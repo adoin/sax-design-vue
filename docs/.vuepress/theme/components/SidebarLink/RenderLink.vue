@@ -12,6 +12,8 @@
     }"
   >
     {{ text }}
+    <span v-if="isNew" class="sidebar-new-badge">New</span>
+    <span v-else-if="isUpdate" class="sidebar-update-badge">Update</span>
   </router-link>
 </template>
 
@@ -56,6 +58,26 @@ watch(watchRoute, () => (active.value = handleRoute(route, props.link)))
   &:after {
     background: #42b983 !important;
   }
+}
+.sidebar-new-badge,
+.sidebar-update-badge {
+  margin-left: 0.35rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1.2;
+  vertical-align: middle;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.sidebar-new-badge {
+  color: #42b983;
+  background: rgba(66, 185, 131, 0.12);
+}
+.sidebar-update-badge {
+  color: #ffba00;
+  background: rgba(255, 186, 0, 0.12);
 }
 .sidebar-update {
   position: relative;

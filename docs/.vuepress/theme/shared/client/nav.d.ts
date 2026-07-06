@@ -32,7 +32,11 @@ export declare type ResolvedNavbarItem =
 /**
  * Sidebar types
  */
-export declare type SidebarItem = NavItem & Partial<NavLink>
+export declare type SidebarItem = NavItem &
+  Partial<NavLink> & {
+    isNew?: boolean
+    isUpdate?: boolean
+  }
 export declare type SidebarGroup = SidebarItem &
   NavGroup<SidebarItem | SidebarGroup | string>
 export declare type SidebarGroupCollapsible = SidebarGroup & {

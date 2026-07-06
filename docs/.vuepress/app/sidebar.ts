@@ -1,3 +1,4 @@
+import { newComponentNavItems } from './new-components'
 import type { SidebarConfig } from '~/shared/client/nav'
 
 export const enSidebar: SidebarConfig = [
@@ -55,20 +56,11 @@ export const enSidebar: SidebarConfig = [
       { text: `Scrollbar`, link: `/components/scrollbar` },
       { text: `Rate`, link: `/components/rate` },
       { text: `Badge`, link: `/components/badge` },
-      { text: `Breadcrumb`, link: `/components/breadcrumb` },
-      { text: `Chip`, link: `/components/chip` },
-      { text: `Collapse`, link: `/components/collapse` },
-      { text: `Divider`, link: `/components/divider` },
-      { text: `Images`, link: `/components/images` },
-      { text: `List`, link: `/components/list` },
-      { text: `Progress`, link: `/components/progress` },
-      { text: `Prompt`, link: `/components/prompt` },
-      { text: `Slider`, link: `/components/slider` },
-      { text: `Spacer`, link: `/components/spacer` },
-      { text: `Tabs`, link: `/components/tabs` },
-      { text: `Textarea`, link: `/components/textarea` },
-      { text: `Upload`, link: `/components/upload` },
     ],
+  },
+  {
+    text: 'New Components',
+    children: newComponentNavItems,
   },
   {
     text: 'Layout',

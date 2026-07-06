@@ -235,6 +235,8 @@ for (const demo of demos) {
 PROPS: []
 EVENTS: []
 EXPOSES: []
+NEWS:
+  - default
 ---
 
 # ${demo.title}

@@ -2,6 +2,8 @@
 PROPS: []
 EVENTS: []
 EXPOSES: []
+NEWS:
+  - default
 ---
 
 # Divider
