@@ -90,7 +90,7 @@
 <script lang="ts"></script>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { usePageFrontmatter } from '@vuepress/client'
 // @ts-ignore
 import { useThemeData } from '@vuepress/plugin-theme-data/client'
@@ -117,7 +117,7 @@ export type PageButtons = {
 const themeData = useThemeData<VuesaxAlphaThemeOptions>()
 const pageFrontmatter = usePageFrontmatter<VsThemeProjectHomePageFrontmatter>()
 
-const star = ref<number>(0)
+const star = ref<number>(204)
 
 const nativeButtons = reactive<PageButtons>({
   github: false,
@@ -138,15 +138,6 @@ const numberWithCommas = computed(() => {
   const parts = x.toString().split('.')
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.')
   return parts.join('.')
-})
-
-onMounted(async () => {
-  const res = await fetch(
-    `https://api.github.com/repos/${themeData.value.repo}`
-  )
-
-  const json = await res.json()
-  star.value = json.stargazers_count
 })
 
 const time = (variable: keyof PageButtons) => {

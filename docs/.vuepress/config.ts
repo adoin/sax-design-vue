@@ -13,7 +13,7 @@ export default defineUserConfig({
   },
   lang: 'en-US',
   title: '',
-  base: '/',
+  base: process.env.VUEPRESS_BASE || '/',
   head: [
     [
       'link',
