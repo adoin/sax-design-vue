@@ -1,0 +1,67 @@
+@use 'mixins/mixins' as *;
+@use 'common/var' as *;
+
+@include b(breadcrumb) {
+  display: flex;
+  align-items: center;
+
+  @include m(align-left) {
+    justify-content: flex-start;
+  }
+
+  @include m(align-center) {
+    justify-content: center;
+  }
+
+  @include m(align-right) {
+    justify-content: flex-end;
+  }
+
+  @include e(list) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @include e(item) {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+
+    @include when(active) {
+      font-weight: 500;
+    }
+
+    @include when(disabled) {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  @include e(link) {
+    color: getColor('primary');
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  @include e(separator) {
+    margin: 0 8px;
+    color: rgba(0, 0, 0, 0.4);
+    user-select: none;
+  }
+
+  @each $type in (primary, success, warn, danger, info) {
+    @include e(text) {
+      @include m($type) {
+        color: getColor($type);
+      }
+    }
+  }
+}

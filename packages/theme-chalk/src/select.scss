@@ -1,0 +1,604 @@
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+
+$clearableRight: 34px;
+$iconActiveMargin: -4px;
+
+.#{$namespace}-select-enter-active,
+.#{$namespace}-select-leave-active {
+  transition: all 0s ease 0s, top 0s, left 0s, transform 0.25s ease,
+    opacity 0.12s ease !important;
+}
+.#{$namespace}-select-enter-from,
+.#{$namespace}-select-leave-to {
+  opacity: 0;
+  &[data-popper-placement='top'] {
+    transform: translate(0, 10px);
+  }
+  &[data-popper-placement='bottom'] {
+    transform: translate(0, -10px);
+  }
+}
+
+.v-clearable {
+  &-enter-active {
+    animation: v-clearable 0.25s ease forwards;
+  }
+  &-leave-active {
+    animation: v-clearable 0.25s ease reverse;
+  }
+}
+
+@keyframes v-clearable {
+  0% {
+    right: 10px;
+    opacity: 0.2;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  100% {
+    right: $clearableRight;
+  }
+}
+
+@mixin state($color) {
+  @include e(input) {
+    background: getColor($color, 0.05);
+    color: getColor($color, 1);
+    &:hover {
+      color: getColor('text', 1);
+    }
+  }
+
+  @include e(chips) {
+    background: getColor($color, 0.05);
+    color: getColor($color, 1);
+    &:hover {
+      &:after {
+        opacity: 0;
+      }
+    }
+    &:after {
+      width: calc(100% - 4px);
+      height: calc(100% - 4px);
+      content: '';
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      border: 2px solid getColor($color, 0.5);
+      border-radius: inherit;
+      transition: getCssVar(transition-ease);
+    }
+  }
+  @include e(label) {
+    color: getColor($color, 1);
+  }
+  @include e(icon) {
+    color: getColor($color, 1);
+    background: getColor($color, 0.1);
+    box-shadow: -15px 10px 10px -10px getColor($color, 0.1);
+  }
+  @include e(arrow) {
+    color: getColor($color);
+  }
+
+  @include e(message) {
+    @include m(#{$color}) {
+      color: getColor($color, 1);
+    }
+  }
+}
+
+@include b(select) {
+  @include set-component-var('select', $select);
+}
+
+@include b(select) {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  min-height: getCssVar(select, min-height);
+  height: fit-content;
+  width: 100%;
+  max-width: getCssVar(select, width);
+
+  @include e(content) {
+    transition: all 0s ease 0s;
+
+    @include pseudo(before) {
+      content: '';
+      position: absolute;
+      top: -10px;
+      width: 80%;
+      margin-left: 10%;
+      left: 0;
+      height: 10px;
+      background: getColor(backgorund);
+      box-shadow: 0 0 20px 0 rgba(0, 0, 0, getCssVar(shadow-opacity));
+      z-index: 200;
+      transition: all 0.25s ease 0.05s;
+      opacity: 1;
+    }
+
+    &[data-popper-placement^='top'] {
+      border-radius: 12px 12px 0px 0px;
+      box-shadow: 0px -10px 20px -5px rgba(0, 0, 0, getCssVar(shadow-opacity));
+      margin-top: 0;
+    }
+    margin-top: -5px;
+    padding: 5px;
+    overflow: hidden;
+    background: getColor('background');
+    color: getColor(color);
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0px 10px 20px -5px rgba(0, 0, 0, getCssVar(shadow-opacity));
+    width: 200px;
+  }
+
+  @include e(state) {
+    @include m(success) {
+      @include state('success');
+    }
+    @include m(danger) {
+      @include state('danger');
+    }
+    @include m(warn) {
+      @include state('warn');
+    }
+    @include m(dark) {
+      @include state('dark');
+    }
+    @include m(primary) {
+      @include state('primary');
+    }
+  }
+
+  @include when(loading) {
+    pointer-events: none;
+    *:not(.#{$namespace}-select__loading):not(.#{$namespace}-select__label) {
+      opacity: 0.6;
+    }
+    .#{$namespace}-select__label {
+      pointer-events: none !important;
+    }
+  }
+
+  @include when(disabled) {
+    pointer-events: none;
+    * {
+      opacity: 0.6;
+    }
+
+    label {
+      opacity: 1;
+      pointer-events: none;
+    }
+  }
+  @include e(arrow) {
+    position: absolute !important;
+    z-index: 2;
+    color: getColor(text, 0.6);
+    right: 10px;
+    top: 20px;
+    transform: translateY(-50%);
+    transition: getCssVar(transition-ease);
+    cursor: pointer;
+  }
+  @include e(clearable) {
+    @include set-var-value(color, getCssVar(text));
+    @include flex(center, center);
+
+    position: absolute;
+    right: 10px;
+    margin-top: 0;
+    top: 20px;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 9999px;
+    cursor: pointer;
+    // background-color: getColor('gray-2');
+    transition: getCssVar(transition-ease);
+    z-index: 9;
+
+    margin-top: $iconActiveMargin;
+    right: $clearableRight;
+  }
+  @include e(input) {
+    opacity: 1;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    z-index: 1;
+    cursor: pointer;
+    transition: getCssVar(transition-ease), height 0s;
+    background: getColor('gray-2');
+    color: getColor('text');
+    min-height: getCssVar(select, min-height);
+    padding: 7px 30px 7px 10px;
+    width: 100%;
+
+    @include when(multiple) {
+      color: transparent !important;
+      background: transparent !important;
+      pointer-events: none;
+    }
+
+    @include when(simple) {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    &-filter {
+      width: auto;
+      flex: 1;
+      padding: 2px 0;
+      position: relative;
+      border: 0px solid transparent;
+      background: transparent;
+      margin: 2px 3px;
+      min-width: 30px;
+      max-width: 100%;
+      color: getColor('text');
+      transition: getCssVar(transition-ease);
+
+      &::placeholder {
+        color: getColor('text', 0.4);
+      }
+
+      &:focus {
+        padding-left: 3px;
+      }
+    }
+  }
+  @include e(chips) {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    left: 0px;
+    background: getColor('gray-2');
+    border-radius: 12px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 5px;
+    min-height: getCssVar(select, min-height);
+    transition: getCssVar(transition-ease), height 0s;
+    padding-right: 26px;
+  }
+  @include m(has-label) {
+    margin-top: 24px !important;
+  }
+
+  @include e(option) {
+    @include flex(flex-start, center);
+    border: 0px;
+    width: 100%;
+    padding: 6px 10px;
+    text-align: left;
+    background: transparent;
+    transition: getCssVar(transition-ease);
+    color: getColor('text');
+    border-radius: 8px;
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, getCssVar(shadow-opacity));
+    margin: 2px 0px;
+    overflow: hidden;
+    opacity: 1;
+    visibility: visible;
+
+    @include when(hidden) {
+      opacity: 0;
+      visibility: hidden;
+      max-height: 0px;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      border: 0px;
+      margin: 0px;
+    }
+
+    @include when(active) {
+      background: getColor('color', 0.05);
+      color: getColor('color', 1);
+      transition: all 0.25s linear;
+    }
+
+    &.is-hover:not(.is-disabled) {
+      background: getColor('color', 0.015);
+      color: getColor('color');
+      padding-left: 14px;
+    }
+
+    @include when(disabled) {
+      opacity: 0.6212;
+      background: transparent;
+      cursor: default;
+    }
+  }
+  @include when(hovering) {
+    @include e(arrow) {
+      transform: translateY(calc(-50% - 4px));
+    }
+    @include e(input) {
+      transform: translateY(-4px);
+      background: getColor('background');
+      box-shadow: 0 5px 25px -4px rgba(0, 0, 0, getCssVar(shadow-opacity));
+    }
+    @include e(chips) {
+      background: getColor('background');
+      transform: translateY(-4px);
+    }
+    @include e(label) {
+      @include when(placeholder) {
+        top: 50%;
+        transform: translateY(calc(-50% - 4px));
+      }
+    }
+    @include e(placeholder) {
+      transform: translateY(calc(-50% - 4px));
+    }
+  }
+  @include when(open) {
+    @include e(arrow) {
+      transform: translateY(calc(-50% - 4px)) rotate(180deg);
+      margin-top: -2px !important;
+    }
+    @include e(input) {
+      border-radius: 12px 12px 0px 0px;
+      background: getColor('background');
+      box-shadow: 0px 5px 25px -4px rgba(0, 0, 0, getCssVar(shadow-opacity));
+      transition: getCssVar(transition-ease), height 0s;
+      border: 2px solid transparent;
+      color: getColor('text');
+      padding-left: 13px;
+      transform: translateY(-4px);
+
+      &-filter {
+        background: transparent;
+        box-shadow: none;
+
+        &::placeholder {
+          font-weight: 400;
+        }
+      }
+    }
+    @include e(label) {
+      top: 0;
+      transform: translateY(calc(-100% - getCssVar(select-label-offset)));
+
+      @include when(placeholder) {
+        top: 50%;
+        transform: translateY(calc(-50% - 4px));
+      }
+    }
+    @include e(placeholder) {
+      transform: translateY(calc(-50% - 4px));
+      left: calc(getCssVar(select-label-left) + 4px);
+      font-size: 0.75rem;
+    }
+
+    @include e(clearable) {
+      margin-top: $iconActiveMargin;
+      right: $clearableRight;
+    }
+    @include e(chips) {
+      border-radius: 12px 12px 0px 0px;
+      background: getColor('background');
+      transform: translate(0, -4px);
+      transition: getCssVar(transition-ease), height 0s;
+      &:after {
+        opacity: 0;
+      }
+    }
+    @include e(label) {
+      margin-top: -4px;
+
+      @include when(placeholder) {
+        margin-top: -30px;
+        opacity: 1;
+        font-size: 0.75rem;
+      }
+    }
+
+    @include when(top) {
+      .#{$namespace}-select__input,
+      .#{$namespace}-select__chips {
+        border-radius: 0px 0px 12px 12px !important;
+        box-shadow: 0px -5px 25px -4px rgba(0, 0, 0, getCssVar(shadow-opacity)) !important;
+      }
+    }
+  }
+  @include when(block) {
+    width: 100%;
+    max-width: unset;
+  }
+  @include e(options) {
+    transition: getCssVar(transition-ease);
+
+    @include when(empty) {
+      padding: 0 5px;
+    }
+
+    @include m(empty) {
+      color: getColor('text', 0.7);
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 6px 10px;
+    }
+  }
+  @include e(label) {
+    position: absolute;
+    left: getCssVar(select-label-left);
+    top: 0;
+    transform: translateY(calc(-100% - getCssVar(select-label-offset)));
+    font-size: getCssVar(select-label-font-size);
+    transition: getCssVar(transition-ease);
+    cursor: default;
+    max-width: calc(100% - getCssVar(select-label-left));
+    z-index: 500;
+    color: getColor('text');
+
+    @include when(placeholder) {
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      font-size: getCssVar(select-placeholder-font-size);
+      opacity: 0.4;
+      color: getColor('text');
+    }
+  }
+  @include e(placeholder) {
+    position: absolute;
+    left: getCssVar(select-label-left);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: getCssVar(select-placeholder-font-size);
+    transition: getCssVar(transition-ease);
+    cursor: default;
+    user-select: none;
+    pointer-events: none;
+    opacity: 0.4;
+    width: 100%;
+    word-wrap: break-word;
+    z-index: 10;
+    color: getColor('text');
+
+    @include when(hidden) {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  @include e(loading) {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 7px;
+    left: auto;
+    pointer-events: none;
+    border-radius: 50%;
+    box-sizing: border-box;
+    background: inherit;
+    cursor: default;
+    z-index: 600;
+
+    * {
+      opacity: 1 !important;
+    }
+
+    ~ .#{$namespace}-select__arrow,
+    ~ .#{$namespace}-select__clearable {
+      opacity: 0 !important;
+    }
+  }
+  @include e(message) {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    font-size: 0.7rem;
+    padding: 0px 7px;
+    overflow: hidden;
+    height: auto;
+    transition: getCssVar(transition-ease);
+
+    @include m(success) {
+      color: getColor('success');
+    }
+    @include m(danger) {
+      color: getColor('danger');
+    }
+    @include m(warn) {
+      color: getColor('warn');
+    }
+    @include m(dark) {
+      color: getColor('dark');
+    }
+    @include m(primary) {
+      color: getColor('primary');
+    }
+  }
+}
+
+@include b(option-group) {
+  padding-left: 10px;
+  border-bottom: 2px solid getColor(gray-1);
+  position: relative;
+  overflow: hidden;
+  transition: getCssVar(transition-ease);
+
+  &:last-child {
+    border: 0px;
+  }
+
+  @include when(hidden) {
+    border-bottom: 0px solid getColor(gray-1);
+    h5 {
+      opacity: 0;
+      visibility: hidden;
+      max-height: 0px;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      border: 0px;
+      margin: 0px;
+      padding: 0px;
+      max-height: 0px;
+    }
+  }
+
+  h5 {
+    max-height: 28px;
+    transition: getCssVar(transition-ease);
+    // opacity: 0.6;
+    margin: 0px;
+    padding: 0px;
+    padding: 7px 0px;
+    font-size: 0.7rem;
+    user-select: none;
+    overflow: hidden;
+    color: getColor(text, 0.6);
+
+    * {
+      pointer-events: none;
+    }
+  }
+}
+
+@include b(chip) {
+  position: relative;
+  margin: 1px 3px 2px 3px;
+  border-radius: 12px;
+  padding: 3px 10px 3px 6px;
+  font-size: 0.84rem;
+  border: 1px solid getColor(gray-2);
+  color: getColor(text);
+  display: flex;
+  background-color: getColor('background');
+
+  @include when(hit) {
+    background-color: transparent;
+    border-color: getColor(color, 0.5);
+  }
+
+  .#{$namespace}-icon-close {
+    background: getColor(gray-4);
+    padding: 14px;
+    position: absolute;
+    top: -11px;
+    right: -11px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+
+    @include set-var-value(color, getCssVar(text));
+
+    &:hover {
+      @include set-var-value(color, getCssVar(white));
+      background: getColor(danger);
+    }
+  }
+}

@@ -1,0 +1,96 @@
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+
+@include b(navbar) {
+  @include set-var-value(color, getCssVar(background));
+  @include set-component-var(navbar, $navbar);
+}
+
+@include b(navbar) {
+  width: 100%;
+  position: absolute;
+  z-index: getCssVar(navbar, z-index);
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  border-radius: getCssVar(navbar, border-radius);
+  background: getCssVar(navbar, background);
+  transition: getCssVar(transition-ease);
+  color: getCssVar(navbar, color);
+
+  @include when(padding-scroll) {
+    &:not(.is-padding-scroll-active) {
+      padding-top: 20px;
+      padding-bottom: 20px;
+
+      @include e(group) {
+        @include m(items) {
+          margin-bottom: -30px;
+        }
+      }
+    }
+  }
+
+  @include when(square) {
+    border-radius: 0px;
+  }
+
+  @include when(text-white) {
+    color: $color-white;
+    @include e(line) {
+      background: $color-white;
+    }
+    @include e(item) {
+      &:before {
+        background: $color-white;
+      }
+    }
+  }
+
+  @include when(fixed) {
+    position: fixed !important;
+  }
+
+  &.is-shadow,
+  &.is-shadow-active {
+    box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+  }
+
+  @include when(hidden) {
+    transform: translate(0, -100%);
+  }
+
+  @include when(not-line) {
+    .#{$namespace}-navbar-group,
+    .#{$namespace}-navbar-item {
+      &::after {
+        display: none;
+      }
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  @include e(content) {
+    width: 100%;
+    position: relative;
+    @include flex(space-between, center);
+    padding: 0px 15px;
+    box-sizing: border-box;
+    min-height: 44px;
+  }
+
+  @include e(left) {
+    @include flex(flex-start, center);
+  }
+
+  @include e(right) {
+    @include flex(flex-end, center);
+  }
+
+  @include e(center) {
+    @include flex(center, center);
+  }
+}

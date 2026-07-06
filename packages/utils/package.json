@@ -1,0 +1,10 @@
+{
+  "name": "@vuesax-alpha/utils",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "peerDependencies": {
+    "vue": "^3.3.4"
+  }
+}

@@ -1,0 +1,116 @@
+@use 'mixins/mixins' as *;
+@use 'common/var' as *;
+
+@include b(tabs) {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+
+  @include e(nav-wrap) {
+    position: relative;
+  }
+
+  @include e(nav) {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+  }
+
+  @include e(item) {
+    position: relative;
+
+    @include when(active) {
+      @include e(btn) {
+        font-weight: 600;
+      }
+    }
+  }
+
+  @include e(btn) {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    background: transparent;
+    margin: 0;
+    padding: 10px 16px;
+    border: 0;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  @include e(line) {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(
+      30deg,
+      getColor('primary') 0%,
+      rgba(25, 91, 255, 0.5) 100%
+    );
+    transition: all 0.2s ease;
+  }
+
+  @include e(content) {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    padding: 10px 0;
+  }
+
+  @include e(pane) {
+    width: 100%;
+  }
+
+  @include m(align-center) {
+    @include e(nav) {
+      justify-content: center;
+    }
+  }
+
+  @include m(align-right) {
+    @include e(nav) {
+      justify-content: flex-end;
+    }
+  }
+
+  @include m(align-fixed) {
+    @include e(nav) {
+      justify-content: space-between;
+    }
+
+    @include e(item) {
+      flex: 1;
+    }
+  }
+
+  @each $type in (primary, success, warn, danger, info) {
+    @include m($type) {
+      @include e(line) {
+        background: linear-gradient(
+          30deg,
+          getColor($type) 0%,
+          rgba(25, 91, 255, 0.5) 100%
+        );
+      }
+
+      @include e(item) {
+        @include when(active) {
+          @include e(btn) {
+            color: getColor($type);
+          }
+        }
+      }
+    }
+  }
+}

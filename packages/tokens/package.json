@@ -1,0 +1,13 @@
+{
+  "name": "@vuesax-alpha/tokens",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "unpkg": "index.js",
+  "jsdelivr": "index.js",
+  "peerDependencies": {
+    "vue": "^3.3.4"
+  },
+  "types": "index.d.js"
+}

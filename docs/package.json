@@ -1,0 +1,38 @@
+{
+  "name": "@vuesax-alpha/docs",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vuepress dev",
+    "build": "vuepress build"
+  },
+  "dependencies": {
+    "@vuepress/shared-utils": "1.9.9",
+    "@vuesax-alpha/icons-vue": "0.0.2-beta.12",
+    "@vueuse/components": "^9.13.0",
+    "@vueuse/core": "^9.13.0",
+    "@vueuse/motion": "2.0.0-beta.12",
+    "@vueuse/shared": "^9.13.0",
+    "boxicons": "^2.1.4",
+    "lodash-unified": "^1.0.2",
+    "minimist": "^1.2.8",
+    "prismjs": "^1.29.0",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4",
+    "vuesax-alpha": "0.2.0-beta.80"
+  },
+  "devDependencies": {
+    "@types/prismjs": "^1.26.0",
+    "@vuepress/client": "2.0.0-beta.68",
+    "@vuepress/plugin-active-header-links": "2.0.0-beta.68",
+    "@vuepress/plugin-container": "2.0.0-beta.68",
+    "@vuepress/plugin-git": "2.0.0-beta.68",
+    "@vuepress/plugin-prismjs": "2.0.0-beta.68",
+    "@vuepress/plugin-register-components": "2.0.0-beta.68",
+    "@vuepress/plugin-theme-data": "2.0.0-beta.68",
+    "vuepress": "2.0.0-beta.68"
+  }
+}

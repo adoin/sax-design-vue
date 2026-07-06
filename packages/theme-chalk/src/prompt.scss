@@ -1,0 +1,95 @@
+@use 'mixins/mixins' as *;
+@use 'common/var' as *;
+
+@include b(prompt) {
+  position: fixed;
+  inset: 0;
+  z-index: getCssVar('index', 'top');
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include e(overlay) {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  @include e(dialog) {
+    position: relative;
+    z-index: 1;
+    width: min(520px, calc(100vw - 32px));
+    background: getColor('white');
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+  }
+
+  @include e(header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 8px;
+  }
+
+  @include e(title-wrap) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @include e(title-accent) {
+    width: 4px;
+    height: 18px;
+    border-radius: 2px;
+    background: getColor('primary');
+  }
+
+  @include e(title) {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  @include e(close) {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @include e(content) {
+    padding: 8px 20px 16px;
+    color: rgba(0, 0, 0, 0.7);
+    line-height: 1.5;
+  }
+
+  @include e(footer) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px 20px 20px;
+  }
+
+  @each $type in (primary, success, warn, danger, info) {
+    @include m($type) {
+      @include e(title-accent) {
+        background: getColor($type);
+      }
+    }
+  }
+}
+
+@include b(prompt) {
+  &-enter-active,
+  &-leave-active {
+    transition: opacity 0.25s ease;
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+  }
+}

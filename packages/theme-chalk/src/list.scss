@@ -1,0 +1,44 @@
+@use 'mixins/mixins' as *;
+
+@include b(list) {
+  width: 100%;
+  position: relative;
+  padding: 5px;
+
+  @include e(item) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  @include e(avatar) {
+    display: flex;
+    align-items: center;
+  }
+
+  @include e(icon) {
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @include e(titles) {
+    flex: 1;
+  }
+
+  @include e(title) {
+    font-weight: bold;
+  }
+
+  @include e(subtitle) {
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.55);
+  }
+
+  @include e(slot) {
+    margin-left: auto;
+  }
+}

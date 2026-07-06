@@ -1,0 +1,130 @@
+@use 'mixins/mixins' as *;
+@use 'common/var' as *;
+
+@include b(upload) {
+  width: 100%;
+
+  @include e(list) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @include e(item) {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+
+    @include when(error) {
+      border-color: getColor('danger');
+    }
+  }
+
+  @include e(preview) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @include e(archive) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 8px;
+    text-align: center;
+    font-size: 0.75rem;
+    gap: 4px;
+  }
+
+  @include e(remove) {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    z-index: 2;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    cursor: pointer;
+  }
+
+  @include e(progress) {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: rgba(25, 91, 255, 0.35);
+    transition: height 0.2s ease;
+  }
+
+  @include e(input-wrap) {
+    position: relative;
+    min-width: 160px;
+    min-height: 120px;
+    border: 1px dashed rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    @include when(disabled) {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  @include e(input) {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  @include e(text) {
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.55);
+    pointer-events: none;
+  }
+
+  @include e(bar) {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    background: getColor('primary');
+    transition: width 0.2s ease;
+  }
+
+  @include e(upload-btn) {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    border: none;
+    background: getColor('primary');
+    color: #fff;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

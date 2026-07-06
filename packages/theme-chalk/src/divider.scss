@@ -1,0 +1,63 @@
+@use 'mixins/mixins' as *;
+@use 'common/var' as *;
+
+@include b(divider) {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 0;
+  clear: both;
+
+  @include e(border) {
+    position: relative;
+    display: block;
+    width: 100%;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: getCssVar('divider', 'border-color');
+
+    @include when(after) {
+      flex: 1;
+    }
+
+    @include when(before) {
+      flex: 1;
+    }
+  }
+
+  @include e(text) {
+    cursor: default;
+    user-select: none;
+    position: relative;
+    white-space: nowrap;
+    background: getColor('white');
+    padding: 0 12px;
+    font-size: 0.9375em;
+  }
+
+  @include e(icon) {
+    font-size: 1.25em;
+  }
+
+  @each $type in (primary, success, warn, danger, info, dark, light) {
+    @include e(border) {
+      @include m($type) {
+        border-top-color: getColor($type);
+      }
+    }
+
+    @include e(text) {
+      @include m($type) {
+        color: getColor($type);
+      }
+    }
+
+    @include e(background) {
+      @include m($type) {
+        background: getColor($type);
+      }
+    }
+  }
+}
