@@ -2,7 +2,7 @@
   <div class="play-container play-index">
     <header class="play-index__header">
       <h1>Vuesax Alpha Playground</h1>
-      <p>选择组件 demo 进行本地验证</p>
+      <p>选择组件 demo 进行本地验证（新增组件）</p>
     </header>
 
     <section class="play-index__section">

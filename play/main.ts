@@ -1,6 +1,7 @@
-import { createApp } from 'vue'
+import { createApp, type Component } from 'vue'
 import '@vuesax-alpha/theme-chalk/src/dark/css-vars.scss'
 import '@vuesax-alpha/theme-chalk/src/loading.scss'
+import './src/play-base.scss'
 import { createRouter, createWebHashHistory } from 'vue-router'
 ;(async () => {
   const apps = import.meta.glob('./src/*.vue')
@@ -19,7 +20,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
     ],
     history: createWebHashHistory(),
   })
-  const App = (await file()).default
+  const { default: App } = (await file()) as { default: Component }
   const app = createApp(App).use(router)
 
   app.mount('#play')

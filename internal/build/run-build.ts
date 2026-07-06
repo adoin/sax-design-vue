@@ -41,8 +41,12 @@ async function main() {
   const taskName = process.argv[2]
 
   if (taskName) {
-    const tasks = await import('./src/tasks')
-    const task = (tasks as Record<string, unknown>)[taskName]
+    const tasksMod = await import('./src/tasks')
+    const tasks =
+      tasksMod.default && typeof tasksMod.default === 'object'
+        ? (tasksMod.default as Record<string, unknown>)
+        : (tasksMod as Record<string, unknown>)
+    const task = tasks[taskName] ?? tasksMod[taskName]
     if (!task) {
       console.error(`Unknown task: ${taskName}`)
       process.exit(1)

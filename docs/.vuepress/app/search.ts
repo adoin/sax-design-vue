@@ -183,4 +183,69 @@ export const enSearchData: SearchDataOption[] = [
       },
     ],
   },
+  {
+    title: 'Breadcrumb',
+    path: 'components/breadcrumb',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
+  {
+    title: 'Chip',
+    path: 'components/chip',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
+  {
+    title: 'Collapse',
+    path: 'components/collapse',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
+  {
+    title: 'Divider',
+    path: 'components/divider',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
+  {
+    title: 'Images',
+    path: 'components/images',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
+  {
+    title: 'List',
+    path: 'components/list',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
+  {
+    title: 'Progress',
+    path: 'components/progress',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
+  {
+    title: 'Prompt',
+    path: 'components/prompt',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
+  {
+    title: 'Slider',
+    path: 'components/slider',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
+  {
+    title: 'Spacer',
+    path: 'components/spacer',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
+  {
+    title: 'Tabs',
+    path: 'components/tabs',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
+  {
+    title: 'Textarea',
+    path: 'components/textarea',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
+  {
+    title: 'Upload',
+    path: 'components/upload',
+    headers: [{ title: 'Default', slug: 'default' }],
+  },
 ]
