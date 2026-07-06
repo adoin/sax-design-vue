@@ -1,6 +1,6 @@
 import type { SidebarItem } from '~/shared/client/nav'
 
-/** Components migrated from vuesax (lusaxweb/vuesax) — shown in a dedicated sidebar/nav group. */
+/** Migrated vuesax components — merged into Components menu with isNew badge. */
 export const newComponentNavItems: SidebarItem[] = [
   { text: 'Spacer', link: '/components/spacer', isNew: true },
   { text: 'Divider', link: '/components/divider', isNew: true },

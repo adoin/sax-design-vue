@@ -56,11 +56,8 @@ export const enSidebar: SidebarConfig = [
       { text: `Scrollbar`, link: `/components/scrollbar` },
       { text: `Rate`, link: `/components/rate` },
       { text: `Badge`, link: `/components/badge` },
+      ...newComponentNavItems,
     ],
-  },
-  {
-    text: 'New Components',
-    children: newComponentNavItems,
   },
   {
     text: 'Layout',

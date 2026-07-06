@@ -64,11 +64,8 @@ export const enNavbar: NavbarConfig = [
           { text: 'Scrollbar', link: `/components/scrollbar` },
           { text: 'Rate', link: `/components/rate` },
           { text: 'Badge', link: `/components/badge` },
+          ...newComponentNavItems,
         ],
-      },
-      {
-        text: 'New Components',
-        children: newComponentNavItems,
       },
     ],
   },
