@@ -33,7 +33,14 @@ jobs:
             echo "No package.json yet; static deploy skipped."
             exit 0
           fi
+          script=$(node -e 'const s=require("./package.json").scripts||{}; console.log(["docs:build","site:build","build:docs","storybook:build"].find((name)=>s[name])||"")')
+          if [ -z "$script" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "No static-site build script found; expected docs:build, site:build, build:docs, or storybook:build."
+            exit 0
+          fi
           echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "build_script=$script" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node
         if: steps.detect.outputs.skip != 'true'
@@ -41,34 +48,37 @@ jobs:
         with:
           node-version: 22
 
-      - name: Build
+      - name: Install and build static site
         if: steps.detect.outputs.skip != 'true'
         shell: bash
         run: |
           set -euo pipefail
           corepack enable
+          build_script='${{ steps.detect.outputs.build_script }}'
           if [ -f pnpm-lock.yaml ]; then
             pnpm install --frozen-lockfile
-            pnpm run build
+            pnpm run "$build_script"
           elif [ -f yarn.lock ]; then
             yarn install --frozen-lockfile
-            yarn build
+            yarn "$build_script"
           elif [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
             npm ci
-            npm run build
+            npm run "$build_script"
           else
             npm install
-            npm run build
+            npm run "$build_script"
           fi
 
           if [ -d dist ]; then
             echo "STATIC_DIR=dist" >> "$GITHUB_ENV"
           elif [ -d docs/.vitepress/dist ]; then
             echo "STATIC_DIR=docs/.vitepress/dist" >> "$GITHUB_ENV"
+          elif [ -d docs/.vuepress/dist ]; then
+            echo "STATIC_DIR=docs/.vuepress/dist" >> "$GITHUB_ENV"
           elif [ -d storybook-static ]; then
             echo "STATIC_DIR=storybook-static" >> "$GITHUB_ENV"
           else
-            echo "No static output found. Expected dist, docs/.vitepress/dist, or storybook-static." >&2
+            echo "No static output found. Expected dist, docs/.vitepress/dist, docs/.vuepress/dist, or storybook-static." >&2
             exit 1
           fi
 
