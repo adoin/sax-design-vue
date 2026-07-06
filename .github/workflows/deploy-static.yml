@@ -1,0 +1,93 @@
+name: Deploy static site
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vuesax-static
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      STATIC_DEPLOY_HOST: ${{ secrets.STATIC_DEPLOY_HOST }}
+      STATIC_DEPLOY_PORT: ${{ secrets.STATIC_DEPLOY_PORT }}
+      STATIC_DEPLOY_USER: ${{ secrets.STATIC_DEPLOY_USER }}
+      STATIC_DEPLOY_PATH: ${{ secrets.STATIC_DEPLOY_PATH }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect static project
+        id: detect
+        shell: bash
+        run: |
+          if [ ! -f package.json ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "No package.json yet; static deploy skipped."
+            exit 0
+          fi
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Node
+        if: steps.detect.outputs.skip != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build
+        if: steps.detect.outputs.skip != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          corepack enable
+          if [ -f pnpm-lock.yaml ]; then
+            pnpm install --frozen-lockfile
+            pnpm run build
+          elif [ -f yarn.lock ]; then
+            yarn install --frozen-lockfile
+            yarn build
+          elif [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
+            npm ci
+            npm run build
+          else
+            npm install
+            npm run build
+          fi
+
+          if [ -d dist ]; then
+            echo "STATIC_DIR=dist" >> "$GITHUB_ENV"
+          elif [ -d docs/.vitepress/dist ]; then
+            echo "STATIC_DIR=docs/.vitepress/dist" >> "$GITHUB_ENV"
+          elif [ -d storybook-static ]; then
+            echo "STATIC_DIR=storybook-static" >> "$GITHUB_ENV"
+          else
+            echo "No static output found. Expected dist, docs/.vitepress/dist, or storybook-static." >&2
+            exit 1
+          fi
+
+      - name: Configure SSH
+        if: steps.detect.outputs.skip != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.STATIC_DEPLOY_KEY }}" > ~/.ssh/static_deploy_key
+          chmod 600 ~/.ssh/static_deploy_key
+          ssh-keyscan -p "$STATIC_DEPLOY_PORT" -H "$STATIC_DEPLOY_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        if: steps.detect.outputs.skip != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          release="$STATIC_DEPLOY_PATH/releases/$GITHUB_SHA"
+          ssh -i ~/.ssh/static_deploy_key -p "$STATIC_DEPLOY_PORT" "$STATIC_DEPLOY_USER@$STATIC_DEPLOY_HOST" "mkdir -p '$release'"
+          rsync -az --delete -e "ssh -i ~/.ssh/static_deploy_key -p $STATIC_DEPLOY_PORT" "$STATIC_DIR/" "$STATIC_DEPLOY_USER@$STATIC_DEPLOY_HOST:$release/"
+          ssh -i ~/.ssh/static_deploy_key -p "$STATIC_DEPLOY_PORT" "$STATIC_DEPLOY_USER@$STATIC_DEPLOY_HOST" "ln -sfn '$release' '$STATIC_DEPLOY_PATH/current' && cd '$STATIC_DEPLOY_PATH/releases' && ls -1dt */ | tail -n +6 | xargs -r rm -rf"
