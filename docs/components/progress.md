@@ -33,6 +33,7 @@ PROPS:
     usage: '#color'
 EVENTS: []
 EXPOSES: []
+description: "Display determinate or indeterminate progress for loading states."
 NEWS:
   - default
   - color
@@ -46,13 +47,22 @@ NEWS:
 
 ## Default
 
+
+Bind `percent` from 0 to 100 for a standard progress bar.
+
 <template #example>
 <progress-default />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/progress/default.vue)
+@[code{1-5}](../.vuepress/components/progress/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{7-15}](../.vuepress/components/progress/default.vue)
 
 </template>
 
@@ -62,13 +72,22 @@ NEWS:
 
 ## Colors
 
+
+Apply theme colors to match your UI context.
+
 <template #example>
 <progress-color />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/progress/color.vue)
+@[code{1-8}](../.vuepress/components/progress/color.vue)
+
+</template>
+
+<template #style>
+
+@[code{10-18}](../.vuepress/components/progress/color.vue)
 
 </template>
 
@@ -78,13 +97,22 @@ NEWS:
 
 ## Indeterminate
 
+
+Use `indeterminate` for unknown-duration operations.
+
 <template #example>
 <progress-indeterminate />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/progress/indeterminate.vue)
+@[code{1-5}](../.vuepress/components/progress/indeterminate.vue)
+
+</template>
+
+<template #style>
+
+@[code{7-15}](../.vuepress/components/progress/indeterminate.vue)
 
 </template>
 
@@ -94,13 +122,22 @@ NEWS:
 
 ## Height
 
+
+Adjust bar thickness with the `height` prop.
+
 <template #example>
 <progress-height />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/progress/height.vue)
+@[code{1-6}](../.vuepress/components/progress/height.vue)
+
+</template>
+
+<template #style>
+
+@[code{8-16}](../.vuepress/components/progress/height.vue)
 
 </template>
 

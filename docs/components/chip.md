@@ -80,6 +80,7 @@ EVENTS:
     params: boolean
     description: Emitted when chip removed in chips group.
 EXPOSES: []
+description: "Chips are compact elements that represent an input, attribute, or action."
 NEWS:
   - default
   - color
@@ -95,13 +96,16 @@ NEWS:
 
 ## Default
 
+
+Render simple chips with optional close behavior.
+
 <template #example>
 <chip-default />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/chip/default.vue)
+@[code{1-6}](../.vuepress/components/chip/default.vue)
 
 </template>
 
@@ -111,13 +115,16 @@ NEWS:
 
 ## Color
 
+
+Color chips using the Vuesax palette or custom values.
+
 <template #example>
 <chip-color />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/chip/color.vue)
+@[code{1-8}](../.vuepress/components/chip/color.vue)
 
 </template>
 
@@ -127,13 +134,16 @@ NEWS:
 
 ## Transparent
 
+
+Use `transparent` for a lighter, outlined appearance.
+
 <template #example>
 <chip-transparent />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/chip/transparent.vue)
+@[code{1-6}](../.vuepress/components/chip/transparent.vue)
 
 </template>
 
@@ -143,13 +153,16 @@ NEWS:
 
 ## Icon
 
+
+Add a leading icon with the `icon` prop.
+
 <template #example>
 <chip-icon />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/chip/icon.vue)
+@[code{1-6}](../.vuepress/components/chip/icon.vue)
 
 </template>
 
@@ -159,13 +172,22 @@ NEWS:
 
 ## Closable
 
+
+Remove chips interactively when `closable` is enabled.
+
 <template #example>
 <chip-closable />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/chip/closable.vue)
+@[code{1-5}](../.vuepress/components/chip/closable.vue)
+
+</template>
+
+<template #script>
+
+@[code{7-13}](../.vuepress/components/chip/closable.vue)
 
 </template>
 
@@ -175,13 +197,28 @@ NEWS:
 
 ## Add and Remove Items
 
+
+Combine `vs-chips` with multiple `vs-chip` children to add and remove tags.
+
 <template #example>
 <chip-chips />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/chip/chips.vue)
+@[code{1-8}](../.vuepress/components/chip/chips.vue)
+
+</template>
+
+<template #script>
+
+@[code{10-13}](../.vuepress/components/chip/chips.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-23}](../.vuepress/components/chip/chips.vue)
 
 </template>
 

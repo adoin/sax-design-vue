@@ -64,6 +64,7 @@ EVENTS:
     params: number | string
     description: Active tab changed.
 EXPOSES: []
+description: "Organize content into switchable tab panels."
 NEWS:
   - default
   - color
@@ -78,13 +79,22 @@ NEWS:
 
 ## Default
 
+
+Control the active tab with `v-model` on `vs-tabs`.
+
 <template #example>
 <tabs-default />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/tabs/default.vue)
+@[code{1-6}](../.vuepress/components/tabs/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{8-11}](../.vuepress/components/tabs/default.vue)
 
 </template>
 
@@ -94,13 +104,22 @@ NEWS:
 
 ## Color
 
+
+Theme the active indicator and labels.
+
 <template #example>
 <tabs-color />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/tabs/color.vue)
+@[code{1-6}](../.vuepress/components/tabs/color.vue)
+
+</template>
+
+<template #script>
+
+@[code{8-11}](../.vuepress/components/tabs/color.vue)
 
 </template>
 
@@ -110,13 +129,22 @@ NEWS:
 
 ## Alignments
 
+
+Align tabs to the left, center, right, or fixed width.
+
 <template #example>
 <tabs-alignments />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/tabs/alignments.vue)
+@[code{1-6}](../.vuepress/components/tabs/alignments.vue)
+
+</template>
+
+<template #script>
+
+@[code{8-11}](../.vuepress/components/tabs/alignments.vue)
 
 </template>
 
@@ -126,13 +154,22 @@ NEWS:
 
 ## Position
 
+
+Place the tab bar on top, bottom, left, or right.
+
 <template #example>
 <tabs-position />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/tabs/position.vue)
+@[code{1-6}](../.vuepress/components/tabs/position.vue)
+
+</template>
+
+<template #script>
+
+@[code{8-11}](../.vuepress/components/tabs/position.vue)
 
 </template>
 
@@ -142,13 +179,22 @@ NEWS:
 
 ## Icons
 
+
+Add icons to individual `vs-tab` items.
+
 <template #example>
 <tabs-icons />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/tabs/icons.vue)
+@[code{1-6}](../.vuepress/components/tabs/icons.vue)
+
+</template>
+
+<template #script>
+
+@[code{8-11}](../.vuepress/components/tabs/icons.vue)
 
 </template>
 

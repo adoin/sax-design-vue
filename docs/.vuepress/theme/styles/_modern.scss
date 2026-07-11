@@ -50,14 +50,40 @@ body,
 }
 
 .card {
-  border-radius: 16px;
-  border: 1px solid rgba(var(--vs-accent-color), 0.1);
+  border-radius: 18px;
+  border: 1px solid rgba(var(--vs-accent-color), 0.12);
   background: linear-gradient(
-    160deg,
-    rgba(var(--vs-theme-layout), 0.96),
-    rgba(var(--vs-accent-color), 0.04)
+    165deg,
+    rgba(var(--vs-theme-layout), 0.98),
+    rgba(var(--vs-accent-color), 0.035)
   );
-  box-shadow: 0 12px 40px rgba(30, 27, 75, 0.05);
+  box-shadow: 0 14px 40px rgba(30, 27, 75, 0.06);
+  overflow: hidden;
+
+  & > .text {
+    padding: 4px 4px 0;
+
+    h2 {
+      margin-top: 0;
+      padding-top: 22px;
+      padding-bottom: 10px;
+      font-size: 1.28rem;
+      letter-spacing: -0.02em;
+      color: rgb(var(--vs-theme-color));
+      border-bottom: 1px solid rgba(var(--vs-accent-color), 0.1);
+
+      + p {
+        margin-top: 14px;
+        color: rgba(var(--vs-theme-color), 0.72);
+        line-height: 1.7;
+      }
+    }
+
+    p {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
 }
 
 .custom-container {
@@ -92,12 +118,20 @@ body,
 }
 
 .card > .example {
-  border-radius: 12px;
+  border-radius: 14px;
+  margin: 16px 16px 0;
   background: linear-gradient(
     180deg,
-    rgba(var(--vs-theme-bg2), 0.7),
+    rgba(var(--vs-theme-bg2), 0.65),
     rgba(var(--vs-theme-layout), 0.95)
   );
+  border: 1px solid rgba(var(--vs-accent-color), 0.08);
+}
+
+.card > .slotcode {
+  margin: 0 12px 12px;
+  border-radius: 14px;
+  overflow: hidden;
 }
 
 .theme-container .page .content,

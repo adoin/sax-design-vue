@@ -72,6 +72,7 @@ EVENTS:
     params: number
     description: Value committed.
 EXPOSES: []
+description: "Select numeric values along a draggable track."
 NEWS:
   - default
   - color
@@ -85,13 +86,22 @@ NEWS:
 
 ## Default
 
+
+Bind a number with `v-model` between `min` and `max`.
+
 <template #example>
 <slider-default />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/slider/default.vue)
+@[code{1-3}](../.vuepress/components/slider/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-8}](../.vuepress/components/slider/default.vue)
 
 </template>
 
@@ -101,13 +111,28 @@ NEWS:
 
 ## Color
 
+
+Color the track and thumb to match your theme.
+
 <template #example>
 <slider-color />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/slider/color.vue)
+@[code{1-7}](../.vuepress/components/slider/color.vue)
+
+</template>
+
+<template #script>
+
+@[code{9-14}](../.vuepress/components/slider/color.vue)
+
+</template>
+
+<template #style>
+
+@[code{16-24}](../.vuepress/components/slider/color.vue)
 
 </template>
 
@@ -117,13 +142,22 @@ NEWS:
 
 ## Ticks
 
+
+Display step ticks along the track.
+
 <template #example>
 <slider-ticks />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/slider/ticks.vue)
+@[code{1-3}](../.vuepress/components/slider/ticks.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-8}](../.vuepress/components/slider/ticks.vue)
 
 </template>
 
@@ -133,13 +167,22 @@ NEWS:
 
 ## Text Fixed
 
+
+Append a suffix such as `%` next to the current value.
+
 <template #example>
 <slider-text-fixed />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/slider/text-fixed.vue)
+@[code{1-3}](../.vuepress/components/slider/text-fixed.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-8}](../.vuepress/components/slider/text-fixed.vue)
 
 </template>
 

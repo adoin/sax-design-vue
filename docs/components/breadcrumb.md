@@ -33,6 +33,7 @@ PROPS:
     usage: '#align'
 EVENTS: []
 EXPOSES: []
+description: "Show the current page location within a navigational hierarchy."
 NEWS:
   - default
   - color
@@ -47,13 +48,22 @@ NEWS:
 
 ## Default
 
+
+Pass an `items` array or compose with `vs-breadcrumb-item` slots.
+
 <template #example>
 <breadcrumb-default />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/breadcrumb/default.vue)
+@[code{1-3}](../.vuepress/components/breadcrumb/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-11}](../.vuepress/components/breadcrumb/default.vue)
 
 </template>
 
@@ -63,13 +73,22 @@ NEWS:
 
 ## Color
 
+
+Theme breadcrumb links with the `color` prop.
+
 <template #example>
 <breadcrumb-color />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/breadcrumb/color.vue)
+@[code{1-3}](../.vuepress/components/breadcrumb/color.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-7}](../.vuepress/components/breadcrumb/color.vue)
 
 </template>
 
@@ -79,13 +98,22 @@ NEWS:
 
 ## Separator
 
+
+Customize the divider between items.
+
 <template #example>
 <breadcrumb-separator />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/breadcrumb/separator.vue)
+@[code{1-3}](../.vuepress/components/breadcrumb/separator.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-7}](../.vuepress/components/breadcrumb/separator.vue)
 
 </template>
 
@@ -95,13 +123,16 @@ NEWS:
 
 ## Slot
 
+
+Build breadcrumbs manually with slot-based items.
+
 <template #example>
 <breadcrumb-slot />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/breadcrumb/slot.vue)
+@[code{1-7}](../.vuepress/components/breadcrumb/slot.vue)
 
 </template>
 
@@ -111,13 +142,28 @@ NEWS:
 
 ## Alignment
 
+
+Align the trail to the left, center, or right.
+
 <template #example>
 <breadcrumb-align />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/breadcrumb/align.vue)
+@[code{1-6}](../.vuepress/components/breadcrumb/align.vue)
+
+</template>
+
+<template #script>
+
+@[code{8-10}](../.vuepress/components/breadcrumb/align.vue)
+
+</template>
+
+<template #style>
+
+@[code{12-20}](../.vuepress/components/breadcrumb/align.vue)
 
 </template>
 

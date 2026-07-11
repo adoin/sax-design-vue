@@ -124,6 +124,8 @@
 
     <slot name="top" />
 
+    <ComponentIntro />
+
     <transition name="fade">
       <Content class="content__default" />
     </transition>
@@ -179,6 +181,7 @@ import { upperFirst } from 'lodash-unified'
 
 import { endingSlashRE, normalize, outboundRE } from '../util'
 
+import ComponentIntro from '../global-components/ComponentIntro.vue'
 import SidebarRight from './SidebarRight.vue'
 import Api from './Api.vue'
 import Footer from './Footer.vue'

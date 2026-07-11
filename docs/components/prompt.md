@@ -80,6 +80,7 @@ EVENTS:
     params: null
     description: Dialog closed.
 EXPOSES: []
+description: "Modal prompts for alerts and confirmations with customizable actions."
 NEWS:
   - default
   - alert
@@ -91,13 +92,22 @@ NEWS:
 
 ## Default
 
+
+Open a confirm dialog bound with `v-model`.
+
 <template #example>
 <prompt-default />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/prompt/default.vue)
+@[code{1-4}](../.vuepress/components/prompt/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{6-9}](../.vuepress/components/prompt/default.vue)
 
 </template>
 
@@ -107,13 +117,22 @@ NEWS:
 
 ## Alert
 
+
+Show a single-action alert-style prompt.
+
 <template #example>
 <prompt-alert />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/prompt/alert.vue)
+@[code{1-4}](../.vuepress/components/prompt/alert.vue)
+
+</template>
+
+<template #script>
+
+@[code{6-9}](../.vuepress/components/prompt/alert.vue)
 
 </template>
 

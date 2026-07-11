@@ -57,6 +57,7 @@ PROPS:
     usage: '#style'
 EVENTS: []
 EXPOSES: []
+description: "Divide text or section components with flexible color, icon, and layout options."
 NEWS:
   - default
   - text
@@ -73,13 +74,22 @@ NEWS:
 
 ## Default
 
+
+Add a horizontal line between blocks of content with `vs-divider`.
+
 <template #example>
 <divider-default />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/divider/default.vue)
+@[code{1-7}](../.vuepress/components/divider/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{9-17}](../.vuepress/components/divider/default.vue)
 
 </template>
 
@@ -89,13 +99,22 @@ NEWS:
 
 ## Text
 
+
+Place text inside the divider to label a section break.
+
 <template #example>
 <divider-text />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/divider/text.vue)
+@[code{1-5}](../.vuepress/components/divider/text.vue)
+
+</template>
+
+<template #style>
+
+@[code{7-15}](../.vuepress/components/divider/text.vue)
 
 </template>
 
@@ -105,13 +124,22 @@ NEWS:
 
 ## Text Position
 
+
+Control text alignment with the `position` prop: left, left-center, center, right-center, or right.
+
 <template #example>
 <divider-position />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/divider/position.vue)
+@[code{1-9}](../.vuepress/components/divider/position.vue)
+
+</template>
+
+<template #style>
+
+@[code{11-19}](../.vuepress/components/divider/position.vue)
 
 </template>
 
@@ -121,13 +149,22 @@ NEWS:
 
 ## Color
 
+
+Change line and label color using Vuesax palette names, RGB, or HEX values.
+
 <template #example>
 <divider-color />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/divider/color.vue)
+@[code{1-10}](../.vuepress/components/divider/color.vue)
+
+</template>
+
+<template #style>
+
+@[code{12-20}](../.vuepress/components/divider/color.vue)
 
 </template>
 
@@ -137,13 +174,22 @@ NEWS:
 
 ## Background
 
+
+Highlight divider text with a custom `background` color.
+
 <template #example>
 <divider-background />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/divider/background.vue)
+@[code{1-7}](../.vuepress/components/divider/background.vue)
+
+</template>
+
+<template #style>
+
+@[code{9-17}](../.vuepress/components/divider/background.vue)
 
 </template>
 
@@ -153,13 +199,22 @@ NEWS:
 
 ## Icons
 
+
+Use Material Icons inside the divider via the `icon` prop.
+
 <template #example>
 <divider-icons />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/divider/icons.vue)
+@[code{1-8}](../.vuepress/components/divider/icons.vue)
+
+</template>
+
+<template #style>
+
+@[code{10-18}](../.vuepress/components/divider/icons.vue)
 
 </template>
 
@@ -169,13 +224,22 @@ NEWS:
 
 ## Style
 
+
+Switch line appearance with `border-style` (solid, dashed, dotted).
+
 <template #example>
 <divider-style />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/divider/style.vue)
+@[code{1-7}](../.vuepress/components/divider/style.vue)
+
+</template>
+
+<template #style>
+
+@[code{9-17}](../.vuepress/components/divider/style.vue)
 
 </template>
 

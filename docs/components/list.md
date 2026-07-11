@@ -33,6 +33,7 @@ PROPS:
     usage: '#header'
 EVENTS: []
 EXPOSES: []
+description: "Structured lists with headers, icons, avatars, and custom slots."
 NEWS:
   - default
   - header
@@ -47,13 +48,16 @@ NEWS:
 
 ## Basic
 
+
+Display title and subtitle rows with `vs-list-item`.
+
 <template #example>
 <list-default />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/list/default.vue)
+@[code{1-6}](../.vuepress/components/list/default.vue)
 
 </template>
 
@@ -63,13 +67,16 @@ NEWS:
 
 ## Header
 
+
+Group items under `vs-list-header`.
+
 <template #example>
 <list-header />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/list/header.vue)
+@[code{1-7}](../.vuepress/components/list/header.vue)
 
 </template>
 
@@ -79,13 +86,16 @@ NEWS:
 
 ## Icon
 
+
+Add leading icons to list rows.
+
 <template #example>
 <list-icon />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/list/icon.vue)
+@[code{1-6}](../.vuepress/components/list/icon.vue)
 
 </template>
 
@@ -95,13 +105,16 @@ NEWS:
 
 ## Content
 
+
+Place actions or custom content in the item slot.
+
 <template #example>
 <list-content />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/list/content.vue)
+@[code{1-7}](../.vuepress/components/list/content.vue)
 
 </template>
 
@@ -111,13 +124,16 @@ NEWS:
 
 ## Avatar
 
+
+Use the `avatar` slot for profile images or initials.
+
 <template #example>
 <list-avatar />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/list/avatar.vue)
+@[code{1-6}](../.vuepress/components/list/avatar.vue)
 
 </template>
 

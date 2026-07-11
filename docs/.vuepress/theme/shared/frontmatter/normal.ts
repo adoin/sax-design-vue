@@ -16,6 +16,7 @@ export interface ThemeNormalPropsFrontmatter {
   code: string
 }
 export interface ThemeNormalApiFrontmatter extends PageFrontmatter {
+  description?: string
   PROPS: ThemeNormalPropsFrontmatter
   SLOTS: ThemeNormalPropsFrontmatter
   EVENTS: ThemeNormalPropsFrontmatter

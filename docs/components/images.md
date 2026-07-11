@@ -41,6 +41,7 @@ PROPS:
     usage: '#default'
 EVENTS: []
 EXPOSES: []
+description: "Responsive image grids with hover effects and layout options."
 NEWS:
   - default
   - hover
@@ -53,13 +54,16 @@ NEWS:
 
 ## Default
 
+
+Place `vs-image` elements inside `vs-images`.
+
 <template #example>
 <images-default />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/images/default.vue)
+@[code{1-8}](../.vuepress/components/images/default.vue)
 
 </template>
 
@@ -69,13 +73,22 @@ NEWS:
 
 ## Hover
 
+
+Pick a hover animation: zoom, blur, dark, scale, or curtain.
+
 <template #example>
 <images-hover />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/images/hover.vue)
+@[code{1-12}](../.vuepress/components/images/hover.vue)
+
+</template>
+
+<template #style>
+
+@[code{14-22}](../.vuepress/components/images/hover.vue)
 
 </template>
 
@@ -85,13 +98,16 @@ NEWS:
 
 ## More Options
 
+
+Fine-tune spacing and corners with `alternating` and margin props.
+
 <template #example>
 <images-more />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/images/more.vue)
+@[code{1-8}](../.vuepress/components/images/more.vue)
 
 </template>
 

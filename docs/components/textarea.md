@@ -72,6 +72,7 @@ EVENTS:
     params: FocusEvent
     description: Emitted on blur.
 EXPOSES: []
+description: "Multi-line text input with label, counter, and sizing options."
 NEWS:
   - default
   - label
@@ -86,13 +87,22 @@ NEWS:
 
 ## Default
 
+
+Bind text with `v-model` for controlled input.
+
 <template #example>
 <textarea-default />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/textarea/default.vue)
+@[code{1-3}](../.vuepress/components/textarea/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-8}](../.vuepress/components/textarea/default.vue)
 
 </template>
 
@@ -102,13 +112,22 @@ NEWS:
 
 ## Label
 
+
+Float a label above the field for clearer forms.
+
 <template #example>
 <textarea-label />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/textarea/label.vue)
+@[code{1-3}](../.vuepress/components/textarea/label.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-8}](../.vuepress/components/textarea/label.vue)
 
 </template>
 
@@ -118,13 +137,22 @@ NEWS:
 
 ## Counter
 
+
+Show remaining characters and warn when the limit is exceeded.
+
 <template #example>
 <textarea-counter />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/textarea/counter.vue)
+@[code{1-3}](../.vuepress/components/textarea/counter.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-8}](../.vuepress/components/textarea/counter.vue)
 
 </template>
 
@@ -134,13 +162,22 @@ NEWS:
 
 ## Width
 
+
+Set a fixed width for form layouts.
+
 <template #example>
 <textarea-width />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/textarea/width.vue)
+@[code{1-3}](../.vuepress/components/textarea/width.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-8}](../.vuepress/components/textarea/width.vue)
 
 </template>
 
@@ -150,13 +187,22 @@ NEWS:
 
 ## Height
 
+
+Control the visible height of the textarea.
+
 <template #example>
 <textarea-height />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/textarea/height.vue)
+@[code{1-3}](../.vuepress/components/textarea/height.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-8}](../.vuepress/components/textarea/height.vue)
 
 </template>
 

@@ -88,6 +88,7 @@ EVENTS:
     params: unknown
     description: Upload failed.
 EXPOSES: []
+description: "Upload files manually or automatically with preview and limits."
 NEWS:
   - default
   - multiple
@@ -100,13 +101,16 @@ NEWS:
 
 ## Default
 
+
+Select a single file with the default upload area.
+
 <template #example>
 <upload-default />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/upload/default.vue)
+@[code{1-3}](../.vuepress/components/upload/default.vue)
 
 </template>
 
@@ -116,13 +120,16 @@ NEWS:
 
 ## Multiple
 
+
+Allow several files and enforce a maximum with `limit`.
+
 <template #example>
 <upload-multiple />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/upload/multiple.vue)
+@[code{1-3}](../.vuepress/components/upload/multiple.vue)
 
 </template>
 
@@ -132,13 +139,16 @@ NEWS:
 
 ## Automatic
 
+
+Upload immediately after selection when `action` is set.
+
 <template #example>
 <upload-automatic />
 </template>
 
 <template #template>
 
-@[code vue](../.vuepress/components/upload/automatic.vue)
+@[code{1-3}](../.vuepress/components/upload/automatic.vue)
 
 </template>
 

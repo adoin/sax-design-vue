@@ -284,7 +284,183 @@ function yamlEvent([name, params, description]) {
     description: ${description}`
 }
 
-function buildMd(name, cfg) {
+const componentMeta = {
+  divider: {
+    description:
+      'Divide text or section components with flexible color, icon, and layout options.',
+    leads: {
+      default: 'Add a horizontal line between blocks of content with `vs-divider`.',
+      text: 'Place text inside the divider to label a section break.',
+      position:
+        'Control text alignment with the `position` prop: left, left-center, center, right-center, or right.',
+      color:
+        'Change line and label color using Vuesax palette names, RGB, or HEX values.',
+      background: 'Highlight divider text with a custom `background` color.',
+      icons: 'Use Material Icons inside the divider via the `icon` prop.',
+      style: 'Switch line appearance with `border-style` (solid, dashed, dotted).',
+    },
+  },
+  progress: {
+    description: 'Display determinate or indeterminate progress for loading states.',
+    leads: {
+      default: 'Bind `percent` from 0 to 100 for a standard progress bar.',
+      color: 'Apply theme colors to match your UI context.',
+      indeterminate: 'Use `indeterminate` for unknown-duration operations.',
+      height: 'Adjust bar thickness with the `height` prop.',
+    },
+  },
+  chip: {
+    description:
+      'Chips are compact elements that represent an input, attribute, or action.',
+    leads: {
+      default: 'Render simple chips with optional close behavior.',
+      color: 'Color chips using the Vuesax palette or custom values.',
+      transparent: 'Use `transparent` for a lighter, outlined appearance.',
+      icon: 'Add a leading icon with the `icon` prop.',
+      closable: 'Remove chips interactively when `closable` is enabled.',
+      chips: 'Combine `vs-chips` with multiple `vs-chip` children to add and remove tags.',
+    },
+  },
+  breadcrumb: {
+    description: 'Show the current page location within a navigational hierarchy.',
+    leads: {
+      default: 'Pass an `items` array or compose with `vs-breadcrumb-item` slots.',
+      color: 'Theme breadcrumb links with the `color` prop.',
+      separator: 'Customize the divider between items.',
+      slot: 'Build breadcrumbs manually with slot-based items.',
+      align: 'Align the trail to the left, center, or right.',
+    },
+  },
+  textarea: {
+    description: 'Multi-line text input with label, counter, and sizing options.',
+    leads: {
+      default: 'Bind text with `v-model` for controlled input.',
+      label: 'Float a label above the field for clearer forms.',
+      counter: 'Show remaining characters and warn when the limit is exceeded.',
+      width: 'Set a fixed width for form layouts.',
+      height: 'Control the visible height of the textarea.',
+    },
+  },
+  collapse: {
+    description: 'Expand and collapse content panels with multiple visual styles.',
+    leads: {
+      default: 'Wrap sections in `vs-collapse-item` with a header slot.',
+      accordion: 'Keep only one panel open at a time with `accordion`.',
+      type: 'Switch container style using the `type` prop.',
+      'open-hover': 'Open panels on hover instead of click.',
+      'icon-arrow': 'Customize the expand arrow per panel.',
+    },
+  },
+  list: {
+    description: 'Structured lists with headers, icons, avatars, and custom slots.',
+    leads: {
+      default: 'Display title and subtitle rows with `vs-list-item`.',
+      header: 'Group items under `vs-list-header`.',
+      icon: 'Add leading icons to list rows.',
+      content: 'Place actions or custom content in the item slot.',
+      avatar: 'Use the `avatar` slot for profile images or initials.',
+    },
+  },
+  images: {
+    description: 'Responsive image grids with hover effects and layout options.',
+    leads: {
+      default: 'Place `vs-image` elements inside `vs-images`.',
+      hover: 'Pick a hover animation: zoom, blur, dark, scale, or curtain.',
+      more: 'Fine-tune spacing and corners with `alternating` and margin props.',
+    },
+  },
+  prompt: {
+    description: 'Modal prompts for alerts and confirmations with customizable actions.',
+    leads: {
+      default: 'Open a confirm dialog bound with `v-model`.',
+      alert: 'Show a single-action alert-style prompt.',
+    },
+  },
+  tabs: {
+    description: 'Organize content into switchable tab panels.',
+    leads: {
+      default: 'Control the active tab with `v-model` on `vs-tabs`.',
+      color: 'Theme the active indicator and labels.',
+      alignments: 'Align tabs to the left, center, right, or fixed width.',
+      position: 'Place the tab bar on top, bottom, left, or right.',
+      icons: 'Add icons to individual `vs-tab` items.',
+    },
+  },
+  slider: {
+    description: 'Select numeric values along a draggable track.',
+    leads: {
+      default: 'Bind a number with `v-model` between `min` and `max`.',
+      color: 'Color the track and thumb to match your theme.',
+      ticks: 'Display step ticks along the track.',
+      'text-fixed': 'Append a suffix such as `%` next to the current value.',
+    },
+  },
+  upload: {
+    description: 'Upload files manually or automatically with preview and limits.',
+    leads: {
+      default: 'Select a single file with the default upload area.',
+      multiple: 'Allow several files and enforce a maximum with `limit`.',
+      automatic: 'Upload immediately after selection when `action` is set.',
+    },
+  },
+  spacer: {
+    description:
+      'Flex spacer utility that pushes items apart in toolbars and action rows.',
+    leads: {
+      default: 'Place `vs-spacer` between flex children to consume free space.',
+    },
+  },
+}
+
+function analyzeDemo(content) {
+  const lines = content.split('\n')
+  const templateOpen = lines.findIndex((l) => l.trim().startsWith('<template'))
+  const templateClose = lines.findIndex((l) => l.trim() === '</template>')
+  const scriptOpen = lines.findIndex((l) => l.trim().startsWith('<script'))
+  const scriptClose =
+    scriptOpen >= 0
+      ? lines.findIndex((l, i) => i > scriptOpen && l.trim() === '</script>')
+      : -1
+  const styleOpen = lines.findIndex((l) => l.trim().startsWith('<style'))
+  const styleClose =
+    styleOpen >= 0
+      ? lines.findIndex((l, i) => i > styleOpen && l.trim() === '</style>')
+      : -1
+
+  const templateRange =
+    templateOpen >= 0 && templateClose >= 0
+      ? [templateOpen + 1, templateClose + 1]
+      : [1, scriptOpen >= 0 ? scriptOpen : lines.length]
+
+  const scriptRange =
+    scriptOpen >= 0 && scriptClose >= 0 ? [scriptOpen + 1, scriptClose + 1] : null
+
+  const styleRange =
+    styleOpen >= 0 && styleClose >= 0 ? [styleOpen + 1, styleClose + 1] : null
+
+  return { templateRange, scriptRange, styleRange }
+}
+
+function codeRef(filePath, [start, end]) {
+  return start === end
+    ? `@[code{${start}}](${filePath})`
+    : `@[code{${start}-${end}}](${filePath})`
+}
+
+function buildCodeSlots(name, sectionId, content) {
+  const relPath = `../.vuepress/components/${name}/${sectionId}.vue`
+  const { templateRange, scriptRange, styleRange } = analyzeDemo(content)
+  let slots = `<template #template>\n\n${codeRef(relPath, templateRange)}\n\n</template>`
+  if (scriptRange) {
+    slots += `\n\n<template #script>\n\n${codeRef(relPath, scriptRange)}\n\n</template>`
+  }
+  if (styleRange) {
+    slots += `\n\n<template #style>\n\n${codeRef(relPath, styleRange)}\n\n</template>`
+  }
+  return slots
+}
+
+function buildMd(name, cfg, meta) {
   const title = name.charAt(0).toUpperCase() + name.slice(1)
   const propsYaml = cfg.props.length
     ? `PROPS:\n${cfg.props.map(yamlProp).join('\n\n')}`
@@ -293,30 +469,33 @@ function buildMd(name, cfg) {
     ? `EVENTS:\n${cfg.events.map(yamlEvent).join('\n\n')}`
     : 'EVENTS: []'
 
+  const descriptionYaml = meta?.description
+    ? `description: ${JSON.stringify(meta.description)}`
+    : ''
+
   const sections = cfg.sections
-    .map(
-      (s) => `<card>
+    .map((s) => {
+      const lead = meta?.leads?.[s.id]
+      const leadBlock = lead ? `\n\n${lead}\n` : '\n'
+      return `<card>
 
 ## ${s.title}
-
+${leadBlock}
 <template #example>
 <${name}-${s.id} />
 </template>
 
-<template #template>
-
-@[code vue](../.vuepress/components/${name}/${s.id}.vue)
-
-</template>
+${buildCodeSlots(name, s.id, s.demoContent)}
 
 </card>`
-    )
+    })
     .join('\n\n')
 
   return `---
 ${propsYaml}
 ${eventsYaml}
 EXPOSES: []
+${descriptionYaml}
 NEWS:
 ${cfg.sections.map((s) => `  - ${s.id}`).join('\n')}
 ---
@@ -336,17 +515,23 @@ ${sections}
 const written = []
 
 for (const [name, cfg] of Object.entries(components)) {
-  const mdPath = path.join(docsDir, `${name}.md`)
-  fs.writeFileSync(mdPath, buildMd(name, cfg))
-  written.push(mdPath)
-
   const compDemoDir = path.join(demoDir, name)
   fs.mkdirSync(compDemoDir, { recursive: true })
-  for (const section of cfg.sections) {
+
+  const sectionsWithContent = cfg.sections.map((section) => {
+    const demoContent = section.demo.trim() + '\n'
     const demoPath = path.join(compDemoDir, `${section.id}.vue`)
-    fs.writeFileSync(demoPath, section.demo.trim() + '\n')
+    fs.writeFileSync(demoPath, demoContent)
     written.push(demoPath)
-  }
+    return { ...section, demoContent }
+  })
+
+  const mdPath = path.join(docsDir, `${name}.md`)
+  fs.writeFileSync(
+    mdPath,
+    buildMd(name, { ...cfg, sections: sectionsWithContent }, componentMeta[name])
+  )
+  written.push(mdPath)
 }
 
 console.log(`Generated ${written.length} files`)
