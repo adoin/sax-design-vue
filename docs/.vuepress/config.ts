@@ -1,9 +1,41 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { viteBundler } from '@vuepress/bundler-vite'
 import { defineUserConfig } from 'vuepress'
 import { enNavbar, enSearchData, enSidebar } from './app'
 import { vuesaxAlphaTheme } from './theme/index'
 import type { UserConfig } from 'vuepress'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const projRoot = path.resolve(__dirname, '../..')
+const pkgRoot = path.resolve(projRoot, 'packages')
+const vsRoot = path.resolve(pkgRoot, 'vuesax-alpha')
+
 export default defineUserConfig({
+  bundler: viteBundler({
+    viteOptions: {
+      resolve: {
+        alias: [
+          {
+            find: '@vuesax-alpha/theme-chalk',
+            replacement: path.resolve(pkgRoot, 'theme-chalk'),
+          },
+          {
+            find: /^vuesax-alpha\/theme-chalk\/(.*)$/,
+            replacement: `${path.resolve(pkgRoot, 'theme-chalk')}/$1`,
+          },
+          {
+            find: /^vuesax-alpha(\/(es|lib))?$/,
+            replacement: path.resolve(vsRoot, 'index.ts'),
+          },
+          {
+            find: /^vuesax-alpha\/(es|lib)\/(.*)$/,
+            replacement: `${pkgRoot}/$2`,
+          },
+        ],
+      },
+    },
+  }),
   open: true,
   locales: {
     '/': {

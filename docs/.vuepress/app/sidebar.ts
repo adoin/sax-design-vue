@@ -14,6 +14,14 @@ export const enSidebar: SidebarConfig = [
         link: '/guide/getting-started/',
       },
       {
+        text: 'Using Components',
+        link: '/guide/using-components',
+      },
+      {
+        text: 'Configuration',
+        link: '/guide/configuration',
+      },
+      {
         text: 'Playground',
         link: '/guide/playground',
       },

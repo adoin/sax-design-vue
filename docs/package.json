@@ -12,6 +12,7 @@
   "dependencies": {
     "@vuepress/shared-utils": "1.9.9",
     "@vuesax-alpha/icons-vue": "0.0.2-beta.12",
+    "@vuesax-alpha/theme-chalk": "workspace:*",
     "@vueuse/components": "^9.13.0",
     "@vueuse/core": "^9.13.0",
     "@vueuse/motion": "2.0.0-beta.12",
@@ -22,10 +23,11 @@
     "prismjs": "^1.29.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4",
-    "vuesax-alpha": "0.2.0-beta.80"
+    "vuesax-alpha": "workspace:*"
   },
   "devDependencies": {
     "@types/prismjs": "^1.26.0",
+    "@vuepress/bundler-vite": "2.0.0-beta.68",
     "@vuepress/client": "2.0.0-beta.68",
     "@vuepress/plugin-active-header-links": "2.0.0-beta.68",
     "@vuepress/plugin-container": "2.0.0-beta.68",

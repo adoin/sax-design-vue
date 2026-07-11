@@ -189,6 +189,16 @@ export const enSearchData: SearchDataOption[] = [
     headers: [{ title: 'Interactive demos', slug: 'interactive-demos' }],
   },
   {
+    title: 'Using Components',
+    path: 'guide/using-components',
+    headers: [{ title: 'Documentation layout', slug: 'documentation-layout' }],
+  },
+  {
+    title: 'Configuration',
+    path: 'guide/configuration',
+    headers: [{ title: 'Global registration', slug: 'global-registration' }],
+  },
+  {
     title: 'Tribute to Vuesax',
     path: 'guide/tribute',
     headers: [{ title: 'Design lineage', slug: 'design-lineage' }],

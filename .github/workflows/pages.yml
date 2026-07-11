@@ -41,6 +41,7 @@ jobs:
           set -euo pipefail
           corepack enable
           pnpm install --frozen-lockfile
+          pnpm run build:theme
           pnpm -C play build
           pnpm run docs:build
           mkdir -p docs/.vuepress/dist/play

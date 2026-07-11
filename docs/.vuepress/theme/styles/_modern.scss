@@ -33,6 +33,22 @@ body,
   border-radius: 14px;
 }
 
+.page .content h1,
+.page .content h2,
+.docs-home .content h2 {
+  letter-spacing: -0.02em;
+}
+
+.custom-container.tip {
+  border-radius: 12px;
+  border: 1px solid rgba(var(--vs-accent-color), 0.2);
+  background: rgba(var(--vs-accent-color), 0.06);
+}
+
+.card > .example {
+  border-radius: 12px;
+}
+
 .theme-container .page .content,
 .theme-container .docs-home .content {
   max-width: var(--vs-content-width);

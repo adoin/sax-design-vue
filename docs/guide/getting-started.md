@@ -2,24 +2,22 @@
 
 <card>
 
-## Installation
+## Prerequisites
 
-Vuesax is a framework of UI components based on Vuejs which means that vuejs has to be in your project so that Vuesax can do the magic.
+Sax Design Vue targets **Vue 3.3+** with a modern bundler (Vite recommended). Install Vue first, then add the component library.
 
 </card>
 
 <card>
 
-## NPM
-
-You can install vuesax through npm with the command:
+## Installation
 
 <command>
 
 <template #pnpm>
 
 ```bash
-pnpm install vuesax-alpha
+pnpm add vue vuesax-alpha
 ```
 
 </template>
@@ -27,7 +25,7 @@ pnpm install vuesax-alpha
 <template #npm>
 
 ```bash
-npm install vuesax-alpha
+npm install vue vuesax-alpha
 ```
 
 </template>
@@ -35,7 +33,7 @@ npm install vuesax-alpha
 <template #yarn>
 
 ```bash
-yarn add vuesax-alpha
+yarn add vue vuesax-alpha
 ```
 
 </template>
@@ -46,27 +44,50 @@ yarn add vuesax-alpha
 
 <card>
 
-## Use
-
-To use vuesax in your vuejs project, add this code:
+## Register globally
 
 <command>
 
 ```ts
 import { createApp } from 'vue'
 import Vuesax from 'vuesax-alpha'
-
 import App from './App.vue'
 
 import 'vuesax-alpha/theme-chalk/index.css'
-// dark mode
 import 'vuesax-alpha/theme-chalk/dark/css-vars.css'
 
-const app = createApp(App)
+createApp(App).use(Vuesax).mount('#app')
+```
 
-app.use(Vuesax)
+</command>
 
-app.mount('#app')
+Import the dark CSS variables file even if you start in light mode — it enables runtime theme switching.
+
+</card>
+
+<card>
+
+## Dark / light theme
+
+Toggle the `html` element class `dark` (the docs site uses the same approach via the navbar switch):
+
+<command>
+
+```ts
+document.documentElement.classList.toggle('dark')
+```
+
+</command>
+
+Or use `@vueuse/core`:
+
+<command>
+
+```ts
+import { useDark, useToggle } from '@vueuse/core'
+
+const isDark = useDark()
+const toggleDark = useToggle(isDark)
 ```
 
 </command>
@@ -75,70 +96,31 @@ app.mount('#app')
 
 <card>
 
-## Individual components (on demand)
-
-There are cases that in your project you only need some components of vuesax and for this you can add them as follows
+## On-demand components
 
 <command>
 
 ```ts
 import { createApp } from 'vue'
-import { VsAlert, VsInput, VsPopup } from 'vuesax-alpha'
+import { VsAlert, VsButton } from 'vuesax-alpha'
 import App from './App.vue'
 
 import 'vuesax-alpha/theme-chalk/index.css'
-// dark mode
 import 'vuesax-alpha/theme-chalk/dark/css-vars.css'
 
-const app = createApp(App)
-
-app.use(VsAlert).use(VsInput).use(VsPopup)
-
-app.mount('#app')
+createApp(App).use(VsAlert).use(VsButton).mount('#app')
 ```
 
 </command>
+
+See [Using Components](/guide/using-components) for resolver / auto-import setup.
 
 </card>
 
 <card>
 
-## CDN
+## Try online first
 
-You can use vuesax by loading it via cdn by adding a `<script>` tag to your project
-
-<command>
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <link
-      href="https://unpkg.com/vuesax-alpha/theme-chalk/index.css"
-      rel="stylesheet"
-    />
-    <meta
-      name="viewport"
-      content="initial-scale=1, maximum-scale=1, user-scalable=no"
-    />
-  </head>
-  <body>
-    <div id="app">
-      <vs-button>Hello World</vs-button>
-    </div>
-
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://unpkg.com/vuesax-alpha/dist/index.full.min.js"></script>
-
-    <script>
-      const { createApp } = Vue
-
-      createApp().mount('#app')
-    </script>
-  </body>
-</html>
-```
-
-</command>
+Open the [Playground](/guide/playground) to preview components before wiring them into your app.
 
 </card>
