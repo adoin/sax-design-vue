@@ -27,6 +27,7 @@ export default defineConfig(async ({ mode }) => {
   ).map((dep) => dep.replace(/\.js$/, ''))
 
   return mergeConfig(baseConfig, {
+    base: process.env.PLAY_BASE || '/',
     resolve: {
       alias: [
         {

@@ -5,7 +5,12 @@ import './src/play-base.scss'
 import { createRouter, createWebHashHistory } from 'vue-router'
 ;(async () => {
   const apps = import.meta.glob('./src/*.vue')
-  const name = location.pathname.replace(/^\//, '') || 'App'
+  const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
+  let pathname = location.pathname
+  if (basePath && pathname.startsWith(basePath)) {
+    pathname = pathname.slice(basePath.length)
+  }
+  const name = pathname.replace(/^\//, '') || 'App'
   const file = apps[`./src/${name}.vue`]
   if (!file) {
     location.pathname = 'App'

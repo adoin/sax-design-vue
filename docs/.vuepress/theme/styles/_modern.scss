@@ -1,0 +1,39 @@
+html {
+  font-family: var(--vs-font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body,
+#app,
+.theme-container {
+  background: rgb(var(--vs-theme-bg));
+  color: rgb(var(--vs-theme-color));
+}
+
+.navbar {
+  backdrop-filter: blur(12px);
+  background: rgba(var(--vs-theme-layout), 0.82) !important;
+  border-bottom: 1px solid rgba(var(--vs-theme-color), 0.06);
+  border-radius: 0 !important;
+}
+
+.sidebar {
+  border-right: 1px solid rgba(var(--vs-theme-color), 0.06);
+  background: rgba(var(--vs-theme-layout), 0.96);
+}
+
+.page,
+.docs-home {
+  background: transparent;
+}
+
+.card,
+.custom-container {
+  border-radius: 14px;
+}
+
+.theme-container .page .content,
+.theme-container .docs-home .content {
+  max-width: var(--vs-content-width);
+}

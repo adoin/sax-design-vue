@@ -5,8 +5,8 @@
         <i class="bx bxs-megaphone" />
       </div>
       <div class="text-n">
-        <h3>New component <b>Scrollbar</b> 🎉</h3>
-        <p>See the examples and the new documentation</p>
+        <h3>Online playground is live 🎉</h3>
+        <p>Try components in the browser with dark mode support</p>
       </div>
     </div>
     <div class="con-btn-n">
@@ -28,10 +28,10 @@ const active = ref<number>(0)
 /**
  * Incre to display notify when add more feature
  */
-const number = ref<number>(13)
+const number = ref<number>(14)
 
 const handleClick = () => {
-  router.push('/components/scrollbar')
+  router.push('/guide/playground')
   active.value = 0
 
   localStorage.notificationHidden = number.value

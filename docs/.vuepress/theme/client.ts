@@ -1,5 +1,6 @@
 import { provide, reactive } from 'vue'
 import { defineClientConfig } from '@vuepress/client'
+import { isDark } from './composables'
 
 import { codesandboxContextKey, vsThemeKey } from './type'
 
@@ -15,7 +16,7 @@ export default defineClientConfig({
     const $vsTheme = reactive<vsThemeContext>({
       mobileActive: false,
       openCode: false,
-      themeDarken: false,
+      themeDarken: isDark.value,
       sidebarCollapseOpen: true,
     })
     const $codesandbox = reactive<codesandboxContext>({

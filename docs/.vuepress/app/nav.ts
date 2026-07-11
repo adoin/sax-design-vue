@@ -8,7 +8,9 @@ export const enNavbar: NavbarConfig = [
     children: [
       { text: `Introduction`, link: `/guide/` },
       { text: `Getting Started`, link: `/guide/getting-started` },
+      { text: `Playground`, link: `/guide/playground` },
       { text: `Usage with Nuxt`, link: `/guide/nuxt` },
+      { text: `Tribute to Vuesax`, link: `/guide/tribute` },
     ],
   },
   {
@@ -80,7 +82,11 @@ export const enNavbar: NavbarConfig = [
             link: `https://github.com/lusaxweb/vuesax`,
           },
           {
-            text: `Vueax Alpha`,
+            text: `Sax Design Vue`,
+            link: `https://github.com/adoin/sax-design-vue`,
+          },
+          {
+            text: `Vuesax Alpha`,
             link: `https://github.com/vuesax-alpha/vuesax-alpha`,
           },
         ],
@@ -89,16 +95,28 @@ export const enNavbar: NavbarConfig = [
         text: `Help`,
         children: [
           {
+            text: `Tribute to Vuesax`,
+            link: `/guide/tribute`,
+          },
+          {
+            text: `Original Vuesax (Vue 2)`,
+            link: `https://github.com/lusaxweb/vuesax`,
+          },
+          {
+            text: `Vuesax Website`,
+            link: `https://vuesax.com/`,
+          },
+          {
             text: `Issues`,
-            link: `https://github.com/vuesax-alpha/vuesax-alpha/issues`,
+            link: `https://github.com/adoin/sax-design-vue/issues`,
           },
           {
             text: `Edit Page`,
-            link: `https://github.com/vuesax-alpha/vuesax-alpha`,
+            link: `https://github.com/adoin/sax-design-vue`,
           },
           {
             text: `Latest Releases`,
-            link: `https://github.com/vuesax-alpha/vuesax-alpha/releases`,
+            link: `https://github.com/adoin/sax-design-vue/releases`,
           },
         ],
       },

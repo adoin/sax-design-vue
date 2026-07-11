@@ -8,13 +8,35 @@ export default defineUserConfig({
   locales: {
     '/': {
       lang: 'en-US',
-      title: 'Vuejs framework components for Vue 3',
+      title: 'Sax Design Vue — Vue 3 component library',
     },
   },
   lang: 'en-US',
-  title: '',
+  title: 'Sax Design Vue',
   base: process.env.VUEPRESS_BASE || '/',
   head: [
+    [
+      'link',
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+    ],
+    [
+      'link',
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'anonymous',
+      },
+    ],
+    [
+      'link',
+      {
+        href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+        rel: 'stylesheet',
+      },
+    ],
     [
       'link',
       {
@@ -48,47 +70,41 @@ export default defineUserConfig({
           'width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, shrink-to-fit=no',
       },
     ],
-    ['meta', { name: 'author', content: 'Lusaxweb' }],
+    ['meta', { name: 'author', content: 'Sax Design Vue' }],
     ['meta', { name: 'google', content: 'nositelinkssearchbox' }],
     [
       'meta',
       {
         hid: 'description',
         name: 'description',
-        content: 'Vuesax Framework Components for Vuejs',
-      },
-    ],
-    [
-      'meta',
-      {
-        property: 'og:image',
-        content: 'https://vuesax.com/vuesax_components.png',
+        content:
+          'Modern Vue 3 component library with usage guides, configuration docs, dark mode, and an online playground.',
       },
     ],
     [
       'meta',
       {
         property: 'og:description',
-        content: 'Vuesax Framework Components for Vuejs',
+        content:
+          'Modern Vue 3 component library with usage guides, configuration docs, dark mode, and an online playground.',
       },
     ],
-    ['meta', { property: 'og:title', content: 'Vuesax - Framework for Vuejs' }],
-    ['meta', { property: 'og:url', content: 'https://vuesax.com/' }],
+    ['meta', { property: 'og:title', content: 'Sax Design Vue' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
   theme: vuesaxAlphaTheme({
-    linkSite: 'https://vuesax-alpha.vercel.app/',
-    repo: 'vuesax-alpha/vuesax-alpha',
-    docsBranch: 'master',
+    linkSite: 'https://adoin.github.io/sax-design-vue/',
+    repo: 'adoin/sax-design-vue',
+    docsBranch: 'main',
     docsDir: 'docs',
-    docsRepo: 'https://github.com/vuesax-alpha/vuesax-alpha/',
+    docsRepo: 'https://github.com/adoin/sax-design-vue',
     editLink: true,
-    editLinkPattern: 'https://github.com/vuesax-alpha/vuesax-alpha/',
+    editLinkPattern: 'https://github.com/adoin/sax-design-vue/edit/main/docs/',
     logo: '/logos/logo-vuesax-svg-3.svg',
     logoDark: '/logos/logo-vuesax-svg-4.svg',
-    prevVersion: 'v4.x',
+    prevVersion: 'Vuesax 4',
     linkPrevVersion: 'https://vuesax.com/',
-    searchPlaceholder: 'Vuesax Search',
+    searchPlaceholder: 'Search components…',
     locales: {
       '/': {
         selectLanguageText: 'Languages',

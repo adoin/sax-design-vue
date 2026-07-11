@@ -64,19 +64,27 @@
     </div>
 
     <div :class="{ 'remove-links': focused }" class="external-links-search">
-      <a
-        title="Previous Version"
-        class="v-old"
-        target="_blank"
-        :href="themeData.linkPrevVersion"
-        >{{ themeData.prevVersion }}</a
+      <router-link
+        class="nav-playground"
+        to="/guide/playground"
+        title="Playground"
       >
+        Playground
+      </router-link>
+
+      <ThemeToggle />
+
+      <router-link class="v-old" to="/guide/tribute" title="Tribute to Vuesax">
+        Tribute
+      </router-link>
 
       <div class="con-links">
         <a
           title="Github"
           target="_blank"
-          href="https://github.com/vuesax-alpha/vuesax-alpha"
+          :href="
+            themeData.docsRepo || 'https://github.com/adoin/sax-design-vue'
+          "
         >
           <i class="bx bxl-github" />
         </a>
@@ -113,6 +121,7 @@ import { useThemeData } from '@vuepress/plugin-theme-data/client'
 import SidebarButton from './SidebarButton.vue'
 import NavLinks from './NavLinks.vue'
 import SearchBox from './SearchBox.vue'
+import ThemeToggle from './ThemeToggle.vue'
 import type { VuesaxAlphaThemeOptions } from '~/vuesaxAlphaTheme'
 
 const emits = defineEmits<{
@@ -184,13 +193,18 @@ const handleShowSuggestions = (active: boolean) => {
   font-weight: 700;
   padding-left: 30px;
 }
-.v-old {
+.v-old,
+.nav-playground {
   padding: 10px;
   color: inherit;
-  opacity: 0.5;
+  opacity: 0.72;
   transition: all 0.25s ease;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
   &:hover {
     opacity: 1;
+    color: rgb(var(--vs-accent-color));
   }
 }
 .external-links-search {

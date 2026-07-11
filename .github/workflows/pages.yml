@@ -32,15 +32,19 @@ jobs:
         with:
           enablement: true
 
-      - name: Install and build docs
+      - name: Install and build docs + playground
         shell: bash
         env:
           VUEPRESS_BASE: /sax-design-vue/
+          PLAY_BASE: /sax-design-vue/play/
         run: |
           set -euo pipefail
           corepack enable
           pnpm install --frozen-lockfile
+          pnpm -C play build
           pnpm run docs:build
+          mkdir -p docs/.vuepress/dist/play
+          cp -r play/dist/* docs/.vuepress/dist/play/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

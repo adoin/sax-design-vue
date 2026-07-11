@@ -46,7 +46,7 @@
 
     <div class="sidebar-mask" @click="toggleSidebar(false)" />
 
-    <Home v-if="pageFrontmatter.home" />
+    <HomeModern v-if="pageFrontmatter.home" />
 
     <DocsHome
       v-else-if="pageFrontmatter.docsHome"
@@ -98,7 +98,7 @@ import {
 } from '@vuepress/plugin-theme-data/client'
 import { resolveSidebarItems } from '../util'
 
-import Home from '../components/Home.vue'
+import HomeModern from '../components/HomeModern.vue'
 import Navbar from '../components/Navbar.vue'
 import Page from '../components/Page.vue'
 import DocsHome from '../components/DocsHome.vue'

@@ -184,6 +184,16 @@ export const enSearchData: SearchDataOption[] = [
     ],
   },
   {
+    title: 'Playground',
+    path: 'guide/playground',
+    headers: [{ title: 'Interactive demos', slug: 'interactive-demos' }],
+  },
+  {
+    title: 'Tribute to Vuesax',
+    path: 'guide/tribute',
+    headers: [{ title: 'Design lineage', slug: 'design-lineage' }],
+  },
+  {
     title: 'Breadcrumb',
     path: 'components/breadcrumb',
     headers: [{ title: 'Default', slug: 'default' }],

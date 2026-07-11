@@ -1,41 +1,42 @@
 :root {
-  --vs-primary: 26, 92, 255;
-  --vs-theme-bg: 244, 247, 248;
-  --vs-theme-color: 44, 62, 80;
+  --vs-primary: 37, 99, 255;
+  --vs-theme-bg: 248, 250, 252;
+  --vs-theme-color: 15, 23, 42;
   --vs-theme-layout: 255, 255, 255;
-  --vs-theme-bg2: 238, 242, 245;
-  --vs-theme-code: 63, 61, 86;
-  --vs-theme-code2: 54, 52, 73;
+  --vs-theme-bg2: 241, 245, 249;
+  --vs-theme-code: 30, 41, 59;
+  --vs-theme-code2: 51, 65, 85;
 
-  --vs-border-color: 234, 236, 239;
-  --vs-accent-color: 37, 100, 255;
-  --vs-text-color: 176, 180, 190;
-  --vs-code-bg-color: 63, 61, 86;
-  --vs-arrow-bg-color: 204, 204, 204;
-  --vs-badge-tip-color: 66, 185, 131;
-  // vuesax-theme vars
-  --vs-bg-color: 222, 231, 234;
+  --vs-border-color: 226, 232, 240;
+  --vs-accent-color: 37, 99, 255;
+  --vs-text-color: 100, 116, 139;
+  --vs-code-bg-color: 30, 41, 59;
+  --vs-arrow-bg-color: 203, 213, 225;
+  --vs-badge-tip-color: 16, 185, 129;
+  --vs-bg-color: 248, 250, 252;
   --vs-layout-color: 255, 255, 255;
 
-  // layout
-  --vs-navbar-height: 3.6rem;
-  --vs-sidebar-width: 20rem;
-  --vs-content-width: 740px;
-  --vs-home-page-width: 960px;
+  --vs-navbar-height: 3.75rem;
+  --vs-sidebar-width: 19rem;
+  --vs-content-width: 760px;
+  --vs-home-page-width: 1080px;
 
-  // responsive breakpoints
   --vs-mq-not-arrow: 959px;
   --vs-mq-mobile: 719px;
   --vs-mq-mobile-not-arrow: 419px;
 
   --vs-line-numbers-wrapper-width: 3.5rem;
+  --vs-font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif;
 }
 
 .dark {
-  --vs-theme-bg: 24, 25, 28;
-  --vs-theme-color: 255, 255, 255;
-  --vs-theme-layout: 30, 32, 35;
-  --vs-theme-bg2: 20, 20, 23;
-  --vs-theme-code: 20, 20, 23;
-  --vs-theme-code2: 22, 22, 25;
+  --vs-theme-bg: 9, 9, 11;
+  --vs-theme-color: 248, 250, 252;
+  --vs-theme-layout: 24, 24, 27;
+  --vs-theme-bg2: 15, 15, 18;
+  --vs-theme-code: 15, 15, 18;
+  --vs-theme-code2: 24, 24, 27;
+  --vs-border-color: 39, 39, 42;
+  --vs-text-color: 161, 161, 170;
 }

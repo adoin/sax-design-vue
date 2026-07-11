@@ -14,8 +14,16 @@ export const enSidebar: SidebarConfig = [
         link: '/guide/getting-started/',
       },
       {
+        text: 'Playground',
+        link: '/guide/playground',
+      },
+      {
         text: 'Usage with Nuxt',
         link: '/guide/nuxt/',
+      },
+      {
+        text: 'Tribute to Vuesax',
+        link: '/guide/tribute',
       },
     ],
   },
