@@ -98,6 +98,10 @@ const handleChange = async (event: Event) => {
   const files = Array.from(input.files || [])
   if (!files.length) return
 
+  if (props.singleUpload || !props.multiple) {
+    fileList.value = []
+  }
+
   for (const file of files) {
     if (props.limit && fileList.value.length >= Number(props.limit)) break
     const preview = await readPreview(file)

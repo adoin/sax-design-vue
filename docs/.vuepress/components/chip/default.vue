@@ -1,15 +1,6 @@
 <template>
-  <div class="center">
-    <vs-chip>Default</vs-chip>
-    <vs-chip color="primary">Primary</vs-chip>
-    <vs-chip color="success" transparent>Transparent</vs-chip>
+  <div class="center" style="flex-direction: row; flex-wrap: wrap; gap: 8px">
+    <vs-chip>Basic Chip</vs-chip>
+    <vs-chip closable>Closable</vs-chip>
   </div>
 </template>
-
-<style scoped lang="scss">
-.center {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-</style>

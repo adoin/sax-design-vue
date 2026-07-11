@@ -9,7 +9,7 @@
       <template v-if="!icon">
         <slot />
       </template>
-      <VsIcon v-else :icon="icon" :class="ns.e('icon')" />
+      <VsIcon v-else :icon="icon" :icon-pack="iconPack" :class="ns.e('icon')" />
     </span>
     <span :class="[ns.e('border'), ns.is('before')]" :style="beforeStyle" />
   </div>

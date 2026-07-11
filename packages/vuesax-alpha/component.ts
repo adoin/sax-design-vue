@@ -8,7 +8,7 @@ import {
 import { VsButton, VsButtonGroup } from '@vuesax-alpha/components/button'
 import { VsCard, VsCardGroup } from '@vuesax-alpha/components/card'
 import { VsCheckbox, VsCheckboxGroup } from '@vuesax-alpha/components/checkbox'
-import { VsChip } from '@vuesax-alpha/components/chip'
+import { VsChip, VsChips } from '@vuesax-alpha/components/chip'
 import { VsCol } from '@vuesax-alpha/components/col'
 import { VsCollapse, VsCollapseItem } from '@vuesax-alpha/components/collapse'
 import { VsCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
@@ -18,7 +18,7 @@ import { VsIcon } from '@vuesax-alpha/components/icon'
 import { VsImage, VsImages } from '@vuesax-alpha/components/images'
 import { VsInput } from '@vuesax-alpha/components/input'
 import { VsInputNumber } from '@vuesax-alpha/components/input-number'
-import { VsList, VsListItem } from '@vuesax-alpha/components/list'
+import { VsList, VsListHeader, VsListItem } from '@vuesax-alpha/components/list'
 import {
   VsNavbar,
   VsNavbarGroup,
@@ -69,6 +69,7 @@ export default [
   VsCheckbox,
   VsCheckboxGroup,
   VsChip,
+  VsChips,
   VsCol,
   VsCollapse,
   VsCollapseItem,
@@ -81,6 +82,7 @@ export default [
   VsInput,
   VsInputNumber,
   VsList,
+  VsListHeader,
   VsListItem,
   VsOptionGroup,
   VsOption,

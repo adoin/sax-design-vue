@@ -8,6 +8,14 @@ import type { ExtractPropTypes } from 'vue'
 import type Icon from './icon.vue'
 
 export const iconProps = buildProps({
+  icon: {
+    type: String,
+    default: null,
+  },
+  iconPack: {
+    type: String,
+    default: 'material-icons',
+  },
   /**
    * @description SVG icon size, size x size
    */

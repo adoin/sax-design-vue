@@ -1,6 +1,12 @@
 <template>
   <span :class="chipKls" :style="chipStyle" @click="handleClick">
     <span :class="ns.e('text')">
+      <VsIcon
+        v-if="icon"
+        :icon="icon"
+        :icon-pack="iconPack"
+        :class="ns.e('icon')"
+      />
       <slot>{{ text }}</slot>
     </span>
 
@@ -10,7 +16,7 @@
       type="button"
       @click.stop="handleClose"
     >
-      <VsIcon :icon="closeIcon" />
+      <VsIcon :icon="closeIcon" :icon-pack="iconPack" />
     </button>
   </span>
 </template>

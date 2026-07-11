@@ -1,13 +1,17 @@
 <template>
   <div class="center">
-    <vs-divider>Default</vs-divider>
-    <vs-divider color="primary">Primary</vs-divider>
+    <p>Content above the divider.</p>
+    <vs-divider />
+    <p>Content below the divider.</p>
   </div>
 </template>
 
 <style scoped lang="scss">
 .center {
   width: 100%;
-  max-width: 420px;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 </style>

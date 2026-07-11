@@ -1,7 +1,8 @@
 <template>
-  <vs-images hover="zoom">
-    <vs-image src="https://picsum.photos/seed/a/300/300" />
-    <vs-image src="https://picsum.photos/seed/b/300/300" />
-    <vs-image src="https://picsum.photos/seed/c/300/300" />
+  <vs-images>
+    <vs-image src="https://picsum.photos/seed/vs1/300" />
+    <vs-image src="https://picsum.photos/seed/vs2/300" />
+    <vs-image src="https://picsum.photos/seed/vs3/300" />
+    <vs-image src="https://picsum.photos/seed/vs4/300" />
   </vs-images>
 </template>

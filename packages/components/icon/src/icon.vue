@@ -1,6 +1,6 @@
 <template>
-  <i :class="ns.b()" :style="style">
-    <slot />
+  <i :class="iconClasses" :style="style">
+    <slot v-if="!icon" />
   </i>
 </template>
 
@@ -17,6 +17,8 @@ defineOptions({
 
 const props = defineProps(iconProps)
 const ns = useNamespace('icon')
+
+const iconClasses = computed(() => [ns.b(), props.iconPack, props.icon])
 
 const style = computed<CSSProperties>(() => {
   const { size, color } = props

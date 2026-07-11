@@ -24,6 +24,10 @@ export const chipProps = buildProps({
     type: String,
     default: null,
   },
+  iconPack: {
+    type: String,
+    default: 'material-icons',
+  },
   closeIcon: {
     type: String,
     default: 'clear',

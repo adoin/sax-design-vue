@@ -16,6 +16,10 @@ export const dividerProps = buildProps({
     type: String,
     default: null,
   },
+  iconPack: {
+    type: String,
+    default: 'material-icons',
+  },
   borderStyle: {
     type: String,
     default: 'solid',

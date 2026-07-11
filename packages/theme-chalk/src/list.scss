@@ -41,4 +41,32 @@
   @include e(slot) {
     margin-left: auto;
   }
+
+  @include e(header) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 5px;
+    font-weight: 600;
+  }
+
+  @include e(header-icon) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @include e(header-titles) {
+    flex: 1;
+  }
+
+  @include e(header-title) {
+    font-weight: 700;
+  }
+
+  @include e(header-subtitle) {
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.55);
+    font-weight: 400;
+  }
 }

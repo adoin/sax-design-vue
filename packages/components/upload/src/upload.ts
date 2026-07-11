@@ -49,8 +49,9 @@ export const uploadProps = buildProps({
   },
   multiple: {
     type: Boolean,
-    default: true,
+    default: false,
   },
+  singleUpload: Boolean,
   accept: String,
   disabled: Boolean,
 } as const)

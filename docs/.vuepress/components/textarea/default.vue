@@ -1,8 +1,8 @@
 <template>
-  <vs-textarea v-model="text" label="Notes" :counter="100" />
+  <vs-textarea v-model="text" placeholder="Write something" />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-const text = ref('Hello textarea')
+const text = ref('')
 </script>

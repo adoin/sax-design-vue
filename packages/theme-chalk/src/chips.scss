@@ -1,0 +1,42 @@
+@use 'mixins/mixins' as *;
+
+@include b(chips) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+
+  @include when(empty) {
+    min-height: 42px;
+  }
+
+  @include e(input) {
+    flex: 1;
+    min-width: 120px;
+    border: 0;
+    outline: none;
+    background: transparent;
+    font: inherit;
+    padding: 4px;
+  }
+
+  @include e(remove-all) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.6;
+    padding: 4px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

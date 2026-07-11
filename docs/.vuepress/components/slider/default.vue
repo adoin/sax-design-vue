@@ -1,8 +1,8 @@
 <template>
-  <vs-slider v-model="value" :min="0" :max="100" color="primary" />
+  <vs-slider v-model="val" />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-const value = ref(40)
+const val = ref(30)
 </script>
