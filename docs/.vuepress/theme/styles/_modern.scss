@@ -11,16 +11,37 @@ body,
   color: rgb(var(--vs-theme-color));
 }
 
+.theme-container {
+  background-image: radial-gradient(
+      circle at 12% 8%,
+      rgba(var(--vs-accent-color), 0.14),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 88% 4%,
+      rgba(var(--vs-accent-secondary), 0.12),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(var(--vs-accent-color), 0.08),
+      transparent 42%
+    );
+  background-attachment: fixed;
+}
+
 .navbar {
-  backdrop-filter: blur(12px);
-  background: rgba(var(--vs-theme-layout), 0.82) !important;
-  border-bottom: 1px solid rgba(var(--vs-theme-color), 0.06);
+  backdrop-filter: blur(14px);
+  background: rgba(var(--vs-theme-layout), 0.78) !important;
+  border-bottom: 1px solid rgba(var(--vs-accent-color), 0.12);
   border-radius: 0 !important;
+  box-shadow: 0 8px 30px rgba(30, 27, 75, 0.06);
 }
 
 .sidebar {
-  border-right: 1px solid rgba(var(--vs-theme-color), 0.06);
-  background: rgba(var(--vs-theme-layout), 0.96);
+  border-right: 1px solid rgba(var(--vs-accent-color), 0.1);
+  background: rgba(var(--vs-theme-layout), 0.88);
+  backdrop-filter: blur(8px);
 }
 
 .page,
@@ -28,7 +49,17 @@ body,
   background: transparent;
 }
 
-.card,
+.card {
+  border-radius: 16px;
+  border: 1px solid rgba(var(--vs-accent-color), 0.1);
+  background: linear-gradient(
+    160deg,
+    rgba(var(--vs-theme-layout), 0.96),
+    rgba(var(--vs-accent-color), 0.04)
+  );
+  box-shadow: 0 12px 40px rgba(30, 27, 75, 0.05);
+}
+
 .custom-container {
   border-radius: 14px;
 }
@@ -39,17 +70,57 @@ body,
   letter-spacing: -0.02em;
 }
 
+.page .content h1 {
+  background: linear-gradient(
+    120deg,
+    rgb(var(--vs-theme-color)),
+    rgb(var(--vs-accent-color))
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .custom-container.tip {
   border-radius: 12px;
-  border: 1px solid rgba(var(--vs-accent-color), 0.2);
-  background: rgba(var(--vs-accent-color), 0.06);
+  border: 1px solid rgba(var(--vs-accent-color), 0.22);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--vs-accent-color), 0.1),
+    rgba(var(--vs-accent-secondary), 0.06)
+  );
 }
 
 .card > .example {
   border-radius: 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(var(--vs-theme-bg2), 0.7),
+    rgba(var(--vs-theme-layout), 0.95)
+  );
 }
 
 .theme-container .page .content,
 .theme-container .docs-home .content {
   max-width: var(--vs-content-width);
+}
+
+.header-page {
+  border-bottom: 1px solid rgba(var(--vs-accent-color), 0.1);
+  background: rgba(var(--vs-theme-layout), 0.6);
+  backdrop-filter: blur(6px);
+}
+
+.sidebar-link.active {
+  color: rgb(var(--vs-accent-color)) !important;
+  font-weight: 700;
+}
+
+.sidebar-link:hover {
+  color: rgb(var(--vs-accent-color));
+}
+
+.sidebar-group .sidebar-heading.open,
+.sidebar-group .sidebar-heading:hover {
+  color: rgb(var(--vs-accent-color));
 }

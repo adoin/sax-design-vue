@@ -4,7 +4,7 @@
 
 ## Interactive demos
 
-Use the embedded playground to preview components in the browser. Pick a demo from the list, then open the full playground for more examples.
+Browse component source code on the left and see the live preview on the right. Copy the snippet or open the full playground for a split code + preview experience.
 
 <PlaygroundEmbed />
 

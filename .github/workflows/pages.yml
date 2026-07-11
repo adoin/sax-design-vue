@@ -10,6 +10,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: write
 
 concurrency:
   group: github-pages
@@ -94,5 +95,49 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 artifact_id: artifact.id,
+              })
+            }
+
+  cleanup-workflow-runs:
+    runs-on: ubuntu-latest
+    needs: deploy
+    permissions:
+      actions: write
+    steps:
+      - name: Keep only the 2 newest workflow runs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const keep = 2
+            const allRuns = []
+            let page = 1
+
+            while (true) {
+              const { data } = await github.rest.actions.listWorkflowRunsForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 100,
+                page,
+              })
+
+              allRuns.push(...data.workflow_runs)
+              if (data.workflow_runs.length < 100) break
+              page += 1
+            }
+
+            const runs = allRuns
+              .filter((run) => run.status === 'completed')
+              .sort(
+                (a, b) =>
+                  new Date(b.created_at).getTime() -
+                  new Date(a.created_at).getTime()
+              )
+
+            for (const run of runs.slice(keep)) {
+              core.info(`Deleting workflow run ${run.id} (${run.name})`)
+              await github.rest.actions.deleteWorkflowRun({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: run.id,
               })
             }

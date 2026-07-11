@@ -1,5 +1,11 @@
 <template>
   <main class="home-modern" aria-labelledby="home-title">
+    <div class="home-modern__bg" aria-hidden="true">
+      <span class="home-modern__orb home-modern__orb--1" />
+      <span class="home-modern__orb home-modern__orb--2" />
+      <span class="home-modern__orb home-modern__orb--3" />
+    </div>
+
     <section class="home-modern__hero">
       <p class="home-modern__eyebrow">Vue 3 · TypeScript · Vite 8</p>
       <h1 id="home-title">{{ heroTitle }}</h1>
@@ -108,9 +114,56 @@ const highlights = [
 
 <style lang="scss" scoped>
 .home-modern {
+  position: relative;
   max-width: 1080px;
   margin: 0 auto;
   padding: 48px 24px 80px;
+  overflow: hidden;
+}
+
+.home-modern__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-modern__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+
+  &--1 {
+    width: 320px;
+    height: 320px;
+    top: -80px;
+    left: -60px;
+    background: rgba(var(--vs-accent-color), 0.35);
+  }
+
+  &--2 {
+    width: 280px;
+    height: 280px;
+    top: 40px;
+    right: -40px;
+    background: rgba(var(--vs-accent-secondary), 0.28);
+  }
+
+  &--3 {
+    width: 360px;
+    height: 360px;
+    bottom: 120px;
+    left: 30%;
+    background: rgba(var(--vs-accent-color), 0.18);
+  }
+}
+
+.home-modern__hero,
+.home-modern__grid,
+.home-modern__tribute {
+  position: relative;
+  z-index: 1;
 }
 
 .home-modern__hero {
@@ -191,9 +244,19 @@ const highlights = [
 .home-modern__card {
   padding: 24px;
   border-radius: 16px;
-  border: 1px solid rgba(var(--vs-theme-color), 0.08);
-  background: rgba(var(--vs-theme-layout), 0.75);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(var(--vs-accent-color), 0.14);
+  background: linear-gradient(
+    155deg,
+    rgba(var(--vs-theme-layout), 0.92),
+    rgba(var(--vs-accent-color), 0.08)
+  );
+  box-shadow: 0 16px 40px rgba(30, 27, 75, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 48px rgba(30, 27, 75, 0.12);
+  }
 
   h2 {
     margin: 0 0 10px;

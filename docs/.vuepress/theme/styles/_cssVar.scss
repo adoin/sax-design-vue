@@ -1,19 +1,20 @@
 :root {
-  --vs-primary: 37, 99, 255;
-  --vs-theme-bg: 248, 250, 252;
-  --vs-theme-color: 15, 23, 42;
+  --vs-primary: 99, 102, 241;
+  --vs-theme-bg: 245, 243, 255;
+  --vs-theme-color: 30, 27, 75;
   --vs-theme-layout: 255, 255, 255;
-  --vs-theme-bg2: 241, 245, 249;
-  --vs-theme-code: 30, 41, 59;
-  --vs-theme-code2: 51, 65, 85;
+  --vs-theme-bg2: 237, 233, 254;
+  --vs-theme-code: 30, 27, 75;
+  --vs-theme-code2: 49, 46, 129;
 
-  --vs-border-color: 226, 232, 240;
-  --vs-accent-color: 37, 99, 255;
-  --vs-text-color: 100, 116, 139;
-  --vs-code-bg-color: 30, 41, 59;
-  --vs-arrow-bg-color: 203, 213, 225;
+  --vs-border-color: 221, 214, 254;
+  --vs-accent-color: 99, 102, 241;
+  --vs-accent-secondary: 168, 85, 247;
+  --vs-text-color: 100, 95, 163;
+  --vs-code-bg-color: 30, 27, 75;
+  --vs-arrow-bg-color: 199, 190, 255;
   --vs-badge-tip-color: 16, 185, 129;
-  --vs-bg-color: 248, 250, 252;
+  --vs-bg-color: 245, 243, 255;
   --vs-layout-color: 255, 255, 255;
 
   --vs-navbar-height: 3.75rem;
@@ -31,12 +32,14 @@
 }
 
 .dark {
-  --vs-theme-bg: 9, 9, 11;
-  --vs-theme-color: 248, 250, 252;
-  --vs-theme-layout: 24, 24, 27;
-  --vs-theme-bg2: 15, 15, 18;
-  --vs-theme-code: 15, 15, 18;
-  --vs-theme-code2: 24, 24, 27;
-  --vs-border-color: 39, 39, 42;
-  --vs-text-color: 161, 161, 170;
+  --vs-theme-bg: 12, 10, 28;
+  --vs-theme-color: 237, 233, 254;
+  --vs-theme-layout: 24, 20, 48;
+  --vs-theme-bg2: 30, 27, 75;
+  --vs-theme-code: 15, 12, 36;
+  --vs-theme-code2: 30, 27, 75;
+  --vs-border-color: 67, 56, 150;
+  --vs-text-color: 165, 160, 210;
+  --vs-accent-color: 129, 140, 248;
+  --vs-accent-secondary: 192, 132, 252;
 }
