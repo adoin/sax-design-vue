@@ -62,3 +62,37 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  cleanup-artifacts:
+    runs-on: ubuntu-latest
+    needs: deploy
+    permissions:
+      actions: write
+    steps:
+      - name: Keep only the 2 newest workflow artifacts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const keep = 2
+            const { data } = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100,
+            })
+
+            const artifacts = data.artifacts
+              .filter((artifact) => !artifact.expired)
+              .sort(
+                (a, b) =>
+                  new Date(b.created_at).getTime() -
+                  new Date(a.created_at).getTime()
+              )
+
+            for (const artifact of artifacts.slice(keep)) {
+              core.info(`Deleting artifact ${artifact.id} (${artifact.name})`)
+              await github.rest.actions.deleteArtifact({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                artifact_id: artifact.id,
+              })
+            }

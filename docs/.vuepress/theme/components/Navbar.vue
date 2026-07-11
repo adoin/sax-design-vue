@@ -2,15 +2,7 @@
   <header ref="$el" class="navbar">
     <SidebarButton @toggle-sidebar="emits('toggle-sidebar')" />
 
-    <router-link
-      :to="
-        themeData.home ||
-        themeData.locales?.[siteLocaleData.base].home ||
-        siteLocaleData.base ||
-        pageData.path
-      "
-      class="home-link"
-    >
+    <router-link :to="homeLink" class="home-link">
       <svg
         class="logo-nav"
         xmlns="http://www.w3.org/2000/svg"
@@ -108,15 +100,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
-import {
-  usePageData,
-  usePageFrontmatter,
-  useSiteLocaleData,
-} from '@vuepress/client'
+import { computed, onMounted, ref } from 'vue'
+import { usePageFrontmatter } from '@vuepress/client'
 
 // @ts-ignore
-import { useThemeData } from '@vuepress/plugin-theme-data/client'
+import {
+  useThemeData,
+  useThemeLocaleData,
+} from '@vuepress/plugin-theme-data/client'
 
 import SidebarButton from './SidebarButton.vue'
 import NavLinks from './NavLinks.vue'
@@ -130,8 +121,11 @@ const emits = defineEmits<{
 
 const frontmatter = usePageFrontmatter<{ search?: boolean }>()
 const themeData = useThemeData<VuesaxAlphaThemeOptions>()
-const siteLocaleData = useSiteLocaleData()
-const pageData = usePageData<{ search?: boolean }>()
+const themeLocaleData = useThemeLocaleData<VuesaxAlphaThemeOptions>()
+
+const homeLink = computed(
+  () => themeData.value.home || themeLocaleData.value?.home || '/'
+)
 
 const linksWrapMaxWidth = ref<number | null>(null)
 const showSuggestions = ref<boolean>(false)

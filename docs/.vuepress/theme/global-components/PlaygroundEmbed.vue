@@ -54,8 +54,8 @@ const demos = [
 
 const activeDemo = ref('divider')
 
-const iframeSrc = computed(() => `${playBase}${activeDemo.value}`)
-const fullPlaygroundUrl = computed(() => `${playBase}App`)
+const iframeSrc = computed(() => `${playBase}#/${activeDemo.value}`)
+const fullPlaygroundUrl = computed(() => `${playBase}#/App`)
 </script>
 
 <style lang="scss" scoped>

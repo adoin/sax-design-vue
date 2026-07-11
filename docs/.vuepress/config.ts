@@ -137,8 +137,10 @@ export default defineUserConfig({
     prevVersion: 'Vuesax 4',
     linkPrevVersion: 'https://vuesax.com/',
     searchPlaceholder: 'Search components…',
+    home: '/',
     locales: {
       '/': {
+        home: '/',
         selectLanguageText: 'Languages',
         selectLanguageName: 'English',
         navbar: enNavbar,

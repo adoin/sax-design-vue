@@ -25,7 +25,7 @@ pnpm dev
 
 </command>
 
-Then visit paths such as `/divider`, `/tabs`, or `/upload` to open individual demos.
+Then visit hash routes such as `#/divider`, `#/tabs`, or `#/upload` to open individual demos.
 
 </card>
 

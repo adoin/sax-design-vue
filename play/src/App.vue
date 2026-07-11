@@ -9,7 +9,7 @@
       <h2>新增组件 Demo</h2>
       <ul class="play-index__list">
         <li v-for="item in newDemos" :key="item.path">
-          <a :href="`/${item.path}`">{{ item.label }}</a>
+          <a :href="`#/${item.path}`">{{ item.label }}</a>
         </li>
       </ul>
     </section>
@@ -18,7 +18,7 @@
       <h2>已有组件 Demo</h2>
       <ul class="play-index__list">
         <li v-for="item in existingDemos" :key="item.path">
-          <a :href="`/${item.path}`">{{ item.label }}</a>
+          <a :href="`#/${item.path}`">{{ item.label }}</a>
         </li>
       </ul>
     </section>

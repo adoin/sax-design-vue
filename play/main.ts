@@ -1,32 +1,40 @@
-import { createApp, type Component } from 'vue'
+import { createApp, h, onMounted, shallowRef, type Component } from 'vue'
+import Vuesax from 'vuesax-alpha'
 import '@vuesax-alpha/theme-chalk/src/dark/css-vars.scss'
 import '@vuesax-alpha/theme-chalk/src/loading.scss'
 import './src/play-base.scss'
-import { createRouter, createWebHashHistory } from 'vue-router'
-;(async () => {
-  const apps = import.meta.glob('./src/*.vue')
-  const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
-  let pathname = location.pathname
-  if (basePath && pathname.startsWith(basePath)) {
-    pathname = pathname.slice(basePath.length)
-  }
-  const name = pathname.replace(/^\//, '') || 'App'
-  const file = apps[`./src/${name}.vue`]
-  if (!file) {
-    location.pathname = 'App'
-    return
-  }
-  const router = createRouter({
-    routes: [
-      {
-        path: '',
-        component: apps,
-      },
-    ],
-    history: createWebHashHistory(),
-  })
-  const { default: App } = (await file()) as { default: Component }
-  const app = createApp(App).use(router)
 
-  app.mount('#play')
-})()
+const demos = import.meta.glob('./src/*.vue')
+
+function demoName(): string {
+  return location.hash.replace(/^#\/?/, '') || 'App'
+}
+
+const Root = {
+  setup() {
+    const current = shallowRef<Component | null>(null)
+
+    const load = async (name: string) => {
+      const loader = demos[`./src/${name}.vue`]
+      if (!loader) {
+        if (name !== 'App') {
+          location.hash = '#/App'
+        }
+        return
+      }
+      const mod = (await loader()) as { default: Component }
+      current.value = mod.default
+    }
+
+    onMounted(() => {
+      void load(demoName())
+      window.addEventListener('hashchange', () => {
+        void load(demoName())
+      })
+    })
+
+    return () => (current.value ? h(current.value) : null)
+  },
+}
+
+createApp(Root).use(Vuesax).mount('#play')

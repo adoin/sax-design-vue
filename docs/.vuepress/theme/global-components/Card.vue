@@ -4,13 +4,15 @@
       <slot />
     </div>
 
-    <div
-      v-if="$slots.example"
-      class="example"
-      :class="{ mobile: $vsTheme.mobileActive }"
-    >
-      <slot name="example" />
-    </div>
+    <ClientOnly>
+      <div
+        v-if="$slots.example"
+        class="example"
+        :class="{ mobile: $vsTheme.mobileActive }"
+      >
+        <slot name="example" />
+      </div>
+    </ClientOnly>
 
     <div
       v-if="$slots.template || $slots.script || $slots.style"
@@ -33,6 +35,7 @@
 
 <script lang="ts" setup>
 import { inject, ref } from 'vue'
+import { ClientOnly } from '@vuepress/client'
 import { vsThemeKey } from '../type'
 
 import Codex from './Codex.vue'

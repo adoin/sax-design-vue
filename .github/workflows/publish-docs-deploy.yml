@@ -1,14 +1,14 @@
 name: Publish Docs Deploy
 
+# Superseded by .github/workflows/pages.yml (GitHub Pages via actions/deploy-pages).
+# This workflow installed vuesax-alpha@latest from npm and overwrote monorepo fixes.
 on:
-  workflow_run:
-    workflows: ['Publish to NPM registry']
-    types: [completed]
+  workflow_dispatch:
 
 jobs:
   deploy-docs:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: false
 
     steps:
       - name: Checkout
