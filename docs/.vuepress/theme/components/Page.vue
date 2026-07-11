@@ -172,7 +172,11 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { usePageData, usePageFrontmatter } from '@vuepress/client'
+import {
+  usePageData,
+  usePageFrontmatter,
+  useRouteLocale,
+} from '@vuepress/client'
 // @ts-ignore
 import { useThemeData } from '@vuepress/plugin-theme-data/client'
 import { ensureEndingSlash, ensureLeadingSlash } from '@vuepress/shared'
@@ -196,6 +200,7 @@ import type { SidebarConfigArray } from 'vuepress-vite'
 const pageData = usePageData<ThemeNormalApiFrontmatter & GitPluginPageData>()
 const themeData = useThemeData<VuesaxAlphaThemeOptions>()
 const pageFrontmatter = usePageFrontmatter<ThemePageFrontmatter>()
+const routeLocale = useRouteLocale()
 
 const props = defineProps<{
   sidebarItems: SidebarConfigArray
@@ -283,7 +288,14 @@ const flattenSidebar = (
 }
 
 const lastUpdatedText = computed(() => {
-  return themeData.value.lastUpdatedText || 'Last Updated'
+  const localeConfig = themeData.value.locales?.[routeLocale.value] as
+    | { lastUpdatedText?: string }
+    | undefined
+  return (
+    localeConfig?.lastUpdatedText ||
+    themeData.value.lastUpdatedText ||
+    'Last Updated'
+  )
 })
 
 const lastUpdatedTime = useDateFormat(

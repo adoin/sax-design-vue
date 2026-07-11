@@ -2,7 +2,14 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { viteBundler } from '@vuepress/bundler-vite'
 import { defineUserConfig } from 'vuepress'
-import { enNavbar, enSearchData, enSidebar } from './app'
+import {
+  enNavbar,
+  enSearchData,
+  enSidebar,
+  zhNavbar,
+  zhSearchData,
+  zhSidebar,
+} from './app'
 import { vuesaxAlphaTheme } from './theme/index'
 import type { UserConfig } from 'vuepress'
 
@@ -41,6 +48,10 @@ export default defineUserConfig({
     '/': {
       lang: 'en-US',
       title: 'Sax Design Vue — Vue 3 component library',
+    },
+    '/zh/': {
+      lang: 'zh-CN',
+      title: 'Sax Design Vue — Vue 3 组件库',
     },
   },
   lang: 'en-US',
@@ -152,12 +163,24 @@ export default defineUserConfig({
         selectLanguageName: 'English',
         navbar: enNavbar,
         sidebar: enSidebar,
+        lastUpdatedText: 'Last Updated',
+        searchPlaceholder: 'Search components…',
+      },
+      '/zh/': {
+        home: '/zh/',
+        selectLanguageText: '语言',
+        selectLanguageName: '简体中文',
+        navbar: zhNavbar,
+        sidebar: zhSidebar,
+        lastUpdatedText: '最后更新',
+        searchPlaceholder: '搜索组件…',
       },
     },
     search: true,
     searchMaxSuggestions: 5,
     searchData: {
       '/': enSearchData,
+      '/zh/': zhSearchData,
     },
     lastUpdated: true,
     contributors: true,

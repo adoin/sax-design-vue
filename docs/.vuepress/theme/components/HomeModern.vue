@@ -14,15 +14,21 @@
       <div class="home-modern__cta">
         <router-link
           class="home-modern__btn home-modern__btn--primary"
-          to="/guide/getting-started/"
+          :to="withLocalePath('/guide/getting-started/')"
         >
-          Get Started
+          {{ t.homeGetStarted }}
         </router-link>
-        <router-link class="home-modern__btn" to="/components/">
-          Components
+        <router-link
+          class="home-modern__btn"
+          :to="withLocalePath('/components/')"
+        >
+          {{ t.homeComponents }}
         </router-link>
-        <router-link class="home-modern__btn" to="/guide/playground">
-          Playground
+        <router-link
+          class="home-modern__btn"
+          :to="withLocalePath('/guide/playground')"
+        >
+          {{ t.homePlayground }}
         </router-link>
       </div>
     </section>
@@ -47,21 +53,36 @@
 
     <section class="home-modern__tribute">
       <div>
-        <p class="home-modern__tribute-label">Design heritage</p>
-        <h2>Standing on the shoulders of Vuesax</h2>
+        <p class="home-modern__tribute-label">{{ t.homeTributeLabel }}</p>
+        <h2>{{ t.homeTributeTitle }}</h2>
         <p>
-          Sax Design Vue continues the visual language pioneered by
-          <a
-            href="https://github.com/lusaxweb/vuesax"
-            target="_blank"
-            rel="noopener"
-            >lusaxweb/vuesax</a
-          >. We are grateful for the original design philosophy — expressive,
-          distinctive, and free from rigid design systems.
+          <template v-if="locale === 'zh'">
+            Sax Design Vue 延续了
+            <a
+              href="https://github.com/lusaxweb/vuesax"
+              target="_blank"
+              rel="noopener"
+              >lusaxweb/vuesax</a
+            >
+            开创的视觉语言。我们感谢这套富有表现力、与众不同、不拘泥于僵化设计体系的理念。
+          </template>
+          <template v-else>
+            Sax Design Vue continues the visual language pioneered by
+            <a
+              href="https://github.com/lusaxweb/vuesax"
+              target="_blank"
+              rel="noopener"
+              >lusaxweb/vuesax</a
+            >. We are grateful for the original design philosophy — expressive,
+            distinctive, and free from rigid design systems.
+          </template>
         </p>
       </div>
-      <router-link class="home-modern__btn" to="/guide/tribute">
-        Read tribute
+      <router-link
+        class="home-modern__btn"
+        :to="withLocalePath('/guide/tribute')"
+      >
+        {{ t.homeReadTribute }}
       </router-link>
     </section>
 
@@ -72,10 +93,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { usePageFrontmatter } from '@vuepress/client'
+import { useDocLocaleUi } from '../composables/docLocale'
 import Footer from './Footer.vue'
 import type { VsThemeProjectHomePageFrontmatter } from '../shared/frontmatter/home'
 
 const pageFrontmatter = usePageFrontmatter<VsThemeProjectHomePageFrontmatter>()
+const { t, withLocalePath, locale } = useDocLocaleUi()
 
 const heroTitle = computed(
   () =>
@@ -84,32 +107,31 @@ const heroTitle = computed(
 const heroDescription = computed(
   () =>
     pageFrontmatter.value.description ||
-    'A modern Vue 3 component library focused on practical usage, clear configuration, and live examples.'
+    (locale.value === 'zh'
+      ? '现代化 Vue 3 组件库，聚焦实用指南、清晰配置与在线示例。'
+      : 'A modern Vue 3 component library focused on practical usage, clear configuration, and live examples.')
 )
 
-const highlights = [
+const highlights = computed(() => [
   {
-    title: 'Usage first',
-    description:
-      'Install with pnpm, register globally or on-demand, and ship with dark mode CSS variables out of the box.',
-    action: 'Getting started',
-    link: '/guide/getting-started/',
+    title: t.value.highlightUsageTitle,
+    description: t.value.highlightUsageDesc,
+    action: t.value.highlightUsageAction,
+    link: withLocalePath('/guide/getting-started/'),
   },
   {
-    title: 'Components & config',
-    description:
-      'Browse every component with props tables, copy-ready snippets, and configuration patterns for real projects.',
-    action: 'Browse components',
-    link: '/components/',
+    title: t.value.highlightComponentsTitle,
+    description: t.value.highlightComponentsDesc,
+    action: t.value.highlightComponentsAction,
+    link: withLocalePath('/components/'),
   },
   {
-    title: 'Online playground',
-    description:
-      'Open interactive demos in the browser — switch components instantly and validate styles before integrating.',
-    action: 'Open playground',
-    link: '/guide/playground',
+    title: t.value.highlightPlaygroundTitle,
+    description: t.value.highlightPlaygroundDesc,
+    action: t.value.highlightPlaygroundAction,
+    link: withLocalePath('/guide/playground'),
   },
-]
+])
 </script>
 
 <style lang="scss" scoped>

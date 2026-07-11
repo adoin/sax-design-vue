@@ -1,3 +1,6 @@
 export * from './nav'
+export * from './nav.zh'
 export * from './search'
+export * from './search.zh'
 export * from './sidebar'
+export * from './sidebar.zh'

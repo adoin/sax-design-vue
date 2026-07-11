@@ -10,19 +10,19 @@
       <div v-for="(table, key) in getTables" :key="key" class="content-table">
         <template v-if="table">
           <header>
-            <h3>{{ key }}</h3>
+            <h3>{{ tableLabel(key) }}</h3>
           </header>
           <table>
             <thead>
               <tr>
-                <th>Property</th>
-                <th>Type</th>
-                <th class="val">Values</th>
-                <th class="des">Description</th>
-                <th>default</th>
-                <th class="ex">Example</th>
+                <th>{{ labels.property }}</th>
+                <th>{{ labels.type }}</th>
+                <th class="val">{{ labels.values }}</th>
+                <th class="des">{{ labels.description }}</th>
+                <th>{{ labels.default }}</th>
+                <th class="ex">{{ labels.example }}</th>
                 <th class="bugx">
-                  <span> More </span>
+                  <span>{{ labels.more }}</span>
                 </th>
               </tr>
             </thead>
@@ -65,15 +65,19 @@
                 <td>{{ tr.default }}</td>
                 <td class="ex">
                   <a v-if="tr.usage" :href="tr.usage" class="btn-usage">
-                    Usage <i class="bx bx-code-block" />
+                    {{ labels.usage }} <i class="bx bx-code-block" />
                   </a>
                   <a
                     v-if="tr.code"
                     class="btn-toggle-code"
                     @click="toggleCode($event)"
                   >
-                    <span class="open">Open <i class="bx bx-code-alt" /></span>
-                    <span class="close">Close <i class="bx bx-x" /></span>
+                    <span class="open"
+                      >{{ labels.open }} <i class="bx bx-code-alt"
+                    /></span>
+                    <span class="close"
+                      >{{ labels.close }} <i class="bx bx-x"
+                    /></span>
                   </a>
                 </td>
 
@@ -117,6 +121,7 @@ import prism from 'prismjs'
 import { useClipboard } from '@vueuse/core'
 
 import { isExternal } from '../util'
+import { useDocLocaleUi } from '../composables/docLocale'
 import type { PageData, PageFrontmatter } from '@vuepress/client'
 import type { ComputedRef } from 'vue'
 import type {
@@ -140,6 +145,14 @@ const pageData: ComputedRef<
 
 const pageFrontmatter: ComputedRef<PageFrontmatter<ThemeNormalApiFrontmatter>> =
   usePageFrontmatter() as any
+
+const { t } = useDocLocaleUi()
+const labels = computed(() => t.value.apiColumns)
+
+const tableLabel = (key: string) => {
+  const tables = t.value.apiTables as Record<string, string>
+  return tables[key] || key
+}
 
 const { copied, copy } = useClipboard({ legacy: true })
 

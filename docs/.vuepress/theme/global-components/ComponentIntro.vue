@@ -2,7 +2,7 @@
   <section v-if="description" class="component-intro">
     <p class="component-intro__lead">{{ description }}</p>
     <div v-if="isNewComponent" class="component-intro__meta">
-      <span class="component-intro__badge">New component</span>
+      <span class="component-intro__badge">{{ t.newComponentBadge }}</span>
     </div>
   </section>
 </template>
@@ -12,18 +12,23 @@ import { computed } from 'vue'
 import { usePageFrontmatter } from '@vuepress/client'
 import { useRoute } from 'vue-router'
 import { newComponentNavItems } from '../../app/new-components'
+import { newComponentNavItemsZh } from '../../app/new-components.zh'
+import { useDocLocaleUi } from '../composables/docLocale'
 import type { ThemeNormalApiFrontmatter } from '../shared/frontmatter/normal'
 
 const route = useRoute()
+const { t, locale } = useDocLocaleUi()
 const frontmatter = usePageFrontmatter<
   ThemeNormalApiFrontmatter & { description?: string }
 >()
 
 const description = computed(() => frontmatter.value.description || '')
 
-const isNewComponent = computed(() =>
-  newComponentNavItems.some((item) => item.link === route.path)
-)
+const isNewComponent = computed(() => {
+  const items =
+    locale.value === 'zh' ? newComponentNavItemsZh : newComponentNavItems
+  return items.some((item) => item.link === route.path)
+})
 </script>
 
 <style lang="scss" scoped>

@@ -202,7 +202,11 @@ const unfocus = () => {
 }
 
 onMounted(() => {
-  placeholder.value = themeData.value.searchPlaceholder || ''
+  const localeConfig = themeData.value.locales?.[routeLocale.value] as
+    | { searchPlaceholder?: string }
+    | undefined
+  placeholder.value =
+    localeConfig?.searchPlaceholder || themeData.value.searchPlaceholder || ''
   document.addEventListener('keydown', onHotkey)
 })
 
