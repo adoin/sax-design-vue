@@ -32,9 +32,9 @@ const components = {
       { id: 'default', title: 'Default', demo: `<template>\n  <div class="center">\n    <p>Content above the divider.</p>\n    <vs-divider />\n    <p>Content below the divider.</p>\n  </div>\n</template>\n\n${centerStyle}` },
       { id: 'text', title: 'Text', demo: `<template>\n  <div class="center">\n    <vs-divider>My Text</vs-divider>\n  </div>\n</template>\n\n${centerStyle}` },
       { id: 'position', title: 'Text Position', demo: `<template>\n  <div class="center">\n    <vs-divider position="left">left</vs-divider>\n    <vs-divider position="left-center">left-center</vs-divider>\n    <vs-divider position="center">center</vs-divider>\n    <vs-divider position="right-center">right-center</vs-divider>\n    <vs-divider position="right">right</vs-divider>\n  </div>\n</template>\n\n${centerStyle}` },
-      { id: 'color', title: 'Color', demo: `<template>\n  <div class="center">\n    <vs-divider>Default</vs-divider>\n    <vs-divider color="primary">Primary</vs-divider>\n    <vs-divider color="success">Success</vs-divider>\n    <vs-divider color="danger">Danger</vs-divider>\n    <vs-divider color="warning">Warning</vs-divider>\n    <vs-divider color="dark">Dark</vs-divider>\n  </div>\n</template>\n\n${centerStyle}` },
-      { id: 'background', title: 'Background', demo: `<template>\n  <div class="center">\n    <vs-divider background="primary" color="#ade6d4">Primary</vs-divider>\n    <vs-divider background="success" color="#0a540a">Success</vs-divider>\n    <vs-divider background="danger" color="lightcoral">Danger</vs-divider>\n  </div>\n</template>\n\n${centerStyle}` },
-      { id: 'icons', title: 'Icons', demo: `<template>\n  <div class="center">\n    <vs-divider icon="arrow_downward" />\n    <vs-divider color="primary" icon="star" />\n    <vs-divider color="success" icon="check" />\n    <vs-divider color="danger" icon="delete_forever" />\n  </div>\n</template>\n\n${centerStyle}` },
+      { id: 'color', title: 'Color', demo: `<template>\n  <div class="center">\n    <vs-divider>Default</vs-divider>\n    <vs-divider color="primary">Primary</vs-divider>\n    <vs-divider color="success">Success</vs-divider>\n    <vs-divider color="danger">Danger</vs-divider>\n    <vs-divider color="warning">Warning</vs-divider>\n    <vs-divider color="dark">Dark</vs-divider>\n    <vs-divider color="rgb(29, 222, 194)">RGB</vs-divider>\n    <vs-divider color="#ad289f">HEX</vs-divider>\n  </div>\n</template>\n\n${centerStyle}` },
+      { id: 'background', title: 'Background', demo: `<template>\n  <div class="center">\n    <vs-divider>Default</vs-divider>\n    <vs-divider background="primary" color="#ade6d4">Primary</vs-divider>\n    <vs-divider background="success" color="#0a540a">Success</vs-divider>\n    <vs-divider background="danger" color="lightcoral">Danger</vs-divider>\n    <vs-divider background="warning" color="grey">Warning</vs-divider>\n    <vs-divider background="dark" color="lightgrey">Dark</vs-divider>\n    <vs-divider background="rgb(252, 243, 192)" color="rgb(29, 222, 194)">RGB</vs-divider>\n    <vs-divider background="#fffaaa" color="#ad289f">HEX</vs-divider>\n  </div>\n</template>\n\n${centerStyle}` },
+      { id: 'icons', title: 'Icons', demo: `<template>\n  <div class="center">\n    <vs-divider icon="arrow_downward" />\n    <vs-divider color="primary" icon="star" />\n    <vs-divider color="success" icon="check" />\n    <vs-divider color="danger" icon="delete_forever" />\n    <vs-divider color="warning" icon="report_problem" />\n    <vs-divider color="dark" icon="watch_later" />\n  </div>\n</template>\n\n${centerStyle}` },
       { id: 'style', title: 'Style', demo: `<template>\n  <div class="center">\n    <vs-divider border-style="dotted" color="dark">dotted</vs-divider>\n    <vs-divider border-style="dashed" color="dark">dashed</vs-divider>\n    <vs-divider border-style="solid" color="dark">solid</vs-divider>\n  </div>\n</template>\n\n${centerStyle}` },
     ],
   },
@@ -296,7 +296,7 @@ const componentMeta = {
       position:
         'Control text alignment with the `position` prop: left, left-center, center, right-center, or right.',
       color:
-        'Change line and label color using Vuesax palette names, RGB, or HEX values.',
+        'Change the color of the line and the text using theme colors, RGB, or HEX.',
       background: 'Highlight divider text with a custom `background` color.',
       icons: 'Use Material Icons inside the divider via the `icon` prop.',
       style: 'Switch line appearance with `border-style` (solid, dashed, dotted).',
@@ -438,7 +438,7 @@ const componentMetaZh = {
     },
     props: {
       position: '文本/图标在线条上的位置。',
-      color: '线条与文本颜色。',
+      color: '线条与文本颜色（主题色、RGB、HEX）。',
       background: '分割线文本背后的背景色。',
       icon: '用图标替代插槽文本。',
       'icon-pack': '图标字体类名（如 material-icons）。',

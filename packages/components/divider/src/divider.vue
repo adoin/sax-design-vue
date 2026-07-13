@@ -1,6 +1,9 @@
 <template>
   <div :class="ns.b()" :style="rootStyle">
-    <span :class="[ns.e('border'), ns.is('after')]" :style="afterStyle" />
+    <span
+      :class="[ns.e('border'), ns.is('after'), borderColorClass]"
+      :style="afterStyle"
+    />
     <span
       v-if="icon || $slots.default"
       :class="[ns.e('text'), textColorClass, backgroundColorClass]"
@@ -11,7 +14,10 @@
       </template>
       <VsIcon v-else :icon="icon" :icon-pack="iconPack" :class="ns.e('icon')" />
     </span>
-    <span :class="[ns.e('border'), ns.is('before')]" :style="beforeStyle" />
+    <span
+      :class="[ns.e('border'), ns.is('before'), borderColorClass]"
+      :style="beforeStyle"
+    />
   </div>
 </template>
 
@@ -19,7 +25,7 @@
 import { computed } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { VsIcon } from '@vuesax-alpha/components/icon'
-import { getVsColor, isVsColor } from '@vuesax-alpha/utils'
+import { getVsColor, isRgbColor, isVsColor } from '@vuesax-alpha/utils'
 import { dividerProps } from './divider'
 import type { CSSProperties } from 'vue'
 
@@ -30,6 +36,16 @@ defineOptions({
 const props = defineProps(dividerProps)
 
 const ns = useNamespace('divider')
+
+const DEFAULT_COLOR = 'rgba(0, 0, 0,.1)'
+
+const normalizeThemeColor = (color: string) =>
+  color === 'warning' ? 'warn' : color
+
+const normalizedColor = computed(() => normalizeThemeColor(props.color))
+const normalizedBackground = computed(() =>
+  normalizeThemeColor(props.background)
+)
 
 const widthAfter = computed(() => {
   switch (props.position) {
@@ -61,19 +77,30 @@ const widthBefore = computed(() => {
   }
 })
 
-const borderColor = computed(() => {
-  if (!isVsColor(props.color)) {
-    return getVsColor(props.color)
+const resolveInlineColor = (color: string) => {
+  if (!color || color === DEFAULT_COLOR || color === 'transparent')
+    return undefined
+  if (isVsColor(normalizeThemeColor(color))) return undefined
+  if (isRgbColor(color)) return color
+  const resolved = getVsColor(color)
+  if (resolved) {
+    return resolved.startsWith('var(') ? resolved : `rgb(${resolved})`
   }
-  return undefined
-})
+  return color
+}
+
+const borderColorClass = computed(() =>
+  isVsColor(normalizedColor.value)
+    ? ns.em('border', normalizedColor.value)
+    : ns.em('border', 'default')
+)
 
 const afterStyle = computed(
   (): CSSProperties => ({
     width: widthAfter.value,
     borderTopWidth: props.borderHeight,
     borderTopStyle: props.borderStyle as CSSProperties['borderTopStyle'],
-    ...(borderColor.value ? { borderTopColor: borderColor.value } : {}),
+    borderTopColor: resolveInlineColor(props.color),
   })
 )
 
@@ -82,36 +109,38 @@ const beforeStyle = computed(
     width: widthBefore.value,
     borderTopWidth: props.borderHeight,
     borderTopStyle: props.borderStyle as CSSProperties['borderTopStyle'],
-    ...(borderColor.value ? { borderTopColor: borderColor.value } : {}),
+    borderTopColor: resolveInlineColor(props.color),
   })
 )
 
 const textStyle = computed(() => {
   const style: Record<string, string> = {}
-  if (!isVsColor(props.color)) {
-    style.color = getVsColor(
-      props.color !== 'rgba(0, 0, 0,.1)' ? props.color : undefined
-    )
-  }
-  if (!isVsColor(props.background)) {
-    style.background = getVsColor(props.background)
+  const textColor = resolveInlineColor(
+    props.color !== DEFAULT_COLOR ? props.color : ''
+  )
+  if (textColor) style.color = textColor
+  const background = resolveInlineColor(props.background)
+  if (background && props.background !== 'transparent') {
+    style.background = background
   }
   return style
 })
 
 const textColorClass = computed(() =>
-  isVsColor(props.color) ? ns.em('text', props.color) : ns.em('text', 'default')
+  isVsColor(normalizedColor.value)
+    ? ns.em('text', normalizedColor.value)
+    : ns.em('text', 'default')
 )
 
 const backgroundColorClass = computed(() =>
-  isVsColor(props.background)
-    ? ns.em('background', props.background)
+  isVsColor(normalizedBackground.value)
+    ? ns.em('background', normalizedBackground.value)
     : ns.em('background', 'default')
 )
 
 const rootStyle = computed(() =>
-  isVsColor(props.color)
-    ? ns.cssVar({ color: getVsColor(props.color) })
+  isVsColor(normalizedColor.value)
+    ? ns.cssVar({ color: getVsColor(normalizedColor.value) })
     : undefined
 )
 </script>

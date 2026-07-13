@@ -150,7 +150,7 @@ Control text alignment with the `position` prop: left, left-center, center, righ
 ## Color
 
 
-Change line and label color using Vuesax palette names, RGB, or HEX values.
+Change the color of the line and the text using theme colors, RGB, or HEX.
 
 <template #example>
 <divider-color />
@@ -158,13 +158,13 @@ Change line and label color using Vuesax palette names, RGB, or HEX values.
 
 <template #template>
 
-@[code{1-10}](../.vuepress/components/divider/color.vue)
+@[code{1-12}](../.vuepress/components/divider/color.vue)
 
 </template>
 
 <template #style>
 
-@[code{12-20}](../.vuepress/components/divider/color.vue)
+@[code{14-22}](../.vuepress/components/divider/color.vue)
 
 </template>
 
@@ -183,13 +183,13 @@ Highlight divider text with a custom `background` color.
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/divider/background.vue)
+@[code{1-12}](../.vuepress/components/divider/background.vue)
 
 </template>
 
 <template #style>
 
-@[code{9-17}](../.vuepress/components/divider/background.vue)
+@[code{14-22}](../.vuepress/components/divider/background.vue)
 
 </template>
 
@@ -208,13 +208,13 @@ Use Material Icons inside the divider via the `icon` prop.
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/divider/icons.vue)
+@[code{1-10}](../.vuepress/components/divider/icons.vue)
 
 </template>
 
 <template #style>
 
-@[code{10-18}](../.vuepress/components/divider/icons.vue)
+@[code{12-20}](../.vuepress/components/divider/icons.vue)
 
 </template>
 

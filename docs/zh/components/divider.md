@@ -11,7 +11,7 @@ PROPS:
   - name: color
     type: String
     values: primary, success, danger, warning, dark, RGB, HEX
-    description: 线条与文本颜色。
+    description: 线条与文本颜色（主题色、RGB、HEX）。
     default: rgba(0,0,0,.1)
     link: null
     usage: '#color'
@@ -158,13 +158,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-10}](../.vuepress/components/divider/color.vue)
+@[code{1-12}](../.vuepress/components/divider/color.vue)
 
 </template>
 
 <template #style>
 
-@[code{12-20}](../.vuepress/components/divider/color.vue)
+@[code{14-22}](../.vuepress/components/divider/color.vue)
 
 </template>
 
@@ -183,13 +183,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/divider/background.vue)
+@[code{1-12}](../.vuepress/components/divider/background.vue)
 
 </template>
 
 <template #style>
 
-@[code{9-17}](../.vuepress/components/divider/background.vue)
+@[code{14-22}](../.vuepress/components/divider/background.vue)
 
 </template>
 
@@ -208,13 +208,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/divider/icons.vue)
+@[code{1-10}](../.vuepress/components/divider/icons.vue)
 
 </template>
 
 <template #style>
 
-@[code{10-18}](../.vuepress/components/divider/icons.vue)
+@[code{12-20}](../.vuepress/components/divider/icons.vue)
 
 </template>
 

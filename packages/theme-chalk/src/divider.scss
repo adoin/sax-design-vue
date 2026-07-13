@@ -41,22 +41,22 @@
     font-size: 1.25em;
   }
 
-  @each $type in (primary, success, warn, danger, info, dark, light) {
+  @each $type in (primary, success, warn, warning, danger, info, dark, light) {
     @include e(border) {
       @include m($type) {
-        border-top-color: getColor($type);
+        border-top-color: getColor(if($type == warning, warn, $type));
       }
     }
 
     @include e(text) {
       @include m($type) {
-        color: getColor($type);
+        color: getColor(if($type == warning, warn, $type));
       }
     }
 
     @include e(background) {
       @include m($type) {
-        background: getColor($type);
+        background: getColor(if($type == warning, warn, $type));
       }
     }
   }

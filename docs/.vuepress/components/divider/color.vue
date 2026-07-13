@@ -6,6 +6,8 @@
     <vs-divider color="danger">Danger</vs-divider>
     <vs-divider color="warning">Warning</vs-divider>
     <vs-divider color="dark">Dark</vs-divider>
+    <vs-divider color="rgb(29, 222, 194)">RGB</vs-divider>
+    <vs-divider color="#ad289f">HEX</vs-divider>
   </div>
 </template>
 

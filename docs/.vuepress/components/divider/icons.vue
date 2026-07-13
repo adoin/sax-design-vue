@@ -4,6 +4,8 @@
     <vs-divider color="primary" icon="star" />
     <vs-divider color="success" icon="check" />
     <vs-divider color="danger" icon="delete_forever" />
+    <vs-divider color="warning" icon="report_problem" />
+    <vs-divider color="dark" icon="watch_later" />
   </div>
 </template>
 
