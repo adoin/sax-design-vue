@@ -1,6 +1,7 @@
 <template>
   <i :class="iconClasses" :style="style">
-    <slot v-if="!icon" />
+    <template v-if="isMaterialIcons">{{ icon }}</template>
+    <slot v-else-if="!icon" />
   </i>
 </template>
 
@@ -18,7 +19,17 @@ defineOptions({
 const props = defineProps(iconProps)
 const ns = useNamespace('icon')
 
-const iconClasses = computed(() => [ns.b(), props.iconPack, props.icon])
+const isMaterialIcons = computed(
+  () => props.iconPack === 'material-icons' && !!props.icon
+)
+
+const iconClasses = computed(() => {
+  const classes: string[] = [ns.b(), props.iconPack]
+  if (!isMaterialIcons.value && props.icon) {
+    classes.push(props.icon)
+  }
+  return classes
+})
 
 const style = computed<CSSProperties>(() => {
   const { size, color } = props

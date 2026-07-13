@@ -95,9 +95,19 @@ const borderColorClass = computed(() =>
     : ns.em('border', 'default')
 )
 
+const borderFlexStyle = (width: string): CSSProperties => {
+  if (width === '0%') {
+    return { flex: '0 0 0', width: 0, minWidth: 0 }
+  }
+  if (width === '100%') {
+    return { flex: '1 1 0', minWidth: 0, width: 'auto' }
+  }
+  return { flex: `0 1 ${width}`, width, minWidth: 0 }
+}
+
 const afterStyle = computed(
   (): CSSProperties => ({
-    width: widthAfter.value,
+    ...borderFlexStyle(widthAfter.value),
     borderTopWidth: props.borderHeight,
     borderTopStyle: props.borderStyle as CSSProperties['borderTopStyle'],
     borderTopColor: resolveInlineColor(props.color),
@@ -106,7 +116,7 @@ const afterStyle = computed(
 
 const beforeStyle = computed(
   (): CSSProperties => ({
-    width: widthBefore.value,
+    ...borderFlexStyle(widthBefore.value),
     borderTopWidth: props.borderHeight,
     borderTopStyle: props.borderStyle as CSSProperties['borderTopStyle'],
     borderTopColor: resolveInlineColor(props.color),
