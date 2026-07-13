@@ -17,7 +17,7 @@
       aria-label="Close"
       @click.stop="handleClose"
     >
-      <IconClose hover="less" scale="0.45" />
+      <VsIcon :icon="closeIcon" :icon-pack="iconPack" />
     </button>
   </div>
 </template>
@@ -29,7 +29,7 @@ import {
   useNamespace,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
-import { IconClose, VsIcon } from '@vuesax-alpha/components/icon'
+import { VsIcon } from '@vuesax-alpha/components/icon'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { chipEmits, chipProps } from './chip'
 import type { Color } from '@vuesax-alpha/constants'
