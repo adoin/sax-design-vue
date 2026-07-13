@@ -47,6 +47,10 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     cursor: grab;
     transition: left 0.15s ease;
+
+    &:hover .#{bem('slider', 'text')} {
+      opacity: 1;
+    }
   }
 
   @include e(tick) {
@@ -62,12 +66,35 @@
 
   @include e(text) {
     position: absolute;
-    top: -28px;
+    top: -36px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 0.75rem;
     white-space: nowrap;
-    color: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    background: var(--vs-slider-color, getColor('primary'));
+    padding: 4px 8px;
+    border-radius: 6px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -4px;
+      transform: translateX(-50%);
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 4px solid var(--vs-slider-color, getColor('primary'));
+    }
+  }
+
+  @include when(dragging) {
+    @include e(text) {
+      opacity: 1;
+    }
   }
 
   @include when(disabled) {

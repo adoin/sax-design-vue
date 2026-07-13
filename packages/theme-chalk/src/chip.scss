@@ -52,10 +52,23 @@
     cursor: pointer;
     transition: all 0.3s ease;
     flex-shrink: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
+    line-height: 1;
 
     .#{$namespace}-icon {
       font-size: 0.9rem;
       color: inherit;
+      width: auto;
+      height: auto;
+      min-width: 0;
+    }
+
+    .#{$namespace}-icon.material-icons {
+      font-family: 'Material Icons' !important;
+      font-size: 14px;
+      line-height: 1;
     }
 
     &:hover {

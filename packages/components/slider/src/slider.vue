@@ -1,6 +1,11 @@
 <template>
   <div
-    :class="[ns.b(), themeColorClass, ns.is('disabled', disabled)]"
+    :class="[
+      ns.b(),
+      themeColorClass,
+      ns.is('disabled', disabled),
+      ns.is('dragging', dragging),
+    ]"
     :style="rootStyle"
     tabindex="0"
     @keydown.left.prevent="decrease"

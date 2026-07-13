@@ -42,6 +42,11 @@
     border: 0;
     cursor: pointer;
     transition: color 0.2s ease;
+    color: rgba(0, 0, 0, 0.55);
+
+    &:hover:not(:disabled) {
+      color: var(--vs-tabs-color, getColor('primary'));
+    }
 
     &:disabled {
       opacity: 0.5;
@@ -176,6 +181,21 @@
     @include e(content) {
       flex: 1;
       padding: 0 10px;
+    }
+  }
+}
+
+@include b(tabs) {
+  @include e(pane-fade) {
+    &-enter-active,
+    &-leave-active {
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    &-enter-from,
+    &-leave-to {
+      opacity: 0;
+      transform: translateY(8px);
     }
   }
 }

@@ -1,7 +1,9 @@
 <template>
-  <div v-show="isActive" :class="ns.e('pane')">
-    <slot />
-  </div>
+  <transition :name="transitionName">
+    <div v-show="isActive" :class="ns.e('pane')">
+      <slot />
+    </div>
+  </transition>
 </template>
 
 <script lang="ts" setup>
@@ -31,6 +33,7 @@ const uid = instance.uid
 const paneIndex = ref(-1)
 
 const isActive = computed(() => tabs.activeIndex.value === paneIndex.value)
+const transitionName = computed(() => ns.e('pane-fade'))
 
 onMounted(() => {
   paneIndex.value = tabs.registerPane({
