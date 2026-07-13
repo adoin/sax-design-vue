@@ -1,5 +1,5 @@
 <template>
-  <span :class="chipKls" :style="chipStyle" @click="handleClick">
+  <div v-if="visible" :class="chipKls" :style="chipStyle" @click="handleClick">
     <span :class="ns.e('text')">
       <VsIcon
         v-if="icon"
@@ -11,14 +11,14 @@
     </span>
 
     <button
-      v-if="closable"
+      v-if="isClosable"
       :class="ns.e('close')"
       type="button"
       @click.stop="handleClose"
     >
       <VsIcon :icon="closeIcon" :icon-pack="iconPack" />
     </button>
-  </span>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -29,9 +29,10 @@ import {
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { VsIcon } from '@vuesax-alpha/components/icon'
-import { getVsColor } from '@vuesax-alpha/utils'
+import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { chipEmits, chipProps } from './chip'
 import type { Color } from '@vuesax-alpha/constants'
+import type { CSSProperties } from 'vue'
 
 defineOptions({
   name: 'VsChip',
@@ -44,29 +45,61 @@ const ns = useNamespace('chip')
 const color = useColor(computed(() => (props.color as Color) || undefined))
 const vsBaseClasses = useVuesaxBaseComponent(color)
 
+const themeColor = computed(() =>
+  normalizeVsColor(props.color || color.value || '')
+)
+
+const isClosable = computed(
+  () => props.closable !== false && props.closable !== ''
+)
+
+const visible = computed(() => props.item || props.modelValue)
+
 const chipKls = computed(() => [
   ns.b(),
   vsBaseClasses,
-  ns.is('closable', !!props.closable),
+  ns.is('closable', isClosable.value),
   ns.is('transparent', props.transparent),
-  props.color && ns.m(props.color),
+  props.color && ns.is('colored', !!props.color),
+  props.color && isVsColor(themeColor.value) && ns.m(themeColor.value),
 ])
 
-const chipStyle = computed(() => {
-  const colorValue = color.value
+const chipStyle = computed((): CSSProperties => {
+  const colorValue = props.color || color.value
   if (!colorValue) {
     return {}
   }
 
-  return props.transparent
-    ? ns.cssVar({ color: getVsColor(colorValue) })
-    : ns.cssVar({ color: getVsColor(colorValue) })
+  if (isVsColor(themeColor.value)) {
+    return {}
+  }
+
+  const resolved = getVsColor(colorValue)
+  if (!resolved) return {}
+
+  if (props.transparent) {
+    const bg = resolved.startsWith('var(')
+      ? `color-mix(in srgb, ${resolved} 15%, transparent)`
+      : `rgba(${resolved}, 0.15)`
+    const fg = resolved.startsWith('var(') ? resolved : `rgb(${resolved})`
+    return { background: bg, color: fg }
+  }
+
+  return {
+    background: resolved.startsWith('var(') ? resolved : `rgb(${resolved})`,
+    color: 'rgba(255,255,255,.9)',
+  }
 })
 
 const handleClose = () => {
+  emit('click')
+  if (props.item) {
+    emit('vs-remove', false)
+    emit('close')
+    return
+  }
   emit('update:modelValue', false)
   emit('close')
-  emit('click')
 }
 
 const handleClick = () => {

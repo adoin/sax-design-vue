@@ -2,6 +2,33 @@
 
 @include b(collapse) {
   width: 100%;
+  padding: 10px;
+
+  @include m(shadow) {
+    @include b(collapse-item) {
+      margin-bottom: 10px;
+      border-bottom: none;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+  }
+
+  @include m(border) {
+    @include b(collapse-item) {
+      margin-bottom: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 6px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  @include m(margin) {
+    @include b(collapse-item) {
+      margin: 10px 0;
+      border-bottom: none;
+    }
+  }
 }
 
 @include b(collapse-item) {
@@ -31,12 +58,19 @@
   }
 
   @include e(body) {
-    padding: 0 16px 16px;
+    padding: 10px;
+    padding-top: 0;
+    opacity: 0.2;
+    transition: opacity 0.25s ease;
   }
 
   @include when(open) {
     @include e(icon) {
       transform: rotate(180deg);
+    }
+
+    @include e(body) {
+      opacity: 1;
     }
   }
 

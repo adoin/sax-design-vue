@@ -1,6 +1,8 @@
 <template>
   <div
-    :class="[ns.b(), ns.m(color), ns.is('disabled', disabled)]"
+    :class="[ns.b(), themeColorClass, ns.is('disabled', disabled)]"
+    :style="rootStyle"
+    tabindex="0"
     @keydown.left.prevent="decrease"
     @keydown.right.prevent="increase"
   >
@@ -14,6 +16,12 @@
     >
       <span :class="ns.e('line')" />
       <span :class="ns.e('fill')" :style="fillStyle" />
+      <span
+        v-for="tick in tickValues"
+        :key="tick"
+        :class="ns.e('tick')"
+        :style="{ left: `${tickPercent(tick)}%` }"
+      />
     </button>
     <button
       ref="thumbRef"
@@ -34,7 +42,9 @@
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
+import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { sliderEmits, sliderProps } from './slider'
+import type { CSSProperties } from 'vue'
 
 defineOptions({
   name: 'VsSlider',
@@ -48,6 +58,12 @@ const trackRef = ref<HTMLButtonElement>()
 const thumbRef = ref<HTMLButtonElement>()
 const dragging = ref(false)
 
+const themeColor = computed(() => normalizeVsColor(props.color))
+const isThemeColor = computed(() => isVsColor(themeColor.value))
+const themeColorClass = computed(() =>
+  isThemeColor.value ? ns.m(themeColor.value) : ''
+)
+
 const clamp = (val: number) => Math.min(props.max, Math.max(props.min, val))
 
 const percent = computed(() => {
@@ -58,20 +74,60 @@ const percent = computed(() => {
 
 const displayValue = computed(() => props.modelValue)
 
-const fillStyle = computed(() => ({ width: `${percent.value}%` }))
-const thumbStyle = computed(() => ({ left: `${percent.value}%` }))
+const customColor = computed(() => {
+  if (isThemeColor.value) return ''
+  const c = getVsColor(props.color)
+  if (!c) return ''
+  return c.startsWith('var(') ? c : `rgb(${c})`
+})
 
-const updateValue = (clientX: number) => {
+const rootStyle = computed((): CSSProperties => {
+  if (!customColor.value) return {}
+  return { '--vs-slider-color': customColor.value } as CSSProperties
+})
+
+const fillStyle = computed(() => ({
+  width: `${percent.value}%`,
+  ...(customColor.value ? { background: customColor.value } : {}),
+}))
+
+const thumbStyle = computed(() => ({
+  left: `${percent.value}%`,
+  ...(customColor.value ? { background: customColor.value } : {}),
+}))
+
+const tickValues = computed(() => {
+  if (!props.ticks) return []
+  const values: number[] = []
+  const step = props.step || 1
+  for (let i = props.min; i <= props.max; i += step) {
+    values.push(i)
+  }
+  return values
+})
+
+const tickPercent = (tick: number) => {
+  const range = props.max - props.min
+  if (range <= 0) return 0
+  return ((tick - props.min) / range) * 100
+}
+
+const setValue = (next: number, emitChange = false) => {
+  const stepped = props.step ? Math.round(next / props.step) * props.step : next
+  const clamped = clamp(stepped)
+  emit('update:modelValue', clamped)
+  if (emitChange) {
+    emit('change', clamped)
+  }
+}
+
+const updateValue = (clientX: number, emitChange = false) => {
   const track = trackRef.value
   if (!track) return
   const rect = track.getBoundingClientRect()
   const ratio = (clientX - rect.left) / rect.width
-  const next = clamp(props.min + ratio * (props.max - props.min))
-  emit(
-    'update:modelValue',
-    props.step ? Math.round(next / props.step) * props.step : next
-  )
-  emit('change', next)
+  const next = props.min + ratio * (props.max - props.min)
+  setValue(next, emitChange)
 }
 
 const startDrag = (event: MouseEvent) => {
@@ -88,6 +144,9 @@ const onDrag = (event: MouseEvent) => {
 }
 
 const stopDrag = () => {
+  if (dragging.value) {
+    emit('change', props.modelValue)
+  }
   dragging.value = false
   window.removeEventListener('mousemove', onDrag)
   window.removeEventListener('mouseup', stopDrag)
@@ -95,21 +154,17 @@ const stopDrag = () => {
 
 const handleTrackClick = (event: MouseEvent) => {
   if (props.disabled) return
-  updateValue(event.clientX)
+  updateValue(event.clientX, true)
 }
 
 const increase = () => {
   if (props.disabled) return
-  const next = clamp(props.modelValue + (props.step || 1))
-  emit('update:modelValue', next)
-  emit('change', next)
+  setValue(props.modelValue + (props.step || 1), true)
 }
 
 const decrease = () => {
   if (props.disabled) return
-  const next = clamp(props.modelValue - (props.step || 1))
-  emit('update:modelValue', next)
-  emit('change', next)
+  setValue(props.modelValue - (props.step || 1), true)
 }
 
 watch(

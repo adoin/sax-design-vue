@@ -1,4 +1,5 @@
 @use 'mixins/mixins' as *;
+@use 'common/var' as *;
 
 @include b(list) {
   width: 100%;
@@ -46,8 +47,10 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 5px;
+    padding: 8px 0;
+    margin-bottom: 5px;
     font-weight: 600;
+    box-shadow: 0 7px 7px -5px rgba(0, 0, 0, 0.08);
   }
 
   @include e(header-icon) {
@@ -68,5 +71,17 @@
     font-size: 0.8rem;
     color: rgba(0, 0, 0, 0.55);
     font-weight: 400;
+  }
+
+  @each $type in (primary, success, warn, danger, info, dark) {
+    @include e(header) {
+      @include m($type) {
+        color: getColor($type);
+
+        .#{bem('list', 'header-title')} {
+          color: getColor($type);
+        }
+      }
+    }
   }
 }

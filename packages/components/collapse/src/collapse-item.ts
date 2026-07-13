@@ -11,6 +11,10 @@ export const collapseItemProps = buildProps({
     type: String,
     default: 'keyboard_arrow_down',
   },
+  iconPack: {
+    type: String,
+    default: 'material-icons',
+  },
 } as const)
 
 export type CollapseItemProps = ExtractPropTypes<typeof collapseItemProps>

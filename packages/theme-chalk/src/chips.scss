@@ -1,42 +1,67 @@
 @use 'mixins/mixins' as *;
+@use 'common/var' as *;
 
 @include b(chips) {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px;
+  justify-content: flex-end;
   width: 100%;
-  padding: 6px 8px;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: rgba(255, 255, 255, 0.9);
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  @include b(chip) {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 
   @include when(empty) {
-    min-height: 42px;
+    @include e(input) {
+      padding-left: 10px !important;
+    }
   }
 
   @include e(input) {
+    display: inline-block;
     flex: 1;
-    min-width: 120px;
+    min-width: 80px;
     border: 0;
     outline: none;
     background: transparent;
+    color: inherit;
     font: inherit;
-    padding: 4px;
+    padding: 9px;
+    margin-left: 2px;
+    box-sizing: border-box;
   }
 
   @include e(remove-all) {
-    display: inline-flex;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    padding: 5px;
     border: 0;
     background: transparent;
     cursor: pointer;
-    opacity: 0.6;
-    padding: 4px;
+    transition: all 0.3s ease;
+    color: inherit;
 
     &:hover {
-      opacity: 1;
+      color: getColor(danger);
+    }
+  }
+
+  @each $type in (primary, success, warn, danger, dark, info) {
+    @include m($type) {
+      border: 1px solid getColor($type, 0.25);
     }
   }
 }

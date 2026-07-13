@@ -24,6 +24,8 @@
     transition: all 0.25s ease;
     position: relative;
     cursor: pointer;
+    float: left;
+    backface-visibility: visible;
   }
 
   @include e(wrap) {
@@ -82,6 +84,75 @@
   @include m(hover-zoom) {
     .#{bem('images', 'item')}:hover .#{bem('images', 'img')} {
       transform: scale(1.2);
+    }
+  }
+
+  @include m(hover-blur) {
+    .#{bem('images', 'item')}:hover {
+      transform: scale(1.04) translate(0, -2px);
+
+      .#{bem('images', 'blur')} {
+        opacity: 0.8;
+        bottom: -10px;
+        transform: scale(0.9);
+      }
+    }
+  }
+
+  @include m(hover-dark) {
+    .#{bem('images', 'item')}:hover {
+      background: #000;
+      border-radius: 20px;
+
+      .#{bem('images', 'img')} {
+        opacity: 0.4;
+      }
+    }
+  }
+
+  @include m(hover-scale) {
+    .#{bem('images', 'item')}:hover {
+      transform: scale(1.15);
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+  }
+
+  @include m(hover-curtain) {
+    .#{bem('images', 'wrap')} {
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        opacity: 0;
+        transition: all 0.25s ease;
+        z-index: 3;
+        border-radius: inherit;
+      }
+    }
+
+    .#{bem('images', 'item')}:hover .#{bem('images', 'wrap')}::before {
+      opacity: 1;
+    }
+
+    .#{bem('images', 'item')}:hover .#{bem('images', 'img')} {
+      transform: scale(1.15);
+    }
+  }
+
+  @include when(alternating) {
+    .#{bem('images', 'item')}:nth-child(5n) {
+      width: calc(50% - 4px);
+      float: right;
+    }
+  }
+
+  @include when(not-margin) {
+    @include when(alternating) {
+      .#{bem('images', 'item')}:nth-child(5n) {
+        width: 50%;
+      }
     }
   }
 }

@@ -30,7 +30,7 @@
     left: 0;
     height: 100%;
     border-radius: 20px;
-    background: getColor('primary');
+    background: var(--vs-slider-color, getColor('primary'));
     transition: width 0.15s ease;
   }
 
@@ -43,10 +43,21 @@
     margin-top: -9px;
     border: 2px solid getColor('white');
     border-radius: 50%;
-    background: getColor('primary');
+    background: var(--vs-slider-color, getColor('primary'));
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     cursor: grab;
     transition: left 0.15s ease;
+  }
+
+  @include e(tick) {
+    position: absolute;
+    top: 50%;
+    width: 2px;
+    height: 10px;
+    margin-top: -5px;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.2);
+    pointer-events: none;
   }
 
   @include e(text) {

@@ -4,7 +4,7 @@
       <slot name="avatar" />
     </div>
     <div v-if="icon" :class="ns.e('icon')">
-      <VsIcon :icon="icon" />
+      <VsIcon :icon="icon" :icon-pack="iconPack" />
     </div>
     <div :class="ns.e('titles')">
       <div v-if="title" :class="ns.e('title')">{{ title }}</div>

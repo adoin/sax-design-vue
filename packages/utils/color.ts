@@ -20,8 +20,11 @@ export const isColorDark = (color?: string | boolean): boolean => {
   return color === 'dark' || color === true
 }
 
+export const normalizeVsColor = (color: string): string =>
+  color === 'warning' ? 'warn' : color
+
 export const isVsColor = (color: string): boolean =>
-  vuesaxColors.includes(color as any)
+  vuesaxColors.includes(normalizeVsColor(color) as VuesaxColor)
 
 /**
  * #eee -> length hex shorthand, shorthand with alpha, classic, hex alpha
@@ -78,7 +81,9 @@ export const setColor = (
     }
   } else if (isVsColor(color)) {
     const style = window.getComputedStyle(document.body)
-    newColor = style.getPropertyValue(`--${namespace}-${color}`)
+    newColor = style.getPropertyValue(
+      `--${namespace}-${normalizeVsColor(color)}`
+    )
     setCssVar(colorName, newColor, el)
     if (addClass) {
       el.classList.add(`${namespace}-change-color`)
@@ -131,7 +136,7 @@ export const getVsColor = (
     const rgb = hexToRgb(color)
     newColor = `${rgb?.r}, ${rgb?.g}, ${rgb?.b}`
   } else if (isVsColor(color as VuesaxColor)) {
-    newColor = `var(--${namespace}-${color})`
+    newColor = `var(--${namespace}-${normalizeVsColor(color)})`
   } else if (isRGBNumbers) {
     newColor = color
   }

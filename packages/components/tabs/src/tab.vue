@@ -11,7 +11,7 @@ import {
   inject,
   onBeforeUnmount,
   onMounted,
-  watch,
+  ref,
 } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { tabsContextKey } from './constants'
@@ -28,11 +28,12 @@ const ns = useNamespace('tabs')
 const tabs = inject(tabsContextKey)!
 const instance = getCurrentInstance()!
 const uid = instance.uid
+const paneIndex = ref(-1)
 
-const isActive = computed(() => tabs.currentName.value === props.label)
+const isActive = computed(() => tabs.activeIndex.value === paneIndex.value)
 
 onMounted(() => {
-  tabs.registerPane({
+  paneIndex.value = tabs.registerPane({
     uid,
     label: props.label,
     icon: props.icon,
@@ -44,13 +45,4 @@ onMounted(() => {
 onBeforeUnmount(() => {
   tabs.unregisterPane(uid)
 })
-
-watch(
-  () => props.label,
-  (label) => {
-    if (isActive.value) {
-      tabs.setCurrentName(label)
-    }
-  }
-)
 </script>

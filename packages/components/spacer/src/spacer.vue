@@ -1,7 +1,5 @@
 <template>
-  <div :class="ns.b()">
-    <slot />
-  </div>
+  <div :class="ns.b()" />
 </template>
 
 <script lang="ts" setup>

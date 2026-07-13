@@ -1,5 +1,5 @@
 <template>
-  <div :class="[ns.b(), ns.m(color), ns.is('empty', !modelValue.length)]">
+  <div :class="[ns.b(), themeColorClass, ns.is('empty', !modelValue.length)]">
     <slot />
 
     <input
@@ -10,21 +10,17 @@
       @keydown.enter.prevent="addItem"
     />
 
-    <button
-      v-if="modelValue.length"
-      :class="ns.e('remove-all')"
-      type="button"
-      @click="removeAll"
-    >
+    <button :class="ns.e('remove-all')" type="button" @click="removeAll">
       <VsIcon :icon="removeIcon" :icon-pack="iconPack" />
     </button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { VsIcon } from '@vuesax-alpha/components/icon'
+import { normalizeVsColor } from '@vuesax-alpha/utils'
 import { chipsEmits, chipsProps } from './chips'
 
 defineOptions({
@@ -36,6 +32,11 @@ const emit = defineEmits(chipsEmits)
 
 const ns = useNamespace('chips')
 const newChip = ref('')
+
+const themeColorClass = computed(() => {
+  const color = normalizeVsColor(props.color)
+  return color ? ns.m(color) : ''
+})
 
 const addItem = () => {
   const value = newChip.value.trim()

@@ -15,6 +15,20 @@
     height: 100%;
     border-radius: 18px;
     transition: all 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  @include e(label) {
+    position: relative;
+    z-index: 101;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #fff;
+    padding: 0 8px;
+    white-space: nowrap;
   }
 
   @include e(indeterminate) {

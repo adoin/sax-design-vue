@@ -16,6 +16,10 @@ export const listItemProps = buildProps({
     type: String,
     default: null,
   },
+  iconPack: {
+    type: String,
+    default: 'material-icons',
+  },
 } as const)
 
 export type ListItemProps = ExtractPropTypes<typeof listItemProps>

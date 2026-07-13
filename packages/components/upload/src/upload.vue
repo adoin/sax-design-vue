@@ -105,7 +105,7 @@ const handleChange = async (event: Event) => {
   for (const file of files) {
     if (props.limit && fileList.value.length >= Number(props.limit)) break
     const preview = await readPreview(file)
-    fileList.value.push({
+    const item: UploadFileItem = {
       uid: ++uid,
       raw: file,
       name: file.name,
@@ -113,7 +113,13 @@ const handleChange = async (event: Event) => {
       percent: 0,
       uploading: false,
       error: false,
-    })
+    }
+    fileList.value.push(item)
+
+    if (props.automatic && props.action && props.singleUpload) {
+      item.uploading = true
+      uploadFile(item)
+    }
   }
 
   emit(
@@ -121,7 +127,7 @@ const handleChange = async (event: Event) => {
     files,
     fileList.value.map((item) => item.raw)
   )
-  if (props.automatic && props.action) {
+  if (props.automatic && props.action && !props.singleUpload) {
     uploadAll()
   }
   input.value = ''

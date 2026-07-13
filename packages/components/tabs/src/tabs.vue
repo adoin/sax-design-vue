@@ -2,18 +2,19 @@
   <div
     :class="[
       ns.b(),
-      ns.m(props.color),
+      themeColorClass,
       ns.m(`position-${position}`),
       ns.m(`align-${alignment}`),
     ]"
+    :style="rootStyle"
   >
     <div :class="ns.e('nav-wrap')">
       <ul ref="navRef" :class="ns.e('nav')">
         <li
-          v-for="pane in panes"
+          v-for="(pane, index) in panes"
           :key="pane.uid"
-          :class="[ns.e('item'), ns.is('active', pane.uid === activeUid)]"
-          @click="setActive(pane.uid)"
+          :class="[ns.e('item'), ns.is('active', index === activeIndex)]"
+          @click="setActiveIndex(index)"
         >
           <button :class="ns.e('btn')" type="button" :disabled="pane.disabled">
             <VsIcon v-if="pane.icon" :icon="pane.icon" />
@@ -33,9 +34,11 @@
 import { computed, nextTick, onMounted, provide, ref, watch } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { VsIcon } from '@vuesax-alpha/components/icon'
+import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { tabsContextKey } from './constants'
 import { tabsEmits, tabsProps } from './tabs'
 import type { TabPaneContext } from './constants'
+import type { CSSProperties } from 'vue'
 
 defineOptions({
   name: 'VsTabs',
@@ -47,35 +50,59 @@ const emit = defineEmits(tabsEmits)
 const ns = useNamespace('tabs')
 const panes = ref<TabPaneContext[]>([])
 const navRef = ref<HTMLElement>()
-const activeUid = ref<number>(0)
+const activeIndex = ref(0)
 const lineStyle = ref<Record<string, string>>({})
 
-const currentName = computed({
-  get: () => props.modelValue,
-  set: (val) => {
-    emit('update:modelValue', val)
-    emit('change', val)
-  },
+const themeColor = computed(() => normalizeVsColor(props.color))
+const isThemeColor = computed(() => isVsColor(themeColor.value))
+const themeColorClass = computed(() =>
+  isThemeColor.value ? ns.m(themeColor.value) : ''
+)
+
+const customColor = computed(() => {
+  if (isThemeColor.value) return ''
+  const c = getVsColor(props.color)
+  if (!c) return ''
+  return c.startsWith('var(') ? c : `rgb(${c})`
 })
 
-const registerPane = (pane: TabPaneContext) => {
-  panes.value.push(pane)
-  if (activeUid.value === 0) {
-    activeUid.value = pane.uid
-    currentName.value = pane.label
-  }
+const rootStyle = computed((): CSSProperties => {
+  if (!customColor.value) return {}
+  return { '--vs-tabs-color': customColor.value } as CSSProperties
+})
+
+const resolveIndex = (val: string | number) => {
+  if (typeof val === 'number') return val
+  const idx = panes.value.findIndex((item) => item.label === val)
+  return idx >= 0 ? idx : 0
+}
+
+const setActiveIndex = (index: number) => {
+  const pane = panes.value[index]
+  if (!pane || pane.disabled) return
+  activeIndex.value = index
+  emit('update:modelValue', index)
+  emit('change', index)
   nextTick(updateLine)
 }
 
-const unregisterPane = (uid: number) => {
-  panes.value = panes.value.filter((pane) => pane.uid !== uid)
+const registerPane = (pane: TabPaneContext) => {
+  panes.value.push(pane)
+  const index = panes.value.length - 1
+  if (index === 0) {
+    const initial = resolveIndex(props.modelValue)
+    activeIndex.value = initial
+  }
+  nextTick(updateLine)
+  return index
 }
 
-const setActive = (uid: number) => {
-  const pane = panes.value.find((item) => item.uid === uid)
-  if (!pane || pane.disabled) return
-  activeUid.value = uid
-  currentName.value = pane.label
+const unregisterPane = (uid: number) => {
+  const removedIndex = panes.value.findIndex((pane) => pane.uid === uid)
+  panes.value = panes.value.filter((pane) => pane.uid !== uid)
+  if (removedIndex >= 0 && activeIndex.value >= panes.value.length) {
+    activeIndex.value = Math.max(0, panes.value.length - 1)
+  }
   nextTick(updateLine)
 }
 
@@ -84,28 +111,50 @@ const updateLine = () => {
   if (!nav) return
   const activeEl = nav.querySelector(`.${ns.is('active')}`) as HTMLElement
   if (!activeEl) return
-  lineStyle.value = {
-    left: `${activeEl.offsetLeft}px`,
-    width: `${activeEl.offsetWidth}px`,
+
+  if (props.position === 'left' || props.position === 'right') {
+    lineStyle.value = {
+      top: `${activeEl.offsetTop}px`,
+      height: `${activeEl.offsetHeight}px`,
+      width: '2px',
+      left: props.position === 'left' ? 'auto' : '',
+      right: props.position === 'right' ? '0' : '',
+      bottom: 'auto',
+    }
+    if (props.position === 'left') {
+      lineStyle.value.right = '0'
+      delete lineStyle.value.left
+    }
+  } else {
+    lineStyle.value = {
+      left: `${activeEl.offsetLeft}px`,
+      width: `${activeEl.offsetWidth}px`,
+      top: props.position === 'bottom' ? '0' : '',
+      bottom: props.position === 'bottom' ? 'auto' : '0',
+      height: '2px',
+    }
   }
 }
 
 watch(
   () => props.modelValue,
   (val) => {
-    const pane = panes.value.find((item) => item.label === val)
-    if (pane) {
-      activeUid.value = pane.uid
+    const index = resolveIndex(val)
+    if (index >= 0 && index < panes.value.length) {
+      activeIndex.value = index
       nextTick(updateLine)
     }
   }
 )
 
+watch(
+  () => props.position,
+  () => nextTick(updateLine)
+)
+
 provide(tabsContextKey, {
-  currentName,
-  setCurrentName: (name) => {
-    currentName.value = name
-  },
+  activeIndex,
+  setActiveIndex,
   registerPane,
   unregisterPane,
 })

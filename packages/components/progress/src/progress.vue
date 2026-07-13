@@ -3,11 +3,15 @@
     :class="[
       ns.b(),
       ns.is('indeterminate', indeterminate),
-      isVsColor(props.color) ? ns.m(props.color) : '',
+      isThemeColor ? ns.m(themeColor) : '',
     ]"
     :style="containerStyle"
   >
-    <div :class="ns.e('foreground')" :style="foregroundStyle" />
+    <div :class="ns.e('foreground')" :style="foregroundStyle">
+      <span v-if="$slots.default" :class="ns.e('label')">
+        <slot />
+      </span>
+    </div>
     <div
       v-if="indeterminate"
       :class="ns.e('indeterminate')"
@@ -19,8 +23,9 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { getVsColor, isVsColor } from '@vuesax-alpha/utils'
+import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { progressProps } from './progress'
+import type { CSSProperties } from 'vue'
 
 defineOptions({
   name: 'VsProgress',
@@ -32,16 +37,34 @@ const ns = useNamespace('progress')
 
 const percentx = ref(0)
 
-const containerStyle = computed(() => ({
-  height: `${props.height}px`,
-  ...(isVsColor(props.color)
-    ? {}
-    : ns.cssVar({ color: getVsColor(props.color) })),
-}))
+const themeColor = computed(() => normalizeVsColor(props.color))
+const isThemeColor = computed(() => isVsColor(themeColor.value))
 
-const foregroundStyle = computed(() => ({
-  width: `${percentx.value}%`,
-}))
+const containerStyle = computed((): CSSProperties => {
+  const style: CSSProperties = { height: `${props.height}px` }
+  if (!isThemeColor.value) {
+    const c = getVsColor(props.color)
+    if (c) {
+      if (c.startsWith('var(')) {
+        style.background = `color-mix(in srgb, ${c} 10%, transparent)`
+      } else {
+        style.background = `rgba(${c}, 0.1)`
+      }
+    }
+  }
+  return style
+})
+
+const foregroundStyle = computed((): CSSProperties => {
+  const style: CSSProperties = { width: `${percentx.value}%` }
+  if (!isThemeColor.value) {
+    const c = getVsColor(props.color)
+    if (c) {
+      style.background = c.startsWith('var(') ? c : `rgb(${c})`
+    }
+  }
+  return style
+})
 
 watch(
   () => props.percent,

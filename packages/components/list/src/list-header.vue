@@ -1,5 +1,5 @@
 <template>
-  <div :class="[ns.e('header'), ns.m(color)]">
+  <div :class="headerKls" :style="headerStyle">
     <VsIcon
       v-if="icon"
       :icon="icon"
@@ -16,15 +16,34 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { VsIcon } from '@vuesax-alpha/components/icon'
+import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { listHeaderProps } from './list-header'
+import type { CSSProperties } from 'vue'
 
 defineOptions({
   name: 'VsListHeader',
 })
 
-defineProps(listHeaderProps)
+const props = defineProps(listHeaderProps)
 
 const ns = useNamespace('list')
+
+const themeColor = computed(() => normalizeVsColor(props.color))
+
+const headerKls = computed(() => [
+  ns.e('header'),
+  isVsColor(themeColor.value) && ns.m(themeColor.value),
+  props.icon && ns.is('with-icon', true),
+])
+
+const headerStyle = computed((): CSSProperties => {
+  if (isVsColor(themeColor.value)) return {}
+  const color = getVsColor(props.color)
+  return color
+    ? { color: color.startsWith('var(') ? color : `rgb(${color})` }
+    : {}
+})
 </script>

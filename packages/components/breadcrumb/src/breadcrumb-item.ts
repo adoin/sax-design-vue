@@ -9,7 +9,7 @@ export const breadcrumbItemProps = buildProps({
   to: String,
   separator: {
     type: String,
-    default: '/',
+    default: undefined,
   },
   hideSeparator: Boolean,
 } as const)

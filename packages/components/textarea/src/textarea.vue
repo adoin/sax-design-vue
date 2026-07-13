@@ -3,7 +3,7 @@
     :class="[
       ns.b(),
       props.color && ns.m(props.color),
-      { [ns.is('focus')]: isFocus, [ns.is('danger')]: isOverCounter },
+      { [ns.is('focus')]: isFocus, [ns.is('danger')]: isDanger },
     ]"
     :style="wrapperStyle"
   >
@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useColor, useNamespace } from '@vuesax-alpha/hooks'
 import { getVsColor } from '@vuesax-alpha/utils'
 import { textareaEmits, textareaProps } from './textarea'
@@ -44,8 +44,14 @@ const color = useColor('primary')
 const isFocus = ref(false)
 
 const isOverCounter = computed(
-  () => props.counter && (props.modelValue?.length ?? 0) > props.counter
+  () => props.counter && (props.modelValue?.length ?? 0) > Number(props.counter)
 )
+
+const isDanger = computed(() => props.counter && isOverCounter.value)
+
+watch(isOverCounter, (val) => {
+  emit('update:counterDanger', Boolean(val))
+})
 
 const wrapperStyle = computed(() => ({
   border: `1px solid ${

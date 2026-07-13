@@ -35,7 +35,12 @@
             :class="ns.e('separator')"
             aria-hidden="true"
           >
-            {{ separator }}
+            <VsIcon
+              v-if="isIconSeparator(separator)"
+              :icon="separator"
+              icon-pack="material-icons"
+            />
+            <template v-else>{{ separator }}</template>
           </span>
         </li>
       </template>
@@ -44,10 +49,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, provide, toRef } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { getVsColor, isVsColor } from '@vuesax-alpha/utils'
+import { VsIcon } from '@vuesax-alpha/components/icon'
+import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { breadcrumbProps } from './breadcrumb'
+import { breadcrumbContextKey } from './constants'
 
 defineOptions({
   name: 'VsBreadcrumb',
@@ -57,14 +64,23 @@ const props = defineProps(breadcrumbProps)
 
 const ns = useNamespace('breadcrumb')
 
+const isIconSeparator = (sep: string) => sep.length > 1
+
+const themeColor = computed(() => normalizeVsColor(props.color))
+
 const textColorClass = computed(() =>
-  isVsColor(props.color) ? ns.em('text', props.color) : ''
+  isVsColor(themeColor.value) ? ns.em('text', themeColor.value) : ''
 )
 
 const textStyle = computed(() => {
-  if (!isVsColor(props.color)) {
+  if (!isVsColor(themeColor.value)) {
     return { color: getVsColor(props.color) }
   }
   return undefined
+})
+
+provide(breadcrumbContextKey, {
+  separator: toRef(props, 'separator'),
+  color: toRef(props, 'color'),
 })
 </script>

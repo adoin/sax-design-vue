@@ -9,9 +9,9 @@ export interface TabPaneContext {
 }
 
 export interface TabsContext {
-  currentName: Ref<string | number>
-  setCurrentName: (name: string | number) => void
-  registerPane: (pane: TabPaneContext) => void
+  activeIndex: Ref<number>
+  setActiveIndex: (index: number) => void
+  registerPane: (pane: TabPaneContext) => number
   unregisterPane: (uid: number) => void
 }
 

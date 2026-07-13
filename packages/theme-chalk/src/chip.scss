@@ -4,38 +4,97 @@
 
 @include b(chip) {
   position: relative;
-  margin: 1px 3px 2px 3px;
-  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  margin: 2px 2px 3px 0;
+  border-radius: 20px;
   padding: 3px 10px 3px 6px;
-  font-size: 0.84rem;
-  border: 1px solid getColor(gray-2);
-  color: getColor(text);
-  display: flex;
-  background-color: getColor(background);
+  font-size: 0.7rem;
+  border: 0;
+  color: rgba(0, 0, 0, 0.7);
+  background: rgb(240, 240, 240);
+  cursor: default;
+
+  @include e(text) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-left: 4px;
+  }
+
+  @include e(icon) {
+    font-size: 0.8rem;
+  }
+
+  @include when(closable) {
+    padding-right: 0;
+  }
+
+  @include when(transparent) {
+    font-weight: 500;
+  }
+
+  @include e(close) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin: 0 4px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.15);
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+
+    .#{$namespace}-icon {
+      font-size: 0.9rem;
+      color: inherit;
+    }
+
+    &:hover {
+      background: getColor(danger);
+    }
+  }
+
+  .#{$namespace}-avatar {
+    width: 24px;
+    height: 24px;
+    margin: 2px 0;
+    margin-left: -8px;
+    margin-right: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.15);
+  }
+
+  @include when(colored) {
+    .#{$namespace}-avatar {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
 
   @include when(hit) {
     background-color: transparent;
-    border-color: getColor(color, 0.5);
+    border: 1px solid getColor(color, 0.5);
   }
 
-  .#{$namespace}-icon-close {
-    background: getColor(gray-4);
-    padding: 14px;
-    position: absolute;
-    top: -11px;
-    right: -11px;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.25s ease;
+  @each $type in (primary, success, warn, danger, dark, info) {
+    @include m($type) {
+      background: getColor($type);
+      color: rgba(255, 255, 255, 0.9);
 
-    @include set-var-value(color, getCssVar(text));
-
-    &:hover {
-      @include set-var-value(color, getCssVar(white));
-      background: getColor('danger');
+      @include when(transparent) {
+        background: getColor($type, 0.15);
+        color: getColor($type);
+      }
     }
   }
 }

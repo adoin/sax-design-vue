@@ -1,8 +1,13 @@
 <template>
   <div class="center" style="flex-direction: row; flex-wrap: wrap; gap: 8px">
-    <vs-chip v-for="item in chips" :key="item" closable @close="remove(item)">{{
+    <vs-chip
+      v-for="item in chips"
+      :key="item"
       item
-    }}</vs-chip>
+      closable
+      @click="remove(item)"
+      >{{ item }}</vs-chip
+    >
   </div>
 </template>
 
