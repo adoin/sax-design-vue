@@ -1,20 +1,25 @@
 <template>
-  <div class="center">
+  <div class="center breadcrumb-align-demo">
+    <vs-breadcrumb align="left" :items="items" />
     <vs-breadcrumb align="center" :items="items" />
     <vs-breadcrumb align="right" :items="items" />
   </div>
 </template>
 
 <script setup lang="ts">
-const items = [{ title: 'Home' }, { title: 'Active', active: true }]
+const items = [
+  { title: 'Dashboard', url: 'dashboard' },
+  { title: 'Link 1', url: 'link-1' },
+  { title: 'Link 2', disabled: true },
+  { title: 'Active', active: true },
+]
 </script>
 
 <style scoped lang="scss">
-.center {
+.breadcrumb-align-demo {
   width: 100%;
-  max-width: 520px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 </style>

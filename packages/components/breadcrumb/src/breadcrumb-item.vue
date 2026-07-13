@@ -7,7 +7,7 @@
     ]"
     :aria-current="active ? 'page' : undefined"
   >
-    <a v-if="!active && to" :href="to" :class="ns.e('link')">
+    <a v-if="!active" :href="to || '#'" :class="ns.e('link')">
       <slot />
     </a>
     <span
@@ -65,6 +65,12 @@ const activeTextColorClass = computed(() =>
 
 const activeTextStyle = computed(() => {
   if (!props.active || isVsColor(themeColor.value)) return undefined
-  return { color: getVsColor(breadcrumb?.color.value || 'primary') }
+  const colorValue = breadcrumb?.color.value
+  if (!colorValue) return undefined
+  const resolved = getVsColor(colorValue)
+  if (!resolved) return undefined
+  return {
+    color: resolved.startsWith('var(') ? resolved : `rgb(${resolved})`,
+  }
 })
 </script>

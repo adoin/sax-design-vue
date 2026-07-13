@@ -1,19 +1,35 @@
 <template>
   <div class="play-container demo">
-    <vs-breadcrumb :items="items" color="primary" />
-    <vs-breadcrumb separator=">">
-      <vs-breadcrumb-item to="#">Home</vs-breadcrumb-item>
-      <vs-breadcrumb-item to="#">Library</vs-breadcrumb-item>
-      <vs-breadcrumb-item active>Data</vs-breadcrumb-item>
+    <vs-breadcrumb :items="defaultItems" />
+    <vs-breadcrumb :color="colorx" :items="defaultItems" />
+    <input v-model="colorx" type="color" />
+    <vs-breadcrumb separator="chevron_right" :items="shortItems" />
+    <vs-breadcrumb>
+      <li>
+        <a href="#" title="Home">Home</a>
+        <span class="vs-breadcrum--separator">/</span>
+      </li>
+      <li aria-current="page" class="active">Infos</li>
     </vs-breadcrumb>
+    <vs-breadcrumb align="center" :items="shortItems" />
   </div>
 </template>
 
 <script setup lang="ts">
-const items = [
-  { title: 'Home', url: '#' },
-  { title: 'Components', url: '#' },
-  { title: 'Breadcrumb', active: true },
+import { ref } from 'vue'
+
+const colorx = ref('#3DC9B3')
+
+const defaultItems = [
+  { title: 'Dashboard', url: 'dashboard' },
+  { title: 'Link 1', url: 'link-1' },
+  { title: 'Link 2', disabled: true },
+  { title: 'Active', active: true },
+]
+
+const shortItems = [
+  { title: 'Dashboard', url: 'dashboard' },
+  { title: 'Active', active: true },
 ]
 </script>
 

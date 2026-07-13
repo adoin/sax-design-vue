@@ -24,6 +24,28 @@
     list-style: none;
     margin: 0;
     padding: 0.75rem 1rem;
+
+    li {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+
+      &.active {
+        font-weight: 500;
+        cursor: default;
+      }
+    }
+
+    a {
+      color: rgba(0, 0, 0, 0.4);
+      text-decoration: none;
+      transition: color 0.2s ease;
+
+      &:hover,
+      &:focus {
+        color: rgba(0, 0, 0, 0.7);
+      }
+    }
   }
 
   @include e(item) {
@@ -33,6 +55,7 @@
 
     @include when(active) {
       font-weight: 500;
+      cursor: default;
     }
 
     @include when(disabled) {
@@ -56,9 +79,26 @@
     padding: 0 0.5rem;
     color: rgba(0, 0, 0, 0.4);
     user-select: none;
+
+    .#{$namespace}-icon {
+      font-size: inherit;
+      vertical-align: middle;
+    }
   }
 
-  @each $type in (primary, success, warn, danger, info) {
+  // Official Vuesax 3.x slot typo class
+  .vs-breadcrum--separator {
+    padding: 0 0.5rem;
+    color: rgba(0, 0, 0, 0.4);
+    user-select: none;
+
+    &.material-icons {
+      vertical-align: middle;
+      font-size: inherit;
+    }
+  }
+
+  @each $type in (primary, success, warn, danger, dark, info) {
     @include e(text) {
       @include m($type) {
         color: getColor($type);

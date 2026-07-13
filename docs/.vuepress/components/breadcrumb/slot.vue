@@ -1,7 +1,13 @@
 <template>
   <vs-breadcrumb>
-    <vs-breadcrumb-item to="/">Home</vs-breadcrumb-item>
-    <vs-breadcrumb-item>Library</vs-breadcrumb-item>
-    <vs-breadcrumb-item active>Data</vs-breadcrumb-item>
+    <li>
+      <a href="#" title="Home">Home</a>
+      <span class="vs-breadcrum--separator">/</span>
+    </li>
+    <li>
+      <a href="#" title="Profil">Profil</a>
+      <span class="vs-breadcrum--separator">/</span>
+    </li>
+    <li aria-current="page" class="active">Infos</li>
   </vs-breadcrumb>
 </template>

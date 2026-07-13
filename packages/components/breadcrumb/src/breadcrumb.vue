@@ -73,10 +73,14 @@ const textColorClass = computed(() =>
 )
 
 const textStyle = computed(() => {
-  if (!isVsColor(themeColor.value)) {
-    return { color: getVsColor(props.color) }
+  if (!props.color || isVsColor(themeColor.value)) {
+    return undefined
   }
-  return undefined
+  const resolved = getVsColor(props.color)
+  if (!resolved) return undefined
+  return {
+    color: resolved.startsWith('var(') ? resolved : `rgb(${resolved})`,
+  }
 })
 
 provide(breadcrumbContextKey, {
