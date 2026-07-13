@@ -43,19 +43,29 @@ const color = useColor('primary')
 
 const isFocus = ref(false)
 
-const isOverCounter = computed(
-  () => props.counter && (props.modelValue?.length ?? 0) > Number(props.counter)
-)
+const isOverCounter = computed(() => {
+  if (!props.counter) return false
+  const limit = Number(props.counter)
+  return (props.modelValue?.length ?? 0) > limit
+})
 
-const isDanger = computed(() => props.counter && isOverCounter.value)
+const isDanger = computed(() => Boolean(props.counter && isOverCounter.value))
 
 watch(isOverCounter, (val) => {
   emit('update:counterDanger', Boolean(val))
 })
 
+const resolveBorderColor = (colorValue: string) => {
+  const resolved = getVsColor(colorValue)
+  if (!resolved) return 'rgba(0, 0, 0, 0.08)'
+  return resolved.startsWith('var(') ? resolved : `rgb(${resolved})`
+}
+
 const wrapperStyle = computed(() => ({
   border: `1px solid ${
-    isFocus.value ? getVsColor(props.color || color.value) : 'rgba(0, 0, 0,.08)'
+    isFocus.value
+      ? resolveBorderColor(props.color || color.value)
+      : 'rgba(0, 0, 0, 0.08)'
   }`,
   height: props.height ?? undefined,
   width: props.width ?? undefined,

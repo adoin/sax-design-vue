@@ -2,20 +2,19 @@
   <div class="play-container demo">
     <vs-textarea
       v-model="text"
-      label="Description"
-      color="primary"
-      :counter="120"
-      height="120px"
+      counter="20"
+      label="Counter: 20"
+      v-model:counter-danger="counterDanger"
       width="100%"
     />
-    <p class="hint">Length: {{ text.length }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const text = ref('Hello Vuesax Textarea')
+const text = ref('')
+const counterDanger = ref(false)
 </script>
 
 <style lang="scss" scoped>

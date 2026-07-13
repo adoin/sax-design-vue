@@ -1,8 +1,15 @@
 <template>
-  <vs-textarea v-model="text" :counter="25" counter-danger />
+  <vs-textarea
+    v-model="textarea"
+    v-model:counter-danger="counterDanger"
+    counter="20"
+    label="Counter: 20"
+  />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-const text = ref('Hello world')
+
+const textarea = ref('')
+const counterDanger = ref(false)
 </script>

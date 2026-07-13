@@ -5,63 +5,92 @@
   position: relative;
   width: 100%;
   margin-bottom: 16px;
-  border-radius: 5px;
-  transition: border-color 0.25s ease;
-  padding: 8px;
+  border-radius: 6px;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 
   @include e(label) {
-    margin: 0 0 6px;
-    font-size: 0.85rem;
-    font-weight: 500;
+    margin: 0;
+    padding: 8px 8px 0;
+    font-size: 0.7rem;
+    font-weight: 400;
+    cursor: default;
+    transition: all 0.25s ease;
+    border-radius: 5px 5px 0 0;
+    color: rgba(0, 0, 0, 0.55);
   }
 
   @include e(inner) {
+    display: block;
     width: 100%;
+    max-width: 100%;
+    min-width: 100%;
     min-height: 80px;
+    padding: 9px;
     border: none;
     outline: none;
     resize: none;
     background: transparent;
     font-family: inherit;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     line-height: 1.5;
+    color: rgba(0, 0, 0, 0.8);
 
     &:focus {
       resize: auto;
+
+      ~ .#{$namespace}-textarea__count {
+        opacity: 1;
+      }
     }
   }
 
   @include e(count) {
     position: absolute;
-    right: 8px;
-    bottom: -10px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    color: #fff;
+    right: 14px;
+    bottom: 0;
+    transform: translate(0, 100%);
+    padding: 1px 6px;
+    border-radius: 0 0 5px 5px;
+    font-size: 0.6rem;
+    font-weight: bold;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 1);
     background: getColor(primary);
-    opacity: 0.85;
+    opacity: 0.3;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    cursor: default;
+    transition: all 0.25s ease;
+    user-select: none;
   }
 
   @include when(focus) {
     @include e(label) {
-      background: #fcfcfc;
+      background: rgb(252, 252, 252);
+      padding-top: 4px;
+      padding-bottom: 4px;
     }
   }
 
   @include when(danger) {
-    border-color: getColor(danger) !important;
-    box-shadow: 0 3px 10px 0 getColor(danger, 0.15);
+    border-color: getColor(danger, 0.4) !important;
+    box-shadow: 0 4px 20px getColor(danger, 0.1);
+
+    @include e(inner) {
+      color: getColor(danger, 0.8);
+    }
 
     @include e(count) {
       background: getColor(danger);
+      opacity: 1;
     }
   }
 
   @each $type in (primary, success, warn, danger, dark) {
     @include m($type) {
       @include when(focus) {
-        border-color: getColor($type);
+        border-color: getColor($type) !important;
       }
     }
   }
