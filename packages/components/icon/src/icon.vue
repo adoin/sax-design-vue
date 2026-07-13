@@ -14,17 +14,24 @@ import type { CSSProperties } from 'vue'
 
 defineOptions({
   name: 'VsIcon',
+  inheritAttrs: false,
 })
 
 const props = defineProps(iconProps)
 const ns = useNamespace('icon')
 
+const MATERIAL_ICON_PACKS = new Set([
+  'material-icons',
+  'material-icons-outlined',
+  'material-symbols-outlined',
+])
+
 const isMaterialIcons = computed(
-  () => props.iconPack === 'material-icons' && !!props.icon
+  () => !!props.icon && MATERIAL_ICON_PACKS.has(props.iconPack)
 )
 
 const iconClasses = computed(() => {
-  const classes: string[] = [ns.b(), props.iconPack]
+  const classes: string[] = [ns.b(), 'notranslate', props.iconPack]
   if (!isMaterialIcons.value && props.icon) {
     classes.push(props.icon)
   }

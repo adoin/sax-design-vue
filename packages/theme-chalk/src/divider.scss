@@ -34,6 +34,7 @@
 
   @include e(icon) {
     font-size: 1.25em;
+    line-height: 1;
   }
 
   @each $type in (primary, success, warn, warning, danger, info, dark, light) {

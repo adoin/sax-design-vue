@@ -44,6 +44,43 @@
     height: 1em;
     width: 1em;
   }
+
+  // Material Icons use ligatures — must override global Poppins on [class^='vs'].
+  &.material-icons {
+    font-family: 'Material Icons' !important;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    width: auto;
+    min-width: 1em;
+    height: auto;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+  }
+
+  &.material-icons-outlined,
+  &.material-symbols-outlined {
+    font-family: 'Material Icons Outlined' !important;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    width: auto;
+    min-width: 1em;
+    height: auto;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+  }
 }
 
 @include b(icon-arrow) {
