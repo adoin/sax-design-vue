@@ -12,12 +12,19 @@
 
   @include e(item) {
     position: relative;
-    width: 120px;
-    height: 120px;
-    border-radius: 8px;
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
     overflow: hidden;
     background: rgba(0, 0, 0, 0.04);
     border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
 
     @include when(error) {
       border-color: getColor('danger');
@@ -70,8 +77,8 @@
 
   @include e(input-wrap) {
     position: relative;
-    min-width: 160px;
-    min-height: 120px;
+    min-width: 200px;
+    min-height: 200px;
     border: 1px dashed rgba(0, 0, 0, 0.15);
     border-radius: 8px;
     display: flex;

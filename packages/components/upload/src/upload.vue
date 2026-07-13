@@ -25,7 +25,10 @@
         />
       </div>
 
-      <div :class="[ns.e('input-wrap'), ns.is('disabled', isDisabled)]">
+      <div
+        v-if="!isLimitReached"
+        :class="[ns.e('input-wrap'), ns.is('disabled', isDisabled)]"
+      >
         <input
           ref="inputRef"
           :class="ns.e('input')"
@@ -46,6 +49,9 @@
         >
           <VsIcon icon="cloud_upload" />
         </button>
+      </div>
+      <div v-else :class="[ns.e('input-wrap'), ns.is('disabled', true)]">
+        <span :class="ns.e('text')">{{ textMax }}</span>
       </div>
     </div>
   </div>
@@ -72,9 +78,13 @@ const fileList = ref<UploadFileItem[]>([])
 const totalPercent = ref(0)
 let uid = 0
 
+const isLimitReached = computed(
+  () => props.limit && fileList.value.length >= Number(props.limit)
+)
+
 const isDisabled = computed(() => {
   if (props.disabled) return true
-  if (props.limit && fileList.value.length >= Number(props.limit)) return true
+  if (isLimitReached.value) return true
   return false
 })
 
@@ -163,6 +173,7 @@ const uploadFile = (item: UploadFileItem) => {
 
   const xhr = new XMLHttpRequest()
   xhr.open('POST', props.action!, true)
+  xhr.withCredentials = true
 
   const headers = props.headers || {}
   Object.entries(headers).forEach(([key, value]) => {

@@ -56,6 +56,10 @@ export const promptProps = buildProps({
     type: String,
     default: 'close',
   },
+  iconPack: {
+    type: String,
+    default: 'material-icons',
+  },
   text: {
     type: String,
     default: null,

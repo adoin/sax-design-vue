@@ -57,22 +57,31 @@
     font: inherit;
     line-height: 1;
 
-    .#{$namespace}-icon {
-      font-size: 0.9rem;
-      color: inherit;
-      width: auto;
-      height: auto;
-      min-width: 0;
-    }
+    .#{$namespace}-icon-close {
+      position: static;
+      top: auto;
+      right: auto;
+      width: 12px;
+      height: 12px;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      box-sizing: border-box;
 
-    .#{$namespace}-icon.material-icons {
-      font-family: 'Material Icons' !important;
-      font-size: 14px;
-      line-height: 1;
+      &::before,
+      &::after {
+        width: 10px;
+        background: rgb(255, 255, 255);
+      }
     }
 
     &:hover {
       background: getColor(danger);
+
+      .#{$namespace}-icon-close::before,
+      .#{$namespace}-icon-close::after {
+        background: rgb(255, 255, 255);
+      }
     }
   }
 

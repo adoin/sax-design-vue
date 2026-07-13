@@ -1,9 +1,7 @@
 <template>
   <div class="center" style="flex-direction: row; flex-wrap: wrap; gap: 8px">
     <vs-chip>Basic Chip</vs-chip>
-    <vs-chip v-if="showClosable" closable @close="showClosable = false"
-      >Closable</vs-chip
-    >
+    <vs-chip v-model="showClosable" closable>Closable</vs-chip>
   </div>
 </template>
 

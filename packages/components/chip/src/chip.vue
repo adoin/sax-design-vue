@@ -14,9 +14,10 @@
       v-if="isClosable"
       :class="ns.e('close')"
       type="button"
+      aria-label="Close"
       @click.stop="handleClose"
     >
-      <VsIcon :icon="closeIcon" :icon-pack="iconPack" />
+      <IconClose hover="less" scale="0.45" />
     </button>
   </div>
 </template>
@@ -28,7 +29,7 @@ import {
   useNamespace,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { IconClose, VsIcon } from '@vuesax-alpha/components/icon'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { chipEmits, chipProps } from './chip'
 import type { Color } from '@vuesax-alpha/constants'

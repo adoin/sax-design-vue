@@ -17,6 +17,7 @@
       type="button"
       :disabled="disabled"
       @mousedown="startDrag"
+      @touchstart.prevent="startTouchDrag"
       @click="handleTrackClick"
     >
       <span :class="ns.e('line')" />
@@ -35,6 +36,7 @@
       :disabled="disabled"
       :style="thumbStyle"
       @mousedown.stop="startDrag"
+      @touchstart.prevent.stop="startTouchDrag"
     >
       <span :class="ns.e('text')">
         {{ displayValue }}
@@ -138,20 +140,37 @@ const updateValue = (clientX: number, emitChange = false) => {
 const startDrag = (event: MouseEvent) => {
   if (props.disabled) return
   dragging.value = true
-  updateValue(event.clientX)
+  updateValue(event.clientX, true)
   window.addEventListener('mousemove', onDrag)
   window.addEventListener('mouseup', stopDrag)
 }
 
 const onDrag = (event: MouseEvent) => {
   if (!dragging.value) return
-  updateValue(event.clientX)
+  updateValue(event.clientX, true)
+}
+
+const startTouchDrag = (event: TouchEvent) => {
+  if (props.disabled) return
+  dragging.value = true
+  updateValue(event.touches[0].clientX, true)
+  window.addEventListener('touchmove', onTouchDrag, { passive: false })
+  window.addEventListener('touchend', stopTouchDrag)
+}
+
+const onTouchDrag = (event: TouchEvent) => {
+  if (!dragging.value) return
+  event.preventDefault()
+  updateValue(event.touches[0].clientX, true)
+}
+
+const stopTouchDrag = () => {
+  dragging.value = false
+  window.removeEventListener('touchmove', onTouchDrag)
+  window.removeEventListener('touchend', stopTouchDrag)
 }
 
 const stopDrag = () => {
-  if (dragging.value) {
-    emit('change', props.modelValue)
-  }
   dragging.value = false
   window.removeEventListener('mousemove', onDrag)
   window.removeEventListener('mouseup', stopDrag)
@@ -182,5 +201,8 @@ watch(
   }
 )
 
-onBeforeUnmount(stopDrag)
+onBeforeUnmount(() => {
+  stopDrag()
+  stopTouchDrag()
+})
 </script>
