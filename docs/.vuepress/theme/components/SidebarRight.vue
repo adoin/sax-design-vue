@@ -11,6 +11,7 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { usePageData, usePageFrontmatter } from '@vuepress/client'
 import RenderHeaders from './SidebarLink/RenderHeaders.vue'
 import type { ThemeNormalApiFrontmatter } from '../shared/frontmatter/normal'
@@ -20,6 +21,13 @@ const pageData = usePageData()
 
 const news = pageFrontmatter.value.NEWS
 const updates = pageFrontmatter.value.UPDATES
+
+// Sync in-page anchor highlight on first paint (hash in URL or scroll position)
+onMounted(() => {
+  requestAnimationFrame(() => {
+    window.dispatchEvent(new Event('scroll'))
+  })
+})
 </script>
 
 <style lang="scss">

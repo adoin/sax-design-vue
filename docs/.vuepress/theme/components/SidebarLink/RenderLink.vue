@@ -40,12 +40,17 @@ const title = computed(() => {
   return props.text
 })
 
-const active = ref<boolean>()
+const active = ref(false)
 
-const watchRoute = props.isHeaderLink ? () => route.hash : () => route.path
-const handleRoute = props.isHeaderLink ? isMatchedHeader : isMathcedPath
+const updateActive = () => {
+  active.value = props.isHeaderLink
+    ? isMatchedHeader(route, props.link)
+    : isMathcedPath(route, props.link)
+}
 
-watch(watchRoute, () => (active.value = handleRoute(route, props.link)))
+watch(() => (props.isHeaderLink ? route.hash : route.path), updateActive, {
+  immediate: true,
+})
 </script>
 
 <style lang="scss">

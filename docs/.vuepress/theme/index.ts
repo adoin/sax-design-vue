@@ -17,7 +17,11 @@ export const saxDesignVueTheme = (
     name: 'vuepress-theme-sax-design-vue',
     clientConfigFile: path.resolve(__dirname, 'client.ts'),
     plugins: [
-      activeHeaderLinksPlugin(),
+      activeHeaderLinksPlugin({
+        headerLinkSelector: '.sidebar-sub-headers a.sidebar-link',
+        headerAnchorSelector: '.header-anchor',
+        offset: 96,
+      }),
       containerPlugin({
         type: 'tip',
         before: (info: string): string =>

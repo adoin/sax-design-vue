@@ -78,8 +78,8 @@ export function isMatchedHeader(
   route: RouteLocationNormalizedLoaded,
   path: string
 ) {
-  const routeHash = route.hash
-  const linkHash = getHash(path)
+  const routeHash = decodeURIComponent(route.hash || '')
+  const linkHash = decodeURIComponent(getHash(path) || '')
 
   return routeHash === linkHash
 }
