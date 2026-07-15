@@ -4,7 +4,7 @@
 
 ## Interactive demos
 
-Browse component source code on the left and see the live preview on the right. Copy the snippet or open the full playground for a split code + preview experience.
+Browse component source code, edit it in place, and see the live preview update below. Copy the snippet or open the full playground for a split code + preview experience.
 
 <PlaygroundEmbed />
 

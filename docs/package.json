@@ -20,6 +20,8 @@
     "boxicons": "^2.1.4",
     "lodash-unified": "^1.0.2",
     "minimist": "^1.2.8",
+    "postcss": "^8.4.31",
+    "postcss-nested": "^6.0.1",
     "prismjs": "^1.29.0",
     "sax-design-vue": "workspace:*",
     "vue": "^3.3.4",
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "@types/prismjs": "^1.26.0",
+    "@vue/compiler-sfc": "^3.3.4",
     "@vuepress/bundler-vite": "2.0.0-beta.68",
     "@vuepress/client": "2.0.0-beta.68",
     "@vuepress/plugin-active-header-links": "2.0.0-beta.68",
