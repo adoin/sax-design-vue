@@ -166,6 +166,10 @@ SLOTS:
 
 # Dialog
 
+**Dialog is a general-purpose modal container** — header, body, and footer are all yours via slots.
+
+For simple **confirm / alert** flows with built-in Accept and Cancel buttons, use [Prompt](/components/prompt) instead. Prompt is not redundant: it targets “Are you sure?”-style interactions; Dialog targets arbitrary UI (forms, wizards, nested modals, fullscreen views).
+
 <card>
 
 ## Default
