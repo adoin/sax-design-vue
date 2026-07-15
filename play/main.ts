@@ -8,8 +8,8 @@ import {
   type VNode,
 } from 'vue'
 import SaxDesignVue from 'sax-design-vue'
+import '@vuesax-alpha/theme-chalk/src/index.scss'
 import '@vuesax-alpha/theme-chalk/src/dark/css-vars.scss'
-import '@vuesax-alpha/theme-chalk/src/loading.scss'
 import './src/play-base.scss'
 import PlaygroundShell from './PlaygroundShell.vue'
 
