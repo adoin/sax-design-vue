@@ -13,22 +13,26 @@
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.4);
+    transition: opacity 0.25s ease;
   }
 
   @include e(dialog) {
     position: relative;
     z-index: 1;
-    width: min(520px, calc(100vw - 32px));
-    background: getColor('white');
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    width: calc(100% - 20px);
+    max-width: 400px;
+    margin: 10px;
+    background: rgb(255, 255, 255);
+    border-radius: 6px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    transition: transform 0.25s ease;
+    animation: vs-prompt-rebound-in 0.3s ease;
+    transition: transform 0.2s ease;
   }
 
   @include when(locked) {
     @include e(dialog) {
-      animation: vs-prompt-rebound 0.3s ease;
+      transform: scale(1.02);
     }
   }
 
@@ -36,9 +40,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 20px;
+    padding: 12px 16px;
     background: rgb(248, 248, 248);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 5px 5px 0 0;
   }
 
   @include e(title-wrap) {
@@ -46,6 +50,8 @@
     align-items: center;
     gap: 10px;
     min-height: 24px;
+    flex: 1;
+    min-width: 0;
   }
 
   @include e(title-accent) {
@@ -53,30 +59,34 @@
     width: 4px;
     min-height: 18px;
     border-radius: 2px;
-    background: getColor('primary');
+    flex-shrink: 0;
   }
 
   @include e(title) {
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
+    line-height: 1.3;
   }
 
   @include e(close) {
     border: none;
-    background: getColor('white');
+    background: rgb(255, 255, 255);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border-radius: 50%;
     width: 32px;
     height: 32px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    margin-left: 8px;
   }
 
   @include e(content) {
-    padding: 16px 20px;
+    padding: 10px;
+    font-size: 0.875rem;
     color: rgba(0, 0, 0, 0.7);
     line-height: 1.5;
   }
@@ -85,7 +95,7 @@
     display: flex;
     justify-content: flex-end;
     gap: 8px;
-    padding: 12px 20px 20px;
+    padding: 10px 16px 16px;
   }
 
   @each $type in (primary, success, warn, danger, info, dark) {
@@ -99,10 +109,14 @@
 
 .dialog-t-enter-active,
 .dialog-t-leave-active {
-  transition: opacity 0.25s ease;
+  transition: opacity 0.2s ease;
 
   .vs-prompt__dialog {
-    transition: transform 0.25s ease, opacity 0.25s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .vs-prompt__content {
+    transition: opacity 0.23s ease 0.1s;
   }
 }
 
@@ -111,8 +125,24 @@
   opacity: 0;
 
   .vs-prompt__dialog {
-    transform: scale(0.92);
+    transform: scale(0.9);
     opacity: 0;
+  }
+
+  .vs-prompt__content {
+    opacity: 0;
+  }
+}
+
+@keyframes vs-prompt-rebound-in {
+  0% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 

@@ -15,6 +15,7 @@ export const promptProps = buildProps({
     type: String,
     values: [
       'default',
+      'filled',
       'border',
       'flat',
       'floating',
@@ -23,7 +24,7 @@ export const promptProps = buildProps({
       'relief',
       'transparent',
     ] as const,
-    default: 'default',
+    default: 'filled',
   },
   buttonCancel: {
     type: String,

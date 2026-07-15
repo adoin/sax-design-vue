@@ -19,7 +19,7 @@ PROPS:
   - name: text
     type: String
     values: String
-    description: Dialog body text.
+    description: Dialog body text when the default slot is empty.
     default: null
     link: null
     usage: '#default'
@@ -27,18 +27,26 @@ PROPS:
   - name: type
     type: String
     values: alert, confirm
-    description: Prompt type.
+    description: Alert shows a header close button and closes on overlay click. Confirm shakes on overlay click.
     default: alert
     link: null
-    usage: '#default'
+    usage: '#alert'
 
   - name: color
     type: String
-    values: primary, success, danger
-    description: Accent color.
+    values: primary, success, danger, warning, dark
+    description: Accent color for the title and accept button.
     default: primary
     link: null
-    usage: '#default'
+    usage: '#validation'
+
+  - name: is-valid
+    type: Boolean | String
+    values: true, false, none
+    description: When false, the accept button stays disabled. Use none to skip validation.
+    default: none
+    link: null
+    usage: '#validation'
 
   - name: accept-text
     type: String
@@ -80,20 +88,22 @@ EVENTS:
     params: null
     description: Dialog closed.
 EXPOSES: []
-description: "Modal prompts for alerts and confirmations with customizable actions."
+description: "Alert and confirm dialogs with slots, validation, and action buttons. Maps to official Vuesax Dialogs / vs-prompt."
 NEWS:
   - default
   - alert
+  - validation
 ---
 
 # Prompt
+
+In Vuesax 3.x, **Prompt** lives under [Dialogs](https://lusaxweb.github.io/vuesax/components/dialogs.html) as `vs-prompt`. It is **not** the same as [Popup](https://lusaxweb.github.io/vuesax/components/popup.html) (`vs-popup`), which is a general modal container. For a full-featured modal shell, use [Dialog](/components/dialog).
 
 <card>
 
 ## Default
 
-
-Open a confirm dialog bound with `v-model`.
+Use the default slot to place inputs, selects, or any custom content inside the prompt.
 
 <template #example>
 <prompt-default />
@@ -101,13 +111,19 @@ Open a confirm dialog bound with `v-model`.
 
 <template #template>
 
-@[code{1-4}](../.vuepress/components/prompt/default.vue)
+@[code{1-12}](../.vuepress/components/prompt/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{6-9}](../.vuepress/components/prompt/default.vue)
+@[code{14-35}](../.vuepress/components/prompt/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{37-60}](../.vuepress/components/prompt/default.vue)
 
 </template>
 
@@ -117,8 +133,7 @@ Open a confirm dialog bound with `v-model`.
 
 ## Alert
 
-
-Show a single-action alert-style prompt.
+`type="alert"` adds a header close button and closes when the overlay is clicked.
 
 <template #example>
 <prompt-alert />
@@ -126,13 +141,37 @@ Show a single-action alert-style prompt.
 
 <template #template>
 
-@[code{1-4}](../.vuepress/components/prompt/alert.vue)
+@[code{1-12}](../.vuepress/components/prompt/alert.vue)
 
 </template>
 
 <template #script>
 
-@[code{6-9}](../.vuepress/components/prompt/alert.vue)
+@[code{14-18}](../.vuepress/components/prompt/alert.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Validation
+
+Use `is-valid` to disable the accept button until the form inside the slot is valid.
+
+<template #example>
+<prompt-validation />
+</template>
+
+<template #template>
+
+@[code{1-22}](../.vuepress/components/prompt/validation.vue)
+
+</template>
+
+<template #script>
+
+@[code{24-40}](../.vuepress/components/prompt/validation.vue)
 
 </template>
 

@@ -9,7 +9,7 @@
         <div :class="ns.e('dialog')">
           <header :class="ns.e('header')" :style="headerStyle">
             <div :class="ns.e('title-wrap')">
-              <span :class="ns.e('title-accent')" />
+              <span :class="ns.e('title-accent')" :style="accentStyle" />
               <h3 :class="ns.e('title')">{{ title }}</h3>
             </div>
             <button
@@ -29,20 +29,17 @@
           <footer v-if="showFooter" :class="ns.e('footer')">
             <VsButton
               :color="color"
-              :type="buttonAccept"
+              :type="resolveButtonType(buttonAccept)"
               :disabled="!canAccept"
               @click="handleAccept"
             >
               {{ acceptText }}
             </VsButton>
-            <VsButton :type="buttonCancel" @click="handleCancel">
+            <VsButton
+              :type="resolveButtonType(buttonCancel)"
+              @click="handleCancel"
+            >
               {{ cancelText }}
-            </VsButton>
-          </footer>
-
-          <footer v-else-if="type === 'alert'" :class="ns.e('footer')">
-            <VsButton :color="color" :type="buttonAccept" @click="handleAccept">
-              {{ acceptText }}
             </VsButton>
           </footer>
         </div>
@@ -75,19 +72,32 @@ const visible = computed({
   set: (val) => emit('update:modelValue', val),
 })
 
+const resolveColor = (colorValue: string) => {
+  const resolved = getVsColor(colorValue)
+  if (!resolved) return undefined
+  return resolved.startsWith('var(') ? resolved : `rgb(${resolved})`
+}
+
 const headerStyle = computed(
   (): CSSProperties => ({
-    color: getVsColor(props.color) || undefined,
+    color: resolveColor(props.color),
   })
 )
+
+const accentStyle = computed(
+  (): CSSProperties => ({
+    background: resolveColor(props.color),
+  })
+)
+
+const resolveButtonType = (type: string) =>
+  type === 'filled' ? 'default' : type
 
 const canAccept = computed(
   () => props.isValid === 'none' || props.isValid === true
 )
 
-const showFooter = computed(
-  () => !props.buttonsHidden && props.type === 'confirm'
-)
+const showFooter = computed(() => !props.buttonsHidden)
 
 const rebound = () => {
   locked.value = true
