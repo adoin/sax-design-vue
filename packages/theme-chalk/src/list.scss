@@ -12,11 +12,16 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+
+    &:last-child {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
   }
 
   @include e(avatar) {
     display: flex;
     align-items: center;
+    margin-right: 4px;
   }
 
   @include e(icon) {
@@ -24,47 +29,72 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .#{$namespace}-icon {
+      font-size: 1.2rem !important;
+    }
   }
 
   @include e(titles) {
     flex: 1;
+    min-width: 0;
   }
 
   @include e(title) {
     font-weight: bold;
+    line-height: 1.4;
   }
 
   @include e(subtitle) {
     font-size: 0.8rem;
+    line-height: 1.35;
     color: rgba(0, 0, 0, 0.55);
   }
 
   @include e(slot) {
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
   }
 
   @include e(header) {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: flex-start;
     padding: 8px 0;
     margin-bottom: 5px;
-    font-weight: 600;
+    font-weight: bold;
     box-shadow: 0 7px 7px -5px rgba(0, 0, 0, 0.08);
-  }
+    color: getColor(primary);
 
-  @include e(header-icon) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include when(with-icon) {
+      @include e(icon) {
+        padding-left: 0;
+      }
+    }
   }
 
   @include e(header-titles) {
     flex: 1;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      margin-left: 12px;
+      background: currentColor;
+      opacity: 0.35;
+    }
   }
 
   @include e(header-title) {
-    font-weight: 700;
+    flex-shrink: 0;
+    font-weight: bold;
+    line-height: 1.4;
   }
 
   @include e(header-subtitle) {
@@ -77,10 +107,6 @@
     @include e(header) {
       @include m($type) {
         color: getColor($type);
-
-        .#{bem('list', 'header-title')} {
-          color: getColor($type);
-        }
       }
     }
   }

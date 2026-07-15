@@ -1,6 +1,8 @@
 <template>
   <vs-list>
-    <vs-list-item title="User 1" subtitle="Developer" />
-    <vs-list-item title="User 2" subtitle="Designer" />
+    <vs-list-item title="One text" />
+    <vs-list-item title="Another text" subtitle="A little text" />
+    <vs-list-item title="Some more text" />
+    <vs-list-item title="Even more text" subtitle="Another little text" />
   </vs-list>
 </template>

@@ -1,11 +1,8 @@
 <template>
   <div :class="headerKls" :style="headerStyle">
-    <VsIcon
-      v-if="icon"
-      :icon="icon"
-      :icon-pack="iconPack"
-      :class="ns.e('header-icon')"
-    />
+    <div v-if="icon" :class="ns.e('icon')">
+      <VsIcon :icon="icon" :icon-pack="iconPack" />
+    </div>
     <div :class="ns.e('header-titles')">
       <div v-if="title" :class="ns.e('header-title')">{{ title }}</div>
       <slot v-else name="title" />
@@ -35,7 +32,7 @@ const themeColor = computed(() => normalizeVsColor(props.color))
 
 const headerKls = computed(() => [
   ns.e('header'),
-  isVsColor(themeColor.value) && ns.m(themeColor.value),
+  isVsColor(themeColor.value) && ns.em('header', themeColor.value),
   props.icon && ns.is('with-icon', true),
 ])
 

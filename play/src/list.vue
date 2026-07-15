@@ -1,9 +1,16 @@
 <template>
   <div class="play-container demo">
     <vs-list>
-      <vs-list-item title="Inbox" subtitle="12 unread messages" icon="mail" />
-      <vs-list-item title="Drafts" subtitle="3 items" icon="drafts" />
-      <vs-list-item title="Trash" subtitle="Empty" icon="delete" />
+      <vs-list-header title="Group 1" />
+      <vs-list-item
+        title="Snickerdoodle"
+        subtitle="An excellent companion"
+      />
+      <vs-list-header title="Group 2" color="success" />
+      <vs-list-item
+        title="Enid's"
+        subtitle="At night a bar, during the day a delicious brunch spot."
+      />
     </vs-list>
   </div>
 </template>
