@@ -80,7 +80,7 @@ NEWS:
   - text-fixed
 ---
 
-# 滑块
+# Slider
 
 <card>
 

@@ -73,7 +73,7 @@ NEWS:
   - icons
 ---
 
-# 标签页
+# Tabs
 
 <card>
 

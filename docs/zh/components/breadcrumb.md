@@ -42,7 +42,7 @@ NEWS:
   - align
 ---
 
-# 面包屑
+# Breadcrumb
 
 <card>
 

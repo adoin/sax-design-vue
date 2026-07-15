@@ -90,7 +90,7 @@ NEWS:
   - chips
 ---
 
-# 标签
+# Chip
 
 <card>
 

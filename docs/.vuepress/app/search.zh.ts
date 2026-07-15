@@ -2,26 +2,11 @@ import { enSearchData } from './search'
 import type { SearchDataOption } from '~/saxDesignVueTheme'
 
 const titleZh: Record<string, string> = {
-  Alert: 'Alert',
-  Button: 'Button',
-  'Time select': '时间选择',
+  'Time select': 'Time select',
   Playground: 'Playground',
   'Using Components': '使用组件',
   Configuration: '配置',
   'Tribute to Vuesax': '致敬 Vuesax',
-  Breadcrumb: '面包屑',
-  Chip: '标签',
-  Collapse: '折叠面板',
-  Divider: '分割线',
-  Images: '图片',
-  List: '列表',
-  Progress: '进度条',
-  Prompt: '提示框',
-  Slider: '滑块',
-  Spacer: '间距',
-  Tabs: '标签页',
-  Textarea: '多行输入',
-  Upload: '上传',
 }
 
 const headerZh: Record<string, string> = {

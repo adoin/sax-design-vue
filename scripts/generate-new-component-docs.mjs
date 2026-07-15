@@ -414,12 +414,6 @@ const componentMeta = {
   },
 }
 
-const pageTitleZh = {
-  divider: '分割线', progress: '进度条', chip: '标签', breadcrumb: '面包屑',
-  textarea: '多行输入', collapse: '折叠面板', list: '列表', images: '图片',
-  prompt: '提示框', tabs: '标签页', slider: '滑块', upload: '上传', spacer: '间距',
-}
-
 const componentMetaZh = {
   divider: {
     description: '在文本或区块之间添加分割线，支持颜色、图标与多种布局。',
@@ -672,10 +666,7 @@ function buildCodeSlots(name, sectionId, content) {
 }
 
 function buildMd(name, cfg, meta, locale = 'en') {
-  const title =
-    locale === 'zh'
-      ? pageTitleZh[name] || name
-      : name.charAt(0).toUpperCase() + name.slice(1)
+  const title = name.charAt(0).toUpperCase() + name.slice(1)
   const propsYaml = cfg.props.length
     ? `PROPS:\n${cfg.props
         .map((row) => yamlProp(row, meta?.props?.[row[0]]))

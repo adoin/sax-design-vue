@@ -7,7 +7,7 @@ NEWS:
   - default
 ---
 
-# 间距
+# Spacer
 
 <card>
 

@@ -42,7 +42,7 @@ NEWS:
   - avatar
 ---
 
-# 列表
+# List
 
 <card>
 

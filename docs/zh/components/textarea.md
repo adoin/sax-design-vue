@@ -81,7 +81,7 @@ NEWS:
   - height
 ---
 
-# 多行输入
+# Textarea
 
 <card>
 

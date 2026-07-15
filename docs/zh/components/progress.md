@@ -41,7 +41,7 @@ NEWS:
   - height
 ---
 
-# 进度条
+# Progress
 
 <card>
 

@@ -95,7 +95,7 @@ NEWS:
   - automatic
 ---
 
-# 上传
+# Upload
 
 <card>
 

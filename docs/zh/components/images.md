@@ -48,7 +48,7 @@ NEWS:
   - more
 ---
 
-# 图片
+# Images
 
 <card>
 

@@ -68,7 +68,7 @@ NEWS:
   - style
 ---
 
-# 分割线
+# Divider
 
 <card>
 

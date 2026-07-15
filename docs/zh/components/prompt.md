@@ -96,7 +96,7 @@ NEWS:
   - programmatic
 ---
 
-# 提示框
+# Prompt
 
 **Prompt 就是确认/警告提示框**，与 [Dialog（对话框）](/zh/components/dialog) 不重复。
 
