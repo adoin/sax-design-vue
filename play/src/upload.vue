@@ -1,6 +1,6 @@
 <template>
   <div class="play-container demo">
-    <vs-upload
+    <s-upload
       text="Select files"
       :limit="3"
       :show-upload-button="false"

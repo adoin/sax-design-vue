@@ -64,7 +64,7 @@ import { useThemeData } from '@vuepress/plugin-theme-data/client'
 import { ensureLeadingSlash, removeEndingSlash } from '@vuepress/shared'
 import { useRouter } from 'vue-router'
 
-import type { VuesaxAlphaThemeOptions } from '../vuesaxAlphaTheme'
+import type { SaxDesignVueThemeOptions } from '../saxDesignVueTheme'
 
 const emits = defineEmits<{
   (event: 'showSuggestions', active: boolean): void
@@ -73,7 +73,7 @@ const emits = defineEmits<{
 }>()
 
 const router = useRouter()
-const themeData = useThemeData<VuesaxAlphaThemeOptions>()
+const themeData = useThemeData<SaxDesignVueThemeOptions>()
 const routeLocale = useRouteLocale()
 
 const SEARCH_MAX_SUGGESTIONS = themeData.value.searchMaxSuggestions || 5

@@ -11,7 +11,7 @@
     />
 
     <button :class="ns.e('remove-all')" type="button" @click="removeAll">
-      <VsIcon :icon="removeIcon" :icon-pack="iconPack" />
+      <SIcon :icon="removeIcon" :icon-pack="iconPack" />
     </button>
   </div>
 </template>
@@ -19,12 +19,12 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { normalizeVsColor } from '@vuesax-alpha/utils'
 import { chipsEmits, chipsProps } from './chips'
 
 defineOptions({
-  name: 'VsChips',
+  name: 'SChips',
 })
 
 const props = defineProps(chipsProps)

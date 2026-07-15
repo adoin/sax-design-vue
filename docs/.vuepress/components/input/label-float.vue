@@ -1,6 +1,6 @@
 <template>
   <div class="center content-inputs">
-    <vs-input v-model="value" label="Country" label-float />
+    <s-input v-model="value" label="Country" label-float />
   </div>
 </template>
 

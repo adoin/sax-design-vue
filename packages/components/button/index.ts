@@ -2,12 +2,12 @@ import { withInstall, withNoopInstall } from '@vuesax-alpha/utils'
 import ButtonGroup from './src/button-group.vue'
 import Button from './src/button.vue'
 
-export const VsButton = withInstall(Button, {
+export const SButton = withInstall(Button, {
   ButtonGroup,
 })
-export default VsButton
+export default SButton
 
-export const VsButtonGroup = withNoopInstall(ButtonGroup)
+export const SButtonGroup = withNoopInstall(ButtonGroup)
 
 export * from './src/button-group'
 export * from './src/button'

@@ -83,7 +83,7 @@ PROPS:
   - name: max
     type: number
     values: number
-    description: (vs-avatar-group) determine how many avatars are visible.
+    description: (s-avatar-group) determine how many avatars are visible.
     default: null
     link: null
     usage: '#group'
@@ -91,7 +91,7 @@ PROPS:
   - name: float
     type: Boolean
     values: true,false
-    description: (vs-avatar-group) change the way the avatar is composed by placing one next to the other.
+    description: (s-avatar-group) change the way the avatar is composed by placing one next to the other.
     default: false
     link: null
     usage: '#group'
@@ -115,11 +115,11 @@ SLOTS:
     link: null
     usage: '#default'
     code: >
-      <vs-avatar>
+      <s-avatar>
         <template #text>
           Lily
         </template>
-      </vs-avatar>
+      </s-avatar>
 
   - name: badge
     type: slot
@@ -129,12 +129,12 @@ SLOTS:
     link: null
     usage: '#badge'
     code: >
-      <vs-avatar badge badge-color="success">
+      <s-avatar badge badge-color="success">
         <img src="/avatars/avatar-2.png" alt="">
         <template #badge>
           28
         </template>
-      </vs-avatar>
+      </s-avatar>
 
   - name: icons
     type: slot
@@ -144,14 +144,14 @@ SLOTS:
     link: null
     usage: '#icons'
     code: >
-      <vs-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-1.png" alt="">
         <template #icons>
           <i class='bx bxl-facebook-square' ></i>
           <i class='bx bxl-github' ></i>
           <i class='bx bxl-twitter' ></i>
         </template>
-      </vs-avatar>
+      </s-avatar>
 ---
 
 # Avatar
@@ -162,7 +162,7 @@ SLOTS:
 
 <docs-warn />
 
-Add an avatar easily and with functionality with the component `<vs-avatar>`
+Add an avatar easily and with functionality with the component `<s-avatar>`
 
 <template #example>
 <avatar-default />
@@ -374,7 +374,7 @@ Add a space next to the avatar with the slot `icons` where you can put icons for
 
 ## Group
 
-You can group several avatar with the parent component `vs-avatar-group`, this component has two interesting properties:
+You can group several avatar with the parent component `s-avatar-group`, this component has two interesting properties:
 
 - **max**: determine the maximum number of avatars to show and the rest hides it generating the number in the last avatar shown
 

@@ -1,49 +1,47 @@
 <template>
   <div class="center">
-    <vs-table>
+    <s-table>
       <template #thead>
-        <vs-tr>
-          <vs-th> Name </vs-th>
-          <vs-th> Email </vs-th>
-          <vs-th> Id </vs-th>
-        </vs-tr>
+        <s-tr>
+          <s-th> Name </s-th>
+          <s-th> Email </s-th>
+          <s-th> Id </s-th>
+        </s-tr>
       </template>
       <template #tbody>
-        <vs-tr v-for="(tr, i) in users" :key="i" :data="tr">
-          <vs-td>
+        <s-tr v-for="(tr, i) in users" :key="i" :data="tr">
+          <s-td>
             {{ tr.name }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.email }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.id }}
-          </vs-td>
+          </s-td>
 
           <template #expand>
             <div class="con-content">
               <div>
-                <vs-avatar>
+                <s-avatar>
                   <img :src="`/avatars/avatar-${i + 1}.png`" alt="" />
-                </vs-avatar>
+                </s-avatar>
                 <p>
                   {{ tr.name }}
                 </p>
               </div>
               <div>
-                <vs-button type="flat" icon>
+                <s-button type="flat" icon>
                   <i class="bx bx-lock-open-alt" />
-                </vs-button>
-                <vs-button type="flat" icon> Send Email </vs-button>
-                <vs-button type="border" color="danger">
-                  Remove User
-                </vs-button>
+                </s-button>
+                <s-button type="flat" icon> Send Email </s-button>
+                <s-button type="border" color="danger"> Remove User </s-button>
               </div>
             </div>
           </template>
-        </vs-tr>
+        </s-tr>
       </template>
-    </vs-table>
+    </s-table>
   </div>
 </template>
 

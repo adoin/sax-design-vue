@@ -18,7 +18,7 @@ import type { MaybeRef } from '@vuesax-alpha/utils'
 import type { App, Ref } from 'vue'
 import type { ConfigProviderContext } from '@vuesax-alpha/tokens'
 
-// this is meant to fix global methods like `VsNotification(opts)`
+// this is meant to fix global methods like `SNotification(opts)`
 const globalConfig = ref<ConfigProviderContext>()
 
 export function useGlobalConfig<
@@ -43,7 +43,7 @@ export function useGlobalConfig(
   }
 }
 
-// for components like `VsNotification`.
+// for components like `SNotification`.
 export const useGlobalComponentSettings = (block: string) => {
   const config = useGlobalConfig()
 

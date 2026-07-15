@@ -1,5 +1,5 @@
 <template>
-  <vs-only-child
+  <s-only-child
     ref="triggerRef"
     :class="ns.e('trigger')"
     @mouseenter="onMouseenter"
@@ -10,14 +10,14 @@
     @contextmenu="onContextMenu"
   >
     <slot />
-  </vs-only-child>
+  </s-only-child>
 </template>
 
 <script setup lang="ts">
 import { inject, toRef } from 'vue'
 import { useForwardRef, useNamespace } from '@vuesax-alpha/hooks'
 import { popperContextKey } from '@vuesax-alpha/tokens'
-import { VsOnlyChild } from '@vuesax-alpha/components/slot'
+import { SOnlyChild } from '@vuesax-alpha/components/slot'
 import { composeEventHandlers } from '@vuesax-alpha/utils'
 import { popperTriggerProps } from './trigger'
 import { whenTrigger } from './utils'

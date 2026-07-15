@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-alert v-model:page="page">
+    <s-alert v-model:page="page">
       <template #title> Vuesax Framework </template>
 
       <template #page-1>
@@ -16,7 +16,7 @@
       <template #page-3>
         Page 3 - this is the last page of the example
       </template>
-    </vs-alert>
+    </s-alert>
   </div>
 </template>
 <script lang="ts" setup>

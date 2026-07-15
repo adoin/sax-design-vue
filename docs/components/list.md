@@ -3,7 +3,7 @@ PROPS:
   - name: title
     type: String
     values: String
-    description: List header title (vs-list-header).
+    description: List header title (s-list-header).
     default: null
     link: null
     usage: '#header'
@@ -49,7 +49,7 @@ NEWS:
 ## Basic
 
 
-Display title and subtitle rows with `vs-list-item`.
+Display title and subtitle rows with `s-list-item`.
 
 <template #example>
 <list-default />
@@ -68,7 +68,7 @@ Display title and subtitle rows with `vs-list-item`.
 ## Header
 
 
-Group items under `vs-list-header`.
+Group items under `s-list-header`.
 
 <template #example>
 <list-header />

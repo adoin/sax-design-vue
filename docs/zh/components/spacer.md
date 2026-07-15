@@ -14,7 +14,7 @@ NEWS:
 ## 默认
 
 
-在 flex 子元素之间放置 `vs-spacer` 以占据剩余空间。
+在 flex 子元素之间放置 `s-spacer` 以占据剩余空间。
 
 <template #example>
 <spacer-default />
@@ -22,7 +22,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/spacer/default.vue)
+@[code{1-7}](../../.vuepress/components/spacer/default.vue)
 
 </template>
 

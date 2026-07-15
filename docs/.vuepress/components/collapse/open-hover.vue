@@ -1,7 +1,7 @@
 <template>
-  <vs-collapse open-hover>
-    <vs-collapse-item
-      ><template #header>Hover me</template>Opens on hover</vs-collapse-item
+  <s-collapse open-hover>
+    <s-collapse-item
+      ><template #header>Hover me</template>Opens on hover</s-collapse-item
     >
-  </vs-collapse>
+  </s-collapse>
 </template>

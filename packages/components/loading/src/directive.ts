@@ -7,7 +7,7 @@ import { loading } from './method'
 import type { LoadingHandle, LoadingParams } from './loading'
 import type { Directive, DirectiveBinding, UnwrapRef } from 'vue'
 
-const INSTANCE_KEY = Symbol('VsLoading')
+const INSTANCE_KEY = Symbol('SLoading')
 
 export type LoadingBinding = boolean | UnwrapRef<LoadingParams>
 export interface ElementLoading extends HTMLElement {

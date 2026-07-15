@@ -36,7 +36,7 @@ export const loading: LoadingFn = (options = {}) => {
 
   if (!isElement(appendTo)) {
     debugWarn(
-      'VsLoading',
+      'SLoading',
       'the appendTo option is not an HTMLElement. Falling back to document.body.'
     )
     appendTo = document.body

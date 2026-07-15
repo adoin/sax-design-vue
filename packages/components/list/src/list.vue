@@ -9,7 +9,7 @@ import { useNamespace } from '@vuesax-alpha/hooks'
 import { listProps } from './list'
 
 defineOptions({
-  name: 'VsList',
+  name: 'SList',
 })
 
 defineProps(listProps)

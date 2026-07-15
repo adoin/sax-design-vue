@@ -1,6 +1,6 @@
 <template>
   <div class="hidden">
-    <vs-sidebar v-model="active" absolute open>
+    <s-sidebar v-model="active" absolute open>
       <template #logo>
         <svg
           class="logo-nav"
@@ -41,63 +41,63 @@
         </svg>
       </template>
 
-      <vs-sidebar-item id="home">
+      <s-sidebar-item id="home">
         <template #icon>
           <i class="bx bx-home" />
         </template>
         Home
-      </vs-sidebar-item>
-      <vs-sidebar-item id="market">
+      </s-sidebar-item>
+      <s-sidebar-item id="market">
         <template #icon>
           <i class="bx bx-grid-alt" />
         </template>
         Market Overview
-      </vs-sidebar-item>
-      <vs-sidebar-item id="Music">
+      </s-sidebar-item>
+      <s-sidebar-item id="Music">
         <template #icon>
           <i class="bx bxs-music" />
         </template>
         Music
-      </vs-sidebar-item>
-      <vs-sidebar-item id="donate">
+      </s-sidebar-item>
+      <s-sidebar-item id="donate">
         <template #icon>
           <i class="bx bxs-donate-heart" />
         </template>
         Donate
-      </vs-sidebar-item>
-      <vs-sidebar-item id="drink">
+      </s-sidebar-item>
+      <s-sidebar-item id="drink">
         <template #icon>
           <i class="bx bx-drink" />
         </template>
         Drink
-      </vs-sidebar-item>
-      <vs-sidebar-item id="shopping">
+      </s-sidebar-item>
+      <s-sidebar-item id="shopping">
         <template #icon>
           <i class="bx bxs-shopping-bags" />
         </template>
         Shopping
-      </vs-sidebar-item>
-      <vs-sidebar-item id="chat">
+      </s-sidebar-item>
+      <s-sidebar-item id="chat">
         <template #icon>
           <i class="bx bx-chat" />
         </template>
         Chat
-      </vs-sidebar-item>
+      </s-sidebar-item>
 
       <template #footer>
-        <vs-row justify="space-between">
-          <vs-avatar>
+        <s-row justify="space-between">
+          <s-avatar>
             <img src="/avatars/avatar-5.png" alt="" />
-          </vs-avatar>
+          </s-avatar>
 
-          <vs-avatar badge-color="danger" badge-position="top-right">
+          <s-avatar badge-color="danger" badge-position="top-right">
             <i class="bx bx-bell" />
 
             <template #badge> 28 </template>
-          </vs-avatar>
-        </vs-row>
+          </s-avatar>
+        </s-row>
       </template>
-    </vs-sidebar>
+    </s-sidebar>
   </div>
 </template>
 

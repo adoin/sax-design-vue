@@ -1,70 +1,70 @@
 <template>
   <div class="center con-avatars">
-    <vs-avatar-group max="7">
-      <vs-avatar>
+    <s-avatar-group max="7">
+      <s-avatar>
         <img src="/avatars/avatar-1.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-6.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-2.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-7.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-3.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-8.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-4.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-9.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-5.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-10.png" alt="" />
-      </vs-avatar>
-    </vs-avatar-group>
+      </s-avatar>
+    </s-avatar-group>
 
-    <vs-avatar-group float max="8">
-      <vs-avatar>
+    <s-avatar-group float max="8">
+      <s-avatar>
         <img src="/avatars/avatar-1.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-6.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-2.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-7.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-3.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-8.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-4.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-9.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-5.png" alt="" />
-      </vs-avatar>
-      <vs-avatar>
+      </s-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-10.png" alt="" />
-      </vs-avatar>
-    </vs-avatar-group>
+      </s-avatar>
+    </s-avatar-group>
   </div>
 </template>
 

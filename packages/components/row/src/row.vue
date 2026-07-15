@@ -12,7 +12,7 @@ import { rowProps } from './row'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
-  name: 'VsRow',
+  name: 'SRow',
 })
 
 const props = defineProps(rowProps)

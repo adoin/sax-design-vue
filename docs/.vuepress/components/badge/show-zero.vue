@@ -1,12 +1,12 @@
 <template>
   <div class="center">
-    <vs-badge :value="0" class="item">
-      <vs-avatar shape="square" color="#ccc" />
-    </vs-badge>
-    <vs-badge :value="0" :show-zero="show" class="item">
-      <vs-avatar shape="square" color="#ccc" />
-    </vs-badge>
-    <vs-switch v-model="show" />
+    <s-badge :value="0" class="item">
+      <s-avatar shape="square" color="#ccc" />
+    </s-badge>
+    <s-badge :value="0" :show-zero="show" class="item">
+      <s-avatar shape="square" color="#ccc" />
+    </s-badge>
+    <s-switch v-model="show" />
   </div>
 </template>
 

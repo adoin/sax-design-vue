@@ -1,8 +1,8 @@
 import { withInstall } from '@vuesax-alpha/utils'
 import Teleport from './src/teleport.vue'
 
-export const VsTeleport = withInstall(Teleport)
+export const STeleport = withInstall(Teleport)
 
-export default VsTeleport
+export default STeleport
 
 export * from './src/teleport'

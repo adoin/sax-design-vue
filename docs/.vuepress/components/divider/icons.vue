@@ -1,11 +1,11 @@
 <template>
   <div class="center">
-    <vs-divider icon="arrow_downward" />
-    <vs-divider color="primary" icon="star" />
-    <vs-divider color="success" icon="check" />
-    <vs-divider color="danger" icon="delete_forever" />
-    <vs-divider color="warning" icon="report_problem" />
-    <vs-divider color="dark" icon="watch_later" />
+    <s-divider icon="arrow_downward" />
+    <s-divider color="primary" icon="star" />
+    <s-divider color="success" icon="check" />
+    <s-divider color="danger" icon="delete_forever" />
+    <s-divider color="warning" icon="report_problem" />
+    <s-divider color="dark" icon="watch_later" />
   </div>
 </template>
 

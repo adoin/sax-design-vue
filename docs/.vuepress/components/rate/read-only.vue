@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-rate
+    <s-rate
       v-model="value"
       disabled
       show-score

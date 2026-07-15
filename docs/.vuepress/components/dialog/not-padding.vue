@@ -1,13 +1,13 @@
 <template>
   <div class="center">
-    <vs-button type="flat" @click="active = !active">
+    <s-button type="flat" @click="active = !active">
       Open Dialog Not Padding
-    </vs-button>
-    <vs-dialog v-model="active" not-close auto-width not-padding>
+    </s-button>
+    <s-dialog v-model="active" not-close auto-width not-padding>
       <div class="con-image">
         <img src="/foto1.png" alt="" />
       </div>
-    </vs-dialog>
+    </s-dialog>
   </div>
 </template>
 

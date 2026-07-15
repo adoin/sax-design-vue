@@ -34,7 +34,7 @@ export const configProviderProps = buildProps({
 export type ConfigProviderProps = ExtractPropTypes<typeof configProviderProps>
 
 const ConfigProvider = defineComponent({
-  name: 'VsConfigProvider',
+  name: 'SConfigProvider',
   props: configProviderProps,
 
   setup(props, { slots }) {

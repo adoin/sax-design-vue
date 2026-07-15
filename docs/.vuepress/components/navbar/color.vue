@@ -1,19 +1,19 @@
 <template>
   <div class="center example-nav">
-    <vs-navbar v-model="active" text-white :color="active" right-collapsed>
+    <s-navbar v-model="active" text-white :color="active" right-collapsed>
       <template #left>
         <img src="/logos/logo-vuesax-logotipo-vuesax-png-4.png" alt="" />
       </template>
       <template #right>
-        <vs-navbar-item id="primary"> Primary </vs-navbar-item>
-        <vs-navbar-item id="success"> Success </vs-navbar-item>
-        <vs-navbar-item id="danger"> Danger </vs-navbar-item>
-        <vs-navbar-item id="warn"> Warn </vs-navbar-item>
-        <vs-navbar-item id="dark"> Dark </vs-navbar-item>
-        <vs-navbar-item id="#7d33ff"> HEX </vs-navbar-item>
-        <vs-navbar-item id="rgb(59,222,200)"> RGB </vs-navbar-item>
+        <s-navbar-item id="primary"> Primary </s-navbar-item>
+        <s-navbar-item id="success"> Success </s-navbar-item>
+        <s-navbar-item id="danger"> Danger </s-navbar-item>
+        <s-navbar-item id="warn"> Warn </s-navbar-item>
+        <s-navbar-item id="dark"> Dark </s-navbar-item>
+        <s-navbar-item id="#7d33ff"> HEX </s-navbar-item>
+        <s-navbar-item id="rgb(59,222,200)"> RGB </s-navbar-item>
       </template>
-    </vs-navbar>
+    </s-navbar>
     <div class="square">
       <div class="child">child 1</div>
       <div class="child">child 2</div>
@@ -23,7 +23,7 @@
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
-import type { Color } from 'vuesax-alpha'
+import type { Color } from 'sax-design-vue'
 
 const active = ref<Color>('primary')
 </script>

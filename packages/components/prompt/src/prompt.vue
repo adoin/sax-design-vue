@@ -18,7 +18,7 @@
               type="button"
               @click="handleClose"
             >
-              <VsIcon :icon="closeIcon" :icon-pack="iconPack" />
+              <SIcon :icon="closeIcon" :icon-pack="iconPack" />
             </button>
           </header>
 
@@ -27,20 +27,20 @@
           </div>
 
           <footer v-if="showFooter" :class="ns.e('footer')">
-            <VsButton
+            <SButton
               :color="color"
               :type="resolveButtonType(buttonAccept)"
               :disabled="!canAccept"
               @click="handleAccept"
             >
               {{ acceptText }}
-            </VsButton>
-            <VsButton
+            </SButton>
+            <SButton
               :type="resolveButtonType(buttonCancel)"
               @click="handleCancel"
             >
               {{ cancelText }}
-            </VsButton>
+            </SButton>
           </footer>
         </div>
       </div>
@@ -51,14 +51,14 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { VsButton } from '@vuesax-alpha/components/button'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SButton } from '@vuesax-alpha/components/button'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { getVsColor } from '@vuesax-alpha/utils'
 import { promptEmits, promptProps } from './prompt'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
-  name: 'VsPrompt',
+  name: 'SPrompt',
 })
 
 const props = defineProps(promptProps)

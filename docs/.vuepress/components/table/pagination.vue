@@ -1,45 +1,45 @@
 <template>
   <div class="center">
-    <vs-table>
+    <s-table>
       <template #thead>
-        <vs-tr>
-          <vs-th> Name </vs-th>
-          <vs-th> Email </vs-th>
-          <vs-th> Id </vs-th>
-        </vs-tr>
+        <s-tr>
+          <s-th> Name </s-th>
+          <s-th> Email </s-th>
+          <s-th> Id </s-th>
+        </s-tr>
       </template>
       <template #tbody>
-        <vs-tr
+        <s-tr
           v-for="(tr, i) in getPage(totalUser, page, pageSize)"
           :key="i"
           :data="tr"
         >
-          <vs-td>
+          <s-td>
             {{ tr.name }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.email }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.id }}
-          </vs-td>
-        </vs-tr>
+          </s-td>
+        </s-tr>
       </template>
       <template #footer>
-        <vs-pagination
+        <s-pagination
           v-model:current-page="page"
           v-model:page-size="pageSize"
           :page-sizes="[3, 5, 7]"
           :total="totalUser.length"
         />
       </template>
-    </vs-table>
+    </s-table>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { getPage } from 'vuesax-alpha'
+import { getPage } from 'sax-design-vue'
 
 type User = {
   id: number | string

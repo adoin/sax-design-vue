@@ -1,23 +1,23 @@
 <template>
   <div class="center">
-    <vs-button type="shadow" icon @click="openNotification(null, '')">
+    <s-button type="shadow" icon @click="openNotification(null, '')">
       <i class="bx bx-border-bottom" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="flat"
       icon
       @click="openNotification('top-center', 'primary', 'auto')"
     >
       <i class="bx bx-border-radius b-r" />
-    </vs-button>
+    </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { VsNotification } from 'vuesax-alpha'
+import { SNotification } from 'sax-design-vue'
 
 const openNotification = (position = null, color, width = 'full') => {
-  VsNotification({
+  SNotification({
     width,
     position,
     color,

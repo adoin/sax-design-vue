@@ -1,36 +1,36 @@
 <template>
   <div class="center">
-    <vs-button @click="active = !active"> Open Dialog </vs-button>
-    <vs-dialog v-model="active">
+    <s-button @click="active = !active"> Open Dialog </s-button>
+    <s-dialog v-model="active">
       <template #header>
         <h4 class="not-margin">Welcome to <b>Vuesax</b></h4>
       </template>
 
       <div class="con-form">
-        <vs-input v-model="email" placeholder="Email">
+        <s-input v-model="email" placeholder="Email">
           <template #icon> @ </template>
-        </vs-input>
-        <vs-input v-model="password" type="password" placeholder="Password">
+        </s-input>
+        <s-input v-model="password" type="password" placeholder="Password">
           <template #icon>
             <i class="bx bxs-lock" />
           </template>
-        </vs-input>
+        </s-input>
         <div class="flex">
-          <vs-checkbox v-model="remember">Remember me</vs-checkbox>
+          <s-checkbox v-model="remember">Remember me</s-checkbox>
           <a href="#">Forgot Password?</a>
         </div>
       </div>
 
       <template #footer>
         <div class="footer-dialog">
-          <vs-button block> Sign In </vs-button>
+          <s-button block> Sign In </s-button>
 
           <div class="new">
             New Here? <router-link to="/">Create New Account</router-link>
           </div>
         </div>
       </template>
-    </vs-dialog>
+    </s-dialog>
   </div>
 </template>
 <script lang="ts" setup>

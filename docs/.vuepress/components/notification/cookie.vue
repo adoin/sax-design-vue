@@ -240,12 +240,12 @@
 
     <p>We use cookies to make your experience on this website better.</p>
 
-    <vs-button block color="dark" @click="accept"> I Like Cookies </vs-button>
+    <s-button block color="dark" @click="accept"> I Like Cookies </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { VsButton } from 'vuesax-alpha'
+import { SButton } from 'sax-design-vue'
 const props = defineProps<{
   close?: () => void
 }>()

@@ -1,5 +1,5 @@
 <template>
-  <vs-slider v-model="val" ticks :step="10" />
+  <s-slider v-model="val" ticks :step="10" />
 </template>
 
 <script setup lang="ts">

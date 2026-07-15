@@ -1,21 +1,21 @@
 <template>
   <div class="center">
-    <vs-tooltip placement="left">
-      <vs-button type="border"> left </vs-button>
+    <s-tooltip placement="left">
+      <s-button type="border"> left </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
-    <vs-tooltip placement="top">
-      <vs-button type="border"> Top </vs-button>
+    </s-tooltip>
+    <s-tooltip placement="top">
+      <s-button type="border"> Top </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
-    <vs-tooltip placement="bottom">
-      <vs-button type="border"> Bottom </vs-button>
+    </s-tooltip>
+    <s-tooltip placement="bottom">
+      <s-button type="border"> Bottom </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
-    <vs-tooltip placement="right">
-      <vs-button type="border"> right </vs-button>
+    </s-tooltip>
+    <s-tooltip placement="right">
+      <s-button type="border"> right </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
+    </s-tooltip>
   </div>
 </template>
 

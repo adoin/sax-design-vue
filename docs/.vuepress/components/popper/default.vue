@@ -1,9 +1,9 @@
 <template>
   <div class="center">
-    <vs-popper>
-      <vs-button>Click me</vs-button>
+    <s-popper>
+      <s-button>Click me</s-button>
 
       <template #content> This is popper content </template>
-    </vs-popper>
+    </s-popper>
   </div>
 </template>

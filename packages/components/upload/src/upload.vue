@@ -11,11 +11,11 @@
           type="button"
           @click="removeFile(index)"
         >
-          <VsIcon icon="clear" />
+          <SIcon icon="clear" />
         </button>
         <img v-if="file.preview" :src="file.preview" :class="ns.e('preview')" />
         <div v-else :class="ns.e('archive')">
-          <VsIcon icon="description" />
+          <SIcon icon="description" />
           <span>{{ file.name }}</span>
         </div>
         <div
@@ -47,7 +47,7 @@
           :disabled="!fileList.length"
           @click="uploadAll"
         >
-          <VsIcon icon="cloud_upload" />
+          <SIcon icon="cloud_upload" />
         </button>
       </div>
       <div v-else :class="[ns.e('input-wrap'), ns.is('disabled', true)]">
@@ -60,12 +60,12 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { uploadEmits, uploadProps } from './upload'
 import type { UploadFileItem } from './upload'
 
 defineOptions({
-  name: 'VsUpload',
+  name: 'SUpload',
   inheritAttrs: false,
 })
 

@@ -1,5 +1,5 @@
 <template>
-  <vs-breadcrumb>
+  <s-breadcrumb>
     <li>
       <a href="#" title="Home">Home</a>
       <span class="vs-breadcrum--separator">/</span>
@@ -9,5 +9,5 @@
       <span class="vs-breadcrum--separator">/</span>
     </li>
     <li aria-current="page" class="active">Infos</li>
-  </vs-breadcrumb>
+  </s-breadcrumb>
 </template>

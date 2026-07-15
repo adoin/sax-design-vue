@@ -1,11 +1,11 @@
 <template>
   <div class="center">
-    <vs-badge value="hot" class="item">
-      <vs-button color="warn">comment</vs-button>
-    </vs-badge>
-    <vs-badge value="new" class="item">
-      <vs-button shape="square">square</vs-button>
-    </vs-badge>
+    <s-badge value="hot" class="item">
+      <s-button color="warn">comment</s-button>
+    </s-badge>
+    <s-badge value="new" class="item">
+      <s-button shape="square">square</s-button>
+    </s-badge>
   </div>
 </template>
 

@@ -1,25 +1,25 @@
 <template>
   <div class="prompt-programmatic-demo">
-    <vs-button type="border" @click="runAlert">Alert (JS)</vs-button>
-    <vs-button type="border" @click="runConfirm">Confirm (JS)</vs-button>
+    <s-button type="border" @click="runAlert">Alert (JS)</s-button>
+    <s-button type="border" @click="runConfirm">Confirm (JS)</s-button>
     <p v-if="message" class="result">{{ message }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { VsPromptBox } from 'vuesax-alpha'
+import { SPromptBox } from 'sax-design-vue'
 
 const message = ref('')
 
 const runAlert = async () => {
-  await VsPromptBox.alert('Saved successfully.', 'Notice')
+  await SPromptBox.alert('Saved successfully.', 'Notice')
   message.value = 'Alert closed'
 }
 
 const runConfirm = async () => {
   try {
-    await VsPromptBox.confirm('Do you want to continue?', 'Confirm action')
+    await SPromptBox.confirm('Do you want to continue?', 'Confirm action')
     message.value = 'Confirmed'
   } catch {
     message.value = 'Cancelled'

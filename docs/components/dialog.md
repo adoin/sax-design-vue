@@ -126,9 +126,9 @@ EVENTS:
     link: null
     usage: null
     code: >
-      <vs-dialog @close="handleClose" v-model="active">
+      <s-dialog @close="handleClose" v-model="active">
         ...
-      </vs-dialog>
+      </s-dialog>
 
 SLOTS:
   - name: default
@@ -157,11 +157,11 @@ SLOTS:
     link: null
     usage: '#default'
     code: >
-      <vs-dialog>
+      <s-dialog>
         <template #footer>
           <h1>This is slot footer</h1>
         </template>
-      </vs-dialog>
+      </s-dialog>
 ---
 
 # Dialog
@@ -176,7 +176,7 @@ For simple **confirm / alert** flows with built-in Accept and Cancel buttons, us
 
 <docs-warn />
 
-It generates a Dialog with the `vs-dialog` component, this component is very customizable since it provides a slot to put and make any type of interface to the user's need
+It generates a Dialog with the `s-dialog` component, this component is very customizable since it provides a slot to put and make any type of interface to the user's need
 
 <template #example>
 <dialog-default />
@@ -386,7 +386,7 @@ If you need to remove the padding from the dialog to make a more personalized in
 
 ## Nested Dialogs
 
-You can nest as many `vs-dialog` as you need without problem
+You can nest as many `s-dialog` as you need without problem
 
 <template #example>
 <dialog-nested />

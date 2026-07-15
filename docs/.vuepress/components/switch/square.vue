@@ -1,8 +1,8 @@
 <template>
   <div class="center con-switch">
-    <vs-switch v-model="active" shape="square" />
-    <vs-switch v-model="active2" shape="square" />
-    <vs-switch v-model="active3" shape="square" disabled />
+    <s-switch v-model="active" shape="square" />
+    <s-switch v-model="active2" shape="square" />
+    <s-switch v-model="active3" shape="square" disabled />
   </div>
 </template>
 

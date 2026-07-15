@@ -1,9 +1,9 @@
 <template>
   <div class="center chip-demo">
-    <vs-button v-if="chips.length === 0" type="filled" @click="reset">
+    <s-button v-if="chips.length === 0" type="filled" @click="reset">
       Reset Chips
-    </vs-button>
-    <vs-chip
+    </s-button>
+    <s-chip
       v-for="chip in chips"
       :key="chip"
       item
@@ -11,7 +11,7 @@
       @click="remove(chip)"
     >
       {{ chip }}
-    </vs-chip>
+    </s-chip>
   </div>
 </template>
 

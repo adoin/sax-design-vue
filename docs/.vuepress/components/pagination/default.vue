@@ -1,6 +1,6 @@
 <template>
   <div class="center con-pagination">
-    <vs-pagination
+    <s-pagination
       v-model:current-page="page"
       :layout="['total', 'prev', 'pager', 'next', 'jumper', 'sizes']"
       :total="50"

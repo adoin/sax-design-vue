@@ -3,14 +3,14 @@ import Navbar from './src/navbar.vue'
 import NavbarItem from './src/navbar-item.vue'
 import NavbarGroup from './src/navbar-group.vue'
 
-export const VsNavbar = withInstall(Navbar, {
+export const SNavbar = withInstall(Navbar, {
   NavbarItem,
   NavbarGroup,
 })
-export default VsNavbar
+export default SNavbar
 
-export const VsNavbarItem = withNoopInstall(NavbarItem)
-export const VsNavbarGroup = withNoopInstall(NavbarGroup)
+export const SNavbarItem = withNoopInstall(NavbarItem)
+export const SNavbarGroup = withNoopInstall(NavbarGroup)
 
 export * from './src/navbar-group'
 export * from './src/navbar-item'

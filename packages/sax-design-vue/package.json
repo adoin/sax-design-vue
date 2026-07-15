@@ -1,18 +1,18 @@
 {
-  "name": "vuesax-alpha",
+  "name": "sax-design-vue",
   "version": "0.0.1",
-  "description": "A Component Library for Vue 3",
+  "description": "Sax Design Vue — Vue 3 component library based on Vuesax 3.x",
   "keywords": [
-    "vuesax-alpha",
+    "sax-design-vue",
     "vuesax",
     "component library",
     "ui framework",
     "ui",
     "vue"
   ],
-  "homepage": "https://vuesax-alpha.vercel.app/",
+  "homepage": "https://adoin.github.io/sax-design-vue/",
   "bugs": {
-    "url": "https://github.com/vuesax-alpha/vuesax-alpha/issues"
+    "url": "https://github.com/adoin/sax-design-vue/issues"
   },
   "license": "MIT",
   "main": "lib/index.js",
@@ -63,7 +63,7 @@
   "jsdelivr": "dist/index.full.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuesax-alpha/vuesax-alpha.git"
+    "url": "git+https://github.com/adoin/sax-design-vue.git"
   },
   "publishConfig": {
     "access": "public"

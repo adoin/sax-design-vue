@@ -9,9 +9,9 @@
 <command>
 
 ```ts
-import Vuesax from 'vuesax-alpha'
+import SaxDesignVue from 'sax-design-vue'
 
-app.use(Vuesax)
+app.use(SaxDesignVue)
 ```
 
 </command>
@@ -63,15 +63,21 @@ html.dark {
 
 ## 自动导入 (Vite)
 
-使用 `unplugin-vue-components` 与官方 resolver：
+使用 `unplugin-vue-components` 与 `@vuesax-alpha/auto-import-resolver`（组件名不变），并将导入指向 **sax-design-vue**：
 
 <command>
 
 ```ts
+import path from 'node:path'
 import Components from 'unplugin-vue-components/vite'
 import { VuesaxAlphaResolver } from '@vuesax-alpha/auto-import-resolver'
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      'vuesax-alpha': path.resolve(__dirname, 'node_modules/sax-design-vue'),
+    },
+  },
   plugins: [
     Components({
       resolvers: [VuesaxAlphaResolver({ importStyle: 'sass' })],
@@ -81,6 +87,8 @@ export default defineConfig({
 ```
 
 </command>
+
+也可以直接从 `sax-design-vue` 按需导入组件。
 
 </card>
 

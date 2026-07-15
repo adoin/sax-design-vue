@@ -1,20 +1,20 @@
 <template>
   <div class="center">
-    <vs-badge :value="12" class="item">
-      <vs-button color="warn">comment</vs-button>
-    </vs-badge>
-    <vs-badge :value="2" type="warn" class="item">
-      <vs-button shape="square">square</vs-button>
-    </vs-badge>
-    <vs-badge :value="2" class="item" color="#ccc"> text </vs-badge>
-    <vs-badge :value="7" class="item">
-      <vs-avatar>
+    <s-badge :value="12" class="item">
+      <s-button color="warn">comment</s-button>
+    </s-badge>
+    <s-badge :value="2" type="warn" class="item">
+      <s-button shape="square">square</s-button>
+    </s-badge>
+    <s-badge :value="2" class="item" color="#ccc"> text </s-badge>
+    <s-badge :value="7" class="item">
+      <s-avatar>
         <img src="/avatars/avatar-5.png" alt="" />
-      </vs-avatar>
-    </vs-badge>
-    <vs-badge :value="3" class="item">
-      <vs-avatar shape="square" color="#ccc" />
-    </vs-badge>
+      </s-avatar>
+    </s-badge>
+    <s-badge :value="3" class="item">
+      <s-avatar shape="square" color="#ccc" />
+    </s-badge>
   </div>
 </template>
 

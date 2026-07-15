@@ -1,14 +1,14 @@
 <template>
   <div class="center content-inputs">
-    <vs-input v-model="value" color="primary" placeholder="Primary" />
+    <s-input v-model="value" color="primary" placeholder="Primary" />
 
-    <vs-input v-model="value2" color="success" placeholder="Success Icon">
+    <s-input v-model="value2" color="success" placeholder="Success Icon">
       <template #icon>
         <i class="bx bx-user" />
       </template>
-    </vs-input>
+    </s-input>
 
-    <vs-input
+    <s-input
       v-model="value3"
       color="danger"
       icon-after
@@ -17,20 +17,20 @@
       <template #icon>
         <i class="bx bx-mail-send" />
       </template>
-    </vs-input>
+    </s-input>
 
-    <vs-input
+    <s-input
       v-model="value4"
       color="warn"
       placeholder="Label Warn"
       label="Warn"
     />
 
-    <vs-input v-model="value5" color="dark" label="Dark" label-float />
+    <s-input v-model="value5" color="dark" label="Dark" label-float />
 
-    <vs-input v-model="value6" color="#7D33FF" placeholder="HEX #7D33FF" />
+    <s-input v-model="value6" color="#7D33FF" placeholder="HEX #7D33FF" />
 
-    <vs-input
+    <s-input
       v-model="value7"
       color="rgb(59, 222, 200)"
       placeholder="RGB(59, 222, 200)"

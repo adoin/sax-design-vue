@@ -6,7 +6,7 @@
 import { useNamespace } from '@vuesax-alpha/hooks'
 
 defineOptions({
-  name: 'VsSpacer',
+  name: 'SSpacer',
 })
 
 const ns = useNamespace('spacer')

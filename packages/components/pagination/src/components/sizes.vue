@@ -1,30 +1,30 @@
 <template>
   <span :class="ns.e('sizes')">
-    <vs-select
+    <s-select
       :model-value="innerPageSize"
       :disabled="disabled"
       @change="handleChange"
     >
-      <vs-option
+      <s-option
         v-for="item in innerPageSizes"
         :key="item"
         :value="item"
         :label="`${item} / page`"
       />
-    </vs-select>
+    </s-select>
   </span>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import { isEqual } from 'lodash-unified'
-import VsSelect, { VsOption } from '@vuesax-alpha/components/select'
+import SSelect, { SOption } from '@vuesax-alpha/components/select'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { usePagination } from '../usePagination'
 import { paginationSizesEmits, paginationSizesProps } from './sizes'
 
 defineOptions({
-  name: 'VsPaginationSizes',
+  name: 'SPaginationSizes',
 })
 
 const props = defineProps(paginationSizesProps)

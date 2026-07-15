@@ -13,7 +13,7 @@ import { iconProps } from './icon'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
-  name: 'VsIcon',
+  name: 'SIcon',
   inheritAttrs: false,
 })
 

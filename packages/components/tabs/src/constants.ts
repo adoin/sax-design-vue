@@ -15,4 +15,4 @@ export interface TabsContext {
   unregisterPane: (uid: number) => void
 }
 
-export const tabsContextKey: InjectionKey<TabsContext> = Symbol('VsTabs')
+export const tabsContextKey: InjectionKey<TabsContext> = Symbol('STabs')

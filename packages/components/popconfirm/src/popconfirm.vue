@@ -1,5 +1,5 @@
 <template>
-  <vs-popper
+  <s-popper
     ref="tooltipRef"
     trigger="click"
     color="light"
@@ -14,46 +14,46 @@
   >
     <template #content>
       <div :class="ns.e('main')">
-        <vs-icon
+        <s-icon
           v-if="!hideIcon && icon"
           :class="ns.e('icon')"
           :style="{ color: iconColor }"
           size="26"
         >
           <component :is="icon" />
-        </vs-icon>
+        </s-icon>
         {{ title }}
       </div>
       <div :class="ns.e('action')">
-        <vs-button
+        <s-button
           :size="cancelButtonSize"
           :color="cancelButtonColor"
           :type="cancelButtonType"
           @click="cancel"
         >
           {{ finalCancelButtonText }}
-        </vs-button>
-        <vs-button
+        </s-button>
+        <s-button
           :size="confirmButtonSize"
           :color="confirmButtonColor"
           :type="confirmButtonType"
           @click="confirm"
         >
           {{ finalConfirmButtonText }}
-        </vs-button>
+        </s-button>
       </div>
     </template>
     <template v-if="$slots.reference">
       <slot name="reference" />
     </template>
-  </vs-popper>
+  </s-popper>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import VsButton from '@vuesax-alpha/components/button'
-import VsIcon from '@vuesax-alpha/components/icon'
-import VsPopper from '@vuesax-alpha/components/popper'
+import SButton from '@vuesax-alpha/components/button'
+import SIcon from '@vuesax-alpha/components/icon'
+import SPopper from '@vuesax-alpha/components/popper'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { addUnit } from '@vuesax-alpha/utils'
 import { popconfirmEmits, popconfirmProps } from './popconfirm'
@@ -61,7 +61,7 @@ import { popconfirmEmits, popconfirmProps } from './popconfirm'
 import type { PopperInstance } from '@vuesax-alpha/components/popper'
 
 defineOptions({
-  name: 'VsPopconfirm',
+  name: 'SPopconfirm',
 })
 
 const props = defineProps(popconfirmProps)

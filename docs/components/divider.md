@@ -75,7 +75,7 @@ NEWS:
 ## Default
 
 
-Add a horizontal line between blocks of content with `vs-divider`.
+Add a horizontal line between blocks of content with `s-divider`.
 
 <template #example>
 <divider-default />

@@ -3,13 +3,13 @@ import List from './src/list.vue'
 import ListItem from './src/list-item.vue'
 import ListHeader from './src/list-header.vue'
 
-export const VsList = withInstall(List, {
+export const SList = withInstall(List, {
   ListItem,
   ListHeader,
 })
-export const VsListItem = withNoopInstall(ListItem)
-export const VsListHeader = withNoopInstall(ListHeader)
-export default VsList
+export const SListItem = withNoopInstall(ListItem)
+export const SListHeader = withNoopInstall(ListHeader)
+export default SList
 
 export * from './src/list'
 export * from './src/list-item'

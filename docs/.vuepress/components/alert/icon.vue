@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-alert>
+    <s-alert>
       <template #icon>
         <i class="bx bxs-chat" />
       </template>
@@ -11,6 +11,6 @@
       Unique and pleasant style, Vuesax is created from scratch and designed for
       all types of developed from the frontend lover to the backend that wants
       to easily create your visual approach to the end user
-    </vs-alert>
+    </s-alert>
   </div>
 </template>

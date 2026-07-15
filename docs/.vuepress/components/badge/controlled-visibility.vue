@@ -1,10 +1,10 @@
 <template>
   <div class="center">
-    <vs-badge :value="3" :hidden="hidden" processing class="item">
-      <vs-avatar shape="square" color="#ccc" />
-    </vs-badge>
+    <s-badge :value="3" :hidden="hidden" processing class="item">
+      <s-avatar shape="square" color="#ccc" />
+    </s-badge>
 
-    <vs-switch v-model="hidden" />
+    <s-switch v-model="hidden" />
   </div>
 </template>
 

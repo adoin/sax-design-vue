@@ -1,5 +1,5 @@
 <template>
-  <vs-collapse-transition>
+  <s-collapse-transition>
     <div v-if="modelValue" :class="alertClasses" :style="alertStyles">
       <div v-if="$slots.icon" :class="ns.e('icon')">
         <slot name="icon" />
@@ -21,14 +21,14 @@
         />
       </div>
 
-      <vs-collapse-transition>
+      <s-collapse-transition>
         <div v-if="!hiddenContent" :class="ns.e('content')">
           <div :class="ns.em('content', 'text')">
             <slot />
             <slot :name="`page-${page}`" />
           </div>
         </div>
-      </vs-collapse-transition>
+      </s-collapse-transition>
 
       <button v-if="closable" :class="ns.e('close')" @click="handleClickClose">
         <icon-close hover="less" />
@@ -51,14 +51,14 @@
         <button @click="handleClickNextPage" v-text="'>'" />
       </div>
     </div>
-  </vs-collapse-transition>
+  </s-collapse-transition>
 </template>
 
 <script lang="ts" setup>
 import { computed, useSlots } from 'vue'
 import { getVsColor, isBoolean } from '@vuesax-alpha/utils'
 import { IconClose, IconPlus } from '@vuesax-alpha/components/icon'
-import { VsCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
+import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import {
   useColor,
   useNamespace,
@@ -70,7 +70,7 @@ import { useAlertDeprecated } from './use-deprecated'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
-  name: 'VsAlert',
+  name: 'SAlert',
 })
 
 const props = defineProps(alertProps)

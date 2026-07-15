@@ -1,10 +1,10 @@
 <template>
   <div class="center">
-    <vs-button icon :active="active == 0" @click="active = 0">
+    <s-button icon :active="active == 0" @click="active = 0">
       <i class="bx bx-home-alt" />
-    </vs-button>
+    </s-button>
 
-    <vs-button
+    <s-button
       icon
       color="success"
       type="flat"
@@ -12,9 +12,9 @@
       @click="active = 1"
     >
       <i class="bx bxs-phone-call" />
-    </vs-button>
+    </s-button>
 
-    <vs-button
+    <s-button
       icon
       color="danger"
       type="border"
@@ -22,9 +22,9 @@
       @click="active = 2"
     >
       <i class="bx bxs-heart" />>
-    </vs-button>
+    </s-button>
 
-    <vs-button
+    <s-button
       icon
       color="warn"
       type="gradient"
@@ -32,9 +32,9 @@
       @click="active = 3"
     >
       <i class="bx bxs-bell-ring" />
-    </vs-button>
+    </s-button>
 
-    <vs-button
+    <s-button
       icon
       color="#7d33ff"
       type="relief"
@@ -42,9 +42,9 @@
       @click="active = 5"
     >
       <i class="bx bxs-paper-plane" />
-    </vs-button>
+    </s-button>
 
-    <vs-button
+    <s-button
       icon
       color="rgb(59,222,200)"
       type="gradient"
@@ -52,7 +52,7 @@
       @click="active = 6"
     >
       <i class="bx bxs-purchase-tag" />
-    </vs-button>
+    </s-button>
   </div>
 </template>
 

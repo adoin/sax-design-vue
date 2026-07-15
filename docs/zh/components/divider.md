@@ -75,7 +75,7 @@ NEWS:
 ## 默认
 
 
-使用 `vs-divider` 在内容块之间添加水平分割线。
+使用 `s-divider` 在内容块之间添加水平分割线。
 
 <template #example>
 <divider-default />
@@ -83,13 +83,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/divider/default.vue)
+@[code{1-7}](../../.vuepress/components/divider/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{9-17}](../.vuepress/components/divider/default.vue)
+@[code{9-17}](../../.vuepress/components/divider/default.vue)
 
 </template>
 
@@ -108,13 +108,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/divider/text.vue)
+@[code{1-5}](../../.vuepress/components/divider/text.vue)
 
 </template>
 
 <template #style>
 
-@[code{7-15}](../.vuepress/components/divider/text.vue)
+@[code{7-15}](../../.vuepress/components/divider/text.vue)
 
 </template>
 
@@ -133,13 +133,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-9}](../.vuepress/components/divider/position.vue)
+@[code{1-9}](../../.vuepress/components/divider/position.vue)
 
 </template>
 
 <template #style>
 
-@[code{11-19}](../.vuepress/components/divider/position.vue)
+@[code{11-19}](../../.vuepress/components/divider/position.vue)
 
 </template>
 
@@ -158,13 +158,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-12}](../.vuepress/components/divider/color.vue)
+@[code{1-12}](../../.vuepress/components/divider/color.vue)
 
 </template>
 
 <template #style>
 
-@[code{14-22}](../.vuepress/components/divider/color.vue)
+@[code{14-22}](../../.vuepress/components/divider/color.vue)
 
 </template>
 
@@ -183,13 +183,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-12}](../.vuepress/components/divider/background.vue)
+@[code{1-12}](../../.vuepress/components/divider/background.vue)
 
 </template>
 
 <template #style>
 
-@[code{14-22}](../.vuepress/components/divider/background.vue)
+@[code{14-22}](../../.vuepress/components/divider/background.vue)
 
 </template>
 
@@ -208,13 +208,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-10}](../.vuepress/components/divider/icons.vue)
+@[code{1-10}](../../.vuepress/components/divider/icons.vue)
 
 </template>
 
 <template #style>
 
-@[code{12-20}](../.vuepress/components/divider/icons.vue)
+@[code{12-20}](../../.vuepress/components/divider/icons.vue)
 
 </template>
 
@@ -233,13 +233,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/divider/style.vue)
+@[code{1-7}](../../.vuepress/components/divider/style.vue)
 
 </template>
 
 <template #style>
 
-@[code{9-17}](../.vuepress/components/divider/style.vue)
+@[code{9-17}](../../.vuepress/components/divider/style.vue)
 
 </template>
 

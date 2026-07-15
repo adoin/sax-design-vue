@@ -21,9 +21,9 @@
             v-html="icon"
           />
           <div v-else :class="ns.e('icon')">
-            <vs-icon :size="addUnit(iconSize)">
+            <s-icon :size="addUnit(iconSize)">
               <component :is="icon" />
-            </vs-icon>
+            </s-icon>
           </div>
         </template>
 
@@ -64,12 +64,12 @@ import {
   useGlobalComponentSettings,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
-import { IconClose, VsIcon } from '@vuesax-alpha/components/icon'
+import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
 import { addUnit, getVsColor } from '@vuesax-alpha/utils'
 import { notificationProps } from './notification'
 
 defineOptions({
-  name: 'VsNotification',
+  name: 'SNotification',
 })
 
 const props = defineProps(notificationProps)

@@ -1,28 +1,24 @@
 <template>
   <div class="grid">
-    <vs-row>
-      <vs-col v-for="i in 3" :key="i" :sm="2"> Default {{ i + 1 }} </vs-col>
-    </vs-row>
+    <s-row>
+      <s-col v-for="i in 3" :key="i" :sm="2"> Default {{ i + 1 }} </s-col>
+    </s-row>
 
-    <vs-row justify="center">
-      <vs-col v-for="i in 3" :key="i" :sm="2"> Center {{ i + 1 }} </vs-col>
-    </vs-row>
+    <s-row justify="center">
+      <s-col v-for="i in 3" :key="i" :sm="2"> Center {{ i + 1 }} </s-col>
+    </s-row>
 
-    <vs-row justify="end">
-      <vs-col v-for="i in 3" :key="i" :sm="2"> Flex-end {{ i + 1 }} </vs-col>
-    </vs-row>
+    <s-row justify="end">
+      <s-col v-for="i in 3" :key="i" :sm="2"> Flex-end {{ i + 1 }} </s-col>
+    </s-row>
 
-    <vs-row justify="space-around">
-      <vs-col v-for="i in 3" :key="i" :sm="2">
-        Space-around {{ i + 1 }}
-      </vs-col>
-    </vs-row>
+    <s-row justify="space-around">
+      <s-col v-for="i in 3" :key="i" :sm="2"> Space-around {{ i + 1 }} </s-col>
+    </s-row>
 
-    <vs-row justify="space-between">
-      <vs-col v-for="i in 3" :key="i" :sm="2">
-        Space-between {{ i + 1 }}
-      </vs-col>
-    </vs-row>
+    <s-row justify="space-between">
+      <s-col v-for="i in 3" :key="i" :sm="2"> Space-between {{ i + 1 }} </s-col>
+    </s-row>
   </div>
 </template>
 <style scoped lang="scss">

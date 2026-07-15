@@ -1,8 +1,8 @@
 <template>
   <div class="center con-checkbox">
-    <vs-checkbox v-model="option" value="automatically">
+    <s-checkbox v-model="option" value="automatically">
       Save data automatically
-    </vs-checkbox>
+    </s-checkbox>
 
     <span class="data">
       {{ option ? option : 'null' }}

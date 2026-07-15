@@ -91,7 +91,7 @@ async function addSourceFiles(project: Project) {
 
   const globSourceFile = '**/*.{js?(x),ts?(x),vue}'
   const filePaths = excludeFiles(
-    await glob([globSourceFile, '!vuesax-alpha/**/*'], {
+    await glob([globSourceFile, '!sax-design-vue/**/*'], {
       cwd: pkgRoot,
       absolute: true,
       onlyFiles: true,

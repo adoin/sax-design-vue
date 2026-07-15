@@ -31,11 +31,11 @@ export default defineConfig(async ({ mode }) => {
     resolve: {
       alias: [
         {
-          find: /^vuesax-alpha(\/(es|lib))?$/,
+          find: /^sax-design-vue(\/(es|lib))?$/,
           replacement: path.resolve(vsRoot, 'index.ts'),
         },
         {
-          find: /^vuesax-alpha\/(es|lib)\/(.*)$/,
+          find: /^sax-design-vue\/(es|lib)\/(.*)$/,
           replacement: `${pkgRoot}/$2`,
         },
       ],

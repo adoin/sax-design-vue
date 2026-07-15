@@ -181,7 +181,7 @@ export const paginationEmits = {
 
 export type PaginationEmits = typeof paginationEmits
 
-const COMPONENT_NAME = 'VsPagination'
+const COMPONENT_NAME = 'SPagination'
 
 export default defineComponent({
   name: COMPONENT_NAME,

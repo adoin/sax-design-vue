@@ -1,8 +1,8 @@
 <template>
   <div class="demo-rate center">
-    <vs-rate v-model="value" size="large" />
-    <vs-rate v-model="value" />
-    <vs-rate v-model="value" size="small" />
+    <s-rate v-model="value" size="large" />
+    <s-rate v-model="value" />
+    <s-rate v-model="value" size="small" />
   </div>
 </template>
 

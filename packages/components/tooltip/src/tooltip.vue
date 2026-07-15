@@ -1,5 +1,5 @@
 <template>
-  <vs-popper
+  <s-popper
     ref="popperRef"
     :interactivity="interactivity"
     :popper-class="[tooltipKls, popperClass ?? '']"
@@ -39,7 +39,7 @@
     <template #content>
       <slot name="content" />
     </template>
-  </vs-popper>
+  </s-popper>
 </template>
 
 <script setup lang="ts">
@@ -49,14 +49,14 @@ import {
   useNamespace,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
-import VsPopper from '@vuesax-alpha/components/popper'
+import SPopper from '@vuesax-alpha/components/popper'
 import { getVsColor } from '@vuesax-alpha/utils'
 import { tooltipProps } from './tooltip'
 import { useTooltipDeprecated } from './useTooltipDeprecated'
 import type { PopperExpose } from '@vuesax-alpha/components/popper'
 
 defineOptions({
-  name: 'VsTooltip',
+  name: 'STooltip',
 })
 
 const ns = useNamespace('tooltip')

@@ -1,16 +1,16 @@
 <template>
   <div class="grid">
-    <vs-row>
-      <vs-col :sm="num">
+    <s-row>
+      <s-col :sm="num">
         {{ num }}
-      </vs-col>
-      <vs-col :sm="num2">
+      </s-col>
+      <s-col :sm="num2">
         {{ num2 }}
-      </vs-col>
-      <vs-col :sm="num">
+      </s-col>
+      <s-col :sm="num">
         {{ num }}
-      </vs-col>
-    </vs-row>
+      </s-col>
+    </s-row>
   </div>
 </template>
 

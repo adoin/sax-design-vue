@@ -9,8 +9,8 @@ import Plus from './src/plus.vue'
 import Star from './src/star.vue'
 import StarFilled from './src/star-filled.vue'
 
-export const VsIcon = withInstall(Icon)
-export default VsIcon
+export const SIcon = withInstall(Icon)
+export default SIcon
 
 export const IconArrow = withInstall(Arrow)
 export const IconCheck = withInstall(Check)

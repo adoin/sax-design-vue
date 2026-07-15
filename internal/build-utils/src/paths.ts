@@ -7,7 +7,7 @@ export const themeRoot = resolve(pkgRoot, 'theme-chalk')
 export const hookRoot = resolve(pkgRoot, 'hooks')
 export const localeRoot = resolve(pkgRoot, 'locale')
 export const directiveRoot = resolve(pkgRoot, 'directives')
-export const vsRoot = resolve(pkgRoot, 'vuesax-alpha')
+export const vsRoot = resolve(pkgRoot, 'sax-design-vue')
 export const utilRoot = resolve(pkgRoot, 'utils')
 export const buildRoot = resolve(projRoot, 'internal', 'build')
 
@@ -18,8 +18,8 @@ export const vpRoot = resolve(docRoot, '.vuepress')
 
 /** `/dist` */
 export const buildOutput = resolve(projRoot, 'dist')
-/** `/dist/vuesax-alpha` */
-export const vsOutput = resolve(buildOutput, 'vuesax-alpha')
+/** `/dist/sax-design-vue` */
+export const vsOutput = resolve(buildOutput, 'sax-design-vue')
 
 export const projPackage = resolve(projRoot, 'package.json')
 export const compPackage = resolve(compRoot, 'package.json')

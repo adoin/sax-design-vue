@@ -9,9 +9,9 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-badge :value="7">
-        <vs-button>Badge</vs-button>
-      </vs-badge>
+      <s-badge :value="7">
+        <s-button>Badge</s-button>
+      </s-badge>
     #__________________________________
   - name: max
     type: Number
@@ -21,9 +21,9 @@ PROPS:
     link: null
     usage: '#max-value'
     code: >
-      <vs-badge :value="100" :max="19" type="primary" >
-        <vs-button >comment</vs-button>
-      </vs-badge>
+      <s-badge :value="100" :max="19" type="primary" >
+        <s-button >comment</s-button>
+      </s-badge>
     #__________________________________
   - name: is-dot
     type: Boolean
@@ -33,9 +33,9 @@ PROPS:
     link: null
     usage: '#red-dot'
     code: >
-      <vs-badge :value="100" :max="19" is-dot type="primary" >
-        <vs-button >comment</vs-button>
-      </vs-badge>
+      <s-badge :value="100" :max="19" is-dot type="primary" >
+        <s-button >comment</s-button>
+      </s-badge>
     #__________________________________
   - name: hidden
     type: Boolean
@@ -45,9 +45,9 @@ PROPS:
     link: null
     usage: '#controlled-visibility'
     code: >
-      <vs-badge :value="3"  :hidden="hidden">
-        <vs-avatar shape="square" color="#ccc"> </vs-avatar>
-      </vs-badge>
+      <s-badge :value="3"  :hidden="hidden">
+        <s-avatar shape="square" color="#ccc"> </s-avatar>
+      </s-badge>
     #__________________________________
   - name: type
     type: String
@@ -57,9 +57,9 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-badge :value="2" type="warn">
-        <vs-button shape="square">square</vs-button>
-      </vs-badge>
+      <s-badge :value="2" type="warn">
+        <s-button shape="square">square</s-button>
+      </s-badge>
     #__________________________________
   - name: show-zero
     type: Boolean
@@ -69,9 +69,9 @@ PROPS:
     link: null
     usage: '#show-zero'
     code: >
-      <vs-badge :value="2" type="warn" show-zero >
-        <vs-button shape="square">square</vs-button>
-      </vs-badge>
+      <s-badge :value="2" type="warn" show-zero >
+        <s-button shape="square">square</s-button>
+      </s-badge>
     #__________________________________
   - name: color
     type: String
@@ -81,7 +81,7 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-badge :value="2" class="item" color="#ccc"> text </vs-badge>
+      <s-badge :value="2" class="item" color="#ccc"> text </s-badge>
     #__________________________________
   - name: offset
     type: Array
@@ -91,9 +91,9 @@ PROPS:
     link: null
     usage: '#offset'
     code: >
-      <vs-badge :value="3" :offset=[-20,20] class="item" >
-        <vs-avatar shape="square" color="#ccc"> </vs-avatar>
-      </vs-badge>
+      <s-badge :value="3" :offset=[-20,20] class="item" >
+        <s-avatar shape="square" color="#ccc"> </s-avatar>
+      </s-badge>
     #__________________________________
   - name: processing
     type: Boolean
@@ -103,9 +103,9 @@ PROPS:
     link: null
     usage: '#processing'
     code: >
-      <vs-badge :value="2" processing  >
-        <vs-button shape="square">square</vs-button>
-      </vs-badge>
+      <s-badge :value="2" processing  >
+        <s-button shape="square">square</s-button>
+      </s-badge>
     #__________________________________
   - name: badge-style
     type: object
@@ -136,9 +136,9 @@ SLOTS:
     link: null
     usage: '#default'
     code: >
-      <vs-badge :value="2">
-        <vs-button shape="square">square</vs-button>
-      </vs-badge>
+      <s-badge :value="2">
+        <s-button shape="square">square</s-button>
+      </s-badge>
 
 UPDATES:
   - type

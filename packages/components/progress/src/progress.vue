@@ -28,7 +28,7 @@ import { progressProps } from './progress'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
-  name: 'VsProgress',
+  name: 'SProgress',
 })
 
 const props = defineProps(progressProps)

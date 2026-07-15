@@ -1,14 +1,14 @@
 <template>
   <div class="prompt-demo">
     <p class="modelx">{{ val || 'null' }}</p>
-    <vs-button type="border" @click="activePrompt = true">Run prompt</vs-button>
+    <s-button type="border" @click="activePrompt = true">Run prompt</s-button>
 
     <p class="modelx">{{ valMultiple.value1 }} {{ valMultiple.value2 }}</p>
-    <vs-button type="border" @click="activePrompt2 = true">
+    <s-button type="border" @click="activePrompt2 = true">
       Run prompt inputs
-    </vs-button>
+    </s-button>
 
-    <vs-prompt
+    <s-prompt
       v-model="activePrompt"
       title="Dialog"
       @cancel="val = ''"
@@ -17,19 +17,19 @@
     >
       <div class="con-exemple-prompt">
         Enter the security code
-        <vs-input v-model="val" placeholder="Code" />
-        <vs-select v-model="select1" label="Figuras" class="select-example">
-          <vs-select-item
+        <s-input v-model="val" placeholder="Code" />
+        <s-select v-model="select1" label="Figuras" class="select-example">
+          <s-select-item
             v-for="(item, index) in options1"
             :key="index"
             :value="item.value"
             :text="item.text"
           />
-        </vs-select>
+        </s-select>
       </div>
-    </vs-prompt>
+    </s-prompt>
 
-    <vs-prompt
+    <s-prompt
       v-model="activePrompt2"
       color="danger"
       title="Dialog"
@@ -45,13 +45,13 @@
     >
       <div class="con-exemple-prompt">
         Enter your first and last name to <b>continue</b>.
-        <vs-input v-model="valMultiple.value1" placeholder="Name" />
-        <vs-input v-model="valMultiple.value2" placeholder="Last Name" />
-        <vs-alert :active="!validName" color="danger" icon="new_releases">
+        <s-input v-model="valMultiple.value1" placeholder="Name" />
+        <s-input v-model="valMultiple.value2" placeholder="Last Name" />
+        <s-alert :active="!validName" color="danger" icon="new_releases">
           Fields can not be empty please enter the data
-        </vs-alert>
+        </s-alert>
       </div>
-    </vs-prompt>
+    </s-prompt>
   </div>
 </template>
 

@@ -8,7 +8,7 @@ PROPS:
     link: /api/color
     usage: '#color'
     code: >
-      <vs-button color="success"> Success </vs-button>
+      <s-button color="success"> Success </s-button>
   # _______________________________________
   - name: style button
     type: Prop
@@ -18,7 +18,7 @@ PROPS:
     link: null
     usage: '#flat'
     code: >
-      <vs-button type="flat"> Flat </vs-button>
+      <s-button type="flat"> Flat </s-button>
   # _______________________________________
   - name: active
     type: Boolean
@@ -28,7 +28,7 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-button active> Default </vs-button>
+      <s-button active> Default </s-button>
   # _______________________________________
   - name: upload
     type: Boolean
@@ -38,9 +38,9 @@ PROPS:
     link: null
     usage: '#upload'
     code: >
-      <vs-button upload >
+      <s-button upload >
         <i class='bx bxs-wallet'></i> Wallet
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: to
     type: String
@@ -50,9 +50,9 @@ PROPS:
     link: null
     usage: '#to-href'
     code: >
-      <vs-button to="/">
+      <s-button to="/">
         Example prop - to
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: href
     type: String
@@ -62,9 +62,9 @@ PROPS:
     link: null
     usage: '#to-href'
     code: >
-      <vs-button href="https://github.com/vuesax-alpha/vuesax-alpha/">
+      <s-button href="https://github.com/adoin/sax-design-vue/">
         Example prop - url
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: blank
     type: Boolean
@@ -74,9 +74,9 @@ PROPS:
     link: null
     usage: '#to-href'
     code: >
-      <vs-button blank href="https://github.com/vuesax-alpha/vuesax-alpha/">
+      <s-button blank href="https://github.com/adoin/sax-design-vue/">
         Example prop - url
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: icon
     type: Boolean
@@ -86,9 +86,9 @@ PROPS:
     link: null
     usage: '#icon'
     code: >
-      <vs-button icon>
+      <s-button icon>
         <i class='bx bx-home-alt'></i>
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: circle
     type: Boolean
@@ -98,9 +98,9 @@ PROPS:
     link: null
     usage: '#circle'
     code: >
-      <vs-button icon shape="circle">
+      <s-button icon shape="circle">
         <i class='bx bx-home-alt'></i>
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: square
     type: Boolean
@@ -110,9 +110,9 @@ PROPS:
     link: null
     usage: '#square'
     code: >
-      <vs-button icon shape="square"> // <------
+      <s-button icon shape="square"> // <------
         <i class='bx bx-home-alt'></i>
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: block
     type: Boolean
@@ -122,9 +122,9 @@ PROPS:
     link: null
     usage: '#block'
     code: >
-      <vs-button block>
+      <s-button block>
         <i class='bx bxs-paint-roll'></i> Edit Theme
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: animationType
     type: Boolean
@@ -134,12 +134,12 @@ PROPS:
     link: null
     usage: '#animate'
     code: >
-      <vs-button type="flat" color="success" animation-type="vertical">
+      <s-button type="flat" color="success" animation-type="vertical">
         Message
         <template #animate>
           <i class='bx bx-mail-send'></i> Send
         </template>
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: animateInactive
     type: Boolean
@@ -149,13 +149,13 @@ PROPS:
     link: null
     usage: '#toggle'
     code: >
-      <vs-button :animate-inactive="successFace" @click="handleClickFace" :loading="loadingFace" color="facebook">
+      <s-button :animate-inactive="successFace" @click="handleClickFace" :loading="loadingFace" color="facebook">
         <i class='bx bxl-facebook-square'></i>
         {{ successFace ? 'Logout' : 'Facebook' }}
         <template #animate >
           <i class='bx bx-user'></i> Login
         </template>
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: Ripple
     type: String
@@ -165,8 +165,8 @@ PROPS:
     usage: '#ripple'
     code: >
       <template>
-        <vs-button ripple="reverse"> Reverse </vs-button>
-        <vs-button ripple="cut"> Cut </vs-button>
+        <s-button ripple="reverse"> Reverse </s-button>
+        <s-button ripple="cut"> Cut </s-button>
       </template>
 SLOTS:
   - name: animate
@@ -176,12 +176,12 @@ SLOTS:
     default: null
     link: null
     code: >
-      <vs-button>
+      <s-button>
         Home
         <template #animate>
           <i class='bx bx-home-alt'></i>
         </template>
-      </vs-button>
+      </s-button>
     usage: '#animated'
   # _______________________________________
 NEWS:
@@ -206,13 +206,13 @@ the buttons have all the states as active, focus, hover, to make its implementat
 
 <template #template>
 
-@[code{1-7} vue](../.vuepress/components/button/default.vue)
+@[code{1-7} vue](../../.vuepress/components/button/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{9-13} vue](../.vuepress/components/button/default.vue)
+@[code{9-13} vue](../../.vuepress/components/button/default.vue)
 
 </template>
 
@@ -230,13 +230,13 @@ You can change the full style towards _flat_ of a button with the `flat` propert
 
 <template #template>
 
-@[code{1-11} vue{3,6,9}](../.vuepress/components/button/flat.vue)
+@[code{1-11} vue{3,6,9}](../../.vuepress/components/button/flat.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17} vue](../.vuepress/components/button/flat.vue)
+@[code{13-17} vue](../../.vuepress/components/button/flat.vue)
 
 </template>
 
@@ -254,13 +254,13 @@ You can change the full style towards _border_ of a button with the `border` pro
 
 <template #template>
 
-@[code{1-11} vue{3,6,9}](../.vuepress/components/button/border.vue)
+@[code{1-11} vue{3,6,9}](../../.vuepress/components/button/border.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17} vue](../.vuepress/components/button/border.vue)
+@[code{13-17} vue](../../.vuepress/components/button/border.vue)
 
 </template>
 
@@ -282,13 +282,13 @@ Gradient colors are automatically generated by the `color` property which in thi
 
 <template #template>
 
-@[code{1-11} vue{3,6,9}](../.vuepress/components/button/gradient.vue)
+@[code{1-11} vue{3,6,9}](../../.vuepress/components/button/gradient.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17} vue](../.vuepress/components/button/gradient.vue)
+@[code{13-17} vue](../../.vuepress/components/button/gradient.vue)
 
 </template>
 
@@ -306,13 +306,13 @@ Change the style of the button to a relief aspect with the `relief` property, th
 
 <template #template>
 
-@[code{1-11} vue{3,6,9}](../.vuepress/components/button/relief.vue)
+@[code{1-11} vue{3,6,9}](../../.vuepress/components/button/relief.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17} vue](../.vuepress/components/button/relief.vue)
+@[code{13-17} vue](../../.vuepress/components/button/relief.vue)
 
 </template>
 
@@ -330,13 +330,13 @@ Change the style of the button with the `transparent` property, the property is 
 
 <template #template>
 
-@[code{1-11} vue{3,6,9}](../.vuepress/components/button/transparent.vue)
+@[code{1-11} vue{3,6,9}](../../.vuepress/components/button/transparent.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17} vue](../.vuepress/components/button/transparent.vue)
+@[code{13-17} vue](../../.vuepress/components/button/transparent.vue)
 
 </template>
 
@@ -354,13 +354,13 @@ Change the style of the button with the `shadow` property, the property is a` bo
 
 <template #template>
 
-@[code{1-11} vue{3,6,9}](../.vuepress/components/button/shadow.vue)
+@[code{1-11} vue{3,6,9}](../../.vuepress/components/button/shadow.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17} vue](../.vuepress/components/button/shadow.vue)
+@[code{13-17} vue](../../.vuepress/components/button/shadow.vue)
 
 </template>
 
@@ -380,13 +380,13 @@ Change the color of the Button component with the `color` property and the color
 
 <template #template>
 
-@[code{1-53} vue{5,13,21,29,37,45}](../.vuepress/components/button/color.vue)
+@[code{1-53} vue{5,13,21,29,37,45}](../../.vuepress/components/button/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{55-59} vue](../.vuepress/components/button/color.vue)
+@[code{55-59} vue](../../.vuepress/components/button/color.vue)
 
 </template>
 
@@ -408,13 +408,13 @@ This property makes the button have a specific size making it the same width and
 
 <template #template>
 
-@[code{1-57} vue{3}](../.vuepress/components/button/icon.vue)
+@[code{1-57} vue{3}](../../.vuepress/components/button/icon.vue)
 
 </template>
 
 <template #script>
 
-@[code{59-63} vue](../.vuepress/components/button/icon.vue)
+@[code{59-63} vue](../../.vuepress/components/button/icon.vue)
 
 </template>
 
@@ -432,13 +432,13 @@ If you need a button with text and icon you can do them by adding them in the `s
 
 <template #template>
 
-@[code{1-52} vue{4}](../.vuepress/components/button/iconText.vue)
+@[code{1-52} vue{4}](../../.vuepress/components/button/iconText.vue)
 
 </template>
 
 <template #script>
 
-@[code{54-58} vue](../.vuepress/components/button/iconText.vue)
+@[code{54-58} vue](../../.vuepress/components/button/iconText.vue)
 
 </template>
 
@@ -456,13 +456,13 @@ You can completely round the corners with the `circle` property, the property is
 
 <template #template>
 
-@[code{1-60} vue{3}](../.vuepress/components/button/circle.vue)
+@[code{1-60} vue{3}](../../.vuepress/components/button/circle.vue)
 
 </template>
 
 <template #script>
 
-@[code{62-66} vue](../.vuepress/components/button/circle.vue)
+@[code{62-66} vue](../../.vuepress/components/button/circle.vue)
 
 </template>
 
@@ -480,13 +480,13 @@ You can make all the corners completely straight with the `Square` property, the
 
 <template #template>
 
-@[code{1-58} vue{3}](../.vuepress/components/button/square.vue)
+@[code{1-58} vue{3}](../../.vuepress/components/button/square.vue)
 
 </template>
 
 <template #script>
 
-@[code{60-64} vue](../.vuepress/components/button/square.vue)
+@[code{60-64} vue](../../.vuepress/components/button/square.vue)
 
 </template>
 
@@ -512,13 +512,13 @@ values:
 
 <template #template>
 
-@[code{1-17} vue{3,6,9,10,13}](../.vuepress/components/button/size.vue)
+@[code{1-17} vue{3,6,9,10,13}](../../.vuepress/components/button/size.vue)
 
 </template>
 
 <template #script>
 
-@[code{19-23} vue](../.vuepress/components/button/size.vue)
+@[code{19-23} vue](../../.vuepress/components/button/size.vue)
 
 </template>
 
@@ -536,13 +536,13 @@ Now you can add a loading status with the `loading` property, the property is a`
 
 <template #template>
 
-@[code{1-59} vue{3}](../.vuepress/components/button/loading.vue)
+@[code{1-59} vue{3}](../../.vuepress/components/button/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{61-65} vue](../.vuepress/components/button/loading.vue)
+@[code{61-65} vue](../../.vuepress/components/button/loading.vue)
 
 </template>
 
@@ -560,13 +560,13 @@ Now you can add a status of sending or uploading data to the server with the `up
 
 <template #template>
 
-@[code{1-70} vue{3}](../.vuepress/components/button/upload.vue)
+@[code{1-70} vue{3}](../../.vuepress/components/button/upload.vue)
 
 </template>
 
 <template #script>
 
-@[code{72-76} vue](../.vuepress/components/button/upload.vue)
+@[code{72-76} vue](../../.vuepress/components/button/upload.vue)
 
 </template>
 
@@ -584,7 +584,7 @@ You can make the button have the full width allowed with the `block` property, t
 
 <template #template>
 
-@[code{1-8} vue{3}](../.vuepress/components/button/block.vue)
+@[code{1-8} vue{3}](../../.vuepress/components/button/block.vue)
 
 </template>
 
@@ -604,7 +604,7 @@ You can also change the type of animation with the `animation-type` property and
 
 <template #template>
 
-@[code{1-32} vue{5-7,10,19,25}](../.vuepress/components/button/animate.vue)
+@[code{1-32} vue{5-7,10,19,25}](../../.vuepress/components/button/animate.vue)
 
 </template>
 
@@ -624,7 +624,7 @@ Supported colors: (`facebook`, `twitter`, `youtube`, `pinterest`, `linkedin`, `s
 
 <template #template>
 
-@[code{1-79} vue{3-5}](../.vuepress/components/button/social.vue)
+@[code{1-79} vue{3-5}](../../.vuepress/components/button/social.vue)
 
 </template>
 
@@ -644,7 +644,7 @@ these buttons usually do an important action in specific and go with a fixed pos
 
 <template #template>
 
-@[code{1-19} vue{3}](../.vuepress/components/button/floating.vue)
+@[code{1-19} vue{3}](../../.vuepress/components/button/floating.vue)
 
 </template>
 
@@ -654,7 +654,7 @@ these buttons usually do an important action in specific and go with a fixed pos
 
 ## Group
 
-If you need to make a group of buttons you can use the **sub-component** `<vs-button-group> </vs-button-group>` and inside the default slot put the buttons you want to group
+If you need to make a group of buttons you can use the **sub-component** `<s-button-group> </s-button-group>` and inside the default slot put the buttons you want to group
 
 <template #example>
 <button-group />
@@ -662,7 +662,7 @@ If you need to make a group of buttons you can use the **sub-component** `<vs-bu
 
 <template #template>
 
-@[code{1-51} vue{3,8}](../.vuepress/components/button/group.vue)
+@[code{1-51} vue{3,8}](../../.vuepress/components/button/group.vue)
 
 </template>
 
@@ -680,19 +680,19 @@ This is an example of what you can achieve with simple logic and few lines of co
 
 <template #template>
 
-@[code{1-28} vue](../.vuepress/components/button/toggle.vue)
+@[code{1-28} vue](../../.vuepress/components/button/toggle.vue)
 
 </template>
 
 <template #script>
 
-@[code{30-54} vue](../.vuepress/components/button/toggle.vue)
+@[code{30-54} vue](../../.vuepress/components/button/toggle.vue)
 
 </template>
 
 <template #style>
 
-@[code{56-66} vue](../.vuepress/components/button/toggle.vue)
+@[code{56-66} vue](../../.vuepress/components/button/toggle.vue)
 
 </template>
 
@@ -713,7 +713,7 @@ You can change ripple style of a button with the `ripple` property and the allow
 
 <template #template>
 
-@[code vue](../.vuepress/components/button/ripple.vue)
+@[code vue](../../.vuepress/components/button/ripple.vue)
 
 </template>
 

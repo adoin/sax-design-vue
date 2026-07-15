@@ -1,9 +1,9 @@
 <template>
   <div class="center breadcrumb-separator-demo">
-    <vs-breadcrumb separator="•" :items="items" />
-    <vs-breadcrumb separator="-" :items="items" />
-    <vs-breadcrumb separator="|" :items="items" />
-    <vs-breadcrumb separator="chevron_right" :items="items" />
+    <s-breadcrumb separator="•" :items="items" />
+    <s-breadcrumb separator="-" :items="items" />
+    <s-breadcrumb separator="|" :items="items" />
+    <s-breadcrumb separator="chevron_right" :items="items" />
   </div>
 </template>
 

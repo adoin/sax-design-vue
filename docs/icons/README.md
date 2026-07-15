@@ -46,11 +46,11 @@ You can change icon name
 
 ```ts
 // main.ts
-import * as VuesaxAlphaIconsVue from '@vuesax-alpha/icons-vue'
+import * as SaxIconsVue from '@vuesax-alpha/icons-vue'
 
 const app = createApp(App)
-for (const [key, component] of Object.entries(VuesaxAlphaIconsVue)) {
-  app.component(`VsIcon${key}`, component)
+for (const [key, component] of Object.entries(SaxIconsVue)) {
+  app.component(`SIcon${key}`, component)
 }
 ```
 

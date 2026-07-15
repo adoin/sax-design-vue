@@ -44,7 +44,7 @@ NEWS:
 ## Default
 
 
-Wrap sections in `vs-collapse-item` with a header slot.
+Wrap sections in `s-collapse-item` with a header slot.
 
 <template #example>
 <collapse-default />

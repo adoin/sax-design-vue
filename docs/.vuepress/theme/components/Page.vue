@@ -23,7 +23,7 @@
                   <li class="tw">
                     <a
                       target="_blank"
-                      :href="`https://twitter.com/intent/tweet?url=https%3A%2F%2Fvuesax-alpha.github.io%2Fvuesax-alpha&text=@vuesax-alpha+framework+components+for+vuejs+/+${pageData.title}&hashtags=${pageData.title},framework,components,vuejs,vuesax,vuesax-alpha,design,developer,frontend`"
+                      :href="`https://twitter.com/intent/tweet?url=https%3A%2F%2Fadoin.github.io%2Fsax-design-vue%2F&text=Sax+Design+Vue+${pageData.title}&hashtags=${pageData.title},vuejs,vuesax,sax-design-vue,frontend`"
                     >
                       <i class="bx bxl-twitter" />
                     </a>
@@ -31,7 +31,7 @@
                   <li class="f">
                     <a
                       target="_blank"
-                      :href="`https://www.facebook.com/sharer.php?u=https%3A%2F%2Fvuesax-alpha.github.io%2Fvuesax-alpha%2F`"
+                      :href="`https://www.facebook.com/sharer.php?u=https%3A%2F%2Fadoin.github.io%2Fsax-design-vue%2F`"
                     >
                       <i class="bx bxl-facebook-square" />
                     </a>
@@ -39,7 +39,7 @@
                   <li class="in">
                     <a
                       target="_blank"
-                      :href="`https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fvuesax-alpha.github.io%2Fvuesax-alpha&title=VuesaxAlpha+Framework&summary=framework+components+for+vuejs.&source=VuesaxAlpha`"
+                      :href="`https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fadoin.github.io%2Fsax-design-vue%2F&title=Sax+Design+Vue&summary=Vue+3+component+library+based+on+Vuesax+3.x&source=SaxDesignVue`"
                     >
                       <i class="bx bxl-linkedin-square" />
                     </a>
@@ -47,7 +47,7 @@
                   <li class="redit">
                     <a
                       target="_blank"
-                      :href="`https://www.reddit.com/submit?url=https%3A%2F%2Fvuesax-alpha.github.io%2Fvuesax-alpha&title=VuesaxAlpha+Framework+components+for+vuejs`"
+                      :href="`https://www.reddit.com/submit?url=https%3A%2F%2Fadoin.github.io%2Fsax-design-vue%2F&title=Sax+Design+Vue+Vue+3+component+library`"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -74,16 +74,13 @@
             <li title="Package NPM">
               <a
                 target="_blank"
-                href="https://www.npmjs.com/package/vuesax-alpha"
+                href="https://www.npmjs.com/package/sax-design-vue"
               >
                 <i class="bx bx-package" />
               </a>
             </li>
             <li title="View Code Github">
-              <a
-                target="_blank"
-                href="https://github.com/vuesax-alpha/vuesax-alpha"
-              >
+              <a target="_blank" href="https://github.com/adoin/sax-design-vue">
                 <i class="bx bx-code-alt" />
               </a>
             </li>
@@ -95,7 +92,7 @@
             <li title="Report a Bug">
               <a
                 target="_blank"
-                :href="`https://github.com/vuesax-alpha/vuesax-alpha/issues/new?title=[${pageData.title}] - Your Bug Name&amp;body=**Steps to Reproduce**%0A1. Do something%0A2. Do something else.%0A3. Do one last thing.%0A%0A**Expected**%0AThe ${pageData.title} should do this%0A%0A**Result**%0AThe ${pageData.title} does not do this%0A%0A**Testcase**%0A(fork this to get started)%0Ahttp://jsfiddle.net/exmple-bug/1/`"
+                :href="`https://github.com/adoin/sax-design-vue/issues/new?title=[${pageData.title}] - Your Bug Name&amp;body=**Steps to Reproduce**%0A1. Do something%0A2. Do something else.%0A3. Do one last thing.%0A%0A**Expected**%0AThe ${pageData.title} should do this%0A%0A**Result**%0AThe ${pageData.title} does not do this%0A%0A**Testcase**%0A(fork this to get started)%0Ahttp://jsfiddle.net/exmple-bug/1/`"
               >
                 <i class="bx bx-bug" />
               </a>
@@ -189,7 +186,7 @@ import ComponentIntro from '../global-components/ComponentIntro.vue'
 import SidebarRight from './SidebarRight.vue'
 import Api from './Api.vue'
 import Footer from './Footer.vue'
-import type { VuesaxAlphaThemeOptions } from '../vuesaxAlphaTheme'
+import type { SaxDesignVueThemeOptions } from '../saxDesignVueTheme'
 import type {
   ThemeNormalApiFrontmatter,
   ThemePageFrontmatter,
@@ -198,7 +195,7 @@ import type { GitPluginPageData } from '@vuepress/plugin-git'
 import type { SidebarConfigArray } from 'vuepress-vite'
 
 const pageData = usePageData<ThemeNormalApiFrontmatter & GitPluginPageData>()
-const themeData = useThemeData<VuesaxAlphaThemeOptions>()
+const themeData = useThemeData<SaxDesignVueThemeOptions>()
 const pageFrontmatter = usePageFrontmatter<ThemePageFrontmatter>()
 const routeLocale = useRouteLocale()
 

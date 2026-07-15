@@ -1,6 +1,6 @@
 <template>
   <div class="center con-selects">
-    <vs-select
+    <s-select
       v-for="(color, index) in colors"
       :key="index"
       v-model="color.value"
@@ -8,19 +8,19 @@
       :label="color.color"
       placeholder="Select"
     >
-      <vs-option label="Vuesax" value="1"> Vuesax </vs-option>
-      <vs-option label="Vue" value="2"> Vue </vs-option>
-      <vs-option label="Javascript" value="3"> Javascript </vs-option>
-      <vs-option label="Sass" value="4"> Sass </vs-option>
-      <vs-option label="Typescript" value="5"> Typescript </vs-option>
-      <vs-option label="Webpack" value="6"> Webpack </vs-option>
-      <vs-option label="Nodejs" value="7"> Nodejs </vs-option>
-    </vs-select>
+      <s-option label="Vuesax" value="1"> Vuesax </s-option>
+      <s-option label="Vue" value="2"> Vue </s-option>
+      <s-option label="Javascript" value="3"> Javascript </s-option>
+      <s-option label="Sass" value="4"> Sass </s-option>
+      <s-option label="Typescript" value="5"> Typescript </s-option>
+      <s-option label="Webpack" value="6"> Webpack </s-option>
+      <s-option label="Nodejs" value="7"> Nodejs </s-option>
+    </s-select>
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { Color } from 'vuesax-alpha'
+import type { Color } from 'sax-design-vue'
 
 const colors: { color: Color; value: string }[] = [
   {

@@ -22,7 +22,7 @@ Newly migrated components are marked with a green **New** label in the sidebar.
 
 ```vue
 <template>
-  <vs-button color="primary" type="flat">Save</vs-button>
+  <s-button color="primary" type="flat">Save</s-button>
 </template>
 ```
 
@@ -41,9 +41,9 @@ Most visual changes are prop-driven — no extra CSS required:
 <command>
 
 ```vue
-<vs-alert color="success" closable v-model="open">
+<s-alert color="success" closable v-model="open">
   Saved successfully.
-</vs-alert>
+</s-alert>
 ```
 
 </command>

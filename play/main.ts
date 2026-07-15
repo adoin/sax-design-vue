@@ -7,7 +7,7 @@ import {
   type Component,
   type VNode,
 } from 'vue'
-import Vuesax from 'vuesax-alpha'
+import SaxDesignVue from 'sax-design-vue'
 import '@vuesax-alpha/theme-chalk/src/dark/css-vars.scss'
 import '@vuesax-alpha/theme-chalk/src/loading.scss'
 import './src/play-base.scss'
@@ -69,4 +69,4 @@ const Root = {
   },
 }
 
-createApp(Root).use(Vuesax).mount('#play')
+createApp(Root).use(SaxDesignVue).mount('#play')

@@ -41,7 +41,7 @@ cat > $DIRNAME/src/$INPUT_NAME.vue <<EOF
 import { ${INPUT_NAME}Props } from './$INPUT_NAME'
 
 defineOptions({
-  name: 'Vs$NAME',
+  name: 'S$NAME',
 })
 
 const props = defineProps(${INPUT_NAME}Props)
@@ -66,8 +66,8 @@ cat <<EOF >"$DIRNAME/index.ts"
 import { withInstall } from '@vuesax-alpha/utils'
 import $NAME from './src/$INPUT_NAME.vue'
 
-export const Vs$NAME = withInstall($NAME)
-export default Vs$NAME
+export const S$NAME = withInstall($NAME)
+export default S$NAME
 
 export * from './src/$INPUT_NAME'
 EOF

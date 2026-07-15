@@ -1,12 +1,12 @@
 <template>
-  <vs-collapse accordion>
-    <vs-collapse-item open>
+  <s-collapse accordion>
+    <s-collapse-item open>
       <template #header>Only one open</template>
       First panel
-    </vs-collapse-item>
-    <vs-collapse-item>
+    </s-collapse-item>
+    <s-collapse-item>
       <template #header>Second</template>
       Second panel
-    </vs-collapse-item>
-  </vs-collapse>
+    </s-collapse-item>
+  </s-collapse>
 </template>

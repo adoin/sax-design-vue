@@ -113,15 +113,15 @@ import SidebarButton from './SidebarButton.vue'
 import NavLinks from './NavLinks.vue'
 import SearchBox from './SearchBox.vue'
 import ThemeToggle from './ThemeToggle.vue'
-import type { VuesaxAlphaThemeOptions } from '~/vuesaxAlphaTheme'
+import type { SaxDesignVueThemeOptions } from '~/saxDesignVueTheme'
 
 const emits = defineEmits<{
   (event: 'toggle-sidebar'): void
 }>()
 
 const frontmatter = usePageFrontmatter<{ search?: boolean }>()
-const themeData = useThemeData<VuesaxAlphaThemeOptions>()
-const themeLocaleData = useThemeLocaleData<VuesaxAlphaThemeOptions>()
+const themeData = useThemeData<SaxDesignVueThemeOptions>()
+const themeLocaleData = useThemeLocaleData<SaxDesignVueThemeOptions>()
 
 const homeLink = computed(
   () => themeData.value.home || themeLocaleData.value?.home || '/'

@@ -1,16 +1,16 @@
 <template>
   <div class="grid">
-    <vs-row justify="center">
-      <vs-col v-for="i in 3" :key="i" :sm="2"> Top {{ i + 1 }} </vs-col>
-    </vs-row>
+    <s-row justify="center">
+      <s-col v-for="i in 3" :key="i" :sm="2"> Top {{ i + 1 }} </s-col>
+    </s-row>
 
-    <vs-row align="middle" justify="center">
-      <vs-col v-for="i in 3" :key="i" :sm="2"> Middle {{ i + 1 }} </vs-col>
-    </vs-row>
+    <s-row align="middle" justify="center">
+      <s-col v-for="i in 3" :key="i" :sm="2"> Middle {{ i + 1 }} </s-col>
+    </s-row>
 
-    <vs-row align="bottom" justify="center">
-      <vs-col v-for="i in 3" :key="i" :sm="2"> Bottom {{ i + 1 }} </vs-col>
-    </vs-row>
+    <s-row align="bottom" justify="center">
+      <s-col v-for="i in 3" :key="i" :sm="2"> Bottom {{ i + 1 }} </s-col>
+    </s-row>
   </div>
 </template>
 

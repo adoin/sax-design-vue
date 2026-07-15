@@ -49,7 +49,7 @@ import { useCheckbox } from './composables'
 
 defineOptions({
   inheritAttrs: false,
-  name: 'VsCheckbox',
+  name: 'SCheckbox',
 })
 
 const props = defineProps(checkboxProps)

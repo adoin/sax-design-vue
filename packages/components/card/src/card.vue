@@ -29,7 +29,7 @@ import { cardProps } from './card'
 
 defineOptions({
   inheritAttrs: false,
-  name: 'VsCard',
+  name: 'SCard',
 })
 
 defineProps(cardProps)

@@ -1,13 +1,13 @@
 <template>
   <div class="center">
-    <vs-tooltip loading>
-      <vs-button type="flat"> Do hover here loading </vs-button>
+    <s-tooltip loading>
+      <s-button type="flat"> Do hover here loading </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
-    <vs-tooltip loading>
-      <vs-button type="flat"> Do hover here loading </vs-button>
+    </s-tooltip>
+    <s-tooltip loading>
+      <s-button type="flat"> Do hover here loading </s-button>
       <template #content />
-    </vs-tooltip>
+    </s-tooltip>
   </div>
 </template>
 <style scoped lang="scss">

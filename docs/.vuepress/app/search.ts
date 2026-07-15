@@ -1,4 +1,4 @@
-import type { SearchDataOption } from '~/vuesaxAlphaTheme'
+import type { SearchDataOption } from '~/saxDesignVueTheme'
 
 export const enSearchData: SearchDataOption[] = [
   {

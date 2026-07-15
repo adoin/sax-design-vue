@@ -1,19 +1,19 @@
 <template>
   <div class="center">
-    <vs-button type="flat" @click="openLoading">
+    <s-button type="flat" @click="openLoading">
       Open Loading <b>Progress</b>
-    </vs-button>
+    </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { VsLoadingFn } from 'vuesax-alpha'
+import { SLoadingFn } from 'sax-design-vue'
 
 const progress = ref<number>(0)
 
 const openLoading = () => {
-  const loadingInstance = VsLoadingFn({
+  const loadingInstance = SLoadingFn({
     progress: 0,
   })
 

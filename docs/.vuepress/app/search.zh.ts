@@ -1,5 +1,5 @@
 import { enSearchData } from './search'
-import type { SearchDataOption } from '~/vuesaxAlphaTheme'
+import type { SearchDataOption } from '~/saxDesignVueTheme'
 
 const titleZh: Record<string, string> = {
   Alert: 'Alert',

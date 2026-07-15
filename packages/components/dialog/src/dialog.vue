@@ -55,7 +55,7 @@ import { useDialog } from './composables'
 import { dialogDeprecated } from './deprecated'
 
 defineOptions({
-  name: 'VsDialog',
+  name: 'SDialog',
 })
 
 const props = defineProps(dialogProps)

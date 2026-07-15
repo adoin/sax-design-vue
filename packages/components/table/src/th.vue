@@ -18,7 +18,7 @@ import { useNamespace } from '@vuesax-alpha/hooks'
 import { tableThProps } from './th'
 
 defineOptions({
-  name: 'VsTh',
+  name: 'STh',
 })
 
 const ns = useNamespace('table')

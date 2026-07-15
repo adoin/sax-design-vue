@@ -1,14 +1,14 @@
 <template>
   <div class="center con-switch">
-    <vs-switch v-model="active"> Suscribe </vs-switch>
-    <vs-switch v-model="active2">
+    <s-switch v-model="active"> Suscribe </s-switch>
+    <s-switch v-model="active2">
       <template #off> Off </template>
       <template #on> On </template>
-    </vs-switch>
-    <vs-switch v-model="active3">
+    </s-switch>
+    <s-switch v-model="active3">
       <template #off> Default </template>
       <template #on> Premium </template>
-    </vs-switch>
+    </s-switch>
   </div>
 </template>
 

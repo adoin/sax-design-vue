@@ -60,7 +60,7 @@ import { useAvatarStatus } from './composables'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
-  name: 'VsAvatar',
+  name: 'SAvatar',
 })
 
 const props = defineProps(avatarProps)

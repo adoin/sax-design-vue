@@ -8,4 +8,4 @@ export interface CollapseContext {
 }
 
 export const collapseContextKey: InjectionKey<CollapseContext> =
-  Symbol('VsCollapse')
+  Symbol('SCollapse')

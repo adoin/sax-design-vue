@@ -1,7 +1,7 @@
 import { withInstall } from '@vuesax-alpha/utils'
 import Popconfirm from './src/popconfirm.vue'
 
-export const VsPopconfirm = withInstall(Popconfirm)
-export default VsPopconfirm
+export const SPopconfirm = withInstall(Popconfirm)
+export default SPopconfirm
 
 export * from './src/popconfirm'

@@ -1,5 +1,5 @@
 <template>
-  <vs-input v-model="input" placeholder="Please input" />
+  <s-input v-model="input" placeholder="Please input" />
 </template>
 
 <script lang="ts" setup>

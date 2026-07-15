@@ -35,7 +35,7 @@ PROPS:
   - name: label
     type: String
     values: String
-    description: Tab label (vs-tab).
+    description: Tab label (s-tab).
     default: Label
     link: null
     usage: '#default'
@@ -43,7 +43,7 @@ PROPS:
   - name: icon
     type: String
     values: Material icon
-    description: Tab icon (vs-tab).
+    description: Tab icon (s-tab).
     default: 
     link: null
     usage: '#icons'
@@ -51,7 +51,7 @@ PROPS:
   - name: disabled
     type: Boolean
     values: true, false
-    description: Disable tab (vs-tab).
+    description: Disable tab (s-tab).
     default: false
     link: null
     usage: '#default'
@@ -80,7 +80,7 @@ NEWS:
 ## Default
 
 
-Control the active tab with `v-model` on `vs-tabs`.
+Control the active tab with `v-model` on `s-tabs`.
 
 <template #example>
 <tabs-default />
@@ -180,7 +180,7 @@ Place the tab bar on top, bottom, left, or right.
 ## Icons
 
 
-Add icons to individual `vs-tab` items.
+Add icons to individual `s-tab` items.
 
 <template #example>
 <tabs-icons />

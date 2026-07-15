@@ -8,9 +8,9 @@ PROPS:
     link: null
     usage: null
     code: >
-      <vs-navbar fixed>
+      <s-navbar fixed>
         ...
-      </vs-navbar>
+      </s-navbar>
   - name: shadow
     type: Boolean
     values: true, false
@@ -19,9 +19,9 @@ PROPS:
     link: null
     usage: null
     code: >
-      <vs-navbar shadow>
+      <s-navbar shadow>
         ...
-      </vs-navbar>
+      </s-navbar>
   - name: shadow-scroll
     type: Boolean
     values: true, false
@@ -30,9 +30,9 @@ PROPS:
     link: null
     usage: null
     code: >
-      <vs-navbar shadow-scroll>
+      <s-navbar shadow-scroll>
         ...
-      </vs-navbar>
+      </s-navbar>
   - name: hide-scroll
     type: Boolean
     values: true, false
@@ -41,9 +41,9 @@ PROPS:
     link: null
     usage: '#hide-scroll'
     code: >
-      <vs-navbar hide-scroll>
+      <s-navbar hide-scroll>
         ...
-      </vs-navbar>
+      </s-navbar>
   - name: textWhite
     type: Boolean
     values: true, false
@@ -52,9 +52,9 @@ PROPS:
     link: null
     usage: '#color'
     code: >
-      <vs-navbar text-white>
+      <s-navbar text-white>
         ...
-      </vs-navbar>
+      </s-navbar>
   - name: square
     type: Boolean
     values: true, false
@@ -63,9 +63,9 @@ PROPS:
     link: null
     usage: '#square'
     code: >
-      <vs-navbar square>
+      <s-navbar square>
         ...
-      </vs-navbar>
+      </s-navbar>
   - name: padding-scroll
     type: Boolean
     values: true, false
@@ -74,9 +74,9 @@ PROPS:
     link: null
     usage: '#padding-scroll'
     code: >
-      <vs-navbar padding-scroll>
+      <s-navbar padding-scroll>
         ...
-      </vs-navbar>
+      </s-navbar>
   - name: not-line
     type: Boolean
     values: true, false
@@ -85,9 +85,9 @@ PROPS:
     link: null
     usage: '#not-line'
     code: >
-      <vs-navbar not-line>
+      <s-navbar not-line>
         ...
-      </vs-navbar>
+      </s-navbar>
   - name: left-collapsed
     type: Boolean
     values: true, false
@@ -96,9 +96,9 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-navbar left-collapsed>
+      <s-navbar left-collapsed>
         ...
-      </vs-navbar>
+      </s-navbar>
   - name: center-collapsed
     type: Boolean
     values: true, false
@@ -107,9 +107,9 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-navbar center-collapsed>
+      <s-navbar center-collapsed>
         ...
-      </vs-navbar>
+      </s-navbar>
   - name: right-collapsed
     type: Boolean
     values: true, false
@@ -118,9 +118,9 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-navbar right-collapsed>
+      <s-navbar right-collapsed>
         ...
-      </vs-navbar>
+      </s-navbar>
   - name: target-scroll
     type: Boolean
     values: true, false
@@ -129,9 +129,9 @@ PROPS:
     link: null
     usage: '#target-scroll'
     code: >
-      <vs-navbar target-scroll="#my-element">
+      <s-navbar target-scroll="#my-element">
         ...
-      </vs-navbar>
+      </s-navbar>
   - name: item:active
     type: Boolean
     values: true, false
@@ -140,9 +140,9 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-navbar-item active>
+      <s-navbar-item active>
         ...
-      </vs-navbar-item>
+      </s-navbar-item>
   - name: item:to
     type: String, Object
     values: vue-router RouteLocationRaw
@@ -151,9 +151,9 @@ PROPS:
     link: null
     usage: null
     code: >
-      <vs-navbar-item to="/">
+      <s-navbar-item to="/">
         ...
-      </vs-navbar-item>
+      </s-navbar-item>
   - name: item:to
     type: String, Object
     values: vue-router RouteLocationRaw
@@ -162,9 +162,9 @@ PROPS:
     link: null
     usage: null
     code: >
-      <vs-navbar-item to="/">
+      <s-navbar-item to="/">
         ...
-      </vs-navbar-item>
+      </s-navbar-item>
   - name: item:link
     type: Object
     values: NavLink
@@ -173,9 +173,9 @@ PROPS:
     link: null
     usage: null
     code: >
-      <vs-navbar-item :link="{ path: '/docs', text: 'Documents' }">
+      <s-navbar-item :link="{ path: '/docs', text: 'Documents' }">
         ...
-      </vs-navbar-item>
+      </s-navbar-item>
 
 SLOTS:
   - name: default
@@ -186,11 +186,11 @@ SLOTS:
     link: null
     usage: '#default'
     code: >
-      <vs-navbar v-model="active">
-        <vs-navbar-item :active="active == 'guide'" id="guide">
+      <s-navbar v-model="active">
+        <s-navbar-item :active="active == 'guide'" id="guide">
           Guide
-        </vs-navbar-item>
-      </vs-navbar>
+        </s-navbar-item>
+      </s-navbar>
   - name: left
     type: slot
     values: null
@@ -211,8 +211,8 @@ SLOTS:
     usage: '#default'
     code: >
       <template #right>
-        <vs-button flat> Login </vs-button>
-        <vs-button> Get Started </vs-button>
+        <s-button flat> Login </s-button>
+        <s-button> Get Started </s-button>
       </template>
 ---
 
@@ -232,19 +232,19 @@ Quickly generate a menu with the `navbar` component, as such the component is di
 
 <template #template>
 
-@[code{1-22}](../.vuepress/components/navbar/default.vue)
+@[code{1-22}](../../.vuepress/components/navbar/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{24-28}](../.vuepress/components/navbar/default.vue)
+@[code{24-28}](../../.vuepress/components/navbar/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{30-52}](../.vuepress/components/navbar/default.vue)
+@[code{30-52}](../../.vuepress/components/navbar/default.vue)
 
 </template>
 
@@ -264,19 +264,19 @@ if you want to change the text color to white you can do it with the property `t
 
 <template #template>
 
-@[code{1-23}](../.vuepress/components/navbar/color.vue)
+@[code{1-23}](../../.vuepress/components/navbar/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{24-29}](../.vuepress/components/navbar/color.vue)
+@[code{24-29}](../../.vuepress/components/navbar/color.vue)
 
 </template>
 
 <template #style>
 
-@[code{30-52}](../.vuepress/components/navbar/color.vue)
+@[code{30-52}](../../.vuepress/components/navbar/color.vue)
 
 </template>
 
@@ -294,19 +294,19 @@ Add functionality to hide navbar when user scroll down and show when upload
 
 <template #template>
 
-@[code{1-35}](../.vuepress/components/navbar/hide-scroll.vue)
+@[code{1-35}](../../.vuepress/components/navbar/hide-scroll.vue)
 
 </template>
 
 <template #script>
 
-@[code{37-41}](../.vuepress/components/navbar/hide-scroll.vue)
+@[code{37-41}](../../.vuepress/components/navbar/hide-scroll.vue)
 
 </template>
 
 <template #style>
 
-@[code{43-65}](../.vuepress/components/navbar/hide-scroll.vue)
+@[code{43-65}](../../.vuepress/components/navbar/hide-scroll.vue)
 
 </template>
 
@@ -316,7 +316,7 @@ Add functionality to hide navbar when user scroll down and show when upload
 
 ## Group
 
-You can add a list of elements within an item with the `vs-navbar-group` component and within it add the `vs-navbar-item` components
+You can add a list of elements within an item with the `s-navbar-group` component and within it add the `s-navbar-item` components
 
 <template #example>
 <navbar-group />
@@ -324,19 +324,19 @@ You can add a list of elements within an item with the `vs-navbar-group` compone
 
 <template #template>
 
-@[code{1-58}](../.vuepress/components/navbar/group.vue)
+@[code{1-58}](../../.vuepress/components/navbar/group.vue)
 
 </template>
 
 <template #script>
 
-@[code{60-64}](../.vuepress/components/navbar/group.vue)
+@[code{60-64}](../../.vuepress/components/navbar/group.vue)
 
 </template>
 
 <template #style>
 
-@[code{66-94}](../.vuepress/components/navbar/group.vue)
+@[code{66-94}](../../.vuepress/components/navbar/group.vue)
 
 </template>
 
@@ -354,19 +354,19 @@ Add the functionality that the component has a padding up and down that when it 
 
 <template #template>
 
-@[code{1-35}](../.vuepress/components/navbar/padding-scroll.vue)
+@[code{1-35}](../../.vuepress/components/navbar/padding-scroll.vue)
 
 </template>
 
 <template #script>
 
-@[code{37-41}](../.vuepress/components/navbar/padding-scroll.vue)
+@[code{37-41}](../../.vuepress/components/navbar/padding-scroll.vue)
 
 </template>
 
 <template #style>
 
-@[code{43-65}](../.vuepress/components/navbar/padding-scroll.vue)
+@[code{43-65}](../../.vuepress/components/navbar/padding-scroll.vue)
 
 </template>
 
@@ -384,19 +384,19 @@ Remove the border-radius property by making the component square
 
 <template #template>
 
-@[code{1-30}](../.vuepress/components/navbar/square.vue)
+@[code{1-30}](../../.vuepress/components/navbar/square.vue)
 
 </template>
 
 <template #script>
 
-@[code{32-36}](../.vuepress/components/navbar/square.vue)
+@[code{32-36}](../../.vuepress/components/navbar/square.vue)
 
 </template>
 
 <template #style>
 
-@[code{38-60}](../.vuepress/components/navbar/square.vue)
+@[code{38-60}](../../.vuepress/components/navbar/square.vue)
 
 </template>
 
@@ -414,13 +414,13 @@ Eliminates the active effect line of the component
 
 <template #template>
 
-@[code{1-30}](../.vuepress/components/navbar/not-line.vue)
+@[code{1-30}](../../.vuepress/components/navbar/not-line.vue)
 
 </template>
 
 <template #script>
 
-@[code{32-36}](../.vuepress/components/navbar/not-line.vue)
+@[code{32-36}](../../.vuepress/components/navbar/not-line.vue)
 
 </template>
 

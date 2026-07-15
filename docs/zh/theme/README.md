@@ -93,7 +93,7 @@ You can only use this function when you can obtain the document object, for exam
 ```html
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { setCssVar } from 'vuesax-alpha'
+  import { setCssVar } from 'sax-design-vue'
 
   onMounted(() => {
     setCssVar('primary', '#000')

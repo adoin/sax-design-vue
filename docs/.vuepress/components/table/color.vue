@@ -1,32 +1,32 @@
 <template>
   <div class="center">
-    <vs-table>
+    <s-table>
       <template #thead>
-        <vs-tr>
-          <vs-th> Name </vs-th>
-          <vs-th> Email </vs-th>
-          <vs-th> Id </vs-th>
-        </vs-tr>
+        <s-tr>
+          <s-th> Name </s-th>
+          <s-th> Email </s-th>
+          <s-th> Id </s-th>
+        </s-tr>
       </template>
       <template #tbody>
-        <vs-tr v-for="(tr, i) in users" :key="i" :data="tr" :color="trColor(i)">
-          <vs-td>
+        <s-tr v-for="(tr, i) in users" :key="i" :data="tr" :color="trColor(i)">
+          <s-td>
             {{ tr.name }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.email }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.id }}
-          </vs-td>
-        </vs-tr>
+          </s-td>
+        </s-tr>
       </template>
-    </vs-table>
+    </s-table>
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { Color } from 'vuesax-alpha'
+import type { Color } from 'sax-design-vue'
 
 type User = {
   id: number | string

@@ -35,7 +35,7 @@ PROPS:
   - name: src
     type: String
     values: URL
-    description: Image source (vs-image).
+    description: Image source (s-image).
     default: null
     link: null
     usage: '#default'
@@ -55,7 +55,7 @@ NEWS:
 ## Default
 
 
-Place `vs-image` elements inside `vs-images`.
+Place `s-image` elements inside `s-images`.
 
 <template #example>
 <images-default />

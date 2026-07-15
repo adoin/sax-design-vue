@@ -40,7 +40,7 @@ export const chipEmits = {
   'update:modelValue': (val: boolean) => isBoolean(val),
   click: () => true,
   close: () => true,
-  'vs-remove': (val: boolean) => isBoolean(val),
+  's-remove': (val: boolean) => isBoolean(val),
 }
 
 export type ChipProps = ExtractPropTypes<typeof chipProps>

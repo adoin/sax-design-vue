@@ -122,7 +122,7 @@ import { paginationPagerProps } from './pager'
 import PaginationProgress from './progress.vue'
 
 defineOptions({
-  name: 'VsPaginationPager',
+  name: 'SPaginationPager',
 })
 
 const props = defineProps(paginationPagerProps)

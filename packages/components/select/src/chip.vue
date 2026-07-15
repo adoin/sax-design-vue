@@ -21,7 +21,7 @@ import { chipEmits, chipProps } from './chip'
 import { selectContextKey } from './tokens'
 
 defineOptions({
-  name: 'VsChip',
+  name: 'SChip',
 })
 
 const ns = useNamespace('chip')

@@ -4,21 +4,21 @@
       <input v-model="color" type="color" />
       <i class="bx bxs-color-fill" />
     </div>
-    <vs-button type="flat" :color="color" @click="openLoading">
+    <s-button type="flat" :color="color" @click="openLoading">
       Open Loading
-    </vs-button>
+    </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { VsLoadingFn } from 'vuesax-alpha'
-import type { Color } from 'vuesax-alpha'
+import { SLoadingFn } from 'sax-design-vue'
+import type { Color } from 'sax-design-vue'
 
 const color = ref<Color>('#7a76cb')
 
 const openLoading = () => {
-  const loadingInstance = VsLoadingFn({
+  const loadingInstance = SLoadingFn({
     background: color,
     color: '#fff',
   })

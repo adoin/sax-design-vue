@@ -41,7 +41,7 @@ import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { navbarEmits, navbarProps } from './navbar'
 
 defineOptions({
-  name: 'VsNavbar',
+  name: 'SNavbar',
 })
 
 const props = defineProps(navbarProps)

@@ -1,12 +1,12 @@
 <template>
   <div class="center content-inputs">
-    <vs-input v-model="value1" type="text" label="Text" />
-    <vs-input v-model="value2" type="password" label="Password" />
-    <vs-input v-model="value3" type="search" label="Search" />
-    <vs-input v-model="value4" type="number" label="Number" />
-    <vs-input v-model="value5" type="url" label="Url" />
-    <vs-input v-model="value6" type="time" label="time" />
-    <vs-input v-model="value7" type="date" label="Date" />
+    <s-input v-model="value1" type="text" label="Text" />
+    <s-input v-model="value2" type="password" label="Password" />
+    <s-input v-model="value3" type="search" label="Search" />
+    <s-input v-model="value4" type="number" label="Number" />
+    <s-input v-model="value5" type="url" label="Url" />
+    <s-input v-model="value6" type="time" label="time" />
+    <s-input v-model="value7" type="date" label="Date" />
   </div>
 </template>
 <script lang="ts" setup>

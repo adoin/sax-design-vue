@@ -19,7 +19,7 @@ import { useNamespace } from '@vuesax-alpha/hooks'
 import { imagesProps } from './images'
 
 defineOptions({
-  name: 'VsImages',
+  name: 'SImages',
   inheritAttrs: false,
 })
 

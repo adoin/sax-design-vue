@@ -1,5 +1,5 @@
 <template>
-  <vs-textarea v-model="text" label="Description" />
+  <s-textarea v-model="text" label="Description" />
 </template>
 
 <script setup lang="ts">

@@ -12,7 +12,7 @@
       <template v-if="!icon">
         <slot />
       </template>
-      <VsIcon v-else :icon="icon" :icon-pack="iconPack" :class="ns.e('icon')" />
+      <SIcon v-else :icon="icon" :icon-pack="iconPack" :class="ns.e('icon')" />
     </span>
     <span
       :class="[ns.e('border'), ns.is('before'), borderColorClass]"
@@ -24,13 +24,13 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { getVsColor, isRgbColor, isVsColor } from '@vuesax-alpha/utils'
 import { dividerProps } from './divider'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
-  name: 'VsDivider',
+  name: 'SDivider',
 })
 
 const props = defineProps(dividerProps)

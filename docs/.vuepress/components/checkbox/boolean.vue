@@ -1,11 +1,11 @@
 <template>
   <div class="center con-checkbox">
-    <vs-checkbox v-model="option1">
+    <s-checkbox v-model="option1">
       {{ option1 }}
-    </vs-checkbox>
-    <vs-checkbox v-model="option2">
+    </s-checkbox>
+    <s-checkbox v-model="option2">
       {{ option2 }}
-    </vs-checkbox>
+    </s-checkbox>
   </div>
 </template>
 <script lang="ts" setup>

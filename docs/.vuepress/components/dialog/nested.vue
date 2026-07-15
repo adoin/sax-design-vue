@@ -1,42 +1,42 @@
 <template>
   <div class="center">
-    <vs-button @click="active = !active"> Open Dialog 1 </vs-button>
-    <vs-dialog v-model="active" lock-scroll>
+    <s-button @click="active = !active"> Open Dialog 1 </s-button>
+    <s-dialog v-model="active" lock-scroll>
       <template #header>
         <h3>Nested dialogs</h3>
       </template>
       <div class="con-content">
-        <vs-button @click="active2 = !active2"> Open Dialog 2 </vs-button>
+        <s-button @click="active2 = !active2"> Open Dialog 2 </s-button>
       </div>
-    </vs-dialog>
-    <vs-dialog v-model="active2">
+    </s-dialog>
+    <s-dialog v-model="active2">
       <template #header>
         <h4 class="not-margin">Welcome to <b>Vuesax</b></h4>
       </template>
 
       <div class="con-form">
-        <vs-input v-model="input1" placeholder="Email">
+        <s-input v-model="input1" placeholder="Email">
           <template #icon> @ </template>
-        </vs-input>
-        <vs-input v-model="input2" type="password" placeholder="Password">
+        </s-input>
+        <s-input v-model="input2" type="password" placeholder="Password">
           <template #icon>
             <i class="bx bxs-lock" />
           </template>
-        </vs-input>
+        </s-input>
         <div class="flex">
-          <vs-checkbox v-model="checkbox1">Remember me</vs-checkbox>
+          <s-checkbox v-model="checkbox1">Remember me</s-checkbox>
           <a href="#">Forgot Password?</a>
         </div>
       </div>
 
       <template #footer>
         <div class="footer-dialog">
-          <vs-button block> Sign In </vs-button>
+          <s-button block> Sign In </s-button>
 
           <div class="new">New Here? <a href="#">Create New Account</a></div>
         </div>
       </template>
-    </vs-dialog>
+    </s-dialog>
   </div>
 </template>
 <script lang="ts" setup>

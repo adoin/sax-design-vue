@@ -7,7 +7,7 @@
     <header :class="ns.e('header')" @click="toggleContent">
       <slot name="header" />
       <span v-if="!notArrow" :class="ns.e('icon')">
-        <VsIcon :icon="props.iconArrow" :icon-pack="props.iconPack" />
+        <SIcon :icon="props.iconArrow" :icon-pack="props.iconPack" />
       </span>
     </header>
     <div ref="contentRef" :class="ns.e('content')" :style="contentStyle">
@@ -21,12 +21,12 @@
 <script lang="ts" setup>
 import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { collapseItemProps } from './collapse-item'
 import { collapseContextKey } from './constants'
 
 defineOptions({
-  name: 'VsCollapseItem',
+  name: 'SCollapseItem',
 })
 
 const props = defineProps(collapseItemProps)

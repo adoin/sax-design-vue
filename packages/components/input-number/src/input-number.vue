@@ -16,9 +16,9 @@
       :class="[ns.e('decrease'), ns.is('disabled', minDisabled)]"
       @keydown.enter="decrease"
     >
-      <vs-icon>
+      <s-icon>
         <minus />
-      </vs-icon>
+      </s-icon>
     </span>
     <span
       v-if="controls"
@@ -27,11 +27,11 @@
       :class="[ns.e('increase'), ns.is('disabled', maxDisabled)]"
       @keydown.enter="increase"
     >
-      <vs-icon>
+      <s-icon>
         <plus />
-      </vs-icon>
+      </s-icon>
     </span>
-    <vs-input
+    <s-input
       :id="id"
       ref="input"
       type="number"
@@ -66,8 +66,8 @@ import {
   watch,
 } from 'vue'
 import { isNil } from 'lodash-unified'
-import { VsInput } from '@vuesax-alpha/components/input'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SInput } from '@vuesax-alpha/components/input'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { RepeatClick as vRepeatClick } from '@vuesax-alpha/directives'
 import { useDisabled, useNamespace } from '@vuesax-alpha/hooks'
 import {
@@ -89,7 +89,7 @@ import { inputNumberEmits, inputNumberProps } from './input-number'
 import type { InputInstance } from '@vuesax-alpha/components/input'
 
 defineOptions({
-  name: 'VsInputNumber',
+  name: 'SInputNumber',
 })
 
 const props = defineProps(inputNumberProps)

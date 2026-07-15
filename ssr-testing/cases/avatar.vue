@@ -1,12 +1,12 @@
 <template>
   <div class="demo-type">
     <div>
-      <vs-avatar
+      <s-avatar
         src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
       />
     </div>
     <div>
-      <vs-avatar> user </vs-avatar>
+      <s-avatar> user </s-avatar>
     </div>
   </div>
 </template>

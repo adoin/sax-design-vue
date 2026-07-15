@@ -1,6 +1,6 @@
 <template>
   <div class="play-container">
-    <vs-alert> Alert Component </vs-alert>
+    <s-alert> Alert Component </s-alert>
   </div>
 </template>
 

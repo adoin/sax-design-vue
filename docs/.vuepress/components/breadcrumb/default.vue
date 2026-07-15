@@ -1,5 +1,5 @@
 <template>
-  <vs-breadcrumb :items="items" />
+  <s-breadcrumb :items="items" />
 </template>
 
 <script setup lang="ts">

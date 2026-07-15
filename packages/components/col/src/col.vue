@@ -13,7 +13,7 @@ import { colProps } from './col'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
-  name: 'VsCol',
+  name: 'SCol',
 })
 
 const props = defineProps(colProps)

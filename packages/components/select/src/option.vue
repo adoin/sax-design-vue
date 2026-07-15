@@ -32,7 +32,7 @@ import { optionProps } from './option'
 import type { SelectOptionContext } from './tokens'
 
 defineOptions({
-  name: 'VsOption',
+  name: 'SOption',
 })
 
 const ns = useNamespace('select')

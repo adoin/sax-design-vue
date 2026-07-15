@@ -1,7 +1,7 @@
 import type { DefaultThemeOptions } from 'vuepress'
 import type { Theme } from '@vuepress/core'
 
-export declare interface VuesaxAlphaThemeOptions extends DefaultThemeOptions {
+export declare interface SaxDesignVueThemeOptions extends DefaultThemeOptions {
   /**
    * Prev Version
    */
@@ -29,7 +29,7 @@ export declare type SearchDataHeaderOption = {
   slug: string
 }
 
-export declare const vuesaxAlphaTheme: ({
+export declare const saxDesignVueTheme: ({
   themePlugins,
   ...localeOptions
-}?: VuesaxAlphaThemeOptions) => Theme
+}?: SaxDesignVueThemeOptions) => Theme

@@ -1,7 +1,7 @@
 <template>
-  <vs-button>Large</vs-button>
-  <vs-button>Default</vs-button>
-  <vs-button size="sm">Small</vs-button>
-  <vs-button type="transparent">Large</vs-button>
-  <vs-button round>Default</vs-button>
+  <s-button>Large</s-button>
+  <s-button>Default</s-button>
+  <s-button size="sm">Small</s-button>
+  <s-button type="transparent">Large</s-button>
+  <s-button round>Default</s-button>
 </template>

@@ -11,8 +11,8 @@
     "internal/**/*.json",
     "scripts/**/*",
     "packages/theme-chalk/*",
-    "packages/vuesax-alpha/version.ts",
-    "packages/vuesax-alpha/package.json"
+    "packages/sax-design-vue/version.ts",
+    "packages/sax-design-vue/package.json"
   ],
   "exclude": ["**/__tests__/**", "**/tests/**", "**/dist"]
 }

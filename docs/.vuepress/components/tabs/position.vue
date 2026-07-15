@@ -1,8 +1,8 @@
 <template>
-  <vs-tabs v-model="active" position="bottom">
-    <vs-tab label="Top content">Content</vs-tab>
-    <vs-tab label="More">More</vs-tab>
-  </vs-tabs>
+  <s-tabs v-model="active" position="bottom">
+    <s-tab label="Top content">Content</s-tab>
+    <s-tab label="More">More</s-tab>
+  </s-tabs>
 </template>
 
 <script setup lang="ts">

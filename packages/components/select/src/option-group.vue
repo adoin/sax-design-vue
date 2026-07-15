@@ -14,7 +14,7 @@ import { optionGroupRegisterKey, selectContextKey } from './tokens'
 import type { SelectOptionContext, SelectOptionValue } from './tokens'
 
 defineOptions({
-  name: 'VsOptionGroup',
+  name: 'SOptionGroup',
 })
 
 defineProps(optionGroupProps)

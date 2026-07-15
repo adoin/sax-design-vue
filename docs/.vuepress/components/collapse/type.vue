@@ -1,15 +1,15 @@
 <template>
   <div class="center">
-    <vs-collapse type="border">
-      <vs-collapse-item open
-        ><template #header>Border</template>Border style</vs-collapse-item
+    <s-collapse type="border">
+      <s-collapse-item open
+        ><template #header>Border</template>Border style</s-collapse-item
       >
-    </vs-collapse>
-    <vs-collapse type="shadow">
-      <vs-collapse-item open
-        ><template #header>Shadow</template>Shadow style</vs-collapse-item
+    </s-collapse>
+    <s-collapse type="shadow">
+      <s-collapse-item open
+        ><template #header>Shadow</template>Shadow style</s-collapse-item
       >
-    </vs-collapse>
+    </s-collapse>
   </div>
 </template>
 

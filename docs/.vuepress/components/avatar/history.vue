@@ -1,20 +1,20 @@
 <template>
   <div class="center con-avatars">
-    <vs-avatar history>
+    <s-avatar history>
       <img src="/avatars/avatar-5.png" alt="" />
-    </vs-avatar>
+    </s-avatar>
 
-    <vs-avatar history color="primary">
+    <s-avatar history color="primary">
       <img src="/avatars/avatar-5.png" alt="" />
-    </vs-avatar>
+    </s-avatar>
 
-    <vs-avatar history color="success">
+    <s-avatar history color="success">
       <img src="/avatars/avatar-5.png" alt="" />
-    </vs-avatar>
+    </s-avatar>
 
-    <vs-avatar history history-gradient>
+    <s-avatar history history-gradient>
       <img src="/avatars/avatar-5.png" alt="" />
-    </vs-avatar>
+    </s-avatar>
   </div>
 </template>
 <style scoped lang="scss">

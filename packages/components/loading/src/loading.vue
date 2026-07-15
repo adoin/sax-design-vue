@@ -70,7 +70,7 @@ import { loadingProps } from './loading'
 import type { Color } from '@vuesax-alpha/constants'
 
 defineOptions({
-  name: 'VsLoading',
+  name: 'SLoading',
 })
 
 const props = defineProps(loadingProps)

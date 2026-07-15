@@ -1,6 +1,6 @@
 <template>
   <div class="center time-range">
-    <vs-time-select
+    <s-time-select
       v-model="startTime"
       :max-time="endTime"
       class="mr-4"
@@ -9,7 +9,7 @@
       step="00:15"
       end="18:30"
     />
-    <vs-time-select
+    <s-time-select
       v-model="endTime"
       :min-time="startTime"
       placeholder="End time"

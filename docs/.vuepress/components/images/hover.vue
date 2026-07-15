@@ -1,13 +1,13 @@
 <template>
   <div class="center">
-    <vs-images hover="zoom">
-      <vs-image src="https://picsum.photos/seed/z1/300" />
-      <vs-image src="https://picsum.photos/seed/z2/300" />
-    </vs-images>
-    <vs-images hover="blur">
-      <vs-image src="https://picsum.photos/seed/b1/300" />
-      <vs-image src="https://picsum.photos/seed/b2/300" />
-    </vs-images>
+    <s-images hover="zoom">
+      <s-image src="https://picsum.photos/seed/z1/300" />
+      <s-image src="https://picsum.photos/seed/z2/300" />
+    </s-images>
+    <s-images hover="blur">
+      <s-image src="https://picsum.photos/seed/b1/300" />
+      <s-image src="https://picsum.photos/seed/b2/300" />
+    </s-images>
   </div>
 </template>
 

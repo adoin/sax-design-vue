@@ -2,12 +2,12 @@ import { withInstall, withNoopInstall } from '@vuesax-alpha/utils'
 import Checkbox from './src/checkbox.vue'
 import CheckboxGroup from './src/checkbox-group.vue'
 
-export const VsCheckbox = withInstall(Checkbox, {
+export const SCheckbox = withInstall(Checkbox, {
   CheckboxGroup,
 })
-export default VsCheckbox
+export default SCheckbox
 
-export const VsCheckboxGroup = withNoopInstall(CheckboxGroup)
+export const SCheckboxGroup = withNoopInstall(CheckboxGroup)
 
 export * from './src/checkbox-group'
 export * from './src/checkbox'

@@ -1,4 +1,2 @@
-export const REPO_OWNER = 'vuesax-alpha'
-export const REPO_NAME = 'vuesax-alpha'
-export const REPO_PATH = `${REPO_OWNER}/${REPO_NAME}`
-export const REPO_BRANCH = 'dev'
+export const REPO_OWNER = 'adoin'
+export const REPO_NAME = 'sax-design-vue'

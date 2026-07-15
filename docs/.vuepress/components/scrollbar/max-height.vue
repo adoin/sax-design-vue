@@ -1,13 +1,13 @@
 <template>
   <div style="display: flex">
-    <vs-button type="flat" @click="add">Add Item</vs-button>
-    <vs-button type="flat" @click="onDelete">Delete Item</vs-button>
+    <s-button type="flat" @click="add">Add Item</s-button>
+    <s-button type="flat" @click="onDelete">Delete Item</s-button>
   </div>
-  <vs-scrollbar max-height="400px">
+  <s-scrollbar max-height="400px">
     <p v-for="item in count" :key="item" class="scrollbar-demo-item">
       {{ item }}
     </p>
-  </vs-scrollbar>
+  </s-scrollbar>
 </template>
 
 <script lang="ts" setup>

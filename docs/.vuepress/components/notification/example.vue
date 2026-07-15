@@ -1,40 +1,40 @@
 <template>
   <div class="center">
-    <vs-button type="border" icon @click="openNotificationUser">
+    <s-button type="border" icon @click="openNotificationUser">
       Example User
-    </vs-button>
-    <vs-button type="border" icon @click="openNotificationCookie">
+    </s-button>
+    <s-button type="border" icon @click="openNotificationCookie">
       Example Cookie
-    </vs-button>
-    <vs-button type="border" icon @click="openNotificationCall">
+    </s-button>
+    <s-button type="border" icon @click="openNotificationCall">
       Example Call
-    </vs-button>
+    </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { createVNode } from 'vue'
-import { VsNotification } from 'vuesax-alpha'
+import { SNotification } from 'sax-design-vue'
 
 import user from './user.vue'
 import cookie from './cookie.vue'
 import call from './call.vue'
 
 const openNotificationCookie = () => {
-  VsNotification({
+  SNotification({
     duration: 0,
     content: createVNode(cookie),
   })
 }
 const openNotificationUser = () => {
-  VsNotification({
+  SNotification({
     duration: 0,
     width: 'auto',
     content: createVNode(user),
   })
 }
 const openNotificationCall = () => {
-  VsNotification({
+  SNotification({
     duration: 0,
     width: 'auto',
     content: createVNode(call),

@@ -8,18 +8,18 @@ import type {
   IfNativePropType,
   IfVsProp,
   NativePropType,
-  VsProp,
-  VsPropConvert,
-  VsPropFinalized,
-  VsPropInput,
-  VsPropMergeType,
+  SProp,
+  SPropConvert,
+  SPropFinalized,
+  SPropInput,
+  SPropMergeType,
 } from './types'
 
 export const vsPropKey = '__vsPropKey'
 
 export const definePropType = <T>(val: any): PropType<T> => val
 
-export const isVsProp = (val: unknown): val is VsProp<any, any, any> =>
+export const isVsProp = (val: unknown): val is SProp<any, any, any> =>
   isObject(val) && !!(val as any)[vsPropKey]
 
 /**
@@ -45,12 +45,12 @@ export const buildProp = <
   Type = never,
   Value = never,
   Validator = never,
-  Default extends VsPropMergeType<Type, Value, Validator> = never,
+  Default extends SPropMergeType<Type, Value, Validator> = never,
   Required extends boolean = false
 >(
-  prop: VsPropInput<Type, Value, Validator, Default, Required>,
+  prop: SPropInput<Type, Value, Validator, Default, Required>,
   key?: string
-): VsPropFinalized<Type, Value, Validator, Default, Required> => {
+): SPropFinalized<Type, Value, Validator, Default, Required> => {
   // filter native prop type and nested prop, e.g `null`, `undefined` (from `buildProps`)
   if (!isObject(prop) || isVsProp(prop)) return prop as any
 
@@ -100,9 +100,7 @@ export const buildProp = <
 export const buildProps = <
   Props extends Record<
     string,
-    | { [vsPropKey]: true }
-    | NativePropType
-    | VsPropInput<any, any, any, any, any>
+    { [vsPropKey]: true } | NativePropType | SPropInput<any, any, any, any, any>
   >
 >(
   props: Props
@@ -110,7 +108,7 @@ export const buildProps = <
   [K in keyof Props]: IfVsProp<
     Props[K],
     Props[K],
-    IfNativePropType<Props[K], Props[K], VsPropConvert<Props[K]>>
+    IfNativePropType<Props[K], Props[K], SPropConvert<Props[K]>>
   >
 } =>
   fromPairs(

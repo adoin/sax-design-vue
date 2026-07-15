@@ -2,7 +2,7 @@
   <div class="play-container demo">
     <div class="demo-row">
       <span>Left</span>
-      <vs-spacer />
+      <s-spacer />
       <span>Right</span>
     </div>
   </div>

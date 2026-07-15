@@ -1,20 +1,20 @@
 <template>
   <div class="center con-avatars">
-    <vs-avatar>
+    <s-avatar>
       <template #text> Lily </template>
-    </vs-avatar>
-    <vs-avatar>
+    </s-avatar>
+    <s-avatar>
       <template #text> Evan You </template>
-    </vs-avatar>
-    <vs-avatar>
+    </s-avatar>
+    <s-avatar>
       <i class="bx bx-user" />
-    </vs-avatar>
-    <vs-avatar color="primary">
+    </s-avatar>
+    <s-avatar color="primary">
       <i class="bx bxs-hot" />
-    </vs-avatar>
-    <vs-avatar>
+    </s-avatar>
+    <s-avatar>
       <img src="/avatars/avatar-5.png" alt="" />
-    </vs-avatar>
+    </s-avatar>
   </div>
 </template>
 

@@ -126,9 +126,9 @@ EVENTS:
     link: null
     usage: null
     code: >
-      <vs-dialog @close="handleClose" v-model="active">
+      <s-dialog @close="handleClose" v-model="active">
         ...
-      </vs-dialog>
+      </s-dialog>
 
 SLOTS:
   - name: default
@@ -157,11 +157,11 @@ SLOTS:
     link: null
     usage: '#default'
     code: >
-      <vs-dialog>
+      <s-dialog>
         <template #footer>
           <h1>This is slot footer</h1>
         </template>
-      </vs-dialog>
+      </s-dialog>
 ---
 
 # Dialog
@@ -176,7 +176,7 @@ SLOTS:
 
 <docs-warn />
 
-It generates a Dialog with the `vs-dialog` component, this component is very customizable since it provides a slot to put and make any type of interface to the user's need
+It generates a Dialog with the `s-dialog` component, this component is very customizable since it provides a slot to put and make any type of interface to the user's need
 
 <template #example>
 <dialog-default />
@@ -184,19 +184,19 @@ It generates a Dialog with the `vs-dialog` component, this component is very cus
 
 <template #template>
 
-@[code{1-35} vue{4-33}](../.vuepress/components/dialog/default.vue)
+@[code{1-35} vue{4-33}](../../.vuepress/components/dialog/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../.vuepress/components/dialog/default.vue)
+@[code{36-43}](../../.vuepress/components/dialog/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-101}](../.vuepress/components/dialog/default.vue)
+@[code{44-101}](../../.vuepress/components/dialog/default.vue)
 
 </template>
 
@@ -214,19 +214,19 @@ You can easily create the most common types of dialogs such as **Alert**, **Conf
 
 <template #template>
 
-@[code{1-74} html{6}](../.vuepress/components/dialog/type.vue)
+@[code{1-74} html{6}](../../.vuepress/components/dialog/type.vue)
 
 </template>
 
 <template #script>
 
-@[code{75-82}](../.vuepress/components/dialog/type.vue)
+@[code{75-82}](../../.vuepress/components/dialog/type.vue)
 
 </template>
 
 <template #style>
 
-@[code{84-140}](../.vuepress/components/dialog/type.vue)
+@[code{84-140}](../../.vuepress/components/dialog/type.vue)
 
 </template>
 
@@ -244,19 +244,19 @@ Add a loading animation to the dialog with the `loading` property
 
 <template #template>
 
-@[code{1-35} vue{6}](../.vuepress/components/dialog/loading.vue)
+@[code{1-35} vue{6}](../../.vuepress/components/dialog/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../.vuepress/components/dialog/loading.vue)
+@[code{36-43}](../../.vuepress/components/dialog/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{45-102}](../.vuepress/components/dialog/loading.vue)
+@[code{45-102}](../../.vuepress/components/dialog/loading.vue)
 
 </template>
 
@@ -274,19 +274,19 @@ You can remove the close button with the `not-close` property
 
 <template #template>
 
-@[code{1-35} vue{4}](../.vuepress/components/dialog/not-close.vue)
+@[code{1-35} vue{4}](../../.vuepress/components/dialog/not-close.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../.vuepress/components/dialog/not-close.vue)
+@[code{36-43}](../../.vuepress/components/dialog/not-close.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-101}](../.vuepress/components/dialog/not-close.vue)
+@[code{44-101}](../../.vuepress/components/dialog/not-close.vue)
 
 </template>
 
@@ -304,19 +304,19 @@ There are cases where you need a scroll because there is a lot of information wi
 
 <template #template>
 
-@[code{1-79} vue{4}](../.vuepress/components/dialog/scroll.vue)
+@[code{1-79} vue{4}](../../.vuepress/components/dialog/scroll.vue)
 
 </template>
 
 <template #script>
 
-@[code{81-85}](../.vuepress/components/dialog/scroll.vue)
+@[code{81-85}](../../.vuepress/components/dialog/scroll.vue)
 
 </template>
 
 <template #style>
 
-@[code{87-97}](../.vuepress/components/dialog/scroll.vue)
+@[code{87-97}](../../.vuepress/components/dialog/scroll.vue)
 
 </template>
 
@@ -334,19 +334,19 @@ If you need to remove the page scroll when opening the dialog you can do it with
 
 <template #template>
 
-@[code{1-35} vue{4}](../.vuepress/components/dialog/lock-scroll.vue)
+@[code{1-35} vue{4}](../../.vuepress/components/dialog/lock-scroll.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../.vuepress/components/dialog/lock-scroll.vue)
+@[code{36-43}](../../.vuepress/components/dialog/lock-scroll.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-101}](../.vuepress/components/dialog/lock-scroll.vue)
+@[code{44-101}](../../.vuepress/components/dialog/lock-scroll.vue)
 
 </template>
 
@@ -364,19 +364,19 @@ If you need to remove the padding from the dialog to make a more personalized in
 
 <template #template>
 
-@[code{1-12}](../.vuepress/components/dialog/not-padding.vue)
+@[code{1-12}](../../.vuepress/components/dialog/not-padding.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-18}](../.vuepress/components/dialog/not-padding.vue)
+@[code{14-18}](../../.vuepress/components/dialog/not-padding.vue)
 
 </template>
 
 <template #style>
 
-@[code{20-30}](../.vuepress/components/dialog/not-padding.vue)
+@[code{20-30}](../../.vuepress/components/dialog/not-padding.vue)
 
 </template>
 
@@ -386,7 +386,7 @@ If you need to remove the padding from the dialog to make a more personalized in
 
 ## Nested Dialogs
 
-You can nest as many `vs-dialog` as you need without problem
+You can nest as many `s-dialog` as you need without problem
 
 <template #example>
 <dialog-nested />
@@ -394,19 +394,19 @@ You can nest as many `vs-dialog` as you need without problem
 
 <template #template>
 
-@[code{1-41}](../.vuepress/components/dialog/nested.vue)
+@[code{1-41}](../../.vuepress/components/dialog/nested.vue)
 
 </template>
 
 <template #script>
 
-@[code{42-50}](../.vuepress/components/dialog/nested.vue)
+@[code{42-50}](../../.vuepress/components/dialog/nested.vue)
 
 </template>
 
 <template #style>
 
-@[code{52-109}](../.vuepress/components/dialog/nested.vue)
+@[code{52-109}](../../.vuepress/components/dialog/nested.vue)
 
 </template>
 
@@ -424,19 +424,19 @@ If you need the dialog to be the total window size you can do it with the `full-
 
 <template #template>
 
-@[code{1-35} vue{4}](../.vuepress/components/dialog/full-screen.vue)
+@[code{1-35} vue{4}](../../.vuepress/components/dialog/full-screen.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../.vuepress/components/dialog/full-screen.vue)
+@[code{36-43}](../../.vuepress/components/dialog/full-screen.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-101}](../.vuepress/components/dialog/full-screen.vue)
+@[code{44-101}](../../.vuepress/components/dialog/full-screen.vue)
 
 </template>
 
@@ -454,19 +454,19 @@ You can add a blur style to all the elements behind the dialog with the `overlay
 
 <template #template>
 
-@[code{1-33} vue{4}](../.vuepress/components/dialog/blur.vue)
+@[code{1-33} vue{4}](../../.vuepress/components/dialog/blur.vue)
 
 </template>
 
 <template #script>
 
-@[code{35-42}](../.vuepress/components/dialog/blur.vue)
+@[code{35-42}](../../.vuepress/components/dialog/blur.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-101}](../.vuepress/components/dialog/blur.vue)
+@[code{44-101}](../../.vuepress/components/dialog/blur.vue)
 
 </template>
 
@@ -486,19 +486,19 @@ Change the dialog style by removing the border radius and making it rectangular
 
 <template #template>
 
-@[code{1-40} vue{4}](../.vuepress/components/dialog/square.vue)
+@[code{1-40} vue{4}](../../.vuepress/components/dialog/square.vue)
 
 </template>
 
 <template #script>
 
-@[code{42-49}](../.vuepress/components/dialog/square.vue)
+@[code{42-49}](../../.vuepress/components/dialog/square.vue)
 
 </template>
 
 <template #style>
 
-@[code{51-108}](../.vuepress/components/dialog/square.vue)
+@[code{51-108}](../../.vuepress/components/dialog/square.vue)
 
 </template>
 
@@ -516,19 +516,19 @@ With the `prevent-close` property you do not close the dialog by clicking outsid
 
 <template #template>
 
-@[code{1-35} vue{4}](../.vuepress/components/dialog/prevent-close.vue)
+@[code{1-35} vue{4}](../../.vuepress/components/dialog/prevent-close.vue)
 
 </template>
 
 <template #script>
 
-@[code{37-44}](../.vuepress/components/dialog/prevent-close.vue)
+@[code{37-44}](../../.vuepress/components/dialog/prevent-close.vue)
 
 </template>
 
 <template #style>
 
-@[code{46-103}](../.vuepress/components/dialog/prevent-close.vue)
+@[code{46-103}](../../.vuepress/components/dialog/prevent-close.vue)
 
 </template>
 

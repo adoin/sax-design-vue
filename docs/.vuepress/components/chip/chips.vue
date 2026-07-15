@@ -1,13 +1,13 @@
 <template>
   <div class="center chips-demo">
     <p class="modelx">{{ chips }}</p>
-    <vs-chips
+    <s-chips
       v-model="chips"
       color="rgb(145, 32, 159)"
       placeholder="New Element"
       remove-icon="delete_forever"
     >
-      <vs-chip
+      <s-chip
         v-for="chip in chips"
         :key="chip"
         item
@@ -16,8 +16,8 @@
         @click="remove(chip)"
       >
         {{ chip }}
-      </vs-chip>
-    </vs-chips>
+      </s-chip>
+    </s-chips>
   </div>
 </template>
 

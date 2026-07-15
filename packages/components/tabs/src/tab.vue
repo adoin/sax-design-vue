@@ -20,7 +20,7 @@ import { tabsContextKey } from './constants'
 import { tabProps } from './tab'
 
 defineOptions({
-  name: 'VsTab',
+  name: 'STab',
   inheritAttrs: false,
 })
 

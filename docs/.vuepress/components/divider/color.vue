@@ -1,13 +1,13 @@
 <template>
   <div class="center">
-    <vs-divider>Default</vs-divider>
-    <vs-divider color="primary">Primary</vs-divider>
-    <vs-divider color="success">Success</vs-divider>
-    <vs-divider color="danger">Danger</vs-divider>
-    <vs-divider color="warning">Warning</vs-divider>
-    <vs-divider color="dark">Dark</vs-divider>
-    <vs-divider color="rgb(29, 222, 194)">RGB</vs-divider>
-    <vs-divider color="#ad289f">HEX</vs-divider>
+    <s-divider>Default</s-divider>
+    <s-divider color="primary">Primary</s-divider>
+    <s-divider color="success">Success</s-divider>
+    <s-divider color="danger">Danger</s-divider>
+    <s-divider color="warning">Warning</s-divider>
+    <s-divider color="dark">Dark</s-divider>
+    <s-divider color="rgb(29, 222, 194)">RGB</s-divider>
+    <s-divider color="#ad289f">HEX</s-divider>
   </div>
 </template>
 

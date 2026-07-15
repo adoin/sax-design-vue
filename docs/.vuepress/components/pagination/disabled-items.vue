@@ -1,6 +1,6 @@
 <template>
   <div class="center con-pagination">
-    <vs-pagination
+    <s-pagination
       v-model:current-page="page"
       :disabled-items="[3, 4, 9, 10, 11, 12, 19]"
       :total="50"

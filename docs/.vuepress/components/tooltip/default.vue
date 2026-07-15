@@ -1,9 +1,9 @@
 <template>
   <div class="center">
-    <vs-tooltip>
-      <vs-button type="flat"> Do hover here </vs-button>
+    <s-tooltip>
+      <s-button type="flat"> Do hover here </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
+    </s-tooltip>
   </div>
 </template>
 <style scoped lang="scss">

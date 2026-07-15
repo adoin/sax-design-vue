@@ -1,7 +1,7 @@
 <template>
-  <vs-scrollbar height="400px">
+  <s-scrollbar height="400px">
     <p v-for="item in 20" :key="item" class="scrollbar-demo-item">{{ item }}</p>
-  </vs-scrollbar>
+  </s-scrollbar>
 </template>
 
 <style scoped>

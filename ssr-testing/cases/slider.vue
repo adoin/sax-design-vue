@@ -1,5 +1,5 @@
 <template>
-  <vs-slider v-model="value" :min="0" :max="100" />
+  <s-slider v-model="value" :min="0" :max="100" />
 </template>
 
 <script setup lang="ts">

@@ -1,6 +1,6 @@
 import { defineClientConfig } from '@vuepress/client'
 
-import Vuesax from 'vuesax-alpha'
+import SaxDesignVue from 'sax-design-vue'
 import '@vuesax-alpha/theme-chalk/src/index.scss'
 import '@vuesax-alpha/theme-chalk/src/dark/css-vars.scss'
 
@@ -36,10 +36,10 @@ const rewriteRootUrls = () => {
 export default defineClientConfig({
   enhance({ app }) {
     // @ts-expect-error
-    app.use(Vuesax)
+    app.use(SaxDesignVue)
 
     for (const [key, component] of Object.entries(VuesaxIconsVue)) {
-      app.component(`VsIcon${key}`, component)
+      app.component(`SIcon${key}`, component)
     }
   },
   setup() {

@@ -35,7 +35,7 @@ PROPS:
   - name: label
     type: String
     values: String
-    description: Tab label (vs-tab).
+    description: Tab label (s-tab).
     default: Label
     link: null
     usage: '#default'
@@ -43,7 +43,7 @@ PROPS:
   - name: icon
     type: String
     values: Material icon
-    description: Tab icon (vs-tab).
+    description: Tab icon (s-tab).
     default: 
     link: null
     usage: '#icons'
@@ -51,7 +51,7 @@ PROPS:
   - name: disabled
     type: Boolean
     values: true, false
-    description: Disable tab (vs-tab).
+    description: Disable tab (s-tab).
     default: false
     link: null
     usage: '#default'
@@ -80,7 +80,7 @@ NEWS:
 ## 默认
 
 
-在 `vs-tabs` 上使用 `v-model` 控制当前标签。
+在 `s-tabs` 上使用 `v-model` 控制当前标签。
 
 <template #example>
 <tabs-default />
@@ -88,13 +88,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/tabs/default.vue)
+@[code{1-6}](../../.vuepress/components/tabs/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{8-11}](../.vuepress/components/tabs/default.vue)
+@[code{8-11}](../../.vuepress/components/tabs/default.vue)
 
 </template>
 
@@ -113,13 +113,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/tabs/color.vue)
+@[code{1-6}](../../.vuepress/components/tabs/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{8-11}](../.vuepress/components/tabs/color.vue)
+@[code{8-11}](../../.vuepress/components/tabs/color.vue)
 
 </template>
 
@@ -138,13 +138,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/tabs/alignments.vue)
+@[code{1-6}](../../.vuepress/components/tabs/alignments.vue)
 
 </template>
 
 <template #script>
 
-@[code{8-11}](../.vuepress/components/tabs/alignments.vue)
+@[code{8-11}](../../.vuepress/components/tabs/alignments.vue)
 
 </template>
 
@@ -163,13 +163,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/tabs/position.vue)
+@[code{1-6}](../../.vuepress/components/tabs/position.vue)
 
 </template>
 
 <template #script>
 
-@[code{8-11}](../.vuepress/components/tabs/position.vue)
+@[code{8-11}](../../.vuepress/components/tabs/position.vue)
 
 </template>
 
@@ -180,7 +180,7 @@ NEWS:
 ## 图标
 
 
-为单个 `vs-tab` 添加图标。
+为单个 `s-tab` 添加图标。
 
 <template #example>
 <tabs-icons />
@@ -188,13 +188,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/tabs/icons.vue)
+@[code{1-6}](../../.vuepress/components/tabs/icons.vue)
 
 </template>
 
 <template #script>
 
-@[code{8-11}](../.vuepress/components/tabs/icons.vue)
+@[code{8-11}](../../.vuepress/components/tabs/icons.vue)
 
 </template>
 

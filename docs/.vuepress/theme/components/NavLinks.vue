@@ -23,10 +23,10 @@ import {
 } from '@vuepress/plugin-theme-data/client'
 import DropdownLink from './DropdownLink.vue'
 import NavLink from './NavLink.vue'
-import type { VuesaxAlphaThemeOptions } from '../vuesaxAlphaTheme'
+import type { SaxDesignVueThemeOptions } from '../saxDesignVueTheme'
 
-const themeData = useThemeData<VuesaxAlphaThemeOptions>()
-const themeLocaleData = useThemeLocaleData<VuesaxAlphaThemeOptions>()
+const themeData = useThemeData<SaxDesignVueThemeOptions>()
+const themeLocaleData = useThemeLocaleData<SaxDesignVueThemeOptions>()
 
 const userNav = computed(() => {
   return themeLocaleData.value?.navbar || themeData.value?.navbar || []

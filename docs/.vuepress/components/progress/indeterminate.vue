@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-progress indeterminate color="primary" />
+    <s-progress indeterminate color="primary" />
   </div>
 </template>
 

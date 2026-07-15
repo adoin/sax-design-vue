@@ -1,41 +1,41 @@
 <template>
   <div class="center chip-demo">
-    <vs-chip>
-      <vs-avatar>
+    <s-chip>
+      <s-avatar>
         <i class="material-icons notranslate">person</i>
-      </vs-avatar>
+      </s-avatar>
       Icon Default
-    </vs-chip>
-    <vs-chip color="primary">
-      <vs-avatar>
+    </s-chip>
+    <s-chip color="primary">
+      <s-avatar>
         <i class="material-icons notranslate">send</i>
-      </vs-avatar>
+      </s-avatar>
       Icon send
-    </vs-chip>
-    <vs-chip color="success">
-      <vs-avatar>
+    </s-chip>
+    <s-chip color="success">
+      <s-avatar>
         <i class="material-icons notranslate">markunread</i>
-      </vs-avatar>
+      </s-avatar>
       Icon markunread
-    </vs-chip>
-    <vs-chip color="danger">
-      <vs-avatar>
+    </s-chip>
+    <s-chip color="danger">
+      <s-avatar>
         <i class="material-icons notranslate">link_off</i>
-      </vs-avatar>
+      </s-avatar>
       Icon link_off
-    </vs-chip>
-    <vs-chip color="warning">
-      <vs-avatar>
+    </s-chip>
+    <s-chip color="warning">
+      <s-avatar>
         <i class="material-icons notranslate">battery_alert</i>
-      </vs-avatar>
+      </s-avatar>
       Icon battery_alert
-    </vs-chip>
-    <vs-chip color="dark">
-      <vs-avatar>
+    </s-chip>
+    <s-chip color="dark">
+      <s-avatar>
         <i class="material-icons notranslate">edit</i>
-      </vs-avatar>
+      </s-avatar>
       Icon edit
-    </vs-chip>
+    </s-chip>
   </div>
 </template>
 

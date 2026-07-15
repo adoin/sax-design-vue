@@ -49,7 +49,7 @@ NEWS:
 ## Default
 
 
-Pass an `items` array or compose with `vs-breadcrumb-item` slots.
+Pass an `items` array or compose with `s-breadcrumb-item` slots.
 
 <template #example>
 <breadcrumb-default />

@@ -1,80 +1,80 @@
 <template>
   <div class="center">
-    <vs-button icon color="facebook">
+    <s-button icon color="facebook">
       <i class="bx bxl-facebook-square" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="twitter">
+    <s-button icon color="twitter">
       <i class="bx bxl-twitter" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="youtube">
+    <s-button icon color="youtube">
       <i class="bx bxl-youtube" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="linkedin">
+    <s-button icon color="linkedin">
       <i class="bx bxl-linkedin" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="whatsapp">
+    <s-button icon color="whatsapp">
       <i class="bx bxl-whatsapp" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="twitch">
+    <s-button icon color="twitch">
       <i class="bx bxl-twitch" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="medium">
+    <s-button icon color="medium">
       <i class="bx bxl-medium" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="skype">
+    <s-button icon color="skype">
       <i class="bx bxl-skype" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="slack">
+    <s-button icon color="slack">
       <i class="bx bxl-slack-old" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="messenger">
+    <s-button icon color="messenger">
       <i class="bx bxl-messenger" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="tumblr">
+    <s-button icon color="tumblr">
       <i class="bx bxl-tumblr" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="dribbble">
+    <s-button icon color="dribbble">
       <i class="bx bxl-dribbble" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="google-plus">
+    <s-button icon color="google-plus">
       <i class="bx bxl-google-plus" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="vimeo">
+    <s-button icon color="vimeo">
       <i class="bx bxl-vimeo" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="pinterest">
+    <s-button icon color="pinterest">
       <i class="bx bxl-pinterest" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="spotify">
+    <s-button icon color="spotify">
       <i class="bx bxl-spotify" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="discord">
+    <s-button icon color="discord">
       <i class="bx bxl-discord" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="amazon">
+    <s-button icon color="amazon">
       <i class="bx bxl-amazon" />
-    </vs-button>
+    </s-button>
 
-    <vs-button icon color="reddit">
+    <s-button icon color="reddit">
       <i class="bx bxl-reddit" />
-    </vs-button>
+    </s-button>
   </div>
 </template>
 

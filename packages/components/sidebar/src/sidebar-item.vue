@@ -28,7 +28,7 @@ import { sidebarItemProps } from './sidebar-item'
 import type { Router } from 'vue-router'
 
 defineOptions({
-  name: 'VsSidebarItem',
+  name: 'SSidebarItem',
 })
 
 const slots = useSlots()

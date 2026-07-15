@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-button
+    <s-button
       :icon="successMail"
       :upload="sendingMail"
       :color="successMail ? 'success' : 'primary'"
@@ -12,9 +12,9 @@
       </span>
 
       <i v-else class="bx bx-check" />
-    </vs-button>
+    </s-button>
 
-    <vs-button
+    <s-button
       :animate-inactive="successFace"
       :loading="loadingFace"
       color="facebook"
@@ -23,7 +23,7 @@
       <i class="bx bxl-facebook-square" />
       {{ successFace ? 'Logout' : 'Facebook' }}
       <template #animate> <i class="bx bx-user" /> Login </template>
-    </vs-button>
+    </s-button>
   </div>
 </template>
 

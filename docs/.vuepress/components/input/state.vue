@@ -1,14 +1,14 @@
 <template>
   <div class="center content-inputs">
-    <vs-input v-model="value" state="primary" placeholder="Primary" />
+    <s-input v-model="value" state="primary" placeholder="Primary" />
 
-    <vs-input v-model="value2" state="success" placeholder="Success Icon">
+    <s-input v-model="value2" state="success" placeholder="Success Icon">
       <template #icon>
         <i class="bx bx-user" />
       </template>
-    </vs-input>
+    </s-input>
 
-    <vs-input
+    <s-input
       v-model="value3"
       state="danger"
       icon-after
@@ -17,16 +17,16 @@
       <template #icon>
         <i class="bx bx-mail-send" />
       </template>
-    </vs-input>
+    </s-input>
 
-    <vs-input
+    <s-input
       v-model="value4"
       state="warn"
       placeholder="Label Warn"
       label="Warn"
     />
 
-    <vs-input v-model="value5" state="dark" label="Dark" label-float />
+    <s-input v-model="value5" state="dark" label="Dark" label-float />
   </div>
 </template>
 

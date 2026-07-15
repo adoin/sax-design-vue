@@ -1,7 +1,7 @@
 <template>
   <div class="center con-checkbox">
-    <vs-checkbox v-model="option" loading> Loading checked </vs-checkbox>
-    <vs-checkbox v-model="option2" loading> Loading unchecked </vs-checkbox>
+    <s-checkbox v-model="option" loading> Loading checked </s-checkbox>
+    <s-checkbox v-model="option2" loading> Loading unchecked </s-checkbox>
   </div>
 </template>
 

@@ -9,9 +9,9 @@ Register the full library once at app bootstrap:
 <command>
 
 ```ts
-import Vuesax from 'vuesax-alpha'
+import SaxDesignVue from 'sax-design-vue'
 
-app.use(Vuesax)
+app.use(SaxDesignVue)
 ```
 
 </command>
@@ -63,15 +63,21 @@ Start from the default example, then jump to the API table at the bottom of the 
 
 ## Auto-import (Vite)
 
-Use `unplugin-vue-components` with the official resolver:
+Use `unplugin-vue-components` with the resolver from `@vuesax-alpha/auto-import-resolver` (component names are unchanged). Point imports at **sax-design-vue**:
 
 <command>
 
 ```ts
+import path from 'node:path'
 import Components from 'unplugin-vue-components/vite'
 import { VuesaxAlphaResolver } from '@vuesax-alpha/auto-import-resolver'
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      'vuesax-alpha': path.resolve(__dirname, 'node_modules/sax-design-vue'),
+    },
+  },
   plugins: [
     Components({
       resolvers: [VuesaxAlphaResolver({ importStyle: 'sass' })],
@@ -81,6 +87,8 @@ export default defineConfig({
 ```
 
 </command>
+
+Alternatively, import components directly from `sax-design-vue` for full control.
 
 </card>
 

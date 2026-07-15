@@ -1,3 +1,3 @@
 <template>
-  <vs-divider color="primary">Divider</vs-divider>
+  <s-divider color="primary">Divider</s-divider>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useClipboard } from '@vueuse/core'
-import { VsNotification } from 'vuesax-alpha'
+import { SNotification } from 'sax-design-vue'
 import * as VuesaxIconsVue from '@vuesax-alpha/icons-vue'
 
 const copyIconVue = ref(true)
@@ -13,14 +13,14 @@ const copyContent = async (content) => {
   try {
     await copy(content)
 
-    VsNotification({
+    SNotification({
       showClose: true,
       content: 'Copied',
       border: 'success',
       position: 'top-center',
     })
   } catch {
-    VsNotification({
+    SNotification({
       showClose: true,
       content: 'Error',
       border: 'danger',
@@ -31,7 +31,7 @@ const copyContent = async (content) => {
 
 const copyIcon = async (name, refs) => {
   if (copyIconVue.value) {
-    await copyContent(`<vs-icon><${name} /></vs-icon>`)
+    await copyContent(`<s-icon><${name} /></s-icon>`)
   } else {
     const content = refs[name]?.[0]?.$el.querySelector('svg')?.outerHTML ?? ''
     await copyContent(content)
@@ -56,7 +56,7 @@ const iconFiltered = computed<typeof VuesaxIconsVue>(
   <div class="center">
     <div style="width: 100%">
       <div class="header">
-        <vs-input
+        <s-input
           v-model="iconNameFilter"
           label="Search"
           placeholder="Type icon name"
@@ -64,13 +64,13 @@ const iconFiltered = computed<typeof VuesaxIconsVue>(
 
         <div class="icon-type">
           <span>Copy SVG</span>
-          <vs-switch v-model="copyIconVue" />
+          <s-switch v-model="copyIconVue" />
           <span>Copy Icon</span>
         </div>
       </div>
 
-      <vs-row class="row">
-        <vs-col
+      <s-row class="row">
+        <s-col
           v-for="icon in iconFiltered"
           :key="icon.name"
           :ref="icon.name"
@@ -78,14 +78,14 @@ const iconFiltered = computed<typeof VuesaxIconsVue>(
           class="col"
           @click="copyIcon(icon.name, $refs)"
         >
-          <vs-icon :size="30">
+          <s-icon :size="30">
             <component :is="icon" />
-          </vs-icon>
+          </s-icon>
           <span class="icon-name">
             {{ icon.name }}
           </span>
-        </vs-col>
-      </vs-row>
+        </s-col>
+      </s-row>
     </div>
   </div>
 </template>

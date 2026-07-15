@@ -1,7 +1,7 @@
 <template>
   <span :class="ns.e('jump')" :disabled="disabled">
     <span :class="ns.e('goto')">Goto</span>
-    <vs-input
+    <s-input
       type="number"
       :class="[ns.e('editor'), ns.is('in-pagination')]"
       :min="1"
@@ -17,12 +17,12 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import VsInput from '@vuesax-alpha/components/input'
+import SInput from '@vuesax-alpha/components/input'
 import { usePagination } from '../usePagination'
 import type { InputValue } from '@vuesax-alpha/components/input'
 
 defineOptions({
-  name: 'VsPaginationJumper',
+  name: 'SPaginationJumper',
 })
 
 const ns = useNamespace('pagination')

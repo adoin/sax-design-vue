@@ -1,9 +1,9 @@
 <template>
   <div class="center">
-    <vs-button @click="active = !active"> Alert </vs-button>
-    <vs-button type="flat" @click="active2 = !active2"> Confirm </vs-button>
-    <vs-button type="border" @click="active3 = !active3"> Prompt </vs-button>
-    <vs-dialog v-model="active" width="550px" not-center>
+    <s-button @click="active = !active"> Alert </s-button>
+    <s-button type="flat" @click="active2 = !active2"> Confirm </s-button>
+    <s-button type="border" @click="active3 = !active3"> Prompt </s-button>
+    <s-dialog v-model="active" width="550px" not-center>
       <template #header>
         <h4 class="not-margin">Welcome to <b>Vuesax</b></h4>
       </template>
@@ -20,11 +20,11 @@
 
       <template #footer>
         <div class="con-footer">
-          <vs-button type="transparent" @click="active = false"> Ok </vs-button>
+          <s-button type="transparent" @click="active = false"> Ok </s-button>
         </div>
       </template>
-    </vs-dialog>
-    <vs-dialog v-model="active2" width="550px" not-center>
+    </s-dialog>
+    <s-dialog v-model="active2" width="550px" not-center>
       <template #header>
         <h4 class="not-margin">Welcome to <b>Vuesax</b></h4>
       </template>
@@ -41,35 +41,31 @@
 
       <template #footer>
         <div class="con-footer">
-          <vs-button type="transparent" @click="active2 = false">
-            Ok
-          </vs-button>
-          <vs-button color="danger" type="transparent" @click="active2 = false">
+          <s-button type="transparent" @click="active2 = false"> Ok </s-button>
+          <s-button color="danger" type="transparent" @click="active2 = false">
             Cancel
-          </vs-button>
+          </s-button>
         </div>
       </template>
-    </vs-dialog>
-    <vs-dialog v-model="active3" width="300px" not-center>
+    </s-dialog>
+    <s-dialog v-model="active3" width="300px" not-center>
       <template #header>
         <h4 class="not-margin">Welcome what is your <b>Name</b></h4>
       </template>
 
       <div class="con-content">
-        <vs-input v-model="input1" placeholder="Name" />
+        <s-input v-model="input1" placeholder="Name" />
       </div>
 
       <template #footer>
         <div class="con-footer">
-          <vs-button type="transparent" @click="active3 = false">
-            Ok
-          </vs-button>
-          <vs-button color="danger" type="transparent" @click="active3 = false">
+          <s-button type="transparent" @click="active3 = false"> Ok </s-button>
+          <s-button color="danger" type="transparent" @click="active3 = false">
             Cancel
-          </vs-button>
+          </s-button>
         </div>
       </template>
-    </vs-dialog>
+    </s-dialog>
   </div>
 </template>
 <script lang="ts" setup>

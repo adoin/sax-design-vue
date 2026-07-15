@@ -90,7 +90,7 @@ PROPS:
     usage: null
     code: null
 
-  - name: vs-sidebar-item:to
+  - name: s-sidebar-item:to
     type: String
     values: url
     description: Generate a new vue-router route
@@ -99,7 +99,7 @@ PROPS:
     usage: null
     code: null
 
-  - name: vs-sidebar-item:href
+  - name: s-sidebar-item:href
     type: String
     values: url
     description: Generate a new route
@@ -145,7 +145,7 @@ SLOTS:
     usage: null
     code: null
 
-  - name: vs-sidebar-item#icon
+  - name: s-sidebar-item#icon
     type: slot
     values: null
     description: It is the space to add the icon or a representative letter.
@@ -166,7 +166,7 @@ NEWS:
 
 <docs-warn />
 
-Add a sidebar menu with the `vs-sidebar` component, there are two subcomponents `vs-sidebar-item` and `vs-sidebar-group`
+Add a sidebar menu with the `s-sidebar` component, there are two subcomponents `s-sidebar-item` and `s-sidebar-group`
 
 <template #example>
 <sidebar-default />
@@ -178,10 +178,10 @@ Add a sidebar menu with the `vs-sidebar` component, there are two subcomponents 
 
 ## Group
 
-You can group items and hide them with the `vs-sidebar-group` sub-component.
+You can group items and hide them with the `s-sidebar-group` sub-component.
 
 :::tip
-The component has a slot: header in which we add a sub-component `vs-sidebar-item` with the property **arrow** and without the property id to not change the active state when clicking
+The component has a slot: header in which we add a sub-component `s-sidebar-item` with the property **arrow** and without the property id to not change the active state when clicking
 :::
 
 <template #example>

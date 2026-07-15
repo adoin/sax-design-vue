@@ -19,7 +19,7 @@ import { navbarItemProps } from './navbar-item'
 import type { Router } from 'vue-router'
 
 defineOptions({
-  name: 'VsNavbarItem',
+  name: 'SNavbarItem',
 })
 
 const props = defineProps(navbarItemProps)

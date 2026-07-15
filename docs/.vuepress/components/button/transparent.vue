@@ -1,12 +1,12 @@
 <template>
   <div class="center">
-    <vs-button type="transparent" :active="active == 0" @click="active = 0">
+    <s-button type="transparent" :active="active == 0" @click="active = 0">
       Active
-    </vs-button>
-    <vs-button type="transparent" :active="active == 1" @click="active = 1">
+    </s-button>
+    <s-button type="transparent" :active="active == 1" @click="active = 1">
       Default
-    </vs-button>
-    <vs-button type="transparent" disabled> Disabled </vs-button>
+    </s-button>
+    <s-button type="transparent" disabled> Disabled </s-button>
   </div>
 </template>
 

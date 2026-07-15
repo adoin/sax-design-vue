@@ -3,14 +3,14 @@ import Select from './src/select.vue'
 import Option from './src/option.vue'
 import OptionGroup from './src/option-group.vue'
 
-export const VsSelect = withInstall(Select, {
+export const SSelect = withInstall(Select, {
   Option,
   OptionGroup,
 })
-export default VsSelect
+export default SSelect
 
-export const VsOption = withNoopInstall(Option)
-export const VsOptionGroup = withNoopInstall(OptionGroup)
+export const SOption = withNoopInstall(Option)
+export const SOptionGroup = withNoopInstall(OptionGroup)
 
 export * from './src/option-group'
 export * from './src/option'

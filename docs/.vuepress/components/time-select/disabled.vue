@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-time-select
+    <s-time-select
       v-model="value"
       start="08:30"
       step="00:15"

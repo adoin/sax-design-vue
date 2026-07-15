@@ -8,10 +8,10 @@ import { buildProp, buildProps, definePropType, keysOf, mutable } from '../..'
 import type {
   IfNever,
   ResolvePropType,
+  SProp,
+  SPropInputDefault,
+  SPropMergeType,
   UnknownToNever,
-  VsProp,
-  VsPropInputDefault,
-  VsPropMergeType,
   Writable,
   WritableArray,
   vsPropKey,
@@ -65,22 +65,22 @@ describe('Types', () => {
     expectTypeOf<ResolvePropType<never>>().toBeNever()
   })
 
-  it('VsPropMergeType', () => {
+  it('SPropMergeType', () => {
     expectTypeOf<
-      VsPropMergeType<StringConstructor | NumberConstructor, 'str', 1>
+      SPropMergeType<StringConstructor | NumberConstructor, 'str', 1>
     >().toEqualTypeOf<'str' | 1>()
-    expectTypeOf<VsPropMergeType<NumberConstructor, 2 | 3, 4>>().toEqualTypeOf<
+    expectTypeOf<SPropMergeType<NumberConstructor, 2 | 3, 4>>().toEqualTypeOf<
       2 | 3 | 4
     >()
   })
 
-  it('VsPropInputDefault', () => {
-    expectTypeOf<VsPropInputDefault<true, 1>>().toBeNever()
-    expectTypeOf<VsPropInputDefault<false, 1>>().toEqualTypeOf<1 | (() => 1)>()
+  it('SPropInputDefault', () => {
+    expectTypeOf<SPropInputDefault<true, 1>>().toBeNever()
+    expectTypeOf<SPropInputDefault<false, 1>>().toEqualTypeOf<1 | (() => 1)>()
   })
 
-  it('VsProp', () => {
-    expectTypeOf<VsProp<'1', '2', false>>().toEqualTypeOf<{
+  it('SProp', () => {
+    expectTypeOf<SProp<'1', '2', false>>().toEqualTypeOf<{
       readonly type: PropType<'1'>
       readonly required: false
       readonly validator: ((val: unknown) => boolean) | undefined
@@ -88,7 +88,7 @@ describe('Types', () => {
       [vsPropKey]: true
     }>()
 
-    expectTypeOf<VsProp<'1', '2', true>>().toEqualTypeOf<{
+    expectTypeOf<SProp<'1', '2', true>>().toEqualTypeOf<{
       readonly type: PropType<'1'>
       readonly required: true
       readonly validator: ((val: unknown) => boolean) | undefined

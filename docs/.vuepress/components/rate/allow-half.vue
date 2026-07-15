@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-rate v-model="value" allow-half />
+    <s-rate v-model="value" allow-half />
   </div>
 </template>
 

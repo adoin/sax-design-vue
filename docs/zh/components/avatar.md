@@ -83,7 +83,7 @@ PROPS:
   - name: max
     type: number
     values: number
-    description: (vs-avatar-group) determine how many avatars are visible.
+    description: (s-avatar-group) determine how many avatars are visible.
     default: null
     link: null
     usage: '#group'
@@ -91,7 +91,7 @@ PROPS:
   - name: float
     type: Boolean
     values: true,false
-    description: (vs-avatar-group) change the way the avatar is composed by placing one next to the other.
+    description: (s-avatar-group) change the way the avatar is composed by placing one next to the other.
     default: false
     link: null
     usage: '#group'
@@ -115,11 +115,11 @@ SLOTS:
     link: null
     usage: '#default'
     code: >
-      <vs-avatar>
+      <s-avatar>
         <template #text>
           Lily
         </template>
-      </vs-avatar>
+      </s-avatar>
 
   - name: badge
     type: slot
@@ -129,12 +129,12 @@ SLOTS:
     link: null
     usage: '#badge'
     code: >
-      <vs-avatar badge badge-color="success">
+      <s-avatar badge badge-color="success">
         <img src="/avatars/avatar-2.png" alt="">
         <template #badge>
           28
         </template>
-      </vs-avatar>
+      </s-avatar>
 
   - name: icons
     type: slot
@@ -144,14 +144,14 @@ SLOTS:
     link: null
     usage: '#icons'
     code: >
-      <vs-avatar>
+      <s-avatar>
         <img src="/avatars/avatar-1.png" alt="">
         <template #icons>
           <i class='bx bxl-facebook-square' ></i>
           <i class='bx bxl-github' ></i>
           <i class='bx bxl-twitter' ></i>
         </template>
-      </vs-avatar>
+      </s-avatar>
 ---
 
 # Avatar
@@ -162,7 +162,7 @@ SLOTS:
 
 <docs-warn />
 
-Add an avatar easily and with functionality with the component `<vs-avatar>`
+Add an avatar easily and with functionality with the component `<s-avatar>`
 
 <template #example>
 <avatar-default />
@@ -170,7 +170,7 @@ Add an avatar easily and with functionality with the component `<vs-avatar>`
 
 <template #template>
 
-@[code{1-19} html{3-5}](../.vuepress/components/avatar/default.vue)
+@[code{1-19} html{3-5}](../../.vuepress/components/avatar/default.vue)
 
 </template>
 
@@ -188,7 +188,7 @@ Change the color of the compound with the `color` property, the colors allowed a
 
 <template #template>
 
-@[code html{3}](../.vuepress/components/avatar/color.vue)
+@[code html{3}](../../.vuepress/components/avatar/color.vue)
 
 </template>
 
@@ -206,7 +206,7 @@ Change the size of the component to the number provided if for example the size 
 
 <template #template>
 
-@[code{1-19} html{3}](../.vuepress/components/avatar/size.vue)
+@[code{1-19} html{3}](../../.vuepress/components/avatar/size.vue)
 
 </template>
 
@@ -228,7 +228,7 @@ There are times when you need to use the avatar in a chat environment and for th
 
 <template #template>
 
-@[code{1-30} html{3}](../.vuepress/components/avatar/badge.vue)
+@[code{1-30} html{3}](../../.vuepress/components/avatar/badge.vue)
 
 </template>
 
@@ -250,7 +250,7 @@ The maximum length of characters is **5**. When that limit is exceeded, changes 
 
 <template #template>
 
-@[code{1-22}](../.vuepress/components/avatar/auto-font.vue)
+@[code{1-22}](../../.vuepress/components/avatar/auto-font.vue)
 
 </template>
 
@@ -270,7 +270,7 @@ Change the border-radius of the entire component to `50%` with the `circle` prop
 
 <template #template>
 
-@[code html{3}](../.vuepress/components/avatar/circle.vue)
+@[code html{3}](../../.vuepress/components/avatar/circle.vue)
 
 </template>
 
@@ -288,7 +288,7 @@ Change the border-radius of the entire component to `0%` with the `square` prope
 
 <template #template>
 
-@[code html{3}](../.vuepress/components/avatar/square.vue)
+@[code html{3}](../../.vuepress/components/avatar/square.vue)
 
 </template>
 
@@ -310,7 +310,7 @@ You can make the border a gradient like instagram with the property `history-gra
 
 <template #template>
 
-@[code{1-19} html{3}](../.vuepress/components/avatar/history.vue)
+@[code{1-19} html{3}](../../.vuepress/components/avatar/history.vue)
 
 </template>
 
@@ -328,7 +328,7 @@ You can put an icon inside an avatar when for example an image is not yet added 
 
 <template #template>
 
-@[code{1-22} html{4}](../.vuepress/components/avatar/icon.vue)
+@[code{1-22} html{4}](../../.vuepress/components/avatar/icon.vue)
 
 </template>
 
@@ -346,7 +346,7 @@ Add a loading animation to the component, this property is a `boolean` so you ca
 
 <template #template>
 
-@[code html{3}](../.vuepress/components/avatar/square.vue)
+@[code html{3}](../../.vuepress/components/avatar/square.vue)
 
 </template>
 
@@ -364,7 +364,7 @@ Add a space next to the avatar with the slot `icons` where you can put icons for
 
 <template #template>
 
-@[code{1-27} html{5-9}](../.vuepress/components/avatar/icons.vue)
+@[code{1-27} html{5-9}](../../.vuepress/components/avatar/icons.vue)
 
 </template>
 
@@ -374,7 +374,7 @@ Add a space next to the avatar with the slot `icons` where you can put icons for
 
 ## Group
 
-You can group several avatar with the parent component `vs-avatar-group`, this component has two interesting properties:
+You can group several avatar with the parent component `s-avatar-group`, this component has two interesting properties:
 
 - **max**: determine the maximum number of avatars to show and the rest hides it generating the number in the last avatar shown
 
@@ -386,7 +386,7 @@ You can group several avatar with the parent component `vs-avatar-group`, this c
 
 <template #template>
 
-@[code{1-69} html{3,36}](../.vuepress/components/avatar/group.vue)
+@[code{1-69} html{3,36}](../../.vuepress/components/avatar/group.vue)
 
 </template>
 

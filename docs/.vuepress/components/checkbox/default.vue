@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-checkbox v-model="option"> Option </vs-checkbox>
+    <s-checkbox v-model="option"> Option </s-checkbox>
   </div>
 </template>
 <script lang="ts" setup>

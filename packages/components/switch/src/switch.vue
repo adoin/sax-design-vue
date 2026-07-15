@@ -50,7 +50,7 @@ import { switchEmits, switchProps } from './switch'
 import { useSwitch } from './use-switch'
 
 defineOptions({
-  name: 'VsSwitch',
+  name: 'SSwitch',
   inheritAttrs: false,
 })
 

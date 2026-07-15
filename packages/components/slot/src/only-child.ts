@@ -18,7 +18,7 @@ import { debugWarn, isObject } from '@vuesax-alpha/utils'
 
 import type { Ref, VNode } from 'vue'
 
-const NAME = 'VsOnlyChild'
+const NAME = 'SOnlyChild'
 
 export const OnlyChild = defineComponent({
   name: NAME,

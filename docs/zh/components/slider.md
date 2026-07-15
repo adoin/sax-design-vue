@@ -95,13 +95,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/slider/default.vue)
+@[code{1-3}](../../.vuepress/components/slider/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-8}](../.vuepress/components/slider/default.vue)
+@[code{5-8}](../../.vuepress/components/slider/default.vue)
 
 </template>
 
@@ -120,19 +120,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/slider/color.vue)
+@[code{1-7}](../../.vuepress/components/slider/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{9-14}](../.vuepress/components/slider/color.vue)
+@[code{9-14}](../../.vuepress/components/slider/color.vue)
 
 </template>
 
 <template #style>
 
-@[code{16-24}](../.vuepress/components/slider/color.vue)
+@[code{16-24}](../../.vuepress/components/slider/color.vue)
 
 </template>
 
@@ -151,13 +151,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/slider/ticks.vue)
+@[code{1-3}](../../.vuepress/components/slider/ticks.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-8}](../.vuepress/components/slider/ticks.vue)
+@[code{5-8}](../../.vuepress/components/slider/ticks.vue)
 
 </template>
 
@@ -176,13 +176,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/slider/text-fixed.vue)
+@[code{1-3}](../../.vuepress/components/slider/text-fixed.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-8}](../.vuepress/components/slider/text-fixed.vue)
+@[code{5-8}](../../.vuepress/components/slider/text-fixed.vue)
 
 </template>
 

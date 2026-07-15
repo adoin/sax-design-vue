@@ -1,8 +1,8 @@
 <template>
   <div class="center breadcrumb-align-demo">
-    <vs-breadcrumb align="left" :items="items" />
-    <vs-breadcrumb align="center" :items="items" />
-    <vs-breadcrumb align="right" :items="items" />
+    <s-breadcrumb align="left" :items="items" />
+    <s-breadcrumb align="center" :items="items" />
+    <s-breadcrumb align="right" :items="items" />
   </div>
 </template>
 

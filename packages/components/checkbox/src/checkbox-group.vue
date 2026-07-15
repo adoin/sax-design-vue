@@ -15,7 +15,7 @@ import { checkboxGroupEmits, checkboxGroupProps } from './checkbox-group'
 import type { CheckboxGroupValueType } from './checkbox-group'
 
 defineOptions({
-  name: 'VsCheckboxGroup',
+  name: 'SCheckboxGroup',
 })
 
 const props = defineProps(checkboxGroupProps)

@@ -3,7 +3,7 @@ PROPS:
   - name: title
     type: String
     values: String
-    description: List header title (vs-list-header).
+    description: List header title (s-list-header).
     default: null
     link: null
     usage: '#header'
@@ -49,7 +49,7 @@ NEWS:
 ## 默认
 
 
-使用 `vs-list-item` 显示标题与副标题行。
+使用 `s-list-item` 显示标题与副标题行。
 
 <template #example>
 <list-default />
@@ -57,7 +57,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/list/default.vue)
+@[code{1-6}](../../.vuepress/components/list/default.vue)
 
 </template>
 
@@ -68,7 +68,7 @@ NEWS:
 ## 标题行
 
 
-在 `vs-list-header` 下分组列表项。
+在 `s-list-header` 下分组列表项。
 
 <template #example>
 <list-header />
@@ -76,7 +76,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/list/header.vue)
+@[code{1-7}](../../.vuepress/components/list/header.vue)
 
 </template>
 
@@ -95,7 +95,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/list/icon.vue)
+@[code{1-6}](../../.vuepress/components/list/icon.vue)
 
 </template>
 
@@ -114,7 +114,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/list/content.vue)
+@[code{1-7}](../../.vuepress/components/list/content.vue)
 
 </template>
 
@@ -133,7 +133,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/list/avatar.vue)
+@[code{1-6}](../../.vuepress/components/list/avatar.vue)
 
 </template>
 

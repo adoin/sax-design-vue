@@ -1,20 +1,20 @@
 <template>
   <div class="center">
-    <vs-button to="/" flat> To - vue-router </vs-button>
-    <vs-button
-      href="https://vuesax-alpha.vercel.app/"
+    <s-button to="/" flat> To - vue-router </s-button>
+    <s-button
+      href="https://adoin.github.io/sax-design-vue/"
       color="success"
       type="flat"
     >
       Href - Replace Url
-    </vs-button>
-    <vs-button
-      href="https://vuesax-alpha.vercel.app/"
+    </s-button>
+    <s-button
+      href="https://adoin.github.io/sax-design-vue/"
       blank
       color="danger"
       type="flat"
     >
       Href - Open External (blank)
-    </vs-button>
+    </s-button>
   </div>
 </template>

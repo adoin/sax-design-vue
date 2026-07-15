@@ -1,23 +1,23 @@
 <template>
   <div class="center">
-    <vs-tooltip>
-      <vs-button type="gradient"> Whats is Vuesax? </vs-button>
+    <s-tooltip>
+      <s-button type="gradient"> Whats is Vuesax? </s-button>
       <template #content>
         <div class="content-tooltip">
           <h4>Whats is Vuesax?</h4>
           <p>Vuesax is a framework of UI components created with Vuejs</p>
         </div>
       </template>
-    </vs-tooltip>
-    <vs-tooltip
+    </s-tooltip>
+    <s-tooltip
       v-model="activeTooltip1"
       placement="bottom"
       type="shadow"
       trigger="click"
     >
-      <vs-button color="danger" @click="activeTooltip1 = !activeTooltip1">
+      <s-button color="danger" @click="activeTooltip1 = !activeTooltip1">
         Click Delete User
-      </vs-button>
+      </s-button>
       <template #content>
         <div class="content-tooltip">
           <h4 class="center">Confirm</h4>
@@ -26,25 +26,25 @@
             data
           </p>
           <footer>
-            <vs-button color="danger" block @click="activeTooltip1 = false">
+            <s-button color="danger" block @click="activeTooltip1 = false">
               Delete
-            </vs-button>
-            <vs-button
+            </s-button>
+            <s-button
               type="transparent"
               color="dark"
               block
               @click="activeTooltip1 = false"
             >
               Cancel
-            </vs-button>
+            </s-button>
           </footer>
         </div>
       </template>
-    </vs-tooltip>
-    <vs-tooltip type="shadow" interactivity>
-      <vs-avatar>
+    </s-tooltip>
+    <s-tooltip type="shadow" interactivity>
+      <s-avatar>
         <img src="/avatars/avatar-5.png" alt="" />
-      </vs-avatar>
+      </s-avatar>
       <template #content>
         <div class="content-tooltip">
           <div class="body">
@@ -52,30 +52,30 @@
               Closed Tasks
               <span> 89 </span>
             </div>
-            <vs-avatar
+            <s-avatar
               shape="circle"
               size="80"
               @click="activeTooltip1 = !activeTooltip1"
             >
               <img src="/avatars/avatar-5.png" alt="" />
-            </vs-avatar>
+            </s-avatar>
             <div class="text">
               Open Tasks
               <span> 8 </span>
             </div>
           </div>
           <footer>
-            <vs-button shape="circle" icon type="border">
+            <s-button shape="circle" icon type="border">
               <i class="bx bxs-share-alt" />
-            </vs-button>
-            <vs-button shape="circle"> Message </vs-button>
-            <vs-button shape="circle" icon type="border">
+            </s-button>
+            <s-button shape="circle"> Message </s-button>
+            <s-button shape="circle" icon type="border">
               <i class="bx bx-like" />
-            </vs-button>
+            </s-button>
           </footer>
         </div>
       </template>
-    </vs-tooltip>
+    </s-tooltip>
   </div>
 </template>
 

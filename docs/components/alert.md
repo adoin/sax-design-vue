@@ -8,11 +8,11 @@ PROPS:
     link: null
     code: >
       <template>
-        <vs-button type="flat" @click="active = !active">
+        <s-button type="flat" @click="active = !active">
           {{ active ? 'Close Alert' : 'Open Alert' }}
-        </vs-button>
+        </s-button>
 
-        <vs-alert closable v-model="active">
+        <s-alert closable v-model="active">
           <template #title>
             Vuesax Framework
           </template>
@@ -21,7 +21,7 @@ PROPS:
           Unique and pleasant style, Vuesax is created from scratch and designed for all types of
           developed from the frontend lover to the backend that wants to easily create
           your visual approach to the end user
-        </vs-alert>
+        </s-alert>
       </template>
 
       <script setup lang="ts">
@@ -41,7 +41,7 @@ PROPS:
     usage: '#hidden-content'
     code: >
       <template>
-        <vs-alert hidden-content>
+        <s-alert hidden-content>
           <template #title>
             Vuesax Framework
           </template>
@@ -50,7 +50,7 @@ PROPS:
           Unique and pleasant style, Vuesax is created from scratch and designed for all types of
           developed from the frontend lover to the backend that wants to easily create
           your visual approach to the end user
-        </vs-alert>
+        </s-alert>
       </template>
   - name: color
     type: String
@@ -60,7 +60,7 @@ PROPS:
     link: null
     usage: '#color'
     code: >
-      <vs-alert color="success">
+      <s-alert color="success">
         <template #title>
           Vuesax Framework
         </template>
@@ -69,7 +69,7 @@ PROPS:
         Unique and pleasant style, Vuesax is created from scratch and designed for all types of
         developed from the frontend lover to the backend that wants to easily create
         your visual approach to the end user
-      </vs-alert>
+      </s-alert>
   - name: type
     type: boolean
     values: solid, border, shadow, gradient, relief
@@ -78,7 +78,7 @@ PROPS:
     link: null
     usage: '#solid'
     code: >
-      <vs-alert solid>
+      <s-alert solid>
         <template #title>
           Vuesax Framework
         </template>
@@ -87,7 +87,7 @@ PROPS:
         Unique and pleasant style, Vuesax is created from scratch and designed for all types of
         developed from the frontend lover to the backend that wants to easily create
         your visual approach to the end user
-      </vs-alert>
+      </s-alert>
   - name: page
     type: Number
     values: Number
@@ -97,14 +97,14 @@ PROPS:
     usage: '#pagination'
     code: >
       <template>
-        <vs-alert :page="1" >
+        <s-alert :page="1" >
           <template #title>
             Vuesax Framework
           </template>
           <template #page-1>
             Page 1 - this page is a slot and here you can add either text, html elements or components
           </template>
-        </vs-alert>
+        </s-alert>
       </template>
   - name: progress
     type: Number
@@ -114,7 +114,7 @@ PROPS:
     link: null
     usage: '#progress-bar'
     code: >
-      <vs-alert progress="70">
+      <s-alert progress="70">
         <template #title>
           Vuesax Framework
         </template>
@@ -123,7 +123,7 @@ PROPS:
         Unique and pleasant style, Vuesax is created from scratch and designed for all types of
         developed from the frontend lover to the backend that wants to easily create
         your visual approach to the end user
-      </vs-alert>
+      </s-alert>
   - name: closable
     type: boolean
     values: boolean
@@ -133,11 +133,11 @@ PROPS:
     usage: '#closable'
     code: >
       <template>
-        <vs-button flat @click="active=!active">
+        <s-button flat @click="active=!active">
           {{ active ? 'Close Alert' : 'Open Alert' }}
-        </vs-button>
+        </s-button>
 
-        <vs-alert closable v-model="active">
+        <s-alert closable v-model="active">
           <template #title>
             Vuesax Framework
           </template>
@@ -146,7 +146,7 @@ PROPS:
           Unique and pleasant style, Vuesax is created from scratch and designed for all types of
           developed from the frontend lover to the backend that wants to easily create
           your visual approach to the end user
-        </vs-alert>
+        </s-alert>
       </template>
 
       <script lang="ts" setup>
@@ -164,7 +164,7 @@ SLOTS:
     usage: '#icon'
     code: >
       <template>
-        <vs-alert>
+        <s-alert>
           <template #icon>
             <i class='bx bxs-chat'></i>
           </template>
@@ -176,7 +176,7 @@ SLOTS:
           Unique and pleasant style, Vuesax is created from scratch and designed for all types of
           developed from the frontend lover to the backend that wants to easily create
           your visual approach to the end user
-        </vs-alert>
+        </s-alert>
       </template>
   - name: title
     type: slot
@@ -188,7 +188,7 @@ SLOTS:
     code: >
       <template>
         <div class="center">
-          <vs-alert>
+          <s-alert>
             <template #title>
               Vuesax Alert Title
             </template>
@@ -197,7 +197,7 @@ SLOTS:
             Unique and pleasant style, Vuesax is created from scratch and designed for all types of
             developed from the frontend lover to the backend that wants to easily create
             your visual approach to the end user
-          </vs-alert>
+          </s-alert>
         </div>
       </template>
   - name: page-{n}
@@ -209,7 +209,7 @@ SLOTS:
     usage: '#pagination'
     code: >
       <template>
-        <vs-alert v-model:page="page" >
+        <s-alert v-model:page="page" >
           <template #title>
             Vuesax Framework
           </template>
@@ -218,7 +218,7 @@ SLOTS:
             Page 1 - this page is a slot and here you can add either text,
             html elements or components
           </template>
-        </vs-alert>
+        </s-alert>
       </template>
   - name: footer
     type: slot
@@ -228,7 +228,7 @@ SLOTS:
     link: null
     usage: '#footer'
     code: >
-      <vs-alert>
+      <s-alert>
         <template #title>
           Vuesax Framework
         </template>
@@ -238,14 +238,14 @@ SLOTS:
         developed from the frontend lover to the backend that wants to easily create
         your visual approach to the end user
         <template #footer>
-          <vs-button flat>
+          <s-button flat>
             Cancel
-          </vs-button>
-          <vs-button>
+          </s-button>
+          <s-button>
             Accept
-          </vs-button>
+          </s-button>
         </template>
-      </vs-alert>
+      </s-alert>
 
 UPDATES:
   - hidden-content

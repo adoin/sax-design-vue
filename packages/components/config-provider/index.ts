@@ -2,7 +2,7 @@ import { withInstall } from '@vuesax-alpha/utils'
 
 import ConfigProvider from './src/config-provider'
 
-export const VsConfigProvider = withInstall(ConfigProvider)
-export default VsConfigProvider
+export const SConfigProvider = withInstall(ConfigProvider)
+export default SConfigProvider
 
 export * from './src/config-provider'

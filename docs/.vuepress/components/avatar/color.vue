@@ -1,26 +1,26 @@
 <template>
   <div class="center con-avatars">
-    <vs-avatar color="primary">
+    <s-avatar color="primary">
       <template #text> Primary </template>
-    </vs-avatar>
-    <vs-avatar color="success">
+    </s-avatar>
+    <s-avatar color="success">
       <template #text> Success </template>
-    </vs-avatar>
-    <vs-avatar color="danger">
+    </s-avatar>
+    <s-avatar color="danger">
       <template #text> Danger </template>
-    </vs-avatar>
-    <vs-avatar color="warn">
+    </s-avatar>
+    <s-avatar color="warn">
       <template #text> Warn </template>
-    </vs-avatar>
-    <vs-avatar color="dark">
+    </s-avatar>
+    <s-avatar color="dark">
       <template #text> Dark </template>
-    </vs-avatar>
-    <vs-avatar color="#7d33ff">
+    </s-avatar>
+    <s-avatar color="#7d33ff">
       <template #text> HEX </template>
-    </vs-avatar>
-    <vs-avatar color="rgb(59,222,200)">
+    </s-avatar>
+    <s-avatar color="rgb(59,222,200)">
       <template #text> RGB </template>
-    </vs-avatar>
+    </s-avatar>
   </div>
 </template>
 <style scoped lang="scss">

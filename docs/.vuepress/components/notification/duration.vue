@@ -1,25 +1,25 @@
 <template>
   <div class="center con-avatars">
-    <vs-button type="border" @click="openNotification(4500)">
+    <s-button type="border" @click="openNotification(4500)">
       Duration default (4.5s)
-    </vs-button>
-    <vs-button type="border" @click="openNotification(6000)">
+    </s-button>
+    <s-button type="border" @click="openNotification(6000)">
       Duration 6s
-    </vs-button>
-    <vs-button type="border" @click="openNotification(10000)">
+    </s-button>
+    <s-button type="border" @click="openNotification(10000)">
       Duration 10s
-    </vs-button>
-    <vs-button type="border" @click="openNotification(0)">
+    </s-button>
+    <s-button type="border" @click="openNotification(0)">
       Duration none
-    </vs-button>
+    </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { VsNotification } from 'vuesax-alpha'
+import { SNotification } from 'sax-design-vue'
 
 const openNotification = (duration) => {
-  VsNotification({
+  SNotification({
     duration,
     progressAuto: true,
     title: 'Documentation Vuesax-alpha',

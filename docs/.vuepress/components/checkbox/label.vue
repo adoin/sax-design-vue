@@ -1,7 +1,7 @@
 <template>
   <div class="center con-checkbox">
-    <vs-checkbox v-model="option"> Label </vs-checkbox>
-    <vs-checkbox v-model="option2" label-before> Label Before </vs-checkbox>
+    <s-checkbox v-model="option"> Label </s-checkbox>
+    <s-checkbox v-model="option2" label-before> Label Before </s-checkbox>
   </div>
 </template>
 <script lang="ts" setup>

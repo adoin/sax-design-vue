@@ -76,7 +76,7 @@ EVENTS:
     params: null
     description: Emitted when chip is closed.
 
-  - name: vs-remove
+  - name: s-remove
     params: boolean
     description: Emitted when chip removed in chips group.
 EXPOSES: []
@@ -198,7 +198,7 @@ Remove chips interactively when `closable` is enabled.
 ## Add and Remove Items
 
 
-Combine `vs-chips` with multiple `vs-chip` children to add and remove tags.
+Combine `s-chips` with multiple `s-chip` children to add and remove tags.
 
 <template #example>
 <chip-chips />

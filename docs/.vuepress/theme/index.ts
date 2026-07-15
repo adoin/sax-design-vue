@@ -7,14 +7,14 @@ import { containerPlugin } from '@vuepress/plugin-container'
 import { gitPlugin } from '@vuepress/plugin-git'
 import { prismjsPlugin } from '@vuepress/plugin-prismjs'
 
-import type { VuesaxAlphaThemeOptions } from './vuesaxAlphaTheme'
+import type { SaxDesignVueThemeOptions } from './saxDesignVueTheme'
 import type { Theme } from '@vuepress/core'
 
-export const vuesaxAlphaTheme = (
-  options: VuesaxAlphaThemeOptions = {}
+export const saxDesignVueTheme = (
+  options: SaxDesignVueThemeOptions = {}
 ): Theme => {
   return {
-    name: 'vuepress-theme-vuesax-alpha',
+    name: 'vuepress-theme-sax-design-vue',
     clientConfigFile: path.resolve(__dirname, 'client.ts'),
     plugins: [
       activeHeaderLinksPlugin(),

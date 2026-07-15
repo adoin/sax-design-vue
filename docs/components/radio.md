@@ -64,7 +64,7 @@ SLOTS:
 
 <docs-warn />
 
-Add the radio type input with the component `<vs-radio />`
+Add the radio type input with the component `<s-radio />`
 
 <template #example>
 <radio-default />

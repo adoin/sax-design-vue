@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-rate v-model="value" clearable />
+    <s-rate v-model="value" clearable />
   </div>
 </template>
 

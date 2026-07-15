@@ -1,31 +1,31 @@
 <template>
   <div class="center con-avatars">
-    <vs-avatar shape="circle">
+    <s-avatar shape="circle">
       <template #text> Joel </template>
-    </vs-avatar>
-    <vs-avatar shape="circle" color="danger">
+    </s-avatar>
+    <s-avatar shape="circle" color="danger">
       <template #text> Fanny </template>
-    </vs-avatar>
-    <vs-avatar shape="circle">
+    </s-avatar>
+    <s-avatar shape="circle">
       <img src="/avatars/avatar-1.png" alt="" />
-    </vs-avatar>
-    <vs-avatar shape="circle" badge>
+    </s-avatar>
+    <s-avatar shape="circle" badge>
       <img src="/avatars/avatar-2.png" alt="" />
-    </vs-avatar>
-    <vs-avatar shape="circle" badge writing badge-color="success">
+    </s-avatar>
+    <s-avatar shape="circle" badge writing badge-color="success">
       <img src="/avatars/avatar-3.png" alt="" />
-    </vs-avatar>
-    <vs-avatar
+    </s-avatar>
+    <s-avatar
       badge
       shape="circle"
       badge-color="warn"
       badge-position="top-right"
     >
       <img src="/avatars/avatar-5.png" alt="" />
-    </vs-avatar>
-    <vs-avatar history history-gradient shape="circle">
+    </s-avatar>
+    <s-avatar history history-gradient shape="circle">
       <img src="/avatars/avatar-6.png" alt="" />
-    </vs-avatar>
+    </s-avatar>
   </div>
 </template>
 <style scoped lang="scss">

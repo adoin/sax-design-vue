@@ -21,9 +21,9 @@
     "lodash-unified": "^1.0.2",
     "minimist": "^1.2.8",
     "prismjs": "^1.29.0",
+    "sax-design-vue": "workspace:*",
     "vue": "^3.3.4",
-    "vue-router": "^4.2.4",
-    "vuesax-alpha": "workspace:*"
+    "vue-router": "^4.2.4"
   },
   "devDependencies": {
     "@types/prismjs": "^1.26.0",

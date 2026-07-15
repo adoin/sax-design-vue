@@ -31,7 +31,7 @@ import { getVsColor, isArray, throwError } from '@vuesax-alpha/utils'
 import { tableTrEmits, tableTrProps } from './tr'
 
 defineOptions({
-  name: 'VsTr',
+  name: 'STr',
 })
 
 const ns = useNamespace('table')

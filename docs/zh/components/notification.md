@@ -8,7 +8,7 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      VsNotification({
+      SNotification({
         title: 'Documentation Vuesax 4.0+',
         content: `These documents refer to the latest version of vuesax (4.0+),
         to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
@@ -21,7 +21,7 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      VsNotification({
+      SNotification({
         title: 'Documentation Vuesax 4.0+',
         content: `These documents refer to the latest version of vuesax (4.0+),
         to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
@@ -34,7 +34,7 @@ PROPS:
     link: null
     usage: '#position'
     code: >
-      const { close } = VsNotification({
+      const { close } = SNotification({
         position: 'top-right',
         title: 'Documentation Vuesax 4.0+',
         content: `These documents refer to the latest version of vuesax (4.0+),
@@ -48,7 +48,7 @@ PROPS:
     link: null
     usage: '#color'
     code: >
-      const { close } = VsNotification({
+      const { close } = SNotification({
         color: 'primary',
         title: 'Documentation Vuesax 4.0+',
         content: 'These documents refer to the latest version of vuesax (4.0+), to see the
@@ -62,7 +62,7 @@ PROPS:
     link: null
     usage: '#border'
     code: >
-      const { close } = VsNotification({
+      const { close } = SNotification({
         border: 'success',
         title: 'Documentation Vuesax 4.0+',
         content: `These documents refer to the latest version of vuesax (4.0+),
@@ -76,7 +76,7 @@ PROPS:
     link: null
     usage: '#icons'
     code: >
-      const { close } = VsNotification({
+      const { close } = SNotification({
         icon: `<i class='bx bxs-time'></i>`,
         title: 'Documentation Vuesax 4.0+',
         content: `These documents refer to the latest version of vuesax (4.0+),
@@ -90,7 +90,7 @@ PROPS:
     link: null
     usage: '#duration'
     code: >
-      const { close } = VsNotification({
+      const { close } = SNotification({
         duration: 10000,
         title: 'Documentation Vuesax 4.0+',
         content: `These documents refer to the latest version of vuesax (4.0+),
@@ -135,9 +135,9 @@ PROPS:
     usage: '#flat'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -153,9 +153,9 @@ PROPS:
     usage: null
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -171,9 +171,9 @@ PROPS:
     usage: '#sticky'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -189,9 +189,9 @@ PROPS:
     usage: '#square'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -207,9 +207,9 @@ PROPS:
     usage: '#width'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -225,9 +225,9 @@ PROPS:
     usage: '#loading'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -243,9 +243,9 @@ PROPS:
     usage: '#progress'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -261,9 +261,9 @@ PROPS:
     usage: '#example'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -279,9 +279,9 @@ PROPS:
     usage: null
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           duration: 0,
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
@@ -297,9 +297,9 @@ PROPS:
     usage: '#example'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           duration: 0,
           width: 'auto',
           title: 'Documentation Vuesax 4.0+',
@@ -316,9 +316,9 @@ PROPS:
     usage: null
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           duration: 0,
           width: 'auto',
           title: 'Documentation Vuesax 4.0+',
@@ -338,9 +338,9 @@ PROPS:
     usage: null
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           duration: 0,
           width: 'auto',
           customClass: 'my-class'
@@ -359,14 +359,14 @@ PROPS:
 
 <docs-warn />
 
-It generates a notification with the vuesax function (`VsNotification`), to use the instance of the notification it is necessary to save it in a variable, for example if you need to close the notification manually or do other functionalities with the instance
+It generates a notification with the vuesax function (`SNotification`), to use the instance of the notification it is necessary to save it in a variable, for example if you need to close the notification manually or do other functionalities with the instance
 
 <command>
 
 ```js
-import { VsNotification } from 'vuesax-alpha'
+import { SNotification } from 'sax-design-vue'
 
-VsNotification({ ...options })
+SNotification({ ...options })
 ```
 
 </command>
@@ -381,13 +381,13 @@ The necessary properties are the `title` and the` content`
 
 <template #template>
 
-@[code{1-5} html{3}](../.vuepress/components/notification/default.vue)
+@[code{1-5} html{3}](../../.vuepress/components/notification/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-17} vue{5}](../.vuepress/components/notification/default.vue)
+@[code{7-17} vue{5}](../../.vuepress/components/notification/default.vue)
 
 </template>
 
@@ -414,19 +414,19 @@ supported values
 
 <template #template>
 
-@[code{1-22} html{6,9}](../.vuepress/components/notification/position.vue)
+@[code{1-22} html{6,9}](../../.vuepress/components/notification/position.vue)
 
 </template>
 
 <template #script>
 
-@[code{24-35} vue{5}](../.vuepress/components/notification/position.vue)
+@[code{24-35} vue{5}](../../.vuepress/components/notification/position.vue)
 
 </template>
 
 <template #style>
 
-@[code{36-57}](../.vuepress/components/notification/position.vue)
+@[code{36-57}](../../.vuepress/components/notification/position.vue)
 
 </template>
 
@@ -454,13 +454,13 @@ Allowed values ​​are:
 
 <template #template>
 
-@[code{1-58} html{6,13}](../.vuepress/components/notification/color.vue)
+@[code{1-58} html{6,13}](../../.vuepress/components/notification/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{60-72} html{6}](../.vuepress/components/notification/color.vue)
+@[code{60-72} html{6}](../../.vuepress/components/notification/color.vue)
 
 </template>
 
@@ -478,19 +478,19 @@ Add the icon provided as the value of the `icon` property to the notification
 
 <template #template>
 
-@[code{1-100} html{6,26}](../.vuepress/components/notification/icons.vue)
+@[code{1-100} html{6,26}](../../.vuepress/components/notification/icons.vue)
 
 </template>
 
 <template #script>
 
-@[code{102-115} html{4,6}](../.vuepress/components/notification/icons.vue)
+@[code{102-115} html{4,6}](../../.vuepress/components/notification/icons.vue)
 
 </template>
 
 <template #style>
 
-@[code{117-138}](../.vuepress/components/notification/icons.vue)
+@[code{117-138}](../../.vuepress/components/notification/icons.vue)
 
 </template>
 
@@ -508,19 +508,19 @@ Add a progress bar to the notification, if the value of the `progress` property 
 
 <template #template>
 
-@[code{1-52}](../.vuepress/components/notification/progress.vue)
+@[code{1-52}](../../.vuepress/components/notification/progress.vue)
 
 </template>
 
 <template #script>
 
-@[code{54-67} vue{6}](../.vuepress/components/notification/progress.vue)
+@[code{54-67} vue{6}](../../.vuepress/components/notification/progress.vue)
 
 </template>
 
 <template #style>
 
-@[code{69-90}](../.vuepress/components/notification/progress.vue)
+@[code{69-90}](../../.vuepress/components/notification/progress.vue)
 
 </template>
 
@@ -540,19 +540,19 @@ if you need the notification to never be hidden, the duration value would be `0`
 
 <template #template>
 
-@[code{1-16}](../.vuepress/components/notification/duration.vue)
+@[code{1-16}](../../.vuepress/components/notification/duration.vue)
 
 </template>
 
 <template #script>
 
-@[code{18-30} html{6}](../.vuepress/components/notification/duration.vue)
+@[code{18-30} html{6}](../../.vuepress/components/notification/duration.vue)
 
 </template>
 
 <template #style>
 
-@[code{31-52}](../.vuepress/components/notification/duration.vue)
+@[code{31-52}](../../.vuepress/components/notification/duration.vue)
 
 </template>
 
@@ -570,19 +570,19 @@ Change the style of the notification with the `square` property so as not to hav
 
 <template #template>
 
-@[code{1-74}](../.vuepress/components/notification/square.vue)
+@[code{1-74}](../../.vuepress/components/notification/square.vue)
 
 </template>
 
 <template #script>
 
-@[code{75-88} vue{6}](../.vuepress/components/notification/square.vue)
+@[code{75-88} vue{6}](../../.vuepress/components/notification/square.vue)
 
 </template>
 
 <template #style>
 
-@[code{89-110}](../.vuepress/components/notification/square.vue)
+@[code{89-110}](../../.vuepress/components/notification/square.vue)
 
 </template>
 
@@ -600,19 +600,19 @@ Change the notification style with the `border` property by adding a border of t
 
 <template #template>
 
-@[code{1-55}](../.vuepress/components/notification/border.vue)
+@[code{1-55}](../../.vuepress/components/notification/border.vue)
 
 </template>
 
 <template #script>
 
-@[code{57-69} vue{6}](../.vuepress/components/notification/border.vue)
+@[code{57-69} vue{6}](../../.vuepress/components/notification/border.vue)
 
 </template>
 
 <template #style>
 
-@[code{71-92}](../.vuepress/components/notification/border.vue)
+@[code{71-92}](../../.vuepress/components/notification/border.vue)
 
 </template>
 
@@ -630,19 +630,19 @@ Change the style of the notification with the `flat` property, having this prope
 
 <template #template>
 
-@[code{1-55}](../.vuepress/components/notification/flat.vue)
+@[code{1-55}](../../.vuepress/components/notification/flat.vue)
 
 </template>
 
 <template #script>
 
-@[code{57-71} vue{6}](../.vuepress/components/notification/flat.vue)
+@[code{57-71} vue{6}](../../.vuepress/components/notification/flat.vue)
 
 </template>
 
 <template #style>
 
-@[code{73-94}](../.vuepress/components/notification/flat.vue)
+@[code{73-94}](../../.vuepress/components/notification/flat.vue)
 
 </template>
 
@@ -660,19 +660,19 @@ Add a loading animation to the notification, having this property will only show
 
 <template #template>
 
-@[code{1-58}](../.vuepress/components/notification/loading.vue)
+@[code{1-58}](../../.vuepress/components/notification/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{60-73} vue{6}](../.vuepress/components/notification/loading.vue)
+@[code{60-73} vue{6}](../../.vuepress/components/notification/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{75-96}](../.vuepress/components/notification/loading.vue)
+@[code{75-96}](../../.vuepress/components/notification/loading.vue)
 
 </template>
 
@@ -692,19 +692,19 @@ If you need the notification to have an automatic size to your content you can d
 
 <template #template>
 
-@[code{1-14}](../.vuepress/components/notification/all-width.vue)
+@[code{1-14}](../../.vuepress/components/notification/all-width.vue)
 
 </template>
 
 <template #script>
 
-@[code{16-29} vue{4,6}](../.vuepress/components/notification/all-width.vue)
+@[code{16-29} vue{4,6}](../../.vuepress/components/notification/all-width.vue)
 
 </template>
 
 <template #style>
 
-@[code{30-41}](../.vuepress/components/notification/all-width.vue)
+@[code{30-41}](../../.vuepress/components/notification/all-width.vue)
 
 </template>
 
@@ -722,19 +722,19 @@ You can add a style to the paste component to the nearest corner with the `stick
 
 <template #template>
 
-@[code{1-58}](../.vuepress/components/notification/sticky.vue)
+@[code{1-58}](../../.vuepress/components/notification/sticky.vue)
 
 </template>
 
 <template #script>
 
-@[code{60-74} vue{6}](../.vuepress/components/notification/sticky.vue)
+@[code{60-74} vue{6}](../../.vuepress/components/notification/sticky.vue)
 
 </template>
 
 <template #style>
 
-@[code{76-97}](../.vuepress/components/notification/sticky.vue)
+@[code{76-97}](../../.vuepress/components/notification/sticky.vue)
 
 </template>
 
@@ -752,13 +752,13 @@ You can do great things with this component and some others from vuesax, to add 
 
 <template #template>
 
-@[code{1-13}](../.vuepress/components/notification/example.vue)
+@[code{1-13}](../../.vuepress/components/notification/example.vue)
 
 </template>
 
 <template #script>
 
-@[code{15-44}](../.vuepress/components/notification/example.vue)
+@[code{15-44}](../../.vuepress/components/notification/example.vue)
 
 </template>
 

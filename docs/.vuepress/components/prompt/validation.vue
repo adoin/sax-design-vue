@@ -1,9 +1,9 @@
 <template>
   <div class="prompt-demo">
-    <vs-button type="border" @click="active = true"
-      >Run validation prompt</vs-button
+    <s-button type="border" @click="active = true"
+      >Run validation prompt</s-button
     >
-    <vs-prompt
+    <s-prompt
       v-model="active"
       color="danger"
       title="Dialog"
@@ -14,13 +14,13 @@
     >
       <div class="con-exemple-prompt">
         Enter your first and last name to <b>continue</b>.
-        <vs-input v-model="firstName" placeholder="Name" />
-        <vs-input v-model="lastName" placeholder="Last Name" />
-        <vs-alert :active="!validName" color="danger" icon="new_releases">
+        <s-input v-model="firstName" placeholder="Name" />
+        <s-input v-model="lastName" placeholder="Last Name" />
+        <s-alert :active="!validName" color="danger" icon="new_releases">
           Fields can not be empty please enter the data
-        </vs-alert>
+        </s-alert>
       </div>
-    </vs-prompt>
+    </s-prompt>
   </div>
 </template>
 

@@ -1,14 +1,14 @@
 <template>
   <div class="center">
-    <vs-button type="flat" @click="openLoading"> Open Loading </vs-button>
+    <s-button type="flat" @click="openLoading"> Open Loading </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { VsLoadingFn } from 'vuesax-alpha'
+import { SLoadingFn } from 'sax-design-vue'
 
 const openLoading = () => {
-  const loadingInstance = VsLoadingFn()
+  const loadingInstance = SLoadingFn()
   setTimeout(() => {
     loadingInstance.close()
   }, 3000)

@@ -11,7 +11,7 @@ import { collapseEmits, collapseProps } from './collapse'
 import { collapseContextKey } from './constants'
 
 defineOptions({
-  name: 'VsCollapse',
+  name: 'SCollapse',
 })
 
 const props = defineProps(collapseProps)

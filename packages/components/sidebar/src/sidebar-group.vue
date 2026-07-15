@@ -18,7 +18,7 @@ import { useNamespace } from '@vuesax-alpha/hooks'
 import { sidebarGroupProps } from './sidebar-group'
 
 defineOptions({
-  name: 'VsSidebarGroup',
+  name: 'SSidebarGroup',
 })
 
 const props = defineProps(sidebarGroupProps)

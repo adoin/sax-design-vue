@@ -1,7 +1,7 @@
 import { withInstall } from '@vuesax-alpha/utils'
 import Input from './src/input.vue'
 
-export const VsInput = withInstall(Input)
-export default VsInput
+export const SInput = withInstall(Input)
+export default SInput
 
 export * from './src/input'

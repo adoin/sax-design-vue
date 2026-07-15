@@ -1,7 +1,7 @@
 import { withInstall } from '@vuesax-alpha/utils'
 import Badge from './src/badge.vue'
 
-export const VsBadge = withInstall(Badge)
-export default VsBadge
+export const SBadge = withInstall(Badge)
+export default SBadge
 
 export * from './src/badge'

@@ -21,7 +21,7 @@ const demos: DemoSpec[] = [
     vueContent: `<template>
   <div class="center">
     <span>Left</span>
-    <vs-spacer />
+    <s-spacer />
     <span>Right</span>
   </div>
 </template>
@@ -43,8 +43,8 @@ const demos: DemoSpec[] = [
     title: 'Divider',
     vueContent: `<template>
   <div class="center">
-    <vs-divider>Default</vs-divider>
-    <vs-divider color="primary">Primary</vs-divider>
+    <s-divider>Default</s-divider>
+    <s-divider color="primary">Primary</s-divider>
   </div>
 </template>
 
@@ -61,8 +61,8 @@ const demos: DemoSpec[] = [
     title: 'Progress',
     vueContent: `<template>
   <div class="center">
-    <vs-progress :percent="60" color="primary" />
-    <vs-progress indeterminate color="success" />
+    <s-progress :percent="60" color="primary" />
+    <s-progress indeterminate color="success" />
   </div>
 </template>
 
@@ -82,9 +82,9 @@ const demos: DemoSpec[] = [
     title: 'Chip',
     vueContent: `<template>
   <div class="center">
-    <vs-chip>Default</vs-chip>
-    <vs-chip color="primary">Primary</vs-chip>
-    <vs-chip color="success" transparent>Transparent</vs-chip>
+    <s-chip>Default</s-chip>
+    <s-chip color="primary">Primary</s-chip>
+    <s-chip color="success" transparent>Transparent</s-chip>
   </div>
 </template>
 
@@ -101,7 +101,7 @@ const demos: DemoSpec[] = [
     name: 'breadcrumb',
     title: 'Breadcrumb',
     vueContent: `<template>
-  <vs-breadcrumb :items="items" color="primary" />
+  <s-breadcrumb :items="items" color="primary" />
 </template>
 
 <script setup lang="ts">
@@ -117,7 +117,7 @@ const items = [
     name: 'textarea',
     title: 'Textarea',
     vueContent: `<template>
-  <vs-textarea v-model="text" label="Notes" :counter="100" />
+  <s-textarea v-model="text" label="Notes" :counter="100" />
 </template>
 
 <script setup lang="ts">
@@ -130,16 +130,16 @@ const text = ref('Hello textarea')
     name: 'collapse',
     title: 'Collapse',
     vueContent: `<template>
-  <vs-collapse accordion>
-    <vs-collapse-item open>
+  <s-collapse accordion>
+    <s-collapse-item open>
       <template #header>One</template>
       First panel
-    </vs-collapse-item>
-    <vs-collapse-item>
+    </s-collapse-item>
+    <s-collapse-item>
       <template #header>Two</template>
       Second panel
-    </vs-collapse-item>
-  </vs-collapse>
+    </s-collapse-item>
+  </s-collapse>
 </template>
 `,
   },
@@ -147,10 +147,10 @@ const text = ref('Hello textarea')
     name: 'list',
     title: 'List',
     vueContent: `<template>
-  <vs-list>
-    <vs-list-item title="Inbox" subtitle="12 messages" icon="mail" />
-    <vs-list-item title="Drafts" subtitle="3 items" icon="drafts" />
-  </vs-list>
+  <s-list>
+    <s-list-item title="Inbox" subtitle="12 messages" icon="mail" />
+    <s-list-item title="Drafts" subtitle="3 items" icon="drafts" />
+  </s-list>
 </template>
 `,
   },
@@ -158,11 +158,11 @@ const text = ref('Hello textarea')
     name: 'images',
     title: 'Images',
     vueContent: `<template>
-  <vs-images hover="zoom">
-    <vs-image src="https://picsum.photos/seed/a/300/300" />
-    <vs-image src="https://picsum.photos/seed/b/300/300" />
-    <vs-image src="https://picsum.photos/seed/c/300/300" />
-  </vs-images>
+  <s-images hover="zoom">
+    <s-image src="https://picsum.photos/seed/a/300/300" />
+    <s-image src="https://picsum.photos/seed/b/300/300" />
+    <s-image src="https://picsum.photos/seed/c/300/300" />
+  </s-images>
 </template>
 `,
   },
@@ -171,8 +171,8 @@ const text = ref('Hello textarea')
     title: 'Prompt',
     vueContent: `<template>
   <div>
-    <vs-button @click="open = true">Open</vs-button>
-    <vs-prompt
+    <s-button @click="open = true">Open</s-button>
+    <s-prompt
       v-model="open"
       title="Confirm"
       text="Continue?"
@@ -191,10 +191,10 @@ const open = ref(false)
     name: 'tabs',
     title: 'Tabs',
     vueContent: `<template>
-  <vs-tabs v-model="active" color="primary">
-    <vs-tab label="One">Tab one</vs-tab>
-    <vs-tab label="Two">Tab two</vs-tab>
-  </vs-tabs>
+  <s-tabs v-model="active" color="primary">
+    <s-tab label="One">Tab one</s-tab>
+    <s-tab label="Two">Tab two</s-tab>
+  </s-tabs>
 </template>
 
 <script setup lang="ts">
@@ -207,7 +207,7 @@ const active = ref('One')
     name: 'slider',
     title: 'Slider',
     vueContent: `<template>
-  <vs-slider v-model="value" :min="0" :max="100" color="primary" />
+  <s-slider v-model="value" :min="0" :max="100" color="primary" />
 </template>
 
 <script setup lang="ts">
@@ -220,7 +220,7 @@ const value = ref(40)
     name: 'upload',
     title: 'Upload',
     vueContent: `<template>
-  <vs-upload text="Upload files" :show-upload-button="false" />
+  <s-upload text="Upload files" :show-upload-button="false" />
 </template>
 `,
   },

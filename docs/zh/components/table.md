@@ -16,7 +16,7 @@ PROPS:
     link: null
     usage: '#striped'
     code: null
-  - name: vs-tr:data
+  - name: s-tr:data
     type: Object
     values: Object
     description: when the functionality of selected is needed this property is needed since it is the object that is passed to the v-model.
@@ -24,7 +24,7 @@ PROPS:
     link: null
     usage: '#single-selected'
     code: null
-  - name: vs-tr:is-selected
+  - name: s-tr:is-selected
     type: Boolean
     values: true, false
     description: Determines if the component is in the selected state, for optimize perf
@@ -32,7 +32,7 @@ PROPS:
     link: null
     usage: '#single-selected'
     code: null
-  - name: vs-td:edit
+  - name: s-td:edit
     type: Boolean
     values: true, false
     description: Determine if the element is editable by adding underline and the pointer cursor.
@@ -40,7 +40,7 @@ PROPS:
     link: null
     usage: '#edit-data'
     code: null
-  - name: vs-th:sort
+  - name: s-th:sort
     type: Boolean
     values: true, false
     description: Add the sort arrows to the corresponding th.
@@ -48,7 +48,7 @@ PROPS:
     link: null
     usage: '#sort'
     code: null
-  - name: vs-tr:color
+  - name: s-tr:color
     type: String, Vuesax colors
     values: color, vuesax colors
     description: Change the color of the tr.
@@ -72,37 +72,37 @@ SLOTS:
   - name: thead
     type: slot
     values: null
-    description: Space representing thead element of the table where the `vs-th` components will be placed.
+    description: Space representing thead element of the table where the `s-th` components will be placed.
     default: null
     link: null
     usage: '#default'
     code: >
       <template #thead>
-        <vs-tr>
-          <vs-th> Name </vs-th>
-          <vs-th> Email </vs-th>
-          <vs-th> Id </vs-th>
-        </vs-tr>
+        <s-tr>
+          <s-th> Name </s-th>
+          <s-th> Email </s-th>
+          <s-th> Id </s-th>
+        </s-tr>
       </template>
   - name: tbody
     type: slot
     values: null
-    description: Represents the tbody element in the table and here we will put the `vs-tr` components.
+    description: Represents the tbody element in the table and here we will put the `s-tr` components.
     default: null
     link: null
     usage: '#default'
     code: >
       <template #tbody>
-        <vs-tr
+        <s-tr
           v-for="tr in users"
           :data="tr"
         >
-          <vs-td> {{ tr.name }} </vs-td>
-          <vs-td> {{ tr.email }} </vs-td>
-          <vs-td> {{ tr.id }} </vs-td>
-        </vs-tr>
+          <s-td> {{ tr.name }} </s-td>
+          <s-td> {{ tr.email }} </s-td>
+          <s-td> {{ tr.id }} </s-td>
+        </s-tr>
       </template>
-  - name: vs-tr:#expand
+  - name: s-tr:#expand
     type: slot
     values: null
     description: Represents the interior of the tr when it is expanded.
@@ -129,7 +129,7 @@ SLOTS:
 
 <docs-warn />
 
-Create a table simply with the `vs-table` component and its`vs-tr`, `vs-td`,`vs-th` components.
+Create a table simply with the `s-table` component and its`s-tr`, `s-td`,`s-th` components.
 
 This component has a different logic for better data management and freer customization according to needs.
 
@@ -139,13 +139,13 @@ This component has a different logic for better data management and freer custom
 
 <template #template>
 
-@[code{1-26} html{3}](../.vuepress/components/table/default.vue)
+@[code{1-26} html{3}](../../.vuepress/components/table/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{28-109}](../.vuepress/components/table/default.vue)
+@[code{28-109}](../../.vuepress/components/table/default.vue)
 
 </template>
 
@@ -163,13 +163,13 @@ You can easily strip the table with the `striped` property
 
 <template #template>
 
-@[code{1-26} html{1}](../.vuepress/components/table/striped.vue)
+@[code{1-26} html{1}](../../.vuepress/components/table/striped.vue)
 
 </template>
 
 <template #script>
 
-@[code{28-109}](../.vuepress/components/table/default.vue)
+@[code{28-109}](../../.vuepress/components/table/default.vue)
 
 </template>
 
@@ -179,7 +179,7 @@ You can easily strip the table with the `striped` property
 
 ## 颜色
 
-Change the color of a tr by adding the color property to the component `vs-tr`
+Change the color of a tr by adding the color property to the component `s-tr`
 
 <template #example>
 <table-color />
@@ -187,13 +187,13 @@ Change the color of a tr by adding the color property to the component `vs-tr`
 
 <template #template>
 
-@[code{1-26} vue{14-17}](../.vuepress/components/table/color.vue)
+@[code{1-26} vue{14-17}](../../.vuepress/components/table/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{28-125}](../.vuepress/components/table/color.vue)
+@[code{28-125}](../../.vuepress/components/table/color.vue)
 
 </template>
 
@@ -203,7 +203,7 @@ Change the color of a tr by adding the color property to the component `vs-tr`
 
 ## 分页
 
-You can add the pagination functionality for the table using the `#footer` slot and the vs-pagination component
+You can add the pagination functionality for the table using the `#footer` slot and the s-pagination component
 
 To make the development easier you can use the vuesax function that generates the items (`getPage`) based on the page and also the one that generates the total number of pages in the pagination component (`getLength`)
 
@@ -217,13 +217,13 @@ See the example
 
 <template #template>
 
-@[code{1-38} vue{12,25}](../.vuepress/components/table/pagination.vue)
+@[code{1-38} vue{12,25}](../../.vuepress/components/table/pagination.vue)
 
 </template>
 
 <template #script>
 
-@[code{40-126}](../.vuepress/components/table/pagination.vue)
+@[code{40-126}](../../.vuepress/components/table/pagination.vue)
 
 </template>
 
@@ -245,13 +245,13 @@ Using the `data` property in the `tr` is important as that is the data to be add
 
 <template #template>
 
-@[code{1-32} vue{3,15}](../.vuepress/components/table/selected.vue)
+@[code{1-32} vue{3,15}](../../.vuepress/components/table/selected.vue)
 
 </template>
 
 <template #script>
 
-@[code{34-119}](../.vuepress/components/table/selected.vue)
+@[code{34-119}](../../.vuepress/components/table/selected.vue)
 
 </template>
 
@@ -271,13 +271,13 @@ for this functionality you can use for example the vuesax checkboxes and the fun
 
 <template #template>
 
-@[code{1-50} vue{3}](../.vuepress/components/table/multiple.vue)
+@[code{1-50} vue{3}](../../.vuepress/components/table/multiple.vue)
 
 </template>
 
 <template #script>
 
-@[code{52-144}](../.vuepress/components/table/multiple.vue)
+@[code{52-144}](../../.vuepress/components/table/multiple.vue)
 
 </template>
 
@@ -287,7 +287,7 @@ for this functionality you can use for example the vuesax checkboxes and the fun
 
 ## Expandable data
 
-To add a `tr` that can display expanded data use the`#expand` slot inside the `vs-tr` component.
+To add a `tr` that can display expanded data use the`#expand` slot inside the `s-tr` component.
 
 <template #example>
 <table-expand />
@@ -295,13 +295,13 @@ To add a `tr` that can display expanded data use the`#expand` slot inside the `v
 
 <template #template>
 
-@[code{1-48} vue{23-43}](../.vuepress/components/table/expand.vue)
+@[code{1-48} vue{23-43}](../../.vuepress/components/table/expand.vue)
 
 </template>
 
 <template #script>
 
-@[code{50-131}](../.vuepress/components/table/expand.vue)
+@[code{50-131}](../../.vuepress/components/table/expand.vue)
 
 </template>
 
@@ -311,7 +311,7 @@ To add a `tr` that can display expanded data use the`#expand` slot inside the `v
 
 ## Edit data
 
-You can edit the data inside the table easily using the `vs-dialog` component and the magic of vuejs
+You can edit the data inside the table easily using the `s-dialog` component and the magic of vuejs
 
 <template #example>
 <table-edit />
@@ -319,13 +319,13 @@ You can edit the data inside the table easily using the `vs-dialog` component an
 
 <template #template>
 
-@[code{1-61} vue{15,21,32}](../.vuepress/components/table/edit.vue)
+@[code{1-61} vue{15,21,32}](../../.vuepress/components/table/edit.vue)
 
 </template>
 
 <template #script>
 
-@[code{63-150} vue{23-41}](../.vuepress/components/table/edit.vue)
+@[code{63-150} vue{23-41}](../../.vuepress/components/table/edit.vue)
 
 </template>
 
@@ -363,13 +363,13 @@ declare function sortData<T extends Record<string, unknown>>(
 
 <template #template>
 
-@[code{1-32} vue{6,9,12}](../.vuepress/components/table/sort.vue)
+@[code{1-32} vue{6,9,12}](../../.vuepress/components/table/sort.vue)
 
 </template>
 
 <template #script>
 
-@[code{34-118}](../.vuepress/components/table/sort.vue)
+@[code{34-118}](../../.vuepress/components/table/sort.vue)
 
 </template>
 
@@ -387,19 +387,19 @@ This is a sample of everything united and its functionality together
 
 <template #template>
 
-@[code{1-121}](../.vuepress/components/table/miscellaneous.vue)
+@[code{1-121}](../../.vuepress/components/table/miscellaneous.vue)
 
 </template>
 
 <template #script>
 
-@[code{123-221}](../.vuepress/components/table/miscellaneous.vue)
+@[code{123-221}](../../.vuepress/components/table/miscellaneous.vue)
 
 </template>
 
 <template #style>
 
-@[code{223-238}](../.vuepress/components/table/miscellaneous.vue)
+@[code{223-238}](../../.vuepress/components/table/miscellaneous.vue)
 
 </template>
 

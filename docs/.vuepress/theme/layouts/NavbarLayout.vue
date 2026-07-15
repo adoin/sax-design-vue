@@ -1,6 +1,6 @@
 <template>
   <div id="con-example" class="con-example">
-    <vs-navbar
+    <s-navbar
       v-model="active"
       :fixed="fixed"
       :shadow="shadow"
@@ -14,9 +14,9 @@
       @collapsed="handleCollapsed"
     >
       <template #left>
-        <vs-button v-if="collapsed" class="btn-menu" flat icon>
+        <s-button v-if="collapsed" class="btn-menu" flat icon>
           <i class="bx bx-menu-alt-left" />
-        </vs-button>
+        </s-button>
         <img
           v-if="!textWhite"
           src="/logos/logo-vuesax-logotipo-vuesax-png-3.png"
@@ -24,66 +24,64 @@
         />
         <img v-else src="/logos/logo-vuesax-logotipo-vuesax-png-4.png" alt="" />
       </template>
-      <vs-navbar-group v-if="!collapsed">
+      <s-navbar-group v-if="!collapsed">
         list
         <template #items>
-          <vs-navbar-item id="guide2" :active="active == 'guide2'">
+          <s-navbar-item id="guide2" :active="active == 'guide2'">
             nuevo 1
-          </vs-navbar-item>
-          <vs-navbar-item id="docs2" :active="active == 'docs2'">
+          </s-navbar-item>
+          <s-navbar-item id="docs2" :active="active == 'docs2'">
             nuevo 2
-          </vs-navbar-item>
+          </s-navbar-item>
         </template>
-      </vs-navbar-group>
-      <vs-navbar-item v-if="!collapsed" id="guide" :active="active == 'guide'">
+      </s-navbar-group>
+      <s-navbar-item v-if="!collapsed" id="guide" :active="active == 'guide'">
         Guide
-      </vs-navbar-item>
-      <vs-navbar-item v-if="!collapsed" id="docs" :active="active == 'docs'">
+      </s-navbar-item>
+      <s-navbar-item v-if="!collapsed" id="docs" :active="active == 'docs'">
         Documents
-      </vs-navbar-item>
-      <vs-navbar-item
+      </s-navbar-item>
+      <s-navbar-item
         v-if="!collapsed"
         id="components"
         :active="active == 'components'"
       >
         Components
-      </vs-navbar-item>
-      <vs-navbar-item
+      </s-navbar-item>
+      <s-navbar-item
         v-if="!collapsed"
         id="license"
         :active="active == 'license'"
       >
         license
-      </vs-navbar-item>
+      </s-navbar-item>
       <template #right>
-        <vs-button flat :color="textWhite ? '#fff' : 'primary'"
-          >Login</vs-button
+        <s-button flat :color="textWhite ? '#fff' : 'primary'">Login</s-button>
+        <s-button :shadow="textWhite" :color="textWhite ? '#fff' : 'primary'"
+          >Get Started</s-button
         >
-        <vs-button :shadow="textWhite" :color="textWhite ? '#fff' : 'primary'"
-          >Get Started</vs-button
-        >
-        <!-- <vs-input square transparent color="#fff" :text-white="textWhite" placeholder="Search"></vs-input> -->
+        <!-- <s-input square transparent color="#fff" :text-white="textWhite" placeholder="Search"></s-input> -->
       </template>
-    </vs-navbar>
+    </s-navbar>
 
     <div class="content-1 contentx">
       <div class="con-colors">
-        <vs-radio v-model="color" val="#fff"> Default </vs-radio>
-        <vs-radio v-model="color" val="primary"> Primary </vs-radio>
-        <vs-radio v-model="color" success val="success"> success </vs-radio>
-        <vs-radio v-model="color" danger val="danger"> danger </vs-radio>
-        <vs-radio v-model="color" warn val="warn"> warn </vs-radio>
-        <vs-radio v-model="color" dark val="dark"> dark </vs-radio>
+        <s-radio v-model="color" val="#fff"> Default </s-radio>
+        <s-radio v-model="color" val="primary"> Primary </s-radio>
+        <s-radio v-model="color" success val="success"> success </s-radio>
+        <s-radio v-model="color" danger val="danger"> danger </s-radio>
+        <s-radio v-model="color" warn val="warn"> warn </s-radio>
+        <s-radio v-model="color" dark val="dark"> dark </s-radio>
       </div>
       <div class="con-opts">
-        <vs-switch v-model="paddingScroll"> Padding-scroll </vs-switch>
-        <vs-switch v-model="shadow"> shadow </vs-switch>
-        <vs-switch v-model="textWhite"> text-white </vs-switch>
-        <vs-switch v-model="fixed"> fixed </vs-switch>
-        <vs-switch v-model="shadowScroll"> shadow-scroll </vs-switch>
-        <vs-switch v-model="hideScroll"> hide-scroll </vs-switch>
-        <vs-switch v-model="notLine"> not-line </vs-switch>
-        <vs-switch v-model="square"> square </vs-switch>
+        <s-switch v-model="paddingScroll"> Padding-scroll </s-switch>
+        <s-switch v-model="shadow"> shadow </s-switch>
+        <s-switch v-model="textWhite"> text-white </s-switch>
+        <s-switch v-model="fixed"> fixed </s-switch>
+        <s-switch v-model="shadowScroll"> shadow-scroll </s-switch>
+        <s-switch v-model="hideScroll"> hide-scroll </s-switch>
+        <s-switch v-model="notLine"> not-line </s-switch>
+        <s-switch v-model="square"> square </s-switch>
       </div>
     </div>
     <div class="content-2 contentx"><h2>2</h2></div>

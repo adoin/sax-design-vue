@@ -126,12 +126,12 @@ Generate a loading with the vuesax function
 <Command>
 
 ```ts
-import { VsLoading, VsLoadingFn } from 'vuesax-alpha'
+import { SLoading, SLoadingFn } from 'sax-design-vue'
 
-VsLoadingFn(options)
+SLoadingFn(options)
 
 // Or use via service
-VsLoading.service(options)
+SLoading.service(options)
 ```
 
 </Command>
@@ -142,13 +142,13 @@ VsLoading.service(options)
 
 <template #template>
 
-@[code{1-5} html{3}](../.vuepress/components/loading/default.vue)
+@[code{1-5} html{3}](../../.vuepress/components/loading/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-16} html{5,7}](../.vuepress/components/loading/default.vue)
+@[code{7-16} html{5,7}](../../.vuepress/components/loading/default.vue)
 
 </template>
 
@@ -186,13 +186,13 @@ Click on the example loading to open it in the whole page
 
 <template #template>
 
-@[code{1-11} html](../.vuepress/components/loading/type.vue)
+@[code{1-11} html](../../.vuepress/components/loading/type.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-64} html{36-38}](../.vuepress/components/loading/type.vue)
+@[code{13-64} html{36-38}](../../.vuepress/components/loading/type.vue)
 
 </template>
 
@@ -210,13 +210,13 @@ Change the color of the loading animation with the property `color`, the colors 
 
 <template #template>
 
-@[code{1-17} html](../.vuepress/components/loading/color.vue)
+@[code{1-17} html](../../.vuepress/components/loading/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{19-87} html](../.vuepress/components/loading/color.vue)
+@[code{19-87} html](../../.vuepress/components/loading/color.vue)
 
 </template>
 
@@ -234,13 +234,13 @@ You can change the loading background with the property `loading`
 
 <template #template>
 
-@[code{1-11} html](../.vuepress/components/loading/background.vue)
+@[code{1-11} html](../../.vuepress/components/loading/background.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-29} html](../.vuepress/components/loading/background.vue)
+@[code{13-29} html](../../.vuepress/components/loading/background.vue)
 
 </template>
 
@@ -258,13 +258,13 @@ Add a descriptive text of the loading or informing the user that it is loading o
 
 <template #template>
 
-@[code{1-7} html](../.vuepress/components/loading/text.vue)
+@[code{1-7} html](../../.vuepress/components/loading/text.vue)
 
 </template>
 
 <template #script>
 
-@[code{9-21} html](../.vuepress/components/loading/text.vue)
+@[code{9-21} html](../../.vuepress/components/loading/text.vue)
 
 </template>
 
@@ -282,13 +282,13 @@ You can add a string of the percentage of load with the `percent` property, if y
 
 <template #template>
 
-@[code{1-7} html](../.vuepress/components/loading/percent.vue)
+@[code{1-7} html](../../.vuepress/components/loading/percent.vue)
 
 </template>
 
 <template #script>
 
-@[code{9-33} html](../.vuepress/components/loading/percent.vue)
+@[code{9-33} html](../../.vuepress/components/loading/percent.vue)
 
 </template>
 
@@ -306,13 +306,13 @@ Add a progress bar at the top to indicate the loading progress of the loading wi
 
 <template #template>
 
-@[code{1-7} html](../.vuepress/components/loading/progress.vue)
+@[code{1-7} html](../../.vuepress/components/loading/progress.vue)
 
 </template>
 
 <template #script>
 
-@[code{9-33} html](../.vuepress/components/loading/progress.vue)
+@[code{9-33} html](../../.vuepress/components/loading/progress.vue)
 
 </template>
 
@@ -334,13 +334,13 @@ Ensure the target's style was set position
 
 <template #template>
 
-@[code{1-17} html](../.vuepress/components/loading/target.vue)
+@[code{1-17} html](../../.vuepress/components/loading/target.vue)
 
 </template>
 
 <template #script>
 
-@[code{19-49} html](../.vuepress/components/loading/target.vue)
+@[code{19-49} html](../../.vuepress/components/loading/target.vue)
 
 </template>
 

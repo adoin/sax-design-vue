@@ -1,7 +1,7 @@
 <template>
   <div class="play-container play-index">
     <header class="play-index__header">
-      <h1>Vuesax Alpha Playground</h1>
+      <h1>Sax Design Vue Playground</h1>
       <p>选择组件 demo 进行本地验证</p>
     </header>
 

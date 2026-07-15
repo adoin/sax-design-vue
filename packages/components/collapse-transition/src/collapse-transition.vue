@@ -8,7 +8,7 @@ import { useNamespace } from '@vuesax-alpha/hooks'
 import type { RendererElement } from '@vue/runtime-core'
 
 defineOptions({
-  name: 'VsCollapseTransition',
+  name: 'SCollapseTransition',
 })
 
 const ns = useNamespace('collapse-transition')

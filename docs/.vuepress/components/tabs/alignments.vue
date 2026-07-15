@@ -1,8 +1,8 @@
 <template>
-  <vs-tabs v-model="active" alignment="center">
-    <vs-tab label="A">A</vs-tab>
-    <vs-tab label="B">B</vs-tab>
-  </vs-tabs>
+  <s-tabs v-model="active" alignment="center">
+    <s-tab label="A">A</s-tab>
+    <s-tab label="B">B</s-tab>
+  </s-tabs>
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <vs-popper
+  <s-popper
     ref="popperRef"
     v-model:visible="dropMenuVisible"
     trigger="click"
@@ -39,7 +39,7 @@
       @click="toggleMenu"
     >
       <div v-if="multiple" ref="chips" :class="[ns.e('chips')]">
-        <vs-chip
+        <s-chip
           v-for="(item, cIndex) in showTagList"
           :key="cIndex + 'chip'"
           :shape="shape"
@@ -48,16 +48,16 @@
           @close="deleteTag(item.value)"
         >
           {{ item.currentLabel }}
-        </vs-chip>
+        </s-chip>
 
-        <vs-chip
+        <s-chip
           v-if="collapseChips && selectedArray.length > maxCollapseChips"
           :show-close="false"
           :shape="shape"
           :hit="collapseTagList.some((item) => item.hit)"
         >
           + {{ selectedArray.length - maxCollapseChips }}
-        </vs-chip>
+        </s-chip>
 
         <input
           v-if="filter && !selectDisabled"
@@ -136,7 +136,7 @@
 
       <icon-loading v-if="loading" class="vs-select__loading" />
 
-      <vs-icon :class="ns.e('arrow')" size="14"><chevron-down /></vs-icon>
+      <s-icon :class="ns.e('arrow')" size="14"><chevron-down /></s-icon>
 
       <transition name="v-clearable">
         <span
@@ -148,7 +148,7 @@
         </span>
       </transition>
 
-      <vs-collapse-transition
+      <s-collapse-transition
         v-for="(messageType, index) in messageTypes"
         :key="index"
       >
@@ -158,11 +158,11 @@
         >
           <slot :name="`message-${messageType}`" />
         </div>
-      </vs-collapse-transition>
+      </s-collapse-transition>
     </div>
 
     <template #content>
-      <vs-scrollbar
+      <s-scrollbar
         v-show="states.options.size > 0 && !loading"
         max-height="200"
         thickness="3"
@@ -176,9 +176,9 @@
         :native="nativeScrollbar"
         @mouseleave="hoverIndex = -1"
       >
-        <vs-option v-if="showNewOption" :value="query" :created="true" />
+        <s-option v-if="showNewOption" :value="query" :created="true" />
         <slot />
-      </vs-scrollbar>
+      </s-scrollbar>
 
       <template
         v-if="
@@ -194,7 +194,7 @@
         </p>
       </template>
     </template>
-  </vs-popper>
+  </s-popper>
 </template>
 
 <script lang="ts" setup>
@@ -203,10 +203,10 @@ import { toRefs, unrefElement, useResizeObserver } from '@vueuse/core'
 import { isEqual } from 'lodash-unified'
 import { ClickOutside as vClickOutside } from '@vuesax-alpha/directives'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import VsIcon, { IconClose, IconLoading } from '@vuesax-alpha/components/icon'
-import VsCollapseTransition from '@vuesax-alpha/components/collapse-transition'
-import VsScrollbar from '@vuesax-alpha/components/scrollbar'
-import VsPopper from '@vuesax-alpha/components/popper'
+import SIcon, { IconClose, IconLoading } from '@vuesax-alpha/components/icon'
+import SCollapseTransition from '@vuesax-alpha/components/collapse-transition'
+import SScrollbar from '@vuesax-alpha/components/scrollbar'
+import SPopper from '@vuesax-alpha/components/popper'
 import { ChevronDown } from '@vuesax-alpha/icons-vue'
 import {
   useColor,
@@ -214,15 +214,15 @@ import {
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { getVsColor } from '@vuesax-alpha/utils'
-import VsOption from './option.vue'
-import VsChip from './chip.vue'
+import SOption from './option.vue'
+import SChip from './chip.vue'
 import { selectContextKey, selectRegisterKey } from './tokens'
 import { selectEmits, selectProps } from './select'
 import { useSelect, useSelectStates } from './useSelect'
 import type { SelectOptionContext } from './tokens'
 
 defineOptions({
-  name: 'VsSelect',
+  name: 'SSelect',
   inheritAttrs: false,
 })
 

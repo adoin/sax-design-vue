@@ -1,7 +1,7 @@
 <template>
   <div class="center">
-    <vs-radio v-model="picked" value="1"> Label </vs-radio>
-    <vs-radio v-model="picked" label-before value="2"> label Before </vs-radio>
+    <s-radio v-model="picked" value="1"> Label </s-radio>
+    <s-radio v-model="picked" label-before value="2"> label Before </s-radio>
   </div>
 </template>
 

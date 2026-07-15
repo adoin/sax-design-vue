@@ -17,7 +17,7 @@
           @click="setActiveIndex(index)"
         >
           <button :class="ns.e('btn')" type="button" :disabled="pane.disabled">
-            <VsIcon v-if="pane.icon" :icon="pane.icon" />
+            <SIcon v-if="pane.icon" :icon="pane.icon" />
             <span>{{ pane.label }}</span>
           </button>
         </li>
@@ -33,7 +33,7 @@
 <script lang="ts" setup>
 import { computed, nextTick, onMounted, provide, ref, watch } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { tabsContextKey } from './constants'
 import { tabsEmits, tabsProps } from './tabs'
@@ -41,7 +41,7 @@ import type { TabPaneContext } from './constants'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
-  name: 'VsTabs',
+  name: 'STabs',
 })
 
 const props = defineProps(tabsProps)

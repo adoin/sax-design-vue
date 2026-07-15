@@ -33,12 +33,12 @@ PROPS:
     usage: '#loading'
     code: >
       <template>
-        <vs-checkbox loading v-model="option">
+        <s-checkbox loading v-model="option">
           Loading checked
-        </vs-checkbox>
-        <vs-checkbox loading v-model="option2">
+        </s-checkbox>
+        <s-checkbox loading v-model="option2">
           Loading unchecked
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: line-through
@@ -50,9 +50,9 @@ PROPS:
     usage: '#linethrough'
     code: >
       <template>
-        <vs-checkbox line-through v-model="option">
+        <s-checkbox line-through v-model="option">
           Option
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: indeterminate
@@ -64,9 +64,9 @@ PROPS:
     usage: '#Indeterminate'
     code: >
       <template>
-        <vs-checkbox indeterminate v-model="option">
+        <s-checkbox indeterminate v-model="option">
           Option
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: label-before
@@ -78,9 +78,9 @@ PROPS:
     usage: '#label'
     code: >
       <template>
-        <vs-checkbox label-before v-model="option2">
+        <s-checkbox label-before v-model="option2">
           Label Before
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: checked
@@ -92,9 +92,9 @@ PROPS:
     usage: null
     code: >
       <template>
-        <vs-checkbox label-before v-model="option2">
+        <s-checkbox label-before v-model="option2">
           Checked state
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: checked-force
@@ -106,9 +106,9 @@ PROPS:
     usage: null
     code: >
       <template>
-        <vs-checkbox checkbox-force v-model="value">
+        <s-checkbox checkbox-force v-model="value">
           Force checked state
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: Checkbox Group
@@ -128,9 +128,9 @@ PROPS:
     usage: null
     code: >
       <template>
-        <vs-checkbox v-model="value" id="framework">
+        <s-checkbox v-model="value" id="framework">
           Vuesax
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: name
@@ -142,9 +142,9 @@ PROPS:
     usage: null
     code: >
       <template>
-        <vs-checkbox v-model="value" name="checkbox-name">
+        <s-checkbox v-model="value" name="checkbox-name">
           Vuesax
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
 SLOTS:
@@ -157,41 +157,41 @@ SLOTS:
     usage: '#icon'
     code: >
       <template>
-        <vs-checkbox v-model="option1">
+        <s-checkbox v-model="option1">
           <template #icon>
             <i class='bx bx-check' />
           </template>
-        </vs-checkbox>
-        <vs-checkbox success v-model="option2">
+        </s-checkbox>
+        <s-checkbox success v-model="option2">
           <template #icon>
             <i class='bx bx-check-double' />
           </template>
-        </vs-checkbox>
-        <vs-checkbox danger v-model="option3">
+        </s-checkbox>
+        <s-checkbox danger v-model="option3">
           <template #icon>
             <i class='bx bx-x' />
           </template>
-        </vs-checkbox>
-        <vs-checkbox warn v-model="option4">
+        </s-checkbox>
+        <s-checkbox warn v-model="option4">
           <template #icon>
             <i class='bx bxs-shield' />
           </template>
-        </vs-checkbox>
-        <vs-checkbox dark v-model="option5">
+        </s-checkbox>
+        <s-checkbox dark v-model="option5">
           <template #icon>
             <i class='bx bxs-heart' />
           </template>
-        </vs-checkbox>
-        <vs-checkbox color="#7d33ff" v-model="option6">
+        </s-checkbox>
+        <s-checkbox color="#7d33ff" v-model="option6">
           <template #icon>
             <i class='bx bx-brightness' />
           </template>
-        </vs-checkbox>
-        <vs-checkbox color="rgb(59,222,200)" v-model="option7">
+        </s-checkbox>
+        <s-checkbox color="rgb(59,222,200)" v-model="option7">
           <template #icon>
             <i class='bx bxs-paint' />
           </template>
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: default
@@ -203,9 +203,9 @@ SLOTS:
     usage: '#default'
     code: >
       <template>
-        <vs-checkbox v-model="option">
+        <s-checkbox v-model="option">
           Option
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 ---
 
@@ -225,13 +225,13 @@ Add a checkbox type input easily and with a beautiful animation
 
 <template #template>
 
-@[code{1-5} vue{3}](../.vuepress/components/checkbox/default.vue)
+@[code{1-5} vue{3}](../../.vuepress/components/checkbox/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{6-10}](../.vuepress/components/checkbox/default.vue)
+@[code{6-10}](../../.vuepress/components/checkbox/default.vue)
 
 </template>
 
@@ -249,13 +249,13 @@ Change the color of the component with the `color` property, the allowed values 
 
 <template #template>
 
-@[code{1-11}](../.vuepress/components/checkbox/color.vue)
+@[code{1-11}](../../.vuepress/components/checkbox/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{12-22}](../.vuepress/components/checkbox/color.vue)
+@[code{12-22}](../../.vuepress/components/checkbox/color.vue)
 
 </template>
 
@@ -273,13 +273,13 @@ By default the component is used with a boolean value that when being checked re
 
 <template #template>
 
-@[code{1-10}](../.vuepress/components/checkbox/boolean.vue)
+@[code{1-10}](../../.vuepress/components/checkbox/boolean.vue)
 
 </template>
 
 <template #script>
 
-@[code{11-16}](../.vuepress/components/checkbox/boolean.vue)
+@[code{11-16}](../../.vuepress/components/checkbox/boolean.vue)
 
 </template>
 
@@ -297,13 +297,13 @@ You may need to return a string when the component is checked for it use the `va
 
 <template #template>
 
-@[code{1-11}](../.vuepress/components/checkbox/string.vue)
+@[code{1-11}](../../.vuepress/components/checkbox/string.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17}](../.vuepress/components/checkbox/string.vue)
+@[code{13-17}](../../.vuepress/components/checkbox/string.vue)
 
 </template>
 
@@ -323,13 +323,13 @@ checkbox-group element can manage multiple checkboxes in one group by using v-mo
 
 <template #template>
 
-@[code{1-15}](../.vuepress/components/checkbox/array.vue)
+@[code{1-15}](../../.vuepress/components/checkbox/array.vue)
 
 </template>
 
 <template #script>
 
-@[code{17-21}](../.vuepress/components/checkbox/array.vue)
+@[code{17-21}](../../.vuepress/components/checkbox/array.vue)
 
 </template>
 
@@ -343,13 +343,13 @@ checkbox-group element can manage multiple checkboxes in one group by using v-mo
 
 <template #template>
 
-@[code{1-34}](../.vuepress/components/checkbox/object.vue)
+@[code{1-34}](../../.vuepress/components/checkbox/object.vue)
 
 </template>
 
 <template #script>
 
-@[code{35-44}](../.vuepress/components/checkbox/object.vue)
+@[code{35-44}](../../.vuepress/components/checkbox/object.vue)
 
 </template>
 
@@ -369,13 +369,13 @@ Change the icon inside the checkbox component with the`slot="icon"`
 
 <template #template>
 
-@[code{1-39}](../.vuepress/components/checkbox/icon.vue)
+@[code{1-39}](../../.vuepress/components/checkbox/icon.vue)
 
 </template>
 
 <template #script>
 
-@[code{41-51}](../.vuepress/components/checkbox/icon.vue)
+@[code{41-51}](../../.vuepress/components/checkbox/icon.vue)
 
 </template>
 
@@ -393,13 +393,13 @@ Add a label to the checkbox with the default slot of the component
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/checkbox/label.vue)
+@[code{1-6}](../../.vuepress/components/checkbox/label.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-12}](../.vuepress/components/checkbox/label.vue)
+@[code{7-12}](../../.vuepress/components/checkbox/label.vue)
 
 </template>
 
@@ -417,13 +417,13 @@ Add a loading status to the component with the property `loading`
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/checkbox/loading.vue)
+@[code{1-6}](../../.vuepress/components/checkbox/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{8-13}](../.vuepress/components/checkbox/loading.vue)
+@[code{8-13}](../../.vuepress/components/checkbox/loading.vue)
 
 </template>
 
@@ -441,13 +441,13 @@ Add a line in the middle of the label when the checkbox is checked with the prop
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/checkbox/line-through.vue)
+@[code{1-5}](../../.vuepress/components/checkbox/line-through.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11}](../.vuepress/components/checkbox/line-through.vue)
+@[code{7-11}](../../.vuepress/components/checkbox/line-through.vue)
 
 </template>
 
@@ -465,13 +465,13 @@ There are some cases where you have several checkboxes and you need one that man
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/checkbox/indeterminate.vue)
+@[code{1-5}](../../.vuepress/components/checkbox/indeterminate.vue)
 
 </template>
 
 <template #script>
 
-@[code{6-10}](../.vuepress/components/checkbox/indeterminate.vue)
+@[code{6-10}](../../.vuepress/components/checkbox/indeterminate.vue)
 
 </template>
 

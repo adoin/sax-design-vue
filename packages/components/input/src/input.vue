@@ -98,21 +98,21 @@
       />
     </div>
 
-    <vs-collapse-transition v-for="message in messageType" :key="message">
+    <s-collapse-transition v-for="message in messageType" :key="message">
       <div
         v-if="$slots[`message-${message}`]"
         :class="[ns.e('message'), ns.em('message', message)]"
       >
         <slot :name="`message-${message}`" />
       </div>
-    </vs-collapse-transition>
+    </s-collapse-transition>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, useSlots } from 'vue'
 import { IconClose, IconLoading } from '@vuesax-alpha/components/icon'
-import { VsCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
+import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import {
   useColor,
   useDeprecated,
@@ -127,7 +127,7 @@ import { useInput } from './composables'
 
 defineOptions({
   inheritAttrs: false,
-  name: 'VsInput',
+  name: 'SInput',
 })
 
 const props = defineProps(inputProps)
@@ -138,7 +138,7 @@ useDeprecated(
   {
     from: 'border',
     type: 'Prop',
-    version: 'VuesaxAlpha',
+    version: 'SaxDesignVue',
     scope: 'vs-input',
     ref: 'https://vuesax-alpha.vercel.app/components/input#style',
     replacement: 'inputStyle',
@@ -150,7 +150,7 @@ useDeprecated(
   {
     from: 'shadow',
     type: 'Prop',
-    version: 'VuesaxAlpha',
+    version: 'SaxDesignVue',
     scope: 'vs-input',
     ref: 'https://vuesax-alpha.vercel.app/components/input#style',
     replacement: 'inputStyle',
@@ -162,7 +162,7 @@ useDeprecated(
   {
     from: 'transparent',
     type: 'Prop',
-    version: 'VuesaxAlpha',
+    version: 'SaxDesignVue',
     scope: 'vs-input',
     ref: 'https://vuesax-alpha.vercel.app/components/input#style',
     replacement: 'inputStyle',
@@ -174,7 +174,7 @@ useDeprecated(
   {
     from: 'labelPlaceholder',
     type: 'Prop',
-    version: 'VuesaxAlpha',
+    version: 'SaxDesignVue',
     scope: 'vs-input',
     ref: 'https://vuesax-alpha.vercel.app/components/input#label',
     replacement: 'labelFloat',
@@ -186,7 +186,7 @@ useDeprecated(
   {
     from: 'square',
     type: 'Prop',
-    version: 'VuesaxAlpha',
+    version: 'SaxDesignVue',
     scope: 'vs-input',
     ref: 'https://vuesax-alpha.vercel.app/components/input#shape',
     replacement: 'shape',

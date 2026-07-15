@@ -1,11 +1,11 @@
 <template>
   <div class="play-container demo">
-    <vs-progress :percent="percent" color="primary" />
-    <vs-progress :percent="percent" color="success" :height="8" />
-    <vs-progress indeterminate color="warn" :height="6" />
-    <vs-button @click="percent = percent >= 100 ? 0 : percent + 10">
+    <s-progress :percent="percent" color="primary" />
+    <s-progress :percent="percent" color="success" :height="8" />
+    <s-progress indeterminate color="warn" :height="6" />
+    <s-button @click="percent = percent >= 100 ? 0 : percent + 10">
       Update {{ percent }}%
-    </vs-button>
+    </s-button>
   </div>
 </template>
 

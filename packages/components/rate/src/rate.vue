@@ -19,7 +19,7 @@
       @mouseleave="resetCurrentValue"
       @click="selectValue(item)"
     >
-      <vs-icon
+      <s-icon
         :class="[
           ns.e('icon'),
           { hover: hoverIndex === item },
@@ -30,14 +30,14 @@
           <component :is="activeComponent" v-show="item <= currentValue" />
           <component :is="voidComponent" v-show="!(item <= currentValue)" />
         </template>
-        <vs-icon
+        <s-icon
           v-if="showDecimalIcon(item)"
           :style="decimalStyle"
           :class="[ns.e('icon'), ns.e('decimal')]"
         >
           <component :is="decimalIconComponent" />
-        </vs-icon>
-      </vs-icon>
+        </s-icon>
+      </s-icon>
     </span>
     <span v-if="showText || showScore" :class="ns.e('text')">
       {{ text }}
@@ -48,7 +48,7 @@
 import { computed, markRaw, ref, watch } from 'vue'
 import { EVENT_CODE, UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { hasClass, isArray, isObject, isString } from '@vuesax-alpha/utils'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { useNamespace, useSize } from '@vuesax-alpha/hooks'
 import { rateEmits, rateProps } from './rate'
 import type { iconPropType } from '@vuesax-alpha/utils'
@@ -75,7 +75,7 @@ function getValueFromMap<T>(
 }
 
 defineOptions({
-  name: 'VsRate',
+  name: 'SRate',
 })
 
 const props = defineProps(rateProps)

@@ -14,7 +14,7 @@ NEWS:
 ## Default
 
 
-Place `vs-spacer` between flex children to consume free space.
+Place `s-spacer` between flex children to consume free space.
 
 <template #example>
 <spacer-default />

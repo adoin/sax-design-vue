@@ -1,6 +1,6 @@
 <template>
   <div class="play-container demo">
-    <vs-slider v-model="value" :min="0" :max="100" :step="5" color="primary" />
+    <s-slider v-model="value" :min="0" :max="100" :step="5" color="primary" />
     <p class="hint">Value: {{ value }}</p>
   </div>
 </template>

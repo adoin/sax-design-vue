@@ -18,7 +18,7 @@ import {
 } from '@vuesax-alpha/tokens/navbar'
 
 defineOptions({
-  name: 'VsNavbarGroup',
+  name: 'SNavbarGroup',
 })
 
 const { modelValue } = inject(navbarContextKey)!

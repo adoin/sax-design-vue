@@ -1,64 +1,64 @@
 <template>
   <div class="center con-avatars">
-    <vs-button type="border" icon @click="openNotification(null, 'primary')">
+    <s-button type="border" icon @click="openNotification(null, 'primary')">
       <i class="bx bx-border-radius b-r" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       color="success"
       icon
       @click="openNotification('top-right', 'success')"
     >
       <i class="bx bx-border-radius t-r" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       color="danger"
       icon
       @click="openNotification('top-left', 'danger')"
     >
       <i class="bx bx-border-radius t-l" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       color="warn"
       icon
       @click="openNotification('bottom-left', 'warn')"
     >
       <i class="bx bx-border-radius b-l" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       color="dark"
       icon
       @click="openNotification('bottom-center', 'dark')"
     >
       <i class="bx bx-border-bottom" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       color="#7d33ff"
       icon
       @click="openNotification('top-center', '#7d33ff')"
     >
       <i class="bx bx-border-top" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       color="rgb(59,222,200)"
       icon
       @click="openNotification(null, 'rgb(59,222,200)')"
     >
       <i class="bx bx-border-radius b-r" />
-    </vs-button>
+    </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { VsNotification } from 'vuesax-alpha'
+import { SNotification } from 'sax-design-vue'
 
 const openNotification = (position = null, border) => {
-  VsNotification({
+  SNotification({
     border,
     position,
     title: 'Documentation Vuesax-alpha',

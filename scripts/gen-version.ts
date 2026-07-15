@@ -2,7 +2,7 @@ import { writeFile } from 'fs/promises'
 import path from 'path'
 import consola from 'consola'
 import { vsRoot } from '@vuesax-alpha/build-utils'
-import pkg from '../packages/vuesax-alpha/package.json' // need to be checked
+import pkg from '../packages/sax-design-vue/package.json' // need to be checked
 
 function getVersion() {
   const tagVer = process.env.TAG_VERSION

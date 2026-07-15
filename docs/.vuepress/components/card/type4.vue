@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-card type="4">
+    <s-card type="4">
       <template #title>
         <h3>Art paintings</h3>
       </template>
@@ -11,15 +11,15 @@
         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
       </template>
       <template #interactions>
-        <vs-button color="danger" icon>
+        <s-button color="danger" icon>
           <i class="bx bx-heart" />
-        </vs-button>
-        <vs-button class="btn-chat" type="shadow">
+        </s-button>
+        <s-button class="btn-chat" type="shadow">
           <i class="bx bx-chat" />
           <span class="span"> 54 </span>
-        </vs-button>
+        </s-button>
       </template>
-    </vs-card>
+    </s-card>
   </div>
 </template>
 

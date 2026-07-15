@@ -38,10 +38,10 @@ export type ResolvePropType<T> = IfNever<
  * Merge Type, Value, Validator types
  *
  * @example
- * VsPropMergeType<StringConstructor, '1', 1> =>  1 | "1" // ignores StringConstructor
- * VsPropMergeType<StringConstructor, never, number> =>  string | number
+ * SPropMergeType<StringConstructor, '1', 1> =>  1 | "1" // ignores StringConstructor
+ * SPropMergeType<StringConstructor, never, number> =>  string | number
  */
-export type VsPropMergeType<Type, Value, Validator> =
+export type SPropMergeType<Type, Value, Validator> =
   | IfNever<UnknownToNever<Value>, ResolvePropType<Type>, never>
   | UnknownToNever<Value>
   | UnknownToNever<Validator>
@@ -49,7 +49,7 @@ export type VsPropMergeType<Type, Value, Validator> =
 /**
  * Handling default values for input (constraints)
  */
-export type VsPropInputDefault<
+export type SPropInputDefault<
   Required extends boolean,
   Default
 > = Required extends true
@@ -72,7 +72,7 @@ export type IfNativePropType<T, Y, N> = [T] extends [NativePropType] ? Y : N
  * input prop `buildProp` or `buildProps` (constraints)
  *
  * @example
- * VsPropInput<StringConstructor, 'a', never, never, true>
+ * SPropInput<StringConstructor, 'a', never, never, true>
  * ⬇️
  * {
     type?: StringConstructor | undefined;
@@ -82,25 +82,25 @@ export type IfNativePropType<T, Y, N> = [T] extends [NativePropType] ? Y : N
     default?: undefined;
   }
  */
-export type VsPropInput<
+export type SPropInput<
   Type,
   Value,
   Validator,
-  Default extends VsPropMergeType<Type, Value, Validator>,
+  Default extends SPropMergeType<Type, Value, Validator>,
   Required extends boolean
 > = {
   type?: Type
   required?: Required
   values?: readonly Value[]
   validator?: ((val: any) => val is Validator) | ((val: any) => boolean)
-  default?: VsPropInputDefault<Required, Default>
+  default?: SPropInputDefault<Required, Default>
 }
 
 /**
  * output prop `buildProp` or `buildProps`.
  *
  * @example
- * VsProp<'a', 'b', true>
+ * SProp<'a', 'b', true>
  * ⬇️
  * {
     readonly type: PropType<"a">;
@@ -110,7 +110,7 @@ export type VsPropInput<
     __vsPropKey: true;
   }
  */
-export type VsProp<Type, Default, Required> = {
+export type SProp<Type, Default, Required> = {
   readonly type: PropType<Type>
   readonly required: [Required] extends [true] ? true : false
   readonly validator: ((val: unknown) => boolean) | undefined
@@ -118,28 +118,28 @@ export type VsProp<Type, Default, Required> = {
 } & IfNever<Default, unknown, { readonly default: Default }>
 
 /**
- * Determine if it is `VsProp`
+ * Determine if it is `SProp`
  */
 export type IfVsProp<T, Y, N> = T extends { [vsPropKey]: true } ? Y : N
 
 /**
  * Converting input to output.
  */
-export type VsPropConvert<Input> = Input extends VsPropInput<
+export type SPropConvert<Input> = Input extends SPropInput<
   infer Type,
   infer Value,
   infer Validator,
   any,
   infer Required
 >
-  ? VsPropFinalized<Type, Value, Validator, Input['default'], Required>
+  ? SPropFinalized<Type, Value, Validator, Input['default'], Required>
   : never
 
 /**
  * Finalized conversion output
  */
-export type VsPropFinalized<Type, Value, Validator, Default, Required> = VsProp<
-  VsPropMergeType<Type, Value, Validator>,
+export type SPropFinalized<Type, Value, Validator, Default, Required> = SProp<
+  SPropMergeType<Type, Value, Validator>,
   UnknownToNever<Default>,
   Required
 >

@@ -44,7 +44,7 @@ NEWS:
 ## 默认
 
 
-在 `vs-collapse-item` 中包裹区块，并使用 header 插槽。
+在 `s-collapse-item` 中包裹区块，并使用 header 插槽。
 
 <template #example>
 <collapse-default />
@@ -52,7 +52,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-12}](../.vuepress/components/collapse/default.vue)
+@[code{1-12}](../../.vuepress/components/collapse/default.vue)
 
 </template>
 
@@ -71,7 +71,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-12}](../.vuepress/components/collapse/accordion.vue)
+@[code{1-12}](../../.vuepress/components/collapse/accordion.vue)
 
 </template>
 
@@ -90,13 +90,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-10}](../.vuepress/components/collapse/type.vue)
+@[code{1-10}](../../.vuepress/components/collapse/type.vue)
 
 </template>
 
 <template #style>
 
-@[code{12-20}](../.vuepress/components/collapse/type.vue)
+@[code{12-20}](../../.vuepress/components/collapse/type.vue)
 
 </template>
 
@@ -115,7 +115,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/collapse/open-hover.vue)
+@[code{1-5}](../../.vuepress/components/collapse/open-hover.vue)
 
 </template>
 
@@ -134,7 +134,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/collapse/icon-arrow.vue)
+@[code{1-8}](../../.vuepress/components/collapse/icon-arrow.vue)
 
 </template>
 

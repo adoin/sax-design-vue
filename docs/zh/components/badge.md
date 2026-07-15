@@ -9,9 +9,9 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-badge :value="7">
-        <vs-button>Badge</vs-button>
-      </vs-badge>
+      <s-badge :value="7">
+        <s-button>Badge</s-button>
+      </s-badge>
     #__________________________________
   - name: max
     type: Number
@@ -21,9 +21,9 @@ PROPS:
     link: null
     usage: '#max-value'
     code: >
-      <vs-badge :value="100" :max="19" type="primary" >
-        <vs-button >comment</vs-button>
-      </vs-badge>
+      <s-badge :value="100" :max="19" type="primary" >
+        <s-button >comment</s-button>
+      </s-badge>
     #__________________________________
   - name: is-dot
     type: Boolean
@@ -33,9 +33,9 @@ PROPS:
     link: null
     usage: '#red-dot'
     code: >
-      <vs-badge :value="100" :max="19" is-dot type="primary" >
-        <vs-button >comment</vs-button>
-      </vs-badge>
+      <s-badge :value="100" :max="19" is-dot type="primary" >
+        <s-button >comment</s-button>
+      </s-badge>
     #__________________________________
   - name: hidden
     type: Boolean
@@ -45,9 +45,9 @@ PROPS:
     link: null
     usage: '#controlled-visibility'
     code: >
-      <vs-badge :value="3"  :hidden="hidden">
-        <vs-avatar shape="square" color="#ccc"> </vs-avatar>
-      </vs-badge>
+      <s-badge :value="3"  :hidden="hidden">
+        <s-avatar shape="square" color="#ccc"> </s-avatar>
+      </s-badge>
     #__________________________________
   - name: type
     type: String
@@ -57,9 +57,9 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-badge :value="2" type="warn">
-        <vs-button shape="square">square</vs-button>
-      </vs-badge>
+      <s-badge :value="2" type="warn">
+        <s-button shape="square">square</s-button>
+      </s-badge>
     #__________________________________
   - name: show-zero
     type: Boolean
@@ -69,9 +69,9 @@ PROPS:
     link: null
     usage: '#show-zero'
     code: >
-      <vs-badge :value="2" type="warn" show-zero >
-        <vs-button shape="square">square</vs-button>
-      </vs-badge>
+      <s-badge :value="2" type="warn" show-zero >
+        <s-button shape="square">square</s-button>
+      </s-badge>
     #__________________________________
   - name: color
     type: String
@@ -81,7 +81,7 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-badge :value="2" class="item" color="#ccc"> text </vs-badge>
+      <s-badge :value="2" class="item" color="#ccc"> text </s-badge>
     #__________________________________
   - name: offset
     type: Array
@@ -91,9 +91,9 @@ PROPS:
     link: null
     usage: '#offset'
     code: >
-      <vs-badge :value="3" :offset=[-20,20] class="item" >
-        <vs-avatar shape="square" color="#ccc"> </vs-avatar>
-      </vs-badge>
+      <s-badge :value="3" :offset=[-20,20] class="item" >
+        <s-avatar shape="square" color="#ccc"> </s-avatar>
+      </s-badge>
     #__________________________________
   - name: processing
     type: Boolean
@@ -103,9 +103,9 @@ PROPS:
     link: null
     usage: '#processing'
     code: >
-      <vs-badge :value="2" processing  >
-        <vs-button shape="square">square</vs-button>
-      </vs-badge>
+      <s-badge :value="2" processing  >
+        <s-button shape="square">square</s-button>
+      </s-badge>
     #__________________________________
   - name: badge-style
     type: object
@@ -136,9 +136,9 @@ SLOTS:
     link: null
     usage: '#default'
     code: >
-      <vs-badge :value="2">
-        <vs-button shape="square">square</vs-button>
-      </vs-badge>
+      <s-badge :value="2">
+        <s-button shape="square">square</s-button>
+      </s-badge>
 
 UPDATES:
   - type
@@ -159,13 +159,13 @@ You can use it on buttons,text,avatars,etc.
 
 <template #template>
 
-@[code{1-19} vue{3-5}](../.vuepress/components/badge/default.vue)
+@[code{1-19} vue{3-5}](../../.vuepress/components/badge/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{21-25}](../.vuepress/components/badge/default.vue)
+@[code{21-25}](../../.vuepress/components/badge/default.vue)
 
 </template>
 
@@ -187,13 +187,13 @@ The max value is defined by property max which is a `Number`. Note that it only 
 
 <template #template>
 
-@[code{1-13} vue{3-5}](../.vuepress/components/badge/max.vue)
+@[code{1-13} vue{3-5}](../../.vuepress/components/badge/max.vue)
 
 </template>
 
 <template #style>
 
-@[code{15-19}](../.vuepress/components/badge/max.vue)
+@[code{15-19}](../../.vuepress/components/badge/max.vue)
 
 </template>
 
@@ -213,13 +213,13 @@ When value is a String, it can display customized text.
 
 <template #template>
 
-@[code{1-10} vue{3-5}](../.vuepress/components/badge/customizations.vue)
+@[code{1-10} vue{3-5}](../../.vuepress/components/badge/customizations.vue)
 
 </template>
 
 <template #style>
 
-@[code{12-16}](../.vuepress/components/badge/customizations.vue)
+@[code{12-16}](../../.vuepress/components/badge/customizations.vue)
 
 </template>
 
@@ -239,13 +239,13 @@ Use the attribute `is-dot`. It is a Boolean.
 
 <template #template>
 
-@[code{1-16} vue{3-5}](../.vuepress/components/badge/red-dot.vue)
+@[code{1-16} vue{3-5}](../../.vuepress/components/badge/red-dot.vue)
 
 </template>
 
 <template #style>
 
-@[code{18-22}](../.vuepress/components/badge/red-dot.vue)
+@[code{18-22}](../../.vuepress/components/badge/red-dot.vue)
 
 </template>
 
@@ -263,13 +263,13 @@ Set offset of the badge dot, the format is [left, top], which represents the off
 
 <template #template>
 
-@[code{1-15} vue{3}](../.vuepress/components/badge/offset.vue)
+@[code{1-15} vue{3}](../../.vuepress/components/badge/offset.vue)
 
 </template>
 
 <template #style>
 
-@[code{17-21}](../.vuepress/components/badge/offset.vue)
+@[code{17-21}](../../.vuepress/components/badge/offset.vue)
 
 </template>
 
@@ -287,13 +287,13 @@ Set `processing` prop to indicate it is processing.
 
 <template #template>
 
-@[code{1-16} vue{3}](../.vuepress/components/badge/processing.vue)
+@[code{1-16} vue{3}](../../.vuepress/components/badge/processing.vue)
 
 </template>
 
 <template #style>
 
-@[code{18-22}](../.vuepress/components/badge/processing.vue)
+@[code{18-22}](../../.vuepress/components/badge/processing.vue)
 
 </template>
 
@@ -311,19 +311,19 @@ Set `hidden` prop to control the visibility of the badge.
 
 <template #template>
 
-@[code{1-9} vue{3}](../.vuepress/components/badge/controlled-visibility.vue)
+@[code{1-9} vue{3}](../../.vuepress/components/badge/controlled-visibility.vue)
 
 </template>
 
 <template #script>
 
-@[code{11-15}](../.vuepress/components/badge/controlled-visibility.vue)
+@[code{11-15}](../../.vuepress/components/badge/controlled-visibility.vue)
 
 </template>
 
 <template #style>
 
-@[code{17-21}](../.vuepress/components/badge/controlled-visibility.vue)
+@[code{17-21}](../../.vuepress/components/badge/controlled-visibility.vue)
 
 </template>
 
@@ -341,19 +341,19 @@ Set `show-zero` prop to display zero.According to reason, it is hidden.
 
 <template #template>
 
-@[code{1-11} vue{6}](../.vuepress/components/badge/show-zero.vue)
+@[code{1-11} vue{6}](../../.vuepress/components/badge/show-zero.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17}](../.vuepress/components/badge/show-zero.vue)
+@[code{13-17}](../../.vuepress/components/badge/show-zero.vue)
 
 </template>
 
 <template #style>
 
-@[code{19-23}](../.vuepress/components/badge/show-zero.vue)
+@[code{19-23}](../../.vuepress/components/badge/show-zero.vue)
 
 </template>
 

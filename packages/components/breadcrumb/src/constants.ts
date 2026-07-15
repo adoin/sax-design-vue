@@ -6,4 +6,4 @@ export interface BreadcrumbContext {
 }
 
 export const breadcrumbContextKey: InjectionKey<BreadcrumbContext> =
-  Symbol('VsBreadcrumb')
+  Symbol('SBreadcrumb')

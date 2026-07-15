@@ -1,9 +1,9 @@
 <template>
   <div class="center">
-    <vs-progress :percent="70" color="primary">primary</vs-progress>
-    <vs-progress :percent="70" color="success">success</vs-progress>
-    <vs-progress :percent="70" color="danger">danger</vs-progress>
-    <vs-progress :percent="70" color="warning">warning</vs-progress>
+    <s-progress :percent="70" color="primary">primary</s-progress>
+    <s-progress :percent="70" color="success">success</s-progress>
+    <s-progress :percent="70" color="danger">danger</s-progress>
+    <s-progress :percent="70" color="warning">warning</s-progress>
   </div>
 </template>
 

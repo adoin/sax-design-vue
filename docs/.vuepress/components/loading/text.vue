@@ -1,16 +1,16 @@
 <template>
   <div class="center">
-    <vs-button type="flat" @click="openLoading">
+    <s-button type="flat" @click="openLoading">
       Open Loading <b>Text</b>
-    </vs-button>
+    </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { VsLoadingFn } from 'vuesax-alpha'
+import { SLoadingFn } from 'sax-design-vue'
 
 const openLoading = () => {
-  const loadingInstance = VsLoadingFn({
+  const loadingInstance = SLoadingFn({
     text: 'Loading...',
   })
 

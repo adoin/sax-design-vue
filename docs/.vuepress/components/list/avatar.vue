@@ -1,30 +1,30 @@
 <template>
-  <vs-list>
-    <vs-list-header title="Users" color="danger" />
-    <vs-list-item title="Steve Jobes" subtitle="Top Contributor">
+  <s-list>
+    <s-list-header title="Users" color="danger" />
+    <s-list-item title="Steve Jobes" subtitle="Top Contributor">
       <template #avatar>
-        <vs-avatar>
+        <s-avatar>
           <i class="material-icons notranslate">person</i>
-        </vs-avatar>
+        </s-avatar>
       </template>
-    </vs-list-item>
-    <vs-list-item title="Matt" subtitle="11 Points">
+    </s-list-item>
+    <s-list-item title="Matt" subtitle="11 Points">
       <template #avatar>
-        <vs-avatar>
+        <s-avatar>
           <template #text>Vuesax</template>
-        </vs-avatar>
+        </s-avatar>
       </template>
-    </vs-list-item>
-    <vs-list-header title="Profile photo" color="warning" />
-    <vs-list-item
+    </s-list-item>
+    <s-list-header title="Profile photo" color="warning" />
+    <s-list-item
       title="Xian Famous Foods"
       subtitle="A taste of Shaanxi's delicious culinary traditions, with delights like spicy cold noodles and lamb burgers."
     >
       <template #avatar>
-        <vs-avatar>
+        <s-avatar>
           <template #text>Vue</template>
-        </vs-avatar>
+        </s-avatar>
       </template>
-    </vs-list-item>
-  </vs-list>
+    </s-list-item>
+  </s-list>
 </template>

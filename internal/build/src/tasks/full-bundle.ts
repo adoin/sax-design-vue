@@ -15,7 +15,7 @@ import {
   PKG_CAMELCASE_NAME,
 } from '@vuesax-alpha/build-constants'
 import { localeRoot, vsOutput, vsRoot } from '@vuesax-alpha/build-utils'
-import { version } from '../../../../packages/vuesax-alpha/version'
+import { version } from '../../../../packages/sax-design-vue/version'
 import { VuesaxAlphaAlias } from '../plugins/vuesax-alpha-alias'
 import {
   formatBundleFilename,

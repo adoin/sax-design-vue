@@ -11,7 +11,7 @@ import type {
   SidebarGroup,
   SidebarItem,
 } from 'vuepress-vite'
-import type { VuesaxAlphaThemeOptions } from '../vuesaxAlphaTheme'
+import type { SaxDesignVueThemeOptions } from '../saxDesignVueTheme'
 
 export const hashRE = /#.*$/
 export const extRE = /\.(md|html)$/
@@ -127,7 +127,7 @@ export function isMatchedHeader(
 
 export function resolveSidebarItems(
   pageData: PageData,
-  themeOptions: VuesaxAlphaThemeOptions,
+  themeOptions: SaxDesignVueThemeOptions,
   localePath: RouteLocale = '/'
 ): SidebarConfigArray {
   const { locales } = themeOptions

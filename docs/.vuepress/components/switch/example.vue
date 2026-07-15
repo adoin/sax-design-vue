@@ -3,40 +3,40 @@
     <ul>
       <li>
         <p>Email messages</p>
-        <vs-switch v-model="active1" />
+        <s-switch v-model="active1" />
       </li>
       <li>
         <p>Change theme</p>
-        <vs-switch v-model="active2">
+        <s-switch v-model="active2">
           <template #circle>
             <i v-if="!active2" class="bx bxs-moon" />
             <i v-else class="bx bxs-sun" />
           </template>
-        </vs-switch>
+        </s-switch>
       </li>
       <li>
         <p>Desktop notifications</p>
-        <vs-switch v-model="active3">
+        <s-switch v-model="active3">
           <i class="bx bxs-message" />
-        </vs-switch>
+        </s-switch>
       </li>
       <li>
         <p>Type of user</p>
-        <vs-switch v-model="active4">
+        <s-switch v-model="active4">
           <template #on> Admin </template>
           <template #off> Default </template>
-        </vs-switch>
+        </s-switch>
       </li>
       <li>
         <p>Allow to send test data to improve this product</p>
-        <vs-switch v-model="active5" color="success">
+        <s-switch v-model="active5" color="success">
           <template #off>
             <i class="bx bx-x" />
           </template>
           <template #on>
             <i class="bx bx-check" />
           </template>
-        </vs-switch>
+        </s-switch>
       </li>
     </ul>
   </div>

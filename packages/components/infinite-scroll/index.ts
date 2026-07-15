@@ -10,4 +10,4 @@ _InfiniteScroll.install = (app: App) => {
 }
 
 export default _InfiniteScroll
-export const VsInfiniteScroll = _InfiniteScroll
+export const SInfiniteScroll = _InfiniteScroll

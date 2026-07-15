@@ -1,21 +1,16 @@
 <template>
   <div class="center content-inputs">
-    <vs-input v-model="value1" placeholder="User name">
+    <s-input v-model="value1" placeholder="User name">
       <template #icon>
         <i class="bx bx-user" />
       </template>
-    </vs-input>
+    </s-input>
 
-    <vs-input
-      v-model="value2"
-      type="password"
-      icon-after
-      placeholder="Password"
-    >
+    <s-input v-model="value2" type="password" icon-after placeholder="Password">
       <template #icon>
         <i class="bx bx-lock-open-alt" />
       </template>
-    </vs-input>
+    </s-input>
   </div>
 </template>
 <script lang="ts" setup>

@@ -1,8 +1,8 @@
 <template>
   <div class="center">
-    <vs-table v-model="selected" multiple>
+    <s-table v-model="selected" multiple>
       <template #header>
-        <vs-input
+        <s-input
           v-model="search"
           block
           type="url"
@@ -11,36 +11,36 @@
         />
       </template>
       <template #thead>
-        <vs-tr>
-          <vs-th>
-            <vs-checkbox
+        <s-tr>
+          <s-th>
+            <s-checkbox
               :checked-force="selected.length > 0"
               :indeterminate="selected.length < users.length"
               @change="selected = toggleSelectAll(selected, getSearch)"
             />
-          </vs-th>
-          <vs-th> Name </vs-th>
-          <vs-th> Email </vs-th>
-          <vs-th> Id </vs-th>
-        </vs-tr>
+          </s-th>
+          <s-th> Name </s-th>
+          <s-th> Email </s-th>
+          <s-th> Id </s-th>
+        </s-tr>
       </template>
       <template #tbody>
-        <vs-tr v-for="(tr, i) in users" :key="i" :data="tr">
-          <vs-td checkbox>
-            <vs-checkbox v-model="selected" :value="tr" />
-          </vs-td>
-          <vs-td>
+        <s-tr v-for="(tr, i) in users" :key="i" :data="tr">
+          <s-td checkbox>
+            <s-checkbox v-model="selected" :value="tr" />
+          </s-td>
+          <s-td>
             {{ tr.name }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.email }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.id }}
-          </vs-td>
-        </vs-tr>
+          </s-td>
+        </s-tr>
       </template>
-    </vs-table>
+    </s-table>
     <span class="data-table">
       <pre>
         {{ selected.length > 0 ? selected : 'Select an item in the table' }}
@@ -51,7 +51,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { toggleSelectAll } from 'vuesax-alpha'
+import { toggleSelectAll } from 'sax-design-vue'
 
 type User = {
   id: number | string

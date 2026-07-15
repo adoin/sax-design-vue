@@ -110,7 +110,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/upload/default.vue)
+@[code{1-3}](../../.vuepress/components/upload/default.vue)
 
 </template>
 
@@ -129,7 +129,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/upload/multiple.vue)
+@[code{1-3}](../../.vuepress/components/upload/multiple.vue)
 
 </template>
 
@@ -148,7 +148,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/upload/automatic.vue)
+@[code{1-3}](../../.vuepress/components/upload/automatic.vue)
 
 </template>
 

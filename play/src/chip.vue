@@ -1,11 +1,11 @@
 <template>
   <div class="play-container demo">
-    <vs-chip>Default</vs-chip>
-    <vs-chip color="primary">Primary</vs-chip>
-    <vs-chip color="success" transparent>Transparent</vs-chip>
-    <vs-chip v-if="visible" color="danger" closable @close="visible = false">
+    <s-chip>Default</s-chip>
+    <s-chip color="primary">Primary</s-chip>
+    <s-chip color="success" transparent>Transparent</s-chip>
+    <s-chip v-if="visible" color="danger" closable @close="visible = false">
       Closable
-    </vs-chip>
+    </s-chip>
   </div>
 </template>
 

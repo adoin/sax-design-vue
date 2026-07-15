@@ -56,13 +56,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/progress/default.vue)
+@[code{1-5}](../../.vuepress/components/progress/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{7-15}](../.vuepress/components/progress/default.vue)
+@[code{7-15}](../../.vuepress/components/progress/default.vue)
 
 </template>
 
@@ -81,13 +81,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/progress/color.vue)
+@[code{1-8}](../../.vuepress/components/progress/color.vue)
 
 </template>
 
 <template #style>
 
-@[code{10-18}](../.vuepress/components/progress/color.vue)
+@[code{10-18}](../../.vuepress/components/progress/color.vue)
 
 </template>
 
@@ -106,13 +106,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/progress/indeterminate.vue)
+@[code{1-5}](../../.vuepress/components/progress/indeterminate.vue)
 
 </template>
 
 <template #style>
 
-@[code{7-15}](../.vuepress/components/progress/indeterminate.vue)
+@[code{7-15}](../../.vuepress/components/progress/indeterminate.vue)
 
 </template>
 
@@ -131,13 +131,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/progress/height.vue)
+@[code{1-6}](../../.vuepress/components/progress/height.vue)
 
 </template>
 
 <template #style>
 
-@[code{8-16}](../.vuepress/components/progress/height.vue)
+@[code{8-16}](../../.vuepress/components/progress/height.vue)
 
 </template>
 

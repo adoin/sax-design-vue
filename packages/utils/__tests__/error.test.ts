@@ -15,7 +15,7 @@ describe('error', () => {
     expect(warnFn.mock.calls).toMatchInlineSnapshot(`
       [
         [
-          [VuesaxAlphaError: [scope] message],
+          [SaxDesignVueError: [scope] message],
         ],
         [
           [SyntaxError: custom error],

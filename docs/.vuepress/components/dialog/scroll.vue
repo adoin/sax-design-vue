@@ -1,7 +1,7 @@
 <template>
   <div class="center">
-    <vs-button type="shadow" @click="active = !active"> Open Dialog </vs-button>
-    <vs-dialog v-model="active" scroll lock-scroll not-close auto-width>
+    <s-button type="shadow" @click="active = !active"> Open Dialog </s-button>
+    <s-dialog v-model="active" scroll lock-scroll not-close auto-width>
       <template #header>
         <h3>Introduction</h3>
       </template>
@@ -74,7 +74,7 @@
           - and much more.
         </p>
       </div>
-    </vs-dialog>
+    </s-dialog>
   </div>
 </template>
 

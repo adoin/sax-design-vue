@@ -1,11 +1,11 @@
 <template>
   <div class="play-container demo">
-    <vs-images hover="zoom">
-      <vs-image src="https://picsum.photos/seed/vs1/400/400" />
-      <vs-image src="https://picsum.photos/seed/vs2/400/400" />
-      <vs-image src="https://picsum.photos/seed/vs3/400/400" />
-      <vs-image src="https://picsum.photos/seed/vs4/400/400" />
-    </vs-images>
+    <s-images hover="zoom">
+      <s-image src="https://picsum.photos/seed/vs1/400/400" />
+      <s-image src="https://picsum.photos/seed/vs2/400/400" />
+      <s-image src="https://picsum.photos/seed/vs3/400/400" />
+      <s-image src="https://picsum.photos/seed/vs4/400/400" />
+    </s-images>
   </div>
 </template>
 

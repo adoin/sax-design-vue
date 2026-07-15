@@ -8,7 +8,7 @@ import { usePagination } from '../usePagination'
 import { paginationTotalProps } from './total'
 
 defineOptions({
-  name: 'VsPaginationTotal',
+  name: 'SPaginationTotal',
 })
 defineProps(paginationTotalProps)
 

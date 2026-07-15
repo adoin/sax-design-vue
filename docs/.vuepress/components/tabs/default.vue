@@ -1,8 +1,8 @@
 <template>
-  <vs-tabs v-model="active">
-    <vs-tab label="Home">Home panel</vs-tab>
-    <vs-tab label="Profile">Profile panel</vs-tab>
-  </vs-tabs>
+  <s-tabs v-model="active">
+    <s-tab label="Home">Home panel</s-tab>
+    <s-tab label="Profile">Profile panel</s-tab>
+  </s-tabs>
 </template>
 
 <script setup lang="ts">

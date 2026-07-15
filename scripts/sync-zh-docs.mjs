@@ -368,13 +368,13 @@ const toggleDark = useToggle(isDark)
 
 \`\`\`ts
 import { createApp } from 'vue'
-import { VsAlert, VsButton } from 'vuesax-alpha'
+import { SAlert, SButton } from 'vuesax-alpha'
 import App from './App.vue'
 
 import 'vuesax-alpha/theme-chalk/index.css'
 import 'vuesax-alpha/theme-chalk/dark/css-vars.css'
 
-createApp(App).use(VsAlert).use(VsButton).mount('#app')
+createApp(App).use(SAlert).use(SButton).mount('#app')
 \`\`\`
 
 </command>

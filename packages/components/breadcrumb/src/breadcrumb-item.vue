@@ -19,7 +19,7 @@
     </span>
     <span v-if="!active && !hideSeparator" :class="ns.e('separator')">
       <slot name="separator">
-        <VsIcon
+        <SIcon
           v-if="isIconSeparator(resolvedSeparator)"
           :icon="resolvedSeparator"
           icon-pack="material-icons"
@@ -33,13 +33,13 @@
 <script lang="ts" setup>
 import { computed, inject } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { breadcrumbItemProps } from './breadcrumb-item'
 import { breadcrumbContextKey } from './constants'
 
 defineOptions({
-  name: 'VsBreadcrumbItem',
+  name: 'SBreadcrumbItem',
 })
 
 const props = defineProps(breadcrumbItemProps)

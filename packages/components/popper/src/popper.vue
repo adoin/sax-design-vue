@@ -72,7 +72,7 @@ import type {
 } from '@vuesax-alpha/hooks/use-floating/vue'
 
 defineOptions({
-  name: 'VsPopper',
+  name: 'SPopper',
   inheritAttrs: false,
 })
 

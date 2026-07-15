@@ -1,7 +1,7 @@
 <template>
   <div class="center breadcrumb-color-demo">
     <input v-model="colorx" type="color" />
-    <vs-breadcrumb :color="colorx" :items="items" />
+    <s-breadcrumb :color="colorx" :items="items" />
   </div>
 </template>
 

@@ -1,8 +1,8 @@
 <template>
   <div class="center">
-    <vs-table v-model="selected" multiple>
+    <s-table v-model="selected" multiple>
       <template #header>
-        <vs-input
+        <s-input
           v-model="search"
           block
           type="url"
@@ -11,74 +11,70 @@
         />
       </template>
       <template #thead>
-        <vs-tr>
-          <vs-th>
-            <vs-checkbox
+        <s-tr>
+          <s-th>
+            <s-checkbox
               :checked-force="selected.length > 0"
               :indeterminate="selected.length < users.length"
               @change="selected = toggleSelectAll(selected, getSearch)"
             />
-          </vs-th>
-          <vs-th sort @click="users = sortData($event, users, 'name')">
+          </s-th>
+          <s-th sort @click="users = sortData($event, users, 'name')">
             Name
-          </vs-th>
-          <vs-th sort @click="users = sortData($event, users, 'email')">
+          </s-th>
+          <s-th sort @click="users = sortData($event, users, 'email')">
             Email
-          </vs-th>
-          <vs-th sort @click="users = sortData($event, users, 'id')">
-            Id
-          </vs-th>
-        </vs-tr>
+          </s-th>
+          <s-th sort @click="users = sortData($event, users, 'id')"> Id </s-th>
+        </s-tr>
       </template>
       <template #tbody>
-        <vs-tr
+        <s-tr
           v-for="(tr, i) in getPage(getSearch, page, pageSize)"
           :key="i"
           :data="tr"
           not-click-selected
           open-expand-only-td
         >
-          <vs-td checkbox>
-            <vs-checkbox v-model="selected" :value="tr" />
-          </vs-td>
-          <vs-td
+          <s-td checkbox>
+            <s-checkbox v-model="selected" :value="tr" />
+          </s-td>
+          <s-td
             edit
             @click=";(edit = tr), (editProp = 'name'), (editActive = true)"
           >
             {{ tr.name }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.email }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.id }}
-          </vs-td>
+          </s-td>
 
           <template #expand>
             <div class="con-content">
               <div>
-                <vs-avatar>
+                <s-avatar>
                   <img :src="`/avatars/avatar-${i + 1}.png`" alt="" />
-                </vs-avatar>
+                </s-avatar>
                 <p>
                   {{ tr.name }}
                 </p>
               </div>
               <div>
-                <vs-button type="flat" icon>
+                <s-button type="flat" icon>
                   <i class="bx bx-lock-open-alt" />
-                </vs-button>
-                <vs-button type="flat" icon> Send Email </vs-button>
-                <vs-button type="border" color="danger">
-                  Remove User
-                </vs-button>
+                </s-button>
+                <s-button type="flat" icon> Send Email </s-button>
+                <s-button type="border" color="danger"> Remove User </s-button>
               </div>
             </div>
           </template>
-        </vs-tr>
+        </s-tr>
       </template>
       <template #footer>
-        <vs-pagination
+        <s-pagination
           v-model:current-page="page"
           v-model:page-size="pageSize"
           :page-sizes="[3, 5, 7]"
@@ -87,41 +83,37 @@
           infinite
         />
       </template>
-    </vs-table>
+    </s-table>
 
-    <vs-dialog v-model="editActive">
+    <s-dialog v-model="editActive">
       <template #header> Change Prop {{ editProp }} </template>
-      <vs-input
+      <s-input
         v-if="editProp == 'email'"
         v-model="edit[editProp]"
         @keypress.enter="editActive = false"
       />
-      <vs-select
+      <s-select
         v-if="editProp == 'name'"
         v-model="edit[editProp]"
         block
         placeholder="Select"
         @change="editActive = false"
       >
-        <vs-option label="Vuesax" value="Vuesax"> Vuesax </vs-option>
-        <vs-option label="Vue" value="Vuejs"> Vue </vs-option>
-        <vs-option label="Javascript" value="Javascript">
-          Javascript
-        </vs-option>
-        <vs-option disabled label="Sass" value="Sass"> Sass </vs-option>
-        <vs-option label="Typescript" value="Typescript">
-          Typescript
-        </vs-option>
-        <vs-option label="Webpack" value="Webpack"> Webpack </vs-option>
-        <vs-option label="Nodejs" value="Nodejs"> Nodejs </vs-option>
-      </vs-select>
-    </vs-dialog>
+        <s-option label="Vuesax" value="Vuesax"> Vuesax </s-option>
+        <s-option label="Vue" value="Vuejs"> Vue </s-option>
+        <s-option label="Javascript" value="Javascript"> Javascript </s-option>
+        <s-option disabled label="Sass" value="Sass"> Sass </s-option>
+        <s-option label="Typescript" value="Typescript"> Typescript </s-option>
+        <s-option label="Webpack" value="Webpack"> Webpack </s-option>
+        <s-option label="Nodejs" value="Nodejs"> Nodejs </s-option>
+      </s-select>
+    </s-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { getPage, sortData, toggleSelectAll } from 'vuesax-alpha'
+import { getPage, sortData, toggleSelectAll } from 'sax-design-vue'
 
 type User = {
   id: number | string

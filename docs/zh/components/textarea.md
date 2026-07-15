@@ -96,13 +96,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/textarea/default.vue)
+@[code{1-3}](../../.vuepress/components/textarea/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-8}](../.vuepress/components/textarea/default.vue)
+@[code{5-8}](../../.vuepress/components/textarea/default.vue)
 
 </template>
 
@@ -121,13 +121,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/textarea/label.vue)
+@[code{1-3}](../../.vuepress/components/textarea/label.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-8}](../.vuepress/components/textarea/label.vue)
+@[code{5-8}](../../.vuepress/components/textarea/label.vue)
 
 </template>
 
@@ -146,13 +146,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/textarea/counter.vue)
+@[code{1-3}](../../.vuepress/components/textarea/counter.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-8}](../.vuepress/components/textarea/counter.vue)
+@[code{5-8}](../../.vuepress/components/textarea/counter.vue)
 
 </template>
 
@@ -171,13 +171,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/textarea/width.vue)
+@[code{1-3}](../../.vuepress/components/textarea/width.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-8}](../.vuepress/components/textarea/width.vue)
+@[code{5-8}](../../.vuepress/components/textarea/width.vue)
 
 </template>
 
@@ -196,13 +196,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/textarea/height.vue)
+@[code{1-3}](../../.vuepress/components/textarea/height.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-8}](../.vuepress/components/textarea/height.vue)
+@[code{5-8}](../../.vuepress/components/textarea/height.vue)
 
 </template>
 

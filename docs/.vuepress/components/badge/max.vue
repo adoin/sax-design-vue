@@ -1,14 +1,14 @@
 <template>
   <div class="center">
-    <vs-badge :value="100" :max="19" type="primary" class="item">
-      <vs-button>comment</vs-button>
-    </vs-badge>
-    <vs-badge :value="100" :max="99" class="item">
-      <vs-button color="warn" shape="square">comment</vs-button>
-    </vs-badge>
-    <vs-badge :value="10" :max="9" class="item">
-      <vs-avatar shape="square" color="#ccc" />
-    </vs-badge>
+    <s-badge :value="100" :max="19" type="primary" class="item">
+      <s-button>comment</s-button>
+    </s-badge>
+    <s-badge :value="100" :max="99" class="item">
+      <s-button color="warn" shape="square">comment</s-button>
+    </s-badge>
+    <s-badge :value="10" :max="9" class="item">
+      <s-avatar shape="square" color="#ccc" />
+    </s-badge>
   </div>
 </template>
 

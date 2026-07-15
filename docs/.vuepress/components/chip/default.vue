@@ -1,23 +1,23 @@
 <template>
   <div class="center chip-demo">
-    <vs-chip>Basic Chip</vs-chip>
-    <vs-chip>
-      <vs-avatar><template #text>LD</template></vs-avatar>
+    <s-chip>Basic Chip</s-chip>
+    <s-chip>
+      <s-avatar><template #text>LD</template></s-avatar>
       Avatar Text
-    </vs-chip>
-    <vs-chip>
-      <vs-avatar>
+    </s-chip>
+    <s-chip>
+      <s-avatar>
         <i class="material-icons notranslate">person</i>
-      </vs-avatar>
+      </s-avatar>
       Avatar Icon
-    </vs-chip>
-    <vs-chip>
-      <vs-avatar>
+    </s-chip>
+    <s-chip>
+      <s-avatar>
         <img src="https://randomuser.me/api/portraits/men/4.jpg" alt="" />
-      </vs-avatar>
+      </s-avatar>
       Avatar Image
-    </vs-chip>
-    <vs-chip v-model="showClosable" closable>Closable chip</vs-chip>
+    </s-chip>
+    <s-chip v-model="showClosable" closable>Closable chip</s-chip>
   </div>
 </template>
 

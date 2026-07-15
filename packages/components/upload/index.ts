@@ -1,7 +1,7 @@
 import { withInstall } from '@vuesax-alpha/utils'
 import Upload from './src/upload.vue'
 
-export const VsUpload = withInstall(Upload)
-export default VsUpload
+export const SUpload = withInstall(Upload)
+export default SUpload
 
 export * from './src/upload'

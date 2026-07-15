@@ -8,7 +8,7 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-pagination v-model:current-page="page" :total="20" />
+      <s-pagination v-model:current-page="page" :total="20" />
   - name: total
     type: Number
     values: number
@@ -17,7 +17,7 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-pagination v-model:current-page="page" :total="20" />
+      <s-pagination v-model:current-page="page" :total="20" />
   - name: color
     type: String
     values: Vuesax colors, RGB, HEX
@@ -26,7 +26,7 @@ PROPS:
     link: null
     usage: '#color'
     code: >
-      <vs-pagination color="danger" v-model:current-page="page" :total="20" />
+      <s-pagination color="danger" v-model:current-page="page" :total="20" />
 
   - name: disabled
     type: Boolean
@@ -36,7 +36,7 @@ PROPS:
     link: null
     usage: '#disabled'
     code: >
-      <vs-pagination disabled v-model:current-page="page" :total="20" />
+      <s-pagination disabled v-model:current-page="page" :total="20" />
 
   - name: shape
     type: String
@@ -46,9 +46,9 @@ PROPS:
     link: null
     usage: '#shape'
     code: >
-      <vs-pagination shape="circle" v-model:current-page="page" :total="20" />
+      <s-pagination shape="circle" v-model:current-page="page" :total="20" />
 
-      <vs-pagination square v-model:current-page="page" :total="20" />
+      <s-pagination square v-model:current-page="page" :total="20" />
 
   - name: buttons-dotted
     type: Boolean
@@ -58,7 +58,7 @@ PROPS:
     link: null
     usage: '#buttons-dotted'
     code: >
-      <vs-pagination buttons-dotted v-model:current-page="page" :total="20" />
+      <s-pagination buttons-dotted v-model:current-page="page" :total="20" />
 
   - name: disabled-items
     type: Number[]
@@ -68,7 +68,7 @@ PROPS:
     link: null
     usage: '#disabled-items'
     code: >
-      <vs-pagination :disabled-items="[3,4,9,10,11,12,19]" v-model:current-page="page" :total="20" />
+      <s-pagination :disabled-items="[3,4,9,10,11,12,19]" v-model:current-page="page" :total="20" />
 
   - name: loading-items
     type: Number[]
@@ -78,7 +78,7 @@ PROPS:
     link: null
     usage: '#loading-items'
     code: >
-      <vs-pagination :loading-items="[3,4,9,10,11,12,19]" v-model:current-page="page" :total="20" />
+      <s-pagination :loading-items="[3,4,9,10,11,12,19]" v-model:current-page="page" :total="20" />
 
   - name: not-margin
     type: Boolean
@@ -88,7 +88,7 @@ PROPS:
     link: null
     usage: '#not-margin'
     code: >
-      <vs-pagination not-margin v-model:current-page="page" :total="20" />
+      <s-pagination not-margin v-model:current-page="page" :total="20" />
 
   - name: progress
     type: Boolean
@@ -98,7 +98,7 @@ PROPS:
     link: null
     usage: '#progress'
     code: >
-      <vs-pagination progress v-model:current-page="page" :total="20" />
+      <s-pagination progress v-model:current-page="page" :total="20" />
 
   - name: infinite
     type: Boolean
@@ -108,7 +108,7 @@ PROPS:
     link: null
     usage: '#infinite'
     code: >
-      <vs-pagination infinite v-model:current-page="page" :total="100" />
+      <s-pagination infinite v-model:current-page="page" :total="100" />
 
   - name: v-model:page-size
     type: Number
@@ -227,11 +227,11 @@ SLOTS:
     link: null
     usage: '#slot'
     code: >
-      <vs-pagination v-model:current-page="page" :total="20">
+      <s-pagination v-model:current-page="page" :total="20">
         <template #default="{ currentPage, total, pageSize, pageSizes, pageCount }">
           // do something
         </template>
-      </vs-pagination>
+      </s-pagination>
 ---
 
 # Pagination
@@ -264,7 +264,7 @@ If current-page is defined, you have to listen current-page change, by also defi
 If page-size is defined while page size selector displayed(sizes included in layout), you have to listen page-size change as well, by define @update:page-size, otherwise change of page size didn't work.
 :::
 
-Easily add a pagination with the `vs-pagination` component, the required properties are `total`
+Easily add a pagination with the `s-pagination` component, the required properties are `total`
 
 <template #example>
 <pagination-default />
@@ -272,13 +272,13 @@ Easily add a pagination with the `vs-pagination` component, the required propert
 
 <template #template>
 
-@[code{1-9} html{3}](../.vuepress/components/pagination/default.vue)
+@[code{1-9} html{3}](../../.vuepress/components/pagination/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{11-15}](../.vuepress/components/pagination/default.vue)
+@[code{11-15}](../../.vuepress/components/pagination/default.vue)
 
 </template>
 
@@ -296,19 +296,19 @@ Easily add a pagination with the `vs-pagination` component, the required propert
 
 <template #template>
 
-@[code{1-19} html{4}](../.vuepress/components/pagination/color.vue)
+@[code{1-19} html{4}](../../.vuepress/components/pagination/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{21-27}](../.vuepress/components/pagination/color.vue)
+@[code{21-27}](../../.vuepress/components/pagination/color.vue)
 
 </template>
 
 <template #style>
 
-@[code{29-51}](../.vuepress/components/pagination/color.vue)
+@[code{29-51}](../../.vuepress/components/pagination/color.vue)
 
 </template>
 
@@ -326,13 +326,13 @@ Change the disabled state of the component with the `disabled` property, this pr
 
 <template #template>
 
-@[code{1-5} vue{3}](../.vuepress/components/pagination/disabled.vue)
+@[code{1-5} vue{3}](../../.vuepress/components/pagination/disabled.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11}](../.vuepress/components/pagination/disabled.vue)
+@[code{7-11}](../../.vuepress/components/pagination/disabled.vue)
 
 </template>
 
@@ -352,13 +352,13 @@ Change the radius of all the elements that make up the component by making them 
 
 <template #template>
 
-@[code{1-5} vue{3}](../.vuepress/components/pagination/circle.vue)
+@[code{1-5} vue{3}](../../.vuepress/components/pagination/circle.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11}](../.vuepress/components/pagination/circle.vue)
+@[code{7-11}](../../.vuepress/components/pagination/circle.vue)
 
 </template>
 
@@ -376,13 +376,13 @@ Change the radius of all the elements that make up the component making them squ
 
 <template #template>
 
-@[code{1-5} vue{3}](../.vuepress/components/pagination/square.vue)
+@[code{1-5} vue{3}](../../.vuepress/components/pagination/square.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11}](../.vuepress/components/pagination/square.vue)
+@[code{7-11}](../../.vuepress/components/pagination/square.vue)
 
 </template>
 
@@ -400,13 +400,13 @@ Cambia por completo el estilo de el componente y elimina los números internos e
 
 <template #template>
 
-@[code{1-5} vue{3}](../.vuepress/components/pagination/buttons-dotted.vue)
+@[code{1-5} vue{3}](../../.vuepress/components/pagination/buttons-dotted.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11}](../.vuepress/components/pagination/buttons-dotted.vue)
+@[code{7-11}](../../.vuepress/components/pagination/buttons-dotted.vue)
 
 </template>
 
@@ -428,13 +428,13 @@ The buttons that are in disabled will skip when changing the value for example o
 
 <template #template>
 
-@[code{1-9} vue{5}](../.vuepress/components/pagination/disabled-items.vue)
+@[code{1-9} vue{5}](../../.vuepress/components/pagination/disabled-items.vue)
 
 </template>
 
 <template #script>
 
-@[code{11-30}](../.vuepress/components/pagination/disabled-items.vue)
+@[code{11-30}](../../.vuepress/components/pagination/disabled-items.vue)
 
 </template>
 
@@ -456,13 +456,13 @@ The buttons that are in loading will skip when changing the value for example in
 
 <template #template>
 
-@[code{1-9} vue{5}](../.vuepress/components/pagination/loading-items.vue)
+@[code{1-9} vue{5}](../../.vuepress/components/pagination/loading-items.vue)
 
 </template>
 
 <template #script>
 
-@[code{11-15}](../.vuepress/components/pagination/loading-items.vue)
+@[code{11-15}](../../.vuepress/components/pagination/loading-items.vue)
 
 </template>
 
@@ -480,13 +480,13 @@ Change the style of the entire component by removing the margin between the butt
 
 <template #template>
 
-@[code{1-5} vue{3}](../.vuepress/components/pagination/not-margin.vue)
+@[code{1-5} vue{3}](../../.vuepress/components/pagination/not-margin.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11}](../.vuepress/components/pagination/not-margin.vue)
+@[code{7-11}](../../.vuepress/components/pagination/not-margin.vue)
 
 </template>
 
@@ -504,13 +504,13 @@ Add a progress bar to the pagination by referencing where you find the last page
 
 <template #template>
 
-@[code{1-5} vue{3}](../.vuepress/components/pagination/progress.vue)
+@[code{1-5} vue{3}](../../.vuepress/components/pagination/progress.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11}](../.vuepress/components/pagination/progress.vue)
+@[code{7-11}](../../.vuepress/components/pagination/progress.vue)
 
 </template>
 
@@ -528,13 +528,13 @@ You can make the pagination infinite with the `infinite` property, this means th
 
 <template #template>
 
-@[code{1-5} vue{3}](../.vuepress/components/pagination/infinite.vue)
+@[code{1-5} vue{3}](../../.vuepress/components/pagination/infinite.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11}](../.vuepress/components/pagination/infinite.vue)
+@[code{7-11}](../../.vuepress/components/pagination/infinite.vue)
 
 </template>
 

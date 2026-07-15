@@ -1,12 +1,12 @@
 <template>
   <div class="center con-checkbox">
-    <vs-checkbox-group v-model="options">
-      <vs-checkbox value="css"> Css </vs-checkbox>
-      <vs-checkbox color="danger" value="html"> Html </vs-checkbox>
-      <vs-checkbox color="warn" value="javascript"> Javascript </vs-checkbox>
-      <vs-checkbox color="#42b883" value="vue"> Vue </vs-checkbox>
-      <vs-checkbox color="dark" value="vuesax"> Vuesax </vs-checkbox>
-    </vs-checkbox-group>
+    <s-checkbox-group v-model="options">
+      <s-checkbox value="css"> Css </s-checkbox>
+      <s-checkbox color="danger" value="html"> Html </s-checkbox>
+      <s-checkbox color="warn" value="javascript"> Javascript </s-checkbox>
+      <s-checkbox color="#42b883" value="vue"> Vue </s-checkbox>
+      <s-checkbox color="dark" value="vuesax"> Vuesax </s-checkbox>
+    </s-checkbox-group>
 
     <span class="data-check">
       {{ options }}

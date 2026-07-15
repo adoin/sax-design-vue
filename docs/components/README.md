@@ -8,7 +8,7 @@ PROPS:
     link: /api/color
     usage: '#color'
     code: >
-      <vs-button color="success"> Success </vs-button>
+      <s-button color="success"> Success </s-button>
   # _______________________________________
   - name: style button
     type: Prop
@@ -18,7 +18,7 @@ PROPS:
     link: null
     usage: '#flat'
     code: >
-      <vs-button type="flat"> Flat </vs-button>
+      <s-button type="flat"> Flat </s-button>
   # _______________________________________
   - name: active
     type: Boolean
@@ -28,7 +28,7 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-button active> Default </vs-button>
+      <s-button active> Default </s-button>
   # _______________________________________
   - name: upload
     type: Boolean
@@ -38,9 +38,9 @@ PROPS:
     link: null
     usage: '#upload'
     code: >
-      <vs-button upload >
+      <s-button upload >
         <i class='bx bxs-wallet'></i> Wallet
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: to
     type: String
@@ -50,9 +50,9 @@ PROPS:
     link: null
     usage: '#to-href'
     code: >
-      <vs-button to="/">
+      <s-button to="/">
         Example prop - to
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: href
     type: String
@@ -62,9 +62,9 @@ PROPS:
     link: null
     usage: '#to-href'
     code: >
-      <vs-button href="https://github.com/vuesax-alpha/vuesax-alpha/">
+      <s-button href="https://github.com/adoin/sax-design-vue/">
         Example prop - url
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: blank
     type: Boolean
@@ -74,9 +74,9 @@ PROPS:
     link: null
     usage: '#to-href'
     code: >
-      <vs-button blank href="https://github.com/vuesax-alpha/vuesax-alpha/">
+      <s-button blank href="https://github.com/adoin/sax-design-vue/">
         Example prop - url
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: icon
     type: Boolean
@@ -86,9 +86,9 @@ PROPS:
     link: null
     usage: '#icon'
     code: >
-      <vs-button icon>
+      <s-button icon>
         <i class='bx bx-home-alt'></i>
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: circle
     type: Boolean
@@ -98,9 +98,9 @@ PROPS:
     link: null
     usage: '#circle'
     code: >
-      <vs-button icon shape="circle">
+      <s-button icon shape="circle">
         <i class='bx bx-home-alt'></i>
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: square
     type: Boolean
@@ -110,9 +110,9 @@ PROPS:
     link: null
     usage: '#square'
     code: >
-      <vs-button icon shape="square"> // <------
+      <s-button icon shape="square"> // <------
         <i class='bx bx-home-alt'></i>
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: block
     type: Boolean
@@ -122,9 +122,9 @@ PROPS:
     link: null
     usage: '#block'
     code: >
-      <vs-button block>
+      <s-button block>
         <i class='bx bxs-paint-roll'></i> Edit Theme
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: animationType
     type: Boolean
@@ -134,12 +134,12 @@ PROPS:
     link: null
     usage: '#animate'
     code: >
-      <vs-button type="flat" color="success" animation-type="vertical">
+      <s-button type="flat" color="success" animation-type="vertical">
         Message
         <template #animate>
           <i class='bx bx-mail-send'></i> Send
         </template>
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: animateInactive
     type: Boolean
@@ -149,13 +149,13 @@ PROPS:
     link: null
     usage: '#toggle'
     code: >
-      <vs-button :animate-inactive="successFace" @click="handleClickFace" :loading="loadingFace" color="facebook">
+      <s-button :animate-inactive="successFace" @click="handleClickFace" :loading="loadingFace" color="facebook">
         <i class='bx bxl-facebook-square'></i>
         {{ successFace ? 'Logout' : 'Facebook' }}
         <template #animate >
           <i class='bx bx-user'></i> Login
         </template>
-      </vs-button>
+      </s-button>
   # _______________________________________
   - name: Ripple
     type: String
@@ -165,8 +165,8 @@ PROPS:
     usage: '#ripple'
     code: >
       <template>
-        <vs-button ripple="reverse"> Reverse </vs-button>
-        <vs-button ripple="cut"> Cut </vs-button>
+        <s-button ripple="reverse"> Reverse </s-button>
+        <s-button ripple="cut"> Cut </s-button>
       </template>
 SLOTS:
   - name: animate
@@ -176,12 +176,12 @@ SLOTS:
     default: null
     link: null
     code: >
-      <vs-button>
+      <s-button>
         Home
         <template #animate>
           <i class='bx bx-home-alt'></i>
         </template>
-      </vs-button>
+      </s-button>
     usage: '#animated'
   # _______________________________________
 NEWS:
@@ -654,7 +654,7 @@ these buttons usually do an important action in specific and go with a fixed pos
 
 ## Group
 
-If you need to make a group of buttons you can use the **sub-component** `<vs-button-group> </vs-button-group>` and inside the default slot put the buttons you want to group
+If you need to make a group of buttons you can use the **sub-component** `<s-button-group> </s-button-group>` and inside the default slot put the buttons you want to group
 
 <template #example>
 <button-group />

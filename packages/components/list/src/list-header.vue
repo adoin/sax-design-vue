@@ -1,7 +1,7 @@
 <template>
   <div :class="headerKls" :style="headerStyle">
     <div v-if="icon" :class="ns.e('icon')">
-      <VsIcon :icon="icon" :icon-pack="iconPack" />
+      <SIcon :icon="icon" :icon-pack="iconPack" />
     </div>
     <div :class="ns.e('header-titles')">
       <div v-if="title" :class="ns.e('header-title')">{{ title }}</div>
@@ -15,13 +15,13 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { listHeaderProps } from './list-header'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
-  name: 'VsListHeader',
+  name: 'SListHeader',
 })
 
 const props = defineProps(listHeaderProps)

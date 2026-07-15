@@ -31,7 +31,7 @@ import { getVsColor } from '@vuesax-alpha/utils'
 import { textareaEmits, textareaProps } from './textarea'
 
 defineOptions({
-  name: 'VsTextarea',
+  name: 'STextarea',
   inheritAttrs: false,
 })
 

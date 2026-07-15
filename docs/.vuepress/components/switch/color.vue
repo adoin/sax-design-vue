@@ -1,12 +1,12 @@
 <template>
   <div class="center con-switch">
-    <vs-switch v-model="active1" />
-    <vs-switch v-model="active2" color="success" />
-    <vs-switch v-model="active3" color="danger" />
-    <vs-switch v-model="active4" color="warn" />
-    <vs-switch v-model="active5" color="dark" />
-    <vs-switch v-model="active6" color="#7d33ff" />
-    <vs-switch v-model="active7" color="rgb(59,222,200)" />
+    <s-switch v-model="active1" />
+    <s-switch v-model="active2" color="success" />
+    <s-switch v-model="active3" color="danger" />
+    <s-switch v-model="active4" color="warn" />
+    <s-switch v-model="active5" color="dark" />
+    <s-switch v-model="active6" color="#7d33ff" />
+    <s-switch v-model="active7" color="rgb(59,222,200)" />
   </div>
 </template>
 

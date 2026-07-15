@@ -1,8 +1,8 @@
 import { withInstall } from '@vuesax-alpha/utils'
 import Popper from './src/popper.vue'
 
-export const VsPopper = withInstall(Popper)
-export default VsPopper
+export const SPopper = withInstall(Popper)
+export default SPopper
 
 export * from './src/popper'
 export * from './src/trigger'

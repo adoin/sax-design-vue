@@ -1,8 +1,8 @@
 <template>
   <div class="center">
-    <vs-slider v-model="a" color="primary" />
-    <vs-slider v-model="b" color="success" />
-    <vs-slider v-model="c" color="danger" />
+    <s-slider v-model="a" color="primary" />
+    <s-slider v-model="b" color="success" />
+    <s-slider v-model="c" color="danger" />
   </div>
 </template>
 

@@ -1,17 +1,17 @@
 <template>
   <div class="play-container demo">
-    <vs-breadcrumb :items="defaultItems" />
-    <vs-breadcrumb :color="colorx" :items="defaultItems" />
+    <s-breadcrumb :items="defaultItems" />
+    <s-breadcrumb :color="colorx" :items="defaultItems" />
     <input v-model="colorx" type="color" />
-    <vs-breadcrumb separator="chevron_right" :items="shortItems" />
-    <vs-breadcrumb>
+    <s-breadcrumb separator="chevron_right" :items="shortItems" />
+    <s-breadcrumb>
       <li>
         <a href="#" title="Home">Home</a>
         <span class="vs-breadcrum--separator">/</span>
       </li>
       <li aria-current="page" class="active">Infos</li>
-    </vs-breadcrumb>
-    <vs-breadcrumb align="center" :items="shortItems" />
+    </s-breadcrumb>
+    <s-breadcrumb align="center" :items="shortItems" />
   </div>
 </template>
 

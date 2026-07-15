@@ -8,7 +8,7 @@
 import { useNamespace } from '@vuesax-alpha/hooks'
 
 defineOptions({
-  name: 'VsButtonGroup',
+  name: 'SButtonGroup',
 })
 
 const ns = useNamespace('button')

@@ -160,35 +160,35 @@ SLOTS:
     link: null
     usage: '#message'
     code: >
-      <vs-select
+      <s-select
         placeholder="Success"
         v-model="value"
       >
         <template #message-success>
           Option Valid
         </template>
-        <vs-option label="Vuesax" value="1">
+        <s-option label="Vuesax" value="1">
           Vuesax
-        </vs-option>
-        <vs-option label="Vue" value="2">
+        </s-option>
+        <s-option label="Vue" value="2">
           Vue
-        </vs-option>
-        <vs-option label="Javascript" value="3">
+        </s-option>
+        <s-option label="Javascript" value="3">
           Javascript
-        </vs-option>
-        <vs-option label="Sass" value="4">
+        </s-option>
+        <s-option label="Sass" value="4">
           Sass
-        </vs-option>
-        <vs-option label="Typescript" value="5">
+        </s-option>
+        <s-option label="Typescript" value="5">
           Typescript
-        </vs-option>
-        <vs-option label="Webpack" value="6">
+        </s-option>
+        <s-option label="Webpack" value="6">
           Webpack
-        </vs-option>
-        <vs-option label="Nodejs" value="7">
+        </s-option>
+        <s-option label="Nodejs" value="7">
           Nodejs
-        </vs-option>
-      </vs-select>
+        </s-option>
+      </s-select>
 ---
 
 # Select
@@ -199,7 +199,7 @@ SLOTS:
 
 <docs-warn />
 
-Add a select element with the `vs-select` component and the `vs-option` sub component
+Add a select element with the `s-select` component and the `s-option` sub component
 
 <template #example>
 <select-default />
@@ -277,7 +277,7 @@ Add a label to the select easily with the `label` property, you can also add a `
 
 ## Group
 
-Group options within the select with the sub-component `vs-option-group`, as the required prop is the `title` to add a title to the item group
+Group options within the select with the sub-component `s-option-group`, as the required prop is the `title` to add a title to the item group
 
 <template #example>
 <select-group />

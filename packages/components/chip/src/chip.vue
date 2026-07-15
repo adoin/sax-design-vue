@@ -1,7 +1,7 @@
 <template>
   <div v-if="visible" :class="chipKls" :style="chipStyle" @click="handleClick">
     <span :class="ns.e('text')">
-      <VsIcon
+      <SIcon
         v-if="icon"
         :icon="icon"
         :icon-pack="iconPack"
@@ -17,7 +17,7 @@
       aria-label="Close"
       @click.stop="handleClose"
     >
-      <VsIcon :icon="closeIcon" :icon-pack="iconPack" />
+      <SIcon :icon="closeIcon" :icon-pack="iconPack" />
     </button>
   </div>
 </template>
@@ -29,14 +29,14 @@ import {
   useNamespace,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { chipEmits, chipProps } from './chip'
 import type { Color } from '@vuesax-alpha/constants'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
-  name: 'VsChip',
+  name: 'SChip',
 })
 
 const props = defineProps(chipProps)
@@ -95,7 +95,7 @@ const chipStyle = computed((): CSSProperties => {
 const handleClose = () => {
   emit('click')
   if (props.item) {
-    emit('vs-remove', false)
+    emit('s-remove', false)
     emit('close')
     return
   }

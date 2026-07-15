@@ -1,7 +1,7 @@
 <template>
   <div class="center con-switch">
-    <vs-switch v-model="activeLoading"> Active Loading </vs-switch>
-    <vs-switch v-model="active2" :loading="activeLoading" />
+    <s-switch v-model="activeLoading"> Active Loading </s-switch>
+    <s-switch v-model="active2" :loading="activeLoading" />
   </div>
 </template>
 

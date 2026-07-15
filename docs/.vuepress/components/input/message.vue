@@ -1,18 +1,18 @@
 <template>
   <div class="center content-inputs">
-    <vs-input v-model="value1" placeholder="Email">
+    <s-input v-model="value1" placeholder="Email">
       <template #message-success> Email Valid </template>
-    </vs-input>
+    </s-input>
 
-    <vs-input v-model="value2" placeholder="Name">
+    <s-input v-model="value2" placeholder="Name">
       <template #message-danger> Required </template>
-    </vs-input>
+    </s-input>
 
-    <vs-input v-model="value3" type="password" placeholder="Password">
+    <s-input v-model="value3" type="password" placeholder="Password">
       <template #message-warn> Insecure password </template>
-    </vs-input>
+    </s-input>
 
-    <vs-input
+    <s-input
       v-model="value4"
       label="Example Regex Validation"
       placeholder="vuesax@gmail.com"
@@ -21,7 +21,7 @@
       <template v-if="!validEmail && value4 !== ''" #message-danger>
         Email Invalid
       </template>
-    </vs-input>
+    </s-input>
   </div>
 </template>
 

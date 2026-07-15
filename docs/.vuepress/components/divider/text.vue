@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-divider>My Text</vs-divider>
+    <s-divider>My Text</s-divider>
   </div>
 </template>
 

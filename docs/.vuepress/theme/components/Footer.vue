@@ -41,9 +41,9 @@
 <script setup lang="ts">
 // @ts-ignore
 import { useThemeData } from '@vuepress/plugin-theme-data/client'
-import type { VuesaxAlphaThemeOptions } from '~/vuesaxAlphaTheme'
+import type { SaxDesignVueThemeOptions } from '~/saxDesignVueTheme'
 
-const themeData = useThemeData<VuesaxAlphaThemeOptions>()
+const themeData = useThemeData<SaxDesignVueThemeOptions>()
 const year = new Date().getFullYear()
 
 const links = [

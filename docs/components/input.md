@@ -25,7 +25,7 @@ PROPS:
     usage: '#label'
     code: >
       <template>
-        <vs-input
+        <s-input
           label="Name"
           placeholder="Evan You"
         />
@@ -39,7 +39,7 @@ PROPS:
     usage: '#label-float'
     code: >
       <template>
-        <vs-input
+        <s-input
           label="Country"
           label-float
           v-model="value"
@@ -54,37 +54,37 @@ PROPS:
     usage: '#color'
     code: >
       <template>
-        <vs-input
+        <s-input
           color="primary"
           placeholder="Primary"
         />
 
-        <vs-input
+        <s-input
           color="success"
           placeholder="Success"
         />
 
-        <vs-input
+        <s-input
           color="danger"
           placeholder="Danger"
         />
 
-        <vs-input
+        <s-input
           color="warn"
           placeholder="Warn"
         />
 
-        <vs-input
+        <s-input
           color="dark"
           placeholder="Dark"
         />
 
-        <vs-input
+        <s-input
           color="#7d33ff"
           placeholder="HEX"
         />
 
-        <vs-input
+        <s-input
           color="rgb(59,222,200)"
           placeholder="HEX"
         />
@@ -116,7 +116,7 @@ PROPS:
     code: >
       <template>
         <div class="center content-inputs">
-          <vs-input loading v-model="value" placeholder="Name" />
+          <s-input loading v-model="value" placeholder="Name" />
         </div>
       </template>
 

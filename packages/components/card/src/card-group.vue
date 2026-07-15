@@ -4,14 +4,14 @@
       <icon-arrow />
     </button>
 
-    <vs-scrollbar
+    <s-scrollbar
       ref="scrollbarRef"
       always
       :view-class="ns.em('group', 'cards')"
       @scroll="handleScrollbar"
     >
       <slot />
-    </vs-scrollbar>
+    </s-scrollbar>
     <div :class="ns.em('group', 'space')" />
 
     <button :class="ns.em('group', 'next')" @click="handleClickNexticon">
@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { IconArrow } from '@vuesax-alpha/components/icon'
-import { VsScrollbar } from '@vuesax-alpha/components/scrollbar'
+import { SScrollbar } from '@vuesax-alpha/components/scrollbar'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import type {
   ScrollEmitParams,
@@ -31,7 +31,7 @@ import type {
 } from '@vuesax-alpha/components/scrollbar'
 
 defineOptions({
-  name: 'VsCardGroup',
+  name: 'SCardGroup',
 })
 
 const ns = useNamespace('card')

@@ -1,18 +1,18 @@
 <template>
   <div class="center example-nav">
-    <vs-navbar v-model="active" center-collapsed>
+    <s-navbar v-model="active" center-collapsed>
       <template #left>
         <img src="/logo2.png" alt="" />
       </template>
-      <vs-navbar-item id="guide"> Guide </vs-navbar-item>
-      <vs-navbar-item id="docs"> Documents </vs-navbar-item>
-      <vs-navbar-item id="components"> Components </vs-navbar-item>
-      <vs-navbar-item id="license"> license </vs-navbar-item>
+      <s-navbar-item id="guide"> Guide </s-navbar-item>
+      <s-navbar-item id="docs"> Documents </s-navbar-item>
+      <s-navbar-item id="components"> Components </s-navbar-item>
+      <s-navbar-item id="license"> license </s-navbar-item>
       <template #right>
-        <vs-button type="flat">Login</vs-button>
-        <vs-button>Get Started</vs-button>
+        <s-button type="flat">Login</s-button>
+        <s-button>Get Started</s-button>
       </template>
-    </vs-navbar>
+    </s-navbar>
     <div class="square">
       <div id="child1" class="child">child 1</div>
       <div id="child2" class="child">child 2</div>

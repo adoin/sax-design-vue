@@ -1,36 +1,36 @@
 <template>
   <div class="center chip-demo">
-    <vs-chip color="primary">Basic Chip</vs-chip>
-    <vs-chip color="success">
-      <vs-avatar><template #text>LD</template></vs-avatar>
+    <s-chip color="primary">Basic Chip</s-chip>
+    <s-chip color="success">
+      <s-avatar><template #text>LD</template></s-avatar>
       Avatar Text
-    </vs-chip>
-    <vs-chip color="danger">
-      <vs-avatar>
+    </s-chip>
+    <s-chip color="danger">
+      <s-avatar>
         <i class="material-icons notranslate">person</i>
-      </vs-avatar>
+      </s-avatar>
       Avatar Icon
-    </vs-chip>
-    <vs-chip color="warning">
-      <vs-avatar>
+    </s-chip>
+    <s-chip color="warning">
+      <s-avatar>
         <img src="https://randomuser.me/api/portraits/men/4.jpg" alt="" />
-      </vs-avatar>
+      </s-avatar>
       Avatar Image
-    </vs-chip>
-    <vs-chip v-model="closableDark" closable color="dark">
+    </s-chip>
+    <s-chip v-model="closableDark" closable color="dark">
       Closable chip
-    </vs-chip>
-    <vs-chip
+    </s-chip>
+    <s-chip
       v-model="closableCustom"
       closable
       color="#24c1a0"
       close-icon="close"
     >
-      <vs-avatar>
+      <s-avatar>
         <img src="https://randomuser.me/api/portraits/men/16.jpg" alt="" />
-      </vs-avatar>
+      </s-avatar>
       Closable chip
-    </vs-chip>
+    </s-chip>
   </div>
 </template>
 

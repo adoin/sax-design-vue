@@ -35,8 +35,8 @@
           <p>Do you want to participate in our initiative? We are open.</p>
 
           <footer>
-            <vs-button color="danger"> Open </vs-button>
-            <vs-button color="dark" type="shadow"> cancel </vs-button>
+            <s-button color="danger"> Open </s-button>
+            <s-button color="dark" type="shadow"> cancel </s-button>
           </footer>
         </div>
       </div>
@@ -77,7 +77,7 @@
           <span class="has-darken"> Red Shoes </span>
         </h4>
 
-        <vs-button block> Button </vs-button>
+        <s-button block> Button </s-button>
       </div>
 
       <div class="component5">
@@ -94,9 +94,9 @@
       </div>
 
       <div class="component6">
-        <vs-button icon color="dark" type="transparent">
+        <s-button icon color="dark" type="transparent">
           <i class="bx bx-dots-vertical-rounded" />
-        </vs-button>
+        </s-button>
 
         <div class="con-load" />
       </div>
@@ -109,14 +109,14 @@
         </div>
 
         <header>
-          <vs-button icon color="dark" type="shadow">
+          <s-button icon color="dark" type="shadow">
             <i class="bx bxs-heart" />
-          </vs-button>
+          </s-button>
 
-          <vs-button color="dark" type="shadow">
+          <s-button color="dark" type="shadow">
             <i class="bx bxs-chat" />
             12
-          </vs-button>
+          </s-button>
         </header>
 
         <div class="content-text">
@@ -128,11 +128,11 @@
         </div>
 
         <footer>
-          <vs-input v-model="input1" placeholder="Comment" />
+          <s-input v-model="input1" placeholder="Comment" />
           <div>
-            <vs-button icon type="flat">
+            <s-button icon type="flat">
               <i class="bx bx-send" />
-            </vs-button>
+            </s-button>
           </div>
         </footer>
       </div>
@@ -153,7 +153,7 @@
 
         <footer>
           <div>
-            <h4>Vuesax Alpha</h4>
+            <h4>Sax Design Vue</h4>
             <p>Framework</p>
           </div>
 
@@ -188,15 +188,15 @@
       </div>
 
       <div class="component10">
-        <vs-button color="danger" icon>
+        <s-button color="danger" icon>
           <i class="bx bx-play" />
-        </vs-button>
-        <vs-button color="warn" icon>
+        </s-button>
+        <s-button color="warn" icon>
           <i class="bx bx-git-pull-request" />
-        </vs-button>
-        <vs-button icon>
+        </s-button>
+        <s-button icon>
           <i class="bx bxl-github" />
-        </vs-button>
+        </s-button>
       </div>
 
       <div :class="{ active: focusDrop }" class="component11">
@@ -225,15 +225,15 @@
       </div>
 
       <div class="component12">
-        <vs-input v-model="input2" placeholder="Search" />
-        <vs-button icon>
+        <s-input v-model="input2" placeholder="Search" />
+        <s-button icon>
           <i class="bx bx-search" />
-        </vs-button>
+        </s-button>
       </div>
 
       <div class="component13">
         <header>
-          <vs-input v-model="input3" placeholder="location" />
+          <s-input v-model="input3" placeholder="location" />
           <button>
             <i class="bx bx-chevron-right" />
           </button>
@@ -241,20 +241,20 @@
 
         <ul>
           <li>
-            <vs-checkbox> Spain </vs-checkbox>
+            <s-checkbox> Spain </s-checkbox>
           </li>
           <li>
-            <vs-checkbox> Germany </vs-checkbox>
+            <s-checkbox> Germany </s-checkbox>
           </li>
           <li>
-            <vs-checkbox> Italy </vs-checkbox>
+            <s-checkbox> Italy </s-checkbox>
           </li>
           <li>
-            <vs-checkbox> Japan </vs-checkbox>
+            <s-checkbox> Japan </s-checkbox>
           </li>
         </ul>
 
-        <vs-button block> Lets Go! </vs-button>
+        <s-button block> Lets Go! </s-button>
       </div>
     </div>
   </div>

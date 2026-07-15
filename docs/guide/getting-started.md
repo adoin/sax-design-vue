@@ -17,7 +17,7 @@ Sax Design Vue targets **Vue 3.3+** with a modern bundler (Vite recommended). In
 <template #pnpm>
 
 ```bash
-pnpm add vue vuesax-alpha
+pnpm add vue sax-design-vue
 ```
 
 </template>
@@ -25,7 +25,7 @@ pnpm add vue vuesax-alpha
 <template #npm>
 
 ```bash
-npm install vue vuesax-alpha
+npm install vue sax-design-vue
 ```
 
 </template>
@@ -33,7 +33,7 @@ npm install vue vuesax-alpha
 <template #yarn>
 
 ```bash
-yarn add vue vuesax-alpha
+yarn add vue sax-design-vue
 ```
 
 </template>
@@ -50,13 +50,13 @@ yarn add vue vuesax-alpha
 
 ```ts
 import { createApp } from 'vue'
-import Vuesax from 'vuesax-alpha'
+import SaxDesignVue from 'sax-design-vue'
 import App from './App.vue'
 
-import 'vuesax-alpha/theme-chalk/index.css'
-import 'vuesax-alpha/theme-chalk/dark/css-vars.css'
+import 'sax-design-vue/theme-chalk/index.css'
+import 'sax-design-vue/theme-chalk/dark/css-vars.css'
 
-createApp(App).use(Vuesax).mount('#app')
+createApp(App).use(SaxDesignVue).mount('#app')
 ```
 
 </command>
@@ -102,13 +102,13 @@ const toggleDark = useToggle(isDark)
 
 ```ts
 import { createApp } from 'vue'
-import { VsAlert, VsButton } from 'vuesax-alpha'
+import { SAlert, SButton } from 'sax-design-vue'
 import App from './App.vue'
 
-import 'vuesax-alpha/theme-chalk/index.css'
-import 'vuesax-alpha/theme-chalk/dark/css-vars.css'
+import 'sax-design-vue/theme-chalk/index.css'
+import 'sax-design-vue/theme-chalk/dark/css-vars.css'
 
-createApp(App).use(VsAlert).use(VsButton).mount('#app')
+createApp(App).use(SAlert).use(SButton).mount('#app')
 ```
 
 </command>

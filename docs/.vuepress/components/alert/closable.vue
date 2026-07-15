@@ -1,10 +1,10 @@
 <template>
   <div class="center">
-    <vs-button flat @click="active = !active">
+    <s-button flat @click="active = !active">
       {{ active ? 'Close Alert' : 'Open Alert' }}
-    </vs-button>
+    </s-button>
 
-    <vs-alert v-model="active" closable>
+    <s-alert v-model="active" closable>
       <template #title> Vuesax Framework </template>
       Vuesax (pronounced / vjusacks: /, as view sacks) is a
       <b>UI components framework</b> created with
@@ -12,7 +12,7 @@
       Unique and pleasant style, Vuesax is created from scratch and designed for
       all types of developed from the frontend lover to the backend that wants
       to easily create your visual approach to the end user
-    </vs-alert>
+    </s-alert>
   </div>
 </template>
 <script lang="ts" setup>

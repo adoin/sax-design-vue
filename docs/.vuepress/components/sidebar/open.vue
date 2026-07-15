@@ -1,29 +1,29 @@
 <template>
   <div class="hidden">
-    <vs-navbar v-model="active" shadow shape="square" center-collapsed>
+    <s-navbar v-model="active" shadow shape="square" center-collapsed>
       <template #left>
-        <vs-button type="flat" icon @click="activeSidebar = !activeSidebar">
+        <s-button type="flat" icon @click="activeSidebar = !activeSidebar">
           <i class="bx bx-menu" />
-        </vs-button>
+        </s-button>
       </template>
-      <vs-navbar-item id="guide" :active="active == 'guide'">
+      <s-navbar-item id="guide" :active="active == 'guide'">
         Guide
-      </vs-navbar-item>
-      <vs-navbar-item id="docs" :active="active == 'docs'">
+      </s-navbar-item>
+      <s-navbar-item id="docs" :active="active == 'docs'">
         Documents
-      </vs-navbar-item>
-      <vs-navbar-item id="components" :active="active == 'components'">
+      </s-navbar-item>
+      <s-navbar-item id="components" :active="active == 'components'">
         Components
-      </vs-navbar-item>
-      <vs-navbar-item id="license" :active="active == 'license'">
+      </s-navbar-item>
+      <s-navbar-item id="license" :active="active == 'license'">
         license
-      </vs-navbar-item>
+      </s-navbar-item>
       <template #right>
-        <vs-button type="flat">Login</vs-button>
-        <vs-button>Get Started</vs-button>
+        <s-button type="flat">Login</s-button>
+        <s-button>Get Started</s-button>
       </template>
-    </vs-navbar>
-    <vs-sidebar v-model="active" v-model:open="activeSidebar" absolute>
+    </s-navbar>
+    <s-sidebar v-model="active" v-model:open="activeSidebar" absolute>
       <template #logo>
         <svg
           class="logo-nav"
@@ -64,132 +64,132 @@
         </svg>
       </template>
       <template #header />
-      <vs-sidebar-item id="home">
+      <s-sidebar-item id="home">
         <template #icon>
           <i class="bx bx-home" />
         </template>
         Home
-      </vs-sidebar-item>
-      <vs-sidebar-item id="market">
+      </s-sidebar-item>
+      <s-sidebar-item id="market">
         <template #icon>
           <i class="bx bx-grid-alt" />
         </template>
         Market Overview
-      </vs-sidebar-item>
-      <vs-sidebar-item id="Music">
+      </s-sidebar-item>
+      <s-sidebar-item id="Music">
         <template #icon>
           <i class="bx bxs-music" />
         </template>
         Music
-      </vs-sidebar-item>
-      <vs-sidebar-group>
+      </s-sidebar-item>
+      <s-sidebar-group>
         <template #header>
-          <vs-sidebar-item arrow>
+          <s-sidebar-item arrow>
             <template #icon>
               <i class="bx bx-group" />
             </template>
             Social media
-          </vs-sidebar-item>
+          </s-sidebar-item>
         </template>
 
-        <vs-sidebar-item id="Instagram">
+        <s-sidebar-item id="Instagram">
           <template #icon>
             <i class="bx bxl-instagram" />
           </template>
           Instagram
-        </vs-sidebar-item>
-        <vs-sidebar-item id="twitter">
+        </s-sidebar-item>
+        <s-sidebar-item id="twitter">
           <template #icon>
             <i class="bx bxl-twitter" />
           </template>
           Twitter
-        </vs-sidebar-item>
-        <vs-sidebar-item id="Facebook">
+        </s-sidebar-item>
+        <s-sidebar-item id="Facebook">
           <template #icon>
             <i class="bx bxl-facebook" />
           </template>
           Facebook
-        </vs-sidebar-item>
-      </vs-sidebar-group>
-      <vs-sidebar-group>
+        </s-sidebar-item>
+      </s-sidebar-group>
+      <s-sidebar-group>
         <template #header>
-          <vs-sidebar-item arrow>
+          <s-sidebar-item arrow>
             <template #icon>
               <i class="bx bx-code-alt" />
             </template>
             Coding
-          </vs-sidebar-item>
+          </s-sidebar-item>
         </template>
 
-        <vs-sidebar-item id="github">
+        <s-sidebar-item id="github">
           <template #icon>
             <i class="bx bxl-github" />
           </template>
           Github
-        </vs-sidebar-item>
-        <vs-sidebar-item id="codepen">
+        </s-sidebar-item>
+        <s-sidebar-item id="codepen">
           <template #icon>
             <i class="bx bxl-codepen" />
           </template>
           Codepen
-        </vs-sidebar-item>
-        <vs-sidebar-item id="discord">
+        </s-sidebar-item>
+        <s-sidebar-item id="discord">
           <template #icon>
             <i class="bx bxl-discord" />
           </template>
           Discord
-        </vs-sidebar-item>
-        <vs-sidebar-item id="Javascript">
+        </s-sidebar-item>
+        <s-sidebar-item id="Javascript">
           <template #icon>
             <i class="bx bxl-javascript" />
           </template>
           Javascript
-        </vs-sidebar-item>
-        <vs-sidebar-item id="git">
+        </s-sidebar-item>
+        <s-sidebar-item id="git">
           <template #icon>
             <i class="bx bxl-git" />
           </template>
           Git
-        </vs-sidebar-item>
-      </vs-sidebar-group>
-      <vs-sidebar-item id="donate">
+        </s-sidebar-item>
+      </s-sidebar-group>
+      <s-sidebar-item id="donate">
         <template #icon>
           <i class="bx bxs-donate-heart" />
         </template>
         Donate
-      </vs-sidebar-item>
-      <vs-sidebar-item id="drink">
+      </s-sidebar-item>
+      <s-sidebar-item id="drink">
         <template #icon>
           <i class="bx bx-drink" />
         </template>
         Drink
-      </vs-sidebar-item>
-      <vs-sidebar-item id="shopping">
+      </s-sidebar-item>
+      <s-sidebar-item id="shopping">
         <template #icon>
           <i class="bx bxs-shopping-bags" />
         </template>
         Shopping
-      </vs-sidebar-item>
-      <vs-sidebar-item id="chat">
+      </s-sidebar-item>
+      <s-sidebar-item id="chat">
         <template #icon>
           <i class="bx bx-chat" />
         </template>
         Chat
-      </vs-sidebar-item>
+      </s-sidebar-item>
       <template #footer>
-        <vs-row justify="space-between">
-          <vs-avatar>
+        <s-row justify="space-between">
+          <s-avatar>
             <img src="/avatars/avatar-5.png" alt="" />
-          </vs-avatar>
+          </s-avatar>
 
-          <vs-avatar badge-color="danger" badge-position="top-right">
+          <s-avatar badge-color="danger" badge-position="top-right">
             <i class="bx bx-bell" />
 
             <template #badge> 28 </template>
-          </vs-avatar>
-        </vs-row>
+          </s-avatar>
+        </s-row>
       </template>
-    </vs-sidebar>
+    </s-sidebar>
   </div>
 </template>
 

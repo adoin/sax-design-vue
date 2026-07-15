@@ -8,11 +8,11 @@ PROPS:
     link: null
     code: >
       <template>
-        <vs-button type="flat" @click="active = !active">
+        <s-button type="flat" @click="active = !active">
           {{ active ? 'Close Alert' : 'Open Alert' }}
-        </vs-button>
+        </s-button>
 
-        <vs-alert closable v-model="active">
+        <s-alert closable v-model="active">
           <template #title>
             Vuesax Framework
           </template>
@@ -21,7 +21,7 @@ PROPS:
           Unique and pleasant style, Vuesax is created from scratch and designed for all types of
           developed from the frontend lover to the backend that wants to easily create
           your visual approach to the end user
-        </vs-alert>
+        </s-alert>
       </template>
 
       <script setup lang="ts">
@@ -41,7 +41,7 @@ PROPS:
     usage: '#hidden-content'
     code: >
       <template>
-        <vs-alert hidden-content>
+        <s-alert hidden-content>
           <template #title>
             Vuesax Framework
           </template>
@@ -50,7 +50,7 @@ PROPS:
           Unique and pleasant style, Vuesax is created from scratch and designed for all types of
           developed from the frontend lover to the backend that wants to easily create
           your visual approach to the end user
-        </vs-alert>
+        </s-alert>
       </template>
   - name: color
     type: String
@@ -60,7 +60,7 @@ PROPS:
     link: null
     usage: '#color'
     code: >
-      <vs-alert color="success">
+      <s-alert color="success">
         <template #title>
           Vuesax Framework
         </template>
@@ -69,7 +69,7 @@ PROPS:
         Unique and pleasant style, Vuesax is created from scratch and designed for all types of
         developed from the frontend lover to the backend that wants to easily create
         your visual approach to the end user
-      </vs-alert>
+      </s-alert>
   - name: type
     type: boolean
     values: solid, border, shadow, gradient, relief
@@ -78,7 +78,7 @@ PROPS:
     link: null
     usage: '#solid'
     code: >
-      <vs-alert solid>
+      <s-alert solid>
         <template #title>
           Vuesax Framework
         </template>
@@ -87,7 +87,7 @@ PROPS:
         Unique and pleasant style, Vuesax is created from scratch and designed for all types of
         developed from the frontend lover to the backend that wants to easily create
         your visual approach to the end user
-      </vs-alert>
+      </s-alert>
   - name: page
     type: Number
     values: Number
@@ -97,14 +97,14 @@ PROPS:
     usage: '#pagination'
     code: >
       <template>
-        <vs-alert :page="1" >
+        <s-alert :page="1" >
           <template #title>
             Vuesax Framework
           </template>
           <template #page-1>
             Page 1 - this page is a slot and here you can add either text, html elements or components
           </template>
-        </vs-alert>
+        </s-alert>
       </template>
   - name: progress
     type: Number
@@ -114,7 +114,7 @@ PROPS:
     link: null
     usage: '#progress-bar'
     code: >
-      <vs-alert progress="70">
+      <s-alert progress="70">
         <template #title>
           Vuesax Framework
         </template>
@@ -123,7 +123,7 @@ PROPS:
         Unique and pleasant style, Vuesax is created from scratch and designed for all types of
         developed from the frontend lover to the backend that wants to easily create
         your visual approach to the end user
-      </vs-alert>
+      </s-alert>
   - name: closable
     type: boolean
     values: boolean
@@ -133,11 +133,11 @@ PROPS:
     usage: '#closable'
     code: >
       <template>
-        <vs-button flat @click="active=!active">
+        <s-button flat @click="active=!active">
           {{ active ? 'Close Alert' : 'Open Alert' }}
-        </vs-button>
+        </s-button>
 
-        <vs-alert closable v-model="active">
+        <s-alert closable v-model="active">
           <template #title>
             Vuesax Framework
           </template>
@@ -146,7 +146,7 @@ PROPS:
           Unique and pleasant style, Vuesax is created from scratch and designed for all types of
           developed from the frontend lover to the backend that wants to easily create
           your visual approach to the end user
-        </vs-alert>
+        </s-alert>
       </template>
 
       <script lang="ts" setup>
@@ -164,7 +164,7 @@ SLOTS:
     usage: '#icon'
     code: >
       <template>
-        <vs-alert>
+        <s-alert>
           <template #icon>
             <i class='bx bxs-chat'></i>
           </template>
@@ -176,7 +176,7 @@ SLOTS:
           Unique and pleasant style, Vuesax is created from scratch and designed for all types of
           developed from the frontend lover to the backend that wants to easily create
           your visual approach to the end user
-        </vs-alert>
+        </s-alert>
       </template>
   - name: title
     type: slot
@@ -188,7 +188,7 @@ SLOTS:
     code: >
       <template>
         <div class="center">
-          <vs-alert>
+          <s-alert>
             <template #title>
               Vuesax Alert Title
             </template>
@@ -197,7 +197,7 @@ SLOTS:
             Unique and pleasant style, Vuesax is created from scratch and designed for all types of
             developed from the frontend lover to the backend that wants to easily create
             your visual approach to the end user
-          </vs-alert>
+          </s-alert>
         </div>
       </template>
   - name: page-{n}
@@ -209,7 +209,7 @@ SLOTS:
     usage: '#pagination'
     code: >
       <template>
-        <vs-alert v-model:page="page" >
+        <s-alert v-model:page="page" >
           <template #title>
             Vuesax Framework
           </template>
@@ -218,7 +218,7 @@ SLOTS:
             Page 1 - this page is a slot and here you can add either text,
             html elements or components
           </template>
-        </vs-alert>
+        </s-alert>
       </template>
   - name: footer
     type: slot
@@ -228,7 +228,7 @@ SLOTS:
     link: null
     usage: '#footer'
     code: >
-      <vs-alert>
+      <s-alert>
         <template #title>
           Vuesax Framework
         </template>
@@ -238,14 +238,14 @@ SLOTS:
         developed from the frontend lover to the backend that wants to easily create
         your visual approach to the end user
         <template #footer>
-          <vs-button flat>
+          <s-button flat>
             Cancel
-          </vs-button>
-          <vs-button>
+          </s-button>
+          <s-button>
             Accept
-          </vs-button>
+          </s-button>
         </template>
-      </vs-alert>
+      </s-alert>
 
 UPDATES:
   - hidden-content
@@ -267,7 +267,7 @@ Easily generate an alert with this component apart from functionalities such as 
 
 <template #template>
 
-@[code html](../.vuepress/components/alert/default.vue)
+@[code html](../../.vuepress/components/alert/default.vue)
 
 </template>
 
@@ -285,7 +285,7 @@ You can change the style of the component by adding the `solid` property, the pr
 
 <template #template>
 
-@[code html{3}](../.vuepress/components/alert/solid.vue)
+@[code html{3}](../../.vuepress/components/alert/solid.vue)
 
 </template>
 
@@ -303,7 +303,7 @@ You can change the style of the component by adding the `border` property, the p
 
 <template #template>
 
-@[code html{3}](../.vuepress/components/alert/border.vue)
+@[code html{3}](../../.vuepress/components/alert/border.vue)
 
 </template>
 
@@ -321,7 +321,7 @@ You can change the style of the component by adding the `shadow` property, the p
 
 <template #template>
 
-@[code html{3}](../.vuepress/components/alert/shadow.vue)
+@[code html{3}](../../.vuepress/components/alert/shadow.vue)
 
 </template>
 
@@ -339,7 +339,7 @@ You can change the style of the component by adding the `gradient` property, the
 
 <template #template>
 
-@[code html{3}](../.vuepress/components/alert/gradient.vue)
+@[code html{3}](../../.vuepress/components/alert/gradient.vue)
 
 </template>
 
@@ -357,7 +357,7 @@ You can change the style of the component by adding the `relief` property, the p
 
 <template #template>
 
-@[code html{3}](../.vuepress/components/alert/relief.vue)
+@[code html{3}](../../.vuepress/components/alert/relief.vue)
 
 </template>
 
@@ -375,13 +375,13 @@ A beautiful and simple animation to show and hide the alert to the user
 
 <template #template>
 
-@[code{1-17} html](../.vuepress/components/alert/animate.vue)
+@[code{1-17} html](../../.vuepress/components/alert/animate.vue)
 
 </template>
 
 <template #script>
 
-@[code{18-23} html](../.vuepress/components/alert/animate.vue)
+@[code{18-23} html](../../.vuepress/components/alert/animate.vue)
 
 </template>
 
@@ -401,19 +401,19 @@ In this example you can click on the buttons and dynamically change the color va
 
 <template #template>
 
-@[code{1-69} html{3}](../.vuepress/components/alert/color.vue)
+@[code{1-69} html{3}](../../.vuepress/components/alert/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{71-75} html](../.vuepress/components/alert/color.vue)
+@[code{71-75} html](../../.vuepress/components/alert/color.vue)
 
 </template>
 
 <template #style>
 
-@[code{77-84} html](../.vuepress/components/alert/color.vue)
+@[code{77-84} html](../../.vuepress/components/alert/color.vue)
 
 </template>
 
@@ -435,7 +435,7 @@ Add an icon to the alert easily with the slot **icon**
 
 <template #template>
 
-@[code html{4-6}](../.vuepress/components/alert/icon.vue)
+@[code html{4-6}](../../.vuepress/components/alert/icon.vue)
 
 </template>
 
@@ -453,7 +453,7 @@ You can add a descriptive title to the alert with the `slot="title"`
 
 <template #template>
 
-@[code html{4}](../.vuepress/components/alert/title.vue)
+@[code html{4}](../../.vuepress/components/alert/title.vue)
 
 </template>
 
@@ -473,13 +473,13 @@ This prop can bind with `v-model:hidden-content`
 
 <template #template>
 
-@[code{1-13} html{3}](../.vuepress/components/alert/hidden-content.vue)
+@[code{1-13} html{3}](../../.vuepress/components/alert/hidden-content.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-18} html{4}](../.vuepress/components/alert/hidden-content.vue)
+@[code{14-18} html{4}](../../.vuepress/components/alert/hidden-content.vue)
 
 </template>
 
@@ -497,13 +497,13 @@ There are times when we need to show a lot of content to the user but we don't w
 
 <template #template>
 
-@[code{1-21} html{3,6,11,16}](../.vuepress/components/alert/pagination.vue)
+@[code{1-21} html{3,6,11,16}](../../.vuepress/components/alert/pagination.vue)
 
 </template>
 
 <template #script>
 
-@[code{22-26} html{4}](../.vuepress/components/alert/pagination.vue)
+@[code{22-26} html{4}](../../.vuepress/components/alert/pagination.vue)
 
 </template>
 
@@ -523,7 +523,7 @@ Use the `footer` slot to add a footer to the alert where for example you can add
 
 <template #template>
 
-@[code html{11-14}](../.vuepress/components/alert/footer.vue)
+@[code html{11-14}](../../.vuepress/components/alert/footer.vue)
 
 </template>
 
@@ -541,7 +541,7 @@ You can add a progress bar to the alert with the progress property and a number 
 
 <template #template>
 
-@[code html{3}](../.vuepress/components/alert/progress.vue)
+@[code html{3}](../../.vuepress/components/alert/progress.vue)
 
 </template>
 
@@ -559,13 +559,13 @@ You can add a close alert icon with the `closable` property, the property is a` 
 
 <template #template>
 
-@[code{1-17} html{7}](../.vuepress/components/alert/closable.vue)
+@[code{1-17} html{7}](../../.vuepress/components/alert/closable.vue)
 
 </template>
 
 <template #script>
 
-@[code{18-22} html{4}](../.vuepress/components/alert/closable.vue)
+@[code{18-22} html{4}](../../.vuepress/components/alert/closable.vue)
 
 </template>
 
@@ -583,13 +583,13 @@ If you need an alert to have time to hide, you can do so by joining some propert
 
 <template #template>
 
-@[code{1-14} html{4}](../.vuepress/components/alert/time.vue)
+@[code{1-14} html{4}](../../.vuepress/components/alert/time.vue)
 
 </template>
 
 <template #script>
 
-@[code{16-36} html{5-6}](../.vuepress/components/alert/time.vue)
+@[code{16-36} html{5-6}](../../.vuepress/components/alert/time.vue)
 
 </template>
 

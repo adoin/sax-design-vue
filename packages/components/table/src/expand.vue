@@ -18,7 +18,7 @@ import { useNamespace } from '@vuesax-alpha/hooks'
 import { expandProps } from './expand'
 
 defineOptions({
-  name: 'VsTableExpand',
+  name: 'STableExpand',
 })
 
 const ns = useNamespace('table')

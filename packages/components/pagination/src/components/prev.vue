@@ -6,20 +6,20 @@
     :aria-disabled="internalDisabled && !infinite"
   >
     <span v-if="prevText">{{ prevText }}</span>
-    <vs-icon v-else>
+    <s-icon v-else>
       <component :is="prevIcon" />
-    </vs-icon>
+    </s-icon>
   </button>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { usePagination } from '../usePagination'
 import { paginationPrevProps } from './prev'
 
 defineOptions({
-  name: 'VsPaginationPrev',
+  name: 'SPaginationPrev',
 })
 
 const { disabled, currentPage, infinite } = usePagination()

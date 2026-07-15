@@ -22,7 +22,7 @@
 
 ```vue
 <template>
-  <vs-button color="primary" type="flat">Save</vs-button>
+  <s-button color="primary" type="flat">Save</s-button>
 </template>
 ```
 
@@ -41,9 +41,9 @@
 <command>
 
 ```vue
-<vs-alert color="success" closable v-model="open">
+<s-alert color="success" closable v-model="open">
   Saved successfully.
-</vs-alert>
+</s-alert>
 ```
 
 </command>

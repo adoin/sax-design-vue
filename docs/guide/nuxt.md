@@ -1,23 +1,41 @@
-# Vuesax + Nuxt
+# Sax Design Vue + Nuxt
 
 <card>
 
-## Installation
+## Manual setup (recommended)
 
-Vuesax has a plugin for [Nuxt](https://nuxt.com) so starting a project is relatively quick just we have to add Vuesax module to the `nuxt.config.ts`
+There is no dedicated Nuxt module for **sax-design-vue** yet. Register the library in a client plugin:
 
-  <command>
+<command>
 
 ```ts
-export default defineNuxtConfig({
-  modules: ['@vuesax-alpha/nuxt'],
-  vuesaxAlpha: {
-    /** Options */
-  },
+// plugins/sax-design-vue.client.ts
+import SaxDesignVue from 'sax-design-vue'
+import 'sax-design-vue/theme-chalk/index.css'
+import 'sax-design-vue/theme-chalk/dark/css-vars.css'
+
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.vueApp.use(SaxDesignVue)
 })
 ```
 
-  </command>
+</command>
+
+Add the plugin in `nuxt.config.ts`:
+
+```ts
+export default defineNuxtConfig({
+  css: [],
+})
+```
+
+</card>
+
+<card>
+
+## Legacy upstream module
+
+The upstream `@vuesax-alpha/nuxt` module targets the **vuesax-alpha** package name. If you use it, alias `vuesax-alpha` to `sax-design-vue` in your Nuxt/Vite config until a first-party module is published.
 
 </card>
 
@@ -25,22 +43,14 @@ export default defineNuxtConfig({
 
 ## Test a component
 
-Now that we have everything correct we are going to test and verify that everything is ready
-
-for this you can enter the pages folder and add a new test call or choose the `index.vue` that represents the main page of our project.
-
-#### Add a component
-
-Let's try adding a simple component like [vsButton](/components/) the final code could be something like this
+Add a page under `pages/` and try a component:
 
 ```html
 <template>
   <div class="app">
-    <vs-button active> Hello World Vuesax + Nuxtjs </vs-button>
+    <s-button active> Hello Sax Design Vue + Nuxt </s-button>
   </div>
 </template>
-
-<script setup lang="ts"></script>
 
 <style>
   .app {
@@ -53,7 +63,4 @@ Let's try adding a simple component like [vsButton](/components/) the final code
 </style>
 ```
 
-and if we see the page `/test` we find something like this
-
-  <img src="/nuxt-test-app.png" >
 </card>

@@ -1,6 +1,6 @@
 <template>
   <div class="play-container demo">
-    <vs-textarea
+    <s-textarea
       v-model="text"
       counter="20"
       label="Counter: 20"

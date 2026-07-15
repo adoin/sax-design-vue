@@ -1,5 +1,5 @@
 <template>
-  <vs-textarea v-model="text" width="300px" label="Fixed width" />
+  <s-textarea v-model="text" width="300px" label="Fixed width" />
 </template>
 
 <script setup lang="ts">

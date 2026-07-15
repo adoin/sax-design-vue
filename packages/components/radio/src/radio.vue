@@ -42,7 +42,7 @@ import { radioEmits, radioProps } from './radio'
 import { useRadio } from './use-radio'
 
 defineOptions({
-  name: 'VsRadio',
+  name: 'SRadio',
 })
 
 const ns = useNamespace('radio')

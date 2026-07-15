@@ -33,12 +33,12 @@ PROPS:
     usage: '#loading'
     code: >
       <template>
-        <vs-checkbox loading v-model="option">
+        <s-checkbox loading v-model="option">
           Loading checked
-        </vs-checkbox>
-        <vs-checkbox loading v-model="option2">
+        </s-checkbox>
+        <s-checkbox loading v-model="option2">
           Loading unchecked
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: line-through
@@ -50,9 +50,9 @@ PROPS:
     usage: '#linethrough'
     code: >
       <template>
-        <vs-checkbox line-through v-model="option">
+        <s-checkbox line-through v-model="option">
           Option
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: indeterminate
@@ -64,9 +64,9 @@ PROPS:
     usage: '#Indeterminate'
     code: >
       <template>
-        <vs-checkbox indeterminate v-model="option">
+        <s-checkbox indeterminate v-model="option">
           Option
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: label-before
@@ -78,9 +78,9 @@ PROPS:
     usage: '#label'
     code: >
       <template>
-        <vs-checkbox label-before v-model="option2">
+        <s-checkbox label-before v-model="option2">
           Label Before
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: checked
@@ -92,9 +92,9 @@ PROPS:
     usage: null
     code: >
       <template>
-        <vs-checkbox label-before v-model="option2">
+        <s-checkbox label-before v-model="option2">
           Checked state
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: checked-force
@@ -106,9 +106,9 @@ PROPS:
     usage: null
     code: >
       <template>
-        <vs-checkbox checkbox-force v-model="value">
+        <s-checkbox checkbox-force v-model="value">
           Force checked state
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: Checkbox Group
@@ -128,9 +128,9 @@ PROPS:
     usage: null
     code: >
       <template>
-        <vs-checkbox v-model="value" id="framework">
+        <s-checkbox v-model="value" id="framework">
           Vuesax
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: name
@@ -142,9 +142,9 @@ PROPS:
     usage: null
     code: >
       <template>
-        <vs-checkbox v-model="value" name="checkbox-name">
+        <s-checkbox v-model="value" name="checkbox-name">
           Vuesax
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
 SLOTS:
@@ -157,41 +157,41 @@ SLOTS:
     usage: '#icon'
     code: >
       <template>
-        <vs-checkbox v-model="option1">
+        <s-checkbox v-model="option1">
           <template #icon>
             <i class='bx bx-check' />
           </template>
-        </vs-checkbox>
-        <vs-checkbox success v-model="option2">
+        </s-checkbox>
+        <s-checkbox success v-model="option2">
           <template #icon>
             <i class='bx bx-check-double' />
           </template>
-        </vs-checkbox>
-        <vs-checkbox danger v-model="option3">
+        </s-checkbox>
+        <s-checkbox danger v-model="option3">
           <template #icon>
             <i class='bx bx-x' />
           </template>
-        </vs-checkbox>
-        <vs-checkbox warn v-model="option4">
+        </s-checkbox>
+        <s-checkbox warn v-model="option4">
           <template #icon>
             <i class='bx bxs-shield' />
           </template>
-        </vs-checkbox>
-        <vs-checkbox dark v-model="option5">
+        </s-checkbox>
+        <s-checkbox dark v-model="option5">
           <template #icon>
             <i class='bx bxs-heart' />
           </template>
-        </vs-checkbox>
-        <vs-checkbox color="#7d33ff" v-model="option6">
+        </s-checkbox>
+        <s-checkbox color="#7d33ff" v-model="option6">
           <template #icon>
             <i class='bx bx-brightness' />
           </template>
-        </vs-checkbox>
-        <vs-checkbox color="rgb(59,222,200)" v-model="option7">
+        </s-checkbox>
+        <s-checkbox color="rgb(59,222,200)" v-model="option7">
           <template #icon>
             <i class='bx bxs-paint' />
           </template>
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 
   - name: default
@@ -203,9 +203,9 @@ SLOTS:
     usage: '#default'
     code: >
       <template>
-        <vs-checkbox v-model="option">
+        <s-checkbox v-model="option">
           Option
-        </vs-checkbox>
+        </s-checkbox>
       </template>
 ---
 

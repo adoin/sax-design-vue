@@ -35,7 +35,7 @@ PROPS:
   - name: src
     type: String
     values: URL
-    description: Image source (vs-image).
+    description: Image source (s-image).
     default: null
     link: null
     usage: '#default'
@@ -55,7 +55,7 @@ NEWS:
 ## 默认
 
 
-在 `vs-images` 内放置 `vs-image` 元素。
+在 `s-images` 内放置 `s-image` 元素。
 
 <template #example>
 <images-default />
@@ -63,7 +63,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/images/default.vue)
+@[code{1-8}](../../.vuepress/components/images/default.vue)
 
 </template>
 
@@ -82,13 +82,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-12}](../.vuepress/components/images/hover.vue)
+@[code{1-12}](../../.vuepress/components/images/hover.vue)
 
 </template>
 
 <template #style>
 
-@[code{14-22}](../.vuepress/components/images/hover.vue)
+@[code{14-22}](../../.vuepress/components/images/hover.vue)
 
 </template>
 
@@ -107,7 +107,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/images/more.vue)
+@[code{1-8}](../../.vuepress/components/images/more.vue)
 
 </template>
 

@@ -1,9 +1,9 @@
 <template>
   <div class="center">
-    <vs-button block>
+    <s-button block>
       <i class="bx bxs-paint-roll" />
       Edit Theme
-    </vs-button>
+    </s-button>
   </div>
 </template>
 

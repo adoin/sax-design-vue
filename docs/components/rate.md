@@ -9,7 +9,7 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-rate v-model="value" />
+      <s-rate v-model="value" />
     #__________________________________
   - name: id
     type: String
@@ -46,7 +46,7 @@ PROPS:
     link: null
     usage: '#max'
     code: >
-      <vs-rate v-model="value" max="5" />
+      <s-rate v-model="value" max="5" />
     #__________________________________
   - name: colors
     type: Object
@@ -56,7 +56,7 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      <vs-rate v-model="value2" colors="['#99A9BF', '#F7BA2A', '#FF9900']" />
+      <s-rate v-model="value2" colors="['#99A9BF', '#F7BA2A', '#FF9900']" />
     #__________________________________
   - name: void-color
     type: String
@@ -66,7 +66,7 @@ PROPS:
     link: null
     usage: '#void-color'
     code: >
-      <vs-rate v-model="value" void-color="#c6d1de" />
+      <s-rate v-model="value" void-color="#c6d1de" />
     #__________________________________
   - name: disabled-void-color
     type: String
@@ -85,7 +85,7 @@ PROPS:
     link: null
     usage: '#more-icons'
     code: >
-      <vs-rate v-model="value" icons="[StarFilled, StarFilled, StarFilled]" />
+      <s-rate v-model="value" icons="[StarFilled, StarFilled, StarFilled]" />
     #__________________________________
   - name: void-icon
     type: String
@@ -95,7 +95,7 @@ PROPS:
     link: null
     usage: '#more-icons'
     code: >
-      <vs-rate v-model="value" void-icon="Star" />
+      <s-rate v-model="value" void-icon="Star" />
     #__________________________________
   - name: disabled-void-icon
     type: String
@@ -114,7 +114,7 @@ PROPS:
     link: null
     usage: '#read-only'
     code: >
-      <vs-rate v-model="value" disabled />
+      <s-rate v-model="value" disabled />
   #__________________________________
   - name: allow-half
     type: Boolean
@@ -124,7 +124,7 @@ PROPS:
     link: null
     usage: '#with-allow-half'
     code: >
-      <vs-rate v-model="value" allow-half />
+      <s-rate v-model="value" allow-half />
   #__________________________________
   - name: show-text
     type: Boolean
@@ -134,7 +134,7 @@ PROPS:
     link: null
     usage: '#with-text'
     code: >
-      <vs-rate
+      <s-rate
       v-model="value"
       :texts="['oops', 'disappointed', 'normal', 'good', 'great']"
       show-text
@@ -148,7 +148,7 @@ PROPS:
     link: null
     usage: '#read-only'
     code: >
-      <vs-rate
+      <s-rate
       v-model="value"
       show-score
       text-color="#ff9900"
@@ -163,7 +163,7 @@ PROPS:
     link: null
     usage: '#text-color'
     code: >
-      <vs-rate
+      <s-rate
       v-model="value"
       show-score
       text-color="#ff9900"
@@ -187,7 +187,7 @@ PROPS:
     link: null
     usage: '#score-template'
     code: >
-      <vs-rate
+      <s-rate
       v-model="value"
       show-score
       text-color="#ff9900"
@@ -202,7 +202,7 @@ PROPS:
     link: null
     usage: '#size'
     code: >
-      <vs-rate
+      <s-rate
       v-model="value"
       size="small"
       />
@@ -215,7 +215,7 @@ PROPS:
     link: null
     usage: '#clearable'
     code: >
-      <vs-rate
+      <s-rate
       v-model="value"
       clearable
       />

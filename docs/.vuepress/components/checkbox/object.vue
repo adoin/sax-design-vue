@@ -1,16 +1,16 @@
 <template>
   <div class="center con-checkbox">
-    <vs-checkbox-group v-model="options">
-      <vs-checkbox
+    <s-checkbox-group v-model="options">
+      <s-checkbox
         :value="{
           github: 'https://github.com/webpack/webpack',
           name: 'Webpack',
         }"
       >
         Webpack
-      </vs-checkbox>
+      </s-checkbox>
 
-      <vs-checkbox
+      <s-checkbox
         color="danger"
         :value="{
           github: 'https://github.com/microsoft/TypeScript',
@@ -18,15 +18,15 @@
         }"
       >
         Typescript
-      </vs-checkbox>
+      </s-checkbox>
 
-      <vs-checkbox
+      <s-checkbox
         color="warn"
         :value="{ github: 'https://github.com/sass/sass', name: 'Sass' }"
       >
         Sass
-      </vs-checkbox>
-    </vs-checkbox-group>
+      </s-checkbox>
+    </s-checkbox-group>
     <pre class="data-check">
       {{ options }}
     </pre>

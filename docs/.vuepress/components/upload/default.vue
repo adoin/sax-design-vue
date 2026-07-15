@@ -1,3 +1,3 @@
 <template>
-  <vs-upload text="Select file" :multiple="false" />
+  <s-upload text="Select file" :multiple="false" />
 </template>

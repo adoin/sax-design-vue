@@ -6,20 +6,20 @@
     :aria-disabled="internalDisabled && !infinite"
   >
     <span v-if="nextText">{{ nextText }}</span>
-    <vs-icon v-else>
+    <s-icon v-else>
       <component :is="nextIcon" />
-    </vs-icon>
+    </s-icon>
   </button>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { usePagination } from '../usePagination'
 import { paginationNextProps } from './next'
 
 defineOptions({
-  name: 'VsPaginationNext',
+  name: 'SPaginationNext',
 })
 
 defineProps(paginationNextProps)

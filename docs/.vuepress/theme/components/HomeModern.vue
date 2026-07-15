@@ -95,9 +95,9 @@ import { computed } from 'vue'
 import { usePageFrontmatter } from '@vuepress/client'
 import { useDocLocaleUi } from '../composables/docLocale'
 import Footer from './Footer.vue'
-import type { VsThemeProjectHomePageFrontmatter } from '../shared/frontmatter/home'
+import type { SThemeProjectHomePageFrontmatter } from '../shared/frontmatter/home'
 
-const pageFrontmatter = usePageFrontmatter<VsThemeProjectHomePageFrontmatter>()
+const pageFrontmatter = usePageFrontmatter<SThemeProjectHomePageFrontmatter>()
 const { t, withLocalePath, locale } = useDocLocaleUi()
 
 const heroTitle = computed(

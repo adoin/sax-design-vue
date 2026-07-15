@@ -1,11 +1,11 @@
 <template>
   <div class="demo-rate-block">
     <span class="demonstration">Default</span>
-    <vs-rate v-model="value1" />
+    <s-rate v-model="value1" />
   </div>
   <div class="demo-rate-block">
     <span class="demonstration">Color for different levels</span>
-    <vs-rate v-model="value2" :colors="colors" />
+    <s-rate v-model="value2" :colors="colors" />
   </div>
 </template>
 

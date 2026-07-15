@@ -1,52 +1,52 @@
 <template>
   <div class="center">
-    <vs-button-group>
-      <vs-button> One </vs-button>
-      <vs-button> Two </vs-button>
-      <vs-button> Three </vs-button>
-      <vs-button> four </vs-button>
-    </vs-button-group>
+    <s-button-group>
+      <s-button> One </s-button>
+      <s-button> Two </s-button>
+      <s-button> Three </s-button>
+      <s-button> four </s-button>
+    </s-button-group>
 
     <span class="divider" />
 
-    <vs-button-group>
-      <vs-button flat icon>
+    <s-button-group>
+      <s-button flat icon>
         <i class="bx bx-play" />
-      </vs-button>
-      <vs-button flat icon>
+      </s-button>
+      <s-button flat icon>
         <i class="bx bx-pause" />
-      </vs-button>
-      <vs-button flat icon>
+      </s-button>
+      <s-button flat icon>
         <i class="bx bx-fast-forward" />
-      </vs-button>
-      <vs-button flat icon>
+      </s-button>
+      <s-button flat icon>
         <i class="bx bx-shuffle" />
-      </vs-button>
-    </vs-button-group>
+      </s-button>
+    </s-button-group>
 
     <span class="divider" />
 
-    <vs-button-group>
-      <vs-button border> <i class="bx bxs-pencil" /> Edit </vs-button>
-      <vs-button border icon>
+    <s-button-group>
+      <s-button border> <i class="bx bxs-pencil" /> Edit </s-button>
+      <s-button border icon>
         <i class="bx bx-font-color" />
-      </vs-button>
-      <vs-button border icon>
+      </s-button>
+      <s-button border icon>
         <i class="bx bx-align-middle" />
-      </vs-button>
-      <vs-button border> <i class="bx bx-font-size" /> Font size </vs-button>
-    </vs-button-group>
+      </s-button>
+      <s-button border> <i class="bx bx-font-size" /> Font size </s-button>
+    </s-button-group>
 
     <span class="divider" />
 
-    <vs-button-group>
-      <vs-button relief> <i class="bx bx-home-alt" /> Home </vs-button>
-      <vs-button relief> <i class="bx bxs-phone-call" /> Contact </vs-button>
-      <vs-button relief loading>
+    <s-button-group>
+      <s-button relief> <i class="bx bx-home-alt" /> Home </s-button>
+      <s-button relief> <i class="bx bxs-phone-call" /> Contact </s-button>
+      <s-button relief loading>
         <i class="bx bxs-cart-alt" /> Products
-      </vs-button>
-      <vs-button relief upload> <i class="bx bxs-envelope" /> Send </vs-button>
-    </vs-button-group>
+      </s-button>
+      <s-button relief upload> <i class="bx bxs-envelope" /> Send </s-button>
+    </s-button-group>
   </div>
 </template>
 

@@ -1,16 +1,16 @@
 <template>
   <div class="play-container demo">
-    <vs-tabs v-model="active" color="primary">
-      <vs-tab label="Account">
+    <s-tabs v-model="active" color="primary">
+      <s-tab label="Account">
         Account panel content.
-      </vs-tab>
-      <vs-tab label="Password">
+      </s-tab>
+      <s-tab label="Password">
         Password panel content.
-      </vs-tab>
-      <vs-tab label="Settings">
+      </s-tab>
+      <s-tab label="Settings">
         Settings panel content.
-      </vs-tab>
-    </vs-tabs>
+      </s-tab>
+    </s-tabs>
     <p class="hint">Active: {{ active }}</p>
   </div>
 </template>

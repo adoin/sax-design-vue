@@ -1,14 +1,14 @@
 <template>
   <div class="center">
-    <vs-button @click="openNotification"> Open Notification </vs-button>
+    <s-button @click="openNotification"> Open Notification </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { VsNotification } from 'vuesax-alpha'
+import { SNotification } from 'sax-design-vue'
 
 const openNotification = () => {
-  VsNotification({
+  SNotification({
     title: 'Documentation Vuesax-alpha',
     content:
       'These documents refer to the latest version of Vuesax-alpha, to see the documents of the previous versions you can do it here 👉 Vuesax4.0',

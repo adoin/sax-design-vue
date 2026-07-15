@@ -1,23 +1,23 @@
 <template>
   <div class="center con-avatars">
-    <vs-avatar>
+    <s-avatar>
       <i class="bx bx-user" />
-    </vs-avatar>
-    <vs-avatar>
+    </s-avatar>
+    <s-avatar>
       <i class="bx bxs-camera" />
-    </vs-avatar>
-    <vs-avatar>
+    </s-avatar>
+    <s-avatar>
       <i class="bx bx-world" />
-    </vs-avatar>
-    <vs-avatar>
+    </s-avatar>
+    <s-avatar>
       <i class="bx bx-support" />
-    </vs-avatar>
-    <vs-avatar>
+    </s-avatar>
+    <s-avatar>
       <i class="bx bx-trophy" />
-    </vs-avatar>
-    <vs-avatar>
+    </s-avatar>
+    <s-avatar>
       <i class="bx bx-map" />
-    </vs-avatar>
+    </s-avatar>
   </div>
 </template>
 <style scoped lang="scss">

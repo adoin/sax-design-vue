@@ -1,7 +1,7 @@
 <template>
   <div class="center">
-    <vs-radio v-model="picked" loading value="1"> Option 1 </vs-radio>
-    <vs-radio v-model="picked" loading value="2"> Option 2 </vs-radio>
+    <s-radio v-model="picked" loading value="1"> Option 1 </s-radio>
+    <s-radio v-model="picked" loading value="2"> Option 2 </s-radio>
   </div>
 </template>
 

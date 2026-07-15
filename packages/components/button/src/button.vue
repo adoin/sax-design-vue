@@ -39,7 +39,7 @@ import {
 import { buttonProps } from './button'
 
 defineOptions({
-  name: 'VsButton',
+  name: 'SButton',
 })
 
 const props = defineProps(buttonProps)

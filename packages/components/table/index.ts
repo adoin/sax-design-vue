@@ -4,16 +4,16 @@ import Td from './src/td.vue'
 import Th from './src/th.vue'
 import Tr from './src/tr.vue'
 
-export const VsTable = withInstall(Table, {
+export const STable = withInstall(Table, {
   Td,
   Th,
   Tr,
 })
-export default VsTable
+export default STable
 
-export const VsTd = withNoopInstall(Td)
-export const VsTh = withNoopInstall(Th)
-export const VsTr = withNoopInstall(Tr)
+export const STd = withNoopInstall(Td)
+export const STh = withNoopInstall(Th)
+export const STr = withNoopInstall(Tr)
 
 export * from './src/table'
 export * from './src/utils'

@@ -37,7 +37,7 @@ import { tableEmits, tableProps } from './table'
 import { useTable } from './composables'
 
 defineOptions({
-  name: 'VsTable',
+  name: 'STable',
 })
 
 const ns = useNamespace('table')

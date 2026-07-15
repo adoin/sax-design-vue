@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-alert>
+    <s-alert>
       <template #title> Vuesax Framework </template>
       Vuesax (pronounced / vjusacks: /, as view sacks) is a
       <b>UI components framework</b> created with
@@ -9,9 +9,9 @@
       all types of developed from the frontend lover to the backend that wants
       to easily create your visual approach to the end user
       <template #footer>
-        <vs-button type="flat"> Cancel </vs-button>
-        <vs-button> Accept </vs-button>
+        <s-button type="flat"> Cancel </s-button>
+        <s-button> Accept </s-button>
       </template>
-    </vs-alert>
+    </s-alert>
   </div>
 </template>

@@ -12,8 +12,8 @@
 
 <script lang="ts" setup>
 import { onBeforeUpdate, onMounted, reactive, ref } from 'vue'
-import { VsLoadingFn } from 'vuesax-alpha'
-import type { LoadingType } from 'vuesax-alpha'
+import { SLoadingFn } from 'sax-design-vue'
+import type { LoadingType } from 'sax-design-vue'
 
 const types: LoadingType[] = [
   'atom',
@@ -35,7 +35,7 @@ const hasOpenLoading = ref(false)
 let $refs = reactive([]) // refs HTMLElement
 
 const handleClickLoading = (type: LoadingType) => {
-  const loadingInstance = VsLoadingFn({
+  const loadingInstance = SLoadingFn({
     type,
   })
   hasOpenLoading.value = true
@@ -45,7 +45,7 @@ const handleClickLoading = (type: LoadingType) => {
   }, 3000)
 }
 const openLoading = (type: LoadingType, ref: string) => {
-  VsLoadingFn({
+  SLoadingFn({
     target: ref,
     text: type,
     type,

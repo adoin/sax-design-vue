@@ -1,8 +1,8 @@
 <template>
-  <vs-tabs v-model="active">
-    <vs-tab label="Inbox" icon="inbox">Inbox</vs-tab>
-    <vs-tab label="Settings" icon="settings">Settings</vs-tab>
-  </vs-tabs>
+  <s-tabs v-model="active">
+    <s-tab label="Inbox" icon="inbox">Inbox</s-tab>
+    <s-tab label="Settings" icon="settings">Settings</s-tab>
+  </s-tabs>
 </template>
 
 <script setup lang="ts">

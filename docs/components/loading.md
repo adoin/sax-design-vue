@@ -126,12 +126,12 @@ Generate a loading with the vuesax function
 <Command>
 
 ```ts
-import { VsLoading, VsLoadingFn } from 'vuesax-alpha'
+import { SLoading, SLoadingFn } from 'sax-design-vue'
 
-VsLoadingFn(options)
+SLoadingFn(options)
 
 // Or use via service
-VsLoading.service(options)
+SLoading.service(options)
 ```
 
 </Command>

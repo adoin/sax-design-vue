@@ -39,7 +39,7 @@ import {
 import type { FocusLayer } from './utils'
 
 defineOptions({
-  name: 'VsFocusTrap',
+  name: 'SFocusTrap',
   inheritAttrs: false,
 })
 

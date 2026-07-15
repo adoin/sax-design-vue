@@ -1,7 +1,7 @@
 <template>
   <div class="center">
-    <vs-button> Default </vs-button>
-    <vs-button ripple="reverse"> Reverse </vs-button>
-    <vs-button ripple="cut"> Cut </vs-button>
+    <s-button> Default </s-button>
+    <s-button ripple="reverse"> Reverse </s-button>
+    <s-button ripple="cut"> Cut </s-button>
   </div>
 </template>

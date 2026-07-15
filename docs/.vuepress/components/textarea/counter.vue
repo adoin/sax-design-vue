@@ -1,5 +1,5 @@
 <template>
-  <vs-textarea
+  <s-textarea
     v-model="textarea"
     v-model:counter-danger="counterDanger"
     counter="20"

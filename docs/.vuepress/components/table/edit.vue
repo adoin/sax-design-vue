@@ -1,62 +1,58 @@
 <template>
   <div class="center">
-    <vs-table>
+    <s-table>
       <template #thead>
-        <vs-tr>
-          <vs-th> Name </vs-th>
-          <vs-th> Email </vs-th>
-          <vs-th> Id </vs-th>
-        </vs-tr>
+        <s-tr>
+          <s-th> Name </s-th>
+          <s-th> Email </s-th>
+          <s-th> Id </s-th>
+        </s-tr>
       </template>
       <template #tbody>
-        <vs-tr v-for="(tr, i) in users" :key="i" :data="tr">
-          <vs-td
+        <s-tr v-for="(tr, i) in users" :key="i" :data="tr">
+          <s-td
             edit
             @click=";(edit = tr), (editProp = 'name'), (editActive = true)"
           >
             {{ tr.name }}
-          </vs-td>
-          <vs-td
+          </s-td>
+          <s-td
             edit
             @click=";(edit = tr), (editProp = 'email'), (editActive = true)"
           >
             {{ tr.email }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.id }}
-          </vs-td>
-        </vs-tr>
+          </s-td>
+        </s-tr>
       </template>
-    </vs-table>
+    </s-table>
 
-    <vs-dialog v-model="editActive">
+    <s-dialog v-model="editActive">
       <template #header> Change Prop {{ editProp }} </template>
-      <vs-input
+      <s-input
         v-if="editProp == 'email'"
         v-model="edit[editProp]"
         block
         @keypress.enter="editActive = false"
       />
-      <vs-select
+      <s-select
         v-if="editProp == 'name'"
         v-model="edit[editProp]"
         block
         placeholder="Select"
         @change="editActive = false"
       >
-        <vs-option label="Vuesax" value="Vuesax"> Vuesax </vs-option>
-        <vs-option label="Vue" value="Vuejs"> Vue </vs-option>
-        <vs-option label="Javascript" value="Javascript">
-          Javascript
-        </vs-option>
-        <vs-option disabled label="Sass" value="Sass"> Sass </vs-option>
-        <vs-option label="Typescript" value="Typescript">
-          Typescript
-        </vs-option>
-        <vs-option label="Webpack" value="Webpack"> Webpack </vs-option>
-        <vs-option label="Nodejs" value="Nodejs"> Nodejs </vs-option>
-      </vs-select>
-    </vs-dialog>
+        <s-option label="Vuesax" value="Vuesax"> Vuesax </s-option>
+        <s-option label="Vue" value="Vuejs"> Vue </s-option>
+        <s-option label="Javascript" value="Javascript"> Javascript </s-option>
+        <s-option disabled label="Sass" value="Sass"> Sass </s-option>
+        <s-option label="Typescript" value="Typescript"> Typescript </s-option>
+        <s-option label="Webpack" value="Webpack"> Webpack </s-option>
+        <s-option label="Nodejs" value="Nodejs"> Nodejs </s-option>
+      </s-select>
+    </s-dialog>
   </div>
 </template>
 

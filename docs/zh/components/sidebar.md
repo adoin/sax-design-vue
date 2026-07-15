@@ -90,7 +90,7 @@ PROPS:
     usage: null
     code: null
 
-  - name: vs-sidebar-item:to
+  - name: s-sidebar-item:to
     type: String
     values: url
     description: Generate a new vue-router route
@@ -99,7 +99,7 @@ PROPS:
     usage: null
     code: null
 
-  - name: vs-sidebar-item:href
+  - name: s-sidebar-item:href
     type: String
     values: url
     description: Generate a new route
@@ -145,7 +145,7 @@ SLOTS:
     usage: null
     code: null
 
-  - name: vs-sidebar-item#icon
+  - name: s-sidebar-item#icon
     type: slot
     values: null
     description: It is the space to add the icon or a representative letter.
@@ -166,7 +166,7 @@ NEWS:
 
 <docs-warn />
 
-Add a sidebar menu with the `vs-sidebar` component, there are two subcomponents `vs-sidebar-item` and `vs-sidebar-group`
+Add a sidebar menu with the `s-sidebar` component, there are two subcomponents `s-sidebar-item` and `s-sidebar-group`
 
 <template #example>
 <sidebar-default />
@@ -178,10 +178,10 @@ Add a sidebar menu with the `vs-sidebar` component, there are two subcomponents 
 
 ## Group
 
-You can group items and hide them with the `vs-sidebar-group` sub-component.
+You can group items and hide them with the `s-sidebar-group` sub-component.
 
 :::tip
-The component has a slot: header in which we add a sub-component `vs-sidebar-item` with the property **arrow** and without the property id to not change the active state when clicking
+The component has a slot: header in which we add a sub-component `s-sidebar-item` with the property **arrow** and without the property id to not change the active state when clicking
 :::
 
 <template #example>
@@ -190,13 +190,13 @@ The component has a slot: header in which we add a sub-component `vs-sidebar-ite
 
 <template #template>
 
-@[code{1-170} html](../.vuepress/components/sidebar/group.vue)
+@[code{1-170} html](../../.vuepress/components/sidebar/group.vue)
 
 </template>
 
 <template #script>
 
-@[code{172-176} html](../.vuepress/components/sidebar/group.vue)
+@[code{172-176} html](../../.vuepress/components/sidebar/group.vue)
 
 </template>
 
@@ -218,13 +218,13 @@ For the sidebar to work correctly it is necessary to add to the items the icon s
 
 <template #template>
 
-@[code{1-171} html](../.vuepress/components/sidebar/reduce.vue)
+@[code{1-171} html](../../.vuepress/components/sidebar/reduce.vue)
 
 </template>
 
 <template #script>
 
-@[code{173-177} html](../.vuepress/components/sidebar/reduce.vue)
+@[code{173-177} html](../../.vuepress/components/sidebar/reduce.vue)
 
 </template>
 
@@ -242,13 +242,13 @@ You can add the functionality to expand and collapse the sidebar with the mouse,
 
 <template #template>
 
-@[code{1-171} html](../.vuepress/components/sidebar/reduce-expand.vue)
+@[code{1-171} html](../../.vuepress/components/sidebar/reduce-expand.vue)
 
 </template>
 
 <template #script>
 
-@[code{173-177} html](../.vuepress/components/sidebar/reduce-expand.vue)
+@[code{173-177} html](../../.vuepress/components/sidebar/reduce-expand.vue)
 
 </template>
 
@@ -266,13 +266,13 @@ Change the color of the sidebar, if necessary you can also change the color of t
 
 <template #template>
 
-@[code{1-118} html](../.vuepress/components/sidebar/color.vue)
+@[code{1-118} html](../../.vuepress/components/sidebar/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{120-124} html](../.vuepress/components/sidebar/color.vue)
+@[code{120-124} html](../../.vuepress/components/sidebar/color.vue)
 
 </template>
 
@@ -290,13 +290,13 @@ You can define if the sidebar is visible or hidden with the open property, this 
 
 <template #template>
 
-@[code{1-194} html](../.vuepress/components/sidebar/open.vue)
+@[code{1-194} html](../../.vuepress/components/sidebar/open.vue)
 
 </template>
 
 <template #script>
 
-@[code{196-201} html](../.vuepress/components/sidebar/open.vue)
+@[code{196-201} html](../../.vuepress/components/sidebar/open.vue)
 
 </template>
 
@@ -314,13 +314,13 @@ Change the position of the sidebar to the right and its animation with the `righ
 
 <template #template>
 
-@[code{1-101} html](../.vuepress/components/sidebar/right.vue)
+@[code{1-101} html](../../.vuepress/components/sidebar/right.vue)
 
 </template>
 
 <template #script>
 
-@[code{103-107} html](../.vuepress/components/sidebar/right.vue)
+@[code{103-107} html](../../.vuepress/components/sidebar/right.vue)
 
 </template>
 

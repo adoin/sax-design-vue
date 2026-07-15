@@ -2,21 +2,21 @@
   <div class="call">
     <img src="/woman.jpg" alt="" />
     <footer>
-      <vs-button color="dark" icon>
+      <s-button color="dark" icon>
         <i class="bx bx-video-off" />
-      </vs-button>
-      <vs-button color="success" icon>
+      </s-button>
+      <s-button color="success" icon>
         <i class="bx bxs-phone-call" />
-      </vs-button>
-      <vs-button color="dark" icon>
+      </s-button>
+      <s-button color="dark" icon>
         <i class="bx bx-microphone-off" />
-      </vs-button>
+      </s-button>
     </footer>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { VsButton } from 'vuesax-alpha'
+import { SButton } from 'sax-design-vue'
 </script>
 
 <style lang="scss" scoped>

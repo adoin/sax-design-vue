@@ -1,39 +1,37 @@
 <template>
   <div class="center">
-    <vs-table>
+    <s-table>
       <template #thead>
-        <vs-tr>
-          <vs-th sort @click="users = sortData($event, users, 'name')">
+        <s-tr>
+          <s-th sort @click="users = sortData($event, users, 'name')">
             Name
-          </vs-th>
-          <vs-th sort @click="users = sortData($event, users, 'email')">
+          </s-th>
+          <s-th sort @click="users = sortData($event, users, 'email')">
             Email
-          </vs-th>
-          <vs-th sort @click="users = sortData($event, users, 'id')">
-            Id
-          </vs-th>
-        </vs-tr>
+          </s-th>
+          <s-th sort @click="users = sortData($event, users, 'id')"> Id </s-th>
+        </s-tr>
       </template>
       <template #tbody>
-        <vs-tr v-for="(tr, i) in users" :key="i" :data="tr">
-          <vs-td>
+        <s-tr v-for="(tr, i) in users" :key="i" :data="tr">
+          <s-td>
             {{ tr.name }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.email }}
-          </vs-td>
-          <vs-td>
+          </s-td>
+          <s-td>
             {{ tr.id }}
-          </vs-td>
-        </vs-tr>
+          </s-td>
+        </s-tr>
       </template>
-    </vs-table>
+    </s-table>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { sortData } from 'vuesax-alpha'
+import { sortData } from 'sax-design-vue'
 
 type User = {
   id: number | string

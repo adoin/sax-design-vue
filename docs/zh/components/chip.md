@@ -76,7 +76,7 @@ EVENTS:
     params: null
     description: 关闭标签时触发。
 
-  - name: vs-remove
+  - name: s-remove
     params: boolean
     description: 在标签组中移除时触发。
 EXPOSES: []
@@ -105,7 +105,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/chip/default.vue)
+@[code{1-6}](../../.vuepress/components/chip/default.vue)
 
 </template>
 
@@ -124,7 +124,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/chip/color.vue)
+@[code{1-8}](../../.vuepress/components/chip/color.vue)
 
 </template>
 
@@ -143,7 +143,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/chip/transparent.vue)
+@[code{1-6}](../../.vuepress/components/chip/transparent.vue)
 
 </template>
 
@@ -162,7 +162,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/chip/icon.vue)
+@[code{1-6}](../../.vuepress/components/chip/icon.vue)
 
 </template>
 
@@ -181,13 +181,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/chip/closable.vue)
+@[code{1-5}](../../.vuepress/components/chip/closable.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-13}](../.vuepress/components/chip/closable.vue)
+@[code{7-13}](../../.vuepress/components/chip/closable.vue)
 
 </template>
 
@@ -198,7 +198,7 @@ NEWS:
 ## 增删条目
 
 
-组合 `vs-chips` 与多个 `vs-chip` 子项以增删标签。
+组合 `s-chips` 与多个 `s-chip` 子项以增删标签。
 
 <template #example>
 <chip-chips />
@@ -206,19 +206,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/chip/chips.vue)
+@[code{1-8}](../../.vuepress/components/chip/chips.vue)
 
 </template>
 
 <template #script>
 
-@[code{10-13}](../.vuepress/components/chip/chips.vue)
+@[code{10-13}](../../.vuepress/components/chip/chips.vue)
 
 </template>
 
 <template #style>
 
-@[code{15-23}](../.vuepress/components/chip/chips.vue)
+@[code{15-23}](../../.vuepress/components/chip/chips.vue)
 
 </template>
 

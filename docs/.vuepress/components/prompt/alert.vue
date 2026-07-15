@@ -1,7 +1,7 @@
 <template>
   <div class="prompt-demo">
-    <vs-button @click="active = true">Alert</vs-button>
-    <vs-prompt
+    <s-button @click="active = true">Alert</s-button>
+    <s-prompt
       v-model="active"
       type="alert"
       title="Notice"

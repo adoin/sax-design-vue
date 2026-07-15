@@ -63,7 +63,7 @@ NEWS:
 
 ## Default
 
-Add a card with the `vs-card` component for the structure of this component we have several slots
+Add a card with the `s-card` component for the structure of this component we have several slots
 
 - title
 - text
@@ -159,7 +159,7 @@ Change the style of the letter completely with the `type` property and the value
 
 ## Group
 
-To have a group of scrolling cards you can use the `vs-card-group` component
+To have a group of scrolling cards you can use the `s-card-group` component
 
 <template #example>
 <card-group />

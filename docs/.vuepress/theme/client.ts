@@ -9,7 +9,7 @@ import NotFound from './layouts/NotFound.vue'
 import type { codesandboxContext, vsThemeContext } from './type'
 // import Sidebar from "./layouts/Sidebar.vue";
 
-import './styles/vuesax-alpha'
+import './styles/sax-design-vue'
 
 export default defineClientConfig({
   setup() {

@@ -35,7 +35,7 @@
             :class="ns.e('separator')"
             aria-hidden="true"
           >
-            <VsIcon
+            <SIcon
               v-if="isIconSeparator(separator)"
               :icon="separator"
               icon-pack="material-icons"
@@ -51,13 +51,13 @@
 <script lang="ts" setup>
 import { computed, provide, toRef } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { breadcrumbProps } from './breadcrumb'
 import { breadcrumbContextKey } from './constants'
 
 defineOptions({
-  name: 'VsBreadcrumb',
+  name: 'SBreadcrumb',
 })
 
 const props = defineProps(breadcrumbProps)

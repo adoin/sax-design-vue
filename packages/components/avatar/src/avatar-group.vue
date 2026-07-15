@@ -10,7 +10,7 @@ import { avatarGroupContextKey } from '@vuesax-alpha/tokens'
 import { avatarGroupProps } from './avatar-group'
 
 defineOptions({
-  name: 'VsAvatarGroup',
+  name: 'SAvatarGroup',
 })
 
 const props = defineProps(avatarGroupProps)

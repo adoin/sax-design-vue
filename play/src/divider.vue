@@ -1,8 +1,8 @@
 <template>
   <div class="play-container demo">
-    <vs-divider> Divider </vs-divider>
-    <vs-divider color="primary"> Primary </vs-divider>
-    <vs-divider position="left"> Left </vs-divider>
+    <s-divider> Divider </s-divider>
+    <s-divider color="primary"> Primary </s-divider>
+    <s-divider position="left"> Left </s-divider>
   </div>
 </template>
 

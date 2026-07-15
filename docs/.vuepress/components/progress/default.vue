@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <vs-progress :percent="62" />
+    <s-progress :percent="62" />
   </div>
 </template>
 

@@ -8,7 +8,7 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      VsNotification({
+      SNotification({
         title: 'Documentation Vuesax 4.0+',
         content: `These documents refer to the latest version of vuesax (4.0+),
         to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
@@ -21,7 +21,7 @@ PROPS:
     link: null
     usage: '#default'
     code: >
-      VsNotification({
+      SNotification({
         title: 'Documentation Vuesax 4.0+',
         content: `These documents refer to the latest version of vuesax (4.0+),
         to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
@@ -34,7 +34,7 @@ PROPS:
     link: null
     usage: '#position'
     code: >
-      const { close } = VsNotification({
+      const { close } = SNotification({
         position: 'top-right',
         title: 'Documentation Vuesax 4.0+',
         content: `These documents refer to the latest version of vuesax (4.0+),
@@ -48,7 +48,7 @@ PROPS:
     link: null
     usage: '#color'
     code: >
-      const { close } = VsNotification({
+      const { close } = SNotification({
         color: 'primary',
         title: 'Documentation Vuesax 4.0+',
         content: 'These documents refer to the latest version of vuesax (4.0+), to see the
@@ -62,7 +62,7 @@ PROPS:
     link: null
     usage: '#border'
     code: >
-      const { close } = VsNotification({
+      const { close } = SNotification({
         border: 'success',
         title: 'Documentation Vuesax 4.0+',
         content: `These documents refer to the latest version of vuesax (4.0+),
@@ -76,7 +76,7 @@ PROPS:
     link: null
     usage: '#icons'
     code: >
-      const { close } = VsNotification({
+      const { close } = SNotification({
         icon: `<i class='bx bxs-time'></i>`,
         title: 'Documentation Vuesax 4.0+',
         content: `These documents refer to the latest version of vuesax (4.0+),
@@ -90,7 +90,7 @@ PROPS:
     link: null
     usage: '#duration'
     code: >
-      const { close } = VsNotification({
+      const { close } = SNotification({
         duration: 10000,
         title: 'Documentation Vuesax 4.0+',
         content: `These documents refer to the latest version of vuesax (4.0+),
@@ -135,9 +135,9 @@ PROPS:
     usage: '#flat'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -153,9 +153,9 @@ PROPS:
     usage: null
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -171,9 +171,9 @@ PROPS:
     usage: '#sticky'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -189,9 +189,9 @@ PROPS:
     usage: '#square'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -207,9 +207,9 @@ PROPS:
     usage: '#width'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -225,9 +225,9 @@ PROPS:
     usage: '#loading'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -243,9 +243,9 @@ PROPS:
     usage: '#progress'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -261,9 +261,9 @@ PROPS:
     usage: '#example'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
           to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
@@ -279,9 +279,9 @@ PROPS:
     usage: null
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           duration: 0,
           title: 'Documentation Vuesax 4.0+',
           content: `These documents refer to the latest version of vuesax (4.0+),
@@ -297,9 +297,9 @@ PROPS:
     usage: '#example'
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           duration: 0,
           width: 'auto',
           title: 'Documentation Vuesax 4.0+',
@@ -316,9 +316,9 @@ PROPS:
     usage: null
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           duration: 0,
           width: 'auto',
           title: 'Documentation Vuesax 4.0+',
@@ -338,9 +338,9 @@ PROPS:
     usage: null
     code: >
       <script setup lang="ts">
-        import { VsNotification } from 'vuesax-alpha'
+        import { SNotification } from 'sax-design-vue'
 
-        const { close } = VsNotification({
+        const { close } = SNotification({
           duration: 0,
           width: 'auto',
           customClass: 'my-class'
@@ -359,14 +359,14 @@ PROPS:
 
 <docs-warn />
 
-It generates a notification with the vuesax function (`VsNotification`), to use the instance of the notification it is necessary to save it in a variable, for example if you need to close the notification manually or do other functionalities with the instance
+It generates a notification with the vuesax function (`SNotification`), to use the instance of the notification it is necessary to save it in a variable, for example if you need to close the notification manually or do other functionalities with the instance
 
 <command>
 
 ```js
-import { VsNotification } from 'vuesax-alpha'
+import { SNotification } from 'sax-design-vue'
 
-VsNotification({ ...options })
+SNotification({ ...options })
 ```
 
 </command>

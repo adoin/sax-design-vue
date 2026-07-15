@@ -1,22 +1,22 @@
 <template>
-  <vs-button @click="dialogVisible = true">click to open the Dialog</vs-button>
+  <s-button @click="dialogVisible = true">click to open the Dialog</s-button>
 
-  <vs-dialog v-model="dialogVisible" title="Tips" width="30%">
+  <s-dialog v-model="dialogVisible" title="Tips" width="30%">
     <span>This is a message</span>
     <template #footer>
       <span class="dialog-footer">
-        <vs-button
+        <s-button
           color="danger"
           style="margin-right: 10px"
           @click="dialogVisible = false"
-          >Cancel</vs-button
+          >Cancel</s-button
         >
-        <vs-button color="primary" @click="dialogVisible = false">
+        <s-button color="primary" @click="dialogVisible = false">
           Confirm
-        </vs-button>
+        </s-button>
       </span>
     </template>
-  </vs-dialog>
+  </s-dialog>
 </template>
 
 <script lang="ts" setup>

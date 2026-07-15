@@ -10,7 +10,7 @@ import { useNamespace } from '@vuesax-alpha/hooks'
 import { tableTdEmits, tableTdProps } from './td'
 
 defineOptions({
-  name: 'VsTd',
+  name: 'STd',
 })
 
 const ns = useNamespace('table')

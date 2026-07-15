@@ -10,13 +10,13 @@ import {
   zhSearchData,
   zhSidebar,
 } from './app'
-import { vuesaxAlphaTheme } from './theme/index'
+import { saxDesignVueTheme } from './theme/index'
 import type { UserConfig } from 'vuepress'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projRoot = path.resolve(__dirname, '../..')
 const pkgRoot = path.resolve(projRoot, 'packages')
-const vsRoot = path.resolve(pkgRoot, 'vuesax-alpha')
+const vsRoot = path.resolve(pkgRoot, 'sax-design-vue')
 
 export default defineUserConfig({
   bundler: viteBundler({
@@ -28,15 +28,15 @@ export default defineUserConfig({
             replacement: path.resolve(pkgRoot, 'theme-chalk'),
           },
           {
-            find: /^vuesax-alpha\/theme-chalk\/(.*)$/,
+            find: /^sax-design-vue\/theme-chalk\/(.*)$/,
             replacement: `${path.resolve(pkgRoot, 'theme-chalk')}/$1`,
           },
           {
-            find: /^vuesax-alpha(\/(es|lib))?$/,
+            find: /^sax-design-vue(\/(es|lib))?$/,
             replacement: path.resolve(vsRoot, 'index.ts'),
           },
           {
-            find: /^vuesax-alpha\/(es|lib)\/(.*)$/,
+            find: /^sax-design-vue\/(es|lib)\/(.*)$/,
             replacement: `${pkgRoot}/$2`,
           },
         ],
@@ -142,7 +142,7 @@ export default defineUserConfig({
     ['meta', { property: 'og:title', content: 'Sax Design Vue' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
-  theme: vuesaxAlphaTheme({
+  theme: saxDesignVueTheme({
     linkSite: 'https://adoin.github.io/sax-design-vue/',
     repo: 'adoin/sax-design-vue',
     docsBranch: 'main',

@@ -1,7 +1,7 @@
 <template>
   <div class="center">
-    <vs-progress :percent="55" :height="6" />
-    <vs-progress :percent="55" :height="12" color="success" />
+    <s-progress :percent="55" :height="6" />
+    <s-progress :percent="55" :height="12" color="success" />
   </div>
 </template>
 

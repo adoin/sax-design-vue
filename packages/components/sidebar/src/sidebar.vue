@@ -38,7 +38,7 @@ import { sidebarContextKey } from '@vuesax-alpha/tokens'
 import { sidebarEmits, sidebarProps } from './sidebar'
 
 defineOptions({
-  name: 'VsSidebar',
+  name: 'SSidebar',
 })
 
 const props = defineProps(sidebarProps)

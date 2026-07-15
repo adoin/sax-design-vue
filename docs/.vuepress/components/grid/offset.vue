@@ -1,24 +1,24 @@
 <template>
   <div>
-    <vs-row>
-      <vs-col :push="6" :span="2"> offset = 6 </vs-col>
-    </vs-row>
+    <s-row>
+      <s-col :push="6" :span="2"> offset = 6 </s-col>
+    </s-row>
 
-    <vs-row>
-      <vs-col :push="2" :span="2"> offset = 2 </vs-col>
-    </vs-row>
+    <s-row>
+      <s-col :push="2" :span="2"> offset = 2 </s-col>
+    </s-row>
 
-    <vs-row>
-      <vs-col :push="8" :span="2"> offset = 8 </vs-col>
-    </vs-row>
+    <s-row>
+      <s-col :push="8" :span="2"> offset = 8 </s-col>
+    </s-row>
 
-    <vs-row>
-      <vs-col :push="7" :span="2"> offset = 7 </vs-col>
-    </vs-row>
+    <s-row>
+      <s-col :push="7" :span="2"> offset = 7 </s-col>
+    </s-row>
 
-    <vs-row>
-      <vs-col :push="4" :span="2"> offset = 4 </vs-col>
-    </vs-row>
+    <s-row>
+      <s-col :push="4" :span="2"> offset = 4 </s-col>
+    </s-row>
   </div>
 </template>
 <style scoped lang="scss">

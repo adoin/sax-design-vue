@@ -1,37 +1,37 @@
 <template>
   <div class="center">
-    <vs-tooltip>
-      <vs-button type="shadow"> Default </vs-button>
+    <s-tooltip>
+      <s-button type="shadow"> Default </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
-    <vs-tooltip color="primary">
-      <vs-button type="flat"> Primary </vs-button>
+    </s-tooltip>
+    <s-tooltip color="primary">
+      <s-button type="flat"> Primary </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
-    <vs-tooltip color="success">
-      <vs-button color="success" type="flat"> Success </vs-button>
+    </s-tooltip>
+    <s-tooltip color="success">
+      <s-button color="success" type="flat"> Success </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
-    <vs-tooltip color="danger">
-      <vs-button color="danger" type="flat"> Danger </vs-button>
+    </s-tooltip>
+    <s-tooltip color="danger">
+      <s-button color="danger" type="flat"> Danger </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
-    <vs-tooltip color="warn">
-      <vs-button color="warn" type="flat"> Warning </vs-button>
+    </s-tooltip>
+    <s-tooltip color="warn">
+      <s-button color="warn" type="flat"> Warning </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
-    <vs-tooltip color="dark">
-      <vs-button color="dark" type="flat"> Dark </vs-button>
+    </s-tooltip>
+    <s-tooltip color="dark">
+      <s-button color="dark" type="flat"> Dark </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
-    <vs-tooltip color="#7d33ff">
-      <vs-button color="#7d33ff" type="flat"> HEX </vs-button>
+    </s-tooltip>
+    <s-tooltip color="#7d33ff">
+      <s-button color="#7d33ff" type="flat"> HEX </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
-    <vs-tooltip color="rgb(59,222,200)">
-      <vs-button color="rgb(59,222,200)" type="flat"> RGB </vs-button>
+    </s-tooltip>
+    <s-tooltip color="rgb(59,222,200)">
+      <s-button color="rgb(59,222,200)" type="flat"> RGB </s-button>
       <template #content> This is a beautiful button </template>
-    </vs-tooltip>
+    </s-tooltip>
   </div>
 </template>
 

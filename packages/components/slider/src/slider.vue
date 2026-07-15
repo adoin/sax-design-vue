@@ -54,7 +54,7 @@ import { sliderEmits, sliderProps } from './slider'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
-  name: 'VsSlider',
+  name: 'SSlider',
 })
 
 const props = defineProps(sliderProps)

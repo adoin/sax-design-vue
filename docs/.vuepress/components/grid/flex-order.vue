@@ -1,11 +1,11 @@
 <template>
   <div>
-    <vs-row vs-w="12">
-      <vs-col :span="3"> 1 </vs-col>
-      <vs-col :span="3"> 2 </vs-col>
-      <vs-col :pull="-1" :span="3"> 3 </vs-col>
-      <vs-col :span="3"> 4 </vs-col>
-    </vs-row>
+    <s-row vs-w="12">
+      <s-col :span="3"> 1 </s-col>
+      <s-col :span="3"> 2 </s-col>
+      <s-col :pull="-1" :span="3"> 3 </s-col>
+      <s-col :span="3"> 4 </s-col>
+    </s-row>
   </div>
 </template>
 <style scoped lang="scss">

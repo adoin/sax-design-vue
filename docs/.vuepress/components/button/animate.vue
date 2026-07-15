@@ -1,18 +1,18 @@
 <template>
   <div class="center">
-    <vs-button>
+    <s-button>
       Home
       <template #animate>
         <i class="bx bx-home-alt" />
       </template>
-    </vs-button>
+    </s-button>
 
-    <vs-button type="flat" color="success" animation-type="vertical">
+    <s-button type="flat" color="success" animation-type="vertical">
       Message
       <template #animate> <i class="bx bx-mail-send" /> Send </template>
-    </vs-button>
+    </s-button>
 
-    <vs-button
+    <s-button
       type="gradient"
       style="min-width: 60px"
       color="warn"
@@ -20,14 +20,14 @@
     >
       <i class="bx bxs-shopping-bag" />
       <template #animate> Store </template>
-    </vs-button>
+    </s-button>
 
-    <vs-button icon type="relief" color="danger" animation-type="rotate">
+    <s-button icon type="relief" color="danger" animation-type="rotate">
       <i class="bx bx-like" />
       <template #animate>
         <i class="bx bxs-like" />
       </template>
-    </vs-button>
+    </s-button>
   </div>
 </template>
 

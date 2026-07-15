@@ -1,14 +1,14 @@
 <template>
   <div class="center">
-    <vs-button
+    <s-button
       type="shadow"
       icon
       @click="openNotification(null, null, `<i class='bx bxs-time'></i>`)"
     >
       <i class="bx bx-border-radius b-r" />
       <i class="bx bxs-time" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="flat"
       icon
       @click="
@@ -17,8 +17,8 @@
     >
       <i class="bx bx-border-radius b-r" />
       <i class="bx bxs-user-pin" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="flat"
       color="success"
       icon
@@ -32,8 +32,8 @@
     >
       <i class="bx bx-border-radius t-r" />
       <i class="bx bx-select-multiple" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="flat"
       color="danger"
       icon
@@ -43,8 +43,8 @@
     >
       <i class="bx bx-border-radius t-l" />
       <i class="bx bxs-bug" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="flat"
       color="warn"
       icon
@@ -54,8 +54,8 @@
     >
       <i class="bx bx-border-radius b-l" />
       <i class="bx bx-error" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="flat"
       color="dark"
       icon
@@ -69,8 +69,8 @@
     >
       <i class="bx bx-border-bottom" />
       <i class="bx bx-folder-open" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="flat"
       color="#7d33ff"
       icon
@@ -80,8 +80,8 @@
     >
       <i class="bx bx-border-top" />
       <i class="bx bx-bell" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="flat"
       color="rgb(59,222,200)"
       icon
@@ -95,15 +95,15 @@
     >
       <i class="bx bx-border-radius b-r" />
       <i class="bx bx-calendar" />
-    </vs-button>
+    </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { VsNotification } from 'vuesax-alpha'
+import { SNotification } from 'sax-design-vue'
 
 const openNotification = (position = null, color, icon) => {
-  VsNotification({
+  SNotification({
     icon,
     color,
     position,

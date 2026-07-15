@@ -1,6 +1,6 @@
 <template>
   <div class="center content-inputs">
-    <vs-input
+    <s-input
       v-model="value"
       :type="inputType"
       :progress="getProgress"
@@ -17,7 +17,7 @@
       <template v-if="getProgress >= 100" #message-success>
         Secure password
       </template>
-    </vs-input>
+    </s-input>
   </div>
 </template>
 <script lang="ts" setup>

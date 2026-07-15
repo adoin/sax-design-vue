@@ -109,7 +109,7 @@ import HeaderNotification from '../components/HeaderNotification.vue'
 import Branding from '../components/Branding.vue'
 import NavbarLayout from './NavbarLayout.vue'
 import type { LayoutFrontmatter } from '../shared/frontmatter/layout'
-import type { VuesaxAlphaThemeOptions } from '../vuesaxAlphaTheme'
+import type { SaxDesignVueThemeOptions } from '../saxDesignVueTheme'
 import type { codesandboxContext } from '../type'
 
 const router = useRouter()
@@ -117,8 +117,8 @@ const router = useRouter()
 const pageData = usePageData()
 const pageFrontmatter = usePageFrontmatter<LayoutFrontmatter>()
 
-const themeData = useThemeData<VuesaxAlphaThemeOptions>()
-const themeLocaleData = useThemeLocaleData<VuesaxAlphaThemeOptions>()
+const themeData = useThemeData<SaxDesignVueThemeOptions>()
+const themeLocaleData = useThemeLocaleData<SaxDesignVueThemeOptions>()
 const routeLocale = useRouteLocale()
 
 const isSidebarOpen = ref<boolean>(false)

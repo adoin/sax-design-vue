@@ -1,46 +1,48 @@
-# Vuesax + Nuxt
+# Sax Design Vue + Nuxt
 
 <card>
 
-## 安装
+## 手动接入（推荐）
 
-Vuesax has a plugin for [Nuxt](https://nuxt.com) so starting a project is relatively quick just we have to add Vuesax module to the `nuxt.config.ts`
+**sax-design-vue** 暂无专用 Nuxt 模块。在客户端插件中注册：
 
-  <command>
+<command>
 
 ```ts
-export default defineNuxtConfig({
-  modules: ['@vuesax-alpha/nuxt'],
-  vuesaxAlpha: {
-    /** Options */
-  },
+// plugins/sax-design-vue.client.ts
+import SaxDesignVue from 'sax-design-vue'
+import 'sax-design-vue/theme-chalk/index.css'
+import 'sax-design-vue/theme-chalk/dark/css-vars.css'
+
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.vueApp.use(SaxDesignVue)
 })
 ```
 
-  </command>
+</command>
 
 </card>
 
 <card>
 
-## Test a component
+## 上游 Nuxt 模块
 
-Now that we have everything correct we are going to test and verify that everything is ready
+上游 `@vuesax-alpha/nuxt` 面向 **vuesax-alpha** 包名。若仍使用该模块，请在 Nuxt/Vite 配置中将 `vuesax-alpha` 别名指向 `sax-design-vue`，直至发布本项目专用模块。
 
-for this you can enter the pages folder and add a new test call or choose the `index.vue` that represents the main page of our project.
+</card>
 
-#### Add a component
+<card>
 
-Let's try adding a simple component like [vsButton](/zh/components/) the final code could be something like this
+## 测试组件
+
+在 `pages/` 下新建页面，例如：
 
 ```html
 <template>
   <div class="app">
-    <vs-button active> Hello World Vuesax + Nuxtjs </vs-button>
+    <s-button active> Hello Sax Design Vue + Nuxt </s-button>
   </div>
 </template>
-
-<script setup lang="ts"></script>
 
 <style>
   .app {
@@ -53,7 +55,4 @@ Let's try adding a simple component like [vsButton](/zh/components/) the final c
 </style>
 ```
 
-and if we see the page `/test` we find something like this
-
-  <img src="/nuxt-test-app.png" >
 </card>

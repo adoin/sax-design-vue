@@ -1,7 +1,7 @@
 <template>
   <div class="play-container demo">
-    <vs-button type="border" @click="open = true">Run prompt</vs-button>
-    <vs-prompt
+    <s-button type="border" @click="open = true">Run prompt</s-button>
+    <s-prompt
       v-model="open"
       title="Dialog"
       :is-valid="code.length > 0"
@@ -11,9 +11,9 @@
     >
       <div class="prompt-body">
         Enter the security code
-        <vs-input v-model="code" placeholder="Code" />
+        <s-input v-model="code" placeholder="Code" />
       </div>
-    </vs-prompt>
+    </s-prompt>
   </div>
 </template>
 

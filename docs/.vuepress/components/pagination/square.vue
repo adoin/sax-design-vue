@@ -1,6 +1,6 @@
 <template>
   <div class="center con-pagination">
-    <vs-pagination v-model:current-page="page" shape="square" :total="50" />
+    <s-pagination v-model:current-page="page" shape="square" :total="50" />
   </div>
 </template>
 

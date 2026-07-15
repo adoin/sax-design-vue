@@ -1,8 +1,8 @@
 <template>
   <div class="center content-inputs">
-    <vs-input v-model="value" input-style="border" placeholder="Name" />
+    <s-input v-model="value" input-style="border" placeholder="Name" />
 
-    <vs-input
+    <s-input
       v-model="value2"
       color="#7d33ff"
       input-style="shadow"
@@ -12,9 +12,9 @@
       <template #icon>
         <i class="bx bx-lock-open-alt" />
       </template>
-    </vs-input>
+    </s-input>
 
-    <vs-input
+    <s-input
       v-model="value3"
       color="warn"
       label="Address"
@@ -26,7 +26,7 @@
       <template #icon>
         <i class="bx bxl-bitcoin" />
       </template>
-    </vs-input>
+    </s-input>
   </div>
 </template>
 

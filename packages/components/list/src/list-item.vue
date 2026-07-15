@@ -4,7 +4,7 @@
       <slot name="avatar" />
     </div>
     <div v-if="icon" :class="ns.e('icon')">
-      <VsIcon :icon="icon" :icon-pack="iconPack" />
+      <SIcon :icon="icon" :icon-pack="iconPack" />
     </div>
     <div :class="ns.e('titles')">
       <div v-if="title" :class="ns.e('title')">{{ title }}</div>
@@ -20,11 +20,11 @@
 
 <script lang="ts" setup>
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { VsIcon } from '@vuesax-alpha/components/icon'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { listItemProps } from './list-item'
 
 defineOptions({
-  name: 'VsListItem',
+  name: 'SListItem',
 })
 
 defineProps(listItemProps)

@@ -1,28 +1,28 @@
 <template>
   <div class="grid">
-    <vs-row>
-      <vs-col> 100% </vs-col>
-    </vs-row>
+    <s-row>
+      <s-col> 100% </s-col>
+    </s-row>
 
-    <vs-row>
-      <vs-col v-for="_ in 2" :key="_" :sm="6"> 50% </vs-col>
-    </vs-row>
+    <s-row>
+      <s-col v-for="_ in 2" :key="_" :sm="6"> 50% </s-col>
+    </s-row>
 
-    <vs-row>
-      <vs-col v-for="_ in 3" :key="_" :sm="4"> 33.3% </vs-col>
-    </vs-row>
+    <s-row>
+      <s-col v-for="_ in 3" :key="_" :sm="4"> 33.3% </s-col>
+    </s-row>
 
-    <vs-row>
-      <vs-col v-for="_ in 4" :key="_" :sm="3"> 25% </vs-col>
-    </vs-row>
+    <s-row>
+      <s-col v-for="_ in 4" :key="_" :sm="3"> 25% </s-col>
+    </s-row>
 
-    <vs-row>
-      <vs-col v-for="_ in 6" :key="_" :sm="2"> 16.6% </vs-col>
-    </vs-row>
+    <s-row>
+      <s-col v-for="_ in 6" :key="_" :sm="2"> 16.6% </s-col>
+    </s-row>
 
-    <vs-row>
-      <vs-col v-for="_ in 12" :key="_" :sm="1"> 8.3% </vs-col>
-    </vs-row>
+    <s-row>
+      <s-col v-for="_ in 12" :key="_" :sm="1"> 8.3% </s-col>
+    </s-row>
   </div>
 </template>
 

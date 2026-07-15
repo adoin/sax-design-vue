@@ -1,88 +1,88 @@
 <template>
   <div class="clean">
-    <vs-sidebar v-model="active" :open="openSidebar" :reduce="reduce">
+    <s-sidebar v-model="active" :open="openSidebar" :reduce="reduce">
       <template #logo>
         <img src="/logos/logo-vuesax-logotipo-vuesax-png-3.png" alt="" />
       </template>
       <template #header>
-        <vs-avatar>
+        <s-avatar>
           <img src="/avatars/avatar-5.png" alt="" />
-        </vs-avatar>
+        </s-avatar>
       </template>
 
-      <vs-sidebar-group>
+      <s-sidebar-group>
         <template #header>
-          <vs-sidebar-item arrow>
+          <s-sidebar-item arrow>
             <template #icon>
               <i class="bx bx-sitemap" />
             </template>
             Items
-          </vs-sidebar-item>
+          </s-sidebar-item>
         </template>
 
-        <vs-sidebar-item id="home">
+        <s-sidebar-item id="home">
           <template #icon>
             <i class="bx bx-home" />
           </template>
           Home
-        </vs-sidebar-item>
-        <vs-sidebar-item id="docs">
+        </s-sidebar-item>
+        <s-sidebar-item id="docs">
           <template #icon>
             <i class="bx bx-book-open" />
           </template>
           Documents the new
-        </vs-sidebar-item>
-        <vs-sidebar-group>
+        </s-sidebar-item>
+        <s-sidebar-group>
           <template #header>
-            <vs-sidebar-item arrow>
+            <s-sidebar-item arrow>
               <template #icon>
                 <i class="bx bx-archive" />
               </template>
               Children
-            </vs-sidebar-item>
+            </s-sidebar-item>
           </template>
 
-          <vs-sidebar-item id="news">
+          <s-sidebar-item id="news">
             <template #icon>
               <i class="bx bx-news" />
             </template>
             News
-          </vs-sidebar-item>
-          <vs-sidebar-item id="Playlist">
+          </s-sidebar-item>
+          <s-sidebar-item id="Playlist">
             <template #icon>
               <i class="bx bxs-playlist" />
             </template>
             Playlist
-          </vs-sidebar-item>
-        </vs-sidebar-group>
-      </vs-sidebar-group>
+          </s-sidebar-item>
+        </s-sidebar-group>
+      </s-sidebar-group>
 
-      <vs-sidebar-item id="Artist">
+      <s-sidebar-item id="Artist">
         <template #icon>
           <i class="bx bxs-bar-chart-alt-2" />
         </template>
         Artist
-      </vs-sidebar-item>
-      <vs-sidebar-item id="chat">
+      </s-sidebar-item>
+      <s-sidebar-item id="chat">
         <template #icon>
           <i class="bx bx-chat" />
         </template>
         Chat
-      </vs-sidebar-item>
-      <vs-sidebar-item id="Songs">
+      </s-sidebar-item>
+      <s-sidebar-item id="Songs">
         <template #icon>
           <i class="bx bx-music" />
         </template>
         Songs
-      </vs-sidebar-item>
+      </s-sidebar-item>
       <template #footer>
-        <vs-button flat icon><i class="bx bxs-cog" /></vs-button>
+        <s-button flat icon><i class="bx bxs-cog" /></s-button>
       </template>
-    </vs-sidebar>
+    </s-sidebar>
 
     <div class="div">
-      <vs-button @click="reduce = !reduce"> click toggle </vs-button>
-      <vs-button @click="openSidebar = !openSidebar"> Open sidebar </vs-button>
+      <s-button @click="reduce = !reduce"> click toggle </s-button>
+      <s-button @click="openSidebar = !openSidebar"> Open sidebar </s-button>
     </div>
   </div>
 </template>

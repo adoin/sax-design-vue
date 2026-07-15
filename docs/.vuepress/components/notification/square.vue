@@ -1,22 +1,22 @@
 <template>
   <div class="center">
-    <vs-button
+    <s-button
       type="shadow"
       shape="square"
       icon
       @click="openNotification(null, '')"
     >
       <i class="bx bx-border-radius b-r" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       shape="square"
       icon
       @click="openNotification(null, 'primary')"
     >
       <i class="bx bx-border-radius b-r" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       shape="square"
       color="success"
@@ -24,8 +24,8 @@
       @click="openNotification('top-right', 'success')"
     >
       <i class="bx bx-border-radius t-r" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       shape="square"
       color="danger"
@@ -33,8 +33,8 @@
       @click="openNotification('top-left', 'danger')"
     >
       <i class="bx bx-border-radius t-l" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       shape="square"
       color="warn"
@@ -42,8 +42,8 @@
       @click="openNotification('bottom-left', 'warn')"
     >
       <i class="bx bx-border-radius b-l" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       shape="square"
       color="dark"
@@ -51,8 +51,8 @@
       @click="openNotification('bottom-center', 'dark')"
     >
       <i class="bx bx-border-bottom" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       shape="square"
       color="#7d33ff"
@@ -60,8 +60,8 @@
       @click="openNotification('top-center', '#7d33ff')"
     >
       <i class="bx bx-border-top" />
-    </vs-button>
-    <vs-button
+    </s-button>
+    <s-button
       type="border"
       shape="square"
       color="rgb(59,222,200)"
@@ -69,14 +69,14 @@
       @click="openNotification(null, 'rgb(59,222,200)')"
     >
       <i class="bx bx-border-radius b-r" />
-    </vs-button>
+    </s-button>
   </div>
 </template>
 <script lang="ts" setup>
-import { VsNotification } from 'vuesax-alpha'
+import { SNotification } from 'sax-design-vue'
 
 const openNotification = (position = null, color) => {
-  VsNotification({
+  SNotification({
     shape: 'square',
     color,
     position,

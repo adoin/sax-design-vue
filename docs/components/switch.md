@@ -9,9 +9,9 @@ PROPS:
     usage: '#dafault'
     code: >
       <template>
-        <vs-switch v-model="active" />
-        <vs-switch v-model="active2" />
-        <vs-switch v-model="active3" disabled />
+        <s-switch v-model="active" />
+        <s-switch v-model="active2" />
+        <s-switch v-model="active3" disabled />
       </template>
 
   - name: color
@@ -32,10 +32,10 @@ PROPS:
     usage: '#loading'
     code: >
       <template>
-        <vs-switch v-model="activeLoading">
+        <s-switch v-model="activeLoading">
           Active Loading
-        </vs-switch>
-        <vs-switch :loading="activeLoading" v-model="active2" />
+        </s-switch>
+        <s-switch :loading="activeLoading" v-model="active2" />
       </template>
 
       <script lang="ts" setup>
@@ -54,9 +54,9 @@ PROPS:
     usage: '#indeterminate'
     code: >
       <template>
-        <vs-switch indeterminate v-model="active" />
-        <vs-switch indeterminate v-model="active2" />
-        <vs-switch indeterminate v-model="active3" disabled />
+        <s-switch indeterminate v-model="active" />
+        <s-switch indeterminate v-model="active2" />
+        <s-switch indeterminate v-model="active3" disabled />
       </template>
 
   - name: Square
@@ -68,9 +68,9 @@ PROPS:
     usage: '#square'
     code: >
       <template>
-        <vs-switch square v-model="active" />
-        <vs-switch square v-model="active2" />
-        <vs-switch square v-model="active3" disabled />
+        <s-switch square v-model="active" />
+        <s-switch square v-model="active2" />
+        <s-switch square v-model="active3" disabled />
       </template>
 
   - name: icon
@@ -82,12 +82,12 @@ PROPS:
     usage: '#icons'
     code: >
       <template>
-        <vs-switch color="#7d33ff" icon v-model="active6">
+        <s-switch color="#7d33ff" icon v-model="active6">
           <template #circle>
               <i v-if="active6" class='bx bxl-instagram-alt'></i>
               <i v-else class='bx bxl-instagram' ></i>
           </template>
-        </vs-switch>
+        </s-switch>
       </template>
 
   - name: notValue
@@ -109,25 +109,25 @@ SLOTS:
     usage: '#text'
     code: >
       <template>
-        <vs-switch v-model="active">
+        <s-switch v-model="active">
           Suscribe
-        </vs-switch>
-        <vs-switch v-model="active2">
+        </s-switch>
+        <s-switch v-model="active2">
           <template #off>
               Off
           </template>
           <template #on>
               On
           </template>
-        </vs-switch>
-        <vs-switch v-model="active3">
+        </s-switch>
+        <s-switch v-model="active3">
           <template #off>
               default
           </template>
           <template #on>
               Premium
           </template>
-        </vs-switch>
+        </s-switch>
       </template>
   - name: on
     type: slot
@@ -137,14 +137,14 @@ SLOTS:
     link: null
     usage: '#icons'
     code: >
-      <vs-switch v-model="active1">
+      <s-switch v-model="active1">
         <template #off>
             <i class='bx bxs-volume-mute' ></i>
         </template>
         <template #on>
             <i class='bx bxs-volume-full' ></i>
         </template>
-      </vs-switch>
+      </s-switch>
   - name: off
     type: slot
     values: null
@@ -153,14 +153,14 @@ SLOTS:
     link: null
     usage: '#icons'
     code: >
-      <vs-switch v-model="active1">
+      <s-switch v-model="active1">
         <template #off>
             <i class='bx bxs-volume-mute' ></i>
         </template>
         <template #on>
             <i class='bx bxs-volume-full' ></i>
         </template>
-      </vs-switch>
+      </s-switch>
   - name: circle
     type: slot
     values: null
@@ -169,12 +169,12 @@ SLOTS:
     link: null
     usage: '#icons'
     code: >
-      <vs-switch color="#7d33ff" icon v-model="active6">
+      <s-switch color="#7d33ff" icon v-model="active6">
         <template #circle>
             <i v-if="active6" class='bx bxl-instagram-alt'></i>
             <i v-else class='bx bxl-instagram' ></i>
         </template>
-      </vs-switch>
+      </s-switch>
 ---
 
 # Switch

@@ -49,7 +49,7 @@ NEWS:
 ## 默认
 
 
-传入 `items` 数组或使用 `vs-breadcrumb-item` 插槽组合。
+传入 `items` 数组或使用 `s-breadcrumb-item` 插槽组合。
 
 <template #example>
 <breadcrumb-default />
@@ -57,13 +57,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/breadcrumb/default.vue)
+@[code{1-3}](../../.vuepress/components/breadcrumb/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-11}](../.vuepress/components/breadcrumb/default.vue)
+@[code{5-11}](../../.vuepress/components/breadcrumb/default.vue)
 
 </template>
 
@@ -82,13 +82,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/breadcrumb/color.vue)
+@[code{1-3}](../../.vuepress/components/breadcrumb/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-7}](../.vuepress/components/breadcrumb/color.vue)
+@[code{5-7}](../../.vuepress/components/breadcrumb/color.vue)
 
 </template>
 
@@ -107,13 +107,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/breadcrumb/separator.vue)
+@[code{1-3}](../../.vuepress/components/breadcrumb/separator.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-7}](../.vuepress/components/breadcrumb/separator.vue)
+@[code{5-7}](../../.vuepress/components/breadcrumb/separator.vue)
 
 </template>
 
@@ -132,7 +132,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/breadcrumb/slot.vue)
+@[code{1-7}](../../.vuepress/components/breadcrumb/slot.vue)
 
 </template>
 
@@ -151,19 +151,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/breadcrumb/align.vue)
+@[code{1-6}](../../.vuepress/components/breadcrumb/align.vue)
 
 </template>
 
 <template #script>
 
-@[code{8-10}](../.vuepress/components/breadcrumb/align.vue)
+@[code{8-10}](../../.vuepress/components/breadcrumb/align.vue)
 
 </template>
 
 <template #style>
 
-@[code{12-20}](../.vuepress/components/breadcrumb/align.vue)
+@[code{12-20}](../../.vuepress/components/breadcrumb/align.vue)
 
 </template>
 

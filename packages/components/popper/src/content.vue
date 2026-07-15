@@ -53,7 +53,7 @@ import { composeEventHandlers } from '@vuesax-alpha/utils'
 import { popperContentEmits, popperContentProps } from './content'
 
 defineOptions({
-  name: 'VsPopper',
+  name: 'SPopper',
 })
 
 const ns = useNamespace('popper')

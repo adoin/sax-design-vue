@@ -88,7 +88,7 @@ export const enNavbar: NavbarConfig = [
             link: `https://github.com/adoin/sax-design-vue`,
           },
           {
-            text: `Vuesax Alpha`,
+            text: `Upstream (reference)`,
             link: `https://github.com/vuesax-alpha/vuesax-alpha`,
           },
         ],
@@ -127,7 +127,7 @@ export const enNavbar: NavbarConfig = [
         children: [
           {
             text: `Pull Request`,
-            link: `https://github.com/vuesax-alpha/vuesax-alpha/pulls`,
+            link: `https://github.com/adoin/sax-design-vue/pulls`,
           },
         ],
       },

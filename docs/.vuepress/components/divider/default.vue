@@ -1,7 +1,7 @@
 <template>
   <div class="center">
     <p>Content above the divider.</p>
-    <vs-divider />
+    <s-divider />
     <p>Content below the divider.</p>
   </div>
 </template>

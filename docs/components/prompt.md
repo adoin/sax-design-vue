@@ -100,7 +100,7 @@ NEWS:
 
 **Prompt is the confirmation / alert dialog** — not a duplicate of [Dialog](/components/dialog).
 
-| | **Prompt** (`vs-prompt`) | **Dialog** (`vs-dialog`) |
+| | **Prompt** (`s-prompt`) | **Dialog** (`s-dialog`) |
 |---|---|---|
 | Purpose | Quick **confirm**, **alert**, or short forms with validation | **General-purpose** modal shell |
 | Layout | Fixed: title bar + body + **Accept / Cancel** footer | Fully custom `#header`, default, `#footer` slots |
@@ -193,7 +193,7 @@ Use `is-valid` to disable the accept button until the form inside the slot is va
 
 ## Programmatic
 
-After `app.use(VuesaxAlpha)`, call **`$prompt`** (Options API) or import **`VsPromptBox`** — no template required. This matches the official `$vs.dialog()` helper.
+After `app.use(SaxDesignVue)`, call **`$prompt`** (Options API) or import **`SPromptBox`** — no template required. This matches the official `$vs.dialog()` helper.
 
 <template #example>
 <prompt-programmatic />
@@ -212,21 +212,21 @@ After `app.use(VuesaxAlpha)`, call **`$prompt`** (Options API) or import **`VsPr
 </template>
 
 ```ts
-import { VsPromptBox } from 'vuesax-alpha'
+import { SPromptBox } from 'sax-design-vue'
 
 // Alert — resolves when dismissed
-await VsPromptBox.alert('Saved successfully.', 'Notice')
+await SPromptBox.alert('Saved successfully.', 'Notice')
 
 // Confirm — resolves on Accept, rejects on Cancel / close
 try {
-  await VsPromptBox.confirm('Delete this item?', 'Confirm')
+  await SPromptBox.confirm('Delete this item?', 'Confirm')
   // user accepted
 } catch {
   // user cancelled
 }
 
 // Full options + action result
-const action = await VsPromptBox({
+const action = await SPromptBox({
   title: 'Confirm',
   text: 'Continue?',
   type: 'confirm',

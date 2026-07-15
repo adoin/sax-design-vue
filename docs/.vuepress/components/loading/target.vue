@@ -1,12 +1,12 @@
 <template>
   <div ref="$target" class="center">
     <div class="con-btns">
-      <vs-button ref="$button" type="flat" @click="openLoadingButton">
+      <s-button ref="$button" type="flat" @click="openLoadingButton">
         Open Loading <b>Button</b>
-      </vs-button>
-      <vs-button type="border" @click="openLoading">
+      </s-button>
+      <s-button type="border" @click="openLoading">
         Open Loading <b>Target</b>
-      </vs-button>
+      </s-button>
     </div>
 
     <div ref="$content" class="content-div">
@@ -18,13 +18,13 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { VsLoadingFn } from 'vuesax-alpha'
+import { SLoadingFn } from 'sax-design-vue'
 
 const $button = ref<HTMLElement>()
 const $content = ref<HTMLElement>()
 
 const openLoading = () => {
-  const loadingInstance = VsLoadingFn({
+  const loadingInstance = SLoadingFn({
     target: $content,
   })
 
@@ -34,7 +34,7 @@ const openLoading = () => {
 }
 
 const openLoadingButton = () => {
-  const loadingInstance = VsLoadingFn({
+  const loadingInstance = SLoadingFn({
     target: $button,
     scale: '0.6',
     background: 'danger',

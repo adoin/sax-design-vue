@@ -1,5 +1,5 @@
 <template>
-  <vs-select
+  <s-select
     ref="selectInstance"
     :model-value="value"
     :disabled="disabled"
@@ -14,21 +14,21 @@
     @blur="(event) => $emit('blur', event)"
     @focus="(event) => $emit('focus', event)"
   >
-    <vs-option
+    <s-option
       v-for="item in items"
       :key="item.value"
       :label="item.value"
       :value="item.value"
       :disabled="item.disabled"
     />
-  </vs-select>
+  </s-select>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
-import { VsOption, VsSelect } from '@vuesax-alpha/components/select'
+import { SOption, SSelect } from '@vuesax-alpha/components/select'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { compareTime, formatTime, nextTime, parseTime } from './utils'
 import { timeSelectProps } from './time-select'
@@ -37,7 +37,7 @@ import type { SelectInstance } from '@vuesax-alpha/components/select'
 dayjs.extend(customParseFormat)
 
 defineOptions({
-  name: 'VsTimeSelect',
+  name: 'STimeSelect',
 })
 
 defineEmits(['change', 'blur', 'focus', UPDATE_MODEL_EVENT])

@@ -1,54 +1,54 @@
 <template>
   <div class="center example-nav">
-    <vs-navbar v-model="active" center-collapsed>
+    <s-navbar v-model="active" center-collapsed>
       <template #left>
         <img src="/logo2.png" alt="" />
       </template>
-      <vs-navbar-group>
+      <s-navbar-group>
         Docs
         <template #items>
-          <vs-navbar-item id="guide" :active="active == 'guide'">
+          <s-navbar-item id="guide" :active="active == 'guide'">
             Guide
-          </vs-navbar-item>
-          <vs-navbar-item id="docs" :active="active == 'docs'">
+          </s-navbar-item>
+          <s-navbar-item id="docs" :active="active == 'docs'">
             Documents
-          </vs-navbar-item>
-          <vs-navbar-item id="components" :active="active == 'components'">
+          </s-navbar-item>
+          <s-navbar-item id="components" :active="active == 'components'">
             Components
-          </vs-navbar-item>
+          </s-navbar-item>
         </template>
-      </vs-navbar-group>
+      </s-navbar-group>
 
-      <vs-navbar-group>
+      <s-navbar-group>
         Ecosystem
 
         <template #items>
           <h5 class="title">Social</h5>
 
-          <vs-navbar-item id="Github" :active="active == 'Github'">
+          <s-navbar-item id="Github" :active="active == 'Github'">
             Github
-          </vs-navbar-item>
-          <vs-navbar-item id="Discord" :active="active == 'Discord'">
+          </s-navbar-item>
+          <s-navbar-item id="Discord" :active="active == 'Discord'">
             Discord
-          </vs-navbar-item>
-          <vs-navbar-item id="Twitter" :active="active == 'Twitter'">
+          </s-navbar-item>
+          <s-navbar-item id="Twitter" :active="active == 'Twitter'">
             Twitter
-          </vs-navbar-item>
-          <vs-navbar-item id="Medium" :active="active == 'Medium'">
+          </s-navbar-item>
+          <s-navbar-item id="Medium" :active="active == 'Medium'">
             Medium
-          </vs-navbar-item>
+          </s-navbar-item>
         </template>
-      </vs-navbar-group>
+      </s-navbar-group>
 
-      <vs-navbar-item id="License" :active="active == 'License'">
+      <s-navbar-item id="License" :active="active == 'License'">
         License
-      </vs-navbar-item>
+      </s-navbar-item>
 
       <template #right>
-        <vs-button type="flat">Login</vs-button>
-        <vs-button>Get Started</vs-button>
+        <s-button type="flat">Login</s-button>
+        <s-button>Get Started</s-button>
       </template>
-    </vs-navbar>
+    </s-navbar>
     <div class="square">
       <div class="child">child 1</div>
       <div class="child">child 2</div>

@@ -1,9 +1,9 @@
 <template>
   <div class="center">
-    <vs-radio v-model="picked" value="1"> Option A </vs-radio>
-    <vs-radio v-model="picked" value="2"> Option B </vs-radio>
-    <vs-radio v-model="picked" value="3" disabled> Option C </vs-radio>
-    <vs-radio v-model="picked" value="4"> Option D </vs-radio>
+    <s-radio v-model="picked" value="1"> Option A </s-radio>
+    <s-radio v-model="picked" value="2"> Option B </s-radio>
+    <s-radio v-model="picked" value="3" disabled> Option C </s-radio>
+    <s-radio v-model="picked" value="4"> Option D </s-radio>
   </div>
 </template>
 

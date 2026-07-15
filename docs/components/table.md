@@ -16,7 +16,7 @@ PROPS:
     link: null
     usage: '#striped'
     code: null
-  - name: vs-tr:data
+  - name: s-tr:data
     type: Object
     values: Object
     description: when the functionality of selected is needed this property is needed since it is the object that is passed to the v-model.
@@ -24,7 +24,7 @@ PROPS:
     link: null
     usage: '#single-selected'
     code: null
-  - name: vs-tr:is-selected
+  - name: s-tr:is-selected
     type: Boolean
     values: true, false
     description: Determines if the component is in the selected state, for optimize perf
@@ -32,7 +32,7 @@ PROPS:
     link: null
     usage: '#single-selected'
     code: null
-  - name: vs-td:edit
+  - name: s-td:edit
     type: Boolean
     values: true, false
     description: Determine if the element is editable by adding underline and the pointer cursor.
@@ -40,7 +40,7 @@ PROPS:
     link: null
     usage: '#edit-data'
     code: null
-  - name: vs-th:sort
+  - name: s-th:sort
     type: Boolean
     values: true, false
     description: Add the sort arrows to the corresponding th.
@@ -48,7 +48,7 @@ PROPS:
     link: null
     usage: '#sort'
     code: null
-  - name: vs-tr:color
+  - name: s-tr:color
     type: String, Vuesax colors
     values: color, vuesax colors
     description: Change the color of the tr.
@@ -72,37 +72,37 @@ SLOTS:
   - name: thead
     type: slot
     values: null
-    description: Space representing thead element of the table where the `vs-th` components will be placed.
+    description: Space representing thead element of the table where the `s-th` components will be placed.
     default: null
     link: null
     usage: '#default'
     code: >
       <template #thead>
-        <vs-tr>
-          <vs-th> Name </vs-th>
-          <vs-th> Email </vs-th>
-          <vs-th> Id </vs-th>
-        </vs-tr>
+        <s-tr>
+          <s-th> Name </s-th>
+          <s-th> Email </s-th>
+          <s-th> Id </s-th>
+        </s-tr>
       </template>
   - name: tbody
     type: slot
     values: null
-    description: Represents the tbody element in the table and here we will put the `vs-tr` components.
+    description: Represents the tbody element in the table and here we will put the `s-tr` components.
     default: null
     link: null
     usage: '#default'
     code: >
       <template #tbody>
-        <vs-tr
+        <s-tr
           v-for="tr in users"
           :data="tr"
         >
-          <vs-td> {{ tr.name }} </vs-td>
-          <vs-td> {{ tr.email }} </vs-td>
-          <vs-td> {{ tr.id }} </vs-td>
-        </vs-tr>
+          <s-td> {{ tr.name }} </s-td>
+          <s-td> {{ tr.email }} </s-td>
+          <s-td> {{ tr.id }} </s-td>
+        </s-tr>
       </template>
-  - name: vs-tr:#expand
+  - name: s-tr:#expand
     type: slot
     values: null
     description: Represents the interior of the tr when it is expanded.
@@ -129,7 +129,7 @@ SLOTS:
 
 <docs-warn />
 
-Create a table simply with the `vs-table` component and its`vs-tr`, `vs-td`,`vs-th` components.
+Create a table simply with the `s-table` component and its`s-tr`, `s-td`,`s-th` components.
 
 This component has a different logic for better data management and freer customization according to needs.
 
@@ -179,7 +179,7 @@ You can easily strip the table with the `striped` property
 
 ## Color
 
-Change the color of a tr by adding the color property to the component `vs-tr`
+Change the color of a tr by adding the color property to the component `s-tr`
 
 <template #example>
 <table-color />
@@ -203,7 +203,7 @@ Change the color of a tr by adding the color property to the component `vs-tr`
 
 ## Pagination
 
-You can add the pagination functionality for the table using the `#footer` slot and the vs-pagination component
+You can add the pagination functionality for the table using the `#footer` slot and the s-pagination component
 
 To make the development easier you can use the vuesax function that generates the items (`getPage`) based on the page and also the one that generates the total number of pages in the pagination component (`getLength`)
 
@@ -287,7 +287,7 @@ for this functionality you can use for example the vuesax checkboxes and the fun
 
 ## Expandable data
 
-To add a `tr` that can display expanded data use the`#expand` slot inside the `vs-tr` component.
+To add a `tr` that can display expanded data use the`#expand` slot inside the `s-tr` component.
 
 <template #example>
 <table-expand />
@@ -311,7 +311,7 @@ To add a `tr` that can display expanded data use the`#expand` slot inside the `v
 
 ## Edit data
 
-You can edit the data inside the table easily using the `vs-dialog` component and the magic of vuejs
+You can edit the data inside the table easily using the `s-dialog` component and the magic of vuejs
 
 <template #example>
 <table-edit />

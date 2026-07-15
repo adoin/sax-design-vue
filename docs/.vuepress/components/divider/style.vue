@@ -1,8 +1,8 @@
 <template>
   <div class="center">
-    <vs-divider border-style="dotted" color="dark">dotted</vs-divider>
-    <vs-divider border-style="dashed" color="dark">dashed</vs-divider>
-    <vs-divider border-style="solid" color="dark">solid</vs-divider>
+    <s-divider border-style="dotted" color="dark">dotted</s-divider>
+    <s-divider border-style="dashed" color="dark">dashed</s-divider>
+    <s-divider border-style="solid" color="dark">solid</s-divider>
   </div>
 </template>
 
