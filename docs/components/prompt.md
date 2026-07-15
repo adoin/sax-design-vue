@@ -93,6 +93,7 @@ NEWS:
   - default
   - alert
   - validation
+  - programmatic
 ---
 
 # Prompt
@@ -185,6 +186,54 @@ Use `is-valid` to disable the accept button until the form inside the slot is va
 @[code{24-40}](../.vuepress/components/prompt/validation.vue)
 
 </template>
+
+</card>
+
+<card>
+
+## Programmatic
+
+After `app.use(VuesaxAlpha)`, call **`$prompt`** (Options API) or import **`VsPromptBox`** — no template required. This matches the official `$vs.dialog()` helper.
+
+<template #example>
+<prompt-programmatic />
+</template>
+
+<template #template>
+
+@[code{1-8}](../.vuepress/components/prompt/programmatic.vue)
+
+</template>
+
+<template #script>
+
+@[code{10-27}](../.vuepress/components/prompt/programmatic.vue)
+
+</template>
+
+```ts
+import { VsPromptBox } from 'vuesax-alpha'
+
+// Alert — resolves when dismissed
+await VsPromptBox.alert('Saved successfully.', 'Notice')
+
+// Confirm — resolves on Accept, rejects on Cancel / close
+try {
+  await VsPromptBox.confirm('Delete this item?', 'Confirm')
+  // user accepted
+} catch {
+  // user cancelled
+}
+
+// Full options + action result
+const action = await VsPromptBox({
+  title: 'Confirm',
+  text: 'Continue?',
+  type: 'confirm',
+  color: 'danger',
+})
+// action: 'accept' | 'cancel' | 'close'
+```
 
 </card>
 

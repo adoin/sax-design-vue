@@ -47,6 +47,7 @@ declare module '@vue/runtime-core' {
 
   interface ComponentCustomProperties {
     $notification: typeof import('../packages/vuesax-alpha')['VsNotification']
+    $prompt: typeof import('../packages/vuesax-alpha')['VsPromptBox']
     $loading: typeof import('../packages/vuesax-alpha')['VsLoadingFn']
   }
 }
