@@ -10,6 +10,7 @@ import type { codesandboxContext, vsThemeContext } from './type'
 // import Sidebar from "./layouts/Sidebar.vue";
 
 import './styles/sax-design-vue'
+import 'prismjs/themes/prism-tomorrow.css'
 
 export default defineClientConfig({
   setup() {

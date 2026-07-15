@@ -104,6 +104,7 @@ if (isMultipleSlot) {
 
 <style lang="scss">
 @import '../styles/use';
+@import '../styles/syntax-tokens';
 
 .command {
   z-index: 300;
@@ -215,7 +216,10 @@ if (isMultipleSlot) {
   .slots {
     border-radius: 20px;
     background: -color(theme-code);
-    // padding: 1.25rem 1.5rem;
+
+    div[class*='language-'] {
+      @include syntax-tokens(true);
+    }
   }
 
   &:hover {

@@ -1,5 +1,6 @@
 @import './config';
 @import './mixin';
+@import './syntax-tokens';
 
 // Inline code only — do not style fenced code blocks here
 :not(pre) > code {
@@ -34,78 +35,12 @@ pre[class*='language-'] code {
   color: #ccc;
 }
 
-@mixin syntax-tokens {
-  .token {
-    &.comment,
-    &.block-comment,
-    &.prolog,
-    &.doctype,
-    &.cdata {
-      color: #999;
-    }
-
-    &.punctuation {
-      color: #ccc;
-    }
-
-    &.tag,
-    &.attr-name,
-    &.namespace,
-    &.deleted {
-      color: #e2777a;
-    }
-
-    &.function-name {
-      color: #6196cc;
-    }
-
-    &.boolean,
-    &.number,
-    &.function {
-      color: #f08d49;
-    }
-
-    &.property,
-    &.class-name,
-    &.constant,
-    &.symbol {
-      color: #f8c555;
-    }
-
-    &.selector,
-    &.important,
-    &.atrule,
-    &.keyword,
-    &.builtin {
-      color: #cc99cd;
-    }
-
-    &.string,
-    &.char,
-    &.attr-value,
-    &.regex,
-    &.variable {
-      color: #7ec699;
-    }
-
-    &.operator,
-    &.entity,
-    &.url {
-      color: #67cdcc;
-    }
-
-    &.inserted {
-      color: #7ec699;
-    }
-  }
-}
-
 div[class*='language-'] {
   position: relative;
   background-color: -color('theme-code');
   border-radius: 6px;
 
-  @include syntax-tokens;
+  @include syntax-tokens(true);
 
   .highlight-lines {
     user-select: none;
@@ -197,8 +132,9 @@ div[class*='language-'] {
   }
 }
 
-.command div[class*='language-'] {
-  @include syntax-tokens;
+.command div[class*='language-'],
+.con-code div[class*='language-'] {
+  @include syntax-tokens(true);
 }
 
 div[class~='language-javascript']:before {

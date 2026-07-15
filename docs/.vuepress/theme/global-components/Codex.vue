@@ -223,6 +223,7 @@ onMounted(() => {
 
 <style lang="scss">
 @import '../styles/use';
+@import '../styles/syntax-tokens';
 
 .slot-all {
   & > div {
@@ -327,6 +328,7 @@ onMounted(() => {
   margin: 0px 10px;
   div[class*='language-'] {
     border-radius: 0px;
+    @include syntax-tokens(true);
   }
   pre {
     margin-top: 0px !important;

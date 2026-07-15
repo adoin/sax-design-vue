@@ -1,0 +1,67 @@
+@mixin syntax-tokens($important: false) {
+  $i: if($important, ' !important', '');
+
+  .token {
+    &.comment,
+    &.block-comment,
+    &.prolog,
+    &.doctype,
+    &.cdata {
+      color: #999#{$i};
+    }
+
+    &.punctuation {
+      color: #ccc#{$i};
+    }
+
+    &.tag,
+    &.attr-name,
+    &.namespace,
+    &.deleted {
+      color: #e2777a#{$i};
+    }
+
+    &.function-name {
+      color: #6196cc#{$i};
+    }
+
+    &.boolean,
+    &.number,
+    &.function {
+      color: #f08d49#{$i};
+    }
+
+    &.property,
+    &.class-name,
+    &.constant,
+    &.symbol {
+      color: #f8c555#{$i};
+    }
+
+    &.selector,
+    &.important,
+    &.atrule,
+    &.keyword,
+    &.builtin {
+      color: #cc99cd#{$i};
+    }
+
+    &.string,
+    &.char,
+    &.attr-value,
+    &.regex,
+    &.variable {
+      color: #7ec699#{$i};
+    }
+
+    &.operator,
+    &.entity,
+    &.url {
+      color: #67cdcc#{$i};
+    }
+
+    &.inserted {
+      color: #7ec699#{$i};
+    }
+  }
+}
