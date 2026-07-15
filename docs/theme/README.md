@@ -68,11 +68,11 @@ It is important that the colors are in HEX format and only the numerical value f
 
 ```css
 :root {
-  --s-primary: 91, 60, 196;
-  --s-success: 23, 201, 100;
-  --s-danger: 242, 19, 93;
-  --s-warn: 254, 130, 0;
-  --s-dark: 36, 33, 69;
+  --sax-primary: 91, 60, 196;
+  --sax-success: 23, 201, 100;
+  --sax-danger: 242, 19, 93;
+  --sax-warn: 254, 130, 0;
+  --sax-dark: 36, 33, 69;
 }
 ```
 
@@ -112,7 +112,7 @@ You can only use this function when the document object is available. For exampl
  * @param propertyName The name of the property
  * @param value The value of the property
  * @param el The element to set the property. Default document.documentElement
- * @param namespace The namespace of the app. Default 's'
+ * @param namespace The namespace of the app. Default 'sax'
  */
 const setCssVar: (
   propertyName: string,

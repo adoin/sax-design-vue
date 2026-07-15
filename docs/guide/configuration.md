@@ -24,17 +24,17 @@ For tree-shaking, register only the components you need — see [Using Component
 
 ## Theme variables
 
-Sax Design Vue components read CSS variables such as `--s-primary`. Override them on `:root` or `html.dark`:
+Sax Design Vue components read CSS variables such as `--sax-primary`. Override them on `:root` or `html.dark`:
 
 <command>
 
 ```css
 :root {
-  --s-primary: 37, 99, 255;
+  --sax-primary: 37, 99, 255;
 }
 
 html.dark {
-  --s-primary: 96, 165, 250;
+  --sax-primary: 96, 165, 250;
 }
 ```
 

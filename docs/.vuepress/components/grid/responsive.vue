@@ -40,10 +40,10 @@ onMounted(() => {
 </script>
 <style scoped lang="scss">
 @function -var($var) {
-  @return unquote('var(--s-' + var + ')');
+  @return unquote('var(--sax-' + var + ')');
 }
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--s-#{$color}), #{$alpha})');
+  @return unquote('rgba(var(--sax-#{$color}), #{$alpha})');
 }
 .grid {
   border-radius: 20px;

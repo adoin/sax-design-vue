@@ -11,6 +11,9 @@ import { debugWarn } from './error'
 import type { MaybeRef } from './typescript'
 import type { VuesaxColor } from '@vuesax-alpha/constants'
 
+const CLASS_NAMESPACE = 's'
+const CSS_VAR_NAMESPACE = 'sax'
+
 export const getCssVariable = (el: HTMLElement, property: string) => {
   return getComputedStyle(el).getPropertyValue(property)
 }
@@ -57,7 +60,7 @@ export const setColor = (
   color: string,
   el: HTMLElement,
   addClass?: boolean,
-  namespace = 's'
+  namespace = CLASS_NAMESPACE
 ) => {
   let newColor
   if (color == 'dark' && el) {
@@ -82,7 +85,7 @@ export const setColor = (
   } else if (isVsColor(color)) {
     const style = window.getComputedStyle(document.body)
     newColor = style.getPropertyValue(
-      `--${namespace}-${normalizeVsColor(color)}`
+      `--${CSS_VAR_NAMESPACE}-${normalizeVsColor(color)}`
     )
     setCssVar(colorName, newColor, el)
     if (addClass) {
@@ -118,7 +121,7 @@ export const acceptColor = (color: string) => {
  */
 export const getVsColor = (
   colorRef: MaybeRef<string | undefined>,
-  namespace = 's'
+  namespace = CSS_VAR_NAMESPACE
 ): string => {
   const color = unref(colorRef)
   if (!color) return ''
@@ -147,13 +150,13 @@ export const getVsColor = (
  * @param propertyName The name of the property
  * @param value The value of the property
  * @param el The element to set the property. Default document.documentElement
- * @param namespace The CSS variable namespace. Default 's'
+ * @param namespace The CSS variable namespace. Default 'sax'
  */
 export const setCssVar = (
   propertyName: string,
   value: string,
   el?: HTMLElement,
-  namespace = 's'
+  namespace = CSS_VAR_NAMESPACE
 ) => {
   if (!el && document?.documentElement) {
     document.documentElement.style.setProperty(

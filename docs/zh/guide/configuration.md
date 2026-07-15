@@ -24,17 +24,17 @@ app.use(SaxDesignVue)
 
 ## 主题变量
 
-Sax Design Vue 组件读取 `--s-primary` 等 CSS 变量。可在 `:root` 或 `html.dark` 上覆盖：
+Sax Design Vue 组件读取 `--sax-primary` 等 CSS 变量。可在 `:root` 或 `html.dark` 上覆盖：
 
 <command>
 
 ```css
 :root {
-  --s-primary: 37, 99, 255;
+  --sax-primary: 37, 99, 255;
 }
 
 html.dark {
-  --s-primary: 96, 165, 250;
+  --sax-primary: 96, 165, 250;
 }
 ```
 

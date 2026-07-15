@@ -56,7 +56,7 @@ const style = computed<StyleValue>(() => {
       marginTop: addUnit(props.offset?.[1] ?? 0),
     },
     props.badgeStyle ?? {},
-    { '--s-badge-ripple-color': props.color || '' },
+    { '--sax-badge-ripple-color': props.color || '' },
   ]
 })
 

@@ -47,7 +47,7 @@
 // join var name
 // joinVarName(('button', 'text-color')) => '--vs-button-text-color'
 @function joinVarName($list) {
-  $name: '--' + config.$namespace;
+  $name: '--' + config.$css-var-namespace;
   @each $item in $list {
     @if $item != '' {
       $name: $name + '-' + $item;

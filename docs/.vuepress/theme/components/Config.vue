@@ -222,15 +222,15 @@ const reloadConfig = () => {
   //   '.header-page > .effect1'
   // ) as HTMLElement
 
-  sidebar?.style.removeProperty(`--s-theme-layout`)
-  navbar?.style.removeProperty(`--s-theme-layout`)
-  navbar?.style.removeProperty(`--s-theme-bg2`)
-  config?.style.removeProperty(`--s-theme-layout`)
-  sidebar?.style.removeProperty(`--s-theme-color`)
-  navbar?.style.removeProperty(`--s-theme-color`)
-  config?.style.removeProperty(`--s-theme-color`)
+  sidebar?.style.removeProperty(`--sax-theme-layout`)
+  navbar?.style.removeProperty(`--sax-theme-layout`)
+  navbar?.style.removeProperty(`--sax-theme-bg2`)
+  config?.style.removeProperty(`--sax-theme-layout`)
+  sidebar?.style.removeProperty(`--sax-theme-color`)
+  navbar?.style.removeProperty(`--sax-theme-color`)
+  config?.style.removeProperty(`--sax-theme-color`)
   document.body.classList.remove('hidden-sidebar')
-  document.body.style.setProperty(`--s-primary`, '26, 92, 255')
+  document.body.style.setProperty(`--sax-primary`, '26, 92, 255')
   $vsTheme.mobileActive = false
   localStorage.mobile = false
 
@@ -307,19 +307,19 @@ const changeColorLayout = (colorBase: string) => {
   //   '.header-page > .effect1'
   // )! as HTMLElement
 
-  sidebar.style.setProperty(`--s-theme-layout`, colour)
-  navbar.style.setProperty(`--s-theme-layout`, colour)
-  navbar.style.setProperty(`--s-theme-bg2`, colour)
-  config.style.setProperty(`--s-theme-layout`, colour)
+  sidebar.style.setProperty(`--sax-theme-layout`, colour)
+  navbar.style.setProperty(`--sax-theme-layout`, colour)
+  navbar.style.setProperty(`--sax-theme-bg2`, colour)
+  config.style.setProperty(`--sax-theme-layout`, colour)
 
   if (contrastColor(colour)) {
-    sidebar.style.setProperty(`--s-theme-color`, '44, 62, 80')
-    navbar.style.setProperty(`--s-theme-color`, '44, 62, 80')
-    config.style.setProperty(`--s-theme-color`, '44, 62, 80')
+    sidebar.style.setProperty(`--sax-theme-color`, '44, 62, 80')
+    navbar.style.setProperty(`--sax-theme-color`, '44, 62, 80')
+    config.style.setProperty(`--sax-theme-color`, '44, 62, 80')
   } else {
-    sidebar.style.setProperty(`--s-theme-color`, '0, 0, 0')
-    navbar.style.setProperty(`--s-theme-color`, '0, 0, 0')
-    config.style.setProperty(`--s-theme-color`, '0, 0, 0')
+    sidebar.style.setProperty(`--sax-theme-color`, '0, 0, 0')
+    navbar.style.setProperty(`--sax-theme-color`, '0, 0, 0')
+    config.style.setProperty(`--sax-theme-color`, '0, 0, 0')
   }
 
   setTimeout(() => {
@@ -332,7 +332,7 @@ const changeColor = (evt: Event) => {
   // @ts-ignore
   const rgb = hexToRgb(evt.target.value)
   const color = `${rgb?.r},${rgb?.g},${rgb?.b}`
-  document.body.style.setProperty(`--s-primary`, color)
+  document.body.style.setProperty(`--sax-primary`, color)
 }
 const changeMenu = () => {
   $vsTheme.sidebarCollapseOpen = !$vsTheme?.sidebarCollapseOpen

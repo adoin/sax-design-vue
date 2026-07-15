@@ -36,11 +36,11 @@ const isNewComponent = computed(() => {
   margin: 0 0 28px;
   padding: 20px 22px;
   border-radius: 16px;
-  border: 1px solid rgba(var(--s-accent-color), 0.14);
+  border: 1px solid rgba(var(--sax-accent-color), 0.14);
   background: linear-gradient(
     135deg,
-    rgba(var(--s-theme-layout), 0.96),
-    rgba(var(--s-accent-color), 0.06)
+    rgba(var(--sax-theme-layout), 0.96),
+    rgba(var(--sax-accent-color), 0.06)
   );
 }
 
@@ -48,7 +48,7 @@ const isNewComponent = computed(() => {
   margin: 0;
   font-size: 1.02rem;
   line-height: 1.75;
-  color: rgba(var(--s-theme-color), 0.78);
+  color: rgba(var(--sax-theme-color), 0.78);
 }
 
 .component-intro__meta {
@@ -64,7 +64,7 @@ const isNewComponent = computed(() => {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgb(var(--s-accent-color));
-  background: rgba(var(--s-accent-color), 0.1);
+  color: rgb(var(--sax-accent-color));
+  background: rgba(var(--sax-accent-color), 0.1);
 }
 </style>

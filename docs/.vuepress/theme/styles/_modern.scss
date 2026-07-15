@@ -1,5 +1,5 @@
 html {
-  font-family: var(--s-font-sans);
+  font-family: var(--sax-font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -7,24 +7,24 @@ html {
 body,
 #app,
 .theme-container {
-  background: rgb(var(--s-theme-bg));
-  color: rgb(var(--s-theme-color));
+  background: rgb(var(--sax-theme-bg));
+  color: rgb(var(--sax-theme-color));
 }
 
 .theme-container {
   background-image: radial-gradient(
       circle at 12% 8%,
-      rgba(var(--s-accent-color), 0.14),
+      rgba(var(--sax-accent-color), 0.14),
       transparent 34%
     ),
     radial-gradient(
       circle at 88% 4%,
-      rgba(var(--s-accent-secondary), 0.12),
+      rgba(var(--sax-accent-secondary), 0.12),
       transparent 30%
     ),
     radial-gradient(
       circle at 50% 100%,
-      rgba(var(--s-accent-color), 0.08),
+      rgba(var(--sax-accent-color), 0.08),
       transparent 42%
     );
   background-attachment: fixed;
@@ -32,15 +32,15 @@ body,
 
 .navbar {
   backdrop-filter: blur(14px);
-  background: rgba(var(--s-theme-layout), 0.78) !important;
-  border-bottom: 1px solid rgba(var(--s-accent-color), 0.12);
+  background: rgba(var(--sax-theme-layout), 0.78) !important;
+  border-bottom: 1px solid rgba(var(--sax-accent-color), 0.12);
   border-radius: 0 !important;
   box-shadow: 0 8px 30px rgba(30, 27, 75, 0.06);
 }
 
 .sidebar {
-  border-right: 1px solid rgba(var(--s-accent-color), 0.1);
-  background: rgba(var(--s-theme-layout), 0.88);
+  border-right: 1px solid rgba(var(--sax-accent-color), 0.1);
+  background: rgba(var(--sax-theme-layout), 0.88);
   backdrop-filter: blur(8px);
 }
 
@@ -51,11 +51,11 @@ body,
 
 .card {
   border-radius: 18px;
-  border: 1px solid rgba(var(--s-accent-color), 0.12);
+  border: 1px solid rgba(var(--sax-accent-color), 0.12);
   background: linear-gradient(
     165deg,
-    rgba(var(--s-theme-layout), 0.98),
-    rgba(var(--s-accent-color), 0.035)
+    rgba(var(--sax-theme-layout), 0.98),
+    rgba(var(--sax-accent-color), 0.035)
   );
   box-shadow: 0 14px 40px rgba(30, 27, 75, 0.06);
   overflow: hidden;
@@ -69,12 +69,12 @@ body,
       padding-bottom: 10px;
       font-size: 1.28rem;
       letter-spacing: -0.02em;
-      color: rgb(var(--s-theme-color));
-      border-bottom: 1px solid rgba(var(--s-accent-color), 0.1);
+      color: rgb(var(--sax-theme-color));
+      border-bottom: 1px solid rgba(var(--sax-accent-color), 0.1);
 
       + p {
         margin-top: 14px;
-        color: rgba(var(--s-theme-color), 0.72);
+        color: rgba(var(--sax-theme-color), 0.72);
         line-height: 1.7;
       }
     }
@@ -99,8 +99,8 @@ body,
 .page .content h1 {
   background: linear-gradient(
     120deg,
-    rgb(var(--s-theme-color)),
-    rgb(var(--s-accent-color))
+    rgb(var(--sax-theme-color)),
+    rgb(var(--sax-accent-color))
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -109,11 +109,11 @@ body,
 
 .custom-container.tip {
   border-radius: 12px;
-  border: 1px solid rgba(var(--s-accent-color), 0.22);
+  border: 1px solid rgba(var(--sax-accent-color), 0.22);
   background: linear-gradient(
     135deg,
-    rgba(var(--s-accent-color), 0.1),
-    rgba(var(--s-accent-secondary), 0.06)
+    rgba(var(--sax-accent-color), 0.1),
+    rgba(var(--sax-accent-secondary), 0.06)
   );
 }
 
@@ -122,10 +122,10 @@ body,
   margin: 16px 16px 0;
   background: linear-gradient(
     180deg,
-    rgba(var(--s-theme-bg2), 0.65),
-    rgba(var(--s-theme-layout), 0.95)
+    rgba(var(--sax-theme-bg2), 0.65),
+    rgba(var(--sax-theme-layout), 0.95)
   );
-  border: 1px solid rgba(var(--s-accent-color), 0.08);
+  border: 1px solid rgba(var(--sax-accent-color), 0.08);
 }
 
 .card > .slotcode {
@@ -136,25 +136,25 @@ body,
 
 .theme-container .page .content,
 .theme-container .docs-home .content {
-  max-width: var(--s-content-width);
+  max-width: var(--sax-content-width);
 }
 
 .header-page {
-  border-bottom: 1px solid rgba(var(--s-accent-color), 0.1);
-  background: rgba(var(--s-theme-layout), 0.6);
+  border-bottom: 1px solid rgba(var(--sax-accent-color), 0.1);
+  background: rgba(var(--sax-theme-layout), 0.6);
   backdrop-filter: blur(6px);
 }
 
 .sidebar-link.active {
-  color: rgb(var(--s-accent-color)) !important;
+  color: rgb(var(--sax-accent-color)) !important;
   font-weight: 700;
 }
 
 .sidebar-link:hover {
-  color: rgb(var(--s-accent-color));
+  color: rgb(var(--sax-accent-color));
 }
 
 .sidebar-group .sidebar-heading.open,
 .sidebar-group .sidebar-heading:hover {
-  color: rgb(var(--s-accent-color));
+  color: rgb(var(--sax-accent-color));
 }

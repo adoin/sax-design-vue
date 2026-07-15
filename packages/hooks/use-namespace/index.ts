@@ -2,6 +2,7 @@ import { computed, inject, ref, unref } from 'vue'
 import type { InjectionKey, Ref } from 'vue'
 
 export const defaultNamespace = 's'
+export const defaultCssVarNamespace = 'sax'
 const statePrefix = 'is-'
 
 const _bem = (
@@ -80,7 +81,7 @@ export const useNamespace = (
     const styles: Record<string, string> = {}
     for (const key in object) {
       if (object[key]) {
-        styles[`--${namespace.value}-${key}`] = object[key]
+        styles[`--${defaultCssVarNamespace}-${key}`] = object[key]
       }
     }
     return styles
@@ -90,15 +91,15 @@ export const useNamespace = (
     const styles: Record<string, string> = {}
     for (const key in object) {
       if (object[key]) {
-        styles[`--${namespace.value}-${block}-${key}`] = object[key]
+        styles[`--${defaultCssVarNamespace}-${block}-${key}`] = object[key]
       }
     }
     return styles
   }
 
-  const cssVarName = (name: string) => `--${namespace.value}-${name}`
+  const cssVarName = (name: string) => `--${defaultCssVarNamespace}-${name}`
   const cssVarBlockName = (name: string) =>
-    `--${namespace.value}-${block}-${name}`
+    `--${defaultCssVarNamespace}-${block}-${name}`
 
   return {
     namespace,

@@ -161,7 +161,7 @@ const highlights = computed(() => [
     height: 320px;
     top: -80px;
     left: -60px;
-    background: rgba(var(--s-accent-color), 0.35);
+    background: rgba(var(--sax-accent-color), 0.35);
   }
 
   &--2 {
@@ -169,7 +169,7 @@ const highlights = computed(() => [
     height: 280px;
     top: 40px;
     right: -40px;
-    background: rgba(var(--s-accent-secondary), 0.28);
+    background: rgba(var(--sax-accent-secondary), 0.28);
   }
 
   &--3 {
@@ -177,7 +177,7 @@ const highlights = computed(() => [
     height: 360px;
     bottom: 120px;
     left: 30%;
-    background: rgba(var(--s-accent-color), 0.18);
+    background: rgba(var(--sax-accent-color), 0.18);
   }
 }
 
@@ -199,7 +199,7 @@ const highlights = computed(() => [
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgb(var(--s-accent-color));
+  color: rgb(var(--sax-accent-color));
 }
 
 .home-modern__hero h1 {
@@ -207,7 +207,7 @@ const highlights = computed(() => [
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   line-height: 1.1;
   font-weight: 700;
-  color: rgb(var(--s-theme-color));
+  color: rgb(var(--sax-theme-color));
 }
 
 .home-modern__lead {
@@ -215,7 +215,7 @@ const highlights = computed(() => [
   margin: 0 auto 28px;
   font-size: 1.1rem;
   line-height: 1.7;
-  color: rgba(var(--s-theme-color), 0.72);
+  color: rgba(var(--sax-theme-color), 0.72);
 }
 
 .home-modern__cta {
@@ -232,21 +232,21 @@ const highlights = computed(() => [
   min-height: 44px;
   padding: 0 18px;
   border-radius: 12px;
-  border: 1px solid rgba(var(--s-theme-color), 0.12);
-  background: rgba(var(--s-theme-layout), 0.9);
-  color: rgb(var(--s-theme-color));
+  border: 1px solid rgba(var(--sax-theme-color), 0.12);
+  background: rgba(var(--sax-theme-layout), 0.9);
+  color: rgb(var(--sax-theme-color));
   font-weight: 600;
   text-decoration: none;
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: rgba(var(--s-accent-color), 0.35);
-    color: rgb(var(--s-accent-color));
+    border-color: rgba(var(--sax-accent-color), 0.35);
+    color: rgb(var(--sax-accent-color));
   }
 
   &--primary {
     border-color: transparent;
-    background: rgb(var(--s-accent-color));
+    background: rgb(var(--sax-accent-color));
     color: #fff;
 
     &:hover {
@@ -266,11 +266,11 @@ const highlights = computed(() => [
 .home-modern__card {
   padding: 24px;
   border-radius: 16px;
-  border: 1px solid rgba(var(--s-accent-color), 0.14);
+  border: 1px solid rgba(var(--sax-accent-color), 0.14);
   background: linear-gradient(
     155deg,
-    rgba(var(--s-theme-layout), 0.92),
-    rgba(var(--s-accent-color), 0.08)
+    rgba(var(--sax-theme-layout), 0.92),
+    rgba(var(--sax-accent-color), 0.08)
   );
   box-shadow: 0 16px 40px rgba(30, 27, 75, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -283,19 +283,19 @@ const highlights = computed(() => [
   h2 {
     margin: 0 0 10px;
     font-size: 1.15rem;
-    color: rgb(var(--s-theme-color));
+    color: rgb(var(--sax-theme-color));
   }
 
   p {
     margin: 0 0 16px;
     line-height: 1.6;
-    color: rgba(var(--s-theme-color), 0.7);
+    color: rgba(var(--sax-theme-color), 0.7);
   }
 }
 
 .home-modern__card-link {
   font-weight: 600;
-  color: rgb(var(--s-accent-color));
+  color: rgb(var(--sax-accent-color));
   text-decoration: none;
 }
 
@@ -310,25 +310,25 @@ const highlights = computed(() => [
   border-radius: 18px;
   background: linear-gradient(
     135deg,
-    rgba(var(--s-accent-color), 0.12),
-    rgba(var(--s-theme-layout), 0.95)
+    rgba(var(--sax-accent-color), 0.12),
+    rgba(var(--sax-theme-layout), 0.95)
   );
-  border: 1px solid rgba(var(--s-accent-color), 0.15);
+  border: 1px solid rgba(var(--sax-accent-color), 0.15);
 
   h2 {
     margin: 0 0 8px;
     font-size: 1.35rem;
-    color: rgb(var(--s-theme-color));
+    color: rgb(var(--sax-theme-color));
   }
 
   p {
     margin: 0;
     max-width: 640px;
     line-height: 1.7;
-    color: rgba(var(--s-theme-color), 0.75);
+    color: rgba(var(--sax-theme-color), 0.75);
 
     a {
-      color: rgb(var(--s-accent-color));
+      color: rgb(var(--sax-accent-color));
       font-weight: 600;
     }
   }
@@ -340,7 +340,7 @@ const highlights = computed(() => [
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgb(var(--s-accent-color));
+  color: rgb(var(--sax-accent-color));
 }
 
 @media (max-width: 720px) {

@@ -4,7 +4,7 @@ PROPS:
     type: String
     values: Theme colors, RGB, HEX
     description: color of the component.
-    default: --s-gray-2
+    default: --sax-gray-2
     link: null
     usage: '#color'
     code: null

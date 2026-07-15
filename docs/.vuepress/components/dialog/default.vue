@@ -43,7 +43,7 @@ const remember = ref(false)
 </script>
 <style lang="scss" scoped>
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--s-#{$color}), #{$alpha})');
+  @return unquote('rgba(var(--sax-#{$color}), #{$alpha})');
 }
 .not-margin {
   margin: 0px;

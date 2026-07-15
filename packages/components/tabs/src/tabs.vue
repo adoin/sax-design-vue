@@ -68,7 +68,7 @@ const customColor = computed(() => {
 
 const rootStyle = computed((): CSSProperties => {
   if (!customColor.value) return {}
-  return { '--s-tabs-color': customColor.value } as CSSProperties
+  return { '--sax-tabs-color': customColor.value } as CSSProperties
 })
 
 const resolveIndex = (val: string | number) => {
