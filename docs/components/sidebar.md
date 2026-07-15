@@ -65,7 +65,7 @@ PROPS:
 
   - name: background
     type: String
-    values: Vuesax Colors, RGB, HEX
+    values: Theme colors, RGB, HEX
     description: Change the background color of the sidebar
     default: false
     link: null

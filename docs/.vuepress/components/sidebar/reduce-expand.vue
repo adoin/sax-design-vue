@@ -181,7 +181,7 @@ const active = ref('home')
   overflow: hidden;
   position: relative;
   min-height: 700px;
-  .vs-avatar {
+  .s-avatar {
     margin-top: 10px;
   }
 }

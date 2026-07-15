@@ -19,7 +19,7 @@ const value = ref(0)
   display: flex;
   align-items: center;
   justify-content: center;
-  .vs-rate {
+  .s-rate {
     width: 120px;
     text-align: left;
   }

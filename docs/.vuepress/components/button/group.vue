@@ -54,7 +54,7 @@
 .center {
   flex-wrap: wrap;
 
-  .vs-button__group {
+  .s-button__group {
     margin: 20px 20px;
   }
 }

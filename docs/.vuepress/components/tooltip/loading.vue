@@ -11,7 +11,7 @@
   </div>
 </template>
 <style scoped lang="scss">
-.vs-button {
+.s-button {
   margin: 0 5px;
 }
 </style>

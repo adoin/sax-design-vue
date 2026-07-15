@@ -23,7 +23,7 @@ const active = ref<boolean>(true)
 </script>
 
 <style scoped>
-.vs-button {
+.s-button {
   margin-bottom: 4px;
 }
 </style>

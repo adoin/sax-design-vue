@@ -11,7 +11,7 @@ PROPS:
 
   - name: color
     type: String
-    values: Vuesax colors, RGB, HEX
+    values: Theme colors, RGB, HEX
     description: color of the tooltip.
     default: text
     link: null

@@ -16,23 +16,23 @@
 
 <style scoped lang="scss">
 @function -var($var) {
-  @return unquote('var(--vs-' + var + ')');
+  @return unquote('var(--s-' + var + ')');
 }
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--vs-#{$color}), #{$alpha})');
+  @return unquote('rgba(var(--s-#{$color}), #{$alpha})');
 }
 .grid {
   border-radius: 20px;
   overflow: hidden;
   padding: 0px;
 }
-.vs-row {
+.s-row {
   height: 90px;
   &:first-child {
     border-top: 2px solid -color('theme-layout');
   }
 }
-.vs-col {
+.s-col {
   height: 30px;
   font-size: 0.58rem;
   padding: 10px;
@@ -53,7 +53,7 @@
 }
 
 @media (max-width: 500px) {
-  .vs-col {
+  .s-col {
     font-weight: bold;
     padding: 10px 0px;
   }

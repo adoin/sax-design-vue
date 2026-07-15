@@ -24,7 +24,7 @@ const options = ref(['javascript', 'vue'])
 .con-checkbox {
   flex-direction: column;
   align-items: flex-start;
-  .vs-checkbox {
+  .s-checkbox {
     min-width: 80px;
   }
   .data-check {

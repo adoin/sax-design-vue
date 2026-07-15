@@ -24,38 +24,38 @@
     transition: all 0.25s ease;
     cursor: default;
     &.primary {
-      box-shadow: 0px 20px 35px -10px rgba(var(--vs-primary, 0.5));
-      background: rgba(var(--vs-primary));
+      box-shadow: 0px 20px 35px -10px rgba(var(--s-primary, 0.5));
+      background: rgba(var(--s-primary));
       &:hover {
-        box-shadow: 0px 0px 0px 0px rgba(var(--vs-primary, 0.5));
+        box-shadow: 0px 0px 0px 0px rgba(var(--s-primary, 0.5));
       }
     }
     &.success {
-      box-shadow: 0px 20px 35px -10px rgba(var(--vs-success, 0.5));
-      background: rgba(var(--vs-success));
+      box-shadow: 0px 20px 35px -10px rgba(var(--s-success, 0.5));
+      background: rgba(var(--s-success));
       &:hover {
-        box-shadow: 0px 0px 0px 0px rgba(var(--vs-success, 0.5));
+        box-shadow: 0px 0px 0px 0px rgba(var(--s-success, 0.5));
       }
     }
     &.danger {
-      box-shadow: 0px 20px 35px -10px rgba(var(--vs-danger, 0.5));
-      background: rgba(var(--vs-danger));
+      box-shadow: 0px 20px 35px -10px rgba(var(--s-danger, 0.5));
+      background: rgba(var(--s-danger));
       &:hover {
-        box-shadow: 0px 0px 0px 0px rgba(var(--vs-danger, 0.5));
+        box-shadow: 0px 0px 0px 0px rgba(var(--s-danger, 0.5));
       }
     }
     &.warn {
-      box-shadow: 0px 20px 35px -10px rgba(var(--vs-warn, 0.5));
-      background: rgba(var(--vs-warn));
+      box-shadow: 0px 20px 35px -10px rgba(var(--s-warn, 0.5));
+      background: rgba(var(--s-warn));
       &:hover {
-        box-shadow: 0px 0px 0px 0px rgba(var(--vs-warn, 0.5));
+        box-shadow: 0px 0px 0px 0px rgba(var(--s-warn, 0.5));
       }
     }
     &.dark {
-      box-shadow: 0px 20px 35px -10px rgba(var(--vs-dark, 0.5));
-      background: rgba(var(--vs-dark));
+      box-shadow: 0px 20px 35px -10px rgba(var(--s-dark, 0.5));
+      background: rgba(var(--s-dark));
       &:hover {
-        box-shadow: 0px 0px 0px 0px rgba(var(--vs-dark, 0.5));
+        box-shadow: 0px 0px 0px 0px rgba(var(--s-dark, 0.5));
       }
     }
     &:hover {

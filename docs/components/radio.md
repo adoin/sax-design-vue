@@ -2,7 +2,7 @@
 PROPS:
   - name: color
     type: String
-    values: Vuesax Colors, RGB, HEX
+    values: Theme colors, RGB, HEX
     description: Change the color of the radio.
     default: primary
     link: null

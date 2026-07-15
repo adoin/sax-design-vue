@@ -90,7 +90,7 @@ const customColor = computed(() => {
 
 const rootStyle = computed((): CSSProperties => {
   if (!customColor.value) return {}
-  return { '--vs-slider-color': customColor.value } as CSSProperties
+  return { '--s-slider-color': customColor.value } as CSSProperties
 })
 
 const fillStyle = computed(() => ({

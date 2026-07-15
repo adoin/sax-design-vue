@@ -99,7 +99,7 @@ const links = [
   justify-content: center;
   flex-direction: column;
   border-radius: 0;
-  border-top: 1px solid rgba(var(--vs-theme-color), 0.08);
+  border-top: 1px solid rgba(var(--s-theme-color), 0.08);
 
   .footer__uls {
     display: flex;
@@ -119,10 +119,10 @@ const links = [
     justify-content: space-between;
     font-size: 0.85rem;
     padding: 20px 24px;
-    color: rgba(var(--vs-theme-color), 0.65);
+    color: rgba(var(--s-theme-color), 0.65);
 
     a {
-      color: rgb(var(--vs-accent-color));
+      color: rgb(var(--s-accent-color));
       text-decoration: none;
       font-weight: 600;
 
@@ -142,7 +142,7 @@ const links = [
       margin-bottom: 12px;
       font-size: 0.95rem;
       font-weight: 700;
-      color: rgb(var(--vs-theme-color));
+      color: rgb(var(--s-theme-color));
     }
 
     li a,
@@ -158,7 +158,7 @@ const links = [
 
       &:hover {
         opacity: 1;
-        color: rgb(var(--vs-accent-color));
+        color: rgb(var(--s-accent-color));
       }
     }
   }

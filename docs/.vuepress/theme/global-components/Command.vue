@@ -139,7 +139,7 @@ if (isMultipleSlot) {
       max-height: 40px;
       z-index: -1;
       pointer-events: none;
-      fill: rgba(var(--vs-theme-code), 1);
+      fill: rgba(var(--s-theme-code), 1);
 
       &.tab-effect1 {
         transform: rotate(72deg) scale(0.6);

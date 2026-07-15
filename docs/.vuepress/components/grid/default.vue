@@ -28,22 +28,22 @@
 
 <style scoped lang="scss">
 @function -var($var) {
-  @return unquote('var(--vs-' + var + ')');
+  @return unquote('var(--s-' + var + ')');
 }
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--vs-#{$color}), #{$alpha})');
+  @return unquote('rgba(var(--s-#{$color}), #{$alpha})');
 }
 .grid {
   border-radius: 20px;
   overflow: hidden;
   padding: 0px;
 }
-.vs-row {
+.s-row {
   &:first-child {
     border-top: 2px solid -color('theme-layout');
   }
 }
-.vs-col {
+.s-col {
   padding: 10px;
   text-align: center;
   background: -color('theme-bg2');
@@ -62,7 +62,7 @@
 }
 
 @media (max-width: 500px) {
-  .vs-col {
+  .s-col {
     font-size: 0.58rem;
     font-weight: bold;
     padding: 10px 0px;

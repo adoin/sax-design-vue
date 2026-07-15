@@ -486,7 +486,7 @@ const handleBurDrop = () => {
         box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.1);
         transform: translate(0, 5px);
       }
-      .vs-input {
+      .s-input {
         width: calc(100% - 50px);
         input {
           width: 100% !important;
@@ -997,7 +997,7 @@ const handleBurDrop = () => {
           height: 41px;
           margin-left: 10px;
         }
-        .vs-input-parent {
+        .s-input-parent {
           width: calc(100% - 60px);
         }
         input {
@@ -1359,7 +1359,7 @@ const handleBurDrop = () => {
           button {
             min-width: 100px;
           }
-          .vs-button--shadow {
+          .s-button--shadow {
             background: -color('theme-layout') !important;
             color: -color('theme-color') !important;
           }

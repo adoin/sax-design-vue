@@ -28,7 +28,7 @@
 
 <style scoped lang="scss">
 .con-avatars {
-  .vs-avatar-content {
+  .s-avatar-content {
     margin: 20px;
   }
 }

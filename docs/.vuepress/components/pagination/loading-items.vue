@@ -16,7 +16,7 @@ const page = ref(1)
 
 <style lang="scss" scoped>
 .con-pagination {
-  .vs-pagination {
+  .s-pagination {
     margin: 10px 0px;
   }
 }

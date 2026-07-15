@@ -4,9 +4,9 @@
 
 ## Default Colors
 
-Vuesax has the main colors that are maintained throughout the application to facilitate change and effective operation
+Sax Design Vue maintains a consistent palette across the application so theme changes stay predictable.
 
-The main colors can be changed and customized to the taste of each developer for a more personalized application
+The main colors can be customized to match your product branding.
 
 Default colors:
 
@@ -24,9 +24,9 @@ Default colors:
 
 ## Customize Theme Colors
 
-You can change the colors as you want and at any time, vuesax uses native css variables which means you can access them and change them whenever you want
+Sax Design Vue uses native CSS variables, so you can read and override them at any time.
 
-equal vuesax gives you several ways to change the main colors either by css or javascript
+You can change the main colors through CSS or JavaScript.
 
 </card>
 
@@ -37,7 +37,9 @@ equal vuesax gives you several ways to change the main colors either by css or j
 <command>
 
 ```ts
-app.use(Vuesax, {
+import SaxDesignVue from 'sax-design-vue'
+
+app.use(SaxDesignVue, {
   colors: {
     primary: '#5b3cc4',
     success: 'rgb(23, 201, 100)',
@@ -56,7 +58,7 @@ app.use(Vuesax, {
 
 ## CSS
 
-You can change the vuesax variables by means of css like any other css variable
+You can change Sax Design Vue variables through CSS like any other custom property.
 
 ::: warning HEX Format Numbers Only
 It is important that the colors are in HEX format and only the numerical value for example: `rgb (255,100,50)` is equivalent to `255,100,50`
@@ -66,11 +68,11 @@ It is important that the colors are in HEX format and only the numerical value f
 
 ```css
 :root {
-  --vs-primary: 91, 60, 196;
-  --vs-success: 23, 201, 100;
-  --vs-danger: 242, 19, 93;
-  --vs-warn: 254, 130, 0;
-  --vs-dark: 36, 33, 69;
+  --s-primary: 91, 60, 196;
+  --s-success: 23, 201, 100;
+  --s-danger: 242, 19, 93;
+  --s-warn: 254, 130, 0;
+  --s-dark: 36, 33, 69;
 }
 ```
 
@@ -80,12 +82,12 @@ It is important that the colors are in HEX format and only the numerical value f
 
 <card>
 
-## VS Function
+## setCssVar
 
-You can change the main colors at any point of your application but only on the client side with the existence of the `document object` with the function of vuesax `setCssVar()`
+You can change the main colors at any point in your application on the client side with `setCssVar()`.
 
 ::: warning
-You can only use this function when you can obtain the document object, for example it cannot be used in the `created()` hook of vuejs since the document and the elements are not yet rendered
+You can only use this function when the document object is available. For example, it cannot be used in the Vue `created()` hook because the DOM is not rendered yet.
 :::
 
 <command>
@@ -110,7 +112,7 @@ You can only use this function when you can obtain the document object, for exam
  * @param propertyName The name of the property
  * @param value The value of the property
  * @param el The element to set the property. Default document.documentElement
- * @param namespace The namespace of vs app. Default'vs'
+ * @param namespace The namespace of the app. Default 's'
  */
 const setCssVar: (
   propertyName: string,

@@ -26,7 +26,7 @@ const value7 = ref('')
   display: flex;
   align-items: center;
   justify-content: center;
-  .vs-input {
+  .s-input {
     margin: 10px;
   }
 }

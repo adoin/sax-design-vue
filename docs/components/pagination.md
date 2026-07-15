@@ -20,7 +20,7 @@ PROPS:
       <s-pagination v-model:current-page="page" :total="20" />
   - name: color
     type: String
-    values: Vuesax colors, RGB, HEX
+    values: Theme colors, RGB, HEX
     description: Change the base color of the component.
     default: primary
     link: null

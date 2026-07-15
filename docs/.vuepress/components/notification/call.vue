@@ -34,7 +34,7 @@ import { SButton } from 'sax-design-vue'
     width: 100%;
     background-image: linear-gradient(180deg, transparent 0%, #000 100%);
     padding: 10px;
-    .vs-button {
+    .s-button {
       margin: 10px;
     }
   }

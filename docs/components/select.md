@@ -108,7 +108,7 @@ PROPS:
     code: null
   - name: state
     type: String
-    values: Vuesax main colors
+    values: Theme colors
     description: Change the state of the component to the color provided.
     default: false
     link: null

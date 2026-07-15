@@ -24,17 +24,17 @@ For tree-shaking, register only the components you need — see [Using Component
 
 ## Theme variables
 
-Vuesax components read CSS variables such as `--vs-primary`. Override them on `:root` or `html.dark`:
+Sax Design Vue components read CSS variables such as `--s-primary`. Override them on `:root` or `html.dark`:
 
 <command>
 
 ```css
 :root {
-  --vs-primary: 37, 99, 255;
+  --s-primary: 37, 99, 255;
 }
 
 html.dark {
-  --vs-primary: 96, 165, 250;
+  --s-primary: 96, 165, 250;
 }
 ```
 
@@ -63,24 +63,24 @@ Start from the default example, then jump to the API table at the bottom of the 
 
 ## Auto-import (Vite)
 
-Use `unplugin-vue-components` with the resolver from `@vuesax-alpha/auto-import-resolver` (component names are unchanged). Point imports at **sax-design-vue**:
+Use `unplugin-vue-components` with a resolver for **S**-prefixed components and import styles from **sax-design-vue**:
 
 <command>
 
 ```ts
 import path from 'node:path'
 import Components from 'unplugin-vue-components/vite'
-import { VuesaxAlphaResolver } from '@vuesax-alpha/auto-import-resolver'
+import { VuesaxAlphaResolver as SaxDesignVueResolver } from '@vuesax-alpha/auto-import-resolver'
 
 export default defineConfig({
   resolve: {
     alias: {
-      'vuesax-alpha': path.resolve(__dirname, 'node_modules/sax-design-vue'),
+      'sax-design-vue': path.resolve(__dirname, 'node_modules/sax-design-vue'),
     },
   },
   plugins: [
     Components({
-      resolvers: [VuesaxAlphaResolver({ importStyle: 'sass' })],
+      resolvers: [SaxDesignVueResolver({ importStyle: 'sass' })],
     }),
   ],
 })

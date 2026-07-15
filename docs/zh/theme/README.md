@@ -4,9 +4,9 @@
 
 ## Default Colors
 
-Vuesax has the main colors that are maintained throughout the application to facilitate change and effective operation
+Sax Design Vue 在全局维护一套主色，便于统一调整主题并保持视觉一致。
 
-The main colors can be changed and customized to the taste of each developer for a more personalized application
+主色可按产品品牌自由定制。
 
 Default colors:
 
@@ -24,9 +24,9 @@ Default colors:
 
 ## Customize Theme Colors
 
-You can change the colors as you want and at any time, vuesax uses native css variables which means you can access them and change them whenever you want
+Sax Design Vue 使用原生 CSS 变量，可随时读取与覆盖。
 
-equal vuesax gives you several ways to change the main colors either by css or javascript
+可通过 CSS 或 JavaScript 修改主色。
 
 </card>
 
@@ -37,7 +37,9 @@ equal vuesax gives you several ways to change the main colors either by css or j
 <command>
 
 ```ts
-app.use(Vuesax, {
+import SaxDesignVue from 'sax-design-vue'
+
+app.use(SaxDesignVue, {
   colors: {
     primary: '#5b3cc4',
     success: 'rgb(23, 201, 100)',
@@ -56,7 +58,7 @@ app.use(Vuesax, {
 
 ## CSS
 
-You can change the vuesax variables by means of css like any other css variable
+可通过 CSS 像修改普通变量一样覆盖 Sax Design Vue 主题变量。
 
 ::: warning HEX Format Numbers Only
 It is important that the colors are in HEX format and only the numerical value for example: `rgb (255,100,50)` is equivalent to `255,100,50`
@@ -66,11 +68,11 @@ It is important that the colors are in HEX format and only the numerical value f
 
 ```css
 :root {
-  --vs-primary: 91, 60, 196;
-  --vs-success: 23, 201, 100;
-  --vs-danger: 242, 19, 93;
-  --vs-warn: 254, 130, 0;
-  --vs-dark: 36, 33, 69;
+  --s-primary: 91, 60, 196;
+  --s-success: 23, 201, 100;
+  --s-danger: 242, 19, 93;
+  --s-warn: 254, 130, 0;
+  --s-dark: 36, 33, 69;
 }
 ```
 
@@ -80,12 +82,12 @@ It is important that the colors are in HEX format and only the numerical value f
 
 <card>
 
-## VS Function
+## setCssVar
 
-You can change the main colors at any point of your application but only on the client side with the existence of the `document object` with the function of vuesax `setCssVar()`
+可在客户端任意时刻通过 `setCssVar()` 修改主色。
 
 ::: warning
-You can only use this function when you can obtain the document object, for example it cannot be used in the `created()` hook of vuejs since the document and the elements are not yet rendered
+仅当 document 可用时才能调用。例如不能在 Vue 的 `created()` 钩子中使用，因为 DOM 尚未渲染。
 :::
 
 <command>
@@ -110,7 +112,7 @@ You can only use this function when you can obtain the document object, for exam
  * @param propertyName The name of the property
  * @param value The value of the property
  * @param el The element to set the property. Default document.documentElement
- * @param namespace The namespace of vs app. Default'vs'
+ * @param namespace The namespace of the app. Default 's'
  */
 const setCssVar: (
   propertyName: string,

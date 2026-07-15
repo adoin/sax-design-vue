@@ -48,7 +48,7 @@ const colors: { color: Color; value: string }[] = [
 
 <style scoped lang="scss">
 .con-selects {
-  .vs-select {
+  .s-select {
     margin: 10px;
   }
 }

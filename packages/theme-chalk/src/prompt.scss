@@ -111,11 +111,11 @@
 .dialog-t-leave-active {
   transition: opacity 0.2s ease;
 
-  .vs-prompt__dialog {
+  .s-prompt__dialog {
     transition: transform 0.2s ease, opacity 0.2s ease;
   }
 
-  .vs-prompt__content {
+  .s-prompt__content {
     transition: opacity 0.23s ease 0.1s;
   }
 }
@@ -124,12 +124,12 @@
 .dialog-t-leave-to {
   opacity: 0;
 
-  .vs-prompt__dialog {
+  .s-prompt__dialog {
     transform: scale(0.9);
     opacity: 0;
   }
 
-  .vs-prompt__content {
+  .s-prompt__content {
     opacity: 0;
   }
 }

@@ -3,7 +3,7 @@
     v-if="
       pageFrontmatter.PROPS || pageFrontmatter.SLOTS || pageFrontmatter.EVENTS
     "
-    id="vs-api"
+    id="s-api"
     class="con-api"
   >
     <div class="content-api">

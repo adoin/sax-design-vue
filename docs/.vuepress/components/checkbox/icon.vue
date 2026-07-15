@@ -51,7 +51,7 @@ const option7 = ref(true)
 </script>
 <style lang="scss">
 .checks {
-  .vs-checkbox {
+  .s-checkbox {
     margin: 5px;
   }
 }

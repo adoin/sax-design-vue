@@ -16,7 +16,7 @@ export default defineComponent({
 <style lang="scss">
 @import '../../styles/_use.scss';
 
-.vs-icon-arrow {
+.s-icon-arrow {
   pointer-events: none;
   width: 7px;
   height: 7px;

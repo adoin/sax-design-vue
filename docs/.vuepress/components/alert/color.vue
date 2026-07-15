@@ -76,7 +76,7 @@ const color = ref<string>('danger')
 
 <style scoped lang="scss">
 .alert-example {
-  .vs-button--active {
+  .s-button--active {
     transform: translate(0, -5px);
     border-radius: 0px 0px 12px 12px;
   }

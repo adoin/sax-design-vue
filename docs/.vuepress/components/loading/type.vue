@@ -65,10 +65,10 @@ onMounted(() => {
 
 <style scoped lang="scss">
 @function -var($var) {
-  @return unquote('var(--vs-' + var + ')');
+  @return unquote('var(--s-' + var + ')');
 }
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--vs-#{$color}), #{$alpha})');
+  @return unquote('rgba(var(--s-#{$color}), #{$alpha})');
 }
 .center {
   flex-wrap: wrap;
@@ -96,13 +96,13 @@ onMounted(() => {
     transform: translate(0, -5px);
     box-shadow: 0px 15px 20px -10px rgba(0, 0, 0, 0.09);
   }
-  .vs-loading {
+  .s-loading {
     padding: 0px;
     background: transparent !important;
 
-    &.vs-loading--gradient,
-    &.vs-loading--square {
-      .vs-loading__load--item-2 {
+    &.s-loading--gradient,
+    &.s-loading--square {
+      .s-loading__load--item-2 {
         background: -color('theme-layout') !important;
       }
     }

@@ -49,7 +49,7 @@ PROPS:
     usage: '#sort'
     code: null
   - name: s-tr:color
-    type: String, Vuesax colors
+    type: String, Theme colors
     values: color, vuesax colors
     description: Change the color of the tr.
     default: null

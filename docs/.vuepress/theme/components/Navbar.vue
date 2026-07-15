@@ -201,7 +201,7 @@ const handleShowSuggestions = (active: boolean) => {
   font-size: 0.9rem;
   &:hover {
     opacity: 1;
-    color: rgb(var(--vs-accent-color));
+    color: rgb(var(--s-accent-color));
   }
 }
 .external-links-search {

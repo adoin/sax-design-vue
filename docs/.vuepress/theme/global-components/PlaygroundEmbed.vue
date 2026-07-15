@@ -100,13 +100,13 @@ const copySource = async () => {
 <style lang="scss" scoped>
 .playground-embed {
   margin: 24px 0;
-  border: 1px solid rgba(var(--vs-accent-color), 0.18);
+  border: 1px solid rgba(var(--s-accent-color), 0.18);
   border-radius: 18px;
   overflow: hidden;
   background: linear-gradient(
     145deg,
-    rgba(var(--vs-theme-layout), 0.98),
-    rgba(var(--vs-accent-color), 0.06)
+    rgba(var(--s-theme-layout), 0.98),
+    rgba(var(--s-accent-color), 0.06)
   );
   box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
 }
@@ -118,24 +118,24 @@ const copySource = async () => {
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
-  border-bottom: 1px solid rgba(var(--vs-theme-color), 0.08);
-  background: rgba(var(--vs-theme-layout), 0.9);
+  border-bottom: 1px solid rgba(var(--s-theme-color), 0.08);
+  background: rgba(var(--s-theme-layout), 0.9);
 
   label {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     font-weight: 600;
-    color: rgb(var(--vs-theme-color));
+    color: rgb(var(--s-theme-color));
   }
 
   select {
     min-width: 160px;
     padding: 8px 12px;
     border-radius: 10px;
-    border: 1px solid rgba(var(--vs-theme-color), 0.12);
-    background: rgba(var(--vs-theme-bg), 0.8);
-    color: rgb(var(--vs-theme-color));
+    border: 1px solid rgba(var(--s-theme-color), 0.12);
+    background: rgba(var(--s-theme-bg), 0.8);
+    color: rgb(var(--s-theme-color));
   }
 }
 
@@ -152,23 +152,23 @@ const copySource = async () => {
   gap: 6px;
   padding: 8px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(var(--vs-theme-color), 0.12);
-  background: rgba(var(--vs-theme-bg), 0.85);
-  color: rgb(var(--vs-theme-color));
+  border: 1px solid rgba(var(--s-theme-color), 0.12);
+  background: rgba(var(--s-theme-bg), 0.85);
+  color: rgb(var(--s-theme-color));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover,
   &.copied {
-    border-color: rgba(var(--vs-accent-color), 0.35);
-    color: rgb(var(--vs-accent-color));
+    border-color: rgba(var(--s-accent-color), 0.35);
+    color: rgb(var(--s-accent-color));
   }
 }
 
 .playground-embed__open {
   font-weight: 600;
-  color: rgb(var(--vs-accent-color));
+  color: rgb(var(--s-accent-color));
   text-decoration: none;
 }
 
@@ -182,8 +182,8 @@ const copySource = async () => {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  border-right: 1px solid rgba(var(--vs-theme-color), 0.08);
-  background: rgb(var(--vs-theme-code));
+  border-right: 1px solid rgba(var(--s-theme-color), 0.08);
+  background: rgb(var(--s-theme-code));
 }
 
 .playground-embed__code-header {
@@ -209,10 +209,10 @@ const copySource = async () => {
   min-height: 0;
   background: radial-gradient(
       circle at 15% 20%,
-      rgba(var(--vs-accent-color), 0.12),
+      rgba(var(--s-accent-color), 0.12),
       transparent 42%
     ),
-    rgba(var(--vs-theme-bg), 0.95);
+    rgba(var(--s-theme-bg), 0.95);
 }
 
 .playground-embed__frame {
@@ -231,7 +231,7 @@ const copySource = async () => {
 
   .playground-embed__code {
     border-right: 0;
-    border-bottom: 1px solid rgba(var(--vs-theme-color), 0.08);
+    border-bottom: 1px solid rgba(var(--s-theme-color), 0.08);
   }
 }
 </style>

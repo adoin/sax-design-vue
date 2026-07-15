@@ -72,7 +72,7 @@ const active5 = ref(true)
       }
     }
   }
-  .vs-switch {
+  .s-switch {
     margin: 5px;
   }
 }

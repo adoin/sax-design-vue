@@ -71,7 +71,7 @@
 <style scoped lang="scss">
 .con-avatars {
   align-items: flex-start;
-  .vs-avatar__group {
+  .s-avatar__group {
     margin: 10px;
     &.float {
       max-width: 300px;
@@ -83,7 +83,7 @@
   .con-avatars {
     align-items: flex-start;
     justify-content: flex-start;
-    .vs-avatar__group {
+    .s-avatar__group {
       margin: 10px;
       &.float {
         max-width: 100%;

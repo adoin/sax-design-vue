@@ -21,7 +21,7 @@ const colors = ref(['#99A9BF', '#F7BA2A', '#FF9900'])
 .demo-rate-block {
   padding: 30px 0;
   text-align: center;
-  border-right: solid 1px rgba(var(--vs-border-color));
+  border-right: solid 1px rgba(var(--s-border-color));
   display: inline-block;
   width: 49%;
   box-sizing: border-box;
@@ -31,7 +31,7 @@ const colors = ref(['#99A9BF', '#F7BA2A', '#FF9900'])
 }
 .demo-rate-block .demonstration {
   display: block;
-  color: rgba(var(--vs-text-color-secondary));
+  color: rgba(var(--s-text-color-secondary));
   font-size: 14px;
   margin-bottom: 20px;
 }

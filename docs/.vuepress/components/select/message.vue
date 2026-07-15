@@ -47,7 +47,7 @@ const value3 = ref('')
 <style scoped lang="scss">
 .con-selects {
   align-items: flex-start;
-  .vs-select-content {
+  .s-select-content {
     margin: 10px;
   }
 }

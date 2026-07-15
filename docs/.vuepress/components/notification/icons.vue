@@ -115,7 +115,7 @@ const openNotification = (position = null, color, icon) => {
 </script>
 
 <style scoped lang="scss">
-.vs-button {
+.s-button {
   margin: 10px;
 }
 i {

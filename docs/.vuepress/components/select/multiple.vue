@@ -62,7 +62,7 @@ const value3 = ref(['1', '4', '5', '6'])
 
 <style scoped lang="scss">
 .con-selects {
-  .vs-select-content {
+  .s-select-content {
     margin: 20px 10px;
     max-width: calc(40% - 20px);
   }
@@ -70,7 +70,7 @@ const value3 = ref(['1', '4', '5', '6'])
 
 @media (max-width: 500px) {
   .con-selects {
-    .vs-select-content {
+    .s-select-content {
       max-width: 100%;
     }
   }

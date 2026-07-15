@@ -94,7 +94,7 @@ const activeTooltip1 = ref(false)
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    .vs-avatar-content {
+    .s-avatar-content {
       margin-top: -30px;
       border: 3px solid -color('theme-layout');
       box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.1);

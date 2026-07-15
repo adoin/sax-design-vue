@@ -30,10 +30,10 @@ const openLoading = () => {
 
 <style scoped lang="scss">
 @function -var($var) {
-  @return unquote('var(--vs-' + var + ')');
+  @return unquote('var(--s-' + var + ')');
 }
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--vs-#{$color}), #{$alpha})');
+  @return unquote('rgba(var(--s-#{$color}), #{$alpha})');
 }
 
 .con-input {

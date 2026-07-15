@@ -39,16 +39,16 @@ watch(isDark, syncTheme)
   width: 36px;
   height: 36px;
   margin-right: 8px;
-  border: 1px solid rgba(var(--vs-theme-color), 0.12);
+  border: 1px solid rgba(var(--s-theme-color), 0.12);
   border-radius: 10px;
-  background: rgba(var(--vs-theme-layout), 0.8);
-  color: rgb(var(--vs-theme-color));
+  background: rgba(var(--s-theme-layout), 0.8);
+  color: rgb(var(--s-theme-color));
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: rgba(var(--vs-accent-color), 0.35);
-    color: rgb(var(--vs-accent-color));
+    border-color: rgba(var(--s-accent-color), 0.35);
+    color: rgb(var(--s-accent-color));
   }
 
   i {

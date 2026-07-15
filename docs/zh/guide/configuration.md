@@ -24,17 +24,17 @@ app.use(SaxDesignVue)
 
 ## 主题变量
 
-Vuesax 组件读取 `--vs-primary` 等 CSS 变量。可在 `:root` 或 `html.dark` 上覆盖：
+Sax Design Vue 组件读取 `--s-primary` 等 CSS 变量。可在 `:root` 或 `html.dark` 上覆盖：
 
 <command>
 
 ```css
 :root {
-  --vs-primary: 37, 99, 255;
+  --s-primary: 37, 99, 255;
 }
 
 html.dark {
-  --vs-primary: 96, 165, 250;
+  --s-primary: 96, 165, 250;
 }
 ```
 
@@ -63,24 +63,24 @@ html.dark {
 
 ## 自动导入 (Vite)
 
-使用 `unplugin-vue-components` 与 `@vuesax-alpha/auto-import-resolver`（组件名不变），并将导入指向 **sax-design-vue**：
+使用 `unplugin-vue-components`，通过解析器按需注册 **S** 前缀组件，并从 **sax-design-vue** 导入样式：
 
 <command>
 
 ```ts
 import path from 'node:path'
 import Components from 'unplugin-vue-components/vite'
-import { VuesaxAlphaResolver } from '@vuesax-alpha/auto-import-resolver'
+import { VuesaxAlphaResolver as SaxDesignVueResolver } from '@vuesax-alpha/auto-import-resolver'
 
 export default defineConfig({
   resolve: {
     alias: {
-      'vuesax-alpha': path.resolve(__dirname, 'node_modules/sax-design-vue'),
+      'sax-design-vue': path.resolve(__dirname, 'node_modules/sax-design-vue'),
     },
   },
   plugins: [
     Components({
-      resolvers: [VuesaxAlphaResolver({ importStyle: 'sass' })],
+      resolvers: [SaxDesignVueResolver({ importStyle: 'sass' })],
     }),
   ],
 })

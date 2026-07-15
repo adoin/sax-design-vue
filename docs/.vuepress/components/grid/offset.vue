@@ -23,21 +23,21 @@
 </template>
 <style scoped lang="scss">
 @function -var($var) {
-  @return unquote('var(--vs-' + var + ')');
+  @return unquote('var(--s-' + var + ')');
 }
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--vs-#{$color}), #{$alpha})');
+  @return unquote('rgba(var(--s-#{$color}), #{$alpha})');
 }
 .grid {
   border-radius: 20px;
   overflow: hidden;
   padding: 0px;
 }
-.vs-row {
+.s-row {
   background: -color('theme-layout');
   border-bottom: 1px dashed -color('theme-bg2');
 }
-.vs-col {
+.s-col {
   padding: 10px;
   text-align: center;
   background: -color('theme-bg2');
@@ -51,7 +51,7 @@
 }
 
 @media (max-width: 500px) {
-  .vs-col {
+  .s-col {
     font-size: 0.6rem;
     font-weight: bold;
     padding: 10px 2px;

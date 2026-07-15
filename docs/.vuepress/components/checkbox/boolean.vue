@@ -17,7 +17,7 @@ const option2 = ref<boolean>(false)
 
 <style scoped lang="scss">
 .con-checkbox {
-  .vs-checkbox {
+  .s-checkbox {
     min-width: 80px;
   }
 }

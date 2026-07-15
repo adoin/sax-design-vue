@@ -79,16 +79,16 @@ const alternates = computed<Alternate[]>(() => {
   border-radius: 10px;
   font-size: 0.82rem;
   font-weight: 600;
-  color: rgba(var(--vs-theme-color), 0.72);
+  color: rgba(var(--s-theme-color), 0.72);
   text-decoration: none;
-  border: 1px solid rgba(var(--vs-accent-color), 0.18);
-  background: rgba(var(--vs-theme-layout), 0.65);
+  border: 1px solid rgba(var(--s-accent-color), 0.18);
+  background: rgba(var(--s-theme-layout), 0.65);
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 
   &:hover {
-    color: rgb(var(--vs-accent-color));
-    border-color: rgba(var(--vs-accent-color), 0.35);
-    background: rgba(var(--vs-accent-color), 0.08);
+    color: rgb(var(--s-accent-color));
+    border-color: rgba(var(--s-accent-color), 0.35);
+    background: rgba(var(--s-accent-color), 0.08);
   }
 }
 </style>

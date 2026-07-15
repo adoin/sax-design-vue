@@ -56,7 +56,7 @@ const active6 = ref(false)
   display: flex;
   align-items: center;
   justify-content: center;
-  .vs-switch {
+  .s-switch {
     margin: 10px;
   }
 }

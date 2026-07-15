@@ -19,7 +19,7 @@ const picked = ref(2)
 .center {
   align-items: flex-start;
   flex-direction: column;
-  .vs-radio-wrapper {
+  .s-radio-wrapper {
     margin: 5px 0px;
   }
 }

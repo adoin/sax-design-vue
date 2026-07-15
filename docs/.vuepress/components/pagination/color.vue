@@ -31,11 +31,11 @@ const color = ref<Color>('success')
     align-items: center;
     justify-content: flex-start;
     flex-wrap: wrap;
-    .vs-radio-wrapper {
+    .s-radio-wrapper {
       margin: 10px;
     }
   }
-  .vs-pagination {
+  .s-pagination {
     margin: 10px 0px;
   }
 }

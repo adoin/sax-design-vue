@@ -26,7 +26,7 @@
 </template>
 <style scoped lang="scss">
 .con-avatars {
-  .vs-avatar-content {
+  .s-avatar-content {
     margin: 10px;
   }
 }

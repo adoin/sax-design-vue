@@ -19,7 +19,7 @@ const option = ref(null)
 <style scoped lang="scss">
 .con-checkbox {
   flex-direction: column;
-  .vs-checkbox {
+  .s-checkbox {
     min-width: 80px;
   }
   .data {

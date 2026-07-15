@@ -16,7 +16,7 @@ PROPS:
 
   - name: color
     type: String
-    values: Vuesax main colors, RGB y HEX
+    values: Theme colors, RGB y HEX
     description: Change the color of the component when it is in active state.
     default: primary
     link: null

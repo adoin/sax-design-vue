@@ -51,7 +51,7 @@ const checkbox1 = ref(false)
 
 <style lang="scss" scoped>
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--vs-#{$color}), #{$alpha})');
+  @return unquote('rgba(var(--s-#{$color}), #{$alpha})');
 }
 .not-margin {
   margin: 0px;
@@ -72,13 +72,13 @@ const checkbox1 = ref(false)
       }
     }
   }
-  .vs-checkbox__label {
+  .s-checkbox__label {
     font-size: 0.8rem;
   }
-  .vs-input {
+  .s-input {
     margin: 10px 0px;
     width: calc(100%);
-    .vs-input__original {
+    .s-input__original {
       width: 100%;
     }
   }
@@ -102,7 +102,7 @@ const checkbox1 = ref(false)
       }
     }
   }
-  .vs-button {
+  .s-button {
     margin: 0px;
   }
 }

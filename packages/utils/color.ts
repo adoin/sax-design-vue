@@ -57,7 +57,7 @@ export const setColor = (
   color: string,
   el: HTMLElement,
   addClass?: boolean,
-  namespace = 'vs'
+  namespace = 's'
 ) => {
   let newColor
   if (color == 'dark' && el) {
@@ -118,7 +118,7 @@ export const acceptColor = (color: string) => {
  */
 export const getVsColor = (
   colorRef: MaybeRef<string | undefined>,
-  namespace = 'vs'
+  namespace = 's'
 ): string => {
   const color = unref(colorRef)
   if (!color) return ''
@@ -147,13 +147,13 @@ export const getVsColor = (
  * @param propertyName The name of the property
  * @param value The value of the property
  * @param el The element to set the property. Default document.documentElement
- * @param namespace The namespace of vs app. Default'vs'
+ * @param namespace The CSS variable namespace. Default 's'
  */
 export const setCssVar = (
   propertyName: string,
   value: string,
   el?: HTMLElement,
-  namespace = 'vs'
+  namespace = 's'
 ) => {
   if (!el && document?.documentElement) {
     document.documentElement.style.setProperty(

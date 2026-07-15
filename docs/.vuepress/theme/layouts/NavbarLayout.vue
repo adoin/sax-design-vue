@@ -150,7 +150,7 @@ const handleCollapsed = (val: boolean) => {
       background: #fff;
       border-radius: 20px;
       flex-wrap: wrap;
-      .vs-switch {
+      .s-switch {
         margin: 10px;
       }
     }

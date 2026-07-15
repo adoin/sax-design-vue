@@ -34,7 +34,7 @@ const openNotification = (position = null) => {
 }
 </script>
 <style scoped lang="scss">
-.vs-button {
+.s-button {
   margin: 10px;
 }
 i {

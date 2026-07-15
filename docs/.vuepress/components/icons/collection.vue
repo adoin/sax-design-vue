@@ -92,7 +92,7 @@ const iconFiltered = computed<typeof VuesaxIconsVue>(
 
 <style lang="scss" scoped>
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--vs-#{$color}), #{$alpha})');
+  @return unquote('rgba(var(--s-#{$color}), #{$alpha})');
 }
 
 .col {

@@ -20,7 +20,7 @@ const value = ref('')
 
 <style lang="scss">
 .con-selects {
-  .vs-select {
+  .s-select {
     margin: 15px 10px;
     max-width: calc(40% - 20px);
   }
@@ -28,7 +28,7 @@ const value = ref('')
 
 @media (max-width: 500px) {
   .con-selects {
-    .vs-select {
+    .s-select {
       max-width: 100%;
     }
   }

@@ -2,9 +2,9 @@
 PROPS:
   - name: color
     type: String
-    values: Vuesax Colors, RGB, HEX
+    values: Theme colors, RGB, HEX
     description: color of the component.
-    default: --vs-gray-2
+    default: --s-gray-2
     link: null
     usage: '#color'
     code: null
@@ -28,7 +28,7 @@ PROPS:
 
   - name: badge-color
     type: String
-    values: Vuesax colors,RGB,HEX
+    values: Theme colors,RGB,HEX
     description: Change the color of the badge inside the avatar.
     default: primary
     link: null

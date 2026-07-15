@@ -33,7 +33,7 @@ const onDelete = () => {
   margin: 10px;
   text-align: center;
   border-radius: 12px;
-  background: rgba(var(--vs-primary), 0.1);
-  color: rgba(var(--vs-primary));
+  background: rgba(var(--s-primary), 0.1);
+  color: rgba(var(--s-primary));
 }
 </style>

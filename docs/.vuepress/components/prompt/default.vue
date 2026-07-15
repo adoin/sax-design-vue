@@ -90,7 +90,7 @@ const validName = computed(
 .con-exemple-prompt {
   padding: 10px 10px 0;
 
-  :deep(.vs-input) {
+  :deep(.s-input) {
     width: 100%;
     margin-top: 10px;
   }
@@ -100,7 +100,7 @@ const validName = computed(
     margin-top: 10px;
   }
 
-  :deep(.vs-alert) {
+  :deep(.s-alert) {
     margin-top: 10px;
   }
 }

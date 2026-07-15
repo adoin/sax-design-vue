@@ -45,7 +45,7 @@
     color: rgba(0, 0, 0, 0.55);
 
     &:hover:not(:disabled) {
-      color: var(--vs-tabs-color, getColor('primary'));
+      color: var(--s-tabs-color, getColor('primary'));
     }
 
     &:disabled {
@@ -60,11 +60,11 @@
     height: 2px;
     background: linear-gradient(
       30deg,
-      var(--vs-tabs-color, getColor('primary')) 0%,
+      var(--s-tabs-color, getColor('primary')) 0%,
       rgba(25, 91, 255, 0.5) 100%
     );
     transition: all 0.2s ease;
-    box-shadow: 0 0 8px color-mix(in srgb, var(--vs-tabs-color, getColor('primary')) 50%, transparent);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--s-tabs-color, getColor('primary')) 50%, transparent);
   }
 
   @include e(content) {

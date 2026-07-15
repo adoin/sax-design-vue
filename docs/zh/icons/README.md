@@ -4,7 +4,7 @@
 
 ## 安装
 
-Vuesax alpha provides a set of common icons.
+Sax Design Vue provides a set of common icons.
 
 <command>
 
