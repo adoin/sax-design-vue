@@ -232,5 +232,3 @@ const onTouchEnd = (e: TouchEvent) => {
   }
 }
 </style>
-
-<style src="prismjs/themes/prism-tomorrow.css"></style>
