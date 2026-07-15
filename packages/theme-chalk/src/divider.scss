@@ -18,7 +18,7 @@
     min-width: 0;
     border-top-width: 1px;
     border-top-style: solid;
-    border-top-color: getCssVar('divider', 'border-color');
+    border-top-color: getColor('divider');
   }
 
   @include e(text) {
