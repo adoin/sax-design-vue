@@ -14,9 +14,3 @@
     </s-list>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.demo {
-  width: min(520px, 90vw);
-}
-</style>

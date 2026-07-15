@@ -11,6 +11,6 @@
 
 <style lang="scss" scoped>
 .demo {
-  width: min(720px, 95vw);
+  width: min(720px, 100%);
 }
 </style>

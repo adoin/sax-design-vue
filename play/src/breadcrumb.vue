@@ -2,16 +2,16 @@
   <div class="play-container demo">
     <s-breadcrumb :items="defaultItems" />
     <s-breadcrumb :color="colorx" :items="defaultItems" />
-    <input v-model="colorx" type="color" />
+    <label class="color-field">
+      Accent color
+      <input v-model="colorx" type="color" />
+    </label>
     <s-breadcrumb separator="chevron_right" :items="shortItems" />
-    <s-breadcrumb>
-      <li>
-        <a href="#" title="Home">Home</a>
-        <span class="vs-breadcrum--separator">/</span>
-      </li>
-      <li aria-current="page" class="active">Infos</li>
+    <s-breadcrumb align="center">
+      <s-breadcrumb-item to="#">Home</s-breadcrumb-item>
+      <s-breadcrumb-item to="#">Library</s-breadcrumb-item>
+      <s-breadcrumb-item active>Infos</s-breadcrumb-item>
     </s-breadcrumb>
-    <s-breadcrumb align="center" :items="shortItems" />
   </div>
 </template>
 
@@ -21,23 +21,28 @@ import { ref } from 'vue'
 const colorx = ref('#3DC9B3')
 
 const defaultItems = [
-  { title: 'Dashboard', url: 'dashboard' },
-  { title: 'Link 1', url: 'link-1' },
+  { title: 'Dashboard', url: '#' },
+  { title: 'Link 1', url: '#' },
   { title: 'Link 2', disabled: true },
   { title: 'Active', active: true },
 ]
 
 const shortItems = [
-  { title: 'Dashboard', url: 'dashboard' },
+  { title: 'Dashboard', url: '#' },
   { title: 'Active', active: true },
 ]
 </script>
 
 <style lang="scss" scoped>
 .demo {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 24px;
-  width: min(520px, 90vw);
+  gap: 20px;
+}
+
+.color-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.65);
 }
 </style>

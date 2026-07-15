@@ -21,11 +21,9 @@ const onChange = (files: File[]) => {
 </script>
 
 <style lang="scss" scoped>
-.demo {
-  flex-direction: column;
-  width: min(560px, 90vw);
-}
 .hint {
-  margin: 12px 0 0;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 0.9rem;
 }
 </style>

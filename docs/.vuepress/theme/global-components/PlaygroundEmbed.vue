@@ -80,7 +80,7 @@ const playBase = `${siteBase.replace(/\/$/, '')}/play/`
 
 const demos = PLAY_DEMOS.filter((name) => name !== 'App')
 
-const activeDemo = ref('divider')
+const activeDemo = ref('alert')
 const editedSource = ref('')
 const copied = ref(false)
 const iframeRef = ref<HTMLIFrameElement | null>(null)

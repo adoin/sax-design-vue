@@ -19,12 +19,6 @@ const counterDanger = ref(false)
 
 <style lang="scss" scoped>
 .demo {
-  flex-direction: column;
-  width: min(480px, 90vw);
-}
-.hint {
-  margin: 8px 0 0;
-  font-size: 0.85rem;
-  color: rgba(0, 0, 0, 0.55);
+  gap: 12px;
 }
 </style>

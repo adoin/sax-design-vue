@@ -26,15 +26,13 @@ const code = ref('')
 
 <style lang="scss" scoped>
 .demo {
-  flex-direction: column;
   gap: 12px;
-  width: min(520px, 90vw);
 }
 
 .prompt-body {
   padding: 10px 10px 0;
 
-  :deep(.vs-input) {
+  :deep(.s-input) {
     width: 100%;
     margin-top: 10px;
   }

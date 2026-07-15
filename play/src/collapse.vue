@@ -23,6 +23,6 @@
 
 <style lang="scss" scoped>
 .demo {
-  width: min(520px, 90vw);
+  gap: 8px;
 }
 </style>

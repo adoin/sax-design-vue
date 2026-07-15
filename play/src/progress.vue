@@ -17,8 +17,6 @@ const percent = ref(40)
 
 <style lang="scss" scoped>
 .demo {
-  flex-direction: column;
   gap: 16px;
-  width: min(480px, 90vw);
 }
 </style>

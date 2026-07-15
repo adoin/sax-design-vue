@@ -18,4 +18,13 @@ body {
     padding: 24px;
     box-sizing: border-box;
   }
+
+  .play-container.demo {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: min(560px, 92vw);
+    margin: 0 auto;
+    gap: 12px;
+  }
 }
