@@ -50,28 +50,24 @@
 
       <section class="playground-embed__preview">
         <header class="playground-embed__preview-header">Live preview</header>
-        <div v-if="compileError" class="playground-embed__error">
-          {{ compileError }}
-        </div>
-        <div class="playground-embed__preview-inner">
-          <component
-            :is="previewComponent"
-            v-if="previewComponent"
-            :key="previewKey"
-          />
-        </div>
+        <iframe
+          ref="iframeRef"
+          :key="iframeKey"
+          class="playground-embed__frame"
+          :src="iframeSrc"
+          title="Sax Design Vue Playground Preview"
+          loading="lazy"
+          @load="postSourceToIframe"
+        />
       </section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, shallowRef, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import { PLAY_DEMOS } from '../../../../play/demo-list'
-import { compileDemoSfc } from '../utils/compile-demo-sfc'
-
-import type { Component } from 'vue'
 
 const rawSources = import.meta.glob('../../../../play/src/*.vue', {
   query: '?raw',
@@ -87,9 +83,9 @@ const demos = PLAY_DEMOS.filter((name) => name !== 'App')
 const activeDemo = ref('divider')
 const editedSource = ref('')
 const copied = ref(false)
-const compileError = ref<string | null>(null)
-const previewComponent = shallowRef<Component | null>(null)
-const previewKey = ref(0)
+const iframeRef = ref<HTMLIFrameElement | null>(null)
+const iframeKey = ref(0)
+const iframeReady = ref(false)
 
 const sourceMap = computed(() => {
   const map: Record<string, string> = {}
@@ -100,25 +96,39 @@ const sourceMap = computed(() => {
   return map
 })
 
+const iframeSrc = computed(
+  () => `${playBase}?embed=preview#/${activeDemo.value}`
+)
 const fullPlaygroundUrl = computed(() => `${playBase}#/${activeDemo.value}`)
 
-const compilePreview = useDebounceFn((source: string, demo: string) => {
-  const { component, error } = compileDemoSfc(source, demo)
-  compileError.value = error
-  previewComponent.value = component
-  if (component) previewKey.value += 1
-}, 250)
+const postSourceToIframe = () => {
+  iframeReady.value = true
+  iframeRef.value?.contentWindow?.postMessage(
+    {
+      type: 'sax-playground-source',
+      source: editedSource.value,
+    },
+    '*'
+  )
+}
+
+const pushSourceToIframe = useDebounceFn(() => {
+  if (!iframeReady.value) return
+  postSourceToIframe()
+}, 200)
 
 watch(
   activeDemo,
   (demo) => {
     editedSource.value = sourceMap.value[demo] || ''
+    iframeReady.value = false
+    iframeKey.value += 1
   },
   { immediate: true }
 )
 
-watch([editedSource, activeDemo], ([source, demo]) => {
-  compilePreview(source, demo)
+watch(editedSource, () => {
+  pushSourceToIframe()
 })
 
 const copySource = async () => {
@@ -282,35 +292,11 @@ const copySource = async () => {
   border-bottom: 1px solid rgba(var(--sax-theme-color), 0.08);
 }
 
-.playground-embed__error {
-  margin: 12px 14px 0;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  background: rgba(239, 68, 68, 0.08);
-  color: #b91c1c;
-  font-size: 0.78rem;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-}
-
-.playground-embed__preview-inner {
-  display: flex;
+.playground-embed__frame {
   flex: 1;
-  align-items: center;
-  justify-content: center;
-  min-height: 240px;
-  padding: 24px;
   width: 100%;
-}
-</style>
-
-<style lang="scss">
-.playground-embed__preview-inner .play-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  min-height: 280px;
+  border: 0;
+  background: transparent;
 }
 </style>

@@ -7,6 +7,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vue/compiler-sfc": "^3.3.4",
+    "postcss": "^8.4.31",
+    "postcss-nested": "^6.0.1",
+    "sax-design-vue": "workspace:*",
     "vue": "^3.3.4"
   },
   "devDependencies": {

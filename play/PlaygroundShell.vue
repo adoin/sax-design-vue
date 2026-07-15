@@ -1,7 +1,21 @@
 <template>
-  <div class="playground-shell" :class="{ 'playground-shell--index': isIndex }">
+  <div
+    class="playground-shell"
+    :class="{
+      'playground-shell--index': isIndex,
+      'playground-shell--preview-only': previewOnly,
+    }"
+  >
     <template v-if="isIndex">
       <slot />
+    </template>
+    <template v-else-if="previewOnly">
+      <main class="playground-shell__preview">
+        <div v-if="compileError" class="playground-shell__error">
+          {{ compileError }}
+        </div>
+        <slot />
+      </main>
     </template>
     <template v-else>
       <aside class="playground-shell__code">
@@ -33,6 +47,8 @@ const props = defineProps<{
   demoName: string
   source: string
   isIndex?: boolean
+  previewOnly?: boolean
+  compileError?: string | null
 }>()
 
 const copied = ref(false)
@@ -63,6 +79,12 @@ const copySource = async () => {
     display: block;
     min-height: 100vh;
     background: linear-gradient(160deg, #f8fafc 0%, #eef2ff 40%, #fdf4ff 100%);
+  }
+
+  &--preview-only {
+    display: block;
+    min-height: 100%;
+    background: transparent;
   }
 }
 
@@ -126,6 +148,7 @@ const copySource = async () => {
   align-items: center;
   justify-content: center;
   min-height: 0;
+  min-height: 100%;
   padding: 24px;
   background: radial-gradient(
       circle at 20% 20%,
@@ -134,6 +157,29 @@ const copySource = async () => {
     ),
     radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.14), transparent 40%),
     rgba(255, 255, 255, 0.96);
+}
+
+.playground-shell--preview-only .playground-shell__preview {
+  position: relative;
+  min-height: 100%;
+  background: transparent;
+}
+
+.playground-shell__error {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 2;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.08);
+  color: #b91c1c;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 @media (max-width: 900px) {

@@ -98,6 +98,13 @@ function injectStyles(css: string, scopeKey: string) {
   styleEl.textContent = css
 }
 
+function executeCompiled(code: string): Component {
+  const fn = new Function('Vue', `${code}; return __sfc__`) as (
+    vue: typeof Vue
+  ) => Component
+  return fn(Vue)
+}
+
 export function compileDemoSfc(
   source: string,
   scopeKey: string
@@ -159,10 +166,7 @@ export function compileDemoSfc(
 
     if (!descriptor.template) {
       const code = transformVueImports(rewriteDefault(scriptCode, '__sfc__'))
-      const run = new Function('Vue', `${code}; return __sfc__`) as (
-        vue: typeof Vue
-      ) => Component
-      return { component: run(Vue), error: null }
+      return { component: executeCompiled(code), error: null }
     }
 
     const compiledTemplate = compileTemplate({
@@ -186,17 +190,16 @@ export function compileDemoSfc(
     }
 
     let code = rewriteDefault(scriptCode, '__sfc__')
+    if (compiledTemplate.preamble) {
+      code = `${compiledTemplate.preamble}\n${code}`
+    }
     code += `;\n${compiledTemplate.code.replace(
       /\nexport function render/g,
       '\nfunction render'
     )}\n__sfc__.render = render`
     code = transformVueImports(code)
 
-    const run = new Function('Vue', `${code}; return __sfc__`) as (
-      vue: typeof Vue
-    ) => Component
-
-    return { component: run(Vue), error: null }
+    return { component: executeCompiled(code), error: null }
   } catch (error) {
     return {
       component: null,
