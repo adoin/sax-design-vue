@@ -1,5 +1,8 @@
 <template>
-  <div class="play-container demo">
+  <div
+    class="play-container demo"
+    style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px; align-items: flex-start"
+  >
     <s-chip>Default</s-chip>
     <s-chip color="primary">Primary</s-chip>
     <s-chip color="success" transparent>Transparent</s-chip>
@@ -14,10 +17,3 @@ import { ref } from 'vue'
 
 const visible = ref(true)
 </script>
-
-<style lang="scss" scoped>
-.demo {
-  flex-wrap: wrap;
-  gap: 8px;
-}
-</style>
