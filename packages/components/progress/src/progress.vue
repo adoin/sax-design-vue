@@ -15,13 +15,13 @@
     <div
       v-if="indeterminate"
       :class="ns.e('indeterminate')"
-      :style="foregroundStyle"
+      :style="indeterminateStyle"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { progressProps } from './progress'
@@ -36,6 +36,7 @@ const props = defineProps(progressProps)
 const ns = useNamespace('progress')
 
 const percentx = ref(0)
+let entranceTimer: ReturnType<typeof setTimeout> | undefined
 
 const themeColor = computed(() => normalizeVsColor(props.color))
 const isThemeColor = computed(() => isVsColor(themeColor.value))
@@ -66,17 +67,44 @@ const foregroundStyle = computed((): CSSProperties => {
   return style
 })
 
+const indeterminateStyle = computed((): CSSProperties => {
+  if (isThemeColor.value) {
+    return {}
+  }
+
+  const c = getVsColor(props.color)
+  if (!c) {
+    return {}
+  }
+
+  return {
+    background: c.startsWith('var(') ? c : `rgb(${c})`,
+  }
+})
+
 watch(
   () => props.percent,
   (val) => {
+    if (entranceTimer) {
+      clearTimeout(entranceTimer)
+      entranceTimer = undefined
+    }
     percentx.value = val
   }
 )
 
 onMounted(() => {
   percentx.value = 0
-  setTimeout(() => {
+  entranceTimer = setTimeout(() => {
+    entranceTimer = undefined
     percentx.value = props.percent
   }, 600)
+})
+
+onBeforeUnmount(() => {
+  if (entranceTimer) {
+    clearTimeout(entranceTimer)
+    entranceTimer = undefined
+  }
 })
 </script>
