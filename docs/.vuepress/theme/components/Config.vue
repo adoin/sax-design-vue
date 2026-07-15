@@ -180,9 +180,21 @@ const lang = computed(() => {
         if (locale.lang === pageLang.value) {
           link = currentLink
         } else {
-          // Try to stay on the same page
-          link = currentLink.replace(pageData.value.path, path)
-          // fallback to homepage
+          // Map current page to the alternate locale
+          if (path === '/') {
+            link = currentLink.startsWith('/zh/')
+              ? currentLink.replace(/^\/zh(?=\/|$)/, '') || '/'
+              : currentLink
+          } else if (path === '/zh/') {
+            link = currentLink.startsWith('/zh/')
+              ? currentLink
+              : currentLink === '/'
+              ? '/zh/'
+              : `/zh${currentLink}`
+          } else {
+            link = path
+          }
+          // fallback to locale homepage
           if (!routes.some((route) => route.path === link)) {
             link = path
           }

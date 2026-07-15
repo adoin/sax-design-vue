@@ -65,10 +65,15 @@ h1 {
 .card {
   border-radius: 20px;
   overflow: hidden;
-  margin: 20px 0 -50px;
+  margin: 20px 0 24px;
   width: 100%;
+
+  &:has(.slotcode) {
+    margin-bottom: -50px;
+  }
+
   &:last-of-type {
-    margin-bottom: 0px;
+    margin-bottom: 24px;
   }
   & > .text {
     ul {
@@ -179,10 +184,12 @@ h1 {
       }
     }
     h2 {
-      padding-top: 120px;
+      padding-top: 22px;
+      scroll-margin-top: 96px;
     }
     h3 {
-      padding-top: 50px;
+      padding-top: 24px;
+      scroll-margin-top: 96px;
     }
     p {
       padding: 5px 20px;

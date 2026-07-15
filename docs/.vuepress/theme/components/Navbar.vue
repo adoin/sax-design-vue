@@ -64,6 +64,8 @@
         Playground
       </router-link>
 
+      <LanguageSwitcher />
+
       <ThemeToggle />
 
       <router-link class="v-old" to="/guide/tribute" title="Tribute to Vuesax">
@@ -113,6 +115,7 @@ import SidebarButton from './SidebarButton.vue'
 import NavLinks from './NavLinks.vue'
 import SearchBox from './SearchBox.vue'
 import ThemeToggle from './ThemeToggle.vue'
+import LanguageSwitcher from './LanguageSwitcher.vue'
 import type { SaxDesignVueThemeOptions } from '~/saxDesignVueTheme'
 
 const emits = defineEmits<{
