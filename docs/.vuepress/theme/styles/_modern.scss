@@ -118,8 +118,8 @@ body,
 }
 
 .card > .example {
-  border-radius: 14px;
   margin: 16px 16px 0;
+  border-radius: 14px;
   background: linear-gradient(
     180deg,
     rgba(var(--sax-theme-bg2), 0.65),
@@ -128,10 +128,50 @@ body,
   border: 1px solid rgba(var(--sax-accent-color), 0.08);
 }
 
+.card:has(> .slotcode) > .example {
+  margin-bottom: 0;
+  border-bottom: 0;
+  border-radius: 14px 14px 0 0;
+}
+
+.card > .example:last-child {
+  margin-bottom: 16px;
+}
+
 .card > .slotcode {
-  margin: 0 12px 12px;
+  margin: 0 16px 16px;
   border-radius: 14px;
   overflow: hidden;
+  border: 1px solid rgba(var(--sax-accent-color), 0.08);
+  background: rgba(var(--sax-theme-layout), 0.98);
+}
+
+.card:has(> .example) > .slotcode {
+  margin-top: 0;
+  border-radius: 0 0 14px 14px;
+  border-top: 0;
+}
+
+.card:has(> .example) > .slotcode .header-codex {
+  border-top: 1px solid rgba(var(--sax-accent-color), 0.08);
+  background: linear-gradient(
+    180deg,
+    rgba(var(--sax-theme-bg2), 0.65),
+    rgba(var(--sax-theme-layout), 0.95)
+  );
+  border-radius: 0;
+}
+
+.card > .slotcode .code {
+  padding-bottom: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
+.card > .slotcode .con-code {
+  width: 100%;
+  margin: 0;
+  border-radius: 0 0 14px 14px;
 }
 
 .theme-container .page .content,

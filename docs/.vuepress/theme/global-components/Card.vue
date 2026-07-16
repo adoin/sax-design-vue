@@ -68,10 +68,6 @@ h1 {
   margin: 20px 0 24px;
   width: 100%;
 
-  &:has(.slotcode) {
-    margin-bottom: -50px;
-  }
-
   &:last-of-type {
     margin-bottom: 24px;
   }
@@ -101,14 +97,13 @@ h1 {
     padding: 10px;
     margin: auto;
     margin-top: 10px;
-    border-radius: 5px 20px 0px 0px;
+    border-radius: 14px;
     border-bottom: 0px solid rgba(0, 0, 0, 0.03);
     background: -color('theme-layout');
     position: relative;
     overflow: hidden;
     transition: all 0.25s ease;
-    width: 100%;
-    height: auto;
+    box-sizing: border-box;
     &:after {
       transition: all 0.25s ease;
       width: 100%;
