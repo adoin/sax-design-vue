@@ -1,19 +1,5 @@
 <template>
   <aside class="sidebar">
-    <svg
-      class="effect1"
-      xmlns="http://www.w3.org/2000/svg"
-      width="160"
-      height="160"
-      viewBox="0 0 160 160"
-    >
-      <path
-        id="Trazado_200"
-        data-name="Trazado 200"
-        d="M0-10,150,0l10,150S137.643,80.734,100.143,43.234,0-10,0-10Z"
-        transform="translate(0 10)"
-      />
-    </svg>
     <div class="content-sidebar">
       <slot name="top" />
       <SidebarLinks :fixed="fixed" :depth="0" :links="sidebar" />
@@ -37,17 +23,6 @@ defineProps<{
 <style lang="scss">
 @import '../styles/use';
 
-.effect1 {
-  transform: rotate(-90deg);
-  position: absolute;
-  max-width: 40px;
-  max-height: 40px;
-  z-index: 200;
-  right: -37px;
-  top: -2px;
-  pointer-events: none;
-  fill: -color('theme-layout');
-}
 .header__btns {
   display: flex;
   align-items: center;

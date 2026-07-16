@@ -100,21 +100,6 @@
           </ul>
         </div>
       </div>
-      <svg
-        class="header-effect"
-        xmlns="http://www.w3.org/2000/svg"
-        width="160"
-        height="160"
-        viewBox="0 0 160 160"
-      >
-        <path
-          id="Trazado_200"
-          data-name="Trazado 200"
-          d="M0-10,150,0l10,150S137.643,80.734,100.143,43.234,0-10,0-10Z"
-          transform="translate(0 10)"
-          fill="#fff"
-        />
-      </svg>
     </header>
 
     <SidebarRight />
@@ -513,9 +498,6 @@ onMounted(() => {
     }
   }
 
-  .header-effect {
-    opacity: 0;
-  }
   table {
     margin: 0px;
     width: calc(100% - 20px);
@@ -656,21 +638,6 @@ onMounted(() => {
     .interactive-links li svg {
       fill: -color('theme-color');
       max-width: 18px;
-    }
-  }
-  .header-effect {
-    position: absolute;
-    bottom: 0px;
-    transform: rotate(0deg);
-    max-width: 40px;
-    max-height: 40px;
-    z-index: 200;
-    right: 0px;
-    bottom: -38px;
-    transition: all 0.25s ease;
-    #Trazado_200 {
-      fill: -color('theme-bg2') !important;
-      stroke: -color('theme-bg2') !important;
     }
   }
 }

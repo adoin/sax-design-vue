@@ -21,9 +21,6 @@ $mobileSidebarWidth: $sidebarWidth * 0.82;
     transition: transform 0.2s ease;
     z-index: 1000 !important;
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
-    .effect1 {
-      display: none;
-    }
     .nav-links {
       border-bottom: 0px;
       .nav-item {
