@@ -20,6 +20,28 @@ for (const file of readdirSync(demoDir).filter((name) => name.endsWith('.vue') &
     continue
   }
 
+  try {
+    if (typeof component.setup === 'function') {
+      component.setup(
+        {},
+        {
+          attrs: {},
+          slots: {},
+          emit: () => {},
+          expose: () => {},
+        }
+      )
+    }
+  } catch (runtimeError) {
+    failed += 1
+    console.error(
+      `[runtime] ${name}: ${
+        runtimeError instanceof Error ? runtimeError.message : String(runtimeError)
+      }`
+    )
+    continue
+  }
+
   console.log(`[ok] ${name}`)
 }
 

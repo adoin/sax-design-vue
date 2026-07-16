@@ -26,7 +26,10 @@ function normalizeSource(source: string): string {
     (_match, attrs: string, body: string) => {
       const stripped = body
         .replace(/\(([^)]*)\)/g, (params) => params.replace(/:\s*[^,)]+/g, ''))
-        .replace(/:\s*[A-Za-z_$][\w$[\].<>,\s|]*/g, '')
+        .replace(
+          /:\s*(?!true\b|false\b|null\b|undefined\b|'|"|`|\d)([A-Za-z_$][\w$[\].<>,\s|]*)/g,
+          ''
+        )
       return `<script${attrs}>${stripped}</script>`
     }
   )
