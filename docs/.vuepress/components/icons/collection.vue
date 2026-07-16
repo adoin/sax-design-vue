@@ -2,14 +2,25 @@
 import { computed, ref } from 'vue'
 import { useClipboard } from '@vueuse/core'
 import { SNotification } from 'sax-design-vue'
-import * as VuesaxIconsVue from '@vuesax-alpha/icons-vue'
+import {
+  buildIconCatalog,
+  filterIconCatalog,
+  iconNameToKebab,
+  saxIcons,
+} from '@sax-design-vue/icons-vue'
 
 const copyIconVue = ref(true)
 const iconNameFilter = ref('')
 
 const { copy } = useClipboard()
 
-const copyContent = async (content) => {
+const iconCatalog = buildIconCatalog(saxIcons)
+
+const iconFiltered = computed(() =>
+  filterIconCatalog(iconCatalog, iconNameFilter.value)
+)
+
+const copyContent = async (content: string) => {
   try {
     await copy(content)
 
@@ -29,27 +40,20 @@ const copyContent = async (content) => {
   }
 }
 
-const copyIcon = async (name, refs) => {
+const copyIcon = async (
+  name: string,
+  refs: Record<string, unknown[] | undefined>
+) => {
   if (copyIconVue.value) {
     await copyContent(`<s-icon><${name} /></s-icon>`)
   } else {
-    const content = refs[name]?.[0]?.$el.querySelector('svg')?.outerHTML ?? ''
+    const content =
+      (
+        refs[name]?.[0] as { $el?: HTMLElement } | undefined
+      )?.$el?.querySelector('svg')?.outerHTML ?? ''
     await copyContent(content)
   }
 }
-
-const iconFiltered = computed<typeof VuesaxIconsVue>(
-  () =>
-    Object.keys(VuesaxIconsVue)
-      .filter((key) =>
-        key.toLowerCase().includes(iconNameFilter.value.toLowerCase())
-      )
-      .reduce((obj, key) => {
-        return Object.assign(obj, {
-          [key]: VuesaxIconsVue[key],
-        })
-      }, {}) as any
-)
 </script>
 
 <template>
@@ -59,7 +63,7 @@ const iconFiltered = computed<typeof VuesaxIconsVue>(
         <s-input
           v-model="iconNameFilter"
           label="Search"
-          placeholder="Type icon name"
+          placeholder="Type icon name (e.g. share, calendar, mail)"
         />
 
         <div class="icon-type">
@@ -68,6 +72,11 @@ const iconFiltered = computed<typeof VuesaxIconsVue>(
           <span>Copy Icon</span>
         </div>
       </div>
+
+      <p v-if="iconNameFilter && iconFiltered.length === 0" class="empty">
+        No icons match “{{ iconNameFilter }}”. Try kebab-case names like
+        <code>share</code>, <code>map-pin</code>, or <code>info-circle</code>.
+      </p>
 
       <s-row class="row">
         <s-col
@@ -79,10 +88,10 @@ const iconFiltered = computed<typeof VuesaxIconsVue>(
           @click="copyIcon(icon.name, $refs)"
         >
           <s-icon :size="30">
-            <component :is="icon" />
+            <component :is="icon.component" />
           </s-icon>
           <span class="icon-name">
-            {{ icon.name }}
+            {{ iconNameToKebab(icon.name) }}
           </span>
         </s-col>
       </s-row>
@@ -93,6 +102,17 @@ const iconFiltered = computed<typeof VuesaxIconsVue>(
 <style lang="scss" scoped>
 @function -color($color, $alpha: 1) {
   @return unquote('rgba(var(--sax-#{$color}), #{$alpha})');
+}
+
+.empty {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  color: rgba(var(--sax-theme-color), 0.72);
+
+  code {
+    font-weight: 600;
+    color: rgb(var(--sax-accent-color));
+  }
 }
 
 .col {
@@ -111,6 +131,8 @@ const iconFiltered = computed<typeof VuesaxIconsVue>(
   .icon-name {
     font-size: 10px;
     margin-top: 12px;
+    text-align: center;
+    word-break: break-word;
   }
 }
 

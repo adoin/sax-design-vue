@@ -64,6 +64,6 @@ Before integrating into your repo, open the [Playground](/guide/playground) and 
 
 ## Design note
 
-Visual language is inherited from [Vuesax](/guide/tribute). Sax Design Vue keeps that expressive look while targeting Vue 3 tooling and modern documentation workflows.
+Visual language is inherited from [Vuesax](https://github.com/lusaxweb/vuesax). Sax Design Vue keeps that expressive look while targeting Vue 3 tooling and modern documentation workflows.
 
 </card>

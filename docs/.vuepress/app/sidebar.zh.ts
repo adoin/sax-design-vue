@@ -13,7 +13,6 @@ export const zhSidebar: SidebarConfig = [
       { text: '配置', link: zh('/guide/configuration') },
       { text: 'Playground', link: zh('/guide/playground') },
       { text: 'Nuxt 集成', link: zh('/guide/nuxt/') },
-      { text: '致敬 Vuesax', link: zh('/guide/tribute') },
     ],
   },
   {

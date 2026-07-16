@@ -4,7 +4,7 @@ import SaxDesignVue from 'sax-design-vue'
 import '@vuesax-alpha/theme-chalk/src/index.scss'
 import '@vuesax-alpha/theme-chalk/src/dark/css-vars.scss'
 
-import * as VuesaxIconsVue from '@vuesax-alpha/icons-vue'
+import { saxIcons } from '@sax-design-vue/icons-vue'
 
 const siteBase = import.meta.env.BASE_URL || '/'
 
@@ -38,7 +38,7 @@ export default defineClientConfig({
     // @ts-expect-error
     app.use(SaxDesignVue)
 
-    for (const [key, component] of Object.entries(VuesaxIconsVue)) {
+    for (const [key, component] of Object.entries(saxIcons)) {
       app.component(`SIcon${key}`, component)
     }
   },

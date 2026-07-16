@@ -20,7 +20,6 @@ Sax Design Vue 是从 Vuesax 生态迁移而来的 **Vue 3 + TypeScript** 组件
 - [使用组件](/zh/guide/using-components) — 示例、属性、Playground 工作流
 - [配置](/zh/guide/configuration) — 主题、自动导入、全局设置
 - [Playground](/zh/guide/playground) — 浏览器内交互示例
-- [致敬 Vuesax](/zh/guide/tribute) — 设计传承与致谢
 
 </card>
 

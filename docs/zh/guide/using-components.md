@@ -64,6 +64,6 @@
 
 ## 设计说明
 
-视觉语言继承自 [Vuesax](/zh/guide/tribute)。Sax Design Vue 在面向 Vue 3 工具链与现代文档工作流的同时，保留富有表现力的外观。
+视觉语言继承自 [Vuesax](https://github.com/lusaxweb/vuesax)。Sax Design Vue 在面向 Vue 3 工具链与现代文档工作流的同时，保留富有表现力的外观。
 
 </card>

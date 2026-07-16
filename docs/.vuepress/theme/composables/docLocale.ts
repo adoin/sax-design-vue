@@ -46,11 +46,6 @@ const ui = {
     homeGetStarted: 'Get Started',
     homeComponents: 'Components',
     homePlayground: 'Playground',
-    homeTributeLabel: 'Design heritage',
-    homeTributeTitle: 'Standing on the shoulders of Vuesax',
-    homeTributeBody:
-      'Sax Design Vue continues the visual language pioneered by lusaxweb/vuesax. We are grateful for the original design philosophy — expressive, distinctive, and free from rigid design systems.',
-    homeReadTribute: 'Read tribute',
     highlightUsageTitle: 'Usage first',
     highlightUsageDesc:
       'Install with pnpm, register globally or on-demand, and ship with dark mode CSS variables out of the box.',
@@ -65,7 +60,6 @@ const ui = {
     highlightPlaygroundAction: 'Open playground',
     notFound: 'Take me home.',
     docsWarnPlayground: 'online playground',
-    docsWarnTribute: 'tribute to Vuesax design',
   },
   zh: {
     newComponentBadge: '新组件',
@@ -91,11 +85,6 @@ const ui = {
     homeGetStarted: '快速开始',
     homeComponents: '组件',
     homePlayground: 'Playground',
-    homeTributeLabel: '设计传承',
-    homeTributeTitle: '站在 Vuesax 的肩膀上',
-    homeTributeBody:
-      'Sax Design Vue 延续了 lusaxweb/vuesax 开创的视觉语言。我们感谢这套富有表现力、与众不同、不拘泥于僵化设计体系的理念。',
-    homeReadTribute: '阅读致敬',
     highlightUsageTitle: '用法优先',
     highlightUsageDesc:
       '使用 pnpm 安装，支持全局或按需注册，内置暗色模式 CSS 变量，开箱即用。',
@@ -110,7 +99,6 @@ const ui = {
     highlightPlaygroundAction: '打开 Playground',
     notFound: '返回首页',
     docsWarnPlayground: '在线 Playground',
-    docsWarnTribute: 'Vuesax 设计致敬',
   },
 } as const
 

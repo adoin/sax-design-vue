@@ -10,6 +10,7 @@
     "build": "vuepress build"
   },
   "dependencies": {
+    "@sax-design-vue/icons-vue": "workspace:*",
     "@vuepress/shared-utils": "1.9.9",
     "@vuesax-alpha/icons-vue": "0.0.2-beta.12",
     "@vuesax-alpha/theme-chalk": "workspace:*",

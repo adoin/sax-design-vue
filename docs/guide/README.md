@@ -20,7 +20,6 @@ Sax Design Vue is a **Vue 3 + TypeScript** component library migrated from the V
 - [Using Components](/guide/using-components) — examples, props, playground workflow
 - [Configuration](/guide/configuration) — theming, auto-import, global setup
 - [Playground](/guide/playground) — interactive demos in the browser
-- [Tribute to Vuesax](/guide/tribute) — design heritage and acknowledgements
 
 </card>
 

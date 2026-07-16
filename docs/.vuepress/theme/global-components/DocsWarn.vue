@@ -5,9 +5,7 @@
       This documentation targets <strong>Vue 3 + TypeScript</strong>. Each
       section includes a live example, copy-ready code, and an API table for
       configuration. Try the component in the
-      <router-link to="/guide/playground">online playground</router-link>
-      or read the
-      <router-link to="/guide/tribute">tribute to Vuesax design</router-link>.
+      <router-link to="/guide/playground">online playground</router-link>.
     </p>
   </div>
 </template>

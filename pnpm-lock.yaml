@@ -228,6 +228,9 @@ importers:
 
   docs:
     dependencies:
+      '@sax-design-vue/icons-vue':
+        specifier: workspace:*
+        version: link:../packages/icons-vue
       '@vuepress/shared-utils':
         specifier: 1.9.9
         version: 1.9.9
@@ -507,6 +510,15 @@ importers:
       vue:
         specifier: ^3.3.4
         version: 3.3.4
+
+  packages/icons-vue:
+    dependencies:
+      '@vuesax-alpha/icons-vue':
+        specifier: 0.0.2-beta.12
+        version: 0.0.2-beta.12(vue@3.5.39(typescript@4.9.5))
+      vue:
+        specifier: ^3.2.0
+        version: 3.5.39(typescript@4.9.5)
 
   packages/locale: {}
 

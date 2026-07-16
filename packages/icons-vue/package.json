@@ -1,0 +1,22 @@
+{
+  "name": "@sax-design-vue/icons-vue",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Extended Vue icon components for Sax Design Vue",
+  "type": "module",
+  "license": "MIT",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./registry": "./src/registry.ts"
+  },
+  "sideEffects": false,
+  "peerDependencies": {
+    "vue": "^3.2.0"
+  },
+  "dependencies": {
+    "@vuesax-alpha/icons-vue": "0.0.2-beta.12"
+  }
+}

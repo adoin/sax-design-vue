@@ -6,7 +6,6 @@ const titleZh: Record<string, string> = {
   Playground: 'Playground',
   'Using Components': '使用组件',
   Configuration: '配置',
-  'Tribute to Vuesax': '致敬 Vuesax',
 }
 
 const headerZh: Record<string, string> = {

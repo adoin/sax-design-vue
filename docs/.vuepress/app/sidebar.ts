@@ -29,10 +29,6 @@ export const enSidebar: SidebarConfig = [
         text: 'Usage with Nuxt',
         link: '/guide/nuxt/',
       },
-      {
-        text: 'Tribute to Vuesax',
-        link: '/guide/tribute',
-      },
     ],
   },
   {

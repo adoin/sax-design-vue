@@ -4,14 +4,14 @@
 
 ## 安装
 
-Sax Design Vue provides a set of common icons.
+Sax Design Vue 提供常用图标，包含上游 Vuesax Alpha 图标集，并补充 share、calendar、mail、filter 等日常图标。
 
 <command>
 
 <template #npm>
 
 ```bash
-npm install @vuesax-alpha/icons-vue
+npm install @sax-design-vue/icons-vue
 ```
 
 </template>
@@ -19,7 +19,7 @@ npm install @vuesax-alpha/icons-vue
 <template #yarn>
 
 ```bash
-yarn add @vuesax-alpha/icons-vue
+yarn add @sax-design-vue/icons-vue
 ```
 
 </template>
@@ -27,18 +27,20 @@ yarn add @vuesax-alpha/icons-vue
 <template #pnpm>
 
 ```bash
-pnpm install @vuesax-alpha/icons-vue
+pnpm install @sax-design-vue/icons-vue
 ```
 
 </template>
 
 </command>
 
+npm 发布前可继续使用 `@vuesax-alpha/icons-vue`；本仓库扩展图标位于 `packages/icons-vue`。
+
 </card>
 
 <card>
 
-## Register All Icons
+## 注册全部图标
 
 ::: tip
 You can change icon name
@@ -46,7 +48,7 @@ You can change icon name
 
 ```ts
 // main.ts
-import * as SaxIconsVue from '@vuesax-alpha/icons-vue'
+import * as SaxIconsVue from '@sax-design-vue/icons-vue'
 
 const app = createApp(App)
 for (const [key, component] of Object.entries(SaxIconsVue)) {

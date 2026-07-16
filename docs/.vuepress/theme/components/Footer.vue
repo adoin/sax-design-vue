@@ -31,8 +31,6 @@
           href="https://github.com/lusaxweb/vuesax"
           >Vuesax</a
         >
-        —
-        <router-link to="/guide/tribute">tribute</router-link>
       </span>
     </div>
   </footer>
@@ -55,18 +53,6 @@ const links = [
       { text: 'Configuration', link: '/guide/configuration' },
       { text: 'Playground', link: '/guide/playground' },
       { text: 'Components', link: '/components/' },
-    ],
-  },
-  {
-    title: 'Design heritage',
-    items: [
-      { text: 'Tribute to Vuesax', link: '/guide/tribute' },
-      {
-        text: 'Original Vuesax (Vue 2)',
-        link: 'https://github.com/lusaxweb/vuesax',
-        external: true,
-      },
-      { text: 'vuesax.com', link: 'https://vuesax.com/', external: true },
     ],
   },
   {

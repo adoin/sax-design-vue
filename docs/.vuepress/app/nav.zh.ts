@@ -14,7 +14,6 @@ export const zhNavbar: NavbarConfig = [
       { text: '配置', link: zh('/guide/configuration') },
       { text: 'Playground', link: zh('/guide/playground') },
       { text: 'Nuxt 集成', link: zh('/guide/nuxt') },
-      { text: '致敬 Vuesax', link: zh('/guide/tribute') },
     ],
   },
   {
@@ -81,7 +80,6 @@ export const zhNavbar: NavbarConfig = [
       {
         text: '帮助',
         children: [
-          { text: '致敬 Vuesax', link: zh('/guide/tribute') },
           {
             text: '原版 Vuesax (Vue 2)',
             link: 'https://github.com/lusaxweb/vuesax',

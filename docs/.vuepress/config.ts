@@ -39,11 +39,15 @@ export default defineUserConfig({
             find: /^sax-design-vue\/(es|lib)\/(.*)$/,
             replacement: `${pkgRoot}/$2`,
           },
+          {
+            find: '@sax-design-vue/icons-vue',
+            replacement: path.resolve(pkgRoot, 'icons-vue/src/index.ts'),
+          },
         ],
       },
     },
   }),
-  open: true,
+  open: false,
   locales: {
     '/': {
       lang: 'en-US',

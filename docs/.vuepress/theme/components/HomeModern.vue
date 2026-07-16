@@ -51,41 +51,6 @@
       </article>
     </section>
 
-    <section class="home-modern__tribute">
-      <div>
-        <p class="home-modern__tribute-label">{{ t.homeTributeLabel }}</p>
-        <h2>{{ t.homeTributeTitle }}</h2>
-        <p>
-          <template v-if="locale === 'zh'">
-            Sax Design Vue 延续了
-            <a
-              href="https://github.com/lusaxweb/vuesax"
-              target="_blank"
-              rel="noopener"
-              >lusaxweb/vuesax</a
-            >
-            开创的视觉语言。我们感谢这套富有表现力、与众不同、不拘泥于僵化设计体系的理念。
-          </template>
-          <template v-else>
-            Sax Design Vue continues the visual language pioneered by
-            <a
-              href="https://github.com/lusaxweb/vuesax"
-              target="_blank"
-              rel="noopener"
-              >lusaxweb/vuesax</a
-            >. We are grateful for the original design philosophy — expressive,
-            distinctive, and free from rigid design systems.
-          </template>
-        </p>
-      </div>
-      <router-link
-        class="home-modern__btn"
-        :to="withLocalePath('/guide/tribute')"
-      >
-        {{ t.homeReadTribute }}
-      </router-link>
-    </section>
-
     <Footer />
   </main>
 </template>
@@ -182,8 +147,7 @@ const highlights = computed(() => [
 }
 
 .home-modern__hero,
-.home-modern__grid,
-.home-modern__tribute {
+.home-modern__grid {
   position: relative;
   z-index: 1;
 }
@@ -299,58 +263,9 @@ const highlights = computed(() => [
   text-decoration: none;
 }
 
-.home-modern__tribute {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 28px;
-  margin-bottom: 48px;
-  border-radius: 18px;
-  background: linear-gradient(
-    135deg,
-    rgba(var(--sax-accent-color), 0.12),
-    rgba(var(--sax-theme-layout), 0.95)
-  );
-  border: 1px solid rgba(var(--sax-accent-color), 0.15);
-
-  h2 {
-    margin: 0 0 8px;
-    font-size: 1.35rem;
-    color: rgb(var(--sax-theme-color));
-  }
-
-  p {
-    margin: 0;
-    max-width: 640px;
-    line-height: 1.7;
-    color: rgba(var(--sax-theme-color), 0.75);
-
-    a {
-      color: rgb(var(--sax-accent-color));
-      font-weight: 600;
-    }
-  }
-}
-
-.home-modern__tribute-label {
-  margin: 0 0 6px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgb(var(--sax-accent-color));
-}
-
 @media (max-width: 720px) {
   .home-modern {
     padding-top: 24px;
-  }
-
-  .home-modern__tribute {
-    flex-direction: column;
-    align-items: flex-start;
   }
 }
 </style>

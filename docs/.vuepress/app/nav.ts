@@ -12,7 +12,6 @@ export const enNavbar: NavbarConfig = [
       { text: `Configuration`, link: `/guide/configuration` },
       { text: `Playground`, link: `/guide/playground` },
       { text: `Usage with Nuxt`, link: `/guide/nuxt` },
-      { text: `Tribute to Vuesax`, link: `/guide/tribute` },
     ],
   },
   {
@@ -96,10 +95,6 @@ export const enNavbar: NavbarConfig = [
       {
         text: `Help`,
         children: [
-          {
-            text: `Tribute to Vuesax`,
-            link: `/guide/tribute`,
-          },
           {
             text: `Original Vuesax (Vue 2)`,
             link: `https://github.com/lusaxweb/vuesax`,

@@ -68,10 +68,6 @@
 
       <ThemeToggle />
 
-      <router-link class="v-old" to="/guide/tribute" title="Tribute to Vuesax">
-        Tribute
-      </router-link>
-
       <div class="con-links">
         <a
           title="Github"
@@ -190,7 +186,6 @@ const handleShowSuggestions = (active: boolean) => {
   font-weight: 700;
   padding-left: 30px;
 }
-.v-old,
 .nav-playground {
   padding: 10px;
   color: inherit;
@@ -225,8 +220,7 @@ const handleShowSuggestions = (active: boolean) => {
     }
   }
 }
-.external-links-search.remove-links .con-links,
-.external-links-search.remove-links .v-old {
+.external-links-search.remove-links .con-links {
   display: none;
 }
 .navbar {
