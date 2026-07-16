@@ -19,9 +19,10 @@ const items = [
 
 <style scoped lang="scss">
 .breadcrumb-color-demo {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
   width: 100%;
 }
 </style>
