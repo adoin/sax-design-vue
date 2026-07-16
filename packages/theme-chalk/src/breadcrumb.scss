@@ -4,6 +4,8 @@
 @include b(breadcrumb) {
   display: flex;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 
   @include m(align-left) {
     justify-content: flex-start;
@@ -19,7 +21,7 @@
 
   @include e(list) {
     display: flex;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
     align-items: center;
     list-style: none;
     margin: 0;
@@ -51,6 +53,7 @@
   @include e(item) {
     display: flex;
     align-items: center;
+    flex: 0 0 auto;
     font-size: 0.9rem;
 
     @include when(active) {

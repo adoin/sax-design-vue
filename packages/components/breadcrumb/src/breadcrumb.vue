@@ -16,13 +16,20 @@
           :aria-current="item.active ? 'page' : undefined"
         >
           <a
-            v-if="!item.active"
+            v-if="!item.active && !item.disabled"
             :href="item.url || '#'"
             :title="item.title"
             :class="ns.e('link')"
           >
             {{ item.title }}
           </a>
+          <span
+            v-else-if="!item.active && item.disabled"
+            :class="[ns.e('link'), ns.is('disabled')]"
+            :title="item.title"
+          >
+            {{ item.title }}
+          </span>
           <span
             v-else
             :class="[ns.e('text'), textColorClass]"

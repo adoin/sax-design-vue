@@ -1,13 +1,24 @@
 <template>
-  <div class="play-container demo">
-    <s-breadcrumb :items="defaultItems" />
-    <s-breadcrumb :color="colorx" :items="defaultItems" />
-    <label class="color-field">
-      Accent color
+  <div
+    class="play-container demo"
+    style="display: flex; flex-direction: column; align-items: flex-start; gap: 20px; width: 100%"
+  >
+    <s-breadcrumb style="width: 100%" :items="defaultItems" />
+
+    <div
+      style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px; width: 100%"
+    >
       <input v-model="colorx" type="color" />
-    </label>
-    <s-breadcrumb separator="chevron_right" :items="shortItems" />
-    <s-breadcrumb align="center">
+      <s-breadcrumb style="width: 100%" :color="colorx" :items="defaultItems" />
+    </div>
+
+    <s-breadcrumb
+      style="width: 100%"
+      separator="chevron_right"
+      :items="shortItems"
+    />
+
+    <s-breadcrumb style="width: 100%" align="center">
       <s-breadcrumb-item to="#">Home</s-breadcrumb-item>
       <s-breadcrumb-item to="#">Library</s-breadcrumb-item>
       <s-breadcrumb-item active>Infos</s-breadcrumb-item>
@@ -32,17 +43,3 @@ const shortItems = [
   { title: 'Active', active: true },
 ]
 </script>
-
-<style lang="scss" scoped>
-.demo {
-  gap: 20px;
-}
-
-.color-field {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.85rem;
-  color: rgba(0, 0, 0, 0.65);
-}
-</style>
