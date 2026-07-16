@@ -73,7 +73,7 @@ Bind `percent` from 0 to 100 for a standard progress bar.
 ## Colors
 
 
-Apply theme colors to match your UI context.
+Apply theme colors to match your UI context. Hover a bar to see its default slot text in a tooltip.
 
 <template #example>
 <progress-color />

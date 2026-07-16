@@ -73,7 +73,7 @@ NEWS:
 ## 颜色
 
 
-应用主题色以匹配界面上下文。
+应用主题色以匹配界面上下文。悬停进度条可查看默认插槽文字 tooltip。
 
 <template #example>
 <progress-color />

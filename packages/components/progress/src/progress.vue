@@ -1,28 +1,34 @@
 <template>
-  <div
-    :class="[
-      ns.b(),
-      ns.is('indeterminate', indeterminate),
-      isThemeColor ? ns.m(themeColor) : '',
-    ]"
-    :style="containerStyle"
+  <s-tooltip
+    :disabled="!$slots.default"
+    placement="top"
+    :trigger-style="{ width: '100%', display: 'block' }"
   >
-    <div :class="ns.e('foreground')" :style="foregroundStyle">
-      <span v-if="$slots.default" :class="ns.e('label')">
-        <slot />
-      </span>
-    </div>
     <div
-      v-if="indeterminate"
-      :class="ns.e('indeterminate')"
-      :style="indeterminateStyle"
-    />
-  </div>
+      :class="[
+        ns.b(),
+        ns.is('indeterminate', indeterminate),
+        isThemeColor ? ns.m(themeColor) : '',
+      ]"
+      :style="containerStyle"
+    >
+      <div :class="ns.e('foreground')" :style="foregroundStyle" />
+      <div
+        v-if="indeterminate"
+        :class="ns.e('indeterminate')"
+        :style="indeterminateStyle"
+      />
+    </div>
+    <template v-if="$slots.default" #content>
+      <slot />
+    </template>
+  </s-tooltip>
 </template>
 
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
+import STooltip from '@vuesax-alpha/components/tooltip'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { progressProps } from './progress'
 import type { CSSProperties } from 'vue'
