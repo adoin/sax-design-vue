@@ -3,6 +3,8 @@ import type { SearchDataOption } from '~/saxDesignVueTheme'
 
 const titleZh: Record<string, string> = {
   'Time select': 'Time select',
+  'Date picker': 'Date picker',
+  'Time picker': 'Time picker',
   Playground: 'Playground',
   'Using Components': '使用组件',
   Configuration: '配置',
