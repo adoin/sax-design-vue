@@ -43,6 +43,8 @@ export const zhSidebar: SidebarConfig = [
       { text: 'Sidebar', link: zh('/components/sidebar') },
       { text: 'Card', link: zh('/components/card') },
       { text: 'Time select', link: zh('/components/time-select') },
+      { text: 'Date picker', link: zh('/components/date-picker') },
+      { text: 'Time picker', link: zh('/components/time-picker') },
       { text: 'Scrollbar', link: zh('/components/scrollbar') },
       { text: 'Rate', link: zh('/components/rate') },
       { text: 'Badge', link: zh('/components/badge') },

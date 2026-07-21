@@ -65,6 +65,8 @@ export const enSidebar: SidebarConfig = [
       { text: `Sidebar`, link: `/components/sidebar` },
       { text: `Card`, link: `/components/card` },
       { text: `Time select`, link: `/components/time-select` },
+      { text: `Date picker`, link: `/components/date-picker` },
+      { text: `Time picker`, link: `/components/time-picker` },
       { text: `Scrollbar`, link: `/components/scrollbar` },
       { text: `Rate`, link: `/components/rate` },
       { text: `Badge`, link: `/components/badge` },

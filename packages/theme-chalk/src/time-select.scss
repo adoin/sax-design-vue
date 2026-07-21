@@ -1,0 +1,12 @@
+@use 'mixins/mixins' as *;
+
+@include b(time-select) {
+  display: inline-flex;
+  width: getCssVar(select, width);
+  max-width: 100%;
+
+  .#{$namespace}-select {
+    width: 100%;
+    max-width: 100%;
+  }
+}

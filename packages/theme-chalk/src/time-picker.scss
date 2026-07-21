@@ -1,0 +1,51 @@
+@use 'mixins/mixins' as *;
+
+@include b(time-picker) {
+  display: inline-flex;
+  width: getCssVar(select, width);
+  max-width: 100%;
+
+  @include when(block) {
+    display: flex;
+    width: 100%;
+    max-width: unset;
+  }
+
+  .#{$namespace}-input {
+    width: 100%;
+  }
+
+  @include e(popper) {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  @include e(dropdown) {
+    display: flex;
+    flex-direction: column;
+    background: getColor('background');
+    border-radius: 12px;
+    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, getCssVar(shadow-opacity));
+    overflow: hidden;
+    min-width: 240px;
+    padding: 8px 12px 0;
+  }
+
+  @include e(footer) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 0 12px;
+    border-top: 1px solid getColor('gray-2');
+    margin-top: 4px;
+  }
+
+  @include e(footer-actions) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}

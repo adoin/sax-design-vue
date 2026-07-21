@@ -1,27 +1,29 @@
 <template>
-  <s-select
-    ref="selectInstance"
-    :model-value="value"
-    :disabled="disabled"
-    :clearable="clearable"
-    :clear-icon="clearIcon"
-    :effect="effect"
-    :placeholder="placeholder"
-    default-first-option
-    :filter="editable"
-    @update:model-value="(event) => $emit('update:modelValue', event)"
-    @change="(event) => $emit('change', event)"
-    @blur="(event) => $emit('blur', event)"
-    @focus="(event) => $emit('focus', event)"
-  >
-    <s-option
-      v-for="item in items"
-      :key="item.value"
-      :label="item.value"
-      :value="item.value"
-      :disabled="item.disabled"
-    />
-  </s-select>
+  <div class="s-time-select">
+    <s-select
+      ref="selectInstance"
+      :model-value="value"
+      :disabled="disabled"
+      :clearable="clearable"
+      :clear-icon="clearIcon"
+      :effect="effect"
+      :placeholder="placeholder"
+      default-first-option
+      :filter="editable"
+      @update:model-value="(event) => $emit('update:modelValue', event)"
+      @change="(event) => $emit('change', event)"
+      @blur="(event) => $emit('blur', event)"
+      @focus="(event) => $emit('focus', event)"
+    >
+      <s-option
+        v-for="item in items"
+        :key="item.value"
+        :label="item.value"
+        :value="item.value"
+        :disabled="item.disabled"
+      />
+    </s-select>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -46,7 +48,7 @@ const props = defineProps(timeSelectProps)
 const selectInstance = ref<SelectInstance>()
 
 const value = computed(() =>
-  dayjs(props.modelValue || start.value, 'HH:mm').format(props.format)
+  props.modelValue ? dayjs(props.modelValue, 'HH:mm').format(props.format) : ''
 )
 const start = computed(() => {
   const time = parseTime(props.start)
@@ -97,10 +99,7 @@ const blur = () => {
 }
 
 defineExpose({
-  /** focus to time select */
   focus,
-
-  /** blur time select */
   blur,
 })
 </script>

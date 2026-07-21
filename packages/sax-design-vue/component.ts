@@ -12,6 +12,7 @@ import { SChip, SChips } from '@vuesax-alpha/components/chip'
 import { SCol } from '@vuesax-alpha/components/col'
 import { SCollapse, SCollapseItem } from '@vuesax-alpha/components/collapse'
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
+import { SDatePicker } from '@vuesax-alpha/components/date-picker'
 import { SDialog } from '@vuesax-alpha/components/dialog'
 import { SDivider } from '@vuesax-alpha/components/divider'
 import { SIcon } from '@vuesax-alpha/components/icon'
@@ -45,6 +46,7 @@ import { SSwitch } from '@vuesax-alpha/components/switch'
 import { STable, STd, STh, STr } from '@vuesax-alpha/components/table'
 import { STab, STabs } from '@vuesax-alpha/components/tabs'
 import { STextarea } from '@vuesax-alpha/components/textarea'
+import { STimePicker } from '@vuesax-alpha/components/time-picker'
 import { STimeSelect } from '@vuesax-alpha/components/time-select'
 import { STooltip } from '@vuesax-alpha/components/tooltip'
 import { SUpload } from '@vuesax-alpha/components/upload'
@@ -70,6 +72,7 @@ export default [
   SCollapse,
   SCollapseItem,
   SCollapseTransition,
+  SDatePicker,
   SDialog,
   SDivider,
   SIcon,
@@ -108,6 +111,7 @@ export default [
   STab,
   STabs,
   STextarea,
+  STimePicker,
   STimeSelect,
   STooltip,
   SUpload,

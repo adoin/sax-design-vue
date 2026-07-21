@@ -1,0 +1,345 @@
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+
+@include b(date-picker) {
+  display: inline-flex;
+  width: getCssVar(select, width);
+  max-width: 100%;
+
+  @include when(block) {
+    display: flex;
+    width: 100%;
+    max-width: unset;
+  }
+
+  .#{$namespace}-input {
+    width: 100%;
+  }
+
+  @include e(popper) {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  @include e(dropdown) {
+    display: flex;
+    flex-direction: column;
+    background: getColor('background');
+    border-radius: 12px;
+    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, getCssVar(shadow-opacity));
+    overflow: hidden;
+    min-width: 280px;
+  }
+
+  @include e(sidebar) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 12px 0;
+    border-bottom: 1px solid getColor('gray-2');
+  }
+
+  @include e(shortcut) {
+    border: 0;
+    background: getColor('gray-2');
+    color: getColor('text');
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: getCssVar(transition-ease);
+
+    &:hover {
+      background: getColor('color', 0.08);
+      color: getColor('color');
+    }
+  }
+
+  @include e(panels) {
+    display: flex;
+    gap: 4px;
+    padding: 8px;
+  }
+
+  @include e(time-wrap) {
+    border-top: 1px solid getColor('gray-2');
+    padding: 8px 12px 0;
+  }
+
+  @include e(time-range) {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  @include e(time-block) {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  @include e(time-label) {
+    display: block;
+    font-size: 0.75rem;
+    color: getColor('text', 0.6);
+    margin-bottom: 6px;
+    padding-left: 4px;
+  }
+
+  @include e(footer) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px 12px;
+    border-top: 1px solid getColor('gray-2');
+  }
+
+  @include e(footer-actions) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+@include b(date-panel) {
+  width: 280px;
+  padding: 4px 8px 8px;
+  user-select: none;
+
+  @include e(header) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  @include e(icon-btn) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: getColor('text', 0.7);
+    cursor: pointer;
+    transition: getCssVar(transition-ease);
+
+    &:hover {
+      background: getColor('gray-2');
+      color: getColor('text');
+    }
+  }
+
+  @include e(label-btn) {
+    border: 0;
+    background: transparent;
+    color: getColor('text');
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 4px 6px;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background: getColor('gray-2');
+      color: getColor('color');
+    }
+  }
+
+  @include e(weekdays) {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 4px;
+
+    span {
+      text-align: center;
+      font-size: 0.72rem;
+      color: getColor('text', 0.55);
+      padding: 4px 0;
+    }
+  }
+
+  @include e(dates) {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+
+  @include e(cell) {
+    width: 34px;
+    height: 34px;
+    margin: 0 auto;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: getColor('text');
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: getCssVar(transition-ease);
+
+    @include when(prev) {
+      color: getColor('text', 0.35);
+    }
+
+    @include when(next) {
+      color: getColor('text', 0.35);
+    }
+
+    @include when(today) {
+      color: getColor('color');
+      font-weight: 600;
+    }
+
+    @include when(in-range) {
+      background: getColor('color', 0.08);
+      border-radius: 0;
+    }
+
+    @include when(range-start) {
+      background: getColor('color');
+      color: getColor('white');
+      border-radius: 10px 0 0 10px;
+    }
+
+    @include when(range-end) {
+      background: getColor('color');
+      color: getColor('white');
+      border-radius: 0 10px 10px 0;
+    }
+
+    @include when(selected) {
+      background: getColor('color');
+      color: getColor('white');
+    }
+
+    &:hover:not(:disabled):not(.is-selected) {
+      background: getColor('color', 0.12);
+      color: getColor('color');
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  }
+
+  @include e(months) {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  @include e(month) {
+    border: 0;
+    border-radius: 10px;
+    background: getColor('gray-2');
+    color: getColor('text');
+    padding: 12px 0;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: getCssVar(transition-ease);
+
+    @include when(selected) {
+      background: getColor('color');
+      color: getColor('white');
+    }
+
+    @include when(today) {
+      box-shadow: inset 0 0 0 2px getColor('color', 0.35);
+    }
+
+    &:hover:not(:disabled):not(.is-selected) {
+      background: getColor('color', 0.1);
+      color: getColor('color');
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  }
+
+  @include e(years) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  @include e(year) {
+    border: 0;
+    border-radius: 10px;
+    background: getColor('gray-2');
+    color: getColor('text');
+    padding: 12px 0;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: getCssVar(transition-ease);
+
+    @include when(selected) {
+      background: getColor('color');
+      color: getColor('white');
+    }
+
+    @include when(today) {
+      box-shadow: inset 0 0 0 2px getColor('color', 0.35);
+    }
+
+    &:hover:not(:disabled):not(.is-selected) {
+      background: getColor('color', 0.1);
+      color: getColor('color');
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@include b(time-panel) {
+  padding: 0 0 8px;
+
+  @include e(spinner) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  @include e(list) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @include e(item) {
+    text-align: center;
+    padding: 6px 0;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: getCssVar(transition-ease);
+
+    @include when(active) {
+      background: getColor('color');
+      color: getColor('white');
+    }
+
+    @include when(disabled) {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(.is-disabled):not(.is-active) {
+      background: getColor('color', 0.1);
+      color: getColor('color');
+    }
+  }
+}

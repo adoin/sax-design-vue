@@ -97,12 +97,13 @@ $iconActiveMargin: -4px;
 
 @include b(select) {
   position: relative;
-  display: flex;
-  justify-content: center;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
   min-height: getCssVar(select, min-height);
   height: fit-content;
-  width: 100%;
-  max-width: getCssVar(select, width);
+  width: getCssVar(select, width);
+  max-width: 100%;
 
   @include e(content) {
     transition: all 0s ease 0s;
@@ -181,7 +182,7 @@ $iconActiveMargin: -4px;
     z-index: 2;
     color: getColor(text, 0.6);
     right: 10px;
-    top: 20px;
+    top: 50%;
     transform: translateY(-50%);
     transition: getCssVar(transition-ease);
     cursor: pointer;
@@ -193,7 +194,7 @@ $iconActiveMargin: -4px;
     position: absolute;
     right: 10px;
     margin-top: 0;
-    top: 20px;
+    top: 50%;
     transform: translateY(-50%);
     width: 22px;
     height: 22px;
@@ -218,6 +219,7 @@ $iconActiveMargin: -4px;
     min-height: getCssVar(select, min-height);
     padding: 7px 30px 7px 10px;
     width: 100%;
+    box-sizing: border-box;
 
     @include when(multiple) {
       color: transparent !important;
