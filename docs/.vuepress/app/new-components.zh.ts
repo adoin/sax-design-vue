@@ -12,6 +12,7 @@ export const newComponentNavItemsZh: SidebarItem[] = [
   { text: '表单', link: zh('/components/form'), isNew: true },
   { text: 'Progress', link: zh('/components/progress'), isNew: true },
   { text: 'Chip', link: zh('/components/chip'), isNew: true },
+  { text: '日历', link: zh('/components/calendar'), isNew: true },
   { text: '轮播图', link: zh('/components/carousel'), isNew: true },
   { text: '级联选择器', link: zh('/components/cascader'), isNew: true },
   { text: 'Breadcrumb', link: zh('/components/breadcrumb'), isNew: true },

@@ -1,0 +1,22 @@
+@use 'common/var' as *;
+
+.s-calendar { width: 100%; overflow: hidden; border: 1px solid getColor(border, .7); border-radius: 14px; background: getColor(background); }
+.s-calendar__header { display: flex; height: 48px; align-items: center; justify-content: space-between; padding: 0 12px; border-bottom: 1px solid getColor(border, .7); color: getColor(text); }
+.s-calendar__header strong { font-size: 14px; }
+.s-calendar__actions { display: flex; align-items: center; gap: 4px; }
+.s-calendar__actions > button, .s-calendar__nav { display: grid; min-width: 28px; height: 28px; padding: 0 7px; place-items: center; border: 0; border-radius: 7px; background: transparent; color: getColor(text, secondary); font-size: 12px; cursor: pointer; }
+.s-calendar__actions > button:hover, .s-calendar__nav:hover { background: getColor(primary, .08); color: getColor(primary); }
+.s-calendar__nav .s-icon { font-size: 19px; }
+.s-calendar__grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); padding: 7px; }
+.s-calendar__grid.is-week-number { grid-template-columns: 30px repeat(7, minmax(0, 1fr)); }
+.s-calendar__weekday, .s-calendar__week-number { display: grid; min-height: 28px; place-items: center; color: getColor(text, secondary); font-size: 11px; font-weight: 500; }
+.s-calendar__week-number { color: getColor(text, secondary); opacity: .65; }
+.s-calendar__cell { position: relative; display: flex; min-height: 40px; align-items: flex-start; justify-content: center; padding: 5px 2px; border: 0; border-radius: 8px; background: transparent; color: getColor(text); cursor: pointer; }
+.s-calendar__cell:hover { background: getColor(primary, .08); color: getColor(primary); }
+.s-calendar__cell.is-outside { color: getColor(text, secondary); opacity: .55; }
+.s-calendar__cell.is-today .s-calendar__day { color: getColor(primary); font-weight: 700; }
+.s-calendar__cell.is-in-range { border-radius: 0; background: getColor(primary, .1); }
+.s-calendar__cell.is-selected { background: getColor(primary); color: getColor(white); }
+.s-calendar__cell.is-selected .s-calendar__day { color: inherit; }
+.s-calendar__cell.is-disabled { cursor: not-allowed; opacity: .38; }
+.s-calendar__day { display: grid; width: 25px; height: 25px; place-items: center; border-radius: 50%; font-size: 13px; }

@@ -7,6 +7,7 @@ import {
   SBreadcrumbItem,
 } from '@vuesax-alpha/components/breadcrumb'
 import { SButton, SButtonGroup } from '@vuesax-alpha/components/button'
+import { SCalendar } from '@vuesax-alpha/components/calendar'
 import { SCard, SCardGroup } from '@vuesax-alpha/components/card'
 import { SCarousel } from '@vuesax-alpha/components/carousel'
 import { SCascader } from '@vuesax-alpha/components/cascader'
@@ -89,6 +90,7 @@ export default [
   SBreadcrumbItem,
   SButton,
   SButtonGroup,
+  SCalendar,
   SCard,
   SCardGroup,
   SCarousel,
