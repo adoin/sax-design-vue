@@ -17,6 +17,7 @@ export const newComponentNavItemsZh: SidebarItem[] = [
   { text: 'Images', link: zh('/components/images'), isNew: true },
   { text: '链接', link: zh('/components/link'), isNew: true },
   { text: 'Prompt', link: zh('/components/prompt'), isNew: true },
+  { text: '结果', link: zh('/components/result'), isNew: true },
   { text: 'Tabs', link: zh('/components/tabs'), isNew: true },
   { text: '标签', link: zh('/components/tag'), isNew: true },
   { text: '文本', link: zh('/components/text'), isNew: true },

@@ -35,6 +35,7 @@ import { SProgress } from '@vuesax-alpha/components/progress'
 import { SPrompt } from '@vuesax-alpha/components/prompt'
 import { SRadio } from '@vuesax-alpha/components/radio'
 import { SRate } from '@vuesax-alpha/components/rate'
+import { SResult } from '@vuesax-alpha/components/result'
 import { SRow } from '@vuesax-alpha/components/row'
 import { SScrollbar } from '@vuesax-alpha/components/scrollbar'
 import { SOption, SOptionGroup, SSelect } from '@vuesax-alpha/components/select'
@@ -104,6 +105,7 @@ export default [
   SPrompt,
   SRadio,
   SRate,
+  SResult,
   SRow,
   SScrollbar,
   SSelect,

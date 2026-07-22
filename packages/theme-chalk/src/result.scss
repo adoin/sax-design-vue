@@ -1,0 +1,34 @@
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+
+@include b(result) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 34px 24px;
+  text-align: center;
+
+  @include e(icon) {
+    display: grid;
+    width: 58px;
+    height: 58px;
+    place-items: center;
+    border-radius: 20px;
+    background: getColor(info, 0.12);
+    color: getColor(info);
+    font-size: 29px;
+    font-weight: 650;
+    box-shadow: 0 12px 28px getColor(info, 0.14);
+  }
+  @include e(title) { margin: 16px 0 0; color: getColor(text); font-size: 18px; line-height: 1.4; }
+  @include e(description) { max-width: 480px; margin: 8px 0 0; color: getColor(text, 0.58); font-size: 14px; line-height: 1.6; }
+  @include e(extra) { margin-top: 20px; }
+
+  @each $type in (success, warning, danger) {
+    @include m($type) {
+      .#{bem('result', 'icon')} { background: getColor($type, 0.12); color: getColor($type); box-shadow: 0 12px 28px getColor($type, 0.14); }
+    }
+  }
+  @include m(error) { .#{bem('result', 'icon')} { background: getColor(danger, 0.12); color: getColor(danger); box-shadow: 0 12px 28px getColor(danger, 0.14); } }
+}
