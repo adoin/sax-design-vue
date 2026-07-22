@@ -1,0 +1,22 @@
+@use 'common/var' as *;
+
+.s-menu { width: 240px; border: 1px solid getColor(border, .7); border-radius: 12px; background: getColor(background); }
+.s-menu__list, .s-menu-node__children { margin: 0; padding: 6px; list-style: none; }
+.s-menu-node { position: relative; }
+.s-menu-node__button { display: flex; width: 100%; min-height: 36px; align-items: center; gap: 9px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: getColor(text, secondary); font-size: 13px; text-align: left; cursor: pointer; transition: background-color .16s ease, color .16s ease; }
+.s-menu-node__button:hover:not(:disabled) { background: getColor(primary, .08); color: getColor(primary); }
+.s-menu-node.is-active > .s-menu-node__button { background: getColor(primary, .12); color: getColor(primary); font-weight: 600; }
+.s-menu-node.is-disabled > .s-menu-node__button { cursor: not-allowed; opacity: .48; }
+.s-menu-node__button > .s-icon { flex: 0 0 auto; color: currentcolor; font-size: 18px; }
+.s-menu-node__label { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.s-menu-node__arrow { transition: transform .18s ease; }
+.s-menu-node.is-open > .s-menu-node__button .s-menu-node__arrow { transform: rotate(180deg); }
+.s-menu-node__children { display: none; padding: 3px 0 3px 16px; }
+.s-menu-node.is-open > .s-menu-node__children { display: block; }
+.s-menu.is-horizontal { width: auto; }
+.s-menu.is-horizontal > .s-menu__list { display: flex; align-items: center; gap: 2px; padding: 5px; }
+.s-menu.is-horizontal > .s-menu__list > .s-menu-node > .s-menu-node__button { width: auto; min-width: 80px; justify-content: center; }
+.s-menu.is-horizontal .s-menu-node__children { position: absolute; top: calc(100% + 5px); left: 0; z-index: 20; width: 210px; padding: 6px; border: 1px solid getColor(border, .7); border-radius: 10px; background: getColor(background); box-shadow: 0 14px 34px rgba(28, 37, 78, .16); }
+.s-menu.is-collapse { width: 52px; }
+.s-menu.is-collapse .s-menu-node__label, .s-menu.is-collapse .s-menu-node__arrow { display: none; }
+.s-menu.is-collapse .s-menu-node__button { justify-content: center; padding: 0; }

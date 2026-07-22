@@ -41,6 +41,7 @@ import {
   SLayoutHeader,
 } from '@vuesax-alpha/components/layout'
 import { SList, SListHeader, SListItem } from '@vuesax-alpha/components/list'
+import { SMenu } from '@vuesax-alpha/components/menu'
 import {
   SNavbar,
   SNavbarGroup,
@@ -140,6 +141,7 @@ export default [
   SList,
   SListHeader,
   SListItem,
+  SMenu,
   SOptionGroup,
   SOption,
   SNavbar,

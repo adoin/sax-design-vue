@@ -77,4 +77,5 @@ export * from './watermark'
 
 // plugins
 export * from './loading'
+export * from './menu'
 export * from './notification'
