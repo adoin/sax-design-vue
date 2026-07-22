@@ -66,6 +66,7 @@ import { STab, STabs } from '@vuesax-alpha/components/tabs'
 import { STag } from '@vuesax-alpha/components/tag'
 import { SText } from '@vuesax-alpha/components/text'
 import { STextarea } from '@vuesax-alpha/components/textarea'
+import { STree } from '@vuesax-alpha/components/tree'
 import { STimePicker } from '@vuesax-alpha/components/time-picker'
 import { STimeSelect } from '@vuesax-alpha/components/time-select'
 import { STooltip } from '@vuesax-alpha/components/tooltip'
@@ -151,6 +152,7 @@ export default [
   STag,
   SText,
   STextarea,
+  STree,
   STimePicker,
   STimeSelect,
   STooltip,

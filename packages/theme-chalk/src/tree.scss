@@ -1,0 +1,20 @@
+@use 'common/var' as *;
+
+.s-tree { width: 100%; padding: 6px; border: 1px solid getColor(border, .7); border-radius: 12px; background: getColor(background); color: getColor(text); box-sizing: border-box; }
+.s-tree__node { display: flex; align-items: center; min-height: 32px; border-radius: 7px; transition: background .16s ease, color .16s ease; cursor: pointer; }
+.s-tree__node:hover { background: getColor(primary, .06); }
+.s-tree__node.is-current { background: getColor(primary, .11); color: getColor(primary); }
+.s-tree__node.is-disabled { cursor: not-allowed; opacity: .55; }
+.s-tree__expand, .s-tree__expand-placeholder { display: grid; flex: 0 0 24px; width: 24px; height: 24px; place-items: center; border: 0; background: transparent; color: inherit; }
+.s-tree__expand { cursor: pointer; }
+.s-tree__expand:disabled { cursor: not-allowed; }
+.s-tree__expand .s-icon { transition: transform .18s ease; }
+.s-tree__expand.is-expanded .s-icon { transform: rotate(90deg); }
+.s-tree__checkbox { display: grid; flex: 0 0 16px; width: 16px; height: 16px; margin-right: 7px; padding: 0; place-items: center; border: 1px solid getColor(border); border-radius: 4px; background: getColor(white); color: getColor(white); cursor: pointer; }
+.s-tree__checkbox.is-checked { border-color: getColor(primary); background: getColor(primary); }
+.s-tree__checkbox.is-indeterminate { border-color: getColor(primary); background: getColor(primary); }
+.s-tree__checkbox.is-indeterminate span { display: block; width: 8px; height: 2px; border-radius: 99px; background: getColor(white); }
+.s-tree__checkbox:disabled { cursor: not-allowed; }
+.s-tree__checkbox .s-icon { font-size: 13px; }
+.s-tree__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; line-height: 32px; }
+.s-tree__empty { padding: 22px 12px; color: getColor(text, secondary); font-size: 13px; text-align: center; }
