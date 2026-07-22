@@ -1,0 +1,6 @@
+@use 'common/var' as *;
+
+.s-text-ellipsis { display: block; color: getColor(text); }
+.s-text-ellipsis__content { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; line-height: 1.55; }
+.s-text-ellipsis__toggle { margin: 5px 0 0; padding: 0; border: 0; background: transparent; color: getColor(primary); font-size: 13px; cursor: pointer; }
+.s-text-ellipsis__toggle:hover { color: getColor(primary, .8); text-decoration: underline; }

@@ -44,6 +44,7 @@ import {
 } from '@vuesax-alpha/components/navbar'
 import { SNoticeBar } from '@vuesax-alpha/components/notice-bar'
 import { SPagination } from '@vuesax-alpha/components/pagination'
+import { SPasswordInput } from '@vuesax-alpha/components/password-input'
 import { SPopconfirm } from '@vuesax-alpha/components/popconfirm'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SProgress } from '@vuesax-alpha/components/progress'
@@ -69,6 +70,7 @@ import { STable, STd, STh, STr } from '@vuesax-alpha/components/table'
 import { STab, STabs } from '@vuesax-alpha/components/tabs'
 import { STag } from '@vuesax-alpha/components/tag'
 import { SText } from '@vuesax-alpha/components/text'
+import { STextEllipsis } from '@vuesax-alpha/components/text-ellipsis'
 import { STextarea } from '@vuesax-alpha/components/textarea'
 import { STree } from '@vuesax-alpha/components/tree'
 import { STimePicker } from '@vuesax-alpha/components/time-picker'
@@ -133,6 +135,7 @@ export default [
   SNavbarItem,
   SNoticeBar,
   SPagination,
+  SPasswordInput,
   SPopconfirm,
   SPopper,
   SProgress,
@@ -160,6 +163,7 @@ export default [
   STabs,
   STag,
   SText,
+  STextEllipsis,
   STextarea,
   STree,
   STimePicker,
