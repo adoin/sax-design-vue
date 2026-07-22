@@ -3,6 +3,7 @@ import type { SidebarItem } from '~/shared/client/nav'
 /** Migrated vuesax components — merged into Components menu with isNew badge. */
 export const newComponentNavItems: SidebarItem[] = [
   { text: 'Backtop', link: '/components/backtop', isNew: true },
+  { text: 'Anchor', link: '/components/anchor', isNew: true },
   { text: 'Spacer', link: '/components/spacer', isNew: true },
   { text: 'Divider', link: '/components/divider', isNew: true },
   { text: 'Drawer', link: '/components/drawer', isNew: true },

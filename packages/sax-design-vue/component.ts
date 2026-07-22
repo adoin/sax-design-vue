@@ -1,4 +1,5 @@
 import { SAlert } from '@vuesax-alpha/components/alert'
+import { SAnchor } from '@vuesax-alpha/components/anchor'
 import { SAvatar, SAvatarGroup } from '@vuesax-alpha/components/avatar'
 import { SBacktop } from '@vuesax-alpha/components/backtop'
 import { SBadge } from '@vuesax-alpha/components/badge'
@@ -84,6 +85,7 @@ import type { Plugin } from 'vue'
 
 export default [
   SAlert,
+  SAnchor,
   SAvatar,
   SAvatarGroup,
   SBacktop,

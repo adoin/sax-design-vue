@@ -5,6 +5,7 @@ const zh = (path: string) => `/zh${path}`
 /** 迁移自 Vuesax 的新组件 — 在侧栏显示 isNew 徽章 */
 export const newComponentNavItemsZh: SidebarItem[] = [
   { text: '回到顶部', link: zh('/components/backtop'), isNew: true },
+  { text: '锚点', link: zh('/components/anchor'), isNew: true },
   { text: 'Spacer', link: zh('/components/spacer'), isNew: true },
   { text: 'Divider', link: zh('/components/divider'), isNew: true },
   { text: '抽屉', link: zh('/components/drawer'), isNew: true },

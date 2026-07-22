@@ -1,0 +1,11 @@
+@use 'common/var' as *;
+
+.s-anchor { display: inline-flex; flex-direction: column; gap: 4px; padding: 6px; border: 1px solid getColor(border, .7); border-radius: 10px; background: getColor(background); }
+.s-anchor__item { position: relative; min-width: 92px; padding: 7px 10px 7px 13px; border: 0; border-radius: 7px; background: transparent; color: getColor(text, secondary); font-size: 13px; text-align: left; cursor: pointer; transition: background .16s ease, color .16s ease; }
+.s-anchor__item:hover { background: getColor(primary, .07); color: getColor(primary); }
+.s-anchor__item.is-active { background: getColor(primary, .1); color: getColor(primary); font-weight: 600; }
+.s-anchor__item.is-active::before { position: absolute; top: 8px; bottom: 8px; left: 4px; width: 3px; border-radius: 99px; background: getColor(primary); content: ''; }
+.s-anchor__item.is-disabled { cursor: not-allowed; opacity: .5; }
+.s-anchor--horizontal { flex-direction: row; }
+.s-anchor--horizontal .s-anchor__item { min-width: 0; text-align: center; }
+.s-anchor--horizontal .s-anchor__item.is-active::before { top: auto; right: 11px; bottom: 3px; left: 11px; width: auto; height: 3px; }

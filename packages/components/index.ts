@@ -1,4 +1,5 @@
 export * from './alert'
+export * from './anchor'
 export * from './avatar'
 export * from './backtop'
 export * from './badge'
