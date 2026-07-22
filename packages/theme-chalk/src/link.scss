@@ -1,0 +1,22 @@
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+
+@include b(link) {
+  display: inline-flex;
+  align-items: center;
+  color: getColor(primary);
+  cursor: pointer;
+  font-size: inherit;
+  text-decoration: none;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease, opacity 0.2s ease;
+
+  &:hover { color: getColor(primary, 0.78); }
+  @include when(underline) { &:hover { text-decoration: underline; } }
+  @include when(disabled) { cursor: not-allowed; opacity: 0.5; }
+
+  @each $type in (success, warning, danger, info) {
+    @include m($type) { color: getColor($type); &:hover { color: getColor($type, 0.78); } }
+  }
+}

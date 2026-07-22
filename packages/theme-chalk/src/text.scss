@@ -1,0 +1,27 @@
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+
+@include b(text) {
+  color: getColor(text);
+  line-height: 1.6;
+
+  @each $type in (primary, success, warning, danger, info) {
+    @include m($type) { color: getColor($type); }
+  }
+
+  @include when(ellipsis) {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+    white-space: nowrap;
+  }
+
+  @include when(clamp) {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+  }
+}

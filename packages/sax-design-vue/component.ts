@@ -21,6 +21,7 @@ import { SIcon } from '@vuesax-alpha/components/icon'
 import { SImage, SImages } from '@vuesax-alpha/components/images'
 import { SInput } from '@vuesax-alpha/components/input'
 import { SInputNumber } from '@vuesax-alpha/components/input-number'
+import { SLink } from '@vuesax-alpha/components/link'
 import { SList, SListHeader, SListItem } from '@vuesax-alpha/components/list'
 import {
   SNavbar,
@@ -48,6 +49,7 @@ import { SSwitch } from '@vuesax-alpha/components/switch'
 import { STable, STd, STh, STr } from '@vuesax-alpha/components/table'
 import { STab, STabs } from '@vuesax-alpha/components/tabs'
 import { STag } from '@vuesax-alpha/components/tag'
+import { SText } from '@vuesax-alpha/components/text'
 import { STextarea } from '@vuesax-alpha/components/textarea'
 import { STimePicker } from '@vuesax-alpha/components/time-picker'
 import { STimeSelect } from '@vuesax-alpha/components/time-select'
@@ -86,6 +88,7 @@ export default [
   SImages,
   SInput,
   SInputNumber,
+  SLink,
   SList,
   SListHeader,
   SListItem,
@@ -117,6 +120,7 @@ export default [
   STab,
   STabs,
   STag,
+  SText,
   STextarea,
   STimePicker,
   STimeSelect,
