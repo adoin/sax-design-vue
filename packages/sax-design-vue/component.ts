@@ -8,6 +8,7 @@ import {
 } from '@vuesax-alpha/components/breadcrumb'
 import { SButton, SButtonGroup } from '@vuesax-alpha/components/button'
 import { SCard, SCardGroup } from '@vuesax-alpha/components/card'
+import { SCarousel } from '@vuesax-alpha/components/carousel'
 import { SCheckbox, SCheckboxGroup } from '@vuesax-alpha/components/checkbox'
 import { SChip, SChips } from '@vuesax-alpha/components/chip'
 import { SCol } from '@vuesax-alpha/components/col'
@@ -85,6 +86,7 @@ export default [
   SButtonGroup,
   SCard,
   SCardGroup,
+  SCarousel,
   SCheckbox,
   SCheckboxGroup,
   SChip,

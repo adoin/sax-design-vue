@@ -1,0 +1,22 @@
+@use 'common/var' as *;
+
+.s-carousel { position: relative; width: 100%; }
+.s-carousel__viewport { position: relative; height: 100%; overflow: hidden; border-radius: 12px; background: getColor(fill, light); box-shadow: 0 10px 28px rgba(38, 46, 89, .08); }
+.s-carousel__track { display: flex; height: 100%; transition: transform .42s cubic-bezier(.22, .61, .36, 1); }
+.s-carousel__item { position: relative; flex: 0 0 100%; width: 100%; height: 100%; overflow: hidden; }
+.s-carousel__image { display: block; width: 100%; height: 100%; object-fit: cover; }
+.s-carousel__caption { position: absolute; right: 0; bottom: 0; left: 0; display: flex; flex-direction: column; gap: 4px; padding: 28px 24px 20px; background: linear-gradient(transparent, rgba(19, 24, 46, .72)); color: getColor(white); font-size: 13px; }
+.s-carousel__caption strong { font-size: 16px; }
+.s-carousel__arrow { position: absolute; top: 50%; z-index: 2; display: grid; width: 34px; height: 34px; place-items: center; border: 0; border-radius: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, .88); color: getColor(primary); box-shadow: 0 4px 12px rgba(21, 29, 72, .16); cursor: pointer; transition: opacity .2s ease, transform .2s ease, background .2s ease; }
+.s-carousel__arrow:hover { transform: translateY(-50%) scale(1.06); background: getColor(white); }
+.s-carousel__arrow-prev { left: 12px; }
+.s-carousel__arrow-next { right: 12px; }
+.s-carousel--arrow-hover .s-carousel__arrow { opacity: 0; pointer-events: none; }
+.s-carousel--arrow-hover:hover .s-carousel__arrow { opacity: 1; pointer-events: auto; }
+.s-carousel__indicators { position: absolute; right: 0; bottom: 12px; left: 0; z-index: 2; display: flex; justify-content: center; gap: 7px; }
+.s-carousel__indicator { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 99px; background: rgba(255, 255, 255, .56); cursor: pointer; transition: width .2s ease, background .2s ease; }
+.s-carousel__indicator.is-active { width: 22px; background: getColor(white); }
+.s-carousel--indicator-outside { padding-bottom: 22px; }
+.s-carousel--indicator-outside .s-carousel__indicators { bottom: 3px; }
+.s-carousel--indicator-outside .s-carousel__indicator { background: getColor(border); }
+.s-carousel--indicator-outside .s-carousel__indicator.is-active { background: getColor(primary); }

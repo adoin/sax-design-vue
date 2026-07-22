@@ -11,6 +11,7 @@ export const newComponentNavItemsZh: SidebarItem[] = [
   { text: '空状态', link: zh('/components/empty'), isNew: true },
   { text: 'Progress', link: zh('/components/progress'), isNew: true },
   { text: 'Chip', link: zh('/components/chip'), isNew: true },
+  { text: '轮播图', link: zh('/components/carousel'), isNew: true },
   { text: 'Breadcrumb', link: zh('/components/breadcrumb'), isNew: true },
   { text: 'Textarea', link: zh('/components/textarea'), isNew: true },
   { text: 'Collapse', link: zh('/components/collapse'), isNew: true },
