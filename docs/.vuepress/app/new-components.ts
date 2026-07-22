@@ -33,6 +33,7 @@ export const newComponentNavItems: SidebarItem[] = [
   { text: 'Text', link: '/components/text', isNew: true },
   { text: 'Text ellipsis', link: '/components/text-ellipsis', isNew: true },
   { text: 'Tree', link: '/components/tree', isNew: true },
+  { text: 'Tree select', link: '/components/tree-select', isNew: true },
   { text: 'Slider', link: '/components/slider', isNew: true },
   { text: 'Splitter', link: '/components/splitter', isNew: true },
   { text: 'Steps', link: '/components/steps', isNew: true },

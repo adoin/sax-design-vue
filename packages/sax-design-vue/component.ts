@@ -74,6 +74,7 @@ import { SText } from '@vuesax-alpha/components/text'
 import { STextEllipsis } from '@vuesax-alpha/components/text-ellipsis'
 import { STextarea } from '@vuesax-alpha/components/textarea'
 import { STree } from '@vuesax-alpha/components/tree'
+import { STreeSelect } from '@vuesax-alpha/components/tree-select'
 import { STimePicker } from '@vuesax-alpha/components/time-picker'
 import { STimeSelect } from '@vuesax-alpha/components/time-select'
 import { STooltip } from '@vuesax-alpha/components/tooltip'
@@ -168,6 +169,7 @@ export default [
   STextEllipsis,
   STextarea,
   STree,
+  STreeSelect,
   STimePicker,
   STimeSelect,
   STooltip,

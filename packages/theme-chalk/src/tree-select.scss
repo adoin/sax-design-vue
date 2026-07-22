@@ -1,0 +1,15 @@
+@use 'common/var' as *;
+
+.s-tree-select { position: relative; display: inline-flex; min-width: 190px; }
+.s-tree-select__trigger { display: inline-flex; width: 100%; min-height: 34px; align-items: center; gap: 6px; padding: 0 9px 0 11px; border: 1px solid transparent; border-radius: 9px; background: getColor(fill, light); color: getColor(text); cursor: pointer; transition: border-color .18s ease, box-shadow .18s ease; }
+.s-tree-select__trigger:hover, .s-tree-select__trigger.is-open { border-color: getColor(primary, .48); box-shadow: 0 0 0 3px getColor(primary, .1); }
+.s-tree-select__value { flex: 1; overflow: hidden; font-size: 13px; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
+.s-tree-select__value.is-placeholder { color: getColor(text, secondary); }
+.s-tree-select__trigger > .s-icon { color: getColor(text, secondary); font-size: 18px; transition: transform .18s ease; }
+.s-tree-select__trigger.is-open > .s-icon { transform: rotate(180deg); }
+.s-tree-select__clear { display: grid; width: 18px; height: 18px; padding: 0; place-items: center; border: 0; border-radius: 50%; background: transparent; color: getColor(text, secondary); cursor: pointer; }
+.s-tree-select__clear:hover { background: getColor(primary, .1); color: getColor(primary); }
+.s-tree-select__clear .s-icon { font-size: 15px; }
+.s-tree-select__panel { position: absolute; top: calc(100% + 8px); left: 0; z-index: 20; width: 260px; max-height: 310px; overflow: auto; border: 1px solid getColor(border, .7); border-radius: 12px; background: getColor(background); box-shadow: 0 14px 34px rgba(28, 37, 78, .16); }
+.s-tree-select__panel .s-tree { border: 0; border-radius: 0; }
+.s-tree-select.is-disabled { opacity: .55; }
