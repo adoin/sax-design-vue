@@ -18,6 +18,7 @@ export const newComponentNavItemsZh: SidebarItem[] = [
   { text: '级联选择器', link: zh('/components/cascader'), isNew: true },
   { text: 'Breadcrumb', link: zh('/components/breadcrumb'), isNew: true },
   { text: '颜色选择器', link: zh('/components/color-picker'), isNew: true },
+  { text: '右键菜单', link: zh('/components/context-menu'), isNew: true },
   { text: 'Textarea', link: zh('/components/textarea'), isNew: true },
   { text: 'Collapse', link: zh('/components/collapse'), isNew: true },
   { text: '倒计时', link: zh('/components/countdown'), isNew: true },

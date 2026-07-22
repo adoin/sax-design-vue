@@ -16,6 +16,7 @@ export const newComponentNavItems: SidebarItem[] = [
   { text: 'Cascader', link: '/components/cascader', isNew: true },
   { text: 'Breadcrumb', link: '/components/breadcrumb', isNew: true },
   { text: 'Color picker', link: '/components/color-picker', isNew: true },
+  { text: 'Context menu', link: '/components/context-menu', isNew: true },
   { text: 'Textarea', link: '/components/textarea', isNew: true },
   { text: 'Collapse', link: '/components/collapse', isNew: true },
   { text: 'Countdown', link: '/components/countdown', isNew: true },
