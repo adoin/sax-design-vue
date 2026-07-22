@@ -1,0 +1,21 @@
+@use 'common/var' as *;
+
+.s-cascader { position: relative; display: inline-flex; min-width: 190px; }
+.s-cascader__trigger { display: inline-flex; width: 100%; min-height: 34px; align-items: center; gap: 6px; padding: 0 9px 0 11px; border: 1px solid transparent; border-radius: 9px; background: getColor(fill, light); color: getColor(text); cursor: pointer; transition: border-color .18s ease, box-shadow .18s ease; }
+.s-cascader__trigger:hover, .s-cascader__trigger.is-open { border-color: getColor(primary, .48); box-shadow: 0 0 0 3px getColor(primary, .1); }
+.s-cascader__value { flex: 1; overflow: hidden; font-size: 13px; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
+.s-cascader__value.is-placeholder { color: getColor(text, secondary); }
+.s-cascader__trigger > .s-icon { color: getColor(text, secondary); font-size: 18px; transition: transform .18s ease; }
+.s-cascader__trigger.is-open > .s-icon { transform: rotate(180deg); }
+.s-cascader__clear { display: grid; width: 18px; height: 18px; padding: 0; place-items: center; border: 0; border-radius: 50%; background: transparent; color: getColor(text, secondary); cursor: pointer; }
+.s-cascader__clear:hover { background: getColor(primary, .1); color: getColor(primary); }
+.s-cascader__clear .s-icon { font-size: 15px; }
+.s-cascader__panel { position: absolute; top: calc(100% + 8px); left: 0; z-index: 20; display: flex; max-width: min(640px, 90vw); overflow: auto; border: 1px solid getColor(border, .7); border-radius: 12px; background: getColor(background); box-shadow: 0 14px 34px rgba(28, 37, 78, .16); }
+.s-cascader__menu { min-width: 150px; max-height: 252px; margin: 0; padding: 6px; overflow: auto; border-right: 1px solid getColor(border, .7); list-style: none; }
+.s-cascader__menu:last-child { border-right: 0; }
+.s-cascader__option { display: flex; min-height: 32px; align-items: center; justify-content: space-between; gap: 8px; padding: 0 8px; border-radius: 7px; color: getColor(text); font-size: 13px; cursor: pointer; transition: background .14s ease, color .14s ease; }
+.s-cascader__option:hover, .s-cascader__option.is-active { background: getColor(primary, .08); color: getColor(primary); }
+.s-cascader__option.is-selected { color: getColor(primary); font-weight: 600; }
+.s-cascader__option.is-disabled { cursor: not-allowed; opacity: .5; }
+.s-cascader__option .s-icon { color: getColor(text, secondary); font-size: 17px; }
+.s-cascader.is-disabled { opacity: .55; }
