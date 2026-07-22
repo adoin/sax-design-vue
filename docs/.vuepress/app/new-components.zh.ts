@@ -20,6 +20,7 @@ export const newComponentNavItemsZh: SidebarItem[] = [
   { text: '链接', link: zh('/components/link'), isNew: true },
   { text: '布局', link: zh('/components/layout'), isNew: true },
   { text: '公告栏', link: zh('/components/notice-bar'), isNew: true },
+  { text: '分段控制', link: zh('/components/segmented'), isNew: true },
   { text: 'Prompt', link: zh('/components/prompt'), isNew: true },
   { text: '结果', link: zh('/components/result'), isNew: true },
   { text: 'Tabs', link: zh('/components/tabs'), isNew: true },
