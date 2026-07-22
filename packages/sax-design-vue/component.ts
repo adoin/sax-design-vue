@@ -22,6 +22,13 @@ import { SImage, SImages } from '@vuesax-alpha/components/images'
 import { SInput } from '@vuesax-alpha/components/input'
 import { SInputNumber } from '@vuesax-alpha/components/input-number'
 import { SLink } from '@vuesax-alpha/components/link'
+import {
+  SLayoutAside,
+  SLayoutBody,
+  SLayoutContainer,
+  SLayoutFooter,
+  SLayoutHeader,
+} from '@vuesax-alpha/components/layout'
 import { SList, SListHeader, SListItem } from '@vuesax-alpha/components/list'
 import {
   SNavbar,
@@ -91,6 +98,11 @@ export default [
   SInput,
   SInputNumber,
   SLink,
+  SLayoutContainer,
+  SLayoutHeader,
+  SLayoutAside,
+  SLayoutBody,
+  SLayoutFooter,
   SList,
   SListHeader,
   SListItem,

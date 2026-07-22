@@ -1,0 +1,10 @@
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+.s-layout-container { display: flex; min-width: 0; min-height: 0; border: 1px solid getColor(border, .7); border-radius: 14px; background: getColor(background); overflow: hidden; }
+.s-layout-container--vertical { flex-direction: column; }
+.s-layout-header, .s-layout-footer { flex: 0 0 auto; min-height: 48px; padding: 0 20px; display: flex; align-items: center; border-color: getColor(border, .7); }
+.s-layout-header { border-bottom: 1px solid getColor(border, .7); }
+.s-layout-footer { border-top: 1px solid getColor(border, .7); }
+.s-layout-aside { flex: 0 0 auto; min-width: 160px; padding: 16px; border-right: 1px solid getColor(border, .7); background: getColor(gray, 0.04); }
+.s-layout-body { flex: 1; min-width: 0; padding: 20px; }
