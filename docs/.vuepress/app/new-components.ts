@@ -14,6 +14,7 @@ export const newComponentNavItems: SidebarItem[] = [
   { text: 'List', link: '/components/list', isNew: true },
   { text: 'Images', link: '/components/images', isNew: true },
   { text: 'Link', link: '/components/link', isNew: true },
+  { text: 'Notice bar', link: '/components/notice-bar', isNew: true },
   { text: 'Prompt', link: '/components/prompt', isNew: true },
   { text: 'Result', link: '/components/result', isNew: true },
   { text: 'Tabs', link: '/components/tabs', isNew: true },
