@@ -22,6 +22,7 @@ import { SCollapse, SCollapseItem } from '@vuesax-alpha/components/collapse'
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import { SCountdown } from '@vuesax-alpha/components/countdown'
 import { SDatePanel, SDatePicker } from '@vuesax-alpha/components/date-picker'
+import { SDateRangePicker } from '@vuesax-alpha/components/date-range-picker'
 import { SDialog } from '@vuesax-alpha/components/dialog'
 import { SDrawer } from '@vuesax-alpha/components/drawer'
 import { SDivider } from '@vuesax-alpha/components/divider'
@@ -55,6 +56,7 @@ import { SPopconfirm } from '@vuesax-alpha/components/popconfirm'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SProgress } from '@vuesax-alpha/components/progress'
 import { SPrint } from '@vuesax-alpha/components/print'
+import { SPrintPageBreak } from '@vuesax-alpha/components/print-page-break'
 import { SPulldown } from '@vuesax-alpha/components/pulldown'
 import { SPrompt } from '@vuesax-alpha/components/prompt'
 import { SRadio, SRadioGroup } from '@vuesax-alpha/components/radio'
@@ -122,6 +124,7 @@ export default [
   SCountdown,
   SDatePicker,
   SDatePanel,
+  SDateRangePicker,
   SDialog,
   SDrawer,
   SDivider,
@@ -158,6 +161,7 @@ export default [
   SPopper,
   SProgress,
   SPrint,
+  SPrintPageBreak,
   SPulldown,
   SPrompt,
   SRadio,

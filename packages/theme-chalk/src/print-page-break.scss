@@ -1,0 +1,2 @@
+.s-print-page-break { display: none; }
+@media print { .s-print-page-break { display: block; break-after: page; page-break-after: always; } }
