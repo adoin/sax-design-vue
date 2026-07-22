@@ -28,6 +28,7 @@ export const newComponentNavItemsZh: SidebarItem[] = [
   { text: '标签', link: zh('/components/tag'), isNew: true },
   { text: '文本', link: zh('/components/text'), isNew: true },
   { text: 'Slider', link: zh('/components/slider'), isNew: true },
+  { text: '分割面板', link: zh('/components/splitter'), isNew: true },
   { text: '步骤条', link: zh('/components/steps'), isNew: true },
   { text: 'Upload', link: zh('/components/upload'), isNew: true },
   { text: '虚拟列表', link: zh('/components/virtual-list'), isNew: true },

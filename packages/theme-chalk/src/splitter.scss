@@ -1,0 +1,13 @@
+@use 'common/var' as *;
+
+.s-splitter { display: flex; width: 100%; min-width: 0; min-height: 180px; overflow: hidden; border: 1px solid getColor(border, .7); border-radius: 14px; background: getColor(background); }
+.s-splitter__panel { min-width: 0; min-height: 0; overflow: auto; }
+.s-splitter__handle { position: relative; z-index: 1; flex: 0 0 10px; width: 10px; padding: 0; border: 0; border-right: 1px solid getColor(border, .7); border-left: 1px solid getColor(border, .7); background: getColor(fill, light); color: getColor(text, secondary); cursor: col-resize; transition: background .2s ease, box-shadow .2s ease; touch-action: none; }
+.s-splitter__handle:hover, .s-splitter.is-dragging .s-splitter__handle { background: getColor(primary, .08); box-shadow: 0 0 0 1px getColor(primary, .25); }
+.s-splitter__handle:disabled { cursor: not-allowed; opacity: .55; }
+.s-splitter__grip { position: absolute; top: 50%; left: 50%; display: flex; flex-direction: column; gap: 3px; transform: translate(-50%, -50%); }
+.s-splitter__grip i { display: block; width: 3px; height: 3px; border-radius: 99px; background: currentColor; }
+.s-splitter--vertical { flex-direction: column; }
+.s-splitter--vertical .s-splitter__handle { flex-basis: 10px; width: auto; height: 10px; border-top: 1px solid getColor(border, .7); border-right: 0; border-bottom: 1px solid getColor(border, .7); border-left: 0; cursor: row-resize; }
+.s-splitter--vertical .s-splitter__grip { flex-direction: row; }
+.s-splitter.is-dragging { user-select: none; }
