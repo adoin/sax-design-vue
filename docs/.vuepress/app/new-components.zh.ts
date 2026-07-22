@@ -24,6 +24,7 @@ export const newComponentNavItemsZh: SidebarItem[] = [
   { text: '倒计时', link: zh('/components/countdown'), isNew: true },
   { text: 'List', link: zh('/components/list'), isNew: true },
   { text: 'Images', link: zh('/components/images'), isNew: true },
+  { text: '图片预览', link: zh('/components/image-preview'), isNew: true },
   { text: '链接', link: zh('/components/link'), isNew: true },
   { text: '布局', link: zh('/components/layout'), isNew: true },
   { text: '公告栏', link: zh('/components/notice-bar'), isNew: true },

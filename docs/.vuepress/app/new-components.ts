@@ -22,6 +22,7 @@ export const newComponentNavItems: SidebarItem[] = [
   { text: 'Countdown', link: '/components/countdown', isNew: true },
   { text: 'List', link: '/components/list', isNew: true },
   { text: 'Images', link: '/components/images', isNew: true },
+  { text: 'Image preview', link: '/components/image-preview', isNew: true },
   { text: 'Link', link: '/components/link', isNew: true },
   { text: 'Layout', link: '/components/layout', isNew: true },
   { text: 'Notice bar', link: '/components/notice-bar', isNew: true },
