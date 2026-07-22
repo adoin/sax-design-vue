@@ -28,6 +28,7 @@ import {
   SNavbarGroup,
   SNavbarItem,
 } from '@vuesax-alpha/components/navbar'
+import { SNoticeBar } from '@vuesax-alpha/components/notice-bar'
 import { SPagination } from '@vuesax-alpha/components/pagination'
 import { SPopconfirm } from '@vuesax-alpha/components/popconfirm'
 import { SPopper } from '@vuesax-alpha/components/popper'
@@ -98,6 +99,7 @@ export default [
   SNavbar,
   SNavbarGroup,
   SNavbarItem,
+  SNoticeBar,
   SPagination,
   SPopconfirm,
   SPopper,

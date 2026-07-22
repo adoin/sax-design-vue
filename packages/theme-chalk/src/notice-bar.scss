@@ -1,0 +1,14 @@
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+@include b(notice-bar) {
+  display: flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid getColor(info, .18); border-radius: 10px; background: getColor(info, .09); color: getColor(info); font-size: 13px;
+  @include e(viewport) { flex: 1; overflow: hidden; white-space: nowrap; }
+  @include e(content) { display: inline-block; padding: 8px 0; }
+  @include e(close) { margin-left: 10px; border: 0; background: transparent; color: currentColor; cursor: pointer; font-size: 18px; line-height: 1; }
+  @each $type in (success, warning, danger) { @include m($type) { border-color: getColor($type, .18); background: getColor($type, .09); color: getColor($type); } }
+}
+.s-notice-bar__content.is-scrollable { min-width: 100%; animation: s-notice-bar-scroll linear infinite; }
+@keyframes s-notice-bar-scroll { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+.s-notice-bar-fade-enter-active, .s-notice-bar-fade-leave-active { transition: opacity .2s ease; }
+.s-notice-bar-fade-enter-from, .s-notice-bar-fade-leave-to { opacity: 0; }
