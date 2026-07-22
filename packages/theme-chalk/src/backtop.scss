@@ -1,0 +1,47 @@
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+
+@include b(backtop) {
+  position: fixed;
+  z-index: 20;
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid getColor(primary, 0.16);
+  border-radius: 14px;
+  background: getColor(background);
+  box-shadow: 0 10px 28px getColor(primary, 0.16);
+  color: getColor(primary);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    background: getColor(primary);
+    box-shadow: 0 14px 30px getColor(primary, 0.28);
+    color: getColor(white);
+  }
+
+  &:focus-visible {
+    outline: 2px solid getColor(primary, 0.35);
+    outline-offset: 3px;
+  }
+
+  @include e(icon) {
+    transform: rotate(180deg);
+  }
+}
+
+.s-backtop-fade-enter-active,
+.s-backtop-fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.s-backtop-fade-enter-from,
+.s-backtop-fade-leave-to {
+  opacity: 0;
+  transform: translateY(8px) scale(0.9);
+}

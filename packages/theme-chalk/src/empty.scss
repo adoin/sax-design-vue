@@ -1,0 +1,64 @@
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+
+@include b(empty) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  padding: 24px;
+  color: getColor(text, 0.55);
+  text-align: center;
+
+  @include e(image) {
+    display: grid;
+    width: 96px;
+    height: 72px;
+    place-items: center;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  @include e(illustration) {
+    position: relative;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    width: 72px;
+    height: 52px;
+    gap: 6px;
+    border: 1px solid getColor(primary, 0.16);
+    border-radius: 18px 18px 12px 12px;
+    background: linear-gradient(145deg, getColor(primary, 0.1), getColor(primary, 0.03));
+    box-shadow: 0 12px 24px getColor(primary, 0.08);
+
+    i {
+      display: block;
+      width: 6px;
+      border-radius: 99px;
+      background: getColor(primary, 0.5);
+    }
+
+    i:nth-child(1) { height: 14px; }
+    i:nth-child(2) { height: 24px; background: getColor(primary, 0.75); }
+    i:nth-child(3) { height: 10px; }
+  }
+
+  @include e(description) {
+    margin: 12px 0 0;
+    color: getColor(text, 0.55);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  @include e(bottom) {
+    margin-top: 16px;
+  }
+}

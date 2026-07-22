@@ -1,5 +1,6 @@
 import { SAlert } from '@vuesax-alpha/components/alert'
 import { SAvatar, SAvatarGroup } from '@vuesax-alpha/components/avatar'
+import { SBacktop } from '@vuesax-alpha/components/backtop'
 import { SBadge } from '@vuesax-alpha/components/badge'
 import {
   SBreadcrumb,
@@ -15,6 +16,7 @@ import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transitio
 import { SDatePicker } from '@vuesax-alpha/components/date-picker'
 import { SDialog } from '@vuesax-alpha/components/dialog'
 import { SDivider } from '@vuesax-alpha/components/divider'
+import { SEmpty } from '@vuesax-alpha/components/empty'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SImage, SImages } from '@vuesax-alpha/components/images'
 import { SInput } from '@vuesax-alpha/components/input'
@@ -45,6 +47,7 @@ import { SSpacer } from '@vuesax-alpha/components/spacer'
 import { SSwitch } from '@vuesax-alpha/components/switch'
 import { STable, STd, STh, STr } from '@vuesax-alpha/components/table'
 import { STab, STabs } from '@vuesax-alpha/components/tabs'
+import { STag } from '@vuesax-alpha/components/tag'
 import { STextarea } from '@vuesax-alpha/components/textarea'
 import { STimePicker } from '@vuesax-alpha/components/time-picker'
 import { STimeSelect } from '@vuesax-alpha/components/time-select'
@@ -58,6 +61,7 @@ export default [
   SAlert,
   SAvatar,
   SAvatarGroup,
+  SBacktop,
   SBadge,
   SBreadcrumb,
   SBreadcrumbItem,
@@ -76,6 +80,7 @@ export default [
   SDatePicker,
   SDialog,
   SDivider,
+  SEmpty,
   SIcon,
   SImage,
   SImages,
@@ -111,6 +116,7 @@ export default [
   STr,
   STab,
   STabs,
+  STag,
   STextarea,
   STimePicker,
   STimeSelect,
