@@ -5,6 +5,7 @@ export const newComponentNavItems: SidebarItem[] = [
   { text: 'Backtop', link: '/components/backtop', isNew: true },
   { text: 'Spacer', link: '/components/spacer', isNew: true },
   { text: 'Divider', link: '/components/divider', isNew: true },
+  { text: 'Drawer', link: '/components/drawer', isNew: true },
   { text: 'Empty', link: '/components/empty', isNew: true },
   { text: 'Progress', link: '/components/progress', isNew: true },
   { text: 'Chip', link: '/components/chip', isNew: true },

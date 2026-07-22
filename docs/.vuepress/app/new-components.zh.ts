@@ -7,6 +7,7 @@ export const newComponentNavItemsZh: SidebarItem[] = [
   { text: '回到顶部', link: zh('/components/backtop'), isNew: true },
   { text: 'Spacer', link: zh('/components/spacer'), isNew: true },
   { text: 'Divider', link: zh('/components/divider'), isNew: true },
+  { text: '抽屉', link: zh('/components/drawer'), isNew: true },
   { text: '空状态', link: zh('/components/empty'), isNew: true },
   { text: 'Progress', link: zh('/components/progress'), isNew: true },
   { text: 'Chip', link: zh('/components/chip'), isNew: true },
