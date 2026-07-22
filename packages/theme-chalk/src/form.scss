@@ -1,0 +1,11 @@
+@use 'common/var' as *;
+
+.s-form { width: 100%; }
+.s-form.is-inline { display: flex; flex-wrap: wrap; gap: 0 18px; }
+.s-form-item { display: flex; align-items: flex-start; margin-bottom: 18px; }
+.s-form.is-inline .s-form-item { flex: 0 0 auto; }
+.s-form-item__label { flex: 0 0 auto; padding: 7px 12px 0 0; color: getColor(text); font-size: 14px; line-height: 20px; text-align: right; box-sizing: border-box; }
+.s-form-item.is-required .s-form-item__label::before { margin-right: 4px; color: getColor(danger); content: '*'; }
+.s-form-item__content { position: relative; flex: 1; min-width: 0; }
+.s-form-item__error { margin-top: 5px; color: getColor(danger); font-size: 12px; line-height: 1.35; }
+.s-form-item.is-error .s-input__wrapper, .s-form-item.is-error .s-textarea__inner { box-shadow: 0 0 0 1px getColor(danger) inset; }

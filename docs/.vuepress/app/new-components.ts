@@ -7,6 +7,7 @@ export const newComponentNavItems: SidebarItem[] = [
   { text: 'Divider', link: '/components/divider', isNew: true },
   { text: 'Drawer', link: '/components/drawer', isNew: true },
   { text: 'Empty', link: '/components/empty', isNew: true },
+  { text: 'Form', link: '/components/form', isNew: true },
   { text: 'Progress', link: '/components/progress', isNew: true },
   { text: 'Chip', link: '/components/chip', isNew: true },
   { text: 'Carousel', link: '/components/carousel', isNew: true },

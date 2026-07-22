@@ -20,6 +20,7 @@ import { SDialog } from '@vuesax-alpha/components/dialog'
 import { SDrawer } from '@vuesax-alpha/components/drawer'
 import { SDivider } from '@vuesax-alpha/components/divider'
 import { SEmpty } from '@vuesax-alpha/components/empty'
+import { SForm, SFormItem } from '@vuesax-alpha/components/form'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SImage, SImages } from '@vuesax-alpha/components/images'
 import { SInput } from '@vuesax-alpha/components/input'
@@ -103,6 +104,8 @@ export default [
   SDrawer,
   SDivider,
   SEmpty,
+  SForm,
+  SFormItem,
   SIcon,
   SImage,
   SImages,
