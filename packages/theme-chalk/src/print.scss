@@ -1,0 +1,3 @@
+.s-print { width: 100%; }
+.s-print__document { max-width: 100%; }
+@media print { .s-print { break-inside: avoid; } }

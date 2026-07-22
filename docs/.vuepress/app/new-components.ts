@@ -11,6 +11,7 @@ export const newComponentNavItems: SidebarItem[] = [
   { text: 'Form', link: '/components/form', isNew: true },
   { text: 'Form group', link: '/components/form-group', isNew: true },
   { text: 'Progress', link: '/components/progress', isNew: true },
+  { text: 'Print', link: '/components/print', isNew: true },
   { text: 'Chip', link: '/components/chip', isNew: true },
   { text: 'Calendar', link: '/components/calendar', isNew: true },
   { text: 'Carousel', link: '/components/carousel', isNew: true },
