@@ -12,6 +12,7 @@ import { SCarousel } from '@vuesax-alpha/components/carousel'
 import { SCheckbox, SCheckboxGroup } from '@vuesax-alpha/components/checkbox'
 import { SChip, SChips } from '@vuesax-alpha/components/chip'
 import { SCol } from '@vuesax-alpha/components/col'
+import { SColorPicker } from '@vuesax-alpha/components/color-picker'
 import { SCollapse, SCollapseItem } from '@vuesax-alpha/components/collapse'
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import { SCountdown } from '@vuesax-alpha/components/countdown'
@@ -95,6 +96,7 @@ export default [
   SChip,
   SChips,
   SCol,
+  SColorPicker,
   SCollapse,
   SCollapseItem,
   SCollapseTransition,

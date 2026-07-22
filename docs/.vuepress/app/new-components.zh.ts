@@ -14,6 +14,7 @@ export const newComponentNavItemsZh: SidebarItem[] = [
   { text: 'Chip', link: zh('/components/chip'), isNew: true },
   { text: '轮播图', link: zh('/components/carousel'), isNew: true },
   { text: 'Breadcrumb', link: zh('/components/breadcrumb'), isNew: true },
+  { text: '颜色选择器', link: zh('/components/color-picker'), isNew: true },
   { text: 'Textarea', link: zh('/components/textarea'), isNew: true },
   { text: 'Collapse', link: zh('/components/collapse'), isNew: true },
   { text: '倒计时', link: zh('/components/countdown'), isNew: true },
