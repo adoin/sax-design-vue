@@ -49,6 +49,7 @@ import { SResult } from '@vuesax-alpha/components/result'
 import { SRow } from '@vuesax-alpha/components/row'
 import { SScrollbar } from '@vuesax-alpha/components/scrollbar'
 import { SOption, SOptionGroup, SSelect } from '@vuesax-alpha/components/select'
+import { SSegmented } from '@vuesax-alpha/components/segmented'
 import {
   SSidebar,
   SSidebarGroup,
@@ -127,6 +128,7 @@ export default [
   SRow,
   SScrollbar,
   SSelect,
+  SSegmented,
   SSwitch,
   SSidebar,
   SSidebarGroup,

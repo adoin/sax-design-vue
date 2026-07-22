@@ -1,0 +1,3 @@
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+.s-segmented { display: inline-flex; gap: 3px; padding: 3px; border-radius: 10px; background: getColor(gray, .08); }.s-segmented__item { min-width: 54px; padding: 6px 10px; border: 0; border-radius: 7px; background: transparent; color: getColor(text, .62); cursor: pointer; transition: .2s ease; }.s-segmented__item.is-active { background: getColor(background); box-shadow: 0 3px 10px getColor(primary, .12); color: getColor(primary); font-weight: 600; }.s-segmented__item:disabled { cursor: not-allowed; opacity: .45; }
