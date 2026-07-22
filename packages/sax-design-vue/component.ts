@@ -13,6 +13,7 @@ import { SChip, SChips } from '@vuesax-alpha/components/chip'
 import { SCol } from '@vuesax-alpha/components/col'
 import { SCollapse, SCollapseItem } from '@vuesax-alpha/components/collapse'
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
+import { SCountdown } from '@vuesax-alpha/components/countdown'
 import { SDatePicker } from '@vuesax-alpha/components/date-picker'
 import { SDialog } from '@vuesax-alpha/components/dialog'
 import { SDrawer } from '@vuesax-alpha/components/drawer'
@@ -89,6 +90,7 @@ export default [
   SCollapse,
   SCollapseItem,
   SCollapseTransition,
+  SCountdown,
   SDatePicker,
   SDialog,
   SDrawer,
