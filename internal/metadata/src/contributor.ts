@@ -1,7 +1,6 @@
 import path from 'path'
 import { existsSync } from 'fs'
 import glob from 'fast-glob'
-import { Octokit } from 'octokit'
 import consola from 'consola'
 import chalk from 'chalk'
 import { chunk, mapValues, uniqBy } from 'lodash-unified'
@@ -16,6 +15,7 @@ import {
   REPO_NAME,
   REPO_OWNER,
 } from '@vuesax-alpha/build-constants'
+import type { Octokit } from 'octokit'
 
 interface FetchOption {
   key: string
@@ -57,7 +57,7 @@ interface ContributorInfo {
 }
 
 const fetchCommits = async (
-  options: FetchOption[]
+  options: FetchOption[],
 ): Promise<Record<string, ApiResult>> => {
   const query = `{
     repository(owner: "${REPO_OWNER}", name: "${REPO_NAME}") {
@@ -97,7 +97,7 @@ const fetchCommits = async (
     Object.entries(response).map(([key, result]) => {
       const index = +key.replace('path', '')
       return [index, result]
-    })
+    }),
   )
 }
 
@@ -148,7 +148,7 @@ const getContributorsByComponents = async (components: string[]) => {
   } while (options.length > 0)
 
   return mapValues(commits, (commits) =>
-    calcContributors(uniqBy(commits, 'oid'))
+    calcContributors(uniqBy(commits, 'oid')),
   )
 }
 
@@ -168,7 +168,7 @@ async function getContributors() {
       ...(await getContributorsByComponents(chunkComponents)),
     }
     consola.success(
-      chalk.green(`Fetched contributors: ${chunkComponents.join(', ')}`)
+      chalk.green(`Fetched contributors: ${chunkComponents.join(', ')}`),
     )
   }
   return contributors
@@ -177,11 +177,14 @@ async function getContributors() {
 const pathOutput = path.resolve(__dirname, '..', 'dist')
 const pathDest = path.resolve(pathOutput, 'contributors.json')
 
-const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN,
-})
+let octokit: Octokit
 
 async function main() {
+  const { Octokit } = await import('octokit')
+  octokit = new Octokit({
+    auth: process.env.GITHUB_TOKEN,
+  })
+
   await ensureDir(pathOutput)
 
   let contributors: Record<string, ContributorInfo[]> | void

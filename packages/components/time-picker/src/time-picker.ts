@@ -2,6 +2,7 @@ import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type TimePicker from './time-picker.vue'
+import type { TimePickerConfig } from '../../date-picker/src/utils'
 
 export type TimePickerValue = Date | string | number | null | undefined
 
@@ -35,6 +36,9 @@ export const timePickerProps = buildProps({
       (hour: number, minute: number, role: string) => number[]
     >(Function),
   },
+  timeConfig: {
+    type: definePropType<TimePickerConfig>(Object),
+  },
   block: Boolean,
   readonly: Boolean,
 } as const)
@@ -42,8 +46,12 @@ export const timePickerProps = buildProps({
 export type TimePickerProps = ExtractPropTypes<typeof timePickerProps>
 
 export const timePickerEmits = {
-  [UPDATE_MODEL_EVENT]: (val: TimePickerValue) => true,
-  change: (val: TimePickerValue) => true,
+  [UPDATE_MODEL_EVENT]: (val: TimePickerValue) => {
+    return Boolean(val) || !val
+  },
+  change: (val: TimePickerValue) => {
+    return Boolean(val) || !val
+  },
   focus: (evt: FocusEvent) => evt instanceof FocusEvent,
   blur: (evt: FocusEvent) => evt instanceof FocusEvent,
   clear: () => true,

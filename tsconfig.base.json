@@ -9,6 +9,8 @@
     "allowJs": false,
     "strict": true,
     "noUnusedLocals": true,
+    "noUncheckedSideEffectImports": false,
+    "ignoreDeprecations": "5.0",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -16,6 +18,10 @@
     "rootDir": ".",
     "types": [],
     "paths": {
+      "@sax-design-vue/icons-vue": ["packages/icons-vue/src/index"],
+      "@vuesax-alpha/icons-vue": [
+        "node_modules/@vuesax-alpha/icons-vue/dist/types/index"
+      ],
       "@vuesax-alpha/*": ["packages/*"]
     }
   }

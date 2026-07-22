@@ -19,7 +19,7 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
   const { nextZIndex } = useZIndex()
   const vsBaseClasses = useVuesaxBaseComponent(useColor())
 
-  const zIndex = ref(nextZIndex())
+  const zIndex = ref(props.zIndex ?? nextZIndex())
 
   const afterEnter = () => {
     emit('opened')
@@ -84,7 +84,7 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
         rebound.value = true
 
         open()
-        zIndex.value = nextZIndex()
+        zIndex.value = props.zIndex ?? nextZIndex()
 
         if (props.lockScroll) {
           document.body.style.overflow = 'hidden'
@@ -101,7 +101,7 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
           close()
         }
       }
-    }
+    },
   )
 
   const dialogKls = computed(() => [
@@ -119,7 +119,18 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
   ])
 
   const dialogStyles = computed(() => ({
-    width: props.width,
+    width: typeof props.width === 'number' ? `${props.width}px` : props.width,
+    height:
+      typeof props.height === 'number' ? `${props.height}px` : props.height,
+    minWidth:
+      typeof props.minWidth === 'number'
+        ? `${props.minWidth}px`
+        : props.minWidth,
+    minHeight:
+      typeof props.minHeight === 'number'
+        ? `${props.minHeight}px`
+        : props.minHeight,
+    marginTop: typeof props.top === 'number' ? `${props.top}px` : props.top,
     ...ns.cssVar({
       color: getVsColor(props.color),
     }),

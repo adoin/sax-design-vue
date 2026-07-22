@@ -48,6 +48,30 @@ PROPS:
     link: null
     usage: '#automatic'
 
+  - name: auto-submit
+    type: Boolean
+    values: true, false
+    description: VXE-compatible alias of automatic upload.
+    default: false
+    link: null
+    usage: '#advanced'
+
+  - name: model-value
+    type: File | File[]
+    values: File
+    description: Two-way file list binding.
+    default: null
+    link: null
+    usage: '#advanced'
+
+  - name: file-types / limit-size / limit-count
+    type: Array / Number
+    values: MIME types / MB / count
+    description: Restrict allowed files, file size and file count.
+    default: null
+    link: null
+    usage: '#advanced'
+
   - name: action
     type: String
     values: URL
@@ -88,7 +112,7 @@ EVENTS:
     params: unknown
     description: Upload failed.
 EXPOSES: []
-description: "Upload files manually or automatically with preview and limits."
+description: 'Upload files manually or automatically with preview and limits.'
 NEWS:
   - default
   - multiple
@@ -100,7 +124,6 @@ NEWS:
 <card>
 
 ## Default
-
 
 Select a single file with the default upload area.
 
@@ -120,7 +143,6 @@ Select a single file with the default upload area.
 
 ## Multiple
 
-
 Allow several files and enforce a maximum with `limit`.
 
 <template #example>
@@ -139,7 +161,6 @@ Allow several files and enforce a maximum with `limit`.
 
 ## Automatic
 
-
 Upload immediately after selection when `action` is set.
 
 <template #example>
@@ -155,6 +176,26 @@ Upload immediately after selection when `action` is set.
 </card>
 
 <card>
+
+## Advanced
+
+`v-model` receives selected files. Use `before-select-method` for app rules and `upload-method` for a custom request adapter. Existing `action` upload still works.
+
+<template #example>
+<upload-advanced />
+</template>
+
+<template #template>
+
+@[code{1-15} html{4-12}](../.vuepress/components/upload/advanced.vue)
+
+</template>
+
+<template #script>
+
+@[code{17-31}](../.vuepress/components/upload/advanced.vue)
+
+</template>
 
 ## API
 

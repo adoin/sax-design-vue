@@ -5,6 +5,7 @@ export type SelectOptionValue = string | number | object
 export type SelectOptionContext = {
   el: HTMLElement | undefined
   index: number
+  data?: Record<string, unknown>
   groupDisabled: boolean
   label?: string
   value: SelectOptionValue
@@ -68,7 +69,7 @@ export type SelectContext = {
   hoverIndex: number
   handleTarget: (
     target: SelectTargetElement | null,
-    condition?: boolean
+    condition?: boolean,
   ) => void
   setSelected(): void
   handleOptionSelect(vm: SelectOptionContext, byClick: boolean): void

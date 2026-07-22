@@ -2,11 +2,13 @@ import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
 import isoWeek from 'dayjs/plugin/isoWeek.js'
 import weekOfYear from 'dayjs/plugin/weekOfYear.js'
+import weekYear from 'dayjs/plugin/weekYear.js'
 import advancedFormat from 'dayjs/plugin/advancedFormat.js'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(isoWeek)
 dayjs.extend(weekOfYear)
+dayjs.extend(weekYear)
 dayjs.extend(advancedFormat)
 
 export type DatePickerType =
@@ -15,8 +17,46 @@ export type DatePickerType =
   | 'daterange'
   | 'datetimerange'
   | 'month'
+  | 'quarter'
   | 'year'
   | 'week'
+
+export type TimePickerOption =
+  | number
+  | string
+  | {
+      label?: string | number
+      value: string | number
+      disabled?: boolean
+    }
+
+export interface TimePickerConfig {
+  hours?: TimePickerOption[]
+  minutes?: TimePickerOption[]
+  seconds?: TimePickerOption[]
+  hourDisabledMethod?: (params: { hour: number }) => boolean
+  minuteDisabledMethod?: (params: { minute: number }) => boolean
+  secondDisabledMethod?: (params: { second: number }) => boolean
+}
+
+export interface DateFestivalInfo {
+  label?: string
+  important?: boolean
+  className?: string
+  style?: Record<string, string>
+  notice?: boolean
+  extra?: string
+}
+
+export interface DateFestivalParams {
+  date: Date
+  type: DatePickerType
+  viewType: 'date' | 'week'
+}
+
+export type DateFestivalMethod = (
+  params: DateFestivalParams,
+) => DateFestivalInfo | null | undefined
 
 export type DatePickerValue =
   | Date
@@ -24,6 +64,7 @@ export type DatePickerValue =
   | number
   | [Date, Date]
   | [string, string]
+  | Array<Date | string | number>
   | null
   | undefined
 
@@ -44,6 +85,8 @@ export const getDefaultFormat = (type: DatePickerType) => {
       return 'YYYY-MM-DD HH:mm:ss'
     case 'month':
       return 'YYYY-MM'
+    case 'quarter':
+      return 'YYYY-[Q]Q'
     case 'year':
       return 'YYYY'
     case 'week':
@@ -55,7 +98,7 @@ export const getDefaultFormat = (type: DatePickerType) => {
 
 export const parseToDayjs = (
   value: Date | string | number | null | undefined,
-  format?: string
+  format?: string,
 ) => {
   if (value === null || value === undefined || value === '') return null
   if (value instanceof Date) return dayjs(value)
@@ -70,7 +113,7 @@ export const parseToDayjs = (
 export const formatValue = (
   date: dayjs.Dayjs | null,
   format: string,
-  valueFormat?: string
+  valueFormat?: string,
 ) => {
   if (!date || !date.isValid()) return null
   if (valueFormat) return date.format(valueFormat)
@@ -79,16 +122,16 @@ export const formatValue = (
 
 export const formatDisplay = (
   date: dayjs.Dayjs | null,
-  displayFormat: string
+  displayFormat: string,
 ) => {
   if (!date || !date.isValid()) return ''
   return date.format(displayFormat)
 }
 
-export const getCalendarCells = (year: number, month: number) => {
+export const getCalendarCells = (year: number, month: number, startDay = 0) => {
   const first = dayjs().year(year).month(month).startOf('month')
   const last = first.endOf('month')
-  const startOffset = first.day()
+  const startOffset = (first.day() - startDay + 7) % 7
   const cells: Array<{
     type: 'prev' | 'current' | 'next'
     date: dayjs.Dayjs
@@ -120,6 +163,14 @@ export const getMonthTable = (year: number) => {
   return months
 }
 
+export const getQuarterTable = (year: number) =>
+  [0, 1, 2, 3].map((quarter) =>
+    dayjs()
+      .year(year)
+      .month(quarter * 3)
+      .startOf('month'),
+  )
+
 export const getYearTable = (centerYear: number) => {
   const start = centerYear - (centerYear % 10)
   const years: dayjs.Dayjs[] = []
@@ -127,7 +178,7 @@ export const getYearTable = (centerYear: number) => {
     years.push(
       dayjs()
         .year(start + i)
-        .startOf('year')
+        .startOf('year'),
     )
   }
   return years
@@ -148,7 +199,7 @@ export const isSameWeek = (a: dayjs.Dayjs | null, b: dayjs.Dayjs | null) =>
 export const isDateInRange = (
   date: dayjs.Dayjs,
   start: dayjs.Dayjs | null,
-  end: dayjs.Dayjs | null
+  end: dayjs.Dayjs | null,
 ) => {
   if (!start || !end) return false
   const min = start.isBefore(end) ? start : end

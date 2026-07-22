@@ -50,6 +50,7 @@ import { STimePicker } from '@vuesax-alpha/components/time-picker'
 import { STimeSelect } from '@vuesax-alpha/components/time-select'
 import { STooltip } from '@vuesax-alpha/components/tooltip'
 import { SUpload } from '@vuesax-alpha/components/upload'
+import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
 
 import type { Plugin } from 'vue'
 
@@ -115,4 +116,5 @@ export default [
   STimeSelect,
   STooltip,
   SUpload,
+  SVirtualList,
 ] as Plugin[]

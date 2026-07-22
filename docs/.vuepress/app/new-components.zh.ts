@@ -17,4 +17,5 @@ export const newComponentNavItemsZh: SidebarItem[] = [
   { text: 'Tabs', link: zh('/components/tabs'), isNew: true },
   { text: 'Slider', link: zh('/components/slider'), isNew: true },
   { text: 'Upload', link: zh('/components/upload'), isNew: true },
+  { text: '虚拟列表', link: zh('/components/virtual-list'), isNew: true },
 ]

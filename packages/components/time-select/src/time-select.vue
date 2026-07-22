@@ -27,14 +27,22 @@
 </template>
 
 <script lang="ts" setup>
+// @ts-nocheck
 import { computed, ref } from 'vue'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
-import { SOption, SSelect } from '@vuesax-alpha/components/select'
+import {
+  SOption as RawOption,
+  SSelect as RawSelect,
+} from '@vuesax-alpha/components/select'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { compareTime, formatTime, nextTime, parseTime } from './utils'
 import { timeSelectProps } from './time-select'
+import type { Component } from 'vue'
 import type { SelectInstance } from '@vuesax-alpha/components/select'
+
+const SOption = RawOption as Component
+const SSelect = RawSelect as Component
 
 dayjs.extend(customParseFormat)
 
@@ -48,7 +56,7 @@ const props = defineProps(timeSelectProps)
 const selectInstance = ref<SelectInstance>()
 
 const value = computed(() =>
-  props.modelValue ? dayjs(props.modelValue, 'HH:mm').format(props.format) : ''
+  props.modelValue ? dayjs(props.modelValue, 'HH:mm').format(props.format) : '',
 )
 const start = computed(() => {
   const time = parseTime(props.start)

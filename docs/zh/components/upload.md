@@ -88,7 +88,7 @@ EVENTS:
     params: unknown
     description: 上传失败时触发。
 EXPOSES: []
-description: "手动或自动上传文件，支持预览与数量限制。"
+description: '手动或自动上传文件，支持预览与数量限制。'
 NEWS:
   - default
   - multiple
@@ -100,7 +100,6 @@ NEWS:
 <card>
 
 ## 默认
-
 
 使用默认上传区域选择单个文件。
 
@@ -120,7 +119,6 @@ NEWS:
 
 ## 多选
 
-
 允许多文件并通过 `limit` 限制数量。
 
 <template #example>
@@ -139,7 +137,6 @@ NEWS:
 
 ## 自动上传
 
-
 设置 `action` 后选择即自动上传。
 
 <template #example>
@@ -155,6 +152,26 @@ NEWS:
 </card>
 
 <card>
+
+## 高级能力
+
+`v-model` 双向绑定已选文件。通过 `before-select-method` 接入业务校验，通过 `upload-method` 接入自定义请求；原有 `action` 上传方式保持兼容。
+
+<template #example>
+<upload-advanced />
+</template>
+
+<template #template>
+
+@[code{1-15} html{4-12}](../../.vuepress/components/upload/advanced.vue)
+
+</template>
+
+<template #script>
+
+@[code{17-31}](../../.vuepress/components/upload/advanced.vue)
+
+</template>
 
 ## API
 

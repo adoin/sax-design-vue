@@ -33,7 +33,6 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { isLinkMailto, isLinkTel } from '@vuepress/shared'
 import { useRoute } from 'vue-router'
 import { isExternal, isMathcedPath } from '../util'
 import type { NavbarItem } from 'vuepress-vite'
@@ -44,6 +43,9 @@ const props = defineProps<{
 }>()
 
 const route = useRoute()
+
+const isLinkMailto = (link: string) => link.startsWith('mailto:')
+const isLinkTel = (link: string) => link.startsWith('tel:')
 
 const active = computed(() => isMathcedPath(route, props.navItem.link))
 </script>

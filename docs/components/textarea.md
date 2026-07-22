@@ -40,6 +40,30 @@ PROPS:
     link: null
     usage: '#counter'
 
+  - name: max-length / show-word-count
+    type: Number, Boolean
+    values: Number, true | false
+    description: Native length limit and a VXE-compatible counter.
+    default: null, false
+    link: null
+    usage: '#advanced'
+
+  - name: auto-size
+    type: Object
+    values: '{ minRows, maxRows }'
+    description: Grow height with content within row bounds.
+    default: null
+    link: null
+    usage: '#advanced'
+
+  - name: readonly / disabled / editable / trim
+    type: Boolean
+    values: true, false
+    description: Control editing state and trim output on change.
+    default: false, false, true, false
+    link: null
+    usage: '#advanced'
+
   - name: height
     type: String
     values: CSS height
@@ -72,7 +96,7 @@ EVENTS:
     params: FocusEvent
     description: Emitted on blur.
 EXPOSES: []
-description: "Multi-line text input with label, counter, and sizing options."
+description: 'Multi-line text input with label, counter, and sizing options.'
 NEWS:
   - default
   - label
@@ -86,7 +110,6 @@ NEWS:
 <card>
 
 ## Default
-
 
 Bind text with `v-model` for controlled input.
 
@@ -112,7 +135,6 @@ Bind text with `v-model` for controlled input.
 
 ## Label
 
-
 Float a label above the field for clearer forms.
 
 <template #example>
@@ -136,7 +158,6 @@ Float a label above the field for clearer forms.
 <card>
 
 ## Counter
-
 
 Show remaining characters and warn when the limit is exceeded.
 
@@ -162,7 +183,6 @@ Show remaining characters and warn when the limit is exceeded.
 
 ## Width
 
-
 Set a fixed width for form layouts.
 
 <template #example>
@@ -187,7 +207,6 @@ Set a fixed width for form layouts.
 
 ## Height
 
-
 Control the visible height of the textarea.
 
 <template #example>
@@ -209,6 +228,26 @@ Control the visible height of the textarea.
 </card>
 
 <card>
+
+## Advanced
+
+Use VXE-aligned `max-length`, `show-word-count`, `auto-size` and `trim` for a bounded, automatically growing field.
+
+<template #example>
+<textarea-advanced />
+</template>
+
+<template #template>
+
+@[code{1-11} html{5-8}](../.vuepress/components/textarea/advanced.vue)
+
+</template>
+
+<template #script>
+
+@[code{13-16}](../.vuepress/components/textarea/advanced.vue)
+
+</template>
 
 ## API
 

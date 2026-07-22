@@ -5,6 +5,13 @@
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
     >
+      <span
+        v-if="$slots.prefix || prefixConfig?.content"
+        :class="ns.e('prefix')"
+        @click="(event) => emit('prefix-click', event)"
+      >
+        <slot name="prefix">{{ prefixConfig?.content }}</slot>
+      </span>
       <input
         v-bind="$attrs"
         :id="inputId"
@@ -12,14 +19,33 @@
         v-model="model"
         :type="inputType"
         :disabled="disabled"
+        :readonly="readonly || !editable"
+        :name="name"
+        :title="title"
+        :form="form"
+        :autocomplete="autoComplete ?? autocomplete"
+        :autofocus="autoFocus"
+        :maxlength="maxLength ?? maxlength"
+        :style="nativeInputStyle"
         :class="[ns.e('original'), ns.is('disabled', disabled)]"
         placeholder=""
         @input="handleInput"
         @focus="handleFocus"
         @blur="handleBlur"
-        @change="handleChange"
+        @change="onChange"
         @keydown="handleKeydown"
+        @keyup="(event) => emit('keyup', event)"
+        @click="(event) => emit('click', event)"
+        @wheel="(event) => emit('wheel', event)"
       />
+
+      <span
+        v-if="$slots.suffix || suffixConfig?.content"
+        :class="ns.e('suffix')"
+        @click="(event) => emit('suffix-click', event)"
+      >
+        <slot name="suffix">{{ suffixConfig?.content }}</slot>
+      </span>
 
       <label
         v-if="placeholder || labelFloat"
@@ -98,6 +124,13 @@
       />
     </div>
 
+    <div v-if="showWordCount" :class="ns.e('count')">
+      {{ wordCount
+      }}<template v-if="maxLength ?? maxlength">
+        / {{ maxLength ?? maxlength }}</template
+      >
+    </div>
+
     <s-collapse-transition v-for="message in messageType" :key="message">
       <div
         v-if="$slots[`message-${message}`]"
@@ -110,7 +143,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, useSlots } from 'vue'
+import { computed, onMounted, useSlots } from 'vue'
 import { IconClose, IconLoading } from '@vuesax-alpha/components/icon'
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import {
@@ -124,10 +157,11 @@ import {
 import { NOOP, getVsColor } from '@vuesax-alpha/utils'
 import { inputEmits, inputProps } from './input'
 import { useInput } from './composables'
+import type { CSSProperties } from 'vue'
 
 defineOptions({
-  inheritAttrs: false,
   name: 'SInput',
+  inheritAttrs: false,
 })
 
 const props = defineProps(inputProps)
@@ -143,7 +177,7 @@ useDeprecated(
     ref: 'https://vuesax-alpha.vercel.app/components/input#style',
     replacement: 'inputStyle',
   },
-  computed(() => props.border)
+  computed(() => props.border),
 )
 
 useDeprecated(
@@ -155,7 +189,7 @@ useDeprecated(
     ref: 'https://vuesax-alpha.vercel.app/components/input#style',
     replacement: 'inputStyle',
   },
-  computed(() => props.shadow)
+  computed(() => props.shadow),
 )
 
 useDeprecated(
@@ -167,7 +201,7 @@ useDeprecated(
     ref: 'https://vuesax-alpha.vercel.app/components/input#style',
     replacement: 'inputStyle',
   },
-  computed(() => props.transparent)
+  computed(() => props.transparent),
 )
 
 useDeprecated(
@@ -179,7 +213,7 @@ useDeprecated(
     ref: 'https://vuesax-alpha.vercel.app/components/input#label',
     replacement: 'labelFloat',
   },
-  computed(() => !!props.labelPlaceholder)
+  computed(() => !!props.labelPlaceholder),
 )
 
 useDeprecated(
@@ -191,7 +225,7 @@ useDeprecated(
     ref: 'https://vuesax-alpha.vercel.app/components/input#shape',
     replacement: 'shape',
   },
-  computed(() => !!props.square)
+  computed(() => !!props.square),
 )
 
 const ns = useNamespace('input')
@@ -225,6 +259,17 @@ const {
   clear,
 } = useInput(props, emit)
 
+const onChange = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const value = props.trim ? target.value.trim() : target.value
+  if (value !== target.value) {
+    target.value = value
+    model.value = value
+  }
+  handleChange(event)
+  emit('lazy-change', value)
+}
+
 const vsBaseClasses = useVuesaxBaseComponent(useColor())
 const inputKls = computed(() => [
   vsBaseClasses,
@@ -245,6 +290,8 @@ const inputKls = computed(() => [
   { [ns.m('icon-after')]: props.iconAfter },
   { [ns.m('icon-eye')]: props.showPassword },
   { [ns.m('icon-clearable')]: showClear.value },
+  { [ns.m('has-prefix')]: !!slots.prefix || !!props.prefixConfig?.content },
+  { [ns.m('has-suffix')]: !!slots.suffix || !!props.suffixConfig?.content },
 ])
 
 const inputStyle = computed(() => [
@@ -254,12 +301,24 @@ const inputStyle = computed(() => [
   props.wrapStyles,
 ])
 
+const nativeInputStyle = computed<CSSProperties>(() => ({
+  textAlign: props.align as CSSProperties['textAlign'],
+}))
+const wordCount = computed(() => {
+  const value = String(props.modelValue ?? '')
+  return props.countMethod ? props.countMethod({ value }) : value.length
+})
+
 const progressState = computed(() => {
   const progress = useProp<typeof props.progress>('progress')
 
   if (!progress.value || progress.value <= 33) return 'danger'
   if (progress.value <= 66) return 'warn'
   return 'success'
+})
+
+onMounted(() => {
+  if (props.autoFocus) focus()
 })
 
 defineExpose({

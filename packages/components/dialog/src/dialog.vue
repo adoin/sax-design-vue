@@ -19,20 +19,44 @@
             <icon-loading />
           </div>
 
-          <button v-if="!notClose" :class="ns.e('close')" @click="close">
+          <button v-if="showClose" :class="ns.e('close')" @click="close">
             <icon-close :hover="'x'" />
           </button>
 
-          <div v-if="$slots.header" :class="ns.e('header')">
-            <slot name="header" />
+          <div
+            v-if="showHeader && ($slots.header || title)"
+            :class="ns.e('header')"
+          >
+            <slot name="header"
+              ><span :class="ns.e('title')">{{ title }}</span></slot
+            >
           </div>
 
-          <div :class="[ns.e('content'), { notFooter: !$slots.footer }]">
-            <slot />
+          <div
+            :class="[
+              ns.e('content'),
+              { notFooter: !($slots.footer || showFooter) },
+            ]"
+          >
+            <slot>
+              <span v-if="useHtml" v-html="content" />
+              <template v-else>{{ content }}</template>
+            </slot>
           </div>
 
-          <div v-if="$slots.footer" :class="ns.e('footer')">
-            <slot name="footer" />
+          <div v-if="$slots.footer || showFooter" :class="ns.e('footer')">
+            <slot name="footer">
+              <s-button
+                v-if="showCancelButton"
+                type="flat"
+                @click="handleCancel"
+              >
+                {{ cancelButtonText }}
+              </s-button>
+              <s-button v-if="showConfirmButton" @click="handleConfirm">
+                {{ confirmButtonText }}
+              </s-button>
+            </slot>
           </div>
         </div>
       </div>
@@ -42,6 +66,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import SButton from '@vuesax-alpha/components/button'
 import { IconClose, IconLoading } from '@vuesax-alpha/components/icon'
 import {
   useModal,
@@ -82,18 +107,32 @@ const {
 
 useModal({ handleClose }, visible)
 
-const clickDialog = useSameTarget(handleClose)
+const clickDialog = useSameTarget(() => {
+  if (props.maskClosable) handleClose()
+})
 
 const rootKls = computed(() => [
   ns.b(),
   ns.is('full-screen', props.fullScreen),
   ns.is('blur', props.overlayBlur),
+  ns.is('mask', props.mask),
 ])
+
+const showClose = computed(() => !props.notClose && props.showClose)
+const handleCancel = () => {
+  emit('cancel')
+  if (props.cancelClosable) close()
+}
+const handleConfirm = () => {
+  emit('confirm')
+  if (props.confirmClosable) close()
+}
 
 defineExpose({
   /** @description whether the dialog is visible */
   visible,
   /** @description dialog close method */
   close,
+  open: () => (visible.value = true),
 })
 </script>

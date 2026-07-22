@@ -72,7 +72,7 @@ EVENTS:
     params: FocusEvent
     description: 失去焦点时触发。
 EXPOSES: []
-description: "多行文本输入，支持标签、计数与尺寸配置。"
+description: '多行文本输入，支持标签、计数与尺寸配置。'
 NEWS:
   - default
   - label
@@ -86,7 +86,6 @@ NEWS:
 <card>
 
 ## 默认
-
 
 使用 `v-model` 绑定文本实现受控输入。
 
@@ -112,7 +111,6 @@ NEWS:
 
 ## 标签
 
-
 在字段上方浮动标签，使表单更清晰。
 
 <template #example>
@@ -136,7 +134,6 @@ NEWS:
 <card>
 
 ## 计数器
-
 
 显示剩余字符数，超出限制时警告。
 
@@ -162,7 +159,6 @@ NEWS:
 
 ## 宽度
 
-
 为表单布局设置固定宽度。
 
 <template #example>
@@ -187,7 +183,6 @@ NEWS:
 
 ## 高度
 
-
 控制多行输入的可见高度。
 
 <template #example>
@@ -209,6 +204,26 @@ NEWS:
 </card>
 
 <card>
+
+## 高级能力
+
+可用 VXE 对齐的 `max-length`、`show-word-count`、`auto-size` 与 `trim`，在不改变现有样式下获得字数限制和自动高度。
+
+<template #example>
+<textarea-advanced />
+</template>
+
+<template #template>
+
+@[code{1-11} html{5-8}](../../.vuepress/components/textarea/advanced.vue)
+
+</template>
+
+<template #script>
+
+@[code{13-16}](../../.vuepress/components/textarea/advanced.vue)
+
+</template>
 
 ## API
 

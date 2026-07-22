@@ -16,9 +16,7 @@
       :class="[ns.e('decrease'), ns.is('disabled', minDisabled)]"
       @keydown.enter="decrease"
     >
-      <s-icon>
-        <minus />
-      </s-icon>
+      <s-icon icon="minus" />
     </span>
     <span
       v-if="controls"
@@ -27,9 +25,7 @@
       :class="[ns.e('increase'), ns.is('disabled', maxDisabled)]"
       @keydown.enter="increase"
     >
-      <s-icon>
-        <plus />
-      </s-icon>
+      <s-icon icon="plus" />
     </span>
     <s-input
       :id="id"
@@ -45,7 +41,7 @@
       :min="min"
       :name="name"
       :label="label"
-      @wheel.prevent
+      @wheel.prevent="() => undefined"
       @keydown.up.prevent="increase"
       @keydown.down.prevent="decrease"
       @blur="handleBlur"
@@ -78,7 +74,6 @@ import {
   isUndefined,
   throwError,
 } from '@vuesax-alpha/utils'
-import { Minus, Plus } from '@vuesax-alpha/icons-vue'
 import {
   CHANGE_EVENT,
   INPUT_EVENT,
@@ -115,10 +110,10 @@ const wrapperStyle = computed(() => ({
 const isDisabled = useDisabled(toRef(props, 'disabled'))
 
 const minDisabled = computed(
-  () => isNumber(props.modelValue) && props.modelValue <= props.min
+  () => isNumber(props.modelValue) && props.modelValue <= props.min,
 )
 const maxDisabled = computed(
-  () => isNumber(props.modelValue) && props.modelValue >= props.max
+  () => isNumber(props.modelValue) && props.modelValue >= props.max,
 )
 
 const numPrecision = computed(() => {
@@ -127,7 +122,7 @@ const numPrecision = computed(() => {
     if (stepPrecision > props.precision) {
       debugWarn(
         'InputNumber',
-        'precision should not be less than the decimal places of step'
+        'precision should not be less than the decimal places of step',
       )
     }
     return props.precision
@@ -196,7 +191,7 @@ const decrease = () => {
 }
 const verifyValue = (
   value: number | string | null | undefined,
-  update?: boolean
+  update?: boolean,
 ): number | null | undefined => {
   const { max, min, step, precision, stepStrictly, valueOnClear } = props
   if (max < min) {
@@ -210,7 +205,9 @@ const verifyValue = (
     if (valueOnClear === null) {
       return null
     }
-    newVal = isString(valueOnClear) ? { min, max }[valueOnClear] : valueOnClear
+    newVal = isString(valueOnClear)
+      ? ({ min, max }[valueOnClear] ?? min)
+      : valueOnClear
   }
   if (stepStrictly) {
     newVal = toPrecision(Math.round(newVal / step) * step, precision)
@@ -220,13 +217,13 @@ const verifyValue = (
   }
   if (newVal > max || newVal < min) {
     newVal = newVal > max ? max : min
-    update && emit(UPDATE_MODEL_EVENT, newVal)
+    if (update) emit(UPDATE_MODEL_EVENT, newVal)
   }
   return newVal
 }
 const setCurrentValue = (
   value: number | string | null | undefined,
-  emitChange = true
+  emitChange = true,
 ) => {
   const oldVal = data.currentValue
   const newVal = verifyValue(value)
@@ -281,7 +278,7 @@ watch(
       data.userInput = null
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 onMounted(() => {
   const { min, max, modelValue } = props
@@ -301,7 +298,7 @@ onMounted(() => {
     'aria-valuenow',
     data.currentValue || data.currentValue === 0
       ? String(data.currentValue)
-      : ''
+      : '',
   )
   innerInput.setAttribute('aria-disabled', String(isDisabled.value))
   if (!isNumber(modelValue) && modelValue != null) {

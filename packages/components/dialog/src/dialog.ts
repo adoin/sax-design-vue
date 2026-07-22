@@ -39,6 +39,49 @@ export const dialogProps = buildProps({
     default: false,
     type: Boolean,
   },
+  title: {
+    type: [String, Number],
+  },
+  content: {
+    type: [String, Number],
+  },
+  useHtml: Boolean,
+  showHeader: {
+    type: Boolean,
+    default: true,
+  },
+  /** VXE-compatible close-button control. */
+  showClose: {
+    type: Boolean,
+    default: true,
+  },
+  showFooter: Boolean,
+  showCancelButton: Boolean,
+  cancelButtonText: {
+    type: String,
+    default: 'Cancel',
+  },
+  showConfirmButton: Boolean,
+  confirmButtonText: {
+    type: String,
+    default: 'Confirm',
+  },
+  cancelClosable: {
+    type: Boolean,
+    default: true,
+  },
+  confirmClosable: {
+    type: Boolean,
+    default: true,
+  },
+  mask: {
+    type: Boolean,
+    default: true,
+  },
+  maskClosable: {
+    type: Boolean,
+    default: true,
+  },
 
   /**
    * @description Makes the dialog the size of the window.
@@ -118,9 +161,21 @@ export const dialogProps = buildProps({
    * @description Determine the width of the dialog.
    */
   width: {
-    default: null,
-    type: String,
+    type: [String, Number],
   },
+  height: {
+    type: [String, Number],
+  },
+  minWidth: {
+    type: [String, Number],
+  },
+  minHeight: {
+    type: [String, Number],
+  },
+  top: {
+    type: [String, Number],
+  },
+  zIndex: Number,
 
   /**
    * @deprecated
@@ -149,6 +204,8 @@ export const dialogEmits = {
    * @description triggers when the Dialog closing animation ends
    */
   closed: () => true,
+  confirm: () => true,
+  cancel: () => true,
   [UPDATE_MODEL_EVENT]: (value: boolean) => isBoolean(value),
 }
 

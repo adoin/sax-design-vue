@@ -536,6 +536,26 @@ With the `prevent-close` property you do not close the dialog by clicking outsid
 
 <card>
 
+## 高级能力
+
+不需要复杂 slot 时，可用 VXE 对齐的 title、content 和内置确认/取消按钮；slot 仍然优先。
+
+<template #example>
+<dialog-advanced />
+</template>
+
+<template #template>
+
+@[code{1-13} html{3-11}](../../.vuepress/components/dialog/advanced.vue)
+
+</template>
+
+<template #script>
+
+@[code{15-19}](../../.vuepress/components/dialog/advanced.vue)
+
+</template>
+
 ## API
 
 </card>

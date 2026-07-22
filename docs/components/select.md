@@ -140,6 +140,16 @@ PROPS:
     link: null
     usage: '#multiple'
     code: null
+  - name: virtual / virtual-config
+    state:
+      text: New
+    type: Boolean / Object
+    values: threshold | estimateSize | overscan
+    description: Window flat data-driven options with TanStack Virtual. Option groups and custom Option children retain normal rendering.
+    default: false / '{}'
+    link: null
+    usage: '#virtual-options'
+    code: null
 
   - name: option-group:label
     state:
@@ -445,6 +455,44 @@ Add an item below the select showing a message to the user
 
 <card>
 
-## API
+## Data source
+
+Use `options` and `option-groups` when data arrives from an API. `option-props` and `option-group-props` map existing field names; `filterable` is the VXE-compatible alias of `filter`.
+
+<template #example>
+<select-data />
+</template>
+
+<template #template>
+
+@[code{1-16} html{4-9}](../.vuepress/components/select/data.vue)
+
+</template>
+
+<template #script>
+
+@[code{18-37}](../.vuepress/components/select/data.vue)
+
+</template>
 
 </card>
+
+<card>
+
+## Virtual options
+
+Enable `virtual` for large flat `options` arrays. Filtering, keyboard navigation and selected-value caching stay available while only visible rows mount.
+
+<template #example>
+<select-virtual />
+</template>
+
+<template #template>
+
+@[code{1-13}](../.vuepress/components/select/virtual.vue)
+
+</template>
+
+</card>
+
+## API

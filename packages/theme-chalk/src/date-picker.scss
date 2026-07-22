@@ -2,7 +2,27 @@
 @use 'mixins/var' as *;
 @use 'common/var' as *;
 
+.#{$namespace}-date-picker-fade-enter-active,
+.#{$namespace}-date-picker-fade-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.#{$namespace}-date-picker-fade-enter-from,
+.#{$namespace}-date-picker-fade-leave-to {
+  opacity: 0;
+
+  &[data-popper-placement^='top'] {
+    transform: translateY(8px) scale(0.98);
+  }
+
+  &[data-popper-placement^='bottom'] {
+    transform: translateY(-8px) scale(0.98);
+  }
+}
+
 @include b(date-picker) {
+  @include set-var-value(color, getCssVar(primary));
+
   display: inline-flex;
   width: getCssVar(select, width);
   max-width: 100%;
@@ -13,11 +33,107 @@
     max-width: unset;
   }
 
+  @include when(date) {
+    &:not(.is-block) {
+      width: 176px;
+    }
+  }
+
+  @include when(month) {
+    &:not(.is-block) {
+      width: 144px;
+    }
+  }
+
+  @include when(quarter) {
+    &:not(.is-block) {
+      width: 132px;
+    }
+  }
+
+  @include when(year) {
+    &:not(.is-block) {
+      width: 112px;
+    }
+  }
+
+  @include when(week) {
+    &:not(.is-block) {
+      width: 144px;
+    }
+  }
+
+  @include when(with-time) {
+    &:not(.is-range):not(.is-block) {
+      width: 224px;
+    }
+  }
+
+  @include when(range) {
+    &:not(.is-block) {
+      width: 332px;
+
+      &.is-with-time {
+        width: 504px;
+      }
+    }
+  }
+
   .#{$namespace}-input {
     width: 100%;
   }
 
+  .#{$namespace}-input__original {
+    width: 100%;
+    min-width: 0;
+  }
+
+  // Date picker icons are affordances, not floating action buttons. Keep them
+  // optically centered in normal, focus, and hover states.
+  .#{$namespace}-input.is-focus.#{$namespace}-input--icon-after,
+  .#{$namespace}-input.#{$namespace}-input--icon-after {
+    .#{$namespace}-input__icon {
+      transform: none;
+
+      &:hover {
+        transform: none;
+      }
+    }
+  }
+
+  @include e(range-input) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+  }
+
+  @include e(range-input) {
+    .#{$namespace}-input {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .#{$namespace}-input__original {
+      width: 100%;
+      min-width: 0;
+    }
+  }
+
+  @include e(range-separator) {
+    flex: 0 0 auto;
+    padding: 0 8px;
+    color: getColor('text', 0.5);
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1;
+    user-select: none;
+    white-space: nowrap;
+  }
+
   @include e(popper) {
+    @include set-var-value(color, getCssVar(primary));
+
     padding: 0 !important;
     border: 0 !important;
     background: transparent !important;
@@ -28,10 +144,15 @@
     display: flex;
     flex-direction: column;
     background: getColor('background');
-    border-radius: 12px;
-    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, getCssVar(shadow-opacity));
+    border: 1px solid getColor('primary', 0.12);
+    border-radius: 14px;
+    box-shadow: 0 18px 44px -16px getColor('primary', 0.28),
+      0 8px 20px -12px rgba(17, 18, 20, 0.2);
     overflow: hidden;
     min-width: 280px;
+    max-width: calc(100vw - 24px);
+    max-height: calc(100vh - 24px);
+    overflow: auto;
   }
 
   @include e(sidebar) {
@@ -60,13 +181,102 @@
 
   @include e(panels) {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 4px;
     padding: 8px;
+  }
+
+  @include e(body) {
+    display: flex;
+    flex-direction: column;
+
+    @include when(with-time) {
+      &:not(.is-range) {
+        flex-direction: row;
+        align-items: stretch;
+        // The calendar has a fixed six-week grid. Anchor the row to its
+        // natural height so the time spinner cannot expand the popper.
+        height: 300px;
+
+        .#{$namespace}-date-picker__panels {
+          flex: 0 0 auto;
+        }
+
+        .#{$namespace}-date-picker__time-wrap {
+          display: flex;
+          min-height: 0;
+          width: 184px;
+          padding: 12px 12px 4px;
+          border-top: 0;
+          border-left: 1px solid getColor('gray-2');
+
+          .#{$namespace}-time-panel {
+            flex: 1 1 auto;
+          }
+        }
+      }
+    }
   }
 
   @include e(time-wrap) {
     border-top: 1px solid getColor('gray-2');
     padding: 8px 12px 0;
+  }
+
+  @include e(range-stage) {
+    height: 300px;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  @include e(range-mode-controls) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid getColor('gray-2');
+  }
+
+  @include e(range-mode-group) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    min-width: 0;
+
+    + .#{$namespace}-date-picker__range-mode-group {
+      border-left: 1px solid getColor('gray-2');
+    }
+  }
+
+  @include e(range-mode-button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 0;
+    padding: 9px 8px;
+    border: 0;
+    background: transparent;
+    color: getColor('text', 0.62);
+    font-size: 0.75rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: getCssVar(transition-ease);
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &:hover {
+      background: getColor('color', 0.06);
+      color: getColor('color');
+    }
+
+    @include when(active) {
+      background: getColor('color', 0.1);
+      color: getColor('color');
+      font-weight: 600;
+    }
   }
 
   @include e(time-range) {
@@ -97,10 +307,65 @@
     border-top: 1px solid getColor('gray-2');
   }
 
+  @include e(custom-footer) {
+    padding: 8px 12px;
+    border-top: 1px solid getColor('gray-2');
+    color: getColor('text', 0.72);
+    font-size: 0.78rem;
+  }
+
+  @include e(custom-header) {
+    padding: 8px 12px;
+    border-bottom: 1px solid getColor('gray-2');
+    color: getColor('text', 0.72);
+    font-size: 0.78rem;
+  }
+
   @include e(footer-actions) {
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+}
+
+// The picker content is teleported outside of .s-date-picker, so these rules
+// intentionally target the popup body directly.
+.#{$namespace}-date-picker__body.is-range-mode {
+  .#{$namespace}-date-picker__range-stage {
+    .#{$namespace}-date-picker__panels {
+      min-height: 0;
+      padding-block: 4px;
+    }
+
+    .#{$namespace}-date-picker__time-wrap {
+      display: flex;
+      align-items: stretch;
+      gap: 16px;
+      height: 100%;
+      min-height: 0;
+      padding: 12px;
+      border-top: 0;
+      overflow: hidden;
+    }
+  }
+
+  .#{$namespace}-date-picker__time-block {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    padding: 0 8px;
+
+    + .#{$namespace}-date-picker__time-block {
+      border-left: 1px solid getColor('gray-2');
+    }
+  }
+
+  .#{$namespace}-date-picker__time-panel {
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
   }
 }
 
@@ -172,6 +437,7 @@
   }
 
   @include e(cell) {
+    position: relative;
     width: 34px;
     height: 34px;
     margin: 0 auto;
@@ -227,6 +493,41 @@
       opacity: 0.35;
       cursor: not-allowed;
     }
+
+    @include when(festival-important) {
+      color: getColor('color');
+      font-weight: 600;
+    }
+  }
+
+  @include e(cell-value) {
+    position: relative;
+    z-index: 1;
+  }
+
+  @include e(cell-notice) {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: getColor('color');
+  }
+
+  .#{$namespace}-date-panel__cell-label,
+  .#{$namespace}-date-panel__cell-extra {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    left: 2px;
+    overflow: hidden;
+    color: getColor('text', 0.55);
+    font-size: 0.5rem;
+    line-height: 1;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   @include e(months) {
@@ -234,6 +535,39 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
     padding: 8px 0;
+  }
+
+  @include e(quarters) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  @include e(quarter) {
+    border: 0;
+    border-radius: 10px;
+    background: getColor('gray-2');
+    color: getColor('text');
+    padding: 12px 0;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: getCssVar(transition-ease);
+
+    @include when(selected) {
+      background: getColor('color');
+      color: getColor('white');
+    }
+
+    &:hover:not(:disabled):not(.is-selected) {
+      background: getColor('color', 0.1);
+      color: getColor('color');
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
   }
 
   @include e(month) {
@@ -305,12 +639,90 @@
 }
 
 @include b(time-panel) {
-  padding: 0 0 8px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0;
 
   @include e(spinner) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
+    flex: 1;
+    height: 0;
+    min-height: 0;
+
+    > * {
+      height: 100%;
+      min-height: 0;
+    }
+
+    .#{$namespace}-scrollbar {
+      border-radius: 8px;
+
+      &:hover {
+        .#{$namespace}-scrollbar__bar.is-vertical {
+          background: getColor('color', 0.08);
+        }
+
+        .#{$namespace}-scrollbar__thumb {
+          background: getColor('color', 0.58);
+        }
+      }
+    }
+
+    .#{$namespace}-scrollbar__bar.is-vertical {
+      top: 4px;
+      right: 0;
+      bottom: 4px;
+      border-radius: 999px;
+      background: getColor('color', 0.04);
+      transition: background getCssVar(transition-ease);
+    }
+
+    .#{$namespace}-scrollbar__thumb {
+      border-radius: 999px;
+      background: getColor('color', 0.38);
+      opacity: 1;
+      transition: background getCssVar(transition-ease),
+        transform getCssVar(transition-ease);
+    }
+  }
+
+  @include e(input) {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 4px;
+    padding-top: 10px;
+    border-top: 1px solid getColor('gray-2');
+  }
+
+  @include e(input-field) {
+    width: 100%;
+    min-width: 0;
+    padding: 5px 2px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: getColor('gray-2');
+    color: getColor('text');
+    font-size: 0.75rem;
+    line-height: 1;
+    text-align: center;
+    outline: 0;
+    transition: getCssVar(transition-ease);
+
+    &:focus {
+      border-color: getColor('color', 0.4);
+      background: getColor('background');
+      box-shadow: 0 0 0 3px getColor('color', 0.1);
+    }
+  }
+
+  @include e(input-separator) {
+    color: getColor('text', 0.45);
+    font-weight: 600;
   }
 
   @include e(list) {

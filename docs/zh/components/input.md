@@ -461,6 +461,26 @@ Change everything is style of the component with the `input-style` property, the
 
 <card>
 
+## 高级能力
+
+通过 VXE 对齐的字数限制、计数、trim 和前后缀内容，增强输入框而不改变原有美术。
+
+<template #example>
+<input-advanced />
+</template>
+
+<template #template>
+
+@[code{1-12} html{4-10}](../../.vuepress/components/input/advanced.vue)
+
+</template>
+
+<template #script>
+
+@[code{14-17}](../../.vuepress/components/input/advanced.vue)
+
+</template>
+
 ## API
 
 </card>

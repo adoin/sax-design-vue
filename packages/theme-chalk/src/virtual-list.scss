@@ -8,6 +8,9 @@
 }
 
 @include b(vl) {
+  display: block;
+  width: 100%;
+
   @include e(wrapper) {
     position: relative;
     &:hover {
@@ -17,13 +20,46 @@
       @include showScrollbar();
     }
   }
+
+  @include e(window) {
+    position: relative;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--sax-primary), 0.34) transparent;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(var(--sax-primary), 0.3);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: rgba(var(--sax-primary), 0.52);
+    }
+  }
+
+  @include e(content) {
+    position: relative;
+    min-width: 100%;
+  }
+
+  @include e(item) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    will-change: transform;
+  }
 }
 
 .#{$namespace}-vl__window {
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  scroll-behavior: auto;
 }
 @include b(virtual-scrollbar) {
   opacity: 0;

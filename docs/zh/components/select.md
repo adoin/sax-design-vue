@@ -140,6 +140,16 @@ PROPS:
     link: null
     usage: '#multiple'
     code: null
+  - name: virtual / virtual-config
+    state:
+      text: New
+    type: Boolean / Object
+    values: threshold | estimateSize | overscan
+    description: 对平铺的 options 数据开启 TanStack Virtual。分组和手写 Option 保持普通渲染。
+    default: false / '{}'
+    link: null
+    usage: '#virtual-options'
+    code: null
 
   - name: option-group:label
     state:
@@ -445,6 +455,44 @@ Add an item below the select showing a message to the user
 
 <card>
 
-## API
+## 数据源
+
+服务端数据可直接传入 `options`、`option-groups`。通过 `option-props`、`option-group-props` 映射字段；`filterable` 是与 VXE 对齐的 `filter` 别名。
+
+<template #example>
+<select-data />
+</template>
+
+<template #template>
+
+@[code{1-16} html{4-9}](../../.vuepress/components/select/data.vue)
+
+</template>
+
+<template #script>
+
+@[code{18-37}](../../.vuepress/components/select/data.vue)
+
+</template>
 
 </card>
+
+<card>
+
+## 虚拟选项
+
+大数据平铺 `options` 可开启 `virtual`。筛选、键盘导航与已选值缓存保留，同时只挂载可见行。
+
+<template #example>
+<select-virtual />
+</template>
+
+<template #template>
+
+@[code{1-13}](../../.vuepress/components/select/virtual.vue)
+
+</template>
+
+</card>
+
+## API

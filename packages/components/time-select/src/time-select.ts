@@ -1,4 +1,4 @@
-import { CloseCircle } from '@vuesax-alpha/icons-vue'
+import { IconClose } from '@vuesax-alpha/components/icon'
 
 import { definePropType } from '@vuesax-alpha/utils'
 import type { Component, ExtractPropTypes, PropType } from 'vue'
@@ -45,7 +45,7 @@ export const timeSelectProps = {
   // },
   clearIcon: {
     type: definePropType<string | Component>([String, Object]),
-    default: () => CloseCircle,
+    default: () => IconClose,
   },
   disabledItems: {
     type: definePropType<string[]>(Array),

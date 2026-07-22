@@ -134,4 +134,11 @@
       cursor: not-allowed;
     }
   }
+
+  @include e(tip) {
+    margin-top: 8px;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
 }

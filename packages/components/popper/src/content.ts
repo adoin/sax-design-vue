@@ -1,5 +1,5 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
-import { defaultZIndex, placements } from '@vuesax-alpha/constants'
+import { placements } from '@vuesax-alpha/constants'
 import type {
   FlipOptions,
   OffsetOptions,
@@ -61,7 +61,6 @@ export const popperContentProps = buildProps({
   },
   zIndex: {
     type: Number,
-    default: defaultZIndex,
   },
   interactivity: {
     type: Boolean,

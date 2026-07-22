@@ -44,6 +44,7 @@ export * from './time-picker'
 export * from './time-select'
 export * from './tooltip'
 export * from './upload'
+export * from './virtual-list'
 
 // plugins
 export * from './loading'

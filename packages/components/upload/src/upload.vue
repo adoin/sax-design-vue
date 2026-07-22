@@ -1,64 +1,75 @@
 <template>
   <div :class="ns.b()">
     <div :class="ns.e('list')">
-      <div
-        v-for="(file, index) in fileList"
-        :key="file.uid"
-        :class="[ns.e('item'), ns.is('error', file.error)]"
-      >
-        <button
-          :class="ns.e('remove')"
-          type="button"
-          @click="removeFile(index)"
-        >
-          <SIcon icon="clear" />
-        </button>
-        <img v-if="file.preview" :src="file.preview" :class="ns.e('preview')" />
-        <div v-else :class="ns.e('archive')">
-          <SIcon icon="description" />
-          <span>{{ file.name }}</span>
-        </div>
+      <template v-if="showList">
         <div
-          v-if="showUploadButton && file.uploading"
-          :class="ns.e('progress')"
-          :style="{ height: `${file.percent}%` }"
-        />
-      </div>
+          v-for="(file, index) in fileList"
+          :key="file.uid"
+          :class="[ns.e('item'), ns.is('error', file.error)]"
+        >
+          <button
+            v-if="showRemoveButton && !readonly"
+            :class="ns.e('remove')"
+            type="button"
+            @click="removeFile(index)"
+          >
+            <SIcon icon="clear" />
+          </button>
+          <img
+            v-if="showPreview && file.preview"
+            :src="file.preview"
+            :class="ns.e('preview')"
+          />
+          <div v-else :class="ns.e('archive')">
+            <SIcon icon="description" />
+            <span>{{ file.name }}</span>
+          </div>
+          <div
+            v-if="showProgress && file.uploading"
+            :class="ns.e('progress')"
+            :style="{ height: `${file.percent}%` }"
+          />
+        </div>
+      </template>
 
       <div
-        v-if="!isLimitReached"
+        v-if="!isLimitReached && !readonly"
         :class="[ns.e('input-wrap'), ns.is('disabled', isDisabled)]"
       >
         <input
           ref="inputRef"
           :class="ns.e('input')"
           type="file"
-          :accept="accept"
+          :accept="effectiveAccept"
           :multiple="multiple"
           :disabled="isDisabled"
           @change="handleChange"
         />
-        <span :class="ns.e('text')">{{ inputText }}</span>
+        <span v-if="showButtonText" :class="ns.e('text')">{{ inputText }}</span>
         <span :class="ns.e('bar')" :style="{ width: `${totalPercent}%` }" />
         <button
-          v-if="showUploadButton"
+          v-if="showUploadButton && showSubmitButton"
           :class="ns.e('upload-btn')"
           type="button"
           :disabled="!fileList.length"
           @click="uploadAll"
         >
-          <SIcon icon="cloud_upload" />
+          <SIcon v-if="showButtonIcon" icon="cloud_upload" />
         </button>
       </div>
       <div v-else :class="[ns.e('input-wrap'), ns.is('disabled', true)]">
         <span :class="ns.e('text')">{{ textMax }}</span>
       </div>
     </div>
+    <div v-if="showTip || $slots.tip" :class="ns.e('tip')">
+      <slot name="tip">{{ tipText }}</slot>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { uploadEmits, uploadProps } from './upload'
@@ -78,9 +89,18 @@ const fileList = ref<UploadFileItem[]>([])
 const totalPercent = ref(0)
 let uid = 0
 
-const isLimitReached = computed(
-  () => props.limit && fileList.value.length >= Number(props.limit)
-)
+const isLimitReached = computed(() => {
+  const count = props.limitCount ?? props.limit
+  return count && fileList.value.length >= Number(count)
+})
+
+const limitCount = computed(() => Number(props.limitCount ?? props.limit ?? 0))
+const shouldAutoSubmit = computed(() => props.automatic || props.autoSubmit)
+const effectiveAccept = computed(() => {
+  if (props.accept) return props.accept
+  if (props.mode === 'image') return 'image/*'
+  return props.fileTypes.join(',')
+})
 
 const isDisabled = computed(() => {
   if (props.disabled) return true
@@ -89,7 +109,9 @@ const isDisabled = computed(() => {
 })
 
 const inputText = computed(() =>
-  isDisabled.value && props.limit ? props.textMax : props.text
+  isDisabled.value && limitCount.value
+    ? props.textMax
+    : props.buttonText || props.text,
 )
 
 const readPreview = (file: File) =>
@@ -113,7 +135,15 @@ const handleChange = async (event: Event) => {
   }
 
   for (const file of files) {
-    if (props.limit && fileList.value.length >= Number(props.limit)) break
+    if (limitCount.value && fileList.value.length >= limitCount.value) break
+    if (props.beforeSelectMethod) {
+      const allowed = await props.beforeSelectMethod({ file })
+      if (!allowed) continue
+    }
+    if (props.limitSize && file.size > Number(props.limitSize) * 1024 * 1024) {
+      emit('on-error', new Error(`File exceeds ${props.limitSize} MB limit`))
+      continue
+    }
     const preview = await readPreview(file)
     const item: UploadFileItem = {
       uid: ++uid,
@@ -125,9 +155,9 @@ const handleChange = async (event: Event) => {
       error: false,
     }
     fileList.value.push(item)
+    emit('add', item, fileList.value)
 
-    if (props.automatic && props.action && props.singleUpload) {
-      item.uploading = true
+    if (shouldAutoSubmit.value && props.singleUpload) {
       uploadFile(item)
     }
   }
@@ -135,78 +165,172 @@ const handleChange = async (event: Event) => {
   emit(
     'change',
     files,
-    fileList.value.map((item) => item.raw)
+    fileList.value.map((item) => item.raw),
   )
-  if (props.automatic && props.action && !props.singleUpload) {
+  emitModelValue()
+  if (shouldAutoSubmit.value && !props.singleUpload) {
     uploadAll()
   }
   input.value = ''
 }
 
-const removeFile = (index: number) => {
+const removeFile = async (index: number) => {
+  const current = fileList.value[index]
+  if (!current) return
+  if (props.beforeRemoveMethod) {
+    const allowed = await props.beforeRemoveMethod({ option: current })
+    if (!allowed) return
+  }
   const [removed] = fileList.value.splice(index, 1)
+  if (!removed) return
   emit('on-delete', removed.raw)
+  emit('remove', removed, fileList.value)
+  emitModelValue()
 }
 
-const uploadAll = () => {
-  if (!props.action) {
+const uploadAll = async () => {
+  if (!props.action && !props.uploadMethod) {
     emit('on-error', new Error('Upload action is required'))
     return
   }
 
-  const pending = fileList.value.filter((item) => !item.error)
+  const pending = fileList.value.filter((item) => !item.error && !item.success)
   if (!pending.length) return
 
-  pending.forEach((item) => {
-    item.uploading = true
-    uploadFile(item)
-  })
+  emit('upload-queue-start', pending)
+  await Promise.all(pending.map((item) => uploadFile(item)))
+  emit('upload-queue-end', pending)
 }
 
-const uploadFile = (item: UploadFileItem) => {
-  const formData = new FormData()
-  const data = props.data || {}
-  Object.entries(data).forEach(([key, value]) => {
-    formData.append(key, value)
-  })
-  formData.append(props.fileName || 'file', item.raw, item.name)
-
-  const xhr = new XMLHttpRequest()
-  xhr.open('POST', props.action!, true)
-  xhr.withCredentials = true
-
-  const headers = props.headers || {}
-  Object.entries(headers).forEach(([key, value]) => {
-    if (value != null) xhr.setRequestHeader(key, String(value))
-  })
-
-  xhr.upload.onprogress = (event) => {
-    if (event.total > 0) {
-      item.percent = Math.trunc((event.loaded / event.total) * 100)
-      totalPercent.value = item.percent
+const uploadFile = async (item: UploadFileItem) => {
+  item.uploading = true
+  item.error = false
+  emit('upload-start', item)
+  if (props.uploadMethod) {
+    try {
+      item.response = await props.uploadMethod({
+        file: item.raw,
+        option: item,
+        updateProgress: (percent: number) => {
+          item.percent = Math.max(0, Math.min(100, Math.trunc(percent)))
+          totalPercent.value = item.percent
+        },
+      })
+      item.percent = 100
+      item.success = true
+      emit('on-success', item.response)
+      emit('upload-success', item, item.response)
+    } catch (error) {
+      item.error = true
+      emit('on-error', error)
+      emit('upload-error', item, error)
+    } finally {
+      item.uploading = false
+      emit('upload-end', item)
     }
+    return
   }
 
-  xhr.onload = () => {
-    item.uploading = false
-    if (xhr.status < 200 || xhr.status >= 300) {
+  await new Promise<void>((resolve) => {
+    const formData = new FormData()
+    const data = props.data || {}
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, String(value))
+    })
+    formData.append(props.fileName || 'file', item.raw, item.name)
+
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', props.action!, true)
+    xhr.withCredentials = true
+
+    const headers = props.headers || {}
+    Object.entries(headers).forEach(([key, value]) => {
+      if (value != null) xhr.setRequestHeader(key, String(value))
+    })
+
+    xhr.upload.onprogress = (event) => {
+      if (event.total > 0) {
+        item.percent = Math.trunc((event.loaded / event.total) * 100)
+        totalPercent.value = item.percent
+      }
+    }
+
+    xhr.onload = () => {
+      item.uploading = false
+      if (xhr.status < 200 || xhr.status >= 300) {
+        item.error = true
+        emit('on-error', xhr.response)
+        emit('upload-error', item, xhr.response)
+        emit('upload-end', item)
+        resolve()
+        return
+      }
+      item.percent = 100
+      item.success = true
+      item.response = xhr.response
+      emit('on-success', xhr.response)
+      emit('upload-success', item, xhr.response)
+      emit('upload-end', item)
+      setTimeout(() => {
+        totalPercent.value = 0
+      }, 800)
+      resolve()
+    }
+
+    xhr.onerror = () => {
+      item.uploading = false
       item.error = true
       emit('on-error', xhr.response)
-      return
+      emit('upload-error', item, xhr.response)
+      emit('upload-end', item)
+      resolve()
     }
-    item.percent = 100
-    emit('on-success', xhr.response)
-    setTimeout(() => {
-      totalPercent.value = 0
-    }, 800)
-  }
 
-  xhr.onerror = () => {
-    item.uploading = false
-    item.error = true
-    emit('on-error', xhr.response)
-  }
-
-  xhr.send(formData)
+    xhr.send(formData)
+  })
 }
+
+const emitModelValue = () => {
+  const files = fileList.value.map((item) => item.raw)
+  emit(UPDATE_MODEL_EVENT, props.multiple ? files : (files[0] ?? null))
+}
+
+const choose = () => inputRef.value?.click()
+const clear = async () => {
+  fileList.value = []
+  emitModelValue()
+}
+const getPendingFiles = () =>
+  fileList.value.filter((item) => !item.success).map((item) => item.raw)
+
+onMounted(async () => {
+  const initial = (
+    Array.isArray(props.modelValue)
+      ? props.modelValue
+      : props.modelValue
+        ? [props.modelValue]
+        : []
+  ) as File[]
+  for (const raw of initial) {
+    const preview = await readPreview(raw)
+    fileList.value.push({
+      uid: ++uid,
+      raw,
+      name: raw.name,
+      preview,
+      percent: 100,
+      uploading: false,
+      error: false,
+      success: true,
+    })
+  }
+})
+
+defineExpose({
+  choose,
+  submit: uploadAll,
+  clear,
+  remove: removeFile,
+  getPendingFiles,
+})
 </script>

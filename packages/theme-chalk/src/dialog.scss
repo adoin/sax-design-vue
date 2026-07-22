@@ -71,7 +71,7 @@
 }
 
 @include b(dialog) {
-  background: rgba(0, 0, 0, getCssVar('background-opacity'));
+  background: transparent;
   position: fixed;
   left: 0px;
   top: 0px;
@@ -83,6 +83,10 @@
   overflow-x: hidden;
   padding-top: 80px;
   padding-bottom: 80px;
+
+  @include when(mask) {
+    background: rgba(0, 0, 0, getCssVar('background-opacity'));
+  }
 
   @include when(full-screen) {
     padding: 0px;
@@ -167,6 +171,11 @@
   @include e(header) {
     @include flex(center, center);
     padding: 10px 16px;
+  }
+  @include e(title) {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
   }
   @include e(content) {
     padding: 10px 16px;

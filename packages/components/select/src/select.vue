@@ -3,7 +3,7 @@
     ref="popperRef"
     v-model:visible="dropMenuVisible"
     trigger="click"
-    placement="bottom"
+    :placement="popupConfig.placement ?? 'bottom'"
     persistent
     :animation="optionsAnimation"
     :flip="flip"
@@ -19,15 +19,20 @@
     :on-mouseenter="onMouseenter"
     :on-mouseleave="onMouseleave"
     :on-keydown="onKeydown"
-    :teleported="teleported"
+    :teleported="popupConfig.transfer ?? teleported"
     :strategy="strategy"
-    :popper-class="[ns.e('content'), useVuesaxBaseComponent(color)]"
-    :popper-style="colorCssVar"
+    :popper-class="[
+      ns.e('content'),
+      useVuesaxBaseComponent(color),
+      popupConfig.className,
+    ]"
+    :popper-style="[colorCssVar, popupStyle]"
+    :z-index="popupConfig.zIndex"
     :show-arrow="false"
     :offset="0"
     :process-before-open="processBeforeOpen"
     :process-before-close="processBeforeClose"
-    @show="handleMenuEnter"
+    @show="handleMenuShow"
   >
     <div
       ref="selectWrapper"
@@ -60,7 +65,7 @@
         </s-chip>
 
         <input
-          v-if="filter && !selectDisabled"
+          v-if="filterable && !selectDisabled"
           ref="input"
           v-model="query"
           type="text"
@@ -69,7 +74,7 @@
             ns.is('disabled', selectDisabled),
             ns.be('chips', 'input'),
           ]"
-          :placeholder="states.selectedLabel ? '' : states.query ?? ''"
+          :placeholder="states.selectedLabel ? '' : (states.query ?? '')"
           :disabled="selectDisabled"
           @focus="handleFocus"
           @blur="handleBlur"
@@ -120,7 +125,7 @@
             labelFloat &&
               !dropMenuVisible &&
               (isEqual(modelValue, notValue) ||
-                (!modelValue && modelValue != 0))
+                (!modelValue && modelValue != 0)),
           ),
         ]"
       >
@@ -136,7 +141,9 @@
 
       <icon-loading v-if="loading" class="vs-select__loading" />
 
-      <s-icon :class="ns.e('arrow')" size="14"><chevron-down /></s-icon>
+      <span :class="ns.e('arrow')" aria-hidden="true">
+        <s-icon size="14"><chevron-down /></s-icon>
+      </span>
 
       <transition name="v-clearable">
         <span
@@ -163,22 +170,84 @@
 
     <template #content>
       <s-scrollbar
+        v-if="!virtualEnabled"
         v-show="states.options.size > 0 && !loading"
-        max-height="200"
+        :max-height="popupConfig.height ?? 200"
         thickness="3"
         :wrap-class="[
           ns.e('options'),
           ns.is(
             'empty',
-            !allowCreate && Boolean(query) && states.filteredOptionsCount === 0
+            !allowCreate && Boolean(query) && states.filteredOptionsCount === 0,
           ),
         ]"
         :native="nativeScrollbar"
         @mouseleave="hoverIndex = -1"
       >
         <s-option v-if="showNewOption" :value="query" :created="true" />
+        <s-option
+          v-for="(option, index) in options"
+          :key="`option-${index}-${getOptionValue(option)}`"
+          :value="getOptionValue(option)"
+          :label="getOptionLabel(option)"
+          :disabled="getOptionDisabled(option)"
+        >
+          <slot name="option" :option="option">{{
+            getOptionLabel(option)
+          }}</slot>
+        </s-option>
+        <s-option-group
+          v-for="(group, index) in optionGroups"
+          :key="`group-${index}`"
+          :label="getGroupLabel(group)"
+        >
+          <s-option
+            v-for="(option, optionIndex) in getGroupOptions(group)"
+            :key="`group-option-${optionIndex}-${getOptionValue(option)}`"
+            :value="getOptionValue(option)"
+            :label="getOptionLabel(option)"
+            :disabled="getOptionDisabled(option)"
+          >
+            <slot name="option" :option="option" :group="group">{{
+              getOptionLabel(option)
+            }}</slot>
+          </s-option>
+        </s-option-group>
         <slot />
       </s-scrollbar>
+
+      <div
+        v-else-if="states.options.size > 0 && !loading"
+        :class="[
+          ns.e('options'),
+          ns.is('empty', virtualVisibleOptions.length === 0),
+        ]"
+        @mouseleave="hoverIndex = -1"
+      >
+        <s-option v-if="showNewOption" :value="query" :created="true" />
+        <s-virtual-list
+          v-if="virtualVisibleOptions.length"
+          ref="virtualListRef"
+          :items="virtualVisibleOptions"
+          :height="virtualHeight"
+          :estimate-size="virtualConfig.estimateSize ?? 34"
+          :overscan="virtualConfig.overscan ?? 6"
+          :item-key="getVirtualItemKey"
+        >
+          <template #default="{ item: option }">
+            <button
+              :class="getVirtualOptionKls(option)"
+              :disabled="option.isDisabled || option.groupDisabled"
+              @mouseenter="hoverVirtualOption(option)"
+              @click="handleOptionSelect(option, true)"
+            >
+              <slot name="option" :option="option.data">
+                {{ option.currentLabel }}
+              </slot>
+            </button>
+          </template>
+        </s-virtual-list>
+      </div>
 
       <template
         v-if="
@@ -198,7 +267,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, provide, reactive, toRef } from 'vue'
+import {
+  computed,
+  nextTick,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  toRef,
+  useSlots,
+  watch,
+} from 'vue'
 import { toRefs, unrefElement, useResizeObserver } from '@vueuse/core'
 import { isEqual } from 'lodash-unified'
 import { ClickOutside as vClickOutside } from '@vuesax-alpha/directives'
@@ -206,6 +285,7 @@ import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import SIcon, { IconClose, IconLoading } from '@vuesax-alpha/components/icon'
 import SCollapseTransition from '@vuesax-alpha/components/collapse-transition'
 import SScrollbar from '@vuesax-alpha/components/scrollbar'
+import SVirtualList from '@vuesax-alpha/components/virtual-list'
 import SPopper from '@vuesax-alpha/components/popper'
 import { ChevronDown } from '@vuesax-alpha/icons-vue'
 import {
@@ -213,13 +293,14 @@ import {
   useNamespace,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
-import { getVsColor } from '@vuesax-alpha/utils'
+import { escapeStringRegexp, getVsColor } from '@vuesax-alpha/utils'
 import SOption from './option.vue'
+import SOptionGroup from './option-group.vue'
 import SChip from './chip.vue'
 import { selectContextKey, selectRegisterKey } from './tokens'
 import { selectEmits, selectProps } from './select'
 import { useSelect, useSelectStates } from './useSelect'
-import type { SelectOptionContext } from './tokens'
+import type { SelectOptionContext, SelectOptionValue } from './tokens'
 
 defineOptions({
   name: 'SSelect',
@@ -231,6 +312,7 @@ const messageTypes = ['success', 'warn', 'danger', 'primary', 'dark']
 const props = defineProps(selectProps)
 const emit = defineEmits(selectEmits)
 const ns = useNamespace('select')
+const slots = useSlots()
 
 const states = useSelectStates(props)
 
@@ -239,7 +321,160 @@ const color = useColor('primary')
 const colorCssVar = computed(() =>
   ns.cssVar({
     color: getVsColor(color.value),
+  }),
+)
+
+const popupConfig = computed(() => props.popupConfig)
+const filterable = computed(() => props.filter || props.filterable)
+const popupStyle = computed(() => ({
+  width:
+    popupConfig.value.width === undefined
+      ? undefined
+      : typeof popupConfig.value.width === 'number'
+        ? `${popupConfig.value.width}px`
+        : popupConfig.value.width,
+  maxHeight:
+    popupConfig.value.height === undefined
+      ? undefined
+      : typeof popupConfig.value.height === 'number'
+        ? `${popupConfig.value.height}px`
+        : popupConfig.value.height,
+}))
+
+const getOptionValue = (option: Record<string, unknown>) =>
+  option[props.optionProps.value ?? 'value'] ?? ''
+const getOptionLabel = (option: Record<string, unknown>) =>
+  `${option[props.optionProps.label ?? 'label'] ?? getOptionValue(option)}`
+const getOptionDisabled = (option: Record<string, unknown>) =>
+  Boolean(option[props.optionProps.disabled ?? 'disabled'])
+const getGroupLabel = (group: Record<string, unknown>) =>
+  `${group[props.optionGroupProps.label ?? 'label'] ?? ''}`
+const getGroupOptions = (group: Record<string, unknown>) => {
+  const options = group[props.optionGroupProps.options ?? 'options']
+  return Array.isArray(options) ? (options as Record<string, unknown>[]) : []
+}
+
+const virtualEnabled = computed(
+  () =>
+    props.virtual &&
+    props.optionGroups.length === 0 &&
+    !slots.default &&
+    props.options.length >= (props.virtualConfig.threshold ?? 100),
+)
+const virtualListRef = ref<InstanceType<typeof SVirtualList>>()
+const virtualOptions = ref<SelectOptionContext[]>([])
+const virtualVisibleOptions = computed(() =>
+  virtualOptions.value.filter((option) => option.visible),
+)
+const virtualHeight = computed(() => popupConfig.value.height ?? 200)
+const getVirtualItemKey = (option: SelectOptionContext) => option.index
+
+const syncVirtualOptions = () => {
+  if (!virtualEnabled.value) {
+    if (!virtualOptions.value.length) return
+    virtualOptions.value = []
+    states.options.clear()
+    states.cachedOptions.clear()
+    states.disabledOptions.clear()
+    states.optionsCount = 0
+    states.filteredOptionsCount = 0
+    return
+  }
+
+  states.options.clear()
+  states.cachedOptions.clear()
+  states.disabledOptions.clear()
+  states.optionsCount = 0
+  states.filteredOptionsCount = 0
+
+  virtualOptions.value = props.options.map((data, index) => {
+    const value = getOptionValue(data) as SelectOptionValue
+    const context = reactive({
+      index,
+      el: undefined,
+      value,
+      data,
+      currentLabel: getOptionLabel(data),
+      isDisabled: getOptionDisabled(data),
+      groupDisabled: false,
+      visible: true,
+      hit: false,
+      hover: false,
+      created: false,
+    }) as SelectOptionContext
+    states.options.set(value, context)
+    states.cachedOptions.set(value, context)
+    if (context.isDisabled) states.disabledOptions.set(value, context)
+    return context
   })
+  states.optionsCount = virtualOptions.value.length
+  applyVirtualFilter()
+  setSelected()
+}
+
+const applyVirtualFilter = () => {
+  if (!virtualEnabled.value) return
+  const regexp = new RegExp(escapeStringRegexp(`${states.query}`), 'i')
+  let visibleCount = 0
+  virtualOptions.value.forEach((option) => {
+    option.visible = regexp.test(option.currentLabel)
+    if (option.visible) visibleCount++
+  })
+  states.filteredOptionsCount = visibleCount
+}
+
+const getVirtualOptionKls = (option: SelectOptionContext) => [
+  ns.e('option'),
+  ns.is('hover', states.hoverIndex === option.index),
+  ns.is(
+    'active',
+    selectedArray.value.some((selected) =>
+      isEqual(selected.value, option.value),
+    ),
+  ),
+  ns.is('disabled', option.isDisabled || option.groupDisabled),
+]
+
+const hoverVirtualOption = (option: SelectOptionContext) => {
+  states.hoverIndex = option.index
+}
+
+const handleMenuShow = () => {
+  handleMenuEnter()
+  if (virtualEnabled.value) {
+    nextTick(() => virtualListRef.value?.measure())
+  }
+}
+
+watch(
+  () => [virtualEnabled.value, props.options] as const,
+  () => syncVirtualOptions(),
+  { deep: true },
+)
+
+watch(
+  () => states.query,
+  () => applyVirtualFilter(),
+)
+
+watch(
+  () => states.visible,
+  (visible) => {
+    if (visible && virtualEnabled.value) {
+      nextTick(() => virtualListRef.value?.measure())
+    }
+  },
+)
+
+watch(
+  () => states.hoverIndex,
+  (index) => {
+    if (!virtualEnabled.value || index < 0) return
+    const visibleIndex = virtualVisibleOptions.value.findIndex(
+      (option) => option.index === index,
+    )
+    if (visibleIndex >= 0) virtualListRef.value?.scrollToIndex(visibleIndex)
+  },
 )
 
 const optionsAnimation = computed(() => ns.b())
@@ -329,6 +564,7 @@ const selectKls = computed(() => [
 const selectStyle = computed(() => [colorCssVar.value])
 
 onMounted(() => {
+  syncVirtualOptions()
   states.cachedPlaceHolder = states.currentPlaceholder = props.placeholder
   if (
     props.multiple &&
@@ -357,7 +593,7 @@ provide(
     handleTarget,
     setSelected,
     handleOptionSelect,
-  })
+  }),
 )
 
 provide(selectRegisterKey, (option: SelectOptionContext) => {
@@ -372,7 +608,7 @@ provide(selectRegisterKey, (option: SelectOptionContext) => {
     },
     unregister: () => {
       const doesSelected = selectedArray.value.some(
-        (e) => e.value == option.value
+        (e) => e.value == option.value,
       )
       // if option is not selected, remove it from cache
       nextTick(() => {

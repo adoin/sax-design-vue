@@ -3,7 +3,7 @@ import { PatchFlags, buildProps, definePropType } from '@vuesax-alpha/utils'
 import { useNamespace, useSameTarget } from '@vuesax-alpha/hooks'
 
 import type { CSSProperties, ExtractPropTypes } from 'vue'
-import type { ZIndexProperty } from 'csstype'
+import type { Property } from 'csstype'
 
 export const overlayProps = buildProps({
   mask: {
@@ -22,7 +22,7 @@ export const overlayProps = buildProps({
     ]),
   },
   zIndex: {
-    type: definePropType<ZIndexProperty>([String, Number]),
+    type: definePropType<Property.ZIndex>([String, Number]),
   },
 } as const)
 export type OverlayProps = ExtractPropTypes<typeof overlayProps>
@@ -46,7 +46,7 @@ export default defineComponent({
     }
 
     const { onClick, onMousedown, onMouseup } = useSameTarget(
-      props.customMaskEvent ? undefined : onMaskClick
+      props.customMaskEvent ? undefined : onMaskClick,
     )
 
     // init here
@@ -67,7 +67,7 @@ export default defineComponent({
             },
             [renderSlot(slots, 'default')],
             PatchFlags.STYLE | PatchFlags.CLASS | PatchFlags.PROPS,
-            ['onClick', 'onMouseup', 'onMousedown']
+            ['onClick', 'onMouseup', 'onMousedown'],
           )
         : h(
             'div',
@@ -82,7 +82,7 @@ export default defineComponent({
                 left: '0px',
               } as CSSProperties,
             },
-            [renderSlot(slots, 'default')]
+            [renderSlot(slots, 'default')],
           )
     }
   },

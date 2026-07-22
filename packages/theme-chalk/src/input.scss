@@ -448,6 +448,34 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     padding-left: 10px;
     width: 200px;
   }
+  @include m(has-prefix) {
+    @include e(original) {
+      padding-left: 42px;
+    }
+  }
+  @include m(has-suffix) {
+    @include e(original) {
+      padding-right: 42px;
+    }
+  }
+  @include e(prefix) {
+    position: absolute;
+    z-index: 1;
+    left: 12px;
+    color: getColor('text', 0.55);
+    font-size: 0.75rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  @include e(suffix) {
+    position: absolute;
+    z-index: 1;
+    right: 12px;
+    color: getColor('text', 0.55);
+    font-size: 0.75rem;
+    line-height: 1;
+    cursor: pointer;
+  }
   @include e(icon) {
     position: absolute;
     right: auto;
@@ -573,5 +601,13 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     @include b(icon-loading) {
       transform: scale(0.5);
     }
+  }
+  @include e(count) {
+    align-self: flex-end;
+    margin-top: 4px;
+    padding-right: 4px;
+    color: getColor('text', 0.5);
+    font-size: 0.65rem;
+    line-height: 1;
   }
 }

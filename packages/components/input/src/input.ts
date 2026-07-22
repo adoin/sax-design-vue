@@ -32,6 +32,34 @@ export const inputProps = buildProps({
    * @description whether Input is disabled
    */
   disabled: { type: Boolean },
+  readonly: { type: Boolean },
+  editable: {
+    type: Boolean,
+    default: true,
+  },
+  name: String,
+  title: String,
+  form: String,
+  autoComplete: String,
+  /** @deprecated use autoComplete */
+  autocomplete: String,
+  autoFocus: Boolean,
+  align: {
+    type: String,
+    values: ['left', 'center', 'right'] as const,
+  },
+  maxLength: {
+    type: [Number, String],
+  },
+  /** @deprecated use maxLength */
+  maxlength: {
+    type: [Number, String],
+  },
+  showWordCount: Boolean,
+  countMethod: {
+    type: definePropType<(params: { value: string }) => number>(Function),
+  },
+  trim: Boolean,
 
   /**
    * @description put the icon to the back of the input
@@ -115,6 +143,12 @@ export const inputProps = buildProps({
     type: Boolean,
     default: false,
   },
+  prefixConfig: {
+    type: definePropType<{ content?: string }>(Object),
+  },
+  suffixConfig: {
+    type: definePropType<{ content?: string }>(Object),
+  },
 
   /**
    * @description Change the background color of the component by changing its status.
@@ -179,6 +213,12 @@ export const inputEmits = {
 
   // NOTE: when autofill by browser, the keydown event is instanceof Event, not KeyboardEvent
   keydown: (evt: KeyboardEvent | Event) => evt instanceof Event,
+  keyup: (evt: KeyboardEvent) => evt instanceof KeyboardEvent,
+  click: (evt: MouseEvent) => evt instanceof MouseEvent,
+  wheel: (evt: WheelEvent) => evt instanceof WheelEvent,
+  'lazy-change': (value: string) => isString(value),
+  'prefix-click': (evt: MouseEvent) => evt instanceof MouseEvent,
+  'suffix-click': (evt: MouseEvent) => evt instanceof MouseEvent,
 }
 
 export type InputEmits = typeof inputEmits

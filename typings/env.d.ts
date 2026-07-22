@@ -1,6 +1,16 @@
 import type { vShow } from 'vue'
 import type { INSTALLED_KEY } from '@vuesax-alpha/constants'
 
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
+  const component: DefineComponent<
+    Record<string, unknown>,
+    Record<string, never>,
+    any
+  >
+  export default component
+}
+
 declare global {
   const process: {
     env: {

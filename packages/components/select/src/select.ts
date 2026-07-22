@@ -16,6 +16,43 @@ import type { SelectOptionValue, SelectValue } from './tokens'
 import type { ExtractPropTypes } from 'vue'
 import type Select from './select.vue'
 
+export type SelectDataOption = Record<string, unknown>
+
+export interface SelectFilterConfig {
+  /** Clear the search text after the panel closes. */
+  clearOnClose?: boolean
+  /** Same callback as `filterMethod`, kept close to VXE UI's API. */
+  filterMethod?: (searchValue: string) => void
+}
+
+export interface SelectRemoteConfig {
+  enabled?: boolean
+  autoLoad?: boolean
+  clearOnClose?: boolean
+  queryMethod?: (params: {
+    searchValue: string
+    value: SelectValue
+  }) => void | Promise<void>
+}
+
+export interface SelectPopupConfig {
+  placement?: 'top' | 'bottom'
+  transfer?: boolean
+  width?: number | string
+  height?: number | string
+  zIndex?: number
+  className?: string
+}
+
+export interface SelectVirtualConfig {
+  /** Enable virtual rendering once the option count reaches this value. */
+  threshold?: number
+  /** Initial option-row height used before the virtualizer measures it. */
+  estimateSize?: number
+  /** Extra rows rendered above and below the visible window. */
+  overscan?: number
+}
+
 export const selectProps = buildProps({
   showAfter: {
     type: Number,
@@ -66,8 +103,53 @@ export const selectProps = buildProps({
     default: 0,
   },
   filter: { type: Boolean },
+  /** VXE-compatible alias of `filter`. */
+  filterable: { type: Boolean },
   filterMethod: {
     type: definePropType<(val: string) => void>(Function),
+  },
+  filterConfig: {
+    type: definePropType<SelectFilterConfig>(Object),
+    default: () => ({}),
+  },
+  remote: { type: Boolean },
+  remoteMethod: {
+    type: definePropType<
+      (params: { searchValue: string }) => void | Promise<void>
+    >(Function),
+  },
+  remoteConfig: {
+    type: definePropType<SelectRemoteConfig>(Object),
+    default: () => ({}),
+  },
+  /** Data driven options, equivalent to rendering `s-option` children. */
+  options: {
+    type: definePropType<SelectDataOption[]>(Array),
+    default: () => [],
+  },
+  /** Virtualize flat data-driven options. Slots and option groups keep normal rendering. */
+  virtual: { type: Boolean, default: false },
+  virtualConfig: {
+    type: definePropType<SelectVirtualConfig>(Object),
+    default: () => ({}),
+  },
+  optionProps: {
+    type: definePropType<{ value?: string; label?: string; disabled?: string }>(
+      Object,
+    ),
+    default: () => ({}),
+  },
+  optionGroups: {
+    type: definePropType<SelectDataOption[]>(Array),
+    default: () => [],
+  },
+  optionGroupProps: {
+    type: definePropType<{ options?: string; label?: string }>(Object),
+    default: () => ({}),
+  },
+  popupConfig: {
+    type: definePropType<SelectPopupConfig>(Object),
+    default: () => ({}),
   },
   collapseChips: { type: Boolean },
   maxCollapseChips: {

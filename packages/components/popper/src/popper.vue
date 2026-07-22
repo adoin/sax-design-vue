@@ -87,7 +87,7 @@ const emit = defineEmits(popperEmits)
 
 const { currentZIndex, nextZIndex } = useZIndex()
 
-const zIndex = computed(() => currentZIndex.value)
+const zIndex = computed(() => props.zIndex ?? currentZIndex.value)
 
 const triggerRef = ref<ReferenceElement>()
 const contentRef = ref<HTMLElement>()
@@ -134,12 +134,12 @@ const {
 })
 
 const controlled = computed(
-  () => isBoolean(props.visible) && !hasUpdateHandler.value
+  () => isBoolean(props.visible) && !hasUpdateHandler.value,
 )
 
 const updatePopper = (shouldUpdateZIndex = true) => {
   update()
-  shouldUpdateZIndex && nextZIndex()
+  if (shouldUpdateZIndex && props.zIndex === undefined) nextZIndex()
 }
 
 const onBlur = () => {
@@ -158,7 +158,7 @@ watch(
     if (disabled && open.value) {
       open.value = false
     }
-  }
+  },
 )
 
 onDeactivated(() => open.value && hide())
@@ -231,6 +231,6 @@ defineExpose(
      * @description expose current poppper placement
      */
     popperPlacement,
-  })
+  }),
 )
 </script>

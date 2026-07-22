@@ -7,18 +7,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "^3.3.4",
-    "postcss": "^8.4.31",
-    "postcss-nested": "^6.0.1",
+    "@vue/compiler-sfc": "^3.5.40",
+    "postcss": "^8.5.20",
+    "postcss-nested": "^7.0.2",
     "sax-design-vue": "workspace:*",
-    "vue": "^3.3.4"
+    "vue": "^3.5.40"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.7",
+    "@vitejs/plugin-vue": "^6.0.8",
     "@vuesax-alpha/auto-import-resolver": "^1.0.2",
-    "local-pkg": "^0.4.2",
-    "vite": "^8.1.3",
-    "vite-plugin-inspect": "^11.4.1",
-    "vite-plugin-mkcert": "^1.17.5"
+    "local-pkg": "^1.2.1",
+    "vite": "^8.1.5",
+    "vite-plugin-inspect": "^12.0.2",
+    "vite-plugin-mkcert": "^2.1.0"
   }
 }

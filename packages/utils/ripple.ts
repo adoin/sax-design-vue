@@ -1,5 +1,7 @@
 import { setColor } from './color'
 
+const RIPPLE_NAMESPACE = 's'
+
 const ripple = (evs: any, color?: string, solid?: boolean) => {
   const el = evs.currentTarget
   const offset = el.getBoundingClientRect()
@@ -14,7 +16,7 @@ const ripple = (evs: any, color?: string, solid?: boolean) => {
 
   const effectContent = document.createElement('div')
 
-  effectContent.className = 'vs-ripple'
+  effectContent.className = `${RIPPLE_NAMESPACE}-ripple`
 
   if (!color) {
     setColor('color', '#fff', effectContent)
@@ -22,9 +24,9 @@ const ripple = (evs: any, color?: string, solid?: boolean) => {
 
   const effect = document.createElement('div')
 
-  effect.className = 'vs-ripple--default'
+  effect.className = `${RIPPLE_NAMESPACE}-ripple--default`
   if (solid) {
-    effect.classList.add('vs-ripple--solid')
+    effect.classList.add(`${RIPPLE_NAMESPACE}-ripple--solid`)
     //   setColor('color', color || 'primary', effectContent)
   }
   effect.style.transition = `all ${time}s ease`
@@ -54,7 +56,7 @@ const ripple = (evs: any, color?: string, solid?: boolean) => {
           el.removeChild(effectContent)
         }, time * 300)
       },
-      noTime ? 0 : time * 400
+      noTime ? 0 : time * 400,
     )
 
     evs.target.removeEventListener('mouseup', removeEffect)
@@ -79,11 +81,11 @@ const rippleReverse = (evs: any) => {
 
   const effectContent = document.createElement('div')
 
-  effectContent.className = 'vs-ripple'
+  effectContent.className = `${RIPPLE_NAMESPACE}-ripple`
 
   const effect = document.createElement('div')
 
-  effect.className = 'vs-ripple--invert'
+  effect.className = `${RIPPLE_NAMESPACE}-ripple--invert`
   // effect.style.transition = `all ${time}s ease`
 
   effect.style.left = `${x}px`
@@ -116,7 +118,7 @@ const rippleReverse = (evs: any) => {
           el.removeChild(effectContent)
         }, time * 300)
       },
-      noTime ? 0 : time * 400
+      noTime ? 0 : time * 400,
     )
 
     evs.target.removeEventListener('mouseup', removeEffect)
@@ -142,13 +144,13 @@ const rippleCut = (evs: any) => {
 
   const effectContent = document.createElement('div')
 
-  effectContent.className = 'vs-ripple'
+  effectContent.className = `${RIPPLE_NAMESPACE}-ripple`
 
   const effect = document.createElement('div')
   const effect2 = document.createElement('div')
 
-  effect.className = 'vs-ripple--cut-1'
-  effect2.className = 'vs-ripple--cut-2'
+  effect.className = `${RIPPLE_NAMESPACE}-ripple--cut-1`
+  effect2.className = `${RIPPLE_NAMESPACE}-ripple--cut-2`
   // effect.style.transition = `all ${time}s ease`
 
   effect.style.left = effect2.style.left = `${x}px`
@@ -184,7 +186,7 @@ const rippleCut = (evs: any) => {
           el.removeChild(effectContent)
         }, time * 300)
       },
-      noTime ? 0 : time * 400
+      noTime ? 0 : time * 400,
     )
 
     evs.target.removeEventListener('mouseup', removeEffect)

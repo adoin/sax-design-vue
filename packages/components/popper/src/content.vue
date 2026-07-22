@@ -133,7 +133,7 @@ const onBeforeLeave = () => {
   onBeforeHide?.()
 }
 
-let stopHandle: ReturnType<typeof onClickOutside>
+let stopHandle: (() => void) | undefined
 
 const onAfterShow = () => {
   onShow()
@@ -147,7 +147,7 @@ const onAfterShow = () => {
       if ($trigger !== 'hover') {
         onClose()
       }
-    }
+    },
   )
 }
 
@@ -164,14 +164,14 @@ watch(
   },
   {
     flush: 'post',
-  }
+  },
 )
 
 watch(
   () => props.content,
   () => {
     updatePopper()
-  }
+  },
 )
 
 onBeforeUnmount(() => {

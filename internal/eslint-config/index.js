@@ -26,6 +26,9 @@ module.exports = defineConfig({
     {
       files: ['*.json', '*.json5', '*.jsonc'],
       parser: 'jsonc-eslint-parser',
+      rules: {
+        '@typescript-eslint/consistent-type-imports': 'off',
+      },
     },
     {
       files: ['*.ts', '*.vue'],
@@ -106,6 +109,7 @@ module.exports = defineConfig({
       files: ['*.js'],
       rules: {
         '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/no-require-imports': 'off',
       },
     },
     {

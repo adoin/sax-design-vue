@@ -116,6 +116,30 @@ PROPS:
     link: null
     usage: null
     code: null
+  - name: title / content / show-header
+    type: String, Boolean
+    values: String, true | false
+    description: VXE-compatible built-in header and content when slots are not needed.
+    default: null, null, true
+    link: null
+    usage: '#advanced'
+    code: null
+  - name: show-footer / show-cancel-button / show-confirm-button
+    type: Boolean
+    values: true | false
+    description: Render built-in action footer and modal events.
+    default: false
+    link: null
+    usage: '#advanced'
+    code: null
+  - name: mask / mask-closable / show-close
+    type: Boolean
+    values: true | false
+    description: Control overlay and dismissal behavior.
+    default: true
+    link: null
+    usage: '#advanced'
+    code: null
 
 EVENTS:
   - name: close
@@ -535,6 +559,26 @@ With the `prevent-close` property you do not close the dialog by clicking outsid
 </card>
 
 <card>
+
+## Advanced
+
+Use VXE-aligned title, content and action-button props when slots would be unnecessary; custom slots keep priority.
+
+<template #example>
+<dialog-advanced />
+</template>
+
+<template #template>
+
+@[code{1-13} html{3-11}](../.vuepress/components/dialog/advanced.vue)
+
+</template>
+
+<template #script>
+
+@[code{15-19}](../.vuepress/components/dialog/advanced.vue)
+
+</template>
 
 ## API
 

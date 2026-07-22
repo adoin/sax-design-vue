@@ -30,6 +30,7 @@ export const generateTypesDefinitions = async () => {
     preserveSymlinks: true,
     skipLibCheck: true,
     noImplicitAny: false,
+    noUnusedLocals: false,
   }
   const project = new Project({
     compilerOptions,
@@ -51,8 +52,8 @@ export const generateTypesDefinitions = async () => {
     const relativePath = path.relative(pkgRoot, sourceFile.getFilePath())
     consola.trace(
       chalk.yellow(
-        `Generating definition for file: ${chalk.bold(relativePath)}`
-      )
+        `Generating definition for file: ${chalk.bold(relativePath)}`,
+      ),
     )
 
     const emitOutput = sourceFile.getEmitOutput()
@@ -70,13 +71,13 @@ export const generateTypesDefinitions = async () => {
       await writeFile(
         filepath,
         pathRewriter('esm')(outputFile.getText()),
-        'utf8'
+        'utf8',
       )
 
       consola.success(
         chalk.green(
-          `Definition for file: ${chalk.bold(relativePath)} generated`
-        )
+          `Definition for file: ${chalk.bold(relativePath)} generated`,
+        ),
       )
     })
 
@@ -91,17 +92,17 @@ async function addSourceFiles(project: Project) {
 
   const globSourceFile = '**/*.{js?(x),ts?(x),vue}'
   const filePaths = excludeFiles(
-    await glob([globSourceFile, '!sax-design-vue/**/*'], {
+    await glob([globSourceFile, '!**/*.d.ts', '!sax-design-vue/**/*'], {
       cwd: pkgRoot,
       absolute: true,
       onlyFiles: true,
-    })
+    }),
   )
   const vsPaths = excludeFiles(
     await glob(globSourceFile, {
       cwd: vsRoot,
       onlyFiles: true,
-    })
+    }),
   )
 
   const sourceFiles: SourceFile[] = []
@@ -118,16 +119,30 @@ async function addSourceFiles(project: Project) {
             (hasTsNoCheck ? '// @ts-nocheck\n' : '') + (script?.content ?? '')
 
           if (scriptSetup) {
+            const useOpaqueComponentType = [
+              'date-picker.vue',
+              'time-select.vue',
+            ].includes(path.basename(file))
             const compiled = vueCompiler.compileScript(sfc.descriptor, {
               id: 'xxx',
+              ...(useOpaqueComponentType
+                ? { genDefaultAs: '__sfc_component__' }
+                : {}),
             })
             content += compiled.content
+            if (useOpaqueComponentType) {
+              // These two SFCs compose many imported components. Their inferred
+              // default component type exceeds TypeScript's declaration limit,
+              // while Props/Instance types remain exported from their modules.
+              content +=
+                "\nimport type { DefineComponent } from 'vue'\nexport default __sfc_component__ as unknown as DefineComponent\n"
+            }
           }
 
           const lang = scriptSetup?.lang || script?.lang || 'js'
           const sourceFile = project.createSourceFile(
             `${path.relative(process.cwd(), file)}.${lang}`,
-            content
+            content,
           )
           sourceFiles.push(sourceFile)
         }
@@ -139,7 +154,7 @@ async function addSourceFiles(project: Project) {
     ...vsPaths.map(async (file) => {
       const content = await readFile(path.resolve(vsRoot, file), 'utf-8')
       sourceFiles.push(
-        project.createSourceFile(path.resolve(pkgRoot, file), content)
+        project.createSourceFile(path.resolve(pkgRoot, file), content),
       )
     }),
   ])

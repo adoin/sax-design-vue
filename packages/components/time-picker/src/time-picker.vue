@@ -34,6 +34,7 @@
         <s-time-panel
           :model-value="innerValue"
           :disabled-date="disabledTime"
+          :time-config="timeConfig"
           @update:model-value="handlePick"
         />
         <div :class="ns.e('footer')">
@@ -85,7 +86,7 @@ const inputRef = ref<InputInstance>()
 const innerValue = ref<dayjs.Dayjs>(dayjs())
 
 const inputPlaceholder = computed(
-  () => props.placeholder || t('vs.datepicker.selectTime')
+  () => props.placeholder || t('vs.datepicker.selectTime'),
 )
 
 const parseModel = () => {

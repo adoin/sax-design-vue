@@ -3,3 +3,26 @@ packages:
   - docs
   - play
   - internal/*
+
+shamefullyHoist: true
+strictPeerDependencies: false
+shellEmulator: true
+
+peerDependencyRules:
+  ignoreMissing:
+    - vite
+    - react
+    - react-dom
+    - '@yarnpkg/core'
+    - webpack
+  allowedVersions:
+    vite: '8'
+    rollup: '2'
+    vue-tsc: '0.38'
+
+allowBuilds:
+  '@parcel/watcher': true
+  es5-ext: false
+  esbuild: true
+  puppeteer: true
+  vue-demi: true

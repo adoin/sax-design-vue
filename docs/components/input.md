@@ -161,6 +161,30 @@ PROPS:
     link: null
     usage: '#progress'
 
+  - name: max-length / show-word-count / trim
+    type: Number, Boolean
+    values: Number, true | false
+    description: VXE-compatible limit, counter and value trimming.
+    default: null, false, false
+    link: null
+    usage: '#advanced'
+
+  - name: readonly / editable / auto-focus / align
+    type: Boolean, String
+    values: true | false, left | center | right
+    description: Control editing state, focus and text alignment.
+    default: false, true, false, left
+    link: null
+    usage: '#advanced'
+
+  - name: prefix-config / suffix-config
+    type: Object
+    values: '{ content }'
+    description: Lightweight prefix and suffix content without changing input styling.
+    default: null
+    link: null
+    usage: '#advanced'
+
 SLOTS:
   - name: icon
     type: Slot
@@ -177,6 +201,13 @@ SLOTS:
     default: null
     link: null
     usage: '#message'
+  - name: prefix / suffix
+    type: Slot
+    values: null
+    description: Custom content before or after the input text.
+    default: null
+    link: null
+    usage: '#advanced'
 ---
 
 # Input
@@ -460,6 +491,26 @@ Change everything is style of the component with the `input-style` property, the
 </card>
 
 <card>
+
+## Advanced
+
+Use VXE-aligned limits, count, trimming and prefix/suffix content while retaining the existing input style.
+
+<template #example>
+<input-advanced />
+</template>
+
+<template #template>
+
+@[code{1-12} html{4-10}](../.vuepress/components/input/advanced.vue)
+
+</template>
+
+<template #script>
+
+@[code{14-17}](../.vuepress/components/input/advanced.vue)
+
+</template>
 
 ## API
 
