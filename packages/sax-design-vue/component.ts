@@ -27,6 +27,7 @@ import { SDivider } from '@vuesax-alpha/components/divider'
 import { SEmpty } from '@vuesax-alpha/components/empty'
 import { SForm, SFormItem } from '@vuesax-alpha/components/form'
 import { SIcon } from '@vuesax-alpha/components/icon'
+import { SIconPicker } from '@vuesax-alpha/components/icon-picker'
 import { SImage, SImages } from '@vuesax-alpha/components/images'
 import { SImagePreview } from '@vuesax-alpha/components/image-preview'
 import { SInput } from '@vuesax-alpha/components/input'
@@ -121,6 +122,7 @@ export default [
   SForm,
   SFormItem,
   SIcon,
+  SIconPicker,
   SImage,
   SImages,
   SImagePreview,
