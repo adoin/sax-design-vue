@@ -14,6 +14,7 @@ export const newComponentNavItems: SidebarItem[] = [
   { text: 'Print', link: '/components/print', isNew: true },
   { text: 'Chip', link: '/components/chip', isNew: true },
   { text: 'Calendar', link: '/components/calendar', isNew: true },
+  { text: 'Date panel', link: '/components/date-panel', isNew: true },
   { text: 'Carousel', link: '/components/carousel', isNew: true },
   { text: 'Cascader', link: '/components/cascader', isNew: true },
   { text: 'Breadcrumb', link: '/components/breadcrumb', isNew: true },

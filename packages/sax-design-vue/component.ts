@@ -20,7 +20,7 @@ import { SContextMenu } from '@vuesax-alpha/components/context-menu'
 import { SCollapse, SCollapseItem } from '@vuesax-alpha/components/collapse'
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import { SCountdown } from '@vuesax-alpha/components/countdown'
-import { SDatePicker } from '@vuesax-alpha/components/date-picker'
+import { SDatePanel, SDatePicker } from '@vuesax-alpha/components/date-picker'
 import { SDialog } from '@vuesax-alpha/components/dialog'
 import { SDrawer } from '@vuesax-alpha/components/drawer'
 import { SDivider } from '@vuesax-alpha/components/divider'
@@ -119,6 +119,7 @@ export default [
   SCollapseTransition,
   SCountdown,
   SDatePicker,
+  SDatePanel,
   SDialog,
   SDrawer,
   SDivider,
