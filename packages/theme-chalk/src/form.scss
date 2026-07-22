@@ -9,3 +9,14 @@
 .s-form-item__content { position: relative; flex: 1; min-width: 0; }
 .s-form-item__error { margin-top: 5px; color: getColor(danger); font-size: 12px; line-height: 1.35; }
 .s-form-item.is-error .s-input__wrapper, .s-form-item.is-error .s-textarea__inner { box-shadow: 0 0 0 1px getColor(danger) inset; }
+.s-form-group { margin: 0 0 20px; }
+.s-form-group.is-border { border: 1px solid getColor(border, .7); border-radius: 12px; background: getColor(background); }
+.s-form-group__header { display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: space-between; padding: 10px 15px; border: 0; border-bottom: 1px solid transparent; background: transparent; color: getColor(text); text-align: left; }
+.s-form-group.is-border:not(.is-collapsed) .s-form-group__header { border-bottom-color: getColor(border, .58); }
+.s-form-group__header:not(:disabled) { cursor: pointer; }
+.s-form-group__header strong, .s-form-group__header small { display: block; }
+.s-form-group__header strong { font-size: 14px; font-weight: 600; }
+.s-form-group__header small { margin-top: 2px; color: getColor(text, secondary); font-size: 12px; }
+.s-form-group__header .s-icon { color: getColor(text, secondary); transition: transform .18s ease; }
+.s-form-group.is-collapsed .s-form-group__header .s-icon { transform: rotate(-90deg); }
+.s-form-group__content { padding: 17px 16px 1px; }
