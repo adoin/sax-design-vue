@@ -71,6 +71,24 @@ NEWS:
 
 <card>
 
+## 预览与适配
+
+设置 `preview` 可打开统一图片预览器。`preview-src-list` 支持自定义相册，`fit`、`width` 与 `height` 用于单项展示且不改变现有网格风格。
+
+<template #example>
+<images-preview />
+</template>
+
+<template #template>
+
+@[code{1-2}](../../.vuepress/components/images/preview.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## 悬停
 
 

@@ -28,6 +28,10 @@
     cursor: pointer;
     float: left;
     backface-visibility: visible;
+
+    @include when(preview) {
+      cursor: zoom-in;
+    }
   }
 
   @include e(wrap) {

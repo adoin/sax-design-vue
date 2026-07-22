@@ -71,6 +71,24 @@ Place `s-image` elements inside `s-images`.
 
 <card>
 
+## Preview and fit
+
+Set `preview` to open the shared image viewer. `preview-src-list` supports a custom gallery; `fit`, `width`, and `height` control single item rendering without changing grid styling.
+
+<template #example>
+<images-preview />
+</template>
+
+<template #template>
+
+@[code{1-8}](../.vuepress/components/images/preview.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Hover
 
 
