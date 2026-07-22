@@ -62,7 +62,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-19}](../.vuepress/components/virtual-list/default.vue)
+@[code{1-19}](../../.vuepress/components/virtual-list/default.vue)
 
 </template>
 

@@ -102,13 +102,13 @@ PROPS:
 
 <template #template>
 
-@[code{1-11}](../.vuepress/components/date-picker/default.vue)
+@[code{1-11}](../../.vuepress/components/date-picker/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17}](../.vuepress/components/date-picker/default.vue)
+@[code{13-17}](../../.vuepress/components/date-picker/default.vue)
 
 </template>
 
@@ -126,13 +126,13 @@ PROPS:
 
 <template #template>
 
-@[code{1-12}](../.vuepress/components/date-picker/datetime.vue)
+@[code{1-12}](../../.vuepress/components/date-picker/datetime.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-18}](../.vuepress/components/date-picker/datetime.vue)
+@[code{14-18}](../../.vuepress/components/date-picker/datetime.vue)
 
 </template>
 
@@ -150,13 +150,13 @@ PROPS:
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/date-picker/time.vue)
+@[code{1-5}](../../.vuepress/components/date-picker/time.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11}](../.vuepress/components/date-picker/time.vue)
+@[code{7-11}](../../.vuepress/components/date-picker/time.vue)
 
 </template>
 
@@ -174,13 +174,13 @@ PROPS:
 
 <template #template>
 
-@[code{1-14}](../.vuepress/components/date-picker/daterange.vue)
+@[code{1-14}](../../.vuepress/components/date-picker/daterange.vue)
 
 </template>
 
 <template #script>
 
-@[code{16-20}](../.vuepress/components/date-picker/daterange.vue)
+@[code{16-20}](../../.vuepress/components/date-picker/daterange.vue)
 
 </template>
 
@@ -198,13 +198,13 @@ PROPS:
 
 <template #template>
 
-@[code{1-16}](../.vuepress/components/date-picker/types.vue)
+@[code{1-16}](../../.vuepress/components/date-picker/types.vue)
 
 </template>
 
 <template #script>
 
-@[code{18-22}](../.vuepress/components/date-picker/types.vue)
+@[code{18-22}](../../.vuepress/components/date-picker/types.vue)
 
 </template>
 
@@ -222,13 +222,13 @@ PROPS:
 
 <template #template>
 
-@[code{1-14}](../.vuepress/components/date-picker/datetimerange.vue)
+@[code{1-14}](../../.vuepress/components/date-picker/datetimerange.vue)
 
 </template>
 
 <template #script>
 
-@[code{16-20}](../.vuepress/components/date-picker/datetimerange.vue)
+@[code{16-20}](../../.vuepress/components/date-picker/datetimerange.vue)
 
 </template>
 
@@ -246,13 +246,13 @@ PROPS:
 
 <template #template>
 
-@[code{1-35}](../.vuepress/components/date-picker/shortcuts.vue)
+@[code{1-35}](../../.vuepress/components/date-picker/shortcuts.vue)
 
 </template>
 
 <template #script>
 
-@[code{11-35}](../.vuepress/components/date-picker/shortcuts.vue)
+@[code{11-35}](../../.vuepress/components/date-picker/shortcuts.vue)
 
 </template>
 
@@ -270,13 +270,13 @@ PROPS:
 
 <template #template>
 
-@[code{1-12}](../.vuepress/components/date-picker/disabled-date.vue)
+@[code{1-12}](../../.vuepress/components/date-picker/disabled-date.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-18}](../.vuepress/components/date-picker/disabled-date.vue)
+@[code{14-18}](../../.vuepress/components/date-picker/disabled-date.vue)
 
 </template>
 
@@ -294,13 +294,13 @@ PROPS:
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/date-picker/festival.vue)
+@[code{1-5}](../../.vuepress/components/date-picker/festival.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-16}](../.vuepress/components/date-picker/festival.vue)
+@[code{7-16}](../../.vuepress/components/date-picker/festival.vue)
 
 </template>
 

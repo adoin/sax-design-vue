@@ -30,13 +30,13 @@ PROPS:
 
 <template #template>
 
-@[code{1-11}](../.vuepress/components/time-picker/default.vue)
+@[code{1-11}](../../.vuepress/components/time-picker/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17}](../.vuepress/components/time-picker/default.vue)
+@[code{13-17}](../../.vuepress/components/time-picker/default.vue)
 
 </template>
 
