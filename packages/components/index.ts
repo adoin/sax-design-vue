@@ -56,6 +56,7 @@ export * from './time-select'
 export * from './tooltip'
 export * from './upload'
 export * from './virtual-list'
+export * from './watermark'
 
 // plugins
 export * from './loading'

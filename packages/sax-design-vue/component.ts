@@ -68,6 +68,7 @@ import { STimeSelect } from '@vuesax-alpha/components/time-select'
 import { STooltip } from '@vuesax-alpha/components/tooltip'
 import { SUpload } from '@vuesax-alpha/components/upload'
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
+import { SWatermark } from '@vuesax-alpha/components/watermark'
 
 import type { Plugin } from 'vue'
 
@@ -149,4 +150,5 @@ export default [
   STooltip,
   SUpload,
   SVirtualList,
+  SWatermark,
 ] as Plugin[]

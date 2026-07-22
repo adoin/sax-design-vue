@@ -1,0 +1,27 @@
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+
+.s-watermark {
+  position: relative;
+  overflow: hidden;
+}
+
+.s-watermark__marks {
+  pointer-events: none;
+  position: absolute;
+  inset: -40%;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(6, max-content);
+  align-content: space-around;
+  justify-content: space-around;
+  color: getColor(text);
+  font-size: 13px;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.s-watermark__content {
+  position: relative;
+  z-index: 2;
+}
