@@ -15,6 +15,7 @@ import { SCollapse, SCollapseItem } from '@vuesax-alpha/components/collapse'
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import { SDatePicker } from '@vuesax-alpha/components/date-picker'
 import { SDialog } from '@vuesax-alpha/components/dialog'
+import { SDrawer } from '@vuesax-alpha/components/drawer'
 import { SDivider } from '@vuesax-alpha/components/divider'
 import { SEmpty } from '@vuesax-alpha/components/empty'
 import { SIcon } from '@vuesax-alpha/components/icon'
@@ -90,6 +91,7 @@ export default [
   SCollapseTransition,
   SDatePicker,
   SDialog,
+  SDrawer,
   SDivider,
   SEmpty,
   SIcon,
