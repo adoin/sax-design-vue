@@ -55,6 +55,7 @@ import { SProgress } from '@vuesax-alpha/components/progress'
 import { SPulldown } from '@vuesax-alpha/components/pulldown'
 import { SPrompt } from '@vuesax-alpha/components/prompt'
 import { SRadio } from '@vuesax-alpha/components/radio'
+import { SRadioButton } from '@vuesax-alpha/components/radio-button'
 import { SRate } from '@vuesax-alpha/components/rate'
 import { SResult } from '@vuesax-alpha/components/result'
 import { SRow } from '@vuesax-alpha/components/row'
@@ -152,6 +153,7 @@ export default [
   SPulldown,
   SPrompt,
   SRadio,
+  SRadioButton,
   SRate,
   SResult,
   SRow,

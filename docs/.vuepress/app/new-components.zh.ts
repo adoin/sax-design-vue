@@ -34,6 +34,7 @@ export const newComponentNavItemsZh: SidebarItem[] = [
   { text: '下拉容器', link: zh('/components/pulldown'), isNew: true },
   { text: '密码输入框', link: zh('/components/password-input'), isNew: true },
   { text: '结果', link: zh('/components/result'), isNew: true },
+  { text: '按钮单选', link: zh('/components/radio-button'), isNew: true },
   { text: 'Tabs', link: zh('/components/tabs'), isNew: true },
   { text: '标签', link: zh('/components/tag'), isNew: true },
   { text: '文本', link: zh('/components/text'), isNew: true },

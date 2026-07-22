@@ -32,6 +32,7 @@ export const newComponentNavItems: SidebarItem[] = [
   { text: 'Pulldown', link: '/components/pulldown', isNew: true },
   { text: 'Password input', link: '/components/password-input', isNew: true },
   { text: 'Result', link: '/components/result', isNew: true },
+  { text: 'Radio button', link: '/components/radio-button', isNew: true },
   { text: 'Tabs', link: '/components/tabs', isNew: true },
   { text: 'Tag', link: '/components/tag', isNew: true },
   { text: 'Text', link: '/components/text', isNew: true },
