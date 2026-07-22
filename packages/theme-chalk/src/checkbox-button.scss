@@ -1,0 +1,9 @@
+@use 'common/var' as *;
+
+.s-checkbox-button { position: relative; display: inline-flex; min-height: 34px; align-items: center; padding: 0 13px; border: 1px solid getColor(border, .8); border-left-width: 0; background: getColor(background); color: getColor(text, secondary); font-size: 13px; cursor: pointer; transition: background-color .16s ease, border-color .16s ease, color .16s ease; }
+.s-checkbox-button:first-of-type { border-left-width: 1px; border-radius: 9px 0 0 9px; }
+.s-checkbox-button:last-of-type { border-radius: 0 9px 9px 0; }
+.s-checkbox-button input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.s-checkbox-button:hover:not(.is-disabled) { background: getColor(primary, .06); color: getColor(primary); }
+.s-checkbox-button.is-active { z-index: 1; border-color: getColor(primary); background: getColor(primary, .12); color: getColor(primary); font-weight: 600; }
+.s-checkbox-button.is-disabled { cursor: not-allowed; opacity: .5; }

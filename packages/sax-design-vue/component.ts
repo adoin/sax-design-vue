@@ -13,6 +13,7 @@ import { SCard, SCardGroup } from '@vuesax-alpha/components/card'
 import { SCarousel } from '@vuesax-alpha/components/carousel'
 import { SCascader } from '@vuesax-alpha/components/cascader'
 import { SCheckbox, SCheckboxGroup } from '@vuesax-alpha/components/checkbox'
+import { SCheckboxButton } from '@vuesax-alpha/components/checkbox-button'
 import { SChip, SChips } from '@vuesax-alpha/components/chip'
 import { SCol } from '@vuesax-alpha/components/col'
 import { SColorPicker } from '@vuesax-alpha/components/color-picker'
@@ -56,7 +57,7 @@ import { SProgress } from '@vuesax-alpha/components/progress'
 import { SPrint } from '@vuesax-alpha/components/print'
 import { SPulldown } from '@vuesax-alpha/components/pulldown'
 import { SPrompt } from '@vuesax-alpha/components/prompt'
-import { SRadio } from '@vuesax-alpha/components/radio'
+import { SRadio, SRadioGroup } from '@vuesax-alpha/components/radio'
 import { SRadioButton } from '@vuesax-alpha/components/radio-button'
 import { SRate } from '@vuesax-alpha/components/rate'
 import { SResult } from '@vuesax-alpha/components/result'
@@ -109,6 +110,7 @@ export default [
   SCascader,
   SCheckbox,
   SCheckboxGroup,
+  SCheckboxButton,
   SChip,
   SChips,
   SCol,
@@ -159,6 +161,7 @@ export default [
   SPulldown,
   SPrompt,
   SRadio,
+  SRadioGroup,
   SRadioButton,
   SRate,
   SResult,

@@ -1,9 +1,5 @@
-@use 'mixins/mixins' as *;
 @use 'common/var' as *;
 
-@include b(radio-group) {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: wrap;
-  font-size: 0;
-}
+.s-radio-group { display: inline-flex; align-items: center; gap: 12px; }
+.s-radio-group--button { gap: 0; }
+.s-radio-group.is-disabled { opacity: .58; }
