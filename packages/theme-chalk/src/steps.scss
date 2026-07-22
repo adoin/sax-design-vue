@@ -1,0 +1,25 @@
+@use 'common/var' as *;
+
+.s-steps { display: flex; width: 100%; margin: 0; padding: 0; list-style: none; }
+.s-steps__item { position: relative; display: flex; flex: 1; min-width: 0; color: getColor(text, secondary); }
+.s-steps__item.is-clickable { cursor: pointer; }
+.s-steps__item.is-disabled { cursor: not-allowed; opacity: .55; }
+.s-steps__head { position: relative; display: flex; align-items: center; }
+.s-steps__icon { z-index: 1; display: grid; width: 28px; height: 28px; place-items: center; border: 2px solid getColor(border); border-radius: 50%; background: getColor(white); color: getColor(text, secondary); font-size: 13px; font-weight: 600; transition: all .2s ease; }
+.s-steps__line { position: absolute; top: 50%; left: 28px; width: calc(100% - 28px); height: 2px; transform: translateY(-50%); background: getColor(border); transition: background .2s ease; }
+.s-steps__main { min-width: 0; margin-left: 10px; padding-right: 14px; }
+.s-steps__title { color: inherit; font-size: 14px; font-weight: 600; line-height: 28px; }
+.s-steps__description { margin-top: 5px; color: getColor(text, secondary); font-size: 12px; line-height: 1.5; }
+.s-steps__item--finish, .s-steps__item--process { color: getColor(primary); }
+.s-steps__item--finish .s-steps__icon, .s-steps__item--process .s-steps__icon { border-color: getColor(primary); background: getColor(primary); color: getColor(white); }
+.s-steps__item--finish .s-steps__line { background: getColor(primary); }
+.s-steps__item--error { color: getColor(danger); }
+.s-steps__item--error .s-steps__icon { border-color: getColor(danger); background: getColor(danger); color: getColor(white); }
+.s-steps--vertical { flex-direction: column; width: auto; }
+.s-steps--vertical .s-steps__item { flex: 0 0 auto; min-height: 72px; }
+.s-steps--vertical .s-steps__line { top: 28px; left: 13px; width: 2px; height: calc(100% - 28px); transform: none; }
+.s-steps--vertical .s-steps__main { padding-bottom: 18px; }
+.s-steps--simple { gap: 20px; }
+.s-steps--simple .s-steps__item { flex: 0 1 auto; align-items: center; }
+.s-steps--simple .s-steps__line { display: none; }
+.s-steps--simple .s-steps__title { margin-left: 8px; line-height: 28px; }

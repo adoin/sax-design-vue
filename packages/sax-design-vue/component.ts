@@ -57,6 +57,7 @@ import {
 } from '@vuesax-alpha/components/sidebar'
 import { SSlider } from '@vuesax-alpha/components/slider'
 import { SSpacer } from '@vuesax-alpha/components/spacer'
+import { SSteps } from '@vuesax-alpha/components/steps'
 import { SSwitch } from '@vuesax-alpha/components/switch'
 import { STable, STd, STh, STr } from '@vuesax-alpha/components/table'
 import { STab, STabs } from '@vuesax-alpha/components/tabs'
@@ -136,6 +137,7 @@ export default [
   SSidebarItem,
   SSlider,
   SSpacer,
+  SSteps,
   STable,
   STd,
   STh,

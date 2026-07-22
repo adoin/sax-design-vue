@@ -25,6 +25,7 @@ export const newComponentNavItems: SidebarItem[] = [
   { text: 'Tag', link: '/components/tag', isNew: true },
   { text: 'Text', link: '/components/text', isNew: true },
   { text: 'Slider', link: '/components/slider', isNew: true },
+  { text: 'Steps', link: '/components/steps', isNew: true },
   { text: 'Upload', link: '/components/upload', isNew: true },
   { text: 'Virtual list', link: '/components/virtual-list', isNew: true },
   { text: 'Watermark', link: '/components/watermark', isNew: true },
