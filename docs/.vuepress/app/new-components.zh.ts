@@ -31,6 +31,7 @@ export const newComponentNavItemsZh: SidebarItem[] = [
   { text: '公告栏', link: zh('/components/notice-bar'), isNew: true },
   { text: '分段控制', link: zh('/components/segmented'), isNew: true },
   { text: 'Prompt', link: zh('/components/prompt'), isNew: true },
+  { text: '下拉容器', link: zh('/components/pulldown'), isNew: true },
   { text: '密码输入框', link: zh('/components/password-input'), isNew: true },
   { text: '结果', link: zh('/components/result'), isNew: true },
   { text: 'Tabs', link: zh('/components/tabs'), isNew: true },

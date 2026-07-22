@@ -29,6 +29,7 @@ export const newComponentNavItems: SidebarItem[] = [
   { text: 'Notice bar', link: '/components/notice-bar', isNew: true },
   { text: 'Segmented', link: '/components/segmented', isNew: true },
   { text: 'Prompt', link: '/components/prompt', isNew: true },
+  { text: 'Pulldown', link: '/components/pulldown', isNew: true },
   { text: 'Password input', link: '/components/password-input', isNew: true },
   { text: 'Result', link: '/components/result', isNew: true },
   { text: 'Tabs', link: '/components/tabs', isNew: true },

@@ -1,0 +1,4 @@
+@use 'common/var' as *;
+
+.s-pulldown { min-width: 150px; overflow: hidden; border: 1px solid getColor(border, .68); border-radius: 12px; background: getColor(background); box-shadow: 0 14px 34px rgba(28, 37, 78, .16); }
+.s-pulldown__popper { padding: 0 !important; border: 0 !important; background: transparent !important; box-shadow: none !important; }

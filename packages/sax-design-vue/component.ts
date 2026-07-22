@@ -52,6 +52,7 @@ import { SPasswordInput } from '@vuesax-alpha/components/password-input'
 import { SPopconfirm } from '@vuesax-alpha/components/popconfirm'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SProgress } from '@vuesax-alpha/components/progress'
+import { SPulldown } from '@vuesax-alpha/components/pulldown'
 import { SPrompt } from '@vuesax-alpha/components/prompt'
 import { SRadio } from '@vuesax-alpha/components/radio'
 import { SRate } from '@vuesax-alpha/components/rate'
@@ -148,6 +149,7 @@ export default [
   SPopconfirm,
   SPopper,
   SProgress,
+  SPulldown,
   SPrompt,
   SRadio,
   SRate,
