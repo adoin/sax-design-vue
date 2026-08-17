@@ -17,6 +17,14 @@ export type CheckboxValueType = string | number | boolean | object
 
 export type CheckboxModelType = CheckboxValueType | CheckboxValueType[]
 
+export const checkboxIconAnimationValues = [
+  'auto',
+  'draw',
+  'pop',
+  'none',
+] as const
+export type CheckboxIconAnimation = (typeof checkboxIconAnimationValues)[number]
+
 export const checkboxProps = buildProps({
   /**
    * @description Component color - Accept Sax Design color tokens, Hex, rgb
@@ -109,6 +117,15 @@ export const checkboxProps = buildProps({
    */
   lineThrough: {
     type: Boolean,
+  },
+  /**
+   * @description animation used by the custom icon slot. Stroke SVGs can be
+   * drawn; other icon types fall back to a pop reveal in auto mode.
+   */
+  iconAnimation: {
+    type: String as () => CheckboxIconAnimation,
+    values: checkboxIconAnimationValues,
+    default: 'auto',
   },
   /**
    * @description native 'name' attribute

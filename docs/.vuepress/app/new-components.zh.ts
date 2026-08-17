@@ -33,7 +33,6 @@ export const componentNamesZh: Record<string, string> = {
   Calendar: '日历',
   Carousel: '轮播图',
   Cascader: '级联选择器',
-  'Checkbox button': '复选按钮',
   Chip: '标签块',
   Collapse: '折叠面板',
   'Color picker': '颜色选择器',

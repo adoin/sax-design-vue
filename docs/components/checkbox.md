@@ -61,6 +61,14 @@ PROPS:
         </s-checkbox>
       </template>
 
+  - name: icon-animation
+    type: String
+    values: auto, draw, pop, none
+    description: Animate a custom icon. Auto draws stroke SVG paths and uses a pop reveal for filled icons.
+    default: auto
+    link: null
+    usage: '#icon'
+
   - name: indeterminate
     type: Boolean
     values: true, false
@@ -156,8 +164,8 @@ PROPS:
 SLOTS:
   - name: icon
     type: slot
-    values: null
-    description: Change the component icon.
+    values: checked, indeterminate
+    description: Change the component icon and receive its current checked and indeterminate states.
     default: null
     link: null
     usage: '#icon'
@@ -343,6 +351,42 @@ checkbox-group element can manage multiple checkboxes in one group by using v-mo
 
 <card>
 
+## Data-driven groups
+
+Pass `options` to let `CheckboxGroup` render flat or sectioned choices. A section heading selects all enabled children and automatically becomes indeterminate when only part of the section is selected. `columns` controls the grid and collapses to one column on small screens.
+
+<template #example>
+<checkbox-advanced-group />
+</template>
+
+<template #template>
+
+@[code](../.vuepress/components/checkbox/advanced-group.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Checkbox group tabs
+
+`CheckboxGroupTabs` combines a platform switcher with grouped choices. The checkbox before a tab selects or clears the whole platform, while clicking its label only switches the visible content. Active tabs use color, surface and shadow instead of borders.
+
+<template #example>
+<checkbox-platform-tabs />
+</template>
+
+<template #template>
+
+@[code](../.vuepress/components/checkbox/platform-tabs.vue)
+
+</template>
+
+</card>
+
+<card>
+
 <template #example>
 <checkbox-object />
 </template>
@@ -365,7 +409,11 @@ checkbox-group element can manage multiple checkboxes in one group by using v-mo
 
 ## Icon
 
-Change the icon inside the checkbox component with the`slot="icon"`
+Change the icon inside the checkbox with the `icon` slot. Custom icons use a
+white foreground while checked. Stroke SVG paths are drawn automatically;
+filled icons use a scale and clip reveal. Set `icon-animation` to `draw`, `pop`,
+or `none` to override the automatic choice. The slot exposes `checked` and
+`indeterminate` for fully custom motion.
 
 <utils-icon />
 
@@ -486,5 +534,36 @@ There are some cases where you have several checkboxes and you need one that man
 <card>
 
 ## API
+
+### CheckboxGroup
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `v-model` | `CheckboxValue[]` | `[]` | Flat array containing every selected child value. |
+| `options` | `(CheckboxGroupOption \| CheckboxGroupSection)[]` | `[]` | Data-driven options; an item with `options` becomes a selectable section. |
+| `columns` | `number` | `1` | Default column count. A section can override it with its own `columns`. |
+| `gap` | `number \| string` | `12` | Row and column gap. Numbers are treated as pixels. |
+| `disabled-values` | `CheckboxValue[]` | `[]` | Disable child values and preserve them during section select/clear actions. |
+| `disabled-group-values` | `CheckboxValue[]` | `[]` | Disable select-all for the specified sections. |
+| `disabled` | `boolean` | `false` | Disable the whole group. |
+| `min` / `max` | `number` | `-` | Minimum and maximum selected value counts. |
+
+`CheckboxGroupOption` supports `label`, `value`, `disabled`, and `description`. `CheckboxGroupSection` supports `label`, `value`, `options`, `disabled`, and `columns`.
+Child `value` entries must remain unique within a CheckboxGroup or tab.
+
+Events: `update:modelValue(value)` and `change(value)`. Slots: `option`, `group-label`, and `empty`. The default slot remains compatible with manually composed Checkbox children when `options` is omitted.
+
+### CheckboxGroupTabs
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `v-model` | `Record<string, CheckboxValue[]>` | `{}` | Selected values stored independently by tab value. |
+| `tabs` | `CheckboxGroupTab[]` | `[]` | Tabs containing `label`, `value`, and grouped `options`. |
+| `active-key` / `v-model:active-key` | `string \| number` | First enabled tab | Active tab. |
+| `columns` | `number` | `2` | Default content column count. |
+| `gap` | `number \| string` | `12` | Content row and column gap. |
+| `disabled` | `boolean` | `false` | Disable every tab and option. |
+
+Events: `update:modelValue(value)`, `change(value, activeKey)`, `update:activeKey(activeKey)`, and `tabChange(activeKey)`. Slots: `tab`, `option`, `group-label`, and `empty`.
 
 </card>

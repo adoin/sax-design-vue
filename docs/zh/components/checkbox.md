@@ -61,6 +61,14 @@ PROPS:
         </s-checkbox>
       </template>
 
+  - name: icon-animation
+    type: String
+    values: auto, draw, pop, none
+    description: 设置自定义图标动画。auto 会绘制描边 SVG，填充图标则使用弹入揭示。
+    default: auto
+    link: null
+    usage: '#icon'
+
   - name: indeterminate
     type: Boolean
     values: true, false
@@ -156,8 +164,8 @@ PROPS:
 SLOTS:
   - name: icon
     type: slot
-    values: null
-    description: 自定义组件图标。
+    values: checked, indeterminate
+    description: 自定义组件图标，并获取当前选中与不确定状态。
     default: null
     link: null
     usage: '#icon'
@@ -343,6 +351,42 @@ SLOTS:
 
 <card>
 
+## 数据驱动分组
+
+传入 `options` 后，`CheckboxGroup` 会直接渲染选项和分组。分组标题可控制组内全选，部分选中时自动展示半选状态；禁用项不会被分组全选覆盖。`columns` 控制每组的列数，小屏会自动回落为单列。
+
+<template #example>
+<checkbox-advanced-group />
+</template>
+
+<template #template>
+
+@[code](../../.vuepress/components/checkbox/advanced-group.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 分组页签
+
+`CheckboxGroupTabs` 适合“平台 + 平台内分组选项”这样的连续选择。页签前的复选框控制整个平台的全选或清空，点击页签文字只切换内容，不会改变选中值。当前页签使用背景、颜色与阴影区分，全程不使用边框。
+
+<template #example>
+<checkbox-platform-tabs />
+</template>
+
+<template #template>
+
+@[code](../../.vuepress/components/checkbox/platform-tabs.vue)
+
+</template>
+
+</card>
+
+<card>
+
 <template #example>
 <checkbox-object />
 </template>
@@ -365,7 +409,10 @@ SLOTS:
 
 ## 图标
 
-通过 `icon` 插槽自定义复选框内部图标。
+通过 `icon` 插槽自定义复选框内部图标。选中后图标统一使用白色前景；
+描边 SVG 会自动播放路径绘制动画，填充图标则使用缩放与裁剪揭示。
+可通过 `icon-animation` 指定 `draw`、`pop` 或 `none`，插槽同时提供
+`checked` 与 `indeterminate`，便于实现完全自定义的状态动画。
 
 <utils-icon />
 
@@ -486,5 +533,36 @@ SLOTS:
 <card>
 
 ## API
+
+### CheckboxGroup
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `v-model` | `CheckboxValue[]` | `[]` | 所有已选子项组成的扁平数组。 |
+| `options` | `(CheckboxGroupOption \| CheckboxGroupSection)[]` | `[]` | 数据驱动选项；带 `options` 的项会作为可全选的分组。 |
+| `columns` | `number` | `1` | 默认列数，分组可通过自身 `columns` 覆盖。 |
+| `gap` | `number \| string` | `12` | 行列间距。数字按像素处理。 |
+| `disabled-values` | `CheckboxValue[]` | `[]` | 禁用指定子项，并在分组全选/清空时保留其值。 |
+| `disabled-group-values` | `CheckboxValue[]` | `[]` | 禁用指定分组标题的全选控制。 |
+| `disabled` | `boolean` | `false` | 禁用整个组。 |
+| `min` / `max` | `number` | `-` | 限制最少或最多选中数量。 |
+
+`CheckboxGroupOption` 支持 `label`、`value`、`disabled`、`description`；`CheckboxGroupSection` 支持 `label`、`value`、`options`、`disabled`、`columns`。
+同一个 CheckboxGroup 或页签内的子项 `value` 应保持唯一。
+
+事件：`update:modelValue(value)`、`change(value)`。插槽：`option`、`group-label`、`empty`，不传 `options` 时默认插槽仍兼容原有的手写 Checkbox 用法。
+
+### CheckboxGroupTabs
+
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `v-model` | `Record<string, CheckboxValue[]>` | `{}` | 按页签值保存各自的选中数组。 |
+| `tabs` | `CheckboxGroupTab[]` | `[]` | 页签数据，每项包含 `label`、`value` 与 `options`。 |
+| `active-key` / `v-model:active-key` | `string \| number` | 首个可用页签 | 当前页签。 |
+| `columns` | `number` | `2` | 内容区默认列数。 |
+| `gap` | `number \| string` | `12` | 内容区行列间距。 |
+| `disabled` | `boolean` | `false` | 禁用所有页签及选项。 |
+
+事件：`update:modelValue(value)`、`change(value, activeKey)`、`update:activeKey(activeKey)`、`tabChange(activeKey)`。插槽：`tab`、`option`、`group-label`、`empty`。
 
 </card>

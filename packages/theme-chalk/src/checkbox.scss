@@ -76,12 +76,6 @@
         // border: 2px solid getColor('color', 1) !important;
         box-shadow: 0px 0px 0px 0px getColor('color', 0.35);
 
-        i:not(.#{$namespace}-icon-check) {
-          opacity: 1;
-          transform: scale(1);
-          transition: getCssVar(transition-ease) 0.15s;
-        }
-
         &:after {
           opacity: 1;
           transform: scale(1);
@@ -165,14 +159,6 @@
       pointer-events: none;
       transition: getCssVar(transition-ease);
 
-      i:not(.#{$namespace}-icon-check) {
-        opacity: 0;
-        transition: getCssVar(transition-ease);
-        color: $color-white;
-        font-size: 1.1em;
-        transform: scale(0.5);
-      }
-
       .#{$namespace}-icon-check__check {
         margin-right: 1px;
       }
@@ -197,6 +183,84 @@
       }
       .#{$namespace}-icon-check {
         z-index: 3;
+      }
+
+      @include e(custom-icon) {
+        position: relative;
+        z-index: 3;
+        display: inline-flex;
+        width: 1.1em;
+        height: 1.1em;
+        align-items: center;
+        justify-content: center;
+        overflow: visible;
+        color: $color-white;
+        clip-path: inset(50% 50% 50% 50% round 50%);
+        opacity: 0;
+        transform: scale(0.45) rotate(-8deg);
+        transform-origin: center;
+        transition:
+          opacity 0.12s ease-in,
+          transform 0.14s ease-in,
+          clip-path 0.14s ease-in;
+
+        > .#{$namespace}-icon {
+          color: $color-white !important;
+        }
+
+        &[data-animation='none'] {
+          transition: none;
+        }
+
+        &[data-animation='draw'] {
+          clip-path: none;
+          transform: none;
+
+          [data-sax-checkbox-draw] {
+            fill: none !important;
+            stroke: currentColor !important;
+            stroke-dasharray: var(--sax-checkbox-icon-path-length);
+            stroke-dashoffset: var(--sax-checkbox-icon-path-length);
+            opacity: 0;
+            transition:
+              stroke-dashoffset 0.22s ease-in,
+              opacity 0.02s 0.2s;
+          }
+        }
+      }
+    }
+  }
+
+  @include when(checked) {
+    @include e(input) {
+      @include m(mask) {
+        @include e(custom-icon) {
+          clip-path: inset(0 round 0);
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
+          transition:
+            opacity 0.12s 0.1s ease-out,
+            transform 0.2s 0.08s cubic-bezier(0.2, 0.8, 0.2, 1.15),
+            clip-path 0.18s 0.08s ease-out;
+
+          &[data-animation='none'] {
+            transition: none;
+          }
+
+          &[data-animation='draw'] {
+            transform: none;
+
+            [data-sax-checkbox-draw] {
+              stroke-dashoffset: 0;
+              opacity: 1;
+              transition:
+                stroke-dashoffset 0.22s
+                  calc(0.1s + var(--sax-checkbox-icon-path-delay)) ease-out,
+                opacity 0.02s
+                  calc(0.1s + var(--sax-checkbox-icon-path-delay));
+            }
+          }
+        }
       }
     }
   }
@@ -229,5 +293,12 @@
       background: getColor('text', 0.6);
       transition: getCssVar(transition-ease);
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-checkbox__custom-icon,
+  .#{$namespace}-checkbox__custom-icon [data-sax-checkbox-draw] {
+    transition: none !important;
   }
 }

@@ -9,7 +9,6 @@ export const additionalComponentNavItems: SidebarItem[] = [
   { text: 'Calendar', link: '/components/calendar' },
   { text: 'Carousel', link: '/components/carousel' },
   { text: 'Cascader', link: '/components/cascader' },
-  { text: 'Checkbox button', link: '/components/checkbox-button' },
   { text: 'Chip', link: '/components/chip' },
   { text: 'Collapse', link: '/components/collapse' },
   { text: 'Color picker', link: '/components/color-picker' },

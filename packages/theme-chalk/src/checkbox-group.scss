@@ -1,0 +1,227 @@
+@use 'mixins/mixins' as *;
+@use 'common/var' as *;
+
+@include b(checkbox-group) {
+  --sax-checkbox-group-columns: 1;
+  --sax-checkbox-group-gap: 12px;
+
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: var(--sax-checkbox-group-gap);
+
+  @include when(data-driven) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  @include when(disabled) {
+    opacity: 0.62;
+  }
+
+  @include e(section) {
+    min-width: 0;
+    padding: 12px 14px 14px;
+    border-radius: var(--sax-radius-md);
+    background: getColor(primary, 0.025);
+    box-shadow:
+      inset 0 2px 5px getColor(primary, 0.055),
+      0 5px 16px -12px getColor(primary, 0.22);
+  }
+
+  @include e(section-header) {
+    display: flex;
+    min-height: 30px;
+    align-items: center;
+    margin-bottom: 4px;
+
+    .#{$namespace}-checkbox__label {
+      color: getColor(primary);
+      font-weight: 600;
+    }
+  }
+
+  @include e(options) {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: repeat(
+      var(--sax-checkbox-group-columns),
+      minmax(0, 1fr)
+    );
+    gap: var(--sax-checkbox-group-gap);
+  }
+
+  @include e(option) {
+    min-width: 0;
+    padding: 1px 4px;
+    border-radius: var(--sax-radius-sm);
+    transition:
+      background var(--sax-motion-duration-fast) ease,
+      box-shadow var(--sax-motion-duration-fast) ease,
+      transform var(--sax-motion-duration-fast) ease;
+
+    &:hover {
+      background: getColor(background, 0.82);
+      box-shadow: 0 5px 14px -10px getColor(primary, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .#{$namespace}-checkbox {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .#{$namespace}-checkbox__label {
+      min-width: 0;
+      flex: 1;
+      align-items: flex-start;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+  }
+
+  @include e(option-label) {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include e(description) {
+    display: block;
+    margin-top: 2px;
+    color: getColor(text, 0.52);
+    font-size: 0.75rem;
+    font-weight: 400;
+    white-space: normal;
+  }
+}
+
+@include b(checkbox-group-tabs) {
+  width: 100%;
+  min-width: 0;
+
+  @include e(list) {
+    display: flex;
+    width: fit-content;
+    max-width: 100%;
+    padding: 4px;
+    overflow-x: auto;
+    gap: 4px;
+    border-radius: var(--sax-radius-md);
+    background: getColor(primary, 0.045);
+    box-shadow: inset 0 2px 6px getColor(primary, 0.08);
+    scrollbar-width: thin;
+  }
+
+  @include e(tab) {
+    display: inline-flex;
+    min-height: 36px;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 3px;
+    padding: 0 7px;
+    border-radius: var(--sax-radius-sm);
+    color: getColor(text, 0.68);
+    transition:
+      color var(--sax-motion-duration-fast) ease,
+      background var(--sax-motion-duration-fast) ease,
+      box-shadow var(--sax-motion-duration-fast) ease,
+      transform var(--sax-motion-duration-fast) ease;
+
+    &:hover:not(.is-disabled) {
+      background: getColor(background, 0.66);
+      color: getColor(primary);
+    }
+
+    @include when(active) {
+      background: getColor(background);
+      color: getColor(primary);
+      box-shadow:
+        0 7px 18px -10px getColor(primary, 0.48),
+        0 2px 6px getColor(primary, 0.1);
+      font-weight: 600;
+      transform: translateY(-1px);
+    }
+
+    @include when(disabled) {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    &:focus-within {
+      box-shadow:
+        0 0 0 3px getColor(primary, 0.14),
+        0 7px 18px -10px getColor(primary, 0.4);
+    }
+
+    .#{$namespace}-checkbox {
+      flex: 0 0 auto;
+    }
+  }
+
+  @include e(tab-button) {
+    display: inline-flex;
+    min-height: 32px;
+    align-items: center;
+    gap: 6px;
+    padding: 0 4px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  @include e(count) {
+    display: inline-flex;
+    min-width: 18px;
+    height: 18px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+    border-radius: var(--sax-radius-pill);
+    background: getColor(primary, 0.1);
+    color: getColor(primary);
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  @include e(panel) {
+    min-width: 0;
+    margin-top: 10px;
+    padding: 14px;
+    border-radius: var(--sax-radius-lg);
+    background: getColor(background, 0.78);
+    box-shadow:
+      inset 0 3px 8px getColor(primary, 0.07),
+      0 12px 30px -20px getColor(primary, 0.42);
+  }
+
+  @include when(disabled) {
+    opacity: 0.62;
+  }
+}
+
+@media (max-width: 640px) {
+  .#{$namespace}-checkbox-group__options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .#{$namespace}-checkbox-group-tabs__list {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-checkbox-group__option,
+  .#{$namespace}-checkbox-group-tabs__tab {
+    transition: none;
+  }
+}

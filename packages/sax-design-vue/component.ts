@@ -14,7 +14,6 @@ import { SCard, SCardGroup } from '@vuesax-alpha/components/card'
 import { SCarousel } from '@vuesax-alpha/components/carousel'
 import { SCascader } from '@vuesax-alpha/components/cascader'
 import { SCheckbox, SCheckboxGroup } from '@vuesax-alpha/components/checkbox'
-import { SCheckboxButton } from '@vuesax-alpha/components/checkbox-button'
 import { SChip, SChips } from '@vuesax-alpha/components/chip'
 import { SCol } from '@vuesax-alpha/components/col'
 import { SColorPicker } from '@vuesax-alpha/components/color-picker'
@@ -116,7 +115,6 @@ export default [
   SCascader,
   SCheckbox,
   SCheckboxGroup,
-  SCheckboxButton,
   SChip,
   SChips,
   SCol,

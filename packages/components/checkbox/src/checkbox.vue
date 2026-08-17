@@ -8,6 +8,8 @@
         :value="value"
         :name="name"
         :disabled="isDisabled"
+        :indeterminate="indeterminate"
+        :aria-checked="indeterminate ? 'mixed' : isChecked"
         :class="ns.e('original')"
         type="checkbox"
         @change="handleChange"
@@ -18,7 +20,18 @@
           :active="isChecked"
           :indeterminate="indeterminate"
         />
-        <slot v-else name="icon" />
+        <span
+          v-else
+          ref="customIcon"
+          :class="ns.e('custom-icon')"
+          :data-animation="resolvedIconAnimation"
+        >
+          <slot
+            name="icon"
+            :checked="isChecked"
+            :indeterminate="indeterminate"
+          />
+        </span>
       </div>
 
       <icon-loading v-if="loading" />
@@ -35,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, useSlots } from 'vue'
+import { computed, useSlots, useTemplateRef } from 'vue'
 import {
   useColor,
   useId,
@@ -45,11 +58,11 @@ import {
 import { getVsColor } from '@vuesax-alpha/utils'
 import { IconCheck, IconLoading } from '@vuesax-alpha/components/icon'
 import { checkboxEmits, checkboxProps } from './checkbox'
-import { useCheckbox } from './composables'
+import { useCheckbox, useCheckboxIconAnimation } from './composables'
 
 defineOptions({
-  inheritAttrs: false,
   name: 'SCheckbox',
+  inheritAttrs: false,
 })
 
 const props = defineProps(checkboxProps)
@@ -62,7 +75,12 @@ const checkboxId = props.id ?? useId()
 const { isChecked, isDisabled, model, hasOwnLabel, handleChange } = useCheckbox(
   props,
   emit,
-  slots
+  slots,
+)
+const customIconElement = useTemplateRef<HTMLElement>('customIcon')
+const { resolvedIconAnimation } = useCheckboxIconAnimation(
+  customIconElement,
+  () => props.iconAnimation,
 )
 const vsBaseClasses = useVuesaxBaseComponent(useColor())
 const checkboxKls = computed(() => [
