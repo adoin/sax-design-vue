@@ -4,7 +4,7 @@
     class="sidebar-button"
     @click="$emit('toggle-sidebar')"
   >
-    <i class="bx bx-menu" />
+    <s-icon  name="bx:menu" />
   </button>
 </template>
 
@@ -16,7 +16,7 @@ defineProps<{ openSidebar?: boolean }>()
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .isSidebarOpen {
   .sidebar-button {

@@ -51,10 +51,10 @@
                 type="flat"
                 @click="handleCancel"
               >
-                {{ cancelButtonText }}
+                {{ cancelButtonText || t('vs.dialog.cancel') }}
               </s-button>
               <s-button v-if="showConfirmButton" @click="handleConfirm">
-                {{ confirmButtonText }}
+                {{ confirmButtonText || t('vs.dialog.confirm') }}
               </s-button>
             </slot>
           </div>
@@ -69,6 +69,7 @@ import { computed } from 'vue'
 import SButton from '@vuesax-alpha/components/button'
 import { IconClose, IconLoading } from '@vuesax-alpha/components/icon'
 import {
+  useLocale,
   useModal,
   useNamespace,
   usePopperContainer,
@@ -90,6 +91,7 @@ usePopperContainer()
 const { selector } = usePopperContainerId()
 
 const ns = useNamespace('dialog')
+const { t } = useLocale()
 
 dialogDeprecated(props)
 

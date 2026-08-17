@@ -1,53 +1,148 @@
 <template>
   <main class="home-modern" aria-labelledby="home-title">
-    <div class="home-modern__bg" aria-hidden="true">
-      <span class="home-modern__orb home-modern__orb--1" />
-      <span class="home-modern__orb home-modern__orb--2" />
-      <span class="home-modern__orb home-modern__orb--3" />
-    </div>
-
     <section class="home-modern__hero">
-      <p class="home-modern__eyebrow">Vue 3 · TypeScript · Vite 8</p>
-      <h1 id="home-title">{{ heroTitle }}</h1>
-      <p class="home-modern__lead" v-html="heroDescription" />
-
-      <div class="home-modern__cta">
-        <router-link
-          class="home-modern__btn home-modern__btn--primary"
-          :to="withLocalePath('/guide/getting-started/')"
-        >
-          {{ t.homeGetStarted }}
-        </router-link>
-        <router-link
-          class="home-modern__btn"
-          :to="withLocalePath('/components/')"
-        >
-          {{ t.homeComponents }}
-        </router-link>
-        <router-link
-          class="home-modern__btn"
-          :to="withLocalePath('/guide/playground')"
-        >
-          {{ t.homePlayground }}
-        </router-link>
+      <div class="home-modern__copy">
+        <s-tag type="primary" round :border="false">
+          {{ copy.kicker }}
+        </s-tag>
+        <h1 id="home-title">{{ copy.title }}</h1>
+        <p>{{ copy.description }}</p>
+        <div class="home-modern__actions">
+          <s-button type="gradient" @click="go('/guide/getting-started/')">
+            {{ copy.start }}
+          </s-button>
+          <s-button type="border" @click="go('/guide/playground')">
+            {{ copy.playground }}
+          </s-button>
+        </div>
       </div>
+
+      <section class="component-gallery" :aria-label="copy.gallery">
+        <s-tabs v-model="activeGalleryTab" alignment="fixed">
+          <s-tab :label="copy.all" />
+          <s-tab :label="copy.dataEntry" />
+          <s-tab :label="copy.feedback" />
+          <s-tab :label="copy.navigation" />
+        </s-tabs>
+
+        <div
+          :key="galleryMode"
+          class="component-gallery__grid"
+          :class="`component-gallery__grid--${galleryMode}`"
+        >
+          <template
+            v-if="galleryMode === 'all' || galleryMode === 'data-entry'"
+          >
+            <div class="gallery-control gallery-control--select">
+              <label>{{ copy.select }}</label>
+              <s-select v-model="selectedFramework" :options="frameworks" />
+            </div>
+
+            <div class="gallery-control gallery-control--date">
+              <label>{{ copy.datePicker }}</label>
+              <s-date-picker v-model="demoDate" />
+            </div>
+
+            <div class="gallery-control gallery-control--slider">
+              <label>{{ copy.slider }}</label>
+              <div class="slider-row">
+                <s-slider v-model="sliderValue" />
+                <span>{{ sliderValue }}</span>
+              </div>
+            </div>
+
+            <div class="gallery-control gallery-control--switch">
+              <label>{{ copy.switch }}</label>
+              <s-switch v-model="demoSwitch" />
+            </div>
+          </template>
+
+          <template v-if="galleryMode === 'all' || galleryMode === 'feedback'">
+            <div class="gallery-control gallery-control--actions">
+              <label>{{ copy.button }}</label>
+              <div class="gallery-buttons">
+                <s-button size="small">{{ copy.primary }}</s-button>
+                <s-button size="small" type="border">{{
+                  copy.secondary
+                }}</s-button>
+              </div>
+            </div>
+          </template>
+
+          <template v-if="galleryMode === 'all' || galleryMode === 'feedback'">
+            <div class="gallery-control gallery-control--chips">
+              <label>{{ copy.chips }}</label>
+              <div class="gallery-chips">
+                <s-chip color="warning" tag-style="mark" round icon="bookmark">
+                  {{ copy.chipRelease }}
+                </s-chip>
+                <s-chip
+                  color="primary"
+                  tag-style="arrow"
+                  round
+                  icon="play_arrow"
+                >
+                  {{ copy.chipForward }}
+                </s-chip>
+                <s-chip
+                  color="success"
+                  tag-style="dashed"
+                  round
+                  icon="verified"
+                >
+                  {{ copy.chipVerified }}
+                </s-chip>
+              </div>
+            </div>
+          </template>
+
+          <template v-if="galleryMode === 'navigation'">
+            <div class="gallery-control gallery-control--navigation">
+              <label>{{ copy.navigation }}</label>
+              <div class="gallery-buttons">
+                <s-button size="small" @click="go('/guide/getting-started/')">
+                  {{ copy.docs }}
+                </s-button>
+                <s-button
+                  size="small"
+                  type="border"
+                  @click="go('/components/')"
+                >
+                  {{ copy.components }}
+                </s-button>
+              </div>
+            </div>
+
+            <div class="gallery-control gallery-control--navigation">
+              <label>{{ copy.playground }}</label>
+              <s-button
+                size="small"
+                type="border"
+                @click="go('/guide/playground')"
+              >
+                {{ copy.open }}
+              </s-button>
+            </div>
+          </template>
+
+          <div class="gallery-control gallery-control--code">
+            <label>{{ copy.code }}</label>
+            <pre><code>{{ galleryCode }}</code></pre>
+          </div>
+        </div>
+      </section>
     </section>
 
-    <section class="home-modern__grid">
-      <article
-        v-for="item in highlights"
-        :key="item.title"
-        class="home-modern__card"
-      >
-        <h2>{{ item.title }}</h2>
-        <p>{{ item.description }}</p>
-        <router-link
-          v-if="item.link"
-          :to="item.link"
-          class="home-modern__card-link"
-        >
-          {{ item.action }} →
-        </router-link>
+    <section class="home-modern__paths" :aria-label="copy.paths">
+      <article v-for="item in paths" :key="item.title" class="home-path">
+        <span>{{ item.index }}</span>
+        <div>
+          <h2>{{ item.title }}</h2>
+          <p>{{ item.description }}</p>
+          <s-button type="transparent" size="small" @click="go(item.link)">
+            {{ item.action }} →
+          </s-button>
+        </div>
       </article>
     </section>
 
@@ -56,216 +151,392 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { usePageFrontmatter } from '@vuepress/client'
-import { useDocLocaleUi } from '../composables/docLocale'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useDocLocale } from '../composables/docLocale'
 import Footer from './Footer.vue'
-import type { SThemeProjectHomePageFrontmatter } from '../shared/frontmatter/home'
 
-const pageFrontmatter = usePageFrontmatter<SThemeProjectHomePageFrontmatter>()
-const { t, withLocalePath, locale } = useDocLocaleUi()
+const router = useRouter()
+const { locale, withLocalePath } = useDocLocale()
 
-const heroTitle = computed(
-  () =>
-    pageFrontmatter.value.heroText?.replace(/<[^>]+>/g, '') || 'Sax Design Vue'
+const activeGalleryTab = ref(0)
+const selectedFramework = ref('Sax Design Vue')
+const demoDate = ref('2026-07-24')
+const sliderValue = ref(60)
+const demoSwitch = ref(true)
+const frameworks = ['Sax Design Vue', 'Vue 3', 'TypeScript'].map((label) => ({
+  label,
+  value: label,
+}))
+
+const galleryModes = ['all', 'data-entry', 'feedback', 'navigation'] as const
+const galleryMode = computed(
+  () => galleryModes[activeGalleryTab.value] ?? 'all',
 )
-const heroDescription = computed(
-  () =>
-    pageFrontmatter.value.description ||
-    (locale.value === 'zh'
-      ? '现代化 Vue 3 组件库，聚焦实用指南、清晰配置与在线示例。'
-      : 'A modern Vue 3 component library focused on practical usage, clear configuration, and live examples.')
+
+const copy = computed(() =>
+  locale.value === 'zh'
+    ? {
+        kicker: '组件画廊',
+        title: '感受得到的组件系统',
+        description:
+          '在真实示例中理解 Sax Design Vue：统一 API、可控样式，以及顺滑的开发体验。',
+        start: '开始学习',
+        playground: '打开 Playground',
+        gallery: '组件画廊示例',
+        all: '全部',
+        dataEntry: '数据输入',
+        feedback: '反馈',
+        navigation: '导航',
+        select: '选择器',
+        datePicker: '日期选择器',
+        chips: '特色 Chip',
+        chipRelease: '候选版本',
+        chipForward: '继续',
+        chipVerified: '已验证',
+        slider: '滑块',
+        switch: '开关',
+        code: '代码预览',
+        button: '按钮',
+        docs: '文档',
+        components: '组件',
+        open: '打开',
+        primary: '主操作',
+        secondary: '次操作',
+        paths: '学习路径',
+        learn: '学习',
+        explore: '探索',
+        test: '测试',
+        learnDescription: '从安装、主题到第一个组件。',
+        exploreDescription: '浏览完整组件、示例和 API。',
+        testDescription: '在 Playground 调整并复制代码。',
+        learnAction: '阅读指南',
+        exploreAction: '查看组件',
+        testAction: '开始测试',
+      }
+    : {
+        kicker: 'Component gallery',
+        title: 'A component system you can feel',
+        description:
+          'Meet Sax Design Vue through real examples: consistent APIs, thoughtful defaults, and a smooth developer experience.',
+        start: 'Start guide',
+        playground: 'Open Playground',
+        gallery: 'Component gallery preview',
+        all: 'All',
+        dataEntry: 'Data entry',
+        feedback: 'Feedback',
+        navigation: 'Navigation',
+        select: 'Select',
+        datePicker: 'Date picker',
+        chips: 'Featured chips',
+        chipRelease: 'Release candidate',
+        chipForward: 'Continue',
+        chipVerified: 'Verified',
+        slider: 'Slider',
+        switch: 'Switch',
+        code: 'Code preview',
+        button: 'Button',
+        docs: 'Docs',
+        components: 'Components',
+        open: 'Open',
+        primary: 'Primary',
+        secondary: 'Secondary',
+        paths: 'Documentation paths',
+        learn: 'Learn',
+        explore: 'Explore',
+        test: 'Test',
+        learnDescription:
+          'Start with installation, theming, and your first component.',
+        exploreDescription: 'Browse components, examples, and API references.',
+        testDescription:
+          'Adjust real controls in Playground and copy the code.',
+        learnAction: 'Browse documentation',
+        exploreAction: 'View components',
+        testAction: 'Open Playground',
+      },
 )
 
-const highlights = computed(() => [
+const galleryCode = computed(() => {
+  if (galleryMode.value === 'all') {
+    return '<s-chip tag-style="mark" round>Release candidate</s-chip>\n<s-chip tag-style="arrow" round>Continue</s-chip>'
+  }
+
+  if (galleryMode.value === 'feedback') {
+    return '<s-chip tag-style="dashed" round>Verified</s-chip>\n<s-button>Save</s-button>'
+  }
+
+  if (galleryMode.value === 'navigation') {
+    return '<s-button>Docs</s-button>\n<s-button>Playground</s-button>'
+  }
+
+  return '<s-select v-model="value" />\n<s-date-picker v-model="date" />'
+})
+
+const paths = computed(() => [
   {
-    title: t.value.highlightUsageTitle,
-    description: t.value.highlightUsageDesc,
-    action: t.value.highlightUsageAction,
-    link: withLocalePath('/guide/getting-started/'),
+    index: '01',
+    title: copy.value.learn,
+    description: copy.value.learnDescription,
+    action: copy.value.learnAction,
+    link: '/guide/getting-started/',
   },
   {
-    title: t.value.highlightComponentsTitle,
-    description: t.value.highlightComponentsDesc,
-    action: t.value.highlightComponentsAction,
-    link: withLocalePath('/components/'),
+    index: '02',
+    title: copy.value.explore,
+    description: copy.value.exploreDescription,
+    action: copy.value.exploreAction,
+    link: '/components/',
   },
   {
-    title: t.value.highlightPlaygroundTitle,
-    description: t.value.highlightPlaygroundDesc,
-    action: t.value.highlightPlaygroundAction,
-    link: withLocalePath('/guide/playground'),
+    index: '03',
+    title: copy.value.test,
+    description: copy.value.testDescription,
+    action: copy.value.testAction,
+    link: '/guide/playground',
   },
 ])
+
+const go = (path: string) => router.push(withLocalePath(path))
 </script>
 
 <style lang="scss" scoped>
 .home-modern {
-  position: relative;
-  max-width: 1080px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 48px 24px 80px;
-  overflow: hidden;
-}
-
-.home-modern__bg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.home-modern__orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.55;
-
-  &--1 {
-    width: 320px;
-    height: 320px;
-    top: -80px;
-    left: -60px;
-    background: rgba(var(--sax-accent-color), 0.35);
-  }
-
-  &--2 {
-    width: 280px;
-    height: 280px;
-    top: 40px;
-    right: -40px;
-    background: rgba(var(--sax-accent-secondary), 0.28);
-  }
-
-  &--3 {
-    width: 360px;
-    height: 360px;
-    bottom: 120px;
-    left: 30%;
-    background: rgba(var(--sax-accent-color), 0.18);
-  }
-}
-
-.home-modern__hero,
-.home-modern__grid {
-  position: relative;
-  z-index: 1;
+  padding: 76px 32px 56px;
 }
 
 .home-modern__hero {
-  text-align: center;
-  padding: 48px 0 56px;
-}
-
-.home-modern__eyebrow {
-  margin: 0 0 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgb(var(--sax-accent-color));
-}
-
-.home-modern__hero h1 {
-  margin: 0 0 16px;
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
-  line-height: 1.1;
-  font-weight: 700;
-  color: rgb(var(--sax-theme-color));
-}
-
-.home-modern__lead {
-  max-width: 720px;
-  margin: 0 auto 28px;
-  font-size: 1.1rem;
-  line-height: 1.7;
-  color: rgba(var(--sax-theme-color), 0.72);
-}
-
-.home-modern__cta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-}
-
-.home-modern__btn {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: minmax(390px, 0.95fr) minmax(620px, 1.45fr);
+  gap: clamp(40px, 7vw, 116px);
   align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0 18px;
-  border-radius: 12px;
-  border: 1px solid rgba(var(--sax-theme-color), 0.12);
-  background: rgba(var(--sax-theme-layout), 0.9);
-  color: rgb(var(--sax-theme-color));
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s ease;
+  min-height: 560px;
+}
 
-  &:hover {
-    border-color: rgba(var(--sax-accent-color), 0.35);
-    color: rgb(var(--sax-accent-color));
+.home-modern__copy {
+  h1 {
+    max-width: 440px;
+    margin: 18px 0;
+    font-size: clamp(2.7rem, 4vw, 3.9rem);
+    line-height: 1.02;
+    letter-spacing: -0.06em;
+    color: rgb(var(--sax-theme-color));
   }
 
-  &--primary {
-    border-color: transparent;
-    background: rgb(var(--sax-accent-color));
-    color: #fff;
+  > p {
+    max-width: 430px;
+    margin: 0;
+    color: rgba(var(--sax-theme-color), 0.68);
+    font-size: 1.08rem;
+    line-height: 1.75;
+  }
+}
 
-    &:hover {
-      color: #fff;
-      filter: brightness(1.05);
+.home-modern__actions,
+.gallery-buttons,
+.gallery-chips,
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.home-modern__actions {
+  margin-top: 30px;
+}
+
+.component-gallery {
+  padding: 26px 28px 28px;
+  border: 1px solid rgba(var(--sax-accent-color), 0.16);
+  border-radius: 24px;
+  background: rgba(var(--sax-theme-layout), 0.94);
+  box-shadow: 0 24px 70px rgba(55, 43, 145, 0.13);
+}
+
+.component-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px 20px;
+  margin-top: 28px;
+
+  &--data-entry,
+  &--feedback,
+  &--navigation {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  &--feedback {
+    .gallery-control--code {
+      align-self: end;
+    }
+  }
+
+  &--all {
+    .gallery-control--chips {
+      grid-column: span 2;
+      align-self: end;
+    }
+
+    .gallery-control--code {
+      align-self: end;
+    }
+  }
+
+  &--navigation {
+    .gallery-control--code {
+      grid-column: span 2;
     }
   }
 }
 
-.home-modern__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
+.gallery-control {
+  min-width: 0;
+
+  label {
+    display: block;
+    margin-bottom: 9px;
+    color: rgba(var(--sax-theme-color), 0.72);
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  :deep(.s-select),
+  :deep(.s-date-picker) {
+    width: 100%;
+  }
 }
 
-.home-modern__card {
-  padding: 24px;
-  border-radius: 16px;
-  border: 1px solid rgba(var(--sax-accent-color), 0.14);
-  background: linear-gradient(
-    155deg,
-    rgba(var(--sax-theme-layout), 0.92),
-    rgba(var(--sax-accent-color), 0.08)
-  );
-  box-shadow: 0 16px 40px rgba(30, 27, 75, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.gallery-control--slider,
+.gallery-control--switch,
+.gallery-control--actions {
+  align-self: end;
+}
+
+.gallery-chips {
+  flex-wrap: wrap;
+  min-height: 34px;
+}
+
+.slider-row {
+  :deep(.s-slider) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  span {
+    min-width: 32px;
+    color: rgb(var(--sax-accent-color));
+    font-weight: 600;
+    text-align: right;
+  }
+}
+
+.gallery-control--code {
+  pre {
+    min-height: 62px;
+    margin: 0;
+    padding: 12px 14px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: rgba(var(--sax-theme-bg), 0.86);
+    color: rgb(var(--sax-accent-color));
+    font-size: 0.73rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+  }
+}
+
+.home-modern__paths {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 42px 0 52px;
+}
+
+.home-path {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  padding: 28px 26px;
+  border-radius: 18px;
+  background: rgba(var(--sax-theme-layout), 0.76);
+  box-shadow: 0 12px 28px rgba(55, 43, 145, 0.08);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 48px rgba(30, 27, 75, 0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 18px 36px rgba(55, 43, 145, 0.13);
+  }
+
+  > span {
+    color: rgb(var(--sax-accent-color));
+    font-size: 0.78rem;
+    font-weight: 700;
   }
 
   h2 {
-    margin: 0 0 10px;
-    font-size: 1.15rem;
+    margin: 0 0 6px;
     color: rgb(var(--sax-theme-color));
+    font-size: 1.05rem;
   }
 
   p {
-    margin: 0 0 16px;
+    min-height: 45px;
+    margin: 0 0 10px;
+    color: rgba(var(--sax-theme-color), 0.66);
+    font-size: 0.88rem;
     line-height: 1.6;
-    color: rgba(var(--sax-theme-color), 0.7);
   }
 }
 
-.home-modern__card-link {
-  font-weight: 600;
-  color: rgb(var(--sax-accent-color));
-  text-decoration: none;
+@media (max-width: 1000px) {
+  .home-modern__hero {
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+
+  .home-modern__copy {
+    text-align: center;
+
+    h1,
+    > p {
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+
+  .home-modern__actions {
+    justify-content: center;
+  }
 }
 
 @media (max-width: 720px) {
   .home-modern {
-    padding-top: 24px;
+    padding: 42px 18px 30px;
+  }
+
+  .component-gallery {
+    padding: 18px;
+  }
+
+  .component-gallery__grid {
+    grid-template-columns: 1fr;
+
+    &--all .gallery-control--chips,
+    &--navigation .gallery-control--code {
+      grid-column: auto;
+    }
+  }
+
+  .home-modern__paths {
+    grid-template-columns: 1fr;
+  }
+
+  .home-path {
+    min-height: 0;
   }
 }
 </style>

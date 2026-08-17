@@ -19,7 +19,7 @@ PROPS:
   - name: not-border-radius
     type: Boolean
     values: true, false
-    description: Disable rounded corners.
+    description: 禁用圆角。
     default: false
     link: null
     usage: '#more'
@@ -27,7 +27,7 @@ PROPS:
   - name: not-margin
     type: Boolean
     values: true, false
-    description: Remove item margins.
+    description: 移除项目间距。
     default: false
     link: null
     usage: '#more'
@@ -35,7 +35,7 @@ PROPS:
   - name: src
     type: String
     values: URL
-    description: Image source (s-image).
+    description: 图片来源（s-image）。
     default: null
     link: null
     usage: '#default'
@@ -48,7 +48,7 @@ NEWS:
   - more
 ---
 
-# Images
+# Images（图片组）
 
 <card>
 

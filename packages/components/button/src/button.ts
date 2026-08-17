@@ -1,5 +1,5 @@
 import { useColorProp } from '@vuesax-alpha/hooks'
-import { buildProps } from '@vuesax-alpha/utils'
+import { buildProps, definePropType, isNumber } from '@vuesax-alpha/utils'
 
 import type { ExtractPropTypes } from 'vue'
 import type Button from './button.vue'
@@ -16,6 +16,8 @@ export const buttonTypes = [
 ] as const
 
 export const buttonSizes = ['xl', 'large', 'default', 'small', 'mini'] as const
+
+export const buttonLoadingTypes = ['pulse', 'ripple', 'shimmer'] as const
 
 export const buttonProps = buildProps({
   /**
@@ -45,10 +47,37 @@ export const buttonProps = buildProps({
   },
 
   /**
-   * @description Component color - Accept Vuesax's color, Hex, rgb
+   * @description Component color - Accept Sax Design color tokens, Hex, rgb
    * @default 'primary'
    */
   color: { ...useColorProp, default: 'primary' },
+
+  /**
+   * @description Disable the button and prevent user interaction.
+   */
+  disabled: { type: Boolean },
+
+  /**
+   * @description Debounce emitted click events in milliseconds. Set to false to disable it.
+   * @default 50
+   */
+  debounce: {
+    type: definePropType<number | false>([Number, Boolean]),
+    default: 50,
+    validator: (value: number | false) =>
+      value === false || (isNumber(value) && value >= 0),
+  },
+
+  /**
+   * @description Throttle emitted click events in milliseconds. Set debounce to false before enabling it.
+   * @default false
+   */
+  throttle: {
+    type: definePropType<number | false>([Number, Boolean]),
+    default: false,
+    validator: (value: number | false) =>
+      value === false || (isNumber(value) && value >= 0),
+  },
 
   /**
    * @description Determine if the component contains only one icon,
@@ -59,9 +88,20 @@ export const buttonProps = buildProps({
   },
 
   /**
-   * @description Add a loading animation to the avatar.
+   * @description Show a non-blocking loading rail while preserving the button content and preventing interaction.
    */
   loading: { type: Boolean },
+
+  /**
+   * @description Select the loading visual preset. All presets share the same markup and only switch state classes.
+   * @enum `pulse` | `ripple` | `shimmer`
+   * @default 'pulse'
+   */
+  loadingType: {
+    type: String,
+    values: buttonLoadingTypes,
+    default: 'pulse',
+  },
 
   /**
    * @description Change the style of the avatar by making it [square | circulating | rounded]

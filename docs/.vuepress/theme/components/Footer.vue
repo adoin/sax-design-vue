@@ -21,10 +21,10 @@
 
     <div class="copy">
       <span class="span-copy"
-        >© {{ year }} Sax Design Vue · Vue 3 component library</span
+        >© {{ year }} Sax Design Vue · {{ t.footer.library }}</span
       >
       <span class="span-heritage">
-        Design inspired by
+        {{ t.footer.inspiredBy }}
         <a
           target="_blank"
           rel="noopener"
@@ -37,45 +37,63 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 // @ts-ignore
 import { useThemeData } from '@vuepress/plugin-theme-data/client'
+import { useDocLocaleUi } from '../composables/docLocale'
 import type { SaxDesignVueThemeOptions } from '~/saxDesignVueTheme'
 
 const themeData = useThemeData<SaxDesignVueThemeOptions>()
+const { t, withLocalePath } = useDocLocaleUi()
 const year = new Date().getFullYear()
 
-const links = [
+const links = computed(() => [
   {
-    title: 'Documentation',
+    title: t.value.footer.documentation,
     items: [
-      { text: 'Getting Started', link: '/guide/getting-started/' },
-      { text: 'Using Components', link: '/guide/using-components' },
-      { text: 'Configuration', link: '/guide/configuration' },
-      { text: 'Playground', link: '/guide/playground' },
-      { text: 'Components', link: '/components/' },
+      {
+        text: t.value.footer.gettingStarted,
+        link: withLocalePath('guide/getting-started/'),
+      },
+      {
+        text: t.value.footer.usingComponents,
+        link: withLocalePath('guide/using-components'),
+      },
+      {
+        text: t.value.footer.configuration,
+        link: withLocalePath('guide/configuration'),
+      },
+      {
+        text: t.value.footer.playground,
+        link: withLocalePath('guide/playground'),
+      },
+      {
+        text: t.value.footer.components,
+        link: withLocalePath('components/'),
+      },
     ],
   },
   {
-    title: 'Project',
+    title: t.value.footer.project,
     items: [
       { text: 'GitHub', link: themeData.value.docsRepo, external: true },
       {
-        text: 'Issues',
+        text: t.value.footer.issues,
         link: `${themeData.value.docsRepo}/issues`,
         external: true,
       },
       {
-        text: 'Releases',
+        text: t.value.footer.releases,
         link: `${themeData.value.docsRepo}/releases`,
         external: true,
       },
     ],
   },
-]
+])
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .footer {
   width: 100%;

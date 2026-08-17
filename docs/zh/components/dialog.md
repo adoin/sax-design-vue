@@ -1,9 +1,20 @@
 ---
+description: "展示聚焦的模态内容并要求用户作出决定。"
 PROPS:
+  - name: before-close / cancel-button-text / cancel-closable / confirm-button-text / confirm-closable
+    type: Function / String / Boolean / String / Boolean
+    values: 关闭守卫和操作按钮配置
+    description: 在关闭前拦截操作，并配置确认、取消按钮文本和关闭行为。
+    default: '-'
+  - name: color / height / mask / mask-closable / min-height / min-width / show-close / show-header / top
+    type: Color / String | Number / Boolean
+    values: 外观、遮罩和尺寸配置
+    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    default: '-'
   - name: v-model
     type: Boolean
     values: true,false
-    description: Determine if the dialogue is visible or hidden.
+    description: 是否显示对话框。
     default: false
     link: null
     usage: '#default'
@@ -12,7 +23,7 @@ PROPS:
   - name: not-center
     type: Boolean
     values: true, false
-    description: By default the header centers the elements, with this property the centering is eliminated.
+    description: 默认标题栏内容居中；启用后取消居中。
     default: false
     link: null
     usage: '#type'
@@ -21,7 +32,7 @@ PROPS:
   - name: width
     type: String
     values: px
-    description: Determine the width of the dialog.
+    description: 设置对话框宽度。
     default: null
     link: null
     usage: '#type'
@@ -30,7 +41,7 @@ PROPS:
   - name: loading
     type: Boolean
     values: true, false
-    description: Add a loading animation to the dialog.
+    description: 为对话框添加加载动画。
     default: false
     link: null
     usage: '#loading'
@@ -39,7 +50,7 @@ PROPS:
   - name: not-close
     type: Boolean
     values: true, false
-    description: Remove the close button from the dialog.
+    description: 隐藏对话框关闭按钮。
     default: false
     link: null
     usage: '#not-close'
@@ -48,7 +59,7 @@ PROPS:
   - name: scroll
     type: Boolean
     values: true, false
-    description: Makes the content a maximum high and gives the possibility to overflow the content add scroll.
+    description: 限制内容最大高度，溢出时显示滚动条。
     default: false
     link: null
     usage: '#scroll'
@@ -57,7 +68,7 @@ PROPS:
   - name: lock-scroll
     type: Boolean
     values: true, false
-    description: When the dialog is opened, the page scroll is deleted.
+    description: 打开对话框时锁定页面滚动。
     default: false
     link: null
     usage: '#lock-scroll'
@@ -66,7 +77,7 @@ PROPS:
   - name: auto-width
     type: Boolean
     values: true, false
-    description: It makes the dialog have an automatic width to its content.
+    description: 使对话框宽度自动适应内容。
     default: false
     link: null
     usage: '#scroll'
@@ -75,7 +86,7 @@ PROPS:
   - name: not-padding
     type: Boolean
     values: true, false
-    description: Eliminates the padding of the base elements of the dialog.
+    description: 移除对话框基础内容区域内边距。
     default: false
     link: null
     usage: '#not-padding'
@@ -84,7 +95,7 @@ PROPS:
   - name: full-screen
     type: Boolean
     values: true, false
-    description: Makes the dialog the size of the window.
+    description: 使对话框占满窗口。
     default: false
     link: null
     usage: '#full-screen'
@@ -93,7 +104,7 @@ PROPS:
   - name: overlay-blur
     type: Boolean
     values: true, false
-    description: Makes all elements blur when the dialog opens.
+    description: 打开时使背景元素模糊。
     default: false
     link: null
     usage: '#overlay-blur'
@@ -102,7 +113,7 @@ PROPS:
   - name: shape
     type: String
     values: square
-    description: Remove the border radius from the dialog.
+    description: 移除对话框圆角。
     default: false
     link: null
     usage: '#shape'
@@ -111,7 +122,7 @@ PROPS:
   - name: prevent-close
     type: Boolean
     values: true, false
-    description: It makes the dialog cannot be closed by clicking outside or by pressing the esc key.
+    description: 禁止点击遮罩或按 Esc 关闭对话框。
     default: false
     link: null
     usage: null
@@ -121,7 +132,7 @@ EVENTS:
   - name: close
     type: Function
     values: null
-    description: triggers when the Dialog closes
+    description: 对话框关闭时触发。
     default: null
     link: null
     usage: null
@@ -134,7 +145,7 @@ SLOTS:
   - name: default
     type: slot
     values: null
-    description: slot default of Dialog
+    description: Dialog 默认内容插槽。
     default: null
     link: null
     usage: '#default'
@@ -143,7 +154,7 @@ SLOTS:
   - name: header
     type: slot
     values: null
-    description: slot header of Dialog
+    description: Dialog 标题插槽。
     default: null
     link: null
     usage: '#default'
@@ -152,7 +163,7 @@ SLOTS:
   - name: footer
     type: slot
     values: null
-    description: slot footer of Dialog
+    description: Dialog 页脚插槽。
     default: null
     link: null
     usage: '#default'
@@ -164,7 +175,7 @@ SLOTS:
       </s-dialog>
 ---
 
-# Dialog
+# Dialog 对话框
 
 **Dialog 是通用模态容器**，通过插槽自定义 header、内容与 footer。
 
@@ -176,7 +187,7 @@ SLOTS:
 
 <docs-warn />
 
-It generates a Dialog with the `s-dialog` component, this component is very customizable since it provides a slot to put and make any type of interface to the user's need
+使用 `s-dialog` 可创建高度可定制的对话框；通过插槽可组合任意业务界面。
 
 <template #example>
 <dialog-default />
@@ -206,7 +217,7 @@ It generates a Dialog with the `s-dialog` component, this component is very cust
 
 ## 类型
 
-You can easily create the most common types of dialogs such as **Alert**, **Confirm** or **Prompt** using the different slots for the structure of the `header`,`default`, `footer` dialog
+通过 `header`、默认和 `footer` 插槽，可快速创建 **提示**、**确认** 等常见对话框结构。
 
 <template #example>
 <dialog-type />
@@ -236,7 +247,7 @@ You can easily create the most common types of dialogs such as **Alert**, **Conf
 
 ## 加载
 
-Add a loading animation to the dialog with the `loading` property
+通过 `loading` 属性为对话框添加加载动画。
 
 <template #example>
 <dialog-loading />
@@ -264,9 +275,9 @@ Add a loading animation to the dialog with the `loading` property
 
 <card>
 
-## Not close
+## 不可关闭
 
-You can remove the close button with the `not-close` property
+通过 `not-close` 属性隐藏关闭按钮。
 
 <template #example>
 <dialog-not-close />
@@ -294,9 +305,9 @@ You can remove the close button with the `not-close` property
 
 <card>
 
-## Scroll
+## 滚动
 
-There are cases where you need a scroll because there is a lot of information within the dialog for this you can use the `scroll` property
+对话框内容较多时，可使用 `scroll` 属性启用滚动。
 
 <template #example>
 <dialog-scroll />
@@ -324,9 +335,9 @@ There are cases where you need a scroll because there is a lot of information wi
 
 <card>
 
-## Lock scroll Body
+## 锁定页面滚动
 
-If you need to remove the page scroll when opening the dialog you can do it with the `lock-scroll` property
+需要在打开对话框时锁定页面滚动，可使用 `lock-scroll` 属性。
 
 <template #example>
 <dialog-lock-scroll />
@@ -354,9 +365,9 @@ If you need to remove the page scroll when opening the dialog you can do it with
 
 <card>
 
-## Not Padding
+## 无内边距
 
-If you need to remove the padding from the dialog to make a more personalized interface you can do it with the `not-padding` property
+需要移除对话框内边距以构建自定义界面时，可使用 `not-padding` 属性。
 
 <template #example>
 <dialog-not-padding />
@@ -384,9 +395,9 @@ If you need to remove the padding from the dialog to make a more personalized in
 
 <card>
 
-## Nested Dialogs
+## 嵌套对话框
 
-You can nest as many `s-dialog` as you need without problem
+可按需嵌套多个 `s-dialog`。
 
 <template #example>
 <dialog-nested />
@@ -414,9 +425,9 @@ You can nest as many `s-dialog` as you need without problem
 
 <card>
 
-## Full Screen
+## 全屏
 
-If you need the dialog to be the total window size you can do it with the `full-screen` property
+需要让对话框占满整个窗口时，可使用 `full-screen` 属性。
 
 <template #example>
 <dialog-full-screen />
@@ -444,9 +455,9 @@ If you need the dialog to be the total window size you can do it with the `full-
 
 <card>
 
-## Overlay blur
+## 遮罩模糊
 
-You can add a blur style to all the elements behind the dialog with the `overlay-blur` property, this functionality depends on the css property [backdrop-filter](https://caniuse.com/#feat=css-backdrop-filter)
+通过 `overlay-blur` 可为对话框后的元素添加模糊样式；该功能依赖 CSS 属性 [backdrop-filter](https://caniuse.com/#feat=css-backdrop-filter)。
 
 <template #example>
 <dialog-blur />
@@ -474,11 +485,11 @@ You can add a blur style to all the elements behind the dialog with the `overlay
 
 <card>
 
-## Shape
+## 形状
 
-### Square
+### 直角
 
-Change the dialog style by removing the border radius and making it rectangular
+移除对话框圆角，使其变为直角矩形。
 
 <template #example>
 <dialog-square />
@@ -506,9 +517,9 @@ Change the dialog style by removing the border radius and making it rectangular
 
 <card>
 
-## Prevent Close
+## 禁止关闭
 
-With the `prevent-close` property you do not close the dialog by clicking outside or pressing the **esc** key
+使用 `prevent-close` 后，点击遮罩或按 **Esc** 键不会关闭对话框。
 
 <template #example>
 <dialog-prevent-close />
@@ -538,7 +549,7 @@ With the `prevent-close` property you do not close the dialog by clicking outsid
 
 ## 高级能力
 
-不需要复杂 slot 时，可用 VXE 对齐的 title、content 和内置确认/取消按钮；slot 仍然优先。
+不需要复杂 slot 时，可用 title、content 和内置确认/取消按钮；slot 仍然优先。
 
 <template #example>
 <dialog-advanced />

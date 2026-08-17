@@ -1,10 +1,11 @@
 ---
+description: "通过可选图标采集或展示评分。"
 PROPS:
   #__________________________________
   - name: model-value/v-model
     type: Number
     values: Number
-    description: binding value.
+    description: 绑定值。
     default: 0
     link: null
     usage: '#default'
@@ -14,7 +15,7 @@ PROPS:
   - name: id
     type: String
     values: String
-    description: native <code>id</code> attribute.
+    description: 原生 <code>id</code> 属性。
     default: null
     link: null
     usage: '#id'
@@ -23,7 +24,7 @@ PROPS:
   - name: low-threshold
     type: Number
     values: Number
-    description: threshold value between low and medium level. The value itself will be included in low level.
+    description: 低分与中分间的阈值；该值本身属于低分级别。
     default: 2
     link: null
     usage: '#low-threshold'
@@ -32,7 +33,7 @@ PROPS:
   - name: high-threshold
     type: Number
     values: Number
-    description: threshold value between medium and high level. The value itself will be included in high level.
+    description: 中分与高分间的阈值；该值本身属于高分级别。
     default: 4
     link: null
     usage: '#high-threshold'
@@ -41,7 +42,7 @@ PROPS:
   - name: max
     type: Number
     values: Number
-    description: max rating score.
+    description: 最大评分值。
     default: 5
     link: null
     usage: '#max'
@@ -51,7 +52,7 @@ PROPS:
   - name: colors
     type: Object
     values: 'string[] , Record:< number| string>'
-    description: colors for icons. If array, it should have 3 elements, each of which corresponds with a score level, else if object, the key should be threshold value between two levels, and the value should be corresponding color
+    description: 图标颜色。数组应含 3 项，分别对应三个评分级别；对象时键为等级阈值，值为对应颜色。
     default: ['#f7ba2a', '#f7ba2a', '#f7ba2a']
     link: null
     usage: '#default'
@@ -61,7 +62,7 @@ PROPS:
   - name: void-color
     type: String
     values: String
-    description: component of unselected icons.
+    description: 未选中图标颜色。
     default: '#c6d1de'
     link: null
     usage: '#void-color'
@@ -71,7 +72,7 @@ PROPS:
   - name: disabled-void-color
     type: String
     values: String
-    description: color of unselected read-only icons.
+    description: 只读状态未选中图标颜色。
     default: '#eff2f7'
     link: null
     usage: '#disabled-void-color'
@@ -80,7 +81,7 @@ PROPS:
   - name: icons
     type: Object
     values: 'string[],component[],Record< number，string | Component>'
-    description: icon components. If array, it should have 3 elements, each of which corresponds with a score level, else if object, the key should be threshold value between two levels, and the value should be corresponding icon component.
+    description: 图标组件。数组应含 3 项，分别对应三个评分级别；对象时键为等级阈值，值为对应图标组件。
     default: '[StarFilled, StarFilled, StarFilled]'
     link: null
     usage: '#more-icons'
@@ -90,7 +91,7 @@ PROPS:
   - name: void-icon
     type: String
     values: 'string,Component'
-    description: component of unselected icons.
+    description: 未选中图标组件。
     default: 'Star'
     link: null
     usage: '#more-icons'
@@ -100,7 +101,7 @@ PROPS:
   - name: disabled-void-icon
     type: String
     values: 'string,Component'
-    description: component of unselected read-only icons.
+    description: 只读状态未选中图标组件。
     default: 'StarFilled'
     link: null
     usage: '#disabled-void-icon'
@@ -109,7 +110,7 @@ PROPS:
   - name: disabled
     type: Boolean
     values: 'true,false'
-    description: whether Rate is read-only.
+    description: 是否只读。
     default: 'false'
     link: null
     usage: '#read-only'
@@ -119,7 +120,7 @@ PROPS:
   - name: allow-half
     type: Boolean
     values: 'true,false'
-    description: whether picking half star is allowed.
+    description: 是否允许选择半星。
     default: 'false'
     link: null
     usage: '#with-allow-half'
@@ -129,7 +130,7 @@ PROPS:
   - name: show-text
     type: Boolean
     values: 'true,false'
-    description: whether to display texts.
+    description: 是否显示文本。
     default: 'false'
     link: null
     usage: '#with-text'
@@ -143,7 +144,7 @@ PROPS:
   - name: show-score
     type: Boolean
     values: 'true,false'
-    description: whether to display current score. show-score and show-text cannot be true at the same time.
+    description: 是否显示当前评分；show-score 与 show-text 不可同时为 true。
     default: 'false'
     link: null
     usage: '#read-only'
@@ -158,7 +159,7 @@ PROPS:
   - name: text-color
     type: String
     values: 'String'
-    description: color of texts.
+    description: 文本颜色。
     default: ''
     link: null
     usage: '#text-color'
@@ -173,7 +174,7 @@ PROPS:
   - name: texts
     type: array
     values: 'String[]'
-    description: text array
+    description: 文本数组。
     default: '[Extremely bad, Disappointed, Fair, Satisfied, Surprise]'
     link: null
     usage: '#texts'
@@ -182,7 +183,7 @@ PROPS:
   - name: score-template
     type: String
     values: 'String'
-    description: score template.
+    description: 评分模板。
     default: ''
     link: null
     usage: '#score-template'
@@ -197,7 +198,7 @@ PROPS:
   - name: size
     type: String
     values: 'large,default, small'
-    description: size of Rate.
+    description: Rate 尺寸。
     default: 'default'
     link: null
     usage: '#size'
@@ -210,7 +211,7 @@ PROPS:
   - name: clearable
     type: Boolean
     values: 'true,false'
-    description: whether value can be reset to <code>0</code>.
+    description: 是否允许将值重置为 <code>0</code>。
     default: 'false'
     link: null
     usage: '#clearable'
@@ -223,7 +224,7 @@ PROPS:
   - name: label
     type: String
     values: 'String'
-    description: same as <code>aria-label</code> in Rate
+    description: 与 Rate 的 <code>aria-label</code> 相同。
     default: ''
     link: null
     usage: '#label'
@@ -233,7 +234,7 @@ EVENTS:
   - name: change
     type: 'Function'
     values: '(value: number) => void'
-    description: Triggers when rate value is changed.
+    description: 评分值变化时触发。
     default: null
     link: null
     code: null
@@ -243,7 +244,7 @@ EXPOSES:
   - name: setCurrentValue
     type: 'Function'
     values: '(value: number) => void'
-    description: set current value.
+    description: 设置当前值。
     default: null
     link: null
     code: null
@@ -252,20 +253,20 @@ EXPOSES:
   - name: resetCurrentValue
     type: 'Function'
     values: '(value: number) => void'
-    description: reset current value.
+    description: 重置当前值。
     default: null
     link: null
     code: null
     usage: ''
 ---
 
-# Rate
+# Rate 评分
 
 <card>
 
 ## 默认
 
-Rate divides rating scores into several levels and these levels can be distinguished by using different background colors. By default background colors are the same, but you can assign them an array with three element to reflect three levels using the <code>colors</code> attribute, and their two thresholds can be defined by <code>low-threshold</code> and <code>high-threshold</code>, or you can assign them with a object which key is the threshold between two levels and value is the corresponding color.
+Rate 将评分分为多个等级，并可用不同背景色区分。默认背景色相同；可通过 <code>colors</code> 传入三个元素的数组对应三个等级，并用 <code>low-threshold</code>、<code>high-threshold</code> 定义阈值；也可传入对象，以等级阈值为键、颜色为值。
 
 <template #example>
 <rate-default />
@@ -295,7 +296,7 @@ Rate divides rating scores into several levels and these levels can be distingui
 
 ## 尺寸
 
-Rate has `small`,`default` and `large` sizes.
+Rate 支持 `small`、`default`、`large` 三种尺寸。
 
 <template #example>
 <rate-size />
@@ -323,9 +324,9 @@ Rate has `small`,`default` and `large` sizes.
 
 <card>
 
-## With allow-half
+## 允许半星
 
-Add attribute allow-half Half star allowed
+添加 `allow-half` 属性即可允许半星评分。
 
 <template #example>
 <rate-allow-half />
@@ -347,11 +348,11 @@ Add attribute allow-half Half star allowed
 
 <card>
 
-## With text
+## 显示文本
 
-Using text to indicate rating score
+使用文本表示评分。
 
-Add attribute `show-text` to display text at the right of Rate. You can assign texts for different scores using `texts`. `texts` is an array whose length should be equal to the max score `max`.
+添加 `show-text` 可在 Rate 右侧显示文本。通过 `texts` 可为不同评分设置文本；数组长度应等于最大评分 `max`。
 
 <template #example>
 <rate-text/>
@@ -379,9 +380,9 @@ Add attribute `show-text` to display text at the right of Rate. You can assign t
 
 <card>
 
-## Clearable
+## 可清空
 
-You can reset the value to 0 when you click at the same value again.
+再次点击当前评分可将值重置为 0。
 
 <template #example>
 <rate-clearable/>
@@ -403,11 +404,11 @@ You can reset the value to 0 when you click at the same value again.
 
 <card>
 
-## More icons
+## 更多图标
 
-You can use different icons to distinguish different rate components.
+可使用不同图标区分不同评分状态。
 
-You can customize icons by passing `icons` an array with three elements or a object which key is the threshold between two levels and value is the corresponding icon. In this example, we also use `void-icon` to set the icon if it is unselected.
+可通过 `icons` 传入三个元素的数组，或以等级阈值为键、图标为值的对象来自定义图标。本示例还使用 `void-icon` 设置未选中图标。
 
 <template #example>
 <rate-more-icons/>
@@ -429,11 +430,11 @@ You can customize icons by passing `icons` an array with three elements or a obj
 
 <card>
 
-## Read-only
+## 只读
 
-Read-only Rate is for displaying rating score. Half star is supported.
+只读 Rate 用于展示评分，支持半星。
 
-Use attribute `disabled` to make the component read-only. Add `show-score` to display the rating score at the right side. Additionally, you can use attribute `score-template` to provide a score template. It must contain `{value}`, and `{value}` will be replaced with the rating score.
+使用 `disabled` 使组件只读。添加 `show-score` 可在右侧显示评分；还可用 `score-template` 设置评分模板，模板必须包含 `{value}`，会自动替换为当前评分。
 
 <template #example>
 <rate-read-only/>

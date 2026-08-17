@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: autocomplete
+    type: String
+    values: 浏览器自动填充令牌
+    description: 设置原生输入框的自动填充行为。
+    default: current-password
   - name: model-value/v-model
     type: String
     values: password
@@ -18,7 +23,7 @@ PROPS:
 EVENTS:
   - name: change / clear
     description: 值变化和清空事件。
-description: "兼容 VXE 的密码输入框。"
+description: "密码输入框。"
 ---
 
 # Password input 密码输入框

@@ -1,9 +1,15 @@
 ---
+description: "使用表头和单元格内容展示结构化表格数据。"
 PROPS:
+  - name: loading
+    type: Boolean
+    values: true | false
+    description: 在表格内容上展示加载状态。
+    default: false
   - name: v-model
     type: Object, Array
     values: Object, Array
-    description: Determines the table values ​​that are selected.
+    description: 当前选中的表格数据。
     default: null
     link: null
     usage: '#single-selected'
@@ -11,7 +17,7 @@ PROPS:
   - name: striped
     type: Boolean
     values: true, false
-    description: Add stripes to the gray tr.
+    description: 为表格行添加斑马纹。
     default: null
     link: null
     usage: '#striped'
@@ -19,7 +25,7 @@ PROPS:
   - name: s-tr:data
     type: Object
     values: Object
-    description: when the functionality of selected is needed this property is needed since it is the object that is passed to the v-model.
+    description: 启用选择功能时必填；该对象会传入 v-model。
     default: null
     link: null
     usage: '#single-selected'
@@ -27,7 +33,7 @@ PROPS:
   - name: s-tr:is-selected
     type: Boolean
     values: true, false
-    description: Determines if the component is in the selected state, for optimize perf
+    description: 是否处于选中状态，可用于性能优化。
     default: false
     link: null
     usage: '#single-selected'
@@ -35,7 +41,7 @@ PROPS:
   - name: s-td:edit
     type: Boolean
     values: true, false
-    description: Determine if the element is editable by adding underline and the pointer cursor.
+    description: 是否可编辑；启用后显示下划线和指针光标。
     default: false
     link: null
     usage: '#edit-data'
@@ -43,15 +49,15 @@ PROPS:
   - name: s-th:sort
     type: Boolean
     values: true, false
-    description: Add the sort arrows to the corresponding th.
+    description: 为对应的表头添加排序箭头。
     default: false
     link: null
     usage: '#sort'
     code: null
   - name: s-tr:color
     type: String, Theme colors
-    values: color, vuesax colors
-    description: Change the color of the tr.
+    values: color, theme colors
+    description: 设置表格行颜色。
     default: null
     link: null
     usage: '#color'
@@ -61,7 +67,7 @@ SLOTS:
   - name: header
     type: slot
     values: null
-    description: Space to put an element at the top of the table such as the input search.
+    description: 表格顶部区域，可放置搜索输入框等元素。
     default: null
     link: null
     usage: '#sort'
@@ -72,7 +78,7 @@ SLOTS:
   - name: thead
     type: slot
     values: null
-    description: Space representing thead element of the table where the `s-th` components will be placed.
+    description: 表格 thead 区域，用于放置 `s-th` 组件。
     default: null
     link: null
     usage: '#default'
@@ -87,7 +93,7 @@ SLOTS:
   - name: tbody
     type: slot
     values: null
-    description: Represents the tbody element in the table and here we will put the `s-tr` components.
+    description: 表格 tbody 区域，用于放置 `s-tr` 组件。
     default: null
     link: null
     usage: '#default'
@@ -105,7 +111,7 @@ SLOTS:
   - name: s-tr:#expand
     type: slot
     values: null
-    description: Represents the interior of the tr when it is expanded.
+    description: 表格行展开后的内容区域。
     default: null
     link: null
     usage: '#expand'
@@ -113,7 +119,7 @@ SLOTS:
   - name: notFound
     type: slot
     values: null
-    description: Change the item to display when there are no items in the table.
+    description: 自定义表格没有数据时的展示内容。
     default: null
     link: null
     usage: '#miscellaneous'
@@ -121,7 +127,7 @@ SLOTS:
       <template #notFound> Not Found </template>
 ---
 
-# Table
+# Table 表格
 
 <card>
 
@@ -129,9 +135,9 @@ SLOTS:
 
 <docs-warn />
 
-Create a table simply with the `s-table` component and its`s-tr`, `s-td`,`s-th` components.
+使用 `s-table` 及其 `s-tr`、`s-td`、`s-th` 子组件即可快速创建表格。
 
-This component has a different logic for better data management and freer customization according to needs.
+组件提供灵活的数据管理与自定义能力。
 
 <template #example>
 <table-default />
@@ -153,9 +159,9 @@ This component has a different logic for better data management and freer custom
 
 <card>
 
-## Striped
+## 斑马纹
 
-You can easily strip the table with the `striped` property
+添加 `striped` 属性即可开启表格斑马纹。
 
 <template #example>
 <table-striped />
@@ -179,7 +185,7 @@ You can easily strip the table with the `striped` property
 
 ## 颜色
 
-Change the color of a tr by adding the color property to the component `s-tr`
+为 `s-tr` 设置 `color` 属性即可改变该行颜色。
 
 <template #example>
 <table-color />
@@ -203,13 +209,13 @@ Change the color of a tr by adding the color property to the component `s-tr`
 
 ## 分页
 
-You can add the pagination functionality for the table using the `#footer` slot and the s-pagination component
+通过 `#footer` 插槽与 `s-pagination` 组件，可为表格添加分页功能。
 
-To make the development easier you can use the vuesax function that generates the items (`getPage`) based on the page and also the one that generates the total number of pages in the pagination component (`getLength`)
+可使用 `getPage` 根据页码生成数据项，并通过 `getLength` 生成分页总数。
 
-This way of handling data is to improve the freedom of customization without losing the ease of implementation
+这种数据处理方式兼顾了自定义自由度与实现效率。
 
-See the example
+参见示例。
 
 <template #example>
 <table-pagination />
@@ -231,12 +237,12 @@ See the example
 
 <card>
 
-## Single Selected
+## 单选
 
-You can add the select functionality with a v-model in the table and the `is-selected` property
+通过表格的 v-model 与 `is-selected` 属性可启用单选功能。
 
-::: tip TIP
-Using the `data` property in the `tr` is important as that is the data to be added to the v-model
+::: tip 提示
+请为 `tr` 设置 `data` 属性；其值会写入 v-model。
 :::
 
 <template #example>
@@ -259,11 +265,11 @@ Using the `data` property in the `tr` is important as that is the data to be add
 
 <card>
 
-## Multiple Selected
+## 多选
 
-You can do multiple select functionality in the table with the `v-model` property with its value being an array
+将 `v-model` 绑定为数组即可启用表格多选。
 
-for this functionality you can use for example the vuesax checkboxes and the function `toggleSelectAll` in the checkbox of th
+可搭配复选框及 `toggleSelectAll` 函数实现表头全选。
 
 <template #example>
 <table-multiple />
@@ -285,9 +291,9 @@ for this functionality you can use for example the vuesax checkboxes and the fun
 
 <card>
 
-## Expandable data
+## 可展开数据
 
-To add a `tr` that can display expanded data use the`#expand` slot inside the `s-tr` component.
+在 `s-tr` 内使用 `#expand` 插槽，即可添加可展开数据行。
 
 <template #example>
 <table-expand />
@@ -309,9 +315,9 @@ To add a `tr` that can display expanded data use the`#expand` slot inside the `s
 
 <card>
 
-## Edit data
+## 编辑数据
 
-You can edit the data inside the table easily using the `s-dialog` component and the magic of vuejs
+可结合 `s-dialog` 组件编辑表格中的数据。
 
 <template #example>
 <table-edit />
@@ -333,12 +339,12 @@ You can edit the data inside the table easily using the `s-dialog` component and
 
 <card>
 
-## Sort
+## 排序
 
-Sort functionality is independent and you can use the global function `sortData`
+排序功能独立实现，可使用全局函数 `sortData`。
 
-::: tip TIP
-The `sortData` function needs 4 parameters: the event, the data of the table, the number of items to be ordered, and the sort type
+::: tip 提示
+`sortData` 需要 4 个参数：事件、表格数据、排序字段和排序类型。
 :::
 
 <command>
@@ -377,9 +383,9 @@ declare function sortData<T extends Record<string, unknown>>(
 
 <card>
 
-## Miscellaneous
+## 综合示例
 
-This is a sample of everything united and its functionality together
+此示例组合展示各项功能。
 
 <template #example>
 <table-miscellaneous />
@@ -407,15 +413,15 @@ This is a sample of everything united and its functionality together
 
 <card>
 
-## Functions
+## 工具函数
 
-We create this component with a different logic and maybe something not very common as a first point we want development to be more free and for the programmer to have many options and customization based on what he needs and wants to create, for example a very important theme it is the queries of the data in the server and that now they are not manipulated by the component until you yourself using a vuesax function impose it
+组件采用更灵活的数据处理逻辑，服务端数据请求不会被组件直接接管；可按业务需求自行调用工具函数处理。
 
-So now we use functions that you can use if you need them such as:
+可用函数如下：
 
 #### toggleSelectAll
 
-See the [Example](#miscellaneous):
+参见[综合示例](#miscellaneous)：
 <command>
 
 ```ts
@@ -434,7 +440,7 @@ declare function toggleSelectAll<T = any>(selected: T[], originalData: T[]): T[]
 
 #### sortData
 
-See the [Example](#sort):
+参见[排序示例](#sort)：
 <command>
 
 ```ts

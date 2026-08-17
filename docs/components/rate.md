@@ -1,4 +1,5 @@
 ---
+description: "Collect or display a rating with selectable symbols."
 PROPS:
   #__________________________________
   - name: model-value/v-model

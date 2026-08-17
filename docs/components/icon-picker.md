@@ -1,15 +1,20 @@
 ---
 PROPS:
+  - name: placeholder
+    type: String
+    values: input text
+    description: Configure the empty-state label.
+    default: '-'
   - name: v-model
     type: String
-    values: Material icon name
+    values: Iconify name (`prefix:name`)
     description: Selected icon name.
     default: "''"
   - name: icon-list
     type: Array
     values: string[]
     description: Available icon names.
-    default: common Material icons
+    default: common Carbon icons
   - name: searchable
     type: Boolean
     values: true / false
@@ -18,7 +23,7 @@ PROPS:
 EVENTS:
   - name: change / clear
     description: Selection and clear events.
-description: "VXE-style icon picker."
+description: "Icon picker."
 ---
 
 # Icon picker

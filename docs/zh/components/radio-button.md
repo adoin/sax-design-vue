@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: label
+    type: String | Number | Boolean
+    values: 选项值
+    description: 作为 Radio group 中的选项值。
+    default: '-'
   - name: v-model
     type: String | Number | Boolean
     values: 单选值
@@ -18,7 +23,7 @@ PROPS:
 EVENTS:
   - name: change
     description: 选中按钮后触发。
-description: "VXE 风格按钮单选。"
+description: "按钮单选。"
 ---
 
 # 按钮单选

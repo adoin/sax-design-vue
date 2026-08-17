@@ -22,9 +22,7 @@
           @click="select(item)"
         >
           <SIcon
-            v-if="item.icon"
-            :icon="item.icon"
-            icon-pack="material-icons"
+            v-if="item.icon" :name="item.icon"
           />
           <span>{{ item.label }}</span>
         </button>

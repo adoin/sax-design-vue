@@ -1,9 +1,10 @@
 ---
+description: "构建带有分组操作和响应式状态的顶层导航。"
 PROPS:
   - name: fixed
     type: Boolean
     values: true, false
-    description: Defines if the component is fixed on the screen.
+    description: 是否将组件固定在屏幕上。
     default: false
     link: null
     usage: null
@@ -14,7 +15,7 @@ PROPS:
   - name: shadow
     type: Boolean
     values: true, false
-    description: Add a shadow to the component.
+    description: 为组件添加阴影。
     default: primary
     link: null
     usage: null
@@ -25,7 +26,7 @@ PROPS:
   - name: shadow-scroll
     type: Boolean
     values: true, false
-    description: Add functionality to add shadow to component when scrollTop is more than 0.
+    description: 滚动位置大于 0 时为组件添加阴影。
     default: false
     link: null
     usage: null
@@ -36,7 +37,7 @@ PROPS:
   - name: hide-scroll
     type: Boolean
     values: true, false
-    description: Add the functionality to hide and show the component based on whether the scroll is lowered or raised.
+    description: 根据向下或向上滚动隐藏、显示组件。
     default: false
     link: null
     usage: '#hide-scroll'
@@ -47,7 +48,7 @@ PROPS:
   - name: textWhite
     type: Boolean
     values: true, false
-    description: Change the text color of items to white.
+    description: 将项目文本颜色改为白色。
     default: false
     link: null
     usage: '#color'
@@ -58,7 +59,7 @@ PROPS:
   - name: square
     type: Boolean
     values: true, false
-    description: Change the border radius to 0 by making the component square.
+    description: 将组件圆角设为 0，形成方形样式。
     default: false
     link: null
     usage: '#square'
@@ -69,7 +70,7 @@ PROPS:
   - name: padding-scroll
     type: Boolean
     values: true, false
-    description: Determines if the component has padding and the user scrolling is removed making an effect.
+    description: 控制组件内边距，并在滚动时移除以形成视觉效果。
     default: false
     link: null
     usage: '#padding-scroll'
@@ -80,7 +81,7 @@ PROPS:
   - name: not-line
     type: Boolean
     values: true, false
-    description: Delete the active line in the component.
+    description: 移除组件激活指示线。
     default: false
     link: null
     usage: '#not-line'
@@ -91,7 +92,7 @@ PROPS:
   - name: left-collapsed
     type: Boolean
     values: true, false
-    description: Add the functionality that when the elements of this slot cannot be correctly they are visually removed.
+    description: 该插槽空间不足时自动折叠其元素。
     default: false
     link: null
     usage: '#default'
@@ -102,7 +103,7 @@ PROPS:
   - name: center-collapsed
     type: Boolean
     values: true, false
-    description: Add the functionality that when the elements of this slot cannot be correctly they are visually removed.
+    description: 该插槽空间不足时自动折叠其元素。
     default: false
     link: null
     usage: '#default'
@@ -113,7 +114,7 @@ PROPS:
   - name: right-collapsed
     type: Boolean
     values: true, false
-    description: Add the functionality that when the elements of this slot cannot be correctly they are visually removed.
+    description: 该插槽空间不足时自动折叠其元素。
     default: false
     link: null
     usage: '#default'
@@ -124,7 +125,7 @@ PROPS:
   - name: target-scroll
     type: Boolean
     values: true, false
-    description: Determines the element to which the scroll event will be requested.
+    description: 指定监听滚动事件的元素。
     default: document
     link: null
     usage: '#target-scroll'
@@ -135,7 +136,7 @@ PROPS:
   - name: item:active
     type: Boolean
     values: true, false
-    description: Determines if the component is in active status.
+    description: 是否处于激活状态。
     default: false
     link: null
     usage: '#default'
@@ -146,7 +147,7 @@ PROPS:
   - name: item:to
     type: String, Object
     values: vue-router RouteLocationRaw
-    description: Use vue-router to generate a new view based on the supplied string.
+    description: 使用 vue-router 根据传入值跳转到新视图。
     default: false
     link: null
     usage: null
@@ -157,7 +158,7 @@ PROPS:
   - name: item:to
     type: String, Object
     values: vue-router RouteLocationRaw
-    description: Use vue-router to generate a new view based on the supplied string.
+    description: 使用 vue-router 根据传入值跳转到新视图。
     default: false
     link: null
     usage: null
@@ -168,7 +169,7 @@ PROPS:
   - name: item:link
     type: Object
     values: NavLink
-    description: Use to navigate the site
+    description: 用于站点导航。
     default: false
     link: null
     usage: null
@@ -181,7 +182,7 @@ SLOTS:
   - name: default
     type: slot
     values: null
-    description: Add the elements in the center of the component.
+    description: 在组件中部添加元素。
     default: null
     link: null
     usage: '#default'
@@ -194,7 +195,7 @@ SLOTS:
   - name: left
     type: slot
     values: null
-    description: Add the elements on the left side of the component.
+    description: 在组件左侧添加元素。
     default: null
     link: null
     usage: '#default'
@@ -205,7 +206,7 @@ SLOTS:
   - name: right
     type: slot
     values: null
-    description: Add the elements on the right side of the component.
+    description: 在组件右侧添加元素。
     default: null
     link: null
     usage: '#default'
@@ -216,7 +217,7 @@ SLOTS:
       </template>
 ---
 
-# Navbar
+# Navbar 导航栏
 
 <card>
 
@@ -224,7 +225,7 @@ SLOTS:
 
 <docs-warn />
 
-Quickly generate a menu with the `navbar` component, as such the component is divided into 3 slots (**left**, **center** (default), **right**) with which you can determine the location of the elements, as sub components we have `navbar-item` and `navbar-group`
+使用 `s-navbar` 可快速创建菜单。组件提供 **left**、**center**（默认）、**right** 三个插槽决定元素位置，并包含 `s-navbar-item`、`s-navbar-group` 子组件。
 
 <template #example>
 <navbar-default />
@@ -254,9 +255,9 @@ Quickly generate a menu with the `navbar` component, as such the component is di
 
 ## 颜色
 
-Change the component's color with the `color` property or by directly adding one of the main vuesax colors
+通过 `color` 或主题色设置组件颜色。
 
-if you want to change the text color to white you can do it with the property `text-white`
+需要将文本设为白色时，使用 `text-white` 属性。
 
 <template #example>
 <navbar-color />
@@ -284,9 +285,9 @@ if you want to change the text color to white you can do it with the property `t
 
 <card>
 
-## Hide scroll
+## 滚动隐藏
 
-Add functionality to hide navbar when user scroll down and show when upload
+用户向下滚动时隐藏导航栏，向上滚动时显示。
 
 <template #example>
 <navbar-hide-scroll />
@@ -314,9 +315,9 @@ Add functionality to hide navbar when user scroll down and show when upload
 
 <card>
 
-## Group
+## 分组
 
-You can add a list of elements within an item with the `s-navbar-group` component and within it add the `s-navbar-item` components
+通过 `s-navbar-group` 可在一个项目中添加元素列表，内部放入 `s-navbar-item` 组件。
 
 <template #example>
 <navbar-group />
@@ -344,9 +345,9 @@ You can add a list of elements within an item with the `s-navbar-group` componen
 
 <card>
 
-## Padding Scroll
+## 滚动内边距
 
-Add the functionality that the component has a padding up and down that when it is lowered the scroll is eliminated giving a pleasant effect
+为组件添加上下内边距，并在滚动时移除，形成平滑视觉效果。
 
 <template #example>
 <navbar-padding-scroll />
@@ -376,7 +377,7 @@ Add the functionality that the component has a padding up and down that when it 
 
 ## 方形
 
-Remove the border-radius property by making the component square
+移除 `border-radius`，使组件呈方形。
 
 <template #example>
 <navbar-square />
@@ -404,9 +405,9 @@ Remove the border-radius property by making the component square
 
 <card>
 
-## Not line
+## 隐藏指示线
 
-Eliminates the active effect line of the component
+移除组件的激活效果线。
 
 <template #example>
 <navbar-not-line />
@@ -428,7 +429,7 @@ Eliminates the active effect line of the component
 
 <card>
 
-## Types
+## 类型定义
 
 ```ts
 interface NavItem {

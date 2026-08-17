@@ -15,7 +15,7 @@ PROPS:
     values: true / false
     description: Collapsed state.
     default: 'false'
-description: "VXE-style form field group."
+description: "Form field group."
 ---
 
 # Form group

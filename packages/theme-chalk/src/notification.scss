@@ -74,9 +74,9 @@
 
       @include when(sticky) {
         margin: 3px 20px;
-        border-radius: 20px;
+        border-radius: var(--sax-radius-xl);
         &:last-child {
-          border-radius: 0 0 20px 20px;
+          border-radius: 0 0 var(--sax-radius-xl) var(--sax-radius-xl);
           margin-top: -10px;
         }
       }
@@ -106,7 +106,7 @@
       clip-path: circle(145% at 0% 50%);
       @include when(sticky) {
         margin-left: 0;
-        border-radius: 0 20px 20px 0;
+        border-radius: 0 var(--sax-radius-xl) var(--sax-radius-xl) 0;
       }
       @include when(border) {
         border: 3px solid transparent;
@@ -134,9 +134,9 @@
 
       @include when(sticky) {
         margin: 3px 20px;
-        border-radius: 20px;
+        border-radius: var(--sax-radius-xl);
         &:last-child {
-          border-radius: 20px 20px 0 0;
+          border-radius: var(--sax-radius-xl) var(--sax-radius-xl) 0 0;
           margin-bottom: -10px;
         }
       }
@@ -163,7 +163,7 @@
 
       @include when(sticky) {
         margin-left: 0;
-        border-radius: 0 20px 20px 0;
+        border-radius: 0 var(--sax-radius-xl) var(--sax-radius-xl) 0;
       }
       @include when(border) {
         border: 3px solid transparent;
@@ -190,7 +190,7 @@
   max-width: 340px;
   width: 100%;
   height: auto;
-  border-radius: 20px;
+  border-radius: var(--sax-radius-xl);
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, getCssVar('shadow-opacity'));
   overflow: hidden;
   clip-path: circle(145% at 100% 50%);
@@ -231,7 +231,7 @@
   @include when(sticky) {
     margin-right: 0;
     margin-bottom: 0;
-    border-radius: 20px 0 0 20px;
+    border-radius: var(--sax-radius-xl) 0 0 var(--sax-radius-xl);
   }
   @include when(flat) {
     box-shadow: 0 0 0 0 rgba(0, 0, 0, getCssVar('shadow-opacity'));
@@ -293,7 +293,7 @@
   @include e(progress) {
     width: 0;
     height: 3px;
-    border-radius: 4px;
+    border-radius: var(--sax-radius-xs);
     background: getColor('text');
     position: absolute;
     bottom: 0;
@@ -303,7 +303,7 @@
   @include e(loading) {
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    border-radius: var(--sax-radius-circle);
     position: absolute;
     &:after {
       box-sizing: border-box;

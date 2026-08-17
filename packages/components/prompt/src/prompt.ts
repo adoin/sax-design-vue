@@ -45,30 +45,17 @@ export const promptProps = buildProps({
     default: 'none',
   },
   buttonsHidden: Boolean,
-  acceptText: {
-    type: String,
-    default: 'Accept',
-  },
-  cancelText: {
-    type: String,
-    default: 'Cancel',
-  },
+  acceptText: String,
+  cancelText: String,
   closeIcon: {
     type: String,
-    default: 'close',
-  },
-  iconPack: {
-    type: String,
-    default: 'material-icons',
+    default: 'cb:close',
   },
   text: {
     type: String,
     default: null,
   },
-  title: {
-    type: String,
-    default: 'Dialog',
-  },
+  title: String,
   type: {
     type: String,
     values: ['alert', 'confirm'],

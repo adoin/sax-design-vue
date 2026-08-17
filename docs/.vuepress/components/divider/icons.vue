@@ -1,11 +1,11 @@
 <template>
   <div class="center">
-    <s-divider icon="arrow_downward" />
-    <s-divider color="primary" icon="star" />
-    <s-divider color="success" icon="check" />
-    <s-divider color="danger" icon="delete_forever" />
-    <s-divider color="warning" icon="report_problem" />
-    <s-divider color="dark" icon="watch_later" />
+    <s-divider icon="cb:arrow-down" />
+    <s-divider color="primary" icon="cb:star" />
+    <s-divider color="success" icon="cb:checkmark" />
+    <s-divider color="danger" icon="cb:trash-can" />
+    <s-divider color="warning" icon="cb:warning" />
+    <s-divider color="dark" icon="cb:time" />
   </div>
 </template>
 

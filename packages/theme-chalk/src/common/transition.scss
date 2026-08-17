@@ -13,7 +13,7 @@
 
 .tooltip-enter-active,
 .tooltip-leave-active {
-  transition: all 0.25s ease, left 0s, top 0s;
+  transition: all getCssVar('motion-duration') getCssVar('motion-easing-standard'), left 0s, top 0s;
 }
 
 .tooltip-enter-from,
@@ -43,7 +43,7 @@
 
 .#{$namespace}-fade-in-enter-active,
 .#{$namespace}-fade-in-leave-active {
-  transition: all getCssVar('transition-duration') cubic-bezier(0.55, 0, 0.1, 1);
+  transition: all getCssVar('transition-duration') getCssVar('motion-easing');
 }
 .#{$namespace}-fade-in-enter-from,
 .#{$namespace}-fade-in-leave-active {
@@ -52,7 +52,7 @@
 
 .#{$namespace}-zoom-in-center-enter-active,
 .#{$namespace}-zoom-in-center-leave-active {
-  transition: all getCssVar('transition-duration') cubic-bezier(0.55, 0, 0.1, 1);
+  transition: all getCssVar('transition-duration') getCssVar('motion-easing');
 }
 .#{$namespace}-zoom-in-center-enter-from,
 .#{$namespace}-zoom-in-center-leave-active {
@@ -124,7 +124,7 @@
 
 .#{$namespace}-list-enter-active,
 .#{$namespace}-list-leave-active {
-  transition: all 1s;
+  transition: all getCssVar('motion-duration-long') getCssVar('motion-easing-standard');
 }
 
 .#{$namespace}-list-enter-from,
@@ -138,6 +138,5 @@
 }
 
 .#{$namespace}-opacity-transition {
-  transition: opacity getCssVar('transition-duration')
-    cubic-bezier(0.55, 0, 0.1, 1);
+  transition: opacity getCssVar('transition-duration') getCssVar('motion-easing');
 }

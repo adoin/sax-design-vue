@@ -8,7 +8,15 @@ const cardType = [1, '1', 2, '2', 3, '3', 4, '4', 5, '5'] as const
 
 export const cardProps = buildProps({
   /**
-   * @description Component color - Accept Vuesax's color, Hex, rgb
+   * @description Card title. The `title` slot takes precedence when provided.
+   */
+  title: String,
+  /**
+   * @description Card body text. The `text` slot takes precedence when provided.
+   */
+  text: String,
+  /**
+   * @description Component color - Accept Sax Design color tokens, Hex, rgb
    */
   color: useColorProp,
   /**

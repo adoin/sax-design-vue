@@ -1,768 +1,399 @@
 <template>
-  <div
+  <section
     v-if="
-      pageFrontmatter.PROPS || pageFrontmatter.SLOTS || pageFrontmatter.EVENTS
+      pageFrontmatter.PROPS ||
+      pageFrontmatter.CHILD_PROPS ||
+      pageFrontmatter.SLOTS ||
+      pageFrontmatter.EVENTS
     "
     id="s-api"
     class="con-api"
   >
     <div class="content-api">
-      <div v-for="(table, key) in getTables" :key="key" class="content-table">
-        <template v-if="table">
-          <header>
-            <h3>{{ tableLabel(key) }}</h3>
-          </header>
-          <table>
-            <thead>
-              <tr>
-                <th>{{ labels.property }}</th>
-                <th>{{ labels.type }}</th>
-                <th class="val">{{ labels.values }}</th>
-                <th class="des">{{ labels.description }}</th>
-                <th>{{ labels.default }}</th>
-                <th class="ex">{{ labels.example }}</th>
-                <th class="bugx">
-                  <span>{{ labels.more }}</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody
-              v-for="(tr, trKey) in table"
-              :id="`api-${tr.name}`"
-              :key="trKey"
-            >
-              <tr>
-                <td>
+      <section v-for="(rows, key) in tables" :key="key" class="content-table">
+        <h3>{{ tableLabel(key) }}</h3>
+
+        <s-table class="api-table">
+          <template #thead>
+            <tr>
+              <th class="api-column-name">{{ labels.property }}</th>
+              <th class="api-column-type">{{ labels.type }}</th>
+              <th class="api-column-values">{{ labels.values }}</th>
+              <th class="api-column-description">{{ labels.description }}</th>
+              <th class="api-column-default">{{ labels.default }}</th>
+              <th class="api-column-example">{{ labels.example }}</th>
+              <th class="api-column-more">{{ labels.more }}</th>
+            </tr>
+          </template>
+
+          <template #tbody>
+            <template v-for="(row, index) in rows" :key="`${key}-${row.name}`">
+              <tr :id="`api-${row.name}`">
+                <td class="api-column-name">
                   <router-link
-                    v-if="tr.link && !isExternal(tr.link)"
-                    :to="tr.link"
+                    v-if="row.link && !isExternal(row.link)"
+                    :to="row.link"
                   >
-                    {{ tr.name }}<i class="bx bx-link" />
+                    {{ row.name }} <s-icon name="bx:link" />
                   </router-link>
-
                   <a
-                    v-else-if="tr.link && isExternal(tr.link)"
+                    v-else-if="row.link"
+                    :href="row.link"
+                    rel="noreferrer"
                     target="_blank"
-                    :href="tr.link"
                   >
-                    {{ tr.name }} <i class="bx bx-link-external" />
+                    {{ row.name }} <s-icon name="bx:link-external" />
                   </a>
-
-                  <span v-else>
-                    {{ tr.name }}
-                  </span>
-
+                  <span v-else>{{ row.name }}</span>
                   <Badge
-                    v-if="tr.state"
-                    style="margin-left: 6px"
-                    :text="tr.state.text"
-                    :type="tr.state.type"
+                    v-if="row.state"
+                    class="api-state"
+                    :text="row.state.text"
+                    :type="row.state.type"
                   />
                 </td>
-                <td>{{ tr.type }}</td>
-                <td class="val" v-html="getValues(tr.values)" />
-                <td class="des" v-html="tr.description" />
-                <td>{{ tr.default }}</td>
-                <td class="ex">
-                  <a v-if="tr.usage" :href="tr.usage" class="btn-usage">
-                    {{ labels.usage }} <i class="bx bx-code-block" />
-                  </a>
-                  <a
-                    v-if="tr.code"
-                    class="btn-toggle-code"
-                    @click="toggleCode($event)"
-                  >
-                    <span class="open"
-                      >{{ labels.open }} <i class="bx bx-code-alt"
-                    /></span>
-                    <span class="close"
-                      >{{ labels.close }} <i class="bx bx-x"
-                    /></span>
-                  </a>
-                </td>
-
-                <td class="bugx">
-                  <a
-                    arget="_blank"
-                    :href="`https://github.com/adoin/sax-design-vue/issues/new?title=[${pageData.title}] prop
-                    (${tr.name}) - Your Bug Name&amp;body=**Steps to Reproduce**%0A1. Do something%0A2. Do something else.%0A3. Do one last thing.%0A%0A**Expected**%0AThe ${tr.name} should do this%0A%0A**Result**%0AThe ${tr.name} does not do this%0A%0A**Testcase**%0A(fork this to get started)%0Ahttp://jsfiddle.net/example-bug/1/`"
-                  >
-                    <i class="bx bx-bug" />
-                  </a>
-
-                  <a
-                    target="_blank"
-                    :href="`https://github.com/adoin/sax-design-vue/`"
-                  >
-                    <i class="bx bx-terminal" />
-                  </a>
-                </td>
-              </tr>
-              <tr v-if="tr.code" class="tr-code">
+                <td class="api-column-type">{{ row.type || '—' }}</td>
+                <td class="api-column-values" v-html="getValues(row.values)" />
                 <td
-                  colspan="7"
-                  @click="handleCopy($event, tr.code)"
-                  v-html="getCode(tr.code)"
+                  class="api-column-description"
+                  v-html="row.description || '—'"
                 />
+                <td class="api-column-default">{{ row.default || '—' }}</td>
+                <td class="api-column-example">
+                  <div class="api-actions">
+                    <a v-if="row.usage" :href="row.usage" class="api-action">
+                      {{ labels.usage }} <s-icon name="bx:code-block" />
+                    </a>
+                    <button
+                      v-if="row.code"
+                      class="api-action"
+                      type="button"
+                      @click="toggleCode(String(key), index)"
+                    >
+                      {{
+                        isCodeOpen(String(key), index)
+                          ? labels.close
+                          : labels.open
+                      }}
+                      <s-icon
+                        :name="
+                          isCodeOpen(String(key), index)
+                            ? 'bx:x'
+                            : 'bx:code-alt'
+                        "
+                      />
+                    </button>
+                    <span v-if="!row.usage && !row.code" class="api-empty"
+                      >—</span
+                    >
+                  </div>
+                </td>
+                <td class="api-column-more">
+                  <a
+                    :href="issueLink(row.name)"
+                    :aria-label="t.examples.reportIssue"
+                    class="api-icon-action"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <s-icon name="bx:bug" />
+                  </a>
+                  <a
+                    href="https://github.com/adoin/sax-design-vue/"
+                    :aria-label="t.examples.viewSource"
+                    class="api-icon-action"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <s-icon name="bx:terminal" />
+                  </a>
+                </td>
               </tr>
-            </tbody>
-          </table>
-        </template>
-      </div>
+              <tr
+                v-if="row.code && isCodeOpen(String(key), index)"
+                class="api-code-row"
+              >
+                <td colspan="7">
+                  <button
+                    class="api-code-copy"
+                    type="button"
+                    @click="copy(row.code)"
+                  >
+                    {{ copied ? t.examples.copied : t.examples.copyCode }}
+                  </button>
+                  <div v-html="getCode(row.code)" />
+                </td>
+              </tr>
+            </template>
+          </template>
+        </s-table>
+      </section>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { usePageData, usePageFrontmatter } from '@vuepress/client'
-import { useRoute } from 'vue-router'
 import prism from 'prismjs'
 import { useClipboard } from '@vueuse/core'
 
 import { isExternal } from '../util'
 import { useDocLocaleUi } from '../composables/docLocale'
-import type { PageData, PageFrontmatter } from '@vuepress/client'
 import type { ComputedRef } from 'vue'
+import type { PageData, PageFrontmatter } from '@vuepress/client'
 import type {
   ThemeNormalApiFrontmatter,
   ThemeNormalPropsFrontmatter,
 } from '../shared/frontmatter/normal'
 
-type Tables = {
-  PROPS?: ThemeNormalPropsFrontmatter
-  SLOTS?: ThemeNormalPropsFrontmatter
-  events?: ThemeNormalPropsFrontmatter
-  exposes?: ThemeNormalPropsFrontmatter
-}
+type Tables = Record<string, ThemeNormalPropsFrontmatter>
 
-const route = useRoute()
-const pageData: ComputedRef<
-  PageData<{
-    title: string
-  }>
-> = usePageData() as any
-
+const pageData: ComputedRef<PageData<{ title: string }>> = usePageData() as any
 const pageFrontmatter: ComputedRef<PageFrontmatter<ThemeNormalApiFrontmatter>> =
   usePageFrontmatter() as any
-
 const { t } = useDocLocaleUi()
 const labels = computed(() => t.value.apiColumns)
-
-const tableLabel = (key: string) => {
-  const tables = t.value.apiTables as Record<string, string>
-  return tables[key] || key
-}
-
 const { copied, copy } = useClipboard({ legacy: true })
+const openCodes = ref(new Set<string>())
 
-let tdElement: null | HTMLElement = null
-
-const handleCopy = (evt: MouseEvent, code: string) => {
-  if (tdElement) {
-    tdElement.classList.remove('copied')
-  }
-  copy(code)
-  tdElement = evt.target as HTMLElement
-  tdElement.classList.add('copied')
-}
-
-watch(copied, (newVal) => {
-  if (!newVal && tdElement) {
-    tdElement.classList.remove('copied')
-  }
-})
-
-const getTables = computed((): Tables => {
-  return {
+const tables = computed<Tables>(() => {
+  const source = {
     PROPS: pageFrontmatter.value.PROPS,
+    CHILD_PROPS: pageFrontmatter.value.CHILD_PROPS,
     SLOTS: pageFrontmatter.value.SLOTS,
     events: pageFrontmatter.value.EVENTS,
     exposes: pageFrontmatter.value.EXPOSES,
   }
+  return Object.fromEntries(
+    Object.entries(source).filter(
+      ([, rows]) => Array.isArray(rows) && rows.length,
+    ),
+  ) as Tables
 })
 
-onMounted(() => {
-  document.addEventListener('scroll', () => {
-    const pageYOffset = Number(window.pageYOffset)
-    const tables = document.querySelectorAll(
-      '.content-api table'
-    ) as unknown as HTMLElement[] | null
-    tables?.forEach((table: HTMLElement, index: number) => {
-      if (
-        pageYOffset + 52 >= table.offsetTop &&
-        pageYOffset + 100 < table.offsetTop + table.offsetHeight
-      ) {
-        const clone: Element = table.cloneNode(true) as unknown as Element
-        const tbodys = clone.querySelectorAll('tbody')
-        tbodys.forEach((tbody) => {
-          clone.removeChild(tbody)
-        })
-
-        const ths = table.querySelectorAll('thead th') as unknown as
-          | HTMLElement[]
-          | null
-        const thsNew = clone.querySelectorAll('thead th') as unknown as
-          | HTMLElement[]
-          | null
-
-        ths?.forEach((th, index) => {
-          thsNew && thsNew[index].setAttribute('width', `${th.offsetWidth}`)
-        })
-
-        clone.classList.add(`table-${index}`)
-
-        if (!document.querySelector(`.header-page .table-${index}`)) {
-          if (
-            document.querySelector(`.header-page table:not(.table-${index})`)
-          ) {
-            const header = document.querySelector(
-              '.header-page .header__content'
-            )
-            const tableRemove = document.querySelector(
-              `.header-page table:not(.table-${index})`
-            )
-            tableRemove && header?.removeChild(tableRemove)
-          }
-          document
-            .querySelector('.header-page .header__content')
-            ?.appendChild(clone)
-          document
-            .querySelector('.header-page .header__content')
-            ?.classList.add('con-table')
-        }
-      } else {
-        const header = document.querySelector('.header-page .header__content')
-        if (document.querySelector(`.header-page .table-${index}`)) {
-          const tableRemove = header?.querySelector(`.table-${index}`)
-          tableRemove && header?.removeChild(tableRemove)
-          document
-            .querySelector('.header-page .header__content')
-            ?.classList.remove('con-table')
-        }
-      }
-
-      const header = document.querySelector('.header-page .header__content')
-      if (document.querySelector(`.con-header table`)) {
-        const tableRemove = header?.querySelector(`.table-${index}`)
-        tableRemove && header?.removeChild(tableRemove)
-        document
-          .querySelector('.header-page .header__content')
-          ?.classList.remove('con-table')
-      }
-    })
-    // window.pageYOffset
-  })
-})
-
-const resetToggleCodeStatus = () => {
-  const toggleCodeBtnList = document.querySelectorAll(
-    '.btn-toggle-code'
-  ) as unknown as Array<HTMLElement>
-
-  toggleCodeBtnList.forEach((toggleBtn: HTMLElement) => {
-    const trParent = toggleBtn.closest('tr')
-    const nextCode = trParent?.nextElementSibling
-    if (nextCode && nextCode.classList.contains('open')) {
-      nextCode.classList.remove('open')
-    }
-    toggleBtn.classList?.remove('open-btn')
-  })
+const tableLabel = (key: string) => {
+  const labels = t.value.apiTables as Record<string, string>
+  return labels[key] || key
 }
-
-watch(
-  () => route.path,
-  () => {
-    const header = document.querySelector('.header-page .header__content')
-    const _table = header?.querySelector('table')
-    _table && header?.removeChild(_table)
-    document
-      .querySelector('.header-page .header__content')
-      ?.classList.remove('con-table')
-    resetToggleCodeStatus()
-  }
-)
-
-const getValues = (values: string) => {
-  if (!values) return
-  const arrayValues = values.split(',')
-  let spanValues = ''
-  arrayValues.forEach((item) => {
-    spanValues += `<span class='value-span'>${item}</span>`
-  })
-  return spanValues
+const codeKey = (table: string, index: number) => `${table}-${index}`
+const isCodeOpen = (table: string, index: number) =>
+  openCodes.value.has(codeKey(table, index))
+const toggleCode = (table: string, index: number) => {
+  const next = new Set(openCodes.value)
+  const key = codeKey(table, index)
+  if (next.has(key)) next.delete(key)
+  else next.add(key)
+  openCodes.value = next
 }
-const toggleCode = (evt: MouseEvent) => {
-  const trParent = (evt.target as HTMLElement).closest('tr')
-  const nextCode = trParent?.nextElementSibling
-
-  if (!nextCode) return
-
-  const preElement = nextCode.querySelector('pre')
-  if (nextCode.classList.contains('open')) {
-    nextCode.classList.remove('open')
-    ;(evt.target as HTMLElement).classList.remove('open-btn')
-
-    if (preElement) {
-      preElement.style.padding = '0px 20px'
-      preElement.style.maxHeight = '0px'
-    }
-  } else {
-    ;(evt.target as HTMLElement).classList.add('open-btn')
-    nextCode.classList.add('open')
-    // console.dir()
-    if (preElement) {
-      preElement.style.padding = '20px'
-      preElement.style.maxHeight = `${preElement.scrollHeight + 40}px`
-    }
-  }
+const getValues = (values?: string) => {
+  if (!values) return '—'
+  return values
+    .split(',')
+    .map((value) => `<span class="value-span">${value.trim()}</span>`)
+    .join('')
 }
-const wrap = (code: string, lang: string) => {
-  return `<pre v-pre class="language-${lang}"><code>${code}</code></pre>`
+const getCode = (code: string) => {
+  const html = prism.highlight(code, prism.languages.html, 'html')
+  return `<pre class="language-html"><code>${html}</code></pre>`
 }
-const getCode = (str: string) => {
-  const code = prism.highlight(str, prism.languages['html'], 'html')
-  return wrap(code, 'html')
-}
+const issueLink = (name: string) =>
+  `https://github.com/adoin/sax-design-vue/issues/new?title=[${pageData.value.title}]%20prop%20(${name})`
 </script>
 
 <style lang="scss">
-@import '../styles/use';
-.content-table {
-  &:last-child {
-    table {
-      margin-bottom: 0px;
-    }
-  }
-}
-.bugx {
-  font-size: 10px !important;
-  padding: 5px;
-  span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  a {
-    margin-top: 3px;
-    border: 1px dashed rgba(0, 0, 0, 0.04);
-    border-radius: 50%;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    transition: all 0s ease !important;
-    width: 30px;
-    height: 30px;
-    &:first-child {
-      margin-top: 0px;
-      &:hover {
-        background: rgba(255, 71, 87, 0.15) !important;
-        border: 2px solid rgba(255, 71, 87, 0);
-        box-icon {
-          opacity: 1;
-          fill: #ff4757 !important;
-        }
-      }
-    }
-    &:nth-child(2):hover {
-      background: rgba(31, 116, 255, 0.15) !important;
-      border: 2px solid rgba(31, 116, 255, 0);
-      box-icon {
-        fill: #1f74ff !important;
-        opacity: 1;
-      }
-    }
-    box-icon {
-      margin: 0px !important;
-      font-size: 0.8rem !important;
-      opacity: 0.4;
-    }
-  }
-}
-.btn-usage {
-  border: 0px;
-  padding: 4px 9px;
-  background: transparent;
-  border: 1px dashed -color('theme-bg2');
-  cursor: pointer;
-  outline: none;
-  border-radius: 15px;
-  transition: all 0.25s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-size: 0.7rem;
-  color: inherit;
-  margin: 3px 0px;
-  box-icon {
-    margin-left: 5px;
-    pointer-events: none;
-    opacity: 0.4;
-  }
-  &:hover {
-    background: -color('theme-bg2');
-    box-icon {
-      opacity: 1;
-    }
-  }
-}
-.btn-toggle-code {
-  border: 0px;
-  padding: 4px 9px;
-  background: transparent;
-  border: 1px dashed -color('theme-bg2');
-  cursor: pointer;
-  outline: none;
-  border-radius: 15px;
-  transition: all 0.25s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  color: inherit;
-  margin: 3px 0px;
-  span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-  }
-  .open {
-    position: relative;
-    pointer-events: none;
-  }
-  .close {
-    display: none;
-    pointer-events: none;
-  }
-  box-icon {
-    margin-left: 6px;
-    pointer-events: none;
-    font-size: 0.8rem;
-    opacity: 0.4;
-  }
-  &.open-btn {
-    color: -color('theme-text') !important;
-    background: -color('theme-bg2');
-    border: 1px solid -color('theme-bg2');
-    .close {
-      position: relative;
-      display: flex;
-    }
-    .open {
-      display: none;
-    }
-  }
-  &:not(.open-btn):hover {
-    background: -color('theme-bg2');
-    box-icon {
-      opacity: 1;
-    }
-  }
-}
-.tr-code {
-  cursor: pointer;
-  td {
-    padding: 0px !important;
-    border-bottom: 0px;
-    border-left: 0px !important;
-    transition: all 0.25s ease;
-    overflow: hidden;
-    border: 0px !important;
-    margin: 0px !important;
-    &:nth-child(1) {
-      border-left: 0px !important;
-    }
-    pre {
-      max-height: 0px;
-      overflow: hidden;
-      padding: 0px 20px;
-      transition: all 0.25s ease;
-    }
-    &:after {
-      content: 'Copied to Clipboard';
-      top: 0px;
-      left: 50%;
-      transform: translate(-50%, -100%);
-      position: absolute;
-      padding: 6px;
-      background: #46c93a;
-      color: #fff;
-      font-size: 0.65rem;
-      font-weight: normal;
-      transition: all 0.25s ease;
-      border-radius: 0px 0px 10px 10px;
-    }
-    &.copied {
-      background: rgba(70, 201, 58, 0.1);
-      &:after {
-        transform: translate(-50%, 0%);
-      }
-    }
-    pre[class*='language-'] {
-      margin: 0px;
-    }
-  }
-  &:active {
-    opacity: 0.7;
-  }
-  &:hover {
-    code[class*='language-'] {
-      background: -color('accent-color', 0.1);
-    }
-  }
-  &.open {
-    display: table-row;
-  }
-  tr {
-    border: 0px !important;
-  }
-}
-.tr-code td.copied code,
-.tr-code td.copied pre {
-  background: transparent !important;
-}
-.tr-code code,
-.tr-code pre {
-  pointer-events: none;
-  font-size: 0.8rem;
-}
+@use '../styles/use' as *;
+
 .con-api {
   max-width: 900px;
-  margin: auto;
-  padding: 1rem 10px;
-  padding-top: 0px;
-  h2 {
-    padding: 0px 20px;
-    padding-top: 40px;
-    padding-bottom: 20px;
-    transition: all 0.25s ease;
-    border-bottom: 0px;
-    &:hover {
-      padding-left: 40px;
-      a {
-        opacity: 1;
-      }
-    }
-    a {
-      font-size: 0.85em;
-      float: left;
-      margin-left: -0.87em;
-      padding-right: 0.23em;
-      margin-top: 0.125em;
-      opacity: 0;
-      transition: all 0.2s ease;
-      outline: none;
-      text-decoration: none;
-      font-weight: 600;
-      color: -color('theme-color');
-      &:hover {
-        opacity: 0.7;
-      }
-    }
-  }
-  .content-api {
-    padding: 10px;
-    background: -color('theme-layout');
-    border-radius: 20px;
-    overflow: hidden;
-    .content-table {
-      overflow: auto;
-    }
-    box-icon {
-      max-height: 16px;
-      max-width: 16px;
-    }
-    h3 {
-      text-transform: capitalize;
-      margin-left: 20px;
-      &:first-child {
-        margin-top: 0px;
-      }
-    }
-    table {
-      border-radius: 15px;
-      border-bottom: 0px;
-      border-bottom: 1px solid -color('theme-bg2');
-      height: auto;
-      width: 100% !important;
-      border-collapse: separate;
-      border-spacing: 0;
-      &.fixed-thead {
-        thead {
-          position: fixed;
-          z-index: 1000;
-          top: 0px;
-        }
-      }
-      tbody {
-        &:nth-child(2) {
-          td {
-            border-top: 0px !important;
-          }
-        }
-      }
-      tr {
-        border: 0px;
-      }
-      td {
-        padding: 10px;
-        &:nth-child(1) {
-          border-left: 1px solid -color('theme-bg2');
-        }
-        &:nth-child(2) {
-          color: #e2777a;
-        }
-        &:nth-child(3) {
-          padding: 4px;
-        }
-        &:nth-child(4) {
-          font-size: 0.75rem;
-        }
-        &:nth-child(5) {
-          color: #7ec699;
-          border-right: 1px dashed -color('theme-bg2') !important;
-        }
-        &:nth-child(6) {
-          padding: 4px;
-          border-left: 0px dashed -color('theme-bg2') !important;
-          border-right: 0px solid rgba(0, 0, 0, 0);
-          border-top: 1px dashed -color('theme-bg2') !important;
-        }
-        &:nth-child(7) {
-          border-left: 0px solid rgba(0, 0, 0, 0);
-          border-top: 1px dashed -color('theme-bg2') !important;
-          border-right: 1px solid -color('theme-bg2') !important;
-        }
-      }
-      th {
-        background: -color('theme-bg');
-        border: 0px !important;
-        font-weight: normal;
-        &:nth-child(6) {
-          font-size: 0.7rem !important;
-          background: -color('theme-bg2');
-        }
-        &:nth-child(7) {
-          font-size: 0.7rem !important;
-          background: -color('theme-bg2');
-        }
-      }
-    }
-    .h2 {
-      border: 0px;
-      transition: all 0.25s ease;
-      margin: 0px;
-      a {
-        opacity: 0;
-      }
-      &:hover {
-        padding-left: 20px;
-        a {
-          opacity: 1;
-        }
-      }
-    }
-  }
+  margin: 0 auto;
+  padding: 24px 20px 48px;
 }
-.con-api .content-api table td,
-.con-api .content-api table th {
+
+.content-api {
+  display: grid;
+  gap: 36px;
+}
+
+.content-table h3 {
+  margin: 0 0 14px;
+  color: rgb(var(--sax-theme-color));
+  font-size: 1.2rem;
+}
+
+.api-table {
+  overflow-x: auto;
+  border-radius: 14px;
+  background: rgb(var(--sax-theme-layout));
+}
+
+.api-table table {
+  width: 100%;
+  min-width: 920px;
+  border-collapse: collapse;
+  background: transparent;
+}
+
+.api-table th,
+.api-table td {
+  padding: 14px 12px;
+  border: 0;
+  border-bottom: 1px solid rgba(var(--sax-theme-color), 0.08);
+  color: rgb(var(--sax-theme-color));
+  text-align: left;
+  vertical-align: top;
+}
+
+.api-table th {
+  background: rgba(var(--sax-primary), 0.08);
+  color: rgb(var(--sax-theme-color));
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.api-table td {
   font-size: 0.8rem;
-  border-left: 1px solid -color('theme-bg2');
-  border-top: 1px solid -color('theme-bg2');
-  border-right: 0px solid -color('theme-bg2');
-  border-bottom: 0px solid -color('theme-bg2');
-  position: relative;
+  line-height: 1.55;
 }
-.con-api .content-api table td:last-child,
-.con-api .content-api table th:last-child {
-  border-right: 0px;
+
+.api-table tbody tr:last-child td {
+  border-bottom: 0;
 }
-.con-api .content-api table td > span.value-span,
-.con-api .content-api table th > span.value-span {
-  border: 1px solid -color('theme-bg2');
-  margin: 2px;
-  border-radius: 5px;
-  padding: 1px 3px;
-  display: block;
-  float: left;
-  font-size: 0.65rem;
+
+.api-column-name {
+  width: 17%;
+  min-width: 150px;
 }
-.con-api .content-api table td > span.value-span:hover,
-.con-api .content-api table th > span.value-span:hover {
-  border: 1px solid -color('theme-bg2');
+
+.api-column-type {
+  width: 10%;
+  min-width: 86px;
+  color: rgb(var(--sax-accent-secondary)) !important;
 }
-.con-api .content-api table td > a:not(.btn-toggle-code):not(.btn-usage),
-.con-api .content-api table th > a:not(.btn-toggle-code):not(.btn-usage) {
+
+.api-column-values {
+  width: 17%;
+  min-width: 150px;
+}
+
+.api-column-description {
+  min-width: 250px;
+}
+
+.api-column-default {
+  width: 12%;
+  min-width: 110px;
+  color: rgb(var(--sax-badge-tip-color)) !important;
+}
+
+.api-column-example {
+  width: 12%;
+  min-width: 126px;
+  white-space: nowrap;
+}
+
+.api-column-more {
+  width: 70px;
+  min-width: 70px;
+  text-align: center !important;
+  white-space: nowrap;
+}
+
+.api-table a {
   color: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  transition: all 0.25s ease;
+  text-decoration: none;
 }
-.con-api .content-api table td > a:not(.btn-toggle-code):not(.btn-usage):hover,
-.con-api .content-api table th > a:not(.btn-toggle-code):not(.btn-usage):hover {
-  opacity: 0.7;
+
+.api-table a:hover {
+  color: rgb(var(--sax-primary));
 }
-.con-api
-  .content-api
-  table
-  td
-  > a:not(.btn-toggle-code):not(.btn-usage)
-  box-icon,
-.con-api
-  .content-api
-  table
-  th
-  > a:not(.btn-toggle-code):not(.btn-usage)
-  box-icon {
-  transition: all 0.25s ease;
+
+.api-state {
+  margin-left: 6px;
+}
+
+.value-span {
+  display: inline-flex;
+  margin: 2px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(var(--sax-primary), 0.09);
+  color: rgb(var(--sax-theme-color));
   font-size: 0.7rem;
 }
 
-// @media (max-width: 1180px)
-//   .content-api
-//     overflow hidden
-//     position relative
-//   .con-api
-//     overflow hidden
-//     position relative
-//     table
-//       pre
-//         width 100%
-//       .bugx,.val
-//         display none
-@media (max-width: 1080px) {
-  .con-api {
-    padding: 1rem 10px !important;
-    .content-api {
-      .content-table {
-        overflow: auto;
-      }
-    }
-    h2 {
-      padding-bottom: 0px;
-    }
-  }
+.api-actions,
+.api-column-more {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.api-actions {
+  flex-wrap: wrap;
+}
+
+.api-action,
+.api-icon-action,
+.api-code-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(var(--sax-primary), 0.1);
+  color: rgb(var(--sax-primary)) !important;
+  cursor: pointer;
+  font: inherit;
+}
+
+.api-action {
+  min-height: 28px;
+  padding: 4px 8px;
+  font-size: 0.72rem;
+}
+
+.api-icon-action {
+  width: 28px;
+  height: 28px;
+}
+
+.api-empty {
+  color: rgba(var(--sax-theme-color), 0.45);
+}
+
+.api-code-row td {
+  position: relative;
+  padding: 0;
+  background: rgba(var(--sax-primary), 0.04);
+}
+
+.api-code-row pre {
+  max-width: 100%;
+  margin: 0;
+  padding: 18px;
+  overflow: auto;
+}
+
+.api-code-copy {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  padding: 6px 10px;
+  font-size: 0.72rem;
 }
 
 @media (max-width: 800px) {
   .con-api {
-    table {
-      .ex {
-        display: none;
-      }
-    }
-    .tr-code {
-      display: none !important;
-    }
+    padding: 20px 0 36px;
   }
-  .con-api table rd,
-  .con-api table td,
-  .con-api table th {
-    font-size: 0.65rem !important;
-    padding: 5px !important;
+
+  .api-table {
+    border-radius: 0;
   }
 }
 </style>

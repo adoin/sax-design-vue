@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: finish-status / process-status
+    type: String
+    values: success | error | process | wait
+    description: 设置已完成步骤和进行中步骤的状态样式。
+    default: 'success / process'
   - name: active
     type: Number
     values: index
@@ -23,7 +28,7 @@ PROPS:
 EVENTS:
   - name: click
     description: 点击步骤时触发，返回下标和步骤项。
-description: "兼容 VXE 的步骤条。"
+description: "步骤条。"
 ---
 
 # Steps 步骤条

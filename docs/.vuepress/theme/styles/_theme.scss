@@ -1,4 +1,4 @@
-@import './_use.scss';
+@use './use' as *;
 
 @font-face {
   font-family: 'Poppins';

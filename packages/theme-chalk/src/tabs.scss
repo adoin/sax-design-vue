@@ -41,7 +41,7 @@
     padding: 10px 16px;
     border: 0;
     cursor: pointer;
-    transition: color 0.2s ease;
+    transition: color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
     color: rgba(0, 0, 0, 0.55);
 
     &:hover:not(:disabled) {
@@ -63,7 +63,7 @@
       var(--sax-tabs-color, getColor('primary')) 0%,
       rgba(25, 91, 255, 0.5) 100%
     );
-    transition: all 0.2s ease;
+    transition: all var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
     box-shadow: 0 0 8px color-mix(in srgb, var(--sax-tabs-color, getColor('primary')) 50%, transparent);
   }
 
@@ -189,7 +189,7 @@
   @include e(pane-fade) {
     &-enter-active,
     &-leave-active {
-      transition: opacity 0.25s ease, transform 0.25s ease;
+      transition: opacity var(--sax-motion-duration) var(--sax-motion-easing-standard), transform var(--sax-motion-duration) var(--sax-motion-easing-standard);
     }
 
     &-enter-from,

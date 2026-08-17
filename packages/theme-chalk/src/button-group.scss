@@ -4,9 +4,13 @@
 
 @include b(button) {
   @include e(group) {
-    @include flex(center, center);
+    @include flex(center, stretch);
     @include b(button) {
       margin: 0px;
+
+      &.#{$namespace}-button--icon {
+        height: auto;
+      }
 
       &:not(:last-of-type):not(:first-of-type) {
         border-radius: 0px;
@@ -25,10 +29,10 @@
         }
       }
       @include pseudo(last-of-type) {
-        border-radius: 0px 12px 12px 0px;
+        border-radius: 0 var(--sax-radius) var(--sax-radius) 0;
       }
       @include pseudo(first-of-type) {
-        border-radius: 12px 0px 0px 12px;
+        border-radius: var(--sax-radius) 0 0 var(--sax-radius);
       }
     }
   }

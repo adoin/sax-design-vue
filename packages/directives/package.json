@@ -1,7 +1,7 @@
 {
   "name": "@vuesax-alpha/directives",
   "version": "0.1.0",
-  "description": "Vuesax Alpha directives",
+  "description": "Sax Design Vue directives",
   "license": "MIT",
   "main": "index.ts",
   "module": "index.ts",

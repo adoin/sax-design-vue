@@ -1,0 +1,16 @@
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+
+@include b(affix) {
+  min-width: 0;
+
+  @include e(content) {
+    width: fit-content;
+    transition: box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard), transform var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+
+    @include when(affixed) {
+      filter: drop-shadow(0 10px 22px getColor(primary, 0.16));
+    }
+  }
+}

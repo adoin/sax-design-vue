@@ -23,7 +23,7 @@ PROPS:
 EVENTS:
   - name: select / open / close
     description: 选择与展开状态事件。
-description: "VXE 风格嵌套导航菜单。"
+description: "嵌套导航菜单。"
 ---
 
 # 菜单

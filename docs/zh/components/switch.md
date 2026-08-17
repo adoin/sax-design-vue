@@ -1,9 +1,15 @@
 ---
+description: "在两个状态之间切换布尔设置。"
 PROPS:
+  - name: active-value / inactive-value / shape
+    type: String | Number | Boolean / String
+    values: 自定义绑定值 / rounded | square
+    description: 将开关状态映射为自定义值并选择外观形状。
+    default: 'true / false / rounded'
   - name: v-model
     type: Boolean, Array
     values: Boolean, Array
-    description: Determine the value of the component and if it is an array add or remove the value.
+    description: 组件绑定值；数组类型时会添加或移除对应值。
     default: null
     link: null
     usage: '#dafault'
@@ -17,7 +23,7 @@ PROPS:
   - name: color
     type: String
     values: Theme colors, RGB y HEX
-    description: Change the color of the component when it is in active state.
+    description: 设置组件激活状态时的颜色。
     default: primary
     link: null
     usage: '#color'
@@ -26,7 +32,7 @@ PROPS:
   - name: loading
     type: Boolean
     values: true, false
-    description: Add a loading animation to the component.
+    description: 为组件添加加载动画。
     default: false
     link: null
     usage: '#loading'
@@ -48,7 +54,7 @@ PROPS:
   - name: indeterminate
     type: Boolean
     values: true, false
-    description: Determine if the component is in an undetermined state (being in this state is disabled).
+    description: 是否为不确定状态；该状态下组件不可用。
     default: false
     link: null
     usage: '#indeterminate'
@@ -62,7 +68,7 @@ PROPS:
   - name: Square
     type: Boolean
     values: true, false
-    description: Change the style of the component from circular to square.
+    description: 将组件样式从圆形改为方形。
     default: false
     link: null
     usage: '#square'
@@ -76,7 +82,7 @@ PROPS:
   - name: icon
     type: Boolean
     values: true, false
-    description: Change the style of the circle by making it transparent (used when adding the slot = "circle").
+    description: 将圆形滑块设为透明，通常配合 `circle` 插槽使用。
     default: false
     link: null
     usage: '#icons'
@@ -84,8 +90,8 @@ PROPS:
       <template>
         <s-switch color="#7d33ff" icon v-model="active6">
           <template #circle>
-              <i v-if="active6" class='bx bxl-instagram-alt'></i>
-              <i v-else class='bx bxl-instagram' ></i>
+              <s-icon v-if="active6"  name="bxl:instagram-alt" />
+              <s-icon v-else   name="bxl:instagram" />
           </template>
         </s-switch>
       </template>
@@ -93,7 +99,7 @@ PROPS:
   - name: notValue
     type: String
     values: String
-    description: Determine the return value of the component when inactive.
+    description: 设置组件未激活时返回的值。
     default: null
     link: null
     usage: null
@@ -103,7 +109,7 @@ SLOTS:
   - name: default
     type: slot
     values: null
-    description: Add text within the component.
+    description: 在组件内添加文本。
     default: null
     link: null
     usage: '#text'
@@ -132,52 +138,52 @@ SLOTS:
   - name: on
     type: slot
     values: null
-    description: Add text within the component when it is in active state.
+    description: 在激活状态下添加文本。
     default: null
     link: null
     usage: '#icons'
     code: >
       <s-switch v-model="active1">
         <template #off>
-            <i class='bx bxs-volume-mute' ></i>
+            <s-icon   name="bxs:volume-mute" />
         </template>
         <template #on>
-            <i class='bx bxs-volume-full' ></i>
+            <s-icon   name="bxs:volume-full" />
         </template>
       </s-switch>
   - name: off
     type: slot
     values: null
-    description: Add text within the component when it is in idle state.
+    description: 在未激活状态下添加文本。
     default: null
     link: null
     usage: '#icons'
     code: >
       <s-switch v-model="active1">
         <template #off>
-            <i class='bx bxs-volume-mute' ></i>
+            <s-icon   name="bxs:volume-mute" />
         </template>
         <template #on>
-            <i class='bx bxs-volume-full' ></i>
+            <s-icon   name="bxs:volume-full" />
         </template>
       </s-switch>
   - name: circle
     type: slot
     values: null
-    description: Add an icon to the circle within the component.
+    description: 在组件圆形滑块内添加图标。
     default: null
     link: null
     usage: '#icons'
     code: >
       <s-switch color="#7d33ff" icon v-model="active6">
         <template #circle>
-            <i v-if="active6" class='bx bxl-instagram-alt'></i>
-            <i v-else class='bx bxl-instagram' ></i>
+            <s-icon v-if="active6"  name="bxl:instagram-alt" />
+            <s-icon v-else   name="bxl:instagram" />
         </template>
       </s-switch>
 ---
 
-# Switch
+# Switch 开关
 
 <card>
 
@@ -185,7 +191,7 @@ SLOTS:
 
 <docs-warn />
 
-Generate a switch element easily with beautiful animations and functionality
+使用 `s-switch` 可快速创建带动画的开关控件。
 
 <template #example>
 <switch-default />
@@ -209,7 +215,7 @@ Generate a switch element easily with beautiful animations and functionality
 
 ## 颜色
 
-Change the color of the component when it is in active state, the allowed values ​​are (main colors of vuesax, RGB, HEX)
+设置组件激活状态颜色，支持主题色、RGB、HEX。
 
 <template #example>
 <switch-color />
@@ -233,10 +239,10 @@ Change the color of the component when it is in active state, the allowed values
 
 ## 文本
 
-Add a text to the switch with the default slot or if you need a different text for each state of the component you can use the `on` or `off` slots
+通过默认插槽为开关添加文本；需要为两种状态设置不同文本时，可使用 `on`、`off` 插槽。
 
-:::tip Self-adjusting
-The component conforms to the text to be displayed by the state in which it is located
+:::tip 自动适应
+组件会根据当前状态适应展示文本。
 :::
 
 <template #example>
@@ -261,7 +267,7 @@ The component conforms to the text to be displayed by the state in which it is l
 
 ## 图标
 
-Add icons to the component in the default slot or the `on` or `off` status slots, and in the `circle`
+可在默认、`on`、`off` 或 `circle` 插槽中为组件添加图标。
 
 <template #example>
 <switch-icons />
@@ -285,7 +291,7 @@ Add icons to the component in the default slot or the `on` or `off` status slots
 
 ## 加载 <Badge text="New"/>
 
-Add a loading animation to the component with the `loading` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `loading`，即可为组件显示加载动画。
 
 <template #example>
 <switch-loading />
@@ -309,7 +315,7 @@ Add a loading animation to the component with the `loading` property, the proper
 
 ## 不确定 <Badge text="New"/>
 
-Add an undetermined state to the compound with the `indeterminate` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `indeterminate`，即可将组件设为不确定状态。
 
 <template #example>
 <switch-indeterminate />
@@ -333,7 +339,7 @@ Add an undetermined state to the compound with the `indeterminate` property, the
 
 ## 方形 <Badge text="New"/>
 
-Change the circular style to square with the `square` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `square`，即可将圆形样式改为方形。
 
 <template #example>
 <switch-square />
@@ -357,7 +363,7 @@ Change the circular style to square with the `square` property, the property is 
 
 ## 示例
 
-A usual example when using the switch component
+这是使用开关组件的常见示例。
 
 <template #example>
 <switch-example />

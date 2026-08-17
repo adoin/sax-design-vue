@@ -32,7 +32,7 @@
               </div>
               <div>
                 <s-button type="flat" icon>
-                  <i class="bx bx-lock-open-alt" />
+                  <s-icon  name="bx:lock-open-alt" />
                 </s-button>
                 <s-button type="flat" icon> Send Email </s-button>
                 <s-button type="border" color="danger"> Remove User </s-button>

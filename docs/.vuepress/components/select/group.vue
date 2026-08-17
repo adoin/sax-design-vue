@@ -3,7 +3,7 @@
     <s-select v-model="value1" label="Group" placeholder="Group">
       <s-option-group label="Vuejs">
         <!-- PROP: label is required -->
-        <s-option label="Vuesax" value="1"> Vuesax </s-option>
+        <s-option label="Sax Design" value="1"> Sax Design </s-option>
         <s-option label="Vue" value="2"> Vue </s-option>
         <s-option label="Javascript" value="3"> Javascript </s-option>
       </s-option-group>
@@ -17,7 +17,7 @@
 
     <s-select v-model="value2" label="Group Filter" filter placeholder="Filter">
       <s-option-group label="Vuejs">
-        <s-option label="Vuesax" value="1"> Vuesax </s-option>
+        <s-option label="Sax Design" value="1"> Sax Design </s-option>
         <s-option label="Vue" value="2"> Vue </s-option>
         <s-option label="Javascript" value="3"> Javascript </s-option>
       </s-option-group>
@@ -37,7 +37,7 @@
       placeholder="Group Multiple Filter"
     >
       <s-option-group label="Vuejs">
-        <s-option label="Vuesax" value="1"> Vuesax </s-option>
+        <s-option label="Sax Design" value="1"> Sax Design </s-option>
         <s-option label="Vue" value="2"> Vue </s-option>
         <s-option label="Javascript" value="3"> Javascript </s-option>
       </s-option-group>

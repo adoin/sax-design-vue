@@ -1,7 +1,11 @@
-import { newComponentNavItemsZh } from './new-components.zh'
+import { additionalComponentNavItemsZh } from './new-components.zh'
 import type { SidebarConfig } from '~/shared/client/nav'
 
 const zh = (path: string) => `/zh${path}`
+const component = (name: string, meaning: string, path: string) => ({
+  text: `${name}（${meaning}）`,
+  link: zh(path),
+})
 
 export const zhSidebar: SidebarConfig = [
   {
@@ -25,31 +29,31 @@ export const zhSidebar: SidebarConfig = [
   {
     text: '组件',
     children: [
-      { text: 'Button', link: zh('/components/') },
-      { text: 'Alert', link: zh('/components/alert') },
-      { text: 'Loading', link: zh('/components/loading') },
-      { text: 'Input', link: zh('/components/input') },
-      { text: 'Checkbox', link: zh('/components/checkbox') },
-      { text: 'Switch', link: zh('/components/switch') },
-      { text: 'Select', link: zh('/components/select') },
-      { text: 'Avatar', link: zh('/components/avatar') },
-      { text: 'Notification', link: zh('/components/notification') },
-      { text: 'Radio', link: zh('/components/radio') },
-      { text: 'Tooltip', link: zh('/components/tooltip') },
-      { text: 'Dialog', link: zh('/components/dialog') },
-      { text: 'Pagination', link: zh('/components/pagination') },
-      { text: 'Table', link: zh('/components/table') },
-      { text: 'Navbar', link: zh('/components/navbar') },
-      { text: 'Sidebar', link: zh('/components/sidebar') },
-      { text: 'Card', link: zh('/components/card') },
-      { text: 'Time select', link: zh('/components/time-select') },
-      { text: 'Date picker', link: zh('/components/date-picker') },
-      { text: 'Time picker', link: zh('/components/time-picker') },
-      { text: 'Scrollbar', link: zh('/components/scrollbar') },
-      { text: 'Rate', link: zh('/components/rate') },
-      { text: 'Badge', link: zh('/components/badge') },
-      ...newComponentNavItemsZh,
-    ],
+      component('Button', '按钮', '/components/'),
+      component('Alert', '警告提示', '/components/alert'),
+      component('Loading', '加载', '/components/loading'),
+      component('Input', '输入框', '/components/input'),
+      component('Checkbox', '复选框', '/components/checkbox'),
+      component('Switch', '开关', '/components/switch'),
+      component('Select', '选择器', '/components/select'),
+      component('Avatar', '头像', '/components/avatar'),
+      component('Notification', '通知', '/components/notification'),
+      component('Radio', '单选框', '/components/radio'),
+      component('Tooltip', '文字提示', '/components/tooltip'),
+      component('Dialog', '对话框', '/components/dialog'),
+      component('Pagination', '分页', '/components/pagination'),
+      component('Table', '表格', '/components/table'),
+      component('Navbar', '导航栏', '/components/navbar'),
+      component('Sidebar', '侧边栏', '/components/sidebar'),
+      component('Card', '卡片', '/components/card'),
+      component('Time select', '时间选择', '/components/time-select'),
+      component('Date picker', '日期选择器', '/components/date-picker'),
+      component('Time picker', '时间选择器', '/components/time-picker'),
+      component('Scrollbar', '滚动条', '/components/scrollbar'),
+      component('Rate', '评分', '/components/rate'),
+      component('Badge', '徽标', '/components/badge'),
+      ...additionalComponentNavItemsZh,
+    ].sort((a, b) => a.text.localeCompare(b.text, 'en')),
   },
   {
     text: '布局',

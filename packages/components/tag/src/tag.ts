@@ -18,7 +18,7 @@ export const tagProps = buildProps({
     values: tagTypes,
     default: 'primary',
   },
-  /** VXE-compatible semantic alias. Takes priority over type. */
+  /** Semantic alias. Takes priority over type. */
   status: { type: String as PropType<TagType> },
   size: { type: String as PropType<ComponentSize> },
   color: String,

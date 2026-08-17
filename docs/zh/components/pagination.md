@@ -1,9 +1,10 @@
 ---
+description: "按页浏览较长的数据集合。"
 PROPS:
   - name: v-model:current-page
     type: Number
     values: number
-    description: Determine the page where the user is.
+    description: 当前所在页码。
     default: 1
     link: null
     usage: '#default'
@@ -12,7 +13,7 @@ PROPS:
   - name: total
     type: Number
     values: number
-    description: It is the total number of pages that the component has.
+    description: 数据总条数。
     default: null
     link: null
     usage: '#default'
@@ -21,7 +22,7 @@ PROPS:
   - name: color
     type: String
     values: Theme colors, RGB, HEX
-    description: Change the base color of the component.
+    description: 设置组件基础颜色。
     default: primary
     link: null
     usage: '#color'
@@ -31,7 +32,7 @@ PROPS:
   - name: disabled
     type: Boolean
     values: true, false
-    description: Determine if the entire component is in the disabled state.
+    description: 是否禁用整个组件。
     default: false
     link: null
     usage: '#disabled'
@@ -41,7 +42,7 @@ PROPS:
   - name: shape
     type: String
     values: circle, square
-    description: Change the style of the buttons making them completely round or totally square.
+    description: 设置按钮为圆形或方形样式。
     default: null
     link: null
     usage: '#shape'
@@ -53,7 +54,7 @@ PROPS:
   - name: buttons-dotted
     type: Boolean
     values: true, false
-    description: Makes the buttons not have the internal number and changes its size.
+    description: 隐藏按钮内页码并调整其尺寸。
     default: false
     link: null
     usage: '#buttons-dotted'
@@ -63,7 +64,7 @@ PROPS:
   - name: disabled-items
     type: Number[]
     values: null
-    description: Determine which items are in the disabled state.
+    description: 指定禁用状态的页码项。
     default: null
     link: null
     usage: '#disabled-items'
@@ -73,7 +74,7 @@ PROPS:
   - name: loading-items
     type: Number[]
     values: null
-    description: Determine which items are in the charging state.
+    description: 指定加载状态的页码项。
     default: null
     link: null
     usage: '#loading-items'
@@ -83,7 +84,7 @@ PROPS:
   - name: not-margin
     type: Boolean
     values: true, false
-    description: Change the margin between the items causing them to be fully glued and the radius is removed making them square.
+    description: 移除页码项间距，并改为无圆角的紧凑样式。
     default: false
     link: null
     usage: '#not-margin'
@@ -93,7 +94,7 @@ PROPS:
   - name: progress
     type: Boolean
     values: true, false
-    description: Add a progress bar to the component determined by the current page and the total of pages.
+    description: 根据当前页与总页数显示进度条。
     default: false
     link: null
     usage: '#progress'
@@ -103,7 +104,7 @@ PROPS:
   - name: infinite
     type: Boolean
     values: true, false
-    description: Determine if the pagination is infinite.
+    description: 是否启用无限分页。
     default: false
     link: null
     usage: '#infinite'
@@ -113,7 +114,7 @@ PROPS:
   - name: v-model:page-size
     type: Number
     values: null
-    description: item count of each page.
+    description: 每页数据条数。
     default: 10
     link: null
     usage: '#default'
@@ -122,7 +123,7 @@ PROPS:
   - name: default-page-size
     type: Number
     values: null
-    description: default initial value of page size
+    description: 每页条数的默认初始值。
     default: null
     link: null
     usage: null
@@ -131,7 +132,7 @@ PROPS:
   - name: page-count
     type: Number
     values: null
-    description: total page count. Set either total or page-count and pages will be displayed; if you need page-sizes, total is required
+    description: 总页数。设置 total 或 page-count 之一即可显示页码；使用 page-sizes 时必须设置 total。
     default: null
     link: null
     usage: null
@@ -140,7 +141,7 @@ PROPS:
   - name: pager-count
     type: Number
     values: 5, 7, 9, 11, 13, 15, 17, 19, 21
-    description: number of pagers. Pagination collapses when the total page count exceeds this value
+    description: 页码按钮数量；总页数超过该值时会折叠。
     default: 7
     link: null
     usage: null
@@ -149,7 +150,7 @@ PROPS:
   - name: default-current-page
     type: Number
     values: null
-    description: default initial value of current-page
+    description: 当前页的默认初始值。
     default: null
     link: null
     usage: null
@@ -158,7 +159,7 @@ PROPS:
   - name: layout
     type: String, String[]
     values: prev, pager, next, jumper, ->, total, slot, sizes
-    description: layout of Pagination, an array or elements separated with a comma
+    description: 分页布局，可传数组或以逗号分隔的元素字符串。
     default: [prev, pager, next, jumper, ->, total, slot, sizes]
     link: null
     usage: '#default'
@@ -167,7 +168,7 @@ PROPS:
   - name: page-sizes
     type: Array
     values: number[]
-    description: options of item count per page
+    description: 每页数据条数选项。
     default: [10, 20, 30, 40, 50, 100]
     link: null
     usage: null
@@ -176,7 +177,7 @@ PROPS:
   - name: hide-on-single-page
     type: Boolean
     values: true, false
-    description: options of item count per page
+    description: 每页数据条数选项。
     default: false
     link: null
     usage: '#hide-on-single-page'
@@ -185,7 +186,7 @@ PROPS:
   - name: prev-text
     type: String
     values: null
-    description: text for the prev button
+    description: 上一页按钮文本。
     default: null
     link: null
     usage: null
@@ -194,7 +195,7 @@ PROPS:
   - name: prev-icon
     type: String, Component
     values: null
-    description: icon for the prev button, higher priority of prev-text
+    description: 上一页按钮图标，优先级高于 prev-text。
     default: ChevronLeft
     link: null
     usage: null
@@ -203,7 +204,7 @@ PROPS:
   - name: next-text
     type: String
     values: null
-    description: text for the next button
+    description: 下一页按钮文本。
     default: null
     link: null
     usage: null
@@ -212,7 +213,7 @@ PROPS:
   - name: next-icon
     type: String, Component
     values: null
-    description: icon for the next button, higher priority of next-text
+    description: 下一页按钮图标，优先级高于 next-text。
     default: ChevronRight
     link: null
     usage: null
@@ -222,7 +223,7 @@ SLOTS:
   - name: default
     type: slot
     values: null
-    description: Custom content. To use this, need to declare slot in layout
+    description: 自定义内容；使用时需在 layout 中声明 slot。
     default: null
     link: null
     usage: '#slot'
@@ -234,7 +235,7 @@ SLOTS:
       </s-pagination>
 ---
 
-# Pagination
+# Pagination 分页
 
 <card>
 
@@ -242,29 +243,29 @@ SLOTS:
 
 <docs-warn />
 
-### Layout
+### 布局
 
-Set layout of Pagination, pass an array or elements separated with a comma
+通过数组或逗号分隔的字符串设置 Pagination 布局。
 
-The accepted values:
+可用值：
 
-- `prev` a button navigating to the previous page
-- `next` a button navigating to the next page
-- `jumper` a jump-to input
-- `pager` page list
-- `sizes` a select to determine page size
-- `total` total item count
-- `->` Every element after this symbol will be pulled to the right
+- `prev`：上一页按钮
+- `next`：下一页按钮
+- `jumper`：跳转输入框
+- `pager`：页码列表
+- `sizes`：每页条数选择器
+- `total`：总条数
+- `->`：其后的元素右对齐
 
-::: warning NOTE
-We'll detect some deprecated usages, if your pagination don't appeared or worked as expected, please check rules below:
+::: warning 注意
+组件会检测部分已废弃用法；若分页未显示或行为异常，请检查以下规则：
 
-You have to define one of total and page-count, otherwise we can't determine count of total pages.When both defined, page-count taken as priority.
-If current-page is defined, you have to listen current-page change, by also define @update:current-page, otherwise pagination didn't work.
-If page-size is defined while page size selector displayed(sizes included in layout), you have to listen page-size change as well, by define @update:page-size, otherwise change of page size didn't work.
+必须设置 `total` 或 `page-count` 之一，二者同时存在时优先使用 `page-count`。
+设置 `current-page` 后，还需监听 `@update:current-page`，否则分页无法更新。
+当布局包含 `sizes` 且设置了 `page-size` 时，还需监听 `@update:page-size`，否则每页条数变更不会生效。
 :::
 
-Easily add a pagination with the `s-pagination` component, the required properties are `total`
+使用 `s-pagination` 即可快速添加分页，至少需要设置 `total`。
 
 <template #example>
 <pagination-default />
@@ -316,9 +317,9 @@ Easily add a pagination with the `s-pagination` component, the required properti
 
 <card>
 
-## Disabled
+## 禁用
 
-Change the disabled state of the component with the `disabled` property, this property is a boolean and you can add it without value
+添加布尔属性 `disabled`，即可切换组件禁用状态。
 
 <template #example>
 <pagination-disabled />
@@ -340,11 +341,11 @@ Change the disabled state of the component with the `disabled` property, this pr
 
 <card>
 
-## Shape
+## 形状
 
-### Circle
+### 圆形
 
-Change the radius of all the elements that make up the component by making them circular with the `circle` property, this property is a boolean so it does not need value
+添加布尔属性 `circle`，即可将组件内元素改为圆形。
 
 <template #example>
 <pagination-circle />
@@ -366,9 +367,9 @@ Change the radius of all the elements that make up the component by making them 
 
 <card>
 
-### Square
+### 方形
 
-Change the radius of all the elements that make up the component making them square with the `square` property, this property is a boolean so it does not need value
+添加布尔属性 `square`，即可将组件内元素改为方形。
 
 <template #example>
 <pagination-square />
@@ -390,9 +391,9 @@ Change the radius of all the elements that make up the component making them squ
 
 <card>
 
-## Buttons Dotted
+## 点状按钮
 
-Cambia por completo el estilo de el componente y elimina los números internos en cada botón con la propiedad `buttons-dotted`
+通过 `buttons-dotted` 完全切换组件样式，并移除各按钮中的页码。
 
 <template #example>
 <pagination-buttons-dotted />
@@ -414,12 +415,12 @@ Cambia por completo el estilo de el componente y elimina los números internos e
 
 <card>
 
-## Disabled Items
+## 禁用页码
 
-You can put disabled buttons specific to the pagination component with the `disabled-items` property, this property is an array with the number of the button you want to put in disabled status
+通过 `disabled-items` 指定要禁用的页码；该属性为页码数组。
 
 ::: tip
-The buttons that are in disabled will skip when changing the value for example on the next or back buttons
+通过上一页、下一页切换时，会跳过被禁用的页码。
 :::
 
 <template #example>
@@ -442,12 +443,12 @@ The buttons that are in disabled will skip when changing the value for example o
 
 <card>
 
-## Loading Items
+## 加载页码
 
-You can make a button inside the pagination be in the state of loading with the `loading-items` property, this property is an array with the number of the button that you want to put in the disabled state
+通过 `loading-items` 指定处于加载状态的页码；该属性为页码数组。
 
 ::: tip
-The buttons that are in loading will skip when changing the value for example in the next or back buttons
+通过上一页、下一页切换时，会跳过加载中的页码。
 :::
 
 <template #example>
@@ -470,9 +471,9 @@ The buttons that are in loading will skip when changing the value for example in
 
 <card>
 
-## Not Margin
+## 紧凑模式
 
-Change the style of the entire component by removing the margin between the buttons and changing the radius with the `not-margin` property
+通过 `not-margin` 移除按钮间距并调整圆角，形成紧凑样式。
 
 <template #example>
 <pagination-not-margin />
@@ -494,9 +495,9 @@ Change the style of the entire component by removing the margin between the butt
 
 <card>
 
-## Progress
+## 进度条
 
-Add a progress bar to the pagination by referencing where you find the last page with the `progress` property
+通过 `progress` 为分页添加进度条，展示当前页进度。
 
 <template #example>
 <pagination-progress />
@@ -518,9 +519,9 @@ Add a progress bar to the pagination by referencing where you find the last page
 
 <card>
 
-## Infinite
+## 无限分页
 
-You can make the pagination infinite with the `infinite` property, this means that the arrow buttons are no longer in the disabled state
+通过 `infinite` 启用无限分页；此时前后翻页按钮不会进入禁用状态。
 
 <template #example>
 <pagination-infinite />

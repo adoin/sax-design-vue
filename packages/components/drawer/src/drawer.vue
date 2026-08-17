@@ -21,7 +21,7 @@
             v-if="showClose"
             type="button"
             :class="ns.e('close')"
-            aria-label="Close"
+            :aria-label="t('vs.common.close')"
             @click="close"
           >
             ×
@@ -37,12 +37,13 @@
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { drawerEmits, drawerProps } from './drawer'
 defineOptions({ name: 'SDrawer' })
 const props = defineProps(drawerProps)
 const emit = defineEmits(drawerEmits)
 const ns = useNamespace('drawer')
+const { t } = useLocale()
 const style = computed(() =>
   ['left', 'right'].includes(props.placement)
     ? { width: typeof props.size === 'number' ? `${props.size}px` : props.size }

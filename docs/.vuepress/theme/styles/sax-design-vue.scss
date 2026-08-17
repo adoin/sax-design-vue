@@ -1,8 +1,8 @@
-@import './cssVar';
-@import './code';
-@import './custom-blocks';
-@import './arrow';
-@import './toc';
-@import './mobile';
-@import './modern';
-@import 'prismjs/themes/prism-tomorrow.css';
+@use './cssVar';
+@use './code';
+@use './custom-blocks';
+@use './arrow';
+@use './toc';
+@use './mobile';
+@use './modern';
+@use 'prismjs/themes/prism-tomorrow.css';

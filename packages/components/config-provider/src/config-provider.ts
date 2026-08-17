@@ -1,6 +1,6 @@
 import { defineComponent, renderSlot } from 'vue'
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
-import { provideGlobalConfig } from '@vuesax-alpha/hooks'
+import { defaultNamespace, provideGlobalConfig } from '@vuesax-alpha/hooks'
 
 import type { ExtractPropTypes } from 'vue'
 import type { Language } from '@vuesax-alpha/locale'
@@ -18,7 +18,7 @@ export const configProviderProps = buildProps({
    */
   namespace: {
     type: String,
-    default: 'vs',
+    default: defaultNamespace,
   },
   color: {
     type: definePropType<ColorProviderContext>(Object),

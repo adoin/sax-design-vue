@@ -1,11 +1,7 @@
 <template>
   <aside class="sidebar">
     <div class="content-sidebar">
-      <RenderHeaders
-        :headers="pageData.headers"
-        :news="news"
-        :updates="updates"
-      />
+      <RenderHeaders :headers="pageData.headers" :updates="updates" />
     </div>
   </aside>
 </template>
@@ -19,7 +15,6 @@ import type { ThemeNormalApiFrontmatter } from '../shared/frontmatter/normal'
 const pageFrontmatter = usePageFrontmatter<ThemeNormalApiFrontmatter>()
 const pageData = usePageData()
 
-const news = pageFrontmatter.value.NEWS
 const updates = pageFrontmatter.value.UPDATES
 
 // Sync in-page anchor highlight on first paint (hash in URL or scroll position)
@@ -31,7 +26,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 @media (max-width: 1080px) {
   .no-sidebar {

@@ -15,7 +15,7 @@
     <s-input
       v-model="value4"
       label="Example Regex Validation"
-      placeholder="vuesax@gmail.com"
+      placeholder="hello@sax-design.dev"
     >
       <template v-if="validEmail" #message-success> Email Valid </template>
       <template v-if="!validEmail && value4 !== ''" #message-danger>
@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-const value1 = ref('vuesax.alpha@gmail.com')
+const value1 = ref('hello@sax-design.dev')
 const value2 = ref('')
 const value3 = ref('123456')
 const value4 = ref('')

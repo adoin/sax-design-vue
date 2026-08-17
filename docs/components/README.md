@@ -1,4 +1,5 @@
 ---
+description: 'Trigger actions with accessible button styles and states.'
 PROPS:
   - name: color
     type: String
@@ -30,6 +31,55 @@ PROPS:
     code: >
       <s-button active> Default </s-button>
   # _______________________________________
+  - name: loading
+    type: Boolean
+    values: true, false
+    description: Keep the button content visible, show the selected loading preset, preserve its size, and prevent interaction.
+    default: false
+    link: null
+    usage: '#loading'
+    code: >
+      <s-button loading> Save changes </s-button>
+  - name: loading-type
+    type: String
+    values: pulse, ripple, shimmer
+    description: Choose the class-driven loading preset without changing the button markup.
+    default: pulse
+    link: null
+    usage: '#loading'
+    code: >
+      <s-button loading loading-type="ripple"> Save changes </s-button>
+  # _______________________________________
+  - name: disabled
+    type: Boolean
+    values: true, false
+    description: Disable the button and prevent user interaction.
+    default: false
+    link: null
+    usage: '#default'
+    code: >
+      <s-button disabled> Disabled </s-button>
+  # _______________________________________
+  - name: debounce
+    type: Number | false
+    values: number, false
+    description: Debounce emitted click events in milliseconds. When both click limiters are numbers, debounce wins and an error is logged.
+    default: 50
+    link: null
+    usage: '#click-rate-limiting'
+    code: >
+      <s-button :debounce="400"> Debounced </s-button>
+  # _______________________________________
+  - name: throttle
+    type: Number | false
+    values: number, false
+    description: Throttle emitted click events in milliseconds. Set debounce to false to enable it.
+    default: false
+    link: null
+    usage: '#click-rate-limiting'
+    code: >
+      <s-button :debounce="false" :throttle="1000"> Throttled </s-button>
+  # _______________________________________
   - name: upload
     type: Boolean
     values: true, false
@@ -39,7 +89,7 @@ PROPS:
     usage: '#upload'
     code: >
       <s-button upload >
-        <i class='bx bxs-wallet'></i> Wallet
+        <s-icon  name="bxs:wallet" /> Wallet
       </s-button>
   # _______________________________________
   - name: to
@@ -87,7 +137,7 @@ PROPS:
     usage: '#icon'
     code: >
       <s-button icon>
-        <i class='bx bx-home-alt'></i>
+        <s-icon  name="bx:home-alt" />
       </s-button>
   # _______________________________________
   - name: circle
@@ -99,7 +149,7 @@ PROPS:
     usage: '#circle'
     code: >
       <s-button icon shape="circle">
-        <i class='bx bx-home-alt'></i>
+        <s-icon  name="bx:home-alt" />
       </s-button>
   # _______________________________________
   - name: square
@@ -111,7 +161,7 @@ PROPS:
     usage: '#square'
     code: >
       <s-button icon shape="square"> // <------
-        <i class='bx bx-home-alt'></i>
+        <s-icon  name="bx:home-alt" />
       </s-button>
   # _______________________________________
   - name: block
@@ -123,7 +173,7 @@ PROPS:
     usage: '#block'
     code: >
       <s-button block>
-        <i class='bx bxs-paint-roll'></i> Edit Theme
+        <s-icon  name="bxs:paint-roll" /> Edit Theme
       </s-button>
   # _______________________________________
   - name: animationType
@@ -137,7 +187,7 @@ PROPS:
       <s-button type="flat" color="success" animation-type="vertical">
         Message
         <template #animate>
-          <i class='bx bx-mail-send'></i> Send
+          <s-icon  name="bx:mail-send" /> Send
         </template>
       </s-button>
   # _______________________________________
@@ -150,10 +200,10 @@ PROPS:
     usage: '#toggle'
     code: >
       <s-button :animate-inactive="successFace" @click="handleClickFace" :loading="loadingFace" color="facebook">
-        <i class='bx bxl-facebook-square'></i>
+        <s-icon  name="bxl:facebook-square" />
         {{ successFace ? 'Logout' : 'Facebook' }}
         <template #animate >
-          <i class='bx bx-user'></i> Login
+          <s-icon  name="bx:user" /> Login
         </template>
       </s-button>
   # _______________________________________
@@ -169,6 +219,19 @@ PROPS:
         <s-button ripple="cut"> Cut </s-button>
       </template>
 SLOTS:
+  - name: loading
+    type: slot
+    values: null
+    description: Replace the selected loading preset with custom loading content.
+    default: null
+    link: null
+    code: >
+      <s-button loading>
+        Save changes
+        <template #loading>Saving...</template>
+      </s-button>
+    usage: '#loading'
+  # _______________________________________
   - name: animate
     type: slot
     values: null
@@ -179,7 +242,7 @@ SLOTS:
       <s-button>
         Home
         <template #animate>
-          <i class='bx bx-home-alt'></i>
+          <s-icon  name="bx:home-alt" />
         </template>
       </s-button>
     usage: '#animated'
@@ -196,7 +259,7 @@ NEWS:
 
 <docs-warn />
 
-The buttons are a fundamental part of any project, with vuesax you can add a great button with a single line of code
+The buttons are a fundamental part of any project, with Sax Design you can add a great button with a single line of code
 
 the buttons have all the states as active, focus, hover, to make its implementation simpler and speed up the work
 
@@ -370,7 +433,7 @@ Change the style of the button with the `shadow` property, the property is a` bo
 
 ## Color
 
-Change the color of the Button component with the `color` property and the color value for example (**#fff**, **rgba (100,10,5)** or the **main colors of vuesax**), this will only affect the component and its value can be dynamic
+Change the color of the Button component with the `color` property and the color value for example (**#fff**, **rgba (100,10,5)** or the **main colors of Sax Design**), this will only affect the component and its value can be dynamic
 
 <utils-color />
 
@@ -528,7 +591,7 @@ values:
 
 ## Loading
 
-Now you can add a loading status with the `loading` property, the property is a` boolean` so you can add it without any value.
+Use `loading` while an action is running. Select `pulse`, `ripple`, or `shimmer` with `loading-type`; each preset keeps the original label and icon recognizable, preserves button size, and prevents clicks. `ripple` uses two clear pulsing waves. Implementation keeps one loading element and switches only the root state class. Use `#loading` for fully custom content.
 
 <template #example>
 <button-loading />
@@ -536,13 +599,31 @@ Now you can add a loading status with the `loading` property, the property is a`
 
 <template #template>
 
-@[code{1-59} vue{3}](../.vuepress/components/button/loading.vue)
+@[code vue](../.vuepress/components/button/loading.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Click rate limiting
+
+`debounce` and `throttle` limit emitted click events without changing button layout. `debounce` uses a trailing invocation and defaults to `50ms`. `throttle` emits the first click immediately; set `debounce="false"` before assigning a numeric throttle delay. If both props are numbers, the component logs an error and applies only `debounce`.
+
+<template #example>
+<button-click-limit />
+</template>
+
+<template #template>
+
+@[code{1-26} vue{4,12,13}](../.vuepress/components/button/click-limit.vue)
 
 </template>
 
 <template #script>
 
-@[code{61-65} vue](../.vuepress/components/button/loading.vue)
+@[code{28-41} vue](../.vuepress/components/button/click-limit.vue)
 
 </template>
 
@@ -614,7 +695,7 @@ You can also change the type of animation with the `animation-type` property and
 
 ## Social
 
-Using the colors of social networks is very common in a project either a login button or a share button so Vuesax makes it easy for you to search for each color and just by putting the name of the network you already change the whole style of the component
+Using the colors of social networks is very common in a project either a login button or a share button so Sax Design makes it easy for you to search for each color and just by putting the name of the network you already change the whole style of the component
 
 Supported colors: (`facebook`, `twitter`, `youtube`, `pinterest`, `linkedin`, `snapchat`, `whatsapp`, `tumblr`, `reddit`, `spotify`, `amazon`, `medium`, `vimeo`, `skype`, `dribbble`, `slack`, `yahoo`, `twitch`, `discord`, `telegram`, `google-plus`, `messenger`)
 
@@ -662,7 +743,7 @@ If you need to make a group of buttons you can use the **sub-component** `<s-but
 
 <template #template>
 
-@[code{1-51} vue{3,8}](../.vuepress/components/button/group.vue)
+@[code{1-57} vue{3,12,29,44}](../.vuepress/components/button/group.vue)
 
 </template>
 

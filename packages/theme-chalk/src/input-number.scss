@@ -14,6 +14,13 @@
   width: getCssVar(input-number-width);
   background: getColor(input-number-background);
   border-radius: getCssVar(input-number-rounded);
+  transition: background-color var(--sax-motion-duration-fast)
+    var(--sax-motion-easing-standard);
+
+  &:hover:not(.is-disabled),
+  &:focus-within {
+    background: getColor('background');
+  }
 
   .#{$namespace}-input {
     &.#{$namespace}-input--has-label {
@@ -89,7 +96,7 @@
       transform: translateY(-50%);
       width: 1px;
       height: 18px;
-      border-radius: 4px;
+      border-radius: var(--sax-radius-xs);
       background: getColor(input-number-color, 0.3);
     }
   }

@@ -9,7 +9,7 @@
       <div :class="ns.e('content')" :style="{ height: `${totalSize}px` }">
         <div
           v-for="virtualItem in virtualItems"
-          :key="virtualItem.key"
+          :key="`${typeof virtualItem.key}:${String(virtualItem.key)}`"
           :ref="dynamic ? measureElement : undefined"
           :class="ns.e('item')"
           :data-index="virtualItem.index"
@@ -31,10 +31,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, useTemplateRef, watch } from 'vue'
 import { useVirtualizer } from '@tanstack/vue-virtual'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { virtualListEmits, virtualListProps } from './virtual-list'
+import type { ComponentPublicInstance } from 'vue'
 
 defineOptions({
   name: 'SVirtualList',
@@ -43,24 +44,33 @@ defineOptions({
 const props = defineProps(virtualListProps)
 const emit = defineEmits(virtualListEmits)
 const ns = useNamespace('vl')
-const scrollRef = ref<HTMLElement>()
+const scrollRef = useTemplateRef<HTMLElement>('scrollRef')
+const itemKeys = computed(() =>
+  props.items.map((item, index) => props.itemKey?.(item, index) ?? index),
+)
 
-const virtualizerOptions = computed(() => ({
-  count: props.items.length,
-  getScrollElement: () => scrollRef.value ?? null,
-  estimateSize: () => Math.max(1, props.estimateSize),
-  overscan: Math.max(0, props.overscan),
-  getItemKey: (index: number) =>
-    props.itemKey?.(props.items[index], index) ?? index,
-  onChange: () => {
-    const rows = virtualizer.value.getVirtualItems()
-    if (!rows.length) return
-    emit('range-change', {
-      start: rows[0].index,
-      end: rows[rows.length - 1].index,
-    })
-  },
-}))
+const virtualizerOptions = computed(() => {
+  const keys = itemKeys.value
+
+  return {
+    count: keys.length,
+    getScrollElement: () => scrollRef.value ?? null,
+    estimateSize: () => Math.max(1, props.estimateSize),
+    overscan: Math.max(0, props.overscan),
+    getItemKey: (index: number) => keys[index] ?? index,
+    useAnimationFrameWithResizeObserver: true,
+    onChange: (instance: {
+      getVirtualItems: () => Array<{ index: number }>
+    }) => {
+      const rows = instance.getVirtualItems()
+      if (!rows.length) return
+      emit('range-change', {
+        start: rows[0].index,
+        end: rows[rows.length - 1].index,
+      })
+    },
+  }
+})
 
 const virtualizer = useVirtualizer<HTMLElement, HTMLElement>(virtualizerOptions)
 const virtualItems = computed(() => virtualizer.value.getVirtualItems())
@@ -69,7 +79,7 @@ const viewportHeight = computed(() =>
   typeof props.height === 'number' ? `${props.height}px` : props.height,
 )
 
-function measureElement(element: Element | null) {
+function measureElement(element: Element | ComponentPublicInstance | null) {
   if (element instanceof HTMLElement) virtualizer.value.measureElement(element)
 }
 
@@ -81,6 +91,8 @@ function scrollToIndex(
   index: number,
   align: 'auto' | 'start' | 'center' | 'end' = 'auto',
 ) {
+  if (!Number.isInteger(index) || index < 0 || index >= props.items.length)
+    return
   virtualizer.value.scrollToIndex(index, { align })
 }
 
@@ -93,15 +105,15 @@ function measure() {
 }
 
 watch(
-  () => [props.items, props.dynamic] as const,
-  () => virtualizer.value.measure(),
-  { deep: true },
+  () => [props.dynamic, props.estimateSize] as const,
+  () => nextTick(() => virtualizer.value.measure()),
 )
 
 defineExpose({
   scrollToIndex,
   scrollToOffset,
   measure,
+  getScrollElement: () => scrollRef.value,
   virtualizer,
 })
 </script>

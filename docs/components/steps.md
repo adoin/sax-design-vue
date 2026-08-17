@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: finish-status / process-status
+    type: String
+    values: success | error | process | wait
+    description: Set status styling for completed and active steps.
+    default: 'success / process'
   - name: active
     type: Number
     values: index
@@ -23,7 +28,7 @@ PROPS:
 EVENTS:
   - name: click
     description: Fired with the clicked item index and item.
-description: "VXE-compatible progress steps."
+description: "Progress steps."
 ---
 
 # Steps

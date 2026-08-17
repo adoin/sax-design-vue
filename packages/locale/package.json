@@ -1,7 +1,7 @@
 {
   "name": "@vuesax-alpha/locale",
   "version": "0.1.0",
-  "description": "Vuesax Alpha locale",
+  "description": "Sax Design Vue locale",
   "license": "MIT",
   "main": "index.ts",
   "module": "index.ts",

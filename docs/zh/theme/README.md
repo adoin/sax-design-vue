@@ -1,14 +1,14 @@
-# Colors
+# 颜色
 
 <card>
 
-## Default Colors
+## 默认颜色
 
 Sax Design Vue 在全局维护一套主色，便于统一调整主题并保持视觉一致。
 
 主色可按产品品牌自由定制。
 
-Default colors:
+默认主题色：
 
 - primary
 - success
@@ -22,7 +22,7 @@ Default colors:
 
 <card>
 
-## Customize Theme Colors
+## 自定义主题色
 
 Sax Design Vue 使用原生 CSS 变量，可随时读取与覆盖。
 
@@ -32,7 +32,7 @@ Sax Design Vue 使用原生 CSS 变量，可随时读取与覆盖。
 
 <card>
 
-## Javascript
+## JavaScript 配置
 
 <command>
 
@@ -60,8 +60,8 @@ app.use(SaxDesignVue, {
 
 可通过 CSS 像修改普通变量一样覆盖 Sax Design Vue 主题变量。
 
-::: warning HEX Format Numbers Only
-It is important that the colors are in HEX format and only the numerical value for example: `rgb (255,100,50)` is equivalent to `255,100,50`
+::: warning 仅填写 RGB 数字分量
+CSS 主题变量保存 RGB 数字分量，请不要包含 `rgb()`。例如，`rgb(255, 100, 50)` 应写为 `255, 100, 50`。
 :::
 
 <command>

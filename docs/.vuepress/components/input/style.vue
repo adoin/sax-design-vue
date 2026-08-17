@@ -10,7 +10,7 @@
       type="password"
     >
       <template #icon>
-        <i class="bx bx-lock-open-alt" />
+        <s-icon  name="bx:lock-open-alt" />
       </template>
     </s-input>
 
@@ -24,7 +24,7 @@
       type="email"
     >
       <template #icon>
-        <i class="bx bxl-bitcoin" />
+        <s-icon  name="bxl:bitcoin" />
       </template>
     </s-input>
   </div>
@@ -43,8 +43,10 @@ const value3 = ref('')
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 20px;
+
   .s-input {
-    margin: 10px;
+    margin: 0;
   }
 }
 </style>

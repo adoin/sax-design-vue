@@ -1,4 +1,4 @@
-import { newComponentNavItems } from './new-components'
+import { additionalComponentNavItems } from './new-components'
 import type { SidebarConfig } from '~/shared/client/nav'
 
 export const enSidebar: SidebarConfig = [
@@ -70,8 +70,8 @@ export const enSidebar: SidebarConfig = [
       { text: `Scrollbar`, link: `/components/scrollbar` },
       { text: `Rate`, link: `/components/rate` },
       { text: `Badge`, link: `/components/badge` },
-      ...newComponentNavItems,
-    ],
+      ...additionalComponentNavItems,
+    ].sort((a, b) => a.text.localeCompare(b.text, 'en')),
   },
   {
     text: 'Layout',

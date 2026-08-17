@@ -1,10 +1,11 @@
 ---
+description: "为相邻内容附加状态、数量或简短元数据。"
 PROPS:
   #__________________________________
   - name: value
     type: Number/String
     values: Number,String
-    description: display value.
+    description: 展示值。
     default: "' '"
     link: null
     usage: '#default'
@@ -16,7 +17,7 @@ PROPS:
   - name: max
     type: Number
     values: Number
-    description: maximum value, shows <code>{max}+</code> when exceeded. Only works if value is a number.
+    description: 最大值，超出时显示 <code>{max}+</code>；仅 value 为数字时生效。
     default: null
     link: null
     usage: '#max-value'
@@ -28,7 +29,7 @@ PROPS:
   - name: is-dot
     type: Boolean
     values: true,false
-    description: Show with little dots level.
+    description: 以小圆点形式展示。
     default: false
     link: null
     usage: '#red-dot'
@@ -40,7 +41,7 @@ PROPS:
   - name: hidden
     type: Boolean
     values: true,false
-    description: hidden badge.
+    description: 是否隐藏徽标。
     default: false
     link: null
     usage: '#controlled-visibility'
@@ -52,7 +53,7 @@ PROPS:
   - name: type
     type: String
     values: 'primary, success, warn, info, danger'
-    description: badge type.
+    description: 徽标类型。
     default: danger
     link: null
     usage: '#default'
@@ -64,7 +65,7 @@ PROPS:
   - name: show-zero
     type: Boolean
     values: true,false
-    description: Whether to show badge when value is zero.
+    description: value 为零时是否显示徽标。
     default: true
     link: null
     usage: '#show-zero'
@@ -76,7 +77,7 @@ PROPS:
   - name: color
     type: String
     values: String
-    description: background color of the dot.
+    description: 小圆点背景颜色。
     default: null
     link: null
     usage: '#default'
@@ -86,7 +87,7 @@ PROPS:
   - name: offset
     type: Array
     values: 'Record< number, number>'
-    description: Adjusting the position of the badge
+    description: 调整徽标位置。
     default: null
     link: null
     usage: '#offset'
@@ -98,7 +99,7 @@ PROPS:
   - name: processing
     type: Boolean
     values: true,false
-    description: Set processing prop to indicate it is processing.
+    description: 设置 processing 表示处理中。
     default: false
     link: null
     usage: '#processing'
@@ -110,7 +111,7 @@ PROPS:
   - name: badge-style
     type: object
     values: 'CSSProperties'
-    description: custom style of badge.
+    description: 自定义徽标样式。
     default: ''
     link: null
     usage: null
@@ -119,7 +120,7 @@ PROPS:
   - name: badge-class
     type: String
     values: 'String'
-    description: custom class of badge.
+    description: 自定义徽标类名。
     default: ''
     link: null
     usage: null
@@ -130,7 +131,7 @@ SLOTS:
   - name: default
     type: slot
     values:
-    description: customize default content
+    description: 自定义默认内容。
     default: null
     example: null
     link: null
@@ -144,14 +145,14 @@ UPDATES:
   - type
 ---
 
-# Badge
+# Badge 徽标
 
 <card>
 
 ## 默认
 
-**Typically displaying unread messages count.**
-You can use it on buttons,text,avatars,etc.
+**通常用于显示未读消息数。**
+可用于按钮、文本、头像等内容。
 
 <template #example>
 <badge-default />
@@ -173,12 +174,12 @@ You can use it on buttons,text,avatars,etc.
 
 <card>
 
-## Max Value
+## 最大值
 
-Set `max` prop to handle overflow situation.
+通过 `max` 处理数值溢出。
 
 ::: tip
-The max value is defined by property max which is a `Number`. Note that it only works when value is also a `Number`.
+`max` 为数字类型，仅当 `value` 也是数字时生效。
 :::
 
 <template #example>
@@ -201,11 +202,11 @@ The max value is defined by property max which is a `Number`. Note that it only 
 
 <card>
 
-## Customizing content
+## 自定义内容
 
-Displays text content other than numbers.
+可显示数字以外的文本内容。
 
-When value is a String, it can display customized text.
+当 `value` 为 String 时，可展示自定义文本。
 
 <template #example>
 <badge-customizations />
@@ -227,11 +228,11 @@ When value is a String, it can display customized text.
 
 <card>
 
-## Red Dot
+## 红点
 
-Use a red dot to mark content that needs to be noticed.
+使用红点标记需要关注的内容。
 
-Use the attribute `is-dot`. It is a Boolean.
+使用布尔属性 `is-dot`。
 
 <template #example>
 <badge-red-dot />
@@ -253,9 +254,9 @@ Use the attribute `is-dot`. It is a Boolean.
 
 <card>
 
-## Offset
+## 偏移量
 
-Set offset of the badge dot, the format is [left, top], which represents the offset of the status dot from the left and top of the default position.
+设置徽标圆点偏移量，格式为 `[left, top]`，表示相对默认位置左侧和顶部的偏移。
 
 <template #example>
 <badge-offset />
@@ -277,9 +278,9 @@ Set offset of the badge dot, the format is [left, top], which represents the off
 
 <card>
 
-## Processing
+## 处理中
 
-Set `processing` prop to indicate it is processing.
+使用 `processing` 表示实时更新或处理中。它会在徽标外持续显示脉冲波纹，可在下方与普通状态直接对比。
 
 <template #example>
 <badge-processing />
@@ -287,13 +288,13 @@ Set `processing` prop to indicate it is processing.
 
 <template #template>
 
-@[code{1-16} vue{3}](../../.vuepress/components/badge/processing.vue)
+@[code{1-43} vue{3}](../../.vuepress/components/badge/processing.vue)
 
 </template>
 
 <template #style>
 
-@[code{18-22}](../../.vuepress/components/badge/processing.vue)
+@[code{45-89}](../../.vuepress/components/badge/processing.vue)
 
 </template>
 
@@ -301,9 +302,9 @@ Set `processing` prop to indicate it is processing.
 
 <card>
 
-## Controlled visibility
+## 受控显示
 
-Set `hidden` prop to control the visibility of the badge.
+通过 `hidden` 控制徽标可见性。
 
 <template #example>
 <badge-controlled-visibility />
@@ -331,9 +332,9 @@ Set `hidden` prop to control the visibility of the badge.
 
 <card>
 
-## Show Zero
+## 显示零值
 
-Set `show-zero` prop to display zero.According to reason, it is hidden.
+通过 `show-zero` 控制是否显示零值；默认隐藏。
 
 <template #example>
 <badge-show-zero />

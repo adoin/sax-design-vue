@@ -3,10 +3,6 @@
 @use 'mixins/mixins' as *;
 @use 'common/var' as *;
 
-// .#{$namespace}-icon-loading {
-//   animation: rotating 2s linear infinite;
-// }
-
 .#{$namespace}-icon--right {
   margin-left: 5px;
 }
@@ -24,7 +20,8 @@
 }
 
 @include b(icon) {
-  --vs-color: inherit;
+  --sax-icon-rolling-duration: 0.9s;
+
   height: 1em;
   width: 1em;
   line-height: 1em;
@@ -33,53 +30,21 @@
   align-items: center;
   position: relative;
   fill: currentColor;
-  color: rgba(var(--vs-color));
+  color: currentColor;
   font-size: inherit;
+  flex: none;
+  vertical-align: -0.125em;
 
-  @include when(loading) {
-    animation: rotating 2s linear infinite;
+  @include when(rolling) {
+    animation: rotating var(--sax-icon-rolling-duration) linear infinite;
   }
 
   svg {
     height: 1em;
     width: 1em;
-  }
-
-  // Material Icons use ligatures — must override global Poppins on [class^='vs'].
-  &.material-icons {
-    font-family: 'Material Icons' !important;
-    font-weight: normal;
-    font-style: normal;
-    display: inline-block;
-    width: auto;
-    min-width: 1em;
-    height: auto;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    font-feature-settings: 'liga';
-    -webkit-font-smoothing: antialiased;
-  }
-
-  &.material-icons-outlined,
-  &.material-symbols-outlined {
-    font-family: 'Material Icons Outlined' !important;
-    font-weight: normal;
-    font-style: normal;
-    display: inline-block;
-    width: auto;
-    min-width: 1em;
-    height: auto;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-smoothing: antialiased;
+    display: block;
+    fill: currentColor;
+    transform-origin: center;
   }
 }
 
@@ -97,7 +62,7 @@
     position: absolute;
     top: 0px;
     display: block;
-    border-radius: 2px;
+    border-radius: var(--sax-radius-xs);
     width: 100%;
     height: 1px;
     background: getColor(text);
@@ -135,7 +100,8 @@
       stroke-dasharray: 0, 24.19;
       stroke-dashoffset: 0;
       visibility: hidden;
-      transition: stroke-dasharray 0.2s ease-in-out,
+      transition:
+        stroke-dasharray 0.2s ease-in-out,
         visibility 0.02s 0.18s;
     }
   }
@@ -151,7 +117,8 @@
       path {
         stroke-dasharray: 24.19, 24.19;
         visibility: visible;
-        transition: stroke-dasharray 0.1s 0.18s ease-in-out,
+        transition:
+          stroke-dasharray 0.1s 0.18s ease-in-out,
           visibility 0.02s 0.18s;
       }
     }
@@ -172,7 +139,7 @@
       width: 2.5px;
       height: 2.5px;
       background-color: #fff;
-      border-radius: 10px;
+      border-radius: var(--sax-radius-md);
       visibility: hidden;
     }
   }
@@ -196,7 +163,7 @@
     position: absolute;
     width: 16px;
     height: 2px;
-    border-radius: 2px;
+    border-radius: var(--sax-radius-xs);
     transition: getCssVar(transition-ease);
   }
 
@@ -277,7 +244,7 @@
     position: absolute;
     width: 14px;
     height: 2px;
-    border-radius: 2px;
+    border-radius: var(--sax-radius-xs);
   }
   @include pseudo(before) {
     transform: rotate(0);

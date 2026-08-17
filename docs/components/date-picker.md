@@ -1,5 +1,21 @@
 ---
+description: 'Select dates, date ranges, and date-time values.'
 PROPS:
+  - name: color / size / label-float / label / start-label / end-label
+    type: String / Boolean
+    values: Theme color / small | default | large / label text
+    description: Share input color, density, and floating labels across single and range date triggers.
+    default: '-'
+    link: null
+    usage: '#default'
+  - name: auto-close / clearable / separator
+    type: Boolean / Boolean / String
+    values: true | false / date range separator
+    description: Control close timing, clear action availability, and range text separator.
+    default: 'true / true / -'
+    link: null
+    usage: '#default'
+    code: null
   - name: v-model / model-value
     type: Date | string | number | [Date, Date]
     values:
@@ -88,7 +104,8 @@ PROPS:
 
 ## Default
 
-Use Date Picker for date input.
+Use Date Picker for date input. The example also shows custom color and floating
+labels for single and range triggers.
 
 ::: tip
 This component requires the
@@ -102,13 +119,13 @@ wrap when used in SSR (eg: [Nuxt](https://nuxt.com/)) and SSG (eg: [VitePress](h
 
 <template #template>
 
-@[code{1-11}](../.vuepress/components/date-picker/default.vue)
+@[code{1-19}](../.vuepress/components/date-picker/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17}](../.vuepress/components/date-picker/default.vue)
+@[code{21-26}](../.vuepress/components/date-picker/default.vue)
 
 </template>
 

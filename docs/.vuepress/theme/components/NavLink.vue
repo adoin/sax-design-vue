@@ -10,7 +10,7 @@
     :exact-active-class="''"
   >
     {{ navItem.text }}
-    <i v-if="arrow" class="bx bx-chevron-down" />
+    <s-icon v-if="arrow"  name="bx:chevron-down" />
   </router-link>
   <a
     v-else
@@ -27,7 +27,7 @@
         : 'noopener noreferrer'
     "
   >
-    {{ navItem.text }} <i class="bx bx-link-external" />
+    {{ navItem.text }} <s-icon  name="bx:link-external" />
   </a>
 </template>
 
@@ -51,7 +51,7 @@ const active = computed(() => isMathcedPath(route, props.navItem.link))
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .nav-item {
   & > div {

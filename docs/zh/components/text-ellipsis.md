@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: expand-text / collapse-text
+    type: String
+    values: 操作文案
+    description: 自定义展开和收起内容时的按钮文案。
+    default: '展开 / 收起'
   - name: content
     type: String
     values: text
@@ -15,7 +20,7 @@ PROPS:
     values: true / false
     description: 显示展开和收起操作。
     default: 'false'
-description: "兼容 VXE 的可展开文本省略。"
+description: "可展开文本省略。"
 ---
 
 # Text ellipsis 文本省略

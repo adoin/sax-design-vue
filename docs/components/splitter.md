@@ -26,7 +26,7 @@ EVENTS:
 SLOTS:
   - name: first / second
     description: Content for the two split panels.
-description: "VXE-compatible resizable split layout."
+description: "Resizable split layout."
 ---
 
 # Splitter

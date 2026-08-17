@@ -2,17 +2,19 @@
   <div v-if="active == number" class="header-notification">
     <div class="con-text-n" @click="handleClick">
       <div class="icon-n">
-        <i class="bx bxs-megaphone" />
+        <s-icon  name="bxs:megaphone" />
       </div>
       <div class="text-n">
-        <h3>Online playground is live 🎉</h3>
-        <p>Try components in the browser with dark mode support</p>
+        <h3>{{ t.shell.notificationTitle }}</h3>
+        <p>{{ t.shell.notificationDescription }}</p>
       </div>
     </div>
     <div class="con-btn-n">
-      <button class="btn-info" @click="handleClick">👉 More information</button>
+      <button class="btn-info" @click="handleClick">
+        👉 {{ t.shell.notificationMore }}
+      </button>
       <button class="btn-x" @click="handleRemove">
-        <i class="bx bx-x" />
+        <s-icon  name="bx:x" />
       </button>
     </div>
   </div>
@@ -21,8 +23,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useDocLocaleUi } from '../composables/docLocale'
 
 const router = useRouter()
+const { t, withLocalePath } = useDocLocaleUi()
 
 const active = ref<number>(0)
 /**
@@ -31,7 +35,7 @@ const active = ref<number>(0)
 const number = ref<number>(14)
 
 const handleClick = () => {
-  router.push('/guide/playground')
+  router.push(withLocalePath('guide/playground'))
   active.value = 0
 
   localStorage.notificationHidden = number.value
@@ -51,7 +55,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 .header-notification {
   width: 100%;
   position: fixed;

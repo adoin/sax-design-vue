@@ -1,113 +1,124 @@
 ---
+description: "在主内容流外展示短暂的程序化通知。"
 PROPS:
+  - name: dangerous-html-string / icon-size / offset / z-index
+    type: Boolean / Number
+    values: true | false / 像素 / 层级数值
+    description: 配置 HTML 渲染、图标尺寸、视口偏移和层叠顺序。
+    default: '-'
+  - name: show-close / on-click-close
+    type: Boolean / Function
+    values: true | false / 关闭回调
+    description: 控制关闭入口并处理关闭交互。
+    default: 'true / -'
   - name: title
     type: String
     values: String
-    description: Add a title to the notification.
+    description: 为通知添加标题。
     default: null
     link: null
     usage: '#default'
     code: >
       SNotification({
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`
       })
   - name: content
     type: String, Component
     values: String, VNode
-    description: Add the content to the notification.
+    description: 为通知添加内容。
     default: null
     link: null
     usage: '#default'
     code: >
       SNotification({
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`
       })
   - name: position
     type: String
     values: bottom-right,top-right,top-center,top-left,bottom-left,bottom-center
-    description: Change the position of the component.
+    description: 修改通知显示位置。
     default: bottom-right
     link: null
     usage: '#position'
     code: >
       const { close } = SNotification({
         position: 'top-right',
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`
       })
   - name: color
     type: String
-    values: vuesax colors, rgb, hex
-    description: Change the base color of the entire component.
+    values: Sax Design colors, rgb, hex
+    description: 修改整个通知的基础颜色。
     default: null
     link: null
     usage: '#color'
     code: >
       const { close } = SNotification({
         color: 'primary',
-        title: 'Documentation Vuesax 4.0+',
-        content: 'These documents refer to the latest version of vuesax (4.0+), to see the
-        documents of the previous versions you can do it here 👉 Vuesax 3.x'
+        title: 'Documentation Sax Design Vue',
+        content: 'Sax Design Vue notification example with configurable content,
+        color, timing, and placement.'
       })
   - name: border
     type: String
-    values: vuesax colors, rgb, hex
-    description: Add a color border to the notification.
+    values: Sax Design colors, rgb, hex
+    description: 为通知添加指定颜色的边框。
     default: null
     link: null
     usage: '#border'
     code: >
       const { close } = SNotification({
         border: 'success',
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`
       })
   - name: icon
     type: String
     values: String
-    description: Add an icon to the notification.
+    description: 为通知添加图标。
     default: null
     link: null
     usage: '#icons'
     code: >
       const { close } = SNotification({
-        icon: `<i class='bx bxs-time'></i>`,
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
+        icon: `<s-icon  name="bxs:time" />`,
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`
       })
   - name: duration
     type: Number, StringNumber
     values: Number, none
-    description: Determine the time until the notification is hidden (none determines not to hide).
+    description: 设置通知自动隐藏的时间；none 表示不自动隐藏。
     default: 4500 (4.5s)
     link: null
     usage: '#duration'
     code: >
       const { close } = SNotification({
         duration: 10000,
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`
       })
   - name: onClick
     type: function
     values: function
-    description: function that is executed by clicking on the notification.
+    description: 点击通知时执行的函数。
     default: null
     link: null
     usage: null
     code: >
       const { close } = this.$notification({
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`,
         onClick: () => {
           console.log('click notification')
         }
@@ -115,21 +126,21 @@ PROPS:
   - name: buttonClose
     type: Boolean
     values: true,false
-    description: Determine if the notification has the close button.
+    description: 是否显示通知关闭按钮。
     default: true
     link: null
     usage: null
     code: >
       const { close } = this.$notification({
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`,
         buttonClose: false
       })
   - name: flat
     type: Boolean
     values: true,false
-    description: Change the notification style to flat.
+    description: 将通知切换为扁平样式。
     default: false
     link: null
     usage: '#flat'
@@ -138,16 +149,16 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           flat: true,
         })
       </script>
   - name: onDestroy
     type: () => void
     values: Function
-    description: Function that is executed when the notification is destroyed.
+    description: 通知销毁时执行的函数。
     default: null
     link: null
     usage: null
@@ -156,16 +167,16 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           sticky: true
         })
       </script>
   - name: sticky
     type: boolean
     values: true,false
-    description: Change the position of the notification attached to the nearest corner.
+    description: 使通知固定在最近的视口角落。
     default: false
     link: null
     usage: '#sticky'
@@ -174,16 +185,16 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           sticky: true
         })
       </script>
   - name: square
     type: boolean
     values: true,false
-    description: Determine if the notification is square and remove the border-radius.
+    description: 是否使用直角样式并移除圆角。
     default: false
     link: null
     usage: '#square'
@@ -192,16 +203,16 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           shape: 'square',
         })
       </script>
   - name: width
     type: String
     values: 100%, auto
-    description: Determine the width of the notification.
+    description: 设置通知宽度。
     default: 340px
     link: null
     usage: '#width'
@@ -210,16 +221,16 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           width: 'auto',
         })
       </script>
   - name: loading
     type: boolean
     values: true,false
-    description: Determine if the notification has a loading animation.
+    description: 是否显示通知加载动画。
     default: false
     link: null
     usage: '#loading'
@@ -228,16 +239,16 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           loading: true
         })
       </script>
   - name: progressAuto
     type: Boolean
     values: true,false
-    description: Add a progress bar to the notification.
+    description: 为通知添加进度条。
     default: null
     link: null
     usage: '#progress'
@@ -246,16 +257,16 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           progressAuto: true
         })
       </script>
   - name: notPadding
     type: Boolean
     values: true,false
-    description: Remove padding from notification.
+    description: 移除通知内边距。
     default: 20px
     link: null
     usage: '#example'
@@ -264,16 +275,16 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           notPadding: true
         })
       </script>
   - name: clickClose
     type: Boolean
     values: true,false
-    description: Determine if clicking on the notification closes.
+    description: 点击通知时是否关闭。
     default: false
     link: null
     usage: null
@@ -283,15 +294,15 @@ PROPS:
 
         const { close } = SNotification({
           duration: 0,
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
         })
       </script>
   - name: content
     type: Vue Component
     values: Vnode,String,ComponentPublicInstance
-    description: Change the content of the notification to the one provided as a value (something similar to a vue slot).
+    description: 使用传入内容替换通知正文，类似 Vue 插槽。
     default: null
     link: null
     usage: '#example'
@@ -302,15 +313,15 @@ PROPS:
         const { close } = SNotification({
           duration: 0,
           width: 'auto',
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
         })
       </script>
   - name: instance.close()
     type: function
     values: null
-    description: Close the notificationn.
+    description: 关闭通知。
     default: null
     link: null
     usage: null
@@ -321,9 +332,9 @@ PROPS:
         const { close } = SNotification({
           duration: 0,
           width: 'auto',
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
         })
 
         close()
@@ -332,7 +343,7 @@ PROPS:
   - name: custom-class
     type: String
     values: String
-    description: Add a custom class to the notification.
+    description: 为通知添加自定义类名。
     default: null
     link: null
     usage: null
@@ -344,14 +355,14 @@ PROPS:
           duration: 0,
           width: 'auto',
           customClass: 'my-class'
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
         })
       </script>
 ---
 
-# Notification
+# Notification（通知）
 
 <card>
 
@@ -359,7 +370,7 @@ PROPS:
 
 <docs-warn />
 
-It generates a notification with the vuesax function (`SNotification`), to use the instance of the notification it is necessary to save it in a variable, for example if you need to close the notification manually or do other functionalities with the instance
+使用 `SNotification` 函数创建通知。需要手动关闭或调用实例能力时，请将返回的实例保存到变量中。
 
 <command>
 
@@ -372,7 +383,7 @@ SNotification({ ...options })
 </command>
 
 ::: tip
-The necessary properties are the `title` and the` content`
+必填属性为 `title` 和 `content`。
 :::
 
 <template #example>
@@ -397,11 +408,11 @@ The necessary properties are the `title` and the` content`
 
 ## 位置
 
-Change the notification position with the position property
+使用 `position` 属性修改通知位置。
 
-supported values
+支持的值：
 
-- `bottom-right` <Badge type=warn text=Default />
+- `bottom-right` <Badge type=warn text=默认 />
 - `top-right`
 - `top-center`
 - `top-left`
@@ -436,9 +447,9 @@ supported values
 
 ## 颜色
 
-Use the color property to change the base color of the component and some of the child components, to better understand the handling of colors and themes you can see it [here](/zh/theme/)
+使用 `color` 属性修改组件及部分子元素的基础颜色。颜色和主题用法请查看[主题](/zh/theme/)。
 
-Allowed values ​​are:
+可选值：
 
 - primary
 - success
@@ -470,7 +481,7 @@ Allowed values ​​are:
 
 ## 图标
 
-Add the icon provided as the value of the `icon` property to the notification
+将 `icon` 属性提供的图标添加到通知中。
 
 <template #example>
 <notification-icons />
@@ -498,9 +509,9 @@ Add the icon provided as the value of the `icon` property to the notification
 
 <card>
 
-## Progress
+## 进度条
 
-Add a progress bar to the notification, if the value of the `progress` property is `auto` be determined by the `duration` property to reach 100%, if you want the value to be manual you can add a number of the (0 - 100) being 100 100% and use the function in the `changeProgress` instance and change the value to the one provided as the first parameter
+为通知添加进度条。`progress="auto"` 时会根据 `duration` 自动推进到 100%；也可传入 `0 - 100` 的数值，并通过实例的 `changeProgress` 方法手动更新。
 
 <template #example>
 <notification-progress />
@@ -528,11 +539,11 @@ Add a progress bar to the notification, if the value of the `progress` property 
 
 <card>
 
-## Duration
+## 持续时间
 
-Change the duration of the notification with the `duration` property, the value is numerical and determine the seconds before the bone component is hidden that **10s** equals **10000** as the value
+使用 `duration` 属性设置通知显示时长，单位为毫秒；例如 **10 秒** 对应 **10000**。
 
-if you need the notification to never be hidden, the duration value would be `0`
+如需通知始终显示，将 `duration` 设为 `0`。
 
 <template #example>
 <notification-duration />
@@ -562,7 +573,7 @@ if you need the notification to never be hidden, the duration value would be `0`
 
 ## 方形
 
-Change the style of the notification with the `square` property so as not to have `border-radius` making it a rectangle
+使用 `square` 属性移除 `border-radius`，将通知改为直角矩形样式。
 
 <template #example>
 <notification-square />
@@ -592,7 +603,7 @@ Change the style of the notification with the `square` property so as not to hav
 
 ## 边框
 
-Change the notification style with the `border` property by adding a border of the color provided as the value
+使用 `border` 属性为通知添加指定颜色的边框。
 
 <template #example>
 <notification-border />
@@ -622,7 +633,7 @@ Change the notification style with the `border` property by adding a border of t
 
 ## 扁平
 
-Change the style of the notification with the `flat` property, having this property changes to lighter colors and the text of the `color` property, this property is a boolean so you can only use the value `true`
+使用布尔属性 `flat` 可切换为扁平样式，颜色会更浅，文字使用 `color` 属性对应的颜色。
 
 <template #example>
 <notification-flat />
@@ -652,7 +663,7 @@ Change the style of the notification with the `flat` property, having this prope
 
 ## 加载
 
-Add a loading animation to the notification, having this property will only show the animation and the content will be hidden
+添加加载动画后，只显示动画，通知内容会被隐藏。
 
 <template #example>
 <notification-loading />
@@ -682,9 +693,9 @@ Add a loading animation to the notification, having this property will only show
 
 ## 宽度
 
-Change the size of the notification to the total screen with the property `width` and giving it a value of `full`
+将 `width` 设为 `full` 可使通知占满屏幕宽度。
 
-If you need the notification to have an automatic size to your content you can do it with the value `auto`
+如需根据内容自动调整宽度，可设为 `auto`。
 
 <template #example>
 <notification-all-width />
@@ -712,9 +723,9 @@ If you need the notification to have an automatic size to your content you can d
 
 <card>
 
-## Sticky
+## 吸附位置
 
-You can add a style to the paste component to the nearest corner with the `sticky` property, this property is a `boolean` po which can only have the value `true`
+使用布尔属性 `sticky` 可使通知吸附到最近的视口角落。
 
 <template #example>
 <notification-sticky />
@@ -744,7 +755,7 @@ You can add a style to the paste component to the nearest corner with the `stick
 
 ## 示例
 
-You can do great things with this component and some others from vuesax, to add any element within the notification we have the property `content` this property can only receive an imported component and that is what it will generate within the notification
+可通过 `content` 属性传入已导入的组件，在通知中渲染任意自定义内容。
 
 <template #example>
 <notification-example />

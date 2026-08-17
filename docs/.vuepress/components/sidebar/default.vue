@@ -43,43 +43,43 @@
 
       <s-sidebar-item id="home">
         <template #icon>
-          <i class="bx bx-home" />
+          <s-icon  name="bx:home" />
         </template>
         Home
       </s-sidebar-item>
       <s-sidebar-item id="market">
         <template #icon>
-          <i class="bx bx-grid-alt" />
+          <s-icon  name="bx:grid-alt" />
         </template>
         Market Overview
       </s-sidebar-item>
       <s-sidebar-item id="Music">
         <template #icon>
-          <i class="bx bxs-music" />
+          <s-icon  name="bxs:music" />
         </template>
         Music
       </s-sidebar-item>
       <s-sidebar-item id="donate">
         <template #icon>
-          <i class="bx bxs-donate-heart" />
+          <s-icon  name="bxs:donate-heart" />
         </template>
         Donate
       </s-sidebar-item>
       <s-sidebar-item id="drink">
         <template #icon>
-          <i class="bx bx-drink" />
+          <s-icon  name="bx:drink" />
         </template>
         Drink
       </s-sidebar-item>
       <s-sidebar-item id="shopping">
         <template #icon>
-          <i class="bx bxs-shopping-bags" />
+          <s-icon  name="bxs:shopping-bags" />
         </template>
         Shopping
       </s-sidebar-item>
       <s-sidebar-item id="chat">
         <template #icon>
-          <i class="bx bx-chat" />
+          <s-icon  name="bx:chat" />
         </template>
         Chat
       </s-sidebar-item>
@@ -91,7 +91,7 @@
           </s-avatar>
 
           <s-avatar badge-color="danger" badge-position="top-right">
-            <i class="bx bx-bell" />
+            <s-icon  name="bx:bell" />
 
             <template #badge> 28 </template>
           </s-avatar>

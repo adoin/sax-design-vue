@@ -14,7 +14,7 @@
     position: relative;
     width: 200px;
     height: 200px;
-    border-radius: 10px;
+    border-radius: var(--sax-radius-md);
     overflow: hidden;
     background: rgba(0, 0, 0, 0.04);
     border: 1px solid rgba(0, 0, 0, 0.08);
@@ -55,7 +55,7 @@
     right: 4px;
     z-index: 2;
     border: none;
-    border-radius: 50%;
+    border-radius: var(--sax-radius-circle);
     width: 22px;
     height: 22px;
     display: flex;
@@ -80,7 +80,7 @@
     min-width: 200px;
     min-height: 200px;
     border: 1px dashed rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
+    border-radius: var(--sax-radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -121,7 +121,7 @@
     border: none;
     background: getColor('primary');
     color: #fff;
-    border-radius: 6px;
+    border-radius: var(--sax-radius-sm);
     width: 32px;
     height: 32px;
     display: flex;

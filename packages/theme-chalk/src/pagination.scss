@@ -71,7 +71,7 @@
     .btn-next,
     .#{$namespace}-pager button,
     .#{$namespace}-pager__aria-active {
-      border-radius: 50%;
+      border-radius: var(--sax-radius-circle);
     }
   }
 
@@ -82,11 +82,11 @@
     }
 
     .btn-prev {
-      border-radius: 12px 0px 0px 12px;
+      border-radius: var(--sax-radius) 0 0 var(--sax-radius);
       margin-right: 0;
     }
     .btn-next {
-      border-radius: 0px 12px 12px 0px;
+      border-radius: 0 var(--sax-radius) var(--sax-radius) 0;
       margin-left: 0;
     }
   }
@@ -185,7 +185,7 @@
     background: getColor('gray-3');
     position: absolute;
     bottom: -8px;
-    border-radius: 10px;
+    border-radius: var(--sax-radius-md);
 
     .progress {
       width: 0px;
@@ -321,7 +321,7 @@
   margin: 0;
 
   .is-loading {
-    border-radius: 50%;
+    border-radius: var(--sax-radius-circle);
     opacity: 0.5;
     pointer-events: none;
     user-select: none;

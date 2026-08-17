@@ -15,7 +15,7 @@ PROPS:
     values: text
     description: Empty-state message.
     default: null
-description: "A calm empty state compatible with VXE Empty use cases."
+description: "A calm empty state for empty content."
 ---
 
 # Empty

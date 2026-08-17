@@ -20,7 +20,7 @@ PROPS:
     values: degrees
     description: Rotation angle of the watermark layer.
     default: '-18'
-description: "VXE-compatible content watermark."
+description: "Content watermark."
 ---
 
 # Watermark

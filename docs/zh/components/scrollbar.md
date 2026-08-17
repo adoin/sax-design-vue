@@ -1,9 +1,10 @@
 ---
+description: "提供可编程控制的自定义滚动区域。"
 PROPS:
   - name: height
     type: String, Number
     values: number
-    description: height of scrollbar
+    description: 滚动条高度。
     default:
     link: null
     usage: '#default'
@@ -12,7 +13,7 @@ PROPS:
   - name: max-height
     type: String, Number
     values: number
-    description: max height of scrollbar
+    description: 滚动条最大高度。
     default: null
     link: null
     usage: '#max-height'
@@ -21,7 +22,7 @@ PROPS:
   - name: native
     type: Boolean
     values: true, false
-    description: whether to use the native scrollbar
+    description: 是否使用原生滚动条。
     default: false
     link: null
     usage: null
@@ -30,7 +31,7 @@ PROPS:
   - name: wrap-style
     type: String, Object, Array
     values: CSSProperties, CSSProperties[], string[]
-    description: style of wrap container
+    description: 外层容器样式。
     default: null
     link: null
     usage: null
@@ -39,7 +40,7 @@ PROPS:
   - name: wrap-class
     type: String
     values: string
-    description: class of wrap container
+    description: 外层容器类名。
     default: null
     link: null
     usage: null
@@ -48,7 +49,7 @@ PROPS:
   - name: view-style
     type: String, Object, Array
     values: CSSProperties, CSSProperties[], string[]
-    description: style of view container
+    description: 内容容器样式。
     default: null
     link: null
     usage: null
@@ -57,7 +58,7 @@ PROPS:
   - name: view-class
     type: String
     values: string
-    description: class of view container
+    description: 内容容器类名。
     default: null
     link: null
     usage: null
@@ -66,7 +67,7 @@ PROPS:
   - name: noresize
     type: Boolean
     values: true, false
-    description: do not respond to container size changes, if the container size does not change, it is better to set it to optimize performance
+    description: 不响应容器尺寸变化；容器尺寸固定时建议开启以优化性能。
     default: false
     link: null
     usage: null
@@ -75,7 +76,7 @@ PROPS:
   - name: tag
     type: string
     values: HTML Tag
-    description: element tag of the view
+    description: 内容区域元素标签。
     default: div
     link: null
     usage: null
@@ -84,7 +85,7 @@ PROPS:
   - name: always
     type: Boolean
     values: true, false
-    description: always show scrollbar
+    description: 始终显示滚动条。
     default: true
     link: null
     usage: null
@@ -93,7 +94,7 @@ PROPS:
   - name: min-size
     type: Number
     values:
-    description: minimum size of scrollbar
+    description: 滚动条最小尺寸。
     default: 20
     link: null
     usage: null
@@ -102,7 +103,7 @@ PROPS:
   - name: thickness
     type: Number, String
     values: number
-    description: thumb width
+    description: 滑块宽度。
     default: 6
     link: null
     usage: null
@@ -112,7 +113,7 @@ EVENTS:
   - name: scroll
     type: function
     values: '({ scrollLeft: number, scrollTop: number }) => void'
-    description: triggers when scrolling, return distance of scrolling
+    description: 滚动时触发，返回滚动距离。
     default: null
     link: null
     usage: null
@@ -122,7 +123,7 @@ SLOTS:
   - name: default
     type: slot
     values:
-    description: customize default content
+    description: 自定义默认内容。
     default: null
     example: null
     link: null
@@ -133,7 +134,7 @@ EXPOSES:
   - name: handleScroll
     type: function
     values: '() => void'
-    description: handle scroll event
+    description: 处理滚动事件。
     default: null
     example: null
     link: null
@@ -143,7 +144,7 @@ EXPOSES:
   - name: scrollTo
     type: function
     values: '(options: ScrollToOptions | number, yCoord?: number) => void'
-    description: scrolls to a particular set of coordinates
+    description: 滚动到指定坐标。
     default: null
     example: null
     link: null
@@ -153,7 +154,7 @@ EXPOSES:
   - name: setScrollTop
     type: function
     values: '(scrollTop: number) => void'
-    description: Set distance to scroll top
+    description: 设置距顶部滚动距离。
     default: null
     example: null
     link: null
@@ -163,7 +164,7 @@ EXPOSES:
   - name: setScrollLeft
     type: function
     values: '(scrollLeft: number) => void'
-    description: Set distance to scroll left
+    description: 设置距左侧滚动距离。
     default: null
     example: null
     link: null
@@ -173,7 +174,7 @@ EXPOSES:
   - name: update
     type: function
     values: '() => void'
-    description: update scrollbar state manually
+    description: 手动更新滚动条状态。
     default: null
     example: null
     link: null
@@ -183,7 +184,7 @@ EXPOSES:
   - name: wrapRef
     type: object
     values: 'Ref HTMLElement'
-    description: scrollbar wrap ref
+    description: 滚动条外层容器引用。
     default: null
     example: null
     link: null
@@ -191,7 +192,7 @@ EXPOSES:
     code: null
 ---
 
-# Scrollbar
+# Scrollbar（滚动条）
 
 <card>
 
@@ -199,9 +200,9 @@ EXPOSES:
 
 <docs-warn />
 
-Used to replace the browser's native scrollbar.
+用于替代浏览器原生滚动条。
 
-Use `height` property to set the height of the scrollbar, or if not set, it adapts according to the parent container height.
+使用 `height` 设置滚动条高度；未设置时会适应父容器高度。
 
 <template #example>
 <scrollbar-default />
@@ -222,9 +223,9 @@ Use `height` property to set the height of the scrollbar, or if not set, it adap
 
 <card>
 
-## Horizontal scroll
+## 水平滚动
 
-When the element width is greater than the scrollbar width, the horizontal scrollbar is displayed.
+元素宽度大于滚动区域宽度时，会显示水平滚动条。
 
 <template #example>
 <scrollbar-hirizontal />
@@ -244,9 +245,9 @@ When the element width is greater than the scrollbar width, the horizontal scrol
 
 <card>
 
-## Max height
+## 最大高度
 
-The scrollbar is displayed only when the element height exceeds the max height.
+仅当元素高度超过最大高度时显示滚动条。
 
 <template #example>
 <scrollbar-max-height />
@@ -271,6 +272,6 @@ The scrollbar is displayed only when the element height exceeds the max height.
 
 <card>
 
-## Api
+## API
 
 </card>

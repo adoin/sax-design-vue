@@ -3,7 +3,7 @@
     <s-button @click="active = !active"> Open Dialog </s-button>
     <s-dialog v-model="active">
       <template #header>
-        <h4 class="not-margin">Welcome to <b>Vuesax</b></h4>
+        <h4 class="not-margin">Welcome to <b>Sax Design</b></h4>
       </template>
 
       <div class="con-form">
@@ -12,7 +12,7 @@
         </s-input>
         <s-input v-model="password" type="password" placeholder="Password">
           <template #icon>
-            <i class="bx bxs-lock" />
+            <s-icon  name="bxs:lock" />
           </template>
         </s-input>
         <div class="flex">

@@ -1,5 +1,11 @@
 ---
+description: "Choose one or more boolean options."
 PROPS:
+  - name: disabled / max / not-value
+    type: Boolean / Number / String | Number | Boolean
+    values: true | false / selected value limit / unchecked value
+    description: Disable selection, cap grouped selections, or customize the unchecked value.
+    default: 'false / - / false'
   - name: v-model
     type: Boolean, String, Array
     values: boolean, string, array
@@ -10,7 +16,7 @@ PROPS:
 
   - name: color
     type: String
-    values: vuesax colors, RGB, HEX
+    values: Sax Design colors, RGB, HEX
     description: Change the color of the component.
     default: false
     link: null
@@ -129,7 +135,7 @@ PROPS:
     code: >
       <template>
         <s-checkbox v-model="value" id="framework">
-          Vuesax
+          Sax Design
         </s-checkbox>
       </template>
 
@@ -143,7 +149,7 @@ PROPS:
     code: >
       <template>
         <s-checkbox v-model="value" name="checkbox-name">
-          Vuesax
+          Sax Design
         </s-checkbox>
       </template>
 
@@ -159,37 +165,37 @@ SLOTS:
       <template>
         <s-checkbox v-model="option1">
           <template #icon>
-            <i class='bx bx-check' />
+            <s-icon   name="bx:check" />
           </template>
         </s-checkbox>
         <s-checkbox success v-model="option2">
           <template #icon>
-            <i class='bx bx-check-double' />
+            <s-icon   name="bx:check-double" />
           </template>
         </s-checkbox>
         <s-checkbox danger v-model="option3">
           <template #icon>
-            <i class='bx bx-x' />
+            <s-icon   name="bx:x" />
           </template>
         </s-checkbox>
         <s-checkbox warn v-model="option4">
           <template #icon>
-            <i class='bx bxs-shield' />
+            <s-icon   name="bxs:shield" />
           </template>
         </s-checkbox>
         <s-checkbox dark v-model="option5">
           <template #icon>
-            <i class='bx bxs-heart' />
+            <s-icon   name="bxs:heart" />
           </template>
         </s-checkbox>
         <s-checkbox color="#7d33ff" v-model="option6">
           <template #icon>
-            <i class='bx bx-brightness' />
+            <s-icon   name="bx:brightness" />
           </template>
         </s-checkbox>
         <s-checkbox color="rgb(59,222,200)" v-model="option7">
           <template #icon>
-            <i class='bx bxs-paint' />
+            <s-icon   name="bxs:paint" />
           </template>
         </s-checkbox>
       </template>
@@ -241,7 +247,7 @@ Add a checkbox type input easily and with a beautiful animation
 
 ## color
 
-Change the color of the component with the `color` property, the allowed values ​​are (main colors of vuesax, RGB, HEX)
+Change the color of the component with the `color` property, the allowed values ​​are (main colors of Sax Design, RGB, HEX)
 
 <template #example>
 <checkbox-color />

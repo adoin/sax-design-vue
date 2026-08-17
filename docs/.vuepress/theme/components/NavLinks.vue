@@ -60,7 +60,7 @@ const repoLink = computed(() => {
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .nav-links {
   display: flex;
@@ -106,16 +106,6 @@ const repoLink = computed(() => {
     }
     &:first-child {
       margin-left: 0;
-    }
-    i {
-      &.bx {
-        &:not(.bx-dots-horizontal-rounded) {
-          display: none;
-        }
-        &.not-remove {
-          display: block !important;
-        }
-      }
     }
   }
   .repo-link {

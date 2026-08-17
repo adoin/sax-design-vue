@@ -2,9 +2,7 @@
   <div v-if="visible" :class="chipKls" :style="chipStyle" @click="handleClick">
     <span :class="ns.e('text')">
       <SIcon
-        v-if="icon"
-        :icon="icon"
-        :icon-pack="iconPack"
+        v-if="icon" :name="icon"
         :class="ns.e('icon')"
       />
       <slot>{{ text }}</slot>
@@ -14,10 +12,10 @@
       v-if="isClosable"
       :class="ns.e('close')"
       type="button"
-      aria-label="Close"
+      :aria-label="t('vs.common.close')"
       @click.stop="handleClose"
     >
-      <SIcon :icon="closeIcon" :icon-pack="iconPack" />
+      <SIcon :name="closeIcon" />
     </button>
   </div>
 </template>
@@ -26,6 +24,7 @@
 import { computed } from 'vue'
 import {
   useColor,
+  useLocale,
   useNamespace,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
@@ -43,15 +42,16 @@ const props = defineProps(chipProps)
 const emit = defineEmits(chipEmits)
 
 const ns = useNamespace('chip')
+const { t } = useLocale()
 const color = useColor(computed(() => (props.color as Color) || undefined))
 const vsBaseClasses = useVuesaxBaseComponent(color)
 
 const themeColor = computed(() =>
-  normalizeVsColor(props.color || color.value || '')
+  normalizeVsColor(props.color || color.value || ''),
 )
 
 const isClosable = computed(
-  () => props.closable !== false && props.closable !== ''
+  () => props.closable !== false && props.closable !== '',
 )
 
 const visible = computed(() => props.item || props.modelValue)
@@ -61,6 +61,9 @@ const chipKls = computed(() => [
   vsBaseClasses,
   ns.is('closable', isClosable.value),
   ns.is('transparent', props.transparent),
+  ns.is(`style-${props.tagStyle}`, props.tagStyle !== 'default'),
+  ns.is('round', props.round),
+  ns.m(props.size),
   props.color && ns.is('colored', !!props.color),
   props.color && isVsColor(themeColor.value) && ns.m(themeColor.value),
 ])
@@ -83,12 +86,21 @@ const chipStyle = computed((): CSSProperties => {
       ? `color-mix(in srgb, ${resolved} 15%, transparent)`
       : `rgba(${resolved}, 0.15)`
     const fg = resolved.startsWith('var(') ? resolved : `rgb(${resolved})`
-    return { background: bg, color: fg }
+    return {
+      '--sax-chip-surface': bg,
+      '--sax-chip-accent': fg,
+      '--sax-chip-text': fg,
+    }
   }
 
   return {
-    background: resolved.startsWith('var(') ? resolved : `rgb(${resolved})`,
-    color: 'rgba(255,255,255,.9)',
+    '--sax-chip-surface': resolved.startsWith('var(')
+      ? resolved
+      : `rgb(${resolved})`,
+    '--sax-chip-accent': resolved.startsWith('var(')
+      ? resolved
+      : `rgb(${resolved})`,
+    '--sax-chip-text': 'rgba(255,255,255,.94)',
   }
 })
 

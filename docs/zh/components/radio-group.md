@@ -18,7 +18,7 @@ PROPS:
 EVENTS:
   - name: change
     description: 选择时触发。
-description: "VXE 风格单选组。"
+description: "单选组。"
 ---
 
 # 单选组

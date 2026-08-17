@@ -1,4 +1,4 @@
-# Grid
+# Grid（栅格）
 
 <card>
 
@@ -6,16 +6,16 @@
 
 <docs-warn />
 
-In the grid system, we define the frame outside the information area according to the row and column, to ensure that each area can have a stable layout.
+栅格系统通过行与列划分内容区域，使页面各部分保持稳定、可预测的布局。
 
-The following is a brief glimpse of how it works:
+基本规则如下：
 
-- Establish a set of columns in the horizontal space defined by row (_abreviada col_)
-- Your content items should be placed directly in the column, and only the column should be placed directly in the row
-- The column grid system has a value of **1** to **12** to represent its range intervals. For example, `w="4"` can create three columns of equal width (**33.3%**).
-- If the sum of the cabbage segments in a row is greater than **12**, then the overflowing cabbage as a whole will start a new line layout.
+- 使用 `s-row` 定义一行水平空间，在行内使用 `s-col` 划分列。
+- 内容应直接放入列中，行的直接子元素应为列。
+- 每行划分为 **12** 份。例如，`w="4"` 可创建三个等宽列（各占 **33.3%**）。
+- 同一行内列宽总和超过 **12** 时，超出的列会整体换到下一行。
 
-With the `w` directive define the column width (s-col) its value is **1-12**, an example of sizes would be:`12=100%`,`6=50%`,`4=33% `
+通过 `w` 属性设置 `s-col` 的宽度，可选值为 **1–12**。例如：`12 = 100%`、`6 = 50%`、`4 = 33.3%`。
 
 <template #example>
 <grid-default />
@@ -31,9 +31,9 @@ With the `w` directive define the column width (s-col) its value is **1-12**, an
 
 <card>
 
-## Offset
+## 偏移
 
-To give a distance from the left we have the offset property that with the same measurements **1-12** we add the specific space, an example would be: `12=100%`,`6=50%`,`4=33%`.
+使用 `offset` 属性设置列左侧偏移，取值同样为 **1–12**。例如：`12 = 100%`、`6 = 50%`、`4 = 33.3%`。
 
 <template #example>
 <grid-offset />
@@ -49,9 +49,9 @@ To give a distance from the left we have the offset property that with the same 
 
 <card>
 
-## Flex Justify
+## 水平对齐
 
-If we have to align the elements horizontally, use the `justify` directive that uses CSS attributes as parameters:` flex-start`, `center`,` flex-end`, `space-around`,` space-between`.
+使用 `justify` 属性控制元素的水平对齐，支持 `flex-start`、`center`、`flex-end`、`space-around` 和 `space-between`。
 
 <template #example>
 <grid-flex-justify />
@@ -67,9 +67,9 @@ If we have to align the elements horizontally, use the `justify` directive that 
 
 <card>
 
-## Align
+## 垂直对齐
 
-If we have to align the elements in Vertical, use the `align` directive that uses CSS attributes as parameters: `top`,
+使用 `align` 属性控制元素的垂直对齐，支持 `top`、`center` 和 `bottom`。
 
 <template #example>
 <grid-flex-align />
@@ -85,18 +85,18 @@ If we have to align the elements in Vertical, use the `align` directive that use
 
 <card>
 
-## Responsive
+## 响应式
 
-Responsive system **Mobile first**.
+响应式系统采用**移动端优先**策略。
 
-There are some measures that can only be added in a specific device size, the directives are:
+可使用以下断点属性为不同视口设置列宽：
 
 - **xxl**: 1536px
 - **xl**: 1280px
 - **lg**: 1024px
 - **md**: 768px
 - **smx**: 640px
-- **sm**: is default
+- **sm**：默认断点
 
 <template #example>
 <grid-responsive />

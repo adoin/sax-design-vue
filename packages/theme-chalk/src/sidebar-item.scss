@@ -39,7 +39,7 @@
     width: 10px;
     height: 100%;
     background: getColor('color');
-    border-radius: 0px 20px 20px 0px;
+    border-radius: 0 var(--sax-radius-xl) var(--sax-radius-xl) 0;
     transform: translate(-7px);
     transition: getCssVar(transition-ease);
     z-index: 60;

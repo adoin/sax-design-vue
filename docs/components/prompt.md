@@ -1,5 +1,15 @@
 ---
 PROPS:
+  - name: button-accept / button-cancel / accept-text / cancel-text
+    type: Boolean / Boolean / String / String
+    values: action visibility and labels
+    description: Configure prompt action buttons and their text.
+    default: '-'
+  - name: close-icon
+    type: String
+    values: Iconify icon name
+    description: Customize the close control icon.
+    default: '-'
   - name: v-model
     type: Boolean
     values: true, false

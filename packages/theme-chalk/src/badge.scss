@@ -11,6 +11,7 @@
   width: fit-content;
 
   @include e(content) {
+    position: relative;
     background-color: getCssVar('badge', 'bg-color');
     border-radius: getCssVar('badge', 'radius');
     color: getColor('white');
@@ -42,20 +43,29 @@
       width: 8px;
       padding: 0;
       right: 0;
-      border-radius: 50%;
+      border-radius: var(--sax-radius-circle);
     }
 
     @include when(process) {
-      &::before {
-        content: ' ';
+      isolation: isolate;
+      overflow: visible;
+
+      &::before,
+      &::after {
+        content: '';
         position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
+        inset: -2px;
+        border: 2px solid getCssVar('badge-ripple-color');
         border-radius: inherit;
-        animation: badge-wave-spread 2s getCssVar('badge', 'ripple-bezier') 1s
-          infinite;
+        opacity: 0;
+        pointer-events: none;
+        will-change: opacity, transform;
+        animation: badge-processing-pulse 1.8s
+          getCssVar('badge', 'ripple-bezier') infinite;
+      }
+
+      &::after {
+        animation-delay: 0.9s;
       }
     }
 
@@ -68,14 +78,31 @@
   }
 }
 
-@keyframes badge-wave-spread {
-  from {
-    box-shadow: 0 0 0.5px 0px getCssVar('badge-ripple-color');
-    opacity: 0.6;
+@keyframes badge-processing-pulse {
+  0% {
+    opacity: 0.72;
+    transform: scale(0.94);
   }
-  to {
-    // don't use exact 5px since chrome will display the animation with glitches
-    box-shadow: 0 0 0.5px 4.5px getCssVar('badge-ripple-color');
+
+  72%,
+  100% {
     opacity: 0;
+    transform: scale(1.55);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s-badge__content.is-process {
+    &::before {
+      animation: none;
+      opacity: 0.58;
+      transform: scale(1.18);
+    }
+
+    &::after {
+      animation: none;
+      opacity: 0.24;
+      transform: scale(1.42);
+    }
   }
 }

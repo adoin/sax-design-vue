@@ -26,7 +26,7 @@ EVENTS:
 SLOTS:
   - name: first / second
     description: 两个分割面板内容。
-description: "兼容 VXE 的可拖拽分割面板。"
+description: "可拖拽分割面板。"
 ---
 
 # Splitter 分割面板

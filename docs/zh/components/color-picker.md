@@ -23,7 +23,7 @@ PROPS:
 EVENTS:
   - name: change
     description: 选择或修改颜色时触发。
-description: "兼容 VXE 的颜色选择器。"
+description: "颜色选择器。"
 ---
 
 # Color picker 颜色选择器

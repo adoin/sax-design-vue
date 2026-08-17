@@ -1,7 +1,7 @@
 <template>
   <div class="center con-selects">
     <s-select v-model="value" placeholder="Select">
-      <s-option label="Vuesax" value="1"> Vuesax </s-option>
+      <s-option label="Sax Design" value="1"> Sax Design </s-option>
       <s-option label="Vue" value="2"> Vue </s-option>
       <s-option label="Javascript" value="3"> Javascript </s-option>
       <s-option disabled label="Sass" value="4"> Sass </s-option>
@@ -18,7 +18,7 @@ import { ref } from 'vue'
 const value = ref('')
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .con-selects {
   .s-select {
     margin: 15px 10px;

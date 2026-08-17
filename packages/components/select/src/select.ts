@@ -11,17 +11,23 @@ import {
 } from '@vuesax-alpha/utils'
 import { popperProps } from '@vuesax-alpha/components/popper'
 import type { EmitFn } from '@vuesax-alpha/utils'
+import type {
+  OffsetOptions,
+  Placement,
+} from '@vuesax-alpha/hooks/use-floating/vue'
 import type { SelectOptionValue, SelectValue } from './tokens'
 
-import type { ExtractPropTypes } from 'vue'
+import type { CSSProperties, ExtractPropTypes } from 'vue'
 import type Select from './select.vue'
 
 export type SelectDataOption = Record<string, unknown>
 
+export type SelectSelectionTool = 'all' | 'invert' | 'clear'
+
 export interface SelectFilterConfig {
   /** Clear the search text after the panel closes. */
   clearOnClose?: boolean
-  /** Same callback as `filterMethod`, kept close to VXE UI's API. */
+  /** Alias of `filterMethod`. */
   filterMethod?: (searchValue: string) => void
 }
 
@@ -36,12 +42,23 @@ export interface SelectRemoteConfig {
 }
 
 export interface SelectPopupConfig {
-  placement?: 'top' | 'bottom'
+  placement?: Placement
   transfer?: boolean
+  appendTo?: string | HTMLElement
+  offset?: OffsetOptions
+  /** Explicit popup width. `full` matches the trigger width. */
   width?: number | string
+  /** Match the popup width to the Select trigger. */
+  full?: boolean
+  /** PSelect-compatible width matching switch. */
+  matchTriggerWidth?: boolean
+  minWidth?: number | string
+  maxWidth?: number | string
   height?: number | string
+  maxHeight?: number | string
   zIndex?: number
   className?: string
+  style?: CSSProperties
 }
 
 export interface SelectVirtualConfig {
@@ -51,6 +68,8 @@ export interface SelectVirtualConfig {
   estimateSize?: number
   /** Extra rows rendered above and below the visible window. */
   overscan?: number
+  /** Measure rendered option rows so wrapped/custom content can use dynamic heights. */
+  dynamic?: boolean
 }
 
 export const selectProps = buildProps({
@@ -103,7 +122,7 @@ export const selectProps = buildProps({
     default: 0,
   },
   filter: { type: Boolean },
-  /** VXE-compatible alias of `filter`. */
+  /** Alias of `filter`. */
   filterable: { type: Boolean },
   filterMethod: {
     type: definePropType<(val: string) => void>(Function),
@@ -127,6 +146,45 @@ export const selectProps = buildProps({
     type: definePropType<SelectDataOption[]>(Array),
     default: () => [],
   },
+  /** Options retained only for resolving labels of selected values. */
+  cachedOptions: {
+    type: definePropType<SelectDataOption[]>(Array),
+    default: () => [],
+  },
+  /** Highlight the matching part of data-driven option labels. */
+  highlightSearch: { type: Boolean, default: false },
+  /** Decide whether an option matches the current search text. */
+  filterOption: {
+    type: definePropType<
+      (searchValue: string, option: SelectDataOption) => boolean
+    >(Function),
+  },
+  /** Apply an additional visibility rule after search filtering. */
+  optionVisibleMethod: {
+    type: definePropType<(option: SelectDataOption) => boolean>(Function),
+  },
+  /** Local-storage namespace used to persist pinned option values. */
+  pinKey: { type: String },
+  /** Load pinned values from a remote persistence layer. */
+  getPinOptions: {
+    type: definePropType<
+      () => SelectOptionValue[] | Promise<SelectOptionValue[]>
+    >(Function),
+  },
+  /** Persist a newly pinned option remotely. */
+  pinMethod: {
+    type: definePropType<(value: SelectOptionValue) => void | Promise<void>>(
+      Function,
+    ),
+  },
+  /** Remove a pinned option from remote persistence. */
+  unpinMethod: {
+    type: definePropType<(value: SelectOptionValue) => void | Promise<void>>(
+      Function,
+    ),
+  },
+  /** Select the first pinned option, or the first enabled option, when empty. */
+  autoUseOption: { type: Boolean },
   /** Virtualize flat data-driven options. Slots and option groups keep normal rendering. */
   virtual: { type: Boolean, default: false },
   virtualConfig: {
@@ -151,12 +209,48 @@ export const selectProps = buildProps({
     type: definePropType<SelectPopupConfig>(Object),
     default: () => ({}),
   },
-  collapseChips: { type: Boolean },
+  collapseChips: { type: Boolean, default: true },
   maxCollapseChips: {
     type: Number,
-    default: 1,
+    default: 0,
     validator: (value: number) => isNumber(value) && value >= 0,
   },
+  multipleDisplayMode: {
+    type: String,
+    values: ['tags', 'text'] as const,
+    default: 'tags',
+  },
+  getTagLabel: {
+    type: definePropType<
+      (params: {
+        value: SelectOptionValue
+        label: string
+        option?: SelectDataOption
+      }) => string
+    >(Function),
+  },
+  getDisplayValue: {
+    type: definePropType<
+      (params: {
+        value: SelectValue
+        labels: string[]
+        options: Array<SelectDataOption | undefined>
+      }) => string
+    >(Function),
+  },
+  /** Optional built-in tools shown above a multiple-select list. */
+  selectionTools: {
+    type: definePropType<SelectSelectionTool[]>(Array),
+    default: () => [],
+  },
+  selectionToolLabels: {
+    type: definePropType<Partial<Record<SelectSelectionTool, string>>>(Object),
+    default: () => ({}),
+  },
+  /** Show a check mark beside selected options. */
+  showSelectedMark: { type: Boolean, default: false },
+  /** Placeholder used by the editable search field. */
+  searchPlaceholder: { type: String, default: '' },
   /**
    * @description set default select is firt option
    */
@@ -167,11 +261,11 @@ export const selectProps = buildProps({
    */
   loading: { type: Boolean },
   /**
-   * @description Select color - Accept Vuesax's color, Hex, rgb
+   * @description Select color - Accept Sax Design color tokens, Hex, rgb
    */
   color: { ...useColorProp, default: 'primary' },
   /**
-   * @description State color - Accept Vuesax's color, Hex, rgb
+   * @description State color - Accept Sax Design color tokens, Hex, rgb
    */
   state: useColorProp,
   /**
@@ -243,6 +337,13 @@ export const selectEmits = {
     isObject(val) ||
     isNil(val),
   clear: () => true,
+  'pin-fetch': (values: SelectOptionValue[], loaded: boolean) =>
+    isArray(values) && isBoolean(loaded),
+  'pin-change': (payload: {
+    value: SelectOptionValue
+    pinned: boolean
+    values: SelectOptionValue[]
+  }) => isBoolean(payload.pinned) && isArray(payload.values),
 }
 
 export type SelectEmits = typeof selectEmits
@@ -256,4 +357,10 @@ export interface SelectExpose {
   readonly focus: () => void
   /** blur select */
   readonly blur: () => void
+  /** Return the pinned values in their current display order. */
+  readonly getPinnedItems: () => SelectOptionValue[]
+  /** Reload pinned values from the configured persistence source. */
+  readonly refreshPinnedItems: () => Promise<SelectOptionValue[]>
+  /** Toggle one value between pinned and unpinned. */
+  readonly togglePin: (value: SelectOptionValue) => Promise<void>
 }

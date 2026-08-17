@@ -35,7 +35,7 @@ PROPS:
   - name: disabled
     type: Boolean
     values: true, false
-    description: Disable interaction.
+    description: 禁用交互。
     default: false
     link: null
     usage: '#default'
@@ -66,11 +66,11 @@ PROPS:
 EVENTS:
   - name: update:modelValue
     params: number
-    description: Value changed.
+    description: 值变化时触发。
 
   - name: change
     params: number
-    description: Value committed.
+    description: 值提交时触发。
 EXPOSES: []
 description: "沿轨道拖动选择数值。"
 NEWS:
@@ -80,7 +80,7 @@ NEWS:
   - text-fixed
 ---
 
-# Slider
+# Slider（滑块）
 
 <card>
 

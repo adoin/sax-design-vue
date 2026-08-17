@@ -42,7 +42,7 @@
 
 ```vue
 <s-alert color="success" closable v-model="open">
-  Saved successfully.
+  保存成功。
 </s-alert>
 ```
 

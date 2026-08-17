@@ -1,9 +1,30 @@
 ---
+description: '从可搜索选项列表中选择一个或多个值。'
 PROPS:
+  - name: v-model / model-value / not-value / label-float
+    type: String | Number | Array / Boolean
+    values: 选项值、空值和标签浮动状态
+    description: 绑定选中值、配置空值并控制标签浮动。
+    default: '-'
+  - name: block / clearable / fit / hide-scrollbar / native-scrollbar / shape / strategy
+    type: Boolean / String
+    values: 字段尺寸、外观和弹层定位选项
+    description: 控制字段宽度、清空操作、下拉滚动条和弹层策略。
+    default: '-'
+  - name: filter-config / filter-method / remote / remote-config / remote-method
+    type: Object / Function / Boolean
+    values: 本地筛选和远程数据配置
+    description: 配置本地筛选或异步远程选项。
+    default: '-'
+  - name: popup-config / show-after / hide-after / loading-text / no-data-text / no-match-text
+    type: Object / Number / String
+    values: width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style
+    description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
+    default: '-'
   - name: color
     type: Color
-    values: Main colors of vuesax, RGB, HEX
-    description: Change the color of the component.
+    values: Theme colors, RGB, HEX
+    description: 设置组件颜色。
     default: primary
     link: null
     usage: '#color'
@@ -11,7 +32,7 @@ PROPS:
   - name: loading
     type: Boolean
     values: true, false
-    description: Determine if the component is in the loading state and add an animation.
+    description: 是否处于加载状态，并显示加载动画。
     default: false
     link: null
     usage: '#loading'
@@ -21,7 +42,7 @@ PROPS:
       text: New
     type: Boolean
     values: true, false
-    description: Changes the placement of the options element to keep it in view.
+    description: 自动调整选项面板位置以保持可见。
     default: true
     link: null
     usage: '#default'
@@ -31,7 +52,7 @@ PROPS:
       text: New
     type: Boolean
     values: true, false
-    description: whether select dropdown is teleported to the body
+    description: 是否将下拉面板传送至 body。
     default: false
     link: null
     usage: null
@@ -39,7 +60,7 @@ PROPS:
   - name: placeholder
     type: String
     values: String
-    description: Add a placeholder to the component.
+    description: 设置组件占位文本。
     default: null
     link: null
     usage: '#default'
@@ -47,7 +68,7 @@ PROPS:
   - name: label
     type: String
     values: String
-    description: Add a label to the composite select.
+    description: 为选择框添加标签。
     default: null
     link: null
     usage: '#label'
@@ -55,7 +76,7 @@ PROPS:
   - name: label-placeholder
     type: String
     values: String
-    description: Add a placeholder that when in focus or with value becomes a label.
+    description: 设置在聚焦或有值时变为标签的占位文本。
     default: null
     link: null
     usage: '#label'
@@ -63,7 +84,7 @@ PROPS:
   - name: filter
     type: Boolean
     values: true, false
-    description: Add the functionality to filter the select options.
+    description: 启用选项筛选。
     default: false
     link: null
     usage: '#filter'
@@ -73,7 +94,7 @@ PROPS:
       text: New
     type: Boolean
     values: true, false
-    description: select first matching option on enter key. Use with `filter`
+    description: 按 Enter 选择首个匹配项，需配合 `filter` 使用。
     default: false
     link: null
     usage: '#filter'
@@ -83,7 +104,7 @@ PROPS:
       text: New
     type: Boolean
     values: true, false
-    description: Whether creating new items is allowed. To use this, `filter` must be true
+    description: 是否允许创建新选项；使用时 `filter` 必须为 true。
     default: false
     link: null
     usage: '#filter'
@@ -91,7 +112,7 @@ PROPS:
   - name: multiple
     type: Boolean
     values: true, false
-    description: Add the functionality of being able to select several options from a select.
+    description: 启用多选。
     default: false
     link: null
     usage: '#multiple'
@@ -101,7 +122,7 @@ PROPS:
       text: New
     type: Number
     values: number
-    description: Maximum number of options user can select when `multiple` is `true`. No limit when set to 0
+    description: '`multiple` 为 true 时可选的最大数量；设为 0 时不限数量。'
     default: 0
     link: null
     usage: '#multiple'
@@ -109,7 +130,7 @@ PROPS:
   - name: state
     type: String
     values: Theme colors
-    description: Change the state of the component to the color provided.
+    description: 使用指定颜色设置组件状态。
     default: false
     link: null
     usage: '#state'
@@ -117,7 +138,7 @@ PROPS:
   - name: disabled
     type: Boolean
     values: true, false
-    description: Determine if the component is in the disabled state.
+    description: 是否禁用组件。
     default: false
     link: null
     usage: null
@@ -125,8 +146,8 @@ PROPS:
   - name: collapse-chips
     type: Boolean
     values: true, false
-    description: Whether to collapse tags to a text when multiple selecting
-    default: false
+    description: 多选时根据剩余宽度自适应折叠放不下的标签，并以 `+N` 显示剩余数量。
+    default: true
     link: null
     usage: '#multiple'
     code: null
@@ -135,8 +156,8 @@ PROPS:
       text: New
     type: Number
     values: number
-    description: The max tags number to be shown. To use this, collapse-chips must be `true`
-    default: 1
+    description: collapse-chips 为 true 时可见标签的可选上限；设为 0 时仅根据可用宽度计算。
+    default: 0
     link: null
     usage: '#multiple'
     code: null
@@ -144,28 +165,62 @@ PROPS:
     state:
       text: New
     type: Boolean / Object
-    values: threshold | estimateSize | overscan
-    description: 对平铺的 options 数据开启 TanStack Virtual。分组和手写 Option 保持普通渲染。
+    values: threshold | estimateSize | overscan | dynamic
+    description: 对平铺的 options 数据开启 TanStack Virtual，并支持动态行高测量。分组和手写 Option 保持普通渲染。
     default: false / '{}'
     link: null
     usage: '#virtual-options'
     code: null
+  - name: pin-key / get-pin-options / pin-method / unpin-method / auto-use-option
+    state:
+      text: New
+    type: String / Function / Function / Function / Boolean
+    values: 本地或远程选项置顶配置
+    description: 将常用平铺选项置顶，可在本地或远程持久化，并可自动使用第一个可用选项。
+    default: '- / - / - / - / false'
+    link: null
+    usage: '#置顶选项'
+    code: null
+  - name: cached-options / highlight-search / filter-option / option-visible-method
+    type: Array / Boolean / Function / Function
+    values: 缓存选项、搜索高亮和可见性规则
+    description: 保留远程选中项标签，并自定义搜索匹配与最终可见性。
+    default: '[] / false / - / -'
+    usage: '#cached-option-labels'
+  - name: multiple-display-mode / get-tag-label / get-display-value
+    type: tags | text / Function / Function
+    values: 多选展示方式与格式化函数
+    description: 控制多选以标签或单行文本展示，并格式化标签或完整展示值。
+    default: tags / - / -
+    usage: '#multiple-selection-tools'
+  - name: selection-tools / selection-tool-labels / show-selected-mark / search-placeholder
+    type: Array / Object / Boolean / String
+    values: all | invert | clear
+    description: 配置多选批量工具、工具文案、选中标记和搜索占位文本。
+    default: "[] / {} / false / ''"
+    usage: '#multiple-selection-tools'
 
   - name: option-group:label
     state:
       text: New
     type: String
     values: String
-    description: Set label for select group (required)
+    description: 设置选择组标签（必填）。
     default: null
     link: null
     usage: '#group'
     code: null
 SLOTS:
+  - name: header / tools / footer
+    type: slot
+    values: scoped slot
+    description: 自定义下拉框头部、批量工具和底部内容；footer 仅提供状态与操作，不内置刷新。
+    default: null
+    usage: '#multiple-selection-tools'
   - name: message-{color}
     type: slot
     values: warn, danger, success
-    description: Add a message below the select.
+    description: 在选择框下方添加提示信息。
     default: null
     link: null
     usage: '#message'
@@ -177,8 +232,8 @@ SLOTS:
         <template #message-success>
           Option Valid
         </template>
-        <s-option label="Vuesax" value="1">
-          Vuesax
+        <s-option label="Sax Design" value="1">
+          Sax Design
         </s-option>
         <s-option label="Vue" value="2">
           Vue
@@ -201,7 +256,7 @@ SLOTS:
       </s-select>
 ---
 
-# Select
+# Select 选择器
 
 <card>
 
@@ -209,7 +264,7 @@ SLOTS:
 
 <docs-warn />
 
-Add a select element with the `s-select` component and the `s-option` sub component
+使用 `s-select` 与 `s-option` 子组件创建选择器。
 
 <template #example>
 <select-default />
@@ -239,7 +294,7 @@ Add a select element with the `s-select` component and the `s-option` sub compon
 
 ## 颜色
 
-Change the color of the component with the `color` property, the allowed values ​​are the main colors of vuesax and the colors (**RGB** and **HEX**)
+通过 `color` 设置组件颜色，支持主题色、**RGB**、**HEX**。
 
 <template #example>
 <select-color />
@@ -263,7 +318,7 @@ Change the color of the component with the `color` property, the allowed values 
 
 ## 标签
 
-Add a label to the select easily with the `label` property, you can also add a `label-placeholder` which as its name says is a placeholder that encourages label, and finally the placeholder with the `placeholder` property
+通过 `label` 可为选择器添加标签；`label-placeholder` 用于聚焦或有值时浮动为标签，`placeholder` 用于常规占位文本。
 
 <template #example>
 <select-label />
@@ -285,9 +340,9 @@ Add a label to the select easily with the `label` property, you can also add a `
 
 <card>
 
-## Group
+## 分组
 
-Group options within the select with the sub-component `s-option-group`, as the required prop is the `title` to add a title to the item group
+通过 `s-option-group` 子组件对选项分组；使用必填的 `title` 为分组添加标题。
 
 <template #example>
 <select-group />
@@ -315,9 +370,9 @@ Group options within the select with the sub-component `s-option-group`, as the 
 
 <card>
 
-## Filter
+## 筛选
 
-You can add the functionality of filtering options with the `filter` property, this property is a `boolean` so you can add it without any value
+添加布尔属性 `filter`，即可启用选项筛选。
 
 <template #example>
 <select-filter />
@@ -341,10 +396,12 @@ You can add the functionality of filtering options with the `filter` property, t
 
 ## 多选
 
-Add the functionality of multiple selection of options with the `multiple` property, this property is a `boolean` so you can add it without any value
+添加布尔属性 `multiple`，即可启用多选。
+
+多选 Select 默认测量当前可用宽度，将放不下的标签自动收纳为 `+N`。需要允许标签换行时可将 `collapse-chips` 设为 `false`；`max-collapse-chips` 仅用于设置可选的显示数量上限。
 
 ::: tip
-The value of the select must be an array
+选择器绑定值必须为数组。
 :::
 
 <template #example>
@@ -353,13 +410,13 @@ The value of the select must be an array
 
 <template #template>
 
-@[code{1-53} html{6,22,38}](../../.vuepress/components/select/multiple.vue)
+@[code{1-54} html{7,24,41-42}](../../.vuepress/components/select/multiple.vue)
 
 </template>
 
 <template #script>
 
-@[code{55-78}](../../.vuepress/components/select/multiple.vue)
+@[code{56-72}](../../.vuepress/components/select/multiple.vue)
 
 </template>
 
@@ -369,7 +426,7 @@ The value of the select must be an array
 
 ## 加载
 
-Add a loading animation to the select with the `loading` property, this property is a `boolean` so you can add it without any value
+添加布尔属性 `loading`，即可为选择器显示加载动画。
 
 <template #example>
 <select-loading />
@@ -391,12 +448,12 @@ Add a loading animation to the select with the `loading` property, this property
 
 <card>
 
-## State
+## 状态
 
-Change the style of the component to the color passed in the `state` property, the allowed colors are only the main ones of vuesax
+通过 `state` 设置组件状态颜色，支持主题色。
 
 ::: tip
-This property can be used to indicate a missing field to the user or when something is ready.
+该属性可用于提示字段缺失、校验通过等状态。
 :::
 
 <template #example>
@@ -425,9 +482,9 @@ This property can be used to indicate a missing field to the user or when someth
 
 <card>
 
-## Message
+## 提示信息
 
-Add an item below the select showing a message to the user
+在选择器下方添加提示信息。
 
 <template #example>
 <select-message />
@@ -457,7 +514,7 @@ Add an item below the select showing a message to the user
 
 ## 数据源
 
-服务端数据可直接传入 `options`、`option-groups`。通过 `option-props`、`option-group-props` 映射字段；`filterable` 是与 VXE 对齐的 `filter` 别名。
+服务端数据可直接传入 `options`、`option-groups`。通过 `option-props`、`option-group-props` 映射字段；`filterable` 是 `filter` 的别名。
 
 <template #example>
 <select-data />
@@ -479,9 +536,117 @@ Add an item below the select showing a message to the user
 
 <card>
 
+## 弹层配置
+
+通过 `popup-config` 控制弹层宽高、与选择框等宽、偏移量、挂载容器和自定义样式。第一个示例使用 `full` 跟随选择框宽度；第二个示例组合使用宽高限制、`offset`、`appendTo`、`placement`、`className` 和 `style`。示例将弹层挂载到 `body`，在弹窗等场景中可将 `appendTo` 换成已存在的容器选择器或元素。
+
+<template #example>
+<select-popup-config />
+</template>
+
+<template #template>
+
+@[code](../../.vuepress/components/select/popup-config.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 搜索匹配与高亮
+
+使用 `filter-option` 定义匹配规则，`highlight-search` 标记匹配文字，`show-selected-mark` 显示选中标记。
+
+<template #example>
+<select-search-highlight />
+</template>
+
+<template #template>
+
+@[code{1-12}](../../.vuepress/components/select/search-highlight.vue)
+
+</template>
+
+<template #script>
+
+@[code{14-26}](../../.vuepress/components/select/search-highlight.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 多选工具与底部内容
+
+`selection-tools` 可按当前筛选结果全选、反选或清空。`footer` 插槽提供数量和批量操作上下文，不包含刷新逻辑。
+
+<template #example>
+<select-selection-tools />
+</template>
+
+<template #template>
+
+@[code{1-18}](../../.vuepress/components/select/selection-tools.vue)
+
+</template>
+
+<template #script>
+
+@[code{20-33}](../../.vuepress/components/select/selection-tools.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 缓存选项标签
+
+远程分页或搜索替换当前 `options` 时，可通过 `cached-options` 保留已选值的标签。`header`、`footer` 可分别定制弹层上下区域。
+
+<template #example>
+<select-cached-options />
+</template>
+
+<template #template>
+
+@[code{1-16}](../../.vuepress/components/select/cached-options.vue)
+
+</template>
+
+<template #script>
+
+@[code{18-29}](../../.vuepress/components/select/cached-options.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 置顶选项
+
+设置 `pin-key` 后，置顶值会保存到本地存储。悬停选项可显示置顶按钮，也可对键盘高亮项按 `Ctrl+P`。需要服务端持久化时，同时传入 `get-pin-options`、`pin-method` 与 `unpin-method`。`auto-use-option` 会优先使用第一个已置顶且可用的选项，没有置顶项时使用第一个可用项。
+
+<template #example>
+<select-pinning />
+</template>
+
+<template #template>
+
+@[code](../../.vuepress/components/select/pinning.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## 虚拟选项
 
-大数据平铺 `options` 可开启 `virtual`。筛选、键盘导航与已选值缓存保留，同时只挂载可见行。
+大数据平铺 `options` 可开启 `virtual`。筛选、键盘导航与已选值缓存保留，同时只挂载可见行。动态测量默认开启，换行标签和自定义选项内容可以使用不同高度；只有行高完全固定时才需要将 `virtual-config.dynamic` 设为 `false`。
 
 <template #example>
 <select-virtual />
@@ -489,7 +654,7 @@ Add an item below the select showing a message to the user
 
 <template #template>
 
-@[code{1-13}](../../.vuepress/components/select/virtual.vue)
+@[code](../../.vuepress/components/select/virtual.vue)
 
 </template>
 

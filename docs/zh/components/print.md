@@ -21,7 +21,7 @@ METHODS:
 EVENTS:
   - name: before-print / after-print / error
     description: 打印生命周期事件。
-description: "VXE 风格局部打印容器。"
+description: "局部打印容器。"
 ---
 
 # 打印

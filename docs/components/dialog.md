@@ -1,5 +1,21 @@
 ---
+description: "Present focused modal content and require a user decision."
 PROPS:
+  - name: model-value / before-close
+    type: Boolean / Function
+    values: true | false / close guard
+    description: Bind visibility and optionally guard closing.
+    default: 'false / -'
+  - name: color / top / height / min-width / min-height / auto-width
+    type: Color / String | Number / Boolean
+    values: CSS size and color values
+    description: Configure dialog appearance, placement and dimensions.
+    default: '-'
+  - name: cancel-closable / confirm-closable / cancel-button-text / confirm-button-text
+    type: Boolean / String
+    values: true | false / button labels
+    description: Configure footer actions and whether each action closes the dialog.
+    default: '-'
   - name: v-model
     type: Boolean
     values: true,false
@@ -119,7 +135,7 @@ PROPS:
   - name: title / content / show-header
     type: String, Boolean
     values: String, true | false
-    description: VXE-compatible built-in header and content when slots are not needed.
+    description: Built-in header and content when slots are not needed.
     default: null, null, true
     link: null
     usage: '#advanced'
@@ -562,7 +578,7 @@ With the `prevent-close` property you do not close the dialog by clicking outsid
 
 ## Advanced
 
-Use VXE-aligned title, content and action-button props when slots would be unnecessary; custom slots keep priority.
+Use title, content and action-button props when slots would be unnecessary; custom slots keep priority.
 
 <template #example>
 <dialog-advanced />

@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: tag / status
+    type: String / String
+    values: semantic HTML tag / theme status
+    description: Select the rendered element and semantic color state.
+    default: 'span / -'
   - name: content
     type: String | Number
     values: text
@@ -15,7 +20,7 @@ PROPS:
     values: lines
     description: Multi-line truncation count.
     default: null
-description: "Semantic text with VXE-style ellipsis support."
+description: "Semantic text with ellipsis support."
 ---
 
 # Text

@@ -38,7 +38,7 @@ export const treeProps = buildProps({
   expandOnClickNode: { type: Boolean, default: true },
   highlightCurrent: { type: Boolean, default: true },
   indent: { type: Number, default: 18 },
-  emptyText: { type: String, default: 'No data' },
+  emptyText: String,
 } as const)
 
 export const treeEmits = {

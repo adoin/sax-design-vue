@@ -15,7 +15,7 @@ PROPS:
     values: text
     description: Supporting result copy.
     default: null
-description: "VXE-compatible result feedback state."
+description: "Result feedback state."
 ---
 
 # Result

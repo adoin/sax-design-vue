@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const defaultChips = ['Dribbble', 'GitHub', 'Behance', 'Vuejs', 'Vuesax']
+const defaultChips = ['Dribbble', 'GitHub', 'Behance', 'Vuejs', 'Sax Design']
 const chips = ref([...defaultChips])
 
 const reset = () => {

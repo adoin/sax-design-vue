@@ -30,7 +30,12 @@
         </div>
       </s-collapse-transition>
 
-      <button v-if="closable" :class="ns.e('close')" @click="handleClickClose">
+      <button
+        v-if="closable"
+        :class="ns.e('close')"
+        :aria-label="t('vs.alert.close')"
+        @click="handleClickClose"
+      >
         <icon-close hover="less" />
       </button>
 
@@ -61,6 +66,7 @@ import { IconClose, IconPlus } from '@vuesax-alpha/components/icon'
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import {
   useColor,
+  useLocale,
   useNamespace,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
@@ -80,6 +86,7 @@ const emit = defineEmits(alertEmits)
 useAlertDeprecated(props)
 
 const ns = useNamespace('alert')
+const { t } = useLocale()
 
 const vsBaseClasses = useVuesaxBaseComponent(useColor())
 

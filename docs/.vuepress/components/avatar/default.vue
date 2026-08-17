@@ -7,10 +7,10 @@
       <template #text> Evan You </template>
     </s-avatar>
     <s-avatar>
-      <i class="bx bx-user" />
+      <s-icon  name="bx:user" />
     </s-avatar>
     <s-avatar color="primary">
-      <i class="bx bxs-hot" />
+      <s-icon  name="bxs:hot" />
     </s-avatar>
     <s-avatar>
       <img src="/avatars/avatar-5.png" alt="" />

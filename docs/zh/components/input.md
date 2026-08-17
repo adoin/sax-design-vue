@@ -1,9 +1,32 @@
 ---
+description: '通过校验和状态反馈采集单行文本。'
 PROPS:
+  - name: align / block / disabled / editable / readonly / shape / text-white
+    type: String / Boolean
+    values: 对齐、交互状态和外观选项
+    description: 控制输入框对齐、宽度、禁用、编辑状态和视觉样式。
+    default: '-'
+  - name: allow-clear / clearable
+    type: Boolean
+    values: true | false
+    description: 输入框悬停或聚焦时在尾部显示清空按钮；clearable 作为兼容别名保留。
+    default: false
+    usage: '#清空'
+  - name: count-method / max-length / show-word-count
+    type: Function / Number / Boolean
+    values: '({ value }) => number / Number / true | false'
+    description: 开启后在 suffix 区显示计数；自定义统计方法会同时用于计数显示和长度限制，可实现 UTF-8 字节或其他编码统计。
+    default: '- / - / false'
+    usage: '#字符计数'
+  - name: wrap-classes / wrap-styles
+    type: String | Object | Array
+    values: 容器类名或样式
+    description: 配置输入框外层容器的类名和样式。
+    default: '-'
   - name: v-model
     type: String, Number
     values: String, Number
-    description: binding value
+    description: 绑定值。
     default: null
     link: null
     usage: '#default'
@@ -11,7 +34,7 @@ PROPS:
   - name: placeholder
     type: String
     values: String
-    description: placeholder of Input
+    description: 输入框占位文本。
     default: null
     link: null
     usage: '#default'
@@ -19,7 +42,7 @@ PROPS:
   - name: label
     type: String
     values: String
-    description: a label above the component.
+    description: 组件上方标签文本。
     default: null
     link: null
     usage: '#label'
@@ -33,7 +56,7 @@ PROPS:
   - name: label-float
     type: String
     values: String
-    description: Add a placeholder converts to focus on a label.
+    description: 将占位文本在聚焦或有值时转换为标签。
     default: null
     link: null
     usage: '#label-float'
@@ -47,8 +70,8 @@ PROPS:
       </template>
   - name: color
     type: String
-    values: vuesax colors, RGB, HEX
-    description: Change component color.
+    values: theme colors, RGB, HEX
+    description: 设置组件颜色。
     default: null
     link: null
     usage: '#color'
@@ -92,8 +115,8 @@ PROPS:
 
   - name: state
     type: String
-    values: vuesax colors,RGB,HEX
-    description: Change the background color of the component by changing its status.
+    values: theme colors, RGB, HEX
+    description: 通过状态改变组件背景颜色。
     default: null
     link: null
     usage: '#state'
@@ -101,7 +124,7 @@ PROPS:
   - name: progress
     type: Number
     values: 0 - 100
-    description: progress bar starting in red and ending in green.
+    description: 进度条值，颜色从红色渐变至绿色。
     default: null
     link: null
     usage: '#progress'
@@ -109,7 +132,7 @@ PROPS:
   - name: loading
     type: Boolean
     values: Boolean
-    description: Add a loading animation to the input.
+    description: 为输入框添加加载动画。
     default: null
     link: null
     usage: '#loading'
@@ -121,10 +144,10 @@ PROPS:
       </template>
 
   - name: type
-    type: string
-    values: html type
-    description: Change the type of input (html values).
-    default: null
+    type: InputType
+    values: text | password | search | number | email | tel | url
+    description: 设置文本类输入类型；日期与时间分别使用 DatePicker、TimePicker。
+    default: text
     link: null
     usage: '#input-types'
     code: null
@@ -132,7 +155,7 @@ PROPS:
   - name: border
     type: Boolean
     values: Boolean
-    description: Change the style of the component.
+    description: 设置组件样式。
     default: false
     link: null
     usage: '#border'
@@ -140,7 +163,7 @@ PROPS:
   - name: shadow
     type: Boolean
     values: Boolean
-    description: Change the style of the component.
+    description: 设置组件样式。
     default: false
     link: null
     usage: '#shadow'
@@ -148,7 +171,7 @@ PROPS:
   - name: icon-after
     type: Boolean
     values: Boolean
-    description: suffix icon component
+    description: 后缀图标组件。
     default: false
     link: null
     usage: '#icon'
@@ -156,16 +179,51 @@ PROPS:
   - name: show-password
     type: boolean
     values: boolean
-    description: If the input is of the password type, it is modified to show the password.
+    description: 密码类型输入框是否提供密码显示切换。
     default: false
     link: null
     usage: '#progress'
+
+  - name: size
+    type: String
+    values: small | default | large
+    description: 设置输入框尺寸。
+    default: default
+    usage: '#尺寸'
+
+  - name: immediate
+    type: Boolean
+    values: true | false
+    description: 控制输入时立即更新，或在 change、blur 时提交。
+    default: true
+    usage: '#延迟提交'
+
+  - name: controls
+    type: Boolean
+    values: true | false
+    description: 显示内置搜索或密码操作按钮。
+    default: false
+    usage: '#搜索'
+
+  - name: prefix-icon / suffix-icon / prefix-config / suffix-config
+    type: String / Object
+    values: 图标名称 / '{ icon, content, status }'
+    description: 配置轻量前后缀图标或文字；同名插槽优先级最高。
+    default: '-'
+    usage: '#前后缀'
+
+  - name: min-length / min / max / step / input-mode / pattern / required / multiple
+    type: Number | String / Boolean
+    values: 原生 input 约束
+    description: 透传常用原生约束，并将数字输入限制在配置的 min–max 范围内。
+    default: '-'
+    usage: '#原生约束'
 
 SLOTS:
   - name: icon
     type: Slot
     values: null
-    description: Add an icon to the input.
+    description: 为输入框添加图标。
     default: null
     link: null
     usage: '#icon'
@@ -173,13 +231,19 @@ SLOTS:
   - name: message
     type: Slot
     values: message-success, message-danger, message-warn
-    description: Add an informative text below the input.
+    description: 在输入框下方添加提示文本。
     default: null
     link: null
     usage: '#message'
+  - name: prefix / suffix
+    type: Slot
+    values: 'suffix: { count, limit }'
+    description: 自定义输入框前后缀；suffix 插槽会替换默认计数器，并提供当前计数和限制值。
+    default: null
+    usage: '#前后缀'
 ---
 
-# Input
+# Input 输入框
 
 <card>
 
@@ -187,7 +251,7 @@ SLOTS:
 
 <docs-warn />
 
-Add an elements input facilitate with the component `input`
+使用 `s-input` 快速创建单行文本输入框。
 
 <template #example>
 <input-default />
@@ -209,9 +273,33 @@ Add an elements input facilitate with the component `input`
 
 <card>
 
+## 清空
+
+设置 `allow-clear` 后，输入框悬停或聚焦时会在尾部显示清空按钮；按 Escape 也可以清空当前值。
+
+<template #example>
+<input-clearable />
+</template>
+
+<template #template>
+
+@[code{7-16} html{10}](../../.vuepress/components/input/clearable.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/input/clearable.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## 标签
 
-Add a label to the input with the property `label`
+通过 `label` 属性为输入框添加标签。
 
 <template #example>
 <input-label />
@@ -233,9 +321,9 @@ Add a label to the input with the property `label`
 
 <card>
 
-## Label Float <badge type="warn" text="Update" />
+## 浮动标签
 
-You can have a placeholder with a great animation when being or in focus or with a value becoming a label above the input with the property `label-float`
+通过 `label-float` 可让占位文本在聚焦或有值时以动画变为输入框上方标签。
 
 <template #example>
 <input-label-float />
@@ -259,7 +347,7 @@ You can have a placeholder with a great animation when being or in focus or with
 
 ## 颜色
 
-Change the color of the component and add a border below with the `color` property, the allowed values ​​are the main colors of vuesax and the colors (**RGB** y **HEX**)
+通过 `color` 设置组件颜色并添加底部边框，支持主题色、**RGB** 与 **HEX**。
 
 <template #example>
 <input-color />
@@ -283,7 +371,7 @@ Change the color of the component and add a border below with the `color` proper
 
 ## 图标
 
-Add an icon to the input easily with the slot icon if you want the icon to be before the input you can do it with the property `icon-before`
+通过 `icon` 插槽可为输入框添加图标；使用 `icon-before` 可将图标放到输入框前侧。
 
 <utils-icon />
 
@@ -307,9 +395,9 @@ Add an icon to the input easily with the slot icon if you want the icon to be be
 
 <card>
 
-## Message
+## 提示信息
 
-You can add a message below the input with the `#message-{vuesax color}` to report that a field is missing or the value is wrong
+通过 `#message-{color}` 插槽可在输入框下方提示必填、格式错误等信息。
 
 <template #example>
 <input-message />
@@ -331,9 +419,9 @@ You can add a message below the input with the `#message-{vuesax color}` to repo
 
 <card>
 
-## State
+## 状态
 
-Change the color of the input for some state, the allowed states are (primary, success, danger, warn, dark)
+可根据状态改变输入框颜色，支持 `primary`、`success`、`danger`、`warn`、`dark`。
 
 <template #example>
 <input-state />
@@ -355,18 +443,18 @@ Change the color of the input for some state, the allowed states are (primary, s
 
 <card>
 
-## Progress
+## 进度
 
-Add a validation progress bar, the most common is its use to validate passwords and correct data within the input, its value is (0 - 100).
+添加校验进度条，常用于校验密码强度和输入数据；值范围为 0 至 100。
 
 :::tip
-The example validates that the password has at least
+此示例校验密码至少包含：
 
-- A special character
-- More than 6 digits
-- One lower case letter
-- An uppercase letter
-- A number
+- 一个特殊字符
+- 超过 6 个字符
+- 一个小写字母
+- 一个大写字母
+- 一个数字
   :::
 
 <template #example>
@@ -391,7 +479,7 @@ The example validates that the password has at least
 
 ## 加载
 
-Add a loading animation to the input with the `loading` property, the property is a `Boolean`, so you can add it without any value.
+通过 `loading` 添加输入框加载动画；该属性为 Boolean，可直接添加。
 
 <template #example>
 <input-loading />
@@ -413,9 +501,11 @@ Add a loading animation to the input with the `loading` property, the property i
 
 <card>
 
-## Input types
+## 输入类型
 
-Change the type of input with the `type` property as a native html input, the default value is `text`
+`type` 只负责文本类输入，可选 `text`、`password`、`search`、`number`、
+`email`、`tel` 和 `url`。日期与时间请使用 `SDatePicker`、`STimePicker`，
+以保持格式化、主题色和弹出层交互一致。
 
 <template #example>
 <input-types />
@@ -423,13 +513,13 @@ Change the type of input with the `type` property as a native html input, the de
 
 <template #template>
 
-@[code{1-11} html{4}](../../.vuepress/components/input/types.vue)
+@[code{1-19} html{4-10,14-16}](../../.vuepress/components/input/types.vue)
 
 </template>
 
 <template #script>
 
-@[code{12-22}](../../.vuepress/components/input/types.vue)
+@[code{20-35}](../../.vuepress/components/input/types.vue)
 
 </template>
 
@@ -437,9 +527,9 @@ Change the type of input with the `type` property as a native html input, the de
 
 <card>
 
-## Border - Shadow
+## 边框与阴影
 
-Change everything is style of the component with the `input-style` property, the property is a `String` with values `border` . `shadow` . `transparent`
+通过 `input-style` 设置组件整体样式；可选值为 `border`、`shadow`、`transparent`。
 
 <template #example>
 <input-style />
@@ -461,26 +551,140 @@ Change everything is style of the component with the `input-style` property, the
 
 <card>
 
-## 高级能力
+## 前后缀
 
-通过 VXE 对齐的字数限制、计数、trim 和前后缀内容，增强输入框而不改变原有美术。
+通过 `prefix-icon`、`suffix-icon` 添加输入框前后缀图标。需要完全自定义内容时，可使用同名插槽。
 
 <template #example>
-<input-advanced />
+<input-affix />
 </template>
 
 <template #template>
 
-@[code{1-12} html{4-10}](../../.vuepress/components/input/advanced.vue)
+@[code{8-21} html{10-19}](../../.vuepress/components/input/affix.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-17}](../../.vuepress/components/input/advanced.vue)
+@[code{1-6}](../../.vuepress/components/input/affix.vue)
 
 </template>
 
-## API
+</card>
+
+<card>
+
+## 尺寸
+
+通过 `size` 设置小号、默认或大号输入框。
+
+<template #example>
+<input-size />
+</template>
+
+<template #template>
+
+@[code{1-7} html{3-5}](../../.vuepress/components/input/size.vue)
+
+</template>
 
 </card>
+
+<card>
+
+## 搜索
+
+设置 `type="search"` 和 `controls` 显示搜索操作。按 Enter 或点击搜索按钮都会触发 `search-click`。
+
+<template #example>
+<input-search />
+</template>
+
+<template #template>
+
+@[code{12-25} html{14-20}](../../.vuepress/components/input/search.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-10}](../../.vuepress/components/input/search.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 延迟提交
+
+设置 `immediate="false"` 后，输入值会在 change 或 blur 时才同步到 `v-model`。输入后点击外部，可观察已提交值的变化。
+
+<template #example>
+<input-deferred />
+</template>
+
+<template #template>
+
+@[code{7-19} html{9-17}](../../.vuepress/components/input/deferred.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/input/deferred.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 字符计数
+
+通过 `max-length` 限制输入并使用 `show-word-count` 显示计数。`count-method` 可同时自定义计数显示和长度限制，第二个输入框按 UTF-8 字节计数。
+
+<template #example>
+<input-count />
+</template>
+
+<template #template>
+
+@[code{11-27} html{13-25}](../../.vuepress/components/input/count.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-9}](../../.vuepress/components/input/count.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 原生约束
+
+`min`、`max`、`step`、`input-mode`、`pattern` 和 `required` 等常用原生约束会透传到内部 input。数字输入还会将键入或粘贴的值限制在配置的 `min`–`max` 范围内。
+
+<template #example>
+<input-constraints />
+</template>
+
+<template #template>
+
+@[code{7-19} html{8-18}](../../.vuepress/components/input/constraints.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/input/constraints.vue)
+
+</template>
+
+</card>
+
+## API

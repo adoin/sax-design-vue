@@ -61,7 +61,7 @@ function createEmbedPreviewRoot() {
           },
           {
             default: () => (current.value ? h(current.value) : null),
-          }
+          },
         )
     },
   }
@@ -108,7 +108,7 @@ function createDefaultRoot() {
           },
           {
             default: () => h(current.value as Component),
-          }
+          },
         )
       }
     },

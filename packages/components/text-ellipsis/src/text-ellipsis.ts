@@ -7,8 +7,8 @@ export const textEllipsisProps = buildProps({
   lineClamp: { type: Number, default: 1 },
   expanded: Boolean,
   expandable: Boolean,
-  expandText: { type: String, default: 'More' },
-  collapseText: { type: String, default: 'Less' },
+  expandText: String,
+  collapseText: String,
 } as const)
 
 export const textEllipsisEmits = {

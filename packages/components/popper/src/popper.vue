@@ -1,6 +1,6 @@
 <template>
   <popper-trigger
-    :disabled="disabled"
+    :disabled="disabled || !referenceVisible"
     :trigger="trigger"
     :virtual-ref="virtualRef"
     :virtual-triggering="virtualTriggering"
@@ -17,6 +17,7 @@
 
   <popper-content
     :animation="animation"
+    :popper-id="popperId"
     :append-to="appendTo"
     :teleported="teleported"
     :persistent="persistent"
@@ -25,7 +26,7 @@
     :interactivity="interactivity"
     :popper-class="popperClass"
     :popper-style="[popperStyle, floatingStyles, { zIndex }]"
-    :disabled="disabled"
+    :disabled="disabled || !referenceVisible"
     :visible="visible"
     :show-arrow="showArrow"
     @blur="onBlur"
@@ -38,6 +39,7 @@
 <script setup lang="ts">
 import {
   computed,
+  onBeforeUnmount,
   onDeactivated,
   provide,
   reactive,
@@ -50,6 +52,7 @@ import {
 import { isBoolean, isEmpty } from '@vuesax-alpha/utils'
 import {
   useDelayedToggle,
+  useId,
   usePopperContainer,
   usePopperContainerId,
   useZIndex,
@@ -88,12 +91,14 @@ const emit = defineEmits(popperEmits)
 const { currentZIndex, nextZIndex } = useZIndex()
 
 const zIndex = computed(() => props.zIndex ?? currentZIndex.value)
+const popperId = useId()
 
 const triggerRef = ref<ReferenceElement>()
 const contentRef = ref<HTMLElement>()
 const arrowRef = ref<HTMLElement>()
 
 const open = ref(false)
+const referenceVisible = ref(true)
 const toggleReason = ref<Event>()
 
 const { show, hide, hasUpdateHandler } = usePopperModelToggle({
@@ -162,6 +167,40 @@ watch(
 )
 
 onDeactivated(() => open.value && hide())
+
+let referenceObserver: IntersectionObserver | undefined
+
+const observeReference = (reference?: ReferenceElement) => {
+  referenceObserver?.disconnect()
+  referenceObserver = undefined
+
+  if (
+    typeof HTMLElement === 'undefined' ||
+    !(reference instanceof HTMLElement)
+  ) {
+    referenceVisible.value = true
+    return
+  }
+
+  referenceObserver = new IntersectionObserver(
+    ([entry]) => {
+      const style = window.getComputedStyle(reference)
+      const visible =
+        entry.isIntersecting &&
+        style.display !== 'none' &&
+        style.visibility !== 'hidden'
+
+      referenceVisible.value = visible
+      if (!visible && open.value) onClose()
+    },
+    { threshold: 0 },
+  )
+  referenceObserver.observe(reference)
+}
+
+watch(triggerRef, observeReference, { flush: 'post', immediate: true })
+
+onBeforeUnmount(() => referenceObserver?.disconnect())
 
 provide(popperContextKey, {
   contentRef,

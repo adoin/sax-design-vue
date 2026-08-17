@@ -60,7 +60,7 @@
       background: getColor('color');
       height: 100%;
       position: relative;
-      border-radius: 0 10px 10px 0;
+      border-radius: 0 var(--sax-radius-md) var(--sax-radius-md) 0;
     }
   }
 
@@ -75,7 +75,7 @@
         position: absolute;
         animation: waves 0.7s ease infinite;
         box-shadow: 0 0 10px 0 getColor('color', 0.5);
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
       }
 
       @include m(item-2) {
@@ -85,7 +85,7 @@
         position: absolute;
         animation: waves 1.4s linear infinite;
         box-shadow: 0 0 10px 0 getColor('color', 0.5);
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
       }
 
       @include m(item-3) {
@@ -95,7 +95,7 @@
         position: absolute;
         animation: waves 1.75s ease infinite;
         box-shadow: 0 0 10px 0 getColor('color', 0.5);
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
       }
     }
   }
@@ -110,7 +110,7 @@
         height: 100%;
         position: absolute;
         animation: corners 1s ease infinite;
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
         border: 2px solid getColor('color', 1);
       }
 
@@ -127,7 +127,7 @@
   @include m(border) {
     @include e(animation) {
       @include flex(center, center);
-      border-radius: 50%;
+      border-radius: var(--sax-radius-circle);
 
       @include m(item-1) {
         position: absolute;
@@ -184,7 +184,7 @@
         width: 8px;
         height: 8px;
         background: getColor('color');
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
         margin: 3px;
         animation: points 0.75s ease infinite;
       }
@@ -193,7 +193,7 @@
         width: 8px;
         height: 8px;
         background: getColor('color');
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
         margin: 3px;
         animation: points 0.75s ease infinite 0.25s;
       }
@@ -202,7 +202,7 @@
         width: 8px;
         height: 8px;
         background: getColor('color');
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
         margin: 3px;
         animation: points 0.75s ease infinite 0.5s;
       }
@@ -246,7 +246,7 @@
 
       width: 60px;
       height: 60px;
-      border-radius: 999px;
+      border-radius: var(--sax-radius-pill);
 
       @include m(item-1) {
         position: absolute;
@@ -327,7 +327,7 @@
         width: 40px;
         height: 40px;
         animation: rotate 1s ease infinite;
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
         border: 2px solid getColor('color', 1);
         border-top: 3px solid transparent;
         border-left: 3px solid transparent;
@@ -339,7 +339,7 @@
         width: 50px;
         height: 50px;
         animation: rotate 1s ease-in-out infinite;
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
         border: 2px dashed getColor('color', 1);
         border-top: 3px solid transparent;
         border-left: 3px solid transparent;
@@ -351,7 +351,7 @@
         width: 60px;
         height: 60px;
         animation: rotate 1s linear infinite reverse;
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
         border: 2px solid getColor('color', 1);
         border-top: 3px solid transparent;
         border-left: 3px solid transparent;
@@ -411,7 +411,7 @@
         background: getColor('color', 1);
         margin: 3px;
         animation: scale 0.8s ease infinite;
-        border-radius: 5px;
+        border-radius: var(--sax-radius-xs);
       }
 
       @include m(item-2) {
@@ -421,7 +421,7 @@
         background: getColor('color', 1);
         margin: 3px;
         animation: scale 0.8s ease infinite 0.2s;
-        border-radius: 5px;
+        border-radius: var(--sax-radius-xs);
       }
 
       @include m(item-3) {
@@ -431,7 +431,7 @@
         background: getColor('color', 1);
         margin: 3px;
         animation: scale 0.8s ease infinite 0.4s;
-        border-radius: 5px;
+        border-radius: var(--sax-radius-xs);
       }
     }
   }
@@ -448,7 +448,7 @@
         box-sizing: border-box;
         width: 100%;
         height: 100%;
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
       }
 
       @include m(item-1) {
@@ -484,7 +484,7 @@
         width: 14px;
         height: 14px;
         position: absolute;
-        border-radius: 9999px;
+        border-radius: var(--sax-radius-pill);
         left: 15%;
         overflow: hidden;
         transform-origin: 50%;
@@ -512,7 +512,7 @@
       @include m(shadow) {
         width: 13px;
         height: 4px;
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
         background-color: rgba(0, 0, 0, 0.12);
         position: absolute;
         top: 32px;
@@ -560,20 +560,20 @@
 // corners
 @keyframes corners {
   0% {
-    border-radius: 50%;
+    border-radius: var(--sax-radius-circle);
     transform: rotate(0deg);
   }
   25% {
-    border-radius: 50% 50% 50% 15%;
+    border-radius: var(--sax-radius-loader-orb-a);
   }
   50% {
-    border-radius: 50% 50% 15% 30%;
+    border-radius: var(--sax-radius-loader-orb-b);
   }
   75% {
-    border-radius: 50% 15% 30% 30%;
+    border-radius: var(--sax-radius-loader-orb-c);
   }
   100% {
-    border-radius: 50%;
+    border-radius: var(--sax-radius-circle);
     transform: rotate(-180deg);
   }
 }
@@ -673,12 +673,12 @@
   0% {
     top: 30px;
     height: 5px;
-    border-radius: 50px 50px 25px 25px;
+    border-radius: var(--sax-radius-3xl) var(--sax-radius-3xl) var(--sax-radius-xl) var(--sax-radius-xl);
     transform: scaleX(1.7);
   }
   40% {
     height: 14px;
-    border-radius: 50%;
+    border-radius: var(--sax-radius-circle);
   }
   100% {
     top: 0;

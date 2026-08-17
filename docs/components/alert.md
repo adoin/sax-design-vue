@@ -1,4 +1,5 @@
 ---
+description: "Display contextual feedback messages for user actions and system state."
 PROPS:
   - name: v-model
     type: boolean
@@ -14,13 +15,10 @@ PROPS:
 
         <s-alert closable v-model="active">
           <template #title>
-            Vuesax Framework
+            Sax Design Vue
           </template>
-          Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-          created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-          Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-          developed from the frontend lover to the backend that wants to easily create
-          your visual approach to the end user
+          Sax Design Vue is a <b>Vue 3 component library</b> with expressive visuals,
+          practical APIs, and consistent interaction patterns for product interfaces.
         </s-alert>
       </template>
 
@@ -43,13 +41,10 @@ PROPS:
       <template>
         <s-alert hidden-content>
           <template #title>
-            Vuesax Framework
+            Sax Design Vue
           </template>
-          Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-          created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-          Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-          developed from the frontend lover to the backend that wants to easily create
-          your visual approach to the end user
+          Sax Design Vue is a <b>Vue 3 component library</b> with expressive visuals,
+          practical APIs, and consistent interaction patterns for product interfaces.
         </s-alert>
       </template>
   - name: color
@@ -62,13 +57,10 @@ PROPS:
     code: >
       <s-alert color="success">
         <template #title>
-          Vuesax Framework
+          Sax Design Vue
         </template>
-        Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-        created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-        Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-        developed from the frontend lover to the backend that wants to easily create
-        your visual approach to the end user
+        Sax Design Vue is a <b>Vue 3 component library</b> with expressive visuals,
+        practical APIs, and consistent interaction patterns for product interfaces.
       </s-alert>
   - name: type
     type: boolean
@@ -80,13 +72,10 @@ PROPS:
     code: >
       <s-alert solid>
         <template #title>
-          Vuesax Framework
+          Sax Design Vue
         </template>
-        Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-        created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-        Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-        developed from the frontend lover to the backend that wants to easily create
-        your visual approach to the end user
+        Sax Design Vue is a <b>Vue 3 component library</b> with expressive visuals,
+        practical APIs, and consistent interaction patterns for product interfaces.
       </s-alert>
   - name: page
     type: Number
@@ -99,7 +88,7 @@ PROPS:
       <template>
         <s-alert :page="1" >
           <template #title>
-            Vuesax Framework
+            Sax Design Vue
           </template>
           <template #page-1>
             Page 1 - this page is a slot and here you can add either text, html elements or components
@@ -116,13 +105,10 @@ PROPS:
     code: >
       <s-alert progress="70">
         <template #title>
-          Vuesax Framework
+          Sax Design Vue
         </template>
-        Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-        created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-        Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-        developed from the frontend lover to the backend that wants to easily create
-        your visual approach to the end user
+        Sax Design Vue is a <b>Vue 3 component library</b> with expressive visuals,
+        practical APIs, and consistent interaction patterns for product interfaces.
       </s-alert>
   - name: closable
     type: boolean
@@ -139,13 +125,10 @@ PROPS:
 
         <s-alert closable v-model="active">
           <template #title>
-            Vuesax Framework
+            Sax Design Vue
           </template>
-          Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-          created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-          Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-          developed from the frontend lover to the backend that wants to easily create
-          your visual approach to the end user
+          Sax Design Vue is a <b>Vue 3 component library</b> with expressive visuals,
+          practical APIs, and consistent interaction patterns for product interfaces.
         </s-alert>
       </template>
 
@@ -166,16 +149,13 @@ SLOTS:
       <template>
         <s-alert>
           <template #icon>
-            <i class='bx bxs-chat'></i>
+            <s-icon  name="bxs:chat" />
           </template>
           <template #title>
-            Vuesax Alert Icon
+            Sax Design Alert Icon
           </template>
-          Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-          created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-          Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-          developed from the frontend lover to the backend that wants to easily create
-          your visual approach to the end user
+          Sax Design Vue is a <b>Vue 3 component library</b> with expressive visuals,
+          practical APIs, and consistent interaction patterns for product interfaces.
         </s-alert>
       </template>
   - name: title
@@ -190,13 +170,10 @@ SLOTS:
         <div class="center">
           <s-alert>
             <template #title>
-              Vuesax Alert Title
+              Sax Design Alert Title
             </template>
-            Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-            created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-            Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-            developed from the frontend lover to the backend that wants to easily create
-            your visual approach to the end user
+            Sax Design Vue is a <b>Vue 3 component library</b> with expressive visuals,
+            practical APIs, and consistent interaction patterns for product interfaces.
           </s-alert>
         </div>
       </template>
@@ -211,7 +188,7 @@ SLOTS:
       <template>
         <s-alert v-model:page="page" >
           <template #title>
-            Vuesax Framework
+            Sax Design Vue
           </template>
 
           <template #page-1>
@@ -230,13 +207,10 @@ SLOTS:
     code: >
       <s-alert>
         <template #title>
-          Vuesax Framework
+          Sax Design Vue
         </template>
-        Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-        created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-        Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-        developed from the frontend lover to the backend that wants to easily create
-        your visual approach to the end user
+        Sax Design Vue is a <b>Vue 3 component library</b> with expressive visuals,
+        practical APIs, and consistent interaction patterns for product interfaces.
         <template #footer>
           <s-button flat>
             Cancel

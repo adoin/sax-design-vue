@@ -35,14 +35,14 @@
     height: 52px;
     gap: 6px;
     border: 1px solid getColor(primary, 0.16);
-    border-radius: 18px 18px 12px 12px;
+    border-radius: var(--sax-radius-xl) var(--sax-radius-xl) var(--sax-radius) var(--sax-radius);
     background: linear-gradient(145deg, getColor(primary, 0.1), getColor(primary, 0.03));
     box-shadow: 0 12px 24px getColor(primary, 0.08);
 
     i {
       display: block;
       width: 6px;
-      border-radius: 99px;
+      border-radius: var(--sax-radius-pill);
       background: getColor(primary, 0.5);
     }
 

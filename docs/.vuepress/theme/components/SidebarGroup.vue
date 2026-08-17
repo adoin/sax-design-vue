@@ -30,7 +30,7 @@
       @click="$emit('toggle')"
     >
       <span>{{ item.text }}</span>
-      <i class="bx bx-chevron-right" />
+      <s-icon  name="bx:chevron-right" />
     </p>
 
     <DropdownTransition>
@@ -63,7 +63,7 @@ defineProps<{
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .sidebar-group {
   .sidebar-group {

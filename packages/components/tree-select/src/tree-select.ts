@@ -9,7 +9,7 @@ export const treeSelectProps = buildProps({
   nodeKey: { type: String, default: 'key' },
   label: { type: String, default: 'label' },
   children: { type: String, default: 'children' },
-  placeholder: { type: String, default: 'Select' },
+  placeholder: String,
   clearable: Boolean,
   disabled: Boolean,
   checkStrictly: Boolean,

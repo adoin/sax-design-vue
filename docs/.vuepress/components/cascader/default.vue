@@ -1,5 +1,13 @@
 <template>
-  <s-cascader v-model="value" :options="options" clearable />
+  <div class="demo-row">
+    <s-cascader v-model="value" :options="options" />
+    <s-cascader
+      v-model="branchValue"
+      :options="options"
+      change-on-select
+      placeholder="Select any level"
+    />
+  </div>
   <p class="value">Selected path: {{ value.join(' / ') || 'none' }}</p>
 </template>
 
@@ -7,6 +15,7 @@
 import { ref } from 'vue'
 
 const value = ref(['guide', 'components'])
+const branchValue = ref([])
 const options = [
   {
     value: 'guide',
@@ -21,6 +30,12 @@ const options = [
 </script>
 
 <style scoped>
+.demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .value {
   margin: 10px 2px 0;
   color: var(--s-text-color-secondary);

@@ -1,4 +1,5 @@
 ---
+description: "Indicate that content or an operation is loading."
 PROPS:
   #__________________________________
   - name: type
@@ -12,7 +13,7 @@ PROPS:
     #__________________________________
   - name: color
     type: String
-    values: All colors of vuesax (RGB y HEX)
+    values: All colors of Sax Design (RGB y HEX)
     description: Change the color of the loading animation.
     default: primary
     link: /theme/
@@ -21,7 +22,7 @@ PROPS:
     #__________________________________
   - name: background
     type: String
-    values: All colors of vuesax (RGB y HEX)
+    values: All colors of Sax Design (RGB y HEX)
     description: Change the background color of the loading.
     default: '#fff'
     link: /theme/
@@ -121,7 +122,7 @@ UPDATES:
 
 <docs-warn />
 
-Generate a loading with the vuesax function
+Generate a loading with the Sax Design function
 
 <Command>
 
@@ -202,7 +203,7 @@ Click on the example loading to open it in the whole page
 
 ## Color
 
-Change the color of the loading animation with the property `color`, the colors can be the main ones of vuesax or (**RGB**, **HEX**)
+Change the color of the loading animation with the property `color`, the colors can be the main ones of Sax Design or (**RGB**, **HEX**)
 
 <template #example>
 <loading-color />

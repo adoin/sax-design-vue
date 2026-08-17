@@ -23,7 +23,7 @@
     max-width: 400px;
     margin: 10px;
     background: rgb(255, 255, 255);
-    border-radius: 6px;
+    border-radius: var(--sax-radius-sm);
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     animation: vs-prompt-rebound-in 0.3s ease;
@@ -42,7 +42,7 @@
     justify-content: space-between;
     padding: 12px 16px;
     background: rgb(248, 248, 248);
-    border-radius: 5px 5px 0 0;
+    border-radius: var(--sax-radius-xs) var(--sax-radius-xs) 0 0;
   }
 
   @include e(title-wrap) {
@@ -58,7 +58,7 @@
     align-self: stretch;
     width: 4px;
     min-height: 18px;
-    border-radius: 2px;
+    border-radius: var(--sax-radius-xs);
     flex-shrink: 0;
   }
 
@@ -73,7 +73,7 @@
     border: none;
     background: rgb(255, 255, 255);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
+    border-radius: var(--sax-radius-circle);
     width: 32px;
     height: 32px;
     cursor: pointer;

@@ -18,7 +18,7 @@ export const dialogProps = buildProps({
     default: false,
   },
   /**
-   * @description Component color - Accept Vuesax's color, Hex, rgb
+   * @description Component color - Accept Sax Design color tokens, Hex, rgb
    */
   color: { ...useColorProp, default: 'primary' },
 
@@ -50,22 +50,16 @@ export const dialogProps = buildProps({
     type: Boolean,
     default: true,
   },
-  /** VXE-compatible close-button control. */
+  /** Close-button control. */
   showClose: {
     type: Boolean,
     default: true,
   },
   showFooter: Boolean,
   showCancelButton: Boolean,
-  cancelButtonText: {
-    type: String,
-    default: 'Cancel',
-  },
+  cancelButtonText: String,
   showConfirmButton: Boolean,
-  confirmButtonText: {
-    type: String,
-    default: 'Confirm',
-  },
+  confirmButtonText: String,
   cancelClosable: {
     type: Boolean,
     default: true,

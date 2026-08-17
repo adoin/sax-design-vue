@@ -1,91 +1,106 @@
 <template>
-  <div
-    id="sax-app"
-    class="theme-container"
-    :class="pageClasses"
-    @touchstart="onTouchStart"
-    @touchend="onTouchEnd"
-  >
-    <transition name="fade-code">
-      <div
-        v-if="codesandbox.url"
-        class="con-codesandbox"
-        @click="handleClickCodeSandbox"
-      >
-        <div class="con-iframe">
-          <iframe
-            :src="codesandbox.url"
-            style="
-              width: 100%;
-              height: 500px;
-              border: 0;
-              border-radius: 4px;
-              overflow: hidden;
-            "
-            title="vuesax-buttons-default"
-            allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-            sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-          />
+  <s-config-provider :locale="componentLocale">
+    <div
+      id="sax-app"
+      class="theme-container"
+      :class="pageClasses"
+      @touchstart="onTouchStart"
+      @touchend="onTouchEnd"
+    >
+      <transition name="fade-code">
+        <div
+          v-if="codesandbox.url"
+          class="con-codesandbox"
+          @click="handleClickCodeSandbox"
+        >
+          <div class="con-iframe">
+            <iframe
+              :src="codesandbox.url"
+              style="
+                width: 100%;
+                height: 500px;
+                border: 0;
+                border-radius: 4px;
+                overflow: hidden;
+              "
+              title="vuesax-buttons-default"
+              allow="
+                geolocation;
+                microphone;
+                camera;
+                midi;
+                vr;
+                accelerometer;
+                gyroscope;
+                payment;
+                ambient-light-sensor;
+                encrypted-media;
+                usb;
+              "
+              sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+            />
+          </div>
         </div>
-      </div>
-    </transition>
+      </transition>
 
-    <HeaderNotification />
+      <HeaderNotification v-if="shouldShowSidebar" />
 
-    <ClientOnly>
-      <Navbar
-        v-if="shouldShowNavbar"
-        v-show="!pageFrontmatter.navbar"
-        :class="{
-          transparent: pageFrontmatter.branding,
-          isSidebarOpen: isSidebarOpen,
-        }"
-        @toggle-sidebar="toggleSidebar"
+      <ClientOnly>
+        <Navbar
+          v-if="shouldShowNavbar"
+          v-show="!pageFrontmatter.navbar"
+          :class="{
+            transparent: pageFrontmatter.branding,
+            isSidebarOpen: isSidebarOpen,
+          }"
+          @toggle-sidebar="toggleSidebar"
+        />
+      </ClientOnly>
+
+      <div class="sidebar-mask" @click="toggleSidebar(false)" />
+
+      <HomeModern v-if="pageFrontmatter.home" />
+
+      <DocsHome
+        v-else-if="pageFrontmatter.docsHome"
+        :sidebar-items="sidebarItems"
       />
-    </ClientOnly>
 
-    <div class="sidebar-mask" @click="toggleSidebar(false)" />
+      <License v-else-if="pageFrontmatter.license" />
 
-    <HomeModern v-if="pageFrontmatter.home" />
+      <Branding v-else-if="pageFrontmatter.branding" />
 
-    <DocsHome
-      v-else-if="pageFrontmatter.docsHome"
-      :sidebar-items="sidebarItems"
-    />
+      <NavbarLayout v-else-if="pageFrontmatter.navbar" />
 
-    <License v-else-if="pageFrontmatter.license" />
+      <Page v-else :sidebar-items="sidebarItems">
+        <template #top>
+          <slot name="page-top" />
+        </template>
+        <template #bottom>
+          <slot name="page-bottom" />
+        </template>
+      </Page>
 
-    <Branding v-else-if="pageFrontmatter.branding" />
+      <Sidebar :sidebar="sidebarItems">
+        <template #top>
+          <slot name="sidebar-top" />
+        </template>
+        <template #bottom>
+          <slot name="sidebar-bottom" />
+        </template>
+      </Sidebar>
 
-    <NavbarLayout v-else-if="pageFrontmatter.navbar" />
-
-    <Page v-else :sidebar-items="sidebarItems">
-      <template #top>
-        <slot name="page-top" />
-      </template>
-      <template #bottom>
-        <slot name="page-bottom" />
-      </template>
-    </Page>
-
-    <Sidebar :sidebar="sidebarItems">
-      <template #top>
-        <slot name="sidebar-top" />
-      </template>
-      <template #bottom>
-        <slot name="sidebar-bottom" />
-      </template>
-    </Sidebar>
-
-    <ClientOnly>
-      <Config v-if="!pageFrontmatter.navbar" />
-    </ClientOnly>
-  </div>
+      <ClientOnly>
+        <Config v-if="shouldShowSidebar" />
+      </ClientOnly>
+    </div>
+  </s-config-provider>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { en, zhCn } from '@vuesax-alpha/locale'
 import {
   usePageData,
   usePageFrontmatter,
@@ -120,6 +135,9 @@ const pageFrontmatter = usePageFrontmatter<LayoutFrontmatter>()
 const themeData = useThemeData<SaxDesignVueThemeOptions>()
 const themeLocaleData = useThemeLocaleData<SaxDesignVueThemeOptions>()
 const routeLocale = useRouteLocale()
+const componentLocale = computed(() =>
+  routeLocale.value.startsWith('/zh') ? zhCn : en,
+)
 
 const isSidebarOpen = ref<boolean>(false)
 const codesandbox = ref<codesandboxContext>({})

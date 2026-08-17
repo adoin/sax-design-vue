@@ -15,7 +15,7 @@
     >
       <template #left>
         <s-button v-if="collapsed" class="btn-menu" flat icon>
-          <i class="bx bx-menu-alt-left" />
+          <s-icon  name="bx:menu-alt-left" />
         </s-button>
         <img
           v-if="!textWhite"

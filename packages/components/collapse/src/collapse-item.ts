@@ -9,11 +9,7 @@ export const collapseItemProps = buildProps({
   notArrow: Boolean,
   iconArrow: {
     type: String,
-    default: 'keyboard_arrow_down',
-  },
-  iconPack: {
-    type: String,
-    default: 'material-icons',
+    default: 'cb:chevron-down',
   },
 } as const)
 

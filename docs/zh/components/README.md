@@ -1,9 +1,10 @@
 ---
+description: '使用无障碍按钮样式和状态触发操作。'
 PROPS:
   - name: color
     type: String
     values: primary, success, danger, warning, dark, RGB, HEX
-    description: Change the color of the component and some of its sub components.
+    description: 设置组件及其子组件的颜色。
     default: primary
     link: /api/color
     usage: '#color'
@@ -13,7 +14,7 @@ PROPS:
   - name: style button
     type: Prop
     values: flat, border, gradient, transparent, dashed, shadow, relief, floating
-    description: Change the style of the component and its states.
+    description: 设置组件及其状态的展示样式。
     default: null
     link: null
     usage: '#flat'
@@ -23,29 +24,78 @@ PROPS:
   - name: active
     type: Boolean
     values: true, false
-    description: Determine if the component is active and change its style to that state.
+    description: 是否激活组件，并应用激活态样式。
     default: false
     link: null
     usage: '#default'
     code: >
       <s-button active> Default </s-button>
   # _______________________________________
+  - name: loading
+    type: Boolean
+    values: true, false
+    description: 保留按钮原内容，展示所选加载动效，保持尺寸稳定，并阻止交互。
+    default: false
+    link: null
+    usage: '#loading'
+    code: >
+      <s-button loading> 保存更改 </s-button>
+  - name: loading-type
+    type: String
+    values: pulse, ripple, shimmer
+    description: 通过状态 class 选择加载动效，不改变按钮 DOM 结构。
+    default: pulse
+    link: null
+    usage: '#加载'
+    code: >
+      <s-button loading loading-type="ripple"> 保存更改 </s-button>
+  # _______________________________________
+  - name: disabled
+    type: Boolean
+    values: true, false
+    description: 禁用按钮并阻止用户交互。
+    default: false
+    link: null
+    usage: '#default'
+    code: >
+      <s-button disabled> 已禁用 </s-button>
+  # _______________________________________
+  - name: debounce
+    type: Number | false
+    values: number, false
+    description: 按毫秒防抖组件发出的点击事件。两个限制属性同时为数字时，仅防抖生效并输出错误。
+    default: 50
+    link: null
+    usage: '#点击频率限制'
+    code: >
+      <s-button :debounce="400"> 防抖点击 </s-button>
+  # _______________________________________
+  - name: throttle
+    type: Number | false
+    values: number, false
+    description: 按毫秒节流组件发出的点击事件。启用前需把 debounce 设为 false。
+    default: false
+    link: null
+    usage: '#点击频率限制'
+    code: >
+      <s-button :debounce="false" :throttle="1000"> 节流点击 </s-button>
+  # _______________________________________
   - name: upload
     type: Boolean
     values: true, false
-    description: Determine if the component has the upload status active by changing the style and adding the animation.
+    description: 是否启用上传状态；启用后会切换样式并显示动画。
     default: false
     link: null
     usage: '#upload'
     code: >
       <s-button upload >
-        <i class='bx bxs-wallet'></i> Wallet
+        <s-icon  name="bxs:wallet" /> Wallet
       </s-button>
   # _______________________________________
   - name: to
     type: String
     values: url - vue-router
-    description: Add the functionality of vue-router to the button, clicking it will redirect to the last route.
+    description: 为按钮添加 vue-router 跳转能力，点击后跳转到指定路由。
     default: false
     link: null
     usage: '#to-href'
@@ -57,7 +107,7 @@ PROPS:
   - name: href
     type: String
     values: href - link
-    description: Add an href of an external link to add the functionality by clicking on the component.
+    description: 为按钮设置外部链接地址。
     default: false
     link: null
     usage: '#to-href'
@@ -69,7 +119,7 @@ PROPS:
   - name: blank
     type: Boolean
     values: true, false
-    description: as in an html element `a` determines whether a new window is opened or the current one is replaced.
+    description: 与 HTML `a` 元素一致，决定在新窗口打开还是替换当前窗口。
     default: false
     link: null
     usage: '#to-href'
@@ -81,55 +131,55 @@ PROPS:
   - name: icon
     type: Boolean
     values: true, false
-    description: Determine if the component contains only one icon, by adding this property the component has an equal width and height.
+    description: 是否为纯图标按钮；启用后按钮宽高相等。
     default: false
     link: null
     usage: '#icon'
     code: >
       <s-button icon>
-        <i class='bx bx-home-alt'></i>
+        <s-icon  name="bx:home-alt" />
       </s-button>
   # _______________________________________
   - name: circle
     type: Boolean
     values: true, false
-    description: Change the border radius to give a circle style.
+    description: 将圆角改为圆形样式。
     default: false
     link: null
     usage: '#circle'
     code: >
       <s-button icon shape="circle">
-        <i class='bx bx-home-alt'></i>
+        <s-icon  name="bx:home-alt" />
       </s-button>
   # _______________________________________
   - name: square
     type: Boolean
     values: true, false
-    description: Change the border radius to give a rectangle style.
+    description: 将圆角改为直角方形样式。
     default: false
     link: null
     usage: '#square'
     code: >
       <s-button icon shape="square"> // <------
-        <i class='bx bx-home-alt'></i>
+        <s-icon  name="bx:home-alt" />
       </s-button>
   # _______________________________________
   - name: block
     type: Boolean
     values: true, false
-    description: Change the width of the component to the possible total determined by the parent element.
+    description: 使组件宽度占满父容器可用空间。
     default: false
     link: null
     usage: '#block'
     code: >
       <s-button block>
-        <i class='bx bxs-paint-roll'></i> Edit Theme
+        <s-icon  name="bxs:paint-roll" /> Edit Theme
       </s-button>
   # _______________________________________
   - name: animationType
     type: Boolean
     values: true, false
-    description: Change the type of animation, this property only works if you have the <code> slot </code> animate.
+    description: 设置动画类型；仅在提供 <code>animate</code> 插槽时生效。
     default: false
     link: null
     usage: '#animate'
@@ -137,30 +187,30 @@ PROPS:
       <s-button type="flat" color="success" animation-type="vertical">
         Message
         <template #animate>
-          <i class='bx bx-mail-send'></i> Send
+          <s-icon  name="bx:mail-send" /> Send
         </template>
       </s-button>
   # _______________________________________
   - name: animateInactive
     type: Boolean
     values: true, false
-    description: Determine if the animation is active for the user when hovering.
+    description: 是否在用户悬浮时启用动画。
     default: false
     link: null
     usage: '#toggle'
     code: >
       <s-button :animate-inactive="successFace" @click="handleClickFace" :loading="loadingFace" color="facebook">
-        <i class='bx bxl-facebook-square'></i>
+        <s-icon  name="bxl:facebook-square" />
         {{ successFace ? 'Logout' : 'Facebook' }}
         <template #animate >
-          <i class='bx bx-user'></i> Login
+          <s-icon  name="bx:user" /> Login
         </template>
       </s-button>
   # _______________________________________
   - name: Ripple
     type: String
     values: reverse, cut
-    description: Change ripple style of a button with the `ripple` property
+    description: 通过 `ripple` 属性设置按钮的水波纹样式。
     default: undefined
     usage: '#ripple'
     code: >
@@ -169,17 +219,30 @@ PROPS:
         <s-button ripple="cut"> Cut </s-button>
       </template>
 SLOTS:
+  - name: loading
+    type: slot
+    values: null
+    description: 使用自定义加载内容替换所选预设动效。
+    default: null
+    link: null
+    code: >
+      <s-button loading>
+        保存更改
+        <template #loading>保存中...</template>
+      </s-button>
+    usage: '#loading'
+  # _______________________________________
   - name: animate
     type: slot
     values: null
-    description: Slot To add the element that will be displayed in the animation.
+    description: 用于放置动画状态展示内容的插槽。
     default: null
     link: null
     code: >
       <s-button>
         Home
         <template #animate>
-          <i class='bx bx-home-alt'></i>
+          <s-icon  name="bx:home-alt" />
         </template>
       </s-button>
     usage: '#animated'
@@ -188,7 +251,7 @@ NEWS:
   - ripple
 ---
 
-# Button
+# Button（按钮）
 
 <card codesandbox="https://codesandbox.io/embed/reverent-shape-pmyk2?fontsize=14&hidenavigation=1&module=%2Fsrc%2FApp.vue">
 
@@ -196,9 +259,9 @@ NEWS:
 
 <docs-warn />
 
-The buttons are a fundamental part of any project, with vuesax you can add a great button with a single line of code
+按钮是项目的基础交互元素；使用 `s-button` 可以快速创建一致的按钮体验。
 
-the buttons have all the states as active, focus, hover, to make its implementation simpler and speed up the work
+组件内置激活、聚焦和悬浮状态，便于直接接入业务界面。
 
 <template #example>
 <button-default />
@@ -222,7 +285,7 @@ the buttons have all the states as active, focus, hover, to make its implementat
 
 ## 扁平
 
-You can change the full style towards _flat_ of a button with the `flat` property that its value is a` boolean`, so just adding it will change the styles
+添加布尔属性 `flat`，即可将按钮切换为扁平样式。
 
 <template #example>
 <button-flat />
@@ -246,7 +309,7 @@ You can change the full style towards _flat_ of a button with the `flat` propert
 
 ## 边框
 
-You can change the full style towards _border_ of a button with the `border` property that its value is a` boolean` so just adding it will change the styles
+添加布尔属性 `border`，即可将按钮切换为边框样式。
 
 <template #example>
 <button-border />
@@ -270,10 +333,10 @@ You can change the full style towards _border_ of a button with the `border` pro
 
 ## 渐变
 
-You can change the full style towards _Gradient_ of a button with the `gradient` property that its value is a` boolean`, so just adding it will change the styles
+添加布尔属性 `gradient`，即可将按钮切换为渐变样式。
 
-:::tip Gradient Auto Color
-Gradient colors are automatically generated by the `color` property which in this example is the` primary` color
+:::tip 渐变自动配色
+渐变色由 `color` 属性自动生成；此示例使用 `primary` 色。
 :::
 
 <template #example>
@@ -298,7 +361,7 @@ Gradient colors are automatically generated by the `color` property which in thi
 
 ## 浮雕
 
-Change the style of the button to a relief aspect with the `relief` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `relief`，即可将按钮切换为浮雕样式。
 
 <template #example>
 <button-relief />
@@ -322,7 +385,7 @@ Change the style of the button to a relief aspect with the `relief` property, th
 
 ## 透明
 
-Change the style of the button with the `transparent` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `transparent`，即可将按钮切换为透明样式。
 
 <template #example>
 <button-transparent />
@@ -346,7 +409,7 @@ Change the style of the button with the `transparent` property, the property is 
 
 ## 阴影
 
-Change the style of the button with the `shadow` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `shadow`，即可将按钮切换为阴影样式。
 
 <template #example>
 <button-shadow />
@@ -370,7 +433,7 @@ Change the style of the button with the `shadow` property, the property is a` bo
 
 ## 颜色
 
-Change the color of the Button component with the `color` property and the color value for example (**#fff**, **rgba (100,10,5)** or the **main colors of vuesax**), this will only affect the component and its value can be dynamic
+通过 `color` 设置按钮颜色，支持主题色、**#fff**、**rgba(100,10,5)** 等值；该属性支持动态更新。
 
 <utils-color />
 
@@ -396,9 +459,9 @@ Change the color of the Button component with the `color` property and the color
 
 ## 图标
 
-If you need an icon-only button use the `icon` property, the property is a` boolean` so you can add it without any value.
+纯图标按钮可添加布尔属性 `icon`。
 
-This property makes the button have a specific size making it the same width and height, do not use when it is icon and text
+启用后按钮宽高相等；图标与文本同时存在时无需设置此属性。
 
 <utils-icon />
 
@@ -422,9 +485,9 @@ This property makes the button have a specific size making it the same width and
 
 <card>
 
-## Icon - Text
+## 图标与文本
 
-If you need a button with text and icon you can do them by adding them in the `slot` default.
+需要同时展示文本和图标时，直接放入默认插槽即可。
 
 <template #example>
 <button-iconText />
@@ -448,7 +511,7 @@ If you need a button with text and icon you can do them by adding them in the `s
 
 ## 圆形
 
-You can completely round the corners with the `circle` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `circle`，即可将按钮圆角设为完整圆形。
 
 <template #example>
 <button-circle />
@@ -472,7 +535,7 @@ You can completely round the corners with the `circle` property, the property is
 
 ## 方形
 
-You can make all the corners completely straight with the `Square` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `square`，即可将按钮圆角设为直角。
 
 <template #example>
 <button-square />
@@ -496,9 +559,9 @@ You can make all the corners completely straight with the `Square` property, the
 
 ## 尺寸
 
-Change the size of the entire button including padding, font-size and border with the `size` property
+通过 `size` 设置按钮整体尺寸，包括内边距、字号和边框。
 
-values:
+可选值：
 
 - xl
 - l
@@ -528,7 +591,7 @@ values:
 
 ## 加载
 
-Now you can add a loading status with the `loading` property, the property is a` boolean` so you can add it without any value.
+操作执行期间可设置 `loading`，并用 `loading-type` 选择 `pulse`（呼吸光轨）、`ripple`（双层脉冲波）或 `shimmer`（流光扫描）。三种预设均保留原文字和图标、保持按钮尺寸并阻止点击；实现只切换根节点状态 class。需要完全自定义时使用 `#loading` 插槽。
 
 <template #example>
 <button-loading />
@@ -536,13 +599,7 @@ Now you can add a loading status with the `loading` property, the property is a`
 
 <template #template>
 
-@[code{1-59} vue{3}](../../.vuepress/components/button/loading.vue)
-
-</template>
-
-<template #script>
-
-@[code{61-65} vue](../../.vuepress/components/button/loading.vue)
+@[code vue](../../.vuepress/components/button/loading.vue)
 
 </template>
 
@@ -550,9 +607,33 @@ Now you can add a loading status with the `loading` property, the property is a`
 
 <card>
 
-## Upload
+## 点击频率限制
 
-Now you can add a status of sending or uploading data to the server with the `upload` property, the property is a` boolean` so you can add it without any value.
+`debounce` 和 `throttle` 用于限制组件发出的点击事件，不改变按钮布局。`debounce` 使用尾触发，默认 `50ms`；`throttle` 首次点击立即触发，设置数字前需要把 `debounce` 设为 `false`。两者同时为数字时，组件会输出控制台错误，并且只执行 `debounce`。
+
+<template #example>
+<button-click-limit />
+</template>
+
+<template #template>
+
+@[code{1-26} vue{4,12,13}](../../.vuepress/components/button/click-limit.vue)
+
+</template>
+
+<template #script>
+
+@[code{28-41} vue](../../.vuepress/components/button/click-limit.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 上传
+
+添加布尔属性 `upload`，即可展示向服务器发送或上传数据的状态。
 
 <template #example>
 <button-upload />
@@ -576,7 +657,7 @@ Now you can add a status of sending or uploading data to the server with the `up
 
 ## 块级
 
-You can make the button have the full width allowed with the `block` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `block`，即可让按钮占满可用宽度。
 
 <template #example>
 <button-block />
@@ -594,9 +675,9 @@ You can make the button have the full width allowed with the `block` property, t
 
 ## 动画
 
-You can create an animation to the component by adding template ``#animate `and the content will be the one that appears when the component is animated
+添加 `#animate` 模板即可定义按钮动画时展示的内容。
 
-You can also change the type of animation with the `animation-type` property and the allowed values ​​are (` vertical`, `scale`,` rotate`)
+可通过 `animation-type` 设置动画类型：`vertical`、`scale`、`rotate`。
 
 <template #example>
 <button-animate />
@@ -612,11 +693,11 @@ You can also change the type of animation with the `animation-type` property and
 
 <card>
 
-## Social
+## 社交平台色
 
-Using the colors of social networks is very common in a project either a login button or a share button so Vuesax makes it easy for you to search for each color and just by putting the name of the network you already change the whole style of the component
+登录、分享等场景可直接使用社交平台色；传入平台名称即可切换组件整体样式。
 
-Supported colors: (`facebook`, `twitter`, `youtube`, `pinterest`, `linkedin`, `snapchat`, `whatsapp`, `tumblr`, `reddit`, `spotify`, `amazon`, `medium`, `vimeo`, `skype`, `dribbble`, `slack`, `yahoo`, `twitch`, `discord`, `telegram`, `google-plus`, `messenger`)
+支持颜色：`facebook`、`twitter`、`youtube`、`pinterest`、`linkedin`、`snapchat`、`whatsapp`、`tumblr`、`reddit`、`spotify`、`amazon`、`medium`、`vimeo`、`skype`、`dribbble`、`slack`、`yahoo`、`twitch`、`discord`、`telegram`、`google-plus`、`messenger`。
 
 <template #example>
 <button-social />
@@ -632,11 +713,11 @@ Supported colors: (`facebook`, `twitter`, `youtube`, `pinterest`, `linkedin`, `s
 
 <card>
 
-## Floating
+## 悬浮按钮
 
-You can make a float style button easily with the `Floating` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `floating`，即可创建悬浮样式按钮。
 
-these buttons usually do an important action in specific and go with a fixed position in the lower corner
+此类按钮通常用于重要操作，并固定在页面角落。
 
 <template #example>
 <button-floating />
@@ -652,9 +733,9 @@ these buttons usually do an important action in specific and go with a fixed pos
 
 <card>
 
-## Group
+## 按钮组
 
-If you need to make a group of buttons you can use the **sub-component** `<s-button-group> </s-button-group>` and inside the default slot put the buttons you want to group
+需要组合多个按钮时，可使用子组件 `<s-button-group>`，并在默认插槽中放入按钮。
 
 <template #example>
 <button-group />
@@ -662,7 +743,7 @@ If you need to make a group of buttons you can use the **sub-component** `<s-but
 
 <template #template>
 
-@[code{1-51} vue{3,8}](../../.vuepress/components/button/group.vue)
+@[code{1-57} vue{3,12,29,44}](../../.vuepress/components/button/group.vue)
 
 </template>
 
@@ -670,9 +751,9 @@ If you need to make a group of buttons you can use the **sub-component** `<s-but
 
 <card>
 
-## Toggle
+## 切换
 
-This is an example of what you can achieve with simple logic and few lines of code.
+此示例展示如何使用少量逻辑实现按钮切换效果。
 
 <template #example>
 <button-toggle />
@@ -700,9 +781,9 @@ This is an example of what you can achieve with simple logic and few lines of co
 
 <card>
 
-## Ripple <Badge text="New" />
+## 水波纹
 
-You can change ripple style of a button with the `ripple` property and the allowed values are
+通过 `ripple` 可设置按钮水波纹样式，可选值：
 
 - `reverse`
 - `cut`

@@ -20,9 +20,7 @@
     <span v-if="!active && !hideSeparator" :class="ns.e('separator')">
       <slot name="separator">
         <SIcon
-          v-if="isIconSeparator(resolvedSeparator)"
-          :icon="resolvedSeparator"
-          icon-pack="material-icons"
+          v-if="isIconSeparator(resolvedSeparator)" :name="resolvedSeparator"
         />
         <template v-else>{{ resolvedSeparator }}</template>
       </slot>

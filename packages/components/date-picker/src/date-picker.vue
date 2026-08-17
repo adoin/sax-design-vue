@@ -30,22 +30,27 @@
         ns.is('range', isRange),
         ns.is('with-time', showTimePanel),
       ]"
+      :style="themeStyle"
     >
       <div v-if="isRange" :class="ns.e('range-input')">
         <s-input
           ref="rangeStartInputRef"
           :model-value="rangeStartText"
           :placeholder="startPlaceholder || t('vs.datepicker.startDate')"
+          :label="startLabel || label"
+          :label-float="labelFloat"
+          :color="color"
+          :size="size"
           :disabled="disabled"
           :readonly="!editable || readonly"
-          aria-label="Start date"
+          :aria-label="t('vs.datepicker.startDate')"
           icon-after
           @update:model-value="handleRangeInput('start', $event)"
           @focus="(e) => $emit('focus', e)"
           @blur="(e) => $emit('blur', e)"
         >
           <template #icon>
-            <s-icon size="18"><calendar /></s-icon>
+            <s-icon name="cb:calendar" size="18" />
           </template>
         </s-input>
         <span :class="ns.e('range-separator')" aria-hidden="true">
@@ -55,10 +60,14 @@
           ref="rangeEndInputRef"
           :model-value="rangeEndText"
           :placeholder="endPlaceholder || t('vs.datepicker.endDate')"
+          :label="endLabel"
+          :label-float="labelFloat"
+          :color="color"
+          :size="size"
           :disabled="disabled"
           :readonly="!editable || readonly"
           :clearable="clearable && !disabled"
-          aria-label="End date"
+          :aria-label="t('vs.datepicker.endDate')"
           icon-after
           @update:model-value="handleRangeInput('end', $event)"
           @clear="handleClear"
@@ -66,7 +75,7 @@
           @blur="(e) => $emit('blur', e)"
         >
           <template #icon>
-            <s-icon size="18"><calendar /></s-icon>
+            <s-icon name="cb:calendar" size="18" />
           </template>
         </s-input>
       </div>
@@ -76,6 +85,10 @@
         ref="inputRef"
         :model-value="displayText"
         :placeholder="inputPlaceholder"
+        :label="label"
+        :label-float="labelFloat"
+        :color="color"
+        :size="size"
         :disabled="disabled"
         :readonly="!editable || readonly"
         :clearable="clearable && !disabled"
@@ -86,7 +99,7 @@
         @blur="(e) => $emit('blur', e)"
       >
         <template #icon>
-          <s-icon size="18"><calendar /></s-icon>
+          <s-icon name="cb:calendar" size="18" />
         </template>
       </s-input>
     </div>
@@ -188,7 +201,7 @@
                   ]"
                   @click="setRangePickerMode('date')"
                 >
-                  <s-icon size="15"><calendar /></s-icon>
+                  <s-icon name="cb:calendar" size="15" />
                   <span>{{ rangeStartDateText }}</span>
                 </button>
                 <button
@@ -199,7 +212,7 @@
                   ]"
                   @click="setRangePickerMode('time')"
                 >
-                  <s-icon size="15"><Clock /></s-icon>
+                  <s-icon name="cb:time" size="15" />
                   <span>{{ rangeStartTimeText }}</span>
                 </button>
               </div>
@@ -212,7 +225,7 @@
                   ]"
                   @click="setRangePickerMode('date')"
                 >
-                  <s-icon size="15"><calendar /></s-icon>
+                  <s-icon name="cb:calendar" size="15" />
                   <span>{{ rangeEndDateText }}</span>
                 </button>
                 <button
@@ -223,7 +236,7 @@
                   ]"
                   @click="setRangePickerMode('time')"
                 >
-                  <s-icon size="15"><Clock /></s-icon>
+                  <s-icon name="cb:time" size="15" />
                   <span>{{ rangeEndTimeText }}</span>
                 </button>
               </div>
@@ -334,13 +347,13 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import dayjs from 'dayjs'
-import { Calendar, Clock } from '@sax-design-vue/icons-vue'
 import SButton from '@vuesax-alpha/components/button'
 import SIcon from '@vuesax-alpha/components/icon'
 import SInput from '@vuesax-alpha/components/input'
 import SPopper from '@vuesax-alpha/components/popper'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { getVsColor } from '@vuesax-alpha/utils'
 import SDatePanel from './date-panel.vue'
 import STimePanel from './time-panel.vue'
 import { datePickerEmits, datePickerProps } from './date-picker'
@@ -383,7 +396,13 @@ const popperPlacement = computed(() =>
 const popperTrigger = computed(() =>
   props.popupConfig?.trigger === 'manual' ? [] : 'click',
 )
+const themeStyle = computed(() =>
+  ns.cssVar({
+    color: getVsColor(props.color),
+  }),
+)
 const popperStyle = computed(() => ({
+  ...themeStyle.value,
   width: props.popupConfig?.width,
   height: props.popupConfig?.height,
 }))

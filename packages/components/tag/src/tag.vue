@@ -6,7 +6,7 @@
       type="button"
       :class="ns.e('close')"
       :disabled="disabled"
-      aria-label="Close"
+      :aria-label="t('vs.common.close')"
       @click.stop="handleClose"
     >
       <icon-close />
@@ -18,7 +18,7 @@
 import { computed } from 'vue'
 import { IconClose } from '@vuesax-alpha/components/icon'
 import { getVsColor } from '@vuesax-alpha/utils'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { tagEmits, tagProps } from './tag'
 import type { CSSProperties } from 'vue'
 
@@ -27,6 +27,7 @@ defineOptions({ name: 'STag' })
 const props = defineProps(tagProps)
 const emit = defineEmits(tagEmits)
 const ns = useNamespace('tag')
+const { t } = useLocale()
 
 const classes = computed(() => [
   ns.b(),

@@ -21,7 +21,7 @@ import {
 } from 'vue'
 import { isObject as _isObject } from 'lodash-unified'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { escapeStringRegexp, throwError } from '@vuesax-alpha/utils'
+import { throwError } from '@vuesax-alpha/utils'
 import {
   optionGroupContextKey,
   optionGroupRegisterKey,
@@ -48,7 +48,7 @@ const optionGroupRegister = inject(optionGroupRegisterKey, undefined)
 if (!select || !selectRegister) {
   throwError(
     'Select Option',
-    '`Option` component must be called inside `select` or `option-group` component'
+    '`Option` component must be called inside `select` or `option-group` component',
   )
 }
 
@@ -83,7 +83,7 @@ const isSelected = computed(() => {
 })
 
 const states: SelectOptionContext = reactive({
-  index: -1,
+  index: props.optionIndex,
   el,
   value,
   currentLabel,
@@ -93,6 +93,7 @@ const states: SelectOptionContext = reactive({
   hit: false,
   hover: false,
   created: props.created,
+  data: props.data,
 })
 
 const { unregister, updateOption } = selectRegister(states)
@@ -116,13 +117,20 @@ watch(currentLabel, () => {
 })
 
 watch(
+  () => props.optionIndex,
+  (index) => {
+    if (index >= 0) states.index = index
+  },
+)
+
+watch(
   () => props.value,
   (val, oldVal) => {
     if (!Object.is(val, oldVal)) {
       updateOption(states)
     }
     if (!props.created) select.setSelected()
-  }
+  },
 )
 
 watch(
@@ -130,18 +138,17 @@ watch(
   (val) => {
     states.groupDisabled = val
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 watch(
   () => select.queryChange,
   (query) => {
-    const regexp = new RegExp(escapeStringRegexp(`${query}`), 'i')
-    states.visible = regexp.test(`${currentLabel.value}`) || props.created
+    states.visible = select.isOptionVisible(states, `${query ?? ''}`)
     if (!states.visible) {
       select.states.filteredOptionsCount--
     }
-  }
+  },
 )
 
 const optionKls = computed(() => [

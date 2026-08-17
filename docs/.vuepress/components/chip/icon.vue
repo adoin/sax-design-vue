@@ -2,37 +2,37 @@
   <div class="center chip-demo">
     <s-chip>
       <s-avatar>
-        <i class="material-icons notranslate">person</i>
+        <s-icon name="cb:user" />
       </s-avatar>
       Icon Default
     </s-chip>
     <s-chip color="primary">
       <s-avatar>
-        <i class="material-icons notranslate">send</i>
+        <s-icon name="cb:send" />
       </s-avatar>
       Icon send
     </s-chip>
     <s-chip color="success">
       <s-avatar>
-        <i class="material-icons notranslate">markunread</i>
+        <s-icon name="cb:email" />
       </s-avatar>
       Icon markunread
     </s-chip>
     <s-chip color="danger">
       <s-avatar>
-        <i class="material-icons notranslate">link_off</i>
+        <s-icon name="cb:unlink" />
       </s-avatar>
       Icon link_off
     </s-chip>
     <s-chip color="warning">
       <s-avatar>
-        <i class="material-icons notranslate">battery_alert</i>
+        <s-icon name="cb:battery-low" />
       </s-avatar>
       Icon battery_alert
     </s-chip>
     <s-chip color="dark">
       <s-avatar>
-        <i class="material-icons notranslate">edit</i>
+        <s-icon name="cb:edit" />
       </s-avatar>
       Icon edit
     </s-chip>

@@ -16,7 +16,7 @@
       :class="[ns.e('decrease'), ns.is('disabled', minDisabled)]"
       @keydown.enter="decrease"
     >
-      <s-icon icon="minus" />
+      <s-icon name="cb:subtract" />
     </span>
     <span
       v-if="controls"
@@ -25,7 +25,7 @@
       :class="[ns.e('increase'), ns.is('disabled', maxDisabled)]"
       @keydown.enter="increase"
     >
-      <s-icon icon="plus" />
+      <s-icon name="cb:add" />
     </span>
     <s-input
       :id="id"

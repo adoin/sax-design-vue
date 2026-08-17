@@ -1,7 +1,3 @@
-import {
-  Star as IconStar,
-  StarBold as IconStarFilled,
-} from '@vuesax-alpha/icons-vue'
 import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import {
   buildProps,
@@ -52,15 +48,19 @@ export const rateProps = buildProps({
     type: definePropType<
       Array<string | Component> | Record<number, string | Component>
     >([Array, Object]),
-    default: () => [IconStarFilled, IconStarFilled, IconStarFilled],
+    default: () => [
+      'cb:star-filled',
+      'cb:star-filled',
+      'cb:star-filled',
+    ],
   },
   voidIcon: {
     type: iconPropType,
-    default: () => IconStar,
+    default: 'cb:star',
   },
   disabledVoidIcon: {
     type: iconPropType,
-    default: () => IconStarFilled,
+    default: 'cb:star-filled',
   },
   disabled: {
     type: Boolean,

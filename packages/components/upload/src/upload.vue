@@ -13,7 +13,7 @@
             type="button"
             @click="removeFile(index)"
           >
-            <SIcon icon="clear" />
+            <SIcon name="cb:close" />
           </button>
           <img
             v-if="showPreview && file.preview"
@@ -21,7 +21,7 @@
             :class="ns.e('preview')"
           />
           <div v-else :class="ns.e('archive')">
-            <SIcon icon="description" />
+            <SIcon name="cb:document" />
             <span>{{ file.name }}</span>
           </div>
           <div
@@ -54,11 +54,13 @@
           :disabled="!fileList.length"
           @click="uploadAll"
         >
-          <SIcon v-if="showButtonIcon" icon="cloud_upload" />
+          <SIcon v-if="showButtonIcon" name="cb:cloud-upload" />
         </button>
       </div>
       <div v-else :class="[ns.e('input-wrap'), ns.is('disabled', true)]">
-        <span :class="ns.e('text')">{{ textMax }}</span>
+        <span :class="ns.e('text')">{{
+          textMax || t('vs.upload.limitReached')
+        }}</span>
       </div>
     </div>
     <div v-if="showTip || $slots.tip" :class="ns.e('tip')">
@@ -70,7 +72,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { uploadEmits, uploadProps } from './upload'
 import type { UploadFileItem } from './upload'
@@ -84,6 +86,7 @@ const props = defineProps(uploadProps)
 const emit = defineEmits(uploadEmits)
 
 const ns = useNamespace('upload')
+const { t } = useLocale()
 const inputRef = ref<HTMLInputElement>()
 const fileList = ref<UploadFileItem[]>([])
 const totalPercent = ref(0)
@@ -110,8 +113,8 @@ const isDisabled = computed(() => {
 
 const inputText = computed(() =>
   isDisabled.value && limitCount.value
-    ? props.textMax
-    : props.buttonText || props.text,
+    ? props.textMax || t('vs.upload.limitReached')
+    : props.buttonText || props.text || t('vs.upload.uploadFile'),
 )
 
 const readPreview = (file: File) =>

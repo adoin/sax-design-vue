@@ -18,7 +18,6 @@ import {
 } from '@vuesax-alpha/utils'
 import { useColorProp, useNamespace } from '@vuesax-alpha/hooks'
 import { paginationContextKey } from '@vuesax-alpha/tokens'
-import { ChevronLeft, ChevronRight } from '@vuesax-alpha/icons-vue'
 
 import Next from './components/next.vue'
 import Prev from './components/prev.vue'
@@ -36,18 +35,11 @@ import type { ExtractPropTypes, VNode } from 'vue'
  */
 const isAbsent = (v: unknown): v is undefined => typeof v !== 'number'
 type LayoutKey =
-  | 'prev'
-  | 'pager'
-  | 'next'
-  | 'jumper'
-  | '->'
-  | 'total'
-  | 'slot'
-  | 'sizes'
+  'prev' | 'pager' | 'next' | 'jumper' | '->' | 'total' | 'slot' | 'sizes'
 
 export const paginationProps = buildProps({
   /**
-   * @description Component color - Accept Vuesax's color, Hex, rgb
+   * @description Component color - Accept Sax Design color tokens, Hex, rgb
    */
   color: useColorProp,
 
@@ -121,7 +113,7 @@ export const paginationProps = buildProps({
   /** @description icon for the prev button, higher priority of `prev-text` */
   prevIcon: {
     type: iconPropType,
-    default: () => ChevronLeft,
+    default: 'cb:chevron-left',
   },
   /** @description text for the next button */
   nextText: {
@@ -131,7 +123,7 @@ export const paginationProps = buildProps({
   /** @description icon for the next button, higher priority of `next-text` */
   nextIcon: {
     type: iconPropType,
-    default: () => ChevronRight,
+    default: 'cb:chevron-right',
   },
 
   /** @description Determine if the pagination is infinite. */
@@ -243,11 +235,11 @@ export default defineComponent({
     })
 
     const innerPageSize = ref(
-      isAbsent(props.defaultPageSize) ? 10 : props.defaultPageSize
+      isAbsent(props.defaultPageSize) ? 10 : props.defaultPageSize,
     )
 
     const innerCurrentPage = ref(
-      isAbsent(props.defaultCurrentPage) ? 1 : props.defaultCurrentPage
+      isAbsent(props.defaultCurrentPage) ? 1 : props.defaultCurrentPage,
     )
 
     const pageSizeBridge = computed({
@@ -387,7 +379,7 @@ export default defineComponent({
       const rightWrapperRoot = h(
         'div',
         { class: ns.e('rightwrapper') },
-        rightWrapperChildren
+        rightWrapperChildren,
       )
       const TEMPLATE_MAP: Record<
         Exclude<LayoutKey, '->'>,
@@ -451,7 +443,7 @@ export default defineComponent({
         addClass(rightWrapperChildren[0], ns.is('first'))
         addClass(
           rightWrapperChildren[rightWrapperChildren.length - 1],
-          ns.is('last')
+          ns.is('last'),
         )
         rootChildren.push(rightWrapperRoot)
       }
@@ -470,7 +462,7 @@ export default defineComponent({
             color: getVsColor(props.color),
           }),
         },
-        rootChildren
+        rootChildren,
       )
     }
   },

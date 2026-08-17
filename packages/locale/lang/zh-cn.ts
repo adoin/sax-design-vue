@@ -1,9 +1,20 @@
 export default {
   name: 'zh-cn',
   vs: {
+    common: {
+      close: '关闭',
+      more: '展开',
+      less: '收起',
+    },
     colorpicker: {
       confirm: '确定',
       clear: '清空',
+      defaultLabel: '颜色选择器',
+      description: '当前颜色为 {color}。按 Enter 键选择新颜色。',
+      color: '颜色',
+      value: '颜色值',
+      opacity: '透明度',
+      choose: '选择 {color}',
     },
     datepicker: {
       now: '此刻',
@@ -13,6 +24,10 @@ export default {
       confirm: '确定',
       selectDate: '选择日期',
       selectTime: '选择时间',
+      dateTablePrompt: '使用方向键和 Enter 键选择日期',
+      monthTablePrompt: '使用方向键和 Enter 键选择月份',
+      yearTablePrompt: '使用方向键和 Enter 键选择年份',
+      selectedDate: '已选择日期',
       startDate: '开始日期',
       startTime: '开始时间',
       endDate: '结束日期',
@@ -59,25 +74,111 @@ export default {
         dec: '十二月',
       },
     },
+    calendar: {
+      previousMonth: '上个月',
+      nextMonth: '下个月',
+      today: '今天',
+      weekNumber: '周',
+      allDay: '全天',
+      events: '个日程',
+      moreEvents: '查看当天全部日程',
+      editEvent: '编辑日程',
+      deleteEvent: '删除日程',
+      views: {
+        month: '月',
+        week: '周',
+        day: '日',
+      },
+    },
+    timepicker: {
+      input: '时间输入',
+      hours: '时',
+      minutes: '分',
+      seconds: '秒',
+    },
+    backtop: {
+      label: '返回顶部',
+    },
+    anchor: {
+      navigation: '锚点导航',
+    },
+    breadcrumb: {
+      label: '面包屑导航',
+    },
+    menu: {
+      label: '菜单',
+    },
+    prompt: {
+      accept: '确定',
+      cancel: '取消',
+      title: '提示',
+    },
+    noticeBar: {
+      close: '关闭',
+    },
+    carousel: {
+      previous: '上一张',
+      next: '下一张',
+      goto: '跳转到第 {index} 张',
+    },
+    imagePreview: {
+      label: '图片预览',
+      close: '关闭',
+      previous: '上一张图片',
+      next: '下一张图片',
+    },
     select: {
       loading: '加载中',
       noMatch: '无匹配数据',
       noData: '无数据',
       placeholder: '请选择',
+      search: '搜索选项',
+      selectAll: '全选',
+      invert: '反选',
+      clear: '清空',
+      pin: '置顶选项',
+      unpin: '取消置顶',
+      selectedSummary: '已选 {count} 项：{labels}',
+      selectedCount: '已选 {count} 项',
+      visibleCount: '当前显示 {count} 项',
+      totalCount: '共 {count} 项',
+      pinHint: '悬停选项后点击置顶按钮，或按 Ctrl+P。',
+      pinned: '已置顶',
+      unpinned: '未置顶',
     },
     cascader: {
       noMatch: '无匹配数据',
       loading: '加载中',
       placeholder: '请选择',
       noData: '暂无数据',
+      clear: '清空选择',
     },
     pagination: {
       goto: '前往',
       pagesize: '条/页',
       total: '共 {total} 条',
+      previous: '上一页',
+      next: '下一页',
       pageClassifier: '页',
       deprecationWarning:
         '你使用了一些已被废弃的用法，请参考 pagination 的官方文档',
+    },
+    iconPicker: {
+      clear: '清空图标',
+      placeholder: '选择图标',
+      search: '搜索图标',
+      empty: '未找到图标',
+    },
+    passwordInput: {
+      clear: '清空密码',
+      show: '显示密码',
+      hide: '隐藏密码',
+    },
+    splitter: {
+      resize: '调整{direction}面板大小',
+    },
+    rate: {
+      label: '评分',
     },
     messagebox: {
       title: '提示',
@@ -85,11 +186,24 @@ export default {
       cancel: '取消',
       error: '输入的数据不合法!',
     },
+    dialog: {
+      close: '关闭对话框',
+      confirm: '确定',
+      cancel: '取消',
+    },
+    alert: {
+      close: '关闭提示',
+    },
+    notification: {
+      close: '关闭通知',
+    },
     upload: {
       deleteTip: '按 delete 键可删除',
       delete: '删除',
       preview: '查看图片',
       continue: '继续上传',
+      uploadFile: '上传文件',
+      limitReached: '已达到文件数量上限',
     },
     table: {
       emptyText: '暂无数据',
@@ -100,6 +214,8 @@ export default {
     },
     tree: {
       emptyText: '暂无数据',
+      expand: '展开节点',
+      collapse: '收起节点',
     },
     transfer: {
       noMatch: '无匹配数据',

@@ -1,4 +1,5 @@
 ---
+description: "Attach status, count, or short metadata to nearby content."
 PROPS:
   #__________________________________
   - name: value
@@ -279,7 +280,7 @@ Set offset of the badge dot, the format is [left, top], which represents the off
 
 ## Processing
 
-Set `processing` prop to indicate it is processing.
+Use `processing` for live or updating states. It adds a repeating pulse around the badge; compare it with the normal state below.
 
 <template #example>
 <badge-processing />
@@ -287,13 +288,13 @@ Set `processing` prop to indicate it is processing.
 
 <template #template>
 
-@[code{1-16} vue{3}](../.vuepress/components/badge/processing.vue)
+@[code{1-43} vue{3}](../.vuepress/components/badge/processing.vue)
 
 </template>
 
 <template #style>
 
-@[code{18-22}](../.vuepress/components/badge/processing.vue)
+@[code{45-89}](../.vuepress/components/badge/processing.vue)
 
 </template>
 

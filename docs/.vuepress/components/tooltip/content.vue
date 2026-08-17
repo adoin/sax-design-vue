@@ -1,11 +1,11 @@
 <template>
   <div class="center">
     <s-tooltip>
-      <s-button type="gradient"> Whats is Vuesax? </s-button>
+      <s-button type="gradient"> Whats is Sax Design? </s-button>
       <template #content>
         <div class="content-tooltip">
-          <h4>Whats is Vuesax?</h4>
-          <p>Vuesax is a framework of UI components created with Vuejs</p>
+          <h4>Whats is Sax Design?</h4>
+          <p>Sax Design is a framework of UI components created with Vuejs</p>
         </div>
       </template>
     </s-tooltip>
@@ -66,11 +66,11 @@
           </div>
           <footer>
             <s-button shape="circle" icon type="border">
-              <i class="bx bxs-share-alt" />
+              <s-icon  name="bxs:share-alt" />
             </s-button>
             <s-button shape="circle"> Message </s-button>
             <s-button shape="circle" icon type="border">
-              <i class="bx bx-like" />
+              <s-icon  name="bx:like" />
             </s-button>
           </footer>
         </div>

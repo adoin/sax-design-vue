@@ -1,7 +1,7 @@
 <template>
   <div class="center">
     <s-alert v-model:page="page">
-      <template #title> Vuesax Framework </template>
+      <template #title> Sax Design Vue </template>
 
       <template #page-1>
         Page 1 - this page is a slot and in here you can add either text, html

@@ -10,6 +10,10 @@
 }
 
 @include b(popper) {
+  background-color: rgb(var(--sax-background));
+  border: 1px solid rgba(var(--sax-primary), 0.1);
+  box-shadow: var(--sax-popper-shadow);
+
   @include when(not-arrow) {
     &::after {
       opacity: 0;
@@ -31,7 +35,7 @@
       bottom: -3px;
       left: 50%;
       transform: translate(-50%) rotate(45deg);
-      border-radius: 0px 0px 2px 0px;
+      border-radius: 0 0 var(--sax-radius-xs) 0;
     }
   }
   &[data-popper-placement='bottom'] {
@@ -39,7 +43,7 @@
       top: -3px;
       left: 50%;
       transform: translate(-50%) rotate(45deg);
-      border-radius: 2px 0px 0px 0px;
+      border-radius: var(--sax-radius-xs) 0 0 0;
     }
   }
   &[data-popper-placement='left'] {
@@ -47,7 +51,7 @@
       right: -3px;
       top: 50%;
       transform: translate(0, -50%) rotate(45deg);
-      border-radius: 0px 2px 0px 0px;
+      border-radius: 0 var(--sax-radius-xs) 0 0;
     }
   }
   &[data-popper-placement='right'] {
@@ -55,7 +59,7 @@
       left: -3px;
       top: 50%;
       transform: translate(0, -50%) rotate(45deg);
-      border-radius: 0px 0px 0px 2px;
+      border-radius: 0 0 0 var(--sax-radius-xs);
     }
   }
 }

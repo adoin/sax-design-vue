@@ -11,7 +11,7 @@ import type { SaxDesignVueThemeOptions } from './saxDesignVueTheme'
 import type { Theme } from '@vuepress/core'
 
 export const saxDesignVueTheme = (
-  options: SaxDesignVueThemeOptions = {}
+  options: SaxDesignVueThemeOptions = {},
 ): Theme => {
   return {
     name: 'vuepress-theme-sax-design-vue',
@@ -50,7 +50,13 @@ export const saxDesignVueTheme = (
       registerComponentsPlugin({
         componentsDir: path.resolve(__dirname, '../components'),
       }),
-      gitPlugin(),
+      // The theme only renders `pageData.git.updatedTime`. Disabling unused
+      // metadata avoids hundreds of concurrent Git subprocesses during page
+      // initialization, which can fail intermittently on Windows.
+      gitPlugin({
+        createdTime: false,
+        contributors: false,
+      }),
     ],
   }
 }

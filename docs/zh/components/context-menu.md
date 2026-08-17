@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: min-width
+    type: Number | String
+    values: CSS 长度
+    description: 设置菜单最小宽度。
+    default: '160'
   - name: items
     type: Array
     values: ContextMenuItem[]
@@ -18,7 +23,7 @@ PROPS:
 EVENTS:
   - name: select / open / close
     description: 选择菜单项与显示状态事件。
-description: "VXE 风格右键菜单。"
+description: "右键菜单。"
 ---
 
 # 右键菜单

@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: duration
+    type: Number
+    values: 毫秒
+    description: 设置公告自动轮播间隔。
+    default: '3000'
   - name: content
     type: String
     values: text
@@ -23,7 +28,7 @@ PROPS:
 EVENTS:
   - name: close
     description: 关闭时触发。
-description: "兼容 VXE 的持续公告栏。"
+description: "持续公告栏。"
 ---
 
 # Notice bar 公告栏

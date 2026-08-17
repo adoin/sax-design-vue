@@ -6,26 +6,31 @@
         class="back-link"
         to="/"
       >
-        <i class="bx bx-left-arrow-alt" />
+        <s-icon  name="bx:left-arrow-alt" />
       </router-link>
 
       <div class="header__content">
-        <div ref="$flex" class="flex-header">
-          <h1 id="header-title" ref="$title">
-            {{ pageData.title }}
-          </h1>
+        <div class="flex-header">
+          <div class="header-title-group">
+            <h1 id="header-title">
+              {{ displayTitle }}
+            </h1>
+            <p v-if="pageFrontmatter.description" class="header-description">
+              {{ pageFrontmatter.description }}
+            </p>
+          </div>
 
           <ul ref="$titleul" class="interactive-links">
-            <li title="Share">
+            <li :title="t.shell.share">
               <button>
-                <i class="bx bx-share-alt" />
+                <s-icon  name="bx:share-alt" />
                 <ul class="options">
                   <li class="tw">
                     <a
                       target="_blank"
                       :href="`https://twitter.com/intent/tweet?url=https%3A%2F%2Fadoin.github.io%2Fsax-design-vue%2F&text=Sax+Design+Vue+${pageData.title}&hashtags=${pageData.title},vuejs,vuesax,sax-design-vue,frontend`"
                     >
-                      <i class="bx bxl-twitter" />
+                      <s-icon  name="bxl:twitter" />
                     </a>
                   </li>
                   <li class="f">
@@ -33,7 +38,7 @@
                       target="_blank"
                       :href="`https://www.facebook.com/sharer.php?u=https%3A%2F%2Fadoin.github.io%2Fsax-design-vue%2F`"
                     >
-                      <i class="bx bxl-facebook-square" />
+                      <s-icon  name="bxl:facebook-square" />
                     </a>
                   </li>
                   <li class="in">
@@ -41,7 +46,7 @@
                       target="_blank"
                       :href="`https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fadoin.github.io%2Fsax-design-vue%2F&title=Sax+Design+Vue&summary=Vue+3+component+library+based+on+Vuesax+3.x&source=SaxDesignVue`"
                     >
-                      <i class="bx bxl-linkedin-square" />
+                      <s-icon  name="bxl:linkedin-square" />
                     </a>
                   </li>
                   <li class="redit">
@@ -71,30 +76,30 @@
               </button>
             </li>
             <li class="divider" />
-            <li title="Package NPM">
+            <li :title="t.shell.packageNpm">
               <a
                 target="_blank"
                 href="https://www.npmjs.com/package/sax-design-vue"
               >
-                <i class="bx bx-package" />
+                <s-icon  name="bx:package" />
               </a>
             </li>
-            <li title="View Code Github">
+            <li :title="t.shell.viewGithub">
               <a target="_blank" href="https://github.com/adoin/sax-design-vue">
-                <i class="bx bx-code-alt" />
+                <s-icon  name="bx:code-alt" />
               </a>
             </li>
-            <li title="Edit Page">
+            <li :title="t.shell.editPage">
               <a target="_blank" :href="editLink">
-                <i class="bx bx-edit" />
+                <s-icon  name="bx:edit" />
               </a>
             </li>
-            <li title="Report a Bug">
+            <li :title="t.shell.reportBug">
               <a
                 target="_blank"
                 :href="`https://github.com/adoin/sax-design-vue/issues/new?title=[${pageData.title}] - Your Bug Name&amp;body=**Steps to Reproduce**%0A1. Do something%0A2. Do something else.%0A3. Do one last thing.%0A%0A**Expected**%0AThe ${pageData.title} should do this%0A%0A**Result**%0AThe ${pageData.title} does not do this%0A%0A**Testcase**%0A(fork this to get started)%0Ahttp://jsfiddle.net/exmple-bug/1/`"
               >
-                <i class="bx bx-bug" />
+                <s-icon  name="bx:bug" />
               </a>
             </li>
           </ul>
@@ -106,8 +111,6 @@
 
     <slot name="top" />
 
-    <ComponentIntro />
-
     <transition name="fade">
       <Content class="content__default" />
     </transition>
@@ -115,7 +118,10 @@
     <Api />
 
     <footer class="page-edit">
-      <div v-if="themeData.lastUpdated" class="last-updated">
+      <div
+        v-if="themeData.lastUpdated && pageFrontmatter.lastUpdated !== false"
+        class="last-updated"
+      >
         <span class="prefix">{{ lastUpdatedText }}: </span>
         <span class="time">{{ lastUpdatedTime }}</span>
       </div>
@@ -125,7 +131,7 @@
       <p class="inner">
         <span v-if="prev" class="prev">
           <router-link :to="prev.link">
-            <i class="bx bx-chevron-left" />
+            <s-icon  name="bx:chevron-left" />
             <span>
               {{ prev.title || prev.link }}
             </span>
@@ -137,16 +143,14 @@
             <span>
               {{ next.title || next.link }}
             </span>
-            <i class="bx bx-chevron-right" />
+            <s-icon  name="bx:chevron-right" />
           </router-link>
         </span>
       </p>
     </div>
     <slot name="bottom" />
 
-    <div ref="$up" class="up" @click="handleUp">
-      <i class="bx bx-chevron-up" />
-    </div>
+    <s-backtop :visibility-height="300" :right="20" :bottom="20" />
 
     <Footer />
   </main>
@@ -165,9 +169,10 @@ import { ensureEndingSlash, ensureLeadingSlash } from '@vuepress/shared'
 import { useDateFormat } from '@vueuse/core'
 import { upperFirst } from 'lodash-unified'
 
+import { componentNamesZh } from '../../app/new-components.zh'
 import { endingSlashRE, normalize, outboundRE } from '../util'
+import { useDocLocaleUi } from '../composables/docLocale'
 
-import ComponentIntro from '../global-components/ComponentIntro.vue'
 import SidebarRight from './SidebarRight.vue'
 import Api from './Api.vue'
 import Footer from './Footer.vue'
@@ -183,6 +188,30 @@ const pageData = usePageData<ThemeNormalApiFrontmatter & GitPluginPageData>()
 const themeData = useThemeData<SaxDesignVueThemeOptions>()
 const pageFrontmatter = usePageFrontmatter<ThemePageFrontmatter>()
 const routeLocale = useRouteLocale()
+const { t } = useDocLocaleUi()
+
+const displayTitle = computed(() => {
+  const title = pageData.value.title.trim()
+
+  if (
+    routeLocale.value !== '/zh/' ||
+    !pageData.value.path.startsWith('/zh/components/')
+  )
+    return title
+
+  const componentName = Object.keys(componentNamesZh)
+    .sort((a, b) => b.length - a.length)
+    .find(
+      (name) =>
+        title === name ||
+        title.startsWith(`${name} `) ||
+        title.startsWith(`${name}（`),
+    )
+
+  return componentName
+    ? `${componentName}（${componentNamesZh[componentName]}）`
+    : title
+})
 
 const props = defineProps<{
   sidebarItems: SidebarConfigArray
@@ -190,15 +219,7 @@ const props = defineProps<{
 
 const $page = ref<HTMLElement>()!
 const $header = ref<HTMLElement>()!
-const $flex = ref<HTMLElement>()!
-const $title = ref<HTMLElement>()!
 const $titleul = ref<HTMLElement>()!
-const $up = ref<HTMLElement>()!
-
-const handleUp = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
 const createEditLink = ({
   repo,
   docsRepo,
@@ -236,13 +257,15 @@ const resolvePage = (sidebar: SidebarConfigArray, offset: number) => {
   const sidebarFlatten = flattenSidebar(sidebar)
 
   const currentPath = ensureEndingSlash(
-    ensureLeadingSlash(normalize(pageData.value.path))
+    ensureLeadingSlash(normalize(pageData.value.path)),
   ).toLocaleLowerCase()
 
   const indexCurrentSidebar = sidebarFlatten.findIndex(
     ({ link }) =>
       currentPath ===
-      ensureEndingSlash(ensureLeadingSlash(normalize(link))).toLocaleLowerCase()
+      ensureEndingSlash(
+        ensureLeadingSlash(normalize(link)),
+      ).toLocaleLowerCase(),
   )
 
   if (indexCurrentSidebar !== -1)
@@ -251,7 +274,7 @@ const resolvePage = (sidebar: SidebarConfigArray, offset: number) => {
 }
 
 const flattenSidebar = (
-  list: SidebarConfigArray
+  list: SidebarConfigArray,
 ): { title: string; link: string }[] => {
   const res: { title: string; link: string }[] = []
   list.forEach((item) => {
@@ -271,8 +294,7 @@ const flattenSidebar = (
 
 const lastUpdatedText = computed(() => {
   const localeConfig = themeData.value.locales?.[routeLocale.value] as
-    | { lastUpdatedText?: string }
-    | undefined
+    { lastUpdatedText?: string } | undefined
   return (
     localeConfig?.lastUpdatedText ||
     themeData.value.lastUpdatedText ||
@@ -282,7 +304,7 @@ const lastUpdatedText = computed(() => {
 
 const lastUpdatedTime = useDateFormat(
   computed(() => pageData.value.git.updatedTime),
-  'YYYY-MM-DD, HH:mm:ss'
+  'YYYY-MM-DD, HH:mm:ss',
 )
 
 const prev = computed(() => {
@@ -334,32 +356,10 @@ const editLink = computed(() => {
 })
 
 onMounted(() => {
-  window.addEventListener('scroll', () => {
-    if ($up.value) {
-      if (window.pageYOffset > 300) {
-        $up.value.classList.add('active')
-      } else {
-        $up.value.classList.remove('active')
-      }
-    }
-
-    if (window.pageYOffset > 200) {
-      $page.value?.querySelector('.sidebar')?.classList.add('fixed')
-    } else {
-      $page.value?.querySelector('.sidebar')?.classList.remove('fixed')
-    }
-
-    if ($title.value && $flex.value) {
-      $title.value.style.fontSize = `${
-        35 - window.pageYOffset / 7 > 24 ? 35 - window.pageYOffset / 8 : 20
-      }px`
-
-      $flex.value.style.marginBottom = `${
-        70 - window.pageYOffset / 2 > 0 ? 70 - window.pageYOffset / 2 : 0
-      }px`
-    }
+  const syncStickyLayout = () => {
+    const headerIsFixed = window.pageYOffset > 76
     if ($header.value) {
-      if (window.pageYOffset > 140) {
+      if (headerIsFixed) {
         $header.value.classList.add('fixed')
         $header.value.style.width = `${$page.value?.offsetWidth}px`
       } else {
@@ -367,24 +367,26 @@ onMounted(() => {
         $header.value.classList.remove('fixed')
       }
     }
-  })
 
-  window.addEventListener('resize', () => {
-    if ($header.value) {
-      if (window.pageYOffset > 140) {
-        $header.value?.classList.add('fixed')
-        $header.value!.style.width = `${$page.value?.offsetWidth}px`
-      } else {
-        $header.value!.style.width = `100%`
-        $header.value?.classList.remove('fixed')
-      }
-    }
-  })
+    const sidebar = $page.value?.querySelector<HTMLElement>('.sidebar')
+    if (!sidebar) return
+    const headerBottom = $header.value?.getBoundingClientRect().bottom ?? 0
+    const reachesHeader = sidebar.getBoundingClientRect().top <= headerBottom
+    sidebar.classList.toggle(
+      'fixed',
+      headerIsFixed && (sidebar.classList.contains('fixed') || reachesHeader),
+    )
+  }
+
+  window.addEventListener('scroll', syncStickyLayout)
+  window.addEventListener('resize', syncStickyLayout)
+  syncStickyLayout()
 })
 </script>
 
 <style lang="scss">
-@import '../styles/_use.scss';
+@use 'sass:color';
+@use '../styles/use' as *;
 
 .back-link {
   position: absolute;
@@ -393,7 +395,10 @@ onMounted(() => {
   z-index: 600;
   margin: 15px;
   display: block;
-  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
   border-radius: 25px 10px 10px 10px;
   display: flex;
   align-items: center;
@@ -424,43 +429,15 @@ onMounted(() => {
   width: 100%;
   height: 100%;
 }
-.up {
-  position: fixed;
-  bottom: 0px;
-  right: 0;
-  width: 40px;
-  height: 40px;
-  background: -color('theme-layout');
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  border-radius: 12px;
-  cursor: pointer;
-  margin: 20px;
-  transform: translate(0, calc(100% + 20px));
-  transition: all 0.25s ease, bottom 0s;
-  z-index: 500;
-  &:active {
-    transform: scale(0.9) translate(0) !important;
-    opacity: 0.7;
-  }
-  &:hover {
-    color: -color('accent-color');
-    box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
-  }
-  &.active {
-    transform: translate(0);
-  }
-}
-
 .header-page {
   width: 100%;
   position: absolute;
   background: -color('theme-bg2');
   height: auto;
   border-radius: 0px 0px 0px 30px;
-  transition: background 0.25s ease, border-radius 0.25s ease;
+  transition:
+    background 0.25s ease,
+    border-radius 0.25s ease;
   top: 0px;
   // overflow hidden
   &:before {
@@ -522,7 +499,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    height: 200px;
+    height: 76px;
     padding-top: 0px;
     padding-bottom: 0px;
     // transition background .25s ease;
@@ -536,9 +513,16 @@ onMounted(() => {
     .flex-header {
       width: 100%;
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: space-between;
-      margin-bottom: 70px;
+      margin-bottom: 0;
+
+      .header-title-group {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 16px;
+      }
     }
 
     &:after {
@@ -557,9 +541,19 @@ onMounted(() => {
     h1 {
       font-size: 35px;
       margin: 0px;
-      padding: 13px 0px;
-      padding-bottom: 15px;
+      padding: 0;
       font-weight: 600;
+    }
+
+    .header-description {
+      max-width: min(56vw, 640px);
+      margin: 0;
+      overflow: hidden;
+      color: rgba(var(--sax-theme-color), 0.6);
+      font-size: 0.82rem;
+      line-height: 1.4;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .interactive-links {
@@ -567,7 +561,7 @@ onMounted(() => {
       align-items: center;
       justify-content: center;
       list-style: none;
-      padding-bottom: 13px;
+      padding-bottom: 0;
       margin: 0px;
       .divider {
         position: relative;
@@ -647,7 +641,8 @@ onMounted(() => {
   margin-top: 57px;
   position: relative;
   margin-bottom: 0px;
-  padding-top: 200px !important;
+  // Header is 76px tall. Keep one compact breathing gap before document content.
+  padding-top: 84px !important;
   transition: all 0.25s ease;
   width: calc(100% - 260px);
 
@@ -689,7 +684,9 @@ onMounted(() => {
     }
     &.fixed {
       position: fixed !important;
-      top: 55px !important;
+      // Sit immediately below the fixed document title bar: navbar (57px) +
+      // compact header content (58px). This avoids overlapping the title.
+      top: 115px !important;
       z-index: 1300 !important;
       max-height: calc(100vh - 270px);
     }
@@ -736,6 +733,14 @@ onMounted(() => {
   .content__default {
     @include wrapper;
     margin: 0 auto;
+    padding-top: 0;
+
+    // The global content rule reserves navbar space for ordinary pages. This
+    // component layout already reserves space above, so do not add it twice.
+    > *:first-child {
+      margin-top: 0;
+    }
+
     h1 {
       display: none !important;
     }
@@ -756,7 +761,7 @@ onMounted(() => {
   .edit-link {
     display: inline-block;
     a {
-      color: lighten($textColor, 25%);
+      color: color.adjust($textColor, $lightness: 25%);
       // color: -color('text-color'); // lighten 25%
       margin-right: 0.25rem;
     }
@@ -768,7 +773,7 @@ onMounted(() => {
     .prefix {
       padding-left: 10px;
       font-weight: 600;
-      // color: lighten($textColor, 25%);
+      // color: color.adjust($textColor, $lightness: 25%);
     }
     .time {
       padding-left: 10px;
@@ -836,6 +841,10 @@ onMounted(() => {
   }
 }
 @media (max-width: $MQMobile) {
+  .header-description {
+    display: none;
+  }
+
   .page-edit {
     .edit-link {
       margin-bottom: 0.5rem;
@@ -895,18 +904,6 @@ onMounted(() => {
   .page {
     .content__default {
       padding: 10px;
-    }
-  }
-  .up {
-    bottom: 50px;
-    right: 0px;
-    opacity: 0;
-    pointer-events: none;
-    margin: 0px;
-    border-radius: 15px 0px 0px 0px;
-    &.active {
-      opacity: 1;
-      pointer-events: auto;
     }
   }
   .header-page {

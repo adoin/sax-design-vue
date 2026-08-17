@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: auto-start
+    type: Boolean
+    values: true | false
+    description: Start the countdown automatically after mounting.
+    default: true
   - name: value
     type: Number
     values: timestamp
@@ -15,7 +20,7 @@ EVENTS:
     description: Fired at zero.
   - name: change
     description: Remaining milliseconds change.
-description: "VXE-compatible countdown display."
+description: "Countdown display."
 ---
 # Countdown
 <card><template #example><countdown-default /></template><template #template>

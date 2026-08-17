@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: overscan
+    type: Number
+    values: item count
+    description: Render this many extra rows before and after the visible range.
+    default: '5'
   - name: items
     type: Array
     values: unknown[]

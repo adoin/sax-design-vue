@@ -20,7 +20,7 @@ PROPS:
     values: degrees
     description: 水印层旋转角度。
     default: '-18'
-description: "兼容 VXE 的内容水印。"
+description: "内容水印。"
 ---
 
 # Watermark 水印

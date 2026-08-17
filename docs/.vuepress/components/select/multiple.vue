@@ -1,13 +1,14 @@
 <template>
-  <div class="center con-selects">
+  <div class="con-selects">
     <s-select
       v-model="value"
       label="Multiple"
+      block
       multiple
       danger
       placeholder="Filter"
     >
-      <s-option label="Vuesax" value="1"> Vuesax </s-option>
+      <s-option label="Sax Design" value="1"> Sax Design </s-option>
       <s-option label="Vue" value="2"> Vue </s-option>
       <s-option label="Javascript" value="3"> Javascript </s-option>
       <s-option label="Sass" value="4"> Sass </s-option>
@@ -18,11 +19,12 @@
     <s-select
       v-model="value2"
       label="Filter Multiple"
+      block
       filter
       multiple
       placeholder="Filter Multiple"
     >
-      <s-option label="Vuesax" value="1"> Vuesax </s-option>
+      <s-option label="Sax Design" value="1"> Sax Design </s-option>
       <s-option label="Vue" value="2"> Vue </s-option>
       <s-option label="Javascript" value="3"> Javascript </s-option>
       <s-option label="Sass" value="4"> Sass </s-option>
@@ -33,15 +35,14 @@
 
     <s-select
       v-model="value3"
-      label="Multiple collapse chips"
+      label="Adaptive collapsed tags"
+      block
       filter
       multiple
-      :multiple-limit="4"
       collapse-chips
-      :max-collapse-chips="2"
-      placeholder="Collapse chips"
+      placeholder="Resize to see tags adapt"
     >
-      <s-option label="Vuesax" value="1"> Vuesax </s-option>
+      <s-option label="Sax Design" value="1"> Sax Design </s-option>
       <s-option label="Vue" value="2"> Vue </s-option>
       <s-option label="Javascript" value="3"> Javascript </s-option>
       <s-option label="Sass" value="4"> Sass </s-option>
@@ -57,22 +58,15 @@ import { ref } from 'vue'
 
 const value = ref(['1', '2', '3'])
 const value2 = ref(['4'])
-const value3 = ref(['1', '4', '5', '6'])
+const value3 = ref(['1', '2', '3', '4', '5', '6', '7'])
 </script>
 
 <style scoped lang="scss">
 .con-selects {
-  .s-select-content {
-    margin: 20px 10px;
-    max-width: calc(40% - 20px);
-  }
-}
-
-@media (max-width: 500px) {
-  .con-selects {
-    .s-select-content {
-      max-width: 100%;
-    }
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  align-items: start;
+  gap: 32px 24px;
+  width: 100%;
 }
 </style>

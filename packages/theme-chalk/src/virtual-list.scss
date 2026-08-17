@@ -11,16 +11,6 @@
   display: block;
   width: 100%;
 
-  @include e(wrapper) {
-    position: relative;
-    &:hover {
-      @include showScrollbar();
-    }
-    &.always-on {
-      @include showScrollbar();
-    }
-  }
-
   @include e(window) {
     position: relative;
     overflow: auto;
@@ -34,7 +24,7 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      border-radius: 999px;
+      border-radius: var(--sax-radius-pill);
       background: rgba(var(--sax-primary), 0.3);
     }
 
@@ -55,6 +45,17 @@
     width: 100%;
     box-sizing: border-box;
     will-change: transform;
+  }
+
+  // Keep this block last: showScrollbar switches the mixin block context.
+  @include e(wrapper) {
+    position: relative;
+    &:hover {
+      @include showScrollbar();
+    }
+    &.always-on {
+      @include showScrollbar();
+    }
   }
 }
 

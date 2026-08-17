@@ -1,7 +1,7 @@
 <template>
   <div :class="headerKls" :style="headerStyle">
     <div v-if="icon" :class="ns.e('icon')">
-      <SIcon :icon="icon" :icon-pack="iconPack" />
+      <SIcon :name="icon" />
     </div>
     <div :class="ns.e('header-titles')">
       <div v-if="title" :class="ns.e('header-title')">{{ title }}</div>

@@ -11,20 +11,20 @@
       @keydown.space.prevent="toggle"
       @keydown.esc.prevent="open = false"
     >
-      <SIcon v-if="modelValue" :icon="modelValue" :icon-pack="iconPack" />
+      <SIcon v-if="modelValue" :name="modelValue" />
       <span :class="[ns.e('value'), ns.is('placeholder', !modelValue)]">{{
-        modelValue || placeholder
+        modelValue || placeholder || t('vs.iconPicker.placeholder')
       }}</span>
       <button
         v-if="clearable && modelValue"
         :class="ns.e('clear')"
         type="button"
-        aria-label="Clear icon"
+        :aria-label="t('vs.iconPicker.clear')"
         @click.stop="clear"
       >
-        <SIcon icon="close" icon-pack="material-icons" />
+        <SIcon name="cb:close" />
       </button>
-      <SIcon v-else icon="arrow_drop_down" icon-pack="material-icons" />
+      <SIcon v-else name="cb:chevron-down" />
     </div>
     <div v-if="open" :class="ns.e('panel')" role="listbox">
       <input
@@ -32,7 +32,7 @@
         v-model="query"
         :class="ns.e('search')"
         type="search"
-        placeholder="Search icon"
+        :placeholder="t('vs.iconPicker.search')"
         autofocus
       />
       <div :class="ns.e('grid')">
@@ -45,11 +45,11 @@
           :aria-label="icon"
           @click="select(icon)"
         >
-          <SIcon :icon="icon" :icon-pack="iconPack" />
+          <SIcon :name="icon" />
         </button>
       </div>
       <div v-if="!filteredIcons.length" :class="ns.e('empty')">
-        No icons found
+        {{ t('vs.iconPicker.empty') }}
       </div>
     </div>
   </div>
@@ -58,7 +58,7 @@
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { iconPickerEmits, iconPickerProps } from './icon-picker'
 
 defineOptions({ name: 'SIconPicker' })
@@ -66,6 +66,7 @@ defineOptions({ name: 'SIconPicker' })
 const props = defineProps(iconPickerProps)
 const emit = defineEmits(iconPickerEmits)
 const ns = useNamespace('icon-picker')
+const { t } = useLocale()
 const rootRef = ref<HTMLElement>()
 const open = ref(false)
 const query = ref('')

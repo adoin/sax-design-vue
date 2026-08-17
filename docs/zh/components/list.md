@@ -3,7 +3,7 @@ PROPS:
   - name: title
     type: String
     values: String
-    description: List header title (s-list-header).
+    description: 列表头部标题（s-list-header）。
     default: null
     link: null
     usage: '#header'
@@ -27,7 +27,7 @@ PROPS:
   - name: color
     type: String
     values: primary, success, danger
-    description: Header color.
+    description: 头部颜色。
     default: primary
     link: null
     usage: '#header'
@@ -42,7 +42,7 @@ NEWS:
   - avatar
 ---
 
-# List
+# List（列表）
 
 <card>
 

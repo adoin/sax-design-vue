@@ -1,0 +1,57 @@
+{
+  "name": "sax-design-vue-iconify",
+  "version": "0.0.4",
+  "description": "Build-time Iconify integration for Sax Design Vue",
+  "type": "module",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "src/virtual.d.ts"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./vite": {
+      "types": "./dist/vite.d.ts",
+      "import": "./dist/vite.mjs",
+      "require": "./dist/vite.cjs"
+    },
+    "./virtual": {
+      "types": "./src/virtual.d.ts"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "unbuild",
+    "dev": "pnpm run stub",
+    "stub": "unbuild --stub"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@iconify/types": "^2.0.0",
+    "@iconify/utils": "^3.1.4"
+  },
+  "peerDependencies": {
+    "vite": ">=4"
+  },
+  "peerDependenciesMeta": {
+    "vite": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "unbuild": "^3.6.1",
+    "vite": "^8.0.0",
+    "vite4": "npm:vite@4.5.14",
+    "vite5": "npm:vite@5.4.21"
+  }
+}

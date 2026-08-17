@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: cols / count-method / immediate
+    type: Number / Function / Boolean
+    values: native column count / counter function / true | false
+    description: Configure width hint, character counting and immediate model updates.
+    default: '-'
   - name: v-model
     type: String
     values: String
@@ -43,7 +48,7 @@ PROPS:
   - name: max-length / show-word-count
     type: Number, Boolean
     values: Number, true | false
-    description: Native length limit and a VXE-compatible counter.
+    description: Native length limit and counter.
     default: null, false
     link: null
     usage: '#advanced'
@@ -231,7 +236,7 @@ Control the visible height of the textarea.
 
 ## Advanced
 
-Use VXE-aligned `max-length`, `show-word-count`, `auto-size` and `trim` for a bounded, automatically growing field.
+Use `max-length`, `show-word-count`, `auto-size` and `trim` for a bounded, automatically growing field.
 
 <template #example>
 <textarea-advanced />

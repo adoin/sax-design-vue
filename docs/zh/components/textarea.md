@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: cols / count-method / editable / immediate / rows
+    type: Number / Function / Boolean
+    values: 原生行列数、统计函数和编辑状态
+    description: 配置文本区尺寸、字数统计、编辑能力和即时更新。
+    default: '-'
   - name: v-model
     type: String
     values: String
@@ -81,7 +86,7 @@ NEWS:
   - height
 ---
 
-# Textarea
+# Textarea（多行输入框）
 
 <card>
 
@@ -207,7 +212,7 @@ NEWS:
 
 ## 高级能力
 
-可用 VXE 对齐的 `max-length`、`show-word-count`、`auto-size` 与 `trim`，在不改变现有样式下获得字数限制和自动高度。
+可用 `max-length`、`show-word-count`、`auto-size` 与 `trim`，获得字数限制和自动高度。
 
 <template #example>
 <textarea-advanced />

@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: duration
+    type: Number
+    values: milliseconds
+    description: Set the autoplay interval for cycling notices.
+    default: '3000'
   - name: content
     type: String
     values: text
@@ -23,7 +28,7 @@ PROPS:
 EVENTS:
   - name: close
     description: Fired when closed.
-description: "VXE-compatible notice bar for persistent announcements."
+description: "Notice bar for persistent announcements."
 ---
 
 # Notice bar

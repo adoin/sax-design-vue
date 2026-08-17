@@ -1,6 +1,6 @@
 <template>
   <span :class="ns.e('jump')" :disabled="disabled">
-    <span :class="ns.e('goto')">Goto</span>
+    <span :class="ns.e('goto')">{{ t('vs.pagination.goto') }}</span>
     <s-input
       type="number"
       :class="[ns.e('editor'), ns.is('in-pagination')]"
@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import SInput from '@vuesax-alpha/components/input'
 import { usePagination } from '../usePagination'
 import type { InputValue } from '@vuesax-alpha/components/input'
@@ -26,6 +26,7 @@ defineOptions({
 })
 
 const ns = useNamespace('pagination')
+const { t } = useLocale()
 
 const { pageCount, disabled, currentPage, changeEvent } = usePagination()
 const userInput = ref<number>()

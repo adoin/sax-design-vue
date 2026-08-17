@@ -15,13 +15,9 @@ export const chipsProps = buildProps({
     type: String,
     default: '',
   },
-  iconPack: {
-    type: String,
-    default: 'material-icons',
-  },
   removeIcon: {
     type: String,
-    default: 'close',
+    default: 'cb:close',
   },
 } as const)
 

@@ -34,7 +34,7 @@
       @click="onMoreClick('prev')"
       @keyup.enter="onMoreClick('prev')"
     >
-      <chevron-left-double />
+      <s-icon name="cb:double-chevron-left" />
       <span>...</span>
     </button>
     <button
@@ -75,7 +75,7 @@
       @click="onMoreClick('next')"
       @keyup.enter="onMoreClick('next')"
     >
-      <chevron-right-double />
+      <s-icon name="cb:double-chevron-right" />
       <span>...</span>
     </button>
     <button
@@ -115,8 +115,7 @@
 import { computed, nextTick, reactive, ref, watch, watchEffect } from 'vue'
 import { isNil } from 'lodash-unified'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { ChevronLeftDouble, ChevronRightDouble } from '@vuesax-alpha/icons-vue'
-import { IconLoading } from '@vuesax-alpha/components/icon'
+import { IconLoading, SIcon } from '@vuesax-alpha/components/icon'
 import { usePagination } from '../usePagination'
 import { paginationPagerProps } from './pager'
 import PaginationProgress from './progress.vue'

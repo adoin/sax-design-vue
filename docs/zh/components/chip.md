@@ -40,19 +40,35 @@ PROPS:
     link: null
     usage: '#transparent'
 
+  - name: tag-style
+    type: String
+    values: default, outline, dashed, mark, arrow, flag
+    description: 标签展示风格。mark 与 arrow 具有专门几何形态。
+    default: default
+    link: null
+    usage: '#tag-styles'
+
+  - name: round
+    type: Boolean
+    values: true, false
+    description: 胶囊圆角。mark 与 arrow 使用兼容圆角的变体。
+    default: false
+    link: null
+    usage: '#tag-styles'
+
+  - name: size
+    type: String
+    values: small, default, large
+    description: 标签尺寸。
+    default: default
+    link: null
+    usage: '#tag-styles'
+
   - name: icon
     type: String
     values: Material icon name
     description: 标签内前置图标。
     default: null
-    link: null
-    usage: '#icon'
-
-  - name: icon-pack
-    type: String
-    values: Icon pack class
-    description: 图标字体类名。
-    default: material-icons
     link: null
     usage: '#icon'
 
@@ -80,22 +96,22 @@ EVENTS:
     params: boolean
     description: 在标签组中移除时触发。
 EXPOSES: []
-description: "标签是表示输入、属性或操作的紧凑元素。"
+description: '标签是表示输入、属性或操作的紧凑元素。'
 NEWS:
   - default
   - color
   - transparent
+  - tag-styles
   - icon
   - closable
   - chips
 ---
 
-# Chip
+# Chip（标签）
 
 <card>
 
 ## 默认
-
 
 渲染简单标签，可选关闭行为。
 
@@ -113,10 +129,81 @@ NEWS:
 
 <card>
 
+## 标签风格
+
+通过 `tag-style` 选择展示形态。
+
+<template #example>
+<chip-styles />
+</template>
+
+<template #template>
+
+@[code{1-25}](../../.vuepress/components/chip/styles.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 圆角
+
+使用 `round` 获得胶囊标签。Arrow 保持左圆、右尖。
+
+<template #example>
+<chip-round />
+</template>
+
+<template #template>
+
+@[code{1-8}](../../.vuepress/components/chip/round.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+使用 `size` 适配紧凑控件或更强调的状态标签。
+
+<template #example>
+<chip-sizes />
+</template>
+
+<template #template>
+
+@[code{1-7}](../../.vuepress/components/chip/sizes.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 组合用法
+
+先了解各个属性，再组合颜色、展示形态、圆角、尺寸和图标。
+
+<template #example>
+<chip-combinations />
+</template>
+
+<template #template>
+
+@[code{1-13}](../../.vuepress/components/chip/combinations.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## 颜色
 
-
-使用 Vuesax 色板或自定义值为标签着色。
+使用 Sax Design 色板或自定义值为标签着色。
 
 <template #example>
 <chip-color />
@@ -133,7 +220,6 @@ NEWS:
 <card>
 
 ## 透明
-
 
 使用 `transparent` 获得更轻的描边外观。
 
@@ -153,7 +239,6 @@ NEWS:
 
 ## 图标
 
-
 通过 `icon` 添加前置图标。
 
 <template #example>
@@ -171,7 +256,6 @@ NEWS:
 <card>
 
 ## 可关闭
-
 
 启用 `closable` 后可交互移除标签。
 
@@ -196,7 +280,6 @@ NEWS:
 <card>
 
 ## 增删条目
-
 
 组合 `s-chips` 与多个 `s-chip` 子项以增删标签。
 

@@ -1,26 +1,24 @@
 ---
+description: '为用户操作和系统状态展示上下文反馈消息。'
 PROPS:
   - name: v-model
     type: boolean
     values: boolean
-    description: Determine if the component is visible.
+    description: 是否显示组件。
     default: true
     link: null
     code: >
       <template>
         <s-button type="flat" @click="active = !active">
-          {{ active ? 'Close Alert' : 'Open Alert' }}
+          {{ active ? '关闭警告' : '打开警告' }}
         </s-button>
 
         <s-alert closable v-model="active">
           <template #title>
-            Vuesax Framework
+            Sax Design Vue
           </template>
-          Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-          created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-          Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-          developed from the frontend lover to the backend that wants to easily create
-          your visual approach to the end user
+          Sax Design Vue 是一个具有鲜明视觉风格、实用 API 和一致交互模式的
+          <b>Vue 3 组件库</b>。
         </s-alert>
       </template>
 
@@ -35,7 +33,7 @@ PROPS:
   - name: v-model:hidden-content
     type: boolean
     values: boolean
-    description: With this property you can hide the content of the alert. You can bind this with v-model
+    description: 隐藏警告内容，可通过 v-model 绑定。
     default: false
     link: null
     usage: '#hidden-content'
@@ -43,55 +41,46 @@ PROPS:
       <template>
         <s-alert hidden-content>
           <template #title>
-            Vuesax Framework
+            Sax Design Vue
           </template>
-          Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-          created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-          Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-          developed from the frontend lover to the backend that wants to easily create
-          your visual approach to the end user
+          Sax Design Vue 是一个具有鲜明视觉风格、实用 API 和一致交互模式的
+          <b>Vue 3 组件库</b>。
         </s-alert>
       </template>
   - name: color
     type: String
     values: primary, success, danger, warning, dark, RGB, HEX
-    description: Change the color of the component and some of its sub components.
+    description: 设置组件及其部分子组件颜色。
     default: primary
     link: null
     usage: '#color'
     code: >
       <s-alert color="success">
         <template #title>
-          Vuesax Framework
+          Sax Design Vue
         </template>
-        Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-        created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-        Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-        developed from the frontend lover to the backend that wants to easily create
-        your visual approach to the end user
+        Sax Design Vue 是一个具有鲜明视觉风格、实用 API 和一致交互模式的
+        <b>Vue 3 组件库</b>。
       </s-alert>
   - name: type
     type: boolean
     values: solid, border, shadow, gradient, relief
-    description: Change the style of all the alert.
+    description: 设置警告框整体样式。
     default: default
     link: null
     usage: '#solid'
     code: >
       <s-alert solid>
         <template #title>
-          Vuesax Framework
+          Sax Design Vue
         </template>
-        Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-        created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-        Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-        developed from the frontend lover to the backend that wants to easily create
-        your visual approach to the end user
+        Sax Design Vue 是一个具有鲜明视觉风格、实用 API 和一致交互模式的
+        <b>Vue 3 组件库</b>。
       </s-alert>
   - name: page
     type: Number
     values: Number
-    description: Determine the page that is active (this property is linked to the slots="page-{n}").
+    description: 当前激活页码，与 `page-{n}` 插槽对应。
     default: null
     link: null
     usage: '#pagination'
@@ -99,53 +88,47 @@ PROPS:
       <template>
         <s-alert :page="1" >
           <template #title>
-            Vuesax Framework
+            Sax Design Vue
           </template>
           <template #page-1>
-            Page 1 - this page is a slot and here you can add either text, html elements or components
+            第 1 页：这里是插槽，可放置文本、HTML 元素或组件。
           </template>
         </s-alert>
       </template>
   - name: progress
     type: Number
     values: 0 - 100
-    description: Add a progress bar to the alert and the value is the percentage of width.
+    description: 为警告框添加进度条，值为宽度百分比。
     default: null
     link: null
     usage: '#progress-bar'
     code: >
       <s-alert progress="70">
         <template #title>
-          Vuesax Framework
+          Sax Design Vue
         </template>
-        Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-        created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-        Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-        developed from the frontend lover to the backend that wants to easily create
-        your visual approach to the end user
+        Sax Design Vue 是一个具有鲜明视觉风格、实用 API 和一致交互模式的
+        <b>Vue 3 组件库</b>。
       </s-alert>
   - name: closable
     type: boolean
     values: boolean
-    description: Add a button to close the alert (it is necessary to use v-model).
+    description: 添加关闭按钮，需要配合 v-model 使用。
     default: false
     link: null
     usage: '#closable'
     code: >
       <template>
         <s-button flat @click="active=!active">
-          {{ active ? 'Close Alert' : 'Open Alert' }}
+          {{ active ? '关闭警告' : '打开警告' }}
         </s-button>
 
         <s-alert closable v-model="active">
           <template #title>
-            Vuesax Framework
+            Sax Design Vue
           </template>
-          Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-          created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-          Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-          developed from the frontend lover to the backend that wants to easily create
-          your visual approach to the end user
+          Sax Design Vue 是一个具有鲜明视觉风格、实用 API 和一致交互模式的
+          <b>Vue 3 组件库</b>。
         </s-alert>
       </template>
 
@@ -158,7 +141,7 @@ SLOTS:
   - name: icon
     type: slot
     values: null
-    description: Add an icon to the alert.
+    description: 为警告框添加图标。
     default: null
     link: null
     usage: '#icon'
@@ -166,22 +149,19 @@ SLOTS:
       <template>
         <s-alert>
           <template #icon>
-            <i class='bx bxs-chat'></i>
+            <s-icon  name="bxs:chat" />
           </template>
           <template #title>
-            Vuesax Alert Icon
+            Sax Design 警告图标
           </template>
-          Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-          created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-          Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-          developed from the frontend lover to the backend that wants to easily create
-          your visual approach to the end user
+          Sax Design Vue 是一个具有鲜明视觉风格、实用 API 和一致交互模式的
+          <b>Vue 3 组件库</b>。
         </s-alert>
       </template>
   - name: title
     type: slot
     values: null
-    description: Add a title to the alert.
+    description: 为警告框添加标题。
     default: null
     link: null
     usage: '#title'
@@ -190,20 +170,17 @@ SLOTS:
         <div class="center">
           <s-alert>
             <template #title>
-              Vuesax Alert Title
+              Sax Design 警告标题
             </template>
-            Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-            created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-            Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-            developed from the frontend lover to the backend that wants to easily create
-            your visual approach to the end user
+            Sax Design Vue 是一个具有鲜明视觉风格、实用 API 和一致交互模式的
+            <b>Vue 3 组件库</b>。
           </s-alert>
         </div>
       </template>
   - name: page-{n}
     type: slot
     values: (page-1 - page-{n})
-    description: Add the pages to the alert component if it is page one would be (slot="page-1").
+    description: 为警告框添加分页内容；第一页对应 `page-1` 插槽。
     default: null
     link: null
     usage: '#pagination'
@@ -211,38 +188,34 @@ SLOTS:
       <template>
         <s-alert v-model:page="page" >
           <template #title>
-            Vuesax Framework
+            Sax Design Vue
           </template>
 
           <template #page-1>
-            Page 1 - this page is a slot and here you can add either text,
-            html elements or components
+            第 1 页：这里是插槽，可放置文本、HTML 元素或组件。
           </template>
         </s-alert>
       </template>
   - name: footer
     type: slot
     values: null
-    description: Add a footer to the alert component.
+    description: 为警告框添加页脚。
     default: null
     link: null
     usage: '#footer'
     code: >
       <s-alert>
         <template #title>
-          Vuesax Framework
+          Sax Design Vue
         </template>
-        Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b>
-        created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a
-        Unique and pleasant style, Vuesax is created from scratch and designed for all types of
-        developed from the frontend lover to the backend that wants to easily create
-        your visual approach to the end user
+        Sax Design Vue 是一个具有鲜明视觉风格、实用 API 和一致交互模式的
+        <b>Vue 3 组件库</b>。
         <template #footer>
           <s-button flat>
-            Cancel
+            取消
           </s-button>
           <s-button>
-            Accept
+            确认
           </s-button>
         </template>
       </s-alert>
@@ -251,7 +224,7 @@ UPDATES:
   - hidden-content
 ---
 
-# Alert
+# Alert（警告提示）
 
 <card>
 
@@ -259,7 +232,7 @@ UPDATES:
 
 <docs-warn />
 
-Easily generate an alert with this component apart from functionalities such as hiding it and showing it color change and title icons among other things
+使用 Alert 可快速展示上下文反馈信息；支持隐藏内容、颜色切换和标题图标等能力。
 
 <template #example>
 <alert-default />
@@ -277,7 +250,7 @@ Easily generate an alert with this component apart from functionalities such as 
 
 ## 实心
 
-You can change the style of the component by adding the `solid` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `solid` 可切换为实心样式，无需传入具体值。
 
 <template #example>
 <alert-solid />
@@ -295,7 +268,7 @@ You can change the style of the component by adding the `solid` property, the pr
 
 ## 边框
 
-You can change the style of the component by adding the `border` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `border` 可切换为边框样式，无需传入具体值。
 
 <template #example>
 <alert-border />
@@ -313,7 +286,7 @@ You can change the style of the component by adding the `border` property, the p
 
 ## 阴影
 
-You can change the style of the component by adding the `shadow` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `shadow` 可切换为阴影样式，无需传入具体值。
 
 <template #example>
 <alert-shadow />
@@ -331,7 +304,7 @@ You can change the style of the component by adding the `shadow` property, the p
 
 ## 渐变
 
-You can change the style of the component by adding the `gradient` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `gradient` 可切换为渐变样式，无需传入具体值。
 
 <template #example>
 <alert-gradient />
@@ -349,7 +322,7 @@ You can change the style of the component by adding the `gradient` property, the
 
 ## 浮雕
 
-You can change the style of the component by adding the `relief` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `relief` 可切换为浮雕样式，无需传入具体值。
 
 <template #example>
 <alert-relief />
@@ -367,7 +340,7 @@ You can change the style of the component by adding the `relief` property, the p
 
 ## 动画
 
-A beautiful and simple animation to show and hide the alert to the user
+通过简洁的动画展示或隐藏 Alert。
 
 <template #example>
 <alert-animate />
@@ -391,9 +364,9 @@ A beautiful and simple animation to show and hide the alert to the user
 
 ## 颜色
 
-Change the color of the entire alert with the `color` property
+使用 `color` 属性修改整个 Alert 的颜色。
 
-In this example you can click on the buttons and dynamically change the color value to display it in the component `alert`
+本示例可点击按钮，动态切换 Alert 的颜色。
 
 <template #example>
 <alert-color />
@@ -423,7 +396,7 @@ In this example you can click on the buttons and dynamically change the color va
 
 ## 图标
 
-Add an icon to the alert easily with the slot **icon**
+通过 **icon** 插槽可为 Alert 轻松添加图标。
 
 <utils-icon />
 
@@ -445,7 +418,7 @@ Add an icon to the alert easily with the slot **icon**
 
 ## 标题
 
-You can add a descriptive title to the alert with the `slot="title"`
+通过 `title` 插槽可为 Alert 添加描述性标题。
 
 <template #example>
 <alert-title />
@@ -463,9 +436,9 @@ You can add a descriptive title to the alert with the `slot="title"`
 
 ## 隐藏内容 <Badge text='Update' type="warn" />
 
-You can hide the content of an alert and just leave the title to display the content dynamically.
+可隐藏 Alert 的内容，仅保留标题并按需动态显示。
 
-This prop can bind with `v-model:hidden-content`
+此属性可通过 `v-model:hidden-content` 双向绑定。
 
 <template #example>
 <alert-hidden-content />
@@ -489,7 +462,7 @@ This prop can bind with `v-model:hidden-content`
 
 ## 分页
 
-There are times when we need to show a lot of content to the user but we don't want to extend the text and make the alert very large and tall
+当需要展示较多内容、又不希望 Alert 过高时，可使用分页能力。
 
 <template #example>
 <alert-pagination />
@@ -511,9 +484,9 @@ There are times when we need to show a lot of content to the user but we don't w
 
 <card>
 
-## footer
+## 页脚
 
-Use the `footer` slot to add a footer to the alert where for example you can add interactions with the user such as a button or a checkbox.
+使用 `footer` 插槽可为 Alert 添加页脚，例如放置按钮或复选框等交互内容。
 
 <template #example>
 
@@ -531,9 +504,9 @@ Use the `footer` slot to add a footer to the alert where for example you can add
 
 <card>
 
-## Progress bar
+## 进度条
 
-You can add a progress bar to the alert with the progress property and a number of (`0 - 100`)
+通过 `progress` 属性传入 `0 - 100` 的数值，可为 Alert 添加进度条。
 
 <template #example>
 <alert-progress />
@@ -551,7 +524,7 @@ You can add a progress bar to the alert with the progress property and a number 
 
 ## 可关闭
 
-You can add a close alert icon with the `closable` property, the property is a` boolean` so you can add it without any value.
+添加布尔属性 `closable` 可显示关闭图标，无需传入具体值。
 
 <template #example>
 <alert-closable />
@@ -575,7 +548,7 @@ You can add a close alert icon with the `closable` property, the property is a` 
 
 ## 定时关闭
 
-If you need an alert to have time to hide, you can do so by joining some properties and few lines of code
+如需让 Alert 在一段时间后自动隐藏，可组合相关属性和少量代码实现。
 
 <template #example>
 <alert-time />

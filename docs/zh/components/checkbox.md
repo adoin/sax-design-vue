@@ -1,17 +1,23 @@
 ---
+description: "选择一个或多个布尔选项。"
 PROPS:
+  - name: disabled / max / not-value
+    type: Boolean / Number / String | Number | Boolean
+    values: true | false / 最大选中数 / 未选中值
+    description: 禁用选择、限制组内选中数或自定义未选中值。
+    default: 'false / - / false'
   - name: v-model
     type: Boolean, String, Array
     values: boolean, string, array
-    description: determine the value of the checkbox and data anchor.
+    description: 复选框绑定值与数据标识。
     default: false
     link: null
     usage: '#default'
 
   - name: color
     type: String
-    values: vuesax colors, RGB, HEX
-    description: Change the color of the component.
+    values: theme colors, RGB, HEX
+    description: 设置组件颜色。
     default: false
     link: null
     usage: '#color'
@@ -19,7 +25,7 @@ PROPS:
   - name: value
     type: String, Object
     values: String, Object
-    description: Determine the value of the input when being checked.
+    description: 选中时输入框返回的值。
     default: true
     link: null
     usage: '#string-value'
@@ -27,7 +33,7 @@ PROPS:
   - name: loading
     type: Boolean
     values: true, false
-    description: Add a loading animation and disable the input.
+    description: 添加加载动画并禁用输入框。
     default: false
     link: null
     usage: '#loading'
@@ -44,7 +50,7 @@ PROPS:
   - name: line-through
     type: Boolean
     values: true, false
-    description: Add a line in the center of the label when checked.
+    description: 选中时为标签添加中划线。
     default: false
     link: null
     usage: '#linethrough'
@@ -58,7 +64,7 @@ PROPS:
   - name: indeterminate
     type: Boolean
     values: true, false
-    description: Change the default checkbox icon to a line that represents undetermined data.
+    description: 将默认图标改为表示不确定状态的横线。
     default: false
     link: null
     usage: '#Indeterminate'
@@ -72,7 +78,7 @@ PROPS:
   - name: label-before
     type: Boolean
     values: true, false
-    description: Change the position of the label.
+    description: 调整标签位置。
     default: false
     link: null
     usage: '#label'
@@ -86,7 +92,7 @@ PROPS:
   - name: checked
     type: Boolean
     values: true, false
-    description: Determine if the component is initially in check (this changes the property computed in v-model to true).
+    description: 是否初始选中；会使 v-model 的计算值为 true。
     default: false
     link: null
     usage: null
@@ -100,7 +106,7 @@ PROPS:
   - name: checked-force
     type: Boolean
     values: true, false
-    description: Force checkbox state is checked
+    description: 强制复选框为选中状态。
     default: false
     link: null
     usage: null
@@ -111,10 +117,10 @@ PROPS:
         </s-checkbox>
       </template>
 
-  - name: Checkbox Group
+  - name: checkbox-group
     type: Array<String | Number | Object>
     values: null
-    description: It is used for multiple checkboxes which are bound in one group.
+    description: 用于将多个复选框绑定为一组。
     default: null
     link: null
     usage: '#checkbox-group'
@@ -122,28 +128,28 @@ PROPS:
   - name: id
     type: string
     values: null
-    description: Checkbox id
+    description: 复选框 id。
     default: undefined
     link: null
     usage: null
     code: >
       <template>
         <s-checkbox v-model="value" id="framework">
-          Vuesax
+          Sax Design
         </s-checkbox>
       </template>
 
   - name: name
     type: string
     values: null
-    description: Checkbox name
+    description: 复选框 name。
     default: null
     link: null
     usage: null
     code: >
       <template>
         <s-checkbox v-model="value" name="checkbox-name">
-          Vuesax
+          Sax Design
         </s-checkbox>
       </template>
 
@@ -151,7 +157,7 @@ SLOTS:
   - name: icon
     type: slot
     values: null
-    description: Change the component icon.
+    description: 自定义组件图标。
     default: null
     link: null
     usage: '#icon'
@@ -159,37 +165,37 @@ SLOTS:
       <template>
         <s-checkbox v-model="option1">
           <template #icon>
-            <i class='bx bx-check' />
+            <s-icon   name="bx:check" />
           </template>
         </s-checkbox>
         <s-checkbox success v-model="option2">
           <template #icon>
-            <i class='bx bx-check-double' />
+            <s-icon   name="bx:check-double" />
           </template>
         </s-checkbox>
         <s-checkbox danger v-model="option3">
           <template #icon>
-            <i class='bx bx-x' />
+            <s-icon   name="bx:x" />
           </template>
         </s-checkbox>
         <s-checkbox warn v-model="option4">
           <template #icon>
-            <i class='bx bxs-shield' />
+            <s-icon   name="bxs:shield" />
           </template>
         </s-checkbox>
         <s-checkbox dark v-model="option5">
           <template #icon>
-            <i class='bx bxs-heart' />
+            <s-icon   name="bxs:heart" />
           </template>
         </s-checkbox>
         <s-checkbox color="#7d33ff" v-model="option6">
           <template #icon>
-            <i class='bx bx-brightness' />
+            <s-icon   name="bx:brightness" />
           </template>
         </s-checkbox>
         <s-checkbox color="rgb(59,222,200)" v-model="option7">
           <template #icon>
-            <i class='bx bxs-paint' />
+            <s-icon   name="bxs:paint" />
           </template>
         </s-checkbox>
       </template>
@@ -197,7 +203,7 @@ SLOTS:
   - name: default
     type: slot
     values: null
-    description: Add a label to the component.
+    description: 为组件添加标签。
     default: null
     link: null
     usage: '#default'
@@ -209,7 +215,7 @@ SLOTS:
       </template>
 ---
 
-# Checkbox
+# Checkbox 复选框
 
 <card>
 
@@ -217,7 +223,7 @@ SLOTS:
 
 <docs-warn />
 
-Add a checkbox type input easily and with a beautiful animation
+使用 `s-checkbox` 可快速创建带动画的复选框输入。
 
 <template #example>
 <checkbox-default />
@@ -239,9 +245,9 @@ Add a checkbox type input easily and with a beautiful animation
 
 <card>
 
-## color
+## 颜色
 
-Change the color of the component with the `color` property, the allowed values ​​are (main colors of vuesax, RGB, HEX)
+通过 `color` 设置组件颜色，支持主题色、RGB、HEX。
 
 <template #example>
 <checkbox-color />
@@ -263,9 +269,9 @@ Change the color of the component with the `color` property, the allowed values 
 
 <card>
 
-## Boolean Value
+## 布尔值
 
-By default the component is used with a boolean value that when being checked returns `true` and when not being checked returns `false`
+默认使用布尔值：选中时返回 `true`，未选中时返回 `false`。
 
 <template #example>
 <checkbox-boolean />
@@ -287,9 +293,9 @@ By default the component is used with a boolean value that when being checked re
 
 <card>
 
-## String Value
+## 字符串值
 
-You may need to return a string when the component is checked for it use the `value` property with the `string` you want to return
+需要在选中时返回字符串，可通过 `value` 设置返回值。
 
 <template #example>
 <checkbox-string />
@@ -311,11 +317,11 @@ You may need to return a string when the component is checked for it use the `va
 
 <card>
 
-## Checkbox group
+## 复选框组
 
-It is used for multiple checkboxes which are bound in one group, and indicates whether one option is selected by checking if it is checked.
+复选框组用于绑定多个复选框，并根据选中状态标识对应选项。
 
-checkbox-group element can manage multiple checkboxes in one group by using v-model which is bound as an Array. Inside the el-checkbox element, label is the value of the checkbox. If no content is nested in that tag, label will be rendered as the description following the button of the checkbox. label also corresponds with the element values in the array. It is selected if the specified value exists in the array, and vice versa.
+通过绑定数组类型的 v-model 管理组内多个复选框。每个选项的 `label` 对应数组中的值；数组包含该值时选中，否则未选中。未提供插槽内容时，`label` 也会作为按钮后的描述展示。
 
 <template #example>
 <checkbox-array />
@@ -359,7 +365,7 @@ checkbox-group element can manage multiple checkboxes in one group by using v-mo
 
 ## 图标
 
-Change the icon inside the checkbox component with the`slot="icon"`
+通过 `icon` 插槽自定义复选框内部图标。
 
 <utils-icon />
 
@@ -385,7 +391,7 @@ Change the icon inside the checkbox component with the`slot="icon"`
 
 ## 标签
 
-Add a label to the checkbox with the default slot of the component
+通过组件默认插槽为复选框添加标签。
 
 <template #example>
 <checkbox-label />
@@ -409,7 +415,7 @@ Add a label to the checkbox with the default slot of the component
 
 ## 加载 <Badge text="New"/>
 
-Add a loading status to the component with the property `loading`
+通过 `loading` 属性为组件添加加载状态。
 
 <template #example>
 <checkbox-loading />
@@ -431,9 +437,9 @@ Add a loading status to the component with the property `loading`
 
 <card>
 
-## Line Through <Badge text="New"/>
+## 中划线
 
-Add a line in the middle of the label when the checkbox is checked with the property `line-through`
+通过 `line-through` 在复选框选中时为标签添加中划线。
 
 <template #example>
 <checkbox-line-through />
@@ -457,7 +463,7 @@ Add a line in the middle of the label when the checkbox is checked with the prop
 
 ## 不确定 <Badge text="New"/>
 
-There are some cases where you have several checkboxes and you need one that manages all the others for this you can do it with the indeterminate property that adds a different style to the checkbox
+存在多个复选框且需要一个统一管理项时，可使用 `indeterminate` 为该复选框添加不确定状态样式。
 
 <template #example>
 <checkbox-indeterminate />

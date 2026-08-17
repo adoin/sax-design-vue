@@ -5,7 +5,7 @@
       <s-checkbox color="danger" value="html"> Html </s-checkbox>
       <s-checkbox color="warn" value="javascript"> Javascript </s-checkbox>
       <s-checkbox color="#42b883" value="vue"> Vue </s-checkbox>
-      <s-checkbox color="dark" value="vuesax"> Vuesax </s-checkbox>
+      <s-checkbox color="dark" value="Sax Design"> Sax Design </s-checkbox>
     </s-checkbox-group>
 
     <span class="data-check">

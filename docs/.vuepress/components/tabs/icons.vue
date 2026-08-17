@@ -1,7 +1,7 @@
 <template>
   <s-tabs v-model="active">
-    <s-tab label="Inbox" icon="inbox">Inbox</s-tab>
-    <s-tab label="Settings" icon="settings">Settings</s-tab>
+    <s-tab label="Inbox" icon="cb:email">Inbox</s-tab>
+    <s-tab label="Settings" icon="cb:settings">Settings</s-tab>
   </s-tabs>
 </template>
 

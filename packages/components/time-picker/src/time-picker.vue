@@ -3,17 +3,29 @@
     v-model:visible="visible"
     trigger="click"
     placement="bottom-start"
+    strategy="fixed"
+    :flip="{ padding: 12 }"
+    :shift="{ padding: 12 }"
     :fit="true"
     :show-arrow="false"
     :disabled="disabled"
     :offset="4"
     :popper-class="ns.e('popper')"
+    :popper-style="themeStyle"
   >
-    <div :class="[ns.b(), ns.is('block', block)]" @mousedown.prevent>
+    <div
+      :class="[ns.b(), ns.is('block', block)]"
+      :style="themeStyle"
+      @mousedown.prevent
+    >
       <s-input
         ref="inputRef"
         :model-value="displayText"
         :placeholder="inputPlaceholder"
+        :label="label"
+        :label-float="labelFloat"
+        :color="color"
+        :size="size"
         :disabled="disabled"
         :readonly="!editable || readonly"
         :clearable="clearable && !disabled"
@@ -24,7 +36,7 @@
         @blur="(e) => $emit('blur', e)"
       >
         <template #icon>
-          <s-icon size="18"><clock /></s-icon>
+          <s-icon name="cb:time" size="18" />
         </template>
       </s-input>
     </div>
@@ -59,13 +71,13 @@
 import { computed, ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
-import { Clock } from '@sax-design-vue/icons-vue'
 import SButton from '@vuesax-alpha/components/button'
 import SIcon from '@vuesax-alpha/components/icon'
 import SInput from '@vuesax-alpha/components/input'
 import SPopper from '@vuesax-alpha/components/popper'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { getVsColor } from '@vuesax-alpha/utils'
 import STimePanel from '../../date-picker/src/time-panel.vue'
 import { timePickerEmits, timePickerProps } from './time-picker'
 import type { TimePickerValue } from './time-picker'
@@ -80,6 +92,12 @@ const emit = defineEmits(timePickerEmits)
 
 const ns = useNamespace('time-picker')
 const { t } = useLocale()
+
+const themeStyle = computed(() =>
+  ns.cssVar({
+    color: getVsColor(props.color),
+  }),
+)
 
 const visible = ref(false)
 const inputRef = ref<InputInstance>()

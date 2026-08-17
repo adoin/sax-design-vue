@@ -64,7 +64,7 @@
               </div>
               <div>
                 <s-button type="flat" icon>
-                  <i class="bx bx-lock-open-alt" />
+                  <s-icon  name="bx:lock-open-alt" />
                 </s-button>
                 <s-button type="flat" icon> Send Email </s-button>
                 <s-button type="border" color="danger"> Remove User </s-button>
@@ -99,7 +99,7 @@
         placeholder="Select"
         @change="editActive = false"
       >
-        <s-option label="Vuesax" value="Vuesax"> Vuesax </s-option>
+        <s-option label="Sax Design" value="Sax Design"> Sax Design </s-option>
         <s-option label="Vue" value="Vuejs"> Vue </s-option>
         <s-option label="Javascript" value="Javascript"> Javascript </s-option>
         <s-option disabled label="Sass" value="Sass"> Sass </s-option>

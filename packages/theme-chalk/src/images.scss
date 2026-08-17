@@ -22,7 +22,7 @@
     width: calc(25% - 4px);
     list-style: none;
     margin: 2px;
-    border-radius: 10px;
+    border-radius: var(--sax-radius-md);
     transition: all 0.25s ease;
     position: relative;
     cursor: pointer;
@@ -37,7 +37,7 @@
   @include e(wrap) {
     overflow: hidden;
     width: 100%;
-    border-radius: 10px;
+    border-radius: var(--sax-radius-md);
     position: relative;
     z-index: 2;
   }
@@ -55,7 +55,7 @@
     position: absolute;
     width: 100%;
     bottom: 0;
-    border-radius: 10px;
+    border-radius: var(--sax-radius-md);
     opacity: 0;
     z-index: 1;
     transform: scale(1);
@@ -108,7 +108,7 @@
   @include m(hover-dark) {
     .#{bem('images', 'item')}:hover {
       background: #000;
-      border-radius: 20px;
+      border-radius: var(--sax-radius-xl);
 
       .#{bem('images', 'img')} {
         opacity: 0.4;

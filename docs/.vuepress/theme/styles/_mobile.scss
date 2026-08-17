@@ -1,4 +1,4 @@
-@import './config';
+@use './config' as *;
 
 $mobileSidebarWidth: $sidebarWidth * 0.82;
 

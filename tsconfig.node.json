@@ -11,6 +11,8 @@
     "internal/**/*.json",
     "scripts/**/*",
     "packages/theme-chalk/*",
+    "packages/iconify/src/vite.ts",
+    "sax-icons.config.ts",
     "packages/sax-design-vue/version.ts",
     "packages/sax-design-vue/package.json"
   ],

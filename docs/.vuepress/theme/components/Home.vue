@@ -14,7 +14,7 @@
 
           <p
             class="description"
-            v-html="pageFrontmatter.description || 'Welcome to Vuesax-alpha'"
+            v-html="pageFrontmatter.description || 'Welcome to Sax Design Vue'"
           />
 
           <div class="con-btns">
@@ -23,7 +23,7 @@
               class="action-button"
               :nav-item="action"
               @mouseleave="time('vuesax')"
-              @mouseenter=";(nativeButtons.vuesax = true), (expand = true)"
+              @mouseenter=";((nativeButtons.vuesax = true), (expand = true))"
             />
 
             <a
@@ -31,7 +31,7 @@
               class="install"
               href="/guide/getting-started.html/#installation"
               @mouseleave="time('install')"
-              @mouseenter=";(nativeButtons.install = true), (expand = true)"
+              @mouseenter=";((nativeButtons.install = true), (expand = true))"
             >
               <img src="/install.png" alt="" />
             </a>
@@ -42,11 +42,11 @@
               target="_blank"
               :href="themeData.docsRepo"
               @mouseleave="time('github')"
-              @mouseenter=";(nativeButtons.github = true), (expand = true)"
+              @mouseenter=";((nativeButtons.github = true), (expand = true))"
             >
-              <i class="bx bxl-github" />
+              <s-icon  name="bxl:github" />
               <span title="Stargazers" class="badge-star">
-                <i class="bx bxs-star" />
+                <s-icon  name="bxs:star" />
                 {{ numberWithCommas }}
               </span>
             </a>
@@ -147,7 +147,7 @@ const time = (variable: keyof PageButtons) => {
 </script>
 
 <style lang="scss">
-@import '../styles/_use.scss';
+@use '../styles/use' as *;
 
 .darken {
   .init {

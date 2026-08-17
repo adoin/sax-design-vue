@@ -1,6 +1,7 @@
 @use './base.scss';
 // component styles
 @use './alert.scss';
+@use './affix.scss';
 @use './anchor.scss';
 @use './avatar-group.scss';
 @use './avatar.scss';
@@ -24,6 +25,7 @@
 @use './collapse.scss';
 @use './countdown.scss';
 @use './context-menu.scss';
+@use './control-group.scss';
 @use './date-picker.scss';
 @use './print-page-break.scss';
 @use './dialog.scss';

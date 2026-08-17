@@ -1,7 +1,7 @@
 <template>
   <nav
     :class="[ns.b(), ns.m(mode), ns.is('collapse', collapse)]"
-    aria-label="Menu"
+    :aria-label="t('vs.menu.label')"
   >
     <ul :class="ns.e('list')">
       <SMenuNode
@@ -22,7 +22,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import SMenuNode from './menu-node.vue'
 import { menuEmits, menuProps } from './menu'
 import type { MenuKey, MenuOption } from './menu'
@@ -32,6 +32,7 @@ defineOptions({ name: 'SMenu' })
 const props = defineProps(menuProps)
 const emit = defineEmits(menuEmits)
 const ns = useNamespace('menu')
+const { t } = useLocale()
 const openKeys = ref<MenuKey[]>([...props.defaultOpeneds])
 const select = (option: MenuOption) => {
   emit('update:modelValue', option.key)

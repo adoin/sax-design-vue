@@ -1,21 +1,18 @@
 <template>
   <div class="center">
-    <s-card>
-      <template #title>
-        <h3>Trendy clothing</h3>
-      </template>
+    <s-card
+      title="Trendy clothing"
+      text="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
+    >
       <template #img>
         <img :src="`/foto5.png`" alt="" />
       </template>
-      <template #text>
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-      </template>
       <template #interactions>
         <s-button color="danger" icon>
-          <i class="bx bx-heart" />
+          <s-icon  name="bx:heart" />
         </s-button>
         <s-button class="btn-chat" type="shadow">
-          <i class="bx bx-chat" />
+          <s-icon  name="bx:chat" />
           <span class="span"> 54 </span>
         </s-button>
       </template>

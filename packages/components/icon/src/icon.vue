@@ -1,14 +1,31 @@
 <template>
-  <i :class="iconClasses" :style="style">
-    <template v-if="isMaterialIcons">{{ icon }}</template>
-    <slot v-else-if="!icon" />
-  </i>
+  <span
+    v-bind="$attrs"
+    :class="[ns.b(), ns.is('rolling', isRolling)]"
+    :style="rootStyle"
+    :role="label ? 'img' : undefined"
+    :aria-label="label"
+    :aria-hidden="label ? undefined : 'true'"
+  >
+    <svg
+      v-if="resolvedIconData"
+      v-bind="resolvedIconData.attributes"
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      focusable="false"
+      :style="svgStyle"
+      v-html="resolvedIconData.body"
+    />
+    <slot v-else />
+  </span>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { addUnit, getVsColor, isUndefined } from '@vuesax-alpha/utils'
+import { addUnit, getVsColor } from '@vuesax-alpha/utils'
 import { useNamespace } from '@vuesax-alpha/hooks'
+import { getIconData } from 'sax-design-vue-iconify'
 import { iconProps } from './icon'
 import type { CSSProperties } from 'vue'
 
@@ -19,35 +36,37 @@ defineOptions({
 
 const props = defineProps(iconProps)
 const ns = useNamespace('icon')
-
-const MATERIAL_ICON_PACKS = new Set([
-  'material-icons',
-  'material-icons-outlined',
-  'material-symbols-outlined',
-])
-
-const isMaterialIcons = computed(
-  () => !!props.icon && MATERIAL_ICON_PACKS.has(props.iconPack)
+const isRolling = computed(
+  () =>
+    props.rolling === true ||
+    (typeof props.rolling === 'number' && props.rolling > 0),
+)
+const resolvedIconData = computed(
+  () => props.iconData || (props.name ? getIconData(props.name) : undefined),
 )
 
-const iconClasses = computed(() => {
-  const classes: string[] = [ns.b(), 'notranslate', props.iconPack]
-  if (!isMaterialIcons.value && props.icon) {
-    classes.push(props.icon)
+const rootStyle = computed<CSSProperties>(() => {
+  const size = props.size === undefined ? '1em' : addUnit(props.size)
+  const rgb = getVsColor(props.color)
+  const style: CSSProperties = {
+    width: size,
+    height: size,
+    fontSize: size,
+    color: rgb ? `rgb(${rgb})` : props.color || 'currentColor',
   }
-  return classes
+  if (typeof props.rolling === 'number' && props.rolling > 0) {
+    style['--sax-icon-rolling-duration'] = `${props.rolling}s`
+  }
+  return style
 })
 
-const style = computed<CSSProperties>(() => {
-  const { size, color } = props
-  if (!size && !color) return {}
-
+const svgStyle = computed<CSSProperties>(() => {
+  const angle =
+    typeof props.rotate === 'number' ? `${props.rotate}deg` : props.rotate
+  const scaleX = props.flip === 'horizontal' || props.flip === 'both' ? -1 : 1
+  const scaleY = props.flip === 'vertical' || props.flip === 'both' ? -1 : 1
   return {
-    ...ns.cssVar({
-      color: getVsColor(color),
-    }),
-    color: `rgb(${ns.cssVarName('color')})`,
-    fontSize: isUndefined(size) ? undefined : addUnit(size),
+    transform: `rotate(${angle || '0deg'}) scale(${scaleX}, ${scaleY})`,
   }
 })
 </script>

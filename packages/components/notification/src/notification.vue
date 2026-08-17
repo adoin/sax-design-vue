@@ -44,7 +44,12 @@
       </template>
       <div v-else :class="ns.e('loading')" />
 
-      <button v-if="showClose" :class="ns.e('close')" @click="handleClickClose">
+      <button
+        v-if="showClose"
+        :class="ns.e('close')"
+        :aria-label="t('vs.notification.close')"
+        @click="handleClickClose"
+      >
         <icon-close hover="less" />
       </button>
 
@@ -62,6 +67,7 @@ import { useTimeoutFn } from '@vueuse/core'
 import {
   useColor,
   useGlobalComponentSettings,
+  useLocale,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
@@ -75,6 +81,7 @@ defineOptions({
 const props = defineProps(notificationProps)
 
 const { ns, zIndex } = useGlobalComponentSettings('notification')
+const { t } = useLocale()
 
 const { currentZIndex, nextZIndex } = zIndex
 

@@ -1,15 +1,20 @@
 ---
 PROPS:
+  - name: placeholder
+    type: String
+    values: 输入框提示
+    description: 配置空状态提示文字。
+    default: '-'
   - name: v-model
     type: String
-    values: Material 图标名
-    description: 已选图标名。
+    values: Iconify 名称（`prefix:name`）
+    description: 当前选中的图标名称。
     default: "''"
   - name: icon-list
     type: Array
     values: string[]
     description: 可选择图标名。
-    default: 常用 Material 图标
+    default: 常用 Carbon 图标
   - name: searchable
     type: Boolean
     values: true / false
@@ -18,7 +23,7 @@ PROPS:
 EVENTS:
   - name: change / clear
     description: 选择与清空事件。
-description: "VXE 风格图标选择器。"
+description: "图标选择器。"
 ---
 
 # 图标选择器

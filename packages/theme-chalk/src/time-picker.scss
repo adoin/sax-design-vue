@@ -2,7 +2,7 @@
 
 @include b(time-picker) {
   display: inline-flex;
-  width: getCssVar(select, width);
+  width: 112px;
   max-width: 100%;
 
   @include when(block) {
@@ -15,6 +15,11 @@
     width: 100%;
   }
 
+  .#{$namespace}-input__original {
+    width: 100%;
+    min-width: 0;
+  }
+
   @include e(popper) {
     padding: 0 !important;
     border: 0 !important;
@@ -25,8 +30,11 @@
   @include e(dropdown) {
     display: flex;
     flex-direction: column;
+    // The shared TimePanel needs a bounded flex parent. Without one, its
+    // 60-minute/second lists expand the standalone picker to document height.
+    height: min(280px, calc(100vh - 24px));
     background: getColor('background');
-    border-radius: 12px;
+    border-radius: var(--sax-radius);
     box-shadow: 0 10px 30px -8px rgba(0, 0, 0, getCssVar(shadow-opacity));
     overflow: hidden;
     min-width: 240px;

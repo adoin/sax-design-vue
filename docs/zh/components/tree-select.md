@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: node-key / label / children / placeholder
+    type: String
+    values: 树数据字段和输入提示
+    description: 映射树数据字段并自定义空状态提示文字。
+    default: 'id / label / children / -'
   - name: model-value/v-model
     type: String | Number
     values: node key
@@ -23,7 +28,7 @@ PROPS:
 EVENTS:
   - name: change / clear
     description: 选择和清空事件。
-description: "兼容 VXE 的树形选择器。"
+description: "树形选择器。"
 ---
 
 # Tree select 树形选择器

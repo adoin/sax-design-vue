@@ -15,7 +15,7 @@ PROPS:
     values: text
     description: 空状态提示文本。
     default: null
-description: "适配 VXE Empty 使用场景的空状态组件。"
+description: "用于空内容状态的组件。"
 ---
 
 # Empty 空状态

@@ -21,15 +21,15 @@ export const buildTranslator =
 export const translate = (
   path: string,
   option: undefined | TranslatorOption,
-  locale: Language
+  locale: Language,
 ): string =>
-  (get(locale, path, path) as string).replace(
+  (get(locale, path, get(English, path, path)) as string).replace(
     /\{(\w+)\}/g,
-    (_, key) => `${option?.[key] ?? `{${key}}`}`
+    (_, key) => `${option?.[key] ?? `{${key}}`}`,
   )
 
 export const buildLocaleContext = (
-  locale: MaybeRef<Language>
+  locale: MaybeRef<Language>,
 ): LocaleContext => {
   const lang = computed(() => unref(locale).name)
   const localeRef = isRef(locale) ? locale : ref(locale)

@@ -10,15 +10,13 @@
     "build": "vuepress build"
   },
   "dependencies": {
-    "@sax-design-vue/icons-vue": "workspace:*",
+    "sax-design-vue-iconify": "workspace:*",
     "@vuepress/shared-utils": "1.9.10",
-    "@vuesax-alpha/icons-vue": "0.0.2-beta.12",
     "@vuesax-alpha/theme-chalk": "workspace:*",
     "@vueuse/components": "^14.3.0",
     "@vueuse/core": "^14.3.0",
     "@vueuse/motion": "3.0.3",
     "@vueuse/shared": "^14.3.0",
-    "boxicons": "^2.1.4",
     "lodash-unified": "^1.0.3",
     "minimist": "^1.2.8",
     "prismjs": "^1.30.0",

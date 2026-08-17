@@ -11,6 +11,8 @@ import {
   zhSidebar,
 } from './app'
 import { saxDesignVueTheme } from './theme/index'
+import { saxIcons } from 'sax-design-vue-iconify/vite'
+import saxIconConfig from '../../sax-icons.config'
 import type { UserConfig } from 'vuepress'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -21,6 +23,29 @@ const vsRoot = path.resolve(pkgRoot, 'sax-design-vue')
 export default defineUserConfig({
   bundler: viteBundler({
     viteOptions: {
+      plugins: [saxIcons(saxIconConfig)],
+      css: {
+        preprocessorOptions: {
+          scss: {
+            // VuePress beta and legacy demo snippets still invoke Sass through
+            // compatibility APIs. Project styles use the module API; keep
+            // dependency-level migration noise out of routine docs builds.
+            silenceDeprecations: [
+              'legacy-js-api',
+              'global-builtin',
+              'color-functions',
+              'if-function',
+              'import',
+              'new-global',
+            ],
+          },
+        },
+      },
+      build: {
+        // Documentation output intentionally bundles the interactive component
+        // catalog. Keep the threshold aligned with this application bundle.
+        chunkSizeWarningLimit: 1500,
+      },
       resolve: {
         alias: [
           {
@@ -38,10 +63,6 @@ export default defineUserConfig({
           {
             find: /^sax-design-vue\/(es|lib)\/(.*)$/,
             replacement: `${pkgRoot}/$2`,
-          },
-          {
-            find: '@sax-design-vue/icons-vue',
-            replacement: path.resolve(pkgRoot, 'icons-vue/src/index.ts'),
           },
         ],
       },
@@ -91,20 +112,6 @@ export default defineUserConfig({
         href: `/logos/logo-vuesax-logotipo-vuesax-png-8.png`,
         media: '(prefers-color-scheme:dark)',
         type: 'image/png',
-      },
-    ],
-    [
-      'link',
-      {
-        href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
-        rel: 'stylesheet',
-      },
-    ],
-    [
-      'link',
-      {
-        href: 'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css',
-        rel: 'stylesheet',
       },
     ],
     [

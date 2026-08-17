@@ -1,3 +1,3 @@
-# Generate
+# 生成主题
 
-## change default Colors
+## 修改默认颜色

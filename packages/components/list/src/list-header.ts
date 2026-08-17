@@ -18,10 +18,6 @@ export const listHeaderProps = buildProps({
     type: String,
     default: null,
   },
-  iconPack: {
-    type: String,
-    default: 'material-icons',
-  },
 } as const)
 
 export type ListHeaderProps = ExtractPropTypes<typeof listHeaderProps>

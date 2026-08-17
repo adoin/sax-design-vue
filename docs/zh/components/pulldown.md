@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: offset / teleported
+    type: Number / Boolean
+    values: 像素 / true | false
+    description: 配置触发元素间距和 body 挂载。
+    default: '12 / true'
   - name: v-model
     type: Boolean
     values: true / false
@@ -18,7 +23,7 @@ PROPS:
 EVENTS:
   - name: show / hide
     description: 显示状态事件。
-description: "VXE 风格通用下拉容器。"
+description: "通用下拉容器。"
 ---
 
 # 下拉容器

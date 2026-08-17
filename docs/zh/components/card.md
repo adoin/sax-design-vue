@@ -1,9 +1,26 @@
 ---
+description: '在具有层次感的容器中组织关联内容和操作。'
 PROPS:
+  - name: title
+    type: String
+    values: null
+    description: 卡片标题；同时传入 title 插槽时优先渲染插槽。
+    default: null
+    link: null
+    usage: '#default'
+    code: null
+  - name: text
+    type: String
+    values: null
+    description: 卡片正文；同时传入 text 插槽时优先渲染插槽。
+    default: null
+    link: null
+    usage: '#default'
+    code: null
   - name: type
     type: String
     values: 1,2,3,4,5
-    description: Change the style of the letter and the position of the internals.
+    description: 设置文字样式和内部元素位置。
     default: null
     link: null
     usage: '#type-5'
@@ -13,7 +30,7 @@ SLOTS:
   - name: text
     type: slot
     values: null
-    description: Add text to the card in the section determined by the card type.
+    description: 自定义卡片正文内容，优先级高于 text 属性。
     default: null
     link: null
     usage: '#default'
@@ -21,7 +38,7 @@ SLOTS:
   - name: title
     type: slot
     values: null
-    description: Add the title to the card in the section determined by the type of card.
+    description: 自定义卡片标题内容，优先级高于 title 属性。
     default: null
     link: null
     usage: '#default'
@@ -29,7 +46,7 @@ SLOTS:
   - name: buttons
     type: slot
     values: null
-    description: Add the buttons to the card in the section determined by the type of card.
+    description: 在卡片类型对应区域添加按钮。
     default: null
     link: null
     usage: '#default'
@@ -37,7 +54,7 @@ SLOTS:
   - name: interactions
     type: slot
     values: null
-    description: Add the interactions to the card in the section determined by the card type.
+    description: 在卡片类型对应区域添加交互内容。
     default: null
     link: null
     usage: '#default'
@@ -45,7 +62,7 @@ SLOTS:
   - name: img
     type: slot
     values: null
-    description: Add the image or video to the card in the section determined by the type of card.
+    description: 在卡片类型对应区域添加图片或视频。
     default: null
     link: null
     usage: '#default'
@@ -55,7 +72,7 @@ NEWS:
   - name
 ---
 
-# Card
+# Card（卡片）
 
 <card>
 
@@ -63,7 +80,7 @@ NEWS:
 
 ## 默认
 
-Add a card with the `s-card` component for the structure of this component we have several slots
+常规文字内容可直接传入 `title` 和 `text`；需要自定义标签时使用同名插槽，插槽优先于属性。
 
 - title
 - text
@@ -85,9 +102,9 @@ Add a card with the `s-card` component for the structure of this component we ha
 
 <card>
 
-## Type 2
+## 类型 2
 
-Completely change the style of the letter with the property `type` and the value` 2`
+通过 `type="2"` 完全切换文字样式。
 
 <template #example>
 <card-type2 />
@@ -103,9 +120,9 @@ Completely change the style of the letter with the property `type` and the value
 
 <card>
 
-## Type 3
+## 类型 3
 
-Completely change the style of the letter with the property `type` and the value` 3`
+通过 `type="3"` 完全切换文字样式。
 
 <template #example>
 <card-type3 />
@@ -121,9 +138,9 @@ Completely change the style of the letter with the property `type` and the value
 
 <card>
 
-## Type 4
+## 类型 4
 
-Completely change the style of the letter with the `type` property and the value` 4`
+通过 `type="4"` 完全切换文字样式。
 
 <template #example>
 <card-type4 />
@@ -139,9 +156,9 @@ Completely change the style of the letter with the `type` property and the value
 
 <card>
 
-## Type 5
+## 类型 5
 
-Change the style of the letter completely with the `type` property and the value` 5`
+通过 `type="5"` 完全切换文字样式。
 
 <template #example>
 <card-type5 />
@@ -157,9 +174,9 @@ Change the style of the letter completely with the `type` property and the value
 
 <card>
 
-## Group
+## 组合
 
-To have a group of scrolling cards you can use the `s-card-group` component
+需要可滚动的卡片组时，可使用 `s-card-group` 组件。
 
 <template #example>
 <card-group />

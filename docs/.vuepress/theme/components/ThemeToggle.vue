@@ -2,11 +2,11 @@
   <button
     class="theme-toggle"
     type="button"
-    :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-    :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+    :title="isDark ? t.shell.switchLight : t.shell.switchDark"
+    :aria-label="isDark ? t.shell.switchLight : t.shell.switchDark"
     @click="onToggle"
   >
-    <i :class="isDark ? 'bx bxs-sun' : 'bx bxs-moon'" />
+    <s-icon :name="isDark ? 'bxs:sun' : 'bxs:moon'"  />
   </button>
 </template>
 
@@ -14,9 +14,11 @@
 import { inject, onMounted, watch } from 'vue'
 import { isDark, toggleDark } from '../composables'
 import { vsThemeKey } from '../type'
+import { useDocLocaleUi } from '../composables/docLocale'
 import type { vsThemeContext } from '../type'
 
 const $vsTheme = inject<vsThemeContext>(vsThemeKey, {} as vsThemeContext)
+const { t } = useDocLocaleUi()
 
 const syncTheme = () => {
   $vsTheme.themeDarken = isDark.value

@@ -7,13 +7,13 @@
     class="sidebar-link"
     :class="{
       active,
-      'sidebar-new': isNew,
       'sidebar-update': isUpdate,
     }"
   >
     {{ text }}
-    <span v-if="isNew" class="sidebar-new-badge">New</span>
-    <span v-else-if="isUpdate" class="sidebar-update-badge">Update</span>
+    <span v-if="isUpdate" class="sidebar-update-badge">{{
+      t.shell.update
+    }}</span>
   </router-link>
 </template>
 
@@ -22,21 +22,21 @@ import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { isMatchedHeader, isMathcedPath } from '../../util'
+import { useDocLocaleUi } from '../../composables/docLocale'
 
 const props = defineProps<{
   text: string
   link: string
-  isNew?: boolean
   isUpdate?: boolean
 
   isHeaderLink?: boolean
 }>()
 
 const route = useRoute()
+const { t } = useDocLocaleUi()
 
 const title = computed(() => {
-  if (props.isNew) return `${props.text}New`
-  if (props.isUpdate) return `${props.text}Update`
+  if (props.isUpdate) return `${props.text} ${t.value.shell.update}`
   return props.text
 })
 
@@ -54,17 +54,8 @@ watch(() => (props.isHeaderLink ? route.hash : route.path), updateActive, {
 </script>
 
 <style lang="scss">
-@import '../../styles/use';
+@use '../../styles/use' as *;
 
-.sidebar-new {
-  position: relative;
-  color: #42b983 !important;
-  opacity: 1 !important;
-  &:after {
-    background: #42b983 !important;
-  }
-}
-.sidebar-new-badge,
 .sidebar-update-badge {
   margin-left: 0.35rem;
   padding: 0.05rem 0.35rem;
@@ -75,10 +66,6 @@ watch(() => (props.isHeaderLink ? route.hash : route.path), updateActive, {
   vertical-align: middle;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-}
-.sidebar-new-badge {
-  color: #42b983;
-  background: rgba(66, 185, 131, 0.12);
 }
 .sidebar-update-badge {
   color: #ffba00;

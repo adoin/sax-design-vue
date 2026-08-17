@@ -20,7 +20,7 @@
   @include e(line) {
     position: absolute;
     inset: 0;
-    border-radius: 20px;
+    border-radius: var(--sax-radius-pill);
     background: rgba(0, 0, 0, 0.08);
   }
 
@@ -29,9 +29,9 @@
     top: 0;
     left: 0;
     height: 100%;
-    border-radius: 20px;
+    border-radius: var(--sax-radius-pill);
     background: var(--sax-slider-color, getColor('primary'));
-    transition: width 0.15s ease;
+    transition: width var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
   }
 
   @include e(thumb) {
@@ -42,11 +42,11 @@
     margin-left: -9px;
     margin-top: -9px;
     border: 2px solid getColor('white');
-    border-radius: 50%;
+    border-radius: var(--sax-radius-circle);
     background: var(--sax-slider-color, getColor('primary'));
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     cursor: grab;
-    transition: left 0.15s ease;
+    transition: left var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 
     &:hover .#{bem('slider', 'text')} {
       opacity: 1;
@@ -74,10 +74,10 @@
     color: #fff;
     background: var(--sax-slider-color, getColor('primary'));
     padding: 4px 8px;
-    border-radius: 6px;
+    border-radius: var(--sax-radius-sm);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 
     &::after {
       content: '';

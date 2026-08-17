@@ -51,7 +51,7 @@ const $text = ref<HTMLElement>()
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 h1 {
   + .card {
@@ -159,6 +159,28 @@ h1 {
         }
       }
     }
+  }
+  // One example surface: the card owns the only rounded outer edge.
+  & > .example {
+    min-height: 132px;
+    margin: 18px 0 0;
+    padding: 30px 28px;
+    border: 0;
+    border-top: 1px solid rgba(var(--sax-accent-color), 0.1);
+    border-radius: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(var(--sax-theme-bg2), 0.16),
+      rgba(var(--sax-theme-layout), 0.42)
+    );
+  }
+
+  & > .slotcode {
+    margin: 0;
+    border: 0;
+    border-top: 1px solid rgba(var(--sax-accent-color), 0.1);
+    border-radius: 0;
+    background: rgba(var(--sax-theme-layout), 0.72);
   }
   .text {
     h2,

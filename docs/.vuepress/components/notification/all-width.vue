@@ -1,14 +1,14 @@
 <template>
   <div class="center">
     <s-button type="shadow" icon @click="openNotification(null, '')">
-      <i class="bx bx-border-bottom" />
+      <s-icon  name="bx:border-bottom" />
     </s-button>
     <s-button
       type="flat"
       icon
       @click="openNotification('top-center', 'primary', 'auto')"
     >
-      <i class="bx bx-border-radius b-r" />
+      <s-icon  name="bx:border-radius" class="b-r" />
     </s-button>
   </div>
 </template>
@@ -21,9 +21,9 @@ const openNotification = (position = null, color, width = 'full') => {
     width,
     position,
     color,
-    title: 'Documentation Vuesax 4.0+',
+    title: 'Sax Design Vue',
     content:
-      'These documents refer to the latest version of vuesax (4.0+), to see the documents of the previous versions you can do it here 👉 Vuesax 3.x',
+      'Sax Design Vue notification example with configurable content, color, and position.',
   })
 }
 </script>

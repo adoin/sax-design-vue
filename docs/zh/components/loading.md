@@ -1,10 +1,11 @@
 ---
+description: "指示内容或操作正在加载。"
 PROPS:
   #__________________________________
   - name: type
     type: String
     values: atom,ball,scale,waves,border,points,square,circles,corners,default,gradient,rectangle,square-rotate
-    description: Change the animation of the loading.
+    description: 设置加载动画类型。
     default: default
     link: null
     usage: '#type'
@@ -12,8 +13,8 @@ PROPS:
     #__________________________________
   - name: color
     type: String
-    values: All colors of vuesax (RGB y HEX)
-    description: Change the color of the loading animation.
+    values: Theme colors, RGB, HEX
+    description: 设置加载动画颜色。
     default: primary
     link: /theme/
     usage: '#color'
@@ -21,8 +22,8 @@ PROPS:
     #__________________________________
   - name: background
     type: String
-    values: All colors of vuesax (RGB y HEX)
-    description: Change the background color of the loading.
+    values: Theme colors, RGB, HEX
+    description: 设置加载层背景颜色。
     default: '#fff'
     link: /theme/
     usage: '#background'
@@ -31,7 +32,7 @@ PROPS:
   - name: text
     type: String
     values: String
-    description: Add a text below the loading animation.
+    description: 在加载动画下方添加文本。
     default: null
     link: null
     usage: '#text'
@@ -40,7 +41,7 @@ PROPS:
   - name: percent
     type: Number
     values: 0 - 100 (%)
-    description: Add a percentage text inside the loading.
+    description: 在加载动画内显示百分比文本。
     default: null
     link: null
     usage: '#percent'
@@ -49,7 +50,7 @@ PROPS:
   - name: progress
     type: Number
     values: 0 - 100
-    description: Add a progress bar to the loading and the progress would be the value.
+    description: 为加载层添加进度条，值为进度百分比。
     default: null
     link: null
     usage: '#progress'
@@ -58,7 +59,7 @@ PROPS:
   - name: target
     type: String | HTMLElement | Ref<HTMLElement> | Vue Component
     values: 'String: Element Selector, HTMLElement: Selector element, Ref HTMLElement'
-    description: Determine the parent of the loading where it will be instantiated.
+    description: 指定加载层实例挂载的父元素。
     default: null
     link: null
     usage: '#target'
@@ -67,7 +68,7 @@ PROPS:
   - name: opacity
     type: Number
     values: 0 - 1
-    description: Change the opacity of the background.
+    description: 设置背景透明度。
     default: '0.6'
     link: null
     usage: '#target'
@@ -76,7 +77,7 @@ PROPS:
   - name: scale
     type: Number
     values: null
-    description: Change the size of the loading animation.
+    description: 设置加载动画尺寸。
     default: '1'
     link: null
     usage: '#target'
@@ -85,7 +86,7 @@ PROPS:
   - name: setPercent
     type: Function
     values: '(percent: Number) => void'
-    description: Change the value of the percent after instantiating the loading.
+    description: 加载层创建后更新百分比值。
     default: null
     link: null
     usage: '#percent'
@@ -94,7 +95,7 @@ PROPS:
   - name: setProgress
     type: Function
     values: '(progress: Number) => void'
-    description: Change the value of the progress after instantiating the loading.
+    description: 加载层创建后更新进度值。
     default: null
     link: null
     usage: '#progress'
@@ -103,7 +104,7 @@ PROPS:
   - name: setText
     type: Function
     values: '(text: String) => void'
-    description: Change the value of the text property after instantiating the loading.
+    description: 加载层创建后更新文本属性值。
     default: null
     link: null
     usage: '#text'
@@ -113,7 +114,7 @@ UPDATES:
   - type
 ---
 
-# Loading
+# Loading 加载
 
 <card>
 
@@ -121,7 +122,7 @@ UPDATES:
 
 <docs-warn />
 
-Generate a loading with the vuesax function
+使用 Sax Design Vue 的函数式 API 创建加载层。
 
 <Command>
 
@@ -158,9 +159,9 @@ SLoading.service(options)
 
 ## 类型 <Badge text="Update" type="warn" />
 
-Change the type of loading with the option `type`
+通过 `type` 设置加载动画类型。
 
-Tipos de loading:
+可用类型：
 
 - atom
 - ball
@@ -177,7 +178,7 @@ Tipos de loading:
 - square-rotate
 
 ::: tip
-Click on the example loading to open it in the whole page
+点击示例加载层可在整页中打开。
 :::
 
 <template #example>
@@ -202,7 +203,7 @@ Click on the example loading to open it in the whole page
 
 ## 颜色
 
-Change the color of the loading animation with the property `color`, the colors can be the main ones of vuesax or (**RGB**, **HEX**)
+通过 `color` 设置加载动画颜色，支持主题色、**RGB**、**HEX**。
 
 <template #example>
 <loading-color />
@@ -226,7 +227,7 @@ Change the color of the loading animation with the property `color`, the colors 
 
 ## 背景
 
-You can change the loading background with the property `loading`
+通过 `background` 属性可修改加载层背景。
 
 <template #example>
 <loading-background />
@@ -250,7 +251,7 @@ You can change the loading background with the property `loading`
 
 ## 文本
 
-Add a descriptive text of the loading or informing the user that it is loading or that it is missing to load with the property `text`
+通过 `text` 添加加载说明，例如正在加载或加载失败提示。
 
 <template #example>
 <loading-text />
@@ -272,9 +273,9 @@ Add a descriptive text of the loading or informing the user that it is loading o
 
 <card>
 
-## Percent
+## 百分比
 
-You can add a string of the percentage of load with the `percent` property, if you need to change that value use the `setPercent` function in the loading instance.
+通过 `percent` 显示加载百分比；需要更新时使用加载实例的 `setPercent` 方法。
 
 <template #example>
 <loading-percent />
@@ -296,9 +297,9 @@ You can add a string of the percentage of load with the `percent` property, if y
 
 <card>
 
-## Progress
+## 进度条
 
-Add a progress bar at the top to indicate the loading progress of the loading with the `progress` property, the value is a number that determines the percentage and the allowed value is (0 - 100)
+通过 `progress` 在顶部显示加载进度条；值为 0 至 100 的百分比。
 
 <template #example>
 <loading-progress />
@@ -320,12 +321,12 @@ Add a progress bar at the top to indicate the loading progress of the loading wi
 
 <card>
 
-## Target
+## 目标元素
 
-Use the loading on a specific dom element using the `target` property and the value can be a string with the `id` or the `class` only if it is unique for the element, you can also use the element itself as per example using `$refs`.
+通过 `target` 可将加载层用于指定 DOM 元素；可传唯一的 `id`、`class` 选择器，也可传元素本身，例如 `$refs`。
 
 ::: tip
-Ensure the target's style was set position
+请确保目标元素已设置定位样式。
 :::
 
 <template #example>

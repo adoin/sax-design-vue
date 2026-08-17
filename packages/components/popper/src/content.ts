@@ -18,6 +18,7 @@ type ClassObjectType = Record<string, boolean>
 type ClassType = string | ClassObjectType | ClassType[]
 
 export const popperContentProps = buildProps({
+  popperId: String,
   animation: {
     type: String,
     default: 'fade-in-linear',

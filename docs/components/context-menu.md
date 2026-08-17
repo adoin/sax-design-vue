@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: min-width
+    type: Number | String
+    values: CSS length
+    description: Set the minimum menu width.
+    default: '160'
   - name: items
     type: Array
     values: ContextMenuItem[]
@@ -18,7 +23,7 @@ PROPS:
 EVENTS:
   - name: select / open / close
     description: Item selection and visibility events.
-description: "VXE-style right-click context menu."
+description: "Right-click context menu."
 ---
 
 # Context menu

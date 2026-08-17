@@ -23,7 +23,7 @@ PROPS:
 EVENTS:
   - name: change
     description: Fired when a color is selected or changed.
-description: "VXE-compatible color picker."
+description: "Color picker."
 ---
 
 # Color picker

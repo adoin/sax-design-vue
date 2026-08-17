@@ -1,4 +1,5 @@
 ---
+description: "Choose a time from a predefined or generated list."
 PROPS:
   - name: v-model / model-value
     type: String

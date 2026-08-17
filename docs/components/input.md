@@ -1,5 +1,27 @@
 ---
+description: 'Capture a single line of text with validation and state feedback.'
 PROPS:
+  - name: block / shape / text-white
+    type: Boolean / String / Boolean
+    values: true | false / square / true | false
+    description: Control input width, visual shape and text contrast.
+    default: 'false / - / false'
+    link: null
+    usage: '#border-shadow'
+  - name: allow-clear / clearable / disabled
+    type: Boolean / Boolean / Boolean
+    values: true | false
+    description: Enable the trailing clear action (`clearable` is retained as an alias) or disable interaction.
+    default: 'false / false / false'
+    link: null
+    usage: '#clearable'
+  - name: wrap-classes / wrap-styles
+    type: String | Object | Array
+    values: CSS class or style values
+    description: Customize the outer input wrapper.
+    default: '-'
+    link: null
+    usage: '#border-shadow'
   - name: v-model
     type: String, Number
     values: String, Number
@@ -47,7 +69,7 @@ PROPS:
       </template>
   - name: color
     type: String
-    values: vuesax colors, RGB, HEX
+    values: Sax Design colors, RGB, HEX
     description: Change component color.
     default: null
     link: null
@@ -92,7 +114,7 @@ PROPS:
 
   - name: state
     type: String
-    values: vuesax colors,RGB,HEX
+    values: Sax Design colors,RGB,HEX
     description: Change the background color of the component by changing its status.
     default: null
     link: null
@@ -121,10 +143,10 @@ PROPS:
       </template>
 
   - name: type
-    type: string
-    values: html type
-    description: Change the type of input (html values).
-    default: null
+    type: InputType
+    values: text | password | search | number | email | tel | url
+    description: Set a text-oriented input type. Use DatePicker or TimePicker for date and time values.
+    default: text
     link: null
     usage: '#input-types'
     code: null
@@ -164,10 +186,58 @@ PROPS:
   - name: max-length / show-word-count / trim
     type: Number, Boolean
     values: Number, true | false
-    description: VXE-compatible limit, counter and value trimming.
+    description: Limit input, show the counter in the suffix area, and trim committed values.
     default: null, false, false
     link: null
-    usage: '#advanced'
+    usage: '#character-count'
+
+  - name: count-method
+    type: '({ value: string }) => number'
+    values: A monotonic non-negative counter
+    description: Customize both the displayed count and max-length enforcement for bytes or another encoding.
+    default: value.length
+    link: null
+    usage: '#character-count'
+
+  - name: size
+    type: String
+    values: small | default | large
+    description: Set the input size.
+    default: default
+    link: null
+    usage: '#sizes'
+
+  - name: immediate
+    type: Boolean
+    values: true | false
+    description: Update while typing or commit the value on change and blur.
+    default: true
+    link: null
+    usage: '#deferred-commit'
+
+  - name: controls
+    type: Boolean
+    values: true | false
+    description: Show the built-in search or password action.
+    default: false
+    link: null
+    usage: '#search'
+
+  - name: prefix-icon / suffix-icon / prefix-config / suffix-config
+    type: String / Object
+    values: Icon name / '{ icon, content, status }'
+    description: Render lightweight prefix and suffix icons or content; slots have the highest priority.
+    default: '-'
+    link: null
+    usage: '#affixes'
+
+  - name: min-length / min / max / step / input-mode / pattern / required / multiple
+    type: Number | String / Boolean
+    values: Native input constraints
+    description: Forward common native constraints and clamp number values to the configured min–max range.
+    default: '-'
+    link: null
+    usage: '#native-constraints'
 
   - name: readonly / editable / auto-focus / align
     type: Boolean, String
@@ -175,15 +245,7 @@ PROPS:
     description: Control editing state, focus and text alignment.
     default: false, true, false, left
     link: null
-    usage: '#advanced'
-
-  - name: prefix-config / suffix-config
-    type: Object
-    values: '{ content }'
-    description: Lightweight prefix and suffix content without changing input styling.
-    default: null
-    link: null
-    usage: '#advanced'
+    usage: '#default'
 
 SLOTS:
   - name: icon
@@ -203,11 +265,11 @@ SLOTS:
     usage: '#message'
   - name: prefix / suffix
     type: Slot
-    values: null
-    description: Custom content before or after the input text.
+    values: 'suffix: { count, limit }'
+    description: Customize either affix. The suffix slot replaces the default counter and receives its current count and limit.
     default: null
     link: null
-    usage: '#advanced'
+    usage: '#affixes'
 ---
 
 # Input
@@ -240,6 +302,30 @@ Add an elements input facilitate with the component `input`
 
 <card>
 
+## Clearable
+
+Set `allow-clear` to show a clear button at the end while the input is hovered or focused. Pressing Escape also clears the current value.
+
+<template #example>
+<input-clearable />
+</template>
+
+<template #template>
+
+@[code{7-16} html{10}](../.vuepress/components/input/clearable.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/input/clearable.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Label
 
 Add a label to the input with the property `label`
@@ -264,7 +350,7 @@ Add a label to the input with the property `label`
 
 <card>
 
-## Label Float <badge type="warn" text="Update" />
+## Label Float
 
 You can have a placeholder with a great animation when being or in focus or with a value becoming a label above the input with the property `label-float`
 
@@ -290,7 +376,7 @@ You can have a placeholder with a great animation when being or in focus or with
 
 ## Color
 
-Change the color of the component and add a border below with the `color` property, the allowed values ​​are the main colors of vuesax and the colors (**RGB** y **HEX**)
+Change the color of the component and add a border below with the `color` property, the allowed values ​​are the main colors of Sax Design and the colors (**RGB** y **HEX**)
 
 <template #example>
 <input-color />
@@ -340,7 +426,7 @@ Add an icon to the input easily with the slot icon if you want the icon to be be
 
 ## Message
 
-You can add a message below the input with the `#message-{vuesax color}` to report that a field is missing or the value is wrong
+You can add a message below the input with the `#message-{Sax Design color}` to report that a field is missing or the value is wrong
 
 <template #example>
 <input-message />
@@ -446,7 +532,9 @@ Add a loading animation to the input with the `loading` property, the property i
 
 ## Input types
 
-Change the type of input with the `type` property as a native html input, the default value is `text`
+Use `type` for text-oriented inputs: `text`, `password`, `search`, `number`,
+`email`, `tel`, or `url`. Date and time values use `SDatePicker` and
+`STimePicker` so formatting, themes, and popup behavior remain consistent.
 
 <template #example>
 <input-types />
@@ -454,13 +542,13 @@ Change the type of input with the `type` property as a native html input, the de
 
 <template #template>
 
-@[code{1-11} html{4}](../.vuepress/components/input/types.vue)
+@[code{1-19} html{4-10,14-16}](../.vuepress/components/input/types.vue)
 
 </template>
 
 <template #script>
 
-@[code{12-22}](../.vuepress/components/input/types.vue)
+@[code{20-35}](../.vuepress/components/input/types.vue)
 
 </template>
 
@@ -492,26 +580,140 @@ Change everything is style of the component with the `input-style` property, the
 
 <card>
 
-## Advanced
+## Affixes
 
-Use VXE-aligned limits, count, trimming and prefix/suffix content while retaining the existing input style.
+Add prefix and suffix icons with `prefix-icon` and `suffix-icon`. Use the matching slots when the affix needs fully custom content.
 
 <template #example>
-<input-advanced />
+<input-affix />
 </template>
 
 <template #template>
 
-@[code{1-12} html{4-10}](../.vuepress/components/input/advanced.vue)
+@[code{8-21} html{10-19}](../.vuepress/components/input/affix.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-17}](../.vuepress/components/input/advanced.vue)
+@[code{1-6}](../.vuepress/components/input/affix.vue)
 
 </template>
 
-## API
+</card>
+
+<card>
+
+## Sizes
+
+Use `size` to render a small, default, or large input.
+
+<template #example>
+<input-size />
+</template>
+
+<template #template>
+
+@[code{1-7} html{3-5}](../.vuepress/components/input/size.vue)
+
+</template>
 
 </card>
+
+<card>
+
+## Search
+
+Set `type="search"` with `controls` to show the search action. Pressing Enter or clicking the action emits `search-click`.
+
+<template #example>
+<input-search />
+</template>
+
+<template #template>
+
+@[code{12-25} html{14-20}](../.vuepress/components/input/search.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-10}](../.vuepress/components/input/search.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Deferred commit
+
+Set `immediate="false"` to synchronize `v-model` on change or blur. Type a value and click outside the field to see the committed value update.
+
+<template #example>
+<input-deferred />
+</template>
+
+<template #template>
+
+@[code{7-19} html{9-17}](../.vuepress/components/input/deferred.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/input/deferred.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Character count
+
+Use `max-length` with `show-word-count` to limit and display the count. `count-method` customizes both behaviors; the second field counts UTF-8 bytes.
+
+<template #example>
+<input-count />
+</template>
+
+<template #template>
+
+@[code{11-27} html{13-25}](../.vuepress/components/input/count.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-9}](../.vuepress/components/input/count.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Native constraints
+
+Common native constraints such as `min`, `max`, `step`, `input-mode`, `pattern`, and `required` are forwarded to the inner input. Number inputs also clamp typed and pasted values to the configured `min`–`max` range.
+
+<template #example>
+<input-constraints />
+</template>
+
+<template #template>
+
+@[code{7-19} html{8-18}](../.vuepress/components/input/constraints.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/input/constraints.vue)
+
+</template>
+
+</card>
+
+## API

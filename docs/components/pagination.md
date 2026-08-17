@@ -1,4 +1,5 @@
 ---
+description: "Navigate long collections one page at a time."
 PROPS:
   - name: v-model:current-page
     type: Number
@@ -392,7 +393,7 @@ Change the radius of all the elements that make up the component making them squ
 
 ## Buttons Dotted
 
-Cambia por completo el estilo de el componente y elimina los números internos en cada botón con la propiedad `buttons-dotted`
+Use `buttons-dotted` to replace the inner page numbers with dot-style controls.
 
 <template #example>
 <pagination-buttons-dotted />

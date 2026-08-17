@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: label
+    type: String | Number | Boolean
+    values: option value
+    description: Value contributed to the containing radio group.
+    default: '-'
   - name: v-model
     type: String | Number | Boolean
     values: Radio value
@@ -18,7 +23,7 @@ PROPS:
 EVENTS:
   - name: change
     description: Fires after selecting the button.
-description: "VXE-style radio button."
+description: "Radio button."
 ---
 
 # Radio button

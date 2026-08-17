@@ -2,11 +2,11 @@
   <header ref="$el" class="navbar">
     <SidebarButton @toggle-sidebar="emits('toggle-sidebar')" />
 
-    <router-link :to="homeLink" class="home-link">
+    <router-link :to="homeLink" class="home-link" aria-label="Sax Design Vue">
       <svg
         class="logo-nav"
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 401.69 98.4"
+        viewBox="0 0 98.4 98.4"
       >
         <g id="Capa_2" data-name="Capa 2">
           <g id="Capa_1-2" data-name="Capa 1">
@@ -52,16 +52,24 @@
           : {}
       "
     >
-      <NavLinks class="can-hide" />
+      <s-menu
+        v-if="isHome"
+        v-model="activeHomeNavigation"
+        class="home-navigation"
+        mode="horizontal"
+        :options="homeNavigation"
+        @select="navigateHome"
+      />
+      <NavLinks v-else class="can-hide" />
     </div>
 
     <div :class="{ 'remove-links': focused }" class="external-links-search">
       <router-link
         class="nav-playground"
-        to="/guide/playground"
-        title="Playground"
+        :to="withLocalePath('guide/playground')"
+        :title="t.examples.playground"
       >
-        Playground
+        {{ t.examples.playground }}
       </router-link>
 
       <LanguageSwitcher />
@@ -76,14 +84,14 @@
             themeData.docsRepo || 'https://github.com/adoin/sax-design-vue'
           "
         >
-          <i class="bx bxl-github" />
+          <s-icon  name="bxl:github" />
         </a>
         <!-- <a
           title="Facebook"
           target="_blank"
           href="https://www.facebook.com/thinh.onichan"
         >
-          <i class="bx bxl-facebook" />
+          <s-icon  name="bxl:facebook" />
         </a> -->
       </div>
 
@@ -99,7 +107,12 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
-import { usePageFrontmatter } from '@vuepress/client'
+import {
+  usePageFrontmatter,
+  usePageLang,
+  useRouteLocale,
+} from '@vuepress/client'
+import { useRouter } from 'vue-router'
 
 // @ts-ignore
 import {
@@ -107,6 +120,7 @@ import {
   useThemeLocaleData,
 } from '@vuepress/plugin-theme-data/client'
 
+import { useDocLocaleUi } from '../composables/docLocale'
 import SidebarButton from './SidebarButton.vue'
 import NavLinks from './NavLinks.vue'
 import SearchBox from './SearchBox.vue'
@@ -118,17 +132,36 @@ const emits = defineEmits<{
   (event: 'toggle-sidebar'): void
 }>()
 
-const frontmatter = usePageFrontmatter<{ search?: boolean }>()
+const frontmatter = usePageFrontmatter<{ home?: boolean; search?: boolean }>()
 const themeData = useThemeData<SaxDesignVueThemeOptions>()
 const themeLocaleData = useThemeLocaleData<SaxDesignVueThemeOptions>()
+const router = useRouter()
+const pageLang = usePageLang()
+const routeLocale = useRouteLocale()
+const { t, withLocalePath } = useDocLocaleUi()
 
 const homeLink = computed(
-  () => themeData.value.home || themeLocaleData.value?.home || '/'
+  () => themeData.value.home || themeLocaleData.value?.home || '/',
 )
 
 const linksWrapMaxWidth = ref<number | null>(null)
 const showSuggestions = ref<boolean>(false)
 const focused = ref<boolean>(false)
+const activeHomeNavigation = ref<string>()
+
+const isHome = computed(() => Boolean(frontmatter.value.home))
+const homeNavigation = computed(() => {
+  const isZh = pageLang.value === 'zh-CN'
+  const localize = (path: string) =>
+    `${routeLocale.value}${path.replace(/^\//, '')}`
+  return [
+    { key: localize('/guide/getting-started/'), label: isZh ? '指南' : 'Docs' },
+    { key: localize('/components/'), label: isZh ? '组件' : 'Components' },
+    { key: localize('/guide/playground'), label: 'Playground' },
+  ]
+})
+
+const navigateHome = (key: string | number) => router.push(String(key))
 
 const $el = ref<HTMLElement>()
 
@@ -174,17 +207,34 @@ const handleShowSuggestions = (active: boolean) => {
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
-.logo-nav {
-  fill: -color('theme-color');
-  height: 28px;
-}
 .home-link {
   position: absolute;
   left: 0px;
+  display: flex !important;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
   font-weight: 700;
   padding-left: 30px;
+
+  .logo-nav {
+    display: block;
+    width: 26px;
+    height: 26px;
+    fill: rgb(var(--sax-theme-color));
+  }
+
+  &::before {
+    content: 'Sax Design Vue';
+    color: rgb(var(--sax-theme-color));
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    white-space: nowrap;
+  }
 }
 .nav-playground {
   padding: 10px;
@@ -261,6 +311,37 @@ const handleShowSuggestions = (active: boolean) => {
       flex: 0 0 auto;
       vertical-align: top;
     }
+
+    .home-navigation {
+      width: auto;
+
+      :deep(.s-menu__list) {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center;
+        gap: 6px;
+        margin: 0;
+        padding: 5px;
+      }
+
+      :deep(.s-menu-node) {
+        flex: 0 0 auto;
+      }
+
+      :deep(.s-menu-node__button) {
+        width: auto !important;
+        min-width: 0;
+        min-height: 38px;
+        border-radius: 12px;
+        color: rgba(var(--sax-theme-color), 0.68);
+        font-weight: 600;
+      }
+
+      :deep(.s-menu-node.is-active .s-menu-node__button) {
+        background: rgba(var(--sax-accent-color), 0.1);
+        color: rgb(var(--sax-accent-color));
+      }
+    }
   }
 }
 .navbar a,
@@ -309,14 +390,12 @@ const handleShowSuggestions = (active: boolean) => {
 
 @media (max-width: 500px) {
   .home-link {
-    width: 24px !important;
-    overflow: hidden;
-    padding: 0px;
-    margin-top: 3px;
+    width: auto !important;
+    padding: 0;
+    margin-top: 0;
 
-    .logo-nav {
-      height: 24px;
-      width: auto;
+    &::before {
+      font-size: 1rem;
     }
   }
 }

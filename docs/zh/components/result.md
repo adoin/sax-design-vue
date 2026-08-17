@@ -15,7 +15,7 @@ PROPS:
     values: text
     description: 结果辅助说明。
     default: null
-description: "兼容 VXE 的结果反馈状态。"
+description: "结果反馈状态。"
 ---
 
 # Result 结果

@@ -10,7 +10,7 @@ PROPS:
     values: CSS size
     description: Header/Footer height or Aside width.
     default: null
-description: "VXE-compatible application layout primitives."
+description: "Application layout primitives."
 ---
 
 # Layout

@@ -1,4 +1,5 @@
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
+import { useColorProp, useSizeProp } from '@vuesax-alpha/hooks'
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type DatePicker from './date-picker.vue'
@@ -23,6 +24,18 @@ export interface DatePickerPopupConfig {
 }
 
 export const datePickerProps = buildProps({
+  /** Theme color shared by the trigger and teleported panel. */
+  color: useColorProp,
+  /** Trigger input size. */
+  size: useSizeProp,
+  /** Keep the input label visible above its value. */
+  labelFloat: Boolean,
+  /** Label for a single picker or the range start input. */
+  label: String,
+  /** Label for the range start input. */
+  startLabel: String,
+  /** Label for the range end input. */
+  endLabel: String,
   type: {
     type: String as PropType<DatePickerType>,
     default: 'date',
@@ -31,7 +44,7 @@ export const datePickerProps = buildProps({
     type: definePropType<DatePickerValue>([Date, String, Number, Array]),
   },
   format: String,
-  /** VXE-compatible alias for the text shown in the input. */
+  /** Alias for the text shown in the input. */
   labelFormat: String,
   valueFormat: String,
   /** Override only the time segment of datetime display formats. */

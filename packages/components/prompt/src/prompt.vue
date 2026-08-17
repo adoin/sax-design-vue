@@ -10,7 +10,9 @@
           <header :class="ns.e('header')" :style="headerStyle">
             <div :class="ns.e('title-wrap')">
               <span :class="ns.e('title-accent')" :style="accentStyle" />
-              <h3 :class="ns.e('title')">{{ title }}</h3>
+              <h3 :class="ns.e('title')">
+                {{ title || t('vs.prompt.title') }}
+              </h3>
             </div>
             <button
               v-if="type === 'alert'"
@@ -18,7 +20,7 @@
               type="button"
               @click="handleClose"
             >
-              <SIcon :icon="closeIcon" :icon-pack="iconPack" />
+              <SIcon :name="closeIcon" />
             </button>
           </header>
 
@@ -33,13 +35,13 @@
               :disabled="!canAccept"
               @click="handleAccept"
             >
-              {{ acceptText }}
+              {{ acceptText || t('vs.prompt.accept') }}
             </SButton>
             <SButton
               :type="resolveButtonType(buttonCancel)"
               @click="handleCancel"
             >
-              {{ cancelText }}
+              {{ cancelText || t('vs.prompt.cancel') }}
             </SButton>
           </footer>
         </div>
@@ -50,7 +52,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { getVsColor } from '@vuesax-alpha/utils'
@@ -65,6 +67,7 @@ const props = defineProps(promptProps)
 const emit = defineEmits(promptEmits)
 
 const ns = useNamespace('prompt')
+const { t } = useLocale()
 const locked = ref(false)
 
 const visible = computed({
@@ -78,23 +81,19 @@ const resolveColor = (colorValue: string) => {
   return resolved.startsWith('var(') ? resolved : `rgb(${resolved})`
 }
 
-const headerStyle = computed(
-  (): CSSProperties => ({
-    color: resolveColor(props.color),
-  })
-)
+const headerStyle = computed((): CSSProperties => ({
+  color: resolveColor(props.color),
+}))
 
-const accentStyle = computed(
-  (): CSSProperties => ({
-    background: resolveColor(props.color),
-  })
-)
+const accentStyle = computed((): CSSProperties => ({
+  background: resolveColor(props.color),
+}))
 
 const resolveButtonType = (type: string) =>
   type === 'filled' ? 'default' : type
 
 const canAccept = computed(
-  () => props.isValid === 'none' || props.isValid === true
+  () => props.isValid === 'none' || props.isValid === true,
 )
 
 const showFooter = computed(() => !props.buttonsHidden)

@@ -27,7 +27,7 @@
             :class="{ copied }"
             @click="copySource"
           >
-            <i :class="copied ? 'bx bx-check' : 'bx bx-copy'" />
+            <s-icon :name="copied ? 'cb:checkmark' : 'cb:copy'" />
             {{ copied ? 'Copied' : 'Copy' }}
           </button>
         </header>

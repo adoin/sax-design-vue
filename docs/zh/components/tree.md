@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: node-key / default-checked-keys / default-expanded-keys / empty-text / expand-on-click-node / highlight-current / indent
+    type: String / Array / Boolean / Number
+    values: 节点键、初始状态和树形交互配置
+    description: 配置节点键、默认选择和展开、空状态、缩进及节点交互。
+    default: '-'
   - name: model-value/v-model
     type: String | Number
     values: node key
@@ -33,7 +38,7 @@ EVENTS:
 SLOTS:
   - name: node
     description: 自定义节点文本，接收 node 和 depth。
-description: "兼容 VXE 的树形控件。"
+description: "树形控件。"
 ---
 
 # Tree 树形控件

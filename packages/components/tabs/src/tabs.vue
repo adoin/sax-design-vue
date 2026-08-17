@@ -17,7 +17,7 @@
           @click="setActiveIndex(index)"
         >
           <button :class="ns.e('btn')" type="button" :disabled="pane.disabled">
-            <SIcon v-if="pane.icon" :icon="pane.icon" />
+            <SIcon v-if="pane.icon" :name="pane.icon" />
             <span>{{ pane.label }}</span>
           </button>
         </li>

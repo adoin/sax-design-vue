@@ -2,8 +2,8 @@
 PROPS:
   - name: items
     type: Array
-    values: BreadcrumbItem[]
-    description: Items rendered when not using slots.
+    values: BreadcrumbItem[] (supports children)
+    description: Items rendered when not using slots. Use children for tree navigation data.
     default: []
     link: null
     usage: '#default'
@@ -31,6 +31,11 @@ PROPS:
     default: left
     link: null
     usage: '#align'
+  - name: trigger
+    type: String | Array
+    values: hover, click
+    description: Tree menu trigger. Uses the same trigger modes as Popper.
+    default: hover
 EVENTS: []
 EXPOSES: []
 description: "Show the current page location within a navigational hierarchy."
@@ -64,6 +69,54 @@ Pass an `items` array or compose with `s-breadcrumb-item` slots.
 <template #script>
 
 @[code{5-11}](../.vuepress/components/breadcrumb/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Tree shortcuts
+
+`items` supports `children`. Hover a path item with children to open a multi-level menu, then choose any item for a quick jump.
+
+<template #example>
+<breadcrumb-tree />
+</template>
+
+<template #template>
+
+@[code{1-3}](../.vuepress/components/breadcrumb/tree.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-32}](../.vuepress/components/breadcrumb/tree.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Click trigger
+
+Set `trigger="click"` to open menus by clicking a path item. You can pass an array to combine Popper trigger modes.
+
+<template #example>
+<breadcrumb-tree-click />
+</template>
+
+<template #template>
+
+@[code{1-3}](../.vuepress/components/breadcrumb/tree-click.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-23}](../.vuepress/components/breadcrumb/tree-click.vue)
 
 </template>
 

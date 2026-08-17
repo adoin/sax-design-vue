@@ -1,9 +1,15 @@
 ---
+description: "使用图片、图标或首字母表示用户、团队或实体。"
 PROPS:
+  - name: badge-position
+    type: String
+    values: top-left | top-right | bottom-left | bottom-right
+    description: 设置可选徽标在头像周围的位置。
+    default: top-right
   - name: color
     type: String
     values: Theme colors, RGB, HEX
-    description: color of the component.
+    description: 组件颜色。
     default: --sax-gray-2
     link: null
     usage: '#color'
@@ -12,7 +18,7 @@ PROPS:
   - name: size
     type: Number
     values: Number
-    description: size of the avatar component.
+    description: 头像组件尺寸。
     default: 44
     link: null
     usage: '#size'
@@ -20,7 +26,7 @@ PROPS:
   - name: badge
     type: Boolean
     values: true, false
-    description: Determine if the badge is active.
+    description: 是否启用徽标。
     default: false
     link: null
     usage: '#badge'
@@ -29,7 +35,7 @@ PROPS:
   - name: badge-color
     type: String
     values: Theme colors,RGB,HEX
-    description: Change the color of the badge inside the avatar.
+    description: 设置头像内徽标颜色。
     default: primary
     link: null
     usage: '#badge'
@@ -38,7 +44,7 @@ PROPS:
   - name: shape
     type: String
     values: square, circle
-    description: Change the style of the avatar by circulating it.
+    description: 设置头像为圆形或方形样式。
     default: false
     link: null
     usage: '#shape'
@@ -47,7 +53,7 @@ PROPS:
   - name: writing
     type: Boolean
     values: true,false
-    description: Add an animation to the writing badge.
+    description: 为输入状态徽标添加动画。
     default: false
     link: null
     usage: '#badge'
@@ -56,7 +62,7 @@ PROPS:
   - name: history
     type: Boolean
     values: true,false
-    description: Add a border to the avatar.
+    description: 为头像添加边框。
     default: gray-2
     link: null
     usage: '#history'
@@ -65,7 +71,7 @@ PROPS:
   - name: history-gradient
     type: Boolean
     values: true,false
-    description: Change the color of the border to a gradient.
+    description: 将边框颜色改为渐变。
     default: false
     link: null
     usage: '#history'
@@ -74,7 +80,7 @@ PROPS:
   - name: loading
     type: Boolean
     values: true,false
-    description: Add a loading animation to the avatar.
+    description: 为头像添加加载动画。
     default: false
     link: null
     usage: '#loading'
@@ -83,7 +89,7 @@ PROPS:
   - name: max
     type: number
     values: number
-    description: (s-avatar-group) determine how many avatars are visible.
+    description: "`s-avatar-group` 中最多显示的头像数量。"
     default: null
     link: null
     usage: '#group'
@@ -91,7 +97,7 @@ PROPS:
   - name: float
     type: Boolean
     values: true,false
-    description: (s-avatar-group) change the way the avatar is composed by placing one next to the other.
+    description: "`s-avatar-group` 中头像是否并排排列。"
     default: false
     link: null
     usage: '#group'
@@ -100,7 +106,7 @@ PROPS:
   - name: pointer
     type: Boolean
     values: true,false
-    description: Determine if the avatar has a pointer cursor.
+    description: 是否显示指针光标。
     default: false
     link: null
     usage: null
@@ -110,7 +116,7 @@ SLOTS:
   - name: text
     type: slot
     values: null
-    description: Add text within the avatar component.
+    description: 在头像组件内添加文本。
     default: null
     link: null
     usage: '#default'
@@ -124,7 +130,7 @@ SLOTS:
   - name: badge
     type: slot
     values: null
-    description: Add to the badge everything that is inside the slot, commonly used for numbers and an icon.
+    description: 徽标内容插槽，常用于数字或图标。
     default: null
     link: null
     usage: '#badge'
@@ -139,7 +145,7 @@ SLOTS:
   - name: icons
     type: slot
     values: null
-    description: Add a space to put icons next to the avatar.
+    description: 用于在头像旁放置图标的插槽。
     default: null
     link: null
     usage: '#icons'
@@ -147,14 +153,14 @@ SLOTS:
       <s-avatar>
         <img src="/avatars/avatar-1.png" alt="">
         <template #icons>
-          <i class='bx bxl-facebook-square' ></i>
-          <i class='bx bxl-github' ></i>
-          <i class='bx bxl-twitter' ></i>
+          <s-icon   name="bxl:facebook-square" />
+          <s-icon   name="bxl:github" />
+          <s-icon   name="bxl:twitter" />
         </template>
       </s-avatar>
 ---
 
-# Avatar
+# Avatar 头像
 
 <card>
 
@@ -162,7 +168,7 @@ SLOTS:
 
 <docs-warn />
 
-Add an avatar easily and with functionality with the component `<s-avatar>`
+使用 `<s-avatar>` 可快速创建功能完整的头像。
 
 <template #example>
 <avatar-default />
@@ -180,7 +186,7 @@ Add an avatar easily and with functionality with the component `<s-avatar>`
 
 ## 颜色
 
-Change the color of the compound with the `color` property, the colors allowed are the main colors of vuesax and (`HEX`, `RGB`)
+通过 `color` 设置组件颜色，支持主题色、`HEX` 与 `RGB`。
 
 <template #example>
 <avatar-color />
@@ -198,7 +204,7 @@ Change the color of the compound with the `color` property, the colors allowed a
 
 ## 尺寸
 
-Change the size of the component to the number provided if for example the size value is `60` equivalent to `60px` in height and width
+通过数值设置组件尺寸；例如 `size="60"` 表示宽高均为 `60px`。
 
 <template #example>
 <avatar-size />
@@ -214,13 +220,13 @@ Change the size of the component to the number provided if for example the size 
 
 <card>
 
-## Badge
+## 徽标
 
-Add a badge to the component with the `badge` property or the slot
+通过 `badge` 属性或插槽为组件添加徽标。
 
-You can also change the color to represent a user status as disconnected or connected with colors such as `success` or `danger`, this you do with the `badge-color` property
+可用 `badge-color` 设置徽标颜色，以表示在线、离线等用户状态，例如 `success`、`danger`。
 
-There are times when you need to use the avatar in a chat environment and for this you can add the `writing` property that adds a writing animation
+聊天场景可添加 `writing` 属性，展示输入中动画。
 
 <template #example>
 <avatar-badge />
@@ -236,12 +242,12 @@ There are times when you need to use the avatar in a chat environment and for th
 
 <card>
 
-## Auto font and split
+## 自动字号与截断
 
-If the user has a short name, it is added as it is but if it is a very long text or has several spaces, the text to be displayed will be automatically generated so that it can be seen correctly
+短名称会原样展示；名称较长或包含多个空格时，组件会自动生成适合展示的文本。
 
 ::: tip
-The maximum length of characters is **5**. When that limit is exceeded, changes are made in the text
+最大字符数为 **5**；超过限制时会自动调整显示文本。
 :::
 
 <template #example>
@@ -258,11 +264,11 @@ The maximum length of characters is **5**. When that limit is exceeded, changes 
 
 <card>
 
-## Shape
+## 形状
 
-### Circle
+### 圆形
 
-Change the border-radius of the entire component to `50%` with the `circle` property making it fully circular
+通过 `circle` 将组件的 `border-radius` 设为 `50%`，形成完整圆形。
 
 <template #example>
 <avatar-circle />
@@ -278,9 +284,9 @@ Change the border-radius of the entire component to `50%` with the `circle` prop
 
 <card>
 
-### Square
+### 方形
 
-Change the border-radius of the entire component to `0%` with the `square` property making it completely square
+通过 `square` 将组件的 `border-radius` 设为 `0%`，形成方形。
 
 <template #example>
 <avatar-square />
@@ -296,12 +302,12 @@ Change the border-radius of the entire component to `0%` with the `square` prope
 
 <card>
 
-## History
+## 动态记录
 
-It generates a border around the avatar, this is usually used to represent that the user is doing an action or in many cases has a `History`
+该属性会在头像周围生成边框，常用于表示用户正在进行某项操作或有动态记录。
 
 ::: tip
-You can make the border a gradient like instagram with the property `history-gradient`
+可通过 `history-gradient` 将边框设为渐变色。
 :::
 
 <template #example>
@@ -320,7 +326,7 @@ You can make the border a gradient like instagram with the property `history-gra
 
 ## 图标
 
-You can put an icon inside an avatar when for example an image is not yet added or is a new user, for this you can simply use the default slot
+尚未上传头像或表示新用户时，可在默认插槽中放入图标。
 
 <template #example>
 <avatar-icon />
@@ -338,7 +344,7 @@ You can put an icon inside an avatar when for example an image is not yet added 
 
 ## 加载
 
-Add a loading animation to the component, this property is a `boolean` so you can add it without any value
+添加布尔属性 `loading`，即可为组件显示加载动画。
 
 <template #example>
 <avatar-loading />
@@ -356,7 +362,7 @@ Add a loading animation to the component, this property is a `boolean` so you ca
 
 ## 图标
 
-Add a space next to the avatar with the slot `icons` where you can put icons for some dynamic action of that user in specific
+通过 `icons` 插槽可在头像旁添加图标，用于用户相关操作。
 
 <template #example>
 <avatar-icons />
@@ -372,13 +378,13 @@ Add a space next to the avatar with the slot `icons` where you can put icons for
 
 <card>
 
-## Group
+## 组合
 
-You can group several avatar with the parent component `s-avatar-group`, this component has two interesting properties:
+通过 `s-avatar-group` 可组合多个头像，常用属性：
 
-- **max**: determine the maximum number of avatars to show and the rest hides it generating the number in the last avatar shown
+- **max**：设置最多展示的头像数量，其余数量会汇总显示在最后一个头像中。
 
-- **float**: causes the avatar components to be placed on each other and the grouping of one on top of the other is eliminated
+- **float**：使头像并排展示，而非相互叠放。
 
 <template #example>
 <avatar-group />

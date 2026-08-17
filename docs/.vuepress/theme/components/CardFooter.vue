@@ -1,20 +1,24 @@
 <template>
   <footer
-    :title="active ? 'Hide code' : 'View code'"
+    :title="active ? t.shell.hideCode : t.shell.showCode"
     class="footer-code"
     @click="$emit('toggleCode')"
   >
-    <i class="bx bx-hide" />
+    <s-icon  name="bx:hide" />
   </footer>
 </template>
 
 <script setup lang="ts">
+import { useDocLocaleUi } from '../composables/docLocale'
+
 defineProps<{
   active?: boolean
 }>()
 defineEmits<{
   (event: 'toggleCode'): void
 }>()
+
+const { t } = useDocLocaleUi()
 </script>
 
 <style lang="scss">

@@ -3,13 +3,13 @@
     <img src="/woman.jpg" alt="" />
     <footer>
       <s-button color="dark" icon>
-        <i class="bx bx-video-off" />
+        <s-icon  name="bx:video-off" />
       </s-button>
       <s-button color="success" icon>
-        <i class="bx bxs-phone-call" />
+        <s-icon  name="bxs:phone-call" />
       </s-button>
       <s-button color="dark" icon>
-        <i class="bx bx-microphone-off" />
+        <s-icon  name="bx:microphone-off" />
       </s-button>
     </footer>
   </div>

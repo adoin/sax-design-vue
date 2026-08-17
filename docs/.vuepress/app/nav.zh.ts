@@ -1,4 +1,4 @@
-import { newComponentNavItemsZh } from './new-components.zh'
+import { additionalComponentNavItemsZh } from './new-components.zh'
 import type { NavbarConfig } from '~/shared/client/nav'
 
 const zh = (path: string) => `/zh${path}`
@@ -57,8 +57,8 @@ export const zhNavbar: NavbarConfig = [
           { text: 'Scrollbar', link: zh('/components/scrollbar') },
           { text: 'Rate', link: zh('/components/rate') },
           { text: 'Badge', link: zh('/components/badge') },
-          ...newComponentNavItemsZh,
-        ],
+          ...additionalComponentNavItemsZh,
+        ].sort((a, b) => a.text.localeCompare(b.text, 'zh-CN')),
       },
     ],
   },

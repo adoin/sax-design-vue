@@ -44,7 +44,7 @@
         placeholder="Select"
         @change="editActive = false"
       >
-        <s-option label="Vuesax" value="Vuesax"> Vuesax </s-option>
+        <s-option label="Sax Design" value="Sax Design"> Sax Design </s-option>
         <s-option label="Vue" value="Vuejs"> Vue </s-option>
         <s-option label="Javascript" value="Javascript"> Javascript </s-option>
         <s-option disabled label="Sass" value="Sass"> Sass </s-option>

@@ -2,8 +2,8 @@
 PROPS:
   - name: items
     type: Array
-    values: BreadcrumbItem[]
-    description: 未使用插槽时渲染的项。
+    values: BreadcrumbItem[]（支持 children）
+    description: 未使用插槽时渲染的项；children 可传入树形导航数据。
     default: []
     link: null
     usage: '#default'
@@ -31,6 +31,11 @@ PROPS:
     default: left
     link: null
     usage: '#align'
+  - name: trigger
+    type: String | Array
+    values: hover, click
+    description: 树形菜单触发方式；与 Popper 触发方式一致。
+    default: hover
 EVENTS: []
 EXPOSES: []
 description: "展示当前页面在导航层级中的位置。"
@@ -42,7 +47,7 @@ NEWS:
   - align
 ---
 
-# Breadcrumb
+# Breadcrumb（面包屑）
 
 <card>
 
@@ -64,6 +69,54 @@ NEWS:
 <template #script>
 
 @[code{5-11}](../../.vuepress/components/breadcrumb/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 树形快速跳转
+
+`items` 支持 `children`。悬浮有子项的路径节点可展开多级菜单，点击任意子项快速跳转。
+
+<template #example>
+<breadcrumb-tree />
+</template>
+
+<template #template>
+
+@[code{1-3}](../../.vuepress/components/breadcrumb/tree.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-32}](../../.vuepress/components/breadcrumb/tree.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 点击展开
+
+设置 `trigger="click"` 后，点击有子项的路径节点展开菜单。可传数组组合 Popper 支持的触发方式。
+
+<template #example>
+<breadcrumb-tree-click />
+</template>
+
+<template #template>
+
+@[code{1-3}](../../.vuepress/components/breadcrumb/tree-click.vue)
+
+</template>
+
+<template #script>
+
+@[code{5-23}](../../.vuepress/components/breadcrumb/tree-click.vue)
 
 </template>
 

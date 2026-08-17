@@ -65,7 +65,7 @@ const alternates = computed<Alternate[]>(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .lang-switcher {
   display: flex;

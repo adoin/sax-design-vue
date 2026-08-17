@@ -1,6 +1,12 @@
 <template>
   <div class="center">
-    <s-time-picker v-model="value" placeholder="Select time" />
+    <s-time-picker
+      v-model="value"
+      label="Reminder time"
+      label-float
+      color="warn"
+      placeholder="Select time"
+    />
   </div>
 </template>
 

@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: hide-on-click-modal / z-index
+    type: Boolean / Number
+    values: true | false / 层级数值
+    description: 控制点击遮罩关闭和预览层叠顺序。
+    default: 'true / -'
   - name: v-model
     type: Boolean
     values: true / false
@@ -23,7 +28,7 @@ PROPS:
 EVENTS:
   - name: close / switch
     description: 关闭预览或切换图片事件。
-description: "VXE 风格全屏图片预览。"
+description: "全屏图片预览。"
 ---
 
 # 图片预览

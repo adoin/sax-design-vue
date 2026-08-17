@@ -14,7 +14,7 @@ defineProps<{ sidebarItems: SidebarConfigArray }>()
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 .docs-home {
   & ~ .config {
     left: 0px;

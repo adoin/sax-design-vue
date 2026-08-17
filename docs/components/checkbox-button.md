@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: label
+    type: String | Number | Boolean
+    values: option value
+    description: Value contributed to the containing checkbox group.
+    default: '-'
   - name: v-model
     type: Boolean | Array
     values: Checked state or selected values.
@@ -13,7 +18,7 @@ PROPS:
 EVENTS:
   - name: change
     description: Fires after toggling.
-description: "VXE-style checkbox button."
+description: "Checkbox button."
 ---
 
 # Checkbox button

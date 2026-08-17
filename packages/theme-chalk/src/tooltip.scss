@@ -9,7 +9,7 @@
   color: getColor('background');
   text-align: center;
   padding: 5px 10px;
-  border-radius: 12px;
+  border-radius: var(--sax-radius);
   font-size: 0.85rem;
   max-width: 350px;
   min-width: 30px;
@@ -93,7 +93,7 @@
     }
   }
   @include when(circle) {
-    border-radius: 20px;
+    border-radius: var(--sax-radius-pill);
   }
   @include when(square) {
     border-radius: 0px;

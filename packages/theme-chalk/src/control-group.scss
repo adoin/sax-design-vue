@@ -1,0 +1,219 @@
+@use 'sass:map';
+
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+
+@include b(control-group) {
+  display: inline-flex;
+  align-items: flex-start;
+  max-width: 100%;
+  vertical-align: top;
+  isolation: isolate;
+  border-radius: var(--sax-radius);
+  @include control-surface-shadow;
+  transition: box-shadow var(--sax-motion-duration-fast)
+    var(--sax-motion-easing-standard);
+
+  &:hover {
+    @include control-surface-shadow(hover);
+  }
+
+  &:focus-within {
+    @include control-surface-shadow(focus);
+  }
+
+  > .#{$namespace}-control-group__item {
+    display: flex;
+    flex: 1 1 0%;
+    position: relative;
+    min-width: 0;
+    margin: 0 !important;
+  }
+
+  > .#{$namespace}-control-group__item:not(:first-child) {
+    margin-left: -1px !important;
+
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: 2;
+      top: 6px;
+      bottom: 6px;
+      left: -5px;
+      width: 10px;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(var(--sax-primary), 0.16) 0%,
+        rgba(var(--sax-primary), 0.06) 38%,
+        transparent 72%
+      );
+      filter: blur(0.45px);
+      opacity: 0.72;
+      pointer-events: none;
+      transition: opacity var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
+    }
+  }
+
+  > .#{$namespace}-control-group__item:hover::before,
+  > .#{$namespace}-control-group__item:focus-within::before {
+    opacity: 1;
+  }
+
+  > .#{$namespace}-control-group__item > .#{$namespace}-input,
+  > .#{$namespace}-control-group__item > .#{$namespace}-select,
+  > .#{$namespace}-control-group__item > .#{$namespace}-cascader,
+  > .#{$namespace}-control-group__item > .#{$namespace}-button {
+    width: 100%;
+    min-width: 0;
+    margin: 0 !important;
+  }
+
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-input
+    .#{$namespace}-input__original {
+    width: 100%;
+    min-width: 0;
+  }
+
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-input
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select
+    .#{$namespace}-select__input,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select
+    .#{$namespace}-select__chips,
+  > .#{$namespace}-control-group__item > .#{$namespace}-cascader,
+  > .#{$namespace}-control-group__item > .#{$namespace}-button {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-input
+    .#{$namespace}-input__wrapper {
+    min-height: map.get($select, 'min-height');
+  }
+
+  > .#{$namespace}-control-group__item > .#{$namespace}-cascader {
+    min-height: map.get($select, 'min-height');
+  }
+
+  > .#{$namespace}-control-group__item:first-child
+    > .#{$namespace}-input
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item:first-child
+    > .#{$namespace}-select
+    .#{$namespace}-select__input,
+  > .#{$namespace}-control-group__item:first-child
+    > .#{$namespace}-select
+    .#{$namespace}-select__chips,
+  > .#{$namespace}-control-group__item:first-child > .#{$namespace}-cascader,
+  > .#{$namespace}-control-group__item:first-child > .#{$namespace}-button {
+    border-radius: var(--sax-radius) 0 0 var(--sax-radius);
+  }
+
+  > .#{$namespace}-control-group__item:last-child
+    > .#{$namespace}-input
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item:last-child
+    > .#{$namespace}-select
+    .#{$namespace}-select__input,
+  > .#{$namespace}-control-group__item:last-child
+    > .#{$namespace}-select
+    .#{$namespace}-select__chips,
+  > .#{$namespace}-control-group__item:last-child > .#{$namespace}-cascader,
+  > .#{$namespace}-control-group__item:last-child > .#{$namespace}-button {
+    border-radius: 0 var(--sax-radius) var(--sax-radius) 0;
+  }
+
+  > .#{$namespace}-control-group__item:only-child
+    > .#{$namespace}-input
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item:only-child
+    > .#{$namespace}-select
+    .#{$namespace}-select__input,
+  > .#{$namespace}-control-group__item:only-child
+    > .#{$namespace}-select
+    .#{$namespace}-select__chips,
+  > .#{$namespace}-control-group__item:only-child > .#{$namespace}-cascader,
+  > .#{$namespace}-control-group__item:only-child > .#{$namespace}-button {
+    border-radius: var(--sax-radius);
+  }
+
+  > .#{$namespace}-control-group__item:hover,
+  > .#{$namespace}-control-group__item:focus-within {
+    z-index: 1;
+  }
+
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-input.is-hovering
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select.is-hovering
+    .#{$namespace}-select__input,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select.is-hovering
+    .#{$namespace}-select__chips,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-input.is-focus
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select.is-focus
+    .#{$namespace}-select__input,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select.is-focus
+    .#{$namespace}-select__chips,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select.is-open
+    .#{$namespace}-select__input,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select.is-open
+    .#{$namespace}-select__chips {
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  > .#{$namespace}-control-group__item > .#{$namespace}-cascader:hover,
+  > .#{$namespace}-control-group__item > .#{$namespace}-cascader.is-open,
+  > .#{$namespace}-control-group__item > .#{$namespace}-cascader:focus-within {
+    box-shadow: none;
+  }
+
+  // A connected row must stay aligned while Select applies its standalone
+  // lift interaction.
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select.is-hovering
+    .#{$namespace}-select__input,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select.is-hovering
+    .#{$namespace}-select__chips,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select.is-open
+    .#{$namespace}-select__input,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select.is-open
+    .#{$namespace}-select__chips {
+    transform: none;
+  }
+
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select.is-hovering
+    .#{$namespace}-select__arrow {
+    transform: translateY(-50%);
+  }
+
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-select.is-open
+    .#{$namespace}-select__arrow {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  @include when(block) {
+    display: flex;
+    width: 100%;
+  }
+}

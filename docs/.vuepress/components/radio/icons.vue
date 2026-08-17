@@ -3,43 +3,43 @@
     <s-radio v-model="picked" value="1">
       Yen
       <template #icon>
-        <i class="bx bx-yen" />
+        <s-icon  name="bx:yen" />
       </template>
     </s-radio>
     <s-radio v-model="picked" value="2">
       Won
       <template #icon>
-        <i class="bx bx-won" />
+        <s-icon  name="bx:won" />
       </template>
     </s-radio>
     <s-radio v-model="picked" value="3">
       Pound
       <template #icon>
-        <i class="bx bx-pound" />
+        <s-icon  name="bx:pound" />
       </template>
     </s-radio>
     <s-radio v-model="picked" value="4">
       Euro
       <template #icon>
-        <i class="bx bx-euro" />
+        <s-icon  name="bx:euro" />
       </template>
     </s-radio>
     <s-radio v-model="picked" value="5">
       Rupee
       <template #icon>
-        <i class="bx bx-rupee" />
+        <s-icon  name="bx:rupee" />
       </template>
     </s-radio>
     <s-radio v-model="picked" value="6">
       Bitcoin
       <template #icon>
-        <i class="bx bx-bitcoin" />
+        <s-icon  name="bx:bitcoin" />
       </template>
     </s-radio>
     <s-radio v-model="picked" value="7">
       Dollar
       <template #icon>
-        <i class="bx bx-dollar" />
+        <s-icon  name="bx:dollar" />
       </template>
     </s-radio>
   </div>

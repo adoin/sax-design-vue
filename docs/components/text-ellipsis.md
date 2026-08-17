@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: expand-text / collapse-text
+    type: String
+    values: action labels
+    description: Customize labels used to expand and collapse content.
+    default: 'Expand / Collapse'
   - name: content
     type: String
     values: text
@@ -15,7 +20,7 @@ PROPS:
     values: true / false
     description: Show expand and collapse action.
     default: 'false'
-description: "VXE-compatible expandable text ellipsis."
+description: "Expandable text ellipsis."
 ---
 
 # Text ellipsis

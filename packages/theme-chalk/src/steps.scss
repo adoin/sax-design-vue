@@ -5,8 +5,8 @@
 .s-steps__item.is-clickable { cursor: pointer; }
 .s-steps__item.is-disabled { cursor: not-allowed; opacity: .55; }
 .s-steps__head { position: relative; display: flex; align-items: center; }
-.s-steps__icon { z-index: 1; display: grid; width: 28px; height: 28px; place-items: center; border: 2px solid getColor(border); border-radius: 50%; background: getColor(white); color: getColor(text, secondary); font-size: 13px; font-weight: 600; transition: all .2s ease; }
-.s-steps__line { position: absolute; top: 50%; left: 28px; width: calc(100% - 28px); height: 2px; transform: translateY(-50%); background: getColor(border); transition: background .2s ease; }
+.s-steps__icon { z-index: 1; display: grid; width: 28px; height: 28px; place-items: center; border: 2px solid getColor(border); border-radius: var(--sax-radius-circle); background: getColor(white); color: getColor(text, secondary); font-size: 13px; font-weight: 600; transition: all var(--sax-motion-duration-fast) var(--sax-motion-easing-standard); }
+.s-steps__line { position: absolute; top: 50%; left: 28px; width: calc(100% - 28px); height: 2px; transform: translateY(-50%); background: getColor(border); transition: background var(--sax-motion-duration-fast) var(--sax-motion-easing-standard); }
 .s-steps__main { min-width: 0; margin-left: 10px; padding-right: 14px; }
 .s-steps__title { color: inherit; font-size: 14px; font-weight: 600; line-height: 28px; }
 .s-steps__description { margin-top: 5px; color: getColor(text, secondary); font-size: 12px; line-height: 1.5; }

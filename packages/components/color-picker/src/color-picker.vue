@@ -10,20 +10,20 @@
     >
       <span :class="ns.e('swatch')" :style="{ background: colorValue }" />
       <span :class="ns.e('value')">{{ valueText }}</span>
-      <SIcon icon="arrow_drop_down" icon-pack="material-icons" />
+      <SIcon name="cb:chevron-down" />
     </button>
     <div
       v-if="open"
       :class="ns.e('panel')"
       role="dialog"
-      aria-label="Color picker"
+      :aria-label="t('vs.colorpicker.defaultLabel')"
     >
       <input
         :class="ns.e('native')"
         type="color"
         :value="hexValue"
         :disabled="disabled"
-        aria-label="Color"
+        :aria-label="t('vs.colorpicker.color')"
         @input="updateHex(($event.target as HTMLInputElement).value)"
       />
       <div :class="ns.e('row')">
@@ -32,12 +32,12 @@
           :class="ns.e('text')"
           :value="valueText"
           :disabled="disabled"
-          aria-label="Color value"
+          :aria-label="t('vs.colorpicker.value')"
           @change="updateText(($event.target as HTMLInputElement).value)"
         />
       </div>
       <label v-if="showAlpha" :class="ns.e('alpha')">
-        <span>Opacity</span>
+        <span>{{ t('vs.colorpicker.opacity') }}</span>
         <input
           type="range"
           min="0"
@@ -57,7 +57,7 @@
           :class="[ns.e('preset'), ns.is('active', color === modelValue)]"
           type="button"
           :style="{ background: color }"
-          :aria-label="`Choose ${color}`"
+          :aria-label="t('vs.colorpicker.choose', { color })"
           @click="selectPreset(color)"
         />
       </div>
@@ -68,7 +68,7 @@
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { colorPickerEmits, colorPickerProps } from './color-picker'
 import type { RgbColor } from './color-picker'
 
@@ -77,6 +77,7 @@ defineOptions({ name: 'SColorPicker' })
 const props = defineProps(colorPickerProps)
 const emit = defineEmits(colorPickerEmits)
 const ns = useNamespace('color-picker')
+const { t } = useLocale()
 const rootRef = ref<HTMLElement>()
 const open = ref(false)
 

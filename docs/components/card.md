@@ -1,5 +1,22 @@
 ---
+description: 'Group related content and actions in a surfaced container.'
 PROPS:
+  - name: title
+    type: String
+    values: null
+    description: Card title. The title slot takes precedence when both are provided.
+    default: null
+    link: null
+    usage: '#default'
+    code: null
+  - name: text
+    type: String
+    values: null
+    description: Card body text. The text slot takes precedence when both are provided.
+    default: null
+    link: null
+    usage: '#default'
+    code: null
   - name: type
     type: String
     values: 1,2,3,4,5
@@ -13,7 +30,7 @@ SLOTS:
   - name: text
     type: slot
     values: null
-    description: Add text to the card in the section determined by the card type.
+    description: Customize card body content. Overrides the text prop.
     default: null
     link: null
     usage: '#default'
@@ -21,7 +38,7 @@ SLOTS:
   - name: title
     type: slot
     values: null
-    description: Add the title to the card in the section determined by the type of card.
+    description: Customize card title content. Overrides the title prop.
     default: null
     link: null
     usage: '#default'
@@ -63,7 +80,7 @@ NEWS:
 
 ## Default
 
-Add a card with the `s-card` component for the structure of this component we have several slots
+Pass `title` and `text` for common text content. Use the named slots when custom markup is needed; slots take precedence over the matching props.
 
 - title
 - text

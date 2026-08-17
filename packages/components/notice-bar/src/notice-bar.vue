@@ -17,7 +17,7 @@
         v-if="closable"
         type="button"
         :class="ns.e('close')"
-        aria-label="Close"
+        :aria-label="t('vs.noticeBar.close')"
         @click.stop="close"
       >
         ×
@@ -28,13 +28,14 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { noticeBarEmits, noticeBarProps } from './notice-bar'
 
 defineOptions({ name: 'SNoticeBar' })
 const props = defineProps(noticeBarProps)
 const emit = defineEmits(noticeBarEmits)
 const ns = useNamespace('notice-bar')
+const { t } = useLocale()
 const visible = ref(true)
 const scrollStyle = computed(() => ({
   animationDuration: `${props.duration}s`,

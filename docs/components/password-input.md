@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: autocomplete
+    type: String
+    values: browser autocomplete token
+    description: Set the native input autocomplete behavior.
+    default: current-password
   - name: model-value/v-model
     type: String
     values: password
@@ -18,7 +23,7 @@ PROPS:
 EVENTS:
   - name: change / clear
     description: Value changes and clear action.
-description: "VXE-compatible password input."
+description: "Password input."
 ---
 
 # Password input

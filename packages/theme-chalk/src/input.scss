@@ -82,6 +82,8 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
   @include flex(center, flex-start);
   flex-direction: column;
   position: relative;
+  width: fit-content;
+  max-width: 100%;
 
   // Input state
   @each $state in $inputState {
@@ -112,17 +114,21 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     }
   }
   @include when(focus) {
+    @include e(wrapper) {
+      box-shadow: var(--sax-input-shadow-focus);
+    }
     &.#{$namespace}-input--has-icon {
       &:not(.#{$namespace}-input--icon-after) {
         @include e(original) {
           padding-left: 40px;
         }
         @include e(icon) {
-          box-shadow: 15px 10px 10px -10px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+          box-shadow: 15px 10px 10px -10px
+            rgba(0, 0, 0, getCssVar('shadow-opacity'));
         }
 
         @include e(placeholder) {
-          &:not(.#{$namespace}-input__placeholder-float) {
+          &:not(.#{$namespace}-input__placeholder--float-active) {
             left: 48px;
           }
         }
@@ -137,10 +143,6 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
       }
     }
     &.#{$namespace}-input--has-color {
-      @include e(original) {
-        border-bottom: 2px solid getColor(color);
-      }
-
       @include e(icon) {
         color: getColor(color);
       }
@@ -154,37 +156,40 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     }
     &.#{$namespace}-input--icon-after {
       @include e(icon) {
-        transform: translate(6px, -6px);
+        transform: translateY(-50%);
       }
     }
     @include e(original) {
-      background: getColor('gray-3');
-      padding-left: 15px;
+      background: getColor('background');
     }
     @include e(icon) {
-      box-shadow: -15px 10px 10px -10px rgba(0, 0, 0, getCssVar('shadow-opacity'));
-      transform: translate(-6px, -6px);
-      background: getColor('gray-1');
+      box-shadow: -15px 10px 10px -10px
+        rgba(0, 0, 0, getCssVar('shadow-opacity'));
+      transform: translateY(-50%);
+      background: getColor('background');
     }
     @include e(clearable) {
       right: getCssVar(input-default-icon-right);
     }
     @include e(placeholder) {
-      &:not(.#{$namespace}-input__placeholder--float) {
+      &:not(.#{$namespace}-input__placeholder--float-active) {
         opacity: 0;
         left: 20px;
-      }
-
-      @include m(float) {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-        transform: translate(-3%, -80%);
-        font-size: 0.75rem;
       }
     }
   }
   @include when(hovering) {
+    @include e(wrapper) {
+      box-shadow: var(--sax-input-shadow-hover);
+    }
+    @include e(original) {
+      &:not(.is-disabled) {
+        background: getColor('background');
+      }
+    }
+    @include e(icon) {
+      background: getColor('background');
+    }
     @include e(clearable) {
       right: getCssVar(input-default-icon-right);
     }
@@ -215,24 +220,24 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
       left: 0px;
       pointer-events: none;
       @include m(1) {
-        border-bottom: 2px solid getColor('gray-3');
+        background-color: getColor('gray-3');
         width: 100%;
-        height: 2px;
+        height: 1px;
         position: absolute;
         bottom: 0px;
         transition: getCssVar(transition-ease);
-        border-radius: 4px;
+        border-radius: 0;
       }
       @include m(2) {
-        border-bottom: 2px solid getColor('color', 1);
+        background-color: getColor('color', 1);
         width: 0%;
-        height: 2px;
+        height: 1px;
         position: absolute;
         bottom: 0px;
         transition: getCssVar(transition-ease);
         left: 50%;
         transform: translate(-50%);
-        border-radius: 4px;
+        border-radius: 0;
       }
     }
     @include e(original) {
@@ -282,7 +287,8 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
       @include e(icon) {
         background: getColor('background') !important;
         opacity: 1;
-        box-shadow: 0px 10px 20px -5px rgba(0, 0, 0, getCssVar('shadow-opacity')) !important;
+        box-shadow: 0px 10px 20px -5px
+          rgba(0, 0, 0, getCssVar('shadow-opacity')) !important;
       }
       @include e(affects) {
         @include m(1) {
@@ -294,7 +300,41 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
   }
 
   @include m(has-label) {
-    margin-top: 24px !important;
+    // Floating labels are positioned within the input wrapper. Reserving space
+    // with an outer margin shifts the whole field off the row baseline and
+    // makes mixed input rows appear uneven.
+    margin-top: 0 !important;
+  }
+  @include m(has-color) {
+    @include e(affects) {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+
+      @include m(2) {
+        position: absolute;
+        inset: 0;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        border: 2px solid transparent;
+        border-bottom-color: getColor('color');
+        border-radius: inherit;
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform var(--sax-motion-duration)
+          var(--sax-motion-easing-standard);
+      }
+    }
+
+    @include when(focus) {
+      @include e(affects) {
+        @include m(2) {
+          transform: scaleX(1);
+        }
+      }
+    }
   }
   @include m(has-icon) {
     @include e(original) {
@@ -313,9 +353,10 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
       pointer-events: auto !important;
       cursor: pointer;
       &:hover {
-        box-shadow: 15px 10px 10px -10px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+        box-shadow: 15px 10px 10px -10px
+          rgba(0, 0, 0, getCssVar('shadow-opacity'));
         // box-shadow: -15px 10px 10px -10px rgba(0, 0, 0, getCssVar('shadow-opacity'));
-        transform: translate(-6px, -6px);
+        transform: translateY(-50%);
         background: getColor('gray-1');
       }
     }
@@ -324,9 +365,10 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
         transform: translate(calc(-3px - 30px), -80%);
       }
       @include e(icon) {
-        box-shadow: -15px 10px 10px -10px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+        box-shadow: -15px 10px 10px -10px
+          rgba(0, 0, 0, getCssVar('shadow-opacity'));
         &:hover {
-          transform: translate(6px, -6px);
+          transform: translateY(-50%);
         }
       }
     }
@@ -354,26 +396,50 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
 
     @include e(placeholder) {
       left: 13px;
+
+      &:not(.#{$namespace}-input__placeholder--float-active) {
+        right: 38px;
+      }
     }
 
     @include e(icon) {
       left: auto;
       right: 2px;
-      box-shadow: -12px 0px 10px -10px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+      box-shadow: -12px 0px 10px -10px
+        rgba(0, 0, 0, getCssVar('shadow-opacity'));
     }
   }
   @include m(icon-eye) {
     @include e(original) {
       padding-right: 33px;
     }
+
+    @include e(placeholder) {
+      &:not(.#{$namespace}-input__placeholder--float-active) {
+        right: 33px;
+      }
+    }
+
     &.#{$namespace}-input--icon-after {
       @include e(original) {
         padding-right: 60px;
+      }
+
+      @include e(placeholder) {
+        &:not(.#{$namespace}-input__placeholder--float-active) {
+          right: 60px;
+        }
       }
     }
     &.#{$namespace}-input--icon-clearable {
       @include e(original) {
         padding-right: 56px;
+      }
+
+      @include e(placeholder) {
+        &:not(.#{$namespace}-input__placeholder--float-active) {
+          right: 56px;
+        }
       }
     }
     @include e(clearable) {
@@ -385,14 +451,32 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
       padding-right: 34px;
     }
 
+    @include e(placeholder) {
+      &:not(.#{$namespace}-input__placeholder--float-active) {
+        right: 34px;
+      }
+    }
+
     &.#{$namespace}-input--icon-eye {
       @include e(original) {
         padding-right: 56px;
+      }
+
+      @include e(placeholder) {
+        &:not(.#{$namespace}-input__placeholder--float-active) {
+          right: 56px;
+        }
       }
     }
     &.#{$namespace}-input--icon-after {
       @include e(original) {
         padding-right: 62px;
+      }
+
+      @include e(placeholder) {
+        &:not(.#{$namespace}-input__placeholder--float-active) {
+          right: 62px;
+        }
       }
     }
   }
@@ -415,8 +499,11 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
 
     @include flex(flex-start, center);
     position: relative;
-    border-radius: 12px;
+    border-radius: var(--sax-radius);
     width: 100%;
+    box-shadow: var(--sax-input-shadow);
+    transition: box-shadow var(--sax-motion-duration)
+      var(--sax-motion-easing-standard);
   }
   @include e(clearable) {
     @include set-var-value(color, getCssVar(text));
@@ -428,10 +515,14 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
 
     width: 22px;
     height: 22px;
+    padding: 0;
+    border: 0;
     @include flex(center, center);
     border-radius: getCssVar(border-radius-full);
 
     cursor: pointer;
+    color: inherit;
+    font: inherit;
     background-color: getColor(gray-2);
 
     .#{$namespace}-icon-close {
@@ -452,16 +543,107 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     @include e(original) {
       padding-left: 42px;
     }
+
+    @include e(placeholder) {
+      &:not(.#{$namespace}-input__placeholder--float-active) {
+        left: 42px;
+      }
+    }
+  }
+  @include m(has-prefix-icon) {
+    @include e(original) {
+      padding-left: 28px;
+    }
+
+    @include e(placeholder) {
+      &:not(.#{$namespace}-input__placeholder--float-active) {
+        left: 28px;
+      }
+    }
+
+    @include e(prefix) {
+      left: 10px;
+    }
   }
   @include m(has-suffix) {
     @include e(original) {
       padding-right: 42px;
+    }
+
+    @include e(placeholder) {
+      &:not(.#{$namespace}-input__placeholder--float-active) {
+        right: 42px;
+      }
+    }
+  }
+  @include m(has-suffix-icon) {
+    @include e(original) {
+      padding-right: 28px;
+    }
+
+    @include e(placeholder) {
+      &:not(.#{$namespace}-input__placeholder--float-active) {
+        right: 28px;
+      }
+    }
+
+    @include e(suffix) {
+      right: 10px;
+    }
+  }
+  @include m(has-count) {
+    @include e(original) {
+      padding-right: 80px;
+    }
+
+    @include e(placeholder) {
+      &:not(.#{$namespace}-input__placeholder--float-active) {
+        right: 80px;
+      }
+    }
+
+    &.#{$namespace}-input--icon-eye,
+    &.#{$namespace}-input--icon-clearable {
+      @include e(original) {
+        padding-right: 108px;
+      }
+
+      @include e(placeholder) {
+        &:not(.#{$namespace}-input__placeholder--float-active) {
+          right: 108px;
+        }
+      }
+
+      @include e(suffix) {
+        right: 42px;
+      }
+    }
+
+    &.#{$namespace}-input--icon-eye.#{$namespace}-input--icon-clearable {
+      @include e(original) {
+        padding-right: 136px;
+      }
+
+      @include e(placeholder) {
+        &:not(.#{$namespace}-input__placeholder--float-active) {
+          right: 136px;
+        }
+      }
+
+      @include e(suffix) {
+        right: 70px;
+      }
     }
   }
   @include e(prefix) {
     position: absolute;
     z-index: 1;
     left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     color: getColor('text', 0.55);
     font-size: 0.75rem;
     line-height: 1;
@@ -471,13 +653,24 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     position: absolute;
     z-index: 1;
     right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     color: getColor('text', 0.55);
     font-size: 0.75rem;
     line-height: 1;
     cursor: pointer;
+
+    @include m(count) {
+      cursor: default;
+    }
   }
   @include e(icon) {
     position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     right: auto;
     width: 36px;
     height: 36px;
@@ -489,26 +682,44 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     pointer-events: none;
     left: 2px;
     user-select: none;
+  }
+  @include e(action) {
+    position: absolute;
+    right: getCssVar(input-default-icon-right);
+    top: 50%;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: getCssVar(border-radius-full);
+    background: transparent;
+    color: getColor('text', 0.72);
+    cursor: pointer;
+    transform: translateY(-50%);
+    transition:
+      color var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      background-color var(--sax-motion-duration)
+        var(--sax-motion-easing-standard);
 
-    @include m(password) {
-      position: absolute;
-      right: getCssVar(input-default-icon-right);
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: getCssVar(z-index-popper);
-      // background: -color('gray-2');
+    &:hover {
+      background: getColor('color', 0.1);
+      color: getColor('color');
+    }
 
-      width: 22px;
-      height: 22px;
-      @include flex(center, center);
-      border-radius: getCssVar(border-radius-full);
-
-      cursor: pointer;
+    &:focus-visible {
+      outline: 2px solid getColor('color', 0.35);
+      outline-offset: 1px;
     }
   }
   @include e(placeholder) {
     position: absolute;
     left: 13px;
+    right: 13px;
+    min-width: 0;
     font-size: 0.8rem;
     transition: getCssVar(transition-ease);
     cursor: text;
@@ -521,15 +732,25 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     @include m(hidden) {
       opacity: 0;
       visibility: hidden;
-
-      &.#{$namespace}-input__placeholder--float {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-        transform: translate(-3%, -80%);
-        font-size: 0.75rem;
-      }
     }
+
+    @include m(float-active) {
+      left: 13px;
+      right: 13px;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translate(-3%, -80%);
+      font-size: 0.75rem;
+    }
+  }
+  @include e(placeholder-text) {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   @include e(label) {
     position: absolute;
@@ -551,7 +772,7 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     background: getColor('gray-2');
     margin-top: 5px;
     overflow: hidden;
-    border-radius: 5px;
+    border-radius: var(--sax-radius-xs);
     @include m(danger) {
       @include meb(bar) {
         background: getColor('danger', 1);
@@ -572,7 +793,7 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
       height: 2px;
       max-width: 100%;
       transition: getCssVar(transition-ease);
-      border-radius: 5px;
+      border-radius: var(--sax-radius-xs);
     }
   }
   @include e(message) {
@@ -603,11 +824,48 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     }
   }
   @include e(count) {
-    align-self: flex-end;
-    margin-top: 4px;
-    padding-right: 4px;
     color: getColor('text', 0.5);
     font-size: 0.65rem;
+    font-variant-numeric: tabular-nums;
     line-height: 1;
+    white-space: nowrap;
+  }
+
+  @include m(small) {
+    @include e(original) {
+      width: 176px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      font-size: 0.75rem;
+    }
+
+    @include e(icon) {
+      width: 30px;
+      height: 30px;
+    }
+
+    @include e(placeholder) {
+      font-size: 0.75rem;
+    }
+  }
+
+  @include m(large) {
+    @include e(original) {
+      width: 224px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    @include e(icon) {
+      width: 42px;
+      height: 42px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-input--has-color .#{$namespace}-input__affects--2 {
+    transition-duration: 0.01ms;
   }
 }

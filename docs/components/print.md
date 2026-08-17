@@ -21,7 +21,7 @@ METHODS:
 EVENTS:
   - name: before-print / after-print / error
     description: Print lifecycle events.
-description: "VXE-style scoped print container."
+description: "Scoped print container."
 ---
 
 # Print

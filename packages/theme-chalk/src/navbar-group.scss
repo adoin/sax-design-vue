@@ -16,7 +16,7 @@
     width: 0;
     transition: width 0.3s ease;
     height: 3px;
-    border-radius: 12px;
+    border-radius: var(--sax-radius);
     background-color: black;
   }
 
@@ -62,7 +62,7 @@
     margin-bottom: -12px;
     transform: translate(0, 90%);
     background: getColor('color');
-    border-radius: 5px 18px 18px 18px;
+    border-radius: var(--sax-radius-xs) var(--sax-radius-xl) var(--sax-radius-xl) var(--sax-radius-xl);
     padding: 10px;
     min-width: 160px;
     opacity: 0;
@@ -96,7 +96,7 @@
         height: 4px;
         background: getColor('text');
         position: absolute;
-        border-radius: 50%;
+        border-radius: var(--sax-radius-circle);
         top: calc(50% - 2px);
         opacity: 0;
         transform: translate(-10px);

@@ -47,7 +47,8 @@
         Enter your first and last name to <b>continue</b>.
         <s-input v-model="valMultiple.value1" placeholder="Name" />
         <s-input v-model="valMultiple.value2" placeholder="Last Name" />
-        <s-alert :active="!validName" color="danger" icon="new_releases">
+        <s-alert :model-value="!validName" color="danger">
+          <template #icon><s-icon name="cb:warning-alt" /></template>
           Fields can not be empty please enter the data
         </s-alert>
       </div>

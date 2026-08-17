@@ -1,8 +1,51 @@
 ---
+description: 'Choose one or more values from a searchable option list.'
 PROPS:
+  - name: label-float
+    type: Boolean
+    values: true | false
+    description: Float the label when the field has focus or a selected value.
+    default: false
+    link: null
+    usage: '#label'
+  - name: v-model / model-value / not-value
+    type: String | Number | Array
+    values: option value or values
+    description: Bind selected values and optionally configure the value treated as empty.
+    default: '-'
+    link: null
+    usage: '#default'
+  - name: block / shape / fit / strategy
+    type: Boolean / String / Boolean / String
+    values: true | false / square / true | false / absolute | fixed
+    description: Control field width, shape and popup positioning strategy.
+    default: 'false / - / false / absolute'
+    link: null
+    usage: '#default'
+  - name: clearable / hide-scrollbar / native-scrollbar
+    type: Boolean
+    values: true | false
+    description: Control clear action and dropdown scrollbar rendering.
+    default: 'false / false / false'
+    link: null
+    usage: '#default'
+  - name: filter-config / filter-method / remote / remote-config / remote-method
+    type: Object / Function / Boolean / Object / Function
+    values: filter and remote data configuration
+    description: Configure local filtering or asynchronous remote options.
+    default: '-'
+    link: null
+    usage: '#filter'
+  - name: popup-config / show-after / hide-after / loading-text / no-data-text / no-match-text
+    type: Object / Number / Number / String / String / String
+    values: width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style
+    description: Configure popup sizing, placement, transfer target, class and inline style, plus delay and feedback states.
+    default: '-'
+    link: null
+    usage: '#default'
   - name: color
     type: Color
-    values: Main colors of vuesax, RGB, HEX
+    values: Main colors of Sax Design, RGB, HEX
     description: Change the color of the component.
     default: primary
     link: null
@@ -125,8 +168,8 @@ PROPS:
   - name: collapse-chips
     type: Boolean
     values: true, false
-    description: Whether to collapse tags to a text when multiple selecting
-    default: false
+    description: Adaptively collapse tags that do not fit and show the remaining count as `+N`.
+    default: true
     link: null
     usage: '#multiple'
     code: null
@@ -135,8 +178,8 @@ PROPS:
       text: New
     type: Number
     values: number
-    description: The max tags number to be shown. To use this, collapse-chips must be `true`
-    default: 1
+    description: Optional upper limit for visible tags when collapse-chips is true. Set to 0 to rely only on available width.
+    default: 0
     link: null
     usage: '#multiple'
     code: null
@@ -144,12 +187,40 @@ PROPS:
     state:
       text: New
     type: Boolean / Object
-    values: threshold | estimateSize | overscan
-    description: Window flat data-driven options with TanStack Virtual. Option groups and custom Option children retain normal rendering.
+    values: threshold | estimateSize | overscan | dynamic
+    description: Window flat data-driven options with TanStack Virtual and optionally measure dynamic row heights. Option groups and custom Option children retain normal rendering.
     default: false / '{}'
     link: null
     usage: '#virtual-options'
     code: null
+  - name: pin-key / get-pin-options / pin-method / unpin-method / auto-use-option
+    state:
+      text: New
+    type: String / Function / Function / Function / Boolean
+    values: local or remote option pinning configuration
+    description: Pin frequently used flat options to the top, persist them locally or remotely, and optionally select the first available option.
+    default: '- / - / - / - / false'
+    link: null
+    usage: '#pinned-options'
+    code: null
+  - name: cached-options / highlight-search / filter-option / option-visible-method
+    type: Array / Boolean / Function / Function
+    values: cached options, search highlighting and visibility predicates
+    description: Retain remote selected labels and customize matching and final visibility.
+    default: '[] / false / - / -'
+    usage: '#cached-option-labels'
+  - name: multiple-display-mode / get-tag-label / get-display-value
+    type: tags | text / Function / Function
+    values: multiple-selection display and formatters
+    description: Render multiple values as tags or one-line text and customize their labels.
+    default: tags / - / -
+    usage: '#multiple-selection-tools'
+  - name: selection-tools / selection-tool-labels / show-selected-mark / search-placeholder
+    type: Array / Object / Boolean / String
+    values: all | invert | clear
+    description: Configure bulk selection tools, labels, selected marks and the search placeholder.
+    default: "[] / {} / false / ''"
+    usage: '#multiple-selection-tools'
 
   - name: option-group:label
     state:
@@ -162,6 +233,12 @@ PROPS:
     usage: '#group'
     code: null
 SLOTS:
+  - name: header / tools / footer
+    type: slot
+    values: scoped slot
+    description: Customize popup header, bulk tools and footer. The footer exposes state and actions without built-in refresh behavior.
+    default: null
+    usage: '#multiple-selection-tools'
   - name: message-{color}
     type: slot
     values: warn, danger, success
@@ -177,8 +254,8 @@ SLOTS:
         <template #message-success>
           Option Valid
         </template>
-        <s-option label="Vuesax" value="1">
-          Vuesax
+        <s-option label="Sax Design" value="1">
+          Sax Design
         </s-option>
         <s-option label="Vue" value="2">
           Vue
@@ -239,7 +316,7 @@ Add a select element with the `s-select` component and the `s-option` sub compon
 
 ## Color
 
-Change the color of the component with the `color` property, the allowed values ​​are the main colors of vuesax and the colors (**RGB** and **HEX**)
+Change the color of the component with the `color` property, the allowed values ​​are the main colors of Sax Design and the colors (**RGB** and **HEX**)
 
 <template #example>
 <select-color />
@@ -343,6 +420,8 @@ You can add the functionality of filtering options with the `filter` property, t
 
 Add the functionality of multiple selection of options with the `multiple` property, this property is a `boolean` so you can add it without any value
 
+Multiple Selects measure their available width by default and automatically replace tags that do not fit with `+N`. Set `collapse-chips` to `false` to allow tags to wrap; `max-collapse-chips` is only an optional upper limit.
+
 ::: tip
 The value of the select must be an array
 :::
@@ -353,13 +432,13 @@ The value of the select must be an array
 
 <template #template>
 
-@[code{1-53} html{6,22,38}](../.vuepress/components/select/multiple.vue)
+@[code{1-54} html{7,24,41-42}](../.vuepress/components/select/multiple.vue)
 
 </template>
 
 <template #script>
 
-@[code{55-78}](../.vuepress/components/select/multiple.vue)
+@[code{56-72}](../.vuepress/components/select/multiple.vue)
 
 </template>
 
@@ -393,7 +472,7 @@ Add a loading animation to the select with the `loading` property, this property
 
 ## State
 
-Change the style of the component to the color passed in the `state` property, the allowed colors are only the main ones of vuesax
+Change the style of the component to the color passed in the `state` property, the allowed colors are only the main ones of Sax Design
 
 ::: tip
 This property can be used to indicate a missing field to the user or when something is ready.
@@ -457,7 +536,7 @@ Add an item below the select showing a message to the user
 
 ## Data source
 
-Use `options` and `option-groups` when data arrives from an API. `option-props` and `option-group-props` map existing field names; `filterable` is the VXE-compatible alias of `filter`.
+Use `options` and `option-groups` when data arrives from an API. `option-props` and `option-group-props` map existing field names; `filterable` is an alias of `filter`.
 
 <template #example>
 <select-data />
@@ -479,9 +558,117 @@ Use `options` and `option-groups` when data arrives from an API. `option-props` 
 
 <card>
 
+## Popup configuration
+
+Use `popup-config` to control panel sizing, trigger-width matching, offset, mount target and custom styles. The first Select uses `full` to match its trigger; the second combines width and height limits with `offset`, `appendTo`, `placement`, `className` and `style`. The demo mounts to `body`; inside a dialog, replace `appendTo` with an existing container selector or element.
+
+<template #example>
+<select-popup-config />
+</template>
+
+<template #template>
+
+@[code](../.vuepress/components/select/popup-config.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Search matching and highlighting
+
+Use `filter-option` for matching, `highlight-search` to mark the matching text and `show-selected-mark` for a selected indicator.
+
+<template #example>
+<select-search-highlight />
+</template>
+
+<template #template>
+
+@[code{1-12}](../.vuepress/components/select/search-highlight.vue)
+
+</template>
+
+<template #script>
+
+@[code{14-26}](../.vuepress/components/select/search-highlight.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Multiple selection tools and footer
+
+`selection-tools` selects, inverts or clears the current filtered results. The `footer` slot receives counts and bulk actions, with no refresh behavior built in.
+
+<template #example>
+<select-selection-tools />
+</template>
+
+<template #template>
+
+@[code{1-18}](../.vuepress/components/select/selection-tools.vue)
+
+</template>
+
+<template #script>
+
+@[code{20-33}](../.vuepress/components/select/selection-tools.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Cached option labels
+
+When remote pagination or searching replaces `options`, pass `cached-options` to retain selected labels. Use `header` and `footer` for the two popup regions.
+
+<template #example>
+<select-cached-options />
+</template>
+
+<template #template>
+
+@[code{1-16}](../.vuepress/components/select/cached-options.vue)
+
+</template>
+
+<template #script>
+
+@[code{18-29}](../.vuepress/components/select/cached-options.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Pinned options
+
+Set `pin-key` to persist pinned values in local storage. Hover an option to reveal its pin action, or press `Ctrl+P` on the keyboard-highlighted option. For server persistence, provide `get-pin-options`, `pin-method` and `unpin-method` together. `auto-use-option` selects the first pinned enabled option, falling back to the first enabled option.
+
+<template #example>
+<select-pinning />
+</template>
+
+<template #template>
+
+@[code](../.vuepress/components/select/pinning.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Virtual options
 
-Enable `virtual` for large flat `options` arrays. Filtering, keyboard navigation and selected-value caching stay available while only visible rows mount.
+Enable `virtual` for large flat `options` arrays. Filtering, keyboard navigation and selected-value caching stay available while only visible rows mount. Dynamic measurement is on by default, so wrapped labels and custom option content may use different row heights; set `virtual-config.dynamic` to `false` only for truly fixed rows.
 
 <template #example>
 <select-virtual />
@@ -489,7 +676,7 @@ Enable `virtual` for large flat `options` arrays. Filtering, keyboard navigation
 
 <template #template>
 
-@[code{1-13}](../.vuepress/components/select/virtual.vue)
+@[code](../.vuepress/components/select/virtual.vue)
 
 </template>
 

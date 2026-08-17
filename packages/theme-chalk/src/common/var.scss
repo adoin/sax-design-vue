@@ -1,6 +1,7 @@
 /* Vuesax Chalk Variables */
 @use 'sass:math';
 @use 'sass:map';
+@use 'sass:color';
 
 @use '../mixins/function.scss' as *;
 
@@ -101,7 +102,7 @@ $social-colors: map.merge(
     (
       $type: (
         '#{$mode}-#{$number}':
-          mix(
+          color.mix(
             $mix-color,
             map.get($colors, $type, 'base'),
             math.percentage(math.div($number, 10))
@@ -138,7 +139,6 @@ $vsVar: () !default;
 $vsVar: map.merge(
   (
     'shadow-opacity': 0.05,
-    'radius': 20px,
     'background-opacity': 0.2,
   ),
   $vsVar
@@ -216,11 +216,11 @@ $border-color-hover: getCssVar('text-color', 'disabled') !default;
 $border-radius: () !default;
 $border-radius: map.merge(
   (
-    'base': 4px,
-    'small': 2px,
-    'round': 20px,
-    'circle': 100%,
-    'full': 99999px,
+    'base': getCssVar(radius),
+    'small': getCssVar(radius-sm),
+    'round': getCssVar(radius-lg),
+    'circle': getCssVar(radius-circle),
+    'full': getCssVar(radius-pill),
   ),
   $border-radius
 );
@@ -355,8 +355,8 @@ $transition: map.merge(
 $transition-duration: () !default;
 $transition-duration: map.merge(
   (
-    '': 0.25s,
-    'fast': 0.2s,
+    '': getCssVar(motion-duration),
+    'fast': getCssVar(motion-duration-fast),
   ),
   $transition-duration
 );
@@ -364,9 +364,9 @@ $transition-duration: map.merge(
 $transition-function: () !default;
 $transition-function: map.merge(
   (
-    'ease-in-out-bezier': cubic-bezier(0.645, 0.045, 0.355, 1),
-    'fast-bezier': cubic-bezier(0.23, 1, 0.32, 1),
-    'ease': ease,
+    'ease-in-out-bezier': getCssVar(motion-easing),
+    'fast-bezier': getCssVar(motion-easing-emphasized),
+    'ease': getCssVar(motion-easing-standard),
   ),
   $transition-function
 );
@@ -472,7 +472,7 @@ $alert: () !default;
 $alert: map.merge(
   (
     'bg-light': getColor(color, 0.1),
-    'border-radius': 4px 12px 12px 4px,
+    'border-radius': getCssVar(radius-sm) getCssVar(radius) getCssVar(radius) getCssVar(radius-sm),
     'shadow--icon-close': 0px 0px 0px 0px rgba(0, 0, 0, 0.15),
     'shadow--icon-close-hover': 0px 5px 18px 0px rgba(0, 0, 0, 0.15),
     'icon-close-width': 30px,
@@ -516,7 +516,7 @@ $badge: () !default;
 $badge: map.merge(
   (
     'bg-color': getCssVar(primary),
-    'radius': 10px,
+    'radius': getCssVar(radius-md),
     'font-size': 12px,
     'padding': 6px,
     'size': 18px,
@@ -536,7 +536,7 @@ $button: map.merge(
     'color-darken': getCssVar(primary),
     'padding': 10px 16px,
     'margin': 5px,
-    'border-radius': 12px,
+    'border-radius': getCssVar(radius),
     'text-color': $color-white
   ),
   $button
@@ -577,7 +577,7 @@ $navbar: map.merge(
     'z-index': getCssVar(z-index-top),
     'color': getColor(text),
     'background': getColor(color),
-    'border-radius': 0px 0px 15px 15px,
+    'border-radius': 0 0 getCssVar(radius-lg) getCssVar(radius-lg),
   ),
   $navbar
 );
@@ -589,7 +589,7 @@ $popper: map.merge(
   (
     'color': getCssVar(background),
     'background': getCssVar(color),
-    'border-radius': 12px,
+    'border-radius': getCssVar(radius),
     'font-size': 0.85rem,
     'arrow-width': 10px,
     'arrow-height': 10px,
@@ -610,7 +610,7 @@ $select: map.merge(
     'placeholder-font-size': 0.76rem,
     'suport-font-size': 0.68rem,
     'suport-offset': 6px,
-    'input-radius': 12px,
+    'input-radius': getCssVar(radius),
   ),
   $select
 );
@@ -646,7 +646,7 @@ $pagination: map.merge(
     'font-size': 14px,
     'bg-color': getColor('gray-3'),
     'text-color': getColor('text'),
-    'border-radius': 12px,
+    'border-radius': getCssVar(radius),
     'button-color': getColor('text'),
     'button-width': 36px,
     'button-height': 36px,

@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: node-key / label / children / placeholder
+    type: String
+    values: tree data fields and input text
+    description: Map tree data fields and customize the empty input label.
+    default: 'id / label / children / -'
   - name: model-value/v-model
     type: String | Number
     values: node key
@@ -23,7 +28,7 @@ PROPS:
 EVENTS:
   - name: change / clear
     description: Selection and clear events.
-description: "VXE-compatible tree select."
+description: "Tree select."
 ---
 
 # Tree select

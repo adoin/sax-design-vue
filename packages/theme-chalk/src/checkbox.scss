@@ -133,12 +133,12 @@
 
         &:before {
           opacity: 0 !important;
-          border-radius: 50%;
+          border-radius: var(--sax-radius-circle);
           // transition: opacity .08s linear;
         }
         &:after {
           opacity: 0 !important;
-          border-radius: 50%;
+          border-radius: var(--sax-radius-circle);
           transform: scale(0.5);
         }
       }
@@ -148,7 +148,7 @@
   @include e(input) {
     width: getCssVar(checkbox-width);
     height: getCssVar(checkbox-height);
-    border-radius: 9px;
+    border-radius: var(--sax-radius-md);
     position: relative;
     z-index: 1;
 
@@ -158,7 +158,7 @@
       // z-index: 50;
       width: 100%;
       height: 100%;
-      border-radius: 32%;
+      border-radius: var(--sax-radius-checkbox);
       @include flex(center, center);
       // border: 2px solid transparent;
       cursor: pointer;
@@ -225,7 +225,7 @@
       position: absolute;
       width: 0px;
       height: 2px;
-      border-radius: 4px;
+      border-radius: var(--sax-radius-xs);
       background: getColor('text', 0.6);
       transition: getCssVar(transition-ease);
     }

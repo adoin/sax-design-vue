@@ -18,7 +18,7 @@ PROPS:
 EVENTS:
   - name: change
     description: Fires on selection.
-description: "VXE-style radio group."
+description: "Radio group."
 ---
 
 # Radio group

@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: offset / teleported
+    type: Number / Boolean
+    values: pixels / true | false
+    description: Configure trigger spacing and body mounting.
+    default: '12 / true'
   - name: v-model
     type: Boolean
     values: true / false
@@ -18,7 +23,7 @@ PROPS:
 EVENTS:
   - name: show / hide
     description: Visibility lifecycle events.
-description: "VXE-style generic dropdown container."
+description: "Generic dropdown container."
 ---
 
 # Pulldown

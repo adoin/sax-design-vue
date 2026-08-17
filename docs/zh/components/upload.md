@@ -1,5 +1,15 @@
 ---
 PROPS:
+  - name: before-remove-method / data / file-types / headers / limit-count / limit-size
+    type: Function / Object / String[] / Number
+    values: 上传请求数据和文件限制
+    description: 配置移除拦截、请求数据、可接受文件及文件限制。
+    default: '-'
+  - name: show-button-icon / show-button-text / show-list / show-preview / show-progress / show-remove-button / show-submit-button / show-upload-button / text-max
+    type: Boolean / Number
+    values: 显示开关和文字限制
+    description: 控制上传按钮、文件列表、预览、进度和操作入口显示。
+    default: '-'
   - name: text
     type: String
     values: String
@@ -11,7 +21,7 @@ PROPS:
   - name: file-name
     type: String
     values: String
-    description: Form field name for upload.
+    description: 上传表单字段名称。
     default: file
     link: null
     usage: '#default'
@@ -78,11 +88,11 @@ EVENTS:
 
   - name: on-delete
     params: File
-    description: File removed.
+    description: 文件移除时触发。
 
   - name: on-success
     params: unknown
-    description: Upload succeeded.
+    description: 上传成功时触发。
 
   - name: on-error
     params: unknown
@@ -95,7 +105,7 @@ NEWS:
   - automatic
 ---
 
-# Upload
+# Upload（上传）
 
 <card>
 

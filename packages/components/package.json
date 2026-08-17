@@ -9,6 +9,9 @@
   "peerDependencies": {
     "vue": "^3.3.4"
   },
+  "dependencies": {
+    "sax-design-vue-iconify": "workspace:*"
+  },
   "types": "index.d.ts",
   "sideEffects": false
 }

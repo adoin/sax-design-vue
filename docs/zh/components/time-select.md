@@ -1,29 +1,30 @@
 ---
+description: "从预设或生成的时间列表中选择时间。"
 PROPS:
   - name: v-model / model-value
     type: String
     values:
-    description: binding time value
+    description: 绑定时间值。
     default: false
     link: null
     usage: '#default'
     code: null
 ---
 
-# Time select
+# Time select 时间选择
 
 <card>
 
 ## 默认
 
-Use Time Select for time input.
+使用 Time Select 输入时间。
 
-The available time range is 00:00 to 23:59
+可选时间范围为 00:00 至 23:59。
 
 ::: tip
-This component requires the
+在 SSR（如 [Nuxt](https://nuxt.com/)）和 SSG（如 [VitePress](https://vitepress.dev/)）中使用时，需要使用
 <code>\<client-only\> \<\/client-only\></code>
-wrap when used in SSR (eg: [Nuxt](https://nuxt.com/)) and SSG (eg: [VitePress](https://vitepress.dev/)).
+包裹该组件。
 :::
 
 <template #example>
@@ -46,14 +47,14 @@ wrap when used in SSR (eg: [Nuxt](https://nuxt.com/)) and SSG (eg: [VitePress](h
 
 <card>
 
-## Time Formats
+## 时间格式
 
-Use format to control format of time(hours and minutes).
+使用 `format` 控制时间（小时和分钟）格式。
 
-Check the list [here](https://day.js.org/docs/en/display/format#list-of-all-available-formats) of all available formats of Day.js.
+可查看 [Day.js 格式列表](https://day.js.org/docs/en/display/format#list-of-all-available-formats)。
 
 ::: warning
-Pay attention to capitalization
+注意大小写。
 :::
 
 <template #example>
@@ -74,9 +75,9 @@ Pay attention to capitalization
 
 <card>
 
-## Fixed time ranges
+## 固定时间范围
 
-If start( end ) time is picked at first, then the status of end( start ) time's options will change accordingly.
+先选择开始（结束）时间后，结束（开始）时间的可选项状态会随之更新。
 
 <template #example>
 <time-select-time-range />
@@ -96,9 +97,9 @@ If start( end ) time is picked at first, then the status of end( start ) time's 
 
 <card>
 
-## Disabled
+## 禁用
 
-whether TimeSelect is disabled
+是否禁用 TimeSelect。
 
 <template #example>
 <time-select-disabled />

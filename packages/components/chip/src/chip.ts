@@ -1,7 +1,19 @@
-import { buildProps, isBoolean } from '@vuesax-alpha/utils'
+import { buildProps, definePropType, isBoolean } from '@vuesax-alpha/utils'
 
 import type { ExtractPropTypes } from 'vue'
 import type Chip from './chip.vue'
+
+export const chipStyleList = [
+  'default',
+  'outline',
+  'dashed',
+  'mark',
+  'arrow',
+  'flag',
+] as const
+
+export type ChipStyle = (typeof chipStyleList)[number]
+export type ChipSize = 'small' | 'default' | 'large'
 
 export const chipProps = buildProps({
   modelValue: {
@@ -24,15 +36,22 @@ export const chipProps = buildProps({
     type: String,
     default: null,
   },
-  iconPack: {
-    type: String,
-    default: 'material-icons',
-  },
   closeIcon: {
     type: String,
-    default: 'clear',
+    default: 'cb:close',
   },
   transparent: Boolean,
+  /** Tag-inspired visual treatment. */
+  tagStyle: {
+    type: definePropType<ChipStyle>(String),
+    default: 'default',
+  },
+  /** Pill geometry. Mark and arrow use dedicated round-safe variants. */
+  round: Boolean,
+  size: {
+    type: definePropType<ChipSize>(String),
+    default: 'default',
+  },
   item: Boolean,
 } as const)
 

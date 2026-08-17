@@ -43,7 +43,7 @@
     <div class="content-user">
       <p><b>Sally Willis</b> liked your post and <b>9</b> other users</p>
       <s-button color="dark" type="transparent" icon>
-        <i class="bx bx-chevron-right" />
+        <s-icon  name="bx:chevron-right" />
       </s-button>
     </div>
   </div>

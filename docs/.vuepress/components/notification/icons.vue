@@ -3,20 +3,20 @@
     <s-button
       type="shadow"
       icon
-      @click="openNotification(null, null, `<i class='bx bxs-time'></i>`)"
+      @click="openNotification(null, null, notificationIcons.time)"
     >
-      <i class="bx bx-border-radius b-r" />
-      <i class="bx bxs-time" />
+      <s-icon  name="bx:border-radius" class="b-r" />
+      <s-icon  name="bxs:time" />
     </s-button>
     <s-button
       type="flat"
       icon
       @click="
-        openNotification(null, 'primary', `<i class='bx bxs-user-pin'></i>`)
+        openNotification(null, 'primary', notificationIcons.user)
       "
     >
-      <i class="bx bx-border-radius b-r" />
-      <i class="bx bxs-user-pin" />
+      <s-icon  name="bx:border-radius" class="b-r" />
+      <s-icon  name="bxs:user-pin" />
     </s-button>
     <s-button
       type="flat"
@@ -26,34 +26,34 @@
         openNotification(
           'top-right',
           'success',
-          `<i class='bx bx-select-multiple' ></i>`
+          notificationIcons.select,
         )
       "
     >
-      <i class="bx bx-border-radius t-r" />
-      <i class="bx bx-select-multiple" />
+      <s-icon  name="bx:border-radius" class="t-r" />
+      <s-icon  name="bx:select-multiple" />
     </s-button>
     <s-button
       type="flat"
       color="danger"
       icon
       @click="
-        openNotification('top-left', 'danger', `<i class='bx bxs-bug'></i>`)
+        openNotification('top-left', 'danger', notificationIcons.bug)
       "
     >
-      <i class="bx bx-border-radius t-l" />
-      <i class="bx bxs-bug" />
+      <s-icon  name="bx:border-radius" class="t-l" />
+      <s-icon  name="bxs:bug" />
     </s-button>
     <s-button
       type="flat"
       color="warn"
       icon
       @click="
-        openNotification('bottom-left', 'warn', `<i class='bx bx-error' ></i>`)
+        openNotification('bottom-left', 'warn', notificationIcons.error)
       "
     >
-      <i class="bx bx-border-radius b-l" />
-      <i class="bx bx-error" />
+      <s-icon  name="bx:border-radius" class="b-l" />
+      <s-icon  name="bx:error" />
     </s-button>
     <s-button
       type="flat"
@@ -63,23 +63,23 @@
         openNotification(
           'bottom-center',
           'dark',
-          `<i class='bx bx-folder-open'></i>`
+          notificationIcons.folder,
         )
       "
     >
-      <i class="bx bx-border-bottom" />
-      <i class="bx bx-folder-open" />
+      <s-icon  name="bx:border-bottom" />
+      <s-icon  name="bx:folder-open" />
     </s-button>
     <s-button
       type="flat"
       color="#7d33ff"
       icon
       @click="
-        openNotification('top-center', '#7d33ff', `<i class='bx bx-bell' ></i>`)
+        openNotification('top-center', '#7d33ff', notificationIcons.bell)
       "
     >
-      <i class="bx bx-border-top" />
-      <i class="bx bx-bell" />
+      <s-icon  name="bx:border-top" />
+      <s-icon  name="bx:bell" />
     </s-button>
     <s-button
       type="flat"
@@ -89,27 +89,45 @@
         openNotification(
           null,
           'rgb(59,222,200)',
-          `<i class='bx bx-calendar' ></i>`
+          notificationIcons.calendar,
         )
       "
     >
-      <i class="bx bx-border-radius b-r" />
-      <i class="bx bx-calendar" />
+      <s-icon  name="bx:border-radius" class="b-r" />
+      <s-icon  name="bx:calendar" />
     </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { SNotification } from 'sax-design-vue'
+import { defineComponent, h } from 'vue'
+import { SIcon, SNotification } from 'sax-design-vue'
+
+const createNotificationIcon = (name: string) =>
+  defineComponent({
+    name: 'NotificationExampleIcon',
+    setup: () => () => h(SIcon, { name }),
+  })
+
+const notificationIcons = {
+  time: createNotificationIcon('bxs:time'),
+  user: createNotificationIcon('bxs:user-pin'),
+  select: createNotificationIcon('bx:select-multiple'),
+  bug: createNotificationIcon('bxs:bug'),
+  error: createNotificationIcon('bx:error'),
+  folder: createNotificationIcon('bx:folder-open'),
+  bell: createNotificationIcon('bx:bell'),
+  calendar: createNotificationIcon('bx:calendar'),
+}
 
 const openNotification = (position = null, color, icon) => {
   SNotification({
     icon,
     color,
     position,
-    title: 'Documentation Vuesax-alpha',
+    title: 'Sax Design Vue',
     content:
-      'These documents refer to the latest version of Vuesax-alpha, to see the documents of the previous versions you can do it here 👉 Vuesax4.0',
+      'Sax Design Vue notification example with configurable content, color, and position.',
   })
 }
 </script>
@@ -118,7 +136,7 @@ const openNotification = (position = null, color, icon) => {
 .s-button {
   margin: 10px;
 }
-i {
+.s-icon {
   margin: 2px;
   font-size: 1.2rem;
   transform-origin: center;

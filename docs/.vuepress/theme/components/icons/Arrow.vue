@@ -14,7 +14,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '../../styles/_use.scss';
+@use '../../styles/use' as *;
 
 .s-icon-arrow {
   pointer-events: none;

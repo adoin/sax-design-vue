@@ -2,7 +2,7 @@
   <div class="center">
     <div :style="`background: ${color};`" class="con-input">
       <input v-model="color" type="color" />
-      <i class="bx bxs-color-fill" />
+      <s-icon  name="bxs:color-fill" />
     </div>
     <s-button type="flat" :color="color" @click="openLoading">
       Open Loading

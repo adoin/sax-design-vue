@@ -1,9 +1,10 @@
 ---
+description: "在可折叠侧边栏中组织次级导航。"
 PROPS:
   - name: open/v-model:open
     type: Boolean
     values: true,false
-    description: Determines if the component is visible.
+    description: 是否显示组件。
     default: false
     link: null
     usage: '#open'
@@ -12,7 +13,7 @@ PROPS:
   - name: v-model
     type: String
     values: id
-    description: Determines the item that is in active status.
+    description: 当前激活的项目。
     default: null
     link: null
     usage: '#default'
@@ -21,7 +22,7 @@ PROPS:
   - name: absolute
     type: boolean
     values: true,false
-    description: Determine if the component is of absolute position.
+    description: 是否使用绝对定位。
     default: false
     link: null
     usage: '#default'
@@ -30,7 +31,7 @@ PROPS:
   - name: reduce
     type: Boolean
     values: true,false
-    description: Determine if the component is in a reduced state with a width of 50px.
+    description: 是否为宽度 50px 的收起状态。
     default: false
     link: null
     usage: '#reduce'
@@ -39,7 +40,7 @@ PROPS:
   - name: hover-expand
     type: Boolean
     values: true,false
-    description: Adds the functionality to expand when the user enters inside the sidebar and vice versa.
+    description: 鼠标进入侧栏时展开，离开时收起。
     default: false
     link: null
     usage: '#hover-expand'
@@ -48,7 +49,7 @@ PROPS:
   - name: shape
     type: string
     values: square
-    description: Determine if the component has no border radius
+    description: 是否移除组件圆角。
     default: false
     link: null
     usage: null
@@ -57,7 +58,7 @@ PROPS:
   - name: not-shadow
     type: Boolean
     values: true,false
-    description: Remove the shadow from the sidebar
+    description: 移除侧边栏阴影。
     default: false
     link: null
     usage: null
@@ -66,7 +67,7 @@ PROPS:
   - name: background
     type: String
     values: Theme colors, RGB, HEX
-    description: Change the background color of the sidebar
+    description: 设置侧边栏背景颜色。
     default: false
     link: null
     usage: '#color'
@@ -75,7 +76,7 @@ PROPS:
   - name: text-white
     type: Boolean
     values: true,false
-    description: Change the text color to white
+    description: 将文本颜色改为白色。
     default: false
     link: null
     usage: '#color'
@@ -84,7 +85,7 @@ PROPS:
   - name: not-line-active
     type: Boolean
     values: true,false
-    description: Remove the active line from items
+    description: 移除项目激活指示线。
     default: false
     link: null
     usage: null
@@ -93,7 +94,7 @@ PROPS:
   - name: s-sidebar-item:to
     type: String
     values: url
-    description: Generate a new vue-router route
+    description: 生成新的 vue-router 路由。
     default: null
     link: null
     usage: null
@@ -102,7 +103,7 @@ PROPS:
   - name: s-sidebar-item:href
     type: String
     values: url
-    description: Generate a new route
+    description: 生成新路由。
     default: null
     link: null
     usage: null
@@ -111,7 +112,7 @@ PROPS:
   - name: right
     type: Boolean
     values: true,false
-    description: Determines if the component is positioned to the right
+    description: 是否将组件定位在右侧。
     default: null
     link: null
     usage: null
@@ -121,7 +122,7 @@ SLOTS:
   - name: logo
     type: slot
     values: null
-    description: Add elements on top of the entire sidebar.
+    description: 在整个侧边栏顶部添加元素。
     default: null
     link: null
     usage: '#default'
@@ -130,7 +131,7 @@ SLOTS:
   - name: footer
     type: slot
     values: null
-    description: Add the elements at the bottom of the sidebar.
+    description: 在侧边栏底部添加元素。
     default: null
     link: null
     usage: '#default'
@@ -139,7 +140,7 @@ SLOTS:
   - name: header
     type: slot
     values: null
-    description: Add the elements below the logo and above the items.
+    description: 在 Logo 下方、项目上方添加元素。
     default: null
     link: null
     usage: null
@@ -148,7 +149,7 @@ SLOTS:
   - name: s-sidebar-item#icon
     type: slot
     values: null
-    description: It is the space to add the icon or a representative letter.
+    description: 用于添加图标或代表字母的区域。
     default: null
     link: null
     usage: '#default'
@@ -158,7 +159,7 @@ NEWS:
   - name
 ---
 
-# Sidebar
+# Sidebar 侧边栏
 
 <card>
 
@@ -166,7 +167,7 @@ NEWS:
 
 <docs-warn />
 
-Add a sidebar menu with the `s-sidebar` component, there are two subcomponents `s-sidebar-item` and `s-sidebar-group`
+使用 `s-sidebar` 可创建侧边栏菜单，包含 `s-sidebar-item` 和 `s-sidebar-group` 两个子组件。
 
 <template #example>
 <sidebar-default />
@@ -176,12 +177,12 @@ Add a sidebar menu with the `s-sidebar` component, there are two subcomponents `
 
 <card>
 
-## Group
+## 分组
 
-You can group items and hide them with the `s-sidebar-group` sub-component.
+通过 `s-sidebar-group` 子组件可将项目分组并收起。
 
 :::tip
-The component has a slot: header in which we add a sub-component `s-sidebar-item` with the property **arrow** and without the property id to not change the active state when clicking
+组件提供 `header` 插槽；在其中放置带 **arrow** 属性且不设置 id 的 `s-sidebar-item`，可避免点击时改变激活状态。
 :::
 
 <template #example>
@@ -204,12 +205,12 @@ The component has a slot: header in which we add a sub-component `s-sidebar-item
 
 <card>
 
-## Reduce
+## 收起
 
-You can make the component 50px wide and only show the icons with the property `reduce` this property is dynamic
+通过 `reduce` 可将组件收起为 50px 宽，仅显示图标；该属性支持动态切换。
 
 :::tip
-For the sidebar to work correctly it is necessary to add to the items the icon slot either with an icon or with for example the first letter of the text
+为确保侧边栏正常工作，项目需要提供 `icon` 插槽，可放置图标或文本首字母。
 :::
 
 <template #example>
@@ -232,9 +233,9 @@ For the sidebar to work correctly it is necessary to add to the items the icon s
 
 <card>
 
-## Hover expand
+## 悬浮展开
 
-You can add the functionality to expand and collapse the sidebar with the mouse, with the property `hover-expand`
+通过 `hover-expand` 可用鼠标控制侧边栏展开和收起。
 
 <template #example>
 <sidebar-reduce-expand />
@@ -258,7 +259,7 @@ You can add the functionality to expand and collapse the sidebar with the mouse,
 
 ## 颜色
 
-Change the color of the sidebar, if necessary you can also change the color of the text to white with the `textWhite` property
+设置侧边栏颜色；需要时可通过 `text-white` 将文本颜色改为白色。
 
 <template #example>
 <sidebar-color />
@@ -280,9 +281,9 @@ Change the color of the sidebar, if necessary you can also change the color of t
 
 <card>
 
-## Open
+## 展开状态
 
-You can define if the sidebar is visible or hidden with the open property, this property by default is `false`
+通过 `open` 控制侧边栏显示或隐藏，默认值为 `false`。
 
 <template #example>
 <sidebar-open />
@@ -304,9 +305,9 @@ You can define if the sidebar is visible or hidden with the open property, this 
 
 <card>
 
-## Position Right
+## 右侧定位
 
-Change the position of the sidebar to the right and its animation with the `right` property
+通过 `right` 将侧边栏定位到右侧，并切换对应动画。
 
 <template #example>
 <sidebar-right />

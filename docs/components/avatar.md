@@ -1,5 +1,11 @@
 ---
+description: "Represent a user, team, or entity with an image, icon, or initials."
 PROPS:
+  - name: badge-position
+    type: String
+    values: top-left | top-right | bottom-left | bottom-right
+    description: Position the optional badge around the avatar.
+    default: top-right
   - name: color
     type: String
     values: Theme colors, RGB, HEX
@@ -147,9 +153,9 @@ SLOTS:
       <s-avatar>
         <img src="/avatars/avatar-1.png" alt="">
         <template #icons>
-          <i class='bx bxl-facebook-square' ></i>
-          <i class='bx bxl-github' ></i>
-          <i class='bx bxl-twitter' ></i>
+          <s-icon   name="bxl:facebook-square" />
+          <s-icon   name="bxl:github" />
+          <s-icon   name="bxl:twitter" />
         </template>
       </s-avatar>
 ---
@@ -180,7 +186,7 @@ Add an avatar easily and with functionality with the component `<s-avatar>`
 
 ## Color
 
-Change the color of the compound with the `color` property, the colors allowed are the main colors of vuesax and (`HEX`, `RGB`)
+Change the color of the compound with the `color` property, the colors allowed are the main colors of Sax Design and (`HEX`, `RGB`)
 
 <template #example>
 <avatar-color />

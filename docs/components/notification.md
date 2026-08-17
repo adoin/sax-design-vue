@@ -1,5 +1,16 @@
 ---
+description: "Show temporary, programmatic notifications outside the main flow."
 PROPS:
+  - name: dangerous-html-string / icon-size / offset / z-index
+    type: Boolean / Number / Number / Number
+    values: true | false / pixels / layer number
+    description: Configure HTML rendering, icon size, viewport offset and stacking order.
+    default: '-'
+  - name: show-close / on-click-close
+    type: Boolean / Function
+    values: true | false / close callback
+    description: Control close affordance and handle close interaction.
+    default: 'true / -'
   - name: title
     type: String
     values: String
@@ -9,9 +20,9 @@ PROPS:
     usage: '#default'
     code: >
       SNotification({
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`
       })
   - name: content
     type: String, Component
@@ -22,9 +33,9 @@ PROPS:
     usage: '#default'
     code: >
       SNotification({
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`
       })
   - name: position
     type: String
@@ -36,13 +47,13 @@ PROPS:
     code: >
       const { close } = SNotification({
         position: 'top-right',
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`
       })
   - name: color
     type: String
-    values: vuesax colors, rgb, hex
+    values: Sax Design colors, rgb, hex
     description: Change the base color of the entire component.
     default: null
     link: null
@@ -50,13 +61,13 @@ PROPS:
     code: >
       const { close } = SNotification({
         color: 'primary',
-        title: 'Documentation Vuesax 4.0+',
-        content: 'These documents refer to the latest version of vuesax (4.0+), to see the
-        documents of the previous versions you can do it here 👉 Vuesax 3.x'
+        title: 'Documentation Sax Design Vue',
+        content: 'Sax Design Vue notification example with configurable content,
+        color, timing, and placement.'
       })
   - name: border
     type: String
-    values: vuesax colors, rgb, hex
+    values: Sax Design colors, rgb, hex
     description: Add a color border to the notification.
     default: null
     link: null
@@ -64,9 +75,9 @@ PROPS:
     code: >
       const { close } = SNotification({
         border: 'success',
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`
       })
   - name: icon
     type: String
@@ -77,10 +88,10 @@ PROPS:
     usage: '#icons'
     code: >
       const { close } = SNotification({
-        icon: `<i class='bx bxs-time'></i>`,
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
+        icon: `<s-icon  name="bxs:time" />`,
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`
       })
   - name: duration
     type: Number, StringNumber
@@ -92,9 +103,9 @@ PROPS:
     code: >
       const { close } = SNotification({
         duration: 10000,
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`
       })
   - name: onClick
     type: function
@@ -105,9 +116,9 @@ PROPS:
     usage: null
     code: >
       const { close } = this.$notification({
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`,
         onClick: () => {
           console.log('click notification')
         }
@@ -121,9 +132,9 @@ PROPS:
     usage: null
     code: >
       const { close } = this.$notification({
-        title: 'Documentation Vuesax 4.0+',
-        content: `These documents refer to the latest version of vuesax (4.0+),
-        to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+        title: 'Documentation Sax Design Vue',
+        content: `Sax Design Vue notification example with configurable content,
+        color, timing, and placement.`,
         buttonClose: false
       })
   - name: flat
@@ -138,9 +149,9 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           flat: true,
         })
       </script>
@@ -156,9 +167,9 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           sticky: true
         })
       </script>
@@ -174,9 +185,9 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           sticky: true
         })
       </script>
@@ -192,9 +203,9 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           shape: 'square',
         })
       </script>
@@ -210,9 +221,9 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           width: 'auto',
         })
       </script>
@@ -228,9 +239,9 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           loading: true
         })
       </script>
@@ -246,9 +257,9 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           progressAuto: true
         })
       </script>
@@ -264,9 +275,9 @@ PROPS:
         import { SNotification } from 'sax-design-vue'
 
         const { close } = SNotification({
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
           notPadding: true
         })
       </script>
@@ -283,9 +294,9 @@ PROPS:
 
         const { close } = SNotification({
           duration: 0,
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
         })
       </script>
   - name: content
@@ -302,9 +313,9 @@ PROPS:
         const { close } = SNotification({
           duration: 0,
           width: 'auto',
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
         })
       </script>
   - name: instance.close()
@@ -321,9 +332,9 @@ PROPS:
         const { close } = SNotification({
           duration: 0,
           width: 'auto',
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
         })
 
         close()
@@ -344,9 +355,9 @@ PROPS:
           duration: 0,
           width: 'auto',
           customClass: 'my-class'
-          title: 'Documentation Vuesax 4.0+',
-          content: `These documents refer to the latest version of vuesax (4.0+),
-          to see the documents of the previous versions you can do it here 👉 Vuesax3.x`,
+          title: 'Documentation Sax Design Vue',
+          content: `Sax Design Vue notification example with configurable content,
+          color, timing, and placement.`,
         })
       </script>
 ---
@@ -359,7 +370,7 @@ PROPS:
 
 <docs-warn />
 
-It generates a notification with the vuesax function (`SNotification`), to use the instance of the notification it is necessary to save it in a variable, for example if you need to close the notification manually or do other functionalities with the instance
+It generates a notification with the Sax Design function (`SNotification`), to use the instance of the notification it is necessary to save it in a variable, for example if you need to close the notification manually or do other functionalities with the instance
 
 <command>
 
@@ -744,7 +755,7 @@ You can add a style to the paste component to the nearest corner with the `stick
 
 ## Example
 
-You can do great things with this component and some others from vuesax, to add any element within the notification we have the property `content` this property can only receive an imported component and that is what it will generate within the notification
+You can do great things with this component and some others from Sax Design, to add any element within the notification we have the property `content` this property can only receive an imported component and that is what it will generate within the notification
 
 <template #example>
 <notification-example />

@@ -4,14 +4,14 @@
     <s-list-item title="Steve Jobes" subtitle="Top Contributor">
       <template #avatar>
         <s-avatar>
-          <i class="material-icons notranslate">person</i>
+          <s-icon name="cb:user" />
         </s-avatar>
       </template>
     </s-list-item>
     <s-list-item title="Matt" subtitle="11 Points">
       <template #avatar>
         <s-avatar>
-          <template #text>Vuesax</template>
+          <template #text>Sax Design</template>
         </s-avatar>
       </template>
     </s-list-item>

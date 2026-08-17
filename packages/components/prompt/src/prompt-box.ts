@@ -20,7 +20,6 @@ export type PromptBoxOptions = Partial<
     | 'buttonAccept'
     | 'buttonCancel'
     | 'closeIcon'
-    | 'iconPack'
     | 'isValid'
     | 'buttonsHidden'
   >

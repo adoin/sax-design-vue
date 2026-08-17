@@ -1,5 +1,26 @@
 ---
 PROPS:
+  - name: data / headers / file-name / file-types / limit-size / limit-count
+    type: Object / Object / String / String[] / Number / Number
+    values: request data and upload restrictions
+    description: Configure upload request data, accepted files and file limits.
+    default: '-'
+    link: null
+    usage: '#default'
+  - name: before-remove-method / show-list / show-preview / show-progress
+    type: Function / Boolean
+    values: remove guard and display switches
+    description: Guard removal and control file list feedback.
+    default: '-'
+    link: null
+    usage: '#default'
+  - name: show-button-icon / show-button-text / show-remove-button / show-submit-button / show-upload-button / text-max
+    type: Boolean / Number
+    values: true | false / text limit
+    description: Configure upload control visibility and label truncation.
+    default: '-'
+    link: null
+    usage: '#default'
   - name: text
     type: String
     values: String
@@ -51,7 +72,7 @@ PROPS:
   - name: auto-submit
     type: Boolean
     values: true, false
-    description: VXE-compatible alias of automatic upload.
+    description: Alias of automatic upload.
     default: false
     link: null
     usage: '#advanced'

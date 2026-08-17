@@ -1,79 +1,79 @@
 <template>
   <div class="center">
     <s-button icon color="facebook">
-      <i class="bx bxl-facebook-square" />
+      <s-icon  name="bxl:facebook-square" />
     </s-button>
 
     <s-button icon color="twitter">
-      <i class="bx bxl-twitter" />
+      <s-icon  name="bxl:twitter" />
     </s-button>
 
     <s-button icon color="youtube">
-      <i class="bx bxl-youtube" />
+      <s-icon  name="bxl:youtube" />
     </s-button>
 
     <s-button icon color="linkedin">
-      <i class="bx bxl-linkedin" />
+      <s-icon  name="bxl:linkedin" />
     </s-button>
 
     <s-button icon color="whatsapp">
-      <i class="bx bxl-whatsapp" />
+      <s-icon  name="bxl:whatsapp" />
     </s-button>
 
     <s-button icon color="twitch">
-      <i class="bx bxl-twitch" />
+      <s-icon  name="bxl:twitch" />
     </s-button>
 
     <s-button icon color="medium">
-      <i class="bx bxl-medium" />
+      <s-icon  name="bxl:medium" />
     </s-button>
 
     <s-button icon color="skype">
-      <i class="bx bxl-skype" />
+      <s-icon  name="bxl:skype" />
     </s-button>
 
     <s-button icon color="slack">
-      <i class="bx bxl-slack-old" />
+      <s-icon  name="bxl:slack-old" />
     </s-button>
 
     <s-button icon color="messenger">
-      <i class="bx bxl-messenger" />
+      <s-icon  name="bxl:messenger" />
     </s-button>
 
     <s-button icon color="tumblr">
-      <i class="bx bxl-tumblr" />
+      <s-icon  name="bxl:tumblr" />
     </s-button>
 
     <s-button icon color="dribbble">
-      <i class="bx bxl-dribbble" />
+      <s-icon  name="bxl:dribbble" />
     </s-button>
 
     <s-button icon color="google-plus">
-      <i class="bx bxl-google-plus" />
+      <s-icon  name="bxl:google-plus" />
     </s-button>
 
     <s-button icon color="vimeo">
-      <i class="bx bxl-vimeo" />
+      <s-icon  name="bxl:vimeo" />
     </s-button>
 
     <s-button icon color="pinterest">
-      <i class="bx bxl-pinterest" />
+      <s-icon  name="bxl:pinterest" />
     </s-button>
 
     <s-button icon color="spotify">
-      <i class="bx bxl-spotify" />
+      <s-icon  name="bxl:spotify" />
     </s-button>
 
     <s-button icon color="discord">
-      <i class="bx bxl-discord" />
+      <s-icon  name="bxl:discord" />
     </s-button>
 
     <s-button icon color="amazon">
-      <i class="bx bxl-amazon" />
+      <s-icon  name="bxl:amazon" />
     </s-button>
 
     <s-button icon color="reddit">
-      <i class="bx bxl-reddit" />
+      <s-icon  name="bxl:reddit" />
     </s-button>
   </div>
 </template>

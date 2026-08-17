@@ -13,7 +13,7 @@ PROPS:
 EVENTS:
   - name: change
     description: Fired when selection changes.
-description: "VXE-compatible segmented single choice."
+description: "Segmented single choice."
 ---
 # Segmented
 <card><template #example><segmented-default /></template><template #template>

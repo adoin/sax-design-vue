@@ -11,7 +11,7 @@
     />
 
     <button :class="ns.e('remove-all')" type="button" @click="removeAll">
-      <SIcon :icon="removeIcon" :icon-pack="iconPack" />
+      <SIcon :name="removeIcon" />
     </button>
   </div>
 </template>

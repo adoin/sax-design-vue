@@ -1,5 +1,15 @@
 ---
 PROPS:
+  - name: button-accept / button-cancel / accept-text / cancel-text
+    type: Boolean / Boolean / String / String
+    values: 操作按钮显示和文案
+    description: 配置 Prompt 操作按钮及其文本。
+    default: '-'
+  - name: close-icon
+    type: String
+    values: Iconify 图标名称
+    description: 自定义关闭控件图标。
+    default: '-'
   - name: v-model
     type: Boolean
     values: true, false
@@ -96,7 +106,7 @@ NEWS:
   - programmatic
 ---
 
-# Prompt
+# Prompt（提示框）
 
 **Prompt 就是确认/警告提示框**，与 [Dialog（对话框）](/zh/components/dialog) 不重复。
 

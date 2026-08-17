@@ -1,4 +1,4 @@
-import { getCurrentInstance, nextTick, ref } from 'vue'
+import { getCurrentInstance, nextTick, shallowRef } from 'vue'
 import type { ShallowRef } from 'vue'
 
 export const useInputEvent = ({
@@ -8,7 +8,7 @@ export const useInputEvent = ({
 }) => {
   const { emit } = getCurrentInstance()!
 
-  const focused = ref(false)
+  const focused = shallowRef(false)
 
   const handleInput = (event: Event) => {
     const { value } = event.target as HTMLInputElement

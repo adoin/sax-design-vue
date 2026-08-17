@@ -18,6 +18,73 @@
   // vuesax var
   @include set-component-var('', $vsVar);
 
+  // Global design tokens. Override --sax-radius or --sax-motion-duration once
+  // to update every component that consumes the shared radius and motion scale.
+  @include set-var-value('radius', 12px);
+  @include set-var-value('radius-xs', max(0px, calc(var(--sax-radius) - 8px)));
+  @include set-var-value('radius-sm', max(0px, calc(var(--sax-radius) - 4px)));
+  @include set-var-value('radius-md', max(0px, calc(var(--sax-radius) - 2px)));
+  @include set-var-value('radius-lg', calc(var(--sax-radius) + 4px));
+  @include set-var-value('radius-xl', calc(var(--sax-radius) + 8px));
+  @include set-var-value('radius-2xl', calc(var(--sax-radius) + 28px));
+  @include set-var-value('radius-3xl', calc(var(--sax-radius) + 38px));
+  @include set-var-value('radius-circle', 50%);
+  @include set-var-value('radius-pill', 9999px);
+  @include set-var-value('radius-loader-orb-a', 50% 50% 50% 15%);
+  @include set-var-value('radius-loader-orb-b', 50% 50% 15% 30%);
+  @include set-var-value('radius-loader-orb-c', 50% 15% 30% 30%);
+  @include set-var-value('radius-avatar', 35%);
+  @include set-var-value('radius-checkbox', 32%);
+  // Kept as the legacy default consumed by existing components such as Button.
+  @include set-var-value('border-radius', getCssVar(radius));
+
+  @include set-var-value('motion-duration', 0.25s);
+  @include set-var-value('motion-duration-fast', 0.18s);
+  @include set-var-value('motion-duration-slow', 0.43s);
+  @include set-var-value('motion-duration-loop', 0.7s);
+  @include set-var-value('motion-duration-long', 1s);
+  @include set-var-value('motion-easing', cubic-bezier(0.645, 0.045, 0.355, 1));
+  @include set-var-value(
+    'motion-easing-emphasized',
+    cubic-bezier(0.23, 1, 0.32, 1)
+  );
+  @include set-var-value('motion-easing-standard', ease);
+
+  // Input surfaces stay distinct without bringing back conventional borders.
+  // Primary is stored as RGB channels, so consumers can keep this tint in sync
+  // with a custom --sax-primary value.
+  @include set-var-value(
+    'input-shadow',
+    (
+      0 1px 2px rgba(var(--sax-primary), 0.08),
+      0 6px 18px rgba(var(--sax-primary), 0.08),
+      inset 0 0 0 1px rgba(var(--sax-primary), 0.08)
+    )
+  );
+  @include set-var-value(
+    'input-shadow-hover',
+    (
+      0 2px 5px rgba(var(--sax-primary), 0.12),
+      0 8px 22px rgba(var(--sax-primary), 0.1),
+      inset 0 0 0 1px rgba(var(--sax-primary), 0.14)
+    )
+  );
+  @include set-var-value(
+    'input-shadow-focus',
+    (
+      0 3px 8px rgba(var(--sax-primary), 0.16),
+      0 12px 28px rgba(var(--sax-primary), 0.14),
+      inset 0 0 0 1px rgba(var(--sax-primary), 0.3)
+    )
+  );
+  @include set-var-value(
+    'popper-shadow',
+    (
+      0 18px 40px -16px rgba(var(--sax-primary), 0.3),
+      0 8px 20px -12px rgba(19, 31, 72, 0.24)
+    )
+  );
+
   // get rgb
   @each $type in (primary, success, warn, danger, error, info, dark, light) {
     @include set-colors($type);

@@ -5,7 +5,6 @@
         <render-link
           :link="`#${header.slug}`"
           :text="header.title"
-          :is-new="news?.includes(header.slug)"
           :is-update="updates?.includes(header.slug)"
           is-header-link
         />
@@ -14,7 +13,6 @@
           <render-headers
             :headers="header.children"
             :link="header.link"
-            :news="news"
             :updates="updates"
           />
         </template>
@@ -29,7 +27,6 @@ import type { MarkdownItHeader } from '@mdit-vue/types'
 
 type SidebarLinkChildrenProps = {
   headers: MarkdownItHeader[]
-  news?: string[]
   updates?: string[]
 }
 

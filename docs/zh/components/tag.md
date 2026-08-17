@@ -1,9 +1,14 @@
 ---
 PROPS:
+  - name: border / size
+    type: Boolean / String
+    values: true | false / small | medium | large
+    description: 控制标签边框和尺寸。
+    default: 'false / medium'
   - name: type / status
     type: String
     values: primary | success | warning | danger | info
-    description: 语义色。`status` 是 VXE 兼容别名，优先级更高。
+    description: 语义色。`status` 是优先级更高的别名。
     default: primary
   - name: content
     type: String
@@ -25,7 +30,7 @@ EVENTS:
     description: 点击关闭按钮时触发。
   - name: click
     description: 点击标签主体时触发。
-description: "适配 VXE Tag 约定的紧凑语义标签。"
+description: "紧凑语义标签。"
 ---
 
 # Tag 标签

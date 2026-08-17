@@ -22,9 +22,9 @@ const openNotification = (duration) => {
   SNotification({
     duration,
     progressAuto: true,
-    title: 'Documentation Vuesax-alpha',
+    title: 'Sax Design Vue',
     content:
-      'These documents refer to the latest version of Vuesax-alpha, to see the documents of the previous versions you can do it here 👉 Vuesax4.0',
+      'Sax Design Vue notification example with configurable content, color, and position.',
   })
 }
 </script>

@@ -19,7 +19,7 @@ withDefaults(
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/use';
+@use '../styles/use' as *;
 .badge {
   display: inline-block;
   font-size: 0.7rem;

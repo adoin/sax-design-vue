@@ -12,18 +12,18 @@
       @keydown.space.prevent="toggle"
     >
       <span :class="[ns.e('value'), ns.is('placeholder', !selectedLabel)]">{{
-        selectedLabel || placeholder
+        selectedLabel || placeholder || t('vs.select.placeholder')
       }}</span>
       <button
         v-if="clearable && modelValue !== undefined"
         :class="ns.e('clear')"
         type="button"
-        aria-label="Clear selection"
+        :aria-label="t('vs.cascader.clear')"
         @click.stop="clear"
       >
-        <SIcon icon="close" icon-pack="material-icons" />
+        <SIcon name="cb:close" />
       </button>
-      <SIcon v-else icon="arrow_drop_down" icon-pack="material-icons" />
+      <SIcon v-else name="cb:chevron-down" />
     </div>
     <div v-if="open" :class="ns.e('panel')">
       <s-tree
@@ -42,7 +42,7 @@
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { treeSelectEmits, treeSelectProps } from './tree-select'
 import type { TreeKey, TreeNode } from '@vuesax-alpha/components/tree'
 
@@ -51,6 +51,7 @@ defineOptions({ name: 'STreeSelect' })
 const props = defineProps(treeSelectProps)
 const emit = defineEmits(treeSelectEmits)
 const ns = useNamespace('tree-select')
+const { t } = useLocale()
 const rootRef = ref<HTMLElement>()
 const open = ref(false)
 const activeKey = ref<TreeKey | undefined>()

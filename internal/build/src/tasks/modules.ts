@@ -10,6 +10,8 @@ import { excludeFiles, pkgRoot, vsRoot } from '@vuesax-alpha/build-utils'
 import { generateExternal, writeBundles } from '../utils'
 import { VuesaxAlphaAlias } from '../plugins/vuesax-alpha-alias'
 import { buildConfigEntries, target } from '../build-info'
+import { saxIcons } from '../../../../packages/iconify/src/vite'
+import saxIconConfig from '../../../../sax-icons.config'
 
 import type { OutputOptions } from 'rollup'
 
@@ -19,12 +21,14 @@ export const buildModules = async () => {
       cwd: pkgRoot,
       absolute: true,
       onlyFiles: true,
-    })
+      ignore: ['iconify/**'],
+    }),
   )
   const bundle = await rollup({
     input,
     plugins: [
       VuesaxAlphaAlias(),
+      saxIcons(saxIconConfig),
       VueMacros({
         setupComponent: false,
         setupSFC: false,
@@ -62,6 +66,6 @@ export const buildModules = async () => {
         sourcemap: true,
         entryFileNames: `[name].${config.ext}`,
       }
-    })
+    }),
   )
 }

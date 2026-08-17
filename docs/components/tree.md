@@ -1,5 +1,20 @@
 ---
 PROPS:
+  - name: node-key / label / children
+    type: String
+    values: data field names
+    description: Map node identity, label and child fields from custom tree data.
+    default: 'id / label / children'
+  - name: default-checked-keys / default-expanded-keys / highlight-current
+    type: Array / Boolean
+    values: node keys / true | false
+    description: Configure initial selection, expansion and current-node highlighting.
+    default: '[] / [] / false'
+  - name: empty-text / indent / expand-on-click-node
+    type: String / Number / Boolean
+    values: empty copy / pixels / true | false
+    description: Configure empty state text, nesting indent and expansion behavior.
+    default: '-'
   - name: model-value/v-model
     type: String | Number
     values: node key
@@ -33,7 +48,7 @@ EVENTS:
 SLOTS:
   - name: node
     description: Custom node label. Receives node and depth.
-description: "VXE-compatible hierarchical tree control."
+description: "Hierarchical tree control."
 ---
 
 # Tree

@@ -19,30 +19,35 @@
             rgba(0, 0, 0, getCssVar('shadow-opacity'));
         }
         .#{$namespace}-card__img {
-          border-radius: 6px 40px 6px 40px;
+          border-radius: var(--sax-radius-sm) var(--sax-radius-2xl)
+            var(--sax-radius-sm) var(--sax-radius-2xl);
           img {
             transform: scale(1.1);
           }
         }
       }
       &__img {
-        border-radius: 6px 20px 6px 20px;
+        border-radius: var(--sax-radius-sm) var(--sax-radius-xl)
+          var(--sax-radius-sm) var(--sax-radius-xl);
       }
       &__interactions {
         bottom: 6px;
-        transition: all 0.25s ease;
+        transition: all var(--sax-motion-duration)
+          var(--sax-motion-easing-standard);
         z-index: 20;
       }
       &__text {
         background: getColor('background', 1);
         box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, getCssVar('shadow-opacity'));
-        border-radius: 6px 20px 6px 20px;
+        border-radius: var(--sax-radius-sm) var(--sax-radius-xl)
+          var(--sax-radius-sm) var(--sax-radius-xl);
         margin-top: -50px;
         z-index: 10;
         position: relative;
         width: calc(100% - 30px);
         padding-top: 10px;
-        transition: all 0.25s ease;
+        transition: all var(--sax-motion-duration)
+          var(--sax-motion-easing-standard);
         transform: translate(0, 25px);
         opacity: 0;
       }
@@ -80,8 +85,9 @@
         position: absolute;
         bottom: 0px;
         backdrop-filter: saturate(180%) blur(20px);
-        border-radius: 0px 0px 20px 20px;
-        transition: all 0.25s ease;
+        border-radius: 0 0 var(--sax-radius-xl) var(--sax-radius-xl);
+        transition: all var(--sax-motion-duration)
+          var(--sax-motion-easing-standard);
         p {
           opacity: 1;
         }
@@ -143,6 +149,9 @@
         position: relative;
         color: inherit;
         padding: 0px;
+        &-text {
+          padding-bottom: 5px;
+        }
         h2,
         h3,
         h4,
@@ -157,7 +166,7 @@
         bottom: 0px;
         background: getColor('background', 0.9);
         padding-top: 30px;
-        border-radius: 0px 0px 20px 20px;
+        border-radius: 0 0 var(--sax-radius-xl) var(--sax-radius-xl);
         background: linear-gradient(
           180deg,
           transparent 0%,
@@ -166,7 +175,8 @@
         color: transparent;
         font-size: 0.9rem;
         transform: translate(0, 45%);
-        transition: all 0.25s ease;
+        transition: all var(--sax-motion-duration)
+          var(--sax-motion-easing-standard);
         p {
           opacity: 1;
         }
@@ -194,7 +204,7 @@
   width: 100%;
   max-width: 350px;
   box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, getCssVar('shadow-opacity'));
-  border-radius: 20px;
+  border-radius: var(--sax-radius-xl);
   transition: getCssVar(transition-ease);
   cursor: pointer;
   position: relative;
@@ -221,6 +231,19 @@
       font-size: 1.1rem;
     }
   }
+  @include e(title-text) {
+    margin: 0;
+    padding: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  @include e(description) {
+    margin: 0;
+    font-size: inherit;
+    line-height: 1.55;
+    opacity: 0.8;
+  }
   @include e(interactions) {
     @include flex(flex-start, center);
     position: absolute;
@@ -233,7 +256,7 @@
     position: relative;
     max-height: 250px;
     overflow: hidden;
-    border-radius: 20px;
+    border-radius: var(--sax-radius-xl);
     transition: getCssVar(transition-ease);
     img {
       width: 100%;

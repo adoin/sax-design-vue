@@ -4,7 +4,9 @@
 
 .#{$namespace}-date-picker-fade-enter-active,
 .#{$namespace}-date-picker-fade-leave-active {
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  transition:
+    opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+    transform var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 }
 
 .#{$namespace}-date-picker-fade-enter-from,
@@ -88,19 +90,6 @@
     min-width: 0;
   }
 
-  // Date picker icons are affordances, not floating action buttons. Keep them
-  // optically centered in normal, focus, and hover states.
-  .#{$namespace}-input.is-focus.#{$namespace}-input--icon-after,
-  .#{$namespace}-input.#{$namespace}-input--icon-after {
-    .#{$namespace}-input__icon {
-      transform: none;
-
-      &:hover {
-        transform: none;
-      }
-    }
-  }
-
   @include e(range-input) {
     display: flex;
     align-items: center;
@@ -132,8 +121,6 @@
   }
 
   @include e(popper) {
-    @include set-var-value(color, getCssVar(primary));
-
     padding: 0 !important;
     border: 0 !important;
     background: transparent !important;
@@ -144,9 +131,10 @@
     display: flex;
     flex-direction: column;
     background: getColor('background');
-    border: 1px solid getColor('primary', 0.12);
-    border-radius: 14px;
-    box-shadow: 0 18px 44px -16px getColor('primary', 0.28),
+    border: 1px solid getColor('color', 0.12);
+    border-radius: var(--sax-radius-lg);
+    box-shadow:
+      0 18px 44px -16px getColor('color', 0.28),
       0 8px 20px -12px rgba(17, 18, 20, 0.2);
     overflow: hidden;
     min-width: 280px;
@@ -167,7 +155,7 @@
     border: 0;
     background: getColor('gray-2');
     color: getColor('text');
-    border-radius: 8px;
+    border-radius: var(--sax-radius-sm);
     padding: 4px 10px;
     font-size: 0.75rem;
     cursor: pointer;
@@ -389,7 +377,7 @@
     width: 28px;
     height: 28px;
     border: 0;
-    border-radius: 8px;
+    border-radius: var(--sax-radius-sm);
     background: transparent;
     color: getColor('text', 0.7);
     cursor: pointer;
@@ -408,7 +396,7 @@
     font-weight: 600;
     font-size: 0.85rem;
     padding: 4px 6px;
-    border-radius: 8px;
+    border-radius: var(--sax-radius-sm);
     cursor: pointer;
 
     &:hover {
@@ -442,7 +430,7 @@
     height: 34px;
     margin: 0 auto;
     border: 0;
-    border-radius: 10px;
+    border-radius: var(--sax-radius-md);
     background: transparent;
     color: getColor('text');
     font-size: 0.8rem;
@@ -470,13 +458,13 @@
     @include when(range-start) {
       background: getColor('color');
       color: getColor('white');
-      border-radius: 10px 0 0 10px;
+      border-radius: var(--sax-radius-md) 0 0 var(--sax-radius-md);
     }
 
     @include when(range-end) {
       background: getColor('color');
       color: getColor('white');
-      border-radius: 0 10px 10px 0;
+      border-radius: 0 var(--sax-radius-md) var(--sax-radius-md) 0;
     }
 
     @include when(selected) {
@@ -511,7 +499,7 @@
     right: 5px;
     width: 4px;
     height: 4px;
-    border-radius: 999px;
+    border-radius: var(--sax-radius-pill);
     background: getColor('color');
   }
 
@@ -546,7 +534,7 @@
 
   @include e(quarter) {
     border: 0;
-    border-radius: 10px;
+    border-radius: var(--sax-radius-md);
     background: getColor('gray-2');
     color: getColor('text');
     padding: 12px 0;
@@ -572,7 +560,7 @@
 
   @include e(month) {
     border: 0;
-    border-radius: 10px;
+    border-radius: var(--sax-radius-md);
     background: getColor('gray-2');
     color: getColor('text');
     padding: 12px 0;
@@ -609,7 +597,7 @@
 
   @include e(year) {
     border: 0;
-    border-radius: 10px;
+    border-radius: var(--sax-radius-md);
     background: getColor('gray-2');
     color: getColor('text');
     padding: 12px 0;
@@ -659,7 +647,7 @@
     }
 
     .#{$namespace}-scrollbar {
-      border-radius: 8px;
+      border-radius: var(--sax-radius-sm);
 
       &:hover {
         .#{$namespace}-scrollbar__bar.is-vertical {
@@ -676,16 +664,17 @@
       top: 4px;
       right: 0;
       bottom: 4px;
-      border-radius: 999px;
+      border-radius: var(--sax-radius-pill);
       background: getColor('color', 0.04);
       transition: background getCssVar(transition-ease);
     }
 
     .#{$namespace}-scrollbar__thumb {
-      border-radius: 999px;
+      border-radius: var(--sax-radius-pill);
       background: getColor('color', 0.38);
       opacity: 1;
-      transition: background getCssVar(transition-ease),
+      transition:
+        background getCssVar(transition-ease),
         transform getCssVar(transition-ease);
     }
   }
@@ -704,7 +693,7 @@
     min-width: 0;
     padding: 5px 2px;
     border: 1px solid transparent;
-    border-radius: 7px;
+    border-radius: var(--sax-radius-sm);
     background: getColor('gray-2');
     color: getColor('text');
     font-size: 0.75rem;
@@ -734,7 +723,7 @@
   @include e(item) {
     text-align: center;
     padding: 6px 0;
-    border-radius: 8px;
+    border-radius: var(--sax-radius-sm);
     font-size: 0.82rem;
     cursor: pointer;
     transition: getCssVar(transition-ease);

@@ -9,7 +9,7 @@
         v-for="item in innerPageSizes"
         :key="item"
         :value="item"
-        :label="`${item} / page`"
+        :label="`${item} ${t('vs.pagination.pagesize')}`"
       />
     </s-select>
   </span>
@@ -19,7 +19,7 @@
 import { computed, ref, watch } from 'vue'
 import { isEqual } from 'lodash-unified'
 import SSelect, { SOption } from '@vuesax-alpha/components/select'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { usePagination } from '../usePagination'
 import { paginationSizesEmits, paginationSizesProps } from './sizes'
 
@@ -30,6 +30,7 @@ defineOptions({
 const props = defineProps(paginationSizesProps)
 const emit = defineEmits(paginationSizesEmits)
 const ns = useNamespace('pagination')
+const { t } = useLocale()
 
 const { disabled, handleSizeChange } = usePagination()
 
@@ -45,14 +46,14 @@ watch(
         : props.pageSizes[0]
       emit('page-size-change', pageSize)
     }
-  }
+  },
 )
 
 watch(
   () => props.pageSize,
   (newVal) => {
     innerPageSize.value = newVal!
-  }
+  },
 )
 
 const innerPageSizes = computed(() => props.pageSizes)

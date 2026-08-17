@@ -7,7 +7,7 @@ import type Alert from './alert.vue'
 
 export const alertProps = buildProps({
   /**
-   * @description Component color - Accept Vuesax's color, Hex, rgb
+   * @description Component color - Accept Sax Design color tokens, Hex, rgb
    */
   color: { ...useColorProp, default: 'primary' },
   /**

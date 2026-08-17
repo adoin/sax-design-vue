@@ -1,9 +1,14 @@
 ---
 PROPS:
+  - name: border / size
+    type: Boolean / String
+    values: true | false / small | medium | large
+    description: Control tag border treatment and size.
+    default: 'false / medium'
   - name: type / status
     type: String
     values: primary | success | warning | danger | info
-    description: Semantic color. `status` is the VXE-compatible alias and takes priority.
+    description: Semantic color. `status` is an alias and takes priority.
     default: primary
   - name: content
     type: String
@@ -25,7 +30,7 @@ EVENTS:
     description: Fired from the close control.
   - name: click
     description: Fired from the tag body.
-description: "Compact semantic label compatible with VXE Tag conventions."
+description: "Compact semantic label."
 ---
 
 # Tag

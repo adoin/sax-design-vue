@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: tag / status
+    type: String / String
+    values: 语义 HTML 标签 / 主题状态
+    description: 选择渲染元素和语义颜色状态。
+    default: 'span / -'
   - name: content
     type: String | Number
     values: text
@@ -15,7 +20,7 @@ PROPS:
     values: lines
     description: 多行省略行数。
     default: null
-description: "带 VXE 风格省略能力的语义文本。"
+description: "支持省略能力的语义文本。"
 ---
 
 # Text 文本

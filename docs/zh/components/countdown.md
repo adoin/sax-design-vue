@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: auto-start
+    type: Boolean
+    values: true | false
+    description: 挂载后自动开始倒计时。
+    default: true
   - name: value
     type: Number
     values: timestamp
@@ -15,7 +20,7 @@ EVENTS:
     description: 归零时触发。
   - name: change
     description: 剩余毫秒变化时触发。
-description: "兼容 VXE 的倒计时展示。"
+description: "倒计时展示。"
 ---
 # Countdown 倒计时
 <card><template #example><countdown-default /></template><template #template>

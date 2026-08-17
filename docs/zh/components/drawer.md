@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: show-close / teleported
+    type: Boolean
+    values: true | false
+    description: 控制关闭按钮显示和是否挂载到 body。
+    default: 'true / true'
   - name: model-value/v-model
     type: Boolean
     values: true | false
@@ -20,7 +25,7 @@ PROPS:
     values: true | false
     description: 是否允许点击遮罩关闭。
     default: true
-description: "兼容 VXE 的方向抽屉。"
+description: "方向抽屉。"
 ---
 # Drawer 抽屉
 <card><template #example><drawer-default /></template><template #template>

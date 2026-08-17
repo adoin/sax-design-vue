@@ -1,5 +1,16 @@
 ---
+description: '选择日期、日期范围和日期时间值。'
 PROPS:
+  - name: color / size / label-float / label / start-label / end-label
+    type: String / Boolean
+    values: 主题色 / small | default | large / 标签文字
+    description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
+    default: '-'
+  - name: auto-close / clearable / editable / separator
+    type: Boolean / Boolean / Boolean / String
+    values: true | false / 日期范围分隔符
+    description: 控制自动关闭、清空操作、输入编辑和日期范围分隔符。
+    default: 'true / true / true / -'
   - name: v-model / model-value
     type: Date | string | number | [Date, Date]
     values:
@@ -82,13 +93,13 @@ PROPS:
     code: null
 ---
 
-# Date picker
+# Date picker 日期选择器
 
 <card>
 
 ## 默认
 
-使用 Date Picker 选择日期。
+使用 Date Picker 选择日期。示例同时展示单值、范围输入的自定义主题色和浮动标签。
 
 ::: tip
 在 SSR（如 [Nuxt](https://nuxt.com/)）或 SSG（如 [VitePress](https://vitepress.dev/)）中使用时，需要用
@@ -102,13 +113,13 @@ PROPS:
 
 <template #template>
 
-@[code{1-11}](../../.vuepress/components/date-picker/default.vue)
+@[code{1-19}](../../.vuepress/components/date-picker/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17}](../../.vuepress/components/date-picker/default.vue)
+@[code{21-26}](../../.vuepress/components/date-picker/default.vue)
 
 </template>
 

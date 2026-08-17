@@ -9,7 +9,7 @@ export const paginationPagerProps = buildProps({
     default: 7,
   },
   /**
-   * @description Component color - Accept Vuesax's color, Hex, rgb
+   * @description Component color - Accept Sax Design color tokens, Hex, rgb
    */
   color: useColorProp,
   progress: { type: Boolean },

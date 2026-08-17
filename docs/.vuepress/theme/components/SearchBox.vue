@@ -4,13 +4,13 @@
       <input
         ref="$input"
         v-model="query"
-        aria-label="Search"
+        :aria-label="t.shell.search"
         :class="{ focused: focused }"
         :placeholder="placeholder"
         autocomplete="off"
         spellcheck="false"
-        @focus=";(focused = true), emits('focus')"
-        @blur=";(focused = false), emits('blur')"
+        @focus=";((focused = true), emits('focus'))"
+        @blur=";((focused = false), emits('blur'))"
         @keyup.enter="go(focusIndex)"
         @keyup.up="onUp"
         @keyup.down="onDown"
@@ -46,7 +46,7 @@
               {{ suggestion.title || suggestion.path }}
             </span>
             <span v-if="suggestion.header" class="header">
-              <i class="bx bx-chevron-right" />
+              <s-icon  name="bx:chevron-right" />
               {{ suggestion.header }}
             </span>
           </router-link>
@@ -63,6 +63,7 @@ import { useRouteLocale } from '@vuepress/client'
 import { useThemeData } from '@vuepress/plugin-theme-data/client'
 import { ensureLeadingSlash, removeEndingSlash } from '@vuepress/shared'
 import { useRouter } from 'vue-router'
+import { useDocLocaleUi } from '../composables/docLocale'
 
 import type { SaxDesignVueThemeOptions } from '../saxDesignVueTheme'
 
@@ -75,6 +76,7 @@ const emits = defineEmits<{
 const router = useRouter()
 const themeData = useThemeData<SaxDesignVueThemeOptions>()
 const routeLocale = useRouteLocale()
+const { t } = useDocLocaleUi()
 
 const SEARCH_MAX_SUGGESTIONS = themeData.value.searchMaxSuggestions || 5
 const SEARCH_HOTKEYS = ['s', '/']
@@ -139,7 +141,7 @@ const suggestions = computed(
       }
     }
     return res
-  }
+  },
 )
 
 // make suggestions align right when there are not enough items
@@ -203,8 +205,7 @@ const unfocus = () => {
 
 onMounted(() => {
   const localeConfig = themeData.value.locales?.[routeLocale.value] as
-    | { searchPlaceholder?: string }
-    | undefined
+    { searchPlaceholder?: string } | undefined
   placeholder.value =
     localeConfig?.searchPlaceholder || themeData.value.searchPlaceholder || ''
   document.addEventListener('keydown', onHotkey)
@@ -216,7 +217,8 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="scss">
-@import '../styles/use';
+@use 'sass:color';
+@use '../styles/use' as *;
 
 .fade-enter-active,
 .fade-leave-active {
@@ -263,7 +265,7 @@ onBeforeUnmount(() => {
     cursor: text;
     width: 15rem;
     color: -color('theme-color');
-    border: 1px solid darken($borderColor, 10%);
+    border: 1px solid color.adjust($borderColor, $lightness: -10%);
     display: inline-block;
     border-radius: 2rem;
     font-size: 0.85rem;

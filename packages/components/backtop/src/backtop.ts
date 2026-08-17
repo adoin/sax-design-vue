@@ -8,6 +8,10 @@ export const backtopProps = buildProps({
     type: Number,
     default: 200,
   },
+  visibilityBottom: {
+    type: Number,
+    default: undefined,
+  },
   right: {
     type: Number,
     default: 40,

@@ -3,13 +3,13 @@
     <s-button>
       Home
       <template #animate>
-        <i class="bx bx-home-alt" />
+        <s-icon  name="bx:home-alt" />
       </template>
     </s-button>
 
     <s-button type="flat" color="success" animation-type="vertical">
       Message
-      <template #animate> <i class="bx bx-mail-send" /> Send </template>
+      <template #animate> <s-icon  name="bx:mail-send" /> Send </template>
     </s-button>
 
     <s-button
@@ -18,14 +18,14 @@
       color="warn"
       animation-type="scale"
     >
-      <i class="bx bxs-shopping-bag" />
+      <s-icon  name="bxs:shopping-bag" />
       <template #animate> Store </template>
     </s-button>
 
     <s-button icon type="relief" color="danger" animation-type="rotate">
-      <i class="bx bx-like" />
+      <s-icon  name="bx:like" />
       <template #animate>
-        <i class="bx bxs-like" />
+        <s-icon  name="bxs:like" />
       </template>
     </s-button>
   </div>

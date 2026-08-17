@@ -1,7 +1,7 @@
 <template>
   <div class="center">
     <s-button block>
-      <i class="bx bxs-paint-roll" />
+      <s-icon  name="bxs:paint-roll" />
       Edit Theme
     </s-button>
   </div>

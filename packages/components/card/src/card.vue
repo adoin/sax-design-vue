@@ -8,12 +8,19 @@
         </div>
       </div>
 
-      <div v-if="$slots.text" :class="ns.e('text')">
-        <div v-if="$slots.title" :class="ns.e('title')">
-          <slot name="title" />
+      <div
+        v-if="$slots.title || title || $slots.text || text"
+        :class="ns.e('text')"
+      >
+        <div v-if="$slots.title || title" :class="ns.e('title')">
+          <slot name="title">
+            <h3 :class="ns.e('title-text')">{{ title }}</h3>
+          </slot>
         </div>
 
-        <slot name="text" />
+        <slot name="text">
+          <p v-if="text" :class="ns.e('description')">{{ text }}</p>
+        </slot>
       </div>
 
       <div v-if="$slots.buttons" :class="ns.e('button')">
@@ -28,8 +35,8 @@ import { useNamespace } from '@vuesax-alpha/hooks'
 import { cardProps } from './card'
 
 defineOptions({
-  inheritAttrs: false,
   name: 'SCard',
+  inheritAttrs: false,
 })
 
 defineProps(cardProps)

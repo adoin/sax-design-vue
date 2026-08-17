@@ -15,7 +15,7 @@
       :class="ns.e('handle')"
       type="button"
       :disabled="disabled"
-      :aria-label="`Resize ${direction} panels`"
+      :aria-label="t('vs.splitter.resize', { direction })"
       @pointerdown="startDrag"
     >
       <span :class="ns.e('grip')"><i /><i /><i /></span>
@@ -26,7 +26,7 @@
 
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { splitterEmits, splitterProps } from './splitter'
 import type { CSSProperties } from 'vue'
 
@@ -35,6 +35,7 @@ defineOptions({ name: 'SSplitter' })
 const props = defineProps(splitterProps)
 const emit = defineEmits(splitterEmits)
 const ns = useNamespace('splitter')
+const { t } = useLocale()
 const rootRef = ref<HTMLElement>()
 const current = ref(50)
 const dragging = ref(false)

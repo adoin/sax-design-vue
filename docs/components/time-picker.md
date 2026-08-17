@@ -1,5 +1,27 @@
 ---
+description: 'Select a time value with an editable input and time columns.'
 PROPS:
+  - name: color / size / label-float / label
+    type: String / Boolean
+    values: Theme color / small | default | large / label text
+    description: Customize the trigger color, density, and floating label.
+    default: '-'
+    link: null
+    usage: '#default'
+  - name: format / clearable
+    type: String / Boolean
+    values: Day.js tokens / true | false
+    description: Format and clear the selected time.
+    default: 'HH:mm:ss / true'
+    link: null
+    usage: '#default'
+  - name: disabled-hours / disabled-minutes / disabled-seconds / time-config
+    type: Function / Object
+    values: disabled time units and column configuration
+    description: Restrict time choices and configure the time columns.
+    default: '-'
+    link: null
+    usage: '#default'
   - name: v-model / model-value
     type: String | Date
     values:

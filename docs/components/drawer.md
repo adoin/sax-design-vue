@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: show-close / teleported
+    type: Boolean
+    values: true | false
+    description: Control close-button visibility and whether the drawer mounts to body.
+    default: 'true / true'
   - name: model-value/v-model
     type: Boolean
     values: true | false
@@ -20,7 +25,7 @@ PROPS:
     values: true | false
     description: Allows backdrop closing.
     default: true
-description: "VXE-compatible directional drawer."
+description: "Directional drawer."
 ---
 # Drawer
 <card><template #example><drawer-default /></template><template #template>

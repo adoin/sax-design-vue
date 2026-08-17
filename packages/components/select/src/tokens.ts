@@ -4,6 +4,8 @@ export type SelectOptionValue = string | number | object
 
 export type SelectOptionContext = {
   el: HTMLElement | undefined
+  /** Stable render key. `index` may change when pinned options are reordered. */
+  key?: string | number
   index: number
   data?: Record<string, unknown>
   groupDisabled: boolean
@@ -67,6 +69,7 @@ export type SelectContext = {
   optionsArray: SelectOptionContext[]
   cachedOptionsArray: SelectOptionContext[]
   hoverIndex: number
+  isOptionVisible(option: SelectOptionContext, query: string): boolean
   handleTarget: (
     target: SelectTargetElement | null,
     condition?: boolean,

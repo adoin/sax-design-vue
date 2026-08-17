@@ -5,9 +5,9 @@
         <span v-if="item.text !== '...'">
           {{ item.text }}
         </span>
-        <i v-else class="bx bx-dots-horizontal-rounded" />
+        <s-icon v-else  name="bx:dots-horizontal-rounded" />
 
-        <i v-if="hasFle" class="bx bx-chevron-down not-remove" />
+        <s-icon v-if="hasFle"  name="bx:chevron-down" class="not-remove" />
       </span>
     </a>
 
@@ -66,7 +66,7 @@ const toggle = () => {
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .dropdown-wrapper {
   .dropdown-title {
@@ -247,7 +247,10 @@ const toggle = () => {
       bottom: 0px;
       transform: translate(0, 100%);
       left: 0;
-      background-color: -color('theme-layout');
+      // Dropdowns sit over page content. Use a solid surface so hero text
+      // never bleeds through while navigating.
+      z-index: 1300;
+      background-color: rgb(var(--sax-theme-layout));
       padding: 0.5rem 0;
       text-align: left;
       border-radius: 7px 20px 20px 20px;

@@ -7,7 +7,7 @@
         :title="t('vs.datepicker.prevYear')"
         @click="changeYear(-1)"
       >
-        <s-icon size="16"><chevron-left-double /></s-icon>
+        <s-icon name="cb:double-chevron-left" size="16" />
       </button>
       <button
         v-if="viewMode === 'date' || viewMode === 'week'"
@@ -16,7 +16,7 @@
         :title="t('vs.datepicker.prevMonth')"
         @click="changeMonth(-1)"
       >
-        <s-icon size="16"><chevron-left /></s-icon>
+        <s-icon name="cb:chevron-left" size="16" />
       </button>
       <button
         type="button"
@@ -39,7 +39,7 @@
         :title="t('vs.datepicker.nextMonth')"
         @click="changeMonth(1)"
       >
-        <s-icon size="16"><chevron-right /></s-icon>
+        <s-icon name="cb:chevron-right" size="16" />
       </button>
       <button
         type="button"
@@ -47,7 +47,7 @@
         :title="t('vs.datepicker.nextYear')"
         @click="changeYear(1)"
       >
-        <s-icon size="16"><chevron-right-double /></s-icon>
+        <s-icon name="cb:double-chevron-right" size="16" />
       </button>
     </div>
 
@@ -135,12 +135,6 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import dayjs from 'dayjs'
-import {
-  ChevronLeft,
-  ChevronLeftDouble,
-  ChevronRight,
-  ChevronRightDouble,
-} from '@vuesax-alpha/icons-vue'
 import SIcon from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import {

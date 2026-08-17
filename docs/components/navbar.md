@@ -1,4 +1,5 @@
 ---
+description: "Build top-level navigation with grouped actions and responsive states."
 PROPS:
   - name: fixed
     type: Boolean
@@ -254,7 +255,7 @@ Quickly generate a menu with the `navbar` component, as such the component is di
 
 ## Color
 
-Change the component's color with the `color` property or by directly adding one of the main vuesax colors
+Change the component's color with the `color` property or by directly adding one of the main Sax Design colors
 
 if you want to change the text color to white you can do it with the property `text-white`
 

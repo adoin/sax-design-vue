@@ -8,7 +8,7 @@
       :label="color.color"
       placeholder="Select"
     >
-      <s-option label="Vuesax" value="1"> Vuesax </s-option>
+      <s-option label="Sax Design" value="1"> Sax Design </s-option>
       <s-option label="Vue" value="2"> Vue </s-option>
       <s-option label="Javascript" value="3"> Javascript </s-option>
       <s-option label="Sass" value="4"> Sass </s-option>

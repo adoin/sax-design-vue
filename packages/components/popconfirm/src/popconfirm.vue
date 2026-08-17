@@ -15,7 +15,14 @@
     <template #content>
       <div :class="ns.e('main')">
         <s-icon
-          v-if="!hideIcon && icon"
+          v-if="!hideIcon && typeof icon === 'string'"
+          :name="icon"
+          :class="ns.e('icon')"
+          :style="{ color: iconColor }"
+          size="26"
+        />
+        <s-icon
+          v-else-if="!hideIcon && icon"
           :class="ns.e('icon')"
           :style="{ color: iconColor }"
           size="26"

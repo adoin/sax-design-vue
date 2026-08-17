@@ -32,14 +32,6 @@ PROPS:
     link: null
     usage: '#icons'
 
-  - name: icon-pack
-    type: String
-    values: Icon pack class
-    description: Icon font class (e.g. material-icons).
-    default: material-icons
-    link: null
-    usage: '#icons'
-
   - name: border-style
     type: String
     values: solid, dashed, dotted

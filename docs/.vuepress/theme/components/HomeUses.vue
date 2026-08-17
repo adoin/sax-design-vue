@@ -246,7 +246,7 @@ const keydownx = (evt: KeyboardEvent) => {
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .darken {
   .con-twits {

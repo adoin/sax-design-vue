@@ -1,5 +1,8 @@
 <template>
-  <nav :class="[ns.b(), ns.m(`align-${align}`)]" aria-label="breadcrumb">
+  <nav
+    :class="[ns.b(), ns.m(`align-${align}`)]"
+    :aria-label="t('vs.breadcrumb.label')"
+  >
     <ol :class="ns.e('list')">
       <slot />
       <template v-if="!$slots.default">
@@ -11,41 +14,82 @@
             {
               [ns.is('active')]: item.active,
               [ns.is('disabled')]: item.disabled,
+              [ns.is('has-children')]: item.children?.length,
             },
           ]"
           :aria-current="item.active ? 'page' : undefined"
         >
-          <a
-            v-if="!item.active && !item.disabled"
-            :href="item.url || '#'"
-            :title="item.title"
-            :class="ns.e('link')"
+          <s-popper
+            v-if="item.children?.length"
+            :trigger="trigger"
+            placement="bottom-start"
+            strategy="fixed"
+            :offset="8"
+            :hide-after="120"
+            :show-arrow="false"
+            persistent
+            popper-class="s-breadcrumb__tree-popper"
           >
-            {{ item.title }}
-          </a>
-          <span
-            v-else-if="!item.active && item.disabled"
-            :class="[ns.e('link'), ns.is('disabled')]"
-            :title="item.title"
-          >
-            {{ item.title }}
-          </span>
-          <span
-            v-else
-            :class="[ns.e('text'), textColorClass]"
-            :style="textStyle"
-          >
-            {{ item.title }}
-          </span>
+            <span :class="ns.e('tree-trigger')">
+              <a
+                v-if="!item.active && !item.disabled"
+                :href="item.url || '#'"
+                :title="item.title"
+                :class="ns.e('link')"
+              >
+                {{ item.title }}
+              </a>
+              <span
+                v-else-if="!item.active && item.disabled"
+                :class="[ns.e('link'), ns.is('disabled')]"
+                :title="item.title"
+              >
+                {{ item.title }}
+              </span>
+              <span
+                v-else
+                :class="[ns.e('text'), textColorClass]"
+                :style="textStyle"
+              >
+                {{ item.title }}
+              </span>
+              <span :class="ns.e('menu-trigger')" aria-hidden="true" />
+            </span>
+            <template #content>
+              <breadcrumb-tree-menu :items="item.children" :trigger="trigger" />
+            </template>
+          </s-popper>
+          <template v-else>
+            <a
+              v-if="!item.active && !item.disabled"
+              :href="item.url || '#'"
+              :title="item.title"
+              :class="ns.e('link')"
+            >
+              {{ item.title }}
+            </a>
+            <span
+              v-else-if="!item.active && item.disabled"
+              :class="[ns.e('link'), ns.is('disabled')]"
+              :title="item.title"
+            >
+              {{ item.title }}
+            </span>
+            <span
+              v-else
+              :class="[ns.e('text'), textColorClass]"
+              :style="textStyle"
+            >
+              {{ item.title }}
+            </span>
+          </template>
           <span
             v-if="!item.active"
             :class="ns.e('separator')"
             aria-hidden="true"
           >
             <SIcon
-              v-if="isIconSeparator(separator)"
-              :icon="separator"
-              icon-pack="material-icons"
+              v-if="isIconSeparator(separator)" :name="separator"
             />
             <template v-else>{{ separator }}</template>
           </span>
@@ -57,11 +101,13 @@
 
 <script lang="ts" setup>
 import { computed, provide, toRef } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
+import { SPopper } from '@vuesax-alpha/components/popper'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { breadcrumbProps } from './breadcrumb'
 import { breadcrumbContextKey } from './constants'
+import BreadcrumbTreeMenu from './breadcrumb-tree-menu.vue'
 
 defineOptions({
   name: 'SBreadcrumb',
@@ -70,13 +116,14 @@ defineOptions({
 const props = defineProps(breadcrumbProps)
 
 const ns = useNamespace('breadcrumb')
+const { t } = useLocale()
 
 const isIconSeparator = (sep: string) => sep.length > 1
 
 const themeColor = computed(() => normalizeVsColor(props.color))
 
 const textColorClass = computed(() =>
-  isVsColor(themeColor.value) ? ns.em('text', themeColor.value) : ''
+  isVsColor(themeColor.value) ? ns.em('text', themeColor.value) : '',
 )
 
 const textStyle = computed(() => {

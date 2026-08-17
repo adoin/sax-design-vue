@@ -2,7 +2,7 @@
   <div
     :class="[rateClasses, ns.is('disabled', rateDisabled)]"
     role="slider"
-    :aria-label="label || 'rating'"
+    :aria-label="label || t('vs.rate.label')"
     :aria-valuenow="currentValue"
     :aria-valuetext="text || undefined"
     aria-valuemin="0"
@@ -27,15 +27,37 @@
         ]"
       >
         <template v-if="!showDecimalIcon(item)">
-          <component :is="activeComponent" v-show="item <= currentValue" />
-          <component :is="voidComponent" v-show="!(item <= currentValue)" />
+          <s-icon
+            v-if="isString(activeComponent)"
+            v-show="item <= currentValue"
+            :name="activeComponent"
+          />
+          <component
+            v-else
+            :is="activeComponent"
+            v-show="item <= currentValue"
+          />
+          <s-icon
+            v-if="isString(voidComponent)"
+            v-show="!(item <= currentValue)"
+            :name="voidComponent"
+          />
+          <component
+            v-else
+            :is="voidComponent"
+            v-show="!(item <= currentValue)"
+          />
         </template>
         <s-icon
           v-if="showDecimalIcon(item)"
           :style="decimalStyle"
           :class="[ns.e('icon'), ns.e('decimal')]"
         >
-          <component :is="decimalIconComponent" />
+          <s-icon
+            v-if="isString(decimalIconComponent)"
+            :name="decimalIconComponent"
+          />
+          <component v-else :is="decimalIconComponent" />
         </s-icon>
       </s-icon>
     </span>
@@ -49,17 +71,17 @@ import { computed, markRaw, ref, watch } from 'vue'
 import { EVENT_CODE, UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { hasClass, isArray, isObject, isString } from '@vuesax-alpha/utils'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { useNamespace, useSize } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace, useSize } from '@vuesax-alpha/hooks'
 import { rateEmits, rateProps } from './rate'
 import type { iconPropType } from '@vuesax-alpha/utils'
 import type { CSSProperties, Component } from 'vue'
 
 function getValueFromMap<T>(
   value: number,
-  map: Record<string, T | { excluded?: boolean; value: T }>
+  map: Record<string, T | { excluded?: boolean; value: T }>,
 ) {
   const isExcludedObject = (
-    val: unknown
+    val: unknown,
   ): val is { excluded?: boolean } & Record<any, unknown> => isObject(val)
 
   const matchedKeys = Object.keys(map)
@@ -83,6 +105,7 @@ const emit = defineEmits(rateEmits)
 
 const rateSize = useSize()
 const ns = useNamespace('rate')
+const { t } = useLocale()
 
 const currentValue = ref(props.modelValue)
 const hoverIndex = ref(-1)
@@ -103,7 +126,7 @@ const text = computed(() => {
   if (props.showScore) {
     result = props.scoreTemplate.replace(
       /\{\s*value\s*\}/,
-      rateDisabled.value ? `${props.modelValue}` : `${currentValue.value}`
+      rateDisabled.value ? `${props.modelValue}` : `${currentValue.value}`,
     )
   } else if (props.showText) {
     result = props.texts[Math.ceil(currentValue.value) - 1]
@@ -111,7 +134,7 @@ const text = computed(() => {
   return result
 })
 const valueDecimal = computed(
-  () => props.modelValue * 100 - Math.floor(props.modelValue) * 100
+  () => props.modelValue * 100 - Math.floor(props.modelValue) * 100,
 )
 const colorMap = computed(() =>
   isArray(props.colors)
@@ -120,7 +143,7 @@ const colorMap = computed(() =>
         [props.highThreshold]: { value: props.colors[1], excluded: true },
         [props.max]: props.colors[2],
       }
-    : props.colors
+    : props.colors,
 )
 const activeColor = computed(() => {
   const color = getValueFromMap(currentValue.value, colorMap.value)
@@ -142,8 +165,7 @@ const decimalStyle = computed(() => {
 const componentMap = computed(() => {
   let icons = isArray(props.icons) ? [...props.icons] : { ...props.icons }
   icons = markRaw(icons) as
-    | Array<string | Component>
-    | Record<number, string | Component>
+    Array<string | Component> | Record<number, string | Component>
   return isArray(icons)
     ? {
         [props.lowThreshold]: icons[0],
@@ -156,7 +178,7 @@ const componentMap = computed(() => {
     : icons
 })
 const decimalIconComponent = computed(() =>
-  getValueFromMap(props.modelValue, componentMap.value)
+  getValueFromMap(props.modelValue, componentMap.value),
 )
 const voidComponent = computed(() =>
   rateDisabled.value
@@ -164,11 +186,11 @@ const voidComponent = computed(() =>
       ? props.disabledVoidIcon
       : (markRaw(props.disabledVoidIcon) as typeof iconPropType)
     : isString(props.voidIcon)
-    ? props.voidIcon
-    : (markRaw(props.voidIcon) as typeof iconPropType)
+      ? props.voidIcon
+      : (markRaw(props.voidIcon) as typeof iconPropType),
 )
 const activeComponent = computed(() =>
-  getValueFromMap(currentValue.value, componentMap.value)
+  getValueFromMap(currentValue.value, componentMap.value),
 )
 
 function showDecimalIcon(item: number) {
@@ -274,7 +296,7 @@ watch(
   (val) => {
     currentValue.value = val
     pointerAtLeftHalf.value = props.modelValue !== Math.floor(props.modelValue)
-  }
+  },
 )
 
 if (!props.modelValue) {

@@ -57,13 +57,17 @@
       </s-scrollbar>
     </div>
 
-    <div :class="ns.e('input')" role="group" aria-label="Time input">
+    <div
+      :class="ns.e('input')"
+      role="group"
+      :aria-label="t('vs.timepicker.input')"
+    >
       <input
         :class="ns.e('input-field')"
         :value="pad(currentHour)"
         inputmode="numeric"
         maxlength="2"
-        aria-label="Hours"
+        :aria-label="t('vs.timepicker.hours')"
         @change="updatePart('hour', $event)"
       />
       <span :class="ns.e('input-separator')">:</span>
@@ -72,7 +76,7 @@
         :value="pad(currentMinute)"
         inputmode="numeric"
         maxlength="2"
-        aria-label="Minutes"
+        :aria-label="t('vs.timepicker.minutes')"
         @change="updatePart('minute', $event)"
       />
       <span :class="ns.e('input-separator')">:</span>
@@ -81,7 +85,7 @@
         :value="pad(currentSecond)"
         inputmode="numeric"
         maxlength="2"
-        aria-label="Seconds"
+        :aria-label="t('vs.timepicker.seconds')"
         @change="updatePart('second', $event)"
       />
     </div>
@@ -92,7 +96,7 @@
 import { computed } from 'vue'
 import dayjs from 'dayjs'
 import SScrollbar from '@vuesax-alpha/components/scrollbar'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { range } from './utils'
 import type { TimePickerConfig, TimePickerOption } from './utils'
 
@@ -109,6 +113,7 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('time-panel')
+const { t } = useLocale()
 
 type TimePanelItem = {
   value: number

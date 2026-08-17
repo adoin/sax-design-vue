@@ -14,7 +14,7 @@
     width: 58px;
     height: 58px;
     place-items: center;
-    border-radius: 20px;
+    border-radius: var(--sax-radius-xl);
     background: getColor(info, 0.12);
     color: getColor(info);
     font-size: 29px;

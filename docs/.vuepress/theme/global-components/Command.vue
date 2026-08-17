@@ -1,5 +1,5 @@
 <template>
-  <CodeCopied :copied="copied" :text="'Copied'" />
+  <CodeCopied :copied="copied" :text="t.examples.copied" />
   <div class="command">
     <div v-if="isMultipleSlot" class="tabs">
       <svg
@@ -44,13 +44,13 @@
     </div>
     <div class="copy">
       <div
-        title="Copy code"
+        :title="t.examples.copyCode"
         class="con-copy"
         :class="{ copied }"
         @click="copy($el.textContent)"
       >
-        <i v-if="!copied" class="bx bx-clipboard" />
-        <i v-else class="bx bx-check" />
+        <s-icon v-if="!copied"  name="bx:clipboard" />
+        <s-icon v-else  name="bx:check" />
       </div>
     </div>
 
@@ -69,8 +69,10 @@
 import { ref, useSlots, watchPostEffect } from 'vue'
 import { useClipboard, useTemplateRefsList } from '@vueuse/core'
 import CodeCopied from '../components/CodeCopied.vue'
+import { useDocLocaleUi } from '../composables/docLocale'
 
 const slots = useSlots()
+const { t } = useDocLocaleUi()
 
 const slotsNames = Object.keys(slots)
 const isMultipleSlot = slotsNames.length > 1
@@ -103,8 +105,8 @@ if (isMultipleSlot) {
 </script>
 
 <style lang="scss">
-@import '../styles/use';
-@import '../styles/syntax-tokens';
+@use '../styles/use' as *;
+@use '../styles/syntax-tokens' as *;
 
 .command {
   z-index: 300;
@@ -124,7 +126,7 @@ if (isMultipleSlot) {
     border-radius: 20px 25px 0 0;
     margin-left: 18px;
     gap: 4px;
-    background: -color(theme-code);
+    background: rgb(var(--sax-theme-code));
     padding: 6px;
     padding-right: 9px;
 
@@ -140,7 +142,7 @@ if (isMultipleSlot) {
       max-height: 40px;
       z-index: -1;
       pointer-events: none;
-      fill: rgba(var(--sax-theme-code), 1);
+      fill: rgb(var(--sax-theme-code));
 
       &.tab-effect1 {
         transform: rotate(72deg) scale(0.6);
@@ -215,7 +217,7 @@ if (isMultipleSlot) {
 
   .slots {
     border-radius: 20px;
-    background: -color(theme-code);
+    background: rgb(var(--sax-theme-code));
 
     div[class*='language-'] {
       @include syntax-tokens(true);

@@ -15,16 +15,12 @@
       @click="activate"
     >
       <SIcon
-        v-if="option.icon"
-        :icon="option.icon"
-        icon-pack="material-icons"
+        v-if="option.icon" :name="option.icon"
       />
       <span :class="ns.e('label')">{{ option.label }}</span>
       <SIcon
         v-if="hasChildren"
-        :class="ns.e('arrow')"
-        icon="expand_more"
-        icon-pack="material-icons"
+        :class="ns.e('arrow')" name="cb:chevron-down"
       />
     </button>
     <ul v-if="hasChildren" :class="ns.e('children')">

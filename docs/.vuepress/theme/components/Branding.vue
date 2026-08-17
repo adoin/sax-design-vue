@@ -26,10 +26,10 @@
           </div>
           <footer>
             <a :href="item.normal.svg" :download="`vuesax-${item.mini.title}`">
-              <i class="bx bx-download" /> .Svg
+              <s-icon  name="bx:download" /> .Svg
             </a>
             <a :href="item.normal.png" :download="`vuesax-${item.mini.title}`">
-              <i class="bx bx-download" /> .Png
+              <s-icon  name="bx:download" /> .Png
             </a>
           </footer>
         </div>
@@ -43,10 +43,10 @@
           </div>
           <footer>
             <a :href="item.normal.svg" :download="`vuesax-${item.mini.title}`">
-              <i class="bx bx-download" /> .Svg
+              <s-icon  name="bx:download" /> .Svg
             </a>
             <a :href="item.normal.png" :download="`vuesax-${item.mini.title}`">
-              <i class="bx bx-download" /> .Png
+              <s-icon  name="bx:download" /> .Png
             </a>
           </footer>
         </div>
@@ -123,7 +123,7 @@ const images = [
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .darken {
   .con-branding {

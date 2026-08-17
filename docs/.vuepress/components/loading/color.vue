@@ -2,7 +2,7 @@
   <div :class="{ hasOpenLoading }" class="center">
     <div :style="`background: ${color};`" class="con-input">
       <input v-model="color" type="color" />
-      <i class="bx bxs-color-fill" />
+      <s-icon  name="bxs:color-fill" />
     </div>
     <div ref="$loadings" class="con-loadings">
       <div

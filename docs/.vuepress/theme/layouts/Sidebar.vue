@@ -14,7 +14,7 @@
         <template #header>
           <s-sidebar-item arrow>
             <template #icon>
-              <i class="bx bx-sitemap" />
+              <s-icon  name="bx:sitemap" />
             </template>
             Items
           </s-sidebar-item>
@@ -22,13 +22,13 @@
 
         <s-sidebar-item id="home">
           <template #icon>
-            <i class="bx bx-home" />
+            <s-icon  name="bx:home" />
           </template>
           Home
         </s-sidebar-item>
         <s-sidebar-item id="docs">
           <template #icon>
-            <i class="bx bx-book-open" />
+            <s-icon  name="bx:book-open" />
           </template>
           Documents the new
         </s-sidebar-item>
@@ -36,7 +36,7 @@
           <template #header>
             <s-sidebar-item arrow>
               <template #icon>
-                <i class="bx bx-archive" />
+                <s-icon  name="bx:archive" />
               </template>
               Children
             </s-sidebar-item>
@@ -44,13 +44,13 @@
 
           <s-sidebar-item id="news">
             <template #icon>
-              <i class="bx bx-news" />
+              <s-icon  name="bx:news" />
             </template>
             News
           </s-sidebar-item>
           <s-sidebar-item id="Playlist">
             <template #icon>
-              <i class="bx bxs-playlist" />
+              <s-icon  name="bxs:playlist" />
             </template>
             Playlist
           </s-sidebar-item>
@@ -59,24 +59,24 @@
 
       <s-sidebar-item id="Artist">
         <template #icon>
-          <i class="bx bxs-bar-chart-alt-2" />
+          <s-icon  name="bxs:bar-chart-alt-2" />
         </template>
         Artist
       </s-sidebar-item>
       <s-sidebar-item id="chat">
         <template #icon>
-          <i class="bx bx-chat" />
+          <s-icon  name="bx:chat" />
         </template>
         Chat
       </s-sidebar-item>
       <s-sidebar-item id="Songs">
         <template #icon>
-          <i class="bx bx-music" />
+          <s-icon  name="bx:music" />
         </template>
         Songs
       </s-sidebar-item>
       <template #footer>
-        <s-button flat icon><i class="bx bxs-cog" /></s-button>
+        <s-button flat icon><s-icon  name="bxs:cog" /></s-button>
       </template>
     </s-sidebar>
 

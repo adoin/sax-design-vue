@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <s-popper>
+    <s-popper trigger="click">
       <s-button>Click me</s-button>
 
       <template #content> This is popper content </template>

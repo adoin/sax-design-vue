@@ -1,5 +1,16 @@
 ---
+description: '通过可编辑输入框和时间列选择时间值。'
 PROPS:
+  - name: color / size / label-float / label
+    type: String / Boolean
+    values: 主题色 / small | default | large / 标签文字
+    description: 设置时间输入触发器的主题色、尺寸和浮动标签。
+    default: '-'
+  - name: clearable / disabled-hours / disabled-minutes / disabled-seconds / editable / format / time-config
+    type: Boolean / Function / String / Object
+    values: 清空、禁用时间项、输入编辑和时间列配置
+    description: 控制清空操作、可选时间、输入编辑、格式和时间列行为。
+    default: '-'
   - name: v-model / model-value
     type: String | Date
     values:
@@ -10,7 +21,7 @@ PROPS:
     code: null
 ---
 
-# Time picker
+# Time picker 时间选择器
 
 <card>
 

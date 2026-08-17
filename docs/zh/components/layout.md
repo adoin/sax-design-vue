@@ -10,7 +10,7 @@ PROPS:
     values: CSS size
     description: Header/Footer 高度或 Aside 宽度。
     default: null
-description: "兼容 VXE 的应用布局原语。"
+description: "应用布局原语。"
 ---
 
 # Layout 布局

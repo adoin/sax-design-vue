@@ -15,6 +15,7 @@
     "**/gulpfile.ts",
     "**/test-helper",
     "packages/test-utils",
-    "**/*.md"
+    "**/*.md",
+    "packages/iconify/src/vite.ts"
   ]
 }

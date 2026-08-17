@@ -65,26 +65,25 @@
                 <span v-if="typeof tr[1] === 'string'">
                   {{ tr[1] }}
                 </span>
-                <i v-else-if="tr[1]" class="bx bx-check" />
-                <i v-else class="bx bx-x" />
+                <s-icon v-else-if="tr[1]"  name="bx:check" />
+                <s-icon v-else  name="bx:x" />
               </td>
               <td :class="{ none: !tr[2] && typeof tr[2] !== 'string' }">
                 <span v-if="typeof tr[1] === 'string'">
                   {{ tr[1] }}
                 </span>
-                <i v-if="tr[2]" class="bx bx-check" />
-                <i v-else class="bx bx-x" />
+                <s-icon v-if="tr[2]"  name="bx:check" />
+                <s-icon v-else  name="bx:x" />
               </td>
               <td :class="{ none: !tr[3] && typeof tr[3] !== 'string' }">
                 <span v-if="typeof tr[1] === 'string'" @click="openContact">
                   {{ tr[1] }}
                 </span>
-                <i v-else-if="tr[3]" class="bx bx-check" />
-                <i v-else class="bx bx-x" />
+                <s-icon v-else-if="tr[3]"  name="bx:check" />
+                <s-icon v-else  name="bx:x" />
               </td>
             </tr>
           </tbody>
-          <tr />
         </table>
       </div>
     </div>
@@ -127,7 +126,7 @@ const openContact = () => {
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .darken {
   .con-faq {

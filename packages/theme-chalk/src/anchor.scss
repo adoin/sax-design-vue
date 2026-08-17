@@ -1,11 +1,106 @@
 @use 'common/var' as *;
 
-.s-anchor { display: inline-flex; flex-direction: column; gap: 4px; padding: 6px; border: 1px solid getColor(border, .7); border-radius: 10px; background: getColor(background); }
-.s-anchor__item { position: relative; min-width: 92px; padding: 7px 10px 7px 13px; border: 0; border-radius: 7px; background: transparent; color: getColor(text, secondary); font-size: 13px; text-align: left; cursor: pointer; transition: background .16s ease, color .16s ease; }
-.s-anchor__item:hover { background: getColor(primary, .07); color: getColor(primary); }
-.s-anchor__item.is-active { background: getColor(primary, .1); color: getColor(primary); font-weight: 600; }
-.s-anchor__item.is-active::before { position: absolute; top: 8px; bottom: 8px; left: 4px; width: 3px; border-radius: 99px; background: getColor(primary); content: ''; }
-.s-anchor__item.is-disabled { cursor: not-allowed; opacity: .5; }
-.s-anchor--horizontal { flex-direction: row; }
-.s-anchor--horizontal .s-anchor__item { min-width: 0; text-align: center; }
-.s-anchor--horizontal .s-anchor__item.is-active::before { top: auto; right: 11px; bottom: 3px; left: 11px; width: auto; height: 3px; }
+.s-anchor {
+  display: inline-flex;
+  flex-direction: column;
+  width: 184px;
+  gap: 2px;
+  padding: 8px;
+  border: 1px solid getColor(border, 0.7);
+  border-radius: var(--sax-radius-lg);
+  background: getColor(background);
+  box-shadow: 0 12px 30px getColor(primary, 0.08);
+}
+
+.s-anchor.is-affix {
+  position: sticky;
+  top: 88px;
+  z-index: 2;
+}
+
+.s-anchor__group {
+  width: 100%;
+}
+
+.s-anchor__item {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 8px 10px 8px 15px;
+  border: 0;
+  border-radius: var(--sax-radius-sm);
+  background: transparent;
+  color: getColor(text, secondary);
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    color 0.16s ease,
+    transform 0.16s ease;
+
+  &:hover {
+    background: getColor(primary, 0.07);
+    color: getColor(primary);
+  }
+
+  &.is-active {
+    background: getColor(primary, 0.1);
+    color: getColor(primary);
+    font-weight: 600;
+
+    &::before {
+      position: absolute;
+      top: 9px;
+      bottom: 9px;
+      left: 5px;
+      width: 3px;
+      border-radius: var(--sax-radius-pill);
+      background: getColor(primary);
+      content: '';
+    }
+  }
+
+  &.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.s-anchor__children {
+  margin: 1px 0 3px 12px;
+  padding-left: 8px;
+  border-left: 1px solid getColor(border, 0.8);
+}
+
+.s-anchor__item--child {
+  padding: 6px 8px 6px 12px;
+  font-size: 12px;
+}
+
+.s-anchor--horizontal {
+  flex-direction: row;
+  width: auto;
+  overflow-x: auto;
+
+  .s-anchor__group {
+    width: auto;
+  }
+  .s-anchor__children {
+    display: none;
+  }
+  .s-anchor__item {
+    width: auto;
+    min-width: max-content;
+    text-align: center;
+  }
+  .s-anchor__item.is-active::before {
+    top: auto;
+    right: 12px;
+    bottom: 3px;
+    left: 12px;
+    width: auto;
+    height: 3px;
+  }
+}

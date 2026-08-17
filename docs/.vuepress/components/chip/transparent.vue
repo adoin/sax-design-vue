@@ -7,7 +7,7 @@
     </s-chip>
     <s-chip transparent color="danger">
       <s-avatar>
-        <i class="material-icons notranslate">person</i>
+        <s-icon name="cb:user" />
       </s-avatar>
       Avatar Icon
     </s-chip>
@@ -25,7 +25,7 @@
       transparent
       closable
       color="#24c1a0"
-      close-icon="close"
+      close-icon="cb:close"
     >
       <s-avatar>
         <img src="https://randomuser.me/api/portraits/men/16.jpg" alt="" />

@@ -1,4 +1,5 @@
 ---
+description: "Provide styled scroll areas with programmatic scroll control."
 PROPS:
   - name: height
     type: String, Number

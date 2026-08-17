@@ -13,7 +13,7 @@
     <s-avatar loading badge badge-color="warn">
       <img src="/avatars/avatar-8.png" alt="" />
       <template #badge>
-        <i class="bx bxs-bell-off" />
+        <s-icon  name="bxs:bell-off" />
       </template>
     </s-avatar>
     <s-avatar loading writing badge badge-color="primary">

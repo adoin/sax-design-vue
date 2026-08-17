@@ -1,4 +1,5 @@
 ---
+description: "Organize secondary navigation in a collapsible side panel."
 PROPS:
   - name: open/v-model:open
     type: Boolean

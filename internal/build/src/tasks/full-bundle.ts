@@ -24,6 +24,8 @@ import {
   writeBundles,
 } from '../utils'
 import { target } from '../build-info'
+import { saxIcons } from '../../../../packages/iconify/src/vite'
+import saxIconConfig from '../../../../sax-icons.config'
 import type { Plugin } from 'rollup'
 
 const banner = `/*! ${PKG_BRAND_NAME} v${version} */\n`
@@ -31,6 +33,7 @@ const banner = `/*! ${PKG_BRAND_NAME} v${version} */\n`
 async function buildFullEntry(minify: boolean) {
   const plugins: Plugin[] = [
     VuesaxAlphaAlias(),
+    saxIcons(saxIconConfig) as Plugin,
     VueMacros({
       setupComponent: false,
       setupSFC: false,
@@ -64,7 +67,7 @@ async function buildFullEntry(minify: boolean) {
       minifyPlugin({
         target,
         sourceMap: true,
-      })
+      }),
     )
   }
 
@@ -80,7 +83,7 @@ async function buildFullEntry(minify: boolean) {
       file: path.resolve(
         vsOutput,
         'dist',
-        formatBundleFilename('index.full', minify, 'js')
+        formatBundleFilename('index.full', minify, 'js'),
       ),
       exports: 'named',
       name: PKG_CAMELCASE_NAME,
@@ -95,7 +98,7 @@ async function buildFullEntry(minify: boolean) {
       file: path.resolve(
         vsOutput,
         'dist',
-        formatBundleFilename('index.full', minify, 'mjs')
+        formatBundleFilename('index.full', minify, 'mjs'),
       ),
       sourcemap: minify,
       banner,
@@ -129,7 +132,7 @@ async function buildFullLocale(minify: boolean) {
           file: path.resolve(
             vsOutput,
             'dist/locale',
-            formatBundleFilename(filename, minify, 'js')
+            formatBundleFilename(filename, minify, 'js'),
           ),
           exports: 'default',
           name: `${PKG_CAMELCASE_LOCAL_NAME}${name}`,
@@ -141,13 +144,13 @@ async function buildFullLocale(minify: boolean) {
           file: path.resolve(
             vsOutput,
             'dist/locale',
-            formatBundleFilename(filename, minify, 'mjs')
+            formatBundleFilename(filename, minify, 'mjs'),
           ),
           sourcemap: minify,
           banner,
         },
       ])
-    })
+    }),
   )
 }
 
@@ -156,5 +159,5 @@ export const buildFull = (minify: boolean) => async () =>
 
 export const buildFullBundle = parallel(
   withTaskName('buildFullMinified', buildFull(true)),
-  withTaskName('buildFull', buildFull(false))
+  withTaskName('buildFull', buildFull(false)),
 )

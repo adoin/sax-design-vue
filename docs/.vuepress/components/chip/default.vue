@@ -7,7 +7,7 @@
     </s-chip>
     <s-chip>
       <s-avatar>
-        <i class="material-icons notranslate">person</i>
+        <s-icon name="cb:user" />
       </s-avatar>
       Avatar Icon
     </s-chip>

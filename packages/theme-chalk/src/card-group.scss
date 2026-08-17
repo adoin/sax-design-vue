@@ -20,7 +20,7 @@
       scroll-behavior: smooth;
       padding-top: 20px;
       padding-bottom: 36px;
-      border-radius: 20px;
+      border-radius: var(--sax-radius-xl);
       .#{$namespace}-card-content {
         min-width: 350px;
         margin-left: 20px;

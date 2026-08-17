@@ -1,4 +1,3 @@
-import { MessageQuestion } from '@vuesax-alpha/icons-vue'
 import { buildProps, iconPropType } from '@vuesax-alpha/utils'
 import { popperContentProps } from '@vuesax-alpha/components/popper'
 import { useColorProp } from '@vuesax-alpha/hooks'
@@ -60,7 +59,7 @@ export const popconfirmProps = buildProps({
    */
   icon: {
     type: iconPropType,
-    default: () => MessageQuestion,
+    default: 'cb:help',
   },
   /**
    * @description Icon color

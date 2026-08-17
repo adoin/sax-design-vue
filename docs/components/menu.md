@@ -23,7 +23,7 @@ PROPS:
 EVENTS:
   - name: select / open / close
     description: Select or expand state events.
-description: "VXE-style nested navigation menu."
+description: "Nested navigation menu."
 ---
 
 # Menu

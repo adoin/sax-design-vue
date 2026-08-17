@@ -15,7 +15,7 @@ PROPS:
     values: true / false
     description: 折叠状态。
     default: 'false'
-description: "VXE 风格表单字段分组。"
+description: "表单字段分组。"
 ---
 
 # 表单分组

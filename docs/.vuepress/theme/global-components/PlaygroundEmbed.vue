@@ -3,7 +3,7 @@
     <div class="playground-embed">
       <div class="playground-embed__toolbar">
         <label>
-          <span>Demo</span>
+          <span>{{ t.examples.demo }}</span>
           <select :value="activeDemo" @change="onDemoSelect">
             <option v-for="demo in demos" :key="demo" :value="demo">
               {{ demo }}
@@ -17,17 +17,9 @@
             :class="{ copied }"
             @click="copySource"
           >
-            <i :class="copied ? 'bx bx-check' : 'bx bx-copy'" />
-            {{ copied ? 'Copied' : 'Copy code' }}
+            <s-icon :name="copied ? 'bx:check' : 'bx:copy'"  />
+            {{ copied ? t.examples.copied : t.examples.copyCode }}
           </button>
-          <a
-            class="playground-embed__open"
-            :href="fullPlaygroundUrl"
-            target="_blank"
-            rel="noopener"
-          >
-            Open full playground ↗
-          </a>
         </div>
       </div>
 
@@ -35,9 +27,9 @@
         <section class="playground-embed__editor">
           <header class="playground-embed__code-header">
             <span>{{ activeDemo }}.vue</span>
-            <span class="playground-embed__hint"
-              >Edit code below — preview updates live</span
-            >
+            <span class="playground-embed__hint">{{
+              t.examples.editorHint
+            }}</span>
           </header>
           <textarea
             :key="activeDemo"
@@ -50,38 +42,33 @@
           />
         </section>
 
-        <section class="playground-embed__preview">
-          <header class="playground-embed__preview-header">Live preview</header>
-          <iframe
-            ref="iframeRef"
-            :key="iframeKey"
-            class="playground-embed__frame"
-            :src="iframeSrc"
-            title="Sax Design Vue Playground Preview"
-            loading="lazy"
-            @load="postSourceToIframe"
-          />
-        </section>
+        <LiveExamplePreview
+          :source="editedSource"
+          :scope-key="`catalog-${activeDemo}`"
+        />
       </div>
     </div>
 
     <template #fallback>
       <div class="playground-embed playground-embed--loading">
-        Loading playground…
+        {{ t.examples.loadingPlayground }}
       </div>
     </template>
   </ClientOnly>
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { ref } from 'vue'
 import { ClientOnly } from '@vuepress/client'
-import { useDebounceFn } from '@vueuse/core'
 import {
   PLAYGROUND_DEMOS,
   getDemoSource,
   isPlayDemo,
 } from '../../../../play/demo-sources'
+import { useDocLocaleUi } from '../composables/docLocale'
+import LiveExamplePreview from './LiveExamplePreview.vue'
+
+const { t } = useDocLocaleUi()
 
 const props = withDefaults(
   defineProps<{
@@ -89,11 +76,8 @@ const props = withDefaults(
   }>(),
   {
     initialDemo: 'alert',
-  }
+  },
 )
-
-const siteBase = import.meta.env.BASE_URL || '/'
-const playBase = `${siteBase.replace(/\/$/, '')}/play/`
 
 const demos = PLAYGROUND_DEMOS
 
@@ -118,66 +102,19 @@ const resolveInitialDemo = (): string => {
 const activeDemo = ref(resolveInitialDemo())
 const editedSource = ref(getDemoSource(activeDemo.value))
 const copied = ref(false)
-const iframeRef = ref<HTMLIFrameElement | null>(null)
-const iframeKey = ref(0)
-const iframeReady = ref(false)
-const syncingDemo = ref(false)
-
-const iframeSrc = computed(
-  () => `${playBase}?embed=preview#/${activeDemo.value}`
-)
-const fullPlaygroundUrl = computed(() => `${playBase}#/${activeDemo.value}`)
-
-const postSourceToIframe = () => {
-  iframeReady.value = true
-  iframeRef.value?.contentWindow?.postMessage(
-    {
-      type: 'sax-playground-source',
-      source: editedSource.value,
-    },
-    '*'
-  )
-}
-
-const pushSourceToIframe = useDebounceFn(() => {
-  if (!iframeReady.value || syncingDemo.value) return
-  postSourceToIframe()
-}, 200)
-
 const loadDemo = (demo: string) => {
   if (!isPlayDemo(demo) || demo === 'App' || demo === activeDemo.value) {
     return
   }
 
-  syncingDemo.value = true
   activeDemo.value = demo
   editedSource.value = getDemoSource(demo)
-  iframeReady.value = false
-  iframeKey.value += 1
-  syncingDemo.value = false
 }
 
 const onDemoSelect = (event: Event) => {
   const demo = (event.target as HTMLSelectElement).value
   loadDemo(demo)
 }
-
-watch(editedSource, () => {
-  pushSourceToIframe()
-})
-
-const onPlaygroundReady = (event: MessageEvent) => {
-  if (event.data?.type !== 'sax-playground-ready') return
-  postSourceToIframe()
-}
-
-onMounted(() => {
-  window.addEventListener('message', onPlaygroundReady)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('message', onPlaygroundReady)
-})
 
 const copySource = async () => {
   try {
@@ -271,12 +208,6 @@ const copySource = async () => {
   }
 }
 
-.playground-embed__open {
-  font-weight: 600;
-  color: rgb(var(--sax-accent-color));
-  text-decoration: none;
-}
-
 .playground-embed__body {
   display: flex;
   flex-direction: column;
@@ -327,34 +258,5 @@ const copySource = async () => {
   &:focus {
     outline: none;
   }
-}
-
-.playground-embed__preview {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 280px;
-  background: radial-gradient(
-      circle at 15% 20%,
-      rgba(var(--sax-accent-color), 0.12),
-      transparent 42%
-    ),
-    rgba(var(--sax-theme-bg), 0.95);
-}
-
-.playground-embed__preview-header {
-  padding: 10px 14px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: rgba(var(--sax-theme-color), 0.72);
-  border-bottom: 1px solid rgba(var(--sax-theme-color), 0.08);
-}
-
-.playground-embed__frame {
-  flex: 1;
-  width: 100%;
-  min-height: 280px;
-  border: 0;
-  background: transparent;
 }
 </style>

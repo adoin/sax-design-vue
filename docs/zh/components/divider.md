@@ -32,14 +32,6 @@ PROPS:
     link: null
     usage: '#icons'
 
-  - name: icon-pack
-    type: String
-    values: Icon pack class
-    description: 图标字体类名（如 material-icons）。
-    default: material-icons
-    link: null
-    usage: '#icons'
-
   - name: border-style
     type: String
     values: solid, dashed, dotted
@@ -68,7 +60,7 @@ NEWS:
   - style
 ---
 
-# Divider
+# Divider（分割线）
 
 <card>
 
@@ -150,7 +142,7 @@ NEWS:
 ## 颜色
 
 
-使用 Vuesax 色板名、RGB 或 HEX 更改线条与标签颜色。
+使用 Sax Design 色板名、RGB 或 HEX 更改线条与标签颜色。
 
 <template #example>
 <divider-color />

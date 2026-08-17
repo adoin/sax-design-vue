@@ -1,5 +1,14 @@
 ---
+description: "Choose exactly one option from a related group."
 PROPS:
+  - name: v-model / model-value
+    type: String | Number | Boolean
+    values: selected radio value
+    description: Bind the selected value for the radio or radio group.
+    default: '-'
+    link: null
+    usage: '#default'
+    code: null
   - name: color
     type: String
     values: Theme colors, RGB, HEX

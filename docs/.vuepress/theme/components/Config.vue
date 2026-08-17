@@ -1,9 +1,9 @@
 <template>
   <div ref="$el" class="config">
     <button class="config-btn">
-      <i class="bx bx-cog" />
+      <s-icon  name="bx:cog" />
       <svg
-        class="effect1config"
+        class="config-curve"
         xmlns="http://www.w3.org/2000/svg"
         width="160"
         height="160"
@@ -33,37 +33,43 @@
           />
         </svg>
         <li @click="reloadConfig">
-          <i title="reload config" class="bx bx-rotate-left" />
+          <s-icon :title="t.shell.reloadConfig"  name="bx:rotate-left" />
         </li>
         <li @click="changeSidebar">
-          <i
-            title="Hidden Sidebar"
-            class="bx bx-left-indent hidden-sidebar-hidden"
+          <s-icon
+            :title="t.shell.hideSidebar"
+            name="bx:left-indent"
+            class="hidden-sidebar-hidden"
           />
-          <i
-            title="Open Sidebar"
-            class="bx bx-right-indent visible-sidebar-hidden"
+          <s-icon
+            :title="t.shell.openSidebar"
+            name="bx:right-indent"
+            class="visible-sidebar-hidden"
           />
         </li>
         <li
-          :title="`${
-            !$vsTheme.sidebarCollapseOpen ? 'Open' : 'Close'
-          } sidebar items`"
+          :title="
+            !$vsTheme.sidebarCollapseOpen
+              ? t.shell.openSidebarItems
+              : t.shell.closeSidebarItems
+          "
           :class="{ active: !$vsTheme.sidebarCollapseOpen }"
           @click="changeMenu"
         >
-          <i v-if="$vsTheme.sidebarCollapseOpen" class="bx bx-list-minus" />
-          <i v-else class="bx bx-list-plus" />
+          <s-icon v-if="$vsTheme.sidebarCollapseOpen"  name="bx:list-minus" />
+          <s-icon v-else  name="bx:list-plus" />
         </li>
         <li
-          :title="`${!$vsTheme?.openCode ? 'Open' : 'Close'} all Code`"
+          :title="
+            !$vsTheme?.openCode ? t.shell.openAllCode : t.shell.closeAllCode
+          "
           :class="{ active: $vsTheme?.openCode }"
           @click="changeOpenCode"
         >
-          <i class="bx bx-code-block" />
+          <s-icon  name="bx:code-block" />
         </li>
-        <li class="theme-color-layout" title="Theme Color Layout">
-          <i class="bx bx-paint-roll" />
+        <li class="theme-color-layout" :title="t.shell.layoutColor">
+          <s-icon  name="bx:paint-roll" />
           <input
             type="color"
             value="#2564ff"
@@ -72,8 +78,8 @@
             "
           />
         </li>
-        <li class="theme-color-primary" title="Theme Primary Color">
-          <i class="bx bxs-color-fill" />
+        <li class="theme-color-primary" :title="t.shell.primaryColor">
+          <s-icon  name="bxs:color-fill" />
           <input type="color" value="#2564ff" @change="changeColor" />
         </li>
 
@@ -122,14 +128,14 @@
 
     <button
       :class="{ active: $vsTheme.themeDarken }"
-      :title="`Theme ${!$vsTheme.themeDarken ? 'Dark' : 'Light'}`"
+      :title="!$vsTheme.themeDarken ? t.shell.switchDark : t.shell.switchLight"
       class="li-darken switch-dark"
       @click="changeTheme"
     >
       <div class="switch-con">
         <span class="circle">
-          <i v-if="$vsTheme.themeDarken" class="bx bxs-sun" />
-          <i v-else class="bx bxs-moon" />
+          <s-icon v-if="$vsTheme.themeDarken"  name="bxs:sun" />
+          <s-icon v-else  name="bxs:moon" />
         </span>
       </div>
     </button>
@@ -149,6 +155,7 @@ import { useThemeData } from '@vuepress/plugin-theme-data/client'
 import { useRouter } from 'vue-router'
 import { vsThemeKey } from '../type'
 import { isDark, toggleDark } from '../composables'
+import { useDocLocaleUi } from '../composables/docLocale'
 import type { vsThemeContext } from '../type'
 
 const router = useRouter()
@@ -159,6 +166,7 @@ const pageLang = usePageLang()
 const siteLocale = useRouteLocale()
 const $vsTheme = inject<vsThemeContext>(vsThemeKey, {} as vsThemeContext)!
 const $el = ref<HTMLElement>()
+const { t } = useDocLocaleUi()
 
 const lang = computed(() => {
   const locales = siteData.value.locales
@@ -169,8 +177,7 @@ const lang = computed(() => {
     const languageDropdown = {
       text:
         (themeData.value.locales?.[siteLocale.value] as any)
-          ?.selectLanguageText || // undefined
-        'Languages',
+          ?.selectLanguageText || 'Languages', // undefined
       items: Object.keys(locales).map((path) => {
         const locale = locales[path]
         const text = (themeData.value.locales?.[path] as any)
@@ -189,8 +196,8 @@ const lang = computed(() => {
             link = currentLink.startsWith('/zh/')
               ? currentLink
               : currentLink === '/'
-              ? '/zh/'
-              : `/zh${currentLink}`
+                ? '/zh/'
+                : `/zh${currentLink}`
           } else {
             link = path
           }
@@ -210,13 +217,13 @@ const lang = computed(() => {
 
 const reloadConfig = () => {
   const sidebar = document.querySelector(
-    '.theme-container > .sidebar'
+    '.theme-container > .sidebar',
   ) as HTMLElement
   const navbar = document.querySelector(
-    '.theme-container > .navbar'
+    '.theme-container > .navbar',
   ) as HTMLElement
   const config = document.querySelector(
-    '.theme-container > .config'
+    '.theme-container > .config',
   ) as HTMLElement
   // const effect1 = document.querySelector(
   //   '.header-page > .effect1'
@@ -295,13 +302,13 @@ const changeColorLayout = (colorBase: string) => {
   $el.value!.focus()
 
   const sidebar = document.querySelector(
-    '.theme-container > .sidebar'
+    '.theme-container > .sidebar',
   )! as HTMLElement
   const navbar = document.querySelector(
-    '.theme-container > .navbar'
+    '.theme-container > .navbar',
   )! as HTMLElement
   const config = document.querySelector(
-    '.theme-container > .config'
+    '.theme-container > .config',
   )! as HTMLElement
   // const effect1 = document.querySelector(
   //   '.header-page > .effect1'
@@ -358,11 +365,11 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .switch-dark {
   position: relative;
-  width: auto !important;
+  width: 48px !important;
   &:hover {
     .switch-con {
       background: -color('theme-bg2');
@@ -375,59 +382,64 @@ onMounted(() => {
   }
   &:active {
     .circle {
-      width: 28px;
+      width: 24px;
       border-radius: 15px;
       i {
-        transform: translate(24px);
+        transform: translate(20px);
         font-size: 0.85rem !important;
       }
     }
   }
   &.active {
     .switch-con {
-      background: -color('theme-bg2') !important;
+      background: rgba(var(--sax-primary), 0.3) !important;
     }
     &:active {
       .circle {
-        width: 28px;
+        width: 24px;
         border-radius: 15px;
-        transform: translate(21px);
+        transform: translate(16px);
         box-shadow: 0px 5px 15px 0px #000;
         i {
-          transform: translate(-24px);
+          transform: translate(-20px);
         }
       }
     }
     .circle {
-      transform: translate(27px);
+      transform: translate(20px);
       i {
-        transform: translate(-27px);
+        transform: translate(-20px);
       }
     }
   }
   .switch-con {
-    width: 60px;
-    height: 32px;
-    background: -color('theme-bg');
+    width: 48px;
+    height: 28px;
+    background: rgba(var(--sax-theme-color), 0.14);
     border-radius: 20px;
     box-shadow: inset 0px 0px 4px 0px rgba(0, 0, 0, 0.05);
   }
   .circle {
-    width: 23px;
-    height: 23px;
-    background: -color('theme-layout');
+    width: 20px;
+    height: 20px;
+    background: rgb(var(--sax-sidebar-surface));
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    margin: 5px;
+    margin: 4px;
     box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.15);
-    transition: transform 0.25s ease, width 0.25s ease !important;
+    transition:
+      transform 0.25s ease,
+      width 0.25s ease !important;
     transform: translate(0px);
     i {
-      transform: translate(27px);
-      transition: transform 0.25s ease, font-size 0.25s ease, opacity 0.25s ease !important;
+      transform: translate(20px);
+      transition:
+        transform 0.25s ease,
+        font-size 0.25s ease,
+        opacity 0.25s ease !important;
       font-size: 1rem !important;
       z-index: -1;
     }
@@ -456,7 +468,7 @@ onMounted(() => {
   }
   svg {
     width: 18px;
-    fill: -color('theme-color');
+    fill: rgb(var(--sax-theme-color));
   }
   .lang {
     transition: all 0.25s ease;
@@ -522,13 +534,17 @@ onMounted(() => {
   bottom: 0px;
   left: 260px;
   z-index: 1200;
-  border: 0px;
-  border-radius: 0px 20px 0px 0px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0px 14px 0px 0px;
+  background: rgb(var(--sax-sidebar-surface));
+  box-shadow: 8px 0 20px rgba(30, 27, 75, 0.07);
   transition: all 0.25s ease;
   outline: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-right: 8px;
   button {
     width: 32px;
     height: 45px;
@@ -537,32 +553,32 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
     border: 0px;
-    background: -color('theme-layout');
+    background: rgb(var(--sax-sidebar-surface)) !important;
     transition: all 0.25s ease;
     &.config-btn {
       width: 40px;
     }
     &:last-child {
-      border-radius: 0px 20px 0px 0px;
+      border-radius: 0px 14px 0px 0px;
     }
     li {
       list-style: none;
     }
   }
   .effect1config {
-    width: 40px;
-    height: 40px;
+    display: none;
+  }
+  .config-curve {
+    position: absolute;
     top: -36px;
     left: -3px;
-    position: absolute;
+    width: 40px;
+    height: 40px;
     transform: rotate(179deg);
-    fill: -color('theme-layout');
-    stroke: -color('theme-layout');
-    &.invert {
-      transform: rotate(-90deg);
-      bottom: -36px;
-      top: auto;
-    }
+    color: rgb(var(--sax-sidebar-surface));
+    fill: currentColor;
+    stroke: currentColor;
+    pointer-events: none;
   }
   i {
     &.bx {
@@ -580,7 +596,7 @@ onMounted(() => {
       top: 0px;
       left: 0px;
       transform: translate(-15px, calc(-100% - 25px));
-      background: -color('theme-layout');
+      background: rgb(var(--sax-sidebar-surface));
       list-style: none;
       padding-left: 0px;
       margin: 0px;
@@ -609,6 +625,11 @@ onMounted(() => {
     }
   }
 }
+
+.dark .config {
+  box-shadow: 8px 0 20px rgba(0, 0, 0, 0.22);
+}
+
 .config .config-btn:focus > i.bx,
 .config .config-btn:hover > i.bx {
   transform: rotate(60deg);

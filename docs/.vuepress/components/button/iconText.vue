@@ -1,7 +1,7 @@
 <template>
   <div class="center">
     <s-button :active="active == 0" @click="active = 0">
-      <i class="bx bx-home-alt" /> Home
+      <s-icon  name="bx:home-alt" /> Home
     </s-button>
 
     <s-button
@@ -10,7 +10,7 @@
       :active="active == 1"
       @click="active = 1"
     >
-      <i class="bx bxs-phone-call" /> Call
+      <s-icon  name="bxs:phone-call" /> Call
     </s-button>
 
     <s-button
@@ -19,7 +19,7 @@
       :active="active == 2"
       @click="active = 2"
     >
-      <i class="bx bxs-heart" /> Like
+      <s-icon  name="bxs:heart" /> Like
     </s-button>
 
     <s-button
@@ -28,7 +28,7 @@
       :active="active == 3"
       @click="active = 3"
     >
-      <i class="bx bxs-bell-ring" /> Notifications
+      <s-icon  name="bxs:bell-ring" /> Notifications
     </s-button>
 
     <s-button
@@ -37,7 +37,7 @@
       :active="active == 5"
       @click="active = 5"
     >
-      <i class="bx bxs-paper-plane" /> Send
+      <s-icon  name="bxs:paper-plane" /> Send
     </s-button>
 
     <s-button
@@ -46,7 +46,7 @@
       :active="active == 6"
       @click="active = 6"
     >
-      <i class="bx bxs-purchase-tag" /> Save
+      <s-icon  name="bxs:purchase-tag" /> Save
     </s-button>
   </div>
 </template>

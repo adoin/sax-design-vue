@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: hide-on-click-modal / z-index
+    type: Boolean / Number
+    values: true | false / layer number
+    description: Control modal click closing and overlay stacking order.
+    default: 'true / -'
   - name: v-model
     type: Boolean
     values: true / false
@@ -23,7 +28,7 @@ PROPS:
 EVENTS:
   - name: close / switch
     description: Close preview or switch image events.
-description: "VXE-style full-screen image preview."
+description: "Full-screen image preview."
 ---
 
 # Image preview

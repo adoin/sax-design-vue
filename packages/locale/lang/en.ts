@@ -1,12 +1,21 @@
 export default {
   name: 'en',
   vs: {
+    common: {
+      close: 'Close',
+      more: 'More',
+      less: 'Less',
+    },
     colorpicker: {
       confirm: 'OK',
       clear: 'Clear',
       defaultLabel: 'color picker',
       description:
         'current color is {color}. press enter to select a new color.',
+      color: 'Color',
+      value: 'Color value',
+      opacity: 'Opacity',
+      choose: 'Choose {color}',
     },
     datepicker: {
       now: 'Now',
@@ -76,6 +85,59 @@ export default {
         dec: 'Dec',
       },
     },
+    calendar: {
+      previousMonth: 'Previous month',
+      nextMonth: 'Next month',
+      today: 'Today',
+      weekNumber: 'Wk',
+      allDay: 'All day',
+      events: 'events',
+      moreEvents: 'Show all schedules for this date',
+      editEvent: 'Edit schedule',
+      deleteEvent: 'Delete schedule',
+      views: {
+        month: 'Month',
+        week: 'Week',
+        day: 'Day',
+      },
+    },
+    timepicker: {
+      input: 'Time input',
+      hours: 'Hours',
+      minutes: 'Minutes',
+      seconds: 'Seconds',
+    },
+    backtop: {
+      label: 'Back to top',
+    },
+    anchor: {
+      navigation: 'Anchor navigation',
+    },
+    breadcrumb: {
+      label: 'breadcrumb',
+    },
+    menu: {
+      label: 'Menu',
+    },
+    prompt: {
+      accept: 'Accept',
+      cancel: 'Cancel',
+      title: 'Dialog',
+    },
+    noticeBar: {
+      close: 'Close',
+    },
+    carousel: {
+      previous: 'Previous slide',
+      next: 'Next slide',
+      goto: 'Go to slide {index}',
+    },
+    imagePreview: {
+      label: 'Image preview',
+      close: 'Close',
+      previous: 'Previous image',
+      next: 'Next image',
+    },
     inputNumber: {
       decrease: 'decrease number',
       increase: 'increase number',
@@ -85,6 +147,19 @@ export default {
       noMatch: 'No matching data',
       noData: 'No data',
       placeholder: 'Select',
+      search: 'Search options',
+      selectAll: 'Select all',
+      invert: 'Invert',
+      clear: 'Clear',
+      pin: 'Pin option',
+      unpin: 'Unpin option',
+      selectedSummary: '{count} selected: {labels}',
+      selectedCount: '{count} selected',
+      visibleCount: '{count} visible',
+      totalCount: '{count} total',
+      pinHint: 'Hover an option and use the pin button or press Ctrl+P.',
+      pinned: 'Pinned',
+      unpinned: 'Not pinned',
     },
     dropdown: {
       toggleDropdown: 'Toggle Dropdown',
@@ -94,17 +169,45 @@ export default {
       loading: 'Loading',
       placeholder: 'Select',
       noData: 'No data',
+      clear: 'Clear selection',
     },
     pagination: {
       goto: 'Go to',
       pagesize: '/page',
       total: 'Total {total}',
+      previous: 'Previous page',
+      next: 'Next page',
       pageClassifier: '',
       deprecationWarning:
         'Deprecated usages detected, please refer to the pagination documentation for more details',
     },
+    iconPicker: {
+      clear: 'Clear icon',
+      placeholder: 'Select icon',
+      search: 'Search icon',
+      empty: 'No icons found',
+    },
+    passwordInput: {
+      clear: 'Clear password',
+      show: 'Show password',
+      hide: 'Hide password',
+    },
+    splitter: {
+      resize: 'Resize {direction} panels',
+    },
+    rate: {
+      label: 'rating',
+    },
     dialog: {
       close: 'Close this dialog',
+      confirm: 'Confirm',
+      cancel: 'Cancel',
+    },
+    alert: {
+      close: 'Close alert',
+    },
+    notification: {
+      close: 'Close notification',
     },
     drawer: {
       close: 'Close this dialog',
@@ -121,6 +224,8 @@ export default {
       delete: 'Delete',
       preview: 'Preview',
       continue: 'Continue',
+      uploadFile: 'Upload File',
+      limitReached: 'Maximum of files reached',
     },
     slider: {
       defaultLabel: 'slider between {min} and {max}',
@@ -137,6 +242,8 @@ export default {
     },
     tree: {
       emptyText: 'No Data',
+      expand: 'Expand node',
+      collapse: 'Collapse node',
     },
     transfer: {
       noMatch: 'No matching data',

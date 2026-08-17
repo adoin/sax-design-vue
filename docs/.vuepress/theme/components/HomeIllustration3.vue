@@ -33,7 +33,7 @@ const handleRouter = (link?: string) => {
 </script>
 
 <style scoped lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .btn-action {
   display: inline-block;

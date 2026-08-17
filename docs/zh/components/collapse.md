@@ -37,7 +37,7 @@ NEWS:
   - icon-arrow
 ---
 
-# Collapse
+# Collapse（折叠面板）
 
 <card>
 

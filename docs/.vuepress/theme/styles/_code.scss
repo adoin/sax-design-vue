@@ -1,10 +1,11 @@
-@import './config';
-@import './mixin';
-@import './syntax-tokens';
+@use 'sass:color';
+@use './config' as *;
+@use './mixin' as *;
+@use './syntax-tokens' as *;
 
 // Inline code only — do not style fenced code blocks here
 :not(pre) > code {
-  color: lighten(#b0b4be, 0.2);
+  color: color.adjust(#b0b4be, $lightness: 0.2%);
   padding: 0.25rem 0.5rem;
   margin: 0;
   font-size: 0.85em !important;
@@ -19,8 +20,8 @@ pre[class*='language-'] {
   line-height: 1.4;
   padding: 1.25rem 1.5rem;
   margin: 0;
-  background-color: -color('theme-code');
-  border-radius: 6px;
+  background-color: rgb(var(--sax-theme-code));
+  border-radius: 14px;
   overflow: auto;
 }
 
@@ -37,8 +38,9 @@ pre[class*='language-'] code {
 
 div[class*='language-'] {
   position: relative;
-  background-color: -color('theme-code');
-  border-radius: 6px;
+  overflow: hidden;
+  background-color: rgb(var(--sax-theme-code));
+  border-radius: 14px;
 
   @include syntax-tokens(true);
 

@@ -29,14 +29,8 @@ export const uploadProps = buildProps({
     type: String,
     default: 'file',
   },
-  text: {
-    type: String,
-    default: 'Upload File',
-  },
-  textMax: {
-    type: String,
-    default: 'Maximum of files reached',
-  },
+  text: String,
+  textMax: String,
   limit: {
     type: [Number, String],
     default: null,
@@ -54,7 +48,7 @@ export const uploadProps = buildProps({
     default: null,
   },
   automatic: Boolean,
-  /** VXE-compatible alias of `automatic`. */
+  /** Alias of `automatic`. */
   autoSubmit: Boolean,
   readonly: Boolean,
   showList: {
@@ -73,7 +67,7 @@ export const uploadProps = buildProps({
   limitSize: {
     type: [Number, String],
   },
-  /** VXE-compatible alias of `limit`. */
+  /** Alias of `limit`. */
   limitCount: {
     type: [Number, String],
   },

@@ -1,9 +1,15 @@
 ---
+description: "在一组关联选项中选择唯一值。"
 PROPS:
+  - name: v-model / model-value
+    type: String | Number | Boolean
+    values: 已选单选值
+    description: 绑定单选项或单选组的选中值。
+    default: '-'
   - name: color
     type: String
     values: Theme colors, RGB, HEX
-    description: Change the color of the radio.
+    description: 设置单选框颜色。
     default: primary
     link: null
     usage: '#color'
@@ -12,7 +18,7 @@ PROPS:
   - name: disabled
     type: Boolean
     values: true,false
-    description: Determine if the component is in the disabled state.
+    description: 是否禁用组件。
     default: false
     link: null
     usage: '#default'
@@ -21,7 +27,7 @@ PROPS:
   - name: loading
     type: Boolean
     values: true,false
-    description: Determine if the component has a loading animation and is disabled.
+    description: 是否显示加载动画并禁用组件。
     default: false
     link: null
     usage: '#loading'
@@ -30,7 +36,7 @@ PROPS:
   - name: val
     type: String
     values: String
-    description: Determine the value of the radio input.
+    description: 单选输入绑定值。
     default: null
     link: null
     usage: '#default'
@@ -40,7 +46,7 @@ SLOTS:
   - name: default
     type: slot
     values: null
-    description: Add a label to the component.
+    description: 为组件添加标签。
     default: null
     link: null
     usage: '#label'
@@ -49,14 +55,14 @@ SLOTS:
   - name: icon
     type: slot
     values: null
-    description: Add an icon inside the radio.
+    description: 在单选框内添加图标。
     default: null
     link: null
     usage: '#icon'
     code: null
 ---
 
-# Radio
+# Radio（单选框）
 
 <card>
 
@@ -64,7 +70,7 @@ SLOTS:
 
 <docs-warn />
 
-Add the radio type input with the component `<s-radio />`
+使用 `<s-radio />` 创建单选输入。
 
 <template #example>
 <radio-default />
@@ -112,7 +118,7 @@ Add the radio type input with the component `<s-radio />`
 
 ## 标签 <Badge text="New"/>
 
-Add a label to the radio with the `default` slot, if you need the label to be before the radio you can use the `label-before` property
+通过默认插槽为单选框添加标签；需要将标签放到前侧时，可使用 `label-before` 属性。
 
 <template #example>
 <radio-label />
@@ -136,7 +142,7 @@ Add a label to the radio with the `default` slot, if you need the label to be be
 
 ## 加载 <Badge text="New"/>
 
-Add a loading animation to the component, when the radio has this property active it is as if it were in `disabled`
+为组件添加加载动画；启用后单选框行为等同于 `disabled`。
 
 <template #example>
 <radio-loading />
@@ -160,7 +166,7 @@ Add a loading animation to the component, when the radio has this property activ
 
 ## 图标 <Badge text="New"/>
 
-Add an icon inside the radio with the `icon` slot
+通过 `icon` 插槽在单选框内部添加图标。
 
 <template #example>
 <radio-icons />

@@ -1,421 +1,442 @@
 <template>
   <CodeCopied :copied="copied" />
-  <div ref="$el" class="code">
+
+  <div class="code">
     <header class="header-codex">
-      <ul>
-        <li
-          v-if="codepen"
-          title="Codepen"
-          class="con-link"
-          @click="openCodepen"
+      <div class="example-actions">
+        <button
+          type="button"
+          :title="t.examples.openExamplePlayground"
+          @click="openPlayground"
         >
-          <i class="bx bxl-codepen" />
-        </li>
-
-        <li v-if="codesandbox" title="Codesandbox" @click="openCodesandbox">
-          <svg
-            t="1514359261842"
-            class="icon"
-            viewBox="0 0 1024 1024"
-            version="1.1"
-            fill="currentColor"
-            xmlns="http://www.w3.org/2000/svg"
-            p-id="9197"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="15px"
-            height="15px"
-          >
-            <path
-              d="M755 140.3l0.5-0.3h0.3L512 0 268.3 140h-0.3l0.8 0.4L68.6 256v512L512 1024l443.4-256V256L755 140.3z m-30 506.4v171.2L548 920.1V534.7L883.4 341v215.7l-158.4 90z m-584.4-90.6V340.8L476 534.4v385.7L300 818.5V646.7l-159.4-90.6zM511.7 280l171.1-98.3 166.3 96-336.9 194.5-337-194.6 165.7-95.7L511.7 280z"
-              p-id="9198"
-            />
-          </svg>
-        </li>
-
-        <li
-          title="Copy code"
+          <s-icon  name="bx:play-circle" />
+          <span>{{ t.examples.playground }}</span>
+        </button>
+        <button
+          type="button"
+          :title="t.examples.copyCode"
           :class="{ copied }"
-          @click="copy($slotRefs[activeSlot].textContent)"
+          @click="copySource"
         >
-          <i v-if="!copied" class="bx bx-clipboard" />
-          <i v-else class="bx bx-check" />
-        </li>
-
-        <li
-          :title="active ? 'hide code' : 'View code'"
-          :class="{ active: active }"
-          class="not-a con-link"
-          @click="toggleCode"
-        >
-          <i v-if="!active" class="bx bx-code-alt" />
-
-          <i v-else class="bx bx-hide" />
-        </li>
-      </ul>
-    </header>
-    <transition @before-enter="beforeEnter" @enter="enter" @leave="leave">
-      <div v-show="active" ref="$codex" class="con-code">
-        <ul ref="$ul" class="ul-codes">
-          <li
-            v-if="$slots.template"
-            :class="{ active: activeSlot == 0 }"
-            @click="activeSlot = 0"
-          >
-            Template
-          </li>
-
-          <li
-            v-if="$slots.script"
-            :class="{ active: activeSlot == 1 }"
-            @click="activeSlot = 1"
-          >
-            Script
-          </li>
-
-          <li
-            v-if="$slots.style"
-            :class="{ active: activeSlot == 2 }"
-            @click="activeSlot = 2"
-          >
-            Style
-          </li>
-
-          <li
-            v-if="Object.keys($slots).length > 1"
-            :class="{ active: activeSlot == 3 }"
-            @click="activeSlot = 3"
-          >
-            All
-          </li>
-        </ul>
-        <div class="con-codes">
-          <CardTransitionCodes>
-            <div
-              v-if="activeSlot == 0"
-              :ref="(el) => ($slotRefs[0] = el)"
-              key="0"
-              class="slot-template slots"
-            >
-              <slot name="template" />
-
-              <CardFooter :active="active" @toggle-code="toggleCode" />
-            </div>
-          </CardTransitionCodes>
-          <CardTransitionCodes>
-            <div
-              v-if="activeSlot == 1"
-              :ref="(el) => ($slotRefs[1] = el)"
-              key="1"
-              class="slot-script slots"
-            >
-              <slot name="script" />
-
-              <CardFooter :active="active" @toggle-code="toggleCode" />
-            </div>
-          </CardTransitionCodes>
-          <CardTransitionCodes>
-            <div
-              v-if="activeSlot == 2"
-              :ref="(el) => ($slotRefs[2] = el)"
-              key="2"
-              class="slot-style slots"
-            >
-              <slot name="style" />
-
-              <CardFooter :active="active" @toggle-code="toggleCode" />
-            </div>
-          </CardTransitionCodes>
-          <CardTransitionCodes>
-            <div
-              v-if="activeSlot == 3"
-              :ref="(el) => ($slotRefs[3] = el)"
-              key="3"
-              class="slot-all slots"
-            >
-              <slot name="template" />
-              <slot name="script" />
-              <slot name="style" />
-
-              <CardFooter :active="active" @toggle-code="toggleCode" />
-            </div>
-          </CardTransitionCodes>
-        </div>
+          <s-icon :name="copied ? 'bx:check' : 'bx:clipboard'"  />
+          <span>{{ t.examples.copy }}</span>
+        </button>
+        <button type="button" :title="t.examples.viewCode" @click="openCode">
+          <s-icon  name="bx:code-alt" />
+          <span>{{ t.examples.code }}</span>
+        </button>
       </div>
-    </transition>
+    </header>
+  </div>
+
+  <Teleport to="body">
+    <Transition name="code-dialog">
+      <div v-if="codeOpen" class="code-dialog-backdrop" @click.self="closeCode">
+        <section
+          class="code-dialog"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="t.examples.exampleCode"
+          @keydown.esc="closeCode"
+        >
+          <header class="code-dialog__header">
+            <div>
+              <strong>{{ t.examples.exampleCode }}</strong>
+              <span>{{ t.examples.exampleCodeDescription }}</span>
+            </div>
+            <div class="code-dialog__header-actions">
+              <button
+                type="button"
+                :title="t.examples.copyCode"
+                @click="copySource"
+              >
+                <s-icon :name="copied ? 'bx:check' : 'bx:clipboard'"  />
+              </button>
+              <button
+                type="button"
+                :title="t.examples.closeCode"
+                @click="closeCode"
+              >
+                <s-icon  name="bx:x" />
+              </button>
+            </div>
+          </header>
+
+          <nav v-if="sections.length > 1" class="code-dialog__tabs">
+            <button
+              v-for="section in sections"
+              :key="section.id"
+              type="button"
+              :class="{ active: activeSection === section.id }"
+              @click="activeSection = section.id"
+            >
+              {{ section.label }}
+            </button>
+          </nav>
+
+          <div class="code-dialog__body">
+            <div v-if="activeSection === 'template'" class="code-section">
+              <slot name="template" />
+            </div>
+            <div v-else-if="activeSection === 'script'" class="code-section">
+              <slot name="script" />
+            </div>
+            <div v-else-if="activeSection === 'style'" class="code-section">
+              <slot name="style" />
+            </div>
+            <div v-else class="code-section">
+              <slot name="template" />
+              <slot name="script" />
+              <slot name="style" />
+            </div>
+          </div>
+
+          <footer class="code-dialog__footer">
+            <button type="button" @click="openPlayground">
+              {{ t.examples.openInPlayground }}
+              <s-icon  name="bx:right-arrow-alt" />
+            </button>
+          </footer>
+        </section>
+      </div>
+    </Transition>
+  </Teleport>
+
+  <div ref="sourceRef" class="source-cache" aria-hidden="true">
+    <slot name="template" />
+    <slot name="script" />
+    <slot name="style" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { inject, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, ref, useSlots } from 'vue'
+import { useRouteLocale } from '@vuepress/client'
 import { useClipboard } from '@vueuse/core'
 
-import CardFooter from '../components/CardFooter.vue'
-import CardTransitionCodes from '../components/CardTransitionCodes.vue'
 import CodeCopied from '../components/CodeCopied.vue'
-import { codesandboxContextKey, vsThemeKey } from '../type'
-import type { activeSlotType } from '../type'
+import { useDocLocaleUi } from '../composables/docLocale'
 
-const props = defineProps<{
+type CodeSection = 'template' | 'script' | 'style' | 'all'
+
+interface DocExampleRecord {
+  id: string
+  component: string
+  section: string
+  title: string
+  source: string
+}
+
+const slots = useSlots()
+const routeLocale = useRouteLocale()
+const { t } = useDocLocaleUi()
+const sourceRef = ref<HTMLElement>()
+const codeOpen = ref(false)
+const activeSection = ref<CodeSection>('template')
+const openedExample = ref<DocExampleRecord | null>(null)
+const { copied, copy } = useClipboard({ legacy: true })
+
+defineProps<{
   codepen?: string
   codesandbox?: string
 }>()
 
-const $el = ref<HTMLElement>()
-const $ul = ref<HTMLElement>()
-const $codex = ref<HTMLElement>()
-const $slotRefs = ref<any[]>([])
+const sections = computed(() => {
+  const available: { id: CodeSection; label: string }[] = []
+  if (slots.template)
+    available.push({ id: 'template', label: t.value.examples.template })
+  if (slots.script)
+    available.push({ id: 'script', label: t.value.examples.script })
+  if (slots.style)
+    available.push({ id: 'style', label: t.value.examples.style })
+  if (available.length > 1)
+    available.push({ id: 'all', label: t.value.examples.all })
+  return available
+})
 
-const active = ref<boolean>(false)
-const activeSlot = ref<activeSlotType>(0)
-
-const $vsTheme = inject(vsThemeKey)!
-const $codesandbox = inject(codesandboxContextKey)!
-
-const { copied, copy } = useClipboard({ legacy: true })
-
-const toggleCode = () => {
-  active.value = !active.value
+const getSource = () => {
+  const blocks = sourceRef.value?.querySelectorAll('pre code')
+  return blocks
+    ? Array.from(blocks)
+        .map((block) => block.textContent?.trim())
+        .filter(Boolean)
+        .join('\n\n')
+    : ''
 }
 
-const openCodepen = () => {
-  window.open(props.codepen)
-}
+const getDocExample = (event?: Event): DocExampleRecord => {
+  const trigger = event?.currentTarget as HTMLElement | null
+  const card = trigger?.closest('.card')
+  const heading = card?.querySelector<HTMLElement>('.text h2, .text h3')
+  const source = getSource()
+  const component =
+    window.location.pathname
+      .split('/')
+      .pop()
+      ?.replace(/\.html$/, '') || 'example'
+  const sourceHash = Array.from(source).reduce(
+    (hash, character) => (hash * 31 + character.charCodeAt(0)) >>> 0,
+    0,
+  )
+  const section = heading?.id || `example-${sourceHash.toString(36)}`
+  const title = heading?.textContent?.trim() || t.value.examples.example
 
-const openCodesandbox = () => {
-  document.body.style.overflow = 'hidden'
-  $codesandbox.url = props.codesandbox
-}
-
-// animation
-const beforeEnter = (el: HTMLElement) => {
-  el.style.height = `0`
-}
-
-const enter = (el: HTMLElement) => {
-  const h = el.scrollHeight
-  el.style.height = `${h - 1}px`
-}
-
-const leave = (el: HTMLElement) => {
-  el.style.height = '0px'
-}
-
-watch(
-  () => $vsTheme.openCode,
-  (val) => {
-    active.value = val
-    localStorage.openCode = val
+  return {
+    id: `${component}--${section}`,
+    component,
+    section,
+    title,
+    source,
   }
-)
+}
 
-watch(activeSlot, () => {
-  nextTick(() => {
-    const ul = $ul.value?.scrollHeight
-    const h = $slotRefs.value[activeSlot.value].scrollHeight
-    $codex.value!.style.height = `${h + ul - 1}px`
-  })
-})
+const openCode = (event: Event) => {
+  openedExample.value = getDocExample(event)
+  activeSection.value = sections.value[0]?.id || 'template'
+  codeOpen.value = true
+}
 
-onMounted(() => {
-  $vsTheme.openCode = localStorage.openCode === 'true'
-})
+const closeCode = () => {
+  codeOpen.value = false
+}
+
+const copySource = () => {
+  const source = getSource()
+  if (source) copy(source)
+}
+
+const openPlayground = (event?: Event) => {
+  if (typeof window === 'undefined') return
+
+  const trigger = event?.currentTarget as HTMLElement | null
+  const example = trigger?.closest('.card')
+    ? getDocExample(event)
+    : openedExample.value || getDocExample()
+
+  if (example.source) {
+    window.sessionStorage.setItem(
+      `sax-doc-example:${example.id}`,
+      JSON.stringify(example),
+    )
+  }
+  const exampleId = encodeURIComponent(example.id)
+  window.location.assign(
+    `${routeLocale.value}guide/example-playground.html?exampleId=${exampleId}`,
+  )
+}
 </script>
 
 <style lang="scss">
-@import '../styles/use';
-@import '../styles/syntax-tokens';
-
-.slot-all {
-  & > div {
-    &:nth-last-child(2) {
-      pre {
-        margin-bottom: 0px;
-      }
-    }
-    &:last-child {
-      div[class*='language-'] {
-        border-radius: 0px 0px 20px 20px;
-        pre {
-          margin-bottom: 0px !important;
-        }
-      }
-    }
-  }
-}
-.con-codes {
-  position: relative;
-  width: 100%;
-}
-.slots {
-  transition: all 0.25s ease;
-  width: 100%;
-  overflow: hidden;
-  top: 0px;
-  left: 0px;
-  div {
-    width: 100%;
-    pre {
-      width: 100%;
-    }
-  }
-  & > div {
-    &:last-child {
-      div[class*='language-'] {
-        border-radius: 0px 0px 20px 20px;
-      }
-    }
-  }
-}
-.ul-codes {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0px 20px;
-  margin: 0px;
-  li {
-    list-style: none;
-    padding: 10px;
-    font-size: 0.75rem;
-    opacity: 0.4;
-    transition: all 0.25s ease;
-    cursor: pointer;
-    position: relative;
-    color: #fff;
-    user-select: none;
-    &:after {
-      content: '';
-      position: absolute;
-      bottom: 0px;
-      left: 50%;
-      transform: translate(-50%);
-      height: 2px;
-      width: 0%;
-      background: #fff;
-      transition: all 0.25s ease;
-    }
-    &:hover {
-      opacity: 1;
-    }
-    &.active {
-      opacity: 1;
-      &:after {
-        width: 100%;
-      }
-    }
-  }
-}
 .code {
-  background: -color('theme-layout');
-  z-index: 300;
   position: relative;
-  padding-bottom: 10px;
-  transition: all 0.25s ease;
-}
-.input-transparent {
-  position: absolute;
-  z-index: 0;
-  opacity: 0;
-  bottom: 0px;
-  right: 0px;
-}
-.con-code {
-  display: block;
-  transition: all 0.25s ease;
-  background: -color('theme-code2');
-  border-radius: 20px;
-  width: calc(100% - 20px);
-  margin: 0px 10px;
-  div[class*='language-'] {
-    border-radius: 0px;
-    @include syntax-tokens(true);
-  }
-  pre {
-    margin-top: 0px !important;
-  }
+  z-index: 2;
+  min-height: 52px;
+  background: transparent;
 }
 
 .header-codex {
-  width: 100%;
   display: flex;
+  min-height: 52px;
   align-items: center;
-  justify-content: center;
-  ul {
-    display: flex;
-    align-items: center;
-    margin: 0px;
-    padding: 0px;
-    justify-content: center;
-    width: 100%;
-    padding: 0px 4px;
-    align-items: stretch;
-    padding-top: 10px;
-    li {
-      list-style: none;
-      color: -color('theme-color');
-      opacity: 0.6;
-      padding: 3px 10px;
-      transition: all 0.25s ease;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 12px;
-      background: transparent;
-      outline: none !important;
-      &.copied {
-        transform: scale(1.3);
-        opacity: 1 !important;
-        i {
-          color: #46c93a !important;
-        }
-      }
-      &:nth-last-child(3) {
-        position: relative;
-        padding-right: 15px;
-        margin-right: 5px;
-      }
-      &:nth-last-child(3):after {
-        content: '';
-        position: absolute;
-        right: 0px;
-        height: 60%;
-        top: 20%;
-        width: 1px;
-        background: -color('border-color', 1);
-        display: block;
-      }
-      &.active {
-        color: -color('accent-color') !important;
-        opacity: 1;
-        border-radius: 12px 12px 0px 0px;
-        background: -color('theme-code2');
-        i {
-          color: #fff !important;
-        }
-      }
-      &:hover {
-        opacity: 1;
-      }
-      &:not(.not-a) {
-        svg {
-          transition: all 0.25s ease;
-          fill: -color('text-color', 0.6);
-          pointer-events: none;
-        }
-      }
-    }
-  }
-}
-.header-codex ul li svg,
-.header-codex ul li i {
-  max-width: 18px;
-  fill: -color('theme-color') !important;
+  justify-content: flex-end;
+  padding: 8px 18px;
 }
 
-@media (max-width: 500px) {
-  .code .con-code {
-    width: 100%;
-    margin: 0px;
+.example-actions,
+.code-dialog__header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.example-actions button,
+.code-dialog__header-actions button,
+.code-dialog__tabs button,
+.code-dialog__footer button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  color: rgba(var(--sax-theme-color), 0.68);
+  font: inherit;
+  cursor: pointer;
+}
+
+.example-actions button {
+  min-height: 32px;
+  padding: 0 9px;
+  border-radius: 9px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.example-actions button:hover,
+.example-actions button:focus-visible {
+  background: rgba(var(--sax-accent-color), 0.1);
+  color: rgb(var(--sax-accent-color));
+}
+
+.example-actions button.copied {
+  color: rgb(var(--sax-badge-tip-color));
+}
+
+.source-cache {
+  display: none;
+}
+
+.code-dialog-backdrop {
+  position: fixed;
+  z-index: 2200;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(18, 16, 45, 0.36);
+  backdrop-filter: blur(7px);
+}
+
+.code-dialog {
+  display: flex;
+  width: min(860px, 100%);
+  max-height: min(760px, calc(100vh - 48px));
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 18px;
+  background: rgb(var(--sax-theme-layout));
+  box-shadow: 0 28px 70px rgba(20, 16, 62, 0.28);
+}
+
+.code-dialog__header {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(var(--sax-accent-color), 0.12);
+
+  strong,
+  span {
+    display: block;
+  }
+
+  strong {
+    color: rgb(var(--sax-theme-color));
+    font-size: 0.95rem;
+  }
+
+  span {
+    margin-top: 2px;
+    color: rgba(var(--sax-theme-color), 0.58);
+    font-size: 0.76rem;
+  }
+}
+
+.code-dialog__header-actions button {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+}
+
+.code-dialog__header-actions button:hover,
+.code-dialog__header-actions button:focus-visible {
+  background: rgba(var(--sax-accent-color), 0.1);
+  color: rgb(var(--sax-accent-color));
+}
+
+.code-dialog__tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 14px 0;
+  background: rgba(var(--sax-theme-bg2), 0.24);
+}
+
+.code-dialog__tabs button {
+  min-height: 34px;
+  padding: 0 10px;
+  border-radius: 8px 8px 0 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.code-dialog__tabs button.active {
+  background: rgb(var(--sax-theme-code));
+  color: #fff;
+}
+
+.code-dialog__body {
+  min-height: 0;
+  overflow: auto;
+  background: rgb(var(--sax-theme-code));
+}
+
+.code-section > div[class*='language-'],
+.code-section pre {
+  margin: 0;
+  border-radius: 0;
+}
+
+.code-dialog__footer {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 8px 18px;
+  border-top: 1px solid rgba(var(--sax-accent-color), 0.12);
+}
+
+.code-dialog__footer button {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 9px;
+  background: rgba(var(--sax-accent-color), 0.1);
+  color: rgb(var(--sax-accent-color));
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.code-dialog__footer button:hover,
+.code-dialog__footer button:focus-visible {
+  background: rgb(var(--sax-accent-color));
+  color: #fff;
+}
+
+.code-dialog-enter-active,
+.code-dialog-leave-active {
+  transition: opacity 0.18s ease;
+}
+
+.code-dialog-enter-active .code-dialog,
+.code-dialog-leave-active .code-dialog {
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.code-dialog-enter-from,
+.code-dialog-leave-to {
+  opacity: 0;
+}
+
+.code-dialog-enter-from .code-dialog,
+.code-dialog-leave-to .code-dialog {
+  opacity: 0;
+  transform: translateY(10px) scale(0.985);
+}
+
+@media (max-width: 560px) {
+  .example-actions button span {
+    display: none;
+  }
+
+  .code-dialog-backdrop {
+    padding: 10px;
+  }
+
+  .code-dialog__header span {
+    display: none;
   }
 }
 </style>

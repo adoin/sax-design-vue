@@ -9,14 +9,18 @@
       type="button"
       @click="toggle"
     >
-      {{ expanded ? collapseText : expandText }}
+      {{
+        expanded
+          ? collapseText || t('vs.common.less')
+          : expandText || t('vs.common.more')
+      }}
     </button>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { textEllipsisEmits, textEllipsisProps } from './text-ellipsis'
 
 defineOptions({ name: 'STextEllipsis' })
@@ -24,6 +28,7 @@ defineOptions({ name: 'STextEllipsis' })
 const props = defineProps(textEllipsisProps)
 const emit = defineEmits(textEllipsisEmits)
 const ns = useNamespace('text-ellipsis')
+const { t } = useLocale()
 const contentStyle = computed(() =>
   props.expanded ? {} : { WebkitLineClamp: props.lineClamp },
 )

@@ -5,7 +5,7 @@
   background-color: getColor('background');
   color: getColor('text');
   padding: 8px 10px;
-  border-radius: 12px;
+  border-radius: var(--sax-radius);
   font-size: 0.85rem;
   max-width: 350px;
   min-width: 30px;

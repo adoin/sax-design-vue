@@ -15,7 +15,7 @@
       <div class="github-logo__3" />
     </div>
     <div class="con-logo github-logo">
-      <i class="bx bxl-github" />
+      <s-icon  name="bxl:github" />
       <div class="github-logo__1" />
       <div class="github-logo__2" />
       <div class="github-logo__3" />
@@ -81,7 +81,7 @@
       </div>
 
       <div class="component5">
-        <i class="bx bxs-star" />
+        <s-icon  name="bxs:star" />
         <div class="con-img">
           <img src="/vue-logo.png" alt="" />
         </div>
@@ -95,7 +95,7 @@
 
       <div class="component6">
         <s-button icon color="dark" type="transparent">
-          <i class="bx bx-dots-vertical-rounded" />
+          <s-icon  name="bx:dots-vertical-rounded" />
         </s-button>
 
         <div class="con-load" />
@@ -103,18 +103,18 @@
 
       <div class="component7">
         <div class="con-img">
-          <i class="bx bx-video" />
+          <s-icon  name="bx:video" />
           <img class="not-darken" src="/foto4.png" alt="" />
           <img class="has-darken" src="/foto11.png" alt="" />
         </div>
 
         <header>
           <s-button icon color="dark" type="shadow">
-            <i class="bx bxs-heart" />
+            <s-icon  name="bxs:heart" />
           </s-button>
 
           <s-button color="dark" type="shadow">
-            <i class="bx bxs-chat" />
+            <s-icon  name="bxs:chat" />
             12
           </s-button>
         </header>
@@ -122,8 +122,8 @@
         <div class="content-text">
           <h4>Get Started</h4>
           <p>
-            Vuesax is an open source framework and you can help even in simple
-            details
+            Sax Design Vue is open source; contributions are welcome at every
+            scale.
           </p>
         </div>
 
@@ -131,7 +131,7 @@
           <s-input v-model="input1" placeholder="Comment" />
           <div>
             <s-button icon type="flat">
-              <i class="bx bx-send" />
+              <s-icon  name="bx:send" />
             </s-button>
           </div>
         </footer>
@@ -139,7 +139,7 @@
 
       <div class="component8">
         <div class="con-icon">
-          <i class="bx bxs-heart" />
+          <s-icon  name="bxs:heart" />
         </div>
 
         <div class="con-img">
@@ -147,7 +147,7 @@
           <img class="has-darken" src="/foto13.png" alt="" />
 
           <div class="play">
-            <i class="bx bxs-right-arrow" />
+            <s-icon  name="bxs:right-arrow" />
           </div>
         </div>
 
@@ -177,7 +177,7 @@
             @blur="handleBur"
             @click="handleClick"
           />
-          <i class="bx bx-chevron-down" />
+          <s-icon  name="bx:chevron-down" />
         </header>
 
         <ul :class="{ active: focusSelect }">
@@ -189,13 +189,13 @@
 
       <div class="component10">
         <s-button color="danger" icon>
-          <i class="bx bx-play" />
+          <s-icon  name="bx:play" />
         </s-button>
         <s-button color="warn" icon>
-          <i class="bx bx-git-pull-request" />
+          <s-icon  name="bx:git-pull-request" />
         </s-button>
         <s-button icon>
-          <i class="bx bxl-github" />
+          <s-icon  name="bxl:github" />
         </s-button>
       </div>
 
@@ -210,7 +210,7 @@
             @blur="handleBurDrop"
             @click="handleClickDrop"
           />
-          <i class="bx bx-chevron-down" />
+          <s-icon  name="bx:chevron-down" />
         </header>
 
         <div class="liquid" />
@@ -227,7 +227,7 @@
       <div class="component12">
         <s-input v-model="input2" placeholder="Search" />
         <s-button icon>
-          <i class="bx bx-search" />
+          <s-icon  name="bx:search" />
         </s-button>
       </div>
 
@@ -235,7 +235,7 @@
         <header>
           <s-input v-model="input3" placeholder="location" />
           <button>
-            <i class="bx bx-chevron-right" />
+            <s-icon  name="bx:chevron-right" />
           </button>
         </header>
 
@@ -292,7 +292,7 @@ const handleBurDrop = () => {
 }
 </script>
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 @keyframes waveslogo {
   0% {
@@ -1121,7 +1121,8 @@ const handleBurDrop = () => {
         height: 85px;
         border-radius: 50%;
         border: 8px solid -color('primary', 1);
-        box-shadow: 0px 0px 20px 0px -color('primary', 0.1),
+        box-shadow:
+          0px 0px 20px 0px -color('primary', 0.1),
           inset 0px 0px 20px 0px -color('primary', 0.1);
         border-left: 8px solid -color('primary', 0.1);
         transform: rotate(45deg);

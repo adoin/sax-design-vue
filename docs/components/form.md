@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: show-message
+    type: Boolean
+    values: true | false
+    description: Show validation messages beneath form fields.
+    default: true
   - name: model
     type: Object
     values: form model
@@ -25,7 +30,7 @@ METHODS:
     description: Return a Promise<boolean> after running rules.
   - name: clearValidate / resetFields
     description: Clear errors or restore initial model values.
-description: "VXE-compatible form validation container."
+description: "Form validation container."
 ---
 
 # Form

@@ -1,5 +1,13 @@
 ---
+description: "Reveal brief contextual help on hover, focus, or click."
 PROPS:
+  - name: append-to / effect / offset / shape / shift / show-arrow
+    type: String | HTMLElement / String / Number / String / Boolean | Object / Boolean
+    values: positioning and visual options
+    description: Configure mounting, appearance, offset, collision shift and arrow visibility.
+    default: '-'
+    link: null
+    usage: '#content'
   - name: v-model
     type: Boolean
     values: true,false
@@ -161,9 +169,9 @@ PROPS:
               </div>
             </div>
             <footer>
-              <s-button circle icon border> <i class='bx bxs-share-alt'></i> </s-button>
+              <s-button circle icon border> <s-icon  name="bxs:share-alt" /> </s-button>
               <s-button circle> Message </s-button>
-              <s-button circle icon border> <i class='bx bx-like' ></i> </s-button>
+              <s-button circle icon border> <s-icon   name="bx:like" /> </s-button>
             </footer>
           </div>
         </template>

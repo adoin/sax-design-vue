@@ -7,35 +7,35 @@
         :style="{ zIndex }"
         role="dialog"
         aria-modal="true"
-        aria-label="Image preview"
+        :aria-label="t('vs.imagePreview.label')"
         @click.self="onModalClick"
       >
         <button
           :class="ns.e('close')"
           type="button"
-          aria-label="Close"
+          :aria-label="t('vs.imagePreview.close')"
           @click="close"
         >
-          <SIcon icon="close" icon-pack="material-icons" />
+          <SIcon name="cb:close" />
         </button>
         <button
           v-if="showPrevious"
           :class="[ns.e('arrow'), ns.e('arrow-left')]"
           type="button"
-          aria-label="Previous image"
+          :aria-label="t('vs.imagePreview.previous')"
           @click="previous"
         >
-          <SIcon icon="chevron_left" icon-pack="material-icons" />
+          <SIcon name="cb:chevron-left" />
         </button>
         <img :class="ns.e('image')" :src="currentUrl" alt="" />
         <button
           v-if="showNext"
           :class="[ns.e('arrow'), ns.e('arrow-right')]"
           type="button"
-          aria-label="Next image"
+          :aria-label="t('vs.imagePreview.next')"
           @click="next"
         >
-          <SIcon icon="chevron_right" icon-pack="material-icons" />
+          <SIcon name="cb:chevron-right" />
         </button>
         <div v-if="urlList.length > 1" :class="ns.e('counter')">
           {{ activeIndex + 1 }} / {{ urlList.length }}
@@ -48,7 +48,7 @@
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { imagePreviewEmits, imagePreviewProps } from './image-preview'
 
 defineOptions({ name: 'SImagePreview' })
@@ -56,6 +56,7 @@ defineOptions({ name: 'SImagePreview' })
 const props = defineProps(imagePreviewProps)
 const emit = defineEmits(imagePreviewEmits)
 const ns = useNamespace('image-preview')
+const { t } = useLocale()
 const activeIndex = ref(0)
 const currentUrl = computed(() => props.urlList[activeIndex.value] ?? '')
 const showPrevious = computed(() => props.infinite || activeIndex.value > 0)

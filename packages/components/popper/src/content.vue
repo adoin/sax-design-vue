@@ -11,6 +11,7 @@
         v-if="shouldRender"
         v-show="shouldShow"
         ref="contentRef"
+        :id="popperId"
         :class="popperKls"
         :style="popperStyle"
         :data-popper-placement="placement"

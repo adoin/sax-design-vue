@@ -1,18 +1,22 @@
 <template>
   <div :class="{ copied }" class="noti-code">
-    <i class="bx bx-check" /> {{ text || 'Code Copied' }}
+    <s-icon  name="bx:check" /> {{ text || t.examples.codeCopied }}
   </div>
 </template>
 
 <script setup lang="ts">
+import { useDocLocaleUi } from '../composables/docLocale'
+
 defineProps<{
   copied: boolean
   text?: string
 }>()
+
+const { t } = useDocLocaleUi()
 </script>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .noti-code {
   position: fixed;

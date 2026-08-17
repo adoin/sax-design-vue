@@ -10,8 +10,8 @@
       @click-icon="hasVisiblePassword = !hasVisiblePassword"
     >
       <template #icon>
-        <i v-if="!hasVisiblePassword" class="bx bx-show-alt" />
-        <i v-else class="bx bx-hide" />
+        <s-icon v-if="!hasVisiblePassword"  name="bx:show-alt" />
+        <s-icon v-else  name="bx:hide" />
       </template>
 
       <template v-if="getProgress >= 100" #message-success>

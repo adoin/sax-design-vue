@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: show-message
+    type: Boolean
+    values: true | false
+    description: 在表单字段下显示校验消息。
+    default: true
   - name: model
     type: Object
     values: form model
@@ -25,7 +30,7 @@ METHODS:
     description: 执行校验并返回 Promise<boolean>。
   - name: clearValidate / resetFields
     description: 清除错误或恢复初始表单值。
-description: "兼容 VXE 的表单校验容器。"
+description: "表单校验容器。"
 ---
 
 # Form 表单

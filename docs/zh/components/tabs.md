@@ -35,7 +35,7 @@ PROPS:
   - name: label
     type: String
     values: String
-    description: Tab label (s-tab).
+    description: 标签页文本（s-tab）。
     default: Label
     link: null
     usage: '#default'
@@ -43,7 +43,7 @@ PROPS:
   - name: icon
     type: String
     values: Material icon
-    description: Tab icon (s-tab).
+    description: 标签页图标（s-tab）。
     default: 
     link: null
     usage: '#icons'
@@ -51,14 +51,14 @@ PROPS:
   - name: disabled
     type: Boolean
     values: true, false
-    description: Disable tab (s-tab).
+    description: 禁用标签页（s-tab）。
     default: false
     link: null
     usage: '#default'
 EVENTS:
   - name: update:modelValue
     params: number | string
-    description: Active tab changed.
+    description: 激活标签页变化时触发。
 
   - name: change
     params: number | string
@@ -73,7 +73,7 @@ NEWS:
   - icons
 ---
 
-# Tabs
+# Tabs（标签页）
 
 <card>
 

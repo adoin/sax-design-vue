@@ -13,7 +13,7 @@
         ><strong v-if="title">{{ title }}</strong
         ><small v-if="description">{{ description }}</small></span
       >
-      <SIcon v-if="collapsible" icon="expand_more" icon-pack="material-icons" />
+      <SIcon v-if="collapsible" name="cb:chevron-down" />
     </button>
     <div v-else-if="$slots.header" :class="ns.e('header')">
       <slot name="header" />

@@ -1,5 +1,11 @@
 ---
+description: "Display structured tabular data with headers and cell content."
 PROPS:
+  - name: loading
+    type: Boolean
+    values: true | false
+    description: Display a loading state over table content.
+    default: false
   - name: v-model
     type: Object, Array
     values: Object, Array
@@ -50,7 +56,7 @@ PROPS:
     code: null
   - name: s-tr:color
     type: String, Theme colors
-    values: color, vuesax colors
+    values: color, Sax Design colors
     description: Change the color of the tr.
     default: null
     link: null
@@ -205,7 +211,7 @@ Change the color of a tr by adding the color property to the component `s-tr`
 
 You can add the pagination functionality for the table using the `#footer` slot and the s-pagination component
 
-To make the development easier you can use the vuesax function that generates the items (`getPage`) based on the page and also the one that generates the total number of pages in the pagination component (`getLength`)
+To make the development easier you can use the Sax Design function that generates the items (`getPage`) based on the page and also the one that generates the total number of pages in the pagination component (`getLength`)
 
 This way of handling data is to improve the freedom of customization without losing the ease of implementation
 
@@ -263,7 +269,7 @@ Using the `data` property in the `tr` is important as that is the data to be add
 
 You can do multiple select functionality in the table with the `v-model` property with its value being an array
 
-for this functionality you can use for example the vuesax checkboxes and the function `toggleSelectAll` in the checkbox of th
+for this functionality you can use for example the Sax Design checkboxes and the function `toggleSelectAll` in the checkbox of th
 
 <template #example>
 <table-multiple />
@@ -409,7 +415,7 @@ This is a sample of everything united and its functionality together
 
 ## Functions
 
-We create this component with a different logic and maybe something not very common as a first point we want development to be more free and for the programmer to have many options and customization based on what he needs and wants to create, for example a very important theme it is the queries of the data in the server and that now they are not manipulated by the component until you yourself using a vuesax function impose it
+We create this component with a different logic and maybe something not very common as a first point we want development to be more free and for the programmer to have many options and customization based on what he needs and wants to create, for example a very important theme it is the queries of the data in the server and that now they are not manipulated by the component until you yourself using a Sax Design function impose it
 
 So now we use functions that you can use if you need them such as:
 

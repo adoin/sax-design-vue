@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: label
+    type: String | Number | Boolean
+    values: 选项值
+    description: 作为 Checkbox group 中的选项值。
+    default: '-'
   - name: v-model
     type: Boolean | Array
     values: 选中状态或选中值。
@@ -13,7 +18,7 @@ PROPS:
 EVENTS:
   - name: change
     description: 切换后触发。
-description: "VXE 风格按钮复选。"
+description: "按钮复选。"
 ---
 
 # 按钮复选

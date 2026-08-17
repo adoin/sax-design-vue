@@ -42,7 +42,7 @@ export const isRGBNumbers = (color: string) => rgbNumberRE.test(color)
 export const hexToRgb = (color: string) => {
   color = color.replace(
     hexShorthandRE,
-    (_, r: string, g: string, b: string) => r + r + g + g + b + b
+    (_, r: string, g: string, b: string) => r + r + g + g + b + b,
   )
   const res = hexFullRE.exec(color)
 
@@ -60,7 +60,7 @@ export const setColor = (
   color: string,
   el: HTMLElement,
   addClass?: boolean,
-  namespace = CLASS_NAMESPACE
+  namespace = CLASS_NAMESPACE,
 ) => {
   let newColor
   if (color == 'dark' && el) {
@@ -85,7 +85,7 @@ export const setColor = (
   } else if (isVsColor(color)) {
     const style = window.getComputedStyle(document.body)
     newColor = style.getPropertyValue(
-      `--${CSS_VAR_NAMESPACE}-${normalizeVsColor(color)}`
+      `--${CSS_VAR_NAMESPACE}-${normalizeVsColor(color)}`,
     )
     setCssVar(colorName, newColor, el)
     if (addClass) {
@@ -100,7 +100,7 @@ export const setColor = (
 }
 
 /**
- * accept Vuesax's color, hex color, rgb color
+ * Accept Sax Design color tokens, hex colors, and rgb colors.
  * @param color string
  */
 export const acceptColor = (color: string) => {
@@ -109,19 +109,19 @@ export const acceptColor = (color: string) => {
   if (isValid) return true
   debugWarn(
     'Invalid Color',
-    'Vuesax only accepts colors like hex, rgb, rgba or rgb number'
+    '[Sax Design] color must be a theme token, hex, rgb, rgba, or numeric rgb value',
   )
   return false
 }
 
 /**
- * Convert color to rgb number, accept Vuesax's color, hex color, rgb color
+ * Convert a Sax Design color token, hex color, or rgb color to numeric rgb.
  *
  * e.g 'rgb(23,34,34)' -> '23, 34, 34'
  */
 export const getVsColor = (
   colorRef: MaybeRef<string | undefined>,
-  namespace = CSS_VAR_NAMESPACE
+  namespace = CSS_VAR_NAMESPACE,
 ): string => {
   const color = unref(colorRef)
   if (!color) return ''
@@ -156,12 +156,12 @@ export const setCssVar = (
   propertyName: string,
   value: string,
   el?: HTMLElement,
-  namespace = CSS_VAR_NAMESPACE
+  namespace = CSS_VAR_NAMESPACE,
 ) => {
   if (!el && document?.documentElement) {
     document.documentElement.style.setProperty(
       `--${namespace}-${propertyName}`,
-      value
+      value,
     )
   } else {
     if (el?.nodeName !== '#comment') {

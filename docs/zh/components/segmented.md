@@ -13,7 +13,7 @@ PROPS:
 EVENTS:
   - name: change
     description: 选项变化时触发。
-description: "兼容 VXE 的分段单选控件。"
+description: "分段单选控件。"
 ---
 # Segmented 分段控制
 <card><template #example><segmented-default /></template><template #template>

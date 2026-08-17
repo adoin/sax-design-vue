@@ -9,12 +9,12 @@
   gap: 4px;
   padding: 2px 8px;
   border: 1px solid transparent;
-  border-radius: 7px;
+  border-radius: var(--sax-radius-sm);
   background: getColor(primary, 0.1);
   color: getColor(primary);
   font-size: 12px;
   line-height: 18px;
-  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+  transition: background var(--sax-motion-duration-fast) var(--sax-motion-easing-standard), color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard), opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 
   @each $type in (primary, success, warning, danger, info) {
     @include m($type) {
@@ -27,7 +27,7 @@
   @include m(small) {
     min-height: 20px;
     padding: 1px 6px;
-    border-radius: 6px;
+    border-radius: var(--sax-radius-sm);
     font-size: 11px;
     line-height: 16px;
   }
@@ -35,12 +35,12 @@
   @include m(large) {
     min-height: 28px;
     padding: 3px 10px;
-    border-radius: 8px;
+    border-radius: var(--sax-radius-sm);
     font-size: 13px;
     line-height: 20px;
   }
 
-  @include when(round) { border-radius: 999px; }
+  @include when(round) { border-radius: var(--sax-radius-pill); }
   @include when(borderless) { border-color: transparent; }
   @include when(disabled) { opacity: 0.55; cursor: not-allowed; }
 
@@ -58,7 +58,7 @@
     justify-content: center;
     padding: 0;
     border: 0;
-    border-radius: 50%;
+    border-radius: var(--sax-radius-circle);
     background: transparent;
     color: currentColor;
     cursor: pointer;

@@ -3,7 +3,7 @@
 </template>
 
 <style lang="scss">
-@import '../styles/use';
+@use '../styles/use' as *;
 
 .codefund {
   position: fixed;

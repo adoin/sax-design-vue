@@ -2,37 +2,37 @@
   <div class="center checks">
     <s-checkbox v-model="option1">
       <template #icon>
-        <i class="bx bx-check" />
+        <s-icon  name="bx:check" />
       </template>
     </s-checkbox>
     <s-checkbox v-model="option2" color="success">
       <template #icon>
-        <i class="bx bx-check-double" />
+        <s-icon  name="bx:check-double" />
       </template>
     </s-checkbox>
     <s-checkbox v-model="option3" color="danger">
       <template #icon>
-        <i class="bx bx-x" />
+        <s-icon  name="bx:x" />
       </template>
     </s-checkbox>
     <s-checkbox v-model="option4" color="warn">
       <template #icon>
-        <i class="bx bxs-shield" />
+        <s-icon  name="bxs:shield" />
       </template>
     </s-checkbox>
     <s-checkbox v-model="option5" color="dark">
       <template #icon>
-        <i class="bx bxs-heart" />
+        <s-icon  name="bxs:heart" />
       </template>
     </s-checkbox>
     <s-checkbox v-model="option6" color="#7d33ff">
       <template #icon>
-        <i class="bx bx-brightness" />
+        <s-icon  name="bx:brightness" />
       </template>
     </s-checkbox>
     <s-checkbox v-model="option7" color="rgb(59,222,200)">
       <template #icon>
-        <i class="bx bxs-paint" />
+        <s-icon  name="bxs:paint" />
       </template>
     </s-checkbox>
   </div>

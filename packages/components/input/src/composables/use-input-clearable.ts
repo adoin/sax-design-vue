@@ -1,40 +1,29 @@
-import { computed, getCurrentInstance } from 'vue'
-import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import type { Ref } from 'vue'
-import type { InputProps } from '../input'
+import { computed } from 'vue'
+import type { Ref, WritableComputedRef } from 'vue'
+import type { InputProps, InputValue } from '../input'
 
 export const useInputClearable = (
   props: InputProps,
   {
     hovering,
     focused,
+    model,
   }: {
     hovering: Ref<boolean>
     focused: Ref<boolean>
-  }
+    model: WritableComputedRef<InputValue>
+  },
 ) => {
-  const { emit } = getCurrentInstance()!
-
-  const clear = () => {
-    if (props.disabled || props.loading) return
-
-    emit(UPDATE_MODEL_EVENT, '')
-    emit('change', '')
-    emit('clear')
-    emit('input', '')
-  }
-
   const showClear = computed(
     () =>
-      props.clearable &&
+      (props.allowClear || props.clearable) &&
       !props.disabled &&
       !props.loading &&
-      String(props.modelValue) &&
-      (focused.value || hovering.value)
+      Boolean(String(model.value)) &&
+      (focused.value || hovering.value),
   )
 
   return {
-    clear,
     showClear,
   }
 }

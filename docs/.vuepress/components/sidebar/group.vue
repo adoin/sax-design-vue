@@ -42,19 +42,19 @@
       </template>
       <s-sidebar-item id="home">
         <template #icon>
-          <i class="bx bx-home" />
+          <s-icon  name="bx:home" />
         </template>
         Home
       </s-sidebar-item>
       <s-sidebar-item id="market">
         <template #icon>
-          <i class="bx bx-grid-alt" />
+          <s-icon  name="bx:grid-alt" />
         </template>
         Market Overview
       </s-sidebar-item>
       <s-sidebar-item id="Music">
         <template #icon>
-          <i class="bx bxs-music" />
+          <s-icon  name="bxs:music" />
         </template>
         Music
       </s-sidebar-item>
@@ -62,7 +62,7 @@
         <template #header>
           <s-sidebar-item arrow>
             <template #icon>
-              <i class="bx bx-group" />
+              <s-icon  name="bx:group" />
             </template>
             Social media
           </s-sidebar-item>
@@ -70,19 +70,19 @@
 
         <s-sidebar-item id="Instagram">
           <template #icon>
-            <i class="bx bxl-instagram" />
+            <s-icon  name="bxl:instagram" />
           </template>
           Instagram
         </s-sidebar-item>
         <s-sidebar-item id="twitter">
           <template #icon>
-            <i class="bx bxl-twitter" />
+            <s-icon  name="bxl:twitter" />
           </template>
           Twitter
         </s-sidebar-item>
         <s-sidebar-item id="Facebook">
           <template #icon>
-            <i class="bx bxl-facebook" />
+            <s-icon  name="bxl:facebook" />
           </template>
           Facebook
         </s-sidebar-item>
@@ -91,7 +91,7 @@
         <template #header>
           <s-sidebar-item arrow>
             <template #icon>
-              <i class="bx bx-code-alt" />
+              <s-icon  name="bx:code-alt" />
             </template>
             Coding
           </s-sidebar-item>
@@ -99,56 +99,56 @@
 
         <s-sidebar-item id="github">
           <template #icon>
-            <i class="bx bxl-github" />
+            <s-icon  name="bxl:github" />
           </template>
           Github
         </s-sidebar-item>
         <s-sidebar-item id="codepen">
           <template #icon>
-            <i class="bx bxl-codepen" />
+            <s-icon  name="bxl:codepen" />
           </template>
           Codepen
         </s-sidebar-item>
         <s-sidebar-item id="discord">
           <template #icon>
-            <i class="bx bxl-discord" />
+            <s-icon  name="bxl:discord" />
           </template>
           Discord
         </s-sidebar-item>
         <s-sidebar-item id="Javascript">
           <template #icon>
-            <i class="bx bxl-javascript" />
+            <s-icon  name="bxl:javascript" />
           </template>
           Javascript
         </s-sidebar-item>
         <s-sidebar-item id="git">
           <template #icon>
-            <i class="bx bxl-git" />
+            <s-icon  name="bxl:git" />
           </template>
           Git
         </s-sidebar-item>
       </s-sidebar-group>
       <s-sidebar-item id="donate">
         <template #icon>
-          <i class="bx bxs-donate-heart" />
+          <s-icon  name="bxs:donate-heart" />
         </template>
         Donate
       </s-sidebar-item>
       <s-sidebar-item id="drink">
         <template #icon>
-          <i class="bx bx-drink" />
+          <s-icon  name="bx:drink" />
         </template>
         Drink
       </s-sidebar-item>
       <s-sidebar-item id="shopping">
         <template #icon>
-          <i class="bx bxs-shopping-bags" />
+          <s-icon  name="bxs:shopping-bags" />
         </template>
         Shopping
       </s-sidebar-item>
       <s-sidebar-item id="chat">
         <template #icon>
-          <i class="bx bx-chat" />
+          <s-icon  name="bx:chat" />
         </template>
         Chat
       </s-sidebar-item>
@@ -159,7 +159,7 @@
           </s-avatar>
 
           <s-avatar badge-color="danger" badge-position="top-right">
-            <i class="bx bx-bell" />
+            <s-icon  name="bx:bell" />
 
             <template #badge> 28 </template>
           </s-avatar>

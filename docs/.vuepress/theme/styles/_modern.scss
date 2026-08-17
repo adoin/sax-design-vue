@@ -12,7 +12,8 @@ body,
 }
 
 .theme-container {
-  background-image: radial-gradient(
+  background-image:
+    radial-gradient(
       circle at 12% 8%,
       rgba(var(--sax-accent-color), 0.14),
       transparent 34%
@@ -39,7 +40,8 @@ body,
 }
 
 .sidebar {
-  border-right: 1px solid rgba(var(--sax-accent-color), 0.1);
+  border-right: 0;
+  box-shadow: none !important;
   background: rgba(var(--sax-theme-layout), 0.88);
   backdrop-filter: blur(8px);
 }
@@ -51,7 +53,7 @@ body,
 
 .card {
   border-radius: 18px;
-  border: 1px solid rgba(var(--sax-accent-color), 0.12);
+  border: 0;
   background: linear-gradient(
     165deg,
     rgba(var(--sax-theme-layout), 0.98),
@@ -118,20 +120,21 @@ body,
 }
 
 .card > .example {
-  margin: 16px 16px 0;
-  border-radius: 14px;
+  margin: 18px 0 0;
+  border-radius: 0;
   background: linear-gradient(
     180deg,
     rgba(var(--sax-theme-bg2), 0.65),
     rgba(var(--sax-theme-layout), 0.95)
   );
-  border: 1px solid rgba(var(--sax-accent-color), 0.08);
+  border: 0;
+  border-top: 1px solid rgba(var(--sax-accent-color), 0.1);
 }
 
 .card:has(> .slotcode) > .example {
   margin-bottom: 0;
   border-bottom: 0;
-  border-radius: 14px 14px 0 0;
+  border-radius: 0;
 }
 
 .card > .example:last-child {
@@ -139,16 +142,17 @@ body,
 }
 
 .card > .slotcode {
-  margin: 0 16px 16px;
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(var(--sax-accent-color), 0.08);
-  background: rgba(var(--sax-theme-layout), 0.98);
+  margin: 0;
+  border-radius: 0;
+  overflow: visible;
+  border: 0;
+  border-top: 1px solid rgba(var(--sax-accent-color), 0.1);
+  background: rgba(var(--sax-theme-layout), 0.72);
 }
 
 .card:has(> .example) > .slotcode {
   margin-top: 0;
-  border-radius: 0 0 14px 14px;
+  border-radius: 0;
   border-top: 0;
 }
 
@@ -177,6 +181,23 @@ body,
 .theme-container .page .content,
 .theme-container .docs-home .content {
   max-width: var(--sax-content-width);
+}
+
+.theme-container.example-playground-page .page .content,
+.theme-container.example-playground-page .page .content__default,
+.theme-container.example-playground-page .page .page-edit {
+  width: min(100%, 1480px);
+  max-width: none;
+  padding-right: clamp(22px, 3vw, 48px);
+  padding-left: clamp(22px, 3vw, 48px);
+}
+
+@media (min-width: 1500px) {
+  .theme-container.example-playground-page .page .content,
+  .theme-container.example-playground-page .page .content__default,
+  .theme-container.example-playground-page .page .page-edit {
+    width: min(100%, 1640px);
+  }
 }
 
 .header-page {

@@ -1,5 +1,11 @@
 ---
+description: "Toggle a boolean setting between two states."
 PROPS:
+  - name: active-value / inactive-value / shape
+    type: String | Number | Boolean / String
+    values: custom bound values / rounded | square
+    description: Map switch states to custom values and choose its visual shape.
+    default: 'true / false / rounded'
   - name: v-model
     type: Boolean, Array
     values: Boolean, Array
@@ -84,8 +90,8 @@ PROPS:
       <template>
         <s-switch color="#7d33ff" icon v-model="active6">
           <template #circle>
-              <i v-if="active6" class='bx bxl-instagram-alt'></i>
-              <i v-else class='bx bxl-instagram' ></i>
+              <s-icon v-if="active6"  name="bxl:instagram-alt" />
+              <s-icon v-else   name="bxl:instagram" />
           </template>
         </s-switch>
       </template>
@@ -139,10 +145,10 @@ SLOTS:
     code: >
       <s-switch v-model="active1">
         <template #off>
-            <i class='bx bxs-volume-mute' ></i>
+            <s-icon   name="bxs:volume-mute" />
         </template>
         <template #on>
-            <i class='bx bxs-volume-full' ></i>
+            <s-icon   name="bxs:volume-full" />
         </template>
       </s-switch>
   - name: off
@@ -155,10 +161,10 @@ SLOTS:
     code: >
       <s-switch v-model="active1">
         <template #off>
-            <i class='bx bxs-volume-mute' ></i>
+            <s-icon   name="bxs:volume-mute" />
         </template>
         <template #on>
-            <i class='bx bxs-volume-full' ></i>
+            <s-icon   name="bxs:volume-full" />
         </template>
       </s-switch>
   - name: circle
@@ -171,8 +177,8 @@ SLOTS:
     code: >
       <s-switch color="#7d33ff" icon v-model="active6">
         <template #circle>
-            <i v-if="active6" class='bx bxl-instagram-alt'></i>
-            <i v-else class='bx bxl-instagram' ></i>
+            <s-icon v-if="active6"  name="bxl:instagram-alt" />
+            <s-icon v-else   name="bxl:instagram" />
         </template>
       </s-switch>
 ---
@@ -209,7 +215,7 @@ Generate a switch element easily with beautiful animations and functionality
 
 ## Color
 
-Change the color of the component when it is in active state, the allowed values ​​are (main colors of vuesax, RGB, HEX)
+Change the color of the component when it is in active state, the allowed values ​​are (main colors of Sax Design, RGB, HEX)
 
 <template #example>
 <switch-color />

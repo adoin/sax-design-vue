@@ -10,42 +10,48 @@
     <span class="divider" />
 
     <s-button-group>
-      <s-button flat icon>
-        <i class="bx bx-play" />
+      <s-button type="flat" icon>
+        <s-icon  name="bx:play" />
       </s-button>
-      <s-button flat icon>
-        <i class="bx bx-pause" />
+      <s-button type="flat" icon>
+        <s-icon  name="bx:pause" />
       </s-button>
-      <s-button flat icon>
-        <i class="bx bx-fast-forward" />
+      <s-button type="flat" icon>
+        <s-icon  name="bx:fast-forward" />
       </s-button>
-      <s-button flat icon>
-        <i class="bx bx-shuffle" />
+      <s-button type="flat" icon>
+        <s-icon  name="bx:shuffle" />
       </s-button>
     </s-button-group>
 
     <span class="divider" />
 
     <s-button-group>
-      <s-button border> <i class="bx bxs-pencil" /> Edit </s-button>
-      <s-button border icon>
-        <i class="bx bx-font-color" />
+      <s-button type="border"> <s-icon  name="bxs:pencil" /> Edit </s-button>
+      <s-button type="border" icon>
+        <s-icon  name="bx:font-color" />
       </s-button>
-      <s-button border icon>
-        <i class="bx bx-align-middle" />
+      <s-button type="border" icon>
+        <s-icon  name="bx:align-middle" />
       </s-button>
-      <s-button border> <i class="bx bx-font-size" /> Font size </s-button>
+      <s-button type="border">
+        <s-icon  name="bx:font-size" /> Font size
+      </s-button>
     </s-button-group>
 
     <span class="divider" />
 
     <s-button-group>
-      <s-button relief> <i class="bx bx-home-alt" /> Home </s-button>
-      <s-button relief> <i class="bx bxs-phone-call" /> Contact </s-button>
-      <s-button relief loading>
-        <i class="bx bxs-cart-alt" /> Products
+      <s-button type="relief"> <s-icon  name="bx:home-alt" /> Home </s-button>
+      <s-button type="relief">
+        <s-icon  name="bxs:phone-call" /> Contact
       </s-button>
-      <s-button relief upload> <i class="bx bxs-envelope" /> Send </s-button>
+      <s-button type="relief" loading>
+        <s-icon  name="bxs:cart-alt" /> Products
+      </s-button>
+      <s-button type="relief" upload>
+        <s-icon  name="bxs:envelope" /> Send
+      </s-button>
     </s-button-group>
   </div>
 </template>

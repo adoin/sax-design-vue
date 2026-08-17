@@ -1,24 +1,28 @@
 <template>
   <div>
     <div class="warning custom-block">
-      <p class="custom-block-title">Valor Permitido</p>
+      <p class="custom-block-title">{{ t.colorNotice.allowedTitle }}</p>
       <p>
-        La propiedad color permite los colores principales de vuesax (
-        <b>Primary(default)</b>, <b>Success</b>, <b>danger</b>, <b>warn</b>,
-        <b>dark</b> )
+        {{ t.colorNotice.allowedIntro }}
+        <b>primary</b>, <b>success</b>, <b>danger</b>, <b>warn</b>, <b>dark</b>
         <br />
-        Tambien estan permitidos los colores (<b>RGB</b> y <b>HEX</b>)
+        {{ t.colorNotice.allowedFormats }}
       </p>
     </div>
     <div class="tip custom-block">
-      <p class="custom-block-title">Colores Boolean (Opcional)</p>
+      <p class="custom-block-title">{{ t.colorNotice.booleanTitle }}</p>
       <p>
-        Ahora puedes usar los colores principales directamente en el componente
-        como un valor <code>Boolean</code>
+        {{ t.colorNotice.booleanIntro }}
         <br />
-        si quieres que el componente sea de color <code>warn</code> con agregar
-        la propiedad <code>warn</code> al componente ya se cambiara el color
+        {{ t.colorNotice.booleanExamplePrefix }} <code>warn</code>
+        {{ t.colorNotice.booleanExampleSuffix }}
       </p>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useDocLocaleUi } from '../../theme/composables/docLocale'
+
+const { t } = useDocLocaleUi()
+</script>

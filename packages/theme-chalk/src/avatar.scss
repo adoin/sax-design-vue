@@ -8,7 +8,7 @@
 }
 
 @include b(avatar-content) {
-  border-radius: 35%;
+  border-radius: var(--sax-radius-avatar);
   z-index: 1;
   width: getCssVar(avatar, width);
   height: getCssVar(avatar, height);
@@ -54,7 +54,7 @@
     display: none !important;
   }
   @include e(circle) {
-    border-radius: 50% !important;
+    border-radius: var(--sax-radius-circle) !important;
 
     .#{$namespace}-avatar__badge {
       right: getCssVar(avatar, circle-badge-position-right);
@@ -76,7 +76,7 @@
     }
   }
   @include e(square) {
-    border-radius: 0% !important;
+    border-radius: 0 !important;
   }
   &.history {
     @include flex(center, center);
@@ -163,7 +163,7 @@
       @include flex(center, center);
       height: 60%;
       width: 60%;
-      border-radius: 50%;
+      border-radius: var(--sax-radius-circle);
       position: relative;
     }
   }
@@ -186,7 +186,7 @@
     width: 13px;
     height: 13px;
     background: getColor(avatar-badge);
-    border-radius: 50%;
+    border-radius: var(--sax-radius-circle);
     border: 2px solid getColor(background) !important;
     right: getCssVar(avatar, badge-position-right);
     bottom: getCssVar(avatar, badge-position-bottom);
@@ -199,7 +199,7 @@
     &.is-writing {
       width: auto;
       height: auto;
-      border-radius: 7px;
+      border-radius: var(--sax-radius-sm);
       min-width: 18px;
       @include flex(center, center);
       color: getColor(background);
@@ -230,7 +230,7 @@
       height: getCssVar(avatar, point-width);
       background: getColor(text);
       margin: 0px 2px;
-      border-radius: 50%;
+      border-radius: var(--sax-radius-circle);
       &:nth-child(1) {
         animation: point 1.2s ease infinite;
       }
@@ -271,7 +271,7 @@
     @include flex(center, flex-end);
     flex-direction: column;
     z-index: -1;
-    border-radius: 5px;
+    border-radius: var(--sax-radius-xs);
     font-size: 1rem;
     i {
       cursor: pointer;

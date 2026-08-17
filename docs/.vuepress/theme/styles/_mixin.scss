@@ -1,10 +1,11 @@
-@import './config';
+@use 'sass:string';
+@use './config' as *;
 
 @function -var($var) {
-  @return unquote('var(--sax-' + var + ')');
+  @return string.unquote('var(--sax-' + $var + ')');
 }
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--sax-#{$color}), #{$alpha})');
+  @return string.unquote('rgba(var(--sax-#{$color}), #{$alpha})');
 }
 @mixin wrapper {
   max-width: 900px;

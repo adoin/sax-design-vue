@@ -5,10 +5,14 @@
   position: relative;
   width: 100%;
   margin-bottom: 16px;
-  border-radius: 6px;
+  border-radius: var(--sax-radius-sm);
+  background: getColor('gray-2');
+  box-shadow: var(--sax-input-shadow);
   transition:
+    background-color var(--sax-motion-duration)
+      var(--sax-motion-easing-standard),
     border-color 0.25s ease,
-    box-shadow 0.25s ease;
+    box-shadow var(--sax-motion-duration) var(--sax-motion-easing-standard);
 
   @include e(label) {
     margin: 0;
@@ -16,8 +20,8 @@
     font-size: 0.7rem;
     font-weight: 400;
     cursor: default;
-    transition: all 0.25s ease;
-    border-radius: 5px 5px 0 0;
+    transition: all var(--sax-motion-duration) var(--sax-motion-easing-standard);
+    border-radius: var(--sax-radius-xs) var(--sax-radius-xs) 0 0;
     color: rgba(0, 0, 0, 0.55);
   }
 
@@ -52,7 +56,7 @@
     bottom: 0;
     transform: translate(0, 100%);
     padding: 1px 6px;
-    border-radius: 0 0 5px 5px;
+    border-radius: 0 0 var(--sax-radius-xs) var(--sax-radius-xs);
     font-size: 0.6rem;
     font-weight: bold;
     line-height: 1.4;
@@ -61,16 +65,24 @@
     opacity: 0.3;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     cursor: default;
-    transition: all 0.25s ease;
+    transition: all var(--sax-motion-duration) var(--sax-motion-easing-standard);
     user-select: none;
   }
 
   @include when(focus) {
+    background: getColor('background');
+    box-shadow: var(--sax-input-shadow-focus);
+
     @include e(label) {
-      background: rgb(252, 252, 252);
+      background: getColor('background');
       padding-top: 4px;
       padding-bottom: 4px;
     }
+  }
+
+  &:hover:not(.is-focus) {
+    background: getColor('background');
+    box-shadow: var(--sax-input-shadow-hover);
   }
 
   @include when(danger) {

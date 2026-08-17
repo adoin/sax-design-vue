@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: overscan
+    type: Number
+    values: 项数
+    description: 在可见范围前后额外渲染的行数。
+    default: '5'
   - name: items
     type: Array
     values: unknown[]

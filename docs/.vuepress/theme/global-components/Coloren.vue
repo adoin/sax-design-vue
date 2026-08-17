@@ -1,14 +1,16 @@
 <template>
   <div>
     <p>
-      Use the <code>color</code> property to change the base color of the
-      component and some of the child components, to better understand the
-      handling of colors and themes you can see it
-      <router-link to="/theme/">here</router-link>
+      {{ t.colorNotice.helpIntro }} <code>color</code>
+      {{ t.colorNotice.helpMiddle }}
+      <router-link :to="withLocalePath('theme/')">{{
+        t.colorNotice.helpLink
+      }}</router-link>
+      {{ t.colorNotice.helpSuffix }}
       <br />
       <br />
     </p>
-    <p>Allowed values are:</p>
+    <p>{{ t.colorNotice.helpValues }}</p>
     <ul>
       <li><code>primary</code></li>
       <li><code>success</code></li>
@@ -20,6 +22,11 @@
     </ul>
   </div>
 </template>
+<script setup lang="ts">
+import { useDocLocaleUi } from '../composables/docLocale'
+
+const { t, withLocalePath } = useDocLocaleUi()
+</script>
 <style scoped lang="scss">
 a {
   text-decoration: underline;

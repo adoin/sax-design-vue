@@ -1,4 +1,5 @@
 import { SAlert } from '@vuesax-alpha/components/alert'
+import { SAffix } from '@vuesax-alpha/components/affix'
 import { SAnchor } from '@vuesax-alpha/components/anchor'
 import { SAvatar, SAvatarGroup } from '@vuesax-alpha/components/avatar'
 import { SBacktop } from '@vuesax-alpha/components/backtop'
@@ -17,7 +18,9 @@ import { SCheckboxButton } from '@vuesax-alpha/components/checkbox-button'
 import { SChip, SChips } from '@vuesax-alpha/components/chip'
 import { SCol } from '@vuesax-alpha/components/col'
 import { SColorPicker } from '@vuesax-alpha/components/color-picker'
+import { SConfigProvider } from '@vuesax-alpha/components/config-provider'
 import { SContextMenu } from '@vuesax-alpha/components/context-menu'
+import { SControlGroup } from '@vuesax-alpha/components/control-group'
 import { SCollapse, SCollapseItem } from '@vuesax-alpha/components/collapse'
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import { SCountdown } from '@vuesax-alpha/components/countdown'
@@ -96,6 +99,7 @@ import type { Plugin } from 'vue'
 
 export default [
   SAlert,
+  SAffix,
   SAnchor,
   SAvatar,
   SAvatarGroup,
@@ -117,7 +121,9 @@ export default [
   SChips,
   SCol,
   SColorPicker,
+  SConfigProvider,
   SContextMenu,
+  SControlGroup,
   SCollapse,
   SCollapseItem,
   SCollapseTransition,

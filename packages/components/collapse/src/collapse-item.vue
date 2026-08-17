@@ -7,7 +7,7 @@
     <header :class="ns.e('header')" @click="toggleContent">
       <slot name="header" />
       <span v-if="!notArrow" :class="ns.e('icon')">
-        <SIcon :icon="props.iconArrow" :icon-pack="props.iconPack" />
+        <SIcon :name="props.iconArrow" />
       </span>
     </header>
     <div ref="contentRef" :class="ns.e('content')" :style="contentStyle">

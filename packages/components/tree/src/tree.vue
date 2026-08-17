@@ -26,11 +26,15 @@
           type="button"
           :disabled="entry.node.disabled"
           :aria-label="
-            expandedKeys.has(entry.key) ? 'Collapse node' : 'Expand node'
+            t(
+              expandedKeys.has(entry.key)
+                ? 'vs.tree.collapse'
+                : 'vs.tree.expand',
+            )
           "
           @click.stop="toggleExpand(entry)"
         >
-          <SIcon icon="chevron_right" icon-pack="material-icons" />
+          <SIcon name="cb:chevron-right" />
         </button>
         <span v-else :class="ns.e('expand-placeholder')" />
         <button
@@ -47,9 +51,7 @@
           @click.stop="toggleCheck(entry.node)"
         >
           <SIcon
-            v-if="checkedKeys.has(entry.key)"
-            icon="check"
-            icon-pack="material-icons"
+            v-if="checkedKeys.has(entry.key)" name="cb:checkmark"
           />
           <span v-else-if="isIndeterminate(entry.node)" />
         </button>
@@ -60,14 +62,16 @@
         </span>
       </div>
     </template>
-    <div v-else :class="ns.e('empty')">{{ emptyText }}</div>
+    <div v-else :class="ns.e('empty')">
+      {{ emptyText || t('vs.tree.emptyText') }}
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { treeEmits, treeProps } from './tree'
 import type { TreeKey, TreeNode, TreeVisibleNode } from './tree'
 
@@ -76,6 +80,7 @@ defineOptions({ name: 'STree' })
 const props = defineProps(treeProps)
 const emit = defineEmits(treeEmits)
 const ns = useNamespace('tree')
+const { t } = useLocale()
 const currentKey = ref<TreeKey | undefined>()
 const expandedKeys = ref(new Set<TreeKey>())
 const checkedKeys = ref(new Set<TreeKey>())
