@@ -7,7 +7,7 @@ export const collapseProps = buildProps({
   accordion: Boolean,
   type: {
     type: String,
-    default: 'default',
+    default: 'shadow',
   },
   openHover: Boolean,
 } as const)

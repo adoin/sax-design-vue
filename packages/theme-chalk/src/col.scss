@@ -12,6 +12,16 @@
   }
 }
 
+.#{$namespace}-col {
+  @include when(justify-self-start) {
+    margin-inline-end: auto;
+  }
+
+  @include when(justify-self-end) {
+    margin-inline-start: auto;
+  }
+}
+
 .#{$namespace}-col-0 {
   display: none;
   // to avoid introducing !important syntax, redundant css rule is required due to selector priority.

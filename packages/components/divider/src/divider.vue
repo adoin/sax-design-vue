@@ -1,26 +1,3 @@
-<template>
-  <div :class="ns.b()" :style="rootStyle">
-    <span
-      :class="[ns.e('border'), ns.is('after'), borderColorClass]"
-      :style="afterStyle"
-    />
-    <span
-      v-if="icon || $slots.default"
-      :class="[ns.e('text'), textColorClass, backgroundColorClass]"
-      :style="textStyle"
-    >
-      <template v-if="!icon">
-        <slot />
-      </template>
-      <SIcon v-else :name="icon" :class="ns.e('icon')" />
-    </span>
-    <span
-      :class="[ns.e('border'), ns.is('before'), borderColorClass]"
-      :style="beforeStyle"
-    />
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
@@ -36,6 +13,8 @@ defineOptions({
 const props = defineProps(dividerProps)
 
 const ns = useNamespace('divider')
+const isVertical = computed(() => props.direction === 'vertical')
+const rootClass = computed(() => [ns.b(), ns.m(props.direction)])
 
 const DEFAULT_COLOR = 'rgba(0, 0, 0,.1)'
 
@@ -44,7 +23,7 @@ const normalizeThemeColor = (color: string) =>
 
 const normalizedColor = computed(() => normalizeThemeColor(props.color))
 const normalizedBackground = computed(() =>
-  normalizeThemeColor(props.background)
+  normalizeThemeColor(props.background),
 )
 
 const widthAfter = computed(() => {
@@ -92,7 +71,7 @@ const resolveInlineColor = (color: string) => {
 const borderColorClass = computed(() =>
   isVsColor(normalizedColor.value)
     ? ns.em('border', normalizedColor.value)
-    : ns.em('border', 'default')
+    : ns.em('border', 'default'),
 )
 
 const borderFlexStyle = (width: string): CSSProperties => {
@@ -105,28 +84,31 @@ const borderFlexStyle = (width: string): CSSProperties => {
   return { flex: `0 1 ${width}`, width, minWidth: 0 }
 }
 
-const afterStyle = computed(
-  (): CSSProperties => ({
-    ...borderFlexStyle(widthAfter.value),
-    borderTopWidth: props.borderHeight,
-    borderTopStyle: props.borderStyle as CSSProperties['borderTopStyle'],
-    borderTopColor: resolveInlineColor(props.color),
-  })
-)
+const afterStyle = computed((): CSSProperties => ({
+  ...borderFlexStyle(widthAfter.value),
+  borderTopWidth: props.borderHeight,
+  borderTopStyle: props.borderStyle as CSSProperties['borderTopStyle'],
+  borderTopColor: resolveInlineColor(props.color),
+}))
 
-const beforeStyle = computed(
-  (): CSSProperties => ({
-    ...borderFlexStyle(widthBefore.value),
-    borderTopWidth: props.borderHeight,
-    borderTopStyle: props.borderStyle as CSSProperties['borderTopStyle'],
-    borderTopColor: resolveInlineColor(props.color),
-  })
-)
+const beforeStyle = computed((): CSSProperties => ({
+  ...borderFlexStyle(widthBefore.value),
+  borderTopWidth: props.borderHeight,
+  borderTopStyle: props.borderStyle as CSSProperties['borderTopStyle'],
+  borderTopColor: resolveInlineColor(props.color),
+}))
+
+const verticalStyle = computed((): CSSProperties => ({
+  borderInlineStartWidth: props.borderHeight,
+  borderInlineStartStyle:
+    props.borderStyle as CSSProperties['borderInlineStartStyle'],
+  borderInlineStartColor: resolveInlineColor(props.color),
+}))
 
 const textStyle = computed(() => {
   const style: Record<string, string> = {}
   const textColor = resolveInlineColor(
-    props.color !== DEFAULT_COLOR ? props.color : ''
+    props.color !== DEFAULT_COLOR ? props.color : '',
   )
   if (textColor) style.color = textColor
   const background = resolveInlineColor(props.background)
@@ -139,18 +121,53 @@ const textStyle = computed(() => {
 const textColorClass = computed(() =>
   isVsColor(normalizedColor.value)
     ? ns.em('text', normalizedColor.value)
-    : ns.em('text', 'default')
+    : ns.em('text', 'default'),
 )
 
 const backgroundColorClass = computed(() =>
   isVsColor(normalizedBackground.value)
     ? ns.em('background', normalizedBackground.value)
-    : ns.em('background', 'default')
+    : ns.em('background', 'default'),
 )
 
 const rootStyle = computed(() =>
   isVsColor(normalizedColor.value)
     ? ns.cssVar({ color: getVsColor(normalizedColor.value) })
-    : undefined
+    : undefined,
 )
 </script>
+
+<template>
+  <div
+    :class="rootClass"
+    :style="rootStyle"
+    role="separator"
+    :aria-orientation="props.direction"
+  >
+    <span
+      v-if="isVertical"
+      :class="[ns.e('border'), ns.is('vertical'), borderColorClass]"
+      :style="verticalStyle"
+    />
+    <template v-else>
+      <span
+        :class="[ns.e('border'), ns.is('after'), borderColorClass]"
+        :style="afterStyle"
+      />
+      <span
+        v-if="icon || $slots.default"
+        :class="[ns.e('text'), textColorClass, backgroundColorClass]"
+        :style="textStyle"
+      >
+        <template v-if="!icon">
+          <slot />
+        </template>
+        <SIcon v-else :name="icon" :class="ns.e('icon')" />
+      </span>
+      <span
+        :class="[ns.e('border'), ns.is('before'), borderColorClass]"
+        :style="beforeStyle"
+      />
+    </template>
+  </div>
+</template>

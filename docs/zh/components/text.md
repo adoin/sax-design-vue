@@ -10,23 +10,23 @@ PROPS:
     values: text
     description: 未传默认插槽时的文本。
     default: null
-  - name: ellipsis
-    type: Boolean
-    values: true | false
-    description: 单行省略。
-    default: false
   - name: line-clamp
-    type: Number
-    values: lines
-    description: 多行省略行数。
-    default: null
-description: "支持省略能力的语义文本。"
+    type: false | Number
+    values: false | 正整数
+    description: 文本省略行数；`false` 不省略，`1` 单行省略，`2+` 多行省略。
+    default: false
+  - name: typing
+    type: Boolean | Number
+    values: false | true | milliseconds
+    description: 对 `content` 启用逐字打字效果；`true` 使用默认速度，数字表示每个字符的间隔毫秒数。
+    default: false
+description: '支持文本省略与逐字打字效果的语义文本。'
 ---
 
 # Text 文本
 
 <card><template #example><text-default /></template><template #template>
 
-@[code{1-10}](../../.vuepress/components/text/default.vue)
+@[code](../../.vuepress/components/text/default.vue)
 
 </template></card>

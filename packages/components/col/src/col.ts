@@ -12,6 +12,9 @@ export type ColSizeObject = {
 
 export type ColSize = number | ColSizeObject
 
+export const colJustifySelf = ['start', 'end'] as const
+export type ColJustifySelf = (typeof colJustifySelf)[number]
+
 export const colProps = buildProps({
   /**
    * @description number of column the grid spans
@@ -40,6 +43,13 @@ export const colProps = buildProps({
   push: {
     type: Number,
     default: 0,
+  },
+  /**
+   * @description place an individual column at the row start or end
+   */
+  justifySelf: {
+    type: String,
+    values: colJustifySelf,
   },
   /**
    * @description `<768px` Responsive columns or column props object

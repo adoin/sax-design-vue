@@ -44,15 +44,11 @@
           :disabled="disabled"
           :readonly="!editable || readonly"
           :aria-label="t('vs.datepicker.startDate')"
-          icon-after
+          suffix-icon="cb:calendar"
           @update:model-value="handleRangeInput('start', $event)"
           @focus="(e) => $emit('focus', e)"
           @blur="(e) => $emit('blur', e)"
-        >
-          <template #icon>
-            <s-icon name="cb:calendar" size="18" />
-          </template>
-        </s-input>
+        />
         <span :class="ns.e('range-separator')" aria-hidden="true">
           {{ rangeSeparator }}
         </span>
@@ -68,16 +64,12 @@
           :readonly="!editable || readonly"
           :clearable="clearable && !disabled"
           :aria-label="t('vs.datepicker.endDate')"
-          icon-after
+          suffix-icon="cb:calendar"
           @update:model-value="handleRangeInput('end', $event)"
           @clear="handleClear"
           @focus="(e) => $emit('focus', e)"
           @blur="(e) => $emit('blur', e)"
-        >
-          <template #icon>
-            <s-icon name="cb:calendar" size="18" />
-          </template>
-        </s-input>
+        />
       </div>
 
       <s-input
@@ -92,16 +84,12 @@
         :disabled="disabled"
         :readonly="!editable || readonly"
         :clearable="clearable && !disabled"
-        icon-after
+        suffix-icon="cb:calendar"
         @update:model-value="handleInput"
         @clear="handleClear"
         @focus="(e) => $emit('focus', e)"
         @blur="(e) => $emit('blur', e)"
-      >
-        <template #icon>
-          <s-icon name="cb:calendar" size="18" />
-        </template>
-      </s-input>
+      />
     </div>
 
     <template #content>

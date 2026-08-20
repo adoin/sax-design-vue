@@ -51,7 +51,9 @@
 
 ## 水平对齐
 
-使用 `justify` 属性控制元素的水平对齐，支持 `flex-start`、`center`、`flex-end`、`space-around` 和 `space-between`。
+使用 `SRow` 的 `justify` 属性控制整组列的水平对齐，支持 `start`（靠左）、`center`、`end`（靠右）、`space-around`、`space-between` 和 `space-evenly`。
+
+如果只需让某个 `SCol` 靠向行首或行尾，使用 `justify-self="start | end"`。它基于自动逻辑外边距实现，因此可以将同一行中的最后一列推到最右侧，并兼容 RTL 布局。
 
 <template #example>
 <grid-flex-justify />
@@ -59,7 +61,7 @@
 
 <template #template>
 
-@[code{1-27}](../../.vuepress/components/grid/flex-justify.vue)
+@[code](../../.vuepress/components/grid/flex-justify.vue)
 
 </template>
 

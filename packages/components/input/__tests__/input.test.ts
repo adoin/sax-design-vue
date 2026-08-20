@@ -115,6 +115,22 @@ describe('Input behavior', () => {
     expect(wrapper.find('.s-input__suffix .s-icon-stub').exists()).toBe(true)
   })
 
+  it('keeps a suffix icon beside the active clear action', async () => {
+    const wrapper = mountInput({
+      modelValue: '2026-08-18',
+      clearable: true,
+      suffixIcon: 'cb:calendar',
+    })
+
+    await wrapper.get('.s-input__wrapper').trigger('mouseenter')
+
+    expect(wrapper.classes()).toContain('s-input--has-suffix')
+    expect(wrapper.classes()).toContain('s-input--has-suffix-icon')
+    expect(wrapper.classes()).toContain('s-input--icon-clearable')
+    expect(wrapper.find('.s-input__suffix').exists()).toBe(true)
+    expect(wrapper.find('.s-input__clearable').exists()).toBe(true)
+  })
+
   it('keeps custom affix slots on the wider content spacing', () => {
     const wrapper = mount(Input, {
       slots: {

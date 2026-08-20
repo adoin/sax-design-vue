@@ -1,58 +1,37 @@
-<template>
-  <div :class="radioKls" :style="radioStyles">
-    <div :class="ns.b()">
-      <input
-        :id="uid"
-        v-model="model"
-        type="radio"
-        :disabled="isDisabled"
-        :readonly="isDisabled"
-        :name="name"
-        @focus="focus = true"
-        @blur="focus = false"
-      />
-      <span :class="ns.e('effect')">
-        <span v-if="$slots.icon" :class="ns.em('effect', 'icon')">
-          <slot name="icon" />
-        </span>
-
-        <span v-if="loading" :class="ns.em('effect', 'loading')">
-          <icon-loading />
-        </span>
-      </span>
-    </div>
-
-    <label v-if="$slots.default || label" :for="uid" :class="ns.e('label')">
-      <slot>{{ label }}</slot>
-    </label>
-  </div>
-</template>
-
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 import {
   useColor,
   useId,
   useNamespace,
+  useSvgIconAnimation,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { getVsColor } from '@vuesax-alpha/utils'
-import { IconLoading } from '@vuesax-alpha/components/icon'
 import { radioEmits, radioProps } from './radio'
 import { useRadio } from './use-radio'
 
 defineOptions({
   name: 'SRadio',
+  inheritAttrs: false,
 })
 
-const ns = useNamespace('radio')
+defineSlots<{
+  default?(): unknown
+  icon?(props: { checked: boolean }): unknown
+}>()
 
+const ns = useNamespace('radio')
 const props = defineProps(radioProps)
 const emit = defineEmits(radioEmits)
-
 const uid = useId()
 
-const { isDisabled, loading, model, focus, checked } = useRadio(props, emit)
+const { isDisabled, loading, model, checked, radioName } = useRadio(props, emit)
+const customIconElement = useTemplateRef<HTMLElement>('customIcon')
+const { resolvedIconAnimation } = useSvgIconAnimation(
+  customIconElement,
+  () => props.iconAnimation,
+)
 
 const color = useColor('primary')
 const vsBaseClasses = useVuesaxBaseComponent(color)
@@ -72,3 +51,51 @@ const radioStyles = computed(() => [
   }),
 ])
 </script>
+
+<template>
+  <label :class="radioKls" :style="radioStyles">
+    <input
+      v-bind="$attrs"
+      :id="uid"
+      v-model="model"
+      :class="ns.e('original')"
+      :value="value"
+      type="radio"
+      :disabled="isDisabled"
+      :name="radioName"
+      :aria-checked="checked"
+      :aria-busy="loading || undefined"
+    />
+
+    <span :class="ns.b()" aria-hidden="true">
+      <svg
+        :class="ns.e('graphic')"
+        viewBox="0 0 20 20"
+        focusable="false"
+        shape-rendering="geometricPrecision"
+      >
+        <circle :class="ns.e('surface')" cx="10" cy="10" r="9.5" />
+        <circle
+          v-if="!$slots.icon"
+          :class="ns.e('dot')"
+          cx="10"
+          cy="10"
+          r="4"
+        />
+      </svg>
+
+      <span
+        v-if="$slots.icon"
+        ref="customIcon"
+        :class="ns.e('custom-icon')"
+        :data-animation="resolvedIconAnimation"
+      >
+        <slot name="icon" :checked="checked" />
+      </span>
+    </span>
+
+    <span v-if="$slots.default || label !== ''" :class="ns.e('label')">
+      <slot>{{ label }}</slot>
+    </span>
+  </label>
+</template>

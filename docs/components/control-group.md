@@ -16,7 +16,7 @@ CHILD_PROPS:
 SLOTS:
   - name: default
     type: Slot
-    values: Input, Select, Cascader, or compatible form controls
+    values: Input, Select, Cascader, DatePicker, TimePicker, or compatible form controls
     description: Controls rendered in their original order without gaps.
     default: null
 ---
@@ -45,7 +45,7 @@ Place a Select and Input next to each other when users need to choose a prefix b
 
 ## Multiple controls and spans
 
-Select, Input, and Cascader can share one connected row. The declared spans below are 4, 4, 7, and 4, so the unset Input automatically receives the remaining 5 columns.
+Select, Input, Cascader, Date Picker, and Time Picker can share connected rows. The first row declares spans of 4, 4, 7, and 4, so the unset Input receives the remaining 5 columns; the second row demonstrates a connected date, time, and regular input.
 
 <template #example><control-group-spans /></template>
 

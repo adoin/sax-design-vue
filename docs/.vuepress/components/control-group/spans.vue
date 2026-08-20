@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { shallowRef } from 'vue'
+import { computed, shallowRef } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const isZh = computed(() => route.path.startsWith('/zh/'))
 
 const method = shallowRef('GET')
 const protocol = shallowRef('https://')
 const address = shallowRef('api.sax-design.dev')
 const region = shallowRef('CN')
 const deployment = shallowRef<Array<string | number>>(['production', 'east'])
+const date = shallowRef('2026-08-18')
+const time = shallowRef('09:30')
+const details = shallowRef('')
 
 const deploymentOptions = [
   {
@@ -52,6 +59,26 @@ const deploymentOptions = [
         <s-option label="China" value="CN">China</s-option>
         <s-option label="Global" value="GLOBAL">Global</s-option>
       </s-select>
+    </s-control-group>
+    <s-control-group block :aria-label="isZh ? '日期与时间' : 'Date and time'">
+      <s-date-picker
+        v-model="date"
+        :span="8"
+        format="YYYY-MM-DD"
+        value-format="YYYY-MM-DD"
+        :placeholder="isZh ? '选择日期' : 'Select date'"
+      />
+      <s-time-picker
+        v-model="time"
+        :span="6"
+        format="HH:mm"
+        value-format="HH:mm"
+        :placeholder="isZh ? '选择时间' : 'Select time'"
+      />
+      <s-input
+        v-model="details"
+        :placeholder="isZh ? '补充内容' : 'Additional details'"
+      />
     </s-control-group>
   </div>
 </template>

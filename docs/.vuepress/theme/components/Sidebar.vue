@@ -1,12 +1,12 @@
 <template>
-  <aside class="sidebar">
+  <nav class="sidebar" aria-label="Documentation navigation">
     <div class="content-sidebar">
       <slot name="top" />
       <SidebarLinks :fixed="fixed" :depth="0" :links="sidebar" />
       <NavLinks />
       <slot name="bottom" />
     </div>
-  </aside>
+  </nav>
 </template>
 
 <script setup lang="ts">

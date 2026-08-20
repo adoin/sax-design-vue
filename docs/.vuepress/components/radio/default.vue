@@ -8,9 +8,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { shallowRef } from 'vue'
 
-const picked = ref(1)
+const picked = shallowRef('1')
 </script>
 
 <style scoped lang="scss">

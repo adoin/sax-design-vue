@@ -1,5 +1,13 @@
 ---
 PROPS:
+  - name: direction
+    type: String
+    values: horizontal, vertical
+    description: Divider direction; vertical is intended for inline content.
+    default: horizontal
+    link: null
+    usage: '#vertical'
+
   - name: position
     type: String
     values: left, left-center, center, right-center, right
@@ -43,15 +51,16 @@ PROPS:
   - name: border-height
     type: String
     values: CSS size
-    description: Border width of the divider line.
+    description: Line thickness in both horizontal and vertical modes.
     default: 1px
     link: null
     usage: '#style'
 EVENTS: []
 EXPOSES: []
-description: "Divide text or section components with flexible color, icon, and layout options."
+description: 'Divide text or section components with flexible color, icon, and layout options.'
 NEWS:
   - default
+  - vertical
   - text
   - position
   - color
@@ -65,7 +74,6 @@ NEWS:
 <card>
 
 ## Default
-
 
 Add a horizontal line between blocks of content with `s-divider`.
 
@@ -89,8 +97,25 @@ Add a horizontal line between blocks of content with `s-divider`.
 
 <card>
 
-## Text
+## Vertical
 
+Set `direction="vertical"` to separate inline text, links, or actions. Its height follows the current font size; text and icon content are not rendered in vertical mode.
+
+<template #example>
+<divider-vertical />
+</template>
+
+<template #template>
+
+@[code](../.vuepress/components/divider/vertical.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Text
 
 Place text inside the divider to label a section break.
 
@@ -116,7 +141,6 @@ Place text inside the divider to label a section break.
 
 ## Text Position
 
-
 Control text alignment with the `position` prop: left, left-center, center, right-center, or right.
 
 <template #example>
@@ -140,7 +164,6 @@ Control text alignment with the `position` prop: left, left-center, center, righ
 <card>
 
 ## Color
-
 
 Change the color of the line and the text using theme colors, RGB, or HEX.
 
@@ -166,7 +189,6 @@ Change the color of the line and the text using theme colors, RGB, or HEX.
 
 ## Background
 
-
 Highlight divider text with a custom `background` color.
 
 <template #example>
@@ -191,7 +213,6 @@ Highlight divider text with a custom `background` color.
 
 ## Icons
 
-
 Use Material Icons inside the divider via the `icon` prop.
 
 <template #example>
@@ -215,7 +236,6 @@ Use Material Icons inside the divider via the `icon` prop.
 <card>
 
 ## Style
-
 
 Switch line appearance with `border-style` (solid, dashed, dotted).
 

@@ -64,8 +64,10 @@
   > .#{$namespace}-control-group__item > .#{$namespace}-input,
   > .#{$namespace}-control-group__item > .#{$namespace}-select,
   > .#{$namespace}-control-group__item > .#{$namespace}-cascader,
+  > .#{$namespace}-control-group__item > .#{$namespace}-date-picker,
+  > .#{$namespace}-control-group__item > .#{$namespace}-time-picker,
   > .#{$namespace}-control-group__item > .#{$namespace}-button {
-    width: 100%;
+    width: 100% !important;
     min-width: 0;
     margin: 0 !important;
   }
@@ -86,6 +88,12 @@
   > .#{$namespace}-control-group__item
     > .#{$namespace}-select
     .#{$namespace}-select__chips,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-date-picker
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-time-picker
+    .#{$namespace}-input__wrapper,
   > .#{$namespace}-control-group__item > .#{$namespace}-cascader,
   > .#{$namespace}-control-group__item > .#{$namespace}-button {
     border-radius: 0;
@@ -102,6 +110,11 @@
     min-height: map.get($select, 'min-height');
   }
 
+  > .#{$namespace}-control-group__item > .#{$namespace}-date-picker,
+  > .#{$namespace}-control-group__item > .#{$namespace}-time-picker {
+    min-height: map.get($select, 'min-height');
+  }
+
   > .#{$namespace}-control-group__item:first-child
     > .#{$namespace}-input
     .#{$namespace}-input__wrapper,
@@ -111,6 +124,19 @@
   > .#{$namespace}-control-group__item:first-child
     > .#{$namespace}-select
     .#{$namespace}-select__chips,
+  > .#{$namespace}-control-group__item:first-child
+    > .#{$namespace}-date-picker
+    > .#{$namespace}-input
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item:first-child
+    > .#{$namespace}-date-picker
+    > .#{$namespace}-date-picker__range-input
+    > .#{$namespace}-input:first-child
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item:first-child
+    > .#{$namespace}-time-picker
+    > .#{$namespace}-input
+    .#{$namespace}-input__wrapper,
   > .#{$namespace}-control-group__item:first-child > .#{$namespace}-cascader,
   > .#{$namespace}-control-group__item:first-child > .#{$namespace}-button {
     border-radius: var(--sax-radius) 0 0 var(--sax-radius);
@@ -125,6 +151,19 @@
   > .#{$namespace}-control-group__item:last-child
     > .#{$namespace}-select
     .#{$namespace}-select__chips,
+  > .#{$namespace}-control-group__item:last-child
+    > .#{$namespace}-date-picker
+    > .#{$namespace}-input
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item:last-child
+    > .#{$namespace}-date-picker
+    > .#{$namespace}-date-picker__range-input
+    > .#{$namespace}-input:last-child
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item:last-child
+    > .#{$namespace}-time-picker
+    > .#{$namespace}-input
+    .#{$namespace}-input__wrapper,
   > .#{$namespace}-control-group__item:last-child > .#{$namespace}-cascader,
   > .#{$namespace}-control-group__item:last-child > .#{$namespace}-button {
     border-radius: 0 var(--sax-radius) var(--sax-radius) 0;
@@ -139,9 +178,33 @@
   > .#{$namespace}-control-group__item:only-child
     > .#{$namespace}-select
     .#{$namespace}-select__chips,
+  > .#{$namespace}-control-group__item:only-child
+    > .#{$namespace}-date-picker
+    > .#{$namespace}-input
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item:only-child
+    > .#{$namespace}-time-picker
+    > .#{$namespace}-input
+    .#{$namespace}-input__wrapper,
   > .#{$namespace}-control-group__item:only-child > .#{$namespace}-cascader,
   > .#{$namespace}-control-group__item:only-child > .#{$namespace}-button {
     border-radius: var(--sax-radius);
+  }
+
+  > .#{$namespace}-control-group__item:only-child
+    > .#{$namespace}-date-picker
+    > .#{$namespace}-date-picker__range-input
+    > .#{$namespace}-input:first-child
+    .#{$namespace}-input__wrapper {
+    border-radius: var(--sax-radius) 0 0 var(--sax-radius);
+  }
+
+  > .#{$namespace}-control-group__item:only-child
+    > .#{$namespace}-date-picker
+    > .#{$namespace}-date-picker__range-input
+    > .#{$namespace}-input:last-child
+    .#{$namespace}-input__wrapper {
+    border-radius: 0 var(--sax-radius) var(--sax-radius) 0;
   }
 
   > .#{$namespace}-control-group__item:hover,
@@ -173,6 +236,26 @@
   > .#{$namespace}-control-group__item
     > .#{$namespace}-select.is-open
     .#{$namespace}-select__chips {
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-date-picker
+    .#{$namespace}-input.is-hovering
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-date-picker
+    .#{$namespace}-input.is-focus
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-time-picker
+    .#{$namespace}-input.is-hovering
+    .#{$namespace}-input__wrapper,
+  > .#{$namespace}-control-group__item
+    > .#{$namespace}-time-picker
+    .#{$namespace}-input.is-focus
+    .#{$namespace}-input__wrapper {
     border-color: transparent;
     box-shadow: none;
   }

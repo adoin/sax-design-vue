@@ -1,18 +1,43 @@
 @use 'mixins/mixins' as *;
+@use 'common/var' as *;
 
 @include b(collapse) {
   width: 100%;
+  min-width: 0;
   padding: 10px;
-  transition: all var(--sax-motion-duration) var(--sax-motion-easing-standard);
-  border-radius: var(--sax-radius-sm);
+  box-sizing: border-box;
+  border-radius: var(--sax-radius);
+  transition:
+    background-color var(--sax-motion-duration-fast)
+      var(--sax-motion-easing-standard),
+    box-shadow var(--sax-motion-duration-fast)
+      var(--sax-motion-easing-standard);
 
   @include m(shadow) {
+    padding: 0;
+    overflow: hidden;
+    background: getColor('gray-2');
+    @include control-surface-shadow;
+
+    &:hover {
+      background: getColor('background');
+      @include control-surface-shadow(hover);
+    }
+
+    &:focus-within {
+      background: getColor('background');
+      @include control-surface-shadow(focus);
+    }
+
     @include b(collapse-item) {
-      margin-bottom: 10px;
+      margin: 0;
       border-bottom: none;
-      border-radius: var(--sax-radius-sm);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      overflow: hidden;
+      border-radius: 0;
+      box-shadow: inset 0 -7px 8px -8px getColor('text', 0.2);
+
+      &:last-child {
+        box-shadow: none;
+      }
     }
   }
 
@@ -36,7 +61,7 @@
     @include b(collapse-item) {
       margin: 10px 0;
       border-bottom: none;
-      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+      @include control-surface-shadow;
       border-radius: var(--sax-radius-xs);
     }
   }
@@ -57,7 +82,19 @@
     padding: 10px 28px 10px 10px;
     cursor: pointer;
     user-select: none;
-    transition: all var(--sax-motion-duration) var(--sax-motion-easing-standard);
+    outline: none;
+    transition:
+      color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+      background-color var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard),
+      box-shadow var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
+
+    &:focus-visible {
+      color: getColor('primary');
+      background: getColor('background');
+      box-shadow: inset 0 0 12px getColor('primary', 0.08);
+    }
   }
 
   @include e(icon) {
@@ -93,7 +130,9 @@
 
   @include when(open) {
     @include e(icon) {
-      transform: translate(-50%, -50%) rotate(180deg);
+      &.is-default-arrow {
+        transform: translate(-50%, -50%) rotate(180deg);
+      }
     }
 
     @include e(body) {

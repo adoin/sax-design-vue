@@ -1,5 +1,226 @@
+@use 'mixins/mixins' as *;
 @use 'common/var' as *;
 
-.s-radio-group { display: inline-flex; align-items: center; gap: 12px; }
-.s-radio-group--button { gap: 0; }
-.s-radio-group.is-disabled { opacity: .58; }
+@include b(radio-group) {
+  --sax-radio-group-columns: 1;
+  --sax-radio-group-gap: 8px;
+
+  display: inline-flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: var(--sax-radio-group-gap);
+
+  @include when(data-driven) {
+    &:not(.#{$namespace}-radio-group--button) {
+      display: grid;
+      width: 100%;
+      grid-template-columns: repeat(
+        var(--sax-radio-group-columns),
+        minmax(0, 1fr)
+      );
+    }
+  }
+
+  @include when(disabled) {
+    opacity: 0.62;
+  }
+
+  @include m(button) {
+    display: inline-flex;
+    width: fit-content;
+    max-width: 100%;
+    padding: 4px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 4px;
+    border-radius: var(--sax-radius-lg);
+    background: getColor(primary, 0.055);
+    box-shadow: inset 0 2px 6px getColor(primary, 0.08);
+    scrollbar-width: thin;
+  }
+
+  @include e(option) {
+    min-width: 0;
+    padding: 2px;
+    border-radius: var(--sax-radius-md);
+    transition:
+      background-color var(--sax-motion-duration-fast) ease,
+      box-shadow var(--sax-motion-duration-fast) ease,
+      transform var(--sax-motion-duration-fast) ease;
+
+    &:hover {
+      background: getColor(primary, 0.045);
+      box-shadow: 0 8px 18px -14px getColor(primary, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .#{$namespace}-radio-wrapper {
+      width: 100%;
+      min-height: 44px;
+      align-items: flex-start;
+    }
+
+    .#{$namespace}-radio__label {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  @include e(option-label) {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include e(description) {
+    display: block;
+    margin-top: 2px;
+    color: getColor(text, 0.52);
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.35;
+    white-space: normal;
+  }
+}
+
+@include b(radio-group-tabs) {
+  width: 100%;
+  min-width: 0;
+
+  @include e(list) {
+    display: flex;
+    width: fit-content;
+    max-width: 100%;
+    padding: 4px;
+    overflow-x: auto;
+    gap: 4px;
+    border-radius: var(--sax-radius-lg);
+    background: getColor(primary, 0.055);
+    box-shadow: inset 0 2px 6px getColor(primary, 0.08);
+    scrollbar-width: thin;
+  }
+
+  @include e(tab) {
+    display: inline-flex;
+    box-sizing: border-box;
+    min-height: 40px;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border: 0;
+    border-radius: var(--sax-radius-md);
+    outline: 0;
+    background: transparent;
+    color: getColor(text, 0.68);
+    cursor: pointer;
+    font: inherit;
+    transition:
+      color var(--sax-motion-duration-fast) ease,
+      background-color var(--sax-motion-duration-fast) ease,
+      box-shadow var(--sax-motion-duration-fast) ease;
+
+    &:hover:not(.is-disabled) {
+      background: getColor(background, 0.66);
+      color: getColor(primary);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 3px getColor(primary, 0.18);
+    }
+
+    @include when(active) {
+      background: getColor(background);
+      color: getColor(primary);
+      box-shadow:
+        0 8px 20px -12px getColor(primary, 0.5),
+        0 2px 6px getColor(primary, 0.1);
+      font-weight: 650;
+    }
+
+    @include when(disabled) {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  }
+
+  @include e(tab-label) {
+    white-space: nowrap;
+  }
+
+  @include e(value) {
+    max-width: 132px;
+    padding: 3px 7px;
+    overflow: hidden;
+    border-radius: var(--sax-radius-pill);
+    background: getColor(primary, 0.1);
+    color: getColor(primary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include e(panel) {
+    min-width: 0;
+    margin-top: 10px;
+    padding: 14px;
+    border-radius: var(--sax-radius-lg);
+    animation: sax-radio-group-tabs-panel-in 0.18s ease-out both;
+    background: getColor(background, 0.78);
+    box-shadow:
+      inset 0 3px 8px getColor(primary, 0.07),
+      0 12px 30px -20px getColor(primary, 0.42);
+
+    .#{$namespace}-radio-group {
+      width: 100%;
+    }
+  }
+
+  @include when(disabled) {
+    opacity: 0.62;
+  }
+}
+
+@keyframes sax-radio-group-tabs-panel-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 4px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .#{$namespace}-radio-group.is-data-driven:not(
+      .#{$namespace}-radio-group--button
+    ) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .#{$namespace}-radio-group-tabs__list {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-radio-group__option {
+    transition: none;
+  }
+
+  .#{$namespace}-radio-group-tabs__tab {
+    transition: none;
+  }
+
+  .#{$namespace}-radio-group-tabs__panel {
+    animation: none;
+  }
+}

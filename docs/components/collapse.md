@@ -12,7 +12,7 @@ PROPS:
     type: String
     values: default, border, margin, shadow
     description: Visual variant.
-    default: default
+    default: shadow
     link: null
     usage: '#type'
 
@@ -27,6 +27,15 @@ EVENTS:
   - name: change
     params: null
     description: Emitted when open panels change.
+SLOTS:
+  - name: default / header
+    type: slot
+    values: '-'
+    description: Render the panel content or its clickable heading.
+  - name: icon-arrow
+    type: scoped slot
+    values: open | disabled
+    description: Render a custom expand icon from the current panel state.
 EXPOSES: []
 description: "Expand and collapse content panels with multiple visual styles."
 NEWS:
@@ -126,7 +135,7 @@ Open panels on hover instead of click.
 ## Change Arrow Icon
 
 
-Customize the expand arrow per panel.
+Use the `icon-arrow` slot with `SIcon` to customize the expand arrow per panel.
 
 <template #example>
 <collapse-icon-arrow />
@@ -134,7 +143,7 @@ Customize the expand arrow per panel.
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/collapse/icon-arrow.vue)
+@[code](../.vuepress/components/collapse/icon-arrow.vue)
 
 </template>
 

@@ -1,167 +1,104 @@
 <template>
-  <div ref="rootRef" :class="[ns.b(), ns.is('disabled', disabled)]">
-    <button
-      :class="ns.e('trigger')"
-      type="button"
-      :disabled="disabled"
-      aria-haspopup="dialog"
-      :aria-expanded="open"
-      @click="open = !open"
-    >
-      <span :class="ns.e('swatch')" :style="{ background: colorValue }" />
-      <span :class="ns.e('value')">{{ valueText }}</span>
-      <SIcon name="cb:chevron-down" />
-    </button>
-    <div
-      v-if="open"
-      :class="ns.e('panel')"
-      role="dialog"
-      :aria-label="t('vs.colorpicker.defaultLabel')"
-    >
-      <input
-        :class="ns.e('native')"
-        type="color"
-        :value="hexValue"
+  <SPopper
+    v-model:visible="open"
+    trigger="click"
+    placement="bottom-start"
+    teleported
+    :disabled="disabled"
+    :show-arrow="false"
+    :offset="8"
+    :popper-class="ns.e('panel')"
+  >
+    <div :class="[ns.b(), ns.is('disabled', disabled)]">
+      <button
+        :class="ns.e('trigger')"
+        type="button"
         :disabled="disabled"
-        :aria-label="t('vs.colorpicker.color')"
-        @input="updateHex(($event.target as HTMLInputElement).value)"
-      />
-      <div :class="ns.e('row')">
-        <span :class="ns.e('preview')" :style="{ background: colorValue }" />
-        <input
-          :class="ns.e('text')"
-          :value="valueText"
-          :disabled="disabled"
-          :aria-label="t('vs.colorpicker.value')"
-          @change="updateText(($event.target as HTMLInputElement).value)"
-        />
-      </div>
-      <label v-if="showAlpha" :class="ns.e('alpha')">
-        <span>{{ t('vs.colorpicker.opacity') }}</span>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          :value="alpha"
-          @input="
-            updateAlpha(Number(($event.target as HTMLInputElement).value))
-          "
-        />
-        <b>{{ Math.round(alpha * 100) }}%</b>
-      </label>
-      <div v-if="predefine.length" :class="ns.e('presets')">
-        <button
-          v-for="color in predefine"
-          :key="color"
-          :class="[ns.e('preset'), ns.is('active', color === modelValue)]"
-          type="button"
-          :style="{ background: color }"
-          :aria-label="t('vs.colorpicker.choose', { color })"
-          @click="selectPreset(color)"
-        />
-      </div>
+        aria-haspopup="dialog"
+        :aria-expanded="open"
+      >
+        <span :class="ns.e('swatch')">
+          <span :style="{ background: cssColor }" />
+        </span>
+        <span :class="ns.e('value')">{{ valueText }}</span>
+        <SIcon name="cb:chevron-down" />
+      </button>
     </div>
-  </div>
+
+    <template #content>
+      <div role="dialog" :aria-label="t('vs.colorpicker.defaultLabel')">
+        <ColorPickerPanel
+          :color="selectedColor"
+          :format="displayFormat"
+          :show-alpha="showAlpha"
+          :predefine="predefine"
+          @update:color="updateColor"
+          @update:format="updateFormat"
+        />
+      </div>
+    </template>
+  </SPopper>
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
+import { SPopper } from '@vuesax-alpha/components/popper'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import ColorPickerPanel from './color-picker-panel.vue'
 import { colorPickerEmits, colorPickerProps } from './color-picker'
-import type { RgbColor } from './color-picker'
+import { formatColor, parseColor, toCssColor } from './color-utils'
+import type { ColorFormat, RgbColor } from './color-utils'
 
 defineOptions({ name: 'SColorPicker' })
+
+const fallbackColor: RgbColor = {
+  red: 86,
+  green: 103,
+  blue: 244,
+  alpha: 1,
+}
 
 const props = defineProps(colorPickerProps)
 const emit = defineEmits(colorPickerEmits)
 const ns = useNamespace('color-picker')
 const { t } = useLocale()
-const rootRef = ref<HTMLElement>()
 const open = ref(false)
+const selectedColor = ref<RgbColor>(
+  parseColor(props.modelValue) || { ...fallbackColor },
+)
+const displayFormat = ref<ColorFormat>(props.format)
+const cssColor = computed(() => toCssColor(selectedColor.value))
+const valueText = computed(() =>
+  formatColor(selectedColor.value, displayFormat.value, props.showAlpha),
+)
 
-const clamp = (value: number) => Math.min(Math.max(value, 0), 255)
-const parseColor = (value: string): RgbColor | undefined => {
-  const hex = value.trim().replace('#', '')
-  if (/^[\da-f]{3}$/i.test(hex)) {
-    return {
-      red: Number.parseInt(hex[0] + hex[0], 16),
-      green: Number.parseInt(hex[1] + hex[1], 16),
-      blue: Number.parseInt(hex[2] + hex[2], 16),
-      alpha: 1,
-    }
-  }
-  if (/^[\da-f]{6}$/i.test(hex)) {
-    return {
-      red: Number.parseInt(hex.slice(0, 2), 16),
-      green: Number.parseInt(hex.slice(2, 4), 16),
-      blue: Number.parseInt(hex.slice(4, 6), 16),
-      alpha: 1,
-    }
-  }
-  const match = value.match(/rgba?\(([^)]+)\)/i)
-  if (!match) return undefined
-  const values = match[1].split(',').map(Number)
-  if (values.length < 3 || values.slice(0, 3).some(Number.isNaN))
-    return undefined
-  return {
-    red: clamp(values[0]),
-    green: clamp(values[1]),
-    blue: clamp(values[2]),
-    alpha: Number.isNaN(values[3]) ? 1 : Math.min(Math.max(values[3], 0), 1),
-  }
-}
-const rgb = computed(
-  () =>
-    parseColor(props.modelValue) || {
-      red: 86,
-      green: 103,
-      blue: 244,
-      alpha: 1,
-    },
+watch(
+  () => props.modelValue,
+  (value) => {
+    const parsed = parseColor(value)
+    if (parsed) selectedColor.value = parsed
+  },
 )
-const hexValue = computed(
-  () =>
-    `#${[rgb.value.red, rgb.value.green, rgb.value.blue].map((part) => Math.round(part).toString(16).padStart(2, '0')).join('')}`,
+
+watch(
+  () => props.format,
+  (value) => (displayFormat.value = value),
 )
-const alpha = computed(() => rgb.value.alpha)
-const colorValue = computed(
-  () =>
-    `rgba(${rgb.value.red}, ${rgb.value.green}, ${rgb.value.blue}, ${rgb.value.alpha})`,
-)
-const formatValue = (color: RgbColor) => {
-  const hex = `#${[color.red, color.green, color.blue].map((part) => Math.round(part).toString(16).padStart(2, '0')).join('')}`
-  return props.format === 'rgb' || (props.showAlpha && color.alpha < 1)
-    ? `rgba(${color.red}, ${color.green}, ${color.blue}, ${Number(color.alpha.toFixed(2))})`
-    : hex
-}
-const valueText = computed(() => formatValue(rgb.value))
-const emitValue = (color: RgbColor) => {
-  const value = formatValue(color)
+
+const commitColor = () => {
+  const value = valueText.value
   emit('update:modelValue', value)
   emit('change', value)
 }
-const updateHex = (value: string) => {
-  const color = parseColor(value)
-  if (color) emitValue({ ...color, alpha: rgb.value.alpha })
-}
-const updateAlpha = (value: number) => emitValue({ ...rgb.value, alpha: value })
-const updateText = (value: string) => {
-  const color = parseColor(value)
-  if (color) emitValue(color)
-}
-const selectPreset = (value: string) => {
-  const color = parseColor(value)
-  if (color) emitValue(color)
-}
-const handlePointerDown = (event: PointerEvent) => {
-  if (rootRef.value && !rootRef.value.contains(event.target as Node))
-    open.value = false
+
+const updateColor = (color: RgbColor) => {
+  selectedColor.value = color
+  commitColor()
 }
 
-onMounted(() => document.addEventListener('pointerdown', handlePointerDown))
-onBeforeUnmount(() =>
-  document.removeEventListener('pointerdown', handlePointerDown),
-)
+const updateFormat = (format: ColorFormat) => {
+  displayFormat.value = format
+  commitColor()
+}
 </script>

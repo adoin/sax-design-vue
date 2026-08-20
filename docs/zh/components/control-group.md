@@ -16,7 +16,7 @@ CHILD_PROPS:
 SLOTS:
   - name: default
     type: Slot
-    values: Input、Select、Cascader 或兼容的表单控件
+    values: Input、Select、Cascader、DatePicker、TimePicker 或兼容的表单控件
     description: 按原有顺序无间距地渲染控件。
     default: null
 ---
@@ -45,7 +45,7 @@ Control Group 将相关控件拼成连续输入区域，同时保留每个子控
 
 ## 多段拼接与栅格
 
-多个控件连续拼接时，可混合 Select、Input 与 Cascader，并为固定宽度的子控件设置 `span`。下例已声明的栅格为 4、4、7、4，中间未声明的 Input 自动占用剩余 5 栅格。
+多个控件连续拼接时，可混合 Select、Input、Cascader、Date Picker 与 Time Picker，并为固定宽度的子控件设置 `span`。第一行已声明的栅格为 4、4、7、4，中间未声明的 Input 自动占用剩余 5 栅格；第二行展示日期、时间与普通输入的连续拼接。
 
 <template #example><control-group-spans /></template>
 

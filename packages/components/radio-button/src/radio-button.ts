@@ -7,7 +7,8 @@ export type RadioButtonValue = string | number | boolean
 export const radioButtonProps = buildProps({
   modelValue: { type: [String, Number, Boolean], default: null },
   value: { type: [String, Number, Boolean], default: '' },
-  label: { type: [String, Number], default: '' },
+  label: { type: [String, Number, Boolean], default: '' },
+  description: { type: String, default: '' },
   disabled: Boolean,
   name: { type: String, default: '' },
 } as const)

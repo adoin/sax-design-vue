@@ -1,5 +1,5 @@
 ---
-description: "Choose exactly one option from a related group."
+description: 'Choose exactly one option from a related group.'
 PROPS:
   - name: v-model / model-value
     type: String | Number | Boolean
@@ -36,11 +36,20 @@ PROPS:
     usage: '#loading'
     code: null
 
-  - name: val
+  - name: icon-animation
     type: String
-    values: String
-    description: Determine the value of the radio input.
-    default: null
+    values: auto, draw, pop, none
+    description: Animate a custom center icon. Stroke SVGs draw their paths and filled icons use a pop reveal.
+    default: auto
+    link: null
+    usage: '#icon'
+    code: null
+
+  - name: value
+    type: String | Number | Boolean
+    values: option value
+    description: Value represented by this radio option.
+    default: "''"
     link: null
     usage: '#default'
     code: null
@@ -57,8 +66,8 @@ SLOTS:
 
   - name: icon
     type: slot
-    values: null
-    description: Add an icon inside the radio.
+    values: checked
+    description: Replace the selected center SVG and receive the current checked state.
     default: null
     link: null
     usage: '#icon'
@@ -69,25 +78,19 @@ SLOTS:
 
 <card>
 
-## Default
+## Radio, group, tabs, and button
 
 <docs-warn />
 
-Add the radio type input with the component `<s-radio />`
+`Radio` is the primitive option. `RadioGroup` owns one selected value, `RadioGroupTabs` preserves one selection per tab, and `type="button"` provides the borderless `RadioButton` segmented presentation. All four forms keep an explicit `v-model` data flow.
 
 <template #example>
-<radio-default />
+<radio-patterns />
 </template>
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/radio/default.vue)
-
-</template>
-
-<template #script>
-
-@[code{10-14}](../.vuepress/components/radio/default.vue)
+@[code](../.vuepress/components/radio/patterns.vue)
 
 </template>
 
@@ -145,7 +148,7 @@ Add a label to the radio with the `default` slot, if you need the label to be be
 
 ## Loading <Badge text="New"/>
 
-Add a loading animation to the component, when the radio has this property active it is as if it were in `disabled`
+Loading reuses Button's pulse rail: a glowing segment travels from left to right along the full radio surface. Interaction is disabled until loading finishes.
 
 <template #example>
 <radio-loading />
@@ -153,13 +156,13 @@ Add a loading animation to the component, when the radio has this property activ
 
 <template #template>
 
-@[code{1-6} vue{3,4}](../.vuepress/components/radio/loading.vue)
+@[code{7-12} vue{9,10}](../.vuepress/components/radio/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{8-12}](../.vuepress/components/radio/loading.vue)
+@[code{1-5}](../.vuepress/components/radio/loading.vue)
 
 </template>
 
@@ -169,7 +172,7 @@ Add a loading animation to the component, when the radio has this property activ
 
 ## Icon <Badge text="New"/>
 
-Add an icon inside the radio with the `icon` slot
+The outer disc and default center dot share one SVG coordinate system, independent from the native input and positional layout. Replace the selected center SVG with the `icon` slot, which exposes `checked`. `icon-animation="auto"` draws stroked SVG geometry and gives filled icons a pop reveal; set `draw`, `pop`, or `none` explicitly when needed.
 
 <template #example>
 <radio-icons />
@@ -177,13 +180,13 @@ Add an icon inside the radio with the `icon` slot
 
 <template #template>
 
-@[code{1-46} vue{5-7}](../.vuepress/components/radio/icons.vue)
+@[code{1-60} vue{3,5-20}](../.vuepress/components/radio/icons.vue)
 
 </template>
 
 <template #script>
 
-@[code{48-52}](../.vuepress/components/radio/icons.vue)
+@[code{62-66}](../.vuepress/components/radio/icons.vue)
 
 </template>
 
@@ -192,5 +195,37 @@ Add an icon inside the radio with the `icon` slot
 <card>
 
 ## API
+
+### RadioGroup
+
+| Property          | Type                          | Default   | Description                                                                                 |
+| ----------------- | ----------------------------- | --------- | ------------------------------------------------------------------------------------------- |
+| `v-model`         | `string \| number \| boolean` | `''`      | The group's single selected value.                                                          |
+| `options`         | `RadioOption[]`               | `[]`      | Data-driven options supporting `label`, `value`, `description`, and `disabled`.             |
+| `type`            | `default \| button`           | `default` | Primitive Radio or borderless RadioButton presentation.                                     |
+| `columns`         | `number`                      | `1`       | Column count for the standard data-driven layout; collapses to one column on small screens. |
+| `gap`             | `number \| string`            | `8`       | Option spacing. Numbers are treated as pixels.                                              |
+| `disabled-values` | `RadioValue[]`                | `[]`      | Disable specific option values.                                                             |
+| `disabled`        | `boolean`                     | `false`   | Disable the whole group.                                                                    |
+| `name`            | `string`                      | generated | Shared native radio name for arrow-key navigation.                                          |
+
+Events: `update:modelValue(value)` and `change(value)`. Slots: `option` and `empty`. Without `options`, Radio or RadioButton children in the default slot automatically join the group model.
+
+### RadioGroupTabs
+
+| Property     | Type                         | Default           | Description                                                                                      |
+| ------------ | ---------------------------- | ----------------- | ------------------------------------------------------------------------------------------------ |
+| `v-model`    | `Record<string, RadioValue>` | `{}`              | Stores one selected value under each tab key.                                                    |
+| `tabs`       | `RadioGroupTab[]`            | `[]`              | Tabs and their `options`; each tab may define `disabled`, `columns`, and disabled option values. |
+| `active-key` | `string \| number`           | first enabled tab | Current panel; supports `v-model:active-key`.                                                    |
+| `columns`    | `number`                     | `2`               | Panel column count when a tab does not override it.                                              |
+| `gap`        | `number \| string`           | `12`              | Spacing between panel options.                                                                   |
+| `disabled`   | `boolean`                    | `false`           | Disable the whole tabbed group.                                                                  |
+
+Events: `update:modelValue(value)`, `change(value, activeKey)`, `update:activeKey(key)`, and `tabChange(key)`. Slots: `tab`, `option`, and `empty`. Tabs support arrow keys, `Home`, and `End` navigation.
+
+### RadioButton
+
+Prefer `RadioButton` through `<s-radio-group type="button" />`. Direct composition still supports `v-model`, `value`, `label`, `description`, `disabled`, and `name`. Its active state combines a familiar radio indicator with color, surface, and shadow instead of borders.
 
 </card>

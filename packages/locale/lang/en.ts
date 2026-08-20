@@ -16,6 +16,11 @@ export default {
       value: 'Color value',
       opacity: 'Opacity',
       choose: 'Choose {color}',
+      hue: 'Hue',
+      format: 'Color format',
+      saturationValue: 'Saturation and brightness',
+      eyedropper: 'Pick a color from the screen',
+      eyedropperFailed: 'The screen color could not be picked.',
     },
     datepicker: {
       now: 'Now',
@@ -115,6 +120,10 @@ export default {
     },
     breadcrumb: {
       label: 'breadcrumb',
+    },
+    layout: {
+      collapseOutside: 'Collapse attached tools',
+      expandOutside: 'Expand attached tools',
     },
     menu: {
       label: 'Menu',

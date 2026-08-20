@@ -3,6 +3,8 @@
 @use 'common/var' as *;
 
 @include b(link) {
+  --sax-link-highlight-color: #{getColor(primary, 0.18)};
+
   display: inline-flex;
   align-items: center;
   color: getColor(primary);
@@ -10,13 +12,121 @@
   font-size: inherit;
   text-decoration: none;
   text-underline-offset: 3px;
-  transition: color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard), opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+  transition:
+    color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+    opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 
-  &:hover { color: getColor(primary, 0.78); }
-  @include when(underline) { &:hover { text-decoration: underline; } }
-  @include when(disabled) { cursor: not-allowed; opacity: 0.5; }
+  &:hover {
+    color: getColor(primary, 0.78);
+  }
+
+  @include when(underline) {
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+    }
+  }
+
+  &.is-underline-slide,
+  &.is-underline-center,
+  &.is-underline-double,
+  &.is-underline-highlight {
+    // Clone the decoration so every wrapped line owns a complete effect.
+    --sax-link-underline-size: 1.5px;
+
+    display: inline;
+    padding-block-end: 1px;
+    background-repeat: no-repeat;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    transition:
+      color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+      opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+      background-size 0.3s ease-out;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: none;
+    }
+  }
+
+  @include when(underline-slide) {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 calc(100% - 1px);
+    background-size: 0 var(--sax-link-underline-size);
+
+    &:hover,
+    &:focus-visible {
+      background-size: 100% var(--sax-link-underline-size);
+    }
+  }
+
+  @include when(underline-center) {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 50% calc(100% - 1px);
+    background-size: 0 var(--sax-link-underline-size);
+
+    &:hover,
+    &:focus-visible {
+      background-size: 100% var(--sax-link-underline-size);
+    }
+  }
+
+  @include when(underline-double) {
+    background-image:
+      linear-gradient(currentColor, currentColor),
+      linear-gradient(currentColor, currentColor);
+    background-position:
+      0 calc(100% - 1px),
+      100% calc(100% - 4px);
+    background-size:
+      0 var(--sax-link-underline-size),
+      0 var(--sax-link-underline-size);
+
+    &:hover,
+    &:focus-visible {
+      background-size:
+        100% var(--sax-link-underline-size),
+        100% var(--sax-link-underline-size);
+    }
+  }
+
+  @include when(underline-highlight) {
+    --sax-link-highlight-size: 0.48em;
+
+    background-image: linear-gradient(
+      var(--sax-link-highlight-color),
+      var(--sax-link-highlight-color)
+    );
+    background-position: 0 calc(100% - 1px);
+    background-size: 0 var(--sax-link-highlight-size);
+
+    &:hover,
+    &:focus-visible {
+      background-size: 100% var(--sax-link-highlight-size);
+    }
+  }
+
+  @include when(disabled) {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 
   @each $type in (success, warning, danger, info) {
-    @include m($type) { color: getColor($type); &:hover { color: getColor($type, 0.78); } }
+    @include m($type) {
+      --sax-link-highlight-color: #{getColor($type, 0.18)};
+
+      color: getColor($type);
+
+      &:hover {
+        color: getColor($type, 0.78);
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-link {
+    transition: none !important;
   }
 }

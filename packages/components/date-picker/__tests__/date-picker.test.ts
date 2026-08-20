@@ -12,6 +12,7 @@ const InputStub = defineComponent({
     labelFloat: Boolean,
     color: String,
     size: String,
+    suffixIcon: String,
   },
   template: '<div class="input-stub" />',
 })
@@ -49,6 +50,7 @@ describe('DatePicker input presentation', () => {
       labelFloat: true,
       color: '#123456',
       size: 'large',
+      suffixIcon: 'cb:calendar',
     })
     expect(wrapper.get('.s-date-picker').attributes('style')).toContain(
       '--sax-color: 18, 52, 86',
@@ -81,6 +83,7 @@ describe('DatePicker input presentation', () => {
         labelFloat: true,
         color: 'success',
         size: 'small',
+        suffixIcon: 'cb:calendar',
       })
     }
   })

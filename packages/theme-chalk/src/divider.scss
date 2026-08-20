@@ -10,6 +10,16 @@
   margin: 15px 0;
   clear: both;
 
+  @include m(vertical) {
+    display: inline-flex;
+    width: auto;
+    height: 1em;
+    margin: 0 0.65em;
+    clear: none;
+    line-height: 1;
+    vertical-align: -0.125em;
+  }
+
   @include e(border) {
     position: relative;
     display: block;
@@ -19,6 +29,16 @@
     border-top-width: 1px;
     border-top-style: solid;
     border-top-color: getColor('divider');
+
+    @include when(vertical) {
+      flex: none;
+      width: 0;
+      height: 100%;
+      border-top: 0;
+      border-inline-start-width: 1px;
+      border-inline-start-style: solid;
+      border-inline-start-color: getColor('divider');
+    }
   }
 
   @include e(text) {
@@ -41,6 +61,12 @@
     @include e(border) {
       @include m($type) {
         border-top-color: getColor(if($type == warning, warn, $type));
+
+        &.is-vertical {
+          border-inline-start-color: getColor(
+            if($type == warning, warn, $type)
+          );
+        }
       }
     }
 

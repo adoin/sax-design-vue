@@ -36,8 +36,6 @@ export const additionalComponentNavItems: SidebarItem[] = [
   { text: 'Progress', link: '/components/progress' },
   { text: 'Prompt', link: '/components/prompt' },
   { text: 'Pulldown', link: '/components/pulldown' },
-  { text: 'Radio button', link: '/components/radio-button' },
-  { text: 'Radio group', link: '/components/radio-group' },
   { text: 'Result', link: '/components/result' },
   { text: 'Segmented', link: '/components/segmented' },
   { text: 'Slider', link: '/components/slider' },

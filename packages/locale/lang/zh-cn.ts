@@ -15,6 +15,11 @@ export default {
       value: '颜色值',
       opacity: '透明度',
       choose: '选择 {color}',
+      hue: '色相',
+      format: '颜色格式',
+      saturationValue: '饱和度和明度',
+      eyedropper: '吸取屏幕颜色',
+      eyedropperFailed: '未能吸取屏幕颜色。',
     },
     datepicker: {
       now: '此刻',
@@ -104,6 +109,10 @@ export default {
     },
     breadcrumb: {
       label: '面包屑导航',
+    },
+    layout: {
+      collapseOutside: '收起外挂工具',
+      expandOutside: '展开外挂工具',
     },
     menu: {
       label: '菜单',

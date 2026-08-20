@@ -591,6 +591,26 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
       right: 10px;
     }
   }
+
+  &.#{$namespace}-input--has-suffix.#{$namespace}-input--icon-clearable {
+    @include e(original) {
+      padding-right: 60px;
+    }
+
+    @include e(placeholder) {
+      &:not(.#{$namespace}-input__placeholder--float-active) {
+        right: 60px;
+      }
+    }
+
+    @include e(suffix) {
+      right: 10px;
+    }
+
+    @include e(clearable) {
+      right: 32px;
+    }
+  }
   @include m(has-count) {
     @include e(original) {
       padding-right: 80px;

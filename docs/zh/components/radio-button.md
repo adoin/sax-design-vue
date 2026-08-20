@@ -1,35 +1,7 @@
 ---
-PROPS:
-  - name: label
-    type: String | Number | Boolean
-    values: 选项值
-    description: 作为 Radio group 中的选项值。
-    default: '-'
-  - name: v-model
-    type: String | Number | Boolean
-    values: 单选值
-    description: 当前选中值。
-    default: null
-  - name: value
-    type: String | Number | Boolean
-    values: 单选值
-    description: 当前按钮值。
-    default: "''"
-  - name: disabled
-    type: Boolean
-    values: true / false
-    description: 禁用选择。
-    default: 'false'
-EVENTS:
-  - name: change
-    description: 选中按钮后触发。
-description: "按钮单选。"
+description: 'RadioButton 文档已合并到 Radio。'
 ---
 
-# 按钮单选
+# RadioButton（单选按钮）
 
-<card><template #example><radio-button-default /></template><template #template>
-
-@[code{1-2}](../../.vuepress/components/radio-button/default.vue)
-
-</template></card>
+Radio、RadioGroup 与 RadioButton 已统一到 [Radio（单选框）](./radio.html#基础、分组与按钮) 页面。RadioButton 推荐通过 `s-radio-group type="button"` 使用。

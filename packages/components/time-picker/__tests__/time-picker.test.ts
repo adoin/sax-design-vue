@@ -12,6 +12,7 @@ const InputStub = defineComponent({
     labelFloat: Boolean,
     color: String,
     size: String,
+    suffixIcon: String,
   },
   template: '<div class="input-stub" />',
 })
@@ -46,6 +47,7 @@ describe('TimePicker input presentation', () => {
       labelFloat: true,
       color: '#654321',
       size: 'small',
+      suffixIcon: 'cb:time',
     })
     expect(wrapper.get('.s-time-picker').attributes('style')).toContain(
       '--sax-color: 101, 67, 33',

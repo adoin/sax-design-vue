@@ -1,7 +1,11 @@
 import { buildProps, isBoolean, isNumber, isString } from '@vuesax-alpha/utils'
 
 import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import { useColorProp } from '@vuesax-alpha/hooks'
+import {
+  type SvgIconAnimation,
+  svgIconAnimationValues,
+  useColorProp,
+} from '@vuesax-alpha/hooks'
 import type { EmitFn } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type Radio from './radio.vue'
@@ -35,6 +39,11 @@ export const radioProps = buildProps({
   labelBefore: {
     type: Boolean,
     default: false,
+  },
+  iconAnimation: {
+    type: String as () => SvgIconAnimation,
+    values: svgIconAnimationValues,
+    default: 'auto',
   },
 })
 

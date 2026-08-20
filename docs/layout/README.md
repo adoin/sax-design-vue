@@ -51,7 +51,9 @@ To give a distance from the left we have the offset property that with the same 
 
 ## Flex Justify
 
-If we have to align the elements horizontally, use the `justify` directive that uses CSS attributes as parameters:` flex-start`, `center`,` flex-end`, `space-around`,` space-between`.
+Use `SRow`'s `justify` prop to align the whole group: `start`, `center`, `end`, `space-around`, `space-between`, or `space-evenly`.
+
+To place one `SCol` at the row start or end, use `justify-self="start | end"`. It uses logical auto margins, so the last column can be pushed to the far edge while remaining compatible with RTL layouts.
 
 <template #example>
 <grid-flex-justify />
@@ -59,7 +61,7 @@ If we have to align the elements horizontally, use the `justify` directive that 
 
 <template #template>
 
-@[code{1-27}](../.vuepress/components/grid/flex-justify.vue)
+@[code](../.vuepress/components/grid/flex-justify.vue)
 
 </template>
 

@@ -60,8 +60,6 @@ export const componentNamesZh: Record<string, string> = {
   Progress: '进度条',
   Prompt: '提示框',
   Pulldown: '下拉容器',
-  'Radio button': '单选按钮',
-  'Radio group': '单选组',
   Result: '结果',
   Segmented: '分段控制',
   Slider: '滑块',

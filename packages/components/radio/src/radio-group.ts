@@ -7,6 +7,7 @@ export interface RadioOption {
   label: string
   value: RadioValue
   disabled?: boolean
+  description?: string
 }
 
 export const radioGroupProps = buildProps({
@@ -22,6 +23,15 @@ export const radioGroupProps = buildProps({
     default: 'default',
   },
   name: { type: String, default: '' },
+  columns: { type: Number, default: 1 },
+  gap: {
+    type: definePropType<number | string>([Number, String]),
+    default: 8,
+  },
+  disabledValues: {
+    type: definePropType<RadioValue[]>(Array),
+    default: () => [],
+  },
 } as const)
 
 export const radioGroupEmits = {

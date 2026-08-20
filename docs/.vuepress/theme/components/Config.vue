@@ -1,25 +1,11 @@
 <template>
-  <div ref="$el" class="config">
-    <button class="config-btn">
-      <s-icon  name="bx:cog" />
-      <svg
-        class="config-curve"
-        xmlns="http://www.w3.org/2000/svg"
-        width="160"
-        height="160"
-        viewBox="0 0 160 160"
-      >
-        <path
-          id="Trazado_200"
-          data-name="Trazado 200"
-          d="M0-10,150,0l10,150S137.643,80.734,100.143,43.234,0-10,0-10Z"
-          transform="translate(0 10)"
-        />
-      </svg>
-
-      <ul class="options">
+  <div ref="$el" class="config" :class="{ 'is-attached': props.attached }">
+    <div class="config__tools">
+      <button class="config-btn">
+        <s-icon name="bx:cog" />
         <svg
-          class="effect1config"
+          v-if="!props.attached"
+          class="config-curve"
           xmlns="http://www.w3.org/2000/svg"
           width="160"
           height="160"
@@ -32,199 +18,189 @@
             transform="translate(0 10)"
           />
         </svg>
-        <li @click="reloadConfig">
-          <s-icon :title="t.shell.reloadConfig"  name="bx:rotate-left" />
-        </li>
-        <li @click="changeSidebar">
-          <s-icon
-            :title="t.shell.hideSidebar"
-            name="bx:left-indent"
-            class="hidden-sidebar-hidden"
-          />
-          <s-icon
-            :title="t.shell.openSidebar"
-            name="bx:right-indent"
-            class="visible-sidebar-hidden"
-          />
-        </li>
-        <li
-          :title="
-            !$vsTheme.sidebarCollapseOpen
-              ? t.shell.openSidebarItems
-              : t.shell.closeSidebarItems
-          "
-          :class="{ active: !$vsTheme.sidebarCollapseOpen }"
-          @click="changeMenu"
-        >
-          <s-icon v-if="$vsTheme.sidebarCollapseOpen"  name="bx:list-minus" />
-          <s-icon v-else  name="bx:list-plus" />
-        </li>
-        <li
-          :title="
-            !$vsTheme?.openCode ? t.shell.openAllCode : t.shell.closeAllCode
-          "
-          :class="{ active: $vsTheme?.openCode }"
-          @click="changeOpenCode"
-        >
-          <s-icon  name="bx:code-block" />
-        </li>
-        <li class="theme-color-layout" :title="t.shell.layoutColor">
-          <s-icon  name="bx:paint-roll" />
-          <input
-            type="color"
-            value="#2564ff"
-            @change="
-              changeColorLayout(($event.target as HTMLInputElement).value)
+
+        <ul class="options">
+          <svg
+            class="effect1config"
+            xmlns="http://www.w3.org/2000/svg"
+            width="160"
+            height="160"
+            viewBox="0 0 160 160"
+          >
+            <path
+              id="Trazado_200"
+              data-name="Trazado 200"
+              d="M0-10,150,0l10,150S137.643,80.734,100.143,43.234,0-10,0-10Z"
+              transform="translate(0 10)"
+            />
+          </svg>
+          <li @click="reloadConfig">
+            <s-icon :title="t.shell.reloadConfig" name="bx:rotate-left" />
+          </li>
+          <li @click="changeSidebar">
+            <s-icon
+              :title="t.shell.hideSidebar"
+              name="bx:left-indent"
+              class="hidden-sidebar-hidden"
+            />
+            <s-icon
+              :title="t.shell.openSidebar"
+              name="bx:right-indent"
+              class="visible-sidebar-hidden"
+            />
+          </li>
+          <li
+            :title="
+              !$vsTheme.sidebarCollapseOpen
+                ? t.shell.openSidebarItems
+                : t.shell.closeSidebarItems
             "
-          />
-        </li>
-        <li class="theme-color-primary" :title="t.shell.primaryColor">
-          <s-icon  name="bxs:color-fill" />
-          <input type="color" value="#2564ff" @change="changeColor" />
-        </li>
+            :class="{ active: !$vsTheme.sidebarCollapseOpen }"
+            @click="changeMenu"
+          >
+            <s-icon v-if="$vsTheme.sidebarCollapseOpen" name="bx:list-minus" />
+            <s-icon v-else name="bx:list-plus" />
+          </li>
+          <li
+            :title="
+              !$vsTheme?.openCode ? t.shell.openAllCode : t.shell.closeAllCode
+            "
+            :class="{ active: $vsTheme?.openCode }"
+            @click="changeOpenCode"
+          >
+            <s-icon name="bx:code-block" />
+          </li>
+          <li class="theme-color-layout" :title="t.shell.layoutColor">
+            <s-icon name="bx:paint-roll" />
+            <input
+              type="color"
+              value="#2564ff"
+              @change="
+                changeColorLayout(($event.target as HTMLInputElement).value)
+              "
+            />
+          </li>
+          <li class="theme-color-primary" :title="t.shell.primaryColor">
+            <s-icon name="bxs:color-fill" />
+            <input type="color" value="#2564ff" @change="changeColor" />
+          </li>
 
+          <svg
+            class="effect1config invert"
+            xmlns="http://www.w3.org/2000/svg"
+            width="160"
+            height="160"
+            viewBox="0 0 160 160"
+          >
+            <path
+              id="Trazado_200"
+              data-name="Trazado 200"
+              d="M0-10,150,0l10,150S137.643,80.734,100.143,43.234,0-10,0-10Z"
+              transform="translate(0 10)"
+            />
+          </svg>
+        </ul>
+      </button>
+
+      <router-link
+        class="btn-lang theme-translate"
+        :to="languageTarget.link"
+        :title="languageTarget.label"
+        :aria-label="languageTarget.label"
+      >
         <svg
-          class="effect1config invert"
+          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
-          width="160"
-          height="160"
-          viewBox="0 0 160 160"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
         >
+          <path d="M0 0h24v24H0z" fill="none" />
           <path
-            id="Trazado_200"
-            data-name="Trazado 200"
-            d="M0-10,150,0l10,150S137.643,80.734,100.143,43.234,0-10,0-10Z"
-            transform="translate(0 10)"
+            d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"
           />
         </svg>
-      </ul>
-    </button>
 
-    <button class="btn-lang theme-translate">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-      >
-        <path d="M0 0h24v24H0z" fill="none" />
-        <path
-          d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"
-        />
-      </svg>
-
-      <ul class="lang">
-        <li
-          v-for="(item, kKey) in lang[0]?.items"
-          v-show="item.link !== pageData.path"
-          :key="kKey"
-        >
-          <router-link :to="item.link">
-            {{ item.text }}
-          </router-link>
-        </li>
-      </ul>
-    </button>
-
-    <button
-      :class="{ active: $vsTheme.themeDarken }"
-      :title="!$vsTheme.themeDarken ? t.shell.switchDark : t.shell.switchLight"
-      class="li-darken switch-dark"
-      @click="changeTheme"
-    >
-      <div class="switch-con">
-        <span class="circle">
-          <s-icon v-if="$vsTheme.themeDarken"  name="bxs:sun" />
-          <s-icon v-else  name="bxs:moon" />
+        <span class="lang" aria-hidden="true">
+          <span class="lang__label">{{ languageTarget.text }}</span>
         </span>
-      </div>
-    </button>
+      </router-link>
+
+      <button
+        :class="{ active: $vsTheme.themeDarken }"
+        :title="
+          !$vsTheme.themeDarken ? t.shell.switchDark : t.shell.switchLight
+        "
+        class="li-darken switch-dark"
+        @click="changeTheme"
+      >
+        <div class="switch-con">
+          <span class="circle">
+            <s-icon v-if="$vsTheme.themeDarken" name="bxs:sun" />
+            <s-icon v-else name="bxs:moon" />
+          </span>
+        </div>
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, inject, onMounted, ref } from 'vue'
-import {
-  usePageData,
-  usePageLang,
-  useRouteLocale,
-  useSiteData,
-} from '@vuepress/client'
+import { useRouteLocale } from '@vuepress/client'
 // @ts-ignore
 import { useThemeData } from '@vuepress/plugin-theme-data/client'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { vsThemeKey } from '../type'
 import { isDark, toggleDark } from '../composables'
 import { useDocLocaleUi } from '../composables/docLocale'
 import type { vsThemeContext } from '../type'
 
 const router = useRouter()
+const route = useRoute()
+const props = defineProps<{ attached?: boolean }>()
 const themeData = useThemeData()
-const pageData = usePageData()
-const siteData = useSiteData()
-const pageLang = usePageLang()
 const siteLocale = useRouteLocale()
 const $vsTheme = inject<vsThemeContext>(vsThemeKey, {} as vsThemeContext)!
 const $el = ref<HTMLElement>()
 const { t } = useDocLocaleUi()
 
-const lang = computed(() => {
-  const locales = siteData.value.locales
-  if (locales && Object.keys(locales).length > 1) {
-    const currentLink = pageData.value.path
-    const routes = router.options.routes
+const languageTarget = computed(() => {
+  const currentPath = route.path
+  const isChinese =
+    siteLocale.value === '/zh/' || currentPath.startsWith('/zh/')
+  const localePath = isChinese ? '/' : '/zh/'
+  let link = isChinese
+    ? currentPath.replace(/^\/zh(?=\/|$)/, '') || '/'
+    : currentPath === '/'
+      ? '/zh/'
+      : `/zh${currentPath}`
 
-    const languageDropdown = {
-      text:
-        (themeData.value.locales?.[siteLocale.value] as any)
-          ?.selectLanguageText || 'Languages', // undefined
-      items: Object.keys(locales).map((path) => {
-        const locale = locales[path]
-        const text = (themeData.value.locales?.[path] as any)
-          ?.selectLanguageName
-        let link: string
-        // Stay on the current page
-        if (locale.lang === pageLang.value) {
-          link = currentLink
-        } else {
-          // Map current page to the alternate locale
-          if (path === '/') {
-            link = currentLink.startsWith('/zh/')
-              ? currentLink.replace(/^\/zh(?=\/|$)/, '') || '/'
-              : currentLink
-          } else if (path === '/zh/') {
-            link = currentLink.startsWith('/zh/')
-              ? currentLink
-              : currentLink === '/'
-                ? '/zh/'
-                : `/zh${currentLink}`
-          } else {
-            link = path
-          }
-          // fallback to locale homepage
-          if (!routes.some((route) => route.path === link)) {
-            link = path
-          }
-        }
-        return { text, link }
-      }),
-    }
-    // console.log(languageDropdown)
-    return [languageDropdown]
+  if (!router.options.routes.some((item) => item.path === link)) {
+    link = localePath
   }
-  return []
+
+  return {
+    link,
+    label: isChinese ? 'Switch to English' : '切换到简体中文',
+    text:
+      (themeData.value.locales?.[localePath] as any)?.selectLanguageName ||
+      (isChinese ? 'English' : '简体中文'),
+  }
+})
+
+const getThemeShellElements = () => ({
+  sidebar: document.querySelector<HTMLElement>(
+    '.docs-layout > .s-layout__content > .s-layout-aside, .theme-container > .sidebar',
+  ),
+  navbar: document.querySelector<HTMLElement>('.theme-container > .navbar'),
+  config: document.querySelector<HTMLElement>(
+    '.docs-layout__config, .theme-container > .config',
+  ),
 })
 
 const reloadConfig = () => {
-  const sidebar = document.querySelector(
-    '.theme-container > .sidebar',
-  ) as HTMLElement
-  const navbar = document.querySelector(
-    '.theme-container > .navbar',
-  ) as HTMLElement
-  const config = document.querySelector(
-    '.theme-container > .config',
-  ) as HTMLElement
+  const { sidebar, navbar, config } = getThemeShellElements()
   // const effect1 = document.querySelector(
   //   '.header-page > .effect1'
   // ) as HTMLElement
@@ -301,32 +277,24 @@ const changeColorLayout = (colorBase: string) => {
   document.body.classList.add('all-transition')
   $el.value!.focus()
 
-  const sidebar = document.querySelector(
-    '.theme-container > .sidebar',
-  )! as HTMLElement
-  const navbar = document.querySelector(
-    '.theme-container > .navbar',
-  )! as HTMLElement
-  const config = document.querySelector(
-    '.theme-container > .config',
-  )! as HTMLElement
+  const { sidebar, navbar, config } = getThemeShellElements()
   // const effect1 = document.querySelector(
   //   '.header-page > .effect1'
   // )! as HTMLElement
 
-  sidebar.style.setProperty(`--sax-theme-layout`, colour)
-  navbar.style.setProperty(`--sax-theme-layout`, colour)
-  navbar.style.setProperty(`--sax-theme-bg2`, colour)
-  config.style.setProperty(`--sax-theme-layout`, colour)
+  sidebar?.style.setProperty(`--sax-theme-layout`, colour)
+  navbar?.style.setProperty(`--sax-theme-layout`, colour)
+  navbar?.style.setProperty(`--sax-theme-bg2`, colour)
+  config?.style.setProperty(`--sax-theme-layout`, colour)
 
   if (contrastColor(colour)) {
-    sidebar.style.setProperty(`--sax-theme-color`, '44, 62, 80')
-    navbar.style.setProperty(`--sax-theme-color`, '44, 62, 80')
-    config.style.setProperty(`--sax-theme-color`, '44, 62, 80')
+    sidebar?.style.setProperty(`--sax-theme-color`, '44, 62, 80')
+    navbar?.style.setProperty(`--sax-theme-color`, '44, 62, 80')
+    config?.style.setProperty(`--sax-theme-color`, '44, 62, 80')
   } else {
-    sidebar.style.setProperty(`--sax-theme-color`, '0, 0, 0')
-    navbar.style.setProperty(`--sax-theme-color`, '0, 0, 0')
-    config.style.setProperty(`--sax-theme-color`, '0, 0, 0')
+    sidebar?.style.setProperty(`--sax-theme-color`, '0, 0, 0')
+    navbar?.style.setProperty(`--sax-theme-color`, '0, 0, 0')
+    config?.style.setProperty(`--sax-theme-color`, '0, 0, 0')
   }
 
   setTimeout(() => {
@@ -447,59 +415,68 @@ onMounted(() => {
 }
 .darken {
   .theme-translate {
-    .lang {
-      li {
-        a {
-          box-shadow: 0px 8px 25px 0px rgba(0, 0, 0, 0.6);
-        }
-      }
+    .lang__label {
+      box-shadow: 0px 8px 25px 0px rgba(0, 0, 0, 0.6);
     }
   }
 }
 .theme-translate {
   position: relative;
   z-index: 100;
-  &:hover {
+  display: flex;
+  width: 32px;
+  height: 45px;
+  flex: 0 0 32px;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: rgb(var(--sax-theme-color));
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(var(--sax-primary), 0.1);
+    color: rgb(var(--sax-primary));
+    outline: none;
+
     .lang {
       opacity: 1;
       visibility: visible;
-      transform: translate(0, -54px);
+      transform: translate(-50%, -54px);
     }
   }
+
   svg {
     width: 18px;
-    fill: rgb(var(--sax-theme-color));
+    fill: currentColor;
   }
+
   .lang {
-    transition: all 0.25s ease;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    transform: translate(0, -90%);
-    padding: 0px;
+    top: 0;
+    left: 50%;
     opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -90%);
+    transition:
+      opacity 0.2s ease,
+      transform 0.25s ease,
+      visibility 0.25s ease;
     visibility: hidden;
-    li {
-      text-align: center;
-      font-weight: bold;
-      padding: 0px 0px !important;
-      display: block;
-      a {
-        padding: 7px 15px;
-        font-weight: bold;
-        background: -color('theme-layout');
-        border-radius: 20px;
-        transition: all 0.25s ease;
-        margin-bottom: 10px;
-        font-size: 0.75rem;
-        display: block;
-        box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.08);
-        &:hover {
-          box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.08) !important;
-          transform: translate(0, 3px);
-        }
-      }
-    }
+  }
+
+  .lang__label {
+    display: block;
+    padding: 7px 15px;
+    border-radius: 20px;
+    background: -color('theme-layout');
+    box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.08);
+    font-size: 0.75rem;
+    font-weight: bold;
+    white-space: nowrap;
   }
 }
 .theme-color-layout {
@@ -626,8 +603,37 @@ onMounted(() => {
   }
 }
 
+.config__tools {
+  display: flex;
+  width: 120px;
+  flex: 0 0 120px;
+  align-items: center;
+}
+
 .dark .config {
   box-shadow: 8px 0 20px rgba(0, 0, 0, 0.22);
+}
+
+.config.is-attached {
+  position: relative;
+  inset: auto;
+  z-index: 1;
+  border-radius: inherit;
+  background: transparent;
+  box-shadow: none;
+  padding-right: 0;
+
+  button {
+    background: transparent !important;
+  }
+
+  .config__tools > button:last-child {
+    border-radius: 0;
+  }
+}
+
+.dark .config.is-attached {
+  box-shadow: none;
 }
 
 .config .config-btn:focus > i.bx,
@@ -674,6 +680,14 @@ onMounted(() => {
         left: 37px;
       }
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .config,
+  .config button,
+  .config i {
+    transition-duration: 0.01ms !important;
   }
 }
 </style>

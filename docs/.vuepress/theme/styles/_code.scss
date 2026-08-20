@@ -1,18 +1,21 @@
-@use 'sass:color';
 @use './config' as *;
 @use './mixin' as *;
 @use './syntax-tokens' as *;
 
 // Inline code only — do not style fenced code blocks here
 :not(pre) > code {
-  color: color.adjust(#b0b4be, $lightness: 0.2%);
-  padding: 0.25rem 0.5rem;
-  margin: 0;
-  font-size: 0.85em !important;
-  background-color: -color('theme-bg2');
-  border-radius: 3px;
-  color: -color('theme-color');
-  box-shadow: inset 0px 0px 20px 0px rgba(0, 0, 0, 0.04);
+  display: inline;
+  margin: 0 0.04em;
+  padding: 0.18rem 0.42rem;
+  border: 1px solid rgba(var(--sax-accent-color), 0.12);
+  border-radius: 6px;
+  background: rgba(var(--sax-accent-color), 0.08);
+  box-shadow: none;
+  color: rgba(var(--sax-theme-color), 0.88);
+  font-size: 0.84em !important;
+  font-weight: 550;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
 pre,

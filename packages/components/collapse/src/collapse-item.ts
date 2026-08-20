@@ -7,10 +7,6 @@ export const collapseItemProps = buildProps({
   open: Boolean,
   disabled: Boolean,
   notArrow: Boolean,
-  iconArrow: {
-    type: String,
-    default: 'cb:chevron-down',
-  },
 } as const)
 
 export type CollapseItemProps = ExtractPropTypes<typeof collapseItemProps>

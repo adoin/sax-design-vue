@@ -30,6 +30,6 @@ description: "Right-click context menu."
 
 <card><template #example><context-menu-default /></template><template #template>
 
-@[code{1-19}](../.vuepress/components/context-menu/default.vue)
+@[code{1-147}](../.vuepress/components/context-menu/default.vue)
 
 </template></card>

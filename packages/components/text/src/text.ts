@@ -1,4 +1,4 @@
-import { buildProps } from '@vuesax-alpha/utils'
+import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type Text from './text.vue'
 
@@ -10,6 +10,9 @@ export const textTypes = [
   'info',
 ] as const
 export type TextType = (typeof textTypes)[number]
+
+export type TextLineClamp = false | number
+export type TextTyping = boolean | number
 
 export const textProps = buildProps({
   content: {
@@ -24,8 +27,20 @@ export const textProps = buildProps({
     values: textTypes,
   },
   status: { type: String as PropType<TextType> },
-  ellipsis: Boolean,
-  lineClamp: Number,
+  lineClamp: {
+    type: definePropType<TextLineClamp>([Boolean, Number]),
+    default: false,
+    validator: (value: TextLineClamp) =>
+      value === false ||
+      (typeof value === 'number' && Number.isInteger(value) && value >= 1),
+  },
+  typing: {
+    type: definePropType<TextTyping>([Boolean, Number]),
+    default: false,
+    validator: (value: TextTyping) =>
+      typeof value === 'boolean' ||
+      (typeof value === 'number' && Number.isFinite(value) && value > 0),
+  },
   title: String,
 } as const)
 

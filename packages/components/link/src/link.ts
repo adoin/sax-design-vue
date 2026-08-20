@@ -11,6 +11,15 @@ export const linkTypes = [
 ] as const
 export type LinkType = (typeof linkTypes)[number]
 
+export const linkUnderlineEffects = [
+  'default',
+  'slide',
+  'center',
+  'double',
+  'highlight',
+] as const
+export type LinkUnderlineEffect = (typeof linkUnderlineEffects)[number]
+
 export const linkProps = buildProps({
   href: String,
   target: String,
@@ -23,6 +32,11 @@ export const linkProps = buildProps({
   underline: {
     type: Boolean,
     default: true,
+  },
+  underlineEffect: {
+    type: String as PropType<LinkUnderlineEffect>,
+    values: linkUnderlineEffects,
+    default: 'default',
   },
   disabled: Boolean,
 } as const)

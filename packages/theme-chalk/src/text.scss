@@ -7,7 +7,9 @@
   line-height: 1.6;
 
   @each $type in (primary, success, warning, danger, info) {
-    @include m($type) { color: getColor($type); }
+    @include m($type) {
+      color: getColor($type);
+    }
   }
 
   @include when(ellipsis) {
@@ -23,5 +25,33 @@
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
+  }
+
+  @include e(typing-caret) {
+    display: inline-block;
+    width: 0.08em;
+    height: 1em;
+    margin-inline-start: 0.08em;
+    background: currentColor;
+    vertical-align: -0.12em;
+    animation: s-text-typing-caret-blink 0.8s steps(1, end) infinite;
+  }
+}
+
+@keyframes s-text-typing-caret-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-text__typing-caret {
+    animation: none;
   }
 }

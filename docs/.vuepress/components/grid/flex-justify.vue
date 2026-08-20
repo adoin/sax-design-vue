@@ -1,23 +1,28 @@
 <template>
   <div class="grid">
-    <s-row>
-      <s-col v-for="i in 3" :key="i" :sm="2"> Default {{ i + 1 }} </s-col>
+    <s-row justify="start">
+      <s-col v-for="i in 3" :key="i" :sm="2"> Start / 靠左 {{ i }} </s-col>
     </s-row>
 
     <s-row justify="center">
-      <s-col v-for="i in 3" :key="i" :sm="2"> Center {{ i + 1 }} </s-col>
+      <s-col v-for="i in 3" :key="i" :sm="2"> Center {{ i }} </s-col>
     </s-row>
 
     <s-row justify="end">
-      <s-col v-for="i in 3" :key="i" :sm="2"> Flex-end {{ i + 1 }} </s-col>
+      <s-col v-for="i in 3" :key="i" :sm="2"> End / 靠右 {{ i }} </s-col>
+    </s-row>
+
+    <s-row>
+      <s-col :span="3">Left / 左侧列</s-col>
+      <s-col :span="3" justify-self="end">Right / 右侧列</s-col>
     </s-row>
 
     <s-row justify="space-around">
-      <s-col v-for="i in 3" :key="i" :sm="2"> Space-around {{ i + 1 }} </s-col>
+      <s-col v-for="i in 3" :key="i" :sm="2"> Space-around {{ i }} </s-col>
     </s-row>
 
     <s-row justify="space-between">
-      <s-col v-for="i in 3" :key="i" :sm="2"> Space-between {{ i + 1 }} </s-col>
+      <s-col v-for="i in 3" :key="i" :sm="2"> Space-between {{ i }} </s-col>
     </s-row>
   </div>
 </template>

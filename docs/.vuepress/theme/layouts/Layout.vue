@@ -72,16 +72,46 @@
 
       <NavbarLayout v-else-if="pageFrontmatter.navbar" />
 
-      <Page v-else :sidebar-items="sidebarItems">
-        <template #top>
-          <slot name="page-top" />
+      <s-layout
+        v-else
+        class="docs-layout"
+        aside-width="260px"
+        :gap="0"
+        :padding="0"
+        min-height="100dvh"
+        :responsive="false"
+      >
+        <template v-if="shouldShowSidebar" #aside>
+          <Sidebar class="docs-layout__sidebar" :sidebar="sidebarItems">
+            <template #top>
+              <slot name="sidebar-top" />
+            </template>
+            <template #bottom>
+              <slot name="sidebar-bottom" />
+            </template>
+          </Sidebar>
         </template>
-        <template #bottom>
-          <slot name="page-bottom" />
-        </template>
-      </Page>
 
-      <Sidebar :sidebar="sidebarItems">
+        <template v-if="shouldShowSidebar" #aside-outside>
+          <ClientOnly>
+            <Config attached class="docs-layout__config" />
+          </ClientOnly>
+        </template>
+
+        <Page :sidebar-items="sidebarItems">
+          <template #top>
+            <slot name="page-top" />
+          </template>
+          <template #bottom>
+            <slot name="page-bottom" />
+          </template>
+        </Page>
+      </s-layout>
+
+      <Sidebar
+        v-if="!isStandardPage && shouldShowSidebar"
+        :sidebar="sidebarItems"
+      >
         <template #top>
           <slot name="sidebar-top" />
         </template>
@@ -91,7 +121,7 @@
       </Sidebar>
 
       <ClientOnly>
-        <Config v-if="shouldShowSidebar" />
+        <Config v-if="!isStandardPage && shouldShowSidebar" />
       </ClientOnly>
     </div>
   </s-config-provider>
@@ -164,6 +194,15 @@ const shouldShowSidebar = computed(() => {
     frontmatter.layout !== 'Layout'
   )
 })
+
+const isStandardPage = computed(
+  () =>
+    !pageFrontmatter.value.home &&
+    !pageFrontmatter.value.docsHome &&
+    !pageFrontmatter.value.license &&
+    !pageFrontmatter.value.branding &&
+    !pageFrontmatter.value.navbar,
+)
 
 const sidebarItems = computed(() => {
   return resolveSidebarItems(pageData.value, themeData.value, routeLocale.value)
@@ -247,6 +286,125 @@ const onTouchEnd = (e: TouchEvent) => {
   .con-iframe {
     max-width: 1200px;
     width: 100%;
+  }
+}
+
+.docs-layout {
+  min-width: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.docs-layout > .s-layout__content {
+  gap: 0;
+}
+
+.docs-layout > .s-layout__content > .s-layout-aside {
+  --s-layout-aside-outside-surface: rgba(var(--sax-theme-layout), 0.9);
+
+  position: fixed;
+  z-index: 1100;
+  top: 57px;
+  bottom: 0;
+  left: 0;
+  width: 260px !important;
+  min-width: 260px;
+  padding: 0;
+  overflow: visible;
+  border-radius: 0;
+  background: rgba(var(--sax-theme-layout), 0.9);
+  box-shadow: 10px 0 28px rgba(30, 27, 75, 0.07);
+  backdrop-filter: blur(12px);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.docs-layout > .s-layout__content > .s-layout-aside > .s-layout-aside__content {
+  height: 100%;
+}
+
+.docs-layout > .s-layout__content > .s-layout-body {
+  width: calc(100% - 260px);
+  margin-left: 260px;
+  padding: 0;
+  overflow: visible;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.docs-layout .docs-layout__sidebar {
+  position: static;
+  width: 100%;
+  height: 100%;
+  padding: 0 5px 0 0;
+  overflow: hidden !important;
+  transform: none !important;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.docs-layout .docs-layout__sidebar > .content-sidebar {
+  height: 100%;
+  padding-bottom: 64px;
+}
+
+.docs-layout .page {
+  width: 100%;
+  margin-left: 0;
+}
+
+.header-notification ~ .navbar:not(.fixed) ~ .docs-layout {
+  .page {
+    margin-top: 97px;
+  }
+
+  > .s-layout__content > .s-layout-aside {
+    top: 97px;
+  }
+}
+
+.hidden-sidebar .docs-layout > .s-layout__content > .s-layout-aside {
+  transform: translateX(-100%) !important;
+}
+
+.hidden-sidebar .docs-layout > .s-layout__content > .s-layout-body {
+  width: 100%;
+  margin-left: 0;
+}
+
+.dark .docs-layout > .s-layout__content > .s-layout-aside {
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.24);
+}
+
+@media (max-width: 1080px) {
+  .docs-layout > .s-layout__content > .s-layout-aside {
+    top: 0;
+    width: 213px !important;
+    min-width: 213px;
+    padding-top: 20px;
+    transform: translateX(-100%);
+  }
+
+  .docs-layout > .s-layout__content > .s-layout-body {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .theme-container.sidebar-open
+    .docs-layout
+    > .s-layout__content
+    > .s-layout-aside {
+    transform: translateX(0);
+  }
+
+  .header-notification ~ .navbar:not(.fixed) ~ .docs-layout {
+    > .s-layout__content > .s-layout-aside {
+      top: 0;
+    }
   }
 }
 </style>

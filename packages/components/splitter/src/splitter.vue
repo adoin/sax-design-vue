@@ -1,93 +1,112 @@
 <template>
   <div
-    ref="rootRef"
     :class="[
       ns.b(),
-      ns.m(direction),
+      ns.em('group', direction),
       ns.is('dragging', dragging),
       ns.is('disabled', disabled),
     ]"
+    :style="splitterStyle"
   >
-    <div :class="ns.e('panel')" :style="firstPanelStyle">
-      <slot name="first" />
-    </div>
-    <button
-      :class="ns.e('handle')"
-      type="button"
-      :disabled="disabled"
-      :aria-label="t('vs.splitter.resize', { direction })"
-      @pointerdown="startDrag"
-    >
-      <span :class="ns.e('grip')"><i /><i /><i /></span>
-    </button>
-    <div :class="ns.e('panel')"><slot name="second" /></div>
+    <slot />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
-import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
-import { splitterEmits, splitterProps } from './splitter'
+import { computed, provide, ref, toRef, watch } from 'vue'
+import { useNamespace } from '@vuesax-alpha/hooks'
+import {
+  createSplitterGroupContext,
+  splitterGroupContextKey,
+} from './splitter-context'
+import {
+  normalizeSplitterGap,
+  normalizeSplitterGroup,
+  splitterEmits,
+  splitterProps,
+  updateSplitterPair,
+} from './splitter'
+
 import type { CSSProperties } from 'vue'
+import type { SplitterModelValue } from './splitter'
 
 defineOptions({ name: 'SSplitter' })
 
 const props = defineProps(splitterProps)
 const emit = defineEmits(splitterEmits)
 const ns = useNamespace('splitter')
-const { t } = useLocale()
-const rootRef = ref<HTMLElement>()
-const current = ref(50)
+const internalModel = ref<SplitterModelValue>(props.modelValue)
 const dragging = ref(false)
 
-const clamp = (value: number) => Math.min(Math.max(value, props.min), props.max)
-const firstPanelStyle = computed<CSSProperties>(() => ({
-  flex: `0 0 ${current.value}%`,
-}))
-
-const setCurrent = (value: number, emitChange = false) => {
-  const next = clamp(value)
-  if (next === current.value) return
-  current.value = next
-  emit('update:modelValue', next)
-  if (emitChange) emit('change', next)
-}
-
-const onPointerMove = (event: PointerEvent) => {
-  const root = rootRef.value
-  if (!dragging.value || !root) return
-  const rect = root.getBoundingClientRect()
-  const length = props.direction === 'horizontal' ? rect.width : rect.height
-  const offset =
-    props.direction === 'horizontal'
-      ? event.clientX - rect.left
-      : event.clientY - rect.top
-  if (length) setCurrent((offset / length) * 100)
-}
-
-const stopDrag = () => {
-  if (!dragging.value) return
-  dragging.value = false
-  emit('change', current.value)
-  window.removeEventListener('pointermove', onPointerMove)
-  window.removeEventListener('pointerup', stopDrag)
-}
-
-const startDrag = (event: PointerEvent) => {
-  if (props.disabled) return
-  event.preventDefault()
-  dragging.value = true
-  window.addEventListener('pointermove', onPointerMove)
-  window.addEventListener('pointerup', stopDrag, { once: true })
-}
-
-watch(
-  () => [props.modelValue, props.min, props.max],
-  () => {
-    current.value = clamp(props.modelValue)
+const direction = computed(() => internalModel.value.type)
+const splitterStyle = computed<CSSProperties>(() => {
+  const { rowGap, columnGap } = normalizeSplitterGap(props.gap)
+  return {
+    '--s-splitter-row-gap': rowGap,
+    '--s-splitter-column-gap': columnGap,
+  } as CSSProperties
+})
+const rootContext = {
+  model: computed(() => internalModel.value),
+  disabled: toRef(props, 'disabled'),
+  minSize: computed(() => Math.max(0, Math.min(props.minSize, 0.49))),
+  keyboardStep: computed(() =>
+    Math.max(
+      10 ** -Math.max(0, Math.min(Math.trunc(props.precision), 8)),
+      Math.min(props.keyboardStep ?? 0, 0.25),
+    ),
+  ),
+  precision: computed(() =>
+    Math.max(0, Math.min(Math.trunc(props.precision), 8)),
+  ),
+  dragging,
+  updatePair(
+    path: number[],
+    index: number,
+    first: number,
+    second: number,
+    restIndex: number,
+  ) {
+    internalModel.value = updateSplitterPair(
+      internalModel.value,
+      path,
+      index,
+      first,
+      second,
+      restIndex,
+    )
+    emit('update:modelValue', internalModel.value)
   },
-  { immediate: true },
+  normalizeGroup(path: number[], itemCount: number, restIndex: number) {
+    const next = normalizeSplitterGroup(
+      internalModel.value,
+      path,
+      itemCount,
+      restIndex,
+      Math.max(0, Math.min(Math.trunc(props.precision), 8)),
+    )
+    if (next === internalModel.value) return
+    internalModel.value = next
+    emit('update:modelValue', next)
+  },
+  commit() {
+    emit('change', internalModel.value)
+  },
+}
+
+const groupContext = createSplitterGroupContext(
+  rootContext,
+  computed(() => []),
+  computed(() => internalModel.value),
 )
 
-onBeforeUnmount(stopDrag)
+provide(splitterGroupContextKey, groupContext)
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    internalModel.value = value
+  },
+  { deep: true },
+)
 </script>

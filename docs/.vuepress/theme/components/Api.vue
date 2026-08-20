@@ -205,6 +205,8 @@ const issueLink = (name: string) =>
 @use '../styles/use' as *;
 
 .con-api {
+  width: 100%;
+  min-width: 0;
   max-width: 900px;
   margin: 0 auto;
   padding: 24px 20px 48px;
@@ -212,7 +214,14 @@ const issueLink = (name: string) =>
 
 .content-api {
   display: grid;
+  width: 100%;
+  min-width: 0;
   gap: 36px;
+}
+
+.content-table {
+  width: 100%;
+  min-width: 0;
 }
 
 .content-table h3 {
@@ -222,9 +231,18 @@ const issueLink = (name: string) =>
 }
 
 .api-table {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   overflow-x: auto;
   border-radius: 14px;
   background: rgb(var(--sax-theme-layout));
+}
+
+.api-table .s-table {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .api-table table {

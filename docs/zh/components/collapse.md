@@ -12,7 +12,7 @@ PROPS:
     type: String
     values: default, border, margin, shadow
     description: 视觉变体。
-    default: default
+    default: shadow
     link: null
     usage: '#type'
 
@@ -27,6 +27,15 @@ EVENTS:
   - name: change
     params: null
     description: 展开面板变化时触发。
+SLOTS:
+  - name: default / header
+    type: slot
+    values: '-'
+    description: 渲染面板内容或可交互标题。
+  - name: icon-arrow
+    type: scoped slot
+    values: open | disabled
+    description: 根据当前面板状态渲染自定义展开图标。
 EXPOSES: []
 description: "可展开/折叠的内容面板，多种视觉样式。"
 NEWS:
@@ -126,7 +135,7 @@ NEWS:
 ## 箭头图标
 
 
-为每个面板自定义展开箭头。
+通过 `icon-arrow` 插槽配合 `SIcon` 为每个面板自定义展开箭头。
 
 <template #example>
 <collapse-icon-arrow />
@@ -134,7 +143,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-8}](../../.vuepress/components/collapse/icon-arrow.vue)
+@[code](../../.vuepress/components/collapse/icon-arrow.vue)
 
 </template>
 

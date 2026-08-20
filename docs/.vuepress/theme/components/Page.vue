@@ -1,12 +1,12 @@
 <template>
-  <main ref="$page" class="page">
+  <div ref="$page" class="page">
     <header ref="$header" class="header-page">
       <router-link
         v-if="$route.path.indexOf('/') !== -1"
         class="back-link"
         to="/"
       >
-        <s-icon  name="bx:left-arrow-alt" />
+        <s-icon name="bx:left-arrow-alt" />
       </router-link>
 
       <div class="header__content">
@@ -23,14 +23,14 @@
           <ul ref="$titleul" class="interactive-links">
             <li :title="t.shell.share">
               <button>
-                <s-icon  name="bx:share-alt" />
+                <s-icon name="bx:share-alt" />
                 <ul class="options">
                   <li class="tw">
                     <a
                       target="_blank"
                       :href="`https://twitter.com/intent/tweet?url=https%3A%2F%2Fadoin.github.io%2Fsax-design-vue%2F&text=Sax+Design+Vue+${pageData.title}&hashtags=${pageData.title},vuejs,vuesax,sax-design-vue,frontend`"
                     >
-                      <s-icon  name="bxl:twitter" />
+                      <s-icon name="bxl:twitter" />
                     </a>
                   </li>
                   <li class="f">
@@ -38,7 +38,7 @@
                       target="_blank"
                       :href="`https://www.facebook.com/sharer.php?u=https%3A%2F%2Fadoin.github.io%2Fsax-design-vue%2F`"
                     >
-                      <s-icon  name="bxl:facebook-square" />
+                      <s-icon name="bxl:facebook-square" />
                     </a>
                   </li>
                   <li class="in">
@@ -46,7 +46,7 @@
                       target="_blank"
                       :href="`https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fadoin.github.io%2Fsax-design-vue%2F&title=Sax+Design+Vue&summary=Vue+3+component+library+based+on+Vuesax+3.x&source=SaxDesignVue`"
                     >
-                      <s-icon  name="bxl:linkedin-square" />
+                      <s-icon name="bxl:linkedin-square" />
                     </a>
                   </li>
                   <li class="redit">
@@ -81,17 +81,17 @@
                 target="_blank"
                 href="https://www.npmjs.com/package/sax-design-vue"
               >
-                <s-icon  name="bx:package" />
+                <s-icon name="bx:package" />
               </a>
             </li>
             <li :title="t.shell.viewGithub">
               <a target="_blank" href="https://github.com/adoin/sax-design-vue">
-                <s-icon  name="bx:code-alt" />
+                <s-icon name="bx:code-alt" />
               </a>
             </li>
             <li :title="t.shell.editPage">
               <a target="_blank" :href="editLink">
-                <s-icon  name="bx:edit" />
+                <s-icon name="bx:edit" />
               </a>
             </li>
             <li :title="t.shell.reportBug">
@@ -99,7 +99,7 @@
                 target="_blank"
                 :href="`https://github.com/adoin/sax-design-vue/issues/new?title=[${pageData.title}] - Your Bug Name&amp;body=**Steps to Reproduce**%0A1. Do something%0A2. Do something else.%0A3. Do one last thing.%0A%0A**Expected**%0AThe ${pageData.title} should do this%0A%0A**Result**%0AThe ${pageData.title} does not do this%0A%0A**Testcase**%0A(fork this to get started)%0Ahttp://jsfiddle.net/exmple-bug/1/`"
               >
-                <s-icon  name="bx:bug" />
+                <s-icon name="bx:bug" />
               </a>
             </li>
           </ul>
@@ -131,7 +131,7 @@
       <p class="inner">
         <span v-if="prev" class="prev">
           <router-link :to="prev.link">
-            <s-icon  name="bx:chevron-left" />
+            <s-icon name="bx:chevron-left" />
             <span>
               {{ prev.title || prev.link }}
             </span>
@@ -143,7 +143,7 @@
             <span>
               {{ next.title || next.link }}
             </span>
-            <s-icon  name="bx:chevron-right" />
+            <s-icon name="bx:chevron-right" />
           </router-link>
         </span>
       </p>
@@ -153,7 +153,7 @@
     <s-backtop :visibility-height="300" :right="20" :bottom="20" />
 
     <Footer />
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -539,10 +539,13 @@ onMounted(() => {
       transition: all 0.25s ease;
     }
     h1 {
-      font-size: 35px;
+      flex-shrink: 0;
+      font-size: 30px;
+      line-height: 1.15;
       margin: 0px;
       padding: 0;
       font-weight: 600;
+      white-space: nowrap;
     }
 
     .header-description {

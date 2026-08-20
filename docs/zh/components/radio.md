@@ -1,5 +1,5 @@
 ---
-description: "在一组关联选项中选择唯一值。"
+description: '在一组关联选项中选择唯一值。'
 PROPS:
   - name: v-model / model-value
     type: String | Number | Boolean
@@ -33,11 +33,20 @@ PROPS:
     usage: '#loading'
     code: null
 
-  - name: val
+  - name: icon-animation
     type: String
-    values: String
-    description: 单选输入绑定值。
-    default: null
+    values: auto, draw, pop, none
+    description: 设置自定义中心图标动画；描边 SVG 自动绘制，填充图标使用弹入动画。
+    default: auto
+    link: null
+    usage: '#icon'
+    code: null
+
+  - name: value
+    type: String | Number | Boolean
+    values: 单选项值
+    description: 当前单选项对应的值。
+    default: "''"
     link: null
     usage: '#default'
     code: null
@@ -54,8 +63,8 @@ SLOTS:
 
   - name: icon
     type: slot
-    values: null
-    description: 在单选框内添加图标。
+    values: checked
+    description: 替换选中态中心 SVG，并获取当前选中状态。
     default: null
     link: null
     usage: '#icon'
@@ -66,25 +75,19 @@ SLOTS:
 
 <card>
 
-## 默认
+## 基础、分组、页签与按钮
 
 <docs-warn />
 
-使用 `<s-radio />` 创建单选输入。
+`Radio` 是基础单选项；`RadioGroup` 管理一组唯一值；`RadioGroupTabs` 在多个页签中分别保留一项选择；设置 `type="button"` 后则使用无边框 `RadioButton` 分段样式。四种形态都沿用清晰的 `v-model` 数据流。
 
 <template #example>
-<radio-default />
+<radio-patterns />
 </template>
 
 <template #template>
 
-@[code{1-8}](../../.vuepress/components/radio/default.vue)
-
-</template>
-
-<template #script>
-
-@[code{10-14}](../../.vuepress/components/radio/default.vue)
+@[code](../../.vuepress/components/radio/patterns.vue)
 
 </template>
 
@@ -142,7 +145,7 @@ SLOTS:
 
 ## 加载 <Badge text="New"/>
 
-为组件添加加载动画；启用后单选框行为等同于 `disabled`。
+加载时复用 Button 的呼吸光轨：底部高光沿整个单选项由左向右移动；此时交互行为等同于 `disabled`。
 
 <template #example>
 <radio-loading />
@@ -150,13 +153,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-6} vue{3,4}](../../.vuepress/components/radio/loading.vue)
+@[code{7-12} vue{9,10}](../../.vuepress/components/radio/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{8-12}](../../.vuepress/components/radio/loading.vue)
+@[code{1-5}](../../.vuepress/components/radio/loading.vue)
 
 </template>
 
@@ -166,7 +169,7 @@ SLOTS:
 
 ## 图标 <Badge text="New"/>
 
-通过 `icon` 插槽在单选框内部添加图标。
+外圆和默认中心圆使用同一个 SVG 坐标系绘制，不依赖 input 或定位计算。通过 `icon` 插槽可替换选中态中心 SVG；插槽提供 `checked`。`icon-animation="auto"` 会自动识别描边 SVG 并播放路径绘制动画，填充图标则使用弹入动画，也可显式设置 `draw`、`pop` 或 `none`。
 
 <template #example>
 <radio-icons />
@@ -174,13 +177,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-46} vue{5-7}](../../.vuepress/components/radio/icons.vue)
+@[code{1-60} vue{3,5-20}](../../.vuepress/components/radio/icons.vue)
 
 </template>
 
 <template #script>
 
-@[code{48-52}](../../.vuepress/components/radio/icons.vue)
+@[code{62-66}](../../.vuepress/components/radio/icons.vue)
 
 </template>
 
@@ -189,5 +192,37 @@ SLOTS:
 <card>
 
 ## API
+
+### RadioGroup
+
+| 属性              | 类型                          | 默认值    | 说明                                                                 |
+| ----------------- | ----------------------------- | --------- | -------------------------------------------------------------------- |
+| `v-model`         | `string \| number \| boolean` | `''`      | 组内唯一选中值。                                                     |
+| `options`         | `RadioOption[]`               | `[]`      | 数据驱动选项。每项支持 `label`、`value`、`description`、`disabled`。 |
+| `type`            | `default \| button`           | `default` | 基础 Radio 或无边框 RadioButton 形态。                               |
+| `columns`         | `number`                      | `1`       | 普通数据分组的列数；小屏自动回落为单列。                             |
+| `gap`             | `number \| string`            | `8`       | 选项间距，数字按像素处理。                                           |
+| `disabled-values` | `RadioValue[]`                | `[]`      | 按值禁用指定选项。                                                   |
+| `disabled`        | `boolean`                     | `false`   | 禁用整个组。                                                         |
+| `name`            | `string`                      | 自动生成  | 原生 Radio 的共享名称，用于键盘方向键切换。                          |
+
+事件：`update:modelValue(value)`、`change(value)`。插槽：`option`、`empty`；不传 `options` 时，默认插槽中的 `Radio` 或 `RadioButton` 会自动接入组模型。
+
+### RadioGroupTabs
+
+| 属性         | 类型                         | 默认值       | 说明                                                             |
+| ------------ | ---------------------------- | ------------ | ---------------------------------------------------------------- |
+| `v-model`    | `Record<string, RadioValue>` | `{}`         | 按页签值保存每个面板的单选结果。                                 |
+| `tabs`       | `RadioGroupTab[]`            | `[]`         | 页签及其 `options`；页签支持 `disabled`、`columns`、禁用值配置。 |
+| `active-key` | `string \| number`           | 首个可用页签 | 当前面板；支持 `v-model:active-key`。                            |
+| `columns`    | `number`                     | `2`          | 页签未单独指定时的面板列数。                                     |
+| `gap`        | `number \| string`           | `12`         | 面板选项间距。                                                   |
+| `disabled`   | `boolean`                    | `false`      | 禁用整个页签分组。                                               |
+
+事件：`update:modelValue(value)`、`change(value, activeKey)`、`update:activeKey(key)`、`tabChange(key)`。插槽：`tab`、`option`、`empty`。页签支持方向键、`Home` 和 `End` 导航。
+
+### RadioButton
+
+`RadioButton` 推荐通过 `<s-radio-group type="button" />` 使用；直接组合时仍支持 `v-model`、`value`、`label`、`description`、`disabled` 与 `name`。选中态使用圆形单选标记、颜色、表面与阴影共同表达，不依赖边框。
 
 </card>

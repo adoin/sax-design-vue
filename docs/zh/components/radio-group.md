@@ -1,30 +1,7 @@
 ---
-PROPS:
-  - name: v-model
-    type: String | Number | Boolean
-    values: 单选值
-    description: 选中项值。
-    default: "''"
-  - name: options
-    type: Array
-    values: RadioOption[]
-    description: 声明式单选项。
-    default: '[]'
-  - name: type
-    type: String
-    values: default / button
-    description: 标准或按钮形态。
-    default: default
-EVENTS:
-  - name: change
-    description: 选择时触发。
-description: "单选组。"
+description: 'RadioGroup 文档已合并到 Radio。'
 ---
 
-# 单选组
+# RadioGroup（单选组）
 
-<card><template #example><radio-group-default /></template><template #template>
-
-@[code{1-2}](../../.vuepress/components/radio-group/default.vue)
-
-</template></card>
+Radio、RadioGroup 与 RadioButton 已统一到 [Radio（单选框）](./radio.html#基础、分组与按钮) 页面，以便在同一个示例中对比基础单选、数据分组和按钮分组。

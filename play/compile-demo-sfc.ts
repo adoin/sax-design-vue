@@ -28,17 +28,17 @@ function normalizeSource(source: string): string {
         .replace(/\(([^)]*)\)/g, (params) => params.replace(/:\s*[^,)]+/g, ''))
         .replace(
           /:\s*(?!true\b|false\b|null\b|undefined\b|'|"|`|\d)([A-Za-z_$][\w$[\].<>,\s|]*)/g,
-          ''
+          '',
         )
       return `<script${attrs}>${stripped}</script>`
-    }
+    },
   )
 
   return result
 }
 
 function hasErrors(
-  errors?: Array<{ message: string }>
+  errors?: Array<{ message: string }>,
 ): errors is Array<{ message: string }> {
   return Array.isArray(errors) && errors.length > 0
 }
@@ -66,11 +66,11 @@ function transformVueImports(code: string): string {
           }
         }
         return ''
-      }
+      },
     )
     .replace(
       /import\s+\*\s+as\s+(\w+)\s+from\s*['"]vue['"]\s*;?/g,
-      'const $1 = Vue'
+      'const $1 = Vue',
     )
     .replace(/import\s+(\w+)\s+from\s*['"]vue['"]\s*;?/g, 'const $1 = Vue')
 
@@ -81,7 +81,7 @@ function cssFromStyleResult(code: string): string {
   const trimmed = code.trim()
   if (trimmed.startsWith('export default')) {
     return new Function(
-      `${trimmed.replace(/^export default /, 'return ')}`
+      `${trimmed.replace(/^export default /, 'return ')}`,
     )() as string
   }
   return trimmed
@@ -101,16 +101,22 @@ function injectStyles(css: string, scopeKey: string) {
   styleEl.textContent = css
 }
 
-function executeCompiled(code: string): Component {
+type ScopedComponent = Component & { __scopeId?: string }
+
+function executeCompiled(code: string, scopeId?: string): Component {
   const fn = new Function('Vue', `${code}; return __sfc__`) as (
-    vue: typeof Vue
-  ) => Component
-  return fn(Vue)
+    vue: typeof Vue,
+  ) => ScopedComponent
+  const component = fn(Vue)
+
+  if (scopeId) component.__scopeId = `data-v-${scopeId}`
+
+  return component
 }
 
 export function compileDemoSfc(
   source: string,
-  scopeKey: string
+  scopeKey: string,
 ): CompileDemoResult {
   try {
     const normalized = normalizeSource(source)
@@ -124,6 +130,7 @@ export function compileDemoSfc(
     }
 
     const scopeId = `pe-${scopeKey.replace(/[^a-z0-9-]/gi, '-')}`
+    const hasScopedStyles = descriptor.styles.some((block) => block.scoped)
     let cssText = ''
 
     for (const block of descriptor.styles) {
@@ -169,14 +176,17 @@ export function compileDemoSfc(
 
     if (!descriptor.template) {
       const code = transformVueImports(rewriteDefault(scriptCode, '__sfc__'))
-      return { component: executeCompiled(code), error: null }
+      return {
+        component: executeCompiled(code, hasScopedStyles ? scopeId : undefined),
+        error: null,
+      }
     }
 
     const compiledTemplate = compileTemplate({
       source: descriptor.template.content,
       filename: 'Demo.vue',
       id: scopeId,
-      scoped: descriptor.styles.some((block) => block.scoped),
+      scoped: hasScopedStyles,
       slotted: descriptor.slotted,
       isProd: false,
       ssr: false,
@@ -198,11 +208,14 @@ export function compileDemoSfc(
     }
     code += `;\n${compiledTemplate.code.replace(
       /\nexport function render/g,
-      '\nfunction render'
+      '\nfunction render',
     )}\n__sfc__.render = render`
     code = transformVueImports(code)
 
-    return { component: executeCompiled(code), error: null }
+    return {
+      component: executeCompiled(code, hasScopedStyles ? scopeId : undefined),
+      error: null,
+    }
   } catch (error) {
     return {
       component: null,

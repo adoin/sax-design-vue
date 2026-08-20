@@ -1,4 +1,4 @@
-import { additionalComponentNavItemsZh } from './new-components.zh'
+import { zhComponentCategories } from './component-categories'
 import type { NavbarConfig } from '~/shared/client/nav'
 
 const zh = (path: string) => `/zh${path}`
@@ -27,39 +27,7 @@ export const zhNavbar: NavbarConfig = [
           { text: '图标', link: zh('/icons/') },
         ],
       },
-      {
-        text: '布局',
-        children: [{ text: '栅格', link: zh('/layout/') }],
-      },
-      {
-        text: '组件',
-        children: [
-          { text: 'Button', link: zh('/components/') },
-          { text: 'Alert', link: zh('/components/alert') },
-          { text: 'Loading', link: zh('/components/loading') },
-          { text: 'Input', link: zh('/components/input') },
-          { text: 'Checkbox', link: zh('/components/checkbox') },
-          { text: 'Switch', link: zh('/components/switch') },
-          { text: 'Select', link: zh('/components/select') },
-          { text: 'Avatar', link: zh('/components/avatar') },
-          { text: 'Notification', link: zh('/components/notification') },
-          { text: 'Radio', link: zh('/components/radio') },
-          { text: 'Tooltip', link: zh('/components/tooltip') },
-          { text: 'Dialog', link: zh('/components/dialog') },
-          { text: 'Pagination', link: zh('/components/pagination') },
-          { text: 'Table', link: zh('/components/table') },
-          { text: 'Navbar', link: zh('/components/navbar') },
-          { text: 'Sidebar', link: zh('/components/sidebar') },
-          { text: 'Card', link: zh('/components/card') },
-          { text: 'Time select', link: zh('/components/time-select') },
-          { text: 'Date picker', link: zh('/components/date-picker') },
-          { text: 'Time picker', link: zh('/components/time-picker') },
-          { text: 'Scrollbar', link: zh('/components/scrollbar') },
-          { text: 'Rate', link: zh('/components/rate') },
-          { text: 'Badge', link: zh('/components/badge') },
-          ...additionalComponentNavItemsZh,
-        ].sort((a, b) => a.text.localeCompare(b.text, 'zh-CN')),
-      },
+      ...zhComponentCategories,
     ],
   },
   {

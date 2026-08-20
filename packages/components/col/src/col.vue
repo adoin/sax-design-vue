@@ -1,9 +1,3 @@
-<template>
-  <div :class="colKls" :style="colStyle">
-    <slot />
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { computed, inject } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
@@ -41,13 +35,16 @@ const colKls = computed(() => {
         classes.push(
           prop !== 'span'
             ? ns.b(`${size}-${prop}-${sizeProp}`)
-            : ns.b(`${size}-${sizeProp}`)
+            : ns.b(`${size}-${sizeProp}`),
         )
       })
     }
   })
   if (gutter.value) {
     classes.push(ns.is('guttered'))
+  }
+  if (props.justifySelf) {
+    classes.push(ns.is(`justify-self-${props.justifySelf}`))
   }
   return [ns.b(), classes]
 })
@@ -60,3 +57,9 @@ const colStyle = computed(() => {
   return styles
 })
 </script>
+
+<template>
+  <div :class="colKls" :style="colStyle">
+    <slot />
+  </div>
+</template>

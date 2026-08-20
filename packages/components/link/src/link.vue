@@ -26,6 +26,9 @@ const classes = computed(() => [
   ns.b(),
   ns.m(props.status || props.type),
   ns.is('underline', props.underline),
+  props.underline && props.underlineEffect !== 'default'
+    ? ns.is(`underline-${props.underlineEffect}`, true)
+    : undefined,
   ns.is('disabled', props.disabled),
 ])
 

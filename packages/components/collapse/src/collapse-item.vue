@@ -4,13 +4,28 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
-    <header :class="ns.e('header')" @click="toggleContent">
+    <header
+      :class="ns.e('header')"
+      :tabindex="disabled ? -1 : 0"
+      role="button"
+      :aria-disabled="disabled"
+      :aria-expanded="isOpen"
+      @click="toggleContent"
+      @keydown.enter.prevent="toggleContent"
+      @keydown.space.prevent="toggleContent"
+    >
       <slot name="header" />
-      <span v-if="!notArrow" :class="ns.e('icon')">
-        <SIcon :name="props.iconArrow" />
+      <span
+        v-if="!notArrow"
+        :class="[ns.e('icon'), ns.is('default-arrow', !slots['icon-arrow'])]"
+        aria-hidden="true"
+      >
+        <slot name="icon-arrow" :open="isOpen" :disabled="disabled">
+          <SIcon name="cb:chevron-down" />
+        </slot>
       </span>
     </header>
-    <div ref="contentRef" :class="ns.e('content')" :style="contentStyle">
+    <div ref="content" :class="ns.e('content')" :style="contentStyle">
       <div :class="ns.e('body')">
         <slot />
       </div>
@@ -19,7 +34,15 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import {
+  computed,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  shallowRef,
+  useTemplateRef,
+  watch,
+} from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { collapseItemProps } from './collapse-item'
@@ -31,11 +54,17 @@ defineOptions({
 
 const props = defineProps(collapseItemProps)
 
+const slots = defineSlots<{
+  default(): unknown
+  header(): unknown
+  'icon-arrow'(props: { open: boolean; disabled: boolean }): unknown
+}>()
+
 const ns = useNamespace('collapse-item')
 const collapse = inject(collapseContextKey)!
 const itemId = Symbol('collapse-item')
-const contentRef = ref<HTMLElement>()
-const maxHeight = ref('0px')
+const contentRef = useTemplateRef<HTMLElement>('content')
+const maxHeight = shallowRef('0px')
 
 const isOpen = computed(() => collapse.isItemOpen(itemId))
 

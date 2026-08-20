@@ -29,16 +29,12 @@
         :disabled="disabled"
         :readonly="!editable || readonly"
         :clearable="clearable && !disabled"
-        icon-after
+        suffix-icon="cb:time"
         @update:model-value="handleInput"
         @clear="handleClear"
         @focus="(e) => $emit('focus', e)"
         @blur="(e) => $emit('blur', e)"
-      >
-        <template #icon>
-          <s-icon name="cb:time" size="18" />
-        </template>
-      </s-input>
+      />
     </div>
 
     <template #content>
@@ -72,7 +68,6 @@ import { computed, ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
 import SButton from '@vuesax-alpha/components/button'
-import SIcon from '@vuesax-alpha/components/icon'
 import SInput from '@vuesax-alpha/components/input'
 import SPopper from '@vuesax-alpha/components/popper'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'

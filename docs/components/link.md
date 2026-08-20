@@ -13,15 +13,20 @@ PROPS:
   - name: underline
     type: Boolean
     values: true | false
-    description: Shows underline on hover.
+    description: Shows an underline on hover or keyboard focus.
     default: true
-description: "Text link with semantic status."
+  - name: underline-effect
+    type: String
+    values: default | slide | center | double | highlight
+    description: Underline effect with slide, center-out, double-line, and highlight variants. All variants support wrapped text.
+    default: default
+description: 'Text link with semantic status.'
 ---
 
 # Link
 
 <card><template #example><link-default /></template><template #template>
 
-@[code{1-9}](../.vuepress/components/link/default.vue)
+@[code](../.vuepress/components/link/default.vue)
 
 </template></card>

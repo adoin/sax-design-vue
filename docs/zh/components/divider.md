@@ -1,5 +1,13 @@
 ---
 PROPS:
+  - name: direction
+    type: String
+    values: horizontal, vertical
+    description: 分割线方向；竖线用于行内内容之间。
+    default: horizontal
+    link: null
+    usage: '#vertical'
+
   - name: position
     type: String
     values: left, left-center, center, right-center, right
@@ -43,15 +51,16 @@ PROPS:
   - name: border-height
     type: String
     values: CSS size
-    description: 分割线边框宽度。
+    description: 线条粗细，水平与竖线模式均生效。
     default: 1px
     link: null
     usage: '#style'
 EVENTS: []
 EXPOSES: []
-description: "在文本或区块之间添加分割线，支持颜色、图标与多种布局。"
+description: '在文本或区块之间添加分割线，支持颜色、图标与多种布局。'
 NEWS:
   - default
+  - vertical
   - text
   - position
   - color
@@ -65,7 +74,6 @@ NEWS:
 <card>
 
 ## 默认
-
 
 使用 `s-divider` 在内容块之间添加水平分割线。
 
@@ -89,8 +97,25 @@ NEWS:
 
 <card>
 
-## 文本
+## 竖线
 
+设置 `direction="vertical"` 在同一行的文字、链接或操作之间添加竖向分隔。竖线高度随当前字号缩放；竖线模式不渲染文本或图标内容。
+
+<template #example>
+<divider-vertical />
+</template>
+
+<template #template>
+
+@[code](../../.vuepress/components/divider/vertical.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 文本
 
 在分割线内放置文本以标注区块分隔。
 
@@ -116,7 +141,6 @@ NEWS:
 
 ## 文本位置
 
-
 通过 `position` 控制文本对齐：left、left-center、center、right-center、right。
 
 <template #example>
@@ -140,7 +164,6 @@ NEWS:
 <card>
 
 ## 颜色
-
 
 使用 Sax Design 色板名、RGB 或 HEX 更改线条与标签颜色。
 
@@ -166,7 +189,6 @@ NEWS:
 
 ## 背景
 
-
 通过 `background` 高亮分割线文本背景。
 
 <template #example>
@@ -191,7 +213,6 @@ NEWS:
 
 ## 图标
 
-
 通过 `icon` 在分割线内使用 Material Icons。
 
 <template #example>
@@ -215,7 +236,6 @@ NEWS:
 <card>
 
 ## 样式
-
 
 使用 `border-style`（solid、dashed、dotted）切换线条样式。
 

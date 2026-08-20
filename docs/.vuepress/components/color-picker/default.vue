@@ -1,5 +1,10 @@
 <template>
-  <s-color-picker v-model="color" show-alpha :predefine="presets" />
+  <s-color-picker
+    v-model="color"
+    show-alpha
+    format="rgb"
+    :predefine="presets"
+  />
   <p class="value">Selected: {{ color }}</p>
 </template>
 
@@ -7,7 +12,13 @@
 import { ref } from 'vue'
 
 const color = ref('rgba(86, 103, 244, 0.88)')
-const presets = ['#5667f4', '#2aa7a1', '#e77a66', '#f0a657', '#272b48']
+const presets = [
+  { name: 'Sax blue', value: '#5667f4' },
+  { name: 'Ocean', value: 'rgba(42, 167, 161, 0.82)' },
+  { name: 'Coral', value: 'hsla(8, 72%, 65%, 0.9)' },
+  { name: 'Sunset', value: '#f0a657' },
+  { name: 'Ink', value: 'rgb(39, 43, 72)' },
+]
 </script>
 
 <style scoped>

@@ -4,6 +4,11 @@ import type { ExtractPropTypes } from 'vue'
 import type Divider from './divider.vue'
 
 export const dividerProps = buildProps({
+  direction: {
+    type: String,
+    values: ['horizontal', 'vertical'] as const,
+    default: 'horizontal',
+  },
   color: {
     type: String,
     default: 'rgba(0, 0, 0,.1)',

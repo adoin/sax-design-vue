@@ -38,6 +38,7 @@ import { SInput } from '@vuesax-alpha/components/input'
 import { SInputNumber } from '@vuesax-alpha/components/input-number'
 import { SLink } from '@vuesax-alpha/components/link'
 import {
+  SLayout,
   SLayoutAside,
   SLayoutBody,
   SLayoutContainer,
@@ -76,7 +77,7 @@ import {
 } from '@vuesax-alpha/components/sidebar'
 import { SSlider } from '@vuesax-alpha/components/slider'
 import { SSpacer } from '@vuesax-alpha/components/spacer'
-import { SSplitter } from '@vuesax-alpha/components/splitter'
+import { SSplitter, SSplitterItem } from '@vuesax-alpha/components/splitter'
 import { SSteps } from '@vuesax-alpha/components/steps'
 import { SSwitch } from '@vuesax-alpha/components/switch'
 import { STable, STd, STh, STr } from '@vuesax-alpha/components/table'
@@ -144,6 +145,7 @@ export default [
   SInput,
   SInputNumber,
   SLink,
+  SLayout,
   SLayoutContainer,
   SLayoutHeader,
   SLayoutAside,
@@ -184,6 +186,7 @@ export default [
   SSlider,
   SSpacer,
   SSplitter,
+  SSplitterItem,
   SSteps,
   STable,
   STd,
