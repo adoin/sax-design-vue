@@ -33,7 +33,7 @@ const handleSearch = (value: string) => {
 }
 
 .input-action-demo__status {
-  color: rgba(var(--sax-text), 0.62);
+  color: hsl(var(--sax-text) / 0.62);
   font-size: 0.78rem;
 }
 </style>

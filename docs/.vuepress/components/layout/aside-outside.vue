@@ -79,7 +79,7 @@ const selectTool = (tool: string) => {
 
 <style scoped>
 .aside-outside-demo {
-  color: rgb(var(--sax-theme-color));
+  color: hsl(var(--sax-theme-color));
   font-size: 12px;
 }
 
@@ -97,8 +97,8 @@ const selectTool = (tool: string) => {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: rgba(var(--sax-primary), 0.13);
-  color: rgb(var(--sax-primary));
+  background: hsl(var(--sax-primary) / 0.13);
+  color: hsl(var(--sax-primary));
   font-weight: 800;
 }
 
@@ -110,15 +110,15 @@ const selectTool = (tool: string) => {
 .aside-outside-demo__nav > a {
   padding: 9px 11px;
   border-radius: 10px;
-  color: rgba(var(--sax-theme-color), 0.64);
+  color: hsl(var(--sax-theme-color) / 0.64);
   font-weight: 600;
   text-decoration: none;
 }
 
 .aside-outside-demo__nav > a.is-active {
-  background: rgba(var(--sax-primary), 0.12);
-  color: rgb(var(--sax-primary));
-  box-shadow: 0 8px 18px -14px rgba(var(--sax-primary), 0.8);
+  background: hsl(var(--sax-primary) / 0.12);
+  color: hsl(var(--sax-primary));
+  box-shadow: 0 8px 18px -14px hsl(var(--sax-primary) / 0.8);
 }
 
 .aside-outside-demo__tools {
@@ -135,7 +135,7 @@ const selectTool = (tool: string) => {
   border: 0;
   border-radius: 11px;
   background: transparent;
-  color: rgba(var(--sax-theme-color), 0.62);
+  color: hsl(var(--sax-theme-color) / 0.62);
   cursor: pointer;
   transition:
     background-color 0.2s ease,
@@ -146,9 +146,9 @@ const selectTool = (tool: string) => {
 .aside-outside-demo__tools > button:hover,
 .aside-outside-demo__tools > button:focus-visible,
 .aside-outside-demo__tools > button.is-active {
-  background: rgba(var(--sax-primary), 0.12);
-  color: rgb(var(--sax-primary));
-  box-shadow: 0 7px 16px -13px rgba(var(--sax-primary), 0.9);
+  background: hsl(var(--sax-primary) / 0.12);
+  color: hsl(var(--sax-primary));
+  box-shadow: 0 7px 16px -13px hsl(var(--sax-primary) / 0.9);
   outline: none;
 }
 
@@ -161,7 +161,7 @@ const selectTool = (tool: string) => {
 }
 
 .aside-outside-demo__eyebrow {
-  color: rgb(var(--sax-primary));
+  color: hsl(var(--sax-primary));
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -179,7 +179,7 @@ const selectTool = (tool: string) => {
 
 .aside-outside-demo__main > p {
   max-width: 520px;
-  color: rgba(var(--sax-theme-color), 0.66);
+  color: hsl(var(--sax-theme-color) / 0.66);
   line-height: 1.65;
 }
 
@@ -195,8 +195,8 @@ const selectTool = (tool: string) => {
   gap: 2px;
   padding: 12px;
   border-radius: 13px;
-  background: rgba(var(--sax-primary), 0.06);
-  box-shadow: 0 12px 24px -22px rgba(var(--sax-primary), 0.8);
+  background: hsl(var(--sax-primary) / 0.06);
+  box-shadow: 0 12px 24px -22px hsl(var(--sax-primary) / 0.8);
 }
 
 .aside-outside-demo__cards strong {
@@ -204,7 +204,7 @@ const selectTool = (tool: string) => {
 }
 
 .aside-outside-demo__cards span {
-  color: rgba(var(--sax-theme-color), 0.58);
+  color: hsl(var(--sax-theme-color) / 0.58);
 }
 
 @media (max-width: 767px) {

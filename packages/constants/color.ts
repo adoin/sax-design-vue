@@ -1,4 +1,5 @@
 export const rgbRE = /^(rgb|rgba)/
+export const hslRE = /^(hsl|hsla)/
 export const rgbNumberRE =
   /^(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d),(0|255|25[0-4]|2[0-4]\d|1\d\d|0?\d?\d)$/
 export const leadingHashRE = /^(#)/
@@ -7,6 +8,8 @@ export const hexFullRE = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i
 
 export type RGB = `rgb(${number},${number},${number})`
 export type RGBA = `rgba(${number},${number},${number},${number})`
+export type HSL = `hsl(${string})`
+export type HSLA = `hsla(${string})`
 export type HEX = `#${string}`
 
 export const componentColors = [
@@ -55,4 +58,22 @@ export const vuesaxColors = [
 
 export type VuesaxColor = (typeof vuesaxColors)[number]
 
-export type Color = RGB | RGBA | HEX | VuesaxColor
+export type Color = RGB | RGBA | HSL | HSLA | HEX | VuesaxColor
+
+export type ThemeState = {
+  saturation?: number
+  lightness?: number
+}
+
+export type ThemeStateScale = {
+  hover?: ThemeState
+  active?: ThemeState
+  subtle?: ThemeState
+}
+
+export type ThemeConfig = {
+  primary?: Color
+  darkPrimary?: Color
+  states?: ThemeStateScale
+  darkStates?: ThemeStateScale
+}

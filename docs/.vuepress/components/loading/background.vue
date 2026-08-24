@@ -2,7 +2,7 @@
   <div class="center">
     <div :style="`background: ${color};`" class="con-input">
       <input v-model="color" type="color" />
-      <s-icon  name="bxs:color-fill" />
+      <s-icon name="bxs:color-fill" />
     </div>
     <s-button type="flat" :color="color" @click="openLoading">
       Open Loading
@@ -33,7 +33,7 @@ const openLoading = () => {
   @return unquote('var(--sax-' + var + ')');
 }
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--sax-#{$color}), #{$alpha})');
+  @return unquote('hsl(var(--sax-#{$color}) / #{$alpha})');
 }
 
 .con-input {

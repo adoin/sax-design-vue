@@ -21,12 +21,12 @@
   padding: 12px 20px 64px;
   overflow-y: auto;
   border-radius: 14px;
-  background: rgba(var(--sax-theme-bg2), 0.46);
-  color: rgba(var(--sax-text-color-secondary));
+  background: hsl(var(--sax-theme-bg2) / 0.46);
+  color: hsl(var(--sax-text-color-secondary));
 }
 
 .backtop-demo__end {
   margin-bottom: 0;
-  color: rgb(var(--sax-primary));
+  color: hsl(var(--sax-primary));
 }
 </style>

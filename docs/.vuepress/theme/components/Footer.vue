@@ -103,7 +103,7 @@ const links = computed(() => [
   justify-content: center;
   flex-direction: column;
   border-radius: 0;
-  border-top: 1px solid rgba(var(--sax-theme-color), 0.08);
+  border-top: 1px solid hsl(var(--sax-theme-color) / 0.08);
 
   .footer__uls {
     display: flex;
@@ -123,10 +123,10 @@ const links = computed(() => [
     justify-content: space-between;
     font-size: 0.85rem;
     padding: 20px 24px;
-    color: rgba(var(--sax-theme-color), 0.65);
+    color: hsl(var(--sax-theme-color) / 0.65);
 
     a {
-      color: rgb(var(--sax-accent-color));
+      color: hsl(var(--sax-accent-color));
       text-decoration: none;
       font-weight: 600;
 
@@ -146,7 +146,7 @@ const links = computed(() => [
       margin-bottom: 12px;
       font-size: 0.95rem;
       font-weight: 700;
-      color: rgb(var(--sax-theme-color));
+      color: hsl(var(--sax-theme-color));
     }
 
     li a,
@@ -162,7 +162,7 @@ const links = computed(() => [
 
       &:hover {
         opacity: 1;
-        color: rgb(var(--sax-accent-color));
+        color: hsl(var(--sax-accent-color));
       }
     }
   }

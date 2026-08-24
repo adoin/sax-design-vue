@@ -62,15 +62,15 @@ const items = computed(() => [
   background:
     radial-gradient(
       circle at 50% 0%,
-      rgba(var(--sax-primary), 0.13),
+      hsl(var(--sax-primary) / 0.13),
       transparent 58%
     ),
-    rgb(var(--sax-background));
-  color: rgb(var(--sax-text));
+    hsl(var(--sax-background));
+  color: hsl(var(--sax-text));
   cursor: context-menu;
   box-shadow:
-    0 14px 32px rgba(var(--sax-primary), 0.12),
-    0 7px 14px -12px rgba(var(--sax-text), 0.42) inset;
+    0 14px 32px hsl(var(--sax-primary) / 0.12),
+    0 7px 14px -12px hsl(var(--sax-text) / 0.42) inset;
   user-select: none;
   transition:
     background-color var(--sax-motion-duration-fast),
@@ -79,10 +79,10 @@ const items = computed(() => [
 }
 
 .context-menu-demo:hover {
-  background-color: rgb(var(--sax-background));
+  background-color: hsl(var(--sax-background));
   box-shadow:
-    0 18px 38px rgba(var(--sax-primary), 0.18),
-    0 8px 18px -13px rgba(var(--sax-primary), 0.48) inset;
+    0 18px 38px hsl(var(--sax-primary) / 0.18),
+    0 8px 18px -13px hsl(var(--sax-primary) / 0.48) inset;
   transform: translateY(-2px);
 }
 
@@ -93,11 +93,11 @@ const items = computed(() => [
   margin-bottom: 14px;
   padding: 6px 8px 6px 10px;
   border-radius: var(--sax-radius-pill);
-  background: rgba(var(--sax-primary), 0.1);
-  color: rgb(var(--sax-primary));
+  background: hsl(var(--sax-primary) / 0.1);
+  color: hsl(var(--sax-primary));
   font-size: 12px;
   font-weight: 600;
-  box-shadow: 0 6px 14px rgba(var(--sax-primary), 0.1);
+  box-shadow: 0 6px 14px hsl(var(--sax-primary) / 0.1);
 }
 
 .context-menu-demo__hint :deep(.s-icon) {
@@ -108,12 +108,12 @@ const items = computed(() => [
   padding: 2px 6px;
   border: 0;
   border-radius: var(--sax-radius-pill);
-  background: rgb(var(--sax-background));
-  color: rgba(var(--sax-text), 0.62);
+  background: hsl(var(--sax-background));
+  color: hsl(var(--sax-text) / 0.62);
   font-family: inherit;
   font-size: 10px;
   font-weight: 600;
-  box-shadow: 0 2px 7px rgba(var(--sax-text), 0.13);
+  box-shadow: 0 2px 7px hsl(var(--sax-text) / 0.13);
 }
 
 .context-menu-demo strong {
@@ -123,14 +123,14 @@ const items = computed(() => [
 
 .context-menu-demo small {
   margin-top: 5px;
-  color: rgba(var(--sax-text), 0.62);
+  color: hsl(var(--sax-text) / 0.62);
   font-size: 12px;
   line-height: 1.5;
 }
 
 .context-menu-demo__result {
   margin: 12px 0 0;
-  color: rgb(var(--sax-primary));
+  color: hsl(var(--sax-primary));
   font-size: 12px;
   font-weight: 600;
 }

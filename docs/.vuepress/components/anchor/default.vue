@@ -55,7 +55,7 @@ const items = computed(() =>
 
 .anchor-page-demo__label {
   margin: 0 0 8px 10px;
-  color: rgba(var(--sax-theme-color), 0.6);
+  color: hsl(var(--sax-theme-color) / 0.6);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.06em;

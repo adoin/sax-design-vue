@@ -4,17 +4,7 @@
 
 ## Default Colors
 
-Sax Design Vue maintains a consistent palette across the application so theme changes stay predictable.
-
-The main colors can be customized to match your product branding.
-
-Default colors:
-
-- primary
-- success
-- danger
-- warn
-- dark
+Sax Design Vue maintains primary, success, danger, warn, and dark semantic colors.
 
 <colors-default />
 
@@ -22,32 +12,36 @@ Default colors:
 
 <card>
 
-## Customize Theme Colors
+## HSL Theme Key
 
-Sax Design Vue uses native CSS variables, so you can read and override them at any time.
+Component colors are stored as HSL channels. Define `primary` once; hover, active, and subtle states keep its H value and change only S/L. Dark mode uses the same H with its own S/L scale.
 
-You can change the main colors through CSS or JavaScript.
-
-</card>
-
-<card>
-
-## Javascript
+Use `SConfigProvider` for application themes:
 
 <command>
 
-```ts
-import SaxDesignVue from 'sax-design-vue'
-
-app.use(SaxDesignVue, {
-  colors: {
-    primary: '#5b3cc4',
-    success: 'rgb(23, 201, 100)',
-    danger: 'rgb(242, 19, 93)',
-    warning: 'rgb(255, 130, 0)',
-    dark: 'rgb(36, 33, 69)',
+```vue
+<script setup lang="ts">
+const theme = {
+  primary: '#5b3cc4',
+  // Optional: a same-hue dark primary is derived when omitted.
+  darkPrimary: 'hsl(252 82% 72%)',
+  states: {
+    hover: { saturation: -2, lightness: -7 },
+    active: { saturation: -4, lightness: -12 },
   },
-})
+  darkStates: {
+    hover: { lightness: 7 },
+    active: { lightness: 12 },
+  },
+}
+</script>
+
+<template>
+  <s-config-provider :theme="theme">
+    <App />
+  </s-config-provider>
+</template>
 ```
 
 </command>
@@ -58,21 +52,18 @@ app.use(SaxDesignVue, {
 
 ## CSS
 
-You can change Sax Design Vue variables through CSS like any other custom property.
-
-::: warning HEX Format Numbers Only
-It is important that the colors are in HEX format and only the numerical value for example: `rgb (255,100,50)` is equivalent to `255,100,50`
-:::
+When using CSS directly, provide HSL channels without `hsl()`.
 
 <command>
 
 ```css
 :root {
-  --sax-primary: 91, 60, 196;
-  --sax-success: 23, 201, 100;
-  --sax-danger: 242, 19, 93;
-  --sax-warn: 254, 130, 0;
-  --sax-dark: 36, 33, 69;
+  --sax-theme-primary-h: 252deg;
+  --sax-theme-primary-s: 54%;
+  --sax-theme-primary-l: 50%;
+  --sax-theme-primary-dark-h: var(--sax-theme-primary-h);
+  --sax-theme-primary-dark-s: 82%;
+  --sax-theme-primary-dark-l: 72%;
 }
 ```
 
@@ -82,44 +73,25 @@ It is important that the colors are in HEX format and only the numerical value f
 
 <card>
 
-## setCssVar
+## Runtime Themes
 
-You can change the main colors at any point in your application on the client side with `setCssVar()`.
-
-::: warning
-You can only use this function when the document object is available. For example, it cannot be used in the Vue `created()` hook because the DOM is not rendered yet.
-:::
+`applyThemeConfig()` accepts the same object as `SConfigProvider` and returns a restore function.
 
 <command>
 
-```html
+```vue
 <script lang="ts" setup>
-  import { onMounted } from 'vue'
-  import { setCssVar } from 'sax-design-vue'
+import { onBeforeUnmount, onMounted } from 'vue'
+import { applyThemeConfig } from 'sax-design-vue'
 
-  onMounted(() => {
-    setCssVar('primary', '#000')
-  })
+let restoreTheme: (() => void) | undefined
+
+onMounted(() => {
+  restoreTheme = applyThemeConfig({ primary: '#5b3cc4' })
+})
+
+onBeforeUnmount(() => restoreTheme?.())
 </script>
-```
-
-</command>
-
-<command>
-
-```ts
-/**
- * @param propertyName The name of the property
- * @param value The value of the property
- * @param el The element to set the property. Default document.documentElement
- * @param namespace The namespace of the app. Default 'sax'
- */
-const setCssVar: (
-  propertyName: string,
-  value: string,
-  el?: HTMLElement,
-  namespace?: string
-) => void
 ```
 
 </command>

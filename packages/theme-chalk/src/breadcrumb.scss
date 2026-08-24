@@ -39,13 +39,13 @@
     }
 
     a {
-      color: rgba(0, 0, 0, 0.4);
+      color: hsl(0deg 0% 0% / 0.4);
       text-decoration: none;
       transition: color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 
       &:hover,
       &:focus {
-        color: rgba(0, 0, 0, 0.7);
+        color: hsl(0deg 0% 0% / 0.7);
       }
     }
   }
@@ -70,19 +70,19 @@
   }
 
   @include e(link) {
-    color: rgba(0, 0, 0, 0.4);
+    color: hsl(0deg 0% 0% / 0.4);
     text-decoration: none;
     transition: color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 
     &:hover,
     &:focus {
-      color: rgba(0, 0, 0, 0.7);
+      color: hsl(0deg 0% 0% / 0.7);
     }
   }
 
   @include e(separator) {
     padding: 0 0.5rem;
-    color: rgba(0, 0, 0, 0.4);
+    color: hsl(0deg 0% 0% / 0.4);
     user-select: none;
 
     .#{$namespace}-icon {
@@ -189,7 +189,7 @@
   // Official Vuesax 3.x slot typo class
   .s-breadcrum--separator {
     padding: 0 0.5rem;
-    color: rgba(0, 0, 0, 0.4);
+    color: hsl(0deg 0% 0% / 0.4);
     user-select: none;
 
   }

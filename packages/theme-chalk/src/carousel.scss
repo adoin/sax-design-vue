@@ -109,10 +109,10 @@
   background:
     radial-gradient(
       ellipse at 50% 84%,
-      rgba(var(--sax-primary), 0.2),
+      hsl(var(--sax-primary) / 0.2),
       transparent 46%
     ),
-    rgb(var(--sax-fill-color-light));
+    hsl(var(--sax-fill-color-light));
 }
 
 .s-carousel--effect-orbit .s-carousel__viewport::after {
@@ -124,7 +124,7 @@
   border-radius: var(--sax-radius-circle);
   background: radial-gradient(
     ellipse,
-    rgba(var(--sax-primary), 0.14),
+    hsl(var(--sax-primary) / 0.14),
     transparent 72%
   );
   z-index: 0;
@@ -149,10 +149,10 @@
   inset: 0;
   overflow: hidden;
   border-radius: var(--s-carousel-radius, var(--sax-radius-lg));
-  background: rgb(var(--sax-fill-color-light));
+  background: hsl(var(--sax-fill-color-light));
   box-shadow:
-    0 0 0 1px rgba(var(--sax-primary), 0.08),
-    0 24px 54px rgba(var(--sax-primary), 0.26);
+    0 0 0 1px hsl(var(--sax-primary) / 0.08),
+    0 24px 54px hsl(var(--sax-primary) / 0.26);
   contain: layout paint;
   isolation: isolate;
   will-change: transform, opacity;
@@ -189,7 +189,7 @@
   height: 30%;
   overflow: visible;
   backface-visibility: visible;
-  box-shadow: 0 16px 38px rgba(var(--sax-primary), 0.14);
+  box-shadow: 0 16px 38px hsl(var(--sax-primary) / 0.14);
   transform-style: preserve-3d;
   transition:
     transform var(--s-carousel-duration, 480ms)
@@ -213,9 +213,9 @@
   border: 0;
   background: transparent;
   box-shadow:
-    inset 0 14px 26px rgba(var(--sax-primary), 0.09),
-    inset 0 -16px 24px rgba(var(--sax-background), 0.38),
-    0 18px 36px rgba(var(--sax-primary), 0.09);
+    inset 0 14px 26px hsl(var(--sax-primary) / 0.09),
+    inset 0 -16px 24px hsl(var(--sax-background) / 0.38),
+    0 18px 36px hsl(var(--sax-primary) / 0.09);
 
   &::after {
     position: absolute;
@@ -226,7 +226,7 @@
     border-radius: var(--sax-radius-circle);
     background: radial-gradient(
       ellipse,
-      rgba(var(--sax-primary), 0.2),
+      hsl(var(--sax-primary) / 0.2),
       transparent 72%
     );
     filter: blur(6px);
@@ -236,8 +236,8 @@
 
 .s-carousel.is-layered.s-carousel--effect-orbit .s-carousel__item.is-active {
   box-shadow:
-    0 0 0 2px rgba(var(--sax-primary), 0.3),
-    0 18px 38px rgba(var(--sax-primary), 0.28);
+    0 0 0 2px hsl(var(--sax-primary) / 0.3),
+    0 18px 38px hsl(var(--sax-primary) / 0.28);
 }
 
 .s-carousel--effect-prism .s-carousel__viewport {
@@ -246,10 +246,10 @@
   background:
     radial-gradient(
       ellipse at 50% 78%,
-      rgba(var(--sax-primary), 0.18),
+      hsl(var(--sax-primary) / 0.18),
       transparent 44%
     ),
-    rgb(var(--sax-fill-color-light));
+    hsl(var(--sax-fill-color-light));
 }
 
 .s-carousel.is-layered.s-carousel--effect-prism .s-carousel__track {
@@ -263,15 +263,15 @@
   width: 54%;
   height: 72%;
   backface-visibility: visible;
-  box-shadow: 0 18px 42px rgba(var(--sax-primary), 0.14);
+  box-shadow: 0 18px 42px hsl(var(--sax-primary) / 0.14);
   transform-style: preserve-3d;
   will-change: transform, filter, opacity;
 }
 
 .s-carousel.is-layered.s-carousel--effect-prism .s-carousel__item.is-active {
   box-shadow:
-    0 0 0 1px rgba(var(--sax-primary), 0.2),
-    0 26px 58px rgba(var(--sax-primary), 0.26);
+    0 0 0 1px hsl(var(--sax-primary) / 0.2),
+    0 26px 58px hsl(var(--sax-primary) / 0.26);
 }
 
 .s-carousel.is-layered.s-carousel--vertical.s-carousel--effect-deck
@@ -330,7 +330,7 @@
   flex-direction: column;
   gap: 4px;
   padding: 34px 24px 20px;
-  background: linear-gradient(transparent, rgba(19, 24, 46, 0.76));
+  background: linear-gradient(transparent, hsl(228.889deg 41.538% 12.745% / 0.76));
   color: getColor(white);
   font-size: 13px;
 }
@@ -425,7 +425,7 @@
   border-radius: var(--sax-radius-pill);
   background: getColor(background, 0.62);
   color: getColor(text);
-  box-shadow: 0 2px 8px rgba(16, 24, 54, 0.12);
+  box-shadow: 0 2px 8px hsl(227.368deg 54.286% 13.725% / 0.12);
   cursor: pointer;
   pointer-events: auto;
   transition:

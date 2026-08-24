@@ -28,6 +28,6 @@
   justify-content: center;
   gap: 24px;
   min-height: 96px;
-  color: rgb(var(--sax-text));
+  color: hsl(var(--sax-text));
 }
 </style>

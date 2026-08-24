@@ -1,6 +1,41 @@
 ---
-description: "构建带有分组操作和响应式状态的顶层导航。"
+description: '构建带有分组操作和响应式状态的顶层导航。'
 PROPS:
+  - name: variant
+    type: String
+    values: surface, floating, transparent
+    description: 导航外壳的表面风格。
+    default: surface
+  - name: position
+    type: String
+    values: static, sticky, fixed
+    description: 导航栏的定位方式。
+    default: static
+  - name: size
+    type: String
+    values: compact, default, spacious
+    description: 导航栏高度与内部密度。
+    default: default
+  - name: blurred
+    type: Boolean
+    values: true, false
+    description: 使用背景模糊的玻璃效果。
+    default: false
+  - name: content-width
+    type: Number, String
+    values: CSS length
+    description: 内层内容的最大宽度。
+    default: 100%
+  - name: gap
+    type: Number, String
+    values: CSS length
+    description: 品牌、导航和操作区之间的间距。
+    default: 12
+  - name: collapse-at
+    type: Number
+    values: pixels
+    description: 启用 collapsed 属性的区域开始折叠时的容器宽度。
+    default: 560
   - name: fixed
     type: Boolean
     values: true, false
@@ -133,6 +168,21 @@ PROPS:
       <s-navbar target-scroll="#my-element">
         ...
       </s-navbar>
+  - name: item:disabled
+    type: Boolean
+    values: true, false
+    description: 禁用选中与导航行为。
+    default: false
+  - name: item:icon
+    type: String
+    values: icon name
+    description: 在文字前显示仓库图标。
+    default: null
+  - name: item:badge
+    type: String, Number
+    values: null
+    description: 在文字后显示紧凑状态。
+    default: null
   - name: item:active
     type: Boolean
     values: true, false
@@ -179,6 +229,21 @@ PROPS:
       </s-navbar-item>
 
 SLOTS:
+  - name: brand
+    type: slot
+    values: collapsed, scrolled
+    description: 品牌区域；优先于旧的 left 插槽。
+    default: null
+  - name: navigation
+    type: slot
+    values: collapsed, scrolled
+    description: 主导航区域；优先于默认插槽。
+    default: null
+  - name: actions
+    type: slot
+    values: collapsed, scrolled
+    description: 操作区域；优先于旧的 right 插槽。
+    default: null
   - name: default
     type: slot
     values: null
@@ -201,7 +266,7 @@ SLOTS:
     usage: '#default'
     code: >
       <template #left>
-        <img src="/logo2.png" alt="">
+        <img src="/sax-logo-mark.svg" alt="">
       </template>
   - name: right
     type: slot
@@ -221,11 +286,11 @@ SLOTS:
 
 <card>
 
-## 默认
+## 交互配置
 
 <docs-warn />
 
-使用 `s-navbar` 可快速创建菜单。组件提供 **left**、**center**（默认）、**right** 三个插槽决定元素位置，并包含 `s-navbar-item`、`s-navbar-group` 子组件。
+`s-navbar` 是可组合的顶部导航外壳。颜色、表面、尺寸、分组、滚动行为和细节样式都可以在同一个示例中实时调整。
 
 <template #example>
 <navbar-default />
@@ -233,195 +298,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-22}](../../.vuepress/components/navbar/default.vue)
-
-</template>
-
-<template #script>
-
-@[code{24-28}](../../.vuepress/components/navbar/default.vue)
-
-</template>
-
-<template #style>
-
-@[code{30-52}](../../.vuepress/components/navbar/default.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 颜色
-
-通过 `color` 或主题色设置组件颜色。
-
-需要将文本设为白色时，使用 `text-white` 属性。
-
-<template #example>
-<navbar-color />
-</template>
-
-<template #template>
-
-@[code{1-23}](../../.vuepress/components/navbar/color.vue)
-
-</template>
-
-<template #script>
-
-@[code{24-29}](../../.vuepress/components/navbar/color.vue)
-
-</template>
-
-<template #style>
-
-@[code{30-52}](../../.vuepress/components/navbar/color.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 滚动隐藏
-
-用户向下滚动时隐藏导航栏，向上滚动时显示。
-
-<template #example>
-<navbar-hide-scroll />
-</template>
-
-<template #template>
-
-@[code{1-35}](../../.vuepress/components/navbar/hide-scroll.vue)
-
-</template>
-
-<template #script>
-
-@[code{37-41}](../../.vuepress/components/navbar/hide-scroll.vue)
-
-</template>
-
-<template #style>
-
-@[code{43-65}](../../.vuepress/components/navbar/hide-scroll.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 分组
-
-通过 `s-navbar-group` 可在一个项目中添加元素列表，内部放入 `s-navbar-item` 组件。
-
-<template #example>
-<navbar-group />
-</template>
-
-<template #template>
-
-@[code{1-58}](../../.vuepress/components/navbar/group.vue)
-
-</template>
-
-<template #script>
-
-@[code{60-64}](../../.vuepress/components/navbar/group.vue)
-
-</template>
-
-<template #style>
-
-@[code{66-94}](../../.vuepress/components/navbar/group.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 滚动内边距
-
-为组件添加上下内边距，并在滚动时移除，形成平滑视觉效果。
-
-<template #example>
-<navbar-padding-scroll />
-</template>
-
-<template #template>
-
-@[code{1-35}](../../.vuepress/components/navbar/padding-scroll.vue)
-
-</template>
-
-<template #script>
-
-@[code{37-41}](../../.vuepress/components/navbar/padding-scroll.vue)
-
-</template>
-
-<template #style>
-
-@[code{43-65}](../../.vuepress/components/navbar/padding-scroll.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 方形
-
-移除 `border-radius`，使组件呈方形。
-
-<template #example>
-<navbar-square />
-</template>
-
-<template #template>
-
-@[code{1-30}](../../.vuepress/components/navbar/square.vue)
-
-</template>
-
-<template #script>
-
-@[code{32-36}](../../.vuepress/components/navbar/square.vue)
-
-</template>
-
-<template #style>
-
-@[code{38-60}](../../.vuepress/components/navbar/square.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 隐藏指示线
-
-移除组件的激活效果线。
-
-<template #example>
-<navbar-not-line />
-</template>
-
-<template #template>
-
-@[code{1-30}](../../.vuepress/components/navbar/not-line.vue)
-
-</template>
-
-<template #script>
-
-@[code{32-36}](../../.vuepress/components/navbar/not-line.vue)
+@[code](../../.vuepress/components/navbar/default.vue)
 
 </template>
 

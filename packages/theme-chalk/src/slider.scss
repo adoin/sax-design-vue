@@ -21,7 +21,7 @@
     position: absolute;
     inset: 0;
     border-radius: var(--sax-radius-pill);
-    background: rgba(0, 0, 0, 0.08);
+    background: hsl(0deg 0% 0% / 0.08);
   }
 
   @include e(fill) {
@@ -44,7 +44,7 @@
     border: 2px solid getColor('white');
     border-radius: var(--sax-radius-circle);
     background: var(--sax-slider-color, getColor('primary'));
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px hsl(0deg 0% 0% / 0.15);
     cursor: grab;
     transition: left var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 
@@ -60,7 +60,7 @@
     height: 10px;
     margin-top: -5px;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.2);
+    background: hsl(0deg 0% 0% / 0.2);
     pointer-events: none;
   }
 

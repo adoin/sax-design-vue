@@ -12,7 +12,7 @@
   @include e(overlay) {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: hsl(0deg 0% 0% / 0.4);
     transition: opacity 0.25s ease;
   }
 
@@ -22,9 +22,9 @@
     width: calc(100% - 20px);
     max-width: 400px;
     margin: 10px;
-    background: rgb(255, 255, 255);
+    background: hsl(0deg 0% 100%);
     border-radius: var(--sax-radius-sm);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 20px hsl(0deg 0% 0% / 0.1);
     overflow: hidden;
     animation: vs-prompt-rebound-in 0.3s ease;
     transition: transform 0.2s ease;
@@ -41,7 +41,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    background: rgb(248, 248, 248);
+    background: hsl(0deg 0% 97.255%);
     border-radius: var(--sax-radius-xs) var(--sax-radius-xs) 0 0;
   }
 
@@ -71,8 +71,8 @@
 
   @include e(close) {
     border: none;
-    background: rgb(255, 255, 255);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: hsl(0deg 0% 100%);
+    box-shadow: 0 2px 8px hsl(0deg 0% 0% / 0.1);
     border-radius: var(--sax-radius-circle);
     width: 32px;
     height: 32px;
@@ -87,7 +87,7 @@
   @include e(content) {
     padding: 10px;
     font-size: 0.875rem;
-    color: rgba(0, 0, 0, 0.7);
+    color: hsl(0deg 0% 0% / 0.7);
     line-height: 1.5;
   }
 

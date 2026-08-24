@@ -239,7 +239,7 @@
 }
 .s-calendar__event,
 .s-calendar__time-event {
-  --sax-calendar-event-color: rgb(var(--sax-primary));
+  --sax-calendar-event-color: hsl(var(--sax-primary));
   border: 0;
   background: color-mix(
     in srgb,
@@ -394,7 +394,7 @@
   background: getColor(primary, 0.045);
 }
 .s-calendar__overflow-event-main {
-  --sax-calendar-event-color: rgb(var(--sax-primary));
+  --sax-calendar-event-color: hsl(var(--sax-primary));
   display: grid;
   min-width: 0;
   gap: 2px;

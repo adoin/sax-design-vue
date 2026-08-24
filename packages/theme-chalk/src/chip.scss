@@ -3,8 +3,8 @@
 @use 'common/var' as *;
 
 @include b(chip) {
-  --sax-chip-surface: rgb(240, 240, 240);
-  --sax-chip-text: rgba(0, 0, 0, 0.7);
+  --sax-chip-surface: hsl(0deg 0% 94.118%);
+  --sax-chip-text: hsl(0deg 0% 0% / 0.7);
   --sax-chip-accent: currentColor;
   --sax-chip-arrow-tip: 0.875rem;
   position: relative;
@@ -184,8 +184,8 @@
     padding: 0;
     border: 0;
     border-radius: var(--sax-radius-circle);
-    background: rgba(0, 0, 0, 0.15);
-    color: rgb(255, 255, 255);
+    background: hsl(0deg 0% 0% / 0.15);
+    color: hsl(0deg 0% 100%);
     cursor: pointer;
     transition: all var(--sax-motion-duration) var(--sax-motion-easing-standard);
     flex-shrink: 0;
@@ -196,7 +196,7 @@
 
     .#{$namespace}-icon {
       font-size: 0.9rem;
-      color: rgb(255, 255, 255);
+      color: hsl(0deg 0% 100%);
     }
 
     &:hover {
@@ -211,7 +211,7 @@
     flex-shrink: 0;
 
     .#{$namespace}-avatar {
-      background: rgba(0, 0, 0, 0.15);
+      background: hsl(0deg 0% 0% / 0.15);
     }
 
     img {
@@ -224,7 +224,7 @@
 
   @include when(colored) {
     .#{$namespace}-avatar-content .#{$namespace}-avatar {
-      background: rgba(255, 255, 255, 0.2);
+      background: hsl(0deg 0% 100% / 0.2);
     }
   }
 
@@ -237,7 +237,7 @@
     @include m($type) {
       --sax-chip-surface: #{getColor($type)};
       --sax-chip-accent: #{getColor($type)};
-      --sax-chip-text: rgba(255, 255, 255, 0.94);
+      --sax-chip-text: hsl(0deg 0% 100% / 0.94);
 
       @include when(transparent) {
         --sax-chip-surface: #{getColor($type, 0.15)};

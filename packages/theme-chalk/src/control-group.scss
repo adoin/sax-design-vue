@@ -44,8 +44,8 @@
       width: 10px;
       background: radial-gradient(
         ellipse at center,
-        rgba(var(--sax-primary), 0.16) 0%,
-        rgba(var(--sax-primary), 0.06) 38%,
+        hsl(var(--sax-primary) / 0.16) 0%,
+        hsl(var(--sax-primary) / 0.06) 38%,
         transparent 72%
       );
       filter: blur(0.45px);

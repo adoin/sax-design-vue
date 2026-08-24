@@ -40,15 +40,15 @@ const getContainer = () => container.value || window
 .anchor-demo-container__scroll {
   height: 360px;
   overflow: auto;
-  border: 1px solid rgba(var(--sax-theme-color), 0.09);
+  border: 1px solid hsl(var(--sax-theme-color) / 0.09);
   border-radius: 12px;
-  background: rgba(var(--sax-theme-color), 0.025);
+  background: hsl(var(--sax-theme-color) / 0.025);
 }
 
 .anchor-demo-container section {
   min-height: 178px;
   padding: 20px;
-  border-bottom: 1px solid rgba(var(--sax-theme-color), 0.08);
+  border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.08);
 }
 
 .anchor-demo-container section:last-child {

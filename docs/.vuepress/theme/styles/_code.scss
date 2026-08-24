@@ -7,11 +7,11 @@
   display: inline;
   margin: 0 0.04em;
   padding: 0.18rem 0.42rem;
-  border: 1px solid rgba(var(--sax-accent-color), 0.12);
+  border: 1px solid hsl(var(--sax-accent-color) / 0.12);
   border-radius: 6px;
-  background: rgba(var(--sax-accent-color), 0.08);
+  background: hsl(var(--sax-accent-color) / 0.08);
   box-shadow: none;
-  color: rgba(var(--sax-theme-color), 0.88);
+  color: hsl(var(--sax-theme-color) / 0.88);
   font-size: 0.84em !important;
   font-weight: 550;
   line-height: 1.45;
@@ -23,7 +23,7 @@ pre[class*='language-'] {
   line-height: 1.4;
   padding: 1.25rem 1.5rem;
   margin: 0;
-  background-color: rgb(var(--sax-theme-code));
+  background-color: hsl(var(--sax-theme-code));
   border-radius: 14px;
   overflow: auto;
 }
@@ -42,7 +42,7 @@ pre[class*='language-'] code {
 div[class*='language-'] {
   position: relative;
   overflow: hidden;
-  background-color: rgb(var(--sax-theme-code));
+  background-color: hsl(var(--sax-theme-code));
   border-radius: 14px;
 
   @include syntax-tokens(true);

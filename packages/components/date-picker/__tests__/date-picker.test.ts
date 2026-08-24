@@ -53,11 +53,11 @@ describe('DatePicker input presentation', () => {
       suffixIcon: 'cb:calendar',
     })
     expect(wrapper.get('.s-date-picker').attributes('style')).toContain(
-      '--sax-color: 18, 52, 86',
+      '--sax-color: 210deg 65.385% 20.392%',
     )
     expect(wrapper.getComponent(PopperStub).props('popperStyle')).toMatchObject(
       {
-        '--sax-color': '18, 52, 86',
+        '--sax-color': '210deg 65.385% 20.392%',
       },
     )
   })

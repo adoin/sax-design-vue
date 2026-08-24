@@ -1,44 +1,106 @@
 @use 'mixins/mixins' as *;
-@use 'mixins/var' as *;
 @use 'common/var' as *;
 
 @include b(navbar-item) {
   position: relative;
-  padding: 10px 15px;
-  margin: 0px;
-  border: 0px;
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 13px;
+  margin: 0;
+  border: 0;
+  border-radius: getCssVar(radius-md);
   background: transparent;
-  font-size: 0.85rem;
-  opacity: 0.7;
-  transition: getCssVar(transition-ease), color 0s;
-  font-weight: bold;
   color: inherit;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  opacity: 0.66;
   cursor: pointer;
+  transition:
+    color var(--sax-motion-duration-fast, 180ms) ease,
+    background-color var(--sax-motion-duration-fast, 180ms) ease,
+    opacity var(--sax-motion-duration-fast, 180ms) ease,
+    transform var(--sax-motion-duration-fast, 180ms) ease;
 
   &::after {
     content: '';
     position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-    bottom: -3px;
-    max-width: 18px;
-    margin: auto;
-    width: 0;
-    height: 3px;
-    border-radius: var(--sax-radius);
-    background-color: black;
+    right: 13px;
+    bottom: 5px;
+    left: 13px;
+    height: 2px;
+    border-radius: 999px;
+    background: hsl(var(--sax-color));
+    opacity: 0;
+    transform: scaleX(0.25);
+    transition:
+      opacity var(--sax-motion-duration-fast, 180ms) ease,
+      transform var(--sax-motion-duration-normal, 250ms)
+        cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  &:hover:not(:disabled) {
+    background: hsl(var(--sax-color) / 0.09);
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid hsl(var(--sax-color) / 0.22);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
   }
 
   @include when(active) {
+    background: hsl(var(--sax-color) / 0.11);
+    color: hsl(var(--sax-color));
     opacity: 1;
 
     &::after {
-      transition: all 1s ease;
-      width: 100%;
+      opacity: 1;
+      transform: scaleX(1);
     }
   }
 
-  &:hover {
-    opacity: 1;
+  @include e(icon) {
+    display: inline-grid;
+    place-items: center;
+    font-size: 1rem;
   }
+
+  @include e(label) {
+    white-space: nowrap;
+  }
+
+  @include e(badge) {
+    display: inline-flex;
+    min-width: 18px;
+    height: 18px;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 5px;
+    border-radius: 999px;
+    background: hsl(var(--sax-color) / 0.14);
+    color: hsl(var(--sax-color));
+    font-size: 0.68rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    &::after {
+      transition: none;
+    }
+  }
+}
+
+.s-navbar.is-not-line .s-navbar-item::after {
+  display: none;
 }

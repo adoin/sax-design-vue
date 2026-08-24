@@ -12,7 +12,7 @@
         </s-input>
         <s-input v-model="input2" type="password" placeholder="Password">
           <template #icon>
-            <s-icon  name="bxs:lock" />
+            <s-icon name="bxs:lock" />
           </template>
         </s-input>
         <div class="flex">
@@ -41,7 +41,7 @@ const checkbox1 = ref(false)
 </script>
 <style lang="scss" scoped>
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--sax-#{$color}), #{$alpha})');
+  @return unquote('hsl(var(--sax-#{$color}) / #{$alpha})');
 }
 .not-margin {
   margin: 0px;

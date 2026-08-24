@@ -61,7 +61,7 @@ const items = [
 }
 .controls span {
   min-width: 52px;
-  color: rgb(var(--sax-text-color));
+  color: hsl(var(--sax-text-color));
   font-size: 12px;
   text-align: center;
 }

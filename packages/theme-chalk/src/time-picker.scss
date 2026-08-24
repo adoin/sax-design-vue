@@ -35,7 +35,7 @@
     height: min(280px, calc(100vh - 24px));
     background: getColor('background');
     border-radius: var(--sax-radius);
-    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, getCssVar(shadow-opacity));
+    box-shadow: 0 10px 30px -8px getColor(black, getCssVar(shadow-opacity));
     overflow: hidden;
     min-width: 240px;
     padding: 8px 12px 0;

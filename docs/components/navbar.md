@@ -1,6 +1,41 @@
 ---
-description: "Build top-level navigation with grouped actions and responsive states."
+description: 'Build top-level navigation with grouped actions and responsive states.'
 PROPS:
+  - name: variant
+    type: String
+    values: surface, floating, transparent
+    description: Surface treatment of the navigation shell.
+    default: surface
+  - name: position
+    type: String
+    values: static, sticky, fixed
+    description: Positioning strategy for the navigation shell.
+    default: static
+  - name: size
+    type: String
+    values: compact, default, spacious
+    description: Navigation height and internal density.
+    default: default
+  - name: blurred
+    type: Boolean
+    values: true, false
+    description: Use a blurred glass surface.
+    default: false
+  - name: content-width
+    type: Number, String
+    values: CSS length
+    description: Maximum width of the inner content.
+    default: 100%
+  - name: gap
+    type: Number, String
+    values: CSS length
+    description: Gap between brand, navigation, and action regions.
+    default: 12
+  - name: collapse-at
+    type: Number
+    values: pixels
+    description: Container width where opted-in collapsed regions are hidden.
+    default: 560
   - name: fixed
     type: Boolean
     values: true, false
@@ -133,6 +168,21 @@ PROPS:
       <s-navbar target-scroll="#my-element">
         ...
       </s-navbar>
+  - name: item:disabled
+    type: Boolean
+    values: true, false
+    description: Disable selection and navigation.
+    default: false
+  - name: item:icon
+    type: String
+    values: icon name
+    description: Render a repository icon before the label.
+    default: null
+  - name: item:badge
+    type: String, Number
+    values: null
+    description: Render compact status after the label.
+    default: null
   - name: item:active
     type: Boolean
     values: true, false
@@ -179,6 +229,21 @@ PROPS:
       </s-navbar-item>
 
 SLOTS:
+  - name: brand
+    type: slot
+    values: collapsed, scrolled
+    description: Brand region; takes priority over the legacy left slot.
+    default: null
+  - name: navigation
+    type: slot
+    values: collapsed, scrolled
+    description: Primary navigation region; takes priority over the default slot.
+    default: null
+  - name: actions
+    type: slot
+    values: collapsed, scrolled
+    description: Action region; takes priority over the legacy right slot.
+    default: null
   - name: default
     type: slot
     values: null
@@ -201,7 +266,7 @@ SLOTS:
     usage: '#default'
     code: >
       <template #left>
-        <img src="/logo2.png" alt="">
+        <img src="/sax-logo-mark.svg" alt="">
       </template>
   - name: right
     type: slot
@@ -221,11 +286,11 @@ SLOTS:
 
 <card>
 
-## Default
+## Interactive playground
 
 <docs-warn />
 
-Quickly generate a menu with the `navbar` component, as such the component is divided into 3 slots (**left**, **center** (default), **right**) with which you can determine the location of the elements, as sub components we have `navbar-item` and `navbar-group`
+`s-navbar` is a composable top-navigation shell. Color, surface, size, groups, scroll behavior, and detail treatments can all be adjusted in this single example.
 
 <template #example>
 <navbar-default />
@@ -233,195 +298,7 @@ Quickly generate a menu with the `navbar` component, as such the component is di
 
 <template #template>
 
-@[code{1-22}](../.vuepress/components/navbar/default.vue)
-
-</template>
-
-<template #script>
-
-@[code{24-28}](../.vuepress/components/navbar/default.vue)
-
-</template>
-
-<template #style>
-
-@[code{30-52}](../.vuepress/components/navbar/default.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Color
-
-Change the component's color with the `color` property or by directly adding one of the main Sax Design colors
-
-if you want to change the text color to white you can do it with the property `text-white`
-
-<template #example>
-<navbar-color />
-</template>
-
-<template #template>
-
-@[code{1-23}](../.vuepress/components/navbar/color.vue)
-
-</template>
-
-<template #script>
-
-@[code{24-29}](../.vuepress/components/navbar/color.vue)
-
-</template>
-
-<template #style>
-
-@[code{30-52}](../.vuepress/components/navbar/color.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Hide scroll
-
-Add functionality to hide navbar when user scroll down and show when upload
-
-<template #example>
-<navbar-hide-scroll />
-</template>
-
-<template #template>
-
-@[code{1-35}](../.vuepress/components/navbar/hide-scroll.vue)
-
-</template>
-
-<template #script>
-
-@[code{37-41}](../.vuepress/components/navbar/hide-scroll.vue)
-
-</template>
-
-<template #style>
-
-@[code{43-65}](../.vuepress/components/navbar/hide-scroll.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Group
-
-You can add a list of elements within an item with the `s-navbar-group` component and within it add the `s-navbar-item` components
-
-<template #example>
-<navbar-group />
-</template>
-
-<template #template>
-
-@[code{1-58}](../.vuepress/components/navbar/group.vue)
-
-</template>
-
-<template #script>
-
-@[code{60-64}](../.vuepress/components/navbar/group.vue)
-
-</template>
-
-<template #style>
-
-@[code{66-94}](../.vuepress/components/navbar/group.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Padding Scroll
-
-Add the functionality that the component has a padding up and down that when it is lowered the scroll is eliminated giving a pleasant effect
-
-<template #example>
-<navbar-padding-scroll />
-</template>
-
-<template #template>
-
-@[code{1-35}](../.vuepress/components/navbar/padding-scroll.vue)
-
-</template>
-
-<template #script>
-
-@[code{37-41}](../.vuepress/components/navbar/padding-scroll.vue)
-
-</template>
-
-<template #style>
-
-@[code{43-65}](../.vuepress/components/navbar/padding-scroll.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Square
-
-Remove the border-radius property by making the component square
-
-<template #example>
-<navbar-square />
-</template>
-
-<template #template>
-
-@[code{1-30}](../.vuepress/components/navbar/square.vue)
-
-</template>
-
-<template #script>
-
-@[code{32-36}](../.vuepress/components/navbar/square.vue)
-
-</template>
-
-<template #style>
-
-@[code{38-60}](../.vuepress/components/navbar/square.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Not line
-
-Eliminates the active effect line of the component
-
-<template #example>
-<navbar-not-line />
-</template>
-
-<template #template>
-
-@[code{1-30}](../.vuepress/components/navbar/not-line.vue)
-
-</template>
-
-<template #script>
-
-@[code{32-36}](../.vuepress/components/navbar/not-line.vue)
+@[code](../.vuepress/components/navbar/default.vue)
 
 </template>
 

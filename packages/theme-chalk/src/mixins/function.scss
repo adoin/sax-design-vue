@@ -93,10 +93,10 @@
   @if $color == 'inherit' {
     @return $color;
   } @else {
-    @return #{rgba($color, $alpha)};
+    @return string.unquote('hsl(#{$color} / #{$alpha})');
   }
 }
 
-@function hex2rgb($color) {
-  @return #{color.channel($color, 'red', $space: rgb), color.channel($color, 'green', $space: rgb), color.channel($color, 'blue', $space: rgb)};
+@function hex2hsl($color) {
+  @return #{color.channel($color, 'hue', $space: hsl) color.channel($color, 'saturation', $space: hsl) color.channel($color, 'lightness', $space: hsl)};
 }

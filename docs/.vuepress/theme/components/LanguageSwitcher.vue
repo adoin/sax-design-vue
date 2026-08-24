@@ -79,16 +79,19 @@ const alternates = computed<Alternate[]>(() => {
   border-radius: 10px;
   font-size: 0.82rem;
   font-weight: 600;
-  color: rgba(var(--sax-theme-color), 0.72);
+  color: hsl(var(--sax-theme-color) / 0.72);
   text-decoration: none;
-  border: 1px solid rgba(var(--sax-accent-color), 0.18);
-  background: rgba(var(--sax-theme-layout), 0.65);
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  border: 1px solid hsl(var(--sax-accent-color) / 0.18);
+  background: hsl(var(--sax-theme-layout) / 0.65);
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
 
   &:hover {
-    color: rgb(var(--sax-accent-color));
-    border-color: rgba(var(--sax-accent-color), 0.35);
-    background: rgba(var(--sax-accent-color), 0.08);
+    color: hsl(var(--sax-accent-color));
+    border-color: hsl(var(--sax-accent-color) / 0.35);
+    background: hsl(var(--sax-accent-color) / 0.08);
   }
 }
 </style>

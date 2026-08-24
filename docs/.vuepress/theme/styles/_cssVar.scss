@@ -1,22 +1,22 @@
 :root {
-  --sax-primary: 99, 102, 241;
-  --sax-theme-bg: 245, 243, 255;
-  --sax-theme-color: 30, 27, 75;
-  --sax-theme-layout: 255, 255, 255;
-  --sax-sidebar-surface: 254, 254, 255;
-  --sax-theme-bg2: 237, 233, 254;
-  --sax-theme-code: 30, 27, 75;
-  --sax-theme-code2: 49, 46, 129;
+  --sax-primary: 238.732deg 83.529% 66.667%;
+  --sax-theme-bg: 250deg 100% 97.647%;
+  --sax-theme-color: 243.75deg 47.059% 20%;
+  --sax-theme-layout: 0deg 0% 100%;
+  --sax-sidebar-surface: 240deg 100% 99.804%;
+  --sax-theme-bg2: 251.429deg 91.304% 95.49%;
+  --sax-theme-code: 243.75deg 47.059% 20%;
+  --sax-theme-code2: 242.169deg 47.429% 34.314%;
 
-  --sax-border-color: 221, 214, 254;
-  --sax-accent-color: 99, 102, 241;
-  --sax-accent-secondary: 168, 85, 247;
-  --sax-text-color: 100, 95, 163;
-  --sax-code-bg-color: 30, 27, 75;
-  --sax-arrow-bg-color: 199, 190, 255;
-  --sax-badge-tip-color: 16, 185, 129;
-  --sax-bg-color: 245, 243, 255;
-  --sax-layout-color: 255, 255, 255;
+  --sax-border-color: 250.5deg 95.238% 91.765%;
+  --sax-accent-color: 238.732deg 83.529% 66.667%;
+  --sax-accent-secondary: 270.741deg 91.011% 65.098%;
+  --sax-text-color: 244.412deg 26.984% 50.588%;
+  --sax-code-bg-color: 243.75deg 47.059% 20%;
+  --sax-arrow-bg-color: 248.308deg 100% 87.255%;
+  --sax-badge-tip-color: 160.118deg 84.08% 39.412%;
+  --sax-bg-color: 250deg 100% 97.647%;
+  --sax-layout-color: 0deg 0% 100%;
 
   --sax-navbar-height: 3.75rem;
   --sax-sidebar-width: 19rem;
@@ -34,15 +34,15 @@
 }
 
 .dark {
-  --sax-theme-bg: 12, 10, 28;
-  --sax-theme-color: 237, 233, 254;
-  --sax-theme-layout: 24, 20, 48;
-  --sax-sidebar-surface: 23, 19, 46;
-  --sax-theme-bg2: 30, 27, 75;
-  --sax-theme-code: 15, 12, 36;
-  --sax-theme-code2: 30, 27, 75;
-  --sax-border-color: 67, 56, 150;
-  --sax-text-color: 165, 160, 210;
-  --sax-accent-color: 129, 140, 248;
-  --sax-accent-secondary: 192, 132, 252;
+  --sax-theme-bg: 220deg 15% 7.843%;
+  --sax-theme-color: 220deg 27.273% 95.686%;
+  --sax-theme-layout: 222.857deg 13.208% 10.392%;
+  --sax-sidebar-surface: 222.857deg 14.286% 9.608%;
+  --sax-theme-bg2: 220deg 13.433% 13.137%;
+  --sax-theme-code: 220deg 16.667% 7.059%;
+  --sax-theme-code2: 220deg 13.846% 12.745%;
+  --sax-border-color: 222.857deg 11.475% 23.922%;
+  --sax-text-color: 218.824deg 9.942% 66.471%;
+  --sax-accent-color: 234.454deg 89.474% 73.922%;
+  --sax-accent-secondary: 255.135deg 91.736% 76.275%;
 }

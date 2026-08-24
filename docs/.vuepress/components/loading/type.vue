@@ -68,7 +68,7 @@ onMounted(() => {
   @return unquote('var(--sax-' + var + ')');
 }
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--sax-#{$color}), #{$alpha})');
+  @return unquote('hsl(var(--sax-#{$color}) / #{$alpha})');
 }
 .center {
   flex-wrap: wrap;

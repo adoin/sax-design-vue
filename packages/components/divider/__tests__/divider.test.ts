@@ -40,6 +40,7 @@ describe('Divider', () => {
     const borderStyle = wrapper.find('.s-divider__border').attributes('style')
     expect(borderStyle).toContain('border-inline-start-width: 2px')
     expect(borderStyle).toContain('border-inline-start-style: dashed')
+    // CSSOM serializes the internally generated HSL color to RGB.
     expect(borderStyle).toContain('border-inline-start-color: rgb(36, 92, 255)')
   })
 })

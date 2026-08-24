@@ -6,7 +6,7 @@
     :aria-label="isDark ? t.shell.switchLight : t.shell.switchDark"
     @click="onToggle"
   >
-    <s-icon :name="isDark ? 'bxs:sun' : 'bxs:moon'"  />
+    <s-icon :name="isDark ? 'bxs:sun' : 'bxs:moon'" />
   </button>
 </template>
 
@@ -41,16 +41,16 @@ watch(isDark, syncTheme)
   width: 36px;
   height: 36px;
   margin-right: 8px;
-  border: 1px solid rgba(var(--sax-theme-color), 0.12);
+  border: 1px solid hsl(var(--sax-theme-color) / 0.12);
   border-radius: 10px;
-  background: rgba(var(--sax-theme-layout), 0.8);
-  color: rgb(var(--sax-theme-color));
+  background: hsl(var(--sax-theme-layout) / 0.8);
+  color: hsl(var(--sax-theme-color));
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: rgba(var(--sax-accent-color), 0.35);
-    color: rgb(var(--sax-accent-color));
+    border-color: hsl(var(--sax-accent-color) / 0.35);
+    color: hsl(var(--sax-accent-color));
   }
 
   i {

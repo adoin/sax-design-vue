@@ -16,14 +16,14 @@
     height: 200px;
     border-radius: var(--sax-radius-md);
     overflow: hidden;
-    background: rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    background: hsl(0deg 0% 0% / 0.04);
+    border: 1px solid hsl(0deg 0% 0% / 0.08);
+    box-shadow: 0 4px 15px hsl(0deg 0% 0% / 0.08);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 8px 20px hsl(0deg 0% 0% / 0.12);
     }
 
     @include when(error) {
@@ -61,7 +61,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.45);
+    background: hsl(0deg 0% 0% / 0.45);
     color: #fff;
     cursor: pointer;
   }
@@ -71,7 +71,7 @@
     left: 0;
     bottom: 0;
     width: 100%;
-    background: rgba(25, 91, 255, 0.35);
+    background: hsl(var(--sax-primary) / 0.35);
     transition: height 0.2s ease;
   }
 
@@ -79,7 +79,7 @@
     position: relative;
     min-width: 200px;
     min-height: 200px;
-    border: 1px dashed rgba(0, 0, 0, 0.15);
+    border: 1px dashed hsl(0deg 0% 0% / 0.15);
     border-radius: var(--sax-radius-sm);
     display: flex;
     align-items: center;
@@ -101,7 +101,7 @@
 
   @include e(text) {
     font-size: 0.85rem;
-    color: rgba(0, 0, 0, 0.55);
+    color: hsl(0deg 0% 0% / 0.55);
     pointer-events: none;
   }
 
@@ -137,7 +137,7 @@
 
   @include e(tip) {
     margin-top: 8px;
-    color: rgba(0, 0, 0, 0.5);
+    color: hsl(0deg 0% 0% / 0.5);
     font-size: 0.75rem;
     line-height: 1.5;
   }

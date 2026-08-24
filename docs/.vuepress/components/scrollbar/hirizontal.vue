@@ -22,7 +22,7 @@
   margin: 10px;
   text-align: center;
   border-radius: 12px;
-  background: rgba(var(--sax-danger), 0.2);
-  color: rgba(var(--sax-danger));
+  background: hsl(var(--sax-danger) / 0.2);
+  color: hsl(var(--sax-danger));
 }
 </style>

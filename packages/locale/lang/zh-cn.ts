@@ -186,6 +186,24 @@ export default {
     splitter: {
       resize: '调整{direction}面板大小',
     },
+    steps: {
+      label: '步骤',
+      status: {
+        wait: '等待中',
+        process: '进行中',
+        finish: '已完成',
+        success: '成功',
+        error: '需要处理',
+        loading: '加载中',
+        disabled: '不可用',
+      },
+    },
+    tabs: {
+      label: '标签页',
+      more: '更多标签页',
+      add: '添加标签页',
+      close: '关闭{label}',
+    },
     rate: {
       label: '评分',
     },

@@ -45,9 +45,9 @@
   @include when(disabled) { opacity: 0.55; cursor: not-allowed; }
 
   &[style*='--sax-tag-color'] {
-    border-color: rgb(var(--sax-tag-color) / 0.24);
-    background: rgb(var(--sax-tag-color) / 0.1);
-    color: rgb(var(--sax-tag-color));
+    border-color: hsl(var(--sax-tag-color) / 0.24);
+    background: hsl(var(--sax-tag-color) / 0.1);
+    color: hsl(var(--sax-tag-color));
   }
 
   @include e(close) {

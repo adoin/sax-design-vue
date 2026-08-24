@@ -1,14 +1,25 @@
 <template>
   <button
     :class="[ns.b(), ns.is('active', active || isActive)]"
-    @click="handleClickItem($router)"
+    type="button"
+    :disabled="disabled"
+    :aria-current="active || isActive ? 'page' : undefined"
+    @click="handleClickItem"
   >
-    <slot>{{ link?.text }}</slot>
+    <span v-if="icon || $slots.icon" :class="ns.e('icon')" aria-hidden="true">
+      <slot name="icon">
+        <s-icon :name="icon" />
+      </slot>
+    </span>
+    <span :class="ns.e('label')"
+      ><slot>{{ link?.text }}</slot></span
+    >
+    <span v-if="badge !== undefined" :class="ns.e('badge')">{{ badge }}</span>
   </button>
 </template>
 
 <script lang="ts" setup>
-import { inject, onBeforeUnmount } from 'vue'
+import { getCurrentInstance, inject, onBeforeUnmount } from 'vue'
 import { throwError } from '@vuesax-alpha/utils'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import {
@@ -36,12 +47,16 @@ const { unregister, onClick, isActive } = navbarRegister(props.id)
 const navbarGroup = navbarGroupRegister?.(props.id)
 
 const ns = useNamespace('navbar-item')
+const router = getCurrentInstance()?.appContext.config.globalProperties
+  .$router as Router | undefined
 
-const handleClickItem = (router: Router) => {
+const handleClickItem = () => {
+  if (props.disabled) return
+
   onClick()
 
   if (props.to) {
-    router.push(props.to)
+    router?.push(props.to)
   } else {
     if (props.link) {
       window.open(props.link.path, props.link.target)

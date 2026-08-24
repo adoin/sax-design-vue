@@ -98,7 +98,7 @@ const matchLastLevel = (query: string, path: CascaderOption[]) =>
 }
 
 .search-example__hint {
-  color: rgba(var(--sax-text), 0.58);
+  color: hsl(var(--sax-text) / 0.58);
   font-size: 0.7rem;
   line-height: 1.4;
 }

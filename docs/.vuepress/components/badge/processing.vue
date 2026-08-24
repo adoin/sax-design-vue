@@ -56,16 +56,16 @@ const labels = computed(() =>
   gap: 16px;
   padding: 18px 20px;
   border-radius: var(--sax-radius-lg);
-  background: rgba(var(--sax-theme-color), 0.035);
+  background: hsl(var(--sax-theme-color) / 0.035);
 }
 
 .processing-demo__group.is-processing {
-  background: rgba(var(--sax-primary), 0.055);
-  box-shadow: 0 10px 28px rgba(var(--sax-primary), 0.1);
+  background: hsl(var(--sax-primary) / 0.055);
+  box-shadow: 0 10px 28px hsl(var(--sax-primary) / 0.1);
 }
 
 .processing-demo__label {
-  color: rgba(var(--sax-theme-color), 0.66);
+  color: hsl(var(--sax-theme-color) / 0.66);
   font-size: 12px;
   font-weight: 700;
 }
@@ -82,8 +82,8 @@ const labels = computed(() =>
   align-items: center;
   padding: 0 12px;
   border-radius: var(--sax-radius-md);
-  background: rgba(var(--sax-theme-color), 0.06);
-  color: rgba(var(--sax-theme-color), 0.78);
+  background: hsl(var(--sax-theme-color) / 0.06);
+  color: hsl(var(--sax-theme-color) / 0.78);
   font-size: 13px;
 }
 </style>

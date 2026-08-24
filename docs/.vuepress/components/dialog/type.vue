@@ -10,9 +10,9 @@
 
       <div class="con-content">
         <p>
-          Sax Design is a relatively new framework with a refreshing design and in
-          the latest trends, Sax Design based on vuejs which means that we go hand
-          in hand with one of the most popular javascript frameworks in the
+          Sax Design is a relatively new framework with a refreshing design and
+          in the latest trends, Sax Design based on vuejs which means that we go
+          hand in hand with one of the most popular javascript frameworks in the
           world and with a huge community with which you will have all the help
           and documentation to create and make your project
         </p>
@@ -31,9 +31,9 @@
 
       <div class="con-content">
         <p>
-          Sax Design is a relatively new framework with a refreshing design and in
-          the latest trends, Sax Design based on vuejs which means that we go hand
-          in hand with one of the most popular javascript frameworks in the
+          Sax Design is a relatively new framework with a refreshing design and
+          in the latest trends, Sax Design based on vuejs which means that we go
+          hand in hand with one of the most popular javascript frameworks in the
           world and with a huge community with which you will have all the help
           and documentation to create and make your project
         </p>
@@ -79,7 +79,7 @@ const input1 = ref('')
 
 <style lang="scss" scoped>
 @function -color($color, $alpha: 1) {
-  @return unquote('rgba(var(--sax-#{$color}), #{$alpha})');
+  @return unquote('hsl(var(--sax-#{$color}) / #{$alpha})');
 }
 .not-margin {
   margin: 0px;

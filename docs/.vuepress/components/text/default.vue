@@ -52,7 +52,7 @@
   width: fit-content;
   padding: 2px 7px;
   border-radius: var(--sax-radius-xs);
-  background: rgb(var(--sax-fill-color-light));
+  background: hsl(var(--sax-fill-color-light));
   color: var(--sax-text-color-secondary);
   font-family: var(--vp-font-family-mono);
   font-size: 11px;

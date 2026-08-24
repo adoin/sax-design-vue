@@ -13,7 +13,7 @@
   margin: 10px;
   text-align: center;
   border-radius: 12px;
-  background: rgba(var(--sax-primary), 0.1);
-  color: rgba(var(--sax-primary));
+  background: hsl(var(--sax-primary) / 0.1);
+  color: hsl(var(--sax-primary));
 }
 </style>

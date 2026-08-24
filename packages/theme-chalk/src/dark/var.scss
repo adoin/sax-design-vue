@@ -68,9 +68,9 @@ $colors: map.deep-merge(
 $bg-color: () !default;
 $bg-color: map.merge(
   (
-    '': #141414,
-    'page': #0a0a0a,
-    'overlay': #1d1e1f,
+    '': #17191e,
+    'page': #111317,
+    'overlay': #202329,
   ),
   $bg-color
 );
@@ -86,7 +86,7 @@ $bg-color: map.merge(
 }
 
 // border
-$border-color-base: #f5f8ff;
+$border-color-base: #f5f7fa;
 $border-color: () !default;
 $border-color: map.merge(
   (
@@ -115,17 +115,17 @@ $box-shadow: () !default;
 $box-shadow: map.merge(
   (
     '': (
-      0px 12px 32px 4px rgba(0, 0, 0, 0.36),
-      0px 8px 20px rgba(0, 0, 0, 0.72),
+      0px 12px 32px 4px hsl(0deg 0% 0% / 0.36),
+      0px 8px 20px hsl(0deg 0% 0% / 0.72),
     ),
     'light': (
-      0px 0px 12px rgba(0, 0, 0, 0.72),
+      0px 0px 12px hsl(0deg 0% 0% / 0.72),
     ),
     'lighter': (
-      0px 0px 6px rgba(0, 0, 0, 0.72),
+      0px 0px 6px hsl(0deg 0% 0% / 0.72),
     ),
     'dark': (
-      0px 16px 48px 16px rgba(0, 0, 0, 0.72),
+      0px 16px 48px 16px hsl(0deg 0% 0% / 0.72),
       0px 12px 32px #000000,
       0px 8px 16px -8px #000000,
     ),
@@ -145,21 +145,21 @@ $vsVar: map.merge(
 $moreColor: () !default;
 $moreColor: map.merge(
   (
-    'gray-1': #18191c,
-    'gray-2': #141417,
-    'gray-3': #0f1013,
-    'gray-4': #0a0b0e,
-    'divider': #3e4042,
-    'text': #ffffff,
-    'background': #1e2023,
-    'dark': #000000,
-    'light': #181b22,
+    'gray-1': #1b1e23,
+    'gray-2': #17191e,
+    'gray-3': #131519,
+    'gray-4': #0f1114,
+    'divider': #343841,
+    'text': #f5f7fa,
+    'background': #1c1f24,
+    'dark': #0b0c0e,
+    'light': #24272e,
   ),
   $moreColor
 );
 
 // fill
-$fill-color-base: #fafcff;
+$fill-color-base: #f7f8fa;
 $fill-color: () !default;
 $fill-color: map.merge(
   (
@@ -187,7 +187,7 @@ $fill-color: map.merge(
 }
 
 // text
-$text-color-base: #f0f5ff;
+$text-color-base: #f6f7f9;
 $text-color: () !default;
 $text-color: map.merge(
   (
@@ -213,8 +213,8 @@ $text-color: map.merge(
 $mask-color: () !default;
 $mask-color: map.merge(
   (
-    '': rgba(0, 0, 0, 0.8),
-    'extra-light': rgba(0, 0, 0, 0.3),
+    '': hsl(0deg 0% 0% / 0.8),
+    'extra-light': hsl(0deg 0% 0% / 0.3),
   ),
   $mask-color
 );
@@ -223,8 +223,8 @@ $mask-color: map.merge(
 $scrollbar: () !default;
 $scrollbar: map.merge(
   (
-    'thumb-color': '241, 245, 249',
-    'bar-color': '30, 41, 59',
+    'thumb-color': '218.182deg 11.579% 62.353%',
+    'bar-color': '222.857deg 13.208% 10.392%',
   ),
   $scrollbar
 );

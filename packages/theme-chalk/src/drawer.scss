@@ -1,8 +1,8 @@
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
-.s-drawer__mask { position: fixed; inset: 0; z-index: 2000; background: rgb(15 23 42 / .36); backdrop-filter: blur(2px); }
-.s-drawer { position: fixed; z-index: 2001; display: flex; flex-direction: column; background: getColor(background); box-shadow: 0 20px 55px rgb(15 23 42 / .2); }
+.s-drawer__mask { position: fixed; inset: 0; z-index: 2000; background: hsl(222.222deg 47.368% 11.176% / .36); backdrop-filter: blur(2px); }
+.s-drawer { position: fixed; z-index: 2001; display: flex; flex-direction: column; background: getColor(background); box-shadow: 0 20px 55px hsl(222.222deg 47.368% 11.176% / .2); }
 .s-drawer--right, .s-drawer--left { top: 0; bottom: 0; }
 .s-drawer--right { right: 0; }.s-drawer--left { left: 0; }.s-drawer--top, .s-drawer--bottom { right: 0; left: 0; }.s-drawer--top { top: 0; }.s-drawer--bottom { bottom: 0; }
 .s-drawer__header { display: flex; min-height: 58px; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid getColor(border, .7); color: getColor(text); font-weight: 600; }

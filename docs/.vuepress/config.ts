@@ -2,6 +2,8 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { viteBundler } from '@vuepress/bundler-vite'
 import { defineUserConfig } from 'vuepress'
+import { saxIcons } from 'sax-design-vue-iconify/vite'
+import saxIconConfig from '../../sax-icons.config'
 import {
   enNavbar,
   enSearchData,
@@ -11,8 +13,6 @@ import {
   zhSidebar,
 } from './app'
 import { saxDesignVueTheme } from './theme/index'
-import { saxIcons } from 'sax-design-vue-iconify/vite'
-import saxIconConfig from '../../sax-icons.config'
 import type { UserConfig } from 'vuepress'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -109,18 +109,18 @@ export default defineUserConfig({
       'link',
       {
         rel: 'icon',
-        href: `/logos/logo-vuesax-logotipo-vuesax-png-8.png`,
+        href: `/sax-logo-mark.svg`,
         media: '(prefers-color-scheme:dark)',
-        type: 'image/png',
+        type: 'image/svg+xml',
       },
     ],
     [
       'link',
       {
         rel: 'icon',
-        href: `/logos/logo-vuesax-logotipo-vuesax-png-7.png`,
+        href: `/sax-logo-mark.svg`,
         media: '(prefers-color-scheme:light)',
-        type: 'image/png',
+        type: 'image/svg+xml',
       },
     ],
     [
@@ -161,8 +161,8 @@ export default defineUserConfig({
     docsRepo: 'https://github.com/adoin/sax-design-vue',
     editLink: true,
     editLinkPattern: 'https://github.com/adoin/sax-design-vue/edit/main/docs/',
-    logo: '/logos/logo-vuesax-svg-3.svg',
-    logoDark: '/logos/logo-vuesax-svg-4.svg',
+    logo: '/sax-logo-mark.svg',
+    logoDark: '/sax-logo-mark.svg',
     prevVersion: 'Vuesax 4',
     linkPrevVersion: 'https://vuesax.com/',
     searchPlaceholder: 'Search components…',

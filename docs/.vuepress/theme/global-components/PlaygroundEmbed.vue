@@ -17,7 +17,7 @@
             :class="{ copied }"
             @click="copySource"
           >
-            <s-icon :name="copied ? 'bx:check' : 'bx:copy'"  />
+            <s-icon :name="copied ? 'bx:check' : 'bx:copy'" />
             {{ copied ? t.examples.copied : t.examples.copyCode }}
           </button>
         </div>
@@ -132,13 +132,13 @@ const copySource = async () => {
 <style lang="scss" scoped>
 .playground-embed {
   margin: 24px 0;
-  border: 1px solid rgba(var(--sax-accent-color), 0.18);
+  border: 1px solid hsl(var(--sax-accent-color) / 0.18);
   border-radius: 18px;
   overflow: hidden;
   background: linear-gradient(
     145deg,
-    rgba(var(--sax-theme-layout), 0.98),
-    rgba(var(--sax-accent-color), 0.06)
+    hsl(var(--sax-theme-layout) / 0.98),
+    hsl(var(--sax-accent-color) / 0.06)
   );
   box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
 
@@ -148,7 +148,7 @@ const copySource = async () => {
     justify-content: center;
     min-height: 240px;
     padding: 24px;
-    color: rgba(var(--sax-theme-color), 0.72);
+    color: hsl(var(--sax-theme-color) / 0.72);
     font-weight: 600;
   }
 }
@@ -160,24 +160,24 @@ const copySource = async () => {
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
-  border-bottom: 1px solid rgba(var(--sax-theme-color), 0.08);
-  background: rgba(var(--sax-theme-layout), 0.9);
+  border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.08);
+  background: hsl(var(--sax-theme-layout) / 0.9);
 
   label {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     font-weight: 600;
-    color: rgb(var(--sax-theme-color));
+    color: hsl(var(--sax-theme-color));
   }
 
   select {
     min-width: 160px;
     padding: 8px 12px;
     border-radius: 10px;
-    border: 1px solid rgba(var(--sax-theme-color), 0.12);
-    background: rgba(var(--sax-theme-bg), 0.8);
-    color: rgb(var(--sax-theme-color));
+    border: 1px solid hsl(var(--sax-theme-color) / 0.12);
+    background: hsl(var(--sax-theme-bg) / 0.8);
+    color: hsl(var(--sax-theme-color));
   }
 }
 
@@ -194,17 +194,17 @@ const copySource = async () => {
   gap: 6px;
   padding: 8px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(var(--sax-theme-color), 0.12);
-  background: rgba(var(--sax-theme-bg), 0.85);
-  color: rgb(var(--sax-theme-color));
+  border: 1px solid hsl(var(--sax-theme-color) / 0.12);
+  background: hsl(var(--sax-theme-bg) / 0.85);
+  color: hsl(var(--sax-theme-color));
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover,
   &.copied {
-    border-color: rgba(var(--sax-accent-color), 0.35);
-    color: rgb(var(--sax-accent-color));
+    border-color: hsl(var(--sax-accent-color) / 0.35);
+    color: hsl(var(--sax-accent-color));
   }
 }
 
@@ -218,8 +218,8 @@ const copySource = async () => {
   display: flex;
   flex-direction: column;
   min-height: 240px;
-  border-bottom: 1px solid rgba(var(--sax-theme-color), 0.08);
-  background: rgb(var(--sax-theme-code));
+  border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.08);
+  background: hsl(var(--sax-theme-code));
 }
 
 .playground-embed__code-header {

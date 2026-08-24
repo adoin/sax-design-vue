@@ -1,32 +1,42 @@
 <template>
-  <div ref="navbarRef" :class="navbarKls" :style="navbarStyles">
+  <header ref="navbarRef" :class="navbarKls" :style="navbarStyles">
     <div :class="ns.e('content')">
-      <div v-if="isLeft" ref="navbarLeftRef" :class="ns.e('left')">
-        <slot name="left" />
+      <div v-if="showBrand" :class="ns.e('brand')">
+        <slot name="brand" v-bind="slotState">
+          <slot name="left" v-bind="slotState" />
+        </slot>
       </div>
 
-      <div v-if="isCenter" ref="navbarCenterRef" :class="ns.e('center')">
-        <slot />
-      </div>
+      <nav
+        v-if="showNavigation"
+        :class="ns.e('navigation')"
+        aria-label="Primary navigation"
+      >
+        <slot name="navigation" v-bind="slotState">
+          <slot v-bind="slotState" />
+        </slot>
+      </nav>
 
-      <div v-if="isRight" ref="navbarRightRef" :class="ns.e('right')">
-        <slot name="right" />
+      <div v-if="showActions" :class="ns.e('actions')">
+        <slot name="actions" v-bind="slotState">
+          <slot name="right" v-bind="slotState" />
+        </slot>
       </div>
     </div>
-  </div>
+  </header>
 </template>
 
 <script lang="ts" setup>
 import {
   computed,
-  nextTick,
   onMounted,
   provide,
   reactive,
   ref,
+  shallowRef,
   watch,
 } from 'vue'
-import { useEventListener } from '@vueuse/core'
+import { useEventListener, useResizeObserver } from '@vueuse/core'
 import {
   useColor,
   useNamespace,
@@ -39,133 +49,111 @@ import {
 } from '@vuesax-alpha/tokens/navbar'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { navbarEmits, navbarProps } from './navbar'
+import type { CSSProperties } from 'vue'
 
-defineOptions({
-  name: 'SNavbar',
-})
+defineOptions({ name: 'SNavbar' })
 
 const props = defineProps(navbarProps)
 const emit = defineEmits(navbarEmits)
 
 const ns = useNamespace('navbar')
-
 const navbarRef = ref<HTMLElement>()
-const navbarLeftRef = ref<HTMLElement>()
-const navbarRightRef = ref<HTMLElement>()
-const navbarCenterRef = ref<HTMLElement>()
-
+const scrollTarget = shallowRef<EventTarget>()
 const children = reactive<Set<string>>(new Set())
 
 const state = reactive({
   scrollTop: 0,
-
-  collapsedWidth: 0,
-  collapsedForced: false,
-
+  collapsed: false,
   hidden: false,
-  shadowActive: false,
-  paddingScrollActive: false,
-  lineNotTransition: false,
+  scrolled: false,
 })
+
+const toCssLength = (value: number | string) =>
+  typeof value === 'number' ? `${value}px` : value
+
+const resolvedPosition = computed(() =>
+  props.fixed ? 'fixed' : props.position,
+)
+const slotState = computed(() => ({
+  collapsed: state.collapsed,
+  scrolled: state.scrolled,
+}))
+
+const showBrand = computed(() => !(props.leftCollapsed && state.collapsed))
+const showNavigation = computed(
+  () => !(props.centerCollapsed && state.collapsed),
+)
+const showActions = computed(() => !(props.rightCollapsed && state.collapsed))
 
 const vsBaseClasses = useVuesaxBaseComponent(useColor())
 const navbarKls = computed(() => [
   ns.b(),
   vsBaseClasses,
-  ns.is('fixed', props.fixed),
+  ns.m(props.variant),
+  ns.m(props.size),
+  ns.is(resolvedPosition.value, true),
   ns.is('shadow', props.shadow),
   ns.is('not-line', props.notLine),
   ns.is('hidden', state.hidden),
-  ns.is('shadow-active', state.shadowActive),
+  ns.is('scrolled', state.scrolled),
+  ns.is('shadow-active', state.scrolled && props.shadowScroll),
   ns.is('text-white', props.textWhite),
   ns.is('padding-scroll', props.paddingScroll),
-  ns.is('padding-scroll-active', state.paddingScrollActive),
+  ns.is('blurred', props.blurred),
   ns.is('square', props.square),
+  ns.is('collapsed', state.collapsed),
 ])
 
-const navbarStyles = computed(() =>
-  ns.cssVar({
-    color: getVsColor(props.color),
-  })
-)
+const navbarStyles = computed<CSSProperties>(() => ({
+  ...ns.cssVar({ color: getVsColor(props.color) }),
+  [ns.cssVarBlockName('content-width')]: toCssLength(props.contentWidth),
+  [ns.cssVarBlockName('gap')]: toCssLength(props.gap),
+}))
 
-const scroll = () => {
-  const _scrollTop = props.targetScroll
-    ? document.querySelector(props.targetScroll)!.scrollTop
-    : window.pageYOffset
-  if (props.hideScroll) {
-    if (Math.sign(_scrollTop - state.scrollTop) === 1) {
-      state.hidden = true
-    } else {
-      state.hidden = false
-    }
-  }
-
-  if (props.shadowScroll) {
-    if (_scrollTop > 0) {
-      state.shadowActive = true
-    } else {
-      state.shadowActive = false
-    }
-  }
-
-  if (props.paddingScroll) {
-    if (_scrollTop > 0) {
-      state.paddingScrollActive = true
-    } else {
-      state.paddingScrollActive = false
-    }
-  }
-  state.scrollTop = _scrollTop
+const readScrollTop = () => {
+  if (scrollTarget.value instanceof HTMLElement)
+    return scrollTarget.value.scrollTop
+  return window.scrollY || window.pageYOffset
 }
 
 const handleScroll = () => {
-  if (props.hideScroll || props.shadowScroll || props.paddingScroll) {
-    if (props.targetScroll) {
-      const scrollElement = document.querySelector(props.targetScroll)
-      scrollElement?.addEventListener('scroll', scroll)
-    } else {
-      window.addEventListener('scroll', scroll)
-    }
-  }
+  if (!scrollTarget.value) return
+
+  const nextScrollTop = readScrollTop()
+  const direction = Math.sign(nextScrollTop - state.scrollTop)
+
+  state.hidden = Boolean(
+    props.hideScroll && direction > 0 && nextScrollTop > 12,
+  )
+  state.scrolled = nextScrollTop > 0
+  state.scrollTop = nextScrollTop
 }
 
-const handleResize = () => {
-  const navbar = navbarRef.value!
-
-  if (props.leftCollapsed || props.centerCollapsed || props.rightCollapsed) {
-    if (navbar.offsetWidth < state.collapsedWidth) {
-      state.collapsedForced = true
-    }
-  }
-
-  if (state.collapsedForced) {
-    emit('collapsed', true)
-  } else {
-    emit('collapsed', false)
-  }
-
-  if (navbar.offsetWidth < state.collapsedWidth) {
-    emit('collapsed', true)
-  } else {
-    emit('collapsed', false)
-    state.collapsedForced = false
-  }
+const resolveScrollTarget = () => {
+  if (typeof window === 'undefined') return
+  scrollTarget.value = props.targetScroll
+    ? document.querySelector(props.targetScroll) || window
+    : window
+  handleScroll()
 }
 
-const isLeft = computed(() =>
-  props.leftCollapsed ? !state.collapsedForced : true
-)
-const isRight = computed(() =>
-  props.rightCollapsed ? !state.collapsedForced : true
-)
-const isCenter = computed(() =>
-  props.centerCollapsed ? !state.collapsedForced : true
-)
+const updateCollapsed = (width: number) => {
+  const next = props.collapseAt > 0 && width <= props.collapseAt
+  if (next === state.collapsed) return
 
+  state.collapsed = next
+  emit('collapsed', next)
+}
+
+useResizeObserver(navbarRef, ([entry]) => {
+  updateCollapsed(entry.contentRect.width)
+})
+useEventListener(scrollTarget, 'scroll', handleScroll, { passive: true })
+
+watch(() => props.targetScroll, resolveScrollTarget)
 watch(
-  [() => props.hideScroll, () => props.paddingScroll, () => props.shadowScroll],
-  handleScroll
+  () => props.collapseAt,
+  () => updateCollapsed(navbarRef.value?.clientWidth || 0),
 )
 
 provide(navbarContextKey, {
@@ -182,35 +170,5 @@ provide(navbarRegisterContextKey, (id: string) => {
   }
 })
 
-onMounted(() => {
-  nextTick(() => {
-    if (
-      navbarRef.value &&
-      navbarLeftRef.value &&
-      navbarCenterRef.value &&
-      navbarRightRef.value
-    ) {
-      const left = navbarLeftRef.value
-      const center = navbarCenterRef.value
-      const right = navbarRightRef.value
-      const navbar = navbarRef.value
-
-      const GAP_PADDING_SLOT = 120 + 30
-      state.collapsedWidth =
-        left.offsetWidth +
-        center.offsetWidth +
-        right.offsetWidth +
-        GAP_PADDING_SLOT
-
-      if (navbar.offsetWidth < state.collapsedWidth) {
-        state.collapsedForced = true
-        emit('collapsed', true)
-        handleResize()
-      }
-    }
-  })
-
-  handleScroll()
-  useEventListener(window, 'resize', handleResize)
-})
+onMounted(resolveScrollTarget)
 </script>

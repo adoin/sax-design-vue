@@ -1,100 +1,122 @@
 ---
+description: 'Tabs with overflow collapse, editable items, context menus, and borderless visual variants.'
 PROPS:
-  - name: v-model
-    type: Number, String
-    values: index or name
-    description: Active tab index.
-    default: 0
-    link: null
-    usage: '#default'
-
-  - name: color
+  - name: v-model / model-value
+    type: String | Number
+    values: s-tab name, or index when name is omitted
+    description: Active tab value.
+    default: '0'
+  - name: type
     type: String
-    values: primary, success, danger
-    description: Active color.
-    default: primary
-    link: null
-    usage: '#color'
-
+    values: line / pill / card / connected-card / editable-card
+    description: Navigation style. connected-card joins the active tab and its pane into one continuous surface; editable-card also shows add and close actions.
+    default: line
+  - name: overflow
+    type: String
+    values: collapse / scroll / wrap
+    description: Collapse, scroll, or wrap tabs when horizontal space runs out.
+    default: collapse
   - name: alignment
     type: String
-    values: left, center, right, fixed
-    description: Tab alignment.
+    values: left / center / right / fixed
+    description: Tab alignment or equal-width layout.
     default: left
-    link: null
-    usage: '#alignments'
-
   - name: position
     type: String
-    values: top, bottom, left, right
+    values: top / bottom / left / right
     description: Tab bar position.
     default: top
-    link: null
-    usage: '#position'
-
+  - name: size
+    type: String
+    values: small / default / large
+    description: Tab size.
+    default: default
+  - name: animated
+    type: Boolean
+    values: true / false
+    description: Animate panel and navigation changes.
+    default: 'true'
+  - name: destroy-on-hide
+    type: Boolean
+    values: true / false
+    description: Unmount hidden panel content.
+    default: 'false'
+  - name: hide-add
+    type: Boolean
+    values: true / false
+    description: Hide the add action in editable-card mode.
+    default: 'false'
+  - name: color
+    type: String
+    values: theme color / RGB / HEX
+    description: Active color.
+    default: primary
+  - name: aria-label
+    type: String
+    values: text
+    description: Accessible navigation name. Defaults to the component locale.
+    default: Tabs
+CHILD_PROPS:
+  - name: name
+    type: String | Number
+    values: unique value
+    description: Stable s-tab identity and v-model value.
+    default: current index
   - name: label
     type: String
-    values: String
-    description: Tab label (s-tab).
+    values: text
+    description: Tab title and overflow-menu fallback text.
     default: Label
-    link: null
-    usage: '#default'
-
-  - name: icon
-    type: String
-    values: Material icon
-    description: Tab icon (s-tab).
-    default: 
-    link: null
-    usage: '#icons'
-
-  - name: disabled
+  - name: icon / badge
+    type: String / String | Number
+    values: icon name / badge content
+    description: Optional tab icon and badge.
+    default: —
+  - name: disabled / closable
     type: Boolean
-    values: true, false
-    description: Disable tab (s-tab).
-    default: false
-    link: null
-    usage: '#default'
+    values: true / false
+    description: Disable a tab or allow closing it in editable-card mode.
+    default: false / true
+  - name: force-render
+    type: Boolean
+    values: true / false
+    description: Keep this panel mounted when destroy-on-hide is enabled.
+    default: 'false'
 EVENTS:
-  - name: update:modelValue
-    params: number | string
-    description: Active tab changed.
-
   - name: change
-    params: number | string
-    description: Active tab changed.
-EXPOSES: []
-description: "Organize content into switchable tab panels."
-NEWS:
-  - default
-  - color
-  - alignments
-  - position
-  - icons
+    description: Emits value and pane when the active tab changes.
+  - name: tab-click
+    description: Emits value, event, and pane when a tab is activated.
+  - name: add / remove / edit
+    description: Requests editable-card mutations; the parent still owns the array.
+  - name: tab-contextmenu
+    description: Emits value, event, and pane for a tab context-menu event.
+SLOTS:
+  - name: label
+    description: Customizes every label with pane, active, and value.
+  - name: s-tab#label
+    description: Customizes one label and can compose ContextMenu.
+  - name: extra
+    description: Trailing tab-bar actions.
+  - name: add-icon / close-icon / more-icon
+    description: Replaces editable and overflow icons.
 ---
 
 # Tabs
 
+Tabs uses semantic `tablist / tab / tabpanel` roles with arrow, Home, and End keyboard navigation. Every visual mode uses spacing, surface depth, and shadow instead of visible borders.
+
 <card>
 
-## Default
+## Style and layout
 
+Switch line, pill, card, position, size, and panel motion in one example.
 
-Control the active tab with `v-model` on `s-tabs`.
-
-<template #example>
-<tabs-default />
-</template>
+<template #example><tabs-default /></template>
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/tabs/default.vue)
-
-</template>
-
-<template #script>
-
-@[code{8-11}](../.vuepress/components/tabs/default.vue)
+@[code](../.vuepress/components/tabs/default.vue)
 
 </template>
 
@@ -102,24 +124,15 @@ Control the active tab with `v-model` on `s-tabs`.
 
 <card>
 
-## Color
+## Overflow collapse
 
+The default `overflow="collapse"` keeps the active tab visible and moves remaining tabs into a More popover.
 
-Theme the active indicator and labels.
-
-<template #example>
-<tabs-color />
-</template>
+<template #example><tabs-overflow /></template>
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/tabs/color.vue)
-
-</template>
-
-<template #script>
-
-@[code{8-11}](../.vuepress/components/tabs/color.vue)
+@[code](../.vuepress/components/tabs/overflow.vue)
 
 </template>
 
@@ -127,24 +140,15 @@ Theme the active indicator and labels.
 
 <card>
 
-## Alignments
+## Add and remove
 
+`editable-card` emits mutation requests while application state remains the single source of truth.
 
-Align tabs to the left, center, right, or fixed width.
-
-<template #example>
-<tabs-alignments />
-</template>
+<template #example><tabs-editable /></template>
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/tabs/alignments.vue)
-
-</template>
-
-<template #script>
-
-@[code{8-11}](../.vuepress/components/tabs/alignments.vue)
+@[code](../.vuepress/components/tabs/editable.vue)
 
 </template>
 
@@ -152,56 +156,18 @@ Align tabs to the left, center, right, or fixed width.
 
 <card>
 
-## Position
+## Context menu
 
+Compose the `s-tab` label slot with the repository's existing `SContextMenu` instead of duplicating menu behavior inside Tabs.
 
-Place the tab bar on top, bottom, left, or right.
-
-<template #example>
-<tabs-position />
-</template>
+<template #example><tabs-context-menu /></template>
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/tabs/position.vue)
-
-</template>
-
-<template #script>
-
-@[code{8-11}](../.vuepress/components/tabs/position.vue)
+@[code](../.vuepress/components/tabs/context-menu.vue)
 
 </template>
 
 </card>
-
-<card>
-
-## Icons
-
-
-Add icons to individual `s-tab` items.
-
-<template #example>
-<tabs-icons />
-</template>
-
-<template #template>
-
-@[code{1-6}](../.vuepress/components/tabs/icons.vue)
-
-</template>
-
-<template #script>
-
-@[code{8-11}](../.vuepress/components/tabs/icons.vue)
-
-</template>
-
-</card>
-
-<card>
 
 ## API
-
-</card>

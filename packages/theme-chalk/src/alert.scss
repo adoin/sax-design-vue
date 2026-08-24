@@ -136,7 +136,7 @@
     }
   }
   @include m(flat) {
-    background: rgba(0, 0, 0, 0.03);
+    background: hsl(0deg 0% 0% / 0.03);
   }
   @include m(relief) {
     background: getColor(color);

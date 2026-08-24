@@ -82,8 +82,8 @@ const axisGap = ref({
   font-size: 12px;
   font-weight: 700;
   box-shadow:
-    0 8px 20px rgba(var(--sax-text), 0.09),
-    0 3px 8px rgba(var(--sax-primary), 0.08);
+    0 8px 20px hsl(var(--sax-text) / 0.09),
+    0 3px 8px hsl(var(--sax-primary) / 0.08);
   transition:
     filter 220ms ease,
     box-shadow 220ms ease;
@@ -121,8 +121,8 @@ const axisGap = ref({
   .panel:hover {
     filter: saturate(1.08) brightness(1.015);
     box-shadow:
-      0 14px 30px rgba(var(--sax-text), 0.12),
-      0 6px 16px rgba(var(--sax-primary), 0.14);
+      0 14px 30px hsl(var(--sax-text) / 0.12),
+      0 6px 16px hsl(var(--sax-primary) / 0.14);
   }
 
   .panel:hover::after {

@@ -27,7 +27,7 @@
   }
   .#{$namespace}-dialog-original {
     transform: scale(0.7);
-    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+    box-shadow: 0px 0px 0px 0px getColor(black, getCssVar('shadow-opacity'));
   }
 }
 
@@ -85,7 +85,7 @@
   padding-bottom: 80px;
 
   @include when(mask) {
-    background: rgba(0, 0, 0, getCssVar('background-opacity'));
+    background: getColor(black, getCssVar('background-opacity'));
   }
 
   @include when(full-screen) {
@@ -111,7 +111,7 @@
     min-width: 400px;
     border-radius: getCssVar('radius');
     transition: getCssVar(transition-ease);
-    box-shadow: 0px 5px 30px 0px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+    box-shadow: 0px 5px 30px 0px getColor(black, getCssVar('shadow-opacity'));
     max-width: 800px;
     margin: auto;
   }
@@ -196,7 +196,7 @@
     @include flex(center, center);
     background: inherit;
     border-radius: var(--sax-radius);
-    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+    box-shadow: 0px 5px 20px 0px getColor(black, getCssVar('shadow-opacity'));
     transition: getCssVar(transition-ease);
     z-index: 200;
     border: 0px;
@@ -212,7 +212,7 @@
       }
     }
     &:hover {
-      box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+      box-shadow: 0px 0px 4px 0px getColor(black, getCssVar('shadow-opacity'));
       transform: translate(-2px, 2px);
       i {
         opacity: 1;

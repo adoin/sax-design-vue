@@ -169,7 +169,8 @@
                           <SIcon
                             v-else
                             key="icon"
-                            :class="ns.e('more-icon')" name="cb:overflow-menu-vertical"
+                            :class="ns.e('more-icon')"
+                            name="cb:overflow-menu-vertical"
                             aria-hidden="true"
                           />
                         </Transition>
@@ -230,8 +231,7 @@
                                     :aria-label="t('vs.calendar.editEvent')"
                                     @click.stop="editOverflowEvent(event)"
                                   >
-                                    <SIcon name="cb:edit"
-                                    />
+                                    <SIcon name="cb:edit" />
                                   </button>
                                   <button
                                     type="button"
@@ -239,8 +239,7 @@
                                     :aria-label="t('vs.calendar.deleteEvent')"
                                     @click.stop="removeOverflowEvent(event)"
                                   >
-                                    <SIcon name="cb:trash-can"
-                                    />
+                                    <SIcon name="cb:trash-can" />
                                   </button>
                                 </div>
                               </div>
@@ -376,7 +375,8 @@
                       <SIcon
                         v-else
                         key="icon"
-                        :class="ns.e('more-icon')" name="cb:overflow-menu-vertical"
+                        :class="ns.e('more-icon')"
+                        name="cb:overflow-menu-vertical"
                         aria-hidden="true"
                       />
                     </Transition>
@@ -435,8 +435,7 @@
                                 :aria-label="t('vs.calendar.deleteEvent')"
                                 @click.stop="removeOverflowEvent(event)"
                               >
-                                <SIcon name="cb:trash-can"
-                                />
+                                <SIcon name="cb:trash-can" />
                               </button>
                             </div>
                           </div>
@@ -912,7 +911,7 @@ const timedEventsForDate = (date: Date) =>
   )
 const eventStyle = (event: CalendarEvent) => ({
   '--sax-calendar-event-color':
-    event.color || props.eventColor || 'rgb(var(--sax-primary))',
+    event.color || props.eventColor || 'hsl(var(--sax-primary))',
 })
 const timeEventStyle = (event: CalendarEvent) => {
   const start = eventStart(event)!

@@ -1,10 +1,14 @@
-import { defineComponent, renderSlot } from 'vue'
-import { buildProps, definePropType } from '@vuesax-alpha/utils'
+import { defineComponent, onBeforeUnmount, renderSlot, watch } from 'vue'
+import {
+  applyThemeConfig,
+  buildProps,
+  definePropType,
+} from '@vuesax-alpha/utils'
 import { defaultNamespace, provideGlobalConfig } from '@vuesax-alpha/hooks'
 
 import type { ExtractPropTypes } from 'vue'
 import type { Language } from '@vuesax-alpha/locale'
-import type { ColorProviderContext } from '@vuesax-alpha/constants'
+import type { ColorProviderContext, ThemeConfig } from '@vuesax-alpha/constants'
 
 export const configProviderProps = buildProps({
   /**
@@ -23,6 +27,9 @@ export const configProviderProps = buildProps({
   color: {
     type: definePropType<ColorProviderContext>(Object),
   },
+  theme: {
+    type: definePropType<ThemeConfig>(Object),
+  },
   /**
    * @description Locale Object
    */
@@ -39,6 +46,20 @@ const ConfigProvider = defineComponent({
 
   setup(props, { slots }) {
     const config = provideGlobalConfig(props)
+    let restoreTheme: (() => void) | undefined
+
+    if (typeof document !== 'undefined') {
+      watch(
+        () => props.theme,
+        (theme) => {
+          restoreTheme?.()
+          restoreTheme = theme ? applyThemeConfig(theme) : undefined
+        },
+        { deep: true, immediate: true },
+      )
+    }
+
+    onBeforeUnmount(() => restoreTheme?.())
 
     return () => renderSlot(slots, 'default', { config: config?.value })
   },

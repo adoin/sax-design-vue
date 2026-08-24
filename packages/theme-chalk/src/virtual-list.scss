@@ -16,7 +16,7 @@
     overflow: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
-    scrollbar-color: rgba(var(--sax-primary), 0.34) transparent;
+    scrollbar-color: hsl(var(--sax-primary) / 0.34) transparent;
 
     &::-webkit-scrollbar {
       width: 6px;
@@ -25,11 +25,11 @@
 
     &::-webkit-scrollbar-thumb {
       border-radius: var(--sax-radius-pill);
-      background: rgba(var(--sax-primary), 0.3);
+      background: hsl(var(--sax-primary) / 0.3);
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background: rgba(var(--sax-primary), 0.52);
+      background: hsl(var(--sax-primary) / 0.52);
     }
   }
 

@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:color';
 
 // CSS3 var
 @use 'common/var' as *;
@@ -14,6 +15,43 @@
   @include set-color('color', $color-base);
   @include set-color('white', $color-white);
   @include set-color('black', $color-black);
+
+  // A theme owns the base H/S/L channels. Component states keep the same hue
+  // and derive hover/active tones only through saturation and lightness.
+  @include set-var-value('theme-state-hover-s', -2%);
+  @include set-var-value('theme-state-hover-l', -7%);
+  @include set-var-value('theme-state-active-s', -4%);
+  @include set-var-value('theme-state-active-l', -12%);
+  @include set-var-value('theme-state-subtle-s', -8%);
+  @include set-var-value('theme-state-subtle-l', 38%);
+  @include set-var-value('theme-dark-state-hover-s', -1%);
+  @include set-var-value('theme-dark-state-hover-l', 7%);
+  @include set-var-value('theme-dark-state-active-s', -3%);
+  @include set-var-value('theme-dark-state-active-l', 12%);
+  @include set-var-value('theme-dark-state-subtle-s', -8%);
+  @include set-var-value('theme-dark-state-subtle-l', -34%);
+  @include set-var-value('color-state-hover-s', getCssVar('theme-state-hover-s'));
+  @include set-var-value('color-state-hover-l', getCssVar('theme-state-hover-l'));
+  @include set-var-value('color-state-active-s', getCssVar('theme-state-active-s'));
+  @include set-var-value('color-state-active-l', getCssVar('theme-state-active-l'));
+  @include set-var-value('color-state-subtle-s', getCssVar('theme-state-subtle-s'));
+  @include set-var-value('color-state-subtle-l', getCssVar('theme-state-subtle-l'));
+
+  @include set-var-value(
+    'theme-primary-h',
+    color.channel($color-primary, 'hue', $space: hsl)
+  );
+  @include set-var-value(
+    'theme-primary-s',
+    color.channel($color-primary, 'saturation', $space: hsl)
+  );
+  @include set-var-value(
+    'theme-primary-l',
+    color.channel($color-primary, 'lightness', $space: hsl)
+  );
+  @include set-var-value('theme-primary-dark-h', getCssVar('theme-primary-h'));
+  @include set-var-value('theme-primary-dark-s', 92%);
+  @include set-var-value('theme-primary-dark-l', 70%);
 
   // vuesax var
   @include set-component-var('', $vsVar);
@@ -51,44 +89,38 @@
   @include set-var-value('motion-easing-standard', ease);
 
   // Input surfaces stay distinct without bringing back conventional borders.
-  // Primary is stored as RGB channels, so consumers can keep this tint in sync
-  // with a custom --sax-primary value.
+  // Primary is stored as HSL channels, so alpha tints stay in sync with themes.
   @include set-var-value(
     'input-shadow',
     (
-      0 1px 2px rgba(var(--sax-primary), 0.08),
-      0 6px 18px rgba(var(--sax-primary), 0.08),
-      inset 0 0 0 1px rgba(var(--sax-primary), 0.08)
+      0 1px 2px hsl(var(--sax-primary) / 0.08),
+      0 6px 18px hsl(var(--sax-primary) / 0.08),
+      inset 0 0 0 1px hsl(var(--sax-primary) / 0.08)
     )
   );
   @include set-var-value(
     'input-shadow-hover',
     (
-      0 2px 5px rgba(var(--sax-primary), 0.12),
-      0 8px 22px rgba(var(--sax-primary), 0.1),
-      inset 0 0 0 1px rgba(var(--sax-primary), 0.14)
+      0 2px 5px hsl(var(--sax-primary) / 0.12),
+      0 8px 22px hsl(var(--sax-primary) / 0.1),
+      inset 0 0 0 1px hsl(var(--sax-primary) / 0.14)
     )
   );
   @include set-var-value(
     'input-shadow-focus',
     (
-      0 3px 8px rgba(var(--sax-primary), 0.16),
-      0 12px 28px rgba(var(--sax-primary), 0.14),
-      inset 0 0 0 1px rgba(var(--sax-primary), 0.3)
+      0 3px 8px hsl(var(--sax-primary) / 0.16),
+      0 12px 28px hsl(var(--sax-primary) / 0.14),
+      inset 0 0 0 1px hsl(var(--sax-primary) / 0.3)
     )
   );
   @include set-var-value(
     'popper-shadow',
     (
-      0 18px 40px -16px rgba(var(--sax-primary), 0.3),
-      0 8px 20px -12px rgba(19, 31, 72, 0.24)
+      0 18px 40px -16px hsl(var(--sax-primary) / 0.3),
+      0 8px 20px -12px hsl(226.415deg 58.242% 17.843% / 0.24)
     )
   );
-
-  // get rgb
-  @each $type in (primary, success, warn, danger, error, info, dark, light) {
-    @include set-colors($type);
-  }
 
   // social color
   @include set-component-color('', $social-colors);
@@ -133,6 +165,11 @@
   @each $type in (primary, success, warn, danger, error, info, dark, light) {
     @include set-colors($type);
   }
+
+  // Primary is the public theme key; all generated primary states reference it.
+  @include set-var-value('primary-h', getCssVar('theme-primary-h'));
+  @include set-var-value('primary-s', getCssVar('theme-primary-s'));
+  @include set-var-value('primary-l', getCssVar('theme-primary-l'));
 
   // color-scheme
   // Background --vs-bg-color-#{$type}

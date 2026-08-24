@@ -16,7 +16,7 @@
           transform: translate(0);
           opacity: 1;
           box-shadow: 0px 0px 30px 0px
-            rgba(0, 0, 0, getCssVar('shadow-opacity'));
+            getColor(black, getCssVar('shadow-opacity'));
         }
         .#{$namespace}-card__img {
           border-radius: var(--sax-radius-sm) var(--sax-radius-2xl)
@@ -38,7 +38,7 @@
       }
       &__text {
         background: getColor('background', 1);
-        box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+        box-shadow: 0px 0px 0px 0px getColor(black, getCssVar('shadow-opacity'));
         border-radius: var(--sax-radius-sm) var(--sax-radius-xl)
           var(--sax-radius-sm) var(--sax-radius-xl);
         margin-top: -50px;
@@ -170,7 +170,7 @@
         background: linear-gradient(
           180deg,
           transparent 0%,
-          rgba(0, 0, 0, 0.5) 100%
+          hsl(0deg 0% 0% / 0.5) 100%
         );
         color: transparent;
         font-size: 0.9rem;
@@ -186,7 +186,7 @@
   &.type-1 {
     .#{$namespace}-card {
       &:hover {
-        box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+        box-shadow: 0px 0px 0px 0px getColor(black, getCssVar('shadow-opacity'));
         transform: translate(0, 5px);
         .#{$namespace}-card__img {
           img {
@@ -203,7 +203,7 @@
   color: getColor('text');
   width: 100%;
   max-width: 350px;
-  box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+  box-shadow: 0px 5px 20px 0px getColor(black, getCssVar('shadow-opacity'));
   border-radius: var(--sax-radius-xl);
   transition: getCssVar(transition-ease);
   cursor: pointer;

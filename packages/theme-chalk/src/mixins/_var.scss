@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:color';
 
 @use 'config';
 @use 'function' as *;
@@ -13,7 +14,7 @@
 }
 
 @mixin set-color($name, $color) {
-  @include set-var-value($name, #{hex2rgb($color)});
+  @include set-var-value($name, #{hex2hsl($color)});
 }
 
 // @include set-var-type('color', 'primary', $map);
@@ -22,17 +23,110 @@
   #{getCssVarName($name, $type)}: #{map.get($variables, $type)};
 }
 
-@mixin set-colors($type) {
-  @include set-var-value($type, hex2rgb(map.get($colors, $type, 'base')));
+@mixin set-colors($type, $dark: false) {
+  $base: map.get($colors, $type, 'base');
 
-  @each $i in (3, 5, 7, 8, 9) {
-    @include set-color(
+  @include set-var-value(($type, 'h'), color.channel($base, 'hue', $space: hsl));
+  @include set-var-value(
+    ($type, 's'),
+    color.channel($base, 'saturation', $space: hsl)
+  );
+  @include set-var-value(
+    ($type, 'l'),
+    color.channel($base, 'lightness', $space: hsl)
+  );
+  @include set-var-value(
+    $type,
+    var(#{getCssVarName($type, 'h')}) var(#{getCssVarName($type, 's')})
+      var(#{getCssVarName($type, 'l')})
+  );
+
+  $lightness-direction: 1;
+  @if $dark {
+    $lightness-direction: -1;
+  }
+
+  @each $i, $offset in (3: 12%, 5: 22%, 7: 32%, 8: 38%, 9: 44%) {
+    @include set-var-value(
       ($type, 'light', $i),
-      map.get($colors, $type, 'light-#{$i}')
+      var(#{getCssVarName($type, 'h')})
+        clamp(
+          0%,
+          calc(var(#{getCssVarName($type, 's')}) - #{$i * 1%}),
+          100%
+        )
+        clamp(
+          0%,
+          calc(
+            var(#{getCssVarName($type, 'l')}) +
+              #{$offset * $lightness-direction}
+          ),
+          100%
+        )
     );
   }
 
-  @include set-color(($type, 'dark-2'), map.get($colors, $type, 'dark-2'));
+  @include set-var-value(
+    ($type, 'hover'),
+    var(#{getCssVarName($type, 'h')})
+      clamp(
+        0%,
+        calc(
+          var(#{getCssVarName($type, 's')}) +
+            var(--sax-color-state-hover-s)
+        ),
+        100%
+      )
+      clamp(
+        0%,
+        calc(
+          var(#{getCssVarName($type, 'l')}) +
+            var(--sax-color-state-hover-l)
+        ),
+        100%
+      )
+  );
+  @include set-var-value(
+    ($type, 'active'),
+    var(#{getCssVarName($type, 'h')})
+      clamp(
+        0%,
+        calc(
+          var(#{getCssVarName($type, 's')}) +
+            var(--sax-color-state-active-s)
+        ),
+        100%
+      )
+      clamp(
+        0%,
+        calc(
+          var(#{getCssVarName($type, 'l')}) +
+            var(--sax-color-state-active-l)
+        ),
+        100%
+      )
+  );
+  @include set-var-value(
+    ($type, 'subtle'),
+    var(#{getCssVarName($type, 'h')})
+      clamp(
+        0%,
+        calc(
+          var(#{getCssVarName($type, 's')}) +
+            var(--sax-color-state-subtle-s)
+        ),
+        100%
+      )
+      clamp(
+        0%,
+        calc(
+          var(#{getCssVarName($type, 'l')}) +
+            var(--sax-color-state-subtle-l)
+        ),
+        100%
+      )
+  );
+  @include css-var-from-global(($type, 'dark-2'), ($type, 'hover'));
 }
 
 // set all css var for component by map

@@ -20,6 +20,7 @@
   text-align: center;
   box-sizing: border-box;
   margin: 0 getCssVar(pagination-button-margin);
+  @include control-surface-shadow;
   transition: getCssVar(transition-ease);
 
   * {
@@ -32,6 +33,7 @@
 
   &:hover {
     background-color: getCssVar(pagination-button-bg-hover);
+    @include control-surface-shadow(hover);
   }
 
   &:active {
@@ -48,6 +50,7 @@
   &:focus-visible {
     outline: 1px solid getCssVar(pagination-hover-color);
     outline-offset: -1px;
+    @include control-surface-shadow(focus);
   }
 }
 
@@ -144,6 +147,39 @@
       select-min-height,
       getCssVar(pagination-button-height)
     );
+    width: 128px;
+
+    // Pagination is a stable horizontal control row. Keep Select's shadow
+    // feedback, but do not lift the trigger out of alignment on hover/open.
+    @include when(hovering) {
+      .#{$namespace}-select__input {
+        transform: none;
+        @include control-surface-shadow(hover);
+      }
+
+      .#{$namespace}-select__arrow,
+      .#{$namespace}-select__label.is-placeholder,
+      .#{$namespace}-select__placeholder {
+        transform: translateY(-50%);
+      }
+    }
+
+    @include when(open) {
+      .#{$namespace}-select__input {
+        transform: none;
+        @include control-surface-shadow(focus);
+      }
+
+      .#{$namespace}-select__arrow {
+        margin-top: 0 !important;
+        transform: translateY(-50%) rotate(180deg);
+      }
+
+      .#{$namespace}-select__label.is-placeholder,
+      .#{$namespace}-select__placeholder {
+        transform: translateY(-50%);
+      }
+    }
   }
   @include meb(false, input, #{$namespace}-select) {
     width: 128px;
@@ -309,6 +345,8 @@
         height: getCssVar(pagination-button-height-small);
         line-height: getCssVar(pagination-button-height-small);
       }
+
+      width: 100px;
     }
   }
 }
@@ -343,17 +381,19 @@
     transition: getCssVar(transition-ease);
     z-index: 100;
     font-size: inherit;
-    box-shadow: 0px 5px 20px 0px getColor('color', 0.3);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    box-shadow:
+      0 2px 5px getColor('color', 0.22),
+      0 8px 22px getColor('color', 0.18);
     cursor: default;
     width: getCssVar(pagination-button-width);
     height: getCssVar(pagination-button-height);
 
-    &:active {
-      transform: scale(1.05);
-    }
-
     @include when(change) {
-      transform: scale(1.1);
+      box-shadow:
+        0 3px 7px getColor('color', 0.28),
+        0 10px 26px getColor('color', 0.24);
     }
   }
 

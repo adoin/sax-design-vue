@@ -8,44 +8,73 @@
 html.dark {
   color-scheme: dark;
 
+  @include set-var-value(
+    'color-state-hover-s',
+    getCssVar('theme-dark-state-hover-s')
+  );
+  @include set-var-value(
+    'color-state-hover-l',
+    getCssVar('theme-dark-state-hover-l')
+  );
+  @include set-var-value(
+    'color-state-active-s',
+    getCssVar('theme-dark-state-active-s')
+  );
+  @include set-var-value(
+    'color-state-active-l',
+    getCssVar('theme-dark-state-active-l')
+  );
+  @include set-var-value(
+    'color-state-subtle-s',
+    getCssVar('theme-dark-state-subtle-s')
+  );
+  @include set-var-value(
+    'color-state-subtle-l',
+    getCssVar('theme-dark-state-subtle-l')
+  );
+
   // Keep controls legible against dark surfaces while preserving the active
   // theme's primary hue instead of introducing a neutral grey border.
   @include set-var-value(
     'input-shadow',
     (
-      0 1px 2px rgba(0, 0, 0, 0.36),
-      0 8px 22px rgba(var(--sax-primary), 0.14),
-      inset 0 0 0 1px rgba(var(--sax-primary), 0.2)
+      0 1px 2px hsl(0deg 0% 0% / 0.36),
+      0 8px 22px hsl(var(--sax-primary) / 0.14),
+      inset 0 0 0 1px hsl(var(--sax-primary) / 0.2)
     )
   );
   @include set-var-value(
     'input-shadow-hover',
     (
-      0 2px 6px rgba(0, 0, 0, 0.44),
-      0 10px 26px rgba(var(--sax-primary), 0.18),
-      inset 0 0 0 1px rgba(var(--sax-primary), 0.32)
+      0 2px 6px hsl(0deg 0% 0% / 0.44),
+      0 10px 26px hsl(var(--sax-primary) / 0.18),
+      inset 0 0 0 1px hsl(var(--sax-primary) / 0.32)
     )
   );
   @include set-var-value(
     'input-shadow-focus',
     (
-      0 3px 9px rgba(0, 0, 0, 0.5),
-      0 14px 32px rgba(var(--sax-primary), 0.22),
-      inset 0 0 0 1px rgba(var(--sax-primary), 0.5)
+      0 3px 9px hsl(0deg 0% 0% / 0.5),
+      0 14px 32px hsl(var(--sax-primary) / 0.22),
+      inset 0 0 0 1px hsl(var(--sax-primary) / 0.5)
     )
   );
   @include set-var-value(
     'popper-shadow',
     (
-      0 18px 40px -16px rgba(0, 0, 0, 0.62),
-      0 8px 20px -12px rgba(var(--sax-primary), 0.28)
+      0 18px 40px -16px hsl(0deg 0% 0% / 0.62),
+      0 8px 20px -12px hsl(var(--sax-primary) / 0.28)
     )
   );
 
   // hex colors
   @each $type in (primary, success, warn, danger, error, info, dark) {
-    @include set-colors($type);
+    @include set-colors($type, true);
   }
+
+  @include set-var-value('primary-h', getCssVar('theme-primary-dark-h'));
+  @include set-var-value('primary-s', getCssVar('theme-primary-dark-s'));
+  @include set-var-value('primary-l', getCssVar('theme-primary-dark-l'));
 
   // // vuesax var
   @include set-component-var('', $vsVar);

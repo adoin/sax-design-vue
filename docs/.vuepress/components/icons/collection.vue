@@ -38,7 +38,7 @@ const examples = [
     min-width: 0;
     padding: 14px 16px;
     border-radius: var(--sax-radius-lg);
-    background: rgba(var(--sax-background), 0.72);
+    background: hsl(var(--sax-background) / 0.72);
     box-shadow: var(--sax-input-shadow, 0 8px 24px rgba(37, 99, 255, 0.08));
   }
 

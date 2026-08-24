@@ -146,11 +146,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, onMounted, ref } from 'vue'
+import { computed, inject, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRouteLocale } from '@vuepress/client'
 // @ts-ignore
 import { useThemeData } from '@vuepress/plugin-theme-data/client'
 import { useRoute, useRouter } from 'vue-router'
+import {
+  applyThemeConfig,
+  colorToHsl,
+  hslToChannels,
+} from '@vuesax-alpha/utils'
 import { vsThemeKey } from '../type'
 import { isDark, toggleDark } from '../composables'
 import { useDocLocaleUi } from '../composables/docLocale'
@@ -164,6 +169,7 @@ const siteLocale = useRouteLocale()
 const $vsTheme = inject<vsThemeContext>(vsThemeKey, {} as vsThemeContext)!
 const $el = ref<HTMLElement>()
 const { t } = useDocLocaleUi()
+let restorePrimaryTheme: (() => void) | undefined
 
 const languageTarget = computed(() => {
   const currentPath = route.path
@@ -213,7 +219,8 @@ const reloadConfig = () => {
   navbar?.style.removeProperty(`--sax-theme-color`)
   config?.style.removeProperty(`--sax-theme-color`)
   document.body.classList.remove('hidden-sidebar')
-  document.body.style.setProperty(`--sax-primary`, '26, 92, 255')
+  restorePrimaryTheme?.()
+  restorePrimaryTheme = undefined
   $vsTheme.mobileActive = false
   localStorage.mobile = false
 
@@ -235,47 +242,12 @@ const changeSidebar = () => {
     document.body.classList.add('hidden-sidebar')
   }
 }
-const hexToRgb = (hex: string) => {
-  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
-  hex = hex.replace(shorthandRegex, (m, r, g, b) => {
-    return r + r + g + g + b + b
-  })
-
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-  return result
-    ? {
-        r: Number.parseInt(result[1], 16),
-        g: Number.parseInt(result[2], 16),
-        b: Number.parseInt(result[3], 16),
-      }
-    : null
-}
-const contrastColor = (element: string) => {
-  const c = `rgb(${element})`
-
-  const rgb = c
-    .replace(/^(rgb|rgba)\(/, '')
-    .replace(/\)$/, '')
-    .replace(/\s/g, '')
-    .split(',')
-
-  const yiq =
-    (Number(rgb[0]) * 299 + Number(rgb[1]) * 587 + Number(rgb[2]) * 114) / 1000
-  if (yiq >= 128) {
-    return true
-  } else {
-    return false
-  }
-}
 const changeColorLayout = (colorBase: string) => {
-  let colour: string = colorBase
-  if (/[#]/g.test(colour)) {
-    const rgb = hexToRgb(colour)
-    colour = `${rgb?.r}, ${rgb?.g}, ${rgb?.b}`
-  }
+  const hsl = colorToHsl(colorBase)
+  if (!hsl) return
+  const colour = hslToChannels(hsl)
   document.body.classList.add('all-transition')
-  $el.value!.focus()
+  $el.value?.focus()
 
   const { sidebar, navbar, config } = getThemeShellElements()
   // const effect1 = document.querySelector(
@@ -287,27 +259,20 @@ const changeColorLayout = (colorBase: string) => {
   navbar?.style.setProperty(`--sax-theme-bg2`, colour)
   config?.style.setProperty(`--sax-theme-layout`, colour)
 
-  if (contrastColor(colour)) {
-    sidebar?.style.setProperty(`--sax-theme-color`, '44, 62, 80')
-    navbar?.style.setProperty(`--sax-theme-color`, '44, 62, 80')
-    config?.style.setProperty(`--sax-theme-color`, '44, 62, 80')
-  } else {
-    sidebar?.style.setProperty(`--sax-theme-color`, '0, 0, 0')
-    navbar?.style.setProperty(`--sax-theme-color`, '0, 0, 0')
-    config?.style.setProperty(`--sax-theme-color`, '0, 0, 0')
-  }
+  const foreground = hsl.l >= 60 ? '0deg 0% 12%' : '0deg 0% 96%'
+  sidebar?.style.setProperty(`--sax-theme-color`, foreground)
+  navbar?.style.setProperty(`--sax-theme-color`, foreground)
+  config?.style.setProperty(`--sax-theme-color`, foreground)
 
   setTimeout(() => {
     document.body.classList.remove('all-transition')
   }, 100)
 }
 const changeColor = (evt: Event) => {
-  // @ts-ignore
-  evt.target.closest('button').focus()
-  // @ts-ignore
-  const rgb = hexToRgb(evt.target.value)
-  const color = `${rgb?.r},${rgb?.g},${rgb?.b}`
-  document.body.style.setProperty(`--sax-primary`, color)
+  const input = evt.target as HTMLInputElement
+  input.closest('button')?.focus()
+  restorePrimaryTheme?.()
+  restorePrimaryTheme = applyThemeConfig({ primary: input.value })
 }
 const changeMenu = () => {
   $vsTheme.sidebarCollapseOpen = !$vsTheme?.sidebarCollapseOpen
@@ -330,6 +295,8 @@ const changeTheme = () => {
 onMounted(() => {
   $vsTheme.themeDarken = isDark.value
 })
+
+onBeforeUnmount(() => restorePrimaryTheme?.())
 </script>
 
 <style lang="scss">
@@ -360,7 +327,7 @@ onMounted(() => {
   }
   &.active {
     .switch-con {
-      background: rgba(var(--sax-primary), 0.3) !important;
+      background: hsl(var(--sax-primary) / 0.3) !important;
     }
     &:active {
       .circle {
@@ -383,14 +350,14 @@ onMounted(() => {
   .switch-con {
     width: 48px;
     height: 28px;
-    background: rgba(var(--sax-theme-color), 0.14);
+    background: hsl(var(--sax-theme-color) / 0.14);
     border-radius: 20px;
     box-shadow: inset 0px 0px 4px 0px rgba(0, 0, 0, 0.05);
   }
   .circle {
     width: 20px;
     height: 20px;
-    background: rgb(var(--sax-sidebar-surface));
+    background: hsl(var(--sax-sidebar-surface));
     position: relative;
     display: flex;
     align-items: center;
@@ -430,7 +397,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   background: transparent;
-  color: rgb(var(--sax-theme-color));
+  color: hsl(var(--sax-theme-color));
   text-decoration: none;
   transition:
     background-color 0.2s ease,
@@ -438,8 +405,8 @@ onMounted(() => {
 
   &:hover,
   &:focus-visible {
-    background: rgba(var(--sax-primary), 0.1);
-    color: rgb(var(--sax-primary));
+    background: hsl(var(--sax-primary) / 0.1);
+    color: hsl(var(--sax-primary));
     outline: none;
 
     .lang {
@@ -514,7 +481,7 @@ onMounted(() => {
   overflow: visible;
   border: 0;
   border-radius: 0px 14px 0px 0px;
-  background: rgb(var(--sax-sidebar-surface));
+  background: hsl(var(--sax-sidebar-surface));
   box-shadow: 8px 0 20px rgba(30, 27, 75, 0.07);
   transition: all 0.25s ease;
   outline: none;
@@ -530,7 +497,7 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
     border: 0px;
-    background: rgb(var(--sax-sidebar-surface)) !important;
+    background: hsl(var(--sax-sidebar-surface)) !important;
     transition: all 0.25s ease;
     &.config-btn {
       width: 40px;
@@ -552,7 +519,7 @@ onMounted(() => {
     width: 40px;
     height: 40px;
     transform: rotate(179deg);
-    color: rgb(var(--sax-sidebar-surface));
+    color: hsl(var(--sax-sidebar-surface));
     fill: currentColor;
     stroke: currentColor;
     pointer-events: none;
@@ -573,7 +540,7 @@ onMounted(() => {
       top: 0px;
       left: 0px;
       transform: translate(-15px, calc(-100% - 25px));
-      background: rgb(var(--sax-sidebar-surface));
+      background: hsl(var(--sax-sidebar-surface));
       list-style: none;
       padding-left: 0px;
       margin: 0px;

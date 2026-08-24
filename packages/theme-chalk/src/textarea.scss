@@ -22,7 +22,7 @@
     cursor: default;
     transition: all var(--sax-motion-duration) var(--sax-motion-easing-standard);
     border-radius: var(--sax-radius-xs) var(--sax-radius-xs) 0 0;
-    color: rgba(0, 0, 0, 0.55);
+    color: hsl(0deg 0% 0% / 0.55);
   }
 
   @include e(inner) {
@@ -39,7 +39,7 @@
     font-family: inherit;
     font-size: 0.8rem;
     line-height: 1.5;
-    color: rgba(0, 0, 0, 0.8);
+    color: hsl(0deg 0% 0% / 0.8);
 
     &:focus {
       resize: auto;
@@ -60,10 +60,10 @@
     font-size: 0.6rem;
     font-weight: bold;
     line-height: 1.4;
-    color: rgba(255, 255, 255, 1);
+    color: hsl(0deg 0% 100% / 1);
     background: getColor(primary);
     opacity: 0.3;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px hsl(0deg 0% 0% / 0.05);
     cursor: default;
     transition: all var(--sax-motion-duration) var(--sax-motion-easing-standard);
     user-select: none;

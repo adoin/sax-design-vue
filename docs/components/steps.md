@@ -1,40 +1,134 @@
 ---
 PROPS:
-  - name: finish-status / process-status
-    type: String
-    values: success | error | process | wait
-    description: Set status styling for completed and active steps.
-    default: 'success / process'
   - name: active
     type: Number
     values: index
-    description: Current active step index.
+    description: Current step index. Supports v-model:active.
     default: '0'
   - name: items
-    type: Array
-    values: '{ title, description?, status?, disabled? }[]'
-    description: Step item definitions.
+    type: StepItem[]
+    values: '{ key?, title, description?, meta?, status?, statusLabel?, disabled?, clickable?, icon? }[]'
+    description: Step data.
     default: '[]'
+  - name: variant
+    type: String
+    values: rail / timeline
+    description: Focus rail or contextual timeline.
+    default: rail
   - name: direction
     type: String
     values: horizontal / vertical
-    description: Steps layout direction.
-    default: horizontal
+    description: Layout direction. Timeline defaults to vertical.
+    default: inferred from variant
+  - name: size
+    type: String
+    values: small / default / large
+    description: Step size.
+    default: default
+  - name: finish-status
+    type: StepStatus
+    values: wait / process / finish / success / error / loading / disabled
+    description: Status used for completed steps.
+    default: finish
+  - name: process-status
+    type: StepStatus
+    values: wait / process / finish / success / error / loading / disabled
+    description: Status used for the current step.
+    default: process
+  - name: status-labels
+    type: Partial<Record<StepStatus, string>>
+    values: object
+    description: Overrides the built-in localized label for each status.
+    default: '{}'
+  - name: clickable
+    type: Boolean
+    values: true / false
+    description: Allow selecting steps by click.
+    default: 'true'
+  - name: show-progress
+    type: Boolean
+    values: true / false
+    description: Show the connecting progress rail.
+    default: 'true'
+  - name: show-step-index
+    type: Boolean
+    values: true / false
+    description: Show the position on the active step.
+    default: 'true'
+  - name: responsive
+    type: Boolean
+    values: true / false
+    description: Stack a horizontal rail on small screens.
+    default: 'true'
   - name: simple
     type: Boolean
     values: true / false
-    description: Use compact presentation.
+    description: Remove the rail for full item-slot layouts.
     default: 'false'
+  - name: aria-label
+    type: String
+    values: text
+    description: Accessible name for the step navigation.
+    default: —
 EVENTS:
+  - name: update:active
+    description: Fired when the active step changes. Supports v-model:active.
+  - name: change
+    description: Fired with the next index and step item after a change.
   - name: click
-    description: Fired with the clicked item index and item.
-description: "Progress steps."
+    description: Fired with the index and item when an enabled step is clicked.
+SLOTS:
+  - name: item
+    description: Replaces a whole step. Receives item, index, status, statusLabel, icon, active, disabled, and interactive.
+  - name: icon
+    description: Custom marker icon. Receives the item slot props.
+  - name: title / description / meta
+    description: Custom text regions. Receive the item slot props.
+  - name: content
+    description: Context content for the active timeline step.
+  - name: actions
+    description: Action region for the active timeline step.
+description: 'Steps with a focus rail, contextual timeline, semantic states, and composable content.'
 ---
 
 # Steps
 
+## Focus rail
+
+For linear flows such as onboarding and configuration, with a strong active-step focus.
+
 <card><template #example><steps-default /></template><template #template>
 
-@[code{1-15}](../.vuepress/components/steps/default.vue)
+@[code](../.vuepress/components/steps/default.vue)
+
+</template></card>
+
+## Context timeline
+
+The active step can reveal details and actions for longer operational flows.
+
+<card><template #example><steps-timeline /></template><template #template>
+
+@[code](../.vuepress/components/steps/timeline.vue)
+
+</template></card>
+
+## Custom item
+
+Use the `item` slot to replace each step with a tile or another custom layout.
+
+<card><template #example><steps-custom-item /></template><template #template>
+
+@[code](../.vuepress/components/steps/custom-item.vue)
+
+</template></card>
+
+## States
+
+Wait, process, loading, finish, success, error, and disabled states are built in.
+
+<card><template #example><steps-states /></template><template #template>
+
+@[code](../.vuepress/components/steps/states.vue)
 
 </template></card>

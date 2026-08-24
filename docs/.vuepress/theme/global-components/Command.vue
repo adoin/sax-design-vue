@@ -49,8 +49,8 @@
         :class="{ copied }"
         @click="copy($el.textContent)"
       >
-        <s-icon v-if="!copied"  name="bx:clipboard" />
-        <s-icon v-else  name="bx:check" />
+        <s-icon v-if="!copied" name="bx:clipboard" />
+        <s-icon v-else name="bx:check" />
       </div>
     </div>
 
@@ -126,7 +126,7 @@ if (isMultipleSlot) {
     border-radius: 20px 25px 0 0;
     margin-left: 18px;
     gap: 4px;
-    background: rgb(var(--sax-theme-code));
+    background: hsl(var(--sax-theme-code));
     padding: 6px;
     padding-right: 9px;
 
@@ -142,7 +142,7 @@ if (isMultipleSlot) {
       max-height: 40px;
       z-index: -1;
       pointer-events: none;
-      fill: rgb(var(--sax-theme-code));
+      fill: hsl(var(--sax-theme-code));
 
       &.tab-effect1 {
         transform: rotate(72deg) scale(0.6);
@@ -217,7 +217,7 @@ if (isMultipleSlot) {
 
   .slots {
     border-radius: 20px;
-    background: rgb(var(--sax-theme-code));
+    background: hsl(var(--sax-theme-code));
 
     div[class*='language-'] {
       @include syntax-tokens(true);

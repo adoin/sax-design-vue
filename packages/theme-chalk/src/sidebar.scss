@@ -30,7 +30,7 @@
   border-radius: 0 var(--sax-radius-xl) var(--sax-radius-xl) 0;
 
   color: getColor('text');
-  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, getCssVar('shadow-opacity'));
+  box-shadow: 0px 0px 25px 0px getColor(black, getCssVar('shadow-opacity'));
   background: getColor('background');
 
   transition: getCssVar(transition-ease);
@@ -72,7 +72,7 @@
   @include when(text-white) {
     .#{$namespace}-sidebar-group__content {
       &:after {
-        background: rgba(255, 255, 255, 0.4);
+        background: hsl(0deg 0% 100% / 0.4);
       }
     }
     .#{$namespace}-sidebar-item {

@@ -5,9 +5,9 @@
         <span v-if="item.text !== '...'">
           {{ item.text }}
         </span>
-        <s-icon v-else  name="bx:dots-horizontal-rounded" />
+        <s-icon v-else name="bx:dots-horizontal-rounded" />
 
-        <s-icon v-if="hasFle"  name="bx:chevron-down" class="not-remove" />
+        <s-icon v-if="hasFle" name="bx:chevron-down" class="not-remove" />
       </span>
     </a>
 
@@ -250,7 +250,7 @@ const toggle = () => {
       // Dropdowns sit over page content. Use a solid surface so hero text
       // never bleeds through while navigating.
       z-index: 1300;
-      background-color: rgb(var(--sax-theme-layout));
+      background-color: hsl(var(--sax-theme-layout));
       padding: 0.5rem 0;
       text-align: left;
       border-radius: 7px 20px 20px 20px;

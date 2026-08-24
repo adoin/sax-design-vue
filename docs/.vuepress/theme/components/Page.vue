@@ -552,7 +552,7 @@ onMounted(() => {
       max-width: min(56vw, 640px);
       margin: 0;
       overflow: hidden;
-      color: rgba(var(--sax-theme-color), 0.6);
+      color: hsl(var(--sax-theme-color) / 0.6);
       font-size: 0.82rem;
       line-height: 1.4;
       text-overflow: ellipsis;

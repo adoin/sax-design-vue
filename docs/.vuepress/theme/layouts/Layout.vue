@@ -301,7 +301,7 @@ const onTouchEnd = (e: TouchEvent) => {
 }
 
 .docs-layout > .s-layout__content > .s-layout-aside {
-  --s-layout-aside-outside-surface: rgba(var(--sax-theme-layout), 0.9);
+  --s-layout-aside-outside-surface: hsl(var(--sax-theme-layout) / 0.9);
 
   position: fixed;
   z-index: 1100;
@@ -313,7 +313,7 @@ const onTouchEnd = (e: TouchEvent) => {
   padding: 0;
   overflow: visible;
   border-radius: 0;
-  background: rgba(var(--sax-theme-layout), 0.9);
+  background: hsl(var(--sax-theme-layout) / 0.9);
   box-shadow: 10px 0 28px rgba(30, 27, 75, 0.07);
   backdrop-filter: blur(12px);
   transition:

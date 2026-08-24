@@ -226,7 +226,7 @@ const issueLink = (name: string) =>
 
 .content-table h3 {
   margin: 0 0 14px;
-  color: rgb(var(--sax-theme-color));
+  color: hsl(var(--sax-theme-color));
   font-size: 1.2rem;
 }
 
@@ -236,7 +236,7 @@ const issueLink = (name: string) =>
   max-width: 100%;
   overflow-x: auto;
   border-radius: 14px;
-  background: rgb(var(--sax-theme-layout));
+  background: hsl(var(--sax-theme-layout));
 }
 
 .api-table .s-table {
@@ -256,15 +256,15 @@ const issueLink = (name: string) =>
 .api-table td {
   padding: 14px 12px;
   border: 0;
-  border-bottom: 1px solid rgba(var(--sax-theme-color), 0.08);
-  color: rgb(var(--sax-theme-color));
+  border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.08);
+  color: hsl(var(--sax-theme-color));
   text-align: left;
   vertical-align: top;
 }
 
 .api-table th {
-  background: rgba(var(--sax-primary), 0.08);
-  color: rgb(var(--sax-theme-color));
+  background: hsl(var(--sax-primary) / 0.08);
+  color: hsl(var(--sax-theme-color));
   font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.25;
@@ -288,7 +288,7 @@ const issueLink = (name: string) =>
 .api-column-type {
   width: 10%;
   min-width: 86px;
-  color: rgb(var(--sax-accent-secondary)) !important;
+  color: hsl(var(--sax-accent-secondary)) !important;
 }
 
 .api-column-values {
@@ -303,7 +303,7 @@ const issueLink = (name: string) =>
 .api-column-default {
   width: 12%;
   min-width: 110px;
-  color: rgb(var(--sax-badge-tip-color)) !important;
+  color: hsl(var(--sax-badge-tip-color)) !important;
 }
 
 .api-column-example {
@@ -325,7 +325,7 @@ const issueLink = (name: string) =>
 }
 
 .api-table a:hover {
-  color: rgb(var(--sax-primary));
+  color: hsl(var(--sax-primary));
 }
 
 .api-state {
@@ -337,8 +337,8 @@ const issueLink = (name: string) =>
   margin: 2px;
   padding: 2px 6px;
   border-radius: 6px;
-  background: rgba(var(--sax-primary), 0.09);
-  color: rgb(var(--sax-theme-color));
+  background: hsl(var(--sax-primary) / 0.09);
+  color: hsl(var(--sax-theme-color));
   font-size: 0.7rem;
 }
 
@@ -362,8 +362,8 @@ const issueLink = (name: string) =>
   gap: 4px;
   border: 0;
   border-radius: 8px;
-  background: rgba(var(--sax-primary), 0.1);
-  color: rgb(var(--sax-primary)) !important;
+  background: hsl(var(--sax-primary) / 0.1);
+  color: hsl(var(--sax-primary)) !important;
   cursor: pointer;
   font: inherit;
 }
@@ -380,13 +380,13 @@ const issueLink = (name: string) =>
 }
 
 .api-empty {
-  color: rgba(var(--sax-theme-color), 0.45);
+  color: hsl(var(--sax-theme-color) / 0.45);
 }
 
 .api-code-row td {
   position: relative;
   padding: 0;
-  background: rgba(var(--sax-primary), 0.04);
+  background: hsl(var(--sax-primary) / 0.04);
 }
 
 .api-code-row pre {

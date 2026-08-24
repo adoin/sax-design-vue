@@ -204,6 +204,24 @@ export default {
     splitter: {
       resize: 'Resize {direction} panels',
     },
+    steps: {
+      label: 'Steps',
+      status: {
+        wait: 'Waiting',
+        process: 'In progress',
+        finish: 'Completed',
+        success: 'Succeeded',
+        error: 'Needs attention',
+        loading: 'Loading',
+        disabled: 'Unavailable',
+      },
+    },
+    tabs: {
+      label: 'Tabs',
+      more: 'More tabs',
+      add: 'Add tab',
+      close: 'Close {label}',
+    },
     rate: {
       label: 'rating',
     },

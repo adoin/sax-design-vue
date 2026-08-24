@@ -1,10 +1,7 @@
 <template>
   <div v-if="visible" :class="chipKls" :style="chipStyle" @click="handleClick">
     <span :class="ns.e('text')">
-      <SIcon
-        v-if="icon" :name="icon"
-        :class="ns.e('icon')"
-      />
+      <SIcon v-if="icon" :name="icon" :class="ns.e('icon')" />
       <slot>{{ text }}</slot>
     </span>
 
@@ -100,7 +97,7 @@ const chipStyle = computed((): CSSProperties => {
     '--sax-chip-accent': resolved.startsWith('var(')
       ? resolved
       : `rgb(${resolved})`,
-    '--sax-chip-text': 'rgba(255,255,255,.94)',
+    '--sax-chip-text': 'hsl(0deg 0% 100% / 0.94)',
   }
 })
 

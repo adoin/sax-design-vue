@@ -321,13 +321,13 @@ const go = (path: string) => router.push(withLocalePath(path))
     font-size: clamp(2.7rem, 4vw, 3.9rem);
     line-height: 1.02;
     letter-spacing: -0.06em;
-    color: rgb(var(--sax-theme-color));
+    color: hsl(var(--sax-theme-color));
   }
 
   > p {
     max-width: 430px;
     margin: 0;
-    color: rgba(var(--sax-theme-color), 0.68);
+    color: hsl(var(--sax-theme-color) / 0.68);
     font-size: 1.08rem;
     line-height: 1.75;
   }
@@ -348,9 +348,9 @@ const go = (path: string) => router.push(withLocalePath(path))
 
 .component-gallery {
   padding: 26px 28px 28px;
-  border: 1px solid rgba(var(--sax-accent-color), 0.16);
+  border: 1px solid hsl(var(--sax-accent-color) / 0.16);
   border-radius: 24px;
-  background: rgba(var(--sax-theme-layout), 0.94);
+  background: hsl(var(--sax-theme-layout) / 0.94);
   box-shadow: 0 24px 70px rgba(55, 43, 145, 0.13);
 }
 
@@ -396,7 +396,7 @@ const go = (path: string) => router.push(withLocalePath(path))
   label {
     display: block;
     margin-bottom: 9px;
-    color: rgba(var(--sax-theme-color), 0.72);
+    color: hsl(var(--sax-theme-color) / 0.72);
     font-size: 0.78rem;
     font-weight: 600;
   }
@@ -426,7 +426,7 @@ const go = (path: string) => router.push(withLocalePath(path))
 
   span {
     min-width: 32px;
-    color: rgb(var(--sax-accent-color));
+    color: hsl(var(--sax-accent-color));
     font-weight: 600;
     text-align: right;
   }
@@ -439,8 +439,8 @@ const go = (path: string) => router.push(withLocalePath(path))
     padding: 12px 14px;
     overflow: hidden;
     border-radius: 12px;
-    background: rgba(var(--sax-theme-bg), 0.86);
-    color: rgb(var(--sax-accent-color));
+    background: hsl(var(--sax-theme-bg) / 0.86);
+    color: hsl(var(--sax-accent-color));
     font-size: 0.73rem;
     line-height: 1.65;
     white-space: pre-wrap;
@@ -460,7 +460,7 @@ const go = (path: string) => router.push(withLocalePath(path))
   gap: 18px;
   padding: 28px 26px;
   border-radius: 18px;
-  background: rgba(var(--sax-theme-layout), 0.76);
+  background: hsl(var(--sax-theme-layout) / 0.76);
   box-shadow: 0 12px 28px rgba(55, 43, 145, 0.08);
   transition:
     transform 0.22s ease,
@@ -472,21 +472,21 @@ const go = (path: string) => router.push(withLocalePath(path))
   }
 
   > span {
-    color: rgb(var(--sax-accent-color));
+    color: hsl(var(--sax-accent-color));
     font-size: 0.78rem;
     font-weight: 700;
   }
 
   h2 {
     margin: 0 0 6px;
-    color: rgb(var(--sax-theme-color));
+    color: hsl(var(--sax-theme-color));
     font-size: 1.05rem;
   }
 
   p {
     min-height: 45px;
     margin: 0 0 10px;
-    color: rgba(var(--sax-theme-color), 0.66);
+    color: hsl(var(--sax-theme-color) / 0.66);
     font-size: 0.88rem;
     line-height: 1.6;
   }

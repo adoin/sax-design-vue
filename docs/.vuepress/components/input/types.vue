@@ -50,7 +50,7 @@ const handleSearch = (value: string) => {
 .search-feedback {
   flex: 0 0 100%;
   margin: -8px 0 0;
-  color: rgba(var(--sax-text), 0.62);
+  color: hsl(var(--sax-text) / 0.62);
   font-size: 0.78rem;
   text-align: center;
 }

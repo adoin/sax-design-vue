@@ -10,8 +10,8 @@
 }
 
 @include b(popper) {
-  background-color: rgb(var(--sax-background));
-  border: 1px solid rgba(var(--sax-primary), 0.1);
+  background-color: hsl(var(--sax-background));
+  border: 1px solid hsl(var(--sax-primary) / 0.1);
   box-shadow: var(--sax-popper-shadow);
 
   @include when(not-arrow) {

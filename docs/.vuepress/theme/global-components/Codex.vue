@@ -9,7 +9,7 @@
           :title="t.examples.openExamplePlayground"
           @click="openPlayground"
         >
-          <s-icon  name="bx:play-circle" />
+          <s-icon name="bx:play-circle" />
           <span>{{ t.examples.playground }}</span>
         </button>
         <button
@@ -18,11 +18,11 @@
           :class="{ copied }"
           @click="copySource"
         >
-          <s-icon :name="copied ? 'bx:check' : 'bx:clipboard'"  />
+          <s-icon :name="copied ? 'bx:check' : 'bx:clipboard'" />
           <span>{{ t.examples.copy }}</span>
         </button>
         <button type="button" :title="t.examples.viewCode" @click="openCode">
-          <s-icon  name="bx:code-alt" />
+          <s-icon name="bx:code-alt" />
           <span>{{ t.examples.code }}</span>
         </button>
       </div>
@@ -50,14 +50,14 @@
                 :title="t.examples.copyCode"
                 @click="copySource"
               >
-                <s-icon :name="copied ? 'bx:check' : 'bx:clipboard'"  />
+                <s-icon :name="copied ? 'bx:check' : 'bx:clipboard'" />
               </button>
               <button
                 type="button"
                 :title="t.examples.closeCode"
                 @click="closeCode"
               >
-                <s-icon  name="bx:x" />
+                <s-icon name="bx:x" />
               </button>
             </div>
           </header>
@@ -94,7 +94,7 @@
           <footer class="code-dialog__footer">
             <button type="button" @click="openPlayground">
               {{ t.examples.openInPlayground }}
-              <s-icon  name="bx:right-arrow-alt" />
+              <s-icon name="bx:right-arrow-alt" />
             </button>
           </footer>
         </section>
@@ -259,7 +259,7 @@ const openPlayground = (event?: Event) => {
   gap: 6px;
   border: 0;
   background: transparent;
-  color: rgba(var(--sax-theme-color), 0.68);
+  color: hsl(var(--sax-theme-color) / 0.68);
   font: inherit;
   cursor: pointer;
 }
@@ -274,12 +274,12 @@ const openPlayground = (event?: Event) => {
 
 .example-actions button:hover,
 .example-actions button:focus-visible {
-  background: rgba(var(--sax-accent-color), 0.1);
-  color: rgb(var(--sax-accent-color));
+  background: hsl(var(--sax-accent-color) / 0.1);
+  color: hsl(var(--sax-accent-color));
 }
 
 .example-actions button.copied {
-  color: rgb(var(--sax-badge-tip-color));
+  color: hsl(var(--sax-badge-tip-color));
 }
 
 .source-cache {
@@ -304,7 +304,7 @@ const openPlayground = (event?: Event) => {
   flex-direction: column;
   overflow: hidden;
   border-radius: 18px;
-  background: rgb(var(--sax-theme-layout));
+  background: hsl(var(--sax-theme-layout));
   box-shadow: 0 28px 70px rgba(20, 16, 62, 0.28);
 }
 
@@ -315,7 +315,7 @@ const openPlayground = (event?: Event) => {
   justify-content: space-between;
   gap: 18px;
   padding: 12px 18px;
-  border-bottom: 1px solid rgba(var(--sax-accent-color), 0.12);
+  border-bottom: 1px solid hsl(var(--sax-accent-color) / 0.12);
 
   strong,
   span {
@@ -323,13 +323,13 @@ const openPlayground = (event?: Event) => {
   }
 
   strong {
-    color: rgb(var(--sax-theme-color));
+    color: hsl(var(--sax-theme-color));
     font-size: 0.95rem;
   }
 
   span {
     margin-top: 2px;
-    color: rgba(var(--sax-theme-color), 0.58);
+    color: hsl(var(--sax-theme-color) / 0.58);
     font-size: 0.76rem;
   }
 }
@@ -342,15 +342,15 @@ const openPlayground = (event?: Event) => {
 
 .code-dialog__header-actions button:hover,
 .code-dialog__header-actions button:focus-visible {
-  background: rgba(var(--sax-accent-color), 0.1);
-  color: rgb(var(--sax-accent-color));
+  background: hsl(var(--sax-accent-color) / 0.1);
+  color: hsl(var(--sax-accent-color));
 }
 
 .code-dialog__tabs {
   display: flex;
   gap: 4px;
   padding: 8px 14px 0;
-  background: rgba(var(--sax-theme-bg2), 0.24);
+  background: hsl(var(--sax-theme-bg2) / 0.24);
 }
 
 .code-dialog__tabs button {
@@ -362,14 +362,14 @@ const openPlayground = (event?: Event) => {
 }
 
 .code-dialog__tabs button.active {
-  background: rgb(var(--sax-theme-code));
+  background: hsl(var(--sax-theme-code));
   color: #fff;
 }
 
 .code-dialog__body {
   min-height: 0;
   overflow: auto;
-  background: rgb(var(--sax-theme-code));
+  background: hsl(var(--sax-theme-code));
 }
 
 .code-section > div[class*='language-'],
@@ -384,22 +384,22 @@ const openPlayground = (event?: Event) => {
   align-items: center;
   justify-content: flex-end;
   padding: 8px 18px;
-  border-top: 1px solid rgba(var(--sax-accent-color), 0.12);
+  border-top: 1px solid hsl(var(--sax-accent-color) / 0.12);
 }
 
 .code-dialog__footer button {
   min-height: 34px;
   padding: 0 12px;
   border-radius: 9px;
-  background: rgba(var(--sax-accent-color), 0.1);
-  color: rgb(var(--sax-accent-color));
+  background: hsl(var(--sax-accent-color) / 0.1);
+  color: hsl(var(--sax-accent-color));
   font-size: 0.78rem;
   font-weight: 700;
 }
 
 .code-dialog__footer button:hover,
 .code-dialog__footer button:focus-visible {
-  background: rgb(var(--sax-accent-color));
+  background: hsl(var(--sax-accent-color));
   color: #fff;
 }
 

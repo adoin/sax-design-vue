@@ -24,38 +24,38 @@
     transition: all 0.25s ease;
     cursor: default;
     &.primary {
-      box-shadow: 0px 20px 35px -10px rgba(var(--sax-primary, 0.5));
-      background: rgba(var(--sax-primary));
+      box-shadow: 0px 20px 35px -10px hsl(var(--sax-primary) / 0.5);
+      background: hsl(var(--sax-primary));
       &:hover {
-        box-shadow: 0px 0px 0px 0px rgba(var(--sax-primary, 0.5));
+        box-shadow: 0px 0px 0px 0px hsl(var(--sax-primary) / 0.5);
       }
     }
     &.success {
-      box-shadow: 0px 20px 35px -10px rgba(var(--sax-success, 0.5));
-      background: rgba(var(--sax-success));
+      box-shadow: 0px 20px 35px -10px hsl(var(--sax-success) / 0.5);
+      background: hsl(var(--sax-success));
       &:hover {
-        box-shadow: 0px 0px 0px 0px rgba(var(--sax-success, 0.5));
+        box-shadow: 0px 0px 0px 0px hsl(var(--sax-success) / 0.5);
       }
     }
     &.danger {
-      box-shadow: 0px 20px 35px -10px rgba(var(--sax-danger, 0.5));
-      background: rgba(var(--sax-danger));
+      box-shadow: 0px 20px 35px -10px hsl(var(--sax-danger) / 0.5);
+      background: hsl(var(--sax-danger));
       &:hover {
-        box-shadow: 0px 0px 0px 0px rgba(var(--sax-danger, 0.5));
+        box-shadow: 0px 0px 0px 0px hsl(var(--sax-danger) / 0.5);
       }
     }
     &.warn {
-      box-shadow: 0px 20px 35px -10px rgba(var(--sax-warn, 0.5));
-      background: rgba(var(--sax-warn));
+      box-shadow: 0px 20px 35px -10px hsl(var(--sax-warn) / 0.5);
+      background: hsl(var(--sax-warn));
       &:hover {
-        box-shadow: 0px 0px 0px 0px rgba(var(--sax-warn, 0.5));
+        box-shadow: 0px 0px 0px 0px hsl(var(--sax-warn) / 0.5);
       }
     }
     &.dark {
-      box-shadow: 0px 20px 35px -10px rgba(var(--sax-dark, 0.5));
-      background: rgba(var(--sax-dark));
+      box-shadow: 0px 20px 35px -10px hsl(var(--sax-dark) / 0.5);
+      background: hsl(var(--sax-dark));
       &:hover {
-        box-shadow: 0px 0px 0px 0px rgba(var(--sax-dark, 0.5));
+        box-shadow: 0px 0px 0px 0px hsl(var(--sax-dark) / 0.5);
       }
     }
     &:hover {

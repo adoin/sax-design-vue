@@ -102,8 +102,8 @@ const radioTabs = [
     min-width: 0;
     padding: 14px;
     border-radius: var(--sax-radius-lg);
-    background: rgba(var(--sax-primary), 0.025);
-    box-shadow: inset 0 2px 7px rgba(var(--sax-primary), 0.06);
+    background: hsl(var(--sax-primary) / 0.025);
+    box-shadow: inset 0 2px 7px hsl(var(--sax-primary) / 0.06);
   }
 
   &__heading {
@@ -112,14 +112,14 @@ const radioTabs = [
     justify-content: space-between;
     gap: 12px;
     margin-bottom: 10px;
-    color: rgba(var(--sax-text), 0.78);
+    color: hsl(var(--sax-text) / 0.78);
     font-size: 0.78rem;
 
     span {
       padding: 3px 7px;
       border-radius: var(--sax-radius-pill);
-      background: rgba(var(--sax-primary), 0.09);
-      color: rgba(var(--sax-primary), 1);
+      background: hsl(var(--sax-primary) / 0.09);
+      color: hsl(var(--sax-primary) / 1);
       font-family: var(--vp-font-family-mono);
       font-size: 0.7rem;
     }

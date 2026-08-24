@@ -24,6 +24,6 @@ const getTarget = () => panel.value || window
   padding: 12px 20px 20px;
   overflow-y: auto;
   border-radius: 14px;
-  background: rgba(var(--sax-theme-bg2), 0.46);
+  background: hsl(var(--sax-theme-bg2) / 0.46);
 }
 </style>

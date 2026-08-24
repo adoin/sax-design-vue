@@ -42,13 +42,13 @@
   }
 
   @include m(border) {
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid hsl(0deg 0% 0% / 0.1);
     padding: 0;
 
     @include b(collapse-item) {
       margin-bottom: 0;
       border: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid hsl(0deg 0% 0% / 0.1);
       border-radius: 0;
 
       &:last-child {
@@ -68,7 +68,7 @@
 }
 
 @include b(collapse-item) {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid hsl(0deg 0% 0% / 0.04);
   cursor: pointer;
   transition: all var(--sax-motion-duration) var(--sax-motion-easing-standard);
 

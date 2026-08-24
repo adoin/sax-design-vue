@@ -24,43 +24,24 @@ app.use(SaxDesignVue)
 
 ## 颜色令牌
 
-Sax Design Vue 不只有 `--sax-primary`，而是一套完整颜色令牌系统。颜色令牌存储的是**以逗号分隔的 RGB 三通道**，不是完整 CSS 颜色值。这样设计是为了让组件基于同一令牌派生透明态，例如 `rgba(var(--sax-primary), 0.12)`。
-
-覆盖下列颜色令牌时使用 `25, 91, 255` 这种格式；不要写 `#195bff`、`rgb(25 91 255)` 或 `hsl(...)`：
+颜色令牌保存 **HSL 三通道**，组件通过 `hsl(var(--sax-primary) / 0.12)` 等方式复用并添加透明度。主题主键拆分 H/S/L，交互态保持 H 不变，只对 S/L 应用偏移。
 
 <command>
 
 ```css
 :root {
-  --sax-primary: 37, 99, 255;
-  --sax-success: 34, 197, 94;
-  --sax-danger: 239, 68, 68;
-}
-
-html.dark {
-  --sax-primary: 96, 165, 250;
+  --sax-theme-primary-h: 222.8deg;
+  --sax-theme-primary-s: 100%;
+  --sax-theme-primary-l: 54.9%;
+  --sax-theme-primary-dark-h: var(--sax-theme-primary-h);
+  --sax-theme-primary-dark-s: 92%;
+  --sax-theme-primary-dark-l: 70%;
 }
 ```
 
 </command>
 
-| 令牌                                                | 默认通道值                                       | 用途                             |
-| --------------------------------------------------- | ------------------------------------------------ | -------------------------------- |
-| `--sax-primary`                                     | `25, 91, 255`                                    | 品牌色和主操作。                 |
-| `--sax-success`                                     | `70, 201, 58`                                    | 成功反馈。                       |
-| `--sax-warn`                                        | `255, 186, 0`                                    | 警告反馈。                       |
-| `--sax-danger` / `--sax-error`                      | `255, 71, 87`                                    | 危险和错误反馈。                 |
-| `--sax-info`                                        | `144, 147, 153`                                  | 中性信息反馈。                   |
-| `--sax-dark` / `--sax-light`                        | `30, 30, 30` / `244, 247, 248`                   | 语义化深浅表面。                 |
-| `--sax-color` / `--sax-white` / `--sax-black`       | `17, 18, 20` / `255, 255, 255` / `0, 0, 0`       | 基础前景色和绝对中性色。         |
-| `--sax-gray-1` … `--sax-gray-4`                     | `249, 252, 253` … `230, 233, 234`                | 中性色阶。                       |
-| `--sax-divider` / `--sax-text` / `--sax-background` | `206, 208, 212` / `44, 62, 80` / `255, 255, 255` | 共享分割线、文本和历史背景令牌。 |
-
-表面类令牌同样支持运行时覆盖：`--sax-text-color`、`--sax-text-color-regular`、`--sax-text-color-secondary`、`--sax-text-color-placeholder`、`--sax-text-color-disabled`；`--sax-bg-color`、`--sax-bg-color-page`、`--sax-bg-color-overlay`；`--sax-border-color` 及 `-light`、`-lighter`、`-extra-light`、`-dark`、`-darker`；以及同样层级的 `--sax-fill-color` 和 `-blank`。除 `--sax-fill-color-blank` 保持语义值 `transparent` 外，所有颜色令牌都使用 RGB 三通道。
-
-每个语义色还提供 `--sax-<type>-light-1` 到 `-light-9` 和 `--sax-<type>-dark-2`（`type` 为 `primary`、`success`、`warn`、`danger`、`error`、`info`、`dark` 或 `light`）。这些色阶在主题构建阶段由 Sass 生成；若运行时改了基础色，并希望某个色阶同步变化，需要显式覆盖对应的色阶令牌。
-
-暗色样式会覆盖表面、文本、边框和填充类令牌。本站使用同一套令牌系统 — 可用导航栏主题开关预览暗色模式。
+`SConfigProvider` 的 `theme` 属性或 `applyThemeConfig()` 可直接接收 HEX、RGB、HSL，并生成主色、暗色主色与 hover / active / subtle 状态变量。完整示例见[颜色主题](/zh/theme/)。`--sax-primary` 等组合令牌仍可读取，但自定义主题应优先修改 `--sax-theme-primary-*` 主键。
 
 </card>
 

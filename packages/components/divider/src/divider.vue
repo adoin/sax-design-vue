@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { getVsColor, isRgbColor, isVsColor } from '@vuesax-alpha/utils'
+import { getVsColor, isVsColor } from '@vuesax-alpha/utils'
 import { dividerProps } from './divider'
 import type { CSSProperties } from 'vue'
 
@@ -16,7 +16,7 @@ const ns = useNamespace('divider')
 const isVertical = computed(() => props.direction === 'vertical')
 const rootClass = computed(() => [ns.b(), ns.m(props.direction)])
 
-const DEFAULT_COLOR = 'rgba(0, 0, 0,.1)'
+const DEFAULT_COLOR = 'hsl(0deg 0% 0% / 0.1)'
 
 const normalizeThemeColor = (color: string) =>
   color === 'warning' ? 'warn' : color
@@ -60,10 +60,9 @@ const resolveInlineColor = (color: string) => {
   if (!color || color === DEFAULT_COLOR || color === 'transparent')
     return undefined
   if (isVsColor(normalizeThemeColor(color))) return undefined
-  if (isRgbColor(color)) return color
   const resolved = getVsColor(color)
   if (resolved) {
-    return resolved.startsWith('var(') ? resolved : `rgb(${resolved})`
+    return resolved.startsWith('var(') ? resolved : `hsl(${resolved})`
   }
   return color
 }

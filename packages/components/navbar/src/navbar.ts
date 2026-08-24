@@ -1,4 +1,9 @@
-import { buildProps, isBoolean, isString } from '@vuesax-alpha/utils'
+import {
+  buildProps,
+  definePropType,
+  isBoolean,
+  isString,
+} from '@vuesax-alpha/utils'
 
 import { useColorProp } from '@vuesax-alpha/hooks'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
@@ -13,6 +18,50 @@ export const navbarProps = buildProps({
    * @description Component color - Accept Sax Design color tokens, Hex, rgb
    */
   color: useColorProp,
+
+  /** @description Surface treatment of the navigation shell. */
+  variant: {
+    type: definePropType<'surface' | 'floating' | 'transparent'>(String),
+    values: ['surface', 'floating', 'transparent'] as const,
+    default: 'surface',
+  },
+
+  /** @description Positioning strategy. The legacy `fixed` prop takes priority. */
+  position: {
+    type: definePropType<'static' | 'sticky' | 'fixed'>(String),
+    values: ['static', 'sticky', 'fixed'] as const,
+    default: 'static',
+  },
+
+  /** @description Controls the navigation bar height and spacing. */
+  size: {
+    type: definePropType<'compact' | 'default' | 'spacious'>(String),
+    values: ['compact', 'default', 'spacious'] as const,
+    default: 'default',
+  },
+
+  /** @description Add a backdrop blur to the surface. */
+  blurred: {
+    type: Boolean,
+  },
+
+  /** @description Maximum width of the inner content. */
+  contentWidth: {
+    type: [Number, String],
+    default: '100%',
+  },
+
+  /** @description Gap between brand, navigation and action regions. */
+  gap: {
+    type: [Number, String],
+    default: 12,
+  },
+
+  /** @description Container width at which opted-in regions collapse. */
+  collapseAt: {
+    type: Number,
+    default: 560,
+  },
 
   /** @description Defines if the component is fixed on the screen. */
   fixed: {

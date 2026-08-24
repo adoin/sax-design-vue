@@ -21,11 +21,11 @@ const description = computed(() => frontmatter.value.description || '')
   margin: 0 0 28px;
   padding: 20px 22px;
   border-radius: 16px;
-  border: 1px solid rgba(var(--sax-accent-color), 0.14);
+  border: 1px solid hsl(var(--sax-accent-color) / 0.14);
   background: linear-gradient(
     135deg,
-    rgba(var(--sax-theme-layout), 0.96),
-    rgba(var(--sax-accent-color), 0.06)
+    hsl(var(--sax-theme-layout) / 0.96),
+    hsl(var(--sax-accent-color) / 0.06)
   );
 }
 
@@ -33,6 +33,6 @@ const description = computed(() => frontmatter.value.description || '')
   margin: 0;
   font-size: 1.02rem;
   line-height: 1.75;
-  color: rgba(var(--sax-theme-color), 0.78);
+  color: hsl(var(--sax-theme-color) / 0.78);
 }
 </style>

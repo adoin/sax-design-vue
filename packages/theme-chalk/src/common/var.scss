@@ -230,19 +230,19 @@ $box-shadow: () !default;
 $box-shadow: map.merge(
   (
     '': (
-      0px 12px 32px 4px rgba(0, 0, 0, 0.04),
-      0px 8px 20px rgba(0, 0, 0, 0.08),
+      0px 12px 32px 4px hsl(0deg 0% 0% / 0.04),
+      0px 8px 20px hsl(0deg 0% 0% / 0.08),
     ),
     'light': (
-      0px 0px 12px rgba(0, 0, 0, 0.12),
+      0px 0px 12px hsl(0deg 0% 0% / 0.12),
     ),
     'lighter': (
-      0px 0px 6px rgba(0, 0, 0, 0.12),
+      0px 0px 6px hsl(0deg 0% 0% / 0.12),
     ),
     'dark': (
-      0px 16px 48px 16px rgba(0, 0, 0, 0.08),
-      0px 12px 32px rgba(0, 0, 0, 0.12),
-      0px 8px 16px -8px rgba(0, 0, 0, 0.16),
+      0px 16px 48px 16px hsl(0deg 0% 0% / 0.08),
+      0px 12px 32px hsl(0deg 0% 0% / 0.12),
+      0px 8px 16px -8px hsl(0deg 0% 0% / 0.16),
     ),
   ),
   $box-shadow
@@ -308,9 +308,9 @@ $common-component-size: map.merge(
 $overlay-color: () !default;
 $overlay-color: map.merge(
   (
-    '': rgba(0, 0, 0, 0.8),
-    'light': rgba(0, 0, 0, 0.7),
-    'lighter': rgba(0, 0, 0, 0.5),
+    '': hsl(0deg 0% 0% / 0.8),
+    'light': hsl(0deg 0% 0% / 0.7),
+    'lighter': hsl(0deg 0% 0% / 0.5),
   ),
   $overlay-color
 );
@@ -319,8 +319,8 @@ $overlay-color: map.merge(
 $mask-color: () !default;
 $mask-color: map.merge(
   (
-    '': rgba(255, 255, 255, 0.9),
-    'extra-light': rgba(255, 255, 255, 0.3),
+    '': hsl(0deg 0% 100% / 0.9),
+    'extra-light': hsl(0deg 0% 100% / 0.3),
   ),
   $mask-color
 );
@@ -473,8 +473,8 @@ $alert: map.merge(
   (
     'bg-light': getColor(color, 0.1),
     'border-radius': getCssVar(radius-sm) getCssVar(radius) getCssVar(radius) getCssVar(radius-sm),
-    'shadow--icon-close': 0px 0px 0px 0px rgba(0, 0, 0, 0.15),
-    'shadow--icon-close-hover': 0px 5px 18px 0px rgba(0, 0, 0, 0.15),
+    'shadow--icon-close': 0px 0px 0px 0px hsl(0deg 0% 0% / 0.15),
+    'shadow--icon-close-hover': 0px 5px 18px 0px hsl(0deg 0% 0% / 0.15),
     'icon-close-width': 30px,
     'icon-close-height': 30px,
     'font-size': 0.9rem,

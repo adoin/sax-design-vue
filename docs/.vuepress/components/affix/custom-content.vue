@@ -30,7 +30,7 @@ const getTarget = () => panel.value || window
   padding: 12px 20px 20px;
   overflow-y: auto;
   border-radius: 14px;
-  background: rgba(var(--sax-theme-bg2), 0.46);
+  background: hsl(var(--sax-theme-bg2) / 0.46);
 }
 
 .affix-demo__toolbar {
@@ -41,8 +41,8 @@ const getTarget = () => panel.value || window
   min-width: min(100%, 360px);
   padding: 10px 12px;
   border-radius: 12px;
-  background: rgb(var(--sax-theme-layout));
-  box-shadow: 0 10px 22px rgba(var(--sax-accent-color), 0.12);
+  background: hsl(var(--sax-theme-layout));
+  box-shadow: 0 10px 22px hsl(var(--sax-accent-color) / 0.12);
 }
 
 .affix-demo__toolbar > div {

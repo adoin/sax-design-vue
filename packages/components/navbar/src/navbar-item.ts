@@ -11,6 +11,21 @@ export const navbarItemProps = buildProps({
     type: Boolean,
   },
 
+  /** @description Disable navigation and selection. */
+  disabled: {
+    type: Boolean,
+  },
+
+  /** @description Icon name rendered before the label. */
+  icon: {
+    type: String,
+  },
+
+  /** @description Compact status rendered after the label. */
+  badge: {
+    type: [String, Number],
+  },
+
   /** @description User-level route location, used for router-link */
   to: {
     type: definePropType<RouteLocationRaw>([String, Object]),

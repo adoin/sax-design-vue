@@ -12,7 +12,7 @@
           :class="{ copied }"
           @click="copySource"
         >
-          <s-icon :name="copied ? 'bx:check' : 'bx:copy'"  />
+          <s-icon :name="copied ? 'bx:check' : 'bx:copy'" />
           {{ copied ? t.examples.copied : t.examples.copyCode }}
         </button>
       </header>
@@ -103,9 +103,9 @@ const copySource = async () => {
 .example-playground {
   margin: 14px auto 30px;
   overflow: hidden;
-  border: 1px solid rgba(var(--sax-accent-color), 0.13);
+  border: 1px solid hsl(var(--sax-accent-color) / 0.13);
   border-radius: 20px;
-  background: rgba(var(--sax-theme-layout), 0.88);
+  background: hsl(var(--sax-theme-layout) / 0.88);
   box-shadow: 0 20px 60px rgba(55, 43, 145, 0.12);
 }
 
@@ -122,7 +122,7 @@ const copySource = async () => {
 .example-playground__toolbar {
   min-height: 66px;
   padding: 14px 20px;
-  border-bottom: 1px solid rgba(var(--sax-accent-color), 0.12);
+  border-bottom: 1px solid hsl(var(--sax-accent-color) / 0.12);
 }
 
 .example-playground__identity {
@@ -134,7 +134,7 @@ const copySource = async () => {
   }
 
   span {
-    color: rgba(var(--sax-theme-color), 0.58);
+    color: hsl(var(--sax-theme-color) / 0.58);
     font-size: 0.75rem;
     font-weight: 600;
   }
@@ -142,7 +142,7 @@ const copySource = async () => {
   strong {
     overflow: hidden;
     margin-top: 2px;
-    color: rgb(var(--sax-theme-color));
+    color: hsl(var(--sax-theme-color));
     font-size: 0.92rem;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -158,8 +158,8 @@ const copySource = async () => {
   padding: 0 12px;
   border: 0;
   border-radius: 9px;
-  background: rgba(var(--sax-accent-color), 0.1);
-  color: rgb(var(--sax-accent-color));
+  background: hsl(var(--sax-accent-color) / 0.1);
+  color: hsl(var(--sax-accent-color));
   font: inherit;
   font-size: 0.78rem;
   font-weight: 700;
@@ -168,7 +168,7 @@ const copySource = async () => {
 
 .example-playground__copy:hover,
 .example-playground__copy.copied {
-  background: rgb(var(--sax-accent-color));
+  background: hsl(var(--sax-accent-color));
   color: #fff;
 }
 
@@ -186,7 +186,7 @@ const copySource = async () => {
 }
 
 .example-playground__editor {
-  background: rgb(var(--sax-theme-code));
+  background: hsl(var(--sax-theme-code));
 }
 
 .example-playground__code-header {
@@ -222,11 +222,11 @@ const copySource = async () => {
 
 .example-playground--missing {
   padding: 28px;
-  color: rgb(var(--sax-theme-color));
+  color: hsl(var(--sax-theme-color));
 
   p {
     margin-bottom: 0;
-    color: rgba(var(--sax-theme-color), 0.66);
+    color: hsl(var(--sax-theme-color) / 0.66);
   }
 }
 
@@ -237,7 +237,7 @@ const copySource = async () => {
   }
 
   .example-playground__editor {
-    border-right: 1px solid rgba(var(--sax-accent-color), 0.12);
+    border-right: 1px solid hsl(var(--sax-accent-color) / 0.12);
   }
 }
 

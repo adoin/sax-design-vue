@@ -50,11 +50,11 @@ describe('TimePicker input presentation', () => {
       suffixIcon: 'cb:time',
     })
     expect(wrapper.get('.s-time-picker').attributes('style')).toContain(
-      '--sax-color: 101, 67, 33',
+      '--sax-color: 30deg 50.746% 26.275%',
     )
     expect(wrapper.getComponent(PopperStub).props('popperStyle')).toMatchObject(
       {
-        '--sax-color': '101, 67, 33',
+        '--sax-color': '30deg 50.746% 26.275%',
       },
     )
   })

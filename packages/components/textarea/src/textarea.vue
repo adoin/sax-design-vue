@@ -83,7 +83,7 @@ watch(isOverCounter, (val) => {
 
 const resolveBorderColor = (colorValue: string) => {
   const resolved = getVsColor(colorValue)
-  if (!resolved) return 'rgba(0, 0, 0, 0.08)'
+  if (!resolved) return 'hsl(0deg 0% 0% / 0.08)'
   return resolved.startsWith('var(') ? resolved : `rgb(${resolved})`
 }
 
@@ -91,7 +91,7 @@ const wrapperStyle = computed(() => ({
   border: `1px solid ${
     isFocus.value
       ? resolveBorderColor(props.color || color.value || 'primary')
-      : 'rgba(0, 0, 0, 0.08)'
+      : 'hsl(0deg 0% 0% / 0.08)'
   }`,
   height: autoSizeConfig.value ? undefined : (props.height ?? undefined),
   width: props.width ?? undefined,
