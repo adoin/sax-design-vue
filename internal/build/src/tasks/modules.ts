@@ -1,10 +1,7 @@
-import { rollup } from 'rollup'
+import { rolldown } from 'rolldown'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import VueMacros from 'unplugin-vue-macros/rollup'
-import { nodeResolve } from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
-import esbuild from 'rollup-plugin-esbuild'
+import VueMacros from 'unplugin-vue-macros/rolldown'
 import glob from 'fast-glob'
 import { excludeFiles, pkgRoot, vsRoot } from '@vuesax-alpha/build-utils'
 import { generateExternal, writeBundles } from '../utils'
@@ -13,7 +10,7 @@ import { buildConfigEntries, target } from '../build-info'
 import { saxIcons } from '../../../../packages/iconify/src/vite'
 import saxIconConfig from '../../../../sax-icons.config'
 
-import type { OutputOptions } from 'rollup'
+import type { OutputOptions } from 'rolldown'
 
 export const buildModules = async () => {
   const input = excludeFiles(
@@ -24,7 +21,7 @@ export const buildModules = async () => {
       ignore: ['iconify/**'],
     }),
   )
-  const bundle = await rollup({
+  const bundle = await rolldown({
     input,
     plugins: [
       VuesaxAlphaAlias(),
@@ -39,18 +36,11 @@ export const buildModules = async () => {
           vueJsx: vueJsx(),
         },
       }),
-      nodeResolve({
-        extensions: ['.mjs', '.js', '.json', '.ts'],
-      }),
-      commonjs(),
-      esbuild({
-        sourceMap: true,
-        target,
-        loaders: {
-          '.vue': 'ts',
-        },
-      }),
     ],
+    resolve: {
+      extensions: ['.mjs', '.js', '.json', '.ts'],
+    },
+    transform: { target },
     external: await generateExternal({ full: false }),
     treeshake: false,
   })

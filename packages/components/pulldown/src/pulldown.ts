@@ -1,4 +1,5 @@
-import { buildProps } from '@vuesax-alpha/utils'
+import { buildProps, definePropType } from '@vuesax-alpha/utils'
+import type { Placement } from '@vuesax-alpha/hooks/use-floating/vue'
 import type { ExtractPropTypes } from 'vue'
 import type Pulldown from './pulldown.vue'
 
@@ -9,7 +10,10 @@ export const pulldownProps = buildProps({
     values: ['click', 'hover', 'focus', 'contextmenu'] as const,
     default: 'click',
   },
-  placement: { type: String, default: 'bottom-start' },
+  placement: {
+    type: definePropType<Placement>(String),
+    default: 'bottom-start',
+  },
   offset: { type: Number, default: 8 },
   disabled: Boolean,
   teleported: { type: Boolean, default: true },

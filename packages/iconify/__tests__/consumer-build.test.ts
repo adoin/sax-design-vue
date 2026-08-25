@@ -9,7 +9,7 @@ import { build } from 'vite'
 import { saxIcons } from '../src/vite'
 
 import type { IconifyJSON } from '@iconify/types'
-import type { RollupOutput } from 'rollup'
+import type { RolldownOutput } from 'rolldown'
 
 const require = createRequire(import.meta.url)
 let fixtureRoot = ''
@@ -74,11 +74,11 @@ describe('consumer production build', () => {
           entry: path.join(fixtureRoot, 'main.ts'),
           formats: ['es'],
         },
-        rollupOptions: {
+        rolldownOptions: {
           external: ['vue', 'sax-design-vue'],
         },
       },
-    })) as RollupOutput | RollupOutput[]
+    })) as RolldownOutput | RolldownOutput[]
 
     const outputs = Array.isArray(result) ? result : [result]
     const code = outputs

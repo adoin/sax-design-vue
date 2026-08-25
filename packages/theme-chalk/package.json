@@ -23,10 +23,9 @@
   "style": "index.css",
   "scripts": {
     "clean": "rimraf dist",
-    "build": "gulp --preload @esbuild-kit/cjs-loader"
+    "build": "tsx ../../node_modules/gulp/bin/gulp.js"
   },
   "devDependencies": {
-    "@esbuild-kit/cjs-loader": "^2.4.4",
     "@types/gulp-autoprefixer": "^0.0.37",
     "@types/gulp-clean-css": "^4.3.4",
     "@types/gulp-rename": "^2.0.7",
@@ -35,6 +34,7 @@
     "gulp-autoprefixer": "^10.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-rename": "^2.1.0",
-    "gulp-sass": "^6.0.1"
+    "gulp-sass": "^6.0.1",
+    "tsx": "^4.23.1"
   }
 }

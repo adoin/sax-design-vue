@@ -27,7 +27,7 @@ export default defineUserConfig({
       css: {
         preprocessorOptions: {
           scss: {
-            // VuePress beta and legacy demo snippets still invoke Sass through
+            // VuePress and legacy demo snippets still invoke Sass through
             // compatibility APIs. Project styles use the module API; keep
             // dependency-level migration noise out of routine docs builds.
             silenceDeprecations: [
@@ -49,6 +49,13 @@ export default defineUserConfig({
       resolve: {
         alias: [
           {
+            find: /^sax-design-vue-iconify$/,
+            replacement: path.resolve(
+              projRoot,
+              'packages/iconify/src/index.ts',
+            ),
+          },
+          {
             find: '@vuesax-alpha/theme-chalk',
             replacement: path.resolve(pkgRoot, 'theme-chalk'),
           },
@@ -69,6 +76,7 @@ export default defineUserConfig({
     },
   }),
   open: false,
+  shouldPrefetch: false,
   locales: {
     '/': {
       lang: 'en-US',
@@ -199,9 +207,6 @@ export default defineUserConfig({
   }),
   markdown: {
     html: true,
-    code: {
-      lineNumbers: false,
-    },
     typographer: true,
   },
 }) as UserConfig

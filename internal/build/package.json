@@ -6,40 +6,42 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
   "scripts": {
     "start": "tsx run-build.ts",
     "dev": "pnpm run stub",
     "stub": "unbuild --stub"
   },
   "peerDependencies": {
-    "vue": "^3.3.4"
+    "vue": "^3.5.0"
   },
   "dependencies": {
     "@pnpm/find-workspace-packages": "^6.0.9",
     "@pnpm/logger": "^1100.0.0",
-    "@rollup/plugin-commonjs": "^29.0.3",
-    "@rollup/plugin-node-resolve": "^16.0.3",
     "@vitejs/plugin-vue": "^6.0.8",
     "@vitejs/plugin-vue-jsx": "^5.1.6",
     "@vuesax-alpha/build-constants": "workspace:^",
     "chalk": "^5.6.2",
     "components-helper": "^2.2.0",
     "consola": "^3.4.2",
-    "esbuild": "^0.28.1",
     "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.6",
     "gulp": "^5.0.1",
     "lodash": "^4.18.1",
-    "rollup": "^4.62.2",
-    "rollup-plugin-esbuild": "^6.2.1",
+    "rolldown": "^1.2.5",
     "ts-morph": "^27.0.2",
     "unplugin-vue-macros": "^2.14.5"
   },
   "devDependencies": {
-    "@esbuild-kit/cjs-loader": "^2.4.4",
     "@pnpm/types": "^1101.4.0",
     "tsx": "^4.23.1",
     "unbuild": "^3.6.1",
-    "vue": "^3.5.40"
+    "vue": "^3.5.41"
   }
 }

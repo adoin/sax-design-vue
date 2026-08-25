@@ -77,10 +77,9 @@
     "lib/components/*/style/*"
   ],
   "peerDependencies": {
-    "vue": "^3.3.4"
+    "vue": "^3.5.0"
   },
   "dependencies": {
-    "sax-design-vue-iconify": "workspace:*",
     "@ctrl/tinycolor": "^4.2.0",
     "@tanstack/vue-virtual": "^3.13.33",
     "@types/lodash": "^4.17.24",
@@ -93,12 +92,13 @@
     "lodash-es": "^4.18.1",
     "lodash-unified": "^1.0.3",
     "memoize-one": "^6.0.0",
-    "normalize-wheel-es": "^1.2.0"
+    "normalize-wheel-es": "^1.2.0",
+    "sax-design-vue-iconify": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
     "csstype": "^3.2.3",
-    "vue": "^3.5.40",
+    "vue": "^3.5.41",
     "vue-router": "^5.2.0"
   },
   "vetur": {

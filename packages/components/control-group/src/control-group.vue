@@ -10,6 +10,7 @@ import {
 } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { controlGroupProps } from './control-group'
+import type { RenderedControlGroupItem } from './control-group'
 import type { PropType, VNode } from 'vue'
 
 defineOptions({ name: 'SControlGroup' })
@@ -22,12 +23,6 @@ const props = defineProps(controlGroupProps)
 const ns = useNamespace('control-group')
 
 const GRID_COLUMNS = 24
-
-interface RenderedControlGroupItem {
-  key: string | number | symbol
-  span?: number
-  vnode: VNode
-}
 
 const normalizeSpan = (value: unknown) => {
   const span = Number(value)

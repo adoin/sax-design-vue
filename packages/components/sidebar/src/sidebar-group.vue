@@ -1,5 +1,5 @@
 <template>
-  <div ref="groupRef" :class="[ns.b(), ns.is('open', openState)]">
+  <div :class="[ns.b(), ns.is('open', openState)]">
     <div :class="ns.e('header')" @click="onClickHeader">
       <slot name="header" />
     </div>
@@ -25,7 +25,6 @@ const props = defineProps(sidebarGroupProps)
 
 const ns = useNamespace('sidebar-group')
 
-const groupRef = ref<HTMLElement>()
 const contentRef = ref<HTMLElement>()
 
 const openState = ref(false)
@@ -49,7 +48,7 @@ watch(
         content.style.height = `${content.scrollHeight - h + 1}px`
       }
     })
-  }
+  },
 )
 
 onMounted(() => {

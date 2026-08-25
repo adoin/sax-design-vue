@@ -2,7 +2,7 @@ import type {
   FloatingElement,
   ReferenceElement,
 } from '@vuesax-alpha/hooks/use-floating/dom'
-import type { ComponentPublicInstance, Ref } from 'vue-demi'
+import type { ComponentPublicInstance, Ref } from 'vue'
 
 import type {
   Padding,
@@ -99,7 +99,7 @@ export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
     whileElementsMounted?: (
       reference: T,
       floating: FloatingElement,
-      update: () => void
+      update: () => void,
     ) => () => void
   }
 

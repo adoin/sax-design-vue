@@ -8,7 +8,32 @@ import { gitPlugin } from '@vuepress/plugin-git'
 import { prismjsPlugin } from '@vuepress/plugin-prismjs'
 
 import type { SaxDesignVueThemeOptions } from './saxDesignVueTheme'
-import type { Theme } from '@vuepress/core'
+import type { Page, Plugin, Theme } from '@vuepress/core'
+
+const apiTableKeys = ['PROPS', 'CHILD_PROPS', 'SLOTS', 'EVENTS', 'EXPOSES']
+
+const escapeInlineScriptEnd = (page: Page) => {
+  for (const key of apiTableKeys) {
+    const rows = page.frontmatter[key]
+    if (!Array.isArray(rows)) continue
+
+    for (const row of rows) {
+      if (
+        typeof row === 'object' &&
+        row !== null &&
+        'code' in row &&
+        typeof row.code === 'string'
+      ) {
+        row.code = row.code.replaceAll('</script>', '<\\/script>')
+      }
+    }
+  }
+}
+
+const safeInlinePageDataPlugin: Plugin = {
+  name: 'vuepress-safe-inline-page-data',
+  extendsPage: escapeInlineScriptEnd,
+}
 
 export const saxDesignVueTheme = (
   options: SaxDesignVueThemeOptions = {},
@@ -50,6 +75,7 @@ export const saxDesignVueTheme = (
       registerComponentsPlugin({
         componentsDir: path.resolve(__dirname, '../components'),
       }),
+      safeInlinePageDataPlugin,
       // The theme only renders `pageData.git.updatedTime`. Disabling unused
       // metadata avoids hundreds of concurrent Git subprocesses during page
       // initialization, which can fail intermittently on Windows.

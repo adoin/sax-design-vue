@@ -12,9 +12,9 @@ import {
   projRoot,
 } from '@vuesax-alpha/build-utils'
 import { VuesaxAlphaResolver } from '@vuesax-alpha/auto-import-resolver'
-import baseConfig from '../vite.config'
+import baseConfig from '../vite.config.ts'
 
-import './vite.init'
+import './vite.init.ts'
 
 export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
@@ -46,7 +46,7 @@ export default defineConfig(async ({ mode }) => {
     },
     plugins: [
       Components({
-        include: `${__dirname}/**`,
+        include: `${import.meta.dirname}/**`,
         resolvers: VuesaxAlphaResolver({ importStyle: 'sass' }),
         dts: false,
       }),
@@ -55,6 +55,11 @@ export default defineConfig(async ({ mode }) => {
     ],
     optimizeDeps: {
       include: ['vue', '@vue/shared', ...dependencies, ...optimizeDeps],
+    },
+    build: {
+      // The browser SFC compiler is an intentional, lazy-only editor chunk.
+      // Keep warnings focused on unexpected initial or component-library growth.
+      chunkSizeWarningLimit: 1024,
     },
   })
 })

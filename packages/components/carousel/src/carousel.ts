@@ -21,6 +21,15 @@ export interface CarouselItem {
   disabled?: boolean
 }
 
+export interface RenderedCarouselItem {
+  item: CarouselItem
+  sourceIndex: number
+  renderIndex: number
+  cloned: boolean
+  virtualEdge: boolean
+  key: string
+}
+
 export const carouselProps = buildProps({
   modelValue: { type: Number, default: 0 },
   items: { type: definePropType<CarouselItem[]>(Array), default: () => [] },

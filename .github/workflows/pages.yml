@@ -45,7 +45,7 @@ jobs:
           pnpm --filter sax-design-vue-iconify build
           pnpm run build:theme
           pnpm -C play build
-          NODE_OPTIONS=--max-old-space-size=6144 pnpm run docs:build
+          pnpm run docs:build
           mkdir -p docs/.vuepress/dist/play
           cp -r play/dist/* docs/.vuepress/dist/play/
 

@@ -183,7 +183,7 @@ const close = () => {
   visible.value = false
 }
 
-let intervalProgress = 0
+let intervalProgress: ReturnType<typeof setInterval> | undefined
 const currentProgress = ref(0)
 
 const handleProgress = () => {
@@ -200,7 +200,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  clearInterval(intervalProgress)
+  if (intervalProgress !== undefined) clearInterval(intervalProgress)
 })
 
 defineExpose({

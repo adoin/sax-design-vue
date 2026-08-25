@@ -1,11 +1,8 @@
 import path from 'path'
-import { nodeResolve } from '@rollup/plugin-node-resolve'
-import { rollup } from 'rollup'
-import commonjs from '@rollup/plugin-commonjs'
+import { rolldown } from 'rolldown'
 import vue from '@vitejs/plugin-vue'
-import VueMacros from 'unplugin-vue-macros/rollup'
+import VueMacros from 'unplugin-vue-macros/rolldown'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import esbuild, { minify as minifyPlugin } from 'rollup-plugin-esbuild'
 import { parallel } from 'gulp'
 import glob from 'fast-glob'
 import { camelCase, upperFirst } from 'lodash-unified'
@@ -26,14 +23,14 @@ import {
 import { target } from '../build-info'
 import { saxIcons } from '../../../../packages/iconify/src/vite'
 import saxIconConfig from '../../../../sax-icons.config'
-import type { Plugin } from 'rollup'
+import type { TaskFunction } from 'gulp'
 
 const banner = `/*! ${PKG_BRAND_NAME} v${version} */\n`
 
 async function buildFullEntry(minify: boolean) {
-  const plugins: Plugin[] = [
+  const plugins = [
     VuesaxAlphaAlias(),
-    saxIcons(saxIconConfig) as Plugin,
+    saxIcons(saxIconConfig),
     VueMacros({
       setupComponent: false,
       setupSFC: false,
@@ -44,36 +41,20 @@ async function buildFullEntry(minify: boolean) {
         vueJsx: vueJsx(),
       },
     }),
-    nodeResolve({
+  ]
+
+  const bundle = await rolldown({
+    input: path.resolve(vsRoot, 'index.ts'),
+    plugins,
+    resolve: {
       extensions: ['.mjs', '.js', '.json', '.ts'],
-    }),
-    commonjs(),
-    esbuild({
-      exclude: [],
-      sourceMap: minify,
+    },
+    transform: {
       target,
-      loaders: {
-        '.vue': 'ts',
-      },
       define: {
         'process.env.NODE_ENV': JSON.stringify('production'),
       },
-      treeShaking: true,
-      legalComments: 'eof',
-    }),
-  ]
-  if (minify) {
-    plugins.push(
-      minifyPlugin({
-        target,
-        sourceMap: true,
-      }),
-    )
-  }
-
-  const bundle = await rollup({
-    input: path.resolve(vsRoot, 'index.ts'),
-    plugins,
+    },
     external: await generateExternal({ full: true }),
     treeshake: true,
   })
@@ -91,6 +72,7 @@ async function buildFullEntry(minify: boolean) {
         vue: 'Vue',
       },
       sourcemap: minify,
+      minify,
       banner,
     },
     {
@@ -101,6 +83,7 @@ async function buildFullEntry(minify: boolean) {
         formatBundleFilename('index.full', minify, 'mjs'),
       ),
       sourcemap: minify,
+      minify,
       banner,
     },
   ])
@@ -116,15 +99,9 @@ async function buildFullLocale(minify: boolean) {
       const filename = path.basename(file, '.ts')
       const name = upperFirst(camelCase(filename))
 
-      const bundle = await rollup({
+      const bundle = await rolldown({
         input: file,
-        plugins: [
-          esbuild({
-            minify,
-            sourceMap: minify,
-            target,
-          }),
-        ],
+        transform: { target },
       })
       await writeBundles(bundle, [
         {
@@ -137,6 +114,7 @@ async function buildFullLocale(minify: boolean) {
           exports: 'default',
           name: `${PKG_CAMELCASE_LOCAL_NAME}${name}`,
           sourcemap: minify,
+          minify,
           banner,
         },
         {
@@ -147,6 +125,7 @@ async function buildFullLocale(minify: boolean) {
             formatBundleFilename(filename, minify, 'mjs'),
           ),
           sourcemap: minify,
+          minify,
           banner,
         },
       ])
@@ -157,7 +136,7 @@ async function buildFullLocale(minify: boolean) {
 export const buildFull = (minify: boolean) => async () =>
   Promise.all([buildFullEntry(minify), buildFullLocale(minify)])
 
-export const buildFullBundle = parallel(
+export const buildFullBundle: TaskFunction = parallel(
   withTaskName('buildFullMinified', buildFull(true)),
   withTaskName('buildFull', buildFull(false)),
 )

@@ -1,4 +1,5 @@
-import findWorkspacePackages from '@pnpm/find-workspace-packages'
+import { readFileSync } from 'node:fs'
+import { findWorkspacePackages } from '@pnpm/find-workspace-packages'
 import { projRoot } from './paths'
 
 import type { ProjectManifest } from '@pnpm/types'
@@ -13,12 +14,11 @@ export const getWorkspaceNames = async (dir = projRoot) => {
 }
 
 export const getPackageManifest = (pkgPath: string) => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  return require(pkgPath) as ProjectManifest
+  return JSON.parse(readFileSync(pkgPath, 'utf8')) as ProjectManifest
 }
 
 export const getPackageDependencies = (
-  pkgPath: string
+  pkgPath: string,
 ): Record<'dependencies' | 'peerDependencies', string[]> => {
   const manifest = getPackageManifest(pkgPath)
   const { dependencies = {}, peerDependencies = {} } = manifest
@@ -32,6 +32,6 @@ export const getPackageDependencies = (
 export const excludeFiles = (files: string[]) => {
   const excludes = ['node_modules', 'test', 'mock', 'gulpfile', 'dist']
   return files.filter(
-    (path) => !excludes.some((exclude) => path.includes(exclude))
+    (path) => !excludes.some((exclude) => path.includes(exclude)),
   )
 }

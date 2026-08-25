@@ -21,6 +21,10 @@ async function main() {
   )
 
   const configuredPrefixes = Object.keys(iconConfig.collections)
+  const collections = iconConfig.collections as Record<
+    string,
+    string | { source: string }
+  >
   const iconPattern = new RegExp(
     `(?:${configuredPrefixes.join('|')}):[a-z0-9-]+`,
     'gi',
@@ -41,7 +45,7 @@ async function main() {
       const separator = name.indexOf(':')
       const publicPrefix = name.slice(0, separator)
       const iconName = name.slice(separator + 1)
-      const collectionConfig = iconConfig.collections[publicPrefix]
+      const collectionConfig = collections[publicPrefix]
       const sourcePrefix =
         typeof collectionConfig === 'string'
           ? collectionConfig
@@ -80,4 +84,4 @@ async function main() {
   }
 }
 
-void main()
+main()

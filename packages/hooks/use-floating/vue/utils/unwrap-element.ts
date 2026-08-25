@@ -1,10 +1,10 @@
 import { getNodeName, isNode } from '@vuesax-alpha/hooks/use-floating/utils/dom'
-import type { ComponentPublicInstance } from 'vue-demi'
+import type { ComponentPublicInstance } from 'vue'
 
 import type { MaybeElement } from '../types'
 
 function isComponentPublicInstance(
-  target: unknown
+  target: unknown,
 ): target is ComponentPublicInstance {
   return target != null && Object.prototype.hasOwnProperty.call(target, '$el')
 }

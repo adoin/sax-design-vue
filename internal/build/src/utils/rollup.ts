@@ -1,6 +1,6 @@
 import { getPackageDependencies, vsPackage } from '@vuesax-alpha/build-utils'
 
-import type { OutputOptions, RollupBuild } from 'rollup'
+import type { OutputOptions, RolldownBuild } from 'rolldown'
 
 /**
  * ReferenceError: __name is not defined
@@ -22,19 +22,19 @@ export const generateExternal = async (options: { full: boolean }) => {
     }
 
     return [...new Set(packages)].some(
-      (pkg) => id === pkg || id.startsWith(`${pkg}/`)
+      (pkg) => id === pkg || id.startsWith(`${pkg}/`),
     )
   }
 }
 
-export function writeBundles(bundle: RollupBuild, options: OutputOptions[]) {
+export function writeBundles(bundle: RolldownBuild, options: OutputOptions[]) {
   return Promise.all(options.map((option) => bundle.write(option)))
 }
 
 export function formatBundleFilename(
   name: string,
   minify: boolean,
-  ext: string
+  ext: string,
 ) {
   return `${name}${minify ? '.min' : ''}.${ext}`
 }

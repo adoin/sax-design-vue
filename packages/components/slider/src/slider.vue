@@ -30,7 +30,6 @@
       />
     </button>
     <button
-      ref="thumbRef"
       :class="ns.e('thumb')"
       type="button"
       :disabled="disabled"
@@ -62,13 +61,12 @@ const emit = defineEmits(sliderEmits)
 
 const ns = useNamespace('slider')
 const trackRef = ref<HTMLButtonElement>()
-const thumbRef = ref<HTMLButtonElement>()
 const dragging = ref(false)
 
 const themeColor = computed(() => normalizeVsColor(props.color))
 const isThemeColor = computed(() => isVsColor(themeColor.value))
 const themeColorClass = computed(() =>
-  isThemeColor.value ? ns.m(themeColor.value) : ''
+  isThemeColor.value ? ns.m(themeColor.value) : '',
 )
 
 const clamp = (val: number) => Math.min(props.max, Math.max(props.min, val))
@@ -198,7 +196,7 @@ watch(
     if (clamped !== val) {
       emit('update:modelValue', clamped)
     }
-  }
+  },
 )
 
 onBeforeUnmount(() => {

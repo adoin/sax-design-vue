@@ -1,23 +1,24 @@
 {
   "name": "@vuesax-alpha/play",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "^3.5.40",
+    "@vue/compiler-sfc": "^3.5.41",
     "postcss": "^8.5.20",
     "postcss-nested": "^7.0.2",
     "sax-design-vue": "workspace:*",
-    "vue": "^3.5.40"
+    "vue": "^3.5.41"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.8",
     "@vuesax-alpha/auto-import-resolver": "^1.0.2",
     "local-pkg": "^1.2.1",
-    "vite": "^8.1.5",
+    "vite": "^8.2.2",
     "vite-plugin-inspect": "^12.0.2",
     "vite-plugin-mkcert": "^2.1.0"
   }

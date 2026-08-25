@@ -10,6 +10,7 @@ import nested from 'postcss-nested'
 import postcss from 'postcss'
 
 import type { Component } from 'vue'
+import type { BindingMetadata } from '@vue/compiler-sfc'
 
 const STYLE_TAG_ID = 'playground-embed-styles'
 
@@ -38,9 +39,17 @@ function normalizeSource(source: string): string {
 }
 
 function hasErrors(
-  errors?: Array<{ message: string }>,
-): errors is Array<{ message: string }> {
+  errors?: readonly (string | { message: string })[],
+): errors is readonly (string | { message: string })[] {
   return Array.isArray(errors) && errors.length > 0
+}
+
+function formatErrors(
+  errors: readonly (string | { message: string })[],
+): string {
+  return errors
+    .map((item) => (typeof item === 'string' ? item : item.message))
+    .join('\n')
 }
 
 function preprocessStyle(content: string, lang?: string): string {
@@ -125,7 +134,7 @@ export function compileDemoSfc(
     if (hasErrors(errors)) {
       return {
         component: null,
-        error: errors.map((item) => item.message).join('\n'),
+        error: formatErrors(errors),
       }
     }
 
@@ -145,7 +154,7 @@ export function compileDemoSfc(
       if (hasErrors(compiledStyle.errors)) {
         return {
           component: null,
-          error: compiledStyle.errors.map((item) => item.message).join('\n'),
+          error: formatErrors(compiledStyle.errors),
         }
       }
 
@@ -155,20 +164,13 @@ export function compileDemoSfc(
     injectStyles(cssText, scopeKey)
 
     let scriptCode = 'export default {}'
-    let bindingMetadata: Record<string, unknown> | undefined
+    let bindingMetadata: BindingMetadata | undefined
 
     if (descriptor.scriptSetup || descriptor.script) {
       const compiledScript = compileScript(descriptor, {
         id: scopeId,
         inlineTemplate: false,
       })
-
-      if (hasErrors(compiledScript.errors)) {
-        return {
-          component: null,
-          error: compiledScript.errors.map((item) => item.message).join('\n'),
-        }
-      }
 
       scriptCode = compiledScript.content
       bindingMetadata = compiledScript.bindings
@@ -198,7 +200,7 @@ export function compileDemoSfc(
     if (hasErrors(compiledTemplate.errors)) {
       return {
         component: null,
-        error: compiledTemplate.errors.map((item) => item.message).join('\n'),
+        error: formatErrors(compiledTemplate.errors),
       }
     }
 

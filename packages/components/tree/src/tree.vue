@@ -50,9 +50,7 @@
           :disabled="entry.node.disabled"
           @click.stop="toggleCheck(entry.node)"
         >
-          <SIcon
-            v-if="checkedKeys.has(entry.key)" name="cb:checkmark"
-          />
+          <SIcon v-if="checkedKeys.has(entry.key)" name="cb:checkmark" />
           <span v-else-if="isIndeterminate(entry.node)" />
         </button>
         <span :class="ns.e('label')">
@@ -99,7 +97,7 @@ const getDescendants = (node: TreeNode): TreeNode[] => {
     [],
   )
 }
-const allKeys = (nodes: TreeNode[]) =>
+const allKeys = (nodes: TreeNode[]): TreeKey[] =>
   nodes.reduce<TreeKey[]>(
     (result, node) => result.concat(getKey(node), allKeys(getChildren(node))),
     [],

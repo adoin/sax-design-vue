@@ -2,17 +2,13 @@ import {
   createApp,
   h,
   onMounted,
-  ref,
   shallowRef,
   type Component,
   type VNode,
 } from 'vue'
-import SaxDesignVue from 'sax-design-vue'
-import '@vuesax-alpha/theme-chalk/src/index.scss'
 import '@vuesax-alpha/theme-chalk/src/dark/css-vars.scss'
 import './src/play-base.scss'
 import PlaygroundShell from './PlaygroundShell.vue'
-import { compileDemoSfc } from './compile-demo-sfc'
 
 const demos = import.meta.glob('./src/*.vue')
 const sources = import.meta.glob('./src/*.vue', {
@@ -29,13 +25,17 @@ function isEmbedPreview(): boolean {
 }
 
 function createEmbedPreviewRoot() {
+  let compiler: Promise<typeof import('./compile-demo-sfc')> | undefined
+
   return {
     setup() {
       const current = shallowRef<Component | null>(null)
-      const compileError = ref<string | null>(null)
-      const activeName = ref(demoName())
+      const compileError = shallowRef<string | null>(null)
+      const activeName = shallowRef(demoName())
 
-      const compileFromSource = (source: string) => {
+      const compileFromSource = async (source: string) => {
+        compiler ||= import('./compile-demo-sfc')
+        const { compileDemoSfc } = await compiler
         const { component, error } = compileDemoSfc(source, activeName.value)
         compileError.value = error
         current.value = component
@@ -44,7 +44,7 @@ function createEmbedPreviewRoot() {
       onMounted(() => {
         window.addEventListener('message', (event) => {
           if (event.data?.type !== 'sax-playground-source') return
-          compileFromSource(String(event.data.source || ''))
+          void compileFromSource(String(event.data.source || ''))
         })
 
         window.parent.postMessage({ type: 'sax-playground-ready' }, '*')
@@ -71,8 +71,8 @@ function createDefaultRoot() {
   return {
     setup() {
       const current = shallowRef<Component | null>(null)
-      const activeName = ref('App')
-      const source = ref('')
+      const activeName = shallowRef('App')
+      const source = shallowRef('')
 
       const load = async (name: string) => {
         const loader = demos[`./src/${name}.vue`]
@@ -115,6 +115,20 @@ function createDefaultRoot() {
   }
 }
 
-const Root = isEmbedPreview() ? createEmbedPreviewRoot() : createDefaultRoot()
+async function bootstrap() {
+  const embedPreview = isEmbedPreview()
+  const Root = embedPreview ? createEmbedPreviewRoot() : createDefaultRoot()
+  const app = createApp(Root)
 
-createApp(Root).use(SaxDesignVue).mount('#play')
+  if (embedPreview) {
+    const [{ default: SaxDesignVue }] = await Promise.all([
+      import('sax-design-vue'),
+      import('@vuesax-alpha/theme-chalk/src/index.scss'),
+    ])
+    app.use(SaxDesignVue)
+  }
+
+  app.mount('#play')
+}
+
+void bootstrap()

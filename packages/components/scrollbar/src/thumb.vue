@@ -42,8 +42,9 @@ const visible = ref(false)
 let cursorDown = false
 let cursorLeave = false
 let originalOnSelectStart:
-  | ((this: GlobalEventHandlers, ev: Event) => any)
-  | null = isClient ? document.onselectstart : null
+  ((this: GlobalEventHandlers, ev: Event) => any) | null = isClient
+  ? document.onselectstart
+  : null
 
 const bar = computed(() => BAR_MAP[props.vertical ? 'vertical' : 'horizontal'])
 
@@ -52,7 +53,7 @@ const thumbStyle = computed(() =>
     size: props.size,
     move: props.move,
     bar: bar.value,
-  })
+  }),
 )
 
 const offsetRatio = computed(
@@ -63,7 +64,7 @@ const offsetRatio = computed(
     instance.value![bar.value.offset] ** 2 /
     scrollbar.wrapElement![bar.value.scrollSize] /
     props.ratio /
-    thumb.value![bar.value.offset]
+    thumb.value![bar.value.offset],
 )
 
 const clickThumbHandler = (e: MouseEvent) => {
@@ -87,7 +88,7 @@ const clickTrackHandler = (e: MouseEvent) => {
 
   const offset = Math.abs(
     (e.target as HTMLElement).getBoundingClientRect()[bar.value.direction] -
-      e[bar.value.client]
+      e[bar.value.client],
   )
   const thumbHalf = thumb.value[bar.value.offset] / 2
   const thumbPositionPercentage =
@@ -111,7 +112,8 @@ const startDrag = (e: MouseEvent) => {
 }
 
 const mouseMoveDocumentHandler = (e: MouseEvent) => {
-  if (!instance.value || !thumb.value) return
+  const wrapElement = scrollbar.wrapElement
+  if (!instance.value || !thumb.value || !wrapElement) return
   if (cursorDown === false) return
 
   const prevPage = thumbState.value[bar.value.axis]
@@ -125,9 +127,8 @@ const mouseMoveDocumentHandler = (e: MouseEvent) => {
   const thumbPositionPercentage =
     ((offset - thumbClickPosition) * 100 * offsetRatio.value) /
     instance.value[bar.value.offset]
-  scrollbar.wrapElement[bar.value.scroll] =
-    (thumbPositionPercentage * scrollbar.wrapElement[bar.value.scrollSize]) /
-    100
+  wrapElement[bar.value.scroll] =
+    (thumbPositionPercentage * wrapElement[bar.value.scrollSize]) / 100
 }
 
 const mouseUpDocumentHandler = () => {
@@ -162,11 +163,11 @@ const restoreOnselectstart = () => {
 useEventListener(
   toRef(scrollbar, 'scrollbarElement'),
   'mousemove',
-  mouseMoveScrollbarHandler
+  mouseMoveScrollbarHandler,
 )
 useEventListener(
   toRef(scrollbar, 'scrollbarElement'),
   'mouseleave',
-  mouseLeaveScrollbarHandler
+  mouseLeaveScrollbarHandler,
 )
 </script>

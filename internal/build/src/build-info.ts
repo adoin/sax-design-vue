@@ -2,7 +2,7 @@ import path from 'path'
 import { PKG_NAME } from '@vuesax-alpha/build-constants'
 import { vsOutput } from '@vuesax-alpha/build-utils'
 
-import type { ModuleFormat } from 'rollup'
+import type { ModuleFormat } from 'rolldown'
 
 export const modules = ['esm', 'cjs'] as const
 export type Module = (typeof modules)[number]
@@ -50,7 +50,7 @@ export const buildConfig: Record<Module, BuildInfo> = {
   },
 }
 export const buildConfigEntries = Object.entries(
-  buildConfig
+  buildConfig,
 ) as BuildConfigEntries
 
 export type BuildConfig = typeof buildConfig

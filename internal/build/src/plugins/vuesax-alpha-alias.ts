@@ -1,6 +1,6 @@
 import { PKG_NAME, PKG_PREFIX } from '@vuesax-alpha/build-constants'
 
-import type { Plugin } from 'rollup'
+import type { Plugin } from 'rolldown'
 
 export function VuesaxAlphaAlias(): Plugin {
   const themeChalk = 'theme-chalk'

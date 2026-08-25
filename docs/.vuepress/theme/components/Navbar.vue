@@ -278,7 +278,7 @@ const handleShowSuggestions = (active: boolean) => {
     .home-navigation {
       width: auto;
 
-      :deep(.s-menu__list) {
+      .s-menu__list {
         display: flex !important;
         flex-direction: row !important;
         align-items: center;
@@ -287,11 +287,11 @@ const handleShowSuggestions = (active: boolean) => {
         padding: 5px;
       }
 
-      :deep(.s-menu-node) {
+      .s-menu-node {
         flex: 0 0 auto;
       }
 
-      :deep(.s-menu-node__button) {
+      .s-menu-node__button {
         width: auto !important;
         min-width: 0;
         min-height: 38px;
@@ -300,7 +300,7 @@ const handleShowSuggestions = (active: boolean) => {
         font-weight: 600;
       }
 
-      :deep(.s-menu-node.is-active .s-menu-node__button) {
+      .s-menu-node.is-active .s-menu-node__button {
         background: hsl(var(--sax-accent-color) / 0.1);
         color: hsl(var(--sax-accent-color));
       }

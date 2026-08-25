@@ -10,8 +10,6 @@
     "build": "vuepress build"
   },
   "dependencies": {
-    "sax-design-vue-iconify": "workspace:*",
-    "@vuepress/shared-utils": "1.9.10",
     "@vuesax-alpha/theme-chalk": "workspace:*",
     "@vueuse/components": "^14.3.0",
     "@vueuse/core": "^14.3.0",
@@ -21,19 +19,20 @@
     "minimist": "^1.2.8",
     "prismjs": "^1.30.0",
     "sax-design-vue": "workspace:*",
-    "vue": "^3.5.40",
+    "sax-design-vue-iconify": "workspace:*",
+    "vue": "^3.5.41",
     "vue-router": "^5.2.0"
   },
   "devDependencies": {
     "@types/prismjs": "^1.26.6",
-    "@vuepress/bundler-vite": "2.0.0-beta.68",
-    "@vuepress/client": "2.0.0-beta.68",
-    "@vuepress/plugin-active-header-links": "2.0.0-beta.68",
-    "@vuepress/plugin-container": "2.0.0-beta.68",
-    "@vuepress/plugin-git": "2.0.0-beta.68",
-    "@vuepress/plugin-prismjs": "2.0.0-beta.68",
-    "@vuepress/plugin-register-components": "2.0.0-beta.68",
-    "@vuepress/plugin-theme-data": "2.0.0-beta.68",
-    "vuepress": "2.0.0-beta.68"
+    "@vuepress/bundler-vite": "2.0.0-rc.31",
+    "@vuepress/client": "2.0.0-rc.31",
+    "@vuepress/plugin-active-header-links": "2.0.0-rc.131",
+    "@vuepress/plugin-container": "2.0.0-rc.28",
+    "@vuepress/plugin-git": "2.0.0-rc.132",
+    "@vuepress/plugin-prismjs": "2.0.0-rc.132",
+    "@vuepress/plugin-register-components": "2.0.0-rc.132",
+    "@vuepress/plugin-theme-data": "2.0.0-rc.131",
+    "vuepress": "2.0.0-rc.31"
   }
 }

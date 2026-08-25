@@ -57,6 +57,7 @@ import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { getVsColor } from '@vuesax-alpha/utils'
 import { promptEmits, promptProps } from './prompt'
+import type { ButtonProps } from '@vuesax-alpha/components/button'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
@@ -89,8 +90,8 @@ const accentStyle = computed((): CSSProperties => ({
   background: resolveColor(props.color),
 }))
 
-const resolveButtonType = (type: string) =>
-  type === 'filled' ? 'default' : type
+const resolveButtonType = (type: string): ButtonProps['type'] =>
+  type === 'filled' ? 'default' : (type as ButtonProps['type'])
 
 const canAccept = computed(
   () => props.isValid === 'none' || props.isValid === true,

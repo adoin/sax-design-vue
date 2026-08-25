@@ -49,6 +49,10 @@ const emit = defineEmits(tableEmits)
 
 const { tableKls, colspan, selected, theadRef } = useTable(props, emit)
 
+// The template compiler binds this named template ref at runtime.
+// eslint-disable-next-line no-void
+void theadRef
+
 provide(tableContextKey, {
   selected,
   colspan,

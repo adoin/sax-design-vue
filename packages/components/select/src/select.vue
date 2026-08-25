@@ -22,11 +22,7 @@
     :teleported="popupConfig.transfer ?? teleported"
     :append-to="popupConfig.appendTo"
     :strategy="strategy"
-    :popper-class="[
-      ns.e('content'),
-      useVuesaxBaseComponent(color),
-      popupConfig.className,
-    ]"
+    :popper-class="popperClass"
     :popper-style="[colorCssVar, popupStyle, popupConfig.style]"
     :z-index="popupConfig.zIndex"
     :show-arrow="false"
@@ -515,8 +511,15 @@ const colorCssVar = computed(() =>
     color: getVsColor(color.value),
   }),
 )
-
 const popupConfig = computed(() => props.popupConfig)
+const baseComponentClasses = useVuesaxBaseComponent(color)
+const popperClass = computed(() =>
+  [
+    ns.e('content'),
+    ...baseComponentClasses,
+    popupConfig.value.className,
+  ].filter((className): className is string => Boolean(className)),
+)
 const filterable = computed(() => props.filter || props.filterable)
 const popupWidth = shallowRef<number>()
 const toCssSize = (value: number | string | undefined) =>
@@ -802,6 +805,10 @@ const {
   cachedOptionsArray,
   selectedArray,
 } = useSelect(props, states, emit)
+
+// The template compiler binds this named template ref at runtime.
+// eslint-disable-next-line no-void
+void reference
 
 const scrollVirtualOptionIntoView = (
   option: SelectOptionContext | undefined,

@@ -117,7 +117,7 @@
                   <button
                     class="api-code-copy"
                     type="button"
-                    @click="copy(row.code)"
+                    @click="copyCode(row.code)"
                   >
                     {{ copied ? t.examples.copied : t.examples.copyCode }}
                   </button>
@@ -193,8 +193,16 @@ const getValues = (values?: string) => {
     .map((value) => `<span class="value-span">${value.trim()}</span>`)
     .join('')
 }
+const scriptEndTag = '<' + '/script>'
+const normalizeCode = (code: string) =>
+  code.replaceAll('<\\/script>', scriptEndTag)
+const copyCode = (code: string) => copy(normalizeCode(code))
 const getCode = (code: string) => {
-  const html = prism.highlight(code, prism.languages.html, 'html')
+  const html = prism.highlight(
+    normalizeCode(code),
+    prism.languages.html,
+    'html',
+  )
   return `<pre class="language-html"><code>${html}</code></pre>`
 }
 const issueLink = (name: string) =>

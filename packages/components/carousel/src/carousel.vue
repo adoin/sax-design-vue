@@ -5,7 +5,7 @@ import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { addUnit } from '@vuesax-alpha/utils'
 import { carouselEmits, carouselProps } from './carousel'
 import { useCarousel } from './use-carousel'
-import type { CarouselItem } from './carousel'
+import type { CarouselItem, RenderedCarouselItem } from './carousel'
 import type { CSSProperties } from 'vue'
 
 defineOptions({ name: 'SCarousel' })
@@ -38,15 +38,6 @@ let dragStart = 0
 let suppressClick = false
 let hasPointerCapture = false
 let pressedItemIndex: number | null = null
-
-interface RenderedCarouselItem {
-  item: CarouselItem
-  sourceIndex: number
-  renderIndex: number
-  cloned: boolean
-  virtualEdge: boolean
-  key: string
-}
 
 const {
   activeIndex,

@@ -1,6 +1,6 @@
 <template>
   <transition name="fade-expand">
-    <tr v-if="!hidden" ref="trRef" :class="ns.be('tr-expand', 'row')">
+    <tr v-if="!hidden" :class="ns.be('tr-expand', 'row')">
       <td :class="ns.be('tr-expand', 'td')" :colspan="colspan">
         <div ref="contentRef" :class="ns.be('tr-expand', 'content')">
           <div :class="ns.bem('tr-expand', 'content', 'inner')">
@@ -27,7 +27,6 @@ defineProps(expandProps)
 
 const hidden = ref<boolean>(true)
 
-const trRef = ref<HTMLElement>()
 const contentRef = ref<HTMLElement>()
 
 watch(hidden, (val: boolean) => {

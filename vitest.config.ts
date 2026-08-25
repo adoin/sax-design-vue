@@ -1,6 +1,5 @@
-import { mergeConfig } from 'vite'
-import { defineConfig } from 'vitest/config'
-import baseConfig from './vite.config'
+import { defineConfig, mergeConfig } from 'vitest/config'
+import baseConfig from './vite.config.ts'
 
 export default mergeConfig(
   baseConfig,
@@ -9,9 +8,6 @@ export default mergeConfig(
       clearMocks: true,
       environment: 'jsdom',
       setupFiles: ['./vitest.setup.ts'],
-      transformMode: {
-        web: [/\.[jt]sx$/],
-      },
     },
-  })
+  }),
 )

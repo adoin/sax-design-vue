@@ -4,8 +4,8 @@ import { debugWarn, throwError } from '..'
 describe('error', () => {
   it('throwError should work', () => {
     expect(() =>
-      throwError('scope', 'message')
-    ).toThrowErrorMatchingInlineSnapshot('"[scope] message"')
+      throwError('scope', 'message'),
+    ).toThrowErrorMatchingInlineSnapshot(`[SaxDesignVueError: [scope] message]`)
   })
 
   it('debugWarn should work', () => {

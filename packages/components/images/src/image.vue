@@ -1,6 +1,9 @@
 <template>
   <li
-    :class="[ns.e('item'), ns.is('preview', preview || previewSrcList.length)]"
+    :class="[
+      ns.e('item'),
+      ns.is('preview', Boolean(preview || previewSrcList.length)),
+    ]"
     :style="itemStyle"
     @click="openPreview"
   >
