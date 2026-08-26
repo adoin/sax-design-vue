@@ -8,6 +8,32 @@
   --sax-tabs-radius: 14px;
   --sax-tabs-surface: hsl(var(--sax-background) / 0.82);
   --sax-tabs-soft: color-mix(in srgb, var(--sax-tabs-color) 11%, transparent);
+  --sax-tabs-pill-item-surface: color-mix(
+    in srgb,
+    hsl(var(--sax-background)) 88%,
+    var(--sax-tabs-color) 12%
+  );
+  --sax-tabs-pill-item-hover: color-mix(
+    in srgb,
+    hsl(var(--sax-background)) 82%,
+    var(--sax-tabs-color) 18%
+  );
+  --sax-tabs-card-surface: color-mix(
+    in srgb,
+    hsl(var(--sax-background)) 92%,
+    hsl(var(--sax-text)) 8%
+  );
+  --sax-tabs-card-surface-hover: color-mix(
+    in srgb,
+    hsl(var(--sax-background)) 88%,
+    var(--sax-tabs-color) 12%
+  );
+  --sax-tabs-card-shadow:
+    0 2px 5px -2px hsl(var(--sax-text) / 0.22),
+    0 11px 22px -17px hsl(var(--sax-text) / 0.42);
+  --sax-tabs-card-shadow-hover:
+    0 4px 9px -4px hsl(var(--sax-text) / 0.26),
+    0 15px 28px -18px var(--sax-tabs-color);
   --sax-tabs-shadow:
     0 1px 2px hsl(var(--sax-primary) / 0.08),
     0 9px 24px -17px hsl(var(--sax-primary) / 0.34);
@@ -370,7 +396,36 @@
     outline: 0;
   }
 
+  @include m(type-line) {
+    @include e(nav) {
+      background: transparent;
+      box-shadow: none;
+    }
+
+    @include e(item) {
+      background: transparent;
+      color: hsl(var(--sax-text) / 0.72);
+      box-shadow: 0 10px 18px -16px hsl(var(--sax-text) / 0.58);
+
+      &:hover:not(.is-disabled):not(.is-active) {
+        background: var(--sax-tabs-soft);
+        color: var(--sax-tabs-color);
+        box-shadow: 0 12px 24px -17px
+          color-mix(in srgb, var(--sax-tabs-color) 72%, transparent);
+      }
+
+      @include when(active) {
+        background: transparent;
+        color: var(--sax-tabs-color);
+        box-shadow: 0 12px 24px -18px
+          color-mix(in srgb, var(--sax-tabs-color) 64%, transparent);
+      }
+    }
+  }
+
   @include m(type-pill) {
+    --sax-tabs-gap: 4px;
+
     @include e(nav) {
       background: color-mix(
         in srgb,
@@ -380,8 +435,18 @@
     }
 
     @include e(item) {
+      background: var(--sax-tabs-pill-item-surface);
+      color: hsl(var(--sax-text) / 0.76);
+      box-shadow: none;
+
+      &:hover:not(.is-disabled):not(.is-active) {
+        background: var(--sax-tabs-pill-item-hover);
+        box-shadow: none;
+      }
+
       @include when(active) {
         background: hsl(var(--sax-background));
+        color: var(--sax-tabs-color);
         box-shadow:
           0 10px 24px -17px var(--sax-tabs-color),
           0 2px 7px -5px hsl(var(--sax-text) / 0.2);
@@ -390,30 +455,21 @@
   }
 
   @include m(type-card) {
+    --sax-tabs-gap: 8px;
+
     @include e(nav) {
       background: transparent;
       box-shadow: none;
     }
 
     @include e(item) {
-      background: color-mix(
-        in srgb,
-        hsl(var(--sax-background)) 95%,
-        var(--sax-tabs-color) 5%
-      );
-      box-shadow:
-        0 10px 24px -20px hsl(var(--sax-text) / 0.46),
-        0 3px 9px -8px hsl(var(--sax-primary) / 0.28);
+      background: var(--sax-tabs-card-surface);
+      color: hsl(var(--sax-text) / 0.76);
+      box-shadow: var(--sax-tabs-card-shadow);
 
       &:hover:not(.is-disabled):not(.is-active) {
-        background: color-mix(
-          in srgb,
-          hsl(var(--sax-background)) 90%,
-          var(--sax-tabs-color) 10%
-        );
-        box-shadow:
-          0 14px 28px -21px var(--sax-tabs-color),
-          0 6px 14px -12px hsl(var(--sax-text) / 0.34);
+        background: var(--sax-tabs-card-surface-hover);
+        box-shadow: var(--sax-tabs-card-shadow-hover);
         transform: translateY(-1px);
       }
 
@@ -458,9 +514,7 @@
 
     @include e(item) {
       &:not(.is-active) {
-        box-shadow:
-          0 4px 12px -10px hsl(var(--sax-text) / 0.38),
-          0 2px 7px -7px hsl(var(--sax-primary) / 0.24);
+        box-shadow: var(--sax-tabs-card-shadow);
       }
 
       @include when(active) {

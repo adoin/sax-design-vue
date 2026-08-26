@@ -21,6 +21,7 @@ export interface TabPaneContext {
 export interface TabsContext {
   activeUid: Ref<number | undefined>
   animated: Ref<boolean>
+  lazy: Ref<boolean>
   destroyOnHide: Ref<boolean>
   registerPane: (pane: TabPaneContext) => void
   updatePane: (uid: number, pane: Partial<TabPaneContext>) => void

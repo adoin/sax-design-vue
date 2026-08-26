@@ -101,6 +101,21 @@ describe('Tabs', () => {
     expect(wrapper.emitted('edit')?.[1]).toEqual(['overview', 'remove'])
   })
 
+  it('supports editing controls independently from the visual type', async () => {
+    const wrapper = mountTabs(
+      { modelValue: 'overview', type: 'connected-card', editable: true },
+      { default: panes },
+    )
+    await nextTick()
+
+    expect(wrapper.classes()).toContain('s-tabs--type-connected-card')
+    await wrapper.get('[aria-label="Add tab"]').trigger('click')
+    await wrapper.get('[aria-label="Close Overview"]').trigger('click')
+
+    expect(wrapper.emitted('add')).toHaveLength(1)
+    expect(wrapper.emitted('remove')?.[0]?.[0]).toBe('overview')
+  })
+
   it('renders a tab label slot inside the navigation control', async () => {
     const wrapper = mountTabs(
       { modelValue: 'custom' },
@@ -119,6 +134,25 @@ describe('Tabs', () => {
     await nextTick()
 
     expect(wrapper.get('.custom-label').text()).toBe('Workspace')
+  })
+
+  it('lazily mounts panes on first activation and keeps visited panes', async () => {
+    const wrapper = mountTabs(
+      { modelValue: 'overview', lazy: true },
+      { default: panes },
+    )
+    await nextTick()
+
+    expect(wrapper.findAll('[role="tabpanel"]')).toHaveLength(1)
+    expect(wrapper.text()).toContain('Overview panel')
+    expect(wrapper.text()).not.toContain('Files panel')
+
+    await wrapper.findAll('[role="tab"]')[1].trigger('click')
+    await nextTick()
+
+    expect(wrapper.findAll('[role="tabpanel"]')).toHaveLength(2)
+    expect(wrapper.text()).toContain('Overview panel')
+    expect(wrapper.text()).toContain('Files panel')
   })
 
   it('renders the connected-card appearance modifier', async () => {

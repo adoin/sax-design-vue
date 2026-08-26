@@ -11,3 +11,5 @@ export default SForm
 export * from './src/form'
 export * from './src/form-item'
 export * from './src/form-group'
+export * from './src/form-validator'
+export * from './src/renderer'

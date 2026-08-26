@@ -53,6 +53,10 @@ export const tabsProps = buildProps({
     default: 'default',
   },
   animated: { type: Boolean, default: true },
+  /** Show add and close controls independently from the visual type. */
+  editable: Boolean,
+  /** Mount a pane only after its first activation, then keep it mounted. */
+  lazy: Boolean,
   destroyOnHide: Boolean,
   hideAdd: Boolean,
   ariaLabel: String,

@@ -9,7 +9,7 @@ PROPS:
   - name: type
     type: String
     values: line / pill / card / connected-card / editable-card
-    description: Navigation style. connected-card joins the active tab and its pane into one continuous surface; editable-card also shows add and close actions.
+    description: Navigation style. connected-card joins the active tab and its pane into one continuous surface; editable-card is the backward-compatible editable card preset.
     default: line
   - name: overflow
     type: String
@@ -41,10 +41,20 @@ PROPS:
     values: true / false
     description: Unmount hidden panel content.
     default: 'false'
+  - name: lazy
+    type: Boolean
+    values: true / false
+    description: Mount each panel on first activation, then keep visited panels mounted.
+    default: 'false'
+  - name: editable
+    type: Boolean
+    values: true / false
+    description: Show add and close controls independently from the selected visual type.
+    default: 'false'
   - name: hide-add
     type: Boolean
     values: true / false
-    description: Hide the add action in editable-card mode.
+    description: Hide the add action when editing controls are enabled.
     default: 'false'
   - name: color
     type: String
@@ -75,7 +85,7 @@ CHILD_PROPS:
   - name: disabled / closable
     type: Boolean
     values: true / false
-    description: Disable a tab or allow closing it in editable-card mode.
+    description: Disable a tab or allow closing it when editing controls are enabled.
     default: false / true
   - name: force-render
     type: Boolean
@@ -88,7 +98,7 @@ EVENTS:
   - name: tab-click
     description: Emits value, event, and pane when a tab is activated.
   - name: add / remove / edit
-    description: Requests editable-card mutations; the parent still owns the array.
+    description: Requests editable tab mutations; the parent still owns the array.
   - name: tab-contextmenu
     description: Emits value, event, and pane for a tab context-menu event.
 SLOTS:
@@ -105,6 +115,24 @@ SLOTS:
 # Tabs
 
 Tabs uses semantic `tablist / tab / tabpanel` roles with arrow, Home, and End keyboard navigation. Every visual mode uses spacing, surface depth, and shadow instead of visible borders.
+
+`lazy` mounts a panel on first activation and keeps it for later switches; `destroy-on-hide` continuously unmounts inactive panels.
+
+<card>
+
+## Lazy mounting
+
+Add `lazy` when panel content is expensive. Only the active panel mounts initially; each visited panel mounts once and remains available for later switches.
+
+<template #example><tabs-lazy /></template>
+
+<template #template>
+
+@[code](../.vuepress/components/tabs/lazy.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -142,7 +170,7 @@ The default `overflow="collapse"` keeps the active tab visible and moves remaini
 
 ## Add and remove
 
-`editable-card` emits mutation requests while application state remains the single source of truth.
+`editable` enables mutation requests for any visual type while application state remains the single source of truth. `editable-card` keeps its original editable card behavior for compatibility.
 
 <template #example><tabs-editable /></template>
 
@@ -169,5 +197,3 @@ Compose the `s-tab` label slot with the repository's existing `SContextMenu` ins
 </template>
 
 </card>
-
-## API

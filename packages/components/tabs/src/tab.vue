@@ -5,6 +5,7 @@ import {
   inject,
   onBeforeUnmount,
   onMounted,
+  shallowRef,
   useSlots,
   watch,
 } from 'vue'
@@ -27,6 +28,13 @@ if (!tabs || !instance) throw new Error('[STab] must be used inside STabs')
 
 const uid = instance.uid
 const isActive = computed(() => tabs.activeUid.value === uid)
+const hasRendered = shallowRef(false)
+const shouldRender = computed(() => {
+  if (props.forceRender) return true
+  if (tabs.destroyOnHide.value) return isActive.value
+  if (!tabs.lazy.value) return true
+  return hasRendered.value
+})
 const transitionName = computed(() =>
   tabs.animated.value ? ns.e('pane-fade') : undefined,
 )
@@ -56,13 +64,21 @@ watch(
   () => tabs.updatePane(uid, paneData()),
 )
 
+watch(
+  isActive,
+  (active) => {
+    if (active) hasRendered.value = true
+  },
+  { immediate: true },
+)
+
 onBeforeUnmount(() => tabs.unregisterPane(uid))
 </script>
 
 <template>
   <Transition :name="transitionName">
     <div
-      v-if="!tabs.destroyOnHide.value || isActive || forceRender"
+      v-if="shouldRender"
       v-show="isActive"
       :id="tabs.panelId(uid)"
       :class="ns.e('pane')"

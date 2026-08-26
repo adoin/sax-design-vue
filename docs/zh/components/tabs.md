@@ -9,7 +9,7 @@ PROPS:
   - name: type
     type: String
     values: line / pill / card / connected-card / editable-card
-    description: 标签栏外观；connected-card 将激活标签与内容面板连接为同一表面，editable-card 同时显示添加与关闭操作。
+    description: 标签栏外观；connected-card 将激活标签与内容面板连接为同一表面，editable-card 是兼容旧用法的可编辑卡片预设。
     default: line
   - name: overflow
     type: String
@@ -41,10 +41,20 @@ PROPS:
     values: true / false
     description: 隐藏后是否卸载面板内容。
     default: 'false'
+  - name: lazy
+    type: Boolean
+    values: true / false
+    description: 面板首次激活时才挂载，访问后继续保留。
+    default: 'false'
+  - name: editable
+    type: Boolean
+    values: true / false
+    description: 不依赖展示风格，独立开启新增与关闭操作。
+    default: 'false'
   - name: hide-add
     type: Boolean
     values: true / false
-    description: editable-card 模式下隐藏添加按钮。
+    description: 开启编辑操作时隐藏添加按钮。
     default: 'false'
   - name: color
     type: String
@@ -75,7 +85,7 @@ CHILD_PROPS:
   - name: disabled / closable
     type: Boolean
     values: true / false
-    description: 禁用标签，或控制 editable-card 中是否允许关闭。
+    description: 禁用标签，或控制开启编辑操作时是否允许关闭。
     default: false / true
   - name: force-render
     type: Boolean
@@ -88,7 +98,7 @@ EVENTS:
   - name: tab-click
     description: 点击或键盘激活标签时返回 value、事件与 pane。
   - name: add / remove / edit
-    description: editable-card 请求添加或删除；数据仍由父级维护。
+    description: 请求添加或删除标签；数据仍由父级维护。
   - name: tab-contextmenu
     description: 标签发生右键事件时返回 value、事件与 pane。
 SLOTS:
@@ -105,6 +115,24 @@ SLOTS:
 # Tabs（标签页）
 
 Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End。所有形态均不依赖可见边框，通过间距、背景层次和阴影组织结构。
+
+`lazy` 会在面板首次激活时挂载并在后续切换中保留；`destroy-on-hide` 则会持续卸载非活动面板。
+
+<card>
+
+## 延迟挂载
+
+面板内容开销较大时可添加 `lazy`。初始只挂载当前面板；每个访问过的面板只挂载一次，并在后续切换中保留。
+
+<template #example><tabs-lazy /></template>
+
+<template #template>
+
+@[code](../../.vuepress/components/tabs/lazy.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -142,7 +170,7 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 
 ## 动态添加与删除
 
-`editable-card` 只发送添加、删除请求，标签数组仍由业务层单一维护。
+`editable` 可以为任意展示风格开启添加、删除请求，标签数组仍由业务层单一维护；`editable-card` 保留原有可编辑卡片行为以兼容旧用法。
 
 <template #example><tabs-editable /></template>
 
@@ -169,5 +197,3 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 </template>
 
 </card>
-
-## API

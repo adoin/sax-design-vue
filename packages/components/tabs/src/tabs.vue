@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {
   computed,
+  getCurrentInstance,
   nextTick,
   onBeforeUnmount,
   onMounted,
@@ -14,7 +15,11 @@ import {
 } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import {
+  useLocale,
+  useNamespace,
+  useOrderedChildren,
+} from '@vuesax-alpha/hooks'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { tabsContextKey } from './constants'
 import { tabsEmits, tabsProps } from './tabs'
@@ -34,8 +39,15 @@ const ns = useNamespace('tabs')
 const { t } = useLocale()
 const tabsId = useId()
 const activeReflowDelay = 180
+const instance = getCurrentInstance()
 
-const panes = shallowRef<TabPaneContext[]>([])
+if (!instance) throw new Error('[STabs] component instance is unavailable')
+
+const {
+  children: panes,
+  addChild: addPane,
+  removeChild: removePane,
+} = useOrderedChildren<TabPaneContext>(instance, 'STab')
 const activeUid = shallowRef<number>()
 const lineStyle = shallowRef<CSSProperties>({})
 const overflowLayout = shallowRef<TabsOverflowResult>({
@@ -54,7 +66,9 @@ const extraRef = useTemplateRef<HTMLElement>('extra')
 const isHorizontal = computed(
   () => props.position === 'top' || props.position === 'bottom',
 )
-const isEditable = computed(() => props.type === 'editable-card')
+const isEditable = computed(
+  () => props.editable || props.type === 'editable-card',
+)
 const showLine = computed(() => props.type === 'line')
 
 const themeColor = computed(() => normalizeVsColor(props.color))
@@ -319,15 +333,16 @@ const handleRemove = (pane: TabPaneContext, event: MouseEvent) => {
 }
 
 const registerPane = (pane: TabPaneContext) => {
-  panes.value = [...panes.value, pane]
+  addPane(pane)
   syncActiveFromModel()
   queueLayout()
 }
 
 const updatePane = (uid: number, nextPane: Partial<TabPaneContext>) => {
-  panes.value = panes.value.map((pane) =>
-    pane.uid === uid ? { ...pane, ...nextPane, uid } : pane,
-  )
+  const pane = panes.value.find((item) => item.uid === uid)
+  if (!pane) return
+  Object.assign(pane, nextPane, { uid })
+  panes.value = [...panes.value]
   syncActiveFromModel()
   queueLayout()
 }
@@ -335,7 +350,7 @@ const updatePane = (uid: number, nextPane: Partial<TabPaneContext>) => {
 const unregisterPane = (uid: number) => {
   const removedIndex = panes.value.findIndex((pane) => pane.uid === uid)
   const wasActive = activeUid.value === uid
-  panes.value = panes.value.filter((pane) => pane.uid !== uid)
+  removePane(uid)
   if (wasActive && panes.value.length) {
     const nextIndex = Math.min(
       Math.max(0, removedIndex),
@@ -384,6 +399,7 @@ useResizeObserver(navWrapRef, measureTabs)
 provide(tabsContextKey, {
   activeUid,
   animated: toRef(props, 'animated'),
+  lazy: toRef(props, 'lazy'),
   destroyOnHide: toRef(props, 'destroyOnHide'),
   registerPane,
   updatePane,
