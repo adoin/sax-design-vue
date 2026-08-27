@@ -52,7 +52,6 @@ import {
 } from '@vuesax-alpha/components/navbar'
 import { SNoticeBar } from '@vuesax-alpha/components/notice-bar'
 import { SPagination } from '@vuesax-alpha/components/pagination'
-import { SPasswordInput } from '@vuesax-alpha/components/password-input'
 import { SPopconfirm } from '@vuesax-alpha/components/popconfirm'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SProgress } from '@vuesax-alpha/components/progress'
@@ -158,7 +157,6 @@ export default [
   SNavbarItem,
   SNoticeBar,
   SPagination,
-  SPasswordInput,
   SPopconfirm,
   SPopper,
   SProgress,

@@ -84,7 +84,6 @@ export const formRenderer = new FormRendererStore()
 formRenderer.mixin({
   SInput: { component: 'SInput' },
   SInputNumber: { component: 'SInputNumber' },
-  SPasswordInput: { component: 'SPasswordInput' },
   STextarea: { component: 'STextarea' },
   SSelect: { component: 'SSelect' },
   SSwitch: { component: 'SSwitch' },

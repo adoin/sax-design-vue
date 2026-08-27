@@ -29,7 +29,6 @@ export const additionalComponentNavItems: SidebarItem[] = [
   { text: 'List', link: '/components/list' },
   { text: 'Menu', link: '/components/menu' },
   { text: 'Notice bar', link: '/components/notice-bar' },
-  { text: 'Password input', link: '/components/password-input' },
   { text: 'Print', link: '/components/print' },
   { text: 'Print page break', link: '/components/print-page-break' },
   { text: 'Progress', link: '/components/progress' },

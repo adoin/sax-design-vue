@@ -85,7 +85,6 @@ export const componentCategories: ComponentCategory[] = [
       component('Form group', '表单分组', '/components/form-group'),
       component('Icon picker', '图标选择器', '/components/icon-picker'),
       component('Input', '输入框', '/components/input'),
-      component('Password input', '密码输入框', '/components/password-input'),
       component('Radio', '单选框', '/components/radio'),
       component('Rate', '评分', '/components/rate'),
       component('Segmented', '分段控制', '/components/segmented'),

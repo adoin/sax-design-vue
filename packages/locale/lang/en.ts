@@ -207,11 +207,6 @@ export default {
       insert: 'Insert SVG',
       cancel: 'Cancel',
     },
-    passwordInput: {
-      clear: 'Clear password',
-      show: 'Show password',
-      hide: 'Hide password',
-    },
     splitter: {
       resize: 'Resize {direction} panels',
     },

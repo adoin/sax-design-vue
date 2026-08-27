@@ -189,11 +189,6 @@ export default {
       insert: '插入 SVG',
       cancel: '取消',
     },
-    passwordInput: {
-      clear: '清空密码',
-      show: '显示密码',
-      hide: '隐藏密码',
-    },
     splitter: {
       resize: '调整{direction}面板大小',
     },
