@@ -121,9 +121,15 @@ PROPS:
     description: 控制 SLayoutAside outside 插槽的收起状态。
     default: false
 description: '响应式应用外壳与可自由拼接的语义布局表面。'
+EVENTS:
+  - name: update:asideOutsideCollapsed / aside-outside-collapse
+    type: Boolean
+    description: 外侧边栏区域折叠或展开时触发。
 ---
 
 # Layout 布局
+
+<card>
 
 `SLayout` 负责标准应用页面骨架，通过命名插槽组织区域。未传入的区域不会产生空包装层，因此同一套 API 可以覆盖后台、内容页和设置页。所有区域都通过间距与阴影建立层级，不依赖分隔边框。
 
@@ -131,31 +137,37 @@ description: '响应式应用外壳与可自由拼接的语义布局表面。'
 
 使用 `header`、`aside`、默认和 `footer` 插槽拼出完整页面。设置 `aside-position="end"` 可将侧栏切换到右侧；小屏幕下会自动纵向排列，避免横向滚动。
 
-<card><template #example><layout-default /></template><template #template>
+<template #example><layout-default /></template><template #template>
 
 @[code](../../.vuepress/components/layout/default.vue)
 
 </template></card>
 
+<card>
+
 ## 侧栏外挂工具
 
 通过 `aside-outside` 插槽把配置、语言、主题等操作吸附在侧栏外侧。`SLayout` 会将内容转发给内部 `SLayoutAside` 的 `outside` 插槽；连接曲面、方向、阴影、小屏回退以及最外侧的收起/展开控件都由 Aside 统一处理。收起后仍保留方向箭头，并提供悬停和键盘反馈。直接使用 `SLayoutAside` 时改用 `#outside` 即可。
 
-<card><template #example><layout-aside-outside /></template><template #template>
+<template #example><layout-aside-outside /></template><template #template>
 
 @[code](../../.vuepress/components/layout/aside-outside.vue)
 
 </template></card>
 
+<card>
+
 ## 自由拼接
 
 非标准结构可直接组合 `SLayoutContainer`、`SLayoutHeader`、`SLayoutAside`、`SLayoutBody` 与 `SLayoutFooter`。容器支持 `direction`、`gap`、`wrap`、`align`、`justify`，也可以任意嵌套。`SLayoutHeader` 可通过 `sticky` 独立吸顶，并用 `sticky-offset` 避开页面已有的顶部导航。`SLayoutAside` 的 `outside` 插槽用于放置配置、语言和主题等工具；侧栏会负责将工具表面连续地吸附在外侧。
 
-<card><template #example><layout-composition /></template><template #template>
+<template #example><layout-composition /></template><template #template>
 
 @[code](../../.vuepress/components/layout/composition.vue)
 
 </template></card>
+
+<card>
 
 ## 插槽
 
@@ -168,3 +180,5 @@ description: '响应式应用外壳与可自由拼接的语义布局表面。'
 | `footer`        | 页面级页脚内容。                                                    |
 
 直接使用 `SLayoutAside` 时，使用 `outside` 插槽；只有插槽存在时才会渲染外挂工具表面。两个外挂插槽都会暴露 `collapsed` 和 `toggle`。在 `SLayout` 上设置 `aside-outside-collapsible="false"`，或在 `SLayoutAside` 上设置 `outside-collapsible="false"`，可以关闭内置控件。状态变化时，`SLayout` 会触发 `update:asideOutsideCollapsed` / `aside-outside-collapse`，`SLayoutAside` 会触发 `update:outsideCollapsed` / `outside-collapse`。
+
+</card>

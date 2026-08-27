@@ -306,9 +306,3 @@ Combine `s-chips` with multiple `s-chip` children to add and remove tags.
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

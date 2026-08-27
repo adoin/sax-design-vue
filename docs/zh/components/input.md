@@ -219,6 +219,33 @@ PROPS:
     default: '-'
     usage: '#原生约束'
 
+EVENTS:
+  - name: update:modelValue / input
+    type: String | Number
+    description: 输入值变化时触发。
+  - name: change / lazy-change
+    type: String
+    description: 原生变更提交或配置的延迟更新提交时触发。
+  - name: focus / blur
+    type: FocusEvent
+    description: 输入框获得或失去焦点时触发。
+  - name: clear
+    description: 点击清空操作并重置值后触发。
+  - name: click / clickIcon / prefix-click / suffix-click
+    type: MouseEvent | Event
+    description: 点击输入区域或前后缀图标操作时触发。
+  - name: keydown / keyup / wheel
+    type: KeyboardEvent | WheelEvent
+    description: 透传键盘和滚轮交互事件。
+  - name: mouseenter / mouseleave
+    type: MouseEvent
+    description: 指针进入或离开输入框容器时触发。
+  - name: search-click
+    type: '(value: String, event: KeyboardEvent | MouseEvent)'
+    description: 通过搜索图标或键盘提交搜索时触发。
+  - name: toggle-visible
+    type: Boolean
+    description: 密码可见状态变化时触发。
 SLOTS:
   - name: icon
     type: Slot
@@ -686,5 +713,3 @@ SLOTS:
 </template>
 
 </card>
-
-## API

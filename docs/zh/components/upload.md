@@ -183,6 +183,5 @@ NEWS:
 
 </template>
 
-## API
 
 </card>

@@ -27,9 +27,3 @@ NEWS:
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

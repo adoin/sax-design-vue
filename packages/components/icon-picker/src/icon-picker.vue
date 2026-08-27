@@ -1,103 +1,136 @@
-<template>
-  <div ref="rootRef" :class="[ns.b(), ns.is('disabled', disabled)]">
-    <div
-      :class="[ns.e('trigger'), ns.is('open', open)]"
-      role="combobox"
-      :tabindex="disabled ? -1 : 0"
-      :aria-expanded="open"
-      aria-haspopup="listbox"
-      @click="toggle"
-      @keydown.enter.prevent="toggle"
-      @keydown.space.prevent="toggle"
-      @keydown.esc.prevent="open = false"
-    >
-      <SIcon v-if="modelValue" :name="modelValue" />
-      <span :class="[ns.e('value'), ns.is('placeholder', !modelValue)]">{{
-        modelValue || placeholder || t('vs.iconPicker.placeholder')
-      }}</span>
-      <button
-        v-if="clearable && modelValue"
-        :class="ns.e('clear')"
-        type="button"
-        :aria-label="t('vs.iconPicker.clear')"
-        @click.stop="clear"
-      >
-        <SIcon name="cb:close" />
-      </button>
-      <SIcon v-else name="cb:chevron-down" />
-    </div>
-    <div v-if="open" :class="ns.e('panel')" role="listbox">
-      <input
-        v-if="searchable"
-        v-model="query"
-        :class="ns.e('search')"
-        type="search"
-        :placeholder="t('vs.iconPicker.search')"
-        autofocus
-      />
-      <div :class="ns.e('grid')">
-        <button
-          v-for="icon in filteredIcons"
-          :key="icon"
-          :class="[ns.e('item'), ns.is('active', icon === modelValue)]"
-          type="button"
-          :title="icon"
-          :aria-label="icon"
-          @click="select(icon)"
-        >
-          <SIcon :name="icon" />
-        </button>
-      </div>
-      <div v-if="!filteredIcons.length" :class="ns.e('empty')">
-        {{ t('vs.iconPicker.empty') }}
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, shallowRef, toRef, useTemplateRef } from 'vue'
+import { SButton } from '@vuesax-alpha/components/button'
+import { SColorPicker } from '@vuesax-alpha/components/color-picker'
+import { SDialog } from '@vuesax-alpha/components/dialog'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
-import { iconPickerEmits, iconPickerProps } from './icon-picker'
+import IconPickerPanel from './icon-picker-panel.vue'
+import {
+  createIconSvg,
+  iconPickerEmits,
+  iconPickerProps,
+  normalizeIconList,
+} from './icon-picker'
 
-defineOptions({ name: 'SIconPicker' })
+defineOptions({ name: 'SIconPickerDialog' })
 
 const props = defineProps(iconPickerProps)
 const emit = defineEmits(iconPickerEmits)
 const ns = useNamespace('icon-picker')
-const { t } = useLocale()
-const rootRef = ref<HTMLElement>()
-const open = ref(false)
-const query = ref('')
-const filteredIcons = computed(() => {
-  const normalized = query.value.trim().toLowerCase()
-  return normalized
-    ? props.iconList.filter((icon) => icon.toLowerCase().includes(normalized))
-    : props.iconList
-})
-const toggle = () => {
-  if (!props.disabled) open.value = !open.value
-}
-const select = (icon: string) => {
-  emit('update:modelValue', icon)
-  emit('change', icon)
-  open.value = false
-}
-const clear = () => {
-  emit('update:modelValue', '')
-  emit('clear')
-}
-const onPointerDown = (event: PointerEvent) => {
-  if (rootRef.value && !rootRef.value.contains(event.target as Node))
-    open.value = false
-}
-
-watch(open, (value) => {
-  if (!value) query.value = ''
-})
-onMounted(() => document.addEventListener('pointerdown', onPointerDown))
-onBeforeUnmount(() =>
-  document.removeEventListener('pointerdown', onPointerDown),
+const { t } = useLocale(toRef(props, 'locale'))
+const panelRef =
+  useTemplateRef<InstanceType<typeof IconPickerPanel>>('panelRef')
+const availableIcons = computed(() => normalizeIconList(props.iconList))
+const visible = shallowRef(true)
+const selectedIcon = shallowRef(
+  availableIcons.value.includes(props.initialIcon) ? props.initialIcon : '',
 )
+const selectedColor = shallowRef(props.color)
+const svgCode = computed(() =>
+  selectedIcon.value
+    ? createIconSvg({
+        name: selectedIcon.value,
+        color: selectedColor.value,
+        size: props.size,
+        label: props.label,
+      })
+    : undefined,
+)
+
+const close = () => (visible.value = false)
+const cancel = () => {
+  emit('cancel')
+  close()
+}
+const confirm = (icon = selectedIcon.value) => {
+  selectedIcon.value = icon
+  const svg = createIconSvg({
+    name: icon,
+    color: selectedColor.value,
+    size: props.size,
+    label: props.label,
+  })
+  if (!svg) return
+  emit('confirm', svg)
+  close()
+}
 </script>
+
+<template>
+  <SDialog
+    v-model="visible"
+    :width="800"
+    :mask-closable="maskClosable"
+    :show-close="false"
+    not-padding
+    not-center
+    lock-scroll
+    overlay-blur
+    @opened="panelRef?.focusSearch()"
+    @closed="emit('closed')"
+  >
+    <template #header>
+      <header :class="ns.e('header')">
+        <div>
+          <h2>{{ title || t('vs.iconPicker.title') }}</h2>
+          <p>{{ t('vs.iconPicker.description') }}</p>
+        </div>
+        <button
+          :class="ns.e('close')"
+          type="button"
+          :aria-label="t('vs.iconPicker.cancel')"
+          @click="cancel"
+        >
+          <SIcon name="cb:close" />
+        </button>
+      </header>
+    </template>
+
+    <div :class="ns.e('body')">
+      <IconPickerPanel
+        ref="panelRef"
+        v-model="selectedIcon"
+        :icon-list="availableIcons"
+        :color="selectedColor"
+        :locale="locale"
+        :show-name="showName"
+        @confirm="confirm"
+      />
+
+      <aside :class="ns.e('settings')">
+        <div :class="ns.e('preview')" aria-live="polite">
+          <SIcon
+            v-if="selectedIcon"
+            :name="selectedIcon"
+            :color="selectedColor"
+            size="72"
+          />
+          <SIcon v-else name="cb:image" size="38" />
+        </div>
+        <div :class="ns.e('selection')">
+          <strong>{{ selectedIcon || t('vs.iconPicker.noSelection') }}</strong>
+          <span>{{ size }} × {{ size }} SVG</span>
+        </div>
+        <label :class="ns.e('color-field')">
+          <span>{{ t('vs.iconPicker.color') }}</span>
+          <SColorPicker
+            v-model="selectedColor"
+            :show-alpha="showAlpha"
+            :predefine="predefine"
+          />
+        </label>
+      </aside>
+    </div>
+
+    <footer :class="ns.e('footer')">
+      <SButton type="flat" @click="cancel">
+        {{ cancelText || t('vs.iconPicker.cancel') }}
+      </SButton>
+      <SButton :disabled="!svgCode" @click="confirm()">
+        <SIcon name="cb:add" />
+        {{ confirmText || t('vs.iconPicker.insert') }}
+      </SButton>
+    </footer>
+  </SDialog>
+</template>

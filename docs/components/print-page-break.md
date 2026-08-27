@@ -9,8 +9,8 @@ description: 'Forces the next Print content to a new browser page.'
 
 @[code{1-2}](../.vuepress/components/print-page-break/default.vue)
 
-</template></card>
-
-## API
+</template>
 
 This layout-only component has no props, events, slots, or exposes.
+
+</card>

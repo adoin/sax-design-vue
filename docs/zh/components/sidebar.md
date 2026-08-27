@@ -1,5 +1,5 @@
 ---
-description: "在可折叠侧边栏中组织次级导航。"
+description: '在可折叠侧边栏中组织次级导航。'
 PROPS:
   - name: open/v-model:open
     type: Boolean
@@ -118,6 +118,13 @@ PROPS:
     usage: null
     code: null
 
+EVENTS:
+  - name: update:modelValue
+    type: String
+    description: 当前激活侧边栏项变化时触发。
+  - name: update:open
+    type: Boolean
+    description: 侧边栏打开或关闭时触发。
 SLOTS:
   - name: logo
     type: slot
@@ -324,11 +331,5 @@ NEWS:
 @[code{103-107} html](../../.vuepress/components/sidebar/right.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

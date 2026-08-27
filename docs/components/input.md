@@ -247,6 +247,33 @@ PROPS:
     link: null
     usage: '#default'
 
+EVENTS:
+  - name: update:modelValue / input
+    type: String | Number
+    description: Fire while the bound input value changes.
+  - name: change / lazy-change
+    type: String
+    description: Fire when the native change is committed or the configured lazy update is committed.
+  - name: focus / blur
+    type: FocusEvent
+    description: Fire when the input gains or loses focus.
+  - name: clear
+    description: Fires after the clear action resets the value.
+  - name: click / clickIcon / prefix-click / suffix-click
+    type: MouseEvent | Event
+    description: Fire for the input surface and its icon actions.
+  - name: keydown / keyup / wheel
+    type: KeyboardEvent | WheelEvent
+    description: Forward keyboard and wheel interaction events.
+  - name: mouseenter / mouseleave
+    type: MouseEvent
+    description: Fire when the pointer enters or leaves the input wrapper.
+  - name: search-click
+    type: '(value: String, event: KeyboardEvent | MouseEvent)'
+    description: Fires when search is submitted from the icon or keyboard.
+  - name: toggle-visible
+    type: Boolean
+    description: Fires when password visibility changes.
 SLOTS:
   - name: icon
     type: Slot
@@ -715,5 +742,3 @@ Common native constraints such as `min`, `max`, `step`, `input-mode`, `pattern`,
 </template>
 
 </card>
-
-## API

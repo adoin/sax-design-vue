@@ -435,9 +435,3 @@ We create the tooltip component in such a way that you have a lot of freedom to 
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

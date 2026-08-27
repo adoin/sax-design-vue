@@ -138,7 +138,6 @@ Set `rolling` to `true` to use the `--sax-icon-rolling-duration` CSS default of 
 </template>
 </card>
 
-## API
 
 | Property  | Type                             | Default        | Description                                         |
 | --------- | -------------------------------- | -------------- | --------------------------------------------------- |

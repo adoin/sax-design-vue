@@ -27,9 +27,3 @@ Place `s-spacer` between flex children to consume free space.
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

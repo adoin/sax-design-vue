@@ -747,7 +747,8 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     pointer-events: none;
     height: 100%;
     @include flex(flex-start, center);
-    opacity: 0.4;
+    color: getColor(text-color-placeholder);
+    opacity: 1;
 
     @include m(hidden) {
       opacity: 0;
@@ -758,6 +759,7 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
       left: 13px;
       right: 13px;
       opacity: 1;
+      color: getColor(text);
       visibility: visible;
       pointer-events: auto;
       transform: translate(-3%, -80%);

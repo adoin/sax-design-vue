@@ -148,9 +148,3 @@ Use the `icon-arrow` slot with `SIcon` to customize the expand arrow per panel.
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

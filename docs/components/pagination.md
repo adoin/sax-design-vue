@@ -1,5 +1,5 @@
 ---
-description: "Navigate long collections one page at a time."
+description: 'Navigate long collections one page at a time.'
 PROPS:
   - name: v-model:current-page
     type: Number
@@ -219,6 +219,16 @@ PROPS:
     usage: null
     code: null
 
+EVENTS:
+  - name: update:current-page / page-change
+    type: Number
+    description: Fire when the current page changes.
+  - name: update:page-size / size-change
+    type: Number
+    description: Fire when the page size changes.
+  - name: prev-click / next-click
+    type: Number
+    description: Fire with the resulting page after a previous or next action.
 SLOTS:
   - name: default
     type: slot
@@ -538,11 +548,5 @@ You can make the pagination infinite with the `infinite` property, this means th
 @[code{7-11}](../.vuepress/components/pagination/infinite.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

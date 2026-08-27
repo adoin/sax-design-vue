@@ -1,5 +1,5 @@
 ---
-description: "选择一个或多个布尔选项。"
+description: '选择一个或多个布尔选项。'
 PROPS:
   - name: disabled / max / not-value
     type: Boolean / Number / String | Number | Boolean
@@ -161,6 +161,16 @@ PROPS:
         </s-checkbox>
       </template>
 
+EVENTS:
+  - name: update:modelValue / change
+    type: CheckboxModelType | CheckboxGroupValueType
+    description: Checkbox 或 CheckboxGroup 的值变化时触发。
+  - name: update:activeKey / tabChange
+    type: String | Number
+    description: CheckboxGroupTabs 激活其他页签时触发。
+  - name: CheckboxGroupTabs change
+    type: '(value: CheckboxGroupTabsModelValue, activeKey: String | Number)'
+    description: 页签分组选项变化后，携带完整分组值与当前页签触发。
 SLOTS:
   - name: icon
     type: slot
@@ -532,20 +542,18 @@ SLOTS:
 
 <card>
 
-## API
-
 ### CheckboxGroup
 
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `v-model` | `CheckboxValue[]` | `[]` | 所有已选子项组成的扁平数组。 |
-| `options` | `(CheckboxGroupOption \| CheckboxGroupSection)[]` | `[]` | 数据驱动选项；带 `options` 的项会作为可全选的分组。 |
-| `columns` | `number` | `1` | 默认列数，分组可通过自身 `columns` 覆盖。 |
-| `gap` | `number \| string` | `12` | 行列间距。数字按像素处理。 |
-| `disabled-values` | `CheckboxValue[]` | `[]` | 禁用指定子项，并在分组全选/清空时保留其值。 |
-| `disabled-group-values` | `CheckboxValue[]` | `[]` | 禁用指定分组标题的全选控制。 |
-| `disabled` | `boolean` | `false` | 禁用整个组。 |
-| `min` / `max` | `number` | `-` | 限制最少或最多选中数量。 |
+| 属性                    | 类型                                              | 默认值  | 说明                                                |
+| ----------------------- | ------------------------------------------------- | ------- | --------------------------------------------------- |
+| `v-model`               | `CheckboxValue[]`                                 | `[]`    | 所有已选子项组成的扁平数组。                        |
+| `options`               | `(CheckboxGroupOption \| CheckboxGroupSection)[]` | `[]`    | 数据驱动选项；带 `options` 的项会作为可全选的分组。 |
+| `columns`               | `number`                                          | `1`     | 默认列数，分组可通过自身 `columns` 覆盖。           |
+| `gap`                   | `number \| string`                                | `12`    | 行列间距。数字按像素处理。                          |
+| `disabled-values`       | `CheckboxValue[]`                                 | `[]`    | 禁用指定子项，并在分组全选/清空时保留其值。         |
+| `disabled-group-values` | `CheckboxValue[]`                                 | `[]`    | 禁用指定分组标题的全选控制。                        |
+| `disabled`              | `boolean`                                         | `false` | 禁用整个组。                                        |
+| `min` / `max`           | `number`                                          | `-`     | 限制最少或最多选中数量。                            |
 
 `CheckboxGroupOption` 支持 `label`、`value`、`disabled`、`description`；`CheckboxGroupSection` 支持 `label`、`value`、`options`、`disabled`、`columns`。
 同一个 CheckboxGroup 或页签内的子项 `value` 应保持唯一。
@@ -554,14 +562,14 @@ SLOTS:
 
 ### CheckboxGroupTabs
 
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `v-model` | `Record<string, CheckboxValue[]>` | `{}` | 按页签值保存各自的选中数组。 |
-| `tabs` | `CheckboxGroupTab[]` | `[]` | 页签数据，每项包含 `label`、`value` 与 `options`。 |
-| `active-key` / `v-model:active-key` | `string \| number` | 首个可用页签 | 当前页签。 |
-| `columns` | `number` | `2` | 内容区默认列数。 |
-| `gap` | `number \| string` | `12` | 内容区行列间距。 |
-| `disabled` | `boolean` | `false` | 禁用所有页签及选项。 |
+| 属性                                | 类型                              | 默认值       | 说明                                               |
+| ----------------------------------- | --------------------------------- | ------------ | -------------------------------------------------- |
+| `v-model`                           | `Record<string, CheckboxValue[]>` | `{}`         | 按页签值保存各自的选中数组。                       |
+| `tabs`                              | `CheckboxGroupTab[]`              | `[]`         | 页签数据，每项包含 `label`、`value` 与 `options`。 |
+| `active-key` / `v-model:active-key` | `string \| number`                | 首个可用页签 | 当前页签。                                         |
+| `columns`                           | `number`                          | `2`          | 内容区默认列数。                                   |
+| `gap`                               | `number \| string`                | `12`         | 内容区行列间距。                                   |
+| `disabled`                          | `boolean`                         | `false`      | 禁用所有页签及选项。                               |
 
 事件：`update:modelValue(value)`、`change(value, activeKey)`、`update:activeKey(activeKey)`、`tabChange(activeKey)`。插槽：`tab`、`option`、`group-label`、`empty`。
 

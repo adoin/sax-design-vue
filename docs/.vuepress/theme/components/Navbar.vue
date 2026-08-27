@@ -119,7 +119,10 @@ const homeNavigation = computed(() => {
   const localize = (path: string) =>
     `${routeLocale.value}${path.replace(/^\//, '')}`
   return [
-    { key: localize('/guide/getting-started/'), label: isZh ? '指南' : 'Docs' },
+    {
+      key: localize('/guide/getting-started.html'),
+      label: isZh ? '指南' : 'Docs',
+    },
     { key: localize('/components/'), label: isZh ? '组件' : 'Components' },
     { key: localize('/guide/playground'), label: 'Playground' },
   ]

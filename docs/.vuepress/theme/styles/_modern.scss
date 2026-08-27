@@ -77,7 +77,7 @@ body,
   overflow: hidden;
 
   & > .text {
-    padding: 4px 4px 0;
+    padding: 4px 4px 20px;
 
     h2 {
       margin-top: 0;
@@ -149,15 +149,29 @@ body,
   background: hsl(var(--sax-theme-layout));
 }
 
+// VuePress renders the heading text inside the anchor. The legacy theme rule
+// treated that anchor as a separate, hidden hash marker, which collapsed the
+// heading and made the following paragraph flow around invisible text.
+.page .content__default :is(h2, h3, h4, h5, h6) > .header-anchor {
+  display: inline;
+  float: none;
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  opacity: 1;
+}
+
 // Markdown tables: lighter structure, stronger text contrast, and safe
 // horizontal scrolling for compact documentation viewports.
 .page .content__default > table,
 .page .content__default .card > .text > table {
-  display: block;
+  display: table;
   width: 100%;
   max-width: 100%;
   margin: 1.15rem 0 1.5rem;
-  overflow-x: auto;
+  overflow: visible;
   border: 1px solid hsl(var(--sax-accent-color) / 0.1);
   border-radius: 14px;
   border-collapse: separate;
@@ -165,11 +179,6 @@ body,
   background: hsl(var(--sax-theme-layout) / 0.72);
   box-shadow: 0 10px 28px rgba(30, 27, 75, 0.045);
   scrollbar-color: hsl(var(--sax-accent-color) / 0.35) transparent;
-
-  thead,
-  tbody {
-    min-width: 620px;
-  }
 
   thead {
     background: linear-gradient(
@@ -409,9 +418,16 @@ body,
 
   .page .content__default > table,
   .page .content__default .card > .text > table {
+    display: block;
+    overflow-x: auto;
     border-right: 0;
     border-left: 0;
     border-radius: 0;
+
+    thead,
+    tbody {
+      min-width: 620px;
+    }
 
     th,
     td {

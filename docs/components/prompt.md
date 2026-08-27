@@ -98,7 +98,7 @@ EVENTS:
     params: null
     description: Dialog closed.
 EXPOSES: []
-description: "Confirmation and alert dialogs with built-in Accept/Cancel actions. Use Dialog for fully custom modal layouts."
+description: 'Confirmation and alert dialogs with built-in Accept/Cancel actions. Use Dialog for fully custom modal layouts.'
 NEWS:
   - default
   - alert
@@ -108,18 +108,22 @@ NEWS:
 
 # Prompt
 
+<card>
+
 **Prompt is the confirmation / alert dialog** — not a duplicate of [Dialog](/components/dialog).
 
-| | **Prompt** (`s-prompt`) | **Dialog** (`s-dialog`) |
-|---|---|---|
-| Purpose | Quick **confirm**, **alert**, or short forms with validation | **General-purpose** modal shell |
-| Layout | Fixed: title bar + body + **Accept / Cancel** footer | Fully custom `#header`, default, `#footer` slots |
-| Typical use | “Delete this item?”, security code, name validation | Login panel, nested modals, fullscreen content |
-| Overlay (confirm) | Shakes to hint “use a button” | Closes or uses `prevent-close` |
+|                   | **Prompt** (`s-prompt`)                                      | **Dialog** (`s-dialog`)                          |
+| ----------------- | ------------------------------------------------------------ | ------------------------------------------------ |
+| Purpose           | Quick **confirm**, **alert**, or short forms with validation | **General-purpose** modal shell                  |
+| Layout            | Fixed: title bar + body + **Accept / Cancel** footer         | Fully custom `#header`, default, `#footer` slots |
+| Typical use       | “Delete this item?”, security code, name validation          | Login panel, nested modals, fullscreen content   |
+| Overlay (confirm) | Shakes to hint “use a button”                                | Closes or uses `prevent-close`                   |
 
 In Vuesax 3.x both come from the Dialogs family (`vs-prompt` is a preset on the same dialog primitive). **Popup** (`vs-popup`) is yet another component — a titled content panel, not yet migrated here.
 
 **Rule of thumb:** need built-in OK/Cancel → **Prompt**. Need to own the whole layout → **Dialog**.
+
+</card>
 
 <card>
 
@@ -244,11 +248,5 @@ const action = await SPromptBox({
 })
 // action: 'accept' | 'cancel' | 'close'
 ```
-
-</card>
-
-<card>
-
-## API
 
 </card>

@@ -81,11 +81,6 @@ export const componentCategories: ComponentCategory[] = [
       component('Color picker', '颜色选择器', '/components/color-picker'),
       component('Control group', '连续控件', '/components/control-group'),
       component('Date picker', '日期选择器', '/components/date-picker'),
-      component(
-        'Date range picker',
-        '日期范围选择器',
-        '/components/date-range-picker',
-      ),
       component('Form', '表单', '/components/form'),
       component('Form group', '表单分组', '/components/form-group'),
       component('Icon picker', '图标选择器', '/components/icon-picker'),

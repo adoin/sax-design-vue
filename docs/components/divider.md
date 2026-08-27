@@ -256,9 +256,3 @@ Switch line appearance with `border-style` (solid, dashed, dotted).
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

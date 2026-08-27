@@ -23,10 +23,12 @@ PROPS:
 EVENTS:
   - name: change
     description: 选择或修改颜色时触发。
-description: "颜色选择器。"
+description: '颜色选择器。'
 ---
 
 # Color picker 颜色选择器
+
+<card>
 
 点击触发器会直接打开完整取色面板。可调整饱和度、明度、色相与透明度，
 也可使用屏幕取色笔，并在 HEX、RGB(A)、HSL(A) 三种通道编辑方式间切换，
@@ -34,7 +36,7 @@ description: "颜色选择器。"
 取色笔会优先使用 EyeDropper API；API 不可用或调用失败时，自动降级到
 浏览器原生颜色选择器。
 
-<card><template #example><color-picker-default /></template><template #template>
+<template #example><color-picker-default /></template><template #template>
 
 @[code{1-22}](../../.vuepress/components/color-picker/default.vue)
 

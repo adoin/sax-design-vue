@@ -1,5 +1,5 @@
 ---
-description: "在主内容流外展示短暂的程序化通知。"
+description: '在主内容流外展示短暂的程序化通知。'
 PROPS:
   - name: dangerous-html-string / icon-size / offset / z-index
     type: Boolean / Number
@@ -360,6 +360,9 @@ PROPS:
           color, timing, and placement.`,
         })
       </script>
+EVENTS:
+  - name: destroy
+    description: 通知实例销毁时触发。
 ---
 
 # Notification（通知）
@@ -772,11 +775,5 @@ SNotification({ ...options })
 @[code{15-44}](../../.vuepress/components/notification/example.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

@@ -230,6 +230,5 @@ NEWS:
 
 </template>
 
-## API
 
 </card>

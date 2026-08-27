@@ -102,6 +102,30 @@ describe('saxIcons', () => {
     expect(result.code).toContain('cb:help')
   })
 
+  it('registers literal icon lists shipped by Sax Design components', async () => {
+    const plugin = saxIcons(config)
+    const transform = hook<(code: string, id: string) => any>(plugin.transform)
+    const result = await transform(
+      "export const icons = ['cb:home', 'cb:search']",
+      '/app/node_modules/sax-design-vue/es/icon-picker.mjs',
+    )
+
+    expect(result.code).toContain('virtual:sax-icon/cb%3Ahome')
+    expect(result.code).toContain('virtual:sax-icon/cb%3Asearch')
+    expect(result.code).toContain('addIconDataRecord')
+  })
+
+  it('does not scan literal strings from unrelated dependencies', async () => {
+    const plugin = saxIcons(config)
+    const transform = hook<(code: string, id: string) => any>(plugin.transform)
+    const result = await transform(
+      "export const value = 'cb:home'",
+      '/app/node_modules/unrelated-package/index.js',
+    )
+
+    expect(result).toBeUndefined()
+  })
+
   it('does not treat a dynamic name binding as a static icon name', async () => {
     const plugin = saxIcons(config)
     const transform = hook<(code: string, id: string) => any>(plugin.transform)

@@ -1,5 +1,5 @@
 ---
-description: '将相关表单控件拼接成一个连续输入区域。'
+description: '用轻量拼图纹理将相关表单控件拼接成连续输入区域。'
 lastUpdated: false
 PROPS:
   - name: block
@@ -17,13 +17,17 @@ SLOTS:
   - name: default
     type: Slot
     values: Input、Select、Cascader、DatePicker、TimePicker 或兼容的表单控件
-    description: 按原有顺序无间距地渲染控件。
+    description: 按原有顺序连续渲染控件，并在相邻控件之间显示拼图接缝纹理。
     default: null
 ---
 
 # Control Group 连续控件
 
-Control Group 将相关控件拼成连续输入区域，同时保留每个子控件自己的值、事件、校验和弹层行为。组合使用 24 栅格，直接子控件可通过 `span` 指定占用栅格；未声明 `span` 的控件会均分剩余空间。
+<card>
+
+Control Group 通过不占布局空间的轻量拼图接缝，将相关控件拼成连续输入区域，同时保留每个子控件自己的值、事件、校验和弹层行为。组合使用 24 栅格，直接子控件可通过 `span` 指定占用栅格；未声明 `span` 的控件会均分剩余空间。
+
+</card>
 
 <card>
 
@@ -72,5 +76,3 @@ Control Group 将相关控件拼成连续输入区域，同时保留每个子控
 </template>
 
 </card>
-
-## API

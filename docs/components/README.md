@@ -218,6 +218,10 @@ PROPS:
         <s-button ripple="reverse"> Reverse </s-button>
         <s-button ripple="cut"> Cut </s-button>
       </template>
+EVENTS:
+  - name: click
+    type: MouseEvent
+    description: Fires after debounce or throttle handling when an enabled, non-loading button is activated.
 SLOTS:
   - name: loading
     type: slot
@@ -797,11 +801,5 @@ You can change ripple style of a button with the `ripple` property and the allow
 @[code vue](../.vuepress/components/button/ripple.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

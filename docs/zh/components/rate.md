@@ -453,9 +453,3 @@ Rate 支持 `small`、`default`、`large` 三种尺寸。
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

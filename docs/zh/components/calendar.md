@@ -151,41 +151,49 @@ description: '支持月、周、日视图的日程日历。'
 
 # Calendar 日历
 
+<card>
+
 ## 展示
 
 ### 默认可切换视图
 
-<card><template #example><calendar-default /></template><template #template>
+<template #example><calendar-default /></template><template #template>
 
 @[code{1-14}](../../.vuepress/components/calendar/default.vue)
 
 </template></card>
 
+<card>
+
 ### 固定视图
 
 仅传入一个 `views` 项即可固定某一种展示形态，并隐藏视图切换器。
 
-<card><template #example><calendar-locked-view /></template><template #template>
+<template #example><calendar-locked-view /></template><template #template>
 
 @[code{1-27}](../../.vuepress/components/calendar/locked-view.vue)
 
 </template></card>
 
+<card>
+
 ## 日程数据
 
 通过外部表单构造扁平 `events`。示例支持编辑已有日程；Calendar 只发出交互意图，业务侧更新自己的数据。
 
-<card><template #example><calendar-adding-events /></template><template #template>
+<template #example><calendar-adding-events /></template><template #template>
 
 @[code{1-212}](../../.vuepress/components/calendar/adding-events.vue)
 
 </template></card>
 
+<card>
+
 ## 业务日程数据与选区操作
 
 Calendar 只渲染扁平 `CalendarEvent[]`，业务侧可保留任意日程数据结构。将原始记录传给 `event-data`，再通过 `event-adapter` 映射。单元格默认展示最早一条日程和 `+n`；悬停时 `+n` 变为溢出图标，点击后展示当天全部日程。默认操作会携带原始 `CalendarEvent` 发出编辑/删除意图；本示例据此反查完整业务源记录，因此编辑和删除影响的是完整日程数据，而非当前单日的渲染项。紧凑日程标签会标识时间点、当天时间段、连续时间段的开头（`08:00~`）和结尾（`~18:00`）；可通过 `event-display` 或事件插槽自定义输出。
 
-<card><template #example><calendar-schedule-adapter /></template><template #template>
+<template #example><calendar-schedule-adapter /></template><template #template>
 
 @[code{1-852}](../../.vuepress/components/calendar/schedule-adapter.vue)
 

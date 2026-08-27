@@ -20,7 +20,11 @@ PROPS:
     values: true / false
     description: 显示展开和收起操作。
     default: 'false'
-description: "可展开文本省略。"
+description: '可展开文本省略。'
+EVENTS:
+  - name: update:expanded / change
+    type: Boolean
+    description: 展开状态变化时触发。
 ---
 
 # Text ellipsis 文本省略

@@ -1,6 +1,10 @@
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { useColorProp, useSizeProp } from '@vuesax-alpha/hooks'
-import { buildProps, definePropType } from '@vuesax-alpha/utils'
+import {
+  buildProps,
+  definePropType,
+  isValidTimeZone,
+} from '@vuesax-alpha/utils'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type DatePicker from './date-picker.vue'
 import type {
@@ -47,6 +51,11 @@ export const datePickerProps = buildProps({
   /** Alias for the text shown in the input. */
   labelFormat: String,
   valueFormat: String,
+  /** IANA time zone. Overrides ConfigProvider's global time zone. */
+  timezone: {
+    type: String,
+    validator: (value: string) => isValidTimeZone(value),
+  },
   /** Override only the time segment of datetime display formats. */
   timeFormat: String,
   placeholder: String,
@@ -70,6 +79,11 @@ export const datePickerProps = buildProps({
   autoClose: {
     type: Boolean,
     default: false,
+  },
+  /** Override whether the "Now" action immediately commits and closes. */
+  autoApplyNow: {
+    type: Boolean,
+    default: undefined,
   },
   editable: {
     type: Boolean,

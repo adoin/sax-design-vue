@@ -130,9 +130,3 @@ Fine-tune spacing and corners with `alternating` and margin props.
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

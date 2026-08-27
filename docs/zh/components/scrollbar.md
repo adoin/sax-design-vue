@@ -269,9 +269,3 @@ EXPOSES:
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

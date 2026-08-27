@@ -73,6 +73,30 @@ Use `en` from the same entry for explicit English. The locale object is reactive
 
 <card>
 
+## Global date and time settings
+
+Set a default IANA `timezone` for Date Picker, Date Range Picker, and Time Picker through `SConfigProvider`. `auto-apply-now` controls whether clicking Now immediately commits and closes. Component-level values take precedence.
+
+<command>
+
+```vue
+<template>
+  <s-config-provider timezone="Asia/Shanghai" :auto-apply-now="true">
+    <app />
+  </s-config-provider>
+</template>
+```
+
+</command>
+
+The time zone leaves the entered wall-clock fields unchanged but changes the corresponding `Date`, `value-format="x"`, or `value-format="timestamp"` instant. `timestamp` emits numeric milliseconds; `x` emits a millisecond string.
+
+Date components can render directly in SSR and SSG. Configure the same `timezone` on the server and client to avoid hydration differences for absolute values. Consider `client-only` only when the application intentionally relies on the browser system zone.
+
+</card>
+
+<card>
+
 ## Shape and motion tokens
 
 Use the global tokens below to keep component geometry and motion consistent. `--sax-radius` is the master corner radius: core inputs, menus, popups, trees, buttons, pagination, and other shared controls inherit from it through the scale variables.
@@ -167,6 +191,6 @@ This resolver imports components from the package root; it does not need a files
 
 ## Nuxt
 
-See [Usage with Nuxt](/guide/nuxt/) for SSR-specific notes.
+See [Usage with Nuxt](/guide/nuxt.html) for SSR-specific notes.
 
 </card>

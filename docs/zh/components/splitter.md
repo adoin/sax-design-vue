@@ -43,37 +43,45 @@ description: '支持任意区域、双向分割与递归嵌套的可拖拽布局
 
 # Splitter 分割面板
 
+<card>
+
 支持任意数量、双向分割与递归嵌套。
 
 ## 任意区域与嵌套
 
 在对应的 `SplitterItem` 中继续嵌套 item 即可。
 
-<card><template #example><splitter-default /></template><template #template>
+<template #example><splitter-default /></template><template #template>
 
 @[code{1-34}](../../.vuepress/components/splitter/default.vue)
 
 </template></card>
 
+<card>
+
 ## Rest 与精度
 
 `use-rest` 永久占用剩余空间；`precision` 默认吸附到 `0.01`。
 
-<card><template #example><splitter-sizing /></template><template #template>
+<template #example><splitter-sizing /></template><template #template>
 
 @[code{1-31}](../../.vuepress/components/splitter/sizing.vue)
 
 </template></card>
 
+<card>
+
 ## Gap
 
 单值控制两个方向，数组顺序为 `[rowGap, columnGap]`；`0` 不占空间但仍可拖拽。
 
-<card><template #example><splitter-gap /></template><template #template>
+<template #example><splitter-gap /></template><template #template>
 
 @[code{1-45}](../../.vuepress/components/splitter/gap.vue)
 
 </template></card>
+
+<card>
 
 ## 数据结构
 
@@ -101,3 +109,5 @@ interface SplitterGroupValue {
 支持鼠标、触摸、方向键、`Home` 和 `End`。
 
 Splitter 不裁切 item 内容；需要滚动时，在 item 内部容器自行设置 `overflow: auto`。
+
+</card>

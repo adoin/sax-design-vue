@@ -114,9 +114,13 @@ SLOTS:
 
 # Tabs（标签页）
 
+<card>
+
 Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End。所有形态均不依赖可见边框，通过间距、背景层次和阴影组织结构。
 
 `lazy` 会在面板首次激活时挂载并在后续切换中保留；`destroy-on-hide` 则会持续卸载非活动面板。
+
+</card>
 
 <card>
 

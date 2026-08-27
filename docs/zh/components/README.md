@@ -218,6 +218,10 @@ PROPS:
         <s-button ripple="reverse"> Reverse </s-button>
         <s-button ripple="cut"> Cut </s-button>
       </template>
+EVENTS:
+  - name: click
+    type: MouseEvent
+    description: 可用且非加载状态的按钮被激活，并经过防抖或节流处理后触发。
 SLOTS:
   - name: loading
     type: slot
@@ -797,11 +801,5 @@ NEWS:
 @[code vue](../../.vuepress/components/button/ripple.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

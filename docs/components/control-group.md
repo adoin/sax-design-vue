@@ -1,5 +1,5 @@
 ---
-description: 'Join related form controls into one continuous field.'
+description: 'Join related form controls with a lightweight puzzle seam.'
 lastUpdated: false
 PROPS:
   - name: block
@@ -17,13 +17,17 @@ SLOTS:
   - name: default
     type: Slot
     values: Input, Select, Cascader, DatePicker, TimePicker, or compatible form controls
-    description: Controls rendered in their original order without gaps.
+    description: Controls rendered in their original order with a puzzle seam between adjacent items.
     default: null
 ---
 
 # Control Group
 
-Control Group joins related controls into a continuous field while each child keeps its own value, events, validation, and popup behavior. It uses a 24-column grid: direct children can declare `span`, while children without it evenly share the remaining space.
+<card>
+
+Control Group joins related controls with a lightweight non-layout puzzle seam while each child keeps its own value, events, validation, and popup behavior. It uses a 24-column grid: direct children can declare `span`, while children without it evenly share the remaining space.
+
+</card>
 
 <card>
 
@@ -72,5 +76,3 @@ Use `block` when the continuous field should fill its container.
 </template>
 
 </card>
-
-## API

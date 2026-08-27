@@ -195,9 +195,3 @@ To have a group of scrolling cards you can use the `s-card-group` component
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

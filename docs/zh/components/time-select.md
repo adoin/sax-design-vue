@@ -1,5 +1,5 @@
 ---
-description: "从预设或生成的时间列表中选择时间。"
+description: '从预设或生成的时间列表中选择时间。'
 PROPS:
   - name: v-model / model-value
     type: String
@@ -9,6 +9,13 @@ PROPS:
     link: null
     usage: '#default'
     code: null
+EVENTS:
+  - name: update:modelValue / change
+    type: String
+    description: 选中的时间选项变化时触发。
+  - name: focus / blur
+    type: FocusEvent | Event
+    description: 控件获得或失去焦点时触发。
 ---
 
 # Time select 时间选择
@@ -20,12 +27,6 @@ PROPS:
 使用 Time Select 输入时间。
 
 可选时间范围为 00:00 至 23:59。
-
-::: tip
-在 SSR（如 [Nuxt](https://nuxt.com/)）和 SSG（如 [VitePress](https://vitepress.dev/)）中使用时，需要使用
-<code>\<client-only\> \<\/client-only\></code>
-包裹该组件。
-:::
 
 <template #example>
 <time-select-default />
@@ -114,11 +115,5 @@ PROPS:
 
 @[code{14-18}](../../.vuepress/components/time-select/disabled.vue)
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

@@ -153,61 +153,73 @@ description: '支持受控状态、层叠卡组、空间 3D 和无障碍导航�
 
 # Carousel（轮播图）
 
+<card>
+
 ## 默认
 
 受控下标、自动播放、箭头和线形指示器均提供稳定默认值。
 
-<card><template #example><carousel-default /></template><template #template>
+<template #example><carousel-default /></template><template #template>
 
 @[code](../../.vuepress/components/carousel/default.vue)
 
 </template></card>
 
+<card>
+
 ## 卡片层叠
 
 `deck` 统一承载中央卡片与左右后层卡片。通过 `deck-visible` 控制露出层数，通过 `deck-blur` 控制是否虚化；不再为相近视觉维护多套效果类型。
 
-<card><template #example><carousel-deck /></template><template #template>
+<template #example><carousel-deck /></template><template #template>
 
 @[code](../../.vuepress/components/carousel/deck.vue)
 
 </template></card>
 
+<card>
+
 ## 环形轨道
 
 `orbit` 使用连续相位让下层小卡片绕 Y 轴平滑排列，上层独立渲染更大的 active 卡，并用短促、GPU 友好的交叉消隐完成切换。`orbit-max-visible` 默认是 10；数据更多且基础窗口为偶数时，会额外取 1 张真实卡组成奇数闭环。所有循环轨道都会在窗口两端各保留一张隐藏克隆缓冲卡：离场卡移入背面并淡出，同内容缓冲卡从另一侧淡入，因此首尾不会瞬移。只有真实数据已经全部进入轨道、偶数问题仍无法通过多取 1 张解决时，才渲染一张内部透明、带轮廓的装饰占位卡作为背面穿越位置。少于 4 项时自动克隆填充轨道。设置非零 `orbit-angle` 可覆盖自动间隔。
 
-<card><template #example><carousel-orbit /></template><template #template>
+<template #example><carousel-orbit /></template><template #template>
 
 @[code](../../.vuepress/components/carousel/orbit.vue)
 
 </template></card>
 
+<card>
+
 ## 镜面棱柱
 
 `prism` 让三张卡片围绕同一旋转轴组成棱柱。每个面保持连续旋转相位，侧面会像同一个刚体自然转动，不再单独翻牌。`radius` 同时作用于 viewport 和每张卡片；传 `false` 可使用直角棱面。
 
-<card><template #example><carousel-prism /></template><template #template>
+<template #example><carousel-prism /></template><template #template>
 
 @[code](../../.vuepress/components/carousel/prism.vue)
 
 </template></card>
 
+<card>
+
 ## 淡入淡出
 
 `fade` 只负责透明度切换；`motion-blur` 可增加短暂动态虚化，同一例子直接比较两种参数状态。
 
-<card><template #example><carousel-fade /></template><template #template>
+<template #example><carousel-fade /></template><template #template>
 
 @[code](../../.vuepress/components/carousel/fade.vue)
 
 </template></card>
 
+<card>
+
 ## 外部控制
 
 暴露方法支持按名称跳转和显式播放控制。禁用项会被箭头、自动播放、键盘和拖动导航统一跳过。
 
-<card><template #example><carousel-controls /></template><template #template>
+<template #example><carousel-controls /></template><template #template>
 
 @[code](../../.vuepress/components/carousel/controls.vue)
 

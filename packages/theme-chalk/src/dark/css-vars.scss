@@ -87,10 +87,11 @@ html.dark {
   // Background --vs-bg-color-#{$type}
   @include set-component-color('bg-color', $bg-color);
   // --vs-text-color-#{$type}
-  @include set-component-var('text-color', $text-color);
+  @include set-component-color('text-color', $text-color);
   // --vs-border-color-#{$type}
-  @include set-component-var('border-color', $border-color);
+  @include set-component-color('border-color', $border-color);
   // Fill --vs-fill-color-#{$type}
-  @include set-component-var('fill-color', $fill-color);
+  @include set-component-color('fill-color', map.remove($fill-color, 'blank'));
+  @include set-var-value('fill-color-blank', map.get($fill-color, 'blank'));
   @include set-component-var('mask-color', $mask-color);
 }

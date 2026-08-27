@@ -359,9 +359,3 @@ UPDATES:
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

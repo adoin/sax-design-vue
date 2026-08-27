@@ -9,11 +9,11 @@ export const zhNavbar: NavbarConfig = [
     link: zh('/guide/'),
     children: [
       { text: '介绍', link: zh('/guide/') },
-      { text: '快速开始', link: zh('/guide/getting-started') },
+      { text: '快速开始', link: zh('/guide/getting-started.html') },
       { text: '使用组件', link: zh('/guide/using-components') },
       { text: '配置', link: zh('/guide/configuration') },
       { text: 'Playground', link: zh('/guide/playground') },
-      { text: 'Nuxt 集成', link: zh('/guide/nuxt') },
+      { text: 'Nuxt 集成', link: zh('/guide/nuxt.html') },
     ],
   },
   {

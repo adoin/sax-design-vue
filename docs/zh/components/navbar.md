@@ -228,6 +228,13 @@ PROPS:
         ...
       </s-navbar-item>
 
+EVENTS:
+  - name: update:modelValue
+    type: String
+    description: 当前激活导航项变化时触发。
+  - name: collapsed
+    type: Boolean
+    description: 响应式折叠状态变化时触发。
 SLOTS:
   - name: brand
     type: slot
@@ -321,11 +328,5 @@ interface NavLink extends NavItem {
 
 type NavbarItem = NavLink
 ```
-
-</card>
-
-<card>
-
-## API
 
 </card>

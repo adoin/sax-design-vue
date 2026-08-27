@@ -138,9 +138,3 @@ Use the `avatar` slot for profile images or initials.
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

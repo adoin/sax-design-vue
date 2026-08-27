@@ -23,12 +23,29 @@ export function useDocLocale() {
 
 const ui = {
   en: {
+    outline: {
+      examples: 'Examples',
+    },
     apiTables: {
       PROPS: 'PROPS',
       CHILD_PROPS: 'CHILD PROPS',
       SLOTS: 'SLOTS',
-      events: 'EVENTS',
-      exposes: 'EXPOSES',
+      EVENTS: 'EVENTS',
+      EXPOSES: 'EXPOSES',
+    },
+    apiRowNames: {
+      PROPS: 'Property',
+      CHILD_PROPS: 'Property',
+      EVENTS: 'Event',
+      SLOTS: 'Slot',
+      EXPOSES: 'Method',
+    },
+    apiValueColumns: {
+      PROPS: 'Values',
+      CHILD_PROPS: 'Values',
+      EVENTS: 'Payload',
+      SLOTS: 'Scope',
+      EXPOSES: 'Parameters',
     },
     apiColumns: {
       property: 'Property',
@@ -167,12 +184,29 @@ const ui = {
     },
   },
   zh: {
+    outline: {
+      examples: '示例',
+    },
     apiTables: {
       PROPS: '属性',
       CHILD_PROPS: '子控件属性',
       SLOTS: '插槽',
-      events: '事件',
-      exposes: '暴露',
+      EVENTS: '事件',
+      EXPOSES: '暴露',
+    },
+    apiRowNames: {
+      PROPS: '属性名',
+      CHILD_PROPS: '属性名',
+      EVENTS: '事件名',
+      SLOTS: '插槽名',
+      EXPOSES: '方法名',
+    },
+    apiValueColumns: {
+      PROPS: '可选值',
+      CHILD_PROPS: '可选值',
+      EVENTS: '参数',
+      SLOTS: '作用域参数',
+      EXPOSES: '参数',
     },
     apiColumns: {
       property: '属性名',

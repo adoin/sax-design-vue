@@ -397,9 +397,3 @@ You can group several avatar with the parent component `s-avatar-group`, this co
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

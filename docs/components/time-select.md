@@ -1,5 +1,5 @@
 ---
-description: "Choose a time from a predefined or generated list."
+description: 'Choose a time from a predefined or generated list.'
 PROPS:
   - name: v-model / model-value
     type: String
@@ -9,6 +9,13 @@ PROPS:
     link: null
     usage: '#default'
     code: null
+EVENTS:
+  - name: update:modelValue / change
+    type: String
+    description: Fire when the selected time option changes.
+  - name: focus / blur
+    type: FocusEvent | Event
+    description: Fire when the control gains or loses focus.
 ---
 
 # Time select
@@ -20,12 +27,6 @@ PROPS:
 Use Time Select for time input.
 
 The available time range is 00:00 to 23:59
-
-::: tip
-This component requires the
-<code>\<client-only\> \<\/client-only\></code>
-wrap when used in SSR (eg: [Nuxt](https://nuxt.com/)) and SSG (eg: [VitePress](https://vitepress.dev/)).
-:::
 
 <template #example>
 <time-select-default />
@@ -114,11 +115,5 @@ whether TimeSelect is disabled
 
 @[code{14-18}](../.vuepress/components/time-select/disabled.vue)
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

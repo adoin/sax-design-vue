@@ -16,7 +16,7 @@ Sax Design Vue is a **Vue 3 + TypeScript** component library migrated from the V
 
 ## Quick links
 
-- [Getting Started](/guide/getting-started/) — install, register, dark mode
+- [Getting Started](/guide/getting-started.html) — install, register, dark mode
 - [Using Components](/guide/using-components) — examples, props, playground workflow
 - [Configuration](/guide/configuration) — theming, auto-import, global setup
 - [Playground](/guide/playground) — interactive demos in the browser

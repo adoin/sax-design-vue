@@ -254,6 +254,5 @@ Use `max-length`, `show-word-count`, `auto-size` and `trim` for a bounded, autom
 
 </template>
 
-## API
 
 </card>

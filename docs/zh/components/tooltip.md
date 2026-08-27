@@ -433,9 +433,3 @@ SLOTS:
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

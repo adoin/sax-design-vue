@@ -1,5 +1,5 @@
 ---
-description: "Organize secondary navigation in a collapsible side panel."
+description: 'Organize secondary navigation in a collapsible side panel.'
 PROPS:
   - name: open/v-model:open
     type: Boolean
@@ -118,6 +118,13 @@ PROPS:
     usage: null
     code: null
 
+EVENTS:
+  - name: update:modelValue
+    type: String
+    description: Fires when the active sidebar item changes.
+  - name: update:open
+    type: Boolean
+    description: Fires when the sidebar opens or closes.
 SLOTS:
   - name: logo
     type: slot
@@ -324,11 +331,5 @@ Change the position of the sidebar to the right and its animation with the `righ
 @[code{103-107} html](../.vuepress/components/sidebar/right.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

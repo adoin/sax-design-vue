@@ -2,13 +2,13 @@ import { createRequire } from 'node:module'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { getIconData, iconToSVG } from '@iconify/utils'
-import type { IconifyJSON } from '@iconify/types'
 import {
   DEFAULT_API_ENDPOINTS,
   type SaxIconCollections,
   type SaxIconData,
   type SaxIconViteOptions,
 } from './index'
+import type { IconifyJSON } from '@iconify/types'
 
 export interface SaxIconVitePlugin {
   name: string
@@ -165,8 +165,12 @@ function transformLiteralIcons(
   collections: SaxIconCollections,
 ) {
   const cleanId = id.split('?', 1)[0].replace(/\\/g, '/')
+  const isSaxDesignModule =
+    /\/node_modules\/(?:@vuesax-alpha\/components|sax-design-vue)(?:\/|$)/.test(
+      cleanId,
+    )
   if (
-    cleanId.includes('/node_modules/') ||
+    (cleanId.includes('/node_modules/') && !isSaxDesignModule) ||
     cleanId.includes('/packages/iconify/') ||
     cleanId.endsWith('.d.ts') ||
     !/\.(?:vue|[cm]?[jt]sx?)$/.test(cleanId)
@@ -247,10 +251,11 @@ export function saxIcons(userOptions: SaxIconViteOptions): SaxIconVitePlugin {
       options.api?.cacheDir || DEFAULT_API_CACHE_DIR,
     )
     const endpoint = new URL(apiBaseUrl())
-    const provider = `${endpoint.protocol.slice(0, -1)}-${endpoint.host}`.replace(
-      /[^a-z0-9.-]+/gi,
-      '-',
-    )
+    const provider =
+      `${endpoint.protocol.slice(0, -1)}-${endpoint.host}`.replace(
+        /[^a-z0-9.-]+/gi,
+        '-',
+      )
     return path.join(
       cacheRoot,
       provider,
@@ -261,7 +266,9 @@ export function saxIcons(userOptions: SaxIconViteOptions): SaxIconVitePlugin {
 
   const readApiCache = async (filename: string, iconName: string) => {
     try {
-      const iconSet = JSON.parse(await readFile(filename, 'utf8')) as IconifyJSON
+      const iconSet = JSON.parse(
+        await readFile(filename, 'utf8'),
+      ) as IconifyJSON
       return getIconData(iconSet, iconName) ? iconSet : undefined
     } catch (error) {
       const code = (error as NodeJS.ErrnoException).code

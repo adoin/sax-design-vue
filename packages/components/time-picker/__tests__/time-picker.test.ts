@@ -14,31 +14,45 @@ const InputStub = defineComponent({
     size: String,
     suffixIcon: String,
   },
+  emits: ['update:modelValue'],
   template: '<div class="input-stub" />',
 })
 
 const PopperStub = defineComponent({
   name: 'SPopper',
   inheritAttrs: false,
-  props: { popperStyle: Object },
-  template: '<div class="popper-stub"><slot /></div>',
+  props: { popperStyle: Object, visible: Boolean },
+  emits: ['update:visible'],
+  template: '<div class="popper-stub"><slot /><slot name="content" /></div>',
 })
+
+const ButtonStub = defineComponent({
+  name: 'SButton',
+  emits: ['click'],
+  template:
+    '<button class="button-stub" @click="$emit(\'click\')"><slot /></button>',
+})
+
+const mountPicker = (props = {}) =>
+  mount(TimePicker, {
+    props,
+    global: {
+      stubs: {
+        SInput: InputStub,
+        SPopper: PopperStub,
+        SButton: ButtonStub,
+        STimePanel: true,
+      },
+    },
+  })
 
 describe('TimePicker input presentation', () => {
   it('shares floating label, color, and size with its trigger and panel', () => {
-    const wrapper = mount(TimePicker, {
-      props: {
-        label: 'Start time',
-        labelFloat: true,
-        color: '#654321',
-        size: 'small',
-      },
-      global: {
-        stubs: {
-          SInput: InputStub,
-          SPopper: PopperStub,
-        },
-      },
+    const wrapper = mountPicker({
+      label: 'Start time',
+      labelFloat: true,
+      color: '#654321',
+      size: 'small',
     })
     const input = wrapper.getComponent(InputStub)
 
@@ -57,5 +71,34 @@ describe('TimePicker input presentation', () => {
         '--sax-color': '30deg 50.746% 26.275%',
       },
     )
+  })
+
+  it('renders an absolute value in the configured timezone', () => {
+    const wrapper = mountPicker({
+      modelValue: Date.UTC(2026, 7, 5, 6, 0, 22),
+      timezone: 'Asia/Shanghai',
+    })
+
+    expect(wrapper.getComponent(InputStub).props('modelValue')).toBe('14:00:22')
+  })
+
+  it('uses the primary theme color by default', () => {
+    const wrapper = mountPicker()
+
+    expect(wrapper.get('.s-time-picker').attributes('style')).toContain(
+      '--sax-color: var(--sax-primary)',
+    )
+  })
+
+  it('stages the current time when autoApplyNow is disabled', async () => {
+    const wrapper = mountPicker({ autoApplyNow: false })
+    const popper = wrapper.getComponent(PopperStub)
+
+    popper.vm.$emit('update:visible', true)
+    await wrapper.vm.$nextTick()
+    await wrapper.findAll('.button-stub')[0].trigger('click')
+
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(popper.props('visible')).toBe(true)
   })
 })

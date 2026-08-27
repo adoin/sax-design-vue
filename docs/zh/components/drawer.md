@@ -25,9 +25,17 @@ PROPS:
     values: true | false
     description: 是否允许点击遮罩关闭。
     default: true
-description: "方向抽屉。"
+description: '方向抽屉。'
+EVENTS:
+  - name: update:modelValue
+    type: Boolean
+    description: 抽屉显示状态变化时触发。
+  - name: open / close
+    description: 抽屉打开或关闭后触发。
 ---
+
 # Drawer 抽屉
+
 <card><template #example><drawer-default /></template><template #template>
 
 @[code{1-12}](../../.vuepress/components/drawer/default.vue)

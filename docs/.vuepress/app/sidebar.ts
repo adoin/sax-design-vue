@@ -11,7 +11,7 @@ export const enSidebar: SidebarConfig = [
       },
       {
         text: 'Getting Started',
-        link: '/guide/getting-started/',
+        link: '/guide/getting-started.html',
       },
       {
         text: 'Using Components',
@@ -27,7 +27,7 @@ export const enSidebar: SidebarConfig = [
       },
       {
         text: 'Usage with Nuxt',
-        link: '/guide/nuxt/',
+        link: '/guide/nuxt.html',
       },
     ],
   },

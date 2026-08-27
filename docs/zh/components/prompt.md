@@ -98,7 +98,7 @@ EVENTS:
     params: null
     description: 对话框关闭时触发。
 EXPOSES: []
-description: "带插槽、校验与 Accept/Cancel 的确认/警告提示框。复杂自定义布局请用 Dialog。"
+description: '带插槽、校验与 Accept/Cancel 的确认/警告提示框。复杂自定义布局请用 Dialog。'
 NEWS:
   - default
   - alert
@@ -108,18 +108,22 @@ NEWS:
 
 # Prompt（提示框）
 
+<card>
+
 **Prompt 就是确认/警告提示框**，与 [Dialog（对话框）](/zh/components/dialog) 不重复。
 
-| | **Prompt**（`s-prompt`） | **Dialog**（`s-dialog`） |
-|---|---|---|
-| 定位 | 快捷 **确认**、**警告**、带校验的短表单 | **通用**模态容器 |
-| 结构 | 固定：标题 + 内容 + **Accept / Cancel** 底栏 | `#header`、默认插槽、`#footer` 完全自定义 |
-| 典型场景 | “确定删除？”, 验证码, 姓名校验 | 登录面板、嵌套弹窗、全屏内容 |
-| 点击遮罩（confirm） | 抖动提示，需点按钮 | 可关闭或 `prevent-close` 禁止关闭 |
+|                     | **Prompt**（`s-prompt`）                     | **Dialog**（`s-dialog`）                  |
+| ------------------- | -------------------------------------------- | ----------------------------------------- |
+| 定位                | 快捷 **确认**、**警告**、带校验的短表单      | **通用**模态容器                          |
+| 结构                | 固定：标题 + 内容 + **Accept / Cancel** 底栏 | `#header`、默认插槽、`#footer` 完全自定义 |
+| 典型场景            | “确定删除？”, 验证码, 姓名校验               | 登录面板、嵌套弹窗、全屏内容              |
+| 点击遮罩（confirm） | 抖动提示，需点按钮                           | 可关闭或 `prevent-close` 禁止关闭         |
 
 Vuesax 3.x 里两者同属 Dialogs 系列（`vs-prompt` 是同一套 dialog 的预设形态）。**Popup**（`vs-popup`）则是另一种带标题的内容弹层，本项目尚未迁移。
 
 **选用建议：** 需要内置确定/取消 → **Prompt**；需要自己搭整套布局 → **Dialog**。
+
+</card>
 
 <card>
 
@@ -244,11 +248,5 @@ const action = await SPromptBox({
 })
 // action: 'accept' | 'cancel' | 'close'
 ```
-
-</card>
-
-<card>
-
-## API
 
 </card>

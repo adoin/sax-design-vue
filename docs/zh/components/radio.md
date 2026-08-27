@@ -51,6 +51,16 @@ PROPS:
     usage: '#default'
     code: null
 
+EVENTS:
+  - name: update:modelValue / change
+    type: RadioValue
+    description: Radio、RadioGroup 或 RadioButton 的值变化时触发。
+  - name: update:activeKey / tabChange
+    type: String | Number
+    description: RadioGroupTabs 激活其他页签时触发。
+  - name: RadioGroupTabs change
+    type: '(value: RadioGroupTabsModelValue, activeKey: String | Number)'
+    description: 页签分组选项变化后，携带完整分组值与当前页签触发。
 SLOTS:
   - name: default
     type: slot
@@ -190,8 +200,6 @@ SLOTS:
 </card>
 
 <card>
-
-## API
 
 ### RadioGroup
 

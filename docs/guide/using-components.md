@@ -28,7 +28,7 @@ Newly migrated components are marked with a green **New** label in the sidebar.
 
 </command>
 
-Import styles once in your entry file (see [Getting Started](/guide/getting-started/)).
+Import styles once in your entry file (see [Getting Started](/guide/getting-started.html)).
 
 </card>
 

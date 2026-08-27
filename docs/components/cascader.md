@@ -170,5 +170,3 @@ Use `expand-trigger="hover"` to expand on hover. For lazy nodes, set `isLeaf` to
 </template>
 
 </card>
-
-## API

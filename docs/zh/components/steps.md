@@ -93,41 +93,49 @@ description: '支持聚焦轨道、上下文时间线、完整状态与可组合
 
 # Steps 步骤条
 
+<card>
+
 ## 聚焦轨道
 
 适合注册、配置等线性流程，当前步骤具有更强的视觉焦点。
 
-<card><template #example><steps-default /></template><template #template>
+<template #example><steps-default /></template><template #template>
 
 @[code](../../.vuepress/components/steps/default.vue)
 
 </template></card>
 
+<card>
+
 ## 上下文时间线
 
 当前步骤可展开说明和操作，适合部署、审核等长流程。
 
-<card><template #example><steps-timeline /></template><template #template>
+<template #example><steps-timeline /></template><template #template>
 
 @[code](../../.vuepress/components/steps/timeline.vue)
 
 </template></card>
 
+<card>
+
 ## 自定义步骤内容
 
 使用 `item` 插槽完整替换步骤内容，可实现卡片式步骤。
 
-<card><template #example><steps-custom-item /></template><template #template>
+<template #example><steps-custom-item /></template><template #template>
 
 @[code](../../.vuepress/components/steps/custom-item.vue)
 
 </template></card>
 
+<card>
+
 ## 状态
 
 内置等待、进行、加载、完成、成功、错误和禁用状态。
 
-<card><template #example><steps-states /></template><template #template>
+<template #example><steps-states /></template><template #template>
 
 @[code](../../.vuepress/components/steps/states.vue)
 

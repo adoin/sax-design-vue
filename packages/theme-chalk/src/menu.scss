@@ -1,3 +1,4 @@
+@use 'mixins/mixins' as *;
 @use 'common/var' as *;
 
 .s-menu {
@@ -44,7 +45,7 @@
   border-radius: var(--sax-radius-md);
   outline: 0;
   background: transparent;
-  color: getColor(text, secondary);
+  color: getColor(text-color-secondary);
   font: inherit;
   font-size: 13px;
   line-height: 1.25;
@@ -120,7 +121,7 @@
 }
 
 .s-menu-node__description {
-  color: getColor(text, placeholder);
+  color: getColor(text-color-placeholder);
   font-size: 11px;
   font-weight: 400;
 }
@@ -220,7 +221,7 @@
 
 .s-menu-node__group-label {
   padding: 10px 11px 5px;
-  color: getColor(text, placeholder);
+  color: getColor(text-color-placeholder);
   font-size: 10px;
   font-weight: 750;
   letter-spacing: 0.09em;
@@ -500,7 +501,7 @@
 }
 
 .s-menu-popup-panel__lead-copy small {
-  color: getColor(text, secondary);
+  color: getColor(text-color-secondary);
   font-size: 10px;
   line-height: 1.45;
 }

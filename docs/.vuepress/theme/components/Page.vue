@@ -112,7 +112,10 @@
     <slot name="top" />
 
     <transition name="fade">
-      <Content class="content__default" />
+      <Content
+        :id="isComponentDocument ? 'examples' : undefined"
+        class="content__default"
+      />
     </transition>
 
     <Api />
@@ -189,6 +192,10 @@ const themeData = useThemeData<SaxDesignVueThemeOptions>()
 const pageFrontmatter = usePageFrontmatter<ThemePageFrontmatter>()
 const routeLocale = useRouteLocale()
 const { t } = useDocLocaleUi()
+
+const isComponentDocument = computed(() =>
+  pageData.value.path.includes('/components/'),
+)
 
 const displayTitle = computed(() => {
   const title = pageData.value.title.trim()

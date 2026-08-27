@@ -28,7 +28,7 @@
 
 </command>
 
-在入口文件中引入样式一次（见[快速开始](/zh/guide/getting-started/)）。
+在入口文件中引入样式一次（见[快速开始](/zh/guide/getting-started.html)）。
 
 </card>
 

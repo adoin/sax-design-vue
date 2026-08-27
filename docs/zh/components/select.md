@@ -210,6 +210,27 @@ PROPS:
     link: null
     usage: '#group'
     code: null
+EVENTS:
+  - name: update:modelValue / change
+    type: SelectValue
+    description: 选中值变化时触发。
+  - name: visible-change
+    type: Boolean
+    description: 下拉层打开或关闭时触发。
+  - name: focus / blur
+    type: FocusEvent | Event
+    description: 控件获得或失去焦点时触发。
+  - name: clear
+    description: 清空当前选择后触发。
+  - name: remove-tag
+    type: SelectOptionValue
+    description: 移除多选标签时触发。
+  - name: pin-change
+    type: '{ value, pinned, values }'
+    description: 选项固定或取消固定后触发。
+  - name: pin-fetch
+    type: '(values: SelectOptionValue[], loaded: Boolean)'
+    description: 持久化固定项加载完成时触发。
 SLOTS:
   - name: header / tools / footer
     type: slot
@@ -659,5 +680,3 @@ SLOTS:
 </template>
 
 </card>
-
-## API

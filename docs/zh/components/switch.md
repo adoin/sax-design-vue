@@ -1,5 +1,5 @@
 ---
-description: "在两个状态之间切换布尔设置。"
+description: '在两个状态之间切换布尔设置。'
 PROPS:
   - name: active-value / inactive-value / shape
     type: String | Number | Boolean / String
@@ -105,6 +105,10 @@ PROPS:
     usage: null
     code: null
 
+EVENTS:
+  - name: update:modelValue / input / change
+    type: Boolean | String | Number
+    description: 开关变化时携带配置的激活值或非激活值触发。
 SLOTS:
   - name: default
     type: slot
@@ -386,11 +390,5 @@ SLOTS:
 @[code{55-79}](../../.vuepress/components/switch/example.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

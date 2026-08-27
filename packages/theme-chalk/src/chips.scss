@@ -36,6 +36,10 @@
     padding: 9px;
     margin-left: 2px;
     box-sizing: border-box;
+
+    &::placeholder {
+      color: getColor(text-color-placeholder);
+    }
   }
 
   @include e(remove-all) {

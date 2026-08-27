@@ -232,6 +232,27 @@ PROPS:
     link: null
     usage: '#group'
     code: null
+EVENTS:
+  - name: update:modelValue / change
+    type: SelectValue
+    description: Fire when the selected value changes.
+  - name: visible-change
+    type: Boolean
+    description: Fires when the dropdown opens or closes.
+  - name: focus / blur
+    type: FocusEvent | Event
+    description: Fire when the control gains or loses focus.
+  - name: clear
+    description: Fires after clearing the current selection.
+  - name: remove-tag
+    type: SelectOptionValue
+    description: Fires when a selected multiple-value tag is removed.
+  - name: pin-change
+    type: '{ value, pinned, values }'
+    description: Fires after an option is pinned or unpinned.
+  - name: pin-fetch
+    type: '(values: SelectOptionValue[], loaded: Boolean)'
+    description: Fires when persisted pinned values finish loading.
 SLOTS:
   - name: header / tools / footer
     type: slot
@@ -681,5 +702,3 @@ Enable `virtual` for large flat `options` arrays. Filtering, keyboard navigation
 </template>
 
 </card>
-
-## API

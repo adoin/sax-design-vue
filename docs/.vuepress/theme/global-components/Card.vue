@@ -68,6 +68,14 @@ h1 {
   margin: 20px 0 24px;
   width: 100%;
 
+  & > .text {
+    padding-bottom: 20px;
+  }
+
+  &:has(> .example, > .slotcode) > .text {
+    padding-bottom: 0;
+  }
+
   &:last-of-type {
     margin-bottom: 24px;
   }

@@ -41,6 +41,10 @@
     line-height: 1.5;
     color: hsl(0deg 0% 0% / 0.8);
 
+    &::placeholder {
+      color: getColor(text-color-placeholder);
+    }
+
     &:focus {
       resize: auto;
 

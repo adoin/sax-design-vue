@@ -55,13 +55,13 @@ description: '用于在当前页面的关联内容区块之间快速导航。'
 
 # Anchor 锚点
 
+<card>
+
 <docs-warn />
 
 <anchor-default />
 
 <h2 id="anchor-default">默认用法</h2>
-
-<card>
 
 <template #example>
 
@@ -77,11 +77,11 @@ description: '用于在当前页面的关联内容区块之间快速导航。'
 
 </card>
 
+<card>
+
 <h2 id="anchor-hierarchy">分级锚点</h2>
 
 通过 `children` 组织关联链接。父级仍是正常的跳转目标；子级用于指向更具体的内容区块。
-
-<card>
 
 <template #example>
 
@@ -97,13 +97,13 @@ description: '用于在当前页面的关联内容区块之间快速导航。'
 
 </card>
 
+<card>
+
 <h3 id="anchor-secondary">二级链接</h3>
 
 每个项目使用稳定的 `href` 指向真实页面 ID。`offset` 控制项目何时高亮，`target-offset` 控制点击后的最终滚动位置。
 
 <h2 id="anchor-horizontal">横向模式</h2>
-
-<card>
 
 <template #example>
 
@@ -119,11 +119,11 @@ description: '用于在当前页面的关联内容区块之间快速导航。'
 
 </card>
 
+<card>
+
 <h2 id="anchor-container">滚动容器</h2>
 
 默认情况下 Anchor 监听页面 window。用于面板或虚拟页面时，可通过 `get-container` 返回实际滚动元素；导航和高亮计算会使用同一个容器。
-
-<card>
 
 <template #example>
 
@@ -139,4 +139,8 @@ description: '用于在当前页面的关联内容区块之间快速导航。'
 
 </card>
 
+<card>
+
 <h2 id="api">API</h2>
+
+</card>

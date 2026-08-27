@@ -21,6 +21,10 @@ PROPS:
     description: Underline effect with slide, center-out, double-line, and highlight variants. All variants support wrapped text.
     default: default
 description: 'Text link with semantic status.'
+EVENTS:
+  - name: click
+    type: MouseEvent
+    description: Fires when an enabled link is activated.
 ---
 
 # Link

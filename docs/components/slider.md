@@ -187,9 +187,3 @@ Append a suffix such as `%` next to the current value.
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

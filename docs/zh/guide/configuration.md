@@ -73,6 +73,30 @@ import { zhCn } from 'sax-design-vue/locales'
 
 <card>
 
+## 全局日期与时间配置
+
+通过 `SConfigProvider` 的 `timezone` 为 Date Picker、Date Range Picker 与 Time Picker 设置默认 IANA 时区。`auto-apply-now` 决定点击“此刻”后是否立即提交并关闭。组件上的同名属性优先级更高。
+
+<command>
+
+```vue
+<template>
+  <s-config-provider timezone="Asia/Shanghai" :auto-apply-now="true">
+    <app />
+  </s-config-provider>
+</template>
+```
+
+</command>
+
+时区不会改变用户输入的年月日时分秒文本，但会改变它对应的 `Date`、`value-format="x"` 或 `value-format="timestamp"` 绝对时间。`timestamp` 输出毫秒数字，`x` 输出毫秒字符串。
+
+SSR / SSG 可以直接渲染日期组件。服务端与客户端应配置相同的 `timezone`，避免绝对时间因系统时区不同产生 hydration 不一致；只有刻意依赖浏览器系统时区时才需要考虑 `client-only`。
+
+</card>
+
+<card>
+
 ## 圆角与动效令牌
 
 下面的全局令牌用于统一组件几何和动效。`--sax-radius` 是主圆角：核心输入框、菜单、弹出层、树、按钮、分页等共享控件会通过派生变量继承它。
@@ -167,6 +191,6 @@ import 'sax-design-vue/theme-chalk/dark/css-vars.css'
 
 ## Nuxt
 
-SSR 相关说明见 [Nuxt 集成](/zh/guide/nuxt/)。
+SSR 相关说明见 [Nuxt 集成](/zh/guide/nuxt.html)。
 
 </card>

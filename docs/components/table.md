@@ -1,5 +1,5 @@
 ---
-description: "Display structured tabular data with headers and cell content."
+description: 'Display structured tabular data with headers and cell content.'
 PROPS:
   - name: loading
     type: Boolean
@@ -63,6 +63,10 @@ PROPS:
     usage: '#color'
     code: null
 
+EVENTS:
+  - name: update:modelValue
+    type: Array | String | Number | Object
+    description: Fires when the table selection or bound table value changes.
 SLOTS:
   - name: header
     type: slot
@@ -357,7 +361,7 @@ declare function sortData<T extends Record<string, unknown>>(
   event: Event,
   arr: T[],
   sortKey: keyof T,
-  sortType?: 'desc' | 'esc'
+  sortType?: 'desc' | 'esc',
 ): T[]
 ```
 
@@ -451,12 +455,10 @@ declare function sortData<T extends Record<string, unknown>>(
   event: Event,
   arr: T[],
   sortKey: keyof T,
-  sortType?: 'desc' | 'esc'
+  sortType?: 'desc' | 'esc',
 ): T[]
 ```
 
 </command>
-
-## API
 
 </card>

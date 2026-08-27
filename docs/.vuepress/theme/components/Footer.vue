@@ -53,7 +53,7 @@ const links = computed(() => [
     items: [
       {
         text: t.value.footer.gettingStarted,
-        link: withLocalePath('guide/getting-started/'),
+        link: withLocalePath('guide/getting-started.html'),
       },
       {
         text: t.value.footer.usingComponents,

@@ -21,6 +21,10 @@ PROPS:
     description: 语义颜色；`status` 为别名。
     default: primary
 description: '支持语义状态的文本链接。'
+EVENTS:
+  - name: click
+    type: MouseEvent
+    description: 可用链接被激活时触发。
 ---
 
 # Link 链接

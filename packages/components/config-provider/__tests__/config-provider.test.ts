@@ -1,5 +1,7 @@
+import { defineComponent, h } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
+import { useGlobalConfig } from '@vuesax-alpha/hooks'
 import ConfigProvider from '../src/config-provider'
 
 describe('ConfigProvider theme', () => {
@@ -22,5 +24,21 @@ describe('ConfigProvider theme', () => {
     wrapper.unmount()
     expect(root.style.getPropertyValue('--sax-theme-primary-h')).toBe('120deg')
     root.style.removeProperty('--sax-theme-primary-h')
+  })
+
+  it('provides a default timezone to descendant components', () => {
+    const Consumer = defineComponent({
+      setup() {
+        const timezone = useGlobalConfig('timezone')
+        const autoApplyNow = useGlobalConfig('autoApplyNow')
+        return () => h('span', `${timezone.value}:${autoApplyNow.value}`)
+      },
+    })
+    const wrapper = mount(ConfigProvider, {
+      props: { timezone: 'Asia/Shanghai', autoApplyNow: true },
+      slots: { default: () => h(Consumer) },
+    })
+
+    expect(wrapper.text()).toBe('Asia/Shanghai:true')
   })
 })

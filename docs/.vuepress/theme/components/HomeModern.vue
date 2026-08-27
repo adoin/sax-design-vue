@@ -8,7 +8,7 @@
         <h1 id="home-title">{{ copy.title }}</h1>
         <p>{{ copy.description }}</p>
         <div class="home-modern__actions">
-          <s-button type="gradient" @click="go('/guide/getting-started/')">
+          <s-button type="gradient" @click="go('/guide/getting-started.html')">
             {{ copy.start }}
           </s-button>
           <s-button type="border" @click="go('/guide/playground')">
@@ -100,7 +100,10 @@
             <div class="gallery-control gallery-control--navigation">
               <label>{{ copy.navigation }}</label>
               <div class="gallery-buttons">
-                <s-button size="small" @click="go('/guide/getting-started/')">
+                <s-button
+                  size="small"
+                  @click="go('/guide/getting-started.html')"
+                >
                   {{ copy.docs }}
                 </s-button>
                 <s-button
@@ -278,7 +281,7 @@ const paths = computed(() => [
     title: copy.value.learn,
     description: copy.value.learnDescription,
     action: copy.value.learnAction,
-    link: '/guide/getting-started/',
+    link: '/guide/getting-started.html',
   },
   {
     index: '02',

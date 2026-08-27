@@ -66,19 +66,21 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import dayjs from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat.js'
 import SButton from '@vuesax-alpha/components/button'
 import SInput from '@vuesax-alpha/components/input'
 import SPopper from '@vuesax-alpha/components/popper'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
-import { getVsColor } from '@vuesax-alpha/utils'
+import { useGlobalConfig, useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import {
+  getTimeZoneNow,
+  getVsColor,
+  normalizeTimeZone,
+} from '@vuesax-alpha/utils'
 import STimePanel from '../../date-picker/src/time-panel.vue'
+import { formatValue, parseToDayjs } from '../../date-picker/src/utils'
 import { timePickerEmits, timePickerProps } from './time-picker'
 import type { TimePickerValue } from './time-picker'
 import type { InputInstance } from '@vuesax-alpha/components/input'
-
-dayjs.extend(customParseFormat)
 
 defineOptions({ name: 'STimePicker' })
 
@@ -87,16 +89,24 @@ const emit = defineEmits(timePickerEmits)
 
 const ns = useNamespace('time-picker')
 const { t } = useLocale()
+const globalTimezone = useGlobalConfig('timezone')
+const globalAutoApplyNow = useGlobalConfig('autoApplyNow')
+const resolvedTimezone = computed(() =>
+  normalizeTimeZone(props.timezone ?? globalTimezone.value),
+)
+const resolvedAutoApplyNow = computed(
+  () => props.autoApplyNow ?? globalAutoApplyNow.value,
+)
 
 const themeStyle = computed(() =>
   ns.cssVar({
-    color: getVsColor(props.color),
+    color: getVsColor(props.color ?? 'primary'),
   }),
 )
 
 const visible = ref(false)
 const inputRef = ref<InputInstance>()
-const innerValue = ref<dayjs.Dayjs>(dayjs())
+const innerValue = ref<dayjs.Dayjs>(getTimeZoneNow(resolvedTimezone.value))
 
 const inputPlaceholder = computed(
   () => props.placeholder || t('vs.datepicker.selectTime'),
@@ -108,24 +118,22 @@ const parseModel = () => {
     props.modelValue === undefined ||
     props.modelValue === ''
   ) {
-    innerValue.value = dayjs()
+    innerValue.value = getTimeZoneNow(resolvedTimezone.value)
     return
   }
-  if (props.modelValue instanceof Date) {
-    innerValue.value = dayjs(props.modelValue)
-    return
-  }
-  if (typeof props.modelValue === 'number') {
-    innerValue.value = dayjs(props.modelValue)
-    return
-  }
-  const parsed = props.valueFormat
-    ? dayjs(props.modelValue, props.valueFormat, true)
-    : dayjs(props.modelValue, props.format, true)
-  innerValue.value = parsed.isValid() ? parsed : dayjs()
+  const parsed = parseToDayjs(
+    props.modelValue,
+    props.valueFormat ||
+      (typeof props.modelValue === 'string' ? props.format : undefined),
+    resolvedTimezone.value,
+  )
+  innerValue.value =
+    parsed?.isValid() === true ? parsed : getTimeZoneNow(resolvedTimezone.value)
 }
 
-watch(() => props.modelValue, parseModel, { immediate: true })
+watch([() => props.modelValue, resolvedTimezone], parseModel, {
+  immediate: true,
+})
 
 const displayText = computed(() => {
   if (
@@ -145,12 +153,17 @@ const emitValue = (value: TimePickerValue) => {
 }
 
 const buildOutput = (date: dayjs.Dayjs): TimePickerValue => {
-  if (props.valueFormat) return date.format(props.valueFormat)
-  return date.toDate()
+  return formatValue(
+    date,
+    props.format,
+    props.valueFormat,
+    resolvedTimezone.value,
+  )
 }
 
 const disabledTime = (date: Date) => {
-  const current = dayjs(date)
+  const current =
+    parseToDayjs(date, undefined, resolvedTimezone.value) ?? dayjs(date)
   const hour = current.hour()
   const minute = current.minute()
   const second = current.second()
@@ -173,9 +186,11 @@ const confirmPick = () => {
 }
 
 const handleNow = () => {
-  innerValue.value = dayjs()
-  emitValue(buildOutput(innerValue.value))
-  visible.value = false
+  innerValue.value = getTimeZoneNow(resolvedTimezone.value)
+  if (resolvedAutoApplyNow.value !== false) {
+    emitValue(buildOutput(innerValue.value))
+    visible.value = false
+  }
 }
 
 const handleClear = () => {
@@ -186,8 +201,8 @@ const handleClear = () => {
 const handleInput = (value: string | number | null | undefined) => {
   if (!props.editable) return
   const text = value == null ? '' : String(value)
-  const parsed = dayjs(text, props.format, true)
-  if (parsed.isValid()) {
+  const parsed = parseToDayjs(text, props.format, resolvedTimezone.value)
+  if (parsed?.isValid()) {
     innerValue.value = parsed
     emitValue(buildOutput(parsed))
   }

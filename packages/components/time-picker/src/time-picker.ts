@@ -1,6 +1,10 @@
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { useColorProp, useSizeProp } from '@vuesax-alpha/hooks'
-import { buildProps, definePropType } from '@vuesax-alpha/utils'
+import {
+  buildProps,
+  definePropType,
+  isValidTimeZone,
+} from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type TimePicker from './time-picker.vue'
 import type { TimePickerConfig } from '../../date-picker/src/utils'
@@ -20,6 +24,16 @@ export const timePickerProps = buildProps({
     default: 'HH:mm:ss',
   },
   valueFormat: String,
+  /** IANA time zone. Overrides ConfigProvider's global time zone. */
+  timezone: {
+    type: String,
+    validator: (value: string) => isValidTimeZone(value),
+  },
+  /** Override whether the "Now" action immediately commits and closes. */
+  autoApplyNow: {
+    type: Boolean,
+    default: undefined,
+  },
   placeholder: String,
   disabled: Boolean,
   clearable: {

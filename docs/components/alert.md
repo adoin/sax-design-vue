@@ -1,5 +1,5 @@
 ---
-description: "Display contextual feedback messages for user actions and system state."
+description: 'Display contextual feedback messages for user actions and system state.'
 PROPS:
   - name: v-model
     type: boolean
@@ -137,6 +137,16 @@ PROPS:
 
         const active = ref<boolean>(true);
       </script>
+EVENTS:
+  - name: update:modelValue
+    type: Boolean
+    description: Fires when the alert visibility changes.
+  - name: update:page
+    type: Number
+    description: Fires when paged alert content changes page.
+  - name: update:hiddenContent
+    type: Boolean
+    description: Fires when expandable content is hidden or shown.
 SLOTS:
   - name: icon
     type: slot
@@ -566,11 +576,5 @@ If you need an alert to have time to hide, you can do so by joining some propert
 @[code{16-36} html{5-6}](../.vuepress/components/alert/time.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

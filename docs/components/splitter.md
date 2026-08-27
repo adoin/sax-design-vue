@@ -43,37 +43,45 @@ description: 'Resizable layout with arbitrary regions, two directions, and recur
 
 # Splitter
 
+<card>
+
 Supports any number of regions, two directions, and recursive nesting.
 
 ## Regions and nesting
 
 Nest more items inside the matching `SplitterItem`.
 
-<card><template #example><splitter-default /></template><template #template>
+<template #example><splitter-default /></template><template #template>
 
 @[code{1-34}](../.vuepress/components/splitter/default.vue)
 
 </template></card>
 
+<card>
+
 ## Rest and precision
 
 `use-rest` keeps the remaining space; `precision` snaps to `0.01` by default.
 
-<card><template #example><splitter-sizing /></template><template #template>
+<template #example><splitter-sizing /></template><template #template>
 
 @[code{1-31}](../.vuepress/components/splitter/sizing.vue)
 
 </template></card>
 
+<card>
+
 ## Gap
 
 A single value controls both directions. Arrays use `[rowGap, columnGap]`; `0` consumes no space and remains draggable.
 
-<card><template #example><splitter-gap /></template><template #template>
+<template #example><splitter-gap /></template><template #template>
 
 @[code{1-45}](../.vuepress/components/splitter/gap.vue)
 
 </template></card>
+
+<card>
 
 ## Data model
 
@@ -101,3 +109,5 @@ Mismatched item counts are evenly recalculated. Object entries represent nested 
 Supports pointer, touch, arrow, `Home`, and `End` keys.
 
 Splitter does not clip item content. Add `overflow: auto` to an inner container when scrolling is needed.
+
+</card>

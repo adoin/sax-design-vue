@@ -1,5 +1,5 @@
 ---
-description: "Present focused modal content and require a user decision."
+description: 'Present focused modal content and require a user decision.'
 PROPS:
   - name: model-value / before-close
     type: Boolean / Function
@@ -206,9 +206,13 @@ SLOTS:
 
 # Dialog
 
+<card>
+
 **Dialog is a general-purpose modal container** — header, body, and footer are all yours via slots.
 
 For simple **confirm / alert** flows with built-in Accept and Cancel buttons, use [Prompt](/components/prompt) instead. Prompt is not redundant: it targets “Are you sure?”-style interactions; Dialog targets arbitrary UI (forms, wizards, nested modals, fullscreen views).
+
+</card>
 
 <card>
 
@@ -595,7 +599,5 @@ Use title, content and action-button props when slots would be unnecessary; cust
 @[code{15-19}](../.vuepress/components/dialog/advanced.vue)
 
 </template>
-
-## API
 
 </card>

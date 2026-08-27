@@ -453,9 +453,3 @@ Use attribute `disabled` to make the component read-only. Add `show-score` to di
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

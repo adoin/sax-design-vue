@@ -9,8 +9,8 @@ description: '强制后续 Print 内容从新的浏览器页面开始。'
 
 @[code{1-2}](../../.vuepress/components/print-page-break/default.vue)
 
-</template></card>
-
-## API
+</template>
 
 该布局组件没有属性、事件、插槽或暴露方法。
+
+</card>

@@ -72,9 +72,13 @@ EVENTS:
 
 # 表单组
 
+<card>
+
 `SFormGroup` 将数组中的每项数据封装为一个标签页和一个独立的 `SForm`。标签默认使用连体卡片风格，可通过 `tabs-type` 切换成其他 `STabs` 外观，同时不影响新增与删除能力。超过 `render-threshold` 后，表单会在标签首次激活时才挂载；未挂载项仍可通过无界面规则引擎参与 `validateAll` 和 `validateFields`。右键菜单操作可以直接更新绑定数组，FormGroup 会自动清理已删除标签、表单实例与校验状态。组件实例还提供 `clearValidate`、`resetFields` 与 `getErrors` 方法。
 
 需要在组件外独立校验时，可使用导出的 `createFormValidator(model, { rules, items })`；其 `validate` 和 `validateField` 不依赖 Vue 组件或 DOM。
+
+</card>
 
 <card>
 

@@ -25,9 +25,17 @@ PROPS:
     values: true | false
     description: Allows backdrop closing.
     default: true
-description: "Directional drawer."
+description: 'Directional drawer.'
+EVENTS:
+  - name: update:modelValue
+    type: Boolean
+    description: Fires when the drawer visibility changes.
+  - name: open / close
+    description: Fire after the drawer is opened or closed.
 ---
+
 # Drawer
+
 <card><template #example><drawer-default /></template><template #template>
 
 @[code{1-12}](../.vuepress/components/drawer/default.vue)

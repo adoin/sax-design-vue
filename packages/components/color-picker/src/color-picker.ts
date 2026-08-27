@@ -33,3 +33,4 @@ export const colorPickerEmits = {
 export type ColorPickerProps = ExtractPropTypes<typeof colorPickerProps>
 export type ColorPickerInstance = InstanceType<typeof ColorPicker>
 export type { ColorFormat, HslColor, RgbColor } from './color-utils'
+export { formatColor, parseColor, toCssColor } from './color-utils'

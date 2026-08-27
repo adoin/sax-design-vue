@@ -359,9 +359,3 @@ Set `show-zero` prop to display zero.According to reason, it is hidden.
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

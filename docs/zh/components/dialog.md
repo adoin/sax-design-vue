@@ -1,5 +1,5 @@
 ---
-description: "展示聚焦的模态内容并要求用户作出决定。"
+description: '展示聚焦的模态内容并要求用户作出决定。'
 PROPS:
   - name: before-close / cancel-button-text / cancel-closable / confirm-button-text / confirm-closable
     type: Function / String / Boolean / String / Boolean
@@ -177,9 +177,13 @@ SLOTS:
 
 # Dialog 对话框
 
+<card>
+
 **Dialog 是通用模态容器**，通过插槽自定义 header、内容与 footer。
 
 若只是 **确认 / 警告** 类交互，且需要内置「确定 / 取消」按钮，请用 [Prompt（提示框）](/zh/components/prompt)。两者不重复：Prompt 面向“你确定吗？”式流程；Dialog 面向任意复杂界面（表单、向导、嵌套弹窗、全屏等）。
+
+</card>
 
 <card>
 
@@ -566,7 +570,5 @@ SLOTS:
 @[code{15-19}](../../.vuepress/components/dialog/advanced.vue)
 
 </template>
-
-## API
 
 </card>

@@ -142,9 +142,3 @@ Adjust bar thickness with the `height` prop.
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

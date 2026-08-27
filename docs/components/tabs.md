@@ -114,9 +114,13 @@ SLOTS:
 
 # Tabs
 
+<card>
+
 Tabs uses semantic `tablist / tab / tabpanel` roles with arrow, Home, and End keyboard navigation. Every visual mode uses spacing, surface depth, and shadow instead of visible borders.
 
 `lazy` mounts a panel on first activation and keeps it for later switches; `destroy-on-hide` continuously unmounts inactive panels.
+
+</card>
 
 <card>
 

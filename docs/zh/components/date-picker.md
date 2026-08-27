@@ -11,6 +11,11 @@ PROPS:
     values: true | false / 日期范围分隔符
     description: 控制自动关闭、清空操作、输入编辑和日期范围分隔符。
     default: 'true / true / true / -'
+  - name: auto-apply-now
+    type: Boolean
+    values: true | false
+    description: 点击“此刻”后是否立即提交当前时间并关闭弹层；组件配置优先于 ConfigProvider。
+    default: ConfigProvider 或按选择器原有行为
   - name: v-model / model-value
     type: Date | string | number | [Date, Date]
     values:
@@ -29,12 +34,18 @@ PROPS:
     code: null
   - name: label-format / value-format / time-format
     type: String
-    values: Day.js 格式 token
-    description: 分别控制展示文本、输出值与 datetime 的时间片段。
+    values: Day.js 格式 token | timestamp
+    description: 分别控制展示文本、输出值与 datetime 的时间片段；timestamp 输出毫秒数字。
     default: 随类型
     link: null
     usage: '#date-and-time'
     code: null
+  - name: timezone
+    type: String
+    values: IANA 时区，如 Asia/Shanghai
+    description: 解释墙上时间并换算绝对值；组件配置优先于 ConfigProvider。
+    default: ConfigProvider 或系统时区
+    usage: '#timezone'
   - name: multiple / limit-count
     type: Boolean / Number
     values:
@@ -91,6 +102,15 @@ PROPS:
     link: null
     usage: '#default'
     code: null
+EVENTS:
+  - name: update:modelValue / change
+    type: DatePickerValue
+    description: 选中的日期或日期范围确认提交时触发。
+  - name: focus / blur
+    type: FocusEvent
+    description: 日期输入框获得或失去焦点时触发。
+  - name: clear
+    description: 清空已选值后触发。
 ---
 
 # Date picker 日期选择器
@@ -100,12 +120,6 @@ PROPS:
 ## 默认
 
 使用 Date Picker 选择日期。示例同时展示单值、范围输入的自定义主题色和浮动标签。
-
-::: tip
-在 SSR（如 [Nuxt](https://nuxt.com/)）或 SSG（如 [VitePress](https://vitepress.dev/)）中使用时，需要用
-<code>\<client-only\> \<\/client-only\></code>
-包裹。
-:::
 
 <template #example>
 <date-picker-default />
@@ -129,7 +143,7 @@ PROPS:
 
 ## 日期时间
 
-设置 `type="datetime"` 可同时选择日期与时间。
+设置 `type="datetime"` 可同时选择日期与时间。开启 `auto-apply-now` 后，点击“此刻”会立即更新 `v-model` 并关闭弹层；关闭时则保留当前时间，等待用户确认。该配置也可通过 `SConfigProvider` 全局设置。
 
 <template #example>
 <date-picker-datetime />
@@ -144,6 +158,30 @@ PROPS:
 <template #script>
 
 @[code{14-18}](../../.vuepress/components/date-picker/datetime.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 时区 {#timezone}
+
+`timezone` 使用 IANA 时区。下面两个选择器都显示 `2026-08-05 14:00:22`，但上海与纽约对应的绝对毫秒不同。第一个从 `SConfigProvider` 继承，第二个在组件上覆盖。夏令时由运行环境的 IANA 数据处理。
+
+<template #example>
+<date-picker-timezone />
+</template>
+
+<template #template>
+
+@[code{1-28}](../../.vuepress/components/date-picker/timezone.vue)
+
+</template>
+
+<template #script>
+
+@[code{30-34}](../../.vuepress/components/date-picker/timezone.vue)
 
 </template>
 
@@ -177,7 +215,8 @@ PROPS:
 
 ## 日期范围
 
-设置 `type="daterange"` 选择日期范围。
+设置 `type="daterange"` 选择日期范围，不再提供单独的 Date Range Picker
+组件。空范围默认打开当前月和下个月；选择结束日期只更新内部草稿，点击“确定”后才更新 `v-model`。
 
 <template #example>
 <date-picker-daterange />
@@ -314,11 +353,5 @@ PROPS:
 @[code{7-16}](../../.vuepress/components/date-picker/festival.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

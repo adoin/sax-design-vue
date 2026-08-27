@@ -24,14 +24,12 @@ import { SCollapse, SCollapseItem } from '@vuesax-alpha/components/collapse'
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import { SCountdown } from '@vuesax-alpha/components/countdown'
 import { SDatePanel, SDatePicker } from '@vuesax-alpha/components/date-picker'
-import { SDateRangePicker } from '@vuesax-alpha/components/date-range-picker'
 import { SDialog } from '@vuesax-alpha/components/dialog'
 import { SDrawer } from '@vuesax-alpha/components/drawer'
 import { SDivider } from '@vuesax-alpha/components/divider'
 import { SEmpty } from '@vuesax-alpha/components/empty'
 import { SForm, SFormGroup, SFormItem } from '@vuesax-alpha/components/form'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { SIconPicker } from '@vuesax-alpha/components/icon-picker'
 import { SImage, SImages } from '@vuesax-alpha/components/images'
 import { SImagePreview } from '@vuesax-alpha/components/image-preview'
 import { SInput } from '@vuesax-alpha/components/input'
@@ -129,7 +127,6 @@ export default [
   SCountdown,
   SDatePicker,
   SDatePanel,
-  SDateRangePicker,
   SDialog,
   SDrawer,
   SDivider,
@@ -138,7 +135,6 @@ export default [
   SFormItem,
   SFormGroup,
   SIcon,
-  SIconPicker,
   SImage,
   SImages,
   SImagePreview,

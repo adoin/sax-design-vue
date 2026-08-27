@@ -54,6 +54,16 @@ PROPS:
     usage: '#default'
     code: null
 
+EVENTS:
+  - name: update:modelValue / change
+    type: RadioValue
+    description: Fire when a Radio, RadioGroup, or RadioButton value changes.
+  - name: update:activeKey / tabChange
+    type: String | Number
+    description: Fire when RadioGroupTabs activates another tab.
+  - name: RadioGroupTabs change
+    type: '(value: RadioGroupTabsModelValue, activeKey: String | Number)'
+    description: Fires with the complete grouped value and active tab after a tabbed selection changes.
 SLOTS:
   - name: default
     type: slot
@@ -193,8 +203,6 @@ The outer disc and default center dot share one SVG coordinate system, independe
 </card>
 
 <card>
-
-## API
 
 ### RadioGroup
 

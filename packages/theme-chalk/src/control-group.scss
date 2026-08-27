@@ -32,32 +32,37 @@
   }
 
   > .#{$namespace}-control-group__item:not(:first-child) {
-    margin-left: -1px !important;
-
     &::before {
       content: '';
       position: absolute;
-      z-index: 2;
-      top: 6px;
-      bottom: 6px;
-      left: -5px;
+      z-index: 3;
+      top: 50%;
+      left: 0;
       width: 10px;
-      background: radial-gradient(
-        ellipse at center,
-        hsl(var(--sax-primary) / 0.16) 0%,
-        hsl(var(--sax-primary) / 0.06) 38%,
-        transparent 72%
-      );
-      filter: blur(0.45px);
-      opacity: 0.72;
+      height: 28px;
+      background: getColor(primary, 0.28);
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 28'%3E%3Cpath d='M5 0V9C2.2 9 1 11.2 1 14s1.2 5 4 5v9' fill='none' stroke='white' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+        center / 10px 28px no-repeat;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 28'%3E%3Cpath d='M5 0V9C2.2 9 1 11.2 1 14s1.2 5 4 5v9' fill='none' stroke='white' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+        center / 10px 28px no-repeat;
+      filter: drop-shadow(0 1px 2px getColor(primary, 0.12));
+      opacity: 0.82;
       pointer-events: none;
-      transition: opacity var(--sax-motion-duration-fast)
-        var(--sax-motion-easing-standard);
+      transform: translate(-50%, -50%);
+      transition:
+        background-color var(--sax-motion-duration-fast)
+          var(--sax-motion-easing-standard),
+        filter var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+        opacity var(--sax-motion-duration-fast)
+          var(--sax-motion-easing-standard);
     }
   }
 
+  &:hover > .#{$namespace}-control-group__item:not(:first-child)::before,
   > .#{$namespace}-control-group__item:hover::before,
   > .#{$namespace}-control-group__item:focus-within::before {
+    background: getColor(primary, 0.42);
+    filter: drop-shadow(0 1px 3px getColor(primary, 0.18));
     opacity: 1;
   }
 
@@ -298,5 +303,12 @@
   @include when(block) {
     display: flex;
     width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-control-group
+    > .#{$namespace}-control-group__item:not(:first-child)::before {
+    transition-duration: 0.01ms;
   }
 }

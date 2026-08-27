@@ -1,5 +1,5 @@
 ---
-description: "按页浏览较长的数据集合。"
+description: '按页浏览较长的数据集合。'
 PROPS:
   - name: v-model:current-page
     type: Number
@@ -219,6 +219,16 @@ PROPS:
     usage: null
     code: null
 
+EVENTS:
+  - name: update:current-page / page-change
+    type: Number
+    description: 当前页码变化时触发。
+  - name: update:page-size / size-change
+    type: Number
+    description: 每页条数变化时触发。
+  - name: prev-click / next-click
+    type: Number
+    description: 点击上一页或下一页后，携带结果页码触发。
 SLOTS:
   - name: default
     type: slot
@@ -538,11 +548,5 @@ SLOTS:
 @[code{7-11}](../../.vuepress/components/pagination/infinite.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

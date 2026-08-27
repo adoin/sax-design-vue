@@ -221,9 +221,3 @@ Align the trail to the left, center, or right.
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

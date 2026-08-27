@@ -153,61 +153,73 @@ description: 'Carousel with controlled state, deck layouts, spatial 3D effects, 
 
 # Carousel
 
+<card>
+
 ## Default
 
 Controlled index, autoplay, arrows, and line indicators use stable defaults.
 
-<card><template #example><carousel-default /></template><template #template>
+<template #example><carousel-default /></template><template #template>
 
 @[code](../.vuepress/components/carousel/default.vue)
 
 </template></card>
 
+<card>
+
 ## Card deck
 
 `deck` owns the centered card and the inactive layers on both sides. Use `deck-visible` for the visible layer count and `deck-blur` for optional depth blur instead of maintaining several nearly identical effect types.
 
-<card><template #example><carousel-deck /></template><template #template>
+<template #example><carousel-deck /></template><template #template>
 
 @[code](../.vuepress/components/carousel/deck.vue)
 
 </template></card>
 
+<card>
+
 ## Orbit stage
 
 `orbit` uses a continuous phase to move a lower ring of compact cards smoothly around the Y axis. A separate, larger active card sits above the ring and changes with a short GPU-friendly crossfade. `orbit-max-visible` defaults to 10. When a larger data set would produce an even base window, the orbit takes one additional real card to form an odd ring. Every looping orbit keeps one hidden clone buffer at each edge: the outgoing card moves into the back and fades out while the matching buffer fades in from the other side, preventing a wrap teleport. Only when every real item already fits and no extra item is available does it render a decorative placeholder with a transparent interior and visible outline as that back-side portal. Fewer than four source items are cloned to fill the ring. Set a non-zero `orbit-angle` to override automatic spacing.
 
-<card><template #example><carousel-orbit /></template><template #template>
+<template #example><carousel-orbit /></template><template #template>
 
 @[code](../.vuepress/components/carousel/orbit.vue)
 
 </template></card>
 
+<card>
+
 ## Mirror prism
 
 `prism` arranges three cards around one shared axis. Every face keeps a continuous rotation phase, so side cards move like one rigid prism instead of flipping independently. `radius` is shared by the viewport and every card; pass `false` for crisp prism faces.
 
-<card><template #example><carousel-prism /></template><template #template>
+<template #example><carousel-prism /></template><template #template>
 
 @[code](../.vuepress/components/carousel/prism.vue)
 
 </template></card>
 
+<card>
+
 ## Fade
 
 `fade` only transitions opacity. Enable `motion-blur` for a brief directional softening and compare both parameter states in the same example.
 
-<card><template #example><carousel-fade /></template><template #template>
+<template #example><carousel-fade /></template><template #template>
 
 @[code](../.vuepress/components/carousel/fade.vue)
 
 </template></card>
 
+<card>
+
 ## External control
 
 The exposed API supports named navigation and explicit playback control. Disabled items are skipped by arrows, autoplay, keyboard, and drag navigation.
 
-<card><template #example><carousel-controls /></template><template #template>
+<template #example><carousel-controls /></template><template #template>
 
 @[code](../.vuepress/components/carousel/controls.vue)
 

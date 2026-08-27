@@ -7,21 +7,26 @@ export type ApiState = {
 
 export interface ThemeNormalPropsFrontmatter {
   name: string
-  state: ApiState
-  type: string
-  values: any
-  description: string
-  default: any
-  link: string
-  code: string
+  state?: ApiState
+  type?: string
+  values?: unknown
+  description?: string
+  default?: unknown
+  link?: string
+  code?: string
 }
+
+export type ThemeNormalApiTableKey =
+  'PROPS' | 'CHILD_PROPS' | 'SLOTS' | 'EVENTS' | 'EXPOSES'
+
 export interface ThemeNormalApiFrontmatter extends PageFrontmatter {
   description?: string
-  PROPS: ThemeNormalPropsFrontmatter
-  CHILD_PROPS?: ThemeNormalPropsFrontmatter
-  SLOTS: ThemeNormalPropsFrontmatter
-  EVENTS: ThemeNormalPropsFrontmatter
-  EXPOSES: ThemeNormalPropsFrontmatter
+  API_TITLES?: Partial<Record<ThemeNormalApiTableKey, string>>
+  PROPS?: ThemeNormalPropsFrontmatter[]
+  CHILD_PROPS?: ThemeNormalPropsFrontmatter[]
+  SLOTS?: ThemeNormalPropsFrontmatter[]
+  EVENTS?: ThemeNormalPropsFrontmatter[]
+  EXPOSES?: ThemeNormalPropsFrontmatter[]
   NEWS: string[]
   UPDATES: string[]
 }

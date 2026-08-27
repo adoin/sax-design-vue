@@ -4,21 +4,30 @@
       pageFrontmatter.PROPS ||
       pageFrontmatter.CHILD_PROPS ||
       pageFrontmatter.SLOTS ||
-      pageFrontmatter.EVENTS
+      pageFrontmatter.EVENTS ||
+      pageFrontmatter.EXPOSES
     "
     id="s-api"
     class="con-api"
   >
     <div class="content-api">
+      <h2 id="api" class="api-heading">
+        <a class="header-anchor" href="#api">API</a>
+      </h2>
+
       <section v-for="(rows, key) in tables" :key="key" class="content-table">
-        <h3>{{ tableLabel(key) }}</h3>
+        <h3 :id="tableSlug(key)">
+          <a class="header-anchor" :href="`#${tableSlug(key)}`">
+            {{ tableLabel(key) }}
+          </a>
+        </h3>
 
         <s-table class="api-table">
           <template #thead>
             <tr>
-              <th class="api-column-name">{{ labels.property }}</th>
+              <th class="api-column-name">{{ rowNameLabel(key) }}</th>
               <th class="api-column-type">{{ labels.type }}</th>
-              <th class="api-column-values">{{ labels.values }}</th>
+              <th class="api-column-values">{{ rowValuesLabel(key) }}</th>
               <th class="api-column-description">{{ labels.description }}</th>
               <th class="api-column-default">{{ labels.default }}</th>
               <th class="api-column-example">{{ labels.example }}</th>
@@ -90,7 +99,7 @@
                 </td>
                 <td class="api-column-more">
                   <a
-                    :href="issueLink(row.name)"
+                    :href="issueLink(row.name, String(key))"
                     :aria-label="t.examples.reportIssue"
                     class="api-icon-action"
                     rel="noreferrer"
@@ -144,10 +153,11 @@ import type { ComputedRef } from 'vue'
 import type { PageData, PageFrontmatter } from '@vuepress/client'
 import type {
   ThemeNormalApiFrontmatter,
+  ThemeNormalApiTableKey,
   ThemeNormalPropsFrontmatter,
 } from '../shared/frontmatter/normal'
 
-type Tables = Record<string, ThemeNormalPropsFrontmatter>
+type Tables = Record<string, ThemeNormalPropsFrontmatter[]>
 
 const pageData: ComputedRef<PageData<{ title: string }>> = usePageData() as any
 const pageFrontmatter: ComputedRef<PageFrontmatter<ThemeNormalApiFrontmatter>> =
@@ -161,9 +171,9 @@ const tables = computed<Tables>(() => {
   const source = {
     PROPS: pageFrontmatter.value.PROPS,
     CHILD_PROPS: pageFrontmatter.value.CHILD_PROPS,
+    EVENTS: pageFrontmatter.value.EVENTS,
     SLOTS: pageFrontmatter.value.SLOTS,
-    events: pageFrontmatter.value.EVENTS,
-    exposes: pageFrontmatter.value.EXPOSES,
+    EXPOSES: pageFrontmatter.value.EXPOSES,
   }
   return Object.fromEntries(
     Object.entries(source).filter(
@@ -173,9 +183,19 @@ const tables = computed<Tables>(() => {
 })
 
 const tableLabel = (key: string) => {
+  const pageLabels = pageFrontmatter.value.API_TITLES
+  const pageLabel = pageLabels?.[key as ThemeNormalApiTableKey]
+  if (pageLabel) return pageLabel
   const labels = t.value.apiTables as Record<string, string>
   return labels[key] || key
 }
+const tableSlug = (key: string) =>
+  `api-${key.toLowerCase().replaceAll('_', '-')}`
+const rowNameLabel = (key: string) =>
+  (t.value.apiRowNames as Record<string, string>)[key] || labels.value.property
+const rowValuesLabel = (key: string) =>
+  (t.value.apiValueColumns as Record<string, string>)[key] ||
+  labels.value.values
 const codeKey = (table: string, index: number) => `${table}-${index}`
 const isCodeOpen = (table: string, index: number) =>
   openCodes.value.has(codeKey(table, index))
@@ -205,8 +225,8 @@ const getCode = (code: string) => {
   )
   return `<pre class="language-html"><code>${html}</code></pre>`
 }
-const issueLink = (name: string) =>
-  `https://github.com/adoin/sax-design-vue/issues/new?title=[${pageData.value.title}]%20prop%20(${name})`
+const issueLink = (name: string, table: string) =>
+  `https://github.com/adoin/sax-design-vue/issues/new?title=[${pageData.value.title}]%20${table.toLowerCase()}%20(${name})`
 </script>
 
 <style lang="scss">
@@ -225,6 +245,10 @@ const issueLink = (name: string) =>
   width: 100%;
   min-width: 0;
   gap: 36px;
+}
+
+.api-heading {
+  margin: 0;
 }
 
 .content-table {

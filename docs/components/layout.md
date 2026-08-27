@@ -121,9 +121,15 @@ PROPS:
     description: Controls the collapsed state of the SLayoutAside outside slot.
     default: false
 description: 'A responsive application shell and composable semantic layout surfaces.'
+EVENTS:
+  - name: update:asideOutsideCollapsed / aside-outside-collapse
+    type: Boolean
+    description: Fire when the outside aside surface is collapsed or expanded.
 ---
 
 # Layout
+
+<card>
 
 `SLayout` handles the standard application frame with named slots. It only renders
 the regions you provide, so the same API works for full dashboards, content pages,
@@ -135,11 +141,13 @@ Use the `header`, `aside`, default, and `footer` slots to assemble a complete pa
 Set `aside-position="end"` for a right rail. On small screens the regions stack to
 avoid horizontal scrolling.
 
-<card><template #example><layout-default /></template><template #template>
+<template #example><layout-default /></template><template #template>
 
 @[code](../.vuepress/components/layout/default.vue)
 
 </template></card>
+
+<card>
 
 ## Attached aside tools
 
@@ -150,11 +158,13 @@ responsive fallback, and the collapse/expand control at the outer edge. The
 collapsed rail keeps a directional arrow visible and exposes hover and keyboard
 feedback. When composing `SLayoutAside` directly, use `#outside`.
 
-<card><template #example><layout-aside-outside /></template><template #template>
+<template #example><layout-aside-outside /></template><template #template>
 
 @[code](../.vuepress/components/layout/aside-outside.vue)
 
 </template></card>
+
+<card>
 
 ## Free composition
 
@@ -165,11 +175,13 @@ For non-standard structures, combine `SLayoutContainer`, `SLayoutHeader`,
 clear an existing top navigation bar. Use the `SLayoutAside` `outside` slot for
 settings, language, and theme tools; the aside owns the seamless attached surface.
 
-<card><template #example><layout-composition /></template><template #template>
+<template #example><layout-composition /></template><template #template>
 
 @[code](../.vuepress/components/layout/composition.vue)
 
 </template></card>
+
+<card>
 
 ## Slots
 
@@ -187,3 +199,5 @@ surface is only rendered when that slot exists. Both outside slots expose
 `outside-collapsible="false"` on `SLayoutAside` to remove the built-in control.
 State changes emit `update:asideOutsideCollapsed` / `aside-outside-collapse` on
 `SLayout` and `update:outsideCollapsed` / `outside-collapse` on `SLayoutAside`.
+
+</card>

@@ -20,7 +20,11 @@ PROPS:
     values: true / false
     description: Show expand and collapse action.
     default: 'false'
-description: "Expandable text ellipsis."
+description: 'Expandable text ellipsis.'
+EVENTS:
+  - name: update:expanded / change
+    type: Boolean
+    description: Fire when the expanded state changes.
 ---
 
 # Text ellipsis

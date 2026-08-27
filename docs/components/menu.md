@@ -95,36 +95,46 @@ description: 'A multi-level menu with inline, cascading popup, and horizontal na
 
 # Menu
 
+<card>
+
 ## Inline hierarchy
 
 The admin-style sidebar keeps its collapse control in the footer, reduces to an icon rail, and automatically moves child menus into popups.
 
-<card><template #example><menu-default /></template><template #template>
+<template #example><menu-default /></template><template #template>
 
 @[code](../.vuepress/components/menu/default.vue)
 
 </template></card>
 
+<card>
+
 ## Cascading popups
 
 Choose hover or click triggers, independent second- and third-level positioning, and the `floating` style.
 
-<card><template #example><menu-popup /></template><template #template>
+<template #example><menu-popup /></template><template #template>
 
 @[code](../.vuepress/components/menu/popup.vue)
 
 </template></card>
 
+<card>
+
 ## Horizontal navigation
 
 Horizontal menus use popups by default and support arrows, Enter, Space, and Escape.
 
-<card><template #example><menu-horizontal /></template><template #template>
+<template #example><menu-horizontal /></template><template #template>
 
 @[code](../.vuepress/components/menu/horizontal.vue)
 
 </template></card>
 
+<card>
+
 ## Data model
 
 `MenuOption` supports `children`, `icon`, `description`, `badge`, `href`, and `disabled`; set `type` to `group` or `divider` for structural rows.
+
+</card>

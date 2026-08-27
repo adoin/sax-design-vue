@@ -59,7 +59,7 @@
   white-space: nowrap;
 }
 .s-cascader__value.is-placeholder {
-  color: getColor(text, secondary);
+  color: getColor(text-color-placeholder);
 }
 .s-cascader__search-input {
   width: 24px;
@@ -73,7 +73,7 @@
   font: inherit;
 }
 .s-cascader__search-input::placeholder {
-  color: getColor(text, secondary);
+  color: getColor(text-color-placeholder);
 }
 .s-cascader__suffix,
 .s-cascader__clear {
@@ -82,7 +82,7 @@
   height: 20px;
   flex: 0 0 20px;
   place-items: center;
-  color: getColor(text, secondary);
+  color: getColor(text-color-secondary);
 }
 .s-cascader__suffix .s-icon {
   transition: transform var(--sax-motion-duration-fast)
@@ -130,7 +130,7 @@
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: getColor(text, secondary);
+  color: getColor(text-color-secondary);
   cursor: pointer;
 }
 .s-cascader__tag-remove:hover {
@@ -253,7 +253,7 @@
 }
 .s-cascader__separator {
   margin: 0 5px;
-  color: getColor(text, secondary);
+  color: getColor(text-color-secondary);
 }
 .s-cascader__highlight {
   padding: 0;
@@ -263,7 +263,7 @@
 .s-cascader__empty {
   min-width: 180px;
   padding: 28px 16px;
-  color: getColor(text, secondary);
+  color: getColor(text-color-secondary);
   font-size: 13px;
   text-align: center;
 }
@@ -271,7 +271,7 @@
 .s-cascader__footer {
   padding: 8px 10px;
   background: getColor(fill, light);
-  color: getColor(text, secondary);
+  color: getColor(text-color-secondary);
   font-size: 12px;
 }
 .s-cascader__header {

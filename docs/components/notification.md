@@ -1,5 +1,5 @@
 ---
-description: "Show temporary, programmatic notifications outside the main flow."
+description: 'Show temporary, programmatic notifications outside the main flow.'
 PROPS:
   - name: dangerous-html-string / icon-size / offset / z-index
     type: Boolean / Number / Number / Number
@@ -360,6 +360,9 @@ PROPS:
           color, timing, and placement.`,
         })
       </script>
+EVENTS:
+  - name: destroy
+    description: Fires when the notification instance is destroyed.
 ---
 
 # Notification
@@ -772,11 +775,5 @@ You can do great things with this component and some others from Sax Design, to 
 @[code{15-44}](../.vuepress/components/notification/example.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

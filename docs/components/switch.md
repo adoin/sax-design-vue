@@ -1,5 +1,5 @@
 ---
-description: "Toggle a boolean setting between two states."
+description: 'Toggle a boolean setting between two states.'
 PROPS:
   - name: active-value / inactive-value / shape
     type: String | Number | Boolean / String
@@ -105,6 +105,10 @@ PROPS:
     usage: null
     code: null
 
+EVENTS:
+  - name: update:modelValue / input / change
+    type: Boolean | String | Number
+    description: Fire with the configured active or inactive value when the switch changes.
 SLOTS:
   - name: default
     type: slot
@@ -386,11 +390,5 @@ A usual example when using the switch component
 @[code{55-79}](../.vuepress/components/switch/example.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

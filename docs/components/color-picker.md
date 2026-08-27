@@ -23,10 +23,12 @@ PROPS:
 EVENTS:
   - name: change
     description: Fired when a color is selected or changed.
-description: "Color picker."
+description: 'Color picker.'
 ---
 
 # Color picker
+
+<card>
 
 Clicking the trigger opens the complete picker directly. Adjust saturation,
 brightness, hue and opacity, use the screen eyedropper, or switch between HEX,
@@ -35,7 +37,7 @@ second native picker.
 The eyedropper uses the EyeDropper API first and automatically falls back to
 the native color selector when that API is unavailable or fails.
 
-<card><template #example><color-picker-default /></template><template #template>
+<template #example><color-picker-default /></template><template #template>
 
 @[code{1-22}](../.vuepress/components/color-picker/default.vue)
 

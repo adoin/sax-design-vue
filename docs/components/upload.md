@@ -218,6 +218,5 @@ Upload immediately after selection when `action` is set.
 
 </template>
 
-## API
 
 </card>

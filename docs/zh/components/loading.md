@@ -346,9 +346,3 @@ SLoading.service(options)
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

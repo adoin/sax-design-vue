@@ -261,7 +261,7 @@ $clearableSafeArea: 64px;
     @include control-surface-shadow;
 
     &::placeholder {
-      color: getColor('text', 0.4);
+      color: getColor(text-color-placeholder);
     }
 
     @include when(multiple) {
@@ -290,7 +290,7 @@ $clearableSafeArea: 64px;
       transition: getCssVar(transition-ease);
 
       &::placeholder {
-        color: getColor('text', 0.4);
+        color: getColor(text-color-placeholder);
       }
 
       &:focus {
@@ -590,8 +590,7 @@ $clearableSafeArea: 64px;
       visibility: visible;
       pointer-events: auto;
       font-size: getCssVar(select-placeholder-font-size);
-      opacity: 0.4;
-      color: getColor('text');
+      color: getColor(text-color-placeholder);
     }
   }
   @include e(placeholder) {
@@ -605,13 +604,13 @@ $clearableSafeArea: 64px;
     cursor: default;
     user-select: none;
     pointer-events: none;
-    opacity: 0.4;
+    opacity: 1;
     width: auto;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     z-index: 10;
-    color: getColor('text');
+    color: getColor(text-color-placeholder);
 
     @include when(hidden) {
       opacity: 0;

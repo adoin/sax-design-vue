@@ -228,6 +228,13 @@ PROPS:
         ...
       </s-navbar-item>
 
+EVENTS:
+  - name: update:modelValue
+    type: String
+    description: Fires when the active navigation item changes.
+  - name: collapsed
+    type: Boolean
+    description: Fires when the responsive collapsed state changes.
 SLOTS:
   - name: brand
     type: slot
@@ -321,11 +328,5 @@ interface NavLink extends NavItem {
 
 type NavbarItem = NavLink
 ```
-
-</card>
-
-<card>
-
-## API
 
 </card>

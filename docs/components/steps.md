@@ -93,41 +93,49 @@ description: 'Steps with a focus rail, contextual timeline, semantic states, and
 
 # Steps
 
+<card>
+
 ## Focus rail
 
 For linear flows such as onboarding and configuration, with a strong active-step focus.
 
-<card><template #example><steps-default /></template><template #template>
+<template #example><steps-default /></template><template #template>
 
 @[code](../.vuepress/components/steps/default.vue)
 
 </template></card>
 
+<card>
+
 ## Context timeline
 
 The active step can reveal details and actions for longer operational flows.
 
-<card><template #example><steps-timeline /></template><template #template>
+<template #example><steps-timeline /></template><template #template>
 
 @[code](../.vuepress/components/steps/timeline.vue)
 
 </template></card>
 
+<card>
+
 ## Custom item
 
 Use the `item` slot to replace each step with a tile or another custom layout.
 
-<card><template #example><steps-custom-item /></template><template #template>
+<template #example><steps-custom-item /></template><template #template>
 
 @[code](../.vuepress/components/steps/custom-item.vue)
 
 </template></card>
 
+<card>
+
 ## States
 
 Wait, process, loading, finish, success, error, and disabled states are built in.
 
-<card><template #example><steps-states /></template><template #template>
+<template #example><steps-states /></template><template #template>
 
 @[code](../.vuepress/components/steps/states.vue)
 

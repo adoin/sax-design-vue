@@ -1,11 +1,6 @@
 <template>
   <div class="center">
-    <s-date-picker
-      v-model="value"
-      type="daterange"
-      start-placeholder="Start date"
-      end-placeholder="End date"
-    />
+    <s-date-picker v-model="value" type="daterange" />
   </div>
 </template>
 

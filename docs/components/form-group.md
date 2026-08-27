@@ -72,9 +72,13 @@ EVENTS:
 
 # Form group
 
+<card>
+
 `SFormGroup` wraps every array item in a tab and an independent `SForm`. Its tabs use the connected-card appearance by default; set `tabs-type` to use another `STabs` style without changing add or remove behavior. Above `render-threshold`, forms mount on first tab activation; unmounted items still participate in `validateAll` and `validateFields` through the headless rule engine. Context-menu actions can update the bound array directly; the group then prunes removed tabs, form instances, and validation state. The instance also exposes `clearValidate`, `resetFields`, and `getErrors`.
 
 For validation outside the component, use the exported `createFormValidator(model, { rules, items })`. Its `validate` and `validateField` methods do not require a Vue component or DOM.
+
+</card>
 
 <card>
 

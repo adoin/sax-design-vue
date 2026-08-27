@@ -16,6 +16,11 @@ PROPS:
     link: null
     usage: '#default'
     code: null
+  - name: auto-apply-now
+    type: Boolean
+    values: true | false
+    description: Commit the current time and close after clicking Now; a component value overrides ConfigProvider.
+    default: ConfigProvider or the picker's existing behavior
   - name: v-model / model-value
     type: Date | string | number | [Date, Date]
     values:
@@ -34,12 +39,18 @@ PROPS:
     code: null
   - name: label-format / value-format / time-format
     type: String
-    values: Day.js format tokens
-    description: Control displayed text, emitted value, or datetime time segment independently.
+    values: Day.js format tokens | timestamp
+    description: Control displayed text, emitted value, or datetime time segment independently; timestamp emits milliseconds as a number.
     default: type-based
     link: null
     usage: '#date-and-time'
     code: null
+  - name: timezone
+    type: String
+    values: IANA zone such as Asia/Shanghai
+    description: Interpret wall time and convert absolute values; a component value overrides ConfigProvider.
+    default: ConfigProvider or system zone
+    usage: '#timezone'
   - name: multiple / limit-count
     type: Boolean / Number
     values:
@@ -96,6 +107,15 @@ PROPS:
     link: null
     usage: '#default'
     code: null
+EVENTS:
+  - name: update:modelValue / change
+    type: DatePickerValue
+    description: Fire when the selected date or date range is committed.
+  - name: focus / blur
+    type: FocusEvent
+    description: Fire when the date input gains or loses focus.
+  - name: clear
+    description: Fires after clearing the selected value.
 ---
 
 # Date picker
@@ -106,12 +126,6 @@ PROPS:
 
 Use Date Picker for date input. The example also shows custom color and floating
 labels for single and range triggers.
-
-::: tip
-This component requires the
-<code>\<client-only\> \<\/client-only\></code>
-wrap when used in SSR (eg: [Nuxt](https://nuxt.com/)) and SSG (eg: [VitePress](https://vitepress.dev/)).
-:::
 
 <template #example>
 <date-picker-default />
@@ -135,7 +149,7 @@ wrap when used in SSR (eg: [Nuxt](https://nuxt.com/)) and SSG (eg: [VitePress](h
 
 ## Date and time
 
-Set `type="datetime"` to pick date and time.
+Set `type="datetime"` to pick date and time. With `auto-apply-now`, clicking Now immediately updates `v-model` and closes the popup. When disabled, the current time remains staged until confirmation. The same default can be configured through `SConfigProvider`.
 
 <template #example>
 <date-picker-datetime />
@@ -150,6 +164,30 @@ Set `type="datetime"` to pick date and time.
 <template #script>
 
 @[code{14-18}](../.vuepress/components/date-picker/datetime.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Time zone {#timezone}
+
+`timezone` accepts an IANA zone. Both pickers below display `2026-08-05 14:00:22`, while Shanghai and New York map that wall time to different absolute milliseconds. The first inherits `SConfigProvider`; the second overrides it locally. Daylight-saving transitions follow the runtime IANA data.
+
+<template #example>
+<date-picker-timezone />
+</template>
+
+<template #template>
+
+@[code{1-28}](../.vuepress/components/date-picker/timezone.vue)
+
+</template>
+
+<template #script>
+
+@[code{30-34}](../.vuepress/components/date-picker/timezone.vue)
 
 </template>
 
@@ -184,7 +222,10 @@ formatting, editable input, clear action, and time-column selection behavior.
 
 ## Date range
 
-Set `type="daterange"` to pick a date range.
+Set `type="daterange"` to pick a date range; there is no separate Date Range
+Picker component. An empty value opens on the current and following months.
+Selecting the end date only updates the draft, and `v-model` changes after
+Confirm.
 
 <template #example>
 <date-picker-daterange />
@@ -322,11 +363,5 @@ for business dates without changing the picker theme.
 @[code{7-16}](../.vuepress/components/date-picker/festival.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

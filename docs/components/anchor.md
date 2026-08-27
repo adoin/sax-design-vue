@@ -55,13 +55,13 @@ description: 'Navigate directly between related sections on the current page.'
 
 # Anchor
 
+<card>
+
 <docs-warn />
 
 <anchor-default />
 
 <h2 id="anchor-default">Default</h2>
-
-<card>
 
 <template #example>
 
@@ -77,12 +77,12 @@ description: 'Navigate directly between related sections on the current page.'
 
 </card>
 
+<card>
+
 <h2 id="anchor-hierarchy">Hierarchy</h2>
 
 Use `children` to organize related links. The parent remains a normal target;
 child items represent the more specific sections beneath it.
-
-<card>
 
 <template #example>
 
@@ -98,6 +98,8 @@ child items represent the more specific sections beneath it.
 
 </card>
 
+<card>
+
 <h3 id="anchor-secondary">Secondary link</h3>
 
 Each item uses a stable `href` that points to a real page ID. `offset` controls
@@ -105,8 +107,6 @@ when an item becomes active, while `target-offset` controls the final scroll
 position after a click.
 
 <h2 id="anchor-horizontal">Horizontal</h2>
-
-<card>
 
 <template #example>
 
@@ -122,13 +122,13 @@ position after a click.
 
 </card>
 
+<card>
+
 <h2 id="anchor-container">Scroll container</h2>
 
 By default Anchor listens to the page window. For a panel or virtualized page,
 provide `get-container` and return that scrolling element. The navigation and
 active-state calculation then use the same container.
-
-<card>
 
 <template #example>
 
@@ -144,4 +144,8 @@ active-state calculation then use the same container.
 
 </card>
 
+<card>
+
 <h2 id="api">API</h2>
+
+</card>

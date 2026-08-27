@@ -1,5 +1,5 @@
 ---
-description: "使用表头和单元格内容展示结构化表格数据。"
+description: '使用表头和单元格内容展示结构化表格数据。'
 PROPS:
   - name: loading
     type: Boolean
@@ -63,6 +63,10 @@ PROPS:
     usage: '#color'
     code: null
 
+EVENTS:
+  - name: update:modelValue
+    type: Array | String | Number | Object
+    description: 表格选择状态或绑定值变化时触发。
 SLOTS:
   - name: header
     type: slot
@@ -357,7 +361,7 @@ declare function sortData<T extends Record<string, unknown>>(
   event: Event,
   arr: T[],
   sortKey: keyof T,
-  sortType?: 'desc' | 'esc'
+  sortType?: 'desc' | 'esc',
 ): T[]
 ```
 
@@ -451,12 +455,10 @@ declare function sortData<T extends Record<string, unknown>>(
   event: Event,
   arr: T[],
   sortKey: keyof T,
-  sortType?: 'desc' | 'esc'
+  sortType?: 'desc' | 'esc',
 ): T[]
 ```
 
 </command>
-
-## API
 
 </card>

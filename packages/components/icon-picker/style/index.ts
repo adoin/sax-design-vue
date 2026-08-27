@@ -1,1 +1,5 @@
+import '@vuesax-alpha/components/button/style'
+import '@vuesax-alpha/components/color-picker/style'
+import '@vuesax-alpha/components/dialog/style'
+import '@vuesax-alpha/components/icon/style'
 import '@vuesax-alpha/theme-chalk/src/icon-picker.scss'

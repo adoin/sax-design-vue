@@ -127,8 +127,8 @@
                   :range-start="rangeStart"
                   :range-end="rangeEnd"
                   :disabled-date="isDateDisabled"
-                  :festival-method="festivalMethod"
-                  :default-date="leftValue || defaultStartDate"
+                  :festival-method="festivalInTimezone"
+                  :default-date="leftValue || defaultStartDate || currentDate"
                   :start-day="startDay"
                   :select-day="selectDay"
                   @pick="handlePick"
@@ -141,7 +141,7 @@
                   :range-start="rangeStart"
                   :range-end="rangeEnd"
                   :disabled-date="isDateDisabled"
-                  :festival-method="festivalMethod"
+                  :festival-method="festivalInTimezone"
                   :default-date="rightValue || defaultEndDate || rightPanelDate"
                   :start-day="startDay"
                   :select-day="selectDay"
@@ -240,8 +240,8 @@
                 :range-start="rangeStart"
                 :range-end="rangeEnd"
                 :disabled-date="isDateDisabled"
-                :festival-method="festivalMethod"
-                :default-date="leftValue || defaultStartDate"
+                :festival-method="festivalInTimezone"
+                :default-date="leftValue || defaultStartDate || currentDate"
                 :start-day="startDay"
                 :select-day="selectDay"
                 @pick="handlePick"
@@ -255,7 +255,7 @@
                 :range-start="rangeStart"
                 :range-end="rangeEnd"
                 :disabled-date="isDateDisabled"
-                :festival-method="festivalMethod"
+                :festival-method="festivalInTimezone"
                 :default-date="rightValue || defaultEndDate || rightPanelDate"
                 :start-day="startDay"
                 :select-day="selectDay"
@@ -340,8 +340,13 @@ import SIcon from '@vuesax-alpha/components/icon'
 import SInput from '@vuesax-alpha/components/input'
 import SPopper from '@vuesax-alpha/components/popper'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
-import { getVsColor } from '@vuesax-alpha/utils'
+import { useGlobalConfig, useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import {
+  getTimeZoneNow,
+  getVsColor,
+  normalizeTimeZone,
+  toTimeZoneWallTime,
+} from '@vuesax-alpha/utils'
 import SDatePanel from './date-panel.vue'
 import STimePanel from './time-panel.vue'
 import { datePickerEmits, datePickerProps } from './date-picker'
@@ -364,6 +369,15 @@ const emit = defineEmits(datePickerEmits)
 
 const ns = useNamespace('date-picker')
 const { t } = useLocale()
+const globalTimezone = useGlobalConfig('timezone')
+const globalAutoApplyNow = useGlobalConfig('autoApplyNow')
+const resolvedTimezone = computed(() =>
+  normalizeTimeZone(props.timezone ?? globalTimezone.value),
+)
+const resolvedAutoApplyNow = computed(
+  () => props.autoApplyNow ?? globalAutoApplyNow.value,
+)
+const currentDate = computed(() => getTimeZoneNow(resolvedTimezone.value))
 
 const popperAnimation = computed(() => `${ns.b()}-fade`)
 const visible = ref(false)
@@ -386,7 +400,7 @@ const popperTrigger = computed(() =>
 )
 const themeStyle = computed(() =>
   ns.cssVar({
-    color: getVsColor(props.color),
+    color: getVsColor(props.color ?? 'primary'),
   }),
 )
 const popperStyle = computed(() => ({
@@ -425,33 +439,61 @@ const getConfigValue = (
 ) => (Array.isArray(value) ? value[index] : value)
 
 const defaultStartDate = computed(() =>
-  parseToDayjs(getConfigValue(props.defaultDate), props.valueFormat),
+  parseToDayjs(
+    getConfigValue(props.defaultDate),
+    props.valueFormat,
+    resolvedTimezone.value,
+  ),
 )
 const defaultEndDate = computed(() =>
-  parseToDayjs(getConfigValue(props.defaultDate, 1), props.valueFormat),
+  parseToDayjs(
+    getConfigValue(props.defaultDate, 1),
+    props.valueFormat,
+    resolvedTimezone.value,
+  ),
 )
 const minimumDate = computed(() =>
-  parseToDayjs(props.minDate ?? props.startDate, props.valueFormat),
+  parseToDayjs(
+    props.minDate ?? props.startDate,
+    props.valueFormat,
+    resolvedTimezone.value,
+  ),
 )
 const maximumDate = computed(() =>
-  parseToDayjs(props.maxDate ?? props.endDate, props.valueFormat),
+  parseToDayjs(
+    props.maxDate ?? props.endDate,
+    props.valueFormat,
+    resolvedTimezone.value,
+  ),
 )
 const isDateDisabled = (date: Date) => {
-  const value = dayjs(date)
+  const value = toTimeZoneWallTime(dayjs(date), resolvedTimezone.value)
   return (
-    !!props.disabledDate?.(date) ||
+    !!props.disabledDate?.(value.toDate()) ||
     !!minimumDate.value?.isAfter(value, 'day') ||
     !!maximumDate.value?.isBefore(value, 'day')
   )
 }
+const festivalInTimezone = (
+  params: Parameters<NonNullable<typeof props.festivalMethod>>[0],
+) =>
+  props.festivalMethod?.({
+    ...params,
+    date: toTimeZoneWallTime(
+      dayjs(params.date),
+      resolvedTimezone.value,
+    ).toDate(),
+  })
 
 const innerDate = ref<dayjs.Dayjs | null>(null)
 const innerEndDate = ref<dayjs.Dayjs | null>(null)
 const innerDates = ref<dayjs.Dayjs[]>([])
-const innerTime = ref<dayjs.Dayjs>(dayjs())
-const innerEndTime = ref<dayjs.Dayjs>(dayjs())
+const innerTime = ref<dayjs.Dayjs>(getTimeZoneNow(resolvedTimezone.value))
+const innerEndTime = ref<dayjs.Dayjs>(getTimeZoneNow(resolvedTimezone.value))
 const rangeStep = ref<0 | 1>(0)
-const rightPanelDate = ref(dayjs().add(1, 'month'))
+const rightPanelDate = ref(
+  getTimeZoneNow(resolvedTimezone.value).add(1, 'month'),
+)
 
 const updateStartTime = (value: dayjs.Dayjs) => {
   innerTime.value = value
@@ -464,7 +506,9 @@ const updateEndTime = (value: dayjs.Dayjs) => {
 const leftValue = computed(() =>
   isRange.value ? innerDate.value : innerDate.value,
 )
-const rightValue = computed(() => innerEndDate.value)
+const rightValue = computed(() =>
+  isRange.value ? rightPanelDate.value : innerEndDate.value,
+)
 const rangeStart = computed(() => (isRange.value ? innerDate.value : null))
 const rangeEnd = computed(() => (isRange.value ? innerEndDate.value : null))
 
@@ -475,13 +519,24 @@ const inputPlaceholder = computed(() => {
 })
 
 const parseModel = () => {
-  const defaultStartTime = parseToDayjs(getConfigValue(props.defaultTime))
-  const defaultEndTime = parseToDayjs(getConfigValue(props.defaultTime, 1))
+  const now = getTimeZoneNow(resolvedTimezone.value)
+  const defaultStartTime = parseToDayjs(
+    getConfigValue(props.defaultTime),
+    undefined,
+    resolvedTimezone.value,
+  )
+  const defaultEndTime = parseToDayjs(
+    getConfigValue(props.defaultTime, 1),
+    undefined,
+    resolvedTimezone.value,
+  )
 
   if (isMultiple.value) {
     const value = Array.isArray(props.modelValue) ? props.modelValue : []
     innerDates.value = value
-      .map((item) => parseToDayjs(item, props.valueFormat))
+      .map((item) =>
+        parseToDayjs(item, props.valueFormat, resolvedTimezone.value),
+      )
       .filter((item): item is dayjs.Dayjs => !!item?.isValid())
     innerDate.value = innerDates.value[0] || null
     innerEndDate.value = null
@@ -491,18 +546,29 @@ const parseModel = () => {
   if (isRange.value) {
     const value = props.modelValue as [Date | string, Date | string] | undefined
     if (Array.isArray(value) && value.length === 2) {
-      innerDate.value = parseToDayjs(value[0], props.valueFormat)
-      innerEndDate.value = parseToDayjs(value[1], props.valueFormat)
+      innerDate.value = parseToDayjs(
+        value[0],
+        props.valueFormat,
+        resolvedTimezone.value,
+      )
+      innerEndDate.value = parseToDayjs(
+        value[1],
+        props.valueFormat,
+        resolvedTimezone.value,
+      )
       if (innerDate.value) innerTime.value = innerDate.value
-      if (innerEndDate.value) {
-        innerEndTime.value = innerEndDate.value
-        rightPanelDate.value = innerEndDate.value.startOf('month')
-      }
+      if (innerEndDate.value) innerEndTime.value = innerEndDate.value
+      rightPanelDate.value = (innerDate.value ?? now)
+        .add(1, 'month')
+        .startOf('month')
     } else {
       innerDate.value = null
       innerEndDate.value = null
-      innerTime.value = defaultStartTime || dayjs()
-      innerEndTime.value = defaultEndTime || defaultStartTime || dayjs()
+      innerTime.value = defaultStartTime || now
+      innerEndTime.value = defaultEndTime || defaultStartTime || now
+      rightPanelDate.value =
+        defaultEndDate.value?.startOf('month') ??
+        (defaultStartDate.value ?? now).add(1, 'month').startOf('month')
     }
     return
   }
@@ -510,12 +576,15 @@ const parseModel = () => {
   innerDate.value = parseToDayjs(
     props.modelValue as Date | string | number,
     props.valueFormat,
+    resolvedTimezone.value,
   )
   if (innerDate.value) innerTime.value = innerDate.value
-  else innerTime.value = defaultStartTime || dayjs()
+  else innerTime.value = defaultStartTime || now
 }
 
-watch(() => props.modelValue, parseModel, { immediate: true })
+watch([() => props.modelValue, resolvedTimezone], parseModel, {
+  immediate: true,
+})
 
 const displayText = computed(() => {
   if (isMultiple.value) {
@@ -565,18 +634,40 @@ const buildOutput = (
   if (isRange.value) {
     if (!start || !end) return null
     return [
-      formatValue(start, displayFormat.value, props.valueFormat),
-      formatValue(end, displayFormat.value, props.valueFormat),
+      formatValue(
+        start,
+        displayFormat.value,
+        props.valueFormat,
+        resolvedTimezone.value,
+      ),
+      formatValue(
+        end,
+        displayFormat.value,
+        props.valueFormat,
+        resolvedTimezone.value,
+      ),
     ] as DatePickerValue
   }
   if (!start) return null
-  return formatValue(start, displayFormat.value, props.valueFormat)
+  return formatValue(
+    start,
+    displayFormat.value,
+    props.valueFormat,
+    resolvedTimezone.value,
+  )
 }
 
 const buildMultipleOutput = (): DatePickerValue =>
   innerDates.value
-    .map((value) => formatValue(value, displayFormat.value, props.valueFormat))
-    .filter((value): value is Date | string => value !== null)
+    .map((value) =>
+      formatValue(
+        value,
+        displayFormat.value,
+        props.valueFormat,
+        resolvedTimezone.value,
+      ),
+    )
+    .filter((value): value is Date | string | number => value !== null)
 
 const isSamePickedValue = (left: dayjs.Dayjs, right: dayjs.Dayjs) => {
   if (props.type === 'week') return left.isSame(right, 'week')
@@ -635,6 +726,7 @@ const handlePick = (date: dayjs.Dayjs) => {
       innerDate.value = picked
       innerTime.value = picked
       innerEndDate.value = null
+      rightPanelDate.value = picked.add(1, 'month').startOf('month')
       rangeStep.value = 1
       return
     }
@@ -658,10 +750,6 @@ const handlePick = (date: dayjs.Dayjs) => {
     innerEndDate.value = end
     if (isDateTimeRange.value) rangePickerMode.value = 'time'
 
-    if (!showTimePanel.value) {
-      emitValue(buildOutput(start, end))
-      if (shouldAutoClose.value) visible.value = false
-    }
     rangeStep.value = 0
     return
   }
@@ -717,32 +805,55 @@ const handleShortcut = (shortcut: DateShortcut) => {
     typeof shortcut.value === 'function' ? shortcut.value() : shortcut.value
 
   if (Array.isArray(value)) {
-    innerDate.value = dayjs(value[0])
-    innerEndDate.value = dayjs(value[1])
+    innerDate.value = parseToDayjs(value[0], undefined, resolvedTimezone.value)
+    innerEndDate.value = parseToDayjs(
+      value[1],
+      undefined,
+      resolvedTimezone.value,
+    )
     emitValue(buildOutput(innerDate.value, innerEndDate.value))
     visible.value = false
     return
   }
 
-  const picked = dayjs(value)
+  const picked = parseToDayjs(value, undefined, resolvedTimezone.value)
+  if (!picked) return
   innerDate.value = picked
   emitValue(buildOutput(picked))
   visible.value = false
 }
 
 const handleNow = () => {
-  const now = dayjs()
+  const now = getTimeZoneNow(resolvedTimezone.value)
+
+  if (!isRange.value && !showTimePanel.value && !isMultiple.value) {
+    innerDate.value = now
+    emitValue(buildOutput(now))
+    visible.value = false
+    return
+  }
+
   if (isMultiple.value) {
     innerDates.value = [now]
     innerDate.value = now
-    emitValue(buildMultipleOutput())
+    if (resolvedAutoApplyNow.value !== false) {
+      emitValue(buildMultipleOutput())
+      if (resolvedAutoApplyNow.value) visible.value = false
+    }
     return
   }
+
   innerDate.value = now
   innerTime.value = now
   innerEndTime.value = now
-  if (!isRange.value && !showTimePanel.value) {
-    emitValue(buildOutput(now))
+
+  if (resolvedAutoApplyNow.value) {
+    if (isRange.value) {
+      innerEndDate.value = now
+      emitValue(buildOutput(now, now))
+    } else {
+      emitValue(buildOutput(now))
+    }
     visible.value = false
   }
 }
@@ -759,7 +870,7 @@ const handleClear = () => {
 const handleInput = (value: string | number | null | undefined) => {
   if (!props.editable) return
   const text = value == null ? '' : String(value)
-  const parsed = parseToDayjs(text, displayFormat.value)
+  const parsed = parseToDayjs(text, displayFormat.value, resolvedTimezone.value)
   if (parsed?.isValid()) {
     innerDate.value = parsed
     emitValue(buildOutput(parsed))
@@ -779,15 +890,11 @@ const handleRangeInput = (
     return
   }
 
-  const parsed = parseToDayjs(text, displayFormat.value)
+  const parsed = parseToDayjs(text, displayFormat.value, resolvedTimezone.value)
   if (!parsed?.isValid() || isDateDisabled(parsed.toDate())) return
 
   if (part === 'start') innerDate.value = parsed
   else innerEndDate.value = parsed
-
-  if (innerDate.value && innerEndDate.value) {
-    emitValue(buildOutput(innerDate.value, innerEndDate.value))
-  }
 }
 
 const handleLeftPanelChange = (date: dayjs.Dayjs) => {

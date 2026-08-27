@@ -137,6 +137,16 @@ PROPS:
 
         const active = ref<boolean>(true);
       </script>
+EVENTS:
+  - name: update:modelValue
+    type: Boolean
+    description: 警告提示的显示状态变化时触发。
+  - name: update:page
+    type: Number
+    description: 分页提示内容切换页码时触发。
+  - name: update:hiddenContent
+    type: Boolean
+    description: 可展开内容隐藏或显示时触发。
 SLOTS:
   - name: icon
     type: slot
@@ -565,11 +575,5 @@ UPDATES:
 @[code{16-36} html{5-6}](../../.vuepress/components/alert/time.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API
 
 </card>

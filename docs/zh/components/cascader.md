@@ -173,5 +173,3 @@ SLOTS:
 </template>
 
 </card>
-
-## API

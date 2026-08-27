@@ -7,11 +7,11 @@ export const enNavbar: NavbarConfig = [
     link: `/guide/`,
     children: [
       { text: `Introduction`, link: `/guide/` },
-      { text: `Getting Started`, link: `/guide/getting-started` },
+      { text: `Getting Started`, link: `/guide/getting-started.html` },
       { text: `Using Components`, link: `/guide/using-components` },
       { text: `Configuration`, link: `/guide/configuration` },
       { text: `Playground`, link: `/guide/playground` },
-      { text: `Usage with Nuxt`, link: `/guide/nuxt` },
+      { text: `Usage with Nuxt`, link: `/guide/nuxt.html` },
     ],
   },
   {

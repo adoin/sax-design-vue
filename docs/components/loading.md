@@ -346,9 +346,3 @@ Ensure the target's style was set position
 </template>
 
 </card>
-
-<card>
-
-## API
-
-</card>

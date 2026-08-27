@@ -3,6 +3,7 @@ import {
   applyThemeConfig,
   buildProps,
   definePropType,
+  isValidTimeZone,
 } from '@vuesax-alpha/utils'
 import { defaultNamespace, provideGlobalConfig } from '@vuesax-alpha/hooks'
 
@@ -35,6 +36,16 @@ export const configProviderProps = buildProps({
    */
   locale: {
     type: definePropType<Language>(Object),
+  },
+  /** Default IANA time zone used by date and time components. */
+  timezone: {
+    type: String,
+    validator: (value: string) => isValidTimeZone(value),
+  },
+  /** Whether the "Now" action immediately commits and closes date/time pickers. */
+  autoApplyNow: {
+    type: Boolean,
+    default: undefined,
   },
 } as const)
 

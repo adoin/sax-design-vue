@@ -16,7 +16,6 @@ export const additionalComponentNavItems: SidebarItem[] = [
   { text: 'Control group', link: '/components/control-group' },
   { text: 'Countdown', link: '/components/countdown' },
   { text: 'Date panel', link: '/components/date-panel' },
-  { text: 'Date range picker', link: '/components/date-range-picker' },
   { text: 'Divider', link: '/components/divider' },
   { text: 'Drawer', link: '/components/drawer' },
   { text: 'Empty', link: '/components/empty' },

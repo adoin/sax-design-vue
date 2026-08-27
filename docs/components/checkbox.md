@@ -1,5 +1,5 @@
 ---
-description: "Choose one or more boolean options."
+description: 'Choose one or more boolean options.'
 PROPS:
   - name: disabled / max / not-value
     type: Boolean / Number / String | Number | Boolean
@@ -161,6 +161,16 @@ PROPS:
         </s-checkbox>
       </template>
 
+EVENTS:
+  - name: update:modelValue / change
+    type: CheckboxModelType | CheckboxGroupValueType
+    description: Fire when a Checkbox or CheckboxGroup value changes.
+  - name: update:activeKey / tabChange
+    type: String | Number
+    description: Fire when CheckboxGroupTabs activates another tab.
+  - name: CheckboxGroupTabs change
+    type: '(value: CheckboxGroupTabsModelValue, activeKey: String | Number)'
+    description: Fires with the complete grouped value and active tab after a tabbed selection changes.
 SLOTS:
   - name: icon
     type: slot
@@ -533,20 +543,18 @@ There are some cases where you have several checkboxes and you need one that man
 
 <card>
 
-## API
-
 ### CheckboxGroup
 
-| Property | Type | Default | Description |
-| --- | --- | --- | --- |
-| `v-model` | `CheckboxValue[]` | `[]` | Flat array containing every selected child value. |
-| `options` | `(CheckboxGroupOption \| CheckboxGroupSection)[]` | `[]` | Data-driven options; an item with `options` becomes a selectable section. |
-| `columns` | `number` | `1` | Default column count. A section can override it with its own `columns`. |
-| `gap` | `number \| string` | `12` | Row and column gap. Numbers are treated as pixels. |
-| `disabled-values` | `CheckboxValue[]` | `[]` | Disable child values and preserve them during section select/clear actions. |
-| `disabled-group-values` | `CheckboxValue[]` | `[]` | Disable select-all for the specified sections. |
-| `disabled` | `boolean` | `false` | Disable the whole group. |
-| `min` / `max` | `number` | `-` | Minimum and maximum selected value counts. |
+| Property                | Type                                              | Default | Description                                                                 |
+| ----------------------- | ------------------------------------------------- | ------- | --------------------------------------------------------------------------- |
+| `v-model`               | `CheckboxValue[]`                                 | `[]`    | Flat array containing every selected child value.                           |
+| `options`               | `(CheckboxGroupOption \| CheckboxGroupSection)[]` | `[]`    | Data-driven options; an item with `options` becomes a selectable section.   |
+| `columns`               | `number`                                          | `1`     | Default column count. A section can override it with its own `columns`.     |
+| `gap`                   | `number \| string`                                | `12`    | Row and column gap. Numbers are treated as pixels.                          |
+| `disabled-values`       | `CheckboxValue[]`                                 | `[]`    | Disable child values and preserve them during section select/clear actions. |
+| `disabled-group-values` | `CheckboxValue[]`                                 | `[]`    | Disable select-all for the specified sections.                              |
+| `disabled`              | `boolean`                                         | `false` | Disable the whole group.                                                    |
+| `min` / `max`           | `number`                                          | `-`     | Minimum and maximum selected value counts.                                  |
 
 `CheckboxGroupOption` supports `label`, `value`, `disabled`, and `description`. `CheckboxGroupSection` supports `label`, `value`, `options`, `disabled`, and `columns`.
 Child `value` entries must remain unique within a CheckboxGroup or tab.
@@ -555,14 +563,14 @@ Events: `update:modelValue(value)` and `change(value)`. Slots: `option`, `group-
 
 ### CheckboxGroupTabs
 
-| Property | Type | Default | Description |
-| --- | --- | --- | --- |
-| `v-model` | `Record<string, CheckboxValue[]>` | `{}` | Selected values stored independently by tab value. |
-| `tabs` | `CheckboxGroupTab[]` | `[]` | Tabs containing `label`, `value`, and grouped `options`. |
-| `active-key` / `v-model:active-key` | `string \| number` | First enabled tab | Active tab. |
-| `columns` | `number` | `2` | Default content column count. |
-| `gap` | `number \| string` | `12` | Content row and column gap. |
-| `disabled` | `boolean` | `false` | Disable every tab and option. |
+| Property                            | Type                              | Default           | Description                                              |
+| ----------------------------------- | --------------------------------- | ----------------- | -------------------------------------------------------- |
+| `v-model`                           | `Record<string, CheckboxValue[]>` | `{}`              | Selected values stored independently by tab value.       |
+| `tabs`                              | `CheckboxGroupTab[]`              | `[]`              | Tabs containing `label`, `value`, and grouped `options`. |
+| `active-key` / `v-model:active-key` | `string \| number`                | First enabled tab | Active tab.                                              |
+| `columns`                           | `number`                          | `2`               | Default content column count.                            |
+| `gap`                               | `number \| string`                | `12`              | Content row and column gap.                              |
+| `disabled`                          | `boolean`                         | `false`           | Disable every tab and option.                            |
 
 Events: `update:modelValue(value)`, `change(value, activeKey)`, `update:activeKey(activeKey)`, and `tabChange(activeKey)`. Slots: `tab`, `option`, `group-label`, and `empty`.
 

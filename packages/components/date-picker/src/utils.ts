@@ -4,6 +4,7 @@ import isoWeek from 'dayjs/plugin/isoWeek.js'
 import weekOfYear from 'dayjs/plugin/weekOfYear.js'
 import weekYear from 'dayjs/plugin/weekYear.js'
 import advancedFormat from 'dayjs/plugin/advancedFormat.js'
+import { formatDateTimeValue, parseDateTime } from '@vuesax-alpha/utils'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(isoWeek)
@@ -99,26 +100,15 @@ export const getDefaultFormat = (type: DatePickerType) => {
 export const parseToDayjs = (
   value: Date | string | number | null | undefined,
   format?: string,
-) => {
-  if (value === null || value === undefined || value === '') return null
-  if (value instanceof Date) return dayjs(value)
-  if (typeof value === 'number') return dayjs(value)
-  if (format) {
-    const parsed = dayjs(value, format, true)
-    return parsed.isValid() ? parsed : dayjs(value)
-  }
-  return dayjs(value)
-}
+  timezone?: string,
+) => parseDateTime(value, format, timezone)
 
 export const formatValue = (
   date: dayjs.Dayjs | null,
-  format: string,
+  _format: string,
   valueFormat?: string,
-) => {
-  if (!date || !date.isValid()) return null
-  if (valueFormat) return date.format(valueFormat)
-  return date.toDate()
-}
+  timezone?: string,
+) => formatDateTimeValue(date, valueFormat, timezone)
 
 export const formatDisplay = (
   date: dayjs.Dayjs | null,
