@@ -1,6 +1,6 @@
 import { defineClientConfig } from '@vuepress/client'
 
-import SaxDesignVue from 'sax-design-vue'
+import SaxDesignVue, { ID_INJECTION_KEY } from 'sax-design-vue'
 import '@vuesax-alpha/theme-chalk/src/index.scss'
 import '@vuesax-alpha/theme-chalk/src/dark/css-vars.scss'
 
@@ -35,6 +35,10 @@ const rewriteRootUrls = () => {
 
 export default defineClientConfig({
   enhance({ app }) {
+    app.provide(ID_INJECTION_KEY, {
+      prefix: 1,
+      current: 0,
+    })
     // @ts-expect-error
     app.use(SaxDesignVue)
   },

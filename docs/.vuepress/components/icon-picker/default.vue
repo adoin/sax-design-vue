@@ -48,8 +48,8 @@ const openPicker = async () => {
   const svg = await SIconPicker({
     locale: locale.value,
     title: isZh.value ? '插入图标' : 'Insert icon',
+    output: 'svg',
     color: '#5667F4',
-    size: 28,
     showAlpha: true,
     predefine: [
       { name: isZh.value ? '品牌蓝' : 'Brand blue', value: '#5667F4' },

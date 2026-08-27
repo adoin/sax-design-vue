@@ -192,7 +192,7 @@ export default {
     },
     iconPicker: {
       title: 'Insert icon',
-      description: 'Choose an icon and color to generate standalone SVG code.',
+      description: 'Choose an icon, color, and size for the required output.',
       search: 'Search icons',
       empty: 'No icons found',
       emptyHint: 'Try another name or collection prefix',
@@ -201,6 +201,9 @@ export default {
       resultCount: '{count} icons',
       noSelection: 'No icon selected',
       color: 'Icon color',
+      size: 'Icon size',
+      sizeHint: 'Available range: 8–256 px',
+      confirm: 'Confirm selection',
       insert: 'Insert SVG',
       cancel: 'Cancel',
     },

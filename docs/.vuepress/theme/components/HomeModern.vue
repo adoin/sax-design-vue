@@ -17,123 +17,134 @@
         </div>
       </div>
 
-      <section class="component-gallery" :aria-label="copy.gallery">
-        <s-tabs v-model="activeGalleryTab" alignment="fixed">
-          <s-tab :label="copy.all" />
-          <s-tab :label="copy.dataEntry" />
-          <s-tab :label="copy.feedback" />
-          <s-tab :label="copy.navigation" />
-        </s-tabs>
+      <ClientOnly>
+        <section class="component-gallery" :aria-label="copy.gallery">
+          <s-tabs v-model="activeGalleryTab" alignment="fixed">
+            <s-tab :label="copy.all" />
+            <s-tab :label="copy.dataEntry" />
+            <s-tab :label="copy.feedback" />
+            <s-tab :label="copy.navigation" />
+          </s-tabs>
 
-        <div
-          :key="galleryMode"
-          class="component-gallery__grid"
-          :class="`component-gallery__grid--${galleryMode}`"
-        >
-          <template
-            v-if="galleryMode === 'all' || galleryMode === 'data-entry'"
+          <div
+            :key="galleryMode"
+            class="component-gallery__grid"
+            :class="`component-gallery__grid--${galleryMode}`"
           >
-            <div class="gallery-control gallery-control--select">
-              <label>{{ copy.select }}</label>
-              <s-select v-model="selectedFramework" :options="frameworks" />
-            </div>
-
-            <div class="gallery-control gallery-control--date">
-              <label>{{ copy.datePicker }}</label>
-              <s-date-picker v-model="demoDate" />
-            </div>
-
-            <div class="gallery-control gallery-control--slider">
-              <label>{{ copy.slider }}</label>
-              <div class="slider-row">
-                <s-slider v-model="sliderValue" />
-                <span>{{ sliderValue }}</span>
+            <template
+              v-if="galleryMode === 'all' || galleryMode === 'data-entry'"
+            >
+              <div class="gallery-control gallery-control--select">
+                <label>{{ copy.select }}</label>
+                <s-select v-model="selectedFramework" :options="frameworks" />
               </div>
-            </div>
 
-            <div class="gallery-control gallery-control--switch">
-              <label>{{ copy.switch }}</label>
-              <s-switch v-model="demoSwitch" />
-            </div>
-          </template>
-
-          <template v-if="galleryMode === 'all' || galleryMode === 'feedback'">
-            <div class="gallery-control gallery-control--actions">
-              <label>{{ copy.button }}</label>
-              <div class="gallery-buttons">
-                <s-button size="small">{{ copy.primary }}</s-button>
-                <s-button size="small" type="border">{{
-                  copy.secondary
-                }}</s-button>
+              <div class="gallery-control gallery-control--date">
+                <label>{{ copy.datePicker }}</label>
+                <s-date-picker v-model="demoDate" />
               </div>
-            </div>
-          </template>
 
-          <template v-if="galleryMode === 'all' || galleryMode === 'feedback'">
-            <div class="gallery-control gallery-control--chips">
-              <label>{{ copy.chips }}</label>
-              <div class="gallery-chips">
-                <s-chip color="warning" tag-style="mark" round icon="bookmark">
-                  {{ copy.chipRelease }}
-                </s-chip>
-                <s-chip
-                  color="primary"
-                  tag-style="arrow"
-                  round
-                  icon="play_arrow"
-                >
-                  {{ copy.chipForward }}
-                </s-chip>
-                <s-chip
-                  color="success"
-                  tag-style="dashed"
-                  round
-                  icon="verified"
-                >
-                  {{ copy.chipVerified }}
-                </s-chip>
+              <div class="gallery-control gallery-control--slider">
+                <label>{{ copy.slider }}</label>
+                <div class="slider-row">
+                  <s-slider v-model="sliderValue" />
+                  <span>{{ sliderValue }}</span>
+                </div>
               </div>
-            </div>
-          </template>
 
-          <template v-if="galleryMode === 'navigation'">
-            <div class="gallery-control gallery-control--navigation">
-              <label>{{ copy.navigation }}</label>
-              <div class="gallery-buttons">
-                <s-button
-                  size="small"
-                  @click="go('/guide/getting-started.html')"
-                >
-                  {{ copy.docs }}
-                </s-button>
+              <div class="gallery-control gallery-control--switch">
+                <label>{{ copy.switch }}</label>
+                <s-switch v-model="demoSwitch" />
+              </div>
+            </template>
+
+            <template
+              v-if="galleryMode === 'all' || galleryMode === 'feedback'"
+            >
+              <div class="gallery-control gallery-control--actions">
+                <label>{{ copy.button }}</label>
+                <div class="gallery-buttons">
+                  <s-button size="small">{{ copy.primary }}</s-button>
+                  <s-button size="small" type="border">{{
+                    copy.secondary
+                  }}</s-button>
+                </div>
+              </div>
+            </template>
+
+            <template
+              v-if="galleryMode === 'all' || galleryMode === 'feedback'"
+            >
+              <div class="gallery-control gallery-control--chips">
+                <label>{{ copy.chips }}</label>
+                <div class="gallery-chips">
+                  <s-chip
+                    color="warning"
+                    tag-style="mark"
+                    round
+                    icon="bookmark"
+                  >
+                    {{ copy.chipRelease }}
+                  </s-chip>
+                  <s-chip
+                    color="primary"
+                    tag-style="arrow"
+                    round
+                    icon="play_arrow"
+                  >
+                    {{ copy.chipForward }}
+                  </s-chip>
+                  <s-chip
+                    color="success"
+                    tag-style="dashed"
+                    round
+                    icon="verified"
+                  >
+                    {{ copy.chipVerified }}
+                  </s-chip>
+                </div>
+              </div>
+            </template>
+
+            <template v-if="galleryMode === 'navigation'">
+              <div class="gallery-control gallery-control--navigation">
+                <label>{{ copy.navigation }}</label>
+                <div class="gallery-buttons">
+                  <s-button
+                    size="small"
+                    @click="go('/guide/getting-started.html')"
+                  >
+                    {{ copy.docs }}
+                  </s-button>
+                  <s-button
+                    size="small"
+                    type="border"
+                    @click="go('/components/')"
+                  >
+                    {{ copy.components }}
+                  </s-button>
+                </div>
+              </div>
+
+              <div class="gallery-control gallery-control--navigation">
+                <label>{{ copy.playground }}</label>
                 <s-button
                   size="small"
                   type="border"
-                  @click="go('/components/')"
+                  @click="go('/guide/playground')"
                 >
-                  {{ copy.components }}
+                  {{ copy.open }}
                 </s-button>
               </div>
-            </div>
+            </template>
 
-            <div class="gallery-control gallery-control--navigation">
-              <label>{{ copy.playground }}</label>
-              <s-button
-                size="small"
-                type="border"
-                @click="go('/guide/playground')"
-              >
-                {{ copy.open }}
-              </s-button>
+            <div class="gallery-control gallery-control--code">
+              <label>{{ copy.code }}</label>
+              <pre><code>{{ galleryCode }}</code></pre>
             </div>
-          </template>
-
-          <div class="gallery-control gallery-control--code">
-            <label>{{ copy.code }}</label>
-            <pre><code>{{ galleryCode }}</code></pre>
           </div>
-        </div>
-      </section>
+        </section>
+      </ClientOnly>
     </section>
 
     <section class="home-modern__paths" :aria-label="copy.paths">
@@ -155,7 +166,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ClientOnly, useRouter } from '@vuepress/client'
 import { useDocLocale } from '../composables/docLocale'
 import Footer from './Footer.vue'
 

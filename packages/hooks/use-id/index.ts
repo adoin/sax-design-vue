@@ -16,8 +16,9 @@ const defaultIdInjection = {
   current: 0,
 }
 
-export const ID_INJECTION_KEY: InjectionKey<IdInjectionContext> =
-  Symbol('IdInjection')
+export const ID_INJECTION_KEY: InjectionKey<IdInjectionContext> = Symbol.for(
+  'sax-design-vue.id-injection',
+)
 
 export const useIdInjection = (): IdInjectionContext => {
   return getCurrentInstance()
@@ -34,7 +35,7 @@ export const useId = (deterministicId?: MaybeRef<string>): Ref<string> => {
 usage: app.provide(ID_INJECTION_KEY, {
   prefix: number,
   current: number,
-})`
+})`,
     )
   }
 
@@ -42,7 +43,7 @@ usage: app.provide(ID_INJECTION_KEY, {
   const idRef = computed(
     () =>
       unref(deterministicId) ||
-      `${namespace.value}-id-${idInjection.prefix}-${idInjection.current++}`
+      `${namespace.value}-id-${idInjection.prefix}-${idInjection.current++}`,
   )
 
   return idRef

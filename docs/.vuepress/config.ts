@@ -19,6 +19,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projRoot = path.resolve(__dirname, '../..')
 const pkgRoot = path.resolve(projRoot, 'packages')
 const vsRoot = path.resolve(pkgRoot, 'sax-design-vue')
+const vuepressBase = process.env.VUEPRESS_BASE || '/'
 
 export default defineUserConfig({
   bundler: viteBundler({
@@ -47,6 +48,11 @@ export default defineUserConfig({
         chunkSizeWarningLimit: 1500,
       },
       resolve: {
+        // pnpm can expose multiple virtual vue-router instances when their
+        // optional peer sets differ. They carry different injection symbols,
+        // so the production bundle must resolve Vue and Vue Router from one
+        // canonical module instance.
+        dedupe: ['vue', 'vue-router'],
         alias: [
           {
             find: /^sax-design-vue-iconify$/,
@@ -89,7 +95,7 @@ export default defineUserConfig({
   },
   lang: 'en-US',
   title: 'Sax Design Vue',
-  base: process.env.VUEPRESS_BASE || '/',
+  base: vuepressBase,
   head: [
     [
       'link',
@@ -117,7 +123,7 @@ export default defineUserConfig({
       'link',
       {
         rel: 'icon',
-        href: `/sax-logo-mark.svg`,
+        href: `${vuepressBase}sax-logo-mark.svg`,
         media: '(prefers-color-scheme:dark)',
         type: 'image/svg+xml',
       },
@@ -126,7 +132,7 @@ export default defineUserConfig({
       'link',
       {
         rel: 'icon',
-        href: `/sax-logo-mark.svg`,
+        href: `${vuepressBase}sax-logo-mark.svg`,
         media: '(prefers-color-scheme:light)',
         type: 'image/svg+xml',
       },

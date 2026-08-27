@@ -15,6 +15,7 @@ import IconPickerPanel from '../src/icon-picker-panel.vue'
 import iconPicker from '../src/icon-picker-service'
 import {
   DEFAULT_ICON_LIST,
+  createIconPickerSelection,
   createIconSvg,
   normalizeIconList,
 } from '../src/icon-picker'
@@ -72,6 +73,14 @@ describe('IconPicker', () => {
     expect(svg).toContain('role="img"')
     expect(svg).toContain('aria-label="Home"')
     expect(svg).not.toContain('currentColor')
+
+    expect(
+      createIconPickerSelection({
+        name: 'cb:home',
+        color: '#12AABB',
+        size: 28,
+      }),
+    ).toMatchObject({ code: 'cb:home', color: '#12AABB', size: 28 })
   })
 
   it('returns undefined for unavailable icons or invalid colors', () => {
@@ -119,13 +128,46 @@ describe('IconPicker', () => {
       '[role="option"][aria-label="cb:home"]',
     )
     expect(option).not.toBeNull()
-    expect(document.body.textContent).toContain('选择图标和颜色')
+    expect(document.body.textContent).toContain('选择图标、颜色和尺寸')
     expect(document.body.textContent).toContain('插入 SVG')
+    expect(document.querySelector('input[type="number"]')).toBeNull()
     option?.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }))
 
     const svg = await pending
     expect(svg).toContain('width="32"')
     expect(svg).toContain('fill="#334455"')
     expect(document.querySelector('.s-icon-picker__body')).toBeNull()
+  })
+
+  it('returns compact code data and lets the user choose size when omitted', async () => {
+    const pending = iconPicker({
+      locale: zhCn,
+      output: 'code',
+      iconList: ['cb:home'],
+      color: '#334455',
+    })
+
+    await nextTick()
+    const sizeInput = document.querySelector<HTMLInputElement>(
+      'input[type="number"]',
+    )
+    const option = document.querySelector<HTMLButtonElement>(
+      '[role="option"][aria-label="cb:home"]',
+    )
+
+    expect(sizeInput?.value).toBe('24')
+    expect(document.body.textContent).toContain('确认选择')
+    if (!sizeInput) throw new Error('Expected a size input')
+    sizeInput.value = '40'
+    sizeInput.dispatchEvent(new Event('input', { bubbles: true }))
+    sizeInput.dispatchEvent(new Event('change', { bubbles: true }))
+    await nextTick()
+    option?.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }))
+
+    await expect(pending).resolves.toEqual({
+      code: 'cb:home',
+      color: '#334455',
+      size: 40,
+    })
   })
 })

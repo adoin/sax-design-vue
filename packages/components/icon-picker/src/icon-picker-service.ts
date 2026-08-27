@@ -2,13 +2,22 @@ import { createVNode, render } from 'vue'
 import { SConfigProvider } from '@vuesax-alpha/components/config-provider'
 import { isClient } from '@vuesax-alpha/utils'
 import IconPickerConstructor from './icon-picker.vue'
-import type { IconPickerOptions } from './icon-picker'
+import type {
+  IconPickerCodeOptions,
+  IconPickerCodeResult,
+  IconPickerOptions,
+  IconPickerResult,
+  IconPickerSelection,
+  IconPickerSvgOptions,
+} from './icon-picker'
 import type { SFCInstallWithContext } from '@vuesax-alpha/utils'
 
 import '../style'
 
 export interface IconPickerFn {
-  (options?: IconPickerOptions): Promise<string | undefined>
+  (options: IconPickerCodeOptions): Promise<IconPickerCodeResult | undefined>
+  (options?: IconPickerSvgOptions): Promise<string | undefined>
+  (options: IconPickerOptions): Promise<IconPickerResult | undefined>
 }
 
 let closeActive: (() => void) | undefined
@@ -20,8 +29,8 @@ const iconPicker = ((options: IconPickerOptions = {}) => {
   const container = document.createElement('div')
   document.body.appendChild(container)
 
-  return new Promise<string | undefined>((resolve) => {
-    let result: string | undefined
+  return new Promise<IconPickerResult | undefined>((resolve) => {
+    let result: IconPickerResult | undefined
     let settled = false
 
     const finish = () => {
@@ -34,7 +43,7 @@ const iconPicker = ((options: IconPickerOptions = {}) => {
     }
 
     closeActive = finish
-    const { locale, ...dialogOptions } = options
+    const { locale, output = 'svg', ...dialogOptions } = options
     const vm = createVNode(
       SConfigProvider,
       { locale },
@@ -43,7 +52,17 @@ const iconPicker = ((options: IconPickerOptions = {}) => {
           createVNode(IconPickerConstructor, {
             ...dialogOptions,
             locale,
-            onConfirm: (svg: string) => (result = svg),
+            output,
+            onConfirm: (selection: IconPickerSelection) => {
+              result =
+                output === 'code'
+                  ? {
+                      code: selection.code,
+                      color: selection.color,
+                      size: selection.size,
+                    }
+                  : selection.svg
+            },
             onCancel: () => (result = undefined),
             onClosed: finish,
           }),

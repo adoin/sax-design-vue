@@ -174,7 +174,7 @@ export default {
     },
     iconPicker: {
       title: '插入图标',
-      description: '选择图标和颜色，生成可独立保存的 SVG 代码。',
+      description: '选择图标、颜色和尺寸，生成需要的图标数据。',
       search: '搜索图标',
       empty: '未找到图标',
       emptyHint: '请尝试其他名称或图标集前缀',
@@ -183,6 +183,9 @@ export default {
       resultCount: '{count} 个图标',
       noSelection: '尚未选择图标',
       color: '图标颜色',
+      size: '图标尺寸',
+      sizeHint: '可选范围 8–256 px',
+      confirm: '确认选择',
       insert: '插入 SVG',
       cancel: '取消',
     },

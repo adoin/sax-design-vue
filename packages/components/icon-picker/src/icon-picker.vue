@@ -4,10 +4,14 @@ import { SButton } from '@vuesax-alpha/components/button'
 import { SColorPicker } from '@vuesax-alpha/components/color-picker'
 import { SDialog } from '@vuesax-alpha/components/dialog'
 import { SIcon } from '@vuesax-alpha/components/icon'
+import { SInputNumber } from '@vuesax-alpha/components/input-number'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import IconPickerPanel from './icon-picker-panel.vue'
 import {
-  createIconSvg,
+  ICON_PICKER_DEFAULT_SIZE,
+  ICON_PICKER_MAX_SIZE,
+  ICON_PICKER_MIN_SIZE,
+  createIconPickerSelection,
   iconPickerEmits,
   iconPickerProps,
   normalizeIconList,
@@ -27,15 +31,26 @@ const selectedIcon = shallowRef(
   availableIcons.value.includes(props.initialIcon) ? props.initialIcon : '',
 )
 const selectedColor = shallowRef(props.color)
-const svgCode = computed(() =>
+const selectedSize = shallowRef(props.size ?? ICON_PICKER_DEFAULT_SIZE)
+const selection = computed(() =>
   selectedIcon.value
-    ? createIconSvg({
+    ? createIconPickerSelection({
         name: selectedIcon.value,
         color: selectedColor.value,
-        size: props.size,
+        size: selectedSize.value,
         label: props.label,
       })
     : undefined,
+)
+const previewSize = computed(() => Math.min(selectedSize.value, 96))
+const confirmLabel = computed(
+  () =>
+    props.confirmText ||
+    t(
+      props.output === 'code'
+        ? 'vs.iconPicker.confirm'
+        : 'vs.iconPicker.insert',
+    ),
 )
 
 const close = () => (visible.value = false)
@@ -45,14 +60,14 @@ const cancel = () => {
 }
 const confirm = (icon = selectedIcon.value) => {
   selectedIcon.value = icon
-  const svg = createIconSvg({
+  const selection = createIconPickerSelection({
     name: icon,
     color: selectedColor.value,
-    size: props.size,
+    size: selectedSize.value,
     label: props.label,
   })
-  if (!svg) return
-  emit('confirm', svg)
+  if (!selection) return
+  emit('confirm', selection)
   close()
 }
 </script>
@@ -98,19 +113,37 @@ const confirm = (icon = selectedIcon.value) => {
         @confirm="confirm"
       />
 
-      <aside :class="ns.e('settings')">
+      <aside
+        :class="[
+          ns.e('settings'),
+          ns.is('size-selectable', size === undefined),
+        ]"
+      >
         <div :class="ns.e('preview')" aria-live="polite">
           <SIcon
             v-if="selectedIcon"
             :name="selectedIcon"
             :color="selectedColor"
-            size="72"
+            :size="previewSize"
           />
           <SIcon v-else name="cb:image" size="38" />
         </div>
         <div :class="ns.e('selection')">
           <strong>{{ selectedIcon || t('vs.iconPicker.noSelection') }}</strong>
-          <span>{{ size }} × {{ size }} SVG</span>
+          <span>{{ selectedSize }} × {{ selectedSize }}</span>
+        </div>
+        <div v-if="size === undefined" :class="ns.e('size-field')">
+          <SInputNumber
+            v-model="selectedSize"
+            color="text"
+            :label="t('vs.iconPicker.size')"
+            :min="ICON_PICKER_MIN_SIZE"
+            :max="ICON_PICKER_MAX_SIZE"
+            :step="1"
+            :precision="0"
+            :value-on-clear="ICON_PICKER_DEFAULT_SIZE"
+          />
+          <span>{{ t('vs.iconPicker.sizeHint') }}</span>
         </div>
         <label :class="ns.e('color-field')">
           <span>{{ t('vs.iconPicker.color') }}</span>
@@ -127,9 +160,9 @@ const confirm = (icon = selectedIcon.value) => {
       <SButton type="flat" @click="cancel">
         {{ cancelText || t('vs.iconPicker.cancel') }}
       </SButton>
-      <SButton :disabled="!svgCode" @click="confirm()">
+      <SButton :disabled="!selection" @click="confirm()">
         <SIcon name="cb:add" />
-        {{ confirmText || t('vs.iconPicker.insert') }}
+        {{ confirmLabel }}
       </SButton>
     </footer>
   </SDialog>

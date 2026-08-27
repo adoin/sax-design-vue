@@ -355,6 +355,36 @@
   }
 }
 
+.s-icon-picker__size-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6px;
+
+  .s-input-number {
+    @include set-var-value(('input-number', 'control-width'), 44px);
+
+    width: 100%;
+    min-height: 44px;
+    background: getColor(background);
+    box-shadow:
+      0 0 0 1px getColor(text, 0.08) inset,
+      0 8px 18px getColor(text, 0.04);
+  }
+
+  .s-input-number__increase,
+  .s-input-number__decrease {
+    top: 0;
+    bottom: 0;
+  }
+
+  > span {
+    color: getColor(text, secondary);
+    font-size: 10px;
+    line-height: 1.4;
+  }
+}
+
 .s-icon-picker__footer {
   display: flex;
   align-items: center;
@@ -390,6 +420,10 @@
   .s-icon-picker__preview {
     min-height: 104px;
     grid-row: span 2;
+  }
+
+  .s-icon-picker__settings.is-size-selectable .s-icon-picker__preview {
+    grid-row: span 3;
   }
 
   .s-icon-picker__grid {

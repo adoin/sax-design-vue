@@ -18,17 +18,19 @@
       v-if="$slots.template || $slots.script || $slots.style"
       class="slotcode"
     >
-      <Codex :codesandbox="codesandbox" :codepen="codepen">
-        <template v-if="$slots.template" #template>
-          <slot name="template" />
-        </template>
-        <template v-if="$slots.script" #script>
-          <slot name="script" />
-        </template>
-        <template v-if="$slots.style" #style>
-          <slot name="style" />
-        </template>
-      </Codex>
+      <ClientOnly>
+        <Codex :codesandbox="codesandbox" :codepen="codepen">
+          <template v-if="$slots.template" #template>
+            <slot name="template" />
+          </template>
+          <template v-if="$slots.script" #script>
+            <slot name="script" />
+          </template>
+          <template v-if="$slots.style" #style>
+            <slot name="style" />
+          </template>
+        </Codex>
+      </ClientOnly>
     </div>
   </div>
 </template>

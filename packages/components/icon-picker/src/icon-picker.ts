@@ -10,6 +10,12 @@ import type { ColorPickerPresetInput } from '@vuesax-alpha/components/color-pick
 import type { Language } from '@vuesax-alpha/locale'
 import type IconPicker from './icon-picker.vue'
 
+export const ICON_PICKER_DEFAULT_SIZE = 24
+export const ICON_PICKER_MIN_SIZE = 8
+export const ICON_PICKER_MAX_SIZE = 256
+export const iconPickerOutputValues = ['svg', 'code'] as const
+export type IconPickerOutput = (typeof iconPickerOutputValues)[number]
+
 export const DEFAULT_ICON_LIST = [
   'cb:home',
   'cb:search',
@@ -192,11 +198,17 @@ export const iconPickerProps = buildProps({
   },
   initialIcon: { type: String, default: '' },
   color: { type: String, default: '#5667F4' },
+  output: {
+    type: definePropType<IconPickerOutput>(String),
+    values: iconPickerOutputValues,
+    default: 'svg',
+  },
   size: {
     type: Number,
-    default: 24,
     validator: (value: number) =>
-      Number.isFinite(value) && value >= 8 && value <= 256,
+      Number.isFinite(value) &&
+      value >= ICON_PICKER_MIN_SIZE &&
+      value <= ICON_PICKER_MAX_SIZE,
   },
   label: String,
   showName: { type: Boolean, default: true },
@@ -211,7 +223,11 @@ export const iconPickerProps = buildProps({
 } as const)
 
 export const iconPickerEmits = {
-  confirm: (svg: string) => typeof svg === 'string',
+  confirm: (selection: IconPickerSelection) =>
+    typeof selection.code === 'string' &&
+    typeof selection.svg === 'string' &&
+    typeof selection.color === 'string' &&
+    typeof selection.size === 'number',
   cancel: () => true,
   closed: () => true,
 }
@@ -223,7 +239,19 @@ export interface CreateIconSvgOptions {
   label?: string
 }
 
-export interface IconPickerOptions {
+export interface IconPickerCodeResult {
+  code: string
+  color: string
+  size: number
+}
+
+export interface IconPickerSelection extends IconPickerCodeResult {
+  svg: string
+}
+
+export type IconPickerResult = string | IconPickerCodeResult
+
+export interface IconPickerBaseOptions {
   locale?: Language
   title?: string
   iconList?: readonly string[]
@@ -238,6 +266,16 @@ export interface IconPickerOptions {
   confirmText?: string
   cancelText?: string
 }
+
+export interface IconPickerSvgOptions extends IconPickerBaseOptions {
+  output?: 'svg'
+}
+
+export interface IconPickerCodeOptions extends IconPickerBaseOptions {
+  output: 'code'
+}
+
+export type IconPickerOptions = IconPickerSvgOptions | IconPickerCodeOptions
 
 const escapeAttribute = (value: string) =>
   value
@@ -257,17 +295,20 @@ export const normalizeIconList = (iconList: readonly string[]) => {
   return [...unique]
 }
 
-export const createIconSvg = ({
+export const createIconPickerSelection = ({
   name,
   color,
-  size = 24,
+  size = ICON_PICKER_DEFAULT_SIZE,
   label,
-}: CreateIconSvgOptions) => {
+}: CreateIconSvgOptions): IconPickerSelection | undefined => {
   const data = getIconData(name)
   const parsedColor = parseColor(color)
   if (!data || !parsedColor) return
 
-  const normalizedSize = Math.min(Math.max(Math.round(size), 8), 256)
+  const normalizedSize = Math.min(
+    Math.max(Math.round(size), ICON_PICKER_MIN_SIZE),
+    ICON_PICKER_MAX_SIZE,
+  )
   const normalizedColor =
     parsedColor.alpha < 1
       ? toCssColor(parsedColor)
@@ -291,8 +332,16 @@ export const createIconSvg = ({
     .map(([key, value]) => `${key}="${escapeAttribute(String(value))}"`)
     .join(' ')
 
-  return `<svg ${serializedAttributes}>${body}</svg>`
+  return {
+    code: name,
+    color: normalizedColor,
+    size: normalizedSize,
+    svg: `<svg ${serializedAttributes}>${body}</svg>`,
+  }
 }
+
+export const createIconSvg = (options: CreateIconSvgOptions) =>
+  createIconPickerSelection(options)?.svg
 
 export type IconPickerProps = ExtractPropTypes<typeof iconPickerProps>
 export type IconPickerInstance = InstanceType<typeof IconPicker>

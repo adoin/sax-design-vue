@@ -22,6 +22,11 @@ PROPS:
     values: prefix:name
     description: 弹窗打开时预选的图标。
     default: "''"
+  - name: output
+    type: String
+    values: svg / code
+    description: 控制 Promise 返回完整 SVG，或包含 code、color、size 的精简对象。
+    default: svg
   - name: color
     type: String
     values: HEX / RGB / HSL
@@ -30,8 +35,8 @@ PROPS:
   - name: size
     type: Number
     values: 8 - 256
-    description: 输出 SVG 的宽高，单位为像素。
-    default: 24
+    description: 固定输出尺寸；不传时由用户在弹窗内选择。
+    default: 弹窗选择，初始为 24
   - name: label
     type: String
     values: 无障碍文本
@@ -62,31 +67,33 @@ PROPS:
     values: 按钮文案
     description: 自定义确认与取消按钮文字。
     default: '-'
-description: '通过 Promise 弹窗选择图标与颜色，并返回可独立保存的 SVG 代码。'
+description: '通过 Promise 弹窗选择图标、颜色与尺寸，按需返回图标代码或完整 SVG。'
 ---
 
 # 图标选择器
 
 <card>
 
-IconPicker 提供 Promise 风格的图标选择弹窗。调用 `SIconPicker(options)` 后，
-用户可以选择图标和颜色；确认时返回完整的 SVG 字符串，取消、关闭或在服务端
-环境调用时返回 `undefined`。
+IconPicker 提供 Promise 风格的图标选择弹窗。`output: 'svg'` 返回完整 SVG
+字符串；`output: 'code'` 返回包含图标代码、颜色和尺寸的精简对象。取消、关闭或在
+服务端环境调用时返回 `undefined`。
 
-返回的 SVG 已包含尺寸、颜色与图形路径，可直接插入富文本、持久化存储或用于
-其他 HTML 场景。后续展示不依赖 Iconify 名称、运行时注册表、缓存或 `safelist`。
+传入 `size` 会固定输出尺寸；不传时，用户可以直接在弹窗中选择 8–256 px 的尺寸。
 
 ```ts
 import { SIconPicker } from 'sax-design-vue'
 
 const svg = await SIconPicker({
   title: '插入图标',
+  output: 'svg',
   color: '#5667F4',
-  size: 28,
   showAlpha: true,
 })
 
 if (svg) editor.insertHtml(svg)
+
+const icon = await SIconPicker({ output: 'code' })
+// { code: 'cb:rocket', color: '#5667F4', size: 24 }
 ```
 
 </card>
@@ -110,18 +117,23 @@ if (svg) editor.insertHtml(svg)
 
 <card>
 
-## 返回值与图标来源
+## 返回格式与图标来源
 
 `SIconPicker(options)`、`openIconPicker(options)` 和安装后的
 `this.$iconPicker(options)` 使用同一套服务：
 
 ```ts
-type IconPickerResult = Promise<string | undefined>
+interface IconPickerCodeResult {
+  code: string
+  color: string
+  size: number
+}
 ```
 
-- 确认：返回完整 `<svg>...</svg>` 字符串。
+- `output: 'svg'`：返回完整 `<svg>...</svg>` 字符串，可直接插入 HTML，后续展示不依赖图标运行时。
+- `output: 'code'`：返回 `IconPickerCodeResult`，数据更精简，后续展示需要对应的图标库。
 - 取消、关闭：返回 `undefined`。
-- `iconList` 只影响这一次弹窗里可以选择什么；一旦生成 SVG，最终内容就与图标库脱离。
+- `iconList` 控制这一次弹窗中可选择的图标。
 - 图形路径来自构建时可信的图标数据，颜色由 ColorPicker 规范化后写入 SVG；不要把未经清理的外部 SVG 混入 `iconList`。
 
 </card>
