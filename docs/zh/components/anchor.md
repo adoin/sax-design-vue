@@ -71,7 +71,19 @@ description: '用于在当前页面的关联内容区块之间快速导航。'
 
 <template #template>
 
-@[code html](../../.vuepress/components/anchor/basic.vue)
+@[code{1-5}](../../.vuepress/components/anchor/basic.vue)
+
+</template>
+
+<template #script>
+
+@[code{7-13}](../../.vuepress/components/anchor/basic.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-20}](../../.vuepress/components/anchor/basic.vue)
 
 </template>
 
@@ -91,7 +103,19 @@ description: '用于在当前页面的关联内容区块之间快速导航。'
 
 <template #template>
 
-@[code html](../../.vuepress/components/anchor/hierarchy.vue)
+@[code{1-5}](../../.vuepress/components/anchor/hierarchy.vue)
+
+</template>
+
+<template #script>
+
+@[code{7-19}](../../.vuepress/components/anchor/hierarchy.vue)
+
+</template>
+
+<template #style>
+
+@[code{21-26}](../../.vuepress/components/anchor/hierarchy.vue)
 
 </template>
 
@@ -113,7 +137,19 @@ description: '用于在当前页面的关联内容区块之间快速导航。'
 
 <template #template>
 
-@[code html](../../.vuepress/components/anchor/horizontal.vue)
+@[code{1-5}](../../.vuepress/components/anchor/horizontal.vue)
+
+</template>
+
+<template #script>
+
+@[code{7-13}](../../.vuepress/components/anchor/horizontal.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-20}](../../.vuepress/components/anchor/horizontal.vue)
 
 </template>
 
@@ -133,7 +169,19 @@ description: '用于在当前页面的关联内容区块之间快速导航。'
 
 <template #template>
 
-@[code html](../../.vuepress/components/anchor/container.vue)
+@[code{1-16}](../../.vuepress/components/anchor/container.vue)
+
+</template>
+
+<template #script>
+
+@[code{18-29}](../../.vuepress/components/anchor/container.vue)
+
+</template>
+
+<template #style>
+
+@[code{31-71}](../../.vuepress/components/anchor/container.vue)
 
 </template>
 

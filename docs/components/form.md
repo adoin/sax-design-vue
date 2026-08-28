@@ -220,11 +220,27 @@ Validation is implemented inside Form without an external validation runtime. Ru
 
 `createFormValidator(model, { rules, items })` runs the same rule format without mounting `SForm` or creating DOM. Use it for lazy content, pre-submit checks, and data that is not currently rendered. `validate()` returns `{ valid, errors }`; `validateField(field)` returns one field result.
 
-<template #example><form-headless-validation /></template><template #template>
+<template #example><form-headless-validation /></template>
 
-@[code](../.vuepress/components/form/headless-validation.vue)
+<template #template>
 
-</template></card>
+@[code{40-71}](../.vuepress/components/form/headless-validation.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-38}](../.vuepress/components/form/headless-validation.vue)
+
+</template>
+
+<template #style>
+
+@[code{73-103}](../.vuepress/components/form/headless-validation.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -232,11 +248,27 @@ Validation is implemented inside Form without an external validation runtime. Ru
 
 `children` can recurse to any depth and every level uses the 24-column grid. A numeric `span` collapses to a full row on phones; pass `{ xs, sm, md, lg, xl }` for precise responsive sizing.
 
-<template #example><form-default /></template><template #template>
+<template #example><form-default /></template>
 
-@[code](../.vuepress/components/form/default.vue)
+<template #template>
 
-</template></card>
+@[code{99-108}](../.vuepress/components/form/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-97}](../.vuepress/components/form/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{110-116}](../.vuepress/components/form/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -244,11 +276,21 @@ Validation is implemented inside Form without an external validation runtime. Ru
 
 Register project renderers with `formRenderer.add(name, definition)`. `renderItem` receives the model, field path, value, disabled state, `setValue`, and `validate` helpers.
 
-<template #example><form-renderer /></template><template #template>
+<template #example><form-renderer /></template>
 
-@[code](../.vuepress/components/form/renderer.vue)
+<template #template>
 
-</template></card>
+@[code{32-34}](../.vuepress/components/form/renderer.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-30}](../.vuepress/components/form/renderer.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -256,11 +298,21 @@ Register project renderers with `formRenderer.add(name, definition)`. `renderIte
 
 The existing `<s-form-item>` API remains compatible. Add `nested` to a parent Item, place child Items directly inside it, and use `span` for layout.
 
-<template #example><form-nested /></template><template #template>
+<template #example><form-nested /></template>
 
-@[code](../.vuepress/components/form/nested.vue)
+<template #template>
 
-</template></card>
+@[code{13-33}](../.vuepress/components/form/nested.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-11}](../.vuepress/components/form/nested.vue)
+
+</template>
+
+</card>
 
 <card>
 

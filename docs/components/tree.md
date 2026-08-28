@@ -53,8 +53,24 @@ description: "Hierarchical tree control."
 
 # Tree
 
-<card><template #example><tree-default /></template><template #template>
+<card><template #example><tree-default /></template>
 
-@[code{1-27}](../.vuepress/components/tree/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-13}](../.vuepress/components/tree/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{15-34}](../.vuepress/components/tree/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{36-42}](../.vuepress/components/tree/default.vue)
+
+</template>
+
+</card>

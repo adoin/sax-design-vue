@@ -101,11 +101,27 @@ description: '支持内联、逐级弹层与横向导航的多级菜单。'
 
 后台侧栏将收起入口放在底部；收起后保留图标轨道，子级自动变为弹层。
 
-<template #example><menu-default /></template><template #template>
+<template #example><menu-default /></template>
 
-@[code](../../.vuepress/components/menu/default.vue)
+<template #template>
 
-</template></card>
+@[code{42-137}](../../.vuepress/components/menu/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-40}](../../.vuepress/components/menu/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{139-336}](../../.vuepress/components/menu/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -113,11 +129,27 @@ description: '支持内联、逐级弹层与横向导航的多级菜单。'
 
 支持 hover / click 触发、二三级独立定位，以及 `floating` 风格。
 
-<template #example><menu-popup /></template><template #template>
+<template #example><menu-popup /></template>
 
-@[code](../../.vuepress/components/menu/popup.vue)
+<template #template>
 
-</template></card>
+@[code{37-53}](../../.vuepress/components/menu/popup.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-35}](../../.vuepress/components/menu/popup.vue)
+
+</template>
+
+<template #style>
+
+@[code{55-62}](../../.vuepress/components/menu/popup.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -125,11 +157,21 @@ description: '支持内联、逐级弹层与横向导航的多级菜单。'
 
 横向一级菜单使用向下展开的导航面板；更深层级才向右级联。方向键、Enter、Space 与 Escape 均可操作。
 
-<template #example><menu-horizontal /></template><template #template>
+<template #example><menu-horizontal /></template>
 
-@[code](../../.vuepress/components/menu/horizontal.vue)
+<template #template>
 
-</template></card>
+@[code{43-51}](../../.vuepress/components/menu/horizontal.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-41}](../../.vuepress/components/menu/horizontal.vue)
+
+</template>
+
+</card>
 
 <card>
 

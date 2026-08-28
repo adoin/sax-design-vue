@@ -94,7 +94,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-24} html](../../.vuepress/components/card/default.vue)
+@[code{1-21}](../../.vuepress/components/card/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{24-34}](../../.vuepress/components/card/default.vue)
 
 </template>
 
@@ -112,7 +118,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-24} html{3}](../../.vuepress/components/card/type2.vue)
+@[code{1-24}](../../.vuepress/components/card/type2.vue)
+
+</template>
+
+<template #style>
+
+@[code{27-37}](../../.vuepress/components/card/type2.vue)
 
 </template>
 
@@ -130,7 +142,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-24} html{3}](../../.vuepress/components/card/type3.vue)
+@[code{1-24}](../../.vuepress/components/card/type3.vue)
+
+</template>
+
+<template #style>
+
+@[code{27-37}](../../.vuepress/components/card/type3.vue)
 
 </template>
 
@@ -148,7 +166,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-24} html{3}](../../.vuepress/components/card/type4.vue)
+@[code{1-24}](../../.vuepress/components/card/type4.vue)
+
+</template>
+
+<template #style>
+
+@[code{27-37}](../../.vuepress/components/card/type4.vue)
 
 </template>
 
@@ -166,7 +190,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-24} html{3}](../../.vuepress/components/card/type5.vue)
+@[code{1-24}](../../.vuepress/components/card/type5.vue)
+
+</template>
+
+<template #style>
+
+@[code{27-37}](../../.vuepress/components/card/type5.vue)
 
 </template>
 
@@ -184,13 +214,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-26} html{3}](../../.vuepress/components/card/group.vue)
+@[code{1-26}](../../.vuepress/components/card/group.vue)
 
 </template>
 
 <template #script>
 
-@[code{28-32}](../../.vuepress/components/card/group.vue)
+@[code{28-33}](../../.vuepress/components/card/group.vue)
+
+</template>
+
+<template #style>
+
+@[code{34-44}](../../.vuepress/components/card/group.vue)
 
 </template>
 

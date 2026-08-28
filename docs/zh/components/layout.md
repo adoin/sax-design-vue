@@ -137,11 +137,21 @@ EVENTS:
 
 使用 `header`、`aside`、默认和 `footer` 插槽拼出完整页面。设置 `aside-position="end"` 可将侧栏切换到右侧；小屏幕下会自动纵向排列，避免横向滚动。
 
-<template #example><layout-default /></template><template #template>
+<template #example><layout-default /></template>
 
-@[code](../../.vuepress/components/layout/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-83}](../../.vuepress/components/layout/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{85-308}](../../.vuepress/components/layout/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -149,11 +159,27 @@ EVENTS:
 
 通过 `aside-outside` 插槽把配置、语言、主题等操作吸附在侧栏外侧。`SLayout` 会将内容转发给内部 `SLayoutAside` 的 `outside` 插槽；连接曲面、方向、阴影、小屏回退以及最外侧的收起/展开控件都由 Aside 统一处理。收起后仍保留方向箭头，并提供悬停和键盘反馈。直接使用 `SLayoutAside` 时改用 `#outside` 即可。
 
-<template #example><layout-aside-outside /></template><template #template>
+<template #example><layout-aside-outside /></template>
 
-@[code](../../.vuepress/components/layout/aside-outside.vue)
+<template #template>
 
-</template></card>
+@[code{11-78}](../../.vuepress/components/layout/aside-outside.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-9}](../../.vuepress/components/layout/aside-outside.vue)
+
+</template>
+
+<template #style>
+
+@[code{80-216}](../../.vuepress/components/layout/aside-outside.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -161,11 +187,21 @@ EVENTS:
 
 非标准结构可直接组合 `SLayoutContainer`、`SLayoutHeader`、`SLayoutAside`、`SLayoutBody` 与 `SLayoutFooter`。容器支持 `direction`、`gap`、`wrap`、`align`、`justify`，也可以任意嵌套。`SLayoutHeader` 可通过 `sticky` 独立吸顶，并用 `sticky-offset` 避开页面已有的顶部导航。`SLayoutAside` 的 `outside` 插槽用于放置配置、语言和主题等工具；侧栏会负责将工具表面连续地吸附在外侧。
 
-<template #example><layout-composition /></template><template #template>
+<template #example><layout-composition /></template>
 
-@[code](../../.vuepress/components/layout/composition.vue)
+<template #template>
 
-</template></card>
+@[code{1-18}](../../.vuepress/components/layout/composition.vue)
+
+</template>
+
+<template #style>
+
+@[code{20-50}](../../.vuepress/components/layout/composition.vue)
+
+</template>
+
+</card>
 
 <card>
 

@@ -25,8 +25,18 @@ description: 'Semantic text with truncation and typewriter effects.'
 
 # Text
 
-<card><template #example><text-default /></template><template #template>
+<card><template #example><text-default /></template>
 
-@[code](../.vuepress/components/text/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-31}](../.vuepress/components/text/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{33-60}](../.vuepress/components/text/default.vue)
+
+</template>
+
+</card>

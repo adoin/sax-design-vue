@@ -29,8 +29,24 @@ EVENTS:
 
 # Link 链接
 
-<card><template #example><link-default /></template><template #template>
+<card><template #example><link-default /></template>
 
-@[code](../../.vuepress/components/link/default.vue)
+<template #template>
 
-</template></card>
+@[code{10-52}](../../.vuepress/components/link/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-8}](../../.vuepress/components/link/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{54-100}](../../.vuepress/components/link/default.vue)
+
+</template>
+
+</card>

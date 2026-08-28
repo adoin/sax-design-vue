@@ -159,11 +159,27 @@ description: 'Carousel with controlled state, deck layouts, spatial 3D effects, 
 
 Controlled index, autoplay, arrows, and line indicators use stable defaults.
 
-<template #example><carousel-default /></template><template #template>
+<template #example><carousel-default /></template>
 
-@[code](../.vuepress/components/carousel/default.vue)
+<template #template>
 
-</template></card>
+@[code{35-45}](../.vuepress/components/carousel/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-33}](../.vuepress/components/carousel/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{47-77}](../.vuepress/components/carousel/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -171,11 +187,27 @@ Controlled index, autoplay, arrows, and line indicators use stable defaults.
 
 `deck` owns the centered card and the inactive layers on both sides. Use `deck-visible` for the visible layer count and `deck-blur` for optional depth blur instead of maintaining several nearly identical effect types.
 
-<template #example><carousel-deck /></template><template #template>
+<template #example><carousel-deck /></template>
 
-@[code](../.vuepress/components/carousel/deck.vue)
+<template #template>
 
-</template></card>
+@[code{60-99}](../.vuepress/components/carousel/deck.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-58}](../.vuepress/components/carousel/deck.vue)
+
+</template>
+
+<template #style>
+
+@[code{101-148}](../.vuepress/components/carousel/deck.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -183,11 +215,27 @@ Controlled index, autoplay, arrows, and line indicators use stable defaults.
 
 `orbit` uses a continuous phase to move a lower ring of compact cards smoothly around the Y axis. A separate, larger active card sits above the ring and changes with a short GPU-friendly crossfade. `orbit-max-visible` defaults to 10. When a larger data set would produce an even base window, the orbit takes one additional real card to form an odd ring. Every looping orbit keeps one hidden clone buffer at each edge: the outgoing card moves into the back and fades out while the matching buffer fades in from the other side, preventing a wrap teleport. Only when every real item already fits and no extra item is available does it render a decorative placeholder with a transparent interior and visible outline as that back-side portal. Fewer than four source items are cloned to fill the ring. Set a non-zero `orbit-angle` to override automatic spacing.
 
-<template #example><carousel-orbit /></template><template #template>
+<template #example><carousel-orbit /></template>
 
-@[code](../.vuepress/components/carousel/orbit.vue)
+<template #template>
 
-</template></card>
+@[code{40-92}](../.vuepress/components/carousel/orbit.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-38}](../.vuepress/components/carousel/orbit.vue)
+
+</template>
+
+<template #style>
+
+@[code{94-145}](../.vuepress/components/carousel/orbit.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -195,11 +243,27 @@ Controlled index, autoplay, arrows, and line indicators use stable defaults.
 
 `prism` arranges three cards around one shared axis. Every face keeps a continuous rotation phase, so side cards move like one rigid prism instead of flipping independently. `radius` is shared by the viewport and every card; pass `false` for crisp prism faces.
 
-<template #example><carousel-prism /></template><template #template>
+<template #example><carousel-prism /></template>
 
-@[code](../.vuepress/components/carousel/prism.vue)
+<template #template>
 
-</template></card>
+@[code{47-83}](../.vuepress/components/carousel/prism.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-45}](../.vuepress/components/carousel/prism.vue)
+
+</template>
+
+<template #style>
+
+@[code{85-129}](../.vuepress/components/carousel/prism.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -207,11 +271,27 @@ Controlled index, autoplay, arrows, and line indicators use stable defaults.
 
 `fade` only transitions opacity. Enable `motion-blur` for a brief directional softening and compare both parameter states in the same example.
 
-<template #example><carousel-fade /></template><template #template>
+<template #example><carousel-fade /></template>
 
-@[code](../.vuepress/components/carousel/fade.vue)
+<template #template>
 
-</template></card>
+@[code{23-60}](../.vuepress/components/carousel/fade.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-21}](../.vuepress/components/carousel/fade.vue)
+
+</template>
+
+<template #style>
+
+@[code{62-100}](../.vuepress/components/carousel/fade.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -219,8 +299,24 @@ Controlled index, autoplay, arrows, and line indicators use stable defaults.
 
 The exposed API supports named navigation and explicit playback control. Disabled items are skipped by arrows, autoplay, keyboard, and drag navigation.
 
-<template #example><carousel-controls /></template><template #template>
+<template #example><carousel-controls /></template>
 
-@[code](../.vuepress/components/carousel/controls.vue)
+<template #template>
 
-</template></card>
+@[code{22-52}](../.vuepress/components/carousel/controls.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-20}](../.vuepress/components/carousel/controls.vue)
+
+</template>
+
+<template #style>
+
+@[code{54-85}](../.vuepress/components/carousel/controls.vue)
+
+</template>
+
+</card>

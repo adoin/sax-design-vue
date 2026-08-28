@@ -283,13 +283,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-9} html{3}](../../.vuepress/components/pagination/default.vue)
+@[code{1-9}](../../.vuepress/components/pagination/default.vue)
 
 </template>
 
 <template #script>
 
 @[code{11-15}](../../.vuepress/components/pagination/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{17-30}](../../.vuepress/components/pagination/default.vue)
 
 </template>
 
@@ -307,19 +313,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-19} html{4}](../../.vuepress/components/pagination/color.vue)
+@[code{1-17}](../../.vuepress/components/pagination/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{21-27}](../../.vuepress/components/pagination/color.vue)
+@[code{19-25}](../../.vuepress/components/pagination/color.vue)
 
 </template>
 
 <template #style>
 
-@[code{29-51}](../../.vuepress/components/pagination/color.vue)
+@[code{27-49}](../../.vuepress/components/pagination/color.vue)
 
 </template>
 
@@ -337,13 +343,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-5} vue{3}](../../.vuepress/components/pagination/disabled.vue)
+@[code{1-5}](../../.vuepress/components/pagination/disabled.vue)
 
 </template>
 
 <template #script>
 
 @[code{7-11}](../../.vuepress/components/pagination/disabled.vue)
+
+</template>
+
+<template #style>
+
+@[code{13-26}](../../.vuepress/components/pagination/disabled.vue)
 
 </template>
 
@@ -363,13 +375,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-5} vue{3}](../../.vuepress/components/pagination/circle.vue)
+@[code{1-5}](../../.vuepress/components/pagination/circle.vue)
 
 </template>
 
 <template #script>
 
 @[code{7-11}](../../.vuepress/components/pagination/circle.vue)
+
+</template>
+
+<template #style>
+
+@[code{13-26}](../../.vuepress/components/pagination/circle.vue)
 
 </template>
 
@@ -387,13 +405,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-5} vue{3}](../../.vuepress/components/pagination/square.vue)
+@[code{1-5}](../../.vuepress/components/pagination/square.vue)
 
 </template>
 
 <template #script>
 
 @[code{7-11}](../../.vuepress/components/pagination/square.vue)
+
+</template>
+
+<template #style>
+
+@[code{13-26}](../../.vuepress/components/pagination/square.vue)
 
 </template>
 
@@ -411,13 +435,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-5} vue{3}](../../.vuepress/components/pagination/buttons-dotted.vue)
+@[code{1-5}](../../.vuepress/components/pagination/buttons-dotted.vue)
 
 </template>
 
 <template #script>
 
 @[code{7-11}](../../.vuepress/components/pagination/buttons-dotted.vue)
+
+</template>
+
+<template #style>
+
+@[code{13-26}](../../.vuepress/components/pagination/buttons-dotted.vue)
 
 </template>
 
@@ -439,13 +469,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-9} vue{5}](../../.vuepress/components/pagination/disabled-items.vue)
+@[code{1-9}](../../.vuepress/components/pagination/disabled-items.vue)
 
 </template>
 
 <template #script>
 
-@[code{11-30}](../../.vuepress/components/pagination/disabled-items.vue)
+@[code{11-15}](../../.vuepress/components/pagination/disabled-items.vue)
+
+</template>
+
+<template #style>
+
+@[code{17-30}](../../.vuepress/components/pagination/disabled-items.vue)
 
 </template>
 
@@ -467,13 +503,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-9} vue{5}](../../.vuepress/components/pagination/loading-items.vue)
+@[code{1-9}](../../.vuepress/components/pagination/loading-items.vue)
 
 </template>
 
 <template #script>
 
 @[code{11-15}](../../.vuepress/components/pagination/loading-items.vue)
+
+</template>
+
+<template #style>
+
+@[code{17-30}](../../.vuepress/components/pagination/loading-items.vue)
 
 </template>
 
@@ -491,13 +533,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-5} vue{3}](../../.vuepress/components/pagination/not-margin.vue)
+@[code{1-5}](../../.vuepress/components/pagination/not-margin.vue)
 
 </template>
 
 <template #script>
 
 @[code{7-11}](../../.vuepress/components/pagination/not-margin.vue)
+
+</template>
+
+<template #style>
+
+@[code{13-26}](../../.vuepress/components/pagination/not-margin.vue)
 
 </template>
 
@@ -515,13 +563,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-5} vue{3}](../../.vuepress/components/pagination/progress.vue)
+@[code{1-5}](../../.vuepress/components/pagination/progress.vue)
 
 </template>
 
 <template #script>
 
 @[code{7-11}](../../.vuepress/components/pagination/progress.vue)
+
+</template>
+
+<template #style>
+
+@[code{13-26}](../../.vuepress/components/pagination/progress.vue)
 
 </template>
 
@@ -539,13 +593,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-5} vue{3}](../../.vuepress/components/pagination/infinite.vue)
+@[code{1-5}](../../.vuepress/components/pagination/infinite.vue)
 
 </template>
 
 <template #script>
 
 @[code{7-11}](../../.vuepress/components/pagination/infinite.vue)
+
+</template>
+
+<template #style>
+
+@[code{13-26}](../../.vuepress/components/pagination/infinite.vue)
 
 </template>
 

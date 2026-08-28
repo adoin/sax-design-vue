@@ -176,7 +176,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-19} html{3-5}](../../.vuepress/components/avatar/default.vue)
+@[code{1-19}](../../.vuepress/components/avatar/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{21-27}](../../.vuepress/components/avatar/default.vue)
 
 </template>
 
@@ -194,7 +200,13 @@ SLOTS:
 
 <template #template>
 
-@[code html{3}](../../.vuepress/components/avatar/color.vue)
+@[code{1-25}](../../.vuepress/components/avatar/color.vue)
+
+</template>
+
+<template #style>
+
+@[code{26-32}](../../.vuepress/components/avatar/color.vue)
 
 </template>
 
@@ -212,7 +224,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-19} html{3}](../../.vuepress/components/avatar/size.vue)
+@[code{1-19}](../../.vuepress/components/avatar/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{20-26}](../../.vuepress/components/avatar/size.vue)
 
 </template>
 
@@ -234,7 +252,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-30} html{3}](../../.vuepress/components/avatar/badge.vue)
+@[code{1-30}](../../.vuepress/components/avatar/badge.vue)
+
+</template>
+
+<template #style>
+
+@[code{31-37}](../../.vuepress/components/avatar/badge.vue)
 
 </template>
 
@@ -260,6 +284,12 @@ SLOTS:
 
 </template>
 
+<template #style>
+
+@[code{23-29}](../../.vuepress/components/avatar/auto-font.vue)
+
+</template>
+
 </card>
 
 <card>
@@ -276,7 +306,13 @@ SLOTS:
 
 <template #template>
 
-@[code html{3}](../../.vuepress/components/avatar/circle.vue)
+@[code{1-30}](../../.vuepress/components/avatar/circle.vue)
+
+</template>
+
+<template #style>
+
+@[code{31-37}](../../.vuepress/components/avatar/circle.vue)
 
 </template>
 
@@ -294,7 +330,13 @@ SLOTS:
 
 <template #template>
 
-@[code html{3}](../../.vuepress/components/avatar/square.vue)
+@[code{1-30}](../../.vuepress/components/avatar/square.vue)
+
+</template>
+
+<template #style>
+
+@[code{31-37}](../../.vuepress/components/avatar/square.vue)
 
 </template>
 
@@ -316,7 +358,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-19} html{3}](../../.vuepress/components/avatar/history.vue)
+@[code{1-19}](../../.vuepress/components/avatar/history.vue)
+
+</template>
+
+<template #style>
+
+@[code{20-26}](../../.vuepress/components/avatar/history.vue)
 
 </template>
 
@@ -334,7 +382,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-22} html{4}](../../.vuepress/components/avatar/icon.vue)
+@[code{1-22}](../../.vuepress/components/avatar/icon.vue)
+
+</template>
+
+<template #style>
+
+@[code{23-29}](../../.vuepress/components/avatar/icon.vue)
 
 </template>
 
@@ -352,7 +406,13 @@ SLOTS:
 
 <template #template>
 
-@[code html{3}](../../.vuepress/components/avatar/square.vue)
+@[code{1-30}](../../.vuepress/components/avatar/square.vue)
+
+</template>
+
+<template #style>
+
+@[code{31-37}](../../.vuepress/components/avatar/square.vue)
 
 </template>
 
@@ -370,7 +430,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-27} html{5-9}](../../.vuepress/components/avatar/icons.vue)
+@[code{1-27}](../../.vuepress/components/avatar/icons.vue)
+
+</template>
+
+<template #style>
+
+@[code{29-35}](../../.vuepress/components/avatar/icons.vue)
 
 </template>
 
@@ -392,7 +458,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-69} html{3,36}](../../.vuepress/components/avatar/group.vue)
+@[code{1-69}](../../.vuepress/components/avatar/group.vue)
+
+</template>
+
+<template #style>
+
+@[code{71-94}](../../.vuepress/components/avatar/group.vue)
 
 </template>
 

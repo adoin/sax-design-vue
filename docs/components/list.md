@@ -57,7 +57,7 @@ Display title and subtitle rows with `s-list-item`.
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/list/default.vue)
+@[code{1-8}](../.vuepress/components/list/default.vue)
 
 </template>
 
@@ -76,7 +76,7 @@ Group items under `s-list-header`.
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/list/header.vue)
+@[code{1-19}](../.vuepress/components/list/header.vue)
 
 </template>
 
@@ -95,7 +95,7 @@ Add leading icons to list rows.
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/list/icon.vue)
+@[code{1-26}](../.vuepress/components/list/icon.vue)
 
 </template>
 
@@ -114,7 +114,7 @@ Place actions or custom content in the item slot.
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/list/content.vue)
+@[code{1-27}](../.vuepress/components/list/content.vue)
 
 </template>
 
@@ -133,7 +133,7 @@ Use the `avatar` slot for profile images or initials.
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/list/avatar.vue)
+@[code{1-30}](../.vuepress/components/list/avatar.vue)
 
 </template>
 

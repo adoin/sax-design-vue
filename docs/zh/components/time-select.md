@@ -65,11 +65,13 @@ EVENTS:
 <template #template>
 
 @[code{1-12}](../../.vuepress/components/time-select/format.vue)
+
 </template>
 
 <template #script>
 
 @[code{14-18}](../../.vuepress/components/time-select/format.vue)
+
 </template>
 
 </card>
@@ -87,11 +89,19 @@ EVENTS:
 <template #template>
 
 @[code{1-21}](../../.vuepress/components/time-select/time-range.vue)
+
 </template>
 
 <template #script>
 
 @[code{23-28}](../../.vuepress/components/time-select/time-range.vue)
+
+</template>
+
+<template #style>
+
+@[code{30-35}](../../.vuepress/components/time-select/time-range.vue)
+
 </template>
 
 </card>
@@ -108,12 +118,14 @@ EVENTS:
 
 <template #template>
 
-@[code{1-12} vue{9}](../../.vuepress/components/time-select/disabled.vue)
+@[code{1-12}](../../.vuepress/components/time-select/disabled.vue)
+
 </template>
 
 <template #script>
 
 @[code{14-18}](../../.vuepress/components/time-select/disabled.vue)
+
 </template>
 
 </card>

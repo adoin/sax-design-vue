@@ -26,8 +26,24 @@ description: "局部打印容器。"
 
 # 打印
 
-<card><template #example><print-default /></template><template #template>
+<card><template #example><print-default /></template>
 
-@[code{1-3}](../../.vuepress/components/print/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-12}](../../.vuepress/components/print/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{13-16}](../../.vuepress/components/print/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{17-26}](../../.vuepress/components/print/default.vue)
+
+</template>
+
+</card>

@@ -84,11 +84,27 @@ For validation outside the component, use the exported `createFormValidator(mode
 
 ## Basic usage
 
-<template #example><form-group-default /></template><template #template>
+<template #example><form-group-default /></template>
 
-@[code](../.vuepress/components/form-group/default.vue)
+<template #template>
 
-</template></card>
+@[code{133-156}](../.vuepress/components/form-group/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-131}](../.vuepress/components/form-group/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{158-162}](../.vuepress/components/form-group/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -96,8 +112,24 @@ For validation outside the component, use the exported `createFormValidator(mode
 
 This example starts with 25 items. Every value is valid by default except item 20. Only the active form mounts initially, but **Validate all** still checks every item and activates the first invalid tab. Add items or right-click a tab to compare its current zero-based array index with its stable `__index`.
 
-<template #example><form-group-large-data /></template><template #template>
+<template #example><form-group-large-data /></template>
 
-@[code](../.vuepress/components/form-group/large-data.vue)
+<template #template>
 
-</template></card>
+@[code{206-260}](../.vuepress/components/form-group/large-data.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-204}](../.vuepress/components/form-group/large-data.vue)
+
+</template>
+
+<template #style>
+
+@[code{262-276}](../.vuepress/components/form-group/large-data.vue)
+
+</template>
+
+</card>

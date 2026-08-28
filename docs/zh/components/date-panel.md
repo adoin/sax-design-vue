@@ -23,8 +23,18 @@ description: "DatePicker 使用的独立日历面板。"
 
 # 日期面板
 
-<card><template #example><date-panel-default /></template><template #template>
+<card><template #example><date-panel-default /></template>
 
-@[code{1-2}](../../.vuepress/components/date-panel/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-8}](../../.vuepress/components/date-panel/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{9-14}](../../.vuepress/components/date-panel/default.vue)
+
+</template>
+
+</card>

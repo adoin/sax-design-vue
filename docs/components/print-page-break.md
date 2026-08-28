@@ -5,9 +5,17 @@ description: 'Forces the next Print content to a new browser page.'
 
 # Print page break
 
-<card><template #example><print-page-break-default /></template><template #template>
+<card><template #example><print-page-break-default /></template>
 
-@[code{1-2}](../.vuepress/components/print-page-break/default.vue)
+<template #template>
+
+@[code{1-7}](../.vuepress/components/print-page-break/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{8-11}](../.vuepress/components/print-page-break/default.vue)
 
 </template>
 

@@ -395,13 +395,13 @@ SNotification({ ...options })
 
 <template #template>
 
-@[code{1-5} html{3}](../../.vuepress/components/notification/default.vue)
+@[code{1-5}](../../.vuepress/components/notification/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-17} vue{5}](../../.vuepress/components/notification/default.vue)
+@[code{7-17}](../../.vuepress/components/notification/default.vue)
 
 </template>
 
@@ -428,13 +428,13 @@ SNotification({ ...options })
 
 <template #template>
 
-@[code{1-22} html{6,9}](../../.vuepress/components/notification/position.vue)
+@[code{1-22}](../../.vuepress/components/notification/position.vue)
 
 </template>
 
 <template #script>
 
-@[code{24-35} vue{5}](../../.vuepress/components/notification/position.vue)
+@[code{24-35}](../../.vuepress/components/notification/position.vue)
 
 </template>
 
@@ -468,13 +468,19 @@ SNotification({ ...options })
 
 <template #template>
 
-@[code{1-58} html{6,13}](../../.vuepress/components/notification/color.vue)
+@[code{1-58}](../../.vuepress/components/notification/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{60-72} html{6}](../../.vuepress/components/notification/color.vue)
+@[code{60-72}](../../.vuepress/components/notification/color.vue)
+
+</template>
+
+<template #style>
+
+@[code{73-94}](../../.vuepress/components/notification/color.vue)
 
 </template>
 
@@ -492,19 +498,19 @@ SNotification({ ...options })
 
 <template #template>
 
-@[code{1-100} html{6,26}](../../.vuepress/components/notification/icons.vue)
+@[code{1-100}](../../.vuepress/components/notification/icons.vue)
 
 </template>
 
 <template #script>
 
-@[code{102-115} html{4,6}](../../.vuepress/components/notification/icons.vue)
+@[code{102-133}](../../.vuepress/components/notification/icons.vue)
 
 </template>
 
 <template #style>
 
-@[code{117-138}](../../.vuepress/components/notification/icons.vue)
+@[code{135-156}](../../.vuepress/components/notification/icons.vue)
 
 </template>
 
@@ -528,7 +534,7 @@ SNotification({ ...options })
 
 <template #script>
 
-@[code{54-67} vue{6}](../../.vuepress/components/notification/progress.vue)
+@[code{54-67}](../../.vuepress/components/notification/progress.vue)
 
 </template>
 
@@ -560,7 +566,7 @@ SNotification({ ...options })
 
 <template #script>
 
-@[code{18-30} html{6}](../../.vuepress/components/notification/duration.vue)
+@[code{18-30}](../../.vuepress/components/notification/duration.vue)
 
 </template>
 
@@ -590,7 +596,7 @@ SNotification({ ...options })
 
 <template #script>
 
-@[code{75-88} vue{6}](../../.vuepress/components/notification/square.vue)
+@[code{75-88}](../../.vuepress/components/notification/square.vue)
 
 </template>
 
@@ -620,7 +626,7 @@ SNotification({ ...options })
 
 <template #script>
 
-@[code{57-69} vue{6}](../../.vuepress/components/notification/border.vue)
+@[code{57-69}](../../.vuepress/components/notification/border.vue)
 
 </template>
 
@@ -650,7 +656,7 @@ SNotification({ ...options })
 
 <template #script>
 
-@[code{57-71} vue{6}](../../.vuepress/components/notification/flat.vue)
+@[code{57-71}](../../.vuepress/components/notification/flat.vue)
 
 </template>
 
@@ -680,7 +686,7 @@ SNotification({ ...options })
 
 <template #script>
 
-@[code{60-73} vue{6}](../../.vuepress/components/notification/loading.vue)
+@[code{60-73}](../../.vuepress/components/notification/loading.vue)
 
 </template>
 
@@ -712,7 +718,7 @@ SNotification({ ...options })
 
 <template #script>
 
-@[code{16-29} vue{4,6}](../../.vuepress/components/notification/all-width.vue)
+@[code{16-29}](../../.vuepress/components/notification/all-width.vue)
 
 </template>
 
@@ -742,7 +748,7 @@ SNotification({ ...options })
 
 <template #script>
 
-@[code{60-74} vue{6}](../../.vuepress/components/notification/sticky.vue)
+@[code{60-74}](../../.vuepress/components/notification/sticky.vue)
 
 </template>
 

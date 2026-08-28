@@ -273,13 +273,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-7} vue](../../.vuepress/components/button/default.vue)
+@[code{1-7}](../../.vuepress/components/button/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{9-13} vue](../../.vuepress/components/button/default.vue)
+@[code{9-13}](../../.vuepress/components/button/default.vue)
 
 </template>
 
@@ -297,13 +297,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-11} vue{3,6,9}](../../.vuepress/components/button/flat.vue)
+@[code{1-11}](../../.vuepress/components/button/flat.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17} vue](../../.vuepress/components/button/flat.vue)
+@[code{13-17}](../../.vuepress/components/button/flat.vue)
 
 </template>
 
@@ -321,13 +321,20 @@ NEWS:
 
 <template #template>
 
-@[code{1-11} vue{3,6,9}](../../.vuepress/components/button/border.vue)
+@[code{1-11}](../../.vuepress/components/button/border.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17} vue](../../.vuepress/components/button/border.vue)
+@[code{13-17}](../../.vuepress/components/button/border.vue)
+
+</template>
+
+<template #style>
+
+@[code{19-23}](../../.vuepress/components/button/border.vue)
+@[code{25-30}](../../.vuepress/components/button/border.vue)
 
 </template>
 
@@ -349,13 +356,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-11} vue{3,6,9}](../../.vuepress/components/button/gradient.vue)
+@[code{1-11}](../../.vuepress/components/button/gradient.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17} vue](../../.vuepress/components/button/gradient.vue)
+@[code{13-17}](../../.vuepress/components/button/gradient.vue)
 
 </template>
 
@@ -373,13 +380,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-11} vue{3,6,9}](../../.vuepress/components/button/relief.vue)
+@[code{1-11}](../../.vuepress/components/button/relief.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17} vue](../../.vuepress/components/button/relief.vue)
+@[code{13-17}](../../.vuepress/components/button/relief.vue)
 
 </template>
 
@@ -397,13 +404,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-11} vue{3,6,9}](../../.vuepress/components/button/transparent.vue)
+@[code{1-11}](../../.vuepress/components/button/transparent.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17} vue](../../.vuepress/components/button/transparent.vue)
+@[code{13-17}](../../.vuepress/components/button/transparent.vue)
 
 </template>
 
@@ -421,13 +428,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-11} vue{3,6,9}](../../.vuepress/components/button/shadow.vue)
+@[code{1-11}](../../.vuepress/components/button/shadow.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-17} vue](../../.vuepress/components/button/shadow.vue)
+@[code{13-17}](../../.vuepress/components/button/shadow.vue)
 
 </template>
 
@@ -447,13 +454,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-53} vue{5,13,21,29,37,45}](../../.vuepress/components/button/color.vue)
+@[code{1-53}](../../.vuepress/components/button/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{55-59} vue](../../.vuepress/components/button/color.vue)
+@[code{55-59}](../../.vuepress/components/button/color.vue)
 
 </template>
 
@@ -475,13 +482,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-57} vue{3}](../../.vuepress/components/button/icon.vue)
+@[code{1-57}](../../.vuepress/components/button/icon.vue)
 
 </template>
 
 <template #script>
 
-@[code{59-63} vue](../../.vuepress/components/button/icon.vue)
+@[code{59-63}](../../.vuepress/components/button/icon.vue)
 
 </template>
 
@@ -499,13 +506,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-52} vue{4}](../../.vuepress/components/button/iconText.vue)
+@[code{1-52}](../../.vuepress/components/button/iconText.vue)
 
 </template>
 
 <template #script>
 
-@[code{54-58} vue](../../.vuepress/components/button/iconText.vue)
+@[code{54-58}](../../.vuepress/components/button/iconText.vue)
 
 </template>
 
@@ -523,13 +530,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-60} vue{3}](../../.vuepress/components/button/circle.vue)
+@[code{1-60}](../../.vuepress/components/button/circle.vue)
 
 </template>
 
 <template #script>
 
-@[code{62-66} vue](../../.vuepress/components/button/circle.vue)
+@[code{62-66}](../../.vuepress/components/button/circle.vue)
 
 </template>
 
@@ -547,13 +554,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-58} vue{3}](../../.vuepress/components/button/square.vue)
+@[code{1-58}](../../.vuepress/components/button/square.vue)
 
 </template>
 
 <template #script>
 
-@[code{60-64} vue](../../.vuepress/components/button/square.vue)
+@[code{60-64}](../../.vuepress/components/button/square.vue)
 
 </template>
 
@@ -579,13 +586,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-17} vue{3,6,9,10,13}](../../.vuepress/components/button/size.vue)
+@[code{1-17}](../../.vuepress/components/button/size.vue)
 
 </template>
 
 <template #script>
 
-@[code{19-23} vue](../../.vuepress/components/button/size.vue)
+@[code{19-23}](../../.vuepress/components/button/size.vue)
 
 </template>
 
@@ -603,7 +610,19 @@ NEWS:
 
 <template #template>
 
-@[code vue](../../.vuepress/components/button/loading.vue)
+@[code{1-52}](../../.vuepress/components/button/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{54-91}](../../.vuepress/components/button/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{93-129}](../../.vuepress/components/button/loading.vue)
 
 </template>
 
@@ -621,13 +640,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-26} vue{4,12,13}](../../.vuepress/components/button/click-limit.vue)
+@[code{1-26}](../../.vuepress/components/button/click-limit.vue)
 
 </template>
 
 <template #script>
 
-@[code{28-41} vue](../../.vuepress/components/button/click-limit.vue)
+@[code{28-41}](../../.vuepress/components/button/click-limit.vue)
+
+</template>
+
+<template #style>
+
+@[code{43-56}](../../.vuepress/components/button/click-limit.vue)
 
 </template>
 
@@ -645,13 +670,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-70} vue{3}](../../.vuepress/components/button/upload.vue)
+@[code{1-68}](../../.vuepress/components/button/upload.vue)
 
 </template>
 
 <template #script>
 
-@[code{72-76} vue](../../.vuepress/components/button/upload.vue)
+@[code{70-74}](../../.vuepress/components/button/upload.vue)
 
 </template>
 
@@ -669,7 +694,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-8} vue{3}](../../.vuepress/components/button/block.vue)
+@[code{1-8}](../../.vuepress/components/button/block.vue)
+
+</template>
+
+<template #style>
+
+@[code{10-15}](../../.vuepress/components/button/block.vue)
 
 </template>
 
@@ -689,7 +720,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-32} vue{5-7,10,19,25}](../../.vuepress/components/button/animate.vue)
+@[code{1-32}](../../.vuepress/components/button/animate.vue)
+
+</template>
+
+<template #style>
+
+@[code{34-39}](../../.vuepress/components/button/animate.vue)
 
 </template>
 
@@ -709,7 +746,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-79} vue{3-5}](../../.vuepress/components/button/social.vue)
+@[code{1-79}](../../.vuepress/components/button/social.vue)
+
+</template>
+
+<template #style>
+
+@[code{81-88}](../../.vuepress/components/button/social.vue)
 
 </template>
 
@@ -729,7 +772,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-19} vue{3}](../../.vuepress/components/button/floating.vue)
+@[code{1-19}](../../.vuepress/components/button/floating.vue)
 
 </template>
 
@@ -747,7 +790,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-57} vue{3,12,29,44}](../../.vuepress/components/button/group.vue)
+@[code{1-57}](../../.vuepress/components/button/group.vue)
+
+</template>
+
+<template #style>
+
+@[code{59-67}](../../.vuepress/components/button/group.vue)
 
 </template>
 
@@ -765,19 +814,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-28} vue](../../.vuepress/components/button/toggle.vue)
+@[code{1-28}](../../.vuepress/components/button/toggle.vue)
 
 </template>
 
 <template #script>
 
-@[code{30-54} vue](../../.vuepress/components/button/toggle.vue)
+@[code{30-54}](../../.vuepress/components/button/toggle.vue)
 
 </template>
 
 <template #style>
 
-@[code{56-66} vue](../../.vuepress/components/button/toggle.vue)
+@[code{56-62}](../../.vuepress/components/button/toggle.vue)
 
 </template>
 
@@ -798,7 +847,7 @@ NEWS:
 
 <template #template>
 
-@[code vue](../../.vuepress/components/button/ripple.vue)
+@[code{1-7}](../../.vuepress/components/button/ripple.vue)
 
 </template>
 

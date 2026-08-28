@@ -36,8 +36,18 @@ EVENTS:
 
 # Drawer
 
-<card><template #example><drawer-default /></template><template #template>
+<card><template #example><drawer-default /></template>
 
-@[code{1-12}](../.vuepress/components/drawer/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-9}](../.vuepress/components/drawer/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{10-13}](../.vuepress/components/drawer/default.vue)
+
+</template>
+
+</card>

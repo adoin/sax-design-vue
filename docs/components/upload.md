@@ -190,7 +190,7 @@ Upload immediately after selection when `action` is set.
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/upload/automatic.vue)
+@[code{1-8}](../.vuepress/components/upload/automatic.vue)
 
 </template>
 
@@ -208,15 +208,14 @@ Upload immediately after selection when `action` is set.
 
 <template #template>
 
-@[code{1-15} html{4-12}](../.vuepress/components/upload/advanced.vue)
+@[code{1-15}](../.vuepress/components/upload/advanced.vue)
 
 </template>
 
 <template #script>
 
-@[code{17-31}](../.vuepress/components/upload/advanced.vue)
+@[code{17-35}](../.vuepress/components/upload/advanced.vue)
 
 </template>
-
 
 </card>

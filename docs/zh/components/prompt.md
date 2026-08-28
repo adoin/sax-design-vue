@@ -137,19 +137,19 @@ Vuesax 3.x 里两者同属 Dialogs 系列（`vs-prompt` 是同一套 dialog 的�
 
 <template #template>
 
-@[code{1-12}](../../.vuepress/components/prompt/default.vue)
+@[code{1-57}](../../.vuepress/components/prompt/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-35}](../../.vuepress/components/prompt/default.vue)
+@[code{59-76}](../../.vuepress/components/prompt/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{37-60}](../../.vuepress/components/prompt/default.vue)
+@[code{78-108}](../../.vuepress/components/prompt/default.vue)
 
 </template>
 
@@ -167,13 +167,19 @@ Vuesax 3.x 里两者同属 Dialogs 系列（`vs-prompt` 是同一套 dialog 的�
 
 <template #template>
 
-@[code{1-12}](../../.vuepress/components/prompt/alert.vue)
+@[code{1-13}](../../.vuepress/components/prompt/alert.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-18}](../../.vuepress/components/prompt/alert.vue)
+@[code{15-19}](../../.vuepress/components/prompt/alert.vue)
+
+</template>
+
+<template #style>
+
+@[code{21-27}](../../.vuepress/components/prompt/alert.vue)
 
 </template>
 
@@ -191,13 +197,19 @@ Vuesax 3.x 里两者同属 Dialogs 系列（`vs-prompt` 是同一套 dialog 的�
 
 <template #template>
 
-@[code{1-22}](../../.vuepress/components/prompt/validation.vue)
+@[code{1-26}](../../.vuepress/components/prompt/validation.vue)
 
 </template>
 
 <template #script>
 
-@[code{24-40}](../../.vuepress/components/prompt/validation.vue)
+@[code{28-43}](../../.vuepress/components/prompt/validation.vue)
+
+</template>
+
+<template #style>
+
+@[code{45-64}](../../.vuepress/components/prompt/validation.vue)
 
 </template>
 
@@ -215,13 +227,19 @@ Vuesax 3.x 里两者同属 Dialogs 系列（`vs-prompt` 是同一套 dialog 的�
 
 <template #template>
 
-@[code{1-8}](../../.vuepress/components/prompt/programmatic.vue)
+@[code{1-7}](../../.vuepress/components/prompt/programmatic.vue)
 
 </template>
 
 <template #script>
 
-@[code{10-27}](../../.vuepress/components/prompt/programmatic.vue)
+@[code{9-28}](../../.vuepress/components/prompt/programmatic.vue)
+
+</template>
+
+<template #style>
+
+@[code{30-44}](../../.vuepress/components/prompt/programmatic.vue)
 
 </template>
 

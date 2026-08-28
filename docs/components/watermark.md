@@ -25,8 +25,18 @@ description: "Content watermark."
 
 # Watermark
 
-<card><template #example><watermark-default /></template><template #template>
+<card><template #example><watermark-default /></template>
 
-@[code{1-18}](../.vuepress/components/watermark/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-8}](../.vuepress/components/watermark/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{10-17}](../.vuepress/components/watermark/default.vue)
+
+</template>
+
+</card>

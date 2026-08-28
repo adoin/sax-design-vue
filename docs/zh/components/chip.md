@@ -121,7 +121,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../../.vuepress/components/chip/default.vue)
+@[code{1-22}](../../.vuepress/components/chip/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{24-28}](../../.vuepress/components/chip/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{30-36}](../../.vuepress/components/chip/default.vue)
 
 </template>
 
@@ -139,7 +151,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-25}](../../.vuepress/components/chip/styles.vue)
+@[code{1-10}](../../.vuepress/components/chip/styles.vue)
+
+</template>
+
+<template #style>
+
+@[code{12-20}](../../.vuepress/components/chip/styles.vue)
 
 </template>
 
@@ -161,6 +179,12 @@ NEWS:
 
 </template>
 
+<template #style>
+
+@[code{10-16}](../../.vuepress/components/chip/round.vue)
+
+</template>
+
 </card>
 
 <card>
@@ -179,6 +203,12 @@ NEWS:
 
 </template>
 
+<template #style>
+
+@[code{9-16}](../../.vuepress/components/chip/sizes.vue)
+
+</template>
+
 </card>
 
 <card>
@@ -193,7 +223,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-13}](../../.vuepress/components/chip/combinations.vue)
+@[code{1-19}](../../.vuepress/components/chip/combinations.vue)
+
+</template>
+
+<template #style>
+
+@[code{21-29}](../../.vuepress/components/chip/combinations.vue)
 
 </template>
 
@@ -211,7 +247,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-8}](../../.vuepress/components/chip/color.vue)
+@[code{1-35}](../../.vuepress/components/chip/color.vue)
+
+</template>
+
+<template #script>
+
+@[code{37-42}](../../.vuepress/components/chip/color.vue)
+
+</template>
+
+<template #style>
+
+@[code{44-50}](../../.vuepress/components/chip/color.vue)
 
 </template>
 
@@ -229,7 +277,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../../.vuepress/components/chip/transparent.vue)
+@[code{1-36}](../../.vuepress/components/chip/transparent.vue)
+
+</template>
+
+<template #script>
+
+@[code{38-43}](../../.vuepress/components/chip/transparent.vue)
+
+</template>
+
+<template #style>
+
+@[code{45-51}](../../.vuepress/components/chip/transparent.vue)
 
 </template>
 
@@ -247,7 +307,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-6}](../../.vuepress/components/chip/icon.vue)
+@[code{1-40}](../../.vuepress/components/chip/icon.vue)
+
+</template>
+
+<template #style>
+
+@[code{42-48}](../../.vuepress/components/chip/icon.vue)
 
 </template>
 
@@ -265,13 +331,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-5}](../../.vuepress/components/chip/closable.vue)
+@[code{1-16}](../../.vuepress/components/chip/closable.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-13}](../../.vuepress/components/chip/closable.vue)
+@[code{18-31}](../../.vuepress/components/chip/closable.vue)
+
+</template>
+
+<template #style>
+
+@[code{33-40}](../../.vuepress/components/chip/closable.vue)
 
 </template>
 
@@ -289,19 +361,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-8}](../../.vuepress/components/chip/chips.vue)
+@[code{1-22}](../../.vuepress/components/chip/chips.vue)
 
 </template>
 
 <template #script>
 
-@[code{10-13}](../../.vuepress/components/chip/chips.vue)
+@[code{24-32}](../../.vuepress/components/chip/chips.vue)
 
 </template>
 
 <template #style>
 
-@[code{15-23}](../../.vuepress/components/chip/chips.vue)
+@[code{34-46}](../../.vuepress/components/chip/chips.vue)
 
 </template>
 

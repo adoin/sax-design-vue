@@ -99,11 +99,27 @@ description: '支持聚焦轨道、上下文时间线、完整状态与可组合
 
 适合注册、配置等线性流程，当前步骤具有更强的视觉焦点。
 
-<template #example><steps-default /></template><template #template>
+<template #example><steps-default /></template>
 
-@[code](../../.vuepress/components/steps/default.vue)
+<template #template>
 
-</template></card>
+@[code{85-101}](../../.vuepress/components/steps/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-83}](../../.vuepress/components/steps/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{103-115}](../../.vuepress/components/steps/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -111,11 +127,27 @@ description: '支持聚焦轨道、上下文时间线、完整状态与可组合
 
 当前步骤可展开说明和操作，适合部署、审核等长流程。
 
-<template #example><steps-timeline /></template><template #template>
+<template #example><steps-timeline /></template>
 
-@[code](../../.vuepress/components/steps/timeline.vue)
+<template #template>
 
-</template></card>
+@[code{70-88}](../../.vuepress/components/steps/timeline.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-68}](../../.vuepress/components/steps/timeline.vue)
+
+</template>
+
+<template #style>
+
+@[code{90-96}](../../.vuepress/components/steps/timeline.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -123,11 +155,27 @@ description: '支持聚焦轨道、上下文时间线、完整状态与可组合
 
 使用 `item` 插槽完整替换步骤内容，可实现卡片式步骤。
 
-<template #example><steps-custom-item /></template><template #template>
+<template #example><steps-custom-item /></template>
 
-@[code](../../.vuepress/components/steps/custom-item.vue)
+<template #template>
 
-</template></card>
+@[code{53-79}](../../.vuepress/components/steps/custom-item.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-51}](../../.vuepress/components/steps/custom-item.vue)
+
+</template>
+
+<template #style>
+
+@[code{81-155}](../../.vuepress/components/steps/custom-item.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -135,8 +183,18 @@ description: '支持聚焦轨道、上下文时间线、完整状态与可组合
 
 内置等待、进行、加载、完成、成功、错误和禁用状态。
 
-<template #example><steps-states /></template><template #template>
+<template #example><steps-states /></template>
 
-@[code](../../.vuepress/components/steps/states.vue)
+<template #template>
 
-</template></card>
+@[code{37-45}](../../.vuepress/components/steps/states.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-35}](../../.vuepress/components/steps/states.vue)
+
+</template>
+
+</card>

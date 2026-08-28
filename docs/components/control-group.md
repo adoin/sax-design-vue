@@ -39,7 +39,19 @@ Place a Select and Input next to each other when users need to choose a prefix b
 
 <template #template>
 
-@[code{1-39}](../.vuepress/components/control-group/basic.vue)
+@[code{8-21}](../.vuepress/components/control-group/basic.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/control-group/basic.vue)
+
+</template>
+
+<template #style>
+
+@[code{23-36}](../.vuepress/components/control-group/basic.vue)
 
 </template>
 
@@ -55,7 +67,19 @@ Select, Input, Cascader, Date Picker, and Time Picker can share connected rows. 
 
 <template #template>
 
-@[code](../.vuepress/components/control-group/spans.vue)
+@[code{37-84}](../.vuepress/components/control-group/spans.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-35}](../.vuepress/components/control-group/spans.vue)
+
+</template>
+
+<template #style>
+
+@[code{86-99}](../.vuepress/components/control-group/spans.vue)
 
 </template>
 
@@ -71,7 +95,19 @@ Use `block` when the continuous field should fill its container.
 
 <template #template>
 
-@[code{1-40}](../.vuepress/components/control-group/block.vue)
+@[code{8-21}](../.vuepress/components/control-group/block.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/control-group/block.vue)
+
+</template>
+
+<template #style>
+
+@[code{23-36}](../.vuepress/components/control-group/block.vue)
 
 </template>
 

@@ -305,7 +305,19 @@ SLOTS:
 
 <template #template>
 
-@[code](../../.vuepress/components/navbar/default.vue)
+@[code{35-177}](../../.vuepress/components/navbar/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-33}](../../.vuepress/components/navbar/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{179-334}](../../.vuepress/components/navbar/default.vue)
 
 </template>
 

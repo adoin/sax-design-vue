@@ -274,19 +274,19 @@ Rate 将评分分为多个等级，并可用不同背景色区分。默认背景
 
 <template #template>
 
-@[code{1-10} vue{4,8}](../../.vuepress/components/rate/default.vue)
+@[code{1-10}](../../.vuepress/components/rate/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{12-18} vue{6}](../../.vuepress/components/rate/default.vue)
+@[code{12-18}](../../.vuepress/components/rate/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{20-39} vue](../../.vuepress/components/rate/default.vue)
+@[code{20-38}](../../.vuepress/components/rate/default.vue)
 
 </template>
 
@@ -304,19 +304,19 @@ Rate 支持 `small`、`default`、`large` 三种尺寸。
 
 <template #template>
 
-@[code{1-7} vue{3-5}](../../.vuepress/components/rate/size.vue)
+@[code{1-7}](../../.vuepress/components/rate/size.vue)
 
 </template>
 
 <template #script>
 
-@[code{9-13} vue](../../.vuepress/components/rate/size.vue)
+@[code{9-13}](../../.vuepress/components/rate/size.vue)
 
 </template>
 
 <template #style>
 
-@[code{15-20} vue](../../.vuepress/components/rate/size.vue)
+@[code{15-20}](../../.vuepress/components/rate/size.vue)
 
 </template>
 
@@ -334,13 +334,13 @@ Rate 支持 `small`、`default`、`large` 三种尺寸。
 
 <template #template>
 
-@[code{1-5} vue{3}](../../.vuepress/components/rate/allow-half.vue)
+@[code{1-5}](../../.vuepress/components/rate/allow-half.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11} vue](../../.vuepress/components/rate/allow-half.vue)
+@[code{7-11}](../../.vuepress/components/rate/allow-half.vue)
 
 </template>
 
@@ -360,19 +360,19 @@ Rate 支持 `small`、`default`、`large` 三种尺寸。
 
 <template #template>
 
-@[code{1-9} vue{3-7}](../../.vuepress/components/rate/text.vue)
+@[code{1-9}](../../.vuepress/components/rate/text.vue)
 
 </template>
 
 <template #script>
 
-@[code{11-15} vue](../../.vuepress/components/rate/text.vue)
+@[code{11-15}](../../.vuepress/components/rate/text.vue)
 
 </template>
 
 <template #style>
 
-@[code{17-27} vue](../../.vuepress/components/rate/text.vue)
+@[code{17-27}](../../.vuepress/components/rate/text.vue)
 
 </template>
 
@@ -390,13 +390,13 @@ Rate 支持 `small`、`default`、`large` 三种尺寸。
 
 <template #template>
 
-@[code{1-5} vue{3}](../../.vuepress/components/rate/clearable.vue)
+@[code{1-5}](../../.vuepress/components/rate/clearable.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11} vue](../../.vuepress/components/rate/clearable.vue)
+@[code{7-11}](../../.vuepress/components/rate/clearable.vue)
 
 </template>
 
@@ -416,13 +416,13 @@ Rate 支持 `small`、`default`、`large` 三种尺寸。
 
 <template #template>
 
-@[code{1-10} vue{5}](../../.vuepress/components/rate/more-icons.vue)
+@[code{1-10}](../../.vuepress/components/rate/more-icons.vue)
 
 </template>
 
 <template #script>
 
-@[code{12-18} vue](../../.vuepress/components/rate/more-icons.vue)
+@[code{12-21}](../../.vuepress/components/rate/more-icons.vue)
 
 </template>
 
@@ -442,13 +442,13 @@ Rate 支持 `small`、`default`、`large` 三种尺寸。
 
 <template #template>
 
-@[code{1-11} vue{3-9}](../../.vuepress/components/rate/read-only.vue)
+@[code{1-11}](../../.vuepress/components/rate/read-only.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-19} vue](../../.vuepress/components/rate/read-only.vue)
+@[code{13-17}](../../.vuepress/components/rate/read-only.vue)
 
 </template>
 

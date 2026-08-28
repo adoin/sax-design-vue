@@ -107,7 +107,13 @@ NEWS:
 
 <template #template>
 
-@[code](../../.vuepress/components/divider/vertical.vue)
+@[code{1-23}](../../.vuepress/components/divider/vertical.vue)
+
+</template>
+
+<template #style>
+
+@[code{25-40}](../../.vuepress/components/divider/vertical.vue)
 
 </template>
 
@@ -197,13 +203,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-12}](../../.vuepress/components/divider/background.vue)
+@[code{1-14}](../../.vuepress/components/divider/background.vue)
 
 </template>
 
 <template #style>
 
-@[code{14-22}](../../.vuepress/components/divider/background.vue)
+@[code{16-24}](../../.vuepress/components/divider/background.vue)
 
 </template>
 

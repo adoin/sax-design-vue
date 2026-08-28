@@ -68,7 +68,7 @@ Pass an `items` array or compose with `s-breadcrumb-item` slots.
 
 <template #script>
 
-@[code{5-11}](../.vuepress/components/breadcrumb/default.vue)
+@[code{5-12}](../.vuepress/components/breadcrumb/default.vue)
 
 </template>
 
@@ -92,7 +92,7 @@ Pass an `items` array or compose with `s-breadcrumb-item` slots.
 
 <template #script>
 
-@[code{5-32}](../.vuepress/components/breadcrumb/tree.vue)
+@[code{5-33}](../.vuepress/components/breadcrumb/tree.vue)
 
 </template>
 
@@ -116,7 +116,7 @@ Set `trigger="click"` to open menus by clicking a path item. You can pass an arr
 
 <template #script>
 
-@[code{5-23}](../.vuepress/components/breadcrumb/tree-click.vue)
+@[code{5-32}](../.vuepress/components/breadcrumb/tree-click.vue)
 
 </template>
 
@@ -135,13 +135,19 @@ Theme breadcrumb links with the `color` prop.
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/breadcrumb/color.vue)
+@[code{1-6}](../.vuepress/components/breadcrumb/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-7}](../.vuepress/components/breadcrumb/color.vue)
+@[code{8-18}](../.vuepress/components/breadcrumb/color.vue)
+
+</template>
+
+<template #style>
+
+@[code{20-28}](../.vuepress/components/breadcrumb/color.vue)
 
 </template>
 
@@ -160,13 +166,19 @@ Customize the divider between items.
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/breadcrumb/separator.vue)
+@[code{1-8}](../.vuepress/components/breadcrumb/separator.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-7}](../.vuepress/components/breadcrumb/separator.vue)
+@[code{10-16}](../.vuepress/components/breadcrumb/separator.vue)
+
+</template>
+
+<template #style>
+
+@[code{18-25}](../.vuepress/components/breadcrumb/separator.vue)
 
 </template>
 
@@ -185,7 +197,7 @@ Build breadcrumbs manually with slot-based items.
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/breadcrumb/slot.vue)
+@[code{1-13}](../.vuepress/components/breadcrumb/slot.vue)
 
 </template>
 
@@ -204,19 +216,19 @@ Align the trail to the left, center, or right.
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/breadcrumb/align.vue)
+@[code{1-7}](../.vuepress/components/breadcrumb/align.vue)
 
 </template>
 
 <template #script>
 
-@[code{8-10}](../.vuepress/components/breadcrumb/align.vue)
+@[code{9-16}](../.vuepress/components/breadcrumb/align.vue)
 
 </template>
 
 <template #style>
 
-@[code{12-20}](../.vuepress/components/breadcrumb/align.vue)
+@[code{18-25}](../.vuepress/components/breadcrumb/align.vue)
 
 </template>
 

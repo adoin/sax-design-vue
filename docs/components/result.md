@@ -20,8 +20,12 @@ description: "Result feedback state."
 
 # Result
 
-<card><template #example><result-default /></template><template #template>
+<card><template #example><result-default /></template>
 
-@[code{1-5}](../.vuepress/components/result/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-9}](../.vuepress/components/result/default.vue)
+
+</template>
+
+</card>

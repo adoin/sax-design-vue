@@ -100,7 +100,19 @@ SLOTS:
 
 <template #template>
 
-@[code](../.vuepress/components/radio/patterns.vue)
+@[code{56-94}](../.vuepress/components/radio/patterns.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-54}](../.vuepress/components/radio/patterns.vue)
+
+</template>
+
+<template #style>
+
+@[code{96-142}](../.vuepress/components/radio/patterns.vue)
 
 </template>
 
@@ -118,13 +130,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-13} vue{4-9}](../.vuepress/components/radio/color.vue)
+@[code{1-11}](../.vuepress/components/radio/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{15-19}](../.vuepress/components/radio/color.vue)
+@[code{13-17}](../.vuepress/components/radio/color.vue)
+
+</template>
+
+<template #style>
+
+@[code{18-26}](../.vuepress/components/radio/color.vue)
 
 </template>
 
@@ -142,13 +160,19 @@ Add a label to the radio with the `default` slot, if you need the label to be be
 
 <template #template>
 
-@[code{1-6} vue{4}](../.vuepress/components/radio/label.vue)
+@[code{1-6}](../.vuepress/components/radio/label.vue)
 
 </template>
 
 <template #script>
 
 @[code{8-12}](../.vuepress/components/radio/label.vue)
+
+</template>
+
+<template #style>
+
+@[code{13-21}](../.vuepress/components/radio/label.vue)
 
 </template>
 
@@ -166,13 +190,19 @@ Loading reuses Button's pulse rail: a glowing segment travels from left to right
 
 <template #template>
 
-@[code{7-12} vue{9,10}](../.vuepress/components/radio/loading.vue)
+@[code{7-12}](../.vuepress/components/radio/loading.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-5}](../.vuepress/components/radio/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{14-20}](../.vuepress/components/radio/loading.vue)
 
 </template>
 
@@ -190,13 +220,19 @@ The outer disc and default center dot share one SVG coordinate system, independe
 
 <template #template>
 
-@[code{1-60} vue{3,5-20}](../.vuepress/components/radio/icons.vue)
+@[code{1-60}](../.vuepress/components/radio/icons.vue)
 
 </template>
 
 <template #script>
 
 @[code{62-66}](../.vuepress/components/radio/icons.vue)
+
+</template>
+
+<template #style>
+
+@[code{67-80}](../.vuepress/components/radio/icons.vue)
 
 </template>
 

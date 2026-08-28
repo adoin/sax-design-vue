@@ -84,11 +84,27 @@ EVENTS:
 
 ## 基础用法
 
-<template #example><form-group-default /></template><template #template>
+<template #example><form-group-default /></template>
 
-@[code](../../.vuepress/components/form-group/default.vue)
+<template #template>
 
-</template></card>
+@[code{133-156}](../../.vuepress/components/form-group/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-131}](../../.vuepress/components/form-group/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{158-162}](../../.vuepress/components/form-group/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -96,8 +112,24 @@ EVENTS:
 
 此示例初始绑定 25 组数据，默认只有第 20 组不通过。初始只挂载当前表单；点击“校验全部”仍会检查所有未渲染项，并自动切换到第一个错误标签。可以新增数据或右键标签，对比当前从 0 开始的数组下标与稳定 `__index`。
 
-<template #example><form-group-large-data /></template><template #template>
+<template #example><form-group-large-data /></template>
 
-@[code](../../.vuepress/components/form-group/large-data.vue)
+<template #template>
 
-</template></card>
+@[code{206-260}](../../.vuepress/components/form-group/large-data.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-204}](../../.vuepress/components/form-group/large-data.vue)
+
+</template>
+
+<template #style>
+
+@[code{262-276}](../../.vuepress/components/form-group/large-data.vue)
+
+</template>
+
+</card>

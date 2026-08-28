@@ -51,11 +51,27 @@ description: '支持任意区域、双向分割与递归嵌套的可拖拽布局
 
 在对应的 `SplitterItem` 中继续嵌套 item 即可。
 
-<template #example><splitter-default /></template><template #template>
+<template #example><splitter-default /></template>
 
-@[code{1-34}](../../.vuepress/components/splitter/default.vue)
+<template #template>
 
-</template></card>
+@[code{16-33}](../../.vuepress/components/splitter/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-14}](../../.vuepress/components/splitter/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{35-110}](../../.vuepress/components/splitter/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -63,11 +79,27 @@ description: '支持任意区域、双向分割与递归嵌套的可拖拽布局
 
 `use-rest` 永久占用剩余空间；`precision` 默认吸附到 `0.01`。
 
-<template #example><splitter-sizing /></template><template #template>
+<template #example><splitter-sizing /></template>
 
-@[code{1-31}](../../.vuepress/components/splitter/sizing.vue)
+<template #template>
 
-</template></card>
+@[code{10-30}](../../.vuepress/components/splitter/sizing.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-8}](../../.vuepress/components/splitter/sizing.vue)
+
+</template>
+
+<template #style>
+
+@[code{32-110}](../../.vuepress/components/splitter/sizing.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -75,11 +107,27 @@ description: '支持任意区域、双向分割与递归嵌套的可拖拽布局
 
 单值控制两个方向，数组顺序为 `[rowGap, columnGap]`；`0` 不占空间但仍可拖拽。
 
-<template #example><splitter-gap /></template><template #template>
+<template #example><splitter-gap /></template>
 
-@[code{1-45}](../../.vuepress/components/splitter/gap.vue)
+<template #template>
 
-</template></card>
+@[code{12-41}](../../.vuepress/components/splitter/gap.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-10}](../../.vuepress/components/splitter/gap.vue)
+
+</template>
+
+<template #style>
+
+@[code{43-149}](../../.vuepress/components/splitter/gap.vue)
+
+</template>
+
+</card>
 
 <card>
 

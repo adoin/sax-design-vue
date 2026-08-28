@@ -29,8 +29,18 @@ EVENTS:
 
 # Text ellipsis
 
-<card><template #example><text-ellipsis-default /></template><template #template>
+<card><template #example><text-ellipsis-default /></template>
 
-@[code{1-6}](../.vuepress/components/text-ellipsis/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-8}](../.vuepress/components/text-ellipsis/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{9-14}](../.vuepress/components/text-ellipsis/default.vue)
+
+</template>
+
+</card>

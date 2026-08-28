@@ -141,11 +141,21 @@ Use the `header`, `aside`, default, and `footer` slots to assemble a complete pa
 Set `aside-position="end"` for a right rail. On small screens the regions stack to
 avoid horizontal scrolling.
 
-<template #example><layout-default /></template><template #template>
+<template #example><layout-default /></template>
 
-@[code](../.vuepress/components/layout/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-83}](../.vuepress/components/layout/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{85-308}](../.vuepress/components/layout/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -158,11 +168,27 @@ responsive fallback, and the collapse/expand control at the outer edge. The
 collapsed rail keeps a directional arrow visible and exposes hover and keyboard
 feedback. When composing `SLayoutAside` directly, use `#outside`.
 
-<template #example><layout-aside-outside /></template><template #template>
+<template #example><layout-aside-outside /></template>
 
-@[code](../.vuepress/components/layout/aside-outside.vue)
+<template #template>
 
-</template></card>
+@[code{11-78}](../.vuepress/components/layout/aside-outside.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-9}](../.vuepress/components/layout/aside-outside.vue)
+
+</template>
+
+<template #style>
+
+@[code{80-216}](../.vuepress/components/layout/aside-outside.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -175,11 +201,21 @@ For non-standard structures, combine `SLayoutContainer`, `SLayoutHeader`,
 clear an existing top navigation bar. Use the `SLayoutAside` `outside` slot for
 settings, language, and theme tools; the aside owns the seamless attached surface.
 
-<template #example><layout-composition /></template><template #template>
+<template #example><layout-composition /></template>
 
-@[code](../.vuepress/components/layout/composition.vue)
+<template #template>
 
-</template></card>
+@[code{1-18}](../.vuepress/components/layout/composition.vue)
+
+</template>
+
+<template #style>
+
+@[code{20-50}](../.vuepress/components/layout/composition.vue)
+
+</template>
+
+</card>
 
 <card>
 

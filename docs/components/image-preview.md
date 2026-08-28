@@ -33,8 +33,24 @@ description: "Full-screen image preview."
 
 # Image preview
 
-<card><template #example><image-preview-default /></template><template #template>
+<card><template #example><image-preview-default /></template>
 
-@[code{1-17}](../.vuepress/components/image-preview/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-16}](../.vuepress/components/image-preview/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{18-31}](../.vuepress/components/image-preview/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{33-45}](../.vuepress/components/image-preview/default.vue)
+
+</template>
+
+</card>

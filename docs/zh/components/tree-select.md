@@ -33,8 +33,24 @@ description: "树形选择器。"
 
 # Tree select 树形选择器
 
-<card><template #example><tree-select-default /></template><template #template>
+<card><template #example><tree-select-default /></template>
 
-@[code{1-18}](../../.vuepress/components/tree-select/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-4}](../../.vuepress/components/tree-select/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{6-20}](../../.vuepress/components/tree-select/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-28}](../../.vuepress/components/tree-select/default.vue)
+
+</template>
+
+</card>

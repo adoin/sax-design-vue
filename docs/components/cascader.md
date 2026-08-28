@@ -101,7 +101,19 @@ Selection commits on a leaf by default. Use `change-on-select` to commit at any 
 
 <template #template>
 
-@[code](../.vuepress/components/cascader/default.vue)
+@[code{1-12}](../.vuepress/components/cascader/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{14-30}](../.vuepress/components/cascader/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{32-44}](../.vuepress/components/cascader/default.vue)
 
 </template>
 
@@ -117,7 +129,19 @@ Selection commits on a leaf by default. Use `change-on-select` to commit at any 
 
 <template #template>
 
-@[code](../.vuepress/components/cascader/search.vue)
+@[code{35-77}](../.vuepress/components/cascader/search.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-33}](../.vuepress/components/cascader/search.vue)
+
+</template>
+
+<template #style>
+
+@[code{79-105}](../.vuepress/components/cascader/search.vue)
 
 </template>
 
@@ -133,7 +157,19 @@ Selection commits on a leaf by default. Use `change-on-select` to commit at any 
 
 <template #template>
 
-@[code](../.vuepress/components/cascader/multiple.vue)
+@[code{1-20}](../.vuepress/components/cascader/multiple.vue)
+
+</template>
+
+<template #script>
+
+@[code{22-50}](../.vuepress/components/cascader/multiple.vue)
+
+</template>
+
+<template #style>
+
+@[code{52-58}](../.vuepress/components/cascader/multiple.vue)
 
 </template>
 
@@ -149,7 +185,19 @@ Use `expand-trigger="hover"` to expand on hover. For lazy nodes, set `isLeaf` to
 
 <template #template>
 
-@[code](../.vuepress/components/cascader/lazy.vue)
+@[code{1-16}](../.vuepress/components/cascader/lazy.vue)
+
+</template>
+
+<template #script>
+
+@[code{18-53}](../.vuepress/components/cascader/lazy.vue)
+
+</template>
+
+<template #style>
+
+@[code{55-61}](../.vuepress/components/cascader/lazy.vue)
 
 </template>
 
@@ -165,7 +213,19 @@ Use `expand-trigger="hover"` to expand on hover. For lazy nodes, set `isLeaf` to
 
 <template #template>
 
-@[code](../.vuepress/components/cascader/popup.vue)
+@[code{1-22}](../.vuepress/components/cascader/popup.vue)
+
+</template>
+
+<template #script>
+
+@[code{24-39}](../.vuepress/components/cascader/popup.vue)
+
+</template>
+
+<template #style>
+
+@[code{41-49}](../.vuepress/components/cascader/popup.vue)
 
 </template>
 

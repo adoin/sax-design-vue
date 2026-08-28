@@ -180,6 +180,24 @@ Add a sidebar menu with the `s-sidebar` component, there are two subcomponents `
 <sidebar-default />
 </template>
 
+<template #template>
+
+@[code{1-102}](../.vuepress/components/sidebar/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{104-108}](../.vuepress/components/sidebar/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{110-116}](../.vuepress/components/sidebar/default.vue)
+
+</template>
+
 </card>
 
 <card>
@@ -198,13 +216,19 @@ The component has a slot: header in which we add a sub-component `s-sidebar-item
 
 <template #template>
 
-@[code{1-170} html](../.vuepress/components/sidebar/group.vue)
+@[code{1-170}](../.vuepress/components/sidebar/group.vue)
 
 </template>
 
 <template #script>
 
-@[code{172-176} html](../.vuepress/components/sidebar/group.vue)
+@[code{172-176}](../.vuepress/components/sidebar/group.vue)
+
+</template>
+
+<template #style>
+
+@[code{178-184}](../.vuepress/components/sidebar/group.vue)
 
 </template>
 
@@ -226,13 +250,19 @@ For the sidebar to work correctly it is necessary to add to the items the icon s
 
 <template #template>
 
-@[code{1-171} html](../.vuepress/components/sidebar/reduce.vue)
+@[code{1-171}](../.vuepress/components/sidebar/reduce.vue)
 
 </template>
 
 <template #script>
 
-@[code{173-177} html](../.vuepress/components/sidebar/reduce.vue)
+@[code{173-177}](../.vuepress/components/sidebar/reduce.vue)
+
+</template>
+
+<template #style>
+
+@[code{179-188}](../.vuepress/components/sidebar/reduce.vue)
 
 </template>
 
@@ -250,13 +280,19 @@ You can add the functionality to expand and collapse the sidebar with the mouse,
 
 <template #template>
 
-@[code{1-171} html](../.vuepress/components/sidebar/reduce-expand.vue)
+@[code{1-171}](../.vuepress/components/sidebar/reduce-expand.vue)
 
 </template>
 
 <template #script>
 
-@[code{173-177} html](../.vuepress/components/sidebar/reduce-expand.vue)
+@[code{173-177}](../.vuepress/components/sidebar/reduce-expand.vue)
+
+</template>
+
+<template #style>
+
+@[code{179-188}](../.vuepress/components/sidebar/reduce-expand.vue)
 
 </template>
 
@@ -274,13 +310,19 @@ Change the color of the sidebar, if necessary you can also change the color of t
 
 <template #template>
 
-@[code{1-118} html](../.vuepress/components/sidebar/color.vue)
+@[code{1-118}](../.vuepress/components/sidebar/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{120-124} html](../.vuepress/components/sidebar/color.vue)
+@[code{120-124}](../.vuepress/components/sidebar/color.vue)
+
+</template>
+
+<template #style>
+
+@[code{126-135}](../.vuepress/components/sidebar/color.vue)
 
 </template>
 
@@ -298,13 +340,19 @@ You can define if the sidebar is visible or hidden with the open property, this 
 
 <template #template>
 
-@[code{1-194} html](../.vuepress/components/sidebar/open.vue)
+@[code{1-194}](../.vuepress/components/sidebar/open.vue)
 
 </template>
 
 <template #script>
 
-@[code{196-201} html](../.vuepress/components/sidebar/open.vue)
+@[code{196-201}](../.vuepress/components/sidebar/open.vue)
+
+</template>
+
+<template #style>
+
+@[code{203-209}](../.vuepress/components/sidebar/open.vue)
 
 </template>
 
@@ -322,13 +370,19 @@ Change the position of the sidebar to the right and its animation with the `righ
 
 <template #template>
 
-@[code{1-101} html](../.vuepress/components/sidebar/right.vue)
+@[code{1-101}](../.vuepress/components/sidebar/right.vue)
 
 </template>
 
 <template #script>
 
-@[code{103-107} html](../.vuepress/components/sidebar/right.vue)
+@[code{103-107}](../.vuepress/components/sidebar/right.vue)
+
+</template>
+
+<template #style>
+
+@[code{109-115}](../.vuepress/components/sidebar/right.vue)
 
 </template>
 

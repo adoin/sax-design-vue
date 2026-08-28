@@ -33,8 +33,12 @@ description: "持续公告栏。"
 
 # Notice bar 公告栏
 
-<card><template #example><notice-bar-default /></template><template #template>
+<card><template #example><notice-bar-default /></template>
 
-@[code{1-3}](../../.vuepress/components/notice-bar/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-6}](../../.vuepress/components/notice-bar/default.vue)
+
+</template>
+
+</card>

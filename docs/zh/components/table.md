@@ -149,7 +149,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-26} html{3}](../../.vuepress/components/table/default.vue)
+@[code{1-26}](../../.vuepress/components/table/default.vue)
 
 </template>
 
@@ -173,13 +173,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-26} html{1}](../../.vuepress/components/table/striped.vue)
+@[code{1-26}](../../.vuepress/components/table/striped.vue)
 
 </template>
 
 <template #script>
 
-@[code{28-109}](../../.vuepress/components/table/default.vue)
+@[code{28-109}](../../.vuepress/components/table/striped.vue)
 
 </template>
 
@@ -197,7 +197,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-26} vue{14-17}](../../.vuepress/components/table/color.vue)
+@[code{1-26}](../../.vuepress/components/table/color.vue)
 
 </template>
 
@@ -227,7 +227,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-38} vue{12,25}](../../.vuepress/components/table/pagination.vue)
+@[code{1-38}](../../.vuepress/components/table/pagination.vue)
 
 </template>
 
@@ -255,13 +255,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-32} vue{3,15}](../../.vuepress/components/table/selected.vue)
+@[code{1-32}](../../.vuepress/components/table/selected.vue)
 
 </template>
 
 <template #script>
 
 @[code{34-119}](../../.vuepress/components/table/selected.vue)
+
+</template>
+
+<template #style>
+
+@[code{120-134}](../../.vuepress/components/table/selected.vue)
 
 </template>
 
@@ -281,13 +287,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-50} vue{3}](../../.vuepress/components/table/multiple.vue)
+@[code{1-50}](../../.vuepress/components/table/multiple.vue)
 
 </template>
 
 <template #script>
 
 @[code{52-144}](../../.vuepress/components/table/multiple.vue)
+
+</template>
+
+<template #style>
+
+@[code{146-162}](../../.vuepress/components/table/multiple.vue)
 
 </template>
 
@@ -305,13 +317,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-48} vue{23-43}](../../.vuepress/components/table/expand.vue)
+@[code{1-46}](../../.vuepress/components/table/expand.vue)
 
 </template>
 
 <template #script>
 
-@[code{50-131}](../../.vuepress/components/table/expand.vue)
+@[code{48-129}](../../.vuepress/components/table/expand.vue)
+
+</template>
+
+<template #style>
+
+@[code{131-146}](../../.vuepress/components/table/expand.vue)
 
 </template>
 
@@ -329,13 +347,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-61} vue{15,21,32}](../../.vuepress/components/table/edit.vue)
+@[code{1-57}](../../.vuepress/components/table/edit.vue)
 
 </template>
 
 <template #script>
 
-@[code{63-150} vue{23-41}](../../.vuepress/components/table/edit.vue)
+@[code{59-146}](../../.vuepress/components/table/edit.vue)
 
 </template>
 
@@ -373,13 +391,13 @@ declare function sortData<T extends Record<string, unknown>>(
 
 <template #template>
 
-@[code{1-32} vue{6,9,12}](../../.vuepress/components/table/sort.vue)
+@[code{1-30}](../../.vuepress/components/table/sort.vue)
 
 </template>
 
 <template #script>
 
-@[code{34-118}](../../.vuepress/components/table/sort.vue)
+@[code{32-116}](../../.vuepress/components/table/sort.vue)
 
 </template>
 
@@ -397,19 +415,19 @@ declare function sortData<T extends Record<string, unknown>>(
 
 <template #template>
 
-@[code{1-121}](../../.vuepress/components/table/miscellaneous.vue)
+@[code{1-112}](../../.vuepress/components/table/miscellaneous.vue)
 
 </template>
 
 <template #script>
 
-@[code{123-221}](../../.vuepress/components/table/miscellaneous.vue)
+@[code{114-212}](../../.vuepress/components/table/miscellaneous.vue)
 
 </template>
 
 <template #style>
 
-@[code{223-238}](../../.vuepress/components/table/miscellaneous.vue)
+@[code{214-229}](../../.vuepress/components/table/miscellaneous.vue)
 
 </template>
 

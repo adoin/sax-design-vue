@@ -81,7 +81,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-2}](../../.vuepress/components/images/preview.vue)
+@[code{1-11}](../../.vuepress/components/images/preview.vue)
+
+</template>
+
+<template #script>
+
+@[code{12-17}](../../.vuepress/components/images/preview.vue)
 
 </template>
 

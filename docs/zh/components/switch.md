@@ -243,13 +243,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-7} html{3}](../../.vuepress/components/switch/default.vue)
+@[code{1-7}](../../.vuepress/components/switch/default.vue)
 
 </template>
 
 <template #script>
 
 @[code{9-15}](../../.vuepress/components/switch/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{17-26}](../../.vuepress/components/switch/default.vue)
 
 </template>
 
@@ -277,6 +283,12 @@ SLOTS:
 
 </template>
 
+<template #style>
+
+@[code{25-34}](../../.vuepress/components/switch/color.vue)
+
+</template>
+
 </card>
 
 <card>
@@ -295,13 +307,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-13} html{5,6,9,10}](../../.vuepress/components/switch/text.vue)
+@[code{1-13}](../../.vuepress/components/switch/text.vue)
 
 </template>
 
 <template #script>
 
 @[code{15-21}](../../.vuepress/components/switch/text.vue)
+
+</template>
+
+<template #style>
+
+@[code{23-32}](../../.vuepress/components/switch/text.vue)
 
 </template>
 
@@ -319,13 +337,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-41} html{4-9,29-32,35-38}](../../.vuepress/components/switch/icons.vue)
+@[code{1-41}](../../.vuepress/components/switch/icons.vue)
 
 </template>
 
 <template #script>
 
 @[code{43-52}](../../.vuepress/components/switch/icons.vue)
+
+</template>
+
+<template #style>
+
+@[code{54-63}](../../.vuepress/components/switch/icons.vue)
 
 </template>
 
@@ -343,13 +367,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-6} html{4}](../../.vuepress/components/switch/loading.vue)
+@[code{1-6}](../../.vuepress/components/switch/loading.vue)
 
 </template>
 
 <template #script>
 
 @[code{8-13}](../../.vuepress/components/switch/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-24}](../../.vuepress/components/switch/loading.vue)
 
 </template>
 
@@ -367,13 +397,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-7} html{3}](../../.vuepress/components/switch/indeterminate.vue)
+@[code{1-7}](../../.vuepress/components/switch/indeterminate.vue)
 
 </template>
 
 <template #script>
 
 @[code{9-15}](../../.vuepress/components/switch/indeterminate.vue)
+
+</template>
+
+<template #style>
+
+@[code{17-26}](../../.vuepress/components/switch/indeterminate.vue)
 
 </template>
 
@@ -391,13 +427,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-7} html{3}](../../.vuepress/components/switch/square.vue)
+@[code{1-7}](../../.vuepress/components/switch/square.vue)
 
 </template>
 
 <template #script>
 
 @[code{9-15}](../../.vuepress/components/switch/square.vue)
+
+</template>
+
+<template #style>
+
+@[code{17-26}](../../.vuepress/components/switch/square.vue)
 
 </template>
 

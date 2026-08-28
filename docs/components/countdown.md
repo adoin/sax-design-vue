@@ -49,9 +49,17 @@ description: 'Countdown display.'
 
 The existing static digit presentation remains the default.
 
-<template #example><countdown-default /></template><template #template>
+<template #example><countdown-default /></template>
 
-@[code](../.vuepress/components/countdown/default.vue)
+<template #template>
+
+@[code{8-11}](../.vuepress/components/countdown/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/countdown/default.vue)
 
 </template>
 
@@ -67,9 +75,23 @@ The highest unit in `format` absorbs omitted larger units: `ss` shows total seco
 
 Use `speed` to change the rate (`0` freezes, `1` is real time, and `2` is twice as fast). Use either `format` for token-based output or `formatter(time)` for custom text; when `formatter` is provided, `format` is ignored. Formatter output still passes through the built-in digit renderer, so the selected `effect` remains active.
 
-<template #example><countdown-formats /></template><template #template>
+<template #example><countdown-formats /></template>
 
-@[code](../.vuepress/components/countdown/formats.vue)
+<template #template>
+
+@[code{44-105}](../.vuepress/components/countdown/formats.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-42}](../.vuepress/components/countdown/formats.vue)
+
+</template>
+
+<template #style>
+
+@[code{107-144}](../.vuepress/components/countdown/formats.vue)
 
 </template>
 

@@ -250,7 +250,7 @@ UPDATES:
 
 <template #template>
 
-@[code html](../../.vuepress/components/alert/default.vue)
+@[code{1-10}](../../.vuepress/components/alert/default.vue)
 
 </template>
 
@@ -268,7 +268,7 @@ UPDATES:
 
 <template #template>
 
-@[code html{3}](../../.vuepress/components/alert/solid.vue)
+@[code{1-10}](../../.vuepress/components/alert/solid.vue)
 
 </template>
 
@@ -286,7 +286,7 @@ UPDATES:
 
 <template #template>
 
-@[code html{3}](../../.vuepress/components/alert/border.vue)
+@[code{1-10}](../../.vuepress/components/alert/border.vue)
 
 </template>
 
@@ -304,7 +304,7 @@ UPDATES:
 
 <template #template>
 
-@[code html{3}](../../.vuepress/components/alert/shadow.vue)
+@[code{1-10}](../../.vuepress/components/alert/shadow.vue)
 
 </template>
 
@@ -322,7 +322,7 @@ UPDATES:
 
 <template #template>
 
-@[code html{3}](../../.vuepress/components/alert/gradient.vue)
+@[code{1-10}](../../.vuepress/components/alert/gradient.vue)
 
 </template>
 
@@ -340,7 +340,7 @@ UPDATES:
 
 <template #template>
 
-@[code html{3}](../../.vuepress/components/alert/relief.vue)
+@[code{1-10}](../../.vuepress/components/alert/relief.vue)
 
 </template>
 
@@ -358,13 +358,19 @@ UPDATES:
 
 <template #template>
 
-@[code{1-17} html](../../.vuepress/components/alert/animate.vue)
+@[code{1-14}](../../.vuepress/components/alert/animate.vue)
 
 </template>
 
 <template #script>
 
-@[code{18-23} html](../../.vuepress/components/alert/animate.vue)
+@[code{16-20}](../../.vuepress/components/alert/animate.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-26}](../../.vuepress/components/alert/animate.vue)
 
 </template>
 
@@ -384,19 +390,19 @@ UPDATES:
 
 <template #template>
 
-@[code{1-69} html{3}](../../.vuepress/components/alert/color.vue)
+@[code{1-66}](../../.vuepress/components/alert/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{71-75} html](../../.vuepress/components/alert/color.vue)
+@[code{68-72}](../../.vuepress/components/alert/color.vue)
 
 </template>
 
 <template #style>
 
-@[code{77-84} html](../../.vuepress/components/alert/color.vue)
+@[code{74-81}](../../.vuepress/components/alert/color.vue)
 
 </template>
 
@@ -418,7 +424,7 @@ UPDATES:
 
 <template #template>
 
-@[code html{4-6}](../../.vuepress/components/alert/icon.vue)
+@[code{1-13}](../../.vuepress/components/alert/icon.vue)
 
 </template>
 
@@ -436,7 +442,7 @@ UPDATES:
 
 <template #template>
 
-@[code html{4}](../../.vuepress/components/alert/title.vue)
+@[code{1-10}](../../.vuepress/components/alert/title.vue)
 
 </template>
 
@@ -456,13 +462,13 @@ UPDATES:
 
 <template #template>
 
-@[code{1-13} html{3}](../../.vuepress/components/alert/hidden-content.vue)
+@[code{1-10}](../../.vuepress/components/alert/hidden-content.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-18} html{4}](../../.vuepress/components/alert/hidden-content.vue)
+@[code{11-15}](../../.vuepress/components/alert/hidden-content.vue)
 
 </template>
 
@@ -480,13 +486,13 @@ UPDATES:
 
 <template #template>
 
-@[code{1-21} html{3,6,11,16}](../../.vuepress/components/alert/pagination.vue)
+@[code{1-21}](../../.vuepress/components/alert/pagination.vue)
 
 </template>
 
 <template #script>
 
-@[code{22-26} html{4}](../../.vuepress/components/alert/pagination.vue)
+@[code{22-26}](../../.vuepress/components/alert/pagination.vue)
 
 </template>
 
@@ -506,7 +512,7 @@ UPDATES:
 
 <template #template>
 
-@[code html{11-14}](../../.vuepress/components/alert/footer.vue)
+@[code{1-14}](../../.vuepress/components/alert/footer.vue)
 
 </template>
 
@@ -524,7 +530,7 @@ UPDATES:
 
 <template #template>
 
-@[code html{3}](../../.vuepress/components/alert/progress.vue)
+@[code{1-10}](../../.vuepress/components/alert/progress.vue)
 
 </template>
 
@@ -542,13 +548,13 @@ UPDATES:
 
 <template #template>
 
-@[code{1-17} html{7}](../../.vuepress/components/alert/closable.vue)
+@[code{1-14}](../../.vuepress/components/alert/closable.vue)
 
 </template>
 
 <template #script>
 
-@[code{18-22} html{4}](../../.vuepress/components/alert/closable.vue)
+@[code{15-19}](../../.vuepress/components/alert/closable.vue)
 
 </template>
 
@@ -566,13 +572,13 @@ UPDATES:
 
 <template #template>
 
-@[code{1-14} html{4}](../../.vuepress/components/alert/time.vue)
+@[code{1-11}](../../.vuepress/components/alert/time.vue)
 
 </template>
 
 <template #script>
 
-@[code{16-36} html{5-6}](../../.vuepress/components/alert/time.vue)
+@[code{13-33}](../../.vuepress/components/alert/time.vue)
 
 </template>
 

@@ -101,11 +101,27 @@ description: 'A multi-level menu with inline, cascading popup, and horizontal na
 
 The admin-style sidebar keeps its collapse control in the footer, reduces to an icon rail, and automatically moves child menus into popups.
 
-<template #example><menu-default /></template><template #template>
+<template #example><menu-default /></template>
 
-@[code](../.vuepress/components/menu/default.vue)
+<template #template>
 
-</template></card>
+@[code{42-137}](../.vuepress/components/menu/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-40}](../.vuepress/components/menu/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{139-336}](../.vuepress/components/menu/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -113,11 +129,27 @@ The admin-style sidebar keeps its collapse control in the footer, reduces to an 
 
 Choose hover or click triggers, independent second- and third-level positioning, and the `floating` style.
 
-<template #example><menu-popup /></template><template #template>
+<template #example><menu-popup /></template>
 
-@[code](../.vuepress/components/menu/popup.vue)
+<template #template>
 
-</template></card>
+@[code{37-53}](../.vuepress/components/menu/popup.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-35}](../.vuepress/components/menu/popup.vue)
+
+</template>
+
+<template #style>
+
+@[code{55-62}](../.vuepress/components/menu/popup.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -125,11 +157,21 @@ Choose hover or click triggers, independent second- and third-level positioning,
 
 Horizontal menus use popups by default and support arrows, Enter, Space, and Escape.
 
-<template #example><menu-horizontal /></template><template #template>
+<template #example><menu-horizontal /></template>
 
-@[code](../.vuepress/components/menu/horizontal.vue)
+<template #template>
 
-</template></card>
+@[code{43-51}](../.vuepress/components/menu/horizontal.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-41}](../.vuepress/components/menu/horizontal.vue)
+
+</template>
+
+</card>
 
 <card>
 

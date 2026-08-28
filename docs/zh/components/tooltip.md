@@ -245,6 +245,12 @@ SLOTS:
 
 </template>
 
+<template #style>
+
+@[code{9-13}](../../.vuepress/components/tooltip/default.vue)
+
+</template>
+
 </card>
 
 <card>
@@ -264,7 +270,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-20} vue{3,7,11,15}](../../.vuepress/components/tooltip/placement.vue)
+@[code{1-20}](../../.vuepress/components/tooltip/placement.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-26}](../../.vuepress/components/tooltip/placement.vue)
 
 </template>
 
@@ -282,7 +294,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-36} vue{7,11,15,19,23,27,31}](../../.vuepress/components/tooltip/color.vue)
+@[code{1-36}](../../.vuepress/components/tooltip/color.vue)
+
+</template>
+
+<template #style>
+
+@[code{38-42}](../../.vuepress/components/tooltip/color.vue)
 
 </template>
 
@@ -304,7 +322,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-16} vue{3,7,11}](../../.vuepress/components/tooltip/border.vue)
+@[code{1-16}](../../.vuepress/components/tooltip/border.vue)
+
+</template>
+
+<template #style>
+
+@[code{18-22}](../../.vuepress/components/tooltip/border.vue)
 
 </template>
 
@@ -322,7 +346,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-8} vue{3}](../../.vuepress/components/tooltip/square.vue)
+@[code{1-8}](../../.vuepress/components/tooltip/square.vue)
+
+</template>
+
+<template #style>
+
+@[code{10-14}](../../.vuepress/components/tooltip/square.vue)
 
 </template>
 
@@ -344,7 +374,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-8} vue{3}](../../.vuepress/components/tooltip/circle.vue)
+@[code{1-8}](../../.vuepress/components/tooltip/circle.vue)
+
+</template>
+
+<template #style>
+
+@[code{10-14}](../../.vuepress/components/tooltip/circle.vue)
 
 </template>
 
@@ -362,7 +398,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-8} vue{3}](../../.vuepress/components/tooltip/shadow.vue)
+@[code{1-8}](../../.vuepress/components/tooltip/shadow.vue)
+
+</template>
+
+<template #style>
+
+@[code{10-14}](../../.vuepress/components/tooltip/shadow.vue)
 
 </template>
 
@@ -380,7 +422,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-20} vue{3,11,19,27}](../../.vuepress/components/tooltip/notArrow.vue)
+@[code{1-20}](../../.vuepress/components/tooltip/notArrow.vue)
+
+</template>
+
+<template #style>
+
+@[code{21-25}](../../.vuepress/components/tooltip/notArrow.vue)
 
 </template>
 
@@ -398,7 +446,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-12} vue{3,7}](../../.vuepress/components/tooltip/loading.vue)
+@[code{1-12}](../../.vuepress/components/tooltip/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{13-17}](../../.vuepress/components/tooltip/loading.vue)
 
 </template>
 

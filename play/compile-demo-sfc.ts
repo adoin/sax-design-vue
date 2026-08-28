@@ -15,6 +15,8 @@ import type { BindingMetadata } from '@vue/compiler-sfc'
 
 const STYLE_TAG_ID = 'playground-embed-styles'
 
+export type DemoRuntimeModules = Record<string, Record<string, unknown>>
+
 export interface CompileDemoResult {
   component: Component | null
   error: string | null
@@ -41,31 +43,46 @@ function preprocessStyle(content: string, lang?: string): string {
   return content
 }
 
-function transformVueImports(code: string): string {
-  const vueImports: string[] = []
+function transformRuntimeImports(code: string): string {
+  const declarations: string[] = []
 
   const withoutImports = code
     .replace(
-      /import\s*\{([^}]+)\}\s*from\s*['"]vue['"]\s*;?/g,
-      (_, specifiers: string) => {
+      /import\s*\{([^}]+)\}\s*from\s*['"]([^'"]+)['"]\s*;?/g,
+      (_, specifiers: string, moduleId: string) => {
         for (const entry of specifiers.split(',')) {
           const parts = entry.trim().split(/\s+as\s+/)
           const imported = parts[0]?.trim()
           const local = (parts[1] || parts[0])?.trim()
           if (imported && local) {
-            vueImports.push(`const ${local} = Vue.${imported}`)
+            declarations.push(
+              `const ${local} = RuntimeModules[${JSON.stringify(moduleId)}].${imported}`,
+            )
           }
         }
         return ''
       },
     )
     .replace(
-      /import\s+\*\s+as\s+(\w+)\s+from\s*['"]vue['"]\s*;?/g,
-      'const $1 = Vue',
+      /import\s+\*\s+as\s+(\w+)\s+from\s*['"]([^'"]+)['"]\s*;?/g,
+      (_, local: string, moduleId: string) => {
+        declarations.push(
+          `const ${local} = RuntimeModules[${JSON.stringify(moduleId)}]`,
+        )
+        return ''
+      },
     )
-    .replace(/import\s+(\w+)\s+from\s*['"]vue['"]\s*;?/g, 'const $1 = Vue')
+    .replace(
+      /import\s+(\w+)\s+from\s*['"]([^'"]+)['"]\s*;?/g,
+      (_, local: string, moduleId: string) => {
+        declarations.push(
+          `const ${local} = RuntimeModules[${JSON.stringify(moduleId)}].default`,
+        )
+        return ''
+      },
+    )
 
-  return `${vueImports.join('\n')}\n${withoutImports}`
+  return `${declarations.join('\n')}\n${withoutImports}`
 }
 
 function transpileTypeScript(code: string, enabled: boolean): string {
@@ -78,6 +95,14 @@ function transpileTypeScript(code: string, enabled: boolean): string {
     },
     fileName: 'Demo.ts',
   }).outputText
+}
+
+function rewriteComponentDefault(code: string, isTypeScript: boolean): string {
+  return rewriteDefault(
+    code,
+    '__sfc__',
+    isTypeScript ? ['typescript'] : undefined,
+  )
 }
 
 function cssFromStyleResult(code: string): string {
@@ -106,11 +131,15 @@ function injectStyles(css: string, scopeKey: string) {
 
 type ScopedComponent = Component & { __scopeId?: string }
 
-function executeCompiled(code: string, scopeId?: string): Component {
-  const fn = new Function('Vue', `${code}; return __sfc__`) as (
-    vue: typeof Vue,
+function executeCompiled(
+  code: string,
+  runtimeModules: DemoRuntimeModules,
+  scopeId?: string,
+): Component {
+  const fn = new Function('RuntimeModules', `${code}; return __sfc__`) as (
+    modules: DemoRuntimeModules,
   ) => ScopedComponent
-  const component = fn(Vue)
+  const component = fn(runtimeModules)
 
   if (scopeId) component.__scopeId = `data-v-${scopeId}`
 
@@ -120,8 +149,10 @@ function executeCompiled(code: string, scopeId?: string): Component {
 export function compileDemoSfc(
   source: string,
   scopeKey: string,
+  modules: DemoRuntimeModules = {},
 ): CompileDemoResult {
   try {
+    const runtimeModules: DemoRuntimeModules = { vue: Vue, ...modules }
     const { descriptor, errors } = parse(source, { filename: 'Demo.vue' })
 
     if (hasErrors(errors)) {
@@ -173,14 +204,18 @@ export function compileDemoSfc(
     }
 
     if (!descriptor.template) {
-      const code = transformVueImports(
+      const code = transformRuntimeImports(
         transpileTypeScript(
-          rewriteDefault(scriptCode, '__sfc__'),
+          rewriteComponentDefault(scriptCode, isTypeScript),
           isTypeScript,
         ),
       )
       return {
-        component: executeCompiled(code, hasScopedStyles ? scopeId : undefined),
+        component: executeCompiled(
+          code,
+          runtimeModules,
+          hasScopedStyles ? scopeId : undefined,
+        ),
         error: null,
       }
     }
@@ -206,7 +241,7 @@ export function compileDemoSfc(
       }
     }
 
-    let code = rewriteDefault(scriptCode, '__sfc__')
+    let code = rewriteComponentDefault(scriptCode, isTypeScript)
     if (compiledTemplate.preamble) {
       code = `${compiledTemplate.preamble}\n${code}`
     }
@@ -215,10 +250,14 @@ export function compileDemoSfc(
       '\nfunction render',
     )}\n__sfc__.render = render`
     code = transpileTypeScript(code, isTypeScript)
-    code = transformVueImports(code)
+    code = transformRuntimeImports(code)
 
     return {
-      component: executeCompiled(code, hasScopedStyles ? scopeId : undefined),
+      component: executeCompiled(
+        code,
+        runtimeModules,
+        hasScopedStyles ? scopeId : undefined,
+      ),
       error: null,
     }
   } catch (error) {

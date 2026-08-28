@@ -51,11 +51,27 @@ Supports any number of regions, two directions, and recursive nesting.
 
 Nest more items inside the matching `SplitterItem`.
 
-<template #example><splitter-default /></template><template #template>
+<template #example><splitter-default /></template>
 
-@[code{1-34}](../.vuepress/components/splitter/default.vue)
+<template #template>
 
-</template></card>
+@[code{16-33}](../.vuepress/components/splitter/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-14}](../.vuepress/components/splitter/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{35-110}](../.vuepress/components/splitter/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -63,11 +79,27 @@ Nest more items inside the matching `SplitterItem`.
 
 `use-rest` keeps the remaining space; `precision` snaps to `0.01` by default.
 
-<template #example><splitter-sizing /></template><template #template>
+<template #example><splitter-sizing /></template>
 
-@[code{1-31}](../.vuepress/components/splitter/sizing.vue)
+<template #template>
 
-</template></card>
+@[code{10-30}](../.vuepress/components/splitter/sizing.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-8}](../.vuepress/components/splitter/sizing.vue)
+
+</template>
+
+<template #style>
+
+@[code{32-110}](../.vuepress/components/splitter/sizing.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -75,11 +107,27 @@ Nest more items inside the matching `SplitterItem`.
 
 A single value controls both directions. Arrays use `[rowGap, columnGap]`; `0` consumes no space and remains draggable.
 
-<template #example><splitter-gap /></template><template #template>
+<template #example><splitter-gap /></template>
 
-@[code{1-45}](../.vuepress/components/splitter/gap.vue)
+<template #template>
 
-</template></card>
+@[code{12-41}](../.vuepress/components/splitter/gap.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-10}](../.vuepress/components/splitter/gap.vue)
+
+</template>
+
+<template #style>
+
+@[code{43-149}](../.vuepress/components/splitter/gap.vue)
+
+</template>
+
+</card>
 
 <card>
 

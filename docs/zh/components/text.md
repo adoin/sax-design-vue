@@ -25,8 +25,18 @@ description: '支持文本省略与逐字打字效果的语义文本。'
 
 # Text 文本
 
-<card><template #example><text-default /></template><template #template>
+<card><template #example><text-default /></template>
 
-@[code](../../.vuepress/components/text/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-31}](../../.vuepress/components/text/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{33-60}](../../.vuepress/components/text/default.vue)
+
+</template>
+
+</card>

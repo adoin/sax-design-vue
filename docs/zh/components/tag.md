@@ -43,7 +43,19 @@ description: "紧凑语义标签。"
 
 <template #template>
 
-@[code{1-11}](../../.vuepress/components/tag/default.vue)
+@[code{1-8}](../../.vuepress/components/tag/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{10-12}](../../.vuepress/components/tag/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{14-20}](../../.vuepress/components/tag/default.vue)
 
 </template>
 

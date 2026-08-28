@@ -36,8 +36,24 @@ description: '颜色选择器。'
 取色笔会优先使用 EyeDropper API；API 不可用或调用失败时，自动降级到
 浏览器原生颜色选择器。
 
-<template #example><color-picker-default /></template><template #template>
+<template #example><color-picker-default /></template>
 
-@[code{1-22}](../../.vuepress/components/color-picker/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-9}](../../.vuepress/components/color-picker/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{11-22}](../../.vuepress/components/color-picker/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{24-30}](../../.vuepress/components/color-picker/default.vue)
+
+</template>
+
+</card>

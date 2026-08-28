@@ -67,7 +67,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-19}](../.vuepress/components/virtual-list/default.vue)
+@[code{1-27}](../.vuepress/components/virtual-list/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{29-51}](../.vuepress/components/virtual-list/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{53-79}](../.vuepress/components/virtual-list/default.vue)
 
 </template>
 

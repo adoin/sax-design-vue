@@ -160,7 +160,7 @@ You can use it on buttons,text,avatars,etc.
 
 <template #template>
 
-@[code{1-19} vue{3-5}](../.vuepress/components/badge/default.vue)
+@[code{1-19}](../.vuepress/components/badge/default.vue)
 
 </template>
 
@@ -188,7 +188,7 @@ The max value is defined by property max which is a `Number`. Note that it only 
 
 <template #template>
 
-@[code{1-13} vue{3-5}](../.vuepress/components/badge/max.vue)
+@[code{1-13}](../.vuepress/components/badge/max.vue)
 
 </template>
 
@@ -214,7 +214,7 @@ When value is a String, it can display customized text.
 
 <template #template>
 
-@[code{1-10} vue{3-5}](../.vuepress/components/badge/customizations.vue)
+@[code{1-10}](../.vuepress/components/badge/customizations.vue)
 
 </template>
 
@@ -240,7 +240,7 @@ Use the attribute `is-dot`. It is a Boolean.
 
 <template #template>
 
-@[code{1-16} vue{3-5}](../.vuepress/components/badge/red-dot.vue)
+@[code{1-16}](../.vuepress/components/badge/red-dot.vue)
 
 </template>
 
@@ -264,7 +264,7 @@ Set offset of the badge dot, the format is [left, top], which represents the off
 
 <template #template>
 
-@[code{1-15} vue{3}](../.vuepress/components/badge/offset.vue)
+@[code{1-15}](../.vuepress/components/badge/offset.vue)
 
 </template>
 
@@ -288,7 +288,13 @@ Use `processing` for live or updating states. It adds a repeating pulse around t
 
 <template #template>
 
-@[code{1-43} vue{3}](../.vuepress/components/badge/processing.vue)
+@[code{1-31}](../.vuepress/components/badge/processing.vue)
+
+</template>
+
+<template #script>
+
+@[code{33-43}](../.vuepress/components/badge/processing.vue)
 
 </template>
 
@@ -312,7 +318,7 @@ Set `hidden` prop to control the visibility of the badge.
 
 <template #template>
 
-@[code{1-9} vue{3}](../.vuepress/components/badge/controlled-visibility.vue)
+@[code{1-9}](../.vuepress/components/badge/controlled-visibility.vue)
 
 </template>
 
@@ -342,7 +348,7 @@ Set `show-zero` prop to display zero.According to reason, it is hidden.
 
 <template #template>
 
-@[code{1-11} vue{6}](../.vuepress/components/badge/show-zero.vue)
+@[code{1-11}](../.vuepress/components/badge/show-zero.vue)
 
 </template>
 

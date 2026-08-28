@@ -28,8 +28,24 @@ description: "通用下拉容器。"
 
 # 下拉容器
 
-<card><template #example><pulldown-default /></template><template #template>
+<card><template #example><pulldown-default /></template>
 
-@[code{1-4}](../../.vuepress/components/pulldown/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-10}](../../.vuepress/components/pulldown/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{11-13}](../../.vuepress/components/pulldown/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{14-29}](../../.vuepress/components/pulldown/default.vue)
+
+</template>
+
+</card>

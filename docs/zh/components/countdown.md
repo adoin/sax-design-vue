@@ -49,9 +49,17 @@ description: '倒计时展示。'
 
 默认使用原有的静态数字展示方式。
 
-<template #example><countdown-default /></template><template #template>
+<template #example><countdown-default /></template>
 
-@[code](../../.vuepress/components/countdown/default.vue)
+<template #template>
+
+@[code{8-11}](../../.vuepress/components/countdown/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../../.vuepress/components/countdown/default.vue)
 
 </template>
 
@@ -67,9 +75,23 @@ description: '倒计时展示。'
 
 使用 `speed` 调整流速：`0` 表示冻结，`1` 表示正常流速，`2` 表示两倍速。基于标记的显示使用 `format`，自定义文本使用 `formatter(time)`；传入 `formatter` 后会忽略 `format`。Formatter 返回文本中的数字仍由内置数字渲染器处理，因此所选 `effect` 会继续生效。
 
-<template #example><countdown-formats /></template><template #template>
+<template #example><countdown-formats /></template>
 
-@[code](../../.vuepress/components/countdown/formats.vue)
+<template #template>
+
+@[code{44-105}](../../.vuepress/components/countdown/formats.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-42}](../../.vuepress/components/countdown/formats.vue)
+
+</template>
+
+<template #style>
+
+@[code{107-144}](../../.vuepress/components/countdown/formats.vue)
 
 </template>
 

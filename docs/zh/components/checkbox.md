@@ -249,7 +249,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-5} vue{3}](../../.vuepress/components/checkbox/default.vue)
+@[code{1-5}](../../.vuepress/components/checkbox/default.vue)
 
 </template>
 
@@ -307,6 +307,12 @@ SLOTS:
 
 </template>
 
+<template #style>
+
+@[code{18-24}](../../.vuepress/components/checkbox/boolean.vue)
+
+</template>
+
 </card>
 
 <card>
@@ -328,6 +334,12 @@ SLOTS:
 <template #script>
 
 @[code{13-17}](../../.vuepress/components/checkbox/string.vue)
+
+</template>
+
+<template #style>
+
+@[code{19-31}](../../.vuepress/components/checkbox/string.vue)
 
 </template>
 
@@ -357,6 +369,12 @@ SLOTS:
 
 </template>
 
+<template #style>
+
+@[code{23-37}](../../.vuepress/components/checkbox/array.vue)
+
+</template>
+
 </card>
 
 <card>
@@ -371,7 +389,19 @@ SLOTS:
 
 <template #template>
 
-@[code](../../.vuepress/components/checkbox/advanced-group.vue)
+@[code{31-36}](../../.vuepress/components/checkbox/advanced-group.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-29}](../../.vuepress/components/checkbox/advanced-group.vue)
+
+</template>
+
+<template #style>
+
+@[code{38-47}](../../.vuepress/components/checkbox/advanced-group.vue)
 
 </template>
 
@@ -389,7 +419,19 @@ SLOTS:
 
 <template #template>
 
-@[code](../../.vuepress/components/checkbox/platform-tabs.vue)
+@[code{95-99}](../../.vuepress/components/checkbox/platform-tabs.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-93}](../../.vuepress/components/checkbox/platform-tabs.vue)
+
+</template>
+
+<template #style>
+
+@[code{101-105}](../../.vuepress/components/checkbox/platform-tabs.vue)
 
 </template>
 
@@ -413,6 +455,12 @@ SLOTS:
 
 </template>
 
+<template #style>
+
+@[code{45-66}](../../.vuepress/components/checkbox/object.vue)
+
+</template>
+
 </card>
 
 <card>
@@ -432,13 +480,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-39}](../../.vuepress/components/checkbox/icon.vue)
+@[code{1-52}](../../.vuepress/components/checkbox/icon.vue)
 
 </template>
 
 <template #script>
 
-@[code{41-51}](../../.vuepress/components/checkbox/icon.vue)
+@[code{54-64}](../../.vuepress/components/checkbox/icon.vue)
+
+</template>
+
+<template #style>
+
+@[code{65-76}](../../.vuepress/components/checkbox/icon.vue)
 
 </template>
 
@@ -466,6 +520,12 @@ SLOTS:
 
 </template>
 
+<template #style>
+
+@[code{13-18}](../../.vuepress/components/checkbox/label.vue)
+
+</template>
+
 </card>
 
 <card>
@@ -487,6 +547,12 @@ SLOTS:
 <template #script>
 
 @[code{8-13}](../../.vuepress/components/checkbox/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-20}](../../.vuepress/components/checkbox/loading.vue)
 
 </template>
 

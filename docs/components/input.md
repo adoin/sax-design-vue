@@ -315,7 +315,7 @@ Add an elements input facilitate with the component `input`
 
 <template #template>
 
-@[code{1-5} html{3}](../.vuepress/components/input/default.vue)
+@[code{1-5}](../.vuepress/components/input/default.vue)
 
 </template>
 
@@ -339,7 +339,7 @@ Set `allow-clear` to show a clear button at the end while the input is hovered o
 
 <template #template>
 
-@[code{7-16} html{10}](../.vuepress/components/input/clearable.vue)
+@[code{7-15}](../.vuepress/components/input/clearable.vue)
 
 </template>
 
@@ -363,7 +363,7 @@ Add a label to the input with the property `label`
 
 <template #template>
 
-@[code{1-5} html{3}](../.vuepress/components/input/label.vue)
+@[code{1-5}](../.vuepress/components/input/label.vue)
 
 </template>
 
@@ -387,7 +387,7 @@ You can have a placeholder with a great animation when being or in focus or with
 
 <template #template>
 
-@[code{1-5} html{3}](../.vuepress/components/input/label-float.vue)
+@[code{1-5}](../.vuepress/components/input/label-float.vue)
 
 </template>
 
@@ -411,13 +411,19 @@ Change the color of the component and add a border below with the `color` proper
 
 <template #template>
 
-@[code{1-39} html{3,5,13,24,36}](../.vuepress/components/input/color.vue)
+@[code{1-39}](../.vuepress/components/input/color.vue)
 
 </template>
 
 <template #script>
 
 @[code{40-50}](../.vuepress/components/input/color.vue)
+
+</template>
+
+<template #style>
+
+@[code{52-61}](../.vuepress/components/input/color.vue)
 
 </template>
 
@@ -437,13 +443,19 @@ Add an icon to the input easily with the slot icon if you want the icon to be be
 
 <template #template>
 
-@[code{1-20} html{4,15}](../.vuepress/components/input/icon.vue)
+@[code{1-15}](../.vuepress/components/input/icon.vue)
 
 </template>
 
 <template #script>
 
-@[code{21-26}](../.vuepress/components/input/icon.vue)
+@[code{16-21}](../.vuepress/components/input/icon.vue)
+
+</template>
+
+<template #style>
+
+@[code{23-32}](../.vuepress/components/input/icon.vue)
 
 </template>
 
@@ -461,13 +473,19 @@ You can add a message below the input with the `#message-{Sax Design color}` to 
 
 <template #template>
 
-@[code{1-26} html{4,8,12,20-21}](../.vuepress/components/input/message.vue)
+@[code{1-26}](../.vuepress/components/input/message.vue)
 
 </template>
 
 <template #script>
 
 @[code{28-39}](../.vuepress/components/input/message.vue)
+
+</template>
+
+<template #style>
+
+@[code{41-50}](../.vuepress/components/input/message.vue)
 
 </template>
 
@@ -485,13 +503,19 @@ Change the color of the input for some state, the allowed states are (primary, s
 
 <template #template>
 
-@[code{1-31} html{12}](../.vuepress/components/input/state.vue)
+@[code{1-31}](../.vuepress/components/input/state.vue)
 
 </template>
 
 <template #script>
 
 @[code{33-41}](../.vuepress/components/input/state.vue)
+
+</template>
+
+<template #style>
+
+@[code{43-52}](../.vuepress/components/input/state.vue)
 
 </template>
 
@@ -519,7 +543,7 @@ The example validates that the password has at least
 
 <template #template>
 
-@[code{1-22} html{7}](../.vuepress/components/input/progress.vue)
+@[code{1-22}](../.vuepress/components/input/progress.vue)
 
 </template>
 
@@ -543,7 +567,7 @@ Add a loading animation to the input with the `loading` property, the property i
 
 <template #template>
 
-@[code{1-5} html{3}](../.vuepress/components/input/loading.vue)
+@[code{1-5}](../.vuepress/components/input/loading.vue)
 
 </template>
 
@@ -569,13 +593,19 @@ Use `type` for text-oriented inputs: `text`, `password`, `search`, `number`,
 
 <template #template>
 
-@[code{1-19} html{4-10,14-16}](../.vuepress/components/input/types.vue)
+@[code{1-19}](../.vuepress/components/input/types.vue)
 
 </template>
 
 <template #script>
 
 @[code{20-35}](../.vuepress/components/input/types.vue)
+
+</template>
+
+<template #style>
+
+@[code{37-57}](../.vuepress/components/input/types.vue)
 
 </template>
 
@@ -593,13 +623,19 @@ Change everything is style of the component with the `input-style` property, the
 
 <template #template>
 
-@[code{1-31} html{3,8,22}](../.vuepress/components/input/style.vue)
+@[code{1-31}](../.vuepress/components/input/style.vue)
 
 </template>
 
 <template #script>
 
-@[code{33-50}](../.vuepress/components/input/style.vue)
+@[code{33-39}](../.vuepress/components/input/style.vue)
+
+</template>
+
+<template #style>
+
+@[code{41-52}](../.vuepress/components/input/style.vue)
 
 </template>
 
@@ -617,13 +653,19 @@ Add prefix and suffix icons with `prefix-icon` and `suffix-icon`. Use the matchi
 
 <template #template>
 
-@[code{8-21} html{10-19}](../.vuepress/components/input/affix.vue)
+@[code{8-21}](../.vuepress/components/input/affix.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-6}](../.vuepress/components/input/affix.vue)
+
+</template>
+
+<template #style>
+
+@[code{23-29}](../.vuepress/components/input/affix.vue)
 
 </template>
 
@@ -641,7 +683,13 @@ Use `size` to render a small, default, or large input.
 
 <template #template>
 
-@[code{1-7} html{3-5}](../.vuepress/components/input/size.vue)
+@[code{1-7}](../.vuepress/components/input/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{9-16}](../.vuepress/components/input/size.vue)
 
 </template>
 
@@ -659,13 +707,19 @@ Set `type="search"` with `controls` to show the search action. Pressing Enter or
 
 <template #template>
 
-@[code{12-25} html{14-20}](../.vuepress/components/input/search.vue)
+@[code{12-25}](../.vuepress/components/input/search.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-10}](../.vuepress/components/input/search.vue)
+
+</template>
+
+<template #style>
+
+@[code{27-39}](../.vuepress/components/input/search.vue)
 
 </template>
 
@@ -683,13 +737,19 @@ Set `immediate="false"` to synchronize `v-model` on change or blur. Type a value
 
 <template #template>
 
-@[code{7-19} html{9-17}](../.vuepress/components/input/deferred.vue)
+@[code{7-19}](../.vuepress/components/input/deferred.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-5}](../.vuepress/components/input/deferred.vue)
+
+</template>
+
+<template #style>
+
+@[code{21-33}](../.vuepress/components/input/deferred.vue)
 
 </template>
 
@@ -707,13 +767,19 @@ Use `max-length` with `show-word-count` to limit and display the count. `count-m
 
 <template #template>
 
-@[code{11-27} html{13-25}](../.vuepress/components/input/count.vue)
+@[code{11-27}](../.vuepress/components/input/count.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-9}](../.vuepress/components/input/count.vue)
+
+</template>
+
+<template #style>
+
+@[code{29-35}](../.vuepress/components/input/count.vue)
 
 </template>
 
@@ -731,7 +797,7 @@ Common native constraints such as `min`, `max`, `step`, `input-mode`, `pattern`,
 
 <template #template>
 
-@[code{7-19} html{8-18}](../.vuepress/components/input/constraints.vue)
+@[code{7-19}](../.vuepress/components/input/constraints.vue)
 
 </template>
 

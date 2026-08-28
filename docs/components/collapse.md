@@ -99,13 +99,13 @@ Switch container style using the `type` prop.
 
 <template #template>
 
-@[code{1-10}](../.vuepress/components/collapse/type.vue)
+@[code{1-14}](../.vuepress/components/collapse/type.vue)
 
 </template>
 
 <template #style>
 
-@[code{12-20}](../.vuepress/components/collapse/type.vue)
+@[code{16-24}](../.vuepress/components/collapse/type.vue)
 
 </template>
 
@@ -124,7 +124,7 @@ Open panels on hover instead of click.
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/collapse/open-hover.vue)
+@[code{1-7}](../.vuepress/components/collapse/open-hover.vue)
 
 </template>
 
@@ -143,7 +143,13 @@ Use the `icon-arrow` slot with `SIcon` to customize the expand arrow per panel.
 
 <template #template>
 
-@[code](../.vuepress/components/collapse/icon-arrow.vue)
+@[code{1-35}](../.vuepress/components/collapse/icon-arrow.vue)
+
+</template>
+
+<template #script>
+
+@[code{37-39}](../.vuepress/components/collapse/icon-arrow.vue)
 
 </template>
 

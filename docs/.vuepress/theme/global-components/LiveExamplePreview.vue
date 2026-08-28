@@ -35,8 +35,15 @@ const compileSource = async () => {
     return
   }
 
-  const { compileDemoSfc } = await import('../../../../play/compile-demo-sfc')
-  const result = compileDemoSfc(props.source, props.scopeKey)
+  const [{ compileDemoSfc }, { demoRuntimeModules }] = await Promise.all([
+    import('../../../../play/compile-demo-sfc'),
+    import('../../../../play/demo-runtime-modules'),
+  ])
+  const result = compileDemoSfc(
+    props.source,
+    props.scopeKey,
+    demoRuntimeModules,
+  )
   previewComponent.value = result.component
   compileError.value = result.error
 }

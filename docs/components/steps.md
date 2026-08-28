@@ -99,11 +99,27 @@ description: 'Steps with a focus rail, contextual timeline, semantic states, and
 
 For linear flows such as onboarding and configuration, with a strong active-step focus.
 
-<template #example><steps-default /></template><template #template>
+<template #example><steps-default /></template>
 
-@[code](../.vuepress/components/steps/default.vue)
+<template #template>
 
-</template></card>
+@[code{85-101}](../.vuepress/components/steps/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-83}](../.vuepress/components/steps/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{103-115}](../.vuepress/components/steps/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -111,11 +127,27 @@ For linear flows such as onboarding and configuration, with a strong active-step
 
 The active step can reveal details and actions for longer operational flows.
 
-<template #example><steps-timeline /></template><template #template>
+<template #example><steps-timeline /></template>
 
-@[code](../.vuepress/components/steps/timeline.vue)
+<template #template>
 
-</template></card>
+@[code{70-88}](../.vuepress/components/steps/timeline.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-68}](../.vuepress/components/steps/timeline.vue)
+
+</template>
+
+<template #style>
+
+@[code{90-96}](../.vuepress/components/steps/timeline.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -123,11 +155,27 @@ The active step can reveal details and actions for longer operational flows.
 
 Use the `item` slot to replace each step with a tile or another custom layout.
 
-<template #example><steps-custom-item /></template><template #template>
+<template #example><steps-custom-item /></template>
 
-@[code](../.vuepress/components/steps/custom-item.vue)
+<template #template>
 
-</template></card>
+@[code{53-79}](../.vuepress/components/steps/custom-item.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-51}](../.vuepress/components/steps/custom-item.vue)
+
+</template>
+
+<template #style>
+
+@[code{81-155}](../.vuepress/components/steps/custom-item.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -135,8 +183,18 @@ Use the `item` slot to replace each step with a tile or another custom layout.
 
 Wait, process, loading, finish, success, error, and disabled states are built in.
 
-<template #example><steps-states /></template><template #template>
+<template #example><steps-states /></template>
 
-@[code](../.vuepress/components/steps/states.vue)
+<template #template>
 
-</template></card>
+@[code{37-45}](../.vuepress/components/steps/states.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-35}](../.vuepress/components/steps/states.vue)
+
+</template>
+
+</card>

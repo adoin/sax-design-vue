@@ -157,11 +157,27 @@ description: 'Event calendar with month, week, and day schedules.'
 
 ### Switchable views
 
-<template #example><calendar-default /></template><template #template>
+<template #example><calendar-default /></template>
 
-@[code{1-14}](../.vuepress/components/calendar/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-20}](../.vuepress/components/calendar/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{22-110}](../.vuepress/components/calendar/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{112-118}](../.vuepress/components/calendar/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -169,11 +185,21 @@ description: 'Event calendar with month, week, and day schedules.'
 
 Pass one item to `views` when a calendar should keep a single presentation and hide the view switcher.
 
-<template #example><calendar-locked-view /></template><template #template>
+<template #example><calendar-locked-view /></template>
 
-@[code{1-27}](../.vuepress/components/calendar/locked-view.vue)
+<template #template>
 
-</template></card>
+@[code{1-10}](../.vuepress/components/calendar/locked-view.vue)
+
+</template>
+
+<template #script>
+
+@[code{12-27}](../.vuepress/components/calendar/locked-view.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -181,11 +207,27 @@ Pass one item to `views` when a calendar should keep a single presentation and h
 
 Create flat `events` from an external form. Existing events can be edited from the demo; Calendar emits intent while the application updates its own data.
 
-<template #example><calendar-adding-events /></template><template #template>
+<template #example><calendar-adding-events /></template>
 
-@[code{1-212}](../.vuepress/components/calendar/adding-events.vue)
+<template #template>
 
-</template></card>
+@[code{1-59}](../.vuepress/components/calendar/adding-events.vue)
+
+</template>
+
+<template #script>
+
+@[code{61-149}](../.vuepress/components/calendar/adding-events.vue)
+
+</template>
+
+<template #style>
+
+@[code{151-212}](../.vuepress/components/calendar/adding-events.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -193,8 +235,24 @@ Create flat `events` from an external form. Existing events can be edited from t
 
 Calendar renders flat `CalendarEvent[]`, but your application can retain any schedule model. Pass raw records through `event-data`, then use `event-adapter` to map them. A cell shows its earliest event and `+n`; hover changes `+n` to an overflow icon, and click opens every event for that date. The default row emits edit/delete intent with the original `CalendarEvent`; this demo resolves it back to the complete source record, so editing or deleting affects the full schedule rather than only one rendered day. Compact markers show a point/range time, a range start (`08:00~`), or a range end (`~18:00`); use `event-display` or event slots for custom output.
 
-<template #example><calendar-schedule-adapter /></template><template #template>
+<template #example><calendar-schedule-adapter /></template>
 
-@[code{1-852}](../.vuepress/components/calendar/schedule-adapter.vue)
+<template #template>
 
-</template></card>
+@[code{1-139}](../.vuepress/components/calendar/schedule-adapter.vue)
+
+</template>
+
+<template #script>
+
+@[code{141-785}](../.vuepress/components/calendar/schedule-adapter.vue)
+
+</template>
+
+<template #style>
+
+@[code{787-852}](../.vuepress/components/calendar/schedule-adapter.vue)
+
+</template>
+
+</card>

@@ -148,13 +148,13 @@ NEWS:
 
 <template #template>
 
-@[code{1-3}](../../.vuepress/components/textarea/counter.vue)
+@[code{1-8}](../../.vuepress/components/textarea/counter.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-8}](../../.vuepress/components/textarea/counter.vue)
+@[code{10-15}](../../.vuepress/components/textarea/counter.vue)
 
 </template>
 
@@ -220,15 +220,14 @@ NEWS:
 
 <template #template>
 
-@[code{1-11} html{5-8}](../../.vuepress/components/textarea/advanced.vue)
+@[code{1-11}](../../.vuepress/components/textarea/advanced.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-16}](../../.vuepress/components/textarea/advanced.vue)
+@[code{13-17}](../../.vuepress/components/textarea/advanced.vue)
 
 </template>
-
 
 </card>

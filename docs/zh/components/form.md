@@ -221,11 +221,27 @@ Form 同时支持传统插槽写法与配置式 `items`。配置式 API 采用�
 
 `createFormValidator(model, { rules, items })` 无需挂载 `SForm` 或创建 DOM，也能执行同一套校验规则，适用于懒渲染内容、提交前预检以及当前未渲染的数据。`validate()` 返回 `{ valid, errors }`，`validateField(field)` 返回单字段结果。
 
-<template #example><form-headless-validation /></template><template #template>
+<template #example><form-headless-validation /></template>
 
-@[code](../../.vuepress/components/form/headless-validation.vue)
+<template #template>
 
-</template></card>
+@[code{40-71}](../../.vuepress/components/form/headless-validation.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-38}](../../.vuepress/components/form/headless-validation.vue)
+
+</template>
+
+<template #style>
+
+@[code{73-103}](../../.vuepress/components/form/headless-validation.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -233,11 +249,27 @@ Form 同时支持传统插槽写法与配置式 `items`。配置式 API 采用�
 
 `children` 可以无限递归；每一层都使用 24 栅格。数字 `span` 在手机端自动回落为整行，也可以传入 `{ xs, sm, md, lg, xl }` 精确控制响应式宽度。
 
-<template #example><form-default /></template><template #template>
+<template #example><form-default /></template>
 
-@[code](../../.vuepress/components/form/default.vue)
+<template #template>
 
-</template></card>
+@[code{99-108}](../../.vuepress/components/form/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-97}](../../.vuepress/components/form/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{110-116}](../../.vuepress/components/form/default.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -246,11 +278,21 @@ Form 同时支持传统插槽写法与配置式 `items`。配置式 API 采用�
 通过 `formRenderer.add(name, definition)` 注册项目级 renderer。`renderItem`
 会收到当前模型、字段路径、字段值、禁用状态、`setValue` 与 `validate`，适合封装组合控件或业务控件。
 
-<template #example><form-renderer /></template><template #template>
+<template #example><form-renderer /></template>
 
-@[code](../../.vuepress/components/form/renderer.vue)
+<template #template>
 
-</template></card>
+@[code{32-34}](../../.vuepress/components/form/renderer.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-30}](../../.vuepress/components/form/renderer.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -258,11 +300,21 @@ Form 同时支持传统插槽写法与配置式 `items`。配置式 API 采用�
 
 旧有 `<s-form-item>` API 保持兼容。给父 Item 添加 `nested` 后，可以直接嵌套子 Item，并继续使用 `span` 组织复杂布局。
 
-<template #example><form-nested /></template><template #template>
+<template #example><form-nested /></template>
 
-@[code](../../.vuepress/components/form/nested.vue)
+<template #template>
 
-</template></card>
+@[code{13-33}](../../.vuepress/components/form/nested.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-11}](../../.vuepress/components/form/nested.vue)
+
+</template>
+
+</card>
 
 <card>
 

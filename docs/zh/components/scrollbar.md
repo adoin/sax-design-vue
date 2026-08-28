@@ -213,6 +213,7 @@ EXPOSES:
 @[code{1-5}](../../.vuepress/components/scrollbar/default.vue)
 
 </template>
+
 <template #style>
 
 @[code{7-19}](../../.vuepress/components/scrollbar/default.vue)
@@ -234,11 +235,13 @@ EXPOSES:
 <template #template>
 
 @[code{1-9}](../../.vuepress/components/scrollbar/hirizontal.vue)
+
 </template>
 
 <template #style>
 
 @[code{11-28}](../../.vuepress/components/scrollbar/hirizontal.vue)
+
 </template>
 
 </card>
@@ -256,16 +259,19 @@ EXPOSES:
 <template #template>
 
 @[code{1-11}](../../.vuepress/components/scrollbar/max-height.vue)
+
 </template>
 
 <template #script>
 
 @[code{13-25}](../../.vuepress/components/scrollbar/max-height.vue)
+
 </template>
 
 <template #style>
 
 @[code{27-39}](../../.vuepress/components/scrollbar/max-height.vue)
+
 </template>
 
 </card>

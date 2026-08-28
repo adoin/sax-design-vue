@@ -56,13 +56,13 @@ Bind `percent` from 0 to 100 for a standard progress bar.
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/progress/default.vue)
+@[code{1-9}](../.vuepress/components/progress/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{7-15}](../.vuepress/components/progress/default.vue)
+@[code{11-19}](../.vuepress/components/progress/default.vue)
 
 </template>
 

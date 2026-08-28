@@ -143,6 +143,12 @@ labels for single and range triggers.
 
 </template>
 
+<template #style>
+
+@[code{28-34}](../.vuepress/components/date-picker/default.vue)
+
+</template>
+
 </card>
 
 <card>
@@ -157,13 +163,13 @@ Set `type="datetime"` to pick date and time. With `auto-apply-now`, clicking Now
 
 <template #template>
 
-@[code{1-12}](../.vuepress/components/date-picker/datetime.vue)
+@[code{1-9}](../.vuepress/components/date-picker/datetime.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-18}](../.vuepress/components/date-picker/datetime.vue)
+@[code{11-15}](../.vuepress/components/date-picker/datetime.vue)
 
 </template>
 
@@ -187,7 +193,13 @@ Set `type="datetime"` to pick date and time. With `auto-apply-now`, clicking Now
 
 <template #script>
 
-@[code{30-34}](../.vuepress/components/date-picker/timezone.vue)
+@[code{30-35}](../.vuepress/components/date-picker/timezone.vue)
+
+</template>
+
+<template #style>
+
+@[code{37-65}](../.vuepress/components/date-picker/timezone.vue)
 
 </template>
 
@@ -233,13 +245,13 @@ Confirm.
 
 <template #template>
 
-@[code{1-14}](../.vuepress/components/date-picker/daterange.vue)
+@[code{1-5}](../.vuepress/components/date-picker/daterange.vue)
 
 </template>
 
 <template #script>
 
-@[code{16-20}](../.vuepress/components/date-picker/daterange.vue)
+@[code{7-11}](../.vuepress/components/date-picker/daterange.vue)
 
 </template>
 
@@ -257,13 +269,19 @@ Month, quarter, year and week pickers.
 
 <template #template>
 
-@[code{1-16}](../.vuepress/components/date-picker/types.vue)
+@[code{1-14}](../.vuepress/components/date-picker/types.vue)
 
 </template>
 
 <template #script>
 
-@[code{18-22}](../.vuepress/components/date-picker/types.vue)
+@[code{16-24}](../.vuepress/components/date-picker/types.vue)
+
+</template>
+
+<template #style>
+
+@[code{26-30}](../.vuepress/components/date-picker/types.vue)
 
 </template>
 
@@ -281,13 +299,13 @@ Set `type="datetimerange"` to pick a date-time range with separate start/end tim
 
 <template #template>
 
-@[code{1-14}](../.vuepress/components/date-picker/datetimerange.vue)
+@[code{1-10}](../.vuepress/components/date-picker/datetimerange.vue)
 
 </template>
 
 <template #script>
 
-@[code{16-20}](../.vuepress/components/date-picker/datetimerange.vue)
+@[code{12-16}](../.vuepress/components/date-picker/datetimerange.vue)
 
 </template>
 
@@ -305,13 +323,13 @@ Use `shortcuts` to provide quick selection options.
 
 <template #template>
 
-@[code{1-35}](../.vuepress/components/date-picker/shortcuts.vue)
+@[code{1-9}](../.vuepress/components/date-picker/shortcuts.vue)
 
 </template>
 
 <template #script>
 
-@[code{11-35}](../.vuepress/components/date-picker/shortcuts.vue)
+@[code{11-38}](../.vuepress/components/date-picker/shortcuts.vue)
 
 </template>
 
@@ -329,13 +347,13 @@ Use `disabled-date` to disable specific dates.
 
 <template #template>
 
-@[code{1-12}](../.vuepress/components/date-picker/disabled-date.vue)
+@[code{1-9}](../.vuepress/components/date-picker/disabled-date.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-18}](../.vuepress/components/date-picker/disabled-date.vue)
+@[code{11-17}](../.vuepress/components/date-picker/disabled-date.vue)
 
 </template>
 
@@ -360,7 +378,7 @@ for business dates without changing the picker theme.
 
 <template #script>
 
-@[code{7-16}](../.vuepress/components/date-picker/festival.vue)
+@[code{7-17}](../.vuepress/components/date-picker/festival.vue)
 
 </template>
 

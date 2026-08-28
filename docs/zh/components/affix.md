@@ -44,7 +44,19 @@ description: "将内容固定在视口或滚动容器边缘。"
 
 <template #template>
 
-@[code{1-24}](../../.vuepress/components/affix/viewport.vue)
+@[code{1-11}](../../.vuepress/components/affix/viewport.vue)
+
+</template>
+
+<template #script>
+
+@[code{13-18}](../../.vuepress/components/affix/viewport.vue)
+
+</template>
+
+<template #style>
+
+@[code{20-24}](../../.vuepress/components/affix/viewport.vue)
 
 </template>
 
@@ -58,7 +70,19 @@ description: "将内容固定在视口或滚动容器边缘。"
 
 <template #template>
 
-@[code{1-24}](../../.vuepress/components/affix/default.vue)
+@[code{1-11}](../../.vuepress/components/affix/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{13-20}](../../.vuepress/components/affix/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-31}](../../.vuepress/components/affix/default.vue)
 
 </template>
 
@@ -72,7 +96,19 @@ description: "将内容固定在视口或滚动容器边缘。"
 
 <template #template>
 
-@[code{1-20}](../../.vuepress/components/affix/bottom.vue)
+@[code{1-11}](../../.vuepress/components/affix/bottom.vue)
+
+</template>
+
+<template #script>
+
+@[code{13-18}](../../.vuepress/components/affix/bottom.vue)
+
+</template>
+
+<template #style>
+
+@[code{20-29}](../../.vuepress/components/affix/bottom.vue)
 
 </template>
 
@@ -88,7 +124,19 @@ description: "将内容固定在视口或滚动容器边缘。"
 
 <template #template>
 
-@[code{1-33}](../../.vuepress/components/affix/custom-content.vue)
+@[code{1-17}](../../.vuepress/components/affix/custom-content.vue)
+
+</template>
+
+<template #script>
+
+@[code{19-24}](../../.vuepress/components/affix/custom-content.vue)
+
+</template>
+
+<template #style>
+
+@[code{26-53}](../../.vuepress/components/affix/custom-content.vue)
 
 </template>
 

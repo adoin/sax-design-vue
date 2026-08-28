@@ -160,7 +160,7 @@ UPDATES:
 
 <template #template>
 
-@[code{1-19} vue{3-5}](../../.vuepress/components/badge/default.vue)
+@[code{1-19}](../../.vuepress/components/badge/default.vue)
 
 </template>
 
@@ -188,7 +188,7 @@ UPDATES:
 
 <template #template>
 
-@[code{1-13} vue{3-5}](../../.vuepress/components/badge/max.vue)
+@[code{1-13}](../../.vuepress/components/badge/max.vue)
 
 </template>
 
@@ -214,7 +214,7 @@ UPDATES:
 
 <template #template>
 
-@[code{1-10} vue{3-5}](../../.vuepress/components/badge/customizations.vue)
+@[code{1-10}](../../.vuepress/components/badge/customizations.vue)
 
 </template>
 
@@ -240,7 +240,7 @@ UPDATES:
 
 <template #template>
 
-@[code{1-16} vue{3-5}](../../.vuepress/components/badge/red-dot.vue)
+@[code{1-16}](../../.vuepress/components/badge/red-dot.vue)
 
 </template>
 
@@ -264,7 +264,7 @@ UPDATES:
 
 <template #template>
 
-@[code{1-15} vue{3}](../../.vuepress/components/badge/offset.vue)
+@[code{1-15}](../../.vuepress/components/badge/offset.vue)
 
 </template>
 
@@ -288,7 +288,13 @@ UPDATES:
 
 <template #template>
 
-@[code{1-43} vue{3}](../../.vuepress/components/badge/processing.vue)
+@[code{1-31}](../../.vuepress/components/badge/processing.vue)
+
+</template>
+
+<template #script>
+
+@[code{33-43}](../../.vuepress/components/badge/processing.vue)
 
 </template>
 
@@ -312,7 +318,7 @@ UPDATES:
 
 <template #template>
 
-@[code{1-9} vue{3}](../../.vuepress/components/badge/controlled-visibility.vue)
+@[code{1-9}](../../.vuepress/components/badge/controlled-visibility.vue)
 
 </template>
 
@@ -342,7 +348,7 @@ UPDATES:
 
 <template #template>
 
-@[code{1-11} vue{6}](../../.vuepress/components/badge/show-zero.vue)
+@[code{1-11}](../../.vuepress/components/badge/show-zero.vue)
 
 </template>
 

@@ -20,8 +20,12 @@ description: "结果反馈状态。"
 
 # Result 结果
 
-<card><template #example><result-default /></template><template #template>
+<card><template #example><result-default /></template>
 
-@[code{1-5}](../../.vuepress/components/result/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-9}](../../.vuepress/components/result/default.vue)
+
+</template>
+
+</card>

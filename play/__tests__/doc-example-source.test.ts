@@ -1,22 +1,17 @@
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { parse } from '@vue/compiler-sfc'
 import { mount } from '@vue/test-utils'
+import { createMemoryHistory, createRouter } from 'vue-router'
 import { describe, expect, it } from 'vitest'
 import { compileDemoSfc } from '../compile-demo-sfc'
+import { demoRuntimeModules } from '../demo-runtime-modules'
 
 const projectRoot = resolve(__dirname, '../..')
 const docsRoots = [
   resolve(projectRoot, 'docs/components'),
   resolve(projectRoot, 'docs/zh/components'),
 ]
-const checkedComponents = [
-  'segmented.md',
-  'slider.md',
-  'switch.md',
-  'verification-code.md',
-]
-
 const readCodeIncludes = (markdownPath: string, source: string): string => {
   const includePattern = /@\[code(?:\{(\d+)-(\d+)\})?[^\]]*\]\(([^)]+)\)/g
 
@@ -47,11 +42,32 @@ const readSlotSource = (
 }
 
 describe('documentation example source', () => {
-  it('reconstructs redesigned input examples as complete Vue SFCs', () => {
+  it('reconstructs and compiles every component example as a complete Vue SFC', () => {
     const failures: string[] = []
+    let exampleCount = 0
+    globalThis.IntersectionObserver = class IntersectionObserver {
+      readonly root = null
+      readonly rootMargin = '0px'
+      readonly thresholds = []
+      disconnect() {}
+      observe() {}
+      takeRecords() {
+        return []
+      }
+      unobserve() {}
+    }
+    const router = createRouter({
+      history: createMemoryHistory(),
+      routes: [{ path: '/', component: { template: '<div />' } }],
+    })
+    const saxDesignVue = demoRuntimeModules['sax-design-vue'].default as {
+      install: () => void
+    }
 
     for (const markdownPath of docsRoots.flatMap((root) =>
-      checkedComponents.map((component) => resolve(root, component)),
+      readdirSync(root)
+        .filter((file) => file.endsWith('.md'))
+        .map((file) => resolve(root, file)),
     )) {
       const markdown = readFileSync(markdownPath, 'utf8')
       const cards = Array.from(
@@ -61,6 +77,7 @@ describe('documentation example source', () => {
       cards.forEach((cardMatch, index) => {
         const card = cardMatch[1]
         if (!card.includes('<template #example>')) return
+        exampleCount += 1
 
         const source = (['template', 'script', 'style'] as const)
           .map((slot) => readSlotSource(markdownPath, card, slot))
@@ -87,6 +104,7 @@ describe('documentation example source', () => {
         const compiled = compileDemoSfc(
           source,
           `${markdownPath}-${index}`.replace(/[^a-z0-9-]/gi, '-'),
+          demoRuntimeModules,
         )
         if (!compiled.component || compiled.error) {
           failures.push(
@@ -96,7 +114,13 @@ describe('documentation example source', () => {
         }
 
         try {
-          mount(compiled.component)
+          const wrapper = mount(compiled.component, {
+            global: {
+              config: { warnHandler: () => {} },
+              plugins: [saxDesignVue, router],
+            },
+          })
+          wrapper.unmount()
         } catch (error) {
           failures.push(
             `${markdownPath} — ${heading}: ${error instanceof Error ? error.message : String(error)}`,
@@ -105,6 +129,7 @@ describe('documentation example source', () => {
       })
     }
 
+    expect(exampleCount).toBeGreaterThan(0)
     expect(failures).toEqual([])
-  })
+  }, 60_000)
 })

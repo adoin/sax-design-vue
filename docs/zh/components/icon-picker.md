@@ -109,7 +109,19 @@ const icon = await SIconPicker({ output: 'code' })
 
 <template #template>
 
-@[code](../../.vuepress/components/icon-picker/default.vue)
+@[code{64-93}](../../.vuepress/components/icon-picker/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-62}](../../.vuepress/components/icon-picker/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{95-148}](../../.vuepress/components/icon-picker/default.vue)
 
 </template>
 

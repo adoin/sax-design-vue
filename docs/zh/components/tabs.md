@@ -132,7 +132,19 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 
 <template #template>
 
-@[code](../../.vuepress/components/tabs/lazy.vue)
+@[code{31-52}](../../.vuepress/components/tabs/lazy.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-29}](../../.vuepress/components/tabs/lazy.vue)
+
+</template>
+
+<template #style>
+
+@[code{54-66}](../../.vuepress/components/tabs/lazy.vue)
 
 </template>
 
@@ -148,7 +160,19 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 
 <template #template>
 
-@[code](../../.vuepress/components/tabs/default.vue)
+@[code{116-177}](../../.vuepress/components/tabs/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-114}](../../.vuepress/components/tabs/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{179-277}](../../.vuepress/components/tabs/default.vue)
 
 </template>
 
@@ -164,7 +188,19 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 
 <template #template>
 
-@[code](../../.vuepress/components/tabs/overflow.vue)
+@[code{50-67}](../../.vuepress/components/tabs/overflow.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-48}](../../.vuepress/components/tabs/overflow.vue)
+
+</template>
+
+<template #style>
+
+@[code{69-88}](../../.vuepress/components/tabs/overflow.vue)
 
 </template>
 
@@ -180,7 +216,19 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 
 <template #template>
 
-@[code](../../.vuepress/components/tabs/editable.vue)
+@[code{45-66}](../../.vuepress/components/tabs/editable.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-43}](../../.vuepress/components/tabs/editable.vue)
+
+</template>
+
+<template #style>
+
+@[code{68-77}](../../.vuepress/components/tabs/editable.vue)
 
 </template>
 
@@ -196,7 +244,19 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 
 <template #template>
 
-@[code](../../.vuepress/components/tabs/context-menu.vue)
+@[code{83-107}](../../.vuepress/components/tabs/context-menu.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-81}](../../.vuepress/components/tabs/context-menu.vue)
+
+</template>
+
+<template #style>
+
+@[code{109-126}](../../.vuepress/components/tabs/context-menu.vue)
 
 </template>
 

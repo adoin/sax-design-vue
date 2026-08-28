@@ -199,7 +199,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-35} vue{4-33}](../../.vuepress/components/dialog/default.vue)
+@[code{1-35}](../../.vuepress/components/dialog/default.vue)
 
 </template>
 
@@ -229,19 +229,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-74} html{6}](../../.vuepress/components/dialog/type.vue)
+@[code{1-70}](../../.vuepress/components/dialog/type.vue)
 
 </template>
 
 <template #script>
 
-@[code{75-82}](../../.vuepress/components/dialog/type.vue)
+@[code{71-78}](../../.vuepress/components/dialog/type.vue)
 
 </template>
 
 <template #style>
 
-@[code{84-140}](../../.vuepress/components/dialog/type.vue)
+@[code{80-136}](../../.vuepress/components/dialog/type.vue)
 
 </template>
 
@@ -259,7 +259,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-35} vue{6}](../../.vuepress/components/dialog/loading.vue)
+@[code{1-35}](../../.vuepress/components/dialog/loading.vue)
 
 </template>
 
@@ -289,19 +289,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-35} vue{4}](../../.vuepress/components/dialog/not-close.vue)
+@[code{1-33}](../../.vuepress/components/dialog/not-close.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../../.vuepress/components/dialog/not-close.vue)
+@[code{34-41}](../../.vuepress/components/dialog/not-close.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-101}](../../.vuepress/components/dialog/not-close.vue)
+@[code{42-99}](../../.vuepress/components/dialog/not-close.vue)
 
 </template>
 
@@ -319,7 +319,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-79} vue{4}](../../.vuepress/components/dialog/scroll.vue)
+@[code{1-79}](../../.vuepress/components/dialog/scroll.vue)
 
 </template>
 
@@ -349,7 +349,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-35} vue{4}](../../.vuepress/components/dialog/lock-scroll.vue)
+@[code{1-35}](../../.vuepress/components/dialog/lock-scroll.vue)
 
 </template>
 
@@ -439,7 +439,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-35} vue{4}](../../.vuepress/components/dialog/full-screen.vue)
+@[code{1-35}](../../.vuepress/components/dialog/full-screen.vue)
 
 </template>
 
@@ -469,7 +469,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-33} vue{4}](../../.vuepress/components/dialog/blur.vue)
+@[code{1-33}](../../.vuepress/components/dialog/blur.vue)
 
 </template>
 
@@ -501,19 +501,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-40} vue{4}](../../.vuepress/components/dialog/square.vue)
+@[code{1-35}](../../.vuepress/components/dialog/square.vue)
 
 </template>
 
 <template #script>
 
-@[code{42-49}](../../.vuepress/components/dialog/square.vue)
+@[code{37-44}](../../.vuepress/components/dialog/square.vue)
 
 </template>
 
 <template #style>
 
-@[code{51-108}](../../.vuepress/components/dialog/square.vue)
+@[code{46-103}](../../.vuepress/components/dialog/square.vue)
 
 </template>
 
@@ -531,19 +531,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-35} vue{4}](../../.vuepress/components/dialog/prevent-close.vue)
+@[code{1-33}](../../.vuepress/components/dialog/prevent-close.vue)
 
 </template>
 
 <template #script>
 
-@[code{37-44}](../../.vuepress/components/dialog/prevent-close.vue)
+@[code{35-42}](../../.vuepress/components/dialog/prevent-close.vue)
 
 </template>
 
 <template #style>
 
-@[code{46-103}](../../.vuepress/components/dialog/prevent-close.vue)
+@[code{44-101}](../../.vuepress/components/dialog/prevent-close.vue)
 
 </template>
 
@@ -561,13 +561,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-13} html{3-11}](../../.vuepress/components/dialog/advanced.vue)
+@[code{1-14}](../../.vuepress/components/dialog/advanced.vue)
 
 </template>
 
 <template #script>
 
-@[code{15-19}](../../.vuepress/components/dialog/advanced.vue)
+@[code{16-21}](../../.vuepress/components/dialog/advanced.vue)
 
 </template>
 

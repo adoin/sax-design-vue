@@ -23,8 +23,18 @@ description: "Standalone calendar panel used by DatePicker."
 
 # Date panel
 
-<card><template #example><date-panel-default /></template><template #template>
+<card><template #example><date-panel-default /></template>
 
-@[code{1-2}](../.vuepress/components/date-panel/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-8}](../.vuepress/components/date-panel/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{9-14}](../.vuepress/components/date-panel/default.vue)
+
+</template>
+
+</card>

@@ -293,7 +293,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-13} html{3}](../../.vuepress/components/select/default.vue)
+@[code{1-13}](../../.vuepress/components/select/default.vue)
 
 </template>
 
@@ -323,7 +323,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-23} html{3}](../../.vuepress/components/select/color.vue)
+@[code{1-23}](../../.vuepress/components/select/color.vue)
 
 </template>
 
@@ -347,13 +347,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-33} html{3,13,23}](../../.vuepress/components/select/label.vue)
+@[code{9-41}](../../.vuepress/components/select/label.vue)
 
 </template>
 
 <template #script>
 
-@[code{34-40}](../../.vuepress/components/select/label.vue)
+@[code{1-7}](../../.vuepress/components/select/label.vue)
+
+</template>
+
+<template #style>
+
+@[code{43-47}](../../.vuepress/components/select/label.vue)
 
 </template>
 
@@ -371,19 +377,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-57} html{4,9}](../../.vuepress/components/select/group.vue)
+@[code{1-52}](../../.vuepress/components/select/group.vue)
 
 </template>
 
 <template #script>
 
-@[code{59-65}](../../.vuepress/components/select/group.vue)
+@[code{54-60}](../../.vuepress/components/select/group.vue)
 
 </template>
 
 <template #style>
 
-@[code{67-82}](../../.vuepress/components/select/group.vue)
+@[code{62-77}](../../.vuepress/components/select/group.vue)
 
 </template>
 
@@ -401,13 +407,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-41} html{6}](../../.vuepress/components/select/filter.vue)
+@[code{1-41}](../../.vuepress/components/select/filter.vue)
 
 </template>
 
 <template #script>
 
-@[code{43-66}](../../.vuepress/components/select/filter.vue)
+@[code{43-49}](../../.vuepress/components/select/filter.vue)
+
+</template>
+
+<template #style>
+
+@[code{51-66}](../../.vuepress/components/select/filter.vue)
 
 </template>
 
@@ -431,13 +443,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-54} html{7,24,41-42}](../../.vuepress/components/select/multiple.vue)
+@[code{1-54}](../../.vuepress/components/select/multiple.vue)
 
 </template>
 
 <template #script>
 
-@[code{56-72}](../../.vuepress/components/select/multiple.vue)
+@[code{56-62}](../../.vuepress/components/select/multiple.vue)
+
+</template>
+
+<template #style>
+
+@[code{64-72}](../../.vuepress/components/select/multiple.vue)
 
 </template>
 
@@ -455,13 +473,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-23} html{3}](../../.vuepress/components/select/loading.vue)
+@[code{1-23}](../../.vuepress/components/select/loading.vue)
 
 </template>
 
 <template #script>
 
 @[code{25-30}](../../.vuepress/components/select/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{32-48}](../../.vuepress/components/select/loading.vue)
 
 </template>
 
@@ -483,7 +507,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-20} html{7}](../../.vuepress/components/select/state.vue)
+@[code{1-20}](../../.vuepress/components/select/state.vue)
 
 </template>
 
@@ -513,7 +537,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-38} html{4,15,26-28}](../../.vuepress/components/select/message.vue)
+@[code{1-38}](../../.vuepress/components/select/message.vue)
 
 </template>
 
@@ -543,13 +567,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-16} html{4-9}](../../.vuepress/components/select/data.vue)
+@[code{1-14}](../../.vuepress/components/select/data.vue)
 
 </template>
 
 <template #script>
 
-@[code{18-37}](../../.vuepress/components/select/data.vue)
+@[code{16-33}](../../.vuepress/components/select/data.vue)
+
+</template>
+
+<template #style>
+
+@[code{35-39}](../../.vuepress/components/select/data.vue)
 
 </template>
 
@@ -567,7 +597,19 @@ SLOTS:
 
 <template #template>
 
-@[code](../../.vuepress/components/select/popup-config.vue)
+@[code{1-29}](../../.vuepress/components/select/popup-config.vue)
+
+</template>
+
+<template #script>
+
+@[code{31-63}](../../.vuepress/components/select/popup-config.vue)
+
+</template>
+
+<template #style>
+
+@[code{65-80}](../../.vuepress/components/select/popup-config.vue)
 
 </template>
 
@@ -609,13 +651,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-18}](../../.vuepress/components/select/selection-tools.vue)
+@[code{1-22}](../../.vuepress/components/select/selection-tools.vue)
 
 </template>
 
 <template #script>
 
-@[code{20-33}](../../.vuepress/components/select/selection-tools.vue)
+@[code{24-44}](../../.vuepress/components/select/selection-tools.vue)
+
+</template>
+
+<template #style>
+
+@[code{46-53}](../../.vuepress/components/select/selection-tools.vue)
 
 </template>
 
@@ -657,7 +705,19 @@ SLOTS:
 
 <template #template>
 
-@[code](../../.vuepress/components/select/pinning.vue)
+@[code{1-22}](../../.vuepress/components/select/pinning.vue)
+
+</template>
+
+<template #script>
+
+@[code{24-40}](../../.vuepress/components/select/pinning.vue)
+
+</template>
+
+<template #style>
+
+@[code{42-51}](../../.vuepress/components/select/pinning.vue)
 
 </template>
 
@@ -675,7 +735,19 @@ SLOTS:
 
 <template #template>
 
-@[code](../../.vuepress/components/select/virtual.vue)
+@[code{1-27}](../../.vuepress/components/select/virtual.vue)
+
+</template>
+
+<template #script>
+
+@[code{29-42}](../../.vuepress/components/select/virtual.vue)
+
+</template>
+
+<template #style>
+
+@[code{44-61}](../../.vuepress/components/select/virtual.vue)
 
 </template>
 

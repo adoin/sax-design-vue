@@ -37,8 +37,24 @@ second native picker.
 The eyedropper uses the EyeDropper API first and automatically falls back to
 the native color selector when that API is unavailable or fails.
 
-<template #example><color-picker-default /></template><template #template>
+<template #example><color-picker-default /></template>
 
-@[code{1-22}](../.vuepress/components/color-picker/default.vue)
+<template #template>
 
-</template></card>
+@[code{1-9}](../.vuepress/components/color-picker/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{11-22}](../.vuepress/components/color-picker/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{24-30}](../.vuepress/components/color-picker/default.vue)
+
+</template>
+
+</card>

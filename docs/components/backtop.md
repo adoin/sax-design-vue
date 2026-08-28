@@ -53,6 +53,12 @@ Appears after the scroll container passes 96px and stays at its lower-right edge
 
 </template>
 
+<template #style>
+
+@[code{16-31}](../.vuepress/components/backtop/default.vue)
+
+</template>
+
 </card>
 
 <card>
@@ -65,7 +71,13 @@ Useful for lists and dynamic loading. `visibility-height` and `visibility-bottom
 
 <template #template>
 
-@[code{1-16}](../.vuepress/components/backtop/bottom-distance.vue)
+@[code{1-15}](../.vuepress/components/backtop/bottom-distance.vue)
+
+</template>
+
+<template #style>
+
+@[code{17-32}](../.vuepress/components/backtop/bottom-distance.vue)
 
 </template>
 
@@ -81,7 +93,13 @@ Use the default slot to replace the built-in arrow with an icon or custom conten
 
 <template #template>
 
-@[code{1-18}](../.vuepress/components/backtop/custom-icon.vue)
+@[code{1-16}](../.vuepress/components/backtop/custom-icon.vue)
+
+</template>
+
+<template #style>
+
+@[code{18-38}](../.vuepress/components/backtop/custom-icon.vue)
 
 </template>
 

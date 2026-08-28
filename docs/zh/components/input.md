@@ -286,7 +286,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-5} html{3}](../../.vuepress/components/input/default.vue)
+@[code{1-5}](../../.vuepress/components/input/default.vue)
 
 </template>
 
@@ -310,7 +310,7 @@ SLOTS:
 
 <template #template>
 
-@[code{7-16} html{10}](../../.vuepress/components/input/clearable.vue)
+@[code{7-15}](../../.vuepress/components/input/clearable.vue)
 
 </template>
 
@@ -334,7 +334,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-5} html{3}](../../.vuepress/components/input/label.vue)
+@[code{1-5}](../../.vuepress/components/input/label.vue)
 
 </template>
 
@@ -358,7 +358,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-5} html{3}](../../.vuepress/components/input/label-float.vue)
+@[code{1-5}](../../.vuepress/components/input/label-float.vue)
 
 </template>
 
@@ -382,13 +382,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-39} html{3,5,13,24,36}](../../.vuepress/components/input/color.vue)
+@[code{1-39}](../../.vuepress/components/input/color.vue)
 
 </template>
 
 <template #script>
 
 @[code{40-50}](../../.vuepress/components/input/color.vue)
+
+</template>
+
+<template #style>
+
+@[code{52-61}](../../.vuepress/components/input/color.vue)
 
 </template>
 
@@ -408,13 +414,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-20} html{4,15}](../../.vuepress/components/input/icon.vue)
+@[code{1-15}](../../.vuepress/components/input/icon.vue)
 
 </template>
 
 <template #script>
 
-@[code{21-26}](../../.vuepress/components/input/icon.vue)
+@[code{16-21}](../../.vuepress/components/input/icon.vue)
+
+</template>
+
+<template #style>
+
+@[code{23-32}](../../.vuepress/components/input/icon.vue)
 
 </template>
 
@@ -432,13 +444,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-26} html{4,8,12,20-21}](../../.vuepress/components/input/message.vue)
+@[code{1-26}](../../.vuepress/components/input/message.vue)
 
 </template>
 
 <template #script>
 
 @[code{28-39}](../../.vuepress/components/input/message.vue)
+
+</template>
+
+<template #style>
+
+@[code{41-50}](../../.vuepress/components/input/message.vue)
 
 </template>
 
@@ -456,13 +474,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-31} html{12}](../../.vuepress/components/input/state.vue)
+@[code{1-31}](../../.vuepress/components/input/state.vue)
 
 </template>
 
 <template #script>
 
 @[code{33-41}](../../.vuepress/components/input/state.vue)
+
+</template>
+
+<template #style>
+
+@[code{43-52}](../../.vuepress/components/input/state.vue)
 
 </template>
 
@@ -490,7 +514,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-22} html{7}](../../.vuepress/components/input/progress.vue)
+@[code{1-22}](../../.vuepress/components/input/progress.vue)
 
 </template>
 
@@ -514,7 +538,7 @@ SLOTS:
 
 <template #template>
 
-@[code{1-5} html{3}](../../.vuepress/components/input/loading.vue)
+@[code{1-5}](../../.vuepress/components/input/loading.vue)
 
 </template>
 
@@ -540,13 +564,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-19} html{4-10,14-16}](../../.vuepress/components/input/types.vue)
+@[code{1-19}](../../.vuepress/components/input/types.vue)
 
 </template>
 
 <template #script>
 
 @[code{20-35}](../../.vuepress/components/input/types.vue)
+
+</template>
+
+<template #style>
+
+@[code{37-57}](../../.vuepress/components/input/types.vue)
 
 </template>
 
@@ -564,13 +594,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-31} html{3,8,22}](../../.vuepress/components/input/style.vue)
+@[code{1-31}](../../.vuepress/components/input/style.vue)
 
 </template>
 
 <template #script>
 
-@[code{33-50}](../../.vuepress/components/input/style.vue)
+@[code{33-39}](../../.vuepress/components/input/style.vue)
+
+</template>
+
+<template #style>
+
+@[code{41-52}](../../.vuepress/components/input/style.vue)
 
 </template>
 
@@ -588,13 +624,19 @@ SLOTS:
 
 <template #template>
 
-@[code{8-21} html{10-19}](../../.vuepress/components/input/affix.vue)
+@[code{8-21}](../../.vuepress/components/input/affix.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-6}](../../.vuepress/components/input/affix.vue)
+
+</template>
+
+<template #style>
+
+@[code{23-29}](../../.vuepress/components/input/affix.vue)
 
 </template>
 
@@ -612,7 +654,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-7} html{3-5}](../../.vuepress/components/input/size.vue)
+@[code{1-7}](../../.vuepress/components/input/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{9-16}](../../.vuepress/components/input/size.vue)
 
 </template>
 
@@ -630,13 +678,19 @@ SLOTS:
 
 <template #template>
 
-@[code{12-25} html{14-20}](../../.vuepress/components/input/search.vue)
+@[code{12-25}](../../.vuepress/components/input/search.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-10}](../../.vuepress/components/input/search.vue)
+
+</template>
+
+<template #style>
+
+@[code{27-39}](../../.vuepress/components/input/search.vue)
 
 </template>
 
@@ -654,13 +708,19 @@ SLOTS:
 
 <template #template>
 
-@[code{7-19} html{9-17}](../../.vuepress/components/input/deferred.vue)
+@[code{7-19}](../../.vuepress/components/input/deferred.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-5}](../../.vuepress/components/input/deferred.vue)
+
+</template>
+
+<template #style>
+
+@[code{21-33}](../../.vuepress/components/input/deferred.vue)
 
 </template>
 
@@ -678,13 +738,19 @@ SLOTS:
 
 <template #template>
 
-@[code{11-27} html{13-25}](../../.vuepress/components/input/count.vue)
+@[code{11-27}](../../.vuepress/components/input/count.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-9}](../../.vuepress/components/input/count.vue)
+
+</template>
+
+<template #style>
+
+@[code{29-35}](../../.vuepress/components/input/count.vue)
 
 </template>
 
@@ -702,7 +768,7 @@ SLOTS:
 
 <template #template>
 
-@[code{7-19} html{8-18}](../../.vuepress/components/input/constraints.vue)
+@[code{7-19}](../../.vuepress/components/input/constraints.vue)
 
 </template>
 

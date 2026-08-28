@@ -28,8 +28,24 @@ description: "右键菜单。"
 
 # 右键菜单
 
-<card><template #example><context-menu-default /></template><template #template>
+<card><template #example><context-menu-default /></template>
 
-@[code{1-147}](../../.vuepress/components/context-menu/default.vue)
+<template #template>
 
-</template></card>
+@[code{19-47}](../../.vuepress/components/context-menu/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-17}](../../.vuepress/components/context-menu/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{49-147}](../../.vuepress/components/context-menu/default.vue)
+
+</template>
+
+</card>

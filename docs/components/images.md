@@ -81,7 +81,13 @@ Set `preview` to open the shared image viewer. `preview-src-list` supports a cus
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/images/preview.vue)
+@[code{1-11}](../.vuepress/components/images/preview.vue)
+
+</template>
+
+<template #script>
+
+@[code{12-17}](../.vuepress/components/images/preview.vue)
 
 </template>
 
