@@ -211,13 +211,19 @@ Use `variant` to choose a classic moving knob, a soft inset control, an icon sta
 
 <template #template>
 
-@[code{10-22}](../.vuepress/components/switch/variants.vue)
+@[code{12-23}](../.vuepress/components/switch/variants.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-8}](../.vuepress/components/switch/variants.vue)
+@[code{1-10}](../.vuepress/components/switch/variants.vue)
+
+</template>
+
+<template #style>
+
+@[code{25-38}](../.vuepress/components/switch/variants.vue)
 
 </template>
 

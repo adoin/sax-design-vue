@@ -44,4 +44,34 @@ describe('compileDemoSfc', () => {
       'data-v-pe-global-example',
     )
   })
+
+  it('preserves reactive object values in TypeScript examples', () => {
+    const { component, error } = compileDemoSfc(
+      `<script setup lang="ts">
+import { reactive } from 'vue'
+const values = reactive({ classic: 42, soft: 58 })
+</script>
+<template><div>{{ values.classic }} / {{ values.soft }}</div></template>`,
+      'typescript-reactive-example',
+    )
+
+    expect(error).toBeNull()
+    expect(component).not.toBeNull()
+    expect(mount(component!).text()).toBe('42 / 58')
+  })
+
+  it('compiles TypeScript assertions used in template expressions', () => {
+    const { component, error } = compileDemoSfc(
+      `<script setup lang="ts">
+const values = { classic: 'ready' }
+const variant = 'classic'
+</script>
+<template><div>{{ values[variant as keyof typeof values] }}</div></template>`,
+      'typescript-template-example',
+    )
+
+    expect(error).toBeNull()
+    expect(component).not.toBeNull()
+    expect(mount(component!).text()).toBe('ready')
+  })
 })

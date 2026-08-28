@@ -67,7 +67,7 @@ PROPS:
     type: String
     values: String
     description: 值旁显示的后缀。
-    default: 
+    default:
     link: null
     usage: '#text-fixed'
 
@@ -87,7 +87,7 @@ EVENTS:
     params: number
     description: 值提交时触发。
 EXPOSES: []
-description: "沿轨道拖动选择数值。"
+description: '沿轨道拖动选择数值。'
 NEWS:
   - default
   - color
@@ -109,13 +109,19 @@ NEWS:
 
 <template #template>
 
-@[code{10-35}](../../.vuepress/components/slider/variants.vue)
+@[code{11-42}](../../.vuepress/components/slider/variants.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-8}](../../.vuepress/components/slider/variants.vue)
+@[code{1-9}](../../.vuepress/components/slider/variants.vue)
+
+</template>
+
+<template #style>
+
+@[code{44-57}](../../.vuepress/components/slider/variants.vue)
 
 </template>
 
@@ -124,7 +130,6 @@ NEWS:
 <card>
 
 ## 默认
-
 
 在 `min` 与 `max` 之间用 `v-model` 绑定数值。
 
@@ -149,7 +154,6 @@ NEWS:
 <card>
 
 ## 颜色
-
 
 为轨道与滑块着色以匹配主题。
 
@@ -181,7 +185,6 @@ NEWS:
 
 ## 刻度
 
-
 沿轨道显示步进刻度。
 
 <template #example>
@@ -205,7 +208,6 @@ NEWS:
 <card>
 
 ## 固定文本
-
 
 在当前值旁追加后缀，如 `%`。
 

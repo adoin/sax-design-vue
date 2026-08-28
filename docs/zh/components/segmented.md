@@ -23,17 +23,35 @@ PROPS:
 EVENTS:
   - name: change
     description: 选项变化时触发。
-description: "分段单选控件。"
+description: '分段单选控件。'
 ---
+
 # Segmented 分段控制
+
 <card>
 
 ## 风格
 
 三种风格分别通过底色、留白、字重和阴影区分选项，不使用边框。方向键可以在可用选项间切换。
 
-<template #example><segmented-default /></template><template #template>
+<template #example><segmented-default /></template>
 
-@[code{1-7}](../../.vuepress/components/segmented/default.vue)
+<template #template>
 
-</template></card>
+@[code{16-28}](../../.vuepress/components/segmented/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-14}](../../.vuepress/components/segmented/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{30-42}](../../.vuepress/components/segmented/default.vue)
+
+</template>
+
+</card>

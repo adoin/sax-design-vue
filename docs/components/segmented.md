@@ -23,17 +23,35 @@ PROPS:
 EVENTS:
   - name: change
     description: Fired when selection changes.
-description: "Segmented single choice."
+description: 'Segmented single choice.'
 ---
+
 # Segmented
+
 <card>
 
 ## Variants
 
 The three variants use surface, spacing, weight, and shadow to separate options without borders. Arrow keys move between enabled options.
 
-<template #example><segmented-default /></template><template #template>
+<template #example><segmented-default /></template>
 
-@[code{1-7}](../.vuepress/components/segmented/default.vue)
+<template #template>
 
-</template></card>
+@[code{16-28}](../.vuepress/components/segmented/default.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-14}](../.vuepress/components/segmented/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{30-42}](../.vuepress/components/segmented/default.vue)
+
+</template>
+
+</card>

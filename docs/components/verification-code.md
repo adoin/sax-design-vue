@@ -54,13 +54,19 @@ The component always renders one native input. The cells are a visual overlay, s
 
 <template #template>
 
-@[code{11-38}](../.vuepress/components/verification-code/default.vue)
+@[code{11-40}](../.vuepress/components/verification-code/default.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-9}](../.vuepress/components/verification-code/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{42-53}](../.vuepress/components/verification-code/default.vue)
 
 </template>
 

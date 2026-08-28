@@ -67,7 +67,7 @@ PROPS:
     type: String
     values: String
     description: Suffix shown next to value.
-    default: 
+    default:
     link: null
     usage: '#text-fixed'
 
@@ -87,7 +87,7 @@ EVENTS:
     params: number
     description: Value committed.
 EXPOSES: []
-description: "Select numeric values along a draggable track."
+description: 'Select numeric values along a draggable track.'
 NEWS:
   - default
   - color
@@ -109,13 +109,19 @@ NEWS:
 
 <template #template>
 
-@[code{10-35}](../.vuepress/components/slider/variants.vue)
+@[code{11-42}](../.vuepress/components/slider/variants.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-8}](../.vuepress/components/slider/variants.vue)
+@[code{1-9}](../.vuepress/components/slider/variants.vue)
+
+</template>
+
+<template #style>
+
+@[code{44-57}](../.vuepress/components/slider/variants.vue)
 
 </template>
 
@@ -124,7 +130,6 @@ NEWS:
 <card>
 
 ## Default
-
 
 Bind a number with `v-model` between `min` and `max`.
 
@@ -149,7 +154,6 @@ Bind a number with `v-model` between `min` and `max`.
 <card>
 
 ## Color
-
 
 Color the track and thumb to match your theme.
 
@@ -181,7 +185,6 @@ Color the track and thumb to match your theme.
 
 ## Ticks
 
-
 Display step ticks along the track.
 
 <template #example>
@@ -205,7 +208,6 @@ Display step ticks along the track.
 <card>
 
 ## Text Fixed
-
 
 Append a suffix such as `%` next to the current value.
 

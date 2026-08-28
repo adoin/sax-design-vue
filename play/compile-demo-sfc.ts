@@ -8,6 +8,7 @@ import {
 } from '@vue/compiler-sfc'
 import nested from 'postcss-nested'
 import postcss from 'postcss'
+import { ModuleKind, ScriptTarget, transpileModule } from 'typescript'
 
 import type { Component } from 'vue'
 import type { BindingMetadata } from '@vue/compiler-sfc'
@@ -17,25 +18,6 @@ const STYLE_TAG_ID = 'playground-embed-styles'
 export interface CompileDemoResult {
   component: Component | null
   error: string | null
-}
-
-function normalizeSource(source: string): string {
-  let result = source.replace(/<script(\s+setup)?\s+lang="ts"/gi, '<script$1')
-
-  result = result.replace(
-    /<script([^>]*)>([\s\S]*?)<\/script>/gi,
-    (_match, attrs: string, body: string) => {
-      const stripped = body
-        .replace(/\(([^)]*)\)/g, (params) => params.replace(/:\s*[^,)]+/g, ''))
-        .replace(
-          /:\s*(?!true\b|false\b|null\b|undefined\b|'|"|`|\d)([A-Za-z_$][\w$[\].<>,\s|]*)/g,
-          '',
-        )
-      return `<script${attrs}>${stripped}</script>`
-    },
-  )
-
-  return result
 }
 
 function hasErrors(
@@ -86,6 +68,18 @@ function transformVueImports(code: string): string {
   return `${vueImports.join('\n')}\n${withoutImports}`
 }
 
+function transpileTypeScript(code: string, enabled: boolean): string {
+  if (!enabled) return code
+
+  return transpileModule(code, {
+    compilerOptions: {
+      module: ModuleKind.ESNext,
+      target: ScriptTarget.ES2020,
+    },
+    fileName: 'Demo.ts',
+  }).outputText
+}
+
 function cssFromStyleResult(code: string): string {
   const trimmed = code.trim()
   if (trimmed.startsWith('export default')) {
@@ -128,8 +122,7 @@ export function compileDemoSfc(
   scopeKey: string,
 ): CompileDemoResult {
   try {
-    const normalized = normalizeSource(source)
-    const { descriptor, errors } = parse(normalized, { filename: 'Demo.vue' })
+    const { descriptor, errors } = parse(source, { filename: 'Demo.vue' })
 
     if (hasErrors(errors)) {
       return {
@@ -140,6 +133,9 @@ export function compileDemoSfc(
 
     const scopeId = `pe-${scopeKey.replace(/[^a-z0-9-]/gi, '-')}`
     const hasScopedStyles = descriptor.styles.some((block) => block.scoped)
+    const isTypeScript = [descriptor.script?.lang, descriptor.scriptSetup?.lang]
+      .filter(Boolean)
+      .some((lang) => lang === 'ts' || lang === 'tsx')
     let cssText = ''
 
     for (const block of descriptor.styles) {
@@ -177,7 +173,12 @@ export function compileDemoSfc(
     }
 
     if (!descriptor.template) {
-      const code = transformVueImports(rewriteDefault(scriptCode, '__sfc__'))
+      const code = transformVueImports(
+        transpileTypeScript(
+          rewriteDefault(scriptCode, '__sfc__'),
+          isTypeScript,
+        ),
+      )
       return {
         component: executeCompiled(code, hasScopedStyles ? scopeId : undefined),
         error: null,
@@ -194,6 +195,7 @@ export function compileDemoSfc(
       ssr: false,
       compilerOptions: {
         bindingMetadata,
+        expressionPlugins: isTypeScript ? ['typescript'] : undefined,
       },
     })
 
@@ -212,6 +214,7 @@ export function compileDemoSfc(
       /\nexport function render/g,
       '\nfunction render',
     )}\n__sfc__.render = render`
+    code = transpileTypeScript(code, isTypeScript)
     code = transformVueImports(code)
 
     return {
