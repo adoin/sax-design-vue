@@ -77,6 +77,7 @@ export * from './tooltip'
 export * from './upload'
 export * from './virtual-list'
 export * from './watermark'
+export * from './verification-code'
 
 // plugins
 export * from './loading'

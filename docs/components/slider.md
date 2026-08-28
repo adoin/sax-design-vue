@@ -1,5 +1,20 @@
 ---
 PROPS:
+  - name: variant
+    type: String
+    values: classic | soft | steps
+    description: Select the slim rail, inset trough, or discrete step design.
+    default: classic
+    link: null
+    usage: '#variants'
+
+  - name: show-value
+    type: Boolean
+    values: true, false
+    description: Keep the current value bubble visible.
+    default: false
+    link: null
+    usage: '#variants'
   - name: v-model
     type: Number
     values: Number
@@ -81,6 +96,30 @@ NEWS:
 ---
 
 # Slider
+
+<card>
+
+## Variants
+
+`classic`, `soft`, and `steps` change the slider structure, not only its color. All variants use one native range input and keep the visual thumb exactly centered on the track.
+
+<template #example>
+<slider-variants />
+</template>
+
+<template #template>
+
+@[code{10-35}](../.vuepress/components/slider/variants.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-8}](../.vuepress/components/slider/variants.vue)
+
+</template>
+
+</card>
 
 <card>
 

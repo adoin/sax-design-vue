@@ -3,203 +3,204 @@
 @use 'common/var' as *;
 
 @keyframes vs-rotate-switch {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 @include b(switch) {
-  @include flex(center, center);
+  --sax-switch-accent: #{getColor('color')};
+  --sax-switch-shadow: 0 8px 20px hsl(226deg 100% 55% / 0.18);
 
-  color: #fff;
-  padding: 5px;
-  border-radius: var(--sax-radius-pill);
-  min-width: 48px;
-  width: fit-content;
-  height: 28px;
-  border: 0px;
   position: relative;
-  background: getColor(gray-3);
-  transition: getCssVar(transition-ease);
-  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  min-width: 48px;
+  min-height: 44px;
+  vertical-align: middle;
   cursor: pointer;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 
-  @include when(icon) {
-    .#{$namespace}-switch__input {
-      &:checked {
-        ~ .#{$namespace}-switch__circle {
-          color: #fff !important;
-        }
-      }
+  @include e(input) {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+
+    &:focus-visible + .#{bem('switch', 'track')} {
+      box-shadow: 0 0 0 5px hsl(226deg 100% 55% / 0.12),
+        var(--sax-switch-shadow);
+      transform: translateY(-1px);
     }
-    .#{$namespace}-switch__circle {
-      background: transparent !important;
-      box-shadow: none !important;
-      i {
-        opacity: 1;
-        font-size: 1.3rem;
+  }
+
+  @include e(track) {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 48px;
+    height: 28px;
+    overflow: hidden;
+    border-radius: var(--sax-radius-pill);
+    background: hsl(225deg 18% 84%);
+    box-shadow: inset 0 2px 5px hsl(225deg 20% 20% / 0.1);
+    transition: background-color var(--sax-motion-duration)
+        var(--sax-motion-easing-standard),
+      box-shadow var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      transform var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+  }
+
+  @include e(circle) {
+    position: absolute;
+    left: 4px;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: var(--sax-radius-circle);
+    color: hsl(225deg 16% 52%);
+    background: getColor(background);
+    box-shadow: 0 3px 8px hsl(225deg 24% 20% / 0.2);
+    transition: left var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      transform var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      background-color var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      color var(--sax-motion-duration) var(--sax-motion-easing-standard);
+
+    i,
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  @include e(text) {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    padding: 0 7px 0 28px;
+    overflow: hidden;
+    color: getColor(text, 0.72);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    transition: color var(--sax-motion-duration) var(--sax-motion-easing-standard);
+  }
+
+  &:hover:not(.is-disabled) {
+    @include e(track) {
+      transform: translateY(-1px);
+      box-shadow: inset 0 2px 5px hsl(225deg 20% 20% / 0.12),
+        0 5px 12px hsl(225deg 24% 20% / 0.12);
+    }
+    @include e(circle) { transform: scale(1.06); }
+  }
+
+  &:active:not(.is-disabled) {
+    @include e(circle) { transform: scale(0.92); }
+  }
+
+  @include when(checked) {
+    @include e(track) {
+      background: var(--sax-switch-accent);
+      box-shadow: var(--sax-switch-shadow);
+    }
+    @include e(circle) {
+      left: calc(100% - 24px);
+      color: var(--sax-switch-accent);
+    }
+    @include e(text) {
+      padding-right: 28px;
+      padding-left: 7px;
+      color: getColor(white);
+    }
+  }
+
+  @include when(soft) {
+    @include e(track) {
+      width: 52px;
+      height: 30px;
+      background: hsl(225deg 32% 95%);
+      box-shadow: inset 0 3px 8px hsl(225deg 30% 25% / 0.08);
+    }
+    @include e(circle) {
+      left: 6px;
+      width: 18px;
+      height: 18px;
+      background: hsl(225deg 14% 72%);
+      box-shadow: 0 3px 8px hsl(225deg 24% 20% / 0.14);
+    }
+    &.is-checked {
+      @include e(track) { background: hsl(226deg 100% 55% / 0.14); }
+      @include e(circle) {
+        left: calc(100% - 24px);
+        background: var(--sax-switch-accent);
+        box-shadow: var(--sax-switch-shadow);
       }
     }
   }
 
-  @include when(indeterminate) {
-    .#{$namespace}-switch__input {
-      pointer-events: none;
+  @include when(icon) {
+    @include e(track) { width: 52px; }
+    @include e(circle) {
+      left: 3px;
+      width: 22px;
+      height: 22px;
     }
-    .#{$namespace}-switch__circle {
-      left: 50% !important;
-      transform: translate(-50%);
+    &.is-checked {
+      @include e(circle) { left: calc(100% - 25px); }
+    }
+  }
+
+  @include when(text) {
+    @include e(track) {
+      min-width: 52px;
+      background: hsl(225deg 24% 92%);
+      box-shadow: inset 0 2px 6px hsl(225deg 20% 20% / 0.08);
+    }
+    @include e(circle) { display: none; }
+    @include e(text) { padding: 0 12px; }
+    &.is-checked {
+      @include e(track) {
+        background: var(--sax-switch-accent);
+        box-shadow: var(--sax-switch-shadow);
+      }
+      @include e(text) { padding: 0 12px; }
     }
   }
 
   @include when(square) {
-    border-radius: var(--sax-radius-xs);
-    .#{$namespace}-switch__background {
-      border-radius: var(--sax-radius-xs) !important;
-    }
-    .#{$namespace}-switch__circle {
-      border-radius: var(--sax-radius-xs) !important;
-    }
+    @include e(track) { border-radius: var(--sax-radius-xs); }
+    @include e(circle) { border-radius: calc(var(--sax-radius-xs) - 1px); }
   }
+
+  @include when(indeterminate) {
+    @include e(circle) { left: 50%; transform: translateX(-50%); }
+  }
+
   @include when(loading) {
-    width: 28px !important;
-    min-width: 28px !important;
     pointer-events: none;
-    border-radius: var(--sax-radius-pill) !important;
-
-    .#{$namespace}-switch__input:not(:checked) {
-      ~ .#{$namespace}-switch__circle {
-        @include set-var-value(color, getCssVar(divider));
-        color: getColor('divider') !important;
-      }
+    @include e(circle) {
+      left: 50%;
+      color: var(--sax-switch-accent);
+      transform: translateX(-50%);
     }
-    .#{$namespace}-switch__circle {
-      border-radius: var(--sax-radius-circle) !important;
-    }
-    .#{$namespace}-switch__background {
-      opacity: 0 !important;
-    }
-  }
-  &:hover {
-    background: getColor('gray-4');
-  }
-  &:active {
-    transform: scale(0.9);
   }
 
-  @include e('background') {
-    width: 100%;
-    height: auto;
-    position: absolute;
-    background: getColor(color);
-    border-radius: inherit;
-    z-index: 2;
-    transition: all var(--sax-motion-duration) var(--sax-motion-easing-standard);
-    transform: scale(1);
-    left: -100%;
-    border-radius: var(--sax-radius-circle);
-    padding-bottom: 100%;
+  @include when(disabled) {
+    cursor: not-allowed;
+    opacity: 0.48;
+    filter: saturate(0.45);
   }
-  @include e(text) {
-    @include flex(center, center);
-    font-size: 0.7rem;
-    padding: 5px;
-    padding-left: 25px;
-    transition: all var(--sax-motion-duration) var(--sax-motion-easing-standard)
-      0.05s;
-    color: getColor('text');
-    z-index: 9;
-    position: relative;
-    overflow: hidden;
-    white-space: nowrap;
-    user-select: none;
+}
 
-    @include when(on) {
-      transform: translate(-100%);
-      position: absolute;
-      opacity: 0;
-    }
-    i {
-      font-size: 1rem;
-      opacity: 0.7;
-    }
-  }
-  @include e(circle) {
-    @include flex(center, center);
-    width: 20px;
-    height: 20px;
-    background: getColor('background');
-    border-radius: var(--sax-radius-pill);
-    transition: getCssVar(transition-ease);
-    position: absolute;
-    z-index: 10;
-    left: 4px;
-    color: getColor('text');
-
-    i {
-      font-size: 0.8rem;
-    }
-  }
-  @include e(input) {
-    position: absolute;
-    width: 100%;
-    opacity: 0 !important;
-    z-index: -1;
-    height: 100%;
-    border-radius: inherit;
-    top: 0px;
-    left: 0px;
-    margin: 0px;
-    cursor: pointer;
-
-    &:active {
-      &:checked {
-        ~ .#{$namespace}-switch__circle {
-          left: calc(100% - 30px);
-        }
-      }
-      ~ .#{$namespace}-switch__circle {
-        width: 25px;
-      }
-    }
-    &:checked {
-      ~ .#{$namespace}-switch__background {
-        opacity: 1;
-        transform: scale(1);
-        width: 100%;
-        padding-bottom: 100%;
-        left: 0px;
-        border-radius: var(--sax-radius-circle);
-        transition: all var(--sax-motion-duration)
-          var(--sax-motion-easing-standard);
-      }
-      ~ .#{$namespace}-switch__text {
-        padding-left: 5px;
-        padding-right: 25px;
-        color: #fff;
-        i {
-          opacity: 1;
-        }
-        @include when(on) {
-          transform: translate(0);
-          position: relative;
-          opacity: 1;
-        }
-        @include when(off) {
-          transform: translate(100%);
-          position: absolute;
-          opacity: 0;
-        }
-      }
-      ~ .#{$namespace}-switch__circle {
-        left: calc(100% - 24px);
-        box-shadow: -5px 0px 25px 0px getColor('background', 0.6);
-        color: getColor('color');
-      }
-    }
-  }
+@media (prefers-reduced-motion: reduce) {
+  .s-switch,
+  .s-switch * { transition-duration: 0.01ms !important; }
 }

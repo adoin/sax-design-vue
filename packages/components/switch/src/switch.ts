@@ -37,6 +37,19 @@ export const switchProps = buildProps({
     values: ['square'] as const,
     default: null,
   },
+  variant: {
+    type: String,
+    values: ['classic', 'soft', 'icon', 'text'] as const,
+    default: 'classic',
+  },
+  activeText: {
+    type: String,
+    default: 'ON',
+  },
+  inactiveText: {
+    type: String,
+    default: 'OFF',
+  },
   indeterminate: {
     type: Boolean,
     default: false,

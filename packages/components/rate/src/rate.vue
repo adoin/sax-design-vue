@@ -19,7 +19,7 @@
       @mouseleave="resetCurrentValue"
       @click="selectValue(item)"
     >
-      <s-icon
+      <span
         :class="[
           ns.e('icon'),
           { hover: hoverIndex === item },
@@ -28,27 +28,14 @@
       >
         <template v-if="!showDecimalIcon(item)">
           <s-icon
-            v-if="isString(activeComponent)"
-            v-show="item <= currentValue"
+            v-if="item <= currentValue && isString(activeComponent)"
             :name="activeComponent"
           />
-          <component
-            v-else
-            :is="activeComponent"
-            v-show="item <= currentValue"
-          />
-          <s-icon
-            v-if="isString(voidComponent)"
-            v-show="!(item <= currentValue)"
-            :name="voidComponent"
-          />
-          <component
-            v-else
-            :is="voidComponent"
-            v-show="!(item <= currentValue)"
-          />
+          <component :is="activeComponent" v-else-if="item <= currentValue" />
+          <s-icon v-else-if="isString(voidComponent)" :name="voidComponent" />
+          <component :is="voidComponent" v-else />
         </template>
-        <s-icon
+        <span
           v-if="showDecimalIcon(item)"
           :style="decimalStyle"
           :class="[ns.e('icon'), ns.e('decimal')]"
@@ -57,9 +44,9 @@
             v-if="isString(decimalIconComponent)"
             :name="decimalIconComponent"
           />
-          <component v-else :is="decimalIconComponent" />
-        </s-icon>
-      </s-icon>
+          <component :is="decimalIconComponent" v-else />
+        </span>
+      </span>
     </span>
     <span v-if="showText || showScore" :class="ns.e('text')">
       {{ text }}

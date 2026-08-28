@@ -29,6 +29,12 @@ export const sliderProps = buildProps({
     default: '',
   },
   ticks: Boolean,
+  variant: {
+    type: String,
+    values: ['classic', 'soft', 'steps'] as const,
+    default: 'classic',
+  },
+  showValue: Boolean,
 } as const)
 
 export const sliderEmits = {

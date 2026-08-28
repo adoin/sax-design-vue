@@ -1,6 +1,16 @@
 ---
 description: 'Toggle a boolean setting between two states.'
 PROPS:
+  - name: variant
+    type: String
+    values: classic | soft | icon | text
+    description: Select a structurally distinct borderless switch style.
+    default: classic
+  - name: active-text / inactive-text
+    type: String
+    values: String
+    description: Labels used by the text variant.
+    default: ON / OFF
   - name: active-value / inactive-value / shape
     type: String | Number | Boolean / String
     values: custom bound values / rounded | square
@@ -188,6 +198,30 @@ SLOTS:
 ---
 
 # Switch
+
+<card>
+
+## Variants
+
+Use `variant` to choose a classic moving knob, a soft inset control, an icon state, or a compact text state. Every style keeps the same native checkbox semantics and borderless focus treatment.
+
+<template #example>
+<switch-variants />
+</template>
+
+<template #template>
+
+@[code{10-22}](../.vuepress/components/switch/variants.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-8}](../.vuepress/components/switch/variants.vue)
+
+</template>
+
+</card>
 
 <card>
 

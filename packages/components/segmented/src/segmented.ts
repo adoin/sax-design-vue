@@ -16,6 +16,12 @@ export const segmentedProps = buildProps({
     default: () => [],
   },
   disabled: Boolean,
+  variant: {
+    type: String,
+    values: ['pill', 'text', 'tile'] as const,
+    default: 'pill',
+  },
+  block: Boolean,
 } as const)
 export const segmentedEmits = {
   [UPDATE_MODEL_EVENT]: (value: string | number) =>

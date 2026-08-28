@@ -1,5 +1,20 @@
 ---
 PROPS:
+  - name: variant
+    type: String
+    values: classic | soft | steps
+    description: 选择细轨、柔和内嵌轨道或离散刻度风格。
+    default: classic
+    link: null
+    usage: '#风格'
+
+  - name: show-value
+    type: Boolean
+    values: true, false
+    description: 始终显示当前值浮层。
+    default: false
+    link: null
+    usage: '#风格'
   - name: v-model
     type: Number
     values: Number
@@ -81,6 +96,30 @@ NEWS:
 ---
 
 # Slider（滑块）
+
+<card>
+
+## 风格
+
+`classic`、`soft`、`steps` 改变的是轨道和滑块的结构，而不只是颜色。所有风格都使用同一个原生范围输入，并保证滑块与轨道中心线严格对齐。
+
+<template #example>
+<slider-variants />
+</template>
+
+<template #template>
+
+@[code{10-35}](../../.vuepress/components/slider/variants.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-8}](../../.vuepress/components/slider/variants.vue)
+
+</template>
+
+</card>
 
 <card>
 

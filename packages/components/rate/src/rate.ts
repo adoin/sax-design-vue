@@ -7,6 +7,7 @@ import {
   isValidComponentSize,
   mutable,
 } from '@vuesax-alpha/utils'
+import { IconStarFilled } from '@vuesax-alpha/components/icon'
 import type { ComponentSize } from '@vuesax-alpha/constants'
 import type { Component, ExtractPropTypes, PropType } from 'vue'
 import type Rate from './rate.vue'
@@ -34,33 +35,29 @@ export const rateProps = buildProps({
   },
   colors: {
     type: definePropType<string[] | Record<number, string>>([Array, Object]),
-    default: () => mutable(['', '', ''] as const),
+    default: () => mutable(['#f7b500', '#f7b500', '#f7b500'] as const),
   },
   voidColor: {
     type: String,
-    default: '',
+    default: '#c8cedb',
   },
   disabledVoidColor: {
     type: String,
-    default: '',
+    default: '#dfe3eb',
   },
   icons: {
     type: definePropType<
       Array<string | Component> | Record<number, string | Component>
     >([Array, Object]),
-    default: () => [
-      'cb:star-filled',
-      'cb:star-filled',
-      'cb:star-filled',
-    ],
+    default: () => [IconStarFilled, IconStarFilled, IconStarFilled],
   },
   voidIcon: {
     type: iconPropType,
-    default: 'cb:star',
+    default: IconStarFilled,
   },
   disabledVoidIcon: {
     type: iconPropType,
-    default: 'cb:star-filled',
+    default: IconStarFilled,
   },
   disabled: {
     type: Boolean,

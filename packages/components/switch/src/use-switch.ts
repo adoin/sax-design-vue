@@ -24,18 +24,11 @@ export const useSwitch = (props: SwitchProps, emit: SwitchEmitFn) => {
     emit(INPUT_EVENT, val)
   }
 
-  const switchValue = () => {
-    if (isDisabled.value) return
-
-    handleChange()
-  }
-
   return {
     checked,
     isDisabled,
     isLoading,
 
     handleChange,
-    switchValue,
   }
 }

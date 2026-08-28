@@ -1,3 +1,139 @@
-@use 'mixins/var' as *;
+@use 'mixins/mixins' as *;
 @use 'common/var' as *;
-.s-segmented { display: inline-flex; gap: 3px; padding: 3px; border-radius: var(--sax-radius-md); background: getColor(gray, .08); }.s-segmented__item { min-width: 54px; padding: 6px 10px; border: 0; border-radius: var(--sax-radius-sm); background: transparent; color: getColor(text, .62); cursor: pointer; transition: all var(--sax-motion-duration-fast) var(--sax-motion-easing-standard); }.s-segmented__item.is-active { background: getColor(background); box-shadow: 0 3px 10px getColor(primary, .12); color: getColor(primary); font-weight: 600; }.s-segmented__item:disabled { cursor: not-allowed; opacity: .45; }
+
+@include b(segmented) {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 3px;
+  padding: 4px;
+  border-radius: var(--sax-radius-lg);
+  background: hsl(225deg 34% 95%);
+  box-shadow: inset 0 3px 8px hsl(225deg 30% 24% / 0.07);
+
+  @include e(item) {
+    position: relative;
+    min-width: 54px;
+    min-height: 36px;
+    padding: 8px 13px;
+    border: 0;
+    border-radius: var(--sax-radius-md);
+    color: getColor(text, 0.68);
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+    transition: color var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard),
+      background-color var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard),
+      box-shadow var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard),
+      transform var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
+
+    &:hover:not(:disabled) {
+      color: getColor(primary);
+      background: hsl(226deg 100% 55% / 0.07);
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+      outline: 0;
+      box-shadow: 0 0 0 5px hsl(226deg 100% 55% / 0.11),
+        0 7px 18px hsl(225deg 24% 20% / 0.14);
+    }
+
+    @include when(active) {
+      color: getColor(white);
+      background: getColor(primary);
+      box-shadow: 0 7px 18px hsl(226deg 100% 50% / 0.22);
+      font-weight: 650;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.42;
+    }
+  }
+
+  @include e(label) {
+    display: block;
+    white-space: nowrap;
+  }
+
+  @include e(dot) {
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    border-radius: var(--sax-radius-circle);
+    background: currentColor;
+    opacity: 0;
+    transform: translate(-50%, 3px) scale(0.5);
+    transition: opacity var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard),
+      transform var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
+  }
+
+  @include when(text) {
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+
+    @include e(item) {
+      min-width: 44px;
+      padding: 8px 10px 12px;
+
+      &:hover:not(:disabled) { background: transparent; }
+      @include when(active) {
+        color: getColor(primary);
+        background: transparent;
+        box-shadow: none;
+      }
+      &.is-active .#{bem('segmented', 'dot')} {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+      }
+      &:focus-visible {
+        background: hsl(226deg 100% 55% / 0.07);
+        box-shadow: 0 6px 18px hsl(226deg 100% 50% / 0.12);
+      }
+    }
+  }
+
+  @include when(tile) {
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+
+    @include e(item) {
+      background: hsl(225deg 30% 96%);
+      box-shadow: 0 4px 12px hsl(225deg 28% 20% / 0.08);
+
+      @include when(active) {
+        color: getColor(white);
+        background: getColor(primary);
+        box-shadow: 0 8px 20px hsl(226deg 100% 50% / 0.22);
+      }
+    }
+  }
+
+  @include when(block) {
+    display: flex;
+    width: 100%;
+    @include e(item) { flex: 1 1 0; }
+  }
+
+  @include when(disabled) {
+    opacity: 0.52;
+    filter: saturate(0.4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s-segmented,
+  .s-segmented * { transition-duration: 0.01ms !important; }
+}

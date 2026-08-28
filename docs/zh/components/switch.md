@@ -1,6 +1,16 @@
 ---
 description: '在两个状态之间切换布尔设置。'
 PROPS:
+  - name: variant
+    type: String
+    values: classic | soft | icon | text
+    description: 选择结构不同的无边框开关风格。
+    default: classic
+  - name: active-text / inactive-text
+    type: String
+    values: String
+    description: 文本风格在开、关状态显示的文字。
+    default: ON / OFF
   - name: active-value / inactive-value / shape
     type: String | Number | Boolean / String
     values: 自定义绑定值 / rounded | square
@@ -188,6 +198,30 @@ SLOTS:
 ---
 
 # Switch 开关
+
+<card>
+
+## 风格
+
+通过 `variant` 选择经典滑块、柔和内嵌、图标状态或紧凑文本风格。四种风格共用原生复选框语义，并用阴影与位移表达无边框焦点状态。
+
+<template #example>
+<switch-variants />
+</template>
+
+<template #template>
+
+@[code{10-22}](../../.vuepress/components/switch/variants.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-8}](../../.vuepress/components/switch/variants.vue)
+
+</template>
+
+</card>
 
 <card>
 

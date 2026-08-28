@@ -96,6 +96,11 @@ export const componentCategories: ComponentCategory[] = [
       component('Time select', '时间选择', '/components/time-select'),
       component('Tree select', '树形选择器', '/components/tree-select'),
       component('Upload', '上传', '/components/upload'),
+      component(
+        'Verification code',
+        '验证码输入',
+        '/components/verification-code',
+      ),
     ],
   },
   {

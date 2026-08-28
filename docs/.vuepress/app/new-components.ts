@@ -37,6 +37,7 @@ export const additionalComponentNavItems: SidebarItem[] = [
   { text: 'Result', link: '/components/result' },
   { text: 'Segmented', link: '/components/segmented' },
   { text: 'Slider', link: '/components/slider' },
+  { text: 'Verification code', link: '/components/verification-code' },
   { text: 'Spacer', link: '/components/spacer' },
   { text: 'Splitter', link: '/components/splitter' },
   { text: 'Steps', link: '/components/steps' },
