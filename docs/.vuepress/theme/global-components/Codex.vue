@@ -300,7 +300,7 @@ const openPlayground = (event?: Event) => {
 .code-dialog {
   display: flex;
   width: min(860px, 100%);
-  max-height: min(760px, calc(100vh - 48px));
+  max-height: calc(100dvh - 32px);
   flex-direction: column;
   overflow: hidden;
   border-radius: 18px;
@@ -369,7 +369,28 @@ const openPlayground = (event?: Event) => {
 .code-dialog__body {
   min-height: 0;
   overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: hsl(var(--sax-accent-color) / 0.62)
+    hsl(var(--sax-theme-code2) / 0.72);
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
   background: hsl(var(--sax-theme-code));
+}
+
+.code-dialog__body::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.code-dialog__body::-webkit-scrollbar-track {
+  background: hsl(var(--sax-theme-code2) / 0.72);
+}
+
+.code-dialog__body::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background: hsl(var(--sax-accent-color) / 0.62);
+  background-clip: padding-box;
 }
 
 .code-section > div[class*='language-'],
