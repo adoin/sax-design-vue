@@ -2,39 +2,39 @@
   <div class="center con-switch">
     <s-switch v-model="active1">
       <template #off>
-        <s-icon  name="bxs:volume-mute" />
+        <s-icon name="bxs:volume-mute" />
       </template>
       <template #on>
-        <s-icon  name="bxs:volume-full" />
+        <s-icon name="bxs:volume-full" />
       </template>
     </s-switch>
     <s-switch v-model="active2" color="danger">
-      <s-icon  name="bxs:microphone" />
+      <s-icon name="bxs:microphone" />
     </s-switch>
     <s-switch v-model="active3" color="success">
       <template #off>
-        <s-icon  name="bx:x" />
+        <s-icon name="bx:x" />
       </template>
       <template #on>
-        <s-icon  name="bx:check" />
+        <s-icon name="bx:check" />
       </template>
     </s-switch>
     <s-switch v-model="active4" color="warn">
       <template #off>
-        <s-icon  name="bxs:plane-alt" />
+        <s-icon name="bxs:plane-alt" />
       </template>
       <template #on> Active </template>
     </s-switch>
     <s-switch v-model="active5" color="dark">
       <template #circle>
-        <s-icon v-if="!active5"  name="bxs:moon" />
-        <s-icon v-else  name="bxs:sun" />
+        <s-icon v-if="!active5" name="bxs:moon" />
+        <s-icon v-else name="bxs:sun" />
       </template>
     </s-switch>
-    <s-switch v-model="active6" color="#7d33ff" icon>
+    <s-switch v-model="active6" color="#7d33ff">
       <template #circle>
-        <s-icon v-if="active6"  name="bxl:instagram-alt" />
-        <s-icon v-else  name="bxl:instagram" />
+        <s-icon v-if="active6" name="bxl:instagram-alt" />
+        <s-icon v-else name="bxl:instagram" />
       </template>
     </s-switch>
   </div>

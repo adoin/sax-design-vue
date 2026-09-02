@@ -2,7 +2,7 @@
 PROPS:
   - name: height
     type: Number, String
-    values: CSS height
+    values: "CSS height"
     description: 进度条高度（像素）。
     default: 5
     link: null
@@ -10,7 +10,7 @@ PROPS:
 
   - name: indeterminate
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 不确定进度动画。
     default: false
     link: null
@@ -18,7 +18,7 @@ PROPS:
 
   - name: percent
     type: Number
-    values: 0 - 100
+    values: "0 - 100"
     description: 确定进度百分比（0–100）。
     default: 0
     link: null
@@ -26,7 +26,7 @@ PROPS:
 
   - name: color
     type: String
-    values: primary, success, danger, warning, dark
+    values: "primary, success, danger, warning, dark"
     description: 进度条颜色。
     default: primary
     link: null

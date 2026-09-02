@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import dayjs, { type Dayjs } from 'dayjs'
 import ConfigProvider from '../../config-provider/src/config-provider'
 import DatePicker from '../src/date-picker.vue'
+import DatePanel from '../src/date-panel.vue'
 
 const InputStub = defineComponent({
   name: 'SInput',
@@ -14,6 +15,7 @@ const InputStub = defineComponent({
     labelFloat: Boolean,
     color: String,
     size: String,
+    shape: String,
     suffixIcon: String,
   },
   emits: ['update:modelValue'],
@@ -31,6 +33,7 @@ const PopperStub = defineComponent({
 const DatePanelStub = defineComponent({
   name: 'SDatePanel',
   props: {
+    color: String,
     modelValue: Object,
     defaultDate: Object,
     rangeStart: Object,
@@ -68,6 +71,7 @@ describe('DatePicker input presentation', () => {
       labelFloat: true,
       color: '#123456',
       size: 'large',
+      shape: 'square',
     })
     const input = wrapper.getComponent(InputStub)
 
@@ -76,16 +80,19 @@ describe('DatePicker input presentation', () => {
       labelFloat: true,
       color: '#123456',
       size: 'large',
+      shape: 'square',
       suffixIcon: 'cb:calendar',
     })
     expect(wrapper.get('.s-date-picker').attributes('style')).toContain(
       '--sax-color: 210deg 65.385% 20.392%',
     )
+    expect(wrapper.get('.s-date-picker').classes()).toContain('is-square')
     expect(wrapper.getComponent(PopperStub).props('popperStyle')).toMatchObject(
       {
         '--sax-color': '210deg 65.385% 20.392%',
       },
     )
+    expect(wrapper.getComponent(DatePanelStub).props('color')).toBe('#123456')
   })
 
   it('uses independent floating labels for both range inputs', () => {
@@ -252,5 +259,34 @@ describe('DatePicker input presentation', () => {
       '2026-08-05',
       '2026-09-06',
     ])
+  })
+})
+
+describe('DatePanel theme color', () => {
+  it('uses the primary theme color when rendered standalone', () => {
+    const wrapper = mount(DatePanel, {
+      props: {
+        pickerType: 'date',
+        modelValue: dayjs('2026-08-18'),
+      },
+    })
+
+    expect(wrapper.attributes('style')).toContain(
+      '--sax-color: var(--sax-primary)',
+    )
+  })
+
+  it('supports an explicit custom theme color', () => {
+    const wrapper = mount(DatePanel, {
+      props: {
+        pickerType: 'date',
+        color: '#123456',
+        modelValue: dayjs('2026-08-18'),
+      },
+    })
+
+    expect(wrapper.attributes('style')).toContain(
+      '--sax-color: 210deg 65.385% 20.392%',
+    )
   })
 })

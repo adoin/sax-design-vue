@@ -7,7 +7,10 @@
       :clearable="clearable"
       :clear-icon="clearIcon"
       :effect="effect"
+      :label="label"
+      :label-float="labelFloat"
       :placeholder="placeholder"
+      :shape="resolvedShape"
       default-first-option
       :filter="editable"
       @update:model-value="(event) => $emit('update:modelValue', event)"
@@ -36,6 +39,7 @@ import {
   SSelect as RawSelect,
 } from '@vuesax-alpha/components/select'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
+import { useShape } from '@vuesax-alpha/hooks'
 import { compareTime, formatTime, nextTime, parseTime } from './utils'
 import { timeSelectProps } from './time-select'
 import type { Component } from 'vue'
@@ -52,6 +56,7 @@ defineOptions({
 
 defineEmits(['change', 'blur', 'focus', UPDATE_MODEL_EVENT])
 const props = defineProps(timeSelectProps)
+const resolvedShape = useShape()
 
 const selectInstance = ref<SelectInstance>()
 

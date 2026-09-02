@@ -2,22 +2,22 @@
 PROPS:
   - name: offset-top
     type: Number
-    values: 像素
+    values: "像素"
     description: 内容距顶部达到该距离后固定。
     default: 0
   - name: offset-bottom
     type: Number
-    values: 像素
+    values: "像素"
     description: 将内容固定在底部，而非顶部。
     default: null
   - name: target
     type: Function
-    values: () => HTMLElement | Window
+    values: "() => HTMLElement | Window"
     description: 滚动目标；传入容器元素可在局部区域固定。
     default: window
   - name: z-index
     type: Number
-    values: number
+    values: "number"
     description: 固定状态下的层叠顺序。
     default: 100
 EVENTS:
@@ -26,7 +26,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: Slot
-    values: 任意内容
+    values: "任意内容"
     description: 需要固定的内容。
     default: null
 description: "将内容固定在视口或滚动容器边缘。"

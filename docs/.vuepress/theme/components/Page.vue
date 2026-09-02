@@ -160,7 +160,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   usePageData,
   usePageFrontmatter,
@@ -172,7 +172,7 @@ import { ensureEndingSlash, ensureLeadingSlash } from '@vuepress/shared'
 import { useDateFormat } from '@vueuse/core'
 import { upperFirst } from 'lodash-unified'
 
-import { componentNamesZh } from '../../app/new-components.zh'
+import { componentNamesZh } from '../../app/component-categories'
 import { endingSlashRE, normalize, outboundRE } from '../util'
 import { useDocLocaleUi } from '../composables/docLocale'
 
@@ -227,6 +227,7 @@ const props = defineProps<{
 const $page = ref<HTMLElement>()!
 const $header = ref<HTMLElement>()!
 const $titleul = ref<HTMLElement>()!
+const outlineBottomGap = 24
 const createEditLink = ({
   repo,
   docsRepo,
@@ -362,32 +363,47 @@ const editLink = computed(() => {
   return ''
 })
 
-onMounted(() => {
-  const syncStickyLayout = () => {
-    const headerIsFixed = window.pageYOffset > 76
-    if ($header.value) {
-      if (headerIsFixed) {
-        $header.value.classList.add('fixed')
-        $header.value.style.width = `${$page.value?.offsetWidth}px`
-      } else {
-        $header.value.style.width = `100%`
-        $header.value.classList.remove('fixed')
-      }
+const syncStickyLayout = () => {
+  const headerIsFixed = window.pageYOffset > 76
+  if ($header.value) {
+    if (headerIsFixed) {
+      $header.value.classList.add('fixed')
+      $header.value.style.width = `${$page.value?.offsetWidth}px`
+    } else {
+      $header.value.style.width = `100%`
+      $header.value.classList.remove('fixed')
     }
-
-    const sidebar = $page.value?.querySelector<HTMLElement>('.sidebar')
-    if (!sidebar) return
-    const headerBottom = $header.value?.getBoundingClientRect().bottom ?? 0
-    const reachesHeader = sidebar.getBoundingClientRect().top <= headerBottom
-    sidebar.classList.toggle(
-      'fixed',
-      headerIsFixed && (sidebar.classList.contains('fixed') || reachesHeader),
-    )
   }
 
+  const sidebar = $page.value?.querySelector<HTMLElement>('.sidebar')
+  if (!sidebar) return
+  const headerBottom = $header.value?.getBoundingClientRect().bottom ?? 0
+  const reachesHeader = sidebar.getBoundingClientRect().top <= headerBottom
+  sidebar.classList.toggle(
+    'fixed',
+    headerIsFixed && (sidebar.classList.contains('fixed') || reachesHeader),
+  )
+
+  const sidebarTop = Math.max(sidebar.getBoundingClientRect().top, 0)
+  const availableHeight = Math.max(
+    window.innerHeight - sidebarTop - outlineBottomGap,
+    0,
+  )
+  sidebar.style.setProperty(
+    '--docs-outline-max-height',
+    `${Math.floor(availableHeight)}px`,
+  )
+}
+
+onMounted(() => {
   window.addEventListener('scroll', syncStickyLayout)
   window.addEventListener('resize', syncStickyLayout)
   syncStickyLayout()
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', syncStickyLayout)
+  window.removeEventListener('resize', syncStickyLayout)
 })
 </script>
 
@@ -664,7 +680,9 @@ onMounted(() => {
     width: auto;
     background: transparent;
     z-index: 800;
-    max-height: calc(100vh - 470px);
+    // JS keeps this aligned to the sidebar's real viewport position. The
+    // fallback prevents a flash of unbounded content before hydration.
+    max-height: var(--docs-outline-max-height, calc(100dvh - 281px));
     overflow: auto;
     transition: 0s !important;
     & > svg {
@@ -698,7 +716,7 @@ onMounted(() => {
       // compact header content (58px). This avoids overlapping the title.
       top: 115px !important;
       z-index: 1300 !important;
-      max-height: calc(100vh - 270px);
+      max-height: var(--docs-outline-max-height, calc(100dvh - 139px));
     }
     .sidebar-sub-headers {
       display: block !important;

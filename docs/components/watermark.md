@@ -2,22 +2,22 @@
 PROPS:
   - name: content
     type: String
-    values: text
+    values: "text"
     description: Text repeated across the content.
-    default: —
+    default: null
   - name: gap
     type: Number
-    values: pixels
+    values: "pixels"
     description: Spacing between watermark marks.
     default: '96'
   - name: opacity
     type: Number
-    values: 0 - 1
+    values: "0 - 1"
     description: Watermark transparency.
     default: '0.12'
   - name: rotate
     type: Number
-    values: degrees
+    values: "degrees"
     description: Rotation angle of the watermark layer.
     default: '-18'
 description: "Content watermark."

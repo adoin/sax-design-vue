@@ -4,69 +4,74 @@ API_TITLES:
 PROPS:
   - name: locale
     type: Language
-    values: 组件语言包
+    values: "组件语言包"
     description: 弹窗及其内部控件使用的语言包。
     default: 英文
   - name: title
     type: String
-    values: 弹窗标题
+    values: "弹窗标题"
     description: 覆盖默认标题。
     default: 插入图标
   - name: iconList
     type: readonly string[]
-    values: 已注册的 Iconify 名称
+    values: "已注册的 Iconify 名称"
     description: 弹窗内可搜索和选择的图标集合。
     default: 168 个常用 Carbon 图标
   - name: initialIcon
     type: String
-    values: prefix:name
+    values: "prefix:name"
     description: 弹窗打开时预选的图标。
     default: "''"
   - name: output
     type: String
-    values: svg / code
+    values: "svg / code"
     description: 控制 Promise 返回完整 SVG，或包含 code、color、size 的精简对象。
     default: svg
   - name: color
     type: String
-    values: HEX / RGB / HSL
+    values: "HEX / RGB / HSL"
     description: 初始图标颜色。
     default: '#5667F4'
   - name: size
     type: Number
-    values: 8 - 256
+    values: "8 - 256"
     description: 固定输出尺寸；不传时由用户在弹窗内选择。
     default: 弹窗选择，初始为 24
   - name: label
     type: String
-    values: 无障碍文本
+    values: "无障碍文本"
     description: 设置后输出 role=img 与 aria-label；不设置时输出装饰图标。
-    default: '-'
+    default: null
   - name: showName
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 是否在图标宫格中显示名称。
     default: 'true'
   - name: showAlpha
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 是否允许选择透明度。
     default: 'false'
   - name: predefine
     type: Array
-    values: 颜色预设
+    values: "颜色预设"
     description: 传给颜色选择器的预设颜色。
     default: '[]'
   - name: maskClosable
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 是否允许点击遮罩关闭弹窗。
     default: 'true'
-  - name: confirmText / cancelText
+  - name: confirmText
     type: String
-    values: 按钮文案
+    values: "按钮文案"
     description: 自定义确认与取消按钮文字。
-    default: '-'
+    default: null
+  - name: cancelText
+    type: String
+    values: "按钮文案"
+    description: 自定义确认与取消按钮文字。
+    default: null
 description: '通过 Promise 弹窗选择图标、颜色与尺寸，按需返回图标代码或完整 SVG。'
 ---
 

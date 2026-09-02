@@ -12,6 +12,7 @@ const InputStub = defineComponent({
     labelFloat: Boolean,
     color: String,
     size: String,
+    shape: String,
     suffixIcon: String,
   },
   emits: ['update:modelValue'],
@@ -53,6 +54,7 @@ describe('TimePicker input presentation', () => {
       labelFloat: true,
       color: '#654321',
       size: 'small',
+      shape: 'square',
     })
     const input = wrapper.getComponent(InputStub)
 
@@ -61,11 +63,13 @@ describe('TimePicker input presentation', () => {
       labelFloat: true,
       color: '#654321',
       size: 'small',
+      shape: 'square',
       suffixIcon: 'cb:time',
     })
     expect(wrapper.get('.s-time-picker').attributes('style')).toContain(
       '--sax-color: 30deg 50.746% 26.275%',
     )
+    expect(wrapper.get('.s-time-picker').classes()).toContain('is-square')
     expect(wrapper.getComponent(PopperStub).props('popperStyle')).toMatchObject(
       {
         '--sax-color': '30deg 50.746% 26.275%',

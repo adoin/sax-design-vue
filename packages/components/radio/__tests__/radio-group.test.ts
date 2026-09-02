@@ -65,7 +65,8 @@ describe('RadioGroup', () => {
     expect(buttons).toHaveLength(3)
     expect(buttons[0].classes()).toContain('is-active')
     expect(buttons[0].text()).toContain('Starter')
-    expect(buttons[0].find('.s-radio-button__indicator').exists()).toBe(true)
+    const indicator = buttons[0].get('.s-radio-button__indicator')
+    expect(indicator.get('.s-radio-button__dot').exists()).toBe(true)
 
     await buttons[1].get('input').setValue(true)
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['team'])
@@ -107,6 +108,7 @@ describe('RadioGroupTabs', () => {
     })
 
     expect(wrapper.get('[role="tabpanel"]').text()).toContain('Starter')
+    expect(wrapper.findComponent(RadioGroup).props('disabled')).toBe(false)
     expect(wrapper.findAll('.s-radio-group-tabs__value')[0].text()).toBe(
       'Starter',
     )

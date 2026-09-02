@@ -1,5 +1,5 @@
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import { useColorProp, useSizeProp } from '@vuesax-alpha/hooks'
+import { useColorProp, useShapeProp, useSizeProp } from '@vuesax-alpha/hooks'
 import {
   buildProps,
   definePropType,
@@ -28,6 +28,7 @@ export interface DatePickerPopupConfig {
 }
 
 export const datePickerProps = buildProps({
+  shape: useShapeProp,
   /** Theme color shared by the trigger and teleported panel. */
   color: useColorProp,
   /** Trigger input size. */

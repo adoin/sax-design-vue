@@ -1,28 +1,33 @@
 ---
 PROPS:
-  - name: bottom / right
+  - name: bottom
     type: Number
-    values: 像素
+    values: "像素"
     description: 设置距视口的距离；设置 target 后，距离相对目标容器计算。
-    default: '40 / 40'
+    default: '40'
+  - name: right
+    type: Number
+    values: "像素"
+    description: 设置距视口的距离；设置 target 后，距离相对目标容器计算。
+    default: '40'
   - name: target
     type: String
-    values: CSS selector
+    values: "CSS selector"
     description: 滚动容器选择器，控件会定位在该容器内；默认 window。
     default: null
   - name: visibility-height
     type: Number
-    values: pixels
+    values: "pixels"
     description: 超过该滚动高度后显示；与 visibility-bottom 任一满足即显示。
     default: 200
   - name: visibility-bottom
     type: Number
-    values: pixels
+    values: "pixels"
     description: 距滚动容器底部不超过该距离后显示；与 visibility-height 任一满足即显示。
     default: null
   - name: behavior
     type: String
-    values: auto | smooth
+    values: "auto | smooth"
     description: 点击后的原生滚动行为。
     default: smooth
 EVENTS:
@@ -31,7 +36,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: Slot
-    values: 图标或自定义内容
+    values: "图标或自定义内容"
     description: 替换默认向上箭头。
     default: IconArrow
 description: "浮动回到顶部控件。"

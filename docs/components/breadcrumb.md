@@ -2,7 +2,7 @@
 PROPS:
   - name: items
     type: Array
-    values: BreadcrumbItem[] (supports children)
+    values: "BreadcrumbItem[] (supports children)"
     description: Items rendered when not using slots. Use children for tree navigation data.
     default: []
     link: null
@@ -10,7 +10,7 @@ PROPS:
 
   - name: separator
     type: String
-    values: String
+    values: "String"
     description: Separator between items.
     default: /
     link: null
@@ -18,7 +18,7 @@ PROPS:
 
   - name: color
     type: String
-    values: primary, success, danger, warning, dark
+    values: "primary, success, danger, warning, dark"
     description: Breadcrumb color.
     default: primary
     link: null
@@ -26,14 +26,14 @@ PROPS:
 
   - name: align
     type: String
-    values: left, center, right
+    values: "left, center, right"
     description: Horizontal alignment.
     default: left
     link: null
     usage: '#align'
   - name: trigger
     type: String | Array
-    values: hover, click
+    values: "hover, click"
     description: Tree menu trigger. Uses the same trigger modes as Popper.
     default: hover
 EVENTS: []

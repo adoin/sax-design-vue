@@ -51,6 +51,7 @@ import { computed, onMounted, ref, useSlots, watch } from 'vue'
 import {
   useColor,
   useNamespace,
+  useShape,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { getVsColor, setCssVar } from '@vuesax-alpha/utils'
@@ -67,6 +68,7 @@ const props = defineProps(avatarProps)
 const slots = useSlots()
 
 const ns = useNamespace('avatar')
+const shape = useShape<'circle' | 'square' | 'default'>()
 
 const root$ = ref<HTMLElement>()
 
@@ -79,7 +81,9 @@ const avatarClassess = computed(() => [
   vsBaseClasses,
   props.history && 'history',
   props.historyGradient && 'history--gradient',
-  props.shape != 'default' && `${ns.be('content', props.shape)}`,
+  shape.value != 'default' &&
+    shape.value != 'rounded' &&
+    `${ns.be('content', shape.value)}`,
   isHidden.value && `${ns.be('content', 'hidden')}`,
   isLastest.value && `${ns.be('content', 'latest')}`,
   slots.icons && `${ns.be('content', 'hasIcons')}`,
@@ -94,7 +98,7 @@ const avatarStyles = computed<CSSProperties>(
       ...ns.cssVar({
         color: getVsColor(props.color),
       }),
-    } as CSSProperties)
+    }) as CSSProperties,
 )
 
 watch(
@@ -102,7 +106,7 @@ watch(
   () => {
     setCssVar('avatar-badge', getVsColor(props.badgeColor), root$.value)
     root$.value?.classList.add(ns.em('badge', 'change-color'))
-  }
+  },
 )
 
 onMounted(() => {

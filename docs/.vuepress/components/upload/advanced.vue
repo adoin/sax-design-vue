@@ -1,35 +1,44 @@
 <template>
   <s-upload
-    v-model="files"
-    multiple
-    auto-submit
-    mode="image"
-    :limit-count="3"
-    :limit-size="2"
-    :file-types="['image/png', 'image/jpeg']"
-    show-tip
-    tip-text="PNG/JPG only, up to 2 MB each."
-    :before-select-method="beforeSelect"
+    ref="uploadRef"
+    accept=".pdf,.doc,.docx"
+    :limit="2"
     :upload-method="uploadMethod"
-  />
+  >
+    <template #trigger="{ choose, disabled }">
+      <div class="custom-trigger">
+        <s-icon name="cb:folder-open" />
+        <div>
+          <strong>Import documents</strong>
+          <span>PDF or Word files</span>
+        </div>
+        <s-button :disabled="disabled" @click.stop="choose">Browse</s-button>
+      </div>
+    </template>
+  </s-upload>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-
-const files = ref<File[]>([])
-
-const beforeSelect = ({ file }: { file: File }) =>
-  file.type.startsWith('image/')
-
-const uploadMethod = async ({
-  updateProgress,
-}: {
-  updateProgress: (percent: number) => void
-}) => {
-  updateProgress(40)
-  await new Promise((resolve) => setTimeout(resolve, 350))
-  updateProgress(100)
-  return { ok: true }
-}
+<script setup lang="ts">
+const uploadMethod = async () => ({ ok: true })
 </script>
+
+<style scoped>
+.custom-trigger {
+  display: flex;
+  width: min(100%, 520px);
+  align-items: center;
+  gap: 14px;
+}
+
+.custom-trigger > div {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  text-align: left;
+}
+
+.custom-trigger span {
+  opacity: 0.62;
+  font-size: 0.75rem;
+}
+</style>

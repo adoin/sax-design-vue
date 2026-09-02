@@ -2,7 +2,7 @@
 PROPS:
   - name: direction
     type: String
-    values: horizontal, vertical
+    values: "horizontal, vertical"
     description: 分割线方向；竖线用于行内内容之间。
     default: horizontal
     link: null
@@ -10,7 +10,7 @@ PROPS:
 
   - name: position
     type: String
-    values: left, left-center, center, right-center, right
+    values: "left, left-center, center, right-center, right"
     description: 文本/图标在线条上的位置。
     default: center
     link: null
@@ -18,7 +18,7 @@ PROPS:
 
   - name: color
     type: String
-    values: primary, success, danger, warning, dark, RGB, HEX
+    values: "primary, success, danger, warning, dark, RGB, HEX"
     description: 线条与文本颜色（主题色、RGB、HEX）。
     default: rgba(0,0,0,.1)
     link: null
@@ -26,7 +26,7 @@ PROPS:
 
   - name: background
     type: String
-    values: primary, success, danger, warning, dark, RGB, HEX
+    values: "primary, success, danger, warning, dark, RGB, HEX"
     description: 分割线文本背后的背景色。
     default: transparent
     link: null
@@ -34,7 +34,7 @@ PROPS:
 
   - name: icon
     type: String
-    values: Material icon name
+    values: "Material icon name"
     description: 用图标替代插槽文本。
     default: null
     link: null
@@ -42,7 +42,7 @@ PROPS:
 
   - name: border-style
     type: String
-    values: solid, dashed, dotted
+    values: "solid, dashed, dotted"
     description: 线条的 CSS 边框样式。
     default: solid
     link: null
@@ -50,7 +50,7 @@ PROPS:
 
   - name: border-height
     type: String
-    values: CSS size
+    values: "CSS size"
     description: 线条粗细，水平与竖线模式均生效。
     default: 1px
     link: null

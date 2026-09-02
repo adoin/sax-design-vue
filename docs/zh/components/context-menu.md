@@ -2,26 +2,30 @@
 PROPS:
   - name: min-width
     type: Number | String
-    values: CSS 长度
+    values: "CSS 长度"
     description: 设置菜单最小宽度。
     default: '160'
   - name: items
     type: Array
-    values: ContextMenuItem[]
+    values: "ContextMenuItem[]"
     description: 菜单项配置。
     default: '[]'
   - name: v-model
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 控制菜单显示状态。
     default: 'false'
   - name: disabled
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 禁用右键触发。
     default: 'false'
 EVENTS:
-  - name: select / open / close
+  - name: select
+    description: 选择菜单项与显示状态事件。
+  - name: open
+    description: 选择菜单项与显示状态事件。
+  - name: close
     description: 选择菜单项与显示状态事件。
 description: "右键菜单。"
 ---

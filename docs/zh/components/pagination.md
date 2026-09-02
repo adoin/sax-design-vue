@@ -3,7 +3,7 @@ description: '按页浏览较长的数据集合。'
 PROPS:
   - name: v-model:current-page
     type: Number
-    values: number
+    values: "number"
     description: 当前所在页码。
     default: 1
     link: null
@@ -12,7 +12,7 @@ PROPS:
       <s-pagination v-model:current-page="page" :total="20" />
   - name: total
     type: Number
-    values: number
+    values: "number"
     description: 数据总条数。
     default: null
     link: null
@@ -21,7 +21,7 @@ PROPS:
       <s-pagination v-model:current-page="page" :total="20" />
   - name: color
     type: String
-    values: Theme colors, RGB, HEX
+    values: "Theme colors, RGB, HEX"
     description: 设置组件基础颜色。
     default: primary
     link: null
@@ -31,7 +31,7 @@ PROPS:
 
   - name: disabled
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 是否禁用整个组件。
     default: false
     link: null
@@ -41,7 +41,7 @@ PROPS:
 
   - name: shape
     type: String
-    values: circle, square
+    values: "circle, square"
     description: 设置按钮为圆形或方形样式。
     default: null
     link: null
@@ -53,7 +53,7 @@ PROPS:
 
   - name: buttons-dotted
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 隐藏按钮内页码并调整其尺寸。
     default: false
     link: null
@@ -63,7 +63,7 @@ PROPS:
 
   - name: disabled-items
     type: Number[]
-    values: null
+    values: "null"
     description: 指定禁用状态的页码项。
     default: null
     link: null
@@ -73,7 +73,7 @@ PROPS:
 
   - name: loading-items
     type: Number[]
-    values: null
+    values: "null"
     description: 指定加载状态的页码项。
     default: null
     link: null
@@ -83,7 +83,7 @@ PROPS:
 
   - name: not-margin
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 移除页码项间距，并改为无圆角的紧凑样式。
     default: false
     link: null
@@ -93,7 +93,7 @@ PROPS:
 
   - name: progress
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 根据当前页与总页数显示进度条。
     default: false
     link: null
@@ -103,7 +103,7 @@ PROPS:
 
   - name: infinite
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 是否启用无限分页。
     default: false
     link: null
@@ -113,7 +113,7 @@ PROPS:
 
   - name: v-model:page-size
     type: Number
-    values: null
+    values: "null"
     description: 每页数据条数。
     default: 10
     link: null
@@ -122,7 +122,7 @@ PROPS:
 
   - name: default-page-size
     type: Number
-    values: null
+    values: "null"
     description: 每页条数的默认初始值。
     default: null
     link: null
@@ -131,7 +131,7 @@ PROPS:
 
   - name: page-count
     type: Number
-    values: null
+    values: "null"
     description: 总页数。设置 total 或 page-count 之一即可显示页码；使用 page-sizes 时必须设置 total。
     default: null
     link: null
@@ -140,7 +140,7 @@ PROPS:
 
   - name: pager-count
     type: Number
-    values: 5, 7, 9, 11, 13, 15, 17, 19, 21
+    values: "5, 7, 9, 11, 13, 15, 17, 19, 21"
     description: 页码按钮数量；总页数超过该值时会折叠。
     default: 7
     link: null
@@ -149,7 +149,7 @@ PROPS:
 
   - name: default-current-page
     type: Number
-    values: null
+    values: "null"
     description: 当前页的默认初始值。
     default: null
     link: null
@@ -158,7 +158,7 @@ PROPS:
 
   - name: layout
     type: String, String[]
-    values: prev, pager, next, jumper, ->, total, slot, sizes
+    values: "prev, pager, next, jumper, ->, total, slot, sizes"
     description: 分页布局，可传数组或以逗号分隔的元素字符串。
     default: [prev, pager, next, jumper, ->, total, slot, sizes]
     link: null
@@ -167,7 +167,7 @@ PROPS:
 
   - name: page-sizes
     type: Array
-    values: number[]
+    values: "number[]"
     description: 每页数据条数选项。
     default: [10, 20, 30, 40, 50, 100]
     link: null
@@ -176,7 +176,7 @@ PROPS:
 
   - name: hide-on-single-page
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 每页数据条数选项。
     default: false
     link: null
@@ -185,7 +185,7 @@ PROPS:
 
   - name: prev-text
     type: String
-    values: null
+    values: "null"
     description: 上一页按钮文本。
     default: null
     link: null
@@ -194,7 +194,7 @@ PROPS:
 
   - name: prev-icon
     type: String, Component
-    values: null
+    values: "null"
     description: 上一页按钮图标，优先级高于 prev-text。
     default: ChevronLeft
     link: null
@@ -203,7 +203,7 @@ PROPS:
 
   - name: next-text
     type: String
-    values: null
+    values: "null"
     description: 下一页按钮文本。
     default: null
     link: null
@@ -212,7 +212,7 @@ PROPS:
 
   - name: next-icon
     type: String, Component
-    values: null
+    values: "null"
     description: 下一页按钮图标，优先级高于 next-text。
     default: ChevronRight
     link: null
@@ -220,19 +220,28 @@ PROPS:
     code: null
 
 EVENTS:
-  - name: update:current-page / page-change
+  - name: update:current-page
     type: Number
     description: 当前页码变化时触发。
-  - name: update:page-size / size-change
+  - name: page-change
+    type: Number
+    description: 当前页码变化时触发。
+  - name: update:page-size
     type: Number
     description: 每页条数变化时触发。
-  - name: prev-click / next-click
+  - name: size-change
+    type: Number
+    description: 每页条数变化时触发。
+  - name: prev-click
+    type: Number
+    description: 点击上一页或下一页后，携带结果页码触发。
+  - name: next-click
     type: Number
     description: 点击上一页或下一页后，携带结果页码触发。
 SLOTS:
   - name: default
     type: slot
-    values: null
+    values: "null"
     description: 自定义内容；使用时需在 layout 中声明 slot。
     default: null
     link: null

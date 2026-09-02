@@ -39,7 +39,7 @@
       block
       filter
       multiple
-      collapse-chips
+      collapse-tags
       placeholder="Resize to see tags adapt"
     >
       <s-option label="Sax Design" value="1"> Sax Design </s-option>

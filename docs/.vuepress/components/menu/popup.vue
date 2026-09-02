@@ -10,7 +10,7 @@ const items = [
     icon: 'cb:cube',
     description: 'Build and release',
     children: [
-      { key: 'roadmap', label: 'Roadmap', badge: 'New' },
+      { key: 'roadmap', label: 'Roadmap' },
       {
         key: 'delivery',
         label: 'Delivery',

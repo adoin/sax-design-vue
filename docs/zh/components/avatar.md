@@ -3,12 +3,12 @@ description: "使用图片、图标或首字母表示用户、团队或实体。
 PROPS:
   - name: badge-position
     type: String
-    values: top-left | top-right | bottom-left | bottom-right
+    values: "top-left | top-right | bottom-left | bottom-right"
     description: 设置可选徽标在头像周围的位置。
     default: top-right
   - name: color
     type: String
-    values: Theme colors, RGB, HEX
+    values: "Theme colors, RGB, HEX"
     description: 组件颜色。
     default: --sax-gray-2
     link: null
@@ -17,7 +17,7 @@ PROPS:
 
   - name: size
     type: Number
-    values: Number
+    values: "Number"
     description: 头像组件尺寸。
     default: 44
     link: null
@@ -25,7 +25,7 @@ PROPS:
     code: null
   - name: badge
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 是否启用徽标。
     default: false
     link: null
@@ -34,7 +34,7 @@ PROPS:
 
   - name: badge-color
     type: String
-    values: Theme colors,RGB,HEX
+    values: "Theme colors,RGB,HEX"
     description: 设置头像内徽标颜色。
     default: primary
     link: null
@@ -43,7 +43,7 @@ PROPS:
 
   - name: shape
     type: String
-    values: square, circle
+    values: "square, circle"
     description: 设置头像为圆形或方形样式。
     default: false
     link: null
@@ -52,7 +52,7 @@ PROPS:
 
   - name: writing
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 为输入状态徽标添加动画。
     default: false
     link: null
@@ -61,7 +61,7 @@ PROPS:
 
   - name: history
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 为头像添加边框。
     default: gray-2
     link: null
@@ -70,7 +70,7 @@ PROPS:
 
   - name: history-gradient
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 将边框颜色改为渐变。
     default: false
     link: null
@@ -79,7 +79,7 @@ PROPS:
 
   - name: loading
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 为头像添加加载动画。
     default: false
     link: null
@@ -88,7 +88,7 @@ PROPS:
 
   - name: max
     type: number
-    values: number
+    values: "number"
     description: "`s-avatar-group` 中最多显示的头像数量。"
     default: null
     link: null
@@ -96,7 +96,7 @@ PROPS:
     code: null
   - name: float
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: "`s-avatar-group` 中头像是否并排排列。"
     default: false
     link: null
@@ -105,7 +105,7 @@ PROPS:
 
   - name: pointer
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 是否显示指针光标。
     default: false
     link: null
@@ -115,7 +115,7 @@ PROPS:
 SLOTS:
   - name: text
     type: slot
-    values: null
+    values: "null"
     description: 在头像组件内添加文本。
     default: null
     link: null
@@ -129,7 +129,7 @@ SLOTS:
 
   - name: badge
     type: slot
-    values: null
+    values: "null"
     description: 徽标内容插槽，常用于数字或图标。
     default: null
     link: null
@@ -144,7 +144,7 @@ SLOTS:
 
   - name: icons
     type: slot
-    values: null
+    values: "null"
     description: 用于在头像旁放置图标的插槽。
     default: null
     link: null

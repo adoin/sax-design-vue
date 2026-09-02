@@ -1,19 +1,51 @@
 ---
 description: '从预设或生成的时间列表中选择时间。'
 PROPS:
-  - name: v-model / model-value
+  - name: shape
     type: String
-    values:
+    values: 'rounded | square'
+    description: 设置时间选择触发器和弹层的圆角或方形外观。
+    default: rounded
+    usage: '#外形'
+  - name: label
+    type: String
+    values: 标签文字
+    description: 设置常驻标签或上浮标签的文字。
+    default: null
+    usage: '#标签'
+  - name: label-float
+    type: Boolean
+    values: 'true | false'
+    description: 让标签作为占位内容，并在聚焦或存在值时上浮。
+    default: false
+    usage: '#标签'
+  - name: v-model
+    type: String
+    values: ''
+    description: 绑定时间值。
+    default: false
+    link: null
+    usage: '#default'
+    code: null
+  - name: model-value
+    type: String
+    values: ''
     description: 绑定时间值。
     default: false
     link: null
     usage: '#default'
     code: null
 EVENTS:
-  - name: update:modelValue / change
+  - name: update:modelValue
     type: String
     description: 选中的时间选项变化时触发。
-  - name: focus / blur
+  - name: change
+    type: String
+    description: 选中的时间选项变化时触发。
+  - name: focus
+    type: FocusEvent | Event
+    description: 控件获得或失去焦点时触发。
+  - name: blur
     type: FocusEvent | Event
     description: 控件获得或失去焦点时触发。
 ---
@@ -41,6 +73,68 @@ EVENTS:
 <template #script>
 
 @[code{13-17}](../../.vuepress/components/time-select/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{19-23}](../../.vuepress/components/time-select/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 标签
+
+使用 `label` 显示常驻标签；同时设置 `label-float` 后，标签会在聚焦或存在值时上浮。
+
+<template #example><time-select-label /></template>
+
+<template #template>
+
+@[code{1-15}](../../.vuepress/components/time-select/label.vue)
+
+</template>
+
+<template #script>
+
+@[code{17-22}](../../.vuepress/components/time-select/label.vue)
+
+</template>
+
+<template #style>
+
+@[code{24-29}](../../.vuepress/components/time-select/label.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 外形
+
+设置 `shape="square"` 可让时间输入框和选项弹层保持一致的直角外观。
+
+<template #example><time-select-shape /></template>
+
+<template #template>
+
+@[code{8-32}](../../.vuepress/components/time-select/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../../.vuepress/components/time-select/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{34-46}](../../.vuepress/components/time-select/shape.vue)
 
 </template>
 

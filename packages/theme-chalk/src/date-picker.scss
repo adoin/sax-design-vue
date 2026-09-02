@@ -2,6 +2,15 @@
 @use 'mixins/var' as *;
 @use 'common/var' as *;
 
+.#{$namespace}-date-picker__popper.is-square {
+  .#{$namespace}-date-picker__dropdown,
+  .#{$namespace}-date-picker__shortcut,
+  .#{$namespace}-date-picker__range-mode-button,
+  .#{$namespace}-time-panel__input-field {
+    border-radius: 0;
+  }
+}
+
 .#{$namespace}-date-picker-fade-enter-active,
 .#{$namespace}-date-picker-fade-leave-active {
   transition:

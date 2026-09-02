@@ -15,7 +15,7 @@
       title="Enid's"
       subtitle="At night a bar, during the day a delicious brunch spot."
     >
-      <s-chip color="warning">Another component</s-chip>
+      <s-tag color="warning">Another component</s-tag>
     </s-list-item>
     <s-list-item
       title="Veronika Ossi"

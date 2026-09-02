@@ -2,7 +2,7 @@
 PROPS:
   - name: height
     type: Number, String
-    values: CSS height
+    values: "CSS height"
     description: Progress bar height in pixels.
     default: 5
     link: null
@@ -10,7 +10,7 @@ PROPS:
 
   - name: indeterminate
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Animated indeterminate progress.
     default: false
     link: null
@@ -18,7 +18,7 @@ PROPS:
 
   - name: percent
     type: Number
-    values: 0 - 100
+    values: "0 - 100"
     description: Determinate progress percentage.
     default: 0
     link: null
@@ -26,7 +26,7 @@ PROPS:
 
   - name: color
     type: String
-    values: primary, success, danger, warning, dark
+    values: "primary, success, danger, warning, dark"
     description: Progress color.
     default: primary
     link: null

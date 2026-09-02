@@ -2,7 +2,7 @@
 import { reactive } from 'vue'
 
 const values = reactive({
-  soft: '2604',
+  soft: 'A7K9Q2',
   capsule: '8062',
   underline: '',
 })
@@ -11,11 +11,12 @@ const values = reactive({
 <template>
   <div class="verification-code-demo">
     <div>
-      <s-text>Soft cells</s-text>
+      <s-text>Alphanumeric</s-text>
       <s-verification-code
         v-model="values.soft"
+        mode="alphanumeric"
         variant="soft"
-        aria-label="Soft verification code"
+        aria-label="Alphanumeric verification code"
       />
     </div>
     <div>

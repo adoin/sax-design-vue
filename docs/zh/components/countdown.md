@@ -2,32 +2,32 @@
 PROPS:
   - name: auto-start
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 挂载后自动开始倒计时。
     default: true
   - name: speed
     type: Number
-    values: number >= 0
+    values: "number >= 0"
     description: 倒计时流速倍数；设为 0 时冻结剩余时间。
     default: 1
   - name: value
     type: Number
-    values: timestamp
+    values: "timestamp"
     description: 毫秒级目标时间戳。
     default: null
   - name: format
     type: String
-    values: DD HH mm ss
+    values: "DD HH mm ss"
     description: 展示格式标记；最高显示单位会吸收被省略的更大单位。
     default: HH:mm:ss
   - name: formatter
     type: Function
-    values: (time) => string
+    values: "(time) => string"
     description: 根据剩余时间格式化自定义文本；传入后优先于 format，返回文本中的数字仍会保留所选动效。
     default: null
   - name: effect
     type: String
-    values: default | flip | fade | particle | slide
+    values: "default | flip | fade | particle | slide"
     description: 数字变化时使用的动效风格；分隔符不会参与动画。
     default: default
 EVENTS:
@@ -36,7 +36,9 @@ EVENTS:
   - name: change
     description: 剩余毫秒变化时触发。
 EXPOSES:
-  - name: start / stop
+  - name: start
+    description: 通过实例方法继续或暂停倒计时。
+  - name: stop
     description: 通过实例方法继续或暂停倒计时。
 description: '倒计时展示。'
 ---

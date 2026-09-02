@@ -1,128 +1,143 @@
 ---
 PROPS:
-  - name: model-value / v-model
+  - name: model-value
     type: Number
-    values: slide index
+    values: "slide index"
+    description: Active slide index.
+    default: '0'
+  - name: v-model
+    type: Number
+    values: "slide index"
     description: Active slide index.
     default: '0'
   - name: items
     type: CarouselItem[]
-    values: '{ name?, label?, src?, alt?, title?, description?, disabled?, ...customData }[]'
+    values: "{ name?, label?, src?, alt?, title?, description?, disabled?, ...customData }[]"
     description: Slide data. Extra business fields are forwarded to the item slot.
     default: '[]'
   - name: height
     type: Number | String
-    values: CSS height
+    values: "CSS height"
     description: Carousel height.
     default: '260'
   - name: radius
     type: Boolean | Number | String
-    values: true / false / CSS length
+    values: "true / false / CSS length"
     description: Shared radius for the viewport and every slide; false uses square corners.
     default: 'true'
   - name: effect
     type: String
-    values: slide / fade / deck / orbit / prism
+    values: "slide / fade / deck / orbit / prism"
     description: Transition presentation. Deck, orbit, and prism use CSS 3D perspective.
     default: slide
   - name: direction
     type: String
-    values: horizontal / vertical
+    values: "horizontal / vertical"
     description: Slide and control direction.
     default: horizontal
   - name: autoplay
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Automatically advance slides.
     default: 'true'
   - name: interval
     type: Number
-    values: milliseconds
+    values: "milliseconds"
     description: Autoplay interval.
     default: '4000'
   - name: loop
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Wrap navigation at both ends.
     default: 'true'
   - name: pause-on-hover
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Pause autoplay while pointer is over the carousel.
     default: 'true'
   - name: arrow
     type: String
-    values: always / hover / never
+    values: "always / hover / never"
     description: Arrow visibility behavior.
     default: hover
   - name: indicator-position
     type: String
-    values: inside / outside / top / bottom / left / right / none
+    values: "inside / outside / top / bottom / left / right / none"
     description: Indicator placement.
     default: inside
   - name: indicator-type
     type: String
-    values: dot / line / number
+    values: "dot / line / number"
     description: Indicator presentation.
     default: line
   - name: trigger
     type: String
-    values: click / hover
+    values: "click / hover"
     description: Indicator activation trigger. Click remains available for accessibility.
     default: click
   - name: transition-duration
     type: Number
-    values: milliseconds
+    values: "milliseconds"
     description: Transition duration shared by every effect.
     default: '480'
   - name: easing
     type: String
-    values: CSS timing function
+    values: "CSS timing function"
     description: Transition interpolation function.
     default: cubic-bezier(.22, .72, 0, 1)
   - name: deck-scale
     type: Number
-    values: 0 - 1
+    values: "0 - 1"
     description: Scale of the first inactive layer in deck mode.
     default: '0.86'
   - name: deck-visible
     type: Number
-    values: 1 - 4
+    values: "1 - 4"
     description: Maximum inactive card layers visible on each side in deck mode.
     default: '2'
   - name: deck-blur
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Blur inactive deck cards progressively by distance.
     default: 'false'
-  - name: perspective / depth
-    type: Number / Number
-    values: pixels
+  - name: perspective
+    type: Number
+    values: "pixels"
     description: 3D camera perspective and Z-axis distance.
-    default: '1200 / 150'
+    default: '1200'
+  - name: depth
+    type: Number
+    values: "pixels"
+    description: 3D camera perspective and Z-axis distance.
+    default: '150'
   - name: orbit-angle
     type: Number
-    values: 0 / 12 - 120
+    values: "0 / 12 - 120"
     description: Angular spacing in orbit mode; 0 distributes rendered items evenly around the full circle.
     default: '0'
   - name: orbit-max-visible
     type: Number
-    values: integer, ≥ 4
+    values: "integer, ≥ 4"
     description: Base visible card count. Auto spacing may take one extra real card to make an even window odd; larger data sets use hidden edge buffers.
     default: '10'
   - name: motion-blur
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Adds a short motion blur during transitions.
     default: 'false'
-  - name: draggable / touchable
-    type: Boolean / Boolean
-    values: true / false
+  - name: draggable
+    type: Boolean
+    values: "true"
     description: Enable mouse dragging and touch swiping.
-    default: 'false / true'
+    default: 'false'
+  - name: touchable
+    type: Boolean
+    values: "false"
+    description: Enable mouse dragging and touch swiping.
+    default: 'true'
   - name: keyboard
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Enable arrow, Home, and End keyboard navigation.
     default: 'true'
 EVENTS:
@@ -137,14 +152,20 @@ EXPOSES:
     description: Readonly active slide index ref.
   - name: setActiveItem(index | name)
     description: Switch to a slide by index or item name.
-  - name: prev / next
+  - name: prev
     description: Switch to the previous or next enabled slide.
-  - name: play / pause
+  - name: next
+    description: Switch to the previous or next enabled slide.
+  - name: play
+    description: Resume or pause autoplay imperatively.
+  - name: pause
     description: Resume or pause autoplay imperatively.
 SLOTS:
   - name: item
     description: Custom slide content. Receives item, index, active, and relative offset.
-  - name: prev / next
+  - name: prev
+    description: Custom arrow content. Receives disabled.
+  - name: next
     description: Custom arrow content. Receives disabled.
   - name: indicator
     description: Custom indicator content. Receives item, index, and active.

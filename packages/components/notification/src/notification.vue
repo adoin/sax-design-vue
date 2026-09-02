@@ -68,6 +68,7 @@ import {
   useColor,
   useGlobalComponentSettings,
   useLocale,
+  useShape,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
@@ -79,6 +80,10 @@ defineOptions({
 })
 
 const props = defineProps(notificationProps)
+const shape = useShape<'square' | ''>()
+const resolvedShape = computed(() =>
+  shape.value === 'rounded' ? '' : shape.value,
+)
 
 const { ns, zIndex } = useGlobalComponentSettings('notification')
 const { t } = useLocale()
@@ -102,7 +107,7 @@ const notifyKls = computed(() => [
   ns.is('icon', !!props.icon),
   ns.is('on-click', !!props.onClick),
   ns.is('on-click-close', !!props.onClickClose),
-  props.shape && ns.is(props.shape),
+  resolvedShape.value && ns.is(resolvedShape.value),
   ns.is('loading', props.loading),
   ns.is('not-padding', props.notPadding),
   ns.is('width-full', props.width == 'full'),

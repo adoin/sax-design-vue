@@ -1,24 +1,31 @@
 ---
 PROPS:
+  - name: color
+    type: String
+    values: Sax Design 主题色 / RGB / HEX / HSL
+    description: 面板的选中态与交互强调色。
+    default: primary
   - name: picker-type
     type: String
-    values: date / month / quarter / year / week
+    values: 'date / month / quarter / year / week'
     description: 面板选择模式。
     default: date
   - name: model-value
     type: Dayjs
-    values: Dayjs 实例
+    values: 'Dayjs 实例'
     description: 面板参考日期。
     default: 当前日期
   - name: selected-dates
     type: Array
-    values: Dayjs[]
+    values: 'Dayjs[]'
     description: 用于高亮的已选日期。
     default: '[]'
 EVENTS:
-  - name: pick / panel-change
+  - name: pick
     description: 选择日期或切换面板日期。
-description: "DatePicker 使用的独立日历面板。"
+  - name: panel-change
+    description: 选择日期或切换面板日期。
+description: 'DatePicker 使用的独立日历面板。'
 ---
 
 # 日期面板

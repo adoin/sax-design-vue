@@ -30,6 +30,7 @@ import { computed, onMounted, provide, ref, watch } from 'vue'
 import {
   useColor,
   useNamespace,
+  useShape,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { ClickOutside as vClickOutside } from '@vuesax-alpha/directives'
@@ -45,6 +46,10 @@ const props = defineProps(sidebarProps)
 const emit = defineEmits(sidebarEmits)
 
 const ns = useNamespace('sidebar')
+const shape = useShape<'square' | ''>()
+const resolvedShape = computed(() =>
+  shape.value === 'rounded' ? '' : shape.value,
+)
 
 const color = useColor('primary')
 
@@ -62,7 +67,7 @@ const sidebarKls = computed(() => [
   ns.is('not-shadow', props.notShadow),
   ns.is('text-white', props.textWhite),
   ns.is('absolute', props.absolute),
-  ns.is(props.shape, !!props.shape),
+  ns.is(resolvedShape.value, !!resolvedShape.value),
   ns.is('right', props.right),
 ])
 
@@ -105,7 +110,7 @@ watch(
     } else {
       wrapper.style.width = `${staticWidth.value}px`
     }
-  }
+  },
 )
 
 watch(reduceInternal, (val: boolean) => {
@@ -127,9 +132,9 @@ watch(
       props.background || '',
       sidebarRef.value!,
       true,
-      ns.namespace.value
+      ns.namespace.value,
     )
-  }
+  },
 )
 
 provide(sidebarContextKey, {
@@ -147,7 +152,7 @@ onMounted(() => {
     props.background || '',
     sidebarRef.value!,
     true,
-    ns.namespace.value
+    ns.namespace.value,
   )
 
   if (props.textWhite) {

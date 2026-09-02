@@ -8,12 +8,29 @@ export type VirtualListItemKey<T = unknown> = (
   item: T,
   index: number,
 ) => VirtualListKey
+export type VirtualListItemAt<T = unknown> = (index: number) => T
+export type VirtualListItemKeyAt = (index: number) => VirtualListKey
 
 export const virtualListProps = buildProps({
   /** @description Items rendered by the virtual list. */
   items: {
     type: definePropType<unknown[]>(Array),
     default: () => [],
+  },
+  /** @description Logical item count for generated data that is not stored in an array. */
+  count: {
+    type: Number,
+    default: undefined,
+  },
+  /** @description Resolves one generated item by index when count is provided. */
+  itemAt: {
+    type: definePropType<VirtualListItemAt>(Function),
+    default: undefined,
+  },
+  /** @description Resolves a stable key by index without creating the item. */
+  itemKeyAt: {
+    type: definePropType<VirtualListItemKeyAt>(Function),
+    default: undefined,
   },
   /** @description Height of the scroll viewport. */
   height: {
@@ -34,6 +51,11 @@ export const virtualListProps = buildProps({
   dynamic: {
     type: Boolean,
     default: true,
+  },
+  /** @description Keep the largest measured size for each stable item key. */
+  retainMaxSize: {
+    type: Boolean,
+    default: false,
   },
   /** @description Returns a stable unique key for every item. */
   itemKey: {

@@ -2,59 +2,67 @@
 PROPS:
   - name: v-model
     type: FormGroupItem[]
-    values: 表单数据数组
+    values: "表单数据数组"
     description: 每项对应一个标签页和一个独立的 SForm；缺少的 __index 会自动补齐。
     default: '[]'
   - name: get-form-setting
     type: (data, index) => FormGroupFormSetting
-    values: 函数
+    values: "函数"
     description: 根据当前数据返回内部 SForm 的配置。
   - name: tab-label
     type: String
-    values: 文本
+    values: "文本"
     description: 默认标签前缀。
     default: Item
   - name: get-tab-label
     type: (data, index) => string
-    values: 函数
+    values: "函数"
     description: 自定义每个标签的完整文本。
   - name: get-context-menu-items
     type: ({ item, index, key, list }) => ContextMenuItem[]
-    values: 函数
+    values: "函数"
     description: 返回标签右键菜单项；index 是当前数组下标，key 是稳定的 __index。
   - name: tabs-type
     type: String
-    values: line / pill / card / connected-card / editable-card
+    values: "line / pill / card / connected-card / editable-card"
     description: 传给内部 STabs 的展示风格；新增、删除能力不受该配置影响。
     default: connected-card
-  - name: editable / show-add
+  - name: editable
     type: Boolean
-    values: true / false
+    values: "true"
+    description: 分别控制删除按钮和新增按钮。
+    default: 'false'
+  - name: show-add
+    type: Boolean
+    values: "false"
     description: 分别控制删除按钮和新增按钮。
     default: 'false'
   - name: create-item
     type: ({ list }) => object | Promise<object>
-    values: 函数
+    values: "函数"
     description: 创建新表单数据；支持异步返回。
   - name: max
     type: Number
-    values: 正数
+    values: "正数"
     description: 表单项最大数量。
     default: Infinity
   - name: lazy-error-mark
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 校验失败时只标记标签，不自动切换到第一个错误标签。
     default: 'false'
   - name: render-threshold
     type: Number
-    values: 非负整数
+    values: "非负整数"
     description: 项数超过该值时启用标签内容懒渲染；force-render 可关闭该优化。
     default: '5'
 description: '基于 STabs 与 SForm 的动态表单组。'
 EVENTS:
-  - name: add / remove
-    type: (item, index)
+  - name: add
+    type: (item
+    description: 新增或删除表单项时触发。
+  - name: remove
+    type: index)
     description: 新增或删除表单项时触发。
   - name: change
     type: (activeKey, index, item)

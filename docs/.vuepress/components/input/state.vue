@@ -4,7 +4,7 @@
 
     <s-input v-model="value2" state="success" placeholder="Success Icon">
       <template #icon>
-        <s-icon  name="bx:user" />
+        <s-icon name="bx:user" />
       </template>
     </s-input>
 
@@ -15,7 +15,7 @@
       placeholder="Danger icon after"
     >
       <template #icon>
-        <s-icon  name="bx:mail-send" />
+        <s-icon name="bx:mail-send" />
       </template>
     </s-input>
 
@@ -45,8 +45,6 @@ const value5 = ref('')
   display: flex;
   align-items: center;
   justify-content: center;
-  .s-input {
-    margin: 10px;
-  }
+  gap: 28px 20px;
 }
 </style>

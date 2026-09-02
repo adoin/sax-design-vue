@@ -1,14 +1,19 @@
 ---
 description: '在一组关联选项中选择唯一值。'
 PROPS:
-  - name: v-model / model-value
+  - name: v-model
     type: String | Number | Boolean
-    values: 已选单选值
+    values: "已选单选值"
     description: 绑定单选项或单选组的选中值。
-    default: '-'
+    default: null
+  - name: model-value
+    type: String | Number | Boolean
+    values: "已选单选值"
+    description: 绑定单选项或单选组的选中值。
+    default: null
   - name: color
     type: String
-    values: Theme colors, RGB, HEX
+    values: "Theme colors, RGB, HEX"
     description: 设置单选框颜色。
     default: primary
     link: null
@@ -17,16 +22,16 @@ PROPS:
 
   - name: disabled
     type: Boolean
-    values: true,false
-    description: 是否禁用组件。
+    values: "true,false"
+    description: 禁用单选框交互，保留当前选中状态。
     default: false
     link: null
-    usage: '#default'
+    usage: '#禁用'
     code: null
 
   - name: loading
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 是否显示加载动画并禁用组件。
     default: false
     link: null
@@ -35,7 +40,7 @@ PROPS:
 
   - name: icon-animation
     type: String
-    values: auto, draw, pop, none
+    values: "auto, draw, pop, none"
     description: 设置自定义中心图标动画；描边 SVG 自动绘制，填充图标使用弹入动画。
     default: auto
     link: null
@@ -44,7 +49,7 @@ PROPS:
 
   - name: value
     type: String | Number | Boolean
-    values: 单选项值
+    values: "单选项值"
     description: 当前单选项对应的值。
     default: "''"
     link: null
@@ -52,10 +57,16 @@ PROPS:
     code: null
 
 EVENTS:
-  - name: update:modelValue / change
+  - name: update:modelValue
     type: RadioValue
     description: Radio、RadioGroup 或 RadioButton 的值变化时触发。
-  - name: update:activeKey / tabChange
+  - name: change
+    type: RadioValue
+    description: Radio、RadioGroup 或 RadioButton 的值变化时触发。
+  - name: update:activeKey
+    type: String | Number
+    description: RadioGroupTabs 激活其他页签时触发。
+  - name: tabChange
     type: String | Number
     description: RadioGroupTabs 激活其他页签时触发。
   - name: RadioGroupTabs change
@@ -64,7 +75,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: slot
-    values: null
+    values: "null"
     description: 为组件添加标签。
     default: null
     link: null
@@ -73,7 +84,7 @@ SLOTS:
 
   - name: icon
     type: slot
-    values: checked
+    values: "checked"
     description: 替换选中态中心 SVG，并获取当前选中状态。
     default: null
     link: null
@@ -117,6 +128,36 @@ SLOTS:
 
 <card>
 
+## 禁用
+
+设置 `disabled` 可禁用交互，并保留当前选中状态。正常状态使用浅色表面和柔和投影，悬停时只让圆形控件轻微上浮；禁用状态使用灰色填充和内凹阴影，圆点仍清晰可辨，标签和整行不会移动。
+
+<template #example>
+<radio-zh-disabled />
+</template>
+
+<template #template>
+
+@[code{7-20}](../../.vuepress/components/radio-zh/disabled.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/radio-zh/disabled.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-29}](../../.vuepress/components/radio-zh/disabled.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## 颜色
 
 <coloren />
@@ -147,7 +188,7 @@ SLOTS:
 
 <card>
 
-## 标签 <Badge text="New"/>
+## 标签
 
 通过默认插槽为单选框添加标签；需要将标签放到前侧时，可使用 `label-before` 属性。
 
@@ -177,7 +218,7 @@ SLOTS:
 
 <card>
 
-## 加载 <Badge text="New"/>
+## 加载
 
 加载时复用 Button 的呼吸光轨：底部高光沿整个单选项由左向右移动；此时交互行为等同于 `disabled`。
 
@@ -207,7 +248,7 @@ SLOTS:
 
 <card>
 
-## 图标 <Badge text="New"/>
+## 图标
 
 外圆和默认中心圆使用同一个 SVG 坐标系绘制，不依赖 input 或定位计算。通过 `icon` 插槽可替换选中态中心 SVG；插槽提供 `checked`。`icon-animation="auto"` 会自动识别描边 SVG 并播放路径绘制动画，填充图标则使用弹入动画，也可显式设置 `draw`、`pop` 或 `none`。
 

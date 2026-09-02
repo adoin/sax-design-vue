@@ -40,7 +40,7 @@
       @mouseleave="handleMouseLeave"
       @click="toggleMenu"
     >
-      <div v-if="multiple" ref="chips" :class="[ns.e('chips')]">
+      <div v-if="multiple" ref="tags" :class="[ns.e('tags')]">
         <span
           v-if="multipleDisplayMode === 'text' && !query && !dropMenuVisible"
           :class="ns.e('selection-text')"
@@ -49,48 +49,48 @@
         </span>
 
         <template v-if="multipleDisplayMode === 'tags'">
-          <s-chip
+          <s-tag
             v-for="(item, cIndex) in showTagList"
-            :key="cIndex + 'chip'"
-            :shape="shape"
+            :key="cIndex + 'tag'"
+            :shape="resolvedShape"
             :disabled="selectDisabled || item.isDisabled"
             :hit="item.hit"
             @close="deleteTag(item.value)"
           >
             {{ getSelectedTagLabel(item) }}
-          </s-chip>
+          </s-tag>
 
-          <s-chip
+          <s-tag
             v-if="hasCollapsedTags"
             :show-close="false"
-            :shape="shape"
+            :shape="resolvedShape"
             :hit="collapseTagList.some((item) => item.hit)"
           >
             + {{ collapsedTagCount }}
-          </s-chip>
+          </s-tag>
 
           <div
-            v-if="collapseChips"
+            v-if="collapseTags"
             ref="tagMeasure"
             :class="ns.e('tag-measure')"
             aria-hidden="true"
           >
-            <s-chip
+            <s-tag
               v-for="(item, measureIndex) in selectedArray"
               :key="`${measureIndex}-measure`"
               data-select-measure-tag
-              :shape="shape"
+              :shape="resolvedShape"
               :disabled="selectDisabled || item.isDisabled"
             >
               {{ getSelectedTagLabel(item) }}
-            </s-chip>
-            <s-chip
+            </s-tag>
+            <s-tag
               data-select-measure-overflow
               :show-close="false"
-              :shape="shape"
+              :shape="resolvedShape"
             >
               + {{ selectedArray.length }}
-            </s-chip>
+            </s-tag>
           </div>
         </template>
 
@@ -106,7 +106,7 @@
               'idle',
               !dropMenuVisible && !query && selectedArray.length > 0,
             ),
-            ns.be('chips', 'input'),
+            ns.be('tags', 'input'),
           ]"
           :placeholder="
             dropMenuVisible
@@ -475,12 +475,13 @@ import {
   useColor,
   useLocale,
   useNamespace,
+  useShape,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { escapeStringRegexp, getVsColor, isClient } from '@vuesax-alpha/utils'
 import SOption from './option.vue'
 import SOptionGroup from './option-group.vue'
-import SChip from './chip.vue'
+import STag from './tag.vue'
 import { selectContextKey, selectRegisterKey } from './tokens'
 import { selectEmits, selectProps } from './select'
 import { useSelect, useSelectStates } from './useSelect'
@@ -499,6 +500,7 @@ const messageTypes = ['success', 'warn', 'danger', 'primary', 'dark']
 const props = defineProps(selectProps)
 const emit = defineEmits(selectEmits)
 const ns = useNamespace('select')
+const resolvedShape = useShape()
 const { t } = useLocale()
 const slots = useSlots()
 
@@ -516,6 +518,7 @@ const baseComponentClasses = useVuesaxBaseComponent(color)
 const popperClass = computed(() =>
   [
     ns.e('content'),
+    ns.is('square', resolvedShape.value === 'square'),
     ...baseComponentClasses,
     popupConfig.value.className,
   ].filter((className): className is string => Boolean(className)),
@@ -770,7 +773,7 @@ const {
   input,
   reference,
 
-  chips,
+  tags,
   popperRef,
   selectDisabled,
   selectWrapper,
@@ -957,18 +960,18 @@ const getSelectedTagLabel = (option: SelectOptionContext) =>
 const tagMeasure = useTemplateRef<HTMLElement>('tagMeasure')
 const visibleTagCount = shallowRef(Number.MAX_SAFE_INTEGER)
 const showTagList = computed(() =>
-  props.collapseChips
+  props.collapseTags
     ? selectedArray.value.slice(0, visibleTagCount.value)
     : selectedArray.value,
 )
 const collapseTagList = computed(() =>
-  props.collapseChips ? selectedArray.value.slice(visibleTagCount.value) : [],
+  props.collapseTags ? selectedArray.value.slice(visibleTagCount.value) : [],
 )
 const collapsedTagCount = computed(
   () => selectedArray.value.length - showTagList.value.length,
 )
 const hasCollapsedTags = computed(
-  () => props.collapseChips && collapsedTagCount.value > 0,
+  () => props.collapseTags && collapsedTagCount.value > 0,
 )
 
 const getOuterWidth = (element: HTMLElement) => {
@@ -983,20 +986,20 @@ const getOuterWidth = (element: HTMLElement) => {
 const updateVisibleTagCount = () => {
   if (!isClient) return
   if (
-    !props.collapseChips ||
+    !props.collapseTags ||
     props.multipleDisplayMode !== 'tags' ||
-    !chips.value ||
+    !tags.value ||
     !tagMeasure.value
   ) {
     visibleTagCount.value = selectedArray.value.length
     return
   }
 
-  const chipsStyle = window.getComputedStyle(chips.value)
+  const tagsStyle = window.getComputedStyle(tags.value)
   const availableWidth =
-    chips.value.clientWidth -
-    Number.parseFloat(chipsStyle.paddingLeft || '0') -
-    Number.parseFloat(chipsStyle.paddingRight || '0')
+    tags.value.clientWidth -
+    Number.parseFloat(tagsStyle.paddingLeft || '0') -
+    Number.parseFloat(tagsStyle.paddingRight || '0')
   const tagWidths = Array.from(
     tagMeasure.value.querySelectorAll<HTMLElement>('[data-select-measure-tag]'),
     getOuterWidth,
@@ -1017,14 +1020,14 @@ const updateVisibleTagCount = () => {
     tagWidths,
     overflowWidth: overflowElement ? getOuterWidth(overflowElement) : 0,
     reservedWidth: filterReservedWidth,
-    maxVisible: props.maxCollapseChips,
+    maxVisible: props.maxCollapseTags,
   })
 }
 
 watch(
   () => [
-    props.collapseChips,
-    props.maxCollapseChips,
+    props.collapseTags,
+    props.maxCollapseTags,
     props.multipleDisplayMode,
     dropMenuVisible.value,
     selectedArray.value.map((option) => getSelectedTagLabel(option)),
@@ -1153,6 +1156,7 @@ const selectKls = computed(() => [
   ns.is('clearable', props.clearable),
   ns.is('multiple', props.multiple),
   ns.is('loading', props.loading),
+  ns.is(resolvedShape.value),
   ns.is(popperRef.value?.popperPlacement ?? 'bottom'),
   { [ns.m('has-label')]: props.label || props.labelFloat },
 ])

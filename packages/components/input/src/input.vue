@@ -96,7 +96,7 @@
       </label>
 
       <label
-        v-if="!labelFloat"
+        v-if="label && !labelFloat"
         :for="inputId"
         :class="[ns.e('label')]"
         @mousedown.prevent="NOOP"
@@ -193,6 +193,7 @@ import {
   useId,
   useNamespace,
   useProp,
+  useShape,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { NOOP, getVsColor } from '@vuesax-alpha/utils'
@@ -270,6 +271,7 @@ useDeprecated(
 )
 
 const ns = useNamespace('input')
+const shape = useShape(computed(() => (props.square ? 'square' : undefined)))
 
 const inputId = props.id ?? useId()
 
@@ -392,7 +394,7 @@ const inputKls = computed(() => [
   ns.is('block', props.block),
   ns.is('focus', focused.value),
   ns.is('hovering', hovering.value),
-  ns.is(props.shape),
+  ns.is(shape.value),
   ns.is('text-white', props.textWhite),
 
   { [ns.m(`state-${props.state}`)]: !!props.state },

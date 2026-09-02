@@ -34,6 +34,11 @@ export const sliderProps = buildProps({
     values: ['classic', 'soft', 'steps'] as const,
     default: 'classic',
   },
+  shape: {
+    type: String,
+    values: ['rounded', 'square'] as const,
+    default: 'rounded',
+  },
   showValue: Boolean,
 } as const)
 

@@ -1,5 +1,5 @@
 <template>
-  <div :class="ns.b()">
+  <div :class="ns.b()" :style="themeStyle">
     <div :class="ns.e('header')">
       <button
         type="button"
@@ -137,6 +137,7 @@ import { computed, ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import SIcon from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { getVsColor } from '@vuesax-alpha/utils'
 import {
   getCalendarCells,
   getMonthTable,
@@ -158,6 +159,7 @@ defineOptions({ name: 'SDatePanel' })
 
 const props = defineProps<{
   pickerType: DatePickerType
+  color?: string
   modelValue?: dayjs.Dayjs | null
   selectedDates?: dayjs.Dayjs[]
   rangeStart?: dayjs.Dayjs | null
@@ -176,6 +178,9 @@ const emit = defineEmits<{
 
 const ns = useNamespace('date-panel')
 const { t } = useLocale()
+const themeStyle = computed(() =>
+  ns.cssVar({ color: getVsColor(props.color ?? 'primary') }),
+)
 
 type ViewMode = 'date' | 'month' | 'quarter' | 'year' | 'week'
 

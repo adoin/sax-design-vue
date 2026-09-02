@@ -2,7 +2,7 @@
 PROPS:
   - name: accordion
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Only one panel open at a time.
     default: false
     link: null
@@ -10,7 +10,7 @@ PROPS:
 
   - name: type
     type: String
-    values: default, border, margin, shadow
+    values: "default, border, margin, shadow"
     description: Visual variant.
     default: shadow
     link: null
@@ -18,7 +18,7 @@ PROPS:
 
   - name: open-hover
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Open panel on hover.
     default: false
     link: null
@@ -28,13 +28,17 @@ EVENTS:
     params: null
     description: Emitted when open panels change.
 SLOTS:
-  - name: default / header
+  - name: default
     type: slot
-    values: '-'
+    values: "-"
+    description: Render the panel content or its clickable heading.
+  - name: header
+    type: slot
+    values: "-"
     description: Render the panel content or its clickable heading.
   - name: icon-arrow
     type: scoped slot
-    values: open | disabled
+    values: "open | disabled"
     description: Render a custom expand icon from the current panel state.
 EXPOSES: []
 description: "Expand and collapse content panels with multiple visual styles."

@@ -3,107 +3,515 @@
 @use 'common/var' as *;
 
 @include b(table) {
+  @include e(pagination) {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 4px 4px;
+
+    .#{$namespace}-pagination {
+      flex-wrap: wrap;
+      gap: 10px;
+      max-width: 100%;
+    }
+  }
+
   @include set-var-value(color, getCssVar(bg-color));
+  --s-table-surface: #{getColor(background)};
+  --s-table-header-surface: #{getColor(gray-2)};
+  --s-table-striped-surface: #{getColor(gray-1)};
+  --s-table-selected-surface: color-mix(
+    in srgb,
+    #{getColor(primary)} 10.5%,
+    #{getColor(background)}
+  );
+
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   font-size: 0.9rem;
   margin: 0px;
   overflow: auto;
 
-  table {
-    margin: 0px;
-    border-collapse: collapse;
+  @include when(horizontal-virtual) {
+    overflow-x: hidden;
+  }
+
+  @include e(data-view) {
+    position: relative;
     width: 100%;
-    min-width: 500px;
-    border: 0px;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: var(--sax-radius-lg);
+    background: var(--s-table-surface);
   }
 
-  @include when(striped) {
-    .#{$namespace}-table-tr {
-      &:nth-child(2n) {
-        background: getColor(gray-1) !important;
-      }
+  @include e(data-header) {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    min-height: 44px;
+    align-items: stretch;
+    background: var(--s-table-header-surface);
+    color: getCssVar(text-color, primary);
+    font-weight: 650;
+  }
+
+  @include e(data-head-cell) {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    padding: 10px 14px;
+    line-height: 1.45;
+
+    @include when(fixed-column) {
+      position: sticky;
+      z-index: 4;
+      background: var(--s-table-header-surface);
     }
   }
 
-  @include when(selected-value) {
-    tr {
-      cursor: pointer;
+  @include e(data-column-spacer) {
+    width: 0;
+    min-width: 0;
+    flex: 0 0 auto;
+    pointer-events: none;
+  }
+
+  @include e(data-body) {
+    width: 100%;
+  }
+
+  @include e(data-row) {
+    --s-table-row-surface: var(--s-table-surface);
+
+    display: flex;
+    width: 100%;
+    min-height: 44px;
+    align-items: stretch;
+    background: var(--s-table-row-surface);
+    transition:
+      background-color 160ms ease,
+      box-shadow 160ms ease;
+
+    &:hover {
+      position: relative;
+      z-index: 1;
+      background: color-mix(
+        in srgb,
+        #{getColor(primary)} 5.5%,
+        var(--s-table-row-surface)
+      );
+      box-shadow: 0 4px 16px hsl(var(--sax-primary) / 0.08);
+    }
+
+    @include when(striped-row) {
+      --s-table-row-surface: var(--s-table-striped-surface);
+    }
+
+    @include when(selected) {
+      background: var(--s-table-selected-surface);
     }
   }
 
-  @include when(multiple-selected) {
-    .#{$namespace}-table-td {
-      border-radius: 0px !important;
+  @include e(data-cell) {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    padding: 10px 14px;
+    line-height: 1.5;
+
+    @include when(fixed-column) {
+      position: sticky;
+      z-index: 2;
+      background: inherit;
     }
   }
 
-  @include e(not-found) {
-    display: none;
+  .is-fixed-left.is-fixed-boundary::after,
+  .is-fixed-right.is-fixed-boundary::before {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    width: 12px;
+    content: '';
+    pointer-events: none;
+  }
+
+  .is-fixed-left.is-fixed-boundary::after {
+    right: -12px;
+    background: linear-gradient(
+      to right,
+      hsl(var(--sax-text-color) / 0.14),
+      transparent
+    );
+  }
+
+  .is-fixed-right.is-fixed-boundary::before {
+    left: -12px;
+    background: linear-gradient(
+      to left,
+      hsl(var(--sax-text-color) / 0.14),
+      transparent
+    );
+  }
+
+  @include e(cell-content) {
+    min-width: 0;
+    flex: 1;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  @include e(header-content) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    gap: 2px;
+  }
+
+  @include e(header-label) {
+    display: block;
+    flex: 1;
+    min-width: 0;
+  }
+
+  @include e((cell-content, header-label)) {
+    &.is-ellipsis {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow-wrap: normal;
+    }
+
+    &:focus-visible {
+      outline: 2px solid getColor(primary, 0.7);
+      outline-offset: 2px;
+      border-radius: 3px;
+    }
+  }
+
+  @include e(header-action) {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 3px;
+    border: 0;
+    border-radius: var(--sax-radius-sm);
+    background: transparent;
+    color: getCssVar(text-color, secondary);
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      background: getColor(primary, 0.1);
+      color: getColor(primary);
+      outline: none;
+      box-shadow: 0 0 0 2px getColor(primary, 0.22);
+    }
+
+    &.is-active {
+      color: getColor(primary);
+    }
+  }
+
+  @include e(sort-controls) {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    position: relative;
+    padding-inline-end: 10px;
+  }
+
+  @include e(sort-buttons) {
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  @include e(sort-button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 14px;
+    padding: 0;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    font: inherit;
+    font-size: 14px;
+    color: getCssVar(text-color, secondary);
+    cursor: pointer;
+
+    &:hover,
+    &.is-active {
+      color: getColor(primary);
+    }
+    &:focus-visible {
+      outline: 2px solid getColor(primary, 0.6);
+      outline-offset: 1px;
+    }
+    @media (pointer: coarse) {
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  @include e(sort-priority) {
+    position: absolute;
+    inset-inline-end: 0;
+    color: getColor(primary);
+    font-size: 10px;
+    line-height: 1;
+  }
+
+  @include e(selection-control) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-inline: auto;
+    min-height: 24px;
+    .#{$namespace}-checkbox {
+      margin: 0;
+    }
+  }
+
+  @include e(filter-panel) {
+    width: max-content;
+    min-width: 200px;
+    max-width: min(340px, calc(100vw - 24px));
+    padding: 14px;
+    border: 0;
+    border-radius: var(--sax-radius-lg);
+    color: getColor(text);
+    background: getColor(background);
+    box-shadow: var(--sax-popper-shadow);
+  }
+
+  @include e(filter-title) {
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    font-weight: 650;
+  }
+
+  @include e(filter-options) {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 240px;
+    overflow-y: auto;
+    padding: 3px;
+  }
+
+  @include e(filter-actions) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 12px;
+    .#{$namespace}-button {
+      flex: 0 0 auto;
+      width: auto;
+    }
+  }
+
+  @include e(overflow-tooltip) {
+    max-width: min(360px, calc(100vw - 24px));
+    padding: 10px 12px;
+    border: 0;
+    border-radius: var(--sax-radius-md);
+    color: getColor(text);
+    background: getColor(background);
+    line-height: 1.6;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    box-shadow: var(--sax-popper-shadow);
+  }
+
+  @include e(tree-leading) {
+    flex: 0 0 auto;
+    height: 1px;
+  }
+
+  @include e(tree-toggle) {
+    display: inline-grid;
+    width: 26px;
+    height: 26px;
+    flex: 0 0 26px;
+    place-items: center;
+    margin-right: 4px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--sax-radius-md);
+    background: transparent;
+    color: getCssVar(text-color, secondary);
+    cursor: pointer;
+    transition:
+      transform 180ms ease,
+      background-color 160ms ease,
+      color 160ms ease;
+
+    &:hover,
+    &:focus-visible {
+      background: hsl(var(--sax-primary) / 0.11);
+      color: hsl(var(--sax-primary));
+      outline: none;
+      box-shadow: 0 0 0 2px hsl(var(--sax-primary) / 0.16);
+    }
+
+    @include when(expanded) {
+      transform: rotate(90deg);
+    }
+
+    @include when(loading) {
+      transform: none;
+      cursor: wait;
+    }
+  }
+
+  @include e(tree-toggle-placeholder) {
+    width: 26px;
+    height: 26px;
+    flex: 0 0 26px;
+    margin-right: 4px;
+  }
+
+  @include e(tree-spinner) {
+    width: 14px;
+    height: 14px;
+    border: 2px solid hsl(var(--sax-primary) / 0.22);
+    border-top-color: hsl(var(--sax-primary));
+    border-radius: 50%;
+    animation: s-table-spin 720ms linear infinite;
+  }
+
+  @include e(data-empty) {
+    display: flex;
+    min-height: 96px;
+    align-items: center;
+    justify-content: center;
     padding: 20px;
-    text-align: center;
-    width: 100%;
-
-    tr {
-      text-align: center;
-      td {
-        padding: 20px;
-        border: 0px;
-        // width: 100%;
-      }
-    }
+    color: getCssVar(text-color, secondary);
   }
 
-  @include e(tbody) {
-    &:empty {
-      display: none;
-      background: #000;
-      ~ .#{$namespace}-table__not-found {
-        display: table-row-group;
-      }
-    }
+  @include e(loading-mask) {
+    position: absolute;
+    z-index: 4;
+    inset: 44px 0 0;
+    display: grid;
+    place-items: center;
+    background: getColor(background, 0.7);
+    backdrop-filter: blur(2px);
   }
 
-  @include e(thead) {
-    width: 100%;
+  @include e(loading-spinner) {
+    width: 24px;
+    height: 24px;
+    border: 3px solid hsl(var(--sax-primary) / 0.2);
+    border-top-color: hsl(var(--sax-primary));
+    border-radius: 50%;
+    animation: s-table-spin 720ms linear infinite;
+  }
 
-    .#{$namespace}-table-th {
-      background: getColor(gray-2);
-      &:first-child {
-        border-radius: var(--sax-radius-lg) 0 0 0;
-      }
-      &:last-child {
-        border-radius: 0 var(--sax-radius-lg) 0 0;
+  @include e(virtual-body) {
+    .#{$namespace}-vl__window {
+      width: 100%;
+    }
+
+    .#{$namespace}-vl__content {
+      width: var(--s-table-virtual-width, 100%);
+      min-width: var(--s-table-virtual-width, 100%);
+    }
+
+    // A two-axis grid can be millions of pixels wide. Promoting each virtual
+    // row to its own composited layer makes the browser allocate enormous
+    // textures even though only a few cells are visible.
+    .#{$namespace}-vl__item {
+      top: var(--s-vl-item-start);
+      transform: none !important;
+      will-change: auto;
+
+      > .#{$namespace}-table__data-row {
+        min-height: inherit;
       }
     }
   }
 
   @include e(footer) {
     padding: 8px 10px;
-    background: getColor(gray-2);
+    background: var(--s-table-header-surface);
     border-radius: 0 0 var(--sax-radius-lg) var(--sax-radius-lg);
   }
 
   &-wrapper {
+    --s-table-header-surface: #{getColor(gray-2)};
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    contain: inline-size;
     // box-shadow: 0px 5px 22px 0px rgba(0,0,0, -var(shadow-opacity));
     border-radius: var(--sax-radius-lg);
 
     &__header {
       width: 100%;
       padding: 10px;
-      background: getColor(gray-2);
+      background: var(--s-table-header-surface);
       border-radius: var(--sax-radius-lg) var(--sax-radius-lg) 0 0;
 
-      & ~ .#{$namespace}-table {
-        .#{$namespace}-table-th {
-          &:first-child {
-            border-radius: 0px;
-          }
-          &:last-child {
-            border-radius: 0px;
-          }
-        }
+      & ~ .#{$namespace}-table .#{$namespace}-table__data-view {
+        border-radius: 0 0 var(--sax-radius-lg) var(--sax-radius-lg);
       }
     }
+  }
+}
+
+html.dark .#{$namespace}-table,
+html.dark .#{$namespace}-table-wrapper {
+  // Dark tables should read as part of the active theme rather than as a
+  // neutral black slab. Keep the base tint quiet and reserve the stronger
+  // step for zebra rows so row grouping remains visible at a glance.
+  --s-table-surface: color-mix(
+    in srgb,
+    #{getColor(primary)} 6%,
+    #{getColor(background)}
+  );
+  --s-table-header-surface: color-mix(
+    in srgb,
+    #{getColor(primary)} 9%,
+    #{getColor(background)}
+  );
+  --s-table-striped-surface: color-mix(
+    in srgb,
+    #{getColor(primary)} 13%,
+    #{getColor(background)}
+  );
+  --s-table-selected-surface: color-mix(
+    in srgb,
+    #{getColor(primary)} 24%,
+    #{getColor(background)}
+  );
+}
+
+@keyframes s-table-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-table__data-row,
+  .#{$namespace}-table__tree-toggle {
+    transition: none;
+  }
+
+  .#{$namespace}-table__tree-spinner,
+  .#{$namespace}-table__loading-spinner {
+    animation: none;
   }
 }

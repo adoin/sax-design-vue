@@ -2,17 +2,22 @@
 PROPS:
   - name: status
     type: String
-    values: success | warning | error | info
+    values: "success | warning | error | info"
     description: Semantic result state.
     default: info
   - name: title
     type: String
-    values: text
+    values: "text"
     description: Result heading.
     default: null
-  - name: description / content
+  - name: description
     type: String
-    values: text
+    values: "text"
+    description: Supporting result copy.
+    default: null
+  - name: content
+    type: String
+    values: "text"
     description: Supporting result copy.
     default: null
 description: "Result feedback state."

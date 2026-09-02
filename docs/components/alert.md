@@ -3,7 +3,7 @@ description: 'Display contextual feedback messages for user actions and system s
 PROPS:
   - name: v-model
     type: boolean
-    values: boolean
+    values: "boolean"
     description: Determine if the component is visible.
     default: true
     link: null
@@ -32,7 +32,7 @@ PROPS:
     usage: '#closable'
   - name: v-model:hidden-content
     type: boolean
-    values: boolean
+    values: "boolean"
     description: With this property you can hide the content of the alert. You can bind this with v-model
     default: false
     link: null
@@ -49,7 +49,7 @@ PROPS:
       </template>
   - name: color
     type: String
-    values: primary, success, danger, warning, dark, RGB, HEX
+    values: "primary, success, danger, warning, dark, RGB, HEX"
     description: Change the color of the component and some of its sub components.
     default: primary
     link: null
@@ -64,7 +64,7 @@ PROPS:
       </s-alert>
   - name: type
     type: boolean
-    values: solid, border, shadow, gradient, relief
+    values: "solid, border, shadow, gradient, relief"
     description: Change the style of all the alert.
     default: default
     link: null
@@ -79,7 +79,7 @@ PROPS:
       </s-alert>
   - name: page
     type: Number
-    values: Number
+    values: "Number"
     description: Determine the page that is active (this property is linked to the slots="page-{n}").
     default: null
     link: null
@@ -97,7 +97,7 @@ PROPS:
       </template>
   - name: progress
     type: Number
-    values: 0 - 100
+    values: "0 - 100"
     description: Add a progress bar to the alert and the value is the percentage of width.
     default: null
     link: null
@@ -112,7 +112,7 @@ PROPS:
       </s-alert>
   - name: closable
     type: boolean
-    values: boolean
+    values: "boolean"
     description: Add a button to close the alert (it is necessary to use v-model).
     default: false
     link: null
@@ -150,7 +150,7 @@ EVENTS:
 SLOTS:
   - name: icon
     type: slot
-    values: null
+    values: "null"
     description: Add an icon to the alert.
     default: null
     link: null
@@ -170,7 +170,7 @@ SLOTS:
       </template>
   - name: title
     type: slot
-    values: null
+    values: "null"
     description: Add a title to the alert.
     default: null
     link: null
@@ -189,7 +189,7 @@ SLOTS:
       </template>
   - name: page-{n}
     type: slot
-    values: (page-1 - page-{n})
+    values: "(page-1 - page-{n})"
     description: Add the pages to the alert component if it is page one would be (slot="page-1").
     default: null
     link: null
@@ -209,7 +209,7 @@ SLOTS:
       </template>
   - name: footer
     type: slot
-    values: null
+    values: "null"
     description: Add a footer to the alert component.
     default: null
     link: null

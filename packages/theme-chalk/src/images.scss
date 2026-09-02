@@ -19,48 +19,137 @@
   }
 
   @include e(item) {
+    position: relative;
+    box-sizing: border-box;
     width: calc(25% - 4px);
-    list-style: none;
     margin: 2px;
     border-radius: var(--sax-radius-md);
-    transition: all 0.25s ease;
-    position: relative;
+    list-style: none;
     cursor: pointer;
     float: left;
     backface-visibility: visible;
+    transition:
+      box-shadow var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard),
+      transform var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
 
     @include when(preview) {
       cursor: zoom-in;
+
+      &:focus-visible {
+        outline: 3px solid rgb(var(--sax-primary));
+        outline-offset: 3px;
+      }
     }
   }
 
   @include e(wrap) {
+    position: relative;
     overflow: hidden;
     width: 100%;
+    aspect-ratio: 1;
     border-radius: var(--sax-radius-md);
-    position: relative;
+    background: hsl(220deg 20% 96%);
     z-index: 2;
   }
 
   @include e(img) {
-    background-position: center center;
-    background-size: cover;
-    width: 100%;
-    padding-bottom: 100%;
     display: block;
-    transition: all 0.25s ease;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    transition:
+      opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+      transform var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
+
+    @include when(loading) {
+      opacity: 0;
+    }
+
+    @include when(error) {
+      visibility: hidden;
+    }
+  }
+
+  @include e(placeholder) {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: hsl(220deg 20% 96%);
+  }
+
+  @include e(skeleton) {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 32%,
+      hsl(0deg 0% 100% / 0.78) 50%,
+      transparent 68%
+    );
+    transform: translateX(-100%);
+    animation: s-images-skeleton 1.35s ease-in-out infinite;
+  }
+
+  @include e(error) {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: hsl(220deg 18% 94%);
+    color: hsl(220deg 9% 58%);
+  }
+
+  @include e(error-mark) {
+    position: relative;
+    width: 34px;
+    height: 28px;
+    border: 2px solid currentcolor;
+    border-radius: 5px;
+
+    &::before {
+      position: absolute;
+      top: 5px;
+      left: 6px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentcolor;
+      content: '';
+    }
+
+    &::after {
+      position: absolute;
+      right: 4px;
+      bottom: 4px;
+      left: 4px;
+      height: 12px;
+      background: currentcolor;
+      clip-path: polygon(0 100%, 34% 42%, 52% 68%, 72% 24%, 100% 100%);
+      content: '';
+    }
   }
 
   @include e(blur) {
     position: absolute;
-    width: 100%;
     bottom: 0;
-    border-radius: var(--sax-radius-md);
-    opacity: 0;
+    left: 0;
     z-index: 1;
-    transform: scale(1);
+    width: 100%;
+    height: 100%;
+    border-radius: var(--sax-radius-md);
     filter: blur(5px);
-    transition: all 0.25s ease;
+    opacity: 0;
+    transform: scale(1);
+    transition:
+      bottom var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+      opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+      transform var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
   }
 
   @include when(not-border-radius) {
@@ -163,6 +252,12 @@
   }
 }
 
+@keyframes s-images-skeleton {
+  to {
+    transform: translateX(100%);
+  }
+}
+
 @media only screen and (max-width: 700px) {
   @include b(images) {
     @include e(item) {
@@ -183,6 +278,22 @@
   @include b(images) {
     @include e(item) {
       width: calc(100% - 4px);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @include b(images) {
+    @include e(item) {
+      transition-duration: 0.01ms;
+    }
+
+    @include e(img) {
+      transition-duration: 0.01ms;
+    }
+
+    @include e(skeleton) {
+      animation: none;
     }
   }
 }

@@ -3,12 +3,12 @@ description: "Represent a user, team, or entity with an image, icon, or initials
 PROPS:
   - name: badge-position
     type: String
-    values: top-left | top-right | bottom-left | bottom-right
+    values: "top-left | top-right | bottom-left | bottom-right"
     description: Position the optional badge around the avatar.
     default: top-right
   - name: color
     type: String
-    values: Theme colors, RGB, HEX
+    values: "Theme colors, RGB, HEX"
     description: color of the component.
     default: --sax-gray-2
     link: null
@@ -17,7 +17,7 @@ PROPS:
 
   - name: size
     type: Number
-    values: Number
+    values: "Number"
     description: size of the avatar component.
     default: 44
     link: null
@@ -25,7 +25,7 @@ PROPS:
     code: null
   - name: badge
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Determine if the badge is active.
     default: false
     link: null
@@ -34,7 +34,7 @@ PROPS:
 
   - name: badge-color
     type: String
-    values: Theme colors,RGB,HEX
+    values: "Theme colors,RGB,HEX"
     description: Change the color of the badge inside the avatar.
     default: primary
     link: null
@@ -43,7 +43,7 @@ PROPS:
 
   - name: shape
     type: String
-    values: square, circle
+    values: "square, circle"
     description: Change the style of the avatar by circulating it.
     default: false
     link: null
@@ -52,7 +52,7 @@ PROPS:
 
   - name: writing
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Add an animation to the writing badge.
     default: false
     link: null
@@ -61,7 +61,7 @@ PROPS:
 
   - name: history
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Add a border to the avatar.
     default: gray-2
     link: null
@@ -70,7 +70,7 @@ PROPS:
 
   - name: history-gradient
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Change the color of the border to a gradient.
     default: false
     link: null
@@ -79,7 +79,7 @@ PROPS:
 
   - name: loading
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Add a loading animation to the avatar.
     default: false
     link: null
@@ -88,7 +88,7 @@ PROPS:
 
   - name: max
     type: number
-    values: number
+    values: "number"
     description: (s-avatar-group) determine how many avatars are visible.
     default: null
     link: null
@@ -96,7 +96,7 @@ PROPS:
     code: null
   - name: float
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: (s-avatar-group) change the way the avatar is composed by placing one next to the other.
     default: false
     link: null
@@ -105,7 +105,7 @@ PROPS:
 
   - name: pointer
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Determine if the avatar has a pointer cursor.
     default: false
     link: null
@@ -115,7 +115,7 @@ PROPS:
 SLOTS:
   - name: text
     type: slot
-    values: null
+    values: "null"
     description: Add text within the avatar component.
     default: null
     link: null
@@ -129,7 +129,7 @@ SLOTS:
 
   - name: badge
     type: slot
-    values: null
+    values: "null"
     description: Add to the badge everything that is inside the slot, commonly used for numbers and an icon.
     default: null
     link: null
@@ -144,7 +144,7 @@ SLOTS:
 
   - name: icons
     type: slot
-    values: null
+    values: "null"
     description: Add a space to put icons next to the avatar.
     default: null
     link: null

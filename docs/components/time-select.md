@@ -1,19 +1,51 @@
 ---
 description: 'Choose a time from a predefined or generated list.'
 PROPS:
-  - name: v-model / model-value
+  - name: shape
     type: String
-    values:
+    values: 'rounded | square'
+    description: Set rounded or square geometry for the select trigger and popup.
+    default: rounded
+    usage: '#shape'
+  - name: label
+    type: String
+    values: Label text
+    description: Set the persistent or floating label text.
+    default: null
+    usage: '#label'
+  - name: label-float
+    type: Boolean
+    values: 'true | false'
+    description: Use the label as a placeholder that floats on focus or when a value exists.
+    default: false
+    usage: '#label'
+  - name: v-model
+    type: String
+    values: ''
+    description: binding time value
+    default: false
+    link: null
+    usage: '#default'
+    code: null
+  - name: model-value
+    type: String
+    values: ''
     description: binding time value
     default: false
     link: null
     usage: '#default'
     code: null
 EVENTS:
-  - name: update:modelValue / change
+  - name: update:modelValue
     type: String
     description: Fire when the selected time option changes.
-  - name: focus / blur
+  - name: change
+    type: String
+    description: Fire when the selected time option changes.
+  - name: focus
+    type: FocusEvent | Event
+    description: Fire when the control gains or loses focus.
+  - name: blur
     type: FocusEvent | Event
     description: Fire when the control gains or loses focus.
 ---
@@ -41,6 +73,68 @@ The available time range is 00:00 to 23:59
 <template #script>
 
 @[code{13-17}](../.vuepress/components/time-select/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{19-23}](../.vuepress/components/time-select/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Label
+
+Use `label` for a persistent label. Add `label-float` to move it above the value when focused or filled.
+
+<template #example><time-select-label /></template>
+
+<template #template>
+
+@[code{1-15}](../.vuepress/components/time-select/label.vue)
+
+</template>
+
+<template #script>
+
+@[code{17-22}](../.vuepress/components/time-select/label.vue)
+
+</template>
+
+<template #style>
+
+@[code{24-29}](../.vuepress/components/time-select/label.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Shape
+
+Use `shape="square"` to keep the time input and its option popup visually consistent.
+
+<template #example><time-select-shape /></template>
+
+<template #template>
+
+@[code{8-32}](../.vuepress/components/time-select/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/time-select/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{34-46}](../.vuepress/components/time-select/shape.vue)
 
 </template>
 

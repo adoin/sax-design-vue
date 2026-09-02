@@ -2,74 +2,74 @@
 PROPS:
   - name: active
     type: Number
-    values: index
+    values: "index"
     description: Current step index. Supports v-model:active.
     default: '0'
   - name: items
     type: StepItem[]
-    values: '{ key?, title, description?, meta?, status?, statusLabel?, disabled?, clickable?, icon? }[]'
+    values: "{ key?, title, description?, meta?, status?, statusLabel?, disabled?, clickable?, icon? }[]"
     description: Step data.
     default: '[]'
   - name: variant
     type: String
-    values: rail / timeline
+    values: "rail / timeline"
     description: Focus rail or contextual timeline.
     default: rail
   - name: direction
     type: String
-    values: horizontal / vertical
+    values: "horizontal / vertical"
     description: Layout direction. Timeline defaults to vertical.
     default: inferred from variant
   - name: size
     type: String
-    values: small / default / large
+    values: "small / default / large"
     description: Step size.
     default: default
   - name: finish-status
     type: StepStatus
-    values: wait / process / finish / success / error / loading / disabled
+    values: "wait / process / finish / success / error / loading / disabled"
     description: Status used for completed steps.
     default: finish
   - name: process-status
     type: StepStatus
-    values: wait / process / finish / success / error / loading / disabled
+    values: "wait / process / finish / success / error / loading / disabled"
     description: Status used for the current step.
     default: process
   - name: status-labels
     type: Partial<Record<StepStatus, string>>
-    values: object
+    values: "object"
     description: Overrides the built-in localized label for each status.
     default: '{}'
   - name: clickable
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Allow selecting steps by click.
     default: 'true'
   - name: show-progress
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Show the connecting progress rail.
     default: 'true'
   - name: show-step-index
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Show the position on the active step.
     default: 'true'
   - name: responsive
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Stack a horizontal rail on small screens.
     default: 'true'
   - name: simple
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Remove the rail for full item-slot layouts.
     default: 'false'
   - name: aria-label
     type: String
-    values: text
+    values: "text"
     description: Accessible name for the step navigation.
-    default: —
+    default: null
 EVENTS:
   - name: update:active
     description: Fired when the active step changes. Supports v-model:active.
@@ -82,7 +82,11 @@ SLOTS:
     description: Replaces a whole step. Receives item, index, status, statusLabel, icon, active, disabled, and interactive.
   - name: icon
     description: Custom marker icon. Receives the item slot props.
-  - name: title / description / meta
+  - name: title
+    description: Custom text regions. Receive the item slot props.
+  - name: description
+    description: Custom text regions. Receive the item slot props.
+  - name: meta
     description: Custom text regions. Receive the item slot props.
   - name: content
     description: Context content for the active timeline step.

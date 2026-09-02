@@ -2,7 +2,7 @@
 PROPS:
   - name: items
     type: Array
-    values: BreadcrumbItem[]（支持 children）
+    values: "BreadcrumbItem[]（支持 children）"
     description: 未使用插槽时渲染的项；children 可传入树形导航数据。
     default: []
     link: null
@@ -10,7 +10,7 @@ PROPS:
 
   - name: separator
     type: String
-    values: String
+    values: "String"
     description: 项之间的分隔符。
     default: /
     link: null
@@ -18,7 +18,7 @@ PROPS:
 
   - name: color
     type: String
-    values: primary, success, danger, warning, dark
+    values: "primary, success, danger, warning, dark"
     description: 面包屑颜色。
     default: primary
     link: null
@@ -26,14 +26,14 @@ PROPS:
 
   - name: align
     type: String
-    values: left, center, right
+    values: "left, center, right"
     description: 水平对齐方式。
     default: left
     link: null
     usage: '#align'
   - name: trigger
     type: String | Array
-    values: hover, click
+    values: "hover, click"
     description: 树形菜单触发方式；与 Popper 触发方式一致。
     default: hover
 EVENTS: []

@@ -4,69 +4,74 @@ API_TITLES:
 PROPS:
   - name: locale
     type: Language
-    values: Component locale object
+    values: "Component locale object"
     description: Locale used by the dialog and its nested controls.
     default: English
   - name: title
     type: String
-    values: Dialog title
+    values: "Dialog title"
     description: Override the default title.
     default: Insert icon
   - name: iconList
     type: readonly string[]
-    values: Registered Iconify names
+    values: "Registered Iconify names"
     description: Icons available for search and selection in the dialog.
     default: 168 common Carbon icons
   - name: initialIcon
     type: String
-    values: prefix:name
+    values: "prefix:name"
     description: Initially selected icon.
     default: "''"
   - name: output
     type: String
-    values: svg / code
+    values: "svg / code"
     description: Return complete SVG or a compact object containing code, color, and size.
     default: svg
   - name: color
     type: String
-    values: HEX / RGB / HSL
+    values: "HEX / RGB / HSL"
     description: Initial icon color.
     default: '#5667F4'
   - name: size
     type: Number
-    values: 8 - 256
+    values: "8 - 256"
     description: Fix the output size; omit it to let the user choose in the dialog.
     default: Dialog selection, initially 24
   - name: label
     type: String
-    values: Accessible text
+    values: "Accessible text"
     description: Adds role=img and aria-label; omitted output is decorative.
-    default: '-'
+    default: null
   - name: showName
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Show names in the icon grid.
     default: 'true'
   - name: showAlpha
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Allow alpha selection.
     default: 'false'
   - name: predefine
     type: Array
-    values: Color presets
+    values: "Color presets"
     description: Preset colors passed to the color picker.
     default: '[]'
   - name: maskClosable
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Allow closing by clicking the overlay.
     default: 'true'
-  - name: confirmText / cancelText
+  - name: confirmText
     type: String
-    values: Button labels
+    values: "Button labels"
     description: Custom confirm and cancel labels.
-    default: '-'
+    default: null
+  - name: cancelText
+    type: String
+    values: "Button labels"
+    description: Custom confirm and cancel labels.
+    default: null
 description: 'Choose an icon, color, and size in a Promise-based dialog, then return compact icon data or complete SVG.'
 ---
 

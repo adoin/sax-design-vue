@@ -2,32 +2,32 @@
 PROPS:
   - name: auto-start
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Start the countdown automatically after mounting.
     default: true
   - name: speed
     type: Number
-    values: number >= 0
+    values: "number >= 0"
     description: Countdown speed multiplier. Zero freezes the remaining time.
     default: 1
   - name: value
     type: Number
-    values: timestamp
+    values: "timestamp"
     description: Target timestamp in milliseconds.
     default: null
   - name: format
     type: String
-    values: DD HH mm ss
+    values: "DD HH mm ss"
     description: Display format tokens. The highest visible unit includes omitted larger units.
     default: HH:mm:ss
   - name: formatter
     type: Function
-    values: (time) => string
+    values: "(time) => string"
     description: Format custom text from the remaining time. When provided, it takes precedence over format, and returned digits keep the selected effect.
     default: null
   - name: effect
     type: String
-    values: default | flip | fade | particle | slide
+    values: "default | flip | fade | particle | slide"
     description: Digit transition effect. Separators remain static.
     default: default
 EVENTS:
@@ -36,7 +36,9 @@ EVENTS:
   - name: change
     description: Remaining milliseconds change.
 EXPOSES:
-  - name: start / stop
+  - name: start
+    description: Resume or pause the countdown imperatively.
+  - name: stop
     description: Resume or pause the countdown imperatively.
 description: 'Countdown display.'
 ---

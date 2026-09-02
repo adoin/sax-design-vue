@@ -2,143 +2,411 @@
 @use 'common/var' as *;
 
 @include b(upload) {
+  --sax-upload-radius: var(--sax-radius-md);
+
   width: 100%;
+  color: hsl(var(--sax-text));
 
-  @include e(list) {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  @include e(item) {
+  @include e(dropzone) {
     position: relative;
-    width: 200px;
-    height: 200px;
-    border-radius: var(--sax-radius-md);
+    display: flex;
+    min-height: 168px;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 28px;
     overflow: hidden;
-    background: hsl(0deg 0% 0% / 0.04);
-    border: 1px solid hsl(0deg 0% 0% / 0.08);
-    box-shadow: 0 4px 15px hsl(0deg 0% 0% / 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px hsl(0deg 0% 0% / 0.12);
-    }
-
-    @include when(error) {
-      border-color: getColor('danger');
-    }
-  }
-
-  @include e(preview) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  @include e(archive) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 8px;
-    text-align: center;
-    font-size: 0.75rem;
-    gap: 4px;
-  }
-
-  @include e(remove) {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    z-index: 2;
-    border: none;
-    border-radius: var(--sax-radius-circle);
-    width: 22px;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: hsl(0deg 0% 0% / 0.45);
-    color: #fff;
+    border: 1px dashed hsl(var(--sax-primary) / 0.32);
+    border-radius: var(--sax-upload-radius);
+    background:
+      radial-gradient(
+        circle at 50% 0%,
+        hsl(var(--sax-primary) / 0.1),
+        transparent 58%
+      ),
+      hsl(var(--sax-background) / 0.72);
+    box-shadow:
+      0 1px 2px hsl(var(--sax-primary) / 0.08),
+      0 12px 30px -24px hsl(var(--sax-primary) / 0.55),
+      inset 0 0 0 1px hsl(var(--sax-background) / 0.6);
     cursor: pointer;
-  }
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
 
-  @include e(progress) {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background: hsl(var(--sax-primary) / 0.35);
-    transition: height 0.2s ease;
-  }
-
-  @include e(input-wrap) {
-    position: relative;
-    min-width: 200px;
-    min-height: 200px;
-    border: 1px dashed hsl(0deg 0% 0% / 0.15);
-    border-radius: var(--sax-radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    &:hover,
+    &:focus-visible {
+      border-color: hsl(var(--sax-primary) / 0.68);
+      box-shadow:
+        0 0 0 3px hsl(var(--sax-primary) / 0.1),
+        0 18px 34px -24px hsl(var(--sax-primary) / 0.65);
+      outline: none;
+      transform: translateY(-1px);
+    }
 
     @include when(disabled) {
-      opacity: 0.5;
-      pointer-events: none;
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none;
+    }
+
+    @include when(limit) {
+      border-style: solid;
+      background: hsl(var(--sax-text) / 0.035);
     }
   }
 
   @include e(input) {
     position: absolute;
-    inset: 0;
-    opacity: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  @include e(upload-icon) {
+    display: inline-flex;
+    width: 54px;
+    height: 54px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    background: hsl(var(--sax-primary));
+    color: hsl(var(--sax-background));
+    box-shadow:
+      0 10px 22px -12px hsl(var(--sax-primary) / 0.78),
+      inset 0 0 0 1px hsl(var(--sax-background) / 0.2);
+    font-size: 1.45rem;
+    transition: transform 0.2s ease;
+  }
+
+  @include when(dragging) {
+    @include e(dropzone) {
+      border-color: hsl(var(--sax-primary));
+      border-style: solid;
+      background: hsl(var(--sax-primary) / 0.12);
+      box-shadow: 0 0 0 4px hsl(var(--sax-primary) / 0.12);
+      transform: scale(1.005);
+    }
+
+    @include e(upload-icon) {
+      transform: translateY(-4px);
+    }
+  }
+
+  @include e(prompt) {
+    display: grid;
+    min-width: 0;
+    gap: 5px;
+  }
+
+  @include e(title) {
+    color: hsl(var(--sax-text));
+    font-size: 0.98rem;
+    font-weight: 700;
+  }
+
+  @include e((description, restriction)) {
+    color: hsl(var(--sax-text) / 0.58);
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+
+  @include e(restriction) {
+    color: hsl(var(--sax-primary) / 0.78);
+  }
+
+  @include e(queue) {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: var(--sax-upload-radius);
+    background: hsl(var(--sax-background) / 0.82);
+    box-shadow:
+      0 1px 2px hsl(var(--sax-primary) / 0.06),
+      0 10px 24px -22px hsl(var(--sax-text) / 0.42),
+      inset 0 0 0 1px hsl(var(--sax-primary) / 0.08);
+  }
+
+  @include e(queue-head) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    > div {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+  }
+
+  @include e(queue-title) {
+    font-size: 0.86rem;
+  }
+
+  @include e(queue-count) {
+    color: hsl(var(--sax-text) / 0.5);
+    font-size: 0.72rem;
+  }
+
+  @include e(submit) {
+    display: inline-flex;
+    min-height: 32px;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 12px;
+    border: none;
+    border-radius: calc(var(--sax-upload-radius) * 0.72);
+    background: hsl(var(--sax-primary));
+    color: hsl(var(--sax-background));
+    box-shadow: 0 7px 16px -10px hsl(var(--sax-primary) / 0.85);
     cursor: pointer;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 700;
+
+    &:focus-visible {
+      outline: 3px solid hsl(var(--sax-primary) / 0.22);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      cursor: wait;
+      opacity: 0.62;
+    }
   }
 
-  @include e(text) {
-    font-size: 0.85rem;
-    color: hsl(0deg 0% 0% / 0.55);
-    pointer-events: none;
-  }
-
-  @include e(bar) {
-    position: absolute;
-    left: 0;
-    bottom: 0;
+  @include e(overall-progress) {
     height: 3px;
-    background: getColor('primary');
+    margin: -3px 0 12px;
+    overflow: hidden;
+    border-radius: 99px;
+    background: hsl(var(--sax-primary) / 0.1);
+
+    > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: hsl(var(--sax-primary));
+      transition: width 0.2s ease;
+    }
+  }
+
+  @include e(files) {
+    display: grid;
+    gap: 8px;
+  }
+
+  @include e(files) {
+    @include m(card) {
+      grid-template-columns: repeat(auto-fill, minmax(154px, 1fr));
+    }
+  }
+
+  @include e(item) {
+    position: relative;
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 9px;
+    border-radius: calc(var(--sax-upload-radius) * 0.78);
+    background: hsl(var(--sax-text) / 0.035);
+    box-shadow: inset 0 0 0 1px hsl(var(--sax-text) / 0.055);
+    transition:
+      background-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover {
+      background: hsl(var(--sax-primary) / 0.055);
+      box-shadow:
+        inset 0 0 0 1px hsl(var(--sax-primary) / 0.12),
+        0 8px 18px -16px hsl(var(--sax-primary) / 0.55);
+    }
+
+    @include when(error) {
+      background: hsl(var(--sax-danger) / 0.07);
+      box-shadow: inset 0 0 0 1px hsl(var(--sax-danger) / 0.18);
+    }
+
+    @include when(success) {
+      box-shadow: inset 3px 0 0 hsl(var(--sax-success));
+    }
+  }
+
+  @include e(files) {
+    @include m(card) {
+      @include e(item) {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: 96px auto;
+        align-items: stretch;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      @include e(visual) {
+        grid-column: 1 / -1;
+        width: 100%;
+        height: 96px;
+        border-radius: 0;
+        background: hsl(var(--sax-primary) / 0.07);
+      }
+
+      @include e(meta) {
+        padding: 9px 0 9px 10px;
+      }
+
+      @include e(actions) {
+        align-self: center;
+        padding-right: 7px;
+      }
+    }
+  }
+
+  @include e(visual) {
+    display: flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: calc(var(--sax-upload-radius) * 0.6);
+    background: hsl(var(--sax-primary) / 0.1);
+    color: hsl(var(--sax-primary));
+    font-size: 1.1rem;
+  }
+
+  @include e(preview) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  @include e(meta) {
+    display: grid;
+    min-width: 0;
+    gap: 3px;
+  }
+
+  @include e(name) {
+    overflow: hidden;
+    font-size: 0.78rem;
+    font-weight: 650;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include e(detail) {
+    color: hsl(var(--sax-text) / 0.52);
+    font-size: 0.68rem;
+  }
+
+  @include e(progress-track) {
+    height: 3px;
+    overflow: hidden;
+    border-radius: 99px;
+    background: hsl(var(--sax-primary) / 0.12);
+  }
+
+  @include e(progress-value) {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: hsl(var(--sax-primary));
     transition: width 0.2s ease;
   }
 
-  @include e(upload-btn) {
-    position: absolute;
-    right: 8px;
-    bottom: 8px;
-    border: none;
-    background: getColor('primary');
-    color: #fff;
-    border-radius: var(--sax-radius-sm);
-    width: 32px;
-    height: 32px;
+  @include e(error-message) {
+    color: hsl(var(--sax-danger));
+    font-size: 0.67rem;
+    line-height: 1.35;
+  }
+
+  @include e(actions) {
     display: flex;
+    gap: 3px;
+  }
+
+  @include e(action) {
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
     align-items: center;
     justify-content: center;
+    border: none;
+    border-radius: calc(var(--sax-upload-radius) * 0.55);
+    background: hsl(var(--sax-primary) / 0.09);
+    color: hsl(var(--sax-primary));
     cursor: pointer;
 
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    &:hover {
+      background: hsl(var(--sax-primary) / 0.16);
+    }
+
+    &:focus-visible {
+      outline: 2px solid hsl(var(--sax-primary) / 0.28);
+      outline-offset: 1px;
+    }
+  }
+
+  @include m(action-remove) {
+    background: transparent;
+    color: hsl(var(--sax-text) / 0.5);
+
+    &:hover {
+      background: hsl(var(--sax-danger) / 0.1);
+      color: hsl(var(--sax-danger));
     }
   }
 
   @include e(tip) {
     margin-top: 8px;
-    color: hsl(0deg 0% 0% / 0.5);
-    font-size: 0.75rem;
+    color: hsl(var(--sax-text) / 0.55);
+    font-size: 0.72rem;
     line-height: 1.5;
+  }
+
+  @include e(sr-only) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @include when(square) {
+    --sax-upload-radius: 0px;
+  }
+
+  @media (max-width: 640px) {
+    @include e(dropzone) {
+      min-height: 150px;
+      flex-direction: column;
+      gap: 12px;
+      padding: 22px 16px;
+      text-align: center;
+    }
+
+    @include e(queue-head) {
+      align-items: flex-start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    @include e((dropzone, upload-icon, item, progress-value)) {
+      transition: none;
+    }
   }
 }

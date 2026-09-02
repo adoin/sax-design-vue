@@ -56,16 +56,8 @@
     min-width: 0;
     padding: 1px 4px;
     border-radius: var(--sax-radius-sm);
-    transition:
-      background var(--sax-motion-duration-fast) ease,
-      box-shadow var(--sax-motion-duration-fast) ease,
-      transform var(--sax-motion-duration-fast) ease;
 
-    &:hover {
-      background: getColor(background, 0.82);
-      box-shadow: 0 5px 14px -10px getColor(primary, 0.28);
-      transform: translateY(-1px);
-    }
+    // Keep option rows still; the checkbox mask owns hover feedback.
 
     .#{$namespace}-checkbox {
       width: 100%;
@@ -220,7 +212,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .#{$namespace}-checkbox-group__option,
   .#{$namespace}-checkbox-group-tabs__tab {
     transition: none;
   }

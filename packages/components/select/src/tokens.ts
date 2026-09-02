@@ -21,10 +21,9 @@ export type SelectOptionContext = {
 
 export type SelectTargetElement =
   | 'select'
-  | 'chip'
+  | 'tag'
   | 'popper'
-  | 'chip'
-  | 'chip-close'
+  | 'tag-close'
   | 'input'
   | 'input-filter'
   | 'reference'

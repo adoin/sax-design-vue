@@ -3,7 +3,7 @@ description: "提供可编程控制的自定义滚动区域。"
 PROPS:
   - name: height
     type: String, Number
-    values: number
+    values: "number"
     description: 滚动条高度。
     default:
     link: null
@@ -12,7 +12,7 @@ PROPS:
 
   - name: max-height
     type: String, Number
-    values: number
+    values: "number"
     description: 滚动条最大高度。
     default: null
     link: null
@@ -21,7 +21,7 @@ PROPS:
 
   - name: native
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 是否使用原生滚动条。
     default: false
     link: null
@@ -30,7 +30,7 @@ PROPS:
 
   - name: wrap-style
     type: String, Object, Array
-    values: CSSProperties, CSSProperties[], string[]
+    values: "CSSProperties, CSSProperties[], string[]"
     description: 外层容器样式。
     default: null
     link: null
@@ -39,7 +39,7 @@ PROPS:
 
   - name: wrap-class
     type: String
-    values: string
+    values: "string"
     description: 外层容器类名。
     default: null
     link: null
@@ -48,7 +48,7 @@ PROPS:
 
   - name: view-style
     type: String, Object, Array
-    values: CSSProperties, CSSProperties[], string[]
+    values: "CSSProperties, CSSProperties[], string[]"
     description: 内容容器样式。
     default: null
     link: null
@@ -57,7 +57,7 @@ PROPS:
 
   - name: view-class
     type: String
-    values: string
+    values: "string"
     description: 内容容器类名。
     default: null
     link: null
@@ -66,7 +66,7 @@ PROPS:
 
   - name: noresize
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 不响应容器尺寸变化；容器尺寸固定时建议开启以优化性能。
     default: false
     link: null
@@ -75,7 +75,7 @@ PROPS:
 
   - name: tag
     type: string
-    values: HTML Tag
+    values: "HTML Tag"
     description: 内容区域元素标签。
     default: div
     link: null
@@ -84,7 +84,7 @@ PROPS:
 
   - name: always
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 始终显示滚动条。
     default: true
     link: null
@@ -93,7 +93,7 @@ PROPS:
 
   - name: min-size
     type: Number
-    values:
+    values: ""
     description: 滚动条最小尺寸。
     default: 20
     link: null
@@ -102,7 +102,7 @@ PROPS:
 
   - name: thickness
     type: Number, String
-    values: number
+    values: "number"
     description: 滑块宽度。
     default: 6
     link: null
@@ -112,7 +112,7 @@ PROPS:
 EVENTS:
   - name: scroll
     type: function
-    values: '({ scrollLeft: number, scrollTop: number }) => void'
+    values: "({ scrollLeft: number, scrollTop: number }) => void"
     description: 滚动时触发，返回滚动距离。
     default: null
     link: null
@@ -122,7 +122,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: slot
-    values:
+    values: ""
     description: 自定义默认内容。
     default: null
     example: null
@@ -133,7 +133,7 @@ SLOTS:
 EXPOSES:
   - name: handleScroll
     type: function
-    values: '() => void'
+    values: "() => void"
     description: 处理滚动事件。
     default: null
     example: null
@@ -143,7 +143,7 @@ EXPOSES:
 
   - name: scrollTo
     type: function
-    values: '(options: ScrollToOptions | number, yCoord?: number) => void'
+    values: "(options: ScrollToOptions | number, yCoord?: number) => void"
     description: 滚动到指定坐标。
     default: null
     example: null
@@ -153,7 +153,7 @@ EXPOSES:
 
   - name: setScrollTop
     type: function
-    values: '(scrollTop: number) => void'
+    values: "(scrollTop: number) => void"
     description: 设置距顶部滚动距离。
     default: null
     example: null
@@ -163,7 +163,7 @@ EXPOSES:
 
   - name: setScrollLeft
     type: function
-    values: '(scrollLeft: number) => void'
+    values: "(scrollLeft: number) => void"
     description: 设置距左侧滚动距离。
     default: null
     example: null
@@ -173,7 +173,7 @@ EXPOSES:
 
   - name: update
     type: function
-    values: '() => void'
+    values: "() => void"
     description: 手动更新滚动条状态。
     default: null
     example: null
@@ -183,7 +183,7 @@ EXPOSES:
 
   - name: wrapRef
     type: object
-    values: 'Ref HTMLElement'
+    values: "Ref HTMLElement"
     description: 滚动条外层容器引用。
     default: null
     example: null

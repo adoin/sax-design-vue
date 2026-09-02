@@ -28,6 +28,18 @@ afterEach(() => {
 })
 
 describe('Checkbox custom icon animation', () => {
+  it('honors controlled false after a previous user selection', async () => {
+    const wrapper = mount(Checkbox, { props: { modelValue: false } })
+    const input = wrapper.get('input')
+    await input.setValue(true)
+    await wrapper.setProps({ modelValue: true })
+    await wrapper.setProps({ modelValue: false })
+    expect(input.element.checked).toBe(false)
+    expect(input.attributes('aria-checked')).toBe('false')
+    expect(wrapper.classes()).not.toContain('is-checked')
+    wrapper.unmount()
+  })
+
   it('draws stroke svg geometry and exposes checked state to the slot', async () => {
     const wrapper = mount(Checkbox, {
       props: { modelValue: false },

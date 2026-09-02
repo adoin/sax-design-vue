@@ -16,7 +16,7 @@ const ORIGINAL = [
   'button',
   'card',
   'checkbox',
-  'chip',
+  'tag',
   'collapse',
   'divider',
   'dropdown',

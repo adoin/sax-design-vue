@@ -2,9 +2,19 @@
 description: "Collect or display a rating with selectable symbols."
 PROPS:
   #__________________________________
-  - name: model-value/v-model
+  - name: model-value
     type: Number
-    values: Number
+    values: "Number"
+    description: binding value.
+    default: 0
+    link: null
+    usage: '#default'
+    code: >
+      <s-rate v-model="value" />
+    #__________________________________
+  - name: v-model
+    type: Number
+    values: "Number"
     description: binding value.
     default: 0
     link: null
@@ -14,7 +24,7 @@ PROPS:
     #__________________________________
   - name: id
     type: String
-    values: String
+    values: "String"
     description: native <code>id</code> attribute.
     default: null
     link: null
@@ -23,7 +33,7 @@ PROPS:
     #__________________________________
   - name: low-threshold
     type: Number
-    values: Number
+    values: "Number"
     description: threshold value between low and medium level. The value itself will be included in low level.
     default: 2
     link: null
@@ -32,7 +42,7 @@ PROPS:
     #__________________________________
   - name: high-threshold
     type: Number
-    values: Number
+    values: "Number"
     description: threshold value between medium and high level. The value itself will be included in high level.
     default: 4
     link: null
@@ -41,7 +51,7 @@ PROPS:
     #__________________________________
   - name: max
     type: Number
-    values: Number
+    values: "Number"
     description: max rating score.
     default: 5
     link: null
@@ -51,7 +61,7 @@ PROPS:
     #__________________________________
   - name: colors
     type: Object
-    values: 'string[] , Record:< number| string>'
+    values: "string[] , Record:< number| string>"
     description: colors for icons. If array, it should have 3 elements, each of which corresponds with a score level, else if object, the key should be threshold value between two levels, and the value should be corresponding color
     default: ['#f7ba2a', '#f7ba2a', '#f7ba2a']
     link: null
@@ -61,7 +71,7 @@ PROPS:
     #__________________________________
   - name: void-color
     type: String
-    values: String
+    values: "String"
     description: component of unselected icons.
     default: '#c6d1de'
     link: null
@@ -71,7 +81,7 @@ PROPS:
     #__________________________________
   - name: disabled-void-color
     type: String
-    values: String
+    values: "String"
     description: color of unselected read-only icons.
     default: '#eff2f7'
     link: null
@@ -80,7 +90,7 @@ PROPS:
     #__________________________________
   - name: icons
     type: Object
-    values: 'string[],component[],Record< number，string | Component>'
+    values: "string[],component[],Record< number，string | Component>"
     description: icon components. If array, it should have 3 elements, each of which corresponds with a score level, else if object, the key should be threshold value between two levels, and the value should be corresponding icon component.
     default: '[StarFilled, StarFilled, StarFilled]'
     link: null
@@ -90,7 +100,7 @@ PROPS:
     #__________________________________
   - name: void-icon
     type: String
-    values: 'string,Component'
+    values: "string,Component"
     description: component of unselected icons.
     default: 'Star'
     link: null
@@ -100,7 +110,7 @@ PROPS:
     #__________________________________
   - name: disabled-void-icon
     type: String
-    values: 'string,Component'
+    values: "string,Component"
     description: component of unselected read-only icons.
     default: 'StarFilled'
     link: null
@@ -109,7 +119,7 @@ PROPS:
     #__________________________________
   - name: disabled
     type: Boolean
-    values: 'true,false'
+    values: "true,false"
     description: whether Rate is read-only.
     default: 'false'
     link: null
@@ -119,7 +129,7 @@ PROPS:
   #__________________________________
   - name: allow-half
     type: Boolean
-    values: 'true,false'
+    values: "true,false"
     description: whether picking half star is allowed.
     default: 'false'
     link: null
@@ -129,7 +139,7 @@ PROPS:
   #__________________________________
   - name: show-text
     type: Boolean
-    values: 'true,false'
+    values: "true,false"
     description: whether to display texts.
     default: 'false'
     link: null
@@ -143,7 +153,7 @@ PROPS:
   #__________________________________
   - name: show-score
     type: Boolean
-    values: 'true,false'
+    values: "true,false"
     description: whether to display current score. show-score and show-text cannot be true at the same time.
     default: 'false'
     link: null
@@ -158,7 +168,7 @@ PROPS:
   #__________________________________
   - name: text-color
     type: String
-    values: 'String'
+    values: "String"
     description: color of texts.
     default: ''
     link: null
@@ -173,7 +183,7 @@ PROPS:
   #__________________________________
   - name: texts
     type: array
-    values: 'String[]'
+    values: "String[]"
     description: text array
     default: '[Extremely bad, Disappointed, Fair, Satisfied, Surprise]'
     link: null
@@ -182,7 +192,7 @@ PROPS:
   #__________________________________
   - name: score-template
     type: String
-    values: 'String'
+    values: "String"
     description: score template.
     default: ''
     link: null
@@ -197,7 +207,7 @@ PROPS:
   #__________________________________
   - name: size
     type: String
-    values: 'large,default, small'
+    values: "large,default, small"
     description: size of Rate.
     default: 'default'
     link: null
@@ -210,7 +220,7 @@ PROPS:
     #__________________________________
   - name: clearable
     type: Boolean
-    values: 'true,false'
+    values: "true,false"
     description: whether value can be reset to <code>0</code>.
     default: 'false'
     link: null
@@ -223,7 +233,7 @@ PROPS:
     #__________________________________
   - name: label
     type: String
-    values: 'String'
+    values: "String"
     description: same as <code>aria-label</code> in Rate
     default: ''
     link: null
@@ -233,7 +243,7 @@ PROPS:
 EVENTS:
   - name: change
     type: 'Function'
-    values: '(value: number) => void'
+    values: "(value: number) => void"
     description: Triggers when rate value is changed.
     default: null
     link: null
@@ -243,7 +253,7 @@ EVENTS:
 EXPOSES:
   - name: setCurrentValue
     type: 'Function'
-    values: '(value: number) => void'
+    values: "(value: number) => void"
     description: set current value.
     default: null
     link: null
@@ -252,7 +262,7 @@ EXPOSES:
     #__________________________________
   - name: resetCurrentValue
     type: 'Function'
-    values: '(value: number) => void'
+    values: "(value: number) => void"
     description: reset current value.
     default: null
     link: null

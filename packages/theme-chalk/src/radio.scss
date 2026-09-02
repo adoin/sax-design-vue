@@ -5,6 +5,8 @@
 
 @include b(radio-wrapper) {
   @include set-component-var('radio', $radio);
+  --sax-radio-shadow:
+    0 2px 4px #{getColor('color', 0.14)}, 0 4px 12px #{getColor('color', 0.1)};
 
   @include flex(center, center);
   position: relative;
@@ -19,40 +21,34 @@
   color: getColor('text', 0.78);
   cursor: pointer;
   touch-action: manipulation;
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
+  // Keep the label and hit area still; only the circular control moves.
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(.is-disabled, .is-loading) {
+      --sax-radio-shadow:
+        0 3px 6px #{getColor('color', 0.2)},
+        0 7px 16px #{getColor('color', 0.18)};
 
-  &:hover:not(.is-disabled, .is-loading) {
-    background: getColor('color', 0.07);
-    color: getColor('text');
+      .#{$namespace}-radio {
+        transform: translateY(-2px) scale(1.04);
+      }
+    }
   }
 
   &:active:not(.is-disabled, .is-loading) {
+    --sax-radio-shadow: 0 1px 3px #{getColor('color', 0.16)};
+
     .#{$namespace}-radio {
-      transform: scale(0.88);
+      transform: scale(0.94);
     }
   }
 
-  &:focus-within {
-    .#{$namespace}-radio {
-      box-shadow: 0 0 0 4px getColor('color', 0.2);
-    }
+  .#{$namespace}-radio__original:focus-visible + .#{$namespace}-radio {
+    box-shadow:
+      0 0 0 4px getColor('color', 0.2),
+      var(--sax-radio-shadow);
   }
 
   @include when(active) {
-    background: getColor('color', 0.12);
-    color: getColor('color');
-
-    @include e(label) {
-      font-weight: 600;
-    }
-
-    .#{$namespace}-radio {
-      box-shadow: 0 0 10px getColor('color', 0.3);
-    }
-
     .#{$namespace}-radio__surface {
       fill: getColor('color');
     }
@@ -91,6 +87,7 @@
   }
 
   @include when(loading) {
+    --sax-radio-shadow: none;
     overflow: hidden;
     background: getColor('color', 0.08);
     cursor: wait;
@@ -104,30 +101,50 @@
   }
 
   @include when(label-before) {
-    @include e(label) {
+    .#{$namespace}-radio__label {
       order: -1;
     }
   }
 
   @include when(disabled) {
-    opacity: 0.48;
     cursor: not-allowed;
 
     &.is-loading {
-      opacity: 1;
       cursor: wait;
+    }
+
+    &:not(.is-loading) {
+      --sax-radio-shadow: inset 0 2px 4px #{getColor('text', 0.12)};
+
+      .#{$namespace}-radio__label {
+        opacity: 0.5;
+      }
+
+      .#{$namespace}-radio__surface {
+        fill: getColor('text', 0.14);
+      }
+
+      &.is-active .#{$namespace}-radio__surface {
+        fill: getColor('text', 0.24);
+      }
+
+      .#{$namespace}-radio__dot {
+        fill: getColor('text', 0.58);
+      }
+
+      .#{$namespace}-radio__custom-icon,
+      .#{$namespace}-radio__custom-icon > .#{$namespace}-icon {
+        color: getColor('text', 0.58) !important;
+      }
     }
   }
 
-  @include e(label) {
+  .#{$namespace}-radio__label {
     min-width: 0;
     color: currentColor;
     font-size: 0.875rem;
     line-height: 1.35;
     user-select: none;
-    transition:
-      color 0.2s ease,
-      font-weight 0.2s ease;
   }
 }
 
@@ -140,10 +157,11 @@
   flex: 0 0 auto;
   place-items: center;
   border-radius: var(--sax-radius-circle);
+  box-shadow: var(--sax-radio-shadow);
   pointer-events: none;
   transition:
     box-shadow 0.2s ease,
-    transform 0.14s ease-out;
+    transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
 
   @include e(graphic) {
     display: block;
@@ -154,7 +172,11 @@
   }
 
   @include e(surface) {
-    fill: getColor('text', 0.11);
+    fill: color-mix(
+      in srgb,
+      #{getColor('background')} 92%,
+      #{getColor('color')}
+    );
     transition: fill 0.2s ease;
   }
 
@@ -234,6 +256,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-radio-wrapper .#{$namespace}-radio {
+    transform: none !important;
+  }
+
   .#{$namespace}-radio-wrapper,
   .#{$namespace}-radio__label,
   .#{$namespace}-radio,

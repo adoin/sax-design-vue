@@ -1,5 +1,9 @@
 <template>
-  <s-textarea v-model="text" placeholder="Write something" />
+  <s-textarea
+    v-model="text"
+    label="Description"
+    placeholder="Write something"
+  />
 </template>
 
 <script setup lang="ts">

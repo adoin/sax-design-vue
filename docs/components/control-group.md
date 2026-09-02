@@ -4,19 +4,19 @@ lastUpdated: false
 PROPS:
   - name: block
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Make the group fill its container and share the available width.
     default: false
 CHILD_PROPS:
   - name: span
     type: Number
-    values: 1–24
+    values: "1–24"
     description: Set it on a direct child to define its share of the 24-column grid. Children without it evenly divide <code>24 - the sum of declared spans</code>.
     default: auto
 SLOTS:
   - name: default
     type: Slot
-    values: Input, Select, Cascader, DatePicker, TimePicker, or compatible form controls
+    values: "Input, Select, Cascader, DatePicker, TimePicker, or compatible form controls"
     description: Controls rendered in their original order with a puzzle seam between adjacent items.
     default: null
 ---

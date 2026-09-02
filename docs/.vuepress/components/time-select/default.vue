@@ -15,3 +15,9 @@ import { ref } from 'vue'
 
 const value = ref('')
 </script>
+
+<style scoped>
+.center {
+  gap: 16px;
+}
+</style>

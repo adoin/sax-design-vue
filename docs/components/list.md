@@ -2,7 +2,7 @@
 PROPS:
   - name: title
     type: String
-    values: String
+    values: "String"
     description: List header title (s-list-header).
     default: null
     link: null
@@ -10,7 +10,7 @@ PROPS:
 
   - name: subtitle
     type: String
-    values: String
+    values: "String"
     description: List header subtitle.
     default: null
     link: null
@@ -18,7 +18,7 @@ PROPS:
 
   - name: icon
     type: String
-    values: Material icon
+    values: "Material icon"
     description: List item or header icon.
     default: null
     link: null
@@ -26,7 +26,7 @@ PROPS:
 
   - name: color
     type: String
-    values: primary, success, danger
+    values: "primary, success, danger"
     description: Header color.
     default: primary
     link: null

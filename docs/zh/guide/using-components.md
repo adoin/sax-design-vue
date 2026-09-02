@@ -10,8 +10,6 @@
 2. **代码标签** — 可复制的 template / script / style 片段
 3. **API 表** — 由 frontmatter 生成的属性、事件、插槽与暴露项
 
-新迁移的组件在侧栏带有绿色 **New** 标记。
-
 </card>
 
 <card>

@@ -123,14 +123,14 @@ const toggleCollapsed = () => {
           <strong>Website redesign</strong>
           <span>Design system · 8 tasks</span>
         </div>
-        <s-chip color="primary">In progress</s-chip>
+        <s-tag color="primary">In progress</s-tag>
       </div>
       <div class="menu-demo__activity">
         <div>
           <strong>Mobile onboarding</strong>
           <span>Product design · 5 tasks</span>
         </div>
-        <s-chip color="warn">Review</s-chip>
+        <s-tag color="warn">Review</s-tag>
       </div>
     </section>
   </s-layout>

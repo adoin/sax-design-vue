@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-unified'
-import { useColorProp } from '@vuesax-alpha/hooks'
+import { useColorProp, useShapeProp } from '@vuesax-alpha/hooks'
 import {
   buildProps,
   definePropType,
@@ -209,8 +209,8 @@ export const selectProps = buildProps({
     type: definePropType<SelectPopupConfig>(Object),
     default: () => ({}),
   },
-  collapseChips: { type: Boolean, default: true },
-  maxCollapseChips: {
+  collapseTags: { type: Boolean, default: true },
+  maxCollapseTags: {
     type: Number,
     default: 0,
     validator: (value: number) => isNumber(value) && value >= 0,
@@ -297,11 +297,7 @@ export const selectProps = buildProps({
     type: String,
     default: null,
   },
-  shape: {
-    type: String,
-    values: ['square'] as const,
-    default: '',
-  },
+  shape: useShapeProp,
   id: {
     type: String,
   },

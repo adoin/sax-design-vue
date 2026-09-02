@@ -4,7 +4,7 @@ export const PLAY_DEMOS = [
   'spacer',
   'divider',
   'progress',
-  'chip',
+  'tag',
   'breadcrumb',
   'textarea',
   'collapse',

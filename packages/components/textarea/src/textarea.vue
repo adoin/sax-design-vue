@@ -3,13 +3,21 @@
     :class="[
       ns.b(),
       props.color && ns.m(props.color),
-      { [ns.is('focus')]: isFocus, [ns.is('danger')]: isDanger },
+      ns.is(shape),
+      {
+        [ns.is('focus')]: isFocus,
+        [ns.is('danger')]: isDanger,
+        [ns.is('label-active')]: isLabelActive,
+      },
     ]"
     :style="wrapperStyle"
   >
-    <h4 v-if="label" :class="ns.e('label')">{{ label }}</h4>
+    <label v-if="label" :class="ns.e('label')" :for="textareaId">
+      {{ label }}
+    </label>
 
     <textarea
+      :id="textareaId"
       ref="textareaRef"
       v-bind="$attrs"
       :value="modelValue"
@@ -39,8 +47,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { useColor, useNamespace } from '@vuesax-alpha/hooks'
+import {
+  computed,
+  nextTick,
+  onMounted,
+  shallowRef,
+  useAttrs,
+  useTemplateRef,
+  watch,
+} from 'vue'
+import { useColor, useId, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { getVsColor } from '@vuesax-alpha/utils'
 import { textareaEmits, textareaProps } from './textarea'
 import type { CSSProperties } from 'vue'
@@ -54,16 +70,27 @@ const props = defineProps(textareaProps)
 const emit = defineEmits(textareaEmits)
 
 const ns = useNamespace('textarea')
+const shape = useShape()
 const color = useColor('primary')
+const attrs = useAttrs()
+const generatedId = useId()
 
-const isFocus = ref(false)
-const textareaRef = ref<HTMLTextAreaElement>()
-const pendingValue = ref(props.modelValue || '')
+const isFocus = shallowRef(false)
+const textareaRef = useTemplateRef<HTMLTextAreaElement>('textareaRef')
+const pendingValue = shallowRef(props.modelValue || '')
+const textareaId = computed(() => String(attrs.id || generatedId.value))
 
 const countLimit = computed(() => props.counter ?? resolvedMaxLength.value)
 const showCount = computed(() => Boolean(props.counter || props.showWordCount))
 const resolvedMaxLength = computed(() => props.maxLength ?? props.maxlength)
 const autoSizeConfig = computed(() => props.autoSize ?? props.autosize)
+const isLabelActive = computed(
+  () =>
+    Boolean(props.label) &&
+    (isFocus.value ||
+      Boolean(pendingValue.value) ||
+      Boolean(props.placeholder)),
+)
 const wordCount = computed(() => {
   const value = props.modelValue || ''
   return props.countMethod ? props.countMethod({ value }) : value.length
@@ -81,18 +108,15 @@ watch(isOverCounter, (val) => {
   emit('update:counterDanger', Boolean(val))
 })
 
-const resolveBorderColor = (colorValue: string) => {
+const resolveFocusColor = (colorValue: string) => {
   const resolved = getVsColor(colorValue)
-  if (!resolved) return 'hsl(0deg 0% 0% / 0.08)'
-  return resolved.startsWith('var(') ? resolved : `rgb(${resolved})`
+  return resolved ? `hsl(${resolved})` : 'hsl(var(--sax-primary))'
 }
 
 const wrapperStyle = computed(() => ({
-  border: `1px solid ${
-    isFocus.value
-      ? resolveBorderColor(props.color || color.value || 'primary')
-      : 'hsl(0deg 0% 0% / 0.08)'
-  }`,
+  '--sax-textarea-focus-color': resolveFocusColor(
+    props.color || color.value || 'primary',
+  ),
   height: autoSizeConfig.value ? undefined : (props.height ?? undefined),
   width: props.width ?? undefined,
 }))
@@ -125,6 +149,13 @@ watch(
   () => [props.modelValue, autoSizeConfig.value],
   () => nextTick(resizeTextarea),
   { deep: true },
+)
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    pendingValue.value = value || ''
+  },
 )
 
 onMounted(() => resizeTextarea())

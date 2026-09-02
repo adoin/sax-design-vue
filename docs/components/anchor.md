@@ -1,48 +1,63 @@
 ---
 PROPS:
-  - name: model-value/v-model
+  - name: model-value
     type: String
-    values: href
+    values: "href"
+    description: Active anchor href.
+    default: "''"
+  - name: v-model
+    type: String
+    values: "href"
     description: Active anchor href.
     default: "''"
   - name: items
     type: Array
-    values: '{ href, title, disabled?, children? }[]'
+    values: "{ href, title, disabled?, children? }[]"
     description: Anchor items. Use children for one nested level in vertical mode.
     default: '[]'
-  - name: offset / target-offset / bounds
+  - name: offset
     type: Number
-    values: pixels
+    values: "pixels"
     description: Active-state offset, scroll destination offset, and detection tolerance.
-    default: '88 / offset / 5'
+    default: '88'
+  - name: target-offset
+    type: Number
+    values: "pixels"
+    description: Active-state offset, scroll destination offset, and detection tolerance.
+    default: 'offset'
+  - name: bounds
+    type: Number
+    values: "pixels"
+    description: Active-state offset, scroll destination offset, and detection tolerance.
+    default: '5'
   - name: affix
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Keeps the anchor navigation sticky in the viewport.
     default: false
   - name: get-container
     type: Function
-    values: () => HTMLElement | Window
+    values: "() => HTMLElement | Window"
     description: Returns the scroll container. Defaults to the page window.
     default: window
   - name: get-current-anchor
     type: Function
-    values: (activeHref) => href
+    values: "(activeHref) => href"
     description: Lets you override the highlighted href.
     default: undefined
   - name: replace
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Replaces browser history instead of appending a hash entry.
     default: false
   - name: direction
     type: String
-    values: vertical / horizontal
+    values: "vertical / horizontal"
     description: Anchor layout direction. Nested items are available in vertical mode.
     default: vertical
   - name: scroll-behavior
     type: String
-    values: auto / smooth
+    values: "auto / smooth"
     description: Scroll behavior after selecting an anchor.
     default: smooth
 EVENTS:

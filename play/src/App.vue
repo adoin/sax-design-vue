@@ -30,7 +30,7 @@ const newDemos = [
   { path: 'spacer', label: 'Spacer' },
   { path: 'divider', label: 'Divider' },
   { path: 'progress', label: 'Progress' },
-  { path: 'chip', label: 'Chip' },
+  { path: 'tag', label: 'Tag' },
   { path: 'breadcrumb', label: 'Breadcrumb' },
   { path: 'textarea', label: 'Textarea' },
   { path: 'collapse', label: 'Collapse' },

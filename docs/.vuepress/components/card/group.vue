@@ -13,10 +13,10 @@
         </template>
         <template #interactions>
           <s-button color="danger" icon>
-            <s-icon  name="bx:heart" />
+            <s-icon name="bx:heart" />
           </s-button>
           <s-button class="btn-chat" type="shadow">
-            <s-icon  name="bx:chat" />
+            <s-icon name="bx:chat" />
             <span class="span"> 54 </span>
           </s-button>
         </template>

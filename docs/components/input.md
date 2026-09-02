@@ -1,30 +1,65 @@
 ---
 description: 'Capture a single line of text with validation and state feedback.'
 PROPS:
-  - name: block / shape / text-white
-    type: Boolean / String / Boolean
-    values: true | false / square / true | false
-    description: Control input width, visual shape and text contrast.
-    default: 'false / - / false'
+  - name: block
+    type: Boolean
+    values: "true | false"
+    description: Stretch the input wrapper to the available width.
+    default: 'false'
     link: null
     usage: '#border-shadow'
-  - name: allow-clear / clearable / disabled
-    type: Boolean / Boolean / Boolean
-    values: true | false
-    description: Enable the trailing clear action (`clearable` is retained as an alias) or disable interaction.
-    default: 'false / false / false'
+  - name: shape
+    type: String
+    values: "rounded | square"
+    description: Select rounded or square outer corners.
+    default: 'rounded'
+    link: null
+    usage: '#shape'
+  - name: text-white
+    type: Boolean
+    values: "true | false"
+    description: Render the input text in white on a dark or colored surface.
+    default: 'false'
+    link: null
+    usage: '#border-shadow'
+  - name: allow-clear
+    type: Boolean
+    values: "true | false"
+    description: Show a trailing action that clears the current value.
+    default: 'false'
     link: null
     usage: '#clearable'
-  - name: wrap-classes / wrap-styles
+  - name: clearable
+    type: Boolean
+    values: "true | false"
+    description: Compatibility alias for `allow-clear`.
+    default: 'false'
+    link: null
+    usage: '#clearable'
+  - name: disabled
+    type: Boolean
+    values: "true | false"
+    description: Disable editing and interaction.
+    default: 'false'
+    link: null
+    usage: '#clearable'
+  - name: wrap-classes
+    type: String
+    values: "CSS class name"
+    description: Add a custom class to the outer input wrapper.
+    default: null
+    link: null
+    usage: '#border-shadow'
+  - name: wrap-styles
     type: String | Object | Array
-    values: CSS class or style values
-    description: Customize the outer input wrapper.
-    default: '-'
+    values: "CSS style value"
+    description: Add custom inline styles to the outer input wrapper.
+    default: null
     link: null
     usage: '#border-shadow'
   - name: v-model
     type: String, Number
-    values: String, Number
+    values: "String, Number"
     description: binding value
     default: null
     link: null
@@ -32,7 +67,7 @@ PROPS:
 
   - name: placeholder
     type: String
-    values: String
+    values: "String"
     description: placeholder of Input
     default: null
     link: null
@@ -40,7 +75,7 @@ PROPS:
 
   - name: label
     type: String
-    values: String
+    values: "String"
     description: a label above the component.
     default: null
     link: null
@@ -54,7 +89,7 @@ PROPS:
       </template>
   - name: label-float
     type: String
-    values: String
+    values: "String"
     description: Add a placeholder converts to focus on a label.
     default: null
     link: null
@@ -69,7 +104,7 @@ PROPS:
       </template>
   - name: color
     type: String
-    values: Sax Design colors, RGB, HEX
+    values: "Sax Design colors, RGB, HEX"
     description: Change component color.
     default: null
     link: null
@@ -114,7 +149,7 @@ PROPS:
 
   - name: state
     type: String
-    values: Sax Design colors,RGB,HEX
+    values: "Sax Design colors,RGB,HEX"
     description: Change the background color of the component by changing its status.
     default: null
     link: null
@@ -122,7 +157,7 @@ PROPS:
 
   - name: progress
     type: Number
-    values: 0 - 100
+    values: "0 - 100"
     description: progress bar starting in red and ending in green.
     default: null
     link: null
@@ -130,7 +165,7 @@ PROPS:
     code: null
   - name: loading
     type: Boolean
-    values: Boolean
+    values: "Boolean"
     description: Add a loading animation to the input.
     default: null
     link: null
@@ -144,7 +179,7 @@ PROPS:
 
   - name: type
     type: InputType
-    values: text | password | search | number | email | tel | url
+    values: "text | password | search | number | email | tel | url"
     description: Set a text-oriented input type. Use DatePicker or TimePicker for date and time values.
     default: text
     link: null
@@ -153,7 +188,7 @@ PROPS:
 
   - name: border
     type: Boolean
-    values: Boolean
+    values: "Boolean"
     description: Change the style of the component.
     default: false
     link: null
@@ -161,7 +196,7 @@ PROPS:
 
   - name: shadow
     type: Boolean
-    values: Boolean
+    values: "Boolean"
     description: Change the style of the component.
     default: false
     link: null
@@ -169,7 +204,7 @@ PROPS:
 
   - name: icon-after
     type: Boolean
-    values: Boolean
+    values: "Boolean"
     description: suffix icon component
     default: false
     link: null
@@ -177,23 +212,39 @@ PROPS:
 
   - name: show-password
     type: boolean
-    values: boolean
+    values: "boolean"
     description: If the input is of the password type, it is modified to show the password.
     default: false
     link: null
     usage: '#progress'
 
-  - name: max-length / show-word-count / trim
+  - name: max-length
     type: Number, Boolean
-    values: Number, true | false
+    values: "Number, true | false"
     description: Limit input, show the counter in the suffix area, and trim committed values.
-    default: null, false, false
+    default: null
+    link: null
+    usage: '#character-count'
+
+  - name: show-word-count
+    type: Number, Boolean
+    values: "Number, true | false"
+    description: Limit input, show the counter in the suffix area, and trim committed values.
+    default: false
+    link: null
+    usage: '#character-count'
+
+  - name: trim
+    type: Number, Boolean
+    values: "Number, true | false"
+    description: Limit input, show the counter in the suffix area, and trim committed values.
+    default: false
     link: null
     usage: '#character-count'
 
   - name: count-method
     type: '({ value: string }) => number'
-    values: A monotonic non-negative counter
+    values: "A monotonic non-negative counter"
     description: Customize both the displayed count and max-length enforcement for bytes or another encoding.
     default: value.length
     link: null
@@ -201,7 +252,7 @@ PROPS:
 
   - name: size
     type: String
-    values: small | default | large
+    values: "small | default | large"
     description: Set the input size.
     default: default
     link: null
@@ -209,7 +260,7 @@ PROPS:
 
   - name: immediate
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Update while typing or commit the value on change and blur.
     default: true
     link: null
@@ -217,55 +268,186 @@ PROPS:
 
   - name: controls
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Show the built-in search or password action.
     default: false
     link: null
     usage: '#search'
 
-  - name: prefix-icon / suffix-icon / prefix-config / suffix-config
+  - name: prefix-icon
     type: String / Object
-    values: Icon name / '{ icon, content, status }'
+    values: "Icon name / '{ icon, content, status }'"
     description: Render lightweight prefix and suffix icons or content; slots have the highest priority.
-    default: '-'
+    default: null
     link: null
     usage: '#affixes'
 
-  - name: min-length / min / max / step / input-mode / pattern / required / multiple
+  - name: suffix-icon
+    type: String / Object
+    values: "Icon name / '{ icon, content, status }'"
+    description: Render lightweight prefix and suffix icons or content; slots have the highest priority.
+    default: null
+    link: null
+    usage: '#affixes'
+
+  - name: prefix-config
+    type: String / Object
+    values: "Icon name / '{ icon, content, status }'"
+    description: Render lightweight prefix and suffix icons or content; slots have the highest priority.
+    default: null
+    link: null
+    usage: '#affixes'
+
+  - name: suffix-config
+    type: String / Object
+    values: "Icon name / '{ icon, content, status }'"
+    description: Render lightweight prefix and suffix icons or content; slots have the highest priority.
+    default: null
+    link: null
+    usage: '#affixes'
+
+  - name: min-length
     type: Number | String / Boolean
-    values: Native input constraints
+    values: "Native input constraints"
     description: Forward common native constraints and clamp number values to the configured min–max range.
-    default: '-'
+    default: null
     link: null
     usage: '#native-constraints'
 
-  - name: readonly / editable / auto-focus / align
+  - name: min
+    type: Number | String / Boolean
+    values: "Native input constraints"
+    description: Forward common native constraints and clamp number values to the configured min–max range.
+    default: null
+    link: null
+    usage: '#native-constraints'
+
+  - name: max
+    type: Number | String / Boolean
+    values: "Native input constraints"
+    description: Forward common native constraints and clamp number values to the configured min–max range.
+    default: null
+    link: null
+    usage: '#native-constraints'
+
+  - name: step
+    type: Number | String / Boolean
+    values: "Native input constraints"
+    description: Forward common native constraints and clamp number values to the configured min–max range.
+    default: null
+    link: null
+    usage: '#native-constraints'
+
+  - name: input-mode
+    type: Number | String / Boolean
+    values: "Native input constraints"
+    description: Forward common native constraints and clamp number values to the configured min–max range.
+    default: null
+    link: null
+    usage: '#native-constraints'
+
+  - name: pattern
+    type: Number | String / Boolean
+    values: "Native input constraints"
+    description: Forward common native constraints and clamp number values to the configured min–max range.
+    default: null
+    link: null
+    usage: '#native-constraints'
+
+  - name: required
+    type: Number | String / Boolean
+    values: "Native input constraints"
+    description: Forward common native constraints and clamp number values to the configured min–max range.
+    default: null
+    link: null
+    usage: '#native-constraints'
+
+  - name: multiple
+    type: Number | String / Boolean
+    values: "Native input constraints"
+    description: Forward common native constraints and clamp number values to the configured min–max range.
+    default: null
+    link: null
+    usage: '#native-constraints'
+
+  - name: readonly
     type: Boolean, String
-    values: true | false, left | center | right
+    values: "true | false, left | center | right"
     description: Control editing state, focus and text alignment.
-    default: false, true, false, left
+    default: false
+    link: null
+    usage: '#default'
+
+  - name: editable
+    type: Boolean, String
+    values: "true | false, left | center | right"
+    description: Control editing state, focus and text alignment.
+    default: true
+    link: null
+    usage: '#default'
+
+  - name: auto-focus
+    type: Boolean, String
+    values: "true | false, left | center | right"
+    description: Control editing state, focus and text alignment.
+    default: false
+    link: null
+    usage: '#default'
+
+  - name: align
+    type: Boolean, String
+    values: "true | false, left | center | right"
+    description: Control editing state, focus and text alignment.
+    default: left
     link: null
     usage: '#default'
 
 EVENTS:
-  - name: update:modelValue / input
+  - name: update:modelValue
     type: String | Number
     description: Fire while the bound input value changes.
-  - name: change / lazy-change
+  - name: input
+    type: String | Number
+    description: Fire while the bound input value changes.
+  - name: change
     type: String
     description: Fire when the native change is committed or the configured lazy update is committed.
-  - name: focus / blur
+  - name: lazy-change
+    type: String
+    description: Fire when the native change is committed or the configured lazy update is committed.
+  - name: focus
+    type: FocusEvent
+    description: Fire when the input gains or loses focus.
+  - name: blur
     type: FocusEvent
     description: Fire when the input gains or loses focus.
   - name: clear
     description: Fires after the clear action resets the value.
-  - name: click / clickIcon / prefix-click / suffix-click
+  - name: click
     type: MouseEvent | Event
     description: Fire for the input surface and its icon actions.
-  - name: keydown / keyup / wheel
+  - name: clickIcon
+    type: MouseEvent | Event
+    description: Fire for the input surface and its icon actions.
+  - name: prefix-click
+    type: MouseEvent | Event
+    description: Fire for the input surface and its icon actions.
+  - name: suffix-click
+    type: MouseEvent | Event
+    description: Fire for the input surface and its icon actions.
+  - name: keydown
     type: KeyboardEvent | WheelEvent
     description: Forward keyboard and wheel interaction events.
-  - name: mouseenter / mouseleave
+  - name: keyup
+    type: KeyboardEvent | WheelEvent
+    description: Forward keyboard and wheel interaction events.
+  - name: wheel
+    type: KeyboardEvent | WheelEvent
+    description: Forward keyboard and wheel interaction events.
+  - name: mouseenter
+    type: MouseEvent
+    description: Fire when the pointer enters or leaves the input wrapper.
+  - name: mouseleave
     type: MouseEvent
     description: Fire when the pointer enters or leaves the input wrapper.
   - name: search-click
@@ -277,7 +459,7 @@ EVENTS:
 SLOTS:
   - name: icon
     type: Slot
-    values: null
+    values: "null"
     description: Add an icon to the input.
     default: null
     link: null
@@ -285,14 +467,21 @@ SLOTS:
 
   - name: message
     type: Slot
-    values: message-success, message-danger, message-warn
+    values: "message-success, message-danger, message-warn"
     description: Add an informative text below the input.
     default: null
     link: null
     usage: '#message'
-  - name: prefix / suffix
+  - name: prefix
     type: Slot
-    values: 'suffix: { count, limit }'
+    values: "suffix: { count"
+    description: Customize either affix. The suffix slot replaces the default counter and receives its current count and limit.
+    default: null
+    link: null
+    usage: '#affixes'
+  - name: suffix
+    type: Slot
+    values: "limit }"
     description: Customize either affix. The suffix slot replaces the default counter and receives its current count and limit.
     default: null
     link: null
@@ -322,6 +511,34 @@ Add an elements input facilitate with the component `input`
 <template #script>
 
 @[code{7-11}](../.vuepress/components/input/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Shape
+
+Use `shape="square"` for straight corners. Shape is independent from border, shadow, color, state, and affix styling.
+
+<template #example><input-shape /></template>
+
+<template #template>
+
+@[code{8-23}](../.vuepress/components/input/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/input/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{25-37}](../.vuepress/components/input/shape.vue)
 
 </template>
 
@@ -515,7 +732,7 @@ Change the color of the input for some state, the allowed states are (primary, s
 
 <template #style>
 
-@[code{43-52}](../.vuepress/components/input/state.vue)
+@[code{43-50}](../.vuepress/components/input/state.vue)
 
 </template>
 

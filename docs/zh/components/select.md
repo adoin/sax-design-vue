@@ -1,29 +1,120 @@
 ---
 description: '从可搜索选项列表中选择一个或多个值。'
 PROPS:
-  - name: v-model / model-value / not-value / label-float
-    type: String | Number | Array / Boolean
-    values: 选项值、空值和标签浮动状态
-    description: 绑定选中值、配置空值并控制标签浮动。
-    default: '-'
-  - name: block / clearable / fit / hide-scrollbar / native-scrollbar / shape / strategy
-    type: Boolean / String
-    values: 字段尺寸、外观和弹层定位选项
-    description: 控制字段宽度、清空操作、下拉滚动条和弹层策略。
-    default: '-'
-  - name: filter-config / filter-method / remote / remote-config / remote-method
+  - name: v-model
+    type: String | Number | Array | Object
+    values: '选项值或选项值数组'
+    description: 双向绑定当前选中值。
+    default: "''"
+  - name: model-value
+    type: String | Number | Array | Object
+    values: '选项值或选项值数组'
+    description: 当前选中值。
+    default: "''"
+  - name: not-value
+    type: String | Number | Object
+    values: '视为空状态的选项值'
+    description: 配置需要视为空状态的值。
+    default: "''"
+  - name: label-float
+    type: Boolean
+    values: 'true | false'
+    description: 聚焦或已有选中值时上浮标签。
+    default: false
+  - name: block
+    type: Boolean
+    values: 'true | false'
+    description: 使选择器占满可用宽度。
+    default: false
+  - name: clearable
+    type: Boolean
+    values: 'true | false'
+    description: 显示清空当前选中值的操作按钮。
+    default: false
+  - name: fit
+    type: Boolean
+    values: 'true | false'
+    description: 根据可用视口调整弹层位置。
+    default: true
+  - name: hide-scrollbar
+    type: Boolean
+    values: 'true | false'
+    description: 隐藏弹层滚动条外观。
+    default: false
+  - name: native-scrollbar
+    type: Boolean
+    values: 'true | false'
+    description: 使用浏览器原生滚动条。
+    default: false
+  - name: shape
+    type: String
+    values: 'rounded | square'
+    description: 设置圆角或方形外观。
+    default: rounded
+    usage: '#外形'
+  - name: strategy
+    type: String
+    values: 'absolute | fixed'
+    description: 设置弹层定位策略。
+    default: absolute
+  - name: filter-config
     type: Object / Function / Boolean
-    values: 本地筛选和远程数据配置
+    values: '本地筛选和远程数据配置'
     description: 配置本地筛选或异步远程选项。
-    default: '-'
-  - name: popup-config / show-after / hide-after / loading-text / no-data-text / no-match-text
+    default: null
+  - name: filter-method
+    type: Object / Function / Boolean
+    values: '本地筛选和远程数据配置'
+    description: 配置本地筛选或异步远程选项。
+    default: null
+  - name: remote
+    type: Object / Function / Boolean
+    values: '本地筛选和远程数据配置'
+    description: 配置本地筛选或异步远程选项。
+    default: null
+  - name: remote-config
+    type: Object / Function / Boolean
+    values: '本地筛选和远程数据配置'
+    description: 配置本地筛选或异步远程选项。
+    default: null
+  - name: remote-method
+    type: Object / Function / Boolean
+    values: '本地筛选和远程数据配置'
+    description: 配置本地筛选或异步远程选项。
+    default: null
+  - name: popup-config
     type: Object / Number / String
-    values: width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style
+    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
     description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
-    default: '-'
+    default: null
+  - name: show-after
+    type: Object / Number / String
+    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
+    description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
+    default: null
+  - name: hide-after
+    type: Object / Number / String
+    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
+    description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
+    default: null
+  - name: loading-text
+    type: Object / Number / String
+    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
+    description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
+    default: null
+  - name: no-data-text
+    type: Object / Number / String
+    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
+    description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
+    default: null
+  - name: no-match-text
+    type: Object / Number / String
+    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
+    description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
+    default: null
   - name: color
     type: Color
-    values: Theme colors, RGB, HEX
+    values: 'Theme colors, RGB, HEX'
     description: 设置组件颜色。
     default: primary
     link: null
@@ -31,27 +122,23 @@ PROPS:
     code: null
   - name: loading
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: 是否处于加载状态，并显示加载动画。
     default: false
     link: null
     usage: '#loading'
     code: null
   - name: flip
-    state:
-      text: New
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: 自动调整选项面板位置以保持可见。
     default: true
     link: null
     usage: '#default'
     code: null
   - name: teleported
-    state:
-      text: New
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: 是否将下拉面板传送至 body。
     default: false
     link: null
@@ -59,7 +146,7 @@ PROPS:
     code: null
   - name: placeholder
     type: String
-    values: String
+    values: 'String'
     description: 设置组件占位文本。
     default: null
     link: null
@@ -67,7 +154,7 @@ PROPS:
     code: null
   - name: label
     type: String
-    values: String
+    values: 'String'
     description: 为选择框添加标签。
     default: null
     link: null
@@ -75,7 +162,7 @@ PROPS:
     code: null
   - name: label-placeholder
     type: String
-    values: String
+    values: 'String'
     description: 设置在聚焦或有值时变为标签的占位文本。
     default: null
     link: null
@@ -83,27 +170,23 @@ PROPS:
     code: null
   - name: filter
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: 启用选项筛选。
     default: false
     link: null
     usage: '#filter'
     code: null
   - name: default-first-option
-    state:
-      text: New
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: 按 Enter 选择首个匹配项，需配合 `filter` 使用。
     default: false
     link: null
     usage: '#filter'
     code: null
   - name: allow-create
-    state:
-      text: New
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: 是否允许创建新选项；使用时 `filter` 必须为 true。
     default: false
     link: null
@@ -111,17 +194,15 @@ PROPS:
     code: null
   - name: multiple
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: 启用多选。
     default: false
     link: null
     usage: '#multiple'
     code: null
   - name: multiple-limit
-    state:
-      text: New
     type: Number
-    values: number
+    values: 'number'
     description: '`multiple` 为 true 时可选的最大数量；设为 0 时不限数量。'
     default: 0
     link: null
@@ -129,7 +210,7 @@ PROPS:
     code: null
   - name: state
     type: String
-    values: Theme colors
+    values: 'Theme colors'
     description: 使用指定颜色设置组件状态。
     default: false
     link: null
@@ -137,87 +218,176 @@ PROPS:
     code: null
   - name: disabled
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: 是否禁用组件。
     default: false
     link: null
     usage: null
     code: null
-  - name: collapse-chips
+  - name: collapse-tags
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: 多选时根据剩余宽度自适应折叠放不下的标签，并以 `+N` 显示剩余数量。
     default: true
     link: null
     usage: '#multiple'
     code: null
-  - name: max-collapse-chips
-    state:
-      text: New
+  - name: max-collapse-tags
     type: Number
-    values: number
-    description: collapse-chips 为 true 时可见标签的可选上限；设为 0 时仅根据可用宽度计算。
+    values: 'number'
+    description: collapse-tags 为 true 时可见标签的可选上限；设为 0 时仅根据可用宽度计算。
     default: 0
     link: null
     usage: '#multiple'
     code: null
-  - name: virtual / virtual-config
-    state:
-      text: New
-    type: Boolean / Object
-    values: threshold | estimateSize | overscan | dynamic
+  - name: virtual
+    type: Boolean
+    values: 'threshold | estimateSize | overscan | dynamic'
     description: 对平铺的 options 数据开启 TanStack Virtual，并支持动态行高测量。分组和手写 Option 保持普通渲染。
-    default: false / '{}'
+    default: false
     link: null
     usage: '#virtual-options'
     code: null
-  - name: pin-key / get-pin-options / pin-method / unpin-method / auto-use-option
-    state:
-      text: New
-    type: String / Function / Function / Function / Boolean
-    values: 本地或远程选项置顶配置
+  - name: virtual-config
+    type: Object
+    values: 'threshold | estimateSize | overscan | dynamic'
+    description: 对平铺的 options 数据开启 TanStack Virtual，并支持动态行高测量。分组和手写 Option 保持普通渲染。
+    default: '{}'
+    link: null
+    usage: '#virtual-options'
+    code: null
+  - name: pin-key
+    type: String
+    values: '本地或远程选项置顶配置'
     description: 将常用平铺选项置顶，可在本地或远程持久化，并可自动使用第一个可用选项。
-    default: '- / - / - / - / false'
+    default: null
     link: null
     usage: '#置顶选项'
     code: null
-  - name: cached-options / highlight-search / filter-option / option-visible-method
-    type: Array / Boolean / Function / Function
-    values: 缓存选项、搜索高亮和可见性规则
+  - name: get-pin-options
+    type: Function
+    values: '本地或远程选项置顶配置'
+    description: 将常用平铺选项置顶，可在本地或远程持久化，并可自动使用第一个可用选项。
+    default: null
+    link: null
+    usage: '#置顶选项'
+    code: null
+  - name: pin-method
+    type: Function
+    values: '本地或远程选项置顶配置'
+    description: 将常用平铺选项置顶，可在本地或远程持久化，并可自动使用第一个可用选项。
+    default: null
+    link: null
+    usage: '#置顶选项'
+    code: null
+  - name: unpin-method
+    type: Function
+    values: '本地或远程选项置顶配置'
+    description: 将常用平铺选项置顶，可在本地或远程持久化，并可自动使用第一个可用选项。
+    default: null
+    link: null
+    usage: '#置顶选项'
+    code: null
+  - name: auto-use-option
+    type: Boolean
+    values: '本地或远程选项置顶配置'
+    description: 将常用平铺选项置顶，可在本地或远程持久化，并可自动使用第一个可用选项。
+    default: 'false'
+    link: null
+    usage: '#置顶选项'
+    code: null
+  - name: cached-options
+    type: Array
+    values: '缓存选项、搜索高亮和可见性规则'
     description: 保留远程选中项标签，并自定义搜索匹配与最终可见性。
-    default: '[] / false / - / -'
+    default: '[]'
     usage: '#cached-option-labels'
-  - name: multiple-display-mode / get-tag-label / get-display-value
-    type: tags | text / Function / Function
-    values: 多选展示方式与格式化函数
+  - name: highlight-search
+    type: Boolean
+    values: '缓存选项、搜索高亮和可见性规则'
+    description: 保留远程选中项标签，并自定义搜索匹配与最终可见性。
+    default: 'false'
+    usage: '#cached-option-labels'
+  - name: filter-option
+    type: Function
+    values: '缓存选项、搜索高亮和可见性规则'
+    description: 保留远程选中项标签，并自定义搜索匹配与最终可见性。
+    default: null
+    usage: '#cached-option-labels'
+  - name: option-visible-method
+    type: Function
+    values: '缓存选项、搜索高亮和可见性规则'
+    description: 保留远程选中项标签，并自定义搜索匹配与最终可见性。
+    default: null
+    usage: '#cached-option-labels'
+  - name: multiple-display-mode
+    type: tags | text
+    values: '多选展示方式与格式化函数'
     description: 控制多选以标签或单行文本展示，并格式化标签或完整展示值。
-    default: tags / - / -
+    default: tags
     usage: '#multiple-selection-tools'
-  - name: selection-tools / selection-tool-labels / show-selected-mark / search-placeholder
-    type: Array / Object / Boolean / String
-    values: all | invert | clear
+  - name: get-tag-label
+    type: Function
+    values: '多选展示方式与格式化函数'
+    description: 控制多选以标签或单行文本展示，并格式化标签或完整展示值。
+    default: null
+    usage: '#multiple-selection-tools'
+  - name: get-display-value
+    type: Function
+    values: '多选展示方式与格式化函数'
+    description: 控制多选以标签或单行文本展示，并格式化标签或完整展示值。
+    default: null
+    usage: '#multiple-selection-tools'
+  - name: selection-tools
+    type: Array
+    values: 'all | invert | clear'
     description: 配置多选批量工具、工具文案、选中标记和搜索占位文本。
-    default: "[] / {} / false / ''"
+    default: '[]'
+    usage: '#multiple-selection-tools'
+
+  - name: selection-tool-labels
+    type: Object
+    values: 'all | invert | clear'
+    description: 配置多选批量工具、工具文案、选中标记和搜索占位文本。
+    default: '{}'
+    usage: '#multiple-selection-tools'
+
+  - name: show-selected-mark
+    type: Boolean
+    values: 'all | invert | clear'
+    description: 配置多选批量工具、工具文案、选中标记和搜索占位文本。
+    default: 'false'
+    usage: '#multiple-selection-tools'
+
+  - name: search-placeholder
+    type: String
+    values: 'all | invert | clear'
+    description: 配置多选批量工具、工具文案、选中标记和搜索占位文本。
+    default: "''"
     usage: '#multiple-selection-tools'
 
   - name: option-group:label
-    state:
-      text: New
     type: String
-    values: String
+    values: 'String'
     description: 设置选择组标签（必填）。
     default: null
     link: null
     usage: '#group'
     code: null
 EVENTS:
-  - name: update:modelValue / change
+  - name: update:modelValue
+    type: SelectValue
+    description: 选中值变化时触发。
+  - name: change
     type: SelectValue
     description: 选中值变化时触发。
   - name: visible-change
     type: Boolean
     description: 下拉层打开或关闭时触发。
-  - name: focus / blur
+  - name: focus
+    type: FocusEvent | Event
+    description: 控件获得或失去焦点时触发。
+  - name: blur
     type: FocusEvent | Event
     description: 控件获得或失去焦点时触发。
   - name: clear
@@ -232,15 +402,27 @@ EVENTS:
     type: '(values: SelectOptionValue[], loaded: Boolean)'
     description: 持久化固定项加载完成时触发。
 SLOTS:
-  - name: header / tools / footer
+  - name: header
     type: slot
-    values: scoped slot
+    values: 'scoped slot'
+    description: 自定义下拉框头部、批量工具和底部内容；footer 仅提供状态与操作，不内置刷新。
+    default: null
+    usage: '#multiple-selection-tools'
+  - name: tools
+    type: slot
+    values: 'scoped slot'
+    description: 自定义下拉框头部、批量工具和底部内容；footer 仅提供状态与操作，不内置刷新。
+    default: null
+    usage: '#multiple-selection-tools'
+  - name: footer
+    type: slot
+    values: 'scoped slot'
     description: 自定义下拉框头部、批量工具和底部内容；footer 仅提供状态与操作，不内置刷新。
     default: null
     usage: '#multiple-selection-tools'
   - name: message-{color}
     type: slot
-    values: warn, danger, success
+    values: 'warn, danger, success'
     description: 在选择框下方添加提示信息。
     default: null
     link: null
@@ -293,19 +475,47 @@ SLOTS:
 
 <template #template>
 
-@[code{1-13}](../../.vuepress/components/select/default.vue)
+@[code{1-5}](../../.vuepress/components/select/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{15-19}](../../.vuepress/components/select/default.vue)
+@[code{7-18}](../../.vuepress/components/select/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{21-36}](../../.vuepress/components/select/default.vue)
+@[code{20-35}](../../.vuepress/components/select/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 外形
+
+设置 `shape="square"` 可让触发器、已选标签、选项和弹层表面统一使用直角外观。
+
+<template #example><select-shape /></template>
+
+<template #template>
+
+@[code{13-33}](../../.vuepress/components/select/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-11}](../../.vuepress/components/select/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{35-47}](../../.vuepress/components/select/shape.vue)
 
 </template>
 
@@ -431,7 +641,7 @@ SLOTS:
 
 添加布尔属性 `multiple`，即可启用多选。
 
-多选 Select 默认测量当前可用宽度，将放不下的标签自动收纳为 `+N`。需要允许标签换行时可将 `collapse-chips` 设为 `false`；`max-collapse-chips` 仅用于设置可选的显示数量上限。
+多选 Select 默认测量当前可用宽度，将放不下的标签自动收纳为 `+N`。需要允许标签换行时可将 `collapse-tags` 设为 `false`；`max-collapse-tags` 仅用于设置可选的显示数量上限。
 
 ::: tip
 选择器绑定值必须为数组。

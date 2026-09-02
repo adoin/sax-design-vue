@@ -75,33 +75,28 @@
             <template
               v-if="galleryMode === 'all' || galleryMode === 'feedback'"
             >
-              <div class="gallery-control gallery-control--chips">
-                <label>{{ copy.chips }}</label>
-                <div class="gallery-chips">
-                  <s-chip
-                    color="warning"
-                    tag-style="mark"
-                    round
-                    icon="bookmark"
-                  >
-                    {{ copy.chipRelease }}
-                  </s-chip>
-                  <s-chip
+              <div class="gallery-control gallery-control--tags">
+                <label>{{ copy.tags }}</label>
+                <div class="gallery-tags">
+                  <s-tag color="warning" tag-style="mark" round icon="bookmark">
+                    {{ copy.tagRelease }}
+                  </s-tag>
+                  <s-tag
                     color="primary"
                     tag-style="arrow"
                     round
                     icon="play_arrow"
                   >
-                    {{ copy.chipForward }}
-                  </s-chip>
-                  <s-chip
+                    {{ copy.tagForward }}
+                  </s-tag>
+                  <s-tag
                     color="success"
                     tag-style="dashed"
                     round
                     icon="verified"
                   >
-                    {{ copy.chipVerified }}
-                  </s-chip>
+                    {{ copy.tagVerified }}
+                  </s-tag>
                 </div>
               </div>
             </template>
@@ -204,10 +199,10 @@ const copy = computed(() =>
         navigation: '导航',
         select: '选择器',
         datePicker: '日期选择器',
-        chips: '特色 Chip',
-        chipRelease: '候选版本',
-        chipForward: '继续',
-        chipVerified: '已验证',
+        tags: '特色 Tag',
+        tagRelease: '候选版本',
+        tagForward: '继续',
+        tagVerified: '已验证',
         slider: '滑块',
         switch: '开关',
         code: '代码预览',
@@ -242,10 +237,10 @@ const copy = computed(() =>
         navigation: 'Navigation',
         select: 'Select',
         datePicker: 'Date picker',
-        chips: 'Featured chips',
-        chipRelease: 'Release candidate',
-        chipForward: 'Continue',
-        chipVerified: 'Verified',
+        tags: 'Featured tags',
+        tagRelease: 'Release candidate',
+        tagForward: 'Continue',
+        tagVerified: 'Verified',
         slider: 'Slider',
         switch: 'Switch',
         code: 'Code preview',
@@ -272,11 +267,11 @@ const copy = computed(() =>
 
 const galleryCode = computed(() => {
   if (galleryMode.value === 'all') {
-    return '<s-chip tag-style="mark" round>Release candidate</s-chip>\n<s-chip tag-style="arrow" round>Continue</s-chip>'
+    return '<s-tag tag-style="mark" round>Release candidate</s-tag>\n<s-tag tag-style="arrow" round>Continue</s-tag>'
   }
 
   if (galleryMode.value === 'feedback') {
-    return '<s-chip tag-style="dashed" round>Verified</s-chip>\n<s-button>Save</s-button>'
+    return '<s-tag tag-style="dashed" round>Verified</s-tag>\n<s-button>Save</s-button>'
   }
 
   if (galleryMode.value === 'navigation') {
@@ -349,7 +344,7 @@ const go = (path: string) => router.push(withLocalePath(path))
 
 .home-modern__actions,
 .gallery-buttons,
-.gallery-chips,
+.gallery-tags,
 .slider-row {
   display: flex;
   align-items: center;
@@ -387,7 +382,7 @@ const go = (path: string) => router.push(withLocalePath(path))
   }
 
   &--all {
-    .gallery-control--chips {
+    .gallery-control--tags {
       grid-column: span 2;
       align-self: end;
     }
@@ -427,7 +422,7 @@ const go = (path: string) => router.push(withLocalePath(path))
   align-self: end;
 }
 
-.gallery-chips {
+.gallery-tags {
   flex-wrap: wrap;
   min-height: 34px;
 }
@@ -539,7 +534,7 @@ const go = (path: string) => router.push(withLocalePath(path))
   .component-gallery__grid {
     grid-template-columns: 1fr;
 
-    &--all .gallery-control--chips,
+    &--all .gallery-control--tags,
     &--navigation .gallery-control--code {
       grid-column: auto;
     }

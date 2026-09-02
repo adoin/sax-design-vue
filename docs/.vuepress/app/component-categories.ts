@@ -87,14 +87,13 @@ export const componentCategories: ComponentCategory[] = [
       component('Input', '输入框', '/components/input'),
       component('Radio', '单选框', '/components/radio'),
       component('Rate', '评分', '/components/rate'),
-      component('Segmented', '分段控制', '/components/segmented'),
       component('Select', '选择器', '/components/select'),
       component('Slider', '滑块', '/components/slider'),
       component('Switch', '开关', '/components/switch'),
+      component('Table select', '表格选择器', '/components/table-select'),
       component('Textarea', '文本域', '/components/textarea'),
       component('Time picker', '时间选择器', '/components/time-picker'),
       component('Time select', '时间选择', '/components/time-select'),
-      component('Tree select', '树形选择器', '/components/tree-select'),
       component('Upload', '上传', '/components/upload'),
       component(
         'Verification code',
@@ -113,7 +112,6 @@ export const componentCategories: ComponentCategory[] = [
       component('Calendar', '日历', '/components/calendar'),
       component('Card', '卡片', '/components/card'),
       component('Carousel', '轮播图', '/components/carousel'),
-      component('Chip', '标签块', '/components/chip'),
       component('Collapse', '折叠面板', '/components/collapse'),
       component('Countdown', '倒计时', '/components/countdown'),
       component('Date panel', '日期面板', '/components/date-panel'),
@@ -122,7 +120,6 @@ export const componentCategories: ComponentCategory[] = [
       component('List', '列表', '/components/list'),
       component('Table', '表格', '/components/table'),
       component('Tag', '标签', '/components/tag'),
-      component('Tree', '树形控件', '/components/tree'),
       component('Virtual list', '虚拟列表', '/components/virtual-list'),
     ],
   },
@@ -159,6 +156,12 @@ export const componentCategories: ComponentCategory[] = [
     ],
   },
 ]
+
+export const componentNamesZh: Record<string, string> = Object.fromEntries(
+  componentCategories.flatMap((category) =>
+    category.children.map(({ text, meaning }) => [text, meaning]),
+  ),
+)
 
 export const enComponentCategories = componentCategories.map((category) => ({
   text: category.text,

@@ -34,6 +34,7 @@ import { computed, onBeforeUnmount, ref, useSlots, watch } from 'vue'
 import {
   useColor,
   useNamespace,
+  useShape,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import {
@@ -55,6 +56,7 @@ const emit = defineEmits<{
 const slots = useSlots()
 
 const ns = useNamespace('button')
+const shape = useShape<'circle' | 'square'>()
 
 const root$ = ref<HTMLButtonElement>()
 
@@ -122,7 +124,7 @@ const resolvedType = computed(() => {
 const resolvedShape = computed(() => {
   if (props.circle) return 'circle'
   if (props.square) return 'square'
-  return props.shape
+  return shape.value
 })
 
 const buttonClasses = computed(() => {

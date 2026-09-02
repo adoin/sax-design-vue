@@ -2,59 +2,67 @@
 PROPS:
   - name: v-model
     type: FormGroupItem[]
-    values: Form data array
+    values: "Form data array"
     description: Each item owns one tab and one SForm; missing __index values are assigned automatically.
     default: '[]'
   - name: get-form-setting
     type: (data, index) => FormGroupFormSetting
-    values: Function
+    values: "Function"
     description: Returns the inner SForm configuration for an item.
   - name: tab-label
     type: String
-    values: Text
+    values: "Text"
     description: Default tab label prefix.
     default: Item
   - name: get-tab-label
     type: (data, index) => string
-    values: Function
+    values: "Function"
     description: Returns the complete label for an item.
   - name: get-context-menu-items
     type: ({ item, index, key, list }) => ContextMenuItem[]
-    values: Function
+    values: "Function"
     description: Returns right-click menu items for a tab. index is the current array position; key is the stable __index.
   - name: tabs-type
     type: String
-    values: line / pill / card / connected-card / editable-card
+    values: "line / pill / card / connected-card / editable-card"
     description: Visual style passed to the inner STabs. Add and remove controls remain independent from this setting.
     default: connected-card
-  - name: editable / show-add
+  - name: editable
     type: Boolean
-    values: true / false
+    values: "true"
+    description: Control the remove and add controls respectively.
+    default: 'false'
+  - name: show-add
+    type: Boolean
+    values: "false"
     description: Control the remove and add controls respectively.
     default: 'false'
   - name: create-item
     type: ({ list }) => object | Promise<object>
-    values: Function
+    values: "Function"
     description: Creates a new form item synchronously or asynchronously.
   - name: max
     type: Number
-    values: Positive number
+    values: "Positive number"
     description: Maximum number of form items.
     default: Infinity
   - name: lazy-error-mark
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Mark invalid tabs without moving to the first invalid tab.
     default: 'false'
   - name: render-threshold
     type: Number
-    values: Non-negative integer
+    values: "Non-negative integer"
     description: Enables lazy tab content above this item count; force-render disables the optimization.
     default: '5'
 description: 'Dynamic form groups built from STabs and SForm.'
 EVENTS:
-  - name: add / remove
-    type: (item, index)
+  - name: add
+    type: (item
+    description: Fires after a form item is added or removed.
+  - name: remove
+    type: index)
     description: Fires after a form item is added or removed.
   - name: change
     type: (activeKey, index, item)

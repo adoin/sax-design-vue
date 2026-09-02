@@ -1,48 +1,63 @@
 ---
 PROPS:
-  - name: model-value/v-model
+  - name: model-value
     type: String
-    values: href
+    values: "href"
+    description: 当前激活锚点 href。
+    default: "''"
+  - name: v-model
+    type: String
+    values: "href"
     description: 当前激活锚点 href。
     default: "''"
   - name: items
     type: Array
-    values: '{ href, title, disabled?, children? }[]'
+    values: "{ href, title, disabled?, children? }[]"
     description: 锚点导航项；垂直模式可通过 children 配置一层分级链接。
     default: '[]'
-  - name: offset / target-offset / bounds
+  - name: offset
     type: Number
-    values: pixels
+    values: "pixels"
     description: 分别控制激活判定偏移、点击滚动偏移和判定容差。
-    default: '88 / offset / 5'
+    default: '88'
+  - name: target-offset
+    type: Number
+    values: "pixels"
+    description: 分别控制激活判定偏移、点击滚动偏移和判定容差。
+    default: 'offset'
+  - name: bounds
+    type: Number
+    values: "pixels"
+    description: 分别控制激活判定偏移、点击滚动偏移和判定容差。
+    default: '5'
   - name: affix
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 让锚点导航吸附在视口中。
     default: false
   - name: get-container
     type: Function
-    values: () => HTMLElement | Window
+    values: "() => HTMLElement | Window"
     description: 返回滚动容器；默认监听页面 window。
     default: window
   - name: get-current-anchor
     type: Function
-    values: (activeHref) => href
+    values: "(activeHref) => href"
     description: 自定义高亮的 href。
     default: undefined
   - name: replace
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 使用替换而非追加方式更新浏览器历史 hash。
     default: false
   - name: direction
     type: String
-    values: vertical / horizontal
+    values: "vertical / horizontal"
     description: 锚点布局方向；分级链接仅在垂直模式展示。
     default: vertical
   - name: scroll-behavior
     type: String
-    values: auto / smooth
+    values: "auto / smooth"
     description: 选择锚点后的滚动行为。
     default: smooth
 EVENTS:

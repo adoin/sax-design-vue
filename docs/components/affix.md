@@ -2,22 +2,22 @@
 PROPS:
   - name: offset-top
     type: Number
-    values: pixels
+    values: "pixels"
     description: Distance from the top edge before the content is pinned.
     default: 0
   - name: offset-bottom
     type: Number
-    values: pixels
+    values: "pixels"
     description: Pin content to the bottom edge instead of the top.
     default: null
   - name: target
     type: Function
-    values: () => HTMLElement | Window
+    values: "() => HTMLElement | Window"
     description: Scroll target. Use a container element for local pinning.
     default: window
   - name: z-index
     type: Number
-    values: number
+    values: "number"
     description: Stacking order while pinned.
     default: 100
 EVENTS:
@@ -26,7 +26,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: Slot
-    values: any content
+    values: "any content"
     description: Content that should be pinned.
     default: null
 description: "Pins content to a viewport or scroll container edge."

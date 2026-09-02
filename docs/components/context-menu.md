@@ -2,26 +2,30 @@
 PROPS:
   - name: min-width
     type: Number | String
-    values: CSS length
+    values: "CSS length"
     description: Set the minimum menu width.
     default: '160'
   - name: items
     type: Array
-    values: ContextMenuItem[]
+    values: "ContextMenuItem[]"
     description: Menu item definitions.
     default: '[]'
   - name: v-model
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Controls menu visibility.
     default: 'false'
   - name: disabled
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Disable the context trigger.
     default: 'false'
 EVENTS:
-  - name: select / open / close
+  - name: select
+    description: Item selection and visibility events.
+  - name: open
+    description: Item selection and visibility events.
+  - name: close
     description: Item selection and visibility events.
 description: "Right-click context menu."
 ---

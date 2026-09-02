@@ -1,9 +1,11 @@
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { buildProps, isString } from '@vuesax-alpha/utils'
+import { useShapeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type VerificationCode from './verification-code.vue'
 
 export const verificationCodeProps = buildProps({
+  shape: useShapeProp,
   modelValue: {
     type: String,
     default: '',

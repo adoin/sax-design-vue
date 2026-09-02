@@ -1,5 +1,12 @@
 @use 'mixins/mixins' as *;
 
+.#{$namespace}-time-picker__popper.is-square {
+  .#{$namespace}-time-picker__dropdown,
+  .#{$namespace}-time-panel__input-field {
+    border-radius: 0;
+  }
+}
+
 @include b(time-picker) {
   display: inline-flex;
   width: 112px;

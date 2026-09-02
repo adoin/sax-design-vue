@@ -45,6 +45,12 @@ const mockNativeColorSelection = (color: string) =>
   })
 
 describe('ColorPicker', () => {
+  it('applies square geometry to the trigger surface', () => {
+    const wrapper = mountPicker({ shape: 'square' })
+
+    expect(wrapper.get('.s-color-picker').classes()).toContain('is-square')
+  })
+
   it('opens the complete custom panel in one click without a native color input', async () => {
     const wrapper = mountPicker()
 

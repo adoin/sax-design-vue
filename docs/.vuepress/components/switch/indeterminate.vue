@@ -1,26 +1,39 @@
+<script setup lang="ts">
+import { shallowRef } from 'vue'
+
+const roundedValue = shallowRef<boolean | string>('pending')
+const squareValue = shallowRef<boolean | string>('pending')
+const disabledValue = shallowRef<boolean | string>('pending')
+</script>
+
 <template>
-  <div class="center con-switch">
-    <s-switch v-model="active" indeterminate />
-    <s-switch v-model="active2" indeterminate />
-    <s-switch v-model="active3" indeterminate disabled />
+  <div class="switch-state-examples">
+    <s-switch
+      v-model="roundedValue"
+      indeterminate
+      aria-label="Rounded indeterminate switch"
+    />
+    <s-switch
+      v-model="squareValue"
+      indeterminate
+      shape="square"
+      aria-label="Square indeterminate switch"
+    />
+    <s-switch
+      v-model="disabledValue"
+      indeterminate
+      disabled
+      aria-label="Disabled indeterminate switch"
+    />
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-
-const active = ref(false)
-const active2 = ref(true)
-const active3 = ref(false)
-</script>
-
-<style lang="scss" scoped>
-.con-switch {
+<style scoped>
+.switch-state-examples {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  .s-switch {
-    margin: 10px;
-  }
+  gap: 16px;
 }
 </style>

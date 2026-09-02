@@ -1,17 +1,25 @@
 ---
 description: 'Choose exactly one option from a related group.'
 PROPS:
-  - name: v-model / model-value
+  - name: v-model
     type: String | Number | Boolean
-    values: selected radio value
+    values: "selected radio value"
     description: Bind the selected value for the radio or radio group.
-    default: '-'
+    default: null
+    link: null
+    usage: '#default'
+    code: null
+  - name: model-value
+    type: String | Number | Boolean
+    values: "selected radio value"
+    description: Bind the selected value for the radio or radio group.
+    default: null
     link: null
     usage: '#default'
     code: null
   - name: color
     type: String
-    values: Theme colors, RGB, HEX
+    values: "Theme colors, RGB, HEX"
     description: Change the color of the radio.
     default: primary
     link: null
@@ -20,16 +28,16 @@ PROPS:
 
   - name: disabled
     type: Boolean
-    values: true,false
-    description: Determine if the component is in the disabled state.
+    values: "true,false"
+    description: Disable radio interaction while preserving the selected state.
     default: false
     link: null
-    usage: '#default'
+    usage: '#disabled'
     code: null
 
   - name: loading
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Determine if the component has a loading animation and is disabled.
     default: false
     link: null
@@ -38,7 +46,7 @@ PROPS:
 
   - name: icon-animation
     type: String
-    values: auto, draw, pop, none
+    values: "auto, draw, pop, none"
     description: Animate a custom center icon. Stroke SVGs draw their paths and filled icons use a pop reveal.
     default: auto
     link: null
@@ -47,7 +55,7 @@ PROPS:
 
   - name: value
     type: String | Number | Boolean
-    values: option value
+    values: "option value"
     description: Value represented by this radio option.
     default: "''"
     link: null
@@ -55,10 +63,16 @@ PROPS:
     code: null
 
 EVENTS:
-  - name: update:modelValue / change
+  - name: update:modelValue
     type: RadioValue
     description: Fire when a Radio, RadioGroup, or RadioButton value changes.
-  - name: update:activeKey / tabChange
+  - name: change
+    type: RadioValue
+    description: Fire when a Radio, RadioGroup, or RadioButton value changes.
+  - name: update:activeKey
+    type: String | Number
+    description: Fire when RadioGroupTabs activates another tab.
+  - name: tabChange
     type: String | Number
     description: Fire when RadioGroupTabs activates another tab.
   - name: RadioGroupTabs change
@@ -67,7 +81,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: slot
-    values: null
+    values: "null"
     description: Add a label to the component.
     default: null
     link: null
@@ -76,7 +90,7 @@ SLOTS:
 
   - name: icon
     type: slot
-    values: checked
+    values: "checked"
     description: Replace the selected center SVG and receive the current checked state.
     default: null
     link: null
@@ -120,6 +134,36 @@ SLOTS:
 
 <card>
 
+## Disabled
+
+Set `disabled` to prevent interaction while preserving the selected state. Enabled controls use a tinted surface and soft shadow; only the circle lifts on hover. Disabled controls use a neutral fill and inset shadow with a visible selection dot. Labels and rows remain stationary.
+
+<template #example>
+<radio-disabled />
+</template>
+
+<template #template>
+
+@[code{7-20}](../.vuepress/components/radio/disabled.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/radio/disabled.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-29}](../.vuepress/components/radio/disabled.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Color
 
 <coloren />
@@ -150,7 +194,7 @@ SLOTS:
 
 <card>
 
-## Label <Badge text="New"/>
+## Label
 
 Add a label to the radio with the `default` slot, if you need the label to be before the radio you can use the `label-before` property
 
@@ -180,7 +224,7 @@ Add a label to the radio with the `default` slot, if you need the label to be be
 
 <card>
 
-## Loading <Badge text="New"/>
+## Loading
 
 Loading reuses Button's pulse rail: a glowing segment travels from left to right along the full radio surface. Interaction is disabled until loading finishes.
 
@@ -210,7 +254,7 @@ Loading reuses Button's pulse rail: a glowing segment travels from left to right
 
 <card>
 
-## Icon <Badge text="New"/>
+## Icon
 
 The outer disc and default center dot share one SVG coordinate system, independent from the native input and positional layout. Replace the selected center SVG with the `icon` slot, which exposes `checked`. `icon-animation="auto"` draws stroked SVG geometry and gives filled icons a pop reveal; set `draw`, `pop`, or `none` explicitly when needed.
 

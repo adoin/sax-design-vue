@@ -11,8 +11,19 @@ const docsDir = path.join(root, 'docs')
 const zhDir = path.join(docsDir, 'zh')
 
 const NEW_COMPONENTS = new Set([
-  'divider', 'progress', 'chip', 'breadcrumb', 'textarea', 'collapse',
-  'list', 'images', 'prompt', 'tabs', 'slider', 'upload', 'spacer',
+  'divider',
+  'progress',
+  'tag',
+  'breadcrumb',
+  'textarea',
+  'collapse',
+  'list',
+  'images',
+  'prompt',
+  'tabs',
+  'slider',
+  'upload',
+  'spacer',
 ])
 
 const sectionTitleZh = {
@@ -102,7 +113,7 @@ const sectionTitleZh = {
 const pageDescriptionZh = {
   divider: '在文本或区块之间添加分割线，支持颜色、图标与多种布局。',
   progress: '展示确定或不确定的加载进度。',
-  chip: '标签是表示输入、属性或操作的紧凑元素。',
+  tag: '标签是表示输入、属性或操作的紧凑元素。',
   breadcrumb: '展示当前页面在导航层级中的位置。',
   textarea: '多行文本输入，支持标签、计数与尺寸配置。',
   collapse: '可展开/折叠的内容面板，多种视觉样式。',
@@ -194,7 +205,7 @@ function injectZhDescription(content, fileBase) {
   if (fm.includes('description:')) {
     return content.replace(
       /^description:.*$/m,
-      `description: ${JSON.stringify(desc)}`
+      `description: ${JSON.stringify(desc)}`,
     )
   }
   return `${fm}\ndescription: ${JSON.stringify(desc)}${body}`
@@ -402,8 +413,6 @@ createApp(App).use(SAlert).use(SButton).mount('#app')
 2. **代码标签** — 可复制的 template / script / style 片段
 3. **API 表** — 由 frontmatter 生成的属性、事件、插槽与暴露项
 
-新迁移的组件在侧栏带有绿色 **New** 标记。
-
 </card>
 
 <card>
@@ -602,7 +611,16 @@ pnpm dev
   }
 
   // Sync nuxt + migration from en with link rewrite
-  for (const file of ['guide/nuxt.md', 'guide/migration.md', 'theme/README.md', 'theme/font.md', 'theme/icons.md', 'theme/generate.md', 'icons/README.md', 'layout/README.md']) {
+  for (const file of [
+    'guide/nuxt.md',
+    'guide/migration.md',
+    'theme/README.md',
+    'theme/font.md',
+    'theme/icons.md',
+    'theme/generate.md',
+    'icons/README.md',
+    'layout/README.md',
+  ]) {
     syncMarkdownFile(file)
   }
 }
@@ -617,10 +635,17 @@ function walkMarkdown(dir, base = '') {
       walkMarkdown(full, rel)
     } else if (entry.name.endsWith('.md')) {
       const key = rel.replace(/\\/g, '/')
-      if (key.startsWith('guide/') && [
-        'guide/README.md', 'guide/getting-started.md', 'guide/using-components.md',
-        'guide/configuration.md', 'guide/playground.md',
-      ].includes(key)) continue
+      if (
+        key.startsWith('guide/') &&
+        [
+          'guide/README.md',
+          'guide/getting-started.md',
+          'guide/using-components.md',
+          'guide/configuration.md',
+          'guide/playground.md',
+        ].includes(key)
+      )
+        continue
       if (key === 'README.md') continue
       if (key.startsWith('components/')) {
         const comp = path.basename(key, '.md')

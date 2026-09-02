@@ -18,3 +18,11 @@ export const codesandboxContextKey: InjectionKey<codesandboxContext> =
 
 export type activeSlotType = 0 | 1 | 2 | 3
 export const activeSlotText = ['template', 'script', 'stype', 'all']
+
+export interface DocExampleRecord {
+  id: string
+  component: string
+  section: string
+  title: string
+  source: string
+}

@@ -42,6 +42,26 @@ const readSlotSource = (
 }
 
 describe('documentation example source', () => {
+  it('keeps massive table data inside the virtual-scrolling example in both locales', () => {
+    for (const root of docsRoots) {
+      const markdown = readFileSync(resolve(root, 'table.md'), 'utf8')
+      const virtualCards = Array.from(
+        markdown.matchAll(/<card[^>]*>([\s\S]*?)<\/card>/g),
+      ).filter((match) => /<table-(?:zh-)?virtual\s*\/>/.test(match[1]))
+      expect(virtualCards).toHaveLength(1)
+      expect(markdown).not.toMatch(/<table-(?:zh-)?stress\s*\/>/)
+      expect(markdown).not.toMatch(
+        /stress\.vue|fixed-column-stress-test|10-万-×/,
+      )
+      const card = virtualCards[0][1]
+      expect(card).toContain('16,777,216')
+      const source = readSlotSource(resolve(root, 'table.md'), card, 'template')
+      expect(source).toContain('class="stress-demo"')
+      expect(source).toContain('v-if="!started"')
+      expect(source).not.toMatch(/10 万行|100,000 rows|100 亿|10 billion/)
+    }
+  })
+
   it('reconstructs and compiles every component example as a complete Vue SFC', () => {
     const failures: string[] = []
     let exampleCount = 0

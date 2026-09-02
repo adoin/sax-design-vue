@@ -1,14 +1,226 @@
 @use 'common/var' as *;
 
-.s-image-preview { position: fixed; inset: 0; display: grid; place-items: center; background: hsl(223.448deg 47.541% 11.961% / .78); }
-.s-image-preview__image { max-width: min(88vw, 1100px); max-height: 84vh; border-radius: var(--sax-radius); box-shadow: 0 20px 60px hsl(0deg 0% 0% / .35); object-fit: contain; user-select: none; }
-.s-image-preview__close, .s-image-preview__arrow { position: absolute; display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid hsl(0deg 0% 100% / .26); border-radius: var(--sax-radius-circle); background: hsl(0deg 0% 100% / .14); color: white; cursor: pointer; transition: background-color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard), transform var(--sax-motion-duration-fast) var(--sax-motion-easing-standard); }
-.s-image-preview__close:hover, .s-image-preview__arrow:hover { background: hsl(0deg 0% 100% / .28); transform: scale(1.06); }
-.s-image-preview__close { top: 22px; right: 24px; }
-.s-image-preview__arrow { top: 50%; transform: translateY(-50%); }
-.s-image-preview__arrow:hover { transform: translateY(-50%) scale(1.06); }
-.s-image-preview__arrow-left { left: 26px; }
-.s-image-preview__arrow-right { right: 26px; }
-.s-image-preview__counter { position: absolute; bottom: 22px; padding: 5px 10px; border-radius: var(--sax-radius-pill); background: hsl(0deg 0% 0% / .34); color: hsl(0deg 0% 100% / .92); font-size: 12px; }
-.s-image-preview-fade-enter-active, .s-image-preview-fade-leave-active { transition: opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard); }
-.s-image-preview-fade-enter-from, .s-image-preview-fade-leave-to { opacity: 0; }
+body.s-popup-parent--hidden {
+  overflow: hidden;
+}
+
+.s-image-preview {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: hsl(223.448deg 47.541% 11.961% / 0.84);
+  outline: none;
+  overscroll-behavior: contain;
+}
+
+.s-image-preview__canvas {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  overflow: hidden;
+  place-items: center;
+  touch-action: none;
+}
+
+.s-image-preview__canvas.is-pannable {
+  cursor: grab;
+}
+
+.s-image-preview__canvas.is-dragging {
+  cursor: grabbing;
+}
+
+.s-image-preview__image {
+  max-width: calc(100vw - 112px);
+  max-height: calc(100vh - 144px);
+  border-radius: var(--sax-radius);
+  box-shadow: 0 24px 72px hsl(0deg 0% 0% / 0.42);
+  object-fit: contain;
+  pointer-events: auto;
+  transform-origin: center;
+  transition: transform var(--sax-motion-duration-fast)
+    var(--sax-motion-easing-standard);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.s-image-preview__close,
+.s-image-preview__arrow,
+.s-image-preview__tool {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: var(--sax-radius-circle);
+  background: hsl(224deg 32% 12% / 0.68);
+  color: hsl(0deg 0% 100% / 0.94);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background-color var(--sax-motion-duration-fast)
+      var(--sax-motion-easing-standard),
+    transform var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+  backdrop-filter: blur(12px);
+}
+
+.s-image-preview__close:hover,
+.s-image-preview__arrow:hover,
+.s-image-preview__tool:hover:not(:disabled),
+.s-image-preview__tool.is-active {
+  background: hsl(0deg 0% 100% / 0.2);
+}
+
+.s-image-preview__close:focus-visible,
+.s-image-preview__arrow:focus-visible,
+.s-image-preview__tool:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.s-image-preview__close {
+  position: absolute;
+  z-index: 3;
+  top: 20px;
+  right: 24px;
+}
+
+.s-image-preview__close:hover {
+  transform: scale(1.05);
+}
+
+.s-image-preview__close:active {
+  transform: scale(0.96);
+}
+
+.s-image-preview__arrow {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.s-image-preview__arrow:hover {
+  transform: translateY(-50%) scale(1.05);
+}
+
+.s-image-preview__arrow:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.s-image-preview__close,
+.s-image-preview__arrow {
+  box-shadow: 0 8px 24px hsl(0deg 0% 0% / 0.24);
+}
+
+.s-image-preview__arrow-left {
+  left: 24px;
+}
+
+.s-image-preview__arrow-right {
+  right: 24px;
+}
+
+.s-image-preview__toolbar {
+  position: absolute;
+  z-index: 3;
+  bottom: 20px;
+  left: 50%;
+  display: flex;
+  max-width: calc(100vw - 32px);
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--sax-radius-pill);
+  background: hsl(224deg 32% 10% / 0.76);
+  box-shadow: 0 12px 36px hsl(0deg 0% 0% / 0.28);
+  color: white;
+  transform: translateX(-50%);
+  backdrop-filter: blur(16px);
+}
+
+.s-image-preview__tool {
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.s-image-preview__tool:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.s-image-preview__tool:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.s-image-preview__counter,
+.s-image-preview__percentage {
+  min-width: 46px;
+  color: hsl(0deg 0% 100% / 0.9);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.s-image-preview__percentage {
+  min-width: 42px;
+}
+
+.s-image-preview__separator {
+  width: 1px;
+  height: 22px;
+  margin: 0 4px;
+  background: hsl(0deg 0% 100% / 0.2);
+}
+
+.s-image-preview-fade-enter-active,
+.s-image-preview-fade-leave-active {
+  transition: opacity var(--sax-motion-duration-fast)
+    var(--sax-motion-easing-standard);
+}
+
+.s-image-preview-fade-enter-from,
+.s-image-preview-fade-leave-to {
+  opacity: 0;
+}
+
+@media (max-width: 640px) {
+  .s-image-preview__close {
+    top: 12px;
+    right: 12px;
+  }
+
+  .s-image-preview__arrow-left {
+    left: 8px;
+  }
+
+  .s-image-preview__arrow-right {
+    right: 8px;
+  }
+
+  .s-image-preview__toolbar {
+    bottom: 12px;
+    overflow-x: auto;
+    border-radius: var(--sax-radius);
+  }
+
+  .s-image-preview__counter,
+  .s-image-preview__separator:first-of-type {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s-image-preview__image,
+  .s-image-preview__close,
+  .s-image-preview__arrow,
+  .s-image-preview__tool,
+  .s-image-preview-fade-enter-active,
+  .s-image-preview-fade-leave-active {
+    transition-duration: 0.01ms;
+  }
+}

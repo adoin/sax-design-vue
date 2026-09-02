@@ -14,7 +14,6 @@ import { SCard, SCardGroup } from '@vuesax-alpha/components/card'
 import { SCarousel } from '@vuesax-alpha/components/carousel'
 import { SCascader } from '@vuesax-alpha/components/cascader'
 import { SCheckbox, SCheckboxGroup } from '@vuesax-alpha/components/checkbox'
-import { SChip, SChips } from '@vuesax-alpha/components/chip'
 import { SCol } from '@vuesax-alpha/components/col'
 import { SColorPicker } from '@vuesax-alpha/components/color-picker'
 import { SConfigProvider } from '@vuesax-alpha/components/config-provider'
@@ -66,7 +65,6 @@ import { SResult } from '@vuesax-alpha/components/result'
 import { SRow } from '@vuesax-alpha/components/row'
 import { SScrollbar } from '@vuesax-alpha/components/scrollbar'
 import { SOption, SOptionGroup, SSelect } from '@vuesax-alpha/components/select'
-import { SSegmented } from '@vuesax-alpha/components/segmented'
 import {
   SSidebar,
   SSidebarGroup,
@@ -77,14 +75,13 @@ import { SSpacer } from '@vuesax-alpha/components/spacer'
 import { SSplitter, SSplitterItem } from '@vuesax-alpha/components/splitter'
 import { SSteps } from '@vuesax-alpha/components/steps'
 import { SSwitch } from '@vuesax-alpha/components/switch'
-import { STable, STd, STh, STr } from '@vuesax-alpha/components/table'
+import { STable, STableColumn } from '@vuesax-alpha/components/table'
+import { STableSelect } from '@vuesax-alpha/components/table-select'
 import { STab, STabs } from '@vuesax-alpha/components/tabs'
-import { STag } from '@vuesax-alpha/components/tag'
+import { STag, STagGroup } from '@vuesax-alpha/components/tag'
 import { SText } from '@vuesax-alpha/components/text'
 import { STextEllipsis } from '@vuesax-alpha/components/text-ellipsis'
 import { STextarea } from '@vuesax-alpha/components/textarea'
-import { STree } from '@vuesax-alpha/components/tree'
-import { STreeSelect } from '@vuesax-alpha/components/tree-select'
 import { STimePicker } from '@vuesax-alpha/components/time-picker'
 import { STimeSelect } from '@vuesax-alpha/components/time-select'
 import { STooltip } from '@vuesax-alpha/components/tooltip'
@@ -114,8 +111,6 @@ export default [
   SCascader,
   SCheckbox,
   SCheckboxGroup,
-  SChip,
-  SChips,
   SCol,
   SColorPicker,
   SConfigProvider,
@@ -173,7 +168,6 @@ export default [
   SRow,
   SScrollbar,
   SSelect,
-  SSegmented,
   SSwitch,
   SSidebar,
   SSidebarGroup,
@@ -184,17 +178,15 @@ export default [
   SSplitterItem,
   SSteps,
   STable,
-  STd,
-  STh,
-  STr,
+  STableColumn,
+  STableSelect,
   STab,
   STabs,
   STag,
+  STagGroup,
   SText,
   STextEllipsis,
   STextarea,
-  STree,
-  STreeSelect,
   STimePicker,
   STimeSelect,
   STooltip,

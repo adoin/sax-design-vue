@@ -5,6 +5,8 @@
   position: relative;
   width: 100%;
   margin-bottom: 16px;
+  box-sizing: border-box;
+  border: 1px solid hsl(0deg 0% 0% / 0.08);
   border-radius: var(--sax-radius-sm);
   background: getColor('gray-2');
   box-shadow: var(--sax-input-shadow);
@@ -15,14 +17,29 @@
     box-shadow var(--sax-motion-duration) var(--sax-motion-easing-standard);
 
   @include e(label) {
+    position: absolute;
+    z-index: 1;
+    top: 9px;
+    left: 9px;
+    max-width: calc(100% - 18px);
     margin: 0;
-    padding: 8px 8px 0;
-    font-size: 0.7rem;
+    padding: 0;
+    overflow: hidden;
+    font-size: 0.8rem;
     font-weight: 400;
-    cursor: default;
-    transition: all var(--sax-motion-duration) var(--sax-motion-easing-standard);
-    border-radius: var(--sax-radius-xs) var(--sax-radius-xs) 0 0;
-    color: hsl(0deg 0% 0% / 0.55);
+    line-height: 1.5;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: getColor(text-color-placeholder);
+    cursor: text;
+    transform-origin: left center;
+    transition:
+      top var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      left var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      padding var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      font-size var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      color var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      transform var(--sax-motion-duration) var(--sax-motion-easing-standard);
   }
 
   @include e(inner) {
@@ -46,8 +63,6 @@
     }
 
     &:focus {
-      resize: auto;
-
       ~ .#{$namespace}-textarea__count {
         opacity: 1;
       }
@@ -74,13 +89,23 @@
   }
 
   @include when(focus) {
+    border-color: var(--sax-textarea-focus-color);
     background: getColor('background');
     box-shadow: var(--sax-input-shadow-focus);
 
     @include e(label) {
-      background: getColor('background');
-      padding-top: 4px;
-      padding-bottom: 4px;
+      color: var(--sax-textarea-focus-color);
+    }
+  }
+
+  @include when(label-active) {
+    @include e(label) {
+      top: 0;
+      left: 10px;
+      padding: 0;
+      background: transparent;
+      font-size: 0.75rem;
+      transform: translateY(calc(-100% - 4px));
     }
   }
 
@@ -103,11 +128,11 @@
     }
   }
 
-  @each $type in (primary, success, warn, danger, dark) {
-    @include m($type) {
-      @include when(focus) {
-        border-color: getColor($type) !important;
-      }
+  @include when(square) {
+    border-radius: 0;
+
+    @include e(count) {
+      border-radius: 0;
     }
   }
 }

@@ -1,24 +1,31 @@
 ---
 PROPS:
+  - name: color
+    type: String
+    values: Sax Design theme color / RGB / HEX / HSL
+    description: Accent color for selected and interactive panel states.
+    default: primary
   - name: picker-type
     type: String
-    values: date / month / quarter / year / week
+    values: 'date / month / quarter / year / week'
     description: Panel selection mode.
     default: date
   - name: model-value
     type: Dayjs
-    values: Dayjs instance
+    values: 'Dayjs instance'
     description: Panel reference date.
     default: current date
   - name: selected-dates
     type: Array
-    values: Dayjs[]
+    values: 'Dayjs[]'
     description: Selected dates used for highlighting.
     default: '[]'
 EVENTS:
-  - name: pick / panel-change
+  - name: pick
     description: Pick a date or navigate to another panel date.
-description: "Standalone calendar panel used by DatePicker."
+  - name: panel-change
+    description: Pick a date or navigate to another panel date.
+description: 'Standalone calendar panel used by DatePicker.'
 ---
 
 # Date panel

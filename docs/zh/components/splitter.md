@@ -1,33 +1,38 @@
 ---
 PROPS:
-  - name: model-value/v-model
+  - name: model-value
     type: SplitterModelValue
-    values: recursive layout tree
+    values: "recursive layout tree"
+    description: 整个分割布局的方向和尺寸树。
+    default: "{ type: 'horizontal', size: ['rest', 'rest'] }"
+  - name: v-model
+    type: SplitterModelValue
+    values: "recursive layout tree"
     description: 整个分割布局的方向和尺寸树。
     default: "{ type: 'horizontal', size: ['rest', 'rest'] }"
   - name: min-size
     type: Number
-    values: 0 - 1
+    values: "0 - 1"
     description: 所有区域默认允许缩小到的最小占比。
     default: '0.08'
   - name: keyboard-step
     type: Number
-    values: 0 - 1
+    values: "0 - 1"
     description: 使用方向键调整分隔条时的步长，未设置时跟随精度。
     default: precision step
   - name: precision
     type: Number
-    values: 0 - 8
+    values: "0 - 8"
     description: 尺寸的小数精度，拖拽会吸附到对应刻度。
     default: '2'
   - name: gap
     type: Number / String / [Size, Size]
-    values: single / [rowGap, columnGap]
+    values: "single / [rowGap, columnGap]"
     description: 分隔按钮实际占用的纵向、横向布局间距。
     default: '12'
   - name: disabled
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 禁止整个布局拖拽。
     default: 'false'
 EVENTS:

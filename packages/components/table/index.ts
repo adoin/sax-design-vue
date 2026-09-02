@@ -1,19 +1,13 @@
 import { withInstall, withNoopInstall } from '@vuesax-alpha/utils'
 import Table from './src/table.vue'
-import Td from './src/td.vue'
-import Th from './src/th.vue'
-import Tr from './src/tr.vue'
+import TableColumn from './src/table-column.vue'
 
 export const STable = withInstall(Table, {
-  Td,
-  Th,
-  Tr,
+  TableColumn,
 })
 export default STable
 
-export const STd = withNoopInstall(Td)
-export const STh = withNoopInstall(Th)
-export const STr = withNoopInstall(Tr)
+export const STableColumn = withNoopInstall(TableColumn)
 
 export * from './src/table'
 export * from './src/utils'

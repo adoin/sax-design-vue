@@ -2,9 +2,19 @@
 description: "通过可选图标采集或展示评分。"
 PROPS:
   #__________________________________
-  - name: model-value/v-model
+  - name: model-value
     type: Number
-    values: Number
+    values: "Number"
+    description: 绑定值。
+    default: 0
+    link: null
+    usage: '#default'
+    code: >
+      <s-rate v-model="value" />
+    #__________________________________
+  - name: v-model
+    type: Number
+    values: "Number"
     description: 绑定值。
     default: 0
     link: null
@@ -14,7 +24,7 @@ PROPS:
     #__________________________________
   - name: id
     type: String
-    values: String
+    values: "String"
     description: 原生 <code>id</code> 属性。
     default: null
     link: null
@@ -23,7 +33,7 @@ PROPS:
     #__________________________________
   - name: low-threshold
     type: Number
-    values: Number
+    values: "Number"
     description: 低分与中分间的阈值；该值本身属于低分级别。
     default: 2
     link: null
@@ -32,7 +42,7 @@ PROPS:
     #__________________________________
   - name: high-threshold
     type: Number
-    values: Number
+    values: "Number"
     description: 中分与高分间的阈值；该值本身属于高分级别。
     default: 4
     link: null
@@ -41,7 +51,7 @@ PROPS:
     #__________________________________
   - name: max
     type: Number
-    values: Number
+    values: "Number"
     description: 最大评分值。
     default: 5
     link: null
@@ -51,7 +61,7 @@ PROPS:
     #__________________________________
   - name: colors
     type: Object
-    values: 'string[] , Record:< number| string>'
+    values: "string[] , Record:< number| string>"
     description: 图标颜色。数组应含 3 项，分别对应三个评分级别；对象时键为等级阈值，值为对应颜色。
     default: ['#f7ba2a', '#f7ba2a', '#f7ba2a']
     link: null
@@ -61,7 +71,7 @@ PROPS:
     #__________________________________
   - name: void-color
     type: String
-    values: String
+    values: "String"
     description: 未选中图标颜色。
     default: '#c6d1de'
     link: null
@@ -71,7 +81,7 @@ PROPS:
     #__________________________________
   - name: disabled-void-color
     type: String
-    values: String
+    values: "String"
     description: 只读状态未选中图标颜色。
     default: '#eff2f7'
     link: null
@@ -80,7 +90,7 @@ PROPS:
     #__________________________________
   - name: icons
     type: Object
-    values: 'string[],component[],Record< number，string | Component>'
+    values: "string[],component[],Record< number，string | Component>"
     description: 图标组件。数组应含 3 项，分别对应三个评分级别；对象时键为等级阈值，值为对应图标组件。
     default: '[StarFilled, StarFilled, StarFilled]'
     link: null
@@ -90,7 +100,7 @@ PROPS:
     #__________________________________
   - name: void-icon
     type: String
-    values: 'string,Component'
+    values: "string,Component"
     description: 未选中图标组件。
     default: 'Star'
     link: null
@@ -100,7 +110,7 @@ PROPS:
     #__________________________________
   - name: disabled-void-icon
     type: String
-    values: 'string,Component'
+    values: "string,Component"
     description: 只读状态未选中图标组件。
     default: 'StarFilled'
     link: null
@@ -109,7 +119,7 @@ PROPS:
     #__________________________________
   - name: disabled
     type: Boolean
-    values: 'true,false'
+    values: "true,false"
     description: 是否只读。
     default: 'false'
     link: null
@@ -119,7 +129,7 @@ PROPS:
   #__________________________________
   - name: allow-half
     type: Boolean
-    values: 'true,false'
+    values: "true,false"
     description: 是否允许选择半星。
     default: 'false'
     link: null
@@ -129,7 +139,7 @@ PROPS:
   #__________________________________
   - name: show-text
     type: Boolean
-    values: 'true,false'
+    values: "true,false"
     description: 是否显示文本。
     default: 'false'
     link: null
@@ -143,7 +153,7 @@ PROPS:
   #__________________________________
   - name: show-score
     type: Boolean
-    values: 'true,false'
+    values: "true,false"
     description: 是否显示当前评分；show-score 与 show-text 不可同时为 true。
     default: 'false'
     link: null
@@ -158,7 +168,7 @@ PROPS:
   #__________________________________
   - name: text-color
     type: String
-    values: 'String'
+    values: "String"
     description: 文本颜色。
     default: ''
     link: null
@@ -173,7 +183,7 @@ PROPS:
   #__________________________________
   - name: texts
     type: array
-    values: 'String[]'
+    values: "String[]"
     description: 文本数组。
     default: '[Extremely bad, Disappointed, Fair, Satisfied, Surprise]'
     link: null
@@ -182,7 +192,7 @@ PROPS:
   #__________________________________
   - name: score-template
     type: String
-    values: 'String'
+    values: "String"
     description: 评分模板。
     default: ''
     link: null
@@ -197,7 +207,7 @@ PROPS:
   #__________________________________
   - name: size
     type: String
-    values: 'large,default, small'
+    values: "large,default, small"
     description: Rate 尺寸。
     default: 'default'
     link: null
@@ -210,7 +220,7 @@ PROPS:
     #__________________________________
   - name: clearable
     type: Boolean
-    values: 'true,false'
+    values: "true,false"
     description: 是否允许将值重置为 <code>0</code>。
     default: 'false'
     link: null
@@ -223,7 +233,7 @@ PROPS:
     #__________________________________
   - name: label
     type: String
-    values: 'String'
+    values: "String"
     description: 与 Rate 的 <code>aria-label</code> 相同。
     default: ''
     link: null
@@ -233,7 +243,7 @@ PROPS:
 EVENTS:
   - name: change
     type: 'Function'
-    values: '(value: number) => void'
+    values: "(value: number) => void"
     description: 评分值变化时触发。
     default: null
     link: null
@@ -243,7 +253,7 @@ EVENTS:
 EXPOSES:
   - name: setCurrentValue
     type: 'Function'
-    values: '(value: number) => void'
+    values: "(value: number) => void"
     description: 设置当前值。
     default: null
     link: null
@@ -252,7 +262,7 @@ EXPOSES:
     #__________________________________
   - name: resetCurrentValue
     type: 'Function'
-    values: '(value: number) => void'
+    values: "(value: number) => void"
     description: 重置当前值。
     default: null
     link: null

@@ -45,6 +45,12 @@ const options = [
 ]
 
 describe('Cascader', () => {
+  it('applies square geometry to the trigger', () => {
+    const wrapper = mountCascader({ modelValue: [], options, shape: 'square' })
+
+    expect(wrapper.get('.s-cascader').classes()).toContain('is-square')
+  })
+
   it('selects a leaf path and returns the selected option path', async () => {
     const wrapper = mountCascader({ modelValue: [], options })
 

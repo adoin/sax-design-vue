@@ -3,49 +3,161 @@ description: 'Choose one or more values from a searchable option list.'
 PROPS:
   - name: label-float
     type: Boolean
-    values: true | false
+    values: 'true | false'
     description: Float the label when the field has focus or a selected value.
     default: false
     link: null
     usage: '#label'
-  - name: v-model / model-value / not-value
+  - name: v-model
     type: String | Number | Array
-    values: option value or values
+    values: 'option value or values'
     description: Bind selected values and optionally configure the value treated as empty.
-    default: '-'
+    default: null
     link: null
     usage: '#default'
-  - name: block / shape / fit / strategy
-    type: Boolean / String / Boolean / String
-    values: true | false / square / true | false / absolute | fixed
-    description: Control field width, shape and popup positioning strategy.
-    default: 'false / - / false / absolute'
+  - name: model-value
+    type: String | Number | Array
+    values: 'option value or values'
+    description: Bind selected values and optionally configure the value treated as empty.
+    default: null
     link: null
     usage: '#default'
-  - name: clearable / hide-scrollbar / native-scrollbar
+  - name: not-value
+    type: String | Number | Array
+    values: 'option value or values'
+    description: Bind selected values and optionally configure the value treated as empty.
+    default: null
+    link: null
+    usage: '#default'
+  - name: block
     type: Boolean
-    values: true | false
-    description: Control clear action and dropdown scrollbar rendering.
-    default: 'false / false / false'
+    values: 'true | false'
+    description: Control field width, shape and popup positioning strategy.
+    default: 'false'
     link: null
     usage: '#default'
-  - name: filter-config / filter-method / remote / remote-config / remote-method
-    type: Object / Function / Boolean / Object / Function
-    values: filter and remote data configuration
+  - name: shape
+    type: String
+    values: 'rounded | square'
+    description: Control field width, shape and popup positioning strategy.
+    default: 'rounded'
+    link: null
+    usage: '#shape'
+  - name: fit
+    type: Boolean
+    values: 'true | false'
+    description: Control field width, shape and popup positioning strategy.
+    default: 'true'
+    link: null
+    usage: '#default'
+  - name: strategy
+    type: String
+    values: 'absolute | fixed'
+    description: Control field width, shape and popup positioning strategy.
+    default: 'absolute'
+    link: null
+    usage: '#default'
+  - name: clearable
+    type: Boolean
+    values: 'true | false'
+    description: Control clear action and dropdown scrollbar rendering.
+    default: 'false'
+    link: null
+    usage: '#default'
+  - name: hide-scrollbar
+    type: Boolean
+    values: 'true | false'
+    description: Control clear action and dropdown scrollbar rendering.
+    default: 'false'
+    link: null
+    usage: '#default'
+  - name: native-scrollbar
+    type: Boolean
+    values: 'true | false'
+    description: Control clear action and dropdown scrollbar rendering.
+    default: 'false'
+    link: null
+    usage: '#default'
+  - name: filter-config
+    type: Object
+    values: 'filter and remote data configuration'
     description: Configure local filtering or asynchronous remote options.
-    default: '-'
+    default: null
     link: null
     usage: '#filter'
-  - name: popup-config / show-after / hide-after / loading-text / no-data-text / no-match-text
-    type: Object / Number / Number / String / String / String
-    values: width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style
+  - name: filter-method
+    type: Function
+    values: 'filter and remote data configuration'
+    description: Configure local filtering or asynchronous remote options.
+    default: null
+    link: null
+    usage: '#filter'
+  - name: remote
+    type: Boolean
+    values: 'filter and remote data configuration'
+    description: Configure local filtering or asynchronous remote options.
+    default: null
+    link: null
+    usage: '#filter'
+  - name: remote-config
+    type: Object
+    values: 'filter and remote data configuration'
+    description: Configure local filtering or asynchronous remote options.
+    default: null
+    link: null
+    usage: '#filter'
+  - name: remote-method
+    type: Function
+    values: 'filter and remote data configuration'
+    description: Configure local filtering or asynchronous remote options.
+    default: null
+    link: null
+    usage: '#filter'
+  - name: popup-config
+    type: Object
+    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
     description: Configure popup sizing, placement, transfer target, class and inline style, plus delay and feedback states.
-    default: '-'
+    default: null
+    link: null
+    usage: '#default'
+  - name: show-after
+    type: Number
+    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
+    description: Configure popup sizing, placement, transfer target, class and inline style, plus delay and feedback states.
+    default: null
+    link: null
+    usage: '#default'
+  - name: hide-after
+    type: Number
+    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
+    description: Configure popup sizing, placement, transfer target, class and inline style, plus delay and feedback states.
+    default: null
+    link: null
+    usage: '#default'
+  - name: loading-text
+    type: String
+    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
+    description: Configure popup sizing, placement, transfer target, class and inline style, plus delay and feedback states.
+    default: null
+    link: null
+    usage: '#default'
+  - name: no-data-text
+    type: String
+    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
+    description: Configure popup sizing, placement, transfer target, class and inline style, plus delay and feedback states.
+    default: null
+    link: null
+    usage: '#default'
+  - name: no-match-text
+    type: String
+    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
+    description: Configure popup sizing, placement, transfer target, class and inline style, plus delay and feedback states.
+    default: null
     link: null
     usage: '#default'
   - name: color
     type: Color
-    values: Main colors of Sax Design, RGB, HEX
+    values: 'Main colors of Sax Design, RGB, HEX'
     description: Change the color of the component.
     default: primary
     link: null
@@ -53,27 +165,23 @@ PROPS:
     code: null
   - name: loading
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: Determine if the component is in the loading state and add an animation.
     default: false
     link: null
     usage: '#loading'
     code: null
   - name: flip
-    state:
-      text: New
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: Changes the placement of the options element to keep it in view.
     default: true
     link: null
     usage: '#default'
     code: null
   - name: teleported
-    state:
-      text: New
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: whether select dropdown is teleported to the body
     default: false
     link: null
@@ -81,7 +189,7 @@ PROPS:
     code: null
   - name: placeholder
     type: String
-    values: String
+    values: 'String'
     description: Add a placeholder to the component.
     default: null
     link: null
@@ -89,7 +197,7 @@ PROPS:
     code: null
   - name: label
     type: String
-    values: String
+    values: 'String'
     description: Add a label to the composite select.
     default: null
     link: null
@@ -97,7 +205,7 @@ PROPS:
     code: null
   - name: label-placeholder
     type: String
-    values: String
+    values: 'String'
     description: Add a placeholder that when in focus or with value becomes a label.
     default: null
     link: null
@@ -105,27 +213,23 @@ PROPS:
     code: null
   - name: filter
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: Add the functionality to filter the select options.
     default: false
     link: null
     usage: '#filter'
     code: null
   - name: default-first-option
-    state:
-      text: New
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: select first matching option on enter key. Use with `filter`
     default: false
     link: null
     usage: '#filter'
     code: null
   - name: allow-create
-    state:
-      text: New
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: Whether creating new items is allowed. To use this, `filter` must be true
     default: false
     link: null
@@ -133,17 +237,15 @@ PROPS:
     code: null
   - name: multiple
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: Add the functionality of being able to select several options from a select.
     default: false
     link: null
     usage: '#multiple'
     code: null
   - name: multiple-limit
-    state:
-      text: New
     type: Number
-    values: number
+    values: 'number'
     description: Maximum number of options user can select when `multiple` is `true`. No limit when set to 0
     default: 0
     link: null
@@ -151,7 +253,7 @@ PROPS:
     code: null
   - name: state
     type: String
-    values: Theme colors
+    values: 'Theme colors'
     description: Change the state of the component to the color provided.
     default: false
     link: null
@@ -159,87 +261,176 @@ PROPS:
     code: null
   - name: disabled
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: Determine if the component is in the disabled state.
     default: false
     link: null
     usage: null
     code: null
-  - name: collapse-chips
+  - name: collapse-tags
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: Adaptively collapse tags that do not fit and show the remaining count as `+N`.
     default: true
     link: null
     usage: '#multiple'
     code: null
-  - name: max-collapse-chips
-    state:
-      text: New
+  - name: max-collapse-tags
     type: Number
-    values: number
-    description: Optional upper limit for visible tags when collapse-chips is true. Set to 0 to rely only on available width.
+    values: 'number'
+    description: Optional upper limit for visible tags when collapse-tags is true. Set to 0 to rely only on available width.
     default: 0
     link: null
     usage: '#multiple'
     code: null
-  - name: virtual / virtual-config
-    state:
-      text: New
-    type: Boolean / Object
-    values: threshold | estimateSize | overscan | dynamic
+  - name: virtual
+    type: Boolean
+    values: 'threshold | estimateSize | overscan | dynamic'
     description: Window flat data-driven options with TanStack Virtual and optionally measure dynamic row heights. Option groups and custom Option children retain normal rendering.
-    default: false / '{}'
+    default: false
     link: null
     usage: '#virtual-options'
     code: null
-  - name: pin-key / get-pin-options / pin-method / unpin-method / auto-use-option
-    state:
-      text: New
-    type: String / Function / Function / Function / Boolean
-    values: local or remote option pinning configuration
+  - name: virtual-config
+    type: Object
+    values: 'threshold | estimateSize | overscan | dynamic'
+    description: Window flat data-driven options with TanStack Virtual and optionally measure dynamic row heights. Option groups and custom Option children retain normal rendering.
+    default: '{}'
+    link: null
+    usage: '#virtual-options'
+    code: null
+  - name: pin-key
+    type: String
+    values: 'local or remote option pinning configuration'
     description: Pin frequently used flat options to the top, persist them locally or remotely, and optionally select the first available option.
-    default: '- / - / - / - / false'
+    default: null
     link: null
     usage: '#pinned-options'
     code: null
-  - name: cached-options / highlight-search / filter-option / option-visible-method
-    type: Array / Boolean / Function / Function
-    values: cached options, search highlighting and visibility predicates
+  - name: get-pin-options
+    type: Function
+    values: 'local or remote option pinning configuration'
+    description: Pin frequently used flat options to the top, persist them locally or remotely, and optionally select the first available option.
+    default: null
+    link: null
+    usage: '#pinned-options'
+    code: null
+  - name: pin-method
+    type: Function
+    values: 'local or remote option pinning configuration'
+    description: Pin frequently used flat options to the top, persist them locally or remotely, and optionally select the first available option.
+    default: null
+    link: null
+    usage: '#pinned-options'
+    code: null
+  - name: unpin-method
+    type: Function
+    values: 'local or remote option pinning configuration'
+    description: Pin frequently used flat options to the top, persist them locally or remotely, and optionally select the first available option.
+    default: null
+    link: null
+    usage: '#pinned-options'
+    code: null
+  - name: auto-use-option
+    type: Boolean
+    values: 'local or remote option pinning configuration'
+    description: Pin frequently used flat options to the top, persist them locally or remotely, and optionally select the first available option.
+    default: 'false'
+    link: null
+    usage: '#pinned-options'
+    code: null
+  - name: cached-options
+    type: Array
+    values: 'cached options, search highlighting and visibility predicates'
     description: Retain remote selected labels and customize matching and final visibility.
-    default: '[] / false / - / -'
+    default: '[]'
     usage: '#cached-option-labels'
-  - name: multiple-display-mode / get-tag-label / get-display-value
-    type: tags | text / Function / Function
-    values: multiple-selection display and formatters
+  - name: highlight-search
+    type: Boolean
+    values: 'cached options, search highlighting and visibility predicates'
+    description: Retain remote selected labels and customize matching and final visibility.
+    default: 'false'
+    usage: '#cached-option-labels'
+  - name: filter-option
+    type: Function
+    values: 'cached options, search highlighting and visibility predicates'
+    description: Retain remote selected labels and customize matching and final visibility.
+    default: null
+    usage: '#cached-option-labels'
+  - name: option-visible-method
+    type: Function
+    values: 'cached options, search highlighting and visibility predicates'
+    description: Retain remote selected labels and customize matching and final visibility.
+    default: null
+    usage: '#cached-option-labels'
+  - name: multiple-display-mode
+    type: tags | text
+    values: 'multiple-selection display and formatters'
     description: Render multiple values as tags or one-line text and customize their labels.
-    default: tags / - / -
+    default: tags
     usage: '#multiple-selection-tools'
-  - name: selection-tools / selection-tool-labels / show-selected-mark / search-placeholder
-    type: Array / Object / Boolean / String
-    values: all | invert | clear
+  - name: get-tag-label
+    type: Function
+    values: 'multiple-selection display and formatters'
+    description: Render multiple values as tags or one-line text and customize their labels.
+    default: null
+    usage: '#multiple-selection-tools'
+  - name: get-display-value
+    type: Function
+    values: 'multiple-selection display and formatters'
+    description: Render multiple values as tags or one-line text and customize their labels.
+    default: null
+    usage: '#multiple-selection-tools'
+  - name: selection-tools
+    type: Array
+    values: 'all | invert | clear'
     description: Configure bulk selection tools, labels, selected marks and the search placeholder.
-    default: "[] / {} / false / ''"
+    default: '[]'
+    usage: '#multiple-selection-tools'
+
+  - name: selection-tool-labels
+    type: Object
+    values: 'all | invert | clear'
+    description: Configure bulk selection tools, labels, selected marks and the search placeholder.
+    default: '{}'
+    usage: '#multiple-selection-tools'
+
+  - name: show-selected-mark
+    type: Boolean
+    values: 'all | invert | clear'
+    description: Configure bulk selection tools, labels, selected marks and the search placeholder.
+    default: 'false'
+    usage: '#multiple-selection-tools'
+
+  - name: search-placeholder
+    type: String
+    values: 'all | invert | clear'
+    description: Configure bulk selection tools, labels, selected marks and the search placeholder.
+    default: "''"
     usage: '#multiple-selection-tools'
 
   - name: option-group:label
-    state:
-      text: New
     type: String
-    values: String
+    values: 'String'
     description: Set label for select group (required)
     default: null
     link: null
     usage: '#group'
     code: null
 EVENTS:
-  - name: update:modelValue / change
+  - name: update:modelValue
+    type: SelectValue
+    description: Fire when the selected value changes.
+  - name: change
     type: SelectValue
     description: Fire when the selected value changes.
   - name: visible-change
     type: Boolean
     description: Fires when the dropdown opens or closes.
-  - name: focus / blur
+  - name: focus
+    type: FocusEvent | Event
+    description: Fire when the control gains or loses focus.
+  - name: blur
     type: FocusEvent | Event
     description: Fire when the control gains or loses focus.
   - name: clear
@@ -254,15 +445,27 @@ EVENTS:
     type: '(values: SelectOptionValue[], loaded: Boolean)'
     description: Fires when persisted pinned values finish loading.
 SLOTS:
-  - name: header / tools / footer
+  - name: header
     type: slot
-    values: scoped slot
+    values: 'scoped slot'
+    description: Customize popup header, bulk tools and footer. The footer exposes state and actions without built-in refresh behavior.
+    default: null
+    usage: '#multiple-selection-tools'
+  - name: tools
+    type: slot
+    values: 'scoped slot'
+    description: Customize popup header, bulk tools and footer. The footer exposes state and actions without built-in refresh behavior.
+    default: null
+    usage: '#multiple-selection-tools'
+  - name: footer
+    type: slot
+    values: 'scoped slot'
     description: Customize popup header, bulk tools and footer. The footer exposes state and actions without built-in refresh behavior.
     default: null
     usage: '#multiple-selection-tools'
   - name: message-{color}
     type: slot
-    values: warn, danger, success
+    values: 'warn, danger, success'
     description: Add a message below the select.
     default: null
     link: null
@@ -315,19 +518,47 @@ Add a select element with the `s-select` component and the `s-option` sub compon
 
 <template #template>
 
-@[code{1-13}](../.vuepress/components/select/default.vue)
+@[code{1-5}](../.vuepress/components/select/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{15-19}](../.vuepress/components/select/default.vue)
+@[code{7-18}](../.vuepress/components/select/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{21-36}](../.vuepress/components/select/default.vue)
+@[code{20-35}](../.vuepress/components/select/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Shape
+
+Use `shape="square"` to keep the trigger, selected tags, options, and popup surface in one square geometry.
+
+<template #example><select-shape /></template>
+
+<template #template>
+
+@[code{13-33}](../.vuepress/components/select/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-11}](../.vuepress/components/select/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{35-47}](../.vuepress/components/select/shape.vue)
 
 </template>
 
@@ -453,7 +684,7 @@ You can add the functionality of filtering options with the `filter` property, t
 
 Add the functionality of multiple selection of options with the `multiple` property, this property is a `boolean` so you can add it without any value
 
-Multiple Selects measure their available width by default and automatically replace tags that do not fit with `+N`. Set `collapse-chips` to `false` to allow tags to wrap; `max-collapse-chips` is only an optional upper limit.
+Multiple Selects measure their available width by default and automatically replace tags that do not fit with `+N`. Set `collapse-tags` to `false` to allow tags to wrap; `max-collapse-tags` is only an optional upper limit.
 
 ::: tip
 The value of the select must be an array

@@ -1,95 +1,110 @@
 ---
 description: '支持溢出收纳、动态增删、右键菜单与多种无边框外观的标签页。'
 PROPS:
-  - name: v-model / model-value
+  - name: v-model
     type: String | Number
-    values: s-tab 的 name；未设置 name 时为索引
+    values: "s-tab 的 name；未设置 name 时为索引"
+    description: 当前激活标签。
+    default: '0'
+  - name: model-value
+    type: String | Number
+    values: "s-tab 的 name；未设置 name 时为索引"
     description: 当前激活标签。
     default: '0'
   - name: type
     type: String
-    values: line / pill / card / connected-card / editable-card
+    values: "line / pill / card / connected-card / editable-card"
     description: 标签栏外观；connected-card 将激活标签与内容面板连接为同一表面，editable-card 是兼容旧用法的可编辑卡片预设。
     default: line
   - name: overflow
     type: String
-    values: collapse / scroll / wrap
+    values: "collapse / scroll / wrap"
     description: 横向空间不足时收进更多菜单、滚动或换行。
     default: collapse
   - name: alignment
     type: String
-    values: left / center / right / fixed
+    values: "left / center / right / fixed"
     description: 标签对齐与均分方式。
     default: left
   - name: position
     type: String
-    values: top / bottom / left / right
+    values: "top / bottom / left / right"
     description: 标签栏位置。
     default: top
   - name: size
     type: String
-    values: small / default / large
+    values: "small / default / large"
     description: 标签尺寸。
     default: default
   - name: animated
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 是否启用面板与列表切换动效。
     default: 'true'
   - name: destroy-on-hide
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 隐藏后是否卸载面板内容。
     default: 'false'
   - name: lazy
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 面板首次激活时才挂载，访问后继续保留。
     default: 'false'
   - name: editable
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 不依赖展示风格，独立开启新增与关闭操作。
     default: 'false'
   - name: hide-add
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 开启编辑操作时隐藏添加按钮。
     default: 'false'
   - name: color
     type: String
-    values: 主题色 / RGB / HEX
+    values: "主题色 / RGB / HEX"
     description: 激活色。
     default: primary
   - name: aria-label
     type: String
-    values: 文本
+    values: "文本"
     description: 标签导航的无障碍名称；默认读取组件语言包。
     default: 标签页
 CHILD_PROPS:
   - name: name
     type: String | Number
-    values: 唯一值
+    values: "唯一值"
     description: s-tab 的稳定标识，也是 v-model 返回值。
     default: 当前索引
   - name: label
     type: String
-    values: 文本
+    values: "文本"
     description: 标签名称与溢出菜单回退文本。
     default: Label
-  - name: icon / badge
-    type: String / String | Number
-    values: 图标名 / 徽标内容
+  - name: icon
+    type: String
+    values: "图标名"
     description: 标签图标与徽标。
-    default: —
-  - name: disabled / closable
+    default: null
+  - name: badge
+    type: String | Number
+    values: "徽标内容"
+    description: 标签图标与徽标。
+    default: null
+  - name: disabled
     type: Boolean
-    values: true / false
+    values: "true"
     description: 禁用标签，或控制开启编辑操作时是否允许关闭。
-    default: false / true
+    default: false
+  - name: closable
+    type: Boolean
+    values: "false"
+    description: 禁用标签，或控制开启编辑操作时是否允许关闭。
+    default: true
   - name: force-render
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 即使 destroy-on-hide 开启也保留该面板。
     default: 'false'
 EVENTS:
@@ -97,7 +112,11 @@ EVENTS:
     description: 激活项变化时返回 value 与 pane。
   - name: tab-click
     description: 点击或键盘激活标签时返回 value、事件与 pane。
-  - name: add / remove / edit
+  - name: add
+    description: 请求添加或删除标签；数据仍由父级维护。
+  - name: remove
+    description: 请求添加或删除标签；数据仍由父级维护。
+  - name: edit
     description: 请求添加或删除标签；数据仍由父级维护。
   - name: tab-contextmenu
     description: 标签发生右键事件时返回 value、事件与 pane。
@@ -108,7 +127,11 @@ SLOTS:
     description: 自定义单个标签标题，可组合 ContextMenu。
   - name: extra
     description: 标签栏尾部操作区。
-  - name: add-icon / close-icon / more-icon
+  - name: add-icon
+    description: 替换添加、关闭和更多图标。
+  - name: close-icon
+    description: 替换添加、关闭和更多图标。
+  - name: more-icon
     description: 替换添加、关闭和更多图标。
 ---
 

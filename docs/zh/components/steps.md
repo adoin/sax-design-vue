@@ -2,74 +2,74 @@
 PROPS:
   - name: active
     type: Number
-    values: index
+    values: "index"
     description: 当前步骤下标，支持 v-model:active。
     default: '0'
   - name: items
     type: StepItem[]
-    values: '{ key?, title, description?, meta?, status?, statusLabel?, disabled?, clickable?, icon? }[]'
+    values: "{ key?, title, description?, meta?, status?, statusLabel?, disabled?, clickable?, icon? }[]"
     description: 步骤数据。
     default: '[]'
   - name: variant
     type: String
-    values: rail / timeline
+    values: "rail / timeline"
     description: 聚焦轨道或上下文时间线。
     default: rail
   - name: direction
     type: String
-    values: horizontal / vertical
+    values: "horizontal / vertical"
     description: 排列方向；timeline 默认纵向。
     default: 按 variant 推导
   - name: size
     type: String
-    values: small / default / large
+    values: "small / default / large"
     description: 步骤尺寸。
     default: default
   - name: finish-status
     type: StepStatus
-    values: wait / process / finish / success / error / loading / disabled
+    values: "wait / process / finish / success / error / loading / disabled"
     description: 已经过的步骤状态。
     default: finish
   - name: process-status
     type: StepStatus
-    values: wait / process / finish / success / error / loading / disabled
+    values: "wait / process / finish / success / error / loading / disabled"
     description: 当前步骤状态。
     default: process
   - name: status-labels
     type: Partial<Record<StepStatus, string>>
-    values: object
+    values: "object"
     description: 覆盖各状态的内置国际化文案。
     default: '{}'
   - name: clickable
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 是否允许点击切换步骤。
     default: 'true'
   - name: show-progress
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 是否显示步骤连接轨道。
     default: 'true'
   - name: show-step-index
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 是否在当前步骤显示进度序号。
     default: 'true'
   - name: responsive
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 小屏时将横向轨道转为纵向。
     default: 'true'
   - name: simple
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 移除轨道，适合完整 item 插槽布局。
     default: 'false'
   - name: aria-label
     type: String
-    values: text
+    values: "text"
     description: 步骤导航的无障碍名称。
-    default: —
+    default: null
 EVENTS:
   - name: update:active
     description: 激活步骤变化时触发，可用于 v-model:active。
@@ -82,7 +82,11 @@ SLOTS:
     description: 完整替换单个步骤内容，参数为 item、index、status、statusLabel、icon、active、disabled、interactive。
   - name: icon
     description: 自定义标记图标，参数同 item。
-  - name: title / description / meta
+  - name: title
+    description: 自定义对应文本，参数同 item。
+  - name: description
+    description: 自定义对应文本，参数同 item。
+  - name: meta
     description: 自定义对应文本，参数同 item。
   - name: content
     description: 时间线当前步骤的上下文内容，参数同 item。

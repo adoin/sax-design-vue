@@ -2,93 +2,99 @@
 PROPS:
   - name: v-model
     type: String | Number
-    values: MenuKey
+    values: "MenuKey"
     description: 当前选中的菜单键。
     default: undefined
   - name: options
     type: MenuOption[]
-    values: 菜单树
+    values: "菜单树"
     description: 菜单项、分组与分隔线数据。
     default: '[]'
   - name: mode
     type: String
-    values: vertical / horizontal
+    values: "vertical / horizontal"
     description: 主菜单排列方向。
     default: vertical
   - name: submenu-mode
     type: String
-    values: inline / popup
+    values: "inline / popup"
     description: 子菜单内联展开或逐级弹出；默认跟随 mode 与 collapse。
     default: 自动
   - name: trigger
     type: String
-    values: hover / click
+    values: "hover / click"
     description: 弹出子菜单的触发方式。
     default: 自动
   - name: variant
     type: String
-    values: soft / floating / plain
+    values: "soft / floating / plain"
     description: 菜单的视觉风格。
     default: soft
   - name: v-model:open-keys
     type: MenuKey[]
-    values: 展开的菜单键
+    values: "展开的菜单键"
     description: 受控的展开分支。
     default: undefined
   - name: default-openeds
     type: MenuKey[]
-    values: 初始菜单键
+    values: "初始菜单键"
     description: 非受控模式的初始展开分支。
     default: '[]'
   - name: collapse
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 收起为图标菜单，子级自动改为弹层。
     default: false
   - name: unique-open
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 同一层只保留一个展开分支。
     default: false
   - name: selectable-parents
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 允许含子项的节点同时被选中。
     default: false
   - name: close-on-select
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 选择后关闭弹出菜单链。
     default: true
   - name: teleported
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 一级弹层是否传送至浮层容器。
     default: true
   - name: show-delay
     type: Number
-    values: 毫秒
+    values: "毫秒"
     description: hover 打开的延迟。
     default: 120
   - name: hide-delay
     type: Number
-    values: 毫秒
+    values: "毫秒"
     description: hover 关闭的延迟。
     default: 180
   - name: popup-offset
     type: Number
-    values: 像素
+    values: "像素"
     description: 弹层和触发项的间距。
     default: 8
   - name: popup-class
     type: String
-    values: 类名
+    values: "类名"
     description: 弹层的附加类名。
     default: undefined
 EVENTS:
-  - name: update:modelValue / select
+  - name: update:modelValue
     description: 选中菜单项时触发。
-  - name: update:openKeys / open / close
+  - name: select
+    description: 选中菜单项时触发。
+  - name: update:openKeys
+    description: 展开状态变化时触发。
+  - name: open
+    description: 展开状态变化时触发。
+  - name: close
     description: 展开状态变化时触发。
 description: '支持内联、逐级弹层与横向导航的多级菜单。'
 ---

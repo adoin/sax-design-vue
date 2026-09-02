@@ -17,8 +17,6 @@
 @use './cascader.scss';
 @use './checkbox-group.scss';
 @use './checkbox.scss';
-@use './chip.scss';
-@use './chips.scss';
 @use './col.scss';
 @use './color-picker.scss';
 @use './collapse.scss';
@@ -68,7 +66,6 @@
 @use './row.scss';
 @use './scrollbar.scss';
 @use './select.scss';
-@use './segmented.scss';
 @use './sidebar-group.scss';
 @use './sidebar-item.scss';
 @use './sidebar.scss';
@@ -80,13 +77,10 @@
 @use './table.scss';
 @use './tabs.scss';
 @use './tag.scss';
+@use './tag-group.scss';
 @use './text.scss';
 @use './text-ellipsis.scss';
-@use './tree.scss';
-@use './tree-select.scss';
-@use './td.scss';
-@use './th.scss';
-@use './tr.scss';
+@use './table-select.scss';
 @use './textarea.scss';
 @use './time-picker.scss';
 @use './time-select.scss';

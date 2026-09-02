@@ -2,24 +2,28 @@
 PROPS:
   - name: title
     type: String
-    values: Document title
+    values: "Document title"
     description: Print window title.
     default: document title
   - name: print-style
     type: String
-    values: CSS text
+    values: "CSS text"
     description: Extra CSS added to the print window.
     default: "''"
   - name: auto-close
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Close the print window after printing.
     default: 'true'
 METHODS:
   - name: print
     description: Open a print window containing default slot content.
 EVENTS:
-  - name: before-print / after-print / error
+  - name: before-print
+    description: Print lifecycle events.
+  - name: after-print
+    description: Print lifecycle events.
+  - name: error
     description: Print lifecycle events.
 description: "Scoped print container."
 ---

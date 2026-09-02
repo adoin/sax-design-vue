@@ -1,10 +1,12 @@
 <template>
-  <s-color-picker
-    v-model="color"
-    show-alpha
-    format="rgb"
-    :predefine="presets"
-  />
+  <div class="picker-row">
+    <s-color-picker
+      v-model="color"
+      show-alpha
+      format="rgb"
+      :predefine="presets"
+    />
+  </div>
   <p class="value">Selected: {{ color }}</p>
 </template>
 
@@ -22,6 +24,12 @@ const presets = [
 </script>
 
 <style scoped>
+.picker-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .value {
   margin: 10px 2px 0;
   color: var(--s-text-color-secondary);

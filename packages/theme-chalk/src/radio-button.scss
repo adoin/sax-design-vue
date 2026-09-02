@@ -53,7 +53,7 @@
 
     .#{$namespace}-radio-button__indicator {
       background: getColor(primary);
-      box-shadow: 0 4px 10px getColor(primary, 0.24);
+      box-shadow: 0 0 10px getColor(primary, 0.3);
     }
 
     .#{$namespace}-radio-button__dot {
@@ -82,9 +82,9 @@
 
   @include e(indicator) {
     display: flex;
-    width: 16px;
-    height: 16px;
-    flex: 0 0 16px;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
     align-items: center;
     justify-content: center;
     border-radius: var(--sax-radius-circle);
@@ -97,8 +97,8 @@
 
   @include e(dot) {
     display: block;
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: var(--sax-radius-circle);
     background: white;
     opacity: 0;

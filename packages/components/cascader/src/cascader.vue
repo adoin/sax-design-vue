@@ -24,6 +24,7 @@
         ns.is('open', mergedOpen),
         ns.is('multiple', multiple),
         ns.is('block', block),
+        ns.is(resolvedShape),
       ]"
       role="combobox"
       :tabindex="disabled || showSearchEnabled ? -1 : 0"
@@ -192,7 +193,7 @@ import { computed, nextTick, shallowRef, useTemplateRef, watch } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import { IconLoading, SIcon } from '@vuesax-alpha/components/icon'
 import SPopper from '@vuesax-alpha/components/popper'
-import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import CascaderPanel from './cascader-panel.vue'
 import { SHOW_PARENT, cascaderEmits, cascaderProps } from './cascader'
 import {
@@ -219,6 +220,7 @@ defineOptions({ name: 'SCascader', inheritAttrs: false })
 const props = defineProps(cascaderProps)
 const emit = defineEmits(cascaderEmits)
 const ns = useNamespace('cascader')
+const resolvedShape = useShape()
 const { t } = useLocale()
 const triggerRef = useTemplateRef<HTMLElement>('triggerRef')
 const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
@@ -248,7 +250,12 @@ const searchText = computed(() => props.searchValue ?? internalSearch.value)
 const mergedOpen = computed(() => props.open ?? internalOpen.value)
 const popupConfig = computed(() => props.popupConfig)
 const popperClass = computed(() =>
-  [ns.e('content'), props.popupClassName, popupConfig.value.className]
+  [
+    ns.e('content'),
+    ns.is('square', resolvedShape.value === 'square'),
+    props.popupClassName,
+    popupConfig.value.className,
+  ]
     .filter(Boolean)
     .join(' '),
 )

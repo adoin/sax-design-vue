@@ -2,127 +2,130 @@
 PROPS:
   - name: aside-position
     type: String
-    values: start | end
+    values: "start | end"
     description: 将侧栏放在主内容之前或之后。
     default: start
   - name: aside-width
     type: String | Number
-    values: CSS 尺寸
+    values: "CSS 尺寸"
     description: 侧栏插槽宽度。
     default: 240
   - name: header-height
     type: String | Number
-    values: CSS 尺寸
+    values: "CSS 尺寸"
     description: 页头插槽的可选固定高度。
     default: null
   - name: footer-height
     type: String | Number
-    values: CSS 尺寸
+    values: "CSS 尺寸"
     description: 页脚插槽的可选固定高度。
     default: null
   - name: gap
     type: String | Number
-    values: CSS 尺寸
+    values: "CSS 尺寸"
     description: 各布局表面之间的间距。
     default: 16
   - name: padding
     type: String | Number
-    values: CSS 尺寸
+    values: "CSS 尺寸"
     description: 应用外壳的内边距。
     default: 16
   - name: min-height
     type: String | Number
-    values: CSS 尺寸
+    values: "CSS 尺寸"
     description: 应用外壳的最小高度。
     default: 100%
   - name: responsive
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 小于 768px 时将侧栏与主内容纵向排列。
     default: true
   - name: sticky-header
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 滚动时保持页头表面可见。
     default: false
   - name: sticky-header-offset
     type: String | Number
-    values: CSS 尺寸
+    values: "CSS 尺寸"
     description: SLayout 页头吸顶时与视口顶部的距离；未设置时沿用布局 padding。
     default: null
   - name: sticky-header-z-index
     type: Number
-    values: number
+    values: "number"
     description: SLayout 吸顶页头的层级。
     default: 10
   - name: aside-outside-collapsible
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 为 aside-outside 工具面显示内置收起控件。
     default: true
   - name: aside-outside-collapsed
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 控制 SLayout 外挂工具的收起状态。
     default: false
   - name: sticky
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 为独立的 SLayoutHeader 开启吸顶。
     default: false
   - name: sticky-offset
     type: String | Number
-    values: CSS 尺寸
+    values: "CSS 尺寸"
     description: 独立 SLayoutHeader 吸顶时与视口顶部的距离。
     default: 0
   - name: z-index
     type: Number
-    values: number
+    values: "number"
     description: 独立 SLayoutHeader 吸顶时的层级。
     default: 10
   - name: direction
     type: String
-    values: horizontal | vertical
+    values: "horizontal | vertical"
     description: SLayoutContainer 的 Flex 方向。
     default: horizontal
   - name: wrap
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 允许 SLayoutContainer 的子项换行。
     default: false
   - name: align
     type: String
-    values: start | center | end | stretch
+    values: "start | center | end | stretch"
     description: SLayoutContainer 的交叉轴对齐方式。
     default: stretch
   - name: justify
     type: String
-    values: start | center | end | space-around | space-between | space-evenly
+    values: "start | center | end | space-around | space-between | space-evenly"
     description: SLayoutContainer 的主轴分布方式。
     default: start
   - name: size
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Header/Footer 高度或 Aside 宽度。
     default: null
   - name: outside-position
     type: String
-    values: start | end
+    values: "start | end"
     description: SLayoutAside 外挂插槽相对侧栏的位置。
     default: end
   - name: outside-collapsible
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 为 outside 插槽显示内置收起和展开控件。
     default: true
   - name: outside-collapsed
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 控制 SLayoutAside outside 插槽的收起状态。
     default: false
 description: '响应式应用外壳与可自由拼接的语义布局表面。'
 EVENTS:
-  - name: update:asideOutsideCollapsed / aside-outside-collapse
+  - name: update:asideOutsideCollapsed
+    type: Boolean
+    description: 外侧边栏区域折叠或展开时触发。
+  - name: aside-outside-collapse
     type: Boolean
     description: 外侧边栏区域折叠或展开时触发。
 ---

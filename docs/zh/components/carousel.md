@@ -1,128 +1,143 @@
 ---
 PROPS:
-  - name: model-value / v-model
+  - name: model-value
     type: Number
-    values: 轮播项下标
+    values: "轮播项下标"
+    description: 当前激活项下标。
+    default: '0'
+  - name: v-model
+    type: Number
+    values: "轮播项下标"
     description: 当前激活项下标。
     default: '0'
   - name: items
     type: CarouselItem[]
-    values: '{ name?, label?, src?, alt?, title?, description?, disabled?, ...customData }[]'
+    values: "{ name?, label?, src?, alt?, title?, description?, disabled?, ...customData }[]"
     description: 轮播数据；额外业务字段会原样传给 item 插槽。
     default: '[]'
   - name: height
     type: Number | String
-    values: CSS 高度
+    values: "CSS 高度"
     description: 轮播高度。
     default: '260'
   - name: radius
     type: Boolean | Number | String
-    values: true / false / CSS 长度
+    values: "true / false / CSS 长度"
     description: 统一控制 viewport 与所有轮播项的圆角；false 表示直角。
     default: 'true'
   - name: effect
     type: String
-    values: slide / fade / deck / orbit / prism
+    values: "slide / fade / deck / orbit / prism"
     description: 切换形态；deck、orbit 与 prism 使用 CSS 3D 透视。
     default: slide
   - name: direction
     type: String
-    values: horizontal / vertical
+    values: "horizontal / vertical"
     description: 轮播与控制器方向。
     default: horizontal
   - name: autoplay
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 是否自动切换。
     default: 'true'
   - name: interval
     type: Number
-    values: 毫秒
+    values: "毫秒"
     description: 自动切换间隔。
     default: '4000'
   - name: loop
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 是否首尾循环。
     default: 'true'
   - name: pause-on-hover
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 指针悬停时暂停自动播放。
     default: 'true'
   - name: arrow
     type: String
-    values: always / hover / never
+    values: "always / hover / never"
     description: 箭头展示时机。
     default: hover
   - name: indicator-position
     type: String
-    values: inside / outside / top / bottom / left / right / none
+    values: "inside / outside / top / bottom / left / right / none"
     description: 指示器位置。
     default: inside
   - name: indicator-type
     type: String
-    values: dot / line / number
+    values: "dot / line / number"
     description: 指示器形态。
     default: line
   - name: trigger
     type: String
-    values: click / hover
+    values: "click / hover"
     description: 指示器触发方式；为保证可访问性，点击始终可用。
     default: click
   - name: transition-duration
     type: Number
-    values: 毫秒
+    values: "毫秒"
     description: 所有效果共用的切换时长。
     default: '480'
   - name: easing
     type: String
-    values: CSS timing function
+    values: "CSS timing function"
     description: 切换插值函数。
     default: cubic-bezier(.22, .72, 0, 1)
   - name: deck-scale
     type: Number
-    values: 0 - 1
+    values: "0 - 1"
     description: deck 模式中第一层非激活卡片的缩放比例。
     default: '0.86'
   - name: deck-visible
     type: Number
-    values: 1 - 4
+    values: "1 - 4"
     description: deck 模式中每侧最多展示的非激活卡片层数。
     default: '2'
   - name: deck-blur
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: deck 模式中是否按距离虚化非激活卡片。
     default: 'false'
-  - name: perspective / depth
-    type: Number / Number
-    values: 像素
+  - name: perspective
+    type: Number
+    values: "像素"
     description: 3D 相机透视距离和 Z 轴层级距离。
-    default: '1200 / 150'
+    default: '1200'
+  - name: depth
+    type: Number
+    values: "像素"
+    description: 3D 相机透视距离和 Z 轴层级距离。
+    default: '150'
   - name: orbit-angle
     type: Number
-    values: 0 / 12 - 120
+    values: "0 / 12 - 120"
     description: orbit 模式中相邻卡片的角度间隔；0 自动按渲染项数均分整圆。
     default: '0'
   - name: orbit-max-visible
     type: Number
-    values: 整数，≥ 4
+    values: "整数，≥ 4"
     description: 环形轨道的基础可见卡片数；自动均分为偶数且仍有数据时会额外取 1 张真实卡，更大数据集使用带前后隐藏缓冲项的虚拟窗口。
     default: '10'
   - name: motion-blur
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 切换期间增加短暂动态模糊。
     default: 'false'
-  - name: draggable / touchable
-    type: Boolean / Boolean
-    values: true / false
+  - name: draggable
+    type: Boolean
+    values: "true"
     description: 开启鼠标拖动和触摸滑动。
-    default: 'false / true'
+    default: 'false'
+  - name: touchable
+    type: Boolean
+    values: "false"
+    description: 开启鼠标拖动和触摸滑动。
+    default: 'true'
   - name: keyboard
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 开启方向键、Home 和 End 键盘导航。
     default: 'true'
 EVENTS:
@@ -137,14 +152,20 @@ EXPOSES:
     description: 只读的当前轮播项下标 ref。
   - name: setActiveItem(index | name)
     description: 按下标或 item name 切换轮播项。
-  - name: prev / next
+  - name: prev
     description: 切换到上一个或下一个可用轮播项。
-  - name: play / pause
+  - name: next
+    description: 切换到上一个或下一个可用轮播项。
+  - name: play
+    description: 命令式恢复或暂停自动播放。
+  - name: pause
     description: 命令式恢复或暂停自动播放。
 SLOTS:
   - name: item
     description: 自定义轮播内容，接收 item、index、active 和相对 offset。
-  - name: prev / next
+  - name: prev
+    description: 自定义箭头内容，接收 disabled。
+  - name: next
     description: 自定义箭头内容，接收 disabled。
   - name: indicator
     description: 自定义指示器，接收 item、index 和 active。

@@ -6,7 +6,7 @@ import type Image from './image.vue'
 export const imageProps = buildProps({
   src: {
     type: String,
-    default: null,
+    default: '',
   },
   alt: { type: String, default: '' },
   fit: {
@@ -14,8 +14,23 @@ export const imageProps = buildProps({
     values: ['fill', 'contain', 'cover', 'none', 'scale-down'] as const,
     default: 'cover',
   },
+  position: { type: String, default: 'center' },
   width: { type: definePropType<string | number>([String, Number]) },
   height: { type: definePropType<string | number>([String, Number]) },
+  aspectRatio: {
+    type: definePropType<string | number>([String, Number]),
+    default: 1,
+  },
+  loading: {
+    type: String,
+    values: ['eager', 'lazy'] as const,
+    default: 'eager',
+  },
+  decoding: {
+    type: String,
+    values: ['auto', 'sync', 'async'] as const,
+    default: 'auto',
+  },
   previewSrcList: { type: definePropType<string[]>(Array), default: () => [] },
   initialIndex: { type: Number, default: 0 },
   preview: Boolean,

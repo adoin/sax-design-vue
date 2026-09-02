@@ -2,22 +2,27 @@
 PROPS:
   - name: href
     type: String
-    values: URL
+    values: "URL"
     description: Link destination.
     default: null
-  - name: type / status
+  - name: type
     type: String
-    values: primary | success | warning | danger | info
+    values: "primary | success | warning | danger | info"
+    description: Semantic color. `status` is an alias.
+    default: primary
+  - name: status
+    type: String
+    values: "primary | success | warning | danger | info"
     description: Semantic color. `status` is an alias.
     default: primary
   - name: underline
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Shows an underline on hover or keyboard focus.
     default: true
   - name: underline-effect
     type: String
-    values: default | slide | center | double | highlight
+    values: "default | slide | center | double | highlight"
     description: Underline effect with slide, center-out, double-line, and highlight variants. All variants support wrapped text.
     default: default
 description: 'Text link with semantic status.'

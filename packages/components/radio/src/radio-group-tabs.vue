@@ -157,7 +157,7 @@ const handleTabKeydown = async (event: KeyboardEvent, index: number) => {
         :options="activeTab.options"
         :columns="activeTab.columns || columns"
         :gap="gap"
-        :disabled="disabled || activeTab.disabled"
+        :disabled="Boolean(disabled || activeTab.disabled)"
         :disabled-values="activeTab.disabledValues"
         :name="`${tabsId}-${String(activeTab.value)}`"
         @update:model-value="handleGroupChange"

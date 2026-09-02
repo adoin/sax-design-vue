@@ -1,6 +1,24 @@
 @use 'common/var' as *;
 @use 'mixins/mixins' as *;
 
+.#{$namespace}-color-picker.is-square {
+  .#{$namespace}-color-picker__trigger,
+  .#{$namespace}-color-picker__swatch {
+    border-radius: 0;
+  }
+}
+
+.#{$namespace}-color-picker__panel.is-square {
+  border-radius: 0;
+
+  .#{$namespace}-color-picker__format,
+  .#{$namespace}-color-picker__field input,
+  .#{$namespace}-color-picker__presets,
+  .#{$namespace}-color-picker__preset {
+    border-radius: 0;
+  }
+}
+
 .s-color-picker {
   position: relative;
   display: inline-flex;
@@ -30,10 +48,8 @@
   cursor: pointer;
   @include control-surface-shadow;
   transition:
-    background var(--sax-motion-duration-fast)
-      var(--sax-motion-easing-standard),
-    box-shadow var(--sax-motion-duration-fast)
-      var(--sax-motion-easing-standard);
+    background var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+    box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 
   &:hover {
     background: getColor(background);

@@ -1,19 +1,39 @@
 ---
 description: 'Show temporary, programmatic notifications outside the main flow.'
 PROPS:
-  - name: dangerous-html-string / icon-size / offset / z-index
-    type: Boolean / Number / Number / Number
-    values: true | false / pixels / layer number
+  - name: dangerous-html-string
+    type: Boolean
+    values: "true | false / pixels / layer number"
     description: Configure HTML rendering, icon size, viewport offset and stacking order.
-    default: '-'
-  - name: show-close / on-click-close
-    type: Boolean / Function
-    values: true | false / close callback
+    default: null
+  - name: icon-size
+    type: Number
+    values: "true | false / pixels / layer number"
+    description: Configure HTML rendering, icon size, viewport offset and stacking order.
+    default: null
+  - name: offset
+    type: Number
+    values: "true | false / pixels / layer number"
+    description: Configure HTML rendering, icon size, viewport offset and stacking order.
+    default: null
+  - name: z-index
+    type: Number
+    values: "true | false / pixels / layer number"
+    description: Configure HTML rendering, icon size, viewport offset and stacking order.
+    default: null
+  - name: show-close
+    type: Boolean
+    values: "true | false"
     description: Control close affordance and handle close interaction.
-    default: 'true / -'
+    default: 'true'
+  - name: on-click-close
+    type: Function
+    values: "close callback"
+    description: Control close affordance and handle close interaction.
+    default: null
   - name: title
     type: String
-    values: String
+    values: "String"
     description: Add a title to the notification.
     default: null
     link: null
@@ -26,7 +46,7 @@ PROPS:
       })
   - name: content
     type: String, Component
-    values: String, VNode
+    values: "String, VNode"
     description: Add the content to the notification.
     default: null
     link: null
@@ -39,7 +59,7 @@ PROPS:
       })
   - name: position
     type: String
-    values: bottom-right,top-right,top-center,top-left,bottom-left,bottom-center
+    values: "bottom-right,top-right,top-center,top-left,bottom-left,bottom-center"
     description: Change the position of the component.
     default: bottom-right
     link: null
@@ -53,7 +73,7 @@ PROPS:
       })
   - name: color
     type: String
-    values: Sax Design colors, rgb, hex
+    values: "Sax Design colors, rgb, hex"
     description: Change the base color of the entire component.
     default: null
     link: null
@@ -67,7 +87,7 @@ PROPS:
       })
   - name: border
     type: String
-    values: Sax Design colors, rgb, hex
+    values: "Sax Design colors, rgb, hex"
     description: Add a color border to the notification.
     default: null
     link: null
@@ -81,7 +101,7 @@ PROPS:
       })
   - name: icon
     type: String
-    values: String
+    values: "String"
     description: Add an icon to the notification.
     default: null
     link: null
@@ -95,7 +115,7 @@ PROPS:
       })
   - name: duration
     type: Number, StringNumber
-    values: Number, none
+    values: "Number, none"
     description: Determine the time until the notification is hidden (none determines not to hide).
     default: 4500 (4.5s)
     link: null
@@ -109,7 +129,7 @@ PROPS:
       })
   - name: onClick
     type: function
-    values: function
+    values: "function"
     description: function that is executed by clicking on the notification.
     default: null
     link: null
@@ -125,7 +145,7 @@ PROPS:
       })
   - name: buttonClose
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Determine if the notification has the close button.
     default: true
     link: null
@@ -139,7 +159,7 @@ PROPS:
       })
   - name: flat
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Change the notification style to flat.
     default: false
     link: null
@@ -157,7 +177,7 @@ PROPS:
       </script>
   - name: onDestroy
     type: () => void
-    values: Function
+    values: "Function"
     description: Function that is executed when the notification is destroyed.
     default: null
     link: null
@@ -175,7 +195,7 @@ PROPS:
       </script>
   - name: sticky
     type: boolean
-    values: true,false
+    values: "true,false"
     description: Change the position of the notification attached to the nearest corner.
     default: false
     link: null
@@ -193,7 +213,7 @@ PROPS:
       </script>
   - name: square
     type: boolean
-    values: true,false
+    values: "true,false"
     description: Determine if the notification is square and remove the border-radius.
     default: false
     link: null
@@ -211,7 +231,7 @@ PROPS:
       </script>
   - name: width
     type: String
-    values: 100%, auto
+    values: "100%, auto"
     description: Determine the width of the notification.
     default: 340px
     link: null
@@ -229,7 +249,7 @@ PROPS:
       </script>
   - name: loading
     type: boolean
-    values: true,false
+    values: "true,false"
     description: Determine if the notification has a loading animation.
     default: false
     link: null
@@ -247,7 +267,7 @@ PROPS:
       </script>
   - name: progressAuto
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Add a progress bar to the notification.
     default: null
     link: null
@@ -265,7 +285,7 @@ PROPS:
       </script>
   - name: notPadding
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Remove padding from notification.
     default: 20px
     link: null
@@ -283,7 +303,7 @@ PROPS:
       </script>
   - name: clickClose
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Determine if clicking on the notification closes.
     default: false
     link: null
@@ -301,7 +321,7 @@ PROPS:
       </script>
   - name: content
     type: Vue Component
-    values: Vnode,String,ComponentPublicInstance
+    values: "Vnode,String,ComponentPublicInstance"
     description: Change the content of the notification to the one provided as a value (something similar to a vue slot).
     default: null
     link: null
@@ -320,7 +340,7 @@ PROPS:
       </script>
   - name: instance.close()
     type: function
-    values: null
+    values: "null"
     description: Close the notificationn.
     default: null
     link: null
@@ -342,7 +362,7 @@ PROPS:
 
   - name: custom-class
     type: String
-    values: String
+    values: "String"
     description: Add a custom class to the notification.
     default: null
     link: null

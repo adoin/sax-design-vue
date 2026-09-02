@@ -1,9 +1,18 @@
 ---
 description: '在可折叠侧边栏中组织次级导航。'
 PROPS:
-  - name: open/v-model:open
+  - name: open
     type: Boolean
-    values: true,false
+    values: "true"
+    description: 是否显示组件。
+    default: false
+    link: null
+    usage: '#open'
+    code: null
+
+  - name: v-model:open
+    type: Boolean
+    values: "false"
     description: 是否显示组件。
     default: false
     link: null
@@ -12,7 +21,7 @@ PROPS:
 
   - name: v-model
     type: String
-    values: id
+    values: "id"
     description: 当前激活的项目。
     default: null
     link: null
@@ -21,7 +30,7 @@ PROPS:
 
   - name: absolute
     type: boolean
-    values: true,false
+    values: "true,false"
     description: 是否使用绝对定位。
     default: false
     link: null
@@ -30,7 +39,7 @@ PROPS:
 
   - name: reduce
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 是否为宽度 50px 的收起状态。
     default: false
     link: null
@@ -39,7 +48,7 @@ PROPS:
 
   - name: hover-expand
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 鼠标进入侧栏时展开，离开时收起。
     default: false
     link: null
@@ -48,7 +57,7 @@ PROPS:
 
   - name: shape
     type: string
-    values: square
+    values: "square"
     description: 是否移除组件圆角。
     default: false
     link: null
@@ -57,7 +66,7 @@ PROPS:
 
   - name: not-shadow
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 移除侧边栏阴影。
     default: false
     link: null
@@ -66,7 +75,7 @@ PROPS:
 
   - name: background
     type: String
-    values: Theme colors, RGB, HEX
+    values: "Theme colors, RGB, HEX"
     description: 设置侧边栏背景颜色。
     default: false
     link: null
@@ -75,7 +84,7 @@ PROPS:
 
   - name: text-white
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 将文本颜色改为白色。
     default: false
     link: null
@@ -84,7 +93,7 @@ PROPS:
 
   - name: not-line-active
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 移除项目激活指示线。
     default: false
     link: null
@@ -93,7 +102,7 @@ PROPS:
 
   - name: s-sidebar-item:to
     type: String
-    values: url
+    values: "url"
     description: 生成新的 vue-router 路由。
     default: null
     link: null
@@ -102,7 +111,7 @@ PROPS:
 
   - name: s-sidebar-item:href
     type: String
-    values: url
+    values: "url"
     description: 生成新路由。
     default: null
     link: null
@@ -111,7 +120,7 @@ PROPS:
 
   - name: right
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 是否将组件定位在右侧。
     default: null
     link: null
@@ -128,7 +137,7 @@ EVENTS:
 SLOTS:
   - name: logo
     type: slot
-    values: null
+    values: "null"
     description: 在整个侧边栏顶部添加元素。
     default: null
     link: null
@@ -137,7 +146,7 @@ SLOTS:
 
   - name: footer
     type: slot
-    values: null
+    values: "null"
     description: 在侧边栏底部添加元素。
     default: null
     link: null
@@ -146,7 +155,7 @@ SLOTS:
 
   - name: header
     type: slot
-    values: null
+    values: "null"
     description: 在 Logo 下方、项目上方添加元素。
     default: null
     link: null
@@ -155,7 +164,7 @@ SLOTS:
 
   - name: s-sidebar-item#icon
     type: slot
-    values: null
+    values: "null"
     description: 用于添加图标或代表字母的区域。
     default: null
     link: null

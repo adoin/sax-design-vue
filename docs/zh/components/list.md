@@ -2,7 +2,7 @@
 PROPS:
   - name: title
     type: String
-    values: String
+    values: "String"
     description: 列表头部标题（s-list-header）。
     default: null
     link: null
@@ -10,7 +10,7 @@ PROPS:
 
   - name: subtitle
     type: String
-    values: String
+    values: "String"
     description: 列表副标题。
     default: null
     link: null
@@ -18,7 +18,7 @@ PROPS:
 
   - name: icon
     type: String
-    values: Material icon
+    values: "Material icon"
     description: 列表项或标题图标。
     default: null
     link: null
@@ -26,7 +26,7 @@ PROPS:
 
   - name: color
     type: String
-    values: primary, success, danger
+    values: "primary, success, danger"
     description: 头部颜色。
     default: primary
     link: null

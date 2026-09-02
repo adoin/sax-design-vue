@@ -102,7 +102,13 @@
     </Transition>
   </Teleport>
 
-  <div ref="sourceRef" class="source-cache" aria-hidden="true">
+  <ExamplePlaygroundDialog
+    v-model:open="playgroundOpen"
+    :example="openedExample"
+    :return-focus-to="playgroundReturnFocus"
+  />
+
+  <div ref="source" class="source-cache" aria-hidden="true">
     <slot name="template" />
     <slot name="script" />
     <slot name="style" />
@@ -110,30 +116,25 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, useSlots } from 'vue'
-import { useRouteLocale } from '@vuepress/client'
+import { computed, shallowRef, useSlots, useTemplateRef } from 'vue'
 import { useClipboard } from '@vueuse/core'
 
 import CodeCopied from '../components/CodeCopied.vue'
 import { useDocLocaleUi } from '../composables/docLocale'
+import ExamplePlaygroundDialog from './ExamplePlaygroundDialog.vue'
+import type { DocExampleRecord } from '../type'
 
 type CodeSection = 'template' | 'script' | 'style' | 'all'
 
-interface DocExampleRecord {
-  id: string
-  component: string
-  section: string
-  title: string
-  source: string
-}
-
 const slots = useSlots()
-const routeLocale = useRouteLocale()
 const { t } = useDocLocaleUi()
-const sourceRef = ref<HTMLElement>()
-const codeOpen = ref(false)
-const activeSection = ref<CodeSection>('template')
-const openedExample = ref<DocExampleRecord | null>(null)
+const sourceRef = useTemplateRef<HTMLElement>('source')
+const codeOpen = shallowRef(false)
+const activeSection = shallowRef<CodeSection>('template')
+const openedExample = shallowRef<DocExampleRecord | null>(null)
+const codeTrigger = shallowRef<HTMLElement | null>(null)
+const playgroundOpen = shallowRef(false)
+const playgroundReturnFocus = shallowRef<HTMLElement | null>(null)
 const { copied, copy } = useClipboard({ legacy: true })
 
 defineProps<{
@@ -191,6 +192,7 @@ const getDocExample = (event?: Event): DocExampleRecord => {
 }
 
 const openCode = (event: Event) => {
+  codeTrigger.value = event.currentTarget as HTMLElement
   openedExample.value = getDocExample(event)
   activeSection.value = sections.value[0]?.id || 'template'
   codeOpen.value = true
@@ -209,7 +211,8 @@ const openPlayground = (event?: Event) => {
   if (typeof window === 'undefined') return
 
   const trigger = event?.currentTarget as HTMLElement | null
-  const example = trigger?.closest('.card')
+  const openedFromCard = Boolean(trigger?.closest('.card'))
+  const example = openedFromCard
     ? getDocExample(event)
     : openedExample.value || getDocExample()
 
@@ -219,10 +222,11 @@ const openPlayground = (event?: Event) => {
       JSON.stringify(example),
     )
   }
-  const exampleId = encodeURIComponent(example.id)
-  window.location.assign(
-    `${routeLocale.value}guide/example-playground.html?exampleId=${exampleId}`,
-  )
+
+  openedExample.value = example
+  playgroundReturnFocus.value = openedFromCard ? trigger : codeTrigger.value
+  codeOpen.value = false
+  playgroundOpen.value = true
 }
 </script>
 

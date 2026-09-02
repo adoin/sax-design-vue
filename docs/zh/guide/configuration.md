@@ -97,6 +97,34 @@ SSR / SSG 可以直接渲染日期组件。服务端与客户端应配置相同�
 
 <card>
 
+## 全局组件外形
+
+在 `SConfigProvider` 上设置 `shape="square"`，支持外形配置的控件及其弹出层会默认使用直角。组件自身的 `shape` 优先级更高，因此仍可按需局部覆盖为 `rounded`，或使用组件支持的 `circle`、`pill`。
+
+<command>
+
+```vue
+<template>
+  <s-config-provider shape="square">
+    <s-input placeholder="继承全局直角" />
+    <s-select placeholder="继承全局直角" />
+    <s-button>继承全局直角</s-button>
+
+    <s-input shape="rounded" placeholder="局部恢复圆角" />
+  </s-config-provider>
+</template>
+```
+
+</command>
+
+未配置全局值时仍默认为 `rounded`。嵌套的 Provider 会继承上层 `shape`，只有显式传入时才会覆盖。
+
+完整安装组件库时也可以一次性配置：`app.use(SaxDesignVue, { shape: 'square' })`。
+
+</card>
+
+<card>
+
 ## 圆角与动效令牌
 
 下面的全局令牌用于统一组件几何和动效。`--sax-radius` 是主圆角：核心输入框、菜单、弹出层、树、按钮、分页等共享控件会通过派生变量继承它。

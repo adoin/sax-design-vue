@@ -1,2 +1,8 @@
 import '@vuesax-alpha/components/base/style/css'
+import '@vuesax-alpha/components/button/style/css'
+import '@vuesax-alpha/components/checkbox/style/css'
+import '@vuesax-alpha/components/radio/style/css'
+import '@vuesax-alpha/components/icon/style/css'
+import '@vuesax-alpha/components/popper/style/css'
+import '@vuesax-alpha/components/pagination/style/css'
 import '@vuesax-alpha/theme-chalk/vs-table.css'

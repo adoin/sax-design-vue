@@ -59,7 +59,7 @@ $clearableSafeArea: 64px;
     }
   }
 
-  @include e(chips) {
+  @include e(tags) {
     background: getColor($color, 0.05);
     color: getColor($color, 1);
     &:hover {
@@ -308,7 +308,7 @@ $clearableSafeArea: 64px;
       }
     }
   }
-  @include e(chips) {
+  @include e(tags) {
     width: 100%;
     position: absolute;
     z-index: 1;
@@ -328,7 +328,7 @@ $clearableSafeArea: 64px;
     padding-right: $suffixSafeArea;
   }
   @include when(multiple) {
-    @include e(chips) {
+    @include e(tags) {
       position: relative;
     }
 
@@ -474,7 +474,7 @@ $clearableSafeArea: 64px;
       background: getColor('background');
       box-shadow: 0 5px 25px -4px getColor(black, getCssVar(shadow-opacity));
     }
-    @include e(chips) {
+    @include e(tags) {
       background: getColor('background');
       transform: translateY(-4px);
     }
@@ -531,7 +531,7 @@ $clearableSafeArea: 64px;
       margin-top: $iconActiveMargin;
       right: $clearableRight;
     }
-    @include e(chips) {
+    @include e(tags) {
       border-radius: var(--sax-radius);
       background: getColor('background');
       transform: translate(0, -4px);
@@ -622,7 +622,7 @@ $clearableSafeArea: 64px;
       padding-right: $clearableSafeArea;
     }
 
-    @include e(chips) {
+    @include e(tags) {
       padding-right: $clearableSafeArea;
     }
 
@@ -684,6 +684,23 @@ $clearableSafeArea: 64px;
   }
 }
 
+.#{$namespace}-select.is-square {
+  .#{$namespace}-select__input,
+  .#{$namespace}-select__tags,
+  .#{$namespace}-select__clearable {
+    border-radius: 0;
+  }
+}
+
+.#{$namespace}-select__content.is-square {
+  border-radius: 0;
+
+  .#{$namespace}-select__option,
+  .#{$namespace}-select__selection-tool {
+    border-radius: 0;
+  }
+}
+
 @include b(option-group) {
   padding-left: 10px;
   border-bottom: 2px solid getColor(gray-1);
@@ -729,7 +746,7 @@ $clearableSafeArea: 64px;
 }
 
 @include b(select) {
-  @include b(chip) {
+  @include b(tag) {
     position: relative;
     margin: 1px 3px 2px 3px;
     border-radius: var(--sax-radius);

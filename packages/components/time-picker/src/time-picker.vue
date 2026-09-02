@@ -10,13 +10,15 @@
     :show-arrow="false"
     :disabled="disabled"
     :offset="4"
-    :popper-class="ns.e('popper')"
+    :popper-class="[
+      ns.e('popper'),
+      ns.is('square', resolvedShape === 'square'),
+    ]"
     :popper-style="themeStyle"
   >
     <div
-      :class="[ns.b(), ns.is('block', block)]"
+      :class="[ns.b(), ns.is('block', block), ns.is(resolvedShape)]"
       :style="themeStyle"
-      @mousedown.prevent
     >
       <s-input
         ref="inputRef"
@@ -26,6 +28,7 @@
         :label-float="labelFloat"
         :color="color"
         :size="size"
+        :shape="resolvedShape"
         :disabled="disabled"
         :readonly="!editable || readonly"
         :clearable="clearable && !disabled"
@@ -70,7 +73,12 @@ import SButton from '@vuesax-alpha/components/button'
 import SInput from '@vuesax-alpha/components/input'
 import SPopper from '@vuesax-alpha/components/popper'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import { useGlobalConfig, useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import {
+  useGlobalConfig,
+  useLocale,
+  useNamespace,
+  useShape,
+} from '@vuesax-alpha/hooks'
 import {
   getTimeZoneNow,
   getVsColor,
@@ -88,6 +96,7 @@ const props = defineProps(timePickerProps)
 const emit = defineEmits(timePickerEmits)
 
 const ns = useNamespace('time-picker')
+const resolvedShape = useShape()
 const { t } = useLocale()
 const globalTimezone = useGlobalConfig('timezone')
 const globalAutoApplyNow = useGlobalConfig('autoApplyNow')

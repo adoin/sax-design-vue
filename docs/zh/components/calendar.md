@@ -2,117 +2,137 @@
 PROPS:
   - name: size
     type: "'small' | 'medium' | 'large'"
-    values: small / medium / large
+    values: "small / medium / large"
     description: 日历视觉密度。默认 medium；large 保留原本较宽松的单元格尺寸。
     default: medium
   - name: events
     type: CalendarEvent[]
-    values: '{ id, title, start, end?, allDay?, color?, display?, data? }[]'
+    values: "{ id, title, start, end?, allDay?, color?, display?, data? }[]"
     description: 日程数据。支持全天日期和本地 ISO 时间段。`display` 可覆盖单条日程的紧凑时间标识或分段类型。
     default: '[]'
   - name: event-data
     type: unknown[]
-    values: 业务自有日程数据
+    values: "业务自有日程数据"
     description: 不透明的业务日程记录；通过 event-adapter 映射为展示事件。
     default: '[]'
   - name: event-adapter
     type: Function
-    values: '(data, { view, start, end }) => CalendarEvent[]'
+    values: "(data, { view, start, end }) => CalendarEvent[]"
     description: 将 event-data 映射为 Calendar 渲染的扁平事件，重复规则与业务逻辑仍留在应用侧。
-    default: —
+    default: null
   - name: event-display
     type: Function
-    values: '(event, { date, view, allDay, segment }) => string | { title?, time?, segment? }'
+    values: "(event, { date, view, allDay, segment }) => string | { title?, time?, segment? }"
     description: 自定义紧凑日程标签。默认区分时间点、当天时间段、连续时间段开头（`08:00~`）和结尾（`~18:00`）。
-    default: —
+    default: null
   - name: event-limit
     type: Number
-    values: 0+
+    values: "0+"
     description: 月视图/全天格直接展示的日程数。默认只展示最早一条，剩余日程通过 `+n` 打开。
     default: '1'
-  - name: date / v-model:date
+  - name: date
     type: String
-    values: YYYY-MM-DD
+    values: "YYYY-MM-DD"
     description: 控制当前展示的月、周、日，不影响日期选中值。
     default: 当前日期
-  - name: view / v-model:view
+  - name: v-model:date
+    type: String
+    values: "YYYY-MM-DD"
+    description: 控制当前展示的月、周、日，不影响日期选中值。
+    default: 当前日期
+  - name: view
     type: month | week | day
-    values: month / week / day
+    values: "month / week / day"
+    description: 当前日程视图。
+    default: month
+  - name: v-model:view
+    type: month | week | day
+    values: "month / week / day"
     description: 当前日程视图。
     default: month
   - name: views
     type: Array
-    values: month / week / day
+    values: "month / week / day"
     description: 可用视图。仅传一个视图时锁定该视图并隐藏切换器。
     default: "['month', 'week', 'day']"
   - name: editable
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 开启后可将定时日程拖拽至新的日期和时间。
     default: 'false'
-  - name: hour-start / hour-end
+  - name: hour-start
     type: Number
-    values: 0 - 24
+    values: "0 - 24"
     description: 周视图和日视图的时间网格范围。
-    default: '0 / 24'
+    default: '0'
+  - name: hour-end
+    type: Number
+    values: "0 - 24"
+    description: 周视图和日视图的时间网格范围。
+    default: '24'
   - name: hour-format
     type: "'12' | '24'"
-    values: 12 / 24
+    values: "12 / 24"
     description: 周、日视图的小时显示格式；保存值始终使用本地 ISO 时间。
     default: '24'
   - name: schedule-height
     type: Number
-    values: pixels
+    values: "pixels"
     description: 周、日视图的可滚动高度；设为 0 时直接展示全部小时。
     default: '640'
   - name: event-color
     type: String
-    values: CSS color
+    values: "CSS color"
     description: 日程未指定颜色时使用的默认颜色。
     default: primary
   - name: context-menu-items
     type: ContextMenuItem[]
-    values: '{ label, value?, icon?, disabled?, divided? }[]'
+    values: "{ label, value?, icon?, disabled?, divided? }[]"
     description: 事件、日期、时间格共用的静态右键菜单项。
     default: '[]'
   - name: get-context-menu-items
     type: Function
-    values: '(context) => ContextMenuItem[]'
+    values: "(context) => ContextMenuItem[]"
     description: 根据被右键的事件、日期或时间动态返回菜单项。参数为 { type, date, event? }。
-    default: —
+    default: null
   - name: context-menu-min-width
     type: Number
-    values: pixels
+    values: "pixels"
     description: 右键菜单面板最小宽度。
     default: '184'
-  - name: model-value/v-model
+  - name: model-value
     type: String | String[]
-    values: YYYY-MM-DD
+    values: "YYYY-MM-DD"
+    description: 当前日期或日期范围。
+    default: "''"
+  - name: v-model
+    type: String | String[]
+    values: "YYYY-MM-DD"
     description: 当前日期或日期范围。
     default: "''"
   - name: range
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 选择日期范围。
     default: 'false'
   - name: multiple
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 任意日期可点击选中或取消；拖拽和 Shift 点击会追加连续日期区间。
     default: 'false'
   - name: first-day-of-week
     type: Number
-    values: 0 - 6
+    values: "0 - 6"
     description: 每周起始日，0 为周日，1 为周一。
     default: '1'
   - name: disabled-date
     type: Function
-    values: '(date) => boolean'
+    values: "(date) => boolean"
     description: 禁用匹配的日期。
-    default: —
+    default: null
   - name: show-week-number
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 显示 ISO 周序号。
     default: 'false'
 EVENTS:
@@ -128,9 +148,13 @@ EVENTS:
     description: 拖拽定时日程后返回 { event, start, end, source }。
   - name: cell-click
     description: 点击空白日期/时间格返回 YYYY-MM-DD 或 YYYY-MM-DDTHH:mm。
-  - name: view-change / panel-change
+  - name: view-change
     description: 当前视图和展示日期变更。
-  - name: context-menu / context-menu-select
+  - name: panel-change
+    description: 当前视图和展示日期变更。
+  - name: context-menu
+    description: 菜单打开上下文与菜单项选中事件。选中事件返回 { item, context }；context.dates 为当前选中的日期范围。
+  - name: context-menu-select
     description: 菜单打开上下文与菜单项选中事件。选中事件返回 { item, context }；context.dates 为当前选中的日期范围。
 EXPOSES:
   - name: clearSelection

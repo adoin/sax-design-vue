@@ -8,6 +8,9 @@ import { selectProps } from '../src/select'
 
 const PopperStub = defineComponent({
   name: 'SPopper',
+  props: {
+    popperClass: [String, Array, Object],
+  },
   setup(_, { expose }) {
     expose({
       contentRef: undefined,
@@ -67,7 +70,7 @@ const mountSelect = (
       stubs: {
         SPopper: PopperStub,
         SScrollbar: { template: '<div><slot /></div>' },
-        SChip: { template: '<span><slot /></span>' },
+        STag: { template: '<span><slot /></span>' },
         SIcon: { template: '<i class="icon-stub" />' },
         IconClose: { template: '<i />' },
         IconLoading: { template: '<i />' },
@@ -82,8 +85,30 @@ afterEach(() => {
 })
 
 describe('Select enhanced capabilities', () => {
+  it('keeps square geometry on the trigger and popup while open', async () => {
+    const wrapper = mountSelect({
+      modelValue: '',
+      shape: 'square',
+      options: [{ value: 'design', label: 'Design' }],
+    })
+    await nextTick()
+
+    expect(wrapper.get('.s-select').classes()).toContain('is-square')
+
+    await wrapper.get('.s-select').trigger('mouseenter')
+    await wrapper.get('.s-select').trigger('click')
+    await nextTick()
+
+    expect(wrapper.get('.s-select').classes()).toEqual(
+      expect.arrayContaining(['is-square', 'is-open']),
+    )
+    expect(wrapper.getComponent(PopperStub).props('popperClass')).toEqual(
+      expect.arrayContaining(['s-select__content', 'is-square']),
+    )
+  })
+
   it('collapses overflowing multiple tags by default', () => {
-    expect(selectProps.collapseChips.default).toBe(true)
+    expect(selectProps.collapseTags.default).toBe(true)
   })
 
   it('uses cached options to restore a selected label', async () => {

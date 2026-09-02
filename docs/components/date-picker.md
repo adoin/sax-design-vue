@@ -1,29 +1,94 @@
 ---
 description: 'Select dates, date ranges, and date-time values.'
 PROPS:
-  - name: color / size / label-float / label / start-label / end-label
+  - name: shape
+    type: String
+    values: "rounded | square"
+    description: Apply rounded or square geometry to the input and picker panel.
+    default: rounded
+    usage: '#shape'
+  - name: color
     type: String / Boolean
-    values: Theme color / small | default | large / label text
+    values: "Theme color / small | default | large / label text"
     description: Share input color, density, and floating labels across single and range date triggers.
-    default: '-'
+    default: null
     link: null
     usage: '#default'
-  - name: auto-close / clearable / separator
-    type: Boolean / Boolean / String
-    values: true | false / date range separator
+  - name: size
+    type: String / Boolean
+    values: "Theme color / small | default | large / label text"
+    description: Share input color, density, and floating labels across single and range date triggers.
+    default: null
+    link: null
+    usage: '#default'
+  - name: label-float
+    type: String / Boolean
+    values: "Theme color / small | default | large / label text"
+    description: Share input color, density, and floating labels across single and range date triggers.
+    default: null
+    link: null
+    usage: '#default'
+  - name: label
+    type: String / Boolean
+    values: "Theme color / small | default | large / label text"
+    description: Share input color, density, and floating labels across single and range date triggers.
+    default: null
+    link: null
+    usage: '#default'
+  - name: start-label
+    type: String / Boolean
+    values: "Theme color / small | default | large / label text"
+    description: Share input color, density, and floating labels across single and range date triggers.
+    default: null
+    link: null
+    usage: '#default'
+  - name: end-label
+    type: String / Boolean
+    values: "Theme color / small | default | large / label text"
+    description: Share input color, density, and floating labels across single and range date triggers.
+    default: null
+    link: null
+    usage: '#default'
+  - name: auto-close
+    type: Boolean
+    values: "true | false / date range separator"
     description: Control close timing, clear action availability, and range text separator.
-    default: 'true / true / -'
+    default: 'true'
+    link: null
+    usage: '#default'
+    code: null
+  - name: clearable
+    type: Boolean
+    values: "true | false / date range separator"
+    description: Control close timing, clear action availability, and range text separator.
+    default: 'true'
+    link: null
+    usage: '#default'
+    code: null
+  - name: separator
+    type: String
+    values: "true | false / date range separator"
+    description: Control close timing, clear action availability, and range text separator.
+    default: null
     link: null
     usage: '#default'
     code: null
   - name: auto-apply-now
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Commit the current time and close after clicking Now; a component value overrides ConfigProvider.
     default: ConfigProvider or the picker's existing behavior
-  - name: v-model / model-value
-    type: Date | string | number | [Date, Date]
-    values:
+  - name: v-model
+    type: Date | string | number | [Date
+    values: ""
+    description: binding date value
+    default: false
+    link: null
+    usage: '#default'
+    code: null
+  - name: model-value
+    type: Date]
+    values: ""
     description: binding date value
     default: false
     link: null
@@ -31,15 +96,31 @@ PROPS:
     code: null
   - name: type
     type: String
-    values: date | datetime | daterange | datetimerange | month | quarter | year | week
+    values: "date | datetime | daterange | datetimerange | month | quarter | year | week"
     description: picker type
     default: date
     link: null
     usage: '#types'
     code: null
-  - name: label-format / value-format / time-format
+  - name: label-format
     type: String
-    values: Day.js format tokens | timestamp
+    values: "Day.js format tokens | timestamp"
+    description: Control displayed text, emitted value, or datetime time segment independently; timestamp emits milliseconds as a number.
+    default: type-based
+    link: null
+    usage: '#date-and-time'
+    code: null
+  - name: value-format
+    type: String
+    values: "Day.js format tokens | timestamp"
+    description: Control displayed text, emitted value, or datetime time segment independently; timestamp emits milliseconds as a number.
+    default: type-based
+    link: null
+    usage: '#date-and-time'
+    code: null
+  - name: time-format
+    type: String
+    values: "Day.js format tokens | timestamp"
     description: Control displayed text, emitted value, or datetime time segment independently; timestamp emits milliseconds as a number.
     default: type-based
     link: null
@@ -47,71 +128,133 @@ PROPS:
     code: null
   - name: timezone
     type: String
-    values: IANA zone such as Asia/Shanghai
+    values: "IANA zone such as Asia/Shanghai"
     description: Interpret wall time and convert absolute values; a component value overrides ConfigProvider.
     default: ConfigProvider or system zone
     usage: '#timezone'
-  - name: multiple / limit-count
-    type: Boolean / Number
-    values:
+  - name: multiple
+    type: Boolean
+    values: ""
     description: Toggle multiple values and optionally cap the selected count.
-    default: 'false / -'
+    default: 'false'
     link: null
     usage: '#other-types'
     code: null
-  - name: show-clear-button / show-confirm-button
+  - name: limit-count
+    type: Number
+    values: ""
+    description: Toggle multiple values and optionally cap the selected count.
+    default: null
+    link: null
+    usage: '#other-types'
+    code: null
+  - name: show-clear-button
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Control footer action visibility.
     default: true
     link: null
     usage: '#date-and-time'
     code: null
-  - name: min-date / max-date / start-date / end-date
-    type: Date | string | number
-    values:
-    description: Restrict selectable dates with inclusive lower and upper bounds.
-    default: '-'
-    link: null
-    usage: '#default'
-    code: null
-  - name: default-date / default-time
-    type: Date | string | number | [DateLike, DateLike]
-    values:
-    description: Set initial panel date and time when the model is empty.
-    default: '-'
+  - name: show-confirm-button
+    type: Boolean
+    values: "true | false"
+    description: Control footer action visibility.
+    default: true
     link: null
     usage: '#date-and-time'
     code: null
-  - name: start-day / select-day
+  - name: min-date
+    type: Date | string | number
+    values: ""
+    description: Restrict selectable dates with inclusive lower and upper bounds.
+    default: null
+    link: null
+    usage: '#default'
+    code: null
+  - name: max-date
+    type: Date | string | number
+    values: ""
+    description: Restrict selectable dates with inclusive lower and upper bounds.
+    default: null
+    link: null
+    usage: '#default'
+    code: null
+  - name: start-date
+    type: Date | string | number
+    values: ""
+    description: Restrict selectable dates with inclusive lower and upper bounds.
+    default: null
+    link: null
+    usage: '#default'
+    code: null
+  - name: end-date
+    type: Date | string | number
+    values: ""
+    description: Restrict selectable dates with inclusive lower and upper bounds.
+    default: null
+    link: null
+    usage: '#default'
+    code: null
+  - name: default-date
+    type: Date | string | number | [DateLike
+    values: ""
+    description: Set initial panel date and time when the model is empty.
+    default: null
+    link: null
+    usage: '#date-and-time'
+    code: null
+  - name: default-time
+    type: DateLike]
+    values: ""
+    description: Set initial panel date and time when the model is empty.
+    default: null
+    link: null
+    usage: '#date-and-time'
+    code: null
+  - name: start-day
     type: Number
-    values: 0-6
+    values: "0-6"
     description: Set the first weekday and the returned day for week selection.
-    default: '0 / -'
+    default: '0'
+    link: null
+    usage: '#other-types'
+    code: null
+  - name: select-day
+    type: Number
+    values: "0-6"
+    description: Set the first weekday and the returned day for week selection.
+    default: null
     link: null
     usage: '#other-types'
     code: null
   - name: time-config
     type: Object
-    values: hours | minutes | seconds | *DisabledMethod
+    values: "hours | minutes | seconds | *DisabledMethod"
     description: Configure time-column values and disabled options.
-    default: '-'
+    default: null
     link: null
     usage: '#date-and-time'
     code: null
   - name: popup-config
     type: Object
-    values: placement | transfer | width | height | zIndex | className
+    values: "placement | transfer | width | height | zIndex | className"
     description: Configure popup placement, mounting, size, layer and class.
-    default: '-'
+    default: null
     link: null
     usage: '#default'
     code: null
 EVENTS:
-  - name: update:modelValue / change
+  - name: update:modelValue
     type: DatePickerValue
     description: Fire when the selected date or date range is committed.
-  - name: focus / blur
+  - name: change
+    type: DatePickerValue
+    description: Fire when the selected date or date range is committed.
+  - name: focus
+    type: FocusEvent
+    description: Fire when the date input gains or loses focus.
+  - name: blur
     type: FocusEvent
     description: Fire when the date input gains or loses focus.
   - name: clear
@@ -146,6 +289,34 @@ labels for single and range triggers.
 <template #style>
 
 @[code{28-34}](../.vuepress/components/date-picker/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Shape
+
+Use `shape="square"` to apply square geometry to both the input trigger and teleported calendar panel.
+
+<template #example><date-picker-shape /></template>
+
+<template #template>
+
+@[code{8-23}](../.vuepress/components/date-picker/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/date-picker/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{25-37}](../.vuepress/components/date-picker/shape.vue)
 
 </template>
 

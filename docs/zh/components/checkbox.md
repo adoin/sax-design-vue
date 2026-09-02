@@ -1,14 +1,25 @@
 ---
 description: '选择一个或多个布尔选项。'
 PROPS:
-  - name: disabled / max / not-value
-    type: Boolean / Number / String | Number | Boolean
-    values: true | false / 最大选中数 / 未选中值
+  - name: disabled
+    type: Boolean
+    values: "true | false"
+    description: 禁用复选框交互，保留当前选中或半选状态。
+    default: 'false'
+    usage: '#禁用'
+  - name: max
+    type: Number
+    values: "最大选中数"
     description: 禁用选择、限制组内选中数或自定义未选中值。
-    default: 'false / - / false'
+    default: null
+  - name: not-value
+    type: String | Number | Boolean
+    values: "未选中值"
+    description: 禁用选择、限制组内选中数或自定义未选中值。
+    default: 'false'
   - name: v-model
     type: Boolean, String, Array
-    values: boolean, string, array
+    values: "boolean, string, array"
     description: 复选框绑定值与数据标识。
     default: false
     link: null
@@ -16,7 +27,7 @@ PROPS:
 
   - name: color
     type: String
-    values: theme colors, RGB, HEX
+    values: "theme colors, RGB, HEX"
     description: 设置组件颜色。
     default: false
     link: null
@@ -24,7 +35,7 @@ PROPS:
 
   - name: value
     type: String, Object
-    values: String, Object
+    values: "String, Object"
     description: 选中时输入框返回的值。
     default: true
     link: null
@@ -32,7 +43,7 @@ PROPS:
 
   - name: loading
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 添加加载动画并禁用输入框。
     default: false
     link: null
@@ -49,7 +60,7 @@ PROPS:
 
   - name: line-through
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 选中时为标签添加中划线。
     default: false
     link: null
@@ -63,7 +74,7 @@ PROPS:
 
   - name: icon-animation
     type: String
-    values: auto, draw, pop, none
+    values: "auto, draw, pop, none"
     description: 设置自定义图标动画。auto 会绘制描边 SVG，填充图标则使用弹入揭示。
     default: auto
     link: null
@@ -71,7 +82,7 @@ PROPS:
 
   - name: indeterminate
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 将默认图标改为表示不确定状态的横线。
     default: false
     link: null
@@ -85,7 +96,7 @@ PROPS:
 
   - name: label-before
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 调整标签位置。
     default: false
     link: null
@@ -99,7 +110,7 @@ PROPS:
 
   - name: checked
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 是否初始选中；会使 v-model 的计算值为 true。
     default: false
     link: null
@@ -113,7 +124,7 @@ PROPS:
 
   - name: checked-force
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 强制复选框为选中状态。
     default: false
     link: null
@@ -127,7 +138,7 @@ PROPS:
 
   - name: checkbox-group
     type: Array<String | Number | Object>
-    values: null
+    values: "null"
     description: 用于将多个复选框绑定为一组。
     default: null
     link: null
@@ -135,7 +146,7 @@ PROPS:
 
   - name: id
     type: string
-    values: null
+    values: "null"
     description: 复选框 id。
     default: undefined
     link: null
@@ -149,7 +160,7 @@ PROPS:
 
   - name: name
     type: string
-    values: null
+    values: "null"
     description: 复选框 name。
     default: null
     link: null
@@ -162,10 +173,16 @@ PROPS:
       </template>
 
 EVENTS:
-  - name: update:modelValue / change
+  - name: update:modelValue
     type: CheckboxModelType | CheckboxGroupValueType
     description: Checkbox 或 CheckboxGroup 的值变化时触发。
-  - name: update:activeKey / tabChange
+  - name: change
+    type: CheckboxModelType | CheckboxGroupValueType
+    description: Checkbox 或 CheckboxGroup 的值变化时触发。
+  - name: update:activeKey
+    type: String | Number
+    description: CheckboxGroupTabs 激活其他页签时触发。
+  - name: tabChange
     type: String | Number
     description: CheckboxGroupTabs 激活其他页签时触发。
   - name: CheckboxGroupTabs change
@@ -174,7 +191,7 @@ EVENTS:
 SLOTS:
   - name: icon
     type: slot
-    values: checked, indeterminate
+    values: "checked, indeterminate"
     description: 自定义组件图标，并获取当前选中与不确定状态。
     default: null
     link: null
@@ -220,7 +237,7 @@ SLOTS:
 
   - name: default
     type: slot
-    values: null
+    values: "null"
     description: 为组件添加标签。
     default: null
     link: null
@@ -256,6 +273,36 @@ SLOTS:
 <template #script>
 
 @[code{6-10}](../../.vuepress/components/checkbox/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 禁用
+
+设置 `disabled` 可禁用交互。禁用态使用灰色填充和内凹阴影，并保留已选中或半选标记；悬停时不会上浮。与正常状态并排对照：
+
+<template #example>
+<checkbox-zh-disabled />
+</template>
+
+<template #template>
+
+@[code{8-18}](../../.vuepress/components/checkbox-zh/disabled.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../../.vuepress/components/checkbox-zh/disabled.vue)
+
+</template>
+
+<template #style>
+
+@[code{20-27}](../../.vuepress/components/checkbox-zh/disabled.vue)
 
 </template>
 
@@ -530,7 +577,7 @@ SLOTS:
 
 <card>
 
-## 加载 <Badge text="New"/>
+## 加载
 
 通过 `loading` 属性为组件添加加载状态。
 
@@ -584,7 +631,7 @@ SLOTS:
 
 <card>
 
-## 不确定 <Badge text="New"/>
+## 不确定
 
 存在多个复选框且需要一个统一管理项时，可使用 `indeterminate` 为该复选框添加不确定状态样式。
 

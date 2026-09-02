@@ -2,127 +2,130 @@
 PROPS:
   - name: aside-position
     type: String
-    values: start | end
+    values: "start | end"
     description: Places the aside before or after the main content.
     default: start
   - name: aside-width
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Width of the aside slot.
     default: 240
   - name: header-height
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Optional fixed height for the header slot.
     default: null
   - name: footer-height
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Optional fixed height for the footer slot.
     default: null
   - name: gap
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Gap between layout surfaces.
     default: 16
   - name: padding
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Padding around the application shell.
     default: 16
   - name: min-height
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Minimum height of the application shell.
     default: 100%
   - name: responsive
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Stacks the aside and main region below 768px.
     default: true
   - name: sticky-header
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Keeps the header surface visible while scrolling.
     default: false
   - name: sticky-header-offset
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Top offset of the SLayout sticky header; falls back to layout padding when omitted.
     default: null
   - name: sticky-header-z-index
     type: Number
-    values: number
+    values: "number"
     description: Stacking level of the SLayout sticky header.
     default: 10
   - name: aside-outside-collapsible
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Adds the built-in collapse control to the aside-outside tool surface.
     default: true
   - name: aside-outside-collapsed
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Controls the collapsed state of the SLayout attached tools.
     default: false
   - name: sticky
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Enables sticky positioning on a standalone SLayoutHeader.
     default: false
   - name: sticky-offset
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Top offset of a standalone sticky SLayoutHeader.
     default: 0
   - name: z-index
     type: Number
-    values: number
+    values: "number"
     description: Stacking level of a standalone sticky SLayoutHeader.
     default: 10
   - name: direction
     type: String
-    values: horizontal | vertical
+    values: "horizontal | vertical"
     description: SLayoutContainer flex direction.
     default: horizontal
   - name: wrap
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Allows SLayoutContainer children to wrap.
     default: false
   - name: align
     type: String
-    values: start | center | end | stretch
+    values: "start | center | end | stretch"
     description: Cross-axis alignment for SLayoutContainer.
     default: stretch
   - name: justify
     type: String
-    values: start | center | end | space-around | space-between | space-evenly
+    values: "start | center | end | space-around | space-between | space-evenly"
     description: Main-axis distribution for SLayoutContainer.
     default: start
   - name: size
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Header/Footer height or Aside width.
     default: null
   - name: outside-position
     type: String
-    values: start | end
+    values: "start | end"
     description: Position of the SLayoutAside outside slot relative to the rail.
     default: end
   - name: outside-collapsible
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Shows the built-in collapse and expand control for the outside slot.
     default: true
   - name: outside-collapsed
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Controls the collapsed state of the SLayoutAside outside slot.
     default: false
 description: 'A responsive application shell and composable semantic layout surfaces.'
 EVENTS:
-  - name: update:asideOutsideCollapsed / aside-outside-collapse
+  - name: update:asideOutsideCollapsed
+    type: Boolean
+    description: Fire when the outside aside surface is collapsed or expanded.
+  - name: aside-outside-collapse
     type: Boolean
     description: Fire when the outside aside surface is collapsed or expanded.
 ---

@@ -1,18 +1,33 @@
 ---
 PROPS:
-  - name: button-accept / button-cancel / accept-text / cancel-text
-    type: Boolean / Boolean / String / String
-    values: action visibility and labels
+  - name: button-accept
+    type: Boolean
+    values: "action visibility and labels"
     description: Configure prompt action buttons and their text.
-    default: '-'
+    default: null
+  - name: button-cancel
+    type: Boolean
+    values: "action visibility and labels"
+    description: Configure prompt action buttons and their text.
+    default: null
+  - name: accept-text
+    type: String
+    values: "action visibility and labels"
+    description: Configure prompt action buttons and their text.
+    default: null
+  - name: cancel-text
+    type: String
+    values: "action visibility and labels"
+    description: Configure prompt action buttons and their text.
+    default: null
   - name: close-icon
     type: String
-    values: Iconify icon name
+    values: "Iconify icon name"
     description: Customize the close control icon.
-    default: '-'
+    default: null
   - name: v-model
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Dialog visibility.
     default: false
     link: null
@@ -20,7 +35,7 @@ PROPS:
 
   - name: title
     type: String
-    values: String
+    values: "String"
     description: Dialog title.
     default: Dialog
     link: null
@@ -28,7 +43,7 @@ PROPS:
 
   - name: text
     type: String
-    values: String
+    values: "String"
     description: Dialog body text when the default slot is empty.
     default: null
     link: null
@@ -36,7 +51,7 @@ PROPS:
 
   - name: type
     type: String
-    values: alert, confirm
+    values: "alert, confirm"
     description: Alert shows a header close button and closes on overlay click. Confirm shakes on overlay click.
     default: alert
     link: null
@@ -44,7 +59,7 @@ PROPS:
 
   - name: color
     type: String
-    values: primary, success, danger, warning, dark
+    values: "primary, success, danger, warning, dark"
     description: Accent color for the title and accept button.
     default: primary
     link: null
@@ -52,7 +67,7 @@ PROPS:
 
   - name: is-valid
     type: Boolean | String
-    values: true, false, none
+    values: "true, false, none"
     description: When false, the accept button stays disabled. Use none to skip validation.
     default: none
     link: null
@@ -60,7 +75,7 @@ PROPS:
 
   - name: accept-text
     type: String
-    values: String
+    values: "String"
     description: Accept button label.
     default: Accept
     link: null
@@ -68,7 +83,7 @@ PROPS:
 
   - name: cancel-text
     type: String
-    values: String
+    values: "String"
     description: Cancel button label.
     default: Cancel
     link: null
@@ -76,7 +91,7 @@ PROPS:
 
   - name: buttons-hidden
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Hide action buttons.
     default: false
     link: null

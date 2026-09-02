@@ -1,10 +1,5 @@
 <template>
-  <RenderLink
-    :link="link.link!"
-    :text="link.text"
-    :is-new="link.isNew"
-    :is-update="link.isUpdate"
-  />
+  <RenderLink :link="link.link!" :text="link.text" :is-update="link.isUpdate" />
 </template>
 
 <script lang="ts" setup>

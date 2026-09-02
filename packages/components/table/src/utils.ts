@@ -16,7 +16,7 @@ export const sortData = <T = Record<any, unknown>>(
   event: Event,
   data: T[],
   sortKey: keyof T,
-  type: 'desc' | 'asc' = 'desc'
+  type: 'desc' | 'asc' = 'desc',
 ) => {
   const _sortKey = String(sortKey)
   let sortType: string | undefined = type
@@ -75,7 +75,7 @@ export const sortData = <T = Record<any, unknown>>(
 export const getPage = <T = any>(
   data: T[],
   page: number,
-  maxItems = 5
+  maxItems = 5,
 ): T[] => {
   const max = Math.ceil(page * maxItems)
   const min = max - maxItems

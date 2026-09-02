@@ -75,7 +75,7 @@ export const useSelect = (
   const reference = ref<HTMLInputElement>()
   const input = ref<HTMLInputElement>()
   const popperRef = ref<PopperExpose>()
-  const chips = ref<HTMLElement>()
+  const tags = ref<HTMLElement>()
   const selectWrapper = ref<HTMLElement>()
   const scrollbar = ref<{
     handleScroll: () => void
@@ -194,8 +194,8 @@ export const useSelect = (
         }
 
         nextTick(() => {
-          if (reference.value && chips.value) {
-            reference.value.style.height = `${chips.value.scrollHeight - 1}px`
+          if (reference.value && tags.value) {
+            reference.value.style.height = `${tags.value.scrollHeight - 1}px`
           }
         })
       }
@@ -486,8 +486,8 @@ export const useSelect = (
   }
 
   const handleResize = () => {
-    if (reference.value && chips.value) {
-      reference.value.style.height = `${chips.value.scrollHeight}px`
+    if (reference.value && tags.value) {
+      reference.value.style.height = `${tags.value.scrollHeight}px`
     }
     popperRef.value?.updatePopper()
   }
@@ -875,7 +875,7 @@ export const useSelect = (
 
   const processBeforeClose = () => {
     if (states.targetOnElement == null) return true
-    return !['chip-close', 'input-filter'].includes(states.targetOnElement)
+    return !['tag-close', 'input-filter'].includes(states.targetOnElement)
   }
 
   return {
@@ -921,7 +921,7 @@ export const useSelect = (
     reference,
     input,
     popperRef,
-    chips,
+    tags,
     selectWrapper,
     scrollbar,
 

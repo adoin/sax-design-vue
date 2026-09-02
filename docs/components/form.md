@@ -7,93 +7,93 @@ API_TITLES:
 PROPS:
   - name: model
     type: Object
-    values: reactive form data
+    values: "reactive form data"
     description: Required. The single data source read and written by field paths.
-    default: —
+    default: null
   - name: rules
     type: FormRules
-    values: '{ [field]: FormRule | FormRule[] }'
+    values: "{ [field]: FormRule | FormRule[] }"
     description: Required, custom validator, and blur / change trigger rules.
     default: '{}'
   - name: items
     type: FormItemConfig[]
-    values: tree configuration with children
+    values: "tree configuration with children"
     description: Render schema-driven items and recursively compose complex layouts.
     default: '[]'
   - name: label-width
     type: String | Number
-    values: CSS width
+    values: "CSS width"
     description: Default label width for horizontal items; fits four CJK characters plus the required marker.
     default: 'calc(4em + 24px)'
   - name: label-position
     type: String
-    values: left / right / top
+    values: "left / right / top"
     description: Default label placement for child Form Items.
     default: right
   - name: label-align
     type: String
-    values: left / right
+    values: "left / right"
     description: Default text alignment inside horizontal labels.
     default: right
   - name: inline
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Use the inline Form layout.
     default: 'false'
   - name: disabled
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Disable all declarative and schema-rendered fields.
     default: 'false'
   - name: readonly
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Make all declarative and schema-rendered fields readonly.
     default: 'false'
   - name: show-message
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Display validation errors and field descriptions.
     default: 'true'
   - name: reserve-error-space
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Reserve stable space for errors or helper text to prevent layout shift.
     default: 'true'
   - name: scroll-to-error
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Focus and scroll to the first invalid field.
     default: 'true'
   - name: column-gap
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Horizontal gap in the 24-column Form grid.
     default: 16
   - name: row-gap
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Vertical gap in the 24-column Form grid.
     default: 4
 CHILD_PROPS:
   - name: label
     type: String
     description: Field label. Takes precedence over title.
-    default: —
+    default: null
   - name: title
     type: String
     description: Compatibility alias used when label is absent.
-    default: —
+    default: null
   - name: prop
     type: String
-    values: deep model path
+    values: "deep model path"
     description: Field path such as profile.name. Takes precedence over field.
-    default: —
+    default: null
   - name: field
     type: String
-    values: deep model path
+    values: "deep model path"
     description: Compatibility alias used when prop is absent.
-    default: —
+    default: null
   - name: id
     type: String
     description: Control id used by the generated label association.
@@ -101,65 +101,65 @@ CHILD_PROPS:
   - name: description
     type: String
     description: Helper text shown when the field has no validation error.
-    default: —
+    default: null
   - name: rules
     type: FormRule | FormRule[]
     description: Item-level rules; override SForm rules for this field.
-    default: —
+    default: null
   - name: required
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Display the required state independently of validation rules.
     default: 'false'
   - name: label-width
     type: String | Number
-    values: CSS width
+    values: "CSS width"
     description: Override SForm label-width for this Item.
     default: inherited
   - name: label-position
     type: String
-    values: left / right / top
+    values: "left / right / top"
     description: Override SForm label-position for this Item.
     default: inherited
   - name: span
     type: Number | FormItemSpan
-    values: 1–24 / responsive object
+    values: "1–24 / responsive object"
     description: Width occupied by this Item in the 24-column grid.
     default: 24
   - name: vertical
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Place this Item label above its control.
     default: 'false'
   - name: nested
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Treat the default slot as a nested Form Item grid.
     default: 'false'
   - name: align
     type: String
-    values: left / center / right
+    values: "left / center / right"
     description: Align the Item content within its grid cell.
     default: left
   - name: reserve-error-space
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Override SForm reserve-error-space for this Item.
     default: inherited
   - name: disabled
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Override the disabled state passed to itemRender.
     default: inherited
   - name: readonly
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Override the readonly state passed to itemRender.
     default: inherited
   - name: item-render
     type: FormItemRenderOptions
     description: Render a registered or custom control when no default slot is supplied.
-    default: —
+    default: null
 EVENTS:
   - name: validate
     description: Fired after a field validates with field, valid, and message.

@@ -92,7 +92,7 @@
     .#{$namespace}-select__input,
   > .#{$namespace}-control-group__item
     > .#{$namespace}-select
-    .#{$namespace}-select__chips,
+    .#{$namespace}-select__tags,
   > .#{$namespace}-control-group__item
     > .#{$namespace}-date-picker
     .#{$namespace}-input__wrapper,
@@ -128,7 +128,7 @@
     .#{$namespace}-select__input,
   > .#{$namespace}-control-group__item:first-child
     > .#{$namespace}-select
-    .#{$namespace}-select__chips,
+    .#{$namespace}-select__tags,
   > .#{$namespace}-control-group__item:first-child
     > .#{$namespace}-date-picker
     > .#{$namespace}-input
@@ -155,7 +155,7 @@
     .#{$namespace}-select__input,
   > .#{$namespace}-control-group__item:last-child
     > .#{$namespace}-select
-    .#{$namespace}-select__chips,
+    .#{$namespace}-select__tags,
   > .#{$namespace}-control-group__item:last-child
     > .#{$namespace}-date-picker
     > .#{$namespace}-input
@@ -182,7 +182,7 @@
     .#{$namespace}-select__input,
   > .#{$namespace}-control-group__item:only-child
     > .#{$namespace}-select
-    .#{$namespace}-select__chips,
+    .#{$namespace}-select__tags,
   > .#{$namespace}-control-group__item:only-child
     > .#{$namespace}-date-picker
     > .#{$namespace}-input
@@ -225,7 +225,7 @@
     .#{$namespace}-select__input,
   > .#{$namespace}-control-group__item
     > .#{$namespace}-select.is-hovering
-    .#{$namespace}-select__chips,
+    .#{$namespace}-select__tags,
   > .#{$namespace}-control-group__item
     > .#{$namespace}-input.is-focus
     .#{$namespace}-input__wrapper,
@@ -234,13 +234,13 @@
     .#{$namespace}-select__input,
   > .#{$namespace}-control-group__item
     > .#{$namespace}-select.is-focus
-    .#{$namespace}-select__chips,
+    .#{$namespace}-select__tags,
   > .#{$namespace}-control-group__item
     > .#{$namespace}-select.is-open
     .#{$namespace}-select__input,
   > .#{$namespace}-control-group__item
     > .#{$namespace}-select.is-open
-    .#{$namespace}-select__chips {
+    .#{$namespace}-select__tags {
     border-color: transparent;
     box-shadow: none;
   }
@@ -278,13 +278,13 @@
     .#{$namespace}-select__input,
   > .#{$namespace}-control-group__item
     > .#{$namespace}-select.is-hovering
-    .#{$namespace}-select__chips,
+    .#{$namespace}-select__tags,
   > .#{$namespace}-control-group__item
     > .#{$namespace}-select.is-open
     .#{$namespace}-select__input,
   > .#{$namespace}-control-group__item
     > .#{$namespace}-select.is-open
-    .#{$namespace}-select__chips {
+    .#{$namespace}-select__tags {
     transform: none;
   }
 

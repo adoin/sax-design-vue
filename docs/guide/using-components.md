@@ -10,8 +10,6 @@ Every component page follows the same structure:
 2. **Code tabs** — template / script / style snippets you can copy
 3. **API table** — props, events, slots, and exposes generated from frontmatter
 
-Newly migrated components are marked with a green **New** label in the sidebar.
-
 </card>
 
 <card>

@@ -3,42 +3,42 @@ description: 'Build top-level navigation with grouped actions and responsive sta
 PROPS:
   - name: variant
     type: String
-    values: surface, floating, transparent
+    values: "surface, floating, transparent"
     description: Surface treatment of the navigation shell.
     default: surface
   - name: position
     type: String
-    values: static, sticky, fixed
+    values: "static, sticky, fixed"
     description: Positioning strategy for the navigation shell.
     default: static
   - name: size
     type: String
-    values: compact, default, spacious
+    values: "compact, default, spacious"
     description: Navigation height and internal density.
     default: default
   - name: blurred
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Use a blurred glass surface.
     default: false
   - name: content-width
     type: Number, String
-    values: CSS length
+    values: "CSS length"
     description: Maximum width of the inner content.
     default: 100%
   - name: gap
     type: Number, String
-    values: CSS length
+    values: "CSS length"
     description: Gap between brand, navigation, and action regions.
     default: 12
   - name: collapse-at
     type: Number
-    values: pixels
+    values: "pixels"
     description: Container width where opted-in collapsed regions are hidden.
     default: 560
   - name: fixed
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Defines if the component is fixed on the screen.
     default: false
     link: null
@@ -49,7 +49,7 @@ PROPS:
       </s-navbar>
   - name: shadow
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Add a shadow to the component.
     default: primary
     link: null
@@ -60,7 +60,7 @@ PROPS:
       </s-navbar>
   - name: shadow-scroll
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Add functionality to add shadow to component when scrollTop is more than 0.
     default: false
     link: null
@@ -71,7 +71,7 @@ PROPS:
       </s-navbar>
   - name: hide-scroll
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Add the functionality to hide and show the component based on whether the scroll is lowered or raised.
     default: false
     link: null
@@ -82,7 +82,7 @@ PROPS:
       </s-navbar>
   - name: textWhite
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Change the text color of items to white.
     default: false
     link: null
@@ -93,7 +93,7 @@ PROPS:
       </s-navbar>
   - name: square
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Change the border radius to 0 by making the component square.
     default: false
     link: null
@@ -104,7 +104,7 @@ PROPS:
       </s-navbar>
   - name: padding-scroll
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Determines if the component has padding and the user scrolling is removed making an effect.
     default: false
     link: null
@@ -115,7 +115,7 @@ PROPS:
       </s-navbar>
   - name: not-line
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Delete the active line in the component.
     default: false
     link: null
@@ -126,7 +126,7 @@ PROPS:
       </s-navbar>
   - name: left-collapsed
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Add the functionality that when the elements of this slot cannot be correctly they are visually removed.
     default: false
     link: null
@@ -137,7 +137,7 @@ PROPS:
       </s-navbar>
   - name: center-collapsed
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Add the functionality that when the elements of this slot cannot be correctly they are visually removed.
     default: false
     link: null
@@ -148,7 +148,7 @@ PROPS:
       </s-navbar>
   - name: right-collapsed
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Add the functionality that when the elements of this slot cannot be correctly they are visually removed.
     default: false
     link: null
@@ -159,7 +159,7 @@ PROPS:
       </s-navbar>
   - name: target-scroll
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Determines the element to which the scroll event will be requested.
     default: document
     link: null
@@ -170,22 +170,22 @@ PROPS:
       </s-navbar>
   - name: item:disabled
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Disable selection and navigation.
     default: false
   - name: item:icon
     type: String
-    values: icon name
+    values: "icon name"
     description: Render a repository icon before the label.
     default: null
   - name: item:badge
     type: String, Number
-    values: null
+    values: "null"
     description: Render compact status after the label.
     default: null
   - name: item:active
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Determines if the component is in active status.
     default: false
     link: null
@@ -196,7 +196,7 @@ PROPS:
       </s-navbar-item>
   - name: item:to
     type: String, Object
-    values: vue-router RouteLocationRaw
+    values: "vue-router RouteLocationRaw"
     description: Use vue-router to generate a new view based on the supplied string.
     default: false
     link: null
@@ -207,7 +207,7 @@ PROPS:
       </s-navbar-item>
   - name: item:to
     type: String, Object
-    values: vue-router RouteLocationRaw
+    values: "vue-router RouteLocationRaw"
     description: Use vue-router to generate a new view based on the supplied string.
     default: false
     link: null
@@ -218,7 +218,7 @@ PROPS:
       </s-navbar-item>
   - name: item:link
     type: Object
-    values: NavLink
+    values: "NavLink"
     description: Use to navigate the site
     default: false
     link: null
@@ -238,22 +238,22 @@ EVENTS:
 SLOTS:
   - name: brand
     type: slot
-    values: collapsed, scrolled
+    values: "collapsed, scrolled"
     description: Brand region; takes priority over the legacy left slot.
     default: null
   - name: navigation
     type: slot
-    values: collapsed, scrolled
+    values: "collapsed, scrolled"
     description: Primary navigation region; takes priority over the default slot.
     default: null
   - name: actions
     type: slot
-    values: collapsed, scrolled
+    values: "collapsed, scrolled"
     description: Action region; takes priority over the legacy right slot.
     default: null
   - name: default
     type: slot
-    values: null
+    values: "null"
     description: Add the elements in the center of the component.
     default: null
     link: null
@@ -266,7 +266,7 @@ SLOTS:
       </s-navbar>
   - name: left
     type: slot
-    values: null
+    values: "null"
     description: Add the elements on the left side of the component.
     default: null
     link: null
@@ -277,7 +277,7 @@ SLOTS:
       </template>
   - name: right
     type: slot
-    values: null
+    values: "null"
     description: Add the elements on the right side of the component.
     default: null
     link: null

@@ -4,19 +4,19 @@ lastUpdated: false
 PROPS:
   - name: block
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 让组合占满容器，并由子控件共享可用宽度。
     default: false
 CHILD_PROPS:
   - name: span
     type: Number
-    values: 1–24
+    values: "1–24"
     description: 设置在直接子控件上，用于指定其在 24 栅格中占用的份数；未设置的子控件会均分 <code>24 - 已声明 span 总和</code>。
     default: 自动分配
 SLOTS:
   - name: default
     type: Slot
-    values: Input、Select、Cascader、DatePicker、TimePicker 或兼容的表单控件
+    values: "Input、Select、Cascader、DatePicker、TimePicker 或兼容的表单控件"
     description: 按原有顺序连续渲染控件，并在相邻控件之间显示拼图接缝纹理。
     default: null
 ---

@@ -1,6 +1,6 @@
 import { buildProps, isBoolean, isNumber, isString } from '@vuesax-alpha/utils'
 
-import { useColorProp } from '@vuesax-alpha/hooks'
+import { useColorProp, useShapeProp } from '@vuesax-alpha/hooks'
 import {
   CHANGE_EVENT,
   INPUT_EVENT,
@@ -32,14 +32,10 @@ export const switchProps = buildProps({
     type: Boolean,
     default: false,
   },
-  shape: {
-    type: String,
-    values: ['square'] as const,
-    default: null,
-  },
+  shape: useShapeProp,
   variant: {
     type: String,
-    values: ['classic', 'soft', 'icon', 'text'] as const,
+    values: ['classic', 'soft', 'text'] as const,
     default: 'classic',
   },
   activeText: {
@@ -51,10 +47,6 @@ export const switchProps = buildProps({
     default: 'OFF',
   },
   indeterminate: {
-    type: Boolean,
-    default: false,
-  },
-  icon: {
     type: Boolean,
     default: false,
   },

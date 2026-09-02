@@ -34,4 +34,14 @@ describe('Slider', () => {
 
     expect(wrapper.findAll('.s-slider__tick')).toHaveLength(11)
   })
+
+  it('applies the square shape without changing range semantics', () => {
+    const wrapper = mount(Slider, {
+      props: { modelValue: 40, shape: 'square' },
+    })
+
+    expect(wrapper.classes()).toContain('is-square')
+    expect(wrapper.findAll('input[type="range"]')).toHaveLength(1)
+    expect(wrapper.get('input').attributes('value')).toBe('40')
+  })
 })

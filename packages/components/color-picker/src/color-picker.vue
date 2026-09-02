@@ -7,9 +7,9 @@
     :disabled="disabled"
     :show-arrow="false"
     :offset="8"
-    :popper-class="ns.e('panel')"
+    :popper-class="[ns.e('panel'), ns.is('square', shape === 'square')]"
   >
-    <div :class="[ns.b(), ns.is('disabled', disabled)]">
+    <div :class="[ns.b(), ns.is('disabled', disabled), ns.is(shape)]">
       <button
         :class="ns.e('trigger')"
         type="button"
@@ -44,7 +44,7 @@
 import { computed, ref, watch } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SPopper } from '@vuesax-alpha/components/popper'
-import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import ColorPickerPanel from './color-picker-panel.vue'
 import { colorPickerEmits, colorPickerProps } from './color-picker'
 import { formatColor, parseColor, toCssColor } from './color-utils'
@@ -62,6 +62,7 @@ const fallbackColor: RgbColor = {
 const props = defineProps(colorPickerProps)
 const emit = defineEmits(colorPickerEmits)
 const ns = useNamespace('color-picker')
+const shape = useShape()
 const { t } = useLocale()
 const open = ref(false)
 const selectedColor = ref<RgbColor>(

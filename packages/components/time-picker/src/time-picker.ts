@@ -1,5 +1,5 @@
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import { useColorProp, useSizeProp } from '@vuesax-alpha/hooks'
+import { useColorProp, useShapeProp, useSizeProp } from '@vuesax-alpha/hooks'
 import {
   buildProps,
   definePropType,
@@ -12,6 +12,7 @@ import type { TimePickerConfig } from '../../date-picker/src/utils'
 export type TimePickerValue = Date | string | number | null | undefined
 
 export const timePickerProps = buildProps({
+  shape: useShapeProp,
   color: useColorProp,
   size: useSizeProp,
   labelFloat: Boolean,

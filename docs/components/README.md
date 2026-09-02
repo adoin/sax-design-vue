@@ -3,7 +3,7 @@ description: 'Trigger actions with accessible button styles and states.'
 PROPS:
   - name: color
     type: String
-    values: primary, success, danger, warning, dark, RGB, HEX
+    values: "primary, success, danger, warning, dark, RGB, HEX"
     description: Change the color of the component and some of its sub components.
     default: primary
     link: /api/color
@@ -13,7 +13,7 @@ PROPS:
   # _______________________________________
   - name: style button
     type: Prop
-    values: flat, border, gradient, transparent, dashed, shadow, relief, floating
+    values: "flat, border, gradient, transparent, dashed, shadow, relief, floating"
     description: Change the style of the component and its states.
     default: null
     link: null
@@ -23,7 +23,7 @@ PROPS:
   # _______________________________________
   - name: active
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Determine if the component is active and change its style to that state.
     default: false
     link: null
@@ -33,7 +33,7 @@ PROPS:
   # _______________________________________
   - name: loading
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Keep the button content visible, show the selected loading preset, preserve its size, and prevent interaction.
     default: false
     link: null
@@ -42,7 +42,7 @@ PROPS:
       <s-button loading> Save changes </s-button>
   - name: loading-type
     type: String
-    values: pulse, ripple, shimmer
+    values: "pulse, ripple, shimmer"
     description: Choose the class-driven loading preset without changing the button markup.
     default: pulse
     link: null
@@ -52,7 +52,7 @@ PROPS:
   # _______________________________________
   - name: disabled
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Disable the button and prevent user interaction.
     default: false
     link: null
@@ -62,7 +62,7 @@ PROPS:
   # _______________________________________
   - name: debounce
     type: Number | false
-    values: number, false
+    values: "number, false"
     description: Debounce emitted click events in milliseconds. When both click limiters are numbers, debounce wins and an error is logged.
     default: 50
     link: null
@@ -72,7 +72,7 @@ PROPS:
   # _______________________________________
   - name: throttle
     type: Number | false
-    values: number, false
+    values: "number, false"
     description: Throttle emitted click events in milliseconds. Set debounce to false to enable it.
     default: false
     link: null
@@ -82,7 +82,7 @@ PROPS:
   # _______________________________________
   - name: upload
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Determine if the component has the upload status active by changing the style and adding the animation.
     default: false
     link: null
@@ -94,7 +94,7 @@ PROPS:
   # _______________________________________
   - name: to
     type: String
-    values: url - vue-router
+    values: "url - vue-router"
     description: Add the functionality of vue-router to the button, clicking it will redirect to the last route.
     default: false
     link: null
@@ -106,7 +106,7 @@ PROPS:
   # _______________________________________
   - name: href
     type: String
-    values: href - link
+    values: "href - link"
     description: Add an href of an external link to add the functionality by clicking on the component.
     default: false
     link: null
@@ -118,7 +118,7 @@ PROPS:
   # _______________________________________
   - name: blank
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: as in an html element `a` determines whether a new window is opened or the current one is replaced.
     default: false
     link: null
@@ -130,7 +130,7 @@ PROPS:
   # _______________________________________
   - name: icon
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Determine if the component contains only one icon, by adding this property the component has an equal width and height.
     default: false
     link: null
@@ -142,7 +142,7 @@ PROPS:
   # _______________________________________
   - name: circle
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Change the border radius to give a circle style.
     default: false
     link: null
@@ -154,7 +154,7 @@ PROPS:
   # _______________________________________
   - name: square
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Change the border radius to give a rectangle style.
     default: false
     link: null
@@ -166,7 +166,7 @@ PROPS:
   # _______________________________________
   - name: block
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Change the width of the component to the possible total determined by the parent element.
     default: false
     link: null
@@ -178,7 +178,7 @@ PROPS:
   # _______________________________________
   - name: animationType
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Change the type of animation, this property only works if you have the <code> slot </code> animate.
     default: false
     link: null
@@ -193,7 +193,7 @@ PROPS:
   # _______________________________________
   - name: animateInactive
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Determine if the animation is active for the user when hovering.
     default: false
     link: null
@@ -209,7 +209,7 @@ PROPS:
   # _______________________________________
   - name: Ripple
     type: String
-    values: reverse, cut
+    values: "reverse, cut"
     description: Change ripple style of a button with the `ripple` property
     default: undefined
     usage: '#ripple'
@@ -225,7 +225,7 @@ EVENTS:
 SLOTS:
   - name: loading
     type: slot
-    values: null
+    values: "null"
     description: Replace the selected loading preset with custom loading content.
     default: null
     link: null
@@ -238,7 +238,7 @@ SLOTS:
   # _______________________________________
   - name: animate
     type: slot
-    values: null
+    values: "null"
     description: Slot To add the element that will be displayed in the animation.
     default: null
     link: null
@@ -834,7 +834,7 @@ This is an example of what you can achieve with simple logic and few lines of co
 
 <card>
 
-## Ripple <Badge text="New" />
+## Ripple
 
 You can change ripple style of a button with the `ripple` property and the allowed values are
 

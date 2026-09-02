@@ -156,6 +156,14 @@ describe('Input behavior', () => {
     expect(wrapper.get('.s-input__placeholder-text').text()).toBe(placeholder)
   })
 
+  it('renders an external label only when label content is provided', () => {
+    const unlabeled = mountInput({ placeholder: 'Name' })
+    const labeled = mountInput({ label: 'Full name', placeholder: 'Name' })
+
+    expect(unlabeled.find('.s-input__label').exists()).toBe(false)
+    expect(labeled.get('.s-input__label').text()).toBe('Full name')
+  })
+
   it('distinguishes a resting float label from an active float label', async () => {
     const wrapper = mountInput({
       modelValue: '',

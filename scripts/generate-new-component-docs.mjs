@@ -52,29 +52,29 @@ const components = {
       { id: 'height', title: 'Height', demo: `<template>\n  <div class="center">\n    <s-progress :percent="55" :height="6" />\n    <s-progress :percent="55" :height="12" color="success" />\n  </div>\n</template>\n\n${centerStyle}` },
     ],
   },
-  chip: {
+  tag: {
     props: [
       ['v-model', 'Boolean', 'true, false', 'Visibility when closable.', 'true', '#closable'],
-      ['text', 'String', 'String', 'Chip label text.', null, '#default'],
+      ['text', 'String', 'String', 'Tag label text.', null, '#default'],
       ['closable', 'Boolean, String', 'true, false', 'Show close button.', 'false', '#closable'],
-      ['color', 'String', 'primary, success, danger, warning, dark, RGB, HEX', 'Chip color.', null, '#color'],
+      ['color', 'String', 'primary, success, danger, warning, dark, RGB, HEX', 'Tag color.', null, '#color'],
       ['transparent', 'Boolean', 'true, false', 'Transparent background style.', 'false', '#transparent'],
-      ['icon', 'String', 'Iconify name', 'Leading icon inside chip.', null, '#icon'],
+      ['icon', 'String', 'Iconify name', 'Leading icon inside tag.', null, '#icon'],
       ['close-icon', 'String', 'Iconify name', 'Close button icon.', 'carbon:close', '#closable'],
     ],
     events: [
       ['update:modelValue', 'boolean', 'Emitted when visibility changes (closable).'],
-      ['click', null, 'Emitted on chip click.'],
-      ['close', null, 'Emitted when chip is closed.'],
-      ['vs-remove', 'boolean', 'Emitted when chip removed in chips group.'],
+      ['click', null, 'Emitted on tag click.'],
+      ['close', null, 'Emitted when tag is closed.'],
+      ['s-remove', 'boolean', 'Emitted when a tag is removed from TagGroup.'],
     ],
     sections: [
-      { id: 'default', title: 'Default', demo: `<template>\n  <div class="center" style="flex-direction:row;flex-wrap:wrap;gap:8px;">\n    <s-chip>Basic Chip</s-chip>\n    <s-chip closable>Closable</s-chip>\n  </div>\n</template>` },
-      { id: 'color', title: 'Color', demo: `<template>\n  <div class="center" style="flex-direction:row;flex-wrap:wrap;gap:8px;">\n    <s-chip color="primary">Primary</s-chip>\n    <s-chip color="success">Success</s-chip>\n    <s-chip color="danger">Danger</s-chip>\n    <s-chip color="warning">Warning</s-chip>\n  </div>\n</template>` },
-      { id: 'transparent', title: 'Transparent', demo: `<template>\n  <div class="center" style="flex-direction:row;flex-wrap:wrap;gap:8px;">\n    <s-chip transparent color="primary">Primary</s-chip>\n    <s-chip transparent color="success">Success</s-chip>\n  </div>\n</template>` },
-      { id: 'icon', title: 'Icon', demo: `<template>\n  <div class="center" style="flex-direction:row;flex-wrap:wrap;gap:8px;">\n    <s-chip icon="carbon:send" color="primary">Send</s-chip>\n    <s-chip icon="carbon:checkmark" color="success">Check</s-chip>\n  </div>\n</template>` },
-      { id: 'closable', title: 'Closable', demo: `<template>\n  <div class="center" style="flex-direction:row;flex-wrap:wrap;gap:8px;">\n    <s-chip v-for="item in chips" :key="item" closable @close="remove(item)">{{ item }}</s-chip>\n  </div>\n</template>\n\n<script setup lang="ts">\nimport { ref } from 'vue'\nconst chips = ref(['Vuejs', 'Vuesax', 'Sax Design'])\nconst remove = (item: string) => {\n  chips.value = chips.value.filter((c) => c !== item)\n}\n</script>` },
-      { id: 'chips', title: 'Add and Remove Items', demo: `<template>\n  <div class="center">\n    <p>{{ chips }}</p>\n    <s-chips v-model="chips" placeholder="New element">\n      <s-chip v-for="chip in chips" :key="chip" closable>{{ chip }}</s-chip>\n    </s-chips>\n  </div>\n</template>\n\n<script setup lang="ts">\nimport { ref } from 'vue'\nconst chips = ref(['Vuejs', 'Node', 'Vuesax'])\n</script>\n\n${centerStyle}` },
+      { id: 'default', title: 'Default', demo: `<template>\n  <div class="center" style="flex-direction:row;flex-wrap:wrap;gap:8px;">\n    <s-tag>Basic Tag</s-tag>\n    <s-tag closable>Closable</s-tag>\n  </div>\n</template>` },
+      { id: 'color', title: 'Color', demo: `<template>\n  <div class="center" style="flex-direction:row;flex-wrap:wrap;gap:8px;">\n    <s-tag color="primary">Primary</s-tag>\n    <s-tag color="success">Success</s-tag>\n    <s-tag color="danger">Danger</s-tag>\n    <s-tag color="warning">Warning</s-tag>\n  </div>\n</template>` },
+      { id: 'transparent', title: 'Transparent', demo: `<template>\n  <div class="center" style="flex-direction:row;flex-wrap:wrap;gap:8px;">\n    <s-tag transparent color="primary">Primary</s-tag>\n    <s-tag transparent color="success">Success</s-tag>\n  </div>\n</template>` },
+      { id: 'icon', title: 'Icon', demo: `<template>\n  <div class="center" style="flex-direction:row;flex-wrap:wrap;gap:8px;">\n    <s-tag icon="carbon:send" color="primary">Send</s-tag>\n    <s-tag icon="carbon:checkmark" color="success">Check</s-tag>\n  </div>\n</template>` },
+      { id: 'closable', title: 'Closable', demo: `<template>\n  <div class="center" style="flex-direction:row;flex-wrap:wrap;gap:8px;">\n    <s-tag v-for="item in tags" :key="item" closable @close="remove(item)">{{ item }}</s-tag>\n  </div>\n</template>\n\n<script setup lang="ts">\nimport { ref } from 'vue'\nconst tags = ref(['Vuejs', 'Vuesax', 'Sax Design'])\nconst remove = (item: string) => {\n  tags.value = tags.value.filter((c) => c !== item)\n}\n</script>` },
+      { id: 'group', title: 'Add and Remove Items', demo: `<template>\n  <div class="center">\n    <p>{{ tags }}</p>\n    <s-tag-group v-model="tags" placeholder="New element">\n      <s-tag v-for="tag in tags" :key="tag" closable>{{ tag }}</s-tag>\n    </s-tag-group>\n  </div>\n</template>\n\n<script setup lang="ts">\nimport { ref } from 'vue'\nconst tags = ref(['Vuejs', 'Node', 'Vuesax'])\n</script>\n\n${centerStyle}` },
     ],
   },
   breadcrumb: {
@@ -309,16 +309,16 @@ const componentMeta = {
       height: 'Adjust bar thickness with the `height` prop.',
     },
   },
-  chip: {
+  tag: {
     description:
-      'Chips are compact elements that represent an input, attribute, or action.',
+      'Tags are compact elements that represent an input, attribute, or action.',
     leads: {
-      default: 'Render simple chips with optional close behavior.',
-      color: 'Color chips using the Vuesax palette or custom values.',
+      default: 'Render simple tags with optional close behavior.',
+      color: 'Color tags using the Vuesax palette or custom values.',
       transparent: 'Use `transparent` for a lighter, outlined appearance.',
       icon: 'Add a leading icon with the `icon` prop.',
-      closable: 'Remove chips interactively when `closable` is enabled.',
-      chips: 'Combine `vs-chips` with multiple `vs-chip` children to add and remove tags.',
+      closable: 'Remove tags interactively when `closable` is enabled.',
+      group: 'Combine `s-tag-group` with multiple `s-tag` children to add and remove tags.',
     },
   },
   breadcrumb: {
@@ -451,11 +451,11 @@ const componentMetaZh = {
       percent: '确定进度百分比（0–100）。', color: '进度条颜色。',
     },
   },
-  chip: {
+  tag: {
     description: '标签是表示输入、属性或操作的紧凑元素。',
     sectionTitles: {
       default: '默认', color: '颜色', transparent: '透明', icon: '图标',
-      closable: '可关闭', chips: '增删条目',
+      closable: '可关闭', group: '增删条目',
     },
     leads: {
       default: '渲染简单标签，可选关闭行为。',
@@ -463,7 +463,7 @@ const componentMetaZh = {
       transparent: '使用 `transparent` 获得更轻的描边外观。',
       icon: '通过 `icon` 添加前置图标。',
       closable: '启用 `closable` 后可交互移除标签。',
-      chips: '组合 `vs-chips` 与多个 `vs-chip` 子项以增删标签。',
+      group: '组合 `s-tag-group` 与多个 `s-tag` 子项以增删标签。',
     },
     props: {
       'v-model': '可关闭时的可见性。', text: '标签文本。', closable: '显示关闭按钮。',
@@ -472,7 +472,7 @@ const componentMetaZh = {
     },
     events: {
       'update:modelValue': '可见性变化时触发（可关闭）。', click: '点击标签时触发。',
-      close: '关闭标签时触发。', 'vs-remove': '在标签组中移除时触发。',
+      close: '关闭标签时触发。', 's-remove': '在标签组中移除时触发。',
     },
   },
   breadcrumb: {

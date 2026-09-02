@@ -1,31 +1,85 @@
 ---
 description: '通过校验和状态反馈采集单行文本。'
 PROPS:
-  - name: align / block / disabled / editable / readonly / shape / text-white
-    type: String / Boolean
-    values: 对齐、交互状态和外观选项
-    description: 控制输入框对齐、宽度、禁用、编辑状态和视觉样式。
-    default: '-'
-  - name: allow-clear / clearable
+  - name: align
+    type: String
+    values: "left | center | right"
+    description: 设置输入文本的对齐方式。
+    default: null
+  - name: block
     type: Boolean
-    values: true | false
-    description: 输入框悬停或聚焦时在尾部显示清空按钮；clearable 作为兼容别名保留。
+    values: "true | false"
+    description: 使输入框占满可用宽度。
+    default: false
+  - name: disabled
+    type: Boolean
+    values: "true | false"
+    description: 禁用输入与交互。
+    default: false
+  - name: editable
+    type: Boolean
+    values: "true | false"
+    description: 控制输入框是否允许编辑。
+    default: true
+  - name: readonly
+    type: Boolean
+    values: "true | false"
+    description: 将原生输入框设为只读。
+    default: false
+  - name: shape
+    type: String
+    values: "rounded | square"
+    description: 设置圆角或方形外观。
+    default: rounded
+    usage: '#外形'
+  - name: text-white
+    type: Boolean
+    values: "true | false"
+    description: 在深色或彩色背景上使用白色输入文本。
+    default: false
+  - name: allow-clear
+    type: Boolean
+    values: "true | false"
+    description: 在输入框尾部显示清空当前值的操作按钮。
     default: false
     usage: '#清空'
-  - name: count-method / max-length / show-word-count
-    type: Function / Number / Boolean
-    values: '({ value }) => number / Number / true | false'
+  - name: clearable
+    type: Boolean
+    values: "true | false"
+    description: '`allow-clear` 的兼容别名。'
+    default: false
+    usage: '#清空'
+  - name: count-method
+    type: Function
+    values: "({ value }) => number"
     description: 开启后在 suffix 区显示计数；自定义统计方法会同时用于计数显示和长度限制，可实现 UTF-8 字节或其他编码统计。
-    default: '- / - / false'
+    default: null
     usage: '#字符计数'
-  - name: wrap-classes / wrap-styles
+  - name: max-length
+    type: Number
+    values: "Number"
+    description: 开启后在 suffix 区显示计数；自定义统计方法会同时用于计数显示和长度限制，可实现 UTF-8 字节或其他编码统计。
+    default: null
+    usage: '#字符计数'
+  - name: show-word-count
+    type: Boolean
+    values: "true | false"
+    description: 开启后在 suffix 区显示计数；自定义统计方法会同时用于计数显示和长度限制，可实现 UTF-8 字节或其他编码统计。
+    default: 'false'
+    usage: '#字符计数'
+  - name: wrap-classes
+    type: String
+    values: "CSS 类名"
+    description: 为输入框外层容器添加自定义类名。
+    default: null
+  - name: wrap-styles
     type: String | Object | Array
-    values: 容器类名或样式
-    description: 配置输入框外层容器的类名和样式。
-    default: '-'
+    values: "CSS 样式值"
+    description: 为输入框外层容器添加自定义内联样式。
+    default: null
   - name: v-model
     type: String, Number
-    values: String, Number
+    values: "String, Number"
     description: 绑定值。
     default: null
     link: null
@@ -33,7 +87,7 @@ PROPS:
 
   - name: placeholder
     type: String
-    values: String
+    values: "String"
     description: 输入框占位文本。
     default: null
     link: null
@@ -41,7 +95,7 @@ PROPS:
 
   - name: label
     type: String
-    values: String
+    values: "String"
     description: 组件上方标签文本。
     default: null
     link: null
@@ -55,7 +109,7 @@ PROPS:
       </template>
   - name: label-float
     type: String
-    values: String
+    values: "String"
     description: 将占位文本在聚焦或有值时转换为标签。
     default: null
     link: null
@@ -70,7 +124,7 @@ PROPS:
       </template>
   - name: color
     type: String
-    values: theme colors, RGB, HEX
+    values: "theme colors, RGB, HEX"
     description: 设置组件颜色。
     default: null
     link: null
@@ -115,7 +169,7 @@ PROPS:
 
   - name: state
     type: String
-    values: theme colors, RGB, HEX
+    values: "theme colors, RGB, HEX"
     description: 通过状态改变组件背景颜色。
     default: null
     link: null
@@ -123,7 +177,7 @@ PROPS:
 
   - name: progress
     type: Number
-    values: 0 - 100
+    values: "0 - 100"
     description: 进度条值，颜色从红色渐变至绿色。
     default: null
     link: null
@@ -131,7 +185,7 @@ PROPS:
     code: null
   - name: loading
     type: Boolean
-    values: Boolean
+    values: "Boolean"
     description: 为输入框添加加载动画。
     default: null
     link: null
@@ -145,7 +199,7 @@ PROPS:
 
   - name: type
     type: InputType
-    values: text | password | search | number | email | tel | url
+    values: "text | password | search | number | email | tel | url"
     description: 设置文本类输入类型；日期与时间分别使用 DatePicker、TimePicker。
     default: text
     link: null
@@ -154,7 +208,7 @@ PROPS:
 
   - name: border
     type: Boolean
-    values: Boolean
+    values: "Boolean"
     description: 设置组件样式。
     default: false
     link: null
@@ -162,7 +216,7 @@ PROPS:
 
   - name: shadow
     type: Boolean
-    values: Boolean
+    values: "Boolean"
     description: 设置组件样式。
     default: false
     link: null
@@ -170,7 +224,7 @@ PROPS:
 
   - name: icon-after
     type: Boolean
-    values: Boolean
+    values: "Boolean"
     description: 后缀图标组件。
     default: false
     link: null
@@ -178,7 +232,7 @@ PROPS:
 
   - name: show-password
     type: boolean
-    values: boolean
+    values: "boolean"
     description: 密码类型输入框是否提供密码显示切换。
     default: false
     link: null
@@ -186,58 +240,155 @@ PROPS:
 
   - name: size
     type: String
-    values: small | default | large
+    values: "small | default | large"
     description: 设置输入框尺寸。
     default: default
     usage: '#尺寸'
 
   - name: immediate
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 控制输入时立即更新，或在 change、blur 时提交。
     default: true
     usage: '#延迟提交'
 
   - name: controls
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 显示内置搜索或密码操作按钮。
     default: false
     usage: '#搜索'
 
-  - name: prefix-icon / suffix-icon / prefix-config / suffix-config
+  - name: prefix-icon
     type: String / Object
-    values: 图标名称 / '{ icon, content, status }'
+    values: "图标名称 / '{ icon, content, status }'"
     description: 配置轻量前后缀图标或文字；同名插槽优先级最高。
-    default: '-'
+    default: null
     usage: '#前后缀'
 
-  - name: min-length / min / max / step / input-mode / pattern / required / multiple
+  - name: suffix-icon
+    type: String / Object
+    values: "图标名称 / '{ icon, content, status }'"
+    description: 配置轻量前后缀图标或文字；同名插槽优先级最高。
+    default: null
+    usage: '#前后缀'
+
+  - name: prefix-config
+    type: String / Object
+    values: "图标名称 / '{ icon, content, status }'"
+    description: 配置轻量前后缀图标或文字；同名插槽优先级最高。
+    default: null
+    usage: '#前后缀'
+
+  - name: suffix-config
+    type: String / Object
+    values: "图标名称 / '{ icon, content, status }'"
+    description: 配置轻量前后缀图标或文字；同名插槽优先级最高。
+    default: null
+    usage: '#前后缀'
+
+  - name: min-length
     type: Number | String / Boolean
-    values: 原生 input 约束
+    values: "原生 input 约束"
     description: 透传常用原生约束，并将数字输入限制在配置的 min–max 范围内。
-    default: '-'
+    default: null
+    usage: '#原生约束'
+
+  - name: min
+    type: Number | String / Boolean
+    values: "原生 input 约束"
+    description: 透传常用原生约束，并将数字输入限制在配置的 min–max 范围内。
+    default: null
+    usage: '#原生约束'
+
+  - name: max
+    type: Number | String / Boolean
+    values: "原生 input 约束"
+    description: 透传常用原生约束，并将数字输入限制在配置的 min–max 范围内。
+    default: null
+    usage: '#原生约束'
+
+  - name: step
+    type: Number | String / Boolean
+    values: "原生 input 约束"
+    description: 透传常用原生约束，并将数字输入限制在配置的 min–max 范围内。
+    default: null
+    usage: '#原生约束'
+
+  - name: input-mode
+    type: Number | String / Boolean
+    values: "原生 input 约束"
+    description: 透传常用原生约束，并将数字输入限制在配置的 min–max 范围内。
+    default: null
+    usage: '#原生约束'
+
+  - name: pattern
+    type: Number | String / Boolean
+    values: "原生 input 约束"
+    description: 透传常用原生约束，并将数字输入限制在配置的 min–max 范围内。
+    default: null
+    usage: '#原生约束'
+
+  - name: required
+    type: Number | String / Boolean
+    values: "原生 input 约束"
+    description: 透传常用原生约束，并将数字输入限制在配置的 min–max 范围内。
+    default: null
+    usage: '#原生约束'
+
+  - name: multiple
+    type: Number | String / Boolean
+    values: "原生 input 约束"
+    description: 透传常用原生约束，并将数字输入限制在配置的 min–max 范围内。
+    default: null
     usage: '#原生约束'
 
 EVENTS:
-  - name: update:modelValue / input
+  - name: update:modelValue
     type: String | Number
     description: 输入值变化时触发。
-  - name: change / lazy-change
+  - name: input
+    type: String | Number
+    description: 输入值变化时触发。
+  - name: change
     type: String
     description: 原生变更提交或配置的延迟更新提交时触发。
-  - name: focus / blur
+  - name: lazy-change
+    type: String
+    description: 原生变更提交或配置的延迟更新提交时触发。
+  - name: focus
+    type: FocusEvent
+    description: 输入框获得或失去焦点时触发。
+  - name: blur
     type: FocusEvent
     description: 输入框获得或失去焦点时触发。
   - name: clear
     description: 点击清空操作并重置值后触发。
-  - name: click / clickIcon / prefix-click / suffix-click
+  - name: click
     type: MouseEvent | Event
     description: 点击输入区域或前后缀图标操作时触发。
-  - name: keydown / keyup / wheel
+  - name: clickIcon
+    type: MouseEvent | Event
+    description: 点击输入区域或前后缀图标操作时触发。
+  - name: prefix-click
+    type: MouseEvent | Event
+    description: 点击输入区域或前后缀图标操作时触发。
+  - name: suffix-click
+    type: MouseEvent | Event
+    description: 点击输入区域或前后缀图标操作时触发。
+  - name: keydown
     type: KeyboardEvent | WheelEvent
     description: 透传键盘和滚轮交互事件。
-  - name: mouseenter / mouseleave
+  - name: keyup
+    type: KeyboardEvent | WheelEvent
+    description: 透传键盘和滚轮交互事件。
+  - name: wheel
+    type: KeyboardEvent | WheelEvent
+    description: 透传键盘和滚轮交互事件。
+  - name: mouseenter
+    type: MouseEvent
+    description: 指针进入或离开输入框容器时触发。
+  - name: mouseleave
     type: MouseEvent
     description: 指针进入或离开输入框容器时触发。
   - name: search-click
@@ -249,7 +400,7 @@ EVENTS:
 SLOTS:
   - name: icon
     type: Slot
-    values: null
+    values: "null"
     description: 为输入框添加图标。
     default: null
     link: null
@@ -257,14 +408,20 @@ SLOTS:
 
   - name: message
     type: Slot
-    values: message-success, message-danger, message-warn
+    values: "message-success, message-danger, message-warn"
     description: 在输入框下方添加提示文本。
     default: null
     link: null
     usage: '#message'
-  - name: prefix / suffix
+  - name: prefix
     type: Slot
-    values: 'suffix: { count, limit }'
+    values: "suffix: { count"
+    description: 自定义输入框前后缀；suffix 插槽会替换默认计数器，并提供当前计数和限制值。
+    default: null
+    usage: '#前后缀'
+  - name: suffix
+    type: Slot
+    values: "limit }"
     description: 自定义输入框前后缀；suffix 插槽会替换默认计数器，并提供当前计数和限制值。
     default: null
     usage: '#前后缀'
@@ -293,6 +450,34 @@ SLOTS:
 <template #script>
 
 @[code{7-11}](../../.vuepress/components/input/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 外形
+
+设置 `shape="square"` 可使用直角外观。外形与边框、阴影、颜色、状态和前后缀样式相互独立。
+
+<template #example><input-shape /></template>
+
+<template #template>
+
+@[code{8-23}](../../.vuepress/components/input/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../../.vuepress/components/input/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{25-37}](../../.vuepress/components/input/shape.vue)
 
 </template>
 
@@ -486,7 +671,7 @@ SLOTS:
 
 <template #style>
 
-@[code{43-52}](../../.vuepress/components/input/state.vue)
+@[code{43-50}](../../.vuepress/components/input/state.vue)
 
 </template>
 

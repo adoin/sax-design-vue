@@ -4,6 +4,7 @@ import {
   useColor,
   useLockscreen,
   useNamespace,
+  useShape,
   useVuesaxBaseComponent,
   useZIndex,
 } from '@vuesax-alpha/hooks'
@@ -16,6 +17,7 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
   const visible = ref(false)
   const closed = ref(false)
   const ns = useNamespace('dialog')
+  const shape = useShape()
   const { nextZIndex } = useZIndex()
   const vsBaseClasses = useVuesaxBaseComponent(useColor())
 
@@ -107,7 +109,7 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
   const dialogKls = computed(() => [
     ns.b('original'),
     vsBaseClasses,
-    ns.m(props.shape),
+    ns.m(shape.value),
     {
       [ns.m('rebound')]: rebound.value,
       [ns.m('not-padding')]: props.notPadding,

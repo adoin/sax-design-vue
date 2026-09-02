@@ -2,17 +2,22 @@
 PROPS:
   - name: status
     type: String
-    values: success | warning | error | info
+    values: "success | warning | error | info"
     description: 语义结果状态。
     default: info
   - name: title
     type: String
-    values: text
+    values: "text"
     description: 结果标题。
     default: null
-  - name: description / content
+  - name: description
     type: String
-    values: text
+    values: "text"
+    description: 结果辅助说明。
+    default: null
+  - name: content
+    type: String
+    values: "text"
     description: 结果辅助说明。
     default: null
 description: "结果反馈状态。"

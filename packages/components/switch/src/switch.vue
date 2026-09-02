@@ -3,13 +3,9 @@ import { computed } from 'vue'
 import {
   useColor,
   useNamespace,
+  useShape,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
-import {
-  IconCheck,
-  IconClose,
-  IconLoading,
-} from '@vuesax-alpha/components/icon'
 import { getVsColor } from '@vuesax-alpha/utils'
 import { switchEmits, switchProps } from './switch'
 import { useSwitch } from './use-switch'
@@ -22,19 +18,20 @@ defineOptions({
 const props = defineProps(switchProps)
 const emit = defineEmits(switchEmits)
 const ns = useNamespace('switch')
+const shape = useShape()
 const color = useColor('primary')
-const { isLoading, checked, isDisabled, handleChange } = useSwitch(props, emit)
-const effectiveVariant = computed(() => (props.icon ? 'icon' : props.variant))
+const { isLoading, checked, isDisabled, isIndeterminate, handleChange } =
+  useSwitch(props, emit)
 const vsBaseClasses = useVuesaxBaseComponent(color)
 const switchKls = computed(() => [
   vsBaseClasses,
   ns.b(),
   ns.is('loading', isLoading.value),
-  ns.is(props.shape),
-  ns.is('indeterminate', props.indeterminate),
-  ns.is(effectiveVariant.value),
+  ns.is(shape.value),
+  ns.is('indeterminate', isIndeterminate.value),
+  ns.is(props.variant),
   ns.is('checked', checked.value),
-  ns.is('disabled', isDisabled.value),
+  ns.is('disabled', props.disabled),
 ])
 const switchStyles = computed(() => [
   ns.cssVar({
@@ -42,7 +39,7 @@ const switchStyles = computed(() => [
   }),
 ])
 
-defineExpose({ checked })
+defineExpose({ checked, isIndeterminate })
 </script>
 
 <template>
@@ -52,27 +49,29 @@ defineExpose({ checked })
       type="checkbox"
       :checked="checked"
       :disabled="isDisabled"
+      :indeterminate="isIndeterminate"
       :readonly="isDisabled"
+      :aria-checked="isIndeterminate ? 'mixed' : undefined"
       :class="ns.e('input')"
       @change="handleChange"
     />
     <span :class="ns.e('track')" aria-hidden="true">
       <span :class="ns.e('circle')">
-        <slot name="circle">
-          <icon-loading v-if="isLoading" />
-          <template v-else-if="effectiveVariant === 'icon'">
-            <icon-check v-if="checked" active />
-            <icon-close v-else />
-          </template>
-        </slot>
+        <slot v-if="!isLoading" name="circle" />
       </span>
-      <span :class="[ns.e('text'), ns.is(checked ? 'on' : 'off')]">
-        <slot v-if="checked && $slots.on" name="on" />
-        <slot v-else-if="!checked && $slots.off" name="off" />
-        <slot v-else-if="$slots.default" />
-        <template v-else-if="effectiveVariant === 'text'">
-          {{ checked ? activeText : inactiveText }}
-        </template>
+      <span :class="ns.e('text')">
+        <span :class="[ns.e('label'), ns.is('on'), ns.is('visible', checked)]">
+          <slot v-if="$slots.on" name="on" />
+          <slot v-else-if="$slots.default" />
+          <template v-else-if="variant === 'text'">{{ activeText }}</template>
+        </span>
+        <span
+          :class="[ns.e('label'), ns.is('off'), ns.is('visible', !checked)]"
+        >
+          <slot v-if="$slots.off" name="off" />
+          <slot v-else-if="$slots.default" />
+          <template v-else-if="variant === 'text'">{{ inactiveText }}</template>
+        </span>
       </span>
     </span>
   </label>

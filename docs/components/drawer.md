@@ -1,28 +1,38 @@
 ---
 PROPS:
-  - name: show-close / teleported
+  - name: show-close
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Control close-button visibility and whether the drawer mounts to body.
-    default: 'true / true'
-  - name: model-value/v-model
+    default: 'true'
+  - name: teleported
     type: Boolean
-    values: true | false
+    values: "true | false"
+    description: Control close-button visibility and whether the drawer mounts to body.
+    default: 'true'
+  - name: model-value
+    type: Boolean
+    values: "true | false"
+    description: Drawer visibility.
+    default: false
+  - name: v-model
+    type: Boolean
+    values: "true | false"
     description: Drawer visibility.
     default: false
   - name: placement
     type: String
-    values: left | right | top | bottom
+    values: "left | right | top | bottom"
     description: Drawer edge.
     default: right
   - name: size
     type: String | Number
-    values: CSS size
+    values: "CSS size"
     description: Drawer width or height.
     default: 360px
   - name: mask-closable
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Allows backdrop closing.
     default: true
 description: 'Directional drawer.'
@@ -30,7 +40,9 @@ EVENTS:
   - name: update:modelValue
     type: Boolean
     description: Fires when the drawer visibility changes.
-  - name: open / close
+  - name: open
+    description: Fire after the drawer is opened or closed.
+  - name: close
     description: Fire after the drawer is opened or closed.
 ---
 

@@ -6,18 +6,33 @@ import { themeDataPlugin } from '@vuepress/plugin-theme-data'
 import { containerPlugin } from '@vuepress/plugin-container'
 import { gitPlugin } from '@vuepress/plugin-git'
 import { prismjsPlugin } from '@vuepress/plugin-prismjs'
+import { createApiTypeDetailsResolver } from './node/apiTypeDetails'
 
 import type { SaxDesignVueThemeOptions } from './saxDesignVueTheme'
 import type { Page, Plugin, Theme } from '@vuepress/core'
 
 const apiTableKeys = ['PROPS', 'CHILD_PROPS', 'SLOTS', 'EVENTS', 'EXPOSES']
+const resolveApiTypeDetails = createApiTypeDetailsResolver(
+  path.resolve(__dirname, '../../../packages/components'),
+)
 
 const escapeInlineScriptEnd = (page: Page) => {
+  const component = page.path.match(/\/components\/([^/.]+)\.html$/)?.[1]
+  const typeExpressions: string[] = []
+
   for (const key of apiTableKeys) {
     const rows = page.frontmatter[key]
     if (!Array.isArray(rows)) continue
 
     for (const row of rows) {
+      if (
+        typeof row === 'object' &&
+        row !== null &&
+        'type' in row &&
+        typeof row.type === 'string'
+      ) {
+        typeExpressions.push(row.type)
+      }
       if (
         typeof row === 'object' &&
         row !== null &&
@@ -27,6 +42,13 @@ const escapeInlineScriptEnd = (page: Page) => {
         row.code = row.code.replaceAll('</script>', '<\\/script>')
       }
     }
+  }
+
+  if (component && typeExpressions.length) {
+    page.frontmatter.API_TYPE_DETAILS = resolveApiTypeDetails(
+      component,
+      typeExpressions,
+    )
   }
 }
 

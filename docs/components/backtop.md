@@ -1,28 +1,33 @@
 ---
 PROPS:
-  - name: bottom / right
+  - name: bottom
     type: Number
-    values: pixels
+    values: "pixels"
     description: Set the distance from the viewport, or from the target container when target is set.
-    default: '40 / 40'
+    default: '40'
+  - name: right
+    type: Number
+    values: "pixels"
+    description: Set the distance from the viewport, or from the target container when target is set.
+    default: '40'
   - name: target
     type: String
-    values: CSS selector
+    values: "CSS selector"
     description: Scrollable container selector. The control is positioned inside this container. Defaults to the window.
     default: null
   - name: visibility-height
     type: Number
-    values: pixels
+    values: "pixels"
     description: Minimum scroll offset before the control appears. Either this or visibility-bottom can show the control.
     default: 200
   - name: visibility-bottom
     type: Number
-    values: pixels
+    values: "pixels"
     description: Shows when the remaining scroll distance reaches this value. Either this or visibility-height can show the control.
     default: null
   - name: behavior
     type: String
-    values: auto | smooth
+    values: "auto | smooth"
     description: Native scroll behavior after activation.
     default: smooth
 EVENTS:
@@ -31,7 +36,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: Slot
-    values: icon or custom content
+    values: "icon or custom content"
     description: Replace the default up arrow.
     default: IconArrow
 description: "Floating scroll-to-top control."

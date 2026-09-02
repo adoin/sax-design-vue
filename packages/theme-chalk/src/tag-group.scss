@@ -1,0 +1,66 @@
+@use 'mixins/mixins' as *;
+@use 'common/var' as *;
+
+@include b(tag-group) {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 100%;
+  gap: 0.4rem;
+
+  @include e(add) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    color: getColor(primary);
+    cursor: pointer;
+    opacity: 0.86;
+    transition:
+      color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+      filter var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+      opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+      transform var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
+
+    .#{$namespace}-icon {
+      font-size: 1.125rem;
+    }
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      outline: none;
+      filter: drop-shadow(0 2px 3px getColor(primary, 0.3));
+      transform: scale(1.14);
+    }
+  }
+
+  @each $type in (primary, success, warn, danger, dark, info) {
+    @include m($type) {
+      @include e(add) {
+        color: getColor($type);
+
+        &:hover,
+        &:focus-visible {
+          filter: drop-shadow(0 2px 3px getColor($type, 0.3));
+        }
+      }
+    }
+  }
+
+  @include m(warning) {
+    @include e(add) {
+      color: getColor(warn);
+    }
+  }
+
+  @include b(tag) {
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}

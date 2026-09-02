@@ -3,7 +3,7 @@ description: '为用户操作和系统状态展示上下文反馈消息。'
 PROPS:
   - name: v-model
     type: boolean
-    values: boolean
+    values: "boolean"
     description: 是否显示组件。
     default: true
     link: null
@@ -32,7 +32,7 @@ PROPS:
     usage: '#closable'
   - name: v-model:hidden-content
     type: boolean
-    values: boolean
+    values: "boolean"
     description: 隐藏警告内容，可通过 v-model 绑定。
     default: false
     link: null
@@ -49,7 +49,7 @@ PROPS:
       </template>
   - name: color
     type: String
-    values: primary, success, danger, warning, dark, RGB, HEX
+    values: "primary, success, danger, warning, dark, RGB, HEX"
     description: 设置组件及其部分子组件颜色。
     default: primary
     link: null
@@ -64,7 +64,7 @@ PROPS:
       </s-alert>
   - name: type
     type: boolean
-    values: solid, border, shadow, gradient, relief
+    values: "solid, border, shadow, gradient, relief"
     description: 设置警告框整体样式。
     default: default
     link: null
@@ -79,7 +79,7 @@ PROPS:
       </s-alert>
   - name: page
     type: Number
-    values: Number
+    values: "Number"
     description: 当前激活页码，与 `page-{n}` 插槽对应。
     default: null
     link: null
@@ -97,7 +97,7 @@ PROPS:
       </template>
   - name: progress
     type: Number
-    values: 0 - 100
+    values: "0 - 100"
     description: 为警告框添加进度条，值为宽度百分比。
     default: null
     link: null
@@ -112,7 +112,7 @@ PROPS:
       </s-alert>
   - name: closable
     type: boolean
-    values: boolean
+    values: "boolean"
     description: 添加关闭按钮，需要配合 v-model 使用。
     default: false
     link: null
@@ -150,7 +150,7 @@ EVENTS:
 SLOTS:
   - name: icon
     type: slot
-    values: null
+    values: "null"
     description: 为警告框添加图标。
     default: null
     link: null
@@ -170,7 +170,7 @@ SLOTS:
       </template>
   - name: title
     type: slot
-    values: null
+    values: "null"
     description: 为警告框添加标题。
     default: null
     link: null
@@ -189,7 +189,7 @@ SLOTS:
       </template>
   - name: page-{n}
     type: slot
-    values: (page-1 - page-{n})
+    values: "(page-1 - page-{n})"
     description: 为警告框添加分页内容；第一页对应 `page-1` 插槽。
     default: null
     link: null
@@ -208,7 +208,7 @@ SLOTS:
       </template>
   - name: footer
     type: slot
-    values: null
+    values: "null"
     description: 为警告框添加页脚。
     default: null
     link: null

@@ -1,32 +1,37 @@
+<script setup lang="ts">
+import { shallowRef } from 'vue'
+
+const announcementsEnabled = shallowRef(false)
+const emailUpdatesEnabled = shallowRef(false)
+const premiumWorkspace = shallowRef(false)
+</script>
+
 <template>
-  <div class="center con-switch">
-    <s-switch v-model="active"> Suscribe </s-switch>
-    <s-switch v-model="active2">
-      <template #off> Off </template>
-      <template #on> On </template>
+  <div class="switch-text-examples">
+    <s-switch v-model="announcementsEnabled">
+      Receive product announcements
     </s-switch>
-    <s-switch v-model="active3">
-      <template #off> Default </template>
-      <template #on> Premium </template>
+
+    <s-switch v-model="emailUpdatesEnabled">
+      <template #off>Email updates disabled</template>
+      <template #on>Email updates enabled</template>
     </s-switch>
+
+    <s-switch
+      v-model="premiumWorkspace"
+      variant="text"
+      inactive-text="Standard workspace"
+      active-text="Premium workspace enabled"
+    />
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-
-const active = ref(false)
-const active2 = ref(false)
-const active3 = ref(false)
-</script>
-
 <style lang="scss" scoped>
-.con-switch {
+.switch-text-examples {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  .s-switch {
-    margin: 10px;
-  }
+  gap: 14px 18px;
 }
 </style>

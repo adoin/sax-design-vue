@@ -29,6 +29,7 @@
         ns.is('week', props.type === 'week'),
         ns.is('range', isRange),
         ns.is('with-time', showTimePanel),
+        ns.is(resolvedShape),
       ]"
       :style="themeStyle"
     >
@@ -41,6 +42,7 @@
           :label-float="labelFloat"
           :color="color"
           :size="size"
+          :shape="resolvedShape"
           :disabled="disabled"
           :readonly="!editable || readonly"
           :aria-label="t('vs.datepicker.startDate')"
@@ -60,6 +62,7 @@
           :label-float="labelFloat"
           :color="color"
           :size="size"
+          :shape="resolvedShape"
           :disabled="disabled"
           :readonly="!editable || readonly"
           :clearable="clearable && !disabled"
@@ -81,6 +84,7 @@
         :label-float="labelFloat"
         :color="color"
         :size="size"
+        :shape="resolvedShape"
         :disabled="disabled"
         :readonly="!editable || readonly"
         :clearable="clearable && !disabled"
@@ -122,6 +126,7 @@
               <div v-show="rangePickerMode === 'date'" :class="ns.e('panels')">
                 <s-date-panel
                   :picker-type="panelType"
+                  :color="props.color"
                   :model-value="leftValue"
                   :selected-dates="innerDates"
                   :range-start="rangeStart"
@@ -136,6 +141,7 @@
                 />
                 <s-date-panel
                   :picker-type="panelType"
+                  :color="props.color"
                   :model-value="rightValue"
                   :selected-dates="innerDates"
                   :range-start="rangeStart"
@@ -235,6 +241,7 @@
             <div :class="ns.e('panels')">
               <s-date-panel
                 :picker-type="panelType"
+                :color="props.color"
                 :model-value="leftValue"
                 :selected-dates="innerDates"
                 :range-start="rangeStart"
@@ -250,6 +257,7 @@
               <s-date-panel
                 v-if="isRange"
                 :picker-type="panelType"
+                :color="props.color"
                 :model-value="rightValue"
                 :selected-dates="innerDates"
                 :range-start="rangeStart"
@@ -340,7 +348,12 @@ import SIcon from '@vuesax-alpha/components/icon'
 import SInput from '@vuesax-alpha/components/input'
 import SPopper from '@vuesax-alpha/components/popper'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import { useGlobalConfig, useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import {
+  useGlobalConfig,
+  useLocale,
+  useNamespace,
+  useShape,
+} from '@vuesax-alpha/hooks'
 import {
   getTimeZoneNow,
   getVsColor,
@@ -368,6 +381,7 @@ const props = defineProps(datePickerProps)
 const emit = defineEmits(datePickerEmits)
 
 const ns = useNamespace('date-picker')
+const resolvedShape = useShape()
 const { t } = useLocale()
 const globalTimezone = useGlobalConfig('timezone')
 const globalAutoApplyNow = useGlobalConfig('autoApplyNow')
@@ -409,7 +423,13 @@ const popperStyle = computed(() => ({
   height: props.popupConfig?.height,
 }))
 const popperClass = computed(() =>
-  [ns.e('popper'), props.popupConfig?.className].filter(Boolean).join(' '),
+  [
+    ns.e('popper'),
+    ns.is('square', resolvedShape.value === 'square'),
+    props.popupConfig?.className,
+  ]
+    .filter(Boolean)
+    .join(' '),
 )
 const panelType = computed(() => {
   if (props.type === 'week') return 'week'

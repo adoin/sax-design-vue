@@ -47,6 +47,7 @@ import { computed, ref } from 'vue'
 import {
   useColor,
   useNamespace,
+  useShape,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import SPopper from '@vuesax-alpha/components/popper'
@@ -64,6 +65,10 @@ const ns = useNamespace('tooltip')
 const popperRef = ref<PopperExpose>()
 
 const props = defineProps(tooltipProps)
+const shape = useShape<'circle' | 'square' | 'default'>()
+const resolvedShape = computed(() =>
+  shape.value === 'rounded' ? '' : shape.value,
+)
 
 const tooltipStyle = computed(() => [
   ns.cssVar({
@@ -76,7 +81,7 @@ const tooltipKls = computed(() => [
   vsBaseClasses,
   ns.is('loading', props.loading),
   ns.is(props.type, !!props.type),
-  ns.is(props.shape, !!props.shape),
+  ns.is(resolvedShape.value, !!resolvedShape.value),
   ns.is('not-arrow', !props.showArrow),
   ns.is(props.effect),
 ])

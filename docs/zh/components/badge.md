@@ -1,10 +1,10 @@
 ---
-description: "为相邻内容附加状态、数量或简短元数据。"
+description: '为相邻内容附加状态、数量或简短元数据。'
 PROPS:
   #__________________________________
   - name: value
     type: Number/String
-    values: Number,String
+    values: 'Number,String'
     description: 展示值。
     default: "' '"
     link: null
@@ -16,7 +16,7 @@ PROPS:
     #__________________________________
   - name: max
     type: Number
-    values: Number
+    values: 'Number'
     description: 最大值，超出时显示 <code>{max}+</code>；仅 value 为数字时生效。
     default: null
     link: null
@@ -28,7 +28,7 @@ PROPS:
     #__________________________________
   - name: is-dot
     type: Boolean
-    values: true,false
+    values: 'true,false'
     description: 以小圆点形式展示。
     default: false
     link: null
@@ -40,7 +40,7 @@ PROPS:
     #__________________________________
   - name: hidden
     type: Boolean
-    values: true,false
+    values: 'true,false'
     description: 是否隐藏徽标。
     default: false
     link: null
@@ -64,19 +64,19 @@ PROPS:
     #__________________________________
   - name: show-zero
     type: Boolean
-    values: true,false
+    values: 'true,false'
     description: value 为零时是否显示徽标。
     default: true
     link: null
     usage: '#show-zero'
     code: >
-      <s-badge :value="2" type="warn" show-zero >
+      <s-badge :value="0" type="warn" :show-zero="false">
         <s-button shape="square">square</s-button>
       </s-badge>
     #__________________________________
   - name: color
     type: String
-    values: String
+    values: 'String'
     description: 小圆点背景颜色。
     default: null
     link: null
@@ -98,7 +98,7 @@ PROPS:
     #__________________________________
   - name: processing
     type: Boolean
-    values: true,false
+    values: 'true,false'
     description: 设置 processing 表示处理中。
     default: false
     link: null
@@ -130,7 +130,7 @@ PROPS:
 SLOTS:
   - name: default
     type: slot
-    values:
+    values: ''
     description: 自定义默认内容。
     default: null
     example: null
@@ -340,7 +340,7 @@ UPDATES:
 
 ## 显示零值
 
-通过 `show-zero` 控制是否显示零值；默认隐藏。
+零值徽标默认显示；设置 `show-zero="false"` 后隐藏徽标，但保留其子内容。
 
 <template #example>
 <badge-show-zero />
@@ -348,19 +348,13 @@ UPDATES:
 
 <template #template>
 
-@[code{1-11}](../../.vuepress/components/badge/show-zero.vue)
-
-</template>
-
-<template #script>
-
-@[code{13-17}](../../.vuepress/components/badge/show-zero.vue)
+@[code{1-10}](../../.vuepress/components/badge/show-zero.vue)
 
 </template>
 
 <template #style>
 
-@[code{19-23}](../../.vuepress/components/badge/show-zero.vue)
+@[code{12-16}](../../.vuepress/components/badge/show-zero.vue)
 
 </template>
 

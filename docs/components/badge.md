@@ -1,10 +1,10 @@
 ---
-description: "Attach status, count, or short metadata to nearby content."
+description: 'Attach status, count, or short metadata to nearby content.'
 PROPS:
   #__________________________________
   - name: value
     type: Number/String
-    values: Number,String
+    values: 'Number,String'
     description: display value.
     default: "' '"
     link: null
@@ -16,7 +16,7 @@ PROPS:
     #__________________________________
   - name: max
     type: Number
-    values: Number
+    values: 'Number'
     description: maximum value, shows <code>{max}+</code> when exceeded. Only works if value is a number.
     default: null
     link: null
@@ -28,7 +28,7 @@ PROPS:
     #__________________________________
   - name: is-dot
     type: Boolean
-    values: true,false
+    values: 'true,false'
     description: Show with little dots level.
     default: false
     link: null
@@ -40,7 +40,7 @@ PROPS:
     #__________________________________
   - name: hidden
     type: Boolean
-    values: true,false
+    values: 'true,false'
     description: hidden badge.
     default: false
     link: null
@@ -64,19 +64,19 @@ PROPS:
     #__________________________________
   - name: show-zero
     type: Boolean
-    values: true,false
+    values: 'true,false'
     description: Whether to show badge when value is zero.
     default: true
     link: null
     usage: '#show-zero'
     code: >
-      <s-badge :value="2" type="warn" show-zero >
+      <s-badge :value="0" type="warn" :show-zero="false">
         <s-button shape="square">square</s-button>
       </s-badge>
     #__________________________________
   - name: color
     type: String
-    values: String
+    values: 'String'
     description: background color of the dot.
     default: null
     link: null
@@ -98,7 +98,7 @@ PROPS:
     #__________________________________
   - name: processing
     type: Boolean
-    values: true,false
+    values: 'true,false'
     description: Set processing prop to indicate it is processing.
     default: false
     link: null
@@ -130,7 +130,7 @@ PROPS:
 SLOTS:
   - name: default
     type: slot
-    values:
+    values: ''
     description: customize default content
     default: null
     example: null
@@ -340,7 +340,8 @@ Set `hidden` prop to control the visibility of the badge.
 
 ## Show Zero
 
-Set `show-zero` prop to display zero.According to reason, it is hidden.
+Zero values are shown by default. Set `show-zero="false"` to hide the badge
+while keeping its child content.
 
 <template #example>
 <badge-show-zero />
@@ -348,19 +349,13 @@ Set `show-zero` prop to display zero.According to reason, it is hidden.
 
 <template #template>
 
-@[code{1-11}](../.vuepress/components/badge/show-zero.vue)
-
-</template>
-
-<template #script>
-
-@[code{13-17}](../.vuepress/components/badge/show-zero.vue)
+@[code{1-10}](../.vuepress/components/badge/show-zero.vue)
 
 </template>
 
 <template #style>
 
-@[code{19-23}](../.vuepress/components/badge/show-zero.vue)
+@[code{12-16}](../.vuepress/components/badge/show-zero.vue)
 
 </template>
 

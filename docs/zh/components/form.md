@@ -7,93 +7,93 @@ API_TITLES:
 PROPS:
   - name: model
     type: Object
-    values: 响应式表单数据
+    values: "响应式表单数据"
     description: 必填。表单唯一数据源，按字段路径读写。
-    default: —
+    default: null
   - name: rules
     type: FormRules
-    values: '{ [field]: FormRule | FormRule[] }'
+    values: "{ [field]: FormRule | FormRule[] }"
     description: 必填、自定义 validator 与 blur / change 触发规则。
     default: '{}'
   - name: items
     type: FormItemConfig[]
-    values: 支持 children 的树形配置
+    values: "支持 children 的树形配置"
     description: 配置式渲染表单项，并通过 children 递归组织复杂布局。
     default: '[]'
   - name: label-width
     type: String | Number
-    values: CSS 宽度
+    values: "CSS 宽度"
     description: 横向布局的默认标签宽度，可容纳四个汉字和必填标记。
     default: 'calc(4em + 24px)'
   - name: label-position
     type: String
-    values: left / right / top
+    values: "left / right / top"
     description: 子 Form Item 的默认标签位置。
     default: right
   - name: label-align
     type: String
-    values: left / right
+    values: "left / right"
     description: 横向标签内部的默认文字对齐方式。
     default: right
   - name: inline
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 使用行内表单布局。
     default: 'false'
   - name: disabled
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 禁用全部声明式和配置式字段。
     default: 'false'
   - name: readonly
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 将全部声明式和配置式字段设为只读。
     default: 'false'
   - name: show-message
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 显示校验错误和字段帮助文字。
     default: 'true'
   - name: reserve-error-space
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 为字段错误或帮助文字保留稳定高度，避免校验时布局跳动。
     default: 'true'
   - name: scroll-to-error
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 校验失败时聚焦并滚动到第一个错误字段。
     default: 'true'
   - name: column-gap
     type: String | Number
-    values: CSS 尺寸
+    values: "CSS 尺寸"
     description: 24 栅格的横向间距。
     default: 16
   - name: row-gap
     type: String | Number
-    values: CSS 尺寸
+    values: "CSS 尺寸"
     description: 24 栅格的纵向间距。
     default: 4
 CHILD_PROPS:
   - name: label
     type: String
     description: 字段标签，优先级高于 title。
-    default: —
+    default: null
   - name: title
     type: String
     description: 未传 label 时使用的兼容别名。
-    default: —
+    default: null
   - name: prop
     type: String
-    values: 深层模型路径
+    values: "深层模型路径"
     description: 例如 profile.name，优先级高于 field。
-    default: —
+    default: null
   - name: field
     type: String
-    values: 深层模型路径
+    values: "深层模型路径"
     description: 未传 prop 时使用的兼容别名。
-    default: —
+    default: null
   - name: id
     type: String
     description: 用于标签和控件关联的控件 id。
@@ -101,65 +101,65 @@ CHILD_PROPS:
   - name: description
     type: String
     description: 字段没有校验错误时显示的帮助文字。
-    default: —
+    default: null
   - name: rules
     type: FormRule | FormRule[]
     description: 当前 Item 的校验规则，优先于 SForm rules 中的同字段规则。
-    default: —
+    default: null
   - name: required
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 独立于校验规则显示必填状态。
     default: 'false'
   - name: label-width
     type: String | Number
-    values: CSS 宽度
+    values: "CSS 宽度"
     description: 覆盖当前 Item 的 SForm label-width。
     default: 继承
   - name: label-position
     type: String
-    values: left / right / top
+    values: "left / right / top"
     description: 覆盖当前 Item 的 SForm label-position。
     default: 继承
   - name: span
     type: Number | FormItemSpan
-    values: 1–24 / 响应式对象
+    values: "1–24 / 响应式对象"
     description: 当前 Item 在 24 栅格中占用的宽度。
     default: 24
   - name: vertical
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 将当前 Item 的标签放到控件上方。
     default: 'false'
   - name: nested
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 将默认插槽作为嵌套 Form Item 栅格处理。
     default: 'false'
   - name: align
     type: String
-    values: left / center / right
+    values: "left / center / right"
     description: 控制当前 Item 内容在栅格单元中的对齐方式。
     default: left
   - name: reserve-error-space
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 覆盖当前 Item 的 SForm reserve-error-space。
     default: 继承
   - name: disabled
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 覆盖传给 itemRender 的禁用状态。
     default: 继承
   - name: readonly
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 覆盖传给 itemRender 的只读状态。
     default: 继承
   - name: item-render
     type: FormItemRenderOptions
     description: 未提供默认插槽时渲染已注册或自定义控件。
-    default: —
+    default: null
 EVENTS:
   - name: validate
     description: 单个字段校验结束后触发，参数为 field、valid、message。

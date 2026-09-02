@@ -3,7 +3,7 @@ description: 'Navigate long collections one page at a time.'
 PROPS:
   - name: v-model:current-page
     type: Number
-    values: number
+    values: "number"
     description: Determine the page where the user is.
     default: 1
     link: null
@@ -12,7 +12,7 @@ PROPS:
       <s-pagination v-model:current-page="page" :total="20" />
   - name: total
     type: Number
-    values: number
+    values: "number"
     description: It is the total number of pages that the component has.
     default: null
     link: null
@@ -21,7 +21,7 @@ PROPS:
       <s-pagination v-model:current-page="page" :total="20" />
   - name: color
     type: String
-    values: Theme colors, RGB, HEX
+    values: "Theme colors, RGB, HEX"
     description: Change the base color of the component.
     default: primary
     link: null
@@ -31,7 +31,7 @@ PROPS:
 
   - name: disabled
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Determine if the entire component is in the disabled state.
     default: false
     link: null
@@ -41,7 +41,7 @@ PROPS:
 
   - name: shape
     type: String
-    values: circle, square
+    values: "circle, square"
     description: Change the style of the buttons making them completely round or totally square.
     default: null
     link: null
@@ -53,7 +53,7 @@ PROPS:
 
   - name: buttons-dotted
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Makes the buttons not have the internal number and changes its size.
     default: false
     link: null
@@ -63,7 +63,7 @@ PROPS:
 
   - name: disabled-items
     type: Number[]
-    values: null
+    values: "null"
     description: Determine which items are in the disabled state.
     default: null
     link: null
@@ -73,7 +73,7 @@ PROPS:
 
   - name: loading-items
     type: Number[]
-    values: null
+    values: "null"
     description: Determine which items are in the charging state.
     default: null
     link: null
@@ -83,7 +83,7 @@ PROPS:
 
   - name: not-margin
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Change the margin between the items causing them to be fully glued and the radius is removed making them square.
     default: false
     link: null
@@ -93,7 +93,7 @@ PROPS:
 
   - name: progress
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Add a progress bar to the component determined by the current page and the total of pages.
     default: false
     link: null
@@ -103,7 +103,7 @@ PROPS:
 
   - name: infinite
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Determine if the pagination is infinite.
     default: false
     link: null
@@ -113,7 +113,7 @@ PROPS:
 
   - name: v-model:page-size
     type: Number
-    values: null
+    values: "null"
     description: item count of each page.
     default: 10
     link: null
@@ -122,7 +122,7 @@ PROPS:
 
   - name: default-page-size
     type: Number
-    values: null
+    values: "null"
     description: default initial value of page size
     default: null
     link: null
@@ -131,7 +131,7 @@ PROPS:
 
   - name: page-count
     type: Number
-    values: null
+    values: "null"
     description: total page count. Set either total or page-count and pages will be displayed; if you need page-sizes, total is required
     default: null
     link: null
@@ -140,7 +140,7 @@ PROPS:
 
   - name: pager-count
     type: Number
-    values: 5, 7, 9, 11, 13, 15, 17, 19, 21
+    values: "5, 7, 9, 11, 13, 15, 17, 19, 21"
     description: number of pagers. Pagination collapses when the total page count exceeds this value
     default: 7
     link: null
@@ -149,7 +149,7 @@ PROPS:
 
   - name: default-current-page
     type: Number
-    values: null
+    values: "null"
     description: default initial value of current-page
     default: null
     link: null
@@ -158,7 +158,7 @@ PROPS:
 
   - name: layout
     type: String, String[]
-    values: prev, pager, next, jumper, ->, total, slot, sizes
+    values: "prev, pager, next, jumper, ->, total, slot, sizes"
     description: layout of Pagination, an array or elements separated with a comma
     default: [prev, pager, next, jumper, ->, total, slot, sizes]
     link: null
@@ -167,7 +167,7 @@ PROPS:
 
   - name: page-sizes
     type: Array
-    values: number[]
+    values: "number[]"
     description: options of item count per page
     default: [10, 20, 30, 40, 50, 100]
     link: null
@@ -176,7 +176,7 @@ PROPS:
 
   - name: hide-on-single-page
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: options of item count per page
     default: false
     link: null
@@ -185,7 +185,7 @@ PROPS:
 
   - name: prev-text
     type: String
-    values: null
+    values: "null"
     description: text for the prev button
     default: null
     link: null
@@ -194,7 +194,7 @@ PROPS:
 
   - name: prev-icon
     type: String, Component
-    values: null
+    values: "null"
     description: icon for the prev button, higher priority of prev-text
     default: ChevronLeft
     link: null
@@ -203,7 +203,7 @@ PROPS:
 
   - name: next-text
     type: String
-    values: null
+    values: "null"
     description: text for the next button
     default: null
     link: null
@@ -212,7 +212,7 @@ PROPS:
 
   - name: next-icon
     type: String, Component
-    values: null
+    values: "null"
     description: icon for the next button, higher priority of next-text
     default: ChevronRight
     link: null
@@ -220,19 +220,28 @@ PROPS:
     code: null
 
 EVENTS:
-  - name: update:current-page / page-change
+  - name: update:current-page
     type: Number
     description: Fire when the current page changes.
-  - name: update:page-size / size-change
+  - name: page-change
+    type: Number
+    description: Fire when the current page changes.
+  - name: update:page-size
     type: Number
     description: Fire when the page size changes.
-  - name: prev-click / next-click
+  - name: size-change
+    type: Number
+    description: Fire when the page size changes.
+  - name: prev-click
+    type: Number
+    description: Fire with the resulting page after a previous or next action.
+  - name: next-click
     type: Number
     description: Fire with the resulting page after a previous or next action.
 SLOTS:
   - name: default
     type: slot
-    values: null
+    values: "null"
     description: Custom content. To use this, need to declare slot in layout
     default: null
     link: null

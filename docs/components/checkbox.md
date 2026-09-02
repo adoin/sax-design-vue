@@ -1,14 +1,25 @@
 ---
 description: 'Choose one or more boolean options.'
 PROPS:
-  - name: disabled / max / not-value
-    type: Boolean / Number / String | Number | Boolean
-    values: true | false / selected value limit / unchecked value
+  - name: disabled
+    type: Boolean
+    values: "true | false"
+    description: Disable checkbox interaction while preserving its checked or indeterminate state.
+    default: 'false'
+    usage: '#disabled'
+  - name: max
+    type: Number
+    values: "selected value limit"
     description: Disable selection, cap grouped selections, or customize the unchecked value.
-    default: 'false / - / false'
+    default: null
+  - name: not-value
+    type: String | Number | Boolean
+    values: "unchecked value"
+    description: Disable selection, cap grouped selections, or customize the unchecked value.
+    default: 'false'
   - name: v-model
     type: Boolean, String, Array
-    values: boolean, string, array
+    values: "boolean, string, array"
     description: determine the value of the checkbox and data anchor.
     default: false
     link: null
@@ -16,7 +27,7 @@ PROPS:
 
   - name: color
     type: String
-    values: Sax Design colors, RGB, HEX
+    values: "Sax Design colors, RGB, HEX"
     description: Change the color of the component.
     default: false
     link: null
@@ -24,7 +35,7 @@ PROPS:
 
   - name: value
     type: String, Object
-    values: String, Object
+    values: "String, Object"
     description: Determine the value of the input when being checked.
     default: true
     link: null
@@ -32,7 +43,7 @@ PROPS:
 
   - name: loading
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Add a loading animation and disable the input.
     default: false
     link: null
@@ -49,7 +60,7 @@ PROPS:
 
   - name: line-through
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Add a line in the center of the label when checked.
     default: false
     link: null
@@ -63,7 +74,7 @@ PROPS:
 
   - name: icon-animation
     type: String
-    values: auto, draw, pop, none
+    values: "auto, draw, pop, none"
     description: Animate a custom icon. Auto draws stroke SVG paths and uses a pop reveal for filled icons.
     default: auto
     link: null
@@ -71,7 +82,7 @@ PROPS:
 
   - name: indeterminate
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Change the default checkbox icon to a line that represents undetermined data.
     default: false
     link: null
@@ -85,7 +96,7 @@ PROPS:
 
   - name: label-before
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Change the position of the label.
     default: false
     link: null
@@ -99,7 +110,7 @@ PROPS:
 
   - name: checked
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Determine if the component is initially in check (this changes the property computed in v-model to true).
     default: false
     link: null
@@ -113,7 +124,7 @@ PROPS:
 
   - name: checked-force
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Force checkbox state is checked
     default: false
     link: null
@@ -127,7 +138,7 @@ PROPS:
 
   - name: Checkbox Group
     type: Array<String | Number | Object>
-    values: null
+    values: "null"
     description: It is used for multiple checkboxes which are bound in one group.
     default: null
     link: null
@@ -135,7 +146,7 @@ PROPS:
 
   - name: id
     type: string
-    values: null
+    values: "null"
     description: Checkbox id
     default: undefined
     link: null
@@ -149,7 +160,7 @@ PROPS:
 
   - name: name
     type: string
-    values: null
+    values: "null"
     description: Checkbox name
     default: null
     link: null
@@ -162,10 +173,16 @@ PROPS:
       </template>
 
 EVENTS:
-  - name: update:modelValue / change
+  - name: update:modelValue
     type: CheckboxModelType | CheckboxGroupValueType
     description: Fire when a Checkbox or CheckboxGroup value changes.
-  - name: update:activeKey / tabChange
+  - name: change
+    type: CheckboxModelType | CheckboxGroupValueType
+    description: Fire when a Checkbox or CheckboxGroup value changes.
+  - name: update:activeKey
+    type: String | Number
+    description: Fire when CheckboxGroupTabs activates another tab.
+  - name: tabChange
     type: String | Number
     description: Fire when CheckboxGroupTabs activates another tab.
   - name: CheckboxGroupTabs change
@@ -174,7 +191,7 @@ EVENTS:
 SLOTS:
   - name: icon
     type: slot
-    values: checked, indeterminate
+    values: "checked, indeterminate"
     description: Change the component icon and receive its current checked and indeterminate states.
     default: null
     link: null
@@ -220,7 +237,7 @@ SLOTS:
 
   - name: default
     type: slot
-    values: null
+    values: "null"
     description: Add a label to the component.
     default: null
     link: null
@@ -256,6 +273,36 @@ Add a checkbox type input easily and with a beautiful animation
 <template #script>
 
 @[code{6-10}](../.vuepress/components/checkbox/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Disabled
+
+Set `disabled` to prevent interaction. Disabled checkboxes use a neutral fill and inset shadow, preserve checked or indeterminate marks, and remain still on hover. Compare them with enabled controls below.
+
+<template #example>
+<checkbox-disabled />
+</template>
+
+<template #template>
+
+@[code{8-18}](../.vuepress/components/checkbox/disabled.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/checkbox/disabled.vue)
+
+</template>
+
+<template #style>
+
+@[code{20-27}](../.vuepress/components/checkbox/disabled.vue)
 
 </template>
 
@@ -531,7 +578,7 @@ Add a label to the checkbox with the default slot of the component
 
 <card>
 
-## Loading <Badge text="New"/>
+## Loading
 
 Add a loading status to the component with the property `loading`
 
@@ -561,7 +608,7 @@ Add a loading status to the component with the property `loading`
 
 <card>
 
-## Line Through <Badge text="New"/>
+## Line Through
 
 Add a line in the middle of the label when the checkbox is checked with the property `line-through`
 
@@ -585,7 +632,7 @@ Add a line in the middle of the label when the checkbox is checked with the prop
 
 <card>
 
-## Indeterminate <Badge text="New"/>
+## Indeterminate
 
 There are some cases where you have several checkboxes and you need one that manages all the others for this you can do it with the indeterminate property that adds a different style to the checkbox
 

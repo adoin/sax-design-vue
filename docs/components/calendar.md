@@ -2,117 +2,137 @@
 PROPS:
   - name: size
     type: "'small' | 'medium' | 'large'"
-    values: small / medium / large
+    values: "small / medium / large"
     description: Calendar visual density. Medium is the default; large preserves the original spacious cells.
     default: medium
   - name: events
     type: CalendarEvent[]
-    values: '{ id, title, start, end?, allDay?, color?, display?, data? }[]'
+    values: "{ id, title, start, end?, allDay?, color?, display?, data? }[]"
     description: Schedule data. Accepts all-day dates and local ISO time ranges. `display` can override one event's compact time marker or segment.
     default: '[]'
   - name: event-data
     type: unknown[]
-    values: application-owned schedule data
+    values: "application-owned schedule data"
     description: Opaque schedule records. Use event-adapter to map any domain model into display events.
     default: '[]'
   - name: event-adapter
     type: Function
-    values: '(data, { view, start, end }) => CalendarEvent[]'
+    values: "(data, { view, start, end }) => CalendarEvent[]"
     description: Translates event-data into the flat events Calendar renders. Keeps recurrence and business rules outside Calendar.
-    default: —
+    default: null
   - name: event-display
     type: Function
-    values: '(event, { date, view, allDay, segment }) => string | { title?, time?, segment? }'
+    values: "(event, { date, view, allDay, segment }) => string | { title?, time?, segment? }"
     description: Customizes compact event labels. Defaults distinguish time points, same-day ranges, range starts (`08:00~`), and range ends (`~18:00`).
-    default: —
+    default: null
   - name: event-limit
     type: Number
-    values: 0+
+    values: "0+"
     description: Number of events shown directly in a month/all-day cell. The default keeps the earliest event plus a `+n` overflow trigger.
     default: '1'
-  - name: date / v-model:date
+  - name: date
     type: String
-    values: YYYY-MM-DD
+    values: "YYYY-MM-DD"
     description: Controls the visible month, week, or day without changing selection.
     default: current date
-  - name: view / v-model:view
+  - name: v-model:date
+    type: String
+    values: "YYYY-MM-DD"
+    description: Controls the visible month, week, or day without changing selection.
+    default: current date
+  - name: view
     type: month | week | day
-    values: month / week / day
+    values: "month / week / day"
+    description: Active scheduler view.
+    default: month
+  - name: v-model:view
+    type: month | week | day
+    values: "month / week / day"
     description: Active scheduler view.
     default: month
   - name: views
     type: Array
-    values: month / week / day
+    values: "month / week / day"
     description: Allowed views. A single item locks the calendar to that view and hides the switcher.
     default: "['month', 'week', 'day']"
   - name: editable
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Enables dragging timed events to a new day and time.
     default: 'false'
-  - name: hour-start / hour-end
+  - name: hour-start
     type: Number
-    values: 0 - 24
+    values: "0 - 24"
     description: Time grid bounds for week and day views.
-    default: '0 / 24'
+    default: '0'
+  - name: hour-end
+    type: Number
+    values: "0 - 24"
+    description: Time grid bounds for week and day views.
+    default: '24'
   - name: hour-format
     type: "'12' | '24'"
-    values: 12 / 24
+    values: "12 / 24"
     description: Hour labels for week and day views. Stored values always remain local ISO time.
     default: '24'
   - name: schedule-height
     type: Number
-    values: pixels
+    values: "pixels"
     description: Scrollable height for week and day schedules. Set 0 to render every hour without an internal scroll area.
     default: '640'
   - name: event-color
     type: String
-    values: CSS color
+    values: "CSS color"
     description: Default event color when an event has no color.
     default: primary
   - name: context-menu-items
     type: ContextMenuItem[]
-    values: '{ label, value?, icon?, disabled?, divided? }[]'
+    values: "{ label, value?, icon?, disabled?, divided? }[]"
     description: Static right-click menu for events, dates, and time slots.
     default: '[]'
   - name: get-context-menu-items
     type: Function
-    values: '(context) => ContextMenuItem[]'
+    values: "(context) => ContextMenuItem[]"
     description: Resolve menu items for the right-clicked event, date, or time. Receives { type, date, event? }.
-    default: —
+    default: null
   - name: context-menu-min-width
     type: Number
-    values: pixels
+    values: "pixels"
     description: Minimum width of the context menu panel.
     default: '184'
-  - name: model-value/v-model
+  - name: model-value
     type: String | String[]
-    values: YYYY-MM-DD
+    values: "YYYY-MM-DD"
+    description: Selected date or selected date range.
+    default: "''"
+  - name: v-model
+    type: String | String[]
+    values: "YYYY-MM-DD"
     description: Selected date or selected date range.
     default: "''"
   - name: range
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Select a date range.
     default: 'false'
   - name: multiple
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Toggle arbitrary dates. Dragging and Shift-click append continuous date ranges.
     default: 'false'
   - name: first-day-of-week
     type: Number
-    values: 0 - 6
+    values: "0 - 6"
     description: Week start day, 0 for Sunday and 1 for Monday.
     default: '1'
   - name: disabled-date
     type: Function
-    values: '(date) => boolean'
+    values: "(date) => boolean"
     description: Disable matching dates.
-    default: —
+    default: null
   - name: show-week-number
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Show ISO week numbers.
     default: 'false'
 EVENTS:
@@ -128,9 +148,13 @@ EVENTS:
     description: Emits { event, start, end, source } after a timed-event drag.
   - name: cell-click
     description: Emits YYYY-MM-DD or YYYY-MM-DDTHH:mm for an empty cell click.
-  - name: view-change / panel-change
+  - name: view-change
     description: Active view and visible date changes.
-  - name: context-menu / context-menu-select
+  - name: panel-change
+    description: Active view and visible date changes.
+  - name: context-menu
+    description: Open context and selected menu item. Selection returns { item, context }; context.dates is the selected date range.
+  - name: context-menu-select
     description: Open context and selected menu item. Selection returns { item, context }; context.dates is the selected date range.
 EXPOSES:
   - name: clearSelection

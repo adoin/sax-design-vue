@@ -26,7 +26,11 @@
           ns.is('active', item <= currentValue),
         ]"
       >
-        <template v-if="!showDecimalIcon(item)">
+        <template v-if="showDecimalIcon(item)">
+          <s-icon v-if="isString(voidComponent)" :name="voidComponent" />
+          <component :is="voidComponent" v-else />
+        </template>
+        <template v-else>
           <s-icon
             v-if="item <= currentValue && isString(activeComponent)"
             :name="activeComponent"
@@ -56,7 +60,7 @@
 <script lang="ts" setup>
 import { computed, markRaw, ref, watch } from 'vue'
 import { EVENT_CODE, UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import { hasClass, isArray, isObject, isString } from '@vuesax-alpha/utils'
+import { isArray, isObject, isString } from '@vuesax-alpha/utils'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace, useSize } from '@vuesax-alpha/hooks'
 import { rateEmits, rateProps } from './rate'
@@ -252,14 +256,15 @@ function setCurrentValue(value: number, event: MouseEvent) {
     return
   }
   if (props.allowHalf) {
-    let target = event.target as HTMLElement
-    if (hasClass(target, ns.e('item'))) {
-      target = target.querySelector(`.${ns.e('icon')}`)!
-    }
-    if (target.clientWidth === 0 || hasClass(target, ns.e('decimal'))) {
-      target = target.parentNode as HTMLElement
-    }
-    pointerAtLeftHalf.value = event.offsetX * 2 <= target.clientWidth
+    const item = event.currentTarget as HTMLElement
+    const icon = item.querySelector<HTMLElement>(`.${ns.e('icon')}`)
+    const itemLeft = item.getBoundingClientRect().left
+    const iconWidth = icon?.clientWidth ?? item.clientWidth
+
+    // Always measure against the stable item box. `event.target` may be the
+    // full icon, the clipped decimal layer, or an SVG child, each of which has
+    // a different coordinate system and caused the half-star state to flicker.
+    pointerAtLeftHalf.value = event.clientX - itemLeft <= iconWidth / 2
     currentValue.value = pointerAtLeftHalf.value ? value - 0.5 : value
   } else {
     currentValue.value = value

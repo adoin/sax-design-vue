@@ -4,11 +4,13 @@ import {
   isBoolean,
   isString,
 } from '@vuesax-alpha/utils'
+import { useShapeProp } from '@vuesax-alpha/hooks'
 
 import type { ExtractPropTypes } from 'vue'
 import type Textarea from './textarea.vue'
 
 export const textareaProps = buildProps({
+  shape: useShapeProp,
   modelValue: {
     type: String,
     default: '',

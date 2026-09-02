@@ -22,120 +22,138 @@
           </a>
         </h3>
 
-        <s-table class="api-table">
-          <template #thead>
-            <tr>
-              <th class="api-column-name">{{ rowNameLabel(key) }}</th>
-              <th class="api-column-type">{{ labels.type }}</th>
-              <th class="api-column-values">{{ rowValuesLabel(key) }}</th>
-              <th class="api-column-description">{{ labels.description }}</th>
-              <th class="api-column-default">{{ labels.default }}</th>
-              <th class="api-column-example">{{ labels.example }}</th>
-              <th class="api-column-more">{{ labels.more }}</th>
-            </tr>
-          </template>
+        <div class="api-table">
+          <table>
+            <thead>
+              <tr>
+                <th class="api-column-name">{{ rowNameLabel(key) }}</th>
+                <th class="api-column-type">{{ labels.type }}</th>
+                <th class="api-column-values">{{ rowValuesLabel(key) }}</th>
+                <th class="api-column-description">
+                  {{ labels.description }}
+                </th>
+                <th class="api-column-default">{{ labels.default }}</th>
+                <th class="api-column-example">{{ labels.example }}</th>
+                <th class="api-column-more">{{ labels.more }}</th>
+              </tr>
+            </thead>
 
-          <template #tbody>
-            <template v-for="(row, index) in rows" :key="`${key}-${row.name}`">
-              <tr :id="`api-${row.name}`">
-                <td class="api-column-name">
-                  <router-link
-                    v-if="row.link && !isExternal(row.link)"
-                    :to="row.link"
-                  >
-                    {{ row.name }} <s-icon name="bx:link" />
-                  </router-link>
-                  <a
-                    v-else-if="row.link"
-                    :href="row.link"
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    {{ row.name }} <s-icon name="bx:link-external" />
-                  </a>
-                  <span v-else>{{ row.name }}</span>
-                  <Badge
-                    v-if="row.state"
-                    class="api-state"
-                    :text="row.state.text"
-                    :type="row.state.type"
-                  />
-                </td>
-                <td class="api-column-type">{{ row.type || '—' }}</td>
-                <td class="api-column-values" v-html="getValues(row.values)" />
-                <td
-                  class="api-column-description"
-                  v-html="row.description || '—'"
-                />
-                <td class="api-column-default">{{ row.default || '—' }}</td>
-                <td class="api-column-example">
-                  <div class="api-actions">
-                    <a v-if="row.usage" :href="row.usage" class="api-action">
-                      {{ labels.usage }} <s-icon name="bx:code-block" />
-                    </a>
-                    <button
-                      v-if="row.code"
-                      class="api-action"
-                      type="button"
-                      @click="toggleCode(String(key), index)"
-                    >
-                      {{
-                        isCodeOpen(String(key), index)
-                          ? labels.close
-                          : labels.open
-                      }}
-                      <s-icon
-                        :name="
-                          isCodeOpen(String(key), index)
-                            ? 'bx:x'
-                            : 'bx:code-alt'
-                        "
-                      />
-                    </button>
-                    <span v-if="!row.usage && !row.code" class="api-empty"
-                      >—</span
-                    >
-                  </div>
-                </td>
-                <td class="api-column-more">
-                  <a
-                    :href="issueLink(row.name, String(key))"
-                    :aria-label="t.examples.reportIssue"
-                    class="api-icon-action"
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    <s-icon name="bx:bug" />
-                  </a>
-                  <a
-                    href="https://github.com/adoin/sax-design-vue/"
-                    :aria-label="t.examples.viewSource"
-                    class="api-icon-action"
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    <s-icon name="bx:terminal" />
-                  </a>
-                </td>
-              </tr>
-              <tr
-                v-if="row.code && isCodeOpen(String(key), index)"
-                class="api-code-row"
+            <tbody>
+              <template
+                v-for="(row, index) in rows"
+                :key="`${key}-${row.name}`"
               >
-                <td colspan="7">
-                  <button
-                    class="api-code-copy"
-                    type="button"
-                    @click="copyCode(row.code)"
-                  >
-                    {{ copied ? t.examples.copied : t.examples.copyCode }}
-                  </button>
-                  <div v-html="getCode(row.code)" />
-                </td>
-              </tr>
-            </template>
-          </template>
-        </s-table>
+                <tr :id="`api-${row.name}`">
+                  <td class="api-column-name">
+                    <router-link
+                      v-if="row.link && !isExternal(row.link)"
+                      :to="row.link"
+                    >
+                      {{ row.name }} <s-icon name="bx:link" />
+                    </router-link>
+                    <a
+                      v-else-if="row.link"
+                      :href="row.link"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      {{ row.name }} <s-icon name="bx:link-external" />
+                    </a>
+                    <span v-else>{{ row.name }}</span>
+                    <Badge
+                      v-if="row.state"
+                      class="api-state"
+                      :text="row.state.text"
+                      :type="row.state.type"
+                    />
+                  </td>
+                  <td class="api-column-type">
+                    <ApiTypeDetails
+                      v-if="row.type && hasTypeDetails(row.type)"
+                      :type="row.type"
+                      :definitions="getTypeDetails(row.type)"
+                      :labels="labels"
+                    />
+                    <span v-else>{{ row.type || '—' }}</span>
+                  </td>
+                  <td
+                    class="api-column-values"
+                    v-html="getValues(row.values)"
+                  />
+                  <td
+                    class="api-column-description"
+                    v-html="row.description || '—'"
+                  />
+                  <td class="api-column-default">{{ row.default || '—' }}</td>
+                  <td class="api-column-example">
+                    <div class="api-actions">
+                      <a v-if="row.usage" :href="row.usage" class="api-action">
+                        {{ labels.usage }} <s-icon name="bx:code-block" />
+                      </a>
+                      <button
+                        v-if="row.code"
+                        class="api-action"
+                        type="button"
+                        @click="toggleCode(String(key), index)"
+                      >
+                        {{
+                          isCodeOpen(String(key), index)
+                            ? labels.close
+                            : labels.open
+                        }}
+                        <s-icon
+                          :name="
+                            isCodeOpen(String(key), index)
+                              ? 'bx:x'
+                              : 'bx:code-alt'
+                          "
+                        />
+                      </button>
+                      <span v-if="!row.usage && !row.code" class="api-empty"
+                        >—</span
+                      >
+                    </div>
+                  </td>
+                  <td class="api-column-more">
+                    <a
+                      :href="issueLink(row.name, String(key))"
+                      :aria-label="t.examples.reportIssue"
+                      class="api-icon-action"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      <s-icon name="bx:bug" />
+                    </a>
+                    <a
+                      href="https://github.com/adoin/sax-design-vue/"
+                      :aria-label="t.examples.viewSource"
+                      class="api-icon-action"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      <s-icon name="bx:terminal" />
+                    </a>
+                  </td>
+                </tr>
+                <tr
+                  v-if="row.code && isCodeOpen(String(key), index)"
+                  class="api-code-row"
+                >
+                  <td colspan="7">
+                    <button
+                      class="api-code-copy"
+                      type="button"
+                      @click="copyCode(row.code)"
+                    >
+                      {{ copied ? t.examples.copied : t.examples.copyCode }}
+                    </button>
+                    <div v-html="getCode(row.code)" />
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   </section>
@@ -147,11 +165,13 @@ import { usePageData, usePageFrontmatter } from '@vuepress/client'
 import prism from 'prismjs'
 import { useClipboard } from '@vueuse/core'
 
-import { isExternal } from '../util'
 import { useDocLocaleUi } from '../composables/docLocale'
+import { isExternal } from '../util'
+import ApiTypeDetails from './ApiTypeDetails.vue'
 import type { ComputedRef } from 'vue'
 import type { PageData, PageFrontmatter } from '@vuepress/client'
 import type {
+  ThemeApiTypeDefinition,
   ThemeNormalApiFrontmatter,
   ThemeNormalApiTableKey,
   ThemeNormalPropsFrontmatter,
@@ -196,6 +216,27 @@ const rowNameLabel = (key: string) =>
 const rowValuesLabel = (key: string) =>
   (t.value.apiValueColumns as Record<string, string>)[key] ||
   labels.value.values
+const typeIdentifierPattern = /\b[A-Za-z_$][\w$]*\b/g
+const getTypeDetails = (expression: string) => {
+  const registry = pageFrontmatter.value.API_TYPE_DETAILS ?? {}
+  const details: Record<string, ThemeApiTypeDefinition> = {}
+  const queue = Array.from(
+    expression.matchAll(typeIdentifierPattern),
+    (match) => match[0],
+  )
+
+  while (queue.length) {
+    const name = queue.shift()!
+    const definition = registry[name]
+    if (!definition || details[name]) continue
+    details[name] = definition
+    queue.push(...definition.references)
+  }
+
+  return details
+}
+const hasTypeDetails = (expression: string) =>
+  Object.keys(getTypeDetails(expression)).length > 0
 const codeKey = (table: string, index: number) => `${table}-${index}`
 const isCodeOpen = (table: string, index: number) =>
   openCodes.value.has(codeKey(table, index))

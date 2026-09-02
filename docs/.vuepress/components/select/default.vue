@@ -1,14 +1,6 @@
 <template>
   <div class="center con-selects">
-    <s-select v-model="value" placeholder="Select">
-      <s-option label="Sax Design" value="1"> Sax Design </s-option>
-      <s-option label="Vue" value="2"> Vue </s-option>
-      <s-option label="Javascript" value="3"> Javascript </s-option>
-      <s-option disabled label="Sass" value="4"> Sass </s-option>
-      <s-option label="Typescript" value="5"> Typescript </s-option>
-      <s-option label="Webpack" value="6"> Webpack </s-option>
-      <s-option label="Nodejs" value="7"> Nodejs </s-option>
-    </s-select>
+    <s-select v-model="value" :options="options" placeholder="Select" />
   </div>
 </template>
 
@@ -16,6 +8,13 @@
 import { ref } from 'vue'
 
 const value = ref('')
+const options = [
+  { label: 'Sax Design', value: '1' },
+  { label: 'Vue', value: '2' },
+  { label: 'JavaScript', value: '3' },
+  { label: 'Sass', value: '4', disabled: true },
+  { label: 'TypeScript', value: '5' },
+]
 </script>
 
 <style scoped lang="scss">

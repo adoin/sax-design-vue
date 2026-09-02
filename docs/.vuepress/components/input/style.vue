@@ -1,6 +1,6 @@
 <template>
   <div class="center content-inputs">
-    <s-input v-model="value" input-style="border" placeholder="Name" />
+    <s-input v-model="value" input-style="border" placeholder="Border" />
 
     <s-input
       v-model="value2"
@@ -10,7 +10,7 @@
       type="password"
     >
       <template #icon>
-        <s-icon  name="bx:lock-open-alt" />
+        <s-icon name="bx:lock-open-alt" />
       </template>
     </s-input>
 
@@ -24,7 +24,7 @@
       type="email"
     >
       <template #icon>
-        <s-icon  name="bxl:bitcoin" />
+        <s-icon name="bxl:bitcoin" />
       </template>
     </s-input>
   </div>

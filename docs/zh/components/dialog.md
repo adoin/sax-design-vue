@@ -1,19 +1,79 @@
 ---
 description: '展示聚焦的模态内容并要求用户作出决定。'
 PROPS:
-  - name: before-close / cancel-button-text / cancel-closable / confirm-button-text / confirm-closable
-    type: Function / String / Boolean / String / Boolean
-    values: 关闭守卫和操作按钮配置
+  - name: before-close
+    type: Function
+    values: "关闭守卫和操作按钮配置"
     description: 在关闭前拦截操作，并配置确认、取消按钮文本和关闭行为。
-    default: '-'
-  - name: color / height / mask / mask-closable / min-height / min-width / show-close / show-header / top
+    default: null
+  - name: cancel-button-text
+    type: String
+    values: "关闭守卫和操作按钮配置"
+    description: 在关闭前拦截操作，并配置确认、取消按钮文本和关闭行为。
+    default: null
+  - name: cancel-closable
+    type: Boolean
+    values: "关闭守卫和操作按钮配置"
+    description: 在关闭前拦截操作，并配置确认、取消按钮文本和关闭行为。
+    default: null
+  - name: confirm-button-text
+    type: String
+    values: "关闭守卫和操作按钮配置"
+    description: 在关闭前拦截操作，并配置确认、取消按钮文本和关闭行为。
+    default: null
+  - name: confirm-closable
+    type: Boolean
+    values: "关闭守卫和操作按钮配置"
+    description: 在关闭前拦截操作，并配置确认、取消按钮文本和关闭行为。
+    default: null
+  - name: color
     type: Color / String | Number / Boolean
-    values: 外观、遮罩和尺寸配置
+    values: "外观、遮罩和尺寸配置"
     description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
-    default: '-'
+    default: null
+  - name: height
+    type: Color / String | Number / Boolean
+    values: "外观、遮罩和尺寸配置"
+    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    default: null
+  - name: mask
+    type: Color / String | Number / Boolean
+    values: "外观、遮罩和尺寸配置"
+    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    default: null
+  - name: mask-closable
+    type: Color / String | Number / Boolean
+    values: "外观、遮罩和尺寸配置"
+    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    default: null
+  - name: min-height
+    type: Color / String | Number / Boolean
+    values: "外观、遮罩和尺寸配置"
+    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    default: null
+  - name: min-width
+    type: Color / String | Number / Boolean
+    values: "外观、遮罩和尺寸配置"
+    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    default: null
+  - name: show-close
+    type: Color / String | Number / Boolean
+    values: "外观、遮罩和尺寸配置"
+    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    default: null
+  - name: show-header
+    type: Color / String | Number / Boolean
+    values: "外观、遮罩和尺寸配置"
+    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    default: null
+  - name: top
+    type: Color / String | Number / Boolean
+    values: "外观、遮罩和尺寸配置"
+    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    default: null
   - name: v-model
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 是否显示对话框。
     default: false
     link: null
@@ -22,7 +82,7 @@ PROPS:
 
   - name: not-center
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 默认标题栏内容居中；启用后取消居中。
     default: false
     link: null
@@ -31,7 +91,7 @@ PROPS:
 
   - name: width
     type: String
-    values: px
+    values: "px"
     description: 设置对话框宽度。
     default: null
     link: null
@@ -40,7 +100,7 @@ PROPS:
 
   - name: loading
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 为对话框添加加载动画。
     default: false
     link: null
@@ -49,7 +109,7 @@ PROPS:
 
   - name: not-close
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 隐藏对话框关闭按钮。
     default: false
     link: null
@@ -58,7 +118,7 @@ PROPS:
 
   - name: scroll
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 限制内容最大高度，溢出时显示滚动条。
     default: false
     link: null
@@ -67,7 +127,7 @@ PROPS:
 
   - name: lock-scroll
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 打开对话框时锁定页面滚动。
     default: false
     link: null
@@ -76,7 +136,7 @@ PROPS:
 
   - name: auto-width
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 使对话框宽度自动适应内容。
     default: false
     link: null
@@ -85,7 +145,7 @@ PROPS:
 
   - name: not-padding
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 移除对话框基础内容区域内边距。
     default: false
     link: null
@@ -94,7 +154,7 @@ PROPS:
 
   - name: full-screen
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 使对话框占满窗口。
     default: false
     link: null
@@ -103,7 +163,7 @@ PROPS:
 
   - name: overlay-blur
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 打开时使背景元素模糊。
     default: false
     link: null
@@ -112,7 +172,7 @@ PROPS:
 
   - name: shape
     type: String
-    values: square
+    values: "square"
     description: 移除对话框圆角。
     default: false
     link: null
@@ -121,7 +181,7 @@ PROPS:
 
   - name: prevent-close
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 禁止点击遮罩或按 Esc 关闭对话框。
     default: false
     link: null
@@ -131,7 +191,7 @@ PROPS:
 EVENTS:
   - name: close
     type: Function
-    values: null
+    values: "null"
     description: 对话框关闭时触发。
     default: null
     link: null
@@ -144,7 +204,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: slot
-    values: null
+    values: "null"
     description: Dialog 默认内容插槽。
     default: null
     link: null
@@ -153,7 +213,7 @@ SLOTS:
 
   - name: header
     type: slot
-    values: null
+    values: "null"
     description: Dialog 标题插槽。
     default: null
     link: null
@@ -162,7 +222,7 @@ SLOTS:
 
   - name: footer
     type: slot
-    values: null
+    values: "null"
     description: Dialog 页脚插槽。
     default: null
     link: null

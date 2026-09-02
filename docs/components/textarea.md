@@ -1,13 +1,29 @@
 ---
 PROPS:
-  - name: cols / count-method / immediate
-    type: Number / Function / Boolean
-    values: native column count / counter function / true | false
+  - name: shape
+    type: String
+    values: 'rounded | square'
+    description: Set rounded or square geometry for the field and counter.
+    default: rounded
+    usage: '#shape'
+  - name: cols
+    type: Number
+    values: 'native column count'
     description: Configure width hint, character counting and immediate model updates.
-    default: '-'
+    default: null
+  - name: count-method
+    type: Function
+    values: 'counter function'
+    description: Configure width hint, character counting and immediate model updates.
+    default: null
+  - name: immediate
+    type: Boolean
+    values: 'true | false'
+    description: Configure width hint, character counting and immediate model updates.
+    default: null
   - name: v-model
     type: String
-    values: String
+    values: 'String'
     description: Textarea value.
     default: ''
     link: null
@@ -15,7 +31,7 @@ PROPS:
 
   - name: label
     type: String
-    values: String
+    values: 'String'
     description: Floating label text.
     default: null
     link: null
@@ -23,7 +39,7 @@ PROPS:
 
   - name: color
     type: String
-    values: primary, success, danger, warning, dark
+    values: 'primary, success, danger, warning, dark'
     description: Component color.
     default: primary
     link: null
@@ -31,7 +47,7 @@ PROPS:
 
   - name: counter
     type: Number, String
-    values: Number
+    values: 'Number'
     description: Max length counter.
     default: null
     link: null
@@ -39,17 +55,25 @@ PROPS:
 
   - name: counter-danger
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: Highlight counter when limit exceeded.
     default: false
     link: null
     usage: '#counter'
 
-  - name: max-length / show-word-count
-    type: Number, Boolean
-    values: Number, true | false
+  - name: max-length
+    type: Number
+    values: 'Number'
     description: Native length limit and counter.
-    default: null, false
+    default: null
+    link: null
+    usage: '#advanced'
+
+  - name: show-word-count
+    type: Boolean
+    values: 'true | false'
+    description: Native length limit and counter.
+    default: false
     link: null
     usage: '#advanced'
 
@@ -61,17 +85,41 @@ PROPS:
     link: null
     usage: '#advanced'
 
-  - name: readonly / disabled / editable / trim
+  - name: readonly
     type: Boolean
-    values: true, false
+    values: 'true, false'
     description: Control editing state and trim output on change.
-    default: false, false, true, false
+    default: false
+    link: null
+    usage: '#advanced'
+
+  - name: disabled
+    type: Boolean
+    values: 'true, false'
+    description: Control editing state and trim output on change.
+    default: false
+    link: null
+    usage: '#advanced'
+
+  - name: editable
+    type: Boolean
+    values: 'true, false'
+    description: Control editing state and trim output on change.
+    default: true
+    link: null
+    usage: '#advanced'
+
+  - name: trim
+    type: Boolean
+    values: 'true, false'
+    description: Control editing state and trim output on change.
+    default: false
     link: null
     usage: '#advanced'
 
   - name: height
     type: String
-    values: CSS height
+    values: 'CSS height'
     description: Textarea height.
     default: null
     link: null
@@ -79,7 +127,7 @@ PROPS:
 
   - name: width
     type: String
-    values: CSS width
+    values: 'CSS width'
     description: Textarea width.
     default: null
     link: null
@@ -124,13 +172,41 @@ Bind text with `v-model` for controlled input.
 
 <template #template>
 
-@[code{1-3}](../.vuepress/components/textarea/default.vue)
+@[code{1-7}](../.vuepress/components/textarea/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{5-8}](../.vuepress/components/textarea/default.vue)
+@[code{9-12}](../.vuepress/components/textarea/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Shape
+
+Use `shape="square"` to apply straight corners to the field, focus surface, and counter area.
+
+<template #example><textarea-shape /></template>
+
+<template #template>
+
+@[code{8-23}](../.vuepress/components/textarea/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/textarea/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{25-37}](../.vuepress/components/textarea/shape.vue)
 
 </template>
 
@@ -140,7 +216,7 @@ Bind text with `v-model` for controlled input.
 
 ## Label
 
-Float a label above the field for clearer forms.
+The label starts inside an empty field, then moves fully above the border on focus or when a value is present, matching the Input label baseline.
 
 <template #example>
 <textarea-label />

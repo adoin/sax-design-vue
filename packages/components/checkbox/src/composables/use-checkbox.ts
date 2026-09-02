@@ -19,7 +19,7 @@ import type {
 
 const setStoreValue = (
   props: CheckboxProps,
-  { model }: Pick<UseCheckbox, 'model'>
+  { model }: Pick<UseCheckbox, 'model'>,
 ) => {
   if (props.checked) {
     if (isArray(model.value) && !model.value.includes(props.value)) {
@@ -33,7 +33,7 @@ const setStoreValue = (
 export const useCheckbox = (
   props: CheckboxProps,
   emit: CheckboxEmitsFn,
-  slots: ComponentInternalInstance['slots']
+  slots: ComponentInternalInstance['slots'],
 ) => {
   // self model check status
   const selfModel = ref<boolean>(false)
@@ -43,7 +43,7 @@ export const useCheckbox = (
   const isGroup = computed(() => isUndefined(checkboxGroup) === false)
 
   const isChecked = computed<boolean>(() => {
-    const value = model.value || checkboxGroup?.modelValue
+    const value = model.value
 
     if (isBoolean(value)) return value
 
@@ -76,14 +76,14 @@ export const useCheckbox = (
   })
 
   const isDisabled = useDisabled(
-    computed(() => checkboxGroup?.disabled.value || isLimitDisabled.value)
+    computed(() => checkboxGroup?.disabled.value || isLimitDisabled.value),
   )
 
   const model = computed({
     get() {
       return isGroup.value
         ? checkboxGroup?.modelValue?.value
-        : props.modelValue || selfModel.value
+        : (props.modelValue ?? selfModel.value)
     },
 
     set(val: CheckboxValueType) {
@@ -93,7 +93,7 @@ export const useCheckbox = (
         isLimitExceeded.value =
           checkboxGroup?.max?.value !== undefined &&
           val.length > checkboxGroup?.max.value
-        isLimitExceeded.value === false && checkboxGroup?.changeEvent?.(val)
+        if (!isLimitExceeded.value) checkboxGroup?.changeEvent?.(val)
         return
       }
 
@@ -109,7 +109,7 @@ export const useCheckbox = (
         const modelValueRaw = props.modelValue.map(toRaw)
 
         const indexVal = modelValueRaw.findIndex((e) =>
-          isEqual(e, updatedValue)
+          isEqual(e, updatedValue),
         )
 
         if (indexVal == -1) {

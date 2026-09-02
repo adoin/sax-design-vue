@@ -27,14 +27,12 @@ export declare type NavbarItem = NavLink
 export declare type NavbarGroup = NavGroup<NavbarGroup | NavbarItem>
 export declare type NavbarConfig = (NavbarItem | NavbarGroup)[]
 export declare type ResolvedNavbarItem =
-  | NavbarItem
-  | NavGroup<ResolvedNavbarItem>
+  NavbarItem | NavGroup<ResolvedNavbarItem>
 /**
  * Sidebar types
  */
 export declare type SidebarItem = NavItem &
   Partial<NavLink> & {
-    isNew?: boolean
     isUpdate?: boolean
   }
 export declare type SidebarGroup = SidebarItem &
@@ -43,9 +41,7 @@ export declare type SidebarGroupCollapsible = SidebarGroup & {
   collapsible?: boolean
 }
 export declare type SidebarConfigArray = (
-  | SidebarItem
-  | SidebarGroupCollapsible
-  | string
+  SidebarItem | SidebarGroupCollapsible | string
 )[]
 export declare type SidebarConfigObject = Record<string, SidebarConfigArray>
 export declare type SidebarConfig = SidebarConfigArray | SidebarConfigObject

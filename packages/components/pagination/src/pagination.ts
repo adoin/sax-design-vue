@@ -16,7 +16,7 @@ import {
   isNumber,
   mutable,
 } from '@vuesax-alpha/utils'
-import { useColorProp, useNamespace } from '@vuesax-alpha/hooks'
+import { useColorProp, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { paginationContextKey } from '@vuesax-alpha/tokens'
 
 import Next from './components/next.vue'
@@ -181,6 +181,10 @@ export default defineComponent({
   emits: paginationEmits,
   setup(props, { emit, slots }) {
     const ns = useNamespace('pagination')
+    const shape = useShape<'circle' | 'square' | ''>()
+    const resolvedShape = computed(() =>
+      shape.value === 'rounded' ? '' : shape.value,
+    )
 
     const vnodeProps = getCurrentInstance()!.vnode.props || {}
 
@@ -454,7 +458,7 @@ export default defineComponent({
           'aria-label': 'pagination',
           class: [
             ns.b(),
-            ns.is(props.shape),
+            ns.is(resolvedShape.value),
             ns.is('buttons-dotted', props.buttonsDotted),
             ns.is('not-margin', props.notMargin),
           ],

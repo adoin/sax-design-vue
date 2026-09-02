@@ -1,24 +1,34 @@
+<script setup lang="ts">
+import { shallowRef } from 'vue'
+
+const loading = shallowRef(true)
+const roundedValue = shallowRef(false)
+const squareValue = shallowRef(true)
+</script>
+
 <template>
-  <div class="center con-switch">
-    <s-switch v-model="activeLoading"> Active Loading </s-switch>
-    <s-switch v-model="active2" :loading="activeLoading" />
+  <div class="switch-state-examples">
+    <s-switch v-model="loading">Loading state</s-switch>
+    <s-switch
+      v-model="roundedValue"
+      :loading="loading"
+      aria-label="Rounded loading switch"
+    />
+    <s-switch
+      v-model="squareValue"
+      :loading="loading"
+      shape="square"
+      aria-label="Square loading switch"
+    />
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-
-const activeLoading = ref(true)
-const active2 = ref(false)
-</script>
-
-<style lang="scss" scoped>
-.con-switch {
+<style scoped>
+.switch-state-examples {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  .s-switch {
-    margin: 10px;
-  }
+  gap: 16px;
 }
 </style>

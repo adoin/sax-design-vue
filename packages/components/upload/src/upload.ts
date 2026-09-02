@@ -1,4 +1,5 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
+import { useShapeProp } from '@vuesax-alpha/hooks'
 
 import type { ExtractPropTypes } from 'vue'
 import type Upload from './upload.vue'
@@ -13,7 +14,12 @@ export interface UploadFileItem {
   error: boolean
   success?: boolean
   response?: unknown
+  status: UploadFileStatus
+  errorMessage?: string
 }
+
+export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
+export type UploadRejectReason = 'type' | 'size' | 'limit' | 'guard'
 
 export interface UploadMethodParams {
   file: File
@@ -22,6 +28,7 @@ export interface UploadMethodParams {
 }
 
 export const uploadProps = buildProps({
+  shape: useShapeProp,
   modelValue: {
     type: definePropType<File | File[] | null>([Object, Array]),
   },
@@ -94,6 +101,24 @@ export const uploadProps = buildProps({
     type: Boolean,
     default: true,
   },
+  drag: {
+    type: Boolean,
+    default: true,
+  },
+  listType: {
+    type: String,
+    values: ['auto', 'list', 'card'] as const,
+    default: 'auto',
+  },
+  previewFit: {
+    type: String,
+    values: ['cover', 'contain'] as const,
+    default: 'cover',
+  },
+  showRetry: {
+    type: Boolean,
+    default: true,
+  },
   showSubmitButton: {
     type: Boolean,
     default: true,
@@ -146,6 +171,15 @@ export const uploadEmits = {
   'upload-end': (file: UploadFileItem) => file instanceof Object,
   'upload-queue-start': (files: UploadFileItem[]) => Array.isArray(files),
   'upload-queue-end': (files: UploadFileItem[]) => Array.isArray(files),
+  progress: (file: UploadFileItem, percent: number) =>
+    file instanceof Object && Number.isFinite(percent),
+  reject: (file: File, reason: UploadRejectReason, error: Error) =>
+    file instanceof File &&
+    typeof reason === 'string' &&
+    error instanceof Error,
+  exceed: (files: File[], currentFiles: UploadFileItem[]) =>
+    Array.isArray(files) && Array.isArray(currentFiles),
+  retry: (file: UploadFileItem) => file instanceof Object,
 }
 
 export type UploadProps = ExtractPropTypes<typeof uploadProps>

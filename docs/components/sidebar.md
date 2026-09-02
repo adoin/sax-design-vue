@@ -1,9 +1,18 @@
 ---
 description: 'Organize secondary navigation in a collapsible side panel.'
 PROPS:
-  - name: open/v-model:open
+  - name: open
     type: Boolean
-    values: true,false
+    values: "true"
+    description: Determines if the component is visible.
+    default: false
+    link: null
+    usage: '#open'
+    code: null
+
+  - name: v-model:open
+    type: Boolean
+    values: "false"
     description: Determines if the component is visible.
     default: false
     link: null
@@ -12,7 +21,7 @@ PROPS:
 
   - name: v-model
     type: String
-    values: id
+    values: "id"
     description: Determines the item that is in active status.
     default: null
     link: null
@@ -21,7 +30,7 @@ PROPS:
 
   - name: absolute
     type: boolean
-    values: true,false
+    values: "true,false"
     description: Determine if the component is of absolute position.
     default: false
     link: null
@@ -30,7 +39,7 @@ PROPS:
 
   - name: reduce
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Determine if the component is in a reduced state with a width of 50px.
     default: false
     link: null
@@ -39,7 +48,7 @@ PROPS:
 
   - name: hover-expand
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Adds the functionality to expand when the user enters inside the sidebar and vice versa.
     default: false
     link: null
@@ -48,7 +57,7 @@ PROPS:
 
   - name: shape
     type: string
-    values: square
+    values: "square"
     description: Determine if the component has no border radius
     default: false
     link: null
@@ -57,7 +66,7 @@ PROPS:
 
   - name: not-shadow
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Remove the shadow from the sidebar
     default: false
     link: null
@@ -66,7 +75,7 @@ PROPS:
 
   - name: background
     type: String
-    values: Theme colors, RGB, HEX
+    values: "Theme colors, RGB, HEX"
     description: Change the background color of the sidebar
     default: false
     link: null
@@ -75,7 +84,7 @@ PROPS:
 
   - name: text-white
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Change the text color to white
     default: false
     link: null
@@ -84,7 +93,7 @@ PROPS:
 
   - name: not-line-active
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Remove the active line from items
     default: false
     link: null
@@ -93,7 +102,7 @@ PROPS:
 
   - name: s-sidebar-item:to
     type: String
-    values: url
+    values: "url"
     description: Generate a new vue-router route
     default: null
     link: null
@@ -102,7 +111,7 @@ PROPS:
 
   - name: s-sidebar-item:href
     type: String
-    values: url
+    values: "url"
     description: Generate a new route
     default: null
     link: null
@@ -111,7 +120,7 @@ PROPS:
 
   - name: right
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Determines if the component is positioned to the right
     default: null
     link: null
@@ -128,7 +137,7 @@ EVENTS:
 SLOTS:
   - name: logo
     type: slot
-    values: null
+    values: "null"
     description: Add elements on top of the entire sidebar.
     default: null
     link: null
@@ -137,7 +146,7 @@ SLOTS:
 
   - name: footer
     type: slot
-    values: null
+    values: "null"
     description: Add the elements at the bottom of the sidebar.
     default: null
     link: null
@@ -146,7 +155,7 @@ SLOTS:
 
   - name: header
     type: slot
-    values: null
+    values: "null"
     description: Add the elements below the logo and above the items.
     default: null
     link: null
@@ -155,7 +164,7 @@ SLOTS:
 
   - name: s-sidebar-item#icon
     type: slot
-    values: null
+    values: "null"
     description: It is the space to add the icon or a representative letter.
     default: null
     link: null

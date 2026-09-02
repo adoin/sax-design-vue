@@ -1,27 +1,34 @@
 ---
 PROPS:
-  - name: offset / teleported
-    type: Number / Boolean
-    values: pixels / true | false
+  - name: offset
+    type: Number
+    values: "pixels"
     description: Configure trigger spacing and body mounting.
-    default: '12 / true'
+    default: '12'
+  - name: teleported
+    type: Boolean
+    values: "true | false"
+    description: Configure trigger spacing and body mounting.
+    default: 'true'
   - name: v-model
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Controls dropdown visibility.
     default: 'false'
   - name: trigger
     type: String
-    values: click / hover / focus / contextmenu
+    values: "click / hover / focus / contextmenu"
     description: Open trigger.
     default: click
   - name: placement
     type: String
-    values: Popper placement
+    values: "Popper placement"
     description: Dropdown position.
     default: bottom-start
 EVENTS:
-  - name: show / hide
+  - name: show
+    description: Visibility lifecycle events.
+  - name: hide
     description: Visibility lifecycle events.
 description: "Generic dropdown container."
 ---

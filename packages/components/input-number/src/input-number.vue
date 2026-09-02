@@ -5,6 +5,7 @@
       ns.is('disabled', isDisabled),
       ns.is('readonly', readonly),
       ns.is('without-controls', !controls),
+      ns.is(resolvedShape),
     ]"
     :style="wrapperStyle"
     @dragstart.prevent
@@ -41,6 +42,7 @@
       :min="min"
       :name="name"
       :label="label"
+      :shape="resolvedShape"
       @wheel.prevent="() => undefined"
       @keydown.up.prevent="increase"
       @keydown.down.prevent="decrease"
@@ -65,7 +67,7 @@ import { isNil } from 'lodash-unified'
 import { SInput } from '@vuesax-alpha/components/input'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { RepeatClick as vRepeatClick } from '@vuesax-alpha/directives'
-import { useDisabled, useNamespace } from '@vuesax-alpha/hooks'
+import { useDisabled, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import {
   debugWarn,
   getVsColor,
@@ -91,6 +93,7 @@ const props = defineProps(inputNumberProps)
 const emit = defineEmits(inputNumberEmits)
 
 const ns = useNamespace('input-number')
+const resolvedShape = useShape()
 const input = ref<InputInstance>()
 
 interface Data {

@@ -2,7 +2,7 @@
 PROPS:
   - name: variant
     type: String
-    values: classic | soft | steps
+    values: "classic | soft | steps"
     description: Select the slim rail, inset trough, or discrete step design.
     default: classic
     link: null
@@ -10,14 +10,21 @@ PROPS:
 
   - name: show-value
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Keep the current value bubble visible.
     default: false
     link: null
     usage: '#variants'
+  - name: shape
+    type: String
+    values: "rounded | square"
+    description: Select rounded or square geometry for the track, thumb, ticks, and value bubble.
+    default: rounded
+    link: null
+    usage: '#shape'
   - name: v-model
     type: Number
-    values: Number
+    values: "Number"
     description: Current value.
     default: 0
     link: null
@@ -25,7 +32,7 @@ PROPS:
 
   - name: min
     type: Number
-    values: Number
+    values: "Number"
     description: Minimum value.
     default: 0
     link: null
@@ -33,7 +40,7 @@ PROPS:
 
   - name: max
     type: Number
-    values: Number
+    values: "Number"
     description: Maximum value.
     default: 100
     link: null
@@ -41,7 +48,7 @@ PROPS:
 
   - name: step
     type: Number
-    values: Number
+    values: "Number"
     description: Step increment.
     default: 1
     link: null
@@ -49,7 +56,7 @@ PROPS:
 
   - name: disabled
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Disable interaction.
     default: false
     link: null
@@ -57,7 +64,7 @@ PROPS:
 
   - name: color
     type: String
-    values: primary, success, danger
+    values: "primary, success, danger"
     description: Slider color.
     default: primary
     link: null
@@ -65,7 +72,7 @@ PROPS:
 
   - name: text-fixed
     type: String
-    values: String
+    values: "String"
     description: Suffix shown next to value.
     default:
     link: null
@@ -73,7 +80,7 @@ PROPS:
 
   - name: ticks
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Show tick marks.
     default: false
     link: null
@@ -129,6 +136,36 @@ NEWS:
 
 <card>
 
+## Shape
+
+Set `shape="square"` to give the track, completed segment, thumb, ticks, and value bubble a consistent square geometry. Shape is independent from `variant`, so it works with `classic`, `soft`, and `steps`.
+
+<template #example>
+<slider-shape />
+</template>
+
+<template #template>
+
+@[code{12-53}](../.vuepress/components/slider/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-10}](../.vuepress/components/slider/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{55-68}](../.vuepress/components/slider/shape.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Default
 
 Bind a number with `v-model` between `min` and `max`.
@@ -155,7 +192,10 @@ Bind a number with `v-model` between `min` and `max`.
 
 ## Color
 
-Color the track and thumb to match your theme.
+The thumb and completed track share the selected color. In `soft`, the track
+automatically uses a translucent tone derived from that color. This example
+pairs `classic`, `soft`, and `steps` with a different semantic color; the
+`steps` item uses a step of 10 so its discrete points remain distinct.
 
 <template #example>
 <slider-color />

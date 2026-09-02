@@ -3,7 +3,32 @@
 @use 'common/var' as *;
 
 .#{$namespace}-card-content {
-  &.type-5 {
+  &.type-classic,
+  &.type-overlay,
+  &.type-split,
+  &.type-frosted,
+  &.type-reveal {
+    > .#{$namespace}-card {
+      border-width: 0;
+      box-shadow: 0px 5px 20px 0px getColor(black, getCssVar('shadow-opacity'));
+      transition: getCssVar(transition-ease);
+      cursor: pointer;
+
+      > .#{$namespace}-card__text {
+        padding: 0 15px 15px;
+      }
+
+      > .#{$namespace}-card__button {
+        display: block;
+      }
+
+      > .#{$namespace}-card__img img {
+        object-fit: fill;
+      }
+    }
+  }
+
+  &.type-reveal {
     .#{$namespace}-card {
       @include flex(center, center);
       box-shadow: none;
@@ -53,7 +78,7 @@
       }
     }
   }
-  &.type-4 {
+  &.type-frosted {
     .#{$namespace}-card {
       box-shadow: none;
       max-width: 300px;
@@ -94,7 +119,7 @@
       }
     }
   }
-  &.type-3 {
+  &.type-split {
     .#{$namespace}-card {
       display: flex;
       max-width: 400px;
@@ -121,7 +146,7 @@
       }
     }
   }
-  &.type-2 {
+  &.type-overlay {
     .#{$namespace}-card {
       box-shadow: none;
       overflow: hidden;
@@ -183,7 +208,7 @@
       }
     }
   }
-  &.type-1 {
+  &.type-classic {
     .#{$namespace}-card {
       &:hover {
         box-shadow: 0px 0px 0px 0px getColor(black, getCssVar('shadow-opacity'));
@@ -196,6 +221,227 @@
       }
     }
   }
+
+  &.type-profile {
+    width: 100%;
+
+    > .#{$namespace}-card {
+      max-width: 340px;
+      overflow: hidden;
+      border-color: getColor(text, 0.08);
+      background: linear-gradient(
+        180deg,
+        getColor(color, 0.14) 0 88px,
+        getColor(background) 88px
+      );
+      box-shadow:
+        0 18px 40px getColor(black, 0.1),
+        0 2px 8px getColor(black, 0.05);
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow:
+          0 22px 48px getColor(black, 0.14),
+          0 4px 10px getColor(black, 0.06);
+      }
+
+      > .#{$namespace}-card__header {
+        position: relative;
+        z-index: 1;
+      }
+
+      > .#{$namespace}-card__img {
+        width: 96px;
+        height: 96px;
+        max-height: none;
+        margin: 32px auto 6px;
+        border: 4px solid getColor(background);
+        border-radius: 50%;
+        box-shadow: 0 8px 22px getColor(black, 0.16);
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      > .#{$namespace}-card__text {
+        padding: 0 24px 18px;
+        text-align: center;
+      }
+
+      .#{$namespace}-card__subtitle {
+        margin-bottom: 4px;
+      }
+
+      > .#{$namespace}-card__body {
+        margin: 0 24px;
+        padding: 16px 0;
+        border-top: 1px solid getColor(text, 0.09);
+        text-align: center;
+      }
+
+      > .#{$namespace}-card__footer {
+        padding: 0 24px 24px;
+
+        .#{$namespace}-card__button {
+          justify-content: center;
+        }
+      }
+
+      &.is-square > .#{$namespace}-card__img {
+        border-radius: 0;
+      }
+    }
+  }
+
+  &.type-metric {
+    width: 100%;
+
+    > .#{$namespace}-card {
+      max-width: 380px;
+      overflow: hidden;
+      border-color: getColor(color, 0.16);
+      background: getColor(background);
+      box-shadow:
+        0 16px 36px getColor(black, 0.09),
+        inset 0 1px 0 getColor(white, 0.2);
+
+      &::before {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 5px;
+        background: getColor(color);
+        content: '';
+      }
+
+      &:hover {
+        border-color: getColor(color, 0.3);
+        box-shadow:
+          0 18px 42px getColor(color, 0.14),
+          0 4px 10px getColor(black, 0.05);
+      }
+
+      > .#{$namespace}-card__header {
+        padding: 20px 24px 0 28px;
+      }
+
+      > .#{$namespace}-card__text {
+        padding: 4px 24px 14px 28px;
+      }
+
+      .#{$namespace}-card__title-text {
+        color: getColor(text);
+        font-size: clamp(1.75rem, 5vw, 2.35rem);
+        font-weight: 750;
+        letter-spacing: -0.04em;
+      }
+
+      .#{$namespace}-card__subtitle {
+        display: inline-flex;
+        margin: 7px 0 0;
+        padding: 4px 9px;
+        border-radius: var(--sax-radius-pill);
+        background: getColor(color, 0.1);
+        color: getColor(color);
+        font-weight: 600;
+      }
+
+      > .#{$namespace}-card__body {
+        padding: 0 24px 20px 28px;
+      }
+
+      > .#{$namespace}-card__footer {
+        padding: 14px 24px 16px 28px;
+        border-top: 1px solid getColor(text, 0.08);
+        background: getColor(text, 0.025);
+      }
+
+      &.is-square .#{$namespace}-card__subtitle {
+        border-radius: 0;
+      }
+    }
+  }
+
+  &.type-article {
+    width: 100%;
+
+    > .#{$namespace}-card {
+      display: grid;
+      grid-template-columns: minmax(180px, 42%) minmax(0, 1fr);
+      grid-template-rows: auto auto 1fr auto;
+      max-width: 720px;
+      min-height: 260px;
+      overflow: hidden;
+      border-color: getColor(text, 0.1);
+      background: getColor(background);
+      box-shadow:
+        0 18px 42px getColor(black, 0.11),
+        0 3px 10px getColor(black, 0.05);
+
+      &:hover {
+        transform: translateY(-3px);
+
+        > .#{$namespace}-card__img img {
+          transform: scale(1.045);
+        }
+      }
+
+      > .#{$namespace}-card__img {
+        grid-column: 1;
+        grid-row: 1 / -1;
+        width: 100%;
+        height: 100%;
+        max-height: none;
+        border-radius: inherit 0 0 inherit;
+
+        img {
+          width: 100%;
+          height: 100%;
+          min-height: 260px;
+          object-fit: cover;
+        }
+      }
+
+      > .#{$namespace}-card__header,
+      > .#{$namespace}-card__text,
+      > .#{$namespace}-card__body,
+      > .#{$namespace}-card__footer {
+        grid-column: 2;
+      }
+
+      > .#{$namespace}-card__header {
+        padding: 22px 24px 0;
+      }
+
+      > .#{$namespace}-card__text {
+        padding: 4px 24px 12px;
+      }
+
+      .#{$namespace}-card__title-text {
+        font-size: 1.35rem;
+        letter-spacing: -0.02em;
+      }
+
+      .#{$namespace}-card__subtitle {
+        color: getColor(color);
+        font-weight: 600;
+      }
+
+      > .#{$namespace}-card__body {
+        padding: 0 24px 18px;
+      }
+
+      > .#{$namespace}-card__footer {
+        padding: 0 24px 22px;
+      }
+
+      &.is-square > .#{$namespace}-card__img {
+        border-radius: 0;
+      }
+    }
+  }
 }
 
 @include b(card) {
@@ -203,34 +449,175 @@
   color: getColor('text');
   width: 100%;
   max-width: 350px;
-  box-shadow: 0px 5px 20px 0px getColor(black, getCssVar('shadow-opacity'));
+  min-width: 0;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  box-shadow: 0 8px 24px getColor(black, getCssVar('shadow-opacity'));
   border-radius: var(--sax-radius-xl);
-  transition: getCssVar(transition-ease);
-  cursor: pointer;
+  transition:
+    transform var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+    box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+    border-color var(--sax-motion-duration-fast)
+      var(--sax-motion-easing-standard),
+    background-color var(--sax-motion-duration-fast)
+      var(--sax-motion-easing-standard);
+  cursor: default;
   position: relative;
+  isolation: isolate;
+
+  @include m(elevated) {
+    background: getColor('background');
+    border-color: transparent;
+    box-shadow:
+      0 12px 30px getColor(black, 0.1),
+      0 2px 8px getColor(black, 0.06);
+  }
+
+  @include m(outlined) {
+    background: getColor('background');
+    border-color: getColor(text, 0.14);
+    box-shadow: none;
+  }
+
+  @include m(soft) {
+    background: getColor(color, 0.1);
+    border-color: getColor(color, 0.14);
+    box-shadow: none;
+
+    @include e(title-text) {
+      color: getColor(color);
+    }
+  }
+
+  @include m(solid) {
+    background: getColor(color);
+    border-color: getColor(color);
+    color: getColor(white);
+    box-shadow: 0 12px 26px getColor(color, 0.24);
+
+    @include e(subtitle) {
+      color: inherit;
+      opacity: 0.78;
+    }
+  }
+
+  @include m(plain) {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  @include m(glass) {
+    background: getColor(background, 0.72);
+    border-color: getColor(text, 0.12);
+    box-shadow:
+      0 16px 38px getColor(black, 0.12),
+      inset 0 1px 0 getColor(white, 0.18);
+    -webkit-backdrop-filter: saturate(155%) blur(18px);
+    backdrop-filter: saturate(155%) blur(18px);
+  }
+
+  @include when(square) {
+    border-radius: 0;
+
+    @include e(img) {
+      border-radius: 0;
+    }
+  }
+
+  @include when(interactive) {
+    cursor: pointer;
+    touch-action: manipulation;
+
+    &:focus-visible {
+      outline: 3px solid getColor(color, 0.28);
+      outline-offset: 3px;
+    }
+
+    &:active:not(.is-loading) {
+      transform: translateY(-1px) scale(0.99);
+    }
+  }
+
+  @include when(hover-lift) {
+    &:hover:not(.is-loading),
+    &:focus-visible:not(.is-loading) {
+      transform: translateY(-4px);
+      box-shadow:
+        0 18px 38px getColor(black, 0.14),
+        0 5px 12px getColor(black, 0.08);
+    }
+  }
+
+  @include when(hover-glow) {
+    &:hover:not(.is-loading),
+    &:focus-visible:not(.is-loading) {
+      border-color: getColor(color, 0.48);
+      box-shadow:
+        0 0 0 3px getColor(color, 0.12),
+        0 14px 34px getColor(color, 0.18);
+    }
+  }
+
+  @include when(selected) {
+    border-color: getColor(color, 0.62);
+    box-shadow:
+      0 0 0 3px getColor(color, 0.16),
+      0 12px 30px getColor(black, 0.1);
+  }
+
+  @include when(loading) {
+    cursor: progress;
+    pointer-events: none;
+
+    > :not(.#{$namespace}-card__loading) {
+      visibility: hidden;
+    }
+  }
+
+  @include e(header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 16px 0;
+  }
+
+  @include e(header-content) {
+    min-width: 0;
+    flex: 1;
+  }
+
+  @include e(extra) {
+    flex: none;
+  }
+
   @include e(text) {
     font-size: 0.85rem;
-    padding: 0px 15px;
-    padding-bottom: 15px;
+    padding: 0 16px 16px;
+
     p {
       font-size: inherit;
-      margin: 0px;
+      margin: 0;
       opacity: 0.8;
     }
   }
+
   @include e(title) {
     padding-top: 10px;
     padding-bottom: 5px;
+
     h2,
     h3,
     h4,
     h5,
     h6 {
-      padding: 0px;
-      margin: 0px;
+      padding: 0;
+      margin: 0;
       font-size: 1.1rem;
     }
   }
+
   @include e(title-text) {
     margin: 0;
     padding: 0;
@@ -238,19 +625,51 @@
     font-weight: 600;
     line-height: 1.35;
   }
+
+  @include e(subtitle) {
+    margin-bottom: 8px;
+    color: getColor(text, 0.62);
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
   @include e(description) {
     margin: 0;
     font-size: inherit;
     line-height: 1.55;
     opacity: 0.8;
   }
+
+  @include e(body) {
+    padding: 16px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+
+    &:first-child {
+      padding-top: 16px;
+    }
+  }
+
+  @include e(footer) {
+    padding: 0 16px 16px;
+  }
+
+  @include e(button) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
   @include e(interactions) {
     @include flex(flex-start, center);
     position: absolute;
-    bottom: 0px;
-    left: 0px;
+    bottom: 0;
+    left: 0;
     padding: 5px 10px;
   }
+
   @include e(img) {
     @include flex(center, center);
     position: relative;
@@ -258,11 +677,198 @@
     overflow: hidden;
     border-radius: var(--sax-radius-xl);
     transition: getCssVar(transition-ease);
+
     img {
       width: 100%;
       border-radius: inherit;
       display: block;
+      object-fit: cover;
       transition: getCssVar(transition-ease);
+    }
+  }
+
+  @include e(loading) {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    align-content: center;
+    gap: 12px;
+    min-height: 170px;
+    padding: 20px;
+    border-radius: inherit;
+    background: inherit;
+  }
+
+  @include e(skeleton) {
+    display: block;
+    overflow: hidden;
+    border-radius: var(--sax-radius-md);
+    background: linear-gradient(
+      100deg,
+      getColor(text, 0.06) 20%,
+      getColor(text, 0.12) 38%,
+      getColor(text, 0.06) 56%
+    );
+    background-size: 240% 100%;
+    animation: card-skeleton 1.35s ease-in-out infinite;
+
+    @include m(media) {
+      height: 72px;
+    }
+
+    @include m(title) {
+      width: 48%;
+      height: 16px;
+    }
+
+    @include m(line) {
+      width: 100%;
+      height: 10px;
+    }
+
+    @include m(line-short) {
+      width: 72%;
+      height: 10px;
+    }
+  }
+}
+
+.#{$namespace}-card-content.is-horizontal {
+  width: 100%;
+
+  .#{$namespace}-card {
+    display: grid;
+    grid-template-columns: minmax(140px, 38%) minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr auto;
+    max-width: 680px;
+
+    &:not(.is-has-media) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    &__header,
+    &__text,
+    &__body,
+    &__footer {
+      grid-column: 2;
+    }
+
+    &:not(.is-has-media) > .#{$namespace}-card__header,
+    &:not(.is-has-media) > .#{$namespace}-card__text,
+    &:not(.is-has-media) > .#{$namespace}-card__body,
+    &:not(.is-has-media) > .#{$namespace}-card__footer {
+      grid-column: 1;
+    }
+
+    &__img {
+      grid-column: 1;
+      grid-row: 1 / -1;
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      border-radius: inherit 0 0 inherit;
+
+      img {
+        width: 100%;
+        height: 100%;
+        min-height: 180px;
+      }
+    }
+  }
+}
+
+@keyframes card-skeleton {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .#{$namespace}-card-content.is-horizontal {
+    .#{$namespace}-card {
+      grid-template-columns: minmax(0, 1fr);
+
+      &__header,
+      &__img,
+      &__text,
+      &__body,
+      &__footer {
+        grid-column: 1;
+      }
+
+      &__img {
+        grid-row: auto;
+        height: auto;
+        border-radius: inherit;
+
+        img {
+          min-height: 0;
+        }
+      }
+    }
+  }
+
+  .#{$namespace}-card-content.type-article {
+    > .#{$namespace}-card {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto;
+
+      > .#{$namespace}-card__header,
+      > .#{$namespace}-card__img,
+      > .#{$namespace}-card__text,
+      > .#{$namespace}-card__body,
+      > .#{$namespace}-card__footer {
+        grid-column: 1;
+        grid-row: auto;
+      }
+
+      > .#{$namespace}-card__img {
+        height: 190px;
+        border-radius: inherit inherit 0 0;
+
+        img {
+          min-height: 0;
+        }
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-card {
+    transition: none;
+
+    &.is-hover-lift,
+    &.is-hover-glow,
+    &.is-interactive {
+      &:hover,
+      &:focus-visible,
+      &:active {
+        transform: none;
+      }
+    }
+
+    &__skeleton {
+      animation: none;
+    }
+
+    &__img img {
+      transition: none;
+    }
+  }
+
+  .#{$namespace}-card-content[class*='type-'] .#{$namespace}-card {
+    transition: none;
+
+    &:hover,
+    &:focus-visible,
+    &:active {
+      transform: none;
     }
   }
 }

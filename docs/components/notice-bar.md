@@ -2,27 +2,27 @@
 PROPS:
   - name: duration
     type: Number
-    values: milliseconds
+    values: "milliseconds"
     description: Set the autoplay interval for cycling notices.
     default: '3000'
   - name: content
     type: String
-    values: text
+    values: "text"
     description: Announcement text when no default slot is supplied.
     default: null
   - name: type
     type: String
-    values: info | success | warning | danger
+    values: "info | success | warning | danger"
     description: Semantic announcement tone.
     default: info
   - name: scrollable
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Enables marquee animation.
     default: true
   - name: closable
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Shows a close control.
     default: false
 EVENTS:

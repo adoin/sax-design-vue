@@ -17,39 +17,69 @@
   @include flex(flex-start, center);
   position: relative;
   max-width: fit-content;
+  --sax-checkbox-shadow:
+    0 2px 4px #{getColor('color', 0.14)}, 0 4px 12px #{getColor('color', 0.1)};
 
-  @include pseudo(active) {
-    @include e(input) {
-      @include m(mask) {
-        background: getColor('gray-4') !important;
+  // Move only the visual box; the native input and label keep a stable hit area.
+  @media (hover: hover) and (pointer: fine) {
+    &:not(.is-disabled):not(.is-loading):hover {
+      --sax-checkbox-shadow:
+        0 3px 6px #{getColor('color', 0.2)},
+        0 7px 16px #{getColor('color', 0.18)};
+
+      .#{bem('checkbox', 'input', 'mask')} {
+        transform: translateY(-2px) scale(1.04);
       }
     }
   }
-  @include pseudo(hover) {
-    @include e(input) {
-      @include m(mask) {
-        background: getColor('gray-3');
 
-        &:before {
-          border: 2px solid getColor('gray-4', 0);
-          // border: 2px solid getColor('gray-3');
-        }
-      }
+  &:not(.is-disabled):not(.is-loading):active {
+    --sax-checkbox-shadow: 0 1px 3px #{getColor('color', 0.16)};
+
+    .#{bem('checkbox', 'input', 'mask')} {
+      transform: scale(0.94);
     }
   }
 
   @include when(disabled) {
+    // A recessed neutral surface distinguishes disabled from the raised control.
+    --sax-checkbox-shadow: inset 0 2px 4px #{getColor('text', 0.12)};
+    cursor: not-allowed;
+
     @include e(label) {
       opacity: 0.5;
+      cursor: not-allowed;
     }
     @include e(input) {
+      cursor: not-allowed;
+
       @include m(mask) {
-        opacity: 0.6;
+        opacity: 1;
         background: transparent !important;
+
+        &:before {
+          background: getColor('text', 0.14);
+        }
+
+        &:after {
+          background: getColor('text', 0.24);
+        }
+
+        .#{$namespace}-icon-check__check path {
+          stroke: getColor('text', 0.58);
+        }
+
+        .#{$namespace}-icon-check__line {
+          background-color: getColor('text', 0.58);
+        }
+
+        .#{bem('checkbox', 'custom-icon')},
+        .#{bem('checkbox', 'custom-icon')} > .#{$namespace}-icon {
+          color: getColor('text', 0.58) !important;
+        }
       }
     }
     @include e(original) {
-      visibility: hidden;
       opacity: 0;
       pointer-events: none;
     }
@@ -64,18 +94,8 @@
         }
       }
     }
-    @include pseudo(hover) {
-      @include e(input) {
-        @include m(mask) {
-          box-shadow: 0px 3px 15px 0px getColor('color', 0.35);
-        }
-      }
-    }
     @include e(input) {
       @include m(mask) {
-        // border: 2px solid getColor('color', 1) !important;
-        box-shadow: 0px 0px 0px 0px getColor('color', 0.35);
-
         &:after {
           opacity: 1;
           transform: scale(1);
@@ -114,7 +134,9 @@
           background: transparent !important;
 
           &:after {
-            transition: all 0.2s linear, opacity 0.6s linear;
+            transition:
+              all 0.2s linear,
+              opacity 0.6s linear;
             transform: scale(0.5);
           }
         }
@@ -124,6 +146,7 @@
     @include e(input) {
       @include m(mask) {
         background: transparent !important;
+        box-shadow: none !important;
 
         &:before {
           opacity: 0 !important;
@@ -149,15 +172,18 @@
     @include m(mask) {
       position: absolute;
       z-index: -1;
-      // z-index: 50;
       width: 100%;
       height: 100%;
       border-radius: var(--sax-radius-checkbox);
       @include flex(center, center);
-      // border: 2px solid transparent;
+      border: 0;
+      box-shadow: var(--sax-checkbox-shadow);
       cursor: pointer;
       pointer-events: none;
-      transition: getCssVar(transition-ease);
+      transition:
+        transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        box-shadow 200ms ease,
+        opacity 180ms ease;
 
       .#{$namespace}-icon-check__check {
         margin-right: 1px;
@@ -179,7 +205,12 @@
         border-radius: inherit;
         transition: getCssVar(transition-ease);
         z-index: -1;
-        border: 2px solid getColor('gray-4', 1);
+        border: 0;
+        background: color-mix(
+          in srgb,
+          #{getColor('background')} 92%,
+          #{getColor('color')}
+        );
       }
       .#{$namespace}-icon-check {
         z-index: 3;
@@ -256,8 +287,7 @@
               transition:
                 stroke-dashoffset 0.22s
                   calc(0.1s + var(--sax-checkbox-icon-path-delay)) ease-out,
-                opacity 0.02s
-                  calc(0.1s + var(--sax-checkbox-icon-path-delay));
+                opacity 0.02s calc(0.1s + var(--sax-checkbox-icon-path-delay));
             }
           }
         }
@@ -273,6 +303,12 @@
     opacity: 0;
     z-index: 100;
     cursor: pointer;
+
+    &:focus-visible + .#{bem('checkbox', 'input', 'mask')} {
+      box-shadow:
+        0 0 0 4px #{getColor('color', 0.2)},
+        var(--sax-checkbox-shadow);
+    }
   }
 
   @include e(label) {
@@ -297,8 +333,17 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .#{bem('checkbox', 'input', 'mask')},
+  .#{bem('checkbox', 'input', 'mask')}::before,
+  .#{bem('checkbox', 'input', 'mask')}::after,
+  .#{$namespace}-checkbox .#{$namespace}-icon-check,
+  .#{$namespace}-checkbox .#{$namespace}-icon-check *,
   .#{$namespace}-checkbox__custom-icon,
   .#{$namespace}-checkbox__custom-icon [data-sax-checkbox-draw] {
     transition: none !important;
+  }
+
+  .#{bem('checkbox', 'input', 'mask')} {
+    transform: none !important;
   }
 }

@@ -4,6 +4,7 @@ import {
   isArray,
   isBoolean,
 } from '@vuesax-alpha/utils'
+import { useShapeProp } from '@vuesax-alpha/hooks'
 import type {
   OffsetOptions,
   Placement,
@@ -66,6 +67,7 @@ export interface CascaderPopupConfig {
 }
 
 export const cascaderProps = buildProps({
+  shape: useShapeProp,
   modelValue: {
     type: definePropType<CascaderModelValue>(Array),
     default: () => [],

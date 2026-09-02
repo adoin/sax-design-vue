@@ -78,13 +78,13 @@ const demos: DemoSpec[] = [
 `,
   },
   {
-    name: 'chip',
-    title: 'Chip',
+    name: 'tag',
+    title: 'Tag',
     vueContent: `<template>
   <div class="center">
-    <s-chip>Default</s-chip>
-    <s-chip color="primary">Primary</s-chip>
-    <s-chip color="success" transparent>Transparent</s-chip>
+    <s-tag>Default</s-tag>
+    <s-tag color="primary">Primary</s-tag>
+    <s-tag color="success" transparent>Transparent</s-tag>
   </div>
 </template>
 

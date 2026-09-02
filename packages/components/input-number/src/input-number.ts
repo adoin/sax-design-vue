@@ -5,11 +5,12 @@ import {
   INPUT_EVENT,
   UPDATE_MODEL_EVENT,
 } from '@vuesax-alpha/constants'
-import { useColorProp } from '@vuesax-alpha/hooks'
+import { useColorProp, useShapeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type InputNumber from './input-number.vue'
 
 export const inputNumberProps = buildProps({
+  shape: useShapeProp,
   color: useColorProp,
   background: useColorProp,
   /**

@@ -1,24 +1,69 @@
 ---
 description: 'Present focused modal content and require a user decision.'
 PROPS:
-  - name: model-value / before-close
-    type: Boolean / Function
-    values: true | false / close guard
+  - name: model-value
+    type: Boolean
+    values: "true | false"
     description: Bind visibility and optionally guard closing.
-    default: 'false / -'
-  - name: color / top / height / min-width / min-height / auto-width
+    default: 'false'
+  - name: before-close
+    type: Function
+    values: "close guard"
+    description: Bind visibility and optionally guard closing.
+    default: null
+  - name: color
     type: Color / String | Number / Boolean
-    values: CSS size and color values
+    values: "CSS size and color values"
     description: Configure dialog appearance, placement and dimensions.
-    default: '-'
-  - name: cancel-closable / confirm-closable / cancel-button-text / confirm-button-text
+    default: null
+  - name: top
+    type: Color / String | Number / Boolean
+    values: "CSS size and color values"
+    description: Configure dialog appearance, placement and dimensions.
+    default: null
+  - name: height
+    type: Color / String | Number / Boolean
+    values: "CSS size and color values"
+    description: Configure dialog appearance, placement and dimensions.
+    default: null
+  - name: min-width
+    type: Color / String | Number / Boolean
+    values: "CSS size and color values"
+    description: Configure dialog appearance, placement and dimensions.
+    default: null
+  - name: min-height
+    type: Color / String | Number / Boolean
+    values: "CSS size and color values"
+    description: Configure dialog appearance, placement and dimensions.
+    default: null
+  - name: auto-width
+    type: Color / String | Number / Boolean
+    values: "CSS size and color values"
+    description: Configure dialog appearance, placement and dimensions.
+    default: null
+  - name: cancel-closable
     type: Boolean / String
-    values: true | false / button labels
+    values: "true | false / button labels"
     description: Configure footer actions and whether each action closes the dialog.
-    default: '-'
+    default: null
+  - name: confirm-closable
+    type: Boolean / String
+    values: "true | false / button labels"
+    description: Configure footer actions and whether each action closes the dialog.
+    default: null
+  - name: cancel-button-text
+    type: Boolean / String
+    values: "true | false / button labels"
+    description: Configure footer actions and whether each action closes the dialog.
+    default: null
+  - name: confirm-button-text
+    type: Boolean / String
+    values: "true | false / button labels"
+    description: Configure footer actions and whether each action closes the dialog.
+    default: null
   - name: v-model
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: Determine if the dialogue is visible or hidden.
     default: false
     link: null
@@ -27,7 +72,7 @@ PROPS:
 
   - name: not-center
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: By default the header centers the elements, with this property the centering is eliminated.
     default: false
     link: null
@@ -36,7 +81,7 @@ PROPS:
 
   - name: width
     type: String
-    values: px
+    values: "px"
     description: Determine the width of the dialog.
     default: null
     link: null
@@ -45,7 +90,7 @@ PROPS:
 
   - name: loading
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Add a loading animation to the dialog.
     default: false
     link: null
@@ -54,7 +99,7 @@ PROPS:
 
   - name: not-close
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Remove the close button from the dialog.
     default: false
     link: null
@@ -63,7 +108,7 @@ PROPS:
 
   - name: scroll
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Makes the content a maximum high and gives the possibility to overflow the content add scroll.
     default: false
     link: null
@@ -72,7 +117,7 @@ PROPS:
 
   - name: lock-scroll
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: When the dialog is opened, the page scroll is deleted.
     default: false
     link: null
@@ -81,7 +126,7 @@ PROPS:
 
   - name: auto-width
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: It makes the dialog have an automatic width to its content.
     default: false
     link: null
@@ -90,7 +135,7 @@ PROPS:
 
   - name: not-padding
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Eliminates the padding of the base elements of the dialog.
     default: false
     link: null
@@ -99,7 +144,7 @@ PROPS:
 
   - name: full-screen
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Makes the dialog the size of the window.
     default: false
     link: null
@@ -108,7 +153,7 @@ PROPS:
 
   - name: overlay-blur
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: Makes all elements blur when the dialog opens.
     default: false
     link: null
@@ -117,7 +162,7 @@ PROPS:
 
   - name: shape
     type: String
-    values: square
+    values: "square"
     description: Remove the border radius from the dialog.
     default: false
     link: null
@@ -126,31 +171,81 @@ PROPS:
 
   - name: prevent-close
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: It makes the dialog cannot be closed by clicking outside or by pressing the esc key.
     default: false
     link: null
     usage: null
     code: null
-  - name: title / content / show-header
+  - name: title
     type: String, Boolean
-    values: String, true | false
+    values: "String, true | false"
     description: Built-in header and content when slots are not needed.
-    default: null, null, true
+    default: null
     link: null
     usage: '#advanced'
     code: null
-  - name: show-footer / show-cancel-button / show-confirm-button
+  - name: content
+    type: String, Boolean
+    values: "String, true | false"
+    description: Built-in header and content when slots are not needed.
+    default: null
+    link: null
+    usage: '#advanced'
+    code: null
+  - name: show-header
+    type: String, Boolean
+    values: "String, true | false"
+    description: Built-in header and content when slots are not needed.
+    default: true
+    link: null
+    usage: '#advanced'
+    code: null
+  - name: show-footer
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: Render built-in action footer and modal events.
     default: false
     link: null
     usage: '#advanced'
     code: null
-  - name: mask / mask-closable / show-close
+  - name: show-cancel-button
     type: Boolean
-    values: true | false
+    values: "true | false"
+    description: Render built-in action footer and modal events.
+    default: false
+    link: null
+    usage: '#advanced'
+    code: null
+  - name: show-confirm-button
+    type: Boolean
+    values: "true | false"
+    description: Render built-in action footer and modal events.
+    default: false
+    link: null
+    usage: '#advanced'
+    code: null
+  - name: mask
+    type: Boolean
+    values: "true | false"
+    description: Control overlay and dismissal behavior.
+    default: true
+    link: null
+    usage: '#advanced'
+    code: null
+
+  - name: mask-closable
+    type: Boolean
+    values: "true | false"
+    description: Control overlay and dismissal behavior.
+    default: true
+    link: null
+    usage: '#advanced'
+    code: null
+
+  - name: show-close
+    type: Boolean
+    values: "true | false"
     description: Control overlay and dismissal behavior.
     default: true
     link: null
@@ -160,7 +255,7 @@ PROPS:
 EVENTS:
   - name: close
     type: Function
-    values: null
+    values: "null"
     description: triggers when the Dialog closes
     default: null
     link: null
@@ -173,7 +268,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: slot
-    values: null
+    values: "null"
     description: slot default of Dialog
     default: null
     link: null
@@ -182,7 +277,7 @@ SLOTS:
 
   - name: header
     type: slot
-    values: null
+    values: "null"
     description: slot header of Dialog
     default: null
     link: null
@@ -191,7 +286,7 @@ SLOTS:
 
   - name: footer
     type: slot
-    values: null
+    values: "null"
     description: slot footer of Dialog
     default: null
     link: null

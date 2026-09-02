@@ -2,7 +2,7 @@
 PROPS:
   - name: accordion
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 同一时间仅展开一个面板。
     default: false
     link: null
@@ -10,7 +10,7 @@ PROPS:
 
   - name: type
     type: String
-    values: default, border, margin, shadow
+    values: "default, border, margin, shadow"
     description: 视觉变体。
     default: shadow
     link: null
@@ -18,7 +18,7 @@ PROPS:
 
   - name: open-hover
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 悬停时展开面板。
     default: false
     link: null
@@ -28,13 +28,17 @@ EVENTS:
     params: null
     description: 展开面板变化时触发。
 SLOTS:
-  - name: default / header
+  - name: default
     type: slot
-    values: '-'
+    values: "-"
+    description: 渲染面板内容或可交互标题。
+  - name: header
+    type: slot
+    values: "-"
     description: 渲染面板内容或可交互标题。
   - name: icon-arrow
     type: scoped slot
-    values: open | disabled
+    values: "open | disabled"
     description: 根据当前面板状态渲染自定义展开图标。
 EXPOSES: []
 description: "可展开/折叠的内容面板，多种视觉样式。"

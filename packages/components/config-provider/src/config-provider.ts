@@ -6,6 +6,7 @@ import {
   isValidTimeZone,
 } from '@vuesax-alpha/utils'
 import { defaultNamespace, provideGlobalConfig } from '@vuesax-alpha/hooks'
+import { componentShapes } from '@vuesax-alpha/constants'
 
 import type { ExtractPropTypes } from 'vue'
 import type { Language } from '@vuesax-alpha/locale'
@@ -46,6 +47,11 @@ export const configProviderProps = buildProps({
   autoApplyNow: {
     type: Boolean,
     default: undefined,
+  },
+  /** Default shape inherited by compatible components. */
+  shape: {
+    type: String,
+    values: componentShapes,
   },
 } as const)
 

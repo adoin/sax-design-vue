@@ -1,14 +1,39 @@
 ---
 description: "在悬停、聚焦或点击时显示简短的上下文帮助。"
 PROPS:
-  - name: append-to / effect / offset / shape / shift / show-arrow
-    type: String | HTMLElement / String / Number / String / Boolean | Object / Boolean
-    values: 定位和视觉配置
+  - name: append-to
+    type: String | HTMLElement
+    values: "定位和视觉配置"
     description: 配置挂载位置、外观、偏移、碰撞调整和箭头显示。
-    default: '-'
+    default: null
+  - name: effect
+    type: String
+    values: "定位和视觉配置"
+    description: 配置挂载位置、外观、偏移、碰撞调整和箭头显示。
+    default: null
+  - name: offset
+    type: Number
+    values: "定位和视觉配置"
+    description: 配置挂载位置、外观、偏移、碰撞调整和箭头显示。
+    default: null
+  - name: shape
+    type: String
+    values: "定位和视觉配置"
+    description: 配置挂载位置、外观、偏移、碰撞调整和箭头显示。
+    default: null
+  - name: shift
+    type: Boolean | Object
+    values: "定位和视觉配置"
+    description: 配置挂载位置、外观、偏移、碰撞调整和箭头显示。
+    default: null
+  - name: show-arrow
+    type: Boolean
+    values: "定位和视觉配置"
+    description: 配置挂载位置、外观、偏移、碰撞调整和箭头显示。
+    default: null
   - name: v-model
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 组件是否激活（可见）。
     default: false
     link: null
@@ -17,7 +42,7 @@ PROPS:
 
   - name: color
     type: String
-    values: Theme colors, RGB, HEX
+    values: "Theme colors, RGB, HEX"
     description: 提示框颜色。
     default: text
     link: null
@@ -30,7 +55,7 @@ PROPS:
 
   - name: left, right, bottom
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 提示框位置。
     default: top
     link: null
@@ -43,7 +68,7 @@ PROPS:
 
   - name: border
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 为提示框添加边框样式。
     default: primary
     link: null
@@ -56,7 +81,7 @@ PROPS:
 
   - name: border-thick
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 仅在箭头位置添加粗边框。
     default: false
     link: null
@@ -69,7 +94,7 @@ PROPS:
 
   - name: square
     type: Boolean
-    values: trie,false
+    values: "trie,false"
     description: 是否为无圆角矩形提示框。
     default: false
     link: null
@@ -82,7 +107,7 @@ PROPS:
 
   - name: circle
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 将圆角设为 20px，单行文本时呈胶囊形。
     default: false
     link: null
@@ -95,7 +120,7 @@ PROPS:
 
   - name: shadow
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 为提示框添加阴影并调整背景样式。
     default: false
     link: null
@@ -108,7 +133,7 @@ PROPS:
 
   - name: not-arrow
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 隐藏提示框箭头。
     default: false
     link: null
@@ -121,7 +146,7 @@ PROPS:
 
   - name: not-hover
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 取消默认的父元素悬浮触发行为，不再随悬浮显示或隐藏。
     default: false
     link: null
@@ -143,7 +168,7 @@ PROPS:
 
   - name: interactivity
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 是否允许交互点击且不自动隐藏。
     default: false
     link: null
@@ -177,7 +202,7 @@ PROPS:
 
   - name: loading
     type: Boolean
-    values: true,false
+    values: "true,false"
     description: 是否显示加载样式和动画。
     default: false
     link: null
@@ -199,7 +224,7 @@ PROPS:
 SLOTS:
   - name: default
     type: slot
-    values: null
+    values: "null"
     description: 提示框触发元素插槽。
     default: null
     link: null
@@ -211,7 +236,7 @@ SLOTS:
       </s-tooltip>
   - name: content
     type: slot
-    values: null
+    values: "null"
     description: 提示框内容插槽。
     default: null
     link: null

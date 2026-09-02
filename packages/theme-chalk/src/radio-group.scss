@@ -44,16 +44,7 @@
     min-width: 0;
     padding: 2px;
     border-radius: var(--sax-radius-md);
-    transition:
-      background-color var(--sax-motion-duration-fast) ease,
-      box-shadow var(--sax-motion-duration-fast) ease,
-      transform var(--sax-motion-duration-fast) ease;
-
-    &:hover {
-      background: getColor(primary, 0.045);
-      box-shadow: 0 8px 18px -14px getColor(primary, 0.4);
-      transform: translateY(-1px);
-    }
+    // Radio owns hover feedback; option rows and labels remain stationary.
 
     .#{$namespace}-radio-wrapper {
       width: 100%;
@@ -212,10 +203,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .#{$namespace}-radio-group__option {
-    transition: none;
-  }
-
   .#{$namespace}-radio-group-tabs__tab {
     transition: none;
   }

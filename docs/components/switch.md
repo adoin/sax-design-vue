@@ -3,26 +3,42 @@ description: 'Toggle a boolean setting between two states.'
 PROPS:
   - name: variant
     type: String
-    values: classic | soft | icon | text
+    values: "classic | soft | text"
     description: Select a structurally distinct borderless switch style.
     default: classic
-  - name: active-text / inactive-text
+  - name: active-text
     type: String
-    values: String
+    values: "String"
     description: Labels used by the text variant.
-    default: ON / OFF
-  - name: active-value / inactive-value / shape
-    type: String | Number | Boolean / String
-    values: custom bound values / rounded | square
-    description: Map switch states to custom values and choose its visual shape.
-    default: 'true / false / rounded'
+    default: ON
+  - name: inactive-text
+    type: String
+    values: "String"
+    description: Labels used by the text variant.
+    default: OFF
+  - name: active-value
+    type: String | Number | Boolean
+    values: "custom bound value"
+    description: Value emitted for the active state.
+    default: 'true'
+  - name: inactive-value
+    type: String | Number | Boolean
+    values: "custom bound value"
+    description: Value emitted for the inactive state.
+    default: 'false'
+  - name: shape
+    type: String
+    values: "rounded | square"
+    description: Select rounded or square geometry for the track and thumb.
+    default: 'rounded'
+    usage: '#shape'
   - name: v-model
-    type: Boolean, Array
-    values: Boolean, Array
-    description: Determine the value of the component and if it is an array add or remove the value.
-    default: null
+    type: Boolean | String | Number
+    values: "Values matched against active-value and inactive-value"
+    description: Set the current switch value; an unmatched value can be represented as indeterminate.
+    default: false
     link: null
-    usage: '#dafault'
+    usage: '#default'
     code: >
       <template>
         <s-switch v-model="active" />
@@ -32,7 +48,7 @@ PROPS:
 
   - name: color
     type: String
-    values: Theme colors, RGB y HEX
+    values: "Theme colors, RGB y HEX"
     description: Change the color of the component when it is in active state.
     default: primary
     link: null
@@ -41,74 +57,41 @@ PROPS:
 
   - name: loading
     type: Boolean
-    values: true, false
-    description: Add a loading animation to the component.
+    values: "true, false"
+    description: Replace the thumb with an equal-size loading indicator that follows the selected shape.
     default: false
     link: null
     usage: '#loading'
     code: >
       <template>
-        <s-switch v-model="activeLoading">
-          Active Loading
-        </s-switch>
-        <s-switch :loading="activeLoading" v-model="active2" />
+        <s-switch v-model="loading">Loading state</s-switch>
+        <s-switch v-model="roundedValue" :loading="loading" />
+        <s-switch v-model="squareValue" :loading="loading" shape="square" />
       </template>
 
-      <script lang="ts" setup>
-        import { ref } from "vue"
+      <script setup lang="ts">
+        import { shallowRef } from "vue"
 
-        const active2       = ref<boolean>()
-        const activeLoading = ref<boolean>()
+        const loading = shallowRef(true)
+        const roundedValue = shallowRef(false)
+        const squareValue = shallowRef(true)
       </script>
 
   - name: indeterminate
     type: Boolean
-    values: true, false
-    description: Determine if the component is in an undetermined state (being in this state is disabled).
+    values: "true, false"
+    description: Center the thumb while the bound value matches neither active-value nor inactive-value; the next selection enters a normal definite state.
     default: false
     link: null
     usage: '#indeterminate'
     code: >
       <template>
-        <s-switch indeterminate v-model="active" />
-        <s-switch indeterminate v-model="active2" />
-        <s-switch indeterminate v-model="active3" disabled />
-      </template>
-
-  - name: Square
-    type: Boolean
-    values: true, false
-    description: Change the style of the component from circular to square.
-    default: false
-    link: null
-    usage: '#square'
-    code: >
-      <template>
-        <s-switch square v-model="active" />
-        <s-switch square v-model="active2" />
-        <s-switch square v-model="active3" disabled />
-      </template>
-
-  - name: icon
-    type: Boolean
-    values: true, false
-    description: Change the style of the circle by making it transparent (used when adding the slot = "circle").
-    default: false
-    link: null
-    usage: '#icons'
-    code: >
-      <template>
-        <s-switch color="#7d33ff" icon v-model="active6">
-          <template #circle>
-              <s-icon v-if="active6"  name="bxl:instagram-alt" />
-              <s-icon v-else   name="bxl:instagram" />
-          </template>
-        </s-switch>
+        <s-switch v-model="value" indeterminate />
       </template>
 
   - name: notValue
     type: String
-    values: String
+    values: "String"
     description: Determine the return value of the component when inactive.
     default: null
     link: null
@@ -116,13 +99,19 @@ PROPS:
     code: null
 
 EVENTS:
-  - name: update:modelValue / input / change
+  - name: update:modelValue
+    type: Boolean | String | Number
+    description: Fire with the configured active or inactive value when the switch changes.
+  - name: input
+    type: Boolean | String | Number
+    description: Fire with the configured active or inactive value when the switch changes.
+  - name: change
     type: Boolean | String | Number
     description: Fire with the configured active or inactive value when the switch changes.
 SLOTS:
   - name: default
     type: slot
-    values: null
+    values: "null"
     description: Add text within the component.
     default: null
     link: null
@@ -151,7 +140,7 @@ SLOTS:
       </template>
   - name: on
     type: slot
-    values: null
+    values: "null"
     description: Add text within the component when it is in active state.
     default: null
     link: null
@@ -167,7 +156,7 @@ SLOTS:
       </s-switch>
   - name: off
     type: slot
-    values: null
+    values: "null"
     description: Add text within the component when it is in idle state.
     default: null
     link: null
@@ -183,13 +172,13 @@ SLOTS:
       </s-switch>
   - name: circle
     type: slot
-    values: null
+    values: "null"
     description: Add an icon to the circle within the component.
     default: null
     link: null
     usage: '#icons'
     code: >
-      <s-switch color="#7d33ff" icon v-model="active6">
+      <s-switch color="#7d33ff" v-model="active6">
         <template #circle>
             <s-icon v-if="active6"  name="bxl:instagram-alt" />
             <s-icon v-else   name="bxl:instagram" />
@@ -203,7 +192,7 @@ SLOTS:
 
 ## Variants
 
-Use `variant` to choose a classic moving knob, a soft inset control, an icon state, or a compact text state. Every style keeps the same native checkbox semantics and borderless focus treatment.
+Use `variant` to choose a classic moving knob, a soft inset control, or a text state. Icons belong in the existing content slots rather than a separate structural variant. Every style keeps the same native checkbox semantics and borderless focus treatment.
 
 <template #example>
 <switch-variants />
@@ -211,19 +200,19 @@ Use `variant` to choose a classic moving knob, a soft inset control, an icon sta
 
 <template #template>
 
-@[code{12-23}](../.vuepress/components/switch/variants.vue)
+@[code{22-35}](../.vuepress/components/switch/variants.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-10}](../.vuepress/components/switch/variants.vue)
+@[code{1-20}](../.vuepress/components/switch/variants.vue)
 
 </template>
 
 <template #style>
 
-@[code{25-38}](../.vuepress/components/switch/variants.vue)
+@[code{37-49}](../.vuepress/components/switch/variants.vue)
 
 </template>
 
@@ -295,11 +284,7 @@ Change the color of the component when it is in active state, the allowed values
 
 ## Text
 
-Add a text to the switch with the default slot or if you need a different text for each state of the component you can use the `on` or `off` slots
-
-:::tip Self-adjusting
-The component conforms to the text to be displayed by the state in which it is located
-:::
+Add text with the default slot, or use the `on` and `off` slots for state-specific content. The track reserves enough width for the longer state label, so it does not jump when toggled. When a moving knob is present, the current label is centered in the remaining space beside it and stays fully visible.
 
 <template #example>
 <switch-text />
@@ -307,19 +292,19 @@ The component conforms to the text to be displayed by the state in which it is l
 
 <template #template>
 
-@[code{1-13}](../.vuepress/components/switch/text.vue)
+@[code{9-27}](../.vuepress/components/switch/text.vue)
 
 </template>
 
 <template #script>
 
-@[code{15-21}](../.vuepress/components/switch/text.vue)
+@[code{1-7}](../.vuepress/components/switch/text.vue)
 
 </template>
 
 <template #style>
 
-@[code{23-32}](../.vuepress/components/switch/text.vue)
+@[code{29-37}](../.vuepress/components/switch/text.vue)
 
 </template>
 
@@ -329,7 +314,7 @@ The component conforms to the text to be displayed by the state in which it is l
 
 ## Icons
 
-Add icons to the component in the default slot or the `on` or `off` status slots, and in the `circle`
+Add icons through the default, `on`, `off`, or `circle` slots. The `circle` slot customizes the classic moving knob directly; no separate icon variant is needed.
 
 <template #example>
 <switch-icons />
@@ -357,69 +342,9 @@ Add icons to the component in the default slot or the `on` or `off` status slots
 
 <card>
 
-## Loading <Badge text="New"/>
+## Shape
 
-Add a loading animation to the component with the `loading` property, the property is a` boolean` so you can add it without any value.
-
-<template #example>
-<switch-loading />
-</template>
-
-<template #template>
-
-@[code{1-6}](../.vuepress/components/switch/loading.vue)
-
-</template>
-
-<template #script>
-
-@[code{8-13}](../.vuepress/components/switch/loading.vue)
-
-</template>
-
-<template #style>
-
-@[code{15-24}](../.vuepress/components/switch/loading.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Indeterminate <Badge text="New"/>
-
-Add an undetermined state to the compound with the `indeterminate` property, the property is a` boolean` so you can add it without any value.
-
-<template #example>
-<switch-indeterminate />
-</template>
-
-<template #template>
-
-@[code{1-7}](../.vuepress/components/switch/indeterminate.vue)
-
-</template>
-
-<template #script>
-
-@[code{9-15}](../.vuepress/components/switch/indeterminate.vue)
-
-</template>
-
-<template #style>
-
-@[code{17-26}](../.vuepress/components/switch/indeterminate.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Square <Badge text="New"/>
-
-Change the circular style to square with the `square` property, the property is a` boolean` so you can add it without any value.
+Set `shape="square"` to use a square track and thumb. Loading and indeterminate states preserve the same square geometry.
 
 <template #example>
 <switch-square />
@@ -440,6 +365,66 @@ Change the circular style to square with the `square` property, the property is 
 <template #style>
 
 @[code{17-26}](../.vuepress/components/switch/square.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Loading
+
+Set `loading` to replace the moving thumb with an equal-size spinner. It stays at the current state position; with `shape="square"`, a fixed square outline advances around its four sides instead of rotating the whole square.
+
+<template #example>
+<switch-loading />
+</template>
+
+<template #template>
+
+@[code{9-24}](../.vuepress/components/switch/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-7}](../.vuepress/components/switch/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{26-34}](../.vuepress/components/switch/loading.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Indeterminate
+
+Use `indeterminate` when the bound value matches neither `active-value` nor `inactive-value`. The thumb starts in the middle; after selection, the value becomes definite and the thumb resumes its normal left/right movement.
+
+<template #example>
+<switch-indeterminate />
+</template>
+
+<template #template>
+
+@[code{9-29}](../.vuepress/components/switch/indeterminate.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-7}](../.vuepress/components/switch/indeterminate.vue)
+
+</template>
+
+<template #style>
+
+@[code{31-39}](../.vuepress/components/switch/indeterminate.vue)
 
 </template>
 

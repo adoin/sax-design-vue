@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, shallowRef, useTemplateRef, watch } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useNamespace, useShape } from '@vuesax-alpha/hooks'
 import {
   verificationCodeEmits,
   verificationCodeProps,
@@ -11,6 +11,7 @@ defineOptions({ name: 'SVerificationCode', inheritAttrs: false })
 const props = defineProps(verificationCodeProps)
 const emit = defineEmits(verificationCodeEmits)
 const ns = useNamespace('verification-code')
+const shape = useShape()
 const inputRef = useTemplateRef<HTMLInputElement>('input')
 const focused = shallowRef(false)
 const safeLength = computed(() => Math.max(1, Math.floor(props.length)))
@@ -44,6 +45,7 @@ const cells = computed(() =>
 const classes = computed(() => [
   ns.b(),
   ns.is(props.variant),
+  ns.is(shape.value),
   ns.is(props.status, props.status !== 'default'),
   ns.is('focused', focused.value),
   ns.is('complete', normalizedValue.value.length === safeLength.value),

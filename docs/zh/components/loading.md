@@ -4,7 +4,7 @@ PROPS:
   #__________________________________
   - name: type
     type: String
-    values: atom,ball,scale,waves,border,points,square,circles,corners,default,gradient,rectangle,square-rotate
+    values: "atom,ball,scale,waves,border,points,square,circles,corners,default,gradient,rectangle,square-rotate"
     description: 设置加载动画类型。
     default: default
     link: null
@@ -13,7 +13,7 @@ PROPS:
     #__________________________________
   - name: color
     type: String
-    values: Theme colors, RGB, HEX
+    values: "Theme colors, RGB, HEX"
     description: 设置加载动画颜色。
     default: primary
     link: /theme/
@@ -22,7 +22,7 @@ PROPS:
     #__________________________________
   - name: background
     type: String
-    values: Theme colors, RGB, HEX
+    values: "Theme colors, RGB, HEX"
     description: 设置加载层背景颜色。
     default: '#fff'
     link: /theme/
@@ -31,7 +31,7 @@ PROPS:
     #__________________________________
   - name: text
     type: String
-    values: String
+    values: "String"
     description: 在加载动画下方添加文本。
     default: null
     link: null
@@ -40,7 +40,7 @@ PROPS:
     #__________________________________
   - name: percent
     type: Number
-    values: 0 - 100 (%)
+    values: "0 - 100 (%)"
     description: 在加载动画内显示百分比文本。
     default: null
     link: null
@@ -49,7 +49,7 @@ PROPS:
     #__________________________________
   - name: progress
     type: Number
-    values: 0 - 100
+    values: "0 - 100"
     description: 为加载层添加进度条，值为进度百分比。
     default: null
     link: null
@@ -58,7 +58,7 @@ PROPS:
     #__________________________________
   - name: target
     type: String | HTMLElement | Ref<HTMLElement> | Vue Component
-    values: 'String: Element Selector, HTMLElement: Selector element, Ref HTMLElement'
+    values: "String: Element Selector, HTMLElement: Selector element, Ref HTMLElement"
     description: 指定加载层实例挂载的父元素。
     default: null
     link: null
@@ -67,7 +67,7 @@ PROPS:
     #__________________________________
   - name: opacity
     type: Number
-    values: 0 - 1
+    values: "0 - 1"
     description: 设置背景透明度。
     default: '0.6'
     link: null
@@ -76,7 +76,7 @@ PROPS:
     #__________________________________
   - name: scale
     type: Number
-    values: null
+    values: "null"
     description: 设置加载动画尺寸。
     default: '1'
     link: null
@@ -85,7 +85,7 @@ PROPS:
   #__________________________________
   - name: setPercent
     type: Function
-    values: '(percent: Number) => void'
+    values: "(percent: Number) => void"
     description: 加载层创建后更新百分比值。
     default: null
     link: null
@@ -94,7 +94,7 @@ PROPS:
   #__________________________________
   - name: setProgress
     type: Function
-    values: '(progress: Number) => void'
+    values: "(progress: Number) => void"
     description: 加载层创建后更新进度值。
     default: null
     link: null
@@ -103,7 +103,7 @@ PROPS:
   #__________________________________
   - name: setText
     type: Function
-    values: '(text: String) => void'
+    values: "(text: String) => void"
     description: 加载层创建后更新文本属性值。
     default: null
     link: null

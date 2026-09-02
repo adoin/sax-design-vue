@@ -134,4 +134,14 @@
     pointer-events: none;
     cursor: default;
   }
+
+  @include when(square) {
+    border-radius: 0;
+
+    @include e((increase, decrease)) {
+      &::after {
+        border-radius: 0;
+      }
+    }
+  }
 }

@@ -1,24 +1,78 @@
 ---
 description: '选择日期、日期范围和日期时间值。'
 PROPS:
-  - name: color / size / label-float / label / start-label / end-label
+  - name: shape
+    type: String
+    values: "rounded | square"
+    description: 为日期输入和选择面板统一设置圆角或方形外观。
+    default: rounded
+    usage: '#外形'
+  - name: color
     type: String / Boolean
-    values: 主题色 / small | default | large / 标签文字
+    values: "主题色 / small | default | large / 标签文字"
     description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
-    default: '-'
-  - name: auto-close / clearable / editable / separator
-    type: Boolean / Boolean / Boolean / String
-    values: true | false / 日期范围分隔符
+    default: null
+  - name: size
+    type: String / Boolean
+    values: "主题色 / small | default | large / 标签文字"
+    description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
+    default: null
+  - name: label-float
+    type: String / Boolean
+    values: "主题色 / small | default | large / 标签文字"
+    description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
+    default: null
+  - name: label
+    type: String / Boolean
+    values: "主题色 / small | default | large / 标签文字"
+    description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
+    default: null
+  - name: start-label
+    type: String / Boolean
+    values: "主题色 / small | default | large / 标签文字"
+    description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
+    default: null
+  - name: end-label
+    type: String / Boolean
+    values: "主题色 / small | default | large / 标签文字"
+    description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
+    default: null
+  - name: auto-close
+    type: Boolean
+    values: "true | false / 日期范围分隔符"
     description: 控制自动关闭、清空操作、输入编辑和日期范围分隔符。
-    default: 'true / true / true / -'
+    default: 'true'
+  - name: clearable
+    type: Boolean
+    values: "true | false / 日期范围分隔符"
+    description: 控制自动关闭、清空操作、输入编辑和日期范围分隔符。
+    default: 'true'
+  - name: editable
+    type: Boolean
+    values: "true | false / 日期范围分隔符"
+    description: 控制自动关闭、清空操作、输入编辑和日期范围分隔符。
+    default: 'true'
+  - name: separator
+    type: String
+    values: "true | false / 日期范围分隔符"
+    description: 控制自动关闭、清空操作、输入编辑和日期范围分隔符。
+    default: null
   - name: auto-apply-now
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 点击“此刻”后是否立即提交当前时间并关闭弹层；组件配置优先于 ConfigProvider。
     default: ConfigProvider 或按选择器原有行为
-  - name: v-model / model-value
-    type: Date | string | number | [Date, Date]
-    values:
+  - name: v-model
+    type: Date | string | number | [Date
+    values: ""
+    description: 绑定日期值
+    default: false
+    link: null
+    usage: '#default'
+    code: null
+  - name: model-value
+    type: Date]
+    values: ""
     description: 绑定日期值
     default: false
     link: null
@@ -26,15 +80,31 @@ PROPS:
     code: null
   - name: type
     type: String
-    values: date | datetime | daterange | datetimerange | month | quarter | year | week
+    values: "date | datetime | daterange | datetimerange | month | quarter | year | week"
     description: 选择器类型
     default: date
     link: null
     usage: '#types'
     code: null
-  - name: label-format / value-format / time-format
+  - name: label-format
     type: String
-    values: Day.js 格式 token | timestamp
+    values: "Day.js 格式 token | timestamp"
+    description: 分别控制展示文本、输出值与 datetime 的时间片段；timestamp 输出毫秒数字。
+    default: 随类型
+    link: null
+    usage: '#date-and-time'
+    code: null
+  - name: value-format
+    type: String
+    values: "Day.js 格式 token | timestamp"
+    description: 分别控制展示文本、输出值与 datetime 的时间片段；timestamp 输出毫秒数字。
+    default: 随类型
+    link: null
+    usage: '#date-and-time'
+    code: null
+  - name: time-format
+    type: String
+    values: "Day.js 格式 token | timestamp"
     description: 分别控制展示文本、输出值与 datetime 的时间片段；timestamp 输出毫秒数字。
     default: 随类型
     link: null
@@ -42,71 +112,133 @@ PROPS:
     code: null
   - name: timezone
     type: String
-    values: IANA 时区，如 Asia/Shanghai
+    values: "IANA 时区，如 Asia/Shanghai"
     description: 解释墙上时间并换算绝对值；组件配置优先于 ConfigProvider。
     default: ConfigProvider 或系统时区
     usage: '#timezone'
-  - name: multiple / limit-count
-    type: Boolean / Number
-    values:
+  - name: multiple
+    type: Boolean
+    values: ""
     description: 开启多选，并可限制最多选中数量。
-    default: 'false / -'
+    default: 'false'
     link: null
     usage: '#other-types'
     code: null
-  - name: show-clear-button / show-confirm-button
+  - name: limit-count
+    type: Number
+    values: ""
+    description: 开启多选，并可限制最多选中数量。
+    default: null
+    link: null
+    usage: '#other-types'
+    code: null
+  - name: show-clear-button
     type: Boolean
-    values: true | false
+    values: "true | false"
     description: 控制底部清除、确认按钮显示。
     default: true
     link: null
     usage: '#date-and-time'
     code: null
-  - name: min-date / max-date / start-date / end-date
-    type: Date | string | number
-    values:
-    description: 设置可选日期的包含式最小、最大边界。
-    default: '-'
-    link: null
-    usage: '#default'
-    code: null
-  - name: default-date / default-time
-    type: Date | string | number | [DateLike, DateLike]
-    values:
-    description: 未绑定值时设置面板初始日期与时间。
-    default: '-'
+  - name: show-confirm-button
+    type: Boolean
+    values: "true | false"
+    description: 控制底部清除、确认按钮显示。
+    default: true
     link: null
     usage: '#date-and-time'
     code: null
-  - name: start-day / select-day
+  - name: min-date
+    type: Date | string | number
+    values: ""
+    description: 设置可选日期的包含式最小、最大边界。
+    default: null
+    link: null
+    usage: '#default'
+    code: null
+  - name: max-date
+    type: Date | string | number
+    values: ""
+    description: 设置可选日期的包含式最小、最大边界。
+    default: null
+    link: null
+    usage: '#default'
+    code: null
+  - name: start-date
+    type: Date | string | number
+    values: ""
+    description: 设置可选日期的包含式最小、最大边界。
+    default: null
+    link: null
+    usage: '#default'
+    code: null
+  - name: end-date
+    type: Date | string | number
+    values: ""
+    description: 设置可选日期的包含式最小、最大边界。
+    default: null
+    link: null
+    usage: '#default'
+    code: null
+  - name: default-date
+    type: Date | string | number | [DateLike
+    values: ""
+    description: 未绑定值时设置面板初始日期与时间。
+    default: null
+    link: null
+    usage: '#date-and-time'
+    code: null
+  - name: default-time
+    type: DateLike]
+    values: ""
+    description: 未绑定值时设置面板初始日期与时间。
+    default: null
+    link: null
+    usage: '#date-and-time'
+    code: null
+  - name: start-day
     type: Number
-    values: 0-6
+    values: "0-6"
     description: 设置每周第一天及周选择时返回的日期。
-    default: '0 / -'
+    default: '0'
+    link: null
+    usage: '#other-types'
+    code: null
+  - name: select-day
+    type: Number
+    values: "0-6"
+    description: 设置每周第一天及周选择时返回的日期。
+    default: null
     link: null
     usage: '#other-types'
     code: null
   - name: time-config
     type: Object
-    values: hours | minutes | seconds | *DisabledMethod
+    values: "hours | minutes | seconds | *DisabledMethod"
     description: 配置时间列候选值和禁用规则。
-    default: '-'
+    default: null
     link: null
     usage: '#date-and-time'
     code: null
   - name: popup-config
     type: Object
-    values: placement | transfer | width | height | zIndex | className
+    values: "placement | transfer | width | height | zIndex | className"
     description: 配置弹层方向、挂载、尺寸、层级和类名。
-    default: '-'
+    default: null
     link: null
     usage: '#default'
     code: null
 EVENTS:
-  - name: update:modelValue / change
+  - name: update:modelValue
     type: DatePickerValue
     description: 选中的日期或日期范围确认提交时触发。
-  - name: focus / blur
+  - name: change
+    type: DatePickerValue
+    description: 选中的日期或日期范围确认提交时触发。
+  - name: focus
+    type: FocusEvent
+    description: 日期输入框获得或失去焦点时触发。
+  - name: blur
     type: FocusEvent
     description: 日期输入框获得或失去焦点时触发。
   - name: clear
@@ -140,6 +272,34 @@ EVENTS:
 <template #style>
 
 @[code{28-34}](../../.vuepress/components/date-picker/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 外形
+
+设置 `shape="square"` 可让输入触发器与传送到外层的日历面板统一使用直角外观。
+
+<template #example><date-picker-shape /></template>
+
+<template #template>
+
+@[code{8-23}](../../.vuepress/components/date-picker/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../../.vuepress/components/date-picker/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{25-37}](../../.vuepress/components/date-picker/shape.vue)
 
 </template>
 

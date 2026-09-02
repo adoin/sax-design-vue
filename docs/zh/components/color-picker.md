@@ -1,23 +1,34 @@
 ---
 PROPS:
-  - name: model-value/v-model
+  - name: shape
     type: String
-    values: hex / rgb / rgba / hsl / hsla
+    values: "rounded | square"
+    description: 为取色触发器和编辑面板统一设置圆角或方形外观。
+    default: rounded
+    usage: '#外形'
+  - name: model-value
+    type: String
+    values: "hex / rgb / rgba / hsl / hsla"
+    description: 当前颜色值。
+    default: '#5667f4'
+  - name: v-model
+    type: String
+    values: "hex / rgb / rgba / hsl / hsla"
     description: 当前颜色值。
     default: '#5667f4'
   - name: show-alpha
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: 开启透明度调节。
     default: 'false'
   - name: predefine
     type: Array
-    values: Array&lt;{ name, value }&gt; / string[]
+    values: "Array&lt;{ name, value }&gt; / string[]"
     description: 带名称的预置色；色值支持 HEX、RGB(A)、HSL(A)，并兼容字符串数组。
     default: '[]'
   - name: format
     type: String
-    values: hex / rgb / hsl
+    values: "hex / rgb / hsl"
     description: 初始编辑与输出格式，也可在面板内切换。
     default: hex
 EVENTS:
@@ -40,19 +51,47 @@ description: '颜色选择器。'
 
 <template #template>
 
-@[code{1-9}](../../.vuepress/components/color-picker/default.vue)
+@[code{1-11}](../../.vuepress/components/color-picker/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{11-22}](../../.vuepress/components/color-picker/default.vue)
+@[code{13-24}](../../.vuepress/components/color-picker/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{24-30}](../../.vuepress/components/color-picker/default.vue)
+@[code{26-38}](../../.vuepress/components/color-picker/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 外形
+
+设置 `shape="square"` 可让颜色触发器和完整编辑面板统一使用直角外观。
+
+<template #example><color-picker-shape /></template>
+
+<template #template>
+
+@[code{8-19}](../../.vuepress/components/color-picker/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../../.vuepress/components/color-picker/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{21-33}](../../.vuepress/components/color-picker/shape.vue)
 
 </template>
 

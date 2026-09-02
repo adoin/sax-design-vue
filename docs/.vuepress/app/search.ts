@@ -222,8 +222,8 @@ export const enSearchData: SearchDataOption[] = [
     headers: [{ title: 'Default', slug: 'default' }],
   },
   {
-    title: 'Chip',
-    path: 'components/chip',
+    title: 'Tag',
+    path: 'components/tag',
     headers: [{ title: 'Default', slug: 'default' }],
   },
   {

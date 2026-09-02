@@ -2,17 +2,17 @@
 PROPS:
   - name: image
     type: String
-    values: URL
+    values: "URL"
     description: Custom illustration URL.
     default: null
   - name: image-size
     type: Number | String
-    values: CSS size
+    values: "CSS size"
     description: Illustration box size.
     default: 96
   - name: description
     type: String
-    values: text
+    values: "text"
     description: Empty-state message.
     default: null
 description: "A calm empty state for empty content."

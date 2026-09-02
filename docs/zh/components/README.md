@@ -3,7 +3,7 @@ description: '使用无障碍按钮样式和状态触发操作。'
 PROPS:
   - name: color
     type: String
-    values: primary, success, danger, warning, dark, RGB, HEX
+    values: "primary, success, danger, warning, dark, RGB, HEX"
     description: 设置组件及其子组件的颜色。
     default: primary
     link: /api/color
@@ -13,7 +13,7 @@ PROPS:
   # _______________________________________
   - name: style button
     type: Prop
-    values: flat, border, gradient, transparent, dashed, shadow, relief, floating
+    values: "flat, border, gradient, transparent, dashed, shadow, relief, floating"
     description: 设置组件及其状态的展示样式。
     default: null
     link: null
@@ -23,7 +23,7 @@ PROPS:
   # _______________________________________
   - name: active
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 是否激活组件，并应用激活态样式。
     default: false
     link: null
@@ -33,7 +33,7 @@ PROPS:
   # _______________________________________
   - name: loading
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 保留按钮原内容，展示所选加载动效，保持尺寸稳定，并阻止交互。
     default: false
     link: null
@@ -42,7 +42,7 @@ PROPS:
       <s-button loading> 保存更改 </s-button>
   - name: loading-type
     type: String
-    values: pulse, ripple, shimmer
+    values: "pulse, ripple, shimmer"
     description: 通过状态 class 选择加载动效，不改变按钮 DOM 结构。
     default: pulse
     link: null
@@ -52,7 +52,7 @@ PROPS:
   # _______________________________________
   - name: disabled
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 禁用按钮并阻止用户交互。
     default: false
     link: null
@@ -62,7 +62,7 @@ PROPS:
   # _______________________________________
   - name: debounce
     type: Number | false
-    values: number, false
+    values: "number, false"
     description: 按毫秒防抖组件发出的点击事件。两个限制属性同时为数字时，仅防抖生效并输出错误。
     default: 50
     link: null
@@ -72,7 +72,7 @@ PROPS:
   # _______________________________________
   - name: throttle
     type: Number | false
-    values: number, false
+    values: "number, false"
     description: 按毫秒节流组件发出的点击事件。启用前需把 debounce 设为 false。
     default: false
     link: null
@@ -82,7 +82,7 @@ PROPS:
   # _______________________________________
   - name: upload
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 是否启用上传状态；启用后会切换样式并显示动画。
     default: false
     link: null
@@ -94,7 +94,7 @@ PROPS:
   # _______________________________________
   - name: to
     type: String
-    values: url - vue-router
+    values: "url - vue-router"
     description: 为按钮添加 vue-router 跳转能力，点击后跳转到指定路由。
     default: false
     link: null
@@ -106,7 +106,7 @@ PROPS:
   # _______________________________________
   - name: href
     type: String
-    values: href - link
+    values: "href - link"
     description: 为按钮设置外部链接地址。
     default: false
     link: null
@@ -118,7 +118,7 @@ PROPS:
   # _______________________________________
   - name: blank
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 与 HTML `a` 元素一致，决定在新窗口打开还是替换当前窗口。
     default: false
     link: null
@@ -130,7 +130,7 @@ PROPS:
   # _______________________________________
   - name: icon
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 是否为纯图标按钮；启用后按钮宽高相等。
     default: false
     link: null
@@ -142,7 +142,7 @@ PROPS:
   # _______________________________________
   - name: circle
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 将圆角改为圆形样式。
     default: false
     link: null
@@ -154,7 +154,7 @@ PROPS:
   # _______________________________________
   - name: square
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 将圆角改为直角方形样式。
     default: false
     link: null
@@ -166,7 +166,7 @@ PROPS:
   # _______________________________________
   - name: block
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 使组件宽度占满父容器可用空间。
     default: false
     link: null
@@ -178,7 +178,7 @@ PROPS:
   # _______________________________________
   - name: animationType
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 设置动画类型；仅在提供 <code>animate</code> 插槽时生效。
     default: false
     link: null
@@ -193,7 +193,7 @@ PROPS:
   # _______________________________________
   - name: animateInactive
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 是否在用户悬浮时启用动画。
     default: false
     link: null
@@ -209,7 +209,7 @@ PROPS:
   # _______________________________________
   - name: Ripple
     type: String
-    values: reverse, cut
+    values: "reverse, cut"
     description: 通过 `ripple` 属性设置按钮的水波纹样式。
     default: undefined
     usage: '#ripple'
@@ -225,7 +225,7 @@ EVENTS:
 SLOTS:
   - name: loading
     type: slot
-    values: null
+    values: "null"
     description: 使用自定义加载内容替换所选预设动效。
     default: null
     link: null
@@ -238,7 +238,7 @@ SLOTS:
   # _______________________________________
   - name: animate
     type: slot
-    values: null
+    values: "null"
     description: 用于放置动画状态展示内容的插槽。
     default: null
     link: null

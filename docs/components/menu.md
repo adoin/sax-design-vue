@@ -2,93 +2,99 @@
 PROPS:
   - name: v-model
     type: String | Number
-    values: MenuKey
+    values: "MenuKey"
     description: Currently selected menu key.
     default: undefined
   - name: options
     type: MenuOption[]
-    values: Menu tree
+    values: "Menu tree"
     description: Items, groups, and dividers.
     default: '[]'
   - name: mode
     type: String
-    values: vertical / horizontal
+    values: "vertical / horizontal"
     description: Root menu direction.
     default: vertical
   - name: submenu-mode
     type: String
-    values: inline / popup
+    values: "inline / popup"
     description: Inline expansion or cascading popups; inferred from mode and collapse by default.
     default: auto
   - name: trigger
     type: String
-    values: hover / click
+    values: "hover / click"
     description: Popup submenu trigger.
     default: auto
   - name: variant
     type: String
-    values: soft / floating / plain
+    values: "soft / floating / plain"
     description: Visual treatment.
     default: soft
   - name: v-model:open-keys
     type: MenuKey[]
-    values: Open menu keys
+    values: "Open menu keys"
     description: Controlled open branches.
     default: undefined
   - name: default-openeds
     type: MenuKey[]
-    values: Initial menu keys
+    values: "Initial menu keys"
     description: Initially open branches in uncontrolled mode.
     default: '[]'
   - name: collapse
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Collapse into an icon rail and open children as popups.
     default: false
   - name: unique-open
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Keep one branch per level open.
     default: false
   - name: selectable-parents
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Allow parent nodes to be selected.
     default: false
   - name: close-on-select
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Close the popup chain after selection.
     default: true
   - name: teleported
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Teleport the first popup level to the floating layer container.
     default: true
   - name: show-delay
     type: Number
-    values: milliseconds
+    values: "milliseconds"
     description: Hover open delay.
     default: 120
   - name: hide-delay
     type: Number
-    values: milliseconds
+    values: "milliseconds"
     description: Hover close delay.
     default: 180
   - name: popup-offset
     type: Number
-    values: pixels
+    values: "pixels"
     description: Space between trigger and popup.
     default: 8
   - name: popup-class
     type: String
-    values: class name
+    values: "class name"
     description: Additional popup class.
     default: undefined
 EVENTS:
-  - name: update:modelValue / select
+  - name: update:modelValue
     description: Emitted when an item is selected.
-  - name: update:openKeys / open / close
+  - name: select
+    description: Emitted when an item is selected.
+  - name: update:openKeys
+    description: Emitted when branch expansion changes.
+  - name: open
+    description: Emitted when branch expansion changes.
+  - name: close
     description: Emitted when branch expansion changes.
 description: 'A multi-level menu with inline, cascading popup, and horizontal navigation modes.'
 ---

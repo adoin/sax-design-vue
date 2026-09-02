@@ -97,6 +97,34 @@ Date components can render directly in SSR and SSG. Configure the same `timezone
 
 <card>
 
+## Global component shape
+
+Set `shape="square"` on `SConfigProvider` to make compatible controls and their popups use square corners by default. A component-level `shape` still takes precedence, so individual controls can opt back into `rounded`, `circle`, or `pill` when supported.
+
+<command>
+
+```vue
+<template>
+  <s-config-provider shape="square">
+    <s-input placeholder="Inherited square input" />
+    <s-select placeholder="Inherited square select" />
+    <s-button>Inherited square button</s-button>
+
+    <s-input shape="rounded" placeholder="Local rounded override" />
+  </s-config-provider>
+</template>
+```
+
+</command>
+
+The default remains `rounded` when no global value is configured. The setting is inherited by nested providers unless a nested provider supplies its own `shape`.
+
+The same option can be configured once during full-library installation: `app.use(SaxDesignVue, { shape: 'square' })`.
+
+</card>
+
+<card>
+
 ## Shape and motion tokens
 
 Use the global tokens below to keep component geometry and motion consistent. `--sax-radius` is the master corner radius: core inputs, menus, popups, trees, buttons, pagination, and other shared controls inherit from it through the scale variables.

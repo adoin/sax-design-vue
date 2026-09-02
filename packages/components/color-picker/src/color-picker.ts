@@ -1,4 +1,5 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
+import { useShapeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type ColorPicker from './color-picker.vue'
 import type { ColorFormat } from './color-utils'
@@ -11,6 +12,7 @@ export interface ColorPickerPreset {
 export type ColorPickerPresetInput = string | ColorPickerPreset
 
 export const colorPickerProps = buildProps({
+  shape: useShapeProp,
   modelValue: { type: String, default: '#5667f4' },
   showAlpha: Boolean,
   predefine: {

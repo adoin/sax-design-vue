@@ -2,7 +2,7 @@
 PROPS:
   - name: direction
     type: String
-    values: horizontal, vertical
+    values: "horizontal, vertical"
     description: Divider direction; vertical is intended for inline content.
     default: horizontal
     link: null
@@ -10,7 +10,7 @@ PROPS:
 
   - name: position
     type: String
-    values: left, left-center, center, right-center, right
+    values: "left, left-center, center, right-center, right"
     description: Text/icon position along the line.
     default: center
     link: null
@@ -18,7 +18,7 @@ PROPS:
 
   - name: color
     type: String
-    values: primary, success, danger, warning, dark, RGB, HEX
+    values: "primary, success, danger, warning, dark, RGB, HEX"
     description: Line and text color.
     default: rgba(0,0,0,.1)
     link: null
@@ -26,7 +26,7 @@ PROPS:
 
   - name: background
     type: String
-    values: primary, success, danger, warning, dark, RGB, HEX
+    values: "primary, success, danger, warning, dark, RGB, HEX"
     description: Background behind divider text.
     default: transparent
     link: null
@@ -34,7 +34,7 @@ PROPS:
 
   - name: icon
     type: String
-    values: Material icon name
+    values: "Material icon name"
     description: Show an icon instead of slot text.
     default: null
     link: null
@@ -42,7 +42,7 @@ PROPS:
 
   - name: border-style
     type: String
-    values: solid, dashed, dotted
+    values: "solid, dashed, dotted"
     description: CSS border style for the line.
     default: solid
     link: null
@@ -50,7 +50,7 @@ PROPS:
 
   - name: border-height
     type: String
-    values: CSS size
+    values: "CSS size"
     description: Line thickness in both horizontal and vertical modes.
     default: 1px
     link: null

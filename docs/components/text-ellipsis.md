@@ -1,28 +1,36 @@
 ---
 PROPS:
-  - name: expand-text / collapse-text
+  - name: expand-text
     type: String
-    values: action labels
+    values: "action labels"
     description: Customize labels used to expand and collapse content.
-    default: 'Expand / Collapse'
+    default: 'Expand'
+  - name: collapse-text
+    type: String
+    values: "action labels"
+    description: Customize labels used to expand and collapse content.
+    default: 'Collapse'
   - name: content
     type: String
-    values: text
+    values: "text"
     description: Text to truncate when no default slot is supplied.
     default: "''"
   - name: line-clamp
     type: Number
-    values: lines
+    values: "lines"
     description: Number of visible lines when collapsed.
     default: '1'
   - name: expandable
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Show expand and collapse action.
     default: 'false'
 description: 'Expandable text ellipsis.'
 EVENTS:
-  - name: update:expanded / change
+  - name: update:expanded
+    type: Boolean
+    description: Fire when the expanded state changes.
+  - name: change
     type: Boolean
     description: Fire when the expanded state changes.
 ---

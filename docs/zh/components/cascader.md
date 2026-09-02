@@ -1,66 +1,174 @@
 ---
 description: '在同一弹层中逐级选择关联数据。'
 PROPS:
-  - name: v-model / model-value
+  - name: shape
+    type: String
+    values: "rounded | square"
+    description: 为触发器、标签和弹层统一设置圆角或方形外观。
+    default: rounded
+    usage: '#外形'
+  - name: v-model
     type: CascaderPathValue | CascaderPathValue[]
-    values: 单选值路径或多选值路径数组
+    values: "单选值路径或多选值路径数组"
     description: 绑定当前选择。单选为一条路径，多选为路径数组。
     default: '[]'
-  - name: options / field-names
-    type: CascaderOption[] / Object
-    values: value | label | children | disabled | isLeaf
+  - name: model-value
+    type: CascaderPathValue | CascaderPathValue[]
+    values: "单选值路径或多选值路径数组"
+    description: 绑定当前选择。单选为一条路径，多选为路径数组。
+    default: '[]'
+  - name: options
+    type: CascaderOption[]
+    values: "value | label | children | disabled | isLeaf"
     description: 配置层级数据，并可映射自定义字段名。
-    default: '[] / {}'
-  - name: multiple / show-checked-strategy
-    type: Boolean / SHOW_PARENT | SHOW_CHILD
-    values: true | false / SHOW_PARENT | SHOW_CHILD
-    description: 开启父子关联多选，并控制全选子节点后回填父节点还是叶子节点。
-    default: false / SHOW_PARENT
-    usage: '#多选与回填策略'
-  - name: max-tag-count / max-tag-placeholder
-    type: Number | responsive / Function
-    values: number | responsive
-    description: 控制多选标签数量；默认根据可用宽度自动折叠为 +N。
-    default: responsive / -
-    usage: '#多选与回填策略'
-  - name: show-search / search-value
-    type: Boolean | Object / String
-    values: filter | sort | limit | matchInputWidth
-    description: 开启路径搜索和高亮，并可自定义匹配、排序、数量限制及受控搜索值。
-    default: false / -
-    usage: '#搜索与字段映射'
-  - name: change-on-select / check-strictly
+    default: '[]'
+  - name: field-names
+    type: Object
+    values: "value | label | children | disabled | isLeaf"
+    description: 配置层级数据，并可映射自定义字段名。
+    default: '{}'
+  - name: multiple
     type: Boolean
-    values: true | false
+    values: "true | false"
+    description: 开启父子关联多选，并控制全选子节点后回填父节点还是叶子节点。
+    default: false
+    usage: '#多选与回填策略'
+  - name: show-checked-strategy
+    type: SHOW_PARENT | SHOW_CHILD
+    values: "SHOW_PARENT | SHOW_CHILD"
+    description: 开启父子关联多选，并控制全选子节点后回填父节点还是叶子节点。
+    default: SHOW_PARENT
+    usage: '#多选与回填策略'
+  - name: max-tag-count
+    type: Number | responsive
+    values: "number | responsive"
+    description: 控制多选标签数量；默认根据可用宽度自动折叠为 +N。
+    default: responsive
+    usage: '#多选与回填策略'
+  - name: max-tag-placeholder
+    type: Function
+    values: "number | responsive"
+    description: 控制多选标签数量；默认根据可用宽度自动折叠为 +N。
+    default: null
+    usage: '#多选与回填策略'
+  - name: show-search
+    type: Boolean | Object
+    values: "filter | sort | limit | matchInputWidth"
+    description: 开启路径搜索和高亮，并可自定义匹配、排序、数量限制及受控搜索值。
+    default: false
+    usage: '#搜索与字段映射'
+  - name: search-value
+    type: String
+    values: "filter | sort | limit | matchInputWidth"
+    description: 开启路径搜索和高亮，并可自定义匹配、排序、数量限制及受控搜索值。
+    default: null
+    usage: '#搜索与字段映射'
+  - name: change-on-select
+    type: Boolean
+    values: "true | false"
     description: 单选时允许选择中间层级；check-strictly 是兼容旧属性。
     default: false
     usage: '#基础选择'
-  - name: expand-trigger / load-data
-    type: click | hover / Function
-    values: click | hover
-    description: 配置层级展开方式，或根据 selectedOptions 异步加载子节点。load-data 与 show-search 不同时启用。
-    default: click / -
-    usage: '#悬停展开与懒加载'
-  - name: allow-clear / clearable / disabled / loading / block
+  - name: check-strictly
     type: Boolean
-    values: true | false
+    values: "true | false"
+    description: 单选时允许选择中间层级；check-strictly 是兼容旧属性。
+    default: false
+    usage: '#基础选择'
+  - name: expand-trigger
+    type: click | hover
+    values: "click | hover"
+    description: 配置层级展开方式，或根据 selectedOptions 异步加载子节点。load-data 与 show-search 不同时启用。
+    default: click
+    usage: '#悬停展开与懒加载'
+  - name: load-data
+    type: Function
+    values: "click | hover"
+    description: 配置层级展开方式，或根据 selectedOptions 异步加载子节点。load-data 与 show-search 不同时启用。
+    default: null
+    usage: '#悬停展开与懒加载'
+  - name: allow-clear
+    type: Boolean
+    values: "true | false"
     description: 控制清空、禁用、加载状态和整行宽度。clearable 保留为兼容别名。
-    default: true / false / false / false / false
-  - name: placeholder / separator / display-render / not-found-content
-    type: String / String / Function / String
-    values: 展示内容
+    default: true
+  - name: clearable
+    type: Boolean
+    values: "true | false"
+    description: 控制清空、禁用、加载状态和整行宽度。clearable 保留为兼容别名。
+    default: false
+  - name: disabled
+    type: Boolean
+    values: "true | false"
+    description: 控制清空、禁用、加载状态和整行宽度。clearable 保留为兼容别名。
+    default: false
+  - name: loading
+    type: Boolean
+    values: "true | false"
+    description: 控制清空、禁用、加载状态和整行宽度。clearable 保留为兼容别名。
+    default: false
+  - name: block
+    type: Boolean
+    values: "true | false"
+    description: 控制清空、禁用、加载状态和整行宽度。clearable 保留为兼容别名。
+    default: false
+  - name: placeholder
+    type: String
+    values: "展示内容"
     description: 配置占位文案、路径分隔符、回填格式和空状态文案。
-    default: locale / ' / ' / - / locale
-  - name: open / default-open / placement / teleported
-    type: Boolean / Boolean / Placement / Boolean
-    values: Popper placement
+    default: locale
+  - name: separator
+    type: String
+    values: "展示内容"
+    description: 配置占位文案、路径分隔符、回填格式和空状态文案。
+    default: "' / '"
+  - name: display-render
+    type: Function
+    values: "展示内容"
+    description: 配置占位文案、路径分隔符、回填格式和空状态文案。
+    default: null
+  - name: not-found-content
+    type: String
+    values: "展示内容"
+    description: 配置占位文案、路径分隔符、回填格式和空状态文案。
+    default: locale
+  - name: open
+    type: Boolean
+    values: "Popper placement"
     description: 控制弹层显隐、默认显隐、位置和是否传送到全局容器。
-    default: '- / false / bottom-start / true'
-  - name: popup-config / popup-class-name / dropdown-style
-    type: Object / String / CSSProperties
-    values: full | width | minWidth | maxWidth | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style
+    default: null
+  - name: default-open
+    type: Boolean
+    values: "Popper placement"
+    description: 控制弹层显隐、默认显隐、位置和是否传送到全局容器。
+    default: 'false'
+  - name: placement
+    type: Placement
+    values: "Popper placement"
+    description: 控制弹层显隐、默认显隐、位置和是否传送到全局容器。
+    default: 'bottom-start'
+  - name: teleported
+    type: Boolean
+    values: "Popper placement"
+    description: 控制弹层显隐、默认显隐、位置和是否传送到全局容器。
+    default: 'true'
+  - name: popup-config
+    type: Object
+    values: "full | width | minWidth | maxWidth | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style"
     description: 配置弹层宽度、限制、挂载目标、偏移、层级和自定义样式。
-    default: '{} / - / {}'
+    default: '{}'
+    usage: '#弹层与内容定制'
+  - name: popup-class-name
+    type: String
+    values: "full | width | minWidth | maxWidth | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style"
+    description: 配置弹层宽度、限制、挂载目标、偏移、层级和自定义样式。
+    default: null
+    usage: '#弹层与内容定制'
+  - name: dropdown-style
+    type: CSSProperties
+    values: "full | width | minWidth | maxWidth | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style"
+    description: 配置弹层宽度、限制、挂载目标、偏移、层级和自定义样式。
+    default: '{}'
     usage: '#弹层与内容定制'
 EVENTS:
   - name: change
@@ -69,26 +177,60 @@ EVENTS:
     description: 搜索值变化时触发。
   - name: dropdown-visible-change
     description: 弹层显隐变化时触发。
-  - name: clear / remove-tag / load
+  - name: clear
     description: 清空、多选标签移除、懒加载完成时触发。
-  - name: focus / blur
+  - name: remove-tag
+    description: 清空、多选标签移除、懒加载完成时触发。
+  - name: load
+    description: 清空、多选标签移除、懒加载完成时触发。
+  - name: focus
+    description: 组件获得或失去焦点时触发。
+  - name: blur
     description: 组件获得或失去焦点时触发。
 SLOTS:
-  - name: option / searchResult
+  - name: option
     type: scoped slot
-    values: option | path | selected | active
+    values: "option | path | selected | active"
     description: 自定义普通选项或搜索结果内容。
-  - name: tag-render / max-tag-placeholder / display-render
+  - name: searchResult
     type: scoped slot
-    values: label | option | path | omittedValues | labels | selectedOptions
+    values: "option | path | selected | active"
+    description: 自定义普通选项或搜索结果内容。
+  - name: tag-render
+    type: scoped slot
+    values: "label | option | path | omittedValues | labels | selectedOptions"
     description: 自定义多选标签、折叠数量和单选回填内容。
-  - name: suffix-icon / clear-icon / expand-icon / empty
+  - name: max-tag-placeholder
+    type: scoped slot
+    values: "label | option | path | omittedValues | labels | selectedOptions"
+    description: 自定义多选标签、折叠数量和单选回填内容。
+  - name: display-render
+    type: scoped slot
+    values: "label | option | path | omittedValues | labels | selectedOptions"
+    description: 自定义多选标签、折叠数量和单选回填内容。
+  - name: suffix-icon
     type: slot
-    values: '-'
+    values: "-"
     description: 自定义后缀、清空、层级展开图标和空状态。
-  - name: header / footer
+  - name: clear-icon
     type: slot
-    values: '-'
+    values: "-"
+    description: 自定义后缀、清空、层级展开图标和空状态。
+  - name: expand-icon
+    type: slot
+    values: "-"
+    description: 自定义后缀、清空、层级展开图标和空状态。
+  - name: empty
+    type: slot
+    values: "-"
+    description: 自定义后缀、清空、层级展开图标和空状态。
+  - name: header
+    type: slot
+    values: "-"
+    description: 在选项区域上方或下方追加内容。
+  - name: footer
+    type: slot
+    values: "-"
     description: 在选项区域上方或下方追加内容。
 ---
 
@@ -104,19 +246,47 @@ SLOTS:
 
 <template #template>
 
-@[code{1-12}](../../.vuepress/components/cascader/default.vue)
+@[code{1-6}](../../.vuepress/components/cascader/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-30}](../../.vuepress/components/cascader/default.vue)
+@[code{8-23}](../../.vuepress/components/cascader/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{32-44}](../../.vuepress/components/cascader/default.vue)
+@[code{25-37}](../../.vuepress/components/cascader/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 外形
+
+设置 `shape="square"` 可让触发器、标签、选项、操作按钮和弹层表面统一使用直角外观。
+
+<template #example><cascader-shape /></template>
+
+<template #template>
+
+@[code{19-39}](../../.vuepress/components/cascader/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-17}](../../.vuepress/components/cascader/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{41-53}](../../.vuepress/components/cascader/shape.vue)
 
 </template>
 

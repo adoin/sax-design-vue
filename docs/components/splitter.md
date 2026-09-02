@@ -1,33 +1,38 @@
 ---
 PROPS:
-  - name: model-value/v-model
+  - name: model-value
     type: SplitterModelValue
-    values: recursive layout tree
+    values: "recursive layout tree"
+    description: Direction and size tree for the complete split layout.
+    default: "{ type: 'horizontal', size: ['rest', 'rest'] }"
+  - name: v-model
+    type: SplitterModelValue
+    values: "recursive layout tree"
     description: Direction and size tree for the complete split layout.
     default: "{ type: 'horizontal', size: ['rest', 'rest'] }"
   - name: min-size
     type: Number
-    values: 0 - 1
+    values: "0 - 1"
     description: Default minimum ratio for every region.
     default: '0.08'
   - name: keyboard-step
     type: Number
-    values: 0 - 1
+    values: "0 - 1"
     description: Arrow-key ratio step; follows precision when omitted.
     default: precision step
   - name: precision
     type: Number
-    values: 0 - 8
+    values: "0 - 8"
     description: Decimal precision used to snap every resize.
     default: '2'
   - name: gap
     type: Number / String / [Size, Size]
-    values: single / [rowGap, columnGap]
+    values: "single / [rowGap, columnGap]"
     description: Row and column layout space occupied by separator buttons.
     default: '12'
   - name: disabled
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Disable resizing for the complete layout.
     default: 'false'
 EVENTS:

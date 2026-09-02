@@ -1,95 +1,110 @@
 ---
 description: 'Tabs with overflow collapse, editable items, context menus, and borderless visual variants.'
 PROPS:
-  - name: v-model / model-value
+  - name: v-model
     type: String | Number
-    values: s-tab name, or index when name is omitted
+    values: "s-tab name"
+    description: Active tab value.
+    default: '0'
+  - name: model-value
+    type: String | Number
+    values: "or index when name is omitted"
     description: Active tab value.
     default: '0'
   - name: type
     type: String
-    values: line / pill / card / connected-card / editable-card
+    values: "line / pill / card / connected-card / editable-card"
     description: Navigation style. connected-card joins the active tab and its pane into one continuous surface; editable-card is the backward-compatible editable card preset.
     default: line
   - name: overflow
     type: String
-    values: collapse / scroll / wrap
+    values: "collapse / scroll / wrap"
     description: Collapse, scroll, or wrap tabs when horizontal space runs out.
     default: collapse
   - name: alignment
     type: String
-    values: left / center / right / fixed
+    values: "left / center / right / fixed"
     description: Tab alignment or equal-width layout.
     default: left
   - name: position
     type: String
-    values: top / bottom / left / right
+    values: "top / bottom / left / right"
     description: Tab bar position.
     default: top
   - name: size
     type: String
-    values: small / default / large
+    values: "small / default / large"
     description: Tab size.
     default: default
   - name: animated
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Animate panel and navigation changes.
     default: 'true'
   - name: destroy-on-hide
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Unmount hidden panel content.
     default: 'false'
   - name: lazy
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Mount each panel on first activation, then keep visited panels mounted.
     default: 'false'
   - name: editable
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Show add and close controls independently from the selected visual type.
     default: 'false'
   - name: hide-add
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Hide the add action when editing controls are enabled.
     default: 'false'
   - name: color
     type: String
-    values: theme color / RGB / HEX
+    values: "theme color / RGB / HEX"
     description: Active color.
     default: primary
   - name: aria-label
     type: String
-    values: text
+    values: "text"
     description: Accessible navigation name. Defaults to the component locale.
     default: Tabs
 CHILD_PROPS:
   - name: name
     type: String | Number
-    values: unique value
+    values: "unique value"
     description: Stable s-tab identity and v-model value.
     default: current index
   - name: label
     type: String
-    values: text
+    values: "text"
     description: Tab title and overflow-menu fallback text.
     default: Label
-  - name: icon / badge
-    type: String / String | Number
-    values: icon name / badge content
+  - name: icon
+    type: String
+    values: "icon name"
     description: Optional tab icon and badge.
-    default: —
-  - name: disabled / closable
+    default: null
+  - name: badge
+    type: String | Number
+    values: "badge content"
+    description: Optional tab icon and badge.
+    default: null
+  - name: disabled
     type: Boolean
-    values: true / false
+    values: "true"
     description: Disable a tab or allow closing it when editing controls are enabled.
-    default: false / true
+    default: false
+  - name: closable
+    type: Boolean
+    values: "false"
+    description: Disable a tab or allow closing it when editing controls are enabled.
+    default: true
   - name: force-render
     type: Boolean
-    values: true / false
+    values: "true / false"
     description: Keep this panel mounted when destroy-on-hide is enabled.
     default: 'false'
 EVENTS:
@@ -97,7 +112,11 @@ EVENTS:
     description: Emits value and pane when the active tab changes.
   - name: tab-click
     description: Emits value, event, and pane when a tab is activated.
-  - name: add / remove / edit
+  - name: add
+    description: Requests editable tab mutations; the parent still owns the array.
+  - name: remove
+    description: Requests editable tab mutations; the parent still owns the array.
+  - name: edit
     description: Requests editable tab mutations; the parent still owns the array.
   - name: tab-contextmenu
     description: Emits value, event, and pane for a tab context-menu event.
@@ -108,7 +127,11 @@ SLOTS:
     description: Customizes one label and can compose ContextMenu.
   - name: extra
     description: Trailing tab-bar actions.
-  - name: add-icon / close-icon / more-icon
+  - name: add-icon
+    description: Replaces editable and overflow icons.
+  - name: close-icon
+    description: Replaces editable and overflow icons.
+  - name: more-icon
     description: Replaces editable and overflow icons.
 ---
 

@@ -1,23 +1,28 @@
 ---
 PROPS:
-  - name: tag / status
-    type: String / String
-    values: semantic HTML tag / theme status
+  - name: tag
+    type: String
+    values: "semantic HTML tag"
     description: Select the rendered element and semantic color state.
-    default: 'span / -'
+    default: 'span'
+  - name: status
+    type: String
+    values: "theme status"
+    description: Select the rendered element and semantic color state.
+    default: null
   - name: content
     type: String | Number
-    values: text
+    values: "text"
     description: Text when no default slot is supplied.
     default: null
   - name: line-clamp
     type: false | Number
-    values: false | positive integer
+    values: "false | positive integer"
     description: Truncation lines. `false` disables truncation, `1` truncates one line, and `2+` clamps multiple lines.
     default: false
   - name: typing
     type: Boolean | Number
-    values: false | true | milliseconds
+    values: "false | true | milliseconds"
     description: Types `content` character by character. `true` uses the default speed; a number sets the interval in milliseconds.
     default: false
 description: 'Semantic text with truncation and typewriter effects.'

@@ -1,12 +1,6 @@
 <template>
   <div class="demo-row">
     <s-cascader v-model="value" :options="options" />
-    <s-cascader
-      v-model="branchValue"
-      :options="options"
-      change-on-select
-      placeholder="Select any level"
-    />
   </div>
   <p class="value">Selected path: {{ value.join(' / ') || 'none' }}</p>
 </template>
@@ -15,7 +9,6 @@
 import { ref } from 'vue'
 
 const value = ref(['guide', 'components'])
-const branchValue = ref([])
 const options = [
   {
     value: 'guide',

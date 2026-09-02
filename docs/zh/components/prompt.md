@@ -1,18 +1,33 @@
 ---
 PROPS:
-  - name: button-accept / button-cancel / accept-text / cancel-text
-    type: Boolean / Boolean / String / String
-    values: 操作按钮显示和文案
+  - name: button-accept
+    type: Boolean
+    values: "操作按钮显示和文案"
     description: 配置 Prompt 操作按钮及其文本。
-    default: '-'
+    default: null
+  - name: button-cancel
+    type: Boolean
+    values: "操作按钮显示和文案"
+    description: 配置 Prompt 操作按钮及其文本。
+    default: null
+  - name: accept-text
+    type: String
+    values: "操作按钮显示和文案"
+    description: 配置 Prompt 操作按钮及其文本。
+    default: null
+  - name: cancel-text
+    type: String
+    values: "操作按钮显示和文案"
+    description: 配置 Prompt 操作按钮及其文本。
+    default: null
   - name: close-icon
     type: String
-    values: Iconify 图标名称
+    values: "Iconify 图标名称"
     description: 自定义关闭控件图标。
-    default: '-'
+    default: null
   - name: v-model
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 可见性。
     default: false
     link: null
@@ -20,7 +35,7 @@ PROPS:
 
   - name: title
     type: String
-    values: String
+    values: "String"
     description: 对话框标题。
     default: Dialog
     link: null
@@ -28,7 +43,7 @@ PROPS:
 
   - name: text
     type: String
-    values: String
+    values: "String"
     description: 未使用默认插槽时显示的正文。
     default: null
     link: null
@@ -36,7 +51,7 @@ PROPS:
 
   - name: type
     type: String
-    values: alert, confirm
+    values: "alert, confirm"
     description: alert 显示头部关闭按钮且点击遮罩可关闭；confirm 点击遮罩会抖动提示。
     default: alert
     link: null
@@ -44,7 +59,7 @@ PROPS:
 
   - name: color
     type: String
-    values: primary, success, danger, warning, dark
+    values: "primary, success, danger, warning, dark"
     description: 标题与确认按钮的主题色。
     default: primary
     link: null
@@ -52,7 +67,7 @@ PROPS:
 
   - name: is-valid
     type: Boolean | String
-    values: true, false, none
+    values: "true, false, none"
     description: 为 false 时禁用确认按钮；none 表示不做校验。
     default: none
     link: null
@@ -60,7 +75,7 @@ PROPS:
 
   - name: accept-text
     type: String
-    values: String
+    values: "String"
     description: 确认按钮文案。
     default: Accept
     link: null
@@ -68,7 +83,7 @@ PROPS:
 
   - name: cancel-text
     type: String
-    values: String
+    values: "String"
     description: 取消按钮文案。
     default: Cancel
     link: null
@@ -76,7 +91,7 @@ PROPS:
 
   - name: buttons-hidden
     type: Boolean
-    values: true, false
+    values: "true, false"
     description: 隐藏底部操作按钮。
     default: false
     link: null

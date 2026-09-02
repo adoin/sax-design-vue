@@ -26,7 +26,7 @@ const select = inject(selectContextKey)
 if (!select) {
   throwError(
     'Option Group',
-    '`option-group` component must be called inside `select` component'
+    '`option-group` component must be called inside `select` component',
   )
 }
 
@@ -40,7 +40,7 @@ watch(
   () => {
     visible.value = optionsArray.value.some((option) => option.visible === true)
   },
-  { flush: 'post' }
+  { flush: 'post' },
 )
 
 provide(optionGroupRegisterKey, (option: SelectOptionContext) => {

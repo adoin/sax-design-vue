@@ -1,7 +1,11 @@
 import { defineComponent, h } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import { useGlobalConfig } from '@vuesax-alpha/hooks'
+import { useGlobalConfig, useShape, useShapeProp } from '@vuesax-alpha/hooks'
+import Button from '../../button/src/button.vue'
+import Card from '../../card/src/card.vue'
+import Tag from '../../tag/src/tag.vue'
+import Input from '../../input/src/input.vue'
 import ConfigProvider from '../src/config-provider'
 
 describe('ConfigProvider theme', () => {
@@ -40,5 +44,60 @@ describe('ConfigProvider theme', () => {
     })
 
     expect(wrapper.text()).toBe('Asia/Shanghai:true')
+  })
+
+  it('provides a default shape while preserving local overrides', () => {
+    const Consumer = defineComponent({
+      props: { shape: useShapeProp },
+      setup() {
+        const shape = useShape()
+        return () => h('span', { 'data-shape': shape.value }, shape.value)
+      },
+    })
+    const wrapper = mount(ConfigProvider, {
+      props: { shape: 'square' },
+      slots: {
+        default: () =>
+          h('div', [
+            h(Consumer),
+            h(Consumer, { shape: 'rounded' }),
+            h(ConfigProvider, null, { default: () => h(Consumer) }),
+          ]),
+      },
+    })
+
+    expect(
+      wrapper
+        .findAll('[data-shape]')
+        .map((item) => item.attributes('data-shape')),
+    ).toEqual(['square', 'rounded', 'square'])
+  })
+
+  it('applies the global shape to compatible component families', () => {
+    const wrapper = mount(ConfigProvider, {
+      props: { shape: 'square' },
+      slots: {
+        default: () =>
+          h('div', [
+            h(Input, { modelValue: '', 'data-test': 'input' }),
+            h(Button, { 'data-test': 'button' }, () => 'Button'),
+            h(Card, { 'data-test': 'card' }, () => 'Card'),
+            h(Tag, { modelValue: true, 'data-test': 'tag' }, () => 'Tag'),
+            h(Input, {
+              modelValue: '',
+              shape: 'rounded',
+              'data-test': 'rounded-input',
+            }),
+          ]),
+      },
+    })
+
+    expect(wrapper.findAll('.s-input')[0]?.classes()).toContain('is-square')
+    expect(wrapper.get('[data-test="button"]').classes()).toContain(
+      's-button--square',
+    )
+    expect(wrapper.get('[data-test="card"]').classes()).toContain('is-square')
+    expect(wrapper.get('[data-test="tag"]').classes()).toContain('is-square')
+    expect(wrapper.findAll('.s-input')[1]?.classes()).toContain('is-rounded')
   })
 })
