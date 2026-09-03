@@ -13,6 +13,7 @@ export interface ThemeNormalPropsFrontmatter {
   description?: string
   default?: unknown
   link?: string
+  usage?: string
   code?: string
 }
 
