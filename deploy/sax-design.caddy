@@ -1,0 +1,37 @@
+(sax_design_static) {
+	root * /srv/www/sax-design.emssion.com/current
+	encode zstd gzip
+	header Cache-Control "public, max-age=0, must-revalidate"
+	header X-Content-Type-Options "nosniff"
+
+	redir /play /play/ 308
+
+	@play_routes {
+		path /play/*
+		not path /play/assets/*
+	}
+	handle @play_routes {
+		try_files {path} {path}/ /play/index.html
+		file_server
+	}
+
+	handle {
+		try_files {path} {path}.html {path}/ =404
+		file_server
+	}
+
+	handle_errors {
+		rewrite * /404.html
+		file_server
+	}
+}
+
+sax-design.emssion.com {
+	import sax_design_static
+}
+
+# Local health checks use the same handlers before DNS and TLS are ready.
+http://127.0.0.1:8091 {
+	bind 127.0.0.1
+	import sax_design_static
+}
