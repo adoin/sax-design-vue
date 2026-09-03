@@ -1,37 +1,38 @@
 <template>
   <div class="center">
-    <s-button color="danger" @click="active = !active"> Open Dialog </s-button>
-    <s-dialog v-model="active" prevent-close>
+    <s-button type="transparent" @click="active = !active">
+      打开对话框
+    </s-button>
+    <s-dialog v-model="active" lock-scroll>
       <template #header>
-        <h4 class="not-margin">Welcome to <b>Sax Design</b></h4>
+        <h4 class="not-margin">欢迎使用 <b>Sax Design</b></h4>
       </template>
 
       <div class="con-form">
-        <s-input v-model="input1" block placeholder="Email">
+        <s-input v-model="input1" block placeholder="邮箱">
           <template #icon> @ </template>
         </s-input>
-        <s-input v-model="input2" block type="password" placeholder="Password">
+        <s-input v-model="input2" block type="password" placeholder="密码">
           <template #icon>
             <s-icon name="bxs:lock" />
           </template>
         </s-input>
         <div class="flex">
-          <s-checkbox v-model="checkbox1">Remember me</s-checkbox>
-          <a href="#">Forgot Password?</a>
+          <s-checkbox v-model="checkbox1">记住我</s-checkbox>
+          <a href="#">忘记密码？</a>
         </div>
       </div>
 
       <template #footer>
         <div class="footer-dialog">
-          <s-button block> Sign In </s-button>
+          <s-button block> 登录 </s-button>
 
-          <div class="new">New Here? <a href="#">Create New Account</a></div>
+          <div class="new">还没有账号？ <a href="#">创建账号</a></div>
         </div>
       </template>
     </s-dialog>
   </div>
 </template>
-
 <script lang="ts" setup>
 import { ref } from 'vue'
 
@@ -40,7 +41,6 @@ const input1 = ref('')
 const input2 = ref('')
 const checkbox1 = ref(false)
 </script>
-
 <style lang="scss" scoped>
 @function -color($color, $alpha: 1) {
   @return unquote('hsl(var(--sax-#{$color}) / #{$alpha})');

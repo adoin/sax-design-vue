@@ -315,7 +315,7 @@ For simple **confirm / alert** flows with built-in Accept and Cancel buttons, us
 
 <docs-warn />
 
-It generates a Dialog with the `s-dialog` component, this component is very customizable since it provides a slot to put and make any type of interface to the user's need
+Use `s-dialog` and its slots to compose a custom interface. Give form inputs the `block` prop to fill the available width.
 
 <template #example>
 <dialog-default />
@@ -323,19 +323,19 @@ It generates a Dialog with the `s-dialog` component, this component is very cust
 
 <template #template>
 
-@[code{1-35}](../.vuepress/components/dialog/default.vue)
+@[code{1-40}](../.vuepress/components/dialog/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../.vuepress/components/dialog/default.vue)
+@[code{41-48}](../.vuepress/components/dialog/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-101}](../.vuepress/components/dialog/default.vue)
+@[code{49-102}](../.vuepress/components/dialog/default.vue)
 
 </template>
 
@@ -395,7 +395,7 @@ Add a loading animation to the dialog with the `loading` property
 
 <template #style>
 
-@[code{45-102}](../.vuepress/components/dialog/loading.vue)
+@[code{45-98}](../.vuepress/components/dialog/loading.vue)
 
 </template>
 
@@ -425,7 +425,7 @@ You can remove the close button with the `not-close` property
 
 <template #style>
 
-@[code{42-99}](../.vuepress/components/dialog/not-close.vue)
+@[code{42-95}](../.vuepress/components/dialog/not-close.vue)
 
 </template>
 
@@ -485,7 +485,7 @@ If you need to remove the page scroll when opening the dialog you can do it with
 
 <template #style>
 
-@[code{44-101}](../.vuepress/components/dialog/lock-scroll.vue)
+@[code{44-97}](../.vuepress/components/dialog/lock-scroll.vue)
 
 </template>
 
@@ -545,7 +545,7 @@ You can nest as many `s-dialog` as you need without problem
 
 <template #style>
 
-@[code{52-109}](../.vuepress/components/dialog/nested.vue)
+@[code{52-105}](../.vuepress/components/dialog/nested.vue)
 
 </template>
 
@@ -575,7 +575,7 @@ If you need the dialog to be the total window size you can do it with the `full-
 
 <template #style>
 
-@[code{44-101}](../.vuepress/components/dialog/full-screen.vue)
+@[code{44-97}](../.vuepress/components/dialog/full-screen.vue)
 
 </template>
 
@@ -605,7 +605,7 @@ You can add a blur style to all the elements behind the dialog with the `overlay
 
 <template #style>
 
-@[code{44-101}](../.vuepress/components/dialog/blur.vue)
+@[code{44-97}](../.vuepress/components/dialog/blur.vue)
 
 </template>
 
@@ -637,7 +637,7 @@ Change the dialog style by removing the border radius and making it rectangular
 
 <template #style>
 
-@[code{46-103}](../.vuepress/components/dialog/square.vue)
+@[code{46-99}](../.vuepress/components/dialog/square.vue)
 
 </template>
 
@@ -667,7 +667,7 @@ With the `prevent-close` property you do not close the dialog by clicking outsid
 
 <template #style>
 
-@[code{44-101}](../.vuepress/components/dialog/prevent-close.vue)
+@[code{44-97}](../.vuepress/components/dialog/prevent-close.vue)
 
 </template>
 

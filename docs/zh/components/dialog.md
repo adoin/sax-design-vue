@@ -251,27 +251,27 @@ SLOTS:
 
 <docs-warn />
 
-使用 `s-dialog` 可创建高度可定制的对话框；通过插槽可组合任意业务界面。
+使用 `s-dialog` 可创建高度可定制的对话框；通过插槽可组合任意业务界面。表单输入框使用 `block` 属性填满可用宽度。
 
 <template #example>
-<dialog-default />
+<dialog-zh-default />
 </template>
 
 <template #template>
 
-@[code{1-35}](../../.vuepress/components/dialog/default.vue)
+@[code{1-35}](../../.vuepress/components/dialog-zh/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../../.vuepress/components/dialog/default.vue)
+@[code{36-43}](../../.vuepress/components/dialog-zh/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-101}](../../.vuepress/components/dialog/default.vue)
+@[code{44-97}](../../.vuepress/components/dialog-zh/default.vue)
 
 </template>
 
@@ -314,24 +314,24 @@ SLOTS:
 通过 `loading` 属性为对话框添加加载动画。
 
 <template #example>
-<dialog-loading />
+<dialog-zh-loading />
 </template>
 
 <template #template>
 
-@[code{1-35}](../../.vuepress/components/dialog/loading.vue)
+@[code{1-35}](../../.vuepress/components/dialog-zh/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../../.vuepress/components/dialog/loading.vue)
+@[code{36-43}](../../.vuepress/components/dialog-zh/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{45-102}](../../.vuepress/components/dialog/loading.vue)
+@[code{45-98}](../../.vuepress/components/dialog-zh/loading.vue)
 
 </template>
 
@@ -344,24 +344,24 @@ SLOTS:
 通过 `not-close` 属性隐藏关闭按钮。
 
 <template #example>
-<dialog-not-close />
+<dialog-zh-not-close />
 </template>
 
 <template #template>
 
-@[code{1-33}](../../.vuepress/components/dialog/not-close.vue)
+@[code{1-33}](../../.vuepress/components/dialog-zh/not-close.vue)
 
 </template>
 
 <template #script>
 
-@[code{34-41}](../../.vuepress/components/dialog/not-close.vue)
+@[code{34-41}](../../.vuepress/components/dialog-zh/not-close.vue)
 
 </template>
 
 <template #style>
 
-@[code{42-99}](../../.vuepress/components/dialog/not-close.vue)
+@[code{42-95}](../../.vuepress/components/dialog-zh/not-close.vue)
 
 </template>
 
@@ -404,24 +404,24 @@ SLOTS:
 需要在打开对话框时锁定页面滚动，可使用 `lock-scroll` 属性。
 
 <template #example>
-<dialog-lock-scroll />
+<dialog-zh-lock-scroll />
 </template>
 
 <template #template>
 
-@[code{1-35}](../../.vuepress/components/dialog/lock-scroll.vue)
+@[code{1-35}](../../.vuepress/components/dialog-zh/lock-scroll.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../../.vuepress/components/dialog/lock-scroll.vue)
+@[code{36-43}](../../.vuepress/components/dialog-zh/lock-scroll.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-101}](../../.vuepress/components/dialog/lock-scroll.vue)
+@[code{44-97}](../../.vuepress/components/dialog-zh/lock-scroll.vue)
 
 </template>
 
@@ -464,24 +464,24 @@ SLOTS:
 可按需嵌套多个 `s-dialog`。
 
 <template #example>
-<dialog-nested />
+<dialog-zh-nested />
 </template>
 
 <template #template>
 
-@[code{1-41}](../../.vuepress/components/dialog/nested.vue)
+@[code{1-41}](../../.vuepress/components/dialog-zh/nested.vue)
 
 </template>
 
 <template #script>
 
-@[code{42-50}](../../.vuepress/components/dialog/nested.vue)
+@[code{42-50}](../../.vuepress/components/dialog-zh/nested.vue)
 
 </template>
 
 <template #style>
 
-@[code{52-109}](../../.vuepress/components/dialog/nested.vue)
+@[code{52-105}](../../.vuepress/components/dialog-zh/nested.vue)
 
 </template>
 
@@ -494,24 +494,24 @@ SLOTS:
 需要让对话框占满整个窗口时，可使用 `full-screen` 属性。
 
 <template #example>
-<dialog-full-screen />
+<dialog-zh-full-screen />
 </template>
 
 <template #template>
 
-@[code{1-35}](../../.vuepress/components/dialog/full-screen.vue)
+@[code{1-35}](../../.vuepress/components/dialog-zh/full-screen.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../../.vuepress/components/dialog/full-screen.vue)
+@[code{36-43}](../../.vuepress/components/dialog-zh/full-screen.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-101}](../../.vuepress/components/dialog/full-screen.vue)
+@[code{44-97}](../../.vuepress/components/dialog-zh/full-screen.vue)
 
 </template>
 
@@ -524,24 +524,24 @@ SLOTS:
 通过 `overlay-blur` 可为对话框后的元素添加模糊样式；该功能依赖 CSS 属性 [backdrop-filter](https://caniuse.com/#feat=css-backdrop-filter)。
 
 <template #example>
-<dialog-blur />
+<dialog-zh-blur />
 </template>
 
 <template #template>
 
-@[code{1-33}](../../.vuepress/components/dialog/blur.vue)
+@[code{1-33}](../../.vuepress/components/dialog-zh/blur.vue)
 
 </template>
 
 <template #script>
 
-@[code{35-42}](../../.vuepress/components/dialog/blur.vue)
+@[code{35-42}](../../.vuepress/components/dialog-zh/blur.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-101}](../../.vuepress/components/dialog/blur.vue)
+@[code{44-97}](../../.vuepress/components/dialog-zh/blur.vue)
 
 </template>
 
@@ -556,24 +556,24 @@ SLOTS:
 移除对话框圆角，使其变为直角矩形。
 
 <template #example>
-<dialog-square />
+<dialog-zh-square />
 </template>
 
 <template #template>
 
-@[code{1-35}](../../.vuepress/components/dialog/square.vue)
+@[code{1-35}](../../.vuepress/components/dialog-zh/square.vue)
 
 </template>
 
 <template #script>
 
-@[code{37-44}](../../.vuepress/components/dialog/square.vue)
+@[code{37-44}](../../.vuepress/components/dialog-zh/square.vue)
 
 </template>
 
 <template #style>
 
-@[code{46-103}](../../.vuepress/components/dialog/square.vue)
+@[code{46-99}](../../.vuepress/components/dialog-zh/square.vue)
 
 </template>
 
@@ -586,24 +586,24 @@ SLOTS:
 使用 `prevent-close` 后，点击遮罩或按 **Esc** 键不会关闭对话框。
 
 <template #example>
-<dialog-prevent-close />
+<dialog-zh-prevent-close />
 </template>
 
 <template #template>
 
-@[code{1-33}](../../.vuepress/components/dialog/prevent-close.vue)
+@[code{1-33}](../../.vuepress/components/dialog-zh/prevent-close.vue)
 
 </template>
 
 <template #script>
 
-@[code{35-42}](../../.vuepress/components/dialog/prevent-close.vue)
+@[code{35-42}](../../.vuepress/components/dialog-zh/prevent-close.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-101}](../../.vuepress/components/dialog/prevent-close.vue)
+@[code{44-97}](../../.vuepress/components/dialog-zh/prevent-close.vue)
 
 </template>
 

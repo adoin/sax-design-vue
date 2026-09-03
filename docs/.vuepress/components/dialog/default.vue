@@ -7,10 +7,15 @@
       </template>
 
       <div class="con-form">
-        <s-input v-model="email" placeholder="Email">
+        <s-input v-model="email" block placeholder="Email">
           <template #icon> @ </template>
         </s-input>
-        <s-input v-model="password" type="password" placeholder="Password">
+        <s-input
+          v-model="password"
+          block
+          type="password"
+          placeholder="Password"
+        >
           <template #icon>
             <s-icon name="bxs:lock" />
           </template>
@@ -69,10 +74,6 @@ const remember = ref(false)
   }
   .s-input {
     margin: 10px 0px;
-    width: calc(100%);
-    .s-input__original {
-      width: 100%;
-    }
   }
 }
 .footer-dialog {
