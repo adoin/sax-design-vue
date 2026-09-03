@@ -18,6 +18,14 @@
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--sax-primary) / 0.34) transparent;
 
+    @supports selector(::-webkit-scrollbar) {
+      // Standard scrollbar styles override the explicit WebKit track in Chromium.
+      // Keep a stable 6px gutter even with Overlay Scrollbars enabled: its fading
+      // thumb has no gutter, so native-drag detection cannot suspend anchoring.
+      scrollbar-width: auto;
+      scrollbar-color: auto;
+    }
+
     &::-webkit-scrollbar {
       width: 6px;
       height: 6px;
