@@ -2,6 +2,15 @@
   <CodeCopied :copied="copied" :text="t.examples.copied" />
   <div class="command" :class="{ 'command--tabs': isMultipleSlot }">
     <div v-if="isMultipleSlot" class="tabs">
+      <svg
+        class="tab-cap"
+        viewBox="0 0 320 56"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path d="M0 56 C34 56 30 0 64 0 H256 C290 0 286 56 320 56 Z" />
+      </svg>
       <button
         v-for="(slot, index) of slotsNames"
         :key="slot"
@@ -14,19 +23,18 @@
         {{ slot }}
       </button>
     </div>
-    <button
-      type="button"
-      :title="t.examples.copyCode"
-      :aria-label="copied ? t.examples.copied : t.examples.copyCode"
-      class="con-copy"
-      :class="{ copied }"
-      @click="copy($el?.querySelector('pre code')?.textContent || '')"
-    >
-      <s-icon v-if="!copied" name="bx:clipboard" />
-      <s-icon v-else name="bx:check" />
-    </button>
-
     <div ref="$el" class="slots">
+      <button
+        type="button"
+        :title="t.examples.copyCode"
+        :aria-label="copied ? t.examples.copied : t.examples.copyCode"
+        class="con-copy"
+        :class="{ copied }"
+        @click="copy($el?.querySelector('pre code')?.textContent || '')"
+      >
+        <s-icon v-if="!copied" name="bx:clipboard" />
+        <s-icon v-else name="bx:check" />
+      </button>
       <template v-if="isMultipleSlot">
         <template v-for="(slot, index) of slotsNames" :key="index">
           <slot v-if="activeSlot === index" :name="slot" />
@@ -62,23 +70,39 @@ const { copied, copy } = useClipboard({
 
 .command {
   position: relative;
+  display: flex;
+  flex-direction: column;
   min-width: 0;
   margin: 20px;
-  overflow: hidden;
-  border-radius: 14px;
-  background: hsl(var(--sax-theme-code));
 
   .tabs {
+    position: relative;
+    z-index: 1;
     display: flex;
     min-height: 56px;
+    max-width: calc(100% - 18px);
+    align-self: flex-start;
     align-items: center;
     flex-wrap: wrap;
     gap: 4px;
-    padding: 6px 58px 6px 8px;
-    border-bottom: 1px solid rgb(255 255 255 / 0.12);
+    margin: 0 0 -2px 18px;
+    padding: 6px 36px;
+  }
+
+  // One continuous silhouette keeps both shoulders smooth at browser zoom
+  // levels. Explicit dimensions avoid the theme's global SVG size overrides.
+  .tab-cap {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: hsl(var(--sax-theme-code));
+    pointer-events: none;
   }
 
   .tab {
+    position: relative;
     display: inline-flex;
     min-width: 44px;
     min-height: 44px;
@@ -128,10 +152,6 @@ const { copied, copy } = useClipboard({
     }
   }
 
-  &.command--tabs .con-copy {
-    right: 8px;
-  }
-
   .tab:focus-visible,
   .con-copy:focus-visible {
     outline: 2px solid #fff;
@@ -139,7 +159,11 @@ const { copied, copy } = useClipboard({
   }
 
   .slots {
+    position: relative;
     min-width: 0;
+    overflow: hidden;
+    border-radius: 20px;
+    background: hsl(var(--sax-theme-code));
 
     div[class*='language-'] {
       margin: 0;
@@ -152,11 +176,27 @@ const { copied, copy } = useClipboard({
       border-radius: 0;
     }
   }
+
+  &.command--tabs .slots {
+    border-top-right-radius: 10px;
+  }
 }
 
 @media (max-width: 600px) {
   .command {
     margin-inline: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .command {
+    .tabs {
+      padding-inline: 32px;
+    }
+
+    .tab {
+      padding-inline: 8px;
+    }
   }
 }
 
