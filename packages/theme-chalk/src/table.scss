@@ -107,7 +107,8 @@
         #{getColor(primary)} 5.5%,
         var(--s-table-row-surface)
       );
-      box-shadow: 0 4px 16px hsl(var(--sax-primary) / 0.08);
+      // Keep hover emphasis inside the row without shading adjacent rows.
+      box-shadow: inset 0 0 0 1px hsl(var(--sax-primary) / 0.08);
     }
 
     @include when(striped-row) {
