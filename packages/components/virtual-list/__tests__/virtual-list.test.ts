@@ -11,6 +11,8 @@ const virtualizerMocks = vi.hoisted(() => ({
   scrollToIndex: vi.fn(),
   scrollToOffset: vi.fn(),
   getTotalSize: vi.fn(() => 40),
+  shouldAdjustScrollPositionOnItemSizeChange: undefined as
+    (() => boolean) | undefined,
   getVirtualItems: vi.fn(() => [
     { index: 0, key: 'alpha', start: 0, size: 40, end: 40, lane: 0 },
   ]),
@@ -98,6 +100,39 @@ describe('VirtualList', () => {
     expect(virtualizerMocks.measure).toHaveBeenCalledTimes(1)
   })
 
+  it('suspends normal-list anchoring only while the native scrollbar is held', async () => {
+    const wrapper = mount(VirtualList, {
+      props: { items: [{ id: 'alpha' }], dynamic: true },
+    })
+    await nextTick()
+    const element = wrapper.find('.s-vl__window').element as HTMLElement
+    Object.defineProperties(element, {
+      clientHeight: { value: 100 },
+      clientWidth: { value: 190 },
+      offsetHeight: { value: 100 },
+      offsetWidth: { value: 200 },
+      scrollHeight: { value: 1000 },
+    })
+    const rect = vi.spyOn(element, 'getBoundingClientRect').mockReturnValue({
+      left: 0,
+      top: 0,
+      width: 200,
+      height: 100,
+    } as DOMRect)
+    element.dispatchEvent(
+      new MouseEvent('mousedown', { button: 0, clientX: 195, clientY: 20 }),
+    )
+    expect(
+      virtualizerMocks.shouldAdjustScrollPositionOnItemSizeChange?.(),
+    ).toBe(false)
+    window.dispatchEvent(new MouseEvent('mouseup'))
+    expect(
+      virtualizerMocks.shouldAdjustScrollPositionOnItemSizeChange,
+    ).toBeUndefined()
+    wrapper.unmount()
+    rect.mockRestore()
+  })
+
   it('resolves generated items only for the rendered window', () => {
     const itemAt = vi.fn((index: number) => ({ id: `row-${index}` }))
     const wrapper = mount(VirtualList, {
@@ -117,6 +152,71 @@ describe('VirtualList', () => {
     expect(wrapper.find('.s-vl__item').attributes('style')).toContain(
       '--s-vl-item-start: 0px',
     )
+  })
+
+  it('keeps the native track height stable during measurement and updates it on release', async () => {
+    let rowHeight = 48
+    const rect = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockImplementation(function (this: HTMLElement) {
+        return this.classList.contains('s-vl__window')
+          ? ({ left: 0, top: 0, width: 300, height: 300 } as DOMRect)
+          : ({ height: rowHeight } as DOMRect)
+      })
+    const wrapper = mount(VirtualList, {
+      props: {
+        count: 10_000,
+        itemAt: (index: number) => index,
+        estimateSize: 48,
+        dynamic: true,
+        retainMaxSize: true,
+      },
+    })
+    await nextTick()
+    await nextTick()
+    const content = wrapper.find('.s-vl__content').element as HTMLElement
+    const element = wrapper.find('.s-vl__window').element as HTMLElement
+    Object.defineProperties(element, {
+      clientHeight: { value: 300 },
+      clientWidth: { value: 290 },
+      offsetHeight: { value: 300 },
+      offsetWidth: { value: 300 },
+      scrollHeight: { get: () => Number.parseFloat(content.style.height) },
+    })
+    const initialHeight = element.scrollHeight
+    element.dispatchEvent(
+      new MouseEvent('mousedown', {
+        button: 0,
+        clientX: 295,
+        clientY: 20,
+      }),
+    )
+    rowHeight = 96
+    wrapper.vm.measureVisible()
+    await nextTick()
+    await nextTick()
+    expect(element.scrollHeight).toBe(initialHeight)
+    expect(content.style.overflowY).toBe('clip')
+    expect(wrapper.findAll('.s-vl__item')[1].attributes('style')).toContain(
+      '--s-vl-item-start: 96px',
+    )
+
+    element.scrollTop = initialHeight - element.clientHeight
+    element.scrollTo = vi.fn(({ top }: ScrollToOptions) => {
+      element.scrollTop = top ?? 0
+    })
+    window.dispatchEvent(new MouseEvent('mouseup'))
+    await nextTick()
+    await nextTick()
+    expect(element.scrollHeight).toBeGreaterThan(initialHeight)
+    expect(content.style.overflowY).toBe('')
+    await vi.waitFor(() => {
+      expect(element.scrollTop).toBe(
+        element.scrollHeight - element.clientHeight,
+      )
+    })
+    wrapper.unmount()
+    rect.mockRestore()
   })
 
   it('batches sparse generated-row measurements into stable offsets', async () => {

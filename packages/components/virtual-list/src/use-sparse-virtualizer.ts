@@ -36,6 +36,7 @@ interface UseSparseVirtualizerOptions {
   overscan: ComputedRef<number>
   retainMaxSize: ComputedRef<boolean>
   scrollElement: Ref<HTMLElement | null>
+  scrollbarDragging: Ref<boolean>
   getItemKey: (index: number) => VirtualListKey
   onRangeChange: (range: { start: number; end: number }) => void
 }
@@ -188,8 +189,8 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
   const resizeItems = (measurements: SparseVirtualMeasurement[]) => {
     if (!options.enabled.value || !measurements.length) return
 
-    const currentOffset = scrollOffset.value
     const scrollElement = options.scrollElement.value
+    const currentOffset = scrollElement?.scrollTop ?? scrollOffset.value
     const wasAtEnd =
       keepAtEnd ||
       (scrollElement != null &&
@@ -235,6 +236,9 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
     if (!changed) return
     measurementVersion.value++
 
+    // Keep measurements live, but let the native scrollbar own its position
+    // throughout the gesture. Replaying these deltas would break the drag.
+    if (options.scrollbarDragging.value) return
     if (!wasAtEnd && !anchorDelta) return
     preserveEndOnResize ||= wasAtEnd
     if (!wasAtEnd) pendingAnchorDelta += anchorDelta
@@ -248,6 +252,11 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
       }
       const applyAdjustment = () => {
         scrollAdjustmentScheduled = false
+        if (
+          options.scrollbarDragging.value ||
+          (!preserveEndOnResize && !pendingAnchorDelta)
+        )
+          return
         if (preserveEndOnResize) {
           element.scrollTop = Math.max(
             0,
@@ -324,6 +333,17 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
 
     scrollToOffset(nextOffset)
   }
+
+  watch(
+    options.scrollbarDragging,
+    (dragging) => {
+      if (!dragging) return
+      pendingAnchorDelta = 0
+      preserveEndOnResize = false
+      keepAtEnd = false
+    },
+    { flush: 'sync' },
+  )
 
   watch(
     range,

@@ -6,7 +6,13 @@
       :style="{ height: viewportHeight }"
       @scroll="handleScroll"
     >
-      <div :class="ns.e('content')" :style="{ height: `${totalSize}px` }">
+      <div
+        :class="ns.e('content')"
+        :style="{
+          height: `${dragTotalSize ?? totalSize}px`,
+          overflowY: scrollbarDragging ? 'clip' : undefined,
+        }"
+      >
         <div
           v-for="virtualItem in virtualItems"
           :key="`${typeof virtualItem.key}:${String(virtualItem.key)}`"
@@ -29,11 +35,19 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, onBeforeUnmount, useTemplateRef, watch } from 'vue'
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  shallowRef,
+  useTemplateRef,
+  watch,
+} from 'vue'
 import { useVirtualizer } from '@tanstack/vue-virtual'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { virtualListEmits, virtualListProps } from './virtual-list'
 import { useSparseVirtualizer } from './use-sparse-virtualizer'
+import { useScrollbarDrag } from './use-scrollbar-drag'
 import type { CSSProperties, ComponentPublicInstance } from 'vue'
 import type { VirtualListKey } from './virtual-list'
 
@@ -45,6 +59,10 @@ const props = defineProps(virtualListProps)
 const emit = defineEmits(virtualListEmits)
 const ns = useNamespace('vl')
 const scrollRef = useTemplateRef<HTMLElement>('scrollRef')
+let scrollbarEndedAtEnd = false
+const scrollbarDragging = useScrollbarDrag(scrollRef, (atEnd) => {
+  scrollbarEndedAtEnd = atEnd
+})
 const itemCount = computed(() =>
   props.count == null
     ? props.items.length
@@ -76,6 +94,7 @@ const sparseVirtualizer = useSparseVirtualizer({
   overscan,
   retainMaxSize: computed(() => props.retainMaxSize),
   scrollElement: scrollRef,
+  scrollbarDragging,
   getItemKey: resolveItemKey,
   onRangeChange: (range) => emit('range-change', range),
 })
@@ -103,6 +122,38 @@ const virtualizerOptions = computed(() => {
 })
 
 const virtualizer = useVirtualizer<HTMLElement, HTMLElement>(virtualizerOptions)
+const dragTotalSize = shallowRef<number>()
+watch(
+  scrollbarDragging,
+  (dragging) => {
+    // A programmatic correction cancels Chromium's native thumb drag.
+    // Restore TanStack's default anchoring predicate after release.
+    virtualizer.value.shouldAdjustScrollPositionOnItemSizeChange = dragging
+      ? () => false
+      : undefined
+
+    const element = scrollRef.value
+    if (dragging) {
+      // Keep the native track geometry stable as newly visited rows are sized.
+      dragTotalSize.value = element?.scrollHeight ?? totalSize.value
+    } else {
+      dragTotalSize.value = undefined
+    }
+  },
+  { flush: 'sync' },
+)
+watch(
+  scrollbarDragging,
+  (dragging) => {
+    // End alignment must use the updated DOM height, after releasing the lock.
+    if (!dragging && scrollbarEndedAtEnd)
+      nextTick(() => {
+        if (!destroyed && !scrollbarDragging.value)
+          scrollToIndex(itemCount.value - 1, 'end')
+      })
+  },
+  { flush: 'post' },
+)
 const virtualItems = computed(() =>
   sparseMode.value
     ? sparseVirtualizer.virtualItems.value
