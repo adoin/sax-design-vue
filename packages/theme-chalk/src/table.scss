@@ -17,7 +17,11 @@
 
   @include set-var-value(color, getCssVar(bg-color));
   --s-table-surface: #{getColor(background)};
-  --s-table-header-surface: #{getColor(gray-2)};
+  --s-table-header-surface: color-mix(
+    in srgb,
+    #{getColor(primary)} 14%,
+    #{getColor(background)}
+  );
   --s-table-striped-surface: #{getColor(gray-1)};
   --s-table-selected-surface: color-mix(
     in srgb,
@@ -450,7 +454,11 @@
   }
 
   &-wrapper {
-    --s-table-header-surface: #{getColor(gray-2)};
+    --s-table-header-surface: color-mix(
+      in srgb,
+      #{getColor(primary)} 14%,
+      #{getColor(background)}
+    );
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -473,9 +481,8 @@
 
 html.dark .#{$namespace}-table,
 html.dark .#{$namespace}-table-wrapper {
-  // Dark tables should read as part of the active theme rather than as a
-  // neutral black slab. Keep the base tint quiet and reserve the stronger
-  // step for zebra rows so row grouping remains visible at a glance.
+  // Use the strongest structural tint for the header, with quieter surfaces
+  // for the body and zebra rows. All three follow the active HSL primary.
   --s-table-surface: color-mix(
     in srgb,
     #{getColor(primary)} 6%,
@@ -483,7 +490,7 @@ html.dark .#{$namespace}-table-wrapper {
   );
   --s-table-header-surface: color-mix(
     in srgb,
-    #{getColor(primary)} 9%,
+    #{getColor(primary)} 28%,
     #{getColor(background)}
   );
   --s-table-striped-surface: color-mix(
