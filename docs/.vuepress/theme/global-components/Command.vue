@@ -80,13 +80,13 @@ const { copied, copy } = useClipboard({
     z-index: 1;
     display: flex;
     min-height: 56px;
-    max-width: calc(100% - 18px);
+    max-width: calc(100% - 6px);
     align-self: flex-start;
     align-items: center;
     flex-wrap: wrap;
     gap: 4px;
-    margin: 0 0 -2px 18px;
-    padding: 6px 36px;
+    margin: 0 0 -2px 6px;
+    padding: 6px 48px;
   }
 
   // One continuous silhouette keeps both shoulders smooth at browser zoom
@@ -111,8 +111,8 @@ const { copied, copy } = useClipboard({
     padding: 6px 12px;
     border: 0;
     border-radius: 8px;
-    background: transparent;
-    color: rgb(255 255 255 / 0.72);
+    background: hsl(var(--sax-accent-color) / 0.14);
+    color: color-mix(in srgb, #fff 78%, hsl(var(--sax-accent-color)));
     font: inherit;
     font-size: 0.9rem;
     cursor: pointer;
@@ -120,9 +120,17 @@ const { copied, copy } = useClipboard({
       background-color 0.18s ease,
       color 0.18s ease;
 
-    &:hover,
+    &:hover {
+      background: hsl(var(--sax-accent-color) / 0.25);
+      color: #fff;
+    }
+
     &.active {
-      background: rgb(255 255 255 / 0.12);
+      background: color-mix(
+        in srgb,
+        hsl(var(--sax-accent-color)) 75%,
+        hsl(var(--sax-theme-code))
+      );
       color: #fff;
     }
   }
@@ -178,6 +186,7 @@ const { copied, copy } = useClipboard({
   }
 
   &.command--tabs .slots {
+    border-top-left-radius: 14px;
     border-top-right-radius: 10px;
   }
 }
@@ -191,7 +200,7 @@ const { copied, copy } = useClipboard({
 @media (max-width: 360px) {
   .command {
     .tabs {
-      padding-inline: 32px;
+      padding-inline: 36px;
     }
 
     .tab {
