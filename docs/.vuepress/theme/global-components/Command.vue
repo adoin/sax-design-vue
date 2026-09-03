@@ -1,58 +1,30 @@
 <template>
   <CodeCopied :copied="copied" :text="t.examples.copied" />
-  <div class="command">
+  <div class="command" :class="{ 'command--tabs': isMultipleSlot }">
     <div v-if="isMultipleSlot" class="tabs">
-      <svg
-        class="tab-effect tab-effect1"
-        xmlns="http://www.w3.org/2000/svg"
-        width="160"
-        height="160"
-        viewBox="0 0 160 160"
-      >
-        <path
-          id="Trazado_200"
-          data-name="Trazado 200"
-          d="M0-10,150,0l10,150S137.643,80.734,100.143,43.234,0-10,0-10Z"
-          transform="translate(0 10)"
-        />
-      </svg>
-      <svg
-        class="tab-effect tab-effect2"
-        xmlns="http://www.w3.org/2000/svg"
-        width="160"
-        height="160"
-        viewBox="0 0 160 160"
-      >
-        <path
-          id="Trazado_200"
-          data-name="Trazado 200"
-          d="M0-10,150,0l10,150S137.643,80.734,100.143,43.234,0-10,0-10Z"
-          transform="translate(0 10)"
-        />
-      </svg>
-
-      <div ref="$tab" class="active" />
-      <div
+      <button
         v-for="(slot, index) of slotsNames"
-        :key="index"
-        :ref="slotRefs.set"
+        :key="slot"
+        type="button"
         class="tab"
+        :class="{ active: activeSlot === index }"
+        :aria-pressed="activeSlot === index"
         @click="activeSlot = index"
       >
         {{ slot }}
-      </div>
+      </button>
     </div>
-    <div class="copy">
-      <div
-        :title="t.examples.copyCode"
-        class="con-copy"
-        :class="{ copied }"
-        @click="copy($el.textContent)"
-      >
-        <s-icon v-if="!copied" name="bx:clipboard" />
-        <s-icon v-else name="bx:check" />
-      </div>
-    </div>
+    <button
+      type="button"
+      :title="t.examples.copyCode"
+      :aria-label="copied ? t.examples.copied : t.examples.copyCode"
+      class="con-copy"
+      :class="{ copied }"
+      @click="copy($el?.querySelector('pre code')?.textContent || '')"
+    >
+      <s-icon v-if="!copied" name="bx:clipboard" />
+      <s-icon v-else name="bx:check" />
+    </button>
 
     <div ref="$el" class="slots">
       <template v-if="isMultipleSlot">
@@ -66,8 +38,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useSlots, watchPostEffect } from 'vue'
-import { useClipboard, useTemplateRefsList } from '@vueuse/core'
+import { ref, useSlots } from 'vue'
+import { useClipboard } from '@vueuse/core'
 import CodeCopied from '../components/CodeCopied.vue'
 import { useDocLocaleUi } from '../composables/docLocale'
 
@@ -78,157 +50,119 @@ const slotsNames = Object.keys(slots)
 const isMultipleSlot = slotsNames.length > 1
 
 const $el = ref<HTMLElement>()
-const $tab = ref<HTMLElement>()
-const slotRefs = useTemplateRefsList<HTMLDivElement>()
 const activeSlot = ref(0)
 
 const { copied, copy } = useClipboard({
   legacy: true,
 })
-
-if (isMultipleSlot) {
-  watchPostEffect(() => {
-    if ($tab.value) {
-      $tab.value.style.width = `${
-        slotRefs.value[activeSlot.value].clientWidth
-      }px`
-      $tab.value!.style.height = `${
-        slotRefs.value[activeSlot.value].clientHeight
-      }px`
-      $tab.value!.style.top = `${slotRefs.value[activeSlot.value].offsetTop}px`
-      $tab.value!.style.left = `${
-        slotRefs.value[activeSlot.value].offsetLeft
-      }px`
-    }
-  })
-}
 </script>
 
 <style lang="scss">
-@use '../styles/use' as *;
 @use '../styles/syntax-tokens' as *;
 
 .command {
-  z-index: 300;
-  transition: all 0.25s ease;
   position: relative;
-
-  border-radius: 20px;
+  min-width: 0;
+  margin: 20px;
   overflow: hidden;
-  margin: 20px 0;
-  width: 100%;
+  border-radius: 14px;
+  background: hsl(var(--sax-theme-code));
 
   .tabs {
-    position: relative;
-    top: 1px;
-    display: inline-flex;
-    height: 48px;
-    border-radius: 20px 25px 0 0;
-    margin-left: 18px;
+    display: flex;
+    min-height: 56px;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 4px;
-    background: hsl(var(--sax-theme-code));
-    padding: 6px;
-    padding-right: 9px;
+    padding: 6px 58px 6px 8px;
+    border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  }
 
-    ~ div {
-      div[class*='language-'] {
-        border-radius: 20px 10px 20px 20px;
-      }
-    }
+  .tab {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: rgb(255 255 255 / 0.72);
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition:
+      background-color 0.18s ease,
+      color 0.18s ease;
 
-    .tab-effect {
-      position: absolute;
-      max-width: 40px;
-      max-height: 40px;
-      z-index: -1;
-      pointer-events: none;
-      fill: hsl(var(--sax-theme-code));
-
-      &.tab-effect1 {
-        transform: rotate(72deg) scale(0.6);
-        left: -87px;
-        bottom: -14px;
-      }
-      &.tab-effect2 {
-        right: -96px;
-        bottom: -4px;
-        transform: rotate(-181deg);
-      }
-    }
-
-    .tab {
-      border-radius: 14px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      user-select: none;
-      color: rgb(240, 234, 234, 0.84);
-      padding: 2px 12px;
-      z-index: 3;
-      cursor: pointer;
-    }
-
-    .active {
-      border-radius: 11px;
-      position: absolute;
-      background: rgba($color: #fff, $alpha: 0.1);
-      transition: all 0.25s ease;
-      z-index: 0;
-    }
-
-    ~ .copy {
-      top: 58px;
+    &:hover,
+    &.active {
+      background: rgb(255 255 255 / 0.12);
+      color: #fff;
     }
   }
 
-  .copy {
+  .con-copy {
     position: absolute;
-    top: 10px;
-    right: 24px;
     z-index: 3;
-    color: aliceblue;
+    top: 6px;
+    right: 40px;
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: rgb(255 255 255 / 0.72);
+    font-size: 1.1rem;
     cursor: pointer;
-    border-radius: 15px;
 
-    &:hover {
-      background-color: #1f2937;
+    &:hover,
+    &.copied {
+      background: rgb(255 255 255 / 0.12);
+      color: #fff;
     }
+  }
 
-    .con-copy {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 40px;
-      height: 40px;
-      transition: all 0.25s ease;
-      opacity: 0;
-      visibility: hidden;
+  &.command--tabs .con-copy {
+    right: 8px;
+  }
 
-      &.copied {
-        i {
-          color: #22c55e;
-        }
-        transform: scale(1.3) !important;
-        opacity: 1;
-        visibility: visible;
-      }
-    }
+  .tab:focus-visible,
+  .con-copy:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -3px;
   }
 
   .slots {
-    border-radius: 20px;
-    background: hsl(var(--sax-theme-code));
+    min-width: 0;
 
     div[class*='language-'] {
+      margin: 0;
+      border-radius: 0;
       @include syntax-tokens(true);
     }
-  }
 
-  &:hover {
-    .con-copy {
-      opacity: 1;
-      visibility: visible;
+    pre {
+      margin: 0;
+      border-radius: 0;
     }
+  }
+}
+
+@media (max-width: 600px) {
+  .command {
+    margin-inline: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .command .tab {
+    transition: none;
   }
 }
 </style>

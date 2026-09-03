@@ -227,7 +227,8 @@ const props = defineProps<{
 const $page = ref<HTMLElement>()!
 const $header = ref<HTMLElement>()!
 const $titleul = ref<HTMLElement>()!
-const outlineBottomGap = 24
+// Leave room for the fixed back-to-top control below long outlines.
+const outlineBottomGap = 84
 const createEditLink = ({
   repo,
   docsRepo,
@@ -677,12 +678,15 @@ onBeforeUnmount(() => {
     right: 0px !important;
     left: auto;
     top: 200px;
+    bottom: auto;
+    height: auto;
     width: auto;
     background: transparent;
+    backdrop-filter: none;
     z-index: 800;
     // JS keeps this aligned to the sidebar's real viewport position. The
     // fallback prevents a flash of unbounded content before hydration.
-    max-height: var(--docs-outline-max-height, calc(100dvh - 281px));
+    max-height: var(--docs-outline-max-height, calc(100dvh - 341px));
     overflow: auto;
     transition: 0s !important;
     & > svg {
@@ -716,7 +720,7 @@ onBeforeUnmount(() => {
       // compact header content (58px). This avoids overlapping the title.
       top: 115px !important;
       z-index: 1300 !important;
-      max-height: var(--docs-outline-max-height, calc(100dvh - 139px));
+      max-height: var(--docs-outline-max-height, calc(100dvh - 199px));
     }
     .sidebar-sub-headers {
       display: block !important;
@@ -887,45 +891,36 @@ onBeforeUnmount(() => {
 @media (max-width: 600px) {
   .page-nav {
     .inner {
-      position: fixed;
-      right: 0px;
-      bottom: 34px;
-      z-index: 1000;
-      padding: 0px;
-      margin: 0px;
-      width: 100%;
-      padding: 10px 0px;
-      span {
-        background: -color('theme-layout');
-        margin: 0px;
-        border-radius: 0px 10px 10px 0px;
-        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
-        transform: translate(0) !important;
-        span {
-          display: none;
-        }
-        &.next {
-          padding: 0px;
-          font-size: 1.5rem;
-          width: 40px;
-          height: 40px;
-          border-radius: 0px 10px 0px 0px;
-        }
-        &.prev {
-          padding: 0px;
-          font-size: 1.5rem;
-          width: 40px;
-          height: 40px;
-          border-radius: 0px 10px 0px 0px;
-          & ~ .next {
-            border-radius: 10px 0px 0px 10px;
-            transform: translate(0) !important;
-            width: 40px;
-            height: 40px;
-            font-size: 1.5rem;
-            padding: 0px;
-          }
-        }
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 12px;
+
+      > .prev,
+      > .next {
+        flex: 1 1 140px;
+        min-width: 0;
+        padding: 0;
+      }
+
+      > .next {
+        margin-left: auto;
+      }
+
+      a {
+        width: 100%;
+        min-height: 44px;
+        gap: 8px;
+        padding: 10px 12px;
+        border: 1px solid hsl(var(--sax-theme-color) / 0.1);
+        border-radius: 12px;
+        background: hsl(var(--sax-theme-layout));
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      a > .s-icon {
+        flex-shrink: 0;
+        padding: 0;
       }
     }
   }
