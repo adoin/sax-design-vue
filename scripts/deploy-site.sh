@@ -86,7 +86,7 @@ verify_release() {
   local served_sha
   served_sha=$(curl --fail --silent --show-error --max-time 15 "$origin/deployment-sha.txt") || return 1
   [[ "$served_sha" == "$commit_sha" ]] || return 1
-  for page in / /zh/ /components/button.html /zh/components/button.html /play/; do
+  for page in / /zh/ /guide/getting-started.html /zh/guide/getting-started.html /play/; do
     curl --fail --silent --show-error --max-time 15 "$origin$page" > /dev/null || return 1
   done
 }
