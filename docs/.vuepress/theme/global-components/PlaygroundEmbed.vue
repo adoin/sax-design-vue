@@ -1,50 +1,56 @@
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import { ClientOnly } from '@vuepress/client'
+import { useClipboard } from '@vueuse/core'
+import { useDocLocaleUi } from '../composables/docLocale'
+import buttonEn from '../playground-starters/button.en.vue?raw'
+import buttonZh from '../playground-starters/button.zh.vue?raw'
+import ExampleSourceEditor from './ExampleSourceEditor.vue'
+import LiveExamplePreview from './LiveExamplePreview.vue'
+
+const { t, locale } = useDocLocaleUi()
+const starterSource = computed(() =>
+  locale.value === 'zh' ? buttonZh : buttonEn,
+)
+const editedSource = ref(starterSource.value)
+const resetVersion = ref(0)
+const { copied, copy } = useClipboard({ legacy: true })
+
+const resetSource = () => {
+  editedSource.value = starterSource.value
+  resetVersion.value += 1
+}
+
+watch(starterSource, resetSource)
+</script>
+
 <template>
   <ClientOnly>
     <div class="playground-embed">
       <div class="playground-embed__toolbar">
-        <label>
-          <span>{{ t.examples.demo }}</span>
-          <select :value="activeDemo" @change="onDemoSelect">
-            <option v-for="demo in demos" :key="demo" :value="demo">
-              {{ demo }}
-            </option>
-          </select>
-        </label>
+        <strong>Button.vue</strong>
         <div class="playground-embed__actions">
-          <button
-            class="playground-embed__copy"
-            type="button"
-            :class="{ copied }"
-            @click="copySource"
-          >
+          <s-button size="small" border @click="resetSource">
+            {{ t.examples.resetExample }}
+          </s-button>
+          <s-button size="small" flat @click="copy(editedSource)">
             <s-icon :name="copied ? 'bx:check' : 'bx:copy'" />
             {{ copied ? t.examples.copied : t.examples.copyCode }}
-          </button>
+          </s-button>
         </div>
       </div>
 
       <div class="playground-embed__body">
         <section class="playground-embed__editor">
           <header class="playground-embed__code-header">
-            <span>{{ activeDemo }}.vue</span>
-            <span class="playground-embed__hint">{{
-              t.examples.editorHint
-            }}</span>
+            {{ t.examples.editorHint }}
           </header>
-          <textarea
-            :key="activeDemo"
-            v-model="editedSource"
-            class="playground-embed__textarea"
-            spellcheck="false"
-            autocapitalize="off"
-            autocomplete="off"
-            autocorrect="off"
-          />
+          <ExampleSourceEditor v-model="editedSource" aria-label="Button.vue" />
         </section>
 
         <LiveExamplePreview
           :source="editedSource"
-          :scope-key="`catalog-${activeDemo}`"
+          :scope-key="'button-starter-' + locale + '-' + resetVersion"
         />
       </div>
     </div>
@@ -57,206 +63,73 @@
   </ClientOnly>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-import { ClientOnly } from '@vuepress/client'
-import {
-  PLAYGROUND_DEMOS,
-  getDemoSource,
-  isPlayDemo,
-} from '../../../../play/demo-sources'
-import { useDocLocaleUi } from '../composables/docLocale'
-import LiveExamplePreview from './LiveExamplePreview.vue'
-
-const { t } = useDocLocaleUi()
-
-const props = withDefaults(
-  defineProps<{
-    initialDemo?: string
-  }>(),
-  {
-    initialDemo: 'alert',
-  },
-)
-
-const demos = PLAYGROUND_DEMOS
-
-const resolveInitialDemo = (): string => {
-  if (typeof window === 'undefined') {
-    return props.initialDemo
-  }
-
-  const params = new URLSearchParams(window.location.search)
-  const fromQuery = params.get('demo')
-  if (fromQuery && isPlayDemo(fromQuery) && fromQuery !== 'App') {
-    return fromQuery
-  }
-
-  if (isPlayDemo(props.initialDemo) && props.initialDemo !== 'App') {
-    return props.initialDemo
-  }
-
-  return 'alert'
-}
-
-const activeDemo = ref(resolveInitialDemo())
-const editedSource = ref(getDemoSource(activeDemo.value))
-const copied = ref(false)
-const loadDemo = (demo: string) => {
-  if (!isPlayDemo(demo) || demo === 'App' || demo === activeDemo.value) {
-    return
-  }
-
-  activeDemo.value = demo
-  editedSource.value = getDemoSource(demo)
-}
-
-const onDemoSelect = (event: Event) => {
-  const demo = (event.target as HTMLSelectElement).value
-  loadDemo(demo)
-}
-
-const copySource = async () => {
-  try {
-    await navigator.clipboard.writeText(editedSource.value)
-    copied.value = true
-    window.setTimeout(() => {
-      copied.value = false
-    }, 1600)
-  } catch {
-    /* clipboard unavailable */
-  }
-}
-</script>
-
 <style lang="scss" scoped>
 .playground-embed {
   margin: 24px 0;
+  overflow: hidden;
   border: 1px solid hsl(var(--sax-accent-color) / 0.18);
   border-radius: 18px;
-  overflow: hidden;
-  background: linear-gradient(
-    145deg,
-    hsl(var(--sax-theme-layout) / 0.98),
-    hsl(var(--sax-accent-color) / 0.06)
-  );
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  background: hsl(var(--sax-theme-layout));
 
   &--loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 240px;
     padding: 24px;
     color: hsl(var(--sax-theme-color) / 0.72);
-    font-weight: 600;
   }
 }
 
 .playground-embed__toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 16px;
+  gap: 12px;
+  padding: 12px 16px;
   border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.08);
-  background: hsl(var(--sax-theme-layout) / 0.9);
-
-  label {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 600;
-    color: hsl(var(--sax-theme-color));
-  }
-
-  select {
-    min-width: 160px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    border: 1px solid hsl(var(--sax-theme-color) / 0.12);
-    background: hsl(var(--sax-theme-bg) / 0.8);
-    color: hsl(var(--sax-theme-color));
-  }
+  color: hsl(var(--sax-theme-color));
 }
 
 .playground-embed__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
   align-items: center;
-}
+  gap: 8px;
 
-.playground-embed__copy {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px solid hsl(var(--sax-theme-color) / 0.12);
-  background: hsl(var(--sax-theme-bg) / 0.85);
-  color: hsl(var(--sax-theme-color));
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover,
-  &.copied {
-    border-color: hsl(var(--sax-accent-color) / 0.35);
-    color: hsl(var(--sax-accent-color));
+  :deep(.s-button) {
+    min-height: 44px;
+    margin: 0;
   }
 }
 
 .playground-embed__body {
-  display: flex;
-  flex-direction: column;
-  min-height: 560px;
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .playground-embed__editor {
   display: flex;
+  min-width: 0;
+  min-height: 320px;
   flex-direction: column;
-  min-height: 240px;
   border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.08);
   background: hsl(var(--sax-theme-code));
 }
 
 .playground-embed__code-header {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 16px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  color: rgb(255 255 255 / 0.72);
   font-size: 0.8rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.72);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.playground-embed__hint {
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.45);
-}
+@media (min-width: 960px) {
+  .playground-embed__body {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
 
-.playground-embed__textarea {
-  flex: 1;
-  width: 100%;
-  min-height: 220px;
-  margin: 0;
-  padding: 14px;
-  border: 0;
-  resize: vertical;
-  overflow: auto;
-  font-size: 0.8rem;
-  line-height: 1.55;
-  color: #e2e8f0;
-  background: transparent;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-
-  &:focus {
-    outline: none;
+  .playground-embed__editor {
+    border-right: 1px solid hsl(var(--sax-accent-color) / 0.12);
+    border-bottom: 0;
   }
 }
 </style>

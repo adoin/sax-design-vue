@@ -80,12 +80,13 @@ const ui = {
     highlightComponentsAction: 'Browse components',
     highlightPlaygroundTitle: 'Online playground',
     highlightPlaygroundDesc:
-      'Open interactive demos in the browser — switch components instantly and validate styles before integrating.',
+      'Experiment from a simple Button, or open any documentation example in its own Playground.',
     highlightPlaygroundAction: 'Open playground',
     notFound: 'Take me home.',
     docsWarnPlayground: 'online playground',
     examples: {
       demo: 'Demo',
+      resetExample: 'Reset example',
       playground: 'Playground',
       openExamplePlayground: 'Open this example in Playground',
       openInPlayground: 'Open in Playground',
@@ -249,12 +250,13 @@ const ui = {
     highlightComponentsAction: '浏览组件',
     highlightPlaygroundTitle: '在线 Playground',
     highlightPlaygroundDesc:
-      '在浏览器中打开交互示例，即时切换组件并在集成前验证样式。',
+      '从一个简单的 Button 自由发挥，也可以在组件文档中打开各个示例自己的 Playground。',
     highlightPlaygroundAction: '打开 Playground',
     notFound: '返回首页',
     docsWarnPlayground: '在线 Playground',
     examples: {
       demo: '示例',
+      resetExample: '重置示例',
       playground: 'Playground',
       openExamplePlayground: '在 Playground 中打开此示例',
       openInPlayground: '在 Playground 中打开',

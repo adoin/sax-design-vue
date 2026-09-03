@@ -4,8 +4,8 @@
   <a href="https://www.npmjs.org/package/sax-design-vue">
     <img src="https://img.shields.io/npm/v/sax-design-vue.svg" alt="npm 版本">
   </a>
-  <a href="https://adoin.github.io/sax-design-vue/">
-    <img src="https://img.shields.io/badge/文档-GitHub%20Pages-blue" alt="文档">
+  <a href="https://sax-design.emssion.com/">
+    <img src="https://img.shields.io/badge/文档-官网-blue" alt="文档">
   </a>
   <br>
 </p>
@@ -17,6 +17,8 @@
 <div align="center">
 
 [English](./README.md) | 简体中文
+
+[官网](https://sax-design.emssion.com/) · [GitHub Pages 镜像](https://adoin.github.io/sax-design-vue/zh/)
 
 </div>
 
@@ -41,7 +43,7 @@ import App from './App.vue'
 createApp(App).use(SaxDesignVue).mount('#app')
 ```
 
-完整文档：[https://adoin.github.io/sax-design-vue/](https://adoin.github.io/sax-design-vue/)
+完整文档：[Sax Design Vue 官网](https://sax-design.emssion.com/zh/)
 
 ## 命令式弹窗
 

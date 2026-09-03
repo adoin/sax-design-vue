@@ -4,8 +4,8 @@
   <a href="https://www.npmjs.org/package/sax-design-vue">
     <img src="https://img.shields.io/npm/v/sax-design-vue.svg" alt="npm version">
   </a>
-  <a href="https://adoin.github.io/sax-design-vue/">
-    <img src="https://img.shields.io/badge/docs-GitHub%20Pages-blue" alt="documentation">
+  <a href="https://sax-design.emssion.com/">
+    <img src="https://img.shields.io/badge/docs-Website-blue" alt="documentation">
   </a>
   <br>
 </p>
@@ -17,6 +17,8 @@
 <div align="center">
 
 English | [简体中文](./README.zh-CN.md)
+
+[Website](https://sax-design.emssion.com/) · [GitHub Pages mirror](https://adoin.github.io/sax-design-vue/)
 
 </div>
 
@@ -41,7 +43,7 @@ import App from './App.vue'
 createApp(App).use(SaxDesignVue).mount('#app')
 ```
 
-See the full guide at [https://adoin.github.io/sax-design-vue/](https://adoin.github.io/sax-design-vue/).
+See the full guide on the [documentation website](https://sax-design.emssion.com/).
 
 ## Programmatic dialogs
 
