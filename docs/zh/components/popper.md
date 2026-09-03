@@ -116,7 +116,7 @@ SLOTS:
     description: 自定义内容。
     default: null
     link: null
-    usage: '#slot'
+    usage: '#default'
     code: >
 ---
 
@@ -126,13 +126,51 @@ SLOTS:
 
 ## 默认
 
+浮层默认提供内边距、圆角和主题阴影，可在 `content` 插槽中放入说明或操作。点击触发按钮打开，点击外部关闭。
+
 <template #example>
-<popper-default />
+<popper-zh-default />
 </template>
 
 <template #template>
 
-@[code{1-9}](../../.vuepress/components/popper/default.vue)
+@[code{1-14}](../../.vuepress/components/popper-zh/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{16-31}](../../.vuepress/components/popper-zh/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 下拉操作
+
+通用下拉内容统一使用 Popper。迁移原 Pulldown 用法时，将 `v-model` 换为 `v-model:visible`，将 `dropdown` 插槽换为 `content`；选中操作后将可见状态设为 `false` 即可关闭。下例仅展示选择结果，不会执行项目操作。
+
+<template #example>
+<popper-zh-dropdown />
+</template>
+
+<template #template>
+
+@[code{14-39}](../../.vuepress/components/popper-zh/dropdown.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-12}](../../.vuepress/components/popper-zh/dropdown.vue)
+
+</template>
+
+<template #style>
+
+@[code{41-68}](../../.vuepress/components/popper-zh/dropdown.vue)
 
 </template>
 

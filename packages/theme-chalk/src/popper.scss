@@ -9,6 +9,17 @@
   color: $color-white;
 }
 
+// Components with their own panel layout can override these defaults without
+// depending on stylesheet import order.
+:where(.#{$namespace}-popper) {
+  box-sizing: border-box;
+  padding: 12px 16px;
+  border-radius: var(--sax-radius);
+  color: hsl(var(--sax-text));
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
 @include b(popper) {
   background-color: hsl(var(--sax-background));
   border: 1px solid hsl(var(--sax-primary) / 0.1);
@@ -28,6 +39,8 @@
     width: 10px;
     height: 10px;
     z-index: -2;
+    background: inherit;
+    pointer-events: none;
   }
 
   &[data-popper-placement='top'] {

@@ -1,12 +1,12 @@
 <template>
   <div class="center">
     <s-popper trigger="click">
-      <s-button>Show popover</s-button>
+      <s-button>打开浮层</s-button>
 
       <template #content>
         <div class="popper-example">
-          <strong>A little more context</strong>
-          <p>Use a popover for helpful details next to the current action.</p>
+          <strong>在这里补充说明</strong>
+          <p>将提示和补充信息放在当前操作旁边，随时查看。</p>
         </div>
       </template>
     </s-popper>

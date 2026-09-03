@@ -150,7 +150,6 @@ export const componentCategories: ComponentCategory[] = [
       component('Popper', '浮层', '/components/popper'),
       component('Print', '打印', '/components/print'),
       component('Print page break', '打印分页', '/components/print-page-break'),
-      component('Pulldown', '下拉容器', '/components/pulldown'),
       component('Scrollbar', '滚动条', '/components/scrollbar'),
       component('Watermark', '水印', '/components/watermark'),
     ],

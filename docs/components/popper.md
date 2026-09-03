@@ -115,7 +115,7 @@ SLOTS:
     description: customize content
     default: null
     link: null
-    usage: '#slot'
+    usage: '#default'
     code: >
 description: 'Position floating content next to a trigger element.'
 ---
@@ -126,13 +126,51 @@ description: 'Position floating content next to a trigger element.'
 
 ## Default
 
+Popovers include padding, rounded corners and a theme shadow. Add details or controls through the `content` slot. Click the trigger to open and click outside to close.
+
 <template #example>
 <popper-default />
 </template>
 
 <template #template>
 
-@[code{1-9}](../.vuepress/components/popper/default.vue)
+@[code{1-14}](../.vuepress/components/popper/default.vue)
+
+</template>
+
+<template #style>
+
+@[code{16-31}](../.vuepress/components/popper/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Dropdown actions
+
+Use Popper for generic dropdown content. When migrating from Pulldown, replace `v-model` with `v-model:visible` and the `dropdown` slot with `content`. Set visibility to `false` after an action to close it. This example only displays the selection; it does not perform project operations.
+
+<template #example>
+<popper-dropdown />
+</template>
+
+<template #template>
+
+@[code{14-39}](../.vuepress/components/popper/dropdown.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-12}](../.vuepress/components/popper/dropdown.vue)
+
+</template>
+
+<template #style>
+
+@[code{41-68}](../.vuepress/components/popper/dropdown.vue)
 
 </template>
 
