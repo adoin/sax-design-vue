@@ -108,10 +108,15 @@ export function useTableKeyboardCoordinates(
     if (props.virtualSource) {
       const config =
         typeof props.keyboardConfig === 'object' ? props.keyboardConfig : {}
-      if (config.rowIndexOf)
+      const rowIndexOf =
+        config.rowIndexOf ??
+        (typeof props.rangeConfig === 'object'
+          ? props.rangeConfig.rowIndexOf
+          : undefined)
+      if (rowIndexOf)
         row = options.sourceViewIndex
-          ? options.sourceViewIndex(config.rowIndexOf(address.rowKey))
-          : config.rowIndexOf(address.rowKey) - options.offset()
+          ? options.sourceViewIndex(rowIndexOf(address.rowKey))
+          : rowIndexOf(address.rowKey) - options.offset()
       else if (hint?.address.rowKey === address.rowKey) row = hint.row
     } else row = rowsByKey.value.get(address.rowKey) ?? -1
     const column = props.virtualSource

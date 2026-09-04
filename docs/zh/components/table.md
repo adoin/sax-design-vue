@@ -1,6 +1,16 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "range-config"
+    type: "Boolean | TableRangeConfig"
+    description: "开启矩形区域选择，可分别控制鼠标、键盘和边缘自动滚动。"
+    default: "false"
+    usage: "#单元格区域选择"
+  - name: "cell-range"
+    type: "TableCellRange | null"
+    description: "通过 v-model:cell-range 控制选区起点和终点；省略时由组件管理。"
+    default: null
+    usage: "#单元格区域选择"
   - name: "group-config"
     type: "Boolean | TableGroupConfig"
     description: "配置本地/远程行分组、聚合和汇总范围。"
@@ -358,6 +368,21 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "update:cellRange"
+    type: "(range: TableCellRange | null) => void"
+    description: "请求更新受控选区。"
+    default: null
+    usage: "#单元格区域选择"
+  - name: "cellRangeChange"
+    type: "(change: TableCellRangeChange) => void"
+    description: "已接受的选区或逻辑边界变化后触发，包含范围、边界和原因。"
+    default: null
+    usage: "#单元格区域选择"
+  - name: "cellRangeError"
+    type: "(error: unknown) => void"
+    description: "选区合并区域解析失败时触发。"
+    default: null
+    usage: "#单元格区域选择"
   - name: "update:groupExpandedKeys"
     type: "(keys: string[]) => void"
     description: "请求更新展开键。"
@@ -649,6 +674,26 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "setCellRange"
+    type: "(range: TableCellRange | null) => Promise<boolean>"
+    description: "设置逻辑选区；返回是否被接受，不移动当前视口。"
+    default: null
+    usage: "#单元格区域选择"
+  - name: "clearCellRange"
+    type: "() => Promise<boolean>"
+    description: "清空选区，保留活动单元格。"
+    default: null
+    usage: "#单元格区域选择"
+  - name: "getCellRange"
+    type: "() => TableCellRange | null"
+    description: "读取选区端点的副本。"
+    default: null
+    usage: "#单元格区域选择"
+  - name: "getCellRangeBounds"
+    type: "() => TableCellRangeBounds | null"
+    description: "读取当前可见数据行与视觉列的半开区间，不计组标题和详情行。"
+    default: null
+    usage: "#单元格区域选择"
   - name: "getGroups"
     type: "() => readonly TableGroupNode[]"
     description: "读取当前分组元数据。"
@@ -1134,6 +1179,66 @@ EXPOSES:
 <template #style>
 
 @[code{59-72}](../../.vuepress/components/table-zh/context-menu-source.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 单元格区域选择
+
+设置 `range-config` 后，拖动单元格建立矩形选区；Shift + 点击或 Shift + 方向键扩展选区，Ctrl / Command + A 选择当前视图，Escape 清空。拖动至可见区域边缘会自动滚动，Escape 可取消拖动并恢复原选区。选区与行高亮、活动单元格分别管理。
+
+`v-model:cell-range` 保存稳定的 `{ anchor, focus }` 地址，合并单元格会完整纳入范围。排序或列重排后跟随行列键，隐藏端点、折叠分组或翻页使端点不可见时请求清空。受控模型需接受更新。
+
+<template #example><table-zh-range /></template>
+
+<template #template>
+
+@[code{21-66}](../../.vuepress/components/table-zh/range.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-19}](../../.vuepress/components/table-zh/range.vue)
+
+</template>
+
+<template #style>
+
+@[code{68-81}](../../.vuepress/components/table-zh/range.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 巨量数据的区域选择
+
+此例按需生成 100 万行、10 万列，固定列与中心列共用逻辑坐标。全表选区只记录端点与边界，不读取全部单元格；渲染仍限于当前窗口。通过 `range-config.rowIndexOf` 将稳定行键映射到绝对源索引，支持视口外的程序选区。
+
+边缘滚动使用内容逻辑像素，在压缩滚动轨道下保持一致速度。合并规则应返回与查询矩形相交的完整区域；极大选区的代价取决于相交合并区域数量，计算可被新手势或上下文变化取消。
+
+<template #example><table-zh-range-source /></template>
+
+<template #template>
+
+@[code{41-81}](../../.vuepress/components/table-zh/range-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-39}](../../.vuepress/components/table-zh/range-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{83-96}](../../.vuepress/components/table-zh/range-source.vue)
 
 </template>
 

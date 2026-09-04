@@ -1,6 +1,16 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "range-config"
+    type: "Boolean | TableRangeConfig"
+    description: "Enable rectangular range selection, with independent mouse, keyboard and edge-scrolling options."
+    default: "false"
+    usage: "#cell-range-selection"
+  - name: "cell-range"
+    type: "TableCellRange | null"
+    description: "Control anchor and focus addresses through v-model:cell-range; omit for internal state."
+    default: null
+    usage: "#cell-range-selection"
   - name: "group-config"
     type: "Boolean | TableGroupConfig"
     description: "Configure local/remote row grouping, aggregates and summary scope."
@@ -358,6 +368,21 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "update:cellRange"
+    type: "(range: TableCellRange | null) => void"
+    description: "Request a controlled range update."
+    default: null
+    usage: "#cell-range-selection"
+  - name: "cellRangeChange"
+    type: "(change: TableCellRangeChange) => void"
+    description: "Emitted after the accepted range or logical bounds change, with range, bounds and reason."
+    default: null
+    usage: "#cell-range-selection"
+  - name: "cellRangeError"
+    type: "(error: unknown) => void"
+    description: "Emitted when merge resolution for a range fails."
+    default: null
+    usage: "#cell-range-selection"
   - name: "update:groupExpandedKeys"
     type: "(keys: string[]) => void"
     description: "Request updated expanded group keys."
@@ -649,6 +674,26 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "setCellRange"
+    type: "(range: TableCellRange | null) => Promise<boolean>"
+    description: "Set a logical range and resolve whether it was accepted, without moving the viewport."
+    default: null
+    usage: "#cell-range-selection"
+  - name: "clearCellRange"
+    type: "() => Promise<boolean>"
+    description: "Clear the range while preserving the active cell."
+    default: null
+    usage: "#cell-range-selection"
+  - name: "getCellRange"
+    type: "() => TableCellRange | null"
+    description: "Read a copy of the range endpoints."
+    default: null
+    usage: "#cell-range-selection"
+  - name: "getCellRangeBounds"
+    type: "() => TableCellRangeBounds | null"
+    description: "Read half-open visible data-row and visual-column bounds, excluding group and detail bands."
+    default: null
+    usage: "#cell-range-selection"
   - name: "getGroups"
     type: "() => readonly TableGroupNode[]"
     description: "Read current group metadata."
@@ -1134,6 +1179,66 @@ With `virtualSource`, body row and column indices are absolute source indices; f
 <template #style>
 
 @[code{61-74}](../.vuepress/components/table/context-menu-source.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Cell range selection
+
+Enable `range-config` and drag across cells to select a rectangle. Shift + click or Shift + arrow extends it, Ctrl / Command + A selects the current view, and Escape clears it. Drag near a viewport edge to scroll; Escape during dragging restores the previous range. Ranges, row highlighting and active-cell focus are independent.
+
+`v-model:cell-range` stores stable `{ anchor, focus }` addresses. Intersecting merged cells are included in full. Ranges follow row and column keys after sorting or reordering; hidden endpoints, collapsed groups or page changes request clearing when an endpoint is no longer visible. Controlled models must accept updates.
+
+<template #example><table-range /></template>
+
+<template #template>
+
+@[code{21-68}](../.vuepress/components/table/range.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-19}](../.vuepress/components/table/range.vue)
+
+</template>
+
+<template #style>
+
+@[code{70-83}](../.vuepress/components/table/range.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Ranges across generated data
+
+This example generates one million rows and 100,000 columns on demand. Fixed and scrolling columns share logical coordinates. Selecting the entire view stores endpoints and bounds without reading every cell; rendering stays limited to the visible window. Use `range-config.rowIndexOf` to map stable row keys to absolute source indices for offscreen programmatic selection.
+
+Edge scrolling uses logical content pixels, preserving speed with compressed tracks. Merge resolvers must return complete regions intersecting the query rectangle. Large-range calculation cost depends on intersecting merge regions and can be cancelled by a newer gesture or context change.
+
+<template #example><table-range-source /></template>
+
+<template #template>
+
+@[code{41-81}](../.vuepress/components/table/range-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-39}](../.vuepress/components/table/range-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{83-96}](../.vuepress/components/table/range-source.vue)
 
 </template>
 

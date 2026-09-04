@@ -21,6 +21,12 @@ import type {
   TableContextMenuSelectParams,
 } from './table-context-menu'
 import type { TableActiveCell, TableKeyboardConfig } from './table-keyboard'
+import type {
+  TableCellRange,
+  TableCellRangeBounds,
+  TableCellRangeChange,
+  TableRangeConfig,
+} from './table-cell-range'
 import type { TableMergeConfig } from './table-merge'
 import type { TableGroupConfig, TableGroupNode } from './table-group'
 import type {
@@ -55,6 +61,7 @@ import type {
 } from './table-validation'
 export * from './table-context-menu'
 export * from './table-keyboard'
+export * from './table-cell-range'
 export * from './table-merge'
 export * from './table-group'
 export * from './table-row-drag'
@@ -438,6 +445,14 @@ export const tableProps = buildProps({
     type: definePropType<boolean | TableKeyboardConfig>([Boolean, Object]),
     default: false,
   },
+  rangeConfig: {
+    type: definePropType<boolean | TableRangeConfig>([Boolean, Object]),
+    default: false,
+  },
+  cellRange: {
+    type: definePropType<TableCellRange | null>(Object),
+    default: undefined,
+  },
   contextMenuConfig: {
     type: definePropType<boolean | TableContextMenuConfig>([Boolean, Object]),
     default: false,
@@ -596,6 +611,10 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  'update:cellRange': (range: TableCellRange | null) =>
+    range === null || isObject(range),
+  cellRangeChange: (change: TableCellRangeChange) => isObject(change),
+  cellRangeError: (error: unknown) => error !== undefined,
   'update:groupExpandedKeys': (keys: string[]) => isArray(keys),
   groupExpand: (params: { group: TableGroupNode; expanded: boolean }) =>
     isObject(params),
@@ -667,6 +686,10 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  setCellRange: (range: TableCellRange | null) => Promise<boolean>
+  clearCellRange: () => Promise<boolean>
+  getCellRange: () => TableCellRange | null
+  getCellRangeBounds: () => TableCellRangeBounds | null
   setGroupExpandedKeys: (keys: readonly string[]) => Promise<boolean>
   toggleGroup: (key: string, expanded?: boolean) => Promise<boolean>
   getGroups: () => readonly TableGroupNode[]

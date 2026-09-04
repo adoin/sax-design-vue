@@ -11,6 +11,7 @@ const props = defineProps<{
   body: TableMergeIndex
   footer: TableMergeIndex
   bodyHost?: HTMLElement | null
+  rangeSelected?: (surface: TableMergeSurface) => boolean
 }>()
 export interface TableMergeSurface extends TableMergeBox {
   area: 'body' | 'footer'
@@ -46,6 +47,7 @@ const surfaces = computed<TableMergeSurface[]>(() => {
         :class="[
           ns.e('merge-fragment'),
           ns.is('footer-merge', surface.area === 'footer'),
+          ns.is('range-cell', rangeSelected?.(surface)),
         ]"
         :style="{
           left: `${surface.left + (bodyHost && surface.area === 'body' ? bodyHost.scrollLeft - geometry.body.clip.left : 0)}px`,

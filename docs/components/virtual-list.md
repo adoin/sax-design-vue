@@ -57,6 +57,9 @@ EXPOSES:
     description: Scroll programmatically or reset all dynamic row measurements.
   - name: scrollToOffset
     description: Scroll programmatically or reset all dynamic row measurements.
+  - name: scrollBy
+    type: '(delta: number) => void'
+    description: Scroll by a relative distance in logical pixels. Positive values move down and negative values move up, including generated lists with compressed scrollbar tracks.
   - name: measure
     description: Measure rendered rows, preserving the largest recorded height when retain-max-size is enabled.
   - name: resetMeasurements

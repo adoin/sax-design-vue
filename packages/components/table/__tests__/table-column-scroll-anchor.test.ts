@@ -75,6 +75,59 @@ describe('Table horizontal scroll anchors during layout changes', () => {
     vi.unstubAllGlobals()
   })
 
+  it('accumulates subpixel steps when the browser rounds native scrollLeft', async () => {
+    const f = fixture()
+    await flush()
+    let physical = 0
+    Object.defineProperty(f.element, 'scrollLeft', {
+      configurable: true,
+      get: () => physical,
+      set: (value: number) => {
+        physical = Math.round(value)
+      },
+    })
+    for (let i = 0; i < 30; i++) {
+      f.controller.scrollBy(16)
+      f.controller.handleScroll({
+        currentTarget: f.element,
+      } as unknown as Event)
+      await flush()
+    }
+    expect(f.controller.logicalScrollLeft.value).toBeCloseTo(480, 5)
+    expect(f.element.scrollLeft).toBeGreaterThan(0)
+    f.scroll(400)
+    await flush()
+    const nativeLogical = f.controller.logicalScrollLeft.value
+    f.controller.scrollBy(16)
+    await flush()
+    expect(f.controller.logicalScrollLeft.value).toBeCloseTo(
+      nativeLogical + 16,
+      5,
+    )
+  })
+
+  it.each([false, true])(
+    'uses logical pixel increments with compressed=%s, including consecutive frames and boundaries',
+    async (compressed) => {
+      const f = fixture(compressed)
+      await flush()
+      f.controller.scrollBy(16)
+      f.controller.scrollBy(16)
+      await flush()
+      expect(f.controller.logicalScrollLeft.value).toBeCloseTo(32, 5)
+      if (compressed) expect(f.element.scrollLeft).toBeLessThan(1)
+      else expect(f.element.scrollLeft).toBe(32)
+      f.controller.scrollBy(-100)
+      await flush()
+      expect(f.controller.logicalScrollLeft.value).toBe(0)
+      const event = new WheelEvent('wheel', { deltaX: -16, cancelable: true })
+      f.controller.handleWheel(event)
+      expect(event.defaultPrevented).toBe(false)
+      f.controller.scrollBy(Number.NaN)
+      expect(f.element.scrollLeft).toBe(0)
+    },
+  )
+
   it('keeps the last columns visible when a fixed band becomes wider', async () => {
     const f = fixture()
     await flush()

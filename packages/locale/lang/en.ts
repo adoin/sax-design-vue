@@ -303,6 +303,9 @@ export default {
       defaultRangeEndLabel: 'pick end value',
     },
     table: {
+      rangeSelected: 'Selected range: {rows} rows by {columns} columns.',
+      rangeEmpty: 'No cell range selected.',
+      selectedCell: 'In selected range',
       dragRow: 'Reorder row {row}',
       dragRowHint:
         'Space to pick up, arrow keys to choose a position, Enter to drop, Escape to cancel.',

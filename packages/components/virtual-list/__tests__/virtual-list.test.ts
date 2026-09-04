@@ -32,6 +32,66 @@ describe('VirtualList', () => {
     vi.clearAllMocks()
   })
 
+  it('scrolls normal lists by a relative logical pixel distance', async () => {
+    const wrapper = mount(VirtualList, { props: { items: [{ id: 'alpha' }] } })
+    await nextTick()
+    const element = wrapper.vm.getScrollElement()!
+    element.scrollTop = 100
+    wrapper.vm.scrollBy(16)
+    expect(virtualizerMocks.scrollToOffset).toHaveBeenLastCalledWith(116, {
+      behavior: 'auto',
+    })
+    wrapper.vm.scrollBy(-200)
+    expect(virtualizerMocks.scrollToOffset).toHaveBeenLastCalledWith(0, {
+      behavior: 'auto',
+    })
+    virtualizerMocks.scrollToOffset.mockClear()
+    wrapper.vm.scrollBy(Number.NaN)
+    expect(virtualizerMocks.scrollToOffset).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('does not multiply relative scrolling by the compressed sparse scrollbar ratio', async () => {
+    const wrapper = mount(VirtualList, {
+      props: {
+        count: 1_000_000,
+        estimateSize: 44,
+        dynamic: false,
+        itemAt: (index: number) => ({ id: index }),
+      },
+    })
+    await nextTick()
+    const element = wrapper.vm.getScrollElement()!
+    Object.defineProperties(element, {
+      clientHeight: { configurable: true, value: 200 },
+      scrollHeight: {
+        configurable: true,
+        get: () =>
+          Number.parseFloat(
+            wrapper
+              .get('.s-vl__content')
+              .attributes('style')
+              ?.match(/height:\s*([\d.]+)px/)?.[1] ?? '0',
+          ),
+      },
+    })
+    wrapper.vm.scrollToOffset(1000)
+    const before = element.scrollTop
+    wrapper.vm.scrollBy(22)
+    wrapper.vm.scrollBy(22)
+    await nextTick()
+    const after = element.scrollTop
+    expect(after).toBeGreaterThan(before)
+    expect(after - before).toBeCloseTo(
+      (44 * (element.scrollHeight - 200)) / (44_000_000 - 200),
+      6,
+    )
+    wrapper.vm.scrollToOffset(1044)
+    expect(element.scrollTop).toBeCloseTo(after, 6)
+    expect(virtualizerMocks.scrollToOffset).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
   it('caches dynamic row heights by stable item key', async () => {
     const rect = vi
       .spyOn(HTMLElement.prototype, 'getBoundingClientRect')

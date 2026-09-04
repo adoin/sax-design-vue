@@ -274,6 +274,9 @@ export default {
       rejected: '文件未通过校验',
     },
     table: {
+      rangeSelected: '已选择 {rows} 行、{columns} 列的区域。',
+      rangeEmpty: '未选择单元格区域。',
+      selectedCell: '位于选区内',
       dragRow: '调整第 {row} 行顺序',
       dragRowHint: '空格开始，方向键选择位置，回车放置，Escape 取消。',
       dragRowTarget: '放到第 {row} 行{position}。',

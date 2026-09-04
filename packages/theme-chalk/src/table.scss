@@ -461,7 +461,7 @@
     }
     &:disabled { opacity: 0.35; cursor: not-allowed; }
   }
-  @include e(drag-status) {
+  @include e((drag-status, range-status)) {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -502,6 +502,15 @@
   }
 
   @include e(data-cell) {
+    @include when(fixed-column) {
+      position: sticky;
+      z-index: 2;
+      background: inherit;
+    }
+    &.is-range-cell {
+      background: color-mix(in srgb, #{getColor(primary)} 11%, var(--s-table-row-surface));
+      box-shadow: inset 0 0 8px -5px #{getColor(primary, 0.3)};
+    }
     &.is-active-cell {
       background: color-mix(in srgb, #{getColor(primary)} 9%, var(--s-table-row-surface));
       box-shadow: inset 0 0 9px -4px #{getColor(primary, 0.5)};
@@ -529,11 +538,6 @@
     padding: 10px 14px;
     line-height: 1.5;
 
-    @include when(fixed-column) {
-      position: sticky;
-      z-index: 2;
-      background: inherit;
-    }
     @include when(invalid) {
       flex-direction: column;
       justify-content: center;
@@ -846,6 +850,11 @@
 
     &.is-footer-merge {
       background: var(--s-table-footer-surface);
+    }
+
+    &.is-range-cell {
+      background: color-mix(in srgb, #{getColor(primary)} 11%, var(--s-table-surface));
+      box-shadow: inset 0 0 8px -5px #{getColor(primary, 0.3)};
     }
 
     > .#{$namespace}-table__data-row,

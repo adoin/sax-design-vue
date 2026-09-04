@@ -196,6 +196,13 @@ export const useTableColumnVirtualization = (
   let pendingScrollLeft = 0
   let layoutRevision = 0
   let disposed = false
+  let relativeTarget:
+    { element: HTMLElement; physical: number; logical: number } | undefined
+  const relativeAt = (element: HTMLElement) =>
+    relativeTarget?.element === element &&
+    relativeTarget.physical === element.scrollLeft
+      ? relativeTarget.logical
+      : undefined
 
   const sparseMetrics = computed(() => {
     const width = options.uniformColumnWidth?.value
@@ -363,8 +370,14 @@ export const useTableColumnVirtualization = (
 
   const measureViewport = () => {
     const element = options.scrollElement.value
+    if (viewportWidth.value !== (element?.clientWidth ?? 0))
+      relativeTarget = undefined
     viewportWidth.value = element?.clientWidth ?? 0
-    scrollLeft.value = element?.scrollLeft ?? 0
+    const logical = element && relativeAt(element)
+    scrollLeft.value =
+      logical == null
+        ? (element?.scrollLeft ?? 0)
+        : toPhysicalScrollLeft(logical)
   }
 
   const observeScrollElement = () => {
@@ -392,7 +405,11 @@ export const useTableColumnVirtualization = (
   const handleScroll = (event: Event) => {
     const element = event.currentTarget as HTMLElement | null
     if (!element) return
-    scheduleScrollLeft(element.scrollLeft)
+    const logical = relativeAt(element)
+    if (logical == null) relativeTarget = undefined
+    scheduleScrollLeft(
+      logical == null ? element.scrollLeft : toPhysicalScrollLeft(logical),
+    )
   }
 
   const handleWheel = (event: WheelEvent) => {
@@ -413,21 +430,36 @@ export const useTableColumnVirtualization = (
       horizontalDelta,
       availableWidth.value,
     )
-    const currentLogicalLeft = mapPhysicalToLogicalScroll(
-      element.scrollLeft,
-      physicalScrollableWidth.value,
-      logicalScrollableWidth.value,
-    )
+    if (scrollBy(logicalDelta)) event.preventDefault()
+  }
+
+  const scrollBy = (delta: number) => {
+    const element = options.scrollElement.value
+    if (!element || !Number.isFinite(delta) || !delta) return
+    const currentLogicalLeft =
+      relativeAt(element) ??
+      mapPhysicalToLogicalScroll(
+        element.scrollLeft,
+        physicalScrollableWidth.value,
+        logicalScrollableWidth.value,
+      )
     const nextLogicalLeft = Math.max(
       0,
-      Math.min(currentLogicalLeft + logicalDelta, logicalScrollableWidth.value),
+      Math.min(currentLogicalLeft + delta, logicalScrollableWidth.value),
     )
     if (nextLogicalLeft === currentLogicalLeft) return
 
-    event.preventDefault()
     const nextPhysicalLeft = toPhysicalScrollLeft(nextLogicalLeft)
     element.scrollLeft = nextPhysicalLeft
+    // Native scroll offsets can round away an entire small logical step on a
+    // compressed track. Accumulate its fractional remainder until it is visible.
+    relativeTarget = {
+      element,
+      physical: element.scrollLeft,
+      logical: nextLogicalLeft,
+    }
     scheduleScrollLeft(nextPhysicalLeft)
+    return true
   }
 
   const scrollToColumn = (
@@ -437,6 +469,7 @@ export const useTableColumnVirtualization = (
     const element = options.scrollElement.value
     const count = metrics.value.count
     if (!element || index < 0 || index >= count) return
+    relativeTarget = undefined
 
     const viewport = availableWidth.value
     const width = pixelWidthAt(index)
@@ -526,6 +559,7 @@ export const useTableColumnVirtualization = (
     scrollFrame = undefined
     pendingScrollLeft = nextPhysical
     scrollLeft.value = nextPhysical
+    relativeTarget = undefined
     const revision = ++layoutRevision
     nextTick(() => {
       if (
@@ -583,5 +617,6 @@ export const useTableColumnVirtualization = (
     handleWheel,
     measureViewport,
     scrollToColumn,
+    scrollBy,
   }
 }

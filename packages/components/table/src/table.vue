@@ -1,6 +1,24 @@
 <template>
   <div :class="ns.b('wrapper')">
     <slot />
+    <span
+      v-if="cellRange.enabled.value"
+      :class="ns.e('range-status')"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {{
+        cellRange.bounds.value
+          ? t('vs.table.rangeSelected', {
+              rows:
+                cellRange.bounds.value.rowEnd - cellRange.bounds.value.rowStart,
+              columns:
+                cellRange.bounds.value.colEnd - cellRange.bounds.value.colStart,
+            })
+          : t('vs.table.rangeEmpty')
+      }}
+    </span>
     <TableColumnManager
       v-if="columnManager.enabled.value"
       :manager="columnManager"
@@ -19,6 +37,9 @@
         ns.is('horizontal-virtual', horizontalVirtualMode && usesBodyScroll),
       ]"
       @keydown="handleTableKeydown"
+      @keydown.capture="rangeInteraction.onKeydown"
+      @pointerdown="rangeInteraction.onPointerdown"
+      @click.capture="rangeInteraction.onClickCapture"
       @click="keyboard.onClick"
       @scroll="handleTableScroll"
       @wheel="handleTableWheel"
@@ -314,6 +335,7 @@
           :geometry="mergeGeometry.geometry.value"
           :body="merges.body.value"
           :footer="merges.footer.value"
+          :range-selected="isRangeMergeSelected"
           @continuation-click="mergeContinuationClick"
           @continuation-dblclick="mergeContinuationDblclick"
           @continuation-contextmenu="mergeContinuationContextmenu"
@@ -445,6 +467,12 @@ import { useTableRowReorder } from './composables/use-table-row-reorder'
 import { useTableRowDrag } from './composables/use-table-row-drag'
 import { useTableKeyboard } from './composables/use-table-keyboard'
 import { useTableKeyboardCoordinates } from './composables/use-table-keyboard-coordinates'
+import { useTableRangeController } from './composables/use-table-range-controller'
+import { useTableRangeInteraction } from './composables/use-table-range-interaction'
+import {
+  tableRangeScrollParent,
+  tableRangeViewport,
+} from './composables/table-range-scroll'
 import { useTableContextMenu } from './composables/use-table-context-menu'
 import { useTableValidation } from './composables/use-table-validation'
 import { useTableValidationApi } from './composables/use-table-validation-api'
@@ -1752,7 +1780,7 @@ watch(
   [
     () => props.data,
     () => props.footerData,
-    () => props.mergeConfig,
+    merges.config,
     () => props.virtualSource?.row,
     resolvedColumns,
     () => totalTablePixelWidth.value,
@@ -1781,30 +1809,31 @@ const contextMenu = useTableContextMenu(props, emit, {
     rawColumns,
   ],
 })
+const coordinateFromElement = (cell: HTMLElement) => {
+  const fragment = cell.closest<HTMLElement>('[data-merge-region]')
+  return mergeCoordinates.at(
+    fragment
+      ? props.virtualSource
+        ? (groups.layout.value.dataIndexNear(
+            Number(fragment.dataset.mergeRowStart),
+            'forward',
+          ) ?? -1)
+        : Number(fragment.dataset.mergeRowStart)
+      : Number(
+          cell
+            .closest('[data-table-row-index]')
+            ?.getAttribute('data-table-row-index'),
+        ),
+    fragment
+      ? Number(fragment.dataset.mergeColStart)
+      : keyboardCoordinates.positionOf(Number(cell.dataset.columnIndex)),
+  )
+}
 const keyboard = useTableKeyboard(props, emit, {
   ...keyboardCoordinates,
   ...mergeCoordinates,
   root: () => tableScrollRef.value,
-  fromElement: (cell) => {
-    const fragment = cell.closest<HTMLElement>('[data-merge-primary]')
-    return mergeCoordinates.at(
-      fragment
-        ? props.virtualSource
-          ? (groups.layout.value.dataIndexNear(
-              Number(fragment.dataset.mergeRowStart),
-              'forward',
-            ) ?? -1)
-          : Number(fragment.dataset.mergeRowStart)
-        : Number(
-            cell
-              .closest('[data-table-row-index]')
-              ?.getAttribute('data-table-row-index'),
-          ),
-      fragment
-        ? Number(fragment.dataset.mergeColStart)
-        : keyboardCoordinates.positionOf(Number(cell.dataset.columnIndex)),
-    )
-  },
+  fromElement: coordinateFromElement,
   locate: (coordinate) => {
     const row = dragRowAt(coordinate.viewRow ?? coordinate.row)
     if (row) scrollToRow(props.virtualSource ? row.index : row.row)
@@ -1844,6 +1873,69 @@ const keyboard = useTableKeyboard(props, emit, {
     columnManager.state,
   ],
 })
+const rangeContext = [
+  () => (props.virtualSource ? undefined : flatRows.value),
+  groups.layout,
+  () => props.virtualSource?.row,
+  () => props.virtualSource?.rowCount,
+  () => props.virtualSource?.columnCount,
+  merges.config,
+  pagination.currentPage,
+  pagination.pageSize,
+  resolvedColumns,
+  columnManager.state,
+]
+const cellRange = useTableRangeController(props, emit, {
+  count: () => effectiveRowCount.value,
+  columns: keyboardCoordinates.countColumns,
+  resolve: mergeCoordinates.resolve,
+  sourceIndexAt: (index) =>
+    props.virtualSource ? sourceIndexAt(index) : index,
+  viewIndexNear: (index, backwards) =>
+    props.virtualSource
+      ? groups.layout.value.dataIndexNear(
+          index,
+          backwards ? 'backward' : 'forward',
+        )
+      : Math.max(0, Math.min(effectiveRowCount.value - 1, index)),
+  query: (window) => merges.query('body', window),
+  context: rangeContext,
+})
+const rangeInteraction = useTableRangeInteraction(cellRange, {
+  root: () => tableScrollRef.value,
+  viewport: () => {
+    const root = tableScrollRef.value
+    const body = virtualListRef.value?.getScrollElement() ?? dataBodyRef.value
+    return root && body ? tableRangeViewport(root, body) : undefined
+  },
+  fromElement: coordinateFromElement,
+  at: mergeCoordinates.at,
+  move: mergeCoordinates.move,
+  current: keyboard.coordinate,
+  count: () => ({
+    rows: effectiveRowCount.value,
+    columns: keyboardCoordinates.countColumns(),
+  }),
+  focus: keyboard.select,
+  scrollBy: (x, y) => {
+    if (x) columnVirtualization.scrollBy(x)
+    if (!y) return
+    if (virtualListRef.value) virtualListRef.value.scrollBy(y)
+    else if (tableScrollRef.value) {
+      const scroll = tableRangeScrollParent(tableScrollRef.value)
+      if (scroll) scroll.scrollTop += y
+    }
+  },
+  blocked: () => Boolean(editing.active.value || rowDrag.session.value),
+  context: rangeContext,
+})
+const isRangeMergeSelected = (surface: TableMergeSurface) => {
+  if (surface.area !== 'body') return false
+  const row = props.virtualSource
+    ? groups.layout.value.dataIndexNear(surface.rowStart, 'forward')
+    : surface.rowStart
+  return row != null && cellRange.contains(row, surface.colStart)
+}
 const TableBodyRow = createTableBodyRow({
   slots: tableSlots,
   cellSlotName,
@@ -1857,6 +1949,7 @@ const TableBodyRow = createTableBodyRow({
     'data-row-key': String(flatRow.key),
     editing,
     keyboard,
+    cellRange,
     validation,
     contextMenuEnabled: contextMenu.enabled.value,
     drag:
@@ -2080,6 +2173,10 @@ const setActiveCell = (rowIndex: number, columnIndex: number) => {
 }
 
 defineExpose({
+  setCellRange: cellRange.select,
+  clearCellRange: cellRange.clear,
+  getCellRange: cellRange.getRange,
+  getCellRangeBounds: cellRange.getBounds,
   setGroupExpandedKeys: groups.setExpandedKeys,
   toggleGroup: groups.toggle,
   getGroups: () => groups.state.value.groups,

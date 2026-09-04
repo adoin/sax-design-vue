@@ -1,4 +1,5 @@
 import { computed } from 'vue'
+import { cloneDeep, isEqual } from 'lodash-unified'
 import {
   createTableMergeIndex,
   resolveTableMergeWindow,
@@ -27,9 +28,10 @@ interface MergeOptions {
 
 /** Separate reactive queries from spatial lookup; static ranges build only once per input. */
 export function useTableMergeRegions(options: MergeOptions) {
-  const config = computed(() => {
+  const config = computed<TableMergeConfig>((previous) => {
     const value = options.config()
-    return typeof value === 'object' ? value : {}
+    const next = typeof value === 'object' ? cloneDeep(value) : {}
+    return previous && isEqual(previous, next) ? previous : next
   })
   const enabled = computed(
     () => Boolean(options.config()) && config.value.enabled !== false,
@@ -63,6 +65,35 @@ export function useTableMergeRegions(options: MergeOptions) {
     })
   const body = areaIndex('body')
   const footer = areaIndex('footer')
+  const query = (area: Area, window: TableMergeWindow) => {
+    if (
+      !enabled.value ||
+      ![window.rowStart, window.rowEnd, window.colStart, window.colEnd].every(
+        (value) => Number.isSafeInteger(value) && value >= 0,
+      ) ||
+      window.rowEnd <= window.rowStart ||
+      window.colEnd <= window.colStart ||
+      window.rowStart >= options[area].count() ||
+      window.colStart >= options.columnCount()
+    )
+      return []
+    const source = config.value[area]
+    if (typeof source !== 'function')
+      return (area === 'body' ? body.value : footer.value).query(window)
+    // A range operation can extend beyond every mounted window. Query the whole
+    // requested rectangle without visiting each row or cell it contains.
+    const clipped = {
+      ...window,
+      rowEnd: Math.min(window.rowEnd, options[area].count()),
+      colEnd: Math.min(window.colEnd, options.columnCount()),
+    }
+    const result = resolveTableMergeWindow(source, queryFor(area, clipped))
+    const failure = result.issues.find(
+      (issue) => issue.reason === 'resolver-error',
+    )
+    if (failure) throw failure.error ?? new Error('Merge resolver failed')
+    return result.query(clipped)
+  }
   const at = (area: Area, row: number, col: number) => {
     if (
       !enabled.value ||
@@ -101,5 +132,5 @@ export function useTableMergeRegions(options: MergeOptions) {
       }),
     ).at(row, col)
   }
-  return { enabled, body, footer, at }
+  return { config, enabled, body, footer, at, query }
 }

@@ -388,6 +388,14 @@ function scrollToOffset(offset: number, behavior: ScrollBehavior = 'auto') {
   else virtualizer.value.scrollToOffset(offset, { behavior })
 }
 
+function scrollBy(delta: number) {
+  if (!Number.isFinite(delta) || !delta || !scrollRef.value) return
+  const current = sparseMode.value
+    ? sparseVirtualizer.scrollOffset.value
+    : scrollRef.value.scrollTop
+  scrollToOffset(Math.max(0, current + delta))
+}
+
 function measure() {
   if (sparseMode.value) sparseVirtualizer.measureViewport()
   else virtualizer.value.measure()
@@ -443,6 +451,7 @@ onBeforeUnmount(() => {
 defineExpose({
   scrollToIndex,
   scrollToOffset,
+  scrollBy,
   measure,
   measureVisible,
   resetMeasurements,

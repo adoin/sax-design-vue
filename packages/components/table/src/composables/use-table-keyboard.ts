@@ -63,7 +63,10 @@ export function useTableKeyboard(
   )
   const enabled = computed(
     () =>
-      Boolean(props.keyboardConfig) &&
+      (Boolean(props.keyboardConfig) ||
+        (Boolean(props.rangeConfig) &&
+          (typeof props.rangeConfig !== 'object' ||
+            props.rangeConfig.enabled !== false))) &&
       config.value.enabled !== false &&
       !props.loading,
   )
@@ -433,6 +436,7 @@ export function useTableKeyboard(
   return {
     enabled,
     active,
+    coordinate,
     onFocusin,
     onClick,
     onKeydown,

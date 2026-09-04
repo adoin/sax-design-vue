@@ -62,6 +62,10 @@
         :class="[
           ns.e('data-cell'),
           ns.is('active-cell', keyboard?.isActive(flatRow.key, entry.index)),
+          ns.is(
+            'range-cell',
+            cellRange?.contains(displayIndex, entry.ariaIndex ?? entry.index),
+          ),
           entry.column.className,
           ns.is(
             'invalid',
@@ -82,6 +86,11 @@
         ]"
         :style="[entry.style, { textAlign: entry.column.align ?? 'left' }]"
         role="cell"
+        :aria-description="
+          cellRange?.contains(displayIndex, entry.ariaIndex ?? entry.index)
+            ? t('vs.table.selectedCell')
+            : undefined
+        "
         :aria-invalid="
           validation?.getError(flatRow.key, entry.column.field)
             ? true
@@ -277,6 +286,7 @@ import type { TableValidation } from './composables/use-table-validation'
 import type { TableEditing } from './composables/use-table-edit'
 import type { TableRowDrag } from './composables/use-table-row-drag'
 import type { TableKeyboard } from './composables/use-table-keyboard'
+import type { TableCellRangeState } from './composables/use-table-cell-range'
 import type { TableMergeRegion } from './composables/table-merge-regions'
 import type { TableEditContext, TableEditRenderer } from './table-edit'
 import type { TableRowDetailState } from './composables/use-table-details'
@@ -309,6 +319,7 @@ const props = defineProps<{
   editing?: TableEditing
   drag?: TableRowDrag
   keyboard?: TableKeyboard
+  cellRange?: TableCellRangeState
   contextMenuEnabled?: boolean
   mergeAt?: (row: number, col: number) => TableMergeRegion | undefined
   mergeRowOffset?: number

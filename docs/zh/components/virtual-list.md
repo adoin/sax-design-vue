@@ -57,6 +57,9 @@ EXPOSES:
     description: 编程滚动，或重置动态行高测量缓存。
   - name: scrollToOffset
     description: 编程滚动，或重置动态行高测量缓存。
+  - name: scrollBy
+    type: '(delta: number) => void'
+    description: 按逻辑像素相对滚动；正数向下、负数向上。生成式巨量列表使用压缩轨道时仍保持相同的内容移动距离。
   - name: measure
     description: 重新测量已渲染行；开启 retain-max-size 时继续保留历史最大高度。
   - name: resetMeasurements
