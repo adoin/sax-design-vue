@@ -176,7 +176,26 @@ export function useTableGroups(options: TableGroupOptions) {
     disposed = true
     expansionRevision++
   })
+  const revealRow = async (index: number, current: () => boolean) => {
+    let level = state.value.groups
+    while (level.length) {
+      let low = 0
+      let high = level.length - 1
+      while (low <= high) {
+        const middle = (low + high) >>> 1
+        if (level[middle].rowStart <= index) low = middle + 1
+        else high = middle - 1
+      }
+      const group = level[high]
+      if (!group || index >= group.rowStart + group.rowCount) break
+      if (!current()) return false
+      if (!expanded(group) && !(await toggle(group.key, true))) return false
+      level = group.children
+    }
+    return current()
+  }
   return {
+    revealRow,
     enabled,
     config,
     state,

@@ -16,6 +16,16 @@ import type {
 } from 'vue'
 import type Table from './table.vue'
 import type {
+  TableFindConfig,
+  TableFindNavigateOptions,
+  TableFindOptions,
+  TableFindQuery,
+  TableFindResult,
+  TableFindState,
+  TableReplaceOptions,
+  TableReplaceResult,
+} from './table-find'
+import type {
   TableClipboardConfig,
   TableClipboardData,
   TableClipboardOptions,
@@ -67,6 +77,7 @@ import type {
   TableValidationRules,
 } from './table-validation'
 export * from './table-clipboard'
+export * from './table-find'
 export * from './table-context-menu'
 export * from './table-keyboard'
 export * from './table-cell-range'
@@ -461,6 +472,10 @@ export const tableProps = buildProps({
     type: definePropType<boolean | TableClipboardConfig>([Boolean, Object]),
     default: false,
   },
+  findConfig: {
+    type: definePropType<boolean | TableFindConfig>([Boolean, Object]),
+    default: false,
+  },
   cellRange: {
     type: definePropType<TableCellRange | null>(Object),
     default: undefined,
@@ -623,6 +638,8 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  findChange: (state: TableFindState) => isObject(state),
+  replace: (result: TableReplaceResult) => isObject(result),
   clipboard: (result: TableClipboardResult) => isObject(result),
   'update:cellRange': (range: TableCellRange | null) =>
     range === null || isObject(range),
@@ -699,6 +716,25 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  openFind: () => Promise<boolean>
+  closeFind: () => void
+  findCells: (
+    query: string | TableFindQuery,
+    options?: TableFindOptions,
+  ) => Promise<TableFindResult>
+  findNext: (options?: TableFindNavigateOptions) => Promise<boolean>
+  findPrevious: (options?: TableFindNavigateOptions) => Promise<boolean>
+  replaceMatch: (
+    replacement: string,
+    options?: TableReplaceOptions,
+  ) => Promise<TableReplaceResult>
+  replaceAll: (
+    replacement: string,
+    options?: TableReplaceOptions,
+  ) => Promise<TableReplaceResult>
+  getFindState: () => TableFindState
+  clearFind: () => void
+  cancelFind: () => void
   copyCells: (options?: TableCopyOptions) => Promise<TableClipboardResult>
   cutCells: (options?: TableCopyOptions) => Promise<TableClipboardResult>
   pasteCells: (

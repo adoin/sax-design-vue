@@ -23,6 +23,7 @@ export interface TableFindCell {
   context: TableEditContext
   /** Includes scope/configuration identity; no remote data is fetched here. */
   isCurrent: () => boolean
+  locate?: (current: () => boolean, focus: boolean) => Promise<boolean>
 }
 export interface TableFindMatch extends TableFindCell {
   text: string
@@ -136,6 +137,12 @@ export async function scanTableFind(
     const context = {
       ...cell.context,
       value: cloneTableDataValue(before.value),
+      get expanded() {
+        return cell.context.expanded
+      },
+      get loading() {
+        return cell.context.loading
+      },
     }
     const text = options.format
       ? options.format(cloneTableDataValue(before.value), context)
@@ -176,6 +183,7 @@ export async function scanTableFind(
     if (!isCurrent()) throw new TableDataBatchConflictError()
     if (occurrences)
       result.matches.push({
+        locate: cell.locate,
         context,
         before,
         text,

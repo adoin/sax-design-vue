@@ -1,6 +1,11 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "find-config"
+    type: "Boolean | TableFindConfig"
+    description: "开启查找面板、搜索范围、转换和处理上限。"
+    default: false
+    usage: "#查找与替换"
   - name: "clipboard-config"
     type: "Boolean | TableClipboardConfig"
     description: "显式开启剪贴板操作，配置文本转换、写入限制和区域上限。"
@@ -373,6 +378,16 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "findChange"
+    type: "(state: TableFindState) => void"
+    description: "搜索进度、匹配、活动索引或清理发生变化。"
+    default: null
+    usage: "#查找与替换"
+  - name: "replace"
+    type: "(result: TableReplaceResult) => void"
+    description: "替换完成，包含变更数量、校验错误或失败原因。"
+    default: null
+    usage: "#查找与替换"
   - name: "clipboard"
     type: "(result: TableClipboardResult) => void"
     description: "操作结束时提供成功状态、剪贴板写入状态、实际变更数及失败原因。"
@@ -684,6 +699,56 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "findCells"
+    type: "(query: string | TableFindQuery, options?: TableFindOptions) => Promise<TableFindResult>"
+    description: "查找指定范围，返回匹配快照及扫描完整性。"
+    default: null
+    usage: "#查找与替换"
+  - name: "findNext"
+    type: "(options?: TableFindNavigateOptions) => Promise<boolean>"
+    description: "定位下一个匹配，末尾循环；返回定位是否成功。"
+    default: null
+    usage: "#查找与替换"
+  - name: "findPrevious"
+    type: "(options?: TableFindNavigateOptions) => Promise<boolean>"
+    description: "定位上一个匹配；focus: false 保留当前输入焦点。"
+    default: null
+    usage: "#查找与替换"
+  - name: "replaceMatch"
+    type: "(replacement: string, options?: TableReplaceOptions) => Promise<TableReplaceResult>"
+    description: "替换活动匹配格或指定索引匹配格中的全部字面命中。"
+    default: null
+    usage: "#查找与替换"
+  - name: "replaceAll"
+    type: "(replacement: string, options?: TableReplaceOptions) => Promise<TableReplaceResult>"
+    description: "校验并以一次事务替换所有可写匹配；要求搜索完整。"
+    default: null
+    usage: "#查找与替换"
+  - name: "getFindState"
+    type: "() => TableFindState"
+    description: "读取查询、范围、匹配摘要、活动索引、进度和上限状态。"
+    default: null
+    usage: "#查找与替换"
+  - name: "clearFind"
+    type: "() => void"
+    description: "取消等待并清空匹配，保留查询内容。"
+    default: null
+    usage: "#查找与替换"
+  - name: "cancelFind"
+    type: "() => void"
+    description: "取消等待中的搜索、定位或替换操作。"
+    default: null
+    usage: "#查找与替换"
+  - name: "openFind"
+    type: "() => Promise<boolean>"
+    description: "打开并聚焦内置面板；未启用或 panel: false 时返回 false。"
+    default: null
+    usage: "#查找与替换"
+  - name: "closeFind"
+    type: "() => void"
+    description: "关闭面板并取消等待；焦点在面板中时恢复到触发按钮。"
+    default: null
+    usage: "#查找与替换"
   - name: "copyCells"
     type: "(options?: TableCopyOptions) => Promise<TableClipboardResult>"
     description: "复制当前区域或 bounds；writeClipboard: false 仅返回独立二维数据与 TSV。"
@@ -1335,6 +1400,74 @@ EXPOSES:
 <template #style>
 
 @[code{171-185}](../../.vuepress/components/table-zh/clipboard-source.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 查找与替换
+
+开启 `find-config` 后显示搜索面板。表格单元格获得焦点时，Ctrl / Command + F 打开查找，Ctrl / Command + H 聚焦替换框，F3 / Shift + F3 导航匹配。面板内按 Enter 执行查找，Escape 取消等待或关闭面板。`panel: false` 用于只通过 API 集成；`keyboard: false` 关闭表格快捷键。
+
+查询按字面文本匹配，可选区分大小写和匹配整个单元格。当前视图搜索当前筛选页中已展开的行；选中区域搜索当前矩形选区。两者按可见视觉列顺序遍历，合并单元格只计一次。已提供数据范围跨页搜索所有已提供的行和已加载的树子节点，不受筛选限制，搜索可见列对应的原始字段；不会请求其他远程页面或懒加载子节点。定位会展开已加载的祖先、分组并请求切页；若筛选隐藏目标行或受控视图拒绝导航，则返回 `false`，不会清除筛选条件。
+
+通过 `findCells(query, { scope, bounds, columns })` 发起程序查询。`bounds` 为当前视图或选区范围内的半开可见坐标，`columns` 限定列键或列索引。`findNext`、`findPrevious` 循环定位匹配；`focus: false` 在滚动并标记活动格时保留输入焦点。空查询不产生匹配。重新框选会清除选区范围的旧结果，显式传入 bounds 的查询不受框选变化影响。
+
+替换需要 `edit-config`、列编辑器和 `change-config`；普通数组通过 `v-model:data` 接受更新。`replaceMatch` 替换一个匹配格内的全部命中，`replaceAll` 处理全部可写匹配格。只读、禁用和业务条件限制的字段保留原值。替换值使用内置编辑器转换或 `parseCell`，`$` 等内容按字面保留。完整候选行先经过已有校验，再提交一次所有者接受的批量变更和一步撤销历史；校验失败则保留全部源数据。成功后重新执行同一查询，不移动焦点。
+
+示例可跨页查找 Alpha、选择区域、分组或切换动态虚拟滚动。项目名称必填且最多 24 字符，可尝试替换为空字符串观察整批校验失败，再用撤销和重做检查成功的事务。
+
+<template #example><table-zh-find /></template>
+
+<template #template>
+
+@[code{57-103}](../../.vuepress/components/table-zh/find.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-56}](../../.vuepress/components/table-zh/find.vue)
+
+</template>
+
+<template #style>
+
+@[code{104-115}](../../.vuepress/components/table-zh/find.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 巨量数据查找与替换
+
+`find-config` 默认最多检查 100000 个位置、保留 1000 个匹配格、处理 2000000 文本字符。本例将 `maxCells` 降为 4096。搜索未完成时会保留明确的上限状态，`replaceAll` 拒绝部分结果，`replaceMatch` 仍可替换一个已返回的匹配格。可缩小范围或主动调整上限。对象值需要格式化函数；文本与单元格上限不衡量已提供对象占用的内存。
+
+来源为百万行、十万列。查找已选中的末端合并区域，在面板中填写替换值，即可更新跨固定列边界的合并起点。数据适配器只保存发生变化的字段，定位复用虚拟行列窗口。
+
+`cancelFind()` 和 `AbortSignal` 可停止搜索、校验和数据接受等待。数据或列变化会使旧结果失效；当前视图的结果还会在翻页或展开状态改变时失效。适配器应在接受写入前检查信号；取消无法撤回已经完成的外部写入，可通过已接受的历史记录撤销。
+
+<template #example><table-zh-find-source /></template>
+
+<template #template>
+
+@[code{95-135}](../../.vuepress/components/table-zh/find-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-94}](../../.vuepress/components/table-zh/find-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{136-147}](../../.vuepress/components/table-zh/find-source.vue)
 
 </template>
 

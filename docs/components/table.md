@@ -1,6 +1,11 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "find-config"
+    type: "Boolean | TableFindConfig"
+    description: "Enable search UI, scopes, conversions and processing limits."
+    default: false
+    usage: "#find-and-replace"
   - name: "clipboard-config"
     type: "Boolean | TableClipboardConfig"
     description: "Enable clipboard actions, text conversions, write restrictions and region limits."
@@ -373,6 +378,16 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "findChange"
+    type: "(state: TableFindState) => void"
+    description: "Search progress, matches, active index or cleared state changed."
+    default: null
+    usage: "#find-and-replace"
+  - name: "replace"
+    type: "(result: TableReplaceResult) => void"
+    description: "Replacement completed with changed-cell count, validation errors or failure reason."
+    default: null
+    usage: "#find-and-replace"
   - name: "clipboard"
     type: "(result: TableClipboardResult) => void"
     description: "Reports completion, OS clipboard status, applied cell count and failure reason."
@@ -684,6 +699,56 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "findCells"
+    type: "(query: string | TableFindQuery, options?: TableFindOptions) => Promise<TableFindResult>"
+    description: "Search the chosen scope and return a snapshot with matches and completion limits."
+    default: null
+    usage: "#find-and-replace"
+  - name: "findNext"
+    type: "(options?: TableFindNavigateOptions) => Promise<boolean>"
+    description: "Move to the next match, wrapping at the end; resolve whether positioning succeeded."
+    default: null
+    usage: "#find-and-replace"
+  - name: "findPrevious"
+    type: "(options?: TableFindNavigateOptions) => Promise<boolean>"
+    description: "Move to the previous match; focus: false preserves the current input focus."
+    default: null
+    usage: "#find-and-replace"
+  - name: "replaceMatch"
+    type: "(replacement: string, options?: TableReplaceOptions) => Promise<TableReplaceResult>"
+    description: "Replace all literal occurrences inside the active or indexed matching cell."
+    default: null
+    usage: "#find-and-replace"
+  - name: "replaceAll"
+    type: "(replacement: string, options?: TableReplaceOptions) => Promise<TableReplaceResult>"
+    description: "Validate and replace writable matches in one transaction; requires a complete search."
+    default: null
+    usage: "#find-and-replace"
+  - name: "getFindState"
+    type: "() => TableFindState"
+    description: "Return query, scope, match summaries, active index, progress and limits."
+    default: null
+    usage: "#find-and-replace"
+  - name: "clearFind"
+    type: "() => void"
+    description: "Cancel pending work and clear matches while retaining the query."
+    default: null
+    usage: "#find-and-replace"
+  - name: "cancelFind"
+    type: "() => void"
+    description: "Cancel pending search, positioning or replacement work."
+    default: null
+    usage: "#find-and-replace"
+  - name: "openFind"
+    type: "() => Promise<boolean>"
+    description: "Open and focus the built-in panel; false when disabled or panel: false."
+    default: null
+    usage: "#find-and-replace"
+  - name: "closeFind"
+    type: "() => void"
+    description: "Close the panel, cancel pending work and restore its trigger focus when appropriate."
+    default: null
+    usage: "#find-and-replace"
   - name: "copyCells"
     type: "(options?: TableCopyOptions) => Promise<TableClipboardResult>"
     description: "Copy the range or bounds; writeClipboard: false returns a snapshot and TSV without OS access."
@@ -1335,6 +1400,74 @@ Generated sources locate stable row keys through `change-config.indexOf` and acc
 <template #style>
 
 @[code{177-191}](../.vuepress/components/table/clipboard-source.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Find and replace
+
+Enable `find-config` to show the search panel. Focus a table cell and press Ctrl / Command + F to find, Ctrl / Command + H to focus replacement, or F3 / Shift + F3 to navigate matches. Enter runs the panel query; Escape cancels pending work or closes the panel. Set `panel: false` for API-only integration, or `keyboard: false` to disable table shortcuts.
+
+Queries are literal text, with optional case-sensitive and whole-cell matching. The current view searches expanded rows on the current filtered page; selection searches the current rectangular range. Both use visible visual-column order and count merged owners once. The supplied-data scope searches all provided rows and loaded tree children, across pages and independently of filters; it searches raw fields in visible columns. It does not fetch other remote pages or lazy children. Positioning can expand loaded ancestors and groups and request a page change. If filters hide a row or a controlled view rejects navigation, positioning returns `false` without clearing the filters.
+
+Use `findCells(query, { scope, bounds, columns })` for programmatic searches. `bounds` is a half-open visible rectangle for view/selection scopes; `columns` restricts column keys or indices. `findNext` and `findPrevious` wrap through matches; `focus: false` preserves input focus while scrolling and marking the active cell. Empty text produces no matches. Changing the selected range clears selection-scope results unless explicit bounds were supplied.
+
+Replacing requires `edit-config`, column editors and `change-config`; ordinary arrays accept updates with `v-model:data`. `replaceMatch` replaces every occurrence within one matching cell, while `replaceAll` handles all writable matching cells. Read-only, disabled and business-restricted fields retain their values. Replacements use built-in editor conversion or `parseCell`; `$` sequences remain literal. Candidate rows pass existing validation before one owner-approved batch, one change event and one undo step. A failed validation preserves all source data. Accepted writes refresh the same search without moving focus.
+
+The example searches Alpha across pages, supports selection and grouping, and can switch to dynamic virtual scrolling. Project names are required and limited to 24 characters: replacing a name with an empty string demonstrates an atomic validation failure. Use Undo/Redo to inspect the accepted transaction.
+
+<template #example><table-find /></template>
+
+<template #template>
+
+@[code{57-107}](../.vuepress/components/table/find.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-56}](../.vuepress/components/table/find.vue)
+
+</template>
+
+<template #style>
+
+@[code{108-119}](../.vuepress/components/table/find.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Finding in generated data
+
+`find-config` defaults to at most 100000 visited positions, 1000 matching cells and 2000000 processed text characters. This example lowers `maxCells` to 4096. Incomplete searches retain their explicit limit status; `replaceAll` refuses a partial result, while `replaceMatch` can target an individual returned match. Narrow the scope or adjust limits deliberately. Object values need a formatter; text and cell limits do not measure the memory retained by supplied objects.
+
+The source contains a million rows and a hundred thousand columns. Search the selected last merged range, edit the replacement text, and replace its owner across the fixed-column boundary. Only changed fields are stored by the data adapter; navigation reuses the virtual row and column windows.
+
+`cancelFind()` and `AbortSignal` stop pending scans, validation and data acceptance. Data or column changes invalidate old results; view-scope results also expire when paging or expansion changes. Adapters must check their signal before accepting a write. A completed external write cannot be rolled back by cancellation; use the accepted history entry to undo it.
+
+<template #example><table-find-source /></template>
+
+<template #template>
+
+@[code{95-137}](../.vuepress/components/table/find-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-94}](../.vuepress/components/table/find-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{138-149}](../.vuepress/components/table/find-source.vue)
 
 </template>
 

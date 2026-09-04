@@ -1,5 +1,5 @@
 <template>
-  <div :class="ns.b('wrapper')">
+  <div :class="ns.b('wrapper')" @keydown="findPanelRef?.keydown($event)">
     <slot />
     <span
       v-if="clipboard.enabled.value"
@@ -37,6 +37,11 @@
     <div v-if="$slots.header" :class="ns.be('wrapper', 'header')">
       <slot name="header" />
     </div>
+    <TableFindPanel
+      v-if="finder.enabled.value && finder.config.value.panel !== false"
+      ref="findPanelRef"
+      :finder="finder"
+    />
 
     <div
       ref="tableScrollRef"
@@ -483,6 +488,9 @@ import { useTableKeyboardCoordinates } from './composables/use-table-keyboard-co
 import { useTableRangeController } from './composables/use-table-range-controller'
 import { useTableClipboard } from './composables/use-table-clipboard'
 import { createTableClipboardCells } from './composables/table-clipboard-cells'
+import { useTableFind } from './composables/use-table-find'
+import { createTableFindScope } from './composables/table-find-scope'
+import TableFindPanel from './table-find-panel.vue'
 import { useTableRangeInteraction } from './composables/use-table-range-interaction'
 import {
   tableRangeScrollParent,
@@ -622,6 +630,7 @@ const sortPriority = (column: TableColumn) =>
 const setColumnFilter = (column: TableColumn, values: TableFilterValue[]) =>
   setFilters({ ...filtersState.value, [tableColumnKey(column)]: values })
 
+const loadedTreeRevision = shallowRef(0)
 const tree = useTableTree({
   data: computed(() => props.data),
   rowKey: computed(() => props.rowKey),
@@ -631,7 +640,10 @@ const tree = useTableTree({
   filterRow: query.filterRow,
   onExpandedKeysChange: (keys) => emit('update:expandedKeys', keys),
   onTreeExpand: (row, expanded) => emit('treeExpand', row, expanded),
-  onLazyLoad: (row, children) => emit('lazyLoad', row, children),
+  onLazyLoad: (row, children) => {
+    loadedTreeRevision.value++
+    emit('lazyLoad', row, children)
+  },
 })
 
 const { setExpandedKeys, toggleRowExpand } = tree
@@ -1547,7 +1559,14 @@ const validationApi = useTableValidationApi(props, validation, editing, {
   sourceColumnHidden: (index) => columnManager.layout.value.hidden.has(index),
   scrollRow: (row) => scrollToRow(row),
   scrollColumn: (index) => scrollToColumn(index),
-  focusCell: (rowKey, field, columnIndex) => {
+  revealRow: (target, current) => {
+    const index = props.virtualSource
+      ? target.index
+      : groups.state.value.rows.findIndex((row) => row.key === target.key)
+    return groups.revealRow(index, current)
+  },
+  focusCell: (rowKey, field, columnIndex, focus = true) => {
+    if (!focus) return true
     if (typeof document === 'undefined') return false
     const id = `${tableValidationId(selectionName.value, rowKey, field, columnIndex)}-cell`
     const cell = tableScrollRef.value?.querySelector<HTMLElement>(
@@ -2052,6 +2071,105 @@ const clipboardStatus = computed(() => {
   const message = { copy: 'Copied', cut: 'Cut', paste: 'Pasted' }[result.action]
   return t(`vs.table.clipboard${message}`)
 })
+const findCellsInScope = createTableFindScope(props, {
+  scope: validationApi.scope,
+  count: () => ({
+    rows: effectiveRowCount.value,
+    columns: keyboardCoordinates.countColumns(),
+  }),
+  columnAt: mergeColumn,
+  selection: cellRange.getBounds,
+  cells: clipboardCells,
+  toggle: (context, expanded) => toggleRowExpand(context.row, expanded),
+  locateView: async (row, col, current, focus) => {
+    if (!current()) return false
+    const target = mergeCoordinates.at(row, col)
+    if (!target) return false
+    if (!focus) {
+      scrollToRow(
+        props.virtualSource ? sourceIndexAt(row) : flatRows.value[row].row,
+      )
+      scrollToColumn(target.column)
+    }
+    return current() ? keyboard.select(target, focus) : false
+  },
+  locateData: async (target, column, index, current, focus) => {
+    if (
+      !(await validationApi.scope.locate(target, column, index, {
+        current,
+        focus: false,
+      })) ||
+      !current()
+    )
+      return false
+    const row = props.virtualSource
+      ? sourceViewIndex(target.index)
+      : flatRows.value.findIndex((flat) => flat.key === target.key)
+    return current()
+      ? keyboard.select(
+          mergeCoordinates.at(row, keyboardCoordinates.positionOf(index)),
+          focus,
+        )
+      : false
+  },
+})
+const finder = useTableFind(props, emit, {
+  cells: findCellsInScope,
+  selection: cellRange.getBounds,
+  editing: () => Boolean(editing.active.value || rowDrag.session.value),
+  writable: (context) => {
+    const editor =
+      typeof context.column.editor === 'object'
+        ? context.column.editor
+        : undefined
+    return (
+      !editor?.props?.disabled &&
+      !editor?.props?.readonly &&
+      editing.isEditable(context)
+    )
+  },
+  changes,
+  validation,
+  rulesFor: (context) => validationApi.rulesFor(context.column),
+  locateError: async (context) => {
+    const match = finder.scan.value?.matches.find(
+      (match) =>
+        match.context.rowKey === context.rowKey &&
+        match.context.columnKey === context.columnKey,
+    )
+    return (await match?.locate?.(() => match.isCurrent(), true)) ?? false
+  },
+  dataContext: [
+    () => props.data,
+    () => props.virtualSource?.row,
+    () => props.virtualSource?.rowCount,
+    () => props.virtualSource?.columnCount,
+    loadedTreeRevision,
+    () =>
+      typeof props.changeConfig === 'object'
+        ? props.changeConfig.dataKey
+        : undefined,
+  ],
+  viewContext: [
+    sorts,
+    filtersState,
+    pagination.currentPage,
+    pagination.pageSize,
+    groups.expansionState,
+    flatRows,
+    groups.layout,
+  ],
+  context: [
+    columnManager.state,
+    rawColumns,
+    merges.config,
+    groups.config,
+    () => props.rowKey,
+    () => props.virtualSource?.rowKey,
+    () => props.virtualSource?.column,
+  ],
+})
+const findPanelRef = shallowRef<InstanceType<typeof TableFindPanel>>()
 const isRangeMergeSelected = (surface: TableMergeSurface) => {
   if (surface.area !== 'body') return false
   const row = props.virtualSource
@@ -2280,6 +2398,8 @@ const handleTableKeydown = (event: KeyboardEvent) => {
   keyboard.onKeydown(event)
 }
 const handleTableKeydownCapture = (event: KeyboardEvent) => {
+  findPanelRef.value?.keydown(event)
+  if (event.defaultPrevented) return
   clipboard.onKeydown(event)
   if (!event.defaultPrevented) rangeInteraction.onKeydown(event)
 }
@@ -2300,6 +2420,16 @@ const setActiveCell = (rowIndex: number, columnIndex: number) => {
 }
 
 defineExpose({
+  openFind: () => findPanelRef.value?.open() ?? Promise.resolve(false),
+  closeFind: () => findPanelRef.value?.close(),
+  findCells: finder.findCells,
+  findNext: finder.findNext,
+  findPrevious: finder.findPrevious,
+  replaceMatch: finder.replaceMatch,
+  replaceAll: finder.replaceAll,
+  getFindState: finder.getFindState,
+  clearFind: finder.clearFind,
+  cancelFind: finder.cancelFind,
   copyCells: clipboard.copyCells,
   cutCells: clipboard.cutCells,
   pasteCells: clipboard.pasteCells,

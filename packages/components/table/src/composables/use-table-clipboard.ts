@@ -18,7 +18,7 @@ import {
 } from '../clipboard-browser'
 import { parseTableClipboardValue } from '../clipboard-value'
 import { equalTableDataValue } from '../change-snapshot'
-import { readTableDataField } from '../change-utils'
+import { validateTableCellWrites } from './validate-cell-write'
 import type { WatchSource } from 'vue'
 import type { TableClipboardCell, TableClipboardDraft } from '../clipboard-data'
 import type {
@@ -31,10 +31,7 @@ import type {
 import type { TableCellRangeBounds } from '../table-cell-range'
 import type { TableEditContext } from '../table-edit'
 import type { TableEmitFn, TableProps } from '../table'
-import type {
-  TableValidationCell,
-  TableValidationRule,
-} from '../table-validation'
+import type { TableValidationRule } from '../table-validation'
 import type { useTableChanges } from './use-table-changes'
 import type { TableValidation } from './use-table-validation'
 
@@ -195,38 +192,12 @@ export function useTableClipboard(
       typeof props.validationConfig === 'object' ? props.validationConfig : {}
     if (!props.validationConfig || validationConfig.onCommit === false)
       return true
-    function* cells(): Generator<TableValidationCell> {
-      for (const draft of drafts) {
-        const unchanged = () =>
-          !disposed &&
-          !item.controller.signal.aborted &&
-          draft.update.expected!.every((expected) => {
-            const actual = readTableDataField(draft.row, expected.field)
-            return (
-              actual.exists === expected.exists &&
-              equalTableDataValue(actual.value, expected.value)
-            )
-          })
-        for (const { context, value } of draft.cells)
-          yield {
-            ...context,
-            field: context.column.field!,
-            draftRow: draft.draftRow,
-            value,
-            rules: options.rulesFor(context),
-            isCurrent: unchanged,
-            readValue: () =>
-              readTableDataField(draft.draftRow, context.column.field!).value,
-            locate: () => options.locate(context),
-          }
-      }
-    }
-    const result = await options.validation.run(cells(), {
+    const result = await validateTableCellWrites(options.validation, drafts, {
       signal: item.controller.signal,
-      clear: false,
+      current: () => !disposed,
+      rulesFor: options.rulesFor,
+      locate: options.locate,
       maxErrors: validationConfig.maxErrors,
-      // Keep focus stable while native copy/cut operations are still in flight.
-      scrollToError: false,
     })
     check(item)
     if (!result.valid) {

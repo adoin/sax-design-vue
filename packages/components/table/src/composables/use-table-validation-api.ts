@@ -1,15 +1,13 @@
-import { computed, nextTick, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { cloneDeep, isEqual } from 'lodash-unified'
 import { tableFieldValue } from '../data-utils'
 import { editableField } from '../edit-utils'
-import type { ComputedRef } from 'vue'
+import { useTableDataScope } from './use-table-data-scope'
 import type {
   TableColumn,
   TableEditRecord,
-  TableFlatRow,
   TableProps,
   TableRow,
-  TableRowKey,
 } from '../table'
 import type {
   TableValidateOptions,
@@ -18,38 +16,16 @@ import type {
 } from '../table-validation'
 import type { TableEditing } from './use-table-edit'
 import type { TableValidation } from './use-table-validation'
-import type { useTableTree } from './use-table-tree'
-import type { useTablePagination } from './use-table-pagination'
-
-interface ValidationRow {
-  row: TableRow
-  key: TableRowKey
-  index: number
-  ancestors: TableRow[]
-  current: () => boolean
-}
-interface ValidationApiOptions {
-  tree: ReturnType<typeof useTableTree<TableRow>>
-  pagination: ReturnType<typeof useTablePagination>
-  columns: ComputedRef<TableColumn[]>
-  visibleColumns: ComputedRef<TableColumn[]>
-  sourceRow: (index: number) => TableFlatRow
-  sourceColumn: (index: number) => TableColumn
-  sourceColumnHidden: (index: number) => boolean
-  scrollRow: (row: TableRow | number) => void
-  scrollColumn: (index: number) => void
-  focusCell: (
-    rowKey: TableRowKey,
-    field: string,
-    columnIndex: number,
-  ) => boolean
-}
+import type {
+  TableDataScopeOptions,
+  TableDataScopeRow,
+} from './use-table-data-scope'
 
 export function useTableValidationApi(
   props: TableProps,
   validation: TableValidation,
   editing: TableEditing,
-  options: ValidationApiOptions,
+  options: TableDataScopeOptions,
 ) {
   const config = computed(() =>
     typeof props.validationConfig === 'object' ? props.validationConfig : {},
@@ -58,201 +34,15 @@ export function useTableValidationApi(
     const rules = column.rules ?? props.validationRules[column.field ?? '']
     return rules ? (Array.isArray(rules) ? rules : [rules]) : []
   }
-  const columnIndex = (column: TableColumn) =>
-    options.visibleColumns.value.findIndex(
-      (item) =>
-        item === column ||
-        (column.key
-          ? item.key === column.key
-          : Boolean(column.field && item.field === column.field)),
-    )
-  function* columns(
-    selected?: TableValidateOptions['columns'],
-  ): Generator<{ column: TableColumn; index: number }> {
-    if (props.virtualSource) {
-      const count = props.virtualSource.columnCount
-      if (selected) {
-        for (const index of new Set(selected))
-          if (
-            typeof index === 'number' &&
-            Number.isInteger(index) &&
-            index >= 0 &&
-            index < count
-          )
-            yield { column: options.sourceColumn(index), index }
-      } else {
-        for (let index = 0; index < count; index++)
-          yield { column: options.sourceColumn(index), index }
-      }
-    } else {
-      const targets = selected
-        ? selected
-            .map((item) =>
-              typeof item === 'number'
-                ? options.visibleColumns.value[item]
-                : typeof item === 'string'
-                  ? options.columns.value.find(
-                      (column) => column.key === item || column.field === item,
-                    )
-                  : item,
-            )
-            .filter((item): item is TableColumn => Boolean(item))
-        : options.columns.value
-      for (const column of new Set(targets))
-        yield { column, index: columnIndex(column) }
-    }
-  }
-  function* rows(
-    selected: TableValidateOptions = {},
-  ): Generator<ValidationRow> {
-    const selectedKeys = selected.rowKeys
-      ? new Set(selected.rowKeys)
-      : undefined
-    if (props.virtualSource) {
-      if (selectedKeys && !selected.rows)
-        throw new TypeError(
-          'Generated validation with rowKeys also requires numeric rows.',
-        )
-      const source = props.virtualSource
-      const rowMethod = source.row
-      const count = source.rowCount
-      const start =
-        selected.scope === 'view' ? options.pagination.sourceOffset.value : 0
-      const end =
-        selected.scope === 'view'
-          ? start + options.pagination.sourceCount.value
-          : count
-      const indices = function* () {
-        if (selected.rows) {
-          for (const index of new Set(selected.rows))
-            if (typeof index === 'number') yield index
-        } else for (let index = start; index < end; index++) yield index
-      }
-      for (const index of indices()) {
-        if (!Number.isInteger(index) || index < 0 || index >= count) continue
-        const flat = options.sourceRow(index)
-        if (selectedKeys && !selectedKeys.has(flat.key)) continue
-        yield {
-          row: flat.row,
-          key: flat.key,
-          index,
-          ancestors: [],
-          current: () =>
-            props.virtualSource?.row === rowMethod &&
-            index < props.virtualSource.rowCount,
-        }
-      }
-      return
-    }
-    const selectedRows = selected.rows
-      ? new Set(
-          selected.rows.map((row) =>
-            typeof row === 'number'
-              ? options.pagination.rows.value[row]?.row
-              : row,
-          ),
-        )
-      : undefined
-    const viewRows =
-      selected.scope === 'view'
-        ? new Set(options.pagination.rows.value.map((flat) => flat.row))
-        : undefined
-    let index = 0
-    function* walk(
-      items: TableRow[],
-      ancestors: TableRow[],
-      parentCurrent: () => boolean,
-    ): Generator<ValidationRow> {
-      for (const [offset, row] of items.entries()) {
-        const rowIndex = index++
-        const key = options.tree.getRowKey(row, rowIndex)
-        const current = () =>
-          parentCurrent() &&
-          items[offset] === row &&
-          options.tree.getRowKey(row, rowIndex) === key
-        if (
-          (!selectedRows || selectedRows.has(row)) &&
-          (!selectedKeys || selectedKeys.has(key)) &&
-          (!viewRows || viewRows.has(row))
-        )
-          yield { row, key, index: rowIndex, ancestors, current }
-        const children = options.tree.getChildren(row, key)
-        if (children.length)
-          yield* walk(
-            children,
-            [...ancestors, row],
-            () => current() && options.tree.getChildren(row, key) === children,
-          )
-      }
-    }
-    const data = props.data
-    yield* walk(data, [], () => props.data === data)
-  }
-  const draftFor = (target: ValidationRow) => {
+  const scope = useTableDataScope(props, options)
+  const { rows, columns, locate } = scope
+  const draftFor = (target: TableDataScopeRow) => {
     const draft = editing.record()
     return draft?.rowKey === target.key
       ? draft.updatedRow
       : props.virtualSource
         ? options.sourceRow(target.index).row
         : target.row
-  }
-  let locating = false
-  const locate = async (
-    target: ValidationRow,
-    column: TableColumn,
-    index: number,
-  ) => {
-    if (!target.current()) return false
-    locating = true
-    try {
-      for (const ancestor of target.ancestors)
-        await options.tree.toggleRowExpand(ancestor, true)
-      const pager = options.pagination
-      if (pager.enabled.value && !pager.remote.value) {
-        let rootIndex = target.index
-        if (!props.virtualSource) {
-          const root = target.ancestors[0] ?? target.row
-          rootIndex = -1
-          let offset = 0
-          for (const flat of options.tree.flatRows.value) {
-            if (flat.depth) continue
-            if (flat.row === root) {
-              rootIndex = offset
-              break
-            }
-            offset++
-          }
-        }
-        if (rootIndex < 0) return false
-        const page = Math.floor(rootIndex / pager.pageSize.value) + 1
-        if (page !== pager.currentPage.value) {
-          pager.changePage(page)
-          await nextTick()
-        }
-        if (page !== pager.currentPage.value) return false
-      }
-      if (
-        !props.virtualSource &&
-        !pager.rows.value.some((flat) => flat.row === target.row)
-      )
-        return false
-      const currentIndex = props.virtualSource ? index : columnIndex(column)
-      if (
-        currentIndex < 0 ||
-        (props.virtualSource && options.sourceColumnHidden(currentIndex))
-      )
-        return false
-      options.scrollRow(props.virtualSource ? target.index : target.row)
-      options.scrollColumn(currentIndex)
-      await nextTick()
-      await nextTick()
-      return (
-        target.current() &&
-        options.focusCell(target.key, column.field!, currentIndex)
-      )
-    } finally {
-      locating = false
-    }
   }
   function* cells(
     selected: TableValidateOptions = {},
@@ -345,12 +135,13 @@ export function useTableValidationApi(
     return false
   }
   return {
+    scope,
     rulesFor,
     validate,
     validateRow,
     validateCell,
     validateEdit,
     isDataCurrent,
-    locating: () => locating,
+    locating: scope.locating,
   }
 }

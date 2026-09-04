@@ -202,6 +202,13 @@ export function useTableTree<Row extends TableRow>(
     getChildren,
     getRowIndex,
     getRowKey,
+    getRowState: (row: Row, key: TableRowKey) => {
+      const entry = rowIndex.value.entryByRow.get(row)
+      return {
+        expanded: entry?.expanded ?? internalExpandedKeys.value.has(key),
+        loading: loadingKeys.has(key),
+      }
+    },
     getAllRows: () => {
       const rows: Row[] = []
       const walk = (items: Row[]) => {

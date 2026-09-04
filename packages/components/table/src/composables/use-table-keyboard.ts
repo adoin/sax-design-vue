@@ -64,6 +64,9 @@ export function useTableKeyboard(
   const enabled = computed(
     () =>
       (Boolean(props.keyboardConfig) ||
+        (Boolean(props.findConfig) &&
+          (typeof props.findConfig !== 'object' ||
+            props.findConfig.enabled !== false)) ||
         (Boolean(props.clipboardConfig) &&
           (typeof props.clipboardConfig !== 'object' ||
             props.clipboardConfig.enabled !== false)) ||
