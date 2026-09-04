@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-09-04T15:27:11.191Z",
+  "browser": "Chrome/150.0.7871.24",
+  "results": [
+    {
+      "locale": "en",
+      "treeExpansion": true,
+      "lazyTree": true,
+      "codeLength": 4197,
+      "rendered": {
+        "rows": 7,
+        "columns": [0, 1, 99993, 99994, 99995, 99996, 99997, 99998, 99999],
+        "height": 8000000,
+        "bottomError": 0,
+        "maxCellError": 0
+      },
+      "alternateTheme": {
+        "rows": 7,
+        "columns": [0, 1, 99993, 99994, 99995, 99996, 99997, 99998, 99999],
+        "height": 8000000,
+        "bottomError": 0,
+        "maxCellError": 0
+      },
+      "fromCode": {
+        "rows": 7,
+        "columns": [0, 1, 99994, 99995, 99996, 99997, 99998, 99999],
+        "height": 8000000,
+        "bottomError": 0,
+        "maxCellError": 0
+      },
+      "direct": {
+        "rows": 7,
+        "columns": [0, 1, 99994, 99995, 99996, 99997, 99998, 99999],
+        "height": 8000000,
+        "bottomError": 0,
+        "maxCellError": 0
+      }
+    },
+    {
+      "locale": "zh",
+      "treeExpansion": true,
+      "lazyTree": true,
+      "codeLength": 3891,
+      "rendered": {
+        "rows": 7,
+        "columns": [0, 1, 99993, 99994, 99995, 99996, 99997, 99998, 99999],
+        "height": 8000000,
+        "bottomError": 0,
+        "maxCellError": 0
+      },
+      "alternateTheme": {
+        "rows": 7,
+        "columns": [0, 1, 99993, 99994, 99995, 99996, 99997, 99998, 99999],
+        "height": 8000000,
+        "bottomError": 0,
+        "maxCellError": 0
+      },
+      "fromCode": {
+        "rows": 7,
+        "columns": [0, 1, 99994, 99995, 99996, 99997, 99998, 99999],
+        "height": 8000000,
+        "bottomError": 0,
+        "maxCellError": 0
+      },
+      "direct": {
+        "rows": 7,
+        "columns": [0, 1, 99994, 99995, 99996, 99997, 99998, 99999],
+        "height": 8000000,
+        "bottomError": 0,
+        "maxCellError": 0
+      }
+    }
+  ]
+}

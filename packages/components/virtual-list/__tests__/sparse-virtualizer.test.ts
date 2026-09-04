@@ -6,8 +6,11 @@ import {
   useSparseVirtualizer,
 } from '../src/use-sparse-virtualizer'
 
-function fixture(count = 1_000_000) {
+function fixture(count = 1_000_000, initiallyEnabled = true) {
   const element = document.createElement('div')
+  const enabled = shallowRef(initiallyEnabled)
+  const rowCount = shallowRef(count)
+  const estimate = shallowRef(64)
   const dragging = shallowRef(false)
   let virtualizer!: ReturnType<typeof useSparseVirtualizer>
   let top = 0
@@ -34,9 +37,9 @@ function fixture(count = 1_000_000) {
     defineComponent({
       setup() {
         virtualizer = useSparseVirtualizer({
-          enabled: computed(() => true),
-          count: computed(() => count),
-          estimateSize: computed(() => 64),
+          enabled: computed(() => enabled.value),
+          count: computed(() => rowCount.value),
+          estimateSize: computed(() => estimate.value),
           overscan: computed(() => 3),
           retainMaxSize: computed(() => true),
           scrollbarDragging: dragging,
@@ -48,10 +51,91 @@ function fixture(count = 1_000_000) {
       },
     }),
   )
-  return { wrapper, element, dragging, virtualizer, write }
+  return {
+    wrapper,
+    element,
+    dragging,
+    virtualizer,
+    write,
+    enabled,
+    rowCount,
+    estimate,
+  }
 }
 
 describe('compressed sparse row coordinates', () => {
+  it('allocates only for non-uniform measurements and reuses the index across layout resets', async () => {
+    const allocation = vi.spyOn(globalThis, 'Float64Array')
+    const { wrapper, virtualizer: s } = fixture()
+    try {
+      await nextTick()
+      s.scrollToIndex(999_999, 'end')
+      s.resizeItems([{ index: 999_999, key: 999_999, size: 64 }])
+      expect(allocation).not.toHaveBeenCalled()
+      expect(s.totalSize.value).toBe(64_000_000)
+      s.resizeItems([{ index: 0, key: 0, size: 80 }])
+      expect(allocation).toHaveBeenCalledExactlyOnceWith(1_000_001)
+      expect(s.totalSize.value).toBe(64_000_016)
+      s.resetMeasurements()
+      expect(s.totalSize.value).toBe(64_000_000)
+      expect(s.measuredSizeCache.size).toBe(0)
+      expect(allocation).toHaveBeenCalledTimes(1)
+      s.resizeItems([{ index: 0, key: 0, size: 72 }])
+      expect(allocation).toHaveBeenCalledTimes(1)
+      expect(s.totalSize.value).toBe(64_000_008)
+    } finally {
+      wrapper.unmount()
+      allocation.mockRestore()
+    }
+  })
+
+  it('does not allocate for an inactive virtualizer and rebuilds retained heights when enabled', async () => {
+    const allocation = vi.spyOn(globalThis, 'Float64Array')
+    const {
+      wrapper,
+      virtualizer: s,
+      enabled,
+      rowCount,
+      estimate,
+    } = fixture(1_000_000, false)
+    try {
+      rowCount.value = 100_000
+      await nextTick()
+      s.resizeItems([{ index: 0, key: 0, size: 80 }])
+      expect(allocation).not.toHaveBeenCalled()
+      expect(s.virtualItems.value).toEqual([])
+      enabled.value = true
+      await nextTick()
+      s.resizeItems([
+        { index: 0, key: 0, size: 80 },
+        { index: 99_999, key: 99_999, size: 96 },
+      ])
+      expect(s.totalSize.value).toBe(6_400_048)
+      enabled.value = false
+      estimate.value = 72
+      rowCount.value = 50_000
+      await nextTick()
+      const count = allocation.mock.calls.length
+      expect(s.totalSize.value).toBe(3_600_000)
+      enabled.value = true
+      await nextTick()
+      expect(allocation).toHaveBeenCalledTimes(count + 1)
+      expect(s.totalSize.value).toBe(3_600_008)
+      s.scrollToIndex(49_999, 'end')
+      expect(s.virtualItems.value.at(-1)?.end).toBe(3_600_008)
+      enabled.value = false
+      await nextTick()
+      s.resetMeasurements()
+      enabled.value = true
+      await nextTick()
+      expect(allocation).toHaveBeenCalledTimes(count + 1)
+      expect(s.totalSize.value).toBe(3_600_000)
+    } finally {
+      wrapper.unmount()
+      allocation.mockRestore()
+    }
+  })
+
   it('reaches the millionth row without exceeding native layout height', async () => {
     const { wrapper, element, virtualizer: s } = fixture()
     await nextTick()

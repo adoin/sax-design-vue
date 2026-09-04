@@ -11,6 +11,7 @@
     // playground
     "play/main.ts",
     "play/env.d.ts",
+    "play/table-audit/**/*.ts",
     "play/src/**/*"
   ]
 }

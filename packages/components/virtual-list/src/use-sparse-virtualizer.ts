@@ -45,23 +45,24 @@ interface UseSparseVirtualizerOptions {
 }
 
 class FenwickTree {
-  private readonly values: Float64Array
+  private values: Float64Array | undefined
 
-  constructor(readonly size: number) {
-    this.values = new Float64Array(size + 1)
-  }
+  constructor(readonly size: number) {}
 
   add(index: number, delta: number) {
     if (!delta || index < 0 || index >= this.size) return
+    // Uniform rows need no height corrections, even for very large sources.
+    const values = (this.values ??= new Float64Array(this.size + 1))
     for (
       let cursor = index + 1;
       cursor <= this.size;
       cursor += cursor & -cursor
     )
-      this.values[cursor] += delta
+      values[cursor] += delta
   }
 
   prefix(endExclusive: number) {
+    if (!this.values) return 0
     let total = 0
     for (
       let cursor = Math.min(Math.max(0, endExclusive), this.size);
@@ -208,7 +209,8 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
         measuredIndexes.delete(index)
         continue
       }
-      sizeDeltas.add(index, measurement.size - rowEstimate())
+      if (options.enabled.value)
+        sizeDeltas.add(index, measurement.size - rowEstimate())
     }
     measurementVersion.value++
   }
@@ -420,9 +422,11 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
 
   return {
     resetMeasurements: () => {
-      // Remove only measured deltas; do not allocate another count-sized index.
-      for (const [index, entry] of measuredIndexes)
-        sizeDeltas.add(index, rowEstimate() - entry.size)
+      // Reuse active backing storage during repeated layout resets (e.g. resize).
+      // Uniform lists have no deltas and still never allocate an index.
+      if (options.enabled.value)
+        for (const [index, entry] of measuredIndexes)
+          sizeDeltas.add(index, rowEstimate() - entry.size)
       measuredSizeCache.clear()
       measuredIndexes.clear()
       pendingAnchorDelta = 0
