@@ -1,27 +1,32 @@
 @use 'mixins/var' as *;
+@use 'mixins/mixins' as *;
 @use 'common/var' as *;
 
 .s-watermark {
   position: relative;
   overflow: hidden;
+  isolation: isolate;
+
+  &.is-blind {
+    // Difference blending needs an opaque local backdrop, including empty space.
+    background-color: getColor(background);
+  }
 }
 
 .s-watermark__marks {
   pointer-events: none;
   position: absolute;
-  inset: -40%;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(6, max-content);
-  align-content: space-around;
-  justify-content: space-around;
-  color: getColor(text);
-  font-size: 13px;
+  inset: 0;
+  background-color: getColor(text);
+  mask-repeat: repeat;
   user-select: none;
-  white-space: nowrap;
+}
+
+.s-watermark__marks--blind {
+  // Modulate color channels rather than making the entire layer transparent.
+  mix-blend-mode: difference;
 }
 
 .s-watermark__content {
   position: relative;
-  z-index: 2;
 }

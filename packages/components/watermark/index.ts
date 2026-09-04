@@ -3,3 +3,5 @@ import Watermark from './src/watermark.vue'
 export const SWatermark = withInstall(Watermark)
 export default SWatermark
 export * from './src/watermark'
+export { revealWatermark } from './src/reveal-watermark'
+export type { WatermarkRevealOptions } from './src/reveal-watermark'

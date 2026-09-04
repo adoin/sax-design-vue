@@ -6,12 +6,9 @@ const count = shallowRef(0)
 <template>
   <s-watermark content="Sax Design Vue" :font-size="16" :gap="72">
     <div class="watermark-document">
-      <h3>Internal preview</h3>
-      <p>
-        Watermarks cover opaque content while keeping buttons, inputs and text
-        selection usable.
-      </p>
-      <s-button @click="count++">Clicked {{ count }} times</s-button>
+      <h3>内部预览</h3>
+      <p>水印覆盖不透明内容，同时保留按钮、输入和文字选择交互。</p>
+      <s-button @click="count++">已点击 {{ count }} 次</s-button>
     </div>
   </s-watermark>
 </template>
