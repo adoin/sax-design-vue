@@ -45,10 +45,13 @@ export function useTableSelection(
   })
   const rowKey = (row: TableRow) =>
     sourceKeys.value.get(row) ?? options.getRowKey(row, -1)
+  const selectedValue = computed(() =>
+    props.row !== undefined ? props.row : props.modelValue,
+  )
   const getSelectedRows = (): TableRow[] => {
-    const values = Array.isArray(props.modelValue)
-      ? props.modelValue
-      : [props.modelValue]
+    const values = Array.isArray(selectedValue.value)
+      ? selectedValue.value
+      : [selectedValue.value]
     return values.filter(
       (value): value is TableRow => value !== null && typeof value === 'object',
     )
@@ -60,7 +63,9 @@ export function useTableSelection(
   const emitRows = (rows: TableRow[]) => {
     const unique = [...new Map(rows.map((row) => [rowKey(row), row])).values()]
     const next = multiple.value ? unique : unique.slice(0, 1)
-    emit('update:modelValue', multiple.value ? next : (next[0] ?? null))
+    const value = multiple.value ? next : (next[0] ?? null)
+    emit('update:row', value)
+    if (props.row === undefined) emit('update:modelValue', value)
     emit('selectionChange', next)
   }
   const setSelectedRows = (rows: TableRow[]) =>

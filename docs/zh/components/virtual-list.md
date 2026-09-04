@@ -75,6 +75,8 @@ description: '基于 TanStack Virtual 的窗口化列表，支持真实测量动
 
 `s-virtual-list` 只挂载视口附近的行。每个已渲染行会被真实测量，因此文本换行、展开收起、追加内容都会更新偏移量并保持滚动锚点。当不同虚拟窗口可能让同一个稳定 item key 出现更高内容时，可开启 `retain-max-size` 保留其历史最大高度。
 
+超大生成数据的总行高超过浏览器布局限制时，组件会压缩原生滚动轨道。`scrollToIndex` 仍使用原始行索引，`scrollToOffset` 使用逻辑内容像素；滚轮保持正常像素步长，拖动原生滑块可遍历完整范围。
+
 <template #example>
 <virtual-list-default />
 </template>

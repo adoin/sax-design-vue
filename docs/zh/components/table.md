@@ -1,5 +1,5 @@
 ---
-description: '通过数据和列配置渲染结构化表格，不再逐个手写表格单元格。'
+description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
   - name: resize-config
     type: Boolean | TableResizeConfig
@@ -26,7 +26,7 @@ PROPS:
     description: 稳定的行键字段或取值函数。
     default: id
     usage: '#grid-式配置'
-  - name: model-value
+  - name: row
     type: TableRow | TableRow[] | null
     description: 当前选中的行或行数组。
     default: null
@@ -60,7 +60,7 @@ PROPS:
     usage: '#虚拟滚动与动态行高'
   - name: virtual-source
     type: TableVirtualSource
-    description: 按索引即时生成扁平行与列，用于极端双轴数据量且不分配完整矩阵。
+    description: 通过索引回调按需提供行与列，适合大规模数据。
     default: null
     usage: '#虚拟滚动与动态行高'
   - name: expanded-keys
@@ -228,7 +228,7 @@ EVENTS:
     description: "拖动结束或键盘调整后触发，含列、索引、新旧宽度及输入来源。"
     default: null
     usage: '#拖动调整列宽'
-  - name: update:modelValue
+  - name: update:row
     type: TableRow | TableRow[] | null
     description: 行选择变化时触发。
   - name: update:expandedKeys
@@ -387,9 +387,9 @@ EXPOSES:
 
 `v-model:column-widths` 用于外部受控与恢复；未传时组件在内部保留结果，不修改原始 columns 或行数据。改变原始列 width 会清除该列的内部调整。拖动过程中预览宽度，松开后才提交事件；父级未接受受控更新时恢复原值。
 
-固定列、树行、分页与双轴虚拟滚动共享同一列布局。横向切换窗口继续保留行最大高度；提交新列宽、容器宽度变化或调用 measure() 时会清空旧布局的行高缓存并重新测量。行内容原地修改后如需允许高度缩小，可主动调用 measure()。
+调整列宽后，固定列位置和动态行高会自动更新。修改行内容后如需重新计算高度，可调用 `measure()`。
 
-十万行模式按需生成行、列，只保存调整过的列宽。当前压力组合为 10 万行 × 10 万列，不分配完整矩阵；此模式的排序、筛选、树结构和数据请求由业务端处理，不能据此推算浏览器的可用容量。
+勾选“百万行生成数据”可体验大数据下的列宽调整。使用 `virtualSource` 时，排序、筛选和数据请求由应用处理。
 
 <template #example>
 <table-zh-resize />
@@ -419,9 +419,9 @@ EXPOSES:
 
 ## Grid 式配置
 
-业务表格应把列和行都放在数据中。通过 `v-bind` 传入一个配置对象即可完成渲染，不涉及任何 `tr`、`th` 或 `td` 组件。
+通过 `data` 提供行数据，`columns` 定义列的字段、标题和显示方式。也可以将表格属性放入一个对象，通过 `v-bind` 统一传入。
 
-列宽采用 VXE 风格的分配规则：`width` 固定占位；无 `width` 的列以 `minWidth`（未设置时为 120px）作为基础宽度，满足基础宽度后共同均分剩余空间。下方示例同时包含默认宽度列和 `minWidth` 列；空间不足时表格保持最小总宽度并横向滚动。
+`width` 指定固定列宽；未设置 `width` 的列以 `minWidth`（默认 120px）为基础，均分剩余空间。容器宽度不足时，可横向滚动查看其余列。
 
 <template #example><table-zh-default /></template>
 
@@ -493,7 +493,7 @@ EXPOSES:
 
 ## 行选择
 
-通过 `v-model` 绑定当前选中行；模型需要数组时添加 `multiple`。
+通过 `v-model:row` 绑定当前选中行；模型需要数组时添加 `multiple`。
 
 <template #example><table-zh-selection /></template>
 
@@ -633,7 +633,7 @@ null 和 undefined 始终放在最后；数字模式还将空白字符串、无�
 
 ## 文本溢出与提示
 
-`show-overflow` 可选择自动换行（false）、仅省略（ellipsis）、原生提示（title）或通用弹层（tooltip / true）。只有内容确实溢出才显示提示，鼠标悬停和键盘聚焦均可触发；表头支持独立的 `show-header-overflow`，列配置优先于表格配置。整张表复用同一份 Tooltip。
+`show-overflow` 可选择自动换行（false）、仅省略（ellipsis）、原生提示（title）或浮动提示（tooltip / true）。只有内容溢出才显示提示，鼠标悬停和键盘聚焦均可触发；表头支持独立的 `show-header-overflow`，列配置优先于表格配置。
 
 <template #example><table-zh-overflow /></template>
 
@@ -689,7 +689,7 @@ null 和 undefined 始终放在最后；数字模式还将空白字符串、无�
 
 ## 加载、空态与表格插槽
 
-表头、表尾与空态插槽可以独立组合。此示例同时演示 `loading`、`show-header`、嵌套字段路径以及 `row-class`，交互控制均使用组件库已有控件。
+通过 `header`、`footer` 和 `empty` 插槽自定义表格周边内容。使用 `loading` 显示加载状态，`show-header` 控制表头显隐，`row-class` 自定义行样式；列的 `field` 支持嵌套字段路径。
 
 <template #example><table-zh-states /></template>
 
@@ -797,13 +797,11 @@ null 和 undefined 始终放在最后；数字模式还将空白字符串、无�
 
 ## 虚拟滚动与动态行高
 
-大数据可通过 `virtual-config` 同时开启双轴虚拟滚动：Y 轴虚拟行支持 `dynamic` 动态行高测量；`horizontal` 开启 X 轴像素列虚拟化，`columnOverscan` 控制左右预渲染列数。列设置 `fixed="left"` 或 `fixed="right"` 后会固定在相应边缘，中间列独立滚动。树形行会先展平再虚拟化，并使用内部 Map 索引稳定行键、展开状态和滚动定位。横向虚拟化的动态行会按稳定 row key 保存所有已访问列窗口中的最大行高，因此回到更矮的列窗口时不会再次收缩，也不会让可见行数回弹；缺少业务行键时也只在 WeakMap 中生成内部身份，不会给原始行对象添加字段。
+设置 `virtual-config` 可开启虚拟滚动，`height` 指定可视区域高度。开启 `dynamic` 后会根据内容测量行高；`horizontal` 开启横向列虚拟化，`columnOverscan` 控制左右额外渲染的列数。列设置 `fixed="left"` 或 `fixed="right"` 可固定在相应边缘。
 
-下方同一示例内提供“巨量数据”测试，按需生成行列，不创建完整单元格矩阵；只渲染可见区域和相邻预渲染区域，保留左右固定列、多行内容及最大行高缓存。点击启动后，可通过中部、末尾跳转及双向滚动检查定位与对齐，停止测试会卸载巨量表格。
+数据会重排、更新或包含树节点时，建议提供稳定唯一的 `row-key`。横向滚动时，行高会保留已显示内容的最大高度，以减少上下跳动；调整列宽后会重新测量。
 
-**极限说明（不是可用行数承诺）：** V8 公开实现记录中的单个 Map 容量上限参考为 `2^24 = 16,777,216` 个键，约 1,677 万；它不是跨浏览器的 JavaScript 规范保证，具体取决于引擎版本与构建。参见 [V8 容量说明](https://groups.google.com/g/v8-reviews/c/7hZljfgPZN8)。
-
-普通 `data` 模式会建立全量行索引；`virtualSource` 的高度 Map 只缓存已测量行，但增量高度索引仍占用随行数增长的内存。当前 Y 轴使用实际总像素高度，还受浏览器滚动高度限制。因此行数极限不能只按 Map 容量计算，内存、实际行高和单元格复杂度可能更早成为瓶颈；此演示不是浏览器或组件的极限认证。
+对于按需加载的数据，可通过 `virtualSource` 提供行数、列数及索引回调。下方示例支持加载大数据、跳转到中部或末尾，以及双向滚动。实际数据规模应结合设备内存、行高和单元格复杂度选择；服务端数据可配合远程分页使用。
 
 <template #example><table-zh-virtual /></template>
 

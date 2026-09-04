@@ -196,19 +196,22 @@ const stop = () => {
             <s-button size="small" @click="reset">Start</s-button>
             <s-button size="small" @click="jumpToMiddle">Middle</s-button>
             <s-button size="small" @click="jumpToEnd">End</s-button>
-            <s-button size="small" @click="stop">Stop test</s-button>
+            <s-button size="small" @click="stop">Hide data</s-button>
           </template>
         </div>
       </div>
       <div v-if="!started" class="stress-gate">
-        <span>The stress grid mounts only after you start the test.</span>
+        <span
+          >Load the data, then scroll or jump to explore its rows and
+          columns.</span
+        >
         <s-button
           size="small"
           :loading="starting"
           :disabled="starting"
           @click="start"
         >
-          {{ starting ? 'Starting…' : 'Start stress test' }}
+          {{ starting ? 'Loading…' : 'Load data' }}
         </s-button>
       </div>
       <s-table

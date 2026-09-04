@@ -54,7 +54,7 @@ describe('documentation example source', () => {
         /stress\.vue|fixed-column-stress-test|10-万-×/,
       )
       const card = virtualCards[0][1]
-      expect(card).toContain('16,777,216')
+      expect(card).toContain('`virtualSource`')
       const source = readSlotSource(resolve(root, 'table.md'), card, 'template')
       expect(source).toContain('class="stress-demo"')
       expect(source).toContain('v-if="!started"')

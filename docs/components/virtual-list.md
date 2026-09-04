@@ -75,6 +75,8 @@ description: 'Windowed list rendering backed by TanStack Virtual, with measured 
 
 `s-virtual-list` only mounts rows near the viewport. It measures each rendered row, so wrapped text, expand/collapse state, and appended content retain correct offsets and scroll anchoring. Set `retain-max-size` when alternate virtual windows can expose taller content for the same stable item key.
 
+Large generated lists compress the native scroll track when their total row height exceeds browser layout limits. `scrollToIndex` still uses the original item index, and `scrollToOffset` uses logical content pixels. Wheel movement keeps its normal pixel step, while dragging the native thumb navigates the full range.
+
 <template #example>
 <virtual-list-default />
 </template>

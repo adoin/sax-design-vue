@@ -16,7 +16,7 @@ const pager = shallowRef(false)
 const large = shallowRef(false)
 const last = shallowRef('')
 const description =
-  'This description verifies wrapping and row-height remeasurement after a column width changes.'
+  'Review project requirements and design documents, coordinate the team, and track this week’s deliverables.'
 const rows: TableRow[] = Array.from({ length: 200 }, (_, id) => ({
   id,
   name: `Member ${id}`,
@@ -54,7 +54,7 @@ const columns: TableColumn[] = [
   },
 ]
 const source: TableVirtualSource = {
-  rowCount: 100_000,
+  rowCount: 1_000_000,
   columnCount: 100_000,
   columnWidth: 120,
   fixedLeftCount: 2,
@@ -104,7 +104,7 @@ const jumpColumn = () => {
       >
       <s-checkbox v-model="pager" :disabled="large">Pagination</s-checkbox>
       <s-checkbox v-model="large" @update:model-value="widths = {}"
-        >100,000 generated rows</s-checkbox
+        >One million generated rows</s-checkbox
       >
       <s-button size="small" flat :disabled="pager && !large" @click="jump"
         >Jump to end</s-button

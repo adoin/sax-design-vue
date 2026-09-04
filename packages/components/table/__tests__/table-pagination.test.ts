@@ -115,7 +115,7 @@ describe('Table built-in pagination', () => {
       props: {
         data,
         columns: [{ type: 'checkbox', width: 60 }, ...columns.slice(1)],
-        modelValue: [],
+        row: [],
         pagerConfig: { pageSize: 2 },
         selectionConfig: {
           reserve: true,
@@ -125,23 +125,21 @@ describe('Table built-in pagination', () => {
     })
     const vm = wrapper.vm as unknown as TableInstance
     vm.selectAll()
-    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toEqual([data[0]])
-    await wrapper.setProps({ modelValue: [data[0]] })
+    expect(wrapper.emitted('update:row')?.at(-1)?.[0]).toEqual([data[0]])
+    await wrapper.setProps({ row: [data[0]] })
     await flip(wrapper, 2)
-    expect(wrapper.emitted('update:modelValue')).toHaveLength(1)
+    expect(wrapper.emitted('update:row')).toHaveLength(1)
     vm.selectAll()
-    const selected = wrapper
-      .emitted('update:modelValue')
-      ?.at(-1)?.[0] as TableRow[]
+    const selected = wrapper.emitted('update:row')?.at(-1)?.[0] as TableRow[]
     expect(selected.map((row) => row.id)).toEqual([1, 3, 4])
-    await wrapper.setProps({ modelValue: selected })
+    await wrapper.setProps({ row: selected })
     await flip(wrapper, 1)
     expect(wrapper.find('.s-table__data-row input').element).toHaveProperty(
       'checked',
       true,
     )
     vm.selectAll(false)
-    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toEqual([
+    expect(wrapper.emitted('update:row')?.at(-1)?.[0]).toEqual([
       data[2],
       data[3],
     ])
@@ -153,12 +151,12 @@ describe('Table built-in pagination', () => {
       props: {
         data,
         columns: [{ type: 'checkbox' }, ...columns],
-        modelValue: [data[0]],
+        row: [data[0]],
         pagerConfig: { pageSize: 2 },
       },
     })
     await flip(wrapper, 2)
-    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toEqual([])
+    expect(wrapper.emitted('update:row')?.at(-1)?.[0]).toEqual([])
     wrapper.unmount()
   })
 

@@ -5,12 +5,13 @@
       :class="ns.e('window')"
       :style="{ height: viewportHeight }"
       @scroll="handleScroll"
+      @wheel="handleWheel"
     >
       <div
         :class="ns.e('content')"
         :style="{
           height: `${dragTotalSize ?? totalSize}px`,
-          overflowY: scrollbarDragging ? 'clip' : undefined,
+          overflowY: scrollbarDragging || compressed ? 'clip' : undefined,
         }"
       >
         <div
@@ -162,16 +163,24 @@ const virtualItems = computed(() =>
 )
 const totalSize = computed(() =>
   sparseMode.value
-    ? sparseVirtualizer.totalSize.value
+    ? sparseVirtualizer.physicalSize.value
     : virtualizer.value.getTotalSize(),
+)
+const compressed = computed(
+  () => sparseMode.value && sparseVirtualizer.compressed.value,
 )
 const viewportHeight = computed(() =>
   typeof props.height === 'number' ? `${props.height}px` : props.height,
 )
 
 const itemStyle = (start: number, size: number): CSSProperties => {
+  const physicalStart = compressed.value
+    ? start -
+      sparseVirtualizer.scrollOffset.value +
+      sparseVirtualizer.physicalOffset.value
+    : start
   const style: CSSProperties = {
-    '--s-vl-item-start': `${start}px`,
+    '--s-vl-item-start': `${physicalStart}px`,
     transform: 'translateY(var(--s-vl-item-start))',
   }
   if (props.dynamic && props.retainMaxSize && !resettingMeasurements.value)
@@ -288,6 +297,44 @@ function handleScroll(event: Event) {
   emit('scroll', event)
 }
 
+function handleWheel(event: WheelEvent) {
+  if (
+    !compressed.value ||
+    event.defaultPrevented ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    !event.deltaY ||
+    Math.abs(event.deltaX) > Math.abs(event.deltaY)
+  )
+    return
+  const element = scrollRef.value
+  if (!element) return
+  // Let nested scrollable controls consume their own vertical gesture.
+  let target = event.target instanceof Element ? event.target : null
+  while (target && target !== element) {
+    if (
+      target instanceof HTMLElement &&
+      target.scrollHeight > target.clientHeight &&
+      /auto|scroll/.test(getComputedStyle(target).overflowY) &&
+      (event.deltaY < 0
+        ? target.scrollTop > 0
+        : target.scrollTop + target.clientHeight < target.scrollHeight)
+    )
+      return
+    target = target.parentElement
+  }
+  const scale =
+    event.deltaMode === 1
+      ? 16
+      : event.deltaMode === 2
+        ? element.clientHeight
+        : 1
+  event.preventDefault()
+  sparseVirtualizer.scrollToOffset(
+    sparseVirtualizer.scrollOffset.value + event.deltaY * scale,
+  )
+}
+
 function scrollToIndex(
   index: number,
   align: 'auto' | 'start' | 'center' | 'end' = 'auto',
@@ -311,7 +358,9 @@ function measure() {
 async function resetMeasurements() {
   if (resettingMeasurements.value || destroyed) return
   const element = scrollRef.value
-  const top = element?.scrollTop ?? 0
+  const top = sparseMode.value
+    ? sparseVirtualizer.scrollOffset.value
+    : (element?.scrollTop ?? 0)
   const anchor = virtualItems.value.find((item) => item.start + item.size > top)
   const delta = anchor ? Math.max(0, top - anchor.start) : 0
   resettingMeasurements.value = true
@@ -330,7 +379,12 @@ async function resetMeasurements() {
   resettingMeasurements.value = false
   if (anchor) {
     scrollToIndex(anchor.index, 'start')
-    if (delta && element) scrollToOffset(element.scrollTop + delta)
+    if (delta && element)
+      scrollToOffset(
+        (sparseMode.value
+          ? sparseVirtualizer.scrollOffset.value
+          : element.scrollTop) + delta,
+      )
   }
 }
 

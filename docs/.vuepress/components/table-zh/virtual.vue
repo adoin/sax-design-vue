@@ -196,19 +196,19 @@ const stop = () => {
             <s-button size="small" @click="reset">回到起点</s-button>
             <s-button size="small" @click="jumpToMiddle">跳到中部</s-button>
             <s-button size="small" @click="jumpToEnd">跳到末尾</s-button>
-            <s-button size="small" @click="stop">停止测试</s-button>
+            <s-button size="small" @click="stop">收起数据</s-button>
           </template>
         </div>
       </div>
       <div v-if="!started" class="stress-gate">
-        <span>压力测试不会随文档页面自动运行，点击后再挂载极大数据表格。</span>
+        <span>加载数据后，可通过滚动或跳转查看不同行列。</span>
         <s-button
           size="small"
           :loading="starting"
           :disabled="starting"
           @click="start"
         >
-          {{ starting ? '正在启动…' : '启动压力测试' }}
+          {{ starting ? '正在加载…' : '加载数据' }}
         </s-button>
       </div>
       <s-table

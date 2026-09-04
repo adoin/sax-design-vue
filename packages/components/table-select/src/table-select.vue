@@ -366,7 +366,7 @@ defineExpose({
           :show-header="showHeader"
           :striped="striped"
           :loading="tableLoading"
-          :model-value="selectedRow"
+          :row="selectedRow"
           @row-click="handleRowClick"
           @cell-click="handleCellClick"
           @update:expanded-keys="emit('update:expandedKeys', $event)"

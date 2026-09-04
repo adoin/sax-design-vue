@@ -56,7 +56,7 @@ describe('Table query and selection features', () => {
         data,
         columns: [{ type: 'checkbox', width: 60 }, ...columns],
         virtualConfig: { height: 200, estimateSize: 32 },
-        modelValue: [],
+        row: [],
       },
     })
     const vm = wrapper.vm as unknown as TableInstance
@@ -70,9 +70,7 @@ describe('Table query and selection features', () => {
     expect(virtualRows).toHaveLength(250)
     expect(virtualRows[0].row.name).toBe('Item 499')
     vm.selectAll()
-    const selected = wrapper
-      .emitted('update:modelValue')
-      ?.at(-1)?.[0] as TableRow[]
+    const selected = wrapper.emitted('update:row')?.at(-1)?.[0] as TableRow[]
     expect(selected).toHaveLength(250)
     expect(selected.every((row) => row.team === 'Dev')).toBe(true)
     wrapper.unmount()
@@ -106,7 +104,7 @@ describe('Table query and selection features', () => {
     expect(row.mock.calls.length).toBeLessThan(100)
     expect(column.mock.calls.length).toBeLessThan(100)
     expect(wrapper.findAll('.s-table__data-row').length).toBeGreaterThan(0)
-    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('update:row')).toBeUndefined()
     wrapper.unmount()
   })
 
@@ -414,18 +412,16 @@ describe('Table query and selection features', () => {
       props: {
         data: rows,
         columns: [{ type: 'checkbox', width: 60 }, ...columns],
-        modelValue: [],
+        row: [],
         selectionConfig: { checkMethod: ({ row }) => row.id !== 2 },
       },
     })
     const vm = wrapper.vm as unknown as TableInstance
     vm.selectAll()
     await nextTick()
-    const selected = wrapper
-      .emitted('update:modelValue')
-      ?.at(-1)?.[0] as TableRow[]
+    const selected = wrapper.emitted('update:row')?.at(-1)?.[0] as TableRow[]
     expect(selected.map((row) => row.id)).toEqual([1, 3])
-    await wrapper.setProps({ modelValue: selected })
+    await wrapper.setProps({ row: selected })
     expect(wrapper.find('input[type="checkbox"]').element).toHaveProperty(
       'checked',
       true,
@@ -434,7 +430,7 @@ describe('Table query and selection features', () => {
     await nextTick()
     vm.selectAll(false)
     expect(
-      (wrapper.emitted('update:modelValue')?.at(-1)?.[0] as TableRow[]).map(
+      (wrapper.emitted('update:row')?.at(-1)?.[0] as TableRow[]).map(
         (row) => row.id,
       ),
     ).toEqual([1])
@@ -446,19 +442,17 @@ describe('Table query and selection features', () => {
       props: {
         data: rows,
         columns: [{ type: 'checkbox' }, ...columns],
-        modelValue: [rows[0]],
+        row: [rows[0]],
         selectionConfig: { reserve: true },
       },
     })
     await wrapper.setProps({
       data: [{ id: 9, name: 'Page 2', score: 1, team: 'Design' }],
     })
-    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('update:row')).toBeUndefined()
     const replacement = { ...rows[0], name: 'Updated' }
     await wrapper.setProps({ data: [replacement] })
-    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toEqual([
-      replacement,
-    ])
+    expect(wrapper.emitted('update:row')?.at(-1)?.[0]).toEqual([replacement])
     expect(wrapper.find('.s-table__data-row').classes()).toContain(
       'is-selected',
     )
@@ -470,18 +464,18 @@ describe('Table query and selection features', () => {
       props: {
         data: rows,
         columns: [{ type: 'radio' }, ...columns],
-        modelValue: rows[0],
+        row: rows[0],
       },
     })
     await wrapper.findAll('input[type="radio"]')[1].setValue(true)
-    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toEqual(rows[1])
-    const before = wrapper.emitted('update:modelValue')?.length
+    expect(wrapper.emitted('update:row')?.at(-1)?.[0]).toEqual(rows[1])
+    const before = wrapper.emitted('update:row')?.length
     await wrapper.findAll('.s-table__data-row')[2].trigger('click')
-    expect(wrapper.emitted('update:modelValue')).toHaveLength(before ?? 0)
+    expect(wrapper.emitted('update:row')).toHaveLength(before ?? 0)
     await wrapper.setProps({
       data: [{ id: 8, name: 'New', score: 1, team: 'Dev' }],
     })
-    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBeNull()
+    expect(wrapper.emitted('update:row')?.at(-1)?.[0]).toBeNull()
     wrapper.unmount()
   })
 

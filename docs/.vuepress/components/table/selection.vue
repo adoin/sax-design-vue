@@ -22,7 +22,7 @@ const selected = shallowRef<UserRow | null>(null)
 </script>
 
 <template>
-  <s-table v-model="selected" :data="rows" :columns="columns" row-key="id">
+  <s-table v-model:row="selected" :data="rows" :columns="columns" row-key="id">
     <template #header>
       Selected: {{ selected?.name ?? 'Click a row' }}
     </template>

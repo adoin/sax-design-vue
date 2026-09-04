@@ -23,11 +23,6 @@
     #{getColor(background)}
   );
   --s-table-striped-surface: #{getColor(gray-1)};
-  --s-table-selected-surface: color-mix(
-    in srgb,
-    #{getColor(primary)} 10.5%,
-    #{getColor(background)}
-  );
 
   width: 100%;
   max-width: 100%;
@@ -155,7 +150,12 @@
     }
 
     @include when(selected) {
-      background: var(--s-table-selected-surface);
+      position: relative;
+      z-index: 1;
+      background: var(--s-table-row-surface);
+      box-shadow:
+        0 3px 6px -4px hsl(var(--sax-text-color) / 0.3),
+        inset 0 0 10px -7px hsl(var(--sax-text-color) / 0.24);
     }
   }
 
@@ -536,11 +536,6 @@ html.dark .#{$namespace}-table-wrapper {
   --s-table-striped-surface: color-mix(
     in srgb,
     #{getColor(primary)} 13%,
-    #{getColor(background)}
-  );
-  --s-table-selected-surface: color-mix(
-    in srgb,
-    #{getColor(primary)} 24%,
     #{getColor(background)}
   );
 }

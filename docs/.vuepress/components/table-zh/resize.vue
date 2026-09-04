@@ -15,7 +15,7 @@ const virtual = shallowRef(true)
 const pager = shallowRef(false)
 const large = shallowRef(false)
 const last = shallowRef('')
-const description = '这段说明用于验证调整列宽后的自动换行和行高重新测量。'
+const description = '整理项目需求与设计文档，协调团队进度，并跟进本周交付事项。'
 const rows: TableRow[] = Array.from({ length: 200 }, (_, id) => ({
   id,
   name: `成员 ${id}`,
@@ -47,7 +47,7 @@ const columns: TableColumn[] = [
   { field: 'status', title: '状态', width: 120, minWidth: 80, fixed: 'right' },
 ]
 const source: TableVirtualSource = {
-  rowCount: 100_000,
+  rowCount: 1_000_000,
   columnCount: 100_000,
   columnWidth: 120,
   fixedLeftCount: 2,
@@ -95,7 +95,7 @@ const jumpColumn = () => {
       <s-checkbox v-model="virtual" :disabled="large">双轴虚拟滚动</s-checkbox>
       <s-checkbox v-model="pager" :disabled="large">分页</s-checkbox>
       <s-checkbox v-model="large" @update:model-value="widths = {}"
-        >十万行生成数据</s-checkbox
+        >百万行生成数据</s-checkbox
       >
       <s-button size="small" flat :disabled="pager && !large" @click="jump"
         >跳到末尾</s-button

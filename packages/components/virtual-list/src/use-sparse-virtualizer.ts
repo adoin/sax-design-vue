@@ -29,6 +29,9 @@ interface SparseMeasuredIndex {
   size: number
 }
 
+// Keep CSS geometry below browser layout limits; row offsets remain logical pixels.
+export const MAX_PHYSICAL_ROW_HEIGHT = 8_000_000
+
 interface UseSparseVirtualizerOptions {
   enabled: ComputedRef<boolean>
   count: ComputedRef<number>
@@ -82,6 +85,7 @@ const cancelFrame = (frame: number | ReturnType<typeof setTimeout>) => {
 
 export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
   const scrollOffset = shallowRef(0)
+  const physicalOffset = shallowRef(0)
   const viewportSize = shallowRef(0)
   const measurementVersion = shallowRef(0)
   const measuredSizeCache = new Map<VirtualListKey, number>()
@@ -95,6 +99,9 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
   let preserveEndOnResize = false
   let scrollAdjustmentScheduled = false
   let keepAtEnd = false
+  let pendingBaseOffset: number | undefined
+  let writtenOffset: { physical: number; logical: number } | undefined
+  let disposed = false
 
   const rowEstimate = () => Math.max(1, options.estimateSize.value)
   const offsetForIndex = (index: number) =>
@@ -110,6 +117,25 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
       sizeDeltas.prefix(options.count.value)
     )
   })
+  const physicalSize = computed(() =>
+    Math.min(totalSize.value, MAX_PHYSICAL_ROW_HEIGHT),
+  )
+  const compressed = computed(() => totalSize.value > physicalSize.value)
+  const logicalRange = () => Math.max(0, totalSize.value - viewportSize.value)
+  const physicalRange = () =>
+    Math.max(0, physicalSize.value - viewportSize.value)
+  const toPhysical = (offset: number) =>
+    compressed.value && logicalRange() > 0
+      ? (offset / logicalRange()) * physicalRange()
+      : offset
+  const readOffset = (offset: number) => {
+    if (writtenOffset && Math.abs(writtenOffset.physical - offset) < 0.02)
+      return writtenOffset.logical
+    writtenOffset = undefined
+    return compressed.value && physicalRange() > 0
+      ? (offset / physicalRange()) * logicalRange()
+      : offset
+  }
 
   const findIndexAtOffset = (offset: number) => {
     const count = options.count.value
@@ -161,7 +187,8 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
   const measureViewport = () => {
     const element = options.scrollElement.value
     viewportSize.value = element?.clientHeight ?? 0
-    scrollOffset.value = element?.scrollTop ?? 0
+    physicalOffset.value = element?.scrollTop ?? 0
+    scrollOffset.value = readOffset(physicalOffset.value)
   }
 
   const observeViewport = () => {
@@ -190,7 +217,9 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
     if (!options.enabled.value || !measurements.length) return
 
     const scrollElement = options.scrollElement.value
-    const currentOffset = scrollElement?.scrollTop ?? scrollOffset.value
+    const currentOffset = scrollElement
+      ? readOffset(scrollElement.scrollTop)
+      : scrollOffset.value
     const wasAtEnd =
       keepAtEnd ||
       (scrollElement != null &&
@@ -239,7 +268,8 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
     // Keep measurements live, but let the native scrollbar own its position
     // throughout the gesture. Replaying these deltas would break the drag.
     if (options.scrollbarDragging.value) return
-    if (!wasAtEnd && !anchorDelta) return
+    if (!wasAtEnd && !anchorDelta && !compressed.value) return
+    pendingBaseOffset ??= currentOffset
     preserveEndOnResize ||= wasAtEnd
     if (!wasAtEnd) pendingAnchorDelta += anchorDelta
     if (scrollAdjustmentScheduled) return
@@ -253,20 +283,19 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
       const applyAdjustment = () => {
         scrollAdjustmentScheduled = false
         if (
+          disposed ||
           options.scrollbarDragging.value ||
-          (!preserveEndOnResize && !pendingAnchorDelta)
+          pendingBaseOffset == null
         )
           return
-        if (preserveEndOnResize) {
-          element.scrollTop = Math.max(
-            0,
-            element.scrollHeight - element.clientHeight,
-          )
-        } else element.scrollTop += pendingAnchorDelta
-        keepAtEnd = preserveEndOnResize
+        scrollToOffset(
+          preserveEndOnResize
+            ? logicalRange()
+            : pendingBaseOffset + pendingAnchorDelta,
+        )
         preserveEndOnResize = false
         pendingAnchorDelta = 0
-        scrollOffset.value = element.scrollTop
+        pendingBaseOffset = undefined
       }
       if (preserveEndOnResize) requestFrame(applyAdjustment)
       else applyAdjustment()
@@ -279,12 +308,13 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
     scrollFrame = requestFrame(() => {
       scrollFrame = undefined
       const previousOffset = scrollOffset.value
-      scrollOffset.value = pendingScrollOffset
+      physicalOffset.value = pendingScrollOffset
+      scrollOffset.value = readOffset(pendingScrollOffset)
       if (keepAtEnd) {
-        if (pendingScrollOffset < previousOffset - 2) keepAtEnd = false
+        if (scrollOffset.value < previousOffset - 2) keepAtEnd = false
       } else
         keepAtEnd =
-          totalSize.value - pendingScrollOffset - viewportSize.value <= 2
+          totalSize.value - scrollOffset.value - viewportSize.value <= 2
     })
   }
 
@@ -294,13 +324,19 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
   ) => {
     const element = options.scrollElement.value
     if (!element) return
+    viewportSize.value = element.clientHeight
     const nextOffset = Math.max(
       0,
       Math.min(offset, Math.max(0, totalSize.value - viewportSize.value)),
     )
-    element.scrollTo({ top: nextOffset, behavior })
+    if (behavior === 'auto') element.scrollTop = toPhysical(nextOffset)
+    else element.scrollTo({ top: toPhysical(nextOffset), behavior })
     keepAtEnd = totalSize.value - nextOffset - viewportSize.value <= 2
-    if (behavior === 'auto') scrollOffset.value = nextOffset
+    if (behavior === 'auto') {
+      physicalOffset.value = element.scrollTop
+      scrollOffset.value = nextOffset
+      writtenOffset = { physical: element.scrollTop, logical: nextOffset }
+    } else writtenOffset = undefined
   }
 
   const scrollToIndex = (
@@ -309,12 +345,7 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
   ) => {
     if (index < 0 || index >= options.count.value) return
     if (index === options.count.value - 1 && align === 'end') {
-      const element = options.scrollElement.value
-      if (!element) return
-      const endOffset = Math.max(0, element.scrollHeight - element.clientHeight)
-      keepAtEnd = true
-      element.scrollTo({ top: endOffset })
-      scrollOffset.value = endOffset
+      scrollToOffset(logicalRange())
       return
     }
     const start = offsetForIndex(index)
@@ -339,8 +370,10 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
     (dragging) => {
       if (!dragging) return
       pendingAnchorDelta = 0
+      pendingBaseOffset = undefined
       preserveEndOnResize = false
       keepAtEnd = false
+      writtenOffset = undefined
     },
     { flush: 'sync' },
   )
@@ -380,6 +413,7 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
 
   onMounted(() => nextTick(observeViewport))
   onBeforeUnmount(() => {
+    disposed = true
     viewportObserver?.disconnect()
     if (scrollFrame != null) cancelFrame(scrollFrame)
   })
@@ -392,12 +426,17 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
       measuredSizeCache.clear()
       measuredIndexes.clear()
       pendingAnchorDelta = 0
+      pendingBaseOffset = undefined
       preserveEndOnResize = false
       keepAtEnd = false
       measurementVersion.value++
     },
     virtualItems,
     totalSize,
+    physicalSize,
+    compressed,
+    scrollOffset,
+    physicalOffset,
     measuredSizeCache,
     resizeItems,
     handleScroll,

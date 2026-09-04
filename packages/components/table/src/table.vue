@@ -420,7 +420,7 @@ const resolvedColumns = computed(() =>
   }),
 )
 
-const { tableKls } = useTable(props, emit)
+const { tableKls } = useTable(props)
 const query = useTableQuery(props, emit, resolvedColumns)
 const {
   sorts,

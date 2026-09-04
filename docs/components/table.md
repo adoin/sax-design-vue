@@ -1,5 +1,5 @@
 ---
-description: 'Render structured data from column configuration instead of handwritten table cells.'
+description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
   - name: resize-config
     type: Boolean | TableResizeConfig
@@ -26,7 +26,7 @@ PROPS:
     description: Stable row key field or getter.
     default: id
     usage: '#grid-style-configuration'
-  - name: model-value
+  - name: row
     type: TableRow | TableRow[] | null
     description: Selected row or rows.
     default: null
@@ -60,7 +60,7 @@ PROPS:
     usage: '#virtual-rows-and-dynamic-heights'
   - name: virtual-source
     type: TableVirtualSource
-    description: Generates flat rows and columns by index for extreme two-axis data sets without allocating the complete matrices.
+    description: Provides rows and columns through index callbacks for large data sets.
     default: null
     usage: '#virtual-rows-and-dynamic-heights'
   - name: expanded-keys
@@ -228,7 +228,7 @@ EVENTS:
     description: "Fires after a pointer drag or keyboard resize with the column, index, old and new widths, and input source."
     default: null
     usage: '#column-resizing'
-  - name: update:modelValue
+  - name: update:row
     type: TableRow | TableRow[] | null
     description: Fires when row selection changes.
   - name: update:expandedKeys
@@ -383,13 +383,13 @@ EXPOSES:
 
 ## Column resizing
 
-Enable resize-config to drag header edges. Right-fixed columns resize from the left edge. Numeric or px column minWidth and the global minimum constrain resizing; resizable: false disables individual columns. Arrow keys resize, Shift accelerates, Home uses the minimum, and Escape cancels dragging.
+Enable `resize-config` to drag header edges. Right-fixed columns resize from the left edge. Numeric or px column `minWidth` and the global minimum constrain resizing; `resizable: false` disables individual columns. Arrow keys resize, Shift accelerates, Home uses the minimum, and Escape cancels dragging.
 
-Use v-model:column-widths for controlled state and resets, or omit it to keep widths internally without mutating columns or rows. Changing a declared column width clears its internal override. Dragging previews widths; release commits the event. Controlled values revert if the parent does not accept the update.
+Use `v-model:column-widths` for controlled state and resets, or omit it to keep widths internally without mutating columns or rows. Changing a declared column `width` clears its internal override. Dragging previews widths; release commits the event. Controlled values revert if the parent does not accept the update.
 
-Fixed columns, tree rows, pagination and two-axis virtualization share the layout. Moving the horizontal window retains maximum row heights; committed widths, container width changes and measure() reset old layout measurements. Call measure() after in-place content edits when rows need to shrink.
+Fixed column positions and dynamic row heights update automatically after resizing. Call `measure()` to recalculate heights after editing row content.
 
-The generated mode uses 100,000 rows and 100,000 columns, storing only resized widths and no full cell matrix. In this mode sorting, filtering, tree structure and data requests belong to the application; the demo is not a browser capacity guarantee.
+Select “One million generated rows” to try resizing with a large data set. With `virtualSource`, the application handles sorting, filtering and data requests.
 
 <template #example>
 <table-resize />
@@ -419,9 +419,9 @@ The generated mode uses 100,000 rows and 100,000 columns, storing only resized w
 
 ## Grid-style configuration
 
-For application tables, keep columns and rows in data. Pass one options object with `v-bind`, similar to a data-grid configuration; no `tr`, `th` or `td` components are involved.
+Pass rows through `data` and define each column's field, title and display options through `columns`. You can also collect table props in an object and pass them together with `v-bind`.
 
-Column widths follow VXE-style allocation: `width` reserves a fixed track; columns without `width` start from `minWidth` (120px by default) and share any remaining space equally. The example below includes both a default-width column and `minWidth` columns; when the minimum total does not fit, the table keeps that width and scrolls horizontally.
+`width` sets a fixed column width. Columns without it start from `minWidth` (120px by default) and share the remaining space equally. When the container is too narrow, scroll horizontally to see the remaining columns.
 
 <template #example><table-default /></template>
 
@@ -493,7 +493,7 @@ In configured columns, map a named slot with `slots.default`, or reference a reu
 
 ## Row selection
 
-Bind the selected row with `v-model`; add `multiple` when the model should be an array.
+Bind the selected row with `v-model:row`; add `multiple` when the model should be an array.
 
 <template #example><table-selection /></template>
 
@@ -633,7 +633,7 @@ Configure the built-in paginator with `v-model:pager-config`; pass the complete 
 
 ## Text overflow and tooltips
 
-`show-overflow` supports wrapping (false), ellipsis, native title, or a shared tooltip (tooltip / true). A tooltip appears only for clipped content, on hover or keyboard focus. Headers use `show-header-overflow`; column settings override table settings. One tooltip is shared by the entire table.
+`show-overflow` supports wrapping (false), ellipsis, native title, or a floating tooltip (tooltip / true). A tooltip appears only for clipped content, on hover or keyboard focus. Headers use `show-header-overflow`; column settings override table settings.
 
 <template #example><table-overflow /></template>
 
@@ -689,7 +689,7 @@ Fixed left and right columns also work without virtualization. The center scroll
 
 ## Loading, empty states and table slots
 
-Header, footer and empty-state slots can be combined independently. This example also demonstrates `loading`, `show-header`, nested field paths and `row-class`, using existing library controls.
+Use the `header`, `footer` and `empty` slots to customize content around the table. `loading` displays a loading state, `show-header` controls header visibility and `row-class` customizes row styling. Column `field` values support nested paths.
 
 <template #example><table-states /></template>
 
@@ -797,19 +797,17 @@ Tree data remains part of `s-table`. Mark one configured column with `treeNode`,
 
 ## Virtual rows and dynamic heights
 
-Large data sets can virtualize both axes with `virtual-config`. Row virtualization handles dynamic heights on the Y axis; `horizontal` virtualizes pixel-sized columns on the X axis, while `columnOverscan` controls adjacent rendered columns. Set a column to `fixed="left"` or `fixed="right"` to keep it visible while the center window scrolls. Tree rows are flattened before virtualization, and internal Map indexes keep row identity, expansion and scrolling stable. For horizontally virtualized dynamic rows, every stable row key retains the largest height measured across all visited column windows, so returning to a shorter window never collapses the row or changes the visible-row count again. When a business row key is missing, an internal WeakMap identity is used instead of adding fields to the source row object.
+Enable virtualization with `virtual-config` and set `height` to define the viewport. `dynamic` measures row heights from their content; `horizontal` enables column virtualization and `columnOverscan` controls extra columns rendered on each side. Set `fixed="left"` or `fixed="right"` on a column to keep it at that edge.
 
-This same example includes a “Massive data” test. Rows and columns are generated on demand without allocating the complete cell matrix; only the viewport and overscan are rendered. Fixed columns, wrapped cells, and maximum measured row heights remain enabled. Start it manually, use the middle/end jumps and both scroll axes to inspect alignment, then stop to unmount the massive table.
+Supply a stable, unique `row-key` when rows can be reordered, updated or expanded as a tree. During horizontal scrolling, rows retain the largest height of their displayed content to reduce vertical movement. Resizing columns triggers fresh measurements.
 
-**Limits (not a supported-row guarantee):** V8's published implementation record gives a single-Map capacity reference of `2^24 = 16,777,216` keys, about 16.8 million. This is not a cross-browser JavaScript specification guarantee and depends on the engine version and build. See [V8's capacity explanation](https://groups.google.com/g/v8-reviews/c/7hZljfgPZN8).
-
-The ordinary `data` mode builds full row indexes. With `virtualSource`, height Maps cache only measured rows, but the incremental height index still uses memory proportional to the row count. The current Y axis uses the actual total pixel height, so browser scroll-height limits also apply. Map capacity alone is not the row limit: memory, row heights, and cell complexity may become bottlenecks earlier. This demo does not certify the maximum capacity of the browser or component.
+For data loaded on demand, use `virtualSource` to provide row and column counts and index callbacks. The example supports loading a large data set, jumping to the middle or end, and scrolling both axes. Choose your data size based on device memory, row heights and cell complexity; server-backed data can also use remote pagination.
 
 <template #example><table-virtual /></template>
 
 <template #template>
 
-@[code{173-225}](../.vuepress/components/table/virtual.vue)
+@[code{173-228}](../.vuepress/components/table/virtual.vue)
 
 </template>
 
@@ -821,7 +819,7 @@ The ordinary `data` mode builds full row indexes. With `virtualSource`, height M
 
 <template #style>
 
-@[code{227-304}](../.vuepress/components/table/virtual.vue)
+@[code{230-307}](../.vuepress/components/table/virtual.vue)
 
 </template>
 

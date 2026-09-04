@@ -2,6 +2,8 @@
 
 ## Documentation examples
 
+- Write public documentation for developers using the library: explain APIs, behavior, and usage choices. Keep task instructions, implementation constraints, conversation history, and verification reports in internal records rather than example descriptions or demo copy.
+
 - When a documentation example needs controls or supporting UI beyond the component being documented, prefer existing components from this repository instead of rebuilding them with custom HTML and CSS. Only create a custom control when no suitable repository component exists, and briefly document why.
 - Keep each example's heading, explanatory copy, notes, controls, and rendered demo inside the same `<card>` block. Only the page title, frontmatter summary, and generated API reference may sit outside example cards.
 - Do not add large fixed or minimum heights to documentation demos just to reserve room for a teleported popper, dialog, or other overlay. Overlay components must layer over the page while the closed demo stays content-sized.
@@ -16,6 +18,8 @@
 - Before completing any component-documentation change, run `pnpm run test:docs-examples`. For changes to the shared Code or Playground pipeline, also run `pnpm run docs:build` and verify the changed example through both the Code button and the Playground button in the browser. Cross-cutting source or compiler changes require the full component-example audit, not a sample-only check.
 
 ## Table architecture
+
+- Use `v-model:row` for the table's selected row or row array. Keep selection effects distinct from the header surface; prefer a contained shadow treatment over a primary-colored row background.
 
 - Hierarchical data belongs to `STable`; do not reintroduce standalone `STree` or `STreeSelect` components. `STableSelect` must reuse the table tree-data mode so expansion behavior and accessibility stay aligned.
 - `STable` is data-driven only. Its canonical APIs are Grid-style `data + columns` configuration and declarative `STableColumn` children; do not reintroduce public `STr`, `STd`, or `STh` components or handwritten row/cell examples.

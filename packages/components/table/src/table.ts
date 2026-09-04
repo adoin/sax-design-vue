@@ -255,6 +255,11 @@ export type TableRowClass<Row extends TableRow = TableRow> =
   string | ((params: TableFlatRow<Row>) => string | string[] | undefined)
 
 export const tableProps = buildProps({
+  row: {
+    type: definePropType<TableRow | TableRow[] | null>([Object, Array]),
+    default: undefined,
+  },
+  // Compatibility for consumers predating the named row model.
   modelValue: {
     type: definePropType<TableModelValueType | TableModelValueType[] | null>([
       Array,
@@ -352,6 +357,8 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  'update:row': (value: TableRow | TableRow[] | null) =>
+    value == null || isObject(value) || isArray(value),
   'update:columnWidths': (widths: TableColumnWidths) => isObject(widths),
   columnResize: (params: TableColumnResizeParams) => isObject(params),
   [UPDATE_MODEL_EVENT]: (value: unknown) =>

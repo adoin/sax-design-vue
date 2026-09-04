@@ -39,7 +39,7 @@ const radioColumns: TableColumn[] = [
       <span>已选: {{ selected.map((row) => row.name).join(', ') || '—' }}</span>
     </div>
     <s-table
-      v-model="selected"
+      v-model:row="selected"
       v-model:pager-config="pager"
       :data="rows"
       :columns="columns"
@@ -51,7 +51,7 @@ const radioColumns: TableColumn[] = [
     />
     <span>单选负责人: {{ radio?.name ?? '—' }}</span>
     <s-table
-      v-model="radio"
+      v-model:row="radio"
       :data="rows"
       :columns="radioColumns"
       :selection-config="{ checkMethod: ({ row }) => Boolean(row.available) }"
