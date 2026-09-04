@@ -2877,6 +2877,10 @@ When changing row fields, custom slot content or external data read by a callbac
 
 For data loaded on demand, use `virtualSource` to provide row and column counts and index callbacks. The example supports loading a large data set, jumping to the middle or end, and scrolling both axes. Choose your data size based on device memory, row heights and cell complexity; server-backed data can also use remote pagination.
 
+Virtualization bounds mounted rows and columns; it does not make every data operation window-sized. Loaded rows in ordinary `data` still need indexes, and local sorting, filtering, grouping and aggregation process their corresponding data scopes. These synchronous computations have no separate cancellation API. Applications or servers provide sorting, filtering and grouping results for generated sources; the table does not enumerate every generated row for those operations or automatically fetch unprovided pages or lazy children.
+
+Full validation still scans its targets: `maxErrors` limits errors, not work. Narrow the scope and set the relevant processing budgets for find, clipboard and chart operations. Cancellation takes effect at checkpoints and asynchronous waits; it cannot interrupt a running synchronous application callback or undo an external write that already completed. Measurement caches, loaded details, change records and history references each retain memory. Cell budgets, history counts and browser Map capacity are not guarantees of usable row counts.
+
 <template #example><table-virtual /></template>
 
 <template #template>
