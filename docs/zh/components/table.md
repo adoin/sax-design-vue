@@ -1,6 +1,16 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "detail-config"
+    type: "Boolean | TableDetailConfig"
+    description: "详情展开配置；expand 列自动开启，false 关闭。生成数据源需显式开启。"
+    default: null
+    usage: "#详情展开行"
+  - name: "detail-expanded-keys"
+    type: "TableRowKey[]"
+    description: "通过 v-model:detail-expanded-keys 控制展开键，独立于树节点展开。"
+    default: null
+    usage: "#详情展开行"
   - name: footer-data
     type: TableRow[]
     description: 与列字段对应的表尾记录数组，不参与正文排序、筛选或分页。
@@ -188,8 +198,8 @@ CHILD_PROPS:
     usage: '#拖动调整列宽'
   - name: type
     type: String
-    values: seq | checkbox | radio
-    description: 生成序号、复选或单选列；选择列使用内置控件。
+    values: seq | checkbox | radio | expand
+    description: 生成序号、复选、单选或详情展开列，使用内置控件。
     default: null
   - name: field
     type: String
@@ -268,6 +278,26 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "update:detailExpandedKeys"
+    type: "(keys: TableRowKey[]) => void"
+    description: "请求更新完整的详情展开键数组。"
+    default: null
+    usage: "#详情展开行"
+  - name: "detailExpand"
+    type: "(params: TableDetailExpandParams) => void"
+    description: "用户或 toggleRowDetail 请求展开或收起时触发；受控模式需更新模型才会生效。"
+    default: null
+    usage: "#详情展开行"
+  - name: "detailLoad"
+    type: "(params: TableDetailParams & { data: unknown }) => void"
+    description: "当前有效的异步详情加载成功时触发。"
+    default: null
+    usage: "#异步详情"
+  - name: "detailLoadError"
+    type: "(params: TableDetailParams & { error: unknown }) => void"
+    description: "当前详情加载失败时触发，不包含取消或过期请求。"
+    default: null
+    usage: "#异步详情"
   - name: footerCellClick
     type: '(params: TableFooterCellRenderParams, event: MouseEvent) => void'
     description: 点击表尾单元格时触发，包含表尾行、叶子列、原始值与索引；不会触发行选择。
@@ -355,6 +385,21 @@ EVENTS:
     default: null
     usage: '#选择列与跨页保留'
 SLOTS:
+  - name: "detail"
+    type: "TableDetailSlotParams"
+    description: "详情内容；接收行、键、索引、加载结果以及 reload 和 close。"
+    default: null
+    usage: "#详情展开行"
+  - name: "detail-loading"
+    type: "TableDetailSlotParams"
+    description: "详情加载中的内容。"
+    default: null
+    usage: "#异步详情"
+  - name: "detail-error"
+    type: "TableDetailSlotParams"
+    description: "详情加载失败的内容；可调用 reload 重试。"
+    default: null
+    usage: "#异步详情"
   - name: footer-[column key]
     type: TableFooterCellRenderParams
     description: 指定叶子列的表尾插槽；也可通过 columns.slots.footer 指定名称。
@@ -404,6 +449,21 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "toggleRowDetail"
+    type: "(rowOrIndex: TableRow | number, expanded?: boolean) => Promise<void>"
+    description: "展开或收起详情；普通数据索引为当前可见行索引，生成数据源索引为全局索引。"
+    default: null
+    usage: "#虚拟滚动中的详情"
+  - name: "setDetailExpandedKeys"
+    type: "(keys: TableRowKey[]) => void"
+    description: "设置详情展开键；受控时仅发出模型更新。"
+    default: null
+    usage: "#详情展开行"
+  - name: "reloadRowDetail"
+    type: "(rowOrIndex: TableRow | number) => Promise<void>"
+    description: "重新加载已展开的详情，行和索引规则同 toggleRowDetail。"
+    default: null
+    usage: "#异步详情"
   - name: setSort
     type: '(sorts: TableSort[]) => void'
     description: '设置排序；受控模式下发出更新，需同步模型。'
@@ -467,6 +527,98 @@ EXPOSES:
 ---
 
 # Table 表格
+
+<card>
+
+## 详情展开行
+
+添加 `type: 'expand'` 列，通过 `#detail` 放置详情、表单或子表格。`v-model:detail-expanded-keys` 使用稳定行键，与树节点的 `expanded-keys` 分别控制；展开按钮支持 Tab 聚焦、Enter 和空格操作。
+
+未绑定模型时可用 `detailConfig.defaultExpandedKeys` 设置初始展开项，`checkMethod` 控制哪些行可展开。表单值由业务保存，详情收起或虚拟滚动离开视口时，插槽组件会卸载。
+
+<template #example><table-zh-details /></template>
+
+<template #template>
+
+@[code{35-66}](../../.vuepress/components/table-zh/details.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-33}](../../.vuepress/components/table-zh/details.vue)
+
+</template>
+
+<template #style>
+
+@[code{68-86}](../../.vuepress/components/table-zh/details.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 异步详情
+
+通过 `detailConfig.load` 异步获取详情；返回结果由 `#detail` 的 `data` 接收。`#detail-loading` 和 `#detail-error` 可替换加载与错误提示，`reload()` 重新加载当前详情。
+
+收起、关闭详情功能、更换数据数组或加载函数、卸载表格时，会取消相关请求并忽略过期结果。请将 `signal` 传给请求客户端。展开项在离开虚拟视口后保留加载结果，收起后清除；替换数据数组会重新加载。
+
+此例延迟 800ms，第二条报表首次加载失败，可点击重试。
+
+<template #example><table-zh-details-async /></template>
+
+<template #template>
+
+@[code{42-58}](../../.vuepress/components/table-zh/details-async.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-40}](../../.vuepress/components/table-zh/details-async.vue)
+
+</template>
+
+<template #style>
+
+@[code{60-64}](../../.vuepress/components/table-zh/details-async.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 虚拟滚动中的详情
+
+详情与对应数据行一起测量高度；开启详情后会自动启用动态测量，内容缩短或收起时重新测量。面板保持可见区域宽度，横向滚动时不会随着虚拟列移出视口。
+
+生成数据源需显式设置 `detail-config` 并提供稳定的 `rowKey`。此例按需生成 100 万行、10 万列，展开状态仅记录指定键。`toggleRowDetail(index)` 接受全局行索引，普通数据则使用当前排序、筛选、分页和树展开后的可见索引；传入行对象时，应使用当前渲染或插槽提供的对象。
+
+<template #example><table-zh-details-source /></template>
+
+<template #template>
+
+@[code{32-59}](../../.vuepress/components/table-zh/details-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-30}](../../.vuepress/components/table-zh/details-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{61-76}](../../.vuepress/components/table-zh/details-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

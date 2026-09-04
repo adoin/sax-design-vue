@@ -103,7 +103,11 @@
     #{getColor(background)}
   );
   --s-table-striped-surface: #{getColor(gray-1)};
-  --s-table-footer-surface: color-mix(in srgb, #{getColor(primary)} 6%, #{getColor(background)});
+  --s-table-footer-surface: color-mix(
+    in srgb,
+    #{getColor(primary)} 6%,
+    #{getColor(background)}
+  );
   --s-table-highlight-hue: clamp(
     15deg,
     calc(var(--sax-primary-h) - 190deg),
@@ -179,7 +183,11 @@
 
   .is-group-header {
     justify-content: center;
-    background: color-mix(in srgb, #{getColor(primary)} 7%, var(--s-table-header-surface));
+    background: color-mix(
+      in srgb,
+      #{getColor(primary)} 7%,
+      var(--s-table-header-surface)
+    );
     box-shadow: inset 0 -3px 5px -5px #{getColor(primary, 0.22)};
   }
 
@@ -237,6 +245,89 @@
     z-index: 2;
     background: var(--s-table-footer-surface);
     box-shadow: 0 -3px 7px -6px #{getColor(primary, 0.22)};
+  }
+
+  @include e(row-block) {
+    width: 100%;
+  }
+
+  @include e(detail-row) {
+    display: flex;
+    width: 100%;
+    background: var(--s-table-surface);
+  }
+
+  @include e(detail-cell) {
+    position: sticky;
+    left: 0;
+    flex: 0 0 auto;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0 16px 16px;
+  }
+
+  @include e(detail-content) {
+    padding: 16px;
+    border-radius: var(--sax-radius);
+    background: color-mix(
+      in srgb,
+      #{getColor(primary)} 4%,
+      #{getColor(background)}
+    );
+    box-shadow: inset 0 2px 6px -4px #{getColor(primary, 0.18)};
+    color: getCssVar(text-color, primary);
+    overflow-wrap: anywhere;
+  }
+
+  @include e(detail-error) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  @include e(detail-toggle) {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--sax-radius);
+    background: transparent;
+    color: #{getColor(primary)};
+    cursor: pointer;
+
+    &::after {
+      position: absolute;
+      inset: -6px;
+      content: '';
+    }
+    &:hover:not(:disabled) {
+      background: #{getColor(primary, 0.08)};
+    }
+    &:focus-visible {
+      outline: 2px solid #{getColor(primary, 0.5)};
+      outline-offset: 2px;
+    }
+    &:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+    .#{$namespace}-icon {
+      transition: transform 160ms ease;
+    }
+    &.is-expanded .#{$namespace}-icon {
+      transform: rotate(90deg);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .#{$namespace}-icon {
+        transition: none;
+      }
+    }
   }
 
   @include e(footer-row) {

@@ -30,11 +30,7 @@
         :class="ns.e('data-view')"
         :style="{ minWidth: dataViewMinWidth }"
         role="table"
-        :aria-rowcount="
-          effectiveRowCount +
-          (showHeader ? headerDepth : 0) +
-          (resolvedColumnCount ? footerData.length : 0)
-        "
+        :aria-rowcount="tableAriaRowCount"
         :aria-colcount="resolvedColumnCount"
       >
         <TableHeaderRows
@@ -192,8 +188,8 @@
           :height="virtualOptions.height"
           :estimate-size="virtualOptions.estimateSize"
           :overscan="virtualOptions.overscan"
-          :dynamic="virtualOptions.dynamic"
-          :retain-max-size="horizontalVirtualMode && virtualOptions.dynamic"
+          :dynamic="dynamicRows"
+          :retain-max-size="horizontalVirtualMode && dynamicRows"
           :item-key="flatRowKey"
           :class="ns.e('virtual-body')"
           :style="virtualBodyStyle"
@@ -201,44 +197,67 @@
           @scroll="handleVirtualScroll"
         >
           <template #default="{ item, index }">
-            <TableDataRow
+            <TableRowBlock
               :flat-row="item as TableFlatRow"
-              :entries="renderedColumnEntries"
-              :display-index="index"
-              :row-offset="showHeader ? headerDepth + 1 : 1"
-              :sequence-offset="
-                pagination.remote.value ? pagination.offset.value : 0
-              "
-              :indent="treeIndent"
-              :selected="isRowSelected((item as TableFlatRow).key)"
-              :selection-disabled="
-                loading ||
-                !isSelectable(
-                  (item as TableFlatRow).row,
-                  (item as TableFlatRow).index,
-                )
-              "
-              :selection-name="selectionName"
-              :overflow="showOverflow"
-              :striped="striped"
-              :row-class="rowClass"
-              @row-click="handleRowClick"
-              @cell-click="handleCellClick"
-              @row-select="toggleRowSelection"
-              @toggle-expand="toggleRowExpand((item as TableFlatRow).row)"
+              :controller="details"
+              :column-count="resolvedColumnCount"
+              :viewport-width="columnVirtualization.viewportWidth.value"
+              :panel-id="detailPanelId((item as TableFlatRow).key)"
+              :aria-row-index="detailAriaIndex(index)"
+              :disabled="loading"
+              @shrink="resetDetailMeasurements"
             >
-              <template #cell="params">
-                <slot :name="cellSlotName(params.column)" v-bind="params">
-                  <slot name="cell" v-bind="params">
-                    <TableRendererOutlet
-                      :renderer="resolveCellRenderer(params.column)"
-                      :params="params"
-                      :fallback="params.value"
-                    />
-                  </slot>
-                </slot>
+              <template #default="{ detail }">
+                <TableDataRow
+                  :detail="detail"
+                  :flat-row="item as TableFlatRow"
+                  :entries="renderedColumnEntries"
+                  :display-index="index"
+                  :row-offset="detailRowOffset(index)"
+                  :sequence-offset="
+                    pagination.remote.value ? pagination.offset.value : 0
+                  "
+                  :indent="treeIndent"
+                  :selected="isRowSelected((item as TableFlatRow).key)"
+                  :selection-disabled="
+                    loading ||
+                    !isSelectable(
+                      (item as TableFlatRow).row,
+                      (item as TableFlatRow).index,
+                    )
+                  "
+                  :selection-name="selectionName"
+                  :overflow="showOverflow"
+                  :striped="striped"
+                  :row-class="rowClass"
+                  @row-click="handleRowClick"
+                  @cell-click="handleCellClick"
+                  @row-select="toggleRowSelection"
+                  @toggle-expand="toggleRowExpand((item as TableFlatRow).row)"
+                >
+                  <template #cell="params">
+                    <slot :name="cellSlotName(params.column)" v-bind="params">
+                      <slot name="cell" v-bind="params">
+                        <TableRendererOutlet
+                          :renderer="resolveCellRenderer(params.column)"
+                          :params="params"
+                          :fallback="params.value"
+                        />
+                      </slot>
+                    </slot>
+                  </template>
+                </TableDataRow>
               </template>
-            </TableDataRow>
+              <template #detail="params"
+                ><slot name="detail" v-bind="params"
+              /></template>
+              <template #loading="params"
+                ><slot name="detail-loading" v-bind="params"
+              /></template>
+              <template #error="params"
+                ><slot name="detail-error" v-bind="params"
+              /></template>
+            </TableRowBlock>
           </template>
         </SVirtualList>
 
@@ -250,43 +269,66 @@
           :class="ns.e('data-body')"
           role="rowgroup"
         >
-          <TableDataRow
+          <TableRowBlock
             v-for="(flatRow, index) in flatRows"
             :key="`${typeof flatRow.key}:${String(flatRow.key)}`"
-            :data-row-key="String(flatRow.key)"
             :flat-row="flatRow"
-            :entries="renderedColumnEntries"
-            :display-index="index"
-            :row-offset="showHeader ? headerDepth + 1 : 1"
-            :sequence-offset="
-              pagination.remote.value ? pagination.offset.value : 0
-            "
-            :indent="treeIndent"
-            :selected="isRowSelected(flatRow.key)"
-            :selection-disabled="
-              loading || !isSelectable(flatRow.row, flatRow.index)
-            "
-            :selection-name="selectionName"
-            :overflow="showOverflow"
-            :striped="striped"
-            :row-class="rowClass"
-            @row-click="handleRowClick"
-            @cell-click="handleCellClick"
-            @row-select="toggleRowSelection"
-            @toggle-expand="toggleRowExpand(flatRow.row)"
+            :controller="details"
+            :column-count="resolvedColumnCount"
+            :viewport-width="columnVirtualization.viewportWidth.value"
+            :panel-id="detailPanelId(flatRow.key)"
+            :aria-row-index="detailAriaIndex(index)"
+            :disabled="loading"
+            @shrink="resetDetailMeasurements"
           >
-            <template #cell="params">
-              <slot :name="cellSlotName(params.column)" v-bind="params">
-                <slot name="cell" v-bind="params">
-                  <TableRendererOutlet
-                    :renderer="resolveCellRenderer(params.column)"
-                    :params="params"
-                    :fallback="params.value"
-                  />
-                </slot>
-              </slot>
+            <template #default="{ detail }">
+              <TableDataRow
+                :data-row-key="String(flatRow.key)"
+                :detail="detail"
+                :flat-row="flatRow"
+                :entries="renderedColumnEntries"
+                :display-index="index"
+                :row-offset="detailRowOffset(index)"
+                :sequence-offset="
+                  pagination.remote.value ? pagination.offset.value : 0
+                "
+                :indent="treeIndent"
+                :selected="isRowSelected(flatRow.key)"
+                :selection-disabled="
+                  loading || !isSelectable(flatRow.row, flatRow.index)
+                "
+                :selection-name="selectionName"
+                :overflow="showOverflow"
+                :striped="striped"
+                :row-class="rowClass"
+                @row-click="handleRowClick"
+                @cell-click="handleCellClick"
+                @row-select="toggleRowSelection"
+                @toggle-expand="toggleRowExpand(flatRow.row)"
+              >
+                <template #cell="params">
+                  <slot :name="cellSlotName(params.column)" v-bind="params">
+                    <slot name="cell" v-bind="params">
+                      <TableRendererOutlet
+                        :renderer="resolveCellRenderer(params.column)"
+                        :params="params"
+                        :fallback="params.value"
+                      />
+                    </slot>
+                  </slot>
+                </template>
+              </TableDataRow>
             </template>
-          </TableDataRow>
+            <template #detail="params"
+              ><slot name="detail" v-bind="params"
+            /></template>
+            <template #loading="params"
+              ><slot name="detail-loading" v-bind="params"
+            /></template>
+            <template #error="params"
+              ><slot name="detail-error" v-bind="params"
+            /></template>
+          </TableRowBlock>
         </div>
 
         <div v-else :class="ns.e('data-empty')" role="row">
@@ -301,7 +343,7 @@
           :data="footerData"
           :row-key="footerRowKey"
           :entries="renderedColumnEntries"
-          :row-offset="effectiveRowCount + (showHeader ? headerDepth : 0) + 1"
+          :row-offset="footerAriaOffset"
           :style="virtualBandStyle"
           :fixed-style="fixedBandStyle"
           :renderers="renderers"
@@ -389,6 +431,8 @@ import TableRendererOutlet from './renderer-outlet'
 import TableHeaderCell from './table-header-cell.vue'
 import TableHeaderRows from './table-header-rows.vue'
 import TableFooterRows from './table-footer-rows.vue'
+import TableRowBlock from './table-row-block.vue'
+import { useTableDetails } from './composables/use-table-details'
 import { flattenTableColumns } from './composables/table-column-tree'
 import { tableColumnKey } from './data-utils'
 import { useTableQuery } from './composables/use-table-query'
@@ -426,6 +470,7 @@ const emit = defineEmits(tableEmits)
 const virtualListRef = ref<VirtualListInstance>()
 const footerRowsRef = ref<InstanceType<typeof TableFooterRows>>()
 const dataBodyRef = ref<HTMLElement>()
+const sourceDetailRows = new WeakMap<TableRow, TableFlatRow>()
 const tableScrollRef = ref<HTMLElement>()
 const columnScrollRef = ref<HTMLElement>()
 const selectionName = useId()
@@ -557,7 +602,8 @@ const {
   ),
   flatRows,
   getAllRows: tree.getAllRows,
-  getRowKey: tree.getRowKey,
+  getRowKey: (row, index) =>
+    sourceDetailRows.get(row)?.key ?? tree.getRowKey(row, index),
   pageKey: computed(() =>
     pagination.enabled.value
       ? `${pagination.currentPage.value}:${pagination.pageSize.value}`
@@ -581,19 +627,100 @@ const resolveSourceRowKey = (row: TableRow, index: number): TableRowKey => {
   return typeof key === 'string' || typeof key === 'number' ? key : index
 }
 
-const virtualItemAt = (index: number): TableFlatRow => {
-  if (!props.virtualSource) return flatRows.value[index]
-  const sourceIndex = index + pagination.sourceOffset.value
-  const row = props.virtualSource.row(sourceIndex)
-  return {
+const details = useTableDetails(props, emit, sizedColumns)
+const detailPanelId = (key: TableRowKey) =>
+  `${selectionName.value}-detail-${encodeURIComponent(`${typeof key}:${String(key)}`)}`
+const detailIndices = computed(() => {
+  const indices: number[] = []
+  if (!details.enabled.value || props.virtualSource) return indices
+  flatRows.value.forEach((row, index) => {
+    if (details.expanded(row)) indices.push(index)
+  })
+  return indices
+})
+const detailRowOffset = (index: number) => {
+  if (props.virtualSource && details.enabled.value) return undefined
+  const indices = detailIndices.value
+  let low = 0,
+    high = indices.length
+  while (low < high) {
+    const middle = (low + high) >>> 1
+    if (indices[middle] < index) low = middle + 1
+    else high = middle
+  }
+  return (props.showHeader ? headerDepth.value : 0) + 1 + low
+}
+const detailAriaIndex = (index: number) => {
+  const offset = detailRowOffset(index)
+  return offset == null ? undefined : offset + index + 1
+}
+const footerAriaOffset = computed(() =>
+  props.virtualSource && details.enabled.value
+    ? undefined
+    : effectiveRowCount.value +
+      detailIndices.value.length +
+      (props.showHeader ? headerDepth.value : 0) +
+      1,
+)
+const tableAriaRowCount = computed(() =>
+  footerAriaOffset.value == null
+    ? -1
+    : footerAriaOffset.value -
+      1 +
+      (resolvedColumnCount.value ? props.footerData.length : 0),
+)
+const resetDetailMeasurements = () =>
+  nextTick(() => virtualListRef.value?.resetMeasurements())
+watch([details.keys, details.enabled], ([keys, enabled], [previous]) => {
+  if (!enabled || [...previous].some((key) => !keys.has(key)))
+    resetDetailMeasurements()
+})
+const createSourceFlatRow = (sourceIndex: number): TableFlatRow => {
+  const source = props.virtualSource!
+  const row = source.row(sourceIndex)
+  const flat: TableFlatRow = {
     row,
-    key: resolveSourceRowKey(row, sourceIndex),
+    key: source.rowKey?.(sourceIndex) ?? resolveSourceRowKey(row, sourceIndex),
     index: sourceIndex,
     depth: 0,
     hasChildren: false,
     expanded: false,
     loading: false,
   }
+  sourceDetailRows.set(row, flat)
+  return flat
+}
+const resolveDetailRow = (
+  rowOrIndex: TableRow | number,
+): TableFlatRow | undefined => {
+  if (props.virtualSource) {
+    if (typeof rowOrIndex !== 'number') return sourceDetailRows.get(rowOrIndex)
+    return Number.isInteger(rowOrIndex) &&
+      rowOrIndex >= 0 &&
+      rowOrIndex < props.virtualSource.rowCount
+      ? createSourceFlatRow(rowOrIndex)
+      : undefined
+  }
+  const index =
+    typeof rowOrIndex === 'number' ? rowOrIndex : getRowIndex(rowOrIndex)
+  return flatRows.value[index]
+}
+const toggleRowDetail = async (
+  rowOrIndex: TableRow | number,
+  expanded?: boolean,
+) => {
+  const row = resolveDetailRow(rowOrIndex)
+  if (row) await details.toggle(row, expanded)
+}
+const reloadRowDetail = async (rowOrIndex: TableRow | number) => {
+  const row = resolveDetailRow(rowOrIndex)
+  if (row) await details.ensure(row, true)
+}
+const setDetailExpandedKeys = details.setKeys
+const virtualItemAt = (index: number): TableFlatRow => {
+  if (!props.virtualSource) return flatRows.value[index]
+  const sourceIndex = index + pagination.sourceOffset.value
+  return createSourceFlatRow(sourceIndex)
 }
 
 const virtualRowKeyAt = (index: number): TableRowKey =>
@@ -620,6 +747,10 @@ const virtualEnabled = computed(
   () =>
     virtualSourceActive.value ||
     (props.virtualConfig !== false && virtualOptions.value.enabled),
+)
+
+const dynamicRows = computed(
+  () => virtualOptions.value.dynamic || details.enabled.value,
 )
 
 const usesBodyScroll = computed(
@@ -827,7 +958,7 @@ const columnRange = computed(() => columnVirtualization.range.value)
 watch(
   () => [columnRange.value.start, columnRange.value.end] as const,
   () => {
-    if (!virtualEnabled.value || !virtualOptions.value.dynamic) return
+    if (!virtualEnabled.value || !dynamicRows.value) return
     nextTick(() => virtualListRef.value?.measureVisible())
   },
   { flush: 'post' },
@@ -1086,7 +1217,7 @@ watch(
     overflow.close()
     nextTick(() => {
       footerRowsRef.value?.measure()
-      if (virtualEnabled.value && virtualOptions.value.dynamic)
+      if (virtualEnabled.value && dynamicRows.value)
         virtualListRef.value?.resetMeasurements()
       columnVirtualization.measureViewport()
     })
@@ -1122,6 +1253,9 @@ watch(
 )
 
 defineExpose({
+  toggleRowDetail,
+  reloadRowDetail,
+  setDetailExpandedKeys,
   toggleRowExpand,
   setExpandedKeys,
   scrollToRow,

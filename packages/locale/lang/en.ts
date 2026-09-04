@@ -289,6 +289,12 @@ export default {
       defaultRangeEndLabel: 'pick end value',
     },
     table: {
+      expandDetails: 'Expand details for row {row}',
+      collapseDetails: 'Collapse details for row {row}',
+      rowDetails: 'Details for row {row}',
+      loadingDetails: 'Loading details…',
+      detailLoadFailed: 'Could not load details.',
+      retryDetails: 'Retry',
       columnSettings: 'Columns',
       unfixedColumn: 'Unfixed',
       fixedLeftColumn: 'Fix left',

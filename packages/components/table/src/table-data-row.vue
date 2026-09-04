@@ -8,7 +8,7 @@
     ]"
     role="row"
     :aria-selected="selected"
-    :aria-rowindex="displayIndex + rowOffset"
+    :aria-rowindex="rowOffset == null ? undefined : displayIndex + rowOffset"
     @click="handleRowClick"
   >
     <template v-for="entry in entries" :key="entry.key">
@@ -64,7 +64,34 @@
           aria-hidden="true"
         />
         <span
-          v-if="
+          v-if="entry.column.type === 'expand'"
+          :class="ns.e('detail-control')"
+          @click.stop
+        >
+          <button
+            type="button"
+            :class="[
+              ns.e('detail-toggle'),
+              ns.is('expanded', detail?.expanded),
+            ]"
+            :disabled="!detail?.enabled || detail.disabled"
+            :aria-expanded="detail?.expanded ?? false"
+            :aria-controls="detail?.panelId"
+            :aria-label="
+              t(
+                detail?.expanded
+                  ? 'vs.table.collapseDetails'
+                  : 'vs.table.expandDetails',
+                { row: displayIndex + 1 },
+              )
+            "
+            @click="detail?.toggle()"
+          >
+            <SIcon name="cb:chevron-right" />
+          </button>
+        </span>
+        <span
+          v-else-if="
             entry.column.type === 'checkbox' || entry.column.type === 'radio'
           "
           :class="ns.e('selection-control')"
@@ -117,6 +144,7 @@ import { SCheckbox } from '@vuesax-alpha/components/checkbox'
 import { SRadio } from '@vuesax-alpha/components/radio'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { tableFieldValue, tableOverflowMode } from './data-utils'
+import type { TableRowDetailState } from './composables/use-table-details'
 import type {
   TableCellRenderParams,
   TableColumn,
@@ -133,7 +161,8 @@ const props = defineProps<{
   flatRow: TableFlatRow
   entries: TableRenderedEntry[]
   displayIndex: number
-  rowOffset: number
+  rowOffset?: number
+  detail?: TableRowDetailState
   sequenceOffset?: number
   indent: number
   selected: boolean

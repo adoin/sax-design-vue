@@ -21,7 +21,7 @@ export type TableRowKey = string | number
 export type TableRow = Record<string, unknown>
 export type TableModelValueType = string | number | object
 export type TableAlign = 'left' | 'center' | 'right'
-export type TableColumnType = 'seq' | 'checkbox' | 'radio'
+export type TableColumnType = 'seq' | 'checkbox' | 'radio' | 'expand'
 export type TableColumnFixed = boolean | 'left' | 'right'
 export interface TableColumnState {
   /** Column key, field, or @originalIndex; virtualSource uses its original index string. */
@@ -136,6 +136,37 @@ export interface TableFlatRow<Row extends TableRow = TableRow> {
   hasChildren: boolean
   expanded: boolean
   loading: boolean
+}
+
+export interface TableDetailParams<Row extends TableRow = TableRow> {
+  row: Row
+  rowKey: TableRowKey
+  rowIndex: number
+}
+export interface TableDetailLoadParams<
+  Row extends TableRow = TableRow,
+> extends TableDetailParams<Row> {
+  signal: AbortSignal
+}
+export interface TableDetailConfig<Row extends TableRow = TableRow> {
+  enabled?: boolean
+  defaultExpandedKeys?: TableRowKey[]
+  checkMethod?: (params: TableDetailParams<Row>) => boolean
+  load?: (params: TableDetailLoadParams<Row>) => Promise<unknown>
+}
+export interface TableDetailSlotParams<
+  Row extends TableRow = TableRow,
+> extends TableDetailParams<Row> {
+  loading: boolean
+  data: unknown
+  error: unknown
+  reload: () => Promise<void>
+  close: () => Promise<void>
+}
+export interface TableDetailExpandParams<
+  Row extends TableRow = TableRow,
+> extends TableDetailParams<Row> {
+  expanded: boolean
 }
 
 export interface TableCellRenderParams<Row extends TableRow = TableRow> {
@@ -307,6 +338,14 @@ export type TableRowClass<Row extends TableRow = TableRow> =
   string | ((params: TableFlatRow<Row>) => string | string[] | undefined)
 
 export const tableProps = buildProps({
+  detailConfig: {
+    type: definePropType<boolean | TableDetailConfig>([Boolean, Object]),
+    default: undefined,
+  },
+  detailExpandedKeys: {
+    type: definePropType<TableRowKey[]>(Array),
+    default: undefined,
+  },
   footerData: {
     type: definePropType<TableRow[]>(Array),
     default: () => [],
@@ -437,6 +476,12 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  'update:detailExpandedKeys': (keys: TableRowKey[]) => isArray(keys),
+  detailExpand: (params: TableDetailExpandParams) => isObject(params),
+  detailLoad: (params: TableDetailParams & { data: unknown }) =>
+    isObject(params),
+  detailLoadError: (params: TableDetailParams & { error: unknown }) =>
+    isObject(params),
   'update:highlight': (value: TableRow | TableRow[] | null) =>
     value == null || isObject(value) || isArray(value),
   'update:columnState': (state: TableColumnState[]) => isArray(state),
@@ -480,6 +525,12 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  toggleRowDetail: (
+    rowOrIndex: Row | number,
+    expanded?: boolean,
+  ) => Promise<void>
+  setDetailExpandedKeys: (keys: TableRowKey[]) => void
+  reloadRowDetail: (rowOrIndex: Row | number) => Promise<void>
   toggleRowExpand: (row: Row, expanded?: boolean) => Promise<void>
   setExpandedKeys: (keys: TableRowKey[]) => void
   scrollToRow: (

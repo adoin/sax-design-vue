@@ -1,6 +1,16 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "detail-config"
+    type: "Boolean | TableDetailConfig"
+    description: "Detail expansion configuration; an expand column enables it automatically, false disables it. Enable explicitly with virtualSource."
+    default: null
+    usage: "#detail-rows"
+  - name: "detail-expanded-keys"
+    type: "TableRowKey[]"
+    description: "Controlled detail keys through v-model:detail-expanded-keys, independent of tree expansion."
+    default: null
+    usage: "#detail-rows"
   - name: footer-data
     type: TableRow[]
     description: Footer records keyed by column fields, independent of body sorting, filtering and pagination.
@@ -188,8 +198,8 @@ CHILD_PROPS:
     usage: '#column-resizing'
   - name: type
     type: String
-    values: seq | checkbox | radio
-    description: Renders sequence, checkbox or radio columns using built-in controls.
+    values: seq | checkbox | radio | expand
+    description: Renders sequence, checkbox, radio or detail expansion columns using built-in controls.
     default: null
   - name: field
     type: String
@@ -268,6 +278,26 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "update:detailExpandedKeys"
+    type: "(keys: TableRowKey[]) => void"
+    description: "Requests the complete next detail key array."
+    default: null
+    usage: "#detail-rows"
+  - name: "detailExpand"
+    type: "(params: TableDetailExpandParams) => void"
+    description: "Emitted when a trigger or toggleRowDetail requests expansion or collapse; controlled state requires parent acceptance."
+    default: null
+    usage: "#detail-rows"
+  - name: "detailLoad"
+    type: "(params: TableDetailParams & { data: unknown }) => void"
+    description: "Emitted when the current detail request succeeds."
+    default: null
+    usage: "#async-details"
+  - name: "detailLoadError"
+    type: "(params: TableDetailParams & { error: unknown }) => void"
+    description: "Emitted for current request failures; aborted and stale requests are ignored."
+    default: null
+    usage: "#async-details"
   - name: footerCellClick
     type: '(params: TableFooterCellRenderParams, event: MouseEvent) => void'
     description: Fires on footer cell clicks with the footer record, leaf column, raw value and indices; does not select body rows.
@@ -355,6 +385,21 @@ EVENTS:
     default: null
     usage: '#selection-columns-and-reservation'
 SLOTS:
+  - name: "detail"
+    type: "TableDetailSlotParams"
+    description: "Detail content with row, key, index, loaded data, reload and close."
+    default: null
+    usage: "#detail-rows"
+  - name: "detail-loading"
+    type: "TableDetailSlotParams"
+    description: "Detail loading content."
+    default: null
+    usage: "#async-details"
+  - name: "detail-error"
+    type: "TableDetailSlotParams"
+    description: "Detail error content; call reload to retry."
+    default: null
+    usage: "#async-details"
   - name: footer-[column key]
     type: TableFooterCellRenderParams
     description: Footer slot for a leaf column; columns.slots.footer can specify another name.
@@ -404,6 +449,21 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "toggleRowDetail"
+    type: "(rowOrIndex: TableRow | number, expanded?: boolean) => Promise<void>"
+    description: "Toggle a detail using a row or index; normal indices address visible rows, source indices address the full source."
+    default: null
+    usage: "#details-with-virtual-scrolling"
+  - name: "setDetailExpandedKeys"
+    type: "(keys: TableRowKey[]) => void"
+    description: "Set detail keys; controlled mode emits a model update."
+    default: null
+    usage: "#detail-rows"
+  - name: "reloadRowDetail"
+    type: "(rowOrIndex: TableRow | number) => Promise<void>"
+    description: "Reload an expanded detail; row and index rules match toggleRowDetail."
+    default: null
+    usage: "#async-details"
   - name: setSort
     type: '(sorts: TableSort[]) => void'
     description: 'Sets sorting; controlled mode emits an update for the model.'
@@ -467,6 +527,98 @@ EXPOSES:
 ---
 
 # Table
+
+<card>
+
+## Detail rows
+
+Add a `type: 'expand'` column and use `#detail` for details, forms or nested tables. `v-model:detail-expanded-keys` uses stable row keys independently of tree `expanded-keys`. Focus the trigger with Tab and activate it with Enter or Space.
+
+Without a controlled model, use `detailConfig.defaultExpandedKeys` for initial expansion and `checkMethod` to restrict eligible rows. Keep form values in application state: slot components unmount when collapsed or outside the virtual window.
+
+<template #example><table-details /></template>
+
+<template #template>
+
+@[code{35-68}](../.vuepress/components/table/details.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-33}](../.vuepress/components/table/details.vue)
+
+</template>
+
+<template #style>
+
+@[code{70-88}](../.vuepress/components/table/details.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Async details
+
+Load details with `detailConfig.load`; the resolved result is passed to `#detail` as `data`. Customize progress and failures with `#detail-loading` and `#detail-error`, and call `reload()` to fetch again.
+
+Collapsing, disabling details, replacing the data array or loader, and unmounting cancel affected requests and ignore stale results. Pass `signal` to your request client. Expanded records retain loaded data outside the virtual window; collapsing clears it, and replacing the data array reloads it.
+
+This example waits 800ms. The second report fails on its first attempt so you can try the retry action.
+
+<template #example><table-details-async /></template>
+
+<template #template>
+
+@[code{42-60}](../.vuepress/components/table/details-async.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-40}](../.vuepress/components/table/details-async.vue)
+
+</template>
+
+<template #style>
+
+@[code{62-66}](../.vuepress/components/table/details-async.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Details with virtual scrolling
+
+Details are measured together with their data row. Enabling details automatically enables dynamic measurement; shrinking content and collapsing trigger a new measurement. The panel stays within the visible table width while columns scroll horizontally.
+
+Enable `detail-config` explicitly with a generated source and provide stable `rowKey` values. This example generates one million rows and 100,000 columns on demand, recording only expanded keys. `toggleRowDetail(index)` accepts a global source index; normal data uses the current visible index after sorting, filtering, pagination and tree expansion. For object arguments, use the row supplied by the current render or slot.
+
+<template #example><table-details-source /></template>
+
+<template #template>
+
+@[code{32-66}](../.vuepress/components/table/details-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-30}](../.vuepress/components/table/details-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{68-83}](../.vuepress/components/table/details-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

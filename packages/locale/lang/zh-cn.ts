@@ -262,6 +262,12 @@ export default {
       rejected: '文件未通过校验',
     },
     table: {
+      expandDetails: '展开第 {row} 行详情',
+      collapseDetails: '收起第 {row} 行详情',
+      rowDetails: '第 {row} 行详情',
+      loadingDetails: '正在加载详情…',
+      detailLoadFailed: '详情加载失败。',
+      retryDetails: '重试',
       columnSettings: '列设置',
       unfixedColumn: '不固定',
       fixedLeftColumn: '左侧固定',

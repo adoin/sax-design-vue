@@ -22,7 +22,7 @@ const props = defineProps<{
   data: TableRow[]
   rowKey?: TableRowKeyGetter
   entries: TableRenderedEntry[]
-  rowOffset: number
+  rowOffset?: number
   fixedStyle: (entry: TableRenderedColumnEntry) => CSSProperties
   renderers: Record<string, TableRenderer | TableCellRenderer>
   overflow?: TableOverflow
@@ -102,7 +102,7 @@ defineExpose({ measure })
             : undefined,
       }"
       role="row"
-      :aria-rowindex="rowOffset + rowIndex"
+      :aria-rowindex="rowOffset == null ? undefined : rowOffset + rowIndex"
       :data-footer-row-key="row.key"
     >
       <template v-for="entry in row.cells" :key="entry.key">
