@@ -24,7 +24,9 @@ export function useTableTree<Row extends TableRow>(
   options: UseTableTreeOptions<Row>,
 ) {
   const internalExpandedKeys = ref(new Set<TableRowKey>())
-  const lazyChildren = shallowReactive(new Map<TableRowKey, Row[]>())
+  const lazyChildren = shallowReactive(
+    new Map<TableRowKey, { rows: Row[]; original: unknown }>(),
+  )
   const loadingKeys = reactive(new Set<TableRowKey>())
   const generatedRowKeys = new WeakMap<Row, TableRowKey>()
   let generatedRowKeySeed = 0
@@ -44,9 +46,10 @@ export function useTableTree<Row extends TableRow>(
 
   const getChildren = (row: Row, key: TableRowKey): Row[] => {
     const localChildren = lazyChildren.get(key)
-    if (localChildren) return localChildren
     const childrenKey = options.config.value?.children ?? 'children'
     const children = row[childrenKey]
+    if (localChildren && children === localChildren.original)
+      return localChildren.rows
     return Array.isArray(children) ? (children as Row[]) : []
   }
 
@@ -153,7 +156,10 @@ export function useTableTree<Row extends TableRow>(
           row,
           rowKey: entry.key,
         })
-        lazyChildren.set(entry.key, children)
+        lazyChildren.set(entry.key, {
+          rows: children,
+          original: row[options.config.value?.children ?? 'children'],
+        })
         options.onLazyLoad(row, children)
       } finally {
         loadingKeys.delete(entry.key)

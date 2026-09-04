@@ -1,6 +1,11 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "change-config"
+    type: "Boolean | TableChangeConfig"
+    description: "开启受控数据变更与追踪；普通数组使用 v-model:data，生成源提供 apply 和 indexOf。"
+    default: false
+    usage: "#变更追踪"
   - name: "validation-rules"
     type: "TableValidationRules"
     description: "按字段设置校验规则；列 rules 优先，空数组可关闭该列规则。"
@@ -308,6 +313,21 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "update:data"
+    type: "(data: TableRow[]) => void"
+    description: "普通数组变更提案；父组件接受后才计入记录。"
+    default: null
+    usage: "#变更追踪"
+  - name: "dataChange"
+    type: "(operations: TableDataMutation[]) => void"
+    description: "数据所有者接受变更且记录提交后触发，包含还原操作。"
+    default: null
+    usage: "#变更追踪"
+  - name: "changesChange"
+    type: "(version: number) => void"
+    description: "变更记录版本变化时触发；可用 getChangeRecords 获取快照。"
+    default: null
+    usage: "#变更追踪"
   - name: "validation"
     type: "TableValidationResult"
     description: "最新校验结束时触发；取消或过期的校验不触发此事件。"
@@ -519,6 +539,46 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "insertRows"
+    type: "(rows: TableRow[], position?: Partial<TableDataPosition>) => Promise<TableDataMutationResult>"
+    description: "按源数据位置插入行；parentKey 指定父节点。index 指源数据同级位置，不是排序或分页后的序号。"
+    default: null
+    usage: "#变更追踪"
+  - name: "removeRows"
+    type: "(rowKeys: TableRowKey[]) => Promise<TableDataMutationResult>"
+    description: "按稳定行键删除；删除树父节点时包含已加载后代。"
+    default: null
+    usage: "#变更追踪"
+  - name: "updateRow"
+    type: "(rowKey: TableRowKey, values: Record<string, unknown>) => Promise<TableDataMutationResult>"
+    description: "按行键应用字段值，支持点路径；不自动执行编辑校验。不可修改稳定行键或直接覆盖树子节点。"
+    default: null
+    usage: "#变更追踪"
+  - name: "revertChanges"
+    type: "(rowKeys?: TableRowKey[]) => Promise<TableDataMutationResult>"
+    description: "还原指定行及其已加载或已删除的后代；省略行键则还原全部未确认变更。"
+    default: null
+    usage: "#变更追踪"
+  - name: "getChangeRecords"
+    type: "() => TableChangeRecords"
+    description: "读取记录版本及新增、修改、删除行。字段变更为快照，row 为只读引用。"
+    default: null
+    usage: "#变更追踪"
+  - name: "acceptChanges"
+    type: "(version: number, rowKeys?: TableRowKey[]) => boolean"
+    description: "将已保存版本确认为基线，不修改数据；过期版本或待处理请求返回 false。可指定仅确认部分行键。"
+    default: null
+    usage: "#变更追踪"
+  - name: "resetChanges"
+    type: "() => void"
+    description: "取消待处理的数据接受请求并清空记录；当前数据保留为新基线。"
+    default: null
+    usage: "#变更追踪"
+  - name: "cancelDataChange"
+    type: "() => void"
+    description: "中止待处理的数据接受请求；保留此前已接受的变更及当前编辑草稿。"
+    default: null
+    usage: "#变更追踪"
   - name: "validate"
     type: "(options?: TableValidateOptions) => Promise<TableValidationResult>"
     description: "校验提供的数据或指定范围；默认包含已加载的折叠树节点，不请求未加载子节点或远程页。"
@@ -655,6 +715,102 @@ EXPOSES:
 
 <card>
 
+## 变更追踪
+
+开启 `change-config`，通过 `v-model:data` 接受普通数组的增删改提案。`row-key` 必须是稳定且唯一的字符串或数字，不能依赖行序号；组件不会原地修改业务行。排序、筛选和分页不改变变更 API 的行键含义。
+
+编辑中的草稿不计入变更记录；编辑校验通过且父组件接受数据后，才触发 `editCommit` 并更新记录。开启变更追踪时无需再在 `editCommit` 中手动替换行。`insertRows`、`removeRows`、`updateRow` 是独立的数据 API，不自动执行编辑校验；保存前可调用 `validate()`。
+
+`getChangeRecords()` 返回 `inserted`、`updated`、`removed` 和 `version`。新增后删除会抵消，修改回原值会移除修改记录。`revertChanges([key])` 还原指定行，省略行键还原全部；业务保存成功后，再调用 `acceptChanges(snapshot.version)` 确认基线。保存期间有新变更时，旧版本确认返回 `false`，应检查最新记录再保存，不能直接清空。
+
+示例的“确认基线”按钮只演示本地确认。`resetChanges()` 清空记录并保留当前数据，与还原不同。外部替换 `data` 数组会开始新基线；需要保留记录的修改应走上述 API。
+
+<template #example><table-zh-changes /></template>
+
+<template #template>
+
+@[code{108-176}](../../.vuepress/components/table-zh/changes.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-106}](../../.vuepress/components/table-zh/changes.vue)
+
+</template>
+
+<template #style>
+
+@[code{178-189}](../../.vuepress/components/table-zh/changes.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 树分支变更与还原
+
+`insertRows(rows, { parentKey, index })` 插入子行；删除父节点会记录已加载的整个分支。`revertChanges([parentKey])` 包含未修改的中间节点下的后代，也能还原已删除的分支；不会恢复在本次基线之后新增又删除的行。
+
+懒加载只处理已经载入的记录，不会为变更追踪主动请求后代。修改已加载子节点时，提案会复制对应祖先并写入子数组；原始业务对象保持不变。下方可以依次加载、修改后代、插入子行、删除分支，再还原分支。
+
+<template #example><table-zh-changes-tree /></template>
+
+<template #template>
+
+@[code{67-122}](../../.vuepress/components/table-zh/changes-tree.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-65}](../../.vuepress/components/table-zh/changes-tree.vue)
+
+</template>
+
+<template #style>
+
+@[code{124-135}](../../.vuepress/components/table-zh/changes-tree.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 生成源变更适配
+
+生成源提供 `changeConfig.indexOf(key)` 定位当前全局行索引，并通过 `apply({ operations, signal })` 接受变更。适配器完成数据写入后返回 `true`，拒绝返回 `false`；异步写入前必须检查 `signal.aborted`，以免取消或切换数据后写回旧结果。同一张表已有待处理请求时，新请求返回 `busy`。
+
+生成行可以按需提供字段。`row` 应表示该次读取的只读数据版本；更新优先读取 `patches`，不要展开整行或遍历完整行列矩阵。插入和删除由适配器维护源行数、稳定键映射及恢复位置；本例为固定行数源，只接受字段更新。表格记录只随已改行和字段增长，示例在百万行、十万列中保存稀疏覆盖值。
+
+切换到另一个业务数据集时更新 `changeConfig.dataKey`。调用 `cancelDataChange()` 取消待处理接受请求，使用 `resetChanges()` 放弃记录并确认当前数据。外部替换生成源的 `row` 函数也会开始新基线；由当前 `apply` 接受的函数替换会保留记录。
+
+<template #example><table-zh-changes-source /></template>
+
+<template #template>
+
+@[code{98-136}](../../.vuepress/components/table-zh/changes-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-96}](../../.vuepress/components/table-zh/changes-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{138-149}](../../.vuepress/components/table-zh/changes-source.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## 数据校验
 
 为列配置 `rules`，或通过 `validation-rules` 按字段配置规则；列规则优先，`rules: []` 可关闭该列校验。支持必填、类型、数值范围、字符串或数组长度、正则，以及自定义同步或异步 `validator`。规则不会转换数据类型；可选空值跳过类型与范围检查，但仍执行自定义函数。
@@ -755,7 +911,7 @@ EXPOSES:
 
 设置 `edit-config` 并为列添加 `editor`，默认双击进入单元格编辑。`mode: 'row'` 开启整行编辑；`trigger` 可选 `click`、`dblclick` 或 `manual`，`checkMethod` 限制可编辑行或单元格。此例的归档项目不可编辑。
 
-编辑只改变草稿。接收 `editCommit` 的 `updatedRow` 或 `changes` 后，由应用更新 `data` 或提交到服务端；组件不会直接修改业务记录。普通输入按 Enter 提交、Escape 取消，选择器和日期面板优先处理自身按键，也可使用保存按钮或 Ctrl/⌘ + Enter。Tab 可进入可编辑单元格，再按 Enter 或 F2 开始。
+默认编辑只改变草稿。未开启 `change-config` 时，接收 `editCommit` 的 `updatedRow` 或 `changes` 后，由应用更新 `data` 或提交到服务端；组件不会直接修改业务记录。普通输入按 Enter 提交、Escape 取消，选择器和日期面板优先处理自身按键，也可使用保存按钮或 Ctrl/⌘ + Enter。Tab 可进入可编辑单元格，再按 Enter 或 F2 开始。
 
 切换编辑目标默认提交前一项，可用 `onSwitch: 'cancel'` 改为取消。翻页、排序、筛选或调整列设置默认取消草稿，`onContextChange: 'commit'` 可改为提交；替换数据或关闭编辑会取消当前会话。`commitEdit()` 成功表示已发出变更，不代表远程请求已完成。
 

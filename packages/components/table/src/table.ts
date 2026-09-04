@@ -15,6 +15,13 @@ import type {
   VNodeChild,
 } from 'vue'
 import type Table from './table.vue'
+import type {
+  TableChangeConfig,
+  TableChangeRecords,
+  TableDataMutation,
+  TableDataMutationResult,
+  TableDataPosition,
+} from './table-changes'
 import type { PaginationProps } from '@vuesax-alpha/components/pagination'
 import type {
   TableEditConfig,
@@ -31,6 +38,17 @@ import type {
   TableValidationRule,
   TableValidationRules,
 } from './table-validation'
+export type {
+  TableChangeConfig,
+  TableChangeRecords,
+  TableChangedRow,
+  TableDataChangeRequest,
+  TableDataFieldChange,
+  TableDataFieldPatch,
+  TableDataMutation,
+  TableDataMutationResult,
+  TableDataPosition,
+} from './table-changes'
 export * from './table-edit'
 export type {
   TableValidateOptions,
@@ -369,6 +387,10 @@ export type TableRowClass<Row extends TableRow = TableRow> =
   string | ((params: TableFlatRow<Row>) => string | string[] | undefined)
 
 export const tableProps = buildProps({
+  changeConfig: {
+    type: definePropType<boolean | TableChangeConfig>([Boolean, Object]),
+    default: false,
+  },
   validationRules: {
     type: definePropType<TableValidationRules>(Object),
     default: () => ({}),
@@ -519,6 +541,9 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  'update:data': (data: TableRow[]) => isArray(data),
+  changesChange: (version: number) => isNumber(version),
+  dataChange: (operations: TableDataMutation[]) => isArray(operations),
   validation: (result: TableValidationResult) => isObject(result),
   editStart: (params: TableEditRecord) => isObject(params),
   editChange: (params: TableEditRecord) => isObject(params),
@@ -573,6 +598,20 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  insertRows: (
+    rows: Row[],
+    position?: Partial<TableDataPosition>,
+  ) => Promise<TableDataMutationResult>
+  removeRows: (rowKeys: TableRowKey[]) => Promise<TableDataMutationResult>
+  updateRow: (
+    rowKey: TableRowKey,
+    values: Record<string, unknown>,
+  ) => Promise<TableDataMutationResult>
+  revertChanges: (rowKeys?: TableRowKey[]) => Promise<TableDataMutationResult>
+  getChangeRecords: () => TableChangeRecords<Row>
+  acceptChanges: (version: number, rowKeys?: TableRowKey[]) => boolean
+  resetChanges: () => void
+  cancelDataChange: () => void
   validate: (
     options?: TableValidateOptions<Row>,
   ) => Promise<TableValidationResult<Row>>

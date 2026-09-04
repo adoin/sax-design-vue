@@ -15,6 +15,10 @@ import type {
 interface EditValidationHooks {
   validate?: (record: TableEditRecord) => boolean | Promise<boolean>
   invalidate?: (context: TableEditContext, field?: string) => void
+  apply?: (
+    record: TableEditRecord,
+    current: () => boolean,
+  ) => boolean | Promise<boolean>
 }
 
 export function useTableEdit(
@@ -45,6 +49,8 @@ export function useTableEdit(
   let disposed = false
   let draftRevision = 0
   const committing = shallowRef(false)
+  const applying = shallowRef(false)
+  let applySequence = 0
   const contextRetained = shallowRef(false)
   let pendingCommit:
     { session: number; revision: number; promise: Promise<boolean> } | undefined
@@ -93,6 +99,8 @@ export function useTableEdit(
     focused = false
     draftRevision++
     committing.value = false
+    applying.value = false
+    applySequence++
     pendingCommit = undefined
     contextRetained.value = false
   }
@@ -143,7 +151,9 @@ export function useTableEdit(
       pendingCommit.revision === revision
     )
       return pendingCommit.promise
-    const finish = (valid: boolean) => {
+    const currentSession = () =>
+      !disposed && active.value?.id === session && draftRevision === revision
+    const finish = (valid: boolean): boolean | Promise<boolean> => {
       if (
         !valid ||
         disposed ||
@@ -153,9 +163,21 @@ export function useTableEdit(
       )
         return false
       const current = record()!
-      clear()
-      emit('editCommit', { ...current, reason } satisfies TableEditEndParams)
-      return true
+      const complete = (accepted: boolean) => {
+        if (!accepted || !currentSession()) return false
+        clear()
+        emit('editCommit', { ...current, reason } satisfies TableEditEndParams)
+        return true
+      }
+      const result = validation.apply?.(current, currentSession) ?? true
+      if (typeof result === 'boolean') return complete(result)
+      applying.value = true
+      const application = ++applySequence
+      return Promise.resolve(result)
+        .then(complete, () => false)
+        .finally(() => {
+          if (application === applySequence) applying.value = false
+        })
     }
     let result: boolean | Promise<boolean>
     try {
@@ -163,16 +185,23 @@ export function useTableEdit(
     } catch {
       return false
     }
-    if (typeof result === 'boolean') return finish(result)
+    let outcome: boolean | Promise<boolean>
+    try {
+      outcome =
+        typeof result === 'boolean'
+          ? finish(result)
+          : Promise.resolve(result).then(finish, () => false)
+    } catch {
+      return false
+    }
+    if (typeof outcome === 'boolean') return outcome
     committing.value = true
-    const promise = Promise.resolve(result)
-      .then(finish, () => false)
-      .finally(() => {
-        if (pendingCommit?.promise === promise) {
-          pendingCommit = undefined
-          committing.value = false
-        }
-      })
+    const promise = Promise.resolve(outcome).finally(() => {
+      if (pendingCommit?.promise === promise) {
+        pendingCommit = undefined
+        committing.value = false
+      }
+    })
     pendingCommit = { session, revision, promise }
     return promise
   }
@@ -224,6 +253,8 @@ export function useTableEdit(
     validation.invalidate?.(params, field)
     pendingCommit = undefined
     committing.value = false
+    applying.value = false
+    applySequence++
     if (!baselines.has(field))
       baselines.set(field, cloneDeep(tableFieldValue(active.value!.row, field)))
     const oldValue = baselines.get(field)
@@ -314,7 +345,9 @@ export function useTableEdit(
   }
   watch(
     () => [props.data, props.virtualSource?.row],
-    () => cancel('data'),
+    () => {
+      if (!applying.value) cancel('data')
+    },
   )
   watch([enabled, () => config.value.mode], () => cancel('disabled'))
   watch(
@@ -336,6 +369,7 @@ export function useTableEdit(
   return {
     active,
     committing,
+    applying,
     contextRetained,
     enabled,
     config,

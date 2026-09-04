@@ -241,7 +241,11 @@ export function useTableColumnResize(
   // External widths are authoritative. Cancel stale drags when the layout changes.
   watch(() => [props.columnWidths, props.virtualSource, enabled.value], cancel)
   watch(
-    () => props.virtualSource,
+    [
+      () => props.virtualSource?.column,
+      () => props.virtualSource?.columnCount,
+      () => props.virtualSource?.columnWidth,
+    ],
     () => {
       if (props.columnWidths === undefined) localWidths.value = {}
     },

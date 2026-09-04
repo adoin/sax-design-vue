@@ -459,6 +459,7 @@ import TableHeaderRows from './table-header-rows.vue'
 import TableFooterRows from './table-footer-rows.vue'
 import TableRowBlock from './table-row-block.vue'
 import { useTableEdit } from './composables/use-table-edit'
+import { useTableChanges } from './composables/use-table-changes'
 import { useTableEditLifecycle } from './composables/use-table-edit-lifecycle'
 import { useTableValidation } from './composables/use-table-validation'
 import { useTableValidationApi } from './composables/use-table-validation-api'
@@ -700,9 +701,19 @@ const validation = useTableValidation(
     invalid: (field) => t('vs.table.validationInvalid', { field }),
   },
 )
+const changes = useTableChanges(props, emit, {
+  children: tree.getChildren,
+  changed: () => {
+    validation.clear()
+    measure()
+  },
+})
 const editing = useTableEdit(props, emit, resolveEditContext, {
   validate: (record) => validationApi.validateEdit(record),
+  apply: (record, current) =>
+    changes.enabled.value ? changes.applyEdit(record, current) : true,
   invalidate: (context, field) => {
+    changes.cancelDataChange()
     validation.clear(context.rowKey, field)
     measure()
   },
@@ -1438,13 +1449,21 @@ watch(
 useTableEditLifecycle(props, editing, {
   query: [sorts, filtersState],
   page: [pagination.currentPage, pagination.pageSize, pagination.enabled],
-  columns: [rawColumns, columnManager.state, () => props.virtualSource?.column],
+  columns: [rawColumns, columnManager.state],
   resolveContext: resolveEditContext,
   isDataCurrent: validationApi.isDataCurrent,
   isLocating: validationApi.locating,
 })
 
 defineExpose({
+  insertRows: changes.insertRows,
+  removeRows: changes.removeRows,
+  updateRow: changes.updateRow,
+  revertChanges: changes.revertChanges,
+  getChangeRecords: changes.getChangeRecords,
+  acceptChanges: changes.acceptChanges,
+  resetChanges: changes.resetChanges,
+  cancelDataChange: changes.cancelDataChange,
   validate: validationApi.validate,
   validateRow: validationApi.validateRow,
   validateCell: validationApi.validateCell,

@@ -71,6 +71,42 @@ export function applyTableDataPatches<Row extends TableRow>(
   return result
 }
 
+/** Generated rows expose untouched values lazily instead of spreading all fields. */
+export function projectTableDataPatches<Row extends TableRow>(
+  row: Row,
+  patches: TableDataFieldPatch[],
+): Row {
+  const values = new Map<string, { value: unknown; exists: boolean }>()
+  for (const patch of patches) {
+    if (!editableField(patch.field))
+      throw new TypeError('Invalid table field path')
+    const [root, ...path] = patch.field.split('.')
+    if (!path.length)
+      values.set(root, {
+        value: cloneTableDataValue(patch.value),
+        exists: patch.exists,
+      })
+    else {
+      const previous = values.get(root) ?? readTableDataField(row, root)
+      const next = applyTableDataPatches({ value: previous.value }, [
+        { ...patch, field: `value.${path.join('.')}` },
+      ])
+      values.set(root, { value: next.value, exists: true })
+    }
+  }
+  // A separate empty target also supports frozen/generated consumer records.
+  return new Proxy({} as Row, {
+    get: (_, key) =>
+      typeof key === 'string' && values.has(key)
+        ? values.get(key)!.value
+        : Reflect.get(row, key),
+    has: (_, key) =>
+      typeof key === 'string' && values.has(key)
+        ? values.get(key)!.exists
+        : key in row,
+  })
+}
+
 const coveredBy = (field: string, parent: string) =>
   field === parent || field.startsWith(`${parent}.`)
 

@@ -1,6 +1,11 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "change-config"
+    type: "Boolean | TableChangeConfig"
+    description: "Enable controlled data mutations and tracking; ordinary arrays use v-model:data, generated sources supply apply and indexOf."
+    default: false
+    usage: "#change-tracking"
   - name: "validation-rules"
     type: "TableValidationRules"
     description: "Field-based rules; column rules take precedence, and an empty array disables rules for that column."
@@ -308,6 +313,21 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "update:data"
+    type: "(data: TableRow[]) => void"
+    description: "Proposed ordinary array; recorded only after the parent accepts it."
+    default: null
+    usage: "#change-tracking"
+  - name: "dataChange"
+    type: "(operations: TableDataMutation[]) => void"
+    description: "Fired after the owner accepts data and the journal commits, including reverts."
+    default: null
+    usage: "#change-tracking"
+  - name: "changesChange"
+    type: "(version: number) => void"
+    description: "Journal version changed; call getChangeRecords to read its snapshot."
+    default: null
+    usage: "#change-tracking"
   - name: "validation"
     type: "TableValidationResult"
     description: "Emitted when the latest validation completes; cancelled or stale runs do not emit."
@@ -519,6 +539,46 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "insertRows"
+    type: "(rows: TableRow[], position?: Partial<TableDataPosition>) => Promise<TableDataMutationResult>"
+    description: "Insert rows in source order, optionally under parentKey. Indices address source siblings, not sorted or paged rows."
+    default: null
+    usage: "#change-tracking"
+  - name: "removeRows"
+    type: "(rowKeys: TableRowKey[]) => Promise<TableDataMutationResult>"
+    description: "Remove rows by stable key; removing a tree parent includes its loaded descendants."
+    default: null
+    usage: "#change-tracking"
+  - name: "updateRow"
+    type: "(rowKey: TableRowKey, values: Record<string, unknown>) => Promise<TableDataMutationResult>"
+    description: "Apply field values by key; dot paths are supported. Does not invoke editor validation. Stable keys and tree children cannot be overwritten."
+    default: null
+    usage: "#change-tracking"
+  - name: "revertChanges"
+    type: "(rowKeys?: TableRowKey[]) => Promise<TableDataMutationResult>"
+    description: "Revert selected rows and their loaded or removed descendants; omit keys to revert all unconfirmed changes."
+    default: null
+    usage: "#change-tracking"
+  - name: "getChangeRecords"
+    type: "() => TableChangeRecords"
+    description: "Read the journal version and inserted, updated and removed records. Field changes are snapshots; rows are read-only references."
+    default: null
+    usage: "#change-tracking"
+  - name: "acceptChanges"
+    type: "(version: number, rowKeys?: TableRowKey[]) => boolean"
+    description: "Confirm a saved version as baseline without changing data. Reject stale versions and pending requests; optional keys confirm only those records."
+    default: null
+    usage: "#change-tracking"
+  - name: "resetChanges"
+    type: "() => void"
+    description: "Cancel pending ownership requests and discard the journal, retaining current data as baseline."
+    default: null
+    usage: "#change-tracking"
+  - name: "cancelDataChange"
+    type: "() => void"
+    description: "Abort the pending ownership request; preserve previously accepted changes and current editor drafts."
+    default: null
+    usage: "#change-tracking"
   - name: "validate"
     type: "(options?: TableValidateOptions) => Promise<TableValidationResult>"
     description: "Validate supplied data or a selected scope; includes loaded collapsed descendants without fetching children or remote pages."
@@ -655,6 +715,102 @@ EXPOSES:
 
 <card>
 
+## Change tracking
+
+Enable `change-config` and accept ordinary array proposals through `v-model:data`. Use unique, stable string or numeric `row-key` values, independent of row indices. The table never mutates owned rows in place. Sorting, filtering and paging do not change the keys used by mutation APIs.
+
+Editor drafts are separate from tracked changes. Validation must pass and the parent must accept the data before the journal updates and `editCommit` fires. With tracking enabled, do not replace the row again in `editCommit`. `insertRows`, `removeRows` and `updateRow` are data APIs and do not automatically run editor validation; call `validate()` before saving.
+
+`getChangeRecords()` returns `inserted`, `updated`, `removed` and `version`. Inserting then removing a row cancels that change; restoring a field to its original value clears its update. `revertChanges([key])` reverts a selected row; omit keys to revert everything. After business persistence succeeds, acknowledge that snapshot with `acceptChanges(snapshot.version)`. If newer changes occurred during saving, the old acknowledgement returns `false`; review and save the latest records instead of clearing them.
+
+The Confirm baseline button demonstrates local acknowledgement only. `resetChanges()` clears the journal while retaining current data, unlike reverting. Replacing the external `data` array starts a new baseline; use the mutation APIs for changes that should remain tracked.
+
+<template #example><table-changes /></template>
+
+<template #template>
+
+@[code{112-180}](../.vuepress/components/table/changes.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-110}](../.vuepress/components/table/changes.vue)
+
+</template>
+
+<template #style>
+
+@[code{182-193}](../.vuepress/components/table/changes.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Tree branch changes
+
+Use `insertRows(rows, { parentKey, index })` to insert children. Removing a parent records its loaded branch. `revertChanges([parentKey])` includes descendants through unchanged intermediate parents and can restore a deleted branch; rows inserted and then removed since the baseline remain absent.
+
+Lazy trees track only loaded records and do not fetch descendants for change tracking. Updating a loaded child copies the affected ancestors into the proposal and supplies their child arrays, leaving original business objects unchanged. Load the example branch, update a descendant, insert a child, remove the branch, then revert it.
+
+<template #example><table-changes-tree /></template>
+
+<template #template>
+
+@[code{69-124}](../.vuepress/components/table/changes-tree.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-67}](../.vuepress/components/table/changes-tree.vue)
+
+</template>
+
+<template #style>
+
+@[code{126-137}](../.vuepress/components/table/changes-tree.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Generated source changes
+
+Generated sources provide `changeConfig.indexOf(key)` to locate the current global row index and accept mutations through `apply({ operations, signal })`. Apply owned data before returning `true`, or return `false` to reject. Before an asynchronous write, check `signal.aborted` so cancelled or replaced requests cannot write stale data. A new request returns `busy` while another ownership request is pending.
+
+Generated rows may supply fields on demand. Each `row` must represent a read-only data version. Prefer `patches` for updates; do not spread a generated row or scan its whole matrix. For insertion and deletion, the adapter owns row counts, stable-key mappings and restoration positions. This fixed-size example accepts field updates only and stores sparse overrides across one million rows and one hundred thousand columns.
+
+Change `changeConfig.dataKey` when switching business datasets. `cancelDataChange()` aborts a pending acceptance request; `resetChanges()` discards the journal while retaining current data. Externally replacing the source `row` function also starts a new baseline; replacements accepted by the current `apply` retain tracking.
+
+<template #example><table-changes-source /></template>
+
+<template #template>
+
+@[code{98-136}](../.vuepress/components/table/changes-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-96}](../.vuepress/components/table/changes-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{138-149}](../.vuepress/components/table/changes-source.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Data validation
 
 Set column `rules` or provide field-based `validation-rules`. Column rules take precedence; `rules: []` disables validation for that column. Rules support required values, types, numeric ranges, string or array lengths, regular expressions and synchronous or asynchronous `validator` functions. Values are not coerced. Optional empty values skip type and range checks but still run custom validators.
@@ -755,7 +911,7 @@ Full validation reads data on demand and periodically yields, but runtime still 
 
 Enable `edit-config` and add `editor` to editable columns. Double-click starts cell editing by default. Use `mode: 'row'` for row editing, `trigger: 'click' | 'dblclick' | 'manual'` for activation, and `checkMethod` for eligibility. The archived project in this example is read-only.
 
-Editing updates a draft. Accept `updatedRow` or `changes` from `editCommit` to update `data` or persist to a server; the table does not mutate business records. Enter commits a text input and Escape cancels; selects and date panels handle their own keys first. Use the Save button or Ctrl/⌘ + Enter for any editor. Tab to an editable cell, then press Enter or F2 to begin.
+Editing updates a draft. Without `change-config`, accept `updatedRow` or `changes` from `editCommit` to update `data` or persist to a server; the table does not mutate business records. Enter commits a text input and Escape cancels; selects and date panels handle their own keys first. Use the Save button or Ctrl/⌘ + Enter for any editor. Tab to an editable cell, then press Enter or F2 to begin.
 
 Switching targets commits the previous edit by default; set `onSwitch: 'cancel'` to discard it. Paging, sorting, filtering and column settings cancel by default; `onContextChange: 'commit'` submits instead. Replacing data or disabling editing cancels the session. A successful `commitEdit()` means changes were emitted, not that a remote request finished.
 

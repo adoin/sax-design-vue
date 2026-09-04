@@ -250,6 +250,18 @@ describe('Table column resizing', () => {
       headers(wrapper)
         .find((cell) => cell.attributes('data-column-index') === '1')!
         .attributes('style'),
+    ).toContain('width: 130px')
+    await wrapper.setProps({
+      virtualSource: {
+        ...wrapper.props('virtualSource')!,
+        column: (index) => ({ ...column(index) }),
+      },
+    })
+    await flushPromises()
+    expect(
+      headers(wrapper)
+        .find((cell) => cell.attributes('data-column-index') === '1')!
+        .attributes('style'),
     ).toContain('width: 120px')
     wrapper.unmount()
   })

@@ -189,6 +189,7 @@ describe('table validation integration', () => {
     })
     await wrapper.vm.startEdit(0, 0)
     const first = wrapper.vm.commitEdit()
+    await vi.waitFor(() => expect(signals).toHaveLength(1))
     expect(wrapper.get('.s-table__data-cell').attributes('aria-busy')).not.toBe(
       'false',
     )
@@ -196,6 +197,7 @@ describe('table validation integration', () => {
     expect(await first).toBe(false)
     expect(signals[0].aborted).toBe(true)
     const second = wrapper.vm.commitEdit()
+    await vi.waitFor(() => expect(signals).toHaveLength(2))
     wrapper.vm.cancelEdit()
     expect(await second).toBe(false)
     resolvers.forEach((resolve) => resolve('Old failure'))
@@ -340,7 +342,7 @@ describe('table validation integration', () => {
       columnIndex: 99_998,
     })
     expect(wrapper.findAll('.s-table__data-row').length).toBeLessThan(20)
-    expect(wrapper.get('[data-column-index="99998"]').exists()).toBe(true)
+    expect(wrapper.find('[data-column-index="99998"]').exists()).toBe(true)
     expect(row.mock.calls.length).toBeLessThan(200)
     expect(column.mock.calls.length).toBeLessThan(400)
     wrapper.unmount()

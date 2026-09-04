@@ -31,6 +31,12 @@ export function useTableEditLifecycle(
   watch(options.columns, () => contextChanged('columns'), {
     deep: true,
   })
+  // A new source object can retain the exact same column getter. Deep watching
+  // that getter would treat every accepted row update as a column change.
+  watch(
+    () => props.virtualSource?.column,
+    () => contextChanged('columns'),
+  )
   watch([() => props.rowKey, () => props.virtualSource?.rowKey], () =>
     editing.cancel('data'),
   )
@@ -38,6 +44,7 @@ export function useTableEditLifecycle(
     () => {
       const active = editing.active.value
       if (!active) return undefined
+      if (editing.applying.value) return active
       if (props.virtualSource) {
         // Generated rows may return a new object on every access. Check the
         // logical bounds without reading rows or materializing their fields.
@@ -51,6 +58,7 @@ export function useTableEditLifecycle(
     (current) => {
       const active = editing.active.value
       if (!active) return
+      if (editing.applying.value) return
       if (!current) {
         if (editing.contextRetained.value && options.isDataCurrent?.(active))
           return
