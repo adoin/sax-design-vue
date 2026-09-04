@@ -9,6 +9,7 @@ import {
   useSlots,
   watch,
 } from 'vue'
+import { cloneDeep, isEqual } from 'lodash-unified'
 import { tableColumnRegistrationKey } from './table'
 import type { TableColumn, TableColumnOptions } from './table'
 
@@ -54,9 +55,15 @@ const createColumn = (): TableColumn => ({
 
 onBeforeMount(() => registration?.register(registrationId, createColumn()))
 
-watch(props, () => registration?.update(registrationId, createColumn()), {
-  deep: true,
-})
+// Inline object props are recreated when the parent table renders its slot.
+// Re-register only semantic changes, including mutations inside rule objects.
+watch(
+  () => cloneDeep(props),
+  (current, previous) => {
+    if (!isEqual(current, previous))
+      registration?.update(registrationId, createColumn())
+  },
+)
 watch(children, () => registration?.update(registrationId, createColumn()))
 
 onBeforeUnmount(() => registration?.unregister(registrationId))

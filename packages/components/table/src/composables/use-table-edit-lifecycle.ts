@@ -8,6 +8,8 @@ interface EditLifecycleOptions {
   page: WatchSource[]
   columns: WatchSource[]
   resolveContext: (context: TableEditContext) => TableEditContext | undefined
+  isDataCurrent?: (context: TableEditContext) => boolean
+  isLocating?: () => boolean
 }
 
 // Coordinate view changes separately from field drafts. All lookups use the
@@ -17,9 +19,16 @@ export function useTableEditLifecycle(
   editing: TableEditing,
   options: EditLifecycleOptions,
 ) {
-  watch(options.query, () => editing.contextChanged('query'), { deep: true })
-  watch(options.page, () => editing.contextChanged('page'))
-  watch(options.columns, () => editing.contextChanged('columns'), {
+  const contextChanged = (reason: 'query' | 'page' | 'columns') => {
+    if (options.isLocating?.()) {
+      if (editing.active.value) editing.contextRetained.value = true
+      return
+    }
+    editing.contextChanged(reason)
+  }
+  watch(options.query, () => contextChanged('query'), { deep: true })
+  watch(options.page, () => contextChanged('page'))
+  watch(options.columns, () => contextChanged('columns'), {
     deep: true,
   })
   watch([() => props.rowKey, () => props.virtualSource?.rowKey], () =>
@@ -43,6 +52,8 @@ export function useTableEditLifecycle(
       const active = editing.active.value
       if (!active) return
       if (!current) {
+        if (editing.contextRetained.value && options.isDataCurrent?.(active))
+          return
         editing.cancel('view')
       } else if (current.row !== active.row) {
         editing.cancel('data')

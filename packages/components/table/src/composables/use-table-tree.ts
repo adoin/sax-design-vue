@@ -193,6 +193,7 @@ export function useTableTree<Row extends TableRow>(
 
   return {
     flatRows,
+    getChildren,
     getRowIndex,
     getRowKey,
     getAllRows: () => {

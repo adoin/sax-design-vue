@@ -31,6 +31,10 @@ describe('documentation API metadata', () => {
       'Boolean | TableEditConfig',
       'TableEditEndParams',
       'TableEditSlotParams',
+      'TableValidationRules',
+      'TableValidateOptions',
+      'TableValidationConfig',
+      'TableValidationResult',
     ])
 
     expect(details.TableColumn.declaration).toContain(
@@ -61,6 +65,12 @@ describe('documentation API metadata', () => {
     expect(details.TableEditRecord.declaration).toContain('updatedRow: Row')
     expect(details.TableEditSlotParams.declaration).toContain('setValue:')
     expect(details.TableEditReason.declaration).toContain("'view'")
+    expect(details.TableValidationRule.declaration).toContain('validator?')
+    expect(details.TableValidationContext.declaration).toContain('signal: AbortSignal')
+    expect(details.TableValidationConfig.declaration).toContain('onCommit?')
+    expect(details.TableValidateOptions.declaration).toContain('scope?')
+    expect(details.TableValidationResult.declaration).toContain('cancelled: boolean')
+    expect(details.TableValidationError.declaration).toContain('field: string')
 
     expect(
       resolveTypeDetails('table', ['String | Boolean | Function']),

@@ -1,4 +1,4 @@
-import { onBeforeUnmount, shallowRef } from 'vue'
+import { computed, onBeforeUnmount, shallowRef } from 'vue'
 import { cloneDeep, isEqual } from 'lodash-unified'
 import {
   awaitValidation,
@@ -26,6 +26,7 @@ export function useTableValidation(
 ) {
   const errors = shallowRef(new Map<string, TableValidationError>())
   const pending = shallowRef<string | null>(null)
+  const validity = new Map<string, () => boolean>()
   const locations = new Map<
     string,
     NonNullable<TableValidationCell['locate']>
@@ -51,26 +52,33 @@ export function useTableValidation(
       ) {
         next.delete(id)
         locations.delete(id)
+        validity.delete(id)
       }
     }
-    errors.value = next
+    if (next.size !== errors.value.size) errors.value = next
   }
-  const getError = (rowKey: TableRowKey, field?: string) =>
-    field ? errors.value.get(key(rowKey, field)) : undefined
+  const getError = (rowKey: TableRowKey, field?: string) => {
+    if (!field) return undefined
+    const id = key(rowKey, field)
+    const error = errors.value.get(id)
+    return error && validity.get(id)?.() ? error : undefined
+  }
   const isPending = (rowKey: TableRowKey, field?: string) =>
     Boolean(field && pending.value === key(rowKey, field))
   const getErrors = () =>
-    [...errors.value.values()].map((error) => ({
-      ...error,
-      value: cloneDeep(error.value),
-    }))
+    [...errors.value.entries()]
+      .filter(([id]) => validity.get(id)?.())
+      .map(([, error]) => ({
+        ...error,
+        value: cloneDeep(error.value),
+      }))
   const scrollToError = async (error = getErrors()[0]): Promise<boolean> =>
-    error
+    error && getError(error.rowKey, error.field)
       ? ((await locations.get(key(error.rowKey, error.field))?.()) ?? false)
       : false
 
   const run = async (
-    cells: Iterable<TableValidationCell>,
+    cells: Iterable<TableValidationCell | undefined>,
     options: ValidationRunOptions = {},
   ): Promise<TableValidationResult> => {
     cancel()
@@ -87,11 +95,15 @@ export function useTableValidation(
     const nextLocations = options.clear
       ? new Map<string, NonNullable<TableValidationCell['locate']>>()
       : new Map(locations)
+    const nextValidity = options.clear
+      ? new Map<string, () => boolean>()
+      : new Map(validity)
     const limit = Number.isFinite(options.maxErrors)
       ? Math.max(1, Math.floor(options.maxErrors!))
       : 100
     let checked = 0
     let visited = 0
+    let lastYield = Date.now()
     let truncated = false
     const stale = () =>
       current.signal.aborted || disposed || request !== revision
@@ -99,13 +111,16 @@ export function useTableValidation(
       for (const cell of cells) {
         if (stale()) break
         // Include cells without rules in the scheduling budget as well.
-        if (++visited % 100 === 0) {
+        if (++visited % 100 === 0 || Date.now() - lastYield >= 8) {
           await new Promise<void>((resolve) => setTimeout(resolve, 0))
+          lastYield = Date.now()
           if (stale()) break
         }
-        if (!cell.rules.length) continue
+        if (!cell?.rules.length) continue
         const id = key(cell.rowKey, cell.field)
-        pending.value = id
+        // Built-in rules do not wait for external work. Avoid rerendering
+        // the visible window for each offscreen field in a synchronous scan.
+        pending.value = cell.rules.some((rule) => rule.validator) ? id : null
         const value = cloneDeep(cell.value)
         const message = await awaitValidation(
           validateTableValue(
@@ -127,6 +142,7 @@ export function useTableValidation(
         checked++
         nextErrors.delete(id)
         nextLocations.delete(id)
+        nextValidity.delete(id)
         if (message !== undefined) {
           const error: TableValidationError = {
             row: cell.row,
@@ -140,6 +156,10 @@ export function useTableValidation(
           }
           collected.push(error)
           nextErrors.set(id, error)
+          nextValidity.set(
+            id,
+            () => cell.isCurrent() && isEqual(value, cell.readValue()),
+          )
           if (cell.locate) nextLocations.set(id, cell.locate)
           if (collected.length >= limit) {
             truncated = true
@@ -147,6 +167,12 @@ export function useTableValidation(
           }
         }
       }
+      if (
+        collected.some(
+          (error) => !nextValidity.get(key(error.rowKey, error.field))?.(),
+        )
+      )
+        current.abort()
       const cancelled = stale()
       const result: TableValidationResult = {
         valid: !cancelled && !collected.length,
@@ -161,6 +187,8 @@ export function useTableValidation(
         checked,
       }
       if (!cancelled) {
+        validity.clear()
+        nextValidity.forEach((check, id) => validity.set(id, check))
         errors.value = nextErrors
         locations.clear()
         nextLocations.forEach((locate, id) => locations.set(id, locate))
@@ -189,6 +217,7 @@ export function useTableValidation(
     clear()
   })
   return {
+    hasErrors: computed(() => getErrors().length > 0),
     run,
     clear,
     cancel,

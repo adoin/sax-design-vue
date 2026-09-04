@@ -229,6 +229,45 @@ describe('table validation sessions', () => {
     expect(validation.pending.value).toBeNull()
   })
 
+  it('does not publish an earlier error whose value changed while a later field was pending', async () => {
+    const { wrapper, validation, emit } = harness()
+    let value = ''
+    let finish!: (value: boolean) => void
+    const pending = validation.run([
+      { ...cell('', [{ required: true }]), readValue: () => value },
+      cell(
+        'Later',
+        [
+          {
+            validator: () =>
+              new Promise((resolve) => {
+                finish = resolve
+              }),
+          },
+        ],
+        2,
+      ),
+    ])
+    while (!finish) await Promise.resolve()
+    value = 'Corrected'
+    finish(true)
+    expect(await pending).toMatchObject({ cancelled: true, errors: [] })
+    expect(emit).not.toHaveBeenCalled()
+    const locate = vi.fn(() => true)
+    const result = await validation.run([
+      { ...cell('', [{ required: true }]), readValue: () => value, locate },
+    ])
+    expect(result.cancelled).toBe(true)
+    value = ''
+    const failed = await validation.run([
+      { ...cell('', [{ required: true }]), readValue: () => value, locate },
+    ])
+    value = 'Corrected'
+    expect(await validation.scrollToError(failed.errors[0])).toBe(false)
+    expect(locate).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
   it('walks a lazy batch only until the error limit and explicitly reports truncation', async () => {
     const { wrapper, validation } = harness()
     let read = 0

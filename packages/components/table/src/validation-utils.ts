@@ -3,6 +3,15 @@ import type {
   TableValidationRule,
   TableValidationType,
 } from './table-validation'
+import type { TableRowKey } from './table'
+
+export const tableValidationId = (
+  tableId: string | undefined,
+  rowKey: TableRowKey,
+  field: string,
+  columnIndex: number,
+) =>
+  `${tableId}-validation-${encodeURIComponent(JSON.stringify([typeof rowKey, rowKey, field, columnIndex]))}`
 
 const empty = (value: unknown) =>
   value == null || value === '' || (Array.isArray(value) && !value.length)

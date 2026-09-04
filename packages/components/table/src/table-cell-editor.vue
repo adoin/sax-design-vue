@@ -26,6 +26,9 @@ const props = defineProps<{
   context: TableEditContext
   editing: TableEditing
   renderer?: TableEditRenderer
+  error?: string
+  errorId?: string
+  validating?: boolean
 }>()
 defineSlots<{ default(params: TableEditSlotParams): unknown }>()
 const ns = useNamespace('table')
@@ -35,7 +38,11 @@ const config = computed(() =>
     ? props.context.column.editor
     : {},
 )
-const params = computed(() => props.editing.slotParams(props.context))
+const params = computed(() => ({
+  ...props.editing.slotParams(props.context),
+  error: props.error,
+  validating: props.validating ?? false,
+}))
 const modelValue = computed(() => props.editing.valueFor(props.context))
 const popupVisible = shallowRef(false)
 const control = shallowRef<{ hidePanel?: () => void }>()
@@ -67,6 +74,9 @@ const builtin = () => {
             }
           : {}),
         modelValue: modelValue.value,
+        'aria-invalid': props.error ? true : undefined,
+        'aria-describedby': props.error ? props.errorId : undefined,
+        'aria-busy': props.validating || undefined,
         ref: control,
         'aria-label':
           config.value.props?.['aria-label'] ??

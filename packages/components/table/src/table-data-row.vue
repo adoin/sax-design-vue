@@ -20,9 +20,18 @@
       />
       <div
         v-else
+        :id="
+          validation?.getError(flatRow.key, entry.column.field)
+            ? `${validationId(entry.column.field!, entry.index)}-cell`
+            : undefined
+        "
         :class="[
           ns.e('data-cell'),
           entry.column.className,
+          ns.is(
+            'invalid',
+            Boolean(validation?.getError(flatRow.key, entry.column.field)),
+          ),
           ns.is('fixed-column', Boolean(entry.fixed)),
           ns.is('fixed-left', entry.fixed === 'left'),
           ns.is('fixed-right', entry.fixed === 'right'),
@@ -38,123 +47,152 @@
         ]"
         :style="[entry.style, { textAlign: entry.column.align ?? 'left' }]"
         role="cell"
+        :aria-invalid="
+          validation?.getError(flatRow.key, entry.column.field)
+            ? true
+            : undefined
+        "
+        :aria-describedby="
+          validation?.getError(flatRow.key, entry.column.field)
+            ? validationId(entry.column.field!, entry.index)
+            : undefined
+        "
+        :aria-busy="
+          validation?.isPending(flatRow.key, entry.column.field) || undefined
+        "
         :aria-colindex="(entry.ariaIndex ?? entry.index) + 1"
         :data-column-index="entry.index"
         :tabindex="
-          editing?.isEditable(editContext(entry.column, entry.index))
-            ? 0
-            : undefined
+          editing?.isEditable(editContext(entry.column, entry.index)) ? 0 : -1
         "
         @dblclick="activateEdit(entry.column, entry.index, $event, 'dblclick')"
         @keydown="editKeydown(entry.column, entry.index, $event)"
         @click="handleCellClick(entry.column, entry.index, $event)"
       >
-        <span
-          v-if="entry.column.treeNode"
-          :class="ns.e('tree-leading')"
-          :style="{ width: `${flatRow.depth * indent}px` }"
-          aria-hidden="true"
-        />
-        <button
-          v-if="entry.column.treeNode && flatRow.hasChildren"
-          :class="[
-            ns.e('tree-toggle'),
-            ns.is('expanded', flatRow.expanded),
-            ns.is('loading', flatRow.loading),
-          ]"
-          type="button"
-          :disabled="flatRow.loading"
-          :aria-expanded="flatRow.expanded"
-          :aria-label="
-            t(flatRow.expanded ? 'vs.tree.collapse' : 'vs.tree.expand')
-          "
-          @click.stop="emit('toggleExpand')"
-        >
-          <span v-if="flatRow.loading" :class="ns.e('tree-spinner')" />
-          <SIcon v-else name="cb:chevron-right" />
-        </button>
-        <span
-          v-else-if="entry.column.treeNode"
-          :class="ns.e('tree-toggle-placeholder')"
-          aria-hidden="true"
-        />
-        <span
-          v-if="entry.column.type === 'expand'"
-          :class="ns.e('detail-control')"
-          @click.stop
-        >
+        <div :class="ns.e('cell-main')">
+          <span
+            v-if="entry.column.treeNode"
+            :class="ns.e('tree-leading')"
+            :style="{ width: `${flatRow.depth * indent}px` }"
+            aria-hidden="true"
+          />
           <button
-            type="button"
+            v-if="entry.column.treeNode && flatRow.hasChildren"
             :class="[
-              ns.e('detail-toggle'),
-              ns.is('expanded', detail?.expanded),
+              ns.e('tree-toggle'),
+              ns.is('expanded', flatRow.expanded),
+              ns.is('loading', flatRow.loading),
             ]"
-            :disabled="!detail?.enabled || detail.disabled"
-            :aria-expanded="detail?.expanded ?? false"
-            :aria-controls="detail?.panelId"
+            type="button"
+            :disabled="flatRow.loading"
+            :aria-expanded="flatRow.expanded"
             :aria-label="
-              t(
-                detail?.expanded
-                  ? 'vs.table.collapseDetails'
-                  : 'vs.table.expandDetails',
-                { row: displayIndex + 1 },
-              )
+              t(flatRow.expanded ? 'vs.tree.collapse' : 'vs.tree.expand')
             "
-            @click="detail?.toggle()"
+            @click.stop="emit('toggleExpand')"
           >
-            <SIcon name="cb:chevron-right" />
+            <span v-if="flatRow.loading" :class="ns.e('tree-spinner')" />
+            <SIcon v-else name="cb:chevron-right" />
           </button>
-        </span>
-        <span
-          v-else-if="
-            entry.column.type === 'checkbox' || entry.column.type === 'radio'
-          "
-          :class="ns.e('selection-control')"
-          @click.stop
-        >
-          <SCheckbox
-            v-if="entry.column.type === 'checkbox'"
-            :model-value="selected"
-            :disabled="selectionDisabled"
-            :aria-label="t('vs.table.selectRow', { row: displayIndex + 1 })"
-            @update:model-value="
-              emit('rowSelect', flatRow.row, Boolean($event))
-            "
+          <span
+            v-else-if="entry.column.treeNode"
+            :class="ns.e('tree-toggle-placeholder')"
+            aria-hidden="true"
           />
-          <SRadio
-            v-else
-            :model-value="selected"
-            :value="true"
-            :name="selectionName"
-            :disabled="selectionDisabled"
-            :aria-label="t('vs.table.selectRow', { row: displayIndex + 1 })"
-            @update:model-value="emit('rowSelect', flatRow.row, true)"
-          />
-        </span>
-        <TableCellEditor
-          v-else-if="editing?.isEditing(editContext(entry.column, entry.index))"
-          :context="editContext(entry.column, entry.index)"
-          :editing="editing"
-          :renderer="editRenderer?.(entry.column)"
-          ><template #default="params"
-            ><slot name="edit" v-bind="params" /></template
-        ></TableCellEditor>
-        <span
-          v-else
-          :class="[
-            ns.e('cell-content'),
-            ns.is('ellipsis', Boolean(overflowMode(entry.column))),
-          ]"
-          :data-table-overflow="overflowMode(entry.column)"
-          :tabindex="overflowMode(entry.column) === 'tooltip' ? 0 : undefined"
-        >
-          <slot
-            name="cell"
-            v-bind="createCellParams(entry.column, entry.index)"
+          <span
+            v-if="entry.column.type === 'expand'"
+            :class="ns.e('detail-control')"
+            @click.stop
           >
-            {{ getValue(entry.column) }}
-          </slot>
-        </span>
+            <button
+              type="button"
+              :class="[
+                ns.e('detail-toggle'),
+                ns.is('expanded', detail?.expanded),
+              ]"
+              :disabled="!detail?.enabled || detail.disabled"
+              :aria-expanded="detail?.expanded ?? false"
+              :aria-controls="detail?.panelId"
+              :aria-label="
+                t(
+                  detail?.expanded
+                    ? 'vs.table.collapseDetails'
+                    : 'vs.table.expandDetails',
+                  { row: displayIndex + 1 },
+                )
+              "
+              @click="detail?.toggle()"
+            >
+              <SIcon name="cb:chevron-right" />
+            </button>
+          </span>
+          <span
+            v-else-if="
+              entry.column.type === 'checkbox' || entry.column.type === 'radio'
+            "
+            :class="ns.e('selection-control')"
+            @click.stop
+          >
+            <SCheckbox
+              v-if="entry.column.type === 'checkbox'"
+              :model-value="selected"
+              :disabled="selectionDisabled"
+              :aria-label="t('vs.table.selectRow', { row: displayIndex + 1 })"
+              @update:model-value="
+                emit('rowSelect', flatRow.row, Boolean($event))
+              "
+            />
+            <SRadio
+              v-else
+              :model-value="selected"
+              :value="true"
+              :name="selectionName"
+              :disabled="selectionDisabled"
+              :aria-label="t('vs.table.selectRow', { row: displayIndex + 1 })"
+              @update:model-value="emit('rowSelect', flatRow.row, true)"
+            />
+          </span>
+          <TableCellEditor
+            v-else-if="
+              editing?.isEditing(editContext(entry.column, entry.index))
+            "
+            :context="editContext(entry.column, entry.index)"
+            :editing="editing"
+            :error="
+              validation?.getError(flatRow.key, entry.column.field)?.message
+            "
+            :error-id="validationId(entry.column.field!, entry.index)"
+            :validating="validation?.isPending(flatRow.key, entry.column.field)"
+            :renderer="editRenderer?.(entry.column)"
+            ><template #default="params"
+              ><slot name="edit" v-bind="params" /></template
+          ></TableCellEditor>
+          <span
+            v-else
+            :class="[
+              ns.e('cell-content'),
+              ns.is('ellipsis', Boolean(overflowMode(entry.column))),
+            ]"
+            :data-table-overflow="overflowMode(entry.column)"
+            :tabindex="overflowMode(entry.column) === 'tooltip' ? 0 : undefined"
+          >
+            <slot
+              name="cell"
+              v-bind="createCellParams(entry.column, entry.index)"
+            >
+              {{ getValue(entry.column) }}
+            </slot>
+          </span>
+        </div>
+        <small
+          v-if="validation?.getError(flatRow.key, entry.column.field)"
+          :id="validationId(entry.column.field!, entry.index)"
+          :class="ns.e('validation-message')"
+          role="alert"
+          >{{
+            validation.getError(flatRow.key, entry.column.field)?.message
+          }}</small
+        >
       </div>
     </template>
   </div>
@@ -168,6 +206,8 @@ import { SRadio } from '@vuesax-alpha/components/radio'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { tableFieldValue, tableOverflowMode } from './data-utils'
 import TableCellEditor from './table-cell-editor.vue'
+import { tableValidationId } from './validation-utils'
+import type { TableValidation } from './composables/use-table-validation'
 import type { TableEditing } from './composables/use-table-edit'
 import type { TableEditContext, TableEditRenderer } from './table-edit'
 import type { TableRowDetailState } from './composables/use-table-details'
@@ -198,8 +238,11 @@ const props = defineProps<{
   selectionName?: string
   overflow?: TableOverflow
   editing?: TableEditing
+  validation?: TableValidation
   editRenderer?: (column: TableColumn) => TableEditRenderer | undefined
 }>()
+const validationId = (field: string, columnIndex: number) =>
+  tableValidationId(props.selectionName, props.flatRow.key, field, columnIndex)
 
 const emit = defineEmits<{
   rowClick: [row: TableRow, event: MouseEvent]

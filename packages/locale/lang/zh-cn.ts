@@ -262,6 +262,8 @@ export default {
       rejected: '文件未通过校验',
     },
     table: {
+      validationRequired: '请填写{field}',
+      validationInvalid: '{field}不符合规则',
       expandDetails: '展开第 {row} 行详情',
       collapseDetails: '收起第 {row} 行详情',
       rowDetails: '第 {row} 行详情',

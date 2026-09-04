@@ -398,6 +398,28 @@
     outline: none;
   }
 
+  @include e(cell-main) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    .#{$namespace}-table__cell-editor {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+  @include e(validation-message) {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    margin-top: 4px;
+    color: getColor(danger);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
   @include e(data-cell) {
     &.is-editable-cell {
       cursor: text;
@@ -424,6 +446,16 @@
       position: sticky;
       z-index: 2;
       background: inherit;
+    }
+    @include when(invalid) {
+      flex-direction: column;
+      justify-content: center;
+      background: color-mix(
+        in srgb,
+        #{getColor(danger)} 6%,
+        var(--s-table-row-surface, var(--s-table-surface))
+      );
+      box-shadow: inset 0 2px 7px -5px #{getColor(danger, 0.3)};
     }
   }
 

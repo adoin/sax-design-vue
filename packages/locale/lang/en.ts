@@ -289,6 +289,8 @@ export default {
       defaultRangeEndLabel: 'pick end value',
     },
     table: {
+      validationRequired: '{field} is required',
+      validationInvalid: '{field} is invalid',
       expandDetails: 'Expand details for row {row}',
       collapseDetails: 'Collapse details for row {row}',
       rowDetails: 'Details for row {row}',

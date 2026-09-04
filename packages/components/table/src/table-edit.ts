@@ -65,6 +65,8 @@ export interface TableEditSlotParams<
   Row extends TableRow = TableRow,
 > extends TableEditContext<Row> {
   mode: TableEditMode
+  error?: string
+  validating?: boolean
   draftRow: Row
   setValue: (value: unknown) => void
   commit: () => Promise<boolean>

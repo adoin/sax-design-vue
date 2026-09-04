@@ -23,7 +23,25 @@ import type {
   TableEditRenderer,
   TableEditorConfig,
 } from './table-edit'
+import type {
+  TableValidateOptions,
+  TableValidationConfig,
+  TableValidationError,
+  TableValidationResult,
+  TableValidationRule,
+  TableValidationRules,
+} from './table-validation'
 export * from './table-edit'
+export type {
+  TableValidateOptions,
+  TableValidationConfig,
+  TableValidationContext,
+  TableValidationError,
+  TableValidationResult,
+  TableValidationRule,
+  TableValidationRules,
+  TableValidationType,
+} from './table-validation'
 
 export type TableRowKey = string | number
 export type TableRow = Record<string, unknown>
@@ -228,6 +246,7 @@ export interface TableRenderer<Row extends TableRow = TableRow> {
 }
 
 export interface TableColumnOptions<Row extends TableRow = TableRow> {
+  rules?: TableValidationRule<Row> | TableValidationRule<Row>[]
   editor?: boolean | TableEditorConfig<Row>
   edit?: TableEditRenderer<Row>
   /** Nested header groups. Only leaf columns render data cells. */
@@ -350,6 +369,14 @@ export type TableRowClass<Row extends TableRow = TableRow> =
   string | ((params: TableFlatRow<Row>) => string | string[] | undefined)
 
 export const tableProps = buildProps({
+  validationRules: {
+    type: definePropType<TableValidationRules>(Object),
+    default: () => ({}),
+  },
+  validationConfig: {
+    type: definePropType<boolean | TableValidationConfig>([Boolean, Object]),
+    default: false,
+  },
   editConfig: {
     type: definePropType<boolean | TableEditConfig>([Boolean, Object]),
     default: false,
@@ -492,6 +519,7 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  validation: (result: TableValidationResult) => isObject(result),
   editStart: (params: TableEditRecord) => isObject(params),
   editChange: (params: TableEditRecord) => isObject(params),
   editCommit: (params: TableEditEndParams) => isObject(params),
@@ -545,6 +573,24 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  validate: (
+    options?: TableValidateOptions<Row>,
+  ) => Promise<TableValidationResult<Row>>
+  validateRow: (
+    rowOrIndex: Row | number,
+    options?: TableValidateOptions<Row>,
+  ) => Promise<TableValidationResult<Row>>
+  validateCell: (
+    rowOrIndex: Row | number,
+    columnOrIndex: TableColumn<Row> | string | number,
+    options?: TableValidateOptions<Row>,
+  ) => Promise<TableValidationResult<Row>>
+  clearValidation: (rowKey?: TableRowKey, field?: string) => void
+  cancelValidation: () => void
+  getValidationErrors: () => TableValidationError<Row>[]
+  scrollToValidationError: (
+    error?: TableValidationError<Row>,
+  ) => Promise<boolean>
   startEdit: (
     rowOrIndex: Row | number,
     columnOrIndex: TableColumn<Row> | string | number,

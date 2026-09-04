@@ -1,6 +1,16 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "validation-rules"
+    type: "TableValidationRules"
+    description: "Field-based rules; column rules take precedence, and an empty array disables rules for that column."
+    default: "{}"
+    usage: "#data-validation"
+  - name: "validation-config"
+    type: "Boolean | TableValidationConfig"
+    description: "Enable validation before edit commits; configure error navigation and the error limit. Manual validation is available when disabled."
+    default: "false"
+    usage: "#data-validation"
   - name: "edit-config"
     type: "Boolean | TableEditConfig"
     description: "Enable editing with cell or row mode, triggers, eligibility and leave policies."
@@ -171,6 +181,11 @@ PROPS:
     default: 'false'
     usage: '#text-overflow-and-tooltips'
 CHILD_PROPS:
+  - name: "rules"
+    type: "TableValidationRule | TableValidationRule[]"
+    description: "Synchronous or asynchronous rules for this column, overriding validation-rules."
+    default: null
+    usage: "#data-validation"
   - name: "editor"
     type: "Boolean | TableEditorConfig"
     description: "Enable field editing with input, number, select, date or switch controls, props, options and eligibility."
@@ -293,6 +308,11 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "validation"
+    type: "TableValidationResult"
+    description: "Emitted when the latest validation completes; cancelled or stale runs do not emit."
+    default: null
+    usage: "#data-validation"
   - name: "editStart"
     type: "(params: TableEditRecord) => void"
     description: "Emitted when an edit session starts."
@@ -499,6 +519,41 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "validate"
+    type: "(options?: TableValidateOptions) => Promise<TableValidationResult>"
+    description: "Validate supplied data or a selected scope; includes loaded collapsed descendants without fetching children or remote pages."
+    default: null
+    usage: "#data-validation"
+  - name: "validateRow"
+    type: "(rowOrIndex: TableRow | number, options?: TableValidateOptions) => Promise<TableValidationResult>"
+    description: "Validate all ruled fields in one row; normal indices refer to expanded current-page rows, generated sources use global indices."
+    default: null
+    usage: "#data-validation"
+  - name: "validateCell"
+    type: "(rowOrIndex: TableRow | number, columnOrIndex: TableColumn | string | number, options?: TableValidateOptions) => Promise<TableValidationResult>"
+    description: "Validate one cell; ordinary columns accept an object, key, field or visible index, generated sources require global numeric indices."
+    default: null
+    usage: "#data-validation"
+  - name: "clearValidation"
+    type: "(rowKey?: TableRowKey, field?: string) => void"
+    description: "Clear all errors or those for a row key and field; also cancel the current validation."
+    default: null
+    usage: "#data-validation"
+  - name: "cancelValidation"
+    type: "() => void"
+    description: "Cancel current validation immediately, retaining previously completed errors and edit drafts."
+    default: null
+    usage: "#data-validation"
+  - name: "getValidationErrors"
+    type: "() => TableValidationError[]"
+    description: "Get a snapshot of current errors, excluding stale rows or changed field values."
+    default: null
+    usage: "#data-validation"
+  - name: "scrollToValidationError"
+    type: "(error?: TableValidationError) => Promise<boolean>"
+    description: "Locate an error, defaulting to the first, expanding ancestors and changing local pages. Returns false for refused controlled updates or filtered/hidden targets."
+    default: null
+    usage: "#data-validation"
   - name: "startEdit"
     type: "(rowOrIndex: TableRow | number, columnOrIndex: TableColumn | string | number) => Promise<boolean>"
     description: "Start and locate an editor; normal data accepts visible row/column indices, row objects and column fields/keys, while generated sources use global numeric indices."
@@ -506,7 +561,7 @@ EXPOSES:
     usage: "#editing-virtual-data"
   - name: "commitEdit"
     type: "() => Promise<boolean>"
-    description: "Commit and emit editCommit; returns true with no session and false on eligibility or data conflicts."
+    description: "Commit and emit editCommit; returns true with no session and false on eligibility, data conflicts or validation failure."
     default: null
     usage: "#cell-and-row-editing"
   - name: "cancelEdit"
@@ -597,6 +652,102 @@ EXPOSES:
 ---
 
 # Table
+
+<card>
+
+## Data validation
+
+Set column `rules` or provide field-based `validation-rules`. Column rules take precedence; `rules: []` disables validation for that column. Rules support required values, types, numeric ranges, string or array lengths, regular expressions and synchronous or asynchronous `validator` functions. Values are not coerced. Optional empty values skip type and range checks but still run custom validators.
+
+Enable `validation-config` explicitly to validate drafts before committing. Cell mode checks the current field; row mode checks every ruled field in that row. A failed check retains the draft without emitting `editCommit`. Manual `validateCell`, `validateRow` and `validate` calls also work without editing enabled.
+
+Custom validators receive `value`, `draftRow` and `signal`. Return `true` or nothing to pass; return `false`, a message, an `Error`, or reject a Promise to fail. The name check below simulates a server check with a delay: `admin` is unavailable. Changing a draft, cancelling an edit or starting a new check invalidates the old request. Pass `signal` to `fetch` for remote checks.
+
+Errors appear inside their cells with accessible associations for built-in editors. Custom editor slots also receive `error` and `validating`. Drafts remain editable and can be discarded while validation is pending.
+
+<template #example><table-validation /></template>
+
+<template #template>
+
+@[code{109-163}](../.vuepress/components/table/validation.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-107}](../.vuepress/components/table/validation.vue)
+
+</template>
+
+<template #style>
+
+@[code{165-179}](../.vuepress/components/table/validation.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Error navigation and scope
+
+`validate()` checks all supplied data, including loaded collapsed descendants. `scope: 'view'` checks the filtered, expanded current page, including rows outside the mounted virtual window. Validation does not fetch unloaded children or remote pages.
+
+By default, an error expands its ancestors, changes the local page, scrolls and receives focus. Set `scrollToError: false` to disable automatic navigation. Controlled pagination and expansion require the parent to accept updates; filtered rows and hidden columns are not forcibly restored. `scrollToValidationError()` reports whether navigation succeeded.
+
+Use `clearValidation(rowKey?, field?)` to clear selected errors, or omit arguments to clear all. Old errors are not used for navigation after data, rules or field values change. Numeric row indices in ordinary data refer to expanded current-page rows; pass a row object to target another page, or validate the whole dataset.
+
+<template #example><table-validation-navigation /></template>
+
+<template #template>
+
+@[code{49-78}](../.vuepress/components/table/validation-navigation.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-47}](../.vuepress/components/table/validation-navigation.vue)
+
+</template>
+
+<template #style>
+
+@[code{80-94}](../.vuepress/components/table/validation-navigation.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Generated data validation
+
+Generated sources use global numeric row and column indices. `validateCell(999_999, 99_998)` checks one distant position directly. Use `validate({ rows, columns })` to select targets without scanning the entire generated table. This example generates one million rows and 100,000 columns; one field in the last row is empty.
+
+Full validation reads data on demand and periodically yields, but runtime still grows with the number of targets. Cancel through an `AbortSignal` or `cancelValidation()`. The default `maxErrors` is 100; reaching the limit stops validation with `truncated: true`. `checked` counts fields with rules that were checked. Cancellation returns `cancelled: true` without publishing partial results or overwriting prior errors. Check `valid` rather than treating an empty error array as success.
+
+<template #example><table-validation-source /></template>
+
+<template #template>
+
+@[code{83-112}](../.vuepress/components/table/validation-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-81}](../.vuepress/components/table/validation-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{114-128}](../.vuepress/components/table/validation-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

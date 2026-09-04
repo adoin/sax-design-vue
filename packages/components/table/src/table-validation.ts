@@ -30,7 +30,7 @@ export type TableValidationRules<Row extends TableRow = TableRow> = Record<
   TableValidationRule<Row> | TableValidationRule<Row>[]
 >
 export interface TableValidationConfig {
-  /** Validate drafts before emitting editCommit. Defaults to true. */
+  /** Validate before editCommit when validationConfig is enabled. Defaults to true. */
   onCommit?: boolean
   /** Locate the first error after an explicit validation. Defaults to true. */
   scrollToError?: boolean

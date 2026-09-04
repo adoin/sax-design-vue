@@ -139,6 +139,8 @@ export default {
       defaultRangeEndLabel: '選擇結束值',
     },
     table: {
+      validationRequired: '請填寫{field}',
+      validationInvalid: '{field}不符合規則',
       emptyText: '暫無資料',
       confirmFilter: '篩選',
       resetFilter: '重置',

@@ -1,6 +1,16 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "validation-rules"
+    type: "TableValidationRules"
+    description: "按字段设置校验规则；列 rules 优先，空数组可关闭该列规则。"
+    default: "{}"
+    usage: "#数据校验"
+  - name: "validation-config"
+    type: "Boolean | TableValidationConfig"
+    description: "开启编辑提交前校验，并配置自动定位及错误数上限。关闭时仍可手动校验。"
+    default: "false"
+    usage: "#数据校验"
   - name: "edit-config"
     type: "Boolean | TableEditConfig"
     description: "开启编辑，配置单元格或整行模式、触发方式、条件及离开策略。"
@@ -171,6 +181,11 @@ PROPS:
     default: 'false'
     usage: '#文本溢出与提示'
 CHILD_PROPS:
+  - name: "rules"
+    type: "TableValidationRule | TableValidationRule[]"
+    description: "当前列的同步或异步规则，优先于 validation-rules。"
+    default: null
+    usage: "#数据校验"
   - name: "editor"
     type: "Boolean | TableEditorConfig"
     description: "允许编辑此字段；支持 input、number、select、date、switch，以及控件 props、选项和条件。"
@@ -293,6 +308,11 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "validation"
+    type: "TableValidationResult"
+    description: "最新校验结束时触发；取消或过期的校验不触发此事件。"
+    default: null
+    usage: "#数据校验"
   - name: "editStart"
     type: "(params: TableEditRecord) => void"
     description: "开始编辑时触发。"
@@ -499,6 +519,41 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "validate"
+    type: "(options?: TableValidateOptions) => Promise<TableValidationResult>"
+    description: "校验提供的数据或指定范围；默认包含已加载的折叠树节点，不请求未加载子节点或远程页。"
+    default: null
+    usage: "#数据校验"
+  - name: "validateRow"
+    type: "(rowOrIndex: TableRow | number, options?: TableValidateOptions) => Promise<TableValidationResult>"
+    description: "校验单行全部规则字段；普通索引为当前页展开行索引，生成源使用全局索引。"
+    default: null
+    usage: "#数据校验"
+  - name: "validateCell"
+    type: "(rowOrIndex: TableRow | number, columnOrIndex: TableColumn | string | number, options?: TableValidateOptions) => Promise<TableValidationResult>"
+    description: "校验一个单元格；普通列可用对象、键、字段或可见列索引，生成源使用全局数字索引。"
+    default: null
+    usage: "#数据校验"
+  - name: "clearValidation"
+    type: "(rowKey?: TableRowKey, field?: string) => void"
+    description: "清除全部或指定行键、字段的错误，并取消正在进行的校验。"
+    default: null
+    usage: "#数据校验"
+  - name: "cancelValidation"
+    type: "() => void"
+    description: "立即取消当前校验，保留之前完成的校验错误与编辑草稿。"
+    default: null
+    usage: "#数据校验"
+  - name: "getValidationErrors"
+    type: "() => TableValidationError[]"
+    description: "获取当前错误的快照；失效行或已修改字段的旧错误不会返回。"
+    default: null
+    usage: "#数据校验"
+  - name: "scrollToValidationError"
+    type: "(error?: TableValidationError) => Promise<boolean>"
+    description: "定位指定错误，默认第一项；自动展开祖先和切换本地页。受控更新拒绝、目标被筛选或列隐藏时返回 false。"
+    default: null
+    usage: "#数据校验"
   - name: "startEdit"
     type: "(rowOrIndex: TableRow | number, columnOrIndex: TableColumn | string | number) => Promise<boolean>"
     description: "开始编辑并定位；普通数据使用当前可见行/列索引或行对象、列字段/键，生成源使用全局数字索引。"
@@ -506,7 +561,7 @@ EXPOSES:
     usage: "#虚拟数据编辑"
   - name: "commitEdit"
     type: "() => Promise<boolean>"
-    description: "提交当前草稿并发出 editCommit；无会话时返回 true，条件或数据冲突导致拒绝时返回 false。"
+    description: "提交当前草稿并发出 editCommit；无会话时返回 true，条件、数据冲突或校验失败导致拒绝时返回 false。"
     default: null
     usage: "#单元格与整行编辑"
   - name: "cancelEdit"
@@ -597,6 +652,102 @@ EXPOSES:
 ---
 
 # Table 表格
+
+<card>
+
+## 数据校验
+
+为列配置 `rules`，或通过 `validation-rules` 按字段配置规则；列规则优先，`rules: []` 可关闭该列校验。支持必填、类型、数值范围、字符串或数组长度、正则，以及自定义同步或异步 `validator`。规则不会转换数据类型；可选空值跳过类型与范围检查，但仍执行自定义函数。
+
+显式开启 `validation-config` 后，提交编辑会先校验草稿。单元格模式检查当前字段，整行模式检查该行所有规则字段；失败保留草稿，不触发 `editCommit`。没有开启编辑时也能调用 `validateCell`、`validateRow` 或 `validate`。
+
+自定义函数接收 `value`、`draftRow` 和 `signal`。返回 `true` 或不返回值表示通过；返回 `false`、错误消息、`Error` 或拒绝 Promise 表示失败。下方名称检查用延迟模拟服务端占用检查，`admin` 不可使用。输入新草稿、取消编辑或启动新校验都会废弃旧请求；远程校验可把 `signal` 传给 `fetch`。
+
+错误显示在对应单元格内，内置编辑器提供错误关联；自定义编辑插槽也可读取 `error` 和 `validating`。校验期间仍可修改或放弃草稿。
+
+<template #example><table-zh-validation /></template>
+
+<template #template>
+
+@[code{108-162}](../../.vuepress/components/table-zh/validation.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-106}](../../.vuepress/components/table-zh/validation.vue)
+
+</template>
+
+<template #style>
+
+@[code{164-178}](../../.vuepress/components/table-zh/validation.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 错误定位与校验范围
+
+`validate()` 默认检查所有已提供的数据，包括已加载的折叠树节点；`scope: 'view'` 仅检查筛选、展开和分页后的行，不限于虚拟滚动当前挂载的窗口。它不会请求尚未加载的树节点或远程页。
+
+发现错误时默认展开祖先、切换本地页并滚动聚焦；使用 `scrollToError: false` 关闭自动定位。受控分页或展开需要父组件接受更新，筛选排除的行和隐藏列不会被强制恢复。`scrollToValidationError()` 返回定位是否成功。
+
+`clearValidation(rowKey?, field?)` 清除指定错误；无参数时清除全部。更换数据、规则或继续修改字段后，旧错误不会继续用于定位。普通数据的数字行索引对应当前页展开后的行；需要校验其他页时传入行对象，或使用全表范围。
+
+<template #example><table-zh-validation-navigation /></template>
+
+<template #template>
+
+@[code{47-72}](../../.vuepress/components/table-zh/validation-navigation.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-45}](../../.vuepress/components/table-zh/validation-navigation.vue)
+
+</template>
+
+<template #style>
+
+@[code{74-88}](../../.vuepress/components/table-zh/validation-navigation.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 生成数据校验
+
+生成数据源使用全局数字行列索引。`validateCell(999_999, 99_998)` 可直接检查一个远端位置；`validate({ rows, columns })` 可指定一组目标，避免扫描整张生成表。下例生成 100 万行、10 万列，只有末行的指定字段为空。
+
+全量校验按需读取数据并定期让出执行时间，但耗时仍随目标数量增长。可通过 `AbortSignal` 或 `cancelValidation()` 取消。`maxErrors` 默认 100，达到上限后停止并设置 `truncated: true`；`checked` 是已校验的规则字段数。取消时返回 `cancelled: true`，不会发布部分结果或覆盖之前的错误。应检查 `valid`，不能仅凭错误数组为空判断通过。
+
+<template #example><table-zh-validation-source /></template>
+
+<template #template>
+
+@[code{76-105}](../../.vuepress/components/table-zh/validation-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-74}](../../.vuepress/components/table-zh/validation-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{107-121}](../../.vuepress/components/table-zh/validation-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

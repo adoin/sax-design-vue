@@ -45,6 +45,7 @@ export function useTableEdit(
   let disposed = false
   let draftRevision = 0
   const committing = shallowRef(false)
+  const contextRetained = shallowRef(false)
   let pendingCommit:
     { session: number; revision: number; promise: Promise<boolean> } | undefined
   const identity = (params: TableEditContext) =>
@@ -93,6 +94,7 @@ export function useTableEdit(
     draftRevision++
     committing.value = false
     pendingCommit = undefined
+    contextRetained.value = false
   }
   const cancel = (reason: TableEditReason = 'api') => {
     const current = record()
@@ -258,8 +260,10 @@ export function useTableEdit(
       sequence++
       return
     }
-    if (config.value.onContextChange === 'commit') commit(reason)
-    else cancel(reason)
+    if (config.value.onContextChange === 'commit') {
+      contextRetained.value = true
+      commit(reason)
+    } else cancel(reason)
   }
   const attach = (params: TableEditContext) => {
     const key = identity(params)
@@ -285,13 +289,16 @@ export function useTableEdit(
                 )
               })
         if (
+          contextRetained.value ||
           remains ||
           !config.value.onScroll ||
           config.value.onScroll === 'keep'
         )
           return
-        if (config.value.onScroll === 'commit') commit('scroll')
-        else cancel('scroll')
+        if (config.value.onScroll === 'commit') {
+          contextRetained.value = true
+          commit('scroll')
+        } else cancel('scroll')
       })
     }
   }
@@ -329,6 +336,7 @@ export function useTableEdit(
   return {
     active,
     committing,
+    contextRetained,
     enabled,
     config,
     isEditable,

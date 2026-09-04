@@ -211,6 +211,7 @@
                 <TableDataRow
                   :detail="detail"
                   :editing="editing"
+                  :validation="validation"
                   :edit-renderer="resolveEditRenderer"
                   :flat-row="item as TableFlatRow"
                   :entries="renderedColumnEntries"
@@ -298,6 +299,7 @@
                 :data-row-key="String(flatRow.key)"
                 :detail="detail"
                 :editing="editing"
+                :validation="validation"
                 :edit-renderer="resolveEditRenderer"
                 :flat-row="flatRow"
                 :entries="renderedColumnEntries"
@@ -458,6 +460,9 @@ import TableFooterRows from './table-footer-rows.vue'
 import TableRowBlock from './table-row-block.vue'
 import { useTableEdit } from './composables/use-table-edit'
 import { useTableEditLifecycle } from './composables/use-table-edit-lifecycle'
+import { useTableValidation } from './composables/use-table-validation'
+import { useTableValidationApi } from './composables/use-table-validation-api'
+import { tableValidationId } from './validation-utils'
 import { useTableDetails } from './composables/use-table-details'
 import { flattenTableColumns } from './composables/table-column-tree'
 import { tableColumnKey, tableFieldValue } from './data-utils'
@@ -686,7 +691,22 @@ const resolveEditContext = (
       }
     : undefined
 }
-const editing = useTableEdit(props, emit, resolveEditContext)
+const validation = useTableValidation(
+  (result) => {
+    emit('validation', result)
+  },
+  {
+    required: (field) => t('vs.table.validationRequired', { field }),
+    invalid: (field) => t('vs.table.validationInvalid', { field }),
+  },
+)
+const editing = useTableEdit(props, emit, resolveEditContext, {
+  validate: (record) => validationApi.validateEdit(record),
+  invalidate: (context, field) => {
+    validation.clear(context.rowKey, field)
+    measure()
+  },
+})
 const detailPanelId = (key: TableRowKey) =>
   `${selectionName.value}-detail-${encodeURIComponent(`${typeof key}:${String(key)}`)}`
 const detailIndices = computed(() => {
@@ -812,7 +832,8 @@ const dynamicRows = computed(
   () =>
     virtualOptions.value.dynamic ||
     details.enabled.value ||
-    editing.enabled.value,
+    editing.enabled.value ||
+    validation.hasErrors.value,
 )
 
 const usesBodyScroll = computed(
@@ -1375,6 +1396,33 @@ const startEdit = async (
 const commitEdit = async () => editing.commit()
 const cancelEdit = () => editing.cancel()
 const getEditRecord = editing.record
+// Error text changes the row's natural height, including when it is cleared.
+watch(validation.getErrors, () => measure(), { flush: 'post' })
+const validationApi = useTableValidationApi(props, validation, editing, {
+  tree,
+  pagination,
+  columns: rawColumns,
+  visibleColumns: resolvedColumns,
+  sourceRow: createSourceFlatRow,
+  sourceColumn: (index) => props.virtualSource!.column(index),
+  sourceColumnHidden: (index) => columnManager.layout.value.hidden.has(index),
+  scrollRow: (row) => scrollToRow(row),
+  scrollColumn: (index) => scrollToColumn(index),
+  focusCell: (rowKey, field, columnIndex) => {
+    if (typeof document === 'undefined') return false
+    const id = `${tableValidationId(selectionName.value, rowKey, field, columnIndex)}-cell`
+    const cell = tableScrollRef.value?.querySelector<HTMLElement>(
+      `[id="${id}"]`,
+    )
+    if (!cell || !tableScrollRef.value?.contains(cell)) return false
+    const target =
+      cell.querySelector<HTMLElement>(
+        'input:not(:disabled),textarea:not(:disabled)',
+      ) ?? cell
+    target.focus({ preventScroll: true })
+    return document.activeElement === target
+  },
+})
 watch(
   () => editing.active.value?.id,
   () =>
@@ -1392,9 +1440,18 @@ useTableEditLifecycle(props, editing, {
   page: [pagination.currentPage, pagination.pageSize, pagination.enabled],
   columns: [rawColumns, columnManager.state, () => props.virtualSource?.column],
   resolveContext: resolveEditContext,
+  isDataCurrent: validationApi.isDataCurrent,
+  isLocating: validationApi.locating,
 })
 
 defineExpose({
+  validate: validationApi.validate,
+  validateRow: validationApi.validateRow,
+  validateCell: validationApi.validateCell,
+  clearValidation: validation.clear,
+  cancelValidation: validation.cancel,
+  getValidationErrors: validation.getErrors,
+  scrollToValidationError: validation.scrollToError,
   startEdit,
   commitEdit,
   cancelEdit,
