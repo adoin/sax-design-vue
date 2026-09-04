@@ -60,6 +60,7 @@ describe('documentation API metadata', () => {
     expect(details.TableEditEndParams.declaration).toContain('TableEditRecord')
     expect(details.TableEditRecord.declaration).toContain('updatedRow: Row')
     expect(details.TableEditSlotParams.declaration).toContain('setValue:')
+    expect(details.TableEditReason.declaration).toContain("'view'")
 
     expect(
       resolveTypeDetails('table', ['String | Boolean | Function']),

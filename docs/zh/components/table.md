@@ -632,6 +632,38 @@ EXPOSES:
 
 <card>
 
+## 编辑生命周期
+
+通过 `edit-config.onSwitch` 设置切换单元格时的行为，默认 `commit`；通过 `onContextChange` 设置排序、筛选、分页或列变更时的行为，默认 `cancel`。受控查询只有在父组件接受新状态后才结束编辑。Enter 提交草稿，Escape 放弃草稿。
+
+虚拟滚动的 `onScroll: 'keep'` 默认在编辑器移出渲染窗口后保留草稿，也可选择 `commit` 或 `cancel`。整行模式会等该行最后一个编辑器移出窗口后再执行。可在下方关闭分页、开启虚拟滚动进行体验。
+
+替换数据数组或正在编辑的行对象时，会以 `data` 原因取消编辑；删除该行、收起其祖先节点，或缩小生成源使活动索引越界时，会以 `view` 原因取消，不会自动保存已经失效的记录。插入或加载其他行可以保留当前草稿；提交前会检查相同字段是否被外部修改。通过 `editCommit` 和 `editCancel` 获取结果及原因。
+
+<template #example><table-zh-editing-lifecycle /></template>
+
+<template #template>
+
+@[code{103-167}](../../.vuepress/components/table-zh/editing-lifecycle.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-101}](../../.vuepress/components/table-zh/editing-lifecycle.vue)
+
+</template>
+
+<template #style>
+
+@[code{169-189}](../../.vuepress/components/table-zh/editing-lifecycle.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## 自定义编辑器
 
 使用 `STableColumn #edit`、指定列的 `#edit-[key]` 或通用 `#edit-cell` 定制编辑内容，调用 `setValue` 更新草稿。`value` 是当前字段草稿，`draftRow` 可读取本行其他字段的草稿；不要直接修改插槽参数中的对象。

@@ -457,6 +457,7 @@ import TableHeaderRows from './table-header-rows.vue'
 import TableFooterRows from './table-footer-rows.vue'
 import TableRowBlock from './table-row-block.vue'
 import { useTableEdit } from './composables/use-table-edit'
+import { useTableEditLifecycle } from './composables/use-table-edit-lifecycle'
 import { useTableDetails } from './composables/use-table-details'
 import { flattenTableColumns } from './composables/table-column-tree'
 import { tableColumnKey, tableFieldValue } from './data-utils'
@@ -473,6 +474,7 @@ import type {
   TableCellRenderParams,
   TableCellRenderer,
   TableColumn,
+  TableEditContext,
   TableEditRenderer,
   TableFilterValue,
   TableFlatRow,
@@ -654,10 +656,12 @@ const resolveSourceRowKey = (row: TableRow, index: number): TableRowKey => {
 }
 
 const details = useTableDetails(props, emit, sizedColumns)
-const editing = useTableEdit(props, emit, (context) => {
+const resolveEditContext = (
+  context: TableEditContext,
+): TableEditContext | undefined => {
   const flat = props.virtualSource
     ? createSourceFlatRow(context.rowIndex)
-    : flatRows.value.find((row) => row.key === context.rowKey)
+    : flatRows.value[getRowIndex(context.rowKey)]
   if (!flat || flat.key !== context.rowKey) return undefined
   const index = props.virtualSource
     ? context.columnIndex
@@ -673,12 +677,16 @@ const editing = useTableEdit(props, emit, (context) => {
         ...context,
         row: flat.row,
         rowIndex: flat.index,
+        depth: flat.depth,
+        expanded: flat.expanded,
+        loading: flat.loading,
         column,
         columnIndex: index,
         value: tableFieldValue(flat.row, column.field),
       }
     : undefined
-})
+}
+const editing = useTableEdit(props, emit, resolveEditContext)
 const detailPanelId = (key: TableRowKey) =>
   `${selectionName.value}-detail-${encodeURIComponent(`${typeof key}:${String(key)}`)}`
 const detailIndices = computed(() => {
@@ -1379,14 +1387,12 @@ watch(
       virtualListRef.value?.resetMeasurements()
     }),
 )
-watch([sorts, filtersState], () => editing.contextChanged('query'))
-watch([pagination.currentPage, pagination.pageSize], () =>
-  editing.contextChanged('page'),
-)
-watch(
-  () => [props.columns, columnManager.state.value],
-  () => editing.contextChanged('columns'),
-)
+useTableEditLifecycle(props, editing, {
+  query: [sorts, filtersState],
+  page: [pagination.currentPage, pagination.pageSize, pagination.enabled],
+  columns: [rawColumns, columnManager.state, () => props.virtualSource?.column],
+  resolveContext: resolveEditContext,
+})
 
 defineExpose({
   startEdit,

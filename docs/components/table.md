@@ -632,6 +632,38 @@ Switching targets commits the previous edit by default; set `onSwitch: 'cancel'`
 
 <card>
 
+## Editing lifecycle
+
+Choose `edit-config.onSwitch` for moving to another cell (`commit` by default), and `onContextChange` for accepted sort, filter, page or column changes (`cancel` by default). Controlled query requests only end editing after the parent accepts the new state. Enter submits the draft; Escape discards it.
+
+With virtual scrolling, `onScroll: 'keep'` preserves the draft when its editor leaves the rendered window. Use `commit` or `cancel` to end it instead. In row mode the policy runs when the last editor for that row leaves the window. Turn off pagination and enable virtual scrolling below to try this behavior.
+
+Replacing the data array or the edited row object cancels the session with reason `data`. Removing the row, collapsing an ancestor, or shrinking a generated source past the active index cancels with reason `view`. These changes never automatically save a stale record. Other rows may be inserted or loaded without discarding the active draft; a change to the same field is checked for conflicts before commit. Listen to `editCommit` and `editCancel` for the result and reason.
+
+<template #example><table-editing-lifecycle /></template>
+
+<template #template>
+
+@[code{103-169}](../.vuepress/components/table/editing-lifecycle.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-101}](../.vuepress/components/table/editing-lifecycle.vue)
+
+</template>
+
+<template #style>
+
+@[code{171-191}](../.vuepress/components/table/editing-lifecycle.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Custom editors
 
 Customize editors with `STableColumn #edit`, a column-specific `#edit-[key]` or generic `#edit-cell`. Call `setValue` to update the draft. `value` is the field draft and `draftRow` exposes other draft fields; do not mutate slot parameter objects directly.

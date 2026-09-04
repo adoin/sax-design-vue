@@ -17,6 +17,7 @@ export type TableEditReason =
   | 'columns'
   | 'scroll'
   | 'data'
+  | 'view'
   | 'disabled'
   | 'conflict'
   | 'unmount'
