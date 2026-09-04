@@ -114,14 +114,25 @@ try {
           bodyError: br ? Math.abs(r.left - br.left) : null,
         }
       })
-      const active = own('.is-active-cell')[0]?.getBoundingClientRect()
+      const activeCell = own('.is-active-cell')[0]
+      const active = activeCell?.getBoundingClientRect()
       return {
         viewport,
         rows: rows.length,
         rowIndices: rows.map((el) => Number(el.dataset.tableRowIndex)),
         rowKeys: rows.map((el) => el.dataset.rowKey),
         activeVisible: active
-          ? active.bottom > viewport.top && active.top < viewport.bottom
+          ? active.height > viewport.bottom - viewport.top
+            ? active.top <= viewport.top + 1 &&
+              active.bottom >= viewport.bottom - 1
+            : active.top >= viewport.top - 1 &&
+              active.bottom <= viewport.bottom + 1
+          : null,
+        activeFocused: Boolean(
+          activeCell && document.activeElement === activeCell,
+        ),
+        activeBounds: active
+          ? { top: active.top, bottom: active.bottom }
           : null,
         headers: own('.s-table__data-head-cell').length,
         alignment,
@@ -215,12 +226,38 @@ try {
               `${name}: last row`,
             )
           if (name === 'grouping-source') {
-            // Inspect the subtotal in the viewport too. Keep the preceding active
-            // cell visibility result: initial dynamic focus is a separate gate.
-            await page.evaluate(() =>
-              window.tableLayoutAudit.table().scrollToRow(999_999, 'end'),
+            assert.equal(
+              stages.at(-1).activeVisible,
+              true,
+              'initial measured target visible',
             )
-            stages.push(await inspect('measured-last-row'))
+            assert.equal(
+              stages.at(-1).activeFocused,
+              true,
+              'initial measured target focused',
+            )
+            // Exercise distant jumps in both directions with the same measured cache.
+            for (const row of [875_000, 937_500, 999_999]) {
+              assert.equal(
+                await page.evaluate(
+                  (row) =>
+                    window.tableLayoutAudit.table().setActiveCell(row, 99_998),
+                  row,
+                ),
+                true,
+              )
+              stages.push(await inspect(`active-row-${row}`))
+              assert.equal(
+                stages.at(-1).activeVisible,
+                true,
+                `active row ${row} visible`,
+              )
+              assert.equal(
+                stages.at(-1).activeFocused,
+                true,
+                `active row ${row} focused`,
+              )
+            }
           }
         }
         await page.evaluate(() =>

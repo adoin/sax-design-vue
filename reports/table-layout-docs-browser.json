@@ -5,11 +5,15 @@
     "sourceLength": 2045,
     "rendered": {
       "rows": 12,
-      "subtotals": 0
+      "subtotals": 0,
+      "activeVisible": null,
+      "activeFocused": false
     },
     "playground": {
       "rows": 12,
-      "subtotals": 0
+      "subtotals": 0,
+      "activeVisible": null,
+      "activeFocused": false
     }
   },
   {
@@ -18,11 +22,15 @@
     "sourceLength": 2738,
     "rendered": {
       "rows": 17,
-      "subtotals": 0
+      "subtotals": 0,
+      "activeVisible": true,
+      "activeFocused": true
     },
     "playground": {
       "rows": 17,
-      "subtotals": 0
+      "subtotals": 0,
+      "activeVisible": true,
+      "activeFocused": true
     }
   },
   {
@@ -30,12 +38,16 @@
     "selector": ".grouping-source-demo",
     "sourceLength": 2359,
     "rendered": {
-      "rows": 13,
-      "subtotals": 1
+      "rows": 11,
+      "subtotals": 1,
+      "activeVisible": true,
+      "activeFocused": true
     },
     "playground": {
-      "rows": 13,
-      "subtotals": 1
+      "rows": 11,
+      "subtotals": 1,
+      "activeVisible": true,
+      "activeFocused": true
     }
   },
   {
@@ -44,11 +56,15 @@
     "sourceLength": 1987,
     "rendered": {
       "rows": 12,
-      "subtotals": 0
+      "subtotals": 0,
+      "activeVisible": null,
+      "activeFocused": false
     },
     "playground": {
       "rows": 12,
-      "subtotals": 0
+      "subtotals": 0,
+      "activeVisible": null,
+      "activeFocused": false
     }
   },
   {
@@ -57,11 +73,15 @@
     "sourceLength": 2522,
     "rendered": {
       "rows": 17,
-      "subtotals": 0
+      "subtotals": 0,
+      "activeVisible": true,
+      "activeFocused": true
     },
     "playground": {
       "rows": 17,
-      "subtotals": 0
+      "subtotals": 0,
+      "activeVisible": true,
+      "activeFocused": true
     }
   },
   {
@@ -69,12 +89,16 @@
     "selector": ".grouping-source-demo",
     "sourceLength": 2311,
     "rendered": {
-      "rows": 13,
-      "subtotals": 1
+      "rows": 11,
+      "subtotals": 1,
+      "activeVisible": true,
+      "activeFocused": true
     },
     "playground": {
-      "rows": 13,
-      "subtotals": 1
+      "rows": 11,
+      "subtotals": 1,
+      "activeVisible": true,
+      "activeFocused": true
     }
   }
 ]

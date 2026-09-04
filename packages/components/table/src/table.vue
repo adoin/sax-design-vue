@@ -494,6 +494,7 @@ import { useTableEditLifecycle } from './composables/use-table-edit-lifecycle'
 import { useTableRowReorder } from './composables/use-table-row-reorder'
 import { useTableRowDrag } from './composables/use-table-row-drag'
 import { useTableKeyboard } from './composables/use-table-keyboard'
+import { tableFocusVisible } from './composables/table-focus-visibility'
 import { useTableKeyboardCoordinates } from './composables/use-table-keyboard-coordinates'
 import { useTableRangeController } from './composables/use-table-range-controller'
 import { useTableClipboard } from './composables/use-table-clipboard'
@@ -1856,6 +1857,11 @@ const keyboard = useTableKeyboard(props, emit, {
   ...mergeCoordinates,
   root: () => tableScrollRef.value,
   fromElement: coordinateFromElement,
+  focusVisible: (cell) => {
+    if (!usesBodyScroll.value || !dynamicRows.value) return undefined
+    const viewport = virtualListRef.value?.getScrollElement()
+    return viewport ? tableFocusVisible(cell, viewport) : false
+  },
   locate: (coordinate) => {
     const row = dragRowAt(coordinate.viewRow ?? coordinate.row)
     if (row) scrollToRow(props.virtualSource ? row.index : row.row)

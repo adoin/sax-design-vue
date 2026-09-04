@@ -33,6 +33,8 @@ interface KeyboardOptions {
   fromElement: (cell: HTMLElement) => TableCellCoordinate | undefined
   locate: (coordinate: TableCellCoordinate) => void
   element: (coordinate: TableCellCoordinate) => HTMLElement | null | undefined
+  /** Undefined skips layout settling when virtual measurement is not active. */
+  focusVisible?: (cell: HTMLElement) => boolean | undefined
   edit: (coordinate: TableCellCoordinate) => Promise<boolean>
   editing: () => boolean
   dragActive: () => boolean
@@ -161,8 +163,15 @@ export function useTableKeyboard(
       if (request !== sequence || disposed) return false
     }
     let cell = options.element(target)
-    // Both virtual axes may mount on separate frames after a distant jump.
-    for (let frame = 0; !cell && frame < 8; frame++) {
+    const needsLayout = cell ? options.focusVisible?.(cell) != null : true
+    let visibleFrames = 0
+    // Mounting in overscan is not enough: dynamic measurements may still move
+    // the target outside the viewport. Require two visible layout frames.
+    for (
+      let frame = 0;
+      frame < 8 && (!cell || (needsLayout && visibleFrames < 2));
+      frame++
+    ) {
       await new Promise<void>((resolve) => {
         const win = options.root()?.ownerDocument.defaultView
         cancelFrame?.()
@@ -191,11 +200,18 @@ export function useTableKeyboard(
       if (resolved.row !== target.row || resolved.column !== target.column) {
         options.locate(resolved)
         target = resolved
+        visibleFrames = 0
         continue
       }
       cell = options.element(target)
+      const visible = cell && options.focusVisible?.(cell)
+      if (cell && visible !== false) visibleFrames += visible == null ? 2 : 1
+      else {
+        visibleFrames = 0
+        options.locate(target)
+      }
     }
-    if (!cell) return false
+    if (!cell || (needsLayout && visibleFrames < 2)) return false
     parked = false
     ownedFocus = true
     cell.focus({ preventScroll: true })
@@ -422,11 +438,29 @@ export function useTableKeyboard(
             cancelFrame?.()
           }
         }
+        const interruptNavigation = () => {
+          if (!pendingFocus) return
+          sequence++
+          cancelFrame?.()
+        }
         root.ownerDocument.addEventListener('focusin', outside)
         root.ownerDocument.addEventListener('pointerdown', outside)
+        // Drag handles and embedded controls may stop pointer event bubbling.
+        root.addEventListener('pointerdown', interruptNavigation, true)
+        root.addEventListener('wheel', interruptNavigation, {
+          passive: true,
+          capture: true,
+        })
+        root.addEventListener('touchstart', interruptNavigation, {
+          passive: true,
+          capture: true,
+        })
         removeFocusListener = () => {
           root.ownerDocument.removeEventListener('focusin', outside)
           root.ownerDocument.removeEventListener('pointerdown', outside)
+          root.removeEventListener('pointerdown', interruptNavigation, true)
+          root.removeEventListener('wheel', interruptNavigation, true)
+          root.removeEventListener('touchstart', interruptNavigation, true)
         }
         refreshDOM()
       },

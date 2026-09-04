@@ -43,10 +43,36 @@ try {
           scope,
         )
         assert.equal(await page.$('.live-example-preview__error'), null)
-        return page.$eval(scope, (el) => ({
-          rows: el.querySelectorAll('.s-table__data-row').length,
-          subtotals: el.querySelectorAll('.s-table__group-subtotal').length,
-        }))
+        const result = await page.$eval(scope, (el) => {
+          const active = el.querySelector('.is-active-cell')
+          const rect = active?.getBoundingClientRect()
+          const viewport = el.querySelector('.s-vl__window')
+          const top = viewport?.getBoundingClientRect().top ?? 0
+          const bottom = top + (viewport?.clientHeight ?? 0)
+          return {
+            rows: el.querySelectorAll('.s-table__data-row').length,
+            subtotals: el.querySelectorAll('.s-table__group-subtotal').length,
+            activeVisible: rect
+              ? rect.height > bottom - top
+                ? rect.top <= top + 1 && rect.bottom >= bottom - 1
+                : rect.top >= top - 1 && rect.bottom <= bottom + 1
+              : null,
+            activeFocused: Boolean(active && document.activeElement === active),
+          }
+        })
+        if (selector === '.grouping-source-demo') {
+          assert.equal(
+            result.activeVisible,
+            true,
+            `${scope}: measured focus visible`,
+          )
+          assert.equal(
+            result.activeFocused,
+            true,
+            `${scope}: measured focus owned`,
+          )
+        }
+        return result
       }
       const rendered = await exercise(selector)
       await page.$$eval(
