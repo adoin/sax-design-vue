@@ -60,9 +60,6 @@ const builtin = () => {
     mergeProps(
       {
         block: true,
-        ...(['select', 'date'].includes(type)
-          ? { label: props.context.column.title ?? props.context.column.field }
-          : {}),
       },
       config.value.props ?? {},
       {

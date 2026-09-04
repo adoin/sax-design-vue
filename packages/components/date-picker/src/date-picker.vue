@@ -78,6 +78,7 @@
       <s-input
         v-else
         ref="inputRef"
+        :aria-label="($attrs['aria-label'] as string | undefined) ?? label"
         :model-value="displayText"
         :placeholder="inputPlaceholder"
         :label="label"

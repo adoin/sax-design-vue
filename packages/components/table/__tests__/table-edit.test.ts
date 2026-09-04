@@ -145,6 +145,14 @@ describe('table editing integration', () => {
     })
     expect(await wrapper.vm.startEdit(0, 'name')).toBe(true)
     expect(wrapper.findAll('.s-table__cell-editor')).toHaveLength(5)
+    expect(wrapper.getComponent(SSelect).props('label')).toBeFalsy()
+    expect(
+      wrapper.getComponent(SSelect).get('input').attributes('aria-label'),
+    ).toBe('Status')
+    expect(wrapper.getComponent(SDatePicker).props('label')).toBeFalsy()
+    expect(
+      wrapper.getComponent(SDatePicker).get('input').attributes('aria-label'),
+    ).toBe('Date')
     await wrapper.get('.s-table__cell-editor input').setValue('Renamed')
     const quantity = wrapper.findAll('.s-table__cell-editor')[1].get('input')
     await quantity.setValue('12')

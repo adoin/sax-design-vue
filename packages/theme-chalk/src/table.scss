@@ -396,6 +396,10 @@
     width: 100%;
     min-width: 0;
     outline: none;
+    .#{$namespace}-select {
+      // Use the same natural text/padding height as the neighboring inputs.
+      @include set-var-value(('select', 'min-height'), 0px);
+    }
   }
 
   @include e(cell-main) {
@@ -429,6 +433,7 @@
       }
     }
     &.is-editing-cell {
+      padding: 0;
       background: color-mix(
         in srgb,
         #{getColor(primary)} 5%,
