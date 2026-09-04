@@ -457,9 +457,9 @@ $rate: map.merge(
 $scrollbar: () !default;
 $scrollbar: map.merge(
   (
-    'thumb-opacity': 0.7,
-    'thumb-hover-opacity': 1,
-    'thumb-color': getCssVar(gray-3),
+    'thumb-opacity': 0.45,
+    'thumb-hover-opacity': 0.7,
+    'thumb-color': getCssVar(primary),
     'bar-color': getCssVar(gray-2),
   ),
   $scrollbar
