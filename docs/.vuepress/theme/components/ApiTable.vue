@@ -264,16 +264,12 @@ const restoreCodeFocus = async () => {
 }
 .api-table :deep(.s-table__data-cell) {
   align-items: flex-start;
-  border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.08);
   line-height: 1.55;
 }
-.api-table :deep(.s-table__data-row:last-child .s-table__data-cell) {
-  border-bottom: 0;
-}
-.api-table :deep(.api-column-type) {
+.api-table :deep(.s-table__data-cell.api-column-type) {
   color: hsl(var(--sax-accent-secondary));
 }
-.api-table :deep(.api-column-default) {
+.api-table :deep(.s-table__data-cell.api-column-default) {
   color: hsl(var(--sax-badge-tip-color));
 }
 .api-name {
