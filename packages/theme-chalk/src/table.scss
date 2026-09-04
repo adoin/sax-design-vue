@@ -405,6 +405,23 @@
       display: flex;
       // Use the same natural text/padding height as the neighboring inputs.
       @include set-var-value(('select', 'min-height'), 0px);
+
+      // Editing controls stay on the same baseline, including hover/open states.
+      &.is-hovering,
+      &.is-open {
+        .#{$namespace}-select__input,
+        .#{$namespace}-select__tags {
+          transform: none;
+        }
+        .#{$namespace}-select__arrow,
+        .#{$namespace}-select__placeholder,
+        .#{$namespace}-select__label.is-placeholder {
+          transform: translateY(-50%);
+        }
+      }
+      &.is-open .#{$namespace}-select__arrow {
+        transform: translateY(-50%) rotate(180deg);
+      }
     }
   }
 
