@@ -43,6 +43,8 @@ describe('shared context menu', () => {
     })
     document.activeElement?.dispatchEvent(tab)
     await settle()
+    wrapper.getComponent(SPopper).vm.$emit('hide')
+    await settle()
     expect(tab.defaultPrevented).toBe(false)
     expect(document.activeElement).toBe(origin)
     expect(wrapper.emitted('close')).toHaveLength(1)
@@ -100,6 +102,8 @@ describe('shared context menu', () => {
         cancelable: true,
       }),
     )
+    await settle()
+    wrapper.getComponent(SPopper).vm.$emit('hide')
     await settle()
     expect(document.activeElement).toBe(origin)
     expect(wrapper.getComponent(SFocusTrap).props('trapped')).toBe(true)

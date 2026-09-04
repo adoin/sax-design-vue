@@ -83,7 +83,9 @@ describe('column management', () => {
       attachTo: document.body,
       props: { data, columns, columnManagerConfig: true },
     })
-    await wrapper.get('.s-table__column-manager button').trigger('click')
+    await wrapper
+      .get('.s-table__column-manager button')
+      .trigger('keydown', { key: 'Enter' })
     await vi.waitFor(() =>
       expect(document.querySelector('.s-table__column-panel')).not.toBeNull(),
     )

@@ -52,6 +52,14 @@ const close = () => {
   restoreTriggerFocus = true
   open.value = false
 }
+const toggleFromKeyboard = () => {
+  if (props.disabled) return
+  if (open.value) close()
+  else {
+    restoreTriggerFocus = false
+    open.value = true
+  }
+}
 const afterHide = () => {
   // The popper may retain its trapped content until the leave transition ends.
   if (restoreTriggerFocus && !open.value && !props.disabled)
@@ -136,6 +144,8 @@ watch(
         :disabled="disabled"
         :aria-expanded="open"
         aria-haspopup="dialog"
+        @keydown.enter.stop.prevent="toggleFromKeyboard"
+        @keydown.space.stop.prevent="toggleFromKeyboard"
       >
         <SIcon name="cb:settings" aria-hidden="true" />
         {{ t('vs.table.columnSettings') }}

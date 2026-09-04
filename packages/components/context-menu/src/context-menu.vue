@@ -23,6 +23,7 @@ const reference = shallowRef<{
 }>({ getBoundingClientRect: () => new DOMRect(0, 0, 0, 0) })
 let origin: HTMLElement | undefined
 let sequence = 0
+let pendingRestore: { request: number; target: HTMLElement } | undefined
 const enabledItems = () => [
   ...(menuRef.value?.querySelectorAll<HTMLButtonElement>(
     '[role="menuitem"]:not(:disabled)',
@@ -47,8 +48,19 @@ const close = (restore = true) => {
     restore &&
     menuRef.value?.contains(menuRef.value.ownerDocument.activeElement)
   setOpen(false)
-  if (shouldRestore && origin?.isConnected)
-    origin.focus({ preventScroll: true })
+  pendingRestore =
+    shouldRestore && origin ? { request: sequence, target: origin } : undefined
+}
+const onHidden = () => {
+  const pending = pendingRestore
+  pendingRestore = undefined
+  if (
+    pending &&
+    pending.request === sequence &&
+    !open.value &&
+    pending.target.isConnected
+  )
+    pending.target.focus({ preventScroll: true })
 }
 const show = async (
   event: MouseEvent | KeyboardEvent,
@@ -67,6 +79,7 @@ const show = async (
     target ??
     (event.target instanceof HTMLElement ? event.target : triggerRef.value)
   if (!anchor) return false
+  pendingRestore = undefined
   event.preventDefault()
   event.stopPropagation()
   origin =
@@ -162,6 +175,7 @@ watch(
 )
 onBeforeUnmount(() => {
   sequence++
+  pendingRestore = undefined
 })
 defineExpose({ show, close })
 </script>
@@ -192,6 +206,7 @@ defineExpose({ show, close })
     :shift="{ padding: 8 }"
     :popper-class="ns.e('popper')"
     @update:visible="setOpen"
+    @hide="onHidden"
   >
     <template #content>
       <SFocusTrap

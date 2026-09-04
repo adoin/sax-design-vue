@@ -1,0 +1,972 @@
+{
+  "timestamp": "2026-09-04T18:36:01.752Z",
+  "browser": "Chrome/150.0.7871.24",
+  "results": [
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "grouping",
+      "heading": "Remote groups and virtual rows",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 2359,
+      "preview": {
+        "tables": 1,
+        "rows": 12,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "merge",
+      "heading": "Merging cells",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 6,
+        "virtual": 0
+      },
+      "sourceLength": 1500,
+      "preview": {
+        "tables": 1,
+        "rows": 6,
+        "fixed": 6,
+        "virtual": 0,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "virtual-merge",
+      "heading": "Virtual merged regions",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 2738,
+      "preview": {
+        "tables": 1,
+        "rows": 17,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "context-menu",
+      "heading": "Menus in virtual data",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 30,
+        "virtual": 1
+      },
+      "sourceLength": 2146,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 30,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "cell-range",
+      "heading": "Ranges across generated data",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 2425,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "clipboard",
+      "heading": "Clipboard with generated data",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 5465,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "chart",
+      "heading": "Large-source charts",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 30,
+        "virtual": 1
+      },
+      "sourceLength": 3705,
+      "preview": {
+        "tables": 1,
+        "rows": 14,
+        "fixed": 30,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "find",
+      "heading": "Finding in generated data",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 3921,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "keyboard",
+      "heading": "Navigation across virtual windows",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 1533,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "row-drag",
+      "heading": "Generated data and edge scrolling",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 2899,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "history",
+      "heading": "Undo and redo",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 3,
+        "virtual": 0
+      },
+      "sourceLength": 3592,
+      "preview": {
+        "tables": 1,
+        "rows": 2,
+        "fixed": 3,
+        "virtual": 0,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "changes",
+      "heading": "Generated source changes",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 30,
+        "virtual": 1
+      },
+      "sourceLength": 4671,
+      "preview": {
+        "tables": 1,
+        "rows": 14,
+        "fixed": 30,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "validation",
+      "heading": "Generated data validation",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 30,
+        "virtual": 1
+      },
+      "sourceLength": 3344,
+      "preview": {
+        "tables": 1,
+        "rows": 14,
+        "fixed": 30,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "editing",
+      "heading": "Editing virtual data",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 30,
+        "virtual": 1
+      },
+      "sourceLength": 2749,
+      "preview": {
+        "tables": 1,
+        "rows": 14,
+        "fixed": 30,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "edit-lifecycle",
+      "heading": "Editing lifecycle",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 7,
+        "virtual": 0
+      },
+      "sourceLength": 4913,
+      "preview": {
+        "tables": 1,
+        "rows": 6,
+        "fixed": 7,
+        "virtual": 0,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "details",
+      "heading": "Details with virtual scrolling",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 20,
+        "virtual": 1
+      },
+      "sourceLength": 2319,
+      "preview": {
+        "tables": 1,
+        "rows": 8,
+        "fixed": 18,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "resize",
+      "heading": "Column resizing",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 27,
+        "virtual": 1
+      },
+      "sourceLength": 4197,
+      "preview": {
+        "tables": 1,
+        "rows": 8,
+        "fixed": 27,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "column-manager",
+      "heading": "Column settings",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 16,
+        "virtual": 1
+      },
+      "sourceLength": 3598,
+      "preview": {
+        "tables": 1,
+        "rows": 7,
+        "fixed": 16,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "grouped-header",
+      "heading": "Generated grouped headers",
+      "lightColor": "color(srgb 0.819427 0.871244 1)",
+      "darkColor": "color(srgb 0.213614 0.273827 0.417002)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 32,
+        "virtual": 1
+      },
+      "sourceLength": 1441,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 32,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table.html",
+      "feature": "footer",
+      "heading": "Virtual columns and footers",
+      "lightColor": "color(srgb 0.819427 0.871244 1)",
+      "darkColor": "color(srgb 0.213614 0.273827 0.417002)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 32,
+        "virtual": 1
+      },
+      "sourceLength": 2045,
+      "preview": {
+        "tables": 1,
+        "rows": 12,
+        "fixed": 32,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table-grid.html",
+      "feature": "grid",
+      "heading": "Generated data",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 1481,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table-grid.html",
+      "feature": "query-toolbar",
+      "heading": "Query and toolbar",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 4,
+        "virtual": 0
+      },
+      "sourceLength": 2971,
+      "preview": {
+        "tables": 1,
+        "rows": 3,
+        "fixed": 4,
+        "virtual": 0,
+        "error": ""
+      }
+    },
+    {
+      "locale": "en",
+      "page": "components/table-grid.html",
+      "feature": "request-proxy",
+      "heading": "Request proxy",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 14,
+        "virtual": 1
+      },
+      "sourceLength": 3838,
+      "preview": {
+        "tables": 1,
+        "rows": 0,
+        "fixed": 1,
+        "virtual": 0,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "grouping",
+      "heading": "远程分组与虚拟行",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 2311,
+      "preview": {
+        "tables": 1,
+        "rows": 12,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "merge",
+      "heading": "合并单元格",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 6,
+        "virtual": 0
+      },
+      "sourceLength": 1354,
+      "preview": {
+        "tables": 1,
+        "rows": 6,
+        "fixed": 6,
+        "virtual": 0,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "virtual-merge",
+      "heading": "虚拟合并区域",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 2522,
+      "preview": {
+        "tables": 1,
+        "rows": 17,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "context-menu",
+      "heading": "虚拟数据菜单",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 30,
+        "virtual": 1
+      },
+      "sourceLength": 2032,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 30,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "cell-range",
+      "heading": "巨量数据的区域选择",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 2376,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "clipboard",
+      "heading": "巨量数据的剪贴板",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 5038,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "chart",
+      "heading": "巨量数据图表",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 30,
+        "virtual": 1
+      },
+      "sourceLength": 3490,
+      "preview": {
+        "tables": 1,
+        "rows": 14,
+        "fixed": 30,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "find",
+      "heading": "巨量数据查找与替换",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 3871,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "keyboard",
+      "heading": "跨虚拟窗口导航",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 1485,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "row-drag",
+      "heading": "生成源拖动与自动滚动",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 2778,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "history",
+      "heading": "撤销与重做",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 3,
+        "virtual": 0
+      },
+      "sourceLength": 3385,
+      "preview": {
+        "tables": 1,
+        "rows": 2,
+        "fixed": 3,
+        "virtual": 0,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "changes",
+      "heading": "生成源变更适配",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 30,
+        "virtual": 1
+      },
+      "sourceLength": 4446,
+      "preview": {
+        "tables": 1,
+        "rows": 14,
+        "fixed": 30,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "validation",
+      "heading": "生成数据校验",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 30,
+        "virtual": 1
+      },
+      "sourceLength": 3136,
+      "preview": {
+        "tables": 1,
+        "rows": 14,
+        "fixed": 30,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "editing",
+      "heading": "虚拟数据编辑",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 30,
+        "virtual": 1
+      },
+      "sourceLength": 2717,
+      "preview": {
+        "tables": 1,
+        "rows": 14,
+        "fixed": 30,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "edit-lifecycle",
+      "heading": "编辑生命周期",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 7,
+        "virtual": 0
+      },
+      "sourceLength": 4667,
+      "preview": {
+        "tables": 1,
+        "rows": 6,
+        "fixed": 7,
+        "virtual": 0,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "details",
+      "heading": "虚拟滚动中的详情",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 20,
+        "virtual": 1
+      },
+      "sourceLength": 2030,
+      "preview": {
+        "tables": 1,
+        "rows": 9,
+        "fixed": 20,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "resize",
+      "heading": "拖动调整列宽",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 30,
+        "virtual": 1
+      },
+      "sourceLength": 3891,
+      "preview": {
+        "tables": 1,
+        "rows": 9,
+        "fixed": 30,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "column-manager",
+      "heading": "列设置",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 20,
+        "virtual": 1
+      },
+      "sourceLength": 3335,
+      "preview": {
+        "tables": 1,
+        "rows": 9,
+        "fixed": 20,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "grouped-header",
+      "heading": "按需生成分组表头",
+      "lightColor": "color(srgb 0.819427 0.871244 1)",
+      "darkColor": "color(srgb 0.213614 0.273827 0.417002)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 32,
+        "virtual": 1
+      },
+      "sourceLength": 1405,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 32,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table.html",
+      "feature": "footer",
+      "heading": "虚拟列与表尾",
+      "lightColor": "color(srgb 0.819427 0.871244 1)",
+      "darkColor": "color(srgb 0.213614 0.273827 0.417002)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 32,
+        "virtual": 1
+      },
+      "sourceLength": 1987,
+      "preview": {
+        "tables": 1,
+        "rows": 12,
+        "fixed": 32,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table-grid.html",
+      "feature": "grid",
+      "heading": "按需生成数据",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 28,
+        "virtual": 1
+      },
+      "sourceLength": 1441,
+      "preview": {
+        "tables": 1,
+        "rows": 13,
+        "fixed": 28,
+        "virtual": 1,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table-grid.html",
+      "feature": "query-toolbar",
+      "heading": "查询与工具栏",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 4,
+        "virtual": 0
+      },
+      "sourceLength": 2794,
+      "preview": {
+        "tables": 1,
+        "rows": 3,
+        "fixed": 4,
+        "virtual": 0,
+        "error": ""
+      }
+    },
+    {
+      "locale": "zh",
+      "page": "components/table-grid.html",
+      "feature": "request-proxy",
+      "heading": "请求代理",
+      "lightColor": "color(srgb 0.873726 0.909961 1)",
+      "darkColor": "color(srgb 0.197779 0.250601 0.374927)",
+      "rendered": {
+        "tables": 1,
+        "fixed": 14,
+        "virtual": 1
+      },
+      "sourceLength": 3660,
+      "preview": {
+        "tables": 1,
+        "rows": 0,
+        "fixed": 1,
+        "virtual": 0,
+        "error": ""
+      }
+    }
+  ]
+}

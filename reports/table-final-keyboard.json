@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-09-04T18:39:20.804Z",
+  "browser": "Chrome/150.0.7871.24",
+  "results": [
+    {
+      "feature": "grouping",
+      "label": "Expand node: Design",
+      "focused": true
+    },
+    {
+      "feature": "details",
+      "expanded": "false",
+      "focused": true
+    },
+    {
+      "feature": "resize",
+      "width": 82,
+      "focused": true
+    },
+    {
+      "feature": "keyboard-navigation",
+      "row": "1",
+      "active": true
+    },
+    {
+      "feature": "context-menu",
+      "items": 2,
+      "focusInside": true,
+      "closed": true,
+      "restored": true
+    },
+    {
+      "feature": "cell-range",
+      "cells": 2,
+      "focused": true
+    },
+    {
+      "feature": "row-drag",
+      "cancelled": true,
+      "focusOnHandle": true
+    },
+    {
+      "feature": "editing",
+      "editorFocused": true,
+      "closed": true,
+      "cellFocused": true
+    },
+    {
+      "feature": "find",
+      "inputFocused": true,
+      "closed": true,
+      "focusReturned": true
+    },
+    {
+      "feature": "column-manager",
+      "closed": true,
+      "restored": true
+    }
+  ]
+}

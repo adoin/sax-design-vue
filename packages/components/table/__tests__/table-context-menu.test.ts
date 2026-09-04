@@ -53,6 +53,10 @@ const settle = async () => {
   await flushPromises()
   await nextTick()
 }
+const finishClose = async (wrapper: ReturnType<typeof setup>) => {
+  wrapper.getComponent(SContextMenu).getComponent(SPopper).vm.$emit('hide')
+  await settle()
+}
 const invoke = async (element: Element, keyboard = false) => {
   const event = keyboard
     ? new KeyboardEvent('keydown', {
@@ -157,6 +161,7 @@ describe('table context menus', () => {
       expect(wrapper.element.contains(document.activeElement)).toBe(false)
       ;(document.activeElement as HTMLButtonElement).click()
       await settle()
+      await finishClose(wrapper)
       const result = wrapper
         .emitted('contextMenuSelect')
         ?.at(-1)?.[0] as TableContextMenuSelectParams
@@ -198,6 +203,7 @@ describe('table context menus', () => {
       }),
     )
     await settle()
+    await finishClose(wrapper)
     expect(document.activeElement).toBe(cell)
     expect(wrapper.emitted('contextMenuClose')).toHaveLength(1)
   })
@@ -317,6 +323,7 @@ describe('table context menus', () => {
       columnIndex: 99998,
     })
     wrapper.vm.closeContextMenu()
+    await finishClose(wrapper)
     expect(document.activeElement).toBe(cell)
     await invoke(
       wrapper.get('.s-table__footer-cell[data-column-index="99999"]').element,
