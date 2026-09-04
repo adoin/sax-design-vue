@@ -13,20 +13,18 @@
 
     <div
       ref="tableScrollRef"
-      tabindex="-1"
+      :tabindex="keyboard.rootTabindex.value"
       :class="[
         tableKls,
         ns.is('horizontal-virtual', horizontalVirtualMode && usesBodyScroll),
       ]"
-      @keydown="
-        rowDrag.session.value?.keyboard &&
-        rowDrag.keydown($event, rowDrag.session.value.from)
-      "
+      @keydown="handleTableKeydown"
+      @click="keyboard.onClick"
       @scroll="handleTableScroll"
       @wheel="handleTableWheel"
       @mouseover="overflow.enter"
       @mouseout="overflow.leave"
-      @focusin="overflow.enter"
+      @focusin="handleTableFocusin"
       @focusout="overflow.leave"
       @scroll.capture="overflow.close"
       @keydown.esc="overflow.close"
@@ -216,6 +214,7 @@
                 <TableDataRow
                   :detail="detail"
                   :editing="editing"
+                  :keyboard="keyboard"
                   :drag="
                     rowReorder.config.value.enabled !== false && rowDragConfig
                       ? rowDrag
@@ -309,6 +308,7 @@
                 :data-row-key="String(flatRow.key)"
                 :detail="detail"
                 :editing="editing"
+                :keyboard="keyboard"
                 :drag="
                   rowReorder.config.value.enabled !== false && rowDragConfig
                     ? rowDrag
@@ -499,6 +499,8 @@ import { useTableChanges } from './composables/use-table-changes'
 import { useTableEditLifecycle } from './composables/use-table-edit-lifecycle'
 import { useTableRowReorder } from './composables/use-table-row-reorder'
 import { useTableRowDrag } from './composables/use-table-row-drag'
+import { useTableKeyboard } from './composables/use-table-keyboard'
+import { useTableKeyboardCoordinates } from './composables/use-table-keyboard-coordinates'
 import { useTableValidation } from './composables/use-table-validation'
 import { useTableValidationApi } from './composables/use-table-validation-api'
 import { tableValidationId } from './validation-utils'
@@ -1569,7 +1571,81 @@ const rowDrag = useTableRowDrag(rowReorder, emit, {
   },
 })
 
+const keyboardCoordinates = useTableKeyboardCoordinates(props, {
+  rows: flatRows,
+  count: () => effectiveRowCount.value,
+  offset: () => pagination.sourceOffset.value,
+  rowAt: dragRowAt,
+  columns: resolvedColumns,
+  manager: columnManager,
+})
+const keyboard = useTableKeyboard(props, emit, {
+  ...keyboardCoordinates,
+  root: () => tableScrollRef.value,
+  fromElement: (cell) =>
+    keyboardCoordinates.at(
+      Number(
+        cell
+          .closest('[data-table-row-index]')
+          ?.getAttribute('data-table-row-index'),
+      ),
+      keyboardCoordinates.positionOf(Number(cell.dataset.columnIndex)),
+    ),
+  locate: (coordinate) => {
+    const row = dragRowAt(coordinate.row)
+    if (row) scrollToRow(props.virtualSource ? row.index : row.row)
+    scrollToColumn(coordinate.column)
+  },
+  element: (coordinate) =>
+    [
+      ...(tableScrollRef.value?.querySelectorAll<HTMLElement>(
+        `[data-table-row-index="${coordinate.row}"] > [data-column-index="${coordinate.column}"]`,
+      ) ?? []),
+    ].find(
+      (cell) =>
+        cell.closest('[role="table"]') ===
+        tableScrollRef.value?.querySelector('[role="table"]'),
+    ),
+  edit: (coordinate) => {
+    const row = dragRowAt(coordinate.row)
+    return row
+      ? startEdit(props.virtualSource ? row.index : row.row, coordinate.column)
+      : Promise.resolve(false)
+  },
+  editing: () => Boolean(editing.active.value),
+  dragActive: () => Boolean(rowDrag.session.value),
+  context: [
+    () => (props.virtualSource ? undefined : flatRows.value),
+    () => props.virtualSource?.row,
+    () => props.virtualSource?.rowCount,
+    () => props.virtualSource?.columnCount,
+    pagination.currentPage,
+    pagination.pageSize,
+    resolvedColumns,
+    columnManager.state,
+  ],
+})
+const handleTableKeydown = (event: KeyboardEvent) => {
+  if (rowDrag.session.value?.keyboard)
+    rowDrag.keydown(event, rowDrag.session.value.from)
+  keyboard.onKeydown(event)
+}
+const handleTableFocusin = (event: FocusEvent) => {
+  overflow.enter(event)
+  keyboard.onFocusin(event)
+}
+const setActiveCell = (rowIndex: number, columnIndex: number) => {
+  const target = keyboardCoordinates.at(
+    props.virtualSource ? rowIndex - pagination.sourceOffset.value : rowIndex,
+    keyboardCoordinates.positionOf(columnIndex),
+  )
+  return target ? keyboard.select(target) : Promise.resolve(false)
+}
+
 defineExpose({
+  setActiveCell,
+  clearActiveCell: keyboard.clear,
+  getActiveCell: keyboard.get,
   moveRow: rowReorder.move,
   cancelRowDrag: rowDrag.cancel,
   undo: changes.undo,

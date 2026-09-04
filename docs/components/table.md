@@ -1,6 +1,16 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "keyboard-config"
+    type: "Boolean | TableKeyboardConfig"
+    description: "Enable cell navigation, Enter editing and generated row-key resolution."
+    default: false
+    usage: "#keyboard-navigation"
+  - name: "active-cell"
+    type: "TableActiveCell | null"
+    description: "Control the active cell with v-model:active-cell; omit for internal state."
+    default: null
+    usage: "#keyboard-navigation"
   - name: "row-drag-config"
     type: "Boolean | TableRowDragConfig"
     description: "Enable row dragging, predicates, edge scrolling and controlled adapters."
@@ -328,6 +338,16 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "update:activeCell"
+    type: "(cell: TableActiveCell | null) => void"
+    description: "Request an active-cell update independently of row selection."
+    default: null
+    usage: "#keyboard-navigation"
+  - name: "activeCellChange"
+    type: "(cell: TableActiveCell | null) => void"
+    description: "Emitted when the accepted active-cell address changes."
+    default: null
+    usage: "#keyboard-navigation"
   - name: "rowDragStart"
     type: "(context: TableRowDragContext) => void"
     description: "A pointer or keyboard interaction picks up a row."
@@ -569,6 +589,21 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "setActiveCell"
+    type: "(rowIndex: number, columnIndex: number) => Promise<boolean>"
+    description: "Activate and locate a cell; resolves whether focus succeeded. Ordinary data uses flattened-page rows and resolved columns; generated data uses absolute source indices."
+    default: null
+    usage: "#keyboard-navigation"
+  - name: "clearActiveCell"
+    type: "() => Promise<boolean>"
+    description: "Clear activity; resolves false when the controlled model refuses."
+    default: null
+    usage: "#keyboard-navigation"
+  - name: "getActiveCell"
+    type: "() => TableActiveCell | null"
+    description: "Read a copy of the current valid active-cell address."
+    default: null
+    usage: "#keyboard-navigation"
   - name: "moveRow"
     type: "(from: number, to: number, position?: TableRowDropPosition) => Promise<TableRowDragResult>"
     description: "Move using current flattened-page indices; position defaults to before."
@@ -772,6 +807,70 @@ EXPOSES:
 ---
 
 # Table
+
+<card>
+
+## Keyboard navigation
+
+Enable `keyboard-config` to move with arrow keys in visible column order. Tab / Shift + Tab wraps across rows; native Tab behavior is preserved at either edge of the current page. Fixed columns share the same navigation order, and hidden columns are skipped. Navigation does not change pages automatically.
+
+`v-model:active-cell` stores `{ rowKey, columnKey }`, independently of row selection through `v-model:highlight`. Ordinary columns use `key`, then `field`, or `@originalIndex` for unnamed columns; provide stable keys to persist addresses. Activity follows keys after sorting or reordering. Filtering, collapsing, paging or hiding the active column requests a clear when the target is no longer visible. Controlled models must accept updates.
+
+Enter / F2 on a focused cell opens its configured editor; set `enterToEdit: false` to disable that shortcut. Without an editor, navigation tries to focus a control in the cell. Editors keep their own arrows, Tab, IME and popup shortcuts; cancelling editing restores cell focus. Escape on a cell clears activity.
+
+When virtualization unmounts the active cell, focus parks at the table entry. It restores when the cell remounts and focus still belongs to the table. Clicking elsewhere or moving focus outside prevents automatic restoration. Use column settings below to hide, reorder or fix columns.
+
+<template #example><table-keyboard /></template>
+
+<template #template>
+
+@[code{18-62}](../.vuepress/components/table/keyboard.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-16}](../.vuepress/components/table/keyboard.vue)
+
+</template>
+
+<template #style>
+
+@[code{64-77}](../.vuepress/components/table/keyboard.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Navigation across virtual windows
+
+Generated addresses use a stringified source column index as `columnKey`. Supply `keyboardConfig.rowIndexOf(key)` to resolve a stable row key to an absolute source index for controlled addresses or reordered data. The table does not scan generated rows to find a key. Without a resolver, it can only retain a known navigation position while its key still matches.
+
+This example generates one million rows and 100,000 columns on demand. Select the last cell, then use arrow keys across virtual windows and into the right fixed column. Only the current window mounts. `setActiveCell` uses absolute source indices for generated data and resolves false for out-of-page or hidden targets, refused models and cancelled focus requests.
+
+<template #example><table-keyboard-source /></template>
+
+<template #template>
+
+@[code{26-47}](../.vuepress/components/table/keyboard-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-24}](../.vuepress/components/table/keyboard-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{49-62}](../.vuepress/components/table/keyboard-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

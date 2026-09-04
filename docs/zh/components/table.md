@@ -1,6 +1,16 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "keyboard-config"
+    type: "Boolean | TableKeyboardConfig"
+    description: "开启单元格导航，配置 Enter 编辑与生成源行键定位。"
+    default: false
+    usage: "#键盘导航"
+  - name: "active-cell"
+    type: "TableActiveCell | null"
+    description: "使用 v-model:active-cell 控制活动单元格；省略时由组件管理。"
+    default: null
+    usage: "#键盘导航"
   - name: "row-drag-config"
     type: "Boolean | TableRowDragConfig"
     description: "开启行拖拽，配置禁用条件、放置条件、自动滚动和受控适配器。"
@@ -328,6 +338,16 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "update:activeCell"
+    type: "(cell: TableActiveCell | null) => void"
+    description: "请求更新活动单元格，与行选择独立。"
+    default: null
+    usage: "#键盘导航"
+  - name: "activeCellChange"
+    type: "(cell: TableActiveCell | null) => void"
+    description: "活动单元格被接受后变化时触发。"
+    default: null
+    usage: "#键盘导航"
   - name: "rowDragStart"
     type: "(context: TableRowDragContext) => void"
     description: "鼠标或键盘拾取行。"
@@ -569,6 +589,21 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "setActiveCell"
+    type: "(rowIndex: number, columnIndex: number) => Promise<boolean>"
+    description: "按索引激活并定位；返回是否成功聚焦。普通数据使用当前页展开行及已解析列索引，生成源使用绝对源索引。"
+    default: null
+    usage: "#键盘导航"
+  - name: "clearActiveCell"
+    type: "() => Promise<boolean>"
+    description: "清空活动格；受控模型拒绝时返回 false。"
+    default: null
+    usage: "#键盘导航"
+  - name: "getActiveCell"
+    type: "() => TableActiveCell | null"
+    description: "读取当前有效活动格的地址副本。"
+    default: null
+    usage: "#键盘导航"
   - name: "moveRow"
     type: "(from: number, to: number, position?: TableRowDropPosition) => Promise<TableRowDragResult>"
     description: "按当前展开页索引移动行；position 默认为 before。"
@@ -772,6 +807,70 @@ EXPOSES:
 ---
 
 # Table 表格
+
+<card>
+
+## 键盘导航
+
+显式开启 `keyboard-config` 后，方向键按可见列顺序移动，Tab / Shift + Tab 跨行移动；到达当前页首尾时保留浏览器原生 Tab 行为。固定列参与相同导航顺序，隐藏列会被跳过。不会自动翻页。
+
+`v-model:active-cell` 保存 `{ rowKey, columnKey }`，与 `v-model:highlight` 行选择独立。普通列使用 `key`、`field`，未命名列使用 `@原始索引`；需要持久保存地址时请提供稳定键。排序、重排列后跟随同一行键和列键；筛选、折叠、翻页或隐藏列使目标不可见时请求清空。受控模型需接受更新。
+
+聚焦单元格后按 Enter / F2 进入已配置的编辑器；设置 `enterToEdit: false` 可关闭该快捷入口。没有编辑器时尝试聚焦格内控件。编辑器内部保留方向键、Tab、中文输入法和弹层快捷键；取消编辑后焦点回到单元格。单元格上的 Escape 清空活动格。
+
+虚拟窗口移走活动格时，焦点暂存于表格入口；该格重新挂载且焦点仍属于表格时恢复。鼠标点击其他区域或焦点已移出表格后不会自动抢回。下例还可以在列设置中隐藏、重排或固定列。
+
+<template #example><table-zh-keyboard /></template>
+
+<template #template>
+
+@[code{18-55}](../../.vuepress/components/table-zh/keyboard.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-16}](../../.vuepress/components/table-zh/keyboard.vue)
+
+</template>
+
+<template #style>
+
+@[code{57-70}](../../.vuepress/components/table-zh/keyboard.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 跨虚拟窗口导航
+
+生成源地址的 `columnKey` 是列源索引的字符串。通过 `keyboardConfig.rowIndexOf(key)` 将行键映射到绝对源行索引，便于受控模型定位或数据重排后跟随行键；组件不会扫描生成数据寻找行。未提供解析器时，只能跟随本次导航已知且仍匹配的行位置。
+
+本例按需生成 100 万行、10 万列。点击末格后可用方向键跨越虚拟窗口、进入右固定列；单元格定位只挂载当前窗口。`setActiveCell` 对生成源使用绝对源索引；目标不在当前页、列被隐藏、模型拒绝或定位取消时返回 false。
+
+<template #example><table-zh-keyboard-source /></template>
+
+<template #template>
+
+@[code{26-45}](../../.vuepress/components/table-zh/keyboard-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-24}](../../.vuepress/components/table-zh/keyboard-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{47-60}](../../.vuepress/components/table-zh/keyboard-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

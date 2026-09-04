@@ -39,6 +39,7 @@
         "
         :class="[
           ns.e('data-cell'),
+          ns.is('active-cell', keyboard?.isActive(flatRow.key, entry.index)),
           entry.column.className,
           ns.is(
             'invalid',
@@ -75,7 +76,13 @@
         :aria-colindex="(entry.ariaIndex ?? entry.index) + 1"
         :data-column-index="entry.index"
         :tabindex="
-          editing?.isEditable(editContext(entry.column, entry.index)) ? 0 : -1
+          keyboard?.enabled.value
+            ? keyboard.isActive(flatRow.key, entry.index)
+              ? 0
+              : -1
+            : editing?.isEditable(editContext(entry.column, entry.index))
+              ? 0
+              : -1
         "
         @dblclick="activateEdit(entry.column, entry.index, $event, 'dblclick')"
         @keydown="editKeydown(entry.column, entry.index, $event)"
@@ -237,6 +244,7 @@ import { tableValidationId } from './validation-utils'
 import type { TableValidation } from './composables/use-table-validation'
 import type { TableEditing } from './composables/use-table-edit'
 import type { TableRowDrag } from './composables/use-table-row-drag'
+import type { TableKeyboard } from './composables/use-table-keyboard'
 import type { TableEditContext, TableEditRenderer } from './table-edit'
 import type { TableRowDetailState } from './composables/use-table-details'
 import type {
@@ -267,6 +275,7 @@ const props = defineProps<{
   overflow?: TableOverflow
   editing?: TableEditing
   drag?: TableRowDrag
+  keyboard?: TableKeyboard
   validation?: TableValidation
   editRenderer?: (column: TableColumn) => TableEditRenderer | undefined
 }>()
@@ -355,6 +364,7 @@ const editKeydown = (
   event: KeyboardEvent,
 ) => {
   if (
+    props.keyboard?.enabled.value ||
     event.target !== event.currentTarget ||
     event.isComposing ||
     event.defaultPrevented

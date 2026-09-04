@@ -15,6 +15,7 @@ import type {
   VNodeChild,
 } from 'vue'
 import type Table from './table.vue'
+import type { TableActiveCell, TableKeyboardConfig } from './table-keyboard'
 import type {
   TableRowDragConfig,
   TableRowDragContext,
@@ -45,6 +46,7 @@ import type {
   TableValidationRule,
   TableValidationRules,
 } from './table-validation'
+export * from './table-keyboard'
 export * from './table-row-drag'
 export type { TableHistoryConfig, TableHistoryState } from './table-history'
 export type {
@@ -422,6 +424,14 @@ export const tableProps = buildProps({
     type: definePropType<boolean | TableRowDragConfig>([Boolean, Object]),
     default: false,
   },
+  keyboardConfig: {
+    type: definePropType<boolean | TableKeyboardConfig>([Boolean, Object]),
+    default: false,
+  },
+  activeCell: {
+    type: definePropType<TableActiveCell | null>(Object),
+    default: undefined,
+  },
   detailConfig: {
     type: definePropType<boolean | TableDetailConfig>([Boolean, Object]),
     default: undefined,
@@ -560,6 +570,10 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  'update:activeCell': (cell: TableActiveCell | null) =>
+    cell === null || isObject(cell),
+  activeCellChange: (cell: TableActiveCell | null) =>
+    cell === null || isObject(cell),
   rowDragStart: (context: TableRowDragContext) => isObject(context),
   rowDragEnd: (result: TableRowDragResult) => isObject(result),
   historyChange: (state: TableHistoryState) => isObject(state),
@@ -620,6 +634,10 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  /** Page row / resolved column indices; generated sources use absolute source indices. */
+  setActiveCell: (rowIndex: number, columnIndex: number) => Promise<boolean>
+  clearActiveCell: () => Promise<boolean>
+  getActiveCell: () => TableActiveCell | null
   /** Current flattened-page indices, including when using a paginated generated source. */
   moveRow: (
     from: number,

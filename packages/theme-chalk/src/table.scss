@@ -466,9 +466,14 @@
   }
 
   @include e(data-cell) {
+    &.is-active-cell {
+      background: color-mix(in srgb, #{getColor(primary)} 9%, var(--s-table-row-surface));
+      box-shadow: inset 0 0 9px -4px #{getColor(primary, 0.5)};
+      outline: none;
+    }
     &.is-editable-cell {
       cursor: text;
-      &:focus-visible {
+      &:focus-visible:not(.is-active-cell) {
         outline: none;
         box-shadow: inset 0 0 0 2px #{getColor(primary, 0.22)};
       }
