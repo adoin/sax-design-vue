@@ -42,6 +42,11 @@
       ref="findPanelRef"
       :finder="finder"
     />
+    <TableChartPanel
+      v-if="chart.enabled.value"
+      :chart="chart"
+      @error="emit('chartError', $event)"
+    />
 
     <div
       ref="tableScrollRef"
@@ -489,6 +494,9 @@ import { useTableRangeController } from './composables/use-table-range-controlle
 import { useTableClipboard } from './composables/use-table-clipboard'
 import { createTableClipboardCells } from './composables/table-clipboard-cells'
 import { useTableFind } from './composables/use-table-find'
+import { useTableChart } from './composables/use-table-chart'
+import { createTableChartScope } from './composables/table-chart-scope'
+import TableChartPanel from './table-chart-panel.vue'
 import { createTableFindScope } from './composables/table-find-scope'
 import TableFindPanel from './table-find-panel.vue'
 import { useTableRangeInteraction } from './composables/use-table-range-interaction'
@@ -2170,6 +2178,85 @@ const finder = useTableFind(props, emit, {
   ],
 })
 const findPanelRef = shallowRef<InstanceType<typeof TableFindPanel>>()
+const chart = useTableChart(props, emit, {
+  editing: () => Boolean(editing.active.value || rowDrag.session.value),
+  selection: cellRange.getBounds,
+  context: [
+    () => props.data,
+    () => props.virtualSource,
+    () => props.virtualSource?.row,
+    () => props.virtualSource?.rowKey,
+    () => props.virtualSource?.rowCount,
+    () => props.virtualSource?.column,
+    () => props.virtualSource?.columnCount,
+    tree.flatRows,
+    columnManager.state,
+    rawColumns,
+    merges.config,
+    groups.state,
+    pagination.currentPage,
+    pagination.pageSize,
+    groups.expansionState,
+    () => props.rowKey,
+  ],
+  scope: createTableChartScope({
+    selection: cellRange.getBounds,
+    count: () => ({
+      rows: effectiveRowCount.value,
+      columns: keyboardCoordinates.countColumns(),
+    }),
+    rowAt: dragRowAt,
+    cells: clipboardCells,
+    columnAt: (position) => {
+      const entry = mergeColumn(position)
+      return entry && { ...entry, position }
+    },
+    column: (key) => {
+      const index =
+        typeof key === 'number'
+          ? key
+          : props.virtualSource
+            ? /^(0|[1-9]\d*)$/.test(key)
+              ? Number(key)
+              : -1
+            : resolvedColumns.value.findIndex(
+                (column, index) =>
+                  (column.key ?? column.field ?? `@${index}`) === key,
+              )
+      const position = keyboardCoordinates.positionOf(index)
+      const entry = position >= 0 ? mergeColumn(position) : undefined
+      return entry && { ...entry, position }
+    },
+    filtered: () => {
+      if (props.virtualSource) {
+        const source = props.virtualSource
+        return {
+          count: source.rowCount,
+          rowAt: createSourceFlatRow,
+          isCurrent: () => source === props.virtualSource,
+        }
+      }
+      const rows = tree.flatRows.value
+      return {
+        count: rows.length,
+        rowAt: (index) => rows[index],
+        isCurrent: () => rows === tree.flatRows.value,
+      }
+    },
+    aggregates: () => {
+      if (!groups.enabled.value || groups.state.value.error)
+        throw new Error('Chart aggregates require a valid group configuration')
+      const model = groups.state.value
+      const nodes = groups.nodes.value
+      return {
+        groups: model.groups,
+        group: (key) => nodes.get(key),
+        summary: model.summary,
+        isCurrent: () => model === groups.state.value,
+      }
+    },
+  }),
+})
 const isRangeMergeSelected = (surface: TableMergeSurface) => {
   if (surface.area !== 'body') return false
   const row = props.virtualSource
@@ -2420,6 +2507,11 @@ const setActiveCell = (rowIndex: number, columnIndex: number) => {
 }
 
 defineExpose({
+  getChartData: chart.getChartData,
+  openChart: chart.openChart,
+  closeChart: chart.closeChart,
+  cancelChart: chart.cancelChart,
+  getChartState: chart.getChartState,
   openFind: () => findPanelRef.value?.open() ?? Promise.resolve(false),
   closeFind: () => findPanelRef.value?.close(),
   findCells: finder.findCells,

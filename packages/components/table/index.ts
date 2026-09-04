@@ -11,3 +11,4 @@ export const STableColumn = withNoopInstall(TableColumn)
 
 export * from './src/table'
 export * from './src/utils'
+export { createTableSvgChartAdapter } from './src/chart-svg-adapter'

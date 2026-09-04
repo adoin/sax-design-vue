@@ -16,6 +16,12 @@ import type {
 } from 'vue'
 import type Table from './table.vue'
 import type {
+  TableChartConfig,
+  TableChartOptions,
+  TableChartResult,
+  TableChartState,
+} from './table-chart'
+import type {
   TableFindConfig,
   TableFindNavigateOptions,
   TableFindOptions,
@@ -78,6 +84,7 @@ import type {
 } from './table-validation'
 export * from './table-clipboard'
 export * from './table-find'
+export * from './table-chart'
 export * from './table-context-menu'
 export * from './table-keyboard'
 export * from './table-cell-range'
@@ -476,6 +483,10 @@ export const tableProps = buildProps({
     type: definePropType<boolean | TableFindConfig>([Boolean, Object]),
     default: false,
   },
+  chartConfig: {
+    type: definePropType<boolean | TableChartConfig>([Boolean, Object]),
+    default: false,
+  },
   cellRange: {
     type: definePropType<TableCellRange | null>(Object),
     default: undefined,
@@ -639,6 +650,8 @@ export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
   findChange: (state: TableFindState) => isObject(state),
+  chartChange: (state: TableChartState) => isObject(state),
+  chartError: (error: unknown) => error !== undefined,
   replace: (result: TableReplaceResult) => isObject(result),
   clipboard: (result: TableClipboardResult) => isObject(result),
   'update:cellRange': (range: TableCellRange | null) =>
@@ -716,6 +729,11 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  getChartData: (options: TableChartOptions) => Promise<TableChartResult>
+  openChart: (options: TableChartOptions) => Promise<TableChartResult>
+  closeChart: () => void
+  cancelChart: () => void
+  getChartState: () => TableChartState
   openFind: () => Promise<boolean>
   closeFind: () => void
   findCells: (

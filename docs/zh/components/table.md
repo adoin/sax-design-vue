@@ -1,6 +1,11 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "chart-config"
+    type: "Boolean | TableChartConfig"
+    description: "开启图表取数，配置预算、转换与可选绘图适配器。"
+    default: false
+    usage: "#图表集成"
   - name: "find-config"
     type: "Boolean | TableFindConfig"
     description: "开启查找面板、搜索范围、转换和处理上限。"
@@ -378,6 +383,16 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "chartChange"
+    type: "(state: TableChartState) => void"
+    description: "取数进度、快照或面板状态改变。"
+    default: null
+    usage: "#图表集成"
+  - name: "chartError"
+    type: "(error: unknown) => void"
+    description: "绘图适配器挂载、尺寸更新或释放发生错误。"
+    default: null
+    usage: "#图表集成"
   - name: "findChange"
     type: "(state: TableFindState) => void"
     description: "搜索进度、匹配、活动索引或清理发生变化。"
@@ -699,6 +714,31 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "getChartData"
+    type: "(options: TableChartOptions) => Promise<TableChartResult>"
+    description: "提取只读图表快照，不打开面板。"
+    default: null
+    usage: "#图表集成"
+  - name: "openChart"
+    type: "(options: TableChartOptions) => Promise<TableChartResult>"
+    description: "提取完整数据后打开面板；需要配置 adapter。"
+    default: null
+    usage: "#图表集成"
+  - name: "closeChart"
+    type: "() => void"
+    description: "关闭面板、取消取数并清除快照。"
+    default: null
+    usage: "#图表集成"
+  - name: "cancelChart"
+    type: "() => void"
+    description: "取消待完成的取数任务。"
+    default: null
+    usage: "#图表集成"
+  - name: "getChartState"
+    type: "() => TableChartState"
+    description: "读取图表取数和面板状态。"
+    default: null
+    usage: "#图表集成"
   - name: "findCells"
     type: "(query: string | TableFindQuery, options?: TableFindOptions) => Promise<TableFindResult>"
     description: "查找指定范围，返回匹配快照及扫描完整性。"
@@ -1400,6 +1440,70 @@ EXPOSES:
 <template #style>
 
 @[code{171-185}](../../.vuepress/components/table-zh/clipboard-source.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 图表集成
+
+开启 `chart-config` 后，使用 `getChartData(options)` 提取不可变快照；配置 `adapter` 后可用 `openChart(options)` 打开面板。按需导入的 `createTableSvgChartAdapter()` 支持柱状图和折线图，普通表格无需引入图表引擎。面板提供数据表格、类型切换与关闭按钮，支持 Tab 焦点循环及 Escape 关闭。
+
+`scope: 'selection'` 使用当前矩形选区或显式 `bounds`；类别与数值列必须位于选区内，完整合并区域的数值只计一次。`filtered` 使用分页前已提供、已筛选并展开的树行，不加载远程页面或未加载的树节点。`aggregate` 读取现有 `group-config` 统计，默认取根分组；`groupKeys` 可指定子分组，`aggregate: 'summary'` 读取整体汇总。组统计范围沿用分组配置，不会重新统计其他页面。
+
+用 `category` 指定类别列，`series` 指定数值列和显示名称；聚合范围中的 `series.column` 是聚合键。只把有限数字作为数值，空值、数字字符串等默认为缺口；需要转换时提供 `categoryMethod` 或 `valueMethod`。相同类别名称仍保留独立数据点，`points` 保存稳定行键或组键。返回的是调用时快照；再次调用刷新数据。数据引用、视图、列或分组模型变化会取消当前取数并关闭旧面板。
+
+自定义适配器实现 `mount(container, { data, type, theme, signal })`，返回包含 `dispose()` 和可选 `resize(width, height)` 的句柄。异步挂载也受支持；数据、类型或主题变化会中止旧信号并在新容器重新挂载。适配器只应写入提供的容器，并在挂载失败时自行释放已创建资源。面板关闭或卸载后释放句柄；晚返回的旧句柄同样会释放。适配器错误通过 `chartError` 报告，取数错误通过方法返回值报告。
+
+<template #example><table-zh-chart /></template>
+
+<template #template>
+
+@[code{60-88}](../../.vuepress/components/table-zh/chart.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-59}](../../.vuepress/components/table-zh/chart.vue)
+
+</template>
+
+<template #style>
+
+@[code{89-103}](../../.vuepress/components/table-zh/chart.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 巨量数据图表
+
+图表取数默认最多保留 1000 个点、32 个系列、10000 个单元格和 2000000 个元数据/类别字符。单元格预算包含每个点的类别与所有系列。超限返回 `reason: 'limit'` 和可用的不完整快照，`openChart` 不展示截断图表；缩小范围或明确调整预算后重试。`cancelChart()` 或 `AbortSignal` 可停止取数，复杂对象的快照与转换仍有独立内存成本。
+
+本例使用百万行、十万列生成源，末端图表只读取选中的五行、两列，跨中心列和右固定列。生成源的 `filtered` 范围是适配器提供的全部逻辑行，不替适配器执行远程查询；远程筛选应先更新数据源。聚合按钮直接使用远程统计，不枚举组内成员。
+
+<template #example><table-zh-chart-source /></template>
+
+<template #template>
+
+@[code{95-128}](../../.vuepress/components/table-zh/chart-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-94}](../../.vuepress/components/table-zh/chart-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{129-143}](../../.vuepress/components/table-zh/chart-source.vue)
 
 </template>
 

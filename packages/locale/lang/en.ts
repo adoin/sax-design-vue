@@ -305,6 +305,18 @@ export default {
     table: {
       rangeSelected: 'Selected range: {rows} rows by {columns} columns.',
       rangeEmpty: 'No cell range selected.',
+      chartTitle: 'Chart',
+      chartCategory: 'Category',
+      chartClose: 'Close',
+      chartType_bar: 'Bar',
+      chartType_line: 'Line',
+      chartData: 'View data',
+      chartRendering: 'Rendering chart…',
+      chartError: 'Unable to render this chart. You can still view its data.',
+      chartEmpty: 'No chart data.',
+      chartAlternative:
+        'Choose View data for an accessible table of all values.',
+      chartSeries: 'Series',
       findTitle: 'Find and replace',
       findText: 'Find text',
       findReplacement: 'Replace with',

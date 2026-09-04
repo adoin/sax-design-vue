@@ -407,6 +407,38 @@
   @include e(find) {
     margin-bottom: 10px;
   }
+  @include e(chart-theme) {
+    display: none;
+    color: getColor(primary);
+    border-color: getColor(text);
+    background-color: getColor(background);
+  }
+  @include e(chart-panel) {
+    max-height: 80vh;
+    overflow: auto;
+    min-width: 0;
+    outline: none;
+    h2 { margin: 0; font-size: 1.15rem; }
+  }
+  @include e(chart-toolbar) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+    h2 { flex: 1; }
+  }
+  @include e(chart-canvas) { width: 100%; height: 320px; }
+  @include e(chart-legend) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    list-style: none;
+    margin: 12px 0;
+    padding: 0;
+    li { display: flex; align-items: center; gap: 6px; }
+    i { width: 10px; height: 10px; border-radius: 3px; }
+  }
   @include e(find-panel) {
     margin-top: 8px;
     padding: 14px;

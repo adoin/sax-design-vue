@@ -1,6 +1,11 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "chart-config"
+    type: "Boolean | TableChartConfig"
+    description: "Enable chart data extraction, budgets, conversions and an optional drawing adapter."
+    default: false
+    usage: "#chart-integration"
   - name: "find-config"
     type: "Boolean | TableFindConfig"
     description: "Enable search UI, scopes, conversions and processing limits."
@@ -378,6 +383,16 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "chartChange"
+    type: "(state: TableChartState) => void"
+    description: "Chart extraction, snapshot or panel state changed."
+    default: null
+    usage: "#chart-integration"
+  - name: "chartError"
+    type: "(error: unknown) => void"
+    description: "The drawing adapter failed while mounting, resizing or disposing."
+    default: null
+    usage: "#chart-integration"
   - name: "findChange"
     type: "(state: TableFindState) => void"
     description: "Search progress, matches, active index or cleared state changed."
@@ -699,6 +714,31 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "getChartData"
+    type: "(options: TableChartOptions) => Promise<TableChartResult>"
+    description: "Extract a readonly chart snapshot without opening a panel."
+    default: null
+    usage: "#chart-integration"
+  - name: "openChart"
+    type: "(options: TableChartOptions) => Promise<TableChartResult>"
+    description: "Extract complete data and open the panel; requires an adapter."
+    default: null
+    usage: "#chart-integration"
+  - name: "closeChart"
+    type: "() => void"
+    description: "Close the panel, cancel extraction and clear the snapshot."
+    default: null
+    usage: "#chart-integration"
+  - name: "cancelChart"
+    type: "() => void"
+    description: "Cancel pending data extraction."
+    default: null
+    usage: "#chart-integration"
+  - name: "getChartState"
+    type: "() => TableChartState"
+    description: "Read extraction and panel state."
+    default: null
+    usage: "#chart-integration"
   - name: "findCells"
     type: "(query: string | TableFindQuery, options?: TableFindOptions) => Promise<TableFindResult>"
     description: "Search the chosen scope and return a snapshot with matches and completion limits."
@@ -1400,6 +1440,70 @@ Generated sources locate stable row keys through `change-config.indexOf` and acc
 <template #style>
 
 @[code{177-191}](../.vuepress/components/table/clipboard-source.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Chart integration
+
+Enable `chart-config` to extract immutable snapshots with `getChartData(options)`. Add an `adapter` to open the panel with `openChart(options)`. The optional `createTableSvgChartAdapter()` export provides bar and line charts without introducing a chart engine into ordinary tables. The panel offers a data table, chart-type controls and a close button, with Tab focus containment and Escape closing.
+
+`scope: 'selection'` uses the current cell range or explicit `bounds`; mapped columns must be inside that range, and numeric values in complete merged regions are counted once. `filtered` reads supplied, filtered and expanded tree rows before local pagination. It never fetches remote pages or unloaded children. `aggregate` consumes existing `group-config` statistics: root groups by default, explicit nested `groupKeys`, or the overall summary with `aggregate: 'summary'`. Statistics retain the grouping configuration's scope rather than recomputing other pages.
+
+Choose the category column with `category` and numeric columns with `series`. For aggregate scope, `series.column` identifies an aggregate key. Only finite numbers become numeric values; missing values and numeric strings are gaps unless converted explicitly with `categoryMethod` or `valueMethod`. Equal category labels remain separate points, with stable row/group keys in `points`. Results are snapshots; call again to refresh. Data-reference, view, column or grouping-model changes cancel extraction and close the old panel.
+
+Custom adapters implement `mount(container, { data, type, theme, signal })`, returning a handle with `dispose()` and optional `resize(width, height)`. Asynchronous mounting is supported. Data, type or theme changes abort the old signal and remount into a new container. Write only inside the provided container and release resources if mounting rejects. Closing or unmounting disposes the handle, including handles returned after cancellation. Adapter failures emit `chartError`; extraction failures are returned by the method.
+
+<template #example><table-chart /></template>
+
+<template #template>
+
+@[code{62-92}](../.vuepress/components/table/chart.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-61}](../.vuepress/components/table/chart.vue)
+
+</template>
+
+<template #style>
+
+@[code{93-107}](../.vuepress/components/table/chart.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Large-source charts
+
+Extraction defaults to 1000 points, 32 series, 10000 cells and 2000000 metadata/category characters. Each point's category and all series count toward the cell budget. Exceeding a budget returns `reason: 'limit'` with an incomplete snapshot; `openChart` never displays a truncated chart. Narrow the scope or explicitly adjust the budget before retrying. `cancelChart()` and `AbortSignal` cancel extraction; snapshots and conversions of complex objects still have separate memory costs.
+
+This example uses one million generated rows and 100000 columns. The last-range chart reads only five rows and two columns spanning the center and right-fixed region. For generated sources, `filtered` means all logical rows supplied by the adapter, not a new remote query; update the source after remote filtering. Aggregate charts consume supplied remote statistics without enumerating group members.
+
+<template #example><table-chart-source /></template>
+
+<template #template>
+
+@[code{97-132}](../.vuepress/components/table/chart-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-96}](../.vuepress/components/table/chart-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{133-147}](../.vuepress/components/table/chart-source.vue)
 
 </template>
 
