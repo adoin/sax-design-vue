@@ -15,6 +15,12 @@ import type {
   VNodeChild,
 } from 'vue'
 import type Table from './table.vue'
+import type {
+  TableRowDragConfig,
+  TableRowDragContext,
+  TableRowDragResult,
+  TableRowDropPosition,
+} from './table-row-drag'
 import type { TableHistoryConfig, TableHistoryState } from './table-history'
 import type {
   TableChangeConfig,
@@ -39,6 +45,7 @@ import type {
   TableValidationRule,
   TableValidationRules,
 } from './table-validation'
+export * from './table-row-drag'
 export type { TableHistoryConfig, TableHistoryState } from './table-history'
 export type {
   TableChangeConfig,
@@ -277,6 +284,8 @@ export interface TableColumnOptions<Row extends TableRow = TableRow> {
   width?: number | string
   minWidth?: number | string
   resizable?: boolean
+  /** Show a drag handle when rowDragConfig is enabled. */
+  dragSort?: boolean
   align?: TableAlign
   footerAlign?: TableAlign
   fixed?: TableColumnFixed
@@ -407,6 +416,10 @@ export const tableProps = buildProps({
   },
   editConfig: {
     type: definePropType<boolean | TableEditConfig>([Boolean, Object]),
+    default: false,
+  },
+  rowDragConfig: {
+    type: definePropType<boolean | TableRowDragConfig>([Boolean, Object]),
     default: false,
   },
   detailConfig: {
@@ -547,6 +560,8 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  rowDragStart: (context: TableRowDragContext) => isObject(context),
+  rowDragEnd: (result: TableRowDragResult) => isObject(result),
   historyChange: (state: TableHistoryState) => isObject(state),
   'update:data': (data: TableRow[]) => isArray(data),
   changesChange: (version: number) => isNumber(version),
@@ -605,6 +620,13 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  /** Current flattened-page indices, including when using a paginated generated source. */
+  moveRow: (
+    from: number,
+    to: number,
+    position?: TableRowDropPosition,
+  ) => Promise<TableRowDragResult<Row>>
+  cancelRowDrag: () => void
   undo: () => Promise<TableDataMutationResult>
   redo: () => Promise<TableDataMutationResult>
   clearHistory: () => void

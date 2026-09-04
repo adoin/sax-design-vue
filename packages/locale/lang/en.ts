@@ -303,6 +303,18 @@ export default {
       defaultRangeEndLabel: 'pick end value',
     },
     table: {
+      dragRow: 'Reorder row {row}',
+      dragRowHint:
+        'Space to pick up, arrow keys to choose a position, Enter to drop, Escape to cancel.',
+      dragRowTarget: 'Drop {position} row {row}.',
+      dragBefore: 'before',
+      dragAfter: 'after',
+      dragStatus: {
+        grabbed: 'Row picked up.',
+        moved: 'Row order updated.',
+        cancelled: 'Reorder cancelled.',
+        rejected: 'Row order was not changed.',
+      },
       validationRequired: '{field} is required',
       validationInvalid: '{field} is invalid',
       expandDetails: 'Expand details for row {row}',

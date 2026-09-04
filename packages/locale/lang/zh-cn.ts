@@ -274,6 +274,17 @@ export default {
       rejected: '文件未通过校验',
     },
     table: {
+      dragRow: '调整第 {row} 行顺序',
+      dragRowHint: '空格开始，方向键选择位置，回车放置，Escape 取消。',
+      dragRowTarget: '放到第 {row} 行{position}。',
+      dragBefore: '之前',
+      dragAfter: '之后',
+      dragStatus: {
+        grabbed: '已拾取行。',
+        moved: '行顺序已更新。',
+        cancelled: '已取消调整顺序。',
+        rejected: '行顺序未改变。',
+      },
       validationRequired: '请填写{field}',
       validationInvalid: '{field}不符合规则',
       expandDetails: '展开第 {row} 行详情',

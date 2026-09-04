@@ -1,6 +1,11 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "row-drag-config"
+    type: "Boolean | TableRowDragConfig"
+    description: "Enable row dragging, predicates, edge scrolling and controlled adapters."
+    default: false
+    usage: "#row-reordering"
   - name: "history-config"
     type: "Boolean | TableHistoryConfig"
     description: "Enable operation history together with change-config; limit defaults to the latest 100 operations."
@@ -191,6 +196,11 @@ PROPS:
     default: 'false'
     usage: '#text-overflow-and-tooltips'
 CHILD_PROPS:
+  - name: "drag-sort"
+    type: "Boolean"
+    description: "Show a row drag handle in this column when row-drag-config is enabled."
+    default: false
+    usage: "#row-reordering"
   - name: "rules"
     type: "TableValidationRule | TableValidationRule[]"
     description: "Synchronous or asynchronous rules for this column, overriding validation-rules."
@@ -318,6 +328,16 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "rowDragStart"
+    type: "(context: TableRowDragContext) => void"
+    description: "A pointer or keyboard interaction picks up a row."
+    default: null
+    usage: "#row-reordering"
+  - name: "rowDragEnd"
+    type: "(result: TableRowDragResult) => void"
+    description: "A drag or moveRow operation ends; inspect applied and reason."
+    default: null
+    usage: "#row-reordering"
   - name: "historyChange"
     type: "(state: TableHistoryState) => void"
     description: "Emitted when history changes, with undo/redo counts and availability."
@@ -549,6 +569,16 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "moveRow"
+    type: "(from: number, to: number, position?: TableRowDropPosition) => Promise<TableRowDragResult>"
+    description: "Move using current flattened-page indices; position defaults to before."
+    default: null
+    usage: "#row-reordering"
+  - name: "cancelRowDrag"
+    type: "() => void"
+    description: "Cancel dragging or a pending reorder adapter."
+    default: null
+    usage: "#row-reordering"
   - name: "undo"
     type: "() => Promise<TableDataMutationResult>"
     description: "Undo the latest accepted operation; commit or cancel an active draft first."
@@ -742,6 +772,92 @@ EXPOSES:
 ---
 
 # Table
+
+<card>
+
+## Row reordering
+
+Enable `row-drag-config` and set `dragSort: true` on a column (`drag-sort` on declarative columns). Provide stable `row-key` values and accept the proposed array with `v-model:data`. `checkMethod` restricts pickup; `dropMethod` restricts drop targets. Handles do not select or edit rows.
+
+Space or Enter picks up a row, arrow keys choose a target, Enter drops it and Escape cancels. Holding near a scrollable window edge scrolls automatically; set `autoScroll: false` to disable this. `scrollThreshold` defaults to 40px and `scrollSpeed` to 16px per frame.
+
+Clear active sorting before reordering. Filtered and paginated views move relative to the target in the complete source array, preserving hidden rows and other pages; remote paging can only reorder supplied records. Active drafts or unsaved changes block reordering until committed or reverted. A reorder establishes a new data baseline; it is not a field change and does not enter edit undo history.
+
+`moveRow(from, to, position)` uses current flattened-page indices; `position` is `before` (default) or `after`. `rowDragStart` identifies the picked-up row. `rowDragEnd` and the return value provide `applied`, `reason` and a generated `request`; its `oldIndex` and `newIndex` refer to the source sibling array, with `parentKey` identifying the parent.
+
+<template #example><table-row-drag /></template>
+
+<template #template>
+
+@[code{40-60}](../.vuepress/components/table/row-drag.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-38}](../.vuepress/components/table/row-drag.vue)
+
+</template>
+
+<template #style>
+
+@[code{62-72}](../.vuepress/components/table/row-drag.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Tree sibling reordering
+
+Tree rows move within the same parent. Expanded descendants follow their parent; dropping into another parent is not supported. Loaded lazy children follow the same rules as ordinary children, without requesting unloaded nodes. Only affected sibling arrays and ancestors are copied; original rows stay unchanged. This example combines declarative columns, fixed columns, virtualization and measured row heights.
+
+<template #example><table-row-drag-tree /></template>
+
+<template #template>
+
+@[code{35-58}](../.vuepress/components/table/row-drag-tree.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-33}](../.vuepress/components/table/row-drag-tree.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Generated data and edge scrolling
+
+`virtualSource` requires `rowDragConfig.apply`, receiving stable row keys, the target, absolute source positions and `signal`. Generated requests omit `data`: update the source and key mapping, then return true. The component verifies the moved row at its new position before reporting success. Ordinary arrays can also use apply; accept the exact proposed data array first. Rejection, errors, external data replacement, cancellation and unmount must not report success. `cancelRowDrag()` settles pending work immediately; adapters must check signal before writing.
+
+This example provides one million rows and one hundred thousand columns on demand, caching only positions whose order changes. Neighboring moves touch few mappings; long moves cost time and memory proportional to the distance. The adapter yields in batches and supports cancellation. A remote service can persist order from stable row keys and relative targets without loading the entire dataset.
+
+<template #example><table-row-drag-source /></template>
+
+<template #template>
+
+@[code{61-85}](../.vuepress/components/table/row-drag-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-59}](../.vuepress/components/table/row-drag-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{87-100}](../.vuepress/components/table/row-drag-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

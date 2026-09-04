@@ -13,10 +13,15 @@
 
     <div
       ref="tableScrollRef"
+      tabindex="-1"
       :class="[
         tableKls,
         ns.is('horizontal-virtual', horizontalVirtualMode && usesBodyScroll),
       ]"
+      @keydown="
+        rowDrag.session.value?.keyboard &&
+        rowDrag.keydown($event, rowDrag.session.value.from)
+      "
       @scroll="handleTableScroll"
       @wheel="handleTableWheel"
       @mouseover="overflow.enter"
@@ -211,6 +216,11 @@
                 <TableDataRow
                   :detail="detail"
                   :editing="editing"
+                  :drag="
+                    rowReorder.config.value.enabled !== false && rowDragConfig
+                      ? rowDrag
+                      : undefined
+                  "
                   :validation="validation"
                   :edit-renderer="resolveEditRenderer"
                   :flat-row="item as TableFlatRow"
@@ -299,6 +309,11 @@
                 :data-row-key="String(flatRow.key)"
                 :detail="detail"
                 :editing="editing"
+                :drag="
+                  rowReorder.config.value.enabled !== false && rowDragConfig
+                    ? rowDrag
+                    : undefined
+                "
                 :validation="validation"
                 :edit-renderer="resolveEditRenderer"
                 :flat-row="flatRow"
@@ -398,6 +413,27 @@
       </div>
     </div>
 
+    <span
+      v-if="rowDragConfig"
+      :class="ns.e('drag-status')"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      >{{
+        rowDrag.session.value?.target !== undefined
+          ? t('vs.table.dragRowTarget', {
+              row: rowDrag.session.value.target + 1,
+              position: t(
+                rowDrag.session.value.position === 'before'
+                  ? 'vs.table.dragBefore'
+                  : 'vs.table.dragAfter',
+              ),
+            })
+          : rowDrag.announcement.value
+            ? t(`vs.table.dragStatus.${rowDrag.announcement.value}`)
+            : ''
+      }}</span
+    >
     <div v-if="$slots.footer" :class="ns.e('footer')">
       <slot name="footer" />
     </div>
@@ -461,6 +497,8 @@ import TableRowBlock from './table-row-block.vue'
 import { useTableEdit } from './composables/use-table-edit'
 import { useTableChanges } from './composables/use-table-changes'
 import { useTableEditLifecycle } from './composables/use-table-edit-lifecycle'
+import { useTableRowReorder } from './composables/use-table-row-reorder'
+import { useTableRowDrag } from './composables/use-table-row-drag'
 import { useTableValidation } from './composables/use-table-validation'
 import { useTableValidationApi } from './composables/use-table-validation-api'
 import { tableValidationId } from './validation-utils'
@@ -1456,7 +1494,84 @@ useTableEditLifecycle(props, editing, {
   isLocating: validationApi.locating,
 })
 
+const dragRowAt = (index: number) =>
+  index < 0 || index >= effectiveRowCount.value
+    ? undefined
+    : props.virtualSource
+      ? createSourceFlatRow(index + pagination.sourceOffset.value)
+      : flatRows.value[index]
+const rowReorder = useTableRowReorder(props, emit, {
+  rowAt: dragRowAt,
+  count: () => effectiveRowCount.value,
+  blocked: () => {
+    const records = changes.getChangeRecords()
+    return Boolean(
+      sorts.value.length ||
+      editing.active.value ||
+      records.inserted.length ||
+      records.updated.length ||
+      records.removed.length,
+    )
+  },
+  children: tree.getChildren,
+  changed: () => {
+    validation.clear()
+    measure()
+  },
+})
+const rowDrag = useTableRowDrag(rowReorder, emit, {
+  root: () => tableScrollRef.value,
+  scroll: () => {
+    const body = virtualListRef.value?.getScrollElement()
+    if (body) return body
+    let node = tableScrollRef.value
+    while (node) {
+      if (
+        node.scrollHeight > node.clientHeight &&
+        /(auto|scroll)/.test(getComputedStyle(node).overflowY)
+      )
+        return node
+      node = node.parentElement ?? undefined
+    }
+    return tableScrollRef.value?.ownerDocument.scrollingElement as
+      HTMLElement | undefined
+  },
+  rowAt: dragRowAt,
+  count: () => effectiveRowCount.value,
+  changes: [
+    () => props.data,
+    () => props.virtualSource,
+    sorts,
+    filtersState,
+    pagination.currentPage,
+    pagination.pageSize,
+    () => props.expandedKeys,
+    () => (props.virtualSource ? undefined : flatRows.value),
+    columnManager.state,
+  ],
+  scrollTo: (index) => {
+    const row = dragRowAt(index)
+    if (row) scrollToRow(props.virtualSource ? row.index : row.row)
+  },
+  focus: async (key, generatedIndex) => {
+    const index = props.virtualSource
+      ? (generatedIndex ?? -1) - pagination.sourceOffset.value
+      : flatRows.value.findIndex((row) => row.key === key)
+    const row = dragRowAt(index)
+    if (!row) return
+    scrollToRow(props.virtualSource ? row.index : row.row)
+    await nextTick()
+    tableScrollRef.value
+      ?.querySelector<HTMLElement>(
+        `[data-table-row-index="${index}"] .${ns.e('row-drag-handle')}`,
+      )
+      ?.focus({ preventScroll: true })
+  },
+})
+
 defineExpose({
+  moveRow: rowReorder.move,
+  cancelRowDrag: rowDrag.cancel,
   undo: changes.undo,
   redo: changes.redo,
   clearHistory: changes.clearHistory,

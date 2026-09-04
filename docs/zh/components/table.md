@@ -1,6 +1,11 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "row-drag-config"
+    type: "Boolean | TableRowDragConfig"
+    description: "开启行拖拽，配置禁用条件、放置条件、自动滚动和受控适配器。"
+    default: false
+    usage: "#行拖拽排序"
   - name: "history-config"
     type: "Boolean | TableHistoryConfig"
     description: "开启操作历史，需同时开启 change-config；limit 默认保留最近 100 次操作。"
@@ -191,6 +196,11 @@ PROPS:
     default: 'false'
     usage: '#文本溢出与提示'
 CHILD_PROPS:
+  - name: "drag-sort"
+    type: "Boolean"
+    description: "在此列显示行拖动手柄，需开启 row-drag-config。"
+    default: false
+    usage: "#行拖拽排序"
   - name: "rules"
     type: "TableValidationRule | TableValidationRule[]"
     description: "当前列的同步或异步规则，优先于 validation-rules。"
@@ -318,6 +328,16 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "rowDragStart"
+    type: "(context: TableRowDragContext) => void"
+    description: "鼠标或键盘拾取行。"
+    default: null
+    usage: "#行拖拽排序"
+  - name: "rowDragEnd"
+    type: "(result: TableRowDragResult) => void"
+    description: "拖动或 moveRow 操作结束；检查 applied 和 reason。"
+    default: null
+    usage: "#行拖拽排序"
   - name: "historyChange"
     type: "(state: TableHistoryState) => void"
     description: "历史栈变化时触发；包含撤销和重做数量以及可用状态。"
@@ -549,6 +569,16 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "moveRow"
+    type: "(from: number, to: number, position?: TableRowDropPosition) => Promise<TableRowDragResult>"
+    description: "按当前展开页索引移动行；position 默认为 before。"
+    default: null
+    usage: "#行拖拽排序"
+  - name: "cancelRowDrag"
+    type: "() => void"
+    description: "取消拖动或等待中的重排适配器。"
+    default: null
+    usage: "#行拖拽排序"
   - name: "undo"
     type: "() => Promise<TableDataMutationResult>"
     description: "撤销最近一次已接受的操作；活动草稿需先提交或取消。"
@@ -742,6 +772,92 @@ EXPOSES:
 ---
 
 # Table 表格
+
+<card>
+
+## 行拖拽排序
+
+开启 `row-drag-config`，在列上设置 `dragSort: true`（声明式列使用 `drag-sort`）显示手柄。使用稳定 `row-key` 和 `v-model:data` 接受重排数组。`checkMethod` 限制可拾取行，`dropMethod` 限制落点；手柄不会触发行选择或编辑。
+
+空格或回车拾取，方向键选择落点，回车放置，Escape 取消。鼠标拖至可滚动窗口边缘会自动滚动，可用 `autoScroll: false` 关闭；`scrollThreshold` 默认 40px，`scrollSpeed` 默认每帧 16px。
+
+排序条件存在时不能重排，请先清除排序。筛选和分页下按目标行在完整源数组中的位置移动，保留隐藏行与其他页；远程分页只能调整当前提供的一页。活动草稿或未保存变更期间禁用；先提交或还原后再调整顺序。重排是一次新的数据基线，不作为编辑字段变更，也不进入编辑撤销历史。
+
+`moveRow(from, to, position)` 接受当前展开页的索引，`position` 为 `before`（默认）或 `after`。`rowDragStart` 提供拾取行，`rowDragEnd` 和返回结果提供 `applied`、`reason` 及已生成的 `request`；其中 `oldIndex`、`newIndex` 为源同级数组位置，`parentKey` 标识父节点。
+
+<template #example><table-zh-row-drag /></template>
+
+<template #template>
+
+@[code{40-57}](../../.vuepress/components/table-zh/row-drag.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-38}](../../.vuepress/components/table-zh/row-drag.vue)
+
+</template>
+
+<template #style>
+
+@[code{59-69}](../../.vuepress/components/table-zh/row-drag.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 树形同级重排
+
+树形数据仅在同级之间移动，展开的后代随父节点一起移动；不会把节点重新挂到另一父节点。已加载的懒节点子数组与普通 children 使用相同规则，不请求未加载子节点。仅复制受影响的同级数组和祖先，原始行保持不变。下例组合声明式列、左右固定列、虚拟滚动和动态行高。
+
+<template #example><table-zh-row-drag-tree /></template>
+
+<template #template>
+
+@[code{29-52}](../../.vuepress/components/table-zh/row-drag-tree.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-27}](../../.vuepress/components/table-zh/row-drag-tree.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 生成源拖动与自动滚动
+
+`virtualSource` 必须提供 `rowDragConfig.apply`，接收稳定行键、落点、源绝对位置和 `signal`。生成源请求没有 `data`，由适配器更新数据源及行键映射，再返回 true；组件核对移动行的新位置后报告成功。普通数组也可使用 apply；需先接受请求中的完整 data 数组。返回 false、异常、外部数据替换、取消或卸载均不能报告成功，`cancelRowDrag()` 会立即结束等待；适配器应在写入前检查 signal。
+
+此例按需提供 100 万行、10 万列，仅缓存顺序改变的位置。相邻拖动只更新少量映射，长距离移动的时间和内存与跨越行数成正比；示例分批让出执行并支持取消。业务服务可用稳定行键及前后落点持久化顺序，不必加载完整数据集。
+
+<template #example><table-zh-row-drag-source /></template>
+
+<template #template>
+
+@[code{59-83}](../../.vuepress/components/table-zh/row-drag-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-57}](../../.vuepress/components/table-zh/row-drag-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{85-98}](../../.vuepress/components/table-zh/row-drag-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

@@ -151,6 +151,17 @@ export default {
       defaultRangeEndLabel: '選擇結束值',
     },
     table: {
+      dragRow: '調整第 {row} 列順序',
+      dragRowHint: '空白鍵開始，方向鍵選擇位置，Enter 放置，Escape 取消。',
+      dragRowTarget: '放到第 {row} 列{position}。',
+      dragBefore: '之前',
+      dragAfter: '之後',
+      dragStatus: {
+        grabbed: '已拾取列。',
+        moved: '列順序已更新。',
+        cancelled: '已取消調整順序。',
+        rejected: '列順序未改變。',
+      },
       validationRequired: '請填寫{field}',
       validationInvalid: '{field}不符合規則',
       emptyText: '暫無資料',

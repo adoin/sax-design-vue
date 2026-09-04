@@ -4,9 +4,21 @@
       ns.e('data-row'),
       ns.is('selected', selected),
       ns.is('striped-row', striped && displayIndex % 2 === 1),
+      ns.is('dragging-row', drag?.session.value?.key === flatRow.key),
+      ns.is(
+        'drop-before',
+        drag?.session.value?.targetKey === flatRow.key &&
+          drag.session.value.position === 'before',
+      ),
+      ns.is(
+        'drop-after',
+        drag?.session.value?.targetKey === flatRow.key &&
+          drag.session.value.position === 'after',
+      ),
       resolvedRowClass,
     ]"
     role="row"
+    :data-table-row-index="displayIndex"
     :aria-selected="selected"
     :aria-rowindex="rowOffset == null ? undefined : displayIndex + rowOffset"
     @click="handleRowClick"
@@ -70,6 +82,21 @@
         @click="handleCellClick(entry.column, entry.index, $event)"
       >
         <div :class="ns.e('cell-main')">
+          <button
+            v-if="drag && entry.column.dragSort"
+            type="button"
+            :class="ns.e('row-drag-handle')"
+            :disabled="!drag.canStart(flatRow, displayIndex)"
+            :aria-label="t('vs.table.dragRow', { row: displayIndex + 1 })"
+            :aria-pressed="drag.session.value?.key === flatRow.key"
+            :title="t('vs.table.dragRowHint')"
+            @pointerdown="drag.start($event, displayIndex)"
+            @keydown="drag.keydown($event, displayIndex)"
+            @click.stop
+            @dblclick.stop
+          >
+            <SIcon name="cb:draggable" />
+          </button>
           <span
             v-if="entry.column.treeNode"
             :class="ns.e('tree-leading')"
@@ -209,6 +236,7 @@ import TableCellEditor from './table-cell-editor.vue'
 import { tableValidationId } from './validation-utils'
 import type { TableValidation } from './composables/use-table-validation'
 import type { TableEditing } from './composables/use-table-edit'
+import type { TableRowDrag } from './composables/use-table-row-drag'
 import type { TableEditContext, TableEditRenderer } from './table-edit'
 import type { TableRowDetailState } from './composables/use-table-details'
 import type {
@@ -238,6 +266,7 @@ const props = defineProps<{
   selectionName?: string
   overflow?: TableOverflow
   editing?: TableEditing
+  drag?: TableRowDrag
   validation?: TableValidation
   editRenderer?: (column: TableColumn) => TableEditRenderer | undefined
 }>()
