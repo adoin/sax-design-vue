@@ -1,6 +1,16 @@
 ---
 description: 'Render structured data from column configuration instead of handwritten table cells.'
 PROPS:
+  - name: resize-config
+    type: Boolean | TableResizeConfig
+    description: "Opt in to column resizing with a minimum width and keyboard step."
+    default: false
+    usage: '#column-resizing'
+  - name: column-widths
+    type: TableColumnWidths
+    description: "Controlled column widths via v-model:column-widths. Keys use column key, field or @index; virtualSource uses stringified column indexes."
+    default: null
+    usage: '#column-resizing'
   - name: data
     type: TableRow[]
     description: Row data rendered by the table.
@@ -121,6 +131,11 @@ PROPS:
     default: 'false'
     usage: '#text-overflow-and-tooltips'
 CHILD_PROPS:
+  - name: resizable
+    type: Boolean
+    description: "Set false to disable resizing for this column; resize-config must be enabled."
+    default: null
+    usage: '#column-resizing'
   - name: type
     type: String
     values: seq | checkbox | radio
@@ -203,6 +218,16 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: update:columnWidths
+    type: '(widths: TableColumnWidths) => void'
+    description: "Emits the complete next width record on commit."
+    default: null
+    usage: '#column-resizing'
+  - name: column-resize
+    type: '(params: TableColumnResizeParams) => void'
+    description: "Fires after a pointer drag or keyboard resize with the column, index, old and new widths, and input source."
+    default: null
+    usage: '#column-resizing'
   - name: update:modelValue
     type: TableRow | TableRow[] | null
     description: Fires when row selection changes.
@@ -353,6 +378,42 @@ EXPOSES:
 ---
 
 # Table
+
+<card>
+
+## Column resizing
+
+Enable resize-config to drag header edges. Right-fixed columns resize from the left edge. Numeric or px column minWidth and the global minimum constrain resizing; resizable: false disables individual columns. Arrow keys resize, Shift accelerates, Home uses the minimum, and Escape cancels dragging.
+
+Use v-model:column-widths for controlled state and resets, or omit it to keep widths internally without mutating columns or rows. Changing a declared column width clears its internal override. Dragging previews widths; release commits the event. Controlled values revert if the parent does not accept the update.
+
+Fixed columns, tree rows, pagination and two-axis virtualization share the layout. Moving the horizontal window retains maximum row heights; committed widths, container width changes and measure() reset old layout measurements. Call measure() after in-place content edits when rows need to shrink.
+
+The generated mode uses 100,000 rows and 100,000 columns, storing only resized widths and no full cell matrix. In this mode sorting, filtering, tree structure and data requests belong to the application; the demo is not a browser capacity guarantee.
+
+<template #example>
+<table-resize />
+</template>
+
+<template #template>
+
+@[code{98-134}](../.vuepress/components/table/resize.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-96}](../.vuepress/components/table/resize.vue)
+
+</template>
+
+<template #style>
+
+@[code{136-149}](../.vuepress/components/table/resize.vue)
+
+</template>
+
+</card>
 
 <card>
 

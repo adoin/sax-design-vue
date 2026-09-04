@@ -385,6 +385,17 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
   })
 
   return {
+    resetMeasurements: () => {
+      // Remove only measured deltas; do not allocate another count-sized index.
+      for (const [index, entry] of measuredIndexes)
+        sizeDeltas.add(index, rowEstimate() - entry.size)
+      measuredSizeCache.clear()
+      measuredIndexes.clear()
+      pendingAnchorDelta = 0
+      preserveEndOnResize = false
+      keepAtEnd = false
+      measurementVersion.value++
+    },
     virtualItems,
     totalSize,
     measuredSizeCache,

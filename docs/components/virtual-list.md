@@ -58,7 +58,10 @@ EXPOSES:
   - name: scrollToOffset
     description: Scroll programmatically or reset all dynamic row measurements.
   - name: measure
-    description: Scroll programmatically or reset all dynamic row measurements.
+    description: Measure rendered rows, preserving the largest recorded height when retain-max-size is enabled.
+  - name: resetMeasurements
+    type: '() => Promise<void>'
+    description: Clear recorded heights and measure the current layout again while retaining the visible row anchor. Call after changes to column widths or content that can reduce row heights.
 NEWS:
   - dynamic-height
 description: 'Windowed list rendering backed by TanStack Virtual, with measured dynamic row heights.'

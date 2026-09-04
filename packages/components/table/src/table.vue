@@ -115,6 +115,49 @@
                   <slot :name="entry.column.slots.filter" v-bind="params" />
                 </template>
               </TableHeaderCell>
+              <span
+                v-if="columnResize.canResize(entry.column)"
+                :class="[
+                  ns.e('resize-handle'),
+                  ns.is(
+                    'resizing',
+                    columnResize.session.value?.key ===
+                      columnResize.keyFor(entry.column, entry.index),
+                  ),
+                ]"
+                role="separator"
+                tabindex="0"
+                aria-orientation="vertical"
+                :aria-label="
+                  t('vs.table.resizeColumn', {
+                    column:
+                      entry.column.title ??
+                      entry.column.field ??
+                      entry.index + 1,
+                  })
+                "
+                :aria-valuemin="columnResize.minimumFor(entry.column)"
+                :aria-valuenow="
+                  columnResize.widthFor(entry.column, entry.index) ??
+                  resolveColumnPixelWidth(
+                    entry.column.width ?? entry.column.minWidth,
+                  ) ??
+                  undefined
+                "
+                @pointerdown="
+                  columnResize.start(
+                    $event,
+                    entry.column,
+                    entry.index,
+                    entry.fixed,
+                  )
+                "
+                @keydown="
+                  columnResize.keydown($event, entry.column, entry.index)
+                "
+                @focus="columnResize.focus"
+                @click.stop
+              />
             </div>
           </template>
         </div>
@@ -305,6 +348,7 @@ import { useTableQuery } from './composables/use-table-query'
 import { useTableSelection } from './composables/use-table-selection'
 import { useTableOverflow } from './composables/use-table-overflow'
 import { useTablePagination } from './composables/use-table-pagination'
+import { useTableColumnResize } from './composables/use-table-column-resize'
 import type { VirtualListInstance } from '@vuesax-alpha/components/virtual-list'
 import type { CSSProperties } from 'vue'
 import type {
@@ -363,10 +407,17 @@ provide(tableColumnRegistrationKey, {
   unregister: unregisterColumn,
 })
 
-const resolvedColumns = computed(() =>
+const rawColumns = computed(() =>
   props.columns.length
     ? props.columns
     : registeredColumns.value.map((entry) => entry.column),
+)
+const columnResize = useTableColumnResize(props, emit, rawColumns)
+const resolvedColumns = computed(() =>
+  rawColumns.value.map((column, index) => {
+    const width = columnResize.widthFor(column, index)
+    return width == null ? column : { ...column, width }
+  }),
 )
 
 const { tableKls } = useTable(props, emit)
@@ -509,6 +560,8 @@ const columnBaseSize = (column: TableColumn) =>
 const sourceColumnWidth = (index: number) => {
   const source = props.virtualSource as TableVirtualSource | undefined
   if (!source) return undefined
+  const width = columnResize.widthFor({ key: String(index) }, index)
+  if (width != null) return width
   return typeof source.columnWidth === 'function'
     ? source.columnWidth(index)
     : source.columnWidth
@@ -627,6 +680,27 @@ const columnVirtualization = useTableColumnVirtualization({
       ? props.virtualSource.columnWidth
       : undefined,
   ),
+  columnWidthOverrides: computed(() => {
+    const overrides = new Map<number, number>()
+    if (!props.virtualSource) return overrides
+    const start = columnPartitions.value.centerStart
+    const end = start + centerColumnCount.value
+    const widths = { ...columnResize.widths.value }
+    if (columnResize.session.value)
+      widths[columnResize.session.value.key] = columnResize.session.value.width
+    for (const [key, width] of Object.entries(widths)) {
+      const index = Number(key)
+      if (
+        Number.isInteger(index) &&
+        index >= start &&
+        index < end &&
+        Number.isFinite(width) &&
+        width > 0
+      )
+        overrides.set(index - start, width)
+    }
+    return overrides
+  }),
   columnWidth: (virtualIndex) => {
     if (props.virtualSource)
       return sourceColumnWidth(
@@ -774,7 +848,14 @@ const fixedHeaderStyle = (entry: TableRenderedColumnEntry): CSSProperties => {
       : columnVirtualization.viewportWidth.value -
         totalTablePixelWidth.value +
         scrollLeft
-  return { transform: `translateX(${shift}px)` }
+  // The translated virtual header already owns fixed-column compensation.
+  // Native sticky offsets would apply a second viewport adjustment.
+  return {
+    position: 'relative',
+    left: 'auto',
+    right: 'auto',
+    transform: `translateX(${shift}px)`,
+  }
 }
 
 const columnSlotKey = (column: TableColumn) =>
@@ -873,10 +954,11 @@ const scrollToColumn = (
       ? columnOrIndex
       : props.virtualSource
         ? -1
-        : resolvedColumns.value.findIndex((column) =>
+        : resolvedColumns.value.findIndex((column, columnIndex) =>
             typeof columnOrIndex === 'string'
               ? column.key === columnOrIndex || column.field === columnOrIndex
-              : column === columnOrIndex,
+              : column === columnOrIndex ||
+                rawColumns.value[columnIndex] === columnOrIndex,
           )
   const virtualIndex = props.virtualSource
     ? index - columnPartitions.value.centerStart
@@ -887,9 +969,34 @@ const scrollToColumn = (
 
 const measure = () =>
   nextTick(() => {
-    virtualListRef.value?.measure()
+    virtualListRef.value?.resetMeasurements()
     columnVirtualization.measureViewport()
   })
+
+// Horizontal window changes keep max heights; actual column layout changes reset them.
+watch(
+  () => [
+    columnResize.revision.value,
+    props.columnWidths,
+    columnVirtualization.viewportWidth.value,
+    props.virtualSource?.columnWidth,
+    rawColumns.value.map((column) => [column.width, column.minWidth]),
+  ],
+  () => {
+    overflow.close()
+    nextTick(() => {
+      if (virtualEnabled.value && virtualOptions.value.dynamic)
+        virtualListRef.value?.resetMeasurements()
+      columnVirtualization.measureViewport()
+    })
+  },
+  { deep: true, flush: 'post' },
+)
+
+watch(
+  () => [props.data, props.virtualSource?.row],
+  () => measure(),
+)
 
 watch([pagination.currentPage, pagination.pageSize], () => {
   overflow.close()

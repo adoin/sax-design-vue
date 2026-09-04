@@ -25,6 +25,20 @@ export type TableColumnType = 'seq' | 'checkbox' | 'radio'
 export type TableColumnFixed = boolean | 'left' | 'right'
 export type TableOverflow = boolean | 'ellipsis' | 'title' | 'tooltip'
 export type TableSortOrder = 'asc' | 'desc'
+export interface TableResizeConfig {
+  enabled?: boolean
+  minWidth?: number
+  keyboardStep?: number
+}
+export type TableColumnWidths = Record<string, number>
+export interface TableColumnResizeParams {
+  column: TableColumn
+  columnIndex: number
+  columnKey: string
+  width: number
+  oldWidth: number
+  source: 'pointer' | 'keyboard'
+}
 export interface TablePagerConfig {
   enabled?: boolean
   currentPage?: number
@@ -140,13 +154,13 @@ export interface TableRenderer<Row extends TableRow = TableRow> {
   header?: TableHeaderRenderer<Row>
 }
 
-export interface TableColumn<Row extends TableRow = TableRow> {
-  key?: string
+export interface TableColumnOptions<Row extends TableRow = TableRow> {
   type?: TableColumnType
   field?: string
   title?: string
   width?: number | string
   minWidth?: number | string
+  resizable?: boolean
   align?: TableAlign
   fixed?: TableColumnFixed
   className?: string
@@ -162,6 +176,12 @@ export interface TableColumn<Row extends TableRow = TableRow> {
   renderer?: string | TableRenderer<Row> | TableCellRenderer<Row>
   cell?: TableCellRenderer<Row>
   header?: TableHeaderRenderer<Row>
+}
+
+export interface TableColumn<
+  Row extends TableRow = TableRow,
+> extends TableColumnOptions<Row> {
+  key?: string
 }
 
 export interface TableRenderedColumnEntry<Row extends TableRow = TableRow> {
@@ -252,6 +272,14 @@ export const tableProps = buildProps({
     type: definePropType<TableColumn[]>(Array),
     default: () => [],
   },
+  resizeConfig: {
+    type: definePropType<boolean | TableResizeConfig>([Boolean, Object]),
+    default: false,
+  },
+  columnWidths: {
+    type: definePropType<TableColumnWidths | undefined>(Object),
+    default: undefined,
+  },
   rowKey: {
     type: definePropType<TableRowKeyGetter>([String, Function]),
     default: 'id',
@@ -324,6 +352,8 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  'update:columnWidths': (widths: TableColumnWidths) => isObject(widths),
+  columnResize: (params: TableColumnResizeParams) => isObject(params),
   [UPDATE_MODEL_EVENT]: (value: unknown) =>
     value == null ||
     isArray(value) ||

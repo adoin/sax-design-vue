@@ -6,6 +6,7 @@ import {
   shallowRef,
   watch,
 } from 'vue'
+import { createSparseColumnMetrics } from './sparse-column-metrics'
 import type { ComputedRef, Ref } from 'vue'
 import type { TableColumn } from '../table'
 
@@ -55,6 +56,7 @@ export interface UseTableColumnVirtualizationOptions {
   columnCount?: ComputedRef<number>
   columnWidth?: (index: number) => number | string | undefined
   uniformColumnWidth?: ComputedRef<number | string | undefined>
+  columnWidthOverrides?: ComputedRef<ReadonlyMap<number, number>>
   horizontal: ComputedRef<boolean>
   overscan: ComputedRef<number>
   scrollElement: Ref<HTMLElement | undefined>
@@ -193,6 +195,18 @@ export const useTableColumnVirtualization = (
   let scrollFrame: number | undefined
   let pendingScrollLeft = 0
 
+  const sparseMetrics = computed(() => {
+    const width = options.uniformColumnWidth?.value
+    const pixels = width == null ? null : resolveColumnPixelWidth(width)
+    const overrides = options.columnWidthOverrides?.value
+    if (!pixels || !overrides?.size) return undefined
+    return createSparseColumnMetrics(
+      options.columnCount?.value ?? options.columns.value.length,
+      pixels,
+      overrides,
+    )
+  })
+
   const metrics = computed(() => {
     const count = Math.max(
       0,
@@ -211,7 +225,10 @@ export const useTableColumnVirtualization = (
         offsets: [0],
         uniformWidth,
         count,
-        totalWidth: uniformWidth == null ? 0 : uniformWidth * count,
+        totalWidth:
+          uniformWidth == null
+            ? 0
+            : (sparseMetrics.value?.totalWidth ?? uniformWidth * count),
       }
     }
     const widths = Array.from({ length: count }, () => 0)
@@ -248,7 +265,10 @@ export const useTableColumnVirtualization = (
   const columnOffsets = computed(() => metrics.value.offsets)
   const totalWidth = computed(() => metrics.value.totalWidth)
   const pixelWidthAt = (index: number) =>
-    metrics.value.uniformWidth ?? pixelWidths.value[index] ?? 0
+    sparseMetrics.value?.widthAt(index) ??
+    metrics.value.uniformWidth ??
+    pixelWidths.value[index] ??
+    0
   const availableWidth = computed(() =>
     Math.max(0, viewportWidth.value - (options.reservedWidth?.value ?? 0)),
   )
@@ -286,13 +306,19 @@ export const useTableColumnVirtualization = (
   const range = computed<TableColumnVirtualRange>(() =>
     active.value
       ? metrics.value.uniformWidth != null
-        ? getUniformVirtualColumnRange(
-            metrics.value.count,
-            metrics.value.uniformWidth,
-            logicalScrollLeft.value,
-            availableWidth.value,
-            options.overscan.value,
-          )
+        ? sparseMetrics.value
+          ? sparseMetrics.value.range(
+              logicalScrollLeft.value,
+              availableWidth.value,
+              options.overscan.value,
+            )
+          : getUniformVirtualColumnRange(
+              metrics.value.count,
+              metrics.value.uniformWidth,
+              logicalScrollLeft.value,
+              availableWidth.value,
+              options.overscan.value,
+            )
         : getVirtualColumnRangeFromOffsets(
             columnOffsets.value,
             logicalScrollLeft.value,
@@ -414,7 +440,8 @@ export const useTableColumnVirtualization = (
     const width = pixelWidthAt(index)
     const start =
       metrics.value.uniformWidth != null
-        ? index * metrics.value.uniformWidth
+        ? (sparseMetrics.value?.offsetAt(index) ??
+          index * metrics.value.uniformWidth)
         : columnOffsets.value[index]
     const end = start + width
     const currentStart = logicalScrollLeft.value

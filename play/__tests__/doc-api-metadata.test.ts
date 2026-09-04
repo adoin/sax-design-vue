@@ -25,10 +25,23 @@ describe('documentation API metadata', () => {
     const details = resolveTypeDetails('table', [
       'TableColumn[]',
       'Boolean | TableVirtualConfig',
+      'Boolean | TableResizeConfig',
+      'TableColumnWidths',
+      'TableColumnResizeParams',
     ])
 
     expect(details.TableColumn.declaration).toContain(
       'export interface TableColumn',
+    )
+    expect(details.TableColumnOptions.declaration).toContain(
+      'resizable?: boolean',
+    )
+    expect(details.TableResizeConfig.declaration).toContain('minWidth?: number')
+    expect(details.TableColumnWidths.declaration).toContain(
+      'Record<string, number>',
+    )
+    expect(details.TableColumnResizeParams.declaration).toContain(
+      'oldWidth: number',
     )
     expect(details.TableColumnSlots.declaration).toContain(
       'export interface TableColumnSlots',

@@ -1,6 +1,16 @@
 ---
 description: '通过数据和列配置渲染结构化表格，不再逐个手写表格单元格。'
 PROPS:
+  - name: resize-config
+    type: Boolean | TableResizeConfig
+    description: "显式开启列宽调整，支持全局最小宽度和键盘步长。"
+    default: false
+    usage: '#拖动调整列宽'
+  - name: column-widths
+    type: TableColumnWidths
+    description: "v-model:column-widths 受控列宽；普通列以 key、field 或 @索引标识，virtualSource 使用列索引字符串。"
+    default: null
+    usage: '#拖动调整列宽'
   - name: data
     type: TableRow[]
     description: 表格渲染的行数据。
@@ -121,6 +131,11 @@ PROPS:
     default: 'false'
     usage: '#文本溢出与提示'
 CHILD_PROPS:
+  - name: resizable
+    type: Boolean
+    description: "设为 false 禁止调整此列；需先开启 resize-config。"
+    default: null
+    usage: '#拖动调整列宽'
   - name: type
     type: String
     values: seq | checkbox | radio
@@ -203,6 +218,16 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: update:columnWidths
+    type: '(widths: TableColumnWidths) => void'
+    description: "提交列宽后返回新的完整宽度记录。"
+    default: null
+    usage: '#拖动调整列宽'
+  - name: column-resize
+    type: '(params: TableColumnResizeParams) => void'
+    description: "拖动结束或键盘调整后触发，含列、索引、新旧宽度及输入来源。"
+    default: null
+    usage: '#拖动调整列宽'
   - name: update:modelValue
     type: TableRow | TableRow[] | null
     description: 行选择变化时触发。
@@ -353,6 +378,42 @@ EXPOSES:
 ---
 
 # Table 表格
+
+<card>
+
+## 拖动调整列宽
+
+开启 `resize-config` 后可拖动表头边缘。右侧固定列从左边缘调整；列的 `minWidth`（数字或 px）与全局 `minWidth` 共同约束拖动，`resizable: false` 可禁用指定列。键盘左右键调整，Shift 加速，Home 到最小宽度，Escape 取消拖动。
+
+`v-model:column-widths` 用于外部受控与恢复；未传时组件在内部保留结果，不修改原始 columns 或行数据。改变原始列 width 会清除该列的内部调整。拖动过程中预览宽度，松开后才提交事件；父级未接受受控更新时恢复原值。
+
+固定列、树行、分页与双轴虚拟滚动共享同一列布局。横向切换窗口继续保留行最大高度；提交新列宽、容器宽度变化或调用 measure() 时会清空旧布局的行高缓存并重新测量。行内容原地修改后如需允许高度缩小，可主动调用 measure()。
+
+十万行模式按需生成行、列，只保存调整过的列宽。当前压力组合为 10 万行 × 10 万列，不分配完整矩阵；此模式的排序、筛选、树结构和数据请求由业务端处理，不能据此推算浏览器的可用容量。
+
+<template #example>
+<table-zh-resize />
+</template>
+
+<template #template>
+
+@[code{91-125}](../../.vuepress/components/table-zh/resize.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-89}](../../.vuepress/components/table-zh/resize.vue)
+
+</template>
+
+<template #style>
+
+@[code{127-140}](../../.vuepress/components/table-zh/resize.vue)
+
+</template>
+
+</card>
 
 <card>
 

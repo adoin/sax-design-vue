@@ -70,6 +70,7 @@ const itemCount = computed(() =>
 )
 const getItem = (index: number) => props.itemAt?.(index) ?? props.items[index]
 const measuredSizeCache = new Map<VirtualListKey, number>()
+const resettingMeasurements = shallowRef(false)
 const measuredElements = new Map<number, HTMLElement>()
 const measurementRefCallbacks = new Map<
   number,
@@ -173,7 +174,8 @@ const itemStyle = (start: number, size: number): CSSProperties => {
     '--s-vl-item-start': `${start}px`,
     transform: 'translateY(var(--s-vl-item-start))',
   }
-  if (props.dynamic && props.retainMaxSize) style.minHeight = `${size}px`
+  if (props.dynamic && props.retainMaxSize && !resettingMeasurements.value)
+    style.minHeight = `${size}px`
   return style
 }
 
@@ -306,6 +308,32 @@ function measure() {
   if (props.dynamic) nextTick(measureVisible)
 }
 
+async function resetMeasurements() {
+  if (resettingMeasurements.value || destroyed) return
+  const element = scrollRef.value
+  const top = element?.scrollTop ?? 0
+  const anchor = virtualItems.value.find((item) => item.start + item.size > top)
+  const delta = anchor ? Math.max(0, top - anchor.start) : 0
+  resettingMeasurements.value = true
+  pendingSparseMeasurements.clear()
+  measuredSizeCache.clear()
+  if (sparseMode.value) sparseVirtualizer.resetMeasurements()
+  else virtualizer.value.measure()
+  await nextTick()
+  if (destroyed) return
+  if (anchor) scrollToIndex(anchor.index, 'start')
+  await nextTick()
+  if (destroyed) return
+  if (props.dynamic) measureVisible()
+  await nextTick()
+  if (destroyed) return
+  resettingMeasurements.value = false
+  if (anchor) {
+    scrollToIndex(anchor.index, 'start')
+    if (delta && element) scrollToOffset(element.scrollTop + delta)
+  }
+}
+
 watch(
   () => [props.dynamic, props.estimateSize, props.retainMaxSize] as const,
   () => nextTick(measure),
@@ -323,6 +351,7 @@ defineExpose({
   scrollToOffset,
   measure,
   measureVisible,
+  resetMeasurements,
   getScrollElement: () => scrollRef.value,
   virtualizer,
 })

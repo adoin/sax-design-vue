@@ -63,6 +63,7 @@
   }
 
   @include e(data-head-cell) {
+    position: relative;
     display: flex;
     min-width: 0;
     align-items: center;
@@ -76,11 +77,49 @@
     }
   }
 
+  @include e(resize-handle) {
+    position: absolute;
+    inset: 0 -5px 0 auto;
+    width: 10px;
+    z-index: 5;
+    cursor: col-resize;
+    touch-action: none;
+    outline: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 8px 4px;
+      border-radius: 2px;
+      background: #{getColor(primary, 0.55)};
+      opacity: 0;
+      transition: opacity 160ms ease;
+    }
+    &:hover::after,
+    &:focus-visible::after,
+    &.is-resizing::after {
+      opacity: 1;
+    }
+    &:focus-visible {
+      box-shadow: inset 0 0 0 2px #{getColor(primary, 0.35)};
+    }
+    @media (prefers-reduced-motion: reduce) {
+      &::after {
+        transition: none;
+      }
+    }
+  }
+
   @include e(data-column-spacer) {
     width: 0;
     min-width: 0;
     flex: 0 0 auto;
     pointer-events: none;
+  }
+
+  .is-fixed-right > .#{$namespace}-table__resize-handle {
+    left: -5px;
+    right: auto;
   }
 
   @include e(data-body) {

@@ -289,6 +289,7 @@ export default {
       defaultRangeEndLabel: 'pick end value',
     },
     table: {
+      resizeColumn: 'Resize column {column}',
       sortAscending: 'Sort ascending',
       sortDescending: 'Sort descending',
       clearSort: 'Clear sorting',

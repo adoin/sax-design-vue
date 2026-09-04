@@ -58,7 +58,10 @@ EXPOSES:
   - name: scrollToOffset
     description: 编程滚动，或重置动态行高测量缓存。
   - name: measure
-    description: 编程滚动，或重置动态行高测量缓存。
+    description: 重新测量已渲染行；开启 retain-max-size 时继续保留历史最大高度。
+  - name: resetMeasurements
+    type: '() => Promise<void>'
+    description: 清空历史高度并重新测量当前布局，保留可见行锚点。列宽或内容变化可能使行变矮时调用。
 NEWS:
   - dynamic-height
 description: '基于 TanStack Virtual 的窗口化列表，支持真实测量动态行高。'

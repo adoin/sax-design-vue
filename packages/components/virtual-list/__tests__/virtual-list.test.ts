@@ -100,6 +100,28 @@ describe('VirtualList', () => {
     expect(virtualizerMocks.measure).toHaveBeenCalledTimes(1)
   })
 
+  it('drops retained maximum heights after a real layout reset', async () => {
+    const rect = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockReturnValue({ height: 92 } as DOMRect)
+    const wrapper = mount(VirtualList, {
+      props: {
+        items: [{ id: 'alpha' }],
+        itemKey: (item: unknown) => (item as { id: string }).id,
+        dynamic: true,
+        retainMaxSize: true,
+      },
+    })
+    await nextTick()
+    expect(virtualizerMocks.options?.value.estimateSize(0)).toBe(92)
+    rect.mockReturnValue({ height: 52 } as DOMRect)
+    await wrapper.vm.resetMeasurements()
+    expect(virtualizerMocks.options?.value.estimateSize(0)).toBe(52)
+    expect(virtualizerMocks.resizeItem).toHaveBeenLastCalledWith(0, 52)
+    wrapper.unmount()
+    rect.mockRestore()
+  })
+
   it('suspends normal-list anchoring only while the native scrollbar is held', async () => {
     const wrapper = mount(VirtualList, {
       props: { items: [{ id: 'alpha' }], dynamic: true },

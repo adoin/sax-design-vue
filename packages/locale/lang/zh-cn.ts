@@ -262,6 +262,7 @@ export default {
       rejected: '文件未通过校验',
     },
     table: {
+      resizeColumn: '调整 {column} 列宽',
       sortAscending: '升序排序',
       sortDescending: '降序排序',
       clearSort: '取消排序',
