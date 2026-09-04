@@ -24,13 +24,13 @@ export interface TableClipboardConfig {
 }
 
 export interface TableClipboardOptions {
-  /** Current view's visible data-row and visual-column indices, excluding group bands. */
+  /** Half-open current-view data-row/visual-column indices, excluding group/detail bands. Omit to use the selected range or active cell. A one-cell paste target expands to the payload size; larger targets must be whole multiples of that size. */
   bounds?: TableCellRangeBounds
   signal?: AbortSignal
 }
 
 export interface TableCopyOptions extends TableClipboardOptions {
-  /** false returns the snapshot without writing to the system clipboard. */
+  /** Defaults to true. false skips the OS write; cut still clears writable source cells after preparing its snapshot. */
   writeClipboard?: boolean
 }
 

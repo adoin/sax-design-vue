@@ -158,4 +158,22 @@ export const tableSelectEmits = {
 }
 
 export type TableSelectProps = ExtractPropTypes<typeof tableSelectProps>
-export type TableSelectInstance = InstanceType<typeof TableSelect>
+
+export interface TableSelectExposes {
+  open: () => void
+  close: () => void
+  toggleRowExpand: (
+    row: TableRow,
+    expanded?: boolean,
+  ) => Promise<void> | undefined
+  setExpandedKeys: (keys: TableRowKey[]) => void
+  scrollToRow: (
+    rowOrIndex: TableRow | TableRowKey,
+    align?: 'auto' | 'start' | 'center' | 'end',
+  ) => void
+  /** Undefined until the popup's internal table has mounted. */
+  measure: () => Promise<void> | undefined
+}
+
+export type TableSelectInstance = InstanceType<typeof TableSelect> &
+  TableSelectExposes

@@ -28,7 +28,7 @@ describe('documentation API metadata', () => {
       expect(page.exposeTypeMismatch, label).toEqual([])
       expect(page.exposeSignatures.mismatches, label).toEqual([])
       expect(page.exposeSignatures.checked, label).toBe(
-        page.component === 'table-select' ? 0 : page.sections.EXPOSES.actual,
+        page.sections.EXPOSES.actual,
       )
       expect(page.defaults.checked, label).toBeGreaterThan(0)
       expect(page.defaults.mismatches, label).toEqual([])
@@ -54,7 +54,9 @@ describe('documentation API metadata', () => {
             replacement,
           ),
       })
-      for (const page of pages.filter((page) => page.component === 'table'))
+      for (const page of pages.filter(
+        (page) => page.component !== 'table-grid',
+      ))
         expect(
           page.exposeSignatures.mismatches.map((item) => item.name),
         ).toEqual(['toggleRowExpand'])

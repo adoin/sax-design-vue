@@ -2,6 +2,7 @@ import { defineComponent, h, nextTick, shallowRef } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import TableSelect from '../src/table-select.vue'
+import type { TableSelectExposes } from '../src/table-select'
 import type { Slot } from 'vue'
 
 const PopperStub = defineComponent({
@@ -60,6 +61,54 @@ const mountTableSelect = (
   })
 
 describe('TableSelect', () => {
+  it('exposes safe pre-mount methods and forwards tree, scrolling and measurement after opening', async () => {
+    const parent = {
+      id: 'root',
+      name: 'Root',
+      children: [{ id: 'child', name: 'Child' }],
+    }
+    const wrapper = mountTableSelect({
+      data: [parent],
+      columns: [{ field: 'name', treeNode: true }],
+      rowKey: 'id',
+      treeConfig: { children: 'children' },
+    })
+    const api = wrapper.vm as unknown as TableSelectExposes
+    try {
+      expect(api.measure()).toBeUndefined()
+      expect(api.toggleRowExpand(parent, true)).toBeUndefined()
+      expect(() => api.scrollToRow('child')).not.toThrow()
+      api.setExpandedKeys(['root'])
+      api.open()
+      await nextTick()
+      expect(wrapper.findAll('.s-table__data-row')).toHaveLength(1)
+      const expanded = api.toggleRowExpand(parent, true)
+      expect(expanded).toBeInstanceOf(Promise)
+      await expanded
+      await nextTick()
+      expect(wrapper.findAll('.s-table__data-row')).toHaveLength(2)
+      const scroll = vi.fn()
+      Object.defineProperty(
+        wrapper.findAll('.s-table__data-row')[1].element,
+        'scrollIntoView',
+        { value: scroll },
+      )
+      api.scrollToRow('child', 'center')
+      expect(scroll).toHaveBeenCalledWith({ block: 'center' })
+      const measured = api.measure()
+      expect(measured).toBeInstanceOf(Promise)
+      await measured
+      api.setExpandedKeys([])
+      await nextTick()
+      expect(wrapper.findAll('.s-table__data-row')).toHaveLength(1)
+      api.close()
+      await nextTick()
+      expect(wrapper.getComponent(PopperStub).props('visible')).toBe(false)
+    } finally {
+      wrapper.unmount()
+    }
+  })
+
   it('uses the shared teleported popper by default', () => {
     const wrapper = mountTableSelect()
     const popper = wrapper.getComponent(PopperStub)

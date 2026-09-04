@@ -251,7 +251,7 @@
     },
     "exposeTypeMismatch": [],
     "exposeSignatures": {
-      "checked": 0,
+      "checked": 6,
       "mismatches": []
     },
     "inheritedTableLink": true
@@ -310,7 +310,7 @@
     },
     "exposeTypeMismatch": [],
     "exposeSignatures": {
-      "checked": 0,
+      "checked": 6,
       "mismatches": []
     },
     "inheritedTableLink": true

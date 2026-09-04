@@ -1,0 +1,28 @@
+[
+  {
+    "locale": "en",
+    "before": {
+      "measure": true,
+      "expand": true
+    },
+    "collapsedRows": 1,
+    "expandedRows": 3,
+    "expanded": true,
+    "measured": true,
+    "labels": ["Workspace", "Components", "Documentation"],
+    "closed": true
+  },
+  {
+    "locale": "zh",
+    "before": {
+      "measure": true,
+      "expand": true
+    },
+    "collapsedRows": 1,
+    "expandedRows": 3,
+    "expanded": true,
+    "measured": true,
+    "labels": ["工作区", "组件", "文档"],
+    "closed": true
+  }
+]

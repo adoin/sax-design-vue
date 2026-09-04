@@ -70,8 +70,8 @@
 - [ ] 组合测试覆盖普通数据、分页/跨页选择、树形/懒加载、固定列、双向虚拟滚动、动态行高；新能力不能只在孤立示例中有效。
 - [x] 巨量场景记录初始化、连续滚动、跳转、窗口渲染数量、缓存和内存表现；主动注明尚不支持的功能组合。见 [运行时验收记录](reports/table-runtime-audit.md) 和同目录前后测量 JSON。
 - [ ] 同步中英文示例文案、渲染示例、完整 Code 源码与 Playground；例子说明和控制均放在同一个 `<card>` 内。
-- [ ] 更新逐项 API 文档与项目类型详情，运行 `pnpm run normalize:doc-examples` 并审核结果。
-  - 公开 API 名称、静态默认值和六页实际渲染核对见 [API 文档核对](reports/table-api-audit.md)；已补齐遗漏并修复重复锚点和失效用法链接。[动态插槽验收](reports/table-slot-audit.md) 已修复迟到插槽及虚拟行内容不更新，并核对作用域参数。[方法参数核对](reports/table-method-contract-audit.md) 已补充 82 个方法的双语签名检查，修复原始行对象定位/校验和 measure 返回类型；嵌套 options 的全部语义及 TableSelect 的独立签名核对仍待完成。
+- [x] 更新逐项 API 文档与项目类型详情，运行 `pnpm run normalize:doc-examples` 并审核结果。
+  - [API 文档核对](reports/table-api-audit.md)、[动态插槽验收](reports/table-slot-audit.md)、[方法参数核对](reports/table-method-contract-audit.md) 与 [方法选项验收](reports/table-options-audit.md) 已完成名称、默认值、插槽参数、88 个方法双语签名及 options 语义核对，修复实际发现的遗漏与对象身份问题。636 项回归、三项类型检查、六页 API 浏览器及 TableSelect 六个方法的真实弹层检查通过；normalize 检查 144 页，0 修改、0 跳过。剩余全功能组合与示例总验收另行跟踪。
 - [x] 运行相关组件测试、`pnpm run test:docs-examples` 和类型检查；共享文档管线变更另运行 `pnpm run docs:build`。见 [类型与测试验收](reports/table-validation-audit.md)：720 项相关回归、5 项文档测试和完整五项类型检查通过，本阶段未变更共享文档管线。
 - [ ] 浏览器检查中英文 Code/Playground、明暗主题、键盘焦点，以及每项新功能与固定列/虚拟滚动的组合。
 

@@ -766,7 +766,7 @@ SLOTS:
 EXPOSES:
   - name: "getChartData"
     type: "(options: TableChartOptions) => Promise<TableChartResult>"
-    description: "Extract a readonly chart snapshot without opening a panel."
+    description: "Extract a readonly chart snapshot without opening a panel. scope and series are required; bounds is only for selection, while aggregate/groupKeys/summaryLabel are for aggregate scope."
     default: null
     usage: "#chart-integration"
   - name: "openChart"
@@ -791,7 +791,7 @@ EXPOSES:
     usage: "#chart-integration"
   - name: "findCells"
     type: "(query: string | TableFindQuery, options?: TableFindOptions) => Promise<TableFindResult>"
-    description: "Search the chosen scope and return a snapshot with matches and completion limits."
+    description: "Search the chosen scope and return matches and completion limits. scope defaults to findConfig.scope, then view; bounds is invalid with data scope, and columns: [] searches nothing."
     default: null
     usage: "#find-and-replace"
   - name: "findNext"
@@ -811,7 +811,7 @@ EXPOSES:
     usage: "#find-and-replace"
   - name: "replaceAll"
     type: "(replacement: string, options?: TableReplaceOptions) => Promise<TableReplaceResult>"
-    description: "Validate and replace writable matches in one transaction; requires a complete search."
+    description: "Validate and replace writable matches in one transaction; requires a complete search. options.index is ignored; it only applies to replaceMatch."
     default: null
     usage: "#find-and-replace"
   - name: "getFindState"
@@ -851,7 +851,7 @@ EXPOSES:
     usage: "#copy-cut-and-paste"
   - name: "pasteCells"
     type: "(data?: string | TableClipboardData, options?: TableClipboardOptions) => Promise<TableClipboardResult>"
-    description: "Paste TSV or a 2D matrix; omitting data requests the browser clipboard."
+    description: "Paste TSV or a 2D matrix; omit data to read the browser clipboard. A single target cell expands to the payload size; a larger target must be a whole multiple of the payload rectangle."
     default: null
     usage: "#copy-cut-and-paste"
   - name: "cancelClipboard"

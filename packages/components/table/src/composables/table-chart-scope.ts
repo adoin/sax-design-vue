@@ -13,19 +13,23 @@ import type { TableColumn, TableFlatRow } from '../table'
 import type { TableGroupNode } from '../table-group'
 
 export interface TableChartSeriesMapping {
-  /** Visible column key/index, or an aggregate key for aggregate scope. */
+  /** Visible column key or resolved index. virtualSource requires an absolute source index (number or decimal string), not a custom column key. Aggregate scope requires an aggregate string key. */
   column: string | number
+  /** Defaults to the column title/field, or the aggregate key for aggregate scope. */
   name?: string
 }
 export interface TableChartRequest {
   scope: TableChartScope
   series: readonly TableChartSeriesMapping[]
-  /** Defaults to the first column of the selected range/filtered view. */
+  /** Same column addressing as series. Defaults to the first visual column of the selected range/filtered view; invalid for aggregate scope. */
   category?: string | number
+  /** Half-open data-row/visual-column coordinates. Only selection scope accepts explicit bounds. */
   bounds?: TableCellRangeBounds
+  /** Aggregate scope only. Defaults to groups; summary extracts the overall summary. */
   aggregate?: 'groups' | 'summary'
-  /** Omit to use root groups. Explicit keys can select nested groups. */
+  /** groups only: omit for root groups, or select nested groups by key. Invalid with summary. */
   groupKeys?: readonly string[]
+  /** Aggregate summary category label; defaults to Total. */
   summaryLabel?: string
 }
 export interface TableChartColumn {

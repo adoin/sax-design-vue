@@ -766,7 +766,7 @@ SLOTS:
 EXPOSES:
   - name: "getChartData"
     type: "(options: TableChartOptions) => Promise<TableChartResult>"
-    description: "提取只读图表快照，不打开面板。"
+    description: "提取只读图表快照，不打开面板。scope 和 series 必填；bounds 仅用于 selection，aggregate/groupKeys/summaryLabel 用于 aggregate 范围。"
     default: null
     usage: "#图表集成"
   - name: "openChart"
@@ -791,7 +791,7 @@ EXPOSES:
     usage: "#图表集成"
   - name: "findCells"
     type: "(query: string | TableFindQuery, options?: TableFindOptions) => Promise<TableFindResult>"
-    description: "查找指定范围，返回匹配快照及扫描完整性。"
+    description: "查找指定范围，返回匹配快照及扫描完整性。scope 默认取 findConfig.scope，再回退到 view；data 范围不接受 bounds，columns: [] 不搜索任何列。"
     default: null
     usage: "#查找与替换"
   - name: "findNext"
@@ -811,7 +811,7 @@ EXPOSES:
     usage: "#查找与替换"
   - name: "replaceAll"
     type: "(replacement: string, options?: TableReplaceOptions) => Promise<TableReplaceResult>"
-    description: "校验并以一次事务替换所有可写匹配；要求搜索完整。"
+    description: "校验并以一次事务替换所有可写匹配；要求搜索完整。忽略 options.index，该索引仅用于 replaceMatch。"
     default: null
     usage: "#查找与替换"
   - name: "getFindState"
@@ -851,7 +851,7 @@ EXPOSES:
     usage: "#复制、剪切与粘贴"
   - name: "pasteCells"
     type: "(data?: string | TableClipboardData, options?: TableClipboardOptions) => Promise<TableClipboardResult>"
-    description: "粘贴 TSV 或二维数据；省略 data 时由浏览器读取剪贴板。"
+    description: "粘贴 TSV 或二维数据；省略 data 时由浏览器读取剪贴板。单格目标按数据尺寸扩展，多格目标的行列数必须分别是数据矩形尺寸的整倍数。"
     default: null
     usage: "#复制、剪切与粘贴"
   - name: "cancelClipboard"

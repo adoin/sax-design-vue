@@ -59,7 +59,9 @@ export interface TableChartConfig
 }
 export interface TableChartOptions extends TableChartRequest {
   signal?: AbortSignal
+  /** Defaults to bar. getChartData also validates this option but does not open a panel. */
   type?: TableChartType
+  /** Panel title; defaults to an empty string. Does not change the extracted series. */
   title?: string
 }
 export interface TableChartState {

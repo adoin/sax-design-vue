@@ -86,7 +86,7 @@ SLOTS:
 EXPOSES:
   - name: "commitProxy"
     type: "(action: TableGridProxyAction, rows?: TableRow[]) => Promise<TableGridProxyResult>"
-    description: "Dispatch query, refresh, save or delete with current conditions; delete defaults to selected rows."
+    description: "Dispatch query, refresh, save or delete with current conditions. rows applies only to delete: omit it for the current selection, or pass [] to delete nothing. save uses the tracked change set."
     default: null
     usage: "#request-proxy"
   - name: "cancelProxy"

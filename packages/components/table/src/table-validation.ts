@@ -55,14 +55,27 @@ export interface TableValidationResult<Row extends TableRow = TableRow> {
   checked: number
 }
 export interface TableValidateOptions<Row extends TableRow = TableRow> {
-  /** all: all supplied/loaded rows; view: the filtered, expanded current page. */
+  /** Defaults to all supplied/loaded rows; view uses the filtered, expanded current page. */
   scope?: 'all' | 'view'
+  /**
+   * Ordinary numbers address the flattened current page; row objects must belong
+   * to supplied/loaded data. With scope:view they must also belong to that view.
+   * Generated sources accept only absolute numeric indices; explicit rows override scope.
+   */
   rows?: Array<Row | number>
   /** Stable keys for supplied tree/array rows. Generated sources also require numeric rows. */
   rowKeys?: TableRowKey[]
+  /**
+   * Omit for all configured columns (including hidden ones). Ordinary numbers
+   * address resolved visible columns; objects or key/field strings may select
+   * configured hidden columns. Generated sources require absolute numeric indices.
+   */
   columns?: Array<TableColumn<Row> | string | number>
+  /** Cancels this run; cancellation does not replace previously completed errors. */
   signal?: AbortSignal
+  /** Overrides validationConfig.scrollToError; defaults to true. */
   scrollToError?: boolean
+  /** Overrides validationConfig.maxErrors; defaults to 100, minimum 1 after flooring. */
   maxErrors?: number
 }
 

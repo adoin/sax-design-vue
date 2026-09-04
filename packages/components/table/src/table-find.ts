@@ -16,11 +16,11 @@ export interface TableFindConfig extends TableFindLimits {
   checkMethod?: (context: TableEditContext) => boolean
 }
 export interface TableFindOptions {
-  /** view: current expanded page; selection: cell range; data: all supplied/loaded rows. */
+  /** view: current expanded page; selection: cell range; data: all supplied/loaded rows. Defaults to findConfig.scope, then view. */
   scope?: TableFindScope
-  /** Half-open visible coordinates; available for view/selection scopes. */
+  /** Half-open visible coordinates, excluding group/detail bands. Overrides the current range for view/selection; invalid with data scope. */
   bounds?: TableCellRangeBounds
-  /** Visible column keys; generated columns use source indices or their string keys. */
+  /** Visible column keys or resolved indices (source indices for generated columns). Empty selects no columns; omit for all visible columns. */
   columns?: readonly (string | number)[]
   signal?: AbortSignal
 }
@@ -50,11 +50,12 @@ export interface TableFindResult {
   error?: unknown
 }
 export interface TableFindNavigateOptions {
+  /** Defaults to true. false scrolls to the match without taking the current input focus. */
   focus?: boolean
   signal?: AbortSignal
 }
 export interface TableReplaceOptions {
-  /** Defaults to the active match for replaceMatch. */
+  /** Zero-based match index for replaceMatch; defaults to the active match. Ignored by replaceAll. */
   index?: number
   signal?: AbortSignal
 }

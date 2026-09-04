@@ -7,6 +7,7 @@ import { STable } from '@vuesax-alpha/components/table'
 import { useId, useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { getVsColor } from '@vuesax-alpha/utils'
 import { tableSelectEmits, tableSelectProps } from './table-select'
+import type { TableSelectExposes } from './table-select'
 import type {
   TableCellRenderParams,
   TableFlatRow,
@@ -237,7 +238,7 @@ defineExpose({
   scrollToRow: (...args: Parameters<TableInstance['scrollToRow']>) =>
     tableRef.value?.scrollToRow(...args),
   measure: () => tableRef.value?.measure(),
-})
+} satisfies TableSelectExposes)
 </script>
 
 <template>

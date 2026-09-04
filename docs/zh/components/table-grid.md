@@ -86,7 +86,7 @@ SLOTS:
 EXPOSES:
   - name: "commitProxy"
     type: "(action: TableGridProxyAction, rows?: TableRow[]) => Promise<TableGridProxyResult>"
-    description: "按当前条件执行 query、refresh、save 或 delete；delete 默认读取当前选中行。"
+    description: "按当前条件执行 query、refresh、save 或 delete。rows 仅用于 delete：省略时读取当前选中行，传 [] 则不删除；save 使用已跟踪的变更记录。"
     default: null
     usage: "#请求代理"
   - name: "cancelProxy"

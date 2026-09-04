@@ -321,13 +321,12 @@ export function auditTableApi({
         if (String(documented) !== String(expected))
           defaults.mismatches.push({ name, expected, documented })
       }
-      const declaredExposes =
-        component === 'table-select'
-          ? null
-          : interfaceKeys(
-              file,
-              component === 'table' ? 'TableExposes' : 'TableGridExposes',
-            )
+      const exposeInterface = {
+        table: 'TableExposes',
+        'table-grid': 'TableGridExposes',
+        'table-select': 'TableSelectExposes',
+      }[component]
+      const declaredExposes = interfaceKeys(file, exposeInterface)
       const exposeTypeMismatch = declaredExposes
         ? [...new Set([...declaredExposes, ...contract.EXPOSES])].filter(
             (name) =>
@@ -335,13 +334,7 @@ export function auditTableApi({
               contract.EXPOSES.includes(name),
           )
         : []
-      const signatures =
-        component === 'table-select'
-          ? null
-          : interfaceSignatures(
-              file,
-              component === 'table' ? 'TableExposes' : 'TableGridExposes',
-            )
+      const signatures = interfaceSignatures(file, exposeInterface)
       const exposeSignatures = {
         checked: signatures?.size ?? 0,
         mismatches: [],
