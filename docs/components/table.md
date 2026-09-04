@@ -1,6 +1,11 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "edit-config"
+    type: "Boolean | TableEditConfig"
+    description: "Enable editing with cell or row mode, triggers, eligibility and leave policies."
+    default: "false"
+    usage: "#cell-and-row-editing"
   - name: "detail-config"
     type: "Boolean | TableDetailConfig"
     description: "Detail expansion configuration; an expand column enables it automatically, false disables it. Enable explicitly with virtualSource."
@@ -166,6 +171,16 @@ PROPS:
     default: 'false'
     usage: '#text-overflow-and-tooltips'
 CHILD_PROPS:
+  - name: "editor"
+    type: "Boolean | TableEditorConfig"
+    description: "Enable field editing with input, number, select, date or switch controls, props, options and eligibility."
+    default: null
+    usage: "#cell-and-row-editing"
+  - name: "edit"
+    type: "TableEditRenderer"
+    description: "Editor render function, independent of the display cell renderer."
+    default: null
+    usage: "#custom-editors"
   - name: footer
     type: TableFooterRenderer
     description: Footer cell render function.
@@ -278,6 +293,26 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "editStart"
+    type: "(params: TableEditRecord) => void"
+    description: "Emitted when an edit session starts."
+    default: null
+    usage: "#cell-and-row-editing"
+  - name: "editChange"
+    type: "(params: TableEditRecord) => void"
+    description: "Emitted when a draft changes; supplied data is not mutated."
+    default: null
+    usage: "#cell-and-row-editing"
+  - name: "editCommit"
+    type: "(params: TableEditEndParams) => void"
+    description: "Provides changed fields and updatedRow on commit; the application accepts and persists the result."
+    default: null
+    usage: "#cell-and-row-editing"
+  - name: "editCancel"
+    type: "(params: TableEditEndParams) => void"
+    description: "Emitted when a draft is cancelled, including its reason."
+    default: null
+    usage: "#cell-and-row-editing"
   - name: "update:detailExpandedKeys"
     type: "(keys: TableRowKey[]) => void"
     description: "Requests the complete next detail key array."
@@ -385,6 +420,21 @@ EVENTS:
     default: null
     usage: '#selection-columns-and-reservation'
 SLOTS:
+  - name: "edit-[column key]"
+    type: "TableEditSlotParams"
+    description: "Column editor slot; columns.slots.edit can specify another name."
+    default: null
+    usage: "#custom-editors"
+  - name: "edit-cell"
+    type: "TableEditSlotParams"
+    description: "Generic editor slot with value, draftRow, setValue, commit and cancel."
+    default: null
+    usage: "#custom-editors"
+  - name: "STableColumn.edit"
+    type: "TableEditSlotParams"
+    description: "Editor slot on a declarative column."
+    default: null
+    usage: "#custom-editors"
   - name: "detail"
     type: "TableDetailSlotParams"
     description: "Detail content with row, key, index, loaded data, reload and close."
@@ -449,6 +499,26 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "startEdit"
+    type: "(rowOrIndex: TableRow | number, columnOrIndex: TableColumn | string | number) => Promise<boolean>"
+    description: "Start and locate an editor; normal data accepts visible row/column indices, row objects and column fields/keys, while generated sources use global numeric indices."
+    default: null
+    usage: "#editing-virtual-data"
+  - name: "commitEdit"
+    type: "() => Promise<boolean>"
+    description: "Commit and emit editCommit; returns true with no session and false on eligibility or data conflicts."
+    default: null
+    usage: "#cell-and-row-editing"
+  - name: "cancelEdit"
+    type: "() => void"
+    description: "Discard the active draft."
+    default: null
+    usage: "#cell-and-row-editing"
+  - name: "getEditRecord"
+    type: "() => TableEditRecord | null"
+    description: "Read the active session and its draft change snapshot."
+    default: null
+    usage: "#cell-and-row-editing"
   - name: "toggleRowDetail"
     type: "(rowOrIndex: TableRow | number, expanded?: boolean) => Promise<void>"
     description: "Toggle a detail using a row or index; normal indices address visible rows, source indices address the full source."
@@ -527,6 +597,92 @@ EXPOSES:
 ---
 
 # Table
+
+<card>
+
+## Cell and row editing
+
+Enable `edit-config` and add `editor` to editable columns. Double-click starts cell editing by default. Use `mode: 'row'` for row editing, `trigger: 'click' | 'dblclick' | 'manual'` for activation, and `checkMethod` for eligibility. The archived project in this example is read-only.
+
+Editing updates a draft. Accept `updatedRow` or `changes` from `editCommit` to update `data` or persist to a server; the table does not mutate business records. Enter commits a text input and Escape cancels; selects and date panels handle their own keys first. Use the Save button or Ctrl/⌘ + Enter for any editor. Tab to an editable cell, then press Enter or F2 to begin.
+
+Switching targets commits the previous edit by default; set `onSwitch: 'cancel'` to discard it. Paging, sorting, filtering and column settings cancel by default; `onContextChange: 'commit'` submits instead. Replacing data or disabling editing cancels the session. A successful `commitEdit()` means changes were emitted, not that a remote request finished.
+
+<template #example><table-editing /></template>
+
+<template #template>
+
+@[code{96-127}](../.vuepress/components/table/editing.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-94}](../.vuepress/components/table/editing.vue)
+
+</template>
+
+<template #style>
+
+@[code{129-143}](../.vuepress/components/table/editing.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Custom editors
+
+Customize editors with `STableColumn #edit`, a column-specific `#edit-[key]` or generic `#edit-cell`. Call `setValue` to update the draft. `value` is the field draft and `draftRow` exposes other draft fields; do not mutate slot parameter objects directly.
+
+Editor precedence is column-specific slot, generic editor slot, column `edit` function, named renderer `edit`, then the built-in editor. Display cells retain their existing rendering rules. This example starts row editing from an action button and reuses the library input and select.
+
+<template #example><table-editing-custom /></template>
+
+<template #template>
+
+@[code{23-78}](../.vuepress/components/table/editing-custom.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-21}](../.vuepress/components/table/editing-custom.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Editing virtual data
+
+Stable row keys and fields identify edits in a generated source. This example generates one million rows and 100,000 columns on demand, saving only changed fields. Send the `changes` patch to a server without constructing the full matrix.
+
+Leaving the virtual viewport retains the current draft by default. Use `onScroll: 'commit'` or `'cancel'` to finish when the editor leaves the window; row mode applies this only after all editors for the row leave. `startEdit` scrolls to the target row and column and focuses the editor. Hidden columns cannot start editing.
+
+<template #example><table-editing-source /></template>
+
+<template #template>
+
+@[code{66-95}](../.vuepress/components/table/editing-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-64}](../.vuepress/components/table/editing-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{97-108}](../.vuepress/components/table/editing-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

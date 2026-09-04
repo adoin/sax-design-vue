@@ -27,11 +27,26 @@
           ns.is('fixed-left', entry.fixed === 'left'),
           ns.is('fixed-right', entry.fixed === 'right'),
           ns.is('fixed-boundary', entry.fixedBoundary),
+          ns.is(
+            'editable-cell',
+            editing?.isEditable(editContext(entry.column, entry.index)),
+          ),
+          ns.is(
+            'editing-cell',
+            editing?.isEditing(editContext(entry.column, entry.index)),
+          ),
         ]"
         :style="[entry.style, { textAlign: entry.column.align ?? 'left' }]"
         role="cell"
         :aria-colindex="(entry.ariaIndex ?? entry.index) + 1"
         :data-column-index="entry.index"
+        :tabindex="
+          editing?.isEditable(editContext(entry.column, entry.index))
+            ? 0
+            : undefined
+        "
+        @dblclick="activateEdit(entry.column, entry.index, $event, 'dblclick')"
+        @keydown="editKeydown(entry.column, entry.index, $event)"
         @click="handleCellClick(entry.column, entry.index, $event)"
       >
         <span
@@ -116,6 +131,14 @@
             @update:model-value="emit('rowSelect', flatRow.row, true)"
           />
         </span>
+        <TableCellEditor
+          v-else-if="editing?.isEditing(editContext(entry.column, entry.index))"
+          :context="editContext(entry.column, entry.index)"
+          :editing="editing"
+          :renderer="editRenderer?.(entry.column)"
+          ><template #default="params"
+            ><slot name="edit" v-bind="params" /></template
+        ></TableCellEditor>
         <span
           v-else
           :class="[
@@ -144,6 +167,9 @@ import { SCheckbox } from '@vuesax-alpha/components/checkbox'
 import { SRadio } from '@vuesax-alpha/components/radio'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { tableFieldValue, tableOverflowMode } from './data-utils'
+import TableCellEditor from './table-cell-editor.vue'
+import type { TableEditing } from './composables/use-table-edit'
+import type { TableEditContext, TableEditRenderer } from './table-edit'
 import type { TableRowDetailState } from './composables/use-table-details'
 import type {
   TableCellRenderParams,
@@ -171,6 +197,8 @@ const props = defineProps<{
   selectionDisabled?: boolean
   selectionName?: string
   overflow?: TableOverflow
+  editing?: TableEditing
+  editRenderer?: (column: TableColumn) => TableEditRenderer | undefined
 }>()
 
 const emit = defineEmits<{
@@ -222,5 +250,48 @@ const handleCellClick = (
   column: TableColumn,
   columnIndex: number,
   event: MouseEvent,
-) => emit('cellClick', createCellParams(column, columnIndex), event)
+) => {
+  emit('cellClick', createCellParams(column, columnIndex), event)
+  activateEdit(column, columnIndex, event, 'click')
+}
+const editContext = (
+  column: TableColumn,
+  columnIndex: number,
+): TableEditContext => ({
+  ...createCellParams(column, columnIndex),
+  rowKey: props.flatRow.key,
+  columnKey: column.key ?? column.field ?? String(columnIndex),
+})
+const activateEdit = (
+  column: TableColumn,
+  index: number,
+  event: MouseEvent,
+  trigger: 'click' | 'dblclick',
+) => {
+  if ((props.editing?.config.value.trigger ?? 'dblclick') !== trigger) return
+  if (
+    (event.target as HTMLElement).closest(
+      'button,input,select,textarea,a,[role="button"]',
+    )
+  )
+    return
+  props.editing?.start(editContext(column, index))
+}
+const editKeydown = (
+  column: TableColumn,
+  index: number,
+  event: KeyboardEvent,
+) => {
+  if (
+    event.target !== event.currentTarget ||
+    event.isComposing ||
+    event.defaultPrevented
+  )
+    return
+  if (event.key !== 'Enter' && event.key !== 'F2') return
+  if (props.editing?.start(editContext(column, index))) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+}
 </script>

@@ -3,6 +3,8 @@ import type { PropType } from 'vue'
 import type {
   TableCellRenderParams,
   TableCellRenderer,
+  TableEditRenderer,
+  TableEditSlotParams,
   TableFooterCellRenderParams,
   TableFooterRenderer,
   TableHeaderRenderParams,
@@ -14,7 +16,10 @@ export default defineComponent({
   props: {
     renderer: {
       type: Function as PropType<
-        TableCellRenderer | TableHeaderRenderer | TableFooterRenderer
+        | TableCellRenderer
+        | TableHeaderRenderer
+        | TableFooterRenderer
+        | TableEditRenderer
       >,
       default: undefined,
     },
@@ -23,6 +28,7 @@ export default defineComponent({
         | TableCellRenderParams
         | TableHeaderRenderParams
         | TableFooterCellRenderParams
+        | TableEditSlotParams
       >,
       required: true,
     },

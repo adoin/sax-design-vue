@@ -1,6 +1,11 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "edit-config"
+    type: "Boolean | TableEditConfig"
+    description: "开启编辑，配置单元格或整行模式、触发方式、条件及离开策略。"
+    default: "false"
+    usage: "#单元格与整行编辑"
   - name: "detail-config"
     type: "Boolean | TableDetailConfig"
     description: "详情展开配置；expand 列自动开启，false 关闭。生成数据源需显式开启。"
@@ -166,6 +171,16 @@ PROPS:
     default: 'false'
     usage: '#文本溢出与提示'
 CHILD_PROPS:
+  - name: "editor"
+    type: "Boolean | TableEditorConfig"
+    description: "允许编辑此字段；支持 input、number、select、date、switch，以及控件 props、选项和条件。"
+    default: null
+    usage: "#单元格与整行编辑"
+  - name: "edit"
+    type: "TableEditRenderer"
+    description: "编辑态渲染函数，与展示态 cell 分开。"
+    default: null
+    usage: "#自定义编辑器"
   - name: footer
     type: TableFooterRenderer
     description: 表尾单元格渲染函数。
@@ -278,6 +293,26 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "editStart"
+    type: "(params: TableEditRecord) => void"
+    description: "开始编辑时触发。"
+    default: null
+    usage: "#单元格与整行编辑"
+  - name: "editChange"
+    type: "(params: TableEditRecord) => void"
+    description: "草稿变更时触发；不会修改传入的数据。"
+    default: null
+    usage: "#单元格与整行编辑"
+  - name: "editCommit"
+    type: "(params: TableEditEndParams) => void"
+    description: "提交草稿时提供变更字段与 updatedRow；业务接收并保存结果。"
+    default: null
+    usage: "#单元格与整行编辑"
+  - name: "editCancel"
+    type: "(params: TableEditEndParams) => void"
+    description: "取消草稿时触发，包含 reason。"
+    default: null
+    usage: "#单元格与整行编辑"
   - name: "update:detailExpandedKeys"
     type: "(keys: TableRowKey[]) => void"
     description: "请求更新完整的详情展开键数组。"
@@ -385,6 +420,21 @@ EVENTS:
     default: null
     usage: '#选择列与跨页保留'
 SLOTS:
+  - name: "edit-[column key]"
+    type: "TableEditSlotParams"
+    description: "指定列的编辑插槽，columns.slots.edit 可更改名称。"
+    default: null
+    usage: "#自定义编辑器"
+  - name: "edit-cell"
+    type: "TableEditSlotParams"
+    description: "通用编辑插槽；接收 value、draftRow、setValue、commit 和 cancel。"
+    default: null
+    usage: "#自定义编辑器"
+  - name: "STableColumn.edit"
+    type: "TableEditSlotParams"
+    description: "声明式列的编辑插槽。"
+    default: null
+    usage: "#自定义编辑器"
   - name: "detail"
     type: "TableDetailSlotParams"
     description: "详情内容；接收行、键、索引、加载结果以及 reload 和 close。"
@@ -449,6 +499,26 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "startEdit"
+    type: "(rowOrIndex: TableRow | number, columnOrIndex: TableColumn | string | number) => Promise<boolean>"
+    description: "开始编辑并定位；普通数据使用当前可见行/列索引或行对象、列字段/键，生成源使用全局数字索引。"
+    default: null
+    usage: "#虚拟数据编辑"
+  - name: "commitEdit"
+    type: "() => Promise<boolean>"
+    description: "提交当前草稿并发出 editCommit；无会话时返回 true，条件或数据冲突导致拒绝时返回 false。"
+    default: null
+    usage: "#单元格与整行编辑"
+  - name: "cancelEdit"
+    type: "() => void"
+    description: "放弃当前草稿。"
+    default: null
+    usage: "#单元格与整行编辑"
+  - name: "getEditRecord"
+    type: "() => TableEditRecord | null"
+    description: "读取当前会话与草稿变更快照。"
+    default: null
+    usage: "#单元格与整行编辑"
   - name: "toggleRowDetail"
     type: "(rowOrIndex: TableRow | number, expanded?: boolean) => Promise<void>"
     description: "展开或收起详情；普通数据索引为当前可见行索引，生成数据源索引为全局索引。"
@@ -527,6 +597,92 @@ EXPOSES:
 ---
 
 # Table 表格
+
+<card>
+
+## 单元格与整行编辑
+
+设置 `edit-config` 并为列添加 `editor`，默认双击进入单元格编辑。`mode: 'row'` 开启整行编辑；`trigger` 可选 `click`、`dblclick` 或 `manual`，`checkMethod` 限制可编辑行或单元格。此例的归档项目不可编辑。
+
+编辑只改变草稿。接收 `editCommit` 的 `updatedRow` 或 `changes` 后，由应用更新 `data` 或提交到服务端；组件不会直接修改业务记录。普通输入按 Enter 提交、Escape 取消，选择器和日期面板优先处理自身按键，也可使用保存按钮或 Ctrl/⌘ + Enter。Tab 可进入可编辑单元格，再按 Enter 或 F2 开始。
+
+切换编辑目标默认提交前一项，可用 `onSwitch: 'cancel'` 改为取消。翻页、排序、筛选或调整列设置默认取消草稿，`onContextChange: 'commit'` 可改为提交；替换数据或关闭编辑会取消当前会话。`commitEdit()` 成功表示已发出变更，不代表远程请求已完成。
+
+<template #example><table-zh-editing /></template>
+
+<template #template>
+
+@[code{93-124}](../../.vuepress/components/table-zh/editing.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-91}](../../.vuepress/components/table-zh/editing.vue)
+
+</template>
+
+<template #style>
+
+@[code{126-140}](../../.vuepress/components/table-zh/editing.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 自定义编辑器
+
+使用 `STableColumn #edit`、指定列的 `#edit-[key]` 或通用 `#edit-cell` 定制编辑内容，调用 `setValue` 更新草稿。`value` 是当前字段草稿，`draftRow` 可读取本行其他字段的草稿；不要直接修改插槽参数中的对象。
+
+编辑内容按指定列插槽、通用编辑插槽、列 `edit` 函数、命名渲染器的 `edit`、内置编辑器依次回退。展示态继续使用原有单元格渲染规则。此例通过操作按钮启动整行编辑，输入框和选择器复用组件库控件。
+
+<template #example><table-zh-editing-custom /></template>
+
+<template #template>
+
+@[code{23-78}](../../.vuepress/components/table-zh/editing-custom.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-21}](../../.vuepress/components/table-zh/editing-custom.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 虚拟数据编辑
+
+生成源通过稳定行键与字段标识编辑位置。此例按需生成 100 万行、10 万列，仅保存已修改字段；接收 `changes` 即可把补丁发送给服务端，不需要构造完整二维数据。
+
+默认离开虚拟视口时保留当前草稿，返回后继续编辑；`onScroll: 'commit'` 或 `'cancel'` 可在编辑器离开窗口时结束会话。整行模式只在整行编辑器都离开窗口时应用此策略。`startEdit` 会滚动到目标行列并聚焦，隐藏列不可启动编辑。
+
+<template #example><table-zh-editing-source /></template>
+
+<template #template>
+
+@[code{66-95}](../../.vuepress/components/table-zh/editing-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-64}](../../.vuepress/components/table-zh/editing-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{97-108}](../../.vuepress/components/table-zh/editing-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

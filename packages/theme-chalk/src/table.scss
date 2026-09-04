@@ -392,7 +392,28 @@
     }
   }
 
+  @include e(cell-editor) {
+    width: 100%;
+    min-width: 0;
+    outline: none;
+  }
+
   @include e(data-cell) {
+    &.is-editable-cell {
+      cursor: text;
+      &:focus-visible {
+        outline: none;
+        box-shadow: inset 0 0 0 2px #{getColor(primary, 0.22)};
+      }
+    }
+    &.is-editing-cell {
+      background: color-mix(
+        in srgb,
+        #{getColor(primary)} 5%,
+        var(--s-table-row-surface)
+      );
+      box-shadow: inset 0 2px 7px -4px #{getColor(primary, 0.25)};
+    }
     display: flex;
     min-width: 0;
     align-items: center;

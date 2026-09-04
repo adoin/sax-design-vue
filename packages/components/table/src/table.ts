@@ -16,6 +16,14 @@ import type {
 } from 'vue'
 import type Table from './table.vue'
 import type { PaginationProps } from '@vuesax-alpha/components/pagination'
+import type {
+  TableEditConfig,
+  TableEditEndParams,
+  TableEditRecord,
+  TableEditRenderer,
+  TableEditorConfig,
+} from './table-edit'
+export * from './table-edit'
 
 export type TableRowKey = string | number
 export type TableRow = Record<string, unknown>
@@ -121,6 +129,7 @@ export interface TableSelectionConfig<Row extends TableRow = TableRow> {
 }
 
 export interface TableColumnSlots {
+  edit?: string
   default?: string
   header?: string
   footer?: string
@@ -212,12 +221,15 @@ export type TableFooterFormatter<Row extends TableRow = TableRow> = (
 ) => string | number | null | undefined
 
 export interface TableRenderer<Row extends TableRow = TableRow> {
+  edit?: TableEditRenderer<Row>
   cell?: TableCellRenderer<Row>
   header?: TableHeaderRenderer<Row>
   footer?: TableFooterRenderer<Row>
 }
 
 export interface TableColumnOptions<Row extends TableRow = TableRow> {
+  editor?: boolean | TableEditorConfig<Row>
+  edit?: TableEditRenderer<Row>
   /** Nested header groups. Only leaf columns render data cells. */
   children?: TableColumn<Row>[]
   type?: TableColumnType
@@ -338,6 +350,10 @@ export type TableRowClass<Row extends TableRow = TableRow> =
   string | ((params: TableFlatRow<Row>) => string | string[] | undefined)
 
 export const tableProps = buildProps({
+  editConfig: {
+    type: definePropType<boolean | TableEditConfig>([Boolean, Object]),
+    default: false,
+  },
   detailConfig: {
     type: definePropType<boolean | TableDetailConfig>([Boolean, Object]),
     default: undefined,
@@ -476,6 +492,10 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  editStart: (params: TableEditRecord) => isObject(params),
+  editChange: (params: TableEditRecord) => isObject(params),
+  editCommit: (params: TableEditEndParams) => isObject(params),
+  editCancel: (params: TableEditEndParams) => isObject(params),
   'update:detailExpandedKeys': (keys: TableRowKey[]) => isArray(keys),
   detailExpand: (params: TableDetailExpandParams) => isObject(params),
   detailLoad: (params: TableDetailParams & { data: unknown }) =>
@@ -525,6 +545,13 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  startEdit: (
+    rowOrIndex: Row | number,
+    columnOrIndex: TableColumn<Row> | string | number,
+  ) => Promise<boolean>
+  commitEdit: () => Promise<boolean>
+  cancelEdit: () => void
+  getEditRecord: () => TableEditRecord<Row> | null
   toggleRowDetail: (
     rowOrIndex: Row | number,
     expanded?: boolean,

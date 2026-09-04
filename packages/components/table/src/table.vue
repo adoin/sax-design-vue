@@ -210,6 +210,8 @@
               <template #default="{ detail }">
                 <TableDataRow
                   :detail="detail"
+                  :editing="editing"
+                  :edit-renderer="resolveEditRenderer"
                   :flat-row="item as TableFlatRow"
                   :entries="renderedColumnEntries"
                   :display-index="index"
@@ -245,6 +247,16 @@
                         />
                       </slot>
                     </slot>
+                  </template>
+                  <template #edit="params">
+                    <slot
+                      :name="
+                        params.column.slots?.edit ??
+                        `edit-${columnSlotKey(params.column)}`
+                      "
+                      v-bind="params"
+                      ><slot name="edit-cell" v-bind="params"
+                    /></slot>
                   </template>
                 </TableDataRow>
               </template>
@@ -285,6 +297,8 @@
               <TableDataRow
                 :data-row-key="String(flatRow.key)"
                 :detail="detail"
+                :editing="editing"
+                :edit-renderer="resolveEditRenderer"
                 :flat-row="flatRow"
                 :entries="renderedColumnEntries"
                 :display-index="index"
@@ -316,6 +330,16 @@
                       />
                     </slot>
                   </slot>
+                </template>
+                <template #edit="params">
+                  <slot
+                    :name="
+                      params.column.slots?.edit ??
+                      `edit-${columnSlotKey(params.column)}`
+                    "
+                    v-bind="params"
+                    ><slot name="edit-cell" v-bind="params"
+                  /></slot>
                 </template>
               </TableDataRow>
             </template>
@@ -432,9 +456,10 @@ import TableHeaderCell from './table-header-cell.vue'
 import TableHeaderRows from './table-header-rows.vue'
 import TableFooterRows from './table-footer-rows.vue'
 import TableRowBlock from './table-row-block.vue'
+import { useTableEdit } from './composables/use-table-edit'
 import { useTableDetails } from './composables/use-table-details'
 import { flattenTableColumns } from './composables/table-column-tree'
-import { tableColumnKey } from './data-utils'
+import { tableColumnKey, tableFieldValue } from './data-utils'
 import { useTableQuery } from './composables/use-table-query'
 import { useTableSelection } from './composables/use-table-selection'
 import { useTableOverflow } from './composables/use-table-overflow'
@@ -448,6 +473,7 @@ import type {
   TableCellRenderParams,
   TableCellRenderer,
   TableColumn,
+  TableEditRenderer,
   TableFilterValue,
   TableFlatRow,
   TableHeaderRenderParams,
@@ -628,6 +654,31 @@ const resolveSourceRowKey = (row: TableRow, index: number): TableRowKey => {
 }
 
 const details = useTableDetails(props, emit, sizedColumns)
+const editing = useTableEdit(props, emit, (context) => {
+  const flat = props.virtualSource
+    ? createSourceFlatRow(context.rowIndex)
+    : flatRows.value.find((row) => row.key === context.rowKey)
+  if (!flat || flat.key !== context.rowKey) return undefined
+  const index = props.virtualSource
+    ? context.columnIndex
+    : resolvedColumns.value.findIndex(
+        (column, index) =>
+          (column.key ?? column.field ?? String(index)) === context.columnKey,
+      )
+  const column = props.virtualSource
+    ? columnManager.columnAt(index)
+    : resolvedColumns.value[index]
+  return column
+    ? {
+        ...context,
+        row: flat.row,
+        rowIndex: flat.index,
+        column,
+        columnIndex: index,
+        value: tableFieldValue(flat.row, column.field),
+      }
+    : undefined
+})
 const detailPanelId = (key: TableRowKey) =>
   `${selectionName.value}-detail-${encodeURIComponent(`${typeof key}:${String(key)}`)}`
 const detailIndices = computed(() => {
@@ -750,7 +801,10 @@ const virtualEnabled = computed(
 )
 
 const dynamicRows = computed(
-  () => virtualOptions.value.dynamic || details.enabled.value,
+  () =>
+    virtualOptions.value.dynamic ||
+    details.enabled.value ||
+    editing.enabled.value,
 )
 
 const usesBodyScroll = computed(
@@ -1097,6 +1151,14 @@ const resolveCellRenderer = (
   return (renderer as TableRenderer | undefined)?.cell
 }
 
+const resolveEditRenderer = (
+  column: TableColumn,
+): TableEditRenderer | undefined => {
+  if (column.edit) return column.edit
+  const renderer = rendererEntry(column)
+  return typeof renderer === 'object' ? renderer?.edit : undefined
+}
+
 const resolveHeaderRenderer = (
   column: TableColumn,
 ): TableHeaderRenderer | undefined => {
@@ -1252,7 +1314,85 @@ watch(
   () => overflow.close(),
 )
 
+const startEdit = async (
+  rowOrIndex: TableRow | number,
+  columnOrIndex: TableColumn | string | number,
+): Promise<boolean> => {
+  const flat = resolveDetailRow(rowOrIndex)
+  if (!flat) return false
+  let index = typeof columnOrIndex === 'number' ? columnOrIndex : -1
+  let column: TableColumn | undefined
+  if (props.virtualSource) {
+    if (
+      index < 0 ||
+      index >= props.virtualSource.columnCount ||
+      columnManager.layout.value.hidden.has(index)
+    )
+      return false
+    column = props.virtualSource.column(index)
+  } else {
+    if (index < 0)
+      index = resolvedColumns.value.findIndex((item) =>
+        typeof columnOrIndex === 'string'
+          ? item.key === columnOrIndex || item.field === columnOrIndex
+          : item === columnOrIndex ||
+            (typeof columnOrIndex === 'object' &&
+              Boolean(
+                columnOrIndex.field && item.field === columnOrIndex.field,
+              )),
+      )
+    column = resolvedColumns.value[index]
+  }
+  if (!column) return false
+  const started = editing.start({
+    row: flat.row,
+    rowKey: flat.key,
+    column,
+    columnIndex: index,
+    columnKey: column.key ?? column.field ?? String(index),
+    rowIndex: flat.index,
+    value: tableFieldValue(flat.row, column.field),
+    depth: flat.depth,
+    expanded: flat.expanded,
+    loading: flat.loading,
+    toggleExpand: async (value) => toggleRowExpand(flat.row, value),
+  })
+  if (started) {
+    scrollToRow(props.virtualSource ? flat.index : flat.row)
+    scrollToColumn(index)
+    await nextTick()
+  }
+  return started
+}
+const commitEdit = async () => editing.commit()
+const cancelEdit = () => editing.cancel()
+const getEditRecord = editing.record
+watch(
+  () => editing.active.value?.id,
+  () =>
+    nextTick(() => {
+      const active = editing.active.value
+      if (active) {
+        scrollToRow(props.virtualSource ? active.rowIndex : active.row)
+        scrollToColumn(active.columnIndex)
+      }
+      virtualListRef.value?.resetMeasurements()
+    }),
+)
+watch([sorts, filtersState], () => editing.contextChanged('query'))
+watch([pagination.currentPage, pagination.pageSize], () =>
+  editing.contextChanged('page'),
+)
+watch(
+  () => [props.columns, columnManager.state.value],
+  () => editing.contextChanged('columns'),
+)
+
 defineExpose({
+  startEdit,
+  commitEdit,
+  cancelEdit,
+  getEditRecord,
   toggleRowDetail,
   reloadRowDetail,
   setDetailExpandedKeys,

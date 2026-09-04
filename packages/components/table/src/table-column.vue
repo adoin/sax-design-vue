@@ -18,6 +18,7 @@ const props = withDefaults(defineProps<TableColumnOptions>(), {
   resizable: undefined,
   fixed: undefined,
   showFooterOverflow: undefined,
+  editor: undefined,
 })
 const instance = getCurrentInstance()
 const slots = useSlots()
@@ -48,6 +49,7 @@ const createColumn = (): TableColumn => ({
   cell: slots.default ? (params) => slots.default?.(params) : props.cell,
   header: slots.header ? (params) => slots.header?.(params) : props.header,
   footer: slots.footer ? (params) => slots.footer?.(params) : props.footer,
+  edit: slots.edit ? (params) => slots.edit?.(params) : props.edit,
 })
 
 onBeforeMount(() => registration?.register(registrationId, createColumn()))

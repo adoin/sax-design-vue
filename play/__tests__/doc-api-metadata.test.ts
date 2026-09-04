@@ -28,6 +28,9 @@ describe('documentation API metadata', () => {
       'Boolean | TableResizeConfig',
       'TableColumnWidths',
       'TableColumnResizeParams',
+      'Boolean | TableEditConfig',
+      'TableEditEndParams',
+      'TableEditSlotParams',
     ])
 
     expect(details.TableColumn.declaration).toContain(
@@ -52,6 +55,11 @@ describe('documentation API metadata', () => {
     expect(details.TableVirtualConfig.declaration).toContain(
       'export interface TableVirtualConfig',
     )
+    expect(details.TableEditConfig.declaration).toContain('onContextChange?')
+    expect(details.TableEditorConfig.declaration).toContain('checkMethod?')
+    expect(details.TableEditEndParams.declaration).toContain('TableEditRecord')
+    expect(details.TableEditRecord.declaration).toContain('updatedRow: Row')
+    expect(details.TableEditSlotParams.declaration).toContain('setValue:')
 
     expect(
       resolveTypeDetails('table', ['String | Boolean | Function']),
