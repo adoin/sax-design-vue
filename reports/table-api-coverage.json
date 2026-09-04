@@ -1,0 +1,294 @@
+[
+  {
+    "component": "table",
+    "locale": "en",
+    "sections": {
+      "PROPS": {
+        "actual": 51,
+        "documented": 51,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "EVENTS": {
+        "actual": 53,
+        "documented": 53,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "EXPOSES": {
+        "actual": 73,
+        "documented": 73,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "SLOTS": {
+        "actual": 12,
+        "documented": 23,
+        "scope": "static declarations only; dynamic forwarded slots reviewed separately",
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "CHILD_PROPS": {
+        "actual": 31,
+        "documented": 31,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      }
+    },
+    "defaults": {
+      "checked": 50,
+      "mismatches": [],
+      "unresolved": ["emptyText"]
+    },
+    "exposeTypeMismatch": [],
+    "inheritedTableLink": true
+  },
+  {
+    "component": "table",
+    "locale": "zh",
+    "sections": {
+      "PROPS": {
+        "actual": 51,
+        "documented": 51,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "EVENTS": {
+        "actual": 53,
+        "documented": 53,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "EXPOSES": {
+        "actual": 73,
+        "documented": 73,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "SLOTS": {
+        "actual": 12,
+        "documented": 23,
+        "scope": "static declarations only; dynamic forwarded slots reviewed separately",
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "CHILD_PROPS": {
+        "actual": 31,
+        "documented": 31,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      }
+    },
+    "defaults": {
+      "checked": 50,
+      "mismatches": [],
+      "unresolved": ["emptyText"]
+    },
+    "exposeTypeMismatch": [],
+    "inheritedTableLink": true
+  },
+  {
+    "component": "table-grid",
+    "locale": "en",
+    "sections": {
+      "PROPS": {
+        "actual": 4,
+        "documented": 4,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "EVENTS": {
+        "actual": 6,
+        "documented": 6,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "EXPOSES": {
+        "actual": 9,
+        "documented": 9,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "SLOTS": {
+        "actual": 5,
+        "documented": 6,
+        "scope": "static declarations only; dynamic forwarded slots reviewed separately",
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      }
+    },
+    "defaults": {
+      "checked": 4,
+      "mismatches": [],
+      "unresolved": []
+    },
+    "exposeTypeMismatch": [],
+    "inheritedTableLink": true
+  },
+  {
+    "component": "table-grid",
+    "locale": "zh",
+    "sections": {
+      "PROPS": {
+        "actual": 4,
+        "documented": 4,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "EVENTS": {
+        "actual": 6,
+        "documented": 6,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "EXPOSES": {
+        "actual": 9,
+        "documented": 9,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "SLOTS": {
+        "actual": 5,
+        "documented": 6,
+        "scope": "static declarations only; dynamic forwarded slots reviewed separately",
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      }
+    },
+    "defaults": {
+      "checked": 4,
+      "mismatches": [],
+      "unresolved": []
+    },
+    "exposeTypeMismatch": [],
+    "inheritedTableLink": true
+  },
+  {
+    "component": "table-select",
+    "locale": "en",
+    "sections": {
+      "PROPS": {
+        "actual": 36,
+        "documented": 37,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "EVENTS": {
+        "actual": 15,
+        "documented": 15,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "EXPOSES": {
+        "actual": 6,
+        "documented": 6,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "SLOTS": {
+        "actual": 9,
+        "documented": 11,
+        "scope": "static declarations only; dynamic forwarded slots reviewed separately",
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      }
+    },
+    "defaults": {
+      "checked": 24,
+      "mismatches": [],
+      "unresolved": [
+        "modelValue",
+        "labelFormatter",
+        "selectable",
+        "emptyText",
+        "placeholder",
+        "disabled",
+        "shape",
+        "state",
+        "prefixIcon",
+        "suffixIcon",
+        "prefixConfig",
+        "suffixConfig"
+      ]
+    },
+    "exposeTypeMismatch": [],
+    "inheritedTableLink": true
+  },
+  {
+    "component": "table-select",
+    "locale": "zh",
+    "sections": {
+      "PROPS": {
+        "actual": 36,
+        "documented": 37,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "EVENTS": {
+        "actual": 15,
+        "documented": 15,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "EXPOSES": {
+        "actual": 6,
+        "documented": 6,
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      },
+      "SLOTS": {
+        "actual": 9,
+        "documented": 11,
+        "scope": "static declarations only; dynamic forwarded slots reviewed separately",
+        "missing": [],
+        "duplicates": [],
+        "extra": []
+      }
+    },
+    "defaults": {
+      "checked": 24,
+      "mismatches": [],
+      "unresolved": [
+        "modelValue",
+        "labelFormatter",
+        "selectable",
+        "emptyText",
+        "placeholder",
+        "disabled",
+        "shape",
+        "state",
+        "prefixIcon",
+        "suffixIcon",
+        "prefixConfig",
+        "suffixConfig"
+      ]
+    },
+    "exposeTypeMismatch": [],
+    "inheritedTableLink": true
+  }
+]

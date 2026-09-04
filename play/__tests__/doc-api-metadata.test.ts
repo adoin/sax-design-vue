@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import matter from 'gray-matter'
 import { describe, expect, it } from 'vitest'
 import { createApiTypeDetailsResolver } from '../../docs/.vuepress/theme/node/apiTypeDetails'
+import { auditTableApi } from '../../scripts/audit-table-api.mjs'
 
 const projectRoot = resolve(__dirname, '../..')
 const docsRoots = [
@@ -18,6 +19,60 @@ const apiSections = new Set([
 ])
 
 describe('documentation API metadata', () => {
+  it('covers the Table family runtime API and statically declared defaults', () => {
+    const pages = auditTableApi()
+    expect(pages).toHaveLength(6)
+    for (const page of pages) {
+      const label = `${page.component}/${page.locale}`
+      expect(page.inheritedTableLink, label).toBe(true)
+      expect(page.exposeTypeMismatch, label).toEqual([])
+      expect(page.defaults.checked, label).toBeGreaterThan(0)
+      expect(page.defaults.mismatches, label).toEqual([])
+      for (const [name, section] of Object.entries(page.sections)) {
+        expect(section.actual, `${label}/${name}`).toBeGreaterThan(0)
+        expect(section.missing, `${label}/${name}`).toEqual([])
+        expect(section.extra, `${label}/${name}`).toEqual([])
+        expect(section.duplicates, `${label}/${name}`).toEqual([])
+      }
+    }
+  })
+
+  it('detects missing metadata, duplicate listener aliases and incorrect defaults', () => {
+    const pages = auditTableApi({
+      readDocumentation: (path: string) => {
+        const text = readFileSync(resolve(projectRoot, path), 'utf8').replace(
+          /\r\n/g,
+          '\n',
+        )
+        if (path !== 'docs/components/table-select.md') return text
+        return text
+          .replace(/ {2}- name: "placeholder"\n(?: {4}.*\n)*/, '')
+          .replace('EVENTS:\n', 'EVENTS:\n  - name: rowClick\n')
+      },
+    })
+    const page = pages.find(
+      (item) => item.component === 'table-select' && item.locale === 'en',
+    )!
+    expect(page.sections.PROPS.missing).toContain('placeholder')
+    expect(page.sections.EVENTS.duplicates).toContain('row-click')
+    // The local Boolean default on clearable is statically resolved; disabled
+    // is an imported Popper prop and is deliberately left to semantic review.
+    const changed = auditTableApi({
+      readDocumentation: (path: string) =>
+        readFileSync(resolve(projectRoot, path), 'utf8').replace(
+          /( {2}- name: clearable\r?\n(?: {4}.*\r?\n)*? {4}default:) false/,
+          '$1 true',
+        ),
+    }).find(
+      (item) => item.component === 'table-select' && item.locale === 'en',
+    )!
+    expect(changed.defaults.mismatches).toContainEqual({
+      name: 'clearable',
+      expected: false,
+      documented: true,
+    })
+  })
+
   it('resolves every Table, TableGrid and TableSelect API type in both locales', () => {
     const resolveTypeDetails = createApiTypeDetailsResolver(
       resolve(projectRoot, 'packages/components'),

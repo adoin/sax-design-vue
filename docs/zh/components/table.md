@@ -1,6 +1,16 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "row"
+    type: "TableRow | TableRow[] | null"
+    description: "旧版具名选择模型，请迁移到 v-model:highlight；显式 highlight 优先。"
+    default: null
+    usage: "#行选择"
+  - name: "model-value"
+    type: "TableModelValueType | TableModelValueType[] | null"
+    description: "旧版未具名选择模型，请迁移到 v-model:highlight；仅在未提供 highlight 和 row 时使用。"
+    default: null
+    usage: "#行选择"
   - name: "chart-config"
     type: "Boolean | TableChartConfig"
     description: "开启图表取数，配置预算、转换与可选绘图适配器。"
@@ -15,7 +25,7 @@ PROPS:
     type: "Boolean | TableClipboardConfig"
     description: "显式开启剪贴板操作，配置文本转换、写入限制和区域上限。"
     default: false
-    usage: "#复制-剪切与粘贴"
+    usage: "#复制、剪切与粘贴"
   - name: "range-config"
     type: "Boolean | TableRangeConfig"
     description: "开启矩形区域选择，可分别控制鼠标、键盘和边缘自动滚动。"
@@ -166,7 +176,7 @@ PROPS:
   - name: row-class
     type: String | Function
     description: 为每一行添加类名。
-    default: null
+    default: ""
     usage: '#grid-式配置'
   - name: tree-config
     type: TableTreeConfig
@@ -251,6 +261,26 @@ PROPS:
     default: 'false'
     usage: '#文本溢出与提示'
 CHILD_PROPS:
+  - name: "key"
+    type: "String"
+    description: "columns 配置中的稳定列标识；声明式 STableColumn 使用 Vue 的 key 属性。"
+    default: null
+    usage: "#声明式列"
+  - name: "class-name"
+    type: "String"
+    description: "此列数据单元格的自定义类名。"
+    default: null
+    usage: "#插槽与渲染器"
+  - name: "cell"
+    type: "TableCellRenderer"
+    description: "单元格渲染函数，优先使用列专属插槽和通用 cell 插槽。"
+    default: null
+    usage: "#插槽与渲染器"
+  - name: "header"
+    type: "TableHeaderRenderer"
+    description: "表头渲染函数，优先使用列专属插槽和通用 header-cell 插槽。"
+    default: null
+    usage: "#插槽与渲染器"
   - name: "drag-sort"
     type: "Boolean"
     description: "在此列显示行拖动手柄，需开启 row-drag-config。"
@@ -383,6 +413,16 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "update:row"
+    type: "(value: TableRow | TableRow[] | null) => void"
+    description: "用于兼容 v-model:row 的选择更新；新代码使用 update:highlight。"
+    default: null
+    usage: "#行选择"
+  - name: "update:modelValue"
+    type: "(value: TableModelValueType | TableModelValueType[] | null) => void"
+    description: "用于兼容未具名模型的更新；新代码使用 update:highlight。"
+    default: null
+    usage: "#行选择"
   - name: "chartChange"
     type: "(state: TableChartState) => void"
     description: "取数进度、快照或面板状态改变。"
@@ -407,7 +447,7 @@ EVENTS:
     type: "(result: TableClipboardResult) => void"
     description: "操作结束时提供成功状态、剪贴板写入状态、实际变更数及失败原因。"
     default: null
-    usage: "#复制-剪切与粘贴"
+    usage: "#复制、剪切与粘贴"
   - name: "update:cellRange"
     type: "(range: TableCellRange | null) => void"
     description: "请求更新受控选区。"
@@ -625,6 +665,16 @@ EVENTS:
     default: null
     usage: '#选择列与跨页保留'
 SLOTS:
+  - name: "STableColumn.default"
+    type: "TableCellRenderParams"
+    description: "声明式列的数据单元格内容。"
+    default: null
+    usage: "#声明式列"
+  - name: "STableColumn.header"
+    type: "TableHeaderRenderParams"
+    description: "声明式叶子列或分组列的表头内容。"
+    default: null
+    usage: "#声明式分组表头"
   - name: "group-header"
     type: "{ group: TableGroupNode; expanded: boolean }"
     description: "组标题内容，保留内置展开按钮。"
@@ -793,22 +843,22 @@ EXPOSES:
     type: "(options?: TableCopyOptions) => Promise<TableClipboardResult>"
     description: "复制当前区域或 bounds；writeClipboard: false 仅返回独立二维数据与 TSV。"
     default: null
-    usage: "#复制-剪切与粘贴"
+    usage: "#复制、剪切与粘贴"
   - name: "cutCells"
     type: "(options?: TableCopyOptions) => Promise<TableClipboardResult>"
     description: "复制成功后校验并批量清空可写字段；默认清空值为 null。"
     default: null
-    usage: "#复制-剪切与粘贴"
+    usage: "#复制、剪切与粘贴"
   - name: "pasteCells"
     type: "(data?: string | TableClipboardData, options?: TableClipboardOptions) => Promise<TableClipboardResult>"
     description: "粘贴 TSV 或二维数据；省略 data 时由浏览器读取剪贴板。"
     default: null
-    usage: "#复制-剪切与粘贴"
+    usage: "#复制、剪切与粘贴"
   - name: "cancelClipboard"
     type: "() => void"
     description: "取消未完成的读取、准备、校验或待接受写入；不撤销已完成的系统剪贴板写入。"
     default: null
-    usage: "#复制-剪切与粘贴"
+    usage: "#复制、剪切与粘贴"
   - name: "setCellRange"
     type: "(range: TableCellRange | null) => Promise<boolean>"
     description: "设置逻辑选区；返回是否被接受，不移动当前视口。"

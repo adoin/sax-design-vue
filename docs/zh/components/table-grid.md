@@ -1,6 +1,11 @@
 ---
 description: "组合查询表单、工具栏、分页和数据表格。"
 PROPS:
+  - name: "data"
+    type: "TableRow[]"
+    description: "外部管理的行数据；省略时请求代理在内部保存查询结果，显式传入的数组优先于代理数据。"
+    default: null
+    usage: "#请求代理"
   - name: "proxy-config"
     type: "Boolean | TableGridProxyConfig"
     description: "配置 query、save、delete 适配器；默认关闭。"

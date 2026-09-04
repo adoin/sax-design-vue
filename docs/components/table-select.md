@@ -1,5 +1,21 @@
 ---
 PROPS:
+  - name: "empty-text"
+    type: "String"
+    description: "Text displayed when the table has no rows; falls back to the current locale."
+    default: null
+    usage: "#tree-data"
+  - name: "placeholder"
+    type: "String"
+    description: "Trigger placeholder when no row is selected; falls back to the current locale."
+    default: null
+    usage: "#tree-data"
+  - name: "disabled"
+    type: "Boolean"
+    description: "Disable trigger actions and close an open popup."
+    default: false
+    values: "true | false"
+    usage: "#tree-data"
   - name: model-value
     type: String | Number
     values: "row key"
@@ -11,95 +27,112 @@ PROPS:
     description: Key of the selected row, resolved through row-key.
     default: null
   - name: data
-    type: TableRow[]
-    values: "Table data-mode configuration"
-    description: Data and columns passed directly to the internal STable.
-    default: '[]'
+    type: "TableRow[]"
+    values: ""
+    description: "Rows passed to STable; children follow tree-config."
+    default: "[]"
+    usage: "#tree-data"
   - name: columns
-    type: TableColumn[]
-    values: "Table data-mode configuration"
-    description: Data and columns passed directly to the internal STable.
-    default: '[]'
+    type: "TableColumn[]"
+    values: ""
+    description: "Column configuration forwarded to STable."
+    default: "[]"
+    usage: "#tree-data"
   - name: row-key
-    type: String | Function
-    values: "stable row key and trigger label resolver"
-    description: Resolve the bound key and the selected text shown in the trigger.
-    default: 'id'
+    type: "TableRowKeyGetter"
+    values: ""
+    description: "Stable row key field or resolver; the selected key is the model value."
+    default: "id"
+    usage: "#tree-data"
   - name: label-key
-    type: String
-    values: "stable row key and trigger label resolver"
-    description: Resolve the bound key and the selected text shown in the trigger.
-    default: 'label'
+    type: "String"
+    values: ""
+    description: "Field path used for the trigger label; falls back to the selected key."
+    default: "label"
+    usage: "#tree-data"
   - name: label-formatter
-    type: Function
-    values: "stable row key and trigger label resolver"
-    description: Resolve the bound key and the selected text shown in the trigger.
+    type: "TableSelectLabelFormatter"
+    values: ""
+    description: "Format the selected row label; takes precedence over label-key."
     default: null
+    usage: "#custom-rendering"
   - name: tree-config
-    type: TableTreeConfig
-    values: "children | indent | expandAll | defaultExpandedKeys | expandOnClickRow | hasChildren | load"
-    description: Enable Table tree-data mode and control expanded rows.
+    type: "TableTreeConfig"
+    values: ""
+    description: "Configure child rows, indentation, expansion and lazy loading through STable."
     default: null
+    usage: "#tree-data"
   - name: expanded-keys
-    type: Array
-    values: "children | indent | expandAll | defaultExpandedKeys | expandOnClickRow | hasChildren | load"
-    description: Enable Table tree-data mode and control expanded rows.
+    type: "TableRowKey[]"
+    values: ""
+    description: "Controlled tree expansion keys; bind with v-model:expanded-keys."
     default: null
+    usage: "#tree-data"
   - name: virtual-config
     type: Boolean | TableVirtualConfig
     values: "true / false / '{ height, estimateSize, overscan, dynamic }'"
     description: Enable STable row virtualization for large flat or tree data.
     default: 'false'
   - name: renderers
-    type: Object
-    values: "Table renderer map and row callbacks"
-    description: Configure Table rendering, row classes, and whether a row can be selected.
-    default: '{}'
+    type: "Record<string, TableRenderer | TableCellRenderer>"
+    values: ""
+    description: "Named cell and header renderers forwarded to STable."
+    default: "{}"
+    usage: "#custom-rendering"
   - name: row-class
-    type: String | Function
-    values: "Table renderer map and row callbacks"
-    description: Configure Table rendering, row classes, and whether a row can be selected.
-    default: null
+    type: "TableRowClass"
+    values: ""
+    description: "Custom row classes; a function receives the flattened row context."
+    default: ""
+    usage: "#tree-data"
   - name: selectable
-    type: Function
-    values: "Table renderer map and row callbacks"
-    description: Configure Table rendering, row classes, and whether a row can be selected.
+    type: "TableSelectSelectable"
+    values: ""
+    description: "Return false to prevent selecting a row. Rows with disabled set remain unselectable."
     default: null
+    usage: "#tree-data"
   - name: show-header
-    type: Boolean
-    values: "true / false"
-    description: Configure the internal Table header, stripes, loading state, and selection closing behavior.
-    default: 'true'
+    type: "Boolean"
+    values: "true | false"
+    description: "Show the table column headers."
+    default: true
+    usage: "#tree-data"
   - name: striped
-    type: Boolean
-    values: "true / false"
-    description: Configure the internal Table header, stripes, loading state, and selection closing behavior.
-    default: 'false'
+    type: "Boolean"
+    values: "true | false"
+    description: "Use alternating row backgrounds."
+    default: false
+    usage: "#tree-data"
   - name: table-loading
-    type: Boolean
-    values: "true / false"
-    description: Configure the internal Table header, stripes, loading state, and selection closing behavior.
-    default: 'false'
+    type: "Boolean"
+    values: "true | false"
+    description: "Show the internal table loading state."
+    default: false
+    usage: "#tree-data"
   - name: close-on-select
-    type: Boolean
-    values: "true / false"
-    description: Configure the internal Table header, stripes, loading state, and selection closing behavior.
-    default: 'true'
+    type: "Boolean"
+    values: "true | false"
+    description: "Close the popup after accepting a row selection."
+    default: true
+    usage: "#tree-data"
   - name: clearable
-    type: Boolean
-    values: "true | false / square / theme or custom color"
-    description: Configure the selector trigger, feedback, width, shape and validation state.
-    default: 'false'
+    type: "Boolean"
+    values: "true | false"
+    description: "Show a clear action for the selected value."
+    default: false
+    usage: "#tree-data"
   - name: loading
-    type: Boolean
-    values: "true | false / square / theme or custom color"
-    description: Configure the selector trigger, feedback, width, shape and validation state.
-    default: 'false'
+    type: "Boolean"
+    values: "true | false"
+    description: "Show trigger loading feedback, block interaction and close the popup."
+    default: false
+    usage: "#tree-data"
   - name: block
-    type: Boolean
-    values: "true | false / square / theme or custom color"
-    description: Configure the selector trigger, feedback, width, shape and validation state.
-    default: 'false'
+    type: "Boolean"
+    values: "true | false"
+    description: "Make the trigger fill the available width."
+    default: false
+    usage: "#tree-data"
   - name: shape
     type: String
     values: "rounded | square"
@@ -107,129 +140,246 @@ PROPS:
     default: rounded
     usage: '#shape'
   - name: color
-    type: Color
-    values: "true | false / square / theme or custom color"
-    description: Configure the selector trigger, feedback, width, shape and validation state.
-    default: 'primary'
+    type: "Color"
+    values: ""
+    description: "Primary visual color of the trigger and popup."
+    default: "primary"
+    usage: "#tree-data"
   - name: state
-    type: Color
-    values: "true | false / square / theme or custom color"
-    description: Configure the selector trigger, feedback, width, shape and validation state.
+    type: "Color"
+    values: ""
+    description: "State color; when provided, takes precedence over color."
     default: null
+    usage: "#tree-data"
   - name: prefix-icon
-    type: String
-    values: "icon name or '{ icon, content }'"
-    description: Add leading and trailing trigger content. Slots take precedence.
+    type: "String"
+    values: ""
+    description: "Leading icon name; takes precedence over prefix-config.icon."
     default: null
+    usage: "#custom-rendering"
   - name: suffix-icon
-    type: String
-    values: "icon name or '{ icon, content }'"
-    description: Add leading and trailing trigger content. Slots take precedence.
+    type: "String"
+    values: ""
+    description: "Trailing decorative icon; the dropdown arrow remains available."
     default: null
+    usage: "#custom-rendering"
   - name: prefix-config
-    type: Object
-    values: "icon name or '{ icon, content }'"
-    description: Add leading and trailing trigger content. Slots take precedence.
+    type: "TableSelectAffixConfig"
+    values: ""
+    description: "Leading icon and text; the prefix slot takes precedence."
     default: null
+    usage: "#custom-rendering"
   - name: suffix-config
-    type: Object
-    values: "icon name or '{ icon, content }'"
-    description: Add leading and trailing trigger content. Slots take precedence.
+    type: "TableSelectAffixConfig"
+    values: ""
+    description: "Trailing icon and text; the suffix slot takes precedence."
     default: null
+    usage: "#custom-rendering"
   - name: open
-    type: Boolean
-    values: "true"
-    description: Control the popup or provide its initial visibility.
+    type: "Boolean"
+    values: "true | false"
+    description: "Controlled popup visibility; bind with v-model:open."
     default: null
+    usage: "#tree-data"
   - name: default-open
-    type: Boolean
-    values: "false"
-    description: Control the popup or provide its initial visibility.
-    default: 'false'
+    type: "Boolean"
+    values: "true | false"
+    description: "Initial popup visibility when open is not controlled."
+    default: false
+    usage: "#tree-data"
   - name: popup-config
-    type: Object
-    values: "width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style"
-    description: Configure the shared Popper sizing, placement and transfer target.
-    default: '{}'
+    type: "TableSelectPopupConfig"
+    values: ""
+    description: "Popup size, position and mount target; configured fields override their corresponding top-level props."
+    default: "{}"
+    usage: "#tree-data"
   - name: placement
-    type: String
-    values: "width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style"
-    description: Configure the shared Popper sizing, placement and transfer target.
-    default: 'bottom-start'
+    type: "String"
+    values: ""
+    description: "Preferred popup placement relative to the trigger."
+    default: "bottom-start"
+    usage: "#tree-data"
   - name: teleported
-    type: Boolean
-    values: "width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style"
-    description: Configure the shared Popper sizing, placement and transfer target.
-    default: 'true'
+    type: "Boolean"
+    values: "true | false"
+    description: "Teleport the popup outside ancestor clipping containers."
+    default: true
+    usage: "#tree-data"
   - name: flip
-    type: Boolean
-    values: "width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style"
-    description: Configure the shared Popper sizing, placement and transfer target.
-    default: 'true'
+    type: "Boolean"
+    values: "true | false"
+    description: "Flip the popup placement when viewport space is insufficient."
+    default: true
+    usage: "#tree-data"
   - name: strategy
-    type: String
-    values: "width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style"
-    description: Configure the shared Popper sizing, placement and transfer target.
-    default: 'absolute'
+    type: "String"
+    values: "absolute | fixed"
+    description: "Positioning strategy passed to the shared Popper."
+    default: "absolute"
+    usage: "#tree-data"
 EVENTS:
-  - name: change
-    description: Selection, clearing, and Table row or cell interaction events.
-  - name: clear
-    description: Selection, clearing, and Table row or cell interaction events.
-  - name: row-click
-    description: Selection, clearing, and Table row or cell interaction events.
-  - name: cell-click
-    description: Selection, clearing, and Table row or cell interaction events.
-  - name: update:expanded-keys
-    description: Events forwarded from the internal STable.
-  - name: tree-expand
-    description: Events forwarded from the internal STable.
-  - name: lazy-load
-    description: Events forwarded from the internal STable.
-  - name: scroll
-    description: Events forwarded from the internal STable.
-  - name: visible-change
-    description: Trigger and popup visibility events.
-  - name: update:open
-    description: Trigger and popup visibility events.
-  - name: focus
-    description: Trigger and popup visibility events.
-  - name: blur
-    description: Trigger and popup visibility events.
+  - name: "update:modelValue"
+    type: "(value: TableRowKey | undefined) => void"
+    description: "Selected key update; clearing emits undefined."
+    default: null
+    usage: "#tree-data"
+  - name: "update:open"
+    type: "(value: boolean) => void"
+    description: "Request a popup visibility update."
+    default: null
+    usage: "#tree-data"
+  - name: "update:expanded-keys"
+    type: "(keys: TableRowKey[]) => void"
+    description: "Tree expansion keys updated by STable."
+    default: null
+    usage: "#tree-data"
+  - name: "visible-change"
+    type: "(value: boolean) => void"
+    description: "An accepted open or close request; controlled visibility still depends on open."
+    default: null
+    usage: "#tree-data"
+  - name: "change"
+    type: "(value: TableRowKey, row: TableRow) => void"
+    description: "A selectable row was chosen; clearing uses clear instead."
+    default: null
+    usage: "#tree-data"
+  - name: "clear"
+    type: "() => void"
+    description: "The clear action was activated."
+    default: null
+    usage: "#tree-data"
+  - name: "row-click"
+    type: "(row: TableRow, event: MouseEvent) => void"
+    description: "Table row click, including clicks on unselectable rows."
+    default: null
+    usage: "#tree-data"
+  - name: "cell-click"
+    type: "(params: TableCellRenderParams, event: MouseEvent) => void"
+    description: "Table data cell click with its render context."
+    default: null
+    usage: "#tree-data"
+  - name: "tree-expand"
+    type: "(row: TableRow, expanded: boolean) => void"
+    description: "A tree row expanded or collapsed."
+    default: null
+    usage: "#tree-data"
+  - name: "lazy-load"
+    type: "(row: TableRow, children: TableRow[]) => void"
+    description: "Lazy child rows finished loading."
+    default: null
+    usage: "#tree-data"
+  - name: "scroll"
+    type: "(event: Event) => void"
+    description: "Internal table viewport scroll event."
+    default: null
+    usage: "#tree-data"
+  - name: "focus"
+    type: "(event: FocusEvent) => void"
+    description: "The trigger received focus."
+    default: null
+    usage: "#tree-data"
+  - name: "blur"
+    type: "(event: FocusEvent) => void"
+    description: "The trigger lost focus."
+    default: null
+    usage: "#tree-data"
+  - name: "prefix-click"
+    type: "(event: MouseEvent) => void"
+    description: "Leading affix click."
+    default: null
+    usage: "#tree-data"
+  - name: "suffix-click"
+    type: "(event: MouseEvent) => void"
+    description: "Trailing affix click."
+    default: null
+    usage: "#tree-data"
 SLOTS:
-  - name: selected
-    type: scoped slot
-    description: Customize the selected value and trigger affixes.
-  - name: prefix
-    type: scoped slot
-    description: Customize the selected value and trigger affixes.
-  - name: suffix
-    type: scoped slot
-    description: Customize the selected value and trigger affixes.
-  - name: clear-icon
-    type: scoped slot
-    description: Customize the selected value and trigger affixes.
-  - name: cell
-    type: scoped slot
-    description: STable cell and header slots forwarded without changing their scope.
-  - name: cell-[key]
-    type: scoped slot
-    description: STable cell and header slots forwarded without changing their scope.
-  - name: header-cell
-    type: scoped slot
-    description: STable cell and header slots forwarded without changing their scope.
-  - name: header-[key]
-    type: scoped slot
-    description: STable cell and header slots forwarded without changing their scope.
-  - name: popup-header
-    type: scoped slot
-    description: Customize popup framing and the empty state.
-  - name: popup-footer
-    type: scoped slot
-    description: Customize popup framing and the empty state.
-  - name: empty
-    type: scoped slot
-    description: Customize popup framing and the empty state.
+  - name: "selected"
+    type: "{ row: TableRow; label: string }"
+    description: "Selected row label in the trigger."
+    default: null
+    usage: "#custom-rendering"
+  - name: "prefix"
+    type: "Slot"
+    description: "Leading trigger content."
+    default: null
+    usage: "#custom-rendering"
+  - name: "suffix"
+    type: "{ open: boolean; selectedRow: TableRow | null }"
+    description: "Trailing decoration; does not replace reserved trigger actions."
+    default: null
+    usage: "#custom-rendering"
+  - name: "clear-icon"
+    type: "Slot"
+    description: "Icon inside the clear action."
+    default: null
+    usage: "#custom-rendering"
+  - name: "cell"
+    type: "TableCellRenderParams"
+    description: "Generic data cell slot forwarded to STable."
+    default: null
+    usage: "#custom-rendering"
+  - name: "cell-[key]"
+    type: "TableCellRenderParams"
+    description: "Column-specific data cell slot."
+    default: null
+    usage: "#custom-rendering"
+  - name: "header-cell"
+    type: "TableHeaderRenderParams"
+    description: "Generic header slot forwarded to STable."
+    default: null
+    usage: "#custom-rendering"
+  - name: "header-[key]"
+    type: "TableHeaderRenderParams"
+    description: "Column-specific header slot."
+    default: null
+    usage: "#custom-rendering"
+  - name: "popup-header"
+    type: "Slot"
+    description: "Content above the popup table."
+    default: null
+    usage: "#custom-rendering"
+  - name: "popup-footer"
+    type: "{ selectedRow: TableRow | null; close: () => void }"
+    description: "Content below the popup table, with a close action."
+    default: null
+    usage: "#custom-rendering"
+  - name: "empty"
+    type: "Slot"
+    description: "Replace the table empty state."
+    default: null
+    usage: "#custom-rendering"
+EXPOSES:
+  - name: "open"
+    type: "() => void"
+    description: "Request opening the popup; disabled or loading prevents opening."
+    default: null
+    usage: "#tree-data"
+  - name: "close"
+    type: "() => void"
+    description: "Request closing the popup; controlled mode emits update:open."
+    default: null
+    usage: "#tree-data"
+  - name: "toggleRowExpand"
+    type: "(row: TableRow, expanded?: boolean) => Promise<void> | undefined"
+    description: "Toggle or set tree expansion through the mounted internal table."
+    default: null
+    usage: "#tree-data"
+  - name: "setExpandedKeys"
+    type: "(keys: TableRowKey[]) => void"
+    description: "Set expanded tree keys through the internal table."
+    default: null
+    usage: "#tree-data"
+  - name: "scrollToRow"
+    type: "(rowOrIndex: TableRow | TableRowKey, align?: 'auto' | 'start' | 'center' | 'end') => void"
+    description: "Scroll the mounted table to a row object or key; a number is used as a visible-row index only if no visible key matches."
+    default: null
+    usage: "#tree-data"
+  - name: "measure"
+    type: "() => Promise<void> | undefined"
+    description: "Remeasure the mounted internal table layout and virtual rows."
+    default: null
+    usage: "#tree-data"
 description: 'Select a row from a flat, virtualized, or tree-structured Table.'
 ---
 

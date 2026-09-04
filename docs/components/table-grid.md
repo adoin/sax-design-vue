@@ -1,6 +1,11 @@
 ---
 description: "Compose a query form, toolbar, pagination and data table."
 PROPS:
+  - name: "data"
+    type: "TableRow[]"
+    description: "Externally owned rows. When omitted, the request proxy stores query results internally; an explicit array takes precedence over proxy data."
+    default: null
+    usage: "#request-proxy"
   - name: "proxy-config"
     type: "Boolean | TableGridProxyConfig"
     description: "Configure query, save and delete adapters; disabled by default."

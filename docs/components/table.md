@@ -1,6 +1,16 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "row"
+    type: "TableRow | TableRow[] | null"
+    description: "Deprecated named selection model; migrate to v-model:highlight. An explicit highlight takes precedence."
+    default: null
+    usage: "#row-selection"
+  - name: "model-value"
+    type: "TableModelValueType | TableModelValueType[] | null"
+    description: "Legacy unnamed selection model; migrate to v-model:highlight. Used only when neither highlight nor row is provided."
+    default: null
+    usage: "#row-selection"
   - name: "chart-config"
     type: "Boolean | TableChartConfig"
     description: "Enable chart data extraction, budgets, conversions and an optional drawing adapter."
@@ -166,7 +176,7 @@ PROPS:
   - name: row-class
     type: String | Function
     description: Adds a class to each rendered row.
-    default: null
+    default: ""
     usage: '#grid-style-configuration'
   - name: tree-config
     type: TableTreeConfig
@@ -251,6 +261,26 @@ PROPS:
     default: 'false'
     usage: '#text-overflow-and-tooltips'
 CHILD_PROPS:
+  - name: "key"
+    type: "String"
+    description: "Stable column identity in columns configuration. With STableColumn, use the Vue key attribute."
+    default: null
+    usage: "#declarative-columns"
+  - name: "class-name"
+    type: "String"
+    description: "Custom class on data cells in this column."
+    default: null
+    usage: "#slots-and-renderers"
+  - name: "cell"
+    type: "TableCellRenderer"
+    description: "Cell render function, used after column-specific and generic cell slots."
+    default: null
+    usage: "#slots-and-renderers"
+  - name: "header"
+    type: "TableHeaderRenderer"
+    description: "Header render function, used after column-specific and generic header slots."
+    default: null
+    usage: "#slots-and-renderers"
   - name: "drag-sort"
     type: "Boolean"
     description: "Show a row drag handle in this column when row-drag-config is enabled."
@@ -383,6 +413,16 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "update:row"
+    type: "(value: TableRow | TableRow[] | null) => void"
+    description: "Compatibility selection update for v-model:row; use update:highlight in new code."
+    default: null
+    usage: "#row-selection"
+  - name: "update:modelValue"
+    type: "(value: TableModelValueType | TableModelValueType[] | null) => void"
+    description: "Compatibility update for the unnamed model; use update:highlight in new code."
+    default: null
+    usage: "#row-selection"
   - name: "chartChange"
     type: "(state: TableChartState) => void"
     description: "Chart extraction, snapshot or panel state changed."
@@ -625,6 +665,16 @@ EVENTS:
     default: null
     usage: '#selection-columns-and-reservation'
 SLOTS:
+  - name: "STableColumn.default"
+    type: "TableCellRenderParams"
+    description: "Cell content on a declarative column."
+    default: null
+    usage: "#declarative-columns"
+  - name: "STableColumn.header"
+    type: "TableHeaderRenderParams"
+    description: "Header content on a declarative leaf or grouped column."
+    default: null
+    usage: "#declarative-grouped-headers"
   - name: "group-header"
     type: "{ group: TableGroupNode; expanded: boolean }"
     description: "Group heading content alongside the built-in expand button."

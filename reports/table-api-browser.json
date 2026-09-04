@@ -1,0 +1,166 @@
+[
+  {
+    "sections": {
+      "PROPS": {
+        "rows": 51,
+        "missing": []
+      },
+      "CHILD_PROPS": {
+        "rows": 31,
+        "missing": []
+      },
+      "EVENTS": {
+        "rows": 53,
+        "missing": []
+      },
+      "SLOTS": {
+        "rows": 23,
+        "missing": []
+      },
+      "EXPOSES": {
+        "rows": 73,
+        "missing": []
+      }
+    },
+    "missingLinks": [],
+    "duplicateIds": [],
+    "type": "TableCellRenderer",
+    "typeOpened": true,
+    "locale": "en",
+    "component": "table"
+  },
+  {
+    "sections": {
+      "PROPS": {
+        "rows": 4,
+        "missing": []
+      },
+      "EVENTS": {
+        "rows": 6,
+        "missing": []
+      },
+      "SLOTS": {
+        "rows": 6,
+        "missing": []
+      },
+      "EXPOSES": {
+        "rows": 9,
+        "missing": []
+      }
+    },
+    "missingLinks": [],
+    "duplicateIds": [],
+    "type": "TableGridProxyConfig",
+    "typeOpened": true,
+    "locale": "en",
+    "component": "table-grid"
+  },
+  {
+    "sections": {
+      "PROPS": {
+        "rows": 37,
+        "missing": []
+      },
+      "EVENTS": {
+        "rows": 15,
+        "missing": []
+      },
+      "SLOTS": {
+        "rows": 11,
+        "missing": []
+      },
+      "EXPOSES": {
+        "rows": 6,
+        "missing": []
+      }
+    },
+    "missingLinks": [],
+    "duplicateIds": [],
+    "type": "TableSelectPopupConfig",
+    "typeOpened": true,
+    "locale": "en",
+    "component": "table-select"
+  },
+  {
+    "sections": {
+      "PROPS": {
+        "rows": 51,
+        "missing": []
+      },
+      "CHILD_PROPS": {
+        "rows": 31,
+        "missing": []
+      },
+      "EVENTS": {
+        "rows": 53,
+        "missing": []
+      },
+      "SLOTS": {
+        "rows": 23,
+        "missing": []
+      },
+      "EXPOSES": {
+        "rows": 73,
+        "missing": []
+      }
+    },
+    "missingLinks": [],
+    "duplicateIds": [],
+    "type": "TableCellRenderer",
+    "typeOpened": true,
+    "locale": "zh",
+    "component": "table"
+  },
+  {
+    "sections": {
+      "PROPS": {
+        "rows": 4,
+        "missing": []
+      },
+      "EVENTS": {
+        "rows": 6,
+        "missing": []
+      },
+      "SLOTS": {
+        "rows": 6,
+        "missing": []
+      },
+      "EXPOSES": {
+        "rows": 9,
+        "missing": []
+      }
+    },
+    "missingLinks": [],
+    "duplicateIds": [],
+    "type": "TableGridProxyConfig",
+    "typeOpened": true,
+    "locale": "zh",
+    "component": "table-grid"
+  },
+  {
+    "sections": {
+      "PROPS": {
+        "rows": 37,
+        "missing": []
+      },
+      "EVENTS": {
+        "rows": 15,
+        "missing": []
+      },
+      "SLOTS": {
+        "rows": 11,
+        "missing": []
+      },
+      "EXPOSES": {
+        "rows": 6,
+        "missing": []
+      }
+    },
+    "missingLinks": [],
+    "duplicateIds": [],
+    "type": "TableSelectPopupConfig",
+    "typeOpened": true,
+    "locale": "zh",
+    "component": "table-select"
+  }
+]

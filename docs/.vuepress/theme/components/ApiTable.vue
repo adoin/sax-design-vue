@@ -115,7 +115,10 @@ const restoreCodeFocus = async () => {
   <div class="api-table" role="region" :aria-label="`${pageTitle} · ${label}`">
     <STable :data="data" :columns="columns" row-key="name">
       <template #cell-name="{ row }">
-        <span :id="`api-${row.name}`" class="api-name">
+        <span
+          :id="`api-${tableKey.toLowerCase().replaceAll('_', '-')}-${row.name}`"
+          class="api-name"
+        >
           <router-link v-if="row.link && !isExternal(row.link)" :to="row.link">
             {{ row.name }} <SIcon name="bx:link" />
           </router-link>
