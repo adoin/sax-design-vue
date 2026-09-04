@@ -12,12 +12,18 @@ import type {
   TableEditSlotParams,
 } from '../table-edit'
 
+interface EditValidationHooks {
+  validate?: (record: TableEditRecord) => boolean | Promise<boolean>
+  invalidate?: (context: TableEditContext, field?: string) => void
+}
+
 export function useTableEdit(
   props: TableProps,
   emit: TableEmitFn,
   resolveContext: (params: TableEditContext) => TableEditContext | undefined = (
     params,
   ) => params,
+  validation: EditValidationHooks = {},
 ) {
   const config = computed(() =>
     typeof props.editConfig === 'object' ? props.editConfig : {},
@@ -37,6 +43,10 @@ export function useTableEdit(
   let sequence = 0
   let focused = false
   let disposed = false
+  let draftRevision = 0
+  const committing = shallowRef(false)
+  let pendingCommit:
+    { session: number; revision: number; promise: Promise<boolean> } | undefined
   const identity = (params: TableEditContext) =>
     JSON.stringify([typeof params.rowKey, params.rowKey, params.columnKey])
   const isEditable = (params: TableEditContext) =>
@@ -75,10 +85,14 @@ export function useTableEdit(
         }
       : null
   const clear = () => {
+    if (active.value) validation.invalidate?.(active.value)
     active.value = null
     changes.value = new Map()
     baselines.clear()
     focused = false
+    draftRevision++
+    committing.value = false
+    pendingCommit = undefined
   }
   const cancel = (reason: TableEditReason = 'api') => {
     const current = record()
@@ -86,8 +100,8 @@ export function useTableEdit(
     clear()
     if (current) emit('editCancel', { ...current, reason })
   }
-  const commit = (reason: TableEditReason = 'api'): boolean => {
-    if (!active.value) return true
+  const canCommit = (): boolean => {
+    if (!active.value) return false
     if (!isEditable(active.value)) {
       cancel('disabled')
       return false
@@ -113,12 +127,54 @@ export function useTableEdit(
         return false
       }
     }
-    const current = record()!
-    clear()
-    emit('editCommit', { ...current, reason } satisfies TableEditEndParams)
     return true
   }
-  const start = (params: TableEditContext): boolean => {
+  const commit = (
+    reason: TableEditReason = 'api',
+  ): boolean | Promise<boolean> => {
+    if (!active.value) return true
+    if (!canCommit()) return false
+    const session = active.value.id
+    const revision = draftRevision
+    if (
+      pendingCommit?.session === session &&
+      pendingCommit.revision === revision
+    )
+      return pendingCommit.promise
+    const finish = (valid: boolean) => {
+      if (
+        !valid ||
+        disposed ||
+        active.value?.id !== session ||
+        draftRevision !== revision ||
+        !canCommit()
+      )
+        return false
+      const current = record()!
+      clear()
+      emit('editCommit', { ...current, reason } satisfies TableEditEndParams)
+      return true
+    }
+    let result: boolean | Promise<boolean>
+    try {
+      result = validation.validate?.(record()!) ?? true
+    } catch {
+      return false
+    }
+    if (typeof result === 'boolean') return finish(result)
+    committing.value = true
+    const promise = Promise.resolve(result)
+      .then(finish, () => false)
+      .finally(() => {
+        if (pendingCommit?.promise === promise) {
+          pendingCommit = undefined
+          committing.value = false
+        }
+      })
+    pendingCommit = { session, revision, promise }
+    return promise
+  }
+  const start = (params: TableEditContext): boolean | Promise<boolean> => {
     if (disposed || !isEditable(params)) return false
     if (isEditing(params)) {
       focused = false
@@ -128,13 +184,21 @@ export function useTableEdit(
     if (active.value) {
       if (config.value.onSwitch === 'cancel') cancel('switch')
       else {
-        if (!commit('switch')) return false
         const request = ++sequence
-        nextTick(() => {
-          if (disposed || request !== sequence) return
+        const result = commit('switch')
+        const openNext = () => {
+          if (disposed || request !== sequence) return false
           const latest = resolveContext(params)
-          if (latest) start(latest)
-        })
+          return latest ? start(latest) : false
+        }
+        if (typeof result !== 'boolean')
+          return result.then(async (valid) => {
+            if (!valid) return false
+            await nextTick()
+            return openNext()
+          })
+        if (!result) return false
+        nextTick(openNext)
         return true
       }
     }
@@ -154,6 +218,10 @@ export function useTableEdit(
   const setValue = (params: TableEditContext, value: unknown) => {
     if (!isEditing(params)) return
     const field = params.column.field!
+    draftRevision++
+    validation.invalidate?.(params, field)
+    pendingCommit = undefined
+    committing.value = false
     if (!baselines.has(field))
       baselines.set(field, cloneDeep(tableFieldValue(active.value!.row, field)))
     const oldValue = baselines.get(field)
@@ -260,6 +328,7 @@ export function useTableEdit(
   })
   return {
     active,
+    committing,
     enabled,
     config,
     isEditable,

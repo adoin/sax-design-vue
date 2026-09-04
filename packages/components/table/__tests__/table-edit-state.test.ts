@@ -1,6 +1,6 @@
 import { defineComponent, h } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { useTableEdit } from '../src/composables/use-table-edit'
 import { tableEmits, tableProps } from '../src/table'
 import { applyTableEditChanges } from '../src/edit-utils'
@@ -8,6 +8,7 @@ import type {
   TableColumn,
   TableEditContext,
   TableEditEndParams,
+  TableEditRecord,
 } from '../src/table'
 
 const Harness = defineComponent({
@@ -39,6 +40,23 @@ const context = (
   loading: false,
   toggleExpand: async () => {},
 })
+
+const validatedHarness = (
+  validate: (record: TableEditRecord) => boolean | Promise<boolean>,
+) => {
+  const invalidate = vi.fn()
+  const Host = defineComponent({
+    props: tableProps,
+    emits: tableEmits,
+    setup(props, { emit }) {
+      return {
+        editing: useTableEdit(props, emit, undefined, { validate, invalidate }),
+      }
+    },
+    render: () => h('div'),
+  })
+  return { wrapper: mount(Host, { props: { editConfig: true } }), invalidate }
+}
 
 describe('table edit state', () => {
   it('requires explicit editing configuration and eligible fields', async () => {
@@ -213,5 +231,104 @@ describe('table edit state', () => {
     expect(source.rows[0].value).toBe(1)
     expect(changed.rows[1]).toBe(source.rows[1])
     expect(Object.prototype).not.toHaveProperty('polluted')
+  })
+
+  it('retains invalid drafts and deduplicates concurrent asynchronous commit attempts', async () => {
+    let resolve!: (valid: boolean) => void
+    const validate = vi.fn(
+      () =>
+        new Promise<boolean>((finish) => {
+          resolve = finish
+        }),
+    )
+    const { wrapper } = validatedHarness(validate)
+    const e = wrapper.vm.editing
+    e.start(context())
+    e.setValue(context(), 'Invalid draft')
+    const first = e.commit(),
+      second = e.commit()
+    expect(first).toBe(second)
+    expect(validate).toHaveBeenCalledTimes(1)
+    expect(e.committing.value).toBe(true)
+    resolve(false)
+    expect(await first).toBe(false)
+    expect(e.record()?.updatedRow.name).toBe('Invalid draft')
+    expect(e.committing.value).toBe(false)
+    expect(wrapper.emitted('editCommit')).toBeUndefined()
+    const accepted = e.commit()
+    resolve(true)
+    expect(await accepted).toBe(true)
+    expect(wrapper.emitted('editCommit')).toHaveLength(1)
+    expect(e.record()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('never commits an obsolete validation after more input, cancellation, or an external conflict', async () => {
+    const completions: Array<(valid: boolean) => void> = []
+    const { wrapper, invalidate } = validatedHarness(
+      () => new Promise((resolve) => completions.push(resolve)),
+    )
+    const e = wrapper.vm.editing
+    const editable = { ...row }
+    const c = { ...context(), row: editable }
+    e.start(c)
+    e.setValue(c, 'First')
+    const first = e.commit()
+    e.setValue(c, 'Second')
+    completions[0](true)
+    expect(await first).toBe(false)
+    expect(e.record()?.updatedRow.name).toBe('Second')
+    const second = e.commit()
+    e.cancel()
+    completions[1](true)
+    expect(await second).toBe(false)
+    e.start(c)
+    e.setValue(c, 'Third')
+    const third = e.commit()
+    editable.name = 'External'
+    completions[2](true)
+    expect(await third).toBe(false)
+    expect(wrapper.emitted('editCancel')!.at(-1)![0]).toMatchObject({
+      reason: 'conflict',
+    })
+    expect(wrapper.emitted('editCommit')).toBeUndefined()
+    expect(invalidate).toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('waits for validation before switching cells and keeps the old editor when it fails', async () => {
+    let finish!: (valid: boolean) => void
+    const { wrapper } = validatedHarness(
+      () =>
+        new Promise((resolve) => {
+          finish = resolve
+        }),
+    )
+    const e = wrapper.vm.editing
+    const next = context({ field: 'meta.score', editor: true })
+    e.start(context())
+    const denied = e.start(next)
+    expect(e.record()?.columnKey).toBe('name')
+    finish(false)
+    expect(await denied).toBe(false)
+    expect(e.record()?.columnKey).toBe('name')
+    const accepted = e.start(next)
+    finish(true)
+    expect(await accepted).toBe(true)
+    expect(e.record()?.columnKey).toBe('meta.score')
+    wrapper.unmount()
+  })
+
+  it('settles validation rejection without losing the active draft or leaking an unhandled promise', async () => {
+    const { wrapper } = validatedHarness(async () => {
+      throw new Error('Network unavailable')
+    })
+    const e = wrapper.vm.editing
+    e.start(context())
+    e.setValue(context(), 'Retry me')
+    expect(await e.commit()).toBe(false)
+    expect(e.record()?.updatedRow.name).toBe('Retry me')
+    expect(e.committing.value).toBe(false)
+    wrapper.unmount()
   })
 })

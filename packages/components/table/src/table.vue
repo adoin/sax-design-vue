@@ -1352,7 +1352,7 @@ const startEdit = async (
     column = resolvedColumns.value[index]
   }
   if (!column) return false
-  const started = editing.start({
+  const started = await editing.start({
     row: flat.row,
     rowKey: flat.key,
     column,
