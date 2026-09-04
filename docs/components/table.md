@@ -1,6 +1,21 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: footer-data
+    type: TableRow[]
+    description: Footer records keyed by column fields, independent of body sorting, filtering and pagination.
+    default: '[]'
+    usage: '#footer-data-rows'
+  - name: footer-row-key
+    type: TableRowKeyGetter
+    description: Field path or function for stable footer row keys; defaults to the footer index.
+    default: null
+    usage: '#footer-data-rows'
+  - name: show-footer-overflow
+    type: TableOverflow
+    description: Footer overflow handling, independent of body and headers; column settings take precedence.
+    default: 'false'
+    usage: '#footer-data-rows'
   - name: column-manager-config
     type: Boolean | TableColumnManagerConfig
     description: Enable the column panel; supply storageKey to opt into local persistence.
@@ -141,6 +156,26 @@ PROPS:
     default: 'false'
     usage: '#text-overflow-and-tooltips'
 CHILD_PROPS:
+  - name: footer
+    type: TableFooterRenderer
+    description: Footer cell render function.
+    default: null
+    usage: '#footer-data-rows'
+  - name: footer-formatter
+    type: TableFooterFormatter
+    description: Footer text formatter, used when no slot or renderer takes precedence.
+    default: null
+    usage: '#footer-data-rows'
+  - name: footer-align
+    type: TableAlign
+    description: Footer alignment, falling back to the column align value.
+    default: null
+    usage: '#footer-data-rows'
+  - name: show-footer-overflow
+    type: TableOverflow
+    description: Footer overflow for this column, overriding the table setting.
+    default: null
+    usage: '#footer-data-rows'
   - name: children
     type: TableColumn[]
     description: Nested columns forming a header group; only leaves render data cells.
@@ -233,6 +268,11 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: footerCellClick
+    type: '(params: TableFooterCellRenderParams, event: MouseEvent) => void'
+    description: Fires on footer cell clicks with the footer record, leaf column, raw value and indices; does not select body rows.
+    default: null
+    usage: '#footer-data-rows'
   - name: update:columnState
     type: '(state: TableColumnState[]) => void'
     description: Request a controlled column-state update.
@@ -315,6 +355,21 @@ EVENTS:
     default: null
     usage: '#selection-columns-and-reservation'
 SLOTS:
+  - name: footer-[column key]
+    type: TableFooterCellRenderParams
+    description: Footer slot for a leaf column; columns.slots.footer can specify another name.
+    default: null
+    usage: '#footer-data-rows'
+  - name: footer-cell
+    type: TableFooterCellRenderParams
+    description: Fallback slot for all footer cells.
+    default: null
+    usage: '#footer-data-rows'
+  - name: STableColumn.footer
+    type: TableFooterCellRenderParams
+    description: Footer render slot on a declarative column.
+    default: null
+    usage: '#footer-data-rows'
   - name: STableColumn.columns
     type: Slot
     description: Nested column declarations inside STableColumn.
@@ -584,6 +639,90 @@ This example provides one million rows and 100,000 columns on demand. Jump to th
 <template #style>
 
 @[code{57-64}](../.vuepress/components/table/grouped-source.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Footer data rows
+
+Provide one or more footer records through `footer-data`, using the leaf columns' fields. Footer rows share column widths, fixed positions and horizontal scrolling with the body, including visibility and order changes from column settings. Set `footer-row-key` for stable row identities.
+
+Calculate footer data in the application or fetch it from the server. It is independent of body sorting, filtering and pagination. The totals and averages below cover all supplied orders. To summarize the current page or filtered results, update `footer-data` using that scope.
+
+Rendering precedence: column footer slot, generic `footer-cell` slot, column `footer`, named or inline renderer's `footer`, `footerFormatter`, then raw field value. Footers do not reuse body render functions or generate selection, sequence or tree controls. Configure `footerAlign` and `showFooterOverflow` independently.
+
+<template #example><table-footer-data /></template>
+
+<template #template>
+
+@[code{79-101}](../.vuepress/components/table/footer-data.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-77}](../.vuepress/components/table/footer-data.vue)
+
+</template>
+
+<template #style>
+
+@[code{103-110}](../.vuepress/components/table/footer-data.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Declarative footers and the bottom slot
+
+Use `#footer` on `STableColumn` to customize a footer cell; `#default` continues to render body cells. The table-level `#footer` slot is a bottom toolbar or note. It can coexist with the column-aligned footer data rows.
+
+<template #example><table-footer-declarations /></template>
+
+<template #template>
+
+@[code{11-38}](../.vuepress/components/table/footer-declarations.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-9}](../.vuepress/components/table/footer-declarations.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Virtual columns and footers
+
+Footers render only the current horizontal window and fixed columns. Measured maximum footer row heights are retained across windows within the same layout. Column widths, container width, column settings or footer data changes reset measurements. Call `measure()` after custom content shrinks if needed.
+
+This example computes totals and averages for one million rows and 100,000 columns with a formula, without enumerating the generated data. Jump to the end, resize columns or switch to an empty body to try footer scrolling. Applications can supply server-generated summaries directly.
+
+<template #example><table-footer-source /></template>
+
+<template #template>
+
+@[code{47-68}](../.vuepress/components/table/footer-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-45}](../.vuepress/components/table/footer-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{70-77}](../.vuepress/components/table/footer-source.vue)
 
 </template>
 

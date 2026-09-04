@@ -13,7 +13,10 @@
 
     <div
       ref="tableScrollRef"
-      :class="[tableKls, ns.is('horizontal-virtual', horizontalVirtualMode)]"
+      :class="[
+        tableKls,
+        ns.is('horizontal-virtual', horizontalVirtualMode && usesBodyScroll),
+      ]"
       @scroll="handleTableScroll"
       @wheel="handleTableWheel"
       @mouseover="overflow.enter"
@@ -25,14 +28,18 @@
     >
       <div
         :class="ns.e('data-view')"
-        :style="{ minWidth: horizontalVirtualMode ? '0px' : dataMinWidth }"
+        :style="{ minWidth: dataViewMinWidth }"
         role="table"
-        :aria-rowcount="effectiveRowCount + (showHeader ? headerDepth : 0)"
+        :aria-rowcount="
+          effectiveRowCount +
+          (showHeader ? headerDepth : 0) +
+          (resolvedColumnCount ? footerData.length : 0)
+        "
         :aria-colcount="resolvedColumnCount"
       >
         <TableHeaderRows
           v-if="showHeader"
-          :style="virtualHeaderStyle"
+          :style="virtualBandStyle"
           :entries="renderedColumnEntries"
           :depth="headerDepth"
           :path-for="headerPathFor"
@@ -50,7 +57,7 @@
               ]"
               :style="[
                 entry.style,
-                fixedHeaderStyle(entry),
+                fixedBandStyle(entry),
                 {
                   textAlign:
                     entry.column.align ?? (entry.group ? 'center' : 'left'),
@@ -171,7 +178,7 @@
         </TableHeaderRows>
 
         <SVirtualList
-          v-if="virtualEnabled && effectiveRowCount && resolvedColumnCount"
+          v-if="usesBodyScroll"
           :key="
             pagination.enabled.value
               ? `${pagination.currentPage.value}:${pagination.pageSize.value}`
@@ -288,6 +295,35 @@
           </slot>
         </div>
 
+        <TableFooterRows
+          v-if="footerData.length && resolvedColumnCount"
+          ref="footerRowsRef"
+          :data="footerData"
+          :row-key="footerRowKey"
+          :entries="renderedColumnEntries"
+          :row-offset="effectiveRowCount + (showHeader ? headerDepth : 0) + 1"
+          :style="virtualBandStyle"
+          :fixed-style="fixedBandStyle"
+          :renderers="renderers"
+          :overflow="showFooterOverflow"
+          :retain-heights="horizontalVirtualMode"
+          @cell-click="
+            (params, event) => emit('footerCellClick', params, event)
+          "
+        >
+          <template #cell="params">
+            <slot
+              :name="
+                params.column.slots?.footer ??
+                `footer-${columnSlotKey(params.column)}`
+              "
+              v-bind="params"
+            >
+              <slot name="footer-cell" v-bind="params" />
+            </slot>
+          </template>
+        </TableFooterRows>
+
         <div v-if="loading" :class="ns.e('loading-mask')" aria-live="polite">
           <span :class="ns.e('loading-spinner')" />
         </div>
@@ -352,6 +388,7 @@ import TableDataRow from './table-data-row.vue'
 import TableRendererOutlet from './renderer-outlet'
 import TableHeaderCell from './table-header-cell.vue'
 import TableHeaderRows from './table-header-rows.vue'
+import TableFooterRows from './table-footer-rows.vue'
 import { flattenTableColumns } from './composables/table-column-tree'
 import { tableColumnKey } from './data-utils'
 import { useTableQuery } from './composables/use-table-query'
@@ -387,6 +424,7 @@ const { t } = useLocale()
 const props = defineProps(tableProps)
 const emit = defineEmits(tableEmits)
 const virtualListRef = ref<VirtualListInstance>()
+const footerRowsRef = ref<InstanceType<typeof TableFooterRows>>()
 const dataBodyRef = ref<HTMLElement>()
 const tableScrollRef = ref<HTMLElement>()
 const columnScrollRef = ref<HTMLElement>()
@@ -584,6 +622,13 @@ const virtualEnabled = computed(
     (props.virtualConfig !== false && virtualOptions.value.enabled),
 )
 
+const usesBodyScroll = computed(
+  () =>
+    virtualEnabled.value &&
+    effectiveRowCount.value > 0 &&
+    resolvedColumnCount.value > 0,
+)
+
 const cssSize = (value: number | string | undefined, fallback: string) =>
   typeof value === 'number' ? `${value}px` : value || fallback
 
@@ -755,11 +800,20 @@ const totalTablePixelWidth = computed(
     fixedPixelMetrics.value.total +
     columnVirtualization.physicalTotalWidth.value,
 )
-const virtualHeaderStyle = computed<CSSProperties>(() =>
+const dataViewMinWidth = computed(() =>
+  horizontalVirtualActive.value && !usesBodyScroll.value
+    ? `${totalTablePixelWidth.value}px`
+    : horizontalVirtualMode.value
+      ? '0px'
+      : dataMinWidth.value,
+)
+const virtualBandStyle = computed<CSSProperties>(() =>
   horizontalVirtualActive.value
     ? {
         width: `${totalTablePixelWidth.value}px`,
-        transform: `translateX(-${columnVirtualization.scrollLeft.value}px)`,
+        transform: !usesBodyScroll.value
+          ? undefined
+          : `translateX(-${columnVirtualization.scrollLeft.value}px)`,
       }
     : {},
 )
@@ -867,8 +921,9 @@ const renderedColumnEntries = computed<TableRenderedEntry[]>(() => {
   return entries
 })
 
-const fixedHeaderStyle = (entry: TableRenderedColumnEntry): CSSProperties => {
-  if (!horizontalVirtualActive.value || !entry.fixed) return {}
+const fixedBandStyle = (entry: TableRenderedColumnEntry): CSSProperties => {
+  if (!horizontalVirtualActive.value || !entry.fixed || !usesBodyScroll.value)
+    return {}
   const scrollLeft = columnVirtualization.scrollLeft.value
   const shift =
     entry.fixed === 'left'
@@ -876,7 +931,7 @@ const fixedHeaderStyle = (entry: TableRenderedColumnEntry): CSSProperties => {
       : columnVirtualization.viewportWidth.value -
         totalTablePixelWidth.value +
         scrollLeft
-  // The translated virtual header already owns fixed-column compensation.
+  // Translated header/footer bands already own fixed-column compensation.
   // Native sticky offsets would apply a second viewport adjustment.
   return {
     position: 'relative',
@@ -943,10 +998,19 @@ const handleTableWheel = (event: WheelEvent) =>
   columnVirtualization.handleWheel(event)
 
 watch(
-  [virtualEnabled, virtualListRef, tableScrollRef],
+  [
+    virtualEnabled,
+    virtualListRef,
+    tableScrollRef,
+    effectiveRowCount,
+    resolvedColumnCount,
+  ],
   () => {
     columnScrollRef.value = virtualEnabled.value
-      ? (virtualListRef.value?.getScrollElement() ?? undefined)
+      ? (virtualListRef.value?.getScrollElement() ??
+        (!effectiveRowCount.value || !resolvedColumnCount.value
+          ? tableScrollRef.value
+          : undefined))
       : tableScrollRef.value
   },
   { immediate: true, flush: 'post' },
@@ -1004,6 +1068,7 @@ const scrollToColumn = (
 const measure = () =>
   nextTick(() => {
     virtualListRef.value?.resetMeasurements()
+    footerRowsRef.value?.measure()
     columnVirtualization.measureViewport()
   })
 
@@ -1020,6 +1085,7 @@ watch(
   () => {
     overflow.close()
     nextTick(() => {
+      footerRowsRef.value?.measure()
       if (virtualEnabled.value && virtualOptions.value.dynamic)
         virtualListRef.value?.resetMeasurements()
       columnVirtualization.measureViewport()
@@ -1049,6 +1115,8 @@ watch(
     () => props.columns,
     () => props.showOverflow,
     () => props.showHeaderOverflow,
+    () => props.footerData,
+    () => props.showFooterOverflow,
   ],
   () => overflow.close(),
 )

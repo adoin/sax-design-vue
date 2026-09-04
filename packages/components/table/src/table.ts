@@ -123,6 +123,7 @@ export interface TableSelectionConfig<Row extends TableRow = TableRow> {
 export interface TableColumnSlots {
   default?: string
   header?: string
+  footer?: string
   filter?: string
 }
 
@@ -162,9 +163,27 @@ export type TableHeaderRenderer<Row extends TableRow = TableRow> = (
   params: TableHeaderRenderParams<Row>,
 ) => VNodeChild
 
+export interface TableFooterCellRenderParams<Row extends TableRow = TableRow> {
+  /** The supplied footer record, independent of body rows. */
+  row: TableRow
+  column: TableColumn<Row>
+  value: unknown
+  rowIndex: number
+  columnIndex: number
+}
+
+export type TableFooterRenderer<Row extends TableRow = TableRow> = (
+  params: TableFooterCellRenderParams<Row>,
+) => VNodeChild
+
+export type TableFooterFormatter<Row extends TableRow = TableRow> = (
+  params: TableFooterCellRenderParams<Row>,
+) => string | number | null | undefined
+
 export interface TableRenderer<Row extends TableRow = TableRow> {
   cell?: TableCellRenderer<Row>
   header?: TableHeaderRenderer<Row>
+  footer?: TableFooterRenderer<Row>
 }
 
 export interface TableColumnOptions<Row extends TableRow = TableRow> {
@@ -177,6 +196,7 @@ export interface TableColumnOptions<Row extends TableRow = TableRow> {
   minWidth?: number | string
   resizable?: boolean
   align?: TableAlign
+  footerAlign?: TableAlign
   fixed?: TableColumnFixed
   className?: string
   treeNode?: boolean
@@ -187,10 +207,13 @@ export interface TableColumnOptions<Row extends TableRow = TableRow> {
   filterMethod?: (params: TableFilterParams<Row>) => boolean
   showOverflow?: TableOverflow
   showHeaderOverflow?: TableOverflow
+  showFooterOverflow?: TableOverflow
   slots?: TableColumnSlots
   renderer?: string | TableRenderer<Row> | TableCellRenderer<Row>
   cell?: TableCellRenderer<Row>
   header?: TableHeaderRenderer<Row>
+  footer?: TableFooterRenderer<Row>
+  footerFormatter?: TableFooterFormatter<Row>
 }
 
 export interface TableColumn<
@@ -284,6 +307,18 @@ export type TableRowClass<Row extends TableRow = TableRow> =
   string | ((params: TableFlatRow<Row>) => string | string[] | undefined)
 
 export const tableProps = buildProps({
+  footerData: {
+    type: definePropType<TableRow[]>(Array),
+    default: () => [],
+  },
+  footerRowKey: {
+    type: definePropType<TableRowKeyGetter>([String, Function]),
+    default: undefined,
+  },
+  showFooterOverflow: {
+    type: definePropType<TableOverflow>([Boolean, String]),
+    default: false,
+  },
   columnManagerConfig: {
     type: definePropType<boolean | TableColumnManagerConfig>([Boolean, Object]),
     default: false,
@@ -424,6 +459,8 @@ export const tableEmits = {
   rowClick: (row: TableRow, event: MouseEvent) =>
     isObject(row) && event instanceof MouseEvent,
   cellClick: (params: TableCellRenderParams, event: MouseEvent) =>
+    isObject(params) && event instanceof MouseEvent,
+  footerCellClick: (params: TableFooterCellRenderParams, event: MouseEvent) =>
     isObject(params) && event instanceof MouseEvent,
   treeExpand: (row: TableRow, expanded: boolean) =>
     isObject(row) && typeof expanded === 'boolean',

@@ -1,6 +1,21 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: footer-data
+    type: TableRow[]
+    description: 与列字段对应的表尾记录数组，不参与正文排序、筛选或分页。
+    default: '[]'
+    usage: '#表尾数据行'
+  - name: footer-row-key
+    type: TableRowKeyGetter
+    description: 表尾稳定行键的字段路径或函数；未设置时使用表尾索引。
+    default: null
+    usage: '#表尾数据行'
+  - name: show-footer-overflow
+    type: TableOverflow
+    description: 表尾溢出处理，与正文和表头独立；列配置优先。
+    default: 'false'
+    usage: '#表尾数据行'
   - name: column-manager-config
     type: Boolean | TableColumnManagerConfig
     description: 开启列设置面板，可通过 storageKey 显式启用本地持久化。
@@ -141,6 +156,26 @@ PROPS:
     default: 'false'
     usage: '#文本溢出与提示'
 CHILD_PROPS:
+  - name: footer
+    type: TableFooterRenderer
+    description: 表尾单元格渲染函数。
+    default: null
+    usage: '#表尾数据行'
+  - name: footer-formatter
+    type: TableFooterFormatter
+    description: 表尾文本格式化函数；无插槽或渲染器时使用。
+    default: null
+    usage: '#表尾数据行'
+  - name: footer-align
+    type: TableAlign
+    description: 表尾对齐方式，默认使用该列 align。
+    default: null
+    usage: '#表尾数据行'
+  - name: show-footer-overflow
+    type: TableOverflow
+    description: 当前列的表尾溢出处理，优先于表格配置。
+    default: null
+    usage: '#表尾数据行'
   - name: children
     type: TableColumn[]
     description: 嵌套子列并生成分组标题；数据单元格只由叶子列渲染。
@@ -233,6 +268,11 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: footerCellClick
+    type: '(params: TableFooterCellRenderParams, event: MouseEvent) => void'
+    description: 点击表尾单元格时触发，包含表尾行、叶子列、原始值与索引；不会触发行选择。
+    default: null
+    usage: '#表尾数据行'
   - name: update:columnState
     type: '(state: TableColumnState[]) => void'
     description: 请求更新受控列设置。
@@ -315,6 +355,21 @@ EVENTS:
     default: null
     usage: '#选择列与跨页保留'
 SLOTS:
+  - name: footer-[column key]
+    type: TableFooterCellRenderParams
+    description: 指定叶子列的表尾插槽；也可通过 columns.slots.footer 指定名称。
+    default: null
+    usage: '#表尾数据行'
+  - name: footer-cell
+    type: TableFooterCellRenderParams
+    description: 所有表尾单元格的后备插槽。
+    default: null
+    usage: '#表尾数据行'
+  - name: STableColumn.footer
+    type: TableFooterCellRenderParams
+    description: 声明式列的表尾渲染插槽。
+    default: null
+    usage: '#表尾数据行'
   - name: STableColumn.columns
     type: Slot
     description: STableColumn 的嵌套子列定义插槽。
@@ -584,6 +639,90 @@ EXPOSES:
 <template #style>
 
 @[code{55-62}](../../.vuepress/components/table-zh/grouped-source.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 表尾数据行
+
+使用 `footer-data` 提供一行或多行表尾记录，字段对应叶子列的 `field`。表尾与正文共享列宽、固定位置及横向滚动，也会跟随列设置的显隐和顺序变化。`footer-row-key` 可指定稳定行键。
+
+表尾数据由应用计算或从服务端获取，不参与正文排序、筛选或分页。下面的合计和平均值覆盖传入的全部订单；如果需要当前页或筛选结果的汇总，请按对应范围更新 `footer-data`。
+
+渲染优先级：指定列表尾插槽、通用 `footer-cell` 插槽、列 `footer`、命名或内联渲染器的 `footer`、`footerFormatter`、原始字段值。表尾不会复用正文渲染函数，也不会生成复选、序号或树展开控件。`footerAlign` 与 `showFooterOverflow` 可单独配置。
+
+<template #example><table-zh-footer-data /></template>
+
+<template #template>
+
+@[code{76-98}](../../.vuepress/components/table-zh/footer-data.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-74}](../../.vuepress/components/table-zh/footer-data.vue)
+
+</template>
+
+<template #style>
+
+@[code{100-107}](../../.vuepress/components/table-zh/footer-data.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 声明式表尾与底部插槽
+
+在 `STableColumn` 上使用 `#footer` 自定义表尾单元格，`#default` 继续处理正文。表格本身的 `#footer` 插槽用于底部工具栏或说明；它与列对齐的表尾数据行可以同时存在。
+
+<template #example><table-zh-footer-declarations /></template>
+
+<template #template>
+
+@[code{11-33}](../../.vuepress/components/table-zh/footer-declarations.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-9}](../../.vuepress/components/table-zh/footer-declarations.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 虚拟列与表尾
+
+表尾只渲染当前横向窗口与固定列。横向切换窗口时保留当前布局下已测得的最大表尾行高；列宽、容器宽度、列设置或表尾数据变化会重新测量。自定义内容缩短后，也可调用 `measure()` 重新计算。
+
+此例按公式计算 100 万行、10 万列的合计与平均值，不遍历生成数据。可以定位末端、调整列宽，并切换为空正文，检查表尾的横向滚动。实际业务可直接传入服务端汇总结果。
+
+<template #example><table-zh-footer-source /></template>
+
+<template #template>
+
+@[code{47-66}](../../.vuepress/components/table-zh/footer-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-45}](../../.vuepress/components/table-zh/footer-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{68-75}](../../.vuepress/components/table-zh/footer-source.vue)
 
 </template>
 

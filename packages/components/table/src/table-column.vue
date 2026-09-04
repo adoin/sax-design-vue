@@ -17,6 +17,7 @@ defineOptions({ name: 'STableColumn' })
 const props = withDefaults(defineProps<TableColumnOptions>(), {
   resizable: undefined,
   fixed: undefined,
+  showFooterOverflow: undefined,
 })
 const instance = getCurrentInstance()
 const slots = useSlots()
@@ -46,6 +47,7 @@ const createColumn = (): TableColumn => ({
   key: instance?.vnode.key == null ? undefined : String(instance.vnode.key),
   cell: slots.default ? (params) => slots.default?.(params) : props.cell,
   header: slots.header ? (params) => slots.header?.(params) : props.header,
+  footer: slots.footer ? (params) => slots.footer?.(params) : props.footer,
 })
 
 onBeforeMount(() => registration?.register(registrationId, createColumn()))

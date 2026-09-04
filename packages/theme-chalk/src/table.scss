@@ -103,6 +103,7 @@
     #{getColor(background)}
   );
   --s-table-striped-surface: #{getColor(gray-1)};
+  --s-table-footer-surface: color-mix(in srgb, #{getColor(primary)} 6%, #{getColor(background)});
   --s-table-highlight-hue: clamp(
     15deg,
     calc(var(--sax-primary-h) - 190deg),
@@ -135,7 +136,8 @@
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    overflow: hidden;
+    // Clip rounded corners without creating a second sticky scroll container.
+    overflow: clip;
     border-radius: var(--sax-radius-lg);
     background: var(--s-table-surface);
   }
@@ -228,6 +230,37 @@
 
   @include e(data-body) {
     width: 100%;
+  }
+
+  @include e(data-footer) {
+    position: relative;
+    z-index: 2;
+    background: var(--s-table-footer-surface);
+    box-shadow: 0 -3px 7px -6px #{getColor(primary, 0.22)};
+  }
+
+  @include e(footer-row) {
+    display: flex;
+    min-height: 44px;
+    align-items: stretch;
+    background: var(--s-table-footer-surface);
+    color: getCssVar(text-color, primary);
+    font-weight: 600;
+  }
+
+  @include e(footer-cell) {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    padding: 10px 14px;
+    line-height: 1.5;
+
+    @include when(fixed-column) {
+      position: sticky;
+      z-index: 4;
+      background: var(--s-table-footer-surface);
+    }
   }
 
   @include e(data-row) {

@@ -3,6 +3,8 @@ import type { PropType } from 'vue'
 import type {
   TableCellRenderParams,
   TableCellRenderer,
+  TableFooterCellRenderParams,
+  TableFooterRenderer,
   TableHeaderRenderParams,
   TableHeaderRenderer,
 } from './table'
@@ -11,11 +13,17 @@ export default defineComponent({
   name: 'STableRendererOutlet',
   props: {
     renderer: {
-      type: Function as PropType<TableCellRenderer | TableHeaderRenderer>,
+      type: Function as PropType<
+        TableCellRenderer | TableHeaderRenderer | TableFooterRenderer
+      >,
       default: undefined,
     },
     params: {
-      type: Object as PropType<TableCellRenderParams | TableHeaderRenderParams>,
+      type: Object as PropType<
+        | TableCellRenderParams
+        | TableHeaderRenderParams
+        | TableFooterCellRenderParams
+      >,
       required: true,
     },
     fallback: {
