@@ -1,0 +1,35 @@
+@use 'mixins/mixins' as *;
+
+@include b(table-grid) {
+  width: 100%;
+  min-width: 0;
+  @include e(query) {
+    margin-bottom: 16px;
+  }
+  @include e(query-actions) {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  @include e(toolbar) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  @include e(title) {
+    min-width: 0;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+  @include e(tools) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+}

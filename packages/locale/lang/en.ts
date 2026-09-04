@@ -1,6 +1,7 @@
 export default {
   name: 'en',
   vs: {
+    tableGrid: { query: 'Search', reset: 'Reset', refresh: 'Refresh' },
     common: {
       close: 'Close',
       more: 'More',

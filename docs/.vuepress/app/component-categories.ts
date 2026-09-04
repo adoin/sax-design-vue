@@ -119,6 +119,7 @@ export const componentCategories: ComponentCategory[] = [
       component('Images', '图片', '/components/images'),
       component('List', '列表', '/components/list'),
       component('Table', '表格', '/components/table'),
+      component('Table Grid', '业务表格', '/components/table-grid'),
       component('Tag', '标签', '/components/tag'),
       component('Virtual list', '虚拟列表', '/components/virtual-list'),
     ],

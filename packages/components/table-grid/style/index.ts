@@ -1,0 +1,5 @@
+import '@vuesax-alpha/components/base/style'
+import '@vuesax-alpha/components/table/style'
+import '@vuesax-alpha/components/form/style'
+import '@vuesax-alpha/components/button/style'
+import '@vuesax-alpha/theme-chalk/src/table-grid.scss'

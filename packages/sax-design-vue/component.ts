@@ -75,6 +75,7 @@ import { SSplitter, SSplitterItem } from '@vuesax-alpha/components/splitter'
 import { SSteps } from '@vuesax-alpha/components/steps'
 import { SSwitch } from '@vuesax-alpha/components/switch'
 import { STable, STableColumn } from '@vuesax-alpha/components/table'
+import { STableGrid } from '@vuesax-alpha/components/table-grid'
 import { STableSelect } from '@vuesax-alpha/components/table-select'
 import { STab, STabs } from '@vuesax-alpha/components/tabs'
 import { STag, STagGroup } from '@vuesax-alpha/components/tag'
@@ -177,6 +178,7 @@ export default [
   SSteps,
   STable,
   STableColumn,
+  STableGrid,
   STableSelect,
   STab,
   STabs,

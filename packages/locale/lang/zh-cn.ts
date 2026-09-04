@@ -1,6 +1,7 @@
 export default {
   name: 'zh-cn',
   vs: {
+    tableGrid: { query: '查询', reset: '重置', refresh: '刷新' },
     common: {
       close: '关闭',
       more: '展开',

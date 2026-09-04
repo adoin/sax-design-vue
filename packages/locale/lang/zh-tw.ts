@@ -1,6 +1,7 @@
 export default {
   name: 'zh-tw',
   vs: {
+    tableGrid: { query: '查詢', reset: '重置', refresh: '重新整理' },
     colorpicker: {
       confirm: '確認',
       clear: '清空',
