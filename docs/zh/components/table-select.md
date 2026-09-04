@@ -501,7 +501,9 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行数据。'
 
 ## 自定义渲染
 
-TableSelect 透传列插槽、命名渲染器和已选值插槽；更复杂的渲染规则仍集中在 Table 自身。
+通过列插槽和命名渲染器自定义表格单元格，通过 `selected` 插槽自定义触发器中的已选值；更复杂的表格渲染规则仍集中在 Table 自身。
+
+`columns.slots.default` 和 `columns.slots.header` 可指定自定义列插槽名称。列插槽及触发器前后缀支持在挂载后按条件增加或移除。选择器保留 `prefix`、`suffix`、`clear-icon`、`selected`、`empty`、`popup-header`、`popup-footer`，表格内容请使用其他名称。已选值插槽接收 `{ row, label }`，数据和表头插槽保持原有 Table 渲染参数。
 
 <template #example><table-select-custom-render /></template>
 

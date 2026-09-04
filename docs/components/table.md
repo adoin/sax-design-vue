@@ -738,16 +738,16 @@ SLOTS:
     type: Slot
     description: Declarative s-table-column definitions.
   - name: cell-[column key]
-    type: Scoped slot
+    type: TableCellRenderParams
     description: Column-specific cell content receiving row, column, value and rowIndex.
   - name: cell
-    type: Scoped slot
+    type: TableCellRenderParams
     description: Fallback cell content for every column.
   - name: header-[column key]
-    type: Scoped slot
+    type: TableHeaderRenderParams
     description: Column-specific header content.
   - name: header-cell
-    type: Scoped slot
+    type: TableHeaderRenderParams
     description: Fallback header content for every column.
   - name: header
     type: Slot

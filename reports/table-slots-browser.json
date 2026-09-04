@@ -1,0 +1,2038 @@
+{
+  "timestamp": "2026-09-04T17:34:47.601Z",
+  "browser": "Chrome/150.0.7871.24",
+  "cases": [
+    {
+      "mode": "select",
+      "width": 1440,
+      "dark": false,
+      "initial": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "B",
+              "text": "1:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 21",
+              "row": "21",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 22",
+              "row": "22",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 23",
+              "row": "23",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 24",
+              "row": "24",
+              "column": "0"
+            }
+          ],
+          "heading": "Person:0",
+          "prefix": "P",
+          "suffix": "true:0",
+          "icons": 0,
+          "fallbackActions": 0,
+          "clear": true,
+          "arrow": true
+        },
+        {
+          "stage": 2,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "I",
+              "text": "2:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 21",
+              "row": "21",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 22",
+              "row": "22",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 23",
+              "row": "23",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 24",
+              "row": "24",
+              "column": "0"
+            }
+          ],
+          "icons": 0,
+          "fallbackActions": 0,
+          "clear": true,
+          "arrow": true
+        },
+        {
+          "stage": 3,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [],
+          "prefix": "",
+          "suffix": "",
+          "icons": 2,
+          "fallbackActions": 0,
+          "clear": true,
+          "arrow": true
+        }
+      ]
+    },
+    {
+      "mode": "select",
+      "width": 1440,
+      "dark": true,
+      "initial": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "B",
+              "text": "1:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 21",
+              "row": "21",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 22",
+              "row": "22",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 23",
+              "row": "23",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 24",
+              "row": "24",
+              "column": "0"
+            }
+          ],
+          "heading": "Person:0",
+          "prefix": "P",
+          "suffix": "true:0",
+          "icons": 0,
+          "fallbackActions": 0,
+          "clear": true,
+          "arrow": true
+        },
+        {
+          "stage": 2,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "I",
+              "text": "2:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 21",
+              "row": "21",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 22",
+              "row": "22",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 23",
+              "row": "23",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 24",
+              "row": "24",
+              "column": "0"
+            }
+          ],
+          "icons": 0,
+          "fallbackActions": 0,
+          "clear": true,
+          "arrow": true
+        },
+        {
+          "stage": 3,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [],
+          "prefix": "",
+          "suffix": "",
+          "icons": 2,
+          "fallbackActions": 0,
+          "clear": true,
+          "arrow": true
+        }
+      ]
+    },
+    {
+      "mode": "select",
+      "width": 390,
+      "dark": false,
+      "initial": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "B",
+              "text": "1:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 21",
+              "row": "21",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 22",
+              "row": "22",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 23",
+              "row": "23",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 24",
+              "row": "24",
+              "column": "0"
+            }
+          ],
+          "heading": "Person:0",
+          "prefix": "P",
+          "suffix": "true:0",
+          "icons": 0,
+          "fallbackActions": 0,
+          "clear": true,
+          "arrow": true
+        },
+        {
+          "stage": 2,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "I",
+              "text": "2:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 21",
+              "row": "21",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 22",
+              "row": "22",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 23",
+              "row": "23",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 24",
+              "row": "24",
+              "column": "0"
+            }
+          ],
+          "icons": 0,
+          "fallbackActions": 0,
+          "clear": true,
+          "arrow": true
+        },
+        {
+          "stage": 3,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [],
+          "prefix": "",
+          "suffix": "",
+          "icons": 2,
+          "fallbackActions": 0,
+          "clear": true,
+          "arrow": true
+        }
+      ]
+    },
+    {
+      "mode": "select",
+      "width": 390,
+      "dark": true,
+      "initial": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "B",
+              "text": "1:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 21",
+              "row": "21",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 22",
+              "row": "22",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 23",
+              "row": "23",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 24",
+              "row": "24",
+              "column": "0"
+            }
+          ],
+          "heading": "Person:0",
+          "prefix": "P",
+          "suffix": "true:0",
+          "icons": 0,
+          "fallbackActions": 0,
+          "clear": true,
+          "arrow": true
+        },
+        {
+          "stage": 2,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "I",
+              "text": "2:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 21",
+              "row": "21",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 22",
+              "row": "22",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 23",
+              "row": "23",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 24",
+              "row": "24",
+              "column": "0"
+            }
+          ],
+          "icons": 0,
+          "fallbackActions": 0,
+          "clear": true,
+          "arrow": true
+        },
+        {
+          "stage": 3,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [],
+          "prefix": "",
+          "suffix": "",
+          "icons": 2,
+          "fallbackActions": 0,
+          "clear": true,
+          "arrow": true
+        }
+      ]
+    },
+    {
+      "mode": "grid",
+      "width": 1440,
+      "dark": false,
+      "initial": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "B",
+              "text": "1:Person 5",
+              "row": "5",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 6",
+              "row": "6",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 7",
+              "row": "7",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 21",
+              "row": "21",
+              "column": "0"
+            }
+          ],
+          "heading": "Person:0",
+          "icons": 0,
+          "query": "initial",
+          "queryActions": "false",
+          "fallbackActions": 0,
+          "clear": false,
+          "arrow": false
+        },
+        {
+          "stage": 2,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "I",
+              "text": "2:Person 5",
+              "row": "5",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 6",
+              "row": "6",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 7",
+              "row": "7",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 21",
+              "row": "21",
+              "column": "0"
+            }
+          ],
+          "icons": 0,
+          "fallbackActions": 2,
+          "clear": false,
+          "arrow": false
+        },
+        {
+          "stage": 3,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [],
+          "icons": 0,
+          "fallbackActions": 2,
+          "clear": false,
+          "arrow": false
+        }
+      ]
+    },
+    {
+      "mode": "grid",
+      "width": 1440,
+      "dark": true,
+      "initial": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "B",
+              "text": "1:Person 5",
+              "row": "5",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 6",
+              "row": "6",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 7",
+              "row": "7",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 21",
+              "row": "21",
+              "column": "0"
+            }
+          ],
+          "heading": "Person:0",
+          "icons": 0,
+          "query": "initial",
+          "queryActions": "false",
+          "fallbackActions": 0,
+          "clear": false,
+          "arrow": false
+        },
+        {
+          "stage": 2,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "I",
+              "text": "2:Person 5",
+              "row": "5",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 6",
+              "row": "6",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 7",
+              "row": "7",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 21",
+              "row": "21",
+              "column": "0"
+            }
+          ],
+          "icons": 0,
+          "fallbackActions": 2,
+          "clear": false,
+          "arrow": false
+        },
+        {
+          "stage": 3,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [],
+          "icons": 0,
+          "fallbackActions": 2,
+          "clear": false,
+          "arrow": false
+        }
+      ]
+    },
+    {
+      "mode": "grid",
+      "width": 390,
+      "dark": false,
+      "initial": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "B",
+              "text": "1:Person 5",
+              "row": "5",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 6",
+              "row": "6",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 7",
+              "row": "7",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 21",
+              "row": "21",
+              "column": "0"
+            }
+          ],
+          "heading": "Person:0",
+          "icons": 0,
+          "query": "initial",
+          "queryActions": "false",
+          "fallbackActions": 0,
+          "clear": false,
+          "arrow": false
+        },
+        {
+          "stage": 2,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "I",
+              "text": "2:Person 5",
+              "row": "5",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 6",
+              "row": "6",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 7",
+              "row": "7",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 21",
+              "row": "21",
+              "column": "0"
+            }
+          ],
+          "icons": 0,
+          "fallbackActions": 2,
+          "clear": false,
+          "arrow": false
+        },
+        {
+          "stage": 3,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [],
+          "icons": 0,
+          "fallbackActions": 2,
+          "clear": false,
+          "arrow": false
+        }
+      ]
+    },
+    {
+      "mode": "grid",
+      "width": 390,
+      "dark": true,
+      "initial": 17,
+      "stages": [
+        {
+          "stage": 1,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "B",
+              "text": "1:Person 5",
+              "row": "5",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 6",
+              "row": "6",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 7",
+              "row": "7",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "B",
+              "text": "1:Person 21",
+              "row": "21",
+              "column": "0"
+            }
+          ],
+          "heading": "Person:0",
+          "icons": 0,
+          "query": "initial",
+          "queryActions": "false",
+          "fallbackActions": 0,
+          "clear": false,
+          "arrow": false
+        },
+        {
+          "stage": 2,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [
+            {
+              "tag": "I",
+              "text": "2:Person 5",
+              "row": "5",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 6",
+              "row": "6",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 7",
+              "row": "7",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 8",
+              "row": "8",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 9",
+              "row": "9",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 10",
+              "row": "10",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 11",
+              "row": "11",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 12",
+              "row": "12",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 13",
+              "row": "13",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 14",
+              "row": "14",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 15",
+              "row": "15",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 16",
+              "row": "16",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 17",
+              "row": "17",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 18",
+              "row": "18",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 19",
+              "row": "19",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 20",
+              "row": "20",
+              "column": "0"
+            },
+            {
+              "tag": "I",
+              "text": "2:Person 21",
+              "row": "21",
+              "column": "0"
+            }
+          ],
+          "icons": 0,
+          "fallbackActions": 2,
+          "clear": false,
+          "arrow": false
+        },
+        {
+          "stage": 3,
+          "rows": 17,
+          "original": "original",
+          "window": "original",
+          "scrollTop": 500,
+          "cells": [],
+          "icons": 0,
+          "fallbackActions": 2,
+          "clear": false,
+          "arrow": false
+        }
+      ]
+    }
+  ]
+}

@@ -54,27 +54,27 @@ EVENTS:
     usage: "#query-and-toolbar"
 SLOTS:
   - name: "proxy-error"
-    type: "Slot"
+    type: "TableGridExposes & { state: TableGridProxyState }"
     description: "Customize request error content; receives state and Grid methods."
     default: null
     usage: "#request-proxy"
   - name: "query"
-    type: "Slot"
+    type: "TableGridExposes & { model: FormModel }"
     description: "Additional SFormItem controls inside the same form; receives model and Grid methods."
     default: null
     usage: "#slots-and-declarative-columns"
   - name: "query-[name]"
     type: "Scoped slot"
-    description: "Named query form slot; use the name without query- in the item configuration."
+    description: "Named query field slot with model, item, field, prop, value, disabled, readonly and setValue(value). Use the name without query- in the item configuration."
     default: null
     usage: "#slots-and-declarative-columns"
   - name: "query-actions"
-    type: "Slot"
+    type: "TableGridExposes & { busy: boolean }"
     description: "Replace query actions; receives query, resetQuery, refresh, busy and other Grid methods."
     default: null
     usage: "#slots-and-declarative-columns"
   - name: "toolbar"
-    type: "Slot"
+    type: "TableGridExposes & { busy: boolean }"
     description: "Replace toolbar actions; receives Grid methods and busy."
     default: null
     usage: "#slots-and-declarative-columns"
@@ -178,6 +178,8 @@ Configure business `buttons` with a `code` for the `toolbarClick` event and opti
 Use `query-[name]` for custom query fields; reference the name without `query-` in `items[].slots.default`. Replace query buttons through `query-actions`, toolbar actions through `toolbar`, and its title through `toolbar-title`. The `query` slot can add `s-form-item` controls to the same form.
 
 Other slots pass through to Table, including `header`, `footer`, cells, editors and default `s-table-column` declarations. This example combines declarative columns, tree expansion, fixed columns and virtual scrolling. Applying conditions displays the submitted keyword while preserving the tree data.
+
+The `query-*` prefix is reserved for query form slots; `query`, `toolbar`, `toolbar-title` and `proxy-error` belong to Grid itself. Choose other names for custom Table column slots. Conditional slots can be added or removed after mounting; removing one restores the corresponding fallback.
 
 <template #example>
   <table-grid-slots />

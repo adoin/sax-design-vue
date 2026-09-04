@@ -1,0 +1,26 @@
+[
+  {
+    "locale": "en",
+    "rendered": {
+      "names": ["API gateway", "Billing service", "Search index"],
+      "selected": "API gateway · Mia"
+    },
+    "playground": {
+      "names": ["API gateway", "Billing service", "Search index"],
+      "selected": "API gateway · Mia"
+    },
+    "sourceLength": 2779
+  },
+  {
+    "locale": "zh",
+    "rendered": {
+      "names": ["API 网关", "账单服务", "搜索索引"],
+      "selected": "API 网关 · Mia"
+    },
+    "playground": {
+      "names": ["API 网关", "账单服务", "搜索索引"],
+      "selected": "API 网关 · Mia"
+    },
+    "sourceLength": 2779
+  }
+]

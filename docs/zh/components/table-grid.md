@@ -54,27 +54,27 @@ EVENTS:
     usage: "#查询与工具栏"
 SLOTS:
   - name: "proxy-error"
-    type: "Slot"
+    type: "TableGridExposes & { state: TableGridProxyState }"
     description: "自定义请求错误内容，接收 state 和 Grid 方法。"
     default: null
     usage: "#请求代理"
   - name: "query"
-    type: "Slot"
+    type: "TableGridExposes & { model: FormModel }"
     description: "在同一个表单中追加 SFormItem，接收 model 和 Grid 方法。"
     default: null
     usage: "#插槽与声明式列"
   - name: "query-[name]"
     type: "Scoped slot"
-    description: "转发给查询表单的命名插槽；items 中填写不含 query- 的名称。"
+    description: "查询字段插槽，提供 model、item、field、prop、value、disabled、readonly 和 setValue(value)；items 中填写不含 query- 的名称。"
     default: null
     usage: "#插槽与声明式列"
   - name: "query-actions"
-    type: "Slot"
+    type: "TableGridExposes & { busy: boolean }"
     description: "替换查询操作，接收 query、resetQuery、refresh、busy 等。"
     default: null
     usage: "#插槽与声明式列"
   - name: "toolbar"
-    type: "Slot"
+    type: "TableGridExposes & { busy: boolean }"
     description: "替换工具栏按钮区，接收 Grid 方法和 busy。"
     default: null
     usage: "#插槽与声明式列"
@@ -178,6 +178,8 @@ EXPOSES:
 通过 `query-[name]` 自定义查询字段；在 `items[].slots.default` 中填写不含 `query-` 的名称。`query-actions` 替换查询按钮区，`toolbar` 替换工具栏按钮，`toolbar-title` 替换标题。`query` 插槽可以追加 `s-form-item`，所有查询控件共用一个表单。
 
 其余插槽继续传给 Table，包括 `header`、`footer`、单元格与编辑插槽，以及默认插槽中的 `s-table-column`。下例把声明式列、树节点展开、左右固定列和虚拟滚动组合使用；应用条件后显示收到的关键词，树数据保持原样。
+
+`query-*` 前缀保留给查询表单，`query`、`toolbar`、`toolbar-title` 和 `proxy-error` 由 Grid 自身使用；自定义 Table 列插槽请使用其他名称。条件插槽支持挂载后增加或移除，移除后恢复对应的默认内容。
 
 <template #example>
   <table-grid-zh-slots />

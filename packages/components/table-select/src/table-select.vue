@@ -58,12 +58,11 @@ const accentColor = computed(() => props.state || props.color)
 const colorCssVar = computed(() =>
   ns.cssVar({ color: getVsColor(accentColor.value) }),
 )
-const hasPrefix = computed(() =>
-  Boolean(slots.prefix || props.prefixIcon || props.prefixConfig?.content),
-)
-const hasSuffix = computed(() =>
-  Boolean(slots.suffix || props.suffixIcon || props.suffixConfig?.content),
-)
+// Slot presence changes with parent renders; the slots object is not reactive.
+const hasPrefix = () =>
+  Boolean(slots.prefix || prefixIconName.value || props.prefixConfig?.content)
+const hasSuffix = () =>
+  Boolean(slots.suffix || suffixIconName.value || props.suffixConfig?.content)
 const prefixIconName = computed(
   () => props.prefixIcon || props.prefixConfig?.icon,
 )
@@ -173,9 +172,8 @@ const reservedSlotNames = new Set([
   'popup-header',
   'popup-footer',
 ])
-const forwardedSlotNames = computed(() =>
-  Object.keys(slots).filter((name) => !reservedSlotNames.has(name)),
-)
+const forwardedSlotNames = () =>
+  Object.keys(slots).filter((name) => !reservedSlotNames.has(name))
 
 const measurePopup = () => {
   popupWidth.value = triggerRef.value?.getBoundingClientRect().width
@@ -268,8 +266,8 @@ defineExpose({
         ns.is('loading', loading),
         ns.is('block', block),
         ns.is('square', resolvedShape === 'square'),
-        ns.is('has-prefix', hasPrefix),
-        ns.is('has-suffix', hasSuffix),
+        ns.is('has-prefix', hasPrefix()),
+        ns.is('has-suffix', hasSuffix()),
       ]"
       :style="colorCssVar"
     >
@@ -287,7 +285,7 @@ defineExpose({
         @keydown="handleTriggerKeydown"
       >
         <span
-          v-if="hasPrefix"
+          v-if="hasPrefix()"
           :class="ns.e('prefix')"
           @click="emit('prefix-click', $event)"
         >
@@ -312,7 +310,7 @@ defineExpose({
         </span>
 
         <span
-          v-if="hasSuffix"
+          v-if="hasSuffix()"
           :class="ns.e('suffix')"
           @click="emit('suffix-click', $event)"
         >
@@ -375,7 +373,7 @@ defineExpose({
           @scroll="emit('scroll', $event)"
         >
           <template
-            v-for="slotName in forwardedSlotNames"
+            v-for="slotName in forwardedSlotNames()"
             #[slotName]="slotProps"
             :key="slotName"
           >

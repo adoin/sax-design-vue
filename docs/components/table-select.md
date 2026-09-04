@@ -501,7 +501,9 @@ A regular three-column Table can use the same virtualized selector shell. This e
 
 ## Custom rendering
 
-Column slots, named renderers, and the selected-value slot are forwarded through TableSelect. Advanced rendering rules remain part of Table.
+Customize table cells with column slots and named renderers, and use `selected` to render the trigger value. Advanced table rendering rules remain part of Table.
+
+Use `columns.slots.default` or `columns.slots.header` to assign custom column slot names. Column slots and trigger affixes may be added or removed conditionally after mounting. The selector reserves `prefix`, `suffix`, `clear-icon`, `selected`, `empty`, `popup-header` and `popup-footer`; use other names for table content. The selected-value slot receives `{ row, label }`, while data and header slots retain their Table render parameters.
 
 <template #example><table-select-custom-render /></template>
 

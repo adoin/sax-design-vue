@@ -10,6 +10,7 @@ import type {
   TableRow,
 } from '@vuesax-alpha/components/table'
 import type { TableGridExposes, TableGridQueryContext } from '../src/table-grid'
+import type { Slot } from 'vue'
 
 const rows = [
   { id: 1, name: 'A' },
@@ -58,6 +59,81 @@ afterEach(() => {
 })
 
 describe('Table Grid integration', () => {
+  it('updates dynamic query and table slots independently with their original payloads', async () => {
+    const content = shallowRef<Record<string, Slot>>({})
+    const model = reactive({ term: 'initial' })
+    let field!: { setValue: (value: unknown) => void }
+    let actions!: TableGridExposes & { busy: boolean }
+    const root = mount(
+      defineComponent({
+        setup: () => () =>
+          h(
+            TableGrid,
+            {
+              data: rows,
+              columns: [
+                {
+                  field: 'name',
+                  title: 'Name',
+                  slots: { default: 'person', header: 'heading' },
+                },
+              ],
+              queryConfig: {
+                model,
+                items: [{ field: 'term', slots: { default: 'term' } }],
+              },
+            },
+            content.value,
+          ),
+      }),
+    )
+    try {
+      content.value = {
+        'query-term': (params) => {
+          field = params
+          return [h('span', { class: 'late-query' }, String(params.value))]
+        },
+        'query-actions': (params) => {
+          actions = params
+          return [h('span', { class: 'late-actions' }, String(params.busy))]
+        },
+        person: ({ value }) => [h('b', { class: 'late-cell' }, value)],
+        heading: ({ column, columnIndex }) => [
+          h('b', { class: 'late-heading' }, `${column.title}:${columnIndex}`),
+        ],
+      }
+      await flushPromises()
+      expect(root.get('.late-query').text()).toBe('initial')
+      expect(root.get('.late-actions').text()).toBe('false')
+      expect(root.findAll('.late-cell')).toHaveLength(3)
+      expect(root.get('.late-heading').text()).toBe('Name:0')
+      field.setValue('changed')
+      await nextTick()
+      expect(model.term).toBe('changed')
+      expect(root.get('.late-query').text()).toBe('changed')
+      expect(await actions.query()).toBe(true)
+      expect(
+        root.getComponent(TableGrid).emitted('query')?.[0][0],
+      ).toMatchObject({ form: { term: 'changed' } })
+      content.value = {
+        person: ({ value }) => [h('i', { class: 'replacement-cell' }, value)],
+      }
+      await flushPromises()
+      expect(root.find('.late-query').exists()).toBe(false)
+      expect(root.find('.late-actions').exists()).toBe(false)
+      expect(root.find('.late-heading').exists()).toBe(false)
+      expect(root.findAll('.replacement-cell')).toHaveLength(3)
+      expect(
+        root.get('.s-table-grid__query-actions').findAll('button'),
+      ).toHaveLength(2)
+      content.value = {}
+      await flushPromises()
+      expect(root.find('.replacement-cell').exists()).toBe(false)
+      expect(root.get('.s-table__data-cell').text()).toBe('A')
+    } finally {
+      root.unmount()
+    }
+  })
   it('does not emit a stale validated query when page acceptance changes the form', async () => {
     const model = reactive({ term: 'A' })
     const config = { model, items }

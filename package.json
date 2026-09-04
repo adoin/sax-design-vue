@@ -21,6 +21,7 @@
     "audit:table-measurements": "node scripts/audit-table-measurements.mjs",
     "audit:table-layout": "node scripts/audit-table-layout.mjs",
     "audit:table-layout-docs": "node scripts/audit-table-layout-docs.mjs",
+    "audit:table-slots": "node scripts/audit-table-slots.mjs",
     "test:ssr": "vitest --config ./ssr-testing/vitest.config.ts",
     "prepare:e2e": "if [ ! -d \"docs/.vuepress/dist\" ]; then pnpm run docs:build; fi;",
     "dev": "pnpm run docs:dev",

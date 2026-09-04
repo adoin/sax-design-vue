@@ -271,7 +271,7 @@
           <template #default="{ item, index }">
             <TableBodyBlock
               :item="normalizeBodyItem(item, index)"
-              :render-slots="{ ...$slots }"
+              :render-slots="renderSlotSnapshot"
             />
           </template>
         </SVirtualList>
@@ -287,7 +287,7 @@
           <TableBodyBlock
             v-for="index in bodyDisplayCount"
             :key="virtualRowKeyAt(index - 1)"
-            :render-slots="{ ...$slots }"
+            :render-slots="renderSlotSnapshot"
             :item="bodyItemAt(index - 1)"
           />
         </div>
@@ -369,7 +369,9 @@
           @continuation-contextmenu="mergeContinuationContextmenu"
         >
           <template #cell="{ surface }"
-            ><TableMergedCell :surface="surface" :render-slots="{ ...$slots }"
+            ><TableMergedCell
+              :surface="surface"
+              :render-slots="renderSlotSnapshot"
           /></template>
         </TableMergeLayer>
 
@@ -456,6 +458,7 @@ import {
   computed,
   h,
   nextTick,
+  onBeforeUpdate,
   ref,
   renderSlot,
   shallowRef,
@@ -561,6 +564,18 @@ const footerRowsRef = ref<InstanceType<typeof TableFooterRows>>()
 const dataBodyRef = ref<HTMLElement>()
 const dataViewRef = ref<HTMLElement>()
 const tableSlots = useSlots()
+// A stable VirtualList slot can skip its parent update. Track the slot snapshot
+// inside row rendering so late slot additions/removals also update mounted rows.
+const renderSlotSnapshot = shallowRef<Slots>({ ...tableSlots })
+onBeforeUpdate(() => {
+  const next = { ...tableSlots }
+  const keys = Object.keys(next)
+  if (
+    keys.length !== Object.keys(renderSlotSnapshot.value).length ||
+    keys.some((key) => next[key] !== renderSlotSnapshot.value[key])
+  )
+    renderSlotSnapshot.value = next
+})
 const sourceDetailRows = new WeakMap<TableRow, TableFlatRow>()
 const tableScrollRef = ref<HTMLElement>()
 const columnScrollRef = ref<HTMLElement>()

@@ -738,16 +738,16 @@ SLOTS:
     type: Slot
     description: 声明式 s-table-column 列定义。
   - name: cell-[column key]
-    type: Scoped slot
+    type: TableCellRenderParams
     description: 指定列的单元格插槽，可获取 row、column、value 和 rowIndex。
   - name: cell
-    type: Scoped slot
+    type: TableCellRenderParams
     description: 所有列共用的后备单元格插槽。
   - name: header-[column key]
-    type: Scoped slot
+    type: TableHeaderRenderParams
     description: 指定列的表头插槽。
   - name: header-cell
-    type: Scoped slot
+    type: TableHeaderRenderParams
     description: 所有列共用的后备表头插槽。
   - name: header
     type: Slot

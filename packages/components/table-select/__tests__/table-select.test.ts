@@ -1,6 +1,6 @@
-import { defineComponent, h, nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { defineComponent, h, nextTick, shallowRef } from 'vue'
+import { flushPromises, mount } from '@vue/test-utils'
+import { describe, expect, it, vi } from 'vitest'
 import TableSelect from '../src/table-select.vue'
 import type { Slot } from 'vue'
 
@@ -100,6 +100,155 @@ describe('TableSelect', () => {
     )
     expect(wrapper.findAll('.custom-name')).toHaveLength(2)
     expect(wrapper.findAll('.custom-name')[0].text()).toBe('Alpha')
+  })
+
+  it.each([false, true])(
+    'updates named table slots without remounting an open selector (virtual: %s)',
+    async (virtual) => {
+      const content = shallowRef<Record<string, Slot>>({})
+      const geometry = virtual
+        ? (
+            [
+              'clientWidth',
+              'offsetWidth',
+              'clientHeight',
+              'offsetHeight',
+            ] as const
+          ).map((key) =>
+            vi
+              .spyOn(HTMLElement.prototype, key, 'get')
+              .mockReturnValue(key.endsWith('Width') ? 600 : 180),
+          )
+        : []
+      const root = mount(
+        defineComponent({
+          setup: () => () =>
+            h(
+              TableSelect,
+              {
+                data: baseData,
+                columns: [
+                  {
+                    field: 'name',
+                    title: 'Name',
+                    slots: { default: 'person', header: 'heading' },
+                  },
+                ],
+                open: true,
+                virtualConfig: virtual
+                  ? { height: 180, dynamic: true, horizontal: true }
+                  : undefined,
+              },
+              content.value,
+            ),
+        }),
+        { global: { stubs: { SPopper: PopperStub } } },
+      )
+      try {
+        await flushPromises()
+        expect(root.findAll('.s-table__data-row')).toHaveLength(2)
+        const original = root.getComponent(TableSelect).vm.$.uid
+        const seen: unknown[] = []
+        content.value = {
+          person: (params) => {
+            seen.push(params)
+            return [h('b', { class: 'late-cell' }, params.value)]
+          },
+          heading: ({ column }) => [
+            h('b', { class: 'late-heading' }, column.title),
+          ],
+        }
+        await flushPromises()
+        expect(root.findAll('.late-cell').map((cell) => cell.text())).toEqual([
+          'Alpha',
+          'Beta',
+        ])
+        expect(seen[0]).toMatchObject({
+          row: baseData[0],
+          value: 'Alpha',
+          rowIndex: 0,
+          columnIndex: 0,
+        })
+        expect(root.get('.late-heading').text()).toBe('Name')
+        content.value = {
+          person: ({ value }) => [h('i', { class: 'replacement-cell' }, value)],
+        }
+        await flushPromises()
+        expect(root.findAll('.replacement-cell')).toHaveLength(2)
+        expect(root.find('.late-heading').exists()).toBe(false)
+        content.value = {}
+        await flushPromises()
+        expect(root.find('.replacement-cell').exists()).toBe(false)
+        expect(root.get('.s-table__data-cell').text()).toBe('Alpha')
+        expect(root.getComponent(TableSelect).vm.$.uid).toBe(original)
+      } finally {
+        root.unmount()
+        geometry.forEach((mock) => mock.mockRestore())
+      }
+    },
+  )
+
+  it('updates conditional affix slots while retaining the clear and dropdown actions', async () => {
+    const enabled = shallowRef(false)
+    const root = mount(
+      defineComponent({
+        setup: () => () =>
+          h(
+            TableSelect,
+            {
+              data: baseData,
+              columns: baseColumns,
+              modelValue: 'beta',
+              clearable: true,
+              open: true,
+            },
+            enabled.value
+              ? {
+                  prefix: () => h('b', 'Prefix'),
+                  suffix: ({
+                    open,
+                    selectedRow,
+                  }: {
+                    open: boolean
+                    selectedRow: (typeof baseData)[number]
+                  }) => h('b', `${open}:${selectedRow.name}`),
+                }
+              : {},
+          ),
+      }),
+      { global: { stubs: { SPopper: PopperStub } } },
+    )
+    try {
+      enabled.value = true
+      await nextTick()
+      expect(root.get('.s-table-select__prefix').text()).toBe('Prefix')
+      expect(root.get('.s-table-select__suffix').text()).toBe('true:Beta')
+      expect(root.find('.s-table-select__clear').exists()).toBe(true)
+      expect(root.find('.s-table-select__action').exists()).toBe(true)
+      enabled.value = false
+      await nextTick()
+      expect(root.find('.s-table-select__prefix').exists()).toBe(false)
+      expect(root.find('.s-table-select__suffix').exists()).toBe(false)
+    } finally {
+      root.unmount()
+    }
+  })
+
+  it('renders affix icons supplied through the configuration objects', () => {
+    const root = mountTableSelect({
+      prefixConfig: { icon: 'cb:user' },
+      suffixConfig: { icon: 'cb:checkmark' },
+    })
+    try {
+      expect(
+        root.get('.s-table-select__prefix .icon-stub').attributes('data-name'),
+      ).toBe('cb:user')
+      expect(
+        root.get('.s-table-select__suffix .icon-stub').attributes('data-name'),
+      ).toBe('cb:checkmark')
+    } finally {
+      root.unmount()
+    }
   })
 
   it('emits the row key and closes after selection', async () => {
