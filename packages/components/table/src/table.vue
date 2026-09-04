@@ -533,6 +533,7 @@ import type {
   TableColumn,
   TableEditContext,
   TableEditRenderer,
+  TableExposes,
   TableFilterValue,
   TableFlatRow,
   TableFooterCellRenderParams,
@@ -597,7 +598,6 @@ const columnManager = useTableColumnManager(props, emit, sizedColumns)
 const resolvedColumns = columnManager.visibleColumns
 watch(columnManager.state, columnResize.cancel, { deep: true })
 
-const { tableKls } = useTable(props)
 const query = useTableQuery(props, emit, sizedColumns)
 const {
   sorts,
@@ -941,6 +941,7 @@ const virtualEnabled = computed(
     virtualSourceActive.value ||
     (props.virtualConfig !== false && virtualOptions.value.enabled),
 )
+const { tableKls } = useTable(props, virtualEnabled)
 
 const dynamicRows = computed(
   () =>
@@ -2565,5 +2566,5 @@ defineExpose({
   clearSelection,
   toggleRowSelection,
   selectAll,
-})
+} satisfies TableExposes)
 </script>

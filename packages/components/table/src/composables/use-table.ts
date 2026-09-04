@@ -1,8 +1,12 @@
 import { computed } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import type { TableProps } from './../table'
+import type { ComputedRef } from 'vue'
+import type { TableProps } from '../table'
 
-export const useTable = (props: TableProps) => {
+export const useTable = (
+  props: TableProps,
+  virtualEnabled: ComputedRef<boolean>,
+) => {
   const ns = useNamespace('table')
 
   const tableKls = computed(() => [
@@ -10,7 +14,7 @@ export const useTable = (props: TableProps) => {
     ns.is('striped', props.striped),
     ns.is('multiple', props.multiple),
     ns.is('data-mode'),
-    ns.is('virtual', props.virtualConfig !== false),
+    ns.is('virtual', virtualEnabled.value),
   ])
 
   return {
