@@ -41,6 +41,14 @@ const readSlotSource = (
   return match ? readCodeIncludes(markdownPath, match[1]) : ''
 }
 
+const exampleCards = (source: string) =>
+  Array.from(source.matchAll(/<card[^>]*>([\s\S]*?)<\/card>/g))
+    .map((match) => match[1])
+    .filter((card) => card.includes('<template #example>'))
+
+const normalizedBlock = (value?: string) =>
+  (value ?? '').replace(/\r\n?/g, '\n').trim()
+
 describe('documentation example source', () => {
   it('keeps massive table data inside the virtual-scrolling example in both locales', () => {
     for (const root of docsRoots) {
@@ -157,4 +165,74 @@ describe('documentation example source', () => {
     expect(exampleCount).toBeGreaterThan(0)
     expect(failures).toEqual([])
   }, 60_000)
+
+  it('keeps every Table example paired, localized and identical to its complete source SFC', () => {
+    const paths = docsRoots.map((root) => resolve(root, 'table.md'))
+    const markdown = paths.map((path) => readFileSync(path, 'utf8'))
+    const cards = markdown.map(exampleCards)
+    expect(cards[0]).toHaveLength(59)
+    expect(cards[1]).toHaveLength(cards[0].length)
+
+    for (const [source, examples] of markdown.map(
+      (source, index) => [source, cards[index]] as const,
+    ))
+      expect(source.match(/<template #example>/g)).toHaveLength(examples.length)
+
+    cards[0].forEach((english, index) => {
+      const chinese = cards[1][index]
+      const tags = [english, chinese].map(
+        (card) => card.match(/<template #example>\s*<([\w-]+)/)?.[1] ?? '',
+      )
+      expect(tags[0]).toBeTruthy()
+      expect(tags[1].replace(/^table-zh-/, 'table-')).toBe(tags[0])
+
+      for (const [locale, card, markdownPath] of [
+        ['en', english, paths[0]],
+        ['zh', chinese, paths[1]],
+      ] as const) {
+        const headingEnd = card.indexOf('\n', card.indexOf('## '))
+        const exampleStart = card.indexOf('<template #example>')
+        expect(
+          card.slice(headingEnd, exampleStart).replace(/[`\s]/g, '').length,
+        ).toBeGreaterThan(20)
+
+        const includes = Array.from(
+          card.matchAll(/@\[code(?:\{\d+-\d+\})?[^\]]*\]\(([^)]+)\)/g),
+        ).map((match) => resolve(dirname(markdownPath), match[1]))
+        expect(includes.length).toBeGreaterThan(0)
+        expect(new Set(includes)).toHaveLength(1)
+        expect(includes[0].replaceAll('\\', '/')).toContain(
+          locale === 'zh' ? '/components/table-zh/' : '/components/table/',
+        )
+
+        const reconstructed = (['template', 'script', 'style'] as const)
+          .map((slot) => readSlotSource(markdownPath, card, slot))
+          .filter(Boolean)
+          .join('\n\n')
+        const actual = readFileSync(includes[0], 'utf8')
+        if (locale === 'en') expect(actual).not.toMatch(/[\u3400-\u9fff]/)
+        else expect(actual).toMatch(/[\u3400-\u9fff]/)
+        const rebuiltDescriptor = parse(reconstructed).descriptor
+        const actualDescriptor = parse(actual).descriptor
+        expect(normalizedBlock(rebuiltDescriptor.template?.content)).toBe(
+          normalizedBlock(actualDescriptor.template?.content),
+        )
+        expect(normalizedBlock(rebuiltDescriptor.script?.content)).toBe(
+          normalizedBlock(actualDescriptor.script?.content),
+        )
+        expect(normalizedBlock(rebuiltDescriptor.scriptSetup?.content)).toBe(
+          normalizedBlock(actualDescriptor.scriptSetup?.content),
+        )
+        expect(
+          rebuiltDescriptor.styles.map((style) =>
+            normalizedBlock(style.content),
+          ),
+        ).toEqual(
+          actualDescriptor.styles.map((style) =>
+            normalizedBlock(style.content),
+          ),
+        )
+      }
+    })
+  })
 })

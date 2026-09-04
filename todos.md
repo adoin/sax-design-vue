@@ -69,7 +69,7 @@
 - [x] 单元测试覆盖默认行为、边界、受控更新、异常、卸载清理及键盘操作。见 [单元测试覆盖核对](reports/table-unit-coverage-audit.md)：逐项核对 23 项新增能力的默认、边界、受控、异常、卸载和键盘证据；补充列宽待执行帧清理及列设置损坏缓存恢复测试。完整相关组件回归、类型和静态检查均通过。
 - [x] 组合测试覆盖普通数据、分页/跨页选择、树形/懒加载、固定列、双向虚拟滚动、动态行高；新能力不能只在孤立示例中有效。见 [功能组合验收](reports/table-combination-audit.md)：共享管线先覆盖六类数据/布局轴，再逐项核对 23 项能力的复杂组合；66 文件、636 项相关组件回归及 32 种浏览器布局组合通过。
 - [x] 巨量场景记录初始化、连续滚动、跳转、窗口渲染数量、缓存和内存表现；主动注明尚不支持的功能组合。见 [运行时验收记录](reports/table-runtime-audit.md) 和同目录前后测量 JSON。
-- [ ] 同步中英文示例文案、渲染示例、完整 Code 源码与 Playground；例子说明和控制均放在同一个 `<card>` 内。
+- [x] 同步中英文示例文案、渲染示例、完整 Code 源码与 Playground；例子说明和控制均放在同一个 `<card>` 内。见 [双语示例完整性验收](reports/table-doc-example-audit.md)：59 对 Table 示例逐项配对，本地化源码无串语；重建的 template、script/script setup、全部 style 与真实 SFC 精确一致并成功编译挂载。文档测试 9 项通过，normalize 检查 144 页为 0 修改、0 跳过。
 - [x] 更新逐项 API 文档与项目类型详情，运行 `pnpm run normalize:doc-examples` 并审核结果。
   - [API 文档核对](reports/table-api-audit.md)、[动态插槽验收](reports/table-slot-audit.md)、[方法参数核对](reports/table-method-contract-audit.md) 与 [方法选项验收](reports/table-options-audit.md) 已完成名称、默认值、插槽参数、88 个方法双语签名及 options 语义核对，修复实际发现的遗漏与对象身份问题。636 项回归、三项类型检查、六页 API 浏览器及 TableSelect 六个方法的真实弹层检查通过；normalize 检查 144 页，0 修改、0 跳过。剩余全功能组合与示例总验收另行跟踪。
 - [x] 运行相关组件测试、`pnpm run test:docs-examples` 和类型检查；共享文档管线变更另运行 `pnpm run docs:build`。见 [类型与测试验收](reports/table-validation-audit.md)：720 项相关回归、5 项文档测试和完整五项类型检查通过，本阶段未变更共享文档管线。
