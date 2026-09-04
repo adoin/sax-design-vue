@@ -69,7 +69,7 @@
 - [x] 巨量场景记录初始化、连续滚动、跳转、窗口渲染数量、缓存和内存表现；主动注明尚不支持的功能组合。见 [运行时验收记录](reports/table-runtime-audit.md) 和同目录前后测量 JSON。
 - [ ] 同步中英文示例文案、渲染示例、完整 Code 源码与 Playground；例子说明和控制均放在同一个 `<card>` 内。
 - [ ] 更新逐项 API 文档与项目类型详情，运行 `pnpm run normalize:doc-examples` 并审核结果。
-- [ ] 运行相关组件测试、`pnpm run test:docs-examples` 和类型检查；共享文档管线变更另运行 `pnpm run docs:build`。
+- [x] 运行相关组件测试、`pnpm run test:docs-examples` 和类型检查；共享文档管线变更另运行 `pnpm run docs:build`。见 [类型与测试验收](reports/table-validation-audit.md)：720 项相关回归、5 项文档测试和完整五项类型检查通过，本阶段未变更共享文档管线。
 - [ ] 浏览器检查中英文 Code/Playground、明暗主题、键盘焦点，以及每项新功能与固定列/虚拟滚动的组合。
 
 ## 列宽调整验证记录（2026-09-04）

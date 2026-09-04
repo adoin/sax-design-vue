@@ -314,7 +314,7 @@ describe('table editing integration', () => {
           row,
           column,
           columnWidth: 140,
-          rowKey: (index) => `key-${index}`,
+          rowKey: (index: number) => `key-${index}`,
           fixedLeftCount: 1,
           fixedRightCount: 1,
         },

@@ -66,7 +66,7 @@ describe('RadioGroup', () => {
     expect(buttons[0].classes()).toContain('is-active')
     expect(buttons[0].text()).toContain('Starter')
     const indicator = buttons[0].get('.s-radio-button__indicator')
-    expect(indicator.get('.s-radio-button__dot').exists()).toBe(true)
+    expect(indicator.find('.s-radio-button__dot').exists()).toBe(true)
 
     await buttons[1].get('input').setValue(true)
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['team'])

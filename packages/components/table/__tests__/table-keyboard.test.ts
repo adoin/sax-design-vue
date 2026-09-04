@@ -185,7 +185,7 @@ describe('table cell keyboard navigation', () => {
               expandedKeys: [1],
               keyboardConfig: true,
               activeCell: active.value,
-              'onUpdate:activeCell': (cell) => {
+              'onUpdate:activeCell': (cell: TableActiveCell | null) => {
                 active.value = cell
               },
               columnState: [{ key: 'hidden', hidden: true }],

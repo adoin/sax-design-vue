@@ -161,7 +161,7 @@ describe('column management', () => {
       })),
     })
     expect(headers(wrapper)).toHaveLength(0)
-    expect(wrapper.getComponent(ColumnManager).exists()).toBe(true)
+    expect(wrapper.findComponent(ColumnManager).exists()).toBe(true)
     manager.reset()
     await wrapper.setProps({ columnState: [] })
     expect(headers(wrapper)).toHaveLength(columns.length)

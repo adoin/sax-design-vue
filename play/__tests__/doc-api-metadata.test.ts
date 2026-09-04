@@ -18,6 +18,32 @@ const apiSections = new Set([
 ])
 
 describe('documentation API metadata', () => {
+  it('resolves every Table, TableGrid and TableSelect API type in both locales', () => {
+    const resolveTypeDetails = createApiTypeDetailsResolver(
+      resolve(projectRoot, 'packages/components'),
+    )
+    const missing: string[] = []
+    for (const root of docsRoots) {
+      for (const component of ['table', 'table-grid', 'table-select']) {
+        const path = resolve(root, `${component}.md`)
+        const metadata = matter(readFileSync(path, 'utf8')).data
+        const types: string[] = [...apiSections].flatMap((section) =>
+          (metadata[section] ?? []).map(
+            (entry: { type?: string }) => entry.type ?? '',
+          ),
+        )
+        const details = resolveTypeDetails(component, types)
+        const names = new Set(
+          types.flatMap((type: string) => type.match(/\bTable[A-Z]\w*/g) ?? []),
+        )
+        expect(names.size, `${path}: declared table types`).toBeGreaterThan(0)
+        for (const name of names)
+          if (!details[name]?.declaration) missing.push(`${path}: ${name}`)
+      }
+    }
+    expect(missing).toEqual([])
+  })
+
   it('resolves API types and their referenced local declarations', () => {
     const resolveTypeDetails = createApiTypeDetailsResolver(
       resolve(projectRoot, 'packages/components'),
@@ -66,10 +92,14 @@ describe('documentation API metadata', () => {
     expect(details.TableEditSlotParams.declaration).toContain('setValue:')
     expect(details.TableEditReason.declaration).toContain("'view'")
     expect(details.TableValidationRule.declaration).toContain('validator?')
-    expect(details.TableValidationContext.declaration).toContain('signal: AbortSignal')
+    expect(details.TableValidationContext.declaration).toContain(
+      'signal: AbortSignal',
+    )
     expect(details.TableValidationConfig.declaration).toContain('onCommit?')
     expect(details.TableValidateOptions.declaration).toContain('scope?')
-    expect(details.TableValidationResult.declaration).toContain('cancelled: boolean')
+    expect(details.TableValidationResult.declaration).toContain(
+      'cancelled: boolean',
+    )
     expect(details.TableValidationError.declaration).toContain('field: string')
 
     expect(
@@ -146,7 +176,7 @@ describe('documentation API metadata', () => {
           if (sectionMatch) section = sectionMatch[1]
           if (!apiSections.has(section)) return
 
-          const nameMatch = line.match(/^  - name:\s*(.+)$/)
+          const nameMatch = line.match(/^ {2}- name:\s*(.+)$/)
           if (nameMatch && nameMatch[1].includes('/')) {
             groupedRows.push(`${path}:${index + 1} — ${nameMatch[1]}`)
           }

@@ -272,7 +272,7 @@ describe('table detail integration', () => {
           columnCount: 100_000,
           row,
           column,
-          rowKey: (index) => `row-${index}`,
+          rowKey: (index: number) => `row-${index}`,
           columnWidth: 120,
           fixedLeftCount: 1,
         },

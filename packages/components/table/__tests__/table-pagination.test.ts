@@ -119,7 +119,7 @@ describe('Table built-in pagination', () => {
         pagerConfig: { pageSize: 2 },
         selectionConfig: {
           reserve: true,
-          checkMethod: ({ row }) => row.id !== 2,
+          checkMethod: ({ row }: { row: TableRow }) => row.id !== 2,
         },
       },
     })
@@ -238,8 +238,11 @@ describe('Table built-in pagination', () => {
           rowCount: 100_000,
           columnCount: 100_000,
           row,
-          rowKey: (index) => index,
-          column: (index) => ({ field: 'name', title: `Column ${index}` }),
+          rowKey: (index: number) => index,
+          column: (index: number) => ({
+            field: 'name',
+            title: `Column ${index}`,
+          }),
           columnWidth: 120,
         },
         virtualConfig: { height: 200, horizontal: true, dynamic: true },

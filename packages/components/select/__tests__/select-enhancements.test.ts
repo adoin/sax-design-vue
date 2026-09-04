@@ -5,6 +5,7 @@ import zhCn from '@vuesax-alpha/locale/lang/zh-cn'
 import { localeContextKey } from '@vuesax-alpha/hooks'
 import Select from '../src/select.vue'
 import { selectProps } from '../src/select'
+import type { ComponentMountingOptions } from '@vue/test-utils'
 
 const PopperStub = defineComponent({
   name: 'SPopper',
@@ -55,7 +56,7 @@ const VirtualListStub = defineComponent({
 
 const mountSelect = (
   props: Record<string, unknown>,
-  slots: Record<string, unknown> = {},
+  slots: NonNullable<ComponentMountingOptions<typeof Select>['slots']> = {},
   locale?: typeof zhCn,
 ) =>
   mount(Select, {
@@ -157,7 +158,7 @@ describe('Select enhanced capabilities', () => {
         selectionTools: ['all'],
       },
       {
-        footer: (scope: Record<string, number>) =>
+        footer: (scope) =>
           h(
             'span',
             { class: 'counts' },

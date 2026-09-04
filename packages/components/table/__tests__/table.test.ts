@@ -13,7 +13,7 @@ import {
   mapPhysicalToLogicalScroll,
   resolveColumnPixelWidth,
 } from '../src/composables/use-table-column-virtualization'
-import type { TableColumn } from '../src/table'
+import type { TableCellRenderParams, TableColumn } from '../src/table'
 
 const virtualizerMocks = vi.hoisted(() => ({
   measure: vi.fn(),
@@ -209,7 +209,8 @@ describe('Table data mode', () => {
       props: {
         data: [{ id: 1, name: 'Alpha', description: 'fallback' }],
         renderers: {
-          description: ({ value }) => h('strong', `renderer:${value}`),
+          description: ({ value }: TableCellRenderParams) =>
+            h('strong', `renderer:${value}`),
         },
         columns: [columns[0], { ...columns[1], renderer: 'description' }],
       },

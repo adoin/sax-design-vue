@@ -104,7 +104,12 @@ describe('documentation example source', () => {
           .filter(Boolean)
           .join('\n\n')
 
-        if (!source) return
+        if (!source) {
+          failures.push(
+            `${markdownPath} — card ${index + 1}: missing Code/Playground source`,
+          )
+          return
+        }
 
         const { descriptor, errors } = parse(source, {
           filename: `${markdownPath}#card-${index + 1}`,

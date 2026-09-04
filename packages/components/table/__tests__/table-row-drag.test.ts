@@ -71,7 +71,7 @@ const setup = (
           data: data.value,
           columns: extra.columns ?? columns,
           rowDragConfig: extra.rowDragConfig ?? true,
-          'onUpdate:data': (value) => {
+          'onUpdate:data': (value: TableRow[]) => {
             data.value = value
           },
         }),
@@ -349,7 +349,7 @@ describe('Table row dragging', () => {
             {
               data: data.value,
               rowDragConfig: true,
-              'onUpdate:data': (rows) => {
+              'onUpdate:data': (rows: TableRow[]) => {
                 data.value = rows as typeof data.value
               },
             },

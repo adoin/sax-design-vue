@@ -413,7 +413,9 @@ describe('Table query and selection features', () => {
         data: rows,
         columns: [{ type: 'checkbox', width: 60 }, ...columns],
         row: [],
-        selectionConfig: { checkMethod: ({ row }) => row.id !== 2 },
+        selectionConfig: {
+          checkMethod: ({ row }: { row: TableRow }) => row.id !== 2,
+        },
       },
     })
     const vm = wrapper.vm as unknown as TableInstance

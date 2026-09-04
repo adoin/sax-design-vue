@@ -151,7 +151,7 @@ describe('table edit state', () => {
   it('guards in-place external conflicts and does not expose the internal draft through event snapshots', () => {
     const wrapper = mount(Harness, { props: { editConfig: true } })
     const e = wrapper.vm.editing
-    const editable = { ...row },
+    const editable: Omit<typeof row, 'name'> & { name: string } = { ...row },
       c = { ...context(), row: editable }
     e.start(c)
     e.setValue(c, 'Draft')
@@ -269,7 +269,7 @@ describe('table edit state', () => {
       () => new Promise((resolve) => completions.push(resolve)),
     )
     const e = wrapper.vm.editing
-    const editable = { ...row }
+    const editable: Omit<typeof row, 'name'> & { name: string } = { ...row }
     const c = { ...context(), row: editable }
     e.start(c)
     e.setValue(c, 'First')

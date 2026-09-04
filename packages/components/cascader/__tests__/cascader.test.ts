@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import Cascader from '../src/cascader.vue'
 import { SHOW_CHILD } from '../src/cascader'
+import type { CascaderOption } from '../src/cascader'
 
 const PopperStub = defineComponent({
   name: 'SPopper',
@@ -134,7 +135,9 @@ describe('Cascader', () => {
   })
 
   it('loads an empty non-leaf option once', async () => {
-    const lazyOptions = [{ value: 'async', label: 'Async', isLeaf: false }]
+    const lazyOptions: CascaderOption[] = [
+      { value: 'async', label: 'Async', isLeaf: false },
+    ]
     const loadData = vi.fn(async (path: typeof lazyOptions) => {
       path[0].children = [{ value: 'loaded', label: 'Loaded' }]
     })

@@ -3,7 +3,10 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Table from '../src/table.vue'
 import TableColumn from '../src/table-column.vue'
-import type { TableValidationContext } from '../src/table'
+import type {
+  TableValidationContext,
+  TableValidationResult,
+} from '../src/table'
 
 const columns = [{ field: 'name', title: 'Name', width: 180, editor: true }]
 const scrollDescriptor = Object.getOwnPropertyDescriptor(
@@ -110,7 +113,9 @@ describe('table validation integration', () => {
       },
     })
     await nextTick()
-    const result = await table.vm.validate({ scrollToError: false })
+    const result: TableValidationResult = await table.vm.validate({
+      scrollToError: false,
+    })
     expect(result.errors.map((error) => error.message)).toEqual(['Column'])
     expect(result.checked).toBe(1)
     table.vm.clearValidation(1, 'name')

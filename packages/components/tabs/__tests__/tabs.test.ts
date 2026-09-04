@@ -9,6 +9,7 @@ import {
   calculateTabsOverflowLayout,
   calculateVisibleTabUids,
 } from '../src/tabs-overflow'
+import type { ComponentMountingOptions } from '@vue/test-utils'
 
 const PopperStub = defineComponent({
   name: 'SPopper',
@@ -17,7 +18,7 @@ const PopperStub = defineComponent({
 
 const mountTabs = (
   props: Record<string, unknown> = {},
-  slots: Record<string, unknown> = {},
+  slots: NonNullable<ComponentMountingOptions<typeof Tabs>['slots']> = {},
   attachTo?: Element,
 ) =>
   mount(Tabs, {
@@ -183,8 +184,8 @@ describe('Tabs', () => {
     expect(wrapper.get('[role="tablist"]').attributes('aria-label')).toBe(
       '标签页',
     )
-    expect(wrapper.get('[aria-label="添加标签页"]').exists()).toBe(true)
-    expect(wrapper.get('[aria-label="关闭首页"]').exists()).toBe(true)
+    expect(wrapper.find('[aria-label="添加标签页"]').exists()).toBe(true)
+    expect(wrapper.find('[aria-label="关闭首页"]').exists()).toBe(true)
   })
 })
 
@@ -249,14 +250,14 @@ describe('Tabs overflow calculation', () => {
   it('shows activation before shifting a controlled overflow window', async () => {
     vi.useFakeTimers()
     vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockImplementation(
-      function () {
+      function (this: HTMLElement) {
         if (this.dataset.tabsMeasureItem !== undefined) return 60
         if (this.dataset.tabsMeasureMore !== undefined) return 64
         return 0
       },
     )
     vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockImplementation(
-      function () {
+      function (this: HTMLElement) {
         return this.classList.contains('s-tabs__nav-wrap') ? 394 : 0
       },
     )
@@ -278,7 +279,7 @@ describe('Tabs overflow calculation', () => {
           Tabs,
           {
             modelValue: model.value,
-            'onUpdate:modelValue': (value: string | number) => {
+            'onUpdate:modelValue': (value: unknown) => {
               model.value = String(value)
             },
           },

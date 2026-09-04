@@ -55,7 +55,7 @@ pnpm audit:table-docs
 - Table、TableGrid、TableSelect、VirtualList：63 文件、594 项测试通过。
 - `test:docs-examples`：4 项通过；`normalize:doc-examples` 检查 144 页，0 页、0 示例改动。
 - `typecheck:web`、`typecheck:play` 通过；本次改动文件 lint 通过。
-- `typecheck:vitest` 未通过：仍有 Table/Grid 等测试的隐式参数类型、旧 `get().exists()` 断言和其他既有测试类型错误；新增 sparse virtualizer 测试无类型错误。公共类型验收保持未完成。
+- 本次运行时基线的 `typecheck:vitest` 未通过：当时仍有 Table/Grid 等测试的隐式参数类型、旧 `get().exists()` 断言和其他既有测试类型错误；新增 sparse virtualizer 测试无类型错误。这些问题随后已在 [类型与测试验收](table-validation-audit.md) 中修复并通过完整类型检查。
 - 未修改共享文档编译或 Playground 管线，本轮不触发该管线的构建验收要求。
 
 ## 功能边界和仍需验收的组合

@@ -254,7 +254,7 @@ describe('Table column resizing', () => {
     await wrapper.setProps({
       virtualSource: {
         ...wrapper.props('virtualSource')!,
-        column: (index) => ({ ...column(index) }),
+        column: (index: number) => ({ ...column(index) }),
       },
     })
     await flushPromises()

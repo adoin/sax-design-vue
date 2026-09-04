@@ -17,7 +17,7 @@ const mountCarousel = (props = {}) =>
       ...props,
     },
     slots: {
-      item: ({ item }: { item: (typeof items)[number] }) => item.title,
+      item: ({ item }) => item.title,
     },
   })
 
@@ -188,7 +188,7 @@ describe('Carousel effects and navigation', () => {
     const renderedItems = wrapper.findAll(
       '.s-carousel__item:not(.s-carousel__orbit-placeholder):not(.is-virtual-edge)',
     )
-    const transforms = renderedItems.map((item) => item.attributes('style'))
+    const transforms = renderedItems.map((item) => item.attributes('style')!)
     const placeholder = wrapper.find('.s-carousel__orbit-placeholder')
 
     expect(renderedItems).toHaveLength(4)
@@ -340,13 +340,13 @@ describe('Carousel effects and navigation', () => {
     expect(renderedItems[2].attributes('style')).toContain('rotateY(240deg)')
     expect(
       renderedItems.every((item) =>
-        item.attributes('style').includes('rotateX(-7deg)'),
+        item.attributes('style')!.includes('rotateX(-7deg)'),
       ),
     ).toBe(true)
     expect(renderedItems[0].attributes('style')).toContain('brightness(1)')
     expect(
       renderedItems.every((item) =>
-        item.attributes('style').includes('scale(0.78)'),
+        item.attributes('style')!.includes('scale(0.78)'),
       ),
     ).toBe(true)
   })

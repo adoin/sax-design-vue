@@ -20,7 +20,7 @@ describe('Card content', () => {
   it('renders a title prop without requiring body text', () => {
     const wrapper = mount(Card, { props: { title: 'Title only' } })
 
-    expect(wrapper.get('.s-card__text').exists()).toBe(true)
+    expect(wrapper.find('.s-card__text').exists()).toBe(true)
     expect(wrapper.get('.s-card__title-text').text()).toBe('Title only')
   })
 
@@ -109,9 +109,9 @@ describe('Card content', () => {
     })
 
     expect(wrapper.get('.s-card').element.tagName).toBe('ARTICLE')
-    expect(wrapper.get('.profile-media').exists()).toBe(true)
-    expect(wrapper.get('.profile-stats').exists()).toBe(true)
-    expect(wrapper.get('.profile-action').exists()).toBe(true)
+    expect(wrapper.find('.profile-media').exists()).toBe(true)
+    expect(wrapper.find('.profile-stats').exists()).toBe(true)
+    expect(wrapper.find('.profile-action').exists()).toBe(true)
     expect(wrapper.get('.s-card__subtitle').text()).toBe('Designer')
   })
 
@@ -156,7 +156,7 @@ describe('Card content', () => {
     expect(card.attributes('aria-busy')).toBe('true')
     expect(card.attributes('aria-disabled')).toBe('true')
     expect(card.attributes('tabindex')).toBeUndefined()
-    expect(wrapper.get('.s-card__loading').exists()).toBe(true)
+    expect(wrapper.find('.s-card__loading').exists()).toBe(true)
     expect(wrapper.findAll('.s-card__skeleton')).toHaveLength(4)
   })
 
@@ -172,11 +172,11 @@ describe('Card content', () => {
       },
     })
 
-    expect(wrapper.get('.header-slot').exists()).toBe(true)
-    expect(wrapper.get('.extra-slot').exists()).toBe(true)
-    expect(wrapper.get('.media-slot').exists()).toBe(true)
-    expect(wrapper.get('.body-slot').exists()).toBe(true)
-    expect(wrapper.get('.actions-slot').exists()).toBe(true)
+    expect(wrapper.find('.header-slot').exists()).toBe(true)
+    expect(wrapper.find('.extra-slot').exists()).toBe(true)
+    expect(wrapper.find('.media-slot').exists()).toBe(true)
+    expect(wrapper.find('.body-slot').exists()).toBe(true)
+    expect(wrapper.find('.actions-slot').exists()).toBe(true)
   })
 
   it('keeps the legacy buttons slot in its original direct wrapper', () => {
@@ -187,7 +187,7 @@ describe('Card content', () => {
     })
 
     const buttonWrapper = wrapper.get('.s-card__button')
-    expect(buttonWrapper.get('.legacy-button').exists()).toBe(true)
+    expect(buttonWrapper.find('.legacy-button').exists()).toBe(true)
     expect(buttonWrapper.element.parentElement).toBe(
       wrapper.get('.s-card').element,
     )

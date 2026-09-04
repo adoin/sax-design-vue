@@ -7,6 +7,7 @@ import type {
   TableDataChangeRequest,
   TableExposes,
   TableRow,
+  TableRowKey,
 } from '../src/table'
 
 const columns = [{ field: 'name', title: 'Name', editor: true }]
@@ -320,14 +321,15 @@ describe('Table change API', () => {
               rowCount: 1_000_000,
               columnCount: 1,
               row,
-              rowKey: (i) => i,
+              rowKey: (i: number) => i,
               column: () => columns[0],
               columnWidth: 120,
             },
             virtualConfig: { height: 180, horizontal: true },
             changeConfig: {
-              indexOf: (key) => (typeof key === 'number' ? key : -1),
-              apply: (request) => {
+              indexOf: (key: TableRowKey) =>
+                typeof key === 'number' ? key : -1,
+              apply: (request: TableDataChangeRequest) => {
                 for (const operation of request.operations)
                   for (const patch of operation.patches)
                     if (patch.field === 'name')
@@ -379,7 +381,7 @@ describe('Table change API', () => {
       }
     })
     const config: TableChangeConfig = {
-      indexOf: (key) => Number(key),
+      indexOf: (key: TableRowKey) => Number(key),
       apply: ({ operations }) => {
         const next = new Map(values.value)
         for (const operation of operations)
@@ -460,14 +462,14 @@ describe('Table change API', () => {
             },
             virtualConfig: { height: 180, horizontal: true },
             changeConfig: {
-              indexOf: (key) =>
+              indexOf: (key: TableRowKey) =>
                 typeof key === 'number' &&
                 key >= 0 &&
                 key < count &&
                 !removed.has(key)
                   ? key - [...removed].filter((deleted) => deleted < key).length
                   : -1,
-              apply: (request) => {
+              apply: (request: TableDataChangeRequest) => {
                 requests.push(request)
                 for (const operation of request.operations) {
                   const key = operation.rowKey as number

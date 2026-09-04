@@ -32,14 +32,16 @@ describe('ImagePreview', () => {
     expect(wrapper.get('[role="toolbar"]').attributes('aria-label')).toBe(
       'Image preview controls',
     )
-    expect(wrapper.get('button[aria-label="Zoom in"]').exists()).toBe(true)
-    expect(wrapper.get('button[aria-label="Zoom out"]').exists()).toBe(true)
-    expect(wrapper.get('button[aria-label="Rotate left"]').exists()).toBe(true)
-    expect(wrapper.get('button[aria-label="Rotate right"]').exists()).toBe(true)
+    expect(wrapper.find('button[aria-label="Zoom in"]').exists()).toBe(true)
+    expect(wrapper.find('button[aria-label="Zoom out"]').exists()).toBe(true)
+    expect(wrapper.find('button[aria-label="Rotate left"]').exists()).toBe(true)
+    expect(wrapper.find('button[aria-label="Rotate right"]').exists()).toBe(
+      true,
+    )
     expect(
-      wrapper.get('button[aria-label="Show original size"]').exists(),
+      wrapper.find('button[aria-label="Show original size"]').exists(),
     ).toBe(true)
-    expect(wrapper.get('button[aria-label="Reset image"]').exists()).toBe(true)
+    expect(wrapper.find('button[aria-label="Reset image"]').exists()).toBe(true)
   })
 
   it('zooms, rotates, resets, and emits transform state', async () => {

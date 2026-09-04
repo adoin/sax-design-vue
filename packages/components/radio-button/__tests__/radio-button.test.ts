@@ -15,7 +15,7 @@ describe('RadioButton', () => {
 
     expect(wrapper.classes()).toContain('is-active')
     expect(wrapper.get('input').element.checked).toBe(true)
-    expect(wrapper.get('.s-radio-button__indicator').exists()).toBe(true)
+    expect(wrapper.find('.s-radio-button__indicator').exists()).toBe(true)
     expect(wrapper.text()).toContain('Shared workspace')
   })
 

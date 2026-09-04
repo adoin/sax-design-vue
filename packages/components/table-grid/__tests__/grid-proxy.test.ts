@@ -3,7 +3,12 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { STable } from '@vuesax-alpha/components/table'
 import TableGrid from '../src/table-grid.vue'
-import type { TableColumn, TableRow } from '@vuesax-alpha/components/table'
+import type {
+  TableColumn,
+  TableDataChangeRequest,
+  TableRow,
+  TableRowKey,
+} from '@vuesax-alpha/components/table'
 import type {
   TableGridExposes,
   TableGridProxyQueryResult,
@@ -174,8 +179,8 @@ describe('Grid request proxy', () => {
           rowCount: 1_000_000,
           columnCount: 100_000,
           row,
-          rowKey: (index) => index,
-          column: (index) => ({
+          rowKey: (index: number) => index,
+          column: (index: number) => ({
             key: String(index),
             field: index === 1 ? 'name' : 'id',
             width: 120,
@@ -184,8 +189,8 @@ describe('Grid request proxy', () => {
         },
         virtualConfig: { height: 180, horizontal: true, dynamic: true },
         changeConfig: {
-          indexOf: (key) => Number(key),
-          apply: ({ operations }) => {
+          indexOf: (key: TableRowKey) => Number(key),
+          apply: ({ operations }: TableDataChangeRequest) => {
             for (const operation of operations)
               for (const patch of operation.patches)
                 if (patch.field === 'name')

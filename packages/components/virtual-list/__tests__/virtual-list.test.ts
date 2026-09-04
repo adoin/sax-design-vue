@@ -5,7 +5,8 @@ import VirtualList from '../src/virtual-list.vue'
 
 const virtualizerMocks = vi.hoisted(() => ({
   options: undefined as
-    undefined | { value: { estimateSize: (index: number) => number } },
+    | undefined
+    | { value: { count: number; estimateSize: (index: number) => number } },
   measure: vi.fn(),
   resizeItem: vi.fn(),
   scrollToIndex: vi.fn(),
@@ -20,7 +21,7 @@ const virtualizerMocks = vi.hoisted(() => ({
 
 vi.mock('@tanstack/vue-virtual', () => ({
   useVirtualizer: (options: {
-    value: { estimateSize: (index: number) => number }
+    value: { count: number; estimateSize: (index: number) => number }
   }) => {
     virtualizerMocks.options = options
     return { value: virtualizerMocks }
@@ -224,7 +225,7 @@ describe('VirtualList', () => {
         itemKey: (item: unknown) => (item as { id: string }).id,
       },
       slots: {
-        default: ({ item }: { item: { id: string } }) => item.id,
+        default: ({ item }) => (item as { id: string }).id,
       },
     })
 
@@ -284,9 +285,12 @@ describe('VirtualList', () => {
     )
 
     element.scrollTop = initialHeight - element.clientHeight
-    element.scrollTo = vi.fn(({ top }: ScrollToOptions) => {
-      element.scrollTop = top ?? 0
-    })
+    element.scrollTo = vi.fn(
+      (options?: ScrollToOptions | number, y?: number) => {
+        element.scrollTop =
+          typeof options === 'number' ? (y ?? 0) : (options?.top ?? 0)
+      },
+    )
     window.dispatchEvent(new MouseEvent('mouseup'))
     await nextTick()
     await nextTick()

@@ -87,8 +87,9 @@ describe('TableSelect', () => {
     const wrapper = mountTableSelect(
       {},
       {
-        'cell-name': ({ row }: { row: Record<string, unknown> }) =>
+        'cell-name': ({ row }: { row: Record<string, unknown> }) => [
           h('strong', { class: 'custom-name' }, String(row.name)),
+        ],
       },
     )
 

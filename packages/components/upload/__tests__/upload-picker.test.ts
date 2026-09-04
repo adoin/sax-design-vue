@@ -55,11 +55,11 @@ describe('Upload promise picker', () => {
 
     selectFiles(pickerInput(), [file])
 
-    await expect(result).rejects.toMatchObject<Partial<UploadPickError>>({
+    await expect(result).rejects.toMatchObject({
       name: 'UploadPickError',
       reason: 'type',
       file,
-    })
+    } satisfies Partial<UploadPickError>)
   })
 
   it('exposes the same picker through SUpload.pick', () => {

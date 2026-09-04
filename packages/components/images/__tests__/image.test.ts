@@ -71,15 +71,15 @@ describe('SImage', () => {
       },
     })
 
-    expect(wrapper.get('.custom-placeholder').exists()).toBe(true)
+    expect(wrapper.find('.custom-placeholder').exists()).toBe(true)
     await wrapper.get('img.s-images__img').trigger('load')
     expect(wrapper.find('.custom-placeholder').exists()).toBe(false)
     expect(wrapper.emitted('load')).toHaveLength(1)
 
     await wrapper.setProps({ src: 'missing.jpg' })
-    expect(wrapper.get('.custom-placeholder').exists()).toBe(true)
+    expect(wrapper.find('.custom-placeholder').exists()).toBe(true)
     await wrapper.get('img.s-images__img').trigger('error')
-    expect(wrapper.get('.custom-error').exists()).toBe(true)
+    expect(wrapper.find('.custom-error').exists()).toBe(true)
     expect(wrapper.emitted('error')).toHaveLength(1)
   })
 
