@@ -213,6 +213,45 @@ describe('column management', () => {
     wrapper.unmount()
   })
 
+  it.each([
+    ['malformed JSON', '{', true],
+    ['null payload', 'null', true],
+    [
+      'future version',
+      '{"version":2,"columns":[{"key":"name","hidden":true}]}',
+      false,
+    ],
+    ['invalid columns', '{"version":1,"columns":{}}', false],
+  ] as const)(
+    'preserves defaults for %s and can persist a later valid edit',
+    async (_, stored, reportsError) => {
+      const storageKey = 'invalid-column-state'
+      localStorage.setItem(storageKey, stored)
+      const wrapper = mount(Table, {
+        props: { data, columns, columnManagerConfig: { storageKey } },
+      })
+      try {
+        await nextTick()
+        expect(titles(wrapper)).toContain('Name')
+        expect(localStorage.getItem(storageKey)).toBe(stored)
+        const errors = wrapper.emitted('columnStorageError') ?? []
+        expect(errors).toHaveLength(reportsError ? 1 : 0)
+        if (reportsError)
+          expect(errors[0][0]).toMatchObject({ operation: 'read' })
+        const manager = wrapper.getComponent(ColumnManager).props('manager')
+        manager.update('name', { hidden: true })
+        await nextTick()
+        expect(titles(wrapper)).not.toContain('Name')
+        expect(JSON.parse(localStorage.getItem(storageKey)!)).toEqual({
+          version: 1,
+          columns: [{ key: 'name', hidden: true }],
+        })
+      } finally {
+        wrapper.unmount()
+      }
+    },
+  )
+
   it('keeps key-based resizing and fixed/header/body alignment after reordering a tree', async () => {
     const wrapper = mount(Table, {
       props: {

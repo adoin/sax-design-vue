@@ -146,6 +146,86 @@ describe('Table column resizing', () => {
     expect(events).toHaveLength(1)
   })
 
+  it.each(['pointercancel', 'blur', 'loading', 'unmount'] as const)(
+    'releases a queued resize frame and restores document styles on %s',
+    async (reason) => {
+      const root = document.documentElement
+      const originalCursor = root.style.cursor
+      const originalSelection = root.style.userSelect
+      const wrapper = mount(Table, {
+        props: { data, columns: cols, resizeConfig: true },
+      })
+      let mounted = true
+      try {
+        await flushPromises()
+        root.style.cursor = 'crosshair'
+        root.style.userSelect = 'text'
+        const frames = new Map<number, FrameRequestCallback>()
+        let sequence = 0
+        vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
+          (callback) => {
+            frames.set(++sequence, callback)
+            return sequence
+          },
+        )
+        const cancelFrame = vi
+          .spyOn(window, 'cancelAnimationFrame')
+          .mockImplementation((id) => {
+            frames.delete(id)
+          })
+        const added = vi.spyOn(window, 'addEventListener')
+        const removed = vi.spyOn(window, 'removeEventListener')
+        pointer(
+          headers(wrapper)[0].get('[role="separator"]').element,
+          'pointerdown',
+          80,
+        )
+        const listeners = added.mock.calls.filter(([type]) =>
+          [
+            'pointermove',
+            'pointerup',
+            'pointercancel',
+            'keydown',
+            'blur',
+          ].includes(type),
+        )
+        expect(listeners).toHaveLength(5)
+        pointer(window, 'pointermove', 180)
+        const queuedFrame = sequence
+        expect(frames.has(queuedFrame)).toBe(true)
+        expect(root.style.cursor).toBe('col-resize')
+        expect(root.style.userSelect).toBe('none')
+        if (reason === 'unmount') {
+          wrapper.unmount()
+          mounted = false
+        } else if (reason === 'loading')
+          await wrapper.setProps({ loading: true })
+        else if (reason === 'blur') window.dispatchEvent(new Event('blur'))
+        else pointer(window, 'pointercancel', 180)
+        await nextTick()
+        expect(cancelFrame).toHaveBeenCalledWith(queuedFrame)
+        expect(frames.has(queuedFrame)).toBe(false)
+        for (const [type, listener] of listeners)
+          expect(removed).toHaveBeenCalledWith(type, listener)
+        expect(root.style.cursor).toBe('crosshair')
+        expect(root.style.userSelect).toBe('text')
+        pointer(window, 'pointermove', 230)
+        pointer(window, 'pointerup', 230)
+        await nextTick()
+        expect(wrapper.emitted('columnResize')).toBeUndefined()
+        expect(wrapper.emitted('update:columnWidths')).toBeUndefined()
+        if (mounted)
+          expect(headers(wrapper)[0].attributes('style')).toContain(
+            'width: 80px',
+          )
+      } finally {
+        if (mounted) wrapper.unmount()
+        root.style.cursor = originalCursor
+        root.style.userSelect = originalSelection
+      }
+    },
+  )
+
   it('honors controlled widths, disabled columns, IME and external resets', async () => {
     const wrapper = mount(Table, {
       props: {
