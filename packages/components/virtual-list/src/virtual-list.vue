@@ -17,7 +17,14 @@
         <div
           v-for="virtualItem in virtualItems"
           :key="`${typeof virtualItem.key}:${String(virtualItem.key)}`"
-          :ref="dynamic ? measurementRefAt(virtualItem.index) : undefined"
+          :ref="
+            dynamic
+              ? measurementRefAt(
+                  virtualItem.index,
+                  virtualItem.key as VirtualListKey,
+                )
+              : undefined
+          "
           :class="ns.e('item')"
           :data-index="virtualItem.index"
           :style="itemStyle(virtualItem.start, virtualItem.size)"
@@ -73,6 +80,8 @@ const getItem = (index: number) => props.itemAt?.(index) ?? props.items[index]
 const measuredSizeCache = new Map<VirtualListKey, number>()
 const resettingMeasurements = shallowRef(false)
 const measuredElements = new Map<number, HTMLElement>()
+const measuredElementKeys = new WeakMap<HTMLElement, VirtualListKey>()
+const measurementRefKeys = new Map<number, VirtualListKey>()
 const measurementRefCallbacks = new Map<
   number,
   (element: Element | ComponentPublicInstance | null) => void
@@ -203,6 +212,7 @@ const measureElementAt = (index: number, element: HTMLElement) => {
 
 interface PendingSparseMeasurement {
   element: HTMLElement
+  key: VirtualListKey
   size?: number
 }
 
@@ -212,16 +222,26 @@ let destroyed = false
 
 const flushSparseMeasurements = () => {
   sparseMeasurementScheduled = false
+  const pending = [...pendingSparseMeasurements]
+  pendingSparseMeasurements.clear()
   if (destroyed || !sparseMode.value) return
-  const measurements = [...pendingSparseMeasurements].map(
-    ([index, measurement]) => ({
+  const measurements: { index: number; key: VirtualListKey; size: number }[] =
+    []
+  for (const [index, measurement] of pending) {
+    if (
+      index >= itemCount.value ||
+      measuredElements.get(index) !== measurement.element
+    )
+      continue
+    const key = resolveItemKey(index)
+    if (key !== measurement.key) continue
+    measurements.push({
       index,
-      key: resolveItemKey(index),
+      key,
       size:
         measurement.size ?? measurement.element.getBoundingClientRect().height,
-    }),
-  )
-  pendingSparseMeasurements.clear()
+    })
+  }
   sparseVirtualizer.resizeItems(measurements)
 }
 
@@ -230,7 +250,19 @@ const queueSparseMeasurement = (
   element: HTMLElement,
   size?: number,
 ) => {
-  pendingSparseMeasurements.set(index, { element, size })
+  if (
+    index < 0 ||
+    index >= itemCount.value ||
+    measuredElements.get(index) !== element
+  )
+    return
+  const key = measuredElementKeys.get(element)
+  if (key == null) return
+  pendingSparseMeasurements.set(index, {
+    element,
+    size,
+    key,
+  })
   if (sparseMeasurementScheduled) return
   sparseMeasurementScheduled = true
   queueMicrotask(flushSparseMeasurements)
@@ -257,12 +289,17 @@ const resizeObserver =
 function setMeasuredElement(
   index: number,
   element: Element | ComponentPublicInstance | null,
+  key: VirtualListKey,
 ) {
   const previous = measuredElements.get(index)
   if (!(element instanceof HTMLElement)) {
+    if (previous && measuredElementKeys.get(previous) !== key) return
     if (previous) resizeObserver?.unobserve(previous)
     measuredElements.delete(index)
-    measurementRefCallbacks.delete(index)
+    if (measurementRefKeys.get(index) === key) {
+      measurementRefCallbacks.delete(index)
+      measurementRefKeys.delete(index)
+    }
     return
   }
 
@@ -271,15 +308,17 @@ function setMeasuredElement(
     measuredElements.set(index, element)
     resizeObserver?.observe(element)
   }
+  measuredElementKeys.set(element, key)
   if (sparseMode.value) queueSparseMeasurement(index, element)
   else measureElementAt(index, element)
 }
 
-const measurementRefAt = (index: number) => {
+const measurementRefAt = (index: number, key: VirtualListKey) => {
   let callback = measurementRefCallbacks.get(index)
-  if (!callback) {
-    callback = (element) => setMeasuredElement(index, element)
+  if (!callback || measurementRefKeys.get(index) !== key) {
+    callback = (element) => setMeasuredElement(index, element, key)
     measurementRefCallbacks.set(index, callback)
+    measurementRefKeys.set(index, key)
   }
   return callback
 }
@@ -397,6 +436,7 @@ onBeforeUnmount(() => {
   destroyed = true
   pendingSparseMeasurements.clear()
   measurementRefCallbacks.clear()
+  measurementRefKeys.clear()
   resizeObserver?.disconnect()
 })
 

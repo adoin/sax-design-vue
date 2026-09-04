@@ -307,4 +307,50 @@ describe('VirtualList', () => {
     expect(rows[0].attributes('style')).toContain('min-height: 96px')
     expect(rows[1].attributes('style')).toContain('--s-vl-item-start: 96px')
   })
+
+  it('discards queued measurements when a source index belongs to a new key', async () => {
+    let prefix = 'old'
+    let height = 72
+    const rect = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockImplementation(() => ({ height }) as DOMRect)
+    const keyAt = (index: number) => `${prefix}:${index}`
+    const wrapper = mount(VirtualList, {
+      props: {
+        count: 100_000,
+        itemAt: (index: number) => index,
+        itemKeyAt: keyAt,
+        estimateSize: 38,
+        dynamic: true,
+        retainMaxSize: true,
+      },
+    })
+    await nextTick()
+    await Promise.resolve()
+    await nextTick()
+    const queued: VoidFunction[] = []
+    const microtask = vi
+      .spyOn(globalThis, 'queueMicrotask')
+      .mockImplementation((callback) => queued.push(callback))
+    try {
+      height = 120
+      wrapper.vm.measureVisible()
+      expect(queued).toHaveLength(1)
+      // The source changes before Vue replaces the old measured elements.
+      prefix = 'new'
+      queued.shift()!()
+      microtask.mockRestore()
+      height = 44
+      await wrapper.setProps({ itemKeyAt: (index: number) => keyAt(index) })
+      await Promise.resolve()
+      await nextTick()
+      expect(wrapper.findAll('.s-vl__item')[1].attributes('style')).toContain(
+        '--s-vl-item-start: 44px',
+      )
+    } finally {
+      microtask.mockRestore()
+      wrapper.unmount()
+      rect.mockRestore()
+    }
+  })
 })

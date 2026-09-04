@@ -21,6 +21,7 @@ interface GeometryOptions {
   root: () => HTMLElement | undefined
   viewport: () => HTMLElement | undefined
   rowOffset: () => number
+  rowIndex?: (index: number) => number
 }
 
 const emptyArea = (): TableMergeAreaGeometry => ({
@@ -83,7 +84,9 @@ export function useTableMergeGeometry(options: GeometryOptions) {
       '[data-table-merge-layer]',
     )
   const owns = (element: Element) =>
-    element.closest('[role="table"]') === root && !inLayer(element)
+    element.closest('[role="table"]') === root &&
+    !inLayer(element) &&
+    !element.closest('[data-table-group-band]')
 
   const read = () => {
     frame = undefined
@@ -125,7 +128,8 @@ export function useTableMergeGeometry(options: GeometryOptions) {
           return {
             index:
               area === 'body'
-                ? Number(element.dataset.tableRowIndex) + options.rowOffset()
+                ? (options.rowIndex?.(Number(element.dataset.tableRowIndex)) ??
+                  Number(element.dataset.tableRowIndex) + options.rowOffset())
                 : Number(element.dataset.footerRowIndex ?? index),
             top: rect.top,
             height: rect.height,

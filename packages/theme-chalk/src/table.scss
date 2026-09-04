@@ -404,6 +404,40 @@
     }
   }
 
+  @include e(group-row) {
+    background: color-mix(in srgb, #{getColor(primary)} 7%, var(--s-table-surface));
+  }
+  @include e(group-cell) {
+    position: sticky;
+    left: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    box-sizing: border-box;
+    padding: 6px 12px;
+    color: getColor(text);
+    overflow-wrap: anywhere;
+  }
+  @include e(group-toggle) {
+    flex: 0 0 auto;
+    min-width: 36px;
+    min-height: 36px;
+    margin: 0;
+  }
+  @include e(group-count) {
+    color: getColor(text, 0.55);
+    font-size: 0.85em;
+  }
+  @include e(group-subtotal) {
+    --s-table-footer-surface: #{getColor(primary, 0.04)};
+    box-shadow: inset 0 4px 6px -6px #{getColor(primary, 0.2)};
+  }
+  @include e(group-summary) {
+    font-weight: 600;
+    box-shadow: 0 -3px 7px -6px #{getColor(primary, 0.25)};
+  }
+
   @include e(row-drag-handle) {
     display: inline-grid;
     flex: 0 0 24px;

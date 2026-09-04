@@ -14,22 +14,30 @@ interface MergeCoordinateOptions {
   rowAt: (absolute: number) => TableFlatRow | undefined
   offset: () => number
   count: () => number
+  rowSourceIndex?: (index: number) => number
+  rowViewIndex?: (index: number, backward: boolean) => number | undefined
 }
 const sameAddress = (a: TableActiveCell, b: TableActiveCell) =>
   a.rowKey === b.rowKey && a.columnKey === b.columnKey
 
 /** Project merged owners onto the current page while preserving their source address. */
 export function useTableMergeCoordinates(options: MergeCoordinateOptions) {
+  const sourceIndex = (row: number) =>
+    options.rowSourceIndex?.(row) ?? row + options.offset()
+  const viewIndex = (row: number, backward = false) =>
+    options.rowViewIndex
+      ? options.rowViewIndex(row, backward)
+      : Math.max(0, row - options.offset())
   const at = (row: number, col: number): TableCellCoordinate | undefined => {
     const original = options.base.at(row, col)
     if (!original) return
-    const region = options.at(row + options.offset(), col)
+    const region = options.at(sourceIndex(row), col)
     if (!region) return original
     const owner = options.rowAt(region.row)
     const column = options.base.columnAt(region.col)
     if (!owner || column < 0) return
     return {
-      row: Math.max(0, region.row - options.offset()),
+      row: viewIndex(region.row) ?? row,
       position: region.col,
       column,
       viewRow: row,
@@ -58,9 +66,10 @@ export function useTableMergeCoordinates(options: MergeCoordinateOptions) {
     key: string,
     backwards: boolean,
   ) => {
-    const offset = options.offset()
-    const position = { row: current.row + offset, col: current.position }
-    const rowEnd = offset + options.count()
+    if (!options.count()) return
+    const offset = sourceIndex(0)
+    const position = { row: sourceIndex(current.row), col: current.position }
+    const rowEnd = sourceIndex(options.count() - 1) + 1
     const lookup = {
       at: (row: number, col: number) => {
         const region = options.at(row, col)
@@ -87,7 +96,11 @@ export function useTableMergeCoordinates(options: MergeCoordinateOptions) {
     if (!next) return
     const row = Math.max(next.row, offset)
     if (next.row < offset && options.at(row, next.col)?.row !== next.row) return
-    return at(row - offset, next.col)
+    const projected = viewIndex(
+      row,
+      direction === 'up' || (key === 'Tab' && backwards),
+    )
+    return projected == null ? undefined : at(projected, next.col)
   }
   return { at, resolve, move }
 }

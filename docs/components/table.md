@@ -1,6 +1,16 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "group-config"
+    type: "Boolean | TableGroupConfig"
+    description: "Configure local/remote row grouping, aggregates and summary scope."
+    default: false
+    usage: "#row-grouping-and-aggregation"
+  - name: "group-expanded-keys"
+    type: "string[]"
+    description: "Control expanded groups with v-model:group-expanded-keys; omit for internal state."
+    default: null
+    usage: "#row-grouping-and-aggregation"
   - name: "merge-config"
     type: "Boolean | TableMergeConfig"
     description: "Merge body and footer cells using positional ranges or synchronous window-based rules."
@@ -348,6 +358,21 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "update:groupExpandedKeys"
+    type: "(keys: string[]) => void"
+    description: "Request updated expanded group keys."
+    default: null
+    usage: "#row-grouping-and-aggregation"
+  - name: "groupExpand"
+    type: "(params: { group: TableGroupNode; expanded: boolean }) => void"
+    description: "Emitted after an expansion change is accepted."
+    default: null
+    usage: "#row-grouping-and-aggregation"
+  - name: "groupError"
+    type: "(error: unknown) => void"
+    description: "Grouping configuration or aggregation failed."
+    default: null
+    usage: "#row-grouping-and-aggregation"
   - name: "contextMenuOpen"
     type: "(context: TableContextMenuContext) => void"
     description: "A menu opens with its area and row/column context."
@@ -535,6 +560,16 @@ EVENTS:
     default: null
     usage: '#selection-columns-and-reservation'
 SLOTS:
+  - name: "group-header"
+    type: "{ group: TableGroupNode; expanded: boolean }"
+    description: "Group heading content alongside the built-in expand button."
+    default: null
+    usage: "#row-grouping-and-aggregation"
+  - name: "group-summary"
+    type: "TableFooterCellRenderParams & { group?: TableGroupNode; kind: string }"
+    description: "Subtotal or overall summary cell."
+    default: null
+    usage: "#row-grouping-and-aggregation"
   - name: "edit-[column key]"
     type: "TableEditSlotParams"
     description: "Column editor slot; columns.slots.edit can specify another name."
@@ -614,6 +649,26 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "getGroups"
+    type: "() => readonly TableGroupNode[]"
+    description: "Read current group metadata."
+    default: null
+    usage: "#row-grouping-and-aggregation"
+  - name: "getGroupSummary"
+    type: "() => Readonly<Record<string, unknown>>"
+    description: "Read overall aggregate results."
+    default: null
+    usage: "#row-grouping-and-aggregation"
+  - name: "toggleGroup"
+    type: "(key: string, expanded?: boolean) => Promise<boolean>"
+    description: "Toggle one group and report whether the update was accepted."
+    default: null
+    usage: "#row-grouping-and-aggregation"
+  - name: "setGroupExpandedKeys"
+    type: "(keys: readonly string[]) => Promise<boolean>"
+    description: "Set expanded group keys and report whether the update was accepted."
+    default: null
+    usage: "#row-grouping-and-aggregation"
   - name: "closeContextMenu"
     type: "() => void"
     description: "Close the menu and restore the originating cell if focus is still inside the menu."
@@ -837,6 +892,94 @@ EXPOSES:
 ---
 
 # Table
+
+<card>
+
+## Row grouping and aggregation
+
+Use `group-config.fields` for nested field grouping. Groups are built after sorting, filtering and pagination. A tree root and its currently expanded descendants remain in one branch. Headings and subtotals are separate from selectable/editable data rows. Double-click Hours to edit; accepted updates recalculate aggregates.
+
+Each subtotal includes all supplied members of that group, independent of collapse state. The overall `summaryScope` defaults to `page`; `filtered` includes supplied visible tree rows matching the filter across local pages. It does not load collapsed or lazy descendants. With remote pagination, unavailable pages are outside the local aggregation scope.
+
+An aggregate `key` addresses its summary column field. `count` counts records; `sum`, `average`, `min` and `max` accept finite numbers only. Empty sum/count results are 0, other empty results are null; numeric overflow returns null. A custom aggregate supplies independent `initial`, `step` and optional `finish` functions without collecting a values array.
+
+Control expansion with `v-model:group-expanded-keys`; rejected updates preserve the displayed state. Group values support primitives and dates; normalize object fields using a `value` function. Invalid configuration or calculation emits `group-error` and restores the original row display.
+
+<template #example><table-grouping /></template>
+
+<template #template>
+
+@[code{111-151}](../.vuepress/components/table/grouping.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-109}](../.vuepress/components/table/grouping.vue)
+
+</template>
+
+<template #style>
+
+@[code{153-165}](../.vuepress/components/table/grouping.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Requesting grouped pages
+
+The simulated service returns page data, page-relative group ranges and an overall summary. `STableGrid` owns requests, pagination, cancellation and error feedback. Group metadata follows the accepted page, so stale, cancelled or failed responses do not replace the displayed groups or totals.
+
+With a real endpoint, return contiguous group members and `TableGroupRemoteResult` from the service. Subtotals cover supplied page members; the service defines the overall summary scope. Here it includes hours from all 24 records.
+
+<template #example><table-grouping-remote /></template>
+
+<template #template>
+
+@[code{85-115}](../.vuepress/components/table/grouping-remote.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-83}](../.vuepress/components/table/grouping-remote.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Remote groups and virtual rows
+
+Generated sources use `mode: remote`. The application supplies `remote.groups` with starts, counts, children and aggregates, plus `remote.summary`. Fetching and cancellation can use the existing Grid request proxy; pass the current server result into this configuration. The table does not scan generated rows to infer groups. Remote ranges use page data indices for ordinary arrays and absolute source indices for generated sources. Sibling ranges must be ordered, disjoint and inside their parent; uncovered rows remain visible.
+
+This example provides formula-based metadata for one million rows and one hundred thousand columns. Open last batch updates expansion before locating the final cell. Collapsed members have no visible data address; expand their group before programmatic navigation. Group headings, subtotals and data share a virtual window, with range metadata proportional to group count. Local grouping/aggregation processes supplied rows synchronously, so computation and storage grow with rows and group depth; use server aggregation for large global datasets.
+
+<template #example><table-grouping-source /></template>
+
+<template #template>
+
+@[code{52-78}](../.vuepress/components/table/grouping-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-50}](../.vuepress/components/table/grouping-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{80-95}](../.vuepress/components/table/grouping-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

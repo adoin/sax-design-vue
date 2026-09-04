@@ -22,6 +22,7 @@ import type {
 } from './table-context-menu'
 import type { TableActiveCell, TableKeyboardConfig } from './table-keyboard'
 import type { TableMergeConfig } from './table-merge'
+import type { TableGroupConfig, TableGroupNode } from './table-group'
 import type {
   TableRowDragConfig,
   TableRowDragContext,
@@ -55,6 +56,7 @@ import type {
 export * from './table-context-menu'
 export * from './table-keyboard'
 export * from './table-merge'
+export * from './table-group'
 export * from './table-row-drag'
 export type { TableHistoryConfig, TableHistoryState } from './table-history'
 export type {
@@ -444,6 +446,14 @@ export const tableProps = buildProps({
     type: definePropType<boolean | TableMergeConfig>([Boolean, Object]),
     default: false,
   },
+  groupConfig: {
+    type: definePropType<boolean | TableGroupConfig>([Boolean, Object]),
+    default: false,
+  },
+  groupExpandedKeys: {
+    type: definePropType<string[]>(Array),
+    default: undefined,
+  },
   activeCell: {
     type: definePropType<TableActiveCell | null>(Object),
     default: undefined,
@@ -586,6 +596,10 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  'update:groupExpandedKeys': (keys: string[]) => isArray(keys),
+  groupExpand: (params: { group: TableGroupNode; expanded: boolean }) =>
+    isObject(params),
+  groupError: (error: unknown) => error !== undefined,
   contextMenuOpen: (context: TableContextMenuContext) => isObject(context),
   contextMenuClose: (context: TableContextMenuContext) => isObject(context),
   contextMenuSelect: (params: TableContextMenuSelectParams) => isObject(params),
@@ -653,6 +667,10 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  setGroupExpandedKeys: (keys: readonly string[]) => Promise<boolean>
+  toggleGroup: (key: string, expanded?: boolean) => Promise<boolean>
+  getGroups: () => readonly TableGroupNode[]
+  getGroupSummary: () => Readonly<Record<string, unknown>>
   closeContextMenu: () => void
   /** Page row / resolved column indices; generated sources use absolute source indices. */
   setActiveCell: (rowIndex: number, columnIndex: number) => Promise<boolean>

@@ -1,6 +1,16 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "group-config"
+    type: "Boolean | TableGroupConfig"
+    description: "配置本地/远程行分组、聚合和汇总范围。"
+    default: false
+    usage: "#行分组与聚合"
+  - name: "group-expanded-keys"
+    type: "string[]"
+    description: "通过 v-model:group-expanded-keys 控制展开组；省略时内部管理。"
+    default: null
+    usage: "#行分组与聚合"
   - name: "merge-config"
     type: "Boolean | TableMergeConfig"
     description: "通过位置范围或同步窗口规则合并正文与表尾单元格。"
@@ -348,6 +358,21 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "update:groupExpandedKeys"
+    type: "(keys: string[]) => void"
+    description: "请求更新展开键。"
+    default: null
+    usage: "#行分组与聚合"
+  - name: "groupExpand"
+    type: "(params: { group: TableGroupNode; expanded: boolean }) => void"
+    description: "展开变更被接受后触发。"
+    default: null
+    usage: "#行分组与聚合"
+  - name: "groupError"
+    type: "(error: unknown) => void"
+    description: "分组配置或聚合计算失败。"
+    default: null
+    usage: "#行分组与聚合"
   - name: "contextMenuOpen"
     type: "(context: TableContextMenuContext) => void"
     description: "菜单打开，提供所在区域及对应行列上下文。"
@@ -535,6 +560,16 @@ EVENTS:
     default: null
     usage: '#选择列与跨页保留'
 SLOTS:
+  - name: "group-header"
+    type: "{ group: TableGroupNode; expanded: boolean }"
+    description: "组标题内容，保留内置展开按钮。"
+    default: null
+    usage: "#行分组与聚合"
+  - name: "group-summary"
+    type: "TableFooterCellRenderParams & { group?: TableGroupNode; kind: string }"
+    description: "小计或整体汇总单元格。"
+    default: null
+    usage: "#行分组与聚合"
   - name: "edit-[column key]"
     type: "TableEditSlotParams"
     description: "指定列的编辑插槽，columns.slots.edit 可更改名称。"
@@ -614,6 +649,26 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "getGroups"
+    type: "() => readonly TableGroupNode[]"
+    description: "读取当前分组元数据。"
+    default: null
+    usage: "#行分组与聚合"
+  - name: "getGroupSummary"
+    type: "() => Readonly<Record<string, unknown>>"
+    description: "读取整体统计结果。"
+    default: null
+    usage: "#行分组与聚合"
+  - name: "toggleGroup"
+    type: "(key: string, expanded?: boolean) => Promise<boolean>"
+    description: "切换一个组，返回更新是否被接受。"
+    default: null
+    usage: "#行分组与聚合"
+  - name: "setGroupExpandedKeys"
+    type: "(keys: readonly string[]) => Promise<boolean>"
+    description: "设置展开键，返回更新是否被接受。"
+    default: null
+    usage: "#行分组与聚合"
   - name: "closeContextMenu"
     type: "() => void"
     description: "关闭当前菜单；焦点仍在菜单内时恢复到来源单元格。"
@@ -837,6 +892,94 @@ EXPOSES:
 ---
 
 # Table 表格
+
+<card>
+
+## 行分组与聚合
+
+通过 `group-config.fields` 按字段嵌套分组。分组发生在排序、筛选、分页后；树数据以当前页的根分支分组，已展开后代保持在根分支内。组标题和小计不参与数据行选择或编辑。双击工时可编辑，成功更新后统计自动重算。
+
+组小计覆盖该组当前提供的所有成员，收起不改变结果。整体汇总的 `summaryScope` 默认为 `page`，设置为 `filtered` 时统计已提供且符合筛选的可见树行，包含其他本地页；不会加载未展开或懒加载的后代。远程分页下，应用未提供的数据不在本地统计范围。
+
+`aggregates` 的 `key` 对应汇总列字段。`count` 统计记录数；`sum`、`average`、`min`、`max` 仅接受有限数字。空输入的 sum/count 为 0，其余为 null；数值溢出返回 null。自定义聚合提供独立的 `initial`、`step` 和可选 `finish`，可按记录逐步计算，无需收集值数组。
+
+展开键可由 `v-model:group-expanded-keys` 控制；拒绝更新时保留原显示状态。分组值支持基础类型和日期，对象字段应配置 `value` 函数返回稳定值。错误通过 `group-error` 报告，恢复原行显示。
+
+<template #example><table-zh-grouping /></template>
+
+<template #template>
+
+@[code{69-105}](../../.vuepress/components/table-zh/grouping.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-67}](../../.vuepress/components/table-zh/grouping.vue)
+
+</template>
+
+<template #style>
+
+@[code{107-119}](../../.vuepress/components/table-zh/grouping.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 远程分组请求
+
+本例用模拟服务返回一页数据、页内分组范围和全量汇总。`STableGrid` 负责请求、分页、取消及错误反馈；分组元数据按已接受的数据页关联，过期、取消或失败的请求不会覆盖当前分组与统计。
+
+使用真实接口时，让服务返回连续的组成员及 `TableGroupRemoteResult`，替换示例中的模拟查询即可。组小计为当前页提供的成员统计，整体汇总由服务定义；这里为全部 24 条记录的工时总和。
+
+<template #example><table-zh-grouping-remote /></template>
+
+<template #template>
+
+@[code{85-115}](../../.vuepress/components/table-zh/grouping-remote.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-83}](../../.vuepress/components/table-zh/grouping-remote.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 远程分组与虚拟行
+
+生成源使用 `mode: remote`。应用提供 `remote.groups` 的起始行、行数、子分组和聚合结果，以及 `remote.summary`；服务请求和取消可使用现有 Grid 请求代理，由应用传入当前结果。表格不会遍历生成源来猜测分组。普通数组的远程范围使用当前页数据索引，生成源使用绝对源索引；兄弟范围必须有序、不重叠，并位于父范围内，未覆盖行保留普通显示。
+
+此例按公式提供 100 万行、10 万列的分组元数据。展开末批会先更新分组状态，再定位末端；收起的行没有可见数据地址，程序定位前应展开所在组。分组标题、小计和数据共用虚拟窗口，索引空间随组数增长；本地分组和聚合则同步处理已提供行，计算及存储成本随行数和分组层级增长，大规模全局统计应交给服务端。
+
+<template #example><table-zh-grouping-source /></template>
+
+<template #template>
+
+@[code{52-78}](../../.vuepress/components/table-zh/grouping-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-50}](../../.vuepress/components/table-zh/grouping-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{80-95}](../../.vuepress/components/table-zh/grouping-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

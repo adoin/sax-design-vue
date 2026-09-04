@@ -9,6 +9,7 @@ interface CoordinateOptions {
   rows: Ref<TableFlatRow[]>
   count: () => number
   offset: () => number
+  sourceViewIndex?: (index: number) => number
   rowAt: (index: number) => TableFlatRow | undefined
   columns: Ref<TableColumn[]>
   manager: ReturnType<typeof useTableColumnManager>
@@ -108,7 +109,9 @@ export function useTableKeyboardCoordinates(
       const config =
         typeof props.keyboardConfig === 'object' ? props.keyboardConfig : {}
       if (config.rowIndexOf)
-        row = config.rowIndexOf(address.rowKey) - options.offset()
+        row = options.sourceViewIndex
+          ? options.sourceViewIndex(config.rowIndexOf(address.rowKey))
+          : config.rowIndexOf(address.rowKey) - options.offset()
       else if (hint?.address.rowKey === address.rowKey) row = hint.row
     } else row = rowsByKey.value.get(address.rowKey) ?? -1
     const column = props.virtualSource

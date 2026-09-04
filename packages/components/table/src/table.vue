@@ -208,8 +208,8 @@
               : 'unpaged'
           "
           ref="virtualListRef"
-          :items="virtualSourceActive ? [] : flatRows"
-          :count="effectiveRowCount"
+          :items="groups.enabled.value || virtualSourceActive ? [] : flatRows"
+          :count="bodyDisplayCount"
           :item-at="virtualItemAt"
           :item-key-at="virtualRowKeyAt"
           :height="virtualOptions.height"
@@ -217,80 +217,30 @@
           :overscan="virtualOptions.overscan"
           :dynamic="dynamicRows"
           :retain-max-size="horizontalVirtualMode && dynamicRows"
-          :item-key="flatRowKey"
+          :item-key="groups.enabled.value ? undefined : flatRowKey"
           :class="ns.e('virtual-body')"
           :style="virtualBodyStyle"
           role="rowgroup"
           @scroll="handleVirtualScroll"
         >
           <template #default="{ item, index }">
-            <TableRowBlock
-              :flat-row="item as TableFlatRow"
-              :controller="details"
-              :column-count="resolvedColumnCount"
-              :viewport-width="columnVirtualization.viewportWidth.value"
-              :panel-id="detailPanelId((item as TableFlatRow).key)"
-              :aria-row-index="detailAriaIndex(index)"
-              :disabled="loading"
-              @shrink="resetDetailMeasurements"
-            >
-              <template #default="{ detail }">
-                <TableBodyRow
-                  :detail="detail"
-                  :flat-row="item as TableFlatRow"
-                  :display-index="index"
-                />
-              </template>
-              <template #detail="params"
-                ><slot name="detail" v-bind="params"
-              /></template>
-              <template #loading="params"
-                ><slot name="detail-loading" v-bind="params"
-              /></template>
-              <template #error="params"
-                ><slot name="detail-error" v-bind="params"
-              /></template>
-            </TableRowBlock>
+            <TableBodyBlock :item="normalizeBodyItem(item, index)" />
           </template>
         </SVirtualList>
 
         <div
           v-else-if="
-            !virtualSourceActive && flatRows.length && resolvedColumnCount
+            !virtualSourceActive && bodyDisplayCount && resolvedColumnCount
           "
           ref="dataBodyRef"
           :class="ns.e('data-body')"
           role="rowgroup"
         >
-          <TableRowBlock
-            v-for="(flatRow, index) in flatRows"
-            :key="`${typeof flatRow.key}:${String(flatRow.key)}`"
-            :flat-row="flatRow"
-            :controller="details"
-            :column-count="resolvedColumnCount"
-            :viewport-width="columnVirtualization.viewportWidth.value"
-            :panel-id="detailPanelId(flatRow.key)"
-            :aria-row-index="detailAriaIndex(index)"
-            :disabled="loading"
-            @shrink="resetDetailMeasurements"
-          >
-            <template #default="{ detail }">
-              <TableBodyRow
-                :detail="detail"
-                :flat-row="flatRow"
-                :display-index="index"
-              />
-            </template>
-            <template #detail="params"
-              ><slot name="detail" v-bind="params"
-            /></template>
-            <template #loading="params"
-              ><slot name="detail-loading" v-bind="params"
-            /></template>
-            <template #error="params"
-              ><slot name="detail-error" v-bind="params"
-            /></template>
-          </TableRowBlock>
+          <TableBodyBlock
+            v-for="index in bodyDisplayCount"
+            :key="virtualRowKeyAt(index - 1)"
+            :item="bodyItemAt(index - 1)"
+          />
         </div>
 
         <div v-else :class="ns.e('data-empty')" role="row">
@@ -298,6 +248,27 @@
             {{ emptyText || t('vs.table.emptyText') }}
           </slot>
         </div>
+
+        <TableGroupBand
+          v-if="showGroupSummary && resolvedColumnCount"
+          kind="summary"
+          :summary="groups.state.value.summary"
+          :disabled="loading"
+          :column-count="resolvedColumnCount"
+          :viewport-width="columnVirtualization.viewportWidth.value"
+          :entries="renderedColumnEntries"
+          :row-index="
+            footerAriaOffset == null ? undefined : footerAriaOffset - 1
+          "
+          :fixed-style="fixedBandStyle"
+          :style="virtualBandStyle"
+          :renderers="renderers"
+          :retain-heights="horizontalVirtualMode"
+        >
+          <template v-if="$slots['group-summary']" #summary="params"
+            ><slot name="group-summary" v-bind="params"
+          /></template>
+        </TableGroupBand>
 
         <TableFooterRows
           v-if="footerData.length && resolvedColumnCount"
@@ -464,7 +435,9 @@ import TableRendererOutlet from './renderer-outlet'
 import TableHeaderCell from './table-header-cell.vue'
 import TableHeaderRows from './table-header-rows.vue'
 import TableFooterRows from './table-footer-rows.vue'
-import TableRowBlock from './table-row-block.vue'
+import TableGroupBand from './table-group-band.vue'
+import { createTableBodyBlock } from './table-body-block'
+import { useTableGroups } from './composables/use-table-groups'
 import { useTableEdit } from './composables/use-table-edit'
 import { useTableChanges } from './composables/use-table-changes'
 import { useTableEditLifecycle } from './composables/use-table-edit-lifecycle'
@@ -486,6 +459,7 @@ import { useTablePagination } from './composables/use-table-pagination'
 import { useTableColumnResize } from './composables/use-table-column-resize'
 import { useTableColumnManager } from './composables/use-table-column-manager'
 import TableColumnManager from './table-column-manager.vue'
+import type { TableBodyItem } from './table-body-block'
 import type { TableMergeSurface } from './table-merge-layer.vue'
 import type { ContextMenuInstance } from '@vuesax-alpha/components/context-menu'
 import type { VirtualListInstance } from '@vuesax-alpha/components/virtual-list'
@@ -619,11 +593,50 @@ const tree = useTableTree({
 
 const { setExpandedKeys, toggleRowExpand } = tree
 const pagination = useTablePagination(props, emit, tree.flatRows)
-const flatRows = pagination.rows
+const groups = useTableGroups({
+  config: () => props.groupConfig,
+  rows: () => pagination.rows.value,
+  filteredRows: () => tree.flatRows.value,
+  sourceBounds: () =>
+    props.virtualSource
+      ? {
+          count: pagination.sourceCount.value,
+          offset: pagination.sourceOffset.value,
+        }
+      : undefined,
+  expandedKeys: () => props.groupExpandedKeys,
+  disabled: () => props.loading,
+  onExpandedKeysChange: (keys) => emit('update:groupExpandedKeys', keys),
+  onExpand: (params) => emit('groupExpand', params),
+  onError: (error) => emit('groupError', error),
+})
+const flatRows = computed(() => {
+  if (
+    !groups.enabled.value ||
+    !groups.state.value.groups.length ||
+    props.virtualSource
+  )
+    return pagination.rows.value
+  const layout = groups.layout.value
+  return Array.from(
+    { length: layout.dataCount },
+    (_, index) => groups.state.value.rows[layout.rowIndexAt(index)!],
+  )
+})
+const bodyDisplayCount = computed(() => groups.layout.value.count)
+const showGroupSummary = computed(
+  () =>
+    groups.enabled.value &&
+    groups.config.value.summary &&
+    groups.state.value.error === undefined,
+)
+const sourceIndexAt = (index: number) =>
+  groups.layout.value.rowIndexAt(index) ?? -1
+const sourceViewIndex = (index: number) =>
+  groups.layout.value.dataIndexOf(index) ?? -1
 const getRowIndex = (rowOrKey: TableRow | TableRowKey) => {
   const index = tree.getRowIndex(rowOrKey)
   if (index < 0) return -1
-  if (!pagination.enabled.value || pagination.remote.value) return index
   return flatRows.value.indexOf(tree.flatRows.value[index])
 }
 watch([sorts, filtersState], pagination.reset)
@@ -664,7 +677,7 @@ const {
 const treeIndent = computed(() => Math.max(0, props.treeConfig?.indent ?? 20))
 const virtualSourceActive = computed(() => Boolean(props.virtualSource))
 const effectiveRowCount = computed(() =>
-  props.virtualSource ? pagination.sourceCount.value : flatRows.value.length,
+  props.virtualSource ? groups.layout.value.dataCount : flatRows.value.length,
 )
 const resolvedColumnCount = computed(() =>
   props.virtualSource
@@ -756,7 +769,13 @@ const detailRowOffset = (index: number) => {
     if (indices[middle] < index) low = middle + 1
     else high = middle
   }
-  return (props.showHeader ? headerDepth.value : 0) + 1 + low
+  return (
+    (props.showHeader ? headerDepth.value : 0) +
+    1 +
+    low +
+    (groups.layout.value.renderIndexAt(index) ?? index) -
+    index
+  )
 }
 const detailAriaIndex = (index: number) => {
   const offset = detailRowOffset(index)
@@ -765,8 +784,9 @@ const detailAriaIndex = (index: number) => {
 const footerAriaOffset = computed(() =>
   props.virtualSource && details.enabled.value
     ? undefined
-    : effectiveRowCount.value +
+    : bodyDisplayCount.value +
       detailIndices.value.length +
+      (showGroupSummary.value ? 1 : 0) +
       (props.showHeader ? headerDepth.value : 0) +
       1,
 )
@@ -825,17 +845,41 @@ const reloadRowDetail = async (rowOrIndex: TableRow | number) => {
   if (row) await details.ensure(row, true)
 }
 const setDetailExpandedKeys = details.setKeys
-const virtualItemAt = (index: number): TableFlatRow => {
-  if (!props.virtualSource) return flatRows.value[index]
-  const sourceIndex = index + pagination.sourceOffset.value
-  return createSourceFlatRow(sourceIndex)
+const bodyItemAt = (index: number): TableBodyItem => {
+  const item = groups.layout.value.itemAt(index)!
+  if (item.kind !== 'data') return { ...item, renderIndex: index }
+  return {
+    kind: 'data',
+    flatRow: props.virtualSource
+      ? createSourceFlatRow(item.rowIndex)
+      : flatRows.value[item.dataIndex],
+    index: item.dataIndex,
+    renderIndex: index,
+  }
 }
+const virtualItemAt = (index: number) =>
+  groups.enabled.value
+    ? bodyItemAt(index)
+    : props.virtualSource
+      ? createSourceFlatRow(index + pagination.sourceOffset.value)
+      : flatRows.value[index]
+const normalizeBodyItem = (item: unknown, index: number): TableBodyItem =>
+  groups.enabled.value
+    ? (item as TableBodyItem)
+    : { kind: 'data', flatRow: item as TableFlatRow, index, renderIndex: index }
+const flatRowKey = (item: unknown) => (item as TableFlatRow).key
 
-const virtualRowKeyAt = (index: number): TableRowKey =>
-  props.virtualSource?.rowKey?.(index + pagination.sourceOffset.value) ??
-  (props.virtualSource
-    ? index + pagination.sourceOffset.value
-    : (flatRows.value[index]?.key ?? index))
+const virtualRowKeyAt = (index: number): TableRowKey => {
+  const item = groups.layout.value.itemAt(index)
+  if (!item) return `removed:${index}`
+  if (item.kind !== 'data') return `${item.kind}:${item.group.key}`
+  const key =
+    props.virtualSource?.rowKey?.(item.rowIndex) ??
+    (props.virtualSource
+      ? item.rowIndex
+      : (flatRows.value[item.dataIndex]?.key ?? index))
+  return groups.enabled.value ? `data:${typeof key}:${String(key)}` : key
+}
 
 const virtualOptions = computed<Required<TableVirtualConfig>>(() => {
   const config =
@@ -861,6 +905,7 @@ const dynamicRows = computed(
   () =>
     virtualOptions.value.dynamic ||
     details.enabled.value ||
+    groups.enabled.value ||
     editing.enabled.value ||
     validation.hasErrors.value,
 )
@@ -868,7 +913,7 @@ const dynamicRows = computed(
 const usesBodyScroll = computed(
   () =>
     virtualEnabled.value &&
-    effectiveRowCount.value > 0 &&
+    bodyDisplayCount.value > 0 &&
     resolvedColumnCount.value > 0,
 )
 
@@ -1259,7 +1304,7 @@ watch(
   () => {
     columnScrollRef.value = virtualEnabled.value
       ? (virtualListRef.value?.getScrollElement() ??
-        (!effectiveRowCount.value || !resolvedColumnCount.value
+        (!bodyDisplayCount.value || !resolvedColumnCount.value
           ? tableScrollRef.value
           : undefined))
       : tableScrollRef.value
@@ -1267,23 +1312,25 @@ watch(
   { immediate: true, flush: 'post' },
 )
 
-const flatRowKey = (item: unknown) => (item as TableFlatRow).key
-
 const scrollToRow = (
   rowOrIndex: TableRow | TableRowKey | number,
   align: 'auto' | 'start' | 'center' | 'end' = 'auto',
 ) => {
   let index = -1
   if (props.virtualSource && typeof rowOrIndex === 'number')
-    index = rowOrIndex - pagination.sourceOffset.value
+    index = sourceViewIndex(rowOrIndex)
   else if (!props.virtualSource) index = getRowIndex(rowOrIndex)
   if (index < 0 && typeof rowOrIndex === 'number' && !props.virtualSource)
     index = rowOrIndex
   if (index < 0 || index >= effectiveRowCount.value) return
 
-  if (virtualEnabled.value) virtualListRef.value?.scrollToIndex(index, align)
+  const renderIndex = groups.layout.value.renderIndexAt(index) ?? index
+  if (virtualEnabled.value)
+    virtualListRef.value?.scrollToIndex(renderIndex, align)
   else {
-    const row = dataBodyRef.value?.children.item(index) as HTMLElement | null
+    const row = dataBodyRef.value?.children.item(
+      renderIndex,
+    ) as HTMLElement | null
     row?.scrollIntoView({ block: align === 'auto' ? 'nearest' : align })
   }
 }
@@ -1379,6 +1426,12 @@ const startEdit = async (
 ): Promise<boolean> => {
   const flat = resolveDetailRow(rowOrIndex)
   if (!flat) return false
+  if (
+    props.virtualSource &&
+    groups.enabled.value &&
+    sourceViewIndex(flat.index) < 0
+  )
+    return false
   let index = typeof columnOrIndex === 'number' ? columnOrIndex : -1
   let column: TableColumn | undefined
   if (props.virtualSource) {
@@ -1503,7 +1556,7 @@ const dragRowAt = (index: number) =>
   index < 0 || index >= effectiveRowCount.value
     ? undefined
     : props.virtualSource
-      ? createSourceFlatRow(index + pagination.sourceOffset.value)
+      ? createSourceFlatRow(sourceIndexAt(index))
       : flatRows.value[index]
 const rowReorder = useTableRowReorder(props, emit, {
   rowAt: dragRowAt,
@@ -1560,7 +1613,7 @@ const rowDrag = useTableRowDrag(rowReorder, emit, {
   },
   focus: async (key, generatedIndex) => {
     const index = props.virtualSource
-      ? (generatedIndex ?? -1) - pagination.sourceOffset.value
+      ? sourceViewIndex(generatedIndex ?? -1)
       : flatRows.value.findIndex((row) => row.key === key)
     const row = dragRowAt(index)
     if (!row) return
@@ -1578,6 +1631,7 @@ const keyboardCoordinates = useTableKeyboardCoordinates(props, {
   rows: flatRows,
   count: () => effectiveRowCount.value,
   offset: () => pagination.sourceOffset.value,
+  sourceViewIndex,
   rowAt: dragRowAt,
   columns: resolvedColumns,
   manager: columnManager,
@@ -1613,6 +1667,7 @@ const mergeGeometry = useTableMergeGeometry({
       ? (virtualListRef.value?.getScrollElement() ?? undefined)
       : tableScrollRef.value,
   rowOffset: () => mergeRowOffset.value,
+  rowIndex: (index) => (props.virtualSource ? sourceIndexAt(index) : index),
 })
 const merges = useTableMergeRegions({
   config: () => props.mergeConfig,
@@ -1638,6 +1693,15 @@ const mergeCoordinates = useTableMergeCoordinates({
   rowAt: mergeFlatRow,
   offset: () => mergeRowOffset.value,
   count: () => effectiveRowCount.value,
+  rowSourceIndex: (index) =>
+    props.virtualSource ? sourceIndexAt(index) : index,
+  rowViewIndex: (index, backwards) =>
+    props.virtualSource
+      ? groups.layout.value.dataIndexNear(
+          index,
+          backwards ? 'backward' : 'forward',
+        )
+      : index,
 })
 const mergeHeights = useTableMergeHeights({
   root: () => dataViewRef.value,
@@ -1657,7 +1721,7 @@ watch(
     if (!active) return undefined
     const coordinate = props.virtualSource
       ? {
-          row: active.rowIndex - mergeRowOffset.value,
+          row: sourceViewIndex(active.rowIndex),
           position: keyboardCoordinates.positionOf(active.columnIndex),
         }
       : keyboardCoordinates.resolve({
@@ -1668,7 +1732,7 @@ watch(
       session: active.id,
       region: coordinate
         ? bodyMergeAt(
-            coordinate.row + mergeRowOffset.value,
+            props.virtualSource ? active.rowIndex : coordinate.row,
             coordinate.position,
           )?.key
         : undefined,
@@ -1725,7 +1789,12 @@ const keyboard = useTableKeyboard(props, emit, {
     const fragment = cell.closest<HTMLElement>('[data-merge-primary]')
     return mergeCoordinates.at(
       fragment
-        ? Number(fragment.dataset.mergeRowStart) - mergeRowOffset.value
+        ? props.virtualSource
+          ? (groups.layout.value.dataIndexNear(
+              Number(fragment.dataset.mergeRowStart),
+              'forward',
+            ) ?? -1)
+          : Number(fragment.dataset.mergeRowStart)
         : Number(
             cell
               .closest('[data-table-row-index]')
@@ -1764,6 +1833,7 @@ const keyboard = useTableKeyboard(props, emit, {
   dragActive: () => Boolean(rowDrag.session.value),
   context: [
     () => (props.virtualSource ? undefined : flatRows.value),
+    groups.layout,
     merges.body,
     () => props.virtualSource?.row,
     () => props.virtualSource?.rowCount,
@@ -1805,8 +1875,11 @@ const TableBodyRow = createTableBodyRow({
     striped: props.striped,
     rowClass: props.rowClass,
     mergeAt: merges.enabled.value ? bodyMergeAt : undefined,
-    mergeRowOffset: mergeRowOffset.value,
-    minimumHeight: mergeHeights.minimum('body', index + mergeRowOffset.value),
+    mergeRowOffset: props.virtualSource ? sourceIndexAt(index) - index : 0,
+    minimumHeight: mergeHeights.minimum(
+      'body',
+      props.virtualSource ? sourceIndexAt(index) : index,
+    ),
     onCellContextMenu: (
       params: TableEditContext,
       event: MouseEvent | KeyboardEvent,
@@ -1817,6 +1890,59 @@ const TableBodyRow = createTableBodyRow({
     onToggleExpand: () => toggleRowExpand(flatRow.row),
   }),
 })
+const groupBandAriaIndex = (renderIndex: number) => {
+  if (props.virtualSource && details.enabled.value) return undefined
+  let previousDetails = 0
+  for (const index of detailIndices.value) {
+    if ((groups.layout.value.renderIndexAt(index) ?? index) >= renderIndex)
+      break
+    previousDetails++
+  }
+  return (
+    (props.showHeader ? headerDepth.value : 0) +
+    1 +
+    renderIndex +
+    previousDetails
+  )
+}
+const TableBodyBlock = createTableBodyBlock({
+  row: TableBodyRow,
+  slots: tableSlots,
+  detail: (flatRow, index) => ({
+    flatRow,
+    controller: details,
+    columnCount: resolvedColumnCount.value,
+    viewportWidth: columnVirtualization.viewportWidth.value,
+    panelId: detailPanelId(flatRow.key),
+    ariaRowIndex: detailAriaIndex(index),
+    disabled: props.loading,
+    onShrink: resetDetailMeasurements,
+  }),
+  group: (item) => ({
+    kind: item.kind === 'subtotal' ? 'subtotal' : 'group',
+    group: item.kind === 'data' ? undefined : item.group,
+    expanded: item.kind === 'data' ? undefined : item.expanded,
+    disabled: props.loading,
+    columnCount: resolvedColumnCount.value,
+    viewportWidth: columnVirtualization.viewportWidth.value,
+    rowIndex: groupBandAriaIndex(item.renderIndex),
+    entries: renderedColumnEntries.value,
+    fixedStyle: fixedBandStyle,
+    style: virtualBandStyle.value,
+    renderers: props.renderers,
+    retainHeights: horizontalVirtualMode.value,
+    onToggle: (key, value) => groups.toggle(key, value),
+  }),
+})
+watch(groups.layout, () => {
+  if (groups.enabled.value) measure()
+})
+watch(
+  () => JSON.stringify([...groups.keys.value]),
+  () => {
+    if (groups.enabled.value) editing.contextChanged('view')
+  },
+)
 const TableMergedCell = ({ surface }: { surface: TableMergeSurface }) => {
   const column = mergeColumn(surface.region.col)
   if (!column) return null
@@ -1835,7 +1961,10 @@ const TableMergedCell = ({ surface }: { surface: TableMergeSurface }) => {
     if (!flatRow) return null
     return h(TableBodyRow, {
       flatRow,
-      displayIndex: Math.max(0, surface.region.row - mergeRowOffset.value),
+      displayIndex: props.virtualSource
+        ? (groups.layout.value.dataIndexNear(surface.region.row, 'forward') ??
+          0)
+        : surface.region.row,
       entries,
       mergeOwner: surface.region,
       detail: {
@@ -1944,13 +2073,17 @@ const handleTableScrollCapture = () => {
 }
 const setActiveCell = (rowIndex: number, columnIndex: number) => {
   const target = mergeCoordinates.at(
-    props.virtualSource ? rowIndex - pagination.sourceOffset.value : rowIndex,
+    props.virtualSource ? sourceViewIndex(rowIndex) : rowIndex,
     keyboardCoordinates.positionOf(columnIndex),
   )
   return target ? keyboard.select(target) : Promise.resolve(false)
 }
 
 defineExpose({
+  setGroupExpandedKeys: groups.setExpandedKeys,
+  toggleGroup: groups.toggle,
+  getGroups: () => groups.state.value.groups,
+  getGroupSummary: () => groups.state.value.summary,
   closeContextMenu: contextMenu.close,
   setActiveCell,
   clearActiveCell: keyboard.clear,

@@ -497,6 +497,74 @@ describe('table merge integration', () => {
     expect(data.map((row) => row.id)).toEqual([0, 1, 2, 3])
   })
 
+  it('keeps a generated merge continuation interactive when its owner group is collapsed', async () => {
+    const wrapper = setup({
+      data: [],
+      columns: [],
+      virtualSource: {
+        rowCount: 8,
+        columnCount: 3,
+        row: (index: number) => ({ id: index, name: `Generated ${index}` }),
+        rowKey: (index: number) => index,
+        column: () => ({ field: 'name', width: 120, editor: true }),
+        columnWidth: () => 120,
+      },
+      groupConfig: {
+        mode: 'remote',
+        subtotal: true,
+        remote: {
+          groups: [
+            {
+              key: 'first',
+              field: 'team',
+              value: 'First',
+              rowStart: 0,
+              rowCount: 2,
+            },
+            {
+              key: 'hidden',
+              field: 'team',
+              value: 'Hidden',
+              rowStart: 2,
+              rowCount: 2,
+            },
+            {
+              key: 'last',
+              field: 'team',
+              value: 'Last',
+              rowStart: 4,
+              rowCount: 4,
+            },
+          ],
+        },
+      },
+      groupExpandedKeys: ['first', 'last'],
+      virtualConfig: { height: 200, dynamic: true },
+      keyboardConfig: { rowIndexOf: Number },
+      editConfig: true,
+      mergeConfig: { body: [{ row: 2, col: 0, rowspan: 4, colspan: 2 }] },
+    })
+    await settle()
+    expect(await wrapper.vm.setActiveCell(4, 1)).toBe(true)
+    await settle()
+    expect(wrapper.vm.getActiveCell()).toEqual({ rowKey: 2, columnKey: '0' })
+    const continuation = wrapper.get('[data-merge-primary] [role="cell"]')
+    await continuation.trigger('keydown', { key: 'ArrowDown' })
+    await settle()
+    expect(wrapper.vm.getActiveCell()).toEqual({ rowKey: 6, columnKey: '0' })
+    expect(await wrapper.vm.setActiveCell(4, 1)).toBe(true)
+    await settle()
+    await wrapper
+      .get('[data-merge-primary] [role="cell"]')
+      .trigger('keydown', { key: 'F2' })
+    await settle()
+    expect(wrapper.get('[data-merge-primary] input').element).toHaveProperty(
+      'value',
+      'Generated 2',
+    )
+    expect(wrapper.vm.getEditRecord()?.rowKey).toBe(2)
+  })
+
   it('keeps a merged tree expander operable as lazy children enter and leave the virtual window', async () => {
     const parent = { id: 10, name: 'Parent', lazy: true }
     const load = vi.fn(async () => [
