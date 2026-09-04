@@ -47,11 +47,26 @@ const fixedOptions = computed(() => [
 ])
 const itemKeyAt = (position: number) =>
   props.manager.keyAt(props.manager.layout.value.sourceAt(position))
+let restoreTriggerFocus = false
 const close = () => {
+  restoreTriggerFocus = true
   open.value = false
-  trigger.value?.$el.focus()
+}
+const afterHide = () => {
+  // The popper may retain its trapped content until the leave transition ends.
+  if (restoreTriggerFocus && !open.value && !props.disabled)
+    trigger.value?.$el.focus()
+  restoreTriggerFocus = false
 }
 const focusPanel = () => panel.value?.focus()
+const allowOutsidePointerFocus = (event: CustomEvent) => {
+  // Let the shared popper close on outside clicks without pulling focus back.
+  if (
+    event.detail?.focusReason === 'pointer' &&
+    !panel.value?.contains(panel.value.ownerDocument.activeElement)
+  )
+    event.preventDefault()
+}
 const page = async (event: KeyboardEvent, direction: -1 | 1) => {
   const row = (event.target as HTMLElement).closest<HTMLElement>(
     '[data-column-key]',
@@ -112,6 +127,7 @@ watch(
         ns.is('square', shape === 'square'),
       ]"
       @show="focusPanel"
+      @hide="afterHide"
     >
       <SButton
         ref="trigger"
@@ -125,7 +141,13 @@ watch(
         {{ t('vs.table.columnSettings') }}
       </SButton>
       <template #content>
-        <SFocusTrap :trapped="open" :loop="true" :focus-trap-el="panel">
+        <SFocusTrap
+          :trapped="open"
+          :loop="true"
+          :focus-trap-el="panel"
+          @focus-after-released.prevent
+          @focusout-prevented="allowOutsidePointerFocus"
+        >
           <div
             ref="panel"
             tabindex="-1"

@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Table from '../src/table.vue'
 import TableColumn from '../src/table-column.vue'
 import ColumnManager from '../src/table-column-manager.vue'
+import { SPopper } from '../../popper'
 import { createColumnLayout } from '../src/composables/column-layout'
 import type { TableColumnState } from '../src/table'
 
@@ -103,6 +104,8 @@ describe('column management', () => {
         new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
       )
     await nextTick()
+    // Vue Test Utils stubs transitions; complete the shared popper's leave phase.
+    wrapper.getComponent(ColumnManager).getComponent(SPopper).vm.$emit('hide')
     expect(document.activeElement).toBe(
       wrapper.get('.s-table__column-manager button').element,
     )

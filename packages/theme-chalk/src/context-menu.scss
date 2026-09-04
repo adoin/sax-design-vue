@@ -46,6 +46,10 @@
       var(--sax-motion-easing-standard),
     color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 }
+.s-context-menu__panel.is-square {
+  border-radius: 0;
+  .s-context-menu__item { border-radius: 0; }
+}
 .s-context-menu__item:hover:not(:disabled),
 .s-context-menu__item:focus-visible:not(:disabled) {
   background: getColor(primary, 0.1);

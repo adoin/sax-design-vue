@@ -20,6 +20,10 @@
 
     &.is-square {
       border-radius: 0;
+
+      .#{$namespace}-table__column-setting {
+        border-radius: 0;
+      }
     }
 
     [role='dialog'] {
@@ -443,6 +447,7 @@
     margin-top: 8px;
     padding: 14px;
     border-radius: var(--sax-radius);
+    &.is-square { border-radius: 0; }
     background: color-mix(in srgb, #{getColor(primary)} 4%, #{getColor(background)});
     box-shadow: 0 3px 9px -6px #{getColor(primary, 0.25)};
     font-size: 0.85rem;

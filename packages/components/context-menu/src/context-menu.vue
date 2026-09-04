@@ -3,7 +3,7 @@ import { nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SFocusTrap } from '@vuesax-alpha/components/focus-trap'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { contextMenuEmits, contextMenuProps } from './context-menu'
 import type { ContextMenuItem } from './context-menu'
 import type { PopperInstance } from '@vuesax-alpha/components/popper'
@@ -12,6 +12,7 @@ defineOptions({ name: 'SContextMenu' })
 const props = defineProps(contextMenuProps)
 const emit = defineEmits(contextMenuEmits)
 const ns = useNamespace('context-menu')
+const shape = useShape()
 const triggerRef = ref<HTMLElement>()
 const menuRef = ref<HTMLElement>()
 const popper = ref<PopperInstance>()
@@ -202,7 +203,7 @@ defineExpose({ show, close })
       >
         <div
           ref="menuRef"
-          :class="ns.e('panel')"
+          :class="[ns.e('panel'), ns.is('square', shape === 'square')]"
           :style="{ minWidth: `min(${minWidth}px, calc(100vw - 16px))` }"
           role="menu"
           tabindex="-1"

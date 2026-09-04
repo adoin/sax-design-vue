@@ -4,13 +4,14 @@ import { SButton } from '@vuesax-alpha/components/button'
 import { SInput } from '@vuesax-alpha/components/input'
 import { SCheckbox } from '@vuesax-alpha/components/checkbox'
 import { SSelect } from '@vuesax-alpha/components/select'
-import { useId, useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { useId, useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import type { ButtonInstance } from '@vuesax-alpha/components/button'
 import type { TableFindController } from './composables/use-table-find'
 import type { TableFindScope } from './table-find'
 
 const props = defineProps<{ finder: TableFindController }>()
 const ns = useNamespace('table')
+const shape = useShape()
 const { t } = useLocale()
 const id = useId()
 const trigger = shallowRef<ButtonInstance>()
@@ -184,7 +185,7 @@ defineExpose({ open, close, keydown })
       v-if="opened"
       :id="id"
       ref="panel"
-      :class="ns.e('find-panel')"
+      :class="[ns.e('find-panel'), ns.is('square', shape === 'square')]"
       role="search"
       :aria-label="t('vs.table.findTitle')"
       :aria-busy="busy"
