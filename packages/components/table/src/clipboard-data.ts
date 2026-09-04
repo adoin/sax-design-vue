@@ -1,5 +1,9 @@
 import { cloneTableDataValue, equalTableDataValue } from './change-snapshot'
-import { projectTableDataPatches, readTableDataField } from './change-utils'
+import { readTableDataField } from './change-utils'
+import {
+  TableCellWriteConflictError,
+  createTableCellWritePlan,
+} from './cell-write-plan'
 import { editableField } from './edit-utils'
 import {
   TableClipboardLimitError,
@@ -8,12 +12,12 @@ import {
   tableClipboardLimits,
 } from './clipboard-text'
 import { createTableClipboardWork } from './clipboard-work'
+import type { TableCellWriteDraft } from './cell-write-plan'
 import type { TableClipboardLimits } from './clipboard-text'
 import type { TableClipboardWork } from './clipboard-work'
 import type { TableCellRangeBounds } from './table-cell-range'
 import type { TableEditContext } from './table-edit'
-import type { TableRow, TableRowKey } from './table'
-import type { TableRowUpdate } from './change-batch'
+import type { TableRow } from './table'
 
 export interface TableClipboardCell {
   context: TableEditContext
@@ -158,13 +162,7 @@ export async function readTableClipboardRegion(
   }
 }
 
-export interface TableClipboardDraft {
-  rowKey: TableRowKey
-  row: TableRow
-  draftRow: TableRow
-  cells: Array<{ context: TableEditContext; value: unknown }>
-  update: TableRowUpdate
-}
+export type TableClipboardDraft = TableCellWriteDraft
 
 /** Plan only: all read-only checks and conversions finish before validation or mutation. */
 export async function planTableClipboardPaste(
@@ -209,9 +207,8 @@ export async function planTableClipboardPaste(
       cloneTableDataValue(index < row.length ? row[index] : ''),
     ),
   )
-  const drafts = new Map<TableRowKey, TableClipboardDraft>()
+  const plan = createTableCellWritePlan()
   const seen = new Map<string, unknown>()
-  const fields = new Map<string, unknown>()
   let skipped = 0
   for (let row = bounds.rowStart; row < bounds.rowEnd; row++) {
     for (let column = bounds.colStart; column < bounds.colEnd; column++) {
@@ -250,47 +247,21 @@ export async function planTableClipboardPaste(
           ? options.parse(cloneTableDataValue(value), context)
           : value,
       )
-      let draft = drafts.get(context.rowKey)
-      if (!draft) {
-        draft = {
-          rowKey: context.rowKey,
-          row: context.row,
-          draftRow: context.row,
-          cells: [],
-          update: { rowKey: context.rowKey, patches: [], expected: [] },
-        }
-        drafts.set(context.rowKey, draft)
+      try {
+        plan.add(context, next)
+      } catch (error) {
+        if (error instanceof TableCellWriteConflictError)
+          throw new TableClipboardShapeError(error.message)
+        throw error
       }
-      const fieldKey = JSON.stringify([
-        typeof context.rowKey,
-        context.rowKey,
-        field,
-      ])
-      if (fields.has(fieldKey)) {
-        if (!equalTableDataValue(fields.get(fieldKey), next))
-          throw new TableClipboardShapeError(
-            'Different clipboard values target the same row field',
-          )
-        // Distinct columns may impose different rules on the same field.
-        draft.cells.push({ context, value: next })
-        continue
-      }
-      fields.set(fieldKey, next)
-      const before = readTableDataField(context.row, field)
-      draft.update.expected!.push({
-        field,
-        ...before,
-        value: cloneTableDataValue(before.value),
-      })
-      draft.update.patches.push({ field, value: next, exists: true })
-      draft.cells.push({ context, value: next })
     }
   }
-  for (const draft of drafts.values()) {
+  const drafts: TableClipboardDraft[] = []
+  for (const draft of plan.drafts()) {
     const waiting = work.checkpoint()
     if (waiting) await waiting
-    draft.draftRow = projectTableDataPatches(draft.row, draft.update.patches)
+    drafts.push(draft)
   }
   work.check()
-  return { bounds, drafts: [...drafts.values()], skipped }
+  return { bounds, drafts, skipped }
 }
