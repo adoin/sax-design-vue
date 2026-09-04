@@ -1,6 +1,16 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: column-manager-config
+    type: Boolean | TableColumnManagerConfig
+    description: 开启列设置面板，可通过 storageKey 显式启用本地持久化。
+    default: false
+    usage: '#列设置'
+  - name: column-state
+    type: TableColumnState[]
+    description: "通过 v-model:column-state 控制列显隐、顺序及固定位置。"
+    default: null
+    usage: '#列设置'
   - name: resize-config
     type: Boolean | TableResizeConfig
     description: "显式开启列宽调整，支持全局最小宽度和键盘步长。"
@@ -26,9 +36,9 @@ PROPS:
     description: 稳定的行键字段或取值函数。
     default: id
     usage: '#grid-式配置'
-  - name: row
+  - name: highlight
     type: TableRow | TableRow[] | null
-    description: 当前选中的行或行数组。
+    description: 当前高亮的行或行数组。
     default: null
     usage: '#行选择'
   - name: multiple
@@ -218,6 +228,21 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: update:columnState
+    type: '(state: TableColumnState[]) => void'
+    description: 请求更新受控列设置。
+    default: null
+    usage: '#列设置'
+  - name: columnStateChange
+    type: '(state: TableColumnState[]) => void'
+    description: 用户更改或重置列设置时触发，携带完整设置数组。
+    default: null
+    usage: '#列设置'
+  - name: columnStorageError
+    type: "(event: { operation: 'read' | 'write'; error: unknown }) => void"
+    description: 读取或写入本地列设置失败时触发，表格仍可正常操作。
+    default: null
+    usage: '#记住列设置'
   - name: update:columnWidths
     type: '(widths: TableColumnWidths) => void'
     description: "提交列宽后返回新的完整宽度记录。"
@@ -228,7 +253,7 @@ EVENTS:
     description: "拖动结束或键盘调整后触发，含列、索引、新旧宽度及输入来源。"
     default: null
     usage: '#拖动调整列宽'
-  - name: update:row
+  - name: update:highlight
     type: TableRow | TableRow[] | null
     description: 行选择变化时触发。
   - name: update:expandedKeys
@@ -417,6 +442,64 @@ EXPOSES:
 
 <card>
 
+## 列设置
+
+开启 `column-manager-config`，用户可以显示或隐藏列、用上下按钮调整顺序、设置左右固定，以及恢复默认。固定列始终位于对应边缘，顺序调整决定同一区域内的排列。隐藏列不会清除已有的排序、筛选或行选择。
+
+`v-model:column-state` 接收 `TableColumnState[]`；不传时由组件管理。每项用 `key` 标识列，依次取列的 `key`、`field` 或 `@索引`。建议为需要保存设置的列提供稳定且唯一的键。使用 `virtualSource` 时以原始列索引字符串标识。
+
+`hidden` 控制隐藏，`fixed` 为 `false`、`left` 或 `right`，`order` 是包含隐藏列的从 0 开始的位置。未指定的设置沿用列定义；未知列键会被忽略。恢复默认会清空列设置，列宽仍由 `column-widths` 独立管理。
+
+面板支持键盘操作；PageUp / PageDown 翻动列列表，Escape 关闭并返回触发按钮。
+
+<template #example><table-zh-column-manager /></template>
+
+<template #template>
+
+@[code{76-106}](../../.vuepress/components/table-zh/column-manager.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-74}](../../.vuepress/components/table-zh/column-manager.vue)
+
+</template>
+
+<template #style>
+
+@[code{108-121}](../../.vuepress/components/table-zh/column-manager.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 记住列设置
+
+给 `column-manager-config.storageKey` 设置唯一的业务键，可将列设置保存在当前浏览器的 localStorage 中。未设置键时不会读写存储；不同表格或用户应使用不同的键。
+
+非受控模式会在挂载时恢复已保存的设置。受控模式以父组件的 `column-state` 为准，只保存已接受的状态，初始恢复由应用负责。恢复默认后保存空设置。存储不可用或容量不足时，可监听 `column-storage-error` 处理错误。
+
+<template #example><table-zh-column-persistence /></template>
+
+<template #template>
+
+@[code{8-17}](../../.vuepress/components/table-zh/column-persistence.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../../.vuepress/components/table-zh/column-persistence.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Grid 式配置
 
 通过 `data` 提供行数据，`columns` 定义列的字段、标题和显示方式。也可以将表格属性放入一个对象，通过 `v-bind` 统一传入。
@@ -493,13 +576,13 @@ EXPOSES:
 
 ## 行选择
 
-通过 `v-model:row` 绑定当前选中行；模型需要数组时添加 `multiple`。
+通过 `v-model:highlight` 绑定当前高亮行；模型需要数组时添加 `multiple`。
 
 <template #example><table-zh-selection /></template>
 
 <template #template>
 
-@[code{24-30}](../../.vuepress/components/table-zh/selection.vue)
+@[code{24-35}](../../.vuepress/components/table-zh/selection.vue)
 
 </template>
 

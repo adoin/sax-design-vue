@@ -1,6 +1,11 @@
 <template>
   <div :class="ns.b('wrapper')">
     <slot />
+    <TableColumnManager
+      v-if="columnManager.enabled.value"
+      :manager="columnManager"
+      :disabled="loading"
+    />
 
     <div v-if="$slots.header" :class="ns.be('wrapper', 'header')">
       <slot name="header" />
@@ -54,7 +59,7 @@
                 { textAlign: entry.column.align ?? 'left' },
               ]"
               role="columnheader"
-              :aria-colindex="entry.index + 1"
+              :aria-colindex="(entry.ariaIndex ?? entry.index) + 1"
               :data-column-index="entry.index"
               :aria-sort="
                 sortOrder(entry.column) === 'asc'
@@ -349,6 +354,8 @@ import { useTableSelection } from './composables/use-table-selection'
 import { useTableOverflow } from './composables/use-table-overflow'
 import { useTablePagination } from './composables/use-table-pagination'
 import { useTableColumnResize } from './composables/use-table-column-resize'
+import { useTableColumnManager } from './composables/use-table-column-manager'
+import TableColumnManager from './table-column-manager.vue'
 import type { VirtualListInstance } from '@vuesax-alpha/components/virtual-list'
 import type { CSSProperties } from 'vue'
 import type {
@@ -413,15 +420,18 @@ const rawColumns = computed(() =>
     : registeredColumns.value.map((entry) => entry.column),
 )
 const columnResize = useTableColumnResize(props, emit, rawColumns)
-const resolvedColumns = computed(() =>
+const sizedColumns = computed(() =>
   rawColumns.value.map((column, index) => {
     const width = columnResize.widthFor(column, index)
     return width == null ? column : { ...column, width }
   }),
 )
+const columnManager = useTableColumnManager(props, emit, sizedColumns)
+const resolvedColumns = columnManager.visibleColumns
+watch(columnManager.state, columnResize.cancel, { deep: true })
 
 const { tableKls } = useTable(props)
-const query = useTableQuery(props, emit, resolvedColumns)
+const query = useTableQuery(props, emit, sizedColumns)
 const {
   sorts,
   filters: filtersState,
@@ -482,7 +492,8 @@ const {
               entry.kind === 'column',
           )
           .map((entry) => entry.column)
-      : resolvedColumns.value,
+          .concat(columnManager.customizedSelectionColumns.value)
+      : sizedColumns.value,
   ),
   flatRows,
   getAllRows: tree.getAllRows,
@@ -500,7 +511,7 @@ const effectiveRowCount = computed(() =>
 )
 const resolvedColumnCount = computed(() =>
   props.virtualSource
-    ? Math.max(0, Math.floor(props.virtualSource.columnCount))
+    ? columnManager.layout.value.visibleCount
     : resolvedColumns.value.length,
 )
 
@@ -603,25 +614,15 @@ const columnPartitions = computed(() => {
   const center: IndexedColumn[] = []
   const right: IndexedColumn[] = []
   if (props.virtualSource) {
-    const count = resolvedColumnCount.value
-    const leftCount = Math.min(
-      count,
-      Math.max(0, Math.floor(props.virtualSource.fixedLeftCount ?? 0)),
-    )
-    const rightCount = Math.min(
-      count - leftCount,
-      Math.max(0, Math.floor(props.virtualSource.fixedRightCount ?? 0)),
-    )
-    for (let index = 0; index < leftCount; index++)
-      left.push({ column: props.virtualSource.column(index), index })
-    for (let index = count - rightCount; index < count; index++)
-      right.push({ column: props.virtualSource.column(index), index })
+    for (const index of columnManager.layout.value.left)
+      left.push({ column: columnManager.columnAt(index), index })
+    for (const index of columnManager.layout.value.right)
+      right.push({ column: columnManager.columnAt(index), index })
     return {
       left,
       center,
       right,
-      centerCount: count - leftCount - rightCount,
-      centerStart: leftCount,
+      centerCount: columnManager.layout.value.centerCount,
     }
   }
 
@@ -631,7 +632,7 @@ const columnPartitions = computed(() => {
     else if (column.fixed === 'right') right.push(entry)
     else center.push(entry)
   })
-  return { left, center, right, centerCount: center.length, centerStart: 0 }
+  return { left, center, right, centerCount: center.length }
 })
 
 const centerColumns = computed(() =>
@@ -642,8 +643,8 @@ const centerColumnAt = (virtualIndex: number): IndexedColumn | undefined => {
   if (props.virtualSource) {
     if (virtualIndex < 0 || virtualIndex >= centerColumnCount.value)
       return undefined
-    const index = columnPartitions.value.centerStart + virtualIndex
-    return { column: props.virtualSource.column(index), index }
+    const index = columnManager.layout.value.centerAt(virtualIndex)
+    return { column: columnManager.columnAt(index), index }
   }
   return columnPartitions.value.center[virtualIndex]
 }
@@ -683,28 +684,26 @@ const columnVirtualization = useTableColumnVirtualization({
   columnWidthOverrides: computed(() => {
     const overrides = new Map<number, number>()
     if (!props.virtualSource) return overrides
-    const start = columnPartitions.value.centerStart
-    const end = start + centerColumnCount.value
     const widths = { ...columnResize.widths.value }
     if (columnResize.session.value)
       widths[columnResize.session.value.key] = columnResize.session.value.width
     for (const [key, width] of Object.entries(widths)) {
       const index = Number(key)
+      const virtualIndex = columnManager.layout.value.centerIndexOf(index)
       if (
         Number.isInteger(index) &&
-        index >= start &&
-        index < end &&
+        virtualIndex >= 0 &&
         Number.isFinite(width) &&
         width > 0
       )
-        overrides.set(index - start, width)
+        overrides.set(virtualIndex, width)
     }
     return overrides
   }),
   columnWidth: (virtualIndex) => {
     if (props.virtualSource)
       return sourceColumnWidth(
-        columnPartitions.value.centerStart + virtualIndex,
+        columnManager.layout.value.centerAt(virtualIndex),
       )
     const entry = centerColumnAt(virtualIndex)
     if (!entry) return undefined
@@ -779,6 +778,7 @@ const visibleCenterEntries = computed<TableRenderedColumnEntry[]>(() => {
       column,
       index,
       style,
+      ariaIndex: columnPartitions.value.left.length + virtualIndex,
     })
   }
   return entries
@@ -802,6 +802,12 @@ const createFixedEntries = (
       column,
       index,
       fixed: side,
+      ariaIndex:
+        side === 'left'
+          ? fixedIndex
+          : columnPartitions.value.left.length +
+            centerColumnCount.value +
+            fixedIndex,
       fixedBoundary:
         side === 'left' ? fixedIndex === entries.length - 1 : fixedIndex === 0,
       style: {
@@ -949,6 +955,10 @@ const scrollToColumn = (
   columnOrIndex: TableColumn | string | number,
   align: 'auto' | 'start' | 'center' | 'end' = 'auto',
 ) => {
+  const originalIndex =
+    typeof columnOrIndex === 'object'
+      ? rawColumns.value.indexOf(columnOrIndex)
+      : -1
   const index =
     typeof columnOrIndex === 'number'
       ? columnOrIndex
@@ -958,10 +968,12 @@ const scrollToColumn = (
             typeof columnOrIndex === 'string'
               ? column.key === columnOrIndex || column.field === columnOrIndex
               : column === columnOrIndex ||
-                rawColumns.value[columnIndex] === columnOrIndex,
+                (originalIndex >= 0 &&
+                  columnResize.keyFor(column, columnIndex) ===
+                    columnManager.keyAt(originalIndex)),
           )
   const virtualIndex = props.virtualSource
-    ? index - columnPartitions.value.centerStart
+    ? columnManager.layout.value.centerIndexOf(index)
     : columnPartitions.value.center.findIndex((entry) => entry.index === index)
   if (virtualIndex >= 0)
     columnVirtualization.scrollToColumn(virtualIndex, align)
@@ -977,6 +989,7 @@ const measure = () =>
 watch(
   () => [
     columnResize.revision.value,
+    columnManager.state.value,
     props.columnWidths,
     columnVirtualization.viewportWidth.value,
     props.virtualSource?.columnWidth,

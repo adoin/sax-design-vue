@@ -46,7 +46,11 @@ export function useTableSelection(
   const rowKey = (row: TableRow) =>
     sourceKeys.value.get(row) ?? options.getRowKey(row, -1)
   const selectedValue = computed(() =>
-    props.row !== undefined ? props.row : props.modelValue,
+    props.highlight !== undefined
+      ? props.highlight
+      : props.row !== undefined
+        ? props.row
+        : props.modelValue,
   )
   const getSelectedRows = (): TableRow[] => {
     const values = Array.isArray(selectedValue.value)
@@ -64,8 +68,11 @@ export function useTableSelection(
     const unique = [...new Map(rows.map((row) => [rowKey(row), row])).values()]
     const next = multiple.value ? unique : unique.slice(0, 1)
     const value = multiple.value ? next : (next[0] ?? null)
-    emit('update:row', value)
-    if (props.row === undefined) emit('update:modelValue', value)
+    emit('update:highlight', value)
+    if (props.highlight === undefined) {
+      emit('update:row', value)
+      if (props.row === undefined) emit('update:modelValue', value)
+    }
     emit('selectionChange', next)
   }
   const setSelectedRows = (rows: TableRow[]) =>

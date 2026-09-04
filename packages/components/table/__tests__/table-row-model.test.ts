@@ -9,6 +9,54 @@ const rows = [
 const columns = [{ field: 'name', title: 'Name' }]
 
 describe('Table named row model', () => {
+  it('uses highlight ahead of both legacy models, including an explicit null', async () => {
+    const wrapper = mount(Table, {
+      props: {
+        data: rows,
+        columns,
+        highlight: null,
+        row: rows[0],
+        modelValue: rows[1],
+      },
+    })
+    expect(wrapper.vm.getSelectedRows()).toEqual([])
+    await wrapper.findAll('.s-table__data-row')[1].trigger('click')
+    expect(wrapper.emitted('update:highlight')?.[0]).toEqual([rows[1]])
+    expect(wrapper.emitted('update:row')).toBeUndefined()
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.findAll('[aria-selected="true"]')).toHaveLength(0)
+    await wrapper.setProps({ highlight: rows[1] })
+    expect(wrapper.findAll('.s-table__data-row')[1].classes()).toContain(
+      'is-selected',
+    )
+    wrapper.vm.clearSelection()
+    expect(wrapper.emitted('update:highlight')?.[1]).toEqual([null])
+    wrapper.unmount()
+  })
+
+  it('supports multiple highlighted rows and checkbox selection without an initial write', async () => {
+    const wrapper = mount(Table, {
+      props: { data: rows, columns, highlight: [], multiple: true },
+    })
+    expect(wrapper.emitted('update:highlight')).toBeUndefined()
+    await wrapper.findAll('.s-table__data-row')[0].trigger('click')
+    expect(wrapper.emitted('update:highlight')?.[0]).toEqual([[rows[0]]])
+    await wrapper.setProps({ highlight: [rows[0]] })
+    await wrapper.findAll('.s-table__data-row')[1].trigger('click')
+    expect(wrapper.emitted('update:highlight')?.[1]).toEqual([rows])
+    await wrapper.setProps({
+      multiple: false,
+      columns: [{ type: 'checkbox' }, ...columns],
+      highlight: [],
+    })
+    await wrapper
+      .findAll('.s-table__data-row')[0]
+      .get('input[type="checkbox"]')
+      .setValue(true)
+    expect(wrapper.emitted('update:highlight')?.[2]).toEqual([[rows[0]]])
+    wrapper.unmount()
+  })
+
   it('uses row as the authoritative controlled model, including null', async () => {
     const wrapper = mount(Table, {
       props: { data: rows, columns, row: null, modelValue: rows[0] },

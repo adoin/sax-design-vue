@@ -23,6 +23,19 @@ export type TableModelValueType = string | number | object
 export type TableAlign = 'left' | 'center' | 'right'
 export type TableColumnType = 'seq' | 'checkbox' | 'radio'
 export type TableColumnFixed = boolean | 'left' | 'right'
+export interface TableColumnState {
+  /** Column key, field, or @originalIndex; virtualSource uses its original index string. */
+  key: string
+  hidden?: boolean
+  /** Zero-based position in the complete order, including hidden columns. */
+  order?: number
+  fixed?: TableColumnFixed
+}
+export interface TableColumnManagerConfig {
+  enabled?: boolean
+  /** Opt-in localStorage key. Controlled state is saved but never implicitly restored. */
+  storageKey?: string
+}
 export type TableOverflow = boolean | 'ellipsis' | 'title' | 'tooltip'
 export type TableSortOrder = 'asc' | 'desc'
 export interface TableResizeConfig {
@@ -190,6 +203,7 @@ export interface TableRenderedColumnEntry<Row extends TableRow = TableRow> {
   column: TableColumn<Row>
   index: number
   style: CSSProperties
+  ariaIndex?: number
   fixed?: 'left' | 'right'
   fixedBoundary?: boolean
 }
@@ -255,6 +269,22 @@ export type TableRowClass<Row extends TableRow = TableRow> =
   string | ((params: TableFlatRow<Row>) => string | string[] | undefined)
 
 export const tableProps = buildProps({
+  columnManagerConfig: {
+    type: definePropType<boolean | TableColumnManagerConfig>([Boolean, Object]),
+    default: false,
+  },
+  columnState: {
+    type: definePropType<TableColumnState[]>(Array),
+    default: undefined,
+  },
+  highlight: {
+    type: definePropType<TableRow | TableRow[] | null | undefined>([
+      Object,
+      Array,
+    ]),
+    default: undefined,
+  },
+  /** @deprecated Use highlight instead. */
   row: {
     type: definePropType<TableRow | TableRow[] | null>([Object, Array]),
     default: undefined,
@@ -357,6 +387,14 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  'update:highlight': (value: TableRow | TableRow[] | null) =>
+    value == null || isObject(value) || isArray(value),
+  'update:columnState': (state: TableColumnState[]) => isArray(state),
+  columnStateChange: (state: TableColumnState[]) => isArray(state),
+  columnStorageError: (event: {
+    operation: 'read' | 'write'
+    error: unknown
+  }) => isObject(event),
   'update:row': (value: TableRow | TableRow[] | null) =>
     value == null || isObject(value) || isArray(value),
   'update:columnWidths': (widths: TableColumnWidths) => isObject(widths),

@@ -30,7 +30,7 @@
         ]"
         :style="[entry.style, { textAlign: entry.column.align ?? 'left' }]"
         role="cell"
-        :aria-colindex="entry.index + 1"
+        :aria-colindex="(entry.ariaIndex ?? entry.index) + 1"
         :data-column-index="entry.index"
         @click="handleCellClick(entry.column, entry.index, $event)"
       >

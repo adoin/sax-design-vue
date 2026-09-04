@@ -5,5 +5,7 @@ import '@vuesax-alpha/components/radio/style'
 import '@vuesax-alpha/components/icon/style'
 import '@vuesax-alpha/components/popper/style'
 import '@vuesax-alpha/components/pagination/style'
+import '@vuesax-alpha/components/select/style'
+import '@vuesax-alpha/components/virtual-list/style'
 
 import '@vuesax-alpha/theme-chalk/src/table.scss'

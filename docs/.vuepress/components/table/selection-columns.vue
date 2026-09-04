@@ -41,7 +41,7 @@ const radioColumns: TableColumn[] = [
       >
     </div>
     <s-table
-      v-model:row="selected"
+      v-model:highlight="selected"
       v-model:pager-config="pager"
       :data="rows"
       :columns="columns"
@@ -53,7 +53,7 @@ const radioColumns: TableColumn[] = [
     />
     <span>Single owner: {{ radio?.name ?? '—' }}</span>
     <s-table
-      v-model:row="radio"
+      v-model:highlight="radio"
       :data="rows"
       :columns="radioColumns"
       :selection-config="{ checkMethod: ({ row }) => Boolean(row.available) }"

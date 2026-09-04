@@ -1,6 +1,16 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: column-manager-config
+    type: Boolean | TableColumnManagerConfig
+    description: Enable the column panel; supply storageKey to opt into local persistence.
+    default: false
+    usage: '#column-settings'
+  - name: column-state
+    type: TableColumnState[]
+    description: "Control visibility, order and fixed position with v-model:column-state."
+    default: null
+    usage: '#column-settings'
   - name: resize-config
     type: Boolean | TableResizeConfig
     description: "Opt in to column resizing with a minimum width and keyboard step."
@@ -26,9 +36,9 @@ PROPS:
     description: Stable row key field or getter.
     default: id
     usage: '#grid-style-configuration'
-  - name: row
+  - name: highlight
     type: TableRow | TableRow[] | null
-    description: Selected row or rows.
+    description: Highlighted row or rows.
     default: null
     usage: '#row-selection'
   - name: multiple
@@ -218,6 +228,21 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: update:columnState
+    type: '(state: TableColumnState[]) => void'
+    description: Request a controlled column-state update.
+    default: null
+    usage: '#column-settings'
+  - name: columnStateChange
+    type: '(state: TableColumnState[]) => void'
+    description: Emitted with the complete state array when the user changes or resets column settings.
+    default: null
+    usage: '#column-settings'
+  - name: columnStorageError
+    type: "(event: { operation: 'read' | 'write'; error: unknown }) => void"
+    description: Emitted when local settings cannot be read or written; table interaction remains available.
+    default: null
+    usage: '#remember-column-settings'
   - name: update:columnWidths
     type: '(widths: TableColumnWidths) => void'
     description: "Emits the complete next width record on commit."
@@ -228,7 +253,7 @@ EVENTS:
     description: "Fires after a pointer drag or keyboard resize with the column, index, old and new widths, and input source."
     default: null
     usage: '#column-resizing'
-  - name: update:row
+  - name: update:highlight
     type: TableRow | TableRow[] | null
     description: Fires when row selection changes.
   - name: update:expandedKeys
@@ -417,6 +442,64 @@ Select “One million generated rows” to try resizing with a large data set. W
 
 <card>
 
+## Column settings
+
+Enable `column-manager-config` to show or hide columns, change their order with the up/down buttons, fix them to either edge, and restore defaults. Fixed columns stay at their designated edge; ordering controls their position within that region. Hiding a column preserves its sorting, filtering and row-selection behavior.
+
+Use `v-model:column-state` with `TableColumnState[]`, or omit it for internal state. Entries identify columns by `key`, falling back to the column's `field` and then `@index`. Provide stable, unique keys when saving settings. For `virtualSource`, use the original column index as a string.
+
+`hidden` controls visibility, `fixed` accepts `false`, `left` or `right`, and `order` is a zero-based position including hidden columns. Unspecified settings use the column definition; unknown keys are ignored. Restoring defaults clears column settings; widths remain independently managed by `column-widths`.
+
+The panel supports keyboard interaction: PageUp / PageDown move through the column list, and Escape closes it and returns focus to the trigger.
+
+<template #example><table-column-manager /></template>
+
+<template #template>
+
+@[code{77-111}](../.vuepress/components/table/column-manager.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-75}](../.vuepress/components/table/column-manager.vue)
+
+</template>
+
+<template #style>
+
+@[code{113-126}](../.vuepress/components/table/column-manager.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Remember column settings
+
+Set a unique `column-manager-config.storageKey` to save settings in the current browser's localStorage. Storage is untouched when no key is supplied. Use different keys for different tables or users.
+
+Uncontrolled tables restore saved settings on mount. Controlled tables use the parent's `column-state` and only persist accepted state; the application owns initial restoration. Restoring defaults saves an empty state. Listen to `column-storage-error` to handle unavailable storage or quota errors.
+
+<template #example><table-column-persistence /></template>
+
+<template #template>
+
+@[code{8-17}](../.vuepress/components/table/column-persistence.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/table/column-persistence.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Grid-style configuration
 
 Pass rows through `data` and define each column's field, title and display options through `columns`. You can also collect table props in an object and pass them together with `v-bind`.
@@ -493,13 +576,13 @@ In configured columns, map a named slot with `slots.default`, or reference a reu
 
 ## Row selection
 
-Bind the selected row with `v-model:row`; add `multiple` when the model should be an array.
+Bind the highlighted row with `v-model:highlight`; add `multiple` when the model should be an array.
 
 <template #example><table-selection /></template>
 
 <template #template>
 
-@[code{24-30}](../.vuepress/components/table/selection.vue)
+@[code{24-35}](../.vuepress/components/table/selection.vue)
 
 </template>
 

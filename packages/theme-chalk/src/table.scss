@@ -3,6 +3,86 @@
 @use 'common/var' as *;
 
 @include b(table) {
+  @include e(column-manager) {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 10px;
+  }
+
+  @include e(column-panel) {
+    width: min(440px, calc(100vw - 32px));
+    max-height: calc(100dvh - 16px);
+    overflow: auto;
+    padding: 16px;
+    box-sizing: border-box;
+    border: 0;
+    color: getCssVar(text-color, primary);
+
+    &.is-square {
+      border-radius: 0;
+    }
+
+    [role='dialog'] {
+      outline: none;
+    }
+  }
+
+  @include e(column-panel-title) {
+    padding: 0 4px 12px;
+    font-weight: 650;
+  }
+
+  @include e(column-setting) {
+    height: 56px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 110px 40px 40px;
+    align-items: center;
+    gap: 4px;
+    padding: 0 6px;
+    box-sizing: border-box;
+    border-radius: var(--sax-radius-md);
+
+    &:hover,
+    &:focus-within {
+      background: getColor(primary, 0.05);
+    }
+
+    > .#{$namespace}-checkbox {
+      min-width: 0;
+      overflow: hidden;
+      .#{$namespace}-checkbox__label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+    > .#{$namespace}-button {
+      width: 40px;
+      height: 44px;
+      margin: 0;
+    }
+    .#{$namespace}-select {
+      min-width: 0;
+    }
+  }
+
+  @include e(column-setting-label) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @include e(column-panel-actions) {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 12px;
+  }
+
   @include e(pagination) {
     display: flex;
     justify-content: flex-end;
@@ -23,6 +103,20 @@
     #{getColor(background)}
   );
   --s-table-striped-surface: #{getColor(gray-1)};
+  --s-table-highlight-hue: clamp(
+    15deg,
+    calc(var(--sax-primary-h) - 190deg),
+    50deg
+  );
+  --s-table-highlight-tint: hsl(
+    var(--s-table-highlight-hue)
+      clamp(45%, calc(var(--sax-primary-s) - 15%), 85%) 80%
+  );
+  --s-table-highlight-surface: color-mix(
+    in srgb,
+    var(--s-table-highlight-tint) 48%,
+    #{getColor(background)}
+  );
 
   width: 100%;
   max-width: 100%;
@@ -152,7 +246,7 @@
     @include when(selected) {
       position: relative;
       z-index: 1;
-      background: var(--s-table-row-surface);
+      background: var(--s-table-highlight-surface);
       box-shadow:
         0 3px 6px -4px hsl(var(--sax-text-color) / 0.3),
         inset 0 0 10px -7px hsl(var(--sax-text-color) / 0.24);
@@ -521,6 +615,11 @@
 
 html.dark .#{$namespace}-table,
 html.dark .#{$namespace}-table-wrapper {
+  --s-table-highlight-surface: color-mix(
+    in srgb,
+    var(--s-table-highlight-tint) 20%,
+    #{getColor(background)}
+  );
   // Use the strongest structural tint for the header, with quieter surfaces
   // for the body and zebra rows. All three follow the active HSL primary.
   --s-table-surface: color-mix(

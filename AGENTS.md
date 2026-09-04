@@ -19,7 +19,7 @@
 
 ## Table architecture
 
-- Use `v-model:row` for the table's selected row or row array. Keep selection effects distinct from the header surface; prefer a contained shadow treatment over a primary-colored row background.
+- Use `v-model:highlight` for the table's highlighted row or row array. Give highlighted rows a light, pale warm surface derived from the primary HSL hue, with a contained weak shadow and no border; keep it distinct from the header surface in both themes.
 
 - Hierarchical data belongs to `STable`; do not reintroduce standalone `STree` or `STreeSelect` components. `STableSelect` must reuse the table tree-data mode so expansion behavior and accessibility stay aligned.
 - `STable` is data-driven only. Its canonical APIs are Grid-style `data + columns` configuration and declarative `STableColumn` children; do not reintroduce public `STr`, `STd`, or `STh` components or handwritten row/cell examples.

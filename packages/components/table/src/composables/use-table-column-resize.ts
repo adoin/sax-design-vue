@@ -268,6 +268,7 @@ export function useTableColumnResize(
   )
   onBeforeUnmount(cancel)
   return {
+    cancel,
     canResize,
     minimumFor,
     keyFor,
