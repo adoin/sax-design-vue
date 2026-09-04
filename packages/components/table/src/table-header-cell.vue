@@ -16,6 +16,7 @@ import type {
 
 const props = defineProps<{
   column: TableColumn
+  group?: boolean
   order?: TableSortOrder
   sortPriority?: number
   filterValues: TableFilterValue[]
@@ -49,8 +50,9 @@ const focusPanel = () => {
 const mode = computed(() =>
   tableOverflowMode(props.column.showHeaderOverflow ?? props.overflow),
 )
-const hasFilter = computed(() =>
-  Boolean(props.column.filters || props.column.slots?.filter),
+const hasFilter = computed(
+  () =>
+    !props.group && Boolean(props.column.filters || props.column.slots?.filter),
 )
 const setValues = (values: TableFilterValue[]) => {
   draft.value =
@@ -93,7 +95,7 @@ const sortLabel = (direction: TableSortOrder) =>
 <template>
   <div :class="ns.e('header-content')">
     <span
-      v-if="column.type === 'checkbox' && showSelectAll"
+      v-if="!group && column.type === 'checkbox' && showSelectAll"
       :class="ns.e('selection-control')"
     >
       <SCheckbox
@@ -111,7 +113,7 @@ const sortLabel = (direction: TableSortOrder) =>
       :tabindex="mode === 'tooltip' ? 0 : undefined"
       ><slot
     /></span>
-    <span v-if="column.sortable" :class="ns.e('sort-controls')">
+    <span v-if="!group && column.sortable" :class="ns.e('sort-controls')">
       <span :class="ns.e('sort-buttons')">
         <button
           v-for="direction in sortDirections"

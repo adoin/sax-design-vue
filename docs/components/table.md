@@ -141,6 +141,11 @@ PROPS:
     default: 'false'
     usage: '#text-overflow-and-tooltips'
 CHILD_PROPS:
+  - name: children
+    type: TableColumn[]
+    description: Nested columns forming a header group; only leaves render data cells.
+    default: null
+    usage: '#grouped-headers'
   - name: resizable
     type: Boolean
     description: "Set false to disable resizing for this column; resize-config must be enabled."
@@ -175,8 +180,8 @@ CHILD_PROPS:
   - name: fixed
     type: Boolean | String
     values: 'true | false | left | right'
-    description: Pins the column to the left or right edge; true is an alias for left.
-    default: 'false'
+    description: Pins the column to either edge; true means left. Inherits the parent group when omitted; false overrides an inherited fixed side.
+    default: null
     usage: '#virtual-rows-and-dynamic-heights'
   - name: tree-node
     type: Boolean
@@ -310,6 +315,10 @@ EVENTS:
     default: null
     usage: '#selection-columns-and-reservation'
 SLOTS:
+  - name: STableColumn.columns
+    type: Slot
+    description: Nested column declarations inside STableColumn.
+    usage: '#declarative-grouped-headers'
   - name: default
     type: Slot
     description: Declarative s-table-column definitions.
@@ -493,6 +502,88 @@ Uncontrolled tables restore saved settings on mount. Controlled tables use the p
 <template #script>
 
 @[code{1-6}](../.vuepress/components/table/column-persistence.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Grouped headers
+
+Nest columns with `children`. Group titles span adjacent visible leaves, while shallower leaf headers span multiple rows. Configure sorting, filtering and resizing on leaf columns. A group's `fixed` value is inherited; set a child to `fixed: false` to leave it unfixed.
+
+Column settings can hide, reorder or pin individual leaves. A group splits into separate title segments when its leaves are no longer adjacent. Data cells continue to use each leaf's field, slot or renderer.
+
+<template #example><table-grouped-headers /></template>
+
+<template #template>
+
+@[code{47-69}](../.vuepress/components/table/grouped-headers.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-45}](../.vuepress/components/table/grouped-headers.vue)
+
+</template>
+
+<template #style>
+
+@[code{71-78}](../.vuepress/components/table/grouped-headers.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Declarative grouped headers
+
+Nest column declarations in an `STableColumn` `#columns` slot. Keep `#default` for leaf cell content and use `#header` for a custom group title. You can also pass a `children` array.
+
+<template #example><table-grouped-declarations /></template>
+
+<template #template>
+
+@[code{8-28}](../.vuepress/components/table/grouped-declarations.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/table/grouped-declarations.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Generated grouped headers
+
+Use `virtualSource.headerPath(index)` to return a leaf's ancestors, from outermost to innermost, with stable keys and titles. Set `headerDepth` to the total number of levels including leaves so the number of header rows stays stable across horizontal windows. Ancestors beyond that depth are truncated. The callback reads only the current column window and fixed columns.
+
+This example provides one million rows and 100,000 columns on demand. Jump to the end, resize columns or open column settings. The application owns sorting and filtering for generated data.
+
+<template #example><table-grouped-source /></template>
+
+<template #template>
+
+@[code{37-55}](../.vuepress/components/table/grouped-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-35}](../.vuepress/components/table/grouped-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{57-64}](../.vuepress/components/table/grouped-source.vue)
 
 </template>
 

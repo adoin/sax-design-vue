@@ -27,26 +27,21 @@
         :class="ns.e('data-view')"
         :style="{ minWidth: horizontalVirtualMode ? '0px' : dataMinWidth }"
         role="table"
-        :aria-rowcount="effectiveRowCount + (showHeader ? 1 : 0)"
+        :aria-rowcount="effectiveRowCount + (showHeader ? headerDepth : 0)"
         :aria-colcount="resolvedColumnCount"
       >
-        <div
+        <TableHeaderRows
           v-if="showHeader"
-          :class="ns.e('data-header')"
           :style="virtualHeaderStyle"
-          role="row"
+          :entries="renderedColumnEntries"
+          :depth="headerDepth"
+          :path-for="headerPathFor"
         >
-          <template v-for="entry in renderedColumnEntries" :key="entry.key">
+          <template #default="{ entry }">
             <div
-              v-if="entry.kind === 'spacer'"
-              :class="ns.e('data-column-spacer')"
-              :style="{ flexBasis: `${entry.width}px` }"
-              aria-hidden="true"
-            />
-            <div
-              v-else
               :class="[
                 ns.e('data-head-cell'),
+                ns.is('group-header', entry.group),
                 entry.column.className,
                 ns.is('fixed-column', Boolean(entry.fixed)),
                 ns.is('fixed-left', entry.fixed === 'left'),
@@ -56,22 +51,30 @@
               :style="[
                 entry.style,
                 fixedHeaderStyle(entry),
-                { textAlign: entry.column.align ?? 'left' },
+                {
+                  textAlign:
+                    entry.column.align ?? (entry.group ? 'center' : 'left'),
+                },
               ]"
               role="columnheader"
               :aria-colindex="(entry.ariaIndex ?? entry.index) + 1"
+              :aria-colspan="entry.colSpan"
+              :aria-rowspan="entry.rowSpan"
               :data-column-index="entry.index"
               :aria-sort="
-                sortOrder(entry.column) === 'asc'
-                  ? 'ascending'
-                  : sortOrder(entry.column) === 'desc'
-                    ? 'descending'
-                    : entry.column.sortable
-                      ? 'none'
-                      : undefined
+                entry.group
+                  ? undefined
+                  : sortOrder(entry.column) === 'asc'
+                    ? 'ascending'
+                    : sortOrder(entry.column) === 'desc'
+                      ? 'descending'
+                      : entry.column.sortable
+                        ? 'none'
+                        : undefined
               "
             >
               <TableHeaderCell
+                :group="entry.group"
                 :column="entry.column"
                 :order="sortOrder(entry.column)"
                 :sort-priority="sortPriority(entry.column)"
@@ -121,7 +124,7 @@
                 </template>
               </TableHeaderCell>
               <span
-                v-if="columnResize.canResize(entry.column)"
+                v-if="!entry.group && columnResize.canResize(entry.column)"
                 :class="[
                   ns.e('resize-handle'),
                   ns.is(
@@ -165,7 +168,7 @@
               />
             </div>
           </template>
-        </div>
+        </TableHeaderRows>
 
         <SVirtualList
           v-if="virtualEnabled && effectiveRowCount && resolvedColumnCount"
@@ -195,7 +198,7 @@
               :flat-row="item as TableFlatRow"
               :entries="renderedColumnEntries"
               :display-index="index"
-              :row-offset="showHeader ? 2 : 1"
+              :row-offset="showHeader ? headerDepth + 1 : 1"
               :sequence-offset="
                 pagination.remote.value ? pagination.offset.value : 0
               "
@@ -247,7 +250,7 @@
             :flat-row="flatRow"
             :entries="renderedColumnEntries"
             :display-index="index"
-            :row-offset="showHeader ? 2 : 1"
+            :row-offset="showHeader ? headerDepth + 1 : 1"
             :sequence-offset="
               pagination.remote.value ? pagination.offset.value : 0
             "
@@ -348,6 +351,8 @@ import { resolveColumnPixelWidth } from './composables/use-table-column-virtuali
 import TableDataRow from './table-data-row.vue'
 import TableRendererOutlet from './renderer-outlet'
 import TableHeaderCell from './table-header-cell.vue'
+import TableHeaderRows from './table-header-rows.vue'
+import { flattenTableColumns } from './composables/table-column-tree'
 import { tableColumnKey } from './data-utils'
 import { useTableQuery } from './composables/use-table-query'
 import { useTableSelection } from './composables/use-table-selection'
@@ -414,11 +419,28 @@ provide(tableColumnRegistrationKey, {
   unregister: unregisterColumn,
 })
 
-const rawColumns = computed(() =>
-  props.columns.length
-    ? props.columns
-    : registeredColumns.value.map((entry) => entry.column),
+const columnTree = computed(() =>
+  flattenTableColumns(
+    props.columns.length
+      ? props.columns
+      : registeredColumns.value.map((entry) => entry.column),
+  ),
 )
+const rawColumns = computed(() => columnTree.value.leaves)
+const headerDepth = computed(() => {
+  if (!props.virtualSource) return columnTree.value.depth
+  const depth = props.virtualSource.headerDepth ?? 1
+  return Number.isFinite(depth) ? Math.max(1, Math.floor(depth)) : 1
+})
+const headerPathFor = (entry: TableRenderedColumnEntry) =>
+  props.virtualSource
+    ? (props.virtualSource.headerPath?.(entry.index) ?? []).map((column) => ({
+        key: column.key,
+        column,
+      }))
+    : (columnTree.value.paths.get(
+        entry.column.key ?? entry.column.field ?? `@${entry.index}`,
+      ) ?? [])
 const columnResize = useTableColumnResize(props, emit, rawColumns)
 const sizedColumns = computed(() =>
   rawColumns.value.map((column, index) => {
@@ -957,7 +979,7 @@ const scrollToColumn = (
 ) => {
   const originalIndex =
     typeof columnOrIndex === 'object'
-      ? rawColumns.value.indexOf(columnOrIndex)
+      ? columnTree.value.originals.indexOf(columnOrIndex)
       : -1
   const index =
     typeof columnOrIndex === 'number'

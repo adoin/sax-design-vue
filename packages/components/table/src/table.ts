@@ -168,6 +168,8 @@ export interface TableRenderer<Row extends TableRow = TableRow> {
 }
 
 export interface TableColumnOptions<Row extends TableRow = TableRow> {
+  /** Nested header groups. Only leaf columns render data cells. */
+  children?: TableColumn<Row>[]
   type?: TableColumnType
   field?: string
   title?: string
@@ -260,6 +262,19 @@ export interface TableVirtualSource<Row extends TableRow = TableRow> {
   columnWidth: number | ((index: number) => number)
   fixedLeftCount?: number
   fixedRightCount?: number
+  /** Stable header row count, including the leaf row. */
+  headerDepth?: number
+  /** Ancestors of one generated leaf, from outermost to innermost. */
+  headerPath?: (index: number) => TableHeaderGroup<Row>[]
+}
+
+export interface TableHeaderGroup<Row extends TableRow = TableRow> {
+  key: string
+  title?: string
+  align?: TableAlign
+  className?: string
+  header?: TableHeaderRenderer<Row>
+  slots?: TableColumnSlots
 }
 
 export type TableRowKeyGetter<Row extends TableRow = TableRow> =

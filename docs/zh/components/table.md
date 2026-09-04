@@ -141,6 +141,11 @@ PROPS:
     default: 'false'
     usage: '#文本溢出与提示'
 CHILD_PROPS:
+  - name: children
+    type: TableColumn[]
+    description: 嵌套子列并生成分组标题；数据单元格只由叶子列渲染。
+    default: null
+    usage: '#多级表头'
   - name: resizable
     type: Boolean
     description: "设为 false 禁止调整此列；需先开启 resize-config。"
@@ -175,8 +180,8 @@ CHILD_PROPS:
   - name: fixed
     type: Boolean | String
     values: 'true | false | left | right'
-    description: 将列固定在左侧或右侧；true 等价于 left。
-    default: 'false'
+    description: 将列固定在左侧或右侧；true 等价于 left。未设置时继承父组，false 解除继承的固定位置。
+    default: null
     usage: '#虚拟滚动与动态行高'
   - name: tree-node
     type: Boolean
@@ -310,6 +315,10 @@ EVENTS:
     default: null
     usage: '#选择列与跨页保留'
 SLOTS:
+  - name: STableColumn.columns
+    type: Slot
+    description: STableColumn 的嵌套子列定义插槽。
+    usage: '#声明式分组表头'
   - name: default
     type: Slot
     description: 声明式 s-table-column 列定义。
@@ -493,6 +502,88 @@ EXPOSES:
 <template #script>
 
 @[code{1-6}](../../.vuepress/components/table-zh/column-persistence.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 多级表头
+
+在列配置的 `children` 中嵌套子列。组标题自动跨越相邻的可见叶子列，较浅的叶子表头跨行显示；排序、筛选与列宽调整配置在叶子列上。组的 `fixed` 会向下继承，子列可用 `fixed: false` 解除固定。
+
+通过列设置隐藏、重排或固定叶子列后，同组中不再相邻的列会显示为独立标题段。分组只影响表头，数据仍按叶子列的 `field`、插槽或渲染器展示。
+
+<template #example><table-zh-grouped-headers /></template>
+
+<template #template>
+
+@[code{47-65}](../../.vuepress/components/table-zh/grouped-headers.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-45}](../../.vuepress/components/table-zh/grouped-headers.vue)
+
+</template>
+
+<template #style>
+
+@[code{67-74}](../../.vuepress/components/table-zh/grouped-headers.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 声明式分组表头
+
+在 `STableColumn` 的 `#columns` 插槽中嵌套列定义；`#default` 继续用于叶子单元格，`#header` 自定义组标题。也可以直接传入 `children` 数组。
+
+<template #example><table-zh-grouped-declarations /></template>
+
+<template #template>
+
+@[code{8-28}](../../.vuepress/components/table-zh/grouped-declarations.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../../.vuepress/components/table-zh/grouped-declarations.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 按需生成分组表头
+
+使用 `virtualSource.headerPath(index)` 返回叶子列从外到内的祖先分组，每层提供稳定 `key` 与 `title`。`headerDepth` 指定包含叶子层在内的总层数，避免因窗口中的叶子层级不同而增减表头行数；超出该层数的祖先会被截断。回调只读取当前列窗口和固定列。
+
+下面按需提供 100 万行、10 万列；可以定位末端、调整列宽或打开列设置。生成数据的排序和筛选由应用处理。
+
+<template #example><table-zh-grouped-source /></template>
+
+<template #template>
+
+@[code{37-53}](../../.vuepress/components/table-zh/grouped-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-35}](../../.vuepress/components/table-zh/grouped-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{55-62}](../../.vuepress/components/table-zh/grouped-source.vue)
 
 </template>
 

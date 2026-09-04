@@ -166,6 +166,21 @@
     }
   }
 
+  @include e(grouped-header) {
+    display: grid;
+    grid-auto-rows: minmax(44px, auto);
+  }
+
+  @include e(header-row) {
+    display: contents;
+  }
+
+  .is-group-header {
+    justify-content: center;
+    background: color-mix(in srgb, #{getColor(primary)} 7%, var(--s-table-header-surface));
+    box-shadow: inset 0 -3px 5px -5px #{getColor(primary, 0.22)};
+  }
+
   @include e(resize-handle) {
     position: absolute;
     inset: 0 -5px 0 auto;
