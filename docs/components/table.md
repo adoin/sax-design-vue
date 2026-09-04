@@ -1,6 +1,11 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "context-menu-config"
+    type: "Boolean | TableContextMenuConfig"
+    description: "Configure header, body and footer items, dynamic factories and visibility predicates."
+    default: false
+    usage: "#context-menus"
   - name: "keyboard-config"
     type: "Boolean | TableKeyboardConfig"
     description: "Enable cell navigation, Enter editing and generated row-key resolution."
@@ -338,6 +343,21 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "contextMenuOpen"
+    type: "(context: TableContextMenuContext) => void"
+    description: "A menu opens with its area and row/column context."
+    default: null
+    usage: "#context-menus"
+  - name: "contextMenuSelect"
+    type: "(params: TableContextMenuSelectParams) => void"
+    description: "An enabled item is selected; the application performs its business action."
+    default: null
+    usage: "#context-menus"
+  - name: "contextMenuClose"
+    type: "(context: TableContextMenuContext) => void"
+    description: "A menu closes with its previous context."
+    default: null
+    usage: "#context-menus"
   - name: "update:activeCell"
     type: "(cell: TableActiveCell | null) => void"
     description: "Request an active-cell update independently of row selection."
@@ -589,6 +609,11 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "closeContextMenu"
+    type: "() => void"
+    description: "Close the menu and restore the originating cell if focus is still inside the menu."
+    default: null
+    usage: "#context-menus"
   - name: "setActiveCell"
     type: "(rowIndex: number, columnIndex: number) => Promise<boolean>"
     description: "Activate and locate a cell; resolves whether focus succeeded. Ordinary data uses flattened-page rows and resolved columns; generated data uses absolute source indices."
@@ -807,6 +832,70 @@ EXPOSES:
 ---
 
 # Table
+
+<card>
+
+## Context menus
+
+Provide item arrays or synchronous context-to-items functions through `context-menu-config.header`, `body` and `footer`. A false `visibleMethod`, an empty region or a disabled configuration preserves the browser's native context menu. A throwing factory also falls back to the native menu.
+
+`context.area` is `header`, `body` or `footer`; all include `column` and `columnIndex`. Headers add `group`, with grouped headers supplying the group column; their index identifies the first leaf in the rendered header segment. Body contexts include `row`, `rowKey`, `rowIndex`, the raw `value` and tree-node context. Footer contexts contain the summary row, footer row index and raw value. `contextMenuSelect` returns `{ context, item }`; the table does not automatically change data or execute business actions such as deletion.
+
+Items reuse `ContextMenuItem`: `label`, `value`, `icon`, `disabled`, `divided` and `keepOpen`. Reactive factories can update disabled states; `keepOpen` supports repeated inspection. This example sorts from headers, inspects records or opens existing editors from body cells, and inspects footer summaries.
+
+Focus a cell and press Shift + F10 or the context-menu key. Arrows and Home / End move menu focus; Enter / Space selects, Escape closes and restores the origin, and Tab closes before continuing navigation. Combine with `keyboard-config` for arrow navigation between data cells. Opening a menu does not select rows. Editors retain native menus and IME behavior.
+
+Scrolling, paging, sorting, filtering, data replacement and column layout changes close the current menu. The shared floating layer handles outside clicks. Menus teleport by default so cards and virtual viewports cannot clip them.
+
+<template #example><table-context-menu /></template>
+
+<template #template>
+
+@[code{58-98}](../.vuepress/components/table/context-menu.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-56}](../.vuepress/components/table/context-menu.vue)
+
+</template>
+
+<template #style>
+
+@[code{100-114}](../.vuepress/components/table/context-menu.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Menus in virtual data
+
+With `virtualSource`, body row and column indices are absolute source indices; footer `rowIndex` still refers to the footer array. Context is built only for the rendered hit cell, without enumerating the source. Select the last cell and press Shift + F10 to inspect the far boundary and fixed columns; footer menus use the same horizontal column window. Source replacement, scrolling and unmounting close stale contexts.
+
+<template #example><table-context-menu-source /></template>
+
+<template #template>
+
+@[code{35-59}](../.vuepress/components/table/context-menu-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-33}](../.vuepress/components/table/context-menu-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{61-74}](../.vuepress/components/table/context-menu-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

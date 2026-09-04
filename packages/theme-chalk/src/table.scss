@@ -397,6 +397,8 @@
     min-width: 0;
     outline: none;
     .#{$namespace}-select {
+      // Inline flex participates in the editor's text baseline and can add a gap.
+      display: flex;
       // Use the same natural text/padding height as the neighboring inputs.
       @include set-var-value(('select', 'min-height'), 0px);
     }

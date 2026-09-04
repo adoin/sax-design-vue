@@ -1,12 +1,12 @@
 ---
 PROPS:
   - name: min-width
-    type: Number | String
-    values: "CSS length"
-    description: Set the minimum menu width.
-    default: '160'
+    type: Number
+    values: "Pixels"
+    description: Set the minimum menu width, constrained to the viewport.
+    default: '184'
   - name: items
-    type: Array
+    type: ContextMenuItem[]
     values: "ContextMenuItem[]"
     description: Menu item definitions.
     default: '[]'
@@ -20,19 +20,35 @@ PROPS:
     values: "true / false"
     description: Disable the context trigger.
     default: 'false'
+EXPOSES:
+  - name: show
+    type: '(event: MouseEvent | KeyboardEvent, target?: HTMLElement) => Promise<boolean>'
+    description: Open at the pointer or keyboard origin and resolve whether opening succeeded.
+    default: null
+  - name: close
+    type: '(restoreFocus?: boolean) => void'
+    description: Close and restore the origin by default when focus remains inside the menu.
+    default: null
 EVENTS:
   - name: select
-    description: Item selection and visibility events.
+    type: '(item: ContextMenuItem) => void'
+    description: Emitted when an enabled item is selected.
   - name: open
-    description: Item selection and visibility events.
+    type: '(event: MouseEvent | KeyboardEvent) => void'
+    description: Emitted with the event that opened the menu.
   - name: close
-    description: Item selection and visibility events.
+    type: '() => void'
+    description: Emitted when the menu closes.
 description: "Right-click context menu."
 ---
 
 # Context menu
 
-<card><template #example><context-menu-default /></template>
+<card>
+
+Right-click or focus the trigger and press Shift + F10 / the context-menu key. Arrows and Home / End move focus, Enter / Space selects, Escape closes and restores focus, and Tab closes before continuing navigation. The shared floating layer shifts menus into the viewport and teleports them by default.
+
+<template #example><context-menu-default /></template>
 
 <template #template>
 

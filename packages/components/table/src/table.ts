@@ -15,6 +15,11 @@ import type {
   VNodeChild,
 } from 'vue'
 import type Table from './table.vue'
+import type {
+  TableContextMenuConfig,
+  TableContextMenuContext,
+  TableContextMenuSelectParams,
+} from './table-context-menu'
 import type { TableActiveCell, TableKeyboardConfig } from './table-keyboard'
 import type {
   TableRowDragConfig,
@@ -46,6 +51,7 @@ import type {
   TableValidationRule,
   TableValidationRules,
 } from './table-validation'
+export * from './table-context-menu'
 export * from './table-keyboard'
 export * from './table-row-drag'
 export type { TableHistoryConfig, TableHistoryState } from './table-history'
@@ -428,6 +434,10 @@ export const tableProps = buildProps({
     type: definePropType<boolean | TableKeyboardConfig>([Boolean, Object]),
     default: false,
   },
+  contextMenuConfig: {
+    type: definePropType<boolean | TableContextMenuConfig>([Boolean, Object]),
+    default: false,
+  },
   activeCell: {
     type: definePropType<TableActiveCell | null>(Object),
     default: undefined,
@@ -570,6 +580,9 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  contextMenuOpen: (context: TableContextMenuContext) => isObject(context),
+  contextMenuClose: (context: TableContextMenuContext) => isObject(context),
+  contextMenuSelect: (params: TableContextMenuSelectParams) => isObject(params),
   'update:activeCell': (cell: TableActiveCell | null) =>
     cell === null || isObject(cell),
   activeCellChange: (cell: TableActiveCell | null) =>
@@ -634,6 +647,7 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  closeContextMenu: () => void
   /** Page row / resolved column indices; generated sources use absolute source indices. */
   setActiveCell: (rowIndex: number, columnIndex: number) => Promise<boolean>
   clearActiveCell: () => Promise<boolean>

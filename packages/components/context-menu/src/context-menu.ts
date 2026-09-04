@@ -21,7 +21,7 @@ export const contextMenuProps = buildProps({
 export const contextMenuEmits = {
   'update:modelValue': (value: boolean) => typeof value === 'boolean',
   select: (item: ContextMenuItem) => !!item,
-  open: (event: MouseEvent) => !!event,
+  open: (event: MouseEvent | KeyboardEvent) => !!event,
   close: () => true,
 }
 

@@ -26,7 +26,7 @@
       @mouseout="overflow.leave"
       @focusin="handleTableFocusin"
       @focusout="overflow.leave"
-      @scroll.capture="overflow.close"
+      @scroll.capture="handleTableScrollCapture"
       @keydown.esc="overflow.close"
     >
       <div
@@ -67,6 +67,7 @@
               :aria-colspan="entry.colSpan"
               :aria-rowspan="entry.rowSpan"
               :data-column-index="entry.index"
+              :tabindex="contextMenu.enabled.value ? 0 : undefined"
               :aria-sort="
                 entry.group
                   ? undefined
@@ -77,6 +78,28 @@
                       : entry.column.sortable
                         ? 'none'
                         : undefined
+              "
+              @contextmenu="
+                contextMenu.open(
+                  {
+                    area: 'header',
+                    column: entry.column,
+                    columnIndex: entry.index,
+                    group: Boolean(entry.group),
+                  },
+                  $event,
+                )
+              "
+              @keydown="
+                contextMenu.open(
+                  {
+                    area: 'header',
+                    column: entry.column,
+                    columnIndex: entry.index,
+                    group: Boolean(entry.group),
+                  },
+                  $event,
+                )
               "
             >
               <TableHeaderCell
@@ -215,6 +238,7 @@
                   :detail="detail"
                   :editing="editing"
                   :keyboard="keyboard"
+                  :context-menu-enabled="contextMenu.enabled.value"
                   :drag="
                     rowReorder.config.value.enabled !== false && rowDragConfig
                       ? rowDrag
@@ -242,6 +266,10 @@
                   :overflow="showOverflow"
                   :striped="striped"
                   :row-class="rowClass"
+                  @cell-context-menu="
+                    (params, event) =>
+                      contextMenu.open({ ...params, area: 'body' }, event)
+                  "
                   @row-click="handleRowClick"
                   @cell-click="handleCellClick"
                   @row-select="toggleRowSelection"
@@ -309,6 +337,7 @@
                 :detail="detail"
                 :editing="editing"
                 :keyboard="keyboard"
+                :context-menu-enabled="contextMenu.enabled.value"
                 :drag="
                   rowReorder.config.value.enabled !== false && rowDragConfig
                     ? rowDrag
@@ -332,6 +361,10 @@
                 :overflow="showOverflow"
                 :striped="striped"
                 :row-class="rowClass"
+                @cell-context-menu="
+                  (params, event) =>
+                    contextMenu.open({ ...params, area: 'body' }, event)
+                "
                 @row-click="handleRowClick"
                 @cell-click="handleCellClick"
                 @row-select="toggleRowSelection"
@@ -390,6 +423,11 @@
           :renderers="renderers"
           :overflow="showFooterOverflow"
           :retain-heights="horizontalVirtualMode"
+          :context-menu-enabled="contextMenu.enabled.value"
+          @cell-context-menu="
+            (params, event) =>
+              contextMenu.open({ ...params, area: 'footer' }, event)
+          "
           @cell-click="
             (params, event) => emit('footerCellClick', params, event)
           "
@@ -413,6 +451,16 @@
       </div>
     </div>
 
+    <SContextMenu
+      v-if="contextMenu.enabled.value"
+      :ref="
+        (instance) => (contextMenu.menu.value = instance as ContextMenuInstance)
+      "
+      :items="contextMenu.items.value"
+      :min-width="contextMenu.config.value.minWidth"
+      @select="contextMenu.select"
+      @close="contextMenu.onClose"
+    />
     <span
       v-if="rowDragConfig"
       :class="ns.e('drag-status')"
@@ -481,6 +529,7 @@ import { SPopper } from '@vuesax-alpha/components/popper'
 import { SPagination } from '@vuesax-alpha/components/pagination'
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
 import { useId, useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { SContextMenu } from '@vuesax-alpha/components/context-menu'
 import { tableColumnRegistrationKey, tableEmits, tableProps } from './table'
 import {
   useTable,
@@ -501,6 +550,7 @@ import { useTableRowReorder } from './composables/use-table-row-reorder'
 import { useTableRowDrag } from './composables/use-table-row-drag'
 import { useTableKeyboard } from './composables/use-table-keyboard'
 import { useTableKeyboardCoordinates } from './composables/use-table-keyboard-coordinates'
+import { useTableContextMenu } from './composables/use-table-context-menu'
 import { useTableValidation } from './composables/use-table-validation'
 import { useTableValidationApi } from './composables/use-table-validation-api'
 import { tableValidationId } from './validation-utils'
@@ -514,6 +564,7 @@ import { useTablePagination } from './composables/use-table-pagination'
 import { useTableColumnResize } from './composables/use-table-column-resize'
 import { useTableColumnManager } from './composables/use-table-column-manager'
 import TableColumnManager from './table-column-manager.vue'
+import type { ContextMenuInstance } from '@vuesax-alpha/components/context-menu'
 import type { VirtualListInstance } from '@vuesax-alpha/components/virtual-list'
 import type { CSSProperties } from 'vue'
 import type {
@@ -1579,6 +1630,22 @@ const keyboardCoordinates = useTableKeyboardCoordinates(props, {
   columns: resolvedColumns,
   manager: columnManager,
 })
+const contextMenu = useTableContextMenu(props, emit, {
+  root: () => tableScrollRef.value,
+  context: [
+    () => props.data,
+    () => props.virtualSource,
+    () => props.footerData,
+    () => props.contextMenuConfig,
+    sorts,
+    filtersState,
+    pagination.currentPage,
+    pagination.pageSize,
+    () => (props.virtualSource ? undefined : flatRows.value),
+    columnManager.state,
+    rawColumns,
+  ],
+})
 const keyboard = useTableKeyboard(props, emit, {
   ...keyboardCoordinates,
   root: () => tableScrollRef.value,
@@ -1634,6 +1701,10 @@ const handleTableFocusin = (event: FocusEvent) => {
   overflow.enter(event)
   keyboard.onFocusin(event)
 }
+const handleTableScrollCapture = () => {
+  overflow.close()
+  contextMenu.close()
+}
 const setActiveCell = (rowIndex: number, columnIndex: number) => {
   const target = keyboardCoordinates.at(
     props.virtualSource ? rowIndex - pagination.sourceOffset.value : rowIndex,
@@ -1643,6 +1714,7 @@ const setActiveCell = (rowIndex: number, columnIndex: number) => {
 }
 
 defineExpose({
+  closeContextMenu: contextMenu.close,
   setActiveCell,
   clearActiveCell: keyboard.clear,
   getActiveCell: keyboard.get,

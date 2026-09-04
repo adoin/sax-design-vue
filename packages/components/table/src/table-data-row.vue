@@ -80,13 +80,21 @@
             ? keyboard.isActive(flatRow.key, entry.index)
               ? 0
               : -1
-            : editing?.isEditable(editContext(entry.column, entry.index))
+            : contextMenuEnabled ||
+                editing?.isEditable(editContext(entry.column, entry.index))
               ? 0
               : -1
         "
         @dblclick="activateEdit(entry.column, entry.index, $event, 'dblclick')"
-        @keydown="editKeydown(entry.column, entry.index, $event)"
+        @keydown="cellKeydown(entry.column, entry.index, $event)"
         @click="handleCellClick(entry.column, entry.index, $event)"
+        @contextmenu="
+          emit(
+            'cellContextMenu',
+            editContext(entry.column, entry.index),
+            $event,
+          )
+        "
       >
         <div :class="ns.e('cell-main')">
           <button
@@ -276,6 +284,7 @@ const props = defineProps<{
   editing?: TableEditing
   drag?: TableRowDrag
   keyboard?: TableKeyboard
+  contextMenuEnabled?: boolean
   validation?: TableValidation
   editRenderer?: (column: TableColumn) => TableEditRenderer | undefined
 }>()
@@ -283,6 +292,7 @@ const validationId = (field: string, columnIndex: number) =>
   tableValidationId(props.selectionName, props.flatRow.key, field, columnIndex)
 
 const emit = defineEmits<{
+  cellContextMenu: [params: TableEditContext, event: MouseEvent | KeyboardEvent]
   rowClick: [row: TableRow, event: MouseEvent]
   cellClick: [params: TableCellRenderParams, event: MouseEvent]
   toggleExpand: []
@@ -375,5 +385,13 @@ const editKeydown = (
     event.preventDefault()
     event.stopPropagation()
   }
+}
+const cellKeydown = (
+  column: TableColumn,
+  index: number,
+  event: KeyboardEvent,
+) => {
+  emit('cellContextMenu', editContext(column, index), event)
+  editKeydown(column, index, event)
 }
 </script>

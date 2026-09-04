@@ -1,6 +1,11 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "context-menu-config"
+    type: "Boolean | TableContextMenuConfig"
+    description: "配置表头、数据区和表尾的菜单项、动态工厂与可见条件。"
+    default: false
+    usage: "#右键菜单"
   - name: "keyboard-config"
     type: "Boolean | TableKeyboardConfig"
     description: "开启单元格导航，配置 Enter 编辑与生成源行键定位。"
@@ -338,6 +343,21 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "contextMenuOpen"
+    type: "(context: TableContextMenuContext) => void"
+    description: "菜单打开，提供所在区域及对应行列上下文。"
+    default: null
+    usage: "#右键菜单"
+  - name: "contextMenuSelect"
+    type: "(params: TableContextMenuSelectParams) => void"
+    description: "选择可用菜单项；由应用执行对应业务操作。"
+    default: null
+    usage: "#右键菜单"
+  - name: "contextMenuClose"
+    type: "(context: TableContextMenuContext) => void"
+    description: "菜单关闭，提供原上下文。"
+    default: null
+    usage: "#右键菜单"
   - name: "update:activeCell"
     type: "(cell: TableActiveCell | null) => void"
     description: "请求更新活动单元格，与行选择独立。"
@@ -589,6 +609,11 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "closeContextMenu"
+    type: "() => void"
+    description: "关闭当前菜单；焦点仍在菜单内时恢复到来源单元格。"
+    default: null
+    usage: "#右键菜单"
   - name: "setActiveCell"
     type: "(rowIndex: number, columnIndex: number) => Promise<boolean>"
     description: "按索引激活并定位；返回是否成功聚焦。普通数据使用当前页展开行及已解析列索引，生成源使用绝对源索引。"
@@ -807,6 +832,70 @@ EXPOSES:
 ---
 
 # Table 表格
+
+<card>
+
+## 右键菜单
+
+通过 `context-menu-config.header`、`body` 和 `footer` 分别提供菜单项数组，或接收上下文并返回数组的同步函数。`visibleMethod` 返回 false、当前区域没有菜单项或配置关闭时，保留浏览器原生右键菜单。工厂函数异常时同样回退到原生菜单。
+
+`context.area` 区分 `header`、`body` 与 `footer`，三者都有 `column`、`columnIndex`。表头另有 `group`，分组表头提供分组列，索引指向当前渲染标题段的首个叶子列；数据区提供 `row`、`rowKey`、`rowIndex`、原始 `value` 及树节点上下文；表尾提供汇总行、表尾行索引及原始值。`contextMenuSelect` 返回 `{ context, item }`，组件不会自动修改数据或执行删除等业务动作。
+
+菜单项沿用 `ContextMenuItem` 的 `label`、`value`、`icon`、`disabled`、`divided`、`keepOpen`。响应式工厂可更新禁用状态；`keepOpen` 适合连续查看操作。下例表头菜单排序，数据菜单查看记录或启动已有编辑器，表尾菜单查看汇总。
+
+聚焦单元格后按 Shift + F10 或菜单键打开，方向键、Home / End 移动菜单焦点，Enter / Space 选择，Escape 关闭并恢复来源焦点，Tab 关闭后继续浏览。配合 `keyboard-config` 可先用方向键选择数据单元格。菜单不触发行选择；编辑器内保留原生右键菜单及输入法行为。
+
+表格滚动、翻页、排序、筛选、数据或列布局变化会关闭当前菜单；外部点击由共享弹层处理。菜单默认传送到页面弹层，不会被卡片或虚拟视口裁切。
+
+<template #example><table-zh-context-menu /></template>
+
+<template #template>
+
+@[code{58-98}](../../.vuepress/components/table-zh/context-menu.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-56}](../../.vuepress/components/table-zh/context-menu.vue)
+
+</template>
+
+<template #style>
+
+@[code{100-114}](../../.vuepress/components/table-zh/context-menu.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 虚拟数据菜单
+
+`virtualSource` 下的数据行列索引为绝对源索引，表尾 `rowIndex` 仍是表尾数组索引。仅为命中的已渲染单元格构造上下文，不枚举整张数据源。点击末格后按 Shift + F10，可检查末端数据和左右固定列；横向移动后也可打开对应表尾菜单。数据源的变更、滚动或卸载会关闭旧上下文。
+
+<template #example><table-zh-context-menu-source /></template>
+
+<template #template>
+
+@[code{35-57}](../../.vuepress/components/table-zh/context-menu-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-33}](../../.vuepress/components/table-zh/context-menu-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{59-72}](../../.vuepress/components/table-zh/context-menu-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

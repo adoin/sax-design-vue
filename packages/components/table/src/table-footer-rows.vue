@@ -27,8 +27,13 @@ const props = defineProps<{
   renderers: Record<string, TableRenderer | TableCellRenderer>
   overflow?: TableOverflow
   retainHeights: boolean
+  contextMenuEnabled?: boolean
 }>()
 const emit = defineEmits<{
+  cellContextMenu: [
+    params: TableFooterCellRenderParams,
+    event: MouseEvent | KeyboardEvent,
+  ]
   cellClick: [params: TableFooterCellRenderParams, event: MouseEvent]
 }>()
 defineSlots<{ cell(params: TableFooterCellRenderParams): unknown }>()
@@ -133,7 +138,10 @@ defineExpose({ measure })
           role="cell"
           :aria-colindex="(entry.ariaIndex ?? entry.index) + 1"
           :data-column-index="entry.index"
+          :tabindex="contextMenuEnabled ? 0 : undefined"
           @click="emit('cellClick', entry.params, $event)"
+          @contextmenu="emit('cellContextMenu', entry.params, $event)"
+          @keydown="emit('cellContextMenu', entry.params, $event)"
         >
           <span
             :class="[
