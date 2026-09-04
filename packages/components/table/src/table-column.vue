@@ -4,13 +4,13 @@ import {
   inject,
   onBeforeMount,
   onBeforeUnmount,
-  provide,
-  shallowRef,
+  onUpdated,
   useSlots,
   watch,
 } from 'vue'
 import { cloneDeep, isEqual } from 'lodash-unified'
 import { tableColumnRegistrationKey } from './table'
+import { useTableColumnRegistry } from './composables/use-table-column-registry'
 import type { TableColumn, TableColumnOptions } from './table'
 
 defineOptions({ name: 'STableColumn' })
@@ -25,7 +25,7 @@ const instance = getCurrentInstance()
 const slots = useSlots()
 const registration = inject(tableColumnRegistrationKey, null)
 const registrationId = Symbol('tableColumn')
-const children = shallowRef<Array<{ id: symbol; column: TableColumn }>>([])
+const children = useTableColumnRegistry()
 const callbacks = new Map<string, (...args: unknown[]) => unknown>()
 const callbackMarker = () => undefined
 const forwardedProps = (): TableColumnOptions => {
@@ -52,25 +52,9 @@ const propSnapshot = () => {
   return snapshot
 }
 
-provide(tableColumnRegistrationKey, {
-  register: (id, column) => {
-    children.value = [...children.value, { id, column }]
-  },
-  update: (id, column) => {
-    children.value = children.value.map((child) =>
-      child.id === id ? { id, column } : child,
-    )
-  },
-  unregister: (id) => {
-    children.value = children.value.filter((child) => child.id !== id)
-  },
-})
-
 const createColumn = (): TableColumn => ({
   ...forwardedProps(),
-  children: slots.columns
-    ? children.value.map((child) => child.column)
-    : props.children,
+  children: slots.columns ? children.value : props.children,
   key: instance?.vnode.key == null ? undefined : String(instance.vnode.key),
   ...(slots.default ? { cell: (params) => slots.default?.(params) } : {}),
   ...(slots.header ? { header: (params) => slots.header?.(params) } : {}),
@@ -78,7 +62,25 @@ const createColumn = (): TableColumn => ({
   ...(slots.edit ? { edit: (params) => slots.edit?.(params) } : {}),
 })
 
-onBeforeMount(() => registration?.register(registrationId, createColumn()))
+onBeforeMount(() =>
+  registration?.register(
+    registrationId,
+    createColumn(),
+    () => instance?.vnode.el as Node | null | undefined,
+  ),
+)
+
+const slotSignature = () =>
+  ['default', 'header', 'footer', 'edit', 'columns']
+    .map((name) => Boolean(slots[name]))
+    .join(',')
+let previousSlots = slotSignature()
+onUpdated(() => {
+  const current = slotSignature()
+  if (current === previousSlots) return
+  previousSlots = current
+  registration?.update(registrationId, createColumn())
+})
 
 // Inline object props are recreated when the parent table renders its slot.
 // Re-register only semantic changes, including mutations inside rule objects.

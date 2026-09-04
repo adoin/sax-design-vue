@@ -379,7 +379,11 @@ export type TableRenderedEntry<Row extends TableRow = TableRow> =
   TableRenderedColumnEntry<Row> | TableRenderedSpacerEntry
 
 export interface TableColumnRegistration {
-  register: (id: symbol, column: TableColumn) => void
+  register: (
+    id: symbol,
+    column: TableColumn,
+    anchor?: () => Node | null | undefined,
+  ) => void
   update: (id: symbol, column: TableColumn) => void
   unregister: (id: symbol) => void
 }

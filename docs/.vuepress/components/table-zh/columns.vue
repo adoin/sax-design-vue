@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import { shallowRef } from 'vue'
+
+const fields = shallowRef([
+  { field: 'name', title: '项目', minWidth: 190 },
+  { field: 'owner', title: '负责人', minWidth: 140 },
+])
+const customStatus = shallowRef(true)
 interface ProjectRow {
   id: number
   name: string
@@ -15,12 +22,23 @@ const rows: ProjectRow[] = [
 </script>
 
 <template>
-  <s-table :data="rows" row-key="id">
+  <s-table class="column-order-demo" :data="rows" row-key="id">
+    <template #header>
+      <div class="column-order-demo__controls">
+        <s-button size="small" @click="fields = [...fields].reverse()"
+          >反转列顺序</s-button
+        >
+        <s-checkbox v-model="customStatus">自定义状态单元格</s-checkbox>
+      </div>
+    </template>
     <s-table-column type="seq" title="序号" :width="72" align="right" />
-    <s-table-column field="name" title="项目" :min-width="190" />
-    <s-table-column field="owner" title="负责人" :min-width="140" />
+    <s-table-column
+      v-for="column in fields"
+      :key="column.field"
+      v-bind="column"
+    />
     <s-table-column field="status" title="状态" :width="130">
-      <template #default="{ value }">
+      <template v-if="customStatus" #default="{ value }">
         <s-tag :color="value === '进行中' ? 'success' : 'warn'">
           {{ value }}
         </s-tag>
@@ -28,3 +46,12 @@ const rows: ProjectRow[] = [
     </s-table-column>
   </s-table>
 </template>
+
+<style scoped>
+.column-order-demo__controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+</style>

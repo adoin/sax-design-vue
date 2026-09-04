@@ -2509,17 +2509,25 @@ EXPOSES:
 
 需要在模板中直观看到列结构时，使用 `s-table-column`。列可以直接持有作用域插槽，而所有行仍由 `data` 提供。
 
+使用 `v-for` 声明列时，为每列提供稳定的 key。调整声明顺序会同步更新表头和单元格；移除自定义单元格插槽后，会恢复列渲染器或原始值。
+
 <template #example><table-zh-columns /></template>
 
 <template #template>
 
-@[code{17-30}](../../.vuepress/components/table-zh/columns.vue)
+@[code{24-48}](../../.vuepress/components/table-zh/columns.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-15}](../../.vuepress/components/table-zh/columns.vue)
+@[code{1-22}](../../.vuepress/components/table-zh/columns.vue)
+
+</template>
+
+<template #style>
+
+@[code{50-57}](../../.vuepress/components/table-zh/columns.vue)
 
 </template>
 

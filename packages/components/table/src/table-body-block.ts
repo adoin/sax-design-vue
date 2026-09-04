@@ -22,19 +22,26 @@ interface Options {
 
 /** One composition path for ordinary and virtual data rows, details, and group bands. */
 export function createTableBodyBlock(options: Options) {
-  function TableBodyBlock({ item }: { item: TableBodyItem }) {
+  function TableBodyBlock({
+    item,
+    renderSlots,
+  }: {
+    item: TableBodyItem
+    renderSlots?: Slots
+  }) {
+    const slots = renderSlots ?? options.slots
     if (item.kind !== 'data')
       return h(TableGroupBand, options.group(item), {
-        ...(options.slots['group-header']
+        ...(slots['group-header']
           ? {
               header: (params: Record<string, unknown>) =>
-                renderSlot(options.slots, 'group-header', params),
+                renderSlot(slots, 'group-header', params),
             }
           : {}),
-        ...(options.slots['group-summary']
+        ...(slots['group-summary']
           ? {
               summary: (params: Record<string, unknown>) =>
-                renderSlot(options.slots, 'group-summary', params),
+                renderSlot(slots, 'group-summary', params),
             }
           : {}),
       })
@@ -44,15 +51,16 @@ export function createTableBodyBlock(options: Options) {
           flatRow: item.flatRow,
           displayIndex: item.index,
           detail,
+          renderSlots: slots,
         }),
       detail: (params: Record<string, unknown>) =>
-        renderSlot(options.slots, 'detail', params),
+        renderSlot(slots, 'detail', params),
       loading: (params: Record<string, unknown>) =>
-        renderSlot(options.slots, 'detail-loading', params),
+        renderSlot(slots, 'detail-loading', params),
       error: (params: Record<string, unknown>) =>
-        renderSlot(options.slots, 'detail-error', params),
+        renderSlot(slots, 'detail-error', params),
     })
   }
-  TableBodyBlock.props = ['item']
+  TableBodyBlock.props = ['item', 'renderSlots']
   return TableBodyBlock
 }

@@ -1,0 +1,58 @@
+[
+  {
+    "locale": "en",
+    "rendered": {
+      "headers": ["#", "Project", "Owner", "Status"],
+      "rows": 3,
+      "reordered": true,
+      "slotRestored": true
+    },
+    "alternateTheme": {
+      "headers": ["#", "Project", "Owner", "Status"],
+      "rows": 3,
+      "reordered": true,
+      "slotRestored": true
+    },
+    "fromCode": {
+      "headers": ["#", "Project", "Owner", "Status"],
+      "rows": 3,
+      "reordered": true,
+      "slotRestored": true
+    },
+    "direct": {
+      "headers": ["#", "Project", "Owner", "Status"],
+      "rows": 3,
+      "reordered": true,
+      "slotRestored": true
+    },
+    "codeLength": 1585
+  },
+  {
+    "locale": "zh",
+    "rendered": {
+      "headers": ["序号", "项目", "负责人", "状态"],
+      "rows": 3,
+      "reordered": true,
+      "slotRestored": true
+    },
+    "alternateTheme": {
+      "headers": ["序号", "项目", "负责人", "状态"],
+      "rows": 3,
+      "reordered": true,
+      "slotRestored": true
+    },
+    "fromCode": {
+      "headers": ["序号", "项目", "负责人", "状态"],
+      "rows": 3,
+      "reordered": true,
+      "slotRestored": true
+    },
+    "direct": {
+      "headers": ["序号", "项目", "负责人", "状态"],
+      "rows": 3,
+      "reordered": true,
+      "slotRestored": true
+    },
+    "codeLength": 1492
+  }
+]

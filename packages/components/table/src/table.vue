@@ -268,7 +268,10 @@
           @scroll="handleVirtualScroll"
         >
           <template #default="{ item, index }">
-            <TableBodyBlock :item="normalizeBodyItem(item, index)" />
+            <TableBodyBlock
+              :item="normalizeBodyItem(item, index)"
+              :render-slots="{ ...$slots }"
+            />
           </template>
         </SVirtualList>
 
@@ -283,6 +286,7 @@
           <TableBodyBlock
             v-for="index in bodyDisplayCount"
             :key="virtualRowKeyAt(index - 1)"
+            :render-slots="{ ...$slots }"
             :item="bodyItemAt(index - 1)"
           />
         </div>
@@ -364,7 +368,7 @@
           @continuation-contextmenu="mergeContinuationContextmenu"
         >
           <template #cell="{ surface }"
-            ><TableMergedCell :surface="surface"
+            ><TableMergedCell :surface="surface" :render-slots="{ ...$slots }"
           /></template>
         </TableMergeLayer>
 
@@ -451,7 +455,6 @@ import {
   computed,
   h,
   nextTick,
-  provide,
   ref,
   renderSlot,
   shallowRef,
@@ -463,7 +466,8 @@ import { SPagination } from '@vuesax-alpha/components/pagination'
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
 import { useId, useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SContextMenu } from '@vuesax-alpha/components/context-menu'
-import { tableColumnRegistrationKey, tableEmits, tableProps } from './table'
+import { tableEmits, tableProps } from './table'
+import { useTableColumnRegistry } from './composables/use-table-column-registry'
 import {
   useTable,
   useTableColumnVirtualization,
@@ -522,7 +526,7 @@ import type { TableBodyItem } from './table-body-block'
 import type { TableMergeSurface } from './table-merge-layer.vue'
 import type { ContextMenuInstance } from '@vuesax-alpha/components/context-menu'
 import type { VirtualListInstance } from '@vuesax-alpha/components/virtual-list'
-import type { CSSProperties } from 'vue'
+import type { CSSProperties, Slots } from 'vue'
 import type {
   TableCellRenderParams,
   TableCellRenderer,
@@ -560,37 +564,11 @@ const columnScrollRef = ref<HTMLElement>()
 const selectionName = useId()
 const overflow = useTableOverflow()
 
-interface RegisteredColumn {
-  id: symbol
-  column: TableColumn
-}
-
-const registeredColumns = shallowRef<RegisteredColumn[]>([])
-const registerColumn = (id: symbol, column: TableColumn) => {
-  registeredColumns.value = [...registeredColumns.value, { id, column }]
-}
-const updateColumn = (id: symbol, column: TableColumn) => {
-  registeredColumns.value = registeredColumns.value.map((entry) =>
-    entry.id === id ? { id, column } : entry,
-  )
-}
-const unregisterColumn = (id: symbol) => {
-  registeredColumns.value = registeredColumns.value.filter(
-    (entry) => entry.id !== id,
-  )
-}
-
-provide(tableColumnRegistrationKey, {
-  register: registerColumn,
-  update: updateColumn,
-  unregister: unregisterColumn,
-})
+const registeredColumns = useTableColumnRegistry()
 
 const columnTree = computed(() =>
   flattenTableColumns(
-    props.columns.length
-      ? props.columns
-      : registeredColumns.value.map((entry) => entry.column),
+    props.columns.length ? props.columns : registeredColumns.value,
   ),
 )
 const rawColumns = computed(() => columnTree.value.leaves)
@@ -2364,7 +2342,13 @@ watch(
     if (groups.enabled.value) editing.contextChanged('view')
   },
 )
-const TableMergedCell = ({ surface }: { surface: TableMergeSurface }) => {
+const TableMergedCell = ({
+  surface,
+  renderSlots,
+}: {
+  surface: TableMergeSurface
+  renderSlots: Slots
+}) => {
   const column = mergeColumn(surface.region.col)
   if (!column) return null
   const entries: TableRenderedColumnEntry[] = [
@@ -2381,6 +2365,7 @@ const TableMergedCell = ({ surface }: { surface: TableMergeSurface }) => {
     const flatRow = mergeFlatRow(surface.region.row)
     if (!flatRow) return null
     return h(TableBodyRow, {
+      renderSlots,
       flatRow,
       displayIndex: props.virtualSource
         ? (groups.layout.value.dataIndexNear(surface.region.row, 'forward') ??

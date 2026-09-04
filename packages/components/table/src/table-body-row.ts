@@ -19,6 +19,7 @@ interface RowProps {
   detail?: TableRowDetailState
   entries?: TableRenderedEntry[]
   mergeOwner?: TableMergeRegion
+  renderSlots?: Slots
 }
 interface RowRendererOptions {
   bindings: (
@@ -34,12 +35,14 @@ interface RowRendererOptions {
 /** Ordinary rows, virtual rows and merge owners share the same slot fallback chain. */
 export function createTableBodyRow(options: RowRendererOptions) {
   function TableBodyRow(props: RowProps) {
+    const { renderSlots, ...rowProps } = props
+    const slots = renderSlots ?? options.slots
     const bindings = options.bindings(props.flatRow, props.displayIndex)
     return h(
       TableDataRow,
       {
         ...bindings,
-        ...props,
+        ...rowProps,
         entries: props.entries ?? bindings.entries,
         mergeAt: props.mergeOwner ? undefined : bindings.mergeAt,
         minimumHeight: props.mergeOwner ? undefined : bindings.minimumHeight,
@@ -47,11 +50,11 @@ export function createTableBodyRow(options: RowRendererOptions) {
       {
         cell: (params: TableCellRenderParams) =>
           renderSlot(
-            options.slots,
+            slots,
             options.cellSlotName(params.column),
             { ...params },
             () => [
-              renderSlot(options.slots, 'cell', { ...params }, () => [
+              renderSlot(slots, 'cell', { ...params }, () => [
                 h(TableRendererOutlet, {
                   renderer: options.renderer(params.column),
                   params,
@@ -62,10 +65,10 @@ export function createTableBodyRow(options: RowRendererOptions) {
           ),
         edit: (params: TableEditSlotParams) =>
           renderSlot(
-            options.slots,
+            slots,
             options.editSlotName(params.column),
             { ...params },
-            () => [renderSlot(options.slots, 'edit-cell', { ...params })],
+            () => [renderSlot(slots, 'edit-cell', { ...params })],
           ),
       },
     )
@@ -76,6 +79,7 @@ export function createTableBodyRow(options: RowRendererOptions) {
     'detail',
     'entries',
     'mergeOwner',
+    'renderSlots',
   ]
   return TableBodyRow
 }

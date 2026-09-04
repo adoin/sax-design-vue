@@ -2509,17 +2509,25 @@ Pass rows through `data` and define each column's field, title and display optio
 
 When template-level column declaration reads better, use `s-table-column`. A column can own its scoped cell slot while rows still come from `data`.
 
+Give columns rendered with `v-for` stable keys. Changing their order updates headers and cells together; removing a custom cell slot restores the column renderer or raw value.
+
 <template #example><table-columns /></template>
 
 <template #template>
 
-@[code{17-30}](../.vuepress/components/table/columns.vue)
+@[code{24-48}](../.vuepress/components/table/columns.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-15}](../.vuepress/components/table/columns.vue)
+@[code{1-22}](../.vuepress/components/table/columns.vue)
+
+</template>
+
+<template #style>
+
+@[code{50-57}](../.vuepress/components/table/columns.vue)
 
 </template>
 

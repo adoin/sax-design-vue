@@ -15,6 +15,7 @@
     "audit:table-docs": "node scripts/audit-table-docs.mjs",
     "audit:table-api": "node scripts/audit-table-api.mjs",
     "audit:table-api-browser": "node scripts/audit-table-api-browser.mjs",
+    "audit:table-columns": "node scripts/audit-table-columns.mjs",
     "test:ssr": "vitest --config ./ssr-testing/vitest.config.ts",
     "prepare:e2e": "if [ ! -d \"docs/.vuepress/dist\" ]; then pnpm run docs:build; fi;",
     "dev": "pnpm run docs:dev",
