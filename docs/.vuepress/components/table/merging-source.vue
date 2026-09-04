@@ -60,7 +60,7 @@ const merges: TableMergeConfig = {
       v-model:active-cell="active"
       :virtual-source="source"
       :merge-config="merged ? merges : false"
-      :keyboard-config="{ rowIndexOf: (key) => Number(key) }"
+      :keyboard-config="{ rowIndexOf: Number }"
       :virtual-config="{ height: 280, dynamic: true, horizontal: true }"
       resize-config
     >

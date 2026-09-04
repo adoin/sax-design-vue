@@ -17,7 +17,7 @@ const source = computed<TableVirtualSource>(() => ({
   column: (index) => ({
     key: String(index),
     title: index ? `Metric ${index}` : 'Row',
-    cell: ({ row }) => (index ? Number(row.id) + index : row.id),
+    cell: ({ row }) => Number(row.id) + index,
     footer: ({ row }) =>
       index
         ? (

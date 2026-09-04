@@ -17,7 +17,7 @@ const source = computed<TableVirtualSource>(() => ({
   column: (index) => ({
     key: String(index),
     title: index ? `指标 ${index}` : '行号',
-    cell: ({ row }) => (index ? Number(row.id) + index : row.id),
+    cell: ({ row }) => Number(row.id) + index,
     footer: ({ row }) =>
       index
         ? (

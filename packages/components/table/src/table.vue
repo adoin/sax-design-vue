@@ -2328,8 +2328,9 @@ const TableBodyBlock = createTableBodyBlock({
     viewportWidth: columnVirtualization.viewportWidth.value,
     rowIndex: groupBandAriaIndex(item.renderIndex),
     entries: renderedColumnEntries.value,
-    fixedStyle: fixedBandStyle,
-    style: virtualBandStyle.value,
+    // Body groups already move with the native scroll window, just like rows.
+    // Only bands outside that window need translated fixed-column compensation.
+    fixedStyle: () => ({}),
     renderers: props.renderers,
     retainHeights: horizontalVirtualMode.value,
     onToggle: (key, value) => groups.toggle(key, value),

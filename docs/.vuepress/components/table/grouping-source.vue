@@ -62,7 +62,7 @@ const last = async () => {
       v-model:active-cell="active"
       :virtual-source="source"
       :group-config="grouping"
-      :keyboard-config="{ rowIndexOf: (key) => Number(key) }"
+      :keyboard-config="{ rowIndexOf: Number }"
       :virtual-config="{ height: 300, dynamic: true, horizontal: true }"
       resize-config
     >
