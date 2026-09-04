@@ -7,7 +7,12 @@ import {
   validTableDataKey,
 } from '../change-data'
 import { applyTableDataPatches, projectTableDataPatches } from '../change-utils'
+import {
+  TableDataBatchConflictError,
+  planTableRowUpdates,
+} from '../change-batch'
 import { useTableHistory } from './use-table-history'
+import type { TableRowUpdate } from '../change-batch'
 import type { TableHistoryAction } from './use-table-history'
 import type { TableDataNode } from '../change-data'
 import type {
@@ -115,19 +120,24 @@ export function useTableChanges(
     data?: TableRow[],
     current: () => boolean = () => true,
     replay?: TableHistoryAction,
+    signal?: AbortSignal,
   ): Promise<TableDataMutationResult> => {
     if (!operations.length) {
-      const applied = current() && transaction.commit()
+      const applied = !signal?.aborted && current() && transaction.commit()
       transaction.cancel()
       return applied
         ? { applied: true }
         : { applied: false, reason: 'cancelled' }
     }
     const controller = new AbortController()
+    const abort = () => controller.abort()
+    signal?.addEventListener('abort', abort, { once: true })
+    if (signal?.aborted) abort()
     const request = { controller, data }
     pending = request
     try {
-      if (!current()) return { applied: false, reason: 'cancelled' }
+      if (controller.signal.aborted || !current())
+        return { applied: false, reason: 'cancelled' }
       const recordHistory = replay
         ? undefined
         : history.capture(operations, transaction)
@@ -170,6 +180,7 @@ export function useTableChanges(
         error,
       }
     } finally {
+      signal?.removeEventListener('abort', abort)
       transaction.cancel()
       if (pending === request) pending = undefined
     }
@@ -182,7 +193,8 @@ export function useTableChanges(
     } catch (error) {
       return {
         applied: false,
-        reason: 'invalid',
+        reason:
+          error instanceof TableDataBatchConflictError ? 'conflict' : 'invalid',
         error,
       } as TableDataMutationResult
     }
@@ -196,64 +208,74 @@ export function useTableChanges(
     editing: options.editing,
     cancel,
   })
+  const updateRows = (
+    updates: readonly TableRowUpdate[],
+    current?: () => boolean,
+    signal?: AbortSignal,
+  ) =>
+    guarded(async () => {
+      if (signal?.aborted || current?.() === false)
+        return { applied: false, reason: 'cancelled' }
+      const tree = props.virtualSource ? undefined : index()
+      const { operations, accepted } = planTableRowUpdates(updates, {
+        generated: Boolean(props.virtualSource),
+        target: (key) => {
+          if (props.virtualSource) return sourceTarget(key)
+          const node = tree!.nodes.get(key)
+          return node
+            ? { row: node.row, position: tree!.position(node) }
+            : undefined
+        },
+        assertKey: (before, after, index) => {
+          const keyValue = (value: TableRow) =>
+            typeof props.rowKey === 'function'
+              ? props.rowKey(value, index)
+              : value[props.rowKey]
+          if (
+            props.virtualSource?.rowKey
+              ? keyValue(after) !== keyValue(before)
+              : rowKey(after) !== rowKey(before)
+          )
+            throw new Error('A table mutation cannot change the stable row key')
+        },
+      })
+      const data = tree
+        ? planTableData(
+            tree,
+            operations.map(({ rowKey, patches }) => ({
+              type: 'update',
+              rowKey,
+              patches,
+            })),
+          )
+        : undefined
+      return apply(
+        operations,
+        journal.prepare(accepted),
+        data,
+        current,
+        undefined,
+        signal,
+      )
+    })
   const updateRow = (
     key: TableRowKey,
     values: Record<string, unknown>,
     current?: () => boolean,
   ) =>
-    guarded(async () => {
-      const patches = Object.entries(values).map(([field, value]) => ({
-        field,
-        value,
-        exists: true,
-      }))
-      const tree = props.virtualSource ? undefined : index()
-      const node = tree?.nodes.get(key)
-      const target = props.virtualSource
-        ? sourceTarget(key)
-        : node
-          ? { row: node.row, position: tree!.position(node) }
-          : undefined
-      if (!target) throw new Error('Target row was not found')
-      const row = props.virtualSource
-        ? projectTableDataPatches(target.row, patches)
-        : applyTableDataPatches(target.row, patches)
-      const source = props.virtualSource
-      const keyValue = (value: TableRow) =>
-        typeof props.rowKey === 'function'
-          ? props.rowKey(value, target.position.index)
-          : value[props.rowKey]
-      if (
-        source?.rowKey
-          ? keyValue(row) !== keyValue(target.row)
-          : rowKey(row) !== rowKey(target.row)
-      )
-        throw new Error('A table mutation cannot change the stable row key')
-      const operation: TableDataMutation = {
-        type: 'update',
-        rowKey: key,
-        row,
-        position: target.position,
-        patches,
-      }
-      const data = tree
-        ? planTableData(tree, [{ type: 'update', rowKey: key, patches }])
-        : undefined
-      return apply(
-        [operation],
-        journal.prepare([
-          {
-            ...operation,
-            row,
-            before: target.row,
-            type: 'update',
-            fields: Object.keys(values),
-          },
-        ]),
-        data,
-        current,
-      )
-    })
+    updateRows(
+      [
+        {
+          rowKey: key,
+          patches: Object.entries(values).map(([field, value]) => ({
+            field,
+            value,
+            exists: true,
+          })),
+        },
+      ],
+      current,
+    )
   const insertRows = (
     rows: TableRow[],
     position: Partial<TableDataPosition> = {},
@@ -504,6 +526,7 @@ export function useTableChanges(
     enabled,
     applyEdit,
     updateRow,
+    updateRows,
     insertRows,
     removeRows,
     revertChanges,
