@@ -694,7 +694,7 @@
     color: getCssVar(text-color, secondary);
     cursor: pointer;
 
-    &:hover,
+    &:hover:not(:disabled),
     &:focus-visible {
       background: getColor(primary, 0.1);
       color: getColor(primary);
@@ -705,6 +705,7 @@
     &.is-active {
       color: getColor(primary);
     }
+    &:disabled { cursor: not-allowed; opacity: 0.45; }
   }
 
   @include e(sort-controls) {
@@ -735,7 +736,7 @@
     color: getCssVar(text-color, secondary);
     cursor: pointer;
 
-    &:hover,
+    &:hover:not(:disabled),
     &.is-active {
       color: getColor(primary);
     }
@@ -743,6 +744,7 @@
       outline: 2px solid getColor(primary, 0.6);
       outline-offset: 1px;
     }
+    &:disabled { cursor: not-allowed; opacity: 0.45; }
     @media (pointer: coarse) {
       width: 44px;
       height: 44px;
@@ -778,6 +780,7 @@
     color: getColor(text);
     background: getColor(background);
     box-shadow: var(--sax-popper-shadow);
+    &.is-square { border-radius: 0; }
   }
 
   @include e(filter-title) {

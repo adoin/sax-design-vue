@@ -86,6 +86,26 @@ afterEach(() => {
 })
 
 describe('Select enhanced capabilities', () => {
+  it('disables the native trigger and cancels keyboard opening when disabled', async () => {
+    const wrapper = mountSelect({
+      disabled: true,
+      options: [{ label: 'A', value: 'a' }],
+    })
+    const input = wrapper.get<HTMLInputElement>('.s-select__input')
+    expect(input.element.disabled).toBe(true)
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    expect(wrapper.find('.s-select.is-open').exists()).toBe(false)
+    await wrapper.setProps({ disabled: false })
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    expect(wrapper.find('.s-select.is-open').exists()).toBe(true)
+    await wrapper.setProps({ disabled: true })
+    expect(input.element.disabled).toBe(true)
+    expect(wrapper.find('.s-select.is-open').exists()).toBe(false)
+    await wrapper.setProps({ disabled: false })
+    expect(wrapper.find('.s-select.is-open').exists()).toBe(false)
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    wrapper.unmount()
+  })
   it('keeps square geometry on the trigger and popup while open', async () => {
     const wrapper = mountSelect({
       modelValue: '',

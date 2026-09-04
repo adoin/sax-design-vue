@@ -90,6 +90,13 @@ export const useSelect = (
   )
 
   const selectDisabled = computed(() => props.disabled)
+  watch(
+    selectDisabled,
+    (disabled) => {
+      if (disabled) states.visible = false
+    },
+    { flush: 'sync' },
+  )
 
   const showClose = computed(() => {
     const hasValue = props.multiple
@@ -813,6 +820,7 @@ export const useSelect = (
   }
 
   const selectOption = () => {
+    if (selectDisabled.value) return
     if (!states.visible) {
       toggleMenu()
     } else {
@@ -829,6 +837,7 @@ export const useSelect = (
   )
 
   const navigateOptions = (direction: 'next' | 'prev' = 'next') => {
+    if (selectDisabled.value) return
     if (!states.visible) {
       states.visible = true
       return

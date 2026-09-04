@@ -148,6 +148,7 @@
               "
             >
               <TableHeaderCell
+                :disabled="loading"
                 :group="entry.group"
                 :column="entry.column"
                 :order="sortOrder(entry.column)"

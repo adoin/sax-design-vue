@@ -4,7 +4,7 @@ import { SButton } from '@vuesax-alpha/components/button'
 import { SCheckbox } from '@vuesax-alpha/components/checkbox'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SPopper } from '@vuesax-alpha/components/popper'
-import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { tableOverflowMode } from './data-utils'
 import type {
   TableColumn,
@@ -17,6 +17,7 @@ import type {
 const props = defineProps<{
   column: TableColumn
   group?: boolean
+  disabled?: boolean
   order?: TableSortOrder
   sortPriority?: number
   filterValues: TableFilterValue[]
@@ -36,6 +37,7 @@ defineSlots<{
   filter?(params: TableFilterSlotParams): unknown
 }>()
 const ns = useNamespace('table')
+const shape = useShape()
 const { t } = useLocale()
 const open = shallowRef(false)
 const draft = shallowRef<TableFilterValue[]>([])
@@ -63,14 +65,16 @@ const close = () => {
 }
 const closeAndFocus = () => {
   close()
-  trigger.value?.focus()
+  if (!props.disabled) trigger.value?.focus()
 }
 const apply = () => {
+  if (props.disabled) return
   emit('filter', [...draft.value])
   close()
   trigger.value?.focus()
 }
 const reset = () => {
+  if (props.disabled) return
   draft.value = []
   emit('filter', [])
   close()
@@ -85,6 +89,12 @@ const toggleOption = (value: TableFilterValue, checked: boolean) =>
 watch(open, (value) => {
   if (value) draft.value = [...props.filterValues]
 })
+watch(
+  () => props.disabled,
+  (value) => {
+    if (value) close()
+  },
+)
 const sortDirections: TableSortOrder[] = ['asc', 'desc']
 const sortLabel = (direction: TableSortOrder) =>
   `${props.column.title ?? props.column.field ?? ''}: ${t(
@@ -122,6 +132,7 @@ const sortLabel = (direction: TableSortOrder) =>
           :class="[ns.e('sort-button'), ns.is('active', order === direction)]"
           :aria-label="sortLabel(direction)"
           :aria-pressed="order === direction"
+          :disabled="disabled"
           :title="
             order === direction ? t('vs.table.clearSort') : sortLabel(direction)
           "
@@ -141,15 +152,21 @@ const sortLabel = (direction: TableSortOrder) =>
       v-if="hasFilter"
       v-model:visible="open"
       trigger="click"
+      :disabled="disabled"
       placement="bottom-end"
       :show-arrow="false"
       :offset="8"
-      :popper-class="ns.e('filter-panel')"
+      :shift="{ padding: 8, crossAxis: true }"
+      :popper-class="[
+        ns.e('filter-panel'),
+        ns.is('square', shape === 'square'),
+      ]"
       @show="focusPanel"
     >
       <button
         ref="trigger"
         type="button"
+        :disabled="disabled"
         :class="[
           ns.e('header-action'),
           ns.is('active', filterValues.length > 0),
@@ -185,7 +202,7 @@ const sortLabel = (direction: TableSortOrder) =>
                 v-for="(option, index) in column.filters"
                 :key="index"
                 :model-value="draft.includes(option.value)"
-                :disabled="option.disabled"
+                :disabled="disabled || option.disabled"
                 :label="option.label"
                 @update:model-value="
                   toggleOption(option.value, Boolean($event))
@@ -194,10 +211,14 @@ const sortLabel = (direction: TableSortOrder) =>
             </div>
           </slot>
           <div :class="ns.e('filter-actions')">
-            <SButton size="mini" type="flat" @click="reset">{{
-              t('vs.table.resetFilter')
-            }}</SButton>
-            <SButton size="mini" @click="apply">{{
+            <SButton
+              size="mini"
+              type="flat"
+              :disabled="disabled"
+              @click="reset"
+              >{{ t('vs.table.resetFilter') }}</SButton
+            >
+            <SButton size="mini" :disabled="disabled" @click="apply">{{
               t('vs.table.confirmFilter')
             }}</SButton>
           </div>

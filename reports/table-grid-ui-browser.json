@@ -1,0 +1,474 @@
+[
+  {
+    "width": 1100,
+    "dark": false,
+    "shape": "square",
+    "filter": {
+      "radius": "0px",
+      "color": "rgb(44, 62, 80)",
+      "background": "rgb(255, 255, 255)",
+      "shadow": "rgba(25, 91, 255, 0.3) 0px 18px 40px -16px, rgba(19, 31, 72, 0.24) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 8,
+      "right": 208,
+      "height": 181.1875
+    },
+    "select": {
+      "radius": "0px",
+      "color": "rgb(25, 91, 255)",
+      "background": "rgb(255, 255, 255)",
+      "shadow": "rgba(25, 91, 255, 0.3) 0px 18px 40px -16px, rgba(19, 31, 72, 0.24) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 484,
+      "right": 684,
+      "height": 81.1875
+    },
+    "controls": [
+      {
+        "radius": "0px",
+        "x": 96,
+        "right": 296,
+        "disabled": false
+      },
+      {
+        "radius": "0px",
+        "x": 484,
+        "right": 684,
+        "disabled": false
+      },
+      {
+        "radius": "0px",
+        "x": 539.875,
+        "right": 597.8125,
+        "disabled": false
+      },
+      {
+        "radius": "0px",
+        "x": 610.8125,
+        "right": 683.484375,
+        "disabled": true
+      },
+      {
+        "radius": "0px",
+        "x": 696.484375,
+        "right": 776,
+        "disabled": false
+      }
+    ],
+    "disabled": true,
+    "requestCycle": true
+  },
+  {
+    "width": 1100,
+    "dark": false,
+    "shape": "rounded",
+    "filter": {
+      "radius": "16px",
+      "color": "rgb(44, 62, 80)",
+      "background": "rgb(255, 255, 255)",
+      "shadow": "rgba(25, 91, 255, 0.3) 0px 18px 40px -16px, rgba(19, 31, 72, 0.24) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 8,
+      "right": 208,
+      "height": 181.1875
+    },
+    "select": {
+      "radius": "12px",
+      "color": "rgb(25, 91, 255)",
+      "background": "rgb(255, 255, 255)",
+      "shadow": "rgba(25, 91, 255, 0.3) 0px 18px 40px -16px, rgba(19, 31, 72, 0.24) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 484,
+      "right": 684,
+      "height": 81.1875
+    },
+    "controls": [
+      {
+        "radius": "12px",
+        "x": 96,
+        "right": 296,
+        "disabled": false
+      },
+      {
+        "radius": "12px",
+        "x": 484,
+        "right": 684,
+        "disabled": false
+      },
+      {
+        "radius": "12px",
+        "x": 539.875,
+        "right": 597.8125,
+        "disabled": false
+      },
+      {
+        "radius": "12px",
+        "x": 610.8125,
+        "right": 683.484375,
+        "disabled": true
+      },
+      {
+        "radius": "12px",
+        "x": 696.484375,
+        "right": 776,
+        "disabled": false
+      }
+    ],
+    "disabled": true,
+    "requestCycle": true
+  },
+  {
+    "width": 1100,
+    "dark": true,
+    "shape": "square",
+    "filter": {
+      "radius": "0px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(28, 31, 36)",
+      "shadow": "rgba(0, 0, 0, 0.62) 0px 18px 40px -16px, rgba(108, 149, 249, 0.28) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 8,
+      "right": 208,
+      "height": 181.1875
+    },
+    "select": {
+      "radius": "0px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(28, 31, 36)",
+      "shadow": "rgba(0, 0, 0, 0.62) 0px 18px 40px -16px, rgba(108, 149, 249, 0.28) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 484,
+      "right": 684,
+      "height": 81.1875
+    },
+    "controls": [
+      {
+        "radius": "0px",
+        "x": 96,
+        "right": 296,
+        "disabled": false
+      },
+      {
+        "radius": "0px",
+        "x": 484,
+        "right": 684,
+        "disabled": false
+      },
+      {
+        "radius": "0px",
+        "x": 539.875,
+        "right": 597.8125,
+        "disabled": false
+      },
+      {
+        "radius": "0px",
+        "x": 610.8125,
+        "right": 683.484375,
+        "disabled": true
+      },
+      {
+        "radius": "0px",
+        "x": 696.484375,
+        "right": 776,
+        "disabled": false
+      }
+    ],
+    "disabled": true,
+    "requestCycle": true
+  },
+  {
+    "width": 1100,
+    "dark": true,
+    "shape": "rounded",
+    "filter": {
+      "radius": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(28, 31, 36)",
+      "shadow": "rgba(0, 0, 0, 0.62) 0px 18px 40px -16px, rgba(108, 149, 249, 0.28) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 8,
+      "right": 208,
+      "height": 181.1875
+    },
+    "select": {
+      "radius": "12px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(28, 31, 36)",
+      "shadow": "rgba(0, 0, 0, 0.62) 0px 18px 40px -16px, rgba(108, 149, 249, 0.28) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 484,
+      "right": 684,
+      "height": 81.1875
+    },
+    "controls": [
+      {
+        "radius": "12px",
+        "x": 96,
+        "right": 296,
+        "disabled": false
+      },
+      {
+        "radius": "12px",
+        "x": 484,
+        "right": 684,
+        "disabled": false
+      },
+      {
+        "radius": "12px",
+        "x": 539.875,
+        "right": 597.8125,
+        "disabled": false
+      },
+      {
+        "radius": "12px",
+        "x": 610.8125,
+        "right": 683.484375,
+        "disabled": true
+      },
+      {
+        "radius": "12px",
+        "x": 696.484375,
+        "right": 776,
+        "disabled": false
+      }
+    ],
+    "disabled": true,
+    "requestCycle": true
+  },
+  {
+    "width": 375,
+    "dark": false,
+    "shape": "square",
+    "filter": {
+      "radius": "0px",
+      "color": "rgb(44, 62, 80)",
+      "background": "rgb(255, 255, 255)",
+      "shadow": "rgba(25, 91, 255, 0.3) 0px 18px 40px -16px, rgba(19, 31, 72, 0.24) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 8,
+      "right": 208,
+      "height": 181.1875
+    },
+    "select": {
+      "radius": "0px",
+      "color": "rgb(25, 91, 255)",
+      "background": "rgb(255, 255, 255)",
+      "shadow": "rgba(25, 91, 255, 0.3) 0px 18px 40px -16px, rgba(19, 31, 72, 0.24) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 16,
+      "right": 216,
+      "height": 81.1875
+    },
+    "controls": [
+      {
+        "radius": "0px",
+        "x": 16,
+        "right": 216,
+        "disabled": false
+      },
+      {
+        "radius": "0px",
+        "x": 16,
+        "right": 216,
+        "disabled": false
+      },
+      {
+        "radius": "0px",
+        "x": 21,
+        "right": 78.9375,
+        "disabled": false
+      },
+      {
+        "radius": "0px",
+        "x": 91.9375,
+        "right": 164.609375,
+        "disabled": true
+      },
+      {
+        "radius": "0px",
+        "x": 177.609375,
+        "right": 257.125,
+        "disabled": false
+      }
+    ],
+    "disabled": true,
+    "requestCycle": true
+  },
+  {
+    "width": 375,
+    "dark": false,
+    "shape": "rounded",
+    "filter": {
+      "radius": "16px",
+      "color": "rgb(44, 62, 80)",
+      "background": "rgb(255, 255, 255)",
+      "shadow": "rgba(25, 91, 255, 0.3) 0px 18px 40px -16px, rgba(19, 31, 72, 0.24) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 8,
+      "right": 208,
+      "height": 181.1875
+    },
+    "select": {
+      "radius": "12px",
+      "color": "rgb(25, 91, 255)",
+      "background": "rgb(255, 255, 255)",
+      "shadow": "rgba(25, 91, 255, 0.3) 0px 18px 40px -16px, rgba(19, 31, 72, 0.24) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 16,
+      "right": 216,
+      "height": 81.1875
+    },
+    "controls": [
+      {
+        "radius": "12px",
+        "x": 16,
+        "right": 216,
+        "disabled": false
+      },
+      {
+        "radius": "12px",
+        "x": 16,
+        "right": 216,
+        "disabled": false
+      },
+      {
+        "radius": "12px",
+        "x": 21,
+        "right": 78.9375,
+        "disabled": false
+      },
+      {
+        "radius": "12px",
+        "x": 91.9375,
+        "right": 164.609375,
+        "disabled": true
+      },
+      {
+        "radius": "12px",
+        "x": 177.609375,
+        "right": 257.125,
+        "disabled": false
+      }
+    ],
+    "disabled": true,
+    "requestCycle": true
+  },
+  {
+    "width": 375,
+    "dark": true,
+    "shape": "square",
+    "filter": {
+      "radius": "0px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(28, 31, 36)",
+      "shadow": "rgba(0, 0, 0, 0.62) 0px 18px 40px -16px, rgba(108, 149, 249, 0.28) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 8,
+      "right": 208,
+      "height": 181.1875
+    },
+    "select": {
+      "radius": "0px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(28, 31, 36)",
+      "shadow": "rgba(0, 0, 0, 0.62) 0px 18px 40px -16px, rgba(108, 149, 249, 0.28) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 16,
+      "right": 216,
+      "height": 81.1875
+    },
+    "controls": [
+      {
+        "radius": "0px",
+        "x": 16,
+        "right": 216,
+        "disabled": false
+      },
+      {
+        "radius": "0px",
+        "x": 16,
+        "right": 216,
+        "disabled": false
+      },
+      {
+        "radius": "0px",
+        "x": 21,
+        "right": 78.9375,
+        "disabled": false
+      },
+      {
+        "radius": "0px",
+        "x": 91.9375,
+        "right": 164.609375,
+        "disabled": true
+      },
+      {
+        "radius": "0px",
+        "x": 177.609375,
+        "right": 257.125,
+        "disabled": false
+      }
+    ],
+    "disabled": true,
+    "requestCycle": true
+  },
+  {
+    "width": 375,
+    "dark": true,
+    "shape": "rounded",
+    "filter": {
+      "radius": "16px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(28, 31, 36)",
+      "shadow": "rgba(0, 0, 0, 0.62) 0px 18px 40px -16px, rgba(108, 149, 249, 0.28) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 8,
+      "right": 208,
+      "height": 181.1875
+    },
+    "select": {
+      "radius": "12px",
+      "color": "rgb(255, 255, 255)",
+      "background": "rgb(28, 31, 36)",
+      "shadow": "rgba(0, 0, 0, 0.62) 0px 18px 40px -16px, rgba(108, 149, 249, 0.28) 0px 8px 20px -12px",
+      "clipped": false,
+      "x": 16,
+      "right": 216,
+      "height": 81.1875
+    },
+    "controls": [
+      {
+        "radius": "12px",
+        "x": 16,
+        "right": 216,
+        "disabled": false
+      },
+      {
+        "radius": "12px",
+        "x": 16,
+        "right": 216,
+        "disabled": false
+      },
+      {
+        "radius": "12px",
+        "x": 21,
+        "right": 78.9375,
+        "disabled": false
+      },
+      {
+        "radius": "12px",
+        "x": 91.9375,
+        "right": 164.609375,
+        "disabled": true
+      },
+      {
+        "radius": "12px",
+        "x": 177.609375,
+        "right": 257.125,
+        "disabled": false
+      }
+    ],
+    "disabled": true,
+    "requestCycle": true
+  }
+]

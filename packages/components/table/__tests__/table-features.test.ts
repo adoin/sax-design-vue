@@ -6,6 +6,7 @@ import TableHeaderCell from '../src/table-header-cell.vue'
 import TableColumnComponent from '../src/table-column.vue'
 import type {
   TableColumn,
+  TableFilterSlotParams,
   TableInstance,
   TableRow,
   TableSortMethod,
@@ -579,6 +580,51 @@ describe('Table query and selection features', () => {
     const buttons = wrapper.findAllComponents({ name: 'SButton' })
     buttons[1].vm.$emit('click')
     expect(wrapper.emitted('filter')?.[0]).toEqual([['Design', 'Dev']])
+    wrapper.unmount()
+  })
+  it('closes header filters during loading and rejects stale custom filter actions', async () => {
+    let actions: TableFilterSlotParams | undefined
+    const wrapper = mount(Table, {
+      props: {
+        data: rows,
+        columns: [
+          { ...columns[2], sortable: true, slots: { filter: 'filterTeam' } },
+        ],
+      },
+      slots: {
+        filterTeam: (params: TableFilterSlotParams) => {
+          actions = params
+          return h('span', 'Custom filter')
+        },
+      },
+    })
+    const header = wrapper.getComponent(TableHeaderCell)
+    const popper = header.getComponent({ name: 'SPopper' })
+    popper.vm.$emit('update:visible', true)
+    await flushPromises()
+    expect(actions).toBeDefined()
+    actions!.setValues(['Design'])
+    await wrapper.setProps({ loading: true })
+    expect(popper.props('visible')).toBe(false)
+    for (const control of wrapper.findAll<HTMLButtonElement>(
+      '.s-table__header-action,.s-table__sort-button',
+    ))
+      expect(control.element.disabled).toBe(true)
+    actions!.apply()
+    actions!.reset()
+    expect(wrapper.emitted('filterChange')).toBeUndefined()
+    await wrapper.setProps({ loading: false })
+    expect(
+      wrapper.get<HTMLButtonElement>('.s-table__header-action').element
+        .disabled,
+    ).toBe(false)
+    popper.vm.$emit('update:visible', true)
+    await flushPromises()
+    expect(actions!.values).toEqual([])
+    actions!.setValues(['Design'])
+    await nextTick()
+    actions!.apply()
+    expect(wrapper.emitted('filterChange')).toHaveLength(1)
     wrapper.unmount()
   })
 })

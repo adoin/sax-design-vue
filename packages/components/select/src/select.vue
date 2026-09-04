@@ -140,6 +140,7 @@
         v-model="states.selectedLabel"
         :aria-label="($attrs['aria-label'] as string | undefined) ?? label"
         :class="[ns.e('input'), ns.is('multiple', multiple)]"
+        :disabled="selectDisabled"
         :readonly="readonly"
         :placeholder="
           !multiple && filterable && dropMenuVisible
