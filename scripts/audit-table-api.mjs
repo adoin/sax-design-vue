@@ -80,6 +80,70 @@ const interfaceKeys = (file, name) => {
   if (!node) throw new Error(`Missing ${name}`)
   return node.members.map((member) => keyOf(member.name))
 }
+// Compare argument order, optionality and result types, independently of names
+// chosen for arguments in prose. Table's Row defaults to TableRow.
+const signatureOf = (node) => {
+  const type = (value) => {
+    if (!value) return 'untyped'
+    if (ts.isParenthesizedTypeNode(value)) return type(value.type)
+    const unionMembers = (item) =>
+      ts.isUnionTypeNode(item)
+        ? item.types.flatMap(unionMembers)
+        : ts.isTypeReferenceNode(item) &&
+            item.typeName.getText() === 'TableRowKey'
+          ? ['number', 'string']
+          : [type(item)]
+    if (ts.isUnionTypeNode(value))
+      return [...new Set(value.types.flatMap(unionMembers))].sort().join('|')
+    if (ts.isArrayTypeNode(value)) return `Array<${type(value.elementType)}>`
+    if (ts.isTypeReferenceNode(value)) {
+      let name = value.typeName.getText()
+      if (name === 'Row') name = 'TableRow'
+      if (name === 'TableRowKey') return 'number|string'
+      const args = value.typeArguments?.map(type) ?? []
+      if (
+        name.startsWith('Table') &&
+        args.length === 1 &&
+        args[0] === 'TableRow'
+      )
+        args.length = 0
+      return args.length ? `${name}<${args.join(',')}>` : name
+    }
+    return value.getText().replace(/\s+/g, '').replace(/"/g, "'")
+  }
+  if (!node || !ts.isFunctionTypeNode(node)) return null
+  return {
+    parameters: node.parameters.map((parameter) => ({
+      type: type(parameter.type),
+      optional: Boolean(parameter.questionToken),
+      rest: Boolean(parameter.dotDotDotToken),
+    })),
+    result: type(node.type),
+  }
+}
+const interfaceSignatures = (file, name) => {
+  const node = file.statements.find(
+    (statement) =>
+      ts.isInterfaceDeclaration(statement) && statement.name.text === name,
+  )
+  return new Map(
+    node.members.map((member) => [
+      keyOf(member.name),
+      signatureOf(member.type),
+    ]),
+  )
+}
+const documentedSignature = (text) => {
+  const file = ts.createSourceFile(
+    'signature.ts',
+    `type Method = ${text}`,
+    ts.ScriptTarget.Latest,
+    true,
+  )
+  return file.parseDiagnostics.length
+    ? null
+    : signatureOf(file.statements[0]?.type)
+}
 const exposed = (file) => {
   let call
   const visit = (node) => {
@@ -271,12 +335,30 @@ export function auditTableApi({
               contract.EXPOSES.includes(name),
           )
         : []
+      const signatures =
+        component === 'table-select'
+          ? null
+          : interfaceSignatures(
+              file,
+              component === 'table' ? 'TableExposes' : 'TableGridExposes',
+            )
+      const exposeSignatures = {
+        checked: signatures?.size ?? 0,
+        mismatches: [],
+      }
+      for (const [name, expected] of signatures ?? []) {
+        const row = data.EXPOSES?.find((row) => row.name === name)
+        const documented = documentedSignature(row?.type ?? '')
+        if (JSON.stringify(expected) !== JSON.stringify(documented))
+          exposeSignatures.mismatches.push({ name, expected, documented })
+      }
       result.push({
         component,
         locale,
         sections,
         defaults,
         exposeTypeMismatch,
+        exposeSignatures,
         inheritedTableLink:
           component !== 'table-grid' || text.includes('./table.md'),
       })
@@ -299,6 +381,7 @@ if (
         !page.inheritedTableLink ||
         page.defaults.mismatches.length ||
         page.exposeTypeMismatch.length ||
+        page.exposeSignatures.mismatches.length ||
         Object.values(page.sections).some(
           (section) =>
             section.missing.length ||

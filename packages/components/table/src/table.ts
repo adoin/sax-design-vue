@@ -843,7 +843,8 @@ export interface TableExposes<Row extends TableRow = TableRow> {
     columnOrIndex: TableColumn<Row> | string | number,
     align?: 'auto' | 'start' | 'center' | 'end',
   ) => void
-  measure: () => void
+  /** Resolves after the next Vue update has requested row/footer remeasurement. */
+  measure: () => Promise<void>
   setSort: (sorts: TableSort[]) => void
   clearSort: () => void
   setFilters: (filters: TableFilters) => void

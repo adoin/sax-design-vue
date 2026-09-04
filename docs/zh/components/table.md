@@ -1105,20 +1105,20 @@ EXPOSES:
     default: null
     usage: '#选择列与跨页保留'
   - name: toggleRowExpand
-    type: '(row, expanded?) => Promise<void>'
-    description: 展开或收起树形行。
+    type: '(row: TableRow, expanded?: boolean) => Promise<void>'
+    description: '展开或收起当前展开树数据中的行对象，包含其他本地页；省略 expanded 时切换状态。需要懒加载时等待加载完成，加载失败会拒绝 Promise。'
   - name: setExpandedKeys
-    type: '(keys) => void'
-    description: 替换树节点展开键集合。
+    type: '(keys: TableRowKey[]) => void'
+    description: '替换树节点展开键集合并发出 update:expandedKeys；不会加载缺失的子节点，懒加载请调用 toggleRowExpand。'
   - name: scrollToRow
-    type: '(rowOrIndex, align?) => void'
-    description: 将普通或虚拟表格滚动到指定行。
+    type: "(rowOrIndex: TableRow | TableRowKey, align?: 'auto' | 'start' | 'center' | 'end') => void"
+    description: '在当前页展开列表内定位。普通数据接受原始行对象或行键；数字优先匹配行键，未匹配时才按从 0 开始的页内索引定位。virtualSource 仅接受当前页内的绝对数字源索引。不自动展开祖先或切换页，align 默认为 auto。'
   - name: scrollToColumn
-    type: '(columnOrIndex, align?) => void'
-    description: 按索引、key、field 或列对象滚动到指定列。
+    type: "(columnOrIndex: TableColumn | string | number, align?: 'auto' | 'start' | 'center' | 'end') => void"
+    description: '定位可见的中间列。普通数据接受解析后的列索引、key、field 或列对象；virtualSource 仅接受绝对数字列索引。隐藏列、固定列和不存在的列不滚动，align 默认为 auto。'
   - name: measure
-    type: '() => void'
-    description: 重新测量虚拟列表的动态行高。
+    type: '() => Promise<void>'
+    description: '在下一次 Vue 更新后重置虚拟行及合并单元格测量、请求表尾重测并更新横向视口。Promise 在这些请求执行后完成，后续 ResizeObserver 测量仍可能继续。'
 ---
 
 # Table 表格

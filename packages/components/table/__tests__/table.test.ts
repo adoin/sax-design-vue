@@ -1,4 +1,4 @@
-import { h, nextTick } from 'vue'
+import { h, nextTick, reactive } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import Table from '../src/table.vue'
@@ -326,6 +326,118 @@ describe('Table data mode', () => {
     expect(virtualizerMocks.scrollToIndex).toHaveBeenCalledWith(42, {
       align: 'auto',
     })
+  })
+
+  it('resolves row keys before numeric page indices and exposes awaitable measurement', async () => {
+    const data = [{ id: 8 }, { id: 0 }, { id: 9 }, { id: 'named' }]
+    const wrapper = mount(Table, {
+      props: {
+        data,
+        columns,
+        rowKey: 'id',
+        virtualConfig: { height: 220, dynamic: true },
+      },
+    })
+    try {
+      await nextTick()
+      virtualizerMocks.scrollToIndex.mockClear()
+      wrapper.vm.scrollToRow(0, 'center')
+      expect(virtualizerMocks.scrollToIndex).toHaveBeenLastCalledWith(1, {
+        align: 'center',
+      })
+      wrapper.vm.scrollToRow(2, 'end')
+      expect(virtualizerMocks.scrollToIndex).toHaveBeenLastCalledWith(2, {
+        align: 'end',
+      })
+      wrapper.vm.scrollToRow('named')
+      expect(virtualizerMocks.scrollToIndex).toHaveBeenLastCalledWith(3, {
+        align: 'auto',
+      })
+      wrapper.vm.scrollToRow(data[0], 'start')
+      expect(virtualizerMocks.scrollToIndex).toHaveBeenLastCalledWith(0, {
+        align: 'start',
+      })
+      wrapper.vm.scrollToRow(reactive(data[0]), 'end')
+      expect(virtualizerMocks.scrollToIndex).toHaveBeenLastCalledWith(0, {
+        align: 'end',
+      })
+      virtualizerMocks.scrollToIndex.mockClear()
+      wrapper.vm.scrollToRow('2')
+      wrapper.vm.scrollToRow({ id: 8 })
+      wrapper.vm.scrollToRow(99)
+      expect(virtualizerMocks.scrollToIndex).not.toHaveBeenCalled()
+      virtualizerMocks.measure.mockClear()
+      const measured: Promise<void> = wrapper.vm.measure()
+      expect(measured).toBeInstanceOf(Promise)
+      await measured
+      expect(virtualizerMocks.measure).toHaveBeenCalled()
+    } finally {
+      wrapper.unmount()
+    }
+  })
+
+  it('accepts original row objects for tree expansion and scoped validation', async () => {
+    const row = { id: 1, name: '', children: [{ id: 2, name: 'Child' }] }
+    const wrapper = mount(Table, {
+      props: {
+        data: [row],
+        columns: [
+          { field: 'name', treeNode: true, rules: [{ required: true }] },
+        ],
+        rowKey: 'id',
+        treeConfig: { children: 'children' },
+      },
+    })
+    try {
+      await wrapper.vm.toggleRowExpand(row, true)
+      await nextTick()
+      expect(wrapper.findAll('.s-table__data-row')).toHaveLength(2)
+      await wrapper.vm.toggleRowExpand(reactive(row), false)
+      await nextTick()
+      expect(wrapper.findAll('.s-table__data-row')).toHaveLength(1)
+      for (const target of [row, reactive(row)]) {
+        const result = await wrapper.vm.validateRow(target, {
+          scrollToError: false,
+        })
+        expect(result.valid).toBe(false)
+        expect(result.errors).toEqual([expect.objectContaining({ rowKey: 1 })])
+      }
+    } finally {
+      wrapper.unmount()
+    }
+  })
+
+  it('uses absolute generated row indices only within the current page', async () => {
+    const wrapper = mount(Table, {
+      global: { stubs: { SPagination: true } },
+      props: {
+        virtualSource: {
+          rowCount: 100,
+          columnCount: 1,
+          row: (index: number) => ({ id: `row-${index}` }),
+          column: () => ({ field: 'id', width: 120 }),
+          rowKey: (index: number) => `row-${index}`,
+        },
+        pagerConfig: { currentPage: 3, pageSize: 10 },
+        virtualConfig: { height: 220 },
+      },
+    })
+    try {
+      await nextTick()
+      virtualizerMocks.scrollToIndex.mockClear()
+      wrapper.vm.scrollToRow(25, 'end')
+      expect(virtualizerMocks.scrollToIndex).toHaveBeenLastCalledWith(5, {
+        align: 'end',
+      })
+      virtualizerMocks.scrollToIndex.mockClear()
+      wrapper.vm.scrollToRow(5)
+      wrapper.vm.scrollToRow(30)
+      wrapper.vm.scrollToRow('row-25')
+      expect(virtualizerMocks.scrollToIndex).not.toHaveBeenCalled()
+      expect(wrapper.emitted('update:pagerConfig')).toBeUndefined()
+    } finally {
+      wrapper.unmount()
+    }
   })
 
   it('keeps a 100k by 100k generated source bounded with fixed columns', async () => {

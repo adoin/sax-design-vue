@@ -1105,20 +1105,20 @@ EXPOSES:
     default: null
     usage: '#selection-columns-and-reservation'
   - name: toggleRowExpand
-    type: '(row, expanded?) => Promise<void>'
-    description: Expands or collapses a tree row.
+    type: '(row: TableRow, expanded?: boolean) => Promise<void>'
+    description: 'Expands or collapses a row object in the currently expanded tree data, including other local pages; omit expanded to toggle. Waits for lazy loading when needed; load failures reject the Promise.'
   - name: setExpandedKeys
-    type: '(keys) => void'
-    description: Replaces the expanded tree key set.
+    type: '(keys: TableRowKey[]) => void'
+    description: 'Replaces the tree expansion key set and emits update:expandedKeys. Does not load missing children; use toggleRowExpand to trigger lazy loading.'
   - name: scrollToRow
-    type: '(rowOrIndex, align?) => void'
-    description: Scrolls a normal or virtual table to a row.
+    type: "(rowOrIndex: TableRow | TableRowKey, align?: 'auto' | 'start' | 'center' | 'end') => void"
+    description: 'Scrolls within the current flattened page. Ordinary data accepts the original row object or a row key; a number first matches a key, then falls back to a zero-based page index. virtualSource accepts only absolute numeric source indices on the current page. Does not expand ancestors or switch pages. align defaults to auto.'
   - name: scrollToColumn
-    type: '(columnOrIndex, align?) => void'
-    description: Scrolls to a column by index, key, field or column object.
+    type: "(columnOrIndex: TableColumn | string | number, align?: 'auto' | 'start' | 'center' | 'end') => void"
+    description: 'Scrolls a visible center column. Ordinary data accepts a resolved column index, key, field or column object; virtualSource requires an absolute numeric column index. Hidden, fixed and missing columns do not scroll. align defaults to auto.'
   - name: measure
-    type: '() => void'
-    description: Remeasures dynamic virtual row heights.
+    type: '() => Promise<void>'
+    description: 'After the next Vue update, resets virtual row and merged-cell measurements, requests footer measurement and refreshes the horizontal viewport. Resolves when these requests run; later ResizeObserver updates may still follow.'
 ---
 
 # Table

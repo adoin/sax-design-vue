@@ -26,6 +26,10 @@ describe('documentation API metadata', () => {
       const label = `${page.component}/${page.locale}`
       expect(page.inheritedTableLink, label).toBe(true)
       expect(page.exposeTypeMismatch, label).toEqual([])
+      expect(page.exposeSignatures.mismatches, label).toEqual([])
+      expect(page.exposeSignatures.checked, label).toBe(
+        page.component === 'table-select' ? 0 : page.sections.EXPOSES.actual,
+      )
       expect(page.defaults.checked, label).toBeGreaterThan(0)
       expect(page.defaults.mismatches, label).toEqual([])
       for (const [name, section] of Object.entries(page.sections)) {
@@ -34,6 +38,26 @@ describe('documentation API metadata', () => {
         expect(section.extra, `${label}/${name}`).toEqual([])
         expect(section.duplicates, `${label}/${name}`).toEqual([])
       }
+    }
+  })
+
+  it('detects changed method argument types, optionality and return values', () => {
+    for (const replacement of [
+      '(row: string, expanded?: boolean) => Promise<void>',
+      '(row: TableRow, expanded: boolean) => Promise<void>',
+      '(row: TableRow, expanded?: boolean) => void',
+    ]) {
+      const pages = auditTableApi({
+        readDocumentation: (path: string) =>
+          readFileSync(resolve(projectRoot, path), 'utf8').replace(
+            '(row: TableRow, expanded?: boolean) => Promise<void>',
+            replacement,
+          ),
+      })
+      for (const page of pages.filter((page) => page.component === 'table'))
+        expect(
+          page.exposeSignatures.mismatches.map((item) => item.name),
+        ).toEqual(['toggleRowExpand'])
     }
   })
 

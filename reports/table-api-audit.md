@@ -24,4 +24,4 @@
 
 ## 验证边界
 
-本轮浏览器核对覆盖 API 表格与类型详情，不替代各功能的 Code/Playground、暗色、键盘和固定列/虚拟滚动组合检查。后续 [动态插槽验收](table-slot-audit.md) 已补充插槽路由和作用域参数核对，修复 TableSelect 的迟到插槽与虚拟行更新问题；全部公开方法参数语义及剩余组合仍按 `todos.md` 继续核对，不因名称清单或插槽检查通过而勾选整个阶段。
+本轮浏览器核对覆盖 API 表格与类型详情，不替代各功能的 Code/Playground、暗色、键盘和固定列/虚拟滚动组合检查。后续 [动态插槽验收](table-slot-audit.md) 已补充插槽路由和作用域参数核对，修复 TableSelect 的迟到插槽与虚拟行更新问题；[方法参数核对](table-method-contract-audit.md) 补充 82 个方法的双语签名及行参数语义。嵌套 options 的全部语义、TableSelect 独立签名和剩余组合仍按 `todos.md` 继续核对，不因名称清单或局部参数检查通过而勾选整个阶段。

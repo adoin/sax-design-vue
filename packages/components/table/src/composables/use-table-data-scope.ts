@@ -1,4 +1,4 @@
-import { nextTick } from 'vue'
+import { nextTick, toRaw } from 'vue'
 import type { ComputedRef } from 'vue'
 import type {
   TableColumn,
@@ -134,9 +134,11 @@ export function useTableDataScope(
     const selectedRows = selected.rows
       ? new Set(
           selected.rows.map((row) =>
-            typeof row === 'number'
-              ? options.pagination.rows.value[row]?.row
-              : row,
+            toRaw(
+              typeof row === 'number'
+                ? options.pagination.rows.value[row]?.row
+                : row,
+            ),
           ),
         )
       : undefined
@@ -158,7 +160,7 @@ export function useTableDataScope(
           items[offset] === row &&
           options.tree.getRowKey(row, rowIndex) === key
         if (
-          (!selectedRows || selectedRows.has(row)) &&
+          (!selectedRows || selectedRows.has(toRaw(row))) &&
           (!selectedKeys || selectedKeys.has(key)) &&
           (!viewRows || viewRows.has(row))
         )

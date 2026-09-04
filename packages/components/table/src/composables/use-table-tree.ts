@@ -1,4 +1,4 @@
-import { computed, reactive, ref, shallowReactive, watch } from 'vue'
+import { computed, reactive, ref, shallowReactive, toRaw, watch } from 'vue'
 import type { ComputedRef } from 'vue'
 import type {
   TableFlatRow,
@@ -129,19 +129,20 @@ export function useTableTree<Row extends TableRow>(
     const entryByRow = new WeakMap<Row, TableFlatRow<Row>>()
     flatRows.value.forEach((entry, flatIndex) => {
       byKey.set(entry.key, flatIndex)
-      byRow.set(entry.row, flatIndex)
-      entryByRow.set(entry.row, entry)
+      // Consumers may retain the original object while Vue wraps the data prop.
+      byRow.set(toRaw(entry.row), flatIndex)
+      entryByRow.set(toRaw(entry.row), entry)
     })
     return { byKey, byRow, entryByRow }
   })
 
   const getRowIndex = (rowOrKey: Row | TableRowKey) =>
     typeof rowOrKey === 'object'
-      ? (rowIndex.value.byRow.get(rowOrKey) ?? -1)
+      ? (rowIndex.value.byRow.get(toRaw(rowOrKey)) ?? -1)
       : (rowIndex.value.byKey.get(rowOrKey) ?? -1)
 
   const toggleRowExpand = async (row: Row, expanded?: boolean) => {
-    const entry = rowIndex.value.entryByRow.get(row)
+    const entry = rowIndex.value.entryByRow.get(toRaw(row))
     if (!entry || !entry.hasChildren || loadingKeys.has(entry.key)) return
 
     const nextExpanded = expanded ?? !entry.expanded
@@ -203,7 +204,7 @@ export function useTableTree<Row extends TableRow>(
     getRowIndex,
     getRowKey,
     getRowState: (row: Row, key: TableRowKey) => {
-      const entry = rowIndex.value.entryByRow.get(row)
+      const entry = rowIndex.value.entryByRow.get(toRaw(row))
       return {
         expanded: entry?.expanded ?? internalExpandedKeys.value.has(key),
         loading: loadingKeys.has(key),

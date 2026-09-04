@@ -46,6 +46,10 @@
       "unresolved": ["emptyText"]
     },
     "exposeTypeMismatch": [],
+    "exposeSignatures": {
+      "checked": 73,
+      "mismatches": []
+    },
     "inheritedTableLink": true
   },
   {
@@ -95,6 +99,10 @@
       "unresolved": ["emptyText"]
     },
     "exposeTypeMismatch": [],
+    "exposeSignatures": {
+      "checked": 73,
+      "mismatches": []
+    },
     "inheritedTableLink": true
   },
   {
@@ -137,6 +145,10 @@
       "unresolved": []
     },
     "exposeTypeMismatch": [],
+    "exposeSignatures": {
+      "checked": 9,
+      "mismatches": []
+    },
     "inheritedTableLink": true
   },
   {
@@ -179,6 +191,10 @@
       "unresolved": []
     },
     "exposeTypeMismatch": [],
+    "exposeSignatures": {
+      "checked": 9,
+      "mismatches": []
+    },
     "inheritedTableLink": true
   },
   {
@@ -234,6 +250,10 @@
       ]
     },
     "exposeTypeMismatch": [],
+    "exposeSignatures": {
+      "checked": 0,
+      "mismatches": []
+    },
     "inheritedTableLink": true
   },
   {
@@ -289,6 +309,10 @@
       ]
     },
     "exposeTypeMismatch": [],
+    "exposeSignatures": {
+      "checked": 0,
+      "mismatches": []
+    },
     "inheritedTableLink": true
   }
 ]
