@@ -1,7 +1,20 @@
 export default {
   name: 'en',
   vs: {
-    tableGrid: { query: 'Search', reset: 'Reset', refresh: 'Refresh' },
+    tableGrid: {
+      pendingChanges: 'Save or revert pending changes first.',
+      pendingDraft: 'Apply or discard the current draft first.',
+      invalidChanges: 'Correct invalid fields before saving.',
+      requestRejected: 'The data owner or service rejected this request.',
+      staleResult:
+        'Data changed during the request. Current data is preserved.',
+      unsupportedSource:
+        'This operation requires a source adapter and a valid validation scope for generated data.',
+      requestFailed: 'Request failed. Please try again.',
+      query: 'Search',
+      reset: 'Reset',
+      refresh: 'Refresh',
+    },
     common: {
       close: 'Close',
       more: 'More',

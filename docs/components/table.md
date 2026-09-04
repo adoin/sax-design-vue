@@ -917,6 +917,8 @@ Errors appear inside their cells with accessible associations for built-in edito
 
 `validate()` checks all supplied data, including loaded collapsed descendants. `scope: 'view'` checks the filtered, expanded current page, including rows outside the mounted virtual window. Validation does not fetch unloaded children or remote pages.
 
+Use `validate({ rowKeys: [...] })` to select ordinary array or tree records by stable keys, including records returned by change tracking. Generated sources must also provide numeric `rows` indices when using `rowKeys`; specify numeric `columns` to bound the validation scope.
+
 By default, an error expands its ancestors, changes the local page, scrolls and receives focus. Set `scrollToError: false` to disable automatic navigation. Controlled pagination and expansion require the parent to accept updates; filtered rows and hidden columns are not forcibly restored. `scrollToValidationError()` reports whether navigation succeeded.
 
 Use `clearValidation(rowKey?, field?)` to clear selected errors, or omit arguments to clear all. Old errors are not used for navigation after data, rules or field values change. Numeric row indices in ordinary data refer to expanded current-page rows; pass a row object to target another page, or validate the whole dataset.

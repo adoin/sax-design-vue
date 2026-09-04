@@ -58,6 +58,8 @@ export interface TableValidateOptions<Row extends TableRow = TableRow> {
   /** all: all supplied/loaded rows; view: the filtered, expanded current page. */
   scope?: 'all' | 'view'
   rows?: Array<Row | number>
+  /** Stable keys for supplied tree/array rows. Generated sources also require numeric rows. */
+  rowKeys?: TableRowKey[]
   columns?: Array<TableColumn<Row> | string | number>
   signal?: AbortSignal
   scrollToError?: boolean

@@ -3,6 +3,9 @@
 @include b(table-grid) {
   width: 100%;
   min-width: 0;
+  @include e(error) {
+    margin-bottom: 12px;
+  }
   @include e(query) {
     margin-bottom: 16px;
   }

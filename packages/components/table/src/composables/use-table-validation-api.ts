@@ -105,7 +105,14 @@ export function useTableValidationApi(
   function* rows(
     selected: TableValidateOptions = {},
   ): Generator<ValidationRow> {
+    const selectedKeys = selected.rowKeys
+      ? new Set(selected.rowKeys)
+      : undefined
     if (props.virtualSource) {
+      if (selectedKeys && !selected.rows)
+        throw new TypeError(
+          'Generated validation with rowKeys also requires numeric rows.',
+        )
       const source = props.virtualSource
       const rowMethod = source.row
       const count = source.rowCount
@@ -124,6 +131,7 @@ export function useTableValidationApi(
       for (const index of indices()) {
         if (!Number.isInteger(index) || index < 0 || index >= count) continue
         const flat = options.sourceRow(index)
+        if (selectedKeys && !selectedKeys.has(flat.key)) continue
         yield {
           row: flat.row,
           key: flat.key,
@@ -164,6 +172,7 @@ export function useTableValidationApi(
           options.tree.getRowKey(row, rowIndex) === key
         if (
           (!selectedRows || selectedRows.has(row)) &&
+          (!selectedKeys || selectedKeys.has(key)) &&
           (!viewRows || viewRows.has(row))
         )
           yield { row, key, index: rowIndex, ancestors, current }

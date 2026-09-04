@@ -11,9 +11,17 @@ import type {
   TableExposes,
   TableFilters,
   TablePagerConfig,
+  TableRow,
   TableSort,
 } from '@vuesax-alpha/components/table'
+import type {
+  TableGridProxyAction,
+  TableGridProxyConfig,
+  TableGridProxyResult,
+  TableGridProxyState,
+} from './grid-proxy'
 import type TableGrid from './table-grid.vue'
+export * from './grid-proxy'
 
 export interface TableGridQueryConfig extends Partial<FormProps> {
   enabled?: boolean
@@ -49,6 +57,11 @@ export interface TableGridQueryContext {
 
 export const tableGridProps = buildProps({
   ...tableProps,
+  data: { ...tableProps.data, default: undefined },
+  proxyConfig: {
+    type: definePropType<boolean | TableGridProxyConfig>([Boolean, Object]),
+    default: false,
+  },
   queryConfig: {
     type: definePropType<boolean | TableGridQueryConfig>([Boolean, Object]),
     default: false,
@@ -63,6 +76,9 @@ export const tableGridEmits = {
   ...tableEmits,
   query: (context: TableGridQueryContext) => Boolean(context),
   queryError: (() => true) as (error: unknown) => boolean,
+  proxyStateChange: (state: TableGridProxyState) => Boolean(state),
+  proxySuccess: (result: TableGridProxyResult) => Boolean(result),
+  proxyError: (result: TableGridProxyResult) => Boolean(result),
   toolbarClick: (
     code: string,
     context: TableGridQueryContext,
@@ -78,5 +94,11 @@ export interface TableGridExposes {
   getQueryContext: () => TableGridQueryContext
   getTable: () => TableExposes | undefined
   getForm: () => FormInstance | undefined
+  commitProxy: (
+    action: TableGridProxyAction,
+    rows?: TableRow[],
+  ) => Promise<TableGridProxyResult>
+  cancelProxy: () => void
+  getProxyState: () => TableGridProxyState
 }
 export type TableGridInstance = InstanceType<typeof TableGrid>

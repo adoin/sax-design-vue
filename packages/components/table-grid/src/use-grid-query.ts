@@ -17,6 +17,7 @@ export function useGridQuery(
   props: TableGridProps,
   emit: TableGridEmitFn,
   form: () => FormInstance | undefined,
+  execute?: (context: TableGridQueryContext) => Promise<boolean>,
 ) {
   const emptyModel = reactive<FormModel>({})
   const queryConfig = computed(() =>
@@ -30,8 +31,10 @@ export function useGridQuery(
     currentPage: 1,
     pageSize: 10,
   })
-  const innerSorts = shallowRef<TableSort[]>([])
-  const innerFilters = shallowRef<TableFilters>({})
+  const innerSorts = shallowRef<TableSort[]>(props.sortConfig.defaultSort ?? [])
+  const innerFilters = shallowRef<TableFilters>(
+    props.filterConfig.defaultFilters ?? {},
+  )
   const pager = computed<TablePagerConfig | false>(() => {
     if (!props.pagerConfig) return false
     const config =
@@ -121,8 +124,9 @@ export function useGridQuery(
             !isEqual(model.value, values)))
       )
         return false
-      emit('query', context(reason))
-      return true
+      const snapshot = context(reason)
+      emit('query', snapshot)
+      return execute ? execute(snapshot) : true
     } catch (error) {
       if (!disposed && request === sequence) emit('queryError', error)
       return false

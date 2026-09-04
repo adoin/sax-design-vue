@@ -18,8 +18,8 @@ const message = ref('双击单元格编辑整行，然后应用草稿。')
 const history = ref<TableHistoryState>({
   undoCount: 0,
   redoCount: 0,
-  can可撤销: false,
-  can可重做: false,
+  canUndo: false,
+  canRedo: false,
 })
 const columns: TableColumn[] = [
   { field: 'id', title: 'ID', width: 80, fixed: 'left' },

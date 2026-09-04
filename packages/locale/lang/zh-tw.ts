@@ -1,7 +1,18 @@
 export default {
   name: 'zh-tw',
   vs: {
-    tableGrid: { query: '查詢', reset: '重置', refresh: '重新整理' },
+    tableGrid: {
+      pendingChanges: '請先儲存或還原待提交變更。',
+      pendingDraft: '請先套用或放棄目前草稿。',
+      invalidChanges: '請修正無效欄位後再儲存。',
+      requestRejected: '資料擁有者或服務拒絕了此次請求。',
+      staleResult: '請求期間資料已變化，目前資料已保留。',
+      unsupportedSource: '此操作需要生成資料來源介接器及有效的驗證範圍。',
+      requestFailed: '請求失敗，請重試。',
+      query: '查詢',
+      reset: '重置',
+      refresh: '重新整理',
+    },
     colorpicker: {
       confirm: '確認',
       clear: '清空',
