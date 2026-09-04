@@ -15,6 +15,7 @@ import type {
   VNodeChild,
 } from 'vue'
 import type Table from './table.vue'
+import type { TableHistoryConfig, TableHistoryState } from './table-history'
 import type {
   TableChangeConfig,
   TableChangeRecords,
@@ -38,6 +39,7 @@ import type {
   TableValidationRule,
   TableValidationRules,
 } from './table-validation'
+export type { TableHistoryConfig, TableHistoryState } from './table-history'
 export type {
   TableChangeConfig,
   TableChangeRecords,
@@ -387,6 +389,10 @@ export type TableRowClass<Row extends TableRow = TableRow> =
   string | ((params: TableFlatRow<Row>) => string | string[] | undefined)
 
 export const tableProps = buildProps({
+  historyConfig: {
+    type: definePropType<boolean | TableHistoryConfig>([Boolean, Object]),
+    default: false,
+  },
   changeConfig: {
     type: definePropType<boolean | TableChangeConfig>([Boolean, Object]),
     default: false,
@@ -541,6 +547,7 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  historyChange: (state: TableHistoryState) => isObject(state),
   'update:data': (data: TableRow[]) => isArray(data),
   changesChange: (version: number) => isNumber(version),
   dataChange: (operations: TableDataMutation[]) => isArray(operations),
@@ -598,6 +605,10 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  undo: () => Promise<TableDataMutationResult>
+  redo: () => Promise<TableDataMutationResult>
+  clearHistory: () => void
+  getHistoryState: () => TableHistoryState
   insertRows: (
     rows: Row[],
     position?: Partial<TableDataPosition>,

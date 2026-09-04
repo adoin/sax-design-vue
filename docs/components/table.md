@@ -1,6 +1,11 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "history-config"
+    type: "Boolean | TableHistoryConfig"
+    description: "Enable operation history together with change-config; limit defaults to the latest 100 operations."
+    default: false
+    usage: "#undo-and-redo"
   - name: "change-config"
     type: "Boolean | TableChangeConfig"
     description: "Enable controlled data mutations and tracking; ordinary arrays use v-model:data, generated sources supply apply and indexOf."
@@ -313,6 +318,11 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "historyChange"
+    type: "(state: TableHistoryState) => void"
+    description: "Emitted when history changes, with undo/redo counts and availability."
+    default: null
+    usage: "#undo-and-redo"
   - name: "update:data"
     type: "(data: TableRow[]) => void"
     description: "Proposed ordinary array; recorded only after the parent accepts it."
@@ -539,6 +549,26 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "undo"
+    type: "() => Promise<TableDataMutationResult>"
+    description: "Undo the latest accepted operation; commit or cancel an active draft first."
+    default: null
+    usage: "#undo-and-redo"
+  - name: "redo"
+    type: "() => Promise<TableDataMutationResult>"
+    description: "Redo the latest undone operation; rejection or cancellation does not move history."
+    default: null
+    usage: "#undo-and-redo"
+  - name: "clearHistory"
+    type: "() => void"
+    description: "Clear undo/redo history and cancel pending proposals, retaining data and tracked changes."
+    default: null
+    usage: "#undo-and-redo"
+  - name: "getHistoryState"
+    type: "() => TableHistoryState"
+    description: "Read history counts and availability; this does not indicate whether a request or draft is active."
+    default: null
+    usage: "#undo-and-redo"
   - name: "insertRows"
     type: "(rows: TableRow[], position?: Partial<TableDataPosition>) => Promise<TableDataMutationResult>"
     description: "Insert rows in source order, optionally under parentKey. Indices address source siblings, not sorted or paged rows."
@@ -715,6 +745,40 @@ EXPOSES:
 
 <card>
 
+## Undo and redo
+
+Enable both `change-config` and `history-config`, then call `undo()` and `redo()` to replay accepted edits, insertions, removals and reverts. A row commit or batch mutation creates one step. Drafts, failed validation and rejected or cancelled operations create none. Replay returns `editing` while a draft is active; commit or cancel it first.
+
+`history-config.limit` defaults to 100; this example retains 30 steps. History stores touched field values and read-only inserted/removed row references, without copying the whole data set. Removing a large loaded branch still retains that branch, so a step limit is not a fixed memory limit. Use mutation APIs rather than changing historical row references in place.
+
+A new operation clears redo; assigning an unchanged value does not. `clearHistory()` retains current data and tracked changes. Successful `acceptChanges()` (including partial confirmation), `resetChanges()`, a new data baseline or disabling history clears all history. Sorting, filtering and paging preserve it; replay identifies records by stable keys.
+
+Replay uses the data acceptance adapter, without rerunning editor validation or automatically saving to a server. Async adapters must honor `signal`; rejection, failure or cancellation does not consume a step. Use `getHistoryState()` and `historyChange` for controls. `empty` means no step is available; `conflict` means a target field changed externally. Check `applied` before reporting success. Native undo shortcuts inside inputs remain unchanged.
+
+<template #example><table-history /></template>
+
+<template #template>
+
+@[code{55-129}](../.vuepress/components/table/history.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-53}](../.vuepress/components/table/history.vue)
+
+</template>
+
+<template #style>
+
+@[code{131-142}](../.vuepress/components/table/history.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Change tracking
 
 Enable `change-config` and accept ordinary array proposals through `v-model:data`. Use unique, stable string or numeric `row-key` values, independent of row indices. The table never mutates owned rows in place. Sorting, filtering and paging do not change the keys used by mutation APIs.
@@ -755,23 +819,25 @@ Use `insertRows(rows, { parentKey, index })` to insert children. Removing a pare
 
 Lazy trees track only loaded records and do not fetch descendants for change tracking. Updating a loaded child copies the affected ancestors into the proposal and supplies their child arrays, leaving original business objects unchanged. Load the example branch, update a descendant, insert a child, remove the branch, then revert it.
 
+History is also enabled: undo or redo child insertion, descendant edits, branch removal and reversion. Undoing removal restores loaded descendants without another lazy request.
+
 <template #example><table-changes-tree /></template>
 
 <template #template>
 
-@[code{69-124}](../.vuepress/components/table/changes-tree.vue)
+@[code{76-145}](../.vuepress/components/table/changes-tree.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-67}](../.vuepress/components/table/changes-tree.vue)
+@[code{1-74}](../.vuepress/components/table/changes-tree.vue)
 
 </template>
 
 <template #style>
 
-@[code{126-137}](../.vuepress/components/table/changes-tree.vue)
+@[code{147-158}](../.vuepress/components/table/changes-tree.vue)
 
 </template>
 
@@ -787,23 +853,25 @@ Generated rows may supply fields on demand. Each `row` must represent a read-onl
 
 Change `changeConfig.dataKey` when switching business datasets. `cancelDataChange()` aborts a pending acceptance request; `resetChanges()` discards the journal while retaining current data. Externally replacing the source `row` function also starts a new baseline; replacements accepted by the current `apply` retain tracking.
 
+History also covers edits at the far end of this generated source. Replay writes through the same apply adapter; confirming the baseline clears history.
+
 <template #example><table-changes-source /></template>
 
 <template #template>
 
-@[code{98-136}](../.vuepress/components/table/changes-source.vue)
+@[code{105-157}](../.vuepress/components/table/changes-source.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-96}](../.vuepress/components/table/changes-source.vue)
+@[code{1-103}](../.vuepress/components/table/changes-source.vue)
 
 </template>
 
 <template #style>
 
-@[code{138-149}](../.vuepress/components/table/changes-source.vue)
+@[code{159-170}](../.vuepress/components/table/changes-source.vue)
 
 </template>
 

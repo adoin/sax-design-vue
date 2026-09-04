@@ -4,10 +4,17 @@ import type {
   TableChangeConfig,
   TableColumn,
   TableExposes,
+  TableHistoryState,
   TableVirtualSource,
 } from 'sax-design-vue'
 
 const table = ref<TableExposes>()
+const history = ref<TableHistoryState>({
+  undoCount: 0,
+  redoCount: 0,
+  canUndo: false,
+  canRedo: false,
+})
 const values = shallowRef(new Map<number, Record<string, unknown>>())
 const editing = ref(false)
 const changed = ref(0)
@@ -98,6 +105,18 @@ const confirm = () => {
 <template>
   <div class="changes-source">
     <div class="changes-source__controls">
+      <s-button
+        size="small"
+        :disabled="editing || !history.canUndo"
+        @click="table?.undo()"
+        >Undo</s-button
+      >
+      <s-button
+        size="small"
+        :disabled="editing || !history.canRedo"
+        @click="table?.redo()"
+        >Redo</s-button
+      >
       <s-button size="small" @click="table?.startEdit(999_999, 99_998)"
         >Edit last record</s-button
       >
@@ -126,6 +145,8 @@ const confirm = () => {
       :change-config="changeConfig"
       edit-config
       resize-config
+      :history-config="{ limit: 30 }"
+      @history-change="history = $event"
       @changes-change="refresh"
       @edit-start="editing = true"
       @edit-commit="editing = false"

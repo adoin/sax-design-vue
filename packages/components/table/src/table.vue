@@ -702,6 +702,7 @@ const validation = useTableValidation(
   },
 )
 const changes = useTableChanges(props, emit, {
+  editing: () => Boolean(editing.active.value),
   children: tree.getChildren,
   changed: () => {
     validation.clear()
@@ -1456,6 +1457,10 @@ useTableEditLifecycle(props, editing, {
 })
 
 defineExpose({
+  undo: changes.undo,
+  redo: changes.redo,
+  clearHistory: changes.clearHistory,
+  getHistoryState: changes.getHistoryState,
   insertRows: changes.insertRows,
   removeRows: changes.removeRows,
   updateRow: changes.updateRow,

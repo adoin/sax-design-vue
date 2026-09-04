@@ -1,6 +1,11 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "history-config"
+    type: "Boolean | TableHistoryConfig"
+    description: "开启操作历史，需同时开启 change-config；limit 默认保留最近 100 次操作。"
+    default: false
+    usage: "#撤销与重做"
   - name: "change-config"
     type: "Boolean | TableChangeConfig"
     description: "开启受控数据变更与追踪；普通数组使用 v-model:data，生成源提供 apply 和 indexOf。"
@@ -313,6 +318,11 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "historyChange"
+    type: "(state: TableHistoryState) => void"
+    description: "历史栈变化时触发；包含撤销和重做数量以及可用状态。"
+    default: null
+    usage: "#撤销与重做"
   - name: "update:data"
     type: "(data: TableRow[]) => void"
     description: "普通数组变更提案；父组件接受后才计入记录。"
@@ -539,6 +549,26 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "undo"
+    type: "() => Promise<TableDataMutationResult>"
+    description: "撤销最近一次已接受的操作；活动草稿需先提交或取消。"
+    default: null
+    usage: "#撤销与重做"
+  - name: "redo"
+    type: "() => Promise<TableDataMutationResult>"
+    description: "重做最近一次撤销；拒绝或取消不会移动历史栈。"
+    default: null
+    usage: "#撤销与重做"
+  - name: "clearHistory"
+    type: "() => void"
+    description: "清空撤销和重做历史并取消待处理提案，保留当前数据与变更记录。"
+    default: null
+    usage: "#撤销与重做"
+  - name: "getHistoryState"
+    type: "() => TableHistoryState"
+    description: "读取历史数量与可用状态快照；并不代表当前未忙或没有活动草稿。"
+    default: null
+    usage: "#撤销与重做"
   - name: "insertRows"
     type: "(rows: TableRow[], position?: Partial<TableDataPosition>) => Promise<TableDataMutationResult>"
     description: "按源数据位置插入行；parentKey 指定父节点。index 指源数据同级位置，不是排序或分页后的序号。"
@@ -715,6 +745,40 @@ EXPOSES:
 
 <card>
 
+## 撤销与重做
+
+同时开启 `change-config` 和 `history-config`，通过 `undo()`、`redo()` 回放已接受的编辑、增删及还原操作。一次整行提交或批量增删只占一个历史步骤；未提交的草稿、校验失败、被拒绝或取消的操作不进入历史。活动草稿期间回放返回 `editing`，请先提交或取消草稿。
+
+`history-config.limit` 默认 100，示例设为 30。历史保存受影响字段的前后值及增删行的只读引用，不复制整张数据集；删除大型已加载分支仍会保留该分支，条数上限不等于固定内存上限。业务应通过变更 API 更新数据，避免原地修改历史引用。
+
+新操作会清空重做分支，写入相同值不会清空。`clearHistory()` 仅清空历史，保留数据和变更记录；成功调用 `acceptChanges()`（包括部分行确认）、`resetChanges()`、更换数据基线或关闭历史功能都会清空全部历史。排序、筛选、分页不清空历史，操作始终按稳定行键定位。
+
+回放沿用数据接受适配器，不重复执行编辑校验，也不自动持久化到服务端。异步适配器需遵守 `signal`；拒绝、异常或取消不消耗历史步骤。`getHistoryState()` 与 `historyChange` 提供按钮状态。`empty` 表示无可回放步骤，`conflict` 表示目标字段已被外部修改；查看返回结果的 `applied` 后再更新业务反馈。输入框内原有的撤销快捷键保持不变。
+
+<template #example><table-zh-history /></template>
+
+<template #template>
+
+@[code{51-126}](../../.vuepress/components/table-zh/history.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-49}](../../.vuepress/components/table-zh/history.vue)
+
+</template>
+
+<template #style>
+
+@[code{128-139}](../../.vuepress/components/table-zh/history.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## 变更追踪
 
 开启 `change-config`，通过 `v-model:data` 接受普通数组的增删改提案。`row-key` 必须是稳定且唯一的字符串或数字，不能依赖行序号；组件不会原地修改业务行。排序、筛选和分页不改变变更 API 的行键含义。
@@ -755,23 +819,25 @@ EXPOSES:
 
 懒加载只处理已经载入的记录，不会为变更追踪主动请求后代。修改已加载子节点时，提案会复制对应祖先并写入子数组；原始业务对象保持不变。下方可以依次加载、修改后代、插入子行、删除分支，再还原分支。
 
+本例同时开启操作历史，可撤销或重做插入子行、修改后代、删除分支及还原；已加载后代随删除操作一起恢复，不重新请求懒加载。
+
 <template #example><table-zh-changes-tree /></template>
 
 <template #template>
 
-@[code{67-122}](../../.vuepress/components/table-zh/changes-tree.vue)
+@[code{74-143}](../../.vuepress/components/table-zh/changes-tree.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-65}](../../.vuepress/components/table-zh/changes-tree.vue)
+@[code{1-72}](../../.vuepress/components/table-zh/changes-tree.vue)
 
 </template>
 
 <template #style>
 
-@[code{124-135}](../../.vuepress/components/table-zh/changes-tree.vue)
+@[code{145-156}](../../.vuepress/components/table-zh/changes-tree.vue)
 
 </template>
 
@@ -787,23 +853,25 @@ EXPOSES:
 
 切换到另一个业务数据集时更新 `changeConfig.dataKey`。调用 `cancelDataChange()` 取消待处理接受请求，使用 `resetChanges()` 放弃记录并确认当前数据。外部替换生成源的 `row` 函数也会开始新基线；由当前 `apply` 接受的函数替换会保留记录。
 
+本例开启历史后，末端单元格的修改也可以撤销或重做；回放通过相同的 apply 适配器写回生成源。确认基线会清空历史。
+
 <template #example><table-zh-changes-source /></template>
 
 <template #template>
 
-@[code{98-136}](../../.vuepress/components/table-zh/changes-source.vue)
+@[code{105-157}](../../.vuepress/components/table-zh/changes-source.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-96}](../../.vuepress/components/table-zh/changes-source.vue)
+@[code{1-103}](../../.vuepress/components/table-zh/changes-source.vue)
 
 </template>
 
 <template #style>
 
-@[code{138-149}](../../.vuepress/components/table-zh/changes-source.vue)
+@[code{159-170}](../../.vuepress/components/table-zh/changes-source.vue)
 
 </template>
 

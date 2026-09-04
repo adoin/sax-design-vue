@@ -1,6 +1,7 @@
 import { cloneTableDataValue, equalTableDataValue } from './change-snapshot'
 import { mergeTableDataChanges } from './change-utils'
 import type { TableRow, TableRowKey } from './table'
+import type { TableChangeCheckpoint } from './table-history'
 import type {
   TableAcceptedDataOperation,
   TableChangeRecords,
@@ -84,6 +85,14 @@ export function createTableChangeStore<Row extends TableRow = TableRow>(
     }
     return {
       cancel: release,
+      checkpoint: () => {
+        const capture = (states: Map<TableRowKey, Entry<Row> | undefined>) =>
+          [...states].map(([rowKey, entry]) => ({
+            rowKey,
+            entry: entry ? { ...snapshot(entry), type: entry.type } : undefined,
+          }))
+        return { before: capture(expected), after: capture(next) }
+      },
       commit: () => {
         if (settled) return false
         if (disposed || origin !== epoch) {
@@ -229,6 +238,25 @@ export function createTableChangeStore<Row extends TableRow = TableRow>(
     }
     return true
   }
+  const prepareCheckpoint = (checkpoints: TableChangeCheckpoint[]) => {
+    const expected = new Map<TableRowKey, Entry<Row> | undefined>()
+    const next = new Map<TableRowKey, Entry<Row> | undefined>()
+    for (const { rowKey, entry } of checkpoints) {
+      expected.set(rowKey, entries.get(rowKey))
+      next.set(
+        rowKey,
+        entry
+          ? {
+              ...entry,
+              row: entry.row as Row,
+              fields: cloneTableDataValue(entry.fields),
+              position: { ...entry.position },
+            }
+          : undefined,
+      )
+    }
+    return transaction(expected, next)
+  }
   const reset = () => {
     if (disposed) return
     epoch++
@@ -245,6 +273,7 @@ export function createTableChangeStore<Row extends TableRow = TableRow>(
   return {
     prepare,
     prepareRevert,
+    prepareCheckpoint,
     getRecords,
     getRecord,
     accept,

@@ -1,4 +1,5 @@
 import { computed, nextTick, onBeforeUnmount, toRaw, watch } from 'vue'
+import { planTableMutations } from '../change-mutations'
 import { createTableChangeStore } from '../change-store'
 import {
   createTableDataIndex,
@@ -6,7 +7,9 @@ import {
   validTableDataKey,
 } from '../change-data'
 import { applyTableDataPatches, projectTableDataPatches } from '../change-utils'
-import type { TableDataNode, TableDataPlanOperation } from '../change-data'
+import { useTableHistory } from './use-table-history'
+import type { TableHistoryAction } from './use-table-history'
+import type { TableDataNode } from '../change-data'
 import type {
   TableEditRecord,
   TableEmitFn,
@@ -25,6 +28,7 @@ import type {
 interface ChangeOptions {
   children: (row: TableRow, key: TableRowKey) => TableRow[]
   changed: () => void
+  editing: () => boolean
 }
 
 export function useTableChanges(
@@ -96,6 +100,7 @@ export function useTableChanges(
   }
   const reset = () => {
     cancel()
+    history.clear()
     journal.reset()
   }
   const available = (): TableDataMutationResult | undefined =>
@@ -109,6 +114,7 @@ export function useTableChanges(
     transaction: TableChangeTransaction,
     data?: TableRow[],
     current: () => boolean = () => true,
+    replay?: TableHistoryAction,
   ): Promise<TableDataMutationResult> => {
     if (!operations.length) {
       const applied = current() && transaction.commit()
@@ -122,6 +128,9 @@ export function useTableChanges(
     pending = request
     try {
       if (!current()) return { applied: false, reason: 'cancelled' }
+      const recordHistory = replay
+        ? undefined
+        : history.capture(operations, transaction)
       let accepted: boolean
       if (config.value.apply) {
         const result = config.value.apply({
@@ -149,6 +158,8 @@ export function useTableChanges(
       if (!accepted || (data && toRaw(props.data) !== toRaw(data)))
         return { applied: false, reason: 'rejected' }
       if (!transaction.commit()) return { applied: false, reason: 'cancelled' }
+      if (replay) replay.commit()
+      else recordHistory?.()
       options.changed()
       emit('dataChange', operations)
       return { applied: true }
@@ -176,6 +187,15 @@ export function useTableChanges(
       } as TableDataMutationResult
     }
   }
+  const history = useTableHistory(props, emit, {
+    tree: () => (props.virtualSource ? undefined : index()),
+    target: sourceTarget,
+    prepare: journal.prepareCheckpoint,
+    apply,
+    available,
+    editing: options.editing,
+    cancel,
+  })
   const updateRow = (
     key: TableRowKey,
     values: Record<string, unknown>,
@@ -392,80 +412,31 @@ export function useTableChanges(
       let data = tree?.data
       try {
         if (tree) {
-          let working = tree
-          const removals = transaction.operations.filter(
-            (operation) => operation.type === 'remove',
-          )
-          const removedKeys = new Set(
-            removals.map((operation) => operation.rowKey),
-          )
-          const removePlans: TableDataPlanOperation[] = []
-          for (const operation of removals) {
-            const node = working.nodes.get(operation.rowKey)
-            if (!node) throw new Error('Inserted row no longer exists')
-            if (node.parent && removedKeys.has(node.parent.key)) continue
-            removePlans.push({ type: 'remove', rowKey: node.key })
-            mutations.push({ ...operation, type: 'remove' })
-          }
-          data = planTableData(working, removePlans)
-          working = createTableDataIndex({ ...tree, data })
-          const restores = transaction.operations.filter(
-            (operation) => operation.type === 'restore',
-          )
-          while (restores.length) {
-            const ready = restores
-              .filter(
-                (operation) =>
-                  operation.position.parentKey === undefined ||
-                  working.nodes.has(operation.position.parentKey),
-              )
-              .sort((a, b) => a.position.index - b.position.index)
-            if (!ready.length)
-              throw new Error('Restore the removed parent before its child')
-            data = planTableData(
-              working,
-              ready.map((operation) => {
-                const row = applyTableDataPatches(
-                  operation.row,
-                  operation.patches,
-                )
-                mutations.push({
+          const planned = planTableMutations(
+            tree,
+            transaction.operations.map((operation): TableDataMutation => {
+              if (operation.type === 'restore')
+                return {
                   ...operation,
-                  row,
                   type: 'insert',
                   patches: [],
-                })
-                return {
-                  type: 'insert' as const,
-                  row,
-                  position: operation.position,
+                  row: applyTableDataPatches(operation.row, operation.patches),
                 }
-              }),
-            )
-            for (const operation of ready)
-              restores.splice(restores.indexOf(operation), 1)
-            working = createTableDataIndex({ ...tree, data })
-          }
-          const updates = transaction.operations.filter(
-            (operation) => operation.type === 'update',
-          )
-          data = planTableData(
-            working,
-            updates.map((operation) => {
-              const row = working.nodes.get(operation.rowKey)?.row
-              if (!row) throw new Error('Changed row no longer exists')
-              mutations.push({
-                ...operation,
-                row: applyTableDataPatches(row, operation.patches),
-                type: 'update',
-              })
+              const node = tree.nodes.get(operation.rowKey)
+              if (!node) throw new Error('Changed row no longer exists')
               return {
-                type: 'update' as const,
-                rowKey: operation.rowKey,
-                patches: operation.patches,
+                ...operation,
+                type: operation.type,
+                position: tree.position(node),
+                row:
+                  operation.type === 'update'
+                    ? applyTableDataPatches(node.row, operation.patches)
+                    : node.row,
               }
             }),
           )
+          data = planned.data
+          mutations.push(...planned.operations)
         } else {
           for (const operation of transaction.operations) {
             const target =
@@ -527,6 +498,7 @@ export function useTableChanges(
     disposed = true
     cancel()
     journal.dispose()
+    history.clear()
   })
   return {
     enabled,
@@ -535,10 +507,16 @@ export function useTableChanges(
     insertRows,
     removeRows,
     revertChanges,
+    undo: history.undo,
+    redo: history.redo,
+    clearHistory: history.clearHistory,
+    getHistoryState: history.getState,
     getChangeRecords: journal.getRecords,
     acceptChanges: (version: number, keys?: TableRowKey[]) => {
       if (pending || !enabled.value) return false
-      return journal.accept(keys, version)
+      const accepted = journal.accept(keys, version)
+      if (accepted) history.clear()
+      return accepted
     },
     resetChanges: reset,
     cancelDataChange: cancel,

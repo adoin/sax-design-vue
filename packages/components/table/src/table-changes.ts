@@ -1,4 +1,5 @@
 import type { TableRow, TableRowKey } from './table'
+import type { TableChangeCheckpoint } from './table-history'
 
 /** Source sibling position, independent of display sorting and pagination. */
 export interface TableDataPosition {
@@ -59,6 +60,10 @@ export interface TableChangeTransaction {
   /** Call only after the data owner accepts the corresponding mutation. */
   commit: () => boolean
   cancel: () => void
+  checkpoint: () => {
+    before: TableChangeCheckpoint[]
+    after: TableChangeCheckpoint[]
+  }
 }
 
 export interface TableDataMutation<Row extends TableRow = TableRow> {
@@ -88,6 +93,14 @@ export interface TableChangeConfig<Row extends TableRow = TableRow> {
 
 export interface TableDataMutationResult {
   applied: boolean
-  reason?: 'disabled' | 'busy' | 'rejected' | 'cancelled' | 'invalid'
+  reason?:
+    | 'disabled'
+    | 'busy'
+    | 'rejected'
+    | 'cancelled'
+    | 'invalid'
+    | 'empty'
+    | 'editing'
+    | 'conflict'
   error?: unknown
 }

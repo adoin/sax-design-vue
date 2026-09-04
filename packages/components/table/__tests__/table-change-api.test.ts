@@ -564,6 +564,7 @@ describe('Table change API', () => {
           h(Table, {
             ref: api,
             changeConfig: config,
+            historyConfig: true,
             virtualSource: {
               rowCount: data.value.length,
               columnCount: 1,
@@ -583,6 +584,16 @@ describe('Table change API', () => {
       await api.value!.insertRows([{ id: 4, name: 'new' }], { index: 1 }),
     ).toEqual({ applied: true })
     expect(await api.value!.removeRows([2])).toEqual({ applied: true })
+    expect(data.value.map((entry) => entry.id)).toEqual([1, 4, 3])
+    expect(await api.value!.undo()).toEqual({ applied: true })
+    expect(data.value.map((entry) => entry.id)).toEqual([1, 4, 2, 3])
+    expect(await api.value!.undo()).toEqual({ applied: true })
+    expect(data.value.map((entry) => entry.id)).toEqual([1, 2, 3])
+    expect(await api.value!.undo()).toEqual({ applied: true })
+    expect(data.value).toEqual(initial)
+    expect(await api.value!.redo()).toEqual({ applied: true })
+    expect(await api.value!.redo()).toEqual({ applied: true })
+    expect(await api.value!.redo()).toEqual({ applied: true })
     expect(data.value.map((entry) => entry.id)).toEqual([1, 4, 3])
     expect(await api.value!.revertChanges()).toEqual({ applied: true })
     expect(data.value).toEqual(initial)

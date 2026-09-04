@@ -4,10 +4,17 @@ import type {
   TableColumn,
   TableDataMutationResult,
   TableExposes,
+  TableHistoryState,
   TableRow,
 } from 'sax-design-vue'
 
 const table = ref<TableExposes>()
+const history = ref<TableHistoryState>({
+  undoCount: 0,
+  redoCount: 0,
+  canUndo: false,
+  canRedo: false,
+})
 const rows = ref<TableRow[]>([
   { id: 1, name: '工作区', lazy: true },
   { id: 5, name: '独立项目' },
@@ -67,6 +74,18 @@ const run = async (
 <template>
   <div class="changes-tree">
     <div class="changes-tree__controls">
+      <s-button
+        size="small"
+        :disabled="busy || !history.canUndo"
+        @click="run(() => table?.undo())"
+        >撤销</s-button
+      >
+      <s-button
+        size="small"
+        :disabled="busy || !history.canRedo"
+        @click="run(() => table?.redo())"
+        >重做</s-button
+      >
       <s-button size="small" :disabled="busy" @click="expand"
         >加载并展开</s-button
       >
@@ -115,6 +134,8 @@ const run = async (
         virtual ? { height: 220, dynamic: true, horizontal: true } : false
       "
       change-config
+      :history-config="{ limit: 30 }"
+      @history-change="history = $event"
       @changes-change="refresh"
     />
     <p role="status">{{ message }}</p>
