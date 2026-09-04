@@ -21,6 +21,7 @@ import type {
   TableContextMenuSelectParams,
 } from './table-context-menu'
 import type { TableActiveCell, TableKeyboardConfig } from './table-keyboard'
+import type { TableMergeConfig } from './table-merge'
 import type {
   TableRowDragConfig,
   TableRowDragContext,
@@ -53,6 +54,7 @@ import type {
 } from './table-validation'
 export * from './table-context-menu'
 export * from './table-keyboard'
+export * from './table-merge'
 export * from './table-row-drag'
 export type { TableHistoryConfig, TableHistoryState } from './table-history'
 export type {
@@ -436,6 +438,10 @@ export const tableProps = buildProps({
   },
   contextMenuConfig: {
     type: definePropType<boolean | TableContextMenuConfig>([Boolean, Object]),
+    default: false,
+  },
+  mergeConfig: {
+    type: definePropType<boolean | TableMergeConfig>([Boolean, Object]),
     default: false,
   },
   activeCell: {

@@ -16,6 +16,9 @@ export interface TableCellCoordinate {
   position: number
   /** Index used by the shared rendering/editing pipeline. */
   column: number
+  /** Requested visible point can differ from a merged owner's address. */
+  viewRow?: number
+  viewColumn?: number
   address: TableActiveCell
 }
 interface KeyboardOptions {
@@ -33,6 +36,11 @@ interface KeyboardOptions {
   edit: (coordinate: TableCellCoordinate) => Promise<boolean>
   editing: () => boolean
   dragActive: () => boolean
+  move?: (
+    current: TableCellCoordinate,
+    key: string,
+    backwards: boolean,
+  ) => TableCellCoordinate | undefined
   context: WatchSource[]
 }
 const equal = (
@@ -73,8 +81,12 @@ export function useTableKeyboard(
   let observer: MutationObserver | undefined
   let removeFocusListener: (() => void) | undefined
   let cancelFrame: (() => void) | undefined
-  const coordinate = () =>
-    active.value ? options.resolve(active.value, hint) : undefined
+  const coordinate = () => {
+    const target = active.value
+      ? options.resolve(active.value, hint)
+      : undefined
+    return target && equal(target.address, active.value) ? target : undefined
+  }
   const ownedCell = (element: Element | null): HTMLElement | undefined => {
     const root = options.root()
     const cell = element?.closest<HTMLElement>(
@@ -332,7 +344,9 @@ export function useTableKeyboard(
       default:
         return
     }
-    const target = options.at(row, position)
+    const target = options.move
+      ? options.move(current, event.key, event.shiftKey)
+      : options.at(row, position)
     // Native Tab exits at either edge; arrow keys stop at the current page boundary.
     if (!target && event.key === 'Tab') return
     event.preventDefault()
@@ -349,9 +363,20 @@ export function useTableKeyboard(
   )
   watch(options.context, () => {
     if (!enabled.value || !active.value) return
-    if (!coordinate()) select(undefined)
+    const target = options.resolve(active.value, hint)
+    if (!target) select(undefined)
+    else if (!equal(target.address, active.value)) select(target, false)
     nextTick(refreshDOM)
   })
+  watch(
+    [enabled, active],
+    () => {
+      if (!enabled.value || !active.value) return
+      const target = options.resolve(active.value, hint)
+      if (target && !equal(target.address, active.value)) select(target, false)
+    },
+    { immediate: true },
+  )
   watch(enabled, (value) => {
     sequence++
     cancelFrame?.()

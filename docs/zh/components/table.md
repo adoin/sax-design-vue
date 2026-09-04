@@ -1,6 +1,11 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "merge-config"
+    type: "Boolean | TableMergeConfig"
+    description: "通过位置范围或同步窗口规则合并正文与表尾单元格。"
+    default: false
+    usage: "#合并单元格"
   - name: "context-menu-config"
     type: "Boolean | TableContextMenuConfig"
     description: "配置表头、数据区和表尾的菜单项、动态工厂与可见条件。"
@@ -832,6 +837,100 @@ EXPOSES:
 ---
 
 # Table 表格
+
+<card>
+
+## 合并单元格
+
+通过 `merge-config.body` 和 `merge-config.footer` 分别指定正文与表尾的合并区域。每项包含从零开始的 `row`、`col`，以及大于零的 `rowspan`、`colspan`。合并区域显示起点单元格的内容，继续使用其列插槽、格式化和交互。
+
+普通数据的 `row` 对应排序、筛选、分页和树展开后的当前显示行；表尾的 `row` 对应 `footer-data`。`col` 按左固定列、中心列、右固定列的可见顺序计算。固定范围跟随位置，查询、分页或列重排后会应用到新位置的单元格；需要按内容分组时应重新计算范围。
+
+下例合并相邻团队，并单独合并表尾标签。方向键和 Tab 跳过被覆盖的单元格。跨固定列的区域分段绘制，只在一处保留内容和可交互控件。
+
+跨度超出行列范围时会裁剪；无效范围被忽略，重叠范围以最先出现的有效项为准。1 × 1 范围不产生合并。将配置设为 `false` 或 `enabled: false` 可恢复独立单元格。
+
+<template #example><table-zh-merging /></template>
+
+<template #template>
+
+@[code{28-40}](../../.vuepress/components/table-zh/merging.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-26}](../../.vuepress/components/table-zh/merging.vue)
+
+</template>
+
+<template #style>
+
+@[code{42-49}](../../.vuepress/components/table-zh/merging.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 合并编辑与详情
+
+双击团队或项目单元格进入编辑，点击保存接受更新，或取消保留原值。合并团队只编辑起点行，不会同时修改被覆盖行的数据。通过首列展开任意项目的详情；合并区域在详情上下分段绘制，详情中的输入保持独立。可切换虚拟行，并拖动表头真实边界调整列宽。
+
+<template #example><table-zh-merging-edit /></template>
+
+<template #template>
+
+@[code{43-83}](../../.vuepress/components/table-zh/merging-edit.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-41}](../../.vuepress/components/table-zh/merging-edit.vue)
+
+</template>
+
+<template #style>
+
+@[code{85-104}](../../.vuepress/components/table-zh/merging-edit.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 虚拟合并区域
+
+生成数据源的合并行位置使用绝对源索引，开启分页时也保持此规则。`body` 或 `footer` 可接收同步函数，参数包含半开窗口 `rowStart`、`rowEnd`、`colStart`、`colEnd`，以及区域、行列数量和 `rowAt` / `columnAt` 访问器。函数需要返回与窗口相交的完整范围，包括起点位于窗口之前的范围。固定列、中心列和程序定位的目标可能分别触发查询；规则应保持确定性，不执行副作用。规则抛出异常时，该次查询不合并单元格。
+
+下例在生成数据中每四行、八列组成一个区域。点击「末端区域」可定位到两个轴末端的被覆盖单元格，活动地址归一到其区域起点。开启多行内容可观察自然高度调整。横向窗口切换保留已测得的最大高度；内容、真实列布局变化或调用 `measure()` 后允许重新测量。编辑和单元格交互使用合并起点对应的行、列上下文。
+
+内容高于整个可视区域时，可在合并单元格内滚动阅读；聚焦后也可使用 Page Up / Page Down。编辑期间改变合并规则会遵循已配置的列变更策略。受控活动地址指向被覆盖单元格时，组件请求将地址更新为区域起点；接受更新后才显示活动状态。
+
+<template #example><table-zh-merging-source /></template>
+
+<template #template>
+
+@[code{46-82}](../../.vuepress/components/table-zh/merging-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-44}](../../.vuepress/components/table-zh/merging-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{84-99}](../../.vuepress/components/table-zh/merging-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

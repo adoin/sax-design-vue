@@ -122,5 +122,5 @@ export function useTableKeyboardCoordinates(
       ? target
       : undefined
   }
-  return { at, resolve, keyAt, countColumns, positionOf }
+  return { at, resolve, keyAt, countColumns, positionOf, columnAt }
 }

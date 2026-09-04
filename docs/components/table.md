@@ -1,6 +1,11 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "merge-config"
+    type: "Boolean | TableMergeConfig"
+    description: "Merge body and footer cells using positional ranges or synchronous window-based rules."
+    default: false
+    usage: "#merging-cells"
   - name: "context-menu-config"
     type: "Boolean | TableContextMenuConfig"
     description: "Configure header, body and footer items, dynamic factories and visibility predicates."
@@ -832,6 +837,100 @@ EXPOSES:
 ---
 
 # Table
+
+<card>
+
+## Merging cells
+
+Use `merge-config.body` and `merge-config.footer` for body and footer ranges. Each range has zero-based `row` and `col` positions, plus positive `rowspan` and `colspan` values. A merged region displays its starting cell, retaining that column's slots, formatting and interactions.
+
+For ordinary data, `row` refers to the current displayed rows after sorting, filtering, pagination and tree expansion; footer rows refer to `footer-data`. `col` follows visible fixed-left, center and fixed-right column order. Static ranges follow positions, so a query, page or column-order change applies them to the cells at the new positions. Recalculate ranges when grouping by content.
+
+This example merges adjacent team labels and independently merges the footer label. Arrow keys and Tab skip covered cells. Ranges crossing fixed-column boundaries are drawn in separate sections, with a single copy of the content and interactive controls.
+
+Out-of-bounds spans are clipped to the available rows and columns. Invalid ranges are ignored; when ranges overlap, the first valid range wins. A 1 × 1 range has no effect. Setting the configuration to `false` or `enabled: false` restores individual cells.
+
+<template #example><table-merging /></template>
+
+<template #template>
+
+@[code{40-52}](../.vuepress/components/table/merging.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-38}](../.vuepress/components/table/merging.vue)
+
+</template>
+
+<template #style>
+
+@[code{54-61}](../.vuepress/components/table/merging.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Editing and details in merged rows
+
+Double-click a team or project cell to edit, then save the update or cancel the draft. Editing a merged team changes only its origin row, leaving covered rows unchanged. Expand a project with the first column: merged regions split around its details, while the detail input remains independent. Toggle virtual rows and drag a header boundary to adjust column widths.
+
+<template #example><table-merging-edit /></template>
+
+<template #template>
+
+@[code{61-101}](../.vuepress/components/table/merging-edit.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-59}](../.vuepress/components/table/merging-edit.vue)
+
+</template>
+
+<template #style>
+
+@[code{103-122}](../.vuepress/components/table/merging-edit.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Virtual merged regions
+
+For generated data, merge row positions are absolute source indices, including when pagination is enabled. A synchronous `body` or `footer` function receives a half-open window (`rowStart`, `rowEnd`, `colStart`, `colEnd`), the area, counts, and `rowAt` / `columnAt` accessors. Return complete ranges that intersect that window, including ranges whose origins precede it. The function may run separately for fixed and center columns, or for a programmatically requested cell; keep it deterministic and free of side effects. A thrown rule returns no merged ranges for that query.
+
+The example groups four rows and eight columns per region over generated data. Use **Last region** to locate a covered cell at the end of both axes; the active address resolves to its region's origin. Enable multiline content to see natural height adjustment. Horizontal window changes retain the largest measured height; content changes, column layout changes and `measure()` allow a fresh measurement. Editing and cell interactions use the original region owner's row and column.
+
+If content is taller than the visible viewport, scroll inside the merged cell to read the rest; a focused cell also supports Page Up / Page Down. Changing a merge rule during editing follows the configured column-change policy. A controlled active address that points to a covered cell requests an update to the origin address; accept that update to display the active state.
+
+<template #example><table-merging-source /></template>
+
+<template #template>
+
+@[code{46-84}](../.vuepress/components/table/merging-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-44}](../.vuepress/components/table/merging-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{86-101}](../.vuepress/components/table/merging-source.vue)
+
+</template>
+
+</card>
 
 <card>
 

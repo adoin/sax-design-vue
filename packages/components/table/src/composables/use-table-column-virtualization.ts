@@ -194,6 +194,8 @@ export const useTableColumnVirtualization = (
   let observedElement: HTMLElement | undefined
   let scrollFrame: number | undefined
   let pendingScrollLeft = 0
+  let layoutRevision = 0
+  let disposed = false
 
   const sparseMetrics = computed(() => {
     const width = options.uniformColumnWidth?.value
@@ -466,6 +468,77 @@ export const useTableColumnVirtualization = (
 
   onMounted(observeScrollElement)
 
+  // Physical scrollbar ratios change when the viewport or reserved fixed bands
+  // change. Preserve the logical column and in-column offset, including the end.
+  const scrollLayout = computed(() => {
+    const current = metrics.value
+    const sparse = sparseMetrics.value
+    return {
+      count: current.count,
+      logical: logicalScrollableWidth.value,
+      physical: physicalScrollableWidth.value,
+      offsetAt: (index: number) =>
+        sparse?.offsetAt(index) ??
+        (current.uniformWidth != null
+          ? index * current.uniformWidth
+          : (current.offsets[index] ?? current.totalWidth)),
+    }
+  })
+  watch(scrollLayout, (current, previous) => {
+    const element = options.scrollElement.value
+    if (
+      !element ||
+      !options.horizontal.value ||
+      !previous.count ||
+      !current.count ||
+      !previous.logical
+    )
+      return
+    const physical = scrollFrame == null ? scrollLeft.value : pendingScrollLeft
+    const logical = mapPhysicalToLogicalScroll(
+      physical,
+      previous.physical,
+      previous.logical,
+    )
+    let low = 0
+    let high = previous.count - 1
+    while (low < high) {
+      const middle = Math.floor((low + high) / 2)
+      if (previous.offsetAt(middle + 1) <= logical) low = middle + 1
+      else high = middle
+    }
+    const column = Math.min(low, current.count - 1)
+    const offset = Math.min(
+      Math.max(0, logical - previous.offsetAt(low)),
+      Math.max(0, current.offsetAt(column + 1) - current.offsetAt(column)),
+    )
+    const nextLogical =
+      previous.physical > 0 && physical >= previous.physical - 1
+        ? current.logical
+        : current.offsetAt(column) + offset
+    const nextPhysical = mapLogicalToPhysicalScroll(
+      nextLogical,
+      current.logical,
+      current.physical,
+    )
+    if (scrollFrame != null && typeof cancelAnimationFrame !== 'undefined')
+      cancelAnimationFrame(scrollFrame)
+    scrollFrame = undefined
+    pendingScrollLeft = nextPhysical
+    scrollLeft.value = nextPhysical
+    const revision = ++layoutRevision
+    nextTick(() => {
+      if (
+        disposed ||
+        revision !== layoutRevision ||
+        options.scrollElement.value !== element
+      )
+        return
+      element.scrollLeft = nextPhysical
+      scheduleScrollLeft(element.scrollLeft)
+    })
+  })
+
   watch(
     () => options.scrollElement.value,
     (element) => {
@@ -486,6 +559,7 @@ export const useTableColumnVirtualization = (
   )
 
   onBeforeUnmount(() => {
+    disposed = true
     resizeObserver?.disconnect()
     if (scrollFrame != null && typeof cancelAnimationFrame !== 'undefined')
       cancelAnimationFrame(scrollFrame)

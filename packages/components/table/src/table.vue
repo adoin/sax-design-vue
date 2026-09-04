@@ -30,6 +30,7 @@
       @keydown.esc="overflow.close"
     >
       <div
+        ref="dataViewRef"
         :class="ns.e('data-view')"
         :style="{ minWidth: dataViewMinWidth }"
         role="table"
@@ -234,69 +235,11 @@
               @shrink="resetDetailMeasurements"
             >
               <template #default="{ detail }">
-                <TableDataRow
+                <TableBodyRow
                   :detail="detail"
-                  :editing="editing"
-                  :keyboard="keyboard"
-                  :context-menu-enabled="contextMenu.enabled.value"
-                  :drag="
-                    rowReorder.config.value.enabled !== false && rowDragConfig
-                      ? rowDrag
-                      : undefined
-                  "
-                  :validation="validation"
-                  :edit-renderer="resolveEditRenderer"
                   :flat-row="item as TableFlatRow"
-                  :entries="renderedColumnEntries"
                   :display-index="index"
-                  :row-offset="detailRowOffset(index)"
-                  :sequence-offset="
-                    pagination.remote.value ? pagination.offset.value : 0
-                  "
-                  :indent="treeIndent"
-                  :selected="isRowSelected((item as TableFlatRow).key)"
-                  :selection-disabled="
-                    loading ||
-                    !isSelectable(
-                      (item as TableFlatRow).row,
-                      (item as TableFlatRow).index,
-                    )
-                  "
-                  :selection-name="selectionName"
-                  :overflow="showOverflow"
-                  :striped="striped"
-                  :row-class="rowClass"
-                  @cell-context-menu="
-                    (params, event) =>
-                      contextMenu.open({ ...params, area: 'body' }, event)
-                  "
-                  @row-click="handleRowClick"
-                  @cell-click="handleCellClick"
-                  @row-select="toggleRowSelection"
-                  @toggle-expand="toggleRowExpand((item as TableFlatRow).row)"
-                >
-                  <template #cell="params">
-                    <slot :name="cellSlotName(params.column)" v-bind="params">
-                      <slot name="cell" v-bind="params">
-                        <TableRendererOutlet
-                          :renderer="resolveCellRenderer(params.column)"
-                          :params="params"
-                          :fallback="params.value"
-                        />
-                      </slot>
-                    </slot>
-                  </template>
-                  <template #edit="params">
-                    <slot
-                      :name="
-                        params.column.slots?.edit ??
-                        `edit-${columnSlotKey(params.column)}`
-                      "
-                      v-bind="params"
-                      ><slot name="edit-cell" v-bind="params"
-                    /></slot>
-                  </template>
-                </TableDataRow>
+                />
               </template>
               <template #detail="params"
                 ><slot name="detail" v-bind="params"
@@ -332,66 +275,11 @@
             @shrink="resetDetailMeasurements"
           >
             <template #default="{ detail }">
-              <TableDataRow
-                :data-row-key="String(flatRow.key)"
+              <TableBodyRow
                 :detail="detail"
-                :editing="editing"
-                :keyboard="keyboard"
-                :context-menu-enabled="contextMenu.enabled.value"
-                :drag="
-                  rowReorder.config.value.enabled !== false && rowDragConfig
-                    ? rowDrag
-                    : undefined
-                "
-                :validation="validation"
-                :edit-renderer="resolveEditRenderer"
                 :flat-row="flatRow"
-                :entries="renderedColumnEntries"
                 :display-index="index"
-                :row-offset="detailRowOffset(index)"
-                :sequence-offset="
-                  pagination.remote.value ? pagination.offset.value : 0
-                "
-                :indent="treeIndent"
-                :selected="isRowSelected(flatRow.key)"
-                :selection-disabled="
-                  loading || !isSelectable(flatRow.row, flatRow.index)
-                "
-                :selection-name="selectionName"
-                :overflow="showOverflow"
-                :striped="striped"
-                :row-class="rowClass"
-                @cell-context-menu="
-                  (params, event) =>
-                    contextMenu.open({ ...params, area: 'body' }, event)
-                "
-                @row-click="handleRowClick"
-                @cell-click="handleCellClick"
-                @row-select="toggleRowSelection"
-                @toggle-expand="toggleRowExpand(flatRow.row)"
-              >
-                <template #cell="params">
-                  <slot :name="cellSlotName(params.column)" v-bind="params">
-                    <slot name="cell" v-bind="params">
-                      <TableRendererOutlet
-                        :renderer="resolveCellRenderer(params.column)"
-                        :params="params"
-                        :fallback="params.value"
-                      />
-                    </slot>
-                  </slot>
-                </template>
-                <template #edit="params">
-                  <slot
-                    :name="
-                      params.column.slots?.edit ??
-                      `edit-${columnSlotKey(params.column)}`
-                    "
-                    v-bind="params"
-                    ><slot name="edit-cell" v-bind="params"
-                  /></slot>
-                </template>
-              </TableDataRow>
+              />
             </template>
             <template #detail="params"
               ><slot name="detail" v-bind="params"
@@ -424,6 +312,8 @@
           :overflow="showFooterOverflow"
           :retain-heights="horizontalVirtualMode"
           :context-menu-enabled="contextMenu.enabled.value"
+          :merge-at="merges.enabled.value ? footerMergeAt : undefined"
+          :minimum-height="footerMergeHeight"
           @cell-context-menu="
             (params, event) =>
               contextMenu.open({ ...params, area: 'footer' }, event)
@@ -444,6 +334,23 @@
             </slot>
           </template>
         </TableFooterRows>
+
+        <TableMergeLayer
+          v-if="merges.enabled.value"
+          :body-host="
+            usesBodyScroll ? virtualListRef?.getScrollElement() : undefined
+          "
+          :geometry="mergeGeometry.geometry.value"
+          :body="merges.body.value"
+          :footer="merges.footer.value"
+          @continuation-click="mergeContinuationClick"
+          @continuation-dblclick="mergeContinuationDblclick"
+          @continuation-contextmenu="mergeContinuationContextmenu"
+        >
+          <template #cell="{ surface }"
+            ><TableMergedCell :surface="surface"
+          /></template>
+        </TableMergeLayer>
 
         <div v-if="loading" :class="ns.e('loading-mask')" aria-live="polite">
           <span :class="ns.e('loading-spinner')" />
@@ -524,7 +431,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, provide, ref, shallowRef, watch } from 'vue'
+import {
+  computed,
+  h,
+  nextTick,
+  provide,
+  ref,
+  renderSlot,
+  shallowRef,
+  useSlots,
+  watch,
+} from 'vue'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SPagination } from '@vuesax-alpha/components/pagination'
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
@@ -537,7 +454,12 @@ import {
   useTableTree,
 } from './composables'
 import { resolveColumnPixelWidth } from './composables/use-table-column-virtualization'
-import TableDataRow from './table-data-row.vue'
+import { createTableBodyRow } from './table-body-row'
+import TableMergeLayer from './table-merge-layer.vue'
+import { useTableMergeGeometry } from './composables/use-table-merge-geometry'
+import { useTableMergeRegions } from './composables/use-table-merge-regions'
+import { useTableMergeCoordinates } from './composables/use-table-merge-coordinates'
+import { useTableMergeHeights } from './composables/use-table-merge-heights'
 import TableRendererOutlet from './renderer-outlet'
 import TableHeaderCell from './table-header-cell.vue'
 import TableHeaderRows from './table-header-rows.vue'
@@ -564,6 +486,7 @@ import { useTablePagination } from './composables/use-table-pagination'
 import { useTableColumnResize } from './composables/use-table-column-resize'
 import { useTableColumnManager } from './composables/use-table-column-manager'
 import TableColumnManager from './table-column-manager.vue'
+import type { TableMergeSurface } from './table-merge-layer.vue'
 import type { ContextMenuInstance } from '@vuesax-alpha/components/context-menu'
 import type { VirtualListInstance } from '@vuesax-alpha/components/virtual-list'
 import type { CSSProperties } from 'vue'
@@ -575,6 +498,7 @@ import type {
   TableEditRenderer,
   TableFilterValue,
   TableFlatRow,
+  TableFooterCellRenderParams,
   TableHeaderRenderParams,
   TableHeaderRenderer,
   TableRenderedColumnEntry,
@@ -595,6 +519,8 @@ const emit = defineEmits(tableEmits)
 const virtualListRef = ref<VirtualListInstance>()
 const footerRowsRef = ref<InstanceType<typeof TableFooterRows>>()
 const dataBodyRef = ref<HTMLElement>()
+const dataViewRef = ref<HTMLElement>()
+const tableSlots = useSlots()
 const sourceDetailRows = new WeakMap<TableRow, TableFlatRow>()
 const tableScrollRef = ref<HTMLElement>()
 const columnScrollRef = ref<HTMLElement>()
@@ -1392,6 +1318,7 @@ const scrollToColumn = (
 
 const measure = () =>
   nextTick(() => {
+    mergeHeights.clear()
     virtualListRef.value?.resetMeasurements()
     footerRowsRef.value?.measure()
     columnVirtualization.measureViewport()
@@ -1476,22 +1403,35 @@ const startEdit = async (
     column = resolvedColumns.value[index]
   }
   if (!column) return false
+  const requestedColumn = index
+  const region = bodyMergeAt(
+    props.virtualSource ? flat.index : getRowIndex(flat.row),
+    keyboardCoordinates.positionOf(index),
+  )
+  const editFlat = region ? mergeFlatRow(region.row) : flat
+  if (!editFlat) return false
+  if (region) {
+    const ownerColumn = mergeColumn(region.col)
+    if (!ownerColumn) return false
+    index = ownerColumn.index
+    column = ownerColumn.column
+  }
   const started = await editing.start({
-    row: flat.row,
-    rowKey: flat.key,
+    row: editFlat.row,
+    rowKey: editFlat.key,
     column,
     columnIndex: index,
     columnKey: column.key ?? column.field ?? String(index),
-    rowIndex: flat.index,
-    value: tableFieldValue(flat.row, column.field),
-    depth: flat.depth,
-    expanded: flat.expanded,
-    loading: flat.loading,
-    toggleExpand: async (value) => toggleRowExpand(flat.row, value),
+    rowIndex: editFlat.index,
+    value: tableFieldValue(editFlat.row, column.field),
+    depth: editFlat.depth,
+    expanded: editFlat.expanded,
+    loading: editFlat.loading,
+    toggleExpand: async (value) => toggleRowExpand(editFlat.row, value),
   })
   if (started) {
     scrollToRow(props.virtualSource ? flat.index : flat.row)
-    scrollToColumn(index)
+    scrollToColumn(requestedColumn)
     await nextTick()
   }
   return started
@@ -1531,7 +1471,19 @@ watch(
   () =>
     nextTick(() => {
       const active = editing.active.value
-      if (active) {
+      const visibleMerge =
+        active &&
+        [
+          ...(dataViewRef.value?.querySelectorAll<HTMLElement>(
+            '[data-merge-primary] [data-row-key]',
+          ) ?? []),
+        ].some(
+          (row) =>
+            row.closest('[role="table"]') === dataViewRef.value &&
+            row.dataset.rowKey === String(active.rowKey) &&
+            row.querySelector(`[data-column-index="${active.columnIndex}"]`),
+        )
+      if (active && !visibleMerge) {
         scrollToRow(props.virtualSource ? active.rowIndex : active.row)
         scrollToColumn(active.columnIndex)
       }
@@ -1630,6 +1582,125 @@ const keyboardCoordinates = useTableKeyboardCoordinates(props, {
   columns: resolvedColumns,
   manager: columnManager,
 })
+const mergeRowOffset = computed(() =>
+  props.virtualSource ? pagination.sourceOffset.value : 0,
+)
+const mergeFlatRow = (index: number) =>
+  props.virtualSource
+    ? index >= 0 && index < props.virtualSource.rowCount
+      ? createSourceFlatRow(index)
+      : undefined
+    : flatRows.value[index]
+const mergeColumn = (position: number) => {
+  const index = keyboardCoordinates.columnAt(position)
+  return index < 0
+    ? undefined
+    : {
+        index,
+        column: props.virtualSource
+          ? columnManager.columnAt(index)
+          : resolvedColumns.value[index],
+      }
+}
+const mergeGeometry = useTableMergeGeometry({
+  enabled: () =>
+    Boolean(props.mergeConfig) &&
+    (typeof props.mergeConfig !== 'object' ||
+      props.mergeConfig.enabled !== false),
+  root: () => dataViewRef.value,
+  viewport: () =>
+    usesBodyScroll.value
+      ? (virtualListRef.value?.getScrollElement() ?? undefined)
+      : tableScrollRef.value,
+  rowOffset: () => mergeRowOffset.value,
+})
+const merges = useTableMergeRegions({
+  config: () => props.mergeConfig,
+  columnCount: keyboardCoordinates.countColumns,
+  columnAt: (position) => mergeColumn(position)?.column,
+  body: {
+    count: () => props.virtualSource?.rowCount ?? flatRows.value.length,
+    rowAt: (index) => mergeFlatRow(index)?.row,
+    windows: () => mergeGeometry.geometry.value.body.windows,
+  },
+  footer: {
+    count: () => props.footerData.length,
+    rowAt: (index) => props.footerData[index],
+    windows: () => mergeGeometry.geometry.value.footer.windows,
+  },
+})
+const bodyMergeAt = (row: number, col: number) => merges.at('body', row, col)
+const footerMergeAt = (row: number, col: number) =>
+  merges.at('footer', row, col)
+const mergeCoordinates = useTableMergeCoordinates({
+  base: keyboardCoordinates,
+  at: bodyMergeAt,
+  rowAt: mergeFlatRow,
+  offset: () => mergeRowOffset.value,
+  count: () => effectiveRowCount.value,
+})
+const mergeHeights = useTableMergeHeights({
+  root: () => dataViewRef.value,
+  enabled: () => merges.enabled.value,
+  index: (area) => (area === 'body' ? merges.body.value : merges.footer.value),
+  columnCount: keyboardCoordinates.countColumns,
+  shrink: () =>
+    nextTick(() => {
+      virtualListRef.value?.resetMeasurements()
+      footerRowsRef.value?.measure()
+    }),
+})
+const footerMergeHeight = (row: number) => mergeHeights.minimum('footer', row)
+watch(
+  () => {
+    const active = editing.active.value
+    if (!active) return undefined
+    const coordinate = props.virtualSource
+      ? {
+          row: active.rowIndex - mergeRowOffset.value,
+          position: keyboardCoordinates.positionOf(active.columnIndex),
+        }
+      : keyboardCoordinates.resolve({
+          rowKey: active.rowKey,
+          columnKey: active.columnKey,
+        })
+    return {
+      session: active.id,
+      region: coordinate
+        ? bodyMergeAt(
+            coordinate.row + mergeRowOffset.value,
+            coordinate.position,
+          )?.key
+        : undefined,
+    }
+  },
+  (current, previous) => {
+    if (
+      current &&
+      previous &&
+      current.session === previous.session &&
+      current.region !== previous.region
+    )
+      editing.contextChanged('columns')
+  },
+)
+watch(
+  [
+    () => props.data,
+    () => props.footerData,
+    () => props.mergeConfig,
+    () => props.virtualSource?.row,
+    resolvedColumns,
+    () => totalTablePixelWidth.value,
+    pagination.currentPage,
+  ],
+  () => {
+    const hadMergeHeights = mergeHeights.clear()
+    if (!merges.enabled.value && !hadMergeHeights) return
+    virtualListRef.value?.resetMeasurements()
+    footerRowsRef.value?.measure()
+  },
+)
 const contextMenu = useTableContextMenu(props, emit, {
   root: () => tableScrollRef.value,
   context: [
@@ -1648,25 +1719,32 @@ const contextMenu = useTableContextMenu(props, emit, {
 })
 const keyboard = useTableKeyboard(props, emit, {
   ...keyboardCoordinates,
+  ...mergeCoordinates,
   root: () => tableScrollRef.value,
-  fromElement: (cell) =>
-    keyboardCoordinates.at(
-      Number(
-        cell
-          .closest('[data-table-row-index]')
-          ?.getAttribute('data-table-row-index'),
-      ),
-      keyboardCoordinates.positionOf(Number(cell.dataset.columnIndex)),
-    ),
+  fromElement: (cell) => {
+    const fragment = cell.closest<HTMLElement>('[data-merge-primary]')
+    return mergeCoordinates.at(
+      fragment
+        ? Number(fragment.dataset.mergeRowStart) - mergeRowOffset.value
+        : Number(
+            cell
+              .closest('[data-table-row-index]')
+              ?.getAttribute('data-table-row-index'),
+          ),
+      fragment
+        ? Number(fragment.dataset.mergeColStart)
+        : keyboardCoordinates.positionOf(Number(cell.dataset.columnIndex)),
+    )
+  },
   locate: (coordinate) => {
-    const row = dragRowAt(coordinate.row)
+    const row = dragRowAt(coordinate.viewRow ?? coordinate.row)
     if (row) scrollToRow(props.virtualSource ? row.index : row.row)
-    scrollToColumn(coordinate.column)
+    scrollToColumn(coordinate.viewColumn ?? coordinate.column)
   },
   element: (coordinate) =>
     [
       ...(tableScrollRef.value?.querySelectorAll<HTMLElement>(
-        `[data-table-row-index="${coordinate.row}"] > [data-column-index="${coordinate.column}"]`,
+        `[data-table-row-index="${coordinate.row}"] > [role="cell"][data-column-index="${coordinate.column}"]`,
       ) ?? []),
     ].find(
       (cell) =>
@@ -1674,15 +1752,19 @@ const keyboard = useTableKeyboard(props, emit, {
         tableScrollRef.value?.querySelector('[role="table"]'),
     ),
   edit: (coordinate) => {
-    const row = dragRowAt(coordinate.row)
+    const row = dragRowAt(coordinate.viewRow ?? coordinate.row)
     return row
-      ? startEdit(props.virtualSource ? row.index : row.row, coordinate.column)
+      ? startEdit(
+          props.virtualSource ? row.index : row.row,
+          coordinate.viewColumn ?? coordinate.column,
+        )
       : Promise.resolve(false)
   },
   editing: () => Boolean(editing.active.value),
   dragActive: () => Boolean(rowDrag.session.value),
   context: [
     () => (props.virtualSource ? undefined : flatRows.value),
+    merges.body,
     () => props.virtualSource?.row,
     () => props.virtualSource?.rowCount,
     () => props.virtualSource?.columnCount,
@@ -1692,6 +1774,161 @@ const keyboard = useTableKeyboard(props, emit, {
     columnManager.state,
   ],
 })
+const TableBodyRow = createTableBodyRow({
+  slots: tableSlots,
+  cellSlotName,
+  editSlotName: (column) =>
+    column.slots?.edit ?? `edit-${columnSlotKey(column)}`,
+  renderer: resolveCellRenderer,
+  bindings: (flatRow, index) => ({
+    flatRow,
+    displayIndex: index,
+    entries: renderedColumnEntries.value,
+    'data-row-key': String(flatRow.key),
+    editing,
+    keyboard,
+    validation,
+    contextMenuEnabled: contextMenu.enabled.value,
+    drag:
+      rowReorder.config.value.enabled !== false && props.rowDragConfig
+        ? rowDrag
+        : undefined,
+    editRenderer: resolveEditRenderer,
+    rowOffset: detailRowOffset(index),
+    sequenceOffset: pagination.remote.value ? pagination.offset.value : 0,
+    indent: treeIndent.value,
+    selected: isRowSelected(flatRow.key),
+    selectionDisabled:
+      props.loading || !isSelectable(flatRow.row, flatRow.index),
+    selectionName: selectionName.value,
+    overflow: props.showOverflow,
+    striped: props.striped,
+    rowClass: props.rowClass,
+    mergeAt: merges.enabled.value ? bodyMergeAt : undefined,
+    mergeRowOffset: mergeRowOffset.value,
+    minimumHeight: mergeHeights.minimum('body', index + mergeRowOffset.value),
+    onCellContextMenu: (
+      params: TableEditContext,
+      event: MouseEvent | KeyboardEvent,
+    ) => contextMenu.open({ ...params, area: 'body' }, event),
+    onRowClick: handleRowClick,
+    onCellClick: handleCellClick,
+    onRowSelect: toggleRowSelection,
+    onToggleExpand: () => toggleRowExpand(flatRow.row),
+  }),
+})
+const TableMergedCell = ({ surface }: { surface: TableMergeSurface }) => {
+  const column = mergeColumn(surface.region.col)
+  if (!column) return null
+  const entries: TableRenderedColumnEntry[] = [
+    {
+      kind: 'column',
+      key: String(column.index),
+      column: column.column,
+      index: column.index,
+      ariaIndex: surface.region.col,
+      style: { width: '100%', minWidth: 0, flex: '1 1 0' },
+    },
+  ]
+  if (surface.area === 'body') {
+    const flatRow = mergeFlatRow(surface.region.row)
+    if (!flatRow) return null
+    return h(TableBodyRow, {
+      flatRow,
+      displayIndex: Math.max(0, surface.region.row - mergeRowOffset.value),
+      entries,
+      mergeOwner: surface.region,
+      detail: {
+        enabled: details.enabled.value,
+        expanded: details.expanded(flatRow),
+        disabled: props.loading || !details.allowed(flatRow),
+        panelId: detailPanelId(flatRow.key),
+        toggle: () => details.toggle(flatRow),
+      },
+    })
+  }
+  const row = props.footerData[surface.region.row]
+  if (!row) return null
+  return h(
+    TableFooterRows,
+    {
+      data: [row],
+      dataOffset: surface.region.row,
+      rowKey: props.footerRowKey,
+      entries,
+      rowOffset:
+        footerAriaOffset.value == null
+          ? undefined
+          : footerAriaOffset.value + surface.region.row,
+      fixedStyle: () => ({}),
+      renderers: props.renderers,
+      overflow: props.showFooterOverflow,
+      retainHeights: false,
+      contextMenuEnabled: contextMenu.enabled.value,
+      mergeOwner: surface.region,
+      onCellClick: (params, event) => emit('footerCellClick', params, event),
+      onCellContextMenu: (params, event) =>
+        contextMenu.open({ ...params, area: 'footer' }, event),
+    },
+    {
+      cell: (params: TableFooterCellRenderParams) =>
+        renderSlot(
+          tableSlots,
+          params.column.slots?.footer ??
+            `footer-${columnSlotKey(params.column)}`,
+          { ...params },
+          () => [renderSlot(tableSlots, 'footer-cell', { ...params })],
+        ),
+    },
+  )
+}
+const mergeOwnerElement = (surface: TableMergeSurface) =>
+  [
+    ...(dataViewRef.value?.querySelectorAll<HTMLElement>(
+      '[data-merge-primary]',
+    ) ?? []),
+  ]
+    .find(
+      (element) =>
+        element.dataset.mergeRegion === surface.region.key &&
+        element.classList.contains('is-footer-merge') ===
+          (surface.area === 'footer'),
+    )
+    ?.querySelector<HTMLElement>('[role="cell"]')
+const mergeContinuationClick = (
+  surface: TableMergeSurface,
+  event: MouseEvent,
+) =>
+  mergeOwnerElement(surface)?.dispatchEvent(
+    new MouseEvent('click', {
+      bubbles: true,
+      ctrlKey: event.ctrlKey,
+      shiftKey: event.shiftKey,
+      metaKey: event.metaKey,
+    }),
+  )
+const mergeContinuationDblclick = (surface: TableMergeSurface) =>
+  mergeOwnerElement(surface)?.dispatchEvent(
+    new MouseEvent('dblclick', { bubbles: true }),
+  )
+const mergeContinuationContextmenu = (
+  surface: TableMergeSurface,
+  event: MouseEvent,
+) => {
+  const target = mergeOwnerElement(surface)
+  if (
+    target &&
+    !target.dispatchEvent(
+      new MouseEvent('contextmenu', {
+        bubbles: true,
+        cancelable: true,
+        clientX: event.clientX,
+        clientY: event.clientY,
+      }),
+    )
+  )
+    event.preventDefault()
+}
 const handleTableKeydown = (event: KeyboardEvent) => {
   if (rowDrag.session.value?.keyboard)
     rowDrag.keydown(event, rowDrag.session.value.from)
@@ -1706,7 +1943,7 @@ const handleTableScrollCapture = () => {
   contextMenu.close()
 }
 const setActiveCell = (rowIndex: number, columnIndex: number) => {
-  const target = keyboardCoordinates.at(
+  const target = mergeCoordinates.at(
     props.virtualSource ? rowIndex - pagination.sourceOffset.value : rowIndex,
     keyboardCoordinates.positionOf(columnIndex),
   )

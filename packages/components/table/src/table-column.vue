@@ -26,6 +26,31 @@ const slots = useSlots()
 const registration = inject(tableColumnRegistrationKey, null)
 const registrationId = Symbol('tableColumn')
 const children = shallowRef<Array<{ id: symbol; column: TableColumn }>>([])
+const callbacks = new Map<string, (...args: unknown[]) => unknown>()
+const callbackMarker = () => undefined
+const forwardedProps = (): TableColumnOptions => {
+  const result: Record<string, unknown> = { ...props }
+  for (const key of Object.keys(result)) {
+    if (typeof result[key] !== 'function') continue
+    if (!callbacks.has(key))
+      callbacks.set(key, function (this: unknown, ...args: unknown[]) {
+        const value = props[key as keyof TableColumnOptions]
+        return typeof value === 'function'
+          ? Reflect.apply(value, this, args)
+          : undefined
+      })
+    result[key] = callbacks.get(key)
+  }
+  return result as TableColumnOptions
+}
+const propSnapshot = () => {
+  const snapshot: Record<string, unknown> = cloneDeep(props)
+  // Inline callbacks may change identity on every parent render. Stable forwarders
+  // above read the current callback reactively without re-registering the column.
+  for (const key of Object.keys(snapshot))
+    if (typeof snapshot[key] === 'function') snapshot[key] = callbackMarker
+  return snapshot
+}
 
 provide(tableColumnRegistrationKey, {
   register: (id, column) => {
@@ -42,28 +67,25 @@ provide(tableColumnRegistrationKey, {
 })
 
 const createColumn = (): TableColumn => ({
-  ...props,
+  ...forwardedProps(),
   children: slots.columns
     ? children.value.map((child) => child.column)
     : props.children,
   key: instance?.vnode.key == null ? undefined : String(instance.vnode.key),
-  cell: slots.default ? (params) => slots.default?.(params) : props.cell,
-  header: slots.header ? (params) => slots.header?.(params) : props.header,
-  footer: slots.footer ? (params) => slots.footer?.(params) : props.footer,
-  edit: slots.edit ? (params) => slots.edit?.(params) : props.edit,
+  ...(slots.default ? { cell: (params) => slots.default?.(params) } : {}),
+  ...(slots.header ? { header: (params) => slots.header?.(params) } : {}),
+  ...(slots.footer ? { footer: (params) => slots.footer?.(params) } : {}),
+  ...(slots.edit ? { edit: (params) => slots.edit?.(params) } : {}),
 })
 
 onBeforeMount(() => registration?.register(registrationId, createColumn()))
 
 // Inline object props are recreated when the parent table renders its slot.
 // Re-register only semantic changes, including mutations inside rule objects.
-watch(
-  () => cloneDeep(props),
-  (current, previous) => {
-    if (!isEqual(current, previous))
-      registration?.update(registrationId, createColumn())
-  },
-)
+watch(propSnapshot, (current, previous) => {
+  if (!isEqual(current, previous))
+    registration?.update(registrationId, createColumn())
+})
 watch(children, () => registration?.update(registrationId, createColumn()))
 
 onBeforeUnmount(() => registration?.unregister(registrationId))

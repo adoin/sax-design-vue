@@ -18,6 +18,9 @@
       resolvedRowClass,
     ]"
     role="row"
+    :style="
+      minimumHeight == null ? undefined : { minHeight: `${minimumHeight}px` }
+    "
     :data-table-row-index="displayIndex"
     :aria-selected="selected"
     :aria-rowindex="rowOffset == null ? undefined : displayIndex + rowOffset"
@@ -28,6 +31,25 @@
         v-if="entry.kind === 'spacer'"
         :class="ns.e('data-column-spacer')"
         :style="{ flexBasis: `${entry.width}px` }"
+        aria-hidden="true"
+      />
+      <div
+        v-else-if="
+          mergeAt?.(
+            displayIndex + (mergeRowOffset ?? 0),
+            entry.ariaIndex ?? entry.index,
+          )
+        "
+        :class="[
+          ns.e('merge-placeholder'),
+          ns.is('fixed-column', Boolean(entry.fixed)),
+          ns.is('fixed-left', entry.fixed === 'left'),
+          ns.is('fixed-right', entry.fixed === 'right'),
+        ]"
+        :style="entry.style"
+        :data-column-index="entry.index"
+        :data-column-position="entry.ariaIndex ?? entry.index"
+        role="presentation"
         aria-hidden="true"
       />
       <div
@@ -74,6 +96,8 @@
           validation?.isPending(flatRow.key, entry.column.field) || undefined
         "
         :aria-colindex="(entry.ariaIndex ?? entry.index) + 1"
+        :aria-rowspan="mergeOwner?.rowspan"
+        :aria-colspan="mergeOwner?.colspan"
         :data-column-index="entry.index"
         :tabindex="
           keyboard?.enabled.value
@@ -253,6 +277,7 @@ import type { TableValidation } from './composables/use-table-validation'
 import type { TableEditing } from './composables/use-table-edit'
 import type { TableRowDrag } from './composables/use-table-row-drag'
 import type { TableKeyboard } from './composables/use-table-keyboard'
+import type { TableMergeRegion } from './composables/table-merge-regions'
 import type { TableEditContext, TableEditRenderer } from './table-edit'
 import type { TableRowDetailState } from './composables/use-table-details'
 import type {
@@ -285,6 +310,10 @@ const props = defineProps<{
   drag?: TableRowDrag
   keyboard?: TableKeyboard
   contextMenuEnabled?: boolean
+  mergeAt?: (row: number, col: number) => TableMergeRegion | undefined
+  mergeRowOffset?: number
+  mergeOwner?: TableMergeRegion
+  minimumHeight?: number
   validation?: TableValidation
   editRenderer?: (column: TableColumn) => TableEditRenderer | undefined
 }>()
