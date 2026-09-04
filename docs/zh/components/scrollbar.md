@@ -1,6 +1,20 @@
 ---
 description: "提供可编程控制的自定义滚动区域。"
 PROPS:
+  - name: placement
+    type: String
+    values: "inside, outside"
+    description: 自定义滚动轨道的位置。outside 在内容区外预留独立空间；native 模式不生效。
+    default: inside
+    usage: '#外置滚动条'
+
+  - name: gap
+    type: Number
+    values: "number"
+    description: 外置轨道与内容区的间距，单位 px；负数按 0 处理。
+    default: 6
+    usage: '#外置滚动条'
+
   - name: height
     type: String, Number
     values: "number"
@@ -193,6 +207,40 @@ EXPOSES:
 ---
 
 # Scrollbar（滚动条）
+
+<card>
+
+## 外置滚动条
+
+设置 `placement="outside"`，将横向和纵向轨道放在内容区外侧，滑块不会遮挡内容。使用 `gap` 调整轨道间距，`thickness` 调整粗细；颜色沿用组件的 HSL 主色。
+
+本例使用 `max-height`，减少条目后内容区会自动收缩，仅在溢出方向显示轨道。外侧轨道占用组件自身空间，不需要负偏移，也不必修改父容器的 overflow。
+
+支持拖动滑块、点击轨道、滚轮和触控板；Tab 聚焦内容区后可使用方向键滚动。关闭 `always` 后，鼠标移出会隐藏轨道，但保留轨道空间，避免布局跳动。
+
+<template #example>
+<scrollbar-zh-outside />
+</template>
+
+<template #template>
+
+@[code{9-33}](../../.vuepress/components/scrollbar-zh/outside.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-7}](../../.vuepress/components/scrollbar-zh/outside.vue)
+
+</template>
+
+<template #style>
+
+@[code{35-66}](../../.vuepress/components/scrollbar-zh/outside.vue)
+
+</template>
+
+</card>
 
 <card>
 

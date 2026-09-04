@@ -3,6 +3,7 @@ import type { ExtractPropTypes } from 'vue'
 import type Thumb from './thumb.vue'
 
 export const thumbProps = buildProps({
+  reserveSpace: Boolean,
   vertical: { type: Boolean },
   size: { type: String },
   move: { type: Number },

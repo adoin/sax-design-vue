@@ -1,9 +1,14 @@
 <template>
   <transition :name="ns.b('fade')">
     <div
-      v-show="always || visible"
+      v-show="reserveSpace || always || visible"
       ref="instance"
       :class="[ns.e('bar'), ns.is(bar.key)]"
+      :style="
+        reserveSpace && !always && !visible
+          ? { opacity: 0, pointerEvents: 'none' }
+          : undefined
+      "
       @mousedown="clickTrackHandler"
     >
       <div
@@ -152,6 +157,7 @@ const mouseLeaveScrollbarHandler = () => {
 
 onBeforeUnmount(() => {
   restoreOnselectstart()
+  document.removeEventListener('mousemove', mouseMoveDocumentHandler)
   document.removeEventListener('mouseup', mouseUpDocumentHandler)
 })
 

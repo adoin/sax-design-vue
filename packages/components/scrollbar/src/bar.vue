@@ -1,17 +1,21 @@
 <template>
   <thumb
+    v-if="!outside || width"
     :move="moveX"
     :ratio="ratioX"
     :size="width"
     :always="always"
+    :reserve-space="outside"
     :style="`height: ${thickness}px`"
   />
   <thumb
+    v-if="!outside || height"
     :move="moveY"
     :ratio="ratioY"
     :size="height"
     vertical
     :always="always"
+    :reserve-space="outside"
     :style="`width: ${thickness}px`"
   />
 </template>

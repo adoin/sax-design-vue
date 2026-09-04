@@ -1,6 +1,20 @@
 ---
 description: "Provide styled scroll areas with programmatic scroll control."
 PROPS:
+  - name: placement
+    type: String
+    values: "inside, outside"
+    description: Custom track placement. outside reserves space beside the viewport; ignored in native mode.
+    default: inside
+    usage: '#outside-scrollbars'
+
+  - name: gap
+    type: Number
+    values: "number"
+    description: Gap in pixels between outside tracks and the viewport. Negative values are clamped to zero.
+    default: 6
+    usage: '#outside-scrollbars'
+
   - name: height
     type: String, Number
     values: "number"
@@ -193,6 +207,40 @@ EXPOSES:
 ---
 
 # Scrollbar
+
+<card>
+
+## Outside scrollbars
+
+Set `placement="outside"` to place both tracks beside the viewport, keeping the thumbs clear of your content. Use `gap` for track spacing and `thickness` for track thickness; colors follow the component’s HSL primary tokens.
+
+This example uses `max-height`: removing items lets the viewport shrink, and tracks appear only on overflowing axes. Outside tracks stay within the component’s footprint, without negative offsets or changes to the parent’s overflow.
+
+Drag a thumb, click a track, or use a wheel or touchpad. Tab into the viewport to scroll with arrow keys. With `always` disabled, tracks hide after the pointer leaves while their space stays reserved to avoid layout shifts.
+
+<template #example>
+<scrollbar-outside />
+</template>
+
+<template #template>
+
+@[code{9-33}](../.vuepress/components/scrollbar/outside.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-7}](../.vuepress/components/scrollbar/outside.vue)
+
+</template>
+
+<template #style>
+
+@[code{35-66}](../.vuepress/components/scrollbar/outside.vue)
+
+</template>
+
+</card>
 
 <card>
 

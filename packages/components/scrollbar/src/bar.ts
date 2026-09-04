@@ -3,6 +3,7 @@ import type { ExtractPropTypes } from 'vue'
 import type Bar from './bar.vue'
 
 export const barProps = buildProps({
+  outside: Boolean,
   always: {
     type: Boolean,
     default: true,

@@ -3,6 +3,17 @@ import type { ExtractPropTypes, StyleValue } from 'vue'
 import type Scrollbar from './scrollbar.vue'
 
 export const scrollbarProps = buildProps({
+  /** @description placement of custom scrollbar tracks relative to the viewport */
+  placement: {
+    type: String,
+    values: ['inside', 'outside'] as const,
+    default: 'inside',
+  },
+  /** @description space in pixels between outside tracks and the viewport */
+  gap: {
+    type: Number,
+    default: 6,
+  },
   /**
    * @description height of scrollbar
    */

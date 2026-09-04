@@ -1,6 +1,18 @@
 <template>
-  <div ref="scrollbarRef" :class="ns.b()">
-    <div ref="wrapRef" :class="wrapKls" :style="style" @scroll="handleScroll">
+  <div
+    ref="scrollbarRef"
+    :class="[ns.b(), ns.is('outside', outside)]"
+    :style="
+      outside ? { '--s-scrollbar-gap': `${Math.max(0, gap)}px` } : undefined
+    "
+  >
+    <div
+      ref="wrapRef"
+      :class="wrapKls"
+      :style="style"
+      :tabindex="outside ? 0 : undefined"
+      @scroll="handleScroll"
+    >
       <component
         :is="tag"
         ref="resizeRef"
@@ -19,6 +31,7 @@
         :ratio-x="ratioX"
         :ratio-y="ratioY"
         :thickness="thickness"
+        :outside="outside"
       />
     </template>
   </div>
@@ -54,6 +67,7 @@ const props = defineProps(scrollbarProps)
 const emit = defineEmits(scrollbarEmits)
 
 const ns = useNamespace('scrollbar')
+const outside = computed(() => props.placement === 'outside' && !props.native)
 
 let stopResizeObserver: (() => void) | undefined = undefined
 let stopResizeListener: (() => void) | undefined = undefined
@@ -147,6 +161,7 @@ const update = () => {
 
   sizeHeight.value = height + GAP < offsetHeight ? `${height}px` : ''
   sizeWidth.value = width + GAP < offsetWidth ? `${width}px` : ''
+  barRef.value?.handleScroll(wrapRef.value)
 }
 
 watch(
@@ -160,7 +175,7 @@ watch(
       stopResizeListener = useEventListener('resize', update)
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 watch(
@@ -173,7 +188,7 @@ watch(
           barRef.value?.handleScroll(wrapRef.value)
         }
       })
-  }
+  },
 )
 
 provide(
@@ -181,7 +196,7 @@ provide(
   reactive({
     scrollbarElement: scrollbarRef,
     wrapElement: wrapRef,
-  })
+  }),
 )
 
 onMounted(() => {
