@@ -1,0 +1,723 @@
+{
+  "timestamp": "2026-09-04T16:56:12.730Z",
+  "scenarios": [
+    {
+      "settings": {
+        "rows": 1000,
+        "columns": 30,
+        "generated": false,
+        "dynamic": true
+      },
+      "stages": [
+        {
+          "name": "initial",
+          "height": 44,
+          "rows": 15,
+          "headers": 9,
+          "columns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 30,
+            "measuredElements": 15,
+            "refCallbacks": 15,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "data-reference-growth",
+          "height": 539,
+          "rows": 15,
+          "headers": 9,
+          "columns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 15,
+            "refCallbacks": 15,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "horizontal-window-retains-maximum",
+          "height": 539,
+          "rows": 7,
+          "headers": 9,
+          "columns": [0, 1, 2, 3, 4, 5, 6, 7, 29],
+          "sourceColumns": [0, 1, 2, 3, 4, 5, 6, 7, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "wider-column-remeasures",
+          "height": 129,
+          "rows": 13,
+          "headers": 6,
+          "columns": [0, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 25, 26, 27, 28, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 13,
+            "measuredElements": 13,
+            "refCallbacks": 13,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "width-restored",
+          "height": 539,
+          "rows": 13,
+          "headers": 9,
+          "columns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 13,
+            "measuredElements": 13,
+            "refCallbacks": 13,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "hidden-column-remeasures",
+          "height": 42,
+          "rows": 15,
+          "headers": 9,
+          "columns": [0, 21, 22, 23, 24, 25, 26, 27, 28],
+          "sourceColumns": [0, 21, 22, 23, 24, 25, 26, 27, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 15,
+            "refCallbacks": 15,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "shown-column-grows",
+          "height": 539,
+          "rows": 7,
+          "headers": 9,
+          "columns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "reordered-column-invalidates-maximum",
+          "height": 42,
+          "rows": 15,
+          "headers": 9,
+          "columns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 21, 22, 23, 24, 25, 26, 27, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 15,
+            "refCallbacks": 15,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "reordered-column-grows-at-new-position",
+          "height": 539,
+          "rows": 15,
+          "headers": 9,
+          "columns": [0, 1, 2, 3, 4, 5, 6, 7, 29],
+          "sourceColumns": [0, 28, 1, 2, 3, 4, 5, 6, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 15,
+            "refCallbacks": 15,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "order-restored",
+          "height": 539,
+          "rows": 7,
+          "headers": 9,
+          "columns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "in-place-shrink-retains-until-measure",
+          "height": 539,
+          "rows": 7,
+          "headers": 9,
+          "columns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "explicit-measure-shrinks",
+          "height": 42,
+          "rows": 15,
+          "headers": 9,
+          "columns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 15,
+            "refCallbacks": 15,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "in-place-growth-observed",
+          "height": 539,
+          "rows": 15,
+          "headers": 9,
+          "columns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 15,
+            "refCallbacks": 15,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "data-reference-shrink",
+          "height": 42,
+          "rows": 15,
+          "headers": 9,
+          "columns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 15,
+            "refCallbacks": 15,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "before-container-change",
+          "height": 539,
+          "rows": 15,
+          "headers": 9,
+          "columns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 15,
+            "refCallbacks": 15,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "container-width-invalidates-hidden-maximum",
+          "height": 42,
+          "rows": 15,
+          "headers": 8,
+          "columns": [0, 1, 2, 3, 4, 5, 6, 29],
+          "sourceColumns": [0, 1, 2, 3, 4, 5, 6, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 15,
+            "refCallbacks": 15,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        },
+        {
+          "name": "revisit-long-column",
+          "height": 539,
+          "rows": 15,
+          "headers": 9,
+          "columns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "sourceColumns": [0, 22, 23, 24, 25, 26, 27, 28, 29],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 0,
+            "ordinaryRows": 15,
+            "measuredElements": 15,
+            "refCallbacks": 15,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000,
+            "physicalHeight": 44000
+          }
+        }
+      ]
+    },
+    {
+      "settings": {
+        "rows": 1000000,
+        "columns": 100000,
+        "generated": true,
+        "dynamic": true
+      },
+      "stages": [
+        {
+          "name": "initial",
+          "height": 64,
+          "rows": 12,
+          "headers": 9,
+          "columns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "sourceColumns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 32,
+            "ordinaryRows": 0,
+            "measuredElements": 12,
+            "refCallbacks": 12,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000398,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "data-reference-growth",
+          "height": 1058,
+          "rows": 7,
+          "headers": 9,
+          "columns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "sourceColumns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44001274,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "horizontal-window-retains-maximum",
+          "height": 1058,
+          "rows": 7,
+          "headers": 9,
+          "columns": [0, 1, 2, 3, 4, 5, 6, 7, 99999],
+          "sourceColumns": [0, 1, 2, 3, 4, 5, 6, 7, 99999],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44001274,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "wider-column-remeasures",
+          "height": 193,
+          "rows": 10,
+          "headers": 6,
+          "columns": [0, 99995, 99996, 99997, 99998, 99999],
+          "sourceColumns": [0, 99995, 99996, 99997, 99998, 99999],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 11,
+            "ordinaryRows": 0,
+            "measuredElements": 10,
+            "refCallbacks": 10,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000349,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "width-restored",
+          "height": 1058,
+          "rows": 7,
+          "headers": 9,
+          "columns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "sourceColumns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 11,
+            "ordinaryRows": 0,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44001214,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "hidden-column-remeasures",
+          "height": 64,
+          "rows": 12,
+          "headers": 9,
+          "columns": [
+            0, 99991, 99992, 99993, 99994, 99995, 99996, 99997, 99999
+          ],
+          "sourceColumns": [
+            0, 99991, 99992, 99993, 99994, 99995, 99996, 99997, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 12,
+            "refCallbacks": 12,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000280,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "shown-column-grows",
+          "height": 1058,
+          "rows": 7,
+          "headers": 9,
+          "columns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "sourceColumns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44001274,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "reordered-column-invalidates-maximum",
+          "height": 64,
+          "rows": 12,
+          "headers": 9,
+          "columns": [
+            0, 99991, 99992, 99993, 99994, 99995, 99996, 99997, 99999
+          ],
+          "sourceColumns": [
+            0, 99991, 99992, 99993, 99994, 99995, 99996, 99997, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 12,
+            "refCallbacks": 12,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000280,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "reordered-column-grows-at-new-position",
+          "height": 1058,
+          "rows": 7,
+          "headers": 9,
+          "columns": [0, 99998, 1, 2, 3, 4, 5, 6, 99999],
+          "sourceColumns": [0, 99998, 1, 2, 3, 4, 5, 6, 99999],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44001274,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "order-restored",
+          "height": 1058,
+          "rows": 7,
+          "headers": 9,
+          "columns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "sourceColumns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44001274,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "in-place-shrink-retains-until-measure",
+          "height": 1058,
+          "rows": 7,
+          "headers": 9,
+          "columns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "sourceColumns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44001274,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "explicit-measure-shrinks",
+          "height": 64,
+          "rows": 12,
+          "headers": 9,
+          "columns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "sourceColumns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 12,
+            "refCallbacks": 12,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000280,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "in-place-growth-observed",
+          "height": 1058,
+          "rows": 7,
+          "headers": 9,
+          "columns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "sourceColumns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44001274,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "data-reference-shrink",
+          "height": 64,
+          "rows": 12,
+          "headers": 9,
+          "columns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "sourceColumns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 12,
+            "refCallbacks": 12,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000280,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "before-container-change",
+          "height": 1058,
+          "rows": 7,
+          "headers": 9,
+          "columns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "sourceColumns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44001274,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "container-width-invalidates-hidden-maximum",
+          "height": 64,
+          "rows": 12,
+          "headers": 8,
+          "columns": [0, 1, 2, 3, 4, 5, 6, 99999],
+          "sourceColumns": [0, 1, 2, 3, 4, 5, 6, 99999],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 12,
+            "refCallbacks": 12,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44000280,
+            "physicalHeight": 8000000
+          }
+        },
+        {
+          "name": "revisit-long-column",
+          "height": 1058,
+          "rows": 7,
+          "headers": 9,
+          "columns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "sourceColumns": [
+            0, 99992, 99993, 99994, 99995, 99996, 99997, 99998, 99999
+          ],
+          "maxCellTopError": 0,
+          "maxCellHeightError": 0,
+          "caches": {
+            "sparseRows": 14,
+            "ordinaryRows": 0,
+            "measuredElements": 7,
+            "refCallbacks": 7,
+            "pendingMeasurements": 0,
+            "logicalHeight": 44001274,
+            "physicalHeight": 8000000
+          }
+        }
+      ]
+    }
+  ]
+}

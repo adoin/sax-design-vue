@@ -11,6 +11,8 @@ import { STable } from '../../packages/components/table'
 import '../../packages/theme-chalk/src/index.scss'
 import type { ComponentInternalInstance, Ref } from 'vue'
 import type {
+  TableColumnState,
+  TableColumnWidths,
   TableExposes,
   TableVirtualConfig,
   TableVirtualSource,
@@ -22,13 +24,16 @@ interface Settings {
   dynamic: boolean
   generated: boolean
 }
-const root = document.querySelector('#fixture')!
+const root = document.querySelector<HTMLElement>('#fixture')!
 let app: ReturnType<typeof createApp> | undefined
 let table: TableExposes | undefined
 let instance: ComponentInternalInstance | undefined
 let rowReads = 0
 let columnReads = 0
 let setLongContent: ((value: boolean) => void) | undefined
+let setLiveContent: ((value: boolean | undefined) => void) | undefined
+let setLayout:
+  ((widths: TableColumnWidths, state: TableColumnState[]) => void) | undefined
 const frame = () =>
   new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
 const settle = async () => {
@@ -101,6 +106,7 @@ const inspect = () => ({
         const rect = cell.getBoundingClientRect()
         return {
           column: Number(cell.dataset.columnIndex),
+          sourceColumn: Number(cell.textContent?.match(/\/ c(\d+)/)?.[1]),
           top: rect.top,
           height: rect.height,
           left: rect.left,
@@ -117,6 +123,8 @@ const unmount = async () => {
   table = undefined
   instance = undefined
   setLongContent = undefined
+  setLiveContent = undefined
+  setLayout = undefined
   await settle()
 }
 const mount = async (settings: Settings) => {
@@ -128,6 +136,16 @@ const mount = async (settings: Settings) => {
     defineComponent({
       setup() {
         const longContent = shallowRef(false)
+        const liveContent = shallowRef<boolean>()
+        const widths = shallowRef<TableColumnWidths>({})
+        const columnState = shallowRef<TableColumnState[]>([])
+        setLiveContent = (value) => {
+          liveContent.value = value
+        }
+        setLayout = (nextWidths, nextState) => {
+          widths.value = nextWidths
+          columnState.value = nextState
+        }
         setLongContent = (value) => {
           longContent.value = value
         }
@@ -154,7 +172,7 @@ const mount = async (settings: Settings) => {
               get(target, key) {
                 if (typeof key === 'string' && /^c\d+$/.test(key)) {
                   const value = `Row ${index} / ${key}`
-                  return long &&
+                  return (liveContent.value ?? long) &&
                     index === settings.rows - 1 &&
                     key === `c${settings.columns - 2}`
                     ? `${value} `.repeat(24)
@@ -178,11 +196,13 @@ const mount = async (settings: Settings) => {
             column,
           }
         })
-        const data = settings.generated
-          ? []
-          : Array.from({ length: settings.rows }, (_, index) =>
-              row(index, false),
-            )
+        const data = computed(() =>
+          settings.generated
+            ? []
+            : Array.from({ length: settings.rows }, (_, index) =>
+                row(index, longContent.value),
+              ),
+        )
         const columns = settings.generated
           ? []
           : Array.from({ length: settings.columns }, (_, index) =>
@@ -194,8 +214,10 @@ const mount = async (settings: Settings) => {
               table = value as unknown as TableExposes
             },
             rowKey: 'id',
-            data,
+            data: data.value,
             columns,
+            columnWidths: widths.value,
+            columnState: columnState.value,
             virtualSource: settings.generated ? source.value : undefined,
             virtualConfig: {
               enabled: true,
@@ -221,7 +243,7 @@ Object.assign(window, {
     unmount,
     inspect,
     settle,
-    jump: async (row: number, column: number) => {
+    jump: async (row: number, column: number | string) => {
       const started = performance.now()
       table!.scrollToRow(row, 'end')
       table!.scrollToColumn(column, 'end')
@@ -230,6 +252,24 @@ Object.assign(window, {
     },
     content: async (long: boolean) => {
       setLongContent!(long)
+      await settle()
+      return inspect()
+    },
+    liveContent: async (long: boolean | undefined) => {
+      setLiveContent!(long)
+      await settle()
+      return inspect()
+    },
+    layout: async (
+      widths: TableColumnWidths = {},
+      state: TableColumnState[] = [],
+    ) => {
+      setLayout!(widths, state)
+      await settle()
+      return inspect()
+    },
+    viewport: async (width: number) => {
+      root.style.width = `${width}px`
       await settle()
       return inspect()
     },

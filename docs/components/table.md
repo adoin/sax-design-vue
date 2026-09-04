@@ -2871,7 +2871,9 @@ Tree data remains part of `s-table`. Mark one configured column with `treeNode`,
 
 Enable virtualization with `virtual-config` and set `height` to define the viewport. `dynamic` measures row heights from their content; `horizontal` enables column virtualization and `columnOverscan` controls extra columns rendered on each side. Set `fixed="left"` or `fixed="right"` on a column to keep it at that edge.
 
-Supply a stable, unique `row-key` when rows can be reordered, updated or expanded as a tree. During horizontal scrolling, rows retain the largest height of their displayed content to reduce vertical movement. Resizing columns triggers fresh measurements.
+Supply a stable, unique `row-key` when rows can be reordered, updated or expanded as a tree. During horizontal scrolling, rows retain the largest height of their displayed content to reduce vertical movement. Changes to column widths, container width, column visibility or order trigger fresh measurements. Replacing the `data` array or the `virtualSource.row` callback also clears previous row-height measurements.
+
+When changing row fields, custom slot content or external data read by a callback in place, visible content growth is measured automatically. To release retained height after content becomes shorter, call `measure()` after updating the content. Height history is stored for visited row keys, so the measurement cache can grow as users browse beyond the current window.
 
 For data loaded on demand, use `virtualSource` to provide row and column counts and index callbacks. The example supports loading a large data set, jumping to the middle or end, and scrolling both axes. Choose your data size based on device memory, row heights and cell complexity; server-backed data can also use remote pagination.
 
