@@ -1,6 +1,11 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
 PROPS:
+  - name: "clipboard-config"
+    type: "Boolean | TableClipboardConfig"
+    description: "显式开启剪贴板操作，配置文本转换、写入限制和区域上限。"
+    default: false
+    usage: "#复制-剪切与粘贴"
   - name: "range-config"
     type: "Boolean | TableRangeConfig"
     description: "开启矩形区域选择，可分别控制鼠标、键盘和边缘自动滚动。"
@@ -368,6 +373,11 @@ CHILD_PROPS:
     default: null
     usage: '#文本溢出与提示'
 EVENTS:
+  - name: "clipboard"
+    type: "(result: TableClipboardResult) => void"
+    description: "操作结束时提供成功状态、剪贴板写入状态、实际变更数及失败原因。"
+    default: null
+    usage: "#复制-剪切与粘贴"
   - name: "update:cellRange"
     type: "(range: TableCellRange | null) => void"
     description: "请求更新受控选区。"
@@ -674,6 +684,26 @@ SLOTS:
     default: null
     usage: '#筛选与自定义筛选'
 EXPOSES:
+  - name: "copyCells"
+    type: "(options?: TableCopyOptions) => Promise<TableClipboardResult>"
+    description: "复制当前区域或 bounds；writeClipboard: false 仅返回独立二维数据与 TSV。"
+    default: null
+    usage: "#复制-剪切与粘贴"
+  - name: "cutCells"
+    type: "(options?: TableCopyOptions) => Promise<TableClipboardResult>"
+    description: "复制成功后校验并批量清空可写字段；默认清空值为 null。"
+    default: null
+    usage: "#复制-剪切与粘贴"
+  - name: "pasteCells"
+    type: "(data?: string | TableClipboardData, options?: TableClipboardOptions) => Promise<TableClipboardResult>"
+    description: "粘贴 TSV 或二维数据；省略 data 时由浏览器读取剪贴板。"
+    default: null
+    usage: "#复制-剪切与粘贴"
+  - name: "cancelClipboard"
+    type: "() => void"
+    description: "取消未完成的读取、准备、校验或待接受写入；不撤销已完成的系统剪贴板写入。"
+    default: null
+    usage: "#复制-剪切与粘贴"
   - name: "setCellRange"
     type: "(range: TableCellRange | null) => Promise<boolean>"
     description: "设置逻辑选区；返回是否被接受，不移动当前视口。"
@@ -1239,6 +1269,72 @@ EXPOSES:
 <template #style>
 
 @[code{83-96}](../../.vuepress/components/table-zh/range-source.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 复制、剪切与粘贴
+
+开启 `clipboard-config` 后，使用 Ctrl / Command + C、X、V 操作当前区域；未选区域时使用活动单元格。输入框内部保留原生文本操作。复制只需剪贴板配置；剪切和粘贴还需 `edit-config`、列 `editor` 及 `change-config`，普通数组使用 `v-model:data` 接受变更。
+
+复制同时生成独立二维值和 TSV 文本。粘贴从单个活动格开始时按输入尺寸展开；已有矩形选区必须是输入行列数的整数倍，可用单值填充。只读格保持原位置，不会把后续值左移。合并区域只在起点复制内容，其余位置为空；目标必须覆盖完整合并格，冲突内容会拒绝。`bounds` 使用当前视图可见数据行与视觉列的半开索引，不包括组标题，也不自动翻页。
+
+`validation-config` 开启时，写入字段复用现有规则，校验可读取包含整批字段变化的 `draftRow`；`onCommit: false` 关闭这一步。任一字段失败则整批保留原数据。一次粘贴或剪切清空各占一步历史，配合 `history-config` 撤销/重做。剪切先复制，再以 `clearCell`（默认 `null`）清空可写格；必填规则可能阻止清空，此时结果会标明 `clipboardWritten: true`。
+
+按钮和无参数 `pasteCells()` 使用浏览器 Clipboard API，需要安全上下文及浏览器许可；快捷键粘贴可直接读取原生粘贴事件。`copyCells({ writeClipboard: false })` 与显式传入二维数据的 `pasteCells(data)` 不访问系统剪贴板。文本数字按数字编辑器转换，开关识别 `true/false`；其他格式通过 `formatCell`、`parseCell` 配置。
+
+表格保持焦点时按 Escape，或调用 `cancelClipboard()` 取消等待；换页、改配置、开始编辑或替换数据也会使旧请求失效。适配器必须在写入前检查 `signal`。取消不能回滚已经完成的系统剪贴板写入；`clipboardWritten: null` 表示系统写入已发起但结果尚未确认。
+
+默认最多处理 10000 个单元格、2000000 个文本字符，可通过 `maxCells`、`maxCharacters` 调整。上限按矩形面积计算，包含只读格和合并续接位置；选中巨量区域不会自动复制完整数据集。二维对象值的大小由业务控制，单元格数量上限并不等同于固定内存预算。
+
+<template #example><table-zh-clipboard /></template>
+
+<template #template>
+
+@[code{70-124}](../../.vuepress/components/table-zh/clipboard.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-69}](../../.vuepress/components/table-zh/clipboard.vue)
+
+</template>
+
+<template #style>
+
+@[code{125-139}](../../.vuepress/components/table-zh/clipboard.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 巨量数据的剪贴板
+
+生成源通过 `change-config.indexOf` 定位稳定行键，通过 `apply` 接受字段补丁；本例只保存修改过的值。末端合并区域跨越右固定列，可复制、粘贴和撤销。选择全表后复制会先返回超限结果，避免枚举百万行十万列。区域读取、候选行生成和校验按批让出执行；未加载的远程页或树节点不会被自动读取。
+
+<template #example><table-zh-clipboard-source /></template>
+
+<template #template>
+
+@[code{120-170}](../../.vuepress/components/table-zh/clipboard-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-119}](../../.vuepress/components/table-zh/clipboard-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{171-185}](../../.vuepress/components/table-zh/clipboard-source.vue)
 
 </template>
 

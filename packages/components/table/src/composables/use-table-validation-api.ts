@@ -345,6 +345,7 @@ export function useTableValidationApi(
     return false
   }
   return {
+    rulesFor,
     validate,
     validateRow,
     validateCell,

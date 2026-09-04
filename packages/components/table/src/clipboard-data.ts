@@ -271,6 +271,8 @@ export async function planTableClipboardPaste(
           throw new TableClipboardShapeError(
             'Different clipboard values target the same row field',
           )
+        // Distinct columns may impose different rules on the same field.
+        draft.cells.push({ context, value: next })
         continue
       }
       fields.set(fieldKey, next)

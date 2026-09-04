@@ -16,6 +16,13 @@ import type {
 } from 'vue'
 import type Table from './table.vue'
 import type {
+  TableClipboardConfig,
+  TableClipboardData,
+  TableClipboardOptions,
+  TableClipboardResult,
+  TableCopyOptions,
+} from './table-clipboard'
+import type {
   TableContextMenuConfig,
   TableContextMenuContext,
   TableContextMenuSelectParams,
@@ -59,6 +66,7 @@ import type {
   TableValidationRule,
   TableValidationRules,
 } from './table-validation'
+export * from './table-clipboard'
 export * from './table-context-menu'
 export * from './table-keyboard'
 export * from './table-cell-range'
@@ -449,6 +457,10 @@ export const tableProps = buildProps({
     type: definePropType<boolean | TableRangeConfig>([Boolean, Object]),
     default: false,
   },
+  clipboardConfig: {
+    type: definePropType<boolean | TableClipboardConfig>([Boolean, Object]),
+    default: false,
+  },
   cellRange: {
     type: definePropType<TableCellRange | null>(Object),
     default: undefined,
@@ -611,6 +623,7 @@ export const tableProps = buildProps({
 export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
+  clipboard: (result: TableClipboardResult) => isObject(result),
   'update:cellRange': (range: TableCellRange | null) =>
     range === null || isObject(range),
   cellRangeChange: (change: TableCellRangeChange) => isObject(change),
@@ -686,6 +699,13 @@ export type TableEmits = typeof tableEmits
 export type TableEmitFn = EmitFn<TableEmits>
 
 export interface TableExposes<Row extends TableRow = TableRow> {
+  copyCells: (options?: TableCopyOptions) => Promise<TableClipboardResult>
+  cutCells: (options?: TableCopyOptions) => Promise<TableClipboardResult>
+  pasteCells: (
+    data?: string | TableClipboardData,
+    options?: TableClipboardOptions,
+  ) => Promise<TableClipboardResult>
+  cancelClipboard: () => void
   setCellRange: (range: TableCellRange | null) => Promise<boolean>
   clearCellRange: () => Promise<boolean>
   getCellRange: () => TableCellRange | null

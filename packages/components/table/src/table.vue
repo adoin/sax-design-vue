@@ -2,6 +2,15 @@
   <div :class="ns.b('wrapper')">
     <slot />
     <span
+      v-if="clipboard.enabled.value"
+      :class="ns.e('range-status')"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {{ clipboardStatus }}
+    </span>
+    <span
       v-if="cellRange.enabled.value"
       :class="ns.e('range-status')"
       role="status"
@@ -36,8 +45,12 @@
         tableKls,
         ns.is('horizontal-virtual', horizontalVirtualMode && usesBodyScroll),
       ]"
+      :aria-busy="clipboard.pending.value ? true : undefined"
       @keydown="handleTableKeydown"
-      @keydown.capture="rangeInteraction.onKeydown"
+      @keydown.capture="handleTableKeydownCapture"
+      @copy="clipboard.onClipboard"
+      @cut="clipboard.onClipboard"
+      @paste="clipboard.onClipboard"
       @pointerdown="rangeInteraction.onPointerdown"
       @click.capture="rangeInteraction.onClickCapture"
       @click="keyboard.onClick"
@@ -468,6 +481,8 @@ import { useTableRowDrag } from './composables/use-table-row-drag'
 import { useTableKeyboard } from './composables/use-table-keyboard'
 import { useTableKeyboardCoordinates } from './composables/use-table-keyboard-coordinates'
 import { useTableRangeController } from './composables/use-table-range-controller'
+import { useTableClipboard } from './composables/use-table-clipboard'
+import { createTableClipboardCells } from './composables/table-clipboard-cells'
 import { useTableRangeInteraction } from './composables/use-table-range-interaction'
 import {
   tableRangeScrollParent,
@@ -1929,6 +1944,114 @@ const rangeInteraction = useTableRangeInteraction(cellRange, {
   blocked: () => Boolean(editing.active.value || rowDrag.session.value),
   context: rangeContext,
 })
+const clipboardCells = createTableClipboardCells({
+  count: () => ({
+    rows: effectiveRowCount.value,
+    columns: keyboardCoordinates.countColumns(),
+    sourceRows: props.virtualSource?.rowCount ?? flatRows.value.length,
+  }),
+  sourceIndexAt: (index) =>
+    props.virtualSource ? sourceIndexAt(index) : index,
+  viewIndexNear: (index, backwards) =>
+    props.virtualSource
+      ? groups.layout.value.dataIndexNear(
+          index,
+          backwards ? 'backward' : 'forward',
+        )
+      : Math.max(0, Math.min(effectiveRowCount.value - 1, index)),
+  rowAt: mergeFlatRow,
+  columnAt: mergeColumn,
+  query: (bounds) => merges.query('body', bounds),
+  toggle: (flat, expanded) => toggleRowExpand(flat.row, expanded),
+})
+const clipboard = useTableClipboard(props, emit, {
+  root: () => tableScrollRef.value,
+  bounds: () => {
+    const selected = cellRange.getBounds()
+    if (selected) return selected
+    const active = keyboard.coordinate()
+    if (!active) return
+    const row = active.viewRow ?? active.row
+    const col = keyboardCoordinates.positionOf(
+      active.viewColumn ?? active.column,
+    )
+    const bounds = {
+      rowStart: row,
+      rowEnd: row + 1,
+      colStart: col,
+      colEnd: col + 1,
+    }
+    return clipboardCells(bounds)(row, col)?.span ?? bounds
+  },
+  count: () => ({
+    rows: effectiveRowCount.value,
+    columns: keyboardCoordinates.countColumns(),
+  }),
+  cells: clipboardCells,
+  writable: (context) => {
+    const resolved = resolveEditContext(context)
+    const editor =
+      typeof resolved?.column.editor === 'object'
+        ? resolved.column.editor
+        : undefined
+    if (editor?.props?.disabled || editor?.props?.readonly) return false
+    return Boolean(resolved && editing.isEditable(resolved))
+  },
+  editing: () => Boolean(editing.active.value || rowDrag.session.value),
+  changes,
+  validation,
+  rulesFor: (context) => validationApi.rulesFor(context.column),
+  locate: async (context) => {
+    scrollToRow(props.virtualSource ? context.rowIndex : context.row)
+    scrollToColumn(context.columnIndex)
+    await nextTick()
+    const root = tableScrollRef.value
+    const id = `${tableValidationId(selectionName.value, context.rowKey, context.column.field!, context.columnIndex)}-cell`
+    const cell = root?.querySelector<HTMLElement>(`[id="${id}"]`)
+    if (!cell || !root?.contains(cell)) return false
+    cell.focus({ preventScroll: true })
+    return root.ownerDocument.activeElement === cell
+  },
+  context: [
+    sorts,
+    filtersState,
+    pagination.currentPage,
+    pagination.pageSize,
+    columnManager.state,
+    merges.config,
+    groups.expansionState,
+    groups.config,
+    rawColumns,
+    () => props.rowKey,
+    () => props.virtualSource?.column,
+    () => props.virtualSource?.rowKey,
+  ],
+  dataContext: [
+    () => props.data,
+    () => props.virtualSource?.row,
+    () => props.virtualSource?.rowCount,
+    () => props.virtualSource?.columnCount,
+    () =>
+      props.changeConfig && typeof props.changeConfig === 'object'
+        ? props.changeConfig.dataKey
+        : undefined,
+    () => flatRows.value,
+    groups.layout,
+  ],
+})
+const clipboardStatus = computed(() => {
+  if (clipboard.pending.value) return t('vs.table.clipboardWorking')
+  const result = clipboard.last.value
+  if (!result) return ''
+  if (!result.success)
+    return t(
+      result.reason === 'cancelled'
+        ? 'vs.table.clipboardCancelled'
+        : 'vs.table.clipboardFailed',
+    )
+  const message = { copy: 'Copied', cut: 'Cut', paste: 'Pasted' }[result.action]
+  return t(`vs.table.clipboard${message}`)
+})
 const isRangeMergeSelected = (surface: TableMergeSurface) => {
   if (surface.area !== 'body') return false
   const row = props.virtualSource
@@ -2156,6 +2279,10 @@ const handleTableKeydown = (event: KeyboardEvent) => {
     rowDrag.keydown(event, rowDrag.session.value.from)
   keyboard.onKeydown(event)
 }
+const handleTableKeydownCapture = (event: KeyboardEvent) => {
+  clipboard.onKeydown(event)
+  if (!event.defaultPrevented) rangeInteraction.onKeydown(event)
+}
 const handleTableFocusin = (event: FocusEvent) => {
   overflow.enter(event)
   keyboard.onFocusin(event)
@@ -2173,6 +2300,10 @@ const setActiveCell = (rowIndex: number, columnIndex: number) => {
 }
 
 defineExpose({
+  copyCells: clipboard.copyCells,
+  cutCells: clipboard.cutCells,
+  pasteCells: clipboard.pasteCells,
+  cancelClipboard: clipboard.cancelClipboard,
   setCellRange: cellRange.select,
   clearCellRange: cellRange.clear,
   getCellRange: cellRange.getRange,

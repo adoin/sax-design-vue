@@ -89,6 +89,7 @@ export function useTableValidation(
     options.signal?.addEventListener('abort', abort, { once: true })
     if (options.signal?.aborted || disposed) current.abort()
     const collected: TableValidationError[] = []
+    const failedFields = new Set<string>()
     const nextErrors = options.clear
       ? new Map<string, TableValidationError>()
       : new Map(errors.value)
@@ -118,6 +119,9 @@ export function useTableValidation(
         }
         if (!cell?.rules.length) continue
         const id = key(cell.rowKey, cell.field)
+        // Several columns can address one field. A later passing column must
+        // not erase an earlier failure for that field in the same batch.
+        if (failedFields.has(id)) continue
         // Built-in rules do not wait for external work. Avoid rerendering
         // the visible window for each offscreen field in a synchronous scan.
         pending.value = cell.rules.some((rule) => rule.validator) ? id : null
@@ -144,6 +148,7 @@ export function useTableValidation(
         nextLocations.delete(id)
         nextValidity.delete(id)
         if (message !== undefined) {
+          failedFields.add(id)
           const error: TableValidationError = {
             row: cell.row,
             rowKey: cell.rowKey,

@@ -182,6 +182,8 @@ export function useTableGroups(options: TableGroupOptions) {
     state,
     nodes,
     keys,
+    // Explicit expansion state is independent of groups created by accepted data edits.
+    expansionState: computed(() => options.expandedKeys() ?? localKeys.value),
     expanded,
     layout,
     setExpandedKeys,

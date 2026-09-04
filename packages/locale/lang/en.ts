@@ -305,6 +305,12 @@ export default {
     table: {
       rangeSelected: 'Selected range: {rows} rows by {columns} columns.',
       rangeEmpty: 'No cell range selected.',
+      clipboardWorking: 'Processing clipboard operation.',
+      clipboardCopied: 'Cell range copied.',
+      clipboardCut: 'Cell range cut.',
+      clipboardPasted: 'Clipboard data pasted.',
+      clipboardCancelled: 'Clipboard operation cancelled.',
+      clipboardFailed: 'Clipboard operation could not be completed.',
       selectedCell: 'In selected range',
       dragRow: 'Reorder row {row}',
       dragRowHint:

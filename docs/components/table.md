@@ -1,6 +1,11 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
 PROPS:
+  - name: "clipboard-config"
+    type: "Boolean | TableClipboardConfig"
+    description: "Enable clipboard actions, text conversions, write restrictions and region limits."
+    default: false
+    usage: "#copy-cut-and-paste"
   - name: "range-config"
     type: "Boolean | TableRangeConfig"
     description: "Enable rectangular range selection, with independent mouse, keyboard and edge-scrolling options."
@@ -368,6 +373,11 @@ CHILD_PROPS:
     default: null
     usage: '#text-overflow-and-tooltips'
 EVENTS:
+  - name: "clipboard"
+    type: "(result: TableClipboardResult) => void"
+    description: "Reports completion, OS clipboard status, applied cell count and failure reason."
+    default: null
+    usage: "#copy-cut-and-paste"
   - name: "update:cellRange"
     type: "(range: TableCellRange | null) => void"
     description: "Request a controlled range update."
@@ -674,6 +684,26 @@ SLOTS:
     default: null
     usage: '#filters-and-custom-filters'
 EXPOSES:
+  - name: "copyCells"
+    type: "(options?: TableCopyOptions) => Promise<TableClipboardResult>"
+    description: "Copy the range or bounds; writeClipboard: false returns a snapshot and TSV without OS access."
+    default: null
+    usage: "#copy-cut-and-paste"
+  - name: "cutCells"
+    type: "(options?: TableCopyOptions) => Promise<TableClipboardResult>"
+    description: "After copying, validate and clear writable fields in one batch; the default clear value is null."
+    default: null
+    usage: "#copy-cut-and-paste"
+  - name: "pasteCells"
+    type: "(data?: string | TableClipboardData, options?: TableClipboardOptions) => Promise<TableClipboardResult>"
+    description: "Paste TSV or a 2D matrix; omitting data requests the browser clipboard."
+    default: null
+    usage: "#copy-cut-and-paste"
+  - name: "cancelClipboard"
+    type: "() => void"
+    description: "Cancel pending reading, preparation, validation or data acceptance; completed OS clipboard writes are not undone."
+    default: null
+    usage: "#copy-cut-and-paste"
   - name: "setCellRange"
     type: "(range: TableCellRange | null) => Promise<boolean>"
     description: "Set a logical range and resolve whether it was accepted, without moving the viewport."
@@ -1239,6 +1269,72 @@ Edge scrolling uses logical content pixels, preserving speed with compressed tra
 <template #style>
 
 @[code{83-96}](../.vuepress/components/table/range-source.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Copy, cut and paste
+
+Enable `clipboard-config` to use Ctrl / Command + C, X and V on the selected range, falling back to the active cell. Editors retain native text actions. Copying only needs clipboard configuration; cutting and pasting also require `edit-config`, column `editor` definitions and `change-config`. Accept ordinary array updates with `v-model:data`.
+
+Copying produces an independent value matrix and TSV text. A single-cell target expands to the input dimensions; an existing rectangle must be a whole multiple of the input shape, including scalar fills. Read-only positions are skipped without shifting subsequent values. A merged owner is copied once with empty continuation slots; pasting must cover complete merges and rejects conflicting values. `bounds` uses half-open visible data-row and visual-column indices in the current view, excluding group bands; operations do not change pages.
+
+With `validation-config`, written fields use existing rules and validators receive a `draftRow` containing the complete row candidate; `onCommit: false` skips this step. A failed field prevents the whole batch. Each paste or cut-clear occupies one history step when `history-config` is enabled. Cutting first copies, then clears writable cells with `clearCell` (default `null`); required rules may reject clearing while the result still reports `clipboardWritten: true`.
+
+Buttons and `pasteCells()` without data use the browser Clipboard API, which requires a secure context and browser permission. Keyboard pastes can use the native paste event directly. `copyCells({ writeClipboard: false })` and `pasteCells(data)` with explicit data do not access the OS clipboard. Number editors parse numeric text and switches accept `true/false`; use `formatCell` and `parseCell` for other formats.
+
+While the table has focus, press Escape or call `cancelClipboard()` to cancel pending work. Page/configuration changes, editing and data replacement invalidate old requests. Adapters must check `signal` before writing. Cancellation cannot roll back a completed OS clipboard write; `clipboardWritten: null` means a write started but its outcome was not confirmed.
+
+The defaults are 10000 cells and 2000000 text characters, configurable with `maxCells` and `maxCharacters`. Limits count the full rectangle, including read-only and merged continuation slots. Selecting a huge region does not copy the full dataset. Applications control the size of structured 2D values; a cell limit is not a fixed memory budget.
+
+<template #example><table-clipboard /></template>
+
+<template #template>
+
+@[code{72-128}](../.vuepress/components/table/clipboard.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-71}](../.vuepress/components/table/clipboard.vue)
+
+</template>
+
+<template #style>
+
+@[code{129-143}](../.vuepress/components/table/clipboard.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Clipboard with generated data
+
+Generated sources locate stable row keys through `change-config.indexOf` and accept field patches through `apply`; this example stores only edited values. The last merged region crosses the right fixed column and supports copy, paste and undo. Copying the whole selection returns a limit result before visiting a million rows by a hundred thousand columns. Region reads, row preparation and validation yield between batches; unloaded remote pages or tree nodes are not fetched automatically.
+
+<template #example><table-clipboard-source /></template>
+
+<template #template>
+
+@[code{122-176}](../.vuepress/components/table/clipboard-source.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-121}](../.vuepress/components/table/clipboard-source.vue)
+
+</template>
+
+<template #style>
+
+@[code{177-191}](../.vuepress/components/table/clipboard-source.vue)
 
 </template>
 

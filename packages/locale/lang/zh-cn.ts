@@ -276,6 +276,12 @@ export default {
     table: {
       rangeSelected: '已选择 {rows} 行、{columns} 列的区域。',
       rangeEmpty: '未选择单元格区域。',
+      clipboardWorking: '正在处理剪贴板操作。',
+      clipboardCopied: '已复制单元格区域。',
+      clipboardCut: '已剪切单元格区域。',
+      clipboardPasted: '已粘贴剪贴板数据。',
+      clipboardCancelled: '已取消剪贴板操作。',
+      clipboardFailed: '剪贴板操作未能完成。',
       selectedCell: '位于选区内',
       dragRow: '调整第 {row} 行顺序',
       dragRowHint: '空格开始，方向键选择位置，回车放置，Escape 取消。',
