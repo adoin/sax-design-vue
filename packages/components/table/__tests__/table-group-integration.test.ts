@@ -172,6 +172,9 @@ describe('Table group integration', () => {
       nestedGroup.get('.s-table__group-cell').attributes('style'),
     ).toContain('padding-inline-start: 48px')
     expect(
+      nestedGroup.get('.s-table__group-cell').attributes('style'),
+    ).toContain('--s-table-hierarchy-branch-width: 18px')
+    expect(
       wrapper.get('[data-row-key="1"] .s-table__data-cell').classes(),
     ).toContain('is-hierarchy-cell')
     expect(

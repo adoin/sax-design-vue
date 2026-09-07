@@ -22,7 +22,6 @@ const guides = computed(() => createTableHierarchyGuides(props.state))
       ]"
       :style="{
         insetInlineStart: `${state.origin + guide.depth * state.indent}px`,
-        '--s-table-hierarchy-branch-width': `${state.indent}px`,
       }"
     />
   </span>

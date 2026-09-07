@@ -280,7 +280,10 @@ describe('Table data mode', () => {
     expect(rows).toHaveLength(3)
     expect(rows[0].findAll('.s-table__hierarchy-guide')).toHaveLength(1)
     expect(rows[0].get('.is-hierarchy-cell').attributes('style')).toContain(
-      '--s-table-hierarchy-continuation-offset: 13px',
+      '--s-table-hierarchy-continuation-offset: 9px',
+    )
+    expect(rows[0].get('.is-hierarchy-cell').attributes('style')).toContain(
+      '--s-table-hierarchy-branch-width: 10px',
     )
     expect(rows[1].findAll('.s-table__hierarchy-guide')).toHaveLength(1)
     expect(

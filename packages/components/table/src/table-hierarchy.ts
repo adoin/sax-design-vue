@@ -51,6 +51,7 @@ export const tableHierarchyStyle = (
 
   return {
     '--s-table-hierarchy-content-start': `${contentStart}px`,
-    '--s-table-hierarchy-continuation-offset': `${state.target === 'tree' ? 13 : 10}px`,
+    '--s-table-hierarchy-branch-width': `${Math.max(0, state.indent - 10)}px`,
+    '--s-table-hierarchy-continuation-offset': '9px',
   }
 }
