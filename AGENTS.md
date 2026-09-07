@@ -3,6 +3,7 @@
 ## Documentation examples
 
 - Write public documentation for developers using the library: explain APIs, behavior, and usage choices. Keep task instructions, implementation constraints, conversation history, and verification reports in internal records rather than example descriptions or demo copy.
+- Treat public documentation as a clean reference for developers and AI. Describe only the current API contract and final behavior. Exclude prompts, conversation details, user feedback, correction history, earlier mistakes, design-review commentary, and validation records; do not frame documentation text as a response to any of them.
 
 - When a documentation example needs controls or supporting UI beyond the component being documented, prefer existing components from this repository instead of rebuilding them with custom HTML and CSS. Only create a custom control when no suitable repository component exists, and briefly document why.
 - Keep each example's heading, explanatory copy, notes, controls, and rendered demo inside the same `<card>` block. Only the page title, frontmatter summary, and generated API reference may sit outside example cards.
