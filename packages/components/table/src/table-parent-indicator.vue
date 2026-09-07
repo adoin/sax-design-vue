@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { tableParentReturnIcon } from './table-icons'
 import type { TableParentIndicatorSlotParams, TableRowKey } from './table'
 
 const props = defineProps<{
@@ -45,7 +46,7 @@ const jump = () => emit('jump')
       @focusout="emit('release')"
     >
       <span :class="ns.e('parent-indicator-mark')" aria-hidden="true">
-        <SIcon name="cb:subdirectory" :rotate="90" />
+        <SIcon :icon-data="tableParentReturnIcon" />
       </span>
       <div v-if="slots.default" :class="ns.e('parent-indicator-custom')">
         <slot :parent-key="props.parentKey" :label="props.label" :jump="jump" />
