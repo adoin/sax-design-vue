@@ -512,10 +512,38 @@
     }
   }
   @include e(group-toggle) {
-    flex: 0 0 auto;
-    min-width: 36px;
-    min-height: 36px;
+    display: inline-grid;
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    place-items: center;
     margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--sax-radius-sm);
+    color: hsl(var(--sax-primary));
+    background: transparent;
+    cursor: pointer;
+
+    .#{$namespace}-icon {
+      width: 14px;
+      height: 14px;
+      transition: transform 160ms ease;
+    }
+
+    &:hover .#{$namespace}-icon {
+      transform: scale(1.14);
+    }
+
+    &:focus-visible {
+      outline: 2px solid hsl(var(--sax-primary) / 0.28);
+      outline-offset: 1px;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
   }
   @include e(group-count) {
     color: getColor(text, 0.55);

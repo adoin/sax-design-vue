@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { SButton } from '@vuesax-alpha/components/button'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import TableFooterRows from './table-footer-rows.vue'
 import TableHierarchyGuides from './table-hierarchy-guides.vue'
@@ -47,7 +47,7 @@ const data = computed(() => [{ ...(props.group?.aggregates ?? props.summary) }])
 const groupDepth = computed(() => props.group?.depth ?? 0)
 const groupCellStyle = computed<CSSProperties>(() => ({
   ...(props.hierarchy ? tableHierarchyStyle(props.hierarchy) : {}),
-  paddingInlineStart: `${12 + groupDepth.value * (props.hierarchy?.indent ?? 28)}px`,
+  paddingInlineStart: `${20 + groupDepth.value * (props.hierarchy?.indent ?? 28)}px`,
 }))
 </script>
 
@@ -71,17 +71,16 @@ const groupCellStyle = computed<CSSProperties>(() => ({
       ]"
     >
       <TableHierarchyGuides v-if="hierarchy" :state="hierarchy" />
-      <SButton
+      <button
         :class="ns.e('group-toggle')"
-        flat
-        :debounce="false"
+        type="button"
         :disabled="disabled"
         :aria-expanded="Boolean(expanded)"
         :aria-label="`${t(expanded ? 'vs.tree.collapse' : 'vs.tree.expand')}: ${group.label}`"
         @click="emit('toggle', group.key, !expanded)"
       >
-        <span aria-hidden="true">{{ expanded ? '−' : '+' }}</span>
-      </SButton>
+        <SIcon :name="expanded ? 'cb:subtract' : 'cb:add'" aria-hidden="true" />
+      </button>
       <slot name="header" :group="group" :expanded="Boolean(expanded)">
         <strong>{{ group.label }}</strong
         ><span :class="ns.e('group-count')">{{ group.rowCount }}</span>

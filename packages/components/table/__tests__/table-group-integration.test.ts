@@ -167,7 +167,7 @@ describe('Table group integration', () => {
     expect(nestedGroup.findAll('.s-table__hierarchy-guide')).not.toHaveLength(0)
     expect(
       nestedGroup.get('.s-table__group-cell').attributes('style'),
-    ).toContain('padding-inline-start: 40px')
+    ).toContain('padding-inline-start: 48px')
     expect(
       wrapper.get('[data-row-key="1"] .s-table__data-cell').classes(),
     ).toContain('is-hierarchy-cell')
