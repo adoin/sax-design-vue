@@ -3,73 +3,73 @@ description: '展示聚焦的模态内容并要求用户作出决定。'
 PROPS:
   - name: before-close
     type: Function
-    values: "关闭守卫和操作按钮配置"
-    description: 在关闭前拦截操作，并配置确认、取消按钮文本和关闭行为。
+    values: "(done: (cancel?: boolean) => void) => void"
+    description: 关闭前运行守卫；调用 done 后继续关闭。
     default: null
   - name: cancel-button-text
     type: String
-    values: "关闭守卫和操作按钮配置"
-    description: 在关闭前拦截操作，并配置确认、取消按钮文本和关闭行为。
+    values: "按钮文字"
+    description: 设置内置取消按钮文字。
     default: null
   - name: cancel-closable
     type: Boolean
-    values: "关闭守卫和操作按钮配置"
-    description: 在关闭前拦截操作，并配置确认、取消按钮文本和关闭行为。
-    default: null
+    values: "true | false"
+    description: 触发取消操作后是否关闭对话框。
+    default: true
   - name: confirm-button-text
     type: String
-    values: "关闭守卫和操作按钮配置"
-    description: 在关闭前拦截操作，并配置确认、取消按钮文本和关闭行为。
+    values: "按钮文字"
+    description: 设置内置确认按钮文字。
     default: null
   - name: confirm-closable
     type: Boolean
-    values: "关闭守卫和操作按钮配置"
-    description: 在关闭前拦截操作，并配置确认、取消按钮文本和关闭行为。
-    default: null
+    values: "true | false"
+    description: 触发确认操作后是否关闭对话框。
+    default: true
   - name: color
-    type: Color / String | Number / Boolean
-    values: "外观、遮罩和尺寸配置"
-    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
-    default: null
+    type: String
+    values: "主题色 | RGB | HEX | HSL"
+    description: 设置对话框强调色。
+    default: primary
   - name: height
-    type: Color / String | Number / Boolean
-    values: "外观、遮罩和尺寸配置"
-    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    type: String | Number
+    values: "CSS 长度"
+    description: 设置对话框高度。
     default: null
   - name: mask
-    type: Color / String | Number / Boolean
-    values: "外观、遮罩和尺寸配置"
-    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
-    default: null
+    type: Boolean
+    values: "true | false"
+    description: 是否显示背景遮罩。
+    default: true
   - name: mask-closable
-    type: Color / String | Number / Boolean
-    values: "外观、遮罩和尺寸配置"
-    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
-    default: null
+    type: Boolean
+    values: "true | false"
+    description: 点击遮罩后是否关闭对话框。
+    default: true
   - name: min-height
-    type: Color / String | Number / Boolean
-    values: "外观、遮罩和尺寸配置"
-    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    type: String | Number
+    values: "CSS 长度"
+    description: 设置对话框最小高度。
     default: null
   - name: min-width
-    type: Color / String | Number / Boolean
-    values: "外观、遮罩和尺寸配置"
-    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    type: String | Number
+    values: "CSS 长度"
+    description: 设置对话框最小宽度。
     default: null
   - name: show-close
-    type: Color / String | Number / Boolean
-    values: "外观、遮罩和尺寸配置"
-    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
-    default: null
+    type: Boolean
+    values: "true | false"
+    description: 是否显示关闭按钮。
+    default: true
   - name: show-header
-    type: Color / String | Number / Boolean
-    values: "外观、遮罩和尺寸配置"
-    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
-    default: null
+    type: Boolean
+    values: "true | false"
+    description: 是否显示内置标题区域。
+    default: true
   - name: top
-    type: Color / String | Number / Boolean
-    values: "外观、遮罩和尺寸配置"
-    description: 配置弹窗外观、遮罩、标题栏、关闭按钮和尺寸位置。
+    type: String | Number
+    values: "CSS 长度"
+    description: 设置对话框顶部偏移。
     default: null
   - name: v-model
     type: Boolean
@@ -172,9 +172,9 @@ PROPS:
 
   - name: shape
     type: String
-    values: "square"
-    description: 移除对话框圆角。
-    default: false
+    values: "rounded | square"
+    description: 设置圆角或方形对话框外观。
+    default: rounded
     link: null
     usage: '#shape'
     code: null
@@ -187,6 +187,36 @@ PROPS:
     link: null
     usage: null
     code: null
+  - name: title
+    type: String | Number
+    values: "header text"
+    description: 未使用 header 插槽时显示的内置标题。
+    default: null
+    usage: '#advanced'
+  - name: content
+    type: String | Number
+    values: "content text"
+    description: 未使用默认插槽时显示的内置内容。
+    default: null
+    usage: '#advanced'
+  - name: show-footer
+    type: Boolean
+    values: "true | false"
+    description: 是否显示内置操作区。
+    default: false
+    usage: '#advanced'
+  - name: show-cancel-button
+    type: Boolean
+    values: "true | false"
+    description: 是否在内置操作区显示取消按钮。
+    default: false
+    usage: '#advanced'
+  - name: show-confirm-button
+    type: Boolean
+    values: "true | false"
+    description: 是否在内置操作区显示确认按钮。
+    default: false
+    usage: '#advanced'
 
 EVENTS:
   - name: close

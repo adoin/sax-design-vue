@@ -6,85 +6,137 @@ PROPS:
     description: 设置文本域及计数器的圆角或方形几何外观。
     default: rounded
     usage: '#外形'
-  - name: cols
-    type: Number / Function / Boolean
-    values: '原生行列数、统计函数和编辑状态'
-    description: 配置文本区尺寸、字数统计、编辑能力和即时更新。
-    default: null
-  - name: count-method
-    type: Number / Function / Boolean
-    values: '原生行列数、统计函数和编辑状态'
-    description: 配置文本区尺寸、字数统计、编辑能力和即时更新。
-    default: null
-  - name: editable
-    type: Number / Function / Boolean
-    values: '原生行列数、统计函数和编辑状态'
-    description: 配置文本区尺寸、字数统计、编辑能力和即时更新。
-    default: null
-  - name: immediate
-    type: Number / Function / Boolean
-    values: '原生行列数、统计函数和编辑状态'
-    description: 配置文本区尺寸、字数统计、编辑能力和即时更新。
-    default: null
-  - name: rows
-    type: Number / Function / Boolean
-    values: '原生行列数、统计函数和编辑状态'
-    description: 配置文本区尺寸、字数统计、编辑能力和即时更新。
-    default: null
   - name: v-model
     type: String
-    values: 'String'
+    values: 'string'
     description: 多行输入值。
     default: ''
-    link: null
     usage: '#default'
-
   - name: label
     type: String
-    values: 'String'
+    values: '标签文字'
     description: 浮动标签文本。
     default: null
-    link: null
     usage: '#label'
-
   - name: color
     type: String
-    values: 'primary, success, danger, warning, dark'
-    description: 组件颜色。
+    values: '主题色 | RGB | HEX | HSL'
+    description: 设置文本域与计数器的强调色。
     default: primary
-    link: null
     usage: '#default'
-
   - name: counter
-    type: Number, String
-    values: 'Number'
-    description: 最大长度计数。
+    type: Number | String
+    values: '数字或数字字符串'
+    description: 显示字符限制和计数器。
     default: null
-    link: null
     usage: '#counter'
-
   - name: counter-danger
     type: Boolean
-    values: 'true, false'
+    values: 'true | false'
     description: 超出限制时高亮计数器。
     default: false
-    link: null
     usage: '#counter'
-
+  - name: placeholder
+    type: String
+    values: '占位文字'
+    description: 设置原生 textarea 的占位文字。
+    default: null
+    usage: '#default'
+  - name: name
+    type: String
+    values: '表单字段名'
+    description: 设置原生表单字段名。
+    default: null
+    usage: '#default'
+  - name: form
+    type: String
+    values: '表单元素 id'
+    description: 将文本域关联到指定表单元素。
+    default: null
+    usage: '#default'
+  - name: max-length
+    type: Number | String
+    values: '非负长度'
+    description: 设置原生输入长度限制。
+    default: null
+    usage: '#advanced'
+  - name: show-word-count
+    type: Boolean
+    values: 'true | false'
+    description: 显示当前字符数。
+    default: false
+    usage: '#advanced'
+  - name: count-method
+    type: Function
+    values: '({ value: string }) => number'
+    description: 自定义显示的字符数。
+    default: value.length
+    usage: '#advanced'
+  - name: auto-size
+    type: Object
+    values: '{ minRows, maxRows }'
+    description: 在行数范围内随内容自动增高。
+    default: null
+    usage: '#advanced'
+  - name: readonly
+    type: Boolean
+    values: 'true | false'
+    description: 将原生 textarea 设为只读。
+    default: false
+    usage: '#advanced'
+  - name: disabled
+    type: Boolean
+    values: 'true | false'
+    description: 禁用编辑与交互。
+    default: false
+    usage: '#advanced'
+  - name: editable
+    type: Boolean
+    values: 'true | false'
+    description: 是否允许编辑文本域的值。
+    default: true
+    usage: '#advanced'
+  - name: trim
+    type: Boolean
+    values: 'true | false'
+    description: 提交变更时移除首尾空白字符。
+    default: false
+    usage: '#advanced'
+  - name: rows
+    type: Number | String
+    values: '原生行数'
+    description: 设置原生 textarea 的行数。
+    default: null
+    usage: '#advanced'
+  - name: cols
+    type: Number | String
+    values: '原生列数'
+    description: 设置原生 textarea 的列数。
+    default: null
+    usage: '#advanced'
+  - name: resize
+    type: String
+    values: 'none | both | horizontal | vertical'
+    description: 设置原生尺寸调整方向。
+    default: null
+    usage: '#advanced'
+  - name: immediate
+    type: Boolean
+    values: 'true | false'
+    description: 输入时立即更新，或在 change、blur 时提交值。
+    default: true
+    usage: '#advanced'
   - name: height
     type: String
     values: 'CSS height'
     description: 多行输入高度。
     default: null
-    link: null
     usage: '#height'
-
   - name: width
     type: String
     values: 'CSS width'
     description: 多行输入宽度。
     default: null
-    link: null
     usage: '#width'
 EVENTS:
   - name: update:modelValue
@@ -112,7 +164,7 @@ NEWS:
   - height
 ---
 
-# Textarea（多行输入框）
+# Textarea 多行输入框
 
 <card>
 

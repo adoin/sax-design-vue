@@ -306,7 +306,7 @@ NEWS:
   - automatic
 ---
 
-# Upload（上传）
+# Upload 上传
 
 <card>
 

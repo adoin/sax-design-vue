@@ -78,7 +78,7 @@ EVENTS:
     description: Fires when one form finishes validation.
 ---
 
-# Form group
+# Form Group
 
 <card>
 

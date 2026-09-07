@@ -3,7 +3,7 @@ PROPS: []
 description: '强制后续 Print 内容从新的浏览器页面开始。'
 ---
 
-# 打印分页
+# Print Page Break 打印分页
 
 <card><template #example><print-page-break-default /></template>
 

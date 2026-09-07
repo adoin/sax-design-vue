@@ -75,7 +75,7 @@ PROPS:
 description: 'Choose an icon, color, and size in a Promise-based dialog, then return compact icon data or complete SVG.'
 ---
 
-# Icon picker
+# Icon Picker
 
 <card>
 

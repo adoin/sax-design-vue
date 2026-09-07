@@ -28,7 +28,7 @@ EVENTS:
 description: 'Standalone calendar panel used by DatePicker.'
 ---
 
-# Date panel
+# Date Panel
 
 <card><template #example><date-panel-default /></template>
 

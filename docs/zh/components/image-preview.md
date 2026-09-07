@@ -105,15 +105,13 @@ EXPOSES:
 description: '支持导航、变换与无障碍操作的全屏图片查看器。'
 ---
 
-# 图片预览
+# Image Preview 图片预览
 
 <card>
 
 ## 完整图片查看器
 
 点击任一缩略图，即可切换图片、缩放、旋转、适应窗口、重置，并在放大后拖动图片。预览器同时支持鼠标滚轮，以及 <kbd>←</kbd>、<kbd>→</kbd>、<kbd>+</kbd>、<kbd>-</kbd>、<kbd>R</kbd>、<kbd>Shift+R</kbd>、<kbd>F</kbd>、<kbd>0</kbd> 和 <kbd>Esc</kbd> 键。
-
-缩略图使用原生图片按钮，因为图片本身就是具有明确语义的预览触发器，仓库现有按钮预设没有对应形态。
 
 <template #example><image-preview-zh-default /></template>
 

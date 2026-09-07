@@ -149,7 +149,7 @@ SLOTS:
     default: null
 ---
 
-# Card（卡片）
+# Card 卡片
 
 <card>
 

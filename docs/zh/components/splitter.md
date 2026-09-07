@@ -26,7 +26,7 @@ PROPS:
     description: 尺寸的小数精度，拖拽会吸附到对应刻度。
     default: '2'
   - name: gap
-    type: Number / String / [Size, Size]
+    type: Number | String | [Size, Size]
     values: "single / [rowGap, columnGap]"
     description: 分隔按钮实际占用的纵向、横向布局间距。
     default: '12'

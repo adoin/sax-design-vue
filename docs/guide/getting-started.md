@@ -69,7 +69,7 @@ Import the dark CSS variables file even if you start in light mode — it enable
 
 ## Dark / light theme
 
-Toggle the `html` element class `dark` (the docs site uses the same approach via the navbar switch):
+Toggle the `dark` class on the `html` element:
 
 <command>
 

@@ -28,7 +28,7 @@ EVENTS:
 description: 'DatePicker 使用的独立日历面板。'
 ---
 
-# 日期面板
+# Date Panel 日期面板
 
 <card><template #example><date-panel-default /></template>
 

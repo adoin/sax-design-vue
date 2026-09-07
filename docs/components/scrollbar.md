@@ -323,9 +323,3 @@ The scrollbar is displayed only when the element height exceeds the max height.
 </template>
 
 </card>
-
-<card>
-
-## Api
-
-</card>

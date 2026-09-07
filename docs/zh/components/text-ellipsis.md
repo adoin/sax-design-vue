@@ -35,7 +35,7 @@ EVENTS:
     description: 展开状态变化时触发。
 ---
 
-# Text ellipsis 文本省略
+# Text Ellipsis 文本省略
 
 <card><template #example><text-ellipsis-default /></template>
 

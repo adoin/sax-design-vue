@@ -69,7 +69,7 @@ createApp(App).use(SaxDesignVue).mount('#app')
 
 ## 深色 / 浅色主题
 
-切换 `html` 元素的 `dark` 类（本站通过导航栏开关使用相同方式）：
+切换 `html` 元素的 `dark` 类：
 
 <command>
 

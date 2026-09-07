@@ -176,7 +176,7 @@ PROPS:
   - name: item:icon
     type: String
     values: "icon name"
-    description: Render a repository icon before the label.
+    description: Render a registered icon before the label.
     default: null
   - name: item:badge
     type: String, Number
@@ -192,17 +192,6 @@ PROPS:
     usage: '#default'
     code: >
       <s-navbar-item active>
-        ...
-      </s-navbar-item>
-  - name: item:to
-    type: String, Object
-    values: "vue-router RouteLocationRaw"
-    description: Use vue-router to generate a new view based on the supplied string.
-    default: false
-    link: null
-    usage: null
-    code: >
-      <s-navbar-item to="/">
         ...
       </s-navbar-item>
   - name: item:to
@@ -293,7 +282,7 @@ SLOTS:
 
 <card>
 
-## Interactive playground
+## Interactive configuration
 
 <docs-warn />
 

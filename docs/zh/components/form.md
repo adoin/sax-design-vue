@@ -371,8 +371,8 @@ Form 有三类相互关联的公开入参。它们存在同名字段，但使用
 | `optionProps` | `Record<string, string>`                       | 自定义渲染器可使用的选项字段映射。              |
 | `children`    | `FormItemRenderOptions[]`                      | 用于组合控件的嵌套渲染节点。                    |
 
-默认 renderer 名称与仓库组件名称一致，例如 `SInput`、`SSelect`、`SSwitch`、`SCheckboxGroup`、`SRadioGroup`、`SDatePicker`、`STextarea` 和 `SButton`。
+内置 renderer 名称与导出的组件名称一致，例如 `SInput`、`SSelect`、`SSwitch`、`SCheckboxGroup`、`SRadioGroup`、`SDatePicker`、`STextarea` 和 `SButton`。
 
-下面的自动表格已按归属拆开：`SForm 属性` 只用于 Form 容器，`SFormItem 属性` 用于声明式 Item，也对应 `items[]` 中的同名字段。
+下面的 API 表已按归属拆开：`SForm 属性` 只用于 Form 容器，`SFormItem 属性` 用于声明式 Item，也对应 `items[]` 中的同名字段。
 
 </card>

@@ -263,9 +263,7 @@ NEWS:
 
 <docs-warn />
 
-The buttons are a fundamental part of any project, with Sax Design you can add a great button with a single line of code
-
-the buttons have all the states as active, focus, hover, to make its implementation simpler and speed up the work
+Buttons are fundamental interactive controls. `SButton` provides consistent active, focus, and hover states with a concise API.
 
 <template #example>
 <button-default />
@@ -602,7 +600,7 @@ values:
 
 ## Loading
 
-Use `loading` while an action is running. Select `pulse`, `ripple`, or `shimmer` with `loading-type`; each preset keeps the original label and icon recognizable, preserves button size, and prevents clicks. `ripple` uses two clear pulsing waves. Implementation keeps one loading element and switches only the root state class. Use `#loading` for fully custom content.
+Use `loading` while an action is running. Select `pulse`, `ripple`, or `shimmer` with `loading-type`; each preset keeps the original label and icon recognizable, preserves button size, and prevents clicks. `ripple` uses two clear pulsing waves. Use `#loading` for fully custom content.
 
 <template #example>
 <button-loading />

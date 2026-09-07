@@ -3,23 +3,23 @@ description: 'Show temporary, programmatic notifications outside the main flow.'
 PROPS:
   - name: dangerous-html-string
     type: Boolean
-    values: "true | false / pixels / layer number"
-    description: Configure HTML rendering, icon size, viewport offset and stacking order.
-    default: null
+    values: "true | false"
+    description: Render string content as HTML. Only use trusted content.
+    default: false
   - name: icon-size
-    type: Number
-    values: "true | false / pixels / layer number"
-    description: Configure HTML rendering, icon size, viewport offset and stacking order.
-    default: null
+    type: String
+    values: "CSS length"
+    description: Set the notification icon size.
+    default: 1.2rem
   - name: offset
     type: Number
-    values: "true | false / pixels / layer number"
-    description: Configure HTML rendering, icon size, viewport offset and stacking order.
-    default: null
+    values: "pixels"
+    description: Set the notification stack offset from the viewport edge.
+    default: 0
   - name: z-index
     type: Number
-    values: "true | false / pixels / layer number"
-    description: Configure HTML rendering, icon size, viewport offset and stacking order.
+    values: "layer number"
+    description: Set the initial stacking order.
     default: null
   - name: show-close
     type: Boolean
@@ -314,25 +314,6 @@ PROPS:
 
         const { close } = SNotification({
           duration: 0,
-          title: 'Documentation Sax Design Vue',
-          content: `Sax Design Vue notification example with configurable content,
-          color, timing, and placement.`,
-        })
-      </script>
-  - name: content
-    type: Vue Component
-    values: "Vnode,String,ComponentPublicInstance"
-    description: Change the content of the notification to the one provided as a value (something similar to a vue slot).
-    default: null
-    link: null
-    usage: '#example'
-    code: >
-      <script setup lang="ts">
-        import { SNotification } from 'sax-design-vue'
-
-        const { close } = SNotification({
-          duration: 0,
-          width: 'auto',
           title: 'Documentation Sax Design Vue',
           content: `Sax Design Vue notification example with configurable content,
           color, timing, and placement.`,

@@ -75,7 +75,7 @@ PROPS:
 description: '通过 Promise 弹窗选择图标、颜色与尺寸，按需返回图标代码或完整 SVG。'
 ---
 
-# 图标选择器
+# Icon Picker 图标选择器
 
 <card>
 

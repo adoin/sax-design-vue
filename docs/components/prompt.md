@@ -10,16 +10,6 @@ PROPS:
     values: "action visibility and labels"
     description: Configure prompt action buttons and their text.
     default: null
-  - name: accept-text
-    type: String
-    values: "action visibility and labels"
-    description: Configure prompt action buttons and their text.
-    default: null
-  - name: cancel-text
-    type: String
-    values: "action visibility and labels"
-    description: Configure prompt action buttons and their text.
-    default: null
   - name: close-icon
     type: String
     values: "Iconify icon name"

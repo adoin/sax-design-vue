@@ -8,68 +8,76 @@ PROPS:
     default: rounded
     usage: '#shape'
   - name: color
-    type: String / Boolean
-    values: "Theme color / small | default | large / label text"
-    description: Share input color, density, and floating labels across single and range date triggers.
+    type: String
+    values: "theme color | RGB | HEX | HSL"
+    description: Set the accent color shared by the trigger and picker panel.
     default: null
     link: null
     usage: '#default'
   - name: size
-    type: String / Boolean
-    values: "Theme color / small | default | large / label text"
-    description: Share input color, density, and floating labels across single and range date triggers.
+    type: String
+    values: "small | default | large"
+    description: Set the trigger input size.
     default: null
     link: null
     usage: '#default'
   - name: label-float
-    type: String / Boolean
-    values: "Theme color / small | default | large / label text"
-    description: Share input color, density, and floating labels across single and range date triggers.
-    default: null
+    type: Boolean
+    values: "true | false"
+    description: Keep the input label visible above its value.
+    default: false
     link: null
     usage: '#default'
   - name: label
-    type: String / Boolean
-    values: "Theme color / small | default | large / label text"
-    description: Share input color, density, and floating labels across single and range date triggers.
+    type: String
+    values: "label text"
+    description: Set the label for a single picker or range start input.
     default: null
     link: null
     usage: '#default'
   - name: start-label
-    type: String / Boolean
-    values: "Theme color / small | default | large / label text"
-    description: Share input color, density, and floating labels across single and range date triggers.
+    type: String
+    values: "label text"
+    description: Set the range start input label.
     default: null
     link: null
     usage: '#default'
   - name: end-label
-    type: String / Boolean
-    values: "Theme color / small | default | large / label text"
-    description: Share input color, density, and floating labels across single and range date triggers.
+    type: String
+    values: "label text"
+    description: Set the range end input label.
     default: null
     link: null
     usage: '#default'
   - name: auto-close
     type: Boolean
-    values: "true | false / date range separator"
-    description: Control close timing, clear action availability, and range text separator.
-    default: 'true'
+    values: "true | false"
+    description: Close the panel automatically after a complete selection.
+    default: 'false'
     link: null
     usage: '#default'
     code: null
   - name: clearable
     type: Boolean
-    values: "true | false / date range separator"
-    description: Control close timing, clear action availability, and range text separator.
+    values: "true | false"
+    description: Show an action that clears the selected value.
+    default: 'true'
+    link: null
+    usage: '#default'
+    code: null
+  - name: editable
+    type: Boolean
+    values: "true | false"
+    description: Allow the trigger input to accept typed dates.
     default: 'true'
     link: null
     usage: '#default'
     code: null
   - name: separator
     type: String
-    values: "true | false / date range separator"
-    description: Control close timing, clear action availability, and range text separator.
-    default: null
+    values: "separator text"
+    description: Set the text displayed between range values.
+    default: ' - '
     link: null
     usage: '#default'
     code: null
@@ -79,18 +87,18 @@ PROPS:
     description: Commit the current time and close after clicking Now; a component value overrides ConfigProvider.
     default: ConfigProvider or the picker's existing behavior
   - name: v-model
-    type: Date | string | number | [Date
-    values: ""
-    description: binding date value
-    default: false
+    type: DatePickerValue
+    values: "Date | string | number | range | array | null"
+    description: Bind the selected date value or values.
+    default: null
     link: null
     usage: '#default'
     code: null
   - name: model-value
-    type: Date]
-    values: ""
-    description: binding date value
-    default: false
+    type: DatePickerValue
+    values: "Date | string | number | range | array | null"
+    description: Set the selected date value or values without v-model syntax.
+    default: null
     link: null
     usage: '#default'
     code: null
@@ -197,7 +205,7 @@ PROPS:
     usage: '#default'
     code: null
   - name: default-date
-    type: Date | string | number | [DateLike
+    type: DateLike | [DateLike, DateLike]
     values: ""
     description: Set initial panel date and time when the model is empty.
     default: null
@@ -205,7 +213,7 @@ PROPS:
     usage: '#date-and-time'
     code: null
   - name: default-time
-    type: DateLike]
+    type: DateLike | [DateLike, DateLike]
     values: ""
     description: Set initial panel date and time when the model is empty.
     default: null
@@ -261,7 +269,7 @@ EVENTS:
     description: Fires after clearing the selected value.
 ---
 
-# Date picker
+# Date Picker
 
 <card>
 

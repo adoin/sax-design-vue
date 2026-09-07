@@ -219,25 +219,25 @@ PROPS:
     usage: '#progress'
 
   - name: max-length
-    type: Number, Boolean
-    values: "Number, true | false"
-    description: Limit input, show the counter in the suffix area, and trim committed values.
+    type: Number | String
+    values: "non-negative length"
+    description: Limit the accepted input length.
     default: null
     link: null
     usage: '#character-count'
 
   - name: show-word-count
-    type: Number, Boolean
-    values: "Number, true | false"
-    description: Limit input, show the counter in the suffix area, and trim committed values.
+    type: Boolean
+    values: "true | false"
+    description: Show the current input count in the suffix area.
     default: false
     link: null
     usage: '#character-count'
 
   - name: trim
-    type: Number, Boolean
-    values: "Number, true | false"
-    description: Limit input, show the counter in the suffix area, and trim committed values.
+    type: Boolean
+    values: "true | false"
+    description: Trim leading and trailing whitespace when a change is committed.
     default: false
     link: null
     usage: '#character-count'
@@ -275,130 +275,130 @@ PROPS:
     usage: '#search'
 
   - name: prefix-icon
-    type: String / Object
-    values: "Icon name / '{ icon, content, status }'"
-    description: Render lightweight prefix and suffix icons or content; slots have the highest priority.
+    type: String
+    values: "icon name"
+    description: Render an icon before the input content; the prefix slot takes priority.
     default: null
     link: null
     usage: '#affixes'
 
   - name: suffix-icon
-    type: String / Object
-    values: "Icon name / '{ icon, content, status }'"
-    description: Render lightweight prefix and suffix icons or content; slots have the highest priority.
+    type: String
+    values: "icon name"
+    description: Render an icon after the input content; reserved actions remain available.
     default: null
     link: null
     usage: '#affixes'
 
   - name: prefix-config
-    type: String / Object
-    values: "Icon name / '{ icon, content, status }'"
-    description: Render lightweight prefix and suffix icons or content; slots have the highest priority.
+    type: InputAffixConfig
+    values: "{ icon?, content?, status? }"
+    description: Configure prefix icon, text, and semantic status.
     default: null
     link: null
     usage: '#affixes'
 
   - name: suffix-config
-    type: String / Object
-    values: "Icon name / '{ icon, content, status }'"
-    description: Render lightweight prefix and suffix icons or content; slots have the highest priority.
+    type: InputAffixConfig
+    values: "{ icon?, content?, status? }"
+    description: Configure suffix icon, text, and semantic status.
     default: null
     link: null
     usage: '#affixes'
 
   - name: min-length
-    type: Number | String / Boolean
-    values: "Native input constraints"
-    description: Forward common native constraints and clamp number values to the configured min–max range.
+    type: Number | String
+    values: "non-negative length"
+    description: Forward the native minimum input length.
     default: null
     link: null
     usage: '#native-constraints'
 
   - name: min
-    type: Number | String / Boolean
-    values: "Native input constraints"
-    description: Forward common native constraints and clamp number values to the configured min–max range.
+    type: Number | String
+    values: "numeric boundary"
+    description: Set the minimum value for number input and clamp committed values.
     default: null
     link: null
     usage: '#native-constraints'
 
   - name: max
-    type: Number | String / Boolean
-    values: "Native input constraints"
-    description: Forward common native constraints and clamp number values to the configured min–max range.
+    type: Number | String
+    values: "numeric boundary"
+    description: Set the maximum value for number input and clamp committed values.
     default: null
     link: null
     usage: '#native-constraints'
 
   - name: step
-    type: Number | String / Boolean
-    values: "Native input constraints"
-    description: Forward common native constraints and clamp number values to the configured min–max range.
+    type: Number | String
+    values: "numeric step"
+    description: Forward the native number input step.
     default: null
     link: null
     usage: '#native-constraints'
 
   - name: input-mode
-    type: Number | String / Boolean
-    values: "Native input constraints"
-    description: Forward common native constraints and clamp number values to the configured min–max range.
+    type: String
+    values: "none | text | decimal | numeric | tel | search | email | url"
+    description: Hint which virtual keyboard should be displayed.
     default: null
     link: null
     usage: '#native-constraints'
 
   - name: pattern
-    type: Number | String / Boolean
-    values: "Native input constraints"
-    description: Forward common native constraints and clamp number values to the configured min–max range.
+    type: String
+    values: "regular expression source"
+    description: Forward the native validation pattern.
     default: null
     link: null
     usage: '#native-constraints'
 
   - name: required
-    type: Number | String / Boolean
-    values: "Native input constraints"
-    description: Forward common native constraints and clamp number values to the configured min–max range.
+    type: Boolean
+    values: "true | false"
+    description: Mark the native input as required.
     default: null
     link: null
     usage: '#native-constraints'
 
   - name: multiple
-    type: Number | String / Boolean
-    values: "Native input constraints"
-    description: Forward common native constraints and clamp number values to the configured min–max range.
+    type: Boolean
+    values: "true | false"
+    description: Forward the native multiple-value hint for supported input types.
     default: null
     link: null
     usage: '#native-constraints'
 
   - name: readonly
-    type: Boolean, String
-    values: "true | false, left | center | right"
-    description: Control editing state, focus and text alignment.
+    type: Boolean
+    values: "true | false"
+    description: Set the native input to read-only.
     default: false
     link: null
     usage: '#default'
 
   - name: editable
-    type: Boolean, String
-    values: "true | false, left | center | right"
-    description: Control editing state, focus and text alignment.
+    type: Boolean
+    values: "true | false"
+    description: Allow the input value to be edited.
     default: true
     link: null
     usage: '#default'
 
   - name: auto-focus
-    type: Boolean, String
-    values: "true | false, left | center | right"
-    description: Control editing state, focus and text alignment.
+    type: Boolean
+    values: "true | false"
+    description: Focus the input after mounting.
     default: false
     link: null
     usage: '#default'
 
   - name: align
-    type: Boolean, String
-    values: "true | false, left | center | right"
-    description: Control editing state, focus and text alignment.
-    default: left
+    type: String
+    values: "left | center | right"
+    description: Align the input text.
+    default: null
     link: null
     usage: '#default'
 

@@ -105,15 +105,13 @@ EXPOSES:
 description: 'A full-screen image viewer with navigation, transforms, and accessible controls.'
 ---
 
-# Image preview
+# Image Preview
 
 <card>
 
 ## Full viewer
 
 Open any thumbnail to navigate, zoom, rotate, fit, reset, and drag a magnified image. The viewer also supports the mouse wheel and the <kbd>←</kbd>, <kbd>→</kbd>, <kbd>+</kbd>, <kbd>-</kbd>, <kbd>R</kbd>, <kbd>Shift+R</kbd>, <kbd>F</kbd>, <kbd>0</kbd>, and <kbd>Esc</kbd> keys.
-
-The thumbnails use native image buttons because the image itself is the accessible preview trigger; no repository button preset represents that pattern.
 
 <template #example><image-preview-default /></template>
 

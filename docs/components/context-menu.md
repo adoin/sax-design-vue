@@ -42,7 +42,7 @@ EVENTS:
 description: "Right-click context menu."
 ---
 
-# Context menu
+# Context Menu
 
 <card>
 

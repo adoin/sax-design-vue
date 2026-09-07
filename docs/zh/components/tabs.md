@@ -135,7 +135,7 @@ SLOTS:
     description: 替换添加、关闭和更多图标。
 ---
 
-# Tabs（标签页）
+# Tabs 标签页
 
 <card>
 
@@ -261,7 +261,7 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 
 ## 右键菜单
 
-使用 `s-tab` 的 `label` 插槽组合仓库已有的 `SContextMenu`，无需在 Tabs 内重复实现菜单系统。
+使用 `s-tab` 的 `label` 插槽组合 `SContextMenu`，可为标签添加右键操作。
 
 <template #example><tabs-context-menu /></template>
 

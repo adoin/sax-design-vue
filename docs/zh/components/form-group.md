@@ -78,7 +78,7 @@ EVENTS:
     description: 单个表单完成校验时触发。
 ---
 
-# 表单组
+# Form Group 表单组
 
 <card>
 

@@ -26,7 +26,7 @@ PROPS:
     description: Decimal precision used to snap every resize.
     default: '2'
   - name: gap
-    type: Number / String / [Size, Size]
+    type: Number | String | [Size, Size]
     values: "single / [rowGap, columnGap]"
     description: Row and column layout space occupied by separator buttons.
     default: '12'

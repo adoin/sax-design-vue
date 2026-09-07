@@ -30,53 +30,53 @@ PROPS:
     default: null
     usage: '#标签'
   - name: clearable
-    type: Boolean / Function / String / Object
-    values: '清空、禁用时间项、输入编辑和时间列配置'
-    description: 控制清空操作、可选时间、输入编辑、格式和时间列行为。
-    default: null
+    type: Boolean
+    values: 'true | false'
+    description: 是否显示清空当前时间的操作按钮。
+    default: 'true'
   - name: disabled-hours
-    type: Boolean / Function / String / Object
-    values: '清空、禁用时间项、输入编辑和时间列配置'
-    description: 控制清空操作、可选时间、输入编辑、格式和时间列行为。
+    type: Function
+    values: '(role: string) => number[]'
+    description: 返回不可选择的小时值。
     default: null
   - name: disabled-minutes
-    type: Boolean / Function / String / Object
-    values: '清空、禁用时间项、输入编辑和时间列配置'
-    description: 控制清空操作、可选时间、输入编辑、格式和时间列行为。
+    type: Function
+    values: '(hour: number, role: string) => number[]'
+    description: 返回指定小时下不可选择的分钟值。
     default: null
   - name: disabled-seconds
-    type: Boolean / Function / String / Object
-    values: '清空、禁用时间项、输入编辑和时间列配置'
-    description: 控制清空操作、可选时间、输入编辑、格式和时间列行为。
+    type: Function
+    values: '(hour: number, minute: number, role: string) => number[]'
+    description: 返回指定时间下不可选择的秒值。
     default: null
   - name: editable
-    type: Boolean / Function / String / Object
-    values: '清空、禁用时间项、输入编辑和时间列配置'
-    description: 控制清空操作、可选时间、输入编辑、格式和时间列行为。
-    default: null
+    type: Boolean
+    values: 'true | false'
+    description: 是否允许在触发输入框中直接键入时间。
+    default: 'true'
   - name: format
-    type: Boolean / Function / String / Object
-    values: '清空、禁用时间项、输入编辑和时间列配置'
-    description: 控制清空操作、可选时间、输入编辑、格式和时间列行为。
-    default: null
+    type: String
+    values: 'Day.js 格式 token'
+    description: 设置触发输入框中显示的时间格式。
+    default: 'HH:mm:ss'
   - name: time-config
-    type: Boolean / Function / String / Object
-    values: '清空、禁用时间项、输入编辑和时间列配置'
-    description: 控制清空操作、可选时间、输入编辑、格式和时间列行为。
+    type: TimePickerConfig
+    values: 'hours | minutes | seconds | 禁用方法'
+    description: 配置各时间列的候选值和禁用规则。
     default: null
   - name: v-model
-    type: String | Date | number
-    values: ''
-    description: 绑定时间值
-    default: false
+    type: TimePickerValue
+    values: 'Date | string | number | null'
+    description: 双向绑定选中的时间值。
+    default: null
     link: null
     usage: '#default'
     code: null
   - name: model-value
-    type: String | Date | number
-    values: ''
-    description: 绑定时间值
-    default: false
+    type: TimePickerValue
+    values: 'Date | string | number | null'
+    description: 不使用 v-model 语法时设置选中的时间值。
+    default: null
     link: null
     usage: '#default'
     code: null
@@ -112,7 +112,7 @@ EVENTS:
     description: 清空已选时间后触发。
 ---
 
-# Time picker 时间选择器
+# Time Picker 时间选择器
 
 <card>
 

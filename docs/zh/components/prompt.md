@@ -10,16 +10,6 @@ PROPS:
     values: "操作按钮显示和文案"
     description: 配置 Prompt 操作按钮及其文本。
     default: null
-  - name: accept-text
-    type: String
-    values: "操作按钮显示和文案"
-    description: 配置 Prompt 操作按钮及其文本。
-    default: null
-  - name: cancel-text
-    type: String
-    values: "操作按钮显示和文案"
-    description: 配置 Prompt 操作按钮及其文本。
-    default: null
   - name: close-icon
     type: String
     values: "Iconify 图标名称"
@@ -121,7 +111,7 @@ NEWS:
   - programmatic
 ---
 
-# Prompt（提示框）
+# Prompt 提示框
 
 <card>
 

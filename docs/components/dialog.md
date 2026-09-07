@@ -1,70 +1,60 @@
 ---
 description: 'Present focused modal content and require a user decision.'
 PROPS:
-  - name: model-value
-    type: Boolean
-    values: "true | false"
-    description: Bind visibility and optionally guard closing.
-    default: 'false'
   - name: before-close
     type: Function
-    values: "close guard"
-    description: Bind visibility and optionally guard closing.
+    values: "(done: (cancel?: boolean) => void) => void"
+    description: Run a guard before closing; call done to continue.
     default: null
   - name: color
-    type: Color / String | Number / Boolean
-    values: "CSS size and color values"
-    description: Configure dialog appearance, placement and dimensions.
-    default: null
+    type: String
+    values: "theme color | RGB | HEX | HSL"
+    description: Set the dialog accent color.
+    default: primary
   - name: top
-    type: Color / String | Number / Boolean
-    values: "CSS size and color values"
-    description: Configure dialog appearance, placement and dimensions.
+    type: String | Number
+    values: "CSS length"
+    description: Set the dialog's top offset.
     default: null
   - name: height
-    type: Color / String | Number / Boolean
-    values: "CSS size and color values"
-    description: Configure dialog appearance, placement and dimensions.
+    type: String | Number
+    values: "CSS length"
+    description: Set the dialog height.
     default: null
   - name: min-width
-    type: Color / String | Number / Boolean
-    values: "CSS size and color values"
-    description: Configure dialog appearance, placement and dimensions.
+    type: String | Number
+    values: "CSS length"
+    description: Set the dialog minimum width.
     default: null
   - name: min-height
-    type: Color / String | Number / Boolean
-    values: "CSS size and color values"
-    description: Configure dialog appearance, placement and dimensions.
-    default: null
-  - name: auto-width
-    type: Color / String | Number / Boolean
-    values: "CSS size and color values"
-    description: Configure dialog appearance, placement and dimensions.
+    type: String | Number
+    values: "CSS length"
+    description: Set the dialog minimum height.
     default: null
   - name: cancel-closable
-    type: Boolean / String
-    values: "true | false / button labels"
-    description: Configure footer actions and whether each action closes the dialog.
-    default: null
+    type: Boolean
+    values: "true | false"
+    description: Close the dialog after the cancel action.
+    default: true
   - name: confirm-closable
-    type: Boolean / String
-    values: "true | false / button labels"
-    description: Configure footer actions and whether each action closes the dialog.
-    default: null
+    type: Boolean
+    values: "true | false"
+    description: Close the dialog after the confirm action.
+    default: true
   - name: cancel-button-text
-    type: Boolean / String
-    values: "true | false / button labels"
-    description: Configure footer actions and whether each action closes the dialog.
+    type: String
+    values: "button label"
+    description: Set the built-in cancel button label.
     default: null
   - name: confirm-button-text
-    type: Boolean / String
-    values: "true | false / button labels"
-    description: Configure footer actions and whether each action closes the dialog.
+    type: String
+    values: "button label"
+    description: Set the built-in confirm button label.
     default: null
   - name: v-model
     type: Boolean
     values: "true,false"
-    description: Determine if the dialogue is visible or hidden.
+    description: Determine whether the dialog is visible.
     default: false
     link: null
     usage: '#default'
@@ -162,9 +152,9 @@ PROPS:
 
   - name: shape
     type: String
-    values: "square"
-    description: Remove the border radius from the dialog.
-    default: false
+    values: "rounded | square"
+    description: Set rounded or square dialog geometry.
+    default: rounded
     link: null
     usage: '#shape'
     code: null
@@ -178,25 +168,25 @@ PROPS:
     usage: null
     code: null
   - name: title
-    type: String, Boolean
-    values: "String, true | false"
-    description: Built-in header and content when slots are not needed.
+    type: String | Number
+    values: "header text"
+    description: Set the built-in title when the header slot is not used.
     default: null
     link: null
     usage: '#advanced'
     code: null
   - name: content
-    type: String, Boolean
-    values: "String, true | false"
-    description: Built-in header and content when slots are not needed.
+    type: String | Number
+    values: "content text"
+    description: Set built-in content when the default slot is not used.
     default: null
     link: null
     usage: '#advanced'
     code: null
   - name: show-header
-    type: String, Boolean
-    values: "String, true | false"
-    description: Built-in header and content when slots are not needed.
+    type: Boolean
+    values: "true | false"
+    description: Render the built-in header area.
     default: true
     link: null
     usage: '#advanced'

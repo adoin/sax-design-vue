@@ -50,7 +50,7 @@ EVENTS:
     description: Fire when the control gains or loses focus.
 ---
 
-# Time select
+# Time Select
 
 <card>
 

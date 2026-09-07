@@ -9,21 +9,21 @@ PROPS:
     link: null
     usage: '#label'
   - name: v-model
-    type: String | Number | Array
+    type: SelectValue
     values: 'option value or values'
     description: Bind selected values and optionally configure the value treated as empty.
     default: null
     link: null
     usage: '#default'
   - name: model-value
-    type: String | Number | Array
+    type: SelectValue
     values: 'option value or values'
     description: Bind selected values and optionally configure the value treated as empty.
     default: null
     link: null
     usage: '#default'
   - name: not-value
-    type: String | Number | Array
+    type: SelectOptionValue
     values: 'option value or values'
     description: Bind selected values and optionally configure the value treated as empty.
     default: null
@@ -79,7 +79,7 @@ PROPS:
     link: null
     usage: '#default'
   - name: filter-config
-    type: Object
+    type: SelectFilterConfig
     values: 'filter and remote data configuration'
     description: Configure local filtering or asynchronous remote options.
     default: null
@@ -100,7 +100,7 @@ PROPS:
     link: null
     usage: '#filter'
   - name: remote-config
-    type: Object
+    type: SelectRemoteConfig
     values: 'filter and remote data configuration'
     description: Configure local filtering or asynchronous remote options.
     default: null
@@ -114,7 +114,7 @@ PROPS:
     link: null
     usage: '#filter'
   - name: popup-config
-    type: Object
+    type: SelectPopupConfig
     values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
     description: Configure popup sizing, placement, transfer target, class and inline style, plus delay and feedback states.
     default: null

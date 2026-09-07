@@ -38,58 +38,65 @@ PROPS:
   - name: format
     type: String
     values: 'Day.js tokens'
-    description: Format and clear the selected time.
+    description: Format the time displayed in the trigger input.
     default: 'HH:mm:ss'
     link: null
     usage: '#default'
   - name: clearable
     type: Boolean
     values: 'true | false'
-    description: Format and clear the selected time.
+    description: Show an action that clears the selected time.
+    default: 'true'
+    link: null
+    usage: '#default'
+  - name: editable
+    type: Boolean
+    values: 'true | false'
+    description: Allow the trigger input to accept a typed time.
     default: 'true'
     link: null
     usage: '#default'
   - name: disabled-hours
-    type: Function / Object
-    values: 'disabled time units and column configuration'
-    description: Restrict time choices and configure the time columns.
+    type: Function
+    values: '(role: string) => number[]'
+    description: Return the hour values that cannot be selected.
     default: null
     link: null
     usage: '#default'
   - name: disabled-minutes
-    type: Function / Object
-    values: 'disabled time units and column configuration'
-    description: Restrict time choices and configure the time columns.
+    type: Function
+    values: '(hour: number, role: string) => number[]'
+    description: Return the minute values that cannot be selected for an hour.
     default: null
     link: null
     usage: '#default'
   - name: disabled-seconds
-    type: Function / Object
-    values: 'disabled time units and column configuration'
-    description: Restrict time choices and configure the time columns.
+    type: Function
+    values: '(hour: number, minute: number, role: string) => number[]'
+    description: Return the second values that cannot be selected for a time.
     default: null
     link: null
     usage: '#default'
   - name: time-config
-    type: Function / Object
-    values: 'disabled time units and column configuration'
-    description: Restrict time choices and configure the time columns.
+    type: TimePickerConfig
+    values: 'hours | minutes | seconds | disabled methods'
+    description: Configure available values and disabled rules for each time column.
     default: null
     link: null
     usage: '#default'
   - name: v-model
-    type: String | Date | number
-    values: ''
-    description: binding time value
-    default: false
+    type: TimePickerValue
+    values: 'Date | string | number | null'
+    description: Bind the selected time value.
+    default: null
     link: null
     usage: '#default'
     code: null
   - name: model-value
-    type: String | Date | number
-    values: ''
-    description: binding time value
-    default: false
+    type: TimePickerValue
+    values: 'Date | string | number | null'
+    description: Set the selected time value without v-model syntax.
+    default: null
     link: null
     usage: '#default'
     code: null
@@ -125,7 +132,7 @@ EVENTS:
     description: Fires after clearing the selected time.
 ---
 
-# Time picker
+# Time Picker
 
 <card>
 

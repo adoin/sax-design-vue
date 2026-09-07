@@ -70,7 +70,7 @@ NEWS:
 description: '基于 TanStack Virtual 的窗口化列表，支持真实测量动态行高。'
 ---
 
-# 虚拟列表
+# Virtual List 虚拟列表
 
 <card>
 

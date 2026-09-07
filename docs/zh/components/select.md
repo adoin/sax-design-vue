@@ -2,17 +2,17 @@
 description: '从可搜索选项列表中选择一个或多个值。'
 PROPS:
   - name: v-model
-    type: String | Number | Array | Object
+    type: SelectValue
     values: '选项值或选项值数组'
     description: 双向绑定当前选中值。
     default: "''"
   - name: model-value
-    type: String | Number | Array | Object
+    type: SelectValue
     values: '选项值或选项值数组'
     description: 当前选中值。
     default: "''"
   - name: not-value
-    type: String | Number | Object
+    type: SelectOptionValue
     values: '视为空状态的选项值'
     description: 配置需要视为空状态的值。
     default: "''"
@@ -58,59 +58,59 @@ PROPS:
     description: 设置弹层定位策略。
     default: absolute
   - name: filter-config
-    type: Object / Function / Boolean
-    values: '本地筛选和远程数据配置'
-    description: 配置本地筛选或异步远程选项。
+    type: SelectFilterConfig
+    values: '{ clearOnClose?, filterMethod? }'
+    description: 配置本地筛选行为。
     default: null
   - name: filter-method
-    type: Object / Function / Boolean
-    values: '本地筛选和远程数据配置'
-    description: 配置本地筛选或异步远程选项。
+    type: Function
+    values: '(searchValue: string) => void'
+    description: 自定义本地筛选输入处理。
     default: null
   - name: remote
-    type: Object / Function / Boolean
-    values: '本地筛选和远程数据配置'
-    description: 配置本地筛选或异步远程选项。
-    default: null
+    type: Boolean
+    values: 'true | false'
+    description: 启用异步远程选项查询。
+    default: false
   - name: remote-config
-    type: Object / Function / Boolean
-    values: '本地筛选和远程数据配置'
-    description: 配置本地筛选或异步远程选项。
+    type: SelectRemoteConfig
+    values: '{ enabled?, autoLoad?, clearOnClose?, queryMethod? }'
+    description: 配置远程选项的加载和查询行为。
     default: null
   - name: remote-method
-    type: Object / Function / Boolean
-    values: '本地筛选和远程数据配置'
-    description: 配置本地筛选或异步远程选项。
+    type: Function
+    values: '({ searchValue: string }) => void | Promise<void>'
+    description: 根据搜索文字加载远程选项。
     default: null
   - name: popup-config
-    type: Object / Number / String
+    type: SelectPopupConfig
     values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
     description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
     default: null
   - name: show-after
-    type: Object / Number / String
-    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
-    description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
-    default: null
+    type: Number
+    values: '毫秒'
+    description: 设置弹层显示延迟。
+    default: 0
   - name: hide-after
-    type: Object / Number / String
-    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
-    description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
-    default: null
+    type: Number
+    values: '毫秒'
+    description: 设置弹层隐藏延迟。
+    default: 0
   - name: loading-text
-    type: Object / Number / String
-    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
-    description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
+    type: String
+    values: '提示文字'
+    description: 设置加载状态提示文字。
     default: null
   - name: no-data-text
-    type: Object / Number / String
-    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
-    description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
+    type: String
+    values: '提示文字'
+    description: 设置没有选项时的提示文字。
     default: null
   - name: no-match-text
-    type: Object / Number / String
-    values: 'width | full | matchTriggerWidth | minWidth | maxWidth | height | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style'
-    description: 配置弹层宽高、跟随触发器、位置、挂载目标、类名和行内样式，以及加载、空数据和无匹配状态。
+    type: String
+    values: '提示文字'
+    description: 设置筛选无匹配项时的提示文字。
     default: null
   - name: color
     type: Color

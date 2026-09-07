@@ -154,7 +154,7 @@ NEWS:
   - more
 ---
 
-# Images（图片组）
+# Images 图片组
 
 <card>
 

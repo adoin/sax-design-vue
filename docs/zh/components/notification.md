@@ -2,24 +2,24 @@
 description: '在主内容流外展示短暂的程序化通知。'
 PROPS:
   - name: dangerous-html-string
-    type: Boolean / Number
-    values: "true | false / 像素 / 层级数值"
-    description: 配置 HTML 渲染、图标尺寸、视口偏移和层叠顺序。
-    default: null
+    type: Boolean
+    values: "true | false"
+    description: 将字符串内容作为 HTML 渲染；仅用于可信内容。
+    default: false
   - name: icon-size
-    type: Boolean / Number
-    values: "true | false / 像素 / 层级数值"
-    description: 配置 HTML 渲染、图标尺寸、视口偏移和层叠顺序。
-    default: null
+    type: String
+    values: "CSS 长度"
+    description: 设置通知图标尺寸。
+    default: 1.2rem
   - name: offset
-    type: Boolean / Number
-    values: "true | false / 像素 / 层级数值"
-    description: 配置 HTML 渲染、图标尺寸、视口偏移和层叠顺序。
-    default: null
+    type: Number
+    values: "像素"
+    description: 设置通知堆栈与视口边缘的偏移。
+    default: 0
   - name: z-index
-    type: Boolean / Number
-    values: "true | false / 像素 / 层级数值"
-    description: 配置 HTML 渲染、图标尺寸、视口偏移和层叠顺序。
+    type: Number
+    values: "层级数值"
+    description: 设置初始层叠顺序。
     default: null
   - name: show-close
     type: Boolean
@@ -319,25 +319,6 @@ PROPS:
           color, timing, and placement.`,
         })
       </script>
-  - name: content
-    type: Vue Component
-    values: "Vnode,String,ComponentPublicInstance"
-    description: 使用传入内容替换通知正文，类似 Vue 插槽。
-    default: null
-    link: null
-    usage: '#example'
-    code: >
-      <script setup lang="ts">
-        import { SNotification } from 'sax-design-vue'
-
-        const { close } = SNotification({
-          duration: 0,
-          width: 'auto',
-          title: 'Documentation Sax Design Vue',
-          content: `Sax Design Vue notification example with configurable content,
-          color, timing, and placement.`,
-        })
-      </script>
   - name: instance.close()
     type: function
     values: "null"
@@ -385,7 +366,7 @@ EVENTS:
     description: 通知实例销毁时触发。
 ---
 
-# Notification（通知）
+# Notification 通知
 
 <card>
 

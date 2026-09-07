@@ -234,7 +234,7 @@ UPDATES:
   - hidden-content
 ---
 
-# Alert（警告提示）
+# Alert 警告提示
 
 <card>
 

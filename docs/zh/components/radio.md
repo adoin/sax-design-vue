@@ -92,7 +92,7 @@ SLOTS:
     code: null
 ---
 
-# Radio（单选框）
+# Radio 单选框
 
 <card>
 

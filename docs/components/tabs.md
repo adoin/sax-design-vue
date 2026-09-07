@@ -261,7 +261,7 @@ The default `overflow="collapse"` keeps the active tab visible and moves remaini
 
 ## Context menu
 
-Compose the `s-tab` label slot with the repository's existing `SContextMenu` instead of duplicating menu behavior inside Tabs.
+Use the `s-tab` label slot with `SContextMenu` to add contextual actions to a tab label.
 
 <template #example><tabs-context-menu /></template>
 

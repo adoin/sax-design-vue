@@ -28,7 +28,7 @@ EVENTS:
 description: "局部打印容器。"
 ---
 
-# 打印
+# Print 打印
 
 <card><template #example><print-default /></template>
 

@@ -31,7 +31,7 @@ EVENTS:
 description: "持续公告栏。"
 ---
 
-# Notice bar 公告栏
+# Notice Bar 公告栏
 
 <card><template #example><notice-bar-default /></template>
 

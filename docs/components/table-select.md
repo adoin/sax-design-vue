@@ -383,7 +383,7 @@ EXPOSES:
 description: 'Select a row from a flat, virtualized, or tree-structured Table.'
 ---
 
-# Table select
+# Table Select
 
 <card>
 

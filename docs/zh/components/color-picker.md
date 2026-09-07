@@ -37,7 +37,7 @@ EVENTS:
 description: '颜色选择器。'
 ---
 
-# Color picker 颜色选择器
+# Color Picker 颜色选择器
 
 <card>
 

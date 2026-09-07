@@ -255,7 +255,7 @@ NEWS:
   - ripple
 ---
 
-# Button（按钮）
+# Button 按钮
 
 <card codesandbox="https://codesandbox.io/embed/reverent-shape-pmyk2?fontsize=14&hidenavigation=1&module=%2Fsrc%2FApp.vue">
 
@@ -602,7 +602,7 @@ NEWS:
 
 ## 加载
 
-操作执行期间可设置 `loading`，并用 `loading-type` 选择 `pulse`（呼吸光轨）、`ripple`（双层脉冲波）或 `shimmer`（流光扫描）。三种预设均保留原文字和图标、保持按钮尺寸并阻止点击；实现只切换根节点状态 class。需要完全自定义时使用 `#loading` 插槽。
+操作执行期间可设置 `loading`，并用 `loading-type` 选择 `pulse`（呼吸光轨）、`ripple`（双层脉冲波）或 `shimmer`（流光扫描）。三种预设均保留原文字和图标、保持按钮尺寸并阻止点击。需要完全自定义时使用 `#loading` 插槽。
 
 <template #example>
 <button-loading />

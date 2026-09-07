@@ -50,7 +50,7 @@ EVENTS:
     description: 控件获得或失去焦点时触发。
 ---
 
-# Time select 时间选择
+# Time Select 时间选择
 
 <card>
 

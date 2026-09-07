@@ -102,7 +102,7 @@ NEWS:
   - text-fixed
 ---
 
-# Slider（滑块）
+# Slider 滑块
 
 <card>
 

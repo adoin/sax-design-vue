@@ -3,7 +3,7 @@ PROPS: []
 description: 'Forces the next Print content to a new browser page.'
 ---
 
-# Print page break
+# Print Page Break
 
 <card><template #example><print-page-break-default /></template>
 

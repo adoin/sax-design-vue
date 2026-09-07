@@ -2,7 +2,7 @@
 description: 'RadioGroup 文档已合并到 Radio。'
 ---
 
-# RadioGroup（单选组）
+# RadioGroup 单选组
 
 <card>
 

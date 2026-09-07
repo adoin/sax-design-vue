@@ -172,7 +172,7 @@ SLOTS:
 description: '支持受控状态、层叠卡组、空间 3D 和无障碍导航的轮播组件。'
 ---
 
-# Carousel（轮播图）
+# Carousel 轮播图
 
 <card>
 

@@ -136,10 +136,10 @@ PROPS:
         </s-checkbox>
       </template>
 
-  - name: Checkbox Group
+  - name: checkbox-group
     type: Array<String | Number | Object>
     values: "null"
-    description: It is used for multiple checkboxes which are bound in one group.
+    description: Bind multiple checkboxes as one group.
     default: null
     link: null
     usage: '#checkbox-group'

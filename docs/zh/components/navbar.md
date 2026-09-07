@@ -176,7 +176,7 @@ PROPS:
   - name: item:icon
     type: String
     values: "icon name"
-    description: 在文字前显示仓库图标。
+    description: 在文字前显示已注册的图标。
     default: null
   - name: item:badge
     type: String, Number
@@ -192,17 +192,6 @@ PROPS:
     usage: '#default'
     code: >
       <s-navbar-item active>
-        ...
-      </s-navbar-item>
-  - name: item:to
-    type: String, Object
-    values: "vue-router RouteLocationRaw"
-    description: 使用 vue-router 根据传入值跳转到新视图。
-    default: false
-    link: null
-    usage: null
-    code: >
-      <s-navbar-item to="/">
         ...
       </s-navbar-item>
   - name: item:to

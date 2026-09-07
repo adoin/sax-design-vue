@@ -70,7 +70,7 @@ NEWS:
 description: 'Windowed list rendering backed by TanStack Virtual, with measured dynamic row heights.'
 ---
 
-# Virtual list
+# Virtual List
 
 <card>
 

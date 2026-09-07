@@ -8,7 +8,7 @@ Every component page follows the same structure:
 
 1. **Live example** — rendered with the same API you use in apps
 2. **Code tabs** — template / script / style snippets you can copy
-3. **API table** — props, events, slots, and exposes generated from frontmatter
+3. **API table** — props, events, slots, and exposed methods
 
 </card>
 
@@ -54,7 +54,7 @@ Open the component doc, find the prop in the API section, and use the linked exa
 
 ## Preview in Playground
 
-Before integrating into your repo, open the [Playground](/guide/playground) and select the component demo. The playground uses the same workspace build as this documentation site.
+Before integrating a component into your app, open the [Playground](/guide/playground) and select its demo. The preview uses the same component APIs shown in the documentation.
 
 </card>
 
@@ -62,6 +62,6 @@ Before integrating into your repo, open the [Playground](/guide/playground) and 
 
 ## Design note
 
-Visual language is inherited from [Vuesax](https://github.com/lusaxweb/vuesax). Sax Design Vue keeps that expressive look while targeting Vue 3 tooling and modern documentation workflows.
+Visual language is inherited from [Vuesax](https://github.com/lusaxweb/vuesax). Sax Design Vue keeps that expressive look while providing APIs and tooling for Vue 3 applications.
 
 </card>

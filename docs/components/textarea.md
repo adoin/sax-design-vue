@@ -6,131 +6,137 @@ PROPS:
     description: Set rounded or square geometry for the field and counter.
     default: rounded
     usage: '#shape'
-  - name: cols
-    type: Number
-    values: 'native column count'
-    description: Configure width hint, character counting and immediate model updates.
-    default: null
-  - name: count-method
-    type: Function
-    values: 'counter function'
-    description: Configure width hint, character counting and immediate model updates.
-    default: null
-  - name: immediate
-    type: Boolean
-    values: 'true | false'
-    description: Configure width hint, character counting and immediate model updates.
-    default: null
   - name: v-model
     type: String
-    values: 'String'
+    values: 'string'
     description: Textarea value.
     default: ''
-    link: null
     usage: '#default'
-
   - name: label
     type: String
-    values: 'String'
+    values: 'label text'
     description: Floating label text.
     default: null
-    link: null
     usage: '#label'
-
   - name: color
     type: String
-    values: 'primary, success, danger, warning, dark'
-    description: Component color.
+    values: 'theme color | RGB | HEX | HSL'
+    description: Set the field and counter accent color.
     default: primary
-    link: null
     usage: '#default'
-
   - name: counter
-    type: Number, String
-    values: 'Number'
-    description: Max length counter.
+    type: Number | String
+    values: 'number | numeric string'
+    description: Display a character limit and counter.
     default: null
-    link: null
     usage: '#counter'
-
   - name: counter-danger
     type: Boolean
-    values: 'true, false'
+    values: 'true | false'
     description: Highlight counter when limit exceeded.
     default: false
-    link: null
     usage: '#counter'
-
-  - name: max-length
-    type: Number
-    values: 'Number'
-    description: Native length limit and counter.
+  - name: placeholder
+    type: String
+    values: 'placeholder text'
+    description: Set the native textarea placeholder.
     default: null
-    link: null
+    usage: '#default'
+  - name: name
+    type: String
+    values: 'form field name'
+    description: Set the native form field name.
+    default: null
+    usage: '#default'
+  - name: form
+    type: String
+    values: 'form element id'
+    description: Associate the textarea with a form element.
+    default: null
+    usage: '#default'
+  - name: max-length
+    type: Number | String
+    values: 'non-negative length'
+    description: Set the native input length limit.
+    default: null
     usage: '#advanced'
-
   - name: show-word-count
     type: Boolean
     values: 'true | false'
-    description: Native length limit and counter.
+    description: Show the current character count.
     default: false
-    link: null
     usage: '#advanced'
-
+  - name: count-method
+    type: Function
+    values: '({ value: string }) => number'
+    description: Customize the displayed character count.
+    default: value.length
+    usage: '#advanced'
   - name: auto-size
     type: Object
     values: '{ minRows, maxRows }'
     description: Grow height with content within row bounds.
     default: null
-    link: null
     usage: '#advanced'
-
   - name: readonly
     type: Boolean
-    values: 'true, false'
-    description: Control editing state and trim output on change.
+    values: 'true | false'
+    description: Set the native textarea to read-only.
     default: false
-    link: null
     usage: '#advanced'
-
   - name: disabled
     type: Boolean
-    values: 'true, false'
-    description: Control editing state and trim output on change.
+    values: 'true | false'
+    description: Disable editing and interaction.
     default: false
-    link: null
     usage: '#advanced'
-
   - name: editable
     type: Boolean
-    values: 'true, false'
-    description: Control editing state and trim output on change.
+    values: 'true | false'
+    description: Allow the textarea value to be edited.
     default: true
-    link: null
     usage: '#advanced'
-
   - name: trim
     type: Boolean
-    values: 'true, false'
-    description: Control editing state and trim output on change.
+    values: 'true | false'
+    description: Trim leading and trailing whitespace when a change is committed.
     default: false
-    link: null
     usage: '#advanced'
-
+  - name: rows
+    type: Number | String
+    values: 'native row count'
+    description: Set the native textarea row count.
+    default: null
+    usage: '#advanced'
+  - name: cols
+    type: Number | String
+    values: 'native column count'
+    description: Set the native textarea column count.
+    default: null
+    usage: '#advanced'
+  - name: resize
+    type: String
+    values: 'none | both | horizontal | vertical'
+    description: Control the native resize direction.
+    default: null
+    usage: '#advanced'
+  - name: immediate
+    type: Boolean
+    values: 'true | false'
+    description: Update while typing, or commit the value on change and blur.
+    default: true
+    usage: '#advanced'
   - name: height
     type: String
     values: 'CSS height'
     description: Textarea height.
     default: null
-    link: null
     usage: '#height'
-
   - name: width
     type: String
     values: 'CSS width'
     description: Textarea width.
     default: null
-    link: null
     usage: '#width'
 EVENTS:
   - name: update:modelValue

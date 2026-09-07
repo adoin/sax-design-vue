@@ -206,7 +206,7 @@ EXPOSES:
     code: null
 ---
 
-# Scrollbar（滚动条）
+# Scrollbar 滚动条
 
 <card>
 

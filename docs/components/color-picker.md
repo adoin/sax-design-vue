@@ -37,7 +37,7 @@ EVENTS:
 description: 'Color picker.'
 ---
 
-# Color picker
+# Color Picker
 
 <card>
 

@@ -99,7 +99,7 @@ EVENTS:
 description: '支持内联、逐级弹层与横向导航的多级菜单。'
 ---
 
-# 菜单
+# Menu 菜单
 
 <card>
 

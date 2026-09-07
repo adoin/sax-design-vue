@@ -383,7 +383,7 @@ EXPOSES:
 description: '从普通、虚拟滚动或树形 Table 中选择一行数据。'
 ---
 
-# Table select 表格选择器
+# Table Select 表格选择器
 
 <card>
 

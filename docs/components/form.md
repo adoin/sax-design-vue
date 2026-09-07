@@ -369,8 +369,8 @@ Each `items` node accepts the same fields as `SFormItem` using camelCase names, 
 | `optionProps` | `Record<string, string>`                       | Option-field mapping available to custom renderers.                  |
 | `children`    | `FormItemRenderOptions[]`                      | Nested renderer nodes for composite controls.                        |
 
-Built-in renderer names match repository component names, including `SInput`, `SSelect`, `SSwitch`, `SCheckboxGroup`, `SRadioGroup`, `SDatePicker`, `STextarea`, and `SButton`.
+Built-in renderer names match the exported component names, including `SInput`, `SSelect`, `SSwitch`, `SCheckboxGroup`, `SRadioGroup`, `SDatePicker`, `STextarea`, and `SButton`.
 
-The generated tables below are separated by owner: `SForm props` only apply to the Form container, while `SFormItem props` apply to a declarative Item and to same-named `items[]` fields.
+The API tables below are separated by owner: `SForm props` only apply to the Form container, while `SFormItem props` apply to a declarative Item and to same-named `items[]` fields.
 
 </card>

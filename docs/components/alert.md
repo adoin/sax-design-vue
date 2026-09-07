@@ -479,7 +479,7 @@ This prop can bind with `v-model:hidden-content`
 
 ## Pagination
 
-There are times when we need to show a lot of content to the user but we don't want to extend the text and make the alert very large and tall
+Use pagination when an Alert contains more content than should be shown at once.
 
 <template #example>
 <alert-pagination />

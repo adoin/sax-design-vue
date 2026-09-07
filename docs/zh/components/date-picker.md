@@ -8,73 +8,73 @@ PROPS:
     default: rounded
     usage: '#外形'
   - name: color
-    type: String / Boolean
-    values: "主题色 / small | default | large / 标签文字"
-    description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
+    type: String
+    values: "主题色 | RGB | HEX | HSL"
+    description: 设置触发输入和选择面板共用的强调色。
     default: null
   - name: size
-    type: String / Boolean
-    values: "主题色 / small | default | large / 标签文字"
-    description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
+    type: String
+    values: "small | default | large"
+    description: 设置触发输入框尺寸。
     default: null
   - name: label-float
-    type: String / Boolean
-    values: "主题色 / small | default | large / 标签文字"
-    description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
-    default: null
+    type: Boolean
+    values: "true | false"
+    description: 是否让输入标签始终显示在值上方。
+    default: false
   - name: label
-    type: String / Boolean
-    values: "主题色 / small | default | large / 标签文字"
-    description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
+    type: String
+    values: "标签文字"
+    description: 设置单值选择器或范围起始输入的标签。
     default: null
   - name: start-label
-    type: String / Boolean
-    values: "主题色 / small | default | large / 标签文字"
-    description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
+    type: String
+    values: "标签文字"
+    description: 设置范围起始输入的标签。
     default: null
   - name: end-label
-    type: String / Boolean
-    values: "主题色 / small | default | large / 标签文字"
-    description: 为单值和范围日期输入同步主题色、尺寸与浮动标签。
+    type: String
+    values: "标签文字"
+    description: 设置范围结束输入的标签。
     default: null
   - name: auto-close
     type: Boolean
-    values: "true | false / 日期范围分隔符"
-    description: 控制自动关闭、清空操作、输入编辑和日期范围分隔符。
-    default: 'true'
+    values: "true | false"
+    description: 完成选择后是否自动关闭面板。
+    default: 'false'
   - name: clearable
     type: Boolean
-    values: "true | false / 日期范围分隔符"
-    description: 控制自动关闭、清空操作、输入编辑和日期范围分隔符。
+    values: "true | false"
+    description: 是否显示清空当前值的操作按钮。
     default: 'true'
   - name: editable
     type: Boolean
-    values: "true | false / 日期范围分隔符"
-    description: 控制自动关闭、清空操作、输入编辑和日期范围分隔符。
+    values: "true | false"
+    description: 是否允许在触发输入框中直接键入日期。
     default: 'true'
   - name: separator
     type: String
-    values: "true | false / 日期范围分隔符"
-    description: 控制自动关闭、清空操作、输入编辑和日期范围分隔符。
-    default: null
+    values: "分隔文字"
+    description: 设置范围值之间显示的分隔文字。
+    default: ' - '
   - name: auto-apply-now
     type: Boolean
     values: "true | false"
     description: 点击“此刻”后是否立即提交当前时间并关闭弹层；组件配置优先于 ConfigProvider。
     default: ConfigProvider 或按选择器原有行为
   - name: v-model
-    type: Date | string | number | [Date
-    values: ""
-    description: 绑定日期值
-    default: false
+    type: DatePickerValue
+    values: "Date | string | number | 范围 | 数组 | null"
+    description: 双向绑定选中的日期值。
+    default: null
     link: null
     usage: '#default'
     code: null
   - name: model-value
-    type: Date]
-    values: ""
-    description: 绑定日期值
-    default: false
+    type: DatePickerValue
+    values: "Date | string | number | 范围 | 数组 | null"
+    description: 不使用 v-model 语法时设置选中的日期值。
+    default: null
     link: null
     usage: '#default'
     code: null
@@ -181,7 +181,7 @@ PROPS:
     usage: '#default'
     code: null
   - name: default-date
-    type: Date | string | number | [DateLike
+    type: DateLike | [DateLike, DateLike]
     values: ""
     description: 未绑定值时设置面板初始日期与时间。
     default: null
@@ -189,7 +189,7 @@ PROPS:
     usage: '#date-and-time'
     code: null
   - name: default-time
-    type: DateLike]
+    type: DateLike | [DateLike, DateLike]
     values: ""
     description: 未绑定值时设置面板初始日期与时间。
     default: null
@@ -245,7 +245,7 @@ EVENTS:
     description: 清空已选值后触发。
 ---
 
-# Date picker 日期选择器
+# Date Picker 日期选择器
 
 <card>
 

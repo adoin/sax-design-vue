@@ -120,7 +120,7 @@ SLOTS:
     code: >
 ---
 
-# Popper（弹出层）
+# Popper 弹出层
 
 <card>
 

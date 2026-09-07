@@ -31,7 +31,7 @@ EVENTS:
 description: "Notice bar for persistent announcements."
 ---
 
-# Notice bar
+# Notice Bar
 
 <card><template #example><notice-bar-default /></template>
 

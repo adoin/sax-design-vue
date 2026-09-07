@@ -8,7 +8,7 @@
 
 1. **实时示例** — 与应用中相同的 API 渲染
 2. **代码标签** — 可复制的 template / script / style 片段
-3. **API 表** — 由 frontmatter 生成的属性、事件、插槽与暴露项
+3. **API 表** — 属性、事件、插槽与暴露方法
 
 </card>
 
@@ -54,7 +54,7 @@
 
 ## 在 Playground 预览
 
-集成到仓库前，打开 [Playground](/zh/guide/playground) 选择组件示例。Playground 与本站使用相同的工作区构建。
+将组件接入应用前，可打开 [Playground](/zh/guide/playground) 选择对应示例。预览使用的组件 API 与文档示例一致。
 
 </card>
 
@@ -62,6 +62,6 @@
 
 ## 设计说明
 
-视觉语言继承自 [Vuesax](https://github.com/lusaxweb/vuesax)。Sax Design Vue 在面向 Vue 3 工具链与现代文档工作流的同时，保留富有表现力的外观。
+视觉语言继承自 [Vuesax](https://github.com/lusaxweb/vuesax)。Sax Design Vue 保留富有表现力的外观，并提供适用于 Vue 3 应用的 API 与工具支持。
 
 </card>

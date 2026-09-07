@@ -35,7 +35,7 @@ EVENTS:
     description: Fire when the expanded state changes.
 ---
 
-# Text ellipsis
+# Text Ellipsis
 
 <card><template #example><text-ellipsis-default /></template>
 

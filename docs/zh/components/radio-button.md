@@ -2,7 +2,7 @@
 description: 'RadioButton 文档已合并到 Radio。'
 ---
 
-# RadioButton（单选按钮）
+# RadioButton 单选按钮
 
 <card>
 
