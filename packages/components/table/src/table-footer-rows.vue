@@ -3,8 +3,11 @@ import { computed, watch } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { tableFieldValue, tableOverflowMode } from './data-utils'
 import TableRendererOutlet from './renderer-outlet'
+import TableHierarchyGuides from './table-hierarchy-guides.vue'
+import { tableHierarchyStyle } from './table-hierarchy'
 import { useTableFooterHeights } from './composables/use-table-footer-heights'
 import type { TableMergeRegion } from './composables/table-merge-regions'
+import type { TableHierarchyState } from './table-hierarchy'
 import type { CSSProperties } from 'vue'
 import type {
   TableCellRenderer,
@@ -33,6 +36,7 @@ const props = defineProps<{
   mergeAt?: (row: number, col: number) => TableMergeRegion | undefined
   mergeOwner?: TableMergeRegion
   minimumHeight?: (row: number) => number | undefined
+  hierarchy?: TableHierarchyState
 }>()
 const emit = defineEmits<{
   cellContextMenu: [
@@ -90,6 +94,11 @@ const rendererFor = (column: TableColumn): TableFooterRenderer | undefined => {
     return (params) => String(column.footerFormatter?.(params) ?? '')
   return undefined
 }
+const isHierarchyCell = (entry: TableRenderedColumnEntry) =>
+  Boolean(props.hierarchy && (entry.ariaIndex ?? entry.index) === 0)
+const hierarchyCellStyle = computed(() =>
+  props.hierarchy ? tableHierarchyStyle(props.hierarchy) : undefined,
+)
 watch(
   () => [props.data, props.rowKey, props.overflow, props.renderers],
   measure,
@@ -147,6 +156,7 @@ defineExpose({ measure })
           v-else
           :class="[
             ns.e('footer-cell'),
+            ns.is('hierarchy-cell', isHierarchyCell(entry)),
             entry.column.className,
             ns.is('fixed-column', Boolean(entry.fixed)),
             ns.is('fixed-left', entry.fixed === 'left'),
@@ -160,6 +170,7 @@ defineExpose({ measure })
               textAlign:
                 entry.column.footerAlign ?? entry.column.align ?? 'left',
             },
+            isHierarchyCell(entry) ? hierarchyCellStyle : undefined,
           ]"
           role="cell"
           :aria-colindex="(entry.ariaIndex ?? entry.index) + 1"
@@ -171,6 +182,10 @@ defineExpose({ measure })
           @contextmenu="emit('cellContextMenu', entry.params, $event)"
           @keydown="emit('cellContextMenu', entry.params, $event)"
         >
+          <TableHierarchyGuides
+            v-if="isHierarchyCell(entry) && hierarchy"
+            :state="hierarchy"
+          />
           <span
             :class="[
               ns.e('cell-content'),

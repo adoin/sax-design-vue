@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h, shallowRef } from 'vue'
+import { h, ref, shallowRef } from 'vue'
 import type {
   TableColumn,
   TableRenderer,
@@ -17,6 +17,8 @@ interface FileRow {
 }
 
 const expandedKeys = shallowRef(['src'])
+const lazyLoading = ref(false)
+const lazyLoaded = ref(false)
 const columns: TableColumn<FileRow>[] = [
   { field: 'name', title: '名称', minWidth: 220, treeNode: true },
   { field: 'kind', title: '类型', width: 150, renderer: 'kind' },
@@ -39,12 +41,20 @@ const rows: FileRow[] = [
 const treeConfig: TableTreeConfig<FileRow> = {
   children: 'children',
   hasChildren: 'hasChildren',
+  line: true,
   async load({ row }) {
     if (row.id !== 'components') return []
-    return [
-      { id: 'table', name: 'table.vue', kind: 'Vue 组件', size: '12 KB' },
-      { id: 'form', name: 'form.vue', kind: 'Vue 组件', size: '9 KB' },
-    ]
+    lazyLoading.value = true
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 800))
+      lazyLoaded.value = true
+      return [
+        { id: 'table', name: 'table.vue', kind: 'Vue 组件', size: '12 KB' },
+        { id: 'form', name: 'form.vue', kind: 'Vue 组件', size: '9 KB' },
+      ]
+    } finally {
+      lazyLoading.value = false
+    }
   },
 }
 
@@ -68,6 +78,15 @@ const renderers: Record<string, TableRenderer<FileRow>> = {
       <div class="tree-name">
         <strong>{{ value }}</strong>
         <small>{{ row.kind }}</small>
+        <s-tag v-if="row.id === 'components'" size="small">
+          {{
+            lazyLoading
+              ? '正在异步加载'
+              : lazyLoaded
+                ? '已懒加载'
+                : '展开后加载'
+          }}
+        </s-tag>
       </div>
     </template>
   </s-table>
@@ -81,6 +100,10 @@ const renderers: Record<string, TableRenderer<FileRow>> = {
 
 .tree-name small {
   color: hsl(var(--sax-text-color-secondary));
+}
+
+.tree-name .s-tag {
+  width: fit-content;
 }
 
 .kind-pill {

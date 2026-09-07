@@ -7,7 +7,13 @@ import type { TableGroupDisplayItem } from './composables/table-group-layout'
 import type { TableRowDetailState } from './composables/use-table-details'
 
 export type TableBodyItem =
-  | { kind: 'data'; flatRow: TableFlatRow; index: number; renderIndex: number }
+  | {
+      kind: 'data'
+      flatRow: TableFlatRow
+      index: number
+      renderIndex: number
+      hierarchy?: TableGroupDisplayItem['hierarchy']
+    }
   | (Exclude<TableGroupDisplayItem, { kind: 'data' }> & { renderIndex: number })
 
 interface Options {
@@ -50,6 +56,7 @@ export function createTableBodyBlock(options: Options) {
         h(options.row, {
           flatRow: item.flatRow,
           displayIndex: item.index,
+          ...(item.hierarchy ? { hierarchy: item.hierarchy } : {}),
           detail,
           renderSlots: slots,
         }),

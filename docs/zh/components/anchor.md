@@ -2,62 +2,62 @@
 PROPS:
   - name: model-value
     type: String
-    values: "href"
+    values: 'href'
     description: 当前激活锚点 href。
     default: "''"
   - name: v-model
     type: String
-    values: "href"
+    values: 'href'
     description: 当前激活锚点 href。
     default: "''"
   - name: items
     type: Array
-    values: "{ href, title, disabled?, children? }[]"
-    description: 锚点导航项；垂直模式可通过 children 配置一层分级链接。
+    values: '{ href, title, disabled?, collapsible?, defaultCollapsed?, children? }[]'
+    description: 递归锚点配置；children 可继续嵌套，collapsible 控制该项是否允许收起子级。
     default: '[]'
   - name: offset
     type: Number
-    values: "pixels"
+    values: 'pixels'
     description: 分别控制激活判定偏移、点击滚动偏移和判定容差。
     default: '88'
   - name: target-offset
     type: Number
-    values: "pixels"
+    values: 'pixels'
     description: 分别控制激活判定偏移、点击滚动偏移和判定容差。
     default: 'offset'
   - name: bounds
     type: Number
-    values: "pixels"
+    values: 'pixels'
     description: 分别控制激活判定偏移、点击滚动偏移和判定容差。
     default: '5'
   - name: affix
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 让锚点导航吸附在视口中。
     default: false
   - name: get-container
     type: Function
-    values: "() => HTMLElement | Window"
+    values: '() => HTMLElement | Window'
     description: 返回滚动容器；默认监听页面 window。
     default: window
   - name: get-current-anchor
     type: Function
-    values: "(activeHref) => href"
+    values: '(activeHref) => href'
     description: 自定义高亮的 href。
     default: undefined
   - name: replace
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 使用替换而非追加方式更新浏览器历史 hash。
     default: false
   - name: direction
     type: String
-    values: "vertical / horizontal"
+    values: 'vertical / horizontal'
     description: 锚点布局方向；分级链接仅在垂直模式展示。
     default: vertical
   - name: scroll-behavior
     type: String
-    values: "auto / smooth"
+    values: 'auto / smooth'
     description: 选择锚点后的滚动行为。
     default: smooth
 EVENTS:
@@ -65,6 +65,8 @@ EVENTS:
     description: 激活锚点变化时触发。
   - name: click
     description: 选择锚点项时触发。
+  - name: collapse-change
+    description: 可折叠锚点项展开或收起时触发，参数为当前项与收起状态。
 description: '用于在当前页面的关联内容区块之间快速导航。'
 ---
 
@@ -108,7 +110,7 @@ description: '用于在当前页面的关联内容区块之间快速导航。'
 
 <h2 id="anchor-hierarchy">分级锚点</h2>
 
-通过 `children` 组织关联链接。父级仍是正常的跳转目标；子级用于指向更具体的内容区块。
+通过 `children` 递归组织任意层级。父级仍是正常的跳转目标；设置 `collapsible: true` 后可单独收起其子级，`defaultCollapsed` 控制初始状态。当前锚点位于已收起分支时，组件会展开祖先以保持定位可见。
 
 <template #example>
 
@@ -124,13 +126,13 @@ description: '用于在当前页面的关联内容区块之间快速导航。'
 
 <template #script>
 
-@[code{7-19}](../../.vuepress/components/anchor/hierarchy.vue)
+@[code{7-38}](../../.vuepress/components/anchor/hierarchy.vue)
 
 </template>
 
 <template #style>
 
-@[code{21-26}](../../.vuepress/components/anchor/hierarchy.vue)
+@[code{40-45}](../../.vuepress/components/anchor/hierarchy.vue)
 
 </template>
 

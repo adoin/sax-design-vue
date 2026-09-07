@@ -244,12 +244,45 @@ describe('Table data mode', () => {
     })
 
     expect(wrapper.findAll('.s-table__data-row')).toHaveLength(2)
+    expect(wrapper.find('.s-table__hierarchy-guides').exists()).toBe(false)
     await wrapper.find('.s-table__tree-toggle').trigger('click')
     await nextTick()
 
     expect(wrapper.findAll('.s-table__data-row')).toHaveLength(3)
     expect(wrapper.emitted('update:expandedKeys')?.[0]).toEqual([['root']])
     expect(wrapper.emitted('treeExpand')?.[0]?.[1]).toBe(true)
+  })
+
+  it('draws continuous tree hierarchy guides only when configured', () => {
+    const wrapper = mount(Table, {
+      props: {
+        columns,
+        data: [
+          {
+            id: 'root',
+            name: 'Root',
+            description: 'Parent',
+            children: [
+              { id: 'first', name: 'First', description: 'Child' },
+              { id: 'last', name: 'Last', description: 'Child' },
+            ],
+          },
+        ],
+        treeConfig: {
+          children: 'children',
+          defaultExpandedKeys: ['root'],
+          line: true,
+        },
+      },
+    })
+
+    const rows = wrapper.findAll('.s-table__data-row')
+    expect(rows).toHaveLength(3)
+    expect(rows[0].findAll('.s-table__hierarchy-guide')).toHaveLength(1)
+    expect(rows[1].findAll('.s-table__hierarchy-guide')).toHaveLength(1)
+    expect(
+      rows[2].find('.s-table__hierarchy-guide.is-to-middle').exists(),
+    ).toBe(true)
   })
 
   it('loads lazy children before expanding a row', async () => {

@@ -6,6 +6,8 @@ export interface AnchorItem {
   href: string
   title: string
   disabled?: boolean
+  collapsible?: boolean
+  defaultCollapsed?: boolean
   children?: AnchorItem[]
 }
 
@@ -41,6 +43,8 @@ export const anchorEmits = {
   'update:modelValue': (value: string) => typeof value === 'string',
   change: (value: string) => typeof value === 'string',
   click: (item: AnchorItem) => typeof item.href === 'string',
+  collapseChange: (item: AnchorItem, collapsed: boolean) =>
+    typeof item.href === 'string' && typeof collapsed === 'boolean',
 }
 
 export type AnchorProps = ExtractPropTypes<typeof anchorProps>

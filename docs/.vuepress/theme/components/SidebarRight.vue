@@ -61,20 +61,11 @@ const headerTitle = (header: MarkdownItHeader) => {
     : title
 }
 
-const flattenChildren = (headers: MarkdownItHeader[]): MarkdownItHeader[] =>
-  headers.flatMap((header) => [
-    header,
-    ...flattenChildren(header.children || []),
-  ])
-
 const toAnchorItem = (header: MarkdownItHeader): AnchorItem => ({
   href: headerHref(header),
   title: headerTitle(header),
   children: header.children?.length
-    ? flattenChildren(header.children).map((child) => ({
-        href: headerHref(child),
-        title: headerTitle(child),
-      }))
+    ? header.children.map(toAnchorItem)
     : undefined,
 })
 
@@ -101,8 +92,11 @@ const collectPageHeadings = () => {
     }
 
     const parent = items.at(-1)
-    if (parent) parent.children = [...(parent.children || []), item]
-    else items.push(item)
+    if (parent) {
+      parent.children = [...(parent.children || []), item]
+      parent.collapsible = true
+      parent.defaultCollapsed = true
+    } else items.push(item)
   })
 
   domPageItems.value = items
@@ -144,11 +138,15 @@ const anchorItems = computed<AnchorItem[]>(() => {
     (header) => header.level === 2 && header.slug !== 'api',
   )
   const exampleItems = exampleHeaders.length
-    ? exampleHeaders.map((header) => ({
-        href: headerHref(header),
-        title: headerTitle(header),
-      }))
-    : domPageItems.value.map(({ href, title }) => ({ href, title }))
+    ? exampleHeaders.map((header) => {
+        const item = toAnchorItem(header)
+        return {
+          ...item,
+          collapsible: Boolean(item.children?.length),
+          defaultCollapsed: Boolean(item.children?.length),
+        }
+      })
+    : domPageItems.value
   const apiChildren = apiTableKeys
     .filter((key) => {
       const rows = pageFrontmatter.value[key]
@@ -164,6 +162,7 @@ const anchorItems = computed<AnchorItem[]>(() => {
   groups.push({
     href: '#examples',
     title: t.value.outline.examples,
+    collapsible: true,
     children: exampleItems.length ? exampleItems : undefined,
   })
 
@@ -171,6 +170,8 @@ const anchorItems = computed<AnchorItem[]>(() => {
     groups.push({
       href: '#api',
       title: 'API',
+      collapsible: true,
+      defaultCollapsed: true,
       children: apiChildren,
     })
   }
@@ -198,13 +199,8 @@ onBeforeUnmount(() => {
 .page .sidebar .docs-outline {
   width: 196px;
 
-  > .s-anchor__group > .s-anchor__item {
+  > .s-anchor__group > .s-anchor__row > .s-anchor__item {
     font-weight: 650;
-  }
-
-  .s-anchor__children {
-    margin-top: 2px;
-    margin-bottom: 7px;
   }
 }
 

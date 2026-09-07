@@ -118,6 +118,8 @@ export default {
     },
     anchor: {
       navigation: '锚点导航',
+      expand: '展开锚点分组',
+      collapse: '收起锚点分组',
     },
     breadcrumb: {
       label: '面包屑导航',

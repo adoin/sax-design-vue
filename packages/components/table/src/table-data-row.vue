@@ -61,6 +61,7 @@
         "
         :class="[
           ns.e('data-cell'),
+          ns.is('hierarchy-cell', isHierarchyCell(entry)),
           ns.is('active-cell', keyboard?.isActive(flatRow.key, entry.index)),
           ns.is(
             'range-cell',
@@ -84,7 +85,11 @@
             editing?.isEditing(editContext(entry.column, entry.index)),
           ),
         ]"
-        :style="[entry.style, { textAlign: entry.column.align ?? 'left' }]"
+        :style="[
+          entry.style,
+          { textAlign: entry.column.align ?? 'left' },
+          isHierarchyCell(entry) ? hierarchyCellStyle : undefined,
+        ]"
         role="cell"
         :aria-description="
           cellRange?.contains(displayIndex, entry.ariaIndex ?? entry.index)
@@ -129,6 +134,10 @@
           )
         "
       >
+        <TableHierarchyGuides
+          v-if="isHierarchyCell(entry) && hierarchy"
+          :state="hierarchy"
+        />
         <div :class="ns.e('cell-main')">
           <button
             v-if="drag && entry.column.dragSort"
@@ -146,7 +155,7 @@
             <SIcon name="cb:draggable" />
           </button>
           <span
-            v-if="entry.column.treeNode"
+            v-if="entry.column.treeNode && hierarchy?.target !== 'tree'"
             :class="ns.e('tree-leading')"
             :style="{ width: `${flatRow.depth * indent}px` }"
             aria-hidden="true"
@@ -281,6 +290,8 @@ import { SRadio } from '@vuesax-alpha/components/radio'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { tableFieldValue, tableOverflowMode } from './data-utils'
 import TableCellEditor from './table-cell-editor.vue'
+import TableHierarchyGuides from './table-hierarchy-guides.vue'
+import { tableHierarchyStyle } from './table-hierarchy'
 import { tableValidationId } from './validation-utils'
 import type { TableValidation } from './composables/use-table-validation'
 import type { TableEditing } from './composables/use-table-edit'
@@ -289,6 +300,7 @@ import type { TableKeyboard } from './composables/use-table-keyboard'
 import type { TableCellRangeState } from './composables/use-table-cell-range'
 import type { TableMergeRegion } from './composables/table-merge-regions'
 import type { TableEditContext, TableEditRenderer } from './table-edit'
+import type { TableHierarchyState } from './table-hierarchy'
 import type { TableRowDetailState } from './composables/use-table-details'
 import type {
   TableCellRenderParams,
@@ -327,6 +339,7 @@ const props = defineProps<{
   minimumHeight?: number
   validation?: TableValidation
   editRenderer?: (column: TableColumn) => TableEditRenderer | undefined
+  hierarchy?: TableHierarchyState
 }>()
 const validationId = (field: string, columnIndex: number) =>
   tableValidationId(props.selectionName, props.flatRow.key, field, columnIndex)
@@ -343,6 +356,16 @@ const ns = useNamespace('table')
 const { t } = useLocale()
 const overflowMode = (column: TableColumn) =>
   tableOverflowMode(column.showOverflow ?? props.overflow)
+
+const isHierarchyCell = (entry: TableRenderedEntry) => {
+  if (!props.hierarchy || entry.kind !== 'column') return false
+  return props.hierarchy.target === 'tree'
+    ? Boolean(entry.column.treeNode)
+    : (entry.ariaIndex ?? entry.index) === 0
+}
+const hierarchyCellStyle = computed(() =>
+  props.hierarchy ? tableHierarchyStyle(props.hierarchy) : undefined,
+)
 
 const resolvedRowClass = computed(() =>
   typeof props.rowClass === 'function'

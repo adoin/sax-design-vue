@@ -235,6 +235,8 @@ export interface TableFlatRow<Row extends TableRow = TableRow> {
   hasChildren: boolean
   expanded: boolean
   loading: boolean
+  ancestorHasNext?: readonly boolean[]
+  isLastChild?: boolean
 }
 
 export interface TableDetailParams<Row extends TableRow = TableRow> {
@@ -399,6 +401,7 @@ export interface TableTreeLoadParams<Row extends TableRow = TableRow> {
 export interface TableTreeConfig<Row extends TableRow = TableRow> {
   children?: string
   indent?: number
+  line?: boolean
   expandAll?: boolean
   defaultExpandedKeys?: TableRowKey[]
   expandOnClickRow?: boolean

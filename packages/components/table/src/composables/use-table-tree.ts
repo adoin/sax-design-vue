@@ -94,14 +94,20 @@ export function useTableTree<Row extends TableRow>(
       matches.set(row, match)
       return match
     }
-    const walk = (rows: Row[], depth: number, parentKey?: TableRowKey) => {
+    const walk = (
+      rows: Row[],
+      depth: number,
+      parentKey?: TableRowKey,
+      ancestorHasNext: readonly boolean[] = [],
+    ) => {
       const ordered = options.sortRows?.value?.(rows) ?? rows
-      ordered.forEach((row) => {
-        if (!matchesBranch(row)) return
+      const visible = ordered.filter(matchesBranch)
+      visible.forEach((row, siblingIndex) => {
         const index = sourceIndex++
         const key = getRowKey(row, index)
         const children = getChildren(row, key)
         const hasChildren = children.length > 0 || hasLazyChildren(row)
+        const hasNextSibling = siblingIndex < visible.length - 1
         const expanded =
           internalExpandedKeys.value.has(key) ||
           Boolean(filter && children.some(matchesBranch))
@@ -114,9 +120,11 @@ export function useTableTree<Row extends TableRow>(
           hasChildren,
           expanded,
           loading: loadingKeys.has(key),
+          ancestorHasNext,
+          isLastChild: !hasNextSibling,
         })
         if (hasChildren && expanded && children.length)
-          walk(children, depth + 1, key)
+          walk(children, depth + 1, key, [...ancestorHasNext, hasNextSibling])
       })
     }
     walk(options.data.value, 0)

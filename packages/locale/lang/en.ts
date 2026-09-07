@@ -131,6 +131,8 @@ export default {
     },
     anchor: {
       navigation: 'Anchor navigation',
+      expand: 'Expand anchor group',
+      collapse: 'Collapse anchor group',
     },
     breadcrumb: {
       label: 'breadcrumb',

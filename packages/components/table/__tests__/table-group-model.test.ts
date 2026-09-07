@@ -6,7 +6,6 @@ import {
 } from '../src/composables/table-group-model'
 import { createTableGroupLayout } from '../src/composables/table-group-layout'
 import type { TableFlatRow, TableRow } from '../src/table'
-import type { TableGroupDisplayItem } from '../src/composables/table-group-layout'
 import type { TableGroupNode, TableRemoteGroup } from '../src/table-group'
 
 const flat = (row: TableRow, index: number, depth = 0): TableFlatRow => ({
@@ -213,13 +212,13 @@ describe('Table remote group ranges', () => {
     const layout = createTableGroupLayout(groups, 10, () => true, {
       rowOffset: 100,
     })
-    expect(layout.itemAt(0)).toEqual({
+    expect(layout.itemAt(0)).toMatchObject({
       kind: 'data',
       rowIndex: 100,
       dataIndex: 0,
     })
     expect(layout.itemAt(5)?.kind).toBe('group')
-    expect(layout.itemAt(6)).toEqual({
+    expect(layout.itemAt(6)).toMatchObject({
       kind: 'data',
       rowIndex: 105,
       dataIndex: 5,
@@ -323,7 +322,7 @@ describe('Table group display layout', () => {
     expect(layout.dataCount).toBe(1)
     expect(layout.count).toBe(6)
     expect(layout.itemAt(0)?.kind).toBe('group')
-    expect(layout.itemAt(3)).toEqual({
+    expect(layout.itemAt(3)).toMatchObject({
       kind: 'data',
       rowIndex: 3,
       dataIndex: 0,
@@ -359,7 +358,14 @@ describe('Table group display layout', () => {
       const open = (group: TableGroupNode) =>
         Boolean(mask & (1 << keys.indexOf(group.key)))
       for (const subtotal of [false, true]) {
-        const expected: TableGroupDisplayItem[] = []
+        const expected: Array<
+          | { kind: 'data'; rowIndex: number; dataIndex: number }
+          | {
+              kind: 'group' | 'subtotal'
+              group: TableGroupNode
+              expanded: boolean
+            }
+        > = []
         let dataIndex = 0
         const walk = (
           nodes: readonly TableGroupNode[],
@@ -395,7 +401,7 @@ describe('Table group display layout', () => {
         const layout = createTableGroupLayout(groups, 4, open, { subtotal })
         expect(layout.count).toBe(expected.length)
         expected.forEach((item, index) => {
-          expect(layout.itemAt(index)).toEqual(item)
+          expect(layout.itemAt(index)).toMatchObject(item)
           if (item.kind === 'data') {
             expect(layout.renderIndexAt(item.dataIndex)).toBe(index)
             expect(layout.rowIndexAt(item.dataIndex)).toBe(item.rowIndex)

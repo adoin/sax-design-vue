@@ -1,4 +1,5 @@
 import type { TableGroupNode } from '../table-group'
+import type { TableHierarchyState } from '../table-hierarchy'
 
 interface DataSegment {
   kind: 'data'
@@ -6,6 +7,8 @@ interface DataSegment {
   end: number
   rowStart: number
   dataStart: number
+  hierarchy?: Omit<TableHierarchyState, 'isLastChild'>
+  continuesAfter: boolean
 }
 interface GroupSegment {
   kind: 'group' | 'subtotal'
@@ -13,12 +16,23 @@ interface GroupSegment {
   end: number
   group: TableGroupNode
   expanded: boolean
+  hierarchy: TableHierarchyState
 }
 type Segment = DataSegment | GroupSegment
 
 export type TableGroupDisplayItem =
-  | { kind: 'data'; rowIndex: number; dataIndex: number }
-  | { kind: 'group' | 'subtotal'; group: TableGroupNode; expanded: boolean }
+  | {
+      kind: 'data'
+      rowIndex: number
+      dataIndex: number
+      hierarchy?: TableHierarchyState
+    }
+  | {
+      kind: 'group' | 'subtotal'
+      group: TableGroupNode
+      expanded: boolean
+      hierarchy: TableHierarchyState
+    }
 
 const findSegment = <T>(
   items: readonly T[],
@@ -55,7 +69,12 @@ export function createTableGroupLayout(
   const data: DataSegment[] = []
   let count = 0
   let dataCount = 0
-  const appendData = (start: number, end: number) => {
+  const appendData = (
+    start: number,
+    end: number,
+    ancestorHasNext: readonly boolean[],
+    continuesAfter: boolean,
+  ) => {
     if (end <= start) return
     const length = end - start
     const segment: DataSegment = {
@@ -64,6 +83,17 @@ export function createTableGroupLayout(
       end: count + length,
       rowStart: start,
       dataStart: dataCount,
+      hierarchy: ancestorHasNext.length
+        ? {
+            depth: ancestorHasNext.length,
+            ancestorHasNext,
+            continues: false,
+            indent: 28,
+            origin: 30,
+            target: 'first',
+          }
+        : undefined,
+      continuesAfter,
     }
     segments.push(segment)
     data.push(segment)
@@ -74,30 +104,66 @@ export function createTableGroupLayout(
     group: TableGroupNode,
     kind: GroupSegment['kind'],
     open: boolean,
+    hierarchy: TableHierarchyState,
   ) => {
-    segments.push({ kind, start: count, end: count + 1, group, expanded: open })
+    segments.push({
+      kind,
+      start: count,
+      end: count + 1,
+      group,
+      expanded: open,
+      hierarchy,
+    })
     count++
   }
   const walk = (
     nodes: readonly TableGroupNode[],
     start: number,
     end: number,
+    ancestorHasNext: readonly boolean[] = [],
+    continuesAfter = false,
   ) => {
     let cursor = start
-    for (const group of nodes) {
+    nodes.forEach((group, groupIndex) => {
       const stop = group.rowStart + group.rowCount
       if (group.rowStart < cursor || stop > end)
         throw new RangeError('Groups must have ordered, non-overlapping ranges')
-      appendData(cursor, group.rowStart)
+      appendData(cursor, group.rowStart, ancestorHasNext, true)
+      const hasNextSibling =
+        groupIndex < nodes.length - 1 || stop < end || continuesAfter
       const open = expanded(group)
-      appendGroup(group, 'group', open)
+      appendGroup(group, 'group', open, {
+        depth: ancestorHasNext.length,
+        ancestorHasNext,
+        isLastChild: !hasNextSibling,
+        continues: open && (group.rowCount > 0 || Boolean(options.subtotal)),
+        indent: 28,
+        origin: 30,
+        target: 'first',
+      })
       if (open) {
-        walk(group.children, group.rowStart, stop)
-        if (options.subtotal) appendGroup(group, 'subtotal', true)
+        const childAncestors = [...ancestorHasNext, hasNextSibling]
+        walk(
+          group.children,
+          group.rowStart,
+          stop,
+          childAncestors,
+          Boolean(options.subtotal),
+        )
+        if (options.subtotal)
+          appendGroup(group, 'subtotal', true, {
+            depth: childAncestors.length,
+            ancestorHasNext: childAncestors,
+            isLastChild: true,
+            continues: false,
+            indent: 28,
+            origin: 30,
+            target: 'first',
+          })
       }
       cursor = stop
-    }
-    appendData(cursor, end)
+    })
+    appendData(cursor, end, ancestorHasNext, continuesAfter)
   }
   walk(groups, rowOffset, rowOffset + rowCount)
   if (!Number.isSafeInteger(count))
@@ -124,11 +190,19 @@ export function createTableGroupLayout(
             kind: 'data',
             rowIndex: segment.rowStart + index - segment.start,
             dataIndex: segment.dataStart + index - segment.start,
+            hierarchy: segment.hierarchy
+              ? {
+                  ...segment.hierarchy,
+                  isLastChild:
+                    index === segment.end - 1 && !segment.continuesAfter,
+                }
+              : undefined,
           }
         : {
             kind: segment.kind,
             group: segment.group,
             expanded: segment.expanded,
+            hierarchy: segment.hierarchy,
           }
     },
     /** Visible data index -> source/group-ordered data index. */

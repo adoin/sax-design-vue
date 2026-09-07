@@ -180,7 +180,7 @@ PROPS:
     usage: '#grid-式配置'
   - name: tree-config
     type: TableTreeConfig
-    description: 开启层级行、受控展开和子节点懒加载。
+    description: 开启层级行、受控展开和子节点懒加载；line 控制是否显示父子连接线。
     default: null
     usage: '#树形表格与懒加载'
   - name: virtual-config
@@ -1491,25 +1491,25 @@ EXPOSES:
 
 ### 树形表格与懒加载
 
-树形数据直接由 `s-table` 处理。在一个配置列上设置 `treeNode`，再通过 `tree-config` 提供子节点或懒加载函数。
+树形数据直接由 `s-table` 处理。在一个配置列上设置 `treeNode`，再通过 `tree-config` 提供子节点或懒加载函数；设置 `line: true` 显示随展开状态连续绘制的父子连接线。本例展开 `components` 时会延迟 800ms 返回子节点，让加载状态和异步插入过程可直接观察。
 
 <template #example><table-zh-tree /></template>
 
 <template #template>
 
-@[code{58-74}](../../.vuepress/components/table-zh/tree.vue)
+@[code{68-93}](../../.vuepress/components/table-zh/tree.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-56}](../../.vuepress/components/table-zh/tree.vue)
+@[code{1-66}](../../.vuepress/components/table-zh/tree.vue)
 
 </template>
 
 <template #style>
 
-@[code{76-95}](../../.vuepress/components/table-zh/tree.vue)
+@[code{95-118}](../../.vuepress/components/table-zh/tree.vue)
 
 </template>
 

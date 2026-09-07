@@ -913,6 +913,7 @@ const bodyItemAt = (index: number): TableBodyItem => {
       : flatRows.value[item.dataIndex],
     index: item.dataIndex,
     renderIndex: index,
+    hierarchy: item.hierarchy,
   }
 }
 const virtualItemAt = (index: number) =>
@@ -2289,6 +2290,18 @@ const TableBodyRow = createTableBodyRow({
     rowOffset: detailRowOffset(index),
     sequenceOffset: pagination.remote.value ? pagination.offset.value : 0,
     indent: treeIndent.value,
+    hierarchy:
+      !groups.enabled.value && props.treeConfig?.line
+        ? {
+            depth: flatRow.depth,
+            ancestorHasNext: flatRow.ancestorHasNext ?? [],
+            isLastChild: flatRow.isLastChild ?? true,
+            continues: flatRow.hasChildren && flatRow.expanded,
+            indent: treeIndent.value,
+            origin: 27,
+            target: 'tree' as const,
+          }
+        : undefined,
     selected: isRowSelected(flatRow.key),
     selectionDisabled:
       props.loading || !isSelectable(flatRow.row, flatRow.index),
@@ -2343,6 +2356,7 @@ const TableBodyBlock = createTableBodyBlock({
   group: (item) => ({
     kind: item.kind === 'subtotal' ? 'subtotal' : 'group',
     group: item.kind === 'data' ? undefined : item.group,
+    hierarchy: item.kind === 'data' ? undefined : item.hierarchy,
     expanded: item.kind === 'data' ? undefined : item.expanded,
     disabled: props.loading,
     columnCount: resolvedColumnCount.value,

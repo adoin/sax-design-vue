@@ -180,7 +180,7 @@ PROPS:
     usage: '#grid-style-configuration'
   - name: tree-config
     type: TableTreeConfig
-    description: Enables hierarchical rows, controlled expansion and lazy child loading.
+    description: Enables hierarchical rows, controlled expansion and lazy child loading; line controls parent-child guides.
     default: null
     usage: '#tree-table-and-lazy-loading'
   - name: virtual-config
@@ -1491,25 +1491,25 @@ Tree sorting reorders siblings without detaching children. Filtering retains mat
 
 ### Tree table and lazy loading
 
-Tree data remains part of `s-table`. Mark one configured column with `treeNode`, then provide children or a lazy loader through `tree-config`.
+Tree data remains part of `s-table`. Mark one configured column with `treeNode`, then provide children or a lazy loader through `tree-config`. Set `line: true` to show continuous parent-child guides that follow expansion state. Expanding `components` in this example waits 800ms before returning its children so the loading state and asynchronous insertion remain visible.
 
 <template #example><table-tree /></template>
 
 <template #template>
 
-@[code{1-17}](../.vuepress/components/table/tree.vue)
+@[code{1-26}](../.vuepress/components/table/tree.vue)
 
 </template>
 
 <template #script>
 
-@[code{19-80}](../.vuepress/components/table/tree.vue)
+@[code{28-99}](../.vuepress/components/table/tree.vue)
 
 </template>
 
 <template #style>
 
-@[code{82-101}](../.vuepress/components/table/tree.vue)
+@[code{101-124}](../.vuepress/components/table/tree.vue)
 
 </template>
 

@@ -3,6 +3,8 @@ import { computed } from 'vue'
 import { SButton } from '@vuesax-alpha/components/button'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import TableFooterRows from './table-footer-rows.vue'
+import TableHierarchyGuides from './table-hierarchy-guides.vue'
+import { tableHierarchyStyle } from './table-hierarchy'
 import type { CSSProperties } from 'vue'
 import type {
   TableCellRenderer,
@@ -12,6 +14,7 @@ import type {
   TableRenderer,
 } from './table'
 import type { TableGroupNode } from './table-group'
+import type { TableHierarchyState } from './table-hierarchy'
 
 const props = defineProps<{
   kind: 'group' | 'subtotal' | 'summary'
@@ -26,6 +29,7 @@ const props = defineProps<{
   fixedStyle: (entry: TableRenderedColumnEntry) => CSSProperties
   renderers: Record<string, TableRenderer | TableCellRenderer>
   retainHeights: boolean
+  hierarchy?: TableHierarchyState
 }>()
 const emit = defineEmits<{ toggle: [key: string, expanded: boolean] }>()
 defineSlots<{
@@ -41,10 +45,9 @@ const ns = useNamespace('table')
 const { t } = useLocale()
 const data = computed(() => [{ ...(props.group?.aggregates ?? props.summary) }])
 const groupDepth = computed(() => props.group?.depth ?? 0)
-const groupDepthStyle = computed<CSSProperties>(() => ({
-  '--s-table-group-indent': `${groupDepth.value * 28}px`,
-  '--s-table-group-guide-offset': `${Math.max(groupDepth.value - 1, 0) * 28 + 30}px`,
-  '--s-table-group-subtotal-indent': `${Math.min(groupDepth.value * 18, 54)}px`,
+const groupCellStyle = computed<CSSProperties>(() => ({
+  ...(props.hierarchy ? tableHierarchyStyle(props.hierarchy) : {}),
+  paddingInlineStart: `${12 + groupDepth.value * (props.hierarchy?.indent ?? 28)}px`,
 }))
 </script>
 
@@ -57,16 +60,17 @@ const groupDepthStyle = computed<CSSProperties>(() => ({
     :aria-rowindex="rowIndex"
     :data-group-key="group.key"
     :data-group-depth="group.depth"
-    :style="groupDepthStyle"
   >
     <div
-      :class="ns.e('group-cell')"
+      :class="[ns.e('group-cell'), ns.is('hierarchy-cell', Boolean(hierarchy))]"
       role="cell"
       :aria-colspan="columnCount"
-      :style="{
-        width: viewportWidth ? `${viewportWidth}px` : '100%',
-      }"
+      :style="[
+        { width: viewportWidth ? `${viewportWidth}px` : '100%' },
+        groupCellStyle,
+      ]"
     >
+      <TableHierarchyGuides v-if="hierarchy" :state="hierarchy" />
       <SButton
         :class="ns.e('group-toggle')"
         flat
@@ -90,7 +94,7 @@ const groupDepthStyle = computed<CSSProperties>(() => ({
     :class="ns.e(kind === 'subtotal' ? 'group-subtotal' : 'group-summary')"
     :data-group-key="group?.key"
     :data-group-depth="group?.depth"
-    :style="groupDepthStyle"
+    :hierarchy="hierarchy"
     :data="data"
     :entries="entries"
     :row-offset="rowIndex"

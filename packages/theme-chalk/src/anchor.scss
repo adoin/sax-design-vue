@@ -20,14 +20,36 @@
 }
 
 .s-anchor__group {
+  position: relative;
   width: 100%;
+}
+
+.s-anchor__group.is-nested::before {
+  position: absolute;
+  inset-block: -2px;
+  inset-inline-start: var(--s-anchor-guide-offset);
+  width: 2px;
+  border-radius: var(--sax-radius-pill);
+  background: getColor(primary, 0.12);
+  content: '';
+}
+
+.s-anchor__row {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 2px;
 }
 
 .s-anchor__item {
   position: relative;
   display: block;
   width: 100%;
-  padding: 8px 10px 8px 15px;
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  padding-inline-start: calc(15px + var(--s-anchor-depth-indent));
   border: 0;
   border-radius: var(--sax-radius-sm);
   background: transparent;
@@ -63,23 +85,50 @@
     }
   }
 
+  &.is-active-path:not(.is-active) {
+    color: getColor(primary, 0.76);
+    font-weight: 600;
+  }
+
   &.is-disabled {
     cursor: not-allowed;
     opacity: 0.5;
   }
 }
 
-.s-anchor__children {
-  margin: 2px 0 4px 10px;
-  padding: 2px 0 2px 10px;
-  border-left: 0;
-  border-radius: var(--sax-radius-sm);
-  box-shadow: inset 8px 0 12px -12px getColor(primary, 0.32);
+.s-anchor__group.is-nested .s-anchor__item {
+  padding-block: 6px;
+  font-size: 12px;
 }
 
-.s-anchor__item--child {
-  padding: 6px 8px 6px 12px;
-  font-size: 12px;
+.s-anchor__collapse {
+  display: inline-grid;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--sax-radius-sm);
+  background: transparent;
+  color: getColor(text, secondary);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: getColor(primary, 0.08);
+    color: getColor(primary);
+    outline: none;
+    box-shadow: 0 0 0 2px getColor(primary, 0.14);
+  }
+
+  .s-icon {
+    transition: transform 160ms ease;
+  }
+
+  &.is-collapsed .s-icon {
+    transform: rotate(-90deg);
+  }
 }
 
 .s-anchor--horizontal {
@@ -89,9 +138,6 @@
 
   .s-anchor__group {
     width: auto;
-  }
-  .s-anchor__children {
-    display: none;
   }
   .s-anchor__item {
     width: auto;
@@ -105,5 +151,14 @@
     left: 12px;
     width: auto;
     height: 3px;
+  }
+  .s-anchor__collapse {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s-anchor__collapse .s-icon {
+    transition: none;
   }
 }

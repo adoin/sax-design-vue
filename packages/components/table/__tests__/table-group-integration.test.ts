@@ -164,13 +164,23 @@ describe('Table group integration', () => {
     await settle()
 
     const nestedGroup = wrapper.get('.s-table__group-row[data-group-depth="1"]')
-    expect(nestedGroup.attributes('style')).toContain(
-      '--s-table-group-indent: 28px',
-    )
+    expect(nestedGroup.findAll('.s-table__hierarchy-guide')).not.toHaveLength(0)
+    expect(
+      nestedGroup.get('.s-table__group-cell').attributes('style'),
+    ).toContain('padding-inline-start: 40px')
+    expect(
+      wrapper.get('[data-row-key="1"] .s-table__data-cell').classes(),
+    ).toContain('is-hierarchy-cell')
     expect(
       wrapper
         .findAll('.s-table__group-subtotal')
         .some((row) => row.attributes('data-group-depth') === '1'),
+    ).toBe(true)
+    expect(
+      wrapper
+        .get('.s-table__group-subtotal[data-group-depth="1"]')
+        .find('.s-table__hierarchy-guides')
+        .exists(),
     ).toBe(true)
   })
 

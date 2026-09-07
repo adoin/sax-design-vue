@@ -12,6 +12,7 @@ import type {
 import type { TableEditSlotParams } from './table-edit'
 import type { TableRowDetailState } from './composables/use-table-details'
 import type { TableMergeRegion } from './composables/table-merge-regions'
+import type { TableHierarchyState } from './table-hierarchy'
 
 interface RowProps {
   flatRow: TableFlatRow
@@ -20,6 +21,7 @@ interface RowProps {
   entries?: TableRenderedEntry[]
   mergeOwner?: TableMergeRegion
   renderSlots?: Slots
+  hierarchy?: TableHierarchyState
 }
 interface RowRendererOptions {
   bindings: (
@@ -35,7 +37,7 @@ interface RowRendererOptions {
 /** Ordinary rows, virtual rows and merge owners share the same slot fallback chain. */
 export function createTableBodyRow(options: RowRendererOptions) {
   function TableBodyRow(props: RowProps) {
-    const { renderSlots, ...rowProps } = props
+    const { renderSlots, hierarchy, ...rowProps } = props
     const slots = renderSlots ?? options.slots
     const bindings = options.bindings(props.flatRow, props.displayIndex)
     return h(
@@ -43,6 +45,7 @@ export function createTableBodyRow(options: RowRendererOptions) {
       {
         ...bindings,
         ...rowProps,
+        ...(hierarchy ? { hierarchy } : {}),
         entries: props.entries ?? bindings.entries,
         mergeAt: props.mergeOwner ? undefined : bindings.mergeAt,
         minimumHeight: props.mergeOwner ? undefined : bindings.minimumHeight,
@@ -80,6 +83,7 @@ export function createTableBodyRow(options: RowRendererOptions) {
     'entries',
     'mergeOwner',
     'renderSlots',
+    'hierarchy',
   ]
   return TableBodyRow
 }

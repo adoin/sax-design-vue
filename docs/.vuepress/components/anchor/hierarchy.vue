@@ -5,17 +5,36 @@
 </template>
 
 <script lang="ts" setup>
-const items = [
-  { href: '#anchor-secondary', title: 'Secondary link' },
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const isZh = computed(() => route.path.startsWith('/zh/'))
+const items = computed(() => [
   {
-    href: '#anchor-container',
-    title: 'Advanced usage',
+    href: '#anchor-hierarchy',
+    title: isZh.value ? '分级锚点' : 'Hierarchy',
+    collapsible: true,
     children: [
-      { href: '#anchor-container', title: 'Scroll container' },
-      { href: '#api', title: 'API' },
+      {
+        href: '#anchor-secondary',
+        title: isZh.value ? '二级链接' : 'Secondary link',
+      },
+      {
+        href: '#anchor-horizontal',
+        title: isZh.value ? '导航模式' : 'Navigation modes',
+        collapsible: true,
+        children: [
+          {
+            href: '#anchor-container',
+            title: isZh.value ? '滚动容器' : 'Scroll container',
+          },
+        ],
+      },
     ],
   },
-]
+  { href: '#api', title: 'API' },
+])
 </script>
 
 <style scoped>

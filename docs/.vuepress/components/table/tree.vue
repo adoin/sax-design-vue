@@ -11,6 +11,15 @@
       <div class="tree-name">
         <strong>{{ value }}</strong>
         <small>{{ row.kind }}</small>
+        <s-tag v-if="row.id === 'components'" size="small">
+          {{
+            lazyLoading
+              ? 'Loading children'
+              : lazyLoaded
+                ? 'Loaded lazily'
+                : 'Expand to load'
+          }}
+        </s-tag>
       </div>
     </template>
   </s-table>
@@ -35,6 +44,8 @@ interface FileRow {
 }
 
 const expandedKeys = ref(['src'])
+const lazyLoading = ref(false)
+const lazyLoaded = ref(false)
 const columns: TableColumn<FileRow>[] = [
   { field: 'name', title: 'Name', minWidth: 220, treeNode: true },
   { field: 'kind', title: 'Type', width: 150, renderer: 'kind' },
@@ -62,13 +73,21 @@ const rows: FileRow[] = [
 const treeConfig: TableTreeConfig<FileRow> = {
   children: 'children',
   hasChildren: 'hasChildren',
+  line: true,
   expandOnClickRow: false,
   async load({ row }) {
     if (row.id !== 'components') return []
-    return [
-      { id: 'table', name: 'table.vue', kind: 'Vue SFC', size: '12 KB' },
-      { id: 'form', name: 'form.vue', kind: 'Vue SFC', size: '9 KB' },
-    ]
+    lazyLoading.value = true
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 800))
+      lazyLoaded.value = true
+      return [
+        { id: 'table', name: 'table.vue', kind: 'Vue SFC', size: '12 KB' },
+        { id: 'form', name: 'form.vue', kind: 'Vue SFC', size: '9 KB' },
+      ]
+    } finally {
+      lazyLoading.value = false
+    }
   },
 }
 
@@ -87,6 +106,10 @@ const renderers: Record<string, TableRenderer<FileRow>> = {
 
 .tree-name small {
   color: hsl(var(--sax-text-color-secondary));
+}
+
+.tree-name .s-tag {
+  width: fit-content;
 }
 
 .kind-pill {
