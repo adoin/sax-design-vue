@@ -887,6 +887,8 @@
   }
 
   .is-hierarchy-cell {
+    position: relative;
+    isolation: isolate;
     padding-inline-start: var(--s-table-hierarchy-content-start);
   }
 
@@ -906,7 +908,9 @@
     background: hsl(var(--sax-primary) / 0.24);
 
     @include when(from-middle) {
-      inset-block-start: 50%;
+      inset-block-start: calc(
+        50% + var(--s-table-hierarchy-continuation-offset, 0px)
+      );
     }
 
     @include when(to-middle) {

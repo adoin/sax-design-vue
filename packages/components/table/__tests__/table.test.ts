@@ -279,6 +279,9 @@ describe('Table data mode', () => {
     const rows = wrapper.findAll('.s-table__data-row')
     expect(rows).toHaveLength(3)
     expect(rows[0].findAll('.s-table__hierarchy-guide')).toHaveLength(1)
+    expect(rows[0].get('.is-hierarchy-cell').attributes('style')).toContain(
+      '--s-table-hierarchy-continuation-offset: 13px',
+    )
     expect(rows[1].findAll('.s-table__hierarchy-guide')).toHaveLength(1)
     expect(
       rows[2].find('.s-table__hierarchy-guide.is-to-middle').exists(),
