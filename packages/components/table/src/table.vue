@@ -271,11 +271,16 @@
           <template #overlay>
             <TableParentIndicator
               :visible="parentIndicator.visible.value"
+              :parent-key="parentIndicator.target.value?.key ?? ''"
               :label="parentIndicator.target.value?.label ?? ''"
               @jump="parentIndicator.jump"
               @hold="parentIndicator.hold"
               @release="parentIndicator.release"
-            />
+            >
+              <template v-if="$slots['parent-indicator']" #default="params">
+                <slot name="parent-indicator" v-bind="params" />
+              </template>
+            </TableParentIndicator>
           </template>
           <template #default="{ item, index }">
             <TableBodyBlock
@@ -1413,6 +1418,8 @@ const scrollToRow = (
 const parentIndicatorEnabled = computed(
   () =>
     props.parentIndicator !== false &&
+    (typeof props.parentIndicator !== 'object' ||
+      props.parentIndicator.enabled !== false) &&
     usesBodyScroll.value &&
     (Boolean(props.treeConfig) || groups.enabled.value),
 )
@@ -1459,7 +1466,7 @@ const resolveParentIndicator = () => {
   if (!parent || parentIndex < 0 || parentIndex >= range.start) return undefined
   const value = tableFieldValue(parent.row, treeNodeColumn.value?.field)
   return {
-    key: `tree:${typeof parent.key}:${String(parent.key)}`,
+    key: parent.key,
     label: value == null || value === '' ? String(parent.key) : String(value),
     jump: () => scrollToRow(parent.key, 'start'),
   }

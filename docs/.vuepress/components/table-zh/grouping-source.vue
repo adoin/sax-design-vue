@@ -63,13 +63,19 @@ const last = async () => {
       :virtual-source="source"
       :group-config="grouping"
       :keyboard-config="{ rowIndexOf: Number }"
-      :parent-indicator="{ hideDelay: 1000 }"
+      :parent-indicator="{ enabled: true, hideDelay: 1000 }"
       :virtual-config="{ height: 300, dynamic: true, horizontal: true }"
       resize-config
     >
       <template #cell="{ rowIndex, columnIndex }"
         >{{ rowIndex }} / {{ columnIndex }}</template
       >
+      <template #parent-indicator="{ label, jump }">
+        <span class="grouping-source-demo__parent-copy">
+          正在浏览 <strong>{{ label }}</strong>
+          <s-button size="small" flat @click="jump">返回父级</s-button>
+        </span>
+      </template>
     </s-table>
     <p role="status">
       活动源单元格：
@@ -89,6 +95,13 @@ const last = async () => {
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 16px;
+}
+.grouping-source-demo__parent-copy {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 .grouping-source-demo p {
   margin: 12px 0 0;

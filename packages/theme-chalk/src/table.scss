@@ -1135,8 +1135,13 @@
     cursor: pointer;
     pointer-events: auto;
 
+    &.is-custom {
+      cursor: default;
+    }
+
     &:hover,
-    &:focus-visible {
+    &:focus-visible,
+    &:focus-within {
       background: color-mix(
         in srgb,
         #{getColor(primary)} 13%,
@@ -1157,6 +1162,11 @@
     border-radius: var(--sax-radius-pill);
     background: #{getColor(primary, 0.1)};
     color: getColor(primary);
+  }
+
+  @include e(parent-indicator-custom) {
+    grid-column: 2 / -1;
+    min-width: 0;
   }
 
   @include e(parent-indicator-context) {

@@ -38,6 +38,14 @@
 - Content: the implementation uses live parent values (for example “批次 1”), while the reference uses illustrative numeric data. This expected data difference does not change the layout or behavior.
 - No remaining P0, P1, or P2 visual mismatches were found in the final state.
 
+### Configurable content follow-up
+
+- Added `parentIndicator.enabled` without changing the default enabled state.
+- Kept the return icon under component control so custom content cannot break its alignment or visual meaning.
+- Moved custom content into the remaining grid area and exposed `parentKey`, `label`, and `jump()` to the slot.
+- Browser verification at 1706 × 960 confirmed the custom Chinese example renders as a `DIV` container with the fixed icon, replaces the default action content, and returns scroll position from 1960 to the parent at 0 when its action calls `jump()`.
+- Unit coverage confirms `{ enabled: false }` suppresses the indicator.
+
 ## Result
 
 passed

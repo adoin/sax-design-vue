@@ -1,9 +1,10 @@
 import { onBeforeUnmount, shallowRef, watch } from 'vue'
 import type { ComputedRef } from 'vue'
 import type { TableGroupNode } from '../table-group'
+import type { TableRowKey } from '../table'
 
 export interface TableParentIndicatorTarget {
-  key: string
+  key: TableRowKey
   label: string
   jump: () => void
 }

@@ -316,7 +316,7 @@ describe('Table data mode', () => {
         ],
         treeConfig: { defaultExpandedKeys: ['root'] },
         virtualConfig: { height: 96, estimateSize: 48, overscan: 2 },
-        parentIndicator: { hideDelay: 500 },
+        parentIndicator: { enabled: true, hideDelay: 500 },
       },
     })
     try {
@@ -340,6 +340,43 @@ describe('Table data mode', () => {
       wrapper.unmount()
       requestFrame.mockRestore()
       vi.useRealTimers()
+    }
+  })
+
+  it('supports disabling the parent shortcut through its config', async () => {
+    const requestFrame = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        callback(0)
+        return 1
+      })
+    const wrapper = mount(Table, {
+      props: {
+        columns,
+        data: [
+          {
+            id: 'root',
+            name: 'Root',
+            children: [{ id: 'child', name: 'Child' }],
+          },
+        ],
+        treeConfig: { defaultExpandedKeys: ['root'] },
+        virtualConfig: { height: 48, estimateSize: 48, overscan: 1 },
+        parentIndicator: { enabled: false },
+      },
+    })
+    try {
+      await nextTick()
+      const viewport = wrapper.get('.s-vl__window')
+      Object.defineProperty(viewport.element, 'clientHeight', { value: 48 })
+      ;(viewport.element as HTMLElement).scrollTop = 48
+      await viewport.trigger('scroll')
+      await nextTick()
+
+      expect(wrapper.find('.s-table__parent-indicator').exists()).toBe(false)
+    } finally {
+      wrapper.unmount()
+      requestFrame.mockRestore()
     }
   })
 
@@ -381,6 +418,66 @@ describe('Table data mode', () => {
         align: 'start',
       })
       expect(wrapper.find('.s-table__parent-indicator').exists()).toBe(false)
+    } finally {
+      wrapper.unmount()
+      requestFrame.mockRestore()
+    }
+  })
+
+  it('exposes the parent label, key, and jump method to the custom slot', async () => {
+    const requestFrame = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        callback(0)
+        return 1
+      })
+    const wrapper = mount(Table, {
+      props: {
+        columns,
+        data: [
+          {
+            id: 'root',
+            name: 'Root',
+            children: Array.from({ length: 5 }, (_, index) => ({
+              id: `child-${index}`,
+              name: `Child ${index}`,
+            })),
+          },
+        ],
+        treeConfig: { defaultExpandedKeys: ['root'] },
+        virtualConfig: { height: 96, estimateSize: 48, overscan: 2 },
+      },
+      slots: {
+        'parent-indicator': ({ parentKey, label, jump }) =>
+          h(
+            'button',
+            {
+              class: 'custom-parent-shortcut',
+              type: 'button',
+              onClick: jump,
+            },
+            `${String(parentKey)}: ${label}`,
+          ),
+      },
+    })
+    try {
+      await nextTick()
+      const viewport = wrapper.get('.s-vl__window')
+      Object.defineProperty(viewport.element, 'clientHeight', { value: 96 })
+      ;(viewport.element as HTMLElement).scrollTop = 96
+      await viewport.trigger('scroll')
+      await nextTick()
+      virtualizerMocks.scrollToIndex.mockClear()
+
+      expect(wrapper.get('.s-table__parent-indicator-mark').exists()).toBe(true)
+      expect(wrapper.get('.custom-parent-shortcut').text()).toBe('root: Root')
+      expect(wrapper.find('.s-table__parent-indicator-action').exists()).toBe(
+        false,
+      )
+      await wrapper.get('.custom-parent-shortcut').trigger('click')
+      expect(virtualizerMocks.scrollToIndex).toHaveBeenCalledWith(0, {
+        align: 'start',
+      })
     } finally {
       wrapper.unmount()
       requestFrame.mockRestore()

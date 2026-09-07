@@ -410,8 +410,19 @@ export interface TableTreeConfig<Row extends TableRow = TableRow> {
 }
 
 export interface TableParentIndicatorConfig {
+  /** Whether to show the parent shortcut while scrolling hierarchical rows. */
+  enabled?: boolean
   /** Milliseconds to keep the parent shortcut visible after scrolling stops. */
   hideDelay?: number
+}
+
+export interface TableParentIndicatorSlotParams {
+  /** Stable key of the parent currently represented by the shortcut. */
+  parentKey: TableRowKey
+  /** Display label resolved from the parent group or tree row. */
+  label: string
+  /** Scroll the table back to the represented parent row. */
+  jump: () => void
 }
 
 export interface TableVirtualConfig {

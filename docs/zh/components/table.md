@@ -185,7 +185,7 @@ PROPS:
     usage: '#树形表格与懒加载'
   - name: parent-indicator
     type: Boolean | TableParentIndicatorConfig
-    description: 虚拟滚动经过树节点或分组成员时显示返回父级的临时吸顶条；hideDelay 设置停止滚动后的隐藏延迟，单位为毫秒。
+    description: 虚拟滚动经过树节点或分组成员时显示返回父级的临时吸顶条；enabled 控制是否开启，hideDelay 设置停止滚动后的隐藏延迟，单位为毫秒。
     default: true
     usage: '#远程分组与虚拟行'
   - name: virtual-config
@@ -690,6 +690,11 @@ SLOTS:
     description: '小计或整体汇总单元格。'
     default: null
     usage: '#行分组与聚合'
+  - name: 'parent-indicator'
+    type: 'TableParentIndicatorSlotParams'
+    description: '自定义固定回退图标以外的提示条内容；可获取 parentKey、label 和 jump。'
+    default: null
+    usage: '#远程分组与虚拟行'
   - name: 'edit-[column key]'
     type: 'TableEditSlotParams'
     description: '指定列的编辑插槽，columns.slots.edit 可更改名称。'
@@ -1580,13 +1585,13 @@ EXPOSES:
 
 生成源使用 `mode: remote`。应用提供 `remote.groups` 的起始行、行数、子分组和聚合结果，以及 `remote.summary`；服务请求和取消可使用现有 Grid 请求代理，由应用传入当前结果。表格不会遍历生成源来猜测分组。普通数组的远程范围使用当前页数据索引，生成源使用绝对源索引；兄弟范围必须有序、不重叠，并位于父范围内，未覆盖行保留普通显示。
 
-此例按公式提供 100 万行、10 万列的分组元数据。滚动经过分组成员时，表头下方会临时显示当前父级；点击即可返回父级行，停止滚动后默认停留 1000ms，可通过 `parent-indicator.hideDelay` 调整。展开末批会先更新分组状态，再定位末端；收起的行没有可见数据地址，程序定位前应展开所在组。分组标题、小计和数据共用虚拟窗口，索引空间随组数增长；本地分组和聚合则同步处理已提供行，计算及存储成本随行数和分组层级增长，大规模全局统计应交给服务端。
+此例按公式提供 100 万行、10 万列的分组元数据。滚动经过分组成员时，表头下方会临时显示当前父级；`parent-indicator.enabled` 控制是否开启，停止滚动后默认停留 1000ms，可通过 `hideDelay` 调整。`parent-indicator` 插槽保留左侧回退图标并自定义其余内容，可通过插槽参数中的 `jump` 返回父级行。展开末批会先更新分组状态，再定位末端；收起的行没有可见数据地址，程序定位前应展开所在组。分组标题、小计和数据共用虚拟窗口，索引空间随组数增长；本地分组和聚合则同步处理已提供行，计算及存储成本随行数和分组层级增长，大规模全局统计应交给服务端。
 
 <template #example><table-zh-grouping-source /></template>
 
 <template #template>
 
-@[code{52-79}](../../.vuepress/components/table-zh/grouping-source.vue)
+@[code{52-85}](../../.vuepress/components/table-zh/grouping-source.vue)
 
 </template>
 
@@ -1598,7 +1603,7 @@ EXPOSES:
 
 <template #style>
 
-@[code{81-96}](../../.vuepress/components/table-zh/grouping-source.vue)
+@[code{87-109}](../../.vuepress/components/table-zh/grouping-source.vue)
 
 </template>
 
