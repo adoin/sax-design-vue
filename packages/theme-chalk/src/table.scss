@@ -934,6 +934,11 @@
         content: '';
       }
     }
+
+    &.is-to-middle.is-branch::after {
+      inset-block-start: auto;
+      inset-block-end: -1px;
+    }
   }
 
   .#{$namespace}-table__cell-main,
