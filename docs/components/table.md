@@ -145,17 +145,17 @@ PROPS:
     type: TableRow[]
     description: Row data rendered by the table. When omitted, an enabled request proxy stores accepted query results internally.
     default: null
-    usage: '#grid-style-configuration'
+    usage: '#configuration-object'
   - name: columns
     type: TableColumn[]
     description: Column configuration for fields, sizing, alignment, slots, renderers and tree nodes.
     default: '[]'
-    usage: '#grid-style-configuration'
+    usage: '#configuration-object'
   - name: row-key
     type: String | Function
     description: Stable row key field or getter.
     default: id
-    usage: '#grid-style-configuration'
+    usage: '#configuration-object'
   - name: highlight
     type: TableRow | TableRow[] | null
     description: Highlighted row or rows.
@@ -172,12 +172,12 @@ PROPS:
     values: 'true | false'
     description: Alternates row backgrounds.
     default: 'false'
-    usage: '#grid-style-configuration'
+    usage: '#configuration-object'
   - name: row-class
     type: String | Function
     description: Adds a class to each rendered row.
     default: ''
-    usage: '#grid-style-configuration'
+    usage: '#configuration-object'
   - name: tree-config
     type: TableTreeConfig
     description: Enables hierarchical rows, controlled expansion and lazy child loading; line controls parent-child guides.
@@ -213,18 +213,18 @@ PROPS:
     values: 'true | false'
     description: Shows the configured column header.
     default: true
-    usage: '#grid-style-configuration'
+    usage: '#configuration-object'
   - name: empty-text
     type: String
     description: Text displayed when there are no rows or columns.
     default: null
-    usage: '#grid-style-configuration'
+    usage: '#configuration-object'
   - name: loading
     type: Boolean
     values: 'true | false'
     description: Displays a loading mask over the table.
     default: 'false'
-    usage: '#grid-style-configuration'
+    usage: '#configuration-object'
   - name: sort-by
     type: 'TableSort[]'
     description: 'Controlled sorting state; omitted uses internal state.'
@@ -285,7 +285,7 @@ CHILD_PROPS:
     type: 'String'
     description: 'Stable column identity in columns configuration. With STableColumn, use the Vue key attribute.'
     default: null
-    usage: '#declarative-columns'
+    usage: '#nested-columns'
   - name: 'class-name'
     type: 'String'
     description: 'Custom class on data cells in this column.'
@@ -394,7 +394,7 @@ CHILD_PROPS:
     default: null
   - name: slots
     type: TableColumnSlots
-    description: Maps configured cell, header and filter slot names in Grid-style mode.
+    description: Maps configured cell, header and filter slot names in the configuration-object form.
     default: null
   - name: sortable
     type: 'Boolean'
@@ -724,37 +724,37 @@ SLOTS:
     type: 'TableExposes & { model: FormModel }'
     description: 'Additional SFormItem controls inside the same form; receives model and Table methods.'
     default: null
-    usage: '#slots-and-declarative-columns'
+    usage: '#slots-and-nested-columns'
   - name: 'query-[name]'
     type: 'Scoped slot'
     description: 'Named query field slot with model, item, field, prop, value, disabled, readonly and setValue(value). Use the name without query- in the item configuration.'
     default: null
-    usage: '#slots-and-declarative-columns'
+    usage: '#slots-and-nested-columns'
   - name: 'query-actions'
     type: 'TableExposes & { busy: boolean }'
     description: 'Replace query actions; receives query, resetQuery, refresh, busy and other Table methods.'
     default: null
-    usage: '#slots-and-declarative-columns'
+    usage: '#slots-and-nested-columns'
   - name: 'toolbar'
     type: 'TableExposes & { busy: boolean }'
     description: 'Replace toolbar actions; receives Table methods and busy.'
     default: null
-    usage: '#slots-and-declarative-columns'
+    usage: '#slots-and-nested-columns'
   - name: 'toolbar-title'
     type: 'Slot'
     description: 'Replace the toolbar title.'
     default: null
-    usage: '#slots-and-declarative-columns'
+    usage: '#slots-and-nested-columns'
   - name: 'STableColumn.default'
     type: 'TableCellRenderParams'
-    description: 'Cell content on a declarative column.'
+    description: 'Cell content on a nested column.'
     default: null
-    usage: '#declarative-columns'
+    usage: '#nested-columns'
   - name: 'STableColumn.header'
     type: 'TableHeaderRenderParams'
-    description: 'Header content on a declarative leaf or grouped column.'
+    description: 'Header content on a nested leaf or grouped column.'
     default: null
-    usage: '#declarative-grouped-headers'
+    usage: '#nested-grouped-headers'
   - name: 'group-header'
     type: '{ group: TableGroupNode; expanded: boolean }'
     description: 'Group heading content alongside the built-in expand button.'
@@ -782,7 +782,7 @@ SLOTS:
     usage: '#custom-editors'
   - name: 'STableColumn.edit'
     type: 'TableEditSlotParams'
-    description: 'Editor slot on a declarative column.'
+    description: 'Editor slot on a nested column.'
     default: null
     usage: '#custom-editors'
   - name: 'detail'
@@ -812,16 +812,16 @@ SLOTS:
     usage: '#footer-data-rows'
   - name: STableColumn.footer
     type: TableFooterCellRenderParams
-    description: Footer render slot on a declarative column.
+    description: Footer render slot on a nested column.
     default: null
     usage: '#footer-data-rows'
   - name: STableColumn.columns
     type: Slot
     description: Nested column declarations inside STableColumn.
-    usage: '#declarative-grouped-headers'
+    usage: '#nested-grouped-headers'
   - name: default
     type: Slot
-    description: Declarative s-table-column definitions.
+    description: Nested s-table-column definitions.
   - name: cell-[column key]
     type: TableCellRenderParams
     description: Column-specific cell content receiving row, column, value and rowIndex.
@@ -1254,7 +1254,7 @@ EXPOSES:
 
 This section covers both `STable` column-definition styles, rendering, selection, sorting, filtering, fixed columns, states and remote queries.
 
-### Grid-style configuration
+### Configuration object
 
 Pass rows through `data` and define each column's field, title and display options through `columns`. You can also collect table props in an object and pass them together with `v-bind`.
 
@@ -1278,7 +1278,7 @@ Pass rows through `data` and define each column's field, title and display optio
 
 <card>
 
-### Declarative columns
+### Nested columns
 
 When template-level column declaration reads better, use `s-table-column`. A column can own its scoped cell slot while rows still come from `data`.
 
@@ -1756,7 +1756,7 @@ Column settings can hide, reorder or pin individual leaves. A group splits into 
 
 <card>
 
-### Declarative grouped headers
+### Nested grouped headers
 
 Nest column declarations in an `STableColumn` `#columns` slot. Keep `#default` for leaf cell content and use `#header` for a custom group title. You can also pass a `children` array.
 
@@ -1838,7 +1838,7 @@ Calculate footer data in the application or fetch it from the server. It is inde
 
 <card>
 
-### Declarative footers and the bottom slot
+### Nested footers and the bottom slot
 
 Use `#footer` on `STableColumn` to customize a footer cell; `#default` continues to render body cells. The table-level `#footer` slot is a bottom toolbar or note. It can coexist with the column-aligned footer data rows.
 
@@ -2610,7 +2610,7 @@ With `virtualSource`, body row and column indices are absolute source indices; f
 
 ### Row reordering
 
-Enable `row-drag-config` and set `dragSort: true` on a column (`drag-sort` on declarative columns). Provide stable `row-key` values and accept the proposed array with `v-model:data`. `checkMethod` restricts pickup; `dropMethod` restricts drop targets. Handles do not select or edit rows.
+Enable `row-drag-config` and set `dragSort: true` on a column (`drag-sort` in the nested form). Provide stable `row-key` values and accept the proposed array with `v-model:data`. `checkMethod` restricts pickup; `dropMethod` restricts drop targets. Handles do not select or edit rows.
 
 Space or Enter picks up a row, arrow keys choose a target, Enter drops it and Escape cancels. Holding near a scrollable window edge scrolls automatically; set `autoScroll: false` to disable this. `scrollThreshold` defaults to 40px and `scrollSpeed` to 16px per frame.
 
@@ -2640,7 +2640,7 @@ Space or Enter picks up a row, arrow keys choose a target, Enter drops it and Es
 
 ### Tree sibling reordering
 
-Tree rows move within the same parent. Expanded descendants follow their parent; dropping into another parent is not supported. Loaded lazy children follow the same rules as ordinary children, without requesting unloaded nodes. Only affected sibling arrays and ancestors are copied; original rows stay unchanged. This example combines declarative columns, fixed columns, virtualization and measured row heights.
+Tree rows move within the same parent. Expanded descendants follow their parent; dropping into another parent is not supported. Loaded lazy children follow the same rules as ordinary children, without requesting unloaded nodes. Only affected sibling arrays and ancestors are copied; original rows stay unchanged. This example combines nested columns, fixed columns, virtualization and measured row heights.
 
 <template #example><table-row-drag-tree /></template>
 
@@ -2962,6 +2962,8 @@ Supply a stable, unique `row-key` when rows can be reordered, updated or expande
 
 ### Query and toolbar
 
+Continue using `s-table` when a table needs a query area, toolbar or request proxy. Enable or combine `query-config`, `toolbar-config` and `proxy-config` independently; when none is supplied, no business configuration area is rendered. The examples below cover manual queries, slots with nested columns, generated data, remote requests, and save and delete operations.
+
 `s-table` accepts [Table](./table.md) props, events and slots, sharing its pagination, sorting, filtering and selection behavior. Add a [Form](./form.md) with `query-config` and business actions with `toolbar-config`.
 
 Provide a reactive `queryConfig.model`; field changes and reset follow the SForm model contract. Configure `items`, `rules`, `labelPosition` and other form options as usual. Search or native form submission validates fields, requests page one, then emits `query`. Reset restores initial field values and requests page one. Refresh keeps the current page and conditions without validating fields.
@@ -2998,11 +3000,11 @@ Configure business `buttons` with a `code` for the `toolbarClick` event and opti
 
 <card>
 
-### Slots and declarative columns
+### Slots and nested columns
 
 Use `query-[name]` for custom query fields; reference the name without `query-` in `items[].slots.default`. Replace query buttons through `query-actions`, toolbar actions through `toolbar`, and its title through `toolbar-title`. The `query` slot can add `s-form-item` controls to the same form.
 
-Other slots pass through to Table, including `header`, `footer`, cells, editors and default `s-table-column` declarations. This example combines declarative columns, tree expansion, fixed columns and virtual scrolling. Applying conditions displays the submitted keyword while preserving the tree data.
+Other slots pass through to Table, including `header`, `footer`, cells, editors and default `s-table-column` declarations. This example combines nested columns, tree expansion, fixed columns and virtual scrolling. Applying conditions displays the submitted keyword while preserving the tree data.
 
 The `query-*` prefix is reserved for query form slots; `query`, `toolbar`, `toolbar-title` and `proxy-error` belong to Table itself. Choose other names for custom Table column slots. Conditional slots can be added or removed after mounting; removing one restores the corresponding fallback.
 

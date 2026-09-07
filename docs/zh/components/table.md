@@ -145,17 +145,17 @@ PROPS:
     type: TableRow[]
     description: 表格渲染的行数据；省略时，已开启的请求代理会在内部保存已接受的查询结果。
     default: null
-    usage: '#grid-式配置'
+    usage: '#配置项写法'
   - name: columns
     type: TableColumn[]
     description: 列配置，支持字段、尺寸、对齐、插槽、渲染器和树节点。
     default: '[]'
-    usage: '#grid-式配置'
+    usage: '#配置项写法'
   - name: row-key
     type: String | Function
     description: 稳定的行键字段或取值函数。
     default: id
-    usage: '#grid-式配置'
+    usage: '#配置项写法'
   - name: highlight
     type: TableRow | TableRow[] | null
     description: 当前高亮的行或行数组。
@@ -172,12 +172,12 @@ PROPS:
     values: 'true | false'
     description: 交替显示行背景。
     default: 'false'
-    usage: '#grid-式配置'
+    usage: '#配置项写法'
   - name: row-class
     type: String | Function
     description: 为每一行添加类名。
     default: ''
-    usage: '#grid-式配置'
+    usage: '#配置项写法'
   - name: tree-config
     type: TableTreeConfig
     description: 开启层级行、受控展开和子节点懒加载；line 控制是否显示父子连接线。
@@ -213,18 +213,18 @@ PROPS:
     values: 'true | false'
     description: 是否显示配置生成的表头。
     default: true
-    usage: '#grid-式配置'
+    usage: '#配置项写法'
   - name: empty-text
     type: String
     description: 没有行或列时显示的文字。
     default: null
-    usage: '#grid-式配置'
+    usage: '#配置项写法'
   - name: loading
     type: Boolean
     values: 'true | false'
     description: 在表格上显示加载遮罩。
     default: 'false'
-    usage: '#grid-式配置'
+    usage: '#配置项写法'
   - name: sort-by
     type: 'TableSort[]'
     description: '受控排序状态；未传时使用内部状态。'
@@ -283,9 +283,9 @@ PROPS:
 CHILD_PROPS:
   - name: 'key'
     type: 'String'
-    description: 'columns 配置中的稳定列标识；声明式 STableColumn 使用 Vue 的 key 属性。'
+    description: 'columns 配置中的稳定列标识；嵌套的 STableColumn 使用 Vue 的 key 属性。'
     default: null
-    usage: '#声明式列'
+    usage: '#嵌套写法'
   - name: 'class-name'
     type: 'String'
     description: '此列数据单元格的自定义类名。'
@@ -394,7 +394,7 @@ CHILD_PROPS:
     default: null
   - name: slots
     type: TableColumnSlots
-    description: Grid 式配置中单元格、表头与筛选插槽的名称映射。
+    description: 配置项写法中单元格、表头与筛选插槽的名称映射。
     default: null
   - name: sortable
     type: 'Boolean'
@@ -724,37 +724,37 @@ SLOTS:
     type: 'TableExposes & { model: FormModel }'
     description: '在同一个表单中追加 SFormItem，接收 model 和 Table 方法。'
     default: null
-    usage: '#插槽与声明式列'
+    usage: '#插槽与嵌套列'
   - name: 'query-[name]'
     type: 'Scoped slot'
     description: '查询字段插槽，提供 model、item、field、prop、value、disabled、readonly 和 setValue(value)；items 中填写不含 query- 的名称。'
     default: null
-    usage: '#插槽与声明式列'
+    usage: '#插槽与嵌套列'
   - name: 'query-actions'
     type: 'TableExposes & { busy: boolean }'
     description: '替换查询操作，接收 query、resetQuery、refresh、busy 等。'
     default: null
-    usage: '#插槽与声明式列'
+    usage: '#插槽与嵌套列'
   - name: 'toolbar'
     type: 'TableExposes & { busy: boolean }'
     description: '替换工具栏按钮区，接收 Table 方法和 busy。'
     default: null
-    usage: '#插槽与声明式列'
+    usage: '#插槽与嵌套列'
   - name: 'toolbar-title'
     type: 'Slot'
     description: '替换工具栏标题。'
     default: null
-    usage: '#插槽与声明式列'
+    usage: '#插槽与嵌套列'
   - name: 'STableColumn.default'
     type: 'TableCellRenderParams'
-    description: '声明式列的数据单元格内容。'
+    description: '嵌套列的数据单元格内容。'
     default: null
-    usage: '#声明式列'
+    usage: '#嵌套写法'
   - name: 'STableColumn.header'
     type: 'TableHeaderRenderParams'
-    description: '声明式叶子列或分组列的表头内容。'
+    description: '嵌套叶子列或分组列的表头内容。'
     default: null
-    usage: '#声明式分组表头'
+    usage: '#嵌套分组表头'
   - name: 'group-header'
     type: '{ group: TableGroupNode; expanded: boolean }'
     description: '组标题内容，保留内置展开按钮。'
@@ -782,7 +782,7 @@ SLOTS:
     usage: '#自定义编辑器'
   - name: 'STableColumn.edit'
     type: 'TableEditSlotParams'
-    description: '声明式列的编辑插槽。'
+    description: '嵌套列的编辑插槽。'
     default: null
     usage: '#自定义编辑器'
   - name: 'detail'
@@ -812,16 +812,16 @@ SLOTS:
     usage: '#表尾数据行'
   - name: STableColumn.footer
     type: TableFooterCellRenderParams
-    description: 声明式列的表尾渲染插槽。
+    description: 嵌套列的表尾渲染插槽。
     default: null
     usage: '#表尾数据行'
   - name: STableColumn.columns
     type: Slot
     description: STableColumn 的嵌套子列定义插槽。
-    usage: '#声明式分组表头'
+    usage: '#嵌套分组表头'
   - name: default
     type: Slot
-    description: 声明式 s-table-column 列定义。
+    description: 嵌套的 s-table-column 列定义。
   - name: cell-[column key]
     type: TableCellRenderParams
     description: 指定列的单元格插槽，可获取 row、column、value 和 rowIndex。
@@ -1254,7 +1254,7 @@ EXPOSES:
 
 本节介绍 `STable` 的两种列定义方式，以及内容渲染、选择、排序、筛选、固定列、状态展示和远程查询。
 
-### Grid 式配置
+### 配置项写法
 
 通过 `data` 提供行数据，`columns` 定义列的字段、标题和显示方式。也可以将表格属性放入一个对象，通过 `v-bind` 统一传入。
 
@@ -1278,7 +1278,7 @@ EXPOSES:
 
 <card>
 
-### 声明式列
+### 嵌套写法
 
 需要在模板中直观看到列结构时，使用 `s-table-column`。列可以直接持有作用域插槽，而所有行仍由 `data` 提供。
 
@@ -1756,7 +1756,7 @@ EXPOSES:
 
 <card>
 
-### 声明式分组表头
+### 嵌套分组表头
 
 在 `STableColumn` 的 `#columns` 插槽中嵌套列定义；`#default` 继续用于叶子单元格，`#header` 自定义组标题。也可以直接传入 `children` 数组。
 
@@ -1838,7 +1838,7 @@ EXPOSES:
 
 <card>
 
-### 声明式表尾与底部插槽
+### 嵌套表尾与底部插槽
 
 在 `STableColumn` 上使用 `#footer` 自定义表尾单元格，`#default` 继续处理正文。表格本身的 `#footer` 插槽用于底部工具栏或说明；它与列对齐的表尾数据行可以同时存在。
 
@@ -2610,7 +2610,7 @@ EXPOSES:
 
 ### 行拖拽排序
 
-开启 `row-drag-config`，在列上设置 `dragSort: true`（声明式列使用 `drag-sort`）显示手柄。使用稳定 `row-key` 和 `v-model:data` 接受重排数组。`checkMethod` 限制可拾取行，`dropMethod` 限制落点；手柄不会触发行选择或编辑。
+开启 `row-drag-config`，在列上设置 `dragSort: true`（嵌套写法使用 `drag-sort`）显示手柄。使用稳定 `row-key` 和 `v-model:data` 接受重排数组。`checkMethod` 限制可拾取行，`dropMethod` 限制落点；手柄不会触发行选择或编辑。
 
 空格或回车拾取，方向键选择落点，回车放置，Escape 取消。鼠标拖至可滚动窗口边缘会自动滚动，可用 `autoScroll: false` 关闭；`scrollThreshold` 默认 40px，`scrollSpeed` 默认每帧 16px。
 
@@ -2640,7 +2640,7 @@ EXPOSES:
 
 ### 树形同级重排
 
-树形数据仅在同级之间移动，展开的后代随父节点一起移动；不会把节点重新挂到另一父节点。已加载的懒节点子数组与普通 children 使用相同规则，不请求未加载子节点。仅复制受影响的同级数组和祖先，原始行保持不变。下例组合声明式列、左右固定列、虚拟滚动和动态行高。
+树形数据仅在同级之间移动，展开的后代随父节点一起移动；不会把节点重新挂到另一父节点。已加载的懒节点子数组与普通 children 使用相同规则，不请求未加载子节点。仅复制受影响的同级数组和祖先，原始行保持不变。下例组合嵌套列、左右固定列、虚拟滚动和动态行高。
 
 <template #example><table-zh-row-drag-tree /></template>
 
@@ -2962,6 +2962,8 @@ EXPOSES:
 
 ### 查询与工具栏
 
+当表格需要查询区、工具栏或请求代理时，仍然使用 `s-table`。`query-config`、`toolbar-config` 和 `proxy-config` 可以独立开启或组合；都未提供时不会生成业务配置区域。下面的示例分别覆盖手动查询、插槽与嵌套列、按需生成数据、远程请求以及保存和删除。
+
 `s-table` 接受 [Table](./table.md) 的属性、事件和插槽，使用同一套分页、排序、筛选和行选择行为。通过 `query-config` 添加 [Form](./form.md) 查询表单，通过 `toolbar-config` 添加业务按钮。
 
 `queryConfig.model` 应为响应式对象，字段更新和重置遵循 SForm 的模型契约。`items`、`rules`、`labelPosition` 等沿用表单配置。点击查询或在表单内提交，会先校验字段；通过后请求第一页，再发出 `query`。重置恢复字段挂载时的初始值并请求第一页；刷新保留当前页和条件，不执行字段校验。
@@ -2998,11 +3000,11 @@ EXPOSES:
 
 <card>
 
-### 插槽与声明式列
+### 插槽与嵌套列
 
 通过 `query-[name]` 自定义查询字段；在 `items[].slots.default` 中填写不含 `query-` 的名称。`query-actions` 替换查询按钮区，`toolbar` 替换工具栏按钮，`toolbar-title` 替换标题。`query` 插槽可以追加 `s-form-item`，所有查询控件共用一个表单。
 
-其余插槽继续传给 Table，包括 `header`、`footer`、单元格与编辑插槽，以及默认插槽中的 `s-table-column`。下例把声明式列、树节点展开、左右固定列和虚拟滚动组合使用；应用条件后显示收到的关键词，树数据保持原样。
+其余插槽继续传给 Table，包括 `header`、`footer`、单元格与编辑插槽，以及默认插槽中的 `s-table-column`。下例把嵌套列、树节点展开、左右固定列和虚拟滚动组合使用；应用条件后显示收到的关键词，树数据保持原样。
 
 `query-*` 前缀保留给查询表单，`query`、`toolbar`、`toolbar-title` 和 `proxy-error` 由 Table 自身使用；自定义 Table 列插槽请使用其他名称。条件插槽支持挂载后增加或移除，移除后恢复对应的默认内容。
 

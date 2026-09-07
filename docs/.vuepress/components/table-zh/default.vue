@@ -23,7 +23,7 @@ const rows: UserRow[] = [
   { id: 4, name: '苏禾', role: '运营', email: 'suhe@example.com' },
 ]
 
-const gridOptions = {
+const tableOptions = {
   data: rows,
   columns,
   rowKey: 'id',
@@ -32,5 +32,5 @@ const gridOptions = {
 </script>
 
 <template>
-  <s-table v-bind="gridOptions" />
+  <s-table v-bind="tableOptions" />
 </template>
