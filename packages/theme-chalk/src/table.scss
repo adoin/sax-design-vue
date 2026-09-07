@@ -193,6 +193,20 @@
       inset 0 -3px 5px -5px #{getColor(primary, 0.22)};
   }
 
+  .is-group-boundary-start {
+    box-shadow: inset 3px 0 5px -5px #{getColor(primary, 0.22)};
+  }
+
+  .is-group-boundary-end {
+    box-shadow: inset -3px 0 5px -5px #{getColor(primary, 0.22)};
+  }
+
+  .is-group-boundary-start.is-group-boundary-end {
+    box-shadow:
+      inset 3px 0 5px -5px #{getColor(primary, 0.22)},
+      inset -3px 0 5px -5px #{getColor(primary, 0.22)};
+  }
+
   @include e(resize-handle) {
     position: absolute;
     inset: 0 -5px 0 auto;

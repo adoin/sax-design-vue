@@ -99,6 +99,16 @@ describe('grouped table headers', () => {
     const name = wrapper.get(
       '[role="columnheader"][data-column-index="1"]:not(.is-group-header)',
     )
+    const team = wrapper.get(
+      '[role="columnheader"][data-column-index="2"]:not(.is-group-header)',
+    )
+    const city = wrapper.get(
+      '[role="columnheader"][data-column-index="3"]:not(.is-group-header)',
+    )
+    expect(name.classes()).toContain('is-group-boundary-start')
+    expect(name.classes()).not.toContain('is-group-boundary-end')
+    expect(team.classes()).toContain('is-group-boundary-start')
+    expect(city.classes()).toContain('is-group-boundary-end')
     await name.get('button').trigger('click')
     expect(wrapper.findAll('.s-table__data-row')[0].text()).toContain('Amy')
     wrapper.vm.setFilters({ team: ['Design'] })

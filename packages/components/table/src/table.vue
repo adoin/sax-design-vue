@@ -93,6 +93,8 @@
               :class="[
                 ns.e('data-head-cell'),
                 ns.is('group-header', entry.group),
+                ns.is('group-boundary-start', entry.groupBoundaryStart),
+                ns.is('group-boundary-end', entry.groupBoundaryEnd),
                 entry.column.className,
                 ns.is('fixed-column', Boolean(entry.fixed)),
                 ns.is('fixed-left', entry.fixed === 'left'),

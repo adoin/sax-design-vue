@@ -4,6 +4,8 @@ import type { HeaderAncestor } from './table-column-tree'
 
 export interface TableHeaderEntry extends TableRenderedColumnEntry {
   group?: boolean
+  groupBoundaryStart?: boolean
+  groupBoundaryEnd?: boolean
   rowSpan?: number
   colSpan?: number
 }
@@ -30,12 +32,23 @@ export function createTableHeaderLayout(
       : widths[index],
   )
   const active: Array<{ key: string; cell: TableHeaderEntry } | undefined> = []
+  const paths = entries.map((entry) =>
+    entry.kind === 'column' ? pathFor(entry).slice(0, depth - 1) : [],
+  )
   entries.forEach((entry, index) => {
     if (entry.kind === 'spacer') {
       active.length = 0
       return
     }
-    const path = pathFor(entry).slice(0, depth - 1)
+    const path = paths[index]
+    const previousPath = paths[index - 1] ?? []
+    const nextPath = paths[index + 1] ?? []
+    const previousEntry = entries[index - 1]
+    const nextEntry = entries[index + 1]
+    const sharesPreviousPartition =
+      previousEntry?.kind === 'column' && previousEntry.fixed === entry.fixed
+    const sharesNextPartition =
+      nextEntry?.kind === 'column' && nextEntry.fixed === entry.fixed
     const leafStyle: CSSProperties = {
       ...entry.style,
       width: undefined,
@@ -45,6 +58,14 @@ export function createTableHeaderLayout(
     }
     rows[path.length].push({
       ...entry,
+      groupBoundaryStart: path.some(
+        (ancestor, level) =>
+          !sharesPreviousPartition || previousPath[level]?.key !== ancestor.key,
+      ),
+      groupBoundaryEnd: path.some(
+        (ancestor, level) =>
+          !sharesNextPartition || nextPath[level]?.key !== ancestor.key,
+      ),
       rowSpan: depth - path.length,
       style: leafStyle,
     })
