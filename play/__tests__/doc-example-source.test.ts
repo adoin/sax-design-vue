@@ -47,11 +47,17 @@ const exampleCards = (source: string) =>
     .filter((card) => card.includes('<template #example>'))
 
 const tableSections = [
-  ['Data display and queries', '数据展示与查询'],
-  ['Trees, groups, and summaries', '树形、分组与汇总'],
-  ['Editing and data state', '编辑与数据状态'],
+  ['Data and column definitions', '数据与列定义'],
+  ['Selection, sorting, and filtering', '选择、排序与筛选'],
+  ['Trees and groups', '树形与分组'],
+  ['Header structures', '表头结构'],
+  ['Footers and summaries', '表尾与汇总'],
+  ['Row expansion', '行展开'],
+  ['Editing, validation, and changes', '编辑、校验与变更'],
   ['Spreadsheet interactions', '表格式交互'],
-  ['Layout, merging, and large data', '布局、合并与大数据'],
+  ['Column layout and management', '列布局与管理'],
+  ['Merged cells', '单元格合并'],
+  ['Large data and visualization', '大数据与可视化'],
   ['Query forms and request proxy', '查询表单与请求代理'],
 ] as const
 

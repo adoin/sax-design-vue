@@ -1250,9 +1250,9 @@ EXPOSES:
 
 <card class="table-doc-section-start">
 
-## Data display and queries
+## Data and column definitions
 
-This section covers both `STable` column-definition styles, rendering, selection, sorting, filtering, fixed columns, states and remote queries.
+Start with row data, column definitions, and content rendering. This section covers configured and nested columns together with overflow, loading, and empty states.
 
 ### Configuration object
 
@@ -1336,6 +1336,66 @@ In configured columns, map a named slot with `slots.default`, or reference a reu
 
 <card>
 
+### Text overflow and tooltips
+
+`show-overflow` supports wrapping (false), ellipsis, native title, or a floating tooltip (tooltip / true). A tooltip appears only for clipped content, on hover or keyboard focus. Headers use `show-header-overflow`; column settings override table settings.
+
+<template #example><table-overflow /></template>
+
+<template #template>
+
+@[code{34-55}](../.vuepress/components/table/overflow.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-32}](../.vuepress/components/table/overflow.vue)
+
+</template>
+
+<template #style>
+
+@[code{57-67}](../.vuepress/components/table/overflow.vue)
+
+</template>
+
+</card>
+
+<card>
+
+### Loading, empty states and table slots
+
+Use the `header`, `footer` and `empty` slots to customize content around the table. `loading` displays a loading state, `show-header` controls header visibility and `row-class` customizes row styling. Column `field` values support nested paths.
+
+<template #example><table-states /></template>
+
+<template #template>
+
+@[code{20-52}](../.vuepress/components/table/states.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-18}](../.vuepress/components/table/states.vue)
+
+</template>
+
+<template #style>
+
+@[code{54-82}](../.vuepress/components/table/states.vue)
+
+</template>
+
+</card>
+
+<card class="table-doc-section-start">
+
+## Selection, sorting, and filtering
+
+This section groups row selection, selection columns, sorting, filtering, and remote data state. Choose the interaction model first, then decide whether the table or server processes the data.
+
 ### Row selection
 
 Bind the highlighted row with `v-model:highlight`; add `multiple` when the model should be an array.
@@ -1351,6 +1411,36 @@ Bind the highlighted row with `v-model:highlight`; add `multiple` when the model
 <template #script>
 
 @[code{1-22}](../.vuepress/components/table/selection.vue)
+
+</template>
+
+</card>
+
+<card>
+
+### Selection columns and reservation
+
+`type="checkbox"` uses an array model and `type="radio"` uses a single row. Controls are the default trigger; use `selection-config.trigger="row"` for row clicks. Select-all covers eligible filtered, expanded rows on the current page, not just the virtual window. `checkMethod` disables rows; `reserve` retains selections on other pages. Supply a stable unique `row-key`. Tree selection is independent, not cascading.
+
+Configure the built-in paginator with `v-model:pager-config`; pass the complete data array without slicing it yourself. Pagination is off by default; `true` starts on page 1 with 10 rows per page. Options include `currentPage`, `pageSize`, `pageSizes`, `layout`, `pagerCount`, `hideOnSinglePage`, `disabled`, and `shape`. Local sorting and filtering run before pagination; changing the query or page size returns to page 1. Trees paginate root nodes with their expanded descendants kept together. Both virtual axes can still operate within the current page.
+
+<template #example><table-selection-columns /></template>
+
+<template #template>
+
+@[code{33-63}](../.vuepress/components/table/selection-columns.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-31}](../.vuepress/components/table/selection-columns.vue)
+
+</template>
+
+<template #style>
+
+@[code{65-78}](../.vuepress/components/table/selection-columns.vue)
 
 </template>
 
@@ -1444,120 +1534,6 @@ Column filters are combined with AND. Options within a column allow multiple val
 
 <card>
 
-### Selection columns and reservation
-
-`type="checkbox"` uses an array model and `type="radio"` uses a single row. Controls are the default trigger; use `selection-config.trigger="row"` for row clicks. Select-all covers eligible filtered, expanded rows on the current page, not just the virtual window. `checkMethod` disables rows; `reserve` retains selections on other pages. Supply a stable unique `row-key`. Tree selection is independent, not cascading.
-
-Configure the built-in paginator with `v-model:pager-config`; pass the complete data array without slicing it yourself. Pagination is off by default; `true` starts on page 1 with 10 rows per page. Options include `currentPage`, `pageSize`, `pageSizes`, `layout`, `pagerCount`, `hideOnSinglePage`, `disabled`, and `shape`. Local sorting and filtering run before pagination; changing the query or page size returns to page 1. Trees paginate root nodes with their expanded descendants kept together. Both virtual axes can still operate within the current page.
-
-<template #example><table-selection-columns /></template>
-
-<template #template>
-
-@[code{33-63}](../.vuepress/components/table/selection-columns.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-31}](../.vuepress/components/table/selection-columns.vue)
-
-</template>
-
-<template #style>
-
-@[code{65-78}](../.vuepress/components/table/selection-columns.vue)
-
-</template>
-
-</card>
-
-<card>
-
-### Text overflow and tooltips
-
-`show-overflow` supports wrapping (false), ellipsis, native title, or a floating tooltip (tooltip / true). A tooltip appears only for clipped content, on hover or keyboard focus. Headers use `show-header-overflow`; column settings override table settings.
-
-<template #example><table-overflow /></template>
-
-<template #template>
-
-@[code{34-55}](../.vuepress/components/table/overflow.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-32}](../.vuepress/components/table/overflow.vue)
-
-</template>
-
-<template #style>
-
-@[code{57-67}](../.vuepress/components/table/overflow.vue)
-
-</template>
-
-</card>
-
-<card>
-
-### Fixed columns and scroll positioning
-
-Fixed left and right columns also work without virtualization. The center scrolls horizontally while fixed columns keep an opaque continuous surface. These controls demonstrate `scrollToColumn` and `scrollToRow`.
-
-<template #example><table-fixed-columns /></template>
-
-<template #template>
-
-@[code{24-54}](../.vuepress/components/table/fixed-columns.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-22}](../.vuepress/components/table/fixed-columns.vue)
-
-</template>
-
-<template #style>
-
-@[code{56-66}](../.vuepress/components/table/fixed-columns.vue)
-
-</template>
-
-</card>
-
-<card>
-
-### Loading, empty states and table slots
-
-Use the `header`, `footer` and `empty` slots to customize content around the table. `loading` displays a loading state, `show-header` controls header visibility and `row-class` customizes row styling. Column `field` values support nested paths.
-
-<template #example><table-states /></template>
-
-<template #template>
-
-@[code{20-52}](../.vuepress/components/table/states.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-18}](../.vuepress/components/table/states.vue)
-
-</template>
-
-<template #style>
-
-@[code{54-82}](../.vuepress/components/table/states.vue)
-
-</template>
-
-</card>
-
-<card>
-
 ### Remote sorting and filtering
 
 Set `remote: true` separately in `sort-config`, `filter-config`, and `pager-config` to keep query and paging state without reprocessing the server's current-page data. Set the paginator's `total` from the server response. Request data on `page-change`, or watch the controlled page and page size as this example does. Reset the page to 1 in your application when a remote sort or filter changes.
@@ -1582,9 +1558,9 @@ A delayed function simulates server sorting, filtering, and pagination here; rep
 
 <card class="table-doc-section-start">
 
-## Trees, groups, and summaries
+## Trees and groups
 
-Use this section for hierarchical records, grouped views, multi-level headers, summary rows and expandable details. Choose only the features required by the shape of your data.
+Tree data and row groups both express hierarchy between records. The examples progress from tree queries and lazy loading to local, remote, and virtual grouping.
 
 ### Tree sorting and filtering
 
@@ -1724,7 +1700,11 @@ This example provides formula-based metadata for one million rows and one hundre
 
 </card>
 
-<card>
+<card class="table-doc-section-start">
+
+## Header structures
+
+Grouped headers describe relationships between columns and can be defined with configuration objects, nested columns, or generated columns.
 
 ### Grouped headers
 
@@ -1806,7 +1786,11 @@ This example provides one million rows and 100,000 columns on demand. Jump to th
 
 </card>
 
-<card>
+<card class="table-doc-section-start">
+
+## Footers and summaries
+
+Footers present aggregate data or supporting content. These examples cover ordinary, nested, and virtual-column footers.
 
 ### Footer data rows
 
@@ -1888,7 +1872,11 @@ This example computes totals and averages for one million rows and 100,000 colum
 
 </card>
 
-<card>
+<card class="table-doc-section-start">
+
+## Row expansion
+
+Detail rows expand supporting content below a record and can be combined with asynchronous loading and virtual scrolling.
 
 ### Detail rows
 
@@ -1980,9 +1968,9 @@ Enable `detail-config` explicitly with a generated source and provide stable `ro
 
 <card class="table-doc-section-start">
 
-## Editing and data state
+## Editing, validation, and changes
 
-Add editing first, then opt into validation, change tracking and history as the workflow requires. The application remains responsible for accepting data updates and persisting them.
+This section follows the data-writing workflow: edit values, validate them, then track, revert, undo, or redo accepted changes.
 
 ### Cell and row editing
 
@@ -2310,7 +2298,7 @@ Enable both `change-config` and `history-config`, then call `undo()` and `redo()
 
 ## Spreadsheet interactions
 
-Use these opt-in features when the table needs keyboard navigation, cell ranges, clipboard operations, find and replace, context menus or row reordering.
+These examples cover spreadsheet-like operations: keyboard navigation, ranges, clipboard actions, find, menus, and row reordering.
 
 ### Keyboard navigation
 
@@ -2690,9 +2678,37 @@ This example provides one million rows and one hundred thousand columns on deman
 
 <card class="table-doc-section-start">
 
-## Layout, merging, and large data
+## Column layout and management
 
-This section covers column layout, merged cells, optional chart adapters and bounded rendering for large datasets. Prefer ordinary `data` until the loaded dataset makes virtualization necessary.
+Fixed columns, resizing, and column settings control the table layout. Persist settings when users need their choices restored.
+
+### Fixed columns and scroll positioning
+
+Fixed left and right columns also work without virtualization. The center scrolls horizontally while fixed columns keep an opaque continuous surface. These controls demonstrate `scrollToColumn` and `scrollToRow`.
+
+<template #example><table-fixed-columns /></template>
+
+<template #template>
+
+@[code{24-54}](../.vuepress/components/table/fixed-columns.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-22}](../.vuepress/components/table/fixed-columns.vue)
+
+</template>
+
+<template #style>
+
+@[code{56-66}](../.vuepress/components/table/fixed-columns.vue)
+
+</template>
+
+</card>
+
+<card>
 
 ### Column resizing
 
@@ -2778,7 +2794,11 @@ Uncontrolled tables restore saved settings on mount. Controlled tables use the p
 
 </card>
 
-<card>
+<card class="table-doc-section-start">
+
+## Merged cells
+
+Merged regions work with ordinary data, editing and detail rows, and virtual windows.
 
 ### Merging cells
 
@@ -2866,6 +2886,40 @@ The example groups four rows and eight columns per region over generated data. U
 
 </card>
 
+<card class="table-doc-section-start">
+
+## Large data and visualization
+
+Configure virtual rows and dynamic heights first, then extract table data for charts when needed. Generated sources avoid fully materializing large row and column sets.
+
+### Virtual rows and dynamic heights
+
+Enable virtualization with `virtual-config` and set `height` to define the viewport. `dynamic` measures row heights from their content; `horizontal` enables column virtualization and `columnOverscan` controls extra columns rendered on each side. Set `fixed="left"` or `fixed="right"` on a column to keep it at that edge.
+
+Supply a stable, unique `row-key` when rows can be reordered, updated or expanded as a tree. During horizontal scrolling, rows retain the largest height of their displayed content to reduce vertical movement. Changes to column widths, container width, column visibility or order trigger fresh measurements. Replacing the `data` array or the row callback in `virtualSource` also clears previous row-height measurements.
+
+<template #example><table-virtual /></template>
+
+<template #template>
+
+@[code{173-228}](../.vuepress/components/table/virtual.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-171}](../.vuepress/components/table/virtual.vue)
+
+</template>
+
+<template #style>
+
+@[code{230-307}](../.vuepress/components/table/virtual.vue)
+
+</template>
+
+</card>
+
 <card>
 
 ### Chart integration
@@ -2926,39 +2980,11 @@ This example uses one million generated rows and 100000 columns. The last-range 
 
 </card>
 
-<card>
-
-### Virtual rows and dynamic heights
-
-Enable virtualization with `virtual-config` and set `height` to define the viewport. `dynamic` measures row heights from their content; `horizontal` enables column virtualization and `columnOverscan` controls extra columns rendered on each side. Set `fixed="left"` or `fixed="right"` on a column to keep it at that edge.
-
-Supply a stable, unique `row-key` when rows can be reordered, updated or expanded as a tree. During horizontal scrolling, rows retain the largest height of their displayed content to reduce vertical movement. Changes to column widths, container width, column visibility or order trigger fresh measurements. Replacing the `data` array or the row callback in `virtualSource` also clears previous row-height measurements.
-
-<template #example><table-virtual /></template>
-
-<template #template>
-
-@[code{173-228}](../.vuepress/components/table/virtual.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-171}](../.vuepress/components/table/virtual.vue)
-
-</template>
-
-<template #style>
-
-@[code{230-307}](../.vuepress/components/table/virtual.vue)
-
-</template>
-
-</card>
+<card class="table-doc-section-start">
 
 ## Query forms and request proxy
 
-<card class="table-doc-section-start">
+Query forms, toolbars, and request proxies are enabled through STable configuration. The examples progress from query interactions to generated data, remote requests, save, and delete.
 
 ### Query and toolbar
 

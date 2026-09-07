@@ -1250,9 +1250,9 @@ EXPOSES:
 
 <card class="table-doc-section-start">
 
-## 数据展示与查询
+## 数据与列定义
 
-本节介绍 `STable` 的两种列定义方式，以及内容渲染、选择、排序、筛选、固定列、状态展示和远程查询。
+从传入数据、定义列和渲染内容开始，涵盖配置项与嵌套两种写法，以及文本溢出、加载和空态等基础展示能力。
 
 ### 配置项写法
 
@@ -1336,6 +1336,66 @@ EXPOSES:
 
 <card>
 
+### 文本溢出与提示
+
+`show-overflow` 可选择自动换行（false）、仅省略（ellipsis）、原生提示（title）或浮动提示（tooltip / true）。只有内容溢出才显示提示，鼠标悬停和键盘聚焦均可触发；表头支持独立的 `show-header-overflow`，列配置优先于表格配置。
+
+<template #example><table-zh-overflow /></template>
+
+<template #template>
+
+@[code{30-51}](../../.vuepress/components/table-zh/overflow.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-28}](../../.vuepress/components/table-zh/overflow.vue)
+
+</template>
+
+<template #style>
+
+@[code{53-63}](../../.vuepress/components/table-zh/overflow.vue)
+
+</template>
+
+</card>
+
+<card>
+
+### 加载、空态与表格插槽
+
+通过 `header`、`footer` 和 `empty` 插槽自定义表格周边内容。使用 `loading` 显示加载状态，`show-header` 控制表头显隐，`row-class` 自定义行样式；列的 `field` 支持嵌套字段路径。
+
+<template #example><table-zh-states /></template>
+
+<template #template>
+
+@[code{20-52}](../../.vuepress/components/table-zh/states.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-18}](../../.vuepress/components/table-zh/states.vue)
+
+</template>
+
+<template #style>
+
+@[code{54-82}](../../.vuepress/components/table-zh/states.vue)
+
+</template>
+
+</card>
+
+<card class="table-doc-section-start">
+
+## 选择、排序与筛选
+
+这里集中介绍行选择、选择列、排序、筛选和远程数据状态。先确定交互模型，再选择本地处理或由服务端接管。
+
 ### 行选择
 
 通过 `v-model:highlight` 绑定当前高亮行；模型需要数组时添加 `multiple`。
@@ -1351,6 +1411,36 @@ EXPOSES:
 <template #script>
 
 @[code{1-22}](../../.vuepress/components/table-zh/selection.vue)
+
+</template>
+
+</card>
+
+<card>
+
+### 选择列与跨页保留
+
+`type="checkbox"` 自动使用数组模型，`type="radio"` 使用单行模型。默认仅点击选择控件切换，`selection-config.trigger="row"` 可启用整行选择。全选只作用于当前页筛选后、展开的可选行，不受虚拟窗口限制。`checkMethod` 禁选，`reserve` 保留其他页的选择，需提供稳定唯一的 `row-key`。树节点独立选择，不自动级联。
+
+通过 `v-model:pager-config` 配置表格内置分页器，无需自行切分数据。默认不分页；传 `true` 时默认第 1 页、每页 10 条。可配置 `currentPage`、`pageSize`、`pageSizes`、`layout`、`pagerCount`、`hideOnSinglePage`、`disabled` 和 `shape`。本地数据先排序、筛选，再分页；查询变化回到第一页，每页条数变化也回到第一页。树形表格按根节点分页，展开的子节点跟随所属根节点；分页后的当前页仍可启用双轴虚拟滚动。
+
+<template #example><table-zh-selection-columns /></template>
+
+<template #template>
+
+@[code{33-61}](../../.vuepress/components/table-zh/selection-columns.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-31}](../../.vuepress/components/table-zh/selection-columns.vue)
+
+</template>
+
+<template #style>
+
+@[code{63-76}](../../.vuepress/components/table-zh/selection-columns.vue)
 
 </template>
 
@@ -1444,120 +1534,6 @@ EXPOSES:
 
 <card>
 
-### 选择列与跨页保留
-
-`type="checkbox"` 自动使用数组模型，`type="radio"` 使用单行模型。默认仅点击选择控件切换，`selection-config.trigger="row"` 可启用整行选择。全选只作用于当前页筛选后、展开的可选行，不受虚拟窗口限制。`checkMethod` 禁选，`reserve` 保留其他页的选择，需提供稳定唯一的 `row-key`。树节点独立选择，不自动级联。
-
-通过 `v-model:pager-config` 配置表格内置分页器，无需自行切分数据。默认不分页；传 `true` 时默认第 1 页、每页 10 条。可配置 `currentPage`、`pageSize`、`pageSizes`、`layout`、`pagerCount`、`hideOnSinglePage`、`disabled` 和 `shape`。本地数据先排序、筛选，再分页；查询变化回到第一页，每页条数变化也回到第一页。树形表格按根节点分页，展开的子节点跟随所属根节点；分页后的当前页仍可启用双轴虚拟滚动。
-
-<template #example><table-zh-selection-columns /></template>
-
-<template #template>
-
-@[code{33-61}](../../.vuepress/components/table-zh/selection-columns.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-31}](../../.vuepress/components/table-zh/selection-columns.vue)
-
-</template>
-
-<template #style>
-
-@[code{63-76}](../../.vuepress/components/table-zh/selection-columns.vue)
-
-</template>
-
-</card>
-
-<card>
-
-### 文本溢出与提示
-
-`show-overflow` 可选择自动换行（false）、仅省略（ellipsis）、原生提示（title）或浮动提示（tooltip / true）。只有内容溢出才显示提示，鼠标悬停和键盘聚焦均可触发；表头支持独立的 `show-header-overflow`，列配置优先于表格配置。
-
-<template #example><table-zh-overflow /></template>
-
-<template #template>
-
-@[code{30-51}](../../.vuepress/components/table-zh/overflow.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-28}](../../.vuepress/components/table-zh/overflow.vue)
-
-</template>
-
-<template #style>
-
-@[code{53-63}](../../.vuepress/components/table-zh/overflow.vue)
-
-</template>
-
-</card>
-
-<card>
-
-### 普通固定列与滚动定位
-
-左右固定列不依赖虚拟滚动。中间内容超出时横向滚动，固定列保留连续背景。下面通过 `scrollToColumn` 定位中间列，`scrollToRow` 定位行。
-
-<template #example><table-zh-fixed-columns /></template>
-
-<template #template>
-
-@[code{24-54}](../../.vuepress/components/table-zh/fixed-columns.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-22}](../../.vuepress/components/table-zh/fixed-columns.vue)
-
-</template>
-
-<template #style>
-
-@[code{56-66}](../../.vuepress/components/table-zh/fixed-columns.vue)
-
-</template>
-
-</card>
-
-<card>
-
-### 加载、空态与表格插槽
-
-通过 `header`、`footer` 和 `empty` 插槽自定义表格周边内容。使用 `loading` 显示加载状态，`show-header` 控制表头显隐，`row-class` 自定义行样式；列的 `field` 支持嵌套字段路径。
-
-<template #example><table-zh-states /></template>
-
-<template #template>
-
-@[code{20-52}](../../.vuepress/components/table-zh/states.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-18}](../../.vuepress/components/table-zh/states.vue)
-
-</template>
-
-<template #style>
-
-@[code{54-82}](../../.vuepress/components/table-zh/states.vue)
-
-</template>
-
-</card>
-
-<card>
-
 ### 远程排序与筛选
 
 分别在 `sort-config`、`filter-config` 和 `pager-config` 中设置 `remote: true`，表格只维护查询与分页状态，不重复处理服务端返回的当前页数据。分页配置中的 `total` 传服务端返回的总条数；可监听 `page-change` 请求数据，或像本例一样监听受控页码和每页条数。远程排序、筛选变化时，由业务将页码重置为 1。
@@ -1582,9 +1558,9 @@ EXPOSES:
 
 <card class="table-doc-section-start">
 
-## 树形、分组与汇总
+## 树形与分组
 
-这里集中介绍层级数据、分组视图、多级表头、汇总行和展开详情。请根据业务数据结构选择需要的能力。
+树形数据和行分组都用于表达记录之间的层级关系。本节依次介绍树形查询、懒加载、本地分组、远程分组和虚拟分组。
 
 ### 树形排序与筛选
 
@@ -1724,7 +1700,11 @@ EXPOSES:
 
 </card>
 
-<card>
+<card class="table-doc-section-start">
+
+## 表头结构
+
+多级表头描述列之间的上下级关系，可以通过配置项、嵌套列或按需生成列实现。
 
 ### 多级表头
 
@@ -1806,7 +1786,11 @@ EXPOSES:
 
 </card>
 
-<card>
+<card class="table-doc-section-start">
+
+## 表尾与汇总
+
+表尾用于展示汇总数据或补充内容。本节覆盖普通表尾、嵌套表尾以及虚拟列下的表尾渲染。
 
 ### 表尾数据行
 
@@ -1888,7 +1872,11 @@ EXPOSES:
 
 </card>
 
-<card>
+<card class="table-doc-section-start">
+
+## 行展开
+
+详情行在当前记录下方展开补充内容，并可与异步加载和虚拟滚动组合使用。
 
 ### 详情展开行
 
@@ -1980,9 +1968,9 @@ EXPOSES:
 
 <card class="table-doc-section-start">
 
-## 编辑与数据状态
+## 编辑、校验与变更
 
-先按业务需要开启编辑，再组合校验、变更追踪和操作历史。应用仍负责接受数据更新并将结果持久化。
+本节围绕数据写入流程组织：先编辑，再校验，随后追踪、还原或撤销变更。
 
 ### 单元格与整行编辑
 
@@ -2310,7 +2298,7 @@ EXPOSES:
 
 ## 表格式交互
 
-当表格需要键盘导航、单元格区域、剪贴板、查找替换、右键菜单或行重排时，再按需开启本节能力。
+这里介绍接近电子表格的操作，包括键盘导航、区域选择、剪贴板、查找、菜单和行拖拽。
 
 ### 键盘导航
 
@@ -2690,9 +2678,37 @@ EXPOSES:
 
 <card class="table-doc-section-start">
 
-## 布局、合并与大数据
+## 列布局与管理
 
-本节介绍列布局、合并单元格、可选图表适配器和大数据的窗口化渲染。数据量不大时优先使用普通 `data`，需要时再开启虚拟滚动。
+固定列、列宽调整和列设置共同控制表格布局；需要持久化时，可保存并恢复用户的列设置。
+
+### 普通固定列与滚动定位
+
+左右固定列不依赖虚拟滚动。中间内容超出时横向滚动，固定列保留连续背景。下面通过 `scrollToColumn` 定位中间列，`scrollToRow` 定位行。
+
+<template #example><table-zh-fixed-columns /></template>
+
+<template #template>
+
+@[code{24-54}](../../.vuepress/components/table-zh/fixed-columns.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-22}](../../.vuepress/components/table-zh/fixed-columns.vue)
+
+</template>
+
+<template #style>
+
+@[code{56-66}](../../.vuepress/components/table-zh/fixed-columns.vue)
+
+</template>
+
+</card>
+
+<card>
 
 ### 拖动调整列宽
 
@@ -2778,7 +2794,11 @@ EXPOSES:
 
 </card>
 
-<card>
+<card class="table-doc-section-start">
+
+## 单元格合并
+
+合并区域可以用于普通数据、编辑与详情行，也可以跨虚拟窗口渲染。
 
 ### 合并单元格
 
@@ -2866,6 +2886,40 @@ EXPOSES:
 
 </card>
 
+<card class="table-doc-section-start">
+
+## 大数据与可视化
+
+先配置虚拟滚动和动态行高，再按需提取表格数据用于图表；生成式数据源可避免完整物化大规模行列。
+
+### 虚拟滚动与动态行高
+
+设置 `virtual-config` 可开启虚拟滚动，`height` 指定可视区域高度。开启 `dynamic` 后会根据内容测量行高；`horizontal` 开启横向列虚拟化，`columnOverscan` 控制左右额外渲染的列数。列设置 `fixed="left"` 或 `fixed="right"` 可固定在相应边缘。
+
+数据会重排、更新或包含树节点时，建议提供稳定唯一的 `row-key`。横向滚动时，行高会保留已显示内容的最大高度，以减少上下跳动。列宽、容器宽度、列显隐或顺序变化后会重新测量；替换 `data` 数组或 `virtualSource` 中的行回调也会清除旧的行高测量。
+
+<template #example><table-zh-virtual /></template>
+
+<template #template>
+
+@[code{173-225}](../../.vuepress/components/table-zh/virtual.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-171}](../../.vuepress/components/table-zh/virtual.vue)
+
+</template>
+
+<template #style>
+
+@[code{227-304}](../../.vuepress/components/table-zh/virtual.vue)
+
+</template>
+
+</card>
+
 <card>
 
 ### 图表集成
@@ -2926,39 +2980,11 @@ EXPOSES:
 
 </card>
 
-<card>
-
-### 虚拟滚动与动态行高
-
-设置 `virtual-config` 可开启虚拟滚动，`height` 指定可视区域高度。开启 `dynamic` 后会根据内容测量行高；`horizontal` 开启横向列虚拟化，`columnOverscan` 控制左右额外渲染的列数。列设置 `fixed="left"` 或 `fixed="right"` 可固定在相应边缘。
-
-数据会重排、更新或包含树节点时，建议提供稳定唯一的 `row-key`。横向滚动时，行高会保留已显示内容的最大高度，以减少上下跳动。列宽、容器宽度、列显隐或顺序变化后会重新测量；替换 `data` 数组或 `virtualSource` 中的行回调也会清除旧的行高测量。
-
-<template #example><table-zh-virtual /></template>
-
-<template #template>
-
-@[code{173-225}](../../.vuepress/components/table-zh/virtual.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-171}](../../.vuepress/components/table-zh/virtual.vue)
-
-</template>
-
-<template #style>
-
-@[code{227-304}](../../.vuepress/components/table-zh/virtual.vue)
-
-</template>
-
-</card>
+<card class="table-doc-section-start">
 
 ## 查询表单与请求代理
 
-<card class="table-doc-section-start">
+查询表单、工具栏和请求代理都由 STable 按配置启用。本节从查询交互开始，再介绍生成数据、远程请求以及保存和删除。
 
 ### 查询与工具栏
 
