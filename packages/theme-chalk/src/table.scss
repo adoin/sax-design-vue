@@ -812,7 +812,10 @@
     gap: 8px;
     max-height: 240px;
     overflow-y: auto;
-    padding: 3px;
+    // Scroll containers clip descendant paint. Keep enough space inside the
+    // scrollport for Checkbox hover and focus shadows instead of trying to
+    // escape the clip with z-index or a different shadow implementation.
+    padding: 10px 12px 14px;
   }
 
   @include e(filter-actions) {
