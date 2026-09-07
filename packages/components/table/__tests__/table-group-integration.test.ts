@@ -149,6 +149,31 @@ describe('Table group integration', () => {
     expect(wrapper.get('[role="table"]').attributes('aria-rowcount')).toBe('9')
   })
 
+  it('exposes nested group depth to group headers and subtotals', async () => {
+    const wrapper = setup({
+      data: [
+        { id: 1, team: 'Design', region: 'East', hours: 3 },
+        { id: 2, team: 'Design', region: 'West', hours: 5 },
+      ],
+      groupConfig: {
+        ...config,
+        fields: ['team', 'region'],
+        summary: false,
+      },
+    })
+    await settle()
+
+    const nestedGroup = wrapper.get('.s-table__group-row[data-group-depth="1"]')
+    expect(nestedGroup.attributes('style')).toContain(
+      '--s-table-group-indent: 28px',
+    )
+    expect(
+      wrapper
+        .findAll('.s-table__group-subtotal')
+        .some((row) => row.attributes('data-group-depth') === '1'),
+    ).toBe(true)
+  })
+
   it('keeps group controls out of row selection and displays fully collapsed groups', async () => {
     const wrapper = setup()
     await wrapper.findAll('.s-table__group-toggle')[0].trigger('click')

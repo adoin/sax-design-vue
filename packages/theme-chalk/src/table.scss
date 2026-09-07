@@ -486,7 +486,15 @@
   }
 
   @include e(group-row) {
-    background: color-mix(in srgb, #{getColor(primary)} 7%, var(--s-table-surface));
+    --s-table-group-indent: 0px;
+    --s-table-group-guide-offset: 30px;
+    position: relative;
+    background: color-mix(in srgb, #{getColor(primary)} 8%, var(--s-table-surface));
+    box-shadow: inset 0 -4px 7px -8px #{getColor(primary, 0.34)};
+
+    &[data-group-depth]:not([data-group-depth='0']) {
+      background: color-mix(in srgb, #{getColor(primary)} 4%, var(--s-table-surface));
+    }
   }
   @include e(group-cell) {
     position: sticky;
@@ -497,8 +505,29 @@
     min-height: 48px;
     box-sizing: border-box;
     padding: 6px 12px;
+    padding-inline-start: calc(12px + var(--s-table-group-indent, 0px));
     color: getColor(text);
     overflow-wrap: anywhere;
+  }
+  .#{$namespace}-table__group-row[data-group-depth]:not([data-group-depth='0']) > .#{$namespace}-table__group-cell::before,
+  .#{$namespace}-table__group-row[data-group-depth]:not([data-group-depth='0']) > .#{$namespace}-table__group-cell::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: var(--s-table-group-guide-offset);
+    pointer-events: none;
+    background: #{getColor(primary, 0.24)};
+  }
+  .#{$namespace}-table__group-row[data-group-depth]:not([data-group-depth='0']) > .#{$namespace}-table__group-cell::before {
+    top: 0;
+    width: 2px;
+    height: 50%;
+    border-radius: 0 0 2px 2px;
+  }
+  .#{$namespace}-table__group-row[data-group-depth]:not([data-group-depth='0']) > .#{$namespace}-table__group-cell::after {
+    top: calc(50% - 1px);
+    width: 12px;
+    height: 2px;
+    border-radius: 0 2px 2px 0;
   }
   @include e(group-toggle) {
     flex: 0 0 auto;
@@ -511,8 +540,28 @@
     font-size: 0.85em;
   }
   @include e(group-subtotal) {
+    --s-table-group-subtotal-indent: 0px;
     --s-table-footer-surface: #{getColor(primary, 0.04)};
     box-shadow: inset 0 4px 6px -6px #{getColor(primary, 0.2)};
+
+    .#{$namespace}-table__footer-row {
+      position: relative;
+    }
+
+    .#{$namespace}-table__footer-cell:first-of-type {
+      padding-inline-start: calc(14px + var(--s-table-group-subtotal-indent));
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset-block: 10px;
+        inset-inline-start: calc(8px + var(--s-table-group-subtotal-indent));
+        width: 3px;
+        border-radius: 999px;
+        background: #{getColor(primary, 0.24)};
+        box-shadow: 0 2px 5px -3px #{getColor(primary, 0.36)};
+      }
+    }
   }
   @include e(group-summary) {
     font-weight: 600;

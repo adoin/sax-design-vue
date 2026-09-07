@@ -40,6 +40,12 @@ defineSlots<{
 const ns = useNamespace('table')
 const { t } = useLocale()
 const data = computed(() => [{ ...(props.group?.aggregates ?? props.summary) }])
+const groupDepth = computed(() => props.group?.depth ?? 0)
+const groupDepthStyle = computed<CSSProperties>(() => ({
+  '--s-table-group-indent': `${groupDepth.value * 28}px`,
+  '--s-table-group-guide-offset': `${Math.max(groupDepth.value - 1, 0) * 28 + 30}px`,
+  '--s-table-group-subtotal-indent': `${Math.min(groupDepth.value * 18, 54)}px`,
+}))
 </script>
 
 <template>
@@ -50,6 +56,8 @@ const data = computed(() => [{ ...(props.group?.aggregates ?? props.summary) }])
     role="row"
     :aria-rowindex="rowIndex"
     :data-group-key="group.key"
+    :data-group-depth="group.depth"
+    :style="groupDepthStyle"
   >
     <div
       :class="ns.e('group-cell')"
@@ -57,7 +65,6 @@ const data = computed(() => [{ ...(props.group?.aggregates ?? props.summary) }])
       :aria-colspan="columnCount"
       :style="{
         width: viewportWidth ? `${viewportWidth}px` : '100%',
-        paddingInlineStart: `${12 + group.depth * 20}px`,
       }"
     >
       <SButton
@@ -81,6 +88,9 @@ const data = computed(() => [{ ...(props.group?.aggregates ?? props.summary) }])
     v-else
     data-table-group-band
     :class="ns.e(kind === 'subtotal' ? 'group-subtotal' : 'group-summary')"
+    :data-group-key="group?.key"
+    :data-group-depth="group?.depth"
+    :style="groupDepthStyle"
     :data="data"
     :entries="entries"
     :row-offset="rowIndex"
