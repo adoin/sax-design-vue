@@ -893,6 +893,12 @@
   }
 
   @include e(hierarchy-guides) {
+    --s-table-hierarchy-line-color: color-mix(
+      in srgb,
+      #{getColor(primary)} 24%,
+      #{getColor(background)}
+    );
+
     position: absolute;
     z-index: 0;
     inset: 0;
@@ -904,8 +910,7 @@
     position: absolute;
     inset-block: -1px;
     width: 2px;
-    border-radius: var(--sax-radius-pill);
-    background: hsl(var(--sax-primary) / 0.24);
+    background: var(--s-table-hierarchy-line-color);
 
     @include when(from-middle) {
       inset-block-start: calc(
@@ -924,7 +929,7 @@
         inset-inline-start: 0;
         width: var(--s-table-hierarchy-branch-width);
         height: 2px;
-        border-radius: var(--sax-radius-pill);
+        border-radius: 0 var(--sax-radius-pill) var(--sax-radius-pill) 0;
         background: inherit;
         content: '';
       }
