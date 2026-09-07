@@ -12,6 +12,8 @@ supersedes: []
 
 # Single-component table business shell
 
+This focused specification extends the broader [Table component architecture](table-component-architecture.md).
+
 ## Contract
 
 `STable` is the only public table component. It supports ordinary data tables and can add a query form, toolbar, or request proxy through `queryConfig`, `toolbarConfig`, and `proxyConfig`. Consumers do not switch to a second component when these capabilities are needed.

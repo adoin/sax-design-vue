@@ -4,11 +4,13 @@
 
 - Read relevant records in `.agents/notes/active/` and `.agents/notes/prohibited/` before implementation. Treat proposed records as unapproved, prohibited records as approaches that must not be repeated unless their `reopen_only_if` condition is met, and implemented records as verified project contracts.
 - Move a project specification to `.agents/notes/implemented/` only after its implementation and required verification pass. Preserve superseded decisions in `.agents/notes/superseded/` when the replacement needs historical context.
+- For Table work, read `.agents/notes/implemented/table-component-architecture.md`, `.agents/notes/implemented/table-documentation-information-architecture.md`, and `.agents/notes/implemented/table-single-component-business-shell.md`, plus their linked prohibited approaches.
+- Implemented Scrollbar outside placement and Watermark blind mode are recorded in `.agents/notes/implemented/scrollbar-outside-placement.md` and `.agents/notes/implemented/watermark-blind-mode.md`.
 
 ## Documentation examples
 
 - Write public documentation for developers using the library: explain APIs, behavior, and usage choices. Keep task instructions, implementation constraints, conversation history, and verification reports in internal records rather than example descriptions or demo copy.
-- Treat public documentation as a clean reference for developers and AI. Describe only the current API contract and final behavior. Exclude prompts, conversation details, user feedback, correction history, earlier mistakes, design-review commentary, and validation records; do not frame documentation text as a response to any of them.
+- Treat public documentation as a clean reference for developers and AI. Follow `.agents/notes/prohibited/conversation-history-in-public-docs.md`.
 
 - When a documentation example needs controls or supporting UI beyond the component being documented, prefer existing components from this repository instead of rebuilding them with custom HTML and CSS. Only create a custom control when no suitable repository component exists, and briefly document why.
 - Keep each example's heading, explanatory copy, notes, controls, and rendered demo inside the same `<card>` block. Only the page title, frontmatter summary, and generated API reference may sit outside example cards.
@@ -25,17 +27,8 @@
 
 ## Table architecture
 
-- Use `v-model:highlight` for the table's highlighted row or row array. Give highlighted rows a light, pale warm surface derived from the primary HSL hue, with a contained weak shadow and no border; keep it distinct from the header surface in both themes.
-
-- Hierarchical data belongs to `STable`; do not reintroduce standalone `STree` or `STreeSelect` components. `STableSelect` must reuse the table tree-data mode so expansion behavior and accessibility stay aligned.
-- `STable` is data-driven only. Its canonical APIs are the configuration-object `data + columns` form and nested `STableColumn` children; do not reintroduce public `STr`, `STd`, or `STh` components or handwritten row/cell examples.
-- Query forms, toolbars, and request proxy behavior belong to `STable` through `queryConfig`, `toolbarConfig`, and `proxyConfig`. Do not introduce `STableGrid` or another public table wrapper; keep the supporting form and toolbar components private and keep request orchestration in table composables. See `.agents/notes/implemented/table-single-component-business-shell.md` and `.agents/notes/prohibited/separate-table-grid-wrapper.md`.
-- Keep `STableColumn` renderless and registered through the parent table. A configured `columns` array takes precedence when both declaration styles are present, and both styles must share the same cell-rendering pipeline.
-- Keep column sizing aligned with VXE-style allocation: `width` columns reserve a fixed track; columns without `width` start from `minWidth` (120px by default) and receive equal shares of any remaining width. Preserve the summed minimum width and horizontal scrolling when the container is narrower.
-- Preserve the data-cell rendering precedence: column-specific slot, generic cell slot, column render function or named renderer, then raw field value.
-- Tree rows must be flattened from the current expansion state before virtualization. Do not mutate consumer row data when loading children; keep lazy results internal and emit them for optional persistence.
-- Virtual table changes must support measured dynamic heights, stable row keys, row and column overscan, keyboard-accessible expand controls, and the exposed `scrollToRow` / `scrollToColumn` / `measure` methods. Keep Y-axis row virtualization and X-axis column virtualization independently configurable; verify normal rows, lazy tree expansion, two-axis large virtual data, Code, and Playground together.
-- `STableSelect` must remain a thin selector shell over `STable`, forwarding columns, tree configuration, renderers, cell/header slots, and `virtualConfig`. Large-data examples must verify that a bounded popup renders only the visible row window rather than mounting every row.
+- Treat `.agents/notes/implemented/table-component-architecture.md` as the verified Table contract and `.agents/notes/implemented/table-documentation-information-architecture.md` as the public documentation structure.
+- Preserve the single-component business shell in `.agents/notes/implemented/table-single-component-business-shell.md`. Do not repeat the approaches in `.agents/notes/prohibited/handwritten-table-markup.md` or `.agents/notes/prohibited/separate-table-grid-wrapper.md` unless the user explicitly satisfies their reopening conditions.
 
 ## Overlay architecture
 

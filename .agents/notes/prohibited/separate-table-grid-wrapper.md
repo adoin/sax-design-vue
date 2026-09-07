@@ -20,3 +20,5 @@ This split duplicates the table rendering contract, fragments refs and exposed m
 ## Required alternative
 
 Add optional business behavior to `STable` through `queryConfig`, `toolbarConfig`, and `proxyConfig`. Keep query form and toolbar views private to the table package, and keep request state and orchestration in table composables.
+
+The governing implemented contracts are [table-component-architecture.md](../implemented/table-component-architecture.md) and [table-single-component-business-shell.md](../implemented/table-single-component-business-shell.md).
