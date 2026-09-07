@@ -1758,13 +1758,13 @@ EXPOSES:
 
 ### 嵌套分组表头
 
-在 `STableColumn` 的 `#columns` 插槽中嵌套列定义；`#default` 继续用于叶子单元格，`#header` 自定义组标题。也可以直接传入 `children` 数组。
+在 `STableColumn` 的 `#columns` 插槽中嵌套列定义。组标题默认使用 `title`；仅在需要覆盖标题内容时提供 `#header`。`#default` 继续用于叶子单元格。也可以直接传入 `children` 数组。
 
 <template #example><table-zh-grouped-declarations /></template>
 
 <template #template>
 
-@[code{8-28}](../../.vuepress/components/table-zh/grouped-declarations.vue)
+@[code{8-27}](../../.vuepress/components/table-zh/grouped-declarations.vue)
 
 </template>
 

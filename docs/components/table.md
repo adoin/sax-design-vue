@@ -1758,13 +1758,13 @@ Column settings can hide, reorder or pin individual leaves. A group splits into 
 
 ### Nested grouped headers
 
-Nest column declarations in an `STableColumn` `#columns` slot. Keep `#default` for leaf cell content and use `#header` for a custom group title. You can also pass a `children` array.
+Nest column declarations in an `STableColumn` `#columns` slot. Group headers use `title` by default; provide `#header` only when overriding that content. Keep `#default` for leaf cell content. You can also pass a `children` array.
 
 <template #example><table-grouped-declarations /></template>
 
 <template #template>
 
-@[code{8-28}](../.vuepress/components/table/grouped-declarations.vue)
+@[code{8-27}](../.vuepress/components/table/grouped-declarations.vue)
 
 </template>
 

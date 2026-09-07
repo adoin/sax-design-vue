@@ -9,7 +9,6 @@ const rows = [
   <s-table :data="rows" row-key="id" column-manager-config resize-config>
     <s-table-column field="id" title="ID" :width="72" />
     <s-table-column title="Member">
-      <template #header>Member profile</template>
       <template #columns>
         <s-table-column field="name" title="Name" sortable :min-width="160">
           <template #default="{ row }"
