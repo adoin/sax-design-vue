@@ -187,11 +187,6 @@
 
   .is-group-header {
     justify-content: center;
-    background: color-mix(
-      in srgb,
-      #{getColor(primary)} 7%,
-      var(--s-table-header-surface)
-    );
     box-shadow: inset 0 -3px 5px -5px #{getColor(primary, 0.22)};
   }
 
