@@ -7,6 +7,9 @@
       @scroll="handleScroll"
       @wheel="handleWheel"
     >
+      <div v-if="$slots.overlay" :class="ns.e('overlay')">
+        <slot name="overlay" />
+      </div>
       <div
         :class="ns.e('content')"
         :style="{
@@ -330,6 +333,24 @@ function measureVisible() {
   }
 }
 
+function getVisibleRange() {
+  const element = scrollRef.value
+  if (!element) return undefined
+  const startOffset = sparseMode.value
+    ? sparseVirtualizer.scrollOffset.value
+    : element.scrollTop
+  const endOffset = startOffset + Math.max(element.clientHeight, 1)
+  const items = virtualItems.value
+  const first = items.find((item) => item.end > startOffset)
+  if (!first) return undefined
+  let last = first
+  for (const item of items) {
+    if (item.start >= endOffset) break
+    if (item.end > startOffset) last = item
+  }
+  return { start: first.index, end: last.index }
+}
+
 function handleScroll(event: Event) {
   if (sparseMode.value && event.currentTarget instanceof HTMLElement)
     sparseVirtualizer.handleScroll(event.currentTarget)
@@ -454,6 +475,7 @@ defineExpose({
   scrollBy,
   measure,
   measureVisible,
+  getVisibleRange,
   resetMeasurements,
   getScrollElement: () => scrollRef.value,
   virtualizer,

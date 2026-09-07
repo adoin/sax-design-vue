@@ -3,6 +3,7 @@ import { createTableGroupLayout } from '../src/composables/table-group-layout'
 import { resolveRemoteTableGroups } from '../src/composables/table-group-model'
 import { createTableMergeIndex } from '../src/composables/table-merge-regions'
 import { useTableMergeCoordinates } from '../src/composables/use-table-merge-coordinates'
+import { findTableParentGroup } from '../src/composables/use-table-parent-indicator'
 import type { TableCellCoordinate } from '../src/composables/use-table-keyboard'
 import type { TableMergeRange } from '../src/table-merge'
 
@@ -66,6 +67,36 @@ const setup = (ranges: TableMergeRange[] = []) => {
 }
 
 describe('grouped source keyboard coordinates', () => {
+  it('locates visible group headers and the deepest parent for a member', () => {
+    const groups = resolveRemoteTableGroups(
+      [
+        {
+          key: 'outer',
+          field: 'region',
+          value: 'east',
+          rowStart: 10,
+          rowCount: 20,
+          children: [
+            {
+              key: 'inner',
+              field: 'team',
+              value: 'design',
+              rowStart: 12,
+              rowCount: 4,
+            },
+          ],
+        },
+      ],
+      40,
+    )
+    const layout = createTableGroupLayout(groups, 40, () => true)
+
+    expect(layout.groupIndexOf('outer')).toBe(10)
+    expect(layout.groupIndexOf('inner')).toBe(13)
+    expect(findTableParentGroup(groups, 14)?.key).toBe('inner')
+    expect(findTableParentGroup(groups, 12, 'inner')?.key).toBe('outer')
+  })
+
   it('skips collapsed ranges in both arrow and tab directions', () => {
     const coordinates = setup()
     expect(

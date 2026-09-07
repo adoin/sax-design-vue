@@ -1111,6 +1111,116 @@
     }
   }
 
+  @include e(parent-indicator) {
+    position: absolute;
+    inset: 0 0 auto;
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    width: 100%;
+    min-height: 36px;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    box-sizing: border-box;
+    border: 0;
+    background: color-mix(
+      in srgb,
+      #{getColor(primary)} 9%,
+      var(--s-table-surface)
+    );
+    box-shadow: 0 5px 10px -8px #{getColor(primary, 0.58)};
+    color: getCssVar(text-color, primary);
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+    pointer-events: auto;
+
+    &:hover,
+    &:focus-visible {
+      background: color-mix(
+        in srgb,
+        #{getColor(primary)} 13%,
+        var(--s-table-surface)
+      );
+      box-shadow:
+        0 6px 12px -8px #{getColor(primary, 0.68)},
+        inset 0 0 0 1px #{getColor(primary, 0.14)};
+      outline: none;
+    }
+  }
+
+  @include e(parent-indicator-mark) {
+    display: inline-grid;
+    width: 24px;
+    height: 24px;
+    place-items: center;
+    border-radius: var(--sax-radius-pill);
+    background: #{getColor(primary, 0.1)};
+    color: getColor(primary);
+  }
+
+  @include e(parent-indicator-context) {
+    display: flex;
+    min-width: 0;
+    align-items: baseline;
+    gap: 8px;
+
+    > span {
+      flex: 0 0 auto;
+      color: getCssVar(text-color, secondary);
+      font-size: 0.78rem;
+    }
+
+    > strong {
+      min-width: 0;
+      overflow: hidden;
+      color: getCssVar(text-color, primary);
+      font-weight: 650;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  @include e(parent-indicator-action) {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: getColor(primary);
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+
+    .#{$namespace}-icon {
+      font-size: 0.78rem;
+    }
+  }
+
+  &-parent-indicator-enter-active,
+  &-parent-indicator-leave-active {
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease;
+  }
+
+  &-parent-indicator-enter-from,
+  &-parent-indicator-leave-to {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  @media (max-width: 520px) {
+    @include e(parent-indicator-action) {
+      font-size: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &-parent-indicator-enter-active,
+    &-parent-indicator-leave-active {
+      transition: none;
+    }
+  }
+
   @include e(footer) {
     padding: 8px 10px;
     background: var(--s-table-header-surface);

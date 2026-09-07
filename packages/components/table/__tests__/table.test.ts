@@ -34,6 +34,8 @@ vi.mock('@tanstack/vue-virtual', () => ({
             index,
             key: index,
             start: index * 48,
+            size: 48,
+            end: (index + 1) * 48,
           }),
         ),
     },
@@ -289,6 +291,100 @@ describe('Table data mode', () => {
     expect(
       rows[2].find('.s-table__hierarchy-guide.is-to-middle').exists(),
     ).toBe(true)
+  })
+
+  it('shows a temporary parent shortcut while scrolling child rows', async () => {
+    vi.useFakeTimers()
+    const requestFrame = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        callback(0)
+        return 1
+      })
+    const wrapper = mount(Table, {
+      props: {
+        columns,
+        data: [
+          {
+            id: 'root',
+            name: 'Root',
+            children: Array.from({ length: 5 }, (_, index) => ({
+              id: `child-${index}`,
+              name: `Child ${index}`,
+            })),
+          },
+        ],
+        treeConfig: { defaultExpandedKeys: ['root'] },
+        virtualConfig: { height: 96, estimateSize: 48, overscan: 2 },
+        parentIndicator: { hideDelay: 500 },
+      },
+    })
+    try {
+      await nextTick()
+      const viewport = wrapper.get('.s-vl__window')
+      Object.defineProperty(viewport.element, 'clientHeight', { value: 96 })
+      ;(viewport.element as HTMLElement).scrollTop = 96
+      await viewport.trigger('scroll')
+      await nextTick()
+
+      const shortcut = wrapper.get('.s-table__parent-indicator')
+      expect(shortcut.text()).toContain('Root')
+      expect(shortcut.attributes('aria-label')).toBe('Back to parent Root')
+      vi.advanceTimersByTime(499)
+      await nextTick()
+      expect(wrapper.find('.s-table__parent-indicator').exists()).toBe(true)
+      vi.advanceTimersByTime(1)
+      await nextTick()
+      expect(wrapper.find('.s-table__parent-indicator').exists()).toBe(false)
+    } finally {
+      wrapper.unmount()
+      requestFrame.mockRestore()
+      vi.useRealTimers()
+    }
+  })
+
+  it('returns to the visible branch parent from the parent shortcut', async () => {
+    const requestFrame = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        callback(0)
+        return 1
+      })
+    const wrapper = mount(Table, {
+      props: {
+        columns,
+        data: [
+          {
+            id: 'root',
+            name: 'Root',
+            children: Array.from({ length: 5 }, (_, index) => ({
+              id: `child-${index}`,
+              name: `Child ${index}`,
+            })),
+          },
+        ],
+        treeConfig: { defaultExpandedKeys: ['root'] },
+        virtualConfig: { height: 96, estimateSize: 48, overscan: 2 },
+      },
+    })
+    try {
+      await nextTick()
+      const viewport = wrapper.get('.s-vl__window')
+      Object.defineProperty(viewport.element, 'clientHeight', { value: 96 })
+      ;(viewport.element as HTMLElement).scrollTop = 96
+      await viewport.trigger('scroll')
+      await nextTick()
+      virtualizerMocks.scrollToIndex.mockClear()
+
+      await wrapper.get('.s-table__parent-indicator').trigger('click')
+      expect(virtualizerMocks.scrollToIndex).toHaveBeenCalledWith(0, {
+        align: 'start',
+      })
+      expect(wrapper.find('.s-table__parent-indicator').exists()).toBe(false)
+    } finally {
+      wrapper.unmount()
+      requestFrame.mockRestore()
+    }
   })
 
   it('loads lazy children before expanding a row', async () => {

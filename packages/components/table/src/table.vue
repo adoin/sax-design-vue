@@ -268,6 +268,15 @@
           role="rowgroup"
           @scroll="handleVirtualScroll"
         >
+          <template #overlay>
+            <TableParentIndicator
+              :visible="parentIndicator.visible.value"
+              :label="parentIndicator.target.value?.label ?? ''"
+              @jump="parentIndicator.jump"
+              @hold="parentIndicator.hold"
+              @release="parentIndicator.release"
+            />
+          </template>
           <template #default="{ item, index }">
             <TableBodyBlock
               :item="normalizeBodyItem(item, index)"
@@ -489,6 +498,7 @@ import TableHeaderCell from './table-header-cell.vue'
 import TableHeaderRows from './table-header-rows.vue'
 import TableFooterRows from './table-footer-rows.vue'
 import TableGroupBand from './table-group-band.vue'
+import TableParentIndicator from './table-parent-indicator.vue'
 import { createTableBodyBlock } from './table-body-block'
 import { useTableGroups } from './composables/use-table-groups'
 import { useTableEdit } from './composables/use-table-edit'
@@ -526,6 +536,10 @@ import { useTableOverflow } from './composables/use-table-overflow'
 import { useTablePagination } from './composables/use-table-pagination'
 import { useTableColumnResize } from './composables/use-table-column-resize'
 import { useTableColumnManager } from './composables/use-table-column-manager'
+import {
+  findTableParentGroup,
+  useTableParentIndicator,
+} from './composables/use-table-parent-indicator'
 import TableColumnManager from './table-column-manager.vue'
 import type { TableBodyItem } from './table-body-block'
 import type { TableMergeSurface } from './table-merge-layer.vue'
@@ -1347,6 +1361,7 @@ const handleTableScroll = (event: Event) => {
 
 const handleVirtualScroll = (event: Event) => {
   columnVirtualization.handleScroll(event)
+  parentIndicator.onScroll(event)
   emit('scroll', event)
 }
 
@@ -1394,6 +1409,68 @@ const scrollToRow = (
     row?.scrollIntoView({ block: align === 'auto' ? 'nearest' : align })
   }
 }
+
+const parentIndicatorEnabled = computed(
+  () =>
+    props.parentIndicator !== false &&
+    usesBodyScroll.value &&
+    (Boolean(props.treeConfig) || groups.enabled.value),
+)
+const parentIndicatorHideDelay = computed(() => {
+  const value =
+    typeof props.parentIndicator === 'object'
+      ? props.parentIndicator.hideDelay
+      : undefined
+  return typeof value === 'number' && Number.isFinite(value)
+    ? Math.max(0, value)
+    : 1000
+})
+const treeNodeColumn = computed(() =>
+  resolvedColumns.value.find((column) => column.treeNode),
+)
+const resolveParentIndicator = () => {
+  const range = virtualListRef.value?.getVisibleRange()
+  if (!range || range.start <= 0) return undefined
+  const item = bodyItemAt(range.start)
+
+  if (groups.enabled.value) {
+    const rowIndex =
+      item.kind === 'data' ? item.flatRow.index : item.group.rowStart
+    const group = findTableParentGroup(
+      groups.state.value.groups,
+      rowIndex,
+      item.kind === 'group' ? item.group.key : undefined,
+    )
+    const renderIndex = group
+      ? groups.layout.value.groupIndexOf(group.key)
+      : undefined
+    if (!group || renderIndex == null || renderIndex >= range.start)
+      return undefined
+    return {
+      key: `group:${group.key}`,
+      label: group.label,
+      jump: () => virtualListRef.value?.scrollToIndex(renderIndex, 'start'),
+    }
+  }
+
+  if (item.kind !== 'data' || item.flatRow.parentKey == null) return undefined
+  const parentIndex = getRowIndex(item.flatRow.parentKey)
+  const parent = flatRows.value[parentIndex]
+  if (!parent || parentIndex < 0 || parentIndex >= range.start) return undefined
+  const value = tableFieldValue(parent.row, treeNodeColumn.value?.field)
+  return {
+    key: `tree:${typeof parent.key}:${String(parent.key)}`,
+    label: value == null || value === '' ? String(parent.key) : String(value),
+    jump: () => scrollToRow(parent.key, 'start'),
+  }
+}
+const parentIndicator = useTableParentIndicator({
+  enabled: parentIndicatorEnabled,
+  hideDelay: parentIndicatorHideDelay,
+  resolve: resolveParentIndicator,
+})
+
+watch([flatRows, groups.layout], parentIndicator.reset)
 
 const scrollToColumn = (
   columnOrIndex: TableColumn | string | number,

@@ -409,6 +409,11 @@ export interface TableTreeConfig<Row extends TableRow = TableRow> {
   load?: (params: TableTreeLoadParams<Row>) => Promise<Row[]>
 }
 
+export interface TableParentIndicatorConfig {
+  /** Milliseconds to keep the parent shortcut visible after scrolling stops. */
+  hideDelay?: number
+}
+
 export interface TableVirtualConfig {
   enabled?: boolean
   height?: number | string
@@ -591,6 +596,13 @@ export const tableProps = buildProps({
   treeConfig: {
     type: definePropType<TableTreeConfig | undefined>(Object),
     default: undefined,
+  },
+  parentIndicator: {
+    type: definePropType<boolean | TableParentIndicatorConfig>([
+      Boolean,
+      Object,
+    ]),
+    default: true,
   },
   virtualConfig: {
     type: definePropType<boolean | TableVirtualConfig>([Boolean, Object]),

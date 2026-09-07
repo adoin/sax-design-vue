@@ -67,6 +67,7 @@ export function createTableGroupLayout(
     throw new RangeError('Invalid group layout bounds')
   const segments: Segment[] = []
   const data: DataSegment[] = []
+  const groupRenderIndexes = new Map<string, number>()
   let count = 0
   let dataCount = 0
   const appendData = (
@@ -106,6 +107,7 @@ export function createTableGroupLayout(
     open: boolean,
     hierarchy: TableHierarchyState,
   ) => {
+    if (kind === 'group') groupRenderIndexes.set(group.key, count)
     segments.push({
       kind,
       start: count,
@@ -208,6 +210,10 @@ export function createTableGroupLayout(
     rowIndexAt(index: number): number | undefined {
       const segment = dataAt(index)
       return segment ? segment.rowStart + index - segment.dataStart : undefined
+    },
+    /** Group key -> virtual-list item index for its visible header band. */
+    groupIndexOf(key: string): number | undefined {
+      return groupRenderIndexes.get(key)
     },
     /** Visible data index -> virtual-list item index (including group bands). */
     renderIndexAt(index: number): number | undefined {

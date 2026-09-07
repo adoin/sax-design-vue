@@ -63,6 +63,7 @@ const last = async () => {
       :virtual-source="source"
       :group-config="grouping"
       :keyboard-config="{ rowIndexOf: Number }"
+      :parent-indicator="{ hideDelay: 1000 }"
       :virtual-config="{ height: 300, dynamic: true, horizontal: true }"
       resize-config
     >

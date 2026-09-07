@@ -183,6 +183,11 @@ PROPS:
     description: Enables hierarchical rows, controlled expansion and lazy child loading; line controls parent-child guides.
     default: null
     usage: '#tree-table-and-lazy-loading'
+  - name: parent-indicator
+    type: Boolean | TableParentIndicatorConfig
+    description: Shows a temporary sticky shortcut back to the parent while virtual scrolling through tree children or group members; hideDelay sets the post-scroll delay in milliseconds.
+    default: true
+    usage: '#remote-groups-and-virtual-rows'
   - name: virtual-config
     type: Boolean | TableVirtualConfig
     description: Enables Y-axis row virtualization and optional X-axis column virtualization.
@@ -1575,13 +1580,13 @@ With a real endpoint, return contiguous group members and `TableGroupRemoteResul
 
 Generated sources use `mode: remote`. The application supplies `remote.groups` with starts, counts, children and aggregates, plus `remote.summary`. Fetching and cancellation can use the existing Grid request proxy; pass the current server result into this configuration. The table does not scan generated rows to infer groups. Remote ranges use page data indices for ordinary arrays and absolute source indices for generated sources. Sibling ranges must be ordered, disjoint and inside their parent; uncovered rows remain visible.
 
-This example provides formula-based metadata for one million rows and one hundred thousand columns. Open last batch updates expansion before locating the final cell. Collapsed members have no visible data address; expand their group before programmatic navigation. Group headings, subtotals and data share a virtual window, with range metadata proportional to group count. Local grouping/aggregation processes supplied rows synchronously, so computation and storage grow with rows and group depth; use server aggregation for large global datasets.
+This example provides formula-based metadata for one million rows and one hundred thousand columns. While scrolling through group members, a temporary bar below the header shows the current parent; select it to return to the parent row. It remains for 1000ms after scrolling stops by default, configurable through `parent-indicator.hideDelay`. Open last batch updates expansion before locating the final cell. Collapsed members have no visible data address; expand their group before programmatic navigation. Group headings, subtotals and data share a virtual window, with range metadata proportional to group count. Local grouping/aggregation processes supplied rows synchronously, so computation and storage grow with rows and group depth; use server aggregation for large global datasets.
 
 <template #example><table-grouping-source /></template>
 
 <template #template>
 
-@[code{52-78}](../.vuepress/components/table/grouping-source.vue)
+@[code{52-79}](../.vuepress/components/table/grouping-source.vue)
 
 </template>
 
@@ -1593,7 +1598,7 @@ This example provides formula-based metadata for one million rows and one hundre
 
 <template #style>
 
-@[code{80-95}](../.vuepress/components/table/grouping-source.vue)
+@[code{81-96}](../.vuepress/components/table/grouping-source.vue)
 
 </template>
 
