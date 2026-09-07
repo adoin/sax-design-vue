@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 import matter from 'gray-matter'
 import { describe, expect, it } from 'vitest'
 import { createApiTypeDetailsResolver } from '../../docs/.vuepress/theme/node/apiTypeDetails'
-import { auditTableApi } from '../../scripts/audit-table-api.mjs'
+import { auditTableApi } from './table-api-metadata.mjs'
 
 const projectRoot = resolve(__dirname, '../..')
 const docsRoots = [

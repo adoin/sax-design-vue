@@ -11,8 +11,6 @@
     // playground
     "play/main.ts",
     "play/env.d.ts",
-    "play/table-audit/**/*.ts",
-    "play/table-overlay-audit/**/*.ts",
     "play/src/**/*"
   ]
 }

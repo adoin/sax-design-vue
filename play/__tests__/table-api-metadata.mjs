@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { URL, fileURLToPath } from 'node:url'
 import { parse } from '@vue/compiler-sfc'
@@ -6,7 +6,7 @@ import ts from 'typescript'
 import matter from 'gray-matter'
 
 const moduleUrl = import.meta.url
-const root = resolve(fileURLToPath(new URL('..', moduleUrl)))
+const root = resolve(fileURLToPath(new URL('../..', moduleUrl)))
 const kebab = (value) =>
   value.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`)
 const unwrap = (node) => {
@@ -358,30 +358,4 @@ export function auditTableApi({
     }
   }
   return result
-}
-
-if (
-  process.argv[1] &&
-  resolve(process.argv[1]) === fileURLToPath(import.meta.url)
-) {
-  const result = auditTableApi()
-  const json = `${JSON.stringify(result, null, 2)}\n`
-  if (process.argv[2]) writeFileSync(process.argv[2], json)
-  else process.stdout.write(json)
-  if (
-    result.some(
-      (page) =>
-        !page.inheritedTableLink ||
-        page.defaults.mismatches.length ||
-        page.exposeTypeMismatch.length ||
-        page.exposeSignatures.mismatches.length ||
-        Object.values(page.sections).some(
-          (section) =>
-            section.missing.length ||
-            section.duplicates.length ||
-            section.extra.length,
-        ),
-    )
-  )
-    process.exitCode = 1
 }
