@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-04T18:36:01.752Z",
+  "timestamp": "2026-09-07T01:53:52.690Z",
   "browser": "Chrome/150.0.7871.24",
   "results": [
     {
@@ -122,8 +122,8 @@
       "sourceLength": 5465,
       "preview": {
         "tables": 1,
-        "rows": 13,
-        "fixed": 28,
+        "rows": 11,
+        "fixed": 24,
         "virtual": 1,
         "error": ""
       }

@@ -46,6 +46,14 @@ const exampleCards = (source: string) =>
     .map((match) => match[1])
     .filter((card) => card.includes('<template #example>'))
 
+const tableSections = [
+  ['Data display and queries', '数据展示与查询'],
+  ['Trees, groups, and summaries', '树形、分组与汇总'],
+  ['Editing and data state', '编辑与数据状态'],
+  ['Spreadsheet interactions', '表格式交互'],
+  ['Layout, merging, and large data', '布局、合并与大数据'],
+] as const
+
 const normalizedBlock = (value?: string) =>
   (value ?? '').replace(/\r\n?/g, '\n').trim()
 
@@ -173,6 +181,16 @@ describe('documentation example source', () => {
     expect(cards[0]).toHaveLength(59)
     expect(cards[1]).toHaveLength(cards[0].length)
 
+    markdown.forEach((source, localeIndex) => {
+      expect(
+        source.match(/<card class="table-doc-section-start">/g),
+      ).toHaveLength(tableSections.length)
+      expect(source.match(/^##\s+.+$/gm)).toEqual(
+        tableSections.map((section) => `## ${section[localeIndex]}`),
+      )
+      expect(source.match(/^###\s+.+$/gm)).toHaveLength(59)
+    })
+
     for (const [source, examples] of markdown.map(
       (source, index) => [source, cards[index]] as const,
     ))
@@ -190,7 +208,9 @@ describe('documentation example source', () => {
         ['en', english, paths[0]],
         ['zh', chinese, paths[1]],
       ] as const) {
-        const headingEnd = card.indexOf('\n', card.indexOf('## '))
+        const heading = card.match(/^###\s+.+$/m)
+        expect(heading).toBeTruthy()
+        const headingEnd = heading!.index! + heading![0].length
         const exampleStart = card.indexOf('<template #example>')
         expect(
           card.slice(headingEnd, exampleStart).replace(/[`\s]/g, '').length,

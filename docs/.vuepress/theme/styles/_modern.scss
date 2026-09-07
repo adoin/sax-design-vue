@@ -131,9 +131,37 @@ body,
   }
 }
 
+.card.table-doc-section-start {
+  margin-top: 56px;
+}
+
+.page .content__default > h1 + .card.table-doc-section-start {
+  margin-top: 24px;
+}
+
 .dark .card {
   background: hsl(var(--sax-theme-layout));
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+}
+
+.card.table-doc-section-start > .text > h3,
+.card.table-doc-section-start ~ .card > .text > h3 {
+  position: static;
+  margin: 0;
+  padding: 22px 20px 10px;
+  border-bottom: 1px solid hsl(var(--sax-accent-color) / 0.1);
+  font-size: 1.28rem;
+  letter-spacing: -0.02em;
+
+  &::before {
+    content: none;
+  }
+
+  + p {
+    margin-top: 14px;
+    color: hsl(var(--sax-theme-color) / 0.72);
+    line-height: 1.7;
+  }
 }
 
 .dark .card > .example {

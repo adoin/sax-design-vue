@@ -12,26 +12,26 @@ const pages = [
   {
     path: 'components/table.html',
     features: [
-      ['grouping', 2],
-      ['merge', 3],
-      ['virtual-merge', 5],
-      ['context-menu', 7],
-      ['cell-range', 9],
-      ['clipboard', 11],
-      ['chart', 13],
-      ['find', 15],
-      ['keyboard', 17],
-      ['row-drag', 20],
-      ['history', 21],
-      ['changes', 24],
-      ['validation', 27],
-      ['editing', 31],
-      ['edit-lifecycle', 29],
-      ['details', 34],
-      ['resize', 35],
-      ['column-manager', 36],
-      ['grouped-header', 40],
-      ['footer', 43],
+      ['grouping', 16],
+      ['merge', 53],
+      ['virtual-merge', 55],
+      ['context-menu', 46],
+      ['cell-range', 40],
+      ['clipboard', 42],
+      ['chart', 57],
+      ['find', 44],
+      ['keyboard', 38],
+      ['row-drag', 49],
+      ['history', 36],
+      ['changes', 35],
+      ['validation', 32],
+      ['editing', 29],
+      ['edit-lifecycle', 27],
+      ['details', 25],
+      ['resize', 50],
+      ['column-manager', 51],
+      ['grouped-header', 19],
+      ['footer', 22],
     ],
   },
   {
@@ -54,8 +54,9 @@ const cardSnapshot = (page, indices) =>
         const cell = table?.querySelector(
           '.s-table__data-cell,.s-table__empty,.s-table__data-head-cell',
         )
+        const heading = card?.querySelector('h3') ?? card?.querySelector('h2')
         return {
-          heading: card?.querySelector('h2')?.textContent?.trim() ?? '',
+          heading: heading?.textContent?.trim() ?? '',
           color: cell ? getComputedStyle(cell).backgroundColor : '',
           tables: card?.querySelectorAll('.s-table').length ?? 0,
           fixed:
@@ -109,9 +110,12 @@ const inspectCodeAndPlayground = async (page, locale, feature, index) => {
     visible: true,
     timeout: 30_000,
   })
-  await page.waitForSelector('.live-example-preview .s-table', {
-    timeout: 30_000,
-  })
+  await page.waitForFunction(
+    () =>
+      document.querySelector('.live-example-preview .s-table') ||
+      document.querySelector('.live-example-preview__error'),
+    { timeout: 60_000 },
+  )
   await pause(180)
   const preview = await page.$eval('.live-example-preview', (element) => ({
     tables: element.querySelectorAll('.s-table').length,

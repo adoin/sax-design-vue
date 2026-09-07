@@ -26,7 +26,7 @@ try {
     }),
   )
 
-  const group = `${scope(0)} .s-table__group-toggle`
+  const group = `${scope(14)} .s-table__group-toggle`
   const groupBefore = await page.$eval(group, (button) =>
     button.getAttribute('aria-label'),
   )
@@ -41,7 +41,7 @@ try {
   assert(groupAfter.focused)
   record('grouping', groupAfter)
 
-  const details = `${scope(32)} .s-table__detail-toggle`
+  const details = `${scope(23)} .s-table__detail-toggle`
   const detailsBefore = await page.$eval(details, (button) =>
     button.getAttribute('aria-expanded'),
   )
@@ -56,7 +56,7 @@ try {
   assert(detailsAfter.focused)
   record('details', detailsAfter)
 
-  const separator = `${scope(35)} .s-table__resize-handle`
+  const separator = `${scope(50)} .s-table__resize-handle`
   const widthBefore = await page.$eval(
     separator,
     (handle) => handle.parentElement.getBoundingClientRect().width,
@@ -72,7 +72,7 @@ try {
   assert(resizeAfter.focused)
   record('resize', resizeAfter)
 
-  const firstCell = `${scope(16)} .s-table__data-cell`
+  const firstCell = `${scope(37)} .s-table__data-cell`
   await page.focus(firstCell)
   const keyboardBefore = await page.$eval(
     firstCell,
@@ -80,7 +80,7 @@ try {
   )
   await page.keyboard.press('ArrowDown')
   await pause()
-  const keyboardAfter = await page.$eval(scope(16), () => ({
+  const keyboardAfter = await page.$eval(scope(37), () => ({
     row: document.activeElement?.closest('[data-table-row-index]')?.dataset
       .tableRowIndex,
     active: document.activeElement?.classList.contains('s-table__data-cell'),
@@ -89,7 +89,7 @@ try {
   assert(keyboardAfter.active)
   record('keyboard-navigation', keyboardAfter)
 
-  const contextCell = `${scope(6)} .s-table__data-cell`
+  const contextCell = `${scope(45)} .s-table__data-cell`
   await page.focus(contextCell)
   await page.keyboard.down('Shift')
   await page.keyboard.press('F10')
@@ -114,13 +114,13 @@ try {
   assert(contextAfter.restored)
   record('context-menu', { ...contextOpen, ...contextAfter })
 
-  const rangeCell = `${scope(8)} .s-table__data-cell:not(.is-fixed-right)`
+  const rangeCell = `${scope(39)} .s-table__data-cell:not(.is-fixed-right)`
   await page.focus(rangeCell)
   await page.keyboard.down('Shift')
   await page.keyboard.press('ArrowRight')
   await page.keyboard.up('Shift')
   await pause()
-  const range = await page.$eval(scope(8), (card) => ({
+  const range = await page.$eval(scope(39), (card) => ({
     cells: card.querySelectorAll('.s-table__data-cell.is-range-cell').length,
     focused: document.activeElement?.classList.contains('s-table__data-cell'),
   }))
@@ -128,14 +128,14 @@ try {
   assert(range.focused)
   record('cell-range', range)
 
-  const drag = `${scope(18)} .s-table__row-drag-handle`
+  const drag = `${scope(47)} .s-table__row-drag-handle`
   await page.focus(drag)
   await page.keyboard.press('Space')
   await page.keyboard.press('ArrowDown')
-  assert(await page.$(`${scope(18)} .is-dragging-row`))
+  assert(await page.$(`${scope(47)} .is-dragging-row`))
   await page.keyboard.press('Escape')
   await pause()
-  const dragAfter = await page.$eval(scope(18), (card) => ({
+  const dragAfter = await page.$eval(scope(47), (card) => ({
     cancelled: !card.querySelector('.is-dragging-row'),
     focusOnHandle: document.activeElement?.classList.contains(
       's-table__row-drag-handle',
@@ -145,14 +145,14 @@ try {
   assert(dragAfter.focusOnHandle)
   record('row-drag', dragAfter)
 
-  const editCell = `${scope(28)} .s-table__data-cell.is-editable-cell`
+  const editCell = `${scope(26)} .s-table__data-cell.is-editable-cell`
   await page.$eval(editCell, (cell) =>
     cell.dispatchEvent(new MouseEvent('dblclick', { bubbles: true })),
   )
-  await page.waitForSelector(`${scope(28)} .s-table__cell-editor input`, {
+  await page.waitForSelector(`${scope(26)} .s-table__cell-editor input`, {
     timeout: 10_000,
   })
-  const editOpen = await page.$eval(scope(28), (card) =>
+  const editOpen = await page.$eval(scope(26), (card) =>
     Boolean(
       card
         .querySelector('.s-table__cell-editor')
@@ -162,7 +162,7 @@ try {
   assert(editOpen)
   await page.keyboard.press('Escape')
   await pause()
-  const editAfter = await page.$eval(scope(28), (card) => ({
+  const editAfter = await page.$eval(scope(26), (card) => ({
     closed: !card.querySelector('.s-table__cell-editor'),
     cellFocused:
       document.activeElement?.classList.contains('s-table__data-cell'),
@@ -171,16 +171,16 @@ try {
   assert(editAfter.cellFocused)
   record('editing', { editorFocused: editOpen, ...editAfter })
 
-  const findCell = `${scope(14)} .s-table__data-cell`
+  const findCell = `${scope(43)} .s-table__data-cell`
   await page.focus(findCell)
   await page.keyboard.down('Control')
   await page.keyboard.press('f')
   await page.keyboard.up('Control')
-  await page.waitForSelector(`${scope(14)} .s-table__find-panel`, {
+  await page.waitForSelector(`${scope(43)} .s-table__find-panel`, {
     visible: true,
     timeout: 10_000,
   })
-  const findOpen = await page.$eval(scope(14), (card) => ({
+  const findOpen = await page.$eval(scope(43), (card) => ({
     inputFocused: card
       .querySelector('.s-table__find-panel')
       ?.contains(document.activeElement),
@@ -188,7 +188,7 @@ try {
   assert(findOpen.inputFocused)
   await page.keyboard.press('Escape')
   await pause()
-  const findAfter = await page.$eval(scope(14), (card) => ({
+  const findAfter = await page.$eval(scope(43), (card) => ({
     closed: !card.querySelector('.s-table__find-panel'),
     focusReturned:
       document.activeElement === card.querySelector('.s-table__find > button'),
@@ -197,7 +197,7 @@ try {
   assert(findAfter.focusReturned)
   record('find', { ...findOpen, ...findAfter })
 
-  const manager = `${scope(36)} .s-table__column-manager .s-popper__trigger`
+  const manager = `${scope(51)} .s-table__column-manager .s-popper__trigger`
   const managerTrigger = await page.$(manager)
   assert(managerTrigger)
   await managerTrigger.focus()
