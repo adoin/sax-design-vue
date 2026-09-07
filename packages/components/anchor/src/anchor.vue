@@ -62,7 +62,7 @@ const initializedCollapseKeys = new Set<string>()
 let scrollContainer: HTMLElement | Window | undefined
 let scrollSettleTimer: ReturnType<typeof setTimeout> | undefined
 
-interface AnchorEntry {
+export interface AnchorEntry {
   item: AnchorItem
   key: string
   depth: number

@@ -1,6 +1,6 @@
 {
   "name": "sax-design-vue-iconify",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Build-time Iconify integration for Sax Design Vue",
   "type": "module",
   "license": "MIT",

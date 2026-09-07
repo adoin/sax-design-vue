@@ -213,7 +213,7 @@ const measureElementAt = (index: number, element: HTMLElement) => {
   virtualizer.value.resizeItem(index, nextSize)
 }
 
-interface PendingSparseMeasurement {
+export interface PendingSparseMeasurement {
   element: HTMLElement
   key: VirtualListKey
   size?: number

@@ -1,7 +1,6 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 
 import type { ExtractPropTypes } from 'vue'
-import type VirtualList from './virtual-list.vue'
 
 export type VirtualListKey = string | number
 export type VirtualListItemKey<T = unknown> = (
@@ -71,4 +70,17 @@ export const virtualListEmits = {
 }
 
 export type VirtualListProps = ExtractPropTypes<typeof virtualListProps>
-export type VirtualListInstance = InstanceType<typeof VirtualList>
+export interface VirtualListInstance {
+  scrollToIndex: (
+    index: number,
+    align?: 'auto' | 'start' | 'center' | 'end',
+  ) => void
+  scrollToOffset: (offset: number, behavior?: ScrollBehavior) => void
+  scrollBy: (delta: number) => void
+  measure: () => void
+  measureVisible: () => void
+  getVisibleRange: () => { start: number; end: number } | undefined
+  resetMeasurements: () => Promise<void>
+  getScrollElement: () => HTMLElement | undefined
+  virtualizer: unknown
+}

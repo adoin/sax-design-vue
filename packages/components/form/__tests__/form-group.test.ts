@@ -54,9 +54,6 @@ const mountGroup = (
   const wrapper = mount(Host, {
     global: {
       components: { TestInput },
-      stubs: {
-        SPopper: { template: '<div><slot /><slot name="content" /></div>' },
-      },
     },
   })
 
@@ -186,10 +183,13 @@ describe('FormGroup', () => {
     })
     expect(event).toBeInstanceOf(MouseEvent)
 
-    const menuItem = document.body.querySelector(
-      '.s-context-menu__item',
-    ) as HTMLButtonElement
-    menuItem.click()
+    const menuItem = [
+      ...document.body.querySelectorAll<HTMLButtonElement>(
+        '.s-context-menu__item',
+      ),
+    ].find((item) => item.textContent?.trim() === 'Close 1')
+    expect(menuItem).toBeDefined()
+    menuItem!.click()
     await flushPromises()
 
     expect(onContextMenuSelect).toHaveBeenCalledOnce()

@@ -1,11 +1,29 @@
 import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
-import type { WatchSource } from 'vue'
+import type { ComputedRef, Ref, ShallowRef, WatchSource } from 'vue'
 import type {
   ContextMenuInstance,
   ContextMenuItem,
 } from '@vuesax-alpha/components/context-menu'
 import type { TableCoreProps, TableEmitFn } from '../table'
-import type { TableContextMenuContext } from '../table-context-menu'
+import type {
+  TableContextMenuConfig,
+  TableContextMenuContext,
+} from '../table-context-menu'
+
+export interface TableContextMenuController {
+  menu: Ref<ContextMenuInstance | undefined>
+  enabled: ComputedRef<boolean>
+  config: ComputedRef<TableContextMenuConfig>
+  items: ComputedRef<ContextMenuItem[]>
+  context: ShallowRef<TableContextMenuContext | undefined>
+  open: (
+    current: TableContextMenuContext,
+    event: MouseEvent | KeyboardEvent,
+  ) => void
+  close: () => void
+  onClose: () => void
+  select: (item: ContextMenuItem) => void
+}
 
 export function useTableContextMenu(
   props: TableCoreProps,
@@ -14,10 +32,10 @@ export function useTableContextMenu(
     root: () => HTMLElement | undefined
     context: WatchSource[]
   },
-) {
+): TableContextMenuController {
   const menu = ref<ContextMenuInstance>()
   const context = shallowRef<TableContextMenuContext>()
-  const config = computed(() =>
+  const config = computed<TableContextMenuConfig>(() =>
     typeof props.contextMenuConfig === 'object' ? props.contextMenuConfig : {},
   )
   const enabled = computed(

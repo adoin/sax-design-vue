@@ -343,6 +343,13 @@ const handleTabContextmenu = (key: string | number, event: MouseEvent) => {
   if (entry) emit('tabContextmenu', entry.context, event)
 }
 
+const handleContextMenuOpen = (
+  key: string | number,
+  event: MouseEvent | KeyboardEvent,
+) => {
+  if (event instanceof MouseEvent) handleTabContextmenu(key, event)
+}
+
 const handleContextMenuSelect = (
   menuItem: ContextMenuItem,
   context: FormGroupItemContext,
@@ -420,6 +427,7 @@ defineExpose({
           <SContextMenu
             v-if="entry.contextMenuItems.length"
             :items="entry.contextMenuItems"
+            @open="handleContextMenuOpen(entry.key, $event)"
             @select="handleContextMenuSelect($event, entry.context)"
           >
             <slot

@@ -1,6 +1,6 @@
 {
   "name": "sax-design-vue",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Sax Design Vue — Vue 3 component library based on Vuesax 3.x",
   "keywords": [
     "sax-design-vue",
@@ -92,7 +92,8 @@
     "lodash-unified": "^1.0.3",
     "memoize-one": "^6.0.0",
     "normalize-wheel-es": "^1.2.0",
-    "sax-design-vue-iconify": "workspace:*"
+    "sax-design-vue-iconify": "workspace:*",
+    "vue-router": "^5.2.0"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",

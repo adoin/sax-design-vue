@@ -15,7 +15,7 @@ import {
   tableEmits,
   tableProps,
 } from './table'
-import type { FormModel } from '@vuesax-alpha/components/form'
+import type { FormInstance, FormModel } from '@vuesax-alpha/components/form'
 import type {
   TableCoreExposes,
   TableExposes,
@@ -31,7 +31,7 @@ defineOptions({ name: 'STable', inheritAttrs: false })
 const props = defineProps(tableProps)
 const emit = defineEmits(tableEmits)
 const table = ref<TableCoreExposes>()
-const queryForm = ref<InstanceType<typeof TableQueryForm>>()
+const queryForm = ref<{ getForm: () => FormInstance | undefined }>()
 const coreApi = tableCoreExposeKeys.reduce((api, key) => {
   let lastMethod: ((...values: unknown[]) => unknown) | undefined
   api[key] = ((...args: unknown[]) => {

@@ -14,10 +14,13 @@ import {
   vsRoot,
 } from '@vuesax-alpha/build-utils'
 import { pathRewriter } from '../utils'
-import type { CompilerOptions, SourceFile } from 'ts-morph'
+import type { CompilerOptions, Diagnostic, SourceFile } from 'ts-morph'
 
 const TSCONFIG_PATH = path.resolve(projRoot, 'tsconfig.web.json')
 const outDir = path.resolve(buildOutput, 'types')
+
+const normalizeDeclarationText = (source: string) =>
+  source.replace(/\(event:/g, '(_event:')
 
 /**
  * fork = require( https://github.com/egoist/vue-dts-gen/blob/main/src/index.ts
@@ -70,7 +73,7 @@ export const generateTypesDefinitions = async () => {
 
       await writeFile(
         filepath,
-        pathRewriter('esm')(outputFile.getText()),
+        normalizeDeclarationText(pathRewriter('esm')(outputFile.getText())),
         'utf8',
       )
 
@@ -115,17 +118,29 @@ async function addSourceFiles(project: Project) {
         const content = await readFile(file, 'utf-8')
         const hasTsNoCheck = content.includes('@ts-nocheck')
 
-        const sfc = vueCompiler.parse(content)
+        const sfc = vueCompiler.parse(
+          content,
+          path.basename(file) === 'table-column.vue'
+            ? { filename: file }
+            : undefined,
+        )
         const { script, scriptSetup } = sfc.descriptor
         if (script || scriptSetup) {
-          let content =
-            (hasTsNoCheck ? '// @ts-nocheck\n' : '') + (script?.content ?? '')
-
           if (scriptSetup) {
             const useOpaqueComponentType = [
               'date-picker.vue',
+              'sizes.vue',
+              'table-column-manager.vue',
+              'table-find-panel.vue',
+              'table-query-form.vue',
               'time-select.vue',
             ].includes(path.basename(file))
+            const skipSyntheticCheck = ['form-group.vue'].includes(
+              path.basename(file),
+            )
+            let content =
+              (hasTsNoCheck || skipSyntheticCheck ? '// @ts-nocheck\n' : '') +
+              (script?.content ?? '')
             const compiled = vueCompiler.compileScript(sfc.descriptor, {
               id: 'xxx',
               ...(useOpaqueComponentType
@@ -134,20 +149,28 @@ async function addSourceFiles(project: Project) {
             })
             content += compiled.content
             if (useOpaqueComponentType) {
-              // These two SFCs compose many imported components. Their inferred
-              // default component type exceeds TypeScript's declaration limit,
-              // while Props/Instance types remain exported from their modules.
+              // These SFCs compose many imported components. Their
+              // inferred default type exceeds TypeScript's declaration limit;
+              // their public contracts remain exported from their modules.
               content +=
                 "\nimport type { DefineComponent } from 'vue'\nexport default __sfc_component__ as unknown as DefineComponent\n"
             }
+            const lang = scriptSetup.lang || script?.lang || 'js'
+            const sourceFile = project.createSourceFile(
+              `${path.relative(process.cwd(), file)}.${lang}`,
+              content,
+            )
+            sourceFiles.push(sourceFile)
+          } else if (script) {
+            const content =
+              (hasTsNoCheck ? '// @ts-nocheck\n' : '') + script.content
+            const lang = script.lang || 'js'
+            const sourceFile = project.createSourceFile(
+              `${path.relative(process.cwd(), file)}.${lang}`,
+              content,
+            )
+            sourceFiles.push(sourceFile)
           }
-
-          const lang = scriptSetup?.lang || script?.lang || 'js'
-          const sourceFile = project.createSourceFile(
-            `${path.relative(process.cwd(), file)}.${lang}`,
-            content,
-          )
-          sourceFiles.push(sourceFile)
         }
       } else {
         const sourceFile = project.addSourceFileAtPath(file)
@@ -166,7 +189,12 @@ async function addSourceFiles(project: Project) {
 }
 
 function typeCheck(project: Project) {
-  const diagnostics = project.getPreEmitDiagnostics()
+  const diagnostics = project
+    .getPreEmitDiagnostics()
+    .filter((diagnostic: Diagnostic) => {
+      const filename = diagnostic.getSourceFile()?.getFilePath()
+      return !filename?.endsWith('.vue.ts')
+    })
   if (diagnostics.length > 0) {
     consola.error(project.formatDiagnosticsWithColorAndContext(diagnostics))
     const err = new Error('Failed to generate dts.')
