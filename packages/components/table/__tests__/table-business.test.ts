@@ -1,15 +1,16 @@
 import { defineComponent, h, nextTick, reactive, ref, shallowRef } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { STable, STableColumn } from '@vuesax-alpha/components/table'
+import { STableColumn } from '@vuesax-alpha/components/table'
 import { SInput } from '@vuesax-alpha/components/input'
-import TableGrid from '../src/table-grid.vue'
+import Table from '../src/table.vue'
+import TableCore from '../src/table-core.vue'
 import type {
   TableColumn,
   TablePagerConfig,
   TableRow,
 } from '@vuesax-alpha/components/table'
-import type { TableGridExposes, TableGridQueryContext } from '../src/table-grid'
+import type { TableExposes, TableQueryContext } from '../src/table'
 import type { Slot } from 'vue'
 
 const rows = [
@@ -58,17 +59,17 @@ afterEach(() => {
   else Reflect.deleteProperty(HTMLElement.prototype, 'scrollIntoView')
 })
 
-describe('Table Grid integration', () => {
+describe('Table business configuration', () => {
   it('updates dynamic query and table slots independently with their original payloads', async () => {
     const content = shallowRef<Record<string, Slot>>({})
     const model = reactive({ term: 'initial' })
     let field!: { setValue: (value: unknown) => void }
-    let actions!: TableGridExposes & { busy: boolean }
+    let actions!: TableExposes & { busy: boolean }
     const root = mount(
       defineComponent({
         setup: () => () =>
           h(
-            TableGrid,
+            Table,
             {
               data: rows,
               columns: [
@@ -112,9 +113,9 @@ describe('Table Grid integration', () => {
       expect(model.term).toBe('changed')
       expect(root.get('.late-query').text()).toBe('changed')
       expect(await actions.query()).toBe(true)
-      expect(
-        root.getComponent(TableGrid).emitted('query')?.[0][0],
-      ).toMatchObject({ form: { term: 'changed' } })
+      expect(root.getComponent(Table).emitted('query')?.[0][0]).toMatchObject({
+        form: { term: 'changed' },
+      })
       content.value = {
         person: ({ value }) => [h('i', { class: 'replacement-cell' }, value)],
       }
@@ -124,7 +125,7 @@ describe('Table Grid integration', () => {
       expect(root.find('.late-heading').exists()).toBe(false)
       expect(root.findAll('.replacement-cell')).toHaveLength(3)
       expect(
-        root.get('.s-table-grid__query-actions').findAll('button'),
+        root.get('.s-table-shell__query-actions').findAll('button'),
       ).toHaveLength(2)
       content.value = {}
       await flushPromises()
@@ -138,12 +139,12 @@ describe('Table Grid integration', () => {
     const model = reactive({ term: 'A' })
     const config = { model, items }
     const pager = ref<TablePagerConfig>({ currentPage: 2, pageSize: 1 })
-    const api = shallowRef<TableGridExposes>()
+    const api = shallowRef<TableExposes>()
     const query = vi.fn()
     const root = mount(
       defineComponent({
         setup: () => () =>
-          h(TableGrid, {
+          h(Table, {
             ref: api,
             data: rows,
             columns,
@@ -163,7 +164,7 @@ describe('Table Grid integration', () => {
   })
 
   it('blocks query actions while loading or disabled and reports orchestration errors', async () => {
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: { loading: true, queryConfig: { model: { term: 'A' }, items } },
     })
     expect(await root.vm.query()).toBe(false)
@@ -185,7 +186,7 @@ describe('Table Grid integration', () => {
 
   it('runs native form submission once through the query validation guard', async () => {
     const validator = vi.fn(async () => true)
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         queryConfig: {
           model: { term: 'A' },
@@ -203,16 +204,17 @@ describe('Table Grid integration', () => {
   it('reuses tree expansion and bounded generated rendering', async () => {
     const load = vi.fn(async () => [{ id: 2, name: 'Child' }])
     const parent = { id: 1, name: 'Parent', lazy: true }
-    const tree = mount(TableGrid, {
+    const tree = mount(Table, {
       props: {
         data: [parent],
         columns: [{ field: 'name', treeNode: true }],
         treeConfig: { hasChildren: 'lazy', load },
       },
     })
-    await tree.vm
-      .getTable()!
-      .toggleRowExpand(tree.findComponent(STable).props('data')![0], true)
+    await tree.vm.toggleRowExpand(
+      tree.findComponent(TableCore).props('data')![0],
+      true,
+    )
     expect(tree.findAll('.s-table__data-row')).toHaveLength(2)
     expect(load).toHaveBeenCalledOnce()
     expect(tree.emitted('lazyLoad')).toHaveLength(1)
@@ -233,7 +235,7 @@ describe('Table Grid integration', () => {
       field: 'id',
       width: 120,
     }))
-    const source = mount(TableGrid, {
+    const source = mount(Table, {
       props: {
         virtualSource: {
           rowCount: 1_000_000,
@@ -251,11 +253,11 @@ describe('Table Grid integration', () => {
     expect(await source.vm.refresh()).toBe(true)
     expect(row.mock.calls.length).toBeLessThan(100)
     expect(column.mock.calls.length).toBeLessThan(100)
-    expect(source.findAllComponents(STable)).toHaveLength(1)
+    expect(source.findAllComponents(TableCore)).toHaveLength(1)
     source.unmount()
   })
   it('renders one unchanged table by default and forwards attributes and cell slots', async () => {
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: { data: rows, columns },
       attrs: { class: 'business-grid', 'aria-label': 'Projects' },
       slots: {
@@ -263,11 +265,13 @@ describe('Table Grid integration', () => {
           h('strong', String(value)),
       },
     })
-    expect(root.findAllComponents(STable)).toHaveLength(1)
+    expect(root.findAllComponents(TableCore)).toHaveLength(1)
     expect(root.find('.s-form').exists()).toBe(false)
-    expect(root.find('.s-table-grid__toolbar').exists()).toBe(false)
+    expect(root.find('.s-table-shell__toolbar').exists()).toBe(false)
     expect(root.classes()).toContain('business-grid')
-    expect(root.findComponent(STable).attributes('aria-label')).toBe('Projects')
+    expect(root.findComponent(TableCore).attributes('aria-label')).toBe(
+      'Projects',
+    )
     expect(
       root.findAll('.s-table__data-row strong').map((node) => node.text()),
     ).toEqual(['A', 'B', 'C'])
@@ -276,7 +280,7 @@ describe('Table Grid integration', () => {
   })
 
   it('retains declarative columns, header and footer slots', async () => {
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: { data: rows },
       slots: {
         default: () => h(STableColumn, { field: 'name', title: 'Declarative' }),
@@ -294,15 +298,15 @@ describe('Table Grid integration', () => {
 
   it('validates query fields and emits an independent condition snapshot', async () => {
     const model = reactive({ term: '' })
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: { data: rows, columns, queryConfig: { model, items } },
     })
     expect(await root.vm.query()).toBe(false)
     expect(root.text()).toContain('Required')
-    await root.get('.s-table-grid__query input').setValue('Alpha')
+    await root.get('.s-table-shell__query input').setValue('Alpha')
     expect(model.term).toBe('Alpha')
     expect(await root.vm.query()).toBe(true)
-    const context = root.emitted('query')![0][0] as TableGridQueryContext
+    const context = root.emitted('query')![0][0] as TableQueryContext
     model.term = 'Beta'
     expect(context.form).toEqual({ term: 'Alpha' })
     expect(context.pager).toBe(false)
@@ -312,7 +316,7 @@ describe('Table Grid integration', () => {
 
   it('resets query fields and the uncontrolled page but refresh preserves the page', async () => {
     const model = reactive({ term: 'initial' })
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         data: rows,
         columns,
@@ -320,14 +324,14 @@ describe('Table Grid integration', () => {
         pagerConfig: { pageSize: 1 },
       },
     })
-    const table = root.findComponent(STable)
+    const table = root.findComponent(TableCore)
     table.vm.$emit('update:pagerConfig', { currentPage: 2, pageSize: 1 })
     await nextTick()
     expect(await root.vm.refresh()).toBe(true)
     expect(
-      (root.emitted('query')![0][0] as TableGridQueryContext).pager,
+      (root.emitted('query')![0][0] as TableQueryContext).pager,
     ).toMatchObject({ currentPage: 2 })
-    await root.get('.s-table-grid__query input').setValue('changed')
+    await root.get('.s-table-shell__query input').setValue('changed')
     expect(await root.vm.resetQuery()).toBe(true)
     expect(model.term).toBe('initial')
     expect(root.vm.getQueryContext().pager).toMatchObject({ currentPage: 1 })
@@ -340,13 +344,13 @@ describe('Table Grid integration', () => {
 
   it('waits for controlled page acceptance before emitting a search', async () => {
     const pager = ref<TablePagerConfig>({ currentPage: 2, pageSize: 1 })
-    const api = shallowRef<TableGridExposes>()
+    const api = shallowRef<TableExposes>()
     let accepts = false
     const query = vi.fn()
     const root = mount(
       defineComponent({
         setup: () => () =>
-          h(TableGrid, {
+          h(Table, {
             ref: api,
             data: rows,
             columns,
@@ -369,7 +373,7 @@ describe('Table Grid integration', () => {
   })
 
   it('preserves sort/filter events and uses the same table row pipeline', async () => {
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         data: rows,
         columns: [
@@ -378,12 +382,12 @@ describe('Table Grid integration', () => {
         ],
       },
     })
-    root.vm.getTable()!.setSort([{ field: 'name', order: 'desc' }])
+    root.vm.setSort([{ field: 'name', order: 'desc' }])
     await nextTick()
     expect(root.findAll('.s-table__data-row').map((row) => row.text())).toEqual(
       ['3C', '2B', '1A'],
     )
-    root.vm.getTable()!.setFilters({ name: ['B'] })
+    root.vm.setFilters({ name: ['B'] })
     await nextTick()
     expect(root.findAll('.s-table__data-row').map((row) => row.text())).toEqual(
       ['2B'],
@@ -399,11 +403,11 @@ describe('Table Grid integration', () => {
 
   it('forwards controlled row mutations and history through the nested table', async () => {
     const data = ref<TableRow[]>(rows)
-    const api = shallowRef<TableGridExposes>()
+    const api = shallowRef<TableExposes>()
     const root = mount(
       defineComponent({
         setup: () => () =>
-          h(TableGrid, {
+          h(Table, {
             ref: api,
             data: data.value,
             columns,
@@ -415,15 +419,13 @@ describe('Table Grid integration', () => {
           }),
       }),
     )
-    expect(
-      await api.value!.getTable()!.updateRow(1, { name: 'updated' }),
-    ).toEqual({ applied: true })
+    expect(await api.value!.updateRow(1, { name: 'updated' })).toEqual({
+      applied: true,
+    })
     expect(data.value[0].name).toBe('updated')
-    expect(await api.value!.getTable()!.undo()).toEqual({ applied: true })
+    expect(await api.value!.undo()).toEqual({ applied: true })
     expect(data.value[0].name).toBe('A')
-    expect(root.findComponent(TableGrid).emitted('historyChange')).toHaveLength(
-      2,
-    )
+    expect(root.findComponent(Table).emitted('historyChange')).toHaveLength(2)
     expect(rows[0].name).toBe('A')
     root.unmount()
   })
@@ -432,7 +434,7 @@ describe('Table Grid integration', () => {
     for (const unmount of [false, true]) {
       let finish!: (value: boolean) => void
       const model = reactive({ term: 'initial' })
-      const root = mount(TableGrid, {
+      const root = mount(Table, {
         props: {
           queryConfig: {
             model,
@@ -462,7 +464,7 @@ describe('Table Grid integration', () => {
   })
 
   it('keeps configured toolbar visibility, disabled actions and refresh semantics', async () => {
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         toolbarConfig: {
           title: 'Projects',
@@ -474,7 +476,7 @@ describe('Table Grid integration', () => {
         },
       },
     })
-    const buttons = root.findAll('.s-table-grid__toolbar button')
+    const buttons = root.findAll('.s-table-shell__toolbar button')
     expect(buttons.map((button) => button.text())).toEqual([
       'Add',
       'Blocked',
@@ -496,7 +498,7 @@ describe('Table Grid integration', () => {
 
   it('passes named form slots and custom query actions without swallowing table slots', async () => {
     const model = reactive({ term: 'custom' })
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         data: rows,
         columns,
@@ -523,8 +525,8 @@ describe('Table Grid integration', () => {
       },
     })
     expect(root.get('.query-value').text()).toBe('custom')
-    expect(root.get('.s-table-grid__query-actions').text()).toBe('Find')
-    await root.get('.s-table-grid__query-actions button').trigger('click')
+    expect(root.get('.s-table-shell__query-actions').text()).toBe('Find')
+    await root.get('.s-table-shell__query-actions button').trigger('click')
     await flushPromises()
     expect(root.emitted('query')).toHaveLength(1)
     expect(root.findAll('.s-table__data-row b')).toHaveLength(3)

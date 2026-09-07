@@ -5,10 +5,10 @@ import { SForm, formProps } from '@vuesax-alpha/components/form'
 import { SButton } from '@vuesax-alpha/components/button'
 import { useLocale } from '@vuesax-alpha/hooks'
 import type { FormInstance, FormModel } from '@vuesax-alpha/components/form'
-import type { TableGridQueryConfig } from './table-grid'
+import type { TableQueryConfig } from './table-business'
 
 const props = defineProps<{
-  config: TableGridQueryConfig
+  config: TableQueryConfig
   model: FormModel
   busy: boolean
 }>()
@@ -25,7 +25,7 @@ defineExpose({ getForm: () => form.value })
 </script>
 
 <template>
-  <div class="s-table-grid__query" @submit.capture="onSubmit">
+  <div class="s-table-shell__query" @submit.capture="onSubmit">
     <SForm
       ref="form"
       v-bind="options"
@@ -43,21 +43,21 @@ defineExpose({ getForm: () => form.value })
         <slot />
         <div
           v-if="config.showActions !== false"
-          class="s-table-grid__query-actions"
+          class="s-table-shell__query-actions"
         >
           <slot name="actions">
             <SButton
               :debounce="false"
               :disabled="busy || config.disabled"
               @click.prevent="emit('query')"
-              >{{ config.submitText ?? t('vs.tableGrid.query') }}</SButton
+              >{{ config.submitText ?? t('vs.table.query') }}</SButton
             >
             <SButton
               :debounce="false"
               flat
               :disabled="busy || config.disabled"
               @click.prevent="emit('reset')"
-              >{{ config.resetText ?? t('vs.tableGrid.reset') }}</SButton
+              >{{ config.resetText ?? t('vs.table.reset') }}</SButton
             >
           </slot>
         </div>

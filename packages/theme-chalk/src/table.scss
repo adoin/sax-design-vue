@@ -451,7 +451,10 @@
     overflow: auto;
     min-width: 0;
     outline: none;
-    h2 { margin: 0; font-size: 1.15rem; }
+    h2 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
   }
   @include e(chart-toolbar) {
     display: flex;
@@ -459,9 +462,14 @@
     flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 12px;
-    h2 { flex: 1; }
+    h2 {
+      flex: 1;
+    }
   }
-  @include e(chart-canvas) { width: 100%; height: 320px; }
+  @include e(chart-canvas) {
+    width: 100%;
+    height: 320px;
+  }
   @include e(chart-legend) {
     display: flex;
     flex-wrap: wrap;
@@ -469,25 +477,48 @@
     list-style: none;
     margin: 12px 0;
     padding: 0;
-    li { display: flex; align-items: center; gap: 6px; }
-    i { width: 10px; height: 10px; border-radius: 3px; }
+    li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    i {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
   }
   @include e(find-panel) {
     margin-top: 8px;
     padding: 14px;
     border-radius: var(--sax-radius);
-    &.is-square { border-radius: 0; }
-    background: color-mix(in srgb, #{getColor(primary)} 4%, #{getColor(background)});
+    &.is-square {
+      border-radius: 0;
+    }
+    background: color-mix(
+      in srgb,
+      #{getColor(primary)} 4%,
+      #{getColor(background)}
+    );
     box-shadow: 0 3px 9px -6px #{getColor(primary, 0.25)};
     font-size: 0.85rem;
-    p { margin: 10px 0 0; color: getColor(text, 0.72); }
+    p {
+      margin: 10px 0 0;
+      color: getColor(text, 0.72);
+    }
   }
   @include e(find-fields) {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
     gap: 12px;
-    > div { min-width: 0; }
-    label, > div > span { display: block; margin-bottom: 6px; }
+    > div {
+      min-width: 0;
+    }
+    label,
+    > div > span {
+      display: block;
+      margin-bottom: 6px;
+    }
   }
   @include e(find-actions) {
     display: flex;
@@ -499,11 +530,19 @@
 
   @include e(group-row) {
     position: relative;
-    background: color-mix(in srgb, #{getColor(primary)} 8%, var(--s-table-surface));
+    background: color-mix(
+      in srgb,
+      #{getColor(primary)} 8%,
+      var(--s-table-surface)
+    );
     box-shadow: inset 0 -4px 7px -8px #{getColor(primary, 0.34)};
 
     &[data-group-depth]:not([data-group-depth='0']) {
-      background: color-mix(in srgb, #{getColor(primary)} 4%, var(--s-table-surface));
+      background: color-mix(
+        in srgb,
+        #{getColor(primary)} 4%,
+        var(--s-table-surface)
+      );
     }
   }
   @include e(group-cell) {
@@ -585,13 +624,18 @@
     cursor: grab;
     touch-action: none;
     user-select: none;
-    &:hover, &:focus-visible, &[aria-pressed='true'] {
+    &:hover,
+    &:focus-visible,
+    &[aria-pressed='true'] {
       color: getColor(primary);
       background: getColor(primary, 0.09);
       box-shadow: 0 2px 5px -3px #{getColor(primary, 0.25)};
       outline: none;
     }
-    &:disabled { opacity: 0.35; cursor: not-allowed; }
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
   }
   @include e((drag-status, range-status)) {
     position: absolute;
@@ -602,7 +646,11 @@
     white-space: nowrap;
   }
   .is-dragging-row > .#{$namespace}-table__data-cell {
-    background: color-mix(in srgb, #{getColor(primary)} 8%, var(--s-table-row-surface));
+    background: color-mix(
+      in srgb,
+      #{getColor(primary)} 8%,
+      var(--s-table-row-surface)
+    );
   }
   .is-drop-before > .#{$namespace}-table__data-cell {
     box-shadow: inset 0 3px 5px -2px #{getColor(primary, 0.7)};
@@ -640,11 +688,19 @@
       background: inherit;
     }
     &.is-range-cell {
-      background: color-mix(in srgb, #{getColor(primary)} 11%, var(--s-table-row-surface));
+      background: color-mix(
+        in srgb,
+        #{getColor(primary)} 11%,
+        var(--s-table-row-surface)
+      );
       box-shadow: inset 0 0 8px -5px #{getColor(primary, 0.3)};
     }
     &.is-active-cell {
-      background: color-mix(in srgb, #{getColor(primary)} 9%, var(--s-table-row-surface));
+      background: color-mix(
+        in srgb,
+        #{getColor(primary)} 9%,
+        var(--s-table-row-surface)
+      );
       box-shadow: inset 0 0 9px -4px #{getColor(primary, 0.5)};
       outline: none;
     }
@@ -773,7 +829,10 @@
     &.is-active {
       color: getColor(primary);
     }
-    &:disabled { cursor: not-allowed; opacity: 0.45; }
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
   }
 
   @include e(sort-controls) {
@@ -812,7 +871,10 @@
       outline: 2px solid getColor(primary, 0.6);
       outline-offset: 1px;
     }
-    &:disabled { cursor: not-allowed; opacity: 0.45; }
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
     @media (pointer: coarse) {
       width: 44px;
       height: 44px;
@@ -848,7 +910,9 @@
     color: getColor(text);
     background: getColor(background);
     box-shadow: var(--sax-popper-shadow);
-    &.is-square { border-radius: 0; }
+    &.is-square {
+      border-radius: 0;
+    }
   }
 
   @include e(filter-title) {
@@ -1052,7 +1116,11 @@
     }
 
     &.is-range-cell {
-      background: color-mix(in srgb, #{getColor(primary)} 11%, var(--s-table-surface));
+      background: color-mix(
+        in srgb,
+        #{getColor(primary)} 11%,
+        var(--s-table-surface)
+      );
       box-shadow: inset 0 0 8px -5px #{getColor(primary, 0.3)};
     }
 
@@ -1323,5 +1391,48 @@ html.dark .#{$namespace}-table-wrapper {
   .#{$namespace}-table__tree-spinner,
   .#{$namespace}-table__loading-spinner {
     animation: none;
+  }
+}
+
+@include b(table-shell) {
+  width: 100%;
+  min-width: 0;
+
+  @include e(error) {
+    margin-bottom: 12px;
+  }
+
+  @include e(query) {
+    margin-bottom: 16px;
+  }
+
+  @include e(query-actions) {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  @include e(toolbar) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  @include e(title) {
+    min-width: 0;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  @include e(tools) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
   }
 }

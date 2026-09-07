@@ -4,8 +4,8 @@ import type { ComputedRef } from 'vue'
 import type {
   TableColumn,
   TableColumnState,
+  TableCoreProps,
   TableEmitFn,
-  TableProps,
 } from '../table'
 
 export interface ManagedColumn {
@@ -34,7 +34,7 @@ export function normalizeColumnState(value: unknown): TableColumnState[] {
 }
 
 export function useTableColumnManager(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   columns: ComputedRef<TableColumn[]>,
 ) {

@@ -1,13 +1,13 @@
 import { computed, defineComponent, h } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
-import { tableEmits, tableProps } from '../src/table'
+import { tableCoreEmits, tableCoreProps } from '../src/table'
 import { useTableDetails } from '../src/composables/use-table-details'
 import type { TableFlatRow } from '../src/table'
 
 const Harness = defineComponent({
-  props: tableProps,
-  emits: tableEmits,
+  props: tableCoreProps,
+  emits: tableCoreEmits,
   setup(props, { emit }) {
     return {
       details: useTableDetails(

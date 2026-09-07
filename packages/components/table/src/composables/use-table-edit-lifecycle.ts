@@ -1,6 +1,6 @@
 import { watch } from 'vue'
 import type { WatchSource } from 'vue'
-import type { TableEditContext, TableProps } from '../table'
+import type { TableCoreProps, TableEditContext } from '../table'
 import type { TableEditing } from './use-table-edit'
 
 interface EditLifecycleOptions {
@@ -15,7 +15,7 @@ interface EditLifecycleOptions {
 // Coordinate view changes separately from field drafts. All lookups use the
 // current row/column model; virtual viewport changes are handled by attachment.
 export function useTableEditLifecycle(
-  props: TableProps,
+  props: TableCoreProps,
   editing: TableEditing,
   options: EditLifecycleOptions,
 ) {

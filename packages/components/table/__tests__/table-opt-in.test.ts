@@ -1,7 +1,6 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import Table from '../src/table.vue'
-import TableGrid from '../../table-grid/src/table-grid.vue'
 import type { TableProps } from '../src/table'
 
 const featureKeys = [
@@ -139,10 +138,10 @@ describe('Table opt-in contract', () => {
   })
 
   it.each([false, { enabled: false }] as const)(
-    'does not mount Grid tools or request data with disabled configuration %j',
+    'does not mount table tools or request data with disabled configuration %j',
     async (disabled) => {
       const query = vi.fn(async () => ({ data: [], total: 0 }))
-      const wrapper = mount(TableGrid, {
+      const wrapper = mount(Table, {
         props: {
           data: [{ id: 1, name: 'Local' }],
           columns: [{ field: 'name' }],

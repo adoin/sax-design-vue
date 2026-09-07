@@ -3,7 +3,7 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Table from '../src/table.vue'
 import TableColumn from '../src/table-column.vue'
-import type { TableRow } from '../src/table'
+import type { TableExposes, TableRow } from '../src/table'
 
 const columns = [{ field: 'name', title: 'Name', editor: true, width: 180 }]
 const scrollDescriptor = Object.getOwnPropertyDescriptor(
@@ -163,11 +163,13 @@ describe('table edit lifecycle across data and view changes', () => {
 
   it('commits on accepted page changes and cancels on declarative column changes', async () => {
     const field = ref('name')
+    const api = ref<TableExposes>()
     const Host = defineComponent({
       setup: () => () =>
         h(
           Table,
           {
+            ref: api,
             data: [
               { id: 1, name: 'One', other: 'Else' },
               { id: 2, name: 'Two' },
@@ -182,10 +184,10 @@ describe('table edit lifecycle across data and view changes', () => {
     const host = mount(Host)
     const table = host.getComponent(Table)
     await nextTick()
-    await table.vm.startEdit(0, 0)
+    await api.value!.startEdit(0, 0)
     field.value = 'other'
     await flushPromises()
-    expect(table.vm.getEditRecord()).toBeNull()
+    expect(api.value!.getEditRecord()).toBeNull()
     expect(table.emitted('editCancel')!.at(-1)![0]).toMatchObject({
       reason: 'columns',
     })

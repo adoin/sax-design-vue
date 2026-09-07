@@ -3,7 +3,11 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Table from '../src/table.vue'
 import TableColumn from '../src/table-column.vue'
-import type { TableColumn as Column, TableActiveCell } from '../src/table'
+import type {
+  TableColumn as Column,
+  TableActiveCell,
+  TableExposes,
+} from '../src/table'
 
 const data = [
   { id: 1, name: 'Alpha' },
@@ -171,12 +175,14 @@ describe('table cell keyboard navigation', () => {
   })
   it('skips hidden columns after column management and supports declarative tree columns', async () => {
     const active = ref<TableActiveCell | null>(null)
+    const api = ref<TableExposes>()
     const wrapper = mount(
       defineComponent({
         setup: () => () =>
           h(
             Table,
             {
+              ref: api,
               data: [
                 { id: 1, name: 'Parent', children: [{ id: 2, name: 'Child' }] },
               ],
@@ -202,9 +208,8 @@ describe('table cell keyboard navigation', () => {
       { attachTo: document.body },
     )
     wrappers.push(wrapper)
-    const table = wrapper.getComponent(Table)
     await settle()
-    expect(await table.vm.setActiveCell(0, 0)).toBe(true)
+    expect(await api.value!.setActiveCell(0, 0)).toBe(true)
     await press('ArrowRight')
     expect(active.value?.columnKey).toBe('last')
     await press('ArrowDown')

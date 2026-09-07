@@ -30,7 +30,7 @@ import type {
 } from '../table-clipboard'
 import type { TableCellRangeBounds } from '../table-cell-range'
 import type { TableEditContext } from '../table-edit'
-import type { TableEmitFn, TableProps } from '../table'
+import type { TableCoreProps, TableEmitFn } from '../table'
 import type { TableValidationRule } from '../table-validation'
 import type { useTableChanges } from './use-table-changes'
 import type { TableValidation } from './use-table-validation'
@@ -65,7 +65,7 @@ class ClipboardAccessError extends Error {
 
 /** Clipboard lifecycle and transactions; rendering/coordinates remain owned by STable. */
 export function useTableClipboard(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   options: Options,
 ) {

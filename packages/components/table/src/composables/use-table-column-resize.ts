@@ -5,8 +5,8 @@ import type {
   TableColumn,
   TableColumnResizeParams,
   TableColumnWidths,
+  TableCoreProps,
   TableEmitFn,
-  TableProps,
 } from '../table'
 
 interface ResizeSession {
@@ -22,7 +22,7 @@ interface ResizeSession {
 }
 
 export function useTableColumnResize(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   columns: ComputedRef<TableColumn[]>,
 ) {

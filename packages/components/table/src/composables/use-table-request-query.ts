@@ -2,22 +2,20 @@ import { computed, nextTick, onBeforeUnmount, reactive, shallowRef } from 'vue'
 import { cloneDeep, isEqual } from 'lodash-unified'
 import type { FormInstance, FormModel } from '@vuesax-alpha/components/form'
 import type {
+  TableBusinessEmitFn,
   TableFilters,
   TablePagerConfig,
+  TableProps,
   TableSort,
-} from '@vuesax-alpha/components/table'
-import type {
-  TableGridEmitFn,
-  TableGridProps,
-  TableGridQueryContext,
-} from './table-grid'
+} from '../table'
+import type { TableQueryContext } from '../table-business'
 
 /** Query orchestration only; STable remains responsible for the actual row pipeline. */
-export function useGridQuery(
-  props: TableGridProps,
-  emit: TableGridEmitFn,
+export function useTableRequestQuery(
+  props: TableProps,
+  emit: TableBusinessEmitFn,
   form: () => FormInstance | undefined,
-  execute?: (context: TableGridQueryContext) => Promise<boolean>,
+  execute?: (context: TableQueryContext) => Promise<boolean>,
 ) {
   const emptyModel = reactive<FormModel>({})
   const queryConfig = computed(() =>
@@ -52,8 +50,8 @@ export function useGridQuery(
   let disposed = false
   let cancelValidation: (() => void) | undefined
   const context = (
-    reason: TableGridQueryContext['reason'] = 'submit',
-  ): TableGridQueryContext => ({
+    reason: TableQueryContext['reason'] = 'submit',
+  ): TableQueryContext => ({
     reason,
     form: cloneDeep(model.value),
     pager: cloneDeep(pager.value),
@@ -69,7 +67,7 @@ export function useGridQuery(
   const updateFilters = (value: TableFilters) => {
     innerFilters.value = value
   }
-  const run = async (reason: TableGridQueryContext['reason']) => {
+  const run = async (reason: TableQueryContext['reason']) => {
     if (disposed || props.loading || busy.value || queryConfig.value.disabled)
       return false
     const request = ++sequence

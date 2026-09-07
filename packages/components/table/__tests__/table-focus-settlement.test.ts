@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useTableKeyboard } from '../src/composables/use-table-keyboard'
 import { tableFocusVisible } from '../src/composables/table-focus-visibility'
 import type { TableCellCoordinate } from '../src/composables/use-table-keyboard'
-import type { TableProps } from '../src/table'
+import type { TableCoreProps } from '../src/table'
 
 let frames: Map<number, FrameRequestCallback>
 let sequence = 0
@@ -46,7 +46,7 @@ const setup = () => {
     defineComponent({
       setup() {
         keyboard = useTableKeyboard(
-          reactive({ keyboardConfig: true }) as TableProps,
+          reactive({ keyboardConfig: true }) as TableCoreProps,
           vi.fn(),
           {
             root: () => root,

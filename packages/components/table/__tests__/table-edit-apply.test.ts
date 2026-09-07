@@ -2,7 +2,7 @@ import { defineComponent, nextTick, reactive } from 'vue'
 import { mount } from '@vue/test-utils'
 import { expect, it, vi } from 'vitest'
 import { useTableEdit } from '../src/composables/use-table-edit'
-import type { TableEditContext, TableProps } from '../src/table'
+import type { TableCoreProps, TableEditContext } from '../src/table'
 
 it('isolates applying state between cancelled and replacement edit sessions', async () => {
   const row = { id: 1, name: 'A' }
@@ -29,7 +29,7 @@ it('isolates applying state between cancelled and replacement edit sessions', as
     defineComponent({
       setup() {
         editing = useTableEdit(
-          props as unknown as TableProps,
+          props as unknown as TableCoreProps,
           vi.fn(),
           (value) => value,
           {

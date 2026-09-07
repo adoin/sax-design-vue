@@ -52,6 +52,7 @@ const tableSections = [
   ['Editing and data state', '编辑与数据状态'],
   ['Spreadsheet interactions', '表格式交互'],
   ['Layout, merging, and large data', '布局、合并与大数据'],
+  ['Query forms and request proxy', '查询表单与请求代理'],
 ] as const
 
 const normalizedBlock = (value?: string) =>
@@ -178,7 +179,7 @@ describe('documentation example source', () => {
     const paths = docsRoots.map((root) => resolve(root, 'table.md'))
     const markdown = paths.map((path) => readFileSync(path, 'utf8'))
     const cards = markdown.map(exampleCards)
-    expect(cards[0]).toHaveLength(59)
+    expect(cards[0]).toHaveLength(64)
     expect(cards[1]).toHaveLength(cards[0].length)
 
     markdown.forEach((source, localeIndex) => {
@@ -188,7 +189,7 @@ describe('documentation example source', () => {
       expect(source.match(/^##\s+.+$/gm)).toEqual(
         tableSections.map((section) => `## ${section[localeIndex]}`),
       )
-      expect(source.match(/^###\s+.+$/gm)).toHaveLength(59)
+      expect(source.match(/^###\s+.+$/gm)).toHaveLength(64)
     })
 
     for (const [source, examples] of markdown.map(

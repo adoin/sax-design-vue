@@ -9,9 +9,9 @@ import {
 import { createTableDataIndex, validTableDataKey } from '../change-data'
 import { planTableRowReorder } from '../row-reorder'
 import type {
+  TableCoreProps,
   TableEmitFn,
   TableFlatRow,
-  TableProps,
   TableRow,
   TableRowKey,
 } from '../table'
@@ -33,7 +33,7 @@ export interface RowReorderOptions {
 
 /** Controlled source-order changes. Pointer hit testing is deliberately separate. */
 export function useTableRowReorder(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   options: RowReorderOptions,
 ) {

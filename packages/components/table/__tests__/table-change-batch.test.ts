@@ -4,9 +4,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { useTableChanges } from '../src/composables/use-table-changes'
 import type { TableRowUpdate } from '../src/change-batch'
 import type {
+  TableCoreProps,
   TableDataChangeRequest,
   TableEmitFn,
-  TableProps,
   TableRow,
 } from '../src/table'
 
@@ -15,7 +15,7 @@ afterEach(() => cleanups.splice(0).forEach((cleanup) => cleanup()))
 
 function host(
   data: TableRow[],
-  extra: Partial<TableProps> = {},
+  extra: Partial<TableCoreProps> = {},
   accepts = true,
 ) {
   const props = reactive({
@@ -24,7 +24,7 @@ function host(
     changeConfig: true,
     historyConfig: true,
     ...extra,
-  }) as { -readonly [Key in keyof TableProps]: TableProps[Key] }
+  }) as { -readonly [Key in keyof TableCoreProps]: TableCoreProps[Key] }
   const events = vi.fn()
   const emit: TableEmitFn = (event, ...args) => {
     events(event, ...args)

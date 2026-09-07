@@ -38,7 +38,6 @@ declare module '@vue/runtime-core' {
     SSidebar: (typeof import('../packages/sax-design-vue'))['SSidebar']
     SSwitch: (typeof import('../packages/sax-design-vue'))['SSwitch']
     STable: (typeof import('../packages/sax-design-vue'))['STable']
-    STableGrid: (typeof import('../packages/sax-design-vue'))['STableGrid']
     STh: (typeof import('../packages/sax-design-vue'))['STh']
     STd: (typeof import('../packages/sax-design-vue'))['STd']
     STr: (typeof import('../packages/sax-design-vue'))['STr']

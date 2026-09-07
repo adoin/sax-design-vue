@@ -4,11 +4,11 @@ import type {
   ContextMenuInstance,
   ContextMenuItem,
 } from '@vuesax-alpha/components/context-menu'
-import type { TableEmitFn, TableProps } from '../table'
+import type { TableCoreProps, TableEmitFn } from '../table'
 import type { TableContextMenuContext } from '../table-context-menu'
 
 export function useTableContextMenu(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   options: {
     root: () => HTMLElement | undefined

@@ -1,5 +1,5 @@
 import { tableFieldValue } from '../data-utils'
-import type { TableColumn, TableProps } from '../table'
+import type { TableColumn, TableCoreProps } from '../table'
 import type { TableEditContext } from '../table-edit'
 import type { TableFindCell } from '../find-data'
 import type { TableFindOptions } from '../table-find'
@@ -34,7 +34,7 @@ interface Options {
 }
 
 /** Search scope selection does not mount cells or fetch unprovided pages/tree nodes. */
-export function createTableFindScope(props: TableProps, options: Options) {
+export function createTableFindScope(props: TableCoreProps, options: Options) {
   return function* cells(
     selected: TableFindOptions,
     current: () => boolean,

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { SButton } from '@vuesax-alpha/components/button'
 import { useLocale } from '@vuesax-alpha/hooks'
-import type { TableGridToolbarConfig } from './table-grid'
-defineProps<{ config: TableGridToolbarConfig; busy: boolean }>()
+import type { TableToolbarConfig } from './table-business'
+defineProps<{ config: TableToolbarConfig; busy: boolean }>()
 const emit = defineEmits<{
   refresh: []
   action: [code: string, event: MouseEvent]
@@ -11,11 +11,11 @@ const { t } = useLocale()
 </script>
 
 <template>
-  <div class="s-table-grid__toolbar">
-    <div v-if="config.title || $slots.title" class="s-table-grid__title">
+  <div class="s-table-shell__toolbar">
+    <div v-if="config.title || $slots.title" class="s-table-shell__title">
       <slot name="title">{{ config.title }}</slot>
     </div>
-    <div class="s-table-grid__tools">
+    <div class="s-table-shell__tools">
       <slot>
         <template v-for="button in config.buttons" :key="button.code">
           <SButton
@@ -34,7 +34,7 @@ const { t } = useLocale()
           :disabled="busy"
           @click.capture.prevent
           @click="emit('refresh')"
-          >{{ config.refreshText ?? t('vs.tableGrid.refresh') }}</SButton
+          >{{ config.refreshText ?? t('vs.table.refresh') }}</SButton
         >
       </slot>
     </div>

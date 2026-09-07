@@ -2,9 +2,9 @@ import { computed, watch } from 'vue'
 import type { ComputedRef } from 'vue'
 import type {
   TableColumn,
+  TableCoreProps,
   TableEmitFn,
   TableFlatRow,
-  TableProps,
   TableRow,
   TableRowKey,
 } from '../table'
@@ -18,7 +18,7 @@ interface SelectionOptions {
 }
 
 export function useTableSelection(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   options: SelectionOptions,
 ) {

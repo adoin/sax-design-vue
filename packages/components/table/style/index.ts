@@ -1,5 +1,7 @@
 import '@vuesax-alpha/components/base/style'
 import '@vuesax-alpha/components/button/style'
+import '@vuesax-alpha/components/alert/style'
+import '@vuesax-alpha/components/form/style'
 import '@vuesax-alpha/components/checkbox/style'
 import '@vuesax-alpha/components/radio/style'
 import '@vuesax-alpha/components/icon/style'

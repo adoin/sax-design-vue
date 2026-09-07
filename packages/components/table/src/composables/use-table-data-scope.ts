@@ -2,8 +2,8 @@ import { nextTick, toRaw } from 'vue'
 import type { ComputedRef } from 'vue'
 import type {
   TableColumn,
+  TableCoreProps,
   TableFlatRow,
-  TableProps,
   TableRow,
   TableRowKey,
 } from '../table'
@@ -42,7 +42,7 @@ export interface TableDataScopeOptions {
 
 /** Shared supplied-data traversal and navigation for validation and search. */
 export function useTableDataScope(
-  props: TableProps,
+  props: TableCoreProps,
   options: TableDataScopeOptions,
 ) {
   const columnIndex = (column: TableColumn) =>

@@ -2,7 +2,7 @@ import { computed, onBeforeUnmount, shallowRef, watch } from 'vue'
 import { TableChartLimitError, buildTableChartData } from '../chart-data'
 import { TableDataBatchConflictError } from '../change-batch'
 import type { WatchSource } from 'vue'
-import type { TableEmitFn, TableProps } from '../table'
+import type { TableCoreProps, TableEmitFn } from '../table'
 import type {
   TableChartOptions,
   TableChartResult,
@@ -18,7 +18,7 @@ interface Options {
 }
 
 export function useTableChart(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   options: Options,
 ) {

@@ -2,13 +2,13 @@
 import { ref } from 'vue'
 import type {
   TableColumn,
-  TableGridExposes,
-  TableGridProxyConfig,
-  TableGridProxyResult,
+  TableExposes,
+  TableProxyConfig,
+  TableProxyResult,
   TableRow,
 } from 'sax-design-vue'
 
-const grid = ref<TableGridExposes>()
+const table = ref<TableExposes>()
 const highlighted = ref<TableRow | null>(null)
 const editing = ref(false)
 const nextId = ref(4)
@@ -43,7 +43,7 @@ const pause = (signal: AbortSignal) =>
     if (signal.aborted) abort()
     else signal.addEventListener('abort', abort, { once: true })
   })
-const proxyConfig: TableGridProxyConfig = {
+const proxyConfig: TableProxyConfig = {
   async query({ pager, signal }) {
     await pause(signal)
     const size = pager ? (pager.pageSize ?? 5) : serviceRows.length
@@ -70,7 +70,7 @@ const proxyConfig: TableGridProxyConfig = {
     serviceRows = serviceRows.filter((row) => !keys.has(row.id))
   },
 }
-const report = (result: TableGridProxyResult) => {
+const report = (result: TableProxyResult) => {
   message.value =
     result.status === 'success'
       ? result.reload?.status === 'error'
@@ -89,19 +89,19 @@ const report = (result: TableGridProxyResult) => {
                 : 'The operation was not applied. Your local data is preserved.'
 }
 const save = async () => {
-  const result = await grid.value?.commitProxy('save')
+  const result = await table.value?.commitProxy('save')
   if (result) report(result)
 }
 const remove = async () => {
-  const result = await grid.value?.commitProxy('delete')
+  const result = await table.value?.commitProxy('delete')
   if (result) report(result)
 }
 </script>
 
 <template>
-  <div class="grid-proxy-edit-demo">
-    <s-table-grid
-      ref="grid"
+  <div class="table-proxy-edit-demo">
+    <s-table
+      ref="table"
       v-model:highlight="highlighted"
       :columns="columns"
       :proxy-config="proxyConfig"
@@ -114,21 +114,25 @@ const remove = async () => {
       @edit-commit="editing = false"
       @edit-cancel="editing = false"
     >
-      <template #toolbar="{ busy, getTable, cancelProxy }">
+      <template
+        #toolbar="{
+          busy,
+          insertRows,
+          commitEdit,
+          cancelEdit,
+          revertChanges,
+          cancelProxy,
+        }"
+      >
         <s-button
           :disabled="busy || editing"
-          @click="
-            getTable()?.insertRows([{ id: nextId++, name: 'New project' }])
-          "
+          @click="insertRows([{ id: nextId++, name: 'New project' }])"
           >Add row</s-button
         >
-        <s-button :disabled="busy || !editing" @click="getTable()?.commitEdit()"
+        <s-button :disabled="busy || !editing" @click="commitEdit()"
           >Apply draft</s-button
         >
-        <s-button
-          flat
-          :disabled="busy || !editing"
-          @click="getTable()?.cancelEdit()"
+        <s-button flat :disabled="busy || !editing" @click="cancelEdit()"
           >Discard draft</s-button
         >
         <s-button :disabled="busy || editing" @click="save"
@@ -141,17 +145,14 @@ const remove = async () => {
           @click="remove"
           >Delete selected</s-button
         >
-        <s-button
-          flat
-          :disabled="busy || editing"
-          @click="getTable()?.revertChanges()"
+        <s-button flat :disabled="busy || editing" @click="revertChanges()"
           >Revert changes</s-button
         >
         <s-button flat :disabled="!busy" @click="cancelProxy"
           >Cancel request</s-button
         >
       </template>
-    </s-table-grid>
+    </s-table>
     <p role="status">{{ message }}</p>
   </div>
 </template>

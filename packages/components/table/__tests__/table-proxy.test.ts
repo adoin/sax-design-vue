@@ -1,8 +1,8 @@
 import { defineComponent, h, nextTick, reactive, ref, shallowRef } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { STable } from '@vuesax-alpha/components/table'
-import TableGrid from '../src/table-grid.vue'
+import Table from '../src/table.vue'
+import TableCore from '../src/table-core.vue'
 import type {
   TableColumn,
   TableDataChangeRequest,
@@ -10,10 +10,10 @@ import type {
   TableRowKey,
 } from '@vuesax-alpha/components/table'
 import type {
-  TableGridExposes,
-  TableGridProxyQueryResult,
-  TableGridProxyRequest,
-} from '../src/table-grid'
+  TableExposes,
+  TableProxyQueryResult,
+  TableProxyRequest,
+} from '../src/table'
 
 const columns: TableColumn[] = [
   { field: 'id', width: 80, fixed: 'left' },
@@ -58,10 +58,10 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
-describe('Grid request proxy', () => {
+describe('Table request proxy', () => {
   it('persists a committed editor draft through the same internal data journal', async () => {
     const save = vi.fn(async () => true)
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         columns,
         editConfig: { mode: 'row' },
@@ -74,11 +74,11 @@ describe('Grid request proxy', () => {
       },
     })
     await flushPromises()
-    expect(await root.vm.getTable()!.startEdit(0, 'name')).toBe(true)
+    expect(await root.vm.startEdit(0, 'name')).toBe(true)
     await root.get('.s-table__cell-editor input').setValue('B')
-    expect(await root.vm.getTable()!.commitEdit()).toBe(true)
+    expect(await root.vm.commitEdit()).toBe(true)
     expect(root.emitted('editCancel')).toBeUndefined()
-    expect(root.vm.getTable()!.getChangeRecords().updated).toHaveLength(1)
+    expect(root.vm.getChangeRecords().updated).toHaveLength(1)
     expect((await root.vm.commitProxy('save')).status).toBe('success')
     expect(save).toHaveBeenCalledOnce()
     root.unmount()
@@ -89,7 +89,7 @@ describe('Grid request proxy', () => {
       .fn()
       .mockResolvedValueOnce(false)
       .mockReturnValueOnce(pending.promise)
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         columns: [{ field: 'name', rules: { required: true } }],
         changeConfig: true,
@@ -98,19 +98,19 @@ describe('Grid request proxy', () => {
       },
     })
     await flushPromises()
-    await root.vm.getTable()!.updateRow(1, { name: '' })
+    await root.vm.updateRow(1, { name: '' })
     expect((await root.vm.commitProxy('save')).status).toBe('invalid')
     expect(save).not.toHaveBeenCalled()
-    await root.vm.getTable()!.updateRow(1, { name: 'B' })
+    await root.vm.updateRow(1, { name: 'B' })
     expect((await root.vm.commitProxy('save')).status).toBe('rejected')
     const operation = root.vm.commitProxy('save')
     await flushPromises()
     root.vm.cancelProxy()
     expect((await operation).status).toBe('cancelled')
-    expect(root.vm.getTable()!.getChangeRecords().updated).toHaveLength(1)
+    expect(root.vm.getChangeRecords().updated).toHaveLength(1)
     pending.resolve(true)
     await flushPromises()
-    expect(root.vm.getTable()!.getChangeRecords().updated).toHaveLength(1)
+    expect(root.vm.getChangeRecords().updated).toHaveLength(1)
     root.unmount()
   })
 
@@ -119,7 +119,7 @@ describe('Grid request proxy', () => {
       vi.spyOn(HTMLElement.prototype, key, 'get').mockReturnValue(600)
     for (const key of ['clientHeight', 'offsetHeight'] as const)
       vi.spyOn(HTMLElement.prototype, key, 'get').mockReturnValue(180)
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         columns: [
           { field: 'name', treeNode: true, fixed: 'left', width: 180 },
@@ -147,12 +147,12 @@ describe('Grid request proxy', () => {
     })
     await flushPromises()
     expect(root.vm.getProxyState().result).toMatchObject({ status: 'success' })
-    expect(root.findComponent(STable).props('data')).toHaveLength(1)
+    expect(root.findComponent(TableCore).props('data')).toHaveLength(1)
     await vi.waitFor(() =>
       expect(root.findAll('.s-table__data-row').length).toBeGreaterThan(1),
     )
     expect(root.findAll('.s-table__data-row').length).toBeLessThan(50)
-    expect(root.findComponent(STable).props('pagerConfig')).toMatchObject({
+    expect(root.findComponent(TableCore).props('pagerConfig')).toMatchObject({
       total: 1_000_000,
       remote: true,
     })
@@ -173,7 +173,7 @@ describe('Grid request proxy', () => {
         ),
     )
     const save = vi.fn(async () => true)
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         virtualSource: {
           rowCount: 1_000_000,
@@ -207,8 +207,7 @@ describe('Grid request proxy', () => {
       },
     })
     expect(
-      (await root.vm.getTable()!.updateRow(999_999, { name: 'updated' }))
-        .applied,
+      (await root.vm.updateRow(999_999, { name: 'updated' })).applied,
     ).toBe(true)
     for (const validationColumns of [['name'], [-1], [100_000], [Number.NaN]]) {
       await root.setProps({
@@ -223,7 +222,7 @@ describe('Grid request proxy', () => {
       expect((await root.vm.commitProxy('save')).status).toBe('unsupported')
       expect(row.mock.calls.length).toBeLessThan(100)
       expect(save).not.toHaveBeenCalled()
-      expect(root.vm.getTable()!.getChangeRecords().updated).toHaveLength(1)
+      expect(root.vm.getChangeRecords().updated).toHaveLength(1)
     }
     await root.setProps({
       proxyConfig: {
@@ -237,13 +236,13 @@ describe('Grid request proxy', () => {
     expect((await root.vm.commitProxy('save')).status).toBe('success')
     expect(save).toHaveBeenCalledOnce()
     expect(row.mock.calls.length).toBeLessThan(100)
-    expect(root.vm.getTable()!.getChangeRecords().updated).toHaveLength(0)
+    expect(root.vm.getChangeRecords().updated).toHaveLength(0)
     root.unmount()
   })
 
   it('loads a remote page without local sorting, filtering or slicing it again', async () => {
     const query = vi.fn<
-      (request: TableGridProxyRequest) => Promise<TableGridProxyQueryResult>
+      (request: TableProxyRequest) => Promise<TableProxyQueryResult>
     >(async () => ({
       data: [
         { id: 7, name: 'B' },
@@ -251,7 +250,7 @@ describe('Grid request proxy', () => {
       ],
       total: 20,
     }))
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         columns,
         pagerConfig: { currentPage: 2, pageSize: 2 },
@@ -269,7 +268,7 @@ describe('Grid request proxy', () => {
       '7B',
       '8A',
     ])
-    expect(root.findComponent(STable).props('pagerConfig')).toMatchObject({
+    expect(root.findComponent(TableCore).props('pagerConfig')).toMatchObject({
       total: 20,
       remote: true,
     })
@@ -278,15 +277,13 @@ describe('Grid request proxy', () => {
   })
 
   it('applies only the latest query and settles superseded adapters that ignore abort', async () => {
-    const first = deferred<TableGridProxyQueryResult>()
-    const second = deferred<TableGridProxyQueryResult>()
+    const first = deferred<TableProxyQueryResult>()
+    const second = deferred<TableProxyQueryResult>()
     const query = vi
-      .fn<
-        (request: TableGridProxyRequest) => Promise<TableGridProxyQueryResult>
-      >()
+      .fn<(request: TableProxyRequest) => Promise<TableProxyQueryResult>>()
       .mockReturnValueOnce(first.promise)
       .mockReturnValueOnce(second.promise)
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: { columns, proxyConfig: { autoLoad: false, query } },
     })
     const a = root.vm.commitProxy('query')
@@ -305,10 +302,8 @@ describe('Grid request proxy', () => {
 
   it('cancels on unmount, explicit cancellation and adapter replacement', async () => {
     for (const mode of ['unmount', 'cancel', 'replace']) {
-      const query = vi.fn(
-        () => new Promise<TableGridProxyQueryResult>(() => {}),
-      )
-      const root = mount(TableGrid, {
+      const query = vi.fn(() => new Promise<TableProxyQueryResult>(() => {}))
+      const root = mount(Table, {
         props: { columns, proxyConfig: { autoLoad: false, query } },
       })
       const pending = root.vm.commitProxy('query')
@@ -326,13 +321,13 @@ describe('Grid request proxy', () => {
     const initial = [{ id: 1, name: 'old' }]
     const next = [{ id: 2, name: 'new' }]
     const data = ref<TableRow[]>(initial)
-    const grid = shallowRef<TableGridExposes>()
+    const grid = shallowRef<TableExposes>()
     let accepts = false
     const query = async () => ({ data: next })
     const root = mount(
       defineComponent({
         setup: () => () =>
-          h(TableGrid, {
+          h(Table, {
             ref: grid,
             data: data.value,
             columns,
@@ -354,12 +349,12 @@ describe('Grid request proxy', () => {
   it('does not query draft form changes and batches accepted sort/filter changes on page one', async () => {
     const model = reactive({ term: 'initial' })
     const query = vi.fn<
-      (request: TableGridProxyRequest) => Promise<TableGridProxyQueryResult>
+      (request: TableProxyRequest) => Promise<TableProxyQueryResult>
     >(async () => ({
       data: [{ id: 1, name: 'A' }],
       total: 30,
     }))
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         columns,
         queryConfig: { model },
@@ -372,12 +367,12 @@ describe('Grid request proxy', () => {
     await flushPromises()
     expect(query).toHaveBeenCalledOnce()
     root
-      .findComponent(STable)
+      .findComponent(TableCore)
       .vm.$emit('update:pagerConfig', { currentPage: 3, pageSize: 2 })
     await flushPromises()
     expect(query).toHaveBeenCalledTimes(2)
-    root.vm.getTable()!.setSort([{ field: 'name', order: 'desc' }])
-    root.vm.getTable()!.setFilters({ name: ['A'] })
+    root.vm.setSort([{ field: 'name', order: 'desc' }])
+    root.vm.setFilters({ name: ['A'] })
     await flushPromises()
     expect(query).toHaveBeenCalledTimes(3)
     expect(query.mock.calls[2][0]).toMatchObject({
@@ -394,7 +389,7 @@ describe('Grid request proxy', () => {
       .mockRejectedValueOnce(new Error('offline'))
       .mockResolvedValueOnce({ data: [], total: -1 })
       .mockResolvedValueOnce({ data: [], total: 0 })
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         columns,
         pagerConfig: true,
@@ -403,11 +398,11 @@ describe('Grid request proxy', () => {
     })
     expect((await root.vm.commitProxy('query')).status).toBe('error')
     await nextTick()
-    expect(root.find('.s-table-grid__error').exists()).toBe(true)
+    expect(root.find('.s-table-shell__error').exists()).toBe(true)
     expect((await root.vm.commitProxy('query')).status).toBe('error')
     expect((await root.vm.commitProxy('query')).status).toBe('success')
     await nextTick()
-    expect(root.find('.s-table-grid__error').exists()).toBe(false)
+    expect(root.find('.s-table-shell__error').exists()).toBe(false)
     expect(root.emitted('proxyError')).toHaveLength(2)
     root.unmount()
   })
@@ -416,7 +411,7 @@ describe('Grid request proxy', () => {
     const pending = deferred<boolean>()
     const save = vi.fn(() => pending.promise)
     const query = async () => ({ data: [{ id: 1, name: 'A' }] })
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         columns,
         changeConfig: true,
@@ -424,9 +419,7 @@ describe('Grid request proxy', () => {
       },
     })
     await flushPromises()
-    expect(
-      (await root.vm.getTable()!.updateRow(1, { name: 'B' })).applied,
-    ).toBe(true)
+    expect((await root.vm.updateRow(1, { name: 'B' })).applied).toBe(true)
     expect((await root.vm.commitProxy('query')).status).toBe('dirty')
     const operation = root.vm.commitProxy('save')
     await flushPromises()
@@ -435,14 +428,14 @@ describe('Grid request proxy', () => {
     expect((await root.vm.commitProxy('refresh')).status).toBe('busy')
     pending.resolve(true)
     expect((await operation).status).toBe('success')
-    expect(root.vm.getTable()!.getChangeRecords().updated).toHaveLength(0)
+    expect(root.vm.getChangeRecords().updated).toHaveLength(0)
     expect(root.find('.s-table__data-row').text()).toBe('1B')
     root.unmount()
   })
 
   it('retains externally replaced data when a pending save completes', async () => {
     const pending = deferred<boolean>()
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: {
         columns,
         changeConfig: true,
@@ -453,14 +446,14 @@ describe('Grid request proxy', () => {
       },
     })
     await flushPromises()
-    await root.vm.getTable()!.updateRow(1, { name: 'B' })
+    await root.vm.updateRow(1, { name: 'B' })
     const save = root.vm.commitProxy('save')
     await flushPromises()
     await root.setProps({ data: [{ id: 1, name: 'C' }] })
     pending.resolve(true)
     expect((await save).status).toBe('stale')
     expect(root.find('.s-table__data-row').text()).toBe('1C')
-    expect(root.vm.getTable()!.getChangeRecords().updated).toHaveLength(0)
+    expect(root.vm.getChangeRecords().updated).toHaveLength(0)
     root.unmount()
   })
 
@@ -472,7 +465,7 @@ describe('Grid request proxy', () => {
     const remove = vi.fn<
       (request: { rows: readonly TableRow[] }) => Promise<boolean>
     >(async () => true)
-    const root = mount(TableGrid, {
+    const root = mount(Table, {
       props: { columns, proxyConfig: { query, delete: remove } },
     })
     await flushPromises()

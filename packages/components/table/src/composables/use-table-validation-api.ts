@@ -5,8 +5,8 @@ import { editableField } from '../edit-utils'
 import { useTableDataScope } from './use-table-data-scope'
 import type {
   TableColumn,
+  TableCoreProps,
   TableEditRecord,
-  TableProps,
   TableRow,
 } from '../table'
 import type {
@@ -22,7 +22,7 @@ import type {
 } from './use-table-data-scope'
 
 export function useTableValidationApi(
-  props: TableProps,
+  props: TableCoreProps,
   validation: TableValidation,
   editing: TableEditing,
   options: TableDataScopeOptions,

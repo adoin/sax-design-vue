@@ -13,7 +13,11 @@ import {
   mapPhysicalToLogicalScroll,
   resolveColumnPixelWidth,
 } from '../src/composables/use-table-column-virtualization'
-import type { TableCellRenderParams, TableColumn } from '../src/table'
+import type {
+  TableCellRenderParams,
+  TableColumn,
+  TableParentIndicatorSlotParams,
+} from '../src/table'
 
 const virtualizerMocks = vi.hoisted(() => ({
   measure: vi.fn(),
@@ -448,7 +452,11 @@ describe('Table data mode', () => {
         virtualConfig: { height: 96, estimateSize: 48, overscan: 2 },
       },
       slots: {
-        'parent-indicator': ({ parentKey, label, jump }) =>
+        'parent-indicator': ({
+          parentKey,
+          label,
+          jump,
+        }: TableParentIndicatorSlotParams) =>
           h(
             'button',
             {
@@ -469,7 +477,9 @@ describe('Table data mode', () => {
       await nextTick()
       virtualizerMocks.scrollToIndex.mockClear()
 
-      expect(wrapper.get('.s-table__parent-indicator-mark').exists()).toBe(true)
+      expect(wrapper.find('.s-table__parent-indicator-mark').exists()).toBe(
+        true,
+      )
       expect(wrapper.get('.custom-parent-shortcut').text()).toBe('root: Root')
       expect(wrapper.find('.s-table__parent-indicator-action').exists()).toBe(
         false,

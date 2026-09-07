@@ -1,5 +1,10 @@
 # Project Rules
 
+## Project specifications
+
+- Read relevant records in `.agents/notes/active/` and `.agents/notes/prohibited/` before implementation. Treat proposed records as unapproved, prohibited records as approaches that must not be repeated unless their `reopen_only_if` condition is met, and implemented records as verified project contracts.
+- Move a project specification to `.agents/notes/implemented/` only after its implementation and required verification pass. Preserve superseded decisions in `.agents/notes/superseded/` when the replacement needs historical context.
+
 ## Documentation examples
 
 - Write public documentation for developers using the library: explain APIs, behavior, and usage choices. Keep task instructions, implementation constraints, conversation history, and verification reports in internal records rather than example descriptions or demo copy.
@@ -24,6 +29,7 @@
 
 - Hierarchical data belongs to `STable`; do not reintroduce standalone `STree` or `STreeSelect` components. `STableSelect` must reuse the table tree-data mode so expansion behavior and accessibility stay aligned.
 - `STable` is data-driven only. Its canonical APIs are Grid-style `data + columns` configuration and declarative `STableColumn` children; do not reintroduce public `STr`, `STd`, or `STh` components or handwritten row/cell examples.
+- Query forms, toolbars, and request proxy behavior belong to `STable` through `queryConfig`, `toolbarConfig`, and `proxyConfig`. Do not introduce `STableGrid` or another public table wrapper; keep the supporting form and toolbar components private and keep request orchestration in table composables. See `.agents/notes/implemented/table-single-component-business-shell.md` and `.agents/notes/prohibited/separate-table-grid-wrapper.md`.
 - Keep `STableColumn` renderless and registered through the parent table. A configured `columns` array takes precedence when both declaration styles are present, and both styles must share the same cell-rendering pipeline.
 - Keep column sizing aligned with VXE-style allocation: `width` columns reserve a fixed track; columns without `width` start from `minWidth` (120px by default) and receive equal shares of any remaining width. Preserve the summed minimum width and horizontal scrolling when the container is narrower.
 - Preserve the data-cell rendering precedence: column-specific slot, generic cell slot, column render function or named renderer, then raw field value.

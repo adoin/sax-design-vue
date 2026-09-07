@@ -9,10 +9,10 @@ import {
 import type { ComputedRef } from 'vue'
 import type {
   TableColumn,
+  TableCoreProps,
   TableDetailParams,
   TableEmitFn,
   TableFlatRow,
-  TableProps,
   TableRowKey,
 } from '../table'
 
@@ -24,7 +24,7 @@ interface DetailRecord {
 }
 
 export function useTableDetails(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   columns: ComputedRef<TableColumn[]>,
 ) {

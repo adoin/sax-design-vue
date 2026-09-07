@@ -1,11 +1,11 @@
 import { computed, shallowRef, watch } from 'vue'
 import type { ComputedRef } from 'vue'
 import type {
+  TableCoreProps,
   TableEmitFn,
   TableFlatRow,
   TablePageChangeParams,
   TablePagerConfig,
-  TableProps,
 } from '../table'
 
 const positive = (value: number | undefined, fallback: number) =>
@@ -18,7 +18,7 @@ const count = (value: number | undefined) =>
 // A root and all its visible descendants stay on one page. Generated sources
 // are sliced by index, never enumerated to build the pagination model.
 export function useTablePagination(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   allRows: ComputedRef<TableFlatRow[]>,
 ) {

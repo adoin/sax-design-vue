@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import type { TableGridQueryContext } from 'sax-design-vue'
+import type { TableQueryContext } from 'sax-design-vue'
 const model = reactive({ term: '' })
 const expanded = ref<number[]>([1])
 const rows = [
@@ -24,14 +24,14 @@ const rows = [
   { id: 4, name: 'Release', note: 'Prepare the next version.' },
 ]
 const message = ref('The query slot uses the same form model and validation.')
-const search = (context: TableGridQueryContext) => {
+const search = (context: TableQueryContext) => {
   message.value = `Submitted term: ${context.form.term || '(empty)'}`
 }
 </script>
 
 <template>
-  <div class="grid-slots-demo">
-    <s-table-grid
+  <div class="table-slots-demo">
+    <s-table
       v-model:expanded-keys="expanded"
       :data="rows"
       :query-config="{
@@ -87,13 +87,13 @@ const search = (context: TableGridQueryContext) => {
       <template #footer
         ><s-tag>Expanded groups: {{ expanded.length }}</s-tag></template
       >
-    </s-table-grid>
+    </s-table>
     <p role="status">{{ message }}</p>
   </div>
 </template>
 
 <style scoped>
-.grid-slots-demo {
+.table-slots-demo {
   width: 100%;
 }
 </style>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { TableGridExposes, TableVirtualSource } from 'sax-design-vue'
-const grid = ref<TableGridExposes>()
+import type { TableExposes, TableVirtualSource } from 'sax-design-vue'
+const table = ref<TableExposes>()
 const source: TableVirtualSource = {
   rowCount: 1_000_000,
   columnCount: 100_000,
@@ -16,38 +16,38 @@ const source: TableVirtualSource = {
           key === 'id'
             ? row.id
             : typeof key === 'string' && key.startsWith('value_')
-              ? `Value ${index}/${key.slice(6)}`
+              ? `值 ${index}/${key.slice(6)}`
               : undefined,
       },
     ),
   column: (index) => ({
     key: String(index),
     field: index === 0 ? 'id' : `value_${index}`,
-    title: index === 0 ? 'Record' : `Column ${index}`,
+    title: index === 0 ? '记录' : `列 ${index}`,
   }),
   columnWidth: (index) => (index === 0 ? 100 : 150),
 }
 const last = () => {
-  grid.value?.getTable()?.scrollToRow(999_999, 'end')
-  grid.value?.getTable()?.scrollToColumn(99_998, 'end')
+  table.value?.scrollToRow(999_999, 'end')
+  table.value?.scrollToColumn(99_998, 'end')
 }
 const first = () => {
-  grid.value?.getTable()?.scrollToRow(0, 'start')
-  grid.value?.getTable()?.scrollToColumn(1, 'start')
+  table.value?.scrollToRow(0, 'start')
+  table.value?.scrollToColumn(1, 'start')
 }
 </script>
 
 <template>
-  <s-table-grid
-    ref="grid"
-    class="grid-source-demo"
+  <s-table
+    ref="table"
+    class="table-source-demo"
     :virtual-source="source"
     :virtual-config="{ height: 280, horizontal: true, dynamic: true }"
     resize-config
   >
     <template #toolbar
-      ><s-button @click="last">Last record and column</s-button
-      ><s-button flat @click="first">Back to start</s-button></template
+      ><s-button @click="last">末行末列</s-button
+      ><s-button flat @click="first">返回开头</s-button></template
     >
-  </s-table-grid>
+  </s-table>
 </template>

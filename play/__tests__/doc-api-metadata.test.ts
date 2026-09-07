@@ -21,7 +21,7 @@ const apiSections = new Set([
 describe('documentation API metadata', () => {
   it('covers the Table family runtime API and statically declared defaults', () => {
     const pages = auditTableApi()
-    expect(pages).toHaveLength(6)
+    expect(pages).toHaveLength(4)
     for (const page of pages) {
       const label = `${page.component}/${page.locale}`
       expect(page.inheritedTableLink, label).toBe(true)
@@ -54,9 +54,7 @@ describe('documentation API metadata', () => {
             replacement,
           ),
       })
-      for (const page of pages.filter(
-        (page) => page.component !== 'table-grid',
-      ))
+      for (const page of pages)
         expect(
           page.exposeSignatures.mismatches.map((item) => item.name),
         ).toEqual(['toggleRowExpand'])
@@ -99,13 +97,13 @@ describe('documentation API metadata', () => {
     })
   })
 
-  it('resolves every Table, TableGrid and TableSelect API type in both locales', () => {
+  it('resolves every Table and TableSelect API type in both locales', () => {
     const resolveTypeDetails = createApiTypeDetailsResolver(
       resolve(projectRoot, 'packages/components'),
     )
     const missing: string[] = []
     for (const root of docsRoots) {
-      for (const component of ['table', 'table-grid', 'table-select']) {
+      for (const component of ['table', 'table-select']) {
         const path = resolve(root, `${component}.md`)
         const metadata = matter(readFileSync(path, 'utf8')).data
         const types: string[] = [...apiSections].flatMap((section) =>

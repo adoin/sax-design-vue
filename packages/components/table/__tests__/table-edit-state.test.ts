@@ -2,7 +2,7 @@ import { defineComponent, h } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import { useTableEdit } from '../src/composables/use-table-edit'
-import { tableEmits, tableProps } from '../src/table'
+import { tableCoreEmits, tableCoreProps } from '../src/table'
 import { applyTableEditChanges } from '../src/edit-utils'
 import type {
   TableColumn,
@@ -12,8 +12,8 @@ import type {
 } from '../src/table'
 
 const Harness = defineComponent({
-  props: tableProps,
-  emits: tableEmits,
+  props: tableCoreProps,
+  emits: tableCoreEmits,
   setup(props, { emit }) {
     return { editing: useTableEdit(props, emit) }
   },
@@ -46,8 +46,8 @@ const validatedHarness = (
 ) => {
   const invalidate = vi.fn()
   const Host = defineComponent({
-    props: tableProps,
-    emits: tableEmits,
+    props: tableCoreProps,
+    emits: tableCoreEmits,
     setup(props, { emit }) {
       return {
         editing: useTableEdit(props, emit, undefined, { validate, invalidate }),

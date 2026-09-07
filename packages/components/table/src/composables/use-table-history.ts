@@ -5,7 +5,12 @@ import { materializeTableBranch, planTableMutations } from '../change-mutations'
 import { projectTableDataPatches } from '../change-utils'
 import type { TableDataIndex } from '../change-data'
 import type { TableHistoryTarget } from '../history-data'
-import type { TableEmitFn, TableProps, TableRow, TableRowKey } from '../table'
+import type {
+  TableCoreProps,
+  TableEmitFn,
+  TableRow,
+  TableRowKey,
+} from '../table'
 import type {
   TableChangeTransaction,
   TableDataMutation,
@@ -37,7 +42,7 @@ interface HistoryOptions {
 
 /** Coordinate accepted history with the existing ownership and data-planning pipeline. */
 export function useTableHistory(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   options: HistoryOptions,
 ) {

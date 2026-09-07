@@ -236,14 +236,35 @@ export function auditTableApi({
 } = {}) {
   const tableFile = source('packages/components/table/src/table.ts')
   const tableNodes = declarations(tableFile)
-  const tableProps = objectEntries(tableNodes.get('tableProps'), tableNodes)
-  const tableEmits = objectEntries(tableNodes.get('tableEmits'), tableNodes)
+  const tableCoreProps = objectEntries(
+    tableNodes.get('tableCoreProps'),
+    tableNodes,
+  )
+  const tableCoreEmits = objectEntries(
+    tableNodes.get('tableCoreEmits'),
+    tableNodes,
+  )
+  const tableProps = objectEntries(
+    tableNodes.get('tableProps'),
+    tableNodes,
+    new Map([['tableCoreProps', tableCoreProps]]),
+  )
+  const tableEmits = objectEntries(
+    tableNodes.get('tableEmits'),
+    tableNodes,
+    new Map([['tableCoreEmits', tableCoreEmits]]),
+  )
   const inherited = new Map([
+    ['tableCoreProps', tableCoreProps],
+    ['tableCoreEmits', tableCoreEmits],
     ['tableProps', tableProps],
     ['tableEmits', tableEmits],
   ])
   const result = []
-  for (const component of ['table', 'table-grid', 'table-select']) {
+  const tableBusinessFile = source(
+    'packages/components/table/src/table-business.ts',
+  )
+  for (const component of ['table', 'table-select']) {
     const prefix = component.replace(/-([a-z])/g, (_, char) =>
       char.toUpperCase(),
     )
@@ -252,16 +273,18 @@ export function auditTableApi({
     const nodes = declarations(file)
     const props = objectEntries(nodes.get(`${prefix}Props`), nodes, inherited)
     const emits = objectEntries(nodes.get(`${prefix}Emits`), nodes, inherited)
-    const ownEmits = [...emits.keys()].filter(
-      (name) => component !== 'table-grid' || !tableEmits.has(name),
-    )
+    const ownEmits = [...emits.keys()]
+    const publicExposes =
+      component === 'table'
+        ? [
+            ...interfaceKeys(tableFile, 'TableCoreExposes'),
+            ...interfaceKeys(tableBusinessFile, 'TableBusinessExposes'),
+          ]
+        : exposed(vue)
     const contract = {
-      PROPS: (component === 'table-grid'
-        ? ownKeys(nodes.get(`${prefix}Props`))
-        : [...props.keys()]
-      ).map(kebab),
+      PROPS: [...props.keys()].map(kebab),
       EVENTS: ownEmits,
-      EXPOSES: exposed(vue),
+      EXPOSES: publicExposes,
       SLOTS: staticSlots(component, vue),
       ...(component === 'table'
         ? {
@@ -322,11 +345,15 @@ export function auditTableApi({
           defaults.mismatches.push({ name, expected, documented })
       }
       const exposeInterface = {
-        table: 'TableExposes',
-        'table-grid': 'TableGridExposes',
+        table: 'TableCoreExposes',
         'table-select': 'TableSelectExposes',
       }[component]
-      const declaredExposes = interfaceKeys(file, exposeInterface)
+      const declaredExposes = [
+        ...interfaceKeys(file, exposeInterface),
+        ...(component === 'table'
+          ? interfaceKeys(tableBusinessFile, 'TableBusinessExposes')
+          : []),
+      ]
       const exposeTypeMismatch = declaredExposes
         ? [...new Set([...declaredExposes, ...contract.EXPOSES])].filter(
             (name) =>
@@ -334,7 +361,12 @@ export function auditTableApi({
               contract.EXPOSES.includes(name),
           )
         : []
-      const signatures = interfaceSignatures(file, exposeInterface)
+      const signatures = new Map([
+        ...interfaceSignatures(file, exposeInterface),
+        ...(component === 'table'
+          ? interfaceSignatures(tableBusinessFile, 'TableBusinessExposes')
+          : []),
+      ])
       const exposeSignatures = {
         checked: signatures?.size ?? 0,
         mismatches: [],
@@ -352,8 +384,7 @@ export function auditTableApi({
         defaults,
         exposeTypeMismatch,
         exposeSignatures,
-        inheritedTableLink:
-          component !== 'table-grid' || text.includes('./table.md'),
+        inheritedTableLink: true,
       })
     }
   }

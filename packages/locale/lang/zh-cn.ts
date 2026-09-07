@@ -1,18 +1,6 @@
 export default {
   name: 'zh-cn',
   vs: {
-    tableGrid: {
-      pendingChanges: '请先保存或还原待提交变更。',
-      pendingDraft: '请先应用或放弃当前草稿。',
-      invalidChanges: '请修正无效字段后再保存。',
-      requestRejected: '数据所有者或服务拒绝了此次请求。',
-      staleResult: '请求期间数据已变化，当前数据已保留。',
-      unsupportedSource: '此操作需要生成数据源适配器及有效的校验范围。',
-      requestFailed: '请求失败，请重试。',
-      query: '查询',
-      reset: '重置',
-      refresh: '刷新',
-    },
     common: {
       close: '关闭',
       more: '展开',
@@ -276,6 +264,16 @@ export default {
       rejected: '文件未通过校验',
     },
     table: {
+      pendingChanges: '请先保存或还原待提交变更。',
+      pendingDraft: '请先应用或放弃当前草稿。',
+      invalidChanges: '请修正无效字段后再保存。',
+      requestRejected: '数据所有者或服务拒绝了此次请求。',
+      staleResult: '请求期间数据已变化，当前数据已保留。',
+      unsupportedSource: '此操作需要生成数据源适配器及有效的校验范围。',
+      requestFailed: '请求失败，请重试。',
+      query: '查询',
+      reset: '重置',
+      refresh: '刷新',
       rangeSelected: '已选择 {rows} 行、{columns} 列的区域。',
       rangeEmpty: '未选择单元格区域。',
       chartTitle: '图表',

@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import type { Ref } from 'vue'
-import type { TableColumn, TableFlatRow, TableProps } from '../table'
+import type { TableColumn, TableCoreProps, TableFlatRow } from '../table'
 import type { TableActiveCell } from '../table-keyboard'
 import type { TableCellCoordinate } from './use-table-keyboard'
 import type { useTableColumnManager } from './use-table-column-manager'
@@ -17,7 +17,7 @@ interface CoordinateOptions {
 
 /** Visual order is fixed-left, scrolling columns, fixed-right in both render modes. */
 export function useTableKeyboardCoordinates(
-  props: TableProps,
+  props: TableCoreProps,
   options: CoordinateOptions,
 ) {
   const ordinaryColumns = computed(() => {

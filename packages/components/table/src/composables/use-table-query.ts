@@ -4,10 +4,10 @@ import { compareTableValues } from '../sort-utils'
 import type { ComputedRef } from 'vue'
 import type {
   TableColumn,
+  TableCoreProps,
   TableEmitFn,
   TableFilterValue,
   TableFilters,
-  TableProps,
   TableRow,
   TableSort,
   TableSortOrder,
@@ -22,7 +22,7 @@ const copyFilters = (filters: TableFilters): TableFilters => {
 }
 
 export function useTableQuery(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   columns: ComputedRef<TableColumn[]>,
 ) {

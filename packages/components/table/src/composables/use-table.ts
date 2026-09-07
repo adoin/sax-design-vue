@@ -1,10 +1,10 @@
 import { computed } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import type { ComputedRef } from 'vue'
-import type { TableProps } from '../table'
+import type { TableCoreProps } from '../table'
 
 export const useTable = (
-  props: TableProps,
+  props: TableCoreProps,
   virtualEnabled: ComputedRef<boolean>,
 ) => {
   const ns = useNamespace('table')

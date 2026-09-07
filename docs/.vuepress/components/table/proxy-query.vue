@@ -3,15 +3,15 @@ import { reactive, ref } from 'vue'
 import { SInput } from 'sax-design-vue'
 import type {
   TableColumn,
-  TableGridExposes,
-  TableGridProxyConfig,
-  TableGridProxyState,
+  TableExposes,
+  TableProxyConfig,
+  TableProxyState,
 } from 'sax-design-vue'
 
-const grid = ref<TableGridExposes>()
+const table = ref<TableExposes>()
 const model = reactive({ term: '' })
 const failNext = ref(false)
-const state = ref<TableGridProxyState>({
+const state = ref<TableProxyState>({
   loading: false,
   action: null,
   error: null,
@@ -20,21 +20,21 @@ const state = ref<TableGridProxyState>({
 const requests = ref(0)
 const columns: TableColumn[] = [
   { field: 'id', title: 'ID', width: 90, fixed: 'left' },
-  { field: 'name', title: '项目', minWidth: 240, sortable: true },
+  { field: 'name', title: 'Project', minWidth: 240, sortable: true },
   {
     field: 'team',
-    title: '部门',
+    title: 'Team',
     width: 160,
     filters: [
-      { label: '设计', value: '设计' },
-      { label: '研发', value: '研发' },
+      { label: 'Design', value: 'Design' },
+      { label: 'Engineering', value: 'Engineering' },
     ],
   },
 ]
 const serviceRows = Array.from({ length: 500 }, (_, index) => ({
   id: index + 1,
-  name: `项目 ${String(index + 1).padStart(3, '0')}`,
-  team: index % 2 ? '设计' : '研发',
+  name: `Project ${String(index + 1).padStart(3, '0')}`,
+  team: index % 2 ? 'Design' : 'Engineering',
 }))
 const pause = (signal: AbortSignal) =>
   new Promise<void>((resolve, reject) => {
@@ -49,13 +49,13 @@ const pause = (signal: AbortSignal) =>
     if (signal.aborted) abort()
     else signal.addEventListener('abort', abort, { once: true })
   })
-const proxyConfig: TableGridProxyConfig = {
+const proxyConfig: TableProxyConfig = {
   async query({ form, pager, sortBy, filters, signal }) {
     requests.value++
     const shouldFail = failNext.value
     failNext.value = false
     await pause(signal)
-    if (shouldFail) throw new Error('模拟服务暂不可用。')
+    if (shouldFail) throw new Error('The simulated service is unavailable.')
     let matched = serviceRows.filter(
       (row) =>
         row.name
@@ -80,9 +80,9 @@ const proxyConfig: TableGridProxyConfig = {
 </script>
 
 <template>
-  <div class="grid-proxy-query-demo">
-    <s-table-grid
-      ref="grid"
+  <div class="table-proxy-query-demo">
+    <s-table
+      ref="table"
       :columns="columns"
       :proxy-config="proxyConfig"
       :query-config="{
@@ -92,7 +92,7 @@ const proxyConfig: TableGridProxyConfig = {
         items: [
           {
             field: 'term',
-            title: '项目名称',
+            title: 'Project name',
             itemRender: {
               name: 'SInput',
               component: SInput,
@@ -108,24 +108,24 @@ const proxyConfig: TableGridProxyConfig = {
       @proxy-state-change="state = $event"
     >
       <template #toolbar="{ refresh, cancelProxy, busy }">
-        <s-button :disabled="busy" @click="refresh">刷新</s-button>
+        <s-button :disabled="busy" @click="refresh">Refresh</s-button>
         <s-button flat :disabled="!busy" @click="cancelProxy"
-          >取消请求</s-button
+          >Cancel request</s-button
         >
         <s-checkbox v-model="failNext" :disabled="busy"
-          >下次查询模拟失败</s-checkbox
+          >Fail the next query</s-checkbox
         >
       </template>
-    </s-table-grid>
+    </s-table>
     <p role="status">
       {{
         state.loading
-          ? '正在从模拟服务加载…'
+          ? 'Loading from the simulated service…'
           : state.result?.status === 'cancelled'
-            ? '请求已取消，保留之前的数据。'
-            : '就绪。'
+            ? 'Request cancelled; previous rows are preserved.'
+            : 'Ready.'
       }}
-      请求次数： {{ requests }}
+      Requests: {{ requests }}
     </p>
   </div>
 </template>

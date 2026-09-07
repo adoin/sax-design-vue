@@ -16,9 +16,9 @@ import type { TableRowUpdate } from '../change-batch'
 import type { TableHistoryAction } from './use-table-history'
 import type { TableDataNode } from '../change-data'
 import type {
+  TableCoreProps,
   TableEditRecord,
   TableEmitFn,
-  TableProps,
   TableRow,
   TableRowKey,
 } from '../table'
@@ -37,7 +37,7 @@ interface ChangeOptions {
 }
 
 export function useTableChanges(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   options: ChangeOptions,
 ) {

@@ -11,21 +11,21 @@ import { isEqual } from 'lodash-unified'
 import type { ComputedRef } from 'vue'
 import type {
   TableChangeRecords,
-  TableExposes,
   TablePagerConfig,
   TableRow,
 } from '@vuesax-alpha/components/table'
 import type {
-  TableGridEmitFn,
-  TableGridProps,
-  TableGridQueryContext,
-} from './table-grid'
+  TableBusinessEmitFn,
+  TableCoreExposes,
+  TableProps,
+} from '../table'
 import type {
-  TableGridProxyAction,
-  TableGridProxyResult,
-  TableGridProxyState,
-  TableGridProxyStatus,
-} from './grid-proxy'
+  TableProxyAction,
+  TableProxyResult,
+  TableProxyState,
+  TableProxyStatus,
+  TableQueryContext,
+} from '../table-business'
 
 const hasChanges = (records?: TableChangeRecords) =>
   Boolean(
@@ -34,7 +34,7 @@ const hasChanges = (records?: TableChangeRecords) =>
       records.updated.length ||
       records.removed.length),
   )
-const criteria = (context: TableGridQueryContext) => ({
+const criteria = (context: TableQueryContext) => ({
   form: context.form,
   sortBy: context.sortBy,
   filters: context.filters,
@@ -43,11 +43,11 @@ const criteria = (context: TableGridQueryContext) => ({
 })
 
 /** Owns request lifetimes and accepted page data, never the table rendering pipeline. */
-export function useGridProxy(
-  props: TableGridProps,
-  emit: TableGridEmitFn,
-  table: () => TableExposes | undefined,
-  context: () => TableGridQueryContext,
+export function useTableProxy(
+  props: TableProps,
+  emit: TableBusinessEmitFn,
+  table: () => TableCoreExposes | undefined,
+  context: () => TableQueryContext,
   queryPager: ComputedRef<TablePagerConfig | false>,
   updatePager: (value: TablePagerConfig) => void,
   queryControls: () => unknown[],
@@ -61,7 +61,7 @@ export function useGridProxy(
   const internalData = shallowRef<TableRow[]>([])
   const total = shallowRef<number>()
   const data = computed(() => props.data ?? internalData.value)
-  const state = shallowRef<TableGridProxyState>({
+  const state = shallowRef<TableProxyState>({
     loading: false,
     action: null,
     error: null,
@@ -84,11 +84,11 @@ export function useGridProxy(
   })
   let disposed = false
   let active:
-    { controller: AbortController; action: TableGridProxyAction } | undefined
+    { controller: AbortController; action: TableProxyAction } | undefined
   let proposed: TableRow[] | undefined
   let scheduled = 0
   let lastCriteria: ReturnType<typeof criteria> | undefined
-  const publish = (next: TableGridProxyState) => {
+  const publish = (next: TableProxyState) => {
     state.value = next
     if (!disposed) emit('proxyStateChange', { ...next })
   }
@@ -135,19 +135,19 @@ export function useGridProxy(
     return accepted
   }
   const run = async (
-    action: TableGridProxyAction,
+    action: TableProxyAction,
     rows?: TableRow[],
     snapshot = context(),
-  ): Promise<TableGridProxyResult> => {
+  ): Promise<TableProxyResult> => {
     const result = (
-      status: TableGridProxyStatus,
+      status: TableProxyStatus,
       error?: unknown,
-    ): TableGridProxyResult => ({
+    ): TableProxyResult => ({
       action,
       status,
       ...(error === undefined ? {} : { error }),
     })
-    const blocked = (status: TableGridProxyStatus) => {
+    const blocked = (status: TableProxyStatus) => {
       const value = result(status)
       if (!active && !disposed)
         publish({ loading: false, action: null, error: null, result: value })
@@ -175,7 +175,7 @@ export function useGridProxy(
     active = request
     const signal = request.controller.signal
     const current = () => !disposed && active === request && !signal.aborted
-    const finish = (value: TableGridProxyResult) => {
+    const finish = (value: TableProxyResult) => {
       if (current()) {
         active = undefined
         publish({

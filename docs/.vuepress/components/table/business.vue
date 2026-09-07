@@ -3,8 +3,8 @@ import { reactive, ref } from 'vue'
 import { SInput, SSelect } from 'sax-design-vue'
 import type {
   TableColumn,
-  TableGridQueryConfig,
-  TableGridQueryContext,
+  TableQueryConfig,
+  TableQueryContext,
   TableRow,
 } from 'sax-design-vue'
 const allRows: TableRow[] = Array.from({ length: 12 }, (_, index) => ({
@@ -16,7 +16,7 @@ const rows = ref(allRows)
 const highlighted = ref<TableRow | null>(null)
 const model = reactive({ term: '', team: '' })
 const message = ref('Change the conditions, then select Search.')
-const queryConfig: TableGridQueryConfig = {
+const queryConfig: TableQueryConfig = {
   model,
   labelPosition: 'top',
   reserveErrorSpace: false,
@@ -65,7 +65,7 @@ const columns: TableColumn[] = [
     ],
   },
 ]
-const search = (context: TableGridQueryContext) => {
+const search = (context: TableQueryContext) => {
   const term = String(context.form.term ?? '').toLowerCase()
   const team = context.form.team
   rows.value = allRows.filter(
@@ -83,8 +83,8 @@ const action = () => {
 </script>
 
 <template>
-  <div class="grid-basic-demo">
-    <s-table-grid
+  <div class="table-basic-demo">
+    <s-table
       v-model:highlight="highlighted"
       :data="rows"
       :columns="columns"
@@ -102,13 +102,13 @@ const action = () => {
       <template #cell-name="{ value }"
         ><strong>{{ value }}</strong></template
       >
-    </s-table-grid>
+    </s-table>
     <p role="status">{{ message }}</p>
   </div>
 </template>
 
 <style scoped>
-.grid-basic-demo {
+.table-basic-demo {
   width: 100%;
 }
 </style>

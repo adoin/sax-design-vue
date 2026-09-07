@@ -12,7 +12,7 @@ import { awaitTableClipboard } from '../clipboard-browser'
 import { validateTableCellWrites } from './validate-cell-write'
 import type { WatchSource } from 'vue'
 import type { TableFindCell, TableFindScan } from '../find-data'
-import type { TableEmitFn, TableProps } from '../table'
+import type { TableCoreProps, TableEmitFn } from '../table'
 import type { TableEditContext } from '../table-edit'
 import type { TableValidationRule } from '../table-validation'
 import type {
@@ -50,7 +50,7 @@ interface Request {
 
 /** Search, navigation and replacement transactions share one explicit lifecycle. */
 export function useTableFind(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   options: Options,
 ) {

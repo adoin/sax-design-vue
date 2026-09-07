@@ -2,7 +2,7 @@ import { computed, nextTick, onBeforeUnmount, shallowRef, watch } from 'vue'
 import { cloneDeep, isEqual } from 'lodash-unified'
 import { tableFieldValue } from '../data-utils'
 import { applyTableEditChanges, editableField } from '../edit-utils'
-import type { TableEmitFn, TableProps } from '../table'
+import type { TableCoreProps, TableEmitFn } from '../table'
 import type {
   TableEditChange,
   TableEditContext,
@@ -22,7 +22,7 @@ interface EditValidationHooks {
 }
 
 export function useTableEdit(
-  props: TableProps,
+  props: TableCoreProps,
   emit: TableEmitFn,
   resolveContext: (params: TableEditContext) => TableEditContext | undefined = (
     params,

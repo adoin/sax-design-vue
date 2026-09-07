@@ -10,6 +10,7 @@ import type {
   TableColumn,
   TableEditEndParams,
   TableEditSlotParams,
+  TableExposes,
 } from '../src/table'
 
 const data = [
@@ -181,11 +182,13 @@ describe('table editing integration', () => {
   })
 
   it('opens the next cell after the parent accepts the previous immutable commit', async () => {
+    const api = ref<TableExposes>()
     const Host = defineComponent({
       setup() {
         const rows = ref([...data])
         return () =>
           h(Table, {
+            ref: api,
             data: rows.value,
             columns,
             editConfig: true,
@@ -200,16 +203,15 @@ describe('table editing integration', () => {
       },
     })
     const wrapper = mount(Host)
-    const table = wrapper.getComponent(Table)
-    await table.vm.startEdit(0, 'name')
+    await api.value!.startEdit(0, 'name')
     await wrapper.get('.s-table__cell-editor input').setValue('Saved name')
     await wrapper
       .findAll('.s-table__data-row')[0]
       .get('[data-column-index="1"]')
       .trigger('dblclick')
     await flushPromises()
-    expect(table.vm.getEditRecord()?.column.field).toBe('quantity')
-    expect(table.vm.getEditRecord()?.row.name).toBe('Saved name')
+    expect(api.value!.getEditRecord()?.column.field).toBe('quantity')
+    expect(api.value!.getEditRecord()?.row.name).toBe('Saved name')
     expect(
       wrapper.get<HTMLInputElement>('.s-table__cell-editor input').element
         .value,

@@ -2,16 +2,16 @@
 import { computed, shallowRef } from 'vue'
 import type {
   TableColumn,
-  TableGridProxyConfig,
   TableGroupConfig,
   TableGroupRemoteResult,
+  TableProxyConfig,
   TableRemoteGroup,
   TableRow,
 } from 'sax-design-vue'
 
 const rows = shallowRef<TableRow[]>([])
 const failNext = shallowRef(false)
-// Metadata follows the page accepted by the Grid, including controlled updates.
+// Metadata follows the page accepted by the Table, including controlled updates.
 const pages = new WeakMap<TableRow[], TableGroupRemoteResult>()
 const groupConfig = computed<TableGroupConfig>(() => ({
   mode: 'remote',
@@ -44,7 +44,7 @@ const pause = (signal: AbortSignal) =>
     if (signal.aborted) abort()
     else signal.addEventListener('abort', abort, { once: true })
   })
-const proxyConfig: TableGridProxyConfig = {
+const proxyConfig: TableProxyConfig = {
   async query({ pager, signal }) {
     const shouldFail = failNext.value
     failNext.value = false
@@ -84,7 +84,7 @@ const proxyConfig: TableGridProxyConfig = {
 
 <template>
   <div class="grouping-remote-demo">
-    <s-table-grid
+    <s-table
       v-model:data="rows"
       :columns="columns"
       row-key="id"
@@ -110,6 +110,6 @@ const proxyConfig: TableGridProxyConfig = {
             : (value ?? '')
         }}
       </template>
-    </s-table-grid>
+    </s-table>
   </div>
 </template>

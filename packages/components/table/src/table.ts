@@ -68,6 +68,15 @@ import type {
 } from './table-changes'
 import type { PaginationProps } from '@vuesax-alpha/components/pagination'
 import type {
+  TableBusinessExposes,
+  TableProxyConfig,
+  TableProxyResult,
+  TableProxyState,
+  TableQueryConfig,
+  TableQueryContext,
+  TableToolbarConfig,
+} from './table-business'
+import type {
   TableEditConfig,
   TableEditEndParams,
   TableEditRecord,
@@ -104,6 +113,7 @@ export type {
   TableDataPosition,
 } from './table-changes'
 export * from './table-edit'
+export * from './table-business'
 export type {
   TableValidateOptions,
   TableValidationConfig,
@@ -465,7 +475,7 @@ export type TableRowKeyGetter<Row extends TableRow = TableRow> =
 export type TableRowClass<Row extends TableRow = TableRow> =
   string | ((params: TableFlatRow<Row>) => string | string[] | undefined)
 
-export const tableProps = buildProps({
+export const tableCoreProps = buildProps({
   historyConfig: {
     type: definePropType<boolean | TableHistoryConfig>([Boolean, Object]),
     default: false,
@@ -676,9 +686,32 @@ export const tableProps = buildProps({
   multiple: { type: Boolean, default: false },
 } as const)
 
-export type TableProps = ExtractPropTypes<typeof tableProps>
+export const tableProps = buildProps({
+  ...tableCoreProps,
+  data: { ...tableCoreProps.data, default: undefined },
+  proxyConfig: {
+    type: definePropType<boolean | TableProxyConfig>([Boolean, Object]),
+    default: false,
+  },
+  queryConfig: {
+    type: definePropType<boolean | TableQueryConfig>([Boolean, Object]),
+    default: false,
+  },
+  toolbarConfig: {
+    type: definePropType<boolean | TableToolbarConfig>([Boolean, Object]),
+    default: false,
+  },
+} as const)
 
-export const tableEmits = {
+export type TableCoreProps = ExtractPropTypes<typeof tableCoreProps>
+export type TableProps = Omit<TableCoreProps, 'data'> & {
+  data?: TableRow[]
+  proxyConfig?: boolean | TableProxyConfig
+  queryConfig?: boolean | TableQueryConfig
+  toolbarConfig?: boolean | TableToolbarConfig
+}
+
+export const tableCoreEmits = {
   findChange: (state: TableFindState) => isObject(state),
   chartChange: (state: TableChartState) => isObject(state),
   chartError: (error: unknown) => error !== undefined,
@@ -755,10 +788,24 @@ export const tableEmits = {
   pageChange: (page: TablePageChangeParams) => isObject(page),
 }
 
-export type TableEmits = typeof tableEmits
-export type TableEmitFn = EmitFn<TableEmits>
+export const tableEmits = {
+  ...tableCoreEmits,
+  query: (context: TableQueryContext) => Boolean(context),
+  queryError: (() => true) as (error: unknown) => boolean,
+  proxyStateChange: (state: TableProxyState) => Boolean(state),
+  proxySuccess: (result: TableProxyResult) => Boolean(result),
+  proxyError: (result: TableProxyResult) => Boolean(result),
+  toolbarClick: (code: string, context: TableQueryContext, event: MouseEvent) =>
+    typeof code === 'string' && Boolean(context) && Boolean(event),
+}
 
-export interface TableExposes<Row extends TableRow = TableRow> {
+export type TableCoreEmits = typeof tableCoreEmits
+export type TableCoreEmitFn = EmitFn<TableCoreEmits>
+export type TableEmits = typeof tableEmits
+export type TableEmitFn = TableCoreEmitFn
+export type TableBusinessEmitFn = EmitFn<TableEmits>
+
+export interface TableCoreExposes<Row extends TableRow = TableRow> {
   getChartData: (options: TableChartOptions) => Promise<TableChartResult>
   openChart: (options: TableChartOptions) => Promise<TableChartResult>
   closeChart: () => void
@@ -881,5 +928,84 @@ export interface TableExposes<Row extends TableRow = TableRow> {
   toggleRowSelection: (row: Row, selected?: boolean) => void
   selectAll: (selected?: boolean) => void
 }
+
+export const tableCoreExposeKeys = [
+  'getChartData',
+  'openChart',
+  'closeChart',
+  'cancelChart',
+  'getChartState',
+  'openFind',
+  'closeFind',
+  'findCells',
+  'findNext',
+  'findPrevious',
+  'replaceMatch',
+  'replaceAll',
+  'getFindState',
+  'clearFind',
+  'cancelFind',
+  'copyCells',
+  'cutCells',
+  'pasteCells',
+  'cancelClipboard',
+  'setCellRange',
+  'clearCellRange',
+  'getCellRange',
+  'getCellRangeBounds',
+  'setGroupExpandedKeys',
+  'toggleGroup',
+  'getGroups',
+  'getGroupSummary',
+  'closeContextMenu',
+  'setActiveCell',
+  'clearActiveCell',
+  'getActiveCell',
+  'moveRow',
+  'cancelRowDrag',
+  'undo',
+  'redo',
+  'clearHistory',
+  'getHistoryState',
+  'insertRows',
+  'removeRows',
+  'updateRow',
+  'revertChanges',
+  'getChangeRecords',
+  'acceptChanges',
+  'resetChanges',
+  'cancelDataChange',
+  'validate',
+  'validateRow',
+  'validateCell',
+  'clearValidation',
+  'cancelValidation',
+  'getValidationErrors',
+  'scrollToValidationError',
+  'startEdit',
+  'commitEdit',
+  'cancelEdit',
+  'getEditRecord',
+  'toggleRowDetail',
+  'reloadRowDetail',
+  'setDetailExpandedKeys',
+  'toggleRowExpand',
+  'setExpandedKeys',
+  'scrollToRow',
+  'scrollToColumn',
+  'measure',
+  'setSort',
+  'clearSort',
+  'setFilters',
+  'clearFilters',
+  'getSelectedRows',
+  'setSelectedRows',
+  'clearSelection',
+  'toggleRowSelection',
+  'selectAll',
+] as const satisfies readonly (keyof TableCoreExposes)[]
+
+export interface TableExposes<Row extends TableRow = TableRow>
+  extends TableCoreExposes<Row>, TableBusinessExposes {}
 
 export type TableInstance = InstanceType<typeof Table> & TableExposes
