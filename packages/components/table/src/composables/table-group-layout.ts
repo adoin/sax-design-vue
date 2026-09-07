@@ -129,8 +129,7 @@ export function createTableGroupLayout(
       if (group.rowStart < cursor || stop > end)
         throw new RangeError('Groups must have ordered, non-overlapping ranges')
       appendData(cursor, group.rowStart, ancestorHasNext, true)
-      const hasNextSibling =
-        groupIndex < nodes.length - 1 || stop < end || continuesAfter
+      const hasNextSibling = groupIndex < nodes.length - 1 || stop < end
       const open = expanded(group)
       appendGroup(group, 'group', open, {
         depth: ancestorHasNext.length,

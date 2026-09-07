@@ -163,7 +163,10 @@ describe('Table group integration', () => {
     })
     await settle()
 
-    const nestedGroup = wrapper.get('.s-table__group-row[data-group-depth="1"]')
+    const nestedGroups = wrapper.findAll(
+      '.s-table__group-row[data-group-depth="1"]',
+    )
+    const nestedGroup = nestedGroups[0]
     expect(nestedGroup.findAll('.s-table__hierarchy-guide')).not.toHaveLength(0)
     expect(
       nestedGroup.get('.s-table__group-cell').attributes('style'),
@@ -182,6 +185,12 @@ describe('Table group integration', () => {
         .find('.s-table__hierarchy-guides')
         .exists(),
     ).toBe(true)
+    expect(
+      nestedGroups[0].get('.s-table__hierarchy-guide.is-branch').classes(),
+    ).not.toContain('is-to-middle')
+    expect(
+      nestedGroups[1].get('.s-table__hierarchy-guide.is-branch').classes(),
+    ).toContain('is-to-middle')
   })
 
   it('keeps group controls out of row selection and displays fully collapsed groups', async () => {
