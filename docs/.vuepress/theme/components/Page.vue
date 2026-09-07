@@ -155,6 +155,8 @@
 
     <s-backtop :visibility-height="300" :right="20" :bottom="20" />
 
+    <InlineCodeCopy :target="$page" />
+
     <Footer />
   </div>
 </template>
@@ -178,6 +180,7 @@ import { useDocLocaleUi } from '../composables/docLocale'
 
 import SidebarRight from './SidebarRight.vue'
 import Api from './Api.vue'
+import InlineCodeCopy from './InlineCodeCopy.vue'
 import Footer from './Footer.vue'
 import type { SaxDesignVueThemeOptions } from '../saxDesignVueTheme'
 import type {

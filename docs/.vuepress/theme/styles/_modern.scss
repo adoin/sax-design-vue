@@ -191,6 +191,47 @@ body,
   opacity: 1;
 }
 
+// Inline code in documentation prose acts as a compact copy target. Code
+// blocks and interactive examples are excluded by the shared component.
+.page :is(.content__default, .con-api) code.docs-inline-code-copy {
+  cursor: copy;
+  transition:
+    background-color 0.16s ease,
+    box-shadow 0.16s ease,
+    color 0.16s ease,
+    transform 0.16s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .page :is(.content__default, .con-api) code.docs-inline-code-copy:hover {
+    background: hsl(var(--sax-accent-color) / 0.15);
+    box-shadow: 0 0 0 2px hsl(var(--sax-accent-color) / 0.11);
+    color: hsl(var(--sax-theme-color));
+  }
+}
+
+.page
+  :is(.content__default, .con-api)
+  code.docs-inline-code-copy:focus-visible {
+  outline: 2px solid hsl(var(--sax-accent-color) / 0.72);
+  outline-offset: 2px;
+}
+
+.page :is(.content__default, .con-api) code.docs-inline-code-copy.is-copied {
+  background: hsl(var(--sax-accent-color) / 0.2);
+  box-shadow:
+    0 0 0 2px hsl(var(--sax-accent-color) / 0.16),
+    0 5px 12px hsl(var(--sax-accent-color) / 0.12);
+  color: hsl(var(--sax-theme-color));
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page :is(.content__default, .con-api) code.docs-inline-code-copy {
+    transition: none;
+  }
+}
+
 // Markdown tables: lighter structure, stronger text contrast, and safe
 // horizontal scrolling for compact documentation viewports.
 .page .content__default > table,
