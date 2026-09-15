@@ -1,23 +1,28 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-pnpm i --frozen-lockfile
-pnpm update:version
+: "${TAG_VERSION:?TAG_VERSION is required}"
+: "${GIT_HEAD:?GIT_HEAD is required}"
 
-pnpm build
+release_version="${TAG_VERSION#v}"
+manifest_version="$(node -p "require('./packages/sax-design-vue/package.json').version")"
 
-cd dist/vuesax-alpha
-npm publish
-cd -
+if [[ "$release_version" != "$manifest_version" ]]; then
+  echo "Tag version $release_version does not match package version $manifest_version" >&2
+  exit 1
+fi
 
-cd internal/eslint-config
-npm publish
-cd -
+pnpm install --frozen-lockfile
+pnpm run gen:version
+pnpm run build
 
-cd internal/metadata
-pnpm build
-npm publish
-cd -
+built_version="$(node -p "require('./dist/sax-design-vue/package.json').version")"
+if [[ "$release_version" != "$built_version" ]]; then
+  echo "Built package version $built_version does not match tag version $release_version" >&2
+  exit 1
+fi
 
-echo "✅ Publish completed"
+npm publish ./dist/sax-design-vue --access public --provenance
+
+echo "✅ Published sax-design-vue@$release_version"

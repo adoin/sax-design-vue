@@ -2,8 +2,8 @@ name: Deploy documentation
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*.*.*'
   workflow_dispatch:
 
 permissions:
@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   build:
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -162,12 +162,18 @@ jobs:
           script: |
             const keep = 2
             const allRuns = []
+            const { data: currentRun } = await github.rest.actions.getWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+            })
             let page = 1
 
             while (true) {
-              const { data } = await github.rest.actions.listWorkflowRunsForRepo({
+              const { data } = await github.rest.actions.listWorkflowRuns({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
+                workflow_id: currentRun.workflow_id,
                 per_page: 100,
                 page,
               })

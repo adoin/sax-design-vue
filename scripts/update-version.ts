@@ -9,8 +9,8 @@ async function main() {
   if (!tagVersion || !gitHead) {
     errorAndExit(
       new Error(
-        'No tag version or git head were found, make sure that you set the environment variable $TAG_VERSION \n'
-      )
+        'No tag version or git head were found, make sure that you set the environment variable $TAG_VERSION \n',
+      ),
     )
   }
 
@@ -18,14 +18,16 @@ async function main() {
   consola.log(chalk.cyan(`$TAG_VERSION: ${tagVersion}`))
   consola.log(chalk.cyan(`$GIT_HEAD: ${gitHead}`))
 
-  consola.debug(chalk.yellow(`Updating package.json for vuesax-alpha`))
+  consola.debug(chalk.yellow(`Updating package.json for sax-design-vue`))
 
   const pkgs = Object.fromEntries(
-    (await getWorkspacePackages()).map((pkg) => [pkg.manifest.name!, pkg])
+    (await getWorkspacePackages()).map((pkg) => [pkg.manifest.name!, pkg]),
   )
-  const vuesaxAlpha = pkgs['vuesax-alpha'] || pkgs['@vuesax-alpha/nightly']
-  const eslintConfig = pkgs['@vuesax-alpha/eslint-config']
-  const metadata = pkgs['@vuesax-alpha/metadata']
+  const saxDesignVue = pkgs['sax-design-vue']
+
+  if (!saxDesignVue) {
+    errorAndExit(new Error('Cannot find the sax-design-vue workspace package'))
+  }
 
   const writeVersion = async (project: Project) => {
     await project.writeProjectManifest({
@@ -36,9 +38,7 @@ async function main() {
   }
 
   try {
-    await writeVersion(vuesaxAlpha)
-    await writeVersion(eslintConfig)
-    await writeVersion(metadata)
+    await writeVersion(saxDesignVue)
   } catch (err: any) {
     errorAndExit(err)
   }
