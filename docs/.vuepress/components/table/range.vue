@@ -20,12 +20,6 @@ const rows = Array.from({ length: 40 }, (_, id) => ({
 
 <template>
   <div class="range-demo">
-    <div class="range-demo__controls">
-      <s-button size="small" flat @click="table?.clearCellRange()"
-        >Clear range</s-button
-      >
-      <s-checkbox v-model="grouped">Group by team</s-checkbox>
-    </div>
     <p>
       Drag across cells, or hold Shift and click or use arrow keys to extend.
     </p>
@@ -43,10 +37,16 @@ const rows = Array.from({ length: 40 }, (_, id) => ({
         height: 280,
         dynamic: true,
       }"
-      column-manager-config
+      :toolbar-config="{ right: [{ itemRender: '$columnConfig' }] }"
       resize-config
       @cell-range-change="bounds = $event.bounds"
     >
+      <template #toolbar_left>
+        <s-button size="small" flat @click="table?.clearCellRange()"
+          >Clear range</s-button
+        >
+        <s-checkbox v-model="grouped">Group by team</s-checkbox>
+      </template>
       <s-table-column field="id" title="ID" fixed="left" :width="100" />
       <s-table-column field="name" title="Project" :width="180" />
       <s-table-column field="team" title="Team" :width="180" />
@@ -70,12 +70,6 @@ const rows = Array.from({ length: 40 }, (_, id) => ({
 <style scoped>
 .range-demo {
   width: 100%;
-}
-.range-demo__controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
 }
 .range-demo p {
   margin: 12px 0;

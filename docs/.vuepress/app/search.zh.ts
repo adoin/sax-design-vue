@@ -2,6 +2,7 @@ import { enSearchData } from './search'
 import type { SearchDataOption } from '~/saxDesignVueTheme'
 
 const titleZh: Record<string, string> = {
+  Renderer: '渲染器',
   'Time select': 'Time select',
   'Date picker': 'Date picker',
   'Time picker': 'Time picker',
@@ -11,6 +12,10 @@ const titleZh: Record<string, string> = {
 }
 
 const headerZh: Record<string, string> = {
+  'Register renderers': '注册渲染器',
+  'Use registered renderers': '使用已注册的渲染器',
+  'Renderer contract': '渲染器契约',
+  'Built-in renderers': '内置渲染器',
   Default: '默认',
   Solid: '实心',
   Border: '边框',

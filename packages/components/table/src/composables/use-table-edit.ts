@@ -2,7 +2,7 @@ import { computed, nextTick, onBeforeUnmount, shallowRef, watch } from 'vue'
 import { cloneDeep, isEqual } from 'lodash-unified'
 import { tableFieldValue } from '../data-utils'
 import { applyTableEditChanges, editableField } from '../edit-utils'
-import type { TableCoreProps, TableEmitFn } from '../table'
+import type { TableCoreEmitFn, TableCoreProps } from '../table'
 import type {
   TableEditChange,
   TableEditContext,
@@ -23,7 +23,7 @@ interface EditValidationHooks {
 
 export function useTableEdit(
   props: TableCoreProps,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   resolveContext: (params: TableEditContext) => TableEditContext | undefined = (
     params,
   ) => params,
@@ -62,8 +62,8 @@ export function useTableEdit(
     editableField(params.column.field) &&
     Boolean(params.column.editor) &&
     (typeof params.column.editor !== 'object' ||
-      params.column.editor.checkMethod?.(params) !== false) &&
-    config.value.checkMethod?.(params) !== false
+      params.column.editor.editableMethod?.(params) !== false) &&
+    config.value.editableMethod?.(params) !== false
   const isEditing = (params: TableEditContext) =>
     Boolean(
       active.value &&
@@ -238,6 +238,10 @@ export function useTableEdit(
       mode: config.value.mode ?? 'cell',
       id: ++sequence,
     }
+    validation.invalidate?.(
+      active.value,
+      active.value.mode === 'cell' ? active.value.column.field : undefined,
+    )
     baselines.set(
       params.column.field!,
       cloneDeep(tableFieldValue(params.row, params.column.field)),

@@ -38,6 +38,38 @@ const config = computed(() =>
     ? props.context.column.editor
     : {},
 )
+const rendererName = computed(() => {
+  const renderer = props.context.column.renderer
+  if (typeof renderer === 'string') return renderer
+  return renderer && typeof renderer === 'object' && 'name' in renderer
+    ? renderer.name
+    : undefined
+})
+type EditorType = 'input' | 'number' | 'select' | 'date' | 'switch'
+const rendererEditorTypes: Record<string, EditorType> = {
+  $select: 'select',
+  $treeSelect: 'select',
+  $cascader: 'select',
+  $time: 'select',
+  $timePicker: 'select',
+  $date: 'date',
+  $dateRange: 'date',
+  $switch: 'switch',
+}
+const editorType = computed<EditorType>(() => {
+  const configured = config.value.type
+  if (
+    configured === 'input' ||
+    configured === 'number' ||
+    configured === 'select' ||
+    configured === 'date' ||
+    configured === 'switch'
+  )
+    return configured
+  return (
+    (rendererName.value && rendererEditorTypes[rendererName.value]) || 'input'
+  )
+})
 const params = computed(() => ({
   ...props.editing.slotParams(props.context),
   error: props.error,
@@ -47,7 +79,7 @@ const modelValue = computed(() => props.editing.valueFor(props.context))
 const popupVisible = shallowRef(false)
 const control = shallowRef<{ hidePanel?: () => void }>()
 const builtin = () => {
-  const type = config.value.type ?? 'input'
+  const type = editorType.value
   const components = {
     input: SInput,
     number: SInput,
@@ -60,6 +92,7 @@ const builtin = () => {
     mergeProps(
       {
         block: true,
+        ...(type === 'switch' ? {} : { shape: 'square' }),
       },
       config.value.props ?? {},
       {
@@ -162,7 +195,7 @@ const onKeydown = (event: KeyboardEvent) => {
   if (
     event.key === 'Escape' &&
     popupVisible.value &&
-    config.value.type === 'date'
+    editorType.value === 'date'
   ) {
     event.preventDefault()
     event.stopPropagation()
@@ -188,7 +221,7 @@ const onKeydown = (event: KeyboardEvent) => {
     (event.ctrlKey ||
       event.metaKey ||
       (!(event.target instanceof HTMLTextAreaElement) &&
-        !['select', 'date', 'switch'].includes(config.value.type ?? 'input')))
+        !['select', 'date', 'switch'].includes(editorType.value)))
   ) {
     event.preventDefault()
     event.stopPropagation()

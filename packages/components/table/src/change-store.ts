@@ -10,12 +10,12 @@ import type {
   TableRevertOperation,
 } from './table-changes'
 
-interface Entry<Row extends TableRow> extends TableChangedRow<Row> {
+interface Entry<Row extends object> extends TableChangedRow<Row> {
   type: 'insert' | 'update' | 'remove'
 }
 
 /** Sparse journal of accepted data changes. Drafts never enter this store. */
-export function createTableChangeStore<Row extends TableRow = TableRow>(
+export function createTableChangeStore<Row extends object = TableRow>(
   onChange: (version: number) => void = () => {},
 ) {
   let entries = new Map<TableRowKey, Entry<Row>>()

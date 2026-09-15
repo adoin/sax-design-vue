@@ -1,4 +1,4 @@
-import type { TableRowKey } from './table'
+import type { TableRow, TableRowKey } from './table'
 import type { TableEditContext } from './table-edit'
 import type { TableCellRangeBounds } from './table-cell-range'
 import type { TableValidationError } from './table-validation'
@@ -6,14 +6,19 @@ import type { TableFindLimits, TableFindQuery } from './find-data'
 export type { TableFindQuery, TableFindLimits } from './find-data'
 
 export type TableFindScope = 'view' | 'selection' | 'data'
-export interface TableFindConfig extends TableFindLimits {
+export interface TableFindConfig<
+  Row extends object = TableRow,
+> extends TableFindLimits {
   enabled?: boolean
   keyboard?: boolean
   panel?: boolean
   scope?: TableFindScope
-  formatCell?: (value: unknown, context: TableEditContext) => string | undefined
-  parseCell?: (text: string, context: TableEditContext) => unknown
-  checkMethod?: (context: TableEditContext) => boolean
+  formatCell?: (
+    value: unknown,
+    context: TableEditContext<Row>,
+  ) => string | undefined
+  parseCell?: (text: string, context: TableEditContext<Row>) => unknown
+  replaceableMethod?: (context: TableEditContext<Row>) => boolean
 }
 export interface TableFindOptions {
   /** view: current expanded page; selection: cell range; data: all supplied/loaded rows. Defaults to findConfig.scope, then view. */
@@ -59,7 +64,7 @@ export interface TableReplaceOptions {
   index?: number
   signal?: AbortSignal
 }
-export interface TableReplaceResult {
+export interface TableReplaceResult<Row extends object = TableRow> {
   applied: boolean
   changedCells: number
   skippedCells: number
@@ -75,6 +80,6 @@ export interface TableReplaceResult {
     | 'limit'
     | 'busy'
     | 'rejected'
-  errors?: TableValidationError[]
+  errors?: TableValidationError<Row>[]
   error?: unknown
 }

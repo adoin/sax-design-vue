@@ -53,6 +53,9 @@ importers:
       dayjs:
         specifier: ^1.11.21
         version: 1.11.21
+      decimal.js:
+        specifier: ^10.6.0
+        version: 10.6.0
       escape-html:
         specifier: ^1.0.3
         version: 1.0.3
@@ -475,6 +478,9 @@ importers:
 
   packages/components:
     dependencies:
+      decimal.js:
+        specifier: ^10.6.0
+        version: 10.6.0
       sax-design-vue-iconify:
         specifier: workspace:*
         version: link:../iconify
@@ -546,6 +552,9 @@ importers:
       dayjs:
         specifier: ^1.11.21
         version: 1.11.21
+      decimal.js:
+        specifier: ^10.6.0
+        version: 10.6.0
       escape-html:
         specifier: ^1.0.3
         version: 1.0.3

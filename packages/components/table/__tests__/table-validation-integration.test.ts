@@ -93,6 +93,263 @@ describe('table validation integration', () => {
     wrapper.unmount()
   })
 
+  it('ends editing before manual validation and restores errors only after a failed commit', async () => {
+    const wrapper = mount(Table, {
+      attachTo: document.body,
+      props: {
+        data: [{ id: 1, name: '' }],
+        columns,
+        editConfig: true,
+        validationConfig: true,
+        validationRules: { name: { required: true, message: 'Name missing' } },
+      },
+    })
+
+    await wrapper.vm.startEdit(0, 'name')
+    expect(wrapper.vm.getEditRecord()).not.toBeNull()
+    expect(
+      await wrapper.vm.validateCell(0, 'name', { scrollToError: false }),
+    ).toMatchObject({ valid: false })
+    expect(wrapper.vm.getEditRecord()).toBeNull()
+    expect(wrapper.emitted('editCancel')?.at(-1)?.[0]).toMatchObject({
+      reason: 'api',
+    })
+    expect(wrapper.get('.s-table__data-cell').classes()).toContain('is-invalid')
+
+    await wrapper.vm.startEdit(0, 'name')
+    await nextTick()
+    expect(wrapper.vm.getValidationErrors()).toEqual([])
+    expect(wrapper.get('.s-table__data-cell').classes()).not.toContain(
+      'is-invalid',
+    )
+    expect(wrapper.find('.s-table__validation-marker').exists()).toBe(false)
+
+    expect(await wrapper.vm.commitEdit()).toBe(false)
+    await flushPromises()
+    expect(wrapper.vm.getEditRecord()).not.toBeNull()
+    expect(wrapper.vm.getValidationErrors()[0]?.message).toBe('Name missing')
+    expect(wrapper.get('.s-table__data-cell').classes()).toContain('is-invalid')
+    expect(wrapper.find('.s-table__validation-marker').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('shows validation callouts temporarily and while hovering without blocking editing', async () => {
+    vi.useFakeTimers()
+    const requestFrame = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        callback(0)
+        return 1
+      })
+    const wrapper = mount(Table, {
+      attachTo: document.body,
+      props: {
+        data: [{ id: 1, name: '' }],
+        columns,
+        editConfig: true,
+        validationRules: { name: { required: true, message: 'Name missing' } },
+      },
+    })
+    const validationPopper = () =>
+      wrapper
+        .findAllComponents({ name: 'SPopper' })
+        .find(
+          (component) =>
+            component.props('popperClass') === 's-table__validation-popover',
+        )!
+
+    try {
+      await wrapper.vm.validateCell(0, 'name', { scrollToError: false })
+      await nextTick()
+      await nextTick()
+      expect(validationPopper().props('visible')).toBe(true)
+
+      vi.advanceTimersByTime(1999)
+      await nextTick()
+      expect(validationPopper().props('visible')).toBe(true)
+      vi.advanceTimersByTime(1)
+      await nextTick()
+      expect(validationPopper().props('visible')).toBe(false)
+
+      const cell = wrapper.get('.s-table__data-cell.is-invalid')
+      await cell.trigger('mouseenter')
+      expect(validationPopper().props('visible')).toBe(true)
+      await cell.trigger('mouseleave')
+      expect(validationPopper().props('visible')).toBe(false)
+
+      await cell.trigger('mouseenter')
+      await cell.trigger('dblclick')
+      await nextTick()
+      expect(wrapper.vm.getEditRecord()).not.toBeNull()
+    } finally {
+      wrapper.unmount()
+      requestFrame.mockRestore()
+      vi.useRealTimers()
+    }
+  })
+
+  it('hides a teleported validation callout when its cell leaves the table viewport', async () => {
+    const intersections = new Map<Element, IntersectionObserverCallback>()
+    vi.stubGlobal(
+      'IntersectionObserver',
+      class {
+        private callback: IntersectionObserverCallback
+        constructor(callback: IntersectionObserverCallback) {
+          this.callback = callback
+        }
+        observe(element: Element) {
+          intersections.set(element, this.callback)
+        }
+        unobserve() {}
+        disconnect() {}
+      },
+    )
+    const wrapper = mount(Table, {
+      attachTo: document.body,
+      props: {
+        data: [{ id: 1, name: '' }],
+        columns,
+        validationRules: { name: { required: true, message: 'Name missing' } },
+      },
+    })
+
+    await wrapper.vm.validateCell(0, 'name', { scrollToError: false })
+    await flushPromises()
+    const cell = wrapper.get('.s-table__data-cell.is-invalid')
+    const validationPopper = wrapper
+      .findAllComponents({ name: 'SPopper' })
+      .find(
+        (component) =>
+          component.props('popperClass') === 's-table__validation-popover',
+      )!
+    await vi.waitFor(() =>
+      expect(validationPopper.vm.triggerRef).toBe(cell.element),
+    )
+    const callout = document.querySelector<HTMLElement>(
+      '.s-table__validation-popover',
+    )!
+    expect(callout.parentElement).toBe(
+      wrapper.get('.s-table__validation-overlay-host').element,
+    )
+    expect(callout.style.display).not.toBe('none')
+
+    const intersection = intersections.get(cell.element)
+    expect(intersection).toBeDefined()
+    intersection!(
+      [{ isIntersecting: false } as IntersectionObserverEntry],
+      {} as IntersectionObserver,
+    )
+    await nextTick()
+    expect(callout.style.visibility).toBe('hidden')
+    await vi.waitFor(() => expect(callout.style.display).toBe('none'))
+    wrapper.unmount()
+  })
+
+  it('uses the table loading state and blocks editing while validation runs', async () => {
+    let finish!: (value: boolean) => void
+    const wrapper = mount(Table, {
+      attachTo: document.body,
+      props: {
+        data: [{ id: 1, name: 'Current' }],
+        columns,
+        editConfig: true,
+        validationRules: {
+          name: {
+            validator: () =>
+              new Promise<boolean>((resolve) => {
+                finish = resolve
+              }),
+          },
+        },
+      },
+    })
+
+    const pending = wrapper.vm.validateCell(0, 'name', {
+      scrollToError: false,
+    })
+    await vi.waitFor(() => expect(finish).toBeTypeOf('function'))
+    expect(wrapper.find('.s-table__loading-mask').exists()).toBe(true)
+    expect(wrapper.get('.s-table').attributes('aria-busy')).toBe('true')
+    expect(await wrapper.vm.startEdit(0, 'name')).toBe(false)
+
+    finish(true)
+    expect(await pending).toMatchObject({ valid: true })
+    await nextTick()
+    expect(wrapper.find('.s-table__loading-mask').exists()).toBe(false)
+    expect(wrapper.get('.s-table').attributes('aria-busy')).toBeUndefined()
+    expect(await wrapper.vm.startEdit(0, 'name')).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('renders an overlaid multi-error navigator and cycles between fields', async () => {
+    const wrapper = mount(Table, {
+      attachTo: document.body,
+      props: {
+        data: [{ id: 1, name: '', other: '' }],
+        columns: [{ field: 'name' }, { field: 'other' }],
+        validationRules: {
+          name: { required: true, message: 'Name missing' },
+          other: { required: true, message: 'Other missing' },
+        },
+      },
+    })
+
+    await wrapper.vm.validate({ scrollToError: false })
+    await flushPromises()
+    expect(wrapper.get('.s-table__validation-navigator').text()).toContain(
+      '1 of 2',
+    )
+    await wrapper
+      .get('.s-table__validation-navigation-action[aria-label="Next error"]')
+      .trigger('click')
+    await flushPromises()
+    expect(document.activeElement?.getAttribute('data-column-index')).toBe('1')
+    expect(wrapper.get('.s-table__validation-navigator').text()).toContain(
+      '2 of 2',
+    )
+    await wrapper
+      .get(
+        '.s-table__validation-navigation-action[aria-label="Close error navigation"]',
+      )
+      .trigger('click')
+    expect(wrapper.find('.s-table__validation-navigator').exists()).toBe(false)
+    expect(wrapper.findAll('.s-table__data-cell.is-invalid')).toHaveLength(2)
+    wrapper.unmount()
+  })
+
+  it('shows a lower-bound error count when validation reaches maxErrors', async () => {
+    const wrapper = mount(Table, {
+      attachTo: document.body,
+      props: {
+        data: Array.from({ length: 100 }, (_, index) => ({
+          id: index + 1,
+          name: '',
+        })),
+        columns,
+        validationRules: { name: { required: true } },
+      },
+    })
+
+    const result = await wrapper.vm.validate({ scrollToError: false })
+    await flushPromises()
+    expect(result).toMatchObject({ truncated: true })
+    expect(wrapper.get('.s-table__validation-count').text()).toBe('99+')
+    expect(wrapper.get('.s-table__validation-position').text()).toContain(
+      '1 of 99+',
+    )
+
+    await wrapper
+      .get(
+        '.s-table__validation-navigation-action[aria-label="Previous error"]',
+      )
+      .trigger('click')
+    await flushPromises()
+    expect(wrapper.get('.s-table__validation-position').text()).toContain(
+      '99+ of 99+',
+    )
+    wrapper.unmount()
+  })
+
   it('uses declarative column rules over global rules and allows explicit empty rules', async () => {
     const table = mount(Table, {
       props: {
@@ -350,6 +607,109 @@ describe('table validation integration', () => {
     expect(wrapper.find('[data-column-index="99998"]').exists()).toBe(true)
     expect(row.mock.calls.length).toBeLessThan(200)
     expect(column.mock.calls.length).toBeLessThan(400)
+    wrapper.unmount()
+  })
+
+  it('cycles between distant generated errors with bounded virtual-source reads', async () => {
+    const invalidCells = new Set(['125000:1111', '875000:98765'])
+    const row = vi.fn(
+      (index: number) =>
+        new Proxy(
+          { id: index },
+          {
+            get(target, key, receiver) {
+              if (typeof key === 'string' && key.startsWith('value_'))
+                return invalidCells.has(`${target.id}:${key.slice(6)}`)
+                  ? ''
+                  : 'valid'
+              return Reflect.get(target, key, receiver)
+            },
+          },
+        ),
+    )
+    const column = vi.fn((index: number) => ({
+      key: String(index),
+      field: `value_${index}`,
+      width: 140,
+    }))
+    const wrapper = mount(Table, {
+      attachTo: document.body,
+      props: {
+        virtualSource: {
+          rowCount: 1_000_000,
+          columnCount: 100_000,
+          row,
+          column,
+          columnWidth: 140,
+        },
+        rowKey: 'id',
+        virtualConfig: { height: 200, horizontal: true },
+        validationRules: {
+          value_1111: { required: true },
+          value_98765: { required: true },
+        },
+      },
+    })
+    await flushPromises()
+
+    const result: TableValidationResult = await wrapper.vm.validate({
+      rows: [125_000, 875_000],
+      columns: [1_111, 98_765],
+      scrollToError: false,
+    })
+    await flushPromises()
+    expect(
+      result.errors.map((error) => [error.rowIndex, error.columnIndex]),
+    ).toEqual([
+      [125_000, 1_111],
+      [875_000, 98_765],
+    ])
+    expect(wrapper.get('.s-table__validation-navigator').text()).toContain(
+      '1 of 2',
+    )
+    const next = () =>
+      wrapper
+        .get('.s-table__validation-navigation-action[aria-label="Next error"]')
+        .trigger('click')
+    const previous = () =>
+      wrapper
+        .get(
+          '.s-table__validation-navigation-action[aria-label="Previous error"]',
+        )
+        .trigger('click')
+    const expectFocusedCell = (rowIndex: number, columnIndex: number) => {
+      const cell = wrapper.get(
+        `[data-row-key="${rowIndex}"] [role="cell"][data-column-index="${columnIndex}"]`,
+      )
+      expect(document.activeElement).toBe(cell.element)
+      expect(wrapper.findAll('.s-table__data-row').length).toBeLessThan(20)
+    }
+
+    await next()
+    await flushPromises()
+    expectFocusedCell(875_000, 98_765)
+    expect(
+      document.querySelector('.s-table__validation-popover')?.parentElement,
+    ).toBe(wrapper.get('.s-table__validation-overlay-host').element)
+    expect(wrapper.get('.s-table__validation-navigator').text()).toContain(
+      '2 of 2',
+    )
+
+    await next()
+    await flushPromises()
+    expectFocusedCell(125_000, 1_111)
+    expect(wrapper.get('.s-table__validation-navigator').text()).toContain(
+      '1 of 2',
+    )
+
+    await previous()
+    await flushPromises()
+    expectFocusedCell(875_000, 98_765)
+    expect(wrapper.get('.s-table__validation-navigator').text()).toContain(
+      '2 of 2',
+    )
+    expect(row.mock.calls.length).toBeLessThan(500)
+    expect(column.mock.calls.length).toBeLessThan(1_000)
     wrapper.unmount()
   })
 })

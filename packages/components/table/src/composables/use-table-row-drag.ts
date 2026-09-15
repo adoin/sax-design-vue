@@ -1,6 +1,6 @@
 import { nextTick, onBeforeUnmount, shallowRef, watch } from 'vue'
 import type { WatchSource } from 'vue'
-import type { TableEmitFn, TableFlatRow, TableRowKey } from '../table'
+import type { TableCoreEmitFn, TableFlatRow, TableRowKey } from '../table'
 import type {
   TableRowDragResult,
   TableRowDropPosition,
@@ -28,7 +28,7 @@ interface RowDragOptions {
 /** Handles pointer capture and edge scrolling using only mounted row rectangles. */
 export function useTableRowDrag(
   reorder: TableRowReorder,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   options: RowDragOptions,
 ) {
   const session = shallowRef<DragSession>()

@@ -35,10 +35,17 @@ export interface PromptBoxFn {
   confirm: (text: string, title?: string) => Promise<true>
 }
 
-const TRANSITION_MS = 250
+const readCloseDuration = () => {
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue('--sax-motion-duration-quick')
+    .trim()
+  const duration = Number.parseFloat(value)
+  if (!Number.isFinite(duration)) return 150
+  return value.endsWith('ms') ? duration : duration * 1000
+}
 
 const normalizeOptions = (
-  options: PromptBoxOptions | string = {}
+  options: PromptBoxOptions | string = {},
 ): PromptBoxOptions =>
   isString(options) ? { text: options, type: 'alert' } : options
 
@@ -65,20 +72,20 @@ const promptBox = ((options?: PromptBoxOptions | string) => {
       modelValue: true,
       'onUpdate:modelValue': (visible: boolean) => {
         if (!visible) {
-          window.setTimeout(() => finish('close'), TRANSITION_MS)
+          window.setTimeout(() => finish('close'), readCloseDuration())
         }
       },
       onAccept: () => {
         normalized.onAccept?.()
-        window.setTimeout(() => finish('accept'), TRANSITION_MS)
+        window.setTimeout(() => finish('accept'), readCloseDuration())
       },
       onCancel: () => {
         normalized.onCancel?.()
-        window.setTimeout(() => finish('cancel'), TRANSITION_MS)
+        window.setTimeout(() => finish('cancel'), readCloseDuration())
       },
       onClose: () => {
         normalized.onClose?.()
-        window.setTimeout(() => finish('close'), TRANSITION_MS)
+        window.setTimeout(() => finish('close'), readCloseDuration())
       },
     }
 

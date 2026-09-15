@@ -1,12 +1,17 @@
 ---
 status: implemented
 kind: project-specification
-updated_at: 2026-09-07
+updated_at: 2026-09-11
 completed_at: 2026-09-07
 modules:
+  - docs/.vuepress/app/component-categories.ts
+  - docs/.vuepress/client.ts
+  - docs/.vuepress/theme/components/SidebarRight.vue
+  - docs/.vuepress/theme/shared/tableDocumentation.ts
   - docs/components/table.md
   - docs/zh/components/table.md
   - play/__tests__/doc-example-source.test.ts
+  - play/__tests__/table-documentation-entry.test.ts
 supersedes: []
 ---
 
@@ -18,30 +23,39 @@ The Table documentation is a public reference for developers and AI using Sax De
 
 Every rendered example remains paired with complete localized source for the Code dialog and Playground. Examples use `STable` with either configuration-object columns or nested `STableColumn` declarations; they do not reconstruct table rows or cells by hand.
 
+Examples that demonstrate render functions may provide a validated `script-tsx` source alongside the standard Vue script. The Code dialog exposes its Vue/TSX switch only for those examples, and the selected form is also used by copy and Playground.
+
 ## Navigation hierarchy
 
-The English and Chinese pages use the same ordered second-level groups, with individual examples as third-level children:
+The English and Chinese Table overview pages keep the generated API as a compatibility endpoint. The component sidebar, the outline's Examples group, and an overview URL without a hash all enter the first route-level feature guide directly. An overview URL with `#api` remains on the API page. Each guide page owns one second-level group with its individual examples as third-level children:
 
 1. Data and column definitions / 数据与列定义
-2. Selection, sorting, and filtering / 选择、排序与筛选
-3. Trees and groups / 树形与分组
-4. Header structures / 表头结构
-5. Footers and summaries / 表尾与汇总
-6. Row expansion / 行展开
-7. Editing, validation, and changes / 编辑、校验与变更
-8. Spreadsheet interactions / 表格式交互
-9. Column layout and management / 列布局与管理
-10. Merged cells / 单元格合并
-11. Large data and visualization / 大数据与可视化
-12. Query forms and request proxy / 查询表单与请求代理
+2. Row selection / 行选择
+3. Sorting and filtering / 排序与筛选
+4. Trees and groups / 树形与分组
+5. Header structures / 表头结构
+6. Footers and summaries / 表尾与汇总
+7. Row expansion / 行展开
+8. Editing, validation, and changes / 编辑、校验与变更
+9. Spreadsheet interactions / 表格式交互
+10. Column layout and management / 列布局与管理
+11. Merged cells / 单元格合并
+12. Large data and visualization / 大数据与可视化
+13. Query forms and request proxy / 查询表单与请求代理
 
 Tree and row-group examples share a hierarchy section. Grouped headers, footer summaries, and detail rows remain separate because they describe column structure, aggregate output, and row expansion respectively. Base behavior precedes its asynchronous, remote, generated-source, or virtualized variant within each group.
 
-The right-side `SAnchor` navigation is generated from this heading hierarchy. Each second-level group can be collapsed independently and reveals the third-level example anchors when expanded.
+The first footer example teaches `footerConfig` with precise built-in decimal aggregation and explains its `data`, `filtered`, and `page` scopes. The same section keeps `footerData` as the explicit application- or server-owned result path, including for `virtualSource` data that cannot be enumerated locally.
+
+The right-side `SAnchor` navigation combines all 13 feature routes into one hierarchy. Its Examples group uses the overview compatibility URL, which resolves to the first feature guide without rendering an intermediate index. The documentation theme delegates ordinary same-origin route clicks to Vue Router, preserving the shared page shell while each chapter remains directly addressable as an HTML URL. The current route expands to reveal its page-local example anchors; API navigation returns to the overview with `#api`. Row selection contains single selection, multiple selection, and highlight selection as separate children; sorting and filtering use their own route. Both locales retain localized labels while sharing route filenames and canonical English anchor values defined by [localized-documentation-anchors.md](localized-documentation-anchors.md).
+
+The overview contains no feature-guide card and is skipped during ordinary navigation. Route-level splitting still bounds mount cost and keeps document height stable; documentation Cards do not destroy or recreate example content in response to viewport movement.
+
+The Table outline enables `SAnchor` router mode and passes the documentation router locally. Anchor finds the active Table section in the existing ordered `items` tree, derives adjacent sibling routes, and generates both floating boundaries internally. `Page.vue` contains no Table-specific boundary wrapper or neighbor calculation. Each edge ignores the gesture that first reaches it and lets a deliberate continued-scroll gesture move through the same router integration as the outline. Wheel ownership follows [anchor-route-boundary-scroll-ownership.md](anchor-route-boundary-scroll-ownership.md): any nested overflowing element resets pending route intent, independent of component type. A cross-route cooldown prevents one residual gesture from skipping chapters. Direct link activation remains available; the first route has no previous item and the final request-proxy route has no next item.
 
 ## Verification
 
-- `pnpm run normalize:doc-examples`: no source-range changes remained after reorganization.
-- `pnpm run test:docs-examples`: 64 examples per locale, 12 matching section boundaries, and 9 tests passed.
-- `pnpm run docs:build`: 173 pages rendered.
-- Browser verification confirmed all 12 groups and the expected children for trees and groups, header structures, footers and summaries, and row expansion in both locales.
+- `pnpm run normalize:doc-examples` recursively normalized all routed source slots with no skipped examples.
+- `pnpm run test:docs-examples`: 65 examples per locale, 13 paired feature routes, and 9 tests passed.
+- `pnpm run docs:build`: 201 pages rendered.
+- Browser verification confirmed cross-route navigation, current-route `aria-current="page"`, the four local column-layout anchors, a stable 3628px document height, and canonical English hash values in the Chinese locale.

@@ -5,6 +5,8 @@ import type {
   TableCellRenderer,
   TableEditRenderer,
   TableEditSlotParams,
+  TableFilterRenderer,
+  TableFilterSlotParams,
   TableFooterCellRenderParams,
   TableFooterRenderer,
   TableHeaderRenderParams,
@@ -19,6 +21,7 @@ export default defineComponent({
         | TableCellRenderer
         | TableHeaderRenderer
         | TableFooterRenderer
+        | TableFilterRenderer
         | TableEditRenderer
       >,
       default: undefined,
@@ -28,6 +31,7 @@ export default defineComponent({
         | TableCellRenderParams
         | TableHeaderRenderParams
         | TableFooterCellRenderParams
+        | TableFilterSlotParams
         | TableEditSlotParams
       >,
       required: true,

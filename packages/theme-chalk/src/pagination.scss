@@ -229,7 +229,8 @@
       height: 100%;
       position: relative;
       border-radius: inherit;
-      transition: all 0.25s ease;
+      transition: width var(--sax-motion-duration)
+        var(--sax-motion-easing-standard);
       max-width: 100%;
     }
   }
@@ -437,11 +438,5 @@
         visibility: hidden;
       }
     }
-  }
-}
-
-@keyframes pager-rotate {
-  100% {
-    transform: rotate(360deg);
   }
 }

@@ -19,23 +19,31 @@ input[type='number'] {
 // vue transition
 .clearable-transition {
   &-enter-active {
-    animation: clearable-transition 0.22s ease-out;
+    animation: clearable-transition var(--sax-motion-duration)
+      var(--sax-motion-easing-in-out);
   }
   &-leave-active {
-    animation: clearable-transition 0.22s ease-in reverse;
+    animation: clearable-transition var(--sax-motion-duration)
+      var(--sax-motion-easing-in-out) reverse;
   }
 }
 
 @keyframes clearable-transition {
   0% {
-    right: getCssVar(input-default-icon-init-right);
+    transform: translateX(
+      calc(
+        getCssVar(input-default-icon-right) - getCssVar(
+            input-default-icon-init-right
+          )
+      )
+    );
     opacity: 0.2;
   }
   30% {
     opacity: 0.7;
   }
   100% {
-    right: getCssVar(input-default-icon-right);
+    transform: translateX(0);
   }
 }
 

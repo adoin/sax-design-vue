@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.web.json",
+  "compilerOptions": {
+    "composite": false,
+    "noEmit": true
+  },
+  "include": [
+    "docs/.vuepress/example-sources/renderer/**/*.ts",
+    "docs/.vuepress/example-sources/renderer/**/*.tsx",
+    "docs/.vuepress/example-sources/renderer-zh/**/*.ts",
+    "docs/.vuepress/example-sources/renderer-zh/**/*.tsx",
+    "typings/components.d.ts",
+    "typings/env.d.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

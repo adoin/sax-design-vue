@@ -24,7 +24,7 @@
           </button>
 
           <div
-            v-if="showHeader && ($slots.header || title)"
+            v-if="props.showHeader && ($slots.header || title)"
             :class="ns.e('header')"
           >
             <slot name="header"
@@ -35,7 +35,7 @@
           <div
             :class="[
               ns.e('content'),
-              { notFooter: !($slots.footer || showFooter) },
+              { notFooter: !($slots.footer || props.showFooter) },
             ]"
           >
             <slot>
@@ -44,7 +44,7 @@
             </slot>
           </div>
 
-          <div v-if="$slots.footer || showFooter" :class="ns.e('footer')">
+          <div v-if="$slots.footer || props.showFooter" :class="ns.e('footer')">
             <slot name="footer">
               <s-button
                 v-if="showCancelButton"
@@ -69,6 +69,7 @@ import { computed } from 'vue'
 import SButton from '@vuesax-alpha/components/button'
 import { IconClose, IconLoading } from '@vuesax-alpha/components/icon'
 import {
+  useGlobalComponentProps,
   useLocale,
   useModal,
   useNamespace,
@@ -84,7 +85,8 @@ defineOptions({
   name: 'SDialog',
 })
 
-const props = defineProps(dialogProps)
+const rawProps = defineProps(dialogProps)
+const props = useGlobalComponentProps('dialog', rawProps)
 const emit = defineEmits(dialogEmits)
 
 usePopperContainer()

@@ -6,19 +6,19 @@ PROPS:
     values: 'rounded | square'
     description: 设置时间选择触发器和弹层的圆角或方形外观。
     default: rounded
-    usage: '#外形'
+    usage: '#shape'
   - name: label
     type: String
     values: 标签文字
     description: 设置常驻标签或上浮标签的文字。
     default: null
-    usage: '#标签'
+    usage: '#label'
   - name: label-float
     type: Boolean
     values: 'true | false'
     description: 让标签作为占位内容，并在聚焦或存在值时上浮。
     default: false
-    usage: '#标签'
+    usage: '#label'
   - name: v-model
     type: String
     values: ''

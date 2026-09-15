@@ -242,7 +242,7 @@ describe('Table row dragging', () => {
     root.unmount()
     const other = setup({
       rowDragConfig: {
-        checkMethod: ({ rowKey }) => rowKey !== 1,
+        draggableMethod: ({ rowKey }) => rowKey !== 1,
         dropMethod: ({ targetKey }) => targetKey !== 3,
       },
     })

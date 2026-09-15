@@ -8,7 +8,6 @@ const pager = ref<TablePagerConfig>({
   layout: ['total', 'prev', 'pager', 'next', 'sizes'],
 })
 const selected = ref<TableRow[]>([])
-const radio = ref<TableRow | null>(null)
 const rows = [
   { id: 1, name: 'Avery', available: true },
   { id: 2, name: 'Casey', available: false },
@@ -23,10 +22,6 @@ const columns: TableColumn[] = [
     title: 'Availability',
     cell: ({ value }) => (value ? 'Available' : 'Disabled'),
   },
-]
-const radioColumns: TableColumn[] = [
-  { type: 'radio', width: 64 },
-  { field: 'name', title: 'Owner' },
 ]
 </script>
 
@@ -47,16 +42,8 @@ const radioColumns: TableColumn[] = [
       :columns="columns"
       :selection-config="{
         reserve: true,
-        checkMethod: ({ row }) => Boolean(row.available),
+        selectableMethod: ({ row }) => Boolean(row.available),
       }"
-      row-key="id"
-    />
-    <span>Single owner: {{ radio?.name ?? '—' }}</span>
-    <s-table
-      v-model:highlight="radio"
-      :data="rows"
-      :columns="radioColumns"
-      :selection-config="{ checkMethod: ({ row }) => Boolean(row.available) }"
       row-key="id"
     />
   </div>

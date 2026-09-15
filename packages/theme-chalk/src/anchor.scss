@@ -2,6 +2,14 @@
 @use 'mixins/function' as *;
 
 .s-anchor {
+  --s-anchor-guide-color: color-mix(
+    in srgb,
+    #{getColor(primary)} 14%,
+    #{getColor(background)}
+  );
+  --s-anchor-route-progress-size: 24px;
+  --s-anchor-route-progress-stroke-width: 2;
+
   display: inline-flex;
   flex-direction: column;
   width: 184px;
@@ -26,12 +34,22 @@
 
 .s-anchor__group.is-nested::before {
   position: absolute;
-  inset-block: -2px;
+  inset-block: -1px;
   inset-inline-start: var(--s-anchor-guide-offset);
-  width: 2px;
-  border-radius: var(--sax-radius-pill);
-  background: getColor(primary, 0.12);
+  width: 1px;
+  background: var(--s-anchor-guide-color);
   content: '';
+}
+
+.s-anchor__group.is-branch-connection::after {
+  position: absolute;
+  inset-block-start: -1px;
+  inset-inline-start: calc(var(--s-anchor-guide-offset) - 14px);
+  width: 14px;
+  height: 1px;
+  background: var(--s-anchor-guide-color);
+  content: '';
+  pointer-events: none;
 }
 
 .s-anchor__row {
@@ -40,6 +58,17 @@
   width: 100%;
   align-items: center;
   gap: 2px;
+}
+
+.s-anchor__group.is-branch-closure .s-anchor__row::after {
+  position: absolute;
+  inset-block-end: -1px;
+  inset-inline-start: calc(var(--s-anchor-guide-offset) - 14px);
+  width: 14px;
+  height: 1px;
+  background: var(--s-anchor-guide-color);
+  content: '';
+  pointer-events: none;
 }
 
 .s-anchor__item {
@@ -57,6 +86,7 @@
   font-size: 13px;
   line-height: 1.45;
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
   transition:
     background 0.16s ease,
@@ -64,28 +94,18 @@
     transform 0.16s ease;
 
   &:hover {
-    background: getColor(primary, 0.07);
+    background: transparent;
     color: getColor(primary);
   }
 
   &.is-active {
-    background: getColor(primary, 0.1);
+    background: transparent;
     color: getColor(primary);
     font-weight: 600;
-
-    &::before {
-      position: absolute;
-      top: 9px;
-      bottom: 9px;
-      left: 5px;
-      width: 3px;
-      border-radius: var(--sax-radius-pill);
-      background: getColor(primary);
-      content: '';
-    }
   }
 
   &.is-active-path:not(.is-active) {
+    background: transparent;
     color: getColor(primary, 0.76);
     font-weight: 600;
   }
@@ -93,6 +113,38 @@
   &.is-disabled {
     cursor: not-allowed;
     opacity: 0.5;
+  }
+}
+
+.s-anchor__item-label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.s-anchor--vertical .s-anchor__item.is-active {
+  background: transparent;
+}
+
+.s-anchor__active-icon {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: -16px;
+  color: getColor(primary);
+  font-size: 12px;
+  filter: drop-shadow(0 0 3px #{getColor(primary, 0.32)});
+  transform-origin: center;
+  animation: s-anchor-active-pulse 1.4s ease-in-out infinite;
+  pointer-events: none;
+
+  > svg,
+  > .s-icon {
+    display: block;
+    width: 1em;
+    height: 1em;
   }
 }
 
@@ -145,20 +197,191 @@
     text-align: center;
   }
   .s-anchor__item.is-active::before {
+    position: absolute;
     top: auto;
     right: 12px;
     bottom: 3px;
     left: 12px;
     width: auto;
     height: 3px;
+    border-radius: var(--sax-radius-pill);
+    background: getColor(primary);
+    content: '';
   }
   .s-anchor__collapse {
     display: none;
   }
 }
 
+.s-anchor-route-boundaries {
+  display: contents;
+}
+
+.s-anchor-route-boundary__shell {
+  display: grid;
+  width: 100%;
+  min-height: 0;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  order: 1;
+  overflow: hidden;
+  pointer-events: none;
+  transition:
+    grid-template-rows 180ms ease,
+    opacity 140ms ease;
+
+  &.is-previous {
+    order: -1;
+  }
+
+  &.is-visible {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.s-anchor-route-boundary {
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+
+  &.is-disabled {
+    opacity: 0.5;
+  }
+}
+
+.s-anchor-route-boundary > .s-anchor-route-boundary__link {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 40px;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: getColor(primary);
+  text-decoration: none;
+  transition:
+    color 160ms ease,
+    opacity 160ms ease;
+
+  &:hover {
+    color: getColor(primary, 0.82);
+  }
+
+  &:focus-visible {
+    outline: 2px solid getColor(primary, 0.28);
+    outline-offset: -2px;
+  }
+}
+
+.s-anchor-route-boundary__title {
+  overflow: hidden;
+  min-width: 0;
+  color: currentColor;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.s-anchor-route-boundary__icon {
+  display: grid;
+  grid-area: 1 / 1;
+  width: 16px;
+  height: 16px;
+  place-items: center;
+  background: transparent;
+  color: currentColor;
+  font-size: 15px;
+
+  svg {
+    display: block;
+  }
+}
+
+.s-anchor-route-boundary.is-previous .s-anchor-route-boundary__icon svg {
+  transform: rotate(180deg);
+}
+
+.s-anchor-route-boundary__progress {
+  display: grid;
+  width: var(--s-anchor-route-progress-size);
+  height: var(--s-anchor-route-progress-size);
+  flex: 0 0 var(--s-anchor-route-progress-size);
+  place-items: center;
+  pointer-events: none;
+}
+
+.s-anchor-route-boundary__progress-ring,
+.s-anchor-route-boundary__icon {
+  grid-area: 1 / 1;
+}
+
+.s-anchor-route-boundary__progress-ring {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: rotate(-90deg);
+}
+
+.s-anchor-route-boundary__progress-track,
+.s-anchor-route-boundary__progress-value {
+  fill: none;
+  stroke-width: var(--s-anchor-route-progress-stroke-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.s-anchor-route-boundary__progress-track {
+  stroke: getColor(primary, 0.16);
+}
+
+.s-anchor-route-boundary__progress-value {
+  stroke: getColor(primary);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 80ms linear;
+}
+
+@keyframes s-anchor-active-pulse {
+  0%,
+  100% {
+    opacity: 0.68;
+    transform: translateY(-50%) scale(0.94);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(calc(-50% - 1px)) scale(1.04);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .s-anchor__active-icon {
+    animation: none;
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+
   .s-anchor__collapse .s-icon {
     transition: none;
+  }
+
+  .s-anchor-route-boundary,
+  .s-anchor-route-boundary__link,
+  .s-anchor-route-boundary__progress-value {
+    transition: none;
+  }
+
+  .s-anchor-route-boundary__icon {
+    animation: none !important;
   }
 }

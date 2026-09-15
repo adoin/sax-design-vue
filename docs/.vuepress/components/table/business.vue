@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { SInput, SSelect } from 'sax-design-vue'
 import type {
   TableColumn,
   TableQueryConfig,
@@ -26,9 +25,8 @@ const queryConfig: TableQueryConfig = {
       title: 'Project name',
       span: { xs: 24, md: 12 },
       itemRender: {
-        name: 'SInput',
-        component: SInput,
-        props: { block: true, clearable: true },
+        name: '$input',
+        props: { clearable: true },
       },
       rules: {
         validator: (value) =>
@@ -40,9 +38,8 @@ const queryConfig: TableQueryConfig = {
       title: 'Team',
       span: { xs: 24, md: 12 },
       itemRender: {
-        name: 'SSelect',
-        component: SSelect,
-        props: { block: true, clearable: true },
+        name: '$select',
+        props: { clearable: true },
         options: [
           { label: 'All teams', value: '' },
           { label: 'Design', value: 'Design' },
@@ -54,7 +51,13 @@ const queryConfig: TableQueryConfig = {
 }
 const columns: TableColumn[] = [
   { field: 'id', title: 'ID', width: 80, fixed: 'left' },
-  { field: 'name', title: 'Project', minWidth: 220, sortable: true },
+  {
+    field: 'name',
+    title: 'Project',
+    minWidth: 220,
+    sortable: true,
+    slots: { default: 'projectNameCell' },
+  },
   {
     field: 'team',
     title: 'Team',
@@ -91,15 +94,30 @@ const action = () => {
       :query-config="queryConfig"
       :toolbar-config="{
         title: 'Projects',
-        buttons: [{ code: 'selection', text: 'Show selection' }],
+        left: [
+          {
+            itemRender: 'button',
+            props: { content: 'Show selection', code: 'selection' },
+          },
+          {
+            itemRender: 'button',
+            props: {
+              content: 'More',
+              children: [
+                { content: 'Archive', code: 'archive', icon: 'cb:archive' },
+                { content: 'Delete', code: 'delete', icon: 'cb:close' },
+              ],
+            },
+          },
+        ],
+        right: [{ itemRender: '$refresh' }, { itemRender: '$columnConfig' }],
       }"
       :pager-config="{ pageSize: 3 }"
-      column-manager-config
       resize-config
       @query="search"
       @toolbar-click="action"
     >
-      <template #cell-name="{ value }"
+      <template #projectNameCell="{ value }"
         ><strong>{{ value }}</strong></template
       >
     </s-table>

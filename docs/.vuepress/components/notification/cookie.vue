@@ -236,19 +236,38 @@
       <g />
     </svg>
 
-    <h3>COOKIE !</h3>
+    <h3>{{ labels.title }}</h3>
 
-    <p>We use cookies to make your experience on this website better.</p>
+    <p>{{ labels.description }}</p>
 
-    <s-button block color="dark" @click="accept"> I Like Cookies </s-button>
+    <s-button block color="dark" @click="accept">
+      {{ labels.accept }}
+    </s-button>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { SButton } from 'sax-design-vue'
+
 const props = defineProps<{
   close?: () => void
 }>()
+const route = useRoute()
+const labels = computed(() =>
+  route.path.startsWith('/zh/')
+    ? {
+        title: 'Cookie 提示',
+        description: '我们使用 Cookie 来改善你在本站的使用体验。',
+        accept: '接受 Cookie',
+      }
+    : {
+        title: 'Cookie notice',
+        description: 'We use cookies to improve your experience on this site.',
+        accept: 'Accept cookies',
+      },
+)
 const accept = () => {
   props.close?.()
 }

@@ -119,7 +119,7 @@ const getFormSetting: FormGroupProps<Project>['getFormSetting'] = () => ({
       title: copy.value.project,
       rules: { required: true, message: copy.value.projectRequired },
       itemRender: {
-        name: 'SInput',
+        name: '$input',
         props: { placeholder: copy.value.projectPlaceholder },
       },
     },
@@ -128,7 +128,7 @@ const getFormSetting: FormGroupProps<Project>['getFormSetting'] = () => ({
       title: copy.value.owner,
       rules: { required: true, message: copy.value.ownerRequired },
       itemRender: {
-        name: 'SInput',
+        name: '$input',
         props: { placeholder: copy.value.ownerPlaceholder },
       },
     },

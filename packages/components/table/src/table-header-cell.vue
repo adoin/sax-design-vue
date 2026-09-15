@@ -6,8 +6,10 @@ import { SIcon } from '@vuesax-alpha/components/icon'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { tableOverflowMode } from './data-utils'
+import RendererOutlet from './renderer-outlet'
 import type {
   TableColumn,
+  TableFilterRenderer,
   TableFilterSlotParams,
   TableFilterValue,
   TableOverflow,
@@ -26,6 +28,7 @@ const props = defineProps<{
   indeterminate: boolean
   selectAllDisabled: boolean
   showSelectAll: boolean
+  filterRenderer?: TableFilterRenderer
 }>()
 const emit = defineEmits<{
   sort: [order: TableSortOrder]
@@ -54,7 +57,13 @@ const mode = computed(() =>
 )
 const hasFilter = computed(
   () =>
-    !props.group && Boolean(props.column.filters || props.column.slots?.filter),
+    !props.group &&
+    Boolean(
+      props.column.filters ||
+      props.column.slots?.filter ||
+      props.column.filterRender ||
+      props.filterRenderer,
+    ),
 )
 const setValues = (values: TableFilterValue[]) => {
   draft.value =
@@ -86,6 +95,15 @@ const toggleOption = (value: TableFilterValue, checked: boolean) =>
       ? [...draft.value, value]
       : draft.value.filter((item) => item !== value),
   )
+const filterParams = computed<TableFilterSlotParams>(() => ({
+  column: props.column,
+  values: draft.value,
+  disabled: props.disabled ?? false,
+  setValues,
+  apply,
+  reset,
+  close,
+}))
 watch(open, (value) => {
   if (value) draft.value = [...props.filterValues]
 })
@@ -188,16 +206,13 @@ const sortLabel = (direction: TableSortOrder) =>
           <div :class="ns.e('filter-title')">
             {{ column.title ?? column.field }}
           </div>
-          <slot
-            name="filter"
-            :column="column"
-            :values="draft"
-            :set-values="setValues"
-            :apply="apply"
-            :reset="reset"
-            :close="close"
-          >
-            <div :class="ns.e('filter-options')">
+          <slot name="filter" v-bind="filterParams">
+            <RendererOutlet
+              v-if="filterRenderer"
+              :renderer="filterRenderer"
+              :params="filterParams"
+            />
+            <div v-else :class="ns.e('filter-options')">
               <SCheckbox
                 v-for="(option, index) in column.filters"
                 :key="index"

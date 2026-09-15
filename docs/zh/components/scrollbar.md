@@ -6,14 +6,14 @@ PROPS:
     values: "inside, outside"
     description: 自定义滚动轨道的位置。outside 在内容区外预留独立空间；native 模式不生效。
     default: inside
-    usage: '#外置滚动条'
+    usage: '#outside-scrollbars'
 
   - name: gap
     type: Number
     values: "number"
     description: 外置轨道与内容区的间距，单位 px；负数按 0 处理。
     default: 6
-    usage: '#外置滚动条'
+    usage: '#outside-scrollbars'
 
   - name: height
     type: String, Number

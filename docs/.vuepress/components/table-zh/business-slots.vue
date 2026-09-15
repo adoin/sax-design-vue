@@ -29,12 +29,18 @@ const search = (context: TableQueryContext) => {
       :query-config="{
         model,
         labelPosition: 'top',
-        items: [{ field: 'term', title: '关键词', slots: { default: 'term' } }],
+        items: [
+          {
+            field: 'term',
+            title: '关键词',
+            slots: { default: 'projectQueryTerm' },
+          },
+        ],
       }"
       :virtual-config="{ height: 220, dynamic: true, horizontal: true }"
       @query="search"
     >
-      <template #query-term="{ value, setValue, id }"
+      <template #projectQueryTerm="{ value, setValue, id }"
         ><s-input
           :id="id"
           block
@@ -52,7 +58,7 @@ const search = (context: TableQueryContext) => {
           >重置条件</s-button
         ></template
       >
-      <template #toolbar="{ refresh, busy }"
+      <template #toolbar_left="{ refresh, busy }"
         ><s-button
           :disabled="busy"
           @click="expanded = expanded.length ? [] : [1]"

@@ -278,7 +278,13 @@
     background: hsl(0deg 0% 0% / 0.15);
     color: hsl(0deg 0% 100%);
     cursor: pointer;
-    transition: all var(--sax-motion-duration) var(--sax-motion-easing-standard);
+    transition:
+      color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+      background-color var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard),
+      opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+      transform var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
     flex-shrink: 0;
     appearance: none;
     -webkit-appearance: none;

@@ -16,23 +16,26 @@ export interface TableMergeWindow {
   colEnd: number
 }
 
-export interface TableMergeQuery extends TableMergeWindow {
+export interface TableMergeQuery<
+  Row extends object = TableRow,
+> extends TableMergeWindow {
   area: 'body' | 'footer'
   rowCount: number
   columnCount: number
-  rowAt: (row: number) => TableRow | undefined
-  columnAt: (position: number) => TableColumn | undefined
+  rowAt: (row: number) => Row | undefined
+  columnAt: (position: number) => TableColumn<Row> | undefined
 }
 
 /** Return whole regions intersecting the query, including origins outside it. */
-export type TableMergeResolver = (
-  query: TableMergeQuery,
+export type TableMergeResolver<Row extends object = TableRow> = (
+  query: TableMergeQuery<Row>,
 ) => readonly TableMergeRange[]
 
-export type TableMergeSource = readonly TableMergeRange[] | TableMergeResolver
+export type TableMergeSource<Row extends object = TableRow> =
+  readonly TableMergeRange[] | TableMergeResolver<Row>
 
-export interface TableMergeConfig {
+export interface TableMergeConfig<Row extends object = TableRow> {
   enabled?: boolean
-  body?: TableMergeSource
-  footer?: TableMergeSource
+  body?: TableMergeSource<Row>
+  footer?: TableMergeSource<Row>
 }

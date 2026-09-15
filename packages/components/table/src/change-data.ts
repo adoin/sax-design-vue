@@ -2,7 +2,7 @@ import { applyTableDataPatches } from './change-utils'
 import type { TableRow, TableRowKey } from './table'
 import type { TableDataFieldPatch, TableDataPosition } from './table-changes'
 
-export interface TableDataNode<Row extends TableRow = TableRow> {
+export interface TableDataNode<Row extends object = TableRow> {
   key: TableRowKey
   row: Row
   parent?: TableDataNode<Row>
@@ -11,14 +11,14 @@ export interface TableDataNode<Row extends TableRow = TableRow> {
   children: Row[]
 }
 
-interface TableDataIndexOptions<Row extends TableRow> {
+interface TableDataIndexOptions<Row extends object> {
   data: Row[]
   childrenField: string
   key: (row: Row) => TableRowKey
   children: (row: Row, key: TableRowKey) => Row[]
 }
 
-export type TableDataPlanOperation<Row extends TableRow = TableRow> =
+export type TableDataPlanOperation<Row extends object = TableRow> =
   | { type: 'update'; rowKey: TableRowKey; patches: TableDataFieldPatch[] }
   | { type: 'remove'; rowKey: TableRowKey }
   | { type: 'insert'; row: Row; position: TableDataPosition }
@@ -27,7 +27,7 @@ export const validTableDataKey = (key: unknown): key is TableRowKey =>
   typeof key === 'string' || (typeof key === 'number' && Number.isFinite(key))
 
 /** Index supplied and loaded data only; never call this for a generated source. */
-export function createTableDataIndex<Row extends TableRow>(
+export function createTableDataIndex<Row extends object>(
   options: TableDataIndexOptions<Row>,
 ) {
   const nodes = new Map<TableRowKey, TableDataNode<Row>>()
@@ -58,12 +58,12 @@ export function createTableDataIndex<Row extends TableRow>(
   return { ...options, nodes, rows, position }
 }
 
-export type TableDataIndex<Row extends TableRow = TableRow> = ReturnType<
+export type TableDataIndex<Row extends object = TableRow> = ReturnType<
   typeof createTableDataIndex<Row>
 >
 
 /** Copy changed sibling arrays and ancestors; all other data remains shared. */
-export function planTableData<Row extends TableRow>(
+export function planTableData<Row extends object>(
   source: TableDataIndex<Row>,
   operations: TableDataPlanOperation<Row>[],
 ): Row[] {

@@ -3,17 +3,23 @@
 @use 'common/var' as *;
 
 .#{$namespace}-dialog-enter-active {
-  transition: getCssVar(transition-ease);
+  transition: opacity var(--sax-motion-duration)
+    var(--sax-motion-easing-smooth-out);
   .#{$namespace}-dialog-original {
-    &:not(.#{$namespace}-dialog--full-screen) {
-      animation: rebound var(--sax-motion-duration-slow) var(--sax-motion-easing-emphasized);
-    }
+    transition:
+      transform var(--sax-motion-duration) var(--sax-motion-easing-smooth-out),
+      box-shadow var(--sax-motion-duration) var(--sax-motion-easing-smooth-out);
   }
 }
 .#{$namespace}-dialog-leave-active {
-  transition: all var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+  transition: opacity var(--sax-motion-duration-quick)
+    var(--sax-motion-easing-smooth-out);
   .#{$namespace}-dialog-original {
-    transition: all var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+    transition:
+      transform var(--sax-motion-duration-quick)
+        var(--sax-motion-easing-smooth-out),
+      box-shadow var(--sax-motion-duration-quick)
+        var(--sax-motion-easing-smooth-out);
   }
 }
 .#{$namespace}-dialog-enter-from,
@@ -26,23 +32,8 @@
     }
   }
   .#{$namespace}-dialog-original {
-    transform: scale(0.7);
+    transform: scale(var(--sax-motion-scale-large));
     box-shadow: 0px 0px 0px 0px getColor(black, getCssVar('shadow-opacity'));
-  }
-}
-
-@keyframes rebound {
-  0% {
-    transform: scale(2);
-  }
-  40% {
-    transform: scale(1.02);
-  }
-  80% {
-    transform: scale(0.981);
-  }
-  100% {
-    transform: scale(1);
   }
 }
 
@@ -58,15 +49,6 @@
   }
   100% {
     transform: scale(1);
-  }
-}
-
-@keyframes loadingDialog {
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(360deg);
   }
 }
 
@@ -150,7 +132,8 @@
     }
   }
   @include m(rebound) {
-    animation: reboundClick var(--sax-motion-duration-slow) var(--sax-motion-easing-emphasized) !important;
+    animation: reboundClick var(--sax-motion-duration-slow)
+      var(--sax-motion-easing-emphasized) !important;
   }
 
   @include e(loading) {

@@ -38,6 +38,7 @@ export const componentCategories: ComponentCategory[] = [
     children: [
       component('Button', '按钮', '/components/'),
       component('Link', '链接', '/components/link'),
+      component('Renderer', '渲染器', '/components/renderer'),
       component('Text', '文本', '/components/text'),
       component('Text ellipsis', '文本省略', '/components/text-ellipsis'),
     ],
@@ -118,7 +119,11 @@ export const componentCategories: ComponentCategory[] = [
       component('Image preview', '图片预览', '/components/image-preview'),
       component('Images', '图片', '/components/images'),
       component('List', '列表', '/components/list'),
-      component('Table', '表格', '/components/table'),
+      component(
+        'Table',
+        '表格',
+        '/components/table/data-and-column-definitions.html',
+      ),
       component('Tag', '标签', '/components/tag'),
       component('Virtual list', '虚拟列表', '/components/virtual-list'),
     ],

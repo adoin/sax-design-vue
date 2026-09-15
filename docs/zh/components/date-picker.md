@@ -6,7 +6,7 @@ PROPS:
     values: "rounded | square"
     description: 为日期输入和选择面板统一设置圆角或方形外观。
     default: rounded
-    usage: '#外形'
+    usage: '#shape'
   - name: color
     type: String
     values: "主题色 | RGB | HEX | HSL"
@@ -331,7 +331,7 @@ EVENTS:
 
 <card>
 
-## 时区 {#timezone}
+## 时区
 
 `timezone` 使用 IANA 时区。下面两个选择器都显示 `2026-08-05 14:00:22`，但上海与纽约对应的绝对毫秒不同。第一个从 `SConfigProvider` 继承，第二个在组件上覆盖。夏令时由运行环境的 IANA 数据处理。
 

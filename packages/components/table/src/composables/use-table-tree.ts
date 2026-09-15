@@ -2,13 +2,12 @@ import { computed, reactive, ref, shallowReactive, toRaw, watch } from 'vue'
 import type { ComputedRef } from 'vue'
 import type {
   TableFlatRow,
-  TableRow,
   TableRowKey,
   TableRowKeyGetter,
   TableTreeConfig,
 } from '../table'
 
-interface UseTableTreeOptions<Row extends TableRow> {
+interface UseTableTreeOptions<Row extends object> {
   data: ComputedRef<Row[]>
   rowKey: ComputedRef<TableRowKeyGetter<Row>>
   config: ComputedRef<TableTreeConfig<Row> | undefined>
@@ -20,7 +19,7 @@ interface UseTableTreeOptions<Row extends TableRow> {
   onLazyLoad: (row: Row, children: Row[]) => void
 }
 
-export function useTableTree<Row extends TableRow>(
+export function useTableTree<Row extends object>(
   options: UseTableTreeOptions<Row>,
 ) {
   const internalExpandedKeys = ref(new Set<TableRowKey>())
@@ -34,7 +33,10 @@ export function useTableTree<Row extends TableRow>(
 
   const getRowKey = (row: Row, index: number): TableRowKey => {
     const key = options.rowKey.value
-    const value = typeof key === 'function' ? key(row, index) : row[key]
+    const value =
+      typeof key === 'function'
+        ? key(row, index)
+        : (row as Record<string, unknown>)[key]
     if (typeof value === 'number' || typeof value === 'string') return value
 
     const existing = generatedRowKeys.get(row)
@@ -47,7 +49,7 @@ export function useTableTree<Row extends TableRow>(
   const getChildren = (row: Row, key: TableRowKey): Row[] => {
     const localChildren = lazyChildren.get(key)
     const childrenKey = options.config.value?.children ?? 'children'
-    const children = row[childrenKey]
+    const children = (row as Record<string, unknown>)[childrenKey]
     if (localChildren && children === localChildren.original)
       return localChildren.rows
     return Array.isArray(children) ? (children as Row[]) : []
@@ -56,7 +58,8 @@ export function useTableTree<Row extends TableRow>(
   const hasLazyChildren = (row: Row) => {
     const hasChildren = options.config.value?.hasChildren
     if (typeof hasChildren === 'function') return hasChildren(row)
-    if (typeof hasChildren === 'string') return Boolean(row[hasChildren])
+    if (typeof hasChildren === 'string')
+      return Boolean((row as Record<string, unknown>)[hasChildren])
     return false
   }
 
@@ -167,7 +170,9 @@ export function useTableTree<Row extends TableRow>(
         })
         lazyChildren.set(entry.key, {
           rows: children,
-          original: row[options.config.value?.children ?? 'children'],
+          original: (row as Record<string, unknown>)[
+            options.config.value?.children ?? 'children'
+          ],
         })
         options.onLazyLoad(row, children)
       } finally {

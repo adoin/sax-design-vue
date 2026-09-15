@@ -165,7 +165,7 @@ describe('documentation API metadata', () => {
       'export interface TableVirtualConfig',
     )
     expect(details.TableEditConfig.declaration).toContain('onContextChange?')
-    expect(details.TableEditorConfig.declaration).toContain('checkMethod?')
+    expect(details.TableEditorConfig.declaration).toContain('editableMethod?')
     expect(details.TableEditEndParams.declaration).toContain('TableEditRecord')
     expect(details.TableEditRecord.declaration).toContain('updatedRow: Row')
     expect(details.TableEditSlotParams.declaration).toContain('setValue:')

@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { computed, ref, useAttrs } from 'vue'
+import { computed, provide, ref, useAttrs } from 'vue'
 import { mapValues, omit, pick } from 'lodash-unified'
 import { SAlert } from '@vuesax-alpha/components/alert'
-import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import {
+  useGlobalComponentProps,
+  useLocale,
+  useNamespace,
+} from '@vuesax-alpha/hooks'
 import TableCore from './table-core.vue'
 import TableQueryForm from './table-query-form.vue'
-import TableToolbar from './table-toolbar.vue'
 import { useTableProxy } from './composables/use-table-proxy'
 import { useTableRequestQuery } from './composables/use-table-request-query'
+import { tableToolbarRuntimeKey } from './table-toolbar-context'
 import {
   tableCoreEmits,
   tableCoreExposeKeys,
@@ -15,7 +19,11 @@ import {
   tableEmits,
   tableProps,
 } from './table'
-import type { FormInstance, FormModel } from '@vuesax-alpha/components/form'
+import type {
+  FormInstance,
+  FormItemConfig,
+  FormModel,
+} from '@vuesax-alpha/components/form'
 import type {
   TableCoreExposes,
   TableExposes,
@@ -24,11 +32,15 @@ import type {
   TableRow,
   TableSort,
 } from './table'
-import type { TableBusinessExposes } from './table-business'
+import type {
+  TableBusinessExposes,
+  TableToolbarRendererOptions,
+} from './table-business'
 
 defineOptions({ name: 'STable', inheritAttrs: false })
 
-const props = defineProps(tableProps)
+const rawProps = defineProps(tableProps)
+const props = useGlobalComponentProps('table', rawProps)
 const emit = defineEmits(tableEmits)
 const table = ref<TableCoreExposes>()
 const queryForm = ref<{ getForm: () => FormInstance | undefined }>()
@@ -59,7 +71,8 @@ const slots = defineSlots<{
   [name: string]: ((params: any) => unknown) | undefined
   query?(params: TableExposes & { model: FormModel }): unknown
   'query-actions'?(params: TableExposes & { busy: boolean }): unknown
-  toolbar?(params: TableExposes & { busy: boolean }): unknown
+  toolbar_left?(params: TableExposes & { busy: boolean }): unknown
+  toolbar_right?(params: TableExposes & { busy: boolean }): unknown
   'toolbar-title'?(): unknown
 }>()
 const ns = useNamespace('table-shell')
@@ -113,22 +126,45 @@ const proxyFeedback = computed(() => {
   const key = messages[proxy.state.value.result?.status ?? '']
   return key ? t(`vs.table.${key}`) : ''
 })
-const toolbar = computed(() =>
+const configuredToolbar = computed(() =>
   typeof props.toolbarConfig === 'object' ? props.toolbarConfig : {},
 )
+const toolbar = computed(() => {
+  const config = configuredToolbar.value
+  const withDefaults = (
+    item: TableToolbarRendererOptions,
+  ): TableToolbarRendererOptions =>
+    item.itemRender === '$refresh' && item.content == null
+      ? { ...item, content: t('vs.table.refresh') }
+      : item
+  return {
+    ...config,
+    left: (config.left ?? []).map(withDefaults),
+    right: (config.right ?? []).map(withDefaults),
+  }
+})
 const toolbarEnabled = computed(
-  () => Boolean(props.toolbarConfig) && toolbar.value.enabled !== false,
+  () =>
+    toolbar.value.enabled !== false &&
+    Boolean(
+      toolbar.value.title ||
+      toolbar.value.left?.length ||
+      toolbar.value.right?.length ||
+      slots.toolbar_left ||
+      slots.toolbar_right ||
+      slots['toolbar-title'],
+    ),
 )
 const shellEnabled = computed(
   () =>
-    Boolean(props.proxyConfig || props.queryConfig || props.toolbarConfig) ||
-    Boolean(
-      slots.query ||
-      slots['query-actions'] ||
-      slots.toolbar ||
-      slots['toolbar-title'] ||
-      slots['proxy-error'],
-    ),
+    Boolean(props.proxyConfig || props.queryConfig || toolbarEnabled.value) ||
+    Boolean(slots.query || slots['query-actions'] || slots['proxy-error']),
+)
+const autoVirtualHeight = computed(
+  () =>
+    typeof props.virtualConfig === 'object' &&
+    props.virtualConfig.height === 'auto' &&
+    (props.virtualConfig.enabled !== false || Boolean(props.virtualSource)),
 )
 const sortConfig = computed(() =>
   proxy.enabled.value
@@ -156,16 +192,18 @@ const tableAttrs = computed(() =>
 const forwardedSlots = () =>
   Object.keys(slots).filter(
     (name) =>
-      !name.startsWith('query-') &&
-      name !== 'query' &&
-      name !== 'toolbar' &&
-      name !== 'toolbar-title' &&
-      name !== 'proxy-error',
+      name !== 'query' && name !== 'query-actions' && name !== 'proxy-error',
   )
-const formSlots = () =>
-  Object.keys(slots).filter(
-    (name) => name.startsWith('query-') && name !== 'query-actions',
-  )
+const formSlots = () => {
+  const names = new Set<string>()
+  const collect = (items: readonly FormItemConfig[] = []) =>
+    items.forEach((item) => {
+      Object.values(item.slots ?? {}).forEach((name) => name && names.add(name))
+      collect(item.children)
+    })
+  collect(query.queryConfig.value.items)
+  return [...names].filter((name) => Boolean(slots[name]))
+}
 const forward = emit as (
   event: keyof typeof tableCoreEmits,
   ...args: unknown[]
@@ -186,12 +224,22 @@ const listeners = mapValues(
       forward(event as keyof typeof tableCoreEmits, ...args)
     },
 )
+
+provide(tableToolbarRuntimeKey, {
+  enabled: toolbarEnabled,
+  config: toolbar,
+  busy,
+  table: exposed,
+  context: () => query.context('refresh'),
+  action: (code, event) =>
+    emit('toolbarClick', code, query.context('refresh'), event),
+})
 </script>
 
 <template>
   <div
     v-if="shellEnabled"
-    :class="[ns.b(), attrs.class]"
+    :class="[ns.b(), ns.is('auto-height', autoVirtualHeight), attrs.class]"
     :style="attrs.style"
     :aria-busy="busy || undefined"
   >
@@ -210,27 +258,10 @@ const listeners = mapValues(
       <template v-if="$slots['query-actions']" #actions>
         <slot name="query-actions" v-bind="exposed" :busy="busy" />
       </template>
-      <template v-for="name in formSlots()" #[name.slice(6)]="params">
+      <template v-for="name in formSlots()" #[name]="params">
         <slot :name="name" v-bind="params || {}" />
       </template>
     </TableQueryForm>
-    <TableToolbar
-      v-if="toolbarEnabled || $slots.toolbar || $slots['toolbar-title']"
-      :config="toolbar"
-      :busy="busy"
-      @refresh="businessApi.refresh"
-      @action="
-        (code, event) =>
-          emit('toolbarClick', code, query.context('refresh'), event)
-      "
-    >
-      <template v-if="$slots['toolbar-title']" #title>
-        <slot name="toolbar-title" />
-      </template>
-      <template v-if="$slots.toolbar" #default>
-        <slot name="toolbar" v-bind="exposed" :busy="busy" />
-      </template>
-    </TableToolbar>
     <div v-if="proxyFeedback" :class="ns.e('error')">
       <slot name="proxy-error" :state="proxy.state.value" v-bind="exposed">
         <SAlert color="danger" type="flat">{{ proxyFeedback }}</SAlert>

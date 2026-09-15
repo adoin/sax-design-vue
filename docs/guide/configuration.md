@@ -125,6 +125,121 @@ The same option can be configured once during full-library installation: `app.us
 
 <card>
 
+## Global size
+
+`size` sets the default density for components that use the shared `small` / `default` / `large` scale. Button, Input, Date Picker, Time Picker, Rate, Steps, Tabs, and Tag currently inherit it. An explicit component `size` always takes precedence.
+
+<command>
+
+```vue
+<template>
+  <s-config-provider size="large">
+    <s-input placeholder="Inherits large" />
+    <s-button>Inherits large</s-button>
+    <s-button size="small">Locally overridden to small</s-button>
+  </s-config-provider>
+</template>
+```
+
+</command>
+
+Components such as Calendar and Navbar have their own size vocabularies (for example, `medium` and `compact`) and therefore do not inherit this scale.
+
+</card>
+
+<card>
+
+## Common interaction defaults
+
+Application-wide interaction policies can be shared through `button`, `dialog`, `drawer`, `notification`, `pagination`, and `popper`. Each object accepts only reusable defaults; content, controlled values, callbacks, and business data remain local to component instances.
+
+<command>
+
+```vue
+<script setup lang="ts">
+const buttonDefaults = { debounce: false }
+const dialogDefaults = { maskClosable: false, lockScroll: true }
+const notificationDefaults = {
+  duration: 6000,
+  position: 'top-right' as const,
+  showClose: true,
+}
+const paginationDefaults = {
+  pageSizes: [20, 50, 100],
+  pagerCount: 9,
+}
+</script>
+
+<template>
+  <s-config-provider
+    :button="buttonDefaults"
+    :dialog="dialogDefaults"
+    :notification="notificationDefaults"
+    :pagination="paginationDefaults"
+  >
+    <app />
+  </s-config-provider>
+</template>
+```
+
+</command>
+
+Drawer can share its placement, size, close button, mask dismissal, and Teleport defaults. Direct `SPopper` usage can share show/hide delays, Teleport, positioning strategy, flipping, offset, arrow, and persistence. Composed components such as Tooltip, Select, and Date Picker keep their own semantic defaults and are not unexpectedly changed by the low-level `popper` configuration.
+
+</card>
+
+<card>
+
+## Global Table defaults
+
+Use `table` to share feature policies and presentation defaults across Table instances. It accepts reusable editing, validation, history, change tracking, dragging, keyboard, range, clipboard, find, chart, context-menu, resizing, virtualization, multi-sort, selection, pagination, overflow, parent-indicator, header, striped, selection-mode, and `rowKey` settings.
+
+<command>
+
+```vue
+<script setup lang="ts">
+import type { TableGlobalConfig } from 'sax-design-vue'
+
+const tableDefaults: TableGlobalConfig = {
+  striped: true,
+  showOverflow: 'tooltip',
+  editConfig: {
+    mode: 'cell',
+    onSwitch: 'commit',
+    onContextChange: 'cancel',
+    onScroll: 'keep',
+  },
+  selectionConfig: { trigger: 'row', reserve: true },
+  virtualConfig: { estimateSize: 48, overscan: 6 },
+}
+const rows = [{ id: 1, name: 'Example' }]
+const columns = [{ field: 'name', title: 'Name' }]
+</script>
+
+<template>
+  <s-config-provider :table="tableDefaults">
+    <s-table :data="rows" :columns="columns" />
+
+    <!-- Scalars and false replace defaults; object fields are merged. -->
+    <s-table
+      :data="rows"
+      :columns="columns"
+      :striped="false"
+      :edit-config="false"
+      :selection-config="{ trigger: 'cell' }"
+    />
+  </s-config-provider>
+</template>
+```
+
+</command>
+
+Precedence is “explicit component value > nearest Provider > outer Provider > built-in component default.” Object configurations are shallow-merged by field, and an explicit `false` disables a globally enabled feature. Data, controlled state, columns, renderers, validation rules, business requests, and model-specific callbacks stay local to each Table so unrelated data models never become implicitly coupled.
+
+</card>
+
+<card>
+
 ## Shape and motion tokens
 
 Use the global tokens below to keep component geometry and motion consistent. `--sax-radius` is the master corner radius: core inputs, menus, popups, trees, buttons, pagination, and other shared controls inherit from it through the scale variables.

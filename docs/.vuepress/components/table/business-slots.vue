@@ -38,13 +38,17 @@ const search = (context: TableQueryContext) => {
         model,
         labelPosition: 'top',
         items: [
-          { field: 'term', title: 'Keyword', slots: { default: 'term' } },
+          {
+            field: 'term',
+            title: 'Keyword',
+            slots: { default: 'projectQueryTerm' },
+          },
         ],
       }"
       :virtual-config="{ height: 220, dynamic: true, horizontal: true }"
       @query="search"
     >
-      <template #query-term="{ value, setValue, id }"
+      <template #projectQueryTerm="{ value, setValue, id }"
         ><s-input
           :id="id"
           block
@@ -62,7 +66,7 @@ const search = (context: TableQueryContext) => {
           >Reset conditions</s-button
         ></template
       >
-      <template #toolbar="{ refresh, busy }"
+      <template #toolbar_left="{ refresh, busy }"
         ><s-button
           :disabled="busy"
           @click="expanded = expanded.length ? [] : [1]"

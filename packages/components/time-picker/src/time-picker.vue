@@ -27,7 +27,7 @@
         :label="label"
         :label-float="labelFloat"
         :color="color"
-        :size="size"
+        :size="resolvedSize"
         :shape="resolvedShape"
         :disabled="disabled"
         :readonly="!editable || readonly"
@@ -78,6 +78,7 @@ import {
   useLocale,
   useNamespace,
   useShape,
+  useSize,
 } from '@vuesax-alpha/hooks'
 import {
   getTimeZoneNow,
@@ -97,6 +98,7 @@ const emit = defineEmits(timePickerEmits)
 
 const ns = useNamespace('time-picker')
 const resolvedShape = useShape()
+const resolvedSize = useSize()
 const { t } = useLocale()
 const globalTimezone = useGlobalConfig('timezone')
 const globalAutoApplyNow = useGlobalConfig('autoApplyNow')

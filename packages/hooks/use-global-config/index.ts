@@ -1,5 +1,13 @@
 // @ts-nocheck
-import { computed, getCurrentInstance, inject, provide, ref, unref } from 'vue'
+import {
+  computed,
+  getCurrentInstance,
+  inject,
+  isRef,
+  provide,
+  ref,
+  unref,
+} from 'vue'
 import { debugWarn, keysOf } from '@vuesax-alpha/utils'
 import { configProviderContextKey } from '@vuesax-alpha/tokens'
 
@@ -23,15 +31,15 @@ const globalConfig = ref<ConfigProviderContext>()
 
 export function useGlobalConfig<
   K extends keyof ConfigProviderContext,
-  D extends ConfigProviderContext[K]
+  D extends ConfigProviderContext[K],
 >(
   key: K,
-  defaultValue?: D
+  defaultValue?: D,
 ): Ref<Exclude<ConfigProviderContext[K], undefined> | D>
 export function useGlobalConfig(): Ref<ConfigProviderContext>
 export function useGlobalConfig(
   key?: keyof ConfigProviderContext,
-  defaultValue = undefined
+  defaultValue = undefined,
 ) {
   const config = getCurrentInstance()
     ? inject(configProviderContextKey, globalConfig)
@@ -43,18 +51,107 @@ export function useGlobalConfig(
   }
 }
 
+const hyphenate = (value: string) =>
+  value.replace(/\B([A-Z])/g, '-$1').toLowerCase()
+
+const isMergeableRecord = (value: unknown): value is Record<string, unknown> =>
+  value !== null &&
+  typeof value === 'object' &&
+  !Array.isArray(value) &&
+  !isRef(value) &&
+  [Object.prototype, null].includes(Object.getPrototypeOf(value))
+
+const mergeConfigRecords = (
+  previous: Record<string, unknown>,
+  next: Record<string, unknown>,
+): Record<string, unknown> => {
+  if (previous === next) return previous
+  const merged = { ...previous }
+  for (const [key, value] of Object.entries(next)) {
+    const inherited = merged[key]
+    merged[key] =
+      isMergeableRecord(inherited) && isMergeableRecord(value)
+        ? mergeConfigRecords(inherited, value)
+        : (value ?? inherited)
+  }
+  return merged
+}
+
+/**
+ * Resolve one component's reusable defaults without hiding local intent.
+ *
+ * Omitted props inherit the configured value. Explicit scalar props replace it;
+ * object props shallow-merge over object defaults; `true` enables a Boolean-or-
+ * object feature while retaining its configured options; and `false` disables it.
+ */
+export const useGlobalComponentProps = <
+  T extends Record<string, unknown>,
+  K extends keyof ConfigProviderContext,
+>(
+  key: K,
+  props: T,
+): T => {
+  const instance = getCurrentInstance()
+  const defaults = useGlobalConfig(key)
+
+  return new Proxy(props, {
+    get(target, property, receiver) {
+      const localValue = Reflect.get(target, property, receiver)
+      if (typeof property !== 'string') return localValue
+
+      const configured = defaults.value
+      if (!isMergeableRecord(configured)) return localValue
+      const configuredValue = configured[property]
+      if (configuredValue === undefined) return localValue
+
+      const vnodeProps = instance?.vnode.props
+      const isExplicit = Boolean(
+        vnodeProps &&
+        (Object.prototype.hasOwnProperty.call(vnodeProps, property) ||
+          Object.prototype.hasOwnProperty.call(
+            vnodeProps,
+            hyphenate(property),
+          )),
+      )
+      if (!isExplicit) return configuredValue
+      if (localValue === false || localValue === null) return localValue
+
+      if (isMergeableRecord(configuredValue)) {
+        if (localValue === true) return { ...configuredValue }
+        if (isMergeableRecord(localValue))
+          return { ...configuredValue, ...localValue }
+      }
+      return localValue
+    },
+  })
+}
+
+/** Resolve options for imperative services, where there is no component vnode. */
+export const resolveGlobalComponentOptions = <
+  T extends Record<string, unknown>,
+  K extends keyof ConfigProviderContext,
+>(
+  key: K,
+  options: T,
+): T => {
+  const configured = useGlobalConfig(key).value
+  return (
+    isMergeableRecord(configured) ? { ...configured, ...options } : options
+  ) as T
+}
+
 // for components like `SNotification`.
 export const useGlobalComponentSettings = (block: string) => {
   const config = useGlobalConfig()
 
   const ns = useNamespace(
     block,
-    computed(() => config.value?.namespace || defaultNamespace)
+    computed(() => config.value?.namespace || defaultNamespace),
   )
 
   const locale = useLocale(computed(() => config.value?.locale))
   const zIndex = useZIndex(
-    computed(() => config.value?.zIndex || defaultInitialZIndex)
+    computed(() => config.value?.zIndex || defaultInitialZIndex),
   )
 
   return {
@@ -67,7 +164,7 @@ export const useGlobalComponentSettings = (block: string) => {
 export const provideGlobalConfig = (
   config: MaybeRef<ConfigProviderContext>,
   app?: App,
-  global = false
+  global = false,
 ) => {
   const inSetup = !!getCurrentInstance()
   const oldConfig = inSetup ? useGlobalConfig() : undefined
@@ -76,7 +173,7 @@ export const provideGlobalConfig = (
   if (!provideFn) {
     debugWarn(
       'provideGlobalConfig',
-      'provideGlobalConfig() can only be used inside setup().'
+      'provideGlobalConfig() can only be used inside setup().',
     )
     return
   }
@@ -90,15 +187,15 @@ export const provideGlobalConfig = (
   provideFn(configProviderContextKey, context)
   provideFn(
     localeContextKey,
-    computed(() => context.value.locale)
+    computed(() => context.value.locale),
   )
   provideFn(
     namespaceContextKey,
-    computed(() => context.value.namespace)
+    computed(() => context.value.namespace),
   )
   provideFn(
     zIndexContextKey,
-    computed(() => context.value.zIndex)
+    computed(() => context.value.zIndex),
   )
 
   if (global || !globalConfig.value) {
@@ -109,12 +206,17 @@ export const provideGlobalConfig = (
 
 const mergeConfig = (
   a: ConfigProviderContext,
-  b: ConfigProviderContext
+  b: ConfigProviderContext,
 ): ConfigProviderContext => {
   const keys = [...new Set([...keysOf(a), ...keysOf(b)])]
   const obj: Record<string, any> = {}
   for (const key of keys) {
-    obj[key] = b[key] ?? a[key]
+    const previous = a[key]
+    const next = b[key]
+    obj[key] =
+      isMergeableRecord(previous) && isMergeableRecord(next)
+        ? mergeConfigRecords(previous, next)
+        : (next ?? previous)
   }
   return obj
 }

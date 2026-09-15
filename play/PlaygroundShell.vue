@@ -123,12 +123,23 @@ const copySource = async () => {
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    border-color var(--sax-motion-duration-fast)
+      var(--sax-motion-easing-standard),
+    color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+    background-color var(--sax-motion-duration-fast)
+      var(--sax-motion-easing-standard);
 
   &:hover,
   &.copied {
     border-color: rgba(129, 140, 248, 0.5);
     color: #c7d2fe;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playground-copy-button {
+    transition: none;
   }
 }
 
@@ -150,12 +161,17 @@ const copySource = async () => {
   min-height: 0;
   min-height: 100%;
   padding: 24px;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       circle at 20% 20%,
       rgba(99, 102, 241, 0.18),
       transparent 45%
     ),
-    radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.14), transparent 40%),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(168, 85, 247, 0.14),
+      transparent 40%
+    ),
     rgba(255, 255, 255, 0.96);
 }
 

@@ -1,17 +1,23 @@
 import { get } from 'lodash-unified'
+import Decimal from 'decimal.js'
 import type {
   TableAggregate,
   TableAggregateCell,
   TableAggregateMethod,
 } from '../table-group'
-import type { TableRow } from '../table'
 
 interface NumericState {
   count: number
-  sum: number
-  correction: number
-  min: number
-  max: number
+  sum: Decimal
+  min?: Decimal
+  max?: Decimal
+}
+
+export interface TableAggregationOptions {
+  /** Accept exact decimal strings in addition to finite numbers. */
+  decimalStrings?: boolean
+  /** String preserves the exact decimal result; number preserves legacy APIs. */
+  resultType?: 'number' | 'string'
 }
 
 const methods = new Set<TableAggregateMethod>([
@@ -23,8 +29,9 @@ const methods = new Set<TableAggregateMethod>([
 ])
 
 /** Finite numbers only: missing values, numeric strings and infinities are not coerced. */
-export function createTableAggregation<Row extends TableRow>(
+export function createTableAggregation<Row extends object>(
   definitions: readonly TableAggregate<Row>[],
+  options: TableAggregationOptions = {},
 ) {
   const keys = new Set<string>()
   const reducers = definitions.map((definition) => {
@@ -32,6 +39,20 @@ export function createTableAggregation<Row extends TableRow>(
       throw new TypeError('Aggregate keys must be nonempty and unique')
     keys.add(definition.key)
     const { method, field, key } = definition
+    if (typeof method === 'function') {
+      const cells: TableAggregateCell<Row>[] = []
+      return {
+        key,
+        add(row: Row, rowIndex: number) {
+          cells.push({
+            row,
+            rowIndex,
+            value: field == null ? undefined : get(row, field),
+          })
+        },
+        result: () => method(cells),
+      }
+    }
     if (typeof method === 'object') {
       if (
         !method ||
@@ -60,36 +81,46 @@ export function createTableAggregation<Row extends TableRow>(
       throw new TypeError(`A numeric aggregate requires a field: ${key}`)
     const state: NumericState = {
       count: 0,
-      sum: 0,
-      correction: 0,
-      min: Infinity,
-      max: -Infinity,
+      sum: new Decimal(0),
+    }
+    const decimalValue = (value: unknown) => {
+      if (typeof value === 'number' && !Number.isFinite(value)) return
+      if (
+        typeof value !== 'number' &&
+        !(options.decimalStrings && typeof value === 'string' && value.trim())
+      )
+        return
+      try {
+        const decimal = new Decimal(value as Decimal.Value)
+        return decimal.isFinite() ? decimal : undefined
+      } catch {
+        return
+      }
+    }
+    const output = (value: Decimal) => {
+      if (options.resultType === 'string') return value.toString()
+      const number = value.toNumber()
+      return Number.isFinite(number) ? number : null
     }
     return {
       key,
       add(row: Row) {
         if (method === 'count') return
         const value = field == null ? undefined : get(row, field)
-        if (typeof value !== 'number' || !Number.isFinite(value)) return
+        const decimal = decimalValue(value)
+        if (!decimal) return
         state.count++
-        // Neumaier summation limits cancellation error without retaining values.
-        const next = state.sum + value
-        state.correction +=
-          Math.abs(state.sum) >= Math.abs(value)
-            ? state.sum - next + value
-            : value - next + state.sum
-        state.sum = next
-        state.min = Math.min(state.min, value)
-        state.max = Math.max(state.max, value)
+        state.sum = state.sum.plus(decimal)
+        if (!state.min || decimal.lessThan(state.min)) state.min = decimal
+        if (!state.max || decimal.greaterThan(state.max)) state.max = decimal
       },
       result(count: number) {
         if (method === 'count') return count
-        if (method === 'min') return state.count ? state.min : null
-        if (method === 'max') return state.count ? state.max : null
-        const sum = state.sum + state.correction
-        if (!Number.isFinite(sum)) return null
-        if (method === 'average') return state.count ? sum / state.count : null
-        return sum
+        if (method === 'min') return state.min ? output(state.min) : null
+        if (method === 'max') return state.max ? output(state.max) : null
+        if (method === 'average')
+          return state.count ? output(state.sum.dividedBy(state.count)) : null
+        return output(state.sum)
       },
     }
   })
@@ -111,11 +142,12 @@ export function createTableAggregation<Row extends TableRow>(
   }
 }
 
-export function aggregateTableRows<Row extends TableRow>(
+export function aggregateTableRows<Row extends object>(
   rows: Iterable<Row>,
   definitions: readonly TableAggregate<Row>[],
+  options?: TableAggregationOptions,
 ): Readonly<Record<string, unknown>> {
-  const aggregate = createTableAggregation(definitions)
+  const aggregate = createTableAggregation(definitions, options)
   let index = 0
   for (const row of rows) aggregate.add(row, index++)
   return aggregate.result()

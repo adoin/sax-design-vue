@@ -356,7 +356,7 @@ Set `type="datetime"` to pick date and time. With `auto-apply-now`, clicking Now
 
 <card>
 
-## Time zone {#timezone}
+## Timezone
 
 `timezone` accepts an IANA zone. Both pickers below display `2026-08-05 14:00:22`, while Shanghai and New York map that wall time to different absolute milliseconds. The first inherits `SConfigProvider`; the second overrides it locally. Daylight-saving transitions follow the runtime IANA data.
 

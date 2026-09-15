@@ -74,4 +74,20 @@ const variant = 'classic'
     expect(component).not.toBeNull()
     expect(mount(component!).text()).toBe('ready')
   })
+
+  it('compiles TSX returned from script setup without a source h import', () => {
+    const { component, error } = compileDemoSfc(
+      `<script setup lang="tsx">
+const Status = () => <strong class="status">TSX ready</strong>
+</script>
+<template><Status /></template>`,
+      'tsx-example',
+    )
+
+    expect(error).toBeNull()
+    expect(component).not.toBeNull()
+
+    const wrapper = mount(component!)
+    expect(wrapper.get('.status').text()).toBe('TSX ready')
+  })
 })

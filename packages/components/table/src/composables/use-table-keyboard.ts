@@ -7,7 +7,7 @@ import {
   watch,
 } from 'vue'
 import type { WatchSource } from 'vue'
-import type { TableCoreProps, TableEmitFn } from '../table'
+import type { TableCoreEmitFn, TableCoreProps } from '../table'
 import type { TableActiveCell } from '../table-keyboard'
 
 export interface TableCellCoordinate {
@@ -57,7 +57,7 @@ const interactive =
 /** Roving cell focus, independent of row selection and editor draft state. */
 export function useTableKeyboard(
   props: TableCoreProps,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   options: KeyboardOptions,
 ) {
   const config = computed(() =>

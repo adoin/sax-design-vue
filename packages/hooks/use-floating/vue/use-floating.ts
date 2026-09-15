@@ -30,7 +30,7 @@ import type {
 export function useFloating<T extends ReferenceElement = ReferenceElement>(
   reference: Ref<MaybeElement<T>>,
   floating: Ref<MaybeElement<FloatingElement>>,
-  options: UseFloatingOptions<T> = {}
+  options: UseFloatingOptions<T> = {},
 ): UseFloatingReturn {
   const whileElementsMountedOption = options.whileElementsMounted
   const openOption = computed(() => unref(options.open) ?? true)
@@ -116,6 +116,8 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   function attach() {
     cleanup()
 
+    if (!openOption.value) return
+
     if (whileElementsMountedOption === undefined) {
       update()
       return
@@ -125,7 +127,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
       whileElementsMountedCleanup = whileElementsMountedOption(
         referenceElement.value,
         floatingElement.value,
-        update
+        update,
       )
       return
     }
@@ -138,14 +140,25 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   }
 
   onMounted(() => {
-    useEventListener('resize', attach, true)
-    useEventListener('scroll', attach, true)
+    const updateWhenOpen = () => {
+      if (openOption.value) attach()
+    }
+    useEventListener('resize', updateWhenOpen, true)
+    useEventListener('scroll', updateWhenOpen, true)
 
     watch([middlewareOption, placementOption, strategyOption], update, {
       flush: 'sync',
     })
     watch([referenceElement, floatingElement], attach, { flush: 'sync' })
-    watch(openOption, reset, { flush: 'sync' })
+    watch(
+      openOption,
+      (open) => {
+        reset()
+        if (open) attach()
+        else cleanup()
+      },
+      { flush: 'sync' },
+    )
   })
 
   if (getCurrentScope()) {

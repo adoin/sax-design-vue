@@ -101,8 +101,7 @@ $social-colors: map.merge(
   $colors: map.deep-merge(
     (
       $type: (
-        '#{$mode}-#{$number}':
-          color.mix(
+        '#{$mode}-#{$number}': color.mix(
             $mix-color,
             map.get($colors, $type, 'base'),
             math.percentage(math.div($number, 10))
@@ -329,17 +328,43 @@ $mask-color: map.merge(
 $transition: () !default;
 $transition: map.merge(
   (
-    'all': all getCssVar('transition-duration')
-      getCssVar('transition-function-ease-in-out-bezier'),
-    'ease': all getCssVar('transition-duration')
-      getCssVar('transition-function-ease'),
+    // Keep the legacy token names, but never let unrelated layout changes
+    // animate implicitly. Components that need width/height motion declare it.
+    'all': (
+        color getCssVar('transition-duration')
+          getCssVar('transition-function-ease-in-out-bezier'),
+        background-color getCssVar('transition-duration')
+          getCssVar('transition-function-ease-in-out-bezier'),
+        border-color getCssVar('transition-duration')
+          getCssVar('transition-function-ease-in-out-bezier'),
+        box-shadow getCssVar('transition-duration')
+          getCssVar('transition-function-ease-in-out-bezier'),
+        opacity getCssVar('transition-duration')
+          getCssVar('transition-function-ease-in-out-bezier'),
+        transform getCssVar('transition-duration')
+          getCssVar('transition-function-ease-in-out-bezier')
+      ),
+    'ease': (
+      color getCssVar('transition-duration')
+        getCssVar('transition-function-ease'),
+      background-color getCssVar('transition-duration')
+        getCssVar('transition-function-ease'),
+      border-color getCssVar('transition-duration')
+        getCssVar('transition-function-ease'),
+      box-shadow getCssVar('transition-duration')
+        getCssVar('transition-function-ease'),
+      opacity getCssVar('transition-duration')
+        getCssVar('transition-function-ease'),
+      transform getCssVar('transition-duration')
+        getCssVar('transition-function-ease')
+    ),
     'fade': opacity getCssVar('transition-duration')
       getCssVar('transition-function-fast-bezier'),
     'md-fade': (
       transform getCssVar('transition-duration')
         getCssVar('transition-function-fast-bezier'),
       opacity getCssVar('transition-duration')
-        getCssVar('transition-function-fast-bezier'),
+        getCssVar('transition-function-fast-bezier')
     ),
     'fade-linear': opacity getCssVar('transition-duration-fast') linear,
     'border': border-color getCssVar('transition-duration-fast')
@@ -347,7 +372,7 @@ $transition: map.merge(
     'box-shadow': box-shadow getCssVar('transition-duration-fast')
       getCssVar('transition-function-ease-in-out-bezier'),
     'color': color getCssVar('transition-duration-fast')
-      getCssVar('transition-function-ease-in-out-bezier'),
+      getCssVar('transition-function-ease-in-out-bezier')
   ),
   $transition
 );
@@ -427,8 +452,10 @@ $popup: map.merge(
 $drawer: () !default;
 $drawer: map.merge(
   (
-    'bg-color':
-      var(#{getCssVarName('dialog', 'bg-color')}, #{getCssVar('bg-color')}),
+    'bg-color': var(
+        #{getCssVarName('dialog', 'bg-color')},
+        #{getCssVar('bg-color')}
+      ),
     'padding-primary': var(#{getCssVarName('dialog', 'padding-primary')}, 20px),
   ),
   $drawer
@@ -472,7 +499,8 @@ $alert: () !default;
 $alert: map.merge(
   (
     'bg-light': getColor(color, 0.1),
-    'border-radius': getCssVar(radius-sm) getCssVar(radius) getCssVar(radius) getCssVar(radius-sm),
+    'border-radius': getCssVar(radius-sm) getCssVar(radius) getCssVar(radius)
+      getCssVar(radius-sm),
     'shadow--icon-close': 0px 0px 0px 0px hsl(0deg 0% 0% / 0.15),
     'shadow--icon-close-hover': 0px 5px 18px 0px hsl(0deg 0% 0% / 0.15),
     'icon-close-width': 30px,

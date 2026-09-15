@@ -8,7 +8,7 @@ import Table from './table.vue'
 import { createTableChartRenderer } from './chart-renderer'
 import type { useTableChart } from './composables/use-table-chart'
 import type { TableChartTheme } from './table-chart'
-import type { TableColumn, TableRow } from './table'
+import type { TableColumn } from './table'
 
 const props = defineProps<{ chart: ReturnType<typeof useTableChart> }>()
 const emit = defineEmits<{ error: [error: unknown] }>()
@@ -71,7 +71,7 @@ const columns = computed<TableColumn[]>(() => [
 const rows = computed(
   () =>
     data.value?.categories.map((category, index) => {
-      const row: TableRow = { id: index, category }
+      const row: Record<string, unknown> = { id: index, category }
       data.value!.series.forEach((series, seriesIndex) => {
         row[`s${seriesIndex}`] = series.values[index]
       })

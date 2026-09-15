@@ -1,5 +1,4 @@
 @use 'mixins/mixins' as *;
-@use 'mixins/loading-track' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
 
@@ -88,15 +87,16 @@
 
   @include when(loading) {
     --sax-radio-shadow: none;
-    overflow: hidden;
-    background: getColor('color', 0.08);
     cursor: wait;
     user-select: none;
-    @include loading-pulse-rail(1);
 
-    > .#{$namespace}-radio,
     > .#{$namespace}-radio__label {
       opacity: 0.58;
+    }
+
+    .#{$namespace}-logo-loading {
+      width: 20px;
+      height: 20px;
     }
   }
 
@@ -268,9 +268,5 @@
   .#{$namespace}-radio__custom-icon,
   .#{$namespace}-radio__custom-icon [data-sax-icon-draw] {
     transition: none !important;
-  }
-
-  .#{$namespace}-radio-wrapper.is-loading {
-    @include loading-reduced-motion;
   }
 }

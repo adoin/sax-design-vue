@@ -6,7 +6,40 @@
   @include e(column-manager) {
     display: flex;
     justify-content: flex-end;
-    padding-bottom: 10px;
+  }
+
+  @include e(column-manager-trigger) {
+    display: inline-flex;
+    min-height: 28px;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border: 0;
+    border-radius: var(--sax-radius-sm);
+    background: getColor(primary, 0.08);
+    color: getColor(primary);
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      background-color var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard),
+      box-shadow var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
+
+    &:hover {
+      background: getColor(primary, 0.13);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px #{getColor(primary, 0.18)};
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
 
   @include e(column-panel) {
@@ -18,10 +51,19 @@
     border: 0;
     color: getCssVar(text-color, primary);
 
+    @include when(content-pending) {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
     &.is-square {
       border-radius: 0;
 
       .#{$namespace}-table__column-setting {
+        border-radius: 0;
+      }
+
+      .#{$namespace}-table__column-setting-branch.is-group::before {
         border-radius: 0;
       }
     }
@@ -36,23 +78,81 @@
     font-weight: 650;
   }
 
+  @include e(column-settings-list) {
+    display: grid;
+    max-height: 280px;
+    overflow-y: auto;
+    gap: 4px;
+    padding: 2px;
+    overscroll-behavior: contain;
+  }
+
+  @include e(column-setting-branch) {
+    position: relative;
+    min-width: 0;
+    isolation: isolate;
+
+    @include when(group) {
+      padding-block: 4px;
+
+      &::before {
+        position: absolute;
+        z-index: 0;
+        inset-block: 0;
+        inset-inline-start: var(--s-table-column-branch-offset, 0px);
+        inset-inline-end: 0;
+        border-inline-start: 3px solid #{getColor(primary, 0.22)};
+        border-radius: var(--sax-radius-md);
+        background: getColor(primary, 0.045);
+        content: '';
+        pointer-events: none;
+      }
+    }
+
+    @include when(drop-inside) {
+      &::before {
+        border-inline-start-color: getColor(primary);
+        background: getColor(primary, 0.09);
+        box-shadow: inset 0 0 0 2px #{getColor(primary, 0.2)};
+      }
+    }
+  }
+
+  @include e(column-setting-children) {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 2px;
+  }
+
   @include e(column-setting) {
+    position: relative;
     height: 56px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 110px 40px 40px;
+    grid-template-columns: minmax(0, 1fr) 110px 44px;
     align-items: center;
     gap: 4px;
     padding: 0 6px;
     box-sizing: border-box;
     border-radius: var(--sax-radius-md);
 
+    @include when(group) {
+      height: 44px;
+    }
+
     &:hover,
     &:focus-within {
       background: getColor(primary, 0.05);
     }
 
+    &.is-nested-layout:hover,
+    &.is-nested-layout:focus-within {
+      background: transparent;
+    }
+
     > .#{$namespace}-checkbox {
       min-width: 0;
+      margin-inline-start: var(--s-table-column-depth, 0px);
       overflow: hidden;
       .#{$namespace}-checkbox__label {
         overflow: hidden;
@@ -60,17 +160,119 @@
         white-space: nowrap;
       }
     }
-    > .#{$namespace}-button {
-      width: 40px;
-      height: 44px;
-      margin: 0;
+
+    > .#{$namespace}-table__column-group-label {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 7px;
+      margin-inline-start: var(--s-table-column-depth, 0px);
+      overflow: hidden;
+      color: getCssVar(text-color, primary);
+      font-weight: 650;
+      white-space: nowrap;
+
+      > span:first-child {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
     .#{$namespace}-select {
       min-width: 0;
     }
+
+    @include when(dragging) {
+      opacity: 0.58;
+    }
+
+    &.is-drop-before::before,
+    &.is-drop-after::after {
+      content: '';
+      position: absolute;
+      z-index: 1;
+      inset-inline: 6px;
+      height: 2px;
+      border-radius: 999px;
+      background: getColor(primary);
+      box-shadow: 0 0 7px #{getColor(primary, 0.35)};
+      pointer-events: none;
+    }
+
+    &.is-drop-before::before {
+      inset-block-start: -1px;
+    }
+
+    &.is-drop-after::after {
+      inset-block-end: -1px;
+    }
+
+    &.is-drop-inside {
+      background: getColor(primary, 0.09);
+      box-shadow: inset 0 0 0 2px #{getColor(primary, 0.24)};
+    }
+
+    &.is-nested-layout.is-drop-inside {
+      background: transparent;
+      box-shadow: none;
+    }
+
+    &.is-nested-layout.is-drop-before::before,
+    &.is-nested-layout.is-drop-after::after {
+      inset-inline-start: calc(8px + var(--s-table-column-depth, 0px));
+    }
+  }
+
+  @include e(column-group-count) {
+    flex: 0 0 auto;
+    color: getColor(text, 0.46);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  @include e(column-drag-handle) {
+    display: inline-grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: getColor(text, 0.42);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+
+    &:hover,
+    &:focus-visible,
+    &[aria-pressed='true'] {
+      color: getColor(primary);
+      filter: drop-shadow(0 2px 3px #{getColor(primary, 0.28)});
+      outline: none;
+    }
+
+    &[aria-pressed='true'] {
+      cursor: grabbing;
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      filter: none;
+    }
   }
 
   @include e(column-setting-label) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @include e(column-drag-status) {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -323,7 +525,7 @@
       content: '';
     }
     &:hover:not(:disabled) {
-      background: #{getColor(primary, 0.08)};
+      background: transparent;
     }
     &:focus-visible {
       outline: 2px solid #{getColor(primary, 0.5)};
@@ -412,6 +614,15 @@
     width: 100%;
     min-width: 0;
     outline: none;
+
+    .#{$namespace}-textarea {
+      margin-bottom: 0;
+    }
+
+    .#{$namespace}-textarea__inner {
+      min-height: 0;
+    }
+
     .#{$namespace}-select {
       // Inline flex participates in the editor's text baseline and can add a gap.
       display: flex;
@@ -670,18 +881,18 @@
     }
   }
   @include e(validation-message) {
-    display: block;
-    width: 100%;
-    min-width: 0;
-    margin-top: 4px;
-    color: getColor(danger);
-    font-size: 0.78rem;
-    line-height: 1.5;
-    white-space: normal;
-    overflow-wrap: anywhere;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   @include e(data-cell) {
+    position: relative;
+
     @include when(fixed-column) {
       position: sticky;
       z-index: 2;
@@ -727,15 +938,158 @@
     line-height: 1.5;
 
     @include when(invalid) {
-      flex-direction: column;
-      justify-content: center;
       background: color-mix(
         in srgb,
-        #{getColor(danger)} 6%,
+        #{getColor(danger)} 5%,
         var(--s-table-row-surface, var(--s-table-surface))
       );
-      box-shadow: inset 0 2px 7px -5px #{getColor(danger, 0.3)};
+      box-shadow:
+        inset 0 0 15px -6px #{getColor(danger, 0.48)},
+        0 4px 10px -9px #{getColor(danger, 0.65)};
     }
+  }
+
+  @include e(validation-marker) {
+    position: absolute;
+    z-index: 6;
+    inset-block-start: 4px;
+    inset-inline-end: 5px;
+    display: inline-grid;
+    width: 24px;
+    height: 24px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: var(--sax-radius-circle);
+    background: transparent;
+    color: getColor(danger);
+    cursor: pointer;
+
+    .#{$namespace}-icon {
+      width: 15px;
+      height: 15px;
+      filter: drop-shadow(0 2px 3px #{getColor(danger, 0.24)});
+    }
+
+    &:hover {
+      background: #{getColor(danger, 0.08)};
+    }
+
+    &:focus-visible {
+      outline: 2px solid #{getColor(danger, 0.5)};
+      outline-offset: 1px;
+    }
+  }
+
+  @include e(validation-popover) {
+    max-width: min(340px, calc(100vw - 24px));
+    padding: 10px 14px;
+    border: 0;
+    pointer-events: none;
+    box-shadow:
+      0 16px 32px -18px #{getColor(danger, 0.42)},
+      var(--sax-popper-shadow);
+  }
+
+  @include e(validation-overlay-host) {
+    position: absolute;
+    z-index: 6;
+    inset: 0;
+    overflow: clip;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  @include e(validation-popover-content) {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    color: getCssVar(text-color, primary);
+    overflow-wrap: anywhere;
+
+    .#{$namespace}-icon {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 17px;
+      margin-top: 2px;
+      color: getColor(danger);
+    }
+  }
+
+  @include e(validation-navigator) {
+    position: absolute;
+    z-index: 7;
+    inset-inline-end: 12px;
+    inset-block-end: 12px;
+    display: flex;
+    min-height: 44px;
+    max-width: calc(100% - 24px);
+    align-items: center;
+    gap: 6px;
+    padding: 5px 7px 5px 8px;
+    box-sizing: border-box;
+    border-radius: var(--sax-radius-lg);
+    background: var(--s-table-surface, #{getColor(background)});
+    box-shadow:
+      0 14px 30px -17px #{getColor(danger, 0.42)},
+      var(--sax-popper-shadow);
+  }
+
+  @include e(validation-count) {
+    display: inline-grid;
+    min-width: 28px;
+    height: 28px;
+    flex: 0 0 auto;
+    place-items: center;
+    padding-inline: 6px;
+    box-sizing: border-box;
+    border-radius: var(--sax-radius-circle);
+    background: getColor(danger);
+    color: getColor(white);
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @include e(validation-position) {
+    min-width: 58px;
+    padding-inline: 4px;
+    color: getCssVar(text-color, primary);
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  @include e(validation-navigation-action) {
+    display: inline-grid;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: var(--sax-radius-md);
+    background: getColor(primary, 0.06);
+    color: getCssVar(text-color, primary);
+    cursor: pointer;
+
+    &:hover {
+      background: getColor(primary, 0.12);
+      color: getColor(primary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #{getColor(primary, 0.5)};
+      outline-offset: 1px;
+    }
+  }
+
+  @include e(validation-navigation-divider) {
+    width: 1px;
+    height: 22px;
+    margin-inline: 2px;
+    background: getColor(primary, 0.14);
   }
 
   .is-fixed-left.is-fixed-boundary::after,
@@ -753,7 +1107,7 @@
     right: -12px;
     background: linear-gradient(
       to right,
-      hsl(var(--sax-text-color) / 0.14),
+      hsl(var(--sax-primary) / 0.16),
       transparent
     );
   }
@@ -762,7 +1116,7 @@
     left: -12px;
     background: linear-gradient(
       to left,
-      hsl(var(--sax-text-color) / 0.14),
+      hsl(var(--sax-primary) / 0.16),
       transparent
     );
   }
@@ -1038,15 +1392,25 @@
     cursor: pointer;
     transition:
       transform 180ms ease,
-      background-color 160ms ease,
       color 160ms ease;
+
+    .#{$namespace}-icon {
+      transition:
+        color 160ms ease,
+        filter 160ms ease;
+    }
 
     &:hover,
     &:focus-visible {
-      background: hsl(var(--sax-primary) / 0.11);
+      background: transparent;
       color: hsl(var(--sax-primary));
       outline: none;
-      box-shadow: 0 0 0 2px hsl(var(--sax-primary) / 0.16);
+      box-shadow: none;
+    }
+
+    &:hover .#{$namespace}-icon,
+    &:focus-visible .#{$namespace}-icon {
+      filter: drop-shadow(0 1px 3px hsl(var(--sax-primary) / 0.32));
     }
 
     @include when(expanded) {
@@ -1069,10 +1433,7 @@
   @include e(tree-spinner) {
     width: 14px;
     height: 14px;
-    border: 2px solid hsl(var(--sax-primary) / 0.22);
-    border-top-color: hsl(var(--sax-primary));
-    border-radius: 50%;
-    animation: s-table-spin 720ms linear infinite;
+    flex: 0 0 14px;
   }
 
   @include e(data-empty) {
@@ -1150,7 +1511,7 @@
 
   @include e(loading-mask) {
     position: absolute;
-    z-index: 4;
+    z-index: 8;
     inset: 44px 0 0;
     display: grid;
     place-items: center;
@@ -1161,14 +1522,12 @@
   @include e(loading-spinner) {
     width: 24px;
     height: 24px;
-    border: 3px solid hsl(var(--sax-primary) / 0.2);
-    border-top-color: hsl(var(--sax-primary));
-    border-radius: 50%;
-    animation: s-table-spin 720ms linear infinite;
   }
 
   @include e(virtual-body) {
     .#{$namespace}-vl__window {
+      --s-vl-scrollbar-track-inset: 4px;
+
       width: 100%;
     }
 
@@ -1341,6 +1700,52 @@
       }
     }
   }
+
+  &-wrapper.is-auto-height {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    flex: 1 1 0%;
+    flex-direction: column;
+
+    > .#{$namespace}-table {
+      display: flex;
+      min-height: 0;
+      flex: 1 1 0%;
+      flex-direction: column;
+      overflow-y: hidden;
+
+      > .#{$namespace}-table__data-view {
+        display: flex;
+        min-height: 0;
+        flex: 1 1 0%;
+        flex-direction: column;
+
+        > .#{$namespace}-table__virtual-body {
+          display: flex;
+          min-height: 0;
+          flex: 1 1 0%;
+          flex-direction: column;
+
+          > .#{$namespace}-vl {
+            display: flex;
+            min-height: 0;
+            flex: 1 1 0%;
+            flex-direction: column;
+          }
+
+          .#{$namespace}-vl__window {
+            min-height: 0;
+            flex: 1 1 0%;
+          }
+        }
+
+        > .#{$namespace}-table__data-empty {
+          flex: 1 1 0%;
+        }
+      }
+    }
+  }
 }
 
 html.dark .#{$namespace}-table,
@@ -1369,12 +1774,6 @@ html.dark .#{$namespace}-table-wrapper {
   );
 }
 
-@keyframes s-table-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @media (pointer: coarse) {
   .#{$namespace}-table__row-drag-handle {
     min-width: 44px;
@@ -1387,16 +1786,24 @@ html.dark .#{$namespace}-table-wrapper {
   .#{$namespace}-table__tree-toggle {
     transition: none;
   }
-
-  .#{$namespace}-table__tree-spinner,
-  .#{$namespace}-table__loading-spinner {
-    animation: none;
-  }
 }
 
 @include b(table-shell) {
   width: 100%;
   min-width: 0;
+
+  @include when(auto-height) {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    flex: 1 1 0%;
+    flex-direction: column;
+
+    > .#{$namespace}-table-wrapper {
+      min-height: 0;
+      flex: 1 1 0%;
+    }
+  }
 
   @include e(error) {
     margin-bottom: 12px;
@@ -1416,11 +1823,33 @@ html.dark .#{$namespace}-table-wrapper {
 
   @include e(toolbar) {
     display: flex;
+    min-height: 32px;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    column-gap: 12px;
+    row-gap: 8px;
     margin-bottom: 12px;
+  }
+
+  @include e(left) {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @include e(right) {
+    display: flex;
+    min-width: 0;
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-inline-start: auto;
   }
 
   @include e(title) {
@@ -1429,10 +1858,9 @@ html.dark .#{$namespace}-table-wrapper {
     overflow-wrap: anywhere;
   }
 
-  @include e(tools) {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
+  @media (max-width: 520px) {
+    @include e(right) {
+      flex: 1 1 100%;
+    }
   }
 }

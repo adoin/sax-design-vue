@@ -128,6 +128,7 @@ import {
   useLocale,
   useNamespace,
   useShape,
+  useSize,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
@@ -143,6 +144,7 @@ const emit = defineEmits(tagEmits)
 
 const ns = useNamespace('tag')
 const shape = useShape<'rounded' | 'square' | 'pill'>()
+const size = useSize()
 const { t } = useLocale()
 const semanticColor = computed(
   () => props.color || props.status || props.type || undefined,
@@ -191,7 +193,7 @@ const tagKls = computed(() => [
   ns.is('transparent', props.transparent),
   ns.is(`style-${resolvedVariant.value}`, resolvedVariant.value !== 'default'),
   ns.is(resolvedShape.value),
-  ns.m(props.size),
+  ns.m(size.value),
   semanticColor.value && ns.is('colored', true),
   semanticColor.value && isVsColor(themeColor.value) && ns.m(themeColor.value),
 ])

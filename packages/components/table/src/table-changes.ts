@@ -23,7 +23,7 @@ export interface TableDataFieldChange extends TableDataFieldPatch {
   oldExists: boolean
 }
 
-export interface TableChangedRow<Row extends TableRow = TableRow> {
+export interface TableChangedRow<Row extends object = TableRow> {
   rowKey: TableRowKey
   /** Read-only consumer row reference; field values below are snapshots. */
   row: Readonly<Row>
@@ -31,14 +31,14 @@ export interface TableChangedRow<Row extends TableRow = TableRow> {
   fields: TableDataFieldChange[]
 }
 
-export interface TableChangeRecords<Row extends TableRow = TableRow> {
+export interface TableChangeRecords<Row extends object = TableRow> {
   version: number
   inserted: TableChangedRow<Row>[]
   updated: TableChangedRow<Row>[]
   removed: TableChangedRow<Row>[]
 }
 
-export type TableAcceptedDataOperation<Row extends TableRow = TableRow> = {
+export type TableAcceptedDataOperation<Row extends object = TableRow> = {
   rowKey: TableRowKey
   row: Row
   position: TableDataPosition
@@ -48,7 +48,7 @@ export type TableAcceptedDataOperation<Row extends TableRow = TableRow> = {
   | { type: 'update'; before: Row; fields: string[] }
 )
 
-export type TableRevertOperation<Row extends TableRow = TableRow> = {
+export type TableRevertOperation<Row extends object = TableRow> = {
   rowKey: TableRowKey
   row: Readonly<Row>
   position: TableDataPosition
@@ -66,7 +66,7 @@ export interface TableChangeTransaction {
   }
 }
 
-export interface TableDataMutation<Row extends TableRow = TableRow> {
+export interface TableDataMutation<Row extends object = TableRow> {
   type: 'insert' | 'update' | 'remove'
   rowKey: TableRowKey
   row: Readonly<Row>
@@ -74,14 +74,14 @@ export interface TableDataMutation<Row extends TableRow = TableRow> {
   patches: TableDataFieldPatch[]
 }
 
-export interface TableDataChangeRequest<Row extends TableRow = TableRow> {
+export interface TableDataChangeRequest<Row extends object = TableRow> {
   operations: TableDataMutation<Row>[]
   /** Assign this exact proposed array before accepting; absent for generated sources. */
   data?: Row[]
   signal: AbortSignal
 }
 
-export interface TableChangeConfig<Row extends TableRow = TableRow> {
+export interface TableChangeConfig<Row extends object = TableRow> {
   enabled?: boolean
   /** Change this key when a generated/remote data set gets a new baseline. */
   dataKey?: string | number

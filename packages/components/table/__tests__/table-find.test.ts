@@ -134,7 +134,7 @@ describe('Table find integration', () => {
     const { api, data } = host(
       {
         treeConfig: { children: 'children' },
-        findConfig: { checkMethod: ({ expanded }) => expanded },
+        findConfig: { replaceableMethod: ({ expanded }) => expanded },
       },
       true,
       [{ id: 1, name: 'A', children: [{ id: 2, name: 'A' }] }],

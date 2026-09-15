@@ -1,5 +1,18 @@
 @mixin syntax-tokens($important: false) {
   $i: if($important, ' !important', '');
+  $text: #d6deeb;
+  $muted: #8794b2;
+  $punctuation: #b4bdd7;
+  $pink: #ff7ab2;
+  $violet: #c5a3ff;
+  $blue: #82aaff;
+  $cyan: #73daca;
+  $aqua: #89ddff;
+  $green: #addb67;
+  $gold: #ffc777;
+  $orange: #f78c6c;
+
+  color: $text#{$i};
 
   .token {
     &.comment,
@@ -7,61 +20,84 @@
     &.prolog,
     &.doctype,
     &.cdata {
-      color: #999#{$i};
+      color: $muted#{$i};
+      font-style: italic;
     }
 
     &.punctuation {
-      color: #ccc#{$i};
+      color: $punctuation#{$i};
     }
 
     &.tag,
-    &.attr-name,
     &.namespace,
     &.deleted {
-      color: #e2777a#{$i};
+      color: $pink#{$i};
+    }
+
+    &.attr-name,
+    &.directive {
+      color: $violet#{$i};
     }
 
     &.function-name {
-      color: #6196cc#{$i};
+      color: $blue#{$i};
+    }
+
+    &.function,
+    &.function-variable {
+      color: $blue#{$i};
     }
 
     &.boolean,
-    &.number,
-    &.function {
-      color: #f08d49#{$i};
+    &.number {
+      color: $orange#{$i};
     }
 
     &.property,
+    &.literal-property {
+      color: $cyan#{$i};
+    }
+
     &.class-name,
+    &.generic,
+    &.type-expression,
     &.constant,
     &.symbol {
-      color: #f8c555#{$i};
+      color: $gold#{$i};
     }
 
     &.selector,
-    &.important,
     &.atrule,
-    &.keyword,
+    &.keyword {
+      color: $violet#{$i};
+    }
+
+    &.important,
     &.builtin {
-      color: #cc99cd#{$i};
+      color: $gold#{$i};
     }
 
     &.string,
     &.char,
     &.attr-value,
-    &.regex,
-    &.variable {
-      color: #7ec699#{$i};
+    &.inserted {
+      color: $green#{$i};
+    }
+
+    &.regex {
+      color: $gold#{$i};
+    }
+
+    &.variable,
+    &.variable-declaration,
+    &.parameter {
+      color: $pink#{$i};
     }
 
     &.operator,
     &.entity,
     &.url {
-      color: #67cdcc#{$i};
-    }
-
-    &.inserted {
-      color: #7ec699#{$i};
+      color: $aqua#{$i};
     }
   }
 }

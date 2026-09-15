@@ -5,14 +5,20 @@
 - Read relevant records in `.agents/notes/active/` and `.agents/notes/prohibited/` before implementation. Treat proposed records as unapproved, prohibited records as approaches that must not be repeated unless their `reopen_only_if` condition is met, and implemented records as verified project contracts.
 - Move a project specification to `.agents/notes/implemented/` only after its implementation and required verification pass. Preserve superseded decisions in `.agents/notes/superseded/` when the replacement needs historical context.
 - For Table work, read `.agents/notes/implemented/table-component-architecture.md`, `.agents/notes/implemented/table-documentation-information-architecture.md`, and `.agents/notes/implemented/table-single-component-business-shell.md`, plus their linked prohibited approaches.
+- Component-wide tabular and lining numeral defaults are recorded in `.agents/notes/implemented/component-numeric-typography.md`.
+- Route-boundary wheel ownership, nested-scroll isolation, and directional progress parity are recorded in `.agents/notes/implemented/anchor-route-boundary-scroll-ownership.md` and `.agents/notes/implemented/anchor-route-boundary-progress-parity.md`.
+- Anchor documentation groups scroll-container configuration under router mode as recorded in `.agents/notes/implemented/anchor-documentation-information-architecture.md`.
 - Implemented Scrollbar outside placement and Watermark blind mode are recorded in `.agents/notes/implemented/scrollbar-outside-placement.md` and `.agents/notes/implemented/watermark-blind-mode.md`.
 
 ## Documentation examples
 
 - Write public documentation for developers using the library: explain APIs, behavior, and usage choices. Keep task instructions, implementation constraints, conversation history, and verification reports in internal records rather than example descriptions or demo copy.
 - Treat public documentation as a clean reference for developers and AI. Follow `.agents/notes/prohibited/conversation-history-in-public-docs.md`.
+- Keep localized heading labels separate from their URL values. Paired English and Chinese documents must expose the same concise English heading slug while retaining localized visible text; keep heading order aligned across locales so the build-time pairing remains deterministic.
+- Use those canonical English slugs in localized frontmatter links such as `usage`. Do not add locale-specific or percent-encoded CJK hash values to public documentation URLs.
 
 - When a documentation example needs controls or supporting UI beyond the component being documented, prefer existing components from this repository instead of rebuilding them with custom HTML and CSS. Only create a custom control when no suitable repository component exists, and briefly document why.
+- In schema-driven Form and Table examples, use the shared built-in `$...` renderers when the example needs a standard input, editor, filter, or action group. Keep custom renderer functions and slots for examples whose purpose is to teach those extension points.
 - Keep each example's heading, explanatory copy, notes, controls, and rendered demo inside the same `<card>` block. Only the page title, frontmatter summary, and generated API reference may sit outside example cards.
 - Do not add large fixed or minimum heights to documentation demos just to reserve room for a teleported popper, dialog, or other overlay. Overlay components must layer over the page while the closed demo stays content-sized.
 - Treat the rendered example, the **Code** dialog, and **Playground** as one feature. Whenever an example component changes, update and verify both English and Chinese documentation source slots so Code and Playground stay synchronized with the rendered demo.
@@ -29,6 +35,12 @@
 
 - Treat `.agents/notes/implemented/table-component-architecture.md` as the verified Table contract and `.agents/notes/implemented/table-documentation-information-architecture.md` as the public documentation structure.
 - Preserve the single-component business shell in `.agents/notes/implemented/table-single-component-business-shell.md`. Do not repeat the approaches in `.agents/notes/prohibited/handwritten-table-markup.md` or `.agents/notes/prohibited/separate-table-grid-wrapper.md` unless the user explicitly satisfies their reopening conditions.
+
+## Renderer architecture
+
+- Preserve the shared global renderer registry in `.agents/notes/implemented/global-renderer-registry.md`. Form and Table must resolve the same renderer definition and its `renderDefault`, `renderEdit`, `renderFormItem`, and `renderFilter` methods; do not introduce separate global stores for each component.
+- Keep the documented `$...` renderer names available and let component-local renderers or slots override the global entry. Extend the shared store through `renderer.add()` or `renderer.mixin()`.
+- Register reusable custom renderers from an application entry or a dedicated startup module. Documentation example components must not call `renderer.add()` or create a local `renderers` map for one-off presentation; use a scoped slot for example-specific output, or state clearly that a referenced renderer was registered globally outside the component.
 
 ## Overlay architecture
 

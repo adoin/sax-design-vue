@@ -13,6 +13,7 @@ it('isolates applying state between cancelled and replacement edit sessions', as
   const context: TableEditContext = {
     row,
     rowKey: 1,
+    index: 0,
     rowIndex: 0,
     columnIndex: 0,
     columnKey: 'name',

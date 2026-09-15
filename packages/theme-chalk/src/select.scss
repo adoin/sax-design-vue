@@ -8,45 +8,54 @@ $iconActiveMargin: -4px;
 $suffixSafeArea: 36px;
 $clearableSafeArea: 64px;
 
-.#{$namespace}-select-enter-active,
-.#{$namespace}-select-leave-active {
+.#{$namespace}-select-enter-active {
   transition:
-    all 0s ease 0s,
     top 0s,
     left 0s,
-    transform 0.25s ease,
-    opacity 0.12s ease !important;
+    transform var(--sax-motion-duration) var(--sax-motion-easing-smooth-out),
+    opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard) !important;
+}
+
+.#{$namespace}-select-leave-active {
+  transition:
+    top 0s,
+    left 0s,
+    transform var(--sax-motion-duration-quick)
+      var(--sax-motion-easing-smooth-out),
+    opacity var(--sax-motion-duration-micro) var(--sax-motion-easing-out) !important;
 }
 .#{$namespace}-select-enter-from,
 .#{$namespace}-select-leave-to {
   opacity: 0;
   &[data-popper-placement='top'] {
-    transform: translate(0, 10px);
+    transform: translate(0, var(--sax-motion-distance-base));
   }
   &[data-popper-placement='bottom'] {
-    transform: translate(0, -10px);
+    transform: translate(0, calc(-1 * var(--sax-motion-distance-base)));
   }
 }
 
 .v-clearable {
   &-enter-active {
-    animation: v-clearable 0.25s ease forwards;
+    animation: v-clearable var(--sax-motion-duration)
+      var(--sax-motion-easing-in-out) forwards;
   }
   &-leave-active {
-    animation: v-clearable 0.25s ease reverse;
+    animation: v-clearable var(--sax-motion-duration)
+      var(--sax-motion-easing-in-out) reverse;
   }
 }
 
 @keyframes v-clearable {
   0% {
-    right: 10px;
+    transform: translateX(calc(#{$clearableRight} - 10px));
     opacity: 0.2;
   }
   10% {
     opacity: 0.7;
   }
   100% {
-    right: $clearableRight;
+    transform: translateX(0);
   }
 }
 
@@ -113,7 +122,7 @@ $clearableSafeArea: 64px;
   max-width: 100%;
 
   @include e(content) {
-    transition: all 0s ease 0s;
+    transition: none;
     margin-top: 0;
     padding: 5px;
     overflow: hidden;
@@ -392,7 +401,10 @@ $clearableSafeArea: 64px;
     @include when(active) {
       background: getColor('color', 0.05);
       color: getColor('color', 1);
-      transition: all 0.25s linear;
+      transition:
+        background-color var(--sax-motion-duration)
+          var(--sax-motion-easing-standard),
+        color var(--sax-motion-duration) var(--sax-motion-easing-standard);
     }
 
     &.is-hover:not(.is-disabled) {
@@ -773,7 +785,11 @@ $clearableSafeArea: 64px;
       border-radius: var(--sax-radius-circle);
       font-size: 0.75rem;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition:
+        color var(--sax-motion-duration) var(--sax-motion-easing-standard),
+        background-color var(--sax-motion-duration)
+          var(--sax-motion-easing-standard),
+        transform var(--sax-motion-duration) var(--sax-motion-easing-standard);
 
       @include set-var-value(color, getCssVar(text));
 

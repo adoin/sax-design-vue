@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { highlightVueSource } from '../../docs/.vuepress/theme/util/highlightVueSource'
+import {
+  highlightVueSfcHtml,
+  highlightVueSource,
+} from '../../docs/.vuepress/theme/util/highlightVueSource'
 
 describe('highlightVueSource', () => {
   it('preserves the complete editable SFC source while producing syntax tokens', () => {
@@ -17,5 +20,29 @@ describe('highlightVueSource', () => {
     expect(segments.some(({ classes }) => classes.includes('string'))).toBe(
       true,
     )
+    expect(
+      segments.some(
+        ({ classes, text }) =>
+          classes.includes('variable-declaration') && text === 'loading',
+      ),
+    ).toBe(true)
+    expect(
+      segments.some(
+        ({ classes, text }) =>
+          classes.includes('function') && text === 'ref',
+      ),
+    ).toBe(true)
+  })
+
+  it('uses TypeScript grammar inside Vue script blocks', () => {
+    const source = `<script setup lang="ts">\nconst tableOptions = computed<SaxGridSetting<UserRow>>(() => ({}))\n</script>`
+    const html = highlightVueSfcHtml(source)
+
+    expect(html).toContain(
+      '<span class="token variable-declaration variable">tableOptions</span>',
+    )
+    expect(html).toContain('<span class="token function">computed</span>')
+    expect(html).toContain('class="token generic class-name"')
+    expect(html).toContain('SaxGridSetting')
   })
 })

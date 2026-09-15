@@ -1,15 +1,25 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
-import { SInput } from 'sax-design-vue'
+import { computed, reactive, ref } from 'vue'
 import type {
+  SaxGridSetting,
   TableColumn,
   TableExposes,
   TableProxyConfig,
   TableProxyState,
 } from 'sax-design-vue'
 
-const table = ref<TableExposes>()
-const model = reactive({ term: '' })
+interface ProjectRow {
+  id: number
+  name: string
+  team: 'Design' | 'Engineering'
+}
+
+interface ProjectQueryForm {
+  term: string
+}
+
+const table = ref<TableExposes<ProjectRow, ProjectQueryForm>>()
+const model = reactive<ProjectQueryForm>({ term: '' })
 const failNext = ref(false)
 const state = ref<TableProxyState>({
   loading: false,
@@ -18,7 +28,7 @@ const state = ref<TableProxyState>({
   result: null,
 })
 const requests = ref(0)
-const columns: TableColumn[] = [
+const columns: TableColumn<ProjectRow>[] = [
   { field: 'id', title: 'ID', width: 90, fixed: 'left' },
   { field: 'name', title: 'Project', minWidth: 240, sortable: true },
   {
@@ -31,7 +41,7 @@ const columns: TableColumn[] = [
     ],
   },
 ]
-const serviceRows = Array.from({ length: 500 }, (_, index) => ({
+const serviceRows: ProjectRow[] = Array.from({ length: 500 }, (_, index) => ({
   id: index + 1,
   name: `Project ${String(index + 1).padStart(3, '0')}`,
   team: index % 2 ? 'Design' : 'Engineering',
@@ -49,7 +59,7 @@ const pause = (signal: AbortSignal) =>
     if (signal.aborted) abort()
     else signal.addEventListener('abort', abort, { once: true })
   })
-const proxyConfig: TableProxyConfig = {
+const proxyConfig: TableProxyConfig<ProjectRow, ProjectQueryForm> = {
   async query({ form, pager, sortBy, filters, signal }) {
     requests.value++
     const shouldFail = failNext.value
@@ -77,37 +87,38 @@ const proxyConfig: TableProxyConfig = {
     }
   },
 }
+const tableOptions = computed<SaxGridSetting<ProjectRow, ProjectQueryForm>>(
+  () => ({
+    columns,
+    proxyConfig,
+    queryConfig: {
+      model,
+      labelPosition: 'top',
+      reserveErrorSpace: false,
+      items: [
+        {
+          field: 'term',
+          title: 'Project name',
+          itemRender: {
+            name: '$input',
+            props: { clearable: true },
+          },
+        },
+      ],
+    },
+    pagerConfig: { pageSize: 20, pageSizes: [20, 50, 100] },
+    virtualConfig: { height: 260, dynamic: true, horizontal: true },
+    toolbarConfig: { right: [{ itemRender: '$columnConfig' }] },
+    resizeConfig: true,
+    onProxyStateChange: (next) => (state.value = next),
+  }),
+)
 </script>
 
 <template>
   <div class="table-proxy-query-demo">
-    <s-table
-      ref="table"
-      :columns="columns"
-      :proxy-config="proxyConfig"
-      :query-config="{
-        model,
-        labelPosition: 'top',
-        reserveErrorSpace: false,
-        items: [
-          {
-            field: 'term',
-            title: 'Project name',
-            itemRender: {
-              name: 'SInput',
-              component: SInput,
-              props: { block: true, clearable: true },
-            },
-          },
-        ],
-      }"
-      :pager-config="{ pageSize: 20, pageSizes: [20, 50, 100] }"
-      :virtual-config="{ height: 260, dynamic: true, horizontal: true }"
-      column-manager-config
-      resize-config
-      @proxy-state-change="state = $event"
-    >
-      <template #toolbar="{ refresh, cancelProxy, busy }">
+    <s-table ref="table" v-bind="tableOptions">
+      <template #toolbar_left="{ refresh, cancelProxy, busy }">
         <s-button :disabled="busy" @click="refresh">Refresh</s-button>
         <s-button flat :disabled="!busy" @click="cancelProxy"
           >Cancel request</s-button

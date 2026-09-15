@@ -40,6 +40,7 @@
 import {
   computed,
   nextTick,
+  onBeforeUnmount,
   onMounted,
   onUpdated,
   provide,
@@ -71,6 +72,7 @@ const outside = computed(() => props.placement === 'outside' && !props.native)
 
 let stopResizeObserver: (() => void) | undefined = undefined
 let stopResizeListener: (() => void) | undefined = undefined
+let updateFrame: number | undefined
 
 const scrollbarRef = ref<HTMLDivElement>()
 const wrapRef = ref<HTMLDivElement>()
@@ -163,6 +165,13 @@ const update = () => {
   sizeWidth.value = width + GAP < offsetWidth ? `${width}px` : ''
   barRef.value?.handleScroll(wrapRef.value)
 }
+const scheduleUpdate = () => {
+  if (updateFrame !== undefined) return
+  updateFrame = requestAnimationFrame(() => {
+    updateFrame = undefined
+    update()
+  })
+}
 
 watch(
   () => props.noresize,
@@ -206,7 +215,11 @@ onMounted(() => {
     })
 })
 
-onUpdated(() => update())
+onUpdated(scheduleUpdate)
+
+onBeforeUnmount(() => {
+  if (updateFrame !== undefined) cancelAnimationFrame(updateFrame)
+})
 
 defineExpose({
   /** @description scrollbar wrap ref */

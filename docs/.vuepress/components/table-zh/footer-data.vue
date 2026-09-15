@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { TableColumn, TableColumnState } from 'sax-design-vue'
+import type {
+  TableColumn,
+  TableColumnState,
+  TableFooterConfig,
+} from 'sax-design-vue'
 
 const virtual = ref(false)
 const multiple = ref(true)
@@ -9,38 +13,51 @@ const allRows = Array.from({ length: 60 }, (_, index) => ({
   id: index + 1,
   name: `订单 ${index + 1}`,
   quantity: (index % 5) + 1,
-  amount: ((index % 5) + 1) * 24,
+  amount: ['24.10', '48.20', '72.30', '96.40', '120.50'][index % 5],
   note: index % 3 ? '待评审' : '发货前请与客户确认交付详情。',
   state: '就绪',
 }))
 const rows = computed(() => (virtual.value ? allRows : allRows.slice(0, 4)))
-const footerData = computed(() => {
-  const quantity = rows.value.reduce((sum, row) => sum + row.quantity, 0)
-  const amount = rows.value.reduce((sum, row) => sum + row.amount, 0)
-  const total = {
-    kind: 'total',
-    name: '合计',
-    quantity,
-    amount,
-    note: `传入的全部 ${rows.value.length} 笔订单`,
-    state: '已计算',
-  }
-  return multiple.value
-    ? [
-        total,
+const footerConfig = computed<TableFooterConfig>(() => ({
+  rows: [
+    {
+      values: {
+        kind: 'total',
+        name: '合计',
+        state: '已计算',
+      },
+      aggregates: [
+        { key: 'quantity', field: 'quantity', method: 'sum' },
+        { key: 'amount', field: 'amount', method: 'sum' },
         {
-          kind: 'average',
-          name: '平均值',
-          quantity: quantity / rows.value.length,
-          amount: amount / rows.value.length,
-          note: '每笔订单',
-          state: '已计算',
+          key: 'note',
+          method: (cells) => `传入的全部 ${cells.length} 笔订单`,
         },
-      ]
-    : [total]
-})
-const money = (value: unknown) =>
-  Number(value).toLocaleString('zh-CN', { style: 'currency', currency: 'CNY' })
+      ],
+    },
+    ...(multiple.value
+      ? [
+          {
+            values: {
+              kind: 'average',
+              name: '平均值',
+              note: '每笔订单',
+              state: '已计算',
+            },
+            aggregates: [
+              { key: 'quantity', field: 'quantity', method: 'average' },
+              { key: 'amount', field: 'amount', method: 'average' },
+            ],
+          },
+        ]
+      : []),
+  ],
+}))
+const fixedDecimal = (value: unknown, digits: number) => {
+  const [integer = '0', fraction = ''] = String(value ?? 0).split('.')
+  return `${integer}.${fraction.padEnd(digits, '0').slice(0, digits)}`
+}
+const money = (value: unknown) => `¥${fixedDecimal(value, 2)}`
 const columns: TableColumn[] = [
   { field: 'name', title: '订单', width: 180, fixed: 'left' },
   {
@@ -51,7 +68,7 @@ const columns: TableColumn[] = [
         title: '数量',
         minWidth: 120,
         align: 'right',
-        footerFormatter: ({ value }) => Number(value).toFixed(1),
+        footerFormatter: ({ value }) => fixedDecimal(value, 1),
       },
       {
         field: 'amount',
@@ -69,28 +86,36 @@ const columns: TableColumn[] = [
       },
     ],
   },
-  { field: 'state', title: '状态', width: 120, fixed: 'right' },
+  {
+    field: 'state',
+    title: '状态',
+    width: 120,
+    fixed: 'right',
+    slots: { footer: 'orderStateFooter' },
+  },
 ]
 </script>
 
 <template>
-  <div class="footer-data-demo">
-    <s-checkbox v-model="multiple">显示合计与平均值</s-checkbox>
-    <s-checkbox v-model="virtual">虚拟滚动（60 笔订单）</s-checkbox>
+  <div :class="['footer-data-demo', { 'is-virtual': virtual }]">
     <s-table
       v-model:column-state="columnState"
       :data="rows"
       :columns="columns"
-      :footer-data="footerData"
+      :footer-config="footerConfig"
       footer-row-key="kind"
       :virtual-config="
-        virtual ? { height: 240, horizontal: true, dynamic: true } : false
+        virtual ? { height: 'auto', horizontal: true, dynamic: true } : false
       "
-      column-manager-config
+      :toolbar-config="{ right: [{ itemRender: '$columnConfig' }] }"
       resize-config
       row-key="id"
     >
-      <template #footer-state="{ row }"
+      <template #toolbar_left>
+        <s-checkbox v-model="multiple">显示合计与平均值</s-checkbox>
+        <s-checkbox v-model="virtual">虚拟滚动（60 笔订单）</s-checkbox>
+      </template>
+      <template #orderStateFooter="{ row }"
         ><s-tag>{{ row.state }}</s-tag></template
       >
     </s-table>
@@ -101,7 +126,8 @@ const columns: TableColumn[] = [
 .footer-data-demo {
   width: 100%;
 }
-.footer-data-demo > .s-table-wrapper {
-  margin-top: 16px;
+
+.footer-data-demo.is-virtual {
+  height: min(440px, 70vh);
 }
 </style>

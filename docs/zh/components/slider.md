@@ -6,7 +6,7 @@ PROPS:
     description: 选择细轨、柔和内嵌轨道或离散刻度风格。
     default: classic
     link: null
-    usage: '#风格'
+    usage: '#variants'
 
   - name: show-value
     type: Boolean
@@ -14,14 +14,14 @@ PROPS:
     description: 始终显示当前值浮层。
     default: false
     link: null
-    usage: '#风格'
+    usage: '#variants'
   - name: shape
     type: String
     values: "rounded | square"
     description: 为轨道、滑块点、刻度点和数值气泡选择圆形或方形几何外观。
     default: rounded
     link: null
-    usage: '#外形'
+    usage: '#shape'
   - name: v-model
     type: Number
     values: "Number"

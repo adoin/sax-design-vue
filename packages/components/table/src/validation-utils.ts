@@ -46,6 +46,55 @@ export const defaultTableValidationMessages: TableValidationMessages = {
   invalid: (field) => `${field} is invalid`,
 }
 
+const validateBuiltInRule = (
+  context: TableValidationContext,
+  rule: TableValidationRule,
+  messages: TableValidationMessages,
+) => {
+  const label = context.column.title ?? context.field
+  const value = context.value
+  if (
+    rule.required &&
+    (empty(value) || (typeof value === 'string' && !value.trim()))
+  )
+    return rule.message ?? messages.required(label)
+  if (value != null && value !== '') {
+    if (rule.type && !matchesType(value, rule.type))
+      return rule.message ?? messages.invalid(label)
+    const size =
+      typeof value === 'number'
+        ? value
+        : typeof value === 'string' || Array.isArray(value)
+          ? value.length
+          : undefined
+    if (
+      (rule.min != null && (size == null || size < rule.min)) ||
+      (rule.max != null && (size == null || size > rule.max))
+    )
+      return rule.message ?? messages.invalid(label)
+    // Avoid mutating a consumer's global/sticky RegExp.lastIndex.
+    if (
+      rule.pattern &&
+      (typeof value !== 'string' ||
+        !new RegExp(rule.pattern.source, rule.pattern.flags).test(value))
+    )
+      return rule.message ?? messages.invalid(label)
+  }
+}
+
+/** Synchronous fast path for a ruleset without custom validators. */
+export function validateTableValueSync(
+  context: TableValidationContext,
+  rules: TableValidationRule[],
+  messages = defaultTableValidationMessages,
+): string | undefined {
+  for (const rule of rules) {
+    if (context.signal.aborted) return undefined
+    const message = validateBuiltInRule(context, rule, messages)
+    if (message !== undefined) return message
+  }
+}
+
 /** Rules never coerce input values; an optional empty value skips type/length checks. */
 export async function validateTableValue(
   context: TableValidationContext,
@@ -55,34 +104,8 @@ export async function validateTableValue(
   const label = context.column.title ?? context.field
   for (const rule of rules) {
     if (context.signal.aborted) return undefined
-    const value = context.value
-    if (
-      rule.required &&
-      (empty(value) || (typeof value === 'string' && !value.trim()))
-    )
-      return rule.message ?? messages.required(label)
-    if (value != null && value !== '') {
-      if (rule.type && !matchesType(value, rule.type))
-        return rule.message ?? messages.invalid(label)
-      const size =
-        typeof value === 'number'
-          ? value
-          : typeof value === 'string' || Array.isArray(value)
-            ? value.length
-            : undefined
-      if (
-        (rule.min != null && (size == null || size < rule.min)) ||
-        (rule.max != null && (size == null || size > rule.max))
-      )
-        return rule.message ?? messages.invalid(label)
-      // Avoid mutating a consumer's global/sticky RegExp.lastIndex.
-      if (
-        rule.pattern &&
-        (typeof value !== 'string' ||
-          !new RegExp(rule.pattern.source, rule.pattern.flags).test(value))
-      )
-        return rule.message ?? messages.invalid(label)
-    }
+    const builtInMessage = validateBuiltInRule(context, rule, messages)
+    if (builtInMessage !== undefined) return builtInMessage
     if (rule.validator) {
       try {
         const result = await rule.validator(context)
@@ -90,14 +113,18 @@ export async function validateTableValue(
         if (typeof result === 'string')
           return result || rule.message || messages.invalid(label)
         if (result instanceof Error)
-          return result.message || rule.message || messages.invalid(label)
+          return (
+            result.message ||
+            rule.message ||
+            messages.invalid(context.column.title ?? context.field)
+          )
       } catch (error) {
         if (context.signal.aborted) return undefined
         return (
           rule.message ??
           (error instanceof Error && error.message
             ? error.message
-            : messages.invalid(label))
+            : messages.invalid(context.column.title ?? context.field))
         )
       }
     }

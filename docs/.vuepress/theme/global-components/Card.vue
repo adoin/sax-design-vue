@@ -15,7 +15,9 @@
     </ClientOnly>
 
     <div
-      v-if="$slots.template || $slots.script || $slots.style"
+      v-if="
+        $slots.template || $slots.script || $slots['script-tsx'] || $slots.style
+      "
       class="slotcode"
     >
       <ClientOnly>
@@ -25,6 +27,9 @@
           </template>
           <template v-if="$slots.script" #script>
             <slot name="script" />
+          </template>
+          <template v-if="$slots['script-tsx']" #script-tsx>
+            <slot name="script-tsx" />
           </template>
           <template v-if="$slots.style" #style>
             <slot name="style" />

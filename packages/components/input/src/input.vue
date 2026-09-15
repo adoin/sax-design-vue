@@ -194,6 +194,7 @@ import {
   useNamespace,
   useProp,
   useShape,
+  useSize,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { NOOP, getVsColor } from '@vuesax-alpha/utils'
@@ -272,6 +273,7 @@ useDeprecated(
 
 const ns = useNamespace('input')
 const shape = useShape(computed(() => (props.square ? 'square' : undefined)))
+const size = useSize()
 
 const inputId = props.id ?? useId()
 
@@ -389,7 +391,7 @@ const inputKls = computed(() => [
   ns.b(),
   props.className,
   props.wrapClasses,
-  props.size && ns.m(props.size),
+  size.value && ns.m(size.value),
   { [ns.is(props.inputStyle)]: !!props.inputStyle },
   ns.is('block', props.block),
   ns.is('focus', focused.value),

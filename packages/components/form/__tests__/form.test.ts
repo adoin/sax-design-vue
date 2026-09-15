@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import Form from '../src/form.vue'
 import FormItem from '../src/form-item.vue'
-import { formRenderer } from '../src/renderer'
+import { formRenderer, renderer } from '../src/renderer'
 import type { FormItemConfig } from '../src/form'
 
 const TestInput = defineComponent({
@@ -35,9 +35,45 @@ const mountForm = (
 
 afterEach(() => {
   formRenderer.delete('ActionRenderer')
+  renderer.delete('$customTest')
 })
 
 describe('Form schema renderer', () => {
+  it('provides VXE-style built-ins and allows extra global registration', () => {
+    const controls = [
+      '$input',
+      '$textarea',
+      '$date',
+      '$dateRange',
+      '$time',
+      '$timePicker',
+      '$select',
+      '$radio',
+      '$checkbox',
+      '$checkboxGroup',
+      '$treeSelect',
+      '$cascader',
+      '$rate',
+      '$slider',
+      '$switch',
+      '$verCode',
+    ]
+
+    controls.forEach((name) => {
+      const definition = renderer.get(name)
+      expect(definition?.renderDefault, name).toBeTypeOf('function')
+      expect(definition?.renderEdit, name).toBeTypeOf('function')
+      expect(definition?.renderFormItem, name).toBeTypeOf('function')
+      expect(definition?.renderFilter, name).toBeTypeOf('function')
+    })
+    expect(renderer.get('$buttons')?.renderDefault).toBeTypeOf('function')
+    expect(renderer.get('$buttons')?.renderFormItem).toBeTypeOf('function')
+    expect(renderer.get('$buttons')?.renderToolbar).toBeTypeOf('function')
+
+    const custom = { renderDefault: () => 'custom' }
+    expect(renderer.add('$customTest', custom).get('$customTest')).toBe(custom)
+  })
+
   it('uses a four-character label width and right alignment by default', () => {
     const model = reactive({ name: '' })
     const wrapper = mountForm(model, [

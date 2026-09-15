@@ -131,6 +131,7 @@ export function createTableFindScope(props: TableCoreProps, options: Options) {
           const context: TableEditContext = {
             row: row.row,
             rowKey: row.key,
+            index: row.index,
             rowIndex: row.index,
             column: entry.column,
             columnIndex: entry.index,

@@ -1,14 +1,20 @@
-import { getIconData } from 'sax-design-vue-iconify'
+import { addIconData, getIconData } from 'sax-design-vue-iconify'
 import {
   formatColor,
   parseColor,
   toCssColor,
 } from '@vuesax-alpha/components/color-picker'
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
+import { defaultCarbonIcons } from './default-carbon-icons'
 import type { ExtractPropTypes } from 'vue'
 import type { ColorPickerPresetInput } from '@vuesax-alpha/components/color-picker'
 import type { Language } from '@vuesax-alpha/locale'
 import type IconPicker from './icon-picker.vue'
+
+Object.entries(defaultCarbonIcons).forEach(([name, data]) => {
+  const publicName = `cb:${name}`
+  if (!getIconData(publicName)) addIconData(publicName, data)
+})
 
 export const ICON_PICKER_DEFAULT_SIZE = 24
 export const ICON_PICKER_MIN_SIZE = 8

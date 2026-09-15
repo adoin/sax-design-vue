@@ -22,7 +22,7 @@ PROPS:
     description: 在标签内部渲染无边框的内联编辑器。
     default: 'false'
     link: null
-    usage: '#增删条目'
+    usage: '#add-and-remove-items'
 
   - name: edit-placeholder
     type: String
@@ -30,7 +30,7 @@ PROPS:
     description: 内联编辑器的占位文本。
     default: "''"
     link: null
-    usage: '#增删条目'
+    usage: '#add-and-remove-items'
 
   - name: edit-autofocus
     type: Boolean
@@ -38,7 +38,7 @@ PROPS:
     description: 可编辑标签挂载后自动聚焦。
     default: 'false'
     link: null
-    usage: '#增删条目'
+    usage: '#add-and-remove-items'
 
   - name: closable
     type: Boolean, String
@@ -62,7 +62,7 @@ PROPS:
     description: 使用语义状态色，自定义 `color` 的优先级更高。
     default: null
     link: null
-    usage: '#默认'
+    usage: '#default'
 
   - name: type
     type: String
@@ -70,7 +70,7 @@ PROPS:
     description: '`status` 的兼容别名。'
     default: null
     link: null
-    usage: '#默认'
+    usage: '#default'
 
   - name: disabled
     type: Boolean
@@ -78,7 +78,7 @@ PROPS:
     description: 禁用标签的点击与关闭交互。
     default: 'false'
     link: null
-    usage: '#默认'
+    usage: '#default'
 
   - name: border
     type: Boolean
@@ -86,7 +86,7 @@ PROPS:
     description: '`variant="outline"` 的兼容别名。'
     default: 'false'
     link: null
-    usage: '#风格'
+    usage: '#variants'
 
   - name: transparent
     type: Boolean
@@ -102,7 +102,7 @@ PROPS:
     description: 选择标签的视觉风格，与外形几何相互独立。
     default: default
     link: null
-    usage: '#风格'
+    usage: '#variants'
 
   - name: tag-style
     type: String
@@ -110,7 +110,7 @@ PROPS:
     description: '`variant` 的兼容别名。'
     default: default
     link: null
-    usage: '#风格'
+    usage: '#variants'
 
   - name: shape
     type: String
@@ -118,7 +118,7 @@ PROPS:
     description: 选择圆角、方形或胶囊外形；mark 与 arrow 会使用兼容对应外形的处理。
     default: rounded
     link: null
-    usage: '#外形'
+    usage: '#shape'
 
   - name: round
     type: Boolean
@@ -126,7 +126,7 @@ PROPS:
     description: '`shape="pill"` 的兼容别名。'
     default: 'false'
     link: null
-    usage: '#外形'
+    usage: '#shape'
 
   - name: size
     type: String
@@ -134,7 +134,7 @@ PROPS:
     description: 标签尺寸。
     default: default
     link: null
-    usage: '#风格'
+    usage: '#variants'
 
   - name: icon
     type: String

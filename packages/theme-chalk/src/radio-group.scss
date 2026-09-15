@@ -162,7 +162,8 @@
     margin-top: 10px;
     padding: 14px;
     border-radius: var(--sax-radius-lg);
-    animation: sax-radio-group-tabs-panel-in 0.18s ease-out both;
+    animation: sax-radio-group-tabs-panel-in var(--sax-motion-duration-slow)
+      var(--sax-motion-easing-smooth-out) both;
     background: getColor(background, 0.78);
     box-shadow:
       inset 0 3px 8px getColor(primary, 0.07),
@@ -181,11 +182,13 @@
 @keyframes sax-radio-group-tabs-panel-in {
   from {
     opacity: 0;
-    transform: translate3d(0, 4px, 0);
+    filter: blur(var(--sax-motion-blur-small));
+    transform: translate3d(0, var(--sax-motion-distance-micro), 0);
   }
 
   to {
     opacity: 1;
+    filter: blur(0);
     transform: none;
   }
 }

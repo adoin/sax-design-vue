@@ -6,7 +6,7 @@ PROPS:
     values: "true | false"
     description: 禁用复选框交互，保留当前选中或半选状态。
     default: 'false'
-    usage: '#禁用'
+    usage: '#disabled'
   - name: max
     type: Number
     values: "最大选中数"

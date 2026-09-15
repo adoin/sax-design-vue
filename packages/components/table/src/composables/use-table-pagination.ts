@@ -1,8 +1,8 @@
 import { computed, shallowRef, watch } from 'vue'
 import type { ComputedRef } from 'vue'
 import type {
+  TableCoreEmitFn,
   TableCoreProps,
-  TableEmitFn,
   TableFlatRow,
   TablePageChangeParams,
   TablePagerConfig,
@@ -19,7 +19,7 @@ const count = (value: number | undefined) =>
 // are sliced by index, never enumerated to build the pagination model.
 export function useTablePagination(
   props: TableCoreProps,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   allRows: ComputedRef<TableFlatRow[]>,
 ) {
   const config = computed<TablePagerConfig>(() =>

@@ -154,9 +154,9 @@ describe('Steps', () => {
     expect(
       wrapper
         .find('.s-steps__item--loading')
-        .findComponent({ name: 'SIcon' })
-        .props('rolling'),
-    ).toBe(1.1)
+        .findComponent({ name: 'SLogoLoading' })
+        .exists(),
+    ).toBe(true)
   })
 
   it('uses the configured locale for built-in status labels', () => {

@@ -47,7 +47,7 @@ const report = (result: TableRowDragResult) => {
       v-model:sort-by="sorts"
       :columns="columns"
       :pager-config="{ pageSize: 5 }"
-      :row-drag-config="{ checkMethod: ({ row }) => row.id !== 3 }"
+      :row-drag-config="{ draggableMethod: ({ row }) => row.id !== 3 }"
       striped
       @row-drag-end="report"
     />

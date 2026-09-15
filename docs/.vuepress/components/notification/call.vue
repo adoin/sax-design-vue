@@ -1,22 +1,41 @@
 <template>
   <div class="call">
-    <img src="/woman.jpg" alt="" />
+    <img src="/woman.jpg" :alt="labels.caller" />
     <footer>
-      <s-button color="dark" icon>
-        <s-icon  name="bx:video-off" />
+      <s-button color="dark" icon :aria-label="labels.video">
+        <s-icon name="bx:video-off" />
       </s-button>
-      <s-button color="success" icon>
-        <s-icon  name="bxs:phone-call" />
+      <s-button color="success" icon :aria-label="labels.answer">
+        <s-icon name="bxs:phone-call" />
       </s-button>
-      <s-button color="dark" icon>
-        <s-icon  name="bx:microphone-off" />
+      <s-button color="dark" icon :aria-label="labels.microphone">
+        <s-icon name="bx:microphone-off" />
       </s-button>
     </footer>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { SButton } from 'sax-design-vue'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { SButton, SIcon } from 'sax-design-vue'
+
+const route = useRoute()
+const labels = computed(() =>
+  route.path.startsWith('/zh/')
+    ? {
+        caller: '来电联系人',
+        video: '关闭视频',
+        answer: '接听电话',
+        microphone: '关闭麦克风',
+      }
+    : {
+        caller: 'Incoming caller',
+        video: 'Turn off video',
+        answer: 'Answer call',
+        microphone: 'Mute microphone',
+      },
+)
 </script>
 
 <style lang="scss" scoped>

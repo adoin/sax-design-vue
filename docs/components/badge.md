@@ -141,8 +141,6 @@ SLOTS:
         <s-button shape="square">square</s-button>
       </s-badge>
 
-UPDATES:
-  - type
 ---
 
 # Badge

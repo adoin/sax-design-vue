@@ -2,72 +2,72 @@
 PROPS:
   - name: active
     type: Number
-    values: "index"
+    values: 'index'
     description: 当前步骤下标，支持 v-model:active。
     default: '0'
   - name: items
     type: StepItem[]
-    values: "{ key?, title, description?, meta?, status?, statusLabel?, disabled?, clickable?, icon? }[]"
+    values: '{ key?, title, description?, meta?, status?, statusLabel?, disabled?, clickable?, icon? }[]'
     description: 步骤数据。
     default: '[]'
   - name: variant
     type: String
-    values: "rail / timeline"
+    values: 'rail / timeline'
     description: 聚焦轨道或上下文时间线。
     default: rail
   - name: direction
     type: String
-    values: "horizontal / vertical"
+    values: 'horizontal / vertical'
     description: 排列方向；timeline 默认纵向。
     default: 按 variant 推导
   - name: size
     type: String
-    values: "small / default / large"
+    values: 'small / default / large'
     description: 步骤尺寸。
     default: default
   - name: finish-status
     type: StepStatus
-    values: "wait / process / finish / success / error / loading / disabled"
+    values: 'wait / process / finish / success / error / loading / disabled'
     description: 已经过的步骤状态。
     default: finish
   - name: process-status
     type: StepStatus
-    values: "wait / process / finish / success / error / loading / disabled"
+    values: 'wait / process / finish / success / error / loading / disabled'
     description: 当前步骤状态。
     default: process
   - name: status-labels
     type: Partial<Record<StepStatus, string>>
-    values: "object"
+    values: 'object'
     description: 覆盖各状态的内置国际化文案。
     default: '{}'
   - name: clickable
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 是否允许点击切换步骤。
     default: 'true'
   - name: show-progress
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 是否显示步骤连接轨道。
     default: 'true'
   - name: show-step-index
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 是否在当前步骤显示进度序号。
     default: 'true'
   - name: responsive
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 小屏时将横向轨道转为纵向。
     default: 'true'
   - name: simple
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 移除轨道，适合完整 item 插槽布局。
     default: 'false'
   - name: aria-label
     type: String
-    values: "text"
+    values: 'text'
     description: 步骤导航的无障碍名称。
     default: null
 EVENTS:
@@ -185,7 +185,7 @@ description: '支持聚焦轨道、上下文时间线、完整状态与可组合
 
 ## 状态
 
-内置等待、进行、加载、完成、成功、错误和禁用状态。
+内置等待、进行、加载、完成、成功、错误和禁用状态。加载状态默认使用共用的 Sax 标志加载器，条目也可传入其他图标覆盖。
 
 <template #example><steps-states /></template>
 

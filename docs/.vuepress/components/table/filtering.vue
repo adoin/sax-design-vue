@@ -12,7 +12,10 @@ const columns: TableColumn[] = [
   {
     field: 'name',
     title: 'Name',
-    slots: { filter: 'nameFilter' },
+    filterRender: {
+      name: '$input',
+      props: { placeholder: 'Enter a name', 'aria-label': 'Name keyword' },
+    },
     filterMethod: ({ value, values }) =>
       String(value)
         .toLowerCase()
@@ -31,10 +34,14 @@ const columns: TableColumn[] = [
     field: 'status',
     title: 'Status',
     filterMultiple: false,
-    filters: [
-      { label: 'Active', value: 'active' },
-      { label: 'Paused', value: 'paused' },
-    ],
+    filterRender: {
+      name: '$radio',
+      options: [
+        { label: 'Active', value: 'active' },
+        { label: 'Paused', value: 'paused' },
+      ],
+    },
+    filterMethod: ({ value, values }) => value === values[0],
     cell: ({ value }) => (value === 'active' ? 'Active' : 'Paused'),
   },
 ]
@@ -45,16 +52,12 @@ const columns: TableColumn[] = [
     <s-button size="small" type="flat" @click="filters = {}"
       >Clear all filters</s-button
     >
-    <s-table v-model:filters="filters" :data="rows" :columns="columns" striped>
-      <template #nameFilter="{ values, setValues }">
-        <s-input
-          :model-value="String(values[0] ?? '')"
-          placeholder="Enter a name"
-          aria-label="Name keyword"
-          @update:model-value="setValues($event ? [String($event)] : [])"
-        />
-      </template>
-    </s-table>
+    <s-table
+      v-model:filters="filters"
+      :data="rows"
+      :columns="columns"
+      striped
+    />
   </div>
 </template>
 

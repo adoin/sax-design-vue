@@ -509,19 +509,19 @@ Use `columns.slots.default` or `columns.slots.header` to assign custom column sl
 
 <template #template>
 
-@[code{61-89}](../.vuepress/components/table-select/custom-render.vue)
+@[code{48-88}](../.vuepress/components/table-select/custom-render.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-59}](../.vuepress/components/table-select/custom-render.vue)
+@[code{1-46}](../.vuepress/components/table-select/custom-render.vue)
 
 </template>
 
 <template #style>
 
-@[code{91-130}](../.vuepress/components/table-select/custom-render.vue)
+@[code{90-129}](../.vuepress/components/table-select/custom-render.vue)
 
 </template>
 

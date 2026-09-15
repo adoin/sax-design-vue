@@ -5,8 +5,8 @@ import type {
   TableColumn,
   TableColumnResizeParams,
   TableColumnWidths,
+  TableCoreEmitFn,
   TableCoreProps,
-  TableEmitFn,
 } from '../table'
 
 interface ResizeSession {
@@ -23,7 +23,7 @@ interface ResizeSession {
 
 export function useTableColumnResize(
   props: TableCoreProps,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   columns: ComputedRef<TableColumn[]>,
 ) {
   const localWidths = shallowRef<TableColumnWidths>({})
@@ -238,6 +238,13 @@ export function useTableColumnResize(
       'keyboard',
     )
   }
+  const reset = () => {
+    if (props.loading) return
+    cancel()
+    if (props.columnWidths === undefined) localWidths.value = {}
+    emit('update:columnWidths', {})
+    revision.value++
+  }
   // External widths are authoritative. Cancel stale drags when the layout changes.
   watch(() => [props.columnWidths, props.virtualSource, enabled.value], cancel)
   watch(
@@ -261,6 +268,13 @@ export function useTableColumnResize(
     (next, previous) => {
       cancel()
       if (props.columnWidths !== undefined) return
+      if (
+        next.length === previous.length &&
+        next.every((entry, index) =>
+          entry.every((value, part) => value === previous[index]?.[part]),
+        )
+      )
+        return
       const prior = new Map(previous.map(([key, width]) => [key, width]))
       const retained: TableColumnWidths = {}
       for (const [key, width] of next) {
@@ -283,5 +297,6 @@ export function useTableColumnResize(
     start,
     focus,
     keydown,
+    reset,
   }
 }

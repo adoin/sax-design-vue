@@ -36,9 +36,6 @@ function jumpToEnd() {
 
 <template>
   <div class="grouped-source-demo">
-    <s-button size="small" flat @click="jumpToEnd"
-      >Last row and column</s-button
-    >
     <s-table
       ref="table"
       :virtual-source="source"
@@ -48,17 +45,20 @@ function jumpToEnd() {
         dynamic: true,
         columnOverscan: 1,
       }"
-      column-manager-config
+      :toolbar-config="{ right: [{ itemRender: '$columnConfig' }] }"
       resize-config
-    />
+    >
+      <template #toolbar_left>
+        <s-button size="small" flat @click="jumpToEnd"
+          >Last row and column</s-button
+        >
+      </template>
+    </s-table>
   </div>
 </template>
 
 <style scoped>
 .grouped-source-demo {
   width: 100%;
-}
-.grouped-source-demo > .s-table-wrapper {
-  margin-top: 16px;
 }
 </style>

@@ -1,5 +1,4 @@
 import { cloneDeep } from 'lodash-unified'
-import type { TableRow } from './table'
 import type { TableEditChange } from './table-edit'
 
 export const editableField = (field?: string): field is string =>
@@ -14,7 +13,7 @@ export const editableField = (field?: string): field is string =>
   )
 
 /** Copy only changed paths; untouched branches and the consumer record stay intact. */
-export function applyTableEditChanges<Row extends TableRow>(
+export function applyTableEditChanges<Row extends object>(
   row: Row,
   changes: TableEditChange[],
 ): Row {
@@ -22,7 +21,7 @@ export function applyTableEditChanges<Row extends TableRow>(
   for (const { field, value } of changes) {
     if (!editableField(field)) continue
     const path = field.split('.')
-    let target: Record<string, unknown> = result
+    let target = result as Record<string, unknown>
     for (const key of path.slice(0, -1)) {
       const current = target[key]
       const next = Array.isArray(current)

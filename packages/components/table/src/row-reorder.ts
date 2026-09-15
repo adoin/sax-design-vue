@@ -1,9 +1,9 @@
 import type { TableDataIndex } from './change-data'
-import type { TableRow, TableRowKey } from './table'
+import type { TableRowKey } from './table'
 import type { TableRowDropPosition } from './table-row-drag'
 
 /** Copies only the affected sibling list and its ancestors, including loaded lazy children. */
-export function planTableRowReorder<Row extends TableRow>(
+export function planTableRowReorder<Row extends object>(
   source: TableDataIndex<Row>,
   fromKey: TableRowKey,
   targetKey: TableRowKey,

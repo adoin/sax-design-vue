@@ -41,7 +41,7 @@
           :label="startLabel || label"
           :label-float="labelFloat"
           :color="color"
-          :size="size"
+          :size="resolvedSize"
           :shape="resolvedShape"
           :disabled="disabled"
           :readonly="!editable || readonly"
@@ -61,7 +61,7 @@
           :label="endLabel"
           :label-float="labelFloat"
           :color="color"
-          :size="size"
+          :size="resolvedSize"
           :shape="resolvedShape"
           :disabled="disabled"
           :readonly="!editable || readonly"
@@ -84,7 +84,7 @@
         :label="label"
         :label-float="labelFloat"
         :color="color"
-        :size="size"
+        :size="resolvedSize"
         :shape="resolvedShape"
         :disabled="disabled"
         :readonly="!editable || readonly"
@@ -354,6 +354,7 @@ import {
   useLocale,
   useNamespace,
   useShape,
+  useSize,
 } from '@vuesax-alpha/hooks'
 import {
   getTimeZoneNow,
@@ -383,6 +384,7 @@ const emit = defineEmits(datePickerEmits)
 
 const ns = useNamespace('date-picker')
 const resolvedShape = useShape()
+const resolvedSize = useSize()
 const { t } = useLocale()
 const globalTimezone = useGlobalConfig('timezone')
 const globalAutoApplyNow = useGlobalConfig('autoApplyNow')

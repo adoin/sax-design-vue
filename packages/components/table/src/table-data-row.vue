@@ -55,7 +55,7 @@
       <div
         v-else
         :id="
-          validation?.getError(flatRow.key, entry.column.field)
+          cellError(entry.column)
             ? `${validationId(entry.column.field!, entry.index)}-cell`
             : undefined
         "
@@ -68,10 +68,7 @@
             cellRange?.contains(displayIndex, entry.ariaIndex ?? entry.index),
           ),
           entry.column.className,
-          ns.is(
-            'invalid',
-            Boolean(validation?.getError(flatRow.key, entry.column.field)),
-          ),
+          ns.is('invalid', Boolean(cellError(entry.column))),
           ns.is('fixed-column', Boolean(entry.fixed)),
           ns.is('fixed-left', entry.fixed === 'left'),
           ns.is('fixed-right', entry.fixed === 'right'),
@@ -96,13 +93,9 @@
             ? t('vs.table.selectedCell')
             : undefined
         "
-        :aria-invalid="
-          validation?.getError(flatRow.key, entry.column.field)
-            ? true
-            : undefined
-        "
+        :aria-invalid="cellError(entry.column) ? true : undefined"
         :aria-describedby="
-          validation?.getError(flatRow.key, entry.column.field)
+          cellError(entry.column)
             ? validationId(entry.column.field!, entry.index)
             : undefined
         "
@@ -124,6 +117,8 @@
               : -1
         "
         @dblclick="activateEdit(entry.column, entry.index, $event, 'dblclick')"
+        @mouseenter="previewValidation(entry.column)"
+        @mouseleave="dismissValidationPreview(entry.column)"
         @keydown="cellKeydown(entry.column, entry.index, $event)"
         @click="handleCellClick(entry.column, entry.index, $event)"
         @contextmenu="
@@ -175,7 +170,11 @@
             "
             @click.stop="emit('toggleExpand')"
           >
-            <span v-if="flatRow.loading" :class="ns.e('tree-spinner')" />
+            <SLogoLoading
+              v-if="flatRow.loading"
+              :class="ns.e('tree-spinner')"
+              :size="14"
+            />
             <SIcon v-else name="cb:chevron-right" />
           </button>
           <span
@@ -242,9 +241,7 @@
             "
             :context="editContext(entry.column, entry.index)"
             :editing="editing"
-            :error="
-              validation?.getError(flatRow.key, entry.column.field)?.message
-            "
+            :error="cellError(entry.column)?.message"
             :error-id="validationId(entry.column.field!, entry.index)"
             :validating="validation?.isPending(flatRow.key, entry.column.field)"
             :renderer="editRenderer?.(entry.column)"
@@ -268,14 +265,27 @@
             </slot>
           </span>
         </div>
+        <button
+          v-if="cellError(entry.column)"
+          type="button"
+          :class="ns.e('validation-marker')"
+          :aria-label="
+            t('vs.table.validationShowError', {
+              message: cellError(entry.column)?.message ?? '',
+            })
+          "
+          @click.stop="activateValidation(entry.column)"
+          @dblclick.stop
+        >
+          <SIcon name="cb:warning-alt-filled" aria-hidden="true" />
+        </button>
         <small
-          v-if="validation?.getError(flatRow.key, entry.column.field)"
+          v-if="cellError(entry.column)"
           :id="validationId(entry.column.field!, entry.index)"
           :class="ns.e('validation-message')"
           role="alert"
-          >{{
-            validation.getError(flatRow.key, entry.column.field)?.message
-          }}</small
+          aria-live="polite"
+          >{{ cellError(entry.column)?.message }}</small
         >
       </div>
     </template>
@@ -283,8 +293,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { SIcon } from '@vuesax-alpha/components/icon'
+import { computed, onBeforeUnmount } from 'vue'
+import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 import { SCheckbox } from '@vuesax-alpha/components/checkbox'
 import { SRadio } from '@vuesax-alpha/components/radio'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
@@ -379,6 +389,29 @@ const getValue = (column: TableColumn) => {
   return tableFieldValue(props.flatRow.row, column.field)
 }
 
+const cellError = (column: TableColumn) =>
+  props.validation?.getError(props.flatRow.key, column.field)
+
+const activateValidation = (column: TableColumn) =>
+  props.validation?.activate(props.flatRow.key, column.field)
+
+let previewedField: string | undefined
+const previewValidation = (column: TableColumn) => {
+  if (
+    column.field &&
+    props.validation?.preview(props.flatRow.key, column.field)
+  )
+    previewedField = column.field
+}
+const dismissValidationPreview = (column: TableColumn) => {
+  props.validation?.dismissPreview(props.flatRow.key, column.field)
+  if (previewedField === column.field) previewedField = undefined
+}
+onBeforeUnmount(() => {
+  if (previewedField)
+    props.validation?.dismissPreview(props.flatRow.key, previewedField)
+})
+
 const createCellParams = (
   column: TableColumn,
   columnIndex: number,
@@ -386,6 +419,7 @@ const createCellParams = (
   row: props.flatRow.row,
   column,
   value: getValue(column),
+  index: props.flatRow.index,
   rowIndex: props.flatRow.index,
   columnIndex,
   depth: props.flatRow.depth,

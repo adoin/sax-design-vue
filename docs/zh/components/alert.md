@@ -230,8 +230,6 @@ SLOTS:
         </template>
       </s-alert>
 
-UPDATES:
-  - hidden-content
 ---
 
 # Alert 警告提示

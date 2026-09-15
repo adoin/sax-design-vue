@@ -16,7 +16,7 @@
           :loading-type="loadingType"
           color="primary"
         >
-          <s-icon  name="bxs:save" />
+          <s-icon name="bxs:save" />
           {{ labels.save }}
         </s-button>
 
@@ -28,7 +28,7 @@
           type="flat"
           :aria-label="labels.call"
         >
-          <s-icon  name="bxs:phone-call" />
+          <s-icon name="bxs:phone-call" />
         </s-button>
 
         <s-button
@@ -37,7 +37,7 @@
           color="danger"
           type="border"
         >
-          <s-icon  name="bxs:heart" />
+          <s-icon name="bxs:heart" />
           {{ labels.like }}
         </s-button>
       </div>
@@ -57,7 +57,7 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const loading = ref(true)
-const loadingTypes = ['pulse', 'ripple', 'shimmer'] as const
+const loadingTypes = ['default', 'pulse', 'ripple', 'shimmer'] as const
 
 const labels = computed(() => {
   const isZh = route.path.startsWith('/zh/')
@@ -70,6 +70,7 @@ const labels = computed(() => {
         showContent: '查看原内容',
         showLoading: '查看加载态',
         types: {
+          default: '品牌标志',
           pulse: '呼吸光轨',
           ripple: '双层脉冲波',
           shimmer: '流光扫描',
@@ -82,6 +83,7 @@ const labels = computed(() => {
         showContent: 'Show content',
         showLoading: 'Show loading',
         types: {
+          default: 'Brand mark',
           pulse: 'Pulse rail',
           ripple: 'Double pulse wave',
           shimmer: 'Surface shimmer',

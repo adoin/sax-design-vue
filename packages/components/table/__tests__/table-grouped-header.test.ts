@@ -3,16 +3,21 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Table from '../src/table.vue'
 import TableColumnComponent from '../src/table-column.vue'
-import { flattenTableColumns } from '../src/composables/table-column-tree'
+import {
+  applyTableColumnState,
+  flattenTableColumns,
+} from '../src/composables/table-column-tree'
 import type { TableColumn } from '../src/table'
 
 const columns: TableColumn[] = [
   { field: 'id', title: 'ID', width: 70, fixed: 'left' },
   {
+    key: 'profile',
     title: 'Profile',
     children: [
       { field: 'name', title: 'Name', minWidth: 160, sortable: true },
       {
+        key: 'details',
         title: 'Details',
         children: [
           {
@@ -132,16 +137,16 @@ describe('grouped table headers', () => {
         cell.text(),
         cell.attributes('aria-colspan'),
       ]),
-    ).toEqual([
-      ['Profile', '1'],
-      ['Profile', '1'],
-      ['Details', '1'],
-    ])
+    ).toEqual([['Profile', '1']])
     const right = groups(wrapper).filter((cell) =>
       cell.classes().includes('is-fixed-right'),
     )
-    expect(right).toHaveLength(2)
-    expect(right[0].attributes('style')).toContain('right: calc(100px)')
+    expect(right).toHaveLength(0)
+    expect(
+      wrapper
+        .get('[role="columnheader"][data-column-index="3"]')
+        .attributes('aria-rowspan'),
+    ).toBe('3')
     await wrapper.setProps({
       columnState: [
         { key: 'id', fixed: false, order: 2 },
@@ -160,6 +165,105 @@ describe('grouped table headers', () => {
     expect(groups(wrapper)).toHaveLength(0)
     expect(wrapper.findAll('[role="columnheader"]')).toHaveLength(2)
     wrapper.unmount()
+  })
+
+  it('reparents leaves and complete groups while preserving the declared tree for reset', async () => {
+    const wrapper = mount(Table, { props: { data, columns } })
+    await wrapper.setProps({
+      columnState: [
+        {
+          key: 'name',
+          fixed: 'left',
+          placement: { parentKey: null, index: 1 },
+        },
+      ],
+    })
+    expect(
+      groups(wrapper).map((cell) => [
+        cell.text(),
+        cell.attributes('aria-colspan'),
+      ]),
+    ).toEqual([
+      ['Profile', '2'],
+      ['Details', '2'],
+    ])
+    expect(
+      wrapper
+        .get('[role="columnheader"][data-column-index="1"]')
+        .attributes('aria-rowspan'),
+    ).toBe('3')
+
+    await wrapper.setProps({
+      columnState: [
+        {
+          key: 'status',
+          fixed: false,
+          placement: { parentKey: 'details', index: 1 },
+        },
+      ],
+    })
+    expect(
+      groups(wrapper).map((cell) => [
+        cell.text(),
+        cell.attributes('aria-colspan'),
+      ]),
+    ).toEqual([
+      ['Profile', '4'],
+      ['Details', '3'],
+    ])
+
+    await wrapper.setProps({
+      columnState: [
+        {
+          key: 'details',
+          placement: { parentKey: null, index: 2 },
+        },
+      ],
+    })
+    expect(groups(wrapper).map((cell) => cell.text())).toEqual([
+      'Profile',
+      'Details',
+    ])
+    await wrapper.setProps({ columnState: [] })
+    expect(groups(wrapper).map((cell) => cell.text())).toEqual([
+      'Profile',
+      'Details',
+    ])
+    wrapper.unmount()
+  })
+
+  it('ignores hierarchy placements that would create a group cycle', () => {
+    const result = applyTableColumnState(columns, [
+      {
+        key: 'profile',
+        placement: { parentKey: 'details', index: 0 },
+      },
+    ])
+    expect(result[1].key).toBe('profile')
+    expect(result[1].children?.[1].key).toBe('details')
+  })
+
+  it('keeps an emptied group empty after its last leaf moves to the root', () => {
+    const result = applyTableColumnState(
+      [
+        {
+          key: 'only-group',
+          title: 'Only group',
+          children: [{ field: 'name', title: 'Name' }],
+        },
+        { field: 'status', title: 'Status' },
+      ],
+      [
+        {
+          key: 'name',
+          placement: { parentKey: null, index: 0 },
+        },
+      ],
+    )
+    expect(result[1].children).toEqual([])
+    expect(
+      flattenTableColumns(result).leaves.map((column) => column.field),
+    ).toEqual(['name', 'status'])
   })
 
   it('registers nested declarations through the columns slot without invoking cell slots early', async () => {
@@ -206,8 +310,6 @@ describe('grouped table headers', () => {
     await flushPromises()
     expect(groups(wrapper).map((cell) => cell.text())).toEqual([
       'Group: Contact',
-      'Group: Contact',
-      'Location',
     ])
     expect(wrapper.get('.s-table__data-row').text()).toContain('Hello Zoe')
     expect(wrapper.get('[role="cell"]').classes()).toContain('is-fixed-left')

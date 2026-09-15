@@ -17,7 +17,12 @@ export const buttonTypes = [
 
 export const buttonSizes = ['xl', 'large', 'default', 'small', 'mini'] as const
 
-export const buttonLoadingTypes = ['pulse', 'ripple', 'shimmer'] as const
+export const buttonLoadingTypes = [
+  'default',
+  'pulse',
+  'ripple',
+  'shimmer',
+] as const
 
 export const buttonProps = buildProps({
   /**
@@ -94,13 +99,13 @@ export const buttonProps = buildProps({
 
   /**
    * @description Select the loading visual preset. All presets share the same markup and only switch state classes.
-   * @enum `pulse` | `ripple` | `shimmer`
-   * @default 'pulse'
+   * @enum `default` | `pulse` | `ripple` | `shimmer`
+   * @default 'default'
    */
   loadingType: {
     type: String,
     values: buttonLoadingTypes,
-    default: 'pulse',
+    default: 'default',
   },
 
   /**

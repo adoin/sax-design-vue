@@ -1,39 +1,60 @@
 import { Fragment, h, resolveDynamicComponent } from 'vue'
+import { RendererButtons } from '@vuesax-alpha/components/button'
+import type {
+  RendererButtonAction,
+  RendererButtonsOptions,
+} from '@vuesax-alpha/components/button'
 import type { Component, VNodeChild } from 'vue'
 import type { FormItemConfig, FormModel, FormRuleTrigger } from './form'
+import type { FieldPath } from '../../types'
 
-export interface FormRendererParams {
-  model: FormModel
-  field?: string
-  prop?: string
+export interface FormRendererParams<Model extends object = FormModel> {
+  model: Model
+  field?: FieldPath<Model>
+  prop?: FieldPath<Model>
   value: unknown
-  item: FormItemConfig
+  item: FormItemConfig<Model>
   disabled: boolean
   readonly: boolean
   controlId?: string
   setValue: (value: unknown) => void
   validate: (trigger?: FormRuleTrigger | 'submit') => Promise<boolean>
+  submit: (event?: Event) => Promise<boolean>
+  reset: (event?: Event) => void
+  /** Original Table/Form context supplied by an adapter. */
+  source?: unknown
 }
 
-export type FormRendererEvent = (
-  params: FormRendererParams,
+export interface RendererToolbarParams {
+  source?: unknown
+  placement: 'left' | 'right'
+  disabled: boolean
+  action: (code: string, event: MouseEvent) => unknown
+}
+
+export type FormRendererEvent<Model extends object = FormModel> = (
+  params: FormRendererParams<Model>,
   ...args: unknown[]
 ) => unknown
 
-export interface FormItemRenderOptions {
+export interface RendererOptions<Model extends object = FormModel> {
   name: string
   component?: Component | string
   props?: Record<string, unknown>
   attrs?: Record<string, unknown>
-  events?: Record<string, FormRendererEvent>
+  events?: Record<string, FormRendererEvent<Model>>
   modelProp?: string
   modelEvent?: string
   changeEvent?: string
-  content?: string | ((params: FormRendererParams) => VNodeChild)
+  content?: string | ((params: FormRendererParams<Model>) => VNodeChild)
   options?: unknown[]
   optionProps?: Record<string, string>
-  children?: FormItemRenderOptions[]
+  children?: RendererOptions<Model>[]
 }
+
+/** @deprecated Use `RendererOptions` instead. */
+export type FormItemRenderOptions<Model extends object = FormModel> =
+  RendererOptions<Model>
 
 export interface FormRendererDefinition {
   component?: Component | string
@@ -42,10 +63,32 @@ export interface FormRendererDefinition {
   modelEvent?: string
   changeEvent?: string
   renderItem?: (
-    options: FormItemRenderOptions,
+    options: RendererOptions,
     params: FormRendererParams,
   ) => VNodeChild
+  renderDefault?: (
+    options: RendererOptions,
+    params: FormRendererParams,
+  ) => VNodeChild
+  renderEdit?: (
+    options: RendererOptions,
+    params: FormRendererParams,
+  ) => VNodeChild
+  renderFormItem?: (
+    options: RendererOptions,
+    params: FormRendererParams,
+  ) => VNodeChild
+  renderFilter?: (
+    options: RendererOptions,
+    params: FormRendererParams,
+  ) => VNodeChild
+  renderToolbar?: (
+    options: RendererOptions,
+    params: RendererToolbarParams,
+  ) => VNodeChild
 }
+
+export type RendererDefinition = FormRendererDefinition
 
 class FormRendererStore {
   private readonly store = new Map<string, FormRendererDefinition>()
@@ -80,6 +123,8 @@ class FormRendererStore {
 }
 
 export const formRenderer = new FormRendererStore()
+/** VXE-style global renderer registry shared by Form and Table. */
+export const renderer = formRenderer
 
 formRenderer.mixin({
   SInput: { component: 'SInput' },
@@ -115,7 +160,7 @@ const toListenerKey = (event: string) => {
 }
 
 const renderDefaultItem = (
-  options: FormItemRenderOptions,
+  options: RendererOptions,
   params: FormRendererParams,
   definition: FormRendererDefinition,
 ): VNodeChild => {
@@ -167,12 +212,97 @@ const renderDefaultItem = (
   return h(component, componentProps, { default: renderContent })
 }
 
+const renderControl = (options: RendererOptions, params: FormRendererParams) =>
+  renderDefaultItem(options, params, formRenderer.get(options.name) || {})
+
+const controlDefinition = (
+  component: Component | string,
+  defaultProps?: Record<string, unknown>,
+): FormRendererDefinition => ({
+  component,
+  defaultProps,
+  renderDefault: (_options, params) => String(params.value ?? ''),
+  renderEdit: renderControl,
+  renderFormItem: renderControl,
+  renderFilter: renderControl,
+})
+
+formRenderer.mixin({
+  $input: controlDefinition('SInput', { block: true }),
+  $textarea: controlDefinition('STextarea', { block: true }),
+  $date: controlDefinition('SDatePicker', { block: true }),
+  $dateRange: controlDefinition('SDatePicker', {
+    block: true,
+    type: 'daterange',
+  }),
+  $time: controlDefinition('STimeSelect', { block: true }),
+  $timePicker: controlDefinition('STimePicker', { block: true }),
+  $select: controlDefinition('SSelect', { block: true }),
+  $radio: controlDefinition('SRadioGroup'),
+  $checkbox: controlDefinition('SCheckbox'),
+  $checkboxGroup: controlDefinition('SCheckboxGroup'),
+  $treeSelect: controlDefinition('STableSelect', {
+    block: true,
+    treeConfig: { line: true },
+  }),
+  $cascader: controlDefinition('SCascader', { block: true }),
+  $rate: controlDefinition('SRate'),
+  $slider: controlDefinition('SSlider'),
+  $switch: controlDefinition('SSwitch'),
+  $verCode: controlDefinition('SVerificationCode'),
+  $buttons: {
+    modelProp: '',
+    modelEvent: '',
+    renderDefault: (options, params) => {
+      const rendererOptions = options.props as Partial<
+        RendererButtonsOptions<unknown>
+      >
+      const context = params.source ?? params
+      return h(RendererButtons, {
+        context,
+        disabled: params.disabled,
+        options: {
+          ...rendererOptions,
+          actions: (options.options ?? []) as RendererButtonAction[],
+        },
+        onAction: (action: RendererButtonAction, event: MouseEvent) => {
+          const handler = options.events?.[action.code]
+          if (handler) handler(params, event)
+          else if (action.code === 'submit') params.submit(event)
+          else if (action.code === 'reset') params.reset(event)
+        },
+      })
+    },
+    renderFormItem: (options, params) =>
+      formRenderer.get('$buttons')?.renderDefault?.(options, params),
+    renderToolbar: (options, params) => {
+      const rendererOptions = options.props as Partial<
+        RendererButtonsOptions<unknown>
+      >
+      return h(RendererButtons, {
+        context: params.source,
+        disabled: params.disabled,
+        options: {
+          ...rendererOptions,
+          actions: (options.options ?? []) as RendererButtonAction[],
+        },
+        onAction: (action: RendererButtonAction, event: MouseEvent) => {
+          const handler = options.events?.[action.code]
+          if (handler) handler(params.source as FormRendererParams, event)
+          else params.action(action.code, event)
+        },
+      })
+    },
+  },
+})
+
 export const renderFormItemRenderer = (
-  options: FormItemRenderOptions,
+  options: RendererOptions,
   params: FormRendererParams,
 ): VNodeChild => {
   const definition = formRenderer.get(options.name) || {}
-  return definition.renderItem
-    ? definition.renderItem(options, params)
+  const render = definition.renderFormItem ?? definition.renderItem
+  return render
+    ? render(options, params)
     : renderDefaultItem(options, params, definition)
 }

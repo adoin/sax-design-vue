@@ -1,21 +1,24 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { CSSProperties, ExtractPropTypes } from 'vue'
-import type Form from './form.vue'
-import type { FormItemRenderOptions } from './renderer'
+import type { RendererOptions } from './renderer'
+import type { FieldPath, Recordable } from '../../types'
 
-export type FormModel = Record<string, unknown>
-export type FormValidator = (
+/** Dynamic fallback used when an application does not supply its own model type. */
+export type FormModel = Recordable
+export type FormValidator<Model extends object = FormModel> = (
   value: unknown,
-  model: FormModel,
+  model: Model,
 ) => boolean | string | Promise<boolean | string>
 export type FormRuleTrigger = 'blur' | 'change'
-export interface FormRule {
+export interface FormRule<Model extends object = FormModel> {
   required?: boolean
   message?: string
-  validator?: FormValidator
+  validator?: FormValidator<Model>
   trigger?: FormRuleTrigger | FormRuleTrigger[]
 }
-export type FormRules = Record<string, FormRule | FormRule[]>
+export type FormRules<Model extends object = FormModel> = Partial<
+  Record<FieldPath<Model>, FormRule<Model> | FormRule<Model>[]>
+>
 
 export const FORM_DEFAULT_LABEL_WIDTH = 'calc(4em + 24px)'
 
@@ -35,14 +38,14 @@ export interface FormItemSlotConfig {
   error?: string
 }
 
-export interface FormItemConfig {
+export interface FormItemConfig<Model extends object = FormModel> {
   key?: string | number
   label?: string
   title?: string
-  prop?: string
-  field?: string
+  prop?: FieldPath<Model>
+  field?: FieldPath<Model>
   description?: string
-  rules?: FormRule | FormRule[]
+  rules?: FormRule<Model> | FormRule<Model>[]
   required?: boolean
   labelWidth?: string | number
   labelPosition?: 'left' | 'right' | 'top'
@@ -53,16 +56,16 @@ export interface FormItemConfig {
   reserveErrorSpace?: boolean
   visible?: boolean
   visibleMethod?: (params: {
-    model: FormModel
-    item: FormItemConfig
+    model: Model
+    item: FormItemConfig<Model>
   }) => boolean
-  disabled?: boolean | ((model: FormModel) => boolean)
-  readonly?: boolean | ((model: FormModel) => boolean)
+  disabled?: boolean | ((model: Model) => boolean)
+  readonly?: boolean | ((model: Model) => boolean)
   class?: string | string[] | Record<string, boolean>
   style?: CSSProperties
-  itemRender?: FormItemRenderOptions
+  itemRender?: RendererOptions<Model>
   slots?: FormItemSlotConfig
-  children?: FormItemConfig[]
+  children?: FormItemConfig<Model>[]
 }
 
 export const formProps = buildProps({
@@ -112,5 +115,23 @@ export const formEmits = {
     !!model && (!event || event instanceof Event),
 }
 
-export type FormProps = ExtractPropTypes<typeof formProps>
-export type FormInstance = InstanceType<typeof Form>
+type FormResolvedProps = ExtractPropTypes<typeof formProps>
+export type FormProps<Model extends object = FormModel> = Omit<
+  FormResolvedProps,
+  'model' | 'rules' | 'items'
+> & {
+  model: Model
+  rules: FormRules<Model>
+  items: FormItemConfig<Model>[]
+}
+export interface FormInstance {
+  validate: () => Promise<boolean>
+  validateField: (
+    prop: string,
+    trigger?: FormRuleTrigger | 'submit',
+  ) => Promise<boolean>
+  clearValidate: (props?: string | string[]) => void
+  resetFields: (event?: Event) => void
+  submit: (event?: Event) => Promise<boolean>
+  getErrors: () => Record<string, string>
+}

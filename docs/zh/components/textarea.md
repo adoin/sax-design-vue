@@ -5,7 +5,7 @@ PROPS:
     values: 'rounded | square'
     description: 设置文本域及计数器的圆角或方形几何外观。
     default: rounded
-    usage: '#外形'
+    usage: '#shape'
   - name: v-model
     type: String
     values: 'string'

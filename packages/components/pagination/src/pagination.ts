@@ -16,7 +16,12 @@ import {
   isNumber,
   mutable,
 } from '@vuesax-alpha/utils'
-import { useColorProp, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import {
+  useColorProp,
+  useGlobalComponentProps,
+  useNamespace,
+  useShape,
+} from '@vuesax-alpha/hooks'
 import { paginationContextKey } from '@vuesax-alpha/tokens'
 
 import Next from './components/next.vue'
@@ -179,7 +184,8 @@ export default defineComponent({
   name: COMPONENT_NAME,
   props: paginationProps,
   emits: paginationEmits,
-  setup(props, { emit, slots }) {
+  setup(rawProps, { emit, slots }) {
+    const props = useGlobalComponentProps('pagination', rawProps)
     const ns = useNamespace('pagination')
     const shape = useShape<'circle' | 'square' | ''>()
     const resolvedShape = computed(() =>

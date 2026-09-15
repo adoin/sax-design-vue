@@ -111,7 +111,9 @@ const getFieldValue = (row: TableRow, field: string) =>
     )
 
 const getChildren = (row: TableRow) => {
-  const children = row[props.treeConfig?.children ?? 'children']
+  const children = (row as Record<string, unknown>)[
+    props.treeConfig?.children ?? 'children'
+  ]
   return Array.isArray(children) ? (children as TableRow[]) : []
 }
 
@@ -152,7 +154,7 @@ const selectedLabel = computed(() => {
 })
 
 const isRowSelectable = (row: TableRow) =>
-  !row.disabled && (props.selectable?.(row) ?? true)
+  !(row as { disabled?: boolean }).disabled && (props.selectable?.(row) ?? true)
 
 const resolveRowClass = (flatRow: TableFlatRow) => {
   const custom =

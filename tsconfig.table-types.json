@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.web.json",
+  "compilerOptions": {
+    "composite": false,
+    "noEmit": true
+  },
+  "include": [
+    "packages",
+    "type-tests",
+    "typings/components.d.ts",
+    "typings/env.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/__tests__/**/*",
+    "**/gulpfile.ts",
+    "**/test-helper",
+    "packages/test-utils",
+    "**/*.md",
+    "packages/iconify/src/vite.ts"
+  ]
+}

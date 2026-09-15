@@ -40,6 +40,12 @@ export interface TableDataScopeOptions {
   ) => Promise<boolean>
 }
 
+const waitForScrollFrame = () =>
+  new Promise<void>((resolve) => {
+    if (typeof requestAnimationFrame === 'undefined') setTimeout(resolve, 0)
+    else requestAnimationFrame(() => resolve())
+  })
+
 /** Shared supplied-data traversal and navigation for validation and search. */
 export function useTableDataScope(
   props: TableCoreProps,
@@ -235,7 +241,7 @@ export function useTableDataScope(
       options.scrollColumn(currentIndex)
       await nextTick()
       await nextTick()
-      return (
+      const focus = () =>
         current() &&
         options.focusCell(
           target.key,
@@ -243,7 +249,12 @@ export function useTableDataScope(
           currentIndex,
           navigation.focus !== false,
         )
-      )
+      if (focus()) return true
+      // Horizontal virtual ranges are updated on an animation frame. Retry
+      // after that bounded render boundary when the first focus ran early.
+      await waitForScrollFrame()
+      await nextTick()
+      return focus()
     } finally {
       locating--
     }

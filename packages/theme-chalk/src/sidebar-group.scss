@@ -44,7 +44,9 @@
       width: 4px;
       height: 100%;
       opacity: 0;
-      transition: all 0.25s ease;
+      transition:
+        opacity var(--sax-motion-duration) var(--sax-motion-easing-standard),
+        transform var(--sax-motion-duration) var(--sax-motion-easing-standard);
       transform: translate(-100%);
       border-radius: 0 var(--sax-radius-md) var(--sax-radius-md) 0;
       z-index: 60;

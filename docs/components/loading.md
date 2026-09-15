@@ -1,10 +1,12 @@
 ---
-description: "Indicate that content or an operation is loading."
+API_TITLES:
+  CHILD_PROPS: SLogoLoading props
+description: 'Indicate that content or an operation is loading.'
 PROPS:
   #__________________________________
   - name: type
     type: String
-    values: "atom,ball,scale,waves,border,points,square,circles,corners,default,gradient,rectangle,square-rotate"
+    values: 'atom,ball,scale,waves,border,points,square,circles,corners,default,gradient,rectangle,square-rotate'
     description: Change the animation of the loading.
     default: default
     link: null
@@ -13,7 +15,7 @@ PROPS:
     #__________________________________
   - name: color
     type: String
-    values: "All colors of Sax Design (RGB y HEX)"
+    values: 'All colors of Sax Design (RGB y HEX)'
     description: Change the color of the loading animation.
     default: primary
     link: /theme/
@@ -22,7 +24,7 @@ PROPS:
     #__________________________________
   - name: background
     type: String
-    values: "All colors of Sax Design (RGB y HEX)"
+    values: 'All colors of Sax Design (RGB y HEX)'
     description: Change the background color of the loading.
     default: '#fff'
     link: /theme/
@@ -31,7 +33,7 @@ PROPS:
     #__________________________________
   - name: text
     type: String
-    values: "String"
+    values: 'String'
     description: Add a text below the loading animation.
     default: null
     link: null
@@ -40,7 +42,7 @@ PROPS:
     #__________________________________
   - name: percent
     type: Number
-    values: "0 - 100 (%)"
+    values: '0 - 100 (%)'
     description: Add a percentage text inside the loading.
     default: null
     link: null
@@ -49,7 +51,7 @@ PROPS:
     #__________________________________
   - name: progress
     type: Number
-    values: "0 - 100"
+    values: '0 - 100'
     description: Add a progress bar to the loading and the progress would be the value.
     default: null
     link: null
@@ -58,7 +60,7 @@ PROPS:
     #__________________________________
   - name: target
     type: String | HTMLElement | Ref<HTMLElement> | Vue Component
-    values: "String: Element Selector, HTMLElement: Selector element, Ref HTMLElement"
+    values: 'String: Element Selector, HTMLElement: Selector element, Ref HTMLElement'
     description: Determine the parent of the loading where it will be instantiated.
     default: null
     link: null
@@ -67,7 +69,7 @@ PROPS:
     #__________________________________
   - name: opacity
     type: Number
-    values: "0 - 1"
+    values: '0 - 1'
     description: Change the opacity of the background.
     default: '0.6'
     link: null
@@ -76,7 +78,7 @@ PROPS:
     #__________________________________
   - name: scale
     type: Number
-    values: "null"
+    values: 'null'
     description: Change the size of the loading animation.
     default: '1'
     link: null
@@ -85,7 +87,7 @@ PROPS:
   #__________________________________
   - name: setPercent
     type: Function
-    values: "(percent: Number) => void"
+    values: '(percent: Number) => void'
     description: Change the value of the percent after instantiating the loading.
     default: null
     link: null
@@ -94,7 +96,7 @@ PROPS:
   #__________________________________
   - name: setProgress
     type: Function
-    values: "(progress: Number) => void"
+    values: '(progress: Number) => void'
     description: Change the value of the progress after instantiating the loading.
     default: null
     link: null
@@ -103,18 +105,78 @@ PROPS:
   #__________________________________
   - name: setText
     type: Function
-    values: "(text: String) => void"
+    values: '(text: String) => void'
     description: Change the value of the text property after instantiating the loading.
     default: null
     link: null
     usage: '#text'
     code: null
 
-UPDATES:
-  - type
+CHILD_PROPS:
+  - name: active
+    type: Boolean
+    values: 'true, false'
+    description: Start the logo-to-orbit motion; false runs the reverse restoration.
+    default: true
+    usage: '#logo-loader'
+  - name: size
+    type: Number | String
+    values: 'CSS size'
+    description: Set the square SVG size; numbers use pixels.
+    default: 1em
+    usage: '#logo-loader'
+  - name: speed
+    type: Number
+    values: '> 0'
+    description: Set the playback multiplier for the complete motion.
+    default: 2.5
+    usage: '#logo-loader'
+  - name: reduced-motion
+    type: Boolean
+    values: 'true, false'
+    description: Override the operating-system motion preference; reduced motion uses a static ring.
+    default: null
+    usage: '#logo-loader'
+  - name: label
+    type: String
+    values: 'accessible text'
+    description: Give a standalone loader an accessible status label; omit it when a parent exposes aria-busy.
+    default: null
+    usage: '#logo-loader'
+
 ---
 
 # Loading
+
+<card>
+
+## Logo loader
+
+`SLogoLoading` is the shared default indicator used by Sax Design Vue components. Its SVG paths preserve the project mark: the two halves of the S flow into a three-color orbit, rotate while active, and follow the reverse route when `active` becomes false. The default production speed is `2.5`; set `speed` when a larger presentation needs a slower motion. The operating-system reduced-motion preference produces a static ring.
+
+<template #example>
+<loading-logo />
+</template>
+
+<template #template>
+
+@[code{9-22}](../.vuepress/components/loading/logo.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-7}](../.vuepress/components/loading/logo.vue)
+
+</template>
+
+<template #style>
+
+@[code{24-31}](../.vuepress/components/loading/logo.vue)
+
+</template>
+
+</card>
 
 <card>
 
@@ -159,7 +221,7 @@ SLoading.service(options)
 
 ## Type <Badge text="Update" type="warn" />
 
-Change the type of loading with the option `type`
+Change the type of loading with the option `type`. Only `default` uses the shared logo loader; every named alternative keeps its own visual.
 
 Tipos de loading:
 

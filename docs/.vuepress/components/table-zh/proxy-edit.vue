@@ -113,7 +113,7 @@ const remove = async () => {
       @edit-cancel="editing = false"
     >
       <template
-        #toolbar="{
+        #toolbar_left="{
           busy,
           insertRows,
           commitEdit,

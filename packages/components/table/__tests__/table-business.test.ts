@@ -5,12 +5,14 @@ import { STableColumn } from '@vuesax-alpha/components/table'
 import { SInput } from '@vuesax-alpha/components/input'
 import Table from '../src/table.vue'
 import TableCore from '../src/table-core.vue'
+import { tableRenderer } from '../src/table-renderer'
 import type {
   TableColumn,
   TablePagerConfig,
   TableRow,
 } from '@vuesax-alpha/components/table'
 import type { TableExposes, TableQueryContext } from '../src/table'
+import type { TableToolbarRendererParams } from '../src/table-business'
 import type { Slot } from 'vue'
 
 const rows = [
@@ -20,7 +22,13 @@ const rows = [
 ]
 const columns: TableColumn[] = [
   { field: 'id', width: 80, fixed: 'left' },
-  { field: 'name', title: 'Name', sortable: true, editor: true },
+  {
+    field: 'name',
+    title: 'Name',
+    sortable: true,
+    editor: true,
+    slots: { default: 'projectNameCell' },
+  },
 ]
 const items = [
   {
@@ -49,6 +57,7 @@ beforeEach(() => {
   })
 })
 afterEach(() => {
+  tableRenderer.delete('$toolbarTest')
   vi.unstubAllGlobals()
   if (scrollDescriptor)
     Object.defineProperty(
@@ -81,7 +90,7 @@ describe('Table business configuration', () => {
               ],
               queryConfig: {
                 model,
-                items: [{ field: 'term', slots: { default: 'term' } }],
+                items: [{ field: 'term', slots: { default: 'businessTerm' } }],
               },
             },
             content.value,
@@ -90,7 +99,7 @@ describe('Table business configuration', () => {
     )
     try {
       content.value = {
-        'query-term': (params) => {
+        businessTerm: (params) => {
           field = params
           return [h('span', { class: 'late-query' }, String(params.value))]
         },
@@ -261,7 +270,7 @@ describe('Table business configuration', () => {
       props: { data: rows, columns },
       attrs: { class: 'business-grid', 'aria-label': 'Projects' },
       slots: {
-        'cell-name': ({ value }: { value: unknown }) =>
+        projectNameCell: ({ value }: { value: unknown }) =>
           h('strong', String(value)),
       },
     })
@@ -463,36 +472,135 @@ describe('Table business configuration', () => {
     }
   })
 
-  it('keeps configured toolbar visibility, disabled actions and refresh semantics', async () => {
+  it('renders configured left and right toolbar renderers with refresh semantics', async () => {
     const root = mount(Table, {
+      attachTo: document.body,
       props: {
         toolbarConfig: {
           title: 'Projects',
-          buttons: [
-            { code: 'add', text: 'Add' },
-            { code: 'hidden', text: 'Hidden', visible: false },
-            { code: 'blocked', text: 'Blocked', disabled: true },
+          left: [
+            {
+              itemRender: 'button',
+              props: { content: 'Add', code: 'add' },
+            },
+            {
+              itemRender: 'button',
+              props: {
+                content: 'More',
+                children: [
+                  { content: 'Delete', code: 'delete', icon: 'cb:close' },
+                ],
+              },
+            },
+            {
+              itemRender: 'button',
+              props: { content: 'Blocked', code: 'blocked', disabled: true },
+            },
+          ],
+          right: [
+            {
+              itemRender: '$refresh',
+              content: 'Reload',
+            },
           ],
         },
       },
     })
-    const buttons = root.findAll('.s-table-shell__toolbar button')
-    expect(buttons.map((button) => button.text())).toEqual([
+    const left = root.findAll('.s-table-shell__left button')
+    const right = root.findAll('.s-table-shell__right button')
+    expect(root.get('[role="toolbar"]').attributes('aria-label')).toBe(
+      'Table toolbar',
+    )
+    expect(left.map((button) => button.text())).toEqual([
       'Add',
+      'More',
       'Blocked',
-      'Refresh',
     ])
-    await buttons[0].trigger('click')
+    expect(right.map((button) => button.text())).toEqual(['Reload'])
+    await left[0].trigger('click')
     await vi.waitFor(() =>
       expect(root.emitted('toolbarClick')?.[0][0]).toBe('add'),
     )
-    expect(buttons[1].attributes('disabled')).toBeDefined()
-    await buttons[2].trigger('click')
+    await left[1].trigger('click')
+    await nextTick()
+    const deleteAction = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(
+        '.s-renderer-buttons__menu button',
+      ),
+    ).find((button) => button.textContent?.includes('Delete'))
+    expect(deleteAction).toBeDefined()
+    deleteAction!.click()
+    await vi.waitFor(() =>
+      expect(root.emitted('toolbarClick')?.at(-1)?.[0]).toBe('delete'),
+    )
+    expect(left[2].attributes('disabled')).toBeDefined()
+    await right[0].trigger('click')
     await vi.waitFor(() =>
       expect(root.emitted('query')?.[0][0]).toMatchObject({
         reason: 'refresh',
       }),
     )
+    root.unmount()
+  })
+
+  it('supports toolbar_left and toolbar_right slots in proxy mode', async () => {
+    const root = mount(Table, {
+      props: {
+        proxyConfig: {
+          autoLoad: false,
+          query: async () => ({ data: rows }),
+        },
+      },
+      slots: {
+        toolbar_left: ({ refresh }: TableExposes) =>
+          h('button', { class: 'left-action', onClick: refresh }, 'Query'),
+        toolbar_right: ({ cancelProxy }: TableExposes) =>
+          h(
+            'button',
+            { class: 'right-action', onClick: cancelProxy },
+            'Cancel',
+          ),
+      },
+    })
+    expect(root.get('.s-table-shell__left .left-action').text()).toBe('Query')
+    expect(root.get('.s-table-shell__right .right-action').text()).toBe(
+      'Cancel',
+    )
+    await root.get('.left-action').trigger('click')
+    await flushPromises()
+    expect(root.emitted('proxySuccess')).toHaveLength(1)
+    root.unmount()
+  })
+
+  it('passes Table context to globally registered toolbar renderers', async () => {
+    const clearSort = vi.fn()
+    tableRenderer.add('$toolbarTest', {
+      renderToolbar: (_options, params) => {
+        const source = params.source as TableToolbarRendererParams
+        return h(
+          'button',
+          {
+            class: 'registered-toolbar-action',
+            onClick: () => {
+              clearSort()
+              source.table.clearSort()
+            },
+          },
+          `${source.placement}:${source.context.reason}`,
+        )
+      },
+    })
+    const root = mount(Table, {
+      props: {
+        toolbarConfig: {
+          right: [{ itemRender: '$toolbarTest' }],
+        },
+      },
+    })
+    const action = root.get('.s-table-shell__right .registered-toolbar-action')
+    expect(action.text()).toBe('right:refresh')
+    await action.trigger('click')
+    expect(clearSort).toHaveBeenCalledOnce()
     root.unmount()
   })
 
@@ -504,11 +612,11 @@ describe('Table business configuration', () => {
         columns,
         queryConfig: {
           model,
-          items: [{ field: 'term', slots: { default: 'term' } }],
+          items: [{ field: 'term', slots: { default: 'businessTerm' } }],
         },
       },
       slots: {
-        'query-term': ({ value }: { value: unknown }) =>
+        businessTerm: ({ value }: { value: unknown }) =>
           h('span', { class: 'query-value' }, String(value)),
         'query-actions': ({ query }: { query: () => Promise<boolean> }) =>
           h(
@@ -521,7 +629,8 @@ describe('Table business configuration', () => {
             },
             'Find',
           ),
-        'cell-name': ({ value }: { value: unknown }) => h('b', String(value)),
+        projectNameCell: ({ value }: { value: unknown }) =>
+          h('b', String(value)),
       },
     })
     expect(root.get('.query-value').text()).toBe('custom')

@@ -30,12 +30,30 @@
   @include set-var-value('theme-dark-state-active-l', 12%);
   @include set-var-value('theme-dark-state-subtle-s', -8%);
   @include set-var-value('theme-dark-state-subtle-l', -34%);
-  @include set-var-value('color-state-hover-s', getCssVar('theme-state-hover-s'));
-  @include set-var-value('color-state-hover-l', getCssVar('theme-state-hover-l'));
-  @include set-var-value('color-state-active-s', getCssVar('theme-state-active-s'));
-  @include set-var-value('color-state-active-l', getCssVar('theme-state-active-l'));
-  @include set-var-value('color-state-subtle-s', getCssVar('theme-state-subtle-s'));
-  @include set-var-value('color-state-subtle-l', getCssVar('theme-state-subtle-l'));
+  @include set-var-value(
+    'color-state-hover-s',
+    getCssVar('theme-state-hover-s')
+  );
+  @include set-var-value(
+    'color-state-hover-l',
+    getCssVar('theme-state-hover-l')
+  );
+  @include set-var-value(
+    'color-state-active-s',
+    getCssVar('theme-state-active-s')
+  );
+  @include set-var-value(
+    'color-state-active-l',
+    getCssVar('theme-state-active-l')
+  );
+  @include set-var-value(
+    'color-state-subtle-s',
+    getCssVar('theme-state-subtle-s')
+  );
+  @include set-var-value(
+    'color-state-subtle-l',
+    getCssVar('theme-state-subtle-l')
+  );
 
   @include set-var-value(
     'theme-primary-h',
@@ -76,9 +94,16 @@
   // Kept as the legacy default consumed by existing components such as Button.
   @include set-var-value('border-radius', getCssVar(radius));
 
-  @include set-var-value('motion-duration', 0.25s);
+  // Usage-based motion scale adapted from transitions.dev. The existing
+  // unqualified duration remains the 250ms open/slide timing.
+  @include set-var-value('motion-duration-stagger', 40ms);
+  @include set-var-value('motion-duration-micro', 80ms);
+  @include set-var-value('motion-duration-quick', 150ms);
+  @include set-var-value('motion-duration', 250ms);
   @include set-var-value('motion-duration-fast', 0.18s);
-  @include set-var-value('motion-duration-slow', 0.43s);
+  @include set-var-value('motion-duration-medium', 350ms);
+  @include set-var-value('motion-duration-slow', 400ms);
+  @include set-var-value('motion-duration-emphasis', 500ms);
   @include set-var-value('motion-duration-loop', 0.7s);
   @include set-var-value('motion-duration-long', 1s);
   @include set-var-value('motion-easing', cubic-bezier(0.645, 0.045, 0.355, 1));
@@ -86,7 +111,34 @@
     'motion-easing-emphasized',
     cubic-bezier(0.23, 1, 0.32, 1)
   );
+  @include set-var-value(
+    'motion-easing-smooth-out',
+    cubic-bezier(0.22, 1, 0.36, 1)
+  );
+  @include set-var-value('motion-easing-in-out', ease-in-out);
+  @include set-var-value('motion-easing-out', ease-out);
+  @include set-var-value('motion-easing-linear', linear);
+  @include set-var-value(
+    'motion-easing-bounce',
+    cubic-bezier(0.34, 1.36, 0.64, 1)
+  );
+  @include set-var-value(
+    'motion-easing-bounce-strong',
+    cubic-bezier(0.34, 3.85, 0.64, 1)
+  );
   @include set-var-value('motion-easing-standard', ease);
+  @include set-var-value('motion-distance-micro', 4px);
+  @include set-var-value('motion-distance-small', 6px);
+  @include set-var-value('motion-distance-base', 8px);
+  @include set-var-value('motion-distance-medium', 12px);
+  @include set-var-value('motion-distance-large', 30px);
+  @include set-var-value('motion-scale-large', 0.96);
+  @include set-var-value('motion-scale-medium', 0.97);
+  @include set-var-value('motion-scale-small', 0.98);
+  @include set-var-value('motion-scale-tiny', 0.99);
+  @include set-var-value('motion-blur-small', 2px);
+  @include set-var-value('motion-blur-medium', 3px);
+  @include set-var-value('motion-blur-large', 8px);
 
   // Input surfaces stay distinct without bringing back conventional borders.
   // Primary is stored as HSL channels, so alpha tints stay in sync with themes.

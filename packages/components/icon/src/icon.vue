@@ -27,6 +27,7 @@ import { addUnit, getVsColor } from '@vuesax-alpha/utils'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { getIconData } from 'sax-design-vue-iconify'
 import { iconProps } from './icon'
+import { builtinCarbonIcons } from './builtin-carbon-icons'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
@@ -41,9 +42,13 @@ const isRolling = computed(
     props.rolling === true ||
     (typeof props.rolling === 'number' && props.rolling > 0),
 )
-const resolvedIconData = computed(
-  () => props.iconData || (props.name ? getIconData(props.name) : undefined),
-)
+const resolvedIconData = computed(() => {
+  if (props.iconData || !props.name) return props.iconData
+  const registered = getIconData(props.name)
+  if (registered) return registered
+  const [prefix, name] = props.name.split(':')
+  return prefix === 'cb' && name ? builtinCarbonIcons[name] : undefined
+})
 
 const rootStyle = computed<CSSProperties>(() => {
   const size = props.size === undefined ? '1em' : addUnit(props.size)

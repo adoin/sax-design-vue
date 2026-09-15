@@ -6,10 +6,10 @@ const rows = [
 </script>
 
 <template>
-  <s-table
-    :data="rows"
-    :column-manager-config="{ storageKey: 'sax-docs-table-columns-en-v1' }"
-  >
+  <s-table :data="rows">
+    <template #toolbar_right>
+      <s-table-column-config storage-key="sax-docs-table-columns-en-v1" />
+    </template>
     <s-table-column field="id" title="ID" :width="80" />
     <s-table-column field="name" title="Member" />
     <s-table-column field="status" title="Status" />

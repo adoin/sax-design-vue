@@ -47,10 +47,12 @@ const save = ({ rowKey, updatedRow }: TableEditEndParams) => {
         ><strong>{{ value }}</strong></template
       >
       <template #edit="{ value, setValue }"
-        ><s-input
+        ><s-textarea
           :model-value="String(value ?? '')"
-          label="任务名称"
-          block
+          aria-label="任务名称"
+          :auto-size="{ minRows: 1, maxRows: 4 }"
+          resize="none"
+          shape="square"
           @update:model-value="setValue"
       /></template>
     </s-table-column>

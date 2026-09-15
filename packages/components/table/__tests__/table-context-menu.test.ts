@@ -15,7 +15,12 @@ const data = [
   { id: 2, name: 'Beta' },
 ]
 const columns = [
-  { field: 'name', title: 'Name', editor: true },
+  {
+    field: 'name',
+    title: 'Name',
+    editor: true,
+    slots: { default: 'outerNameCell' },
+  },
   { field: 'id', title: 'ID', fixed: 'right' as const },
 ]
 const menus = {
@@ -279,7 +284,7 @@ describe('table context menus', () => {
     const wrapper = setup(
       {},
       {
-        'cell-name': () =>
+        outerNameCell: () =>
           h(Table, {
             data,
             columns,

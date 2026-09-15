@@ -3,37 +3,37 @@ description: 'Show temporary, programmatic notifications outside the main flow.'
 PROPS:
   - name: dangerous-html-string
     type: Boolean
-    values: "true | false"
+    values: 'true | false'
     description: Render string content as HTML. Only use trusted content.
     default: false
   - name: icon-size
     type: String
-    values: "CSS length"
+    values: 'CSS length'
     description: Set the notification icon size.
     default: 1.2rem
   - name: offset
     type: Number
-    values: "pixels"
+    values: 'pixels'
     description: Set the notification stack offset from the viewport edge.
     default: 0
   - name: z-index
     type: Number
-    values: "layer number"
+    values: 'layer number'
     description: Set the initial stacking order.
     default: null
   - name: show-close
     type: Boolean
-    values: "true | false"
+    values: 'true | false'
     description: Control close affordance and handle close interaction.
     default: 'true'
   - name: on-click-close
     type: Function
-    values: "close callback"
+    values: 'close callback'
     description: Control close affordance and handle close interaction.
     default: null
   - name: title
     type: String
-    values: "String"
+    values: 'String'
     description: Add a title to the notification.
     default: null
     link: null
@@ -46,7 +46,7 @@ PROPS:
       })
   - name: content
     type: String, Component
-    values: "String, VNode"
+    values: 'String, VNode'
     description: Add the content to the notification.
     default: null
     link: null
@@ -59,7 +59,7 @@ PROPS:
       })
   - name: position
     type: String
-    values: "bottom-right,top-right,top-center,top-left,bottom-left,bottom-center"
+    values: 'bottom-right,top-right,top-center,top-left,bottom-left,bottom-center'
     description: Change the position of the component.
     default: bottom-right
     link: null
@@ -73,7 +73,7 @@ PROPS:
       })
   - name: color
     type: String
-    values: "Sax Design colors, rgb, hex"
+    values: 'Sax Design colors, rgb, hex'
     description: Change the base color of the entire component.
     default: null
     link: null
@@ -87,7 +87,7 @@ PROPS:
       })
   - name: border
     type: String
-    values: "Sax Design colors, rgb, hex"
+    values: 'Sax Design colors, rgb, hex'
     description: Add a color border to the notification.
     default: null
     link: null
@@ -101,7 +101,7 @@ PROPS:
       })
   - name: icon
     type: String
-    values: "String"
+    values: 'String'
     description: Add an icon to the notification.
     default: null
     link: null
@@ -115,7 +115,7 @@ PROPS:
       })
   - name: duration
     type: Number, StringNumber
-    values: "Number, none"
+    values: 'Number, none'
     description: Determine the time until the notification is hidden (none determines not to hide).
     default: 4500 (4.5s)
     link: null
@@ -129,7 +129,7 @@ PROPS:
       })
   - name: onClick
     type: function
-    values: "function"
+    values: 'function'
     description: function that is executed by clicking on the notification.
     default: null
     link: null
@@ -145,7 +145,7 @@ PROPS:
       })
   - name: buttonClose
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: Determine if the notification has the close button.
     default: true
     link: null
@@ -159,7 +159,7 @@ PROPS:
       })
   - name: flat
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: Change the notification style to flat.
     default: false
     link: null
@@ -177,7 +177,7 @@ PROPS:
       </script>
   - name: onDestroy
     type: () => void
-    values: "Function"
+    values: 'Function'
     description: Function that is executed when the notification is destroyed.
     default: null
     link: null
@@ -195,7 +195,7 @@ PROPS:
       </script>
   - name: sticky
     type: boolean
-    values: "true,false"
+    values: 'true,false'
     description: Change the position of the notification attached to the nearest corner.
     default: false
     link: null
@@ -213,7 +213,7 @@ PROPS:
       </script>
   - name: square
     type: boolean
-    values: "true,false"
+    values: 'true,false'
     description: Determine if the notification is square and remove the border-radius.
     default: false
     link: null
@@ -231,7 +231,7 @@ PROPS:
       </script>
   - name: width
     type: String
-    values: "100%, auto"
+    values: '100%, auto'
     description: Determine the width of the notification.
     default: 340px
     link: null
@@ -249,7 +249,7 @@ PROPS:
       </script>
   - name: loading
     type: boolean
-    values: "true,false"
+    values: 'true,false'
     description: Determine if the notification has a loading animation.
     default: false
     link: null
@@ -267,7 +267,7 @@ PROPS:
       </script>
   - name: progressAuto
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: Add a progress bar to the notification.
     default: null
     link: null
@@ -285,7 +285,7 @@ PROPS:
       </script>
   - name: notPadding
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: Remove padding from notification.
     default: 20px
     link: null
@@ -303,7 +303,7 @@ PROPS:
       </script>
   - name: clickClose
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: Determine if clicking on the notification closes.
     default: false
     link: null
@@ -321,7 +321,7 @@ PROPS:
       </script>
   - name: instance.close()
     type: function
-    values: "null"
+    values: 'null'
     description: Close the notificationn.
     default: null
     link: null
@@ -343,7 +343,7 @@ PROPS:
 
   - name: custom-class
     type: String
-    values: "String"
+    values: 'String'
     description: Add a custom class to the notification.
     default: null
     link: null
@@ -673,7 +673,7 @@ Change the style of the notification with the `flat` property, having this prope
 
 ## Loading
 
-Add a loading animation to the notification, having this property will only show the animation and the content will be hidden
+Set `loading` to show the shared Sax logo loader while the notification content is hidden.
 
 <template #example>
 <notification-loading />
@@ -763,9 +763,9 @@ You can add a style to the paste component to the nearest corner with the `stick
 
 <card>
 
-## Example
+## Custom content
 
-You can do great things with this component and some others from Sax Design, to add any element within the notification we have the property `content` this property can only receive an imported component and that is what it will generate within the notification
+Create a VNode from an imported component and pass it to `content` to render custom notification content.
 
 <template #example>
 <notification-example />
@@ -779,7 +779,13 @@ You can do great things with this component and some others from Sax Design, to 
 
 <template #script>
 
-@[code{15-44}](../.vuepress/components/notification/example.vue)
+@[code{15-53}](../.vuepress/components/notification/example.vue)
+
+</template>
+
+<template #style>
+
+@[code{55-66}](../.vuepress/components/notification/example.vue)
 
 </template>
 

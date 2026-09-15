@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, shallowRef, watch } from 'vue'
 import { SButton } from '@vuesax-alpha/components/button'
-import { SCheckbox } from '@vuesax-alpha/components/checkbox'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SFocusTrap } from '@vuesax-alpha/components/focus-trap'
 import { SPopper } from '@vuesax-alpha/components/popper'
-import { SSelect } from '@vuesax-alpha/components/select'
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
-import { useId, useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
-import type { ButtonInstance } from '@vuesax-alpha/components/button'
+import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import TableColumnSetting from './table-column-setting.vue'
+import TableColumnSettingBranch from './table-column-setting-branch.vue'
 import type { VirtualListInstance } from '@vuesax-alpha/components/virtual-list'
 import type {
   ManagedColumn,
@@ -21,7 +20,6 @@ const props = defineProps<{
 }>()
 const ns = useNamespace('table')
 const shape = useShape()
-const id = useId()
 const { t } = useLocale()
 const open = shallowRef(false)
 let nestedOpen = false
@@ -37,7 +35,7 @@ const nestedVisibility = (visible: boolean) => {
 }
 onBeforeUnmount(() => clearTimeout(nestedCloseTimer))
 const canClose = () => !nestedOpen
-const trigger = shallowRef<ButtonInstance>()
+const trigger = shallowRef<HTMLButtonElement>()
 const panel = shallowRef<HTMLElement>()
 const list = shallowRef<VirtualListInstance>()
 const fixedOptions = computed(() => [
@@ -45,14 +43,68 @@ const fixedOptions = computed(() => [
   { label: t('vs.table.fixedLeftColumn'), value: 'left' },
   { label: t('vs.table.fixedRightColumn'), value: 'right' },
 ])
+const virtualizeSettings = computed(() => props.manager.settingCount.value > 20)
+const materializedColumns = computed(() =>
+  Array.from({ length: props.manager.settingCount.value }, (_, position) =>
+    props.manager.settingItemAt(position),
+  ),
+)
+interface ColumnSettingTree {
+  item: ManagedColumn
+  children: ColumnSettingTree[]
+}
+const materializedBranches = computed(() => {
+  const branches = materializedColumns.value.map<ColumnSettingTree>((item) => ({
+    item,
+    children: [],
+  }))
+  const byKey = new Map(branches.map((branch) => [branch.item.key, branch]))
+  const roots: ColumnSettingTree[] = []
+  branches.forEach((branch) => {
+    const parent = branch.item.parentKey
+      ? byKey.get(branch.item.parentKey)
+      : undefined
+    if (parent?.item.group) parent.children.push(branch)
+    else roots.push(branch)
+  })
+  return roots
+})
+const branchRootIndexByPosition = computed(() => {
+  const result = new Map<number, number>()
+  const visit = (branch: ColumnSettingTree, rootIndex: number) => {
+    result.set(branch.item.position, rootIndex)
+    branch.children.forEach((child) => visit(child, rootIndex))
+  }
+  materializedBranches.value.forEach(visit)
+  return result
+})
+const virtualIndexForPosition = (position: number) =>
+  props.manager.hasGroups.value
+    ? (branchRootIndexByPosition.value.get(position) ?? 0)
+    : position
+const branchAt = (index: number) => materializedBranches.value[index]
+const branchKeyAt = (index: number) =>
+  materializedBranches.value[index]?.item.key ?? String(index)
+const virtualContentReady = shallowRef(false)
+const panelContentReady = computed(
+  () => !virtualizeSettings.value || virtualContentReady.value,
+)
+const markVirtualContentReady = () => {
+  if (virtualContentReady.value) return
+  nextTick(() =>
+    requestAnimationFrame(() => {
+      virtualContentReady.value = true
+    }),
+  )
+}
 const itemKeyAt = (position: number) =>
-  props.manager.keyAt(props.manager.layout.value.sourceAt(position))
+  props.manager.settingItemAt(position).key
 let restoreTriggerFocus = false
 const close = () => {
   restoreTriggerFocus = true
   open.value = false
 }
-const toggleFromKeyboard = () => {
+const togglePanel = () => {
   if (props.disabled) return
   if (open.value) close()
   else {
@@ -63,10 +115,12 @@ const toggleFromKeyboard = () => {
 const afterHide = () => {
   // The popper may retain its trapped content until the leave transition ends.
   if (restoreTriggerFocus && !open.value && !props.disabled)
-    trigger.value?.$el.focus()
+    trigger.value?.focus()
   restoreTriggerFocus = false
 }
-const focusPanel = () => panel.value?.focus()
+const focusPanel = () => {
+  if (panelContentReady.value) panel.value?.focus({ preventScroll: true })
+}
 const allowOutsidePointerFocus = (event: CustomEvent) => {
   // Let the shared popper close on outside clicks without pulling focus back.
   if (
@@ -79,77 +133,296 @@ const page = async (event: KeyboardEvent, direction: -1 | 1) => {
   const row = (event.target as HTMLElement).closest<HTMLElement>(
     '[data-column-key]',
   )
-  const index = row?.dataset.columnKey
-    ? props.manager.indexForKey(row.dataset.columnKey)
+  const position = row?.dataset.columnKey
+    ? props.manager.settingIndexForKey(row.dataset.columnKey)
     : 0
-  const position = props.manager.layout.value.positionOf(index)
   const next = Math.max(
     0,
-    Math.min(props.manager.count.value - 1, position + direction * 5),
+    Math.min(props.manager.settingCount.value - 1, position + direction * 5),
   )
-  list.value?.scrollToIndex(next, 'start')
+  if (virtualizeSettings.value)
+    list.value?.scrollToIndex(virtualIndexForPosition(next), 'start')
   await nextTick()
   const key = itemKeyAt(next)
   const target = Array.from(
     panel.value?.querySelectorAll<HTMLElement>('[data-column-key]') ?? [],
   ).find((element) => element.dataset.columnKey === key)
+  if (!virtualizeSettings.value)
+    target?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
   target?.querySelector<HTMLElement>('input')?.focus()
 }
-const move = async (item: ManagedColumn, direction: -1 | 1) => {
-  const action = direction === -1 ? 'up' : 'down'
-  props.manager.move(item.key, direction)
+type ColumnDropPlacement = 'before' | 'inside' | 'after'
+interface ColumnDragSession {
+  key: string
+  from: number
+  target?: number
+  placement: ColumnDropPlacement
+  keyboard: boolean
+}
+const dragSession = shallowRef<ColumnDragSession>()
+const dragAnnouncement = shallowRef<'grabbed' | 'moved' | 'cancelled' | ''>('')
+let dragCleanup: (() => void) | undefined
+const clearDrag = () => {
+  dragCleanup?.()
+  dragCleanup = undefined
+  dragSession.value = undefined
+}
+const focusDragHandle = async (key: string) => {
   await nextTick()
-  const position = props.manager.layout.value.positionOf(item.index)
-  list.value?.scrollToIndex(position, 'auto')
+  const position = props.manager.settingIndexForKey(key)
+  if (virtualizeSettings.value)
+    list.value?.scrollToIndex(virtualIndexForPosition(position), 'auto')
   await nextTick()
   const row = Array.from(
     panel.value?.querySelectorAll<HTMLElement>('[data-column-key]') ?? [],
-  ).find((element) => element.dataset.columnKey === item.key)
-  const button = row?.querySelector<HTMLButtonElement>(
-    `button[data-action="${action}"]:not(:disabled)`,
-  )
-  ;(button ?? row?.querySelector<HTMLElement>('input') ?? panel.value)?.focus()
+  ).find((element) => element.dataset.columnKey === key)
+  if (!virtualizeSettings.value)
+    row?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
+  ;(
+    row?.querySelector<HTMLButtonElement>(
+      `.${ns.e('column-drag-handle')}:not(:disabled)`,
+    ) ?? panel.value
+  )?.focus()
 }
+const cancelDrag = () => {
+  const current = dragSession.value
+  clearDrag()
+  if (!current) return
+  dragAnnouncement.value = 'cancelled'
+  focusDragHandle(current.key)
+}
+const dropColumn = () => {
+  const current = dragSession.value
+  clearDrag()
+  if (!current) return
+  const moved =
+    current.target !== undefined &&
+    props.manager.moveSetting(current.key, current.target, current.placement)
+  dragAnnouncement.value = moved ? 'moved' : 'cancelled'
+  focusDragHandle(current.key)
+}
+const beginDrag = (item: ManagedColumn, keyboard: boolean) => {
+  if (props.disabled) return false
+  clearDrag()
+  dragSession.value = {
+    key: item.key,
+    from: item.position,
+    placement: 'before',
+    keyboard,
+  }
+  dragAnnouncement.value = 'grabbed'
+  if (keyboard) panel.value?.focus({ preventScroll: true })
+  return true
+}
+const chooseDropTarget = (target: number, placement: ColumnDropPlacement) => {
+  const current = dragSession.value
+  if (!current || target < 0 || target >= props.manager.settingCount.value)
+    return
+  dragSession.value = {
+    ...current,
+    target: target === current.from ? undefined : target,
+    placement,
+  }
+}
+const startPointerDrag = (event: PointerEvent, item: ManagedColumn) => {
+  if (
+    event.button !== 0 ||
+    event.isPrimary === false ||
+    !beginDrag(item, false) ||
+    !panel.value
+  )
+    return
+  event.preventDefault()
+  event.stopPropagation()
+  const root = panel.value
+  const doc = root.ownerDocument
+  const win = doc.defaultView!
+  const scroller = root.querySelector<HTMLElement>(
+    `.${ns.e('column-settings-list')}, .s-vl__window`,
+  )
+  const pointerId = event.pointerId
+  const startX = event.clientX
+  const startY = event.clientY
+  let x = startX
+  let y = startY
+  let moved = false
+  let frame = 0
+  const hit = () => {
+    const current = dragSession.value
+    if (!current || !moved) return
+    const element = doc
+      .elementFromPoint(x, y)
+      ?.closest<HTMLElement>('[data-column-position]')
+    if (!element || !root.contains(element)) {
+      dragSession.value = { ...current, target: undefined }
+      return
+    }
+    const target = Number(element.dataset.columnPosition)
+    const box = element.getBoundingClientRect()
+    const ratio = (y - box.top) / Math.max(1, box.height)
+    const targetItem = props.manager.settingItemAt(target)
+    chooseDropTarget(
+      target,
+      targetItem.group && ratio >= 0.25 && ratio <= 0.75
+        ? 'inside'
+        : ratio < 0.5
+          ? 'before'
+          : 'after',
+    )
+  }
+  const tick = () => {
+    if (!dragSession.value) return
+    if (moved && scroller) {
+      const box = scroller.getBoundingClientRect()
+      const threshold = Math.min(36, box.height / 3)
+      const delta =
+        y < box.top + threshold
+          ? -12 * Math.min(1, (box.top + threshold - y) / threshold)
+          : y > box.bottom - threshold
+            ? 12 * Math.min(1, (y - box.bottom + threshold) / threshold)
+            : 0
+      if (delta) scroller.scrollTop += delta
+    }
+    hit()
+    frame = win.requestAnimationFrame(tick)
+  }
+  const movePointer = (moveEvent: PointerEvent) => {
+    if (moveEvent.pointerId !== pointerId) return
+    x = moveEvent.clientX
+    y = moveEvent.clientY
+    moved ||= Math.hypot(x - startX, y - startY) >= 3
+  }
+  const endPointer = (upEvent: PointerEvent) => {
+    if (upEvent.pointerId !== pointerId) return
+    movePointer(upEvent)
+    hit()
+    dropColumn()
+  }
+  const cancelPointer = (cancelEvent: PointerEvent) => {
+    if (cancelEvent.pointerId === pointerId) cancelDrag()
+  }
+  const cancelFromKeyboard = (keyEvent: KeyboardEvent) => {
+    if (keyEvent.key === 'Escape') {
+      keyEvent.preventDefault()
+      cancelDrag()
+    }
+  }
+  const cancelFromWindow = () => cancelDrag()
+  doc.addEventListener('pointermove', movePointer)
+  doc.addEventListener('pointerup', endPointer)
+  doc.addEventListener('pointercancel', cancelPointer)
+  doc.addEventListener('keydown', cancelFromKeyboard)
+  win.addEventListener('blur', cancelFromWindow)
+  root.setPointerCapture?.(pointerId)
+  frame = win.requestAnimationFrame(tick)
+  dragCleanup = () => {
+    win.cancelAnimationFrame(frame)
+    doc.removeEventListener('pointermove', movePointer)
+    doc.removeEventListener('pointerup', endPointer)
+    doc.removeEventListener('pointercancel', cancelPointer)
+    doc.removeEventListener('keydown', cancelFromKeyboard)
+    win.removeEventListener('blur', cancelFromWindow)
+    if (root.hasPointerCapture?.(pointerId))
+      root.releasePointerCapture(pointerId)
+  }
+}
+const handleDragKeydown = (event: KeyboardEvent, item?: ManagedColumn) => {
+  if (event.isComposing || event.defaultPrevented) return
+  if (event.key === ' ' || event.key === 'Enter') {
+    if (!dragSession.value && !item) return
+    event.preventDefault()
+    event.stopPropagation()
+    if (dragSession.value?.keyboard) dropColumn()
+    else if (item) beginDrag(item, true)
+    return
+  }
+  const current = dragSession.value
+  if (
+    !current?.keyboard ||
+    !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)
+  )
+    return
+  event.preventDefault()
+  event.stopPropagation()
+  if (event.key === 'ArrowRight') {
+    if (current.target === undefined) return
+    const targetItem = props.manager.settingItemAt(current.target)
+    if (targetItem.group) chooseDropTarget(current.target, 'inside')
+    return
+  }
+  if (event.key === 'ArrowLeft') {
+    const source = props.manager.settingItemAt(current.from)
+    if (!source.parentKey) return
+    const parentPosition = props.manager.settingIndexForKey(source.parentKey)
+    if (parentPosition >= 0) chooseDropTarget(parentPosition, 'after')
+    return
+  }
+  const direction = event.key === 'ArrowUp' ? -1 : 1
+  const target = (current.target ?? current.from) + direction
+  if (target < 0 || target >= props.manager.settingCount.value) return
+  chooseDropTarget(target, direction < 0 ? 'before' : 'after')
+  if (virtualizeSettings.value)
+    list.value?.scrollToIndex(virtualIndexForPosition(target), 'auto')
+  else
+    nextTick(() =>
+      panel.value
+        ?.querySelector<HTMLElement>(`[data-column-position="${target}"]`)
+        ?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' }),
+    )
+}
+const closeOrCancelDrag = () => {
+  if (dragSession.value) cancelDrag()
+  else close()
+}
+onBeforeUnmount(clearDrag)
 watch(
   () => props.disabled,
   (value) => {
-    if (value) open.value = false
+    if (value) {
+      clearDrag()
+      open.value = false
+    }
   },
 )
+watch(panelContentReady, (ready) => {
+  if (ready && open.value) focusPanel()
+})
 </script>
 
 <template>
   <div :class="ns.e('column-manager')">
     <SPopper
       v-model:visible="open"
-      trigger="click"
+      :trigger="[]"
       placement="bottom-end"
+      animation="none"
       :disabled="disabled"
       :show-arrow="false"
       :offset="8"
       :hide-after="0"
+      persistent
       :shift="{ padding: 8, crossAxis: true }"
       :process-before-close="canClose"
       :popper-class="[
         ns.e('column-panel'),
         ns.is('square', shape === 'square'),
+        ns.is('content-pending', !panelContentReady),
       ]"
       @show="focusPanel"
       @hide="afterHide"
     >
-      <SButton
+      <button
         ref="trigger"
-        type="flat"
-        size="small"
+        type="button"
+        :class="ns.e('column-manager-trigger')"
         :disabled="disabled"
         :aria-expanded="open"
         aria-haspopup="dialog"
-        @keydown.enter.stop.prevent="toggleFromKeyboard"
-        @keydown.space.stop.prevent="toggleFromKeyboard"
+        @click="togglePanel"
       >
         <SIcon name="cb:settings" aria-hidden="true" />
         {{ t('vs.table.columnSettings') }}
-      </SButton>
+      </button>
       <template #content>
         <SFocusTrap
           :trapped="open"
@@ -163,97 +436,124 @@ watch(
             tabindex="-1"
             role="dialog"
             :aria-label="t('vs.table.columnSettings')"
-            @keydown.esc.stop.prevent="close"
+            @keydown="handleDragKeydown($event)"
+            @keydown.esc.stop.prevent="closeOrCancelDrag"
             @keydown.page-up.stop.prevent="page($event, -1)"
             @keydown.page-down.stop.prevent="page($event, 1)"
           >
             <div :class="ns.e('column-panel-title')">
               {{ t('vs.table.columnSettings') }}
             </div>
+            <div
+              v-if="!virtualizeSettings"
+              :class="ns.e('column-settings-list')"
+            >
+              <template v-if="manager.hasGroups.value">
+                <TableColumnSettingBranch
+                  v-for="branch in materializedBranches"
+                  :key="branch.item.key"
+                  :branch="branch"
+                  :manager="manager"
+                  :fixed-options="fixedOptions"
+                  :disabled="disabled"
+                  :drag-key="dragSession?.key"
+                  :drop-target="dragSession?.target"
+                  :drop-placement="dragSession?.placement ?? 'before'"
+                  @nested-visibility="nestedVisibility"
+                  @pointerdown="startPointerDrag"
+                  @keydown="handleDragKeydown"
+                />
+              </template>
+              <template v-else>
+                <TableColumnSetting
+                  v-for="item in materializedColumns"
+                  :key="item.key"
+                  :item="item"
+                  :manager="manager"
+                  :fixed-options="fixedOptions"
+                  :disabled="disabled"
+                  :drag-key="dragSession?.key"
+                  :drop-target="dragSession?.target"
+                  :drop-placement="dragSession?.placement ?? 'before'"
+                  @nested-visibility="nestedVisibility"
+                  @pointerdown="startPointerDrag"
+                  @keydown="handleDragKeydown"
+                />
+              </template>
+            </div>
             <SVirtualList
+              v-else-if="manager.hasGroups.value"
               ref="list"
-              :count="manager.count.value"
-              :item-at="manager.itemAt"
+              :count="materializedBranches.length"
+              :item-at="branchAt"
+              :item-key-at="branchKeyAt"
+              :height="Math.min(280, manager.settingCount.value * 56)"
+              :estimate-size="168"
+              dynamic
+              :overscan="1"
+              @range-change="markVirtualContentReady"
+            >
+              <template #default="{ item }">
+                <TableColumnSettingBranch
+                  :branch="item as ColumnSettingTree"
+                  :manager="manager"
+                  :fixed-options="fixedOptions"
+                  :disabled="disabled"
+                  :drag-key="dragSession?.key"
+                  :drop-target="dragSession?.target"
+                  :drop-placement="dragSession?.placement ?? 'before'"
+                  @nested-visibility="nestedVisibility"
+                  @pointerdown="startPointerDrag"
+                  @keydown="handleDragKeydown"
+                />
+              </template>
+            </SVirtualList>
+            <SVirtualList
+              v-else
+              ref="list"
+              :count="manager.settingCount.value"
+              :item-at="manager.settingItemAt"
               :item-key-at="itemKeyAt"
-              :height="Math.min(280, manager.count.value * 56)"
+              :height="Math.min(280, manager.settingCount.value * 56)"
               :estimate-size="56"
               :dynamic="false"
               :overscan="2"
+              @range-change="markVirtualContentReady"
             >
               <template #default="{ item }">
-                <div
-                  :class="ns.e('column-setting')"
-                  :data-column-key="(item as ManagedColumn).key"
-                >
-                  <SCheckbox
-                    :model-value="!(item as ManagedColumn).hidden"
-                    :disabled="disabled"
-                    :label="(item as ManagedColumn).title"
-                    :title="(item as ManagedColumn).title"
-                    @update:model-value="
-                      manager.update((item as ManagedColumn).key, {
-                        hidden: !$event,
-                      })
-                    "
-                  />
-                  <label
-                    :class="ns.e('column-setting-label')"
-                    :for="`${id}-${(item as ManagedColumn).index}`"
-                    >{{
-                      t('vs.table.pinColumn', {
-                        column: (item as ManagedColumn).title,
-                      })
-                    }}</label
-                  >
-                  <SSelect
-                    :id="`${id}-${(item as ManagedColumn).index}`"
-                    :model-value="(item as ManagedColumn).fixed || 'none'"
-                    :options="fixedOptions"
-                    :disabled="disabled"
-                    @visible-change="nestedVisibility"
-                    @update:model-value="
-                      manager.update((item as ManagedColumn).key, {
-                        fixed:
-                          $event === 'left' || $event === 'right'
-                            ? $event
-                            : false,
-                      })
-                    "
-                  />
-                  <SButton
-                    v-for="direction in [-1, 1] as const"
-                    :key="direction"
-                    icon
-                    :debounce="false"
-                    type="flat"
-                    size="small"
-                    :data-action="direction === -1 ? 'up' : 'down'"
-                    :disabled="
-                      disabled ||
-                      (item as ManagedColumn).position + direction < 0 ||
-                      (item as ManagedColumn).position + direction >=
-                        manager.count.value
-                    "
-                    :aria-label="
-                      t(
-                        direction === -1
-                          ? 'vs.table.moveColumnUp'
-                          : 'vs.table.moveColumnDown',
-                        { column: (item as ManagedColumn).title },
-                      )
-                    "
-                    @click="move(item as ManagedColumn, direction)"
-                  >
-                    <SIcon
-                      :name="
-                        direction === -1 ? 'cb:chevron-up' : 'cb:chevron-down'
-                      "
-                      aria-hidden="true"
-                    />
-                  </SButton>
-                </div>
+                <TableColumnSetting
+                  :item="item as ManagedColumn"
+                  :manager="manager"
+                  :fixed-options="fixedOptions"
+                  :disabled="disabled"
+                  :drag-key="dragSession?.key"
+                  :drop-target="dragSession?.target"
+                  :drop-placement="dragSession?.placement ?? 'before'"
+                  @nested-visibility="nestedVisibility"
+                  @pointerdown="startPointerDrag"
+                  @keydown="handleDragKeydown"
+                />
               </template>
             </SVirtualList>
+            <span
+              :class="ns.e('column-drag-status')"
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              >{{
+                dragSession?.target !== undefined
+                  ? dragSession.placement === 'inside'
+                    ? t('vs.table.dragColumnInside', {
+                        column: manager.settingItemAt(dragSession.target).title,
+                      })
+                    : t('vs.table.dragColumnTarget', {
+                        position: dragSession.target + 1,
+                      })
+                  : dragAnnouncement
+                    ? t(`vs.table.columnDragStatus.${dragAnnouncement}`)
+                    : ''
+              }}</span
+            >
             <div :class="ns.e('column-panel-actions')">
               <SButton
                 type="flat"

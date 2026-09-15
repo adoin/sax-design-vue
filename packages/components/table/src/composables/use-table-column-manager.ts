@@ -1,11 +1,12 @@
 import { computed, onMounted, shallowRef, watch } from 'vue'
 import { createColumnLayout } from './column-layout'
+import { applyTableColumnState, flattenTableColumns } from './table-column-tree'
 import type { ComputedRef } from 'vue'
 import type {
   TableColumn,
   TableColumnState,
+  TableCoreEmitFn,
   TableCoreProps,
-  TableEmitFn,
 } from '../table'
 
 export interface ManagedColumn {
@@ -15,6 +16,11 @@ export interface ManagedColumn {
   title: string
   hidden: boolean
   fixed: false | 'left' | 'right'
+  group: boolean
+  depth: number
+  parentKey: string | null
+  siblingIndex: number
+  childCount: number
 }
 
 export function normalizeColumnState(value: unknown): TableColumnState[] {
@@ -28,6 +34,17 @@ export function normalizeColumnState(value: unknown): TableColumnState[] {
       state.order = entry.order
     if ([true, false, 'left', 'right'].includes(entry.fixed))
       state.fixed = entry.fixed
+    if (
+      entry.placement &&
+      (entry.placement.parentKey === null ||
+        typeof entry.placement.parentKey === 'string') &&
+      Number.isInteger(entry.placement.index) &&
+      entry.placement.index >= 0
+    )
+      state.placement = {
+        parentKey: entry.placement.parentKey,
+        index: entry.placement.index,
+      }
     unique.set(state.key, state)
   }
   return [...unique.values()]
@@ -35,21 +52,22 @@ export function normalizeColumnState(value: unknown): TableColumnState[] {
 
 export function useTableColumnManager(
   props: TableCoreProps,
-  emit: TableEmitFn,
-  columns: ComputedRef<TableColumn[]>,
+  emit: TableCoreEmitFn,
+  columnDefinitions: ComputedRef<TableColumn[]>,
 ) {
+  let resetWidths: () => void = () => undefined
   const localState = shallowRef<TableColumnState[]>([])
   const mounted = shallowRef(false)
-  const config = computed(() =>
-    typeof props.columnManagerConfig === 'object'
-      ? props.columnManagerConfig
-      : {},
-  )
-  const enabled = computed(
-    () => props.columnManagerConfig !== false && config.value.enabled !== false,
-  )
   const state = computed(() =>
     normalizeColumnState(props.columnState ?? localState.value),
+  )
+  const effectiveColumns = computed(() =>
+    applyTableColumnState(columnDefinitions.value, state.value),
+  )
+  const columnTree = computed(() => flattenTableColumns(effectiveColumns.value))
+  const emptyColumns: TableColumn[] = []
+  const columns = computed(() =>
+    props.virtualSource ? emptyColumns : columnTree.value.leaves,
   )
   const count = computed(() =>
     props.virtualSource
@@ -68,6 +86,15 @@ export function useTableColumnManager(
       columns.value.forEach((_, index) => map.set(keyAt(index), index))
     return map
   })
+  const nodeByKey = computed(
+    () => new Map(columnTree.value.nodes.map((node) => [node.key, node])),
+  )
+  const hasGroups = computed(() =>
+    columnTree.value.nodes.some((node) => node.group),
+  )
+  const settingCount = computed(() =>
+    props.virtualSource ? count.value : columnTree.value.nodes.length,
+  )
   const indexForKey = (key: string) =>
     props.virtualSource
       ? /^(0|[1-9]\d*)$/.test(key)
@@ -122,6 +149,7 @@ export function useTableColumnManager(
   const itemAt = (position: number): ManagedColumn => {
     const index = layout.value.sourceAt(position)
     const column = columnAt(index)
+    const node = nodeByKey.value.get(keyAt(index))
     return {
       key: keyAt(index),
       index,
@@ -129,22 +157,55 @@ export function useTableColumnManager(
       title: String(column?.title ?? column?.field ?? index + 1),
       hidden: layout.value.hidden.has(index),
       fixed: layout.value.fixedOf(index),
+      group: false,
+      depth: node?.depth ?? 0,
+      parentKey: node?.parentKey ?? null,
+      siblingIndex: node?.siblingIndex ?? position,
+      childCount: 0,
     }
   }
-  const visibleColumns = computed(() => {
-    if (props.virtualSource || !state.value.length) return columns.value
+  const settingItemAt = (position: number): ManagedColumn => {
+    if (props.virtualSource) return itemAt(position)
+    const node = columnTree.value.nodes[position]
+    if (!node) return itemAt(position)
+    const fixed = node.group
+      ? node.column.fixed === true
+        ? 'left'
+        : node.column.fixed || false
+      : layout.value.fixedOf(node.leafIndex)
+    return {
+      key: node.key,
+      index: node.leafIndex,
+      position,
+      title: String(node.column.title ?? node.column.field ?? position + 1),
+      hidden: node.group ? false : layout.value.hidden.has(node.leafIndex),
+      fixed,
+      group: node.group,
+      depth: node.depth,
+      parentKey: node.parentKey,
+      siblingIndex: node.siblingIndex,
+      childCount: node.childKeys.length,
+    }
+  }
+  const settingIndexForKey = (key: string) =>
+    props.virtualSource
+      ? layout.value.positionOf(indexForKey(key))
+      : columnTree.value.nodes.findIndex((node) => node.key === key)
+  const resolveVisibleColumns = (source: TableColumn[]) => {
+    if (props.virtualSource || !state.value.length) return source
     const result: TableColumn[] = []
     for (let position = 0; position < count.value; position++) {
       const index = layout.value.sourceAt(position)
       if (!layout.value.hidden.has(index))
         result.push({
-          ...columns.value[index],
+          ...source[index],
           key: keyAt(index),
           fixed: layout.value.fixedOf(index),
         })
     }
     return result
-  })
+  }
+  const visibleColumns = computed(() => resolveVisibleColumns(columns.value))
   const commit = (next: TableColumnState[]) => {
     if (props.loading) return
     if (props.columnState === undefined) localState.value = next
@@ -155,17 +216,35 @@ export function useTableColumnManager(
     key: string,
     patch: Omit<Partial<TableColumnState>, 'key'>,
   ) => {
-    if (indexForKey(key) < 0 || indexForKey(key) >= count.value) return
+    if (
+      props.virtualSource
+        ? indexForKey(key) < 0 || indexForKey(key) >= count.value
+        : !nodeByKey.value.has(key)
+    )
+      return
     const entries = new Map(state.value.map((entry) => [entry.key, entry]))
     entries.set(key, { ...entries.get(key), ...patch, key })
     commit(normalizeColumnState([...entries.values()]))
   }
-  const move = (key: string, direction: -1 | 1) => {
+  const moveTo = (
+    key: string,
+    targetPosition: number,
+    placement: 'before' | 'after' = 'before',
+  ) => {
     const index = indexForKey(key)
     const position = layout.value.positionOf(index)
-    const other = layout.value.sourceAt(position + direction)
-    if (index < 0 || other < 0) return
-    // Preserve collision-resolved positions before swapping two neighboring slots.
+    if (
+      index < 0 ||
+      position < 0 ||
+      targetPosition < 0 ||
+      targetPosition >= count.value
+    )
+      return false
+    let destination = targetPosition + (placement === 'after' ? 1 : 0)
+    if (position < destination) destination--
+    destination = Math.max(0, Math.min(count.value - 1, destination))
+    if (destination === position) return false
+    // Resolve sparse collisions before assigning the affected insertion range.
     const entries = new Map(
       state.value.map((entry) => [
         entry.key,
@@ -177,20 +256,95 @@ export function useTableColumnManager(
             },
       ]),
     )
-    entries.set(key, { ...entries.get(key), key, order: position + direction })
-    const otherKey = keyAt(other)
-    entries.set(otherKey, {
-      ...entries.get(otherKey),
-      key: otherKey,
-      order: position,
-    })
+    const direction = destination > position ? 1 : -1
+    entries.set(key, { ...entries.get(key), key, order: destination })
+    for (
+      let current = position + direction;
+      direction > 0 ? current <= destination : current >= destination;
+      current += direction
+    ) {
+      const shiftedIndex = layout.value.sourceAt(current)
+      if (shiftedIndex < 0) continue
+      const shiftedKey = keyAt(shiftedIndex)
+      entries.set(shiftedKey, {
+        ...entries.get(shiftedKey),
+        key: shiftedKey,
+        order: current - direction,
+      })
+    }
     commit([...entries.values()])
+    return true
+  }
+  const move = (key: string, direction: -1 | 1) => {
+    const index = indexForKey(key)
+    const position = layout.value.positionOf(index)
+    return moveTo(
+      key,
+      position + direction,
+      direction === -1 ? 'before' : 'after',
+    )
+  }
+  const moveSetting = (
+    key: string,
+    targetPosition: number,
+    placement: 'before' | 'inside' | 'after',
+  ) => {
+    if (props.virtualSource || !hasGroups.value) {
+      if (placement === 'inside') return false
+      const target = settingItemAt(targetPosition)
+      return moveTo(key, target.position, placement)
+    }
+    const source = nodeByKey.value.get(key)
+    const target = columnTree.value.nodes[targetPosition]
+    if (!source || !target || source.key === target.key) return false
+    const parentKey = placement === 'inside' ? target.key : target.parentKey
+    if (placement === 'inside' && !target.group) return false
+    let cursor = parentKey
+    while (cursor) {
+      if (cursor === source.key) return false
+      cursor = nodeByKey.value.get(cursor)?.parentKey ?? null
+    }
+    let index =
+      placement === 'inside'
+        ? target.childKeys.length
+        : target.siblingIndex + (placement === 'after' ? 1 : 0)
+    if (source.parentKey === parentKey && source.siblingIndex < index) index--
+    if (source.parentKey === parentKey && source.siblingIndex === index)
+      return false
+    const entries = new Map(state.value.map((entry) => [entry.key, entry]))
+    const previous = entries.get(key)
+    entries.set(key, {
+      ...previous,
+      key,
+      order: undefined,
+      placement: { parentKey, index },
+    })
+    commit(normalizeColumnState([...entries.values()]))
+    return true
   }
   let loadedKey: string | undefined
   let restoredState: TableColumnState[] | undefined
-  const storageKey = computed(() => config.value.storageKey)
+  const storageBindings = shallowRef(new Map<symbol, string>())
+  const storageKey = computed(() => {
+    const values = [...storageBindings.value.values()]
+    return values[values.length - 1]
+  })
+  const setStorageKey = (owner: symbol, key?: string) => {
+    const next = new Map(storageBindings.value)
+    if (key) next.set(owner, key)
+    else next.delete(owner)
+    storageBindings.value = next
+  }
+  const setResetWidths = (reset: () => void) => {
+    resetWidths = reset
+  }
   const restore = () => {
     if (!mounted.value || typeof window === 'undefined') return
+    if (!storageKey.value) {
+      loadedKey = undefined
+      restoredState = undefined
+      return
+    }
     const changedKey = loadedKey !== storageKey.value
     loadedKey = storageKey.value
     if (changedKey && props.columnState === undefined) {
@@ -238,18 +392,32 @@ export function useTableColumnManager(
     { deep: true, flush: 'post' },
   )
   return {
-    enabled,
     state,
+    effectiveColumns,
+    columnTree,
+    columns,
     count,
+    settingCount,
+    hasGroups,
     layout,
     keyAt,
     indexForKey,
     columnAt,
     customizedSelectionColumns,
     itemAt,
+    settingItemAt,
+    settingIndexForKey,
     visibleColumns,
+    resolveVisibleColumns,
     update,
     move,
-    reset: () => commit([]),
+    moveTo,
+    moveSetting,
+    setStorageKey,
+    setResetWidths,
+    reset: () => {
+      commit([])
+      resetWidths()
+    },
   }
 }

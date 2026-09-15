@@ -16,9 +16,9 @@ import type { TableRowUpdate } from '../change-batch'
 import type { TableHistoryAction } from './use-table-history'
 import type { TableDataNode } from '../change-data'
 import type {
+  TableCoreEmitFn,
   TableCoreProps,
   TableEditRecord,
-  TableEmitFn,
   TableRow,
   TableRowKey,
 } from '../table'
@@ -38,7 +38,7 @@ interface ChangeOptions {
 
 export function useTableChanges(
   props: TableCoreProps,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   options: ChangeOptions,
 ) {
   const config = computed(() =>
@@ -57,7 +57,7 @@ export function useTableChanges(
     const key =
       typeof props.rowKey === 'function'
         ? props.rowKey(row, -1)
-        : row[props.rowKey]
+        : (row as Record<string, unknown>)[props.rowKey]
     if (!validTableDataKey(key))
       throw new TypeError('Change tracking requires stable row keys')
     return key
@@ -230,7 +230,7 @@ export function useTableChanges(
           const keyValue = (value: TableRow) =>
             typeof props.rowKey === 'function'
               ? props.rowKey(value, index)
-              : value[props.rowKey]
+              : (value as Record<string, unknown>)[props.rowKey]
           if (
             props.virtualSource?.rowKey
               ? keyValue(after) !== keyValue(before)

@@ -1,24 +1,25 @@
 <script setup lang="ts">
-import { computed, h, shallowRef } from 'vue'
+import { computed, shallowRef } from 'vue'
 import { useRoute } from 'vue-router'
-import type {
-  TableCellRenderParams,
-  TableColumn,
-  TableRow,
-} from 'sax-design-vue'
+import type { TableColumn, TableRow } from 'sax-design-vue'
 
 const route = useRoute()
 const isZh = computed(() => route.path.startsWith('/zh/'))
 const value = shallowRef<string>()
 
 const columns = computed<TableColumn[]>(() => [
-  { field: 'name', title: isZh.value ? '服务' : 'Service', minWidth: 180 },
+  {
+    field: 'name',
+    title: isZh.value ? '服务' : 'Service',
+    minWidth: 180,
+    slots: { default: 'serviceNameCell' },
+  },
   { field: 'owner', title: isZh.value ? '负责人' : 'Owner', minWidth: 120 },
   {
     field: 'status',
     title: isZh.value ? '状态' : 'Status',
     minWidth: 110,
-    renderer: 'status',
+    slots: { default: 'status' },
   },
 ])
 const data = computed<TableRow[]>(() => [
@@ -41,20 +42,6 @@ const data = computed<TableRow[]>(() => [
     status: 'healthy',
   },
 ])
-const renderers = {
-  status: ({ value }: TableCellRenderParams) =>
-    h(
-      'span',
-      { class: ['status', `is-${String(value)}`] },
-      String(value) === 'healthy'
-        ? isZh.value
-          ? '正常'
-          : 'Healthy'
-        : isZh.value
-          ? '关注'
-          : 'Warning',
-    ),
-}
 const popupConfig = { width: 520, maxHeight: 340 }
 </script>
 
@@ -64,7 +51,6 @@ const popupConfig = { width: 520, maxHeight: 340 }
       v-model="value"
       :data="data"
       :columns="columns"
-      :renderers="renderers"
       :popup-config="popupConfig"
       label-key="name"
       clearable
@@ -77,10 +63,23 @@ const popupConfig = { width: 520, maxHeight: 340 }
           {{ row.name }} · {{ row.owner }}
         </span>
       </template>
-      <template #cell-name="{ row }">
+      <template #serviceNameCell="{ row }">
         <span class="service-name">
           <s-icon name="cb:cube" />
           {{ row.name }}
+        </span>
+      </template>
+      <template #status="{ value: cellValue }">
+        <span :class="['status', `is-${String(cellValue)}`]">
+          {{
+            String(cellValue) === 'healthy'
+              ? isZh
+                ? '正常'
+                : 'Healthy'
+              : isZh
+                ? '关注'
+                : 'Warning'
+          }}
         </span>
       </template>
     </s-table-select>

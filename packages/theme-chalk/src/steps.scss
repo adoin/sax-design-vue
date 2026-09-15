@@ -213,7 +213,12 @@ button.s-steps__trigger {
 }
 
 .s-steps__item--loading .s-steps__marker {
-  animation: s-steps-loading-pulse 1.35s ease-in-out infinite;
+  background: getColor(background);
+
+  .s-logo-loading {
+    width: 72%;
+    height: 72%;
+  }
 }
 
 .s-steps__item.is-clickable:hover .s-steps__marker {
@@ -458,24 +463,5 @@ button.s-steps__trigger {
   .s-steps__marker,
   .s-steps__line::after {
     transition: none !important;
-  }
-
-  .s-steps__item--loading .s-steps__marker {
-    animation: none;
-  }
-}
-
-@keyframes s-steps-loading-pulse {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 6px var(--s-steps-state-soft),
-      0 14px 28px -16px var(--s-steps-state-color);
-  }
-
-  50% {
-    box-shadow:
-      0 0 0 11px var(--s-steps-state-soft),
-      0 18px 36px -14px var(--s-steps-state-color);
   }
 }

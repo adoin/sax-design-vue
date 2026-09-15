@@ -8,7 +8,7 @@ import {
 } from '@vue/compiler-sfc'
 import nested from 'postcss-nested'
 import postcss from 'postcss'
-import { ModuleKind, ScriptTarget, transpileModule } from 'typescript'
+import { JsxEmit, ModuleKind, ScriptTarget, transpileModule } from 'typescript'
 
 import type { Component } from 'vue'
 import type { BindingMetadata } from '@vue/compiler-sfc'
@@ -85,24 +85,46 @@ function transformRuntimeImports(code: string): string {
   return `${declarations.join('\n')}\n${withoutImports}`
 }
 
-function transpileTypeScript(code: string, enabled: boolean): string {
+function transpileTypeScript(
+  code: string,
+  enabled: boolean,
+  jsxEnabled = false,
+): string {
   if (!enabled) return code
 
   return transpileModule(code, {
     compilerOptions: {
+      jsx: jsxEnabled ? JsxEmit.React : undefined,
+      jsxFactory: jsxEnabled ? '__jsx' : undefined,
+      jsxFragmentFactory: jsxEnabled ? '__jsxFragment' : undefined,
       module: ModuleKind.ESNext,
       target: ScriptTarget.ES2020,
     },
-    fileName: 'Demo.ts',
+    fileName: jsxEnabled ? 'Demo.tsx' : 'Demo.ts',
   }).outputText
 }
 
-function rewriteComponentDefault(code: string, isTypeScript: boolean): string {
+function rewriteComponentDefault(
+  code: string,
+  isTypeScript: boolean,
+  jsxEnabled = false,
+): string {
+  const normalizedCode = jsxEnabled
+    ? transpileTypeScript(code, true, true)
+    : code
   return rewriteDefault(
-    code,
+    normalizedCode,
     '__sfc__',
-    isTypeScript ? ['typescript'] : undefined,
+    isTypeScript && !jsxEnabled ? ['typescript'] : undefined,
   )
+}
+
+function injectJsxRuntime(code: string, enabled: boolean): string {
+  if (!enabled) return code
+
+  return `const __jsx = RuntimeModules.vue.h
+const __jsxFragment = RuntimeModules.vue.Fragment
+${code}`
 }
 
 function cssFromStyleResult(code: string): string {
@@ -167,6 +189,9 @@ export function compileDemoSfc(
     const isTypeScript = [descriptor.script?.lang, descriptor.scriptSetup?.lang]
       .filter(Boolean)
       .some((lang) => lang === 'ts' || lang === 'tsx')
+    const isTsx = [descriptor.script?.lang, descriptor.scriptSetup?.lang]
+      .filter(Boolean)
+      .some((lang) => lang === 'tsx')
     let cssText = ''
 
     for (const block of descriptor.styles) {
@@ -206,13 +231,13 @@ export function compileDemoSfc(
     if (!descriptor.template) {
       const code = transformRuntimeImports(
         transpileTypeScript(
-          rewriteComponentDefault(scriptCode, isTypeScript),
-          isTypeScript,
+          rewriteComponentDefault(scriptCode, isTypeScript, isTsx),
+          isTypeScript && !isTsx,
         ),
       )
       return {
         component: executeCompiled(
-          code,
+          injectJsxRuntime(code, isTsx),
           runtimeModules,
           hasScopedStyles ? scopeId : undefined,
         ),
@@ -241,7 +266,7 @@ export function compileDemoSfc(
       }
     }
 
-    let code = rewriteComponentDefault(scriptCode, isTypeScript)
+    let code = rewriteComponentDefault(scriptCode, isTypeScript, isTsx)
     if (compiledTemplate.preamble) {
       code = `${compiledTemplate.preamble}\n${code}`
     }
@@ -249,8 +274,9 @@ export function compileDemoSfc(
       /\nexport function render/g,
       '\nfunction render',
     )}\n__sfc__.render = render`
-    code = transpileTypeScript(code, isTypeScript)
+    code = transpileTypeScript(code, isTypeScript && !isTsx)
     code = transformRuntimeImports(code)
+    code = injectJsxRuntime(code, isTsx)
 
     return {
       component: executeCompiled(

@@ -1,41 +1,68 @@
 <script setup lang="ts">
-import { SButton } from '@vuesax-alpha/components/button'
 import { useLocale } from '@vuesax-alpha/hooks'
-import type { TableToolbarConfig } from './table-business'
-defineProps<{ config: TableToolbarConfig; busy: boolean }>()
+import TableToolbarItem from './table-toolbar-item'
+import type { TableExposes } from './table'
+import type {
+  TableQueryContext,
+  TableToolbarConfig,
+  TableToolbarRendererParams,
+} from './table-business'
+
+const props = defineProps<{
+  config: TableToolbarConfig
+  busy: boolean
+  table: TableExposes
+  context: TableQueryContext
+}>()
 const emit = defineEmits<{
-  refresh: []
   action: [code: string, event: MouseEvent]
 }>()
 const { t } = useLocale()
+defineSlots<{
+  title?(): unknown
+  left?(params: TableExposes & { busy: boolean }): unknown
+  right?(params: TableExposes & { busy: boolean }): unknown
+}>()
+
+const rendererParams = (
+  placement: 'left' | 'right',
+): TableToolbarRendererParams => ({
+  table: props.table,
+  context: props.context,
+  placement,
+  busy: props.busy,
+})
 </script>
 
 <template>
-  <div class="s-table-shell__toolbar">
-    <div v-if="config.title || $slots.title" class="s-table-shell__title">
-      <slot name="title">{{ config.title }}</slot>
+  <div
+    class="s-table-shell__toolbar"
+    role="toolbar"
+    :aria-label="t('vs.table.toolbar')"
+  >
+    <div class="s-table-shell__left">
+      <div v-if="config.title || $slots.title" class="s-table-shell__title">
+        <slot name="title">{{ config.title }}</slot>
+      </div>
+      <slot name="left" v-bind="table" :busy="busy">
+        <TableToolbarItem
+          v-for="(item, index) in config.left ?? []"
+          :key="item.key ?? `${item.itemRender}-${index}`"
+          :options="item"
+          :params="rendererParams('left')"
+          :action="(code, event) => emit('action', code, event)"
+        />
+      </slot>
     </div>
-    <div class="s-table-shell__tools">
-      <slot>
-        <template v-for="button in config.buttons" :key="button.code">
-          <SButton
-            v-if="button.visible !== false"
-            v-bind="button.props"
-            :disabled="busy || button.disabled || button.props?.disabled"
-            :loading="button.loading || button.props?.loading"
-            @click.capture.prevent
-            @click="emit('action', button.code, $event)"
-            >{{ button.text }}</SButton
-          >
-        </template>
-        <SButton
-          v-if="config.refresh !== false"
-          flat
-          :disabled="busy"
-          @click.capture.prevent
-          @click="emit('refresh')"
-          >{{ config.refreshText ?? t('vs.table.refresh') }}</SButton
-        >
+    <div class="s-table-shell__right">
+      <slot name="right" v-bind="table" :busy="busy">
+        <TableToolbarItem
+          v-for="(item, index) in config.right ?? []"
+          :key="item.key ?? `${item.itemRender}-${index}`"
+          :options="item"
+          :params="rendererParams('right')"
+          :action="(code, event) => emit('action', code, event)"
+        />
       </slot>
     </div>
   </div>

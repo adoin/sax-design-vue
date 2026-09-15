@@ -36,7 +36,7 @@ PROPS:
     values: "rounded | square"
     description: 设置圆角或方形外观。
     default: rounded
-    usage: '#外形'
+    usage: '#shape'
   - name: text-white
     type: Boolean
     values: "true | false"
@@ -47,37 +47,37 @@ PROPS:
     values: "true | false"
     description: 在输入框尾部显示清空当前值的操作按钮。
     default: false
-    usage: '#清空'
+    usage: '#clearable'
   - name: clearable
     type: Boolean
     values: "true | false"
     description: '`allow-clear` 的兼容别名。'
     default: false
-    usage: '#清空'
+    usage: '#clearable'
   - name: count-method
     type: '({ value: string }) => number'
     values: "({ value }) => number"
     description: 开启后在 suffix 区显示计数；自定义统计方法会同时用于计数显示和长度限制，可实现 UTF-8 字节或其他编码统计。
     default: null
-    usage: '#字符计数'
+    usage: '#character-count'
   - name: max-length
     type: Number | String
     values: "Number"
     description: 开启后在 suffix 区显示计数；自定义统计方法会同时用于计数显示和长度限制，可实现 UTF-8 字节或其他编码统计。
     default: null
-    usage: '#字符计数'
+    usage: '#character-count'
   - name: show-word-count
     type: Boolean
     values: "true | false"
     description: 开启后在 suffix 区显示计数；自定义统计方法会同时用于计数显示和长度限制，可实现 UTF-8 字节或其他编码统计。
     default: 'false'
-    usage: '#字符计数'
+    usage: '#character-count'
   - name: trim
     type: Boolean
     values: "true | false"
     description: 提交变更时移除首尾空白字符。
     default: false
-    usage: '#字符计数'
+    usage: '#character-count'
   - name: wrap-classes
     type: String
     values: "CSS 类名"
@@ -254,105 +254,105 @@ PROPS:
     values: "small | default | large"
     description: 设置输入框尺寸。
     default: default
-    usage: '#尺寸'
+    usage: '#sizes'
 
   - name: immediate
     type: Boolean
     values: "true | false"
     description: 控制输入时立即更新，或在 change、blur 时提交。
     default: true
-    usage: '#延迟提交'
+    usage: '#deferred-commit'
 
   - name: controls
     type: Boolean
     values: "true | false"
     description: 显示内置搜索或密码操作按钮。
     default: false
-    usage: '#搜索'
+    usage: '#search'
 
   - name: prefix-icon
     type: String
     values: "图标名称"
     description: 在输入内容前显示图标；prefix 插槽优先。
     default: null
-    usage: '#前后缀'
+    usage: '#affixes'
 
   - name: suffix-icon
     type: String
     values: "图标名称"
     description: 在输入内容后显示图标，并保留组件内置操作。
     default: null
-    usage: '#前后缀'
+    usage: '#affixes'
 
   - name: prefix-config
     type: InputAffixConfig
     values: "{ icon?, content?, status? }"
     description: 配置前缀图标、文字与语义状态。
     default: null
-    usage: '#前后缀'
+    usage: '#affixes'
 
   - name: suffix-config
     type: InputAffixConfig
     values: "{ icon?, content?, status? }"
     description: 配置后缀图标、文字与语义状态。
     default: null
-    usage: '#前后缀'
+    usage: '#affixes'
 
   - name: min-length
     type: Number | String
     values: "非负长度"
     description: 透传原生最小输入长度。
     default: null
-    usage: '#原生约束'
+    usage: '#native-constraints'
 
   - name: min
     type: Number | String
     values: "数值边界"
     description: 设置数字输入下限，并限制提交值。
     default: null
-    usage: '#原生约束'
+    usage: '#native-constraints'
 
   - name: max
     type: Number | String
     values: "数值边界"
     description: 设置数字输入上限，并限制提交值。
     default: null
-    usage: '#原生约束'
+    usage: '#native-constraints'
 
   - name: step
     type: Number | String
     values: "数值步长"
     description: 透传原生数字输入步长。
     default: null
-    usage: '#原生约束'
+    usage: '#native-constraints'
 
   - name: input-mode
     type: String
     values: "none | text | decimal | numeric | tel | search | email | url"
     description: 提示设备显示对应的虚拟键盘。
     default: null
-    usage: '#原生约束'
+    usage: '#native-constraints'
 
   - name: pattern
     type: String
     values: "正则表达式文本"
     description: 透传原生校验表达式。
     default: null
-    usage: '#原生约束'
+    usage: '#native-constraints'
 
   - name: required
     type: Boolean
     values: "true | false"
     description: 将原生输入标记为必填。
     default: null
-    usage: '#原生约束'
+    usage: '#native-constraints'
 
   - name: multiple
     type: Boolean
     values: "true | false"
     description: 为支持的输入类型透传原生多值提示。
     default: null
-    usage: '#原生约束'
+    usage: '#native-constraints'
 
 EVENTS:
   - name: update:modelValue
@@ -429,13 +429,13 @@ SLOTS:
     values: "suffix: { count"
     description: 自定义输入框前后缀；suffix 插槽会替换默认计数器，并提供当前计数和限制值。
     default: null
-    usage: '#前后缀'
+    usage: '#affixes'
   - name: suffix
     type: Slot
     values: "limit }"
     description: 自定义输入框前后缀；suffix 插槽会替换默认计数器，并提供当前计数和限制值。
     default: null
-    usage: '#前后缀'
+    usage: '#affixes'
 ---
 
 # Input 输入框

@@ -128,7 +128,11 @@ async function addSourceFiles(project: Project) {
         if (script || scriptSetup) {
           if (scriptSetup) {
             const useOpaqueComponentType = [
+              'anchor.vue',
+              'calendar.vue',
               'date-picker.vue',
+              'form-group.vue',
+              'form.vue',
               'sizes.vue',
               'table-column-manager.vue',
               'table-find-panel.vue',

@@ -1,8 +1,9 @@
 import type { TableColumn, TableRow, TableRowKey } from './table'
+import type { FieldPath } from '../../types'
 
 export type TableValidationType =
   'string' | 'number' | 'integer' | 'boolean' | 'array' | 'object' | 'date'
-export interface TableValidationContext<Row extends TableRow = TableRow> {
+export interface TableValidationContext<Row extends object = TableRow> {
   row: Row
   draftRow: Row
   rowKey: TableRowKey
@@ -13,7 +14,7 @@ export interface TableValidationContext<Row extends TableRow = TableRow> {
   value: unknown
   signal: AbortSignal
 }
-export interface TableValidationRule<Row extends TableRow = TableRow> {
+export interface TableValidationRule<Row extends object = TableRow> {
   required?: boolean
   type?: TableValidationType
   min?: number
@@ -25,9 +26,8 @@ export interface TableValidationRule<Row extends TableRow = TableRow> {
   ) =>
     void | boolean | string | Error | Promise<void | boolean | string | Error>
 }
-export type TableValidationRules<Row extends TableRow = TableRow> = Record<
-  string,
-  TableValidationRule<Row> | TableValidationRule<Row>[]
+export type TableValidationRules<Row extends object = TableRow> = Partial<
+  Record<FieldPath<Row>, TableValidationRule<Row> | TableValidationRule<Row>[]>
 >
 export interface TableValidationConfig {
   /** Validate before editCommit when validationConfig is enabled. Defaults to true. */
@@ -36,8 +36,10 @@ export interface TableValidationConfig {
   scrollToError?: boolean
   /** Stop at this many errors. Defaults to 100; the result reports truncated. */
   maxErrors?: number
+  /** Concurrent custom validators per stage. Defaults to 8; clamped to 1–32. */
+  concurrency?: number
 }
-export interface TableValidationError<Row extends TableRow = TableRow> {
+export interface TableValidationError<Row extends object = TableRow> {
   row: Row
   rowKey: TableRowKey
   rowIndex: number
@@ -47,14 +49,14 @@ export interface TableValidationError<Row extends TableRow = TableRow> {
   value: unknown
   message: string
 }
-export interface TableValidationResult<Row extends TableRow = TableRow> {
+export interface TableValidationResult<Row extends object = TableRow> {
   valid: boolean
   errors: TableValidationError<Row>[]
   cancelled: boolean
   truncated: boolean
   checked: number
 }
-export interface TableValidateOptions<Row extends TableRow = TableRow> {
+export interface TableValidateOptions<Row extends object = TableRow> {
   /** Defaults to all supplied/loaded rows; view uses the filtered, expanded current page. */
   scope?: 'all' | 'view'
   /**
@@ -77,6 +79,8 @@ export interface TableValidateOptions<Row extends TableRow = TableRow> {
   scrollToError?: boolean
   /** Overrides validationConfig.maxErrors; defaults to 100, minimum 1 after flooring. */
   maxErrors?: number
+  /** Overrides validationConfig.concurrency for custom validators. */
+  concurrency?: number
 }
 
 /** Internal lazy target: do not snapshot a whole table to validate a field. */

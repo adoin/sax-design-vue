@@ -19,6 +19,7 @@ import {
   createIconSvg,
   normalizeIconList,
 } from '../src/icon-picker'
+import { defaultCarbonIcons } from '../src/default-carbon-icons'
 
 const iconData = {
   body: '<path fill="currentColor" d="M2 2h12v12H2z"/>',
@@ -37,7 +38,6 @@ beforeAll(() => {
   )
   addIconData('cb:home', iconData)
   addIconData('cb:search', iconData)
-  DEFAULT_ICON_LIST.forEach((name) => addIconData(name, iconData))
 })
 
 afterAll(() => vi.unstubAllGlobals())
@@ -50,6 +50,8 @@ describe('IconPicker', () => {
   it('ships a broad, unique default Carbon collection', () => {
     expect(DEFAULT_ICON_LIST).toHaveLength(168)
     expect(new Set(DEFAULT_ICON_LIST).size).toBe(DEFAULT_ICON_LIST.length)
+    expect(Object.keys(defaultCarbonIcons)).toHaveLength(168)
+    expect(normalizeIconList(DEFAULT_ICON_LIST)).toEqual(DEFAULT_ICON_LIST)
   })
 
   it('normalizes registered names and ignores unavailable values', () => {

@@ -3,24 +3,31 @@ import type {
   TableCellRenderParams,
   TableColumn,
   TableFooterCellRenderParams,
+  TableRow,
   TableRowKey,
 } from './table'
 
-export type TableContextMenuContext =
-  | { area: 'header'; column: TableColumn; columnIndex: number; group: boolean }
-  | ({ area: 'body'; rowKey: TableRowKey } & TableCellRenderParams)
-  | ({ area: 'footer' } & TableFooterCellRenderParams)
-export type TableContextMenuItems =
-  ContextMenuItem[] | ((context: TableContextMenuContext) => ContextMenuItem[])
-export interface TableContextMenuConfig {
+export type TableContextMenuContext<Row extends object = TableRow> =
+  | {
+      area: 'header'
+      column: TableColumn<Row>
+      columnIndex: number
+      group: boolean
+    }
+  | ({ area: 'body'; rowKey: TableRowKey } & TableCellRenderParams<Row>)
+  | ({ area: 'footer' } & TableFooterCellRenderParams<Row>)
+export type TableContextMenuItems<Row extends object = TableRow> =
+  | ContextMenuItem[]
+  | ((context: TableContextMenuContext<Row>) => ContextMenuItem[])
+export interface TableContextMenuConfig<Row extends object = TableRow> {
   enabled?: boolean
-  header?: TableContextMenuItems
-  body?: TableContextMenuItems
-  footer?: TableContextMenuItems
+  header?: TableContextMenuItems<Row>
+  body?: TableContextMenuItems<Row>
+  footer?: TableContextMenuItems<Row>
   minWidth?: number
-  visibleMethod?: (context: TableContextMenuContext) => boolean
+  visibleMethod?: (context: TableContextMenuContext<Row>) => boolean
 }
-export interface TableContextMenuSelectParams {
-  context: TableContextMenuContext
+export interface TableContextMenuSelectParams<Row extends object = TableRow> {
+  context: TableContextMenuContext<Row>
   item: ContextMenuItem
 }

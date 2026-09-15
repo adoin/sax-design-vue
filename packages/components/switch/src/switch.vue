@@ -7,6 +7,7 @@ import {
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { getVsColor } from '@vuesax-alpha/utils'
+import { SLogoLoading } from '@vuesax-alpha/components/icon'
 import { switchEmits, switchProps } from './switch'
 import { useSwitch } from './use-switch'
 
@@ -57,7 +58,8 @@ defineExpose({ checked, isIndeterminate })
     />
     <span :class="ns.e('track')" aria-hidden="true">
       <span :class="ns.e('circle')">
-        <slot v-if="!isLoading" name="circle" />
+        <SLogoLoading v-if="isLoading" :size="18" />
+        <slot v-else-if="!isLoading" name="circle" />
       </span>
       <span :class="ns.e('text')">
         <span :class="[ns.e('label'), ns.is('on'), ns.is('visible', checked)]">

@@ -44,77 +44,77 @@ CHILD_PROPS:
     values: 文本
     description: SImage 的无障碍替代文本。
     default: null
-    usage: '#尺寸与适配'
+    usage: '#sizing-and-fit'
 
   - name: fit
     type: String
     values: fill | contain | cover | none | scale-down
     description: 控制原图如何适配给定的图片容器。
     default: cover
-    usage: '#尺寸与适配'
+    usage: '#sizing-and-fit'
 
   - name: position
     type: String
     values: CSS object-position
     description: 设置图片在容器内的对齐位置，尤其适用于 cover 裁切。
     default: center
-    usage: '#尺寸与适配'
+    usage: '#sizing-and-fit'
 
   - name: width
     type: String | Number
     values: CSS 长度 | 数字
     description: 设置 SImage 项宽度；数字按像素处理。
     default: null
-    usage: '#尺寸与适配'
+    usage: '#sizing-and-fit'
 
   - name: height
     type: String | Number
     values: CSS 长度 | 数字
     description: 设置 SImage 项的明确高度；数字按像素处理。
     default: null
-    usage: '#尺寸与适配'
+    usage: '#sizing-and-fit'
 
   - name: aspect-ratio
     type: String | Number
     values: CSS aspect-ratio
     description: 未设置 height 时预留稳定的图片容器比例。
     default: 1
-    usage: '#尺寸与适配'
+    usage: '#sizing-and-fit'
 
   - name: loading
     type: String
     values: eager | lazy
     description: 选择原生立即加载或懒加载模式。
     default: eager
-    usage: '#尺寸与适配'
+    usage: '#sizing-and-fit'
 
   - name: decoding
     type: String
     values: auto | sync | async
     description: 传递原生图片解码偏好。
     default: auto
-    usage: '#尺寸与适配'
+    usage: '#sizing-and-fit'
 
   - name: preview-src-list
     type: Array
     values: string[]
     description: 提供统一图片预览器打开的图片列表。
     default: '[]'
-    usage: '#预览'
+    usage: '#preview'
 
   - name: initial-index
     type: Number
     values: number >= 0
     description: 设置 preview-src-list 中的初始图片下标。
     default: '0'
-    usage: '#预览'
+    usage: '#preview'
 
   - name: preview
     type: Boolean
     values: true | false
     description: 允许通过鼠标或键盘打开统一图片预览器。
     default: 'false'
-    usage: '#预览'
+    usage: '#preview'
 EVENTS:
   - name: load
     type: Event

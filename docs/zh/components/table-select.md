@@ -4,18 +4,18 @@ PROPS:
     type: "String"
     description: "表格没有数据时显示的文本，省略时使用当前语言的默认文案。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "placeholder"
     type: "String"
     description: "未选择行时的占位文本，省略时使用当前语言的默认文案。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "disabled"
     type: "Boolean"
     description: "禁用触发器交互，并关闭已打开的弹层。"
     default: false
     values: "true | false"
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: model-value
     type: String | Number
     values: "行键值"
@@ -31,43 +31,43 @@ PROPS:
     values: ""
     description: "传入 STable 的行数据，子节点按 tree-config 解析。"
     default: "[]"
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: columns
     type: "TableColumn[]"
     values: ""
     description: "转发给 STable 的列配置。"
     default: "[]"
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: row-key
     type: "TableRowKeyGetter"
     values: ""
     description: "稳定行键字段或取值函数，选中行的键作为模型值。"
     default: "id"
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: label-key
     type: "String"
     values: ""
     description: "触发器标签的字段路径，字段缺失时显示选中的键。"
     default: "label"
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: label-formatter
     type: "TableSelectLabelFormatter"
     values: ""
     description: "格式化选中行标签，优先于 label-key。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: tree-config
     type: "TableTreeConfig"
     values: ""
     description: "通过 STable 配置子节点、缩进、展开及懒加载。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: expanded-keys
     type: "TableRowKey[]"
     values: ""
     description: "受控的树节点展开键，通过 v-model:expanded-keys 绑定。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: virtual-config
     type: Boolean | TableVirtualConfig
     values: "true / false / '{ height, estimateSize, overscan, dynamic }'"
@@ -78,308 +78,308 @@ PROPS:
     values: ""
     description: "转发给 STable 的具名单元格与表头渲染器。"
     default: "{}"
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: row-class
     type: "TableRowClass"
     values: ""
     description: "自定义行类名，函数接收扁平化行上下文。"
     default: ""
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: selectable
     type: "TableSelectSelectable"
     values: ""
     description: "返回 false 禁止选中该行；disabled 为真的行始终不可选。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: show-header
     type: "Boolean"
     values: "true | false"
     description: "显示表格列标题。"
     default: true
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: striped
     type: "Boolean"
     values: "true | false"
     description: "使用交替行背景。"
     default: false
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: table-loading
     type: "Boolean"
     values: "true | false"
     description: "显示内部表格的加载状态。"
     default: false
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: close-on-select
     type: "Boolean"
     values: "true | false"
     description: "选中行后关闭弹层。"
     default: true
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: clearable
     type: "Boolean"
     values: "true | false"
     description: "为选中值显示清除操作。"
     default: false
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: loading
     type: "Boolean"
     values: "true | false"
     description: "显示触发器加载反馈，阻止交互并关闭弹层。"
     default: false
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: block
     type: "Boolean"
     values: "true | false"
     description: "触发器占满可用宽度。"
     default: false
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: shape
     type: String
     values: "rounded | square"
     description: 为选择器触发器与弹层表面统一设置圆角或方形外观。
     default: rounded
-    usage: '#外形'
+    usage: '#shape'
   - name: color
     type: "Color"
     values: ""
     description: "触发器与弹层的主视觉颜色。"
     default: "primary"
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: state
     type: "Color"
     values: ""
     description: "状态颜色，提供时优先于 color。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: prefix-icon
     type: "String"
     values: ""
     description: "前缀图标名，优先于 prefix-config.icon。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: suffix-icon
     type: "String"
     values: ""
     description: "后缀装饰图标，不移除下拉箭头。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: prefix-config
     type: "TableSelectAffixConfig"
     values: ""
     description: "前缀图标与文本，prefix 插槽优先。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: suffix-config
     type: "TableSelectAffixConfig"
     values: ""
     description: "后缀图标与文本，suffix 插槽优先。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: open
     type: "Boolean"
     values: "true | false"
     description: "受控弹层可见性，通过 v-model:open 绑定。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: default-open
     type: "Boolean"
     values: "true | false"
     description: "open 非受控时的初始弹层可见性。"
     default: false
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: popup-config
     type: "TableSelectPopupConfig"
     values: ""
     description: "弹层尺寸、位置和挂载目标；其中配置的字段优先于对应顶层属性。"
     default: "{}"
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: placement
     type: "String"
     values: ""
     description: "弹层相对触发器的首选位置。"
     default: "bottom-start"
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: teleported
     type: "Boolean"
     values: "true | false"
     description: "将弹层传送到祖先裁剪容器之外。"
     default: true
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: flip
     type: "Boolean"
     values: "true | false"
     description: "视口空间不足时翻转弹层位置。"
     default: true
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: strategy
     type: "String"
     values: "absolute | fixed"
     description: "传给共享 Popper 的定位策略。"
     default: "absolute"
-    usage: "#树形数据"
+    usage: "#tree-data"
 EVENTS:
   - name: "update:modelValue"
     type: "(value: TableRowKey | undefined) => void"
     description: "选中键更新，清除时发出 undefined。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "update:open"
     type: "(value: boolean) => void"
     description: "请求更新弹层可见性。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "update:expanded-keys"
     type: "(keys: TableRowKey[]) => void"
     description: "STable 更新树节点展开键。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "visible-change"
     type: "(value: boolean) => void"
     description: "已接受的打开或关闭请求；受控可见性仍由 open 决定。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "change"
     type: "(value: TableRowKey, row: TableRow) => void"
     description: "选中了可选行，清除操作单独触发 clear。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "clear"
     type: "() => void"
     description: "触发了清除操作。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "row-click"
     type: "(row: TableRow, event: MouseEvent) => void"
     description: "表格行点击，包含不可选行的点击。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "cell-click"
     type: "(params: TableCellRenderParams, event: MouseEvent) => void"
     description: "数据单元格点击，携带其渲染上下文。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "tree-expand"
     type: "(row: TableRow, expanded: boolean) => void"
     description: "树节点展开或折叠。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "lazy-load"
     type: "(row: TableRow, children: TableRow[]) => void"
     description: "懒加载子节点完成。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "scroll"
     type: "(event: Event) => void"
     description: "内部表格视口滚动事件。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "focus"
     type: "(event: FocusEvent) => void"
     description: "触发器获得焦点。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "blur"
     type: "(event: FocusEvent) => void"
     description: "触发器失去焦点。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "prefix-click"
     type: "(event: MouseEvent) => void"
     description: "点击前缀内容。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "suffix-click"
     type: "(event: MouseEvent) => void"
     description: "点击后缀内容。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
 SLOTS:
   - name: "selected"
     type: "{ row: TableRow; label: string }"
     description: "触发器中的选中行标签。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: "prefix"
     type: "Slot"
     description: "触发器前缀内容。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: "suffix"
     type: "{ open: boolean; selectedRow: TableRow | null }"
     description: "触发器后缀装饰，不替换内置操作。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: "clear-icon"
     type: "Slot"
     description: "清除操作的图标。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: "cell"
     type: "TableCellRenderParams"
     description: "转发到 STable 的通用数据单元格插槽。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: "cell-[key]"
     type: "TableCellRenderParams"
     description: "指定列的数据单元格插槽。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: "header-cell"
     type: "TableHeaderRenderParams"
     description: "转发到 STable 的通用表头插槽。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: "header-[key]"
     type: "TableHeaderRenderParams"
     description: "指定列的表头插槽。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: "popup-header"
     type: "Slot"
     description: "弹层内表格上方的内容。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: "popup-footer"
     type: "{ selectedRow: TableRow | null; close: () => void }"
     description: "弹层内表格下方的内容，提供关闭方法。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
   - name: "empty"
     type: "Slot"
     description: "替换表格空状态内容。"
     default: null
-    usage: "#自定义渲染"
+    usage: "#custom-rendering"
 EXPOSES:
   - name: "open"
     type: "() => void"
     description: "请求打开弹层，禁用或加载时不打开。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "close"
     type: "() => void"
     description: "请求关闭弹层，受控模式通过 update:open 通知。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "toggleRowExpand"
     type: "(row: TableRow, expanded?: boolean) => Promise<void> | undefined"
     description: "通过已挂载的内部表格切换或设置树节点展开状态。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "setExpandedKeys"
     type: "(keys: TableRowKey[]) => void"
     description: "通过内部表格设置树节点展开键。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "scrollToRow"
     type: "(rowOrIndex: TableRow | TableRowKey, align?: 'auto' | 'start' | 'center' | 'end') => void"
     description: "按行对象或行键定位已挂载的内部表格；数字未匹配到可见行键时，才按可见行索引定位。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
   - name: "measure"
     type: "() => Promise<void> | undefined"
     description: "重新测量已挂载的内部表格布局与虚拟行。"
     default: null
-    usage: "#树形数据"
+    usage: "#tree-data"
 description: '从普通、虚拟滚动或树形 Table 中选择一行数据。'
 ---
 
@@ -509,19 +509,19 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行数据。'
 
 <template #template>
 
-@[code{61-89}](../../.vuepress/components/table-select/custom-render.vue)
+@[code{48-88}](../../.vuepress/components/table-select/custom-render.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-59}](../../.vuepress/components/table-select/custom-render.vue)
+@[code{1-46}](../../.vuepress/components/table-select/custom-render.vue)
 
 </template>
 
 <template #style>
 
-@[code{91-130}](../../.vuepress/components/table-select/custom-render.vue)
+@[code{90-129}](../../.vuepress/components/table-select/custom-render.vue)
 
 </template>
 

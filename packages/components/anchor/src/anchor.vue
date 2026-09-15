@@ -1,31 +1,79 @@
 <template>
   <nav
-    :class="[ns.b(), ns.m(direction), ns.is('affix', affix)]"
+    :class="[
+      ns.b(),
+      ns.m(direction),
+      ns.is('affix', affix),
+      ns.is('router', mode === 'router'),
+    ]"
     :aria-label="t('vs.anchor.navigation')"
   >
     <div
       v-for="entry in visibleItems"
       :key="entry.key"
-      :class="[ns.e('group'), ns.is('nested', entry.depth > 0)]"
+      :class="[
+        ns.e('group'),
+        ns.is('nested', entry.depth > 0),
+        ns.is('branch-connection', entry.connectToParent),
+        ns.is('branch-closure', entry.closeParentConnection),
+      ]"
       :style="{
         '--s-anchor-depth-indent': `${entry.depth * 14}px`,
         '--s-anchor-guide-offset': `${10 + Math.max(0, entry.depth - 1) * 14}px`,
       }"
     >
       <div :class="ns.e('row')">
-        <button
+        <a
           :class="[
             ns.e('item'),
             ns.is('active', current === entry.item.href),
             ns.is('active-path', entry.activePath),
+            ns.is('collapsible', entry.collapsible),
             ns.is('disabled', entry.item.disabled),
           ]"
-          type="button"
-          :disabled="entry.item.disabled"
-          @click="navigate(entry.item)"
+          :href="entry.item.disabled ? undefined : entry.item.href"
+          :aria-disabled="entry.item.disabled || undefined"
+          :aria-current="
+            current === entry.item.href
+              ? entry.item.href.startsWith('#')
+                ? 'location'
+                : 'page'
+              : undefined
+          "
+          :tabindex="entry.item.disabled ? -1 : undefined"
+          @click="navigate(entry.item, $event)"
         >
-          {{ entry.item.title }}
-        </button>
+          <span :class="ns.e('item-label')">
+            <span
+              v-if="direction === 'vertical' && current === entry.item.href"
+              :class="ns.e('active-icon')"
+              aria-hidden="true"
+            >
+              <slot
+                name="active-icon"
+                :item="entry.item"
+                :href="entry.item.href"
+              >
+                <SIcon v-if="activeIcon" :name="activeIcon" />
+                <svg
+                  v-else
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 32 32"
+                >
+                  <path d="M0 0h32v32H0z" fill="none" />
+                  <path
+                    fill="currentColor"
+                    d="M16 2A11.013 11.013 0 0 0 5 13a10.9 10.9 0 0 0 2.216 6.6s.3.395.349.452L16 30l8.439-9.953c.044-.053.345-.447.345-.447l.001-.003A10.9 10.9 0 0 0 27 13A11.013 11.013 0 0 0 16 2m0 15a4 4 0 1 1 4-4a4.005 4.005 0 0 1-4 4"
+                  />
+                  <circle cx="16" cy="13" r="4" fill="none" />
+                </svg>
+              </slot>
+            </span>
+            <span>{{ entry.item.title }}</span>
+          </span>
+        </a>
 
         <button
           v-if="entry.collapsible"
@@ -39,15 +87,44 @@
         </button>
       </div>
     </div>
+
+    <AnchorRouteBoundary
+      v-if="routeBoundaryContext"
+      :previous="routeBoundaryContext.previous"
+      :next="routeBoundaryContext.next"
+      :threshold="routeBoundaryOptions?.threshold"
+      :arm-delay="routeBoundaryOptions?.armDelay"
+      :route-cooldown="routeBoundaryOptions?.routeCooldown"
+      :get-container="getContainer"
+      @navigate="handleRouteBoundaryNavigate"
+    >
+      <template v-if="$slots['route-previous']" #previous="slotProps">
+        <slot name="route-previous" v-bind="slotProps" />
+      </template>
+      <template v-if="$slots['route-next']" #next="slotProps">
+        <slot name="route-next" v-bind="slotProps" />
+      </template>
+    </AnchorRouteBoundary>
   </nav>
 </template>
 
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { useGlobalConfig, useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import AnchorRouteBoundary from './anchor-route-boundary.vue'
 import { anchorEmits, anchorProps } from './anchor'
+import {
+  findAnchorRouteContext,
+  isPlainAnchorRouteClick,
+  readAnchorRouterLocation,
+} from './anchor-router'
 import type { AnchorItem } from './anchor'
+import type {
+  AnchorRouteBoundaryNavigateParams,
+  AnchorRouteBoundarySlotParams,
+} from './anchor-route-boundary'
+import type { AnchorRouteBoundaryOptions } from '../../types'
 
 defineOptions({ name: 'SAnchor' })
 
@@ -55,12 +132,52 @@ const props = defineProps(anchorProps)
 const emit = defineEmits(anchorEmits)
 const ns = useNamespace('anchor')
 const { t } = useLocale()
+const anchorConfig = useGlobalConfig('anchor')
+const activeIcon = computed(() => anchorConfig.value?.activeIcon)
+defineSlots<{
+  'active-icon'?(params: { item: AnchorItem; href: string }): unknown
+  'route-previous'?(params: AnchorRouteBoundarySlotParams): unknown
+  'route-next'?(params: AnchorRouteBoundarySlotParams): unknown
+}>()
 const current = ref('')
 const pendingHref = ref('')
 const collapsedKeys = ref(new Set<string>())
 const initializedCollapseKeys = new Set<string>()
 let scrollContainer: HTMLElement | Window | undefined
 let scrollSettleTimer: ReturnType<typeof setTimeout> | undefined
+let scrollFrame: number | undefined
+
+const routerAdapter = computed(() => props.router || anchorConfig.value?.router)
+const routeBoundaryOptions = computed<AnchorRouteBoundaryOptions | undefined>(
+  () => {
+    const globalValue = anchorConfig.value?.routeBoundary
+    const localValue = props.routeBoundary
+    if (
+      localValue === false ||
+      (localValue === undefined && globalValue === false)
+    )
+      return
+    return {
+      ...(typeof globalValue === 'object' ? globalValue : {}),
+      ...(typeof localValue === 'object' ? localValue : {}),
+    }
+  },
+)
+const routerLocation = computed(
+  () =>
+    readAnchorRouterLocation(routerAdapter.value) ||
+    (!props.modelValue.startsWith('#') ? props.modelValue : ''),
+)
+const routeContext = computed(() =>
+  props.mode === 'router' && routerLocation.value
+    ? findAnchorRouteContext(props.items, routerLocation.value)
+    : undefined,
+)
+const routeBoundaryContext = computed(() =>
+  routerAdapter.value && routeBoundaryOptions.value
+    ? routeContext.value
+    : undefined,
+)
 
 export interface AnchorEntry {
   item: AnchorItem
@@ -69,6 +186,8 @@ export interface AnchorEntry {
   collapsible: boolean
   collapsed: boolean
   activePath: boolean
+  connectToParent: boolean
+  closeParentConnection: boolean
 }
 
 const hasActiveDescendant = (item: AnchorItem): boolean =>
@@ -120,7 +239,16 @@ const visibleItems = computed<AnchorEntry[]>(() => {
       )
       const activePath = hasActiveDescendant(item)
       const collapsed = collapsible && collapsedKeys.value.has(key)
-      result.push({ item, key, depth, collapsible, collapsed, activePath })
+      result.push({
+        item,
+        key,
+        depth,
+        collapsible,
+        collapsed,
+        activePath,
+        connectToParent: depth > 1 && index === 0,
+        closeParentConnection: depth > 1 && index === items.length - 1,
+      })
       if (props.direction === 'vertical' && item.children?.length && !collapsed)
         visit(item.children, depth + 1, `${key}/`)
     })
@@ -143,9 +271,32 @@ const setCurrent = (value: string) => {
   emit('update:modelValue', nextValue)
   emit('change', nextValue)
 }
-const navigate = (item: AnchorItem) => {
-  if (item.disabled) return
-  emit('click', item)
+const navigateRoute = (href: string) => {
+  const router = routerAdapter.value
+  if (!router) return
+  const method = props.replace && router.replace ? router.replace : router.push
+  method.call(router, href)
+}
+const navigate = (item: AnchorItem, event: MouseEvent) => {
+  if (item.disabled) {
+    event.preventDefault()
+    return
+  }
+  emit('click', item, event)
+  if (!item.href.startsWith('#')) {
+    if (
+      props.mode === 'router' &&
+      routerAdapter.value &&
+      isPlainAnchorRouteClick(event)
+    ) {
+      event.preventDefault()
+      navigateRoute(item.href)
+      setCurrent(item.href)
+    } else if (isPlainAnchorRouteClick(event)) setCurrent(item.href)
+    return
+  }
+
+  event.preventDefault()
   pendingHref.value = item.href
   const target = getTarget(item.href)
   if (target) {
@@ -169,11 +320,17 @@ const navigate = (item: AnchorItem) => {
       })
     }
   }
-  if (item.href.startsWith('#')) {
-    const method = props.replace ? 'replaceState' : 'pushState'
-    window.history[method](null, '', item.href)
-  }
+  const method = props.replace ? 'replaceState' : 'pushState'
+  window.history[method](null, '', item.href)
   setCurrent(item.href)
+}
+const handleRouteBoundaryNavigate = (
+  params: AnchorRouteBoundaryNavigateParams,
+) => {
+  if (params.trigger === 'click' && !isPlainAnchorRouteClick(params.event))
+    return
+  params.event.preventDefault()
+  navigateRoute(params.href)
 }
 const toggleCollapse = (entry: AnchorEntry) => {
   const next = new Set(collapsedKeys.value)
@@ -183,20 +340,32 @@ const toggleCollapse = (entry: AnchorEntry) => {
   emit('collapseChange', entry.item, next.has(entry.key))
 }
 const updateCurrent = () => {
-  let active: AnchorItem | undefined
-  flatItems.value.forEach((item: AnchorItem) => {
-    const target = getTarget(item.href)
-    const containerTop =
-      scrollContainer && scrollContainer !== window
-        ? (scrollContainer as HTMLElement).getBoundingClientRect().top
-        : 0
-    const targetTop = target
+  const containerTop =
+    scrollContainer && scrollContainer !== window
+      ? (scrollContainer as HTMLElement).getBoundingClientRect().top
+      : 0
+  const threshold = props.offset + props.bounds
+  const targetTop = (index: number) => {
+    const target = getTarget(flatItems.value[index]?.href ?? '')
+    return target
       ? target.getBoundingClientRect().top - containerTop
       : Number.POSITIVE_INFINITY
-    if (target && targetTop <= props.offset + props.bounds) {
-      active = item
-    }
-  })
+  }
+  let index = flatItems.value.findIndex((item) => item.href === current.value)
+  let active: AnchorItem | undefined
+  if (index < 0) {
+    flatItems.value.forEach((item, itemIndex) => {
+      if (targetTop(itemIndex) <= threshold) active = item
+    })
+  } else {
+    while (index > 0 && targetTop(index) > threshold) index--
+    while (
+      index + 1 < flatItems.value.length &&
+      targetTop(index + 1) <= threshold
+    )
+      index++
+    if (targetTop(index) <= threshold) active = flatItems.value[index]
+  }
 
   if (
     scrollContainer &&
@@ -216,7 +385,11 @@ const settleScroll = () => {
 }
 const handleScroll = () => {
   if (!pendingHref.value) {
-    updateCurrent()
+    if (scrollFrame === undefined)
+      scrollFrame = requestAnimationFrame(() => {
+        scrollFrame = undefined
+        updateCurrent()
+      })
     return
   }
 
@@ -228,6 +401,13 @@ watch(
   () => props.modelValue,
   (value) => {
     current.value = value
+  },
+  { immediate: true },
+)
+watch(
+  () => routeContext.value?.current.href,
+  (href) => {
+    if (href) setCurrent(href)
   },
   { immediate: true },
 )
@@ -243,6 +423,7 @@ onMounted(() => {
 })
 onBeforeUnmount(() => {
   if (scrollSettleTimer) clearTimeout(scrollSettleTimer)
+  if (scrollFrame !== undefined) cancelAnimationFrame(scrollFrame)
   scrollContainer?.removeEventListener('scroll', handleScroll)
   scrollContainer?.removeEventListener('scrollend', settleScroll)
 })

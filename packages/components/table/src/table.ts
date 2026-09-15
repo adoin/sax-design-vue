@@ -12,9 +12,12 @@ import type {
   CSSProperties,
   ExtractPropTypes,
   InjectionKey,
+  PublicProps,
+  VNode,
   VNodeChild,
 } from 'vue'
 import type Table from './table.vue'
+import type { FieldPath, Recordable } from '../../types'
 import type {
   TableChartConfig,
   TableChartOptions,
@@ -52,6 +55,7 @@ import type {
 } from './table-cell-range'
 import type { TableMergeConfig } from './table-merge'
 import type { TableGroupConfig, TableGroupNode } from './table-group'
+import type { TableFooterConfig } from './table-footer-config'
 import type {
   TableRowDragConfig,
   TableRowDragContext,
@@ -67,6 +71,7 @@ import type {
   TableDataPosition,
 } from './table-changes'
 import type { PaginationProps } from '@vuesax-alpha/components/pagination'
+import type { FormModel } from '@vuesax-alpha/components/form'
 import type {
   TableBusinessExposes,
   TableProxyConfig,
@@ -81,6 +86,7 @@ import type {
   TableEditEndParams,
   TableEditRecord,
   TableEditRenderer,
+  TableEditSlotParams,
   TableEditorConfig,
 } from './table-edit'
 import type {
@@ -99,6 +105,7 @@ export * from './table-keyboard'
 export * from './table-cell-range'
 export * from './table-merge'
 export * from './table-group'
+export * from './table-footer-config'
 export * from './table-row-drag'
 export type { TableHistoryConfig, TableHistoryState } from './table-history'
 export type {
@@ -114,6 +121,7 @@ export type {
 } from './table-changes'
 export * from './table-edit'
 export * from './table-business'
+export type { TableGlobalConfig } from './table-global-config'
 export type {
   TableValidateOptions,
   TableValidationConfig,
@@ -126,23 +134,27 @@ export type {
 } from './table-validation'
 
 export type TableRowKey = string | number
-export type TableRow = Record<string, unknown>
+/** Dynamic fallback used when an application does not supply its own row type. */
+export type TableRow = Recordable
 export type TableModelValueType = string | number | object
 export type TableAlign = 'left' | 'center' | 'right'
 export type TableColumnType = 'seq' | 'checkbox' | 'radio' | 'expand'
 export type TableColumnFixed = boolean | 'left' | 'right'
+export interface TableColumnPlacement {
+  /** Parent group key; null places the node at the root level. */
+  parentKey: string | null
+  /** Zero-based position among the parent's direct children. */
+  index: number
+}
 export interface TableColumnState {
-  /** Column key, field, or @originalIndex; virtualSource uses its original index string. */
+  /** Leaf or group key; virtualSource uses its original index string. */
   key: string
   hidden?: boolean
   /** Zero-based position in the complete order, including hidden columns. */
   order?: number
   fixed?: TableColumnFixed
-}
-export interface TableColumnManagerConfig {
-  enabled?: boolean
-  /** Opt-in localStorage key. Controlled state is saved but never implicitly restored. */
-  storageKey?: string
+  /** Optional hierarchy override. Omit it to retain the declared parent. */
+  placement?: TableColumnPlacement
 }
 export type TableOverflow = boolean | 'ellipsis' | 'title' | 'tooltip'
 export type TableSortOrder = 'asc' | 'desc'
@@ -152,8 +164,8 @@ export interface TableResizeConfig {
   keyboardStep?: number
 }
 export type TableColumnWidths = Record<string, number>
-export interface TableColumnResizeParams {
-  column: TableColumn
+export interface TableColumnResizeParams<Row extends object = TableRow> {
+  column: TableColumn<Row>
   columnIndex: number
   columnKey: string
   width: number
@@ -179,64 +191,67 @@ export interface TablePageChangeParams {
   total: number
   type: 'current' | 'size' | 'reset' | 'clamp'
 }
-export type TableSortComparator<Row extends TableRow = TableRow> = (
+export type TableSortComparator<Row extends object = TableRow> = (
   a: unknown,
   b: unknown,
   rowA: Row,
   rowB: Row,
 ) => boolean | number
-export type TableSortMethod<Row extends TableRow = TableRow> =
+export type TableSortMethod<Row extends object = TableRow> =
   'number' | 'string' | TableSortComparator<Row>
-export interface TableSort {
-  field: string
+export interface TableSort<Row extends object = TableRow> {
+  field: FieldPath<Row>
   order: TableSortOrder
 }
-export interface TableSortConfig {
+export interface TableSortConfig<Row extends object = TableRow> {
   multiple?: boolean
   remote?: boolean
-  defaultSort?: TableSort[]
+  defaultSort?: TableSort<Row>[]
 }
-export type TableFilterValue = string | number | boolean
+export type TableFilterValue = TableModelValueType | boolean | Date | null
 export interface TableFilterOption {
   label: string
   value: TableFilterValue
   disabled?: boolean
 }
-export type TableFilters = Record<string, TableFilterValue[]>
-export interface TableFilterConfig {
+export type TableFilters<Row extends object = TableRow> = Partial<
+  Record<FieldPath<Row>, TableFilterValue[]>
+>
+export interface TableFilterConfig<Row extends object = TableRow> {
   remote?: boolean
-  defaultFilters?: TableFilters
+  defaultFilters?: TableFilters<Row>
 }
-export interface TableFilterParams<Row extends TableRow = TableRow> {
+export interface TableFilterParams<Row extends object = TableRow> {
   row: Row
   column: TableColumn<Row>
   value: unknown
   values: TableFilterValue[]
 }
-export interface TableFilterSlotParams<Row extends TableRow = TableRow> {
+export interface TableFilterSlotParams<Row extends object = TableRow> {
   column: TableColumn<Row>
   values: TableFilterValue[]
+  disabled: boolean
   setValues: (values: TableFilterValue[]) => void
   apply: () => void
   reset: () => void
   close: () => void
 }
-export interface TableSelectionConfig<Row extends TableRow = TableRow> {
+export interface TableSelectionConfig<Row extends object = TableRow> {
   trigger?: 'row' | 'cell'
   reserve?: boolean
   showSelectAll?: boolean
-  checkMethod?: (params: { row: Row; rowIndex: number }) => boolean
+  selectableMethod?: (params: { row: Row; rowIndex: number }) => boolean
 }
 
-export interface TableColumnSlots {
+export interface TableColumnSlots<Row extends object = TableRow> {
   edit?: string
-  default?: string
+  default?: string | TableCellRenderer<Row>
   header?: string
   footer?: string
   filter?: string
 }
 
-export interface TableFlatRow<Row extends TableRow = TableRow> {
+export interface TableFlatRow<Row extends object = TableRow> {
   row: Row
   key: TableRowKey
   index: number
@@ -249,24 +264,24 @@ export interface TableFlatRow<Row extends TableRow = TableRow> {
   isLastChild?: boolean
 }
 
-export interface TableDetailParams<Row extends TableRow = TableRow> {
+export interface TableDetailParams<Row extends object = TableRow> {
   row: Row
   rowKey: TableRowKey
   rowIndex: number
 }
 export interface TableDetailLoadParams<
-  Row extends TableRow = TableRow,
+  Row extends object = TableRow,
 > extends TableDetailParams<Row> {
   signal: AbortSignal
 }
-export interface TableDetailConfig<Row extends TableRow = TableRow> {
+export interface TableDetailConfig<Row extends object = TableRow> {
   enabled?: boolean
   defaultExpandedKeys?: TableRowKey[]
-  checkMethod?: (params: TableDetailParams<Row>) => boolean
+  expandableMethod?: (params: TableDetailParams<Row>) => boolean
   load?: (params: TableDetailLoadParams<Row>) => Promise<unknown>
 }
 export interface TableDetailSlotParams<
-  Row extends TableRow = TableRow,
+  Row extends object = TableRow,
 > extends TableDetailParams<Row> {
   loading: boolean
   data: unknown
@@ -275,15 +290,17 @@ export interface TableDetailSlotParams<
   close: () => Promise<void>
 }
 export interface TableDetailExpandParams<
-  Row extends TableRow = TableRow,
+  Row extends object = TableRow,
 > extends TableDetailParams<Row> {
   expanded: boolean
 }
 
-export interface TableCellRenderParams<Row extends TableRow = TableRow> {
+export interface TableCellRenderParams<Row extends object = TableRow> {
   row: Row
   column: TableColumn<Row>
   value: unknown
+  /** VXE-style alias of rowIndex for configured render functions. */
+  index: number
   rowIndex: number
   columnIndex: number
   depth: number
@@ -292,20 +309,20 @@ export interface TableCellRenderParams<Row extends TableRow = TableRow> {
   toggleExpand: (expanded?: boolean) => Promise<void>
 }
 
-export interface TableHeaderRenderParams<Row extends TableRow = TableRow> {
+export interface TableHeaderRenderParams<Row extends object = TableRow> {
   column: TableColumn<Row>
   columnIndex: number
 }
 
-export type TableCellRenderer<Row extends TableRow = TableRow> = (
+export type TableCellRenderer<Row extends object = TableRow> = (
   params: TableCellRenderParams<Row>,
 ) => VNodeChild
 
-export type TableHeaderRenderer<Row extends TableRow = TableRow> = (
+export type TableHeaderRenderer<Row extends object = TableRow> = (
   params: TableHeaderRenderParams<Row>,
 ) => VNodeChild
 
-export interface TableFooterCellRenderParams<Row extends TableRow = TableRow> {
+export interface TableFooterCellRenderParams<Row extends object = TableRow> {
   /** The supplied footer record, independent of body rows. */
   row: TableRow
   column: TableColumn<Row>
@@ -314,29 +331,50 @@ export interface TableFooterCellRenderParams<Row extends TableRow = TableRow> {
   columnIndex: number
 }
 
-export type TableFooterRenderer<Row extends TableRow = TableRow> = (
+export type TableFooterRenderer<Row extends object = TableRow> = (
   params: TableFooterCellRenderParams<Row>,
 ) => VNodeChild
 
-export type TableFooterFormatter<Row extends TableRow = TableRow> = (
+export type TableFooterFormatter<Row extends object = TableRow> = (
   params: TableFooterCellRenderParams<Row>,
 ) => string | number | null | undefined
 
-export interface TableRenderer<Row extends TableRow = TableRow> {
+export type TableFilterRenderer<Row extends object = TableRow> = (
+  params: TableFilterSlotParams<Row>,
+) => VNodeChild
+
+export type TableRendererEvent<Row extends object = TableRow> = (
+  params:
+    | TableCellRenderParams<Row>
+    | TableEditSlotParams<Row>
+    | TableFilterSlotParams<Row>,
+  ...args: unknown[]
+) => unknown
+
+export interface TableRendererOptions<Row extends object = TableRow> {
+  name: string
+  props?: Record<string, unknown>
+  attrs?: Record<string, unknown>
+  events?: Record<string, TableRendererEvent<Row>>
+  options?: unknown[]
+}
+
+export interface TableRenderer<Row extends object = TableRow> {
   edit?: TableEditRenderer<Row>
   cell?: TableCellRenderer<Row>
   header?: TableHeaderRenderer<Row>
   footer?: TableFooterRenderer<Row>
+  filter?: TableFilterRenderer<Row>
 }
 
-export interface TableColumnOptions<Row extends TableRow = TableRow> {
+export interface TableColumnOptions<Row extends object = TableRow> {
   rules?: TableValidationRule<Row> | TableValidationRule<Row>[]
   editor?: boolean | TableEditorConfig<Row>
   edit?: TableEditRenderer<Row>
   /** Nested header groups. Only leaf columns render data cells. */
   children?: TableColumn<Row>[]
   type?: TableColumnType
-  field?: string
+  field?: FieldPath<Row>
   title?: string
   width?: number | string
   minWidth?: number | string
@@ -353,11 +391,16 @@ export interface TableColumnOptions<Row extends TableRow = TableRow> {
   filters?: TableFilterOption[]
   filterMultiple?: boolean
   filterMethod?: (params: TableFilterParams<Row>) => boolean
+  filterRender?: TableRendererOptions<Row>
   showOverflow?: TableOverflow
   showHeaderOverflow?: TableOverflow
   showFooterOverflow?: TableOverflow
-  slots?: TableColumnSlots
-  renderer?: string | TableRenderer<Row> | TableCellRenderer<Row>
+  slots?: TableColumnSlots<Row>
+  renderer?:
+    | string
+    | TableRendererOptions<Row>
+    | TableRenderer<Row>
+    | TableCellRenderer<Row>
   cell?: TableCellRenderer<Row>
   header?: TableHeaderRenderer<Row>
   footer?: TableFooterRenderer<Row>
@@ -365,12 +408,12 @@ export interface TableColumnOptions<Row extends TableRow = TableRow> {
 }
 
 export interface TableColumn<
-  Row extends TableRow = TableRow,
+  Row extends object = TableRow,
 > extends TableColumnOptions<Row> {
   key?: string
 }
 
-export interface TableRenderedColumnEntry<Row extends TableRow = TableRow> {
+export interface TableRenderedColumnEntry<Row extends object = TableRow> {
   kind: 'column'
   key: string
   column: TableColumn<Row>
@@ -387,7 +430,7 @@ export interface TableRenderedSpacerEntry {
   width: number
 }
 
-export type TableRenderedEntry<Row extends TableRow = TableRow> =
+export type TableRenderedEntry<Row extends object = TableRow> =
   TableRenderedColumnEntry<Row> | TableRenderedSpacerEntry
 
 export interface TableColumnRegistration {
@@ -403,19 +446,19 @@ export interface TableColumnRegistration {
 export const tableColumnRegistrationKey: InjectionKey<TableColumnRegistration> =
   Symbol('tableColumnRegistration')
 
-export interface TableTreeLoadParams<Row extends TableRow = TableRow> {
+export interface TableTreeLoadParams<Row extends object = TableRow> {
   row: Row
   rowKey: TableRowKey
 }
 
-export interface TableTreeConfig<Row extends TableRow = TableRow> {
-  children?: string
+export interface TableTreeConfig<Row extends object = TableRow> {
+  children?: FieldPath<Row>
   indent?: number
   line?: boolean
   expandAll?: boolean
   defaultExpandedKeys?: TableRowKey[]
   expandOnClickRow?: boolean
-  hasChildren?: string | ((row: Row) => boolean)
+  hasChildren?: FieldPath<Row> | ((row: Row) => boolean)
   load?: (params: TableTreeLoadParams<Row>) => Promise<Row[]>
 }
 
@@ -437,6 +480,7 @@ export interface TableParentIndicatorSlotParams {
 
 export interface TableVirtualConfig {
   enabled?: boolean
+  /** Row viewport height. auto consumes the remaining height of a bounded parent. */
   height?: number | string
   estimateSize?: number
   overscan?: number
@@ -445,7 +489,7 @@ export interface TableVirtualConfig {
   columnOverscan?: number
 }
 
-export interface TableVirtualSource<Row extends TableRow = TableRow> {
+export interface TableVirtualSource<Row extends object = TableRow> {
   rowCount: number
   columnCount: number
   row: (index: number) => Row
@@ -460,19 +504,19 @@ export interface TableVirtualSource<Row extends TableRow = TableRow> {
   headerPath?: (index: number) => TableHeaderGroup<Row>[]
 }
 
-export interface TableHeaderGroup<Row extends TableRow = TableRow> {
+export interface TableHeaderGroup<Row extends object = TableRow> {
   key: string
   title?: string
   align?: TableAlign
   className?: string
   header?: TableHeaderRenderer<Row>
-  slots?: TableColumnSlots
+  slots?: TableColumnSlots<Row>
 }
 
-export type TableRowKeyGetter<Row extends TableRow = TableRow> =
-  string | ((row: Row, index: number) => TableRowKey)
+export type TableRowKeyGetter<Row extends object = TableRow> =
+  FieldPath<Row> | ((row: Row, index: number) => TableRowKey)
 
-export type TableRowClass<Row extends TableRow = TableRow> =
+export type TableRowClass<Row extends object = TableRow> =
   string | ((params: TableFlatRow<Row>) => string | string[] | undefined)
 
 export const tableCoreProps = buildProps({
@@ -556,16 +600,16 @@ export const tableCoreProps = buildProps({
     type: definePropType<TableRow[]>(Array),
     default: () => [],
   },
+  footerConfig: {
+    type: definePropType<boolean | TableFooterConfig>([Boolean, Object]),
+    default: false,
+  },
   footerRowKey: {
     type: definePropType<TableRowKeyGetter>([String, Function]),
     default: undefined,
   },
   showFooterOverflow: {
     type: definePropType<TableOverflow>([Boolean, String]),
-    default: false,
-  },
-  columnManagerConfig: {
-    type: definePropType<boolean | TableColumnManagerConfig>([Boolean, Object]),
     default: false,
   },
   columnState: {
@@ -704,11 +748,69 @@ export const tableProps = buildProps({
 } as const)
 
 export type TableCoreProps = ExtractPropTypes<typeof tableCoreProps>
-export type TableProps = Omit<TableCoreProps, 'data'> & {
-  data?: TableRow[]
-  proxyConfig?: boolean | TableProxyConfig
-  queryConfig?: boolean | TableQueryConfig
-  toolbarConfig?: boolean | TableToolbarConfig
+type TableGenericPropKey =
+  | 'changeConfig'
+  | 'validationRules'
+  | 'editConfig'
+  | 'rowDragConfig'
+  | 'clipboardConfig'
+  | 'findConfig'
+  | 'contextMenuConfig'
+  | 'mergeConfig'
+  | 'groupConfig'
+  | 'detailConfig'
+  | 'footerConfig'
+  | 'highlight'
+  | 'row'
+  | 'data'
+  | 'columns'
+  | 'rowKey'
+  | 'treeConfig'
+  | 'virtualSource'
+  | 'renderers'
+  | 'rowClass'
+  | 'sortBy'
+  | 'sortConfig'
+  | 'filters'
+  | 'filterConfig'
+  | 'selectionConfig'
+
+export type TableProps<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> = Omit<
+  TableCoreProps,
+  TableGenericPropKey | 'proxyConfig' | 'queryConfig' | 'toolbarConfig'
+> & {
+  changeConfig: boolean | TableChangeConfig<Row>
+  validationRules: TableValidationRules<Row>
+  editConfig: boolean | TableEditConfig<Row>
+  rowDragConfig: boolean | TableRowDragConfig<Row>
+  clipboardConfig: boolean | TableClipboardConfig<Row>
+  findConfig: boolean | TableFindConfig<Row>
+  contextMenuConfig: boolean | TableContextMenuConfig<Row>
+  mergeConfig: boolean | TableMergeConfig<Row>
+  groupConfig: boolean | TableGroupConfig<Row>
+  detailConfig?: boolean | TableDetailConfig<Row>
+  footerConfig: boolean | TableFooterConfig<Row>
+  highlight?: Row | Row[] | null
+  /** @deprecated Use highlight instead. */
+  row?: Row | Row[] | null
+  data?: Row[]
+  columns: TableColumn<Row>[]
+  rowKey: TableRowKeyGetter<Row>
+  treeConfig?: TableTreeConfig<Row>
+  virtualSource?: TableVirtualSource<Row>
+  renderers: Record<string, TableRenderer<Row> | TableCellRenderer<Row>>
+  rowClass: TableRowClass<Row>
+  sortBy?: TableSort<Row>[]
+  sortConfig: TableSortConfig<Row>
+  filters?: TableFilters<Row>
+  filterConfig: TableFilterConfig<Row>
+  selectionConfig: TableSelectionConfig<Row>
+  proxyConfig?: boolean | TableProxyConfig<Row, QueryForm>
+  queryConfig?: boolean | TableQueryConfig<QueryForm>
+  toolbarConfig?: boolean | TableToolbarConfig<Row, QueryForm>
 }
 
 export const tableCoreEmits = {
@@ -725,6 +827,7 @@ export const tableCoreEmits = {
   groupExpand: (params: { group: TableGroupNode; expanded: boolean }) =>
     isObject(params),
   groupError: (error: unknown) => error !== undefined,
+  footerError: (error: unknown) => error !== undefined,
   contextMenuOpen: (context: TableContextMenuContext) => isObject(context),
   contextMenuClose: (context: TableContextMenuContext) => isObject(context),
   contextMenuSelect: (params: TableContextMenuSelectParams) => isObject(params),
@@ -802,10 +905,163 @@ export const tableEmits = {
 export type TableCoreEmits = typeof tableCoreEmits
 export type TableCoreEmitFn = EmitFn<TableCoreEmits>
 export type TableEmits = typeof tableEmits
-export type TableEmitFn = TableCoreEmitFn
 export type TableBusinessEmitFn = EmitFn<TableEmits>
 
-export interface TableCoreExposes<Row extends TableRow = TableRow> {
+export interface SaxGridEventMap<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> {
+  findChange: [state: TableFindState]
+  chartChange: [state: TableChartState]
+  chartError: [error: unknown]
+  replace: [result: TableReplaceResult<Row>]
+  clipboard: [result: TableClipboardResult<Row>]
+  'update:cellRange': [range: TableCellRange | null]
+  cellRangeChange: [change: TableCellRangeChange]
+  cellRangeError: [error: unknown]
+  'update:groupExpandedKeys': [keys: string[]]
+  groupExpand: [params: { group: TableGroupNode; expanded: boolean }]
+  groupError: [error: unknown]
+  footerError: [error: unknown]
+  contextMenuOpen: [context: TableContextMenuContext<Row>]
+  contextMenuClose: [context: TableContextMenuContext<Row>]
+  contextMenuSelect: [params: TableContextMenuSelectParams<Row>]
+  'update:activeCell': [cell: TableActiveCell | null]
+  activeCellChange: [cell: TableActiveCell | null]
+  rowDragStart: [context: TableRowDragContext<Row>]
+  rowDragEnd: [result: TableRowDragResult<Row>]
+  historyChange: [state: TableHistoryState]
+  'update:data': [data: Row[]]
+  changesChange: [version: number]
+  dataChange: [operations: TableDataMutation<Row>[]]
+  validation: [result: TableValidationResult<Row>]
+  editStart: [params: TableEditRecord<Row>]
+  editChange: [params: TableEditRecord<Row>]
+  editCommit: [params: TableEditEndParams<Row>]
+  editCancel: [params: TableEditEndParams<Row>]
+  'update:detailExpandedKeys': [keys: TableRowKey[]]
+  detailExpand: [params: TableDetailExpandParams<Row>]
+  detailLoad: [params: TableDetailParams<Row> & { data: unknown }]
+  detailLoadError: [params: TableDetailParams<Row> & { error: unknown }]
+  'update:highlight': [value: Row | Row[] | null]
+  'update:columnState': [state: TableColumnState[]]
+  columnStateChange: [state: TableColumnState[]]
+  columnStorageError: [
+    event: {
+      operation: 'read' | 'write'
+      error: unknown
+    },
+  ]
+  'update:row': [value: Row | Row[] | null]
+  'update:columnWidths': [widths: TableColumnWidths]
+  columnResize: [params: TableColumnResizeParams<Row>]
+  'update:modelValue': [
+    value: TableModelValueType | TableModelValueType[] | null,
+  ]
+  'update:expandedKeys': [keys: TableRowKey[]]
+  rowClick: [row: Row, event: MouseEvent]
+  cellClick: [params: TableCellRenderParams<Row>, event: MouseEvent]
+  footerCellClick: [params: TableFooterCellRenderParams<Row>, event: MouseEvent]
+  treeExpand: [row: Row, expanded: boolean]
+  lazyLoad: [row: Row, children: Row[]]
+  scroll: [event: Event]
+  'update:sortBy': [sorts: TableSort<Row>[]]
+  sortChange: [sorts: TableSort<Row>[]]
+  'update:filters': [filters: TableFilters<Row>]
+  filterChange: [filters: TableFilters<Row>]
+  selectionChange: [rows: Row[]]
+  'update:pagerConfig': [config: TablePagerConfig]
+  pageChange: [page: TablePageChangeParams]
+  query: [context: TableQueryContext<Row, QueryForm>]
+  queryError: [error: unknown]
+  proxyStateChange: [state: TableProxyState]
+  proxySuccess: [result: TableProxyResult]
+  proxyError: [result: TableProxyResult]
+  toolbarClick: [
+    code: string,
+    context: TableQueryContext<Row, QueryForm>,
+    event: MouseEvent,
+  ]
+}
+
+type SaxGridEventPropName<Event extends string> = `on${Capitalize<Event>}`
+
+export type SaxGridListenerProps<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> = {
+  [
+    Event in Extract<
+      keyof SaxGridEventMap<Row, QueryForm>,
+      string
+    > as SaxGridEventPropName<Event>
+  ]?: (
+    ...args: SaxGridEventMap<Row, QueryForm>[Event] extends unknown[]
+      ? SaxGridEventMap<Row, QueryForm>[Event]
+      : never
+  ) => unknown
+}
+
+/** Public configuration object accepted by `v-bind` on STable. */
+export type SaxGridSetting<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> = Partial<TableProps<Row, QueryForm>> & SaxGridListenerProps<Row, QueryForm>
+
+export type SaxGridEmitFn<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> = <Event extends keyof SaxGridEventMap<Row, QueryForm>>(
+  event: Event,
+  ...args: SaxGridEventMap<Row, QueryForm>[Event]
+) => void
+
+export type TableEmitFn<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> = SaxGridEmitFn<Row, QueryForm>
+
+export interface TableSlots<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> {
+  default?(): unknown
+  header?(): unknown
+  footer?(): unknown
+  notFound?(): unknown
+  'toolbar-title'?(): unknown
+  query?(params: TableExposes<Row, QueryForm> & { model: QueryForm }): unknown
+  'query-actions'?(
+    params: TableExposes<Row, QueryForm> & { busy: boolean },
+  ): unknown
+  toolbar_left?(
+    params: TableExposes<Row, QueryForm> & { busy: boolean },
+  ): unknown
+  toolbar_right?(
+    params: TableExposes<Row, QueryForm> & { busy: boolean },
+  ): unknown
+  'proxy-error'?(
+    params: TableExposes<Row, QueryForm> & { state: TableProxyState },
+  ): unknown
+  cell?(params: TableCellRenderParams<Row>): unknown
+  'header-cell'?(params: TableHeaderRenderParams<Row>): unknown
+  'edit-cell'?(params: TableEditSlotParams<Row>): unknown
+  'footer-cell'?(params: TableFooterCellRenderParams<Row>): unknown
+  'group-header'?(params: { group: TableGroupNode; expanded: boolean }): unknown
+  'group-summary'?(
+    params: TableFooterCellRenderParams<Row> & {
+      group?: TableGroupNode
+      kind: string
+    },
+  ): unknown
+  'parent-indicator'?(params: TableParentIndicatorSlotParams): unknown
+  detail?(params: TableDetailSlotParams<Row>): unknown
+  'detail-loading'?(params: TableDetailSlotParams<Row>): unknown
+  'detail-error'?(params: TableDetailSlotParams<Row>): unknown
+  [name: string]: ((params: any) => unknown) | undefined
+}
+
+export interface TableCoreExposes<Row extends object = TableRow> {
   getChartData: (options: TableChartOptions) => Promise<TableChartResult>
   openChart: (options: TableChartOptions) => Promise<TableChartResult>
   closeChart: () => void
@@ -822,20 +1078,20 @@ export interface TableCoreExposes<Row extends TableRow = TableRow> {
   replaceMatch: (
     replacement: string,
     options?: TableReplaceOptions,
-  ) => Promise<TableReplaceResult>
+  ) => Promise<TableReplaceResult<Row>>
   replaceAll: (
     replacement: string,
     options?: TableReplaceOptions,
-  ) => Promise<TableReplaceResult>
+  ) => Promise<TableReplaceResult<Row>>
   getFindState: () => TableFindState
   clearFind: () => void
   cancelFind: () => void
-  copyCells: (options?: TableCopyOptions) => Promise<TableClipboardResult>
-  cutCells: (options?: TableCopyOptions) => Promise<TableClipboardResult>
+  copyCells: (options?: TableCopyOptions) => Promise<TableClipboardResult<Row>>
+  cutCells: (options?: TableCopyOptions) => Promise<TableClipboardResult<Row>>
   pasteCells: (
     data?: string | TableClipboardData,
     options?: TableClipboardOptions,
-  ) => Promise<TableClipboardResult>
+  ) => Promise<TableClipboardResult<Row>>
   cancelClipboard: () => void
   setCellRange: (range: TableCellRange | null) => Promise<boolean>
   clearCellRange: () => Promise<boolean>
@@ -868,7 +1124,7 @@ export interface TableCoreExposes<Row extends TableRow = TableRow> {
   removeRows: (rowKeys: TableRowKey[]) => Promise<TableDataMutationResult>
   updateRow: (
     rowKey: TableRowKey,
-    values: Record<string, unknown>,
+    values: Partial<Row>,
   ) => Promise<TableDataMutationResult>
   revertChanges: (rowKeys?: TableRowKey[]) => Promise<TableDataMutationResult>
   getChangeRecords: () => TableChangeRecords<Row>
@@ -920,7 +1176,7 @@ export interface TableCoreExposes<Row extends TableRow = TableRow> {
   measure: () => Promise<void>
   setSort: (sorts: TableSort[]) => void
   clearSort: () => void
-  setFilters: (filters: TableFilters) => void
+  setFilters: (filters: TableFilters<Row>) => void
   clearFilters: () => void
   getSelectedRows: () => Row[]
   setSelectedRows: (rows: Row[]) => void
@@ -1005,7 +1261,48 @@ export const tableCoreExposeKeys = [
   'selectAll',
 ] as const satisfies readonly (keyof TableCoreExposes)[]
 
-export interface TableExposes<Row extends TableRow = TableRow>
-  extends TableCoreExposes<Row>, TableBusinessExposes {}
+export interface TableExposes<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+>
+  extends TableCoreExposes<Row>, TableBusinessExposes<Row, QueryForm> {}
 
-export type TableInstance = InstanceType<typeof Table> & TableExposes
+export type TableInstance<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> = Omit<InstanceType<typeof Table>, '$props' | '$slots' | '$emit'> &
+  TableExposes<Row, QueryForm> & {
+    $props: SaxGridSetting<Row, QueryForm>
+    $slots: TableSlots<Row, QueryForm>
+    $emit: SaxGridEmitFn<Row, QueryForm>
+  }
+
+export type SaxGridInstance<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> = TableInstance<Row, QueryForm>
+
+export interface SaxTableSetupContext<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> {
+  props: PublicProps & SaxGridSetting<Row, QueryForm>
+  expose: (exposed: TableExposes<Row, QueryForm>) => void
+  attrs: Record<string, unknown>
+  slots: TableSlots<Row, QueryForm>
+  emit: SaxGridEmitFn<Row, QueryForm>
+}
+
+/** Generic public component signature used by Vue templates and TSX. */
+export type SaxTableComponent = <
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+>(
+  props: PublicProps & SaxGridSetting<Row, QueryForm>,
+  context?: Pick<
+    SaxTableSetupContext<Row, QueryForm>,
+    'attrs' | 'emit' | 'slots'
+  >,
+  exposed?: TableExposes<Row, QueryForm>,
+  setup?: Promise<SaxTableSetupContext<Row, QueryForm>>,
+) => VNode & { __ctx?: SaxTableSetupContext<Row, QueryForm> }

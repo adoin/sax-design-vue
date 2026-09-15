@@ -44,7 +44,7 @@ export function tableTrackingPath(row: TableRow, field: string): string {
 }
 
 /** Immutable path updates for ordinary rows; generated sources can apply patches directly. */
-export function applyTableDataPatches<Row extends TableRow>(
+export function applyTableDataPatches<Row extends object>(
   row: Row,
   patches: TableDataFieldPatch[],
 ): Row {
@@ -53,7 +53,7 @@ export function applyTableDataPatches<Row extends TableRow>(
   for (const { field, value, exists } of patches) {
     if (!editableField(field)) throw new TypeError('Invalid table field path')
     const parts = field.split('.')
-    let target: Record<string, unknown> = result
+    let target = result as Record<string, unknown>
     for (const part of parts.slice(0, -1)) {
       const current = target[part]
       const next = Array.isArray(current)
@@ -72,7 +72,7 @@ export function applyTableDataPatches<Row extends TableRow>(
 }
 
 /** Generated rows expose untouched values lazily instead of spreading all fields. */
-export function projectTableDataPatches<Row extends TableRow>(
+export function projectTableDataPatches<Row extends object>(
   row: Row,
   patches: TableDataFieldPatch[],
 ): Row {

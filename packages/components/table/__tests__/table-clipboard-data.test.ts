@@ -23,6 +23,7 @@ const makeCell = (
     row,
     rowKey: row.id as number,
     column,
+    index: rowIndex,
     rowIndex,
     columnIndex,
     columnKey: column.key!,

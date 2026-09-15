@@ -3,37 +3,37 @@ description: '在主内容流外展示短暂的程序化通知。'
 PROPS:
   - name: dangerous-html-string
     type: Boolean
-    values: "true | false"
+    values: 'true | false'
     description: 将字符串内容作为 HTML 渲染；仅用于可信内容。
     default: false
   - name: icon-size
     type: String
-    values: "CSS 长度"
+    values: 'CSS 长度'
     description: 设置通知图标尺寸。
     default: 1.2rem
   - name: offset
     type: Number
-    values: "像素"
+    values: '像素'
     description: 设置通知堆栈与视口边缘的偏移。
     default: 0
   - name: z-index
     type: Number
-    values: "层级数值"
+    values: '层级数值'
     description: 设置初始层叠顺序。
     default: null
   - name: show-close
     type: Boolean
-    values: "true | false"
+    values: 'true | false'
     description: 控制关闭入口并处理关闭交互。
     default: 'true'
   - name: on-click-close
     type: Function
-    values: "关闭回调"
+    values: '关闭回调'
     description: 控制关闭入口并处理关闭交互。
     default: null
   - name: title
     type: String
-    values: "String"
+    values: 'String'
     description: 为通知添加标题。
     default: null
     link: null
@@ -46,7 +46,7 @@ PROPS:
       })
   - name: content
     type: String, Component
-    values: "String, VNode"
+    values: 'String, VNode'
     description: 为通知添加内容。
     default: null
     link: null
@@ -59,7 +59,7 @@ PROPS:
       })
   - name: position
     type: String
-    values: "bottom-right,top-right,top-center,top-left,bottom-left,bottom-center"
+    values: 'bottom-right,top-right,top-center,top-left,bottom-left,bottom-center'
     description: 修改通知显示位置。
     default: bottom-right
     link: null
@@ -73,7 +73,7 @@ PROPS:
       })
   - name: color
     type: String
-    values: "Sax Design colors, rgb, hex"
+    values: 'Sax Design colors, rgb, hex'
     description: 修改整个通知的基础颜色。
     default: null
     link: null
@@ -87,7 +87,7 @@ PROPS:
       })
   - name: border
     type: String
-    values: "Sax Design colors, rgb, hex"
+    values: 'Sax Design colors, rgb, hex'
     description: 为通知添加指定颜色的边框。
     default: null
     link: null
@@ -101,7 +101,7 @@ PROPS:
       })
   - name: icon
     type: String
-    values: "String"
+    values: 'String'
     description: 为通知添加图标。
     default: null
     link: null
@@ -115,7 +115,7 @@ PROPS:
       })
   - name: duration
     type: Number, StringNumber
-    values: "Number, none"
+    values: 'Number, none'
     description: 设置通知自动隐藏的时间；none 表示不自动隐藏。
     default: 4500 (4.5s)
     link: null
@@ -129,7 +129,7 @@ PROPS:
       })
   - name: onClick
     type: function
-    values: "function"
+    values: 'function'
     description: 点击通知时执行的函数。
     default: null
     link: null
@@ -145,7 +145,7 @@ PROPS:
       })
   - name: buttonClose
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: 是否显示通知关闭按钮。
     default: true
     link: null
@@ -159,7 +159,7 @@ PROPS:
       })
   - name: flat
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: 将通知切换为扁平样式。
     default: false
     link: null
@@ -177,7 +177,7 @@ PROPS:
       </script>
   - name: onDestroy
     type: () => void
-    values: "Function"
+    values: 'Function'
     description: 通知销毁时执行的函数。
     default: null
     link: null
@@ -195,7 +195,7 @@ PROPS:
       </script>
   - name: sticky
     type: boolean
-    values: "true,false"
+    values: 'true,false'
     description: 使通知固定在最近的视口角落。
     default: false
     link: null
@@ -213,7 +213,7 @@ PROPS:
       </script>
   - name: square
     type: boolean
-    values: "true,false"
+    values: 'true,false'
     description: 是否使用直角样式并移除圆角。
     default: false
     link: null
@@ -231,7 +231,7 @@ PROPS:
       </script>
   - name: width
     type: String
-    values: "100%, auto"
+    values: '100%, auto'
     description: 设置通知宽度。
     default: 340px
     link: null
@@ -249,7 +249,7 @@ PROPS:
       </script>
   - name: loading
     type: boolean
-    values: "true,false"
+    values: 'true,false'
     description: 是否显示通知加载动画。
     default: false
     link: null
@@ -267,7 +267,7 @@ PROPS:
       </script>
   - name: progressAuto
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: 为通知添加进度条。
     default: null
     link: null
@@ -285,7 +285,7 @@ PROPS:
       </script>
   - name: notPadding
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: 移除通知内边距。
     default: 20px
     link: null
@@ -303,7 +303,7 @@ PROPS:
       </script>
   - name: clickClose
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: 点击通知时是否关闭。
     default: false
     link: null
@@ -321,7 +321,7 @@ PROPS:
       </script>
   - name: instance.close()
     type: function
-    values: "null"
+    values: 'null'
     description: 关闭通知。
     default: null
     link: null
@@ -343,7 +343,7 @@ PROPS:
 
   - name: custom-class
     type: String
-    values: "String"
+    values: 'String'
     description: 为通知添加自定义类名。
     default: null
     link: null
@@ -673,7 +673,7 @@ SNotification({ ...options })
 
 ## 加载
 
-添加加载动画后，只显示动画，通知内容会被隐藏。
+设置 `loading` 后显示共用的 Sax 标志加载器，并隐藏通知内容。
 
 <template #example>
 <notification-loading />
@@ -763,9 +763,9 @@ SNotification({ ...options })
 
 <card>
 
-## 示例
+## 自定义内容
 
-可通过 `content` 属性传入已导入的组件，在通知中渲染任意自定义内容。
+将导入的组件创建为 VNode 并传给 `content`，即可在通知中渲染自定义内容。
 
 <template #example>
 <notification-example />
@@ -779,7 +779,13 @@ SNotification({ ...options })
 
 <template #script>
 
-@[code{15-44}](../../.vuepress/components/notification/example.vue)
+@[code{15-53}](../../.vuepress/components/notification/example.vue)
+
+</template>
+
+<template #style>
+
+@[code{55-66}](../../.vuepress/components/notification/example.vue)
 
 </template>
 

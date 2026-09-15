@@ -23,6 +23,15 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
 
   const zIndex = ref(props.zIndex ?? nextZIndex())
 
+  const readReboundDuration = () => {
+    const value = getComputedStyle(document.documentElement)
+      .getPropertyValue('--sax-motion-duration-slow')
+      .trim()
+    const duration = Number.parseFloat(value)
+    if (!Number.isFinite(duration)) return 400
+    return value.endsWith('ms') ? duration : duration * 1000
+  }
+
   const afterEnter = () => {
     emit('opened')
   }
@@ -67,7 +76,7 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
   const handleClose = () => {
     if (props.preventClose) {
       rebound.value = true
-      useTimeoutFn(() => (rebound.value = false), 300)
+      useTimeoutFn(() => (rebound.value = false), readReboundDuration())
 
       return
     }

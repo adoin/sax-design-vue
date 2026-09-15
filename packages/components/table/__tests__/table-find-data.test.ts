@@ -17,6 +17,7 @@ const makeCell = (
   context: {
     row,
     rowKey: row.id as number,
+    index: row.id as number,
     rowIndex: row.id as number,
     column,
     columnKey: column.key ?? column.field!,

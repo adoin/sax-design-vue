@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { reactive, useTemplateRef } from 'vue'
-import type { FormInstance, FormItemConfig } from 'sax-design-vue'
+import { reactive } from 'vue'
+import type { FormItemConfig } from 'sax-design-vue'
 
-const formRef = useTemplateRef<FormInstance>('formRef')
 const model = reactive({
   account: { name: '', email: '' },
   profile: { role: '', region: '', notifications: true },
@@ -20,7 +19,7 @@ const items: FormItemConfig[] = [
         span: 12,
         rules: { required: true, message: '请输入姓名', trigger: 'blur' },
         itemRender: {
-          name: 'SInput',
+          name: '$input',
           props: { placeholder: '请输入姓名' },
         },
       },
@@ -36,7 +35,7 @@ const items: FormItemConfig[] = [
             /.+@.+\..+/.test(String(value)) || '请输入有效邮箱',
         },
         itemRender: {
-          name: 'SInput',
+          name: '$input',
           props: { placeholder: 'name@example.com' },
         },
       },
@@ -51,7 +50,7 @@ const items: FormItemConfig[] = [
         title: '角色',
         span: 12,
         itemRender: {
-          name: 'SSelect',
+          name: '$select',
           props: { placeholder: '请选择角色' },
           options: [
             { label: '产品设计', value: 'design' },
@@ -65,7 +64,7 @@ const items: FormItemConfig[] = [
         title: '办公区域',
         span: 12,
         itemRender: {
-          name: 'SInput',
+          name: '$input',
           props: { placeholder: '例如：上海' },
         },
       },
@@ -74,14 +73,14 @@ const items: FormItemConfig[] = [
         title: '消息通知',
         span: 12,
         description: '接收工作区状态和审核提醒。',
-        itemRender: { name: 'SSwitch' },
+        itemRender: { name: '$switch' },
       },
       {
         field: 'note',
         title: '备注',
         span: 12,
         itemRender: {
-          name: 'STextarea',
+          name: '$textarea',
           props: { placeholder: '补充说明', rows: 3 },
         },
       },
@@ -91,26 +90,17 @@ const items: FormItemConfig[] = [
     span: 24,
     align: 'right',
     reserveErrorSpace: false,
-    slots: { default: 'actions' },
+    itemRender: {
+      name: '$buttons',
+      options: [
+        { code: 'reset', text: '重置', props: { type: 'flat' } },
+        { code: 'submit', text: '校验并保存' },
+      ],
+    },
   },
 ]
 </script>
 
 <template>
-  <s-form ref="formRef" :model="model" :items="items">
-    <template #actions>
-      <span class="form-demo__actions">
-        <s-button type="flat" @click="formRef?.resetFields()"> 重置 </s-button>
-        <s-button @click="formRef?.validate()"> 校验并保存 </s-button>
-      </span>
-    </template>
-  </s-form>
+  <s-form :model="model" :items="items" />
 </template>
-
-<style scoped>
-.form-demo__actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-</style>

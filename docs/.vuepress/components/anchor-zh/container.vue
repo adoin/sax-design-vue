@@ -1,0 +1,71 @@
+<template>
+  <div class="anchor-demo-container">
+    <s-anchor
+      :get-container="getContainer"
+      :items="items"
+      :offset="18"
+      :target-offset="18"
+    />
+    <div ref="container" class="anchor-demo-container__scroll">
+      <section v-for="item in items" :id="item.href.slice(1)" :key="item.href">
+        <h4>{{ item.title }}</h4>
+        <p>滚动此面板，或从锚点导航中选择一个项目。</p>
+      </section>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const container = ref<HTMLElement>()
+const items = [
+  { href: '#anchor-container-first', title: '第一节' },
+  { href: '#anchor-container-second', title: '第二节' },
+  { href: '#anchor-container-third', title: '第三节' },
+  { href: '#anchor-container-fourth', title: '第四节' },
+]
+const getContainer = () => container.value || window
+</script>
+
+<style scoped>
+.anchor-demo-container {
+  display: grid;
+  grid-template-columns: 172px minmax(0, 1fr);
+  gap: 22px;
+  min-height: 360px;
+  padding: 18px;
+}
+
+.anchor-demo-container__scroll {
+  height: 360px;
+  overflow: auto;
+  border: 1px solid hsl(var(--sax-theme-color) / 0.09);
+  border-radius: 12px;
+  background: hsl(var(--sax-theme-color) / 0.025);
+}
+
+.anchor-demo-container section {
+  min-height: 178px;
+  padding: 20px;
+  border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.08);
+}
+
+.anchor-demo-container section:last-child {
+  border-bottom: 0;
+}
+
+.anchor-demo-container h4 {
+  margin: 0 0 8px;
+}
+
+.anchor-demo-container p {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .anchor-demo-container {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

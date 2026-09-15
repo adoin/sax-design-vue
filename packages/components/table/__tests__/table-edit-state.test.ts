@@ -33,6 +33,7 @@ const context = (
   column,
   columnKey: column.field!,
   columnIndex: 0,
+  index: 0,
   rowIndex: 0,
   value: row.name,
   depth: 0,
@@ -72,7 +73,9 @@ describe('table edit state', () => {
       false,
     )
     expect(
-      e.start(context({ field: 'name', editor: { checkMethod: () => false } })),
+      e.start(
+        context({ field: 'name', editor: { editableMethod: () => false } }),
+      ),
     ).toBe(false)
     expect(e.start(context())).toBe(true)
     expect(wrapper.emitted('editStart')).toHaveLength(1)

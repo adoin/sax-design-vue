@@ -11,25 +11,36 @@
   opacity: 0;
 }
 
-.tooltip-enter-active,
+.tooltip-enter-active {
+  transition:
+    opacity getCssVar('motion-duration-quick') getCssVar('motion-easing-out'),
+    transform getCssVar('motion-duration-quick') getCssVar('motion-easing-out'),
+    left 0s,
+    top 0s;
+}
+
 .tooltip-leave-active {
-  transition: all getCssVar('motion-duration') getCssVar('motion-easing-standard'), left 0s, top 0s;
+  transition:
+    opacity getCssVar('motion-duration-micro') getCssVar('motion-easing-out'),
+    transform getCssVar('motion-duration-micro') getCssVar('motion-easing-out'),
+    left 0s,
+    top 0s;
 }
 
 .tooltip-enter-from,
 .tooltip-leave-to {
   opacity: 0;
   &[data-popper-placement*='top'] {
-    transform: translate(0, 5px);
+    transform: translate(0, getCssVar('motion-distance-micro'));
   }
   &[data-popper-placement*='bottom'] {
-    transform: translate(0, -5px);
+    transform: translate(0, calc(-1 * getCssVar('motion-distance-micro')));
   }
   &[data-popper-placement*='left'] {
-    transform: translate(5px);
+    transform: translate(getCssVar('motion-distance-micro'));
   }
   &[data-popper-placement*='right'] {
-    transform: translate(-5px);
+    transform: translate(calc(-1 * getCssVar('motion-distance-micro')));
   }
 }
 .#{$namespace}-fade-in-linear-enter-active,
@@ -43,7 +54,8 @@
 
 .#{$namespace}-fade-in-enter-active,
 .#{$namespace}-fade-in-leave-active {
-  transition: all getCssVar('transition-duration') getCssVar('motion-easing');
+  transition: opacity getCssVar('transition-duration')
+    getCssVar('motion-easing');
 }
 .#{$namespace}-fade-in-enter-from,
 .#{$namespace}-fade-in-leave-active {
@@ -52,7 +64,9 @@
 
 .#{$namespace}-zoom-in-center-enter-active,
 .#{$namespace}-zoom-in-center-leave-active {
-  transition: all getCssVar('transition-duration') getCssVar('motion-easing');
+  transition:
+    opacity getCssVar('transition-duration') getCssVar('motion-easing'),
+    transform getCssVar('transition-duration') getCssVar('motion-easing');
 }
 .#{$namespace}-zoom-in-center-enter-from,
 .#{$namespace}-zoom-in-center-leave-active {
@@ -104,27 +118,34 @@
 }
 
 .#{$namespace}-collapse-transition {
-  transition: getCssVar('transition-duration') height ease-in-out,
+  transition:
+    getCssVar('transition-duration') height ease-in-out,
     getCssVar('transition-duration') padding-top ease-in-out,
     getCssVar('transition-duration') padding-bottom ease-in-out;
 }
 
 .#{$namespace}-collapse-transition-leave-active,
 .#{$namespace}-collapse-transition-enter-active {
-  transition: getCssVar('transition-duration') max-height ease-in-out,
+  transition:
+    getCssVar('transition-duration') max-height ease-in-out,
     getCssVar('transition-duration') padding-top ease-in-out,
     getCssVar('transition-duration') padding-bottom ease-in-out;
 }
 
 .#{$namespace}-horizontal-collapse-transition {
-  transition: getCssVar('transition-duration') width ease-in-out,
+  transition:
+    getCssVar('transition-duration') width ease-in-out,
     getCssVar('transition-duration') padding-left ease-in-out,
     getCssVar('transition-duration') padding-right ease-in-out;
 }
 
 .#{$namespace}-list-enter-active,
 .#{$namespace}-list-leave-active {
-  transition: all getCssVar('motion-duration-long') getCssVar('motion-easing-standard');
+  transition:
+    opacity getCssVar('motion-duration-long')
+      getCssVar('motion-easing-standard'),
+    transform getCssVar('motion-duration-long')
+      getCssVar('motion-easing-standard');
 }
 
 .#{$namespace}-list-enter-from,
@@ -138,5 +159,26 @@
 }
 
 .#{$namespace}-opacity-transition {
-  transition: opacity getCssVar('transition-duration') getCssVar('motion-easing');
+  transition: opacity getCssVar('transition-duration')
+    getCssVar('motion-easing');
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class^='#{$namespace}-'],
+  [class*=' #{$namespace}-'],
+  .fade-in-linear-enter-active,
+  .fade-in-linear-leave-active,
+  .tooltip-enter-active,
+  .tooltip-leave-active {
+    &,
+    &::before,
+    &::after {
+      scroll-behavior: auto !important;
+      transition-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
 }

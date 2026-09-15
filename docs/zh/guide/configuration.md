@@ -125,6 +125,121 @@ SSR / SSG 可以直接渲染日期组件。服务端与客户端应配置相同�
 
 <card>
 
+## 全局尺寸
+
+`size` 为使用共享 `small` / `default` / `large` 尺寸体系的组件设置默认密度。目前 Button、Input、Date Picker、Time Picker、Rate、Steps、Tabs 和 Tag 会继承该值。组件显式传入的 `size` 始终优先。
+
+<command>
+
+```vue
+<template>
+  <s-config-provider size="large">
+    <s-input placeholder="继承 large" />
+    <s-button>继承 large</s-button>
+    <s-button size="small">局部覆盖为 small</s-button>
+  </s-config-provider>
+</template>
+```
+
+</command>
+
+Calendar、Navbar 等组件使用自己的尺寸语义（例如 `medium`、`compact`），不会错误套用这组全局值。
+
+</card>
+
+<card>
+
+## 常用交互默认值
+
+对全应用重复出现的交互策略，可分别通过 `button`、`dialog`、`drawer`、`notification`、`pagination` 和 `popper` 设置默认值。它们只接收适合复用的入参；内容、受控值、回调和业务数据仍保留在组件实例上。
+
+<command>
+
+```vue
+<script setup lang="ts">
+const buttonDefaults = { debounce: false }
+const dialogDefaults = { maskClosable: false, lockScroll: true }
+const notificationDefaults = {
+  duration: 6000,
+  position: 'top-right' as const,
+  showClose: true,
+}
+const paginationDefaults = {
+  pageSizes: [20, 50, 100],
+  pagerCount: 9,
+}
+</script>
+
+<template>
+  <s-config-provider
+    :button="buttonDefaults"
+    :dialog="dialogDefaults"
+    :notification="notificationDefaults"
+    :pagination="paginationDefaults"
+  >
+    <app />
+  </s-config-provider>
+</template>
+```
+
+</command>
+
+Drawer 可统一 `placement`、`size`、关闭按钮、遮罩关闭和 Teleport；直接使用 `SPopper` 时可统一显示/隐藏延迟、Teleport、定位策略、翻转、偏移、箭头和持久挂载。Tooltip、Select、Date Picker 等基于 Popper 的复合组件保留自己的语义默认，不会被底层 `popper` 配置意外改变。
+
+</card>
+
+<card>
+
+## Table 全局默认值
+
+`table` 用于统一多个 Table 实例的功能策略和显示默认值。它支持编辑、校验、历史、变更追踪、拖拽、键盘、区域、剪贴板、查找、图表、上下文菜单、列宽调整、虚拟滚动、多列排序、选择、分页、溢出显示、父级提示、表头、斑马纹、单复选模式和 `rowKey` 等可复用配置。
+
+<command>
+
+```vue
+<script setup lang="ts">
+import type { TableGlobalConfig } from 'sax-design-vue'
+
+const tableDefaults: TableGlobalConfig = {
+  striped: true,
+  showOverflow: 'tooltip',
+  editConfig: {
+    mode: 'cell',
+    onSwitch: 'commit',
+    onContextChange: 'cancel',
+    onScroll: 'keep',
+  },
+  selectionConfig: { trigger: 'row', reserve: true },
+  virtualConfig: { estimateSize: 48, overscan: 6 },
+}
+const rows = [{ id: 1, name: '示例' }]
+const columns = [{ field: 'name', title: '名称' }]
+</script>
+
+<template>
+  <s-config-provider :table="tableDefaults">
+    <s-table :data="rows" :columns="columns" />
+
+    <!-- 标量和 false 直接覆盖；对象字段与全局对象合并。 -->
+    <s-table
+      :data="rows"
+      :columns="columns"
+      :striped="false"
+      :edit-config="false"
+      :selection-config="{ trigger: 'cell' }"
+    />
+  </s-config-provider>
+</template>
+```
+
+</command>
+
+优先级为“组件显式值 > 最近一层 Provider > 外层 Provider > 组件内置默认值”。对象配置按字段浅合并；显式 `false` 可以关闭全局启用的功能。数据、受控状态、列定义、渲染器、校验规则、业务请求与回调仍必须放在具体 Table 上，避免不同数据模型之间产生隐式耦合。
+
+</card>
+
+<card>
+
 ## 圆角与动效令牌
 
 下面的全局令牌用于统一组件几何和动效。`--sax-radius` 是主圆角：核心输入框、菜单、弹出层、树、按钮、分页等共享控件会通过派生变量继承它。

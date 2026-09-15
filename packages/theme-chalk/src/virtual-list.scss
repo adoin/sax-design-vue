@@ -12,6 +12,8 @@
   width: 100%;
 
   @include e(window) {
+    --s-vl-scrollbar-track-inset: 0px;
+
     position: relative;
     overflow: auto;
     overscroll-behavior: contain;
@@ -32,8 +34,19 @@
     }
 
     &::-webkit-scrollbar-thumb {
+      border: 1px solid transparent;
       border-radius: var(--sax-radius-pill);
       background: hsl(var(--sax-primary) / 0.3);
+      background-clip: padding-box;
+    }
+
+    &::-webkit-scrollbar-track {
+      margin: var(--s-vl-scrollbar-track-inset);
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-corner {
+      background: transparent;
     }
 
     &::-webkit-scrollbar-thumb:hover {
@@ -82,7 +95,8 @@
 }
 @include b(virtual-scrollbar) {
   opacity: 0;
-  transition: opacity 340ms ease-out;
+  transition: opacity var(--sax-motion-duration-medium)
+    var(--sax-motion-easing-out);
   &.always-on {
     opacity: 1;
   }

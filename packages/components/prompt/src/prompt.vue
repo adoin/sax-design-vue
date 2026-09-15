@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
@@ -99,12 +99,29 @@ const canAccept = computed(
 
 const showFooter = computed(() => !props.buttonsHidden)
 
+let reboundTimer: number | undefined
+
+const readMotionDuration = () => {
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue('--sax-motion-duration')
+    .trim()
+  const duration = Number.parseFloat(value)
+  if (!Number.isFinite(duration)) return 250
+  return value.endsWith('ms') ? duration : duration * 1000
+}
+
 const rebound = () => {
   locked.value = true
-  window.setTimeout(() => {
+  if (reboundTimer !== undefined) window.clearTimeout(reboundTimer)
+  reboundTimer = window.setTimeout(() => {
     locked.value = false
-  }, 300)
+    reboundTimer = undefined
+  }, readMotionDuration())
 }
+
+onBeforeUnmount(() => {
+  if (reboundTimer !== undefined) window.clearTimeout(reboundTimer)
+})
 
 const handleAccept = () => {
   if (!canAccept.value) return

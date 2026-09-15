@@ -2,6 +2,7 @@ import { createVNode, isVNode, render } from 'vue'
 import { isClient, isObject } from '@vuesax-alpha/utils'
 import {
   createContainer,
+  resolveGlobalComponentOptions,
   useGlobalComponentSettings,
 } from '@vuesax-alpha/hooks'
 
@@ -28,6 +29,8 @@ export const notification: NotifyFn & Partial<Notify> = (options = {}) => {
     options = { content: options }
   }
 
+  options = resolveGlobalComponentOptions('notification', options)
+
   const position = options.position || 'bottom-right'
 
   const { id, selector } = useNotificationContainerId()
@@ -48,7 +51,7 @@ export const notification: NotifyFn & Partial<Notify> = (options = {}) => {
       ? {
           default: () => (isObject(options) ? options.content : null),
         }
-      : null
+      : null,
   )
 
   const container = document.createElement('div')

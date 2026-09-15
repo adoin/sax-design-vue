@@ -9,9 +9,9 @@ import {
 import type { ComputedRef } from 'vue'
 import type {
   TableColumn,
+  TableCoreEmitFn,
   TableCoreProps,
   TableDetailParams,
-  TableEmitFn,
   TableFlatRow,
   TableRowKey,
 } from '../table'
@@ -25,7 +25,7 @@ interface DetailRecord {
 
 export function useTableDetails(
   props: TableCoreProps,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   columns: ComputedRef<TableColumn[]>,
 ) {
   const config = computed(() =>
@@ -57,7 +57,7 @@ export function useTableDetails(
     rowIndex: flat.index,
   })
   const allowed = (flat: TableFlatRow) =>
-    enabled.value && (config.value.checkMethod?.(paramsFor(flat)) ?? true)
+    enabled.value && (config.value.expandableMethod?.(paramsFor(flat)) ?? true)
   const expanded = (flat: TableFlatRow) =>
     allowed(flat) && keys.value.has(flat.key)
   const stateFor = (key: TableRowKey): DetailRecord =>
@@ -161,7 +161,7 @@ export function useTableDetails(
     () => [
       enabled.value,
       config.value.load,
-      config.value.checkMethod,
+      config.value.expandableMethod,
       props.data,
       props.virtualSource?.row,
     ],

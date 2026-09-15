@@ -19,6 +19,7 @@ import {
   useLocale,
   useNamespace,
   useOrderedChildren,
+  useSize,
 } from '@vuesax-alpha/hooks'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { tabsContextKey } from './constants'
@@ -36,6 +37,7 @@ const props = defineProps(tabsProps)
 const emit = defineEmits(tabsEmits)
 const slots = useSlots()
 const ns = useNamespace('tabs')
+const resolvedSize = useSize()
 const { t } = useLocale()
 const tabsId = useId()
 const activeReflowDelay = 180
@@ -388,7 +390,7 @@ watch(
     props.type,
     props.alignment,
     props.overflow,
-    props.size,
+    resolvedSize.value,
     props.hideAdd,
   ],
   () => queueLayout(),

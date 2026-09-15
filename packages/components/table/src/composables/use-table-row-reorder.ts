@@ -9,8 +9,8 @@ import {
 import { createTableDataIndex, validTableDataKey } from '../change-data'
 import { planTableRowReorder } from '../row-reorder'
 import type {
+  TableCoreEmitFn,
   TableCoreProps,
-  TableEmitFn,
   TableFlatRow,
   TableRow,
   TableRowKey,
@@ -34,7 +34,7 @@ export interface RowReorderOptions {
 /** Controlled source-order changes. Pointer hit testing is deliberately separate. */
 export function useTableRowReorder(
   props: TableCoreProps,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   options: RowReorderOptions,
 ) {
   const config = computed(() =>
@@ -60,7 +60,7 @@ export function useTableRowReorder(
     const value =
       typeof props.rowKey === 'function'
         ? props.rowKey(row, -1)
-        : row[props.rowKey]
+        : (row as Record<string, unknown>)[props.rowKey]
     if (!validTableDataKey(value))
       throw new Error('Row dragging requires stable row keys')
     return value
@@ -72,7 +72,7 @@ export function useTableRowReorder(
       const stable = props.virtualSource?.rowKey?.(row.index) ?? key(row.row)
       return (
         stable === row.key &&
-        config.value.checkMethod?.(context(row, index)) !== false
+        config.value.draggableMethod?.(context(row, index)) !== false
       )
     } catch {
       return false

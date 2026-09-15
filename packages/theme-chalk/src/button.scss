@@ -12,6 +12,31 @@
   }
 }
 
+.s-renderer-buttons {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 6px;
+}
+
+.s-renderer-buttons__popper {
+  min-width: 132px;
+  padding: 6px;
+}
+
+.s-renderer-buttons__menu {
+  display: grid;
+  gap: 2px;
+
+  .s-button {
+    justify-content: flex-start;
+  }
+
+  .s-button__content {
+    gap: 8px;
+  }
+}
+
 @include b(button) {
   @include set-component-var('', $button);
 }
@@ -180,6 +205,7 @@
       opacity: 0;
     }
   }
+
   @include e(loading) {
     position: absolute;
     inset: 0;
@@ -193,13 +219,15 @@
     .#{$namespace}-icon-loading {
       position: relative;
       inset: auto;
-      width: 1.25em;
-      height: 1.25em;
+      width: 1.8em;
+      height: 1.8em;
       max-width: none;
       max-height: none;
       margin: 0;
       z-index: auto;
       color: currentColor;
+      filter: drop-shadow(0 1px 2px hsl(0deg 0% 0% / 0.18))
+        drop-shadow(0 0 1px hsl(0deg 0% 100% / 0.7));
       transform: none;
     }
   }
@@ -438,7 +466,13 @@
       height: 100%;
       border-radius: inherit;
       pointer-events: none;
-      transition: all 0.4s ease;
+      transition:
+        filter var(--sax-motion-duration-slow)
+          var(--sax-motion-easing-emphasized),
+        opacity var(--sax-motion-duration-slow)
+          var(--sax-motion-easing-standard),
+        transform var(--sax-motion-duration-slow)
+          var(--sax-motion-easing-emphasized);
       z-index: -1;
       filter: hue-rotate(-40deg);
       box-sizing: border-box;
@@ -478,7 +512,13 @@
       height: calc(100% - 3px);
       border-radius: inherit;
       pointer-events: none;
-      transition: all 0.4s ease;
+      transition:
+        filter var(--sax-motion-duration-slow)
+          var(--sax-motion-easing-emphasized),
+        border-color var(--sax-motion-duration-slow)
+          var(--sax-motion-easing-standard),
+        transform var(--sax-motion-duration-slow)
+          var(--sax-motion-easing-emphasized);
       z-index: -1;
       filter: contrast(2) grayscale(0.4);
       border-bottom: 3px solid getColor('color');

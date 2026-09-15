@@ -49,10 +49,13 @@ const setValue = (prop: string, value: unknown) => {
   const segments = getSegments(prop)
   const last = segments.pop()
   if (!last) return
-  const target = segments.reduce<Record<string, unknown>>((current, key) => {
-    if (!current[key] || typeof current[key] !== 'object') current[key] = {}
-    return current[key] as Record<string, unknown>
-  }, props.model)
+  const target = segments.reduce<Record<string, unknown>>(
+    (current, key) => {
+      if (!current[key] || typeof current[key] !== 'object') current[key] = {}
+      return current[key] as Record<string, unknown>
+    },
+    props.model as Record<string, unknown>,
+  )
   target[last] = value
 }
 
@@ -144,6 +147,8 @@ provide(formContextKey, {
   validateField,
   emitValidate: (prop, valid, message) =>
     emit('validate', prop, valid, message),
+  submit,
+  resetFields,
 })
 
 defineExpose({

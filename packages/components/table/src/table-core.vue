@@ -1,6 +1,35 @@
 <template>
-  <div :class="ns.b('wrapper')" @keydown="findPanelRef?.keydown($event)">
+  <div
+    :class="[ns.b('wrapper'), ns.is('auto-height', autoVirtualHeight)]"
+    @keydown="findPanelRef?.keydown($event)"
+  >
     <slot />
+    <TableToolbar
+      v-if="toolbarRuntime?.enabled.value"
+      :config="toolbarRuntime.config.value"
+      :busy="toolbarRuntime.busy.value"
+      :table="toolbarRuntime.table"
+      :context="toolbarRuntime.context()"
+      @action="toolbarRuntime.action"
+    >
+      <template v-if="$slots['toolbar-title']" #title>
+        <slot name="toolbar-title" />
+      </template>
+      <template v-if="$slots.toolbar_left" #left>
+        <slot
+          name="toolbar_left"
+          v-bind="toolbarRuntime.table"
+          :busy="toolbarRuntime.busy.value"
+        />
+      </template>
+      <template v-if="$slots.toolbar_right" #right>
+        <slot
+          name="toolbar_right"
+          v-bind="toolbarRuntime.table"
+          :busy="toolbarRuntime.busy.value"
+        />
+      </template>
+    </TableToolbar>
     <span
       v-if="clipboard.enabled.value"
       :class="ns.e('range-status')"
@@ -28,12 +57,6 @@
           : t('vs.table.rangeEmpty')
       }}
     </span>
-    <TableColumnManager
-      v-if="columnManager.enabled.value"
-      :manager="columnManager"
-      :disabled="loading"
-    />
-
     <div v-if="$slots.header" :class="ns.be('wrapper', 'header')">
       <slot name="header" />
     </div>
@@ -55,7 +78,7 @@
         tableKls,
         ns.is('horizontal-virtual', horizontalVirtualMode && usesBodyScroll),
       ]"
-      :aria-busy="clipboard.pending.value ? true : undefined"
+      :aria-busy="tableBusy || clipboard.pending.value ? true : undefined"
       @keydown="handleTableKeydown"
       @keydown.capture="handleTableKeydownCapture"
       @copy="clipboard.onClipboard"
@@ -71,7 +94,7 @@
       @focusin="handleTableFocusin"
       @focusout="overflow.leave"
       @scroll.capture="handleTableScrollCapture"
-      @keydown.esc="overflow.close"
+      @keydown.esc="(validation.closeNavigation(), overflow.close())"
     >
       <div
         ref="dataViewRef"
@@ -150,7 +173,7 @@
               "
             >
               <TableHeaderCell
-                :disabled="loading"
+                :disabled="tableBusy"
                 :group="entry.group"
                 :column="entry.column"
                 :order="sortOrder(entry.column)"
@@ -164,13 +187,14 @@
                   entry.column.type === 'checkbox' && indeterminate
                 "
                 :select-all-disabled="
-                  loading ||
+                  tableBusy ||
                   Boolean(virtualSource) ||
                   (entry.column.type === 'checkbox' && !selectableRows.length)
                 "
                 :show-select-all="
                   selectionConfig.showSelectAll !== false && !virtualSource
                 "
+                :filter-renderer="resolveFilterRenderer(entry.column)"
                 @sort="query.toggleSort(entry.column, $event)"
                 @filter="setColumnFilter(entry.column, $event)"
                 @select-all="selectAll"
@@ -259,7 +283,7 @@
           :count="bodyDisplayCount"
           :item-at="virtualItemAt"
           :item-key-at="virtualRowKeyAt"
-          :height="virtualOptions.height"
+          :height="virtualViewportHeight"
           :estimate-size="virtualOptions.estimateSize"
           :overscan="virtualOptions.overscan"
           :dynamic="dynamicRows"
@@ -318,7 +342,7 @@
           v-if="showGroupSummary && resolvedColumnCount"
           kind="summary"
           :summary="groups.state.value.summary"
-          :disabled="loading"
+          :disabled="tableBusy"
           :column-count="resolvedColumnCount"
           :viewport-width="columnVirtualization.viewportWidth.value"
           :entries="renderedColumnEntries"
@@ -336,9 +360,9 @@
         </TableGroupBand>
 
         <TableFooterRows
-          v-if="footerData.length && resolvedColumnCount"
+          v-if="resolvedFooterData.length && resolvedColumnCount"
           ref="footerRowsRef"
-          :data="footerData"
+          :data="resolvedFooterData"
           :row-key="footerRowKey"
           :entries="renderedColumnEntries"
           :row-offset="footerAriaOffset"
@@ -360,10 +384,7 @@
         >
           <template #cell="params">
             <slot
-              :name="
-                params.column.slots?.footer ??
-                `footer-${columnSlotKey(params.column)}`
-              "
+              :name="params.column.slots?.footer ?? 'footer-cell'"
               v-bind="params"
             >
               <slot name="footer-cell" v-bind="params" />
@@ -391,8 +412,13 @@
           /></template>
         </TableMergeLayer>
 
-        <div v-if="loading" :class="ns.e('loading-mask')" aria-live="polite">
-          <span :class="ns.e('loading-spinner')" />
+        <TableValidationOverlay
+          :validation="validation"
+          :selection-name="selectionName"
+        />
+
+        <div v-if="tableBusy" :class="ns.e('loading-mask')" aria-live="polite">
+          <SLogoLoading :class="ns.e('loading-spinner')" :size="24" />
         </div>
       </div>
     </div>
@@ -473,8 +499,10 @@
 import {
   computed,
   h,
+  inject,
   nextTick,
   onBeforeUpdate,
+  provide,
   ref,
   renderSlot,
   shallowRef,
@@ -486,6 +514,7 @@ import { SPagination } from '@vuesax-alpha/components/pagination'
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
 import { useId, useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SContextMenu } from '@vuesax-alpha/components/context-menu'
+import { SLogoLoading } from '@vuesax-alpha/components/icon'
 import { tableCoreEmits, tableCoreProps } from './table'
 import { useTableColumnRegistry } from './composables/use-table-column-registry'
 import {
@@ -501,11 +530,21 @@ import { useTableMergeRegions } from './composables/use-table-merge-regions'
 import { useTableMergeCoordinates } from './composables/use-table-merge-coordinates'
 import { useTableMergeHeights } from './composables/use-table-merge-heights'
 import TableRendererOutlet from './renderer-outlet'
+import {
+  resolveGlobalDefaultRenderer,
+  resolveGlobalEditRenderer,
+  resolveGlobalFilterRenderer,
+  tableRenderer,
+} from './table-renderer'
 import TableHeaderCell from './table-header-cell.vue'
 import TableHeaderRows from './table-header-rows.vue'
 import TableFooterRows from './table-footer-rows.vue'
 import TableGroupBand from './table-group-band.vue'
 import TableParentIndicator from './table-parent-indicator.vue'
+import TableToolbar from './table-toolbar.vue'
+import { tableToolbarRuntimeKey } from './table-toolbar-context'
+import { tableColumnConfigRuntimeKey } from './table-column-config-context'
+import { buildTableFooterRows } from './table-footer-config'
 import { createTableBodyBlock } from './table-body-block'
 import { useTableGroups } from './composables/use-table-groups'
 import { useTableEdit } from './composables/use-table-edit'
@@ -525,6 +564,7 @@ import { createTableChartScope } from './composables/table-chart-scope'
 import TableChartPanel from './table-chart-panel.vue'
 import { createTableFindScope } from './composables/table-find-scope'
 import TableFindPanel from './table-find-panel.vue'
+import TableValidationOverlay from './table-validation-overlay.vue'
 import { useTableRangeInteraction } from './composables/use-table-range-interaction'
 import {
   tableRangeScrollParent,
@@ -535,7 +575,6 @@ import { useTableValidation } from './composables/use-table-validation'
 import { useTableValidationApi } from './composables/use-table-validation-api'
 import { tableValidationId } from './validation-utils'
 import { useTableDetails } from './composables/use-table-details'
-import { flattenTableColumns } from './composables/table-column-tree'
 import { tableColumnKey, tableFieldValue } from './data-utils'
 import { useTableQuery } from './composables/use-table-query'
 import { useTableSelection } from './composables/use-table-selection'
@@ -547,12 +586,12 @@ import {
   findTableParentGroup,
   useTableParentIndicator,
 } from './composables/use-table-parent-indicator'
-import TableColumnManager from './table-column-manager.vue'
 import type { TableBodyItem } from './table-body-block'
 import type { TableMergeSurface } from './table-merge-layer.vue'
 import type { ContextMenuInstance } from '@vuesax-alpha/components/context-menu'
 import type { VirtualListInstance } from '@vuesax-alpha/components/virtual-list'
 import type { CSSProperties, Slots } from 'vue'
+import type { TableFooterConfig } from './table-footer-config'
 import type {
   TableCellRenderParams,
   TableCellRenderer,
@@ -560,6 +599,7 @@ import type {
   TableCoreExposes,
   TableEditContext,
   TableEditRenderer,
+  TableFilterRenderer,
   TableFilterValue,
   TableFlatRow,
   TableFooterCellRenderParams,
@@ -568,6 +608,7 @@ import type {
   TableRenderedColumnEntry,
   TableRenderedEntry,
   TableRenderer,
+  TableRendererOptions,
   TableRow,
   TableRowKey,
   TableVirtualConfig,
@@ -580,6 +621,7 @@ const ns = useNamespace('table')
 const { t } = useLocale()
 const props = defineProps(tableCoreProps)
 const emit = defineEmits(tableCoreEmits)
+const toolbarRuntime = inject(tableToolbarRuntimeKey, undefined)
 const virtualListRef = ref<VirtualListInstance>()
 const footerRowsRef = ref<InstanceType<typeof TableFooterRows>>()
 const dataBodyRef = ref<HTMLElement>()
@@ -602,38 +644,72 @@ const tableScrollRef = ref<HTMLElement>()
 const columnScrollRef = ref<HTMLElement>()
 const selectionName = useId()
 const overflow = useTableOverflow()
+const validation = useTableValidation(
+  (result) => {
+    emit('validation', result)
+  },
+  {
+    required: (field) => t('vs.table.validationRequired', { field }),
+    invalid: (field) => t('vs.table.validationInvalid', { field }),
+  },
+)
+const tableBusy = computed(() => props.loading || validation.running.value)
 
 const registeredColumns = useTableColumnRegistry()
 
-const columnTree = computed(() =>
-  flattenTableColumns(
-    props.columns.length ? props.columns : registeredColumns.value,
-  ),
+const columnDefinitions = computed(() =>
+  props.columns.length ? props.columns : registeredColumns.value,
 )
-const rawColumns = computed(() => columnTree.value.leaves)
+const columnManager = useTableColumnManager(props, emit, columnDefinitions)
+provide(tableColumnConfigRuntimeKey, {
+  manager: columnManager,
+  disabled: tableBusy,
+})
+const columnTree = columnManager.columnTree
+const rawColumns = columnManager.columns
 const headerDepth = computed(() => {
   if (!props.virtualSource) return columnTree.value.depth
   const depth = props.virtualSource.headerDepth ?? 1
   return Number.isFinite(depth) ? Math.max(1, Math.floor(depth)) : 1
 })
-const headerPathFor = (entry: TableRenderedColumnEntry) =>
-  props.virtualSource
-    ? (props.virtualSource.headerPath?.(entry.index) ?? []).map((column) => ({
+const headerPathFor = (entry: TableRenderedColumnEntry) => {
+  if (props.virtualSource)
+    return (props.virtualSource.headerPath?.(entry.index) ?? []).map(
+      (column) => ({
         key: column.key,
         column,
-      }))
-    : (columnTree.value.paths.get(
-        entry.column.key ?? entry.column.field ?? `@${entry.index}`,
-      ) ?? [])
+      }),
+    )
+  const path =
+    columnTree.value.paths.get(
+      entry.column.key ?? entry.column.field ?? `@${entry.index}`,
+    ) ?? []
+  const partition = entry.fixed ?? 'center'
+  const explicit = path
+    .map((ancestor, index) => {
+      const fixed = ancestor.column.fixed
+      if (fixed === undefined) return undefined
+      return {
+        index,
+        partition: fixed === true ? 'left' : fixed || 'center',
+      }
+    })
+    .filter((value) => value !== undefined)
+  if (!explicit.length) return partition === 'center' ? path : []
+  const matching = explicit.find((value) => value.partition === partition)
+  return matching ? path.slice(matching.index) : []
+}
 const columnResize = useTableColumnResize(props, emit, rawColumns)
+columnManager.setResetWidths(columnResize.reset)
 const sizedColumns = computed(() =>
   rawColumns.value.map((column, index) => {
     const width = columnResize.widthFor(column, index)
     return width == null ? column : { ...column, width }
   }),
 )
-const columnManager = useTableColumnManager(props, emit, sizedColumns)
-const resolvedColumns = columnManager.visibleColumns
+const resolvedColumns = computed(() =>
+  columnManager.resolveVisibleColumns(sizedColumns.value),
+)
 watch(columnManager.state, columnResize.cancel, { deep: true })
 
 const query = useTableQuery(props, emit, sizedColumns)
@@ -672,6 +748,50 @@ const tree = useTableTree({
 
 const { setExpandedKeys, toggleRowExpand } = tree
 const pagination = useTablePagination(props, emit, tree.flatRows)
+const footerConfig = computed<TableFooterConfig>(() =>
+  typeof props.footerConfig === 'object' ? props.footerConfig : {},
+)
+const footerState = computed(() => {
+  const empty = { rows: [] as TableRow[], error: undefined as unknown }
+  if (
+    !props.footerConfig ||
+    footerConfig.value.enabled === false ||
+    props.footerData.length
+  )
+    return empty
+  if (props.virtualSource)
+    return {
+      ...empty,
+      error: new TypeError(
+        'footerConfig cannot enumerate virtualSource; provide footerData instead',
+      ),
+    }
+  try {
+    const scope = footerConfig.value.scope ?? 'data'
+    const rows =
+      scope === 'page'
+        ? pagination.rows.value.map((entry) => entry.row)
+        : scope === 'filtered'
+          ? tree.flatRows.value.map((entry) => entry.row)
+          : tree.getAllRows()
+    return {
+      rows: buildTableFooterRows(rows, footerConfig.value),
+      error: undefined,
+    }
+  } catch (error) {
+    return { ...empty, error }
+  }
+})
+const resolvedFooterData = computed(() =>
+  props.footerData.length ? props.footerData : footerState.value.rows,
+)
+watch(
+  () => footerState.value.error,
+  (error) => {
+    if (error !== undefined) emit('footerError', error)
+  },
+  { immediate: true },
+)
 const groups = useTableGroups({
   config: () => props.groupConfig,
   rows: () => pagination.rows.value,
@@ -766,7 +886,7 @@ const resolvedColumnCount = computed(() =>
 
 const resolveSourceRowKey = (row: TableRow, index: number): TableRowKey => {
   if (typeof props.rowKey === 'function') return props.rowKey(row, index)
-  const key = row[props.rowKey]
+  const key = (row as Record<string, unknown>)[props.rowKey]
   return typeof key === 'string' || typeof key === 'number' ? key : index
 }
 
@@ -801,15 +921,6 @@ const resolveEditContext = (
       }
     : undefined
 }
-const validation = useTableValidation(
-  (result) => {
-    emit('validation', result)
-  },
-  {
-    required: (field) => t('vs.table.validationRequired', { field }),
-    invalid: (field) => t('vs.table.validationInvalid', { field }),
-  },
-)
 const changes = useTableChanges(props, emit, {
   editing: () => Boolean(editing.active.value),
   children: tree.getChildren,
@@ -825,7 +936,6 @@ const editing = useTableEdit(props, emit, resolveEditContext, {
   invalidate: (context, field) => {
     changes.cancelDataChange()
     validation.clear(context.rowKey, field)
-    measure()
   },
 })
 const detailPanelId = (key: TableRowKey) =>
@@ -874,7 +984,7 @@ const tableAriaRowCount = computed(() =>
     ? -1
     : footerAriaOffset.value -
       1 +
-      (resolvedColumnCount.value ? props.footerData.length : 0),
+      (resolvedColumnCount.value ? resolvedFooterData.value.length : 0),
 )
 const resetDetailMeasurements = () =>
   nextTick(() => virtualListRef.value?.resetMeasurements())
@@ -974,11 +1084,16 @@ const virtualOptions = computed<Required<TableVirtualConfig>>(() => {
     columnOverscan: Math.max(0, config.columnOverscan ?? 2),
   }
 })
-
 const virtualEnabled = computed(
   () =>
     virtualSourceActive.value ||
     (props.virtualConfig !== false && virtualOptions.value.enabled),
+)
+const autoVirtualHeight = computed(
+  () => virtualEnabled.value && virtualOptions.value.height === 'auto',
+)
+const virtualViewportHeight = computed(() =>
+  autoVirtualHeight.value ? '100%' : virtualOptions.value.height,
 )
 const { tableKls } = useTable(props, virtualEnabled)
 
@@ -1310,49 +1425,94 @@ const fixedBandStyle = (entry: TableRenderedColumnEntry): CSSProperties => {
   }
 }
 
-const columnSlotKey = (column: TableColumn) =>
-  column.key ?? column.field ?? column.type ?? 'column'
 const cellSlotName = (column: TableColumn) =>
-  column.slots?.default ?? `cell-${columnSlotKey(column)}`
+  typeof column.slots?.default === 'string' ? column.slots.default : 'cell'
+const cellSlotRenderer = (column: TableColumn) =>
+  typeof column.slots?.default === 'function' ? column.slots.default : undefined
 const headerSlotName = (column: TableColumn) =>
-  column.slots?.header ?? `header-${columnSlotKey(column)}`
+  column.slots?.header ?? 'header-cell'
 const headerParams = (
   column: TableColumn,
   columnIndex: number,
 ): TableHeaderRenderParams => ({ column, columnIndex })
 
-const rendererEntry = (column: TableColumn) => {
-  if (typeof column.renderer !== 'string') return column.renderer
-  return props.renderers[column.renderer]
+const rendererOptions = (
+  renderer: TableColumn['renderer'],
+): TableRendererOptions | undefined => {
+  if (typeof renderer === 'string') return { name: renderer }
+  return renderer && typeof renderer === 'object' && 'name' in renderer
+    ? renderer
+    : undefined
+}
+
+const localRendererEntry = (column: TableColumn) => {
+  const options = rendererOptions(column.renderer)
+  if (options) return props.renderers[options.name]
+  return column.renderer
+}
+
+const globalRendererEntry = (column: TableColumn) => {
+  const options = rendererOptions(column.renderer)
+  return options ? tableRenderer.get(options.name) : undefined
 }
 
 const resolveCellRenderer = (
   column: TableColumn,
 ): TableCellRenderer | undefined => {
   if (column.cell) return column.cell
-  const renderer = rendererEntry(column)
+  const renderer = localRendererEntry(column)
   if (typeof renderer === 'function') return renderer as TableCellRenderer
-  return (renderer as TableRenderer | undefined)?.cell
+  const local = (renderer as TableRenderer | undefined)?.cell
+  if (local) return local
+  const options = rendererOptions(column.renderer)
+  const global = globalRendererEntry(column)?.renderDefault
+  return global && options
+    ? (params) => resolveGlobalDefaultRenderer(params, options)
+    : undefined
 }
 
 const resolveEditRenderer = (
   column: TableColumn,
 ): TableEditRenderer | undefined => {
   if (column.edit) return column.edit
-  const renderer = rendererEntry(column)
-  return typeof renderer === 'object' ? renderer?.edit : undefined
+  const renderer = localRendererEntry(column)
+  const local =
+    renderer && typeof renderer === 'object' && !('name' in renderer)
+      ? renderer.edit
+      : undefined
+  if (local) return local
+  const options = rendererOptions(column.renderer)
+  const global = globalRendererEntry(column)?.renderEdit
+  return global && options
+    ? (params) => resolveGlobalEditRenderer(params, options)
+    : undefined
 }
 
 const resolveHeaderRenderer = (
   column: TableColumn,
 ): TableHeaderRenderer | undefined => {
   if (column.header) return column.header
-  const renderer = rendererEntry(column)
-  return typeof renderer === 'object' ? renderer?.header : undefined
+  const renderer = localRendererEntry(column)
+  return renderer && typeof renderer === 'object' && !('name' in renderer)
+    ? renderer.header
+    : undefined
+}
+
+const resolveFilterRenderer = (
+  column: TableColumn,
+): TableFilterRenderer | undefined => {
+  const options = column.filterRender
+  if (!options) return
+  const local = props.renderers[options.name]
+  if (local && typeof local === 'object' && local.filter) return local.filter
+  const global = tableRenderer.get(options.name)?.renderFilter
+  return global
+    ? (params) => resolveGlobalFilterRenderer(params, options)
+    : undefined
 }
 
 const handleRowClick = async (row: TableRow, event: MouseEvent) => {
-  if (!props.loading) selectRowOnClick(row)
+  if (!tableBusy.value) selectRowOnClick(row)
   emit('rowClick', row, event)
   if (props.treeConfig?.expandOnClickRow) await toggleRowExpand(row)
 }
@@ -1560,7 +1720,7 @@ watch(
     () => props.columns,
     () => props.showOverflow,
     () => props.showHeaderOverflow,
-    () => props.footerData,
+    resolvedFooterData,
     () => props.showFooterOverflow,
   ],
   () => overflow.close(),
@@ -1570,6 +1730,7 @@ const startEdit = async (
   rowOrIndex: TableRow | number,
   columnOrIndex: TableColumn | string | number,
 ): Promise<boolean> => {
+  if (tableBusy.value) return false
   const flat = resolveDetailRow(rowOrIndex)
   if (!flat) return false
   if (
@@ -1621,6 +1782,7 @@ const startEdit = async (
     column,
     columnIndex: index,
     columnKey: column.key ?? column.field ?? String(index),
+    index: editFlat.index,
     rowIndex: editFlat.index,
     value: tableFieldValue(editFlat.row, column.field),
     depth: editFlat.depth,
@@ -1638,8 +1800,6 @@ const startEdit = async (
 const commitEdit = async () => editing.commit()
 const cancelEdit = () => editing.cancel()
 const getEditRecord = editing.record
-// Error text changes the row's natural height, including when it is cleared.
-watch(validation.getErrors, () => measure(), { flush: 'post' })
 const validationApi = useTableValidationApi(props, validation, editing, {
   tree,
   pagination,
@@ -1677,19 +1837,20 @@ watch(
   () =>
     nextTick(() => {
       const active = editing.active.value
-      const visibleMerge =
+      const activeCellMounted =
         active &&
         [
           ...(dataViewRef.value?.querySelectorAll<HTMLElement>(
-            '[data-merge-primary] [data-row-key]',
+            `[data-column-index="${active.columnIndex}"]`,
           ) ?? []),
-        ].some(
-          (row) =>
-            row.closest('[role="table"]') === dataViewRef.value &&
-            row.dataset.rowKey === String(active.rowKey) &&
-            row.querySelector(`[data-column-index="${active.columnIndex}"]`),
-        )
-      if (active && !visibleMerge) {
+        ].some((cell) => {
+          const row = cell.closest<HTMLElement>('[data-row-key]')
+          return (
+            cell.closest('[role="table"]') === dataViewRef.value &&
+            row?.dataset.rowKey === String(active.rowKey)
+          )
+        })
+      if (active && !activeCellMounted) {
         scrollToRow(props.virtualSource ? active.rowIndex : active.row)
         scrollToColumn(active.columnIndex)
       }
@@ -1832,8 +1993,8 @@ const merges = useTableMergeRegions({
     windows: () => mergeGeometry.geometry.value.body.windows,
   },
   footer: {
-    count: () => props.footerData.length,
-    rowAt: (index) => props.footerData[index],
+    count: () => resolvedFooterData.value.length,
+    rowAt: (index) => resolvedFooterData.value[index],
     windows: () => mergeGeometry.geometry.value.footer.windows,
   },
 })
@@ -1904,7 +2065,7 @@ watch(
 watch(
   [
     () => props.data,
-    () => props.footerData,
+    resolvedFooterData,
     merges.config,
     () => props.virtualSource?.row,
     resolvedColumns,
@@ -1923,7 +2084,7 @@ const contextMenu = useTableContextMenu(props, emit, {
   context: [
     () => props.data,
     () => props.virtualSource,
-    () => props.footerData,
+    resolvedFooterData,
     () => props.contextMenuConfig,
     sorts,
     filtersState,
@@ -2355,8 +2516,8 @@ const isRangeMergeSelected = (surface: TableMergeSurface) => {
 const TableBodyRow = createTableBodyRow({
   slots: tableSlots,
   cellSlotName,
-  editSlotName: (column) =>
-    column.slots?.edit ?? `edit-${columnSlotKey(column)}`,
+  cellSlotRenderer,
+  editSlotName: (column) => column.slots?.edit ?? 'edit-cell',
   renderer: resolveCellRenderer,
   bindings: (flatRow, index) => ({
     flatRow,
@@ -2390,7 +2551,7 @@ const TableBodyRow = createTableBodyRow({
         : undefined,
     selected: isRowSelected(flatRow.key),
     selectionDisabled:
-      props.loading || !isSelectable(flatRow.row, flatRow.index),
+      tableBusy.value || !isSelectable(flatRow.row, flatRow.index),
     selectionName: selectionName.value,
     overflow: props.showOverflow,
     striped: props.striped,
@@ -2436,7 +2597,7 @@ const TableBodyBlock = createTableBodyBlock({
     viewportWidth: columnVirtualization.viewportWidth.value,
     panelId: detailPanelId(flatRow.key),
     ariaRowIndex: detailAriaIndex(index),
-    disabled: props.loading,
+    disabled: tableBusy.value,
     onShrink: resetDetailMeasurements,
   }),
   group: (item) => ({
@@ -2444,7 +2605,7 @@ const TableBodyBlock = createTableBodyBlock({
     group: item.kind === 'data' ? undefined : item.group,
     hierarchy: item.kind === 'data' ? undefined : item.hierarchy,
     expanded: item.kind === 'data' ? undefined : item.expanded,
-    disabled: props.loading,
+    disabled: tableBusy.value,
     columnCount: resolvedColumnCount.value,
     viewportWidth: columnVirtualization.viewportWidth.value,
     rowIndex: groupBandAriaIndex(item.renderIndex),
@@ -2500,13 +2661,13 @@ const TableMergedCell = ({
       detail: {
         enabled: details.enabled.value,
         expanded: details.expanded(flatRow),
-        disabled: props.loading || !details.allowed(flatRow),
+        disabled: tableBusy.value || !details.allowed(flatRow),
         panelId: detailPanelId(flatRow.key),
         toggle: () => details.toggle(flatRow),
       },
     })
   }
-  const row = props.footerData[surface.region.row]
+  const row = resolvedFooterData.value[surface.region.row]
   if (!row) return null
   return h(
     TableFooterRows,
@@ -2533,8 +2694,7 @@ const TableMergedCell = ({
       cell: (params: TableFooterCellRenderParams) =>
         renderSlot(
           tableSlots,
-          params.column.slots?.footer ??
-            `footer-${columnSlotKey(params.column)}`,
+          params.column.slots?.footer ?? 'footer-cell',
           { ...params },
           () => [renderSlot(tableSlots, 'footer-cell', { ...params })],
         ),
@@ -2589,11 +2749,17 @@ const mergeContinuationContextmenu = (
     event.preventDefault()
 }
 const handleTableKeydown = (event: KeyboardEvent) => {
+  if (tableBusy.value) return
   if (rowDrag.session.value?.keyboard)
     rowDrag.keydown(event, rowDrag.session.value.from)
   keyboard.onKeydown(event)
 }
 const handleTableKeydownCapture = (event: KeyboardEvent) => {
+  if (tableBusy.value) {
+    event.stopPropagation()
+    if (event.key !== 'Tab') event.preventDefault()
+    return
+  }
   findPanelRef.value?.keydown(event)
   if (event.defaultPrevented) return
   clipboard.onKeydown(event)

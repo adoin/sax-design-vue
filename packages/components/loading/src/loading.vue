@@ -9,19 +9,21 @@
           {{ unref(percent) }}
         </div>
 
-        <template v-if="unref(type) === 'default'">
+        <template v-if="usesLogoLoading">
           <icon-loading />
         </template>
 
-        <div
-          :class="[ns.em('animation', 'item'), ns.em('animation', 'item-1')]"
-        />
-        <div
-          :class="[ns.em('animation', 'item'), ns.em('animation', 'item-2')]"
-        />
-        <div
-          :class="[ns.em('animation', 'item'), ns.em('animation', 'item-3')]"
-        />
+        <template v-else>
+          <div
+            :class="[ns.em('animation', 'item'), ns.em('animation', 'item-1')]"
+          />
+          <div
+            :class="[ns.em('animation', 'item'), ns.em('animation', 'item-2')]"
+          />
+          <div
+            :class="[ns.em('animation', 'item'), ns.em('animation', 'item-3')]"
+          />
+        </template>
 
         <template v-if="unref(type) === 'ball'">
           <div
@@ -68,6 +70,7 @@ import { IconLoading } from '@vuesax-alpha/components/icon'
 import { getVsColor } from '@vuesax-alpha/utils'
 import { loadingProps } from './loading'
 import type { Color } from '@vuesax-alpha/constants'
+import type { LoadingType } from './loading'
 
 defineOptions({
   name: 'SLoading',
@@ -83,6 +86,10 @@ const loadingRef = ref<HTMLElement>()
 const color = useColor('primary')
 const background = useProp<Color>('background')
 const type = useProp<string>('type')
+const logoLoadingTypes = new Set<LoadingType>(['default'])
+const usesLogoLoading = computed(() =>
+  logoLoadingTypes.has(type.value as LoadingType),
+)
 
 const loadingKls = computed(() => [
   ns.b(),

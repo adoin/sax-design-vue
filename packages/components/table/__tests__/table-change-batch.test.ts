@@ -4,9 +4,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { useTableChanges } from '../src/composables/use-table-changes'
 import type { TableRowUpdate } from '../src/change-batch'
 import type {
+  TableCoreEmitFn,
   TableCoreProps,
   TableDataChangeRequest,
-  TableEmitFn,
   TableRow,
 } from '../src/table'
 
@@ -26,7 +26,7 @@ function host(
     ...extra,
   }) as { -readonly [Key in keyof TableCoreProps]: TableCoreProps[Key] }
   const events = vi.fn()
-  const emit: TableEmitFn = (event, ...args) => {
+  const emit: TableCoreEmitFn = (event, ...args) => {
     events(event, ...args)
     if (event === 'update:data' && accepts) props.data = args[0] as TableRow[]
   }

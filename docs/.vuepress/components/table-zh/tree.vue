@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import { h, ref, shallowRef } from 'vue'
-import type {
-  TableColumn,
-  TableRenderer,
-  TableTreeConfig,
-} from 'sax-design-vue'
+import { ref, shallowRef } from 'vue'
+import type { TableColumn, TableTreeConfig } from 'sax-design-vue'
 
 interface FileRow {
   id: string
@@ -20,8 +16,19 @@ const expandedKeys = shallowRef(['src'])
 const lazyLoading = ref(false)
 const lazyLoaded = ref(false)
 const columns: TableColumn<FileRow>[] = [
-  { field: 'name', title: '名称', minWidth: 220, treeNode: true },
-  { field: 'kind', title: '类型', width: 150, renderer: 'kind' },
+  {
+    field: 'name',
+    title: '名称',
+    minWidth: 220,
+    treeNode: true,
+    slots: { default: 'fileNameCell' },
+  },
+  {
+    field: 'kind',
+    title: '类型',
+    width: 150,
+    slots: { default: 'kind' },
+  },
   { field: 'size', title: '大小', width: 100, align: 'right' },
 ]
 
@@ -57,12 +64,6 @@ const treeConfig: TableTreeConfig<FileRow> = {
     }
   },
 }
-
-const renderers: Record<string, TableRenderer<FileRow>> = {
-  kind: {
-    cell: ({ value }) => h('span', { class: 'kind-pill' }, String(value)),
-  },
-}
 </script>
 
 <template>
@@ -71,10 +72,9 @@ const renderers: Record<string, TableRenderer<FileRow>> = {
     :data="rows"
     :columns="columns"
     :tree-config="treeConfig"
-    :renderers="renderers"
     row-key="id"
   >
-    <template #cell-name="{ row, value }">
+    <template #fileNameCell="{ row, value }">
       <div class="tree-name">
         <strong>{{ value }}</strong>
         <small>{{ row.kind }}</small>
@@ -88,6 +88,9 @@ const renderers: Record<string, TableRenderer<FileRow>> = {
           }}
         </s-tag>
       </div>
+    </template>
+    <template #kind="{ value }">
+      <span class="kind-pill">{{ value }}</span>
     </template>
   </s-table>
 </template>

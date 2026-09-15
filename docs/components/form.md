@@ -7,72 +7,72 @@ API_TITLES:
 PROPS:
   - name: model
     type: Object
-    values: "reactive form data"
+    values: 'reactive form data'
     description: Required. The single data source read and written by field paths.
     default: null
   - name: rules
     type: FormRules
-    values: "{ [field]: FormRule | FormRule[] }"
+    values: '{ [field]: FormRule | FormRule[] }'
     description: Required, custom validator, and blur / change trigger rules.
     default: '{}'
   - name: items
     type: FormItemConfig[]
-    values: "tree configuration with children"
+    values: 'tree configuration with children'
     description: Render schema-driven items and recursively compose complex layouts.
     default: '[]'
   - name: label-width
     type: String | Number
-    values: "CSS width"
+    values: 'CSS width'
     description: Default label width for horizontal items; fits four CJK characters plus the required marker.
     default: 'calc(4em + 24px)'
   - name: label-position
     type: String
-    values: "left / right / top"
+    values: 'left / right / top'
     description: Default label placement for child Form Items.
     default: right
   - name: label-align
     type: String
-    values: "left / right"
+    values: 'left / right'
     description: Default text alignment inside horizontal labels.
     default: right
   - name: inline
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Use the inline Form layout.
     default: 'false'
   - name: disabled
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Disable all declarative and schema-rendered fields.
     default: 'false'
   - name: readonly
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Make all declarative and schema-rendered fields readonly.
     default: 'false'
   - name: show-message
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Display validation errors and field descriptions.
     default: 'true'
   - name: reserve-error-space
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Reserve stable space for errors or helper text to prevent layout shift.
     default: 'true'
   - name: scroll-to-error
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Focus and scroll to the first invalid field.
     default: 'true'
   - name: column-gap
     type: String | Number
-    values: "CSS size"
+    values: 'CSS size'
     description: Horizontal gap in the 24-column Form grid.
     default: 16
   - name: row-gap
     type: String | Number
-    values: "CSS size"
+    values: 'CSS size'
     description: Vertical gap in the 24-column Form grid.
     default: 4
 CHILD_PROPS:
@@ -86,12 +86,12 @@ CHILD_PROPS:
     default: null
   - name: prop
     type: String
-    values: "deep model path"
+    values: 'deep model path'
     description: Field path such as profile.name. Takes precedence over field.
     default: null
   - name: field
     type: String
-    values: "deep model path"
+    values: 'deep model path'
     description: Compatibility alias used when prop is absent.
     default: null
   - name: id
@@ -108,56 +108,56 @@ CHILD_PROPS:
     default: null
   - name: required
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Display the required state independently of validation rules.
     default: 'false'
   - name: label-width
     type: String | Number
-    values: "CSS width"
+    values: 'CSS width'
     description: Override SForm label-width for this Item.
     default: inherited
   - name: label-position
     type: String
-    values: "left / right / top"
+    values: 'left / right / top'
     description: Override SForm label-position for this Item.
     default: inherited
   - name: span
     type: Number | FormItemSpan
-    values: "1–24 / responsive object"
+    values: '1–24 / responsive object'
     description: Width occupied by this Item in the 24-column grid.
     default: 24
   - name: vertical
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Place this Item label above its control.
     default: 'false'
   - name: nested
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Treat the default slot as a nested Form Item grid.
     default: 'false'
   - name: align
     type: String
-    values: "left / center / right"
+    values: 'left / center / right'
     description: Align the Item content within its grid cell.
     default: left
   - name: reserve-error-space
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Override SForm reserve-error-space for this Item.
     default: inherited
   - name: disabled
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Override the disabled state passed to itemRender.
     default: inherited
   - name: readonly
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Override the readonly state passed to itemRender.
     default: inherited
   - name: item-render
-    type: FormItemRenderOptions
+    type: RendererOptions
     description: Render a registered or custom control when no default slot is supplied.
     default: null
 EVENTS:
@@ -246,25 +246,19 @@ Validation is implemented inside Form without an external validation runtime. Ru
 
 ## Schema renderers and nested layout
 
-`children` can recurse to any depth and every level uses the 24-column grid. A numeric `span` collapses to a full row on phones; pass `{ xs, sm, md, lg, xl }` for precise responsive sizing.
+`children` can recurse to any depth and every level uses the 24-column grid. A numeric `span` collapses to a full row on phones; pass `{ xs, sm, md, lg, xl }` for precise responsive sizing. Use the built-in `$input`, `$select`, `$switch`, and `$textarea` names directly in `itemRender`; `$buttons` can provide Form `submit` and `reset` actions without rebuilding an action slot.
 
 <template #example><form-default /></template>
 
 <template #template>
 
-@[code{99-108}](../.vuepress/components/form/default.vue)
+@[code{104-106}](../.vuepress/components/form/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-97}](../.vuepress/components/form/default.vue)
-
-</template>
-
-<template #style>
-
-@[code{110-116}](../.vuepress/components/form/default.vue)
+@[code{1-102}](../.vuepress/components/form/default.vue)
 
 </template>
 
@@ -274,19 +268,19 @@ Validation is implemented inside Form without an external validation runtime. Ru
 
 ## Custom renderer
 
-Register project renderers with `formRenderer.add(name, definition)`. `renderItem` receives the model, field path, value, disabled state, `setValue`, and `validate` helpers.
+Reusable project renderers are registered once from the application entry. The example below only references `$uppercaseInput`, which this documentation site registered globally outside the component. See [Renderer](./renderer.md) for registration, callback contracts, usage in Form and Table, and built-in mappings.
 
 <template #example><form-renderer /></template>
 
 <template #template>
 
-@[code{32-34}](../.vuepress/components/form/renderer.vue)
+@[code{19-21}](../.vuepress/components/form/renderer.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-30}](../.vuepress/components/form/renderer.vue)
+@[code{1-17}](../.vuepress/components/form/renderer.vue)
 
 </template>
 
@@ -320,13 +314,13 @@ The existing `<s-form-item>` API remains compatible. Add `nested` to a parent It
 
 Form has three related public inputs. Their fields intentionally overlap, but they are not interchangeable:
 
-| Passed to                      | Public type             | Reference below            |
-| ------------------------------ | ----------------------- | -------------------------- |
-| `<s-form>`                     | `FormProps`             | **SForm props**            |
-| `<s-form-item>`                | `FormItemProps`         | **SFormItem props**        |
-| each node in `<s-form :items>` | `FormItemConfig`        | **items[] configuration**  |
-| each entry in `rules`          | `FormRule`              | **Validation rule**        |
-| `itemRender` on an Item/config | `FormItemRenderOptions` | **Renderer configuration** |
+| Passed to                      | Public type       | Reference below            |
+| ------------------------------ | ----------------- | -------------------------- |
+| `<s-form>`                     | `FormProps`       | **SForm props**            |
+| `<s-form-item>`                | `FormItemProps`   | **SFormItem props**        |
+| each node in `<s-form :items>` | `FormItemConfig`  | **items[] configuration**  |
+| each entry in `rules`          | `FormRule`        | **Validation rule**        |
+| `itemRender` on an Item/config | `RendererOptions` | **Renderer configuration** |
 
 ### `items[]` configuration (`FormItemConfig`)
 
@@ -353,7 +347,7 @@ Each `items` node accepts the same fields as `SFormItem` using camelCase names, 
 | `validator` | `(value, model) => boolean \| string \| Promise<…>` | Return `true` when valid, or `false` / an error string when invalid.         |
 | `trigger`   | `'blur' \| 'change' \| Array<'blur' \| 'change'>`   | Interaction that runs the rule; omitted interaction rules default to `blur`. |
 
-### Renderer configuration (`FormItemRenderOptions`)
+### Renderer configuration (`RendererOptions`)
 
 | Property      | Type                                           | Description                                                          |
 | ------------- | ---------------------------------------------- | -------------------------------------------------------------------- |
@@ -367,9 +361,9 @@ Each `items` node accepts the same fields as `SFormItem` using camelCase names, 
 | `content`     | `string \| (params) => VNodeChild`             | Default slot content or a content renderer.                          |
 | `options`     | `unknown[]`                                    | Data options forwarded to components such as Select and Radio Group. |
 | `optionProps` | `Record<string, string>`                       | Option-field mapping available to custom renderers.                  |
-| `children`    | `FormItemRenderOptions[]`                      | Nested renderer nodes for composite controls.                        |
+| `children`    | `RendererOptions[]`                            | Nested renderer nodes for composite controls.                        |
 
-Built-in renderer names match the exported component names, including `SInput`, `SSelect`, `SSwitch`, `SCheckboxGroup`, `SRadioGroup`, `SDatePicker`, `STextarea`, and `SButton`.
+The shared registry includes `$input`, `$textarea`, `$date`, `$dateRange`, `$time`, `$timePicker`, `$select`, `$radio`, `$checkbox`, `$checkboxGroup`, `$treeSelect`, `$cascader`, `$rate`, `$slider`, `$switch`, `$verCode`, and `$buttons`. Existing component-name registrations such as `SInput` and `SSelect` remain available.
 
 The API tables below are separated by owner: `SForm props` only apply to the Form container, while `SFormItem props` apply to a declarative Item and to same-named `items[]` fields.
 

@@ -3,7 +3,7 @@ import { formContextKey } from './constants'
 import { renderFormItemRenderer } from './renderer'
 import type { PropType } from 'vue'
 import type { FormItemConfig } from './form'
-import type { FormItemRenderOptions, FormRendererParams } from './renderer'
+import type { FormRendererParams, RendererOptions } from './renderer'
 
 export default defineComponent({
   name: 'SFormRenderer',
@@ -13,7 +13,7 @@ export default defineComponent({
       required: true,
     },
     render: {
-      type: Object as PropType<FormItemRenderOptions>,
+      type: Object as PropType<RendererOptions>,
       required: true,
     },
     controlId: String,
@@ -45,6 +45,8 @@ export default defineComponent({
           field
             ? (form?.validateField(field, trigger) ?? Promise.resolve(true))
             : Promise.resolve(true),
+        submit: (event) => form?.submit(event) ?? Promise.resolve(false),
+        reset: (event) => form?.resetFields(event),
       }
       return renderFormItemRenderer(props.render, params)
     }

@@ -6,79 +6,79 @@ PROPS:
     values: String
     description: 卡片标题；title 插槽优先。
     default: null
-    usage: '#默认'
+    usage: '#default'
   - name: subtitle
     type: String
     values: String
     description: 标题下方的辅助文本。
     default: null
-    usage: '#默认'
+    usage: '#default'
   - name: text
     type: String
     values: String
     description: 卡片描述；text 插槽优先。
     default: null
-    usage: '#默认'
+    usage: '#default'
   - name: color
     type: String
     values: Sax Design 颜色 | RGB | HEX
     description: 彩色表面与交互效果使用的语义强调色。
     default: primary
-    usage: '#扩展表面样式'
+    usage: '#extended-surface-variants'
   - name: variant
     type: String
     values: elevated | outlined | soft | solid | plain | glass
     description: 表面样式，与布局和交互行为彼此独立。
     default: null
-    usage: '#扩展表面样式'
+    usage: '#extended-surface-variants'
   - name: orientation
     type: String
     values: vertical | horizontal
     description: 垂直或水平排列媒体与内容。
     default: null
-    usage: '#排列方向'
+    usage: '#orientation'
   - name: hover-effect
     type: String
     values: none | lift | glow
     description: 鼠标悬停与键盘聚焦时的视觉反馈。
     default: null
-    usage: '#悬停效果'
+    usage: '#hover-effects'
   - name: shape
     type: String
     values: rounded | square
     description: 卡片圆角形态，可继承 ConfigProvider 的全局配置。
     default: rounded
-    usage: '#外形'
+    usage: '#shape'
   - name: interactive
     type: Boolean
     values: true | false
     description: 为可点击卡片添加按钮语义与键盘焦点。
     default: 'false'
-    usage: '#悬停效果'
+    usage: '#hover-effects'
   - name: selectable
     type: Boolean
     values: true | false
     description: 让卡片成为可切换的选择表面。
     default: 'false'
-    usage: '#选择与加载'
+    usage: '#selection-and-loading'
   - name: selected
     type: Boolean
     values: true | false
     description: 受控选中状态，支持 v-model:selected。
     default: 'false'
-    usage: '#选择与加载'
+    usage: '#selection-and-loading'
   - name: loading
     type: Boolean
     values: true | false
     description: 显示稳定的骨架屏并禁用交互。
     default: 'false'
-    usage: '#选择与加载'
+    usage: '#selection-and-loading'
   - name: type
     type: String
     values: classic | overlay | split | frosted | reveal | profile | metric | article
     description: 选择一套有明确语义的完整卡片预设；数字 1-5 仅作为兼容别名保留。
     default: classic
-    usage: '#文章卡片'
+    usage: '#article'
 EVENTS:
   - name: update:selected
     type: Boolean

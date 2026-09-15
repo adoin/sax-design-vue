@@ -8,7 +8,6 @@ const pager = ref<TablePagerConfig>({
   layout: ['total', 'prev', 'pager', 'next', 'sizes'],
 })
 const selected = ref<TableRow[]>([])
-const radio = ref<TableRow | null>(null)
 const rows = [
   { id: 1, name: '林晓', available: true },
   { id: 2, name: '陈屿', available: false },
@@ -23,10 +22,6 @@ const columns: TableColumn[] = [
     title: '可选状态',
     cell: ({ value }) => (value ? '可选' : '禁选'),
   },
-]
-const radioColumns: TableColumn[] = [
-  { type: 'radio', width: 64 },
-  { field: 'name', title: '负责人' },
 ]
 </script>
 
@@ -45,16 +40,8 @@ const radioColumns: TableColumn[] = [
       :columns="columns"
       :selection-config="{
         reserve: true,
-        checkMethod: ({ row }) => Boolean(row.available),
+        selectableMethod: ({ row }) => Boolean(row.available),
       }"
-      row-key="id"
-    />
-    <span>单选负责人: {{ radio?.name ?? '—' }}</span>
-    <s-table
-      v-model:highlight="radio"
-      :data="rows"
-      :columns="radioColumns"
-      :selection-config="{ checkMethod: ({ row }) => Boolean(row.available) }"
       row-key="id"
     />
   </div>

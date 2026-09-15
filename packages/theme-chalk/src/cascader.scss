@@ -254,9 +254,6 @@
   border-color: getColor(primary);
   background: getColor(primary);
 }
-.s-cascader__loading {
-  animation: s-cascader-spin 0.8s linear infinite;
-}
 .s-cascader__search-results {
   max-height: 300px;
   padding: 6px;
@@ -295,12 +292,6 @@
 }
 .s-cascader__footer {
   box-shadow: inset 0 8px 12px -12px getColor(shadow, 0.28);
-}
-
-@keyframes s-cascader-spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 @media (max-width: 640px) {

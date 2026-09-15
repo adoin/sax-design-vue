@@ -12,6 +12,7 @@
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif !important;
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
 body {
@@ -163,6 +164,6 @@ input.hide-clear[type='search']::-webkit-search-results-decoration {
   *,
   *:after,
   *:before {
-    transition: all 0s !important;
+    transition: none !important;
   }
 }

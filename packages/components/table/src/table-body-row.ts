@@ -30,6 +30,7 @@ interface RowRendererOptions {
   ) => InstanceType<typeof TableDataRow>['$props']
   slots: Slots
   cellSlotName: (column: TableColumn) => string
+  cellSlotRenderer: (column: TableColumn) => TableCellRenderer | undefined
   editSlotName: (column: TableColumn) => string
   renderer: (column: TableColumn) => TableCellRenderer | undefined
 }
@@ -51,8 +52,10 @@ export function createTableBodyRow(options: RowRendererOptions) {
         minimumHeight: props.mergeOwner ? undefined : bindings.minimumHeight,
       },
       {
-        cell: (params: TableCellRenderParams) =>
-          renderSlot(
+        cell: (params: TableCellRenderParams) => {
+          const configuredSlot = options.cellSlotRenderer(params.column)
+          if (configuredSlot) return configuredSlot(params)
+          return renderSlot(
             slots,
             options.cellSlotName(params.column),
             { ...params },
@@ -65,7 +68,8 @@ export function createTableBodyRow(options: RowRendererOptions) {
                 }),
               ]),
             ],
-          ),
+          )
+        },
         edit: (params: TableEditSlotParams) =>
           renderSlot(
             slots,

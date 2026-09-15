@@ -92,7 +92,8 @@
       transparent 68%
     );
     transform: translateX(-100%);
-    animation: s-images-skeleton 1.35s ease-in-out infinite;
+    animation: s-images-skeleton var(--sax-motion-duration-long)
+      var(--sax-motion-easing-in-out) infinite;
   }
 
   @include e(error) {
@@ -221,7 +222,8 @@
         inset: 0;
         background: hsl(0deg 0% 0% / 0.35);
         opacity: 0;
-        transition: all 0.25s ease;
+        transition: opacity var(--sax-motion-duration)
+          var(--sax-motion-easing-standard);
         z-index: 3;
         border-radius: inherit;
       }

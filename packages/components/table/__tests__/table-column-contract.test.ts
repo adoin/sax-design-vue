@@ -10,6 +10,26 @@ const values = (wrapper: ReturnType<typeof mount>) =>
   wrapper.findAll('.s-table__data-row [role="cell"]').map((cell) => cell.text())
 
 describe('Table column declaration contract', () => {
+  it('does not derive column slot names from field values', () => {
+    const wrapper = mount(Table, {
+      props: {
+        data,
+        columns: [{ field: 'a', title: 'A' }],
+        footerData: [{ a: 'Total' }],
+      },
+      slots: {
+        'cell-a': () => h('span', 'implicit cell'),
+        'header-a': () => h('span', 'implicit header'),
+        'footer-a': () => h('span', 'implicit footer'),
+      },
+    })
+
+    expect(values(wrapper)).toEqual(['A'])
+    expect(wrapper.get('.s-table__data-head-cell').text()).toBe('A')
+    expect(wrapper.get('.s-table__footer-cell').text()).toBe('Total')
+    wrapper.unmount()
+  })
+
   it.each(['configured', 'declarative'] as const)(
     'keeps keyed %s columns in the current source order',
     async (mode) => {
@@ -154,6 +174,7 @@ describe('Table column declaration contract', () => {
           key: 'a',
           field: 'a',
           title: 'A',
+          slots: { default: 'specificA' },
           cell: ['specific', 'generic', 'function'].includes(stage.value)
             ? renderer
             : undefined,
@@ -178,7 +199,7 @@ describe('Table column declaration contract', () => {
                     }
                   : {}),
                 ...(stage.value === 'specific'
-                  ? { 'cell-a': () => h('span', 'specific') }
+                  ? { specificA: () => h('span', 'specific') }
                   : {}),
                 ...(['specific', 'generic'].includes(stage.value)
                   ? { cell: () => h('span', 'generic') }

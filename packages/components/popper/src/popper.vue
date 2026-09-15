@@ -19,16 +19,21 @@
     :animation="animation"
     :popper-id="popperId"
     :append-to="appendTo"
-    :teleported="teleported"
-    :persistent="persistent"
+    :teleported="props.teleported"
+    :persistent="props.persistent"
     :placement="popperPlacement"
     :content="content"
-    :interactivity="interactivity"
+    :interactivity="props.interactivity"
     :popper-class="popperClass"
-    :popper-style="[popperStyle, floatingStyles, { zIndex }]"
+    :popper-style="[
+      popperStyle,
+      floatingStyles,
+      { zIndex },
+      referenceVisibilityStyle,
+    ]"
     :disabled="disabled || !referenceVisible"
     :visible="visible"
-    :show-arrow="showArrow"
+    :show-arrow="props.showArrow"
     @blur="onBlur"
     @close="onClose"
   >
@@ -52,6 +57,7 @@ import {
 import { isBoolean, isEmpty } from '@vuesax-alpha/utils'
 import {
   useDelayedToggle,
+  useGlobalComponentProps,
   useId,
   usePopperContainer,
   usePopperContainerId,
@@ -85,7 +91,8 @@ const { selector, id } = usePopperContainerId()
 
 const appendTo = computed(() => props.appendTo || selector.value)
 
-const props = defineProps(popperProps)
+const rawProps = defineProps(popperProps)
+const props = useGlobalComponentProps('popper', rawProps)
 const emit = defineEmits(popperEmits)
 
 const { currentZIndex, nextZIndex } = useZIndex()
@@ -99,6 +106,9 @@ const arrowRef = ref<HTMLElement>()
 
 const open = ref(false)
 const referenceVisible = ref(true)
+const referenceVisibilityStyle = computed(() =>
+  referenceVisible.value ? {} : { visibility: 'hidden' as const },
+)
 const toggleReason = ref<Event>()
 
 const { show, hide, hasUpdateHandler } = usePopperModelToggle({
@@ -176,6 +186,7 @@ const observeReference = (reference?: ReferenceElement) => {
 
   if (
     typeof HTMLElement === 'undefined' ||
+    typeof IntersectionObserver === 'undefined' ||
     !(reference instanceof HTMLElement)
   ) {
     referenceVisible.value = true

@@ -5,6 +5,7 @@ import '@vuesax-alpha/theme-chalk/src/index.scss'
 import '@vuesax-alpha/theme-chalk/src/dark/css-vars.scss'
 
 import 'virtual:sax-icons/register'
+import { resolveTableDocumentationOverviewRedirect } from './theme/shared/tableDocumentation'
 
 const siteBase = import.meta.env.BASE_URL || '/'
 
@@ -34,13 +35,22 @@ const rewriteRootUrls = () => {
 }
 
 export default defineClientConfig({
-  enhance({ app }) {
+  enhance({ app, router }) {
     app.provide(ID_INJECTION_KEY, {
       prefix: 1,
       current: 0,
     })
     // @ts-expect-error
     app.use(SaxDesignVue)
+    router.beforeEach((to) => {
+      const redirect = resolveTableDocumentationOverviewRedirect(
+        to.path,
+        to.hash,
+      )
+      return redirect
+        ? { path: redirect, query: to.query, replace: true }
+        : true
+    })
   },
   setup() {
     if (typeof window === 'undefined' || siteBase === '/') return

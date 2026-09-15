@@ -3,11 +3,14 @@
 @use 'common/var' as *;
 
 .#{$namespace}-notification-enter-active {
-  transition: all 0.3s ease 0.05s, transform 0.3s ease, margin 0.25s ease,
-    clip-path 8s ease 0.8s;
+  transition:
+    opacity var(--sax-motion-duration-medium)
+      var(--sax-motion-easing-smooth-out),
+    transform var(--sax-motion-duration-medium)
+      var(--sax-motion-easing-smooth-out),
+    clip-path var(--sax-motion-duration-medium)
+      var(--sax-motion-easing-smooth-out);
 }
-// .notification-leave-active
-//   transition: all .25s ease !important
 
 .#{$namespace}-notification-leave-to {
   max-height: 0 !important;
@@ -19,7 +22,7 @@
   box-shadow: 0 0 0 0 hsl(0deg 0% 0% / 0);
   opacity: 0 !important;
   clip-path: circle(0% at 80% 35%) !important;
-  transform: translate(0, 10px) !important;
+  transform: translate(0, var(--sax-motion-distance-base)) !important;
 }
 
 .#{$namespace}-notification-enter-from {
@@ -45,7 +48,6 @@
   right: 0;
   bottom: 0;
   z-index: 200000;
-  transition: all 25s ease;
   padding: 10px 0;
   display: flex;
   flex-direction: column;
@@ -69,8 +71,13 @@
 
     .#{$namespace}-notification {
       clip-path: circle(120% at 50% 0%);
-      transition: all 0.25s ease, transform 0.3s ease, max-height 0.25s ease,
-        clip-path 0.5s ease 0.1s;
+      transition:
+        opacity var(--sax-motion-duration) var(--sax-motion-easing-standard),
+        transform var(--sax-motion-duration) var(--sax-motion-easing-emphasized),
+        max-height var(--sax-motion-duration)
+          var(--sax-motion-easing-emphasized),
+        clip-path var(--sax-motion-duration-slow)
+          var(--sax-motion-easing-emphasized);
 
       @include when(sticky) {
         margin: 3px 20px;
@@ -129,8 +136,13 @@
 
     .#{$namespace}-notification {
       clip-path: circle(120% at 50% 100%);
-      transition: all 0.25s ease, transform 0.3s ease, max-height 0.25s ease,
-        clip-path 0.5s ease 0.1s;
+      transition:
+        opacity var(--sax-motion-duration) var(--sax-motion-easing-standard),
+        transform var(--sax-motion-duration) var(--sax-motion-easing-emphasized),
+        max-height var(--sax-motion-duration)
+          var(--sax-motion-easing-emphasized),
+        clip-path var(--sax-motion-duration-slow)
+          var(--sax-motion-easing-emphasized);
 
       @include when(sticky) {
         margin: 3px 20px;
@@ -197,8 +209,17 @@
   background: getColor('color');
   color: getColor('text');
   margin: 3px 10px;
-  transition: all 0.25s ease, transform 0.3s ease 0.1s, max-height 0.25s ease,
-    clip-path 0.5s ease 0.1s;
+  transition:
+    width var(--sax-motion-duration) var(--sax-motion-easing-emphasized),
+    max-height var(--sax-motion-duration) var(--sax-motion-easing-emphasized),
+    padding var(--sax-motion-duration) var(--sax-motion-easing-emphasized),
+    margin var(--sax-motion-duration) var(--sax-motion-easing-emphasized),
+    border-radius var(--sax-motion-duration) var(--sax-motion-easing-emphasized),
+    box-shadow var(--sax-motion-duration) var(--sax-motion-easing-standard),
+    opacity var(--sax-motion-duration) var(--sax-motion-easing-standard),
+    transform var(--sax-motion-duration) var(--sax-motion-easing-emphasized),
+    clip-path var(--sax-motion-duration-slow)
+      var(--sax-motion-easing-emphasized);
 
   &:hover:not(.is-flat) {
     box-shadow: 0 0 0 0 getColor(black, getCssVar('shadow-opacity'));
@@ -261,7 +282,8 @@
       top: 0;
       left: 0;
       z-index: -1;
-      transition: all 0.25s ease;
+      transition: background-color var(--sax-motion-duration)
+        var(--sax-motion-easing-standard);
     }
   }
   @include when(on-click) {
@@ -298,38 +320,12 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    transition: all 0.25s ease;
+    transition: width var(--sax-motion-duration) linear;
   }
   @include e(loading) {
     width: 50px;
     height: 50px;
-    border-radius: var(--sax-radius-circle);
     position: absolute;
-    &:after {
-      box-sizing: border-box;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: inherit;
-      border: 2px solid transparent;
-      border-bottom-color: getColor('text');
-      animation: loading-notification 0.8s ease infinite;
-      top: 0;
-      content: '';
-    }
-    &:before {
-      box-sizing: border-box;
-      top: 0;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: inherit;
-      border: 2px dashed transparent;
-      border-bottom-color: getColor('text');
-      animation: loading-notification 0.8s linear infinite;
-      opacity: 0.2;
-      content: '';
-    }
   }
   @include e(close) {
     @include set-var-value(color, getCssVar(text));
@@ -355,7 +351,11 @@
     position: relative;
     width: auto;
     height: auto;
-    transition: all 0.25s ease 0.2s;
+    transition:
+      opacity var(--sax-motion-duration) var(--sax-motion-easing-standard)
+        var(--sax-motion-duration-fast),
+      transform var(--sax-motion-duration) var(--sax-motion-easing-emphasized)
+        var(--sax-motion-duration-fast);
     opacity: 1;
   }
   @include e(text) {
@@ -392,24 +392,6 @@
     p {
       color: $color-white !important;
     }
-  }
-}
-
-@keyframes loading-notification {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes progress-notification {
-  0% {
-    width: 0;
-  }
-  100% {
-    width: 100%;
   }
 }
 

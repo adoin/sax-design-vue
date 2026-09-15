@@ -3,17 +3,17 @@ description: '在一组关联选项中选择唯一值。'
 PROPS:
   - name: v-model
     type: String | Number | Boolean
-    values: "已选单选值"
+    values: '已选单选值'
     description: 绑定单选项或单选组的选中值。
     default: null
   - name: model-value
     type: String | Number | Boolean
-    values: "已选单选值"
+    values: '已选单选值'
     description: 绑定单选项或单选组的选中值。
     default: null
   - name: color
     type: String
-    values: "Theme colors, RGB, HEX"
+    values: 'Theme colors, RGB, HEX'
     description: 设置单选框颜色。
     default: primary
     link: null
@@ -22,16 +22,16 @@ PROPS:
 
   - name: disabled
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: 禁用单选框交互，保留当前选中状态。
     default: false
     link: null
-    usage: '#禁用'
+    usage: '#disabled'
     code: null
 
   - name: loading
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: 是否显示加载动画并禁用组件。
     default: false
     link: null
@@ -40,7 +40,7 @@ PROPS:
 
   - name: icon-animation
     type: String
-    values: "auto, draw, pop, none"
+    values: 'auto, draw, pop, none'
     description: 设置自定义中心图标动画；描边 SVG 自动绘制，填充图标使用弹入动画。
     default: auto
     link: null
@@ -49,7 +49,7 @@ PROPS:
 
   - name: value
     type: String | Number | Boolean
-    values: "单选项值"
+    values: '单选项值'
     description: 当前单选项对应的值。
     default: "''"
     link: null
@@ -75,7 +75,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: slot
-    values: "null"
+    values: 'null'
     description: 为组件添加标签。
     default: null
     link: null
@@ -84,7 +84,7 @@ SLOTS:
 
   - name: icon
     type: slot
-    values: "checked"
+    values: 'checked'
     description: 替换选中态中心 SVG，并获取当前选中状态。
     default: null
     link: null
@@ -220,7 +220,7 @@ SLOTS:
 
 ## 加载
 
-加载时复用 Button 的呼吸光轨：底部高光沿整个单选项由左向右移动；此时交互行为等同于 `disabled`。
+加载时使用共用的 Sax 标志加载器替换单选控件，标签位置保持不变；此时交互行为等同于 `disabled`。
 
 <template #example>
 <radio-loading />

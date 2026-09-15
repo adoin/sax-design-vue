@@ -47,7 +47,12 @@ vi.mock('@tanstack/vue-virtual', () => ({
 }))
 
 const columns: TableColumn[] = [
-  { field: 'name', title: 'Name', treeNode: true },
+  {
+    field: 'name',
+    title: 'Name',
+    treeNode: true,
+    slots: { default: 'nameCell' },
+  },
   { field: 'description', title: 'Description' },
 ]
 
@@ -210,6 +215,38 @@ describe('Table data mode', () => {
     expect(wrapper.find('b').text()).toBe('Alpha')
   })
 
+  it('supports VXE-style inline default slot render functions', () => {
+    const inlineSlot = vi.fn((params: TableCellRenderParams) =>
+      h(
+        'b',
+        `${params.row.id}:${params.column.field}:${params.index}:${params.rowIndex}`,
+      ),
+    )
+    const wrapper = mount(Table, {
+      props: {
+        data: [{ id: 7, name: 'Alpha' }],
+        columns: [
+          {
+            field: 'name',
+            title: 'Name',
+            slots: { default: inlineSlot },
+            renderer: ({ value }: TableCellRenderParams) =>
+              h('strong', `renderer:${value}`),
+          },
+        ],
+      },
+      slots: {
+        cell: ({ value }: { value: unknown }) =>
+          h('em', `generic:${String(value)}`),
+      },
+    })
+
+    expect(wrapper.find('b').text()).toBe('7:name:0:0')
+    expect(wrapper.find('em').exists()).toBe(false)
+    expect(wrapper.find('strong').exists()).toBe(false)
+    expect(inlineSlot).toHaveBeenCalledTimes(1)
+  })
+
   it('supports column slots before renderers', () => {
     const wrapper = mount(Table, {
       props: {
@@ -221,7 +258,7 @@ describe('Table data mode', () => {
         columns: [columns[0], { ...columns[1], renderer: 'description' }],
       },
       slots: {
-        'cell-name': ({ value }: { value: unknown }) =>
+        nameCell: ({ value }: { value: unknown }) =>
           h('em', `slot:${String(value)}`),
       },
     })

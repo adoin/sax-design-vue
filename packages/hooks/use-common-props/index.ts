@@ -44,15 +44,21 @@ export const useShape = <T extends string = ComponentShape>(
   )
 }
 
-export const useSize = (
-  fallback?: MaybeRef<ComponentSize | undefined>,
+export const useSize = <T extends string | number = ComponentSize>(
+  fallback?: MaybeRef<T | ComponentSize | undefined>,
   ignore: Partial<Record<'prop', boolean>> = {},
 ) => {
   const emptyRef = ref(undefined)
+  const instance = getCurrentInstance()
 
-  const size = ignore.prop ? emptyRef : useProp<ComponentSize>('size')
+  const size = ignore.prop ? emptyRef : useProp<T>('size')
+  const globalSize = useGlobalConfig('size')
+  const hasExplicitSize = computed(() => instance?.vnode.props?.size != null)
 
-  return computed((): ComponentSize => size.value || unref(fallback) || '')
+  return computed((): T | ComponentSize => {
+    if (hasExplicitSize.value) return size.value ?? ''
+    return unref(fallback) ?? globalSize.value ?? size.value ?? ''
+  })
 }
 
 export const useDisabled = (fallback?: MaybeRef<boolean | undefined>) => {

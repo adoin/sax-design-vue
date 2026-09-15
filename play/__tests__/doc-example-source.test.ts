@@ -4,6 +4,7 @@ import { parse } from '@vue/compiler-sfc'
 import { mount } from '@vue/test-utils'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import { describe, expect, it } from 'vitest'
+import '../../docs/.vuepress/global-renderers'
 import { compileDemoSfc } from '../compile-demo-sfc'
 import { demoRuntimeModules } from '../demo-runtime-modules'
 
@@ -12,6 +13,14 @@ const docsRoots = [
   resolve(projectRoot, 'docs/components'),
   resolve(projectRoot, 'docs/zh/components'),
 ]
+const markdownFiles = (root: string): string[] =>
+  readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
+    const filePath = resolve(root, entry.name)
+    if (entry.isDirectory()) return markdownFiles(filePath)
+    return entry.isFile() && entry.name.endsWith('.md') ? [filePath] : []
+  })
+type ExampleSourceSlot = 'template' | 'script' | 'script-tsx' | 'style'
+
 const readCodeIncludes = (markdownPath: string, source: string): string => {
   const includePattern = /@\[code(?:\{(\d+)-(\d+)\})?[^\]]*\]\(([^)]+)\)/g
 
@@ -29,16 +38,19 @@ const readCodeIncludes = (markdownPath: string, source: string): string => {
     })
     .join('\n')
 }
+const readSlotMarkup = (card: string, slot: ExampleSourceSlot): string => {
+  const match = card.match(
+    new RegExp(`<template #${slot}>\\s*([\\s\\S]*?)\\s*</template>`),
+  )
+  return match?.[1] ?? ''
+}
 
 const readSlotSource = (
   markdownPath: string,
   card: string,
-  slot: 'template' | 'script' | 'style',
+  slot: ExampleSourceSlot,
 ): string => {
-  const match = card.match(
-    new RegExp(`<template #${slot}>\\s*([\\s\\S]*?)\\s*</template>`),
-  )
-  return match ? readCodeIncludes(markdownPath, match[1]) : ''
+  return readCodeIncludes(markdownPath, readSlotMarkup(card, slot))
 }
 
 const exampleCards = (source: string) =>
@@ -47,18 +59,39 @@ const exampleCards = (source: string) =>
     .filter((card) => card.includes('<template #example>'))
 
 const tableSections = [
-  ['Data and column definitions', '数据与列定义'],
-  ['Selection, sorting, and filtering', '选择、排序与筛选'],
-  ['Trees and groups', '树形与分组'],
-  ['Header structures', '表头结构'],
-  ['Footers and summaries', '表尾与汇总'],
-  ['Row expansion', '行展开'],
-  ['Editing, validation, and changes', '编辑、校验与变更'],
-  ['Spreadsheet interactions', '表格式交互'],
-  ['Column layout and management', '列布局与管理'],
-  ['Merged cells', '单元格合并'],
-  ['Large data and visualization', '大数据与可视化'],
-  ['Query forms and request proxy', '查询表单与请求代理'],
+  [
+    'data-and-column-definitions',
+    'Data and column definitions',
+    '数据与列定义',
+  ],
+  ['row-selection', 'Row selection', '行选择'],
+  ['sorting-and-filtering', 'Sorting and filtering', '排序与筛选'],
+  ['trees-and-groups', 'Trees and groups', '树形与分组'],
+  ['header-structures', 'Header structures', '表头结构'],
+  ['footers-and-summaries', 'Footers and summaries', '表尾与汇总'],
+  ['row-expansion', 'Row expansion', '行展开'],
+  [
+    'editing-validation-and-changes',
+    'Editing, validation, and changes',
+    '编辑、校验与变更',
+  ],
+  ['spreadsheet-interactions', 'Spreadsheet interactions', '表格式交互'],
+  [
+    'column-layout-and-management',
+    'Column layout and management',
+    '列布局与管理',
+  ],
+  ['merged-cells', 'Merged cells', '单元格合并'],
+  [
+    'large-data-and-visualization',
+    'Large data and visualization',
+    '大数据与可视化',
+  ],
+  [
+    'query-forms-and-request-proxy',
+    'Query forms and request proxy',
+    '查询表单与请求代理',
+  ],
 ] as const
 
 const normalizedBlock = (value?: string) =>
@@ -67,7 +100,11 @@ const normalizedBlock = (value?: string) =>
 describe('documentation example source', () => {
   it('keeps massive table data inside the virtual-scrolling example in both locales', () => {
     for (const root of docsRoots) {
-      const markdown = readFileSync(resolve(root, 'table.md'), 'utf8')
+      const markdownPath = resolve(
+        root,
+        'table/large-data-and-visualization.md',
+      )
+      const markdown = readFileSync(markdownPath, 'utf8')
       const virtualCards = Array.from(
         markdown.matchAll(/<card[^>]*>([\s\S]*?)<\/card>/g),
       ).filter((match) => /<table-(?:zh-)?virtual\s*\/>/.test(match[1]))
@@ -78,7 +115,7 @@ describe('documentation example source', () => {
       )
       const card = virtualCards[0][1]
       expect(card).toContain('`virtualSource`')
-      const source = readSlotSource(resolve(root, 'table.md'), card, 'template')
+      const source = readSlotSource(markdownPath, card, 'template')
       expect(source).toContain('class="stress-demo"')
       expect(source).toContain('v-if="!started"')
       expect(source).not.toMatch(/10 万行|100,000 rows|100 亿|10 billion/)
@@ -88,6 +125,7 @@ describe('documentation example source', () => {
   it('reconstructs and compiles every component example as a complete Vue SFC', () => {
     const failures: string[] = []
     let exampleCount = 0
+    let tsxExampleCount = 0
     globalThis.IntersectionObserver = class IntersectionObserver {
       readonly root = null
       readonly rootMargin = '0px'
@@ -107,11 +145,7 @@ describe('documentation example source', () => {
       install: () => void
     }
 
-    for (const markdownPath of docsRoots.flatMap((root) =>
-      readdirSync(root)
-        .filter((file) => file.endsWith('.md'))
-        .map((file) => resolve(root, file)),
-    )) {
+    for (const markdownPath of docsRoots.flatMap(markdownFiles)) {
       const markdown = readFileSync(markdownPath, 'utf8')
       const cards = Array.from(
         markdown.matchAll(/<card[^>]*>([\s\S]*?)<\/card>/g),
@@ -174,34 +208,95 @@ describe('documentation example source', () => {
             `${markdownPath} — ${heading}: ${error instanceof Error ? error.message : String(error)}`,
           )
         }
+
+        const tsxScript = readSlotSource(markdownPath, card, 'script-tsx')
+        if (!tsxScript) return
+        tsxExampleCount += 1
+
+        const tsxSource = [
+          readSlotSource(markdownPath, card, 'template'),
+          tsxScript,
+          readSlotSource(markdownPath, card, 'style'),
+        ]
+          .filter(Boolean)
+          .join('\n\n')
+        const tsxDescriptor = parse(tsxSource).descriptor
+        if (tsxDescriptor.scriptSetup?.lang !== 'tsx') {
+          failures.push(
+            `${markdownPath} — ${heading} (TSX): missing script setup lang=\"tsx\"`,
+          )
+          return
+        }
+
+        const tsxCompiled = compileDemoSfc(
+          tsxSource,
+          `${markdownPath}-${index}-tsx`.replace(/[^a-z0-9-]/gi, '-'),
+          demoRuntimeModules,
+        )
+        if (!tsxCompiled.component || tsxCompiled.error) {
+          failures.push(
+            `${markdownPath} — ${heading} (TSX): ${tsxCompiled.error || 'failed to compile'}`,
+          )
+          return
+        }
+
+        try {
+          const wrapper = mount(tsxCompiled.component, {
+            global: {
+              config: { warnHandler: () => {} },
+              plugins: [saxDesignVue, router],
+            },
+          })
+          wrapper.unmount()
+        } catch (error) {
+          failures.push(
+            `${markdownPath} — ${heading} (TSX): ${error instanceof Error ? error.message : String(error)}`,
+          )
+        }
       })
     }
 
     expect(exampleCount).toBeGreaterThan(0)
+    expect(tsxExampleCount).toBeGreaterThan(0)
     expect(failures).toEqual([])
-  }, 60_000)
+  }, 120_000)
 
   it('keeps every Table example paired, localized and identical to its complete source SFC', () => {
-    const paths = docsRoots.map((root) => resolve(root, 'table.md'))
-    const markdown = paths.map((path) => readFileSync(path, 'utf8'))
-    const cards = markdown.map(exampleCards)
-    expect(cards[0]).toHaveLength(64)
+    const paths = docsRoots.map((root) =>
+      tableSections.map(([slug]) => resolve(root, `table/${slug}.md`)),
+    )
+    const markdown = paths.map((localePaths) =>
+      localePaths.map((path) => readFileSync(path, 'utf8')),
+    )
+    const cards = markdown.map((localePages) =>
+      localePages.flatMap(exampleCards),
+    )
+    expect(cards[0]).toHaveLength(65)
     expect(cards[1]).toHaveLength(cards[0].length)
 
-    markdown.forEach((source, localeIndex) => {
+    markdown.forEach((localePages, localeIndex) => {
       expect(
-        source.match(/<card class="table-doc-section-start">/g),
-      ).toHaveLength(tableSections.length)
-      expect(source.match(/^##\s+.+$/gm)).toEqual(
-        tableSections.map((section) => `## ${section[localeIndex]}`),
-      )
-      expect(source.match(/^###\s+.+$/gm)).toHaveLength(64)
+        readFileSync(resolve(docsRoots[localeIndex], 'table.md'), 'utf8'),
+      ).not.toContain('<template #example>')
+      localePages.forEach((source, sectionIndex) => {
+        expect(
+          source.match(/<card class="table-doc-section-start">/g),
+        ).toHaveLength(1)
+        expect(source.match(/^##\s+.+$/gm)).toEqual([
+          `## ${tableSections[sectionIndex][localeIndex + 1]}`,
+        ])
+      })
+      expect(
+        localePages.flatMap((source) => source.match(/^###\s+.+$/gm) ?? []),
+      ).toHaveLength(65)
     })
 
-    for (const [source, examples] of markdown.map(
-      (source, index) => [source, cards[index]] as const,
-    ))
-      expect(source.match(/<template #example>/g)).toHaveLength(examples.length)
+    markdown.forEach((localePages) => {
+      const source = localePages.join('\n')
+      expect(source.match(/<template #example>/g)).toHaveLength(
+        exampleCards(source).length,
+      )
+    })
 
     cards[0].forEach((english, index) => {
       const chinese = cards[1][index]
@@ -211,9 +306,16 @@ describe('documentation example source', () => {
       expect(tags[0]).toBeTruthy()
       expect(tags[1].replace(/^table-zh-/, 'table-')).toBe(tags[0])
 
+      const sectionIndex = tableSections.findIndex((_, candidateIndex) => {
+        const previousCount = markdown[0]
+          .slice(0, candidateIndex)
+          .reduce((count, source) => count + exampleCards(source).length, 0)
+        const currentCount = exampleCards(markdown[0][candidateIndex]).length
+        return index >= previousCount && index < previousCount + currentCount
+      })
       for (const [locale, card, markdownPath] of [
-        ['en', english, paths[0]],
-        ['zh', chinese, paths[1]],
+        ['en', english, paths[0][sectionIndex]],
+        ['zh', chinese, paths[1][sectionIndex]],
       ] as const) {
         const heading = card.match(/^###\s+.+$/m)
         expect(heading).toBeTruthy()
@@ -223,8 +325,13 @@ describe('documentation example source', () => {
           card.slice(headingEnd, exampleStart).replace(/[`\s]/g, '').length,
         ).toBeGreaterThan(20)
 
+        const canonicalSlots = (['template', 'script', 'style'] as const)
+          .map((slot) => readSlotMarkup(card, slot))
+          .join('\n')
         const includes = Array.from(
-          card.matchAll(/@\[code(?:\{\d+-\d+\})?[^\]]*\]\(([^)]+)\)/g),
+          canonicalSlots.matchAll(
+            /@\[code(?:\{\d+-\d+\})?[^\]]*\]\(([^)]+)\)/g,
+          ),
         ).map((match) => resolve(dirname(markdownPath), match[1]))
         expect(includes.length).toBeGreaterThan(0)
         expect(new Set(includes)).toHaveLength(1)

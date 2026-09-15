@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, useId, useTemplateRef } from 'vue'
-import { SIcon } from '@vuesax-alpha/components/icon'
-import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
+import { useLocale, useNamespace, useSize } from '@vuesax-alpha/hooks'
 import { stepsEmits, stepsProps } from './steps'
 
 import type {
@@ -26,6 +26,7 @@ const slots = defineSlots<{
 }>()
 
 const ns = useNamespace('steps')
+const resolvedSize = useSize()
 const { t } = useLocale()
 const stepsId = useId()
 const triggerRefs = useTemplateRef<HTMLElement[]>('triggers')
@@ -42,7 +43,6 @@ const defaultStatusIcons: Partial<Record<StepStatus, string>> = {
   finish: 'cb:checkmark',
   success: 'cb:checkmark',
   error: 'cb:warning-alt',
-  loading: 'cb:renew',
   disabled: 'cb:locked',
 }
 
@@ -165,7 +165,7 @@ const contextId = (index: number) => `${stepsId}-context-${index}`
       ns.b(),
       ns.m(resolvedDirection),
       ns.m(variant),
-      ns.m(size),
+      ns.m(resolvedSize),
       ns.is('simple', simple),
       ns.is('responsive', responsive),
       ns.is('custom-item', !!slots.item),
@@ -224,12 +224,16 @@ const contextId = (index: number) => `${stepsId}-context-${index}`
             <span :class="ns.e('marker-track')" aria-hidden="true">
               <span :class="ns.e('marker')">
                 <slot name="icon" v-bind="createSlotProps(item, index)">
-                  <SIcon
-                    v-if="resolveIcon(item, resolveStatus(item, index))"
-                    :name="resolveIcon(item, resolveStatus(item, index))"
-                    :rolling="
-                      resolveStatus(item, index) === 'loading' ? 1.1 : false
+                  <SLogoLoading
+                    v-if="
+                      resolveStatus(item, index) === 'loading' &&
+                      !resolveIcon(item, resolveStatus(item, index))
                     "
+                    size="72%"
+                  />
+                  <SIcon
+                    v-else-if="resolveIcon(item, resolveStatus(item, index))"
+                    :name="resolveIcon(item, resolveStatus(item, index))"
                   />
                   <span v-else :class="ns.e('number')">{{ index + 1 }}</span>
                 </slot>

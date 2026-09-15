@@ -1,15 +1,32 @@
 <script setup lang="ts">
+import type { TableFooterConfig } from 'sax-design-vue'
+
 const rows = [
   { name: '设计评审', hours: 3, amount: 240 },
   { name: '实现开发', hours: 5, amount: 400 },
 ]
-const totals = [{ name: '合计', hours: 8, amount: 640 }]
+const footerConfig: TableFooterConfig = {
+  rows: [
+    {
+      values: { name: '合计' },
+      aggregates: [
+        { key: 'hours', field: 'hours', method: 'sum' },
+        { key: 'amount', field: 'amount', method: 'sum' },
+      ],
+    },
+  ],
+}
 const money = (value: unknown) =>
   Number(value).toLocaleString('zh-CN', { style: 'currency', currency: 'CNY' })
 </script>
 
 <template>
-  <s-table :data="rows" :footer-data="totals" row-key="name" resize-config>
+  <s-table
+    :data="rows"
+    :footer-config="footerConfig"
+    row-key="name"
+    resize-config
+  >
     <s-table-column field="name" title="服务" :min-width="180">
       <template #footer="{ value }"
         ><strong>{{ value }}</strong></template

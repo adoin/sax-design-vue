@@ -88,7 +88,12 @@ const rendererFor = (column: TableColumn): TableFooterRenderer | undefined => {
     typeof column.renderer === 'string'
       ? props.renderers[column.renderer]
       : column.renderer
-  if (renderer && typeof renderer === 'object' && renderer.footer)
+  if (
+    renderer &&
+    typeof renderer === 'object' &&
+    !('name' in renderer) &&
+    renderer.footer
+  )
     return renderer.footer
   if (column.footerFormatter)
     return (params) => String(column.footerFormatter?.(params) ?? '')

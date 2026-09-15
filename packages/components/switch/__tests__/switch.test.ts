@@ -13,7 +13,7 @@ describe('Switch', () => {
           stubs: {
             IconCheck: true,
             IconClose: true,
-            IconLoading: true,
+            SLogoLoading: true,
           },
         },
       })
@@ -65,6 +65,7 @@ describe('Switch', () => {
   it('replaces the thumb content while loading without disabled styling', () => {
     const wrapper = mount(Switch, {
       props: { modelValue: false, loading: true },
+      global: { stubs: { SLogoLoading: true } },
       slots: {
         circle: () => h('span', { class: 'custom-circle-icon' }),
       },
@@ -74,6 +75,17 @@ describe('Switch', () => {
     expect(wrapper.classes()).not.toContain('is-disabled')
     expect(wrapper.get('input').attributes('disabled')).toBeDefined()
     expect(wrapper.find('.custom-circle-icon').exists()).toBe(false)
+    expect(wrapper.findComponent({ name: 'SLogoLoading' }).exists()).toBe(true)
+  })
+
+  it('uses the same brand loader for square geometry', () => {
+    const wrapper = mount(Switch, {
+      props: { modelValue: false, loading: true, shape: 'square' },
+      global: { stubs: { SLogoLoading: true } },
+    })
+
+    expect(wrapper.classes()).toContain('is-square')
+    expect(wrapper.findComponent({ name: 'SLogoLoading' }).exists()).toBe(true)
   })
 
   it('leaves indeterminate mode after the model enters a definite state', async () => {

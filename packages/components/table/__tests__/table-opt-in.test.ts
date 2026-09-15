@@ -16,7 +16,6 @@ const featureKeys = [
   'contextMenuConfig',
   'mergeConfig',
   'groupConfig',
-  'columnManagerConfig',
   'resizeConfig',
   'virtualConfig',
   'pagerConfig',

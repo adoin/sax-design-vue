@@ -2,7 +2,11 @@ import { defineComponent, h } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import { useTableValidation } from '../src/composables/use-table-validation'
-import { awaitValidation, validateTableValue } from '../src/validation-utils'
+import {
+  awaitValidation,
+  validateTableValue,
+  validateTableValueSync,
+} from '../src/validation-utils'
 import type {
   TableValidationCell,
   TableValidationContext,
@@ -80,6 +84,9 @@ describe('table validation rules', () => {
         await validateTableValue(context('Alpha'), [{ pattern }]),
       ).toBeUndefined()
     expect(pattern.lastIndex).toBe(4)
+    expect(validateTableValueSync(context(''), [{ required: true }])).toBe(
+      'Value is required',
+    )
   })
 
   it('supports cross-field sync/async checks, rejected validators, and localized messages', async () => {
@@ -218,13 +225,16 @@ describe('table validation sessions', () => {
       [cell('A', [{ validator: () => new Promise(() => {}) }])],
       { signal: controller.signal },
     )
+    expect(validation.running.value).toBe(true)
     controller.abort()
     expect(await pending).toMatchObject({ cancelled: true })
+    expect(validation.running.value).toBe(false)
     const unmounted = validation.run([
       cell('B', [{ validator: () => new Promise(() => {}) }]),
     ])
     wrapper.unmount()
     expect(await unmounted).toMatchObject({ cancelled: true })
+    expect(validation.running.value).toBe(false)
     expect(emit).not.toHaveBeenCalled()
     expect(validation.pending.value).toBeNull()
   })
@@ -287,23 +297,101 @@ describe('table validation sessions', () => {
     expect(result.errors).toHaveLength(3)
     expect(read).toBe(3)
     expect(validation.getErrors()).toHaveLength(3)
+    expect(validation.errorCountTruncated.value).toBe(true)
+    validation.clear()
+    expect(validation.errorCountTruncated.value).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('keeps built-in-only scans synchronous until their time budget is spent', async () => {
+    const { wrapper, validation } = harness()
+    const clock = vi.spyOn(Date, 'now').mockReturnValue(0)
+    const timeout = vi.spyOn(globalThis, 'setTimeout')
+    function* cells() {
+      for (let id = 0; id < 10_000; id++)
+        yield cell('OK', [{ required: true }], id)
+    }
+
+    const result = await validation.run(cells())
+    expect(result).toMatchObject({ valid: true, checked: 10_000 })
+    expect(timeout).not.toHaveBeenCalled()
+    clock.mockRestore()
+    timeout.mockRestore()
+    wrapper.unmount()
+  })
+
+  it('runs custom validators in a bounded stage without reading past maxErrors', async () => {
+    const { wrapper, validation } = harness()
+    const resolvers: Array<(value: boolean) => void> = []
+    let active = 0
+    let maximumActive = 0
+    let read = 0
+    function* cells() {
+      for (let id = 0; id < 100; id++) {
+        read++
+        yield cell(
+          'OK',
+          [
+            {
+              validator: () =>
+                new Promise<boolean>((resolve) => {
+                  active++
+                  maximumActive = Math.max(maximumActive, active)
+                  resolvers.push((value) => {
+                    active--
+                    resolve(value)
+                  })
+                }),
+            },
+          ],
+          id,
+        )
+      }
+    }
+
+    const pending = validation.run(cells(), {
+      concurrency: 8,
+      maxErrors: 3,
+      clear: true,
+    })
+    await vi.waitFor(() => expect(resolvers).toHaveLength(3))
+    expect(read).toBe(3)
+    expect(maximumActive).toBe(3)
+    expect([0, 1, 2].every((id) => validation.isPending(id, 'value'))).toBe(
+      true,
+    )
+    resolvers.forEach((resolve) => resolve(false))
+
+    const result = await pending
+    expect(result).toMatchObject({
+      valid: false,
+      truncated: true,
+      cancelled: false,
+      checked: 3,
+    })
+    expect(result.errors.map((error) => error.rowKey)).toEqual([0, 1, 2])
+    expect(read).toBe(3)
     wrapper.unmount()
   })
 
   it('yields during a large valid batch so an external signal can stop it', async () => {
     const { wrapper, validation } = harness()
     const controller = new AbortController()
+    let now = 0
+    const clock = vi.spyOn(Date, 'now').mockImplementation(() => now)
     let read = 0
     function* cells() {
       for (let id = 0; id < 1_000_000; id++) {
         read++
+        if (read === 256) now = 9
         yield cell('OK', [{ required: true }], id)
       }
     }
     setTimeout(() => controller.abort(), 0)
     const result = await validation.run(cells(), { signal: controller.signal })
     expect(result.cancelled).toBe(true)
-    expect(read).toBeLessThanOrEqual(101)
+    expect(read).toBe(256)
+    clock.mockRestore()
     wrapper.unmount()
   })
 
@@ -316,6 +404,38 @@ describe('table validation sessions', () => {
     validation.clear(1, 'value')
     expect(validation.getError(1, 'value')).toBeUndefined()
     expect(validation.getError('1', 'value')).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('opens, cycles, and closes navigation without clearing field errors', async () => {
+    const { wrapper, validation } = harness()
+    const first = vi.fn(() => true)
+    const second = vi.fn(() => true)
+    await validation.run([
+      { ...cell('', [{ required: true }], 1), locate: first },
+      { ...cell('', [{ required: true }], 2), locate: second },
+    ])
+
+    expect(validation.navigationVisible.value).toBe(true)
+    expect(validation.errorCount.value).toBe(2)
+    expect(validation.activeError.value?.rowKey).toBe(1)
+    expect(validation.activeErrorIndex.value).toBe(0)
+
+    expect(await validation.navigate(1)).toBe(true)
+    expect(second).toHaveBeenCalledTimes(1)
+    expect(validation.activeError.value?.rowKey).toBe(2)
+    expect(validation.activeErrorIndex.value).toBe(1)
+
+    validation.closeNavigation()
+    expect(validation.navigationVisible.value).toBe(false)
+    expect(validation.getErrors()).toHaveLength(2)
+    expect(await validation.activate(1, 'value')).toBe(true)
+    expect(first).toHaveBeenCalledTimes(1)
+    expect(validation.navigationVisible.value).toBe(true)
+
+    validation.clear()
+    expect(validation.navigationVisible.value).toBe(false)
+    expect(validation.activeError.value).toBeUndefined()
     wrapper.unmount()
   })
 })

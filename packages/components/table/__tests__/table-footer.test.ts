@@ -203,6 +203,54 @@ describe('table footer data', () => {
     wrapper.unmount()
   })
 
+  it('calculates footer config through declarative leaf columns before applying their slots', async () => {
+    const rows = [
+      { name: 'Design', hours: 3, amount: 240 },
+      { name: 'Build', hours: 5, amount: 400 },
+    ]
+    const wrapper = mount(Table, {
+      props: {
+        data: rows,
+        footerConfig: {
+          rows: [
+            {
+              values: { name: 'Total' },
+              aggregates: [
+                { key: 'hours', field: 'hours', method: 'sum' },
+                { key: 'amount', field: 'amount', method: 'sum' },
+              ],
+            },
+          ],
+        },
+      },
+      slots: {
+        default: () => [
+          h(
+            TableColumnComponent,
+            { field: 'name', title: 'Service' },
+            {
+              footer: ({ value }: { value: unknown }) =>
+                h('strong', String(value)),
+            },
+          ),
+          h(TableColumnComponent, { field: 'hours', title: 'Hours' }),
+          h(
+            TableColumnComponent,
+            { field: 'amount', title: 'Amount' },
+            {
+              footer: ({ value }: { value: unknown }) => `$${value}`,
+            },
+          ),
+        ],
+      },
+    })
+    await flushPromises()
+
+    expect(wrapper.get('.s-table__data-footer').text()).toBe('Total8$640')
+    expect(wrapper.get('.s-table__data-footer strong').text()).toBe('Total')
+    wrapper.unmount()
+  })
+
   it('preserves supplied totals through filtering and pagination and follows column state and widths', async () => {
     const wrapper = mount(Table, {
       props: {
@@ -237,6 +285,155 @@ describe('table footer data', () => {
         .map((row) => row.attributes('data-footer-row-key')),
     ).toEqual(['string:avg', 'string:sum'])
     expect(footerData[0].amount.net).toBe(8)
+    wrapper.unmount()
+  })
+
+  it('builds precise multi-row summaries and lets explicit footer data override them', async () => {
+    const wrapper = mount(Table, {
+      props: {
+        data: [
+          { id: 1, amount: '0.1' },
+          { id: 2, amount: '0.2' },
+        ],
+        columns: [
+          { field: 'label', title: 'Label' },
+          { field: 'amount', title: 'Amount' },
+        ],
+        footerConfig: {
+          rows: [
+            {
+              values: { label: 'Total' },
+              aggregates: [{ key: 'amount', field: 'amount', method: 'sum' }],
+            },
+            {
+              values: { label: 'Average' },
+              aggregates: [
+                { key: 'amount', field: 'amount', method: 'average' },
+              ],
+            },
+          ],
+        },
+      },
+    })
+
+    expect(wrapper.get('.s-table__data-footer').text()).toBe(
+      'Total0.3Average0.15',
+    )
+    expect(
+      wrapper
+        .findAll('.s-table__footer-row')[0]
+        .findAll('[role="cell"]')[1]
+        .text(),
+    ).toBe('0.3')
+    await wrapper.setProps({
+      footerData: [{ label: 'Server', amount: '9.99' }],
+    })
+    expect(wrapper.get('.s-table__data-footer').text()).toBe('Server9.99')
+    wrapper.unmount()
+  })
+
+  it('summarizes either the current page or all supplied rows', async () => {
+    const definition = {
+      rows: [
+        {
+          aggregates: [
+            { key: 'amount', field: 'amount', method: 'sum' as const },
+          ],
+        },
+      ],
+    }
+    const wrapper = mount(Table, {
+      props: {
+        data: [
+          { id: 1, amount: '0.1' },
+          { id: 2, amount: '0.2' },
+        ],
+        columns: [{ field: 'amount', title: 'Amount' }],
+        pagerConfig: { currentPage: 2, pageSize: 1 },
+        footerConfig: { ...definition, scope: 'page' },
+      },
+    })
+
+    expect(wrapper.get('.s-table__data-footer').text()).toBe('0.2')
+    await wrapper.setProps({
+      footerConfig: { ...definition, scope: 'data' },
+    })
+    expect(wrapper.get('.s-table__data-footer').text()).toBe('0.3')
+    wrapper.unmount()
+  })
+
+  it('lets the virtual body consume space remaining after intrinsic shell and footer content', async () => {
+    const wrapper = mount(Table, {
+      props: {
+        data: Array.from({ length: 20 }, (_, id) => ({
+          id,
+          label: `Row ${id}`,
+        })),
+        columns: [{ field: 'label', title: 'Label' }],
+        footerData: [{ label: 'A footer can wrap onto additional lines' }],
+        virtualConfig: { height: 'auto' },
+      },
+      slots: {
+        toolbar_left: () => 'Toolbar',
+      },
+    })
+
+    expect(wrapper.get('.s-table-shell').classes()).toContain('is-auto-height')
+    expect(wrapper.get('.s-table-wrapper').classes()).toContain(
+      'is-auto-height',
+    )
+    expect(wrapper.get('.s-vl__window').attributes('style')).toContain(
+      'height: 100%',
+    )
+    expect(wrapper.get('.s-table__data-footer').text()).toContain(
+      'A footer can wrap onto additional lines',
+    )
+
+    await wrapper.setProps({ virtualConfig: { height: 180 } })
+    expect(wrapper.get('.s-table-shell').classes()).not.toContain(
+      'is-auto-height',
+    )
+    expect(wrapper.get('.s-table-wrapper').classes()).not.toContain(
+      'is-auto-height',
+    )
+    expect(wrapper.get('.s-vl__window').attributes('style')).toContain(
+      'height: 180px',
+    )
+    await wrapper.setProps({
+      virtualConfig: { enabled: false, height: 'auto' },
+    })
+    expect(wrapper.get('.s-table-shell').classes()).not.toContain(
+      'is-auto-height',
+    )
+    expect(wrapper.get('.s-table-wrapper').classes()).not.toContain(
+      'is-auto-height',
+    )
+    wrapper.unmount()
+  })
+
+  it('rejects local summary enumeration for virtual sources', async () => {
+    const wrapper = mount(Table, {
+      props: {
+        virtualSource: {
+          rowCount: 1_000_000,
+          columnCount: 1,
+          row: (index: number) => ({ id: index, amount: '0.1' }),
+          column: () => ({ field: 'amount' }),
+        },
+        virtualConfig: { height: 200 },
+        footerConfig: {
+          rows: [
+            {
+              aggregates: [{ key: 'amount', field: 'amount', method: 'sum' }],
+            },
+          ],
+        },
+      },
+    })
+    await nextTick()
+
+    expect(wrapper.find('.s-table__data-footer').exists()).toBe(false)
+    expect(wrapper.emitted('footerError')?.[0]?.[0]).toBeInstanceOf(TypeError)
     wrapper.unmount()
   })
 

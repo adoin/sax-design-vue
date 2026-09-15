@@ -193,7 +193,18 @@ describe('Table group integration', () => {
     ).not.toContain('is-to-middle')
     expect(
       nestedGroups[1].get('.s-table__hierarchy-guide.is-branch').classes(),
-    ).toContain('is-to-middle')
+    ).not.toContain('is-to-middle')
+    const lastMemberGuides = wrapper
+      .get('[data-row-key="2"] .s-table__hierarchy-guides')
+      .findAll('.s-table__hierarchy-guide')
+    expect(lastMemberGuides).toHaveLength(2)
+    expect(lastMemberGuides[0].classes()).not.toContain('is-branch')
+    const nestedSubtotalGuides = wrapper
+      .get('.s-table__group-subtotal[data-group-depth="1"]')
+      .findAll('.s-table__hierarchy-guide')
+    expect(nestedSubtotalGuides).toHaveLength(2)
+    expect(nestedSubtotalGuides[0].classes()).not.toContain('is-branch')
+    expect(nestedSubtotalGuides[1].classes()).toContain('is-to-middle')
   })
 
   it('keeps group controls out of row selection and displays fully collapsed groups', async () => {

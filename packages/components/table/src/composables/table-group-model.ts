@@ -1,6 +1,7 @@
 import { get } from 'lodash-unified'
 import { createTableAggregation } from './table-aggregation'
-import type { TableFlatRow, TableRow } from '../table'
+import type { TableFlatRow } from '../table'
+import type { FieldPath } from '../../../types'
 import type {
   TableAggregate,
   TableGroupField,
@@ -34,7 +35,7 @@ const labelFor = (value: TableGroupValue) =>
         : value.toISOString()
       : String(value)
 
-interface Draft<Row extends TableRow> {
+interface Draft<Row extends object> {
   field: TableGroupField<Row>
   value: TableGroupValue
   children: Map<string, Draft<Row>>
@@ -43,12 +44,12 @@ interface Draft<Row extends TableRow> {
 }
 
 /** Group root branches without mutating rows, separating parent/child rows, or storing member arrays per ancestor. */
-export function buildTableGroupModel<Row extends TableRow>(
+export function buildTableGroupModel<Row extends object>(
   input: readonly TableFlatRow<Row>[],
-  fields: readonly (string | TableGroupField<Row>)[],
+  fields: readonly (FieldPath<Row> | TableGroupField<Row>)[],
   aggregates: readonly TableAggregate<Row>[] = [],
 ) {
-  const normalized = fields.map((field) =>
+  const normalized: TableGroupField<Row>[] = fields.map((field) =>
     typeof field === 'string' ? { field } : field,
   )
   if (

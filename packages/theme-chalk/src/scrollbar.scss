@@ -119,11 +119,13 @@
 
 .#{$namespace}-scrollbar-fade {
   &-enter-active {
-    transition: opacity 340ms ease-out;
+    transition: opacity var(--sax-motion-duration-medium)
+      var(--sax-motion-easing-out);
   }
 
   &-leave-active {
-    transition: opacity 120ms ease-out;
+    transition: opacity var(--sax-motion-duration-quick)
+      var(--sax-motion-easing-out);
   }
 
   &-enter-from,

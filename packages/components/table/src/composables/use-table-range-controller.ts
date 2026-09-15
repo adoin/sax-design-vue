@@ -1,7 +1,7 @@
 import { useTableCellRange } from './use-table-cell-range'
 import { createTableRangeMergeQuery } from './table-range-merge-query'
 import type { WatchSource } from 'vue'
-import type { TableCoreProps, TableEmitFn } from '../table'
+import type { TableCoreEmitFn, TableCoreProps } from '../table'
 import type { TableCellCoordinate } from './use-table-keyboard'
 import type { TableCellRangeBounds } from '../table-cell-range'
 import type { TableMergeRegion } from './table-merge-regions'
@@ -21,7 +21,7 @@ interface Options {
 
 export function useTableRangeController(
   props: TableCoreProps,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   options: Options,
 ) {
   return useTableCellRange({

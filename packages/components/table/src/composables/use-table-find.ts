@@ -12,7 +12,7 @@ import { awaitTableClipboard } from '../clipboard-browser'
 import { validateTableCellWrites } from './validate-cell-write'
 import type { WatchSource } from 'vue'
 import type { TableFindCell, TableFindScan } from '../find-data'
-import type { TableCoreProps, TableEmitFn } from '../table'
+import type { TableCoreEmitFn, TableCoreProps } from '../table'
 import type { TableEditContext } from '../table-edit'
 import type { TableValidationRule } from '../table-validation'
 import type {
@@ -51,7 +51,7 @@ interface Request {
 /** Search, navigation and replacement transactions share one explicit lifecycle. */
 export function useTableFind(
   props: TableCoreProps,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   options: Options,
 ) {
   const config = computed(() =>
@@ -235,7 +235,8 @@ export function useTableFind(
     }
   }
   const writable = (context: TableEditContext) =>
-    options.writable(context) && config.value.checkMethod?.(context) !== false
+    options.writable(context) &&
+    config.value.replaceableMethod?.(context) !== false
   const replace = async (
     all: boolean,
     replacement: string,

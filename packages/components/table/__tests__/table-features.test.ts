@@ -4,8 +4,10 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import Table from '../src/table.vue'
 import TableHeaderCell from '../src/table-header-cell.vue'
 import TableColumnComponent from '../src/table-column.vue'
+import { SInput } from '../../input'
 import type {
   TableColumn,
+  TableFilterParams,
   TableFilterSlotParams,
   TableInstance,
   TableRow,
@@ -332,7 +334,7 @@ describe('Table query and selection features', () => {
             field: 'score',
             key: 'score',
             title: 'Threshold',
-            filterMethod: ({ value, values }) =>
+            filterMethod: ({ value, values }: TableFilterParams) =>
               Number(value) >= Number(values[0]),
           },
         ],
@@ -415,7 +417,7 @@ describe('Table query and selection features', () => {
         columns: [{ type: 'checkbox', width: 60 }, ...columns],
         row: [],
         selectionConfig: {
-          checkMethod: ({ row }: { row: TableRow }) => row.id !== 2,
+          selectableMethod: ({ row }: { row: TableRow }) => row.id !== 2,
         },
       },
     })
@@ -580,6 +582,79 @@ describe('Table query and selection features', () => {
     const buttons = wrapper.findAllComponents({ name: 'SButton' })
     buttons[1].vm.$emit('click')
     expect(wrapper.emitted('filter')?.[0]).toEqual([['Design', 'Dev']])
+    wrapper.unmount()
+  })
+  it('uses a registered built-in renderer for filter UI', async () => {
+    const wrapper = mount(Table, {
+      props: {
+        data: rows,
+        columns: [
+          {
+            field: 'name',
+            title: 'Name',
+            filterRender: {
+              name: '$input',
+              props: { placeholder: 'Search name' },
+            },
+            filterMethod: ({ value, values }: TableFilterParams) =>
+              String(value).includes(String(values[0] ?? '')),
+          },
+        ],
+      },
+      global: { components: { SInput } },
+    })
+    const popper = wrapper
+      .getComponent(TableHeaderCell)
+      .getComponent({ name: 'SPopper' })
+    popper.vm.$emit('update:visible', true)
+    await flushPromises()
+
+    const input = wrapper.getComponent({ name: 'SInput' })
+    expect(input.props('placeholder')).toBe('Search name')
+    input.vm.$emit('update:modelValue', 'Item 2')
+    await nextTick()
+    wrapper
+      .getComponent(TableHeaderCell)
+      .findAllComponents({ name: 'SButton' })[1]
+      .vm.$emit('click')
+    await nextTick()
+
+    expect(names(wrapper)).toEqual(['Item 2'])
+    wrapper.unmount()
+  })
+
+  it('renders operation columns with collapsible hover or click actions', async () => {
+    const edit = vi.fn()
+    const wrapper = mount(Table, {
+      props: {
+        data: rows.slice(0, 1),
+        columns: [
+          { field: 'name', title: 'Name' },
+          {
+            key: 'actions',
+            title: 'Actions',
+            renderer: {
+              name: '$buttons',
+              props: { maxVisible: 1, trigger: 'hover' },
+              options: [
+                { code: 'edit', text: 'Edit' },
+                { code: 'remove', text: 'Remove' },
+              ],
+              events: { edit },
+            },
+          },
+        ],
+      },
+    })
+    const buttons = wrapper.getComponent({ name: 'SRendererButtons' })
+    expect(buttons.getComponent({ name: 'SPopper' }).props('trigger')).toBe(
+      'hover',
+    )
+    buttons
+      .findAllComponents({ name: 'SButton' })[0]
+      .vm.$emit('click', new MouseEvent('click'))
+    expect(edit).toHaveBeenCalledOnce()
+    expect(edit.mock.calls[0]?.[0]).toMatchObject({ row: rows[0] })
     wrapper.unmount()
   })
   it('closes header filters during loading and rejects stale custom filter actions', async () => {

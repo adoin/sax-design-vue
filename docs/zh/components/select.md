@@ -51,7 +51,7 @@ PROPS:
     values: 'rounded | square'
     description: 设置圆角或方形外观。
     default: rounded
-    usage: '#外形'
+    usage: '#shape'
   - name: strategy
     type: String
     values: 'absolute | fixed'
@@ -262,7 +262,7 @@ PROPS:
     description: 将常用平铺选项置顶，可在本地或远程持久化，并可自动使用第一个可用选项。
     default: null
     link: null
-    usage: '#置顶选项'
+    usage: '#pinned-options'
     code: null
   - name: get-pin-options
     type: Function
@@ -270,7 +270,7 @@ PROPS:
     description: 将常用平铺选项置顶，可在本地或远程持久化，并可自动使用第一个可用选项。
     default: null
     link: null
-    usage: '#置顶选项'
+    usage: '#pinned-options'
     code: null
   - name: pin-method
     type: Function
@@ -278,7 +278,7 @@ PROPS:
     description: 将常用平铺选项置顶，可在本地或远程持久化，并可自动使用第一个可用选项。
     default: null
     link: null
-    usage: '#置顶选项'
+    usage: '#pinned-options'
     code: null
   - name: unpin-method
     type: Function
@@ -286,7 +286,7 @@ PROPS:
     description: 将常用平铺选项置顶，可在本地或远程持久化，并可自动使用第一个可用选项。
     default: null
     link: null
-    usage: '#置顶选项'
+    usage: '#pinned-options'
     code: null
   - name: auto-use-option
     type: Boolean
@@ -294,7 +294,7 @@ PROPS:
     description: 将常用平铺选项置顶，可在本地或远程持久化，并可自动使用第一个可用选项。
     default: 'false'
     link: null
-    usage: '#置顶选项'
+    usage: '#pinned-options'
     code: null
   - name: cached-options
     type: Array

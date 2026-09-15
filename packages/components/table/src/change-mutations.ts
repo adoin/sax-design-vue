@@ -14,7 +14,7 @@ export function materializeTableBranch(
   )
   if (!children.length) return node.row
   return children.every((row, index) => row === node.children[index]) &&
-    node.row[tree.childrenField] === node.children
+    (node.row as Record<string, unknown>)[tree.childrenField] === node.children
     ? node.row
     : { ...node.row, [tree.childrenField]: children }
 }

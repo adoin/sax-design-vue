@@ -20,12 +20,6 @@ const rows = Array.from({ length: 40 }, (_, id) => ({
 
 <template>
   <div class="range-demo">
-    <div class="range-demo__controls">
-      <s-button size="small" flat @click="table?.clearCellRange()"
-        >清空选区</s-button
-      >
-      <s-checkbox v-model="grouped">按部门分组</s-checkbox>
-    </div>
     <p>拖动单元格选择；按住 Shift 点击或使用方向键扩选。</p>
     <s-table
       ref="table"
@@ -41,10 +35,16 @@ const rows = Array.from({ length: 40 }, (_, id) => ({
         height: 280,
         dynamic: true,
       }"
-      column-manager-config
+      :toolbar-config="{ right: [{ itemRender: '$columnConfig' }] }"
       resize-config
       @cell-range-change="bounds = $event.bounds"
     >
+      <template #toolbar_left>
+        <s-button size="small" flat @click="table?.clearCellRange()"
+          >清空选区</s-button
+        >
+        <s-checkbox v-model="grouped">按部门分组</s-checkbox>
+      </template>
       <s-table-column field="id" title="编号" fixed="left" :width="100" />
       <s-table-column field="name" title="项目" :width="180" />
       <s-table-column field="team" title="部门" :width="180" />
@@ -68,12 +68,6 @@ const rows = Array.from({ length: 40 }, (_, id) => ({
 <style scoped>
 .range-demo {
   width: 100%;
-}
-.range-demo__controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
 }
 .range-demo p {
   margin: 12px 0;

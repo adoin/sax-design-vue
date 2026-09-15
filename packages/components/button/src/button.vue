@@ -22,7 +22,8 @@
     <Transition :name="ns.b('loading')" appear>
       <div v-if="loading" :class="ns.e('loading')">
         <slot name="loading">
-          <span :class="ns.e('loading-track')" aria-hidden="true" />
+          <IconLoading v-if="props.loadingType === 'default'" />
+          <span v-else :class="ns.e('loading-track')" aria-hidden="true" />
         </slot>
       </div>
     </Transition>
@@ -33,8 +34,10 @@
 import { computed, onBeforeUnmount, ref, useSlots, watch } from 'vue'
 import {
   useColor,
+  useGlobalComponentProps,
   useNamespace,
   useShape,
+  useSize,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import {
@@ -43,13 +46,15 @@ import {
   rippleCut,
   rippleReverse,
 } from '@vuesax-alpha/utils'
+import { IconLoading } from '@vuesax-alpha/components/icon'
 import { buttonProps } from './button'
 
 defineOptions({
   name: 'SButton',
 })
 
-const props = defineProps(buttonProps)
+const rawProps = defineProps(buttonProps)
+const props = useGlobalComponentProps('button', rawProps)
 const emit = defineEmits<{
   (event: 'click', value: MouseEvent): void
 }>()
@@ -57,6 +62,7 @@ const slots = useSlots()
 
 const ns = useNamespace('button')
 const shape = useShape<'circle' | 'square'>()
+const size = useSize<string | number>()
 
 const root$ = ref<HTMLButtonElement>()
 
@@ -140,7 +146,7 @@ const buttonClasses = computed(() => {
     props.icon && ns.m('icon'),
     props.loading && ns.m('loading'),
     props.loading && ns.m(`loading-${props.loadingType}`),
-    ns.em('size', props.size),
+    ns.em('size', String(size.value)),
     ns.m(resolvedType.value),
     props.upload && ns.m('upload'),
   ]

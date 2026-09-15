@@ -4,8 +4,11 @@
       <s-anchor
         class="docs-outline"
         :items="anchorItems"
-        :offset="124"
-        :target-offset="124"
+        :model-value="activeAnchorHref"
+        :mode="isTableDocument ? 'router' : 'anchor'"
+        :router="isTableDocument ? router : undefined"
+        :offset="anchorTargetOffset"
+        :target-offset="anchorTargetOffset"
         replace
       />
     </div>
@@ -15,7 +18,15 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { usePageData, usePageFrontmatter } from '@vuepress/client'
+import { useRouter } from 'vue-router'
 import { useDocLocaleUi } from '../composables/docLocale'
+import {
+  isTableDocumentationPath,
+  tableDocumentationPath,
+  tableDocumentationSectionPath,
+  tableDocumentationSectionSlug,
+  tableDocumentationSections,
+} from '../shared/tableDocumentation'
 import type { MarkdownItHeader } from '@mdit-vue/types'
 import type { AnchorItem } from '@vuesax-alpha/components/anchor'
 import type {
@@ -25,8 +36,10 @@ import type {
 
 const pageFrontmatter = usePageFrontmatter<ThemeNormalApiFrontmatter>()
 const pageData = usePageData()
+const router = useRouter()
 const { t } = useDocLocaleUi()
 const domPageItems = ref<AnchorItem[]>([])
+const anchorTargetOffset = 124
 let collectFrame: number | undefined
 let headingObserver: MutationObserver | undefined
 
@@ -68,6 +81,76 @@ const toAnchorItem = (header: MarkdownItHeader): AnchorItem => ({
     ? header.children.map(toAnchorItem)
     : undefined,
 })
+
+const tableLocale = computed<'en' | 'zh'>(() =>
+  pageData.value.path.startsWith('/zh/') ? 'zh' : 'en',
+)
+const currentTableSection = computed(() =>
+  tableDocumentationSectionSlug(pageData.value.path),
+)
+const isTableDocument = computed(() =>
+  isTableDocumentationPath(pageData.value.path),
+)
+const activeAnchorHref = computed(() =>
+  isTableDocument.value ? pageData.value.path : '',
+)
+
+const tableAnchorItems = (pageHeaders: MarkdownItHeader[]): AnchorItem[] => {
+  const locale = tableLocale.value
+  const overviewPath = tableDocumentationPath(locale)
+  const sectionHeader = pageHeaders.find(
+    (header) => header.level === 2 && header.slug === currentTableSection.value,
+  )
+  const domLocalItems = domPageItems.value.flatMap(
+    (item) => item.children || [],
+  )
+  const localItems =
+    domLocalItems.length > 0
+      ? domLocalItems
+      : sectionHeader?.children?.map(toAnchorItem)
+  const sections = tableDocumentationSections.map((section): AnchorItem => {
+    const children = pageData.value.path.endsWith(`/table/${section.slug}.html`)
+      ? localItems
+      : undefined
+
+    return {
+      href: tableDocumentationSectionPath(locale, section.slug),
+      title: locale === 'zh' ? section.titleZh : section.title,
+      collapsible: Boolean(children?.length),
+      children,
+    }
+  })
+  const apiChildren = apiTableKeys
+    .filter((key) => {
+      const rows = pageFrontmatter.value[key]
+      return Array.isArray(rows) && rows.length > 0
+    })
+    .map((key): AnchorItem => ({
+      title: tableLabel(key),
+      href: `#${tableSlug(key)}`,
+    }))
+
+  return [
+    {
+      href: overviewPath,
+      title: t.value.outline.examples,
+      collapsible: true,
+      children: sections,
+    },
+    apiChildren.length
+      ? {
+          href: '#api',
+          title: 'API',
+          collapsible: true,
+          defaultCollapsed: true,
+          children: apiChildren,
+        }
+      : {
+          href: `${overviewPath}#api`,
+          title: 'API',
+        },
+  ]
+}
 
 const collectPageHeadings = () => {
   const headings = document.querySelectorAll<HTMLElement>(
@@ -127,6 +210,8 @@ const observePageHeadings = () => {
 const anchorItems = computed<AnchorItem[]>(() => {
   const pageHeaders = pageData.value.headers ?? []
   const isComponentDocument = pageData.value.path.includes('/components/')
+
+  if (isTableDocument.value) return tableAnchorItems(pageHeaders)
 
   if (!isComponentDocument) {
     return pageHeaders.length

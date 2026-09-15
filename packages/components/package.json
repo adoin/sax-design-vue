@@ -10,6 +10,7 @@
     "vue": "^3.5.0"
   },
   "dependencies": {
+    "decimal.js": "^10.6.0",
     "sax-design-vue-iconify": "workspace:*"
   },
   "types": "index.d.ts",

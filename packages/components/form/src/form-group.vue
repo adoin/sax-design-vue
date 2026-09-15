@@ -154,7 +154,7 @@ const setFormRef = (
   key: number,
   instance: Element | ComponentPublicInstance | null,
 ) => {
-  if (instance) formRefs.set(key, instance as FormInstance)
+  if (instance) formRefs.set(key, instance as unknown as FormInstance)
   else formRefs.delete(key)
 }
 

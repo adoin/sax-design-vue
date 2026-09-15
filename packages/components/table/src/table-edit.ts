@@ -22,27 +22,27 @@ export type TableEditReason =
   | 'conflict'
   | 'unmount'
 export interface TableEditContext<
-  Row extends TableRow = TableRow,
+  Row extends object = TableRow,
 > extends TableCellRenderParams<Row> {
   rowKey: TableRowKey
   columnKey: string
 }
-export interface TableEditorConfig<Row extends TableRow = TableRow> {
+export interface TableEditorConfig<Row extends object = TableRow> {
   type?: 'input' | 'number' | 'select' | 'date' | 'switch'
   props?: Record<string, unknown>
   options?: Array<Record<string, unknown>>
-  checkMethod?: (params: TableEditContext<Row>) => boolean
+  editableMethod?: (params: TableEditContext<Row>) => boolean
 }
-export interface TableEditConfig<Row extends TableRow = TableRow> {
+export interface TableEditConfig<Row extends object = TableRow> {
   enabled?: boolean
   mode?: TableEditMode
   trigger?: 'click' | 'dblclick' | 'manual'
-  checkMethod?: (params: TableEditContext<Row>) => boolean
+  editableMethod?: (params: TableEditContext<Row>) => boolean
   onSwitch?: 'commit' | 'cancel'
   onContextChange?: 'commit' | 'cancel'
   onScroll?: 'keep' | 'commit' | 'cancel'
 }
-export interface TableEditChange<Row extends TableRow = TableRow> {
+export interface TableEditChange<Row extends object = TableRow> {
   field: string
   column: TableColumn<Row>
   columnKey: string
@@ -50,19 +50,19 @@ export interface TableEditChange<Row extends TableRow = TableRow> {
   value: unknown
 }
 export interface TableEditRecord<
-  Row extends TableRow = TableRow,
+  Row extends object = TableRow,
 > extends TableEditContext<Row> {
   mode: TableEditMode
   changes: TableEditChange<Row>[]
   updatedRow: Row
 }
 export interface TableEditEndParams<
-  Row extends TableRow = TableRow,
+  Row extends object = TableRow,
 > extends TableEditRecord<Row> {
   reason: TableEditReason
 }
 export interface TableEditSlotParams<
-  Row extends TableRow = TableRow,
+  Row extends object = TableRow,
 > extends TableEditContext<Row> {
   mode: TableEditMode
   error?: string
@@ -72,6 +72,6 @@ export interface TableEditSlotParams<
   commit: () => Promise<boolean>
   cancel: () => void
 }
-export type TableEditRenderer<Row extends TableRow = TableRow> = (
+export type TableEditRenderer<Row extends object = TableRow> = (
   params: TableEditSlotParams<Row>,
 ) => VNodeChild

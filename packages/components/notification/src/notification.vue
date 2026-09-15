@@ -42,10 +42,10 @@
           </div>
         </div>
       </template>
-      <div v-else :class="ns.e('loading')" />
+      <SLogoLoading v-else :class="ns.e('loading')" :size="50" />
 
       <button
-        v-if="showClose"
+        v-if="props.showClose"
         :class="ns.e('close')"
         :aria-label="t('vs.notification.close')"
         @click="handleClickClose"
@@ -54,7 +54,7 @@
       </button>
 
       <div
-        v-if="progressAuto"
+        v-if="props.progressAuto"
         :class="ns.e('progress')"
         :style="{ width: `${currentProgress}%` }"
       />
@@ -66,12 +66,13 @@ import { computed, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 import { useTimeoutFn } from '@vueuse/core'
 import {
   useColor,
+  useGlobalComponentProps,
   useGlobalComponentSettings,
   useLocale,
   useShape,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
-import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
+import { IconClose, SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 import { addUnit, getVsColor } from '@vuesax-alpha/utils'
 import { notificationProps } from './notification'
 
@@ -79,7 +80,8 @@ defineOptions({
   name: 'SNotification',
 })
 
-const props = defineProps(notificationProps)
+const rawProps = defineProps(notificationProps)
+const props = useGlobalComponentProps('notification', rawProps)
 const shape = useShape<'square' | ''>()
 const resolvedShape = computed(() =>
   shape.value === 'rounded' ? '' : shape.value,

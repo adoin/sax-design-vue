@@ -29,6 +29,8 @@ export interface FormContext {
     trigger?: FormRuleTrigger | 'submit',
   ) => Promise<boolean>
   emitValidate: (prop: string, valid: boolean, message: string) => void
+  submit: (event?: Event) => Promise<boolean>
+  resetFields: (event?: Event) => void
 }
 
 export const formContextKey: InjectionKey<FormContext> =

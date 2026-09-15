@@ -7,72 +7,72 @@ API_TITLES:
 PROPS:
   - name: model
     type: Object
-    values: "响应式表单数据"
+    values: '响应式表单数据'
     description: 必填。表单唯一数据源，按字段路径读写。
     default: null
   - name: rules
     type: FormRules
-    values: "{ [field]: FormRule | FormRule[] }"
+    values: '{ [field]: FormRule | FormRule[] }'
     description: 必填、自定义 validator 与 blur / change 触发规则。
     default: '{}'
   - name: items
     type: FormItemConfig[]
-    values: "支持 children 的树形配置"
+    values: '支持 children 的树形配置'
     description: 配置式渲染表单项，并通过 children 递归组织复杂布局。
     default: '[]'
   - name: label-width
     type: String | Number
-    values: "CSS 宽度"
+    values: 'CSS 宽度'
     description: 横向布局的默认标签宽度，可容纳四个汉字和必填标记。
     default: 'calc(4em + 24px)'
   - name: label-position
     type: String
-    values: "left / right / top"
+    values: 'left / right / top'
     description: 子 Form Item 的默认标签位置。
     default: right
   - name: label-align
     type: String
-    values: "left / right"
+    values: 'left / right'
     description: 横向标签内部的默认文字对齐方式。
     default: right
   - name: inline
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 使用行内表单布局。
     default: 'false'
   - name: disabled
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 禁用全部声明式和配置式字段。
     default: 'false'
   - name: readonly
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 将全部声明式和配置式字段设为只读。
     default: 'false'
   - name: show-message
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 显示校验错误和字段帮助文字。
     default: 'true'
   - name: reserve-error-space
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 为字段错误或帮助文字保留稳定高度，避免校验时布局跳动。
     default: 'true'
   - name: scroll-to-error
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 校验失败时聚焦并滚动到第一个错误字段。
     default: 'true'
   - name: column-gap
     type: String | Number
-    values: "CSS 尺寸"
+    values: 'CSS 尺寸'
     description: 24 栅格的横向间距。
     default: 16
   - name: row-gap
     type: String | Number
-    values: "CSS 尺寸"
+    values: 'CSS 尺寸'
     description: 24 栅格的纵向间距。
     default: 4
 CHILD_PROPS:
@@ -86,12 +86,12 @@ CHILD_PROPS:
     default: null
   - name: prop
     type: String
-    values: "深层模型路径"
+    values: '深层模型路径'
     description: 例如 profile.name，优先级高于 field。
     default: null
   - name: field
     type: String
-    values: "深层模型路径"
+    values: '深层模型路径'
     description: 未传 prop 时使用的兼容别名。
     default: null
   - name: id
@@ -108,56 +108,56 @@ CHILD_PROPS:
     default: null
   - name: required
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 独立于校验规则显示必填状态。
     default: 'false'
   - name: label-width
     type: String | Number
-    values: "CSS 宽度"
+    values: 'CSS 宽度'
     description: 覆盖当前 Item 的 SForm label-width。
     default: 继承
   - name: label-position
     type: String
-    values: "left / right / top"
+    values: 'left / right / top'
     description: 覆盖当前 Item 的 SForm label-position。
     default: 继承
   - name: span
     type: Number | FormItemSpan
-    values: "1–24 / 响应式对象"
+    values: '1–24 / 响应式对象'
     description: 当前 Item 在 24 栅格中占用的宽度。
     default: 24
   - name: vertical
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 将当前 Item 的标签放到控件上方。
     default: 'false'
   - name: nested
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 将默认插槽作为嵌套 Form Item 栅格处理。
     default: 'false'
   - name: align
     type: String
-    values: "left / center / right"
+    values: 'left / center / right'
     description: 控制当前 Item 内容在栅格单元中的对齐方式。
     default: left
   - name: reserve-error-space
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 覆盖当前 Item 的 SForm reserve-error-space。
     default: 继承
   - name: disabled
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 覆盖传给 itemRender 的禁用状态。
     default: 继承
   - name: readonly
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 覆盖传给 itemRender 的只读状态。
     default: 继承
   - name: item-render
-    type: FormItemRenderOptions
+    type: RendererOptions
     description: 未提供默认插槽时渲染已注册或自定义控件。
     default: null
 EVENTS:
@@ -247,25 +247,19 @@ Form 同时支持传统插槽写法与配置式 `items`。配置式 API 采用�
 
 ## 配置式渲染与嵌套布局
 
-`children` 可以无限递归；每一层都使用 24 栅格。数字 `span` 在手机端自动回落为整行，也可以传入 `{ xs, sm, md, lg, xl }` 精确控制响应式宽度。
+`children` 可以无限递归；每一层都使用 24 栅格。数字 `span` 在手机端自动回落为整行，也可以传入 `{ xs, sm, md, lg, xl }` 精确控制响应式宽度。`itemRender` 可直接使用内置的 `$input`、`$select`、`$switch` 和 `$textarea`；`$buttons` 能提供 Form 的 `submit`、`reset` 操作，无需重新编写操作插槽。
 
 <template #example><form-default /></template>
 
 <template #template>
 
-@[code{99-108}](../../.vuepress/components/form/default.vue)
+@[code{104-106}](../../.vuepress/components/form/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-97}](../../.vuepress/components/form/default.vue)
-
-</template>
-
-<template #style>
-
-@[code{110-116}](../../.vuepress/components/form/default.vue)
+@[code{1-102}](../../.vuepress/components/form/default.vue)
 
 </template>
 
@@ -275,20 +269,19 @@ Form 同时支持传统插槽写法与配置式 `items`。配置式 API 采用�
 
 ## 自定义渲染器
 
-通过 `formRenderer.add(name, definition)` 注册项目级 renderer。`renderItem`
-会收到当前模型、字段路径、字段值、禁用状态、`setValue` 与 `validate`，适合封装组合控件或业务控件。
+可复用的项目级渲染器应从应用入口统一注册。下例组件只引用 `$uppercaseInput`，该名称已由本站在组件外全局注册。注册方式、回调契约、Form 与 Table 的使用位置以及内置对应关系统一参见[渲染器](./renderer.md)。
 
 <template #example><form-renderer /></template>
 
 <template #template>
 
-@[code{32-34}](../../.vuepress/components/form/renderer.vue)
+@[code{19-21}](../../.vuepress/components/form/renderer.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-30}](../../.vuepress/components/form/renderer.vue)
+@[code{1-17}](../../.vuepress/components/form/renderer.vue)
 
 </template>
 
@@ -322,13 +315,13 @@ Form 同时支持传统插槽写法与配置式 `items`。配置式 API 采用�
 
 Form 有三类相互关联的公开入参。它们存在同名字段，但使用位置不同：
 
-| 传入位置                       | 公开类型                | 对应说明           |
-| ------------------------------ | ----------------------- | ------------------ |
-| `<s-form>`                     | `FormProps`             | **SForm 属性**     |
-| `<s-form-item>`                | `FormItemProps`         | **SFormItem 属性** |
-| `<s-form :items>` 的每个节点   | `FormItemConfig`        | **items[] 配置**   |
-| `rules` 中的每条规则           | `FormRule`              | **校验规则**       |
-| Item / 配置项中的 `itemRender` | `FormItemRenderOptions` | **渲染器配置**     |
+| 传入位置                       | 公开类型          | 对应说明           |
+| ------------------------------ | ----------------- | ------------------ |
+| `<s-form>`                     | `FormProps`       | **SForm 属性**     |
+| `<s-form-item>`                | `FormItemProps`   | **SFormItem 属性** |
+| `<s-form :items>` 的每个节点   | `FormItemConfig`  | **items[] 配置**   |
+| `rules` 中的每条规则           | `FormRule`        | **校验规则**       |
+| Item / 配置项中的 `itemRender` | `RendererOptions` | **渲染器配置**     |
 
 ### `items[]` 配置（`FormItemConfig`）
 
@@ -355,7 +348,7 @@ Form 有三类相互关联的公开入参。它们存在同名字段，但使用
 | `validator` | `(value, model) => boolean \| string \| Promise<…>` | 合法时返回 `true`，非法时返回 `false` 或错误字符串。     |
 | `trigger`   | `'blur' \| 'change' \| Array<'blur' \| 'change'>`   | 指定交互触发时机；未声明时，交互校验默认按 `blur` 运行。 |
 
-### 渲染器配置（`FormItemRenderOptions`）
+### 渲染器配置（`RendererOptions`）
 
 | 属性          | 类型                                           | 说明                                            |
 | ------------- | ---------------------------------------------- | ----------------------------------------------- |
@@ -369,9 +362,9 @@ Form 有三类相互关联的公开入参。它们存在同名字段，但使用
 | `content`     | `string \| (params) => VNodeChild`             | 默认插槽文字或内容渲染函数。                    |
 | `options`     | `unknown[]`                                    | 传给 Select、Radio Group 等数据驱动组件的选项。 |
 | `optionProps` | `Record<string, string>`                       | 自定义渲染器可使用的选项字段映射。              |
-| `children`    | `FormItemRenderOptions[]`                      | 用于组合控件的嵌套渲染节点。                    |
+| `children`    | `RendererOptions[]`                            | 用于组合控件的嵌套渲染节点。                    |
 
-内置 renderer 名称与导出的组件名称一致，例如 `SInput`、`SSelect`、`SSwitch`、`SCheckboxGroup`、`SRadioGroup`、`SDatePicker`、`STextarea` 和 `SButton`。
+共享注册表内置 `$input`、`$textarea`、`$date`、`$dateRange`、`$time`、`$timePicker`、`$select`、`$radio`、`$checkbox`、`$checkboxGroup`、`$treeSelect`、`$cascader`、`$rate`、`$slider`、`$switch`、`$verCode` 和 `$buttons`。原有的 `SInput`、`SSelect` 等组件名注册仍然可用。
 
 下面的 API 表已按归属拆开：`SForm 属性` 只用于 Form 容器，`SFormItem 属性` 用于声明式 Item，也对应 `items[]` 中的同名字段。
 

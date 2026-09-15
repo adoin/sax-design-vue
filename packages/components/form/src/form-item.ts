@@ -1,7 +1,7 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type { FormItemSpan, FormRule } from './form'
-import type { FormItemRenderOptions } from './renderer'
+import type { RendererOptions } from './renderer'
 import type FormItem from './form-item.vue'
 
 export const formItemProps = buildProps({
@@ -33,7 +33,7 @@ export const formItemProps = buildProps({
   disabled: { type: Boolean, default: undefined },
   readonly: { type: Boolean, default: undefined },
   itemRender: {
-    type: definePropType<FormItemRenderOptions>(Object),
+    type: definePropType<RendererOptions>(Object),
   },
 } as const)
 

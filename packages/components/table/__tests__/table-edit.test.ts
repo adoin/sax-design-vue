@@ -3,6 +3,7 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Table from '../src/table.vue'
 import TableColumnComponent from '../src/table-column.vue'
+import { SInput } from '../../input'
 import { SSelect } from '../../select'
 import { SDatePicker } from '../../date-picker'
 import { SSwitch } from '../../switch'
@@ -11,6 +12,7 @@ import type {
   TableEditEndParams,
   TableEditSlotParams,
   TableExposes,
+  TableVirtualSource,
 } from '../src/table'
 
 const data = [
@@ -123,6 +125,7 @@ describe('table editing integration', () => {
     await cell.trigger('dblclick')
     await nextTick()
     const input = wrapper.get<HTMLInputElement>('.s-table__cell-editor input')
+    expect(wrapper.getComponent(SInput).props('shape')).toBe('square')
     expect(document.activeElement).toBe(input.element)
     await input.setValue('Changed')
     expect(data[0].name).toBe('Alpha')
@@ -140,6 +143,81 @@ describe('table editing integration', () => {
     wrapper.unmount()
   })
 
+  it('does not horizontally relocate a cell that was double-clicked in place', async () => {
+    const wrapper = mount(Table, {
+      props: {
+        data,
+        columns,
+        editConfig: true,
+        virtualConfig: { height: 200, horizontal: true },
+      },
+    })
+    await flushPromises()
+    const scroller = wrapper.get<HTMLElement>('.s-table')
+    const scrollTo = vi.spyOn(scroller.element, 'scrollTo')
+    const cell = wrapper
+      .findAll('.s-table__data-row')[0]
+      .get('[data-column-index="1"]')
+
+    await cell.trigger('dblclick')
+    await nextTick()
+
+    expect(wrapper.find('.s-table__cell-editor').exists()).toBe(true)
+    expect(scrollTo).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('preserves a generated horizontal window when editing a mounted cell', async () => {
+    const source: TableVirtualSource = {
+      rowCount: 20,
+      columnCount: 100_000,
+      fixedLeftCount: 1,
+      fixedRightCount: 1,
+      row: (index) => ({ id: index, value: `Row ${index}` }),
+      rowKey: (index) => index,
+      columnWidth: (index) => (index === 0 ? 100 : 160),
+      column: (index) =>
+        index === 0
+          ? { field: 'id', width: 100 }
+          : {
+              key: String(index),
+              field: 'value',
+              width: 160,
+              editor: true,
+            },
+    }
+    const wrapper = mount(Table, {
+      props: {
+        virtualSource: source,
+        virtualConfig: { height: 200, horizontal: true },
+        editConfig: true,
+      },
+    })
+    await flushPromises()
+    wrapper.vm.scrollToColumn(20, 'start')
+    await vi.waitFor(() =>
+      expect(
+        wrapper.find('.s-table__data-cell[data-column-index="20"]').exists(),
+      ).toBe(true),
+    )
+    const scroller = wrapper.get<HTMLElement>('.s-vl__window')
+    const before = scroller.element.scrollLeft
+    const scrollTo = vi.spyOn(scroller.element, 'scrollTo')
+    const cell = wrapper.get('.s-table__data-cell[data-column-index="20"]')
+
+    await cell.trigger('dblclick')
+    await flushPromises()
+
+    expect(wrapper.find('.s-table__cell-editor').exists()).toBe(true)
+    expect(
+      scrollTo.mock.calls.filter(
+        ([options]) => typeof options === 'object' && 'left' in options,
+      ),
+    ).toHaveLength(0)
+    expect(scroller.element.scrollLeft).toBe(before)
+    wrapper.unmount()
+  })
+
   it('reuses select, date and switch controls in row mode and submits all changed fields', async () => {
     const wrapper = mount(Table, {
       props: { data, columns, editConfig: { mode: 'row', trigger: 'manual' } },
@@ -147,10 +225,12 @@ describe('table editing integration', () => {
     expect(await wrapper.vm.startEdit(0, 'name')).toBe(true)
     expect(wrapper.findAll('.s-table__cell-editor')).toHaveLength(5)
     expect(wrapper.getComponent(SSelect).props('label')).toBeFalsy()
+    expect(wrapper.getComponent(SSelect).props('shape')).toBe('square')
     expect(
       wrapper.getComponent(SSelect).get('input').attributes('aria-label'),
     ).toBe('Status')
     expect(wrapper.getComponent(SDatePicker).props('label')).toBeFalsy()
+    expect(wrapper.getComponent(SDatePicker).props('shape')).toBe('square')
     expect(
       wrapper.getComponent(SDatePicker).get('input').attributes('aria-label'),
     ).toBe('Date')
@@ -178,6 +258,42 @@ describe('table editing integration', () => {
     })
     expect(result.changes).toHaveLength(5)
     expect(data[0].quantity).toBe(2)
+    wrapper.unmount()
+  })
+
+  it('uses square input surfaces for registered table editors and preserves explicit shapes', async () => {
+    const wrapper = mount(Table, {
+      props: {
+        data: data.slice(0, 1),
+        columns: [
+          {
+            field: 'name',
+            title: 'Name',
+            editor: true,
+            renderer: { name: '$input' },
+          },
+          {
+            field: 'status',
+            title: 'Status',
+            editor: true,
+            renderer: {
+              name: '$select',
+              props: { shape: 'rounded' },
+              options: [
+                { label: 'Open', value: 'open' },
+                { label: 'Done', value: 'done' },
+              ],
+            },
+          },
+        ],
+        editConfig: { mode: 'row', trigger: 'manual' },
+      },
+      global: { components: { SInput, SSelect } },
+    })
+
+    expect(await wrapper.vm.startEdit(0, 'name')).toBe(true)
+    expect(wrapper.getComponent(SInput).props('shape')).toBe('square')
+    expect(wrapper.getComponent(SSelect).props('shape')).toBe('rounded')
     wrapper.unmount()
   })
 
@@ -263,12 +379,18 @@ describe('table editing integration', () => {
     const wrapper = mount(Table, {
       props: {
         data,
-        columns: [{ ...columns[0], renderer: 'custom' }],
+        columns: [
+          {
+            ...columns[0],
+            renderer: 'custom',
+            slots: { edit: 'nameEditor' },
+          },
+        ],
         renderers: { custom: { edit: renderer } },
         editConfig: { onContextChange: 'commit' },
       },
       slots: {
-        'edit-name': (params: TableEditSlotParams) =>
+        nameEditor: (params: TableEditSlotParams) =>
           h('input', {
             class: 'override',
             value: params.value,

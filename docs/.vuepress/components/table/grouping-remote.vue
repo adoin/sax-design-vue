@@ -92,7 +92,7 @@ const proxyConfig: TableProxyConfig = {
       :proxy-config="proxyConfig"
       :pager-config="{ pageSize: 6, pageSizes: [6, 12] }"
     >
-      <template #toolbar="{ refresh, cancelProxy, busy }">
+      <template #toolbar_left="{ refresh, cancelProxy, busy }">
         <s-button size="small" @click="refresh">Refresh</s-button>
         <s-button size="small" flat :disabled="!busy" @click="cancelProxy"
           >Cancel request</s-button

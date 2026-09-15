@@ -12,6 +12,7 @@ import {
   zhSearchData,
   zhSidebar,
 } from './app'
+import { createLocalizedHeadingSlugify } from './node/localizedHeadingSlugs'
 import { saxDesignVueTheme } from './theme/index'
 import type { UserConfig } from 'vuepress'
 
@@ -20,6 +21,9 @@ const projRoot = path.resolve(__dirname, '../..')
 const pkgRoot = path.resolve(projRoot, 'packages')
 const vsRoot = path.resolve(pkgRoot, 'sax-design-vue')
 const vuepressBase = process.env.VUEPRESS_BASE || '/'
+const localizedHeadingSlugify = createLocalizedHeadingSlugify(
+  path.resolve(projRoot, 'docs'),
+)
 
 export default defineUserConfig({
   bundler: viteBundler({
@@ -212,6 +216,9 @@ export default defineUserConfig({
     lastUpdatedText: 'Last Updated',
   }),
   markdown: {
+    anchor: {
+      slugifyWithState: localizedHeadingSlugify,
+    },
     html: true,
     typographer: true,
   },

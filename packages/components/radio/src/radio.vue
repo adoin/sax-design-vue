@@ -8,6 +8,7 @@ import {
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { getVsColor } from '@vuesax-alpha/utils'
+import { SLogoLoading } from '@vuesax-alpha/components/icon'
 import { radioEmits, radioProps } from './radio'
 import { useRadio } from './use-radio'
 
@@ -68,7 +69,9 @@ const radioStyles = computed(() => [
     />
 
     <span :class="ns.b()" aria-hidden="true">
+      <SLogoLoading v-if="loading" :size="20" />
       <svg
+        v-else
         :class="ns.e('graphic')"
         viewBox="0 0 20 20"
         focusable="false"
@@ -85,7 +88,7 @@ const radioStyles = computed(() => [
       </svg>
 
       <span
-        v-if="$slots.icon"
+        v-if="!loading && $slots.icon"
         ref="customIcon"
         :class="ns.e('custom-icon')"
         :data-animation="resolvedIconAnimation"

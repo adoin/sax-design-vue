@@ -18,6 +18,12 @@ const shouldWrite = process.argv.includes('--write')
 const sourceSlotPattern =
   /\n?<template #(template|script|style)>\s*[\s\S]*?\s*<\/template>\s*/g
 const codeIncludePattern = /@\[code(?:\{\d+-\d+\})?[^\]]*\]\(([^)]+)\)/g
+const markdownFiles = (root: string): string[] =>
+  readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
+    const filePath = resolve(root, entry.name)
+    if (entry.isDirectory()) return markdownFiles(filePath)
+    return entry.isFile() && entry.name.endsWith('.md') ? [filePath] : []
+  })
 
 const findSfcBlockRanges = (source: string): SfcBlockRange[] => {
   const blockPattern = /^<(template|script|style)(?:\s[^>]*)?>[\s\S]*?^<\/\1>/gm
@@ -90,11 +96,8 @@ let changedExampleCount = 0
 const skipped: string[] = []
 
 for (const docsRoot of docsRoots) {
-  for (const fileName of readdirSync(docsRoot).filter((file) =>
-    file.endsWith('.md'),
-  )) {
+  for (const markdownPath of markdownFiles(docsRoot)) {
     pageCount += 1
-    const markdownPath = resolve(docsRoot, fileName)
     const markdown = readFileSync(markdownPath, 'utf8')
     let pageChanged = false
     const normalized = markdown.replace(

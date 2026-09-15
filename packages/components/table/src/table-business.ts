@@ -1,11 +1,12 @@
-import type { ButtonProps } from '@vuesax-alpha/components/button'
 import type {
   FormInstance,
   FormModel,
   FormProps,
 } from '@vuesax-alpha/components/form'
+import type { VNodeChild } from 'vue'
 import type {
   TableChangeRecords,
+  TableExposes,
   TableFilters,
   TablePagerConfig,
   TableRow,
@@ -13,61 +14,107 @@ import type {
   TableValidateOptions,
 } from './table'
 
-export interface TableQueryConfig extends Partial<FormProps> {
+export interface TableQueryConfig<
+  QueryForm extends object = FormModel,
+> extends Partial<FormProps<QueryForm>> {
   enabled?: boolean
   showActions?: boolean
   submitText?: string
   resetText?: string
 }
 
-export interface TableToolbarButton {
-  code: string
-  text: string
+export interface TableToolbarRendererParams<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> {
+  table: TableExposes<Row, QueryForm>
+  context: TableQueryContext<Row, QueryForm>
+  placement: 'left' | 'right'
+  busy: boolean
+}
+
+export type TableToolbarRendererEvent<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> = (
+  params: TableToolbarRendererParams<Row, QueryForm>,
+  ...args: unknown[]
+) => unknown
+
+export interface TableToolbarRendererOptions<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> {
+  /** Renderer name from the shared global renderer registry. */
+  itemRender: string
+  key?: string
+  props?: Record<string, unknown>
+  attrs?: Record<string, unknown>
+  events?: Record<string, TableToolbarRendererEvent<Row, QueryForm>>
+  content?:
+    | string
+    | ((params: TableToolbarRendererParams<Row, QueryForm>) => VNodeChild)
+  options?: unknown[]
   visible?: boolean
   disabled?: boolean
-  loading?: boolean
-  props?: Partial<ButtonProps>
 }
 
-export interface TableToolbarConfig {
+export interface TableToolbarConfig<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> {
   enabled?: boolean
   title?: string
-  refresh?: boolean
-  refreshText?: string
-  buttons?: TableToolbarButton[]
+  left?: TableToolbarRendererOptions<Row, QueryForm>[]
+  right?: TableToolbarRendererOptions<Row, QueryForm>[]
 }
 
-export interface TableQueryContext {
+export interface TableQueryContext<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> {
   reason: 'submit' | 'reset' | 'refresh'
-  form: FormModel
+  form: QueryForm
   pager: TablePagerConfig | false
-  sortBy: TableSort[]
-  filters: TableFilters
+  sortBy: TableSort<Row>[]
+  filters: TableFilters<Row>
 }
 
 export type TableProxyAction = 'query' | 'refresh' | 'save' | 'delete'
 
-export interface TableProxyRequest extends TableQueryContext {
+export interface TableProxyRequest<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> extends TableQueryContext<Row, QueryForm> {
   action: TableProxyAction
   signal: AbortSignal
 }
 
-export interface TableProxyQueryResult {
-  data: TableRow[]
+export interface TableProxyQueryResult<Row extends object = TableRow> {
+  data: Row[]
   /** Required when pagination is enabled; counts root records for tree data. */
   total?: number
 }
 
-export interface TableProxySaveRequest extends TableProxyRequest {
-  changes: TableChangeRecords
+export interface TableProxySaveRequest<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> extends TableProxyRequest<Row, QueryForm> {
+  changes: TableChangeRecords<Row>
 }
 
-export interface TableProxyDeleteRequest extends TableProxyRequest {
+export interface TableProxyDeleteRequest<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> extends TableProxyRequest<Row, QueryForm> {
   /** Read-only references to explicitly supplied or selected rows. */
-  rows: Readonly<TableRow>[]
+  rows: Readonly<Row>[]
 }
 
-export interface TableProxyConfig {
+export interface TableProxyConfig<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> {
   enabled?: boolean
   /** Change when switching remote datasets, even if callback identities stay stable. */
   dataKey?: string | number
@@ -75,15 +122,15 @@ export interface TableProxyConfig {
   autoQuery?: boolean
   reloadAfterMutation?: boolean
   /** Optional validation scope for saves; generated sources require numeric column indices. */
-  validationColumns?: TableValidateOptions['columns']
+  validationColumns?: TableValidateOptions<Row>['columns']
   query?: (
-    request: TableProxyRequest,
-  ) => TableProxyQueryResult | Promise<TableProxyQueryResult>
+    request: TableProxyRequest<Row, QueryForm>,
+  ) => TableProxyQueryResult<Row> | Promise<TableProxyQueryResult<Row>>
   save?: (
-    request: TableProxySaveRequest,
+    request: TableProxySaveRequest<Row, QueryForm>,
   ) => boolean | void | Promise<boolean | void>
   delete?: (
-    request: TableProxyDeleteRequest,
+    request: TableProxyDeleteRequest<Row, QueryForm>,
   ) => boolean | void | Promise<boolean | void>
 }
 
@@ -116,15 +163,18 @@ export interface TableProxyState {
   result: TableProxyResult | null
 }
 
-export interface TableBusinessExposes {
+export interface TableBusinessExposes<
+  Row extends object = TableRow,
+  QueryForm extends object = FormModel,
+> {
   query: () => Promise<boolean>
   resetQuery: () => Promise<boolean>
   refresh: () => Promise<boolean>
-  getQueryContext: () => TableQueryContext
+  getQueryContext: () => TableQueryContext<Row, QueryForm>
   getForm: () => FormInstance | undefined
   commitProxy: (
     action: TableProxyAction,
-    rows?: TableRow[],
+    rows?: Row[],
   ) => Promise<TableProxyResult>
   cancelProxy: () => void
   getProxyState: () => TableProxyState

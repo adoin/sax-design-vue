@@ -24,7 +24,7 @@ export const popperContentProps = buildProps({
     default: 'fade-in-linear',
   },
   appendTo: {
-    type: definePropType<string | HTMLElement>(String),
+    type: definePropType<string | HTMLElement>([String, Object]),
   },
   // because model toggle prop is generated dynamically
   // so the typing cannot be evaluated by typescript as type:

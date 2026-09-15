@@ -1,20 +1,13 @@
 <script setup lang="ts">
-import type { TableColumn } from 'sax-design-vue'
+import { computed } from 'vue'
+import type { SaxGridSetting } from 'sax-design-vue'
 
 interface UserRow {
   id: number
   name: string
   role: string
   email: string
-  [key: string]: unknown
 }
-
-const columns: TableColumn<UserRow>[] = [
-  { type: 'seq', title: '序号', width: 72, align: 'right' },
-  { field: 'name', title: '姓名', minWidth: 160 },
-  { field: 'role', title: '岗位' },
-  { field: 'email', title: '邮箱', minWidth: 220 },
-]
 
 const rows: UserRow[] = [
   { id: 1, name: '林晓', role: '设计师', email: 'linxiao@example.com' },
@@ -23,12 +16,22 @@ const rows: UserRow[] = [
   { id: 4, name: '苏禾', role: '运营', email: 'suhe@example.com' },
 ]
 
-const tableOptions = {
+const tableOptions = computed<SaxGridSetting<UserRow>>(() => ({
   data: rows,
-  columns,
+  columns: [
+    { type: 'seq', title: '序号', width: 72, align: 'right' },
+    {
+      field: 'name',
+      title: '姓名',
+      minWidth: 160,
+      cell: ({ row }) => row.name,
+    },
+    { field: 'role', title: '岗位' },
+    { field: 'email', title: '邮箱', minWidth: 220 },
+  ],
   rowKey: 'id',
   striped: true,
-}
+}))
 </script>
 
 <template>

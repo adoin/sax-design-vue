@@ -62,16 +62,31 @@
             </div>
           </header>
 
-          <nav v-if="sections.length > 1" class="code-dialog__tabs">
-            <button
-              v-for="section in sections"
-              :key="section.id"
-              type="button"
-              :class="{ active: activeSection === section.id }"
-              @click="activeSection = section.id"
-            >
-              {{ section.label }}
-            </button>
+          <nav
+            v-if="sections.length > 1 || hasTsxSource"
+            class="code-dialog__tabs"
+          >
+            <div class="code-dialog__tab-list">
+              <button
+                v-for="section in sections"
+                :key="section.id"
+                type="button"
+                :class="{ active: activeSection === section.id }"
+                @click="activeSection = section.id"
+              >
+                {{ section.label }}
+              </button>
+            </div>
+
+            <div v-if="hasTsxSource" class="code-dialog__tsx-toggle">
+              <s-switch
+                v-model="tsxMode"
+                variant="text"
+                inactive-text="Vue"
+                active-text="TSX"
+                :aria-label="t.examples.tsxMode"
+              />
+            </div>
           </nav>
 
           <div class="code-dialog__body">
@@ -79,14 +94,16 @@
               <slot name="template" />
             </div>
             <div v-else-if="activeSection === 'script'" class="code-section">
-              <slot name="script" />
+              <slot v-if="tsxMode && hasTsxSource" name="script-tsx" />
+              <slot v-else name="script" />
             </div>
             <div v-else-if="activeSection === 'style'" class="code-section">
               <slot name="style" />
             </div>
             <div v-else class="code-section">
               <slot name="template" />
-              <slot name="script" />
+              <slot v-if="tsxMode && hasTsxSource" name="script-tsx" />
+              <slot v-else name="script" />
               <slot name="style" />
             </div>
           </div>
@@ -113,6 +130,16 @@
     <slot name="script" />
     <slot name="style" />
   </div>
+  <div
+    v-if="hasTsxSource"
+    ref="tsxSource"
+    class="source-cache"
+    aria-hidden="true"
+  >
+    <slot name="template" />
+    <slot name="script-tsx" />
+    <slot name="style" />
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -129,8 +156,10 @@ type CodeSection = 'template' | 'script' | 'style' | 'all'
 const slots = useSlots()
 const { t } = useDocLocaleUi()
 const sourceRef = useTemplateRef<HTMLElement>('source')
+const tsxSourceRef = useTemplateRef<HTMLElement>('tsxSource')
 const codeOpen = shallowRef(false)
 const activeSection = shallowRef<CodeSection>('template')
+const tsxMode = shallowRef(false)
 const openedExample = shallowRef<DocExampleRecord | null>(null)
 const codeTrigger = shallowRef<HTMLElement | null>(null)
 const playgroundOpen = shallowRef(false)
@@ -154,9 +183,12 @@ const sections = computed(() => {
     available.push({ id: 'all', label: t.value.examples.all })
   return available
 })
+const hasTsxSource = computed(() => Boolean(slots['script-tsx']))
 
 const getSource = () => {
-  const blocks = sourceRef.value?.querySelectorAll('pre code')
+  const container =
+    tsxMode.value && hasTsxSource.value ? tsxSourceRef.value : sourceRef.value
+  const blocks = container?.querySelectorAll('pre code')
   return blocks
     ? Array.from(blocks)
         .map((block) => block.textContent?.trim())
@@ -214,7 +246,10 @@ const openPlayground = (event?: Event) => {
   const openedFromCard = Boolean(trigger?.closest('.card'))
   const example = openedFromCard
     ? getDocExample(event)
-    : openedExample.value || getDocExample()
+    : {
+        ...(openedExample.value || getDocExample()),
+        source: getSource(),
+      }
 
   if (example.source) {
     window.sessionStorage.setItem(
@@ -352,9 +387,19 @@ const openPlayground = (event?: Event) => {
 
 .code-dialog__tabs {
   display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
   gap: 4px;
   padding: 8px 14px 0;
   background: hsl(var(--sax-theme-bg2) / 0.24);
+}
+
+.code-dialog__tab-list {
+  display: flex;
+  min-width: 0;
+  align-items: flex-end;
+  gap: 4px;
+  overflow-x: auto;
 }
 
 .code-dialog__tabs button {
@@ -368,6 +413,18 @@ const openPlayground = (event?: Event) => {
 .code-dialog__tabs button.active {
   background: hsl(var(--sax-theme-code));
   color: #fff;
+}
+
+.code-dialog__tsx-toggle {
+  display: inline-flex;
+  min-height: 34px;
+  flex: 0 0 auto;
+  align-items: center;
+  padding: 0 2px;
+
+  .s-switch {
+    min-height: 34px;
+  }
 }
 
 .code-dialog__body {

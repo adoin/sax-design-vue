@@ -22,7 +22,7 @@ export const tooltipProps = buildProps({
     default: false,
   },
   appendTo: {
-    type: definePropType<string | HTMLElement>(String),
+    type: definePropType<string | HTMLElement>([String, Object]),
   },
   /**
    * @description tooltip style

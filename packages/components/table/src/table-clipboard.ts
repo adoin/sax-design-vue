@@ -1,11 +1,12 @@
 import type { TableEditContext } from './table-edit'
 import type { TableCellRangeBounds } from './table-cell-range'
 import type { TableValidationError } from './table-validation'
+import type { TableRow } from './table'
 
 export type TableClipboardAction = 'copy' | 'cut' | 'paste'
 export type TableClipboardData = readonly (readonly unknown[])[]
 
-export interface TableClipboardConfig {
+export interface TableClipboardConfig<Row extends object = TableRow> {
   enabled?: boolean
   keyboard?: boolean
   copy?: boolean
@@ -15,12 +16,12 @@ export interface TableClipboardConfig {
   maxCells?: number
   /** Maximum TSV character count; default 2000000. */
   maxCharacters?: number
-  formatCell?: (value: unknown, context: TableEditContext) => string
-  parseCell?: (value: unknown, context: TableEditContext) => unknown
+  formatCell?: (value: unknown, context: TableEditContext<Row>) => string
+  parseCell?: (value: unknown, context: TableEditContext<Row>) => unknown
   /** Cut clears writable cells to null unless supplied here. */
-  clearCell?: (context: TableEditContext) => unknown
+  clearCell?: (context: TableEditContext<Row>) => unknown
   /** Additional write restriction; cannot override editConfig or disabled editors. */
-  checkMethod?: (context: TableEditContext) => boolean
+  writableMethod?: (context: TableEditContext<Row>) => boolean
 }
 
 export interface TableClipboardOptions {
@@ -34,7 +35,7 @@ export interface TableCopyOptions extends TableClipboardOptions {
   writeClipboard?: boolean
 }
 
-export interface TableClipboardResult {
+export interface TableClipboardResult<Row extends object = TableRow> {
   action: TableClipboardAction
   success: boolean
   applied: boolean
@@ -59,6 +60,6 @@ export interface TableClipboardResult {
     | 'rejected'
     | 'busy'
     | 'invalid'
-  errors?: TableValidationError[]
+  errors?: TableValidationError<Row>[]
   error?: unknown
 }

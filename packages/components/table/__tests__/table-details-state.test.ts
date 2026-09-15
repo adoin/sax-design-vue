@@ -164,7 +164,7 @@ describe('table detail state', () => {
     const load = vi.fn(async () => null)
     const wrapper = mount(Harness, {
       props: {
-        detailConfig: { checkMethod: () => false, load },
+        detailConfig: { expandableMethod: () => false, load },
         detailExpandedKeys: [1],
       },
     })

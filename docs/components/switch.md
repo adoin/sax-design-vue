@@ -3,38 +3,38 @@ description: 'Toggle a boolean setting between two states.'
 PROPS:
   - name: variant
     type: String
-    values: "classic | soft | text"
+    values: 'classic | soft | text'
     description: Select a structurally distinct borderless switch style.
     default: classic
   - name: active-text
     type: String
-    values: "String"
+    values: 'String'
     description: Labels used by the text variant.
     default: ON
   - name: inactive-text
     type: String
-    values: "String"
+    values: 'String'
     description: Labels used by the text variant.
     default: OFF
   - name: active-value
     type: String | Number | Boolean
-    values: "custom bound value"
+    values: 'custom bound value'
     description: Value emitted for the active state.
     default: 'true'
   - name: inactive-value
     type: String | Number | Boolean
-    values: "custom bound value"
+    values: 'custom bound value'
     description: Value emitted for the inactive state.
     default: 'false'
   - name: shape
     type: String
-    values: "rounded | square"
+    values: 'rounded | square'
     description: Select rounded or square geometry for the track and thumb.
     default: 'rounded'
     usage: '#shape'
   - name: v-model
     type: Boolean | String | Number
-    values: "Values matched against active-value and inactive-value"
+    values: 'Values matched against active-value and inactive-value'
     description: Set the current switch value; an unmatched value can be represented as indeterminate.
     default: false
     link: null
@@ -48,7 +48,7 @@ PROPS:
 
   - name: color
     type: String
-    values: "Theme colors, RGB y HEX"
+    values: 'Theme colors, RGB y HEX'
     description: Change the color of the component when it is in active state.
     default: primary
     link: null
@@ -57,8 +57,8 @@ PROPS:
 
   - name: loading
     type: Boolean
-    values: "true, false"
-    description: Replace the thumb with an equal-size loading indicator that follows the selected shape.
+    values: 'true, false'
+    description: Replace the thumb with the shared Sax logo loading indicator.
     default: false
     link: null
     usage: '#loading'
@@ -79,7 +79,7 @@ PROPS:
 
   - name: indeterminate
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: Center the thumb while the bound value matches neither active-value nor inactive-value; the next selection enters a normal definite state.
     default: false
     link: null
@@ -91,7 +91,7 @@ PROPS:
 
   - name: notValue
     type: String
-    values: "String"
+    values: 'String'
     description: Determine the return value of the component when inactive.
     default: null
     link: null
@@ -111,7 +111,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: slot
-    values: "null"
+    values: 'null'
     description: Add text within the component.
     default: null
     link: null
@@ -140,7 +140,7 @@ SLOTS:
       </template>
   - name: on
     type: slot
-    values: "null"
+    values: 'null'
     description: Add text within the component when it is in active state.
     default: null
     link: null
@@ -156,7 +156,7 @@ SLOTS:
       </s-switch>
   - name: off
     type: slot
-    values: "null"
+    values: 'null'
     description: Add text within the component when it is in idle state.
     default: null
     link: null
@@ -172,7 +172,7 @@ SLOTS:
       </s-switch>
   - name: circle
     type: slot
-    values: "null"
+    values: 'null'
     description: Add an icon to the circle within the component.
     default: null
     link: null
@@ -374,7 +374,7 @@ Set `shape="square"` to use a square track and thumb. Loading and indeterminate 
 
 ## Loading
 
-Set `loading` to replace the moving thumb with an equal-size spinner. It stays at the current state position; with `shape="square"`, a fixed square outline advances around its four sides instead of rotating the whole square.
+Set `loading` to replace the moving thumb with the shared Sax logo loader. It stays at the current state position for both rounded and square switches.
 
 <template #example>
 <switch-loading />

@@ -5,229 +5,229 @@ PROPS:
     values: 已选文件
     description: 通过 v-model 控制已选文件集合。
     default: null
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: shape
     type: String
     values: rounded | square
     description: 为上传区、文件队列和操作入口统一设置圆角或方形外观。
     default: rounded
-    usage: '#外形'
+    usage: '#shape'
   - name: drag
     type: Boolean
     values: true | false
     description: 是否接收拖放到上传区的文件。
     default: 'true'
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: list-type
     type: String
     values: auto | list | card
     description: 使用紧凑列表或图片卡片展示队列；auto 在图片模式下自动使用卡片。
     default: auto
-    usage: '#图片队列'
+    usage: '#image-queue'
   - name: preview-fit
     type: String
     values: cover | contain
     description: 控制图片预览在卡片中的适配方式。
     default: cover
-    usage: '#图片队列'
+    usage: '#image-queue'
   - name: mode
     type: String
     values: all | image
     description: 限制为图片选择，并参与自动队列形态判断。
     default: all
-    usage: '#图片队列'
+    usage: '#image-queue'
   - name: multiple
     type: Boolean
     values: true | false
     description: 是否允许选择和拖放多个文件。
     default: 'false'
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: single-upload
     type: Boolean
     values: true | false
     description: 每次加入有效文件时替换当前队列。
     default: 'false'
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: accept
     type: String
     values: MIME 类型或扩展名列表
     description: 同时约束原生选择器和拖放文件的类型。
     default: null
-    usage: '#自定义触发区'
+    usage: '#custom-trigger'
   - name: file-types
     type: String[]
     values: MIME 类型或扩展名列表
     description: 未设置 accept 时使用的文件类型规则。
     default: '[]'
-    usage: '#图片队列'
+    usage: '#image-queue'
   - name: limit
     type: Number | String
     values: 正数
     description: 限制队列最多保留的文件数量。
     default: null
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: limit-count
     type: Number | String
     values: 正数
     description: limit 的兼容别名。
     default: null
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: limit-size
     type: Number | String
     values: MB
     description: 拒绝超过指定大小的单个文件。
     default: null
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: automatic
     type: Boolean
     values: true | false
     description: 文件通过校验后立即开始上传。
     default: 'false'
-    usage: '#自动上传'
+    usage: '#automatic-upload'
   - name: auto-submit
     type: Boolean
     values: true | false
     description: automatic 的兼容别名。
     default: 'false'
-    usage: '#自动上传'
+    usage: '#automatic-upload'
   - name: action
     type: String
     values: URL
     description: 内置 XMLHttpRequest 适配器使用的 POST 地址。
     default: null
-    usage: '#自动上传'
+    usage: '#automatic-upload'
   - name: upload-method
     type: Function
     values: ({ file, option, updateProgress }) => Promise
     description: 替换内置请求，并可通过 updateProgress 回报进度。
     default: null
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: file-name
     type: String
     values: 表单字段名
     description: 设置内置 multipart 请求中的文件字段名。
     default: file
-    usage: '#自动上传'
+    usage: '#automatic-upload'
   - name: headers
     type: Object
     values: Record<string, string>
     description: 为内置上传请求增加请求头。
     default: null
-    usage: '#自动上传'
+    usage: '#automatic-upload'
   - name: data
     type: Object
     values: Record<string, string>
     description: 为内置 multipart 请求增加数据字段。
     default: null
-    usage: '#自动上传'
+    usage: '#automatic-upload'
   - name: before-select-method
     type: Function
     values: ({ file }) => boolean | Promise<boolean>
     description: 文件进入队列前执行应用级校验。
     default: null
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: before-remove-method
     type: Function
     values: ({ option }) => boolean | Promise<boolean>
     description: 拦截队列文件的移除操作。
     default: null
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: text
     type: String
     values: 文本
     description: 设置上传区主标题。
     default: 上传文件
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: text-max
     type: String
     values: 文本
     description: 达到文件数量上限后替换上传区标题。
     default: null
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: button-text
     type: String
     values: 文本
     description: 优先级高于 text 的兼容标题属性。
     default: null
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: show-tip
     type: Boolean
     values: true | false
     description: 是否在组件下方展示辅助说明。
     default: 'false'
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: tip-text
     type: String
     values: 文本
     description: 设置内置辅助说明。
     default: null
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: show-list
     type: Boolean
     values: true | false
     description: 是否展示已选文件队列。
     default: 'true'
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: show-preview
     type: Boolean
     values: true | false
     description: 是否为图片文件展示预览。
     default: 'true'
-    usage: '#图片队列'
+    usage: '#image-queue'
   - name: show-progress
     type: Boolean
     values: true | false
     description: 是否展示单文件和整体上传进度。
     default: 'true'
-    usage: '#自动上传'
+    usage: '#automatic-upload'
   - name: show-retry
     type: Boolean
     values: true | false
     description: 是否为上传失败的文件展示重试入口。
     default: 'true'
-    usage: '#自动上传'
+    usage: '#automatic-upload'
   - name: show-remove-button
     type: Boolean
     values: true | false
     description: 是否展示队列项的移除入口。
     default: 'true'
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: show-upload-button
     type: Boolean
     values: true | false
     description: 是否展示手动上传队列的操作入口。
     default: 'true'
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: show-submit-button
     type: Boolean
     values: true | false
     description: 是否展示手动上传队列的操作入口。
     default: 'true'
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: show-button-icon
     type: Boolean
     values: true | false
     description: 是否展示手动上传操作中的图标。
     default: 'true'
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: show-button-text
     type: Boolean
     values: true | false
     description: 是否展示手动上传操作中的文字。
     default: 'true'
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: readonly
     type: Boolean
     values: true | false
     description: 只展示文件，隐藏选择、移除、重试和上传操作。
     default: 'false'
-    usage: '#完整流程'
+    usage: '#complete-flow'
   - name: disabled
     type: Boolean
     values: true | false
     description: 禁用文件选择和拖放。
     default: 'false'
-    usage: '#完整流程'
+    usage: '#complete-flow'
 EVENTS:
   - name: update:modelValue
     params: File | File[] | null

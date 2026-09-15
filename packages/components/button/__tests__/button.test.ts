@@ -18,10 +18,17 @@ describe('Button loading presets', () => {
     },
   )
 
-  it('uses the pulse preset by default', () => {
-    const wrapper = mount(Button, { props: { loading: true } })
+  it('uses the brand loader by default', () => {
+    const wrapper = mount(Button, {
+      props: { loading: true },
+      slots: { default: 'Save changes' },
+      global: { stubs: { IconLoading: true } },
+    })
 
-    expect(wrapper.classes()).toContain('s-button--loading-pulse')
+    expect(wrapper.classes()).toContain('s-button--loading-default')
+    expect(wrapper.findComponent({ name: 'IconLoading' }).exists()).toBe(true)
+    expect(wrapper.find('.s-button__loading-track').exists()).toBe(false)
+    expect(wrapper.get('.s-button__content').text()).toBe('Save changes')
   })
 })
 

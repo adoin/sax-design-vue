@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { SInput, SSelect } from 'sax-design-vue'
 import type {
   TableColumn,
   TableQueryConfig,
@@ -26,9 +25,8 @@ const queryConfig: TableQueryConfig = {
       title: '项目名称',
       span: { xs: 24, md: 12 },
       itemRender: {
-        name: 'SInput',
-        component: SInput,
-        props: { block: true, clearable: true },
+        name: '$input',
+        props: { clearable: true },
       },
       rules: {
         validator: (value) =>
@@ -40,9 +38,8 @@ const queryConfig: TableQueryConfig = {
       title: '部门',
       span: { xs: 24, md: 12 },
       itemRender: {
-        name: 'SSelect',
-        component: SSelect,
-        props: { block: true, clearable: true },
+        name: '$select',
+        props: { clearable: true },
         options: [
           { label: '全部部门', value: '' },
           { label: '设计', value: '设计' },
@@ -54,7 +51,13 @@ const queryConfig: TableQueryConfig = {
 }
 const columns: TableColumn[] = [
   { field: 'id', title: 'ID', width: 80, fixed: 'left' },
-  { field: 'name', title: '项目', minWidth: 220, sortable: true },
+  {
+    field: 'name',
+    title: '项目',
+    minWidth: 220,
+    sortable: true,
+    slots: { default: 'projectNameCell' },
+  },
   {
     field: 'team',
     title: '部门',
@@ -91,15 +94,30 @@ const action = () => {
       :query-config="queryConfig"
       :toolbar-config="{
         title: '项目列表',
-        buttons: [{ code: 'selection', text: '查看选择' }],
+        left: [
+          {
+            itemRender: 'button',
+            props: { content: '查看选择', code: 'selection' },
+          },
+          {
+            itemRender: 'button',
+            props: {
+              content: '更多',
+              children: [
+                { content: '归档', code: 'archive', icon: 'cb:archive' },
+                { content: '删除', code: 'delete', icon: 'cb:close' },
+              ],
+            },
+          },
+        ],
+        right: [{ itemRender: '$refresh' }, { itemRender: '$columnConfig' }],
       }"
       :pager-config="{ pageSize: 3 }"
-      column-manager-config
       resize-config
       @query="search"
       @toolbar-click="action"
     >
-      <template #cell-name="{ value }"
+      <template #projectNameCell="{ value }"
         ><strong>{{ value }}</strong></template
       >
     </s-table>

@@ -307,7 +307,7 @@ describe('Table clipboard integration', () => {
         focus: { rowKey: 2, columnKey: 'count' },
       },
       clipboardConfig: {
-        checkMethod: ({ rowKey, column }) =>
+        writableMethod: ({ rowKey, column }) =>
           rowKey !== 1 || column.field !== 'name',
       },
     })
@@ -325,7 +325,7 @@ describe('Table clipboard integration', () => {
     const { write } = mockClipboard()
     const { api, data } = host({
       clipboardConfig: {
-        checkMethod: ({ column }) => column.field !== 'count',
+        writableMethod: ({ column }) => column.field !== 'count',
       },
     })
     expect(await api.value!.cutCells({ bounds })).toMatchObject({

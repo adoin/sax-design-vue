@@ -10,26 +10,26 @@ interface UserRow {
 }
 
 const columns: TableColumn<UserRow>[] = [
-  { field: 'name', title: 'Name', minWidth: 180 },
-  { field: 'team', title: 'Team', minWidth: 160 },
+  { field: 'name', title: '姓名', minWidth: 180 },
+  { field: 'team', title: '团队', minWidth: 160 },
 ]
 const rows: UserRow[] = [
-  { id: 1, name: 'Leanne Graham', team: 'Design' },
-  { id: 2, name: 'Ervin Howell', team: 'Engineering' },
-  { id: 3, name: 'Clementine Bauch', team: 'Product' },
+  { id: 1, name: '林晓', team: '设计' },
+  { id: 2, name: '陈屿', team: '研发' },
+  { id: 3, name: '周宁', team: '产品' },
 ]
-const selected = shallowRef<UserRow | null>(null)
+const highlighted = shallowRef<UserRow | null>(null)
 </script>
 
 <template>
   <s-table
-    v-model:highlight="selected"
+    v-model:highlight="highlighted"
     :data="rows"
     :columns="columns"
     row-key="id"
   >
     <template #header>
-      Selected: {{ selected?.name ?? 'Click a row' }}
+      当前高亮：{{ highlighted?.name ?? '点击一行高亮' }}
     </template>
   </s-table>
 </template>

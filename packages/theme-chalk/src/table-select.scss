@@ -133,10 +133,6 @@
   transform: rotate(180deg);
 }
 
-.s-table-select__loading {
-  animation: s-table-select-spin 0.8s linear infinite;
-}
-
 .s-table-select__panel {
   padding: 0;
   width: min(520px, calc(100vw - 24px));
@@ -204,19 +200,9 @@
   font-size: 12px;
 }
 
-@keyframes s-table-select-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .s-table-select__trigger,
   .s-table-select__action .s-icon {
     transition: none;
-  }
-
-  .s-table-select__loading {
-    animation-duration: 1.6s;
   }
 }

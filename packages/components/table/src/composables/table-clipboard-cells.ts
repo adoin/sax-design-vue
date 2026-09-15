@@ -55,6 +55,7 @@ export function createTableClipboardCells(options: Options) {
         context: {
           row: flat.row,
           rowKey: flat.key,
+          index: flat.index,
           rowIndex: flat.index,
           column: entry.column,
           columnIndex: entry.index,

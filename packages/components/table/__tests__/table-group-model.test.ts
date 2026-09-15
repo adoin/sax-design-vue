@@ -334,6 +334,35 @@ describe('Table group display layout', () => {
     expect(result.summary.count).toBe(4)
   })
 
+  it('continues ancestor guides through the last child until its parent subtotal', () => {
+    const result = model()
+    const layout = createTableGroupLayout(
+      result.groups,
+      result.rows.length,
+      () => true,
+      { subtotal: true },
+    )
+    const items = Array.from({ length: layout.count }, (_, index) =>
+      layout.itemAt(index),
+    )
+    const lastDesignChild = items.findIndex(
+      (item) =>
+        item?.kind === 'group' &&
+        item.group.depth === 1 &&
+        item.group.value === 'B',
+    )
+
+    expect(lastDesignChild).toBeGreaterThan(-1)
+    expect(items[lastDesignChild]?.hierarchy?.isLastChild).toBe(false)
+    expect(items[lastDesignChild + 1]?.hierarchy?.ancestorHasNext[1]).toBe(true)
+    expect(items[lastDesignChild + 2]?.hierarchy?.ancestorHasNext[1]).toBe(true)
+    expect(items[lastDesignChild + 3]).toMatchObject({
+      kind: 'subtotal',
+      group: result.groups[0],
+      hierarchy: { isLastChild: true },
+    })
+  })
+
   it('allows a fully collapsed table and empty groups', () => {
     const groups = resolveRemoteTableGroups(
       [{ key: 'a', field: 'x', value: 1, rowStart: 0, rowCount: 0 }],

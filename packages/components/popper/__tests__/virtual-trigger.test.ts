@@ -33,6 +33,46 @@ const anchor = (x: number) => ({
 })
 
 describe('Popper virtual anchor', () => {
+  it('immediately stops painting when a real virtual anchor is clipped', async () => {
+    let intersection: IntersectionObserverCallback | undefined
+    vi.stubGlobal(
+      'IntersectionObserver',
+      class {
+        constructor(callback: IntersectionObserverCallback) {
+          intersection = callback
+        }
+        observe() {}
+        disconnect() {}
+      },
+    )
+    const reference = document.createElement('button')
+    document.body.append(reference)
+    const wrapper = mount(Popper, {
+      attachTo: document.body,
+      props: {
+        virtualTriggering: true,
+        virtualRef: reference,
+        visible: true,
+        trigger: [],
+        content: 'Clipped content',
+        persistent: true,
+        teleported: false,
+      },
+    })
+    await flushPromises()
+
+    intersection?.(
+      [{ isIntersecting: false } as IntersectionObserverEntry],
+      {} as IntersectionObserver,
+    )
+    await wrapper.vm.$nextTick()
+    expect(wrapper.get('.s-popper').attributes('style')).toContain(
+      'visibility: hidden',
+    )
+    wrapper.unmount()
+    reference.remove()
+  })
+
   it('positions an initially open, slotless popper against its virtual reference', async () => {
     const reference = anchor(120)
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
@@ -76,6 +116,35 @@ describe('Popper virtual anchor', () => {
     expect(second.getBoundingClientRect).toHaveBeenCalled()
     expect(wrapper.findAll('.s-popper')).toHaveLength(1)
     expect(wrapper.text()).toContain('Second')
+    wrapper.unmount()
+  })
+
+  it('skips viewport positioning while a persistent popper is closed', async () => {
+    const reference = anchor(120)
+    const wrapper = mount(Popper, {
+      props: {
+        virtualTriggering: true,
+        virtualRef: reference,
+        visible: false,
+        trigger: [],
+        content: 'Persistent content',
+        persistent: true,
+        teleported: false,
+      },
+    })
+    await flushPromises()
+    reference.getBoundingClientRect.mockClear()
+    window.dispatchEvent(new Event('scroll'))
+    await flushPromises()
+    expect(reference.getBoundingClientRect).not.toHaveBeenCalled()
+
+    await wrapper.setProps({ visible: true })
+    await flushPromises()
+    expect(reference.getBoundingClientRect).toHaveBeenCalled()
+    reference.getBoundingClientRect.mockClear()
+    window.dispatchEvent(new Event('scroll'))
+    await flushPromises()
+    expect(reference.getBoundingClientRect).toHaveBeenCalled()
     wrapper.unmount()
   })
 

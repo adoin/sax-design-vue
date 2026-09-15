@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Table from '../src/table.vue'
 import TableColumn from '../src/table-column.vue'
 import ColumnManager from '../src/table-column-manager.vue'
+import TableColumnConfig from '../src/table-column-config.vue'
 import { SPopper } from '../../popper'
 import { createColumnLayout } from '../src/composables/column-layout'
 import type { TableColumnState } from '../src/table'
@@ -24,6 +25,14 @@ const data = [
   },
   { id: 2, name: 'A' },
 ]
+const columnConfig = (storageKey?: string) => ({
+  right: [
+    {
+      itemRender: '$columnConfig',
+      ...(storageKey ? { props: { storageKey } } : {}),
+    },
+  ],
+})
 const headers = (wrapper: ReturnType<typeof mount>) =>
   wrapper.findAll('[role="columnheader"]')
 const titles = (wrapper: ReturnType<typeof mount>) =>
@@ -32,6 +41,22 @@ const scrollDescriptor = Object.getOwnPropertyDescriptor(
   HTMLElement.prototype,
   'scrollTo',
 )
+const elementFromPointDescriptor = Object.getOwnPropertyDescriptor(
+  document,
+  'elementFromPoint',
+)
+const pointer = (type: string, y: number, pointerId = 7) => {
+  const event = new MouseEvent(type, {
+    bubbles: true,
+    cancelable: true,
+    button: 0,
+    clientX: 40,
+    clientY: y,
+  })
+  Object.defineProperty(event, 'pointerId', { value: pointerId })
+  Object.defineProperty(event, 'isPrimary', { value: true })
+  return event as PointerEvent
+}
 
 describe('column management', () => {
   beforeEach(() => {
@@ -74,25 +99,108 @@ describe('column management', () => {
     if (scrollDescriptor)
       Object.defineProperty(HTMLElement.prototype, 'scrollTo', scrollDescriptor)
     else Reflect.deleteProperty(HTMLElement.prototype, 'scrollTo')
+    if (elementFromPointDescriptor)
+      Object.defineProperty(
+        document,
+        'elementFromPoint',
+        elementFromPointDescriptor,
+      )
+    else Reflect.deleteProperty(document, 'elementFromPoint')
     vi.restoreAllMocks()
     vi.unstubAllGlobals()
   })
 
-  it('reorders from the rendered buttons and restores trigger focus after Escape', async () => {
+  it('renders column settings as a right-side toolbar renderer', () => {
+    const wrapper = mount(Table, {
+      props: { data, columns },
+      slots: {
+        toolbar_left: () =>
+          h('button', { class: 'consumer-control' }, 'Action'),
+        toolbar_right: () => h(TableColumnConfig),
+      },
+    })
+    expect(wrapper.get('.s-table-shell__left').text()).toBe('Action')
+    expect(
+      wrapper
+        .get('.s-table-shell__right')
+        .findComponent(ColumnManager)
+        .exists(),
+    ).toBe(true)
+    expect(wrapper.findAll('.s-table-shell__toolbar')).toHaveLength(1)
+    wrapper.unmount()
+  })
+
+  it('can enable and place column settings explicitly through toolbarConfig', async () => {
+    const wrapper = mount(Table, {
+      props: {
+        data,
+        columns,
+        toolbarConfig: {
+          left: [{ itemRender: '$columnConfig' }],
+        },
+      },
+    })
+    expect(
+      wrapper.get('.s-table-shell__left').findComponent(ColumnManager).exists(),
+    ).toBe(true)
+    expect(wrapper.findAllComponents(ColumnManager)).toHaveLength(1)
+    await wrapper.setProps({ toolbarConfig: false })
+    expect(wrapper.findComponent(ColumnManager).exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('reorders from one keyboard-operable drag handle and restores trigger focus after Escape', async () => {
     const wrapper = mount(Table, {
       attachTo: document.body,
-      props: { data, columns, columnManagerConfig: true },
+      props: { data, columns, toolbarConfig: columnConfig() },
     })
-    await wrapper
-      .get('.s-table__column-manager button')
-      .trigger('keydown', { key: 'Enter' })
+    const popper = wrapper.getComponent(ColumnManager).getComponent(SPopper)
+    expect(popper.props('trigger')).toEqual([])
+    expect(popper.props('animation')).toBe('none')
+    expect(popper.props('persistent')).toBe(true)
+    expect(
+      document.querySelectorAll(
+        '.s-table__column-panel .s-table__column-setting',
+      ),
+    ).toHaveLength(columns.length)
+    expect(document.querySelector('.s-table__column-panel .s-vl')).toBeNull()
+    await wrapper.get('.s-table__column-manager button').trigger('click')
     await vi.waitFor(() =>
       expect(document.querySelector('.s-table__column-panel')).not.toBeNull(),
     )
-    const button = document.querySelector<HTMLButtonElement>(
-      '.s-table__column-panel [data-column-key="description"] button[data-action="up"]',
+    const handle = document.querySelector<HTMLButtonElement>(
+      '.s-table__column-panel [data-column-key="description"] .s-table__column-drag-handle',
     )!
-    button.click()
+    expect(
+      document.querySelectorAll(
+        '.s-table__column-panel [data-column-key] .s-table__column-drag-handle',
+      ),
+    ).toHaveLength(columns.length)
+    expect(
+      document.querySelector('.s-table__column-panel [data-action]'),
+    ).toBeNull()
+    handle.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: ' ',
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    const dialog = document.querySelector<HTMLElement>('[role="dialog"]')!
+    dialog.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'ArrowUp',
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    dialog.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Enter',
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
     await nextTick()
     expect(titles(wrapper)).toEqual(['ID', '', 'Description', 'Name', 'Status'])
     expect(wrapper.emitted('update:columnState')?.[0]?.[0]).toEqual([
@@ -100,11 +208,9 @@ describe('column management', () => {
       { key: 'name', order: 3 },
     ])
     await flushPromises()
-    document
-      .querySelector('[role="dialog"]')!
-      .dispatchEvent(
-        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
-      )
+    dialog.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+    )
     await nextTick()
     // Vue Test Utils stubs transitions; complete the shared popper's leave phase.
     wrapper.getComponent(ColumnManager).getComponent(SPopper).vm.$emit('hide')
@@ -114,13 +220,156 @@ describe('column management', () => {
     wrapper.unmount()
   })
 
+  it('reorders a column by dragging its handle to another row edge', async () => {
+    const wrapper = mount(Table, {
+      attachTo: document.body,
+      props: { data, columns, toolbarConfig: columnConfig() },
+    })
+    await wrapper.get('.s-table__column-manager button').trigger('click')
+    await vi.waitFor(() =>
+      expect(document.querySelector('.s-table__column-panel')).not.toBeNull(),
+    )
+    const source = document.querySelector<HTMLButtonElement>(
+      '.s-table__column-panel [data-column-key="description"] .s-table__column-drag-handle',
+    )!
+    const target = document.querySelector<HTMLElement>(
+      '.s-table__column-panel [data-column-key="name"]',
+    )!
+    Object.defineProperty(document, 'elementFromPoint', {
+      configurable: true,
+      value: vi.fn(() => target),
+    })
+    source.dispatchEvent(pointer('pointerdown', 100))
+    document.dispatchEvent(pointer('pointermove', 10))
+    document.dispatchEvent(pointer('pointerup', 10))
+    await nextTick()
+    expect(titles(wrapper)).toEqual(['ID', '', 'Description', 'Name', 'Status'])
+    expect(wrapper.emitted('update:columnState')?.[0]?.[0]).toEqual([
+      { key: 'description', order: 2 },
+      { key: 'name', order: 3 },
+    ])
+    wrapper.unmount()
+  })
+
+  it('renders grouped columns as a tree and reparents nodes without allowing cycles', async () => {
+    const groupedColumns = [
+      {
+        key: 'profile',
+        title: 'Profile',
+        children: [
+          { field: 'name', title: 'Name' },
+          {
+            key: 'details',
+            title: 'Details',
+            children: [
+              { field: 'description', title: 'Description' },
+              { field: 'status', title: 'Status' },
+            ],
+          },
+        ],
+      },
+    ]
+    const wrapper = mount(Table, {
+      attachTo: document.body,
+      props: { data, columns: groupedColumns, toolbarConfig: columnConfig() },
+    })
+    const manager = wrapper.getComponent(ColumnManager).props('manager')
+    expect(manager.settingCount.value).toBe(5)
+    await wrapper.get('.s-table__column-manager button').trigger('click')
+    expect(
+      Array.from(document.querySelectorAll('.s-table__column-group-label')).map(
+        (element) => element.textContent,
+      ),
+    ).toEqual(['Profile2 columns', 'Details2 columns'])
+    const groupLabels = Array.from(
+      document.querySelectorAll('.s-table__column-group-label'),
+    )
+    const profileBranch = groupLabels[0].closest(
+      '.s-table__column-setting-branch.is-group',
+    )!
+    const detailsBranch = groupLabels[1].closest(
+      '.s-table__column-setting-branch.is-group',
+    )!
+    expect(profileBranch.contains(detailsBranch)).toBe(true)
+    expect(
+      profileBranch.querySelector('[data-column-key="name"]'),
+    ).not.toBeNull()
+    expect(
+      detailsBranch.querySelector('[data-column-key="description"]'),
+    ).not.toBeNull()
+    expect(
+      detailsBranch.querySelector('[data-column-key="status"]'),
+    ).not.toBeNull()
+    expect(document.querySelector('.s-table__column-group-toggle')).toBeNull()
+
+    const source = document.querySelector<HTMLButtonElement>(
+      '.s-table__column-panel [data-column-key="name"] .s-table__column-drag-handle',
+    )!
+    const target = document.querySelector<HTMLElement>(
+      '.s-table__column-panel [data-column-key="details"]',
+    )!
+    Object.defineProperty(document, 'elementFromPoint', {
+      configurable: true,
+      value: vi.fn(() => target),
+    })
+    source.dispatchEvent(pointer('pointerdown', 100))
+    document.dispatchEvent(pointer('pointermove', 24))
+    document.dispatchEvent(pointer('pointerup', 24))
+    await nextTick()
+    expect(wrapper.emitted('update:columnState')?.[0]?.[0]).toEqual([
+      {
+        key: 'name',
+        placement: { parentKey: 'details', index: 2 },
+      },
+    ])
+    expect(
+      document
+        .querySelectorAll('.s-table__column-group-label')[1]
+        .closest('.s-table__column-setting-branch')
+        ?.querySelector('[data-column-key="name"]'),
+    ).not.toBeNull()
+    expect(
+      manager.moveSetting(
+        'profile',
+        manager.settingIndexForKey('details'),
+        'inside',
+      ),
+    ).toBe(false)
+    expect(wrapper.emitted('update:columnState')).toHaveLength(1)
+    wrapper.unmount()
+  })
+
+  it('virtualizes grouped root branches without flattening their containers', async () => {
+    const groupedColumns = Array.from({ length: 24 }, (_, index) => ({
+      key: `group-${index}`,
+      title: `Group ${index}`,
+      children: [{ field: `field-${index}`, title: `Field ${index}` }],
+    }))
+    const wrapper = mount(Table, {
+      attachTo: document.body,
+      props: { data, columns: groupedColumns, toolbarConfig: columnConfig() },
+    })
+    await wrapper.get('.s-table__column-manager button').trigger('click')
+    await flushPromises()
+    expect(
+      document.querySelector('.s-table__column-panel .s-vl'),
+    ).not.toBeNull()
+    expect(
+      document.querySelector(
+        '.s-table__column-panel .s-table__column-setting-branch.is-group',
+      ),
+    ).not.toBeNull()
+    expect(document.querySelector('.s-table__column-group-toggle')).toBeNull()
+    wrapper.unmount()
+  })
+
   it('is opt-in, preserves hidden selection/query columns and restores declarative defaults', async () => {
     const wrapper = mount(Table, {
       props: { data, sortBy: [{ field: 'name', order: 'asc' }] },
       slots: { default: () => columns.map((column) => h(TableColumn, column)) },
     })
     expect(wrapper.findComponent(ColumnManager).exists()).toBe(false)
-    await wrapper.setProps({ columnManagerConfig: true })
+    await wrapper.setProps({ toolbarConfig: columnConfig() })
     const manager = wrapper.getComponent(ColumnManager).props('manager')
     manager.update('check', { hidden: true })
     manager.update('name', { hidden: true })
@@ -144,7 +393,12 @@ describe('column management', () => {
 
   it('waits for controlled acceptance, respects loading and supports all columns hidden', async () => {
     const wrapper = mount(Table, {
-      props: { data, columns, columnManagerConfig: true, columnState: [] },
+      props: {
+        data,
+        columns,
+        toolbarConfig: columnConfig(),
+        columnState: [],
+      },
     })
     const manager = wrapper.getComponent(ColumnManager).props('manager')
     manager.update('name', { hidden: true })
@@ -180,7 +434,7 @@ describe('column management', () => {
       JSON.stringify({ version: 1, columns: [{ key: 'name', hidden: true }] }),
     )
     const wrapper = mount(Table, {
-      props: { data, columns, columnManagerConfig: { storageKey } },
+      props: { data, columns, toolbarConfig: columnConfig(storageKey) },
     })
     await nextTick()
     expect(titles(wrapper)).not.toContain('Name')
@@ -191,7 +445,7 @@ describe('column management', () => {
       JSON.parse(localStorage.getItem(storageKey)!).columns,
     ).toContainEqual({ key: 'status', fixed: 'left' })
     await wrapper.setProps({
-      columnManagerConfig: { storageKey: 'another-table' },
+      toolbarConfig: columnConfig('another-table'),
     })
     expect(titles(wrapper)).toContain('Name')
     const storage = Object.getPrototypeOf(localStorage)
@@ -207,7 +461,7 @@ describe('column management', () => {
     vi.spyOn(storage, 'getItem').mockImplementation(() => {
       throw new Error('denied')
     })
-    await wrapper.setProps({ columnManagerConfig: { storageKey: 'blocked' } })
+    await wrapper.setProps({ toolbarConfig: columnConfig('blocked') })
     expect(wrapper.emitted('columnStorageError')?.at(-1)?.[0]).toMatchObject({
       operation: 'read',
     })
@@ -230,7 +484,7 @@ describe('column management', () => {
       const storageKey = 'invalid-column-state'
       localStorage.setItem(storageKey, stored)
       const wrapper = mount(Table, {
-        props: { data, columns, columnManagerConfig: { storageKey } },
+        props: { data, columns, toolbarConfig: columnConfig(storageKey) },
       })
       try {
         await nextTick()
@@ -259,7 +513,7 @@ describe('column management', () => {
       props: {
         data,
         columns,
-        columnManagerConfig: true,
+        toolbarConfig: columnConfig(),
         resizeConfig: true,
         treeConfig: { expandAll: true },
         pagerConfig: { pageSize: 5 },
@@ -288,6 +542,9 @@ describe('column management', () => {
       expect(row.findAll('[role="cell"]')[0].attributes('style')).toContain(
         'width: 230px',
       )
+    manager.reset()
+    await nextTick()
+    expect(wrapper.emitted('update:columnWidths')?.at(-1)?.[0]).toEqual({})
     wrapper.unmount()
   })
 
@@ -301,7 +558,7 @@ describe('column management', () => {
     const count = 16_777_216
     const wrapper = mount(Table, {
       props: {
-        columnManagerConfig: true,
+        toolbarConfig: columnConfig(),
         resizeConfig: true,
         columnWidths: { '8000000': 180 },
         virtualSource: {

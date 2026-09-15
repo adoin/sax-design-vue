@@ -13,7 +13,8 @@
     position: absolute;
     inset: 0;
     background: hsl(0deg 0% 0% / 0.4);
-    transition: opacity 0.25s ease;
+    transition: opacity var(--sax-motion-duration)
+      var(--sax-motion-easing-smooth-out);
   }
 
   @include e(dialog) {
@@ -26,8 +27,8 @@
     border-radius: var(--sax-radius-sm);
     box-shadow: 0 5px 20px hsl(0deg 0% 0% / 0.1);
     overflow: hidden;
-    animation: vs-prompt-rebound-in 0.3s ease;
-    transition: transform 0.2s ease;
+    transition: transform var(--sax-motion-duration)
+      var(--sax-motion-easing-smooth-out);
   }
 
   @include when(locked) {
@@ -107,16 +108,33 @@
   }
 }
 
-.dialog-t-enter-active,
-.dialog-t-leave-active {
-  transition: opacity 0.2s ease;
+.dialog-t-enter-active {
+  transition: opacity var(--sax-motion-duration)
+    var(--sax-motion-easing-smooth-out);
 
   .s-prompt__dialog {
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    transition:
+      transform var(--sax-motion-duration) var(--sax-motion-easing-smooth-out),
+      opacity var(--sax-motion-duration) var(--sax-motion-easing-smooth-out);
   }
 
   .s-prompt__content {
-    transition: opacity 0.23s ease 0.1s;
+    transition: opacity var(--sax-motion-duration)
+      var(--sax-motion-easing-standard) var(--sax-motion-duration-micro);
+  }
+}
+
+.dialog-t-leave-active {
+  transition: opacity var(--sax-motion-duration-quick)
+    var(--sax-motion-easing-smooth-out);
+
+  .s-prompt__dialog,
+  .s-prompt__content {
+    transition:
+      transform var(--sax-motion-duration-quick)
+        var(--sax-motion-easing-smooth-out),
+      opacity var(--sax-motion-duration-quick)
+        var(--sax-motion-easing-smooth-out);
   }
 }
 
@@ -125,42 +143,11 @@
   opacity: 0;
 
   .s-prompt__dialog {
-    transform: scale(0.9);
+    transform: scale(var(--sax-motion-scale-large));
     opacity: 0;
   }
 
   .s-prompt__content {
     opacity: 0;
-  }
-}
-
-@keyframes vs-prompt-rebound-in {
-  0% {
-    transform: scale(0.9);
-  }
-  50% {
-    transform: scale(1.08);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes vs-prompt-rebound {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  20% {
-    transform: translateX(-6px);
-  }
-  40% {
-    transform: translateX(6px);
-  }
-  60% {
-    transform: translateX(-4px);
-  }
-  80% {
-    transform: translateX(4px);
   }
 }

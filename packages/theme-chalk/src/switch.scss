@@ -2,40 +2,9 @@
 @use 'mixins/var' as *;
 @use 'common/var' as *;
 
-@keyframes vs-rotate-switch {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes vs-step-switch-square {
-  0%,
-  100% {
-    border-color: var(--sax-switch-loader-dim);
-    border-top-color: var(--sax-switch-loader-strong);
-  }
-
-  25% {
-    border-color: var(--sax-switch-loader-dim);
-    border-right-color: var(--sax-switch-loader-strong);
-  }
-
-  50% {
-    border-color: var(--sax-switch-loader-dim);
-    border-bottom-color: var(--sax-switch-loader-strong);
-  }
-
-  75% {
-    border-color: var(--sax-switch-loader-dim);
-    border-left-color: var(--sax-switch-loader-strong);
-  }
-}
-
 @include b(switch) {
   --sax-switch-accent: #{getColor('color')};
   --sax-switch-shadow: 0 8px 20px hsl(226deg 100% 55% / 0.18);
-  --sax-switch-loader-dim: hsl(0deg 0% 100% / 0.36);
-  --sax-switch-loader-strong: #{getColor(background)};
 
   position: relative;
   display: inline-flex;
@@ -244,30 +213,9 @@
       background: transparent;
       box-shadow: none;
 
-      &::before {
-        position: absolute;
-        inset: 0;
-        box-sizing: border-box;
-        border: 3px solid var(--sax-switch-loader-dim);
-        border-top-color: var(--sax-switch-loader-strong);
-        border-radius: inherit;
-        animation: vs-rotate-switch 720ms linear infinite;
-        content: '';
-      }
-    }
-  }
-
-  &.is-soft.is-loading {
-    --sax-switch-loader-dim: hsl(226deg 100% 55% / 0.24);
-    --sax-switch-loader-strong: var(--sax-switch-accent);
-  }
-
-  &.is-square.is-loading {
-    @include e(circle) {
-      &::before {
-        animation-name: vs-step-switch-square;
-        animation-duration: 800ms;
-        animation-timing-function: steps(1, end);
+      .#{$namespace}-logo-loading {
+        width: 18px;
+        height: 18px;
       }
     }
   }
@@ -285,10 +233,5 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-
-  .s-switch__circle::before {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
   }
 }

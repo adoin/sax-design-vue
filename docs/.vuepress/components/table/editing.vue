@@ -37,12 +37,20 @@ const rows = ref([
   },
 ])
 const columns: TableColumn[] = [
-  { field: 'name', title: 'Project', width: 190, fixed: 'left', editor: true },
+  {
+    field: 'name',
+    title: 'Project',
+    width: 190,
+    fixed: 'left',
+    editor: true,
+    renderer: { name: '$input' },
+  },
   {
     field: 'quantity',
     title: 'Quantity',
     width: 130,
-    editor: { type: 'number', props: { min: 0 } },
+    editor: true,
+    renderer: { name: '$input', props: { type: 'number', min: 0 } },
   },
   {
     field: 'status',
@@ -55,8 +63,9 @@ const columns: TableColumn[] = [
       )[String(value)] ?? String(value),
     title: 'Status',
     width: 150,
-    editor: {
-      type: 'select',
+    editor: true,
+    renderer: {
+      name: '$select',
       options: [
         { label: 'Open', value: 'open' },
         { label: 'Done', value: 'done' },
@@ -67,15 +76,17 @@ const columns: TableColumn[] = [
     field: 'due',
     title: 'Due date',
     width: 200,
-    editor: { type: 'date', props: { valueFormat: 'YYYY-MM-DD' } },
+    editor: true,
+    renderer: { name: '$date', props: { valueFormat: 'YYYY-MM-DD' } },
   },
   {
     field: 'active',
     cell: ({ value }) => (value ? 'On' : 'Off'),
     title: 'Active',
     width: 110,
-    editor: {
-      type: 'switch',
+    editor: true,
+    renderer: {
+      name: '$switch',
       props: { activeText: 'On', inactiveText: 'Off' },
     },
   },
@@ -114,7 +125,7 @@ const cancel = () => {
       :columns="columns"
       :edit-config="{
         mode: rowMode ? 'row' : 'cell',
-        checkMethod: ({ row }) => row.status !== 'archived',
+        editableMethod: ({ row }) => row.status !== 'archived',
       }"
       row-key="id"
       resize-config

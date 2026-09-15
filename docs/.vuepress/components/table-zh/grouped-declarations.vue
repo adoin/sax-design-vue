@@ -6,7 +6,12 @@ const rows = [
 </script>
 
 <template>
-  <s-table :data="rows" row-key="id" column-manager-config resize-config>
+  <s-table
+    :data="rows"
+    row-key="id"
+    :toolbar-config="{ right: [{ itemRender: '$columnConfig' }] }"
+    resize-config
+  >
     <s-table-column field="id" title="编号" :width="72" />
     <s-table-column title="成员">
       <template #columns>

@@ -51,7 +51,55 @@ describe('Table streaming aggregates', () => {
     ).toBe(1)
   })
 
-  it('returns null for numeric overflow rather than publishing NaN', () => {
+  it('preserves exact decimal strings for footer summaries', () => {
+    const result = aggregateTableRows(
+      [{ amount: '0.1' }, { amount: '0.2' }],
+      [
+        { key: 'sum', field: 'amount', method: 'sum' },
+        { key: 'average', field: 'amount', method: 'average' },
+        { key: 'min', field: 'amount', method: 'min' },
+        { key: 'max', field: 'amount', method: 'max' },
+      ],
+      { decimalStrings: true, resultType: 'string' },
+    )
+
+    expect(result).toEqual({
+      sum: '0.3',
+      average: '0.15',
+      min: '0.1',
+      max: '0.2',
+    })
+  })
+
+  it('passes an ordered cell array to convenient custom aggregate functions', () => {
+    const rows = [
+      { amount: 3, weight: 2 },
+      { amount: 4, weight: 5 },
+    ]
+    const method = vi.fn(
+      (
+        cells: readonly {
+          value: unknown
+          row: (typeof rows)[number]
+          rowIndex: number
+        }[],
+      ) =>
+        cells
+          .map(
+            ({ value, row, rowIndex }) =>
+              `${rowIndex}:${Number(value) * row.weight}`,
+          )
+          .join(','),
+    )
+
+    expect(
+      aggregateTableRows(rows, [{ key: 'weighted', field: 'amount', method }]),
+    ).toEqual({ weighted: '0:6,1:20' })
+    expect(method).toHaveBeenCalledTimes(1)
+    expect(method.mock.calls[0][0].map(({ row }) => row)).toEqual(rows)
+  })
+
+  it('converts each exact result independently when a number would overflow', () => {
     const result = aggregateTableRows(
       [Number.MAX_VALUE, Number.MAX_VALUE].map((amount) => ({
         metrics: { amount },
@@ -59,7 +107,7 @@ describe('Table streaming aggregates', () => {
       definitions,
     )
     expect(result.sum).toBeNull()
-    expect(result.average).toBeNull()
+    expect(result.average).toBe(Number.MAX_VALUE)
     expect(result.max).toBe(Number.MAX_VALUE)
   })
 

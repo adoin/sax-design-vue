@@ -73,14 +73,19 @@ export function useTableValidationApi(
       }
     }
   }
-  const validate = (selected: TableValidateOptions = {}) =>
+  const runValidation = (selected: TableValidateOptions = {}) =>
     validation.run(cells(selected), {
       ...selected,
       clear: !selected.rows && !selected.columns,
       maxErrors: selected.maxErrors ?? config.value.maxErrors,
+      concurrency: selected.concurrency ?? config.value.concurrency,
       scrollToError:
         selected.scrollToError ?? config.value.scrollToError ?? true,
     })
+  const validate = (selected: TableValidateOptions = {}) => {
+    if (editing.record()) editing.cancel()
+    return runValidation(selected)
+  }
   const validateRow = (
     row: TableRow | number,
     selected: TableValidateOptions = {},
@@ -94,7 +99,7 @@ export function useTableValidationApi(
     record: TableEditRecord,
   ): boolean | Promise<boolean> => {
     if (!props.validationConfig || config.value.onCommit === false) return true
-    return validate({
+    return runValidation({
       rows: [props.virtualSource ? record.rowIndex : record.row],
       columns:
         record.mode === 'cell'

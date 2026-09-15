@@ -6,7 +6,7 @@ PROPS:
     values: 'rounded | square'
     description: 为时间输入和时间面板统一设置圆角或方形外观。
     default: rounded
-    usage: '#外形'
+    usage: '#shape'
   - name: color
     type: String
     values: 'Sax Design 主题色 / RGB / HEX / HSL'
@@ -22,13 +22,13 @@ PROPS:
     values: 'true | false'
     description: 让标签作为占位内容，并在聚焦或存在值时上浮。
     default: false
-    usage: '#标签'
+    usage: '#label'
   - name: label
     type: String
     values: 标签文字
     description: 设置常驻标签或上浮标签的文字。
     default: null
-    usage: '#标签'
+    usage: '#label'
   - name: clearable
     type: Boolean
     values: 'true | false'

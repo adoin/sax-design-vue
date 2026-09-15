@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { h, nextTick, shallowRef } from 'vue'
+import { nextTick, shallowRef } from 'vue'
 import type {
   TableColumn,
   TableInstance,
-  TableRenderer,
   TableVirtualConfig,
   TableVirtualSource,
 } from 'sax-design-vue'
@@ -24,13 +23,23 @@ interface PersonRow {
 
 const columns: TableColumn<PersonRow>[] = [
   { field: 'id', title: '编号', width: 76, align: 'right', fixed: 'left' },
-  { field: 'name', title: '成员', minWidth: 220 },
+  {
+    field: 'name',
+    title: '成员',
+    minWidth: 220,
+    slots: { default: 'personNameCell' },
+  },
   { field: 'department', title: '部门', minWidth: 160 },
   { field: 'project', title: '项目', minWidth: 220 },
   { field: 'location', title: '地点', minWidth: 160 },
   { field: 'status', title: '状态', minWidth: 140 },
   { field: 'email', title: '邮箱', minWidth: 260 },
-  { field: 'score', title: '评分', width: 110, renderer: 'score' },
+  {
+    field: 'score',
+    title: '评分',
+    width: 110,
+    slots: { default: 'score' },
+  },
   {
     field: 'updatedAt',
     title: '更新时间',
@@ -64,17 +73,6 @@ const rows: PersonRow[] = Array.from({ length: 10_000 }, (_, index) => ({
       : undefined,
 }))
 
-const renderers: Record<string, TableRenderer<PersonRow>> = {
-  score: {
-    cell: ({ value }) =>
-      h(
-        'strong',
-        { class: Number(value) >= 90 ? 'score-high' : 'score-normal' },
-        String(value),
-      ),
-  },
-}
-
 interface MatrixRow {
   id: number
   [key: string]: unknown
@@ -99,7 +97,7 @@ const virtualSource: TableVirtualSource<MatrixRow> = {
     title: index === 0 ? '行号' : `第 ${index + 1} 列`,
     width: 120,
     fixed: index < 2 ? 'left' : index === COLUMN_COUNT - 1 ? 'right' : false,
-    renderer: 'matrix',
+    slots: { default: 'matrix' },
   }),
 }
 
@@ -112,30 +110,16 @@ const stressVirtualConfig: TableVirtualConfig = {
   columnOverscan: 3,
 }
 
-const stressRenderers: Record<string, TableRenderer<MatrixRow>> = {
-  matrix: {
-    cell: ({ rowIndex, columnIndex }) => {
-      const isLongCell =
-        columnIndex > 1 &&
-        columnIndex < COLUMN_COUNT - 1 &&
-        (rowIndex + columnIndex) % 11 === 0
-      return h(
-        'span',
-        {
-          class: [
-            columnIndex === 0 && 'row-anchor',
-            isLongCell && 'matrix-cell--long',
-          ],
-        },
-        columnIndex === 0
-          ? `第 ${rowIndex + 1} 行`
-          : isLongCell
-            ? `第 ${rowIndex + 1} 行 · 第 ${columnIndex + 1} 列：横向滚动后重新测量并缓存这条多行内容。`
-            : `行 ${rowIndex + 1} · 列 ${columnIndex + 1}`,
-      )
-    },
-  },
-}
+const isLongMatrixCell = (rowIndex: number, columnIndex: number) =>
+  columnIndex > 1 &&
+  columnIndex < COLUMN_COUNT - 1 &&
+  (rowIndex + columnIndex) % 11 === 0
+const matrixText = (rowIndex: number, columnIndex: number) =>
+  columnIndex === 0
+    ? `第 ${rowIndex + 1} 行`
+    : isLongMatrixCell(rowIndex, columnIndex)
+      ? `第 ${rowIndex + 1} 行 · 第 ${columnIndex + 1} 列：横向滚动后重新测量并缓存这条多行内容。`
+      : `行 ${rowIndex + 1} · 列 ${columnIndex + 1}`
 
 const jumpToMiddle = () => {
   stressTableRef.value?.scrollToRow(Math.floor(ROW_COUNT / 2), 'center')
@@ -176,39 +160,43 @@ const stop = () => {
       :data="rows"
       :columns="columns"
       :virtual-config="virtualConfig"
-      :renderers="renderers"
       row-key="id"
       striped
     >
-      <template #cell-name="{ row, value }">
+      <template #personNameCell="{ row, value }">
         <div class="person-cell">
           <strong>{{ value }}</strong>
           <span v-if="row.note">{{ row.note }}</span>
         </div>
       </template>
+      <template #score="{ value }">
+        <strong :class="Number(value) >= 90 ? 'score-high' : 'score-normal'">
+          {{ value }}
+        </strong>
+      </template>
     </s-table>
 
     <div class="stress-demo">
       <div class="stress-toolbar">
-        <span>巨量数据</span>
+        <span>巨量逻辑数据</span>
         <div class="stress-actions">
           <template v-if="started">
             <s-button size="small" @click="reset">回到起点</s-button>
             <s-button size="small" @click="jumpToMiddle">跳到中部</s-button>
             <s-button size="small" @click="jumpToEnd">跳到末尾</s-button>
-            <s-button size="small" @click="stop">收起数据</s-button>
+            <s-button size="small" @click="stop">关闭演示</s-button>
           </template>
         </div>
       </div>
       <div v-if="!started" class="stress-gate">
-        <span>加载数据后，可通过滚动或跳转查看不同行列。</span>
+        <span>启动后只为当前可见窗口按索引创建行列对象。</span>
         <s-button
           size="small"
           :loading="starting"
           :disabled="starting"
           @click="start"
         >
-          {{ starting ? '正在加载…' : '加载数据' }}
+          {{ starting ? '正在启动…' : '启动演示' }}
         </s-button>
       </div>
       <s-table
@@ -216,10 +204,20 @@ const stop = () => {
         ref="stressTableRef"
         :virtual-source="virtualSource"
         :virtual-config="stressVirtualConfig"
-        :renderers="stressRenderers"
         row-key="id"
         striped
-      />
+      >
+        <template #matrix="{ rowIndex, columnIndex }">
+          <span
+            :class="[
+              columnIndex === 0 && 'row-anchor',
+              isLongMatrixCell(rowIndex, columnIndex) && 'matrix-cell--long',
+            ]"
+          >
+            {{ matrixText(rowIndex, columnIndex) }}
+          </span>
+        </template>
+      </s-table>
     </div>
   </div>
 </template>

@@ -3,6 +3,7 @@ import { computed, ref, shallowRef } from 'vue'
 import type {
   TableColumn,
   TableColumnState,
+  TableColumnWidths,
   TableInstance,
   TableRow,
   TableVirtualSource,
@@ -10,6 +11,7 @@ import type {
 
 const table = ref<TableInstance>()
 const state = ref<TableColumnState[]>([])
+const widths = ref<TableColumnWidths>({})
 const virtual = shallowRef(true)
 const large = shallowRef(false)
 const loading = shallowRef(false)
@@ -72,38 +74,44 @@ const jump = () => {
     'end',
   )
 }
+const resetColumns = () => {
+  state.value = []
+  widths.value = {}
+}
 </script>
 
 <template>
   <div class="column-manager-demo">
-    <div class="column-manager-controls">
-      <s-button size="small" :disabled="loading" @click="state = []"
-        >Reset columns</s-button
-      >
-      <s-checkbox v-model="virtual" :disabled="large"
-        >Two-axis virtualization</s-checkbox
-      >
-      <s-checkbox v-model="large" @update:model-value="state = []"
-        >One million generated rows</s-checkbox
-      >
-      <s-checkbox v-model="loading">Loading state</s-checkbox>
-      <s-button size="small" type="flat" @click="jump"
-        >Go to last column</s-button
-      >
-    </div>
     <s-table
       ref="table"
       v-model:column-state="state"
+      v-model:column-widths="widths"
       :data="large ? [] : rows"
       :columns="large ? [] : columns"
       :virtual-source="large ? source : undefined"
       :virtual-config="virtualConfig"
       :tree-config="large ? undefined : { defaultExpandedKeys: [0] }"
       :loading="loading"
-      column-manager-config
+      :toolbar-config="{ right: [{ itemRender: '$columnConfig' }] }"
       resize-config
       striped
-    />
+    >
+      <template #toolbar_left>
+        <s-button size="small" :disabled="loading" @click="resetColumns"
+          >Reset columns</s-button
+        >
+        <s-checkbox v-model="virtual" :disabled="large"
+          >Two-axis virtualization</s-checkbox
+        >
+        <s-checkbox v-model="large" @update:model-value="resetColumns"
+          >One million generated rows</s-checkbox
+        >
+        <s-checkbox v-model="loading">Loading state</s-checkbox>
+        <s-button size="small" type="flat" @click="jump"
+          >Go to last column</s-button
+        >
+      </template>
+    </s-table>
     <s-text role="status" aria-live="polite"
       >Customized columns: {{ state.length }}</s-text
     >
@@ -116,11 +124,5 @@ const jump = () => {
   width: 100%;
   min-width: 0;
   gap: 16px;
-}
-.column-manager-controls {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
 }
 </style>

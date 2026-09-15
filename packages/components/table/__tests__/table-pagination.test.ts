@@ -119,7 +119,7 @@ describe('Table built-in pagination', () => {
         pagerConfig: { pageSize: 2 },
         selectionConfig: {
           reserve: true,
-          checkMethod: ({ row }: { row: TableRow }) => row.id !== 2,
+          selectableMethod: ({ row }: { row: TableRow }) => row.id !== 2,
         },
       },
     })

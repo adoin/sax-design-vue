@@ -3,38 +3,38 @@ description: '在两个状态之间切换布尔设置。'
 PROPS:
   - name: variant
     type: String
-    values: "classic | soft | text"
+    values: 'classic | soft | text'
     description: 选择结构不同的无边框开关风格。
     default: classic
   - name: active-text
     type: String
-    values: "String"
+    values: 'String'
     description: 文本风格在开、关状态显示的文字。
     default: ON
   - name: inactive-text
     type: String
-    values: "String"
+    values: 'String'
     description: 文本风格在开、关状态显示的文字。
     default: OFF
   - name: active-value
     type: String | Number | Boolean
-    values: "自定义绑定值"
+    values: '自定义绑定值'
     description: 激活状态对应的绑定值。
     default: 'true'
   - name: inactive-value
     type: String | Number | Boolean
-    values: "自定义绑定值"
+    values: '自定义绑定值'
     description: 未激活状态对应的绑定值。
     default: 'false'
   - name: shape
     type: String
-    values: "rounded | square"
+    values: 'rounded | square'
     description: 为轨道和滑块选择圆角或方形外观。
     default: 'rounded'
-    usage: '#外形'
+    usage: '#shape'
   - name: v-model
     type: Boolean | String | Number
-    values: "与 active-value、inactive-value 匹配的值"
+    values: '与 active-value、inactive-value 匹配的值'
     description: 设置当前开关值；不匹配开、关值时可表达为不确定状态。
     default: false
     link: null
@@ -48,7 +48,7 @@ PROPS:
 
   - name: color
     type: String
-    values: "Theme colors, RGB y HEX"
+    values: 'Theme colors, RGB y HEX'
     description: 设置组件激活状态时的颜色。
     default: primary
     link: null
@@ -57,8 +57,8 @@ PROPS:
 
   - name: loading
     type: Boolean
-    values: "true, false"
-    description: 将滑块替换为同尺寸的加载指示器，并跟随设置的外观形状。
+    values: 'true, false'
+    description: 将滑块替换为共用的 Sax 标志加载指示器。
     default: false
     link: null
     usage: '#loading'
@@ -79,7 +79,7 @@ PROPS:
 
   - name: indeterminate
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: 当绑定值既不等于 active-value 也不等于 inactive-value 时，将滑块置于中间；选择后进入正常的确定状态。
     default: false
     link: null
@@ -91,7 +91,7 @@ PROPS:
 
   - name: notValue
     type: String
-    values: "String"
+    values: 'String'
     description: 设置组件未激活时返回的值。
     default: null
     link: null
@@ -111,7 +111,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: slot
-    values: "null"
+    values: 'null'
     description: 在组件内添加文本。
     default: null
     link: null
@@ -140,7 +140,7 @@ SLOTS:
       </template>
   - name: on
     type: slot
-    values: "null"
+    values: 'null'
     description: 在激活状态下添加文本。
     default: null
     link: null
@@ -156,7 +156,7 @@ SLOTS:
       </s-switch>
   - name: off
     type: slot
-    values: "null"
+    values: 'null'
     description: 在未激活状态下添加文本。
     default: null
     link: null
@@ -172,7 +172,7 @@ SLOTS:
       </s-switch>
   - name: circle
     type: slot
-    values: "null"
+    values: 'null'
     description: 在组件圆形滑块内添加图标。
     default: null
     link: null
@@ -374,7 +374,7 @@ SLOTS:
 
 ## 加载
 
-设置 `loading` 后，移动滑块本体会替换为同尺寸的加载环，并停留在当前状态对应的位置。使用 `shape="square"` 时，方形轮廓保持不动，由高亮边沿四边推进，避免整个方块旋转。
+设置 `loading` 后，移动滑块本体会替换为共用的 Sax 标志加载器，并在圆角和方形开关中都停留于当前状态对应的位置。
 
 <template #example>
 <switch-loading />

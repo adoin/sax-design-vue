@@ -6,7 +6,7 @@ PROPS:
     values: "rounded | square"
     description: 为触发器、标签和弹层统一设置圆角或方形外观。
     default: rounded
-    usage: '#外形'
+    usage: '#shape'
   - name: v-model
     type: CascaderPathValue | CascaderPathValue[]
     values: "单选值路径或多选值路径数组"
@@ -32,61 +32,61 @@ PROPS:
     values: "true | false"
     description: 开启父子关联多选，并控制全选子节点后回填父节点还是叶子节点。
     default: false
-    usage: '#多选与回填策略'
+    usage: '#multiple-and-display-strategy'
   - name: show-checked-strategy
     type: SHOW_PARENT | SHOW_CHILD
     values: "SHOW_PARENT | SHOW_CHILD"
     description: 开启父子关联多选，并控制全选子节点后回填父节点还是叶子节点。
     default: SHOW_PARENT
-    usage: '#多选与回填策略'
+    usage: '#multiple-and-display-strategy'
   - name: max-tag-count
     type: Number | responsive
     values: "number | responsive"
     description: 控制多选标签数量；默认根据可用宽度自动折叠为 +N。
     default: responsive
-    usage: '#多选与回填策略'
+    usage: '#multiple-and-display-strategy'
   - name: max-tag-placeholder
     type: Function
     values: "number | responsive"
     description: 控制多选标签数量；默认根据可用宽度自动折叠为 +N。
     default: null
-    usage: '#多选与回填策略'
+    usage: '#multiple-and-display-strategy'
   - name: show-search
     type: Boolean | Object
     values: "filter | sort | limit | matchInputWidth"
     description: 开启路径搜索和高亮，并可自定义匹配、排序、数量限制及受控搜索值。
     default: false
-    usage: '#搜索与字段映射'
+    usage: '#search-and-field-mapping'
   - name: search-value
     type: String
     values: "filter | sort | limit | matchInputWidth"
     description: 开启路径搜索和高亮，并可自定义匹配、排序、数量限制及受控搜索值。
     default: null
-    usage: '#搜索与字段映射'
+    usage: '#search-and-field-mapping'
   - name: change-on-select
     type: Boolean
     values: "true | false"
     description: 单选时允许选择中间层级；check-strictly 是兼容旧属性。
     default: false
-    usage: '#基础选择'
+    usage: '#basic-selection'
   - name: check-strictly
     type: Boolean
     values: "true | false"
     description: 单选时允许选择中间层级；check-strictly 是兼容旧属性。
     default: false
-    usage: '#基础选择'
+    usage: '#basic-selection'
   - name: expand-trigger
     type: click | hover
     values: "click | hover"
     description: 配置层级展开方式，或根据 selectedOptions 异步加载子节点。load-data 与 show-search 不同时启用。
     default: click
-    usage: '#悬停展开与懒加载'
+    usage: '#hover-expansion-and-lazy-loading'
   - name: load-data
     type: Function
     values: "click | hover"
     description: 配置层级展开方式，或根据 selectedOptions 异步加载子节点。load-data 与 show-search 不同时启用。
     default: null
-    usage: '#悬停展开与懒加载'
+    usage: '#hover-expansion-and-lazy-loading'
   - name: allow-clear
     type: Boolean
     values: "true | false"
@@ -157,19 +157,19 @@ PROPS:
     values: "full | width | minWidth | maxWidth | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style"
     description: 配置弹层宽度、限制、挂载目标、偏移、层级和自定义样式。
     default: '{}'
-    usage: '#弹层与内容定制'
+    usage: '#popup-and-content-customization'
   - name: popup-class-name
     type: String
     values: "full | width | minWidth | maxWidth | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style"
     description: 配置弹层宽度、限制、挂载目标、偏移、层级和自定义样式。
     default: null
-    usage: '#弹层与内容定制'
+    usage: '#popup-and-content-customization'
   - name: dropdown-style
     type: CSSProperties
     values: "full | width | minWidth | maxWidth | maxHeight | placement | transfer | appendTo | offset | zIndex | className | style"
     description: 配置弹层宽度、限制、挂载目标、偏移、层级和自定义样式。
     default: '{}'
-    usage: '#弹层与内容定制'
+    usage: '#popup-and-content-customization'
 EVENTS:
   - name: change
     description: 选择变化时触发，参数为 value 与 selectedOptions。

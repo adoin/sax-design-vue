@@ -6,8 +6,8 @@ import { projectTableDataPatches } from '../change-utils'
 import type { TableDataIndex } from '../change-data'
 import type { TableHistoryTarget } from '../history-data'
 import type {
+  TableCoreEmitFn,
   TableCoreProps,
-  TableEmitFn,
   TableRow,
   TableRowKey,
 } from '../table'
@@ -43,7 +43,7 @@ interface HistoryOptions {
 /** Coordinate accepted history with the existing ownership and data-planning pipeline. */
 export function useTableHistory(
   props: TableCoreProps,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   options: HistoryOptions,
 ) {
   const config = computed(() =>

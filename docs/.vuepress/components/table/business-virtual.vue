@@ -45,7 +45,7 @@ const first = () => {
     :virtual-config="{ height: 280, horizontal: true, dynamic: true }"
     resize-config
   >
-    <template #toolbar
+    <template #toolbar_left
       ><s-button @click="last">Last record and column</s-button
       ><s-button flat @click="first">Back to start</s-button></template
     >

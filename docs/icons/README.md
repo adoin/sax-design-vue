@@ -2,6 +2,8 @@
 
 `SIcon` renders Iconify SVG data. No icon font, global CSS, or runtime Iconify API request is required. The Vite plugin extracts only the icons used by the application.
 
+Sax components ship a small built-in Carbon fallback for their own default controls, so pagination arrows, close buttons, picker affordances, table actions, and similar internal icons remain visible without configuring Carbon. Explicit `iconData` and application-registered icons take precedence over this fallback. IconPicker loads its broader built-in default list only when the picker is used. Icon names chosen by an application still require the corresponding collection or safelist configuration described below.
+
 This integration targets Vite 4, 5, and 8. A Webpack adapter is intentionally not shipped.
 
 ## Find an icon
@@ -137,7 +139,6 @@ Set `rolling` to `true` to use the `--sax-icon-rolling-duration` CSS default of 
   <icons-collection />
 </template>
 </card>
-
 
 | Property  | Type                             | Default        | Description                                         |
 | --------- | -------------------------------- | -------------- | --------------------------------------------------- |

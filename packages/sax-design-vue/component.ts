@@ -28,7 +28,7 @@ import { SDrawer } from '@vuesax-alpha/components/drawer'
 import { SDivider } from '@vuesax-alpha/components/divider'
 import { SEmpty } from '@vuesax-alpha/components/empty'
 import { SForm, SFormGroup, SFormItem } from '@vuesax-alpha/components/form'
-import { SIcon } from '@vuesax-alpha/components/icon'
+import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 import { SImage, SImages } from '@vuesax-alpha/components/images'
 import { SImagePreview } from '@vuesax-alpha/components/image-preview'
 import { SInput } from '@vuesax-alpha/components/input'
@@ -74,7 +74,11 @@ import { SSpacer } from '@vuesax-alpha/components/spacer'
 import { SSplitter, SSplitterItem } from '@vuesax-alpha/components/splitter'
 import { SSteps } from '@vuesax-alpha/components/steps'
 import { SSwitch } from '@vuesax-alpha/components/switch'
-import { STable, STableColumn } from '@vuesax-alpha/components/table'
+import {
+  STable,
+  STableColumn,
+  STableColumnConfig,
+} from '@vuesax-alpha/components/table'
 import { STableSelect } from '@vuesax-alpha/components/table-select'
 import { STab, STabs } from '@vuesax-alpha/components/tabs'
 import { STag, STagGroup } from '@vuesax-alpha/components/tag'
@@ -129,6 +133,7 @@ export default [
   SFormItem,
   SFormGroup,
   SIcon,
+  SLogoLoading,
   SImage,
   SImages,
   SImagePreview,
@@ -177,6 +182,7 @@ export default [
   SSteps,
   STable,
   STableColumn,
+  STableColumnConfig,
   STableSelect,
   STab,
   STabs,

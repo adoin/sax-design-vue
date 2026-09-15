@@ -17,12 +17,6 @@ const rows = ref([
 
 <template>
   <div class="keyboard-demo">
-    <div class="keyboard-demo__controls">
-      <s-button size="small" @click="table?.setActiveCell(0, 0)">首格</s-button>
-      <s-button size="small" flat @click="table?.clearActiveCell()"
-        >清除活动格</s-button
-      >
-    </div>
     <s-table
       ref="table"
       v-model:active-cell="active"
@@ -34,8 +28,16 @@ const rows = ref([
       change-config
       :tree-config="{}"
       :expanded-keys="[1]"
-      column-manager-config
+      :toolbar-config="{ right: [{ itemRender: '$columnConfig' }] }"
     >
+      <template #toolbar_left>
+        <s-button size="small" @click="table?.setActiveCell(0, 0)"
+          >首格</s-button
+        >
+        <s-button size="small" flat @click="table?.clearActiveCell()"
+          >清除活动格</s-button
+        >
+      </template>
       <s-table-column
         field="name"
         title="项目"
@@ -57,12 +59,6 @@ const rows = ref([
 <style scoped>
 .keyboard-demo {
   width: 100%;
-}
-.keyboard-demo__controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
 }
 .keyboard-demo > p {
   margin: 12px 0 0;

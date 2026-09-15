@@ -3,7 +3,7 @@ description: 'Choose exactly one option from a related group.'
 PROPS:
   - name: v-model
     type: String | Number | Boolean
-    values: "selected radio value"
+    values: 'selected radio value'
     description: Bind the selected value for the radio or radio group.
     default: null
     link: null
@@ -11,7 +11,7 @@ PROPS:
     code: null
   - name: model-value
     type: String | Number | Boolean
-    values: "selected radio value"
+    values: 'selected radio value'
     description: Bind the selected value for the radio or radio group.
     default: null
     link: null
@@ -19,7 +19,7 @@ PROPS:
     code: null
   - name: color
     type: String
-    values: "Theme colors, RGB, HEX"
+    values: 'Theme colors, RGB, HEX'
     description: Change the color of the radio.
     default: primary
     link: null
@@ -28,7 +28,7 @@ PROPS:
 
   - name: disabled
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: Disable radio interaction while preserving the selected state.
     default: false
     link: null
@@ -37,7 +37,7 @@ PROPS:
 
   - name: loading
     type: Boolean
-    values: "true,false"
+    values: 'true,false'
     description: Determine if the component has a loading animation and is disabled.
     default: false
     link: null
@@ -46,7 +46,7 @@ PROPS:
 
   - name: icon-animation
     type: String
-    values: "auto, draw, pop, none"
+    values: 'auto, draw, pop, none'
     description: Animate a custom center icon. Stroke SVGs draw their paths and filled icons use a pop reveal.
     default: auto
     link: null
@@ -55,7 +55,7 @@ PROPS:
 
   - name: value
     type: String | Number | Boolean
-    values: "option value"
+    values: 'option value'
     description: Value represented by this radio option.
     default: "''"
     link: null
@@ -81,7 +81,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: slot
-    values: "null"
+    values: 'null'
     description: Add a label to the component.
     default: null
     link: null
@@ -90,7 +90,7 @@ SLOTS:
 
   - name: icon
     type: slot
-    values: "checked"
+    values: 'checked'
     description: Replace the selected center SVG and receive the current checked state.
     default: null
     link: null
@@ -226,7 +226,7 @@ Add a label to the radio with the `default` slot, if you need the label to be be
 
 ## Loading
 
-Loading reuses Button's pulse rail: a glowing segment travels from left to right along the full radio surface. Interaction is disabled until loading finishes.
+Loading replaces the radio control with the shared Sax logo loader while keeping the label in place. Interaction is disabled until loading finishes.
 
 <template #example>
 <radio-loading />

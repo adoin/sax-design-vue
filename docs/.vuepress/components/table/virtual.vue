@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { h, nextTick, shallowRef } from 'vue'
+import { nextTick, shallowRef } from 'vue'
 import type {
   TableColumn,
   TableInstance,
-  TableRenderer,
   TableVirtualConfig,
   TableVirtualSource,
 } from 'sax-design-vue'
@@ -24,13 +23,23 @@ interface PersonRow {
 
 const columns: TableColumn<PersonRow>[] = [
   { field: 'id', title: '#', width: 76, align: 'right', fixed: 'left' },
-  { field: 'name', title: 'Member', minWidth: 220 },
+  {
+    field: 'name',
+    title: 'Member',
+    minWidth: 220,
+    slots: { default: 'personNameCell' },
+  },
   { field: 'department', title: 'Department', minWidth: 160 },
   { field: 'project', title: 'Project', minWidth: 220 },
   { field: 'location', title: 'Location', minWidth: 160 },
   { field: 'status', title: 'Status', minWidth: 140 },
   { field: 'email', title: 'Email', minWidth: 260 },
-  { field: 'score', title: 'Score', width: 110, renderer: 'score' },
+  {
+    field: 'score',
+    title: 'Score',
+    width: 110,
+    slots: { default: 'score' },
+  },
   {
     field: 'updatedAt',
     title: 'Updated',
@@ -64,17 +73,6 @@ const rows: PersonRow[] = Array.from({ length: 10_000 }, (_, index) => ({
       : undefined,
 }))
 
-const renderers: Record<string, TableRenderer<PersonRow>> = {
-  score: {
-    cell: ({ value }) =>
-      h(
-        'strong',
-        { class: Number(value) >= 90 ? 'score-high' : 'score-normal' },
-        String(value),
-      ),
-  },
-}
-
 interface MatrixRow {
   id: number
   [key: string]: unknown
@@ -99,7 +97,7 @@ const virtualSource: TableVirtualSource<MatrixRow> = {
     title: index === 0 ? 'Row' : `C${index + 1}`,
     width: 120,
     fixed: index < 2 ? 'left' : index === COLUMN_COUNT - 1 ? 'right' : false,
-    renderer: 'matrix',
+    slots: { default: 'matrix' },
   }),
 }
 
@@ -112,30 +110,16 @@ const stressVirtualConfig: TableVirtualConfig = {
   columnOverscan: 3,
 }
 
-const stressRenderers: Record<string, TableRenderer<MatrixRow>> = {
-  matrix: {
-    cell: ({ rowIndex, columnIndex }) => {
-      const isLongCell =
-        columnIndex > 1 &&
-        columnIndex < COLUMN_COUNT - 1 &&
-        (rowIndex + columnIndex) % 11 === 0
-      return h(
-        'span',
-        {
-          class: [
-            columnIndex === 0 && 'row-anchor',
-            isLongCell && 'matrix-cell--long',
-          ],
-        },
-        columnIndex === 0
-          ? `R${rowIndex + 1}`
-          : isLongCell
-            ? `Row ${rowIndex + 1} · column ${columnIndex + 1}: remeasure and cache this wrapped content after horizontal scrolling.`
-            : `R${rowIndex + 1} · C${columnIndex + 1}`,
-      )
-    },
-  },
-}
+const isLongMatrixCell = (rowIndex: number, columnIndex: number) =>
+  columnIndex > 1 &&
+  columnIndex < COLUMN_COUNT - 1 &&
+  (rowIndex + columnIndex) % 11 === 0
+const matrixText = (rowIndex: number, columnIndex: number) =>
+  columnIndex === 0
+    ? `R${rowIndex + 1}`
+    : isLongMatrixCell(rowIndex, columnIndex)
+      ? `Row ${rowIndex + 1} · column ${columnIndex + 1}: remeasure and cache this wrapped content after horizontal scrolling.`
+      : `R${rowIndex + 1} · C${columnIndex + 1}`
 
 const jumpToMiddle = () => {
   stressTableRef.value?.scrollToRow(Math.floor(ROW_COUNT / 2), 'center')
@@ -176,34 +160,38 @@ const stop = () => {
       :data="rows"
       :columns="columns"
       :virtual-config="virtualConfig"
-      :renderers="renderers"
       row-key="id"
       striped
     >
-      <template #cell-name="{ row, value }">
+      <template #personNameCell="{ row, value }">
         <div class="person-cell">
           <strong>{{ value }}</strong>
           <span v-if="row.note">{{ row.note }}</span>
         </div>
       </template>
+      <template #score="{ value }">
+        <strong :class="Number(value) >= 90 ? 'score-high' : 'score-normal'">
+          {{ value }}
+        </strong>
+      </template>
     </s-table>
 
     <div class="stress-demo">
       <div class="stress-toolbar">
-        <span>Massive data</span>
+        <span>Massive logical data</span>
         <div class="stress-actions">
           <template v-if="started">
             <s-button size="small" @click="reset">Start</s-button>
             <s-button size="small" @click="jumpToMiddle">Middle</s-button>
             <s-button size="small" @click="jumpToEnd">End</s-button>
-            <s-button size="small" @click="stop">Hide data</s-button>
+            <s-button size="small" @click="stop">Close demo</s-button>
           </template>
         </div>
       </div>
       <div v-if="!started" class="stress-gate">
         <span
-          >Load the data, then scroll or jump to explore its rows and
-          columns.</span
+          >Start the demo to materialize only the rows and columns in the
+          visible window.</span
         >
         <s-button
           size="small"
@@ -211,7 +199,7 @@ const stop = () => {
           :disabled="starting"
           @click="start"
         >
-          {{ starting ? 'Loading…' : 'Load data' }}
+          {{ starting ? 'Starting…' : 'Start demo' }}
         </s-button>
       </div>
       <s-table
@@ -219,10 +207,20 @@ const stop = () => {
         ref="stressTableRef"
         :virtual-source="virtualSource"
         :virtual-config="stressVirtualConfig"
-        :renderers="stressRenderers"
         row-key="id"
         striped
-      />
+      >
+        <template #matrix="{ rowIndex, columnIndex }">
+          <span
+            :class="[
+              columnIndex === 0 && 'row-anchor',
+              isLongMatrixCell(rowIndex, columnIndex) && 'matrix-cell--long',
+            ]"
+          >
+            {{ matrixText(rowIndex, columnIndex) }}
+          </span>
+        </template>
+      </s-table>
     </div>
   </div>
 </template>

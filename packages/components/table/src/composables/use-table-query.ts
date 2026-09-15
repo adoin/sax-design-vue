@@ -4,8 +4,8 @@ import { compareTableValues } from '../sort-utils'
 import type { ComputedRef } from 'vue'
 import type {
   TableColumn,
+  TableCoreEmitFn,
   TableCoreProps,
-  TableEmitFn,
   TableFilterValue,
   TableFilters,
   TableRow,
@@ -16,14 +16,14 @@ import type {
 const copyFilters = (filters: TableFilters): TableFilters => {
   const result: TableFilters = {}
   for (const [field, values] of Object.entries(filters)) {
-    if (values.length) result[field] = [...new Set(values)]
+    if (values?.length) result[field] = [...new Set(values)]
   }
   return result
 }
 
 export function useTableQuery(
   props: TableCoreProps,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   columns: ComputedRef<TableColumn[]>,
 ) {
   const internalSort = shallowRef<TableSort[]>(
@@ -111,7 +111,7 @@ export function useTableQuery(
     const active: { column: TableColumn; values: TableFilterValue[] }[] = []
     for (const [field, values] of Object.entries(filters.value)) {
       const column = columnMap.value.get(field)
-      if (column && values.length) active.push({ column, values })
+      if (column && values?.length) active.push({ column, values })
     }
     if (!active.length) return undefined
     return (row: TableRow) =>

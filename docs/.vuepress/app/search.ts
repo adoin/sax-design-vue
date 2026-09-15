@@ -2,6 +2,16 @@ import type { SearchDataOption } from '~/saxDesignVueTheme'
 
 export const enSearchData: SearchDataOption[] = [
   {
+    title: 'Renderer',
+    path: 'components/renderer',
+    headers: [
+      { title: 'Register renderers', slug: 'register-renderers' },
+      { title: 'Use registered renderers', slug: 'use-registered-renderers' },
+      { title: 'Renderer contract', slug: 'renderer-contract' },
+      { title: 'Built-in renderers', slug: 'built-in-renderers' },
+    ],
+  },
+  {
     title: 'Alert',
     path: 'components/alert',
     headers: [

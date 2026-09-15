@@ -133,7 +133,13 @@
   @include when(indeterminate) {
     .#{$namespace}-icon-check__line {
       width: 10px;
-      transition: all 0.2s ease-in-out;
+      transition:
+        width var(--sax-motion-duration-fast) var(--sax-motion-easing),
+        height var(--sax-motion-duration-fast) var(--sax-motion-easing),
+        opacity var(--sax-motion-duration-fast) var(--sax-motion-easing),
+        transform var(--sax-motion-duration-fast) var(--sax-motion-easing),
+        background-color var(--sax-motion-duration-fast)
+          var(--sax-motion-easing);
       left: 0;
       right: auto;
       width: 2.5px;
@@ -185,45 +191,55 @@
 }
 
 // icon loading
+@include b(logo-loading) {
+  display: inline-flex;
+  width: var(--sax-logo-loading-size, 1em);
+  height: var(--sax-logo-loading-size, 1em);
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  line-height: 1;
+  vertical-align: -0.125em;
+
+  @include e(graphic) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  @include e(stroke) {
+    fill: none;
+    stroke: #6366f1;
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    @include when(top-accent) {
+      stroke: #a855f7;
+    }
+
+    @include when(bottom-accent) {
+      stroke: #2dd4bf;
+    }
+  }
+
+  @include e(ring) {
+    fill: none;
+    stroke: #6366f1;
+    stroke-width: 7;
+  }
+}
+
 @include b(icon-loading) {
   @include absolute-full;
   margin: auto;
   width: 100%;
+  height: 100%;
   max-width: 50px;
   max-height: 50px;
-
-  border-radius: getCssVar('border-radius-full');
   z-index: 999999;
-  color: getColor(color);
-  transition: getCssVar(transition-ease);
-
-  @include e(item) {
-    @include absolute-full;
-    border-radius: inherit;
-
-    .path {
-      stroke: currentColor;
-      stroke-width: 10;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      fill: none;
-    }
-  }
-  @include e(1) {
-    animation: rotating 0.88s ease infinite 0.11s;
-
-    .path {
-      stroke-dasharray: 60 150;
-    }
-  }
-  @include e(2) {
-    opacity: 0.6;
-    animation: rotating 0.88s linear infinite;
-
-    .path {
-      stroke-dasharray: 5 130;
-    }
-  }
 }
 
 // icon plus
@@ -252,7 +268,8 @@
   }
   @include pseudo(after) {
     transform: rotate(90deg);
-    transition: all 0.4s ease;
+    transition: transform var(--sax-motion-duration-slow)
+      var(--sax-motion-easing-emphasized);
   }
 
   &:hover:not(.is-less) {

@@ -12,7 +12,10 @@ const columns: TableColumn[] = [
   {
     field: 'name',
     title: '姓名',
-    slots: { filter: 'nameFilter' },
+    filterRender: {
+      name: '$input',
+      props: { placeholder: '输入姓名', 'aria-label': '姓名关键字' },
+    },
     filterMethod: ({ value, values }) =>
       String(value)
         .toLowerCase()
@@ -31,10 +34,14 @@ const columns: TableColumn[] = [
     field: 'status',
     title: '状态',
     filterMultiple: false,
-    filters: [
-      { label: '活跃', value: 'active' },
-      { label: '暂停', value: 'paused' },
-    ],
+    filterRender: {
+      name: '$radio',
+      options: [
+        { label: '活跃', value: 'active' },
+        { label: '暂停', value: 'paused' },
+      ],
+    },
+    filterMethod: ({ value, values }) => value === values[0],
     cell: ({ value }) => (value === 'active' ? '活跃' : '暂停'),
   },
 ]
@@ -45,16 +52,12 @@ const columns: TableColumn[] = [
     <s-button size="small" type="flat" @click="filters = {}"
       >清除全部筛选</s-button
     >
-    <s-table v-model:filters="filters" :data="rows" :columns="columns" striped>
-      <template #nameFilter="{ values, setValues }">
-        <s-input
-          :model-value="String(values[0] ?? '')"
-          placeholder="输入姓名关键字"
-          aria-label="姓名关键字"
-          @update:model-value="setValues($event ? [String($event)] : [])"
-        />
-      </template>
-    </s-table>
+    <s-table
+      v-model:filters="filters"
+      :data="rows"
+      :columns="columns"
+      striped
+    />
   </div>
 </template>
 

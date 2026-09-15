@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { TableColumn, TableColumnState } from 'sax-design-vue'
+import type {
+  TableColumn,
+  TableColumnState,
+  TableFooterConfig,
+} from 'sax-design-vue'
 
 const virtual = ref(false)
 const multiple = ref(true)
@@ -9,7 +13,7 @@ const allRows = Array.from({ length: 60 }, (_, index) => ({
   id: index + 1,
   name: `Order ${index + 1}`,
   quantity: (index % 5) + 1,
-  amount: ((index % 5) + 1) * 24,
+  amount: ['24.10', '48.20', '72.30', '96.40', '120.50'][index % 5],
   note:
     index % 3
       ? 'Ready for review'
@@ -17,33 +21,46 @@ const allRows = Array.from({ length: 60 }, (_, index) => ({
   state: 'Ready',
 }))
 const rows = computed(() => (virtual.value ? allRows : allRows.slice(0, 4)))
-const footerData = computed(() => {
-  const quantity = rows.value.reduce((sum, row) => sum + row.quantity, 0)
-  const amount = rows.value.reduce((sum, row) => sum + row.amount, 0)
-  const total = {
-    kind: 'total',
-    name: 'Total',
-    quantity,
-    amount,
-    note: `All ${rows.value.length} supplied orders`,
-    state: 'Calculated',
-  }
-  return multiple.value
-    ? [
-        total,
+const footerConfig = computed<TableFooterConfig>(() => ({
+  rows: [
+    {
+      values: {
+        kind: 'total',
+        name: 'Total',
+        state: 'Calculated',
+      },
+      aggregates: [
+        { key: 'quantity', field: 'quantity', method: 'sum' },
+        { key: 'amount', field: 'amount', method: 'sum' },
         {
-          kind: 'average',
-          name: 'Average',
-          quantity: quantity / rows.value.length,
-          amount: amount / rows.value.length,
-          note: 'Per order',
-          state: 'Calculated',
+          key: 'note',
+          method: (cells) => `All ${cells.length} supplied orders`,
         },
-      ]
-    : [total]
-})
-const money = (value: unknown) =>
-  Number(value).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+      ],
+    },
+    ...(multiple.value
+      ? [
+          {
+            values: {
+              kind: 'average',
+              name: 'Average',
+              note: 'Per order',
+              state: 'Calculated',
+            },
+            aggregates: [
+              { key: 'quantity', field: 'quantity', method: 'average' },
+              { key: 'amount', field: 'amount', method: 'average' },
+            ],
+          },
+        ]
+      : []),
+  ],
+}))
+const fixedDecimal = (value: unknown, digits: number) => {
+  const [integer = '0', fraction = ''] = String(value ?? 0).split('.')
+  return `${integer}.${fraction.padEnd(digits, '0').slice(0, digits)}`
+}
+const money = (value: unknown) => `$${fixedDecimal(value, 2)}`
 const columns: TableColumn[] = [
   { field: 'name', title: 'Order', width: 180, fixed: 'left' },
   {
@@ -54,7 +71,7 @@ const columns: TableColumn[] = [
         title: 'Quantity',
         minWidth: 120,
         align: 'right',
-        footerFormatter: ({ value }) => Number(value).toFixed(1),
+        footerFormatter: ({ value }) => fixedDecimal(value, 1),
       },
       {
         field: 'amount',
@@ -72,28 +89,38 @@ const columns: TableColumn[] = [
       },
     ],
   },
-  { field: 'state', title: 'State', width: 120, fixed: 'right' },
+  {
+    field: 'state',
+    title: 'State',
+    width: 120,
+    fixed: 'right',
+    slots: { footer: 'orderStateFooter' },
+  },
 ]
 </script>
 
 <template>
-  <div class="footer-data-demo">
-    <s-checkbox v-model="multiple">Show total and average</s-checkbox>
-    <s-checkbox v-model="virtual">Virtual scrolling with 60 orders</s-checkbox>
+  <div :class="['footer-data-demo', { 'is-virtual': virtual }]">
     <s-table
       v-model:column-state="columnState"
       :data="rows"
       :columns="columns"
-      :footer-data="footerData"
+      :footer-config="footerConfig"
       footer-row-key="kind"
       :virtual-config="
-        virtual ? { height: 240, horizontal: true, dynamic: true } : false
+        virtual ? { height: 'auto', horizontal: true, dynamic: true } : false
       "
-      column-manager-config
+      :toolbar-config="{ right: [{ itemRender: '$columnConfig' }] }"
       resize-config
       row-key="id"
     >
-      <template #footer-state="{ row }"
+      <template #toolbar_left>
+        <s-checkbox v-model="multiple">Show total and average</s-checkbox>
+        <s-checkbox v-model="virtual"
+          >Virtual scrolling with 60 orders</s-checkbox
+        >
+      </template>
+      <template #orderStateFooter="{ row }"
         ><s-tag>{{ row.state }}</s-tag></template
       >
     </s-table>
@@ -104,7 +131,8 @@ const columns: TableColumn[] = [
 .footer-data-demo {
   width: 100%;
 }
-.footer-data-demo > .s-table-wrapper {
-  margin-top: 16px;
+
+.footer-data-demo.is-virtual {
+  height: min(440px, 70vh);
 }
 </style>

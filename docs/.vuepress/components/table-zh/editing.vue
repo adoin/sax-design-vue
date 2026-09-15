@@ -37,12 +37,20 @@ const rows = ref([
   },
 ])
 const columns: TableColumn[] = [
-  { field: 'name', title: '项目', width: 190, fixed: 'left', editor: true },
+  {
+    field: 'name',
+    title: '项目',
+    width: 190,
+    fixed: 'left',
+    editor: true,
+    renderer: { name: '$input' },
+  },
   {
     field: 'quantity',
     title: '数量',
     width: 130,
-    editor: { type: 'number', props: { min: 0 } },
+    editor: true,
+    renderer: { name: '$input', props: { type: 'number', min: 0 } },
   },
   {
     field: 'status',
@@ -55,8 +63,9 @@ const columns: TableColumn[] = [
       )[String(value)] ?? String(value),
     title: '状态',
     width: 150,
-    editor: {
-      type: 'select',
+    editor: true,
+    renderer: {
+      name: '$select',
       options: [
         { label: '进行中', value: 'open' },
         { label: '已完成', value: 'done' },
@@ -67,14 +76,19 @@ const columns: TableColumn[] = [
     field: 'due',
     title: '截止日期',
     width: 200,
-    editor: { type: 'date', props: { valueFormat: 'YYYY-MM-DD' } },
+    editor: true,
+    renderer: { name: '$date', props: { valueFormat: 'YYYY-MM-DD' } },
   },
   {
     field: 'active',
     cell: ({ value }) => (value ? '启用' : '停用'),
     title: '启用',
     width: 110,
-    editor: { type: 'switch', props: { activeText: '开', inactiveText: '关' } },
+    editor: true,
+    renderer: {
+      name: '$switch',
+      props: { activeText: '开', inactiveText: '关' },
+    },
   },
 ]
 const save = ({ rowKey, updatedRow, changes }: TableEditEndParams) => {
@@ -111,7 +125,7 @@ const cancel = () => {
       :columns="columns"
       :edit-config="{
         mode: rowMode ? 'row' : 'cell',
-        checkMethod: ({ row }) => row.status !== 'archived',
+        editableMethod: ({ row }) => row.status !== 'archived',
       }"
       row-key="id"
       resize-config

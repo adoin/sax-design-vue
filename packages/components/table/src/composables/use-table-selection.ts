@@ -2,8 +2,8 @@ import { computed, watch } from 'vue'
 import type { ComputedRef } from 'vue'
 import type {
   TableColumn,
+  TableCoreEmitFn,
   TableCoreProps,
-  TableEmitFn,
   TableFlatRow,
   TableRow,
   TableRowKey,
@@ -19,7 +19,7 @@ interface SelectionOptions {
 
 export function useTableSelection(
   props: TableCoreProps,
-  emit: TableEmitFn,
+  emit: TableCoreEmitFn,
   options: SelectionOptions,
 ) {
   const columnType = computed(
@@ -62,7 +62,7 @@ export function useTableSelection(
   }
   const selectedKeys = computed(() => new Set(getSelectedRows().map(rowKey)))
   const isSelectable = (row: TableRow, rowIndex: number) =>
-    props.selectionConfig.checkMethod?.({ row, rowIndex }) !== false
+    props.selectionConfig.selectableMethod?.({ row, rowIndex }) !== false
   const selected = (key: TableRowKey) => selectedKeys.value.has(key)
   const emitRows = (rows: TableRow[]) => {
     const unique = [...new Map(rows.map((row) => [rowKey(row), row])).values()]

@@ -7,6 +7,7 @@ import { containerPlugin } from '@vuepress/plugin-container'
 import { gitPlugin } from '@vuepress/plugin-git'
 import { prismjsPlugin } from '@vuepress/plugin-prismjs'
 import { createApiTypeDetailsResolver } from './node/apiTypeDetails'
+import { highlightVueSfcHtml } from './util/highlightVueSource'
 
 import type { SaxDesignVueThemeOptions } from './saxDesignVueTheme'
 import type { Page, Plugin, Theme } from '@vuepress/core'
@@ -57,6 +58,17 @@ const safeInlinePageDataPlugin: Plugin = {
   extendsPage: escapeInlineScriptEnd,
 }
 
+const vueSfcHighlightPlugin: Plugin = {
+  name: 'vuepress-vue-sfc-highlight',
+  extendsMarkdown(md) {
+    const fallback = md.options.highlight
+    md.options.highlight = (source, language, attrs) =>
+      language === 'vue'
+        ? highlightVueSfcHtml(source)
+        : (fallback?.(source, language, attrs) ?? '')
+  },
+}
+
 export const saxDesignVueTheme = (
   options: SaxDesignVueThemeOptions = {},
 ): Theme => {
@@ -91,6 +103,7 @@ export const saxDesignVueTheme = (
         themeData: options,
       }),
       prismjsPlugin(),
+      vueSfcHighlightPlugin,
       registerComponentsPlugin({
         componentsDir: path.resolve(__dirname, 'global-components'),
       }),
