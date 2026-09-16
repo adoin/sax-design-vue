@@ -1,6 +1,8 @@
 import { h, nextTick, reactive } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
+import zhCn from '@vuesax-alpha/locale/lang/zh-cn'
+import zhTw from '@vuesax-alpha/locale/lang/zh-tw'
 import Table from '../src/table.vue'
 import TableColumnComponent from '../src/table-column.vue'
 import {
@@ -57,6 +59,15 @@ const columns: TableColumn[] = [
 ]
 
 describe('Table data mode', () => {
+  it('uses upper-level wording for the Chinese parent indicator defaults', () => {
+    expect(zhCn.vs.table.parentContext).toBe('上级')
+    expect(zhCn.vs.table.returnToParent).toBe('回到上级行')
+    expect(zhCn.vs.table.returnToParentLabel).toBe('回到上级 {parent}')
+    expect(zhTw.vs.table.parentContext).toBe('上級')
+    expect(zhTw.vs.table.returnToParent).toBe('回到上級列')
+    expect(zhTw.vs.table.returnToParentLabel).toBe('回到上級 {parent}')
+  })
+
   it('calculates a bounded horizontal column window with spacers', () => {
     expect(
       getVirtualColumnRange([80, 120, 160, 200, 240], 220, 180, 0),

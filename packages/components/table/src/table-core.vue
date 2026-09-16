@@ -1378,6 +1378,16 @@ const visibleCenterEntries = computed<TableRenderedColumnEntry[]>(() => {
 const cssOffset = (sizes: string[]) =>
   sizes.length ? `calc(${sizes.join(' + ')})` : '0px'
 
+const fixedRightScrollbarCompensation = computed(() => {
+  if (!usesBodyScroll.value) return 0
+  const measuredWidth = columnVirtualization.viewportWidth.value
+  const scrollElement = columnScrollRef.value
+  if (!measuredWidth || !scrollElement?.clientWidth) return 0
+  // Sticky offsets use the inner scrollport edge. Header/footer bands and the
+  // boundary shadow use its outer paint edge, so bridge any native gutter.
+  return Math.max(0, scrollElement.offsetWidth - scrollElement.clientWidth)
+})
+
 const createFixedEntries = (
   entries: IndexedColumn[],
   side: 'left' | 'right',
@@ -1405,7 +1415,10 @@ const createFixedEntries = (
         width: size,
         minWidth: size,
         flex: `0 0 ${size}`,
-        [side]: cssOffset(offsetSizes),
+        [side]:
+          side === 'right' && fixedRightScrollbarCompensation.value
+            ? `calc(${offsetSizes.length ? `${offsetSizes.join(' + ')} - ` : '-'}${fixedRightScrollbarCompensation.value}px)`
+            : cssOffset(offsetSizes),
       },
     }
   })
@@ -1440,12 +1453,12 @@ const fixedBandStyle = (entry: TableRenderedColumnEntry): CSSProperties => {
   if (!horizontalVirtualActive.value || !entry.fixed || !usesBodyScroll.value)
     return {}
   const scrollLeft = columnVirtualization.scrollLeft.value
+  const measuredWidth = columnVirtualization.viewportWidth.value
+  const paintWidth = columnScrollRef.value?.offsetWidth ?? measuredWidth
   const shift =
     entry.fixed === 'left'
       ? scrollLeft
-      : columnVirtualization.viewportWidth.value -
-        totalTablePixelWidth.value +
-        scrollLeft
+      : paintWidth - totalTablePixelWidth.value + scrollLeft
   // Translated header/footer bands already own fixed-column compensation.
   // Native sticky offsets would apply a second viewport adjustment.
   return {

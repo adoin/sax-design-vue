@@ -456,9 +456,9 @@ describe('table cell keyboard navigation', () => {
     vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(610)
     const wrapper = setup({
       columns: [
-        { field: 'name', fixed: 'left', width: 190 },
-        { field: 'id', width: 500 },
-        { field: 'id', fixed: 'right', width: 110 },
+        { key: 'left', field: 'name', fixed: 'left', width: 190 },
+        { key: 'center', field: 'id', width: 500 },
+        { key: 'right', field: 'id', fixed: 'right', width: 110 },
       ],
       virtualConfig: false,
     })
@@ -473,6 +473,39 @@ describe('table cell keyboard navigation', () => {
     expect(
       wrapper.get('.s-table__fixed-boundary-overlay').attributes('style'),
     ).toContain('width: 610px')
+    expect(
+      wrapper.get('.s-table__data-row .is-fixed-right').attributes('style'),
+    ).toContain('right: 0px')
+  })
+  it('compensates a virtual body scrollbar gutter without shifting its header or shadow', async () => {
+    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(610)
+    const wrapper = setup({
+      virtualSource: {
+        rowCount: 20,
+        columnCount: 100,
+        row: (index: number) => ({ id: index }),
+        rowKey: (index: number) => index,
+        column: () => ({ field: 'id', width: 140 }),
+        columnWidth: 140,
+        fixedLeftCount: 1,
+        fixedRightCount: 2,
+      },
+      virtualConfig: { height: 200, horizontal: true },
+    })
+    await settle()
+    expect(
+      wrapper
+        .get('.s-table__data-row [data-column-index="99"]')
+        .attributes('style'),
+    ).toContain('right: calc(-10px)')
+    expect(
+      wrapper
+        .get('.s-table__data-row [data-column-index="98"]')
+        .attributes('style'),
+    ).toContain('right: calc(130px)')
+    expect(
+      wrapper.get('.s-table__fixed-boundary-overlay').attributes('style'),
+    ).toContain('width: 100%')
   })
   it('parks focus when a virtual cell unmounts and never restores over outside focus', async () => {
     const wrapper = setup({
