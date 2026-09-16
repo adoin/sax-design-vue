@@ -422,6 +422,8 @@ export interface TableRenderedColumnEntry<Row extends object = TableRow> {
   ariaIndex?: number
   fixed?: 'left' | 'right'
   fixedBoundary?: boolean
+  /** Suppress content clipped by a fixed band in the horizontal viewport. */
+  edgeFragment?: boolean
 }
 
 export interface TableRenderedSpacerEntry {

@@ -1,9 +1,10 @@
 // @vitest-environment node
 
-import { mkdtemp, readFile, rm } from 'node:fs/promises'
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { createServer } from 'vite'
 import { DEFAULT_API_ENDPOINTS } from '../src'
 import { saxIcons } from '../src/vite'
 
@@ -158,12 +159,36 @@ describe('saxIcons', () => {
         tag: 'script',
         attrs: {
           type: 'module',
-          src: 'virtual:sax-icons/register',
         },
+        children: "import 'virtual:sax-icons/register'",
         injectTo: 'head-prepend',
       },
     ])
     expect(plugin.transformIndexHtml.order).toBe('pre')
+  })
+
+  it('lets Vite resolve the injected registry instead of exposing a virtual URL', async () => {
+    const root = await mkdtemp(path.join(tmpdir(), 'sax-icon-html-'))
+    const entry = '<!doctype html><html><head></head><body></body></html>'
+    await writeFile(path.join(root, 'index.html'), entry)
+    const server = await createServer({
+      configFile: false,
+      logLevel: 'silent',
+      root,
+      plugins: [saxIcons(config)],
+      server: { middlewareMode: true },
+    })
+    try {
+      const html = await server.transformIndexHtml('/index.html', entry)
+      expect(html).not.toContain('src="virtual:sax-icons/register"')
+      const proxy = html.match(/src="([^"]+html-proxy[^"]+)"/)?.[1]
+      expect(proxy).toBeDefined()
+      const module = await server.transformRequest(proxy!)
+      expect(module?.code).toContain('/@id/__x00__sax-icons:register')
+    } finally {
+      await server.close()
+      await rm(root, { recursive: true, force: true })
+    }
   })
 
   it('allows automatic registry injection to be disabled', () => {

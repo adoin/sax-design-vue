@@ -167,6 +167,7 @@ defineExpose({ measure })
             ns.is('fixed-left', entry.fixed === 'left'),
             ns.is('fixed-right', entry.fixed === 'right'),
             ns.is('fixed-boundary', entry.fixedBoundary),
+            ns.is('edge-fragment', entry.edgeFragment),
           ]"
           :style="[
             entry.style,

@@ -32,17 +32,27 @@ PROPS:
   - name: offset
     type: Number
     values: 'pixels'
-    description: Active-state offset, scroll destination offset, and detection tolerance.
+    description: Reading viewport top inset; also the legacy heading activation offset and click destination fallback when their dedicated props are omitted.
     default: '88'
+  - name: active-strategy
+    type: String
+    values: 'heading / visible-section'
+    description: Choose the heading-crossing rule or the section occupying most of the readable viewport. Local value overrides global anchor.activeStrategy.
+    default: heading
+  - name: active-offset
+    type: Number
+    values: 'pixels'
+    description: Heading activation line measured from the scroll viewport top. Local value overrides global anchor.activeOffset; omitted value falls back to offset.
+    default: 'offset'
   - name: target-offset
     type: Number
     values: 'pixels'
-    description: Active-state offset, scroll destination offset, and detection tolerance.
+    description: Scroll destination inset after selecting a hash link; defaults to offset.
     default: 'offset'
   - name: bounds
     type: Number
     values: 'pixels'
-    description: Active-state offset, scroll destination offset, and detection tolerance.
+    description: Detection tolerance around the heading line and page-bottom boundary.
     default: '5'
   - name: affix
     type: Boolean
@@ -184,9 +194,11 @@ The active marker uses a built-in inline location SVG, so the default does not d
 
 <h3 id="anchor-secondary">Secondary link</h3>
 
-Each item uses a stable `href` that points to a real page ID. `offset` controls
-when an item becomes active, while `target-offset` controls the final scroll
-position after a click.
+Each item uses a stable `href` that points to a real page ID. The default
+`heading` strategy activates a heading after it crosses `active-offset + bounds`.
+Without `active-offset`, the line uses `offset`; `target-offset` independently
+controls where a click scrolls. `visible-section` instead compares how much of
+each heading-to-next-heading section occupies the viewport below `offset`.
 
 <h2 id="anchor-horizontal">Horizontal</h2>
 
@@ -220,7 +232,13 @@ position after a click.
 
 <h2 id="anchor-route-boundary">Router mode</h2>
 
-Set `mode="router"` and keep using the normal recursive `items` structure. Anchor finds the item matching the router's current location, derives the nearest route siblings, and creates the floating previous/next boundary internally. Hash children remain page anchors and do not enter the route sequence.
+Set `mode="router"` when one outline combines route-level chapters with headings inside each chapter. Route items select the current page and provide its previous/next floating boundaries; `#hash` descendants select headings on that page and update as it scrolls. Hash items do not enter the cross-route sequence. Scrolling forward across the bottom edge opens the next chapter at its start; scrolling backward across the top edge opens the previous chapter at its end. Ordinary route-link clicks retain normal router entry behavior.
+
+The router and page scroll owner control route-entry scrolling. Keep route changes instantaneous rather than relying on a global smooth-scroll rule, which can animate the new page backward from the previous page's scroll position. Hash-link clicks still use Anchor's `scroll-behavior` setting, which defaults to `smooth`.
+
+The documentation outline uses `active-strategy="visible-section"` so its highlighted hash follows the section occupying most of the readable page area. The library default remains `heading` for existing applications. Set `active-strategy` on one Anchor, or set `anchor: { activeStrategy: 'visible-section', activeOffset: 160 }` in `SConfigProvider` or the installation options for a shared default. An explicit component prop takes precedence; `activeOffset` only changes the `heading` strategy.
+
+When entering the next route through a boundary, the outline waits for its scroll position to settle at the new page start before selecting a page hash. The first heading stays active through the beginning of the chapter; later headings take over as they enter the reading area.
 
 Pass a Vue Router-compatible object locally through `router`. For example, use [vue-smart-router](https://www.npmjs.com/package/vue-smart-router) or another compatible router to handle navigation.
 
@@ -276,6 +294,8 @@ app.use(router)
 app.use(SaxDesignVue, {
   anchor: {
     router,
+    activeStrategy: 'visible-section',
+    activeOffset: 160,
     routeBoundary: {
       threshold: 160,
       armDelay: 320,

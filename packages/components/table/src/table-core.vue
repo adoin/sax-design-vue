@@ -123,6 +123,7 @@
                 ns.is('fixed-left', entry.fixed === 'left'),
                 ns.is('fixed-right', entry.fixed === 'right'),
                 ns.is('fixed-boundary', entry.fixedBoundary),
+                ns.is('edge-fragment', entry.edgeFragment),
               ]"
               :style="[
                 entry.style,
@@ -417,6 +418,19 @@
           :selection-name="selectionName"
         />
 
+        <div
+          v-if="fixedPixelMetrics.left || fixedPixelMetrics.right"
+          ref="fixedBoundaryOverlayRef"
+          :class="[
+            ns.e('fixed-boundary-overlay'),
+            ns.is('fixed-left', fixedPixelMetrics.left > 0),
+            ns.is('fixed-right', fixedPixelMetrics.right > 0),
+          ]"
+          :style="fixedBoundaryOverlayStyle"
+          role="presentation"
+          aria-hidden="true"
+        />
+
         <div v-if="tableBusy" :class="ns.e('loading-mask')" aria-live="polite">
           <SLogoLoading :class="ns.e('loading-spinner')" :size="24" />
         </div>
@@ -641,6 +655,7 @@ onBeforeUpdate(() => {
 })
 const sourceDetailRows = new WeakMap<TableRow, TableFlatRow>()
 const tableScrollRef = ref<HTMLElement>()
+const fixedBoundaryOverlayRef = ref<HTMLElement>()
 const columnScrollRef = ref<HTMLElement>()
 const selectionName = useId()
 const overflow = useTableOverflow()
@@ -1205,22 +1220,24 @@ const indexedColumnBaseSize = ({ column, index }: IndexedColumn) =>
     : columnBaseSize(column)
 
 const fixedPixelMetrics = computed(() => {
-  const widths = [
-    ...columnPartitions.value.left,
-    ...columnPartitions.value.right,
-  ].map((entry) =>
-    resolveColumnPixelWidth(
-      props.virtualSource
-        ? sourceColumnWidth(entry.index)
-        : (entry.column.width ?? entry.column.minWidth),
-    ),
-  )
+  const widthsFor = (entries: IndexedColumn[]) =>
+    entries.map((entry) =>
+      resolveColumnPixelWidth(
+        props.virtualSource
+          ? sourceColumnWidth(entry.index)
+          : (entry.column.width ?? entry.column.minWidth),
+      ),
+    )
+  const leftWidths = widthsFor(columnPartitions.value.left)
+  const rightWidths = widthsFor(columnPartitions.value.right)
+  const widths = [...leftWidths, ...rightWidths]
+  const sum = (values: Array<number | null>) =>
+    values.reduce<number>((total, width) => total + (width ?? 0), 0)
   return {
     supported: widths.every((width): width is number => width != null),
-    total: widths.reduce<number>(
-      (sum, width) => sum + (typeof width === 'number' ? width : 0),
-      0,
-    ),
+    left: sum(leftWidths),
+    right: sum(rightWidths),
+    total: sum(widths),
   }
 })
 
@@ -1272,6 +1289,16 @@ const columnVirtualization = useTableColumnVirtualization({
 const horizontalVirtualActive = computed(
   () => columnVirtualization.active.value && fixedPixelMetrics.value.supported,
 )
+const fixedBoundaryOverlayStyle = computed<CSSProperties>(() => ({
+  left: usesBodyScroll.value
+    ? '0px'
+    : `${columnVirtualization.scrollLeft.value}px`,
+  width: usesBodyScroll.value
+    ? '100%'
+    : `${tableScrollRef.value?.offsetWidth ?? columnVirtualization.viewportWidth.value}px`,
+  '--s-table-fixed-left-width': `${fixedPixelMetrics.value.left}px`,
+  '--s-table-fixed-right-width': `${fixedPixelMetrics.value.right}px`,
+}))
 const horizontalVirtualMode = computed(
   () =>
     virtualEnabled.value &&
@@ -1339,6 +1366,10 @@ const visibleCenterEntries = computed<TableRenderedColumnEntry[]>(() => {
       index,
       style,
       ariaIndex: columnPartitions.value.left.length + virtualIndex,
+      edgeFragment:
+        horizontalVirtualActive.value &&
+        fixedPixelMetrics.value.total > 0 &&
+        !columnVirtualization.columnVisible(virtualIndex),
     })
   }
   return entries
@@ -1521,6 +1552,8 @@ const handleCellClick = (params: TableCellRenderParams, event: MouseEvent) =>
   emit('cellClick', params, event)
 
 const handleTableScroll = (event: Event) => {
+  if (!usesBodyScroll.value && fixedBoundaryOverlayRef.value)
+    fixedBoundaryOverlayRef.value.style.left = `${(event.currentTarget as HTMLElement).scrollLeft}px`
   if (event.currentTarget === columnScrollRef.value)
     columnVirtualization.handleScroll(event)
   emit('scroll', event)
@@ -2121,9 +2154,26 @@ const keyboard = useTableKeyboard(props, emit, {
   root: () => tableScrollRef.value,
   fromElement: coordinateFromElement,
   focusVisible: (cell) => {
-    if (!usesBodyScroll.value || !dynamicRows.value) return undefined
     const viewport = virtualListRef.value?.getScrollElement()
-    return viewport ? tableFocusVisible(cell, viewport) : false
+    const vertical =
+      usesBodyScroll.value && dynamicRows.value
+        ? viewport
+          ? tableFocusVisible(cell, viewport)
+          : false
+        : undefined
+    const column = Number(cell.dataset.columnIndex)
+    const center = props.virtualSource
+      ? columnManager.layout.value.centerIndexOf(column)
+      : columnPartitions.value.center.findIndex(
+          (entry) => entry.index === column,
+        )
+    const horizontal =
+      horizontalVirtualActive.value && center >= 0
+        ? columnVirtualization.columnVisible(center)
+        : undefined
+    return vertical === false || horizontal === false
+      ? false
+      : (vertical ?? horizontal)
   },
   locate: (coordinate) => {
     const row = dragRowAt(coordinate.viewRow ?? coordinate.row)
@@ -2164,6 +2214,72 @@ const keyboard = useTableKeyboard(props, emit, {
     columnManager.state,
   ],
 })
+let editTabPending = false
+const navigateEditTab = async (
+  context: TableEditContext,
+  backwards: boolean,
+): Promise<boolean> => {
+  if (editTabPending || tableBusy.value || !editing.active.value) return false
+  const active = editing.active.value
+  if (
+    active.rowKey !== context.rowKey ||
+    active.columnKey !== context.columnKey
+  )
+    return false
+  const row = props.virtualSource
+    ? sourceViewIndex(active.rowIndex)
+    : flatRows.value.findIndex((flat) => flat.key === active.rowKey)
+  let current = mergeCoordinates.at(
+    row,
+    keyboardCoordinates.positionOf(active.columnIndex),
+  )
+  if (!current) return false
+  let target: typeof current | undefined
+  // Merged cells are traversed once; callbacks decide editability for each row.
+  while ((current = mergeCoordinates.move(current, 'Tab', backwards))) {
+    const column = props.virtualSource
+      ? columnManager.columnAt(current.column)
+      : resolvedColumns.value[current.column]
+    if (!column?.editor) continue
+    const editor = typeof column.editor === 'object' ? column.editor : undefined
+    if (editor?.props?.disabled || editor?.props?.readonly) continue
+    const flat = dragRowAt(current.row)
+    if (!flat) continue
+    const candidate: TableEditContext = {
+      row: flat.row,
+      rowKey: flat.key,
+      column,
+      columnKey: column.key ?? column.field ?? String(current.column),
+      columnIndex: current.column,
+      index: flat.index,
+      rowIndex: flat.index,
+      value: tableFieldValue(flat.row, column.field),
+      depth: flat.depth,
+      expanded: flat.expanded,
+      loading: flat.loading,
+      toggleExpand: async (value) => toggleRowExpand(flat.row, value),
+    }
+    if (editing.isEditable(candidate)) {
+      target = current
+      break
+    }
+  }
+  editTabPending = true
+  try {
+    if (!(await editing.commit('switch'))) return false
+    if (!target) return true
+    await keyboard.select(target, false)
+    const flat = dragRowAt(target.viewRow ?? target.row)
+    return flat
+      ? startEdit(
+          props.virtualSource ? flat.index : flat.row,
+          target.viewColumn ?? target.column,
+        )
+      : false
+  } finally {
+    editTabPending = false
+  }
+}
 const rangeContext = [
   () => (props.virtualSource ? undefined : flatRows.value),
   groups.layout,
@@ -2526,6 +2642,7 @@ const TableBodyRow = createTableBodyRow({
     'data-row-key': String(flatRow.key),
     editing,
     keyboard,
+    navigateEditTab,
     cellRange,
     validation,
     contextMenuEnabled: contextMenu.enabled.value,

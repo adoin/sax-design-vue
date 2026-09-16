@@ -25,6 +25,10 @@ import type {
 const props = defineProps<{
   context: TableEditContext
   editing: TableEditing
+  navigateTab?: (
+    context: TableEditContext,
+    backwards: boolean,
+  ) => Promise<boolean>
   renderer?: TableEditRenderer
   error?: string
   errorId?: string
@@ -203,6 +207,18 @@ const onKeydown = (event: KeyboardEvent) => {
     return
   }
   if (popupOpen && !event.ctrlKey && !event.metaKey) return
+  if (
+    event.key === 'Tab' &&
+    !event.altKey &&
+    !event.ctrlKey &&
+    !event.metaKey &&
+    props.navigateTab
+  ) {
+    event.preventDefault()
+    event.stopPropagation()
+    props.navigateTab(props.context, event.shiftKey)
+    return
+  }
   if (
     event.key === 'Enter' &&
     !event.ctrlKey &&

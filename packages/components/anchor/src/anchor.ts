@@ -15,6 +15,8 @@ export interface AnchorItem {
   children?: AnchorItem[]
 }
 
+export type AnchorActiveStrategy = 'heading' | 'visible-section'
+
 export const anchorProps = buildProps({
   mode: {
     type: String,
@@ -24,6 +26,12 @@ export const anchorProps = buildProps({
   modelValue: { type: String, default: '' },
   items: { type: definePropType<AnchorItem[]>(Array), default: () => [] },
   offset: { type: Number, default: 88 },
+  activeOffset: { type: Number, default: undefined },
+  activeStrategy: {
+    type: definePropType<AnchorActiveStrategy>(String),
+    values: ['heading', 'visible-section'] as const,
+    default: undefined,
+  },
   targetOffset: { type: Number, default: undefined },
   bounds: { type: Number, default: 5 },
   affix: { type: Boolean, default: false },

@@ -224,6 +224,8 @@ export function useTableKeyboard(
   ) => {
     if (!enabled.value || disposed || options.dragActive()) return false
     const request = ++sequence
+    const previous = active.value ? { ...active.value } : null
+    const previousHint = hint
     if (shouldFocus && target) pendingFocus = request
     cancelFrame?.()
     try {
@@ -247,7 +249,19 @@ export function useTableKeyboard(
         return true
       }
       if (!shouldFocus) return true
-      return await focus(target, request)
+      const focused = await focus(target, request)
+      if (
+        !focused &&
+        request === sequence &&
+        !disposed &&
+        enabled.value &&
+        equal(active.value, address)
+      ) {
+        hint = previousHint
+        if (props.activeCell === undefined) local.value = previous
+        emit('update:activeCell', previous)
+      }
+      return focused
     } finally {
       if (pendingFocus === request) pendingFocus = 0
     }

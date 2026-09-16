@@ -53,6 +53,12 @@ The overview contains no feature-guide card and is skipped during ordinary navig
 
 The Table outline enables `SAnchor` router mode and passes the documentation router locally. Anchor finds the active Table section in the existing ordered `items` tree, derives adjacent sibling routes, and generates both floating boundaries internally. `Page.vue` contains no Table-specific boundary wrapper or neighbor calculation. Each edge ignores the gesture that first reaches it and lets a deliberate continued-scroll gesture move through the same router integration as the outline. Wheel ownership follows [anchor-route-boundary-scroll-ownership.md](anchor-route-boundary-scroll-ownership.md): any nested overflowing element resets pending route intent, independent of component type. A cross-route cooldown prevents one residual gesture from skipping chapters. Direct link activation remains available; the first route has no previous item and the final request-proxy route has no next item.
 
+Route and heading state are separate within this mixed outline. The current guide remains marked as the page while its mounted hash descendants update as the guide scrolls. When a local heading is active, only that heading receives the visible active icon; the guide retains its page semantics and highlighted path without a duplicate icon. Backward wheel navigation enters the previous guide at its final scroll position, including content-height settlement, whereas ordinary route clicks keep their normal top-entry behavior.
+
+Direct documentation URLs with a `#hash` defer Vue Router's initial scroll until the target heading mounts and the page content height settles. The site guards missing headings instead of returning a selector that is not yet in the DOM, and cancels a pending scroll when the user navigates to another route or hash. This is a documentation-router integration detail; `SAnchor` still owns explicit outline-click scrolling.
+
+The documentation outline opts into Anchor's `visible-section` active strategy across ordinary component pages and routed Table guides. On Table pages, the page-local highlight follows the heading interval occupying most of the readable viewport while retaining the route-level page marker and ordinary router-mode boundaries. The library keeps the `heading` default for consumers unless locally or globally configured otherwise.
+
 ## Verification
 
 - `pnpm run normalize:doc-examples` recursively normalized all routed source slots with no skipped examples.

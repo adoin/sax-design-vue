@@ -4,6 +4,13 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+// Route changes must enter the next document at its start without animating
+// backward from the previous page's scroll position. SAnchor hash clicks pass
+// an explicit smooth behavior and keep their local scrolling feedback.
+html:root {
+  scroll-behavior: auto;
+}
+
 body,
 #app,
 .theme-container {

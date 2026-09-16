@@ -469,7 +469,6 @@ export const useTableColumnVirtualization = (
     const element = options.scrollElement.value
     const count = metrics.value.count
     if (!element || index < 0 || index >= count) return
-    relativeTarget = undefined
 
     const viewport = availableWidth.value
     const width = pixelWidthAt(index)
@@ -479,7 +478,7 @@ export const useTableColumnVirtualization = (
           index * metrics.value.uniformWidth)
         : columnOffsets.value[index]
     const end = start + width
-    const currentStart = logicalScrollLeft.value
+    const currentStart = relativeAt(element) ?? logicalScrollLeft.value
     const currentEnd = currentStart + viewport
     let left = currentStart
 
@@ -494,9 +493,48 @@ export const useTableColumnVirtualization = (
       Math.min(left, logicalScrollableWidth.value),
     )
     const nextLeft = toPhysicalScrollLeft(nextLogicalLeft)
-    if (typeof element.scrollTo === 'function')
-      element.scrollTo({ left: nextLeft })
-    else element.scrollLeft = nextLeft
+    const setLeft = (physical: number) => {
+      element.scrollLeft = physical
+    }
+    setLeft(nextLeft)
+    // A compressed native track may round a requested subpixel offset. Nudge
+    // the actual thumb toward the cell if that rounding still clips its edge.
+    const actualLogical = () =>
+      mapPhysicalToLogicalScroll(
+        element.scrollLeft,
+        physicalScrollableWidth.value,
+        logicalScrollableWidth.value,
+      )
+    if (width <= viewport && end > actualLogical() + viewport + 1)
+      setLeft(Math.ceil(nextLeft))
+    else if (width <= viewport && start < actualLogical() - 1)
+      setLeft(Math.floor(nextLeft))
+    const actualLeft = element.scrollLeft
+    relativeTarget = {
+      element,
+      physical: actualLeft,
+      logical: actualLogical(),
+    }
+    scheduleScrollLeft(actualLeft)
+  }
+
+  const columnVisible = (index: number) => {
+    if (!active.value) return true
+    if (index < 0 || index >= metrics.value.count) return false
+    const viewport = availableWidth.value
+    if (viewport <= 0) return false
+    const width = pixelWidthAt(index)
+    const start =
+      metrics.value.uniformWidth != null
+        ? (sparseMetrics.value?.offsetAt(index) ??
+          index * metrics.value.uniformWidth)
+        : columnOffsets.value[index]
+    const end = start + width
+    const visibleStart = logicalScrollLeft.value
+    const visibleEnd = visibleStart + viewport
+    return width > viewport
+      ? start <= visibleStart + 1 && end >= visibleEnd - 1
+      : start >= visibleStart - 1 && end <= visibleEnd + 1
   }
 
   onMounted(observeScrollElement)
@@ -617,6 +655,7 @@ export const useTableColumnVirtualization = (
     handleWheel,
     measureViewport,
     scrollToColumn,
+    columnVisible,
     scrollBy,
   }
 }

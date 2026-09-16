@@ -25,7 +25,8 @@ export interface SaxIconVitePlugin {
     handler: () =>
       | Array<{
           tag: 'script'
-          attrs: { type: 'module'; src: string }
+          attrs: { type: 'module' }
+          children: string
           injectTo: 'head-prepend'
         }>
       | undefined
@@ -357,7 +358,8 @@ export function saxIcons(userOptions: SaxIconViteOptions): SaxIconVitePlugin {
         return [
           {
             tag: 'script',
-            attrs: { type: 'module', src: REGISTER_ID },
+            attrs: { type: 'module' },
+            children: `import '${REGISTER_ID}'`,
             injectTo: 'head-prepend',
           },
         ]

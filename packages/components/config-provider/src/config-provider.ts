@@ -94,6 +94,10 @@ export interface PopperGlobalConfig {
 export interface AnchorGlobalConfig {
   /** Icon name used by the active marker. Omit it to use Anchor's inline SVG. */
   activeIcon?: string
+  /** Default active-item calculation; local Anchor props take precedence. */
+  activeStrategy?: 'heading' | 'visible-section'
+  /** Heading activation line in pixels; defaults to Anchor's offset. */
+  activeOffset?: number
   /** Router used by every Anchor in router mode unless locally overridden. */
   router?: AnchorRouterAdapter
   /** Defaults for automatically generated route boundaries. */

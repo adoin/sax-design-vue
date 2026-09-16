@@ -28,7 +28,8 @@ const localizedHeadingSlugify = createLocalizedHeadingSlugify(
 export default defineUserConfig({
   bundler: viteBundler({
     viteOptions: {
-      plugins: [saxIcons(saxIconConfig)],
+      // client.ts imports the registry already; avoid a duplicate HTML entry.
+      plugins: [saxIcons({ ...saxIconConfig, autoRegister: false })],
       css: {
         preprocessorOptions: {
           scss: {

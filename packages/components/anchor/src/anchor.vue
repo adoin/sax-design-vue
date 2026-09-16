@@ -26,7 +26,7 @@
         <a
           :class="[
             ns.e('item'),
-            ns.is('active', current === entry.item.href),
+            ns.is('active', isActiveItem(entry.item)),
             ns.is('active-path', entry.activePath),
             ns.is('collapsible', entry.collapsible),
             ns.is('disabled', entry.item.disabled),
@@ -34,7 +34,7 @@
           :href="entry.item.disabled ? undefined : entry.item.href"
           :aria-disabled="entry.item.disabled || undefined"
           :aria-current="
-            current === entry.item.href
+            isActiveItem(entry.item)
               ? entry.item.href.startsWith('#')
                 ? 'location'
                 : 'page'
@@ -45,7 +45,7 @@
         >
           <span :class="ns.e('item-label')">
             <span
-              v-if="direction === 'vertical' && current === entry.item.href"
+              v-if="direction === 'vertical' && isActiveIconItem(entry.item)"
               :class="ns.e('active-icon')"
               aria-hidden="true"
             >
@@ -109,12 +109,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { useGlobalConfig, useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import AnchorRouteBoundary from './anchor-route-boundary.vue'
+import { selectVisibleAnchorSection } from './anchor-active-section'
 import { anchorEmits, anchorProps } from './anchor'
 import {
+  anchorRouteKey,
   findAnchorRouteContext,
   isPlainAnchorRouteClick,
   readAnchorRouterLocation,
@@ -134,6 +136,12 @@ const ns = useNamespace('anchor')
 const { t } = useLocale()
 const anchorConfig = useGlobalConfig('anchor')
 const activeIcon = computed(() => anchorConfig.value?.activeIcon)
+const activeStrategy = computed(
+  () => props.activeStrategy ?? anchorConfig.value?.activeStrategy ?? 'heading',
+)
+const activeOffset = computed(
+  () => props.activeOffset ?? anchorConfig.value?.activeOffset ?? props.offset,
+)
 defineSlots<{
   'active-icon'?(params: { item: AnchorItem; href: string }): unknown
   'route-previous'?(params: AnchorRouteBoundarySlotParams): unknown
@@ -146,6 +154,11 @@ const initializedCollapseKeys = new Set<string>()
 let scrollContainer: HTMLElement | Window | undefined
 let scrollSettleTimer: ReturnType<typeof setTimeout> | undefined
 let scrollFrame: number | undefined
+let routeEntryFrame: number | undefined
+let routeEntryFollowFrame: number | undefined
+let routeEntryFollowKey: string | undefined
+let previousRouteEntry: string | undefined
+let nextRouteEntry: string | undefined
 
 const routerAdapter = computed(() => props.router || anchorConfig.value?.router)
 const routeBoundaryOptions = computed<AnchorRouteBoundaryOptions | undefined>(
@@ -177,6 +190,40 @@ const routeBoundaryContext = computed(() =>
   routerAdapter.value && routeBoundaryOptions.value
     ? routeContext.value
     : undefined,
+)
+const isActiveItem = (item: AnchorItem) =>
+  current.value === item.href ||
+  (props.mode === 'router' &&
+    !item.href.startsWith('#') &&
+    routeContext.value?.current.href === item.href)
+
+const routeHashItems = computed(() => {
+  const result: AnchorItem[] = []
+  const visit = (items: AnchorItem[]) => {
+    items.forEach((item) => {
+      if (item.href.startsWith('#') && !item.disabled) result.push(item)
+      if (item.children?.length) visit(item.children)
+    })
+  }
+  visit(routeContext.value?.current.children || [])
+  return result
+})
+const hasActiveRouteHash = computed(() =>
+  routeHashItems.value.some((item) => item.href === current.value),
+)
+const isActiveIconItem = (item: AnchorItem) =>
+  isActiveItem(item) &&
+  !(
+    props.mode === 'router' &&
+    !item.href.startsWith('#') &&
+    hasActiveRouteHash.value
+  )
+const hashItems = computed(() =>
+  props.mode === 'router'
+    ? routeHashItems.value
+    : flatItems.value.filter(
+        (item) => item.href.startsWith('#') && !item.disabled,
+      ),
 )
 
 export interface AnchorEntry {
@@ -275,7 +322,7 @@ const navigateRoute = (href: string) => {
   const router = routerAdapter.value
   if (!router) return
   const method = props.replace && router.replace ? router.replace : router.push
-  method.call(router, href)
+  return method.call(router, href)
 }
 const navigate = (item: AnchorItem, event: MouseEvent) => {
   if (item.disabled) {
@@ -284,6 +331,10 @@ const navigate = (item: AnchorItem, event: MouseEvent) => {
   }
   emit('click', item, event)
   if (!item.href.startsWith('#')) {
+    stopFollowingRouteEnd()
+    previousRouteEntry = undefined
+    nextRouteEntry = undefined
+    if (routeEntryFrame !== undefined) cancelAnimationFrame(routeEntryFrame)
     if (
       props.mode === 'router' &&
       routerAdapter.value &&
@@ -330,7 +381,101 @@ const handleRouteBoundaryNavigate = (
   if (params.trigger === 'click' && !isPlainAnchorRouteClick(params.event))
     return
   params.event.preventDefault()
-  navigateRoute(params.href)
+  stopFollowingRouteEnd()
+  previousRouteEntry =
+    params.trigger === 'wheel' && params.direction === 'previous'
+      ? anchorRouteKey(params.href)
+      : undefined
+  nextRouteEntry =
+    params.direction === 'next' ? anchorRouteKey(params.href) : undefined
+  const entryKey = previousRouteEntry
+  const nextEntryKey = nextRouteEntry
+  Promise.resolve(navigateRoute(params.href)).catch(() => {
+    if (previousRouteEntry === entryKey) previousRouteEntry = undefined
+    if (nextRouteEntry === nextEntryKey) nextRouteEntry = undefined
+  })
+}
+const routeEnd = () => {
+  const container = scrollContainer || window
+  if (container === window) {
+    const scroller = document.scrollingElement || document.documentElement
+    return Math.max(0, scroller.scrollHeight - window.innerHeight)
+  }
+  const element = container as HTMLElement
+  return Math.max(0, element.scrollHeight - element.clientHeight)
+}
+const stopFollowingRouteEnd = () => {
+  if (routeEntryFollowFrame !== undefined)
+    cancelAnimationFrame(routeEntryFollowFrame)
+  routeEntryFollowFrame = undefined
+  routeEntryFollowKey = undefined
+  scrollContainer?.removeEventListener('wheel', stopFollowingRouteEnd)
+}
+const scrollToRouteEnd = () => {
+  const container = scrollContainer || window
+  if (container === window) {
+    window.scrollTo({
+      top: routeEnd(),
+      behavior: 'auto',
+    })
+  } else {
+    const element = container as HTMLElement
+    element.scrollTo({
+      top: routeEnd(),
+      behavior: 'auto',
+    })
+  }
+  updateCurrent()
+}
+const followRouteEnd = (entryKey: string) => {
+  stopFollowingRouteEnd()
+  routeEntryFollowKey = entryKey
+  scrollContainer?.addEventListener('wheel', stopFollowingRouteEnd, {
+    passive: true,
+  })
+  const started = performance.now()
+  let lastEnd = routeEnd()
+  const follow = (now: number) => {
+    routeEntryFollowFrame = undefined
+    if (
+      routeEntryFollowKey !== entryKey ||
+      anchorRouteKey(routerLocation.value) !== entryKey ||
+      now - started >= 2000
+    ) {
+      stopFollowingRouteEnd()
+      return
+    }
+    const nextEnd = routeEnd()
+    if (nextEnd !== lastEnd) {
+      lastEnd = nextEnd
+      scrollToRouteEnd()
+    }
+    routeEntryFollowFrame = requestAnimationFrame(follow)
+  }
+  routeEntryFollowFrame = requestAnimationFrame(follow)
+}
+const settlePreviousRouteEntry = async () => {
+  const entryKey = previousRouteEntry
+  if (!entryKey || anchorRouteKey(routerLocation.value) !== entryKey) return
+  await nextTick()
+  if (routeEntryFrame !== undefined) cancelAnimationFrame(routeEntryFrame)
+  let attempts = 0
+  const finishWhenReady = () => {
+    routeEntryFrame = undefined
+    if (previousRouteEntry !== entryKey) return
+    const headings = routeHashItems.value
+    const mounted = headings.some((item) => getTarget(item.href))
+    if (!mounted && ++attempts < 60) {
+      routeEntryFrame = requestAnimationFrame(finishWhenReady)
+      return
+    }
+    previousRouteEntry = undefined
+    scrollToRouteEnd()
+    followRouteEnd(entryKey)
+  }
+  routeEntryFrame = requestAnimationFrame(() => {
+    routeEntryFrame = requestAnimationFrame(finishWhenReady)
+  })
 }
 const toggleCollapse = (entry: AnchorEntry) => {
   const next = new Set(collapsedKeys.value)
@@ -344,7 +489,99 @@ const updateCurrent = () => {
     scrollContainer && scrollContainer !== window
       ? (scrollContainer as HTMLElement).getBoundingClientRect().top
       : 0
-  const threshold = props.offset + props.bounds
+  const threshold = activeOffset.value + props.bounds
+  const scrollStart =
+    !scrollContainer || scrollContainer === window
+      ? (document.scrollingElement || document.documentElement).scrollTop
+      : (scrollContainer as HTMLElement).scrollTop
+  const atEnd =
+    !scrollContainer || scrollContainer === window
+      ? (() => {
+          const scroller = document.scrollingElement || document.documentElement
+          return (
+            scroller.scrollTop + window.innerHeight >=
+            scroller.scrollHeight - props.bounds
+          )
+        })()
+      : (scrollContainer as HTMLElement).scrollTop +
+          (scrollContainer as HTMLElement).clientHeight >=
+        (scrollContainer as HTMLElement).scrollHeight - props.bounds
+
+  if (activeStrategy.value === 'visible-section') {
+    const points: { href: string; top: number }[] = []
+    hashItems.value.forEach((item) => {
+      const target = getTarget(item.href)
+      if (target)
+        points.push({
+          href: item.href,
+          top: target.getBoundingClientRect().top,
+        })
+    })
+    const viewportBottom =
+      scrollContainer && scrollContainer !== window
+        ? (scrollContainer as HTMLElement).getBoundingClientRect().bottom
+        : window.innerHeight
+    const viewportTop = containerTop + props.offset
+    const currentRouteKey = anchorRouteKey(routerLocation.value)
+    if (
+      props.mode === 'router' &&
+      nextRouteEntry &&
+      nextRouteEntry === currentRouteKey
+    ) {
+      const firstConfigured = routeHashItems.value[0]?.href
+      if (
+        scrollStart > 2 ||
+        !firstConfigured ||
+        points[0]?.href !== firstConfigured
+      ) {
+        if (routeContext.value) setCurrent(routeContext.value.current.href)
+        return
+      }
+      nextRouteEntry = undefined
+    }
+    const first = points[0]
+    const nextTop = points[1]?.top ?? Number.POSITIVE_INFINITY
+    const usableHeight = Math.max(0, viewportBottom - viewportTop)
+    const firstHoldDistance = Math.min(120, usableHeight * 0.15)
+    const readingLine = viewportTop + usableHeight * 0.35
+    const holdFirst =
+      props.mode === 'router' &&
+      first &&
+      (scrollStart <= firstHoldDistance ||
+        (current.value === first.href && nextTop > readingLine))
+    const selected = holdFirst
+      ? first.href
+      : atEnd
+        ? points[points.length - 1]?.href
+        : selectVisibleAnchorSection(
+            points,
+            viewportTop,
+            viewportBottom,
+            current.value,
+          )
+    if (selected || routeContext.value)
+      setCurrent(selected || routeContext.value!.current.href)
+    return
+  }
+
+  if (props.mode === 'router' && routeContext.value) {
+    let active: AnchorItem | undefined
+    for (const item of routeHashItems.value) {
+      const target = getTarget(item.href)
+      if (
+        target &&
+        target.getBoundingClientRect().top - containerTop <= threshold
+      )
+        active = item
+    }
+    if (atEnd) {
+      active = [...routeHashItems.value]
+        .reverse()
+        .find((item) => getTarget(item.href))
+    }
+    setCurrent(active?.href || routeContext.value.current.href)
+    return
+  }
   const targetTop = (index: number) => {
     const target = getTarget(flatItems.value[index]?.href ?? '')
     return target
@@ -411,6 +648,13 @@ watch(
   },
   { immediate: true },
 )
+watch([routerLocation, () => props.items], settlePreviousRouteEntry, {
+  deep: true,
+})
+watch([hashItems, activeStrategy, activeOffset], async () => {
+  await nextTick()
+  if (scrollContainer) updateCurrent()
+})
 watch([() => props.items, current], syncCollapsedState, {
   immediate: true,
   deep: true,
@@ -424,6 +668,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (scrollSettleTimer) clearTimeout(scrollSettleTimer)
   if (scrollFrame !== undefined) cancelAnimationFrame(scrollFrame)
+  if (routeEntryFrame !== undefined) cancelAnimationFrame(routeEntryFrame)
+  stopFollowingRouteEnd()
   scrollContainer?.removeEventListener('scroll', handleScroll)
   scrollContainer?.removeEventListener('scrollend', settleScroll)
 })

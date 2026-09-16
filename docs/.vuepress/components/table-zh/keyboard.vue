@@ -47,7 +47,7 @@ const rows = ref([
         editor
       />
       <s-table-column field="count" title="数量" :editor="{ type: 'number' }" />
-      <s-table-column field="id" title="ID" fixed="right" :width="120" />
+      <s-table-column field="id" title="ID" fixed="right" :width="120" editor />
     </s-table>
     <p role="status">
       活动格: {{ active ? `${active.rowKey} / ${active.columnKey}` : '—' }} ·

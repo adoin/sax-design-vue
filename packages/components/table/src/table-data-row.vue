@@ -73,6 +73,7 @@
           ns.is('fixed-left', entry.fixed === 'left'),
           ns.is('fixed-right', entry.fixed === 'right'),
           ns.is('fixed-boundary', entry.fixedBoundary),
+          ns.is('edge-fragment', entry.edgeFragment),
           ns.is(
             'editable-cell',
             editing?.isEditable(editContext(entry.column, entry.index)),
@@ -241,6 +242,7 @@
             "
             :context="editContext(entry.column, entry.index)"
             :editing="editing"
+            :navigate-tab="navigateEditTab"
             :error="cellError(entry.column)?.message"
             :error-id="validationId(entry.column.field!, entry.index)"
             :validating="validation?.isPending(flatRow.key, entry.column.field)"
@@ -339,6 +341,10 @@ const props = defineProps<{
   selectionName?: string
   overflow?: TableOverflow
   editing?: TableEditing
+  navigateEditTab?: (
+    context: TableEditContext,
+    backwards: boolean,
+  ) => Promise<boolean>
   drag?: TableRowDrag
   keyboard?: TableKeyboard
   cellRange?: TableCellRangeState

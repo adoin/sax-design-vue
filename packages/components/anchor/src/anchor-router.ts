@@ -8,7 +8,7 @@ export interface AnchorRouteContext {
   next?: AnchorRouteBoundaryItem
 }
 
-const routeKey = (href: string) => {
+export const anchorRouteKey = (href: string) => {
   if (!href || href.startsWith('#')) return
   try {
     const browser = typeof window !== 'undefined'
@@ -43,12 +43,12 @@ export const findAnchorRouteContext = (
   items: AnchorItem[],
   href: string,
 ): AnchorRouteContext | undefined => {
-  const activeKey = routeKey(href)
+  const activeKey = anchorRouteKey(href)
   if (!activeKey) return
 
   const visit = (siblings: AnchorItem[]): AnchorRouteContext | undefined => {
     const index = siblings.findIndex(
-      (item) => routeKey(item.href) === activeKey,
+      (item) => anchorRouteKey(item.href) === activeKey,
     )
     if (index >= 0) {
       const adjacent = (step: -1 | 1) => {
@@ -58,7 +58,7 @@ export const findAnchorRouteContext = (
           candidateIndex += step
         ) {
           const candidate = siblings[candidateIndex]
-          if (!candidate.disabled && routeKey(candidate.href))
+          if (!candidate.disabled && anchorRouteKey(candidate.href))
             return { href: candidate.href, title: candidate.title }
         }
       }

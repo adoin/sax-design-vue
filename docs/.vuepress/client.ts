@@ -6,6 +6,7 @@ import '@vuesax-alpha/theme-chalk/src/dark/css-vars.scss'
 
 import 'virtual:sax-icons/register'
 import { resolveTableDocumentationOverviewRedirect } from './theme/shared/tableDocumentation'
+import { createDocumentationHashScrollBehavior } from './theme/shared/documentationHashScroll'
 
 const siteBase = import.meta.env.BASE_URL || '/'
 
@@ -36,6 +37,12 @@ const rewriteRootUrls = () => {
 
 export default defineClientConfig({
   enhance({ app, router }) {
+    const originalScrollBehavior = router.options.scrollBehavior
+    if (originalScrollBehavior)
+      router.options.scrollBehavior = createDocumentationHashScrollBehavior(
+        originalScrollBehavior,
+        (fullPath) => router.currentRoute.value.fullPath === fullPath,
+      )
     app.provide(ID_INJECTION_KEY, {
       prefix: 1,
       current: 0,

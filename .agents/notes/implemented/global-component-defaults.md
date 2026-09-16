@@ -31,6 +31,7 @@ Global defaults never own instance data, controlled state, application content, 
 
 - `size` applies only to components using the shared `small` / `default` / `large` scale.
 - Existing `shape`, locale, time zone, date/time Now behavior, Anchor settings, namespace, z-index, and theme contracts remain intact.
+- Anchor `activeStrategy` and `activeOffset` are reusable application/subtree policies. An explicit Anchor prop overrides the nearest configured field; `activeOffset` falls back to the established local `offset` when no dedicated value is supplied.
 - `button`, `dialog`, `drawer`, `notification`, `pagination`, and direct `popper` usage expose only their reusable interaction and presentation policies.
 - `table` accepts reusable feature configuration and presentation defaults through `TableGlobalConfig`.
 

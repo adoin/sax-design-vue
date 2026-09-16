@@ -12,7 +12,7 @@ These examples cover spreadsheet-like operations: keyboard navigation, ranges, c
 
 ### Keyboard navigation
 
-Enable `keyboard-config` to move with arrow keys in visible column order. Tab / Shift + Tab wraps across rows; native Tab behavior is preserved at either edge of the current page. Fixed columns share the same navigation order, and hidden columns are skipped. Navigation does not change pages automatically.
+Enable `keyboard-config` to move with arrow keys in visible column order when not editing. Tab / Shift + Tab wraps across rows; native Tab behavior is preserved at either edge of the current page. While editing, Tab / Shift + Tab commits the current cell and opens the next or previous editable cell in left-to-right, top-to-bottom order. Cells without an editor, disabled or readonly editors, and cells excluded by `editableMethod` are skipped. A failed commit validation keeps the current editor open. Fixed columns share the same navigation order, and hidden columns are skipped. Navigation does not change pages automatically.
 
 `v-model:active-cell` stores `{ rowKey, columnKey }`, independently of row selection through `v-model:highlight`. Ordinary columns use `key`, then `field`, or `@originalIndex` for unnamed columns; provide stable keys to persist addresses. Activity follows keys after sorting or reordering. Filtering, collapsing, paging or hiding the active column requests a clear when the target is no longer visible. Controlled models must accept updates.
 

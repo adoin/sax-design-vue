@@ -1092,33 +1092,46 @@
     background: getColor(primary, 0.14);
   }
 
-  .is-fixed-left.is-fixed-boundary::after,
-  .is-fixed-right.is-fixed-boundary::before {
+  @include e(fixed-boundary-overlay) {
     position: absolute;
-    z-index: 1;
+    z-index: 6;
     top: 0;
     bottom: 0;
-    width: 12px;
-    content: '';
     pointer-events: none;
+
+    &::before,
+    &::after {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 12px;
+      content: '';
+      pointer-events: none;
+    }
+
+    &.is-fixed-left::before {
+      left: var(--s-table-fixed-left-width);
+      background: linear-gradient(
+        to right,
+        hsl(var(--sax-primary) / 0.16),
+        transparent
+      );
+    }
+
+    &.is-fixed-right::after {
+      right: var(--s-table-fixed-right-width);
+      background: linear-gradient(
+        to left,
+        hsl(var(--sax-primary) / 0.16),
+        transparent
+      );
+    }
   }
 
-  .is-fixed-left.is-fixed-boundary::after {
-    right: -12px;
-    background: linear-gradient(
-      to right,
-      hsl(var(--sax-primary) / 0.16),
-      transparent
-    );
-  }
-
-  .is-fixed-right.is-fixed-boundary::before {
-    left: -12px;
-    background: linear-gradient(
-      to left,
-      hsl(var(--sax-primary) / 0.16),
-      transparent
-    );
+  // Overscan keeps partially covered center cells mounted. Their text must not
+  // appear as cropped fragments along a fixed-column boundary.
+  .is-edge-fragment > * {
+    visibility: hidden;
   }
 
   @include e(cell-content) {

@@ -1,7 +1,10 @@
 import { computed, defineComponent, h, nextTick, shallowRef } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { useTableColumnVirtualization } from '../src/composables/use-table-column-virtualization'
+import {
+  mapPhysicalToLogicalScroll,
+  useTableColumnVirtualization,
+} from '../src/composables/use-table-column-virtualization'
 import type { TableColumn } from '../src/table'
 
 let frames: Map<number, FrameRequestCallback>
@@ -104,6 +107,31 @@ describe('Table horizontal scroll anchors during layout changes', () => {
       nativeLogical + 16,
       5,
     )
+  })
+  it('keeps a keyboard-located column visible on a rounded compressed track', async () => {
+    const f = fixture()
+    await flush()
+    let physical = 0
+    Object.defineProperty(f.element, 'scrollLeft', {
+      configurable: true,
+      get: () => physical,
+      set: (value: number) => {
+        physical = Math.round(value)
+      },
+    })
+    f.controller.scrollToColumn(23)
+    f.controller.handleScroll({ currentTarget: f.element } as unknown as Event)
+    await flush()
+    const actualLogical = mapPhysicalToLogicalScroll(
+      f.element.scrollLeft,
+      f.controller.physicalTotalWidth.value - f.controller.availableWidth.value,
+      f.controller.totalWidth.value - f.controller.availableWidth.value,
+    )
+    expect(
+      actualLogical + f.controller.availableWidth.value,
+    ).toBeGreaterThanOrEqual(24 * 140)
+    expect(f.controller.columnVisible(23)).toBe(true)
+    expect(f.controller.columnVisible(24)).toBe(false)
   })
 
   it.each([false, true])(

@@ -48,6 +48,16 @@ export { default } from './App.vue'
 `,
     'utf8',
   )
+  await writeFile(
+    path.join(fixtureRoot, 'index.html'),
+    '<!doctype html><html><head></head><body><script type="module" src="/auto.ts"></script></body></html>',
+    'utf8',
+  )
+  await writeFile(
+    path.join(fixtureRoot, 'auto.ts'),
+    "import './App.vue'",
+    'utf8',
+  )
 })
 
 afterAll(async () => {
@@ -91,5 +101,41 @@ describe('consumer production build', () => {
     expect(code).toContain(await iconPath('notification'))
     expect(code).not.toContain(await iconPath('accessibility'))
     expect(code).not.toContain('"prefix":"carbon"')
+  })
+
+  it('bundles the automatically injected registry in an HTML entry', async () => {
+    const result = (await build({
+      configFile: false,
+      root: fixtureRoot,
+      logLevel: 'silent',
+      plugins: [
+        saxIcons({
+          collections: { cb: 'carbon' },
+          safelist: ['cb:notification'],
+        }),
+        vue(),
+      ],
+      build: {
+        minify: false,
+        write: false,
+        rolldownOptions: { external: ['vue', 'sax-design-vue'] },
+      },
+    })) as RolldownOutput | RolldownOutput[]
+    const outputs = Array.isArray(result) ? result : [result]
+    const code = outputs
+      .flatMap((output) => output.output)
+      .filter((item) => item.type === 'chunk')
+      .map((item) => item.code)
+      .join('\n')
+    const html = outputs
+      .flatMap((output) => output.output)
+      .flatMap((item) =>
+        item.type === 'asset' && item.fileName.endsWith('.html')
+          ? [String(item.source)]
+          : [],
+      )
+      .join('\n')
+    expect(code).toContain(await iconPath('notification'))
+    expect(html).not.toContain('virtual:sax-icons/register')
   })
 })

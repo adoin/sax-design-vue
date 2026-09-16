@@ -193,6 +193,7 @@ describe('virtual keyboard focus settlement', () => {
     const pending = f.keyboard.select(f.coordinates[0])
     for (let i = 0; i < 8; i++) await frame()
     expect(await pending).toBe(false)
+    expect(f.keyboard.get()).toBeNull()
     expect(f.locate.mock.calls.length).toBeLessThanOrEqual(9)
     expect(frames.size).toBe(0)
   })

@@ -6,6 +6,7 @@
         :items="anchorItems"
         :model-value="activeAnchorHref"
         :mode="isTableDocument ? 'router' : 'anchor'"
+        active-strategy="visible-section"
         :router="isTableDocument ? router : undefined"
         :offset="anchorTargetOffset"
         :target-offset="anchorTargetOffset"
@@ -27,6 +28,7 @@ import {
   tableDocumentationSectionSlug,
   tableDocumentationSections,
 } from '../shared/tableDocumentation'
+import { documentationHashOffset } from '../shared/documentationHashScroll'
 import type { MarkdownItHeader } from '@mdit-vue/types'
 import type { AnchorItem } from '@vuesax-alpha/components/anchor'
 import type {
@@ -39,7 +41,7 @@ const pageData = usePageData()
 const router = useRouter()
 const { t } = useDocLocaleUi()
 const domPageItems = ref<AnchorItem[]>([])
-const anchorTargetOffset = 124
+const anchorTargetOffset = documentationHashOffset
 let collectFrame: number | undefined
 let headingObserver: MutationObserver | undefined
 

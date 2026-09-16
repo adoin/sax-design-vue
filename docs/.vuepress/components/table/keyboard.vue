@@ -51,7 +51,7 @@ const rows = ref([
         title="Quantity"
         :editor="{ type: 'number' }"
       />
-      <s-table-column field="id" title="ID" fixed="right" :width="120" />
+      <s-table-column field="id" title="ID" fixed="right" :width="120" editor />
     </s-table>
     <p role="status">
       Active cell:

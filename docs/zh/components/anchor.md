@@ -32,17 +32,27 @@ PROPS:
   - name: offset
     type: Number
     values: 'pixels'
-    description: 分别控制激活判定偏移、点击滚动偏移和判定容差。
+    description: 可读视口的顶部留白；未指定专用属性时，也作为旧版标题激活线和点击落点的默认偏移。
     default: '88'
+  - name: active-strategy
+    type: String
+    values: 'heading / visible-section'
+    description: 选择标题过线或可读视口中占比最大的内容区间；组件局部值优先于全局 anchor.activeStrategy。
+    default: heading
+  - name: active-offset
+    type: Number
+    values: '像素'
+    description: 标题过线算法的激活线距离滚动视口顶部的像素数；局部值优先于全局 anchor.activeOffset，省略时回退到 offset。
+    default: 'offset'
   - name: target-offset
     type: Number
     values: 'pixels'
-    description: 分别控制激活判定偏移、点击滚动偏移和判定容差。
+    description: 选择哈希链接后滚动到的顶部留白；默认沿用 offset。
     default: 'offset'
   - name: bounds
     type: Number
     values: 'pixels'
-    description: 分别控制激活判定偏移、点击滚动偏移和判定容差。
+    description: 标题激活线与页底判定附近的容差。
     default: '5'
   - name: affix
     type: Boolean
@@ -175,7 +185,7 @@ Anchor 本身不依赖路由库。使用 `router` 模式时，在组件或 Ancho
 
 <h3 id="anchor-secondary">二级链接</h3>
 
-每个项目使用稳定的 `href` 指向真实页面 ID。`offset` 控制项目何时高亮，`target-offset` 控制点击后的最终滚动位置。
+每个项目使用稳定的 `href` 指向真实页面 ID。默认的 `heading` 算法在标题越过 `active-offset + bounds` 后激活它；未传 `active-offset` 时沿用 `offset`。`target-offset` 独立控制点击后的滚动落点。`visible-section` 则比较各标题至下一标题的内容区间，在扣除 `offset` 顶部留白后的视口中各占多少高度。
 
 <h2 id="anchor-horizontal">横向模式</h2>
 
@@ -209,7 +219,13 @@ Anchor 本身不依赖路由库。使用 `router` 模式时，在组件或 Ancho
 
 <h2 id="anchor-route-boundary">路由模式</h2>
 
-设置 `mode="router"` 后继续使用普通的递归 `items`。Anchor 会找到与路由当前位置匹配的项目，从它的同级路由项中推导前后章节，并在内部自动生成悬浮的上下边界。哈希子项仍是当前页面锚点，不会进入跨路由顺序。
+当一份目录同时包含跨路由章节和章节内标题时，使用 `mode="router"`。路由项标识当前页面并提供悬浮的上／下一章边界；该路由下的 `#hash` 子项标识页内标题，随页面滚动更新。哈希子项不进入跨路由顺序。向下越过页底会从下一章开头继续，向上越过页首会从上一章末尾继续；普通路由链接点击仍遵循路由器的常规落点。
+
+跨路由的页面落点由路由器和页面滚动容器管理，应瞬时进入新页面，而不要依赖全局平滑滚动样式把旧页面的滚动位置动画带到新页面。页内哈希点击仍使用 Anchor 的 `scroll-behavior` 设置，默认值为 `smooth`。
+
+文档右侧目录采用 `active-strategy="visible-section"`，让哈希高亮跟随可读视口内占比最大的内容区间。组件库对现有应用的默认值仍为 `heading`。可在单个 Anchor 上传 `active-strategy`，或通过 `SConfigProvider`、安装配置中的 `anchor: { activeStrategy: 'visible-section', activeOffset: 160 }` 统一设置；组件局部值优先。`activeOffset` 只影响 `heading` 算法。
+
+通过边界进入下一路由时，目录会先等待新页面的滚动位置稳定在页首，再选中页内哈希。章节开头保持第一个标题激活；继续向下阅读、后续标题进入阅读区域后再切换。
 
 通过 `router` 局部传入兼容 Vue Router 的对象。比如：[vue-smart-router](https://www.npmjs.com/package/vue-smart-router) **等**来实现对路由的操作。
 
@@ -268,6 +284,8 @@ app.use(router)
 app.use(SaxDesignVue, {
   anchor: {
     router,
+    activeStrategy: 'visible-section',
+    activeOffset: 160,
     routeBoundary: {
       threshold: 160,
       armDelay: 320,

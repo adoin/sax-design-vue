@@ -12,7 +12,7 @@ import {
   markAnchorRouteBoundaryNavigation,
   resetAnchorRouteBoundaryNavigation,
 } from '../src/anchor-route-boundary-intent'
-import type { AnchorItem } from '../src/anchor'
+import type { AnchorActiveStrategy, AnchorItem } from '../src/anchor'
 
 const items: AnchorItem[] = [
   {
@@ -43,6 +43,26 @@ afterEach(() => {
 })
 
 describe('Anchor hierarchy', () => {
+  it('keeps the route marker when no local hash is active', () => {
+    const wrapper = mount(Anchor, {
+      props: {
+        mode: 'router',
+        router: {
+          currentRoute: ref({ path: '/guide/data' }),
+          push: vi.fn(),
+        },
+        routeBoundary: false,
+        items: [{ href: '/guide/data', title: 'Data' }],
+      },
+    })
+    expect(wrapper.findAll('.s-anchor__active-icon')).toHaveLength(1)
+    expect(
+      wrapper
+        .find('.s-anchor__item[aria-current="page"] .s-anchor__active-icon')
+        .exists(),
+    ).toBe(true)
+    wrapper.unmount()
+  })
   it('renders cancellable page links and exposes page state', async () => {
     const routeItems: AnchorItem[] = [
       { href: '/components/table/row-selection.html', title: 'Selection' },
@@ -132,6 +152,341 @@ describe('Anchor hierarchy', () => {
     expect(wrapper.find('.s-anchor-route-boundaries').exists()).toBe(false)
   })
 
+  it('updates hash headings without losing the active route in router mode', async () => {
+    const container = document.createElement('div')
+    Object.defineProperties(container, {
+      clientHeight: { value: 200 },
+      scrollHeight: { value: 1000, configurable: true },
+    })
+    const overview = document.createElement('h2')
+    overview.id = 'router-overview'
+    const detail = document.createElement('h2')
+    detail.id = 'router-detail'
+    let detailTop = 300
+    vi.spyOn(overview, 'getBoundingClientRect').mockReturnValue({
+      top: 60,
+    } as DOMRect)
+    vi.spyOn(detail, 'getBoundingClientRect').mockImplementation(
+      () => ({ top: detailTop }) as DOMRect,
+    )
+    document.body.append(overview, detail)
+
+    const wrapper = mount(Anchor, {
+      props: {
+        mode: 'router',
+        router: {
+          currentRoute: ref({ path: '/guide/selection' }),
+          push: vi.fn(),
+        },
+        getContainer: () => container,
+        items: [
+          { href: '/guide/data', title: 'Data' },
+          {
+            href: '/guide/selection',
+            title: 'Selection',
+            children: [
+              { href: '#router-overview', title: 'Overview' },
+              { href: '#router-detail', title: 'Detail' },
+            ],
+          },
+          { href: '/guide/sorting', title: 'Sorting' },
+        ],
+      },
+    })
+    const link = (href: string) =>
+      wrapper
+        .findAll('.s-anchor__item')
+        .find((item) => item.attributes('href') === href)!
+
+    container.dispatchEvent(new Event('scrollend'))
+    await wrapper.vm.$nextTick()
+
+    expect(link('/guide/selection').attributes('aria-current')).toBe('page')
+    expect(link('#router-overview').attributes('aria-current')).toBe('location')
+    expect(wrapper.findAll('.s-anchor__active-icon')).toHaveLength(1)
+    expect(
+      link('/guide/selection').find('.s-anchor__active-icon').exists(),
+    ).toBe(false)
+    expect(
+      link('#router-overview').find('.s-anchor__active-icon').exists(),
+    ).toBe(true)
+    detailTop = 80
+    container.dispatchEvent(new Event('scroll'))
+    container.dispatchEvent(new Event('scrollend'))
+    await wrapper.vm.$nextTick()
+    expect(link('/guide/selection').attributes('aria-current')).toBe('page')
+    expect(link('#router-detail').attributes('aria-current')).toBe('location')
+    expect(link('#router-overview').attributes('aria-current')).toBeUndefined()
+    expect(wrapper.findAll('.s-anchor__active-icon')).toHaveLength(1)
+    expect(link('#router-detail').find('.s-anchor__active-icon').exists()).toBe(
+      true,
+    )
+
+    wrapper.unmount()
+    overview.remove()
+    detail.remove()
+  })
+
+  it('selects the last mounted hash at the window page bottom', async () => {
+    const scroller = document.scrollingElement || document.documentElement
+    const oldScrollHeight = Object.getOwnPropertyDescriptor(
+      scroller,
+      'scrollHeight',
+    )
+    const oldScrollTop = scroller.scrollTop
+    Object.defineProperty(scroller, 'scrollHeight', {
+      value: 1000,
+      configurable: true,
+    })
+    vi.stubGlobal('innerHeight', 300)
+    const first = document.createElement('h2')
+    first.id = 'router-window-first'
+    const last = document.createElement('h2')
+    last.id = 'router-window-last'
+    vi.spyOn(first, 'getBoundingClientRect').mockReturnValue({
+      top: 60,
+    } as DOMRect)
+    vi.spyOn(last, 'getBoundingClientRect').mockReturnValue({
+      top: 260,
+    } as DOMRect)
+    document.body.append(first, last)
+
+    const wrapper = mount(Anchor, {
+      props: {
+        mode: 'router',
+        router: { currentRoute: ref({ path: '/guide/data' }), push: vi.fn() },
+        items: [
+          {
+            href: '/guide/data',
+            title: 'Data',
+            children: [
+              { href: '#router-window-first', title: 'First' },
+              { href: '#router-window-last', title: 'Last' },
+            ],
+          },
+          { href: '/guide/selection', title: 'Selection' },
+        ],
+      },
+    })
+    const link = (href: string) =>
+      wrapper
+        .findAll('.s-anchor__item')
+        .find((item) => item.attributes('href') === href)!
+
+    scroller.scrollTop = 400
+    window.dispatchEvent(new Event('scrollend'))
+    await wrapper.vm.$nextTick()
+    expect(link('#router-window-first').attributes('aria-current')).toBe(
+      'location',
+    )
+    expect(
+      link('#router-window-last').attributes('aria-current'),
+    ).toBeUndefined()
+
+    scroller.scrollTop = 700
+    window.dispatchEvent(new Event('scrollend'))
+    await wrapper.vm.$nextTick()
+    expect(link('/guide/data').attributes('aria-current')).toBe('page')
+    expect(link('#router-window-last').attributes('aria-current')).toBe(
+      'location',
+    )
+    expect(
+      link('#router-window-first').attributes('aria-current'),
+    ).toBeUndefined()
+
+    wrapper.unmount()
+    first.remove()
+    last.remove()
+    scroller.scrollTop = oldScrollTop
+    if (oldScrollHeight)
+      Object.defineProperty(scroller, 'scrollHeight', oldScrollHeight)
+    else Reflect.deleteProperty(scroller, 'scrollHeight')
+  })
+
+  it('enters the previous route at its end only for boundary wheel navigation', async () => {
+    const container = document.createElement('div')
+    Object.defineProperties(container, {
+      clientHeight: { value: 200 },
+      scrollHeight: { value: 1000, configurable: true },
+    })
+    const scrollTo = vi.fn((options?: ScrollToOptions | number, y?: number) => {
+      container.scrollTop =
+        typeof options === 'number' ? y || 0 : options?.top || 0
+    })
+    container.scrollTo = scrollTo
+    const lastHeading = document.createElement('h2')
+    lastHeading.id = 'router-data-last'
+    vi.spyOn(lastHeading, 'getBoundingClientRect').mockReturnValue({
+      top: 90,
+    } as DOMRect)
+    document.body.append(lastHeading)
+    const currentRoute = ref({ path: '/guide/selection' })
+    const push = vi.fn((href: string) => {
+      currentRoute.value = { path: href }
+    })
+    const wrapper = mount(Anchor, {
+      props: {
+        mode: 'router',
+        router: { currentRoute, push },
+        getContainer: () => container,
+        items: [
+          {
+            href: '/guide/data',
+            title: 'Data',
+            children: [{ href: '#router-data-last', title: 'Last heading' }],
+          },
+          { href: '/guide/selection', title: 'Selection' },
+        ],
+      },
+    })
+    wrapper.findComponent(AnchorRouteBoundary).vm.$emit('navigate', {
+      href: '/guide/data',
+      title: 'Data',
+      direction: 'previous',
+      trigger: 'wheel',
+      event: new WheelEvent('wheel', { cancelable: true }),
+    })
+    await new Promise((resolve) => setTimeout(resolve, 70))
+
+    expect(push).toHaveBeenCalledWith('/guide/data')
+    expect(scrollTo).toHaveBeenCalledWith({ top: 800, behavior: 'auto' })
+    const links = wrapper.findAll('.s-anchor__item')
+    expect(
+      links
+        .find((link) => link.attributes('href') === '/guide/data')
+        ?.attributes('aria-current'),
+    ).toBe('page')
+    expect(
+      links
+        .find((link) => link.attributes('href') === '#router-data-last')
+        ?.attributes('aria-current'),
+    ).toBe('location')
+
+    Object.defineProperty(container, 'scrollHeight', {
+      value: 1200,
+      configurable: true,
+    })
+    await new Promise((resolve) => setTimeout(resolve, 70))
+    expect(scrollTo).toHaveBeenCalledWith({ top: 1000, behavior: 'auto' })
+    container.dispatchEvent(new WheelEvent('wheel', { deltaY: -120 }))
+    Object.defineProperty(container, 'scrollHeight', {
+      value: 1400,
+      configurable: true,
+    })
+    await new Promise((resolve) => setTimeout(resolve, 70))
+    expect(scrollTo).not.toHaveBeenCalledWith({ top: 1200, behavior: 'auto' })
+
+    currentRoute.value = { path: '/guide/selection' }
+    await wrapper.vm.$nextTick()
+    const scrollCalls = scrollTo.mock.calls.length
+    wrapper.findComponent(AnchorRouteBoundary).vm.$emit('navigate', {
+      href: '/guide/data',
+      title: 'Data',
+      direction: 'previous',
+      trigger: 'click',
+      event: new MouseEvent('click', { button: 0, cancelable: true }),
+    })
+    await new Promise((resolve) => setTimeout(resolve, 70))
+    expect(scrollTo).toHaveBeenCalledTimes(scrollCalls)
+
+    wrapper.unmount()
+    lastHeading.remove()
+  })
+
+  it('keeps the first hash stable while a forward route entry settles', async () => {
+    const container = document.createElement('div')
+    Object.defineProperties(container, {
+      clientHeight: { value: 600 },
+      scrollHeight: { value: 1600 },
+    })
+    vi.spyOn(container, 'getBoundingClientRect').mockReturnValue({
+      top: 0,
+      bottom: 600,
+    } as DOMRect)
+    const first = document.createElement('h2')
+    first.id = 'router-next-first'
+    const second = document.createElement('h2')
+    second.id = 'router-next-second'
+    let firstTop = 120
+    let secondTop = 310
+    vi.spyOn(first, 'getBoundingClientRect').mockImplementation(
+      () => ({ top: firstTop }) as DOMRect,
+    )
+    vi.spyOn(second, 'getBoundingClientRect').mockImplementation(
+      () => ({ top: secondTop }) as DOMRect,
+    )
+    document.body.append(first, second)
+    const currentRoute = ref({ path: '/guide/previous' })
+    const push = vi.fn((href: string) => {
+      currentRoute.value = { path: href }
+    })
+    const wrapper = mount(Anchor, {
+      props: {
+        mode: 'router',
+        activeStrategy: 'visible-section',
+        router: { currentRoute, push },
+        getContainer: () => container,
+        items: [
+          { href: '/guide/previous', title: 'Previous' },
+          {
+            href: '/guide/next',
+            title: 'Next',
+            children: [
+              { href: '#router-next-first', title: 'First' },
+              { href: '#router-next-second', title: 'Second' },
+            ],
+          },
+        ],
+      },
+    })
+    const activeHash = () =>
+      wrapper
+        .findAll('.s-anchor__item[aria-current="location"]')
+        .map((item) => item.attributes('href'))
+
+    container.scrollTop = 1000
+    wrapper.findComponent(AnchorRouteBoundary).vm.$emit('navigate', {
+      href: '/guide/next',
+      title: 'Next',
+      direction: 'next',
+      trigger: 'wheel',
+      event: new WheelEvent('wheel', { cancelable: true }),
+    })
+    await wrapper.vm.$nextTick()
+    container.dispatchEvent(new Event('scrollend'))
+    await wrapper.vm.$nextTick()
+    expect(push).toHaveBeenCalledWith('/guide/next')
+    expect(activeHash()).toEqual([])
+    expect(
+      wrapper
+        .findAll('.s-anchor__item[aria-current="page"]')
+        .map((item) => item.attributes('href')),
+    ).toEqual(['/guide/next'])
+
+    container.scrollTop = 0
+    container.dispatchEvent(new Event('scrollend'))
+    await wrapper.vm.$nextTick()
+    expect(activeHash()).toEqual(['#router-next-first'])
+
+    container.scrollTop = 20
+    firstTop = 100
+    secondTop = 290
+    container.dispatchEvent(new Event('scrollend'))
+    await wrapper.vm.$nextTick()
+    expect(activeHash()).toEqual(['#router-next-first'])
+
+    container.scrollTop = 140
+    firstTop = -20
+    secondTop = 170
+    container.dispatchEvent(new Event('scrollend'))
+    await wrapper.vm.$nextTick()
+    expect(activeHash()).toEqual(['#router-next-second'])
+
+    wrapper.unmount()
+    first.remove()
+    second.remove()
+  })
+
   it('inherits the router from global Anchor configuration', async () => {
     const router = {
       currentRoute: ref({ path: '/guide/selection' }),
@@ -152,6 +507,95 @@ describe('Anchor hierarchy', () => {
     expect(
       wrapper.get('.s-anchor-route-boundary__link').attributes('href'),
     ).toBe('/guide/data')
+  })
+
+  it('resolves active strategy and heading offset from global then local settings', async () => {
+    const localStrategy = ref<AnchorActiveStrategy | undefined>()
+    const localOffset = ref<number | undefined>()
+    const container = document.createElement('div')
+    Object.defineProperties(container, {
+      clientHeight: { value: 600 },
+      scrollHeight: { value: 1400 },
+    })
+    container.scrollTop = 150
+    vi.spyOn(container, 'getBoundingClientRect').mockReturnValue({
+      top: 0,
+      bottom: 600,
+    } as DOMRect)
+    const first = document.createElement('h2')
+    first.id = 'router-strategy-first'
+    const last = document.createElement('h2')
+    last.id = 'router-strategy-last'
+    vi.spyOn(first, 'getBoundingClientRect').mockReturnValue({
+      top: -200,
+    } as DOMRect)
+    vi.spyOn(last, 'getBoundingClientRect').mockReturnValue({
+      top: 220,
+    } as DOMRect)
+    document.body.append(first, last)
+    const routeItems: AnchorItem[] = [
+      {
+        href: '/guide/data',
+        title: 'Data',
+        children: [
+          { href: '#router-strategy-first', title: 'First' },
+          { href: '#router-strategy-last', title: 'Last' },
+        ],
+      },
+      { href: '/guide/selection', title: 'Selection' },
+    ]
+    const wrapper = mount(ConfigProvider, {
+      props: {
+        anchor: { activeStrategy: 'visible-section', activeOffset: 130 },
+      },
+      slots: {
+        default: () =>
+          h(Anchor, {
+            mode: 'router',
+            router: {
+              currentRoute: ref({ path: '/guide/data' }),
+              push: vi.fn(),
+            },
+            getContainer: () => container,
+            items: routeItems,
+            activeStrategy: localStrategy.value,
+            activeOffset: localOffset.value,
+          }),
+      },
+    })
+    const activeHash = () =>
+      wrapper
+        .findAll('.s-anchor__item[aria-current="location"]')
+        .map((item) => item.attributes('href'))
+
+    container.dispatchEvent(new Event('scrollend'))
+    await wrapper.vm.$nextTick()
+    expect(activeHash()).toEqual(['#router-strategy-last'])
+
+    localStrategy.value = 'heading'
+    await wrapper.vm.$nextTick()
+    container.dispatchEvent(new Event('scrollend'))
+    await wrapper.vm.$nextTick()
+    expect(activeHash()).toEqual(['#router-strategy-first'])
+
+    localOffset.value = 260
+    await wrapper.vm.$nextTick()
+    container.dispatchEvent(new Event('scrollend'))
+    await wrapper.vm.$nextTick()
+    expect(activeHash()).toEqual(['#router-strategy-last'])
+
+    localStrategy.value = undefined
+    localOffset.value = undefined
+    await wrapper.setProps({
+      anchor: { activeStrategy: 'heading', activeOffset: 130 },
+    })
+    container.dispatchEvent(new Event('scrollend'))
+    await wrapper.vm.$nextTick()
+    expect(activeHash()).toEqual(['#router-strategy-first'])
+
+    wrapper.unmount()
+    first.remove()
+    last.remove()
   })
 
   it('renders recursive levels and toggles collapsible items independently', async () => {

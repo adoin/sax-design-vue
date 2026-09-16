@@ -1,7 +1,7 @@
 ---
 status: implemented
 kind: project-specification
-updated_at: 2026-09-14
+updated_at: 2026-09-15
 completed_at: 2026-09-07
 modules:
   - packages/components/table
@@ -58,7 +58,7 @@ Custom-editor wrapping and row growth follow [table-custom-editor-sizing.md](tab
 
 Validation presentation follows [table-validation-overlay.md](table-validation-overlay.md). Error messages never change row height: invalid cells use a contained danger shadow and marker, the active message uses the shared teleported Popper, and multiple errors use an overlaid previous/next navigator. Manual validation closes active editors; starting an editor clears its old error presentation, while a failed commit republishes the error without discarding the draft.
 
-Fixed-column boundary shadows use a translucent primary hue and terminate at each cell's block edges so adjacent rows do not accumulate opacity into horizontal seams. Starting an editor from an already mounted cell preserves the current horizontal position; only programmatic editing of an offscreen target invokes row or column location before focus, and editor focus uses `preventScroll`.
+Fixed-column boundary shadows use a single pointer-transparent overlay spanning the data viewport, aligned to the fixed bands in both virtual and ordinary horizontal scrolling. Ordinary scroll viewports use their paint-box width (`offsetWidth`) for the right boundary: a native scrollbar gutter can make `clientWidth` narrower without moving the sticky right cell. Do not paint one gradient per fixed cell: subpixel row boundaries can leave pale seams, while extending those segments overlaps them into dark seams. Horizontal overscan keeps partially covered center cells mounted; suppress their content until the column is fully visible so clipped text does not appear beside a fixed band. Starting an editor from an already mounted cell preserves the current horizontal position; only programmatic editing of an offscreen target invokes row or column location before focus, and editor focus uses `preventScroll`.
 
 Column settings use one drag handle per row for ordering. Group columns render as tinted containers that wrap their complete descendant branch; nested groups add another inset surface and every group shows its direct child count. These containers are always expanded and do not add disclosure controls. Pointer dragging shows an insertion line or highlights a target group container and scrolls near the panel edges; keyboard users can pick up a focused handle, choose a position with the arrow keys, then drop or cancel it. The panel does not render separate up/down ordering buttons. Its trigger updates the shared popper model synchronously without the general Button ripple, debounce, or delayed-toggle path. The shared popper content stays mounted while hidden. Panels with at most 20 columns pre-render their rows; larger panels retain virtual rendering and remain visually hidden until the first range is ready, so neither mode exposes an empty panel shell.
 
