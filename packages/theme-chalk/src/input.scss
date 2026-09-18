@@ -735,8 +735,9 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     }
 
     &:focus-visible {
-      outline: 2px solid getColor('color', 0.35);
-      outline-offset: 1px;
+      background: getColor('color', 0.1);
+      color: getColor('color');
+      outline: none;
     }
   }
   @include e(placeholder) {

@@ -1,10 +1,5 @@
 ---
 PROPS:
-  - name: mode
-    type: String
-    values: 'anchor / router'
-    description: anchor handles page hashes; router derives adjacent route boundaries from sibling items and delegates navigation to the router adapter.
-    default: anchor
   - name: model-value
     type: String
     values: 'href'
@@ -17,8 +12,8 @@ PROPS:
     default: "''"
   - name: items
     type: Array
-    values: '{ href, title, disabled?, collapsible?, defaultCollapsed?, children? }[]'
-    description: Recursive navigation items. A hash href scrolls within the page; a route or URL href renders as a normal link. children can nest further, while collapsible controls whether that item's descendants can be collapsed.
+    values: '{ href?, title, disabled?, boundary?, collapsible?, defaultCollapsed?, children? }[]'
+    description: Recursive navigation items. Omit href for a grouping label; #hash scrolls locally, while another same-origin path uses the configured router. boundary overrides participation in the flattened previous/next sequence.
     default: '[]'
   - name: router
     type: AnchorRouterAdapter
@@ -27,7 +22,7 @@ PROPS:
     default: null
   - name: route-boundary
     type: Boolean | AnchorRouteBoundaryOptions
-    description: Automatic floating previous/next boundary in router mode; false disables it, or configure threshold, armDelay and routeCooldown.
+    description: Automatic floating previous/next boundary for the flattened eligible route sequence; false disables it, or configure threshold, armDelay and routeCooldown.
     default: true
   - name: offset
     type: Number
@@ -88,7 +83,7 @@ EVENTS:
   - name: change
     description: Fired when the active anchor changes.
   - name: click
-    description: Fired with the selected item and MouseEvent before navigation; router mode then delegates an ordinary route click to the configured adapter.
+    description: Fired with the selected item and MouseEvent before navigation; ordinary same-origin route clicks are then delegated to the configured adapter.
   - name: collapse-change
     description: Fired when a collapsible item opens or closes, with the item and collapsed state.
 SLOTS:
@@ -98,11 +93,11 @@ SLOTS:
     default: null
   - name: route-previous
     type: 'Slot<{ item: AnchorRouteBoundaryItem, direction: previous, visible: boolean, navigating: boolean, progress: number }>'
-    description: Replaces the automatic previous-route copy in router mode while keeping its link, icon and progress indicator.
+    description: Replaces the automatic previous-route copy while keeping its link, icon and progress indicator.
     default: null
   - name: route-next
     type: 'Slot<{ item: AnchorRouteBoundaryItem, direction: next, visible: boolean, navigating: boolean, progress: number }>'
-    description: Replaces the automatic next-route copy in router mode while keeping its link, icon and progress indicator.
+    description: Replaces the automatic next-route copy while keeping its link, icon and progress indicator.
     default: null
 description: 'Navigate between sections on the current page or related routes.'
 ---
@@ -122,10 +117,10 @@ root-relative, or absolute URL to navigate to another route. Anchor renders
 semantic links, so route items keep standard browser behaviors such as opening
 in a new tab and copying the destination.
 
-Anchor has no router dependency. In `router` mode, provide a compatible router
-locally or through global Anchor configuration; ordinary clicks are delegated
-automatically, while modified clicks remain native links and can open in a new
-tab.
+Anchor has no router dependency. Provide a compatible router locally or through
+global Anchor configuration when the item tree contains same-origin page paths.
+Anchor classifies every `href` automatically: ordinary route clicks are
+delegated, while modified clicks remain native links and can open in a new tab.
 
 <template #example>
 
@@ -157,8 +152,8 @@ tab.
 
 <h2 id="anchor-hierarchy">Hierarchy</h2>
 
-Use `children` recursively for any depth. The parent remains a normal target.
-Set `collapsible: true` to let that item hide its descendants, and use
+Use `children` recursively for any depth. A parent with `href` remains a normal
+target; omit `href` when it is only a grouping label. Set `collapsible: true` to let that item hide its descendants, and use
 `defaultCollapsed` for its initial state. If the active anchor is hidden in a
 collapsed branch, its ancestors open so the current location remains visible.
 
@@ -230,9 +225,9 @@ each heading-to-next-heading section occupies the viewport below `offset`.
 
 <card>
 
-<h2 id="anchor-route-boundary">Router mode</h2>
+<h2 id="anchor-route-boundary">Mixed route and anchor navigation</h2>
 
-Set `mode="router"` when one outline combines route-level chapters with headings inside each chapter. Route items select the current page and provide its previous/next floating boundaries; `#hash` descendants select headings on that page and update as it scrolls. Hash items do not enter the cross-route sequence. Scrolling forward across the bottom edge opens the next chapter at its start; scrolling backward across the top edge opens the previous chapter at its end. Ordinary route-link clicks retain normal router entry behavior.
+Provide `router` when one outline combines route-level chapters with headings inside each chapter; no mode switch is required. Anchor infers behavior per item. A bare `#hash` scrolls within the current document, another same-origin pathname uses the router, and a pathname plus hash uses the router only when its document differs. The previous/next sequence is flattened across groups and includes full routes without hashes by default; set `boundary: true` to include a cross-document hash such as an API endpoint, or `false` to exclude a route. Scrolling forward across the bottom edge opens the next entry at its start; scrolling backward across the top edge opens the previous entry at its end.
 
 The router and page scroll owner control route-entry scrolling. Keep route changes instantaneous rather than relying on a global smooth-scroll rule, which can animate the new page backward from the previous page's scroll position. Hash-link clicks still use Anchor's `scroll-behavior` setting, which defaults to `smooth`.
 
@@ -251,7 +246,6 @@ const router = useRouter()
 const items: AnchorItem[] = [
   {
     title: 'Table guides',
-    href: '/table',
     children: [
       { title: 'Data', href: '/table/data' },
       { title: 'Selection', href: '/table/selection' },
@@ -263,7 +257,7 @@ const items: AnchorItem[] = [
 
 <template>
   <aside>
-    <SAnchor mode="router" :items="items" :router="router" />
+    <SAnchor :items="items" :router="router" />
   </aside>
   <RouterView />
 </template>
@@ -320,12 +314,12 @@ const routerAdapter: AnchorRouterAdapter = {
 `current()` should read reactive route state. If the router exposes no reactive location, synchronize the active route through Anchor's `v-model` instead.
 
 ::: tip Live example
-[Try router mode in the Table guides →](/components/table/large-data-and-visualization.html)
+[Try mixed navigation in the Table guides →](/components/table/large-data-and-visualization.html)
 :::
 
 <h3 id="anchor-container">Scroll container</h3>
 
-Regular anchors and router mode both listen to the page window by default. For
+Local anchors and route-aware outlines both listen to the page window by default. For
 a panel or virtualized page, provide `get-container` and return that scrolling
 element. Anchor navigation, active-state calculation and route boundaries then
 use the same container.

@@ -18,7 +18,7 @@
     overflow: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--sax-primary) / 0.34) transparent;
+    scrollbar-color: #{getColor(primary, 0.34)} transparent;
 
     @supports selector(::-webkit-scrollbar) {
       // Standard scrollbar styles override the explicit WebKit track in Chromium.
@@ -36,7 +36,7 @@
     &::-webkit-scrollbar-thumb {
       border: 1px solid transparent;
       border-radius: var(--sax-radius-pill);
-      background: hsl(var(--sax-primary) / 0.3);
+      background: #{getColor(primary, 0.3)};
       background-clip: padding-box;
     }
 
@@ -50,7 +50,7 @@
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background: hsl(var(--sax-primary) / 0.52);
+      background: #{getColor(primary, 0.52)};
     }
   }
 

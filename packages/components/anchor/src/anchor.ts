@@ -7,9 +7,11 @@ import type {
 } from '../../types'
 
 export interface AnchorItem {
-  href: string
+  href?: string
   title: string
   disabled?: boolean
+  /** Override participation in the flattened previous/next route sequence. */
+  boundary?: boolean
   collapsible?: boolean
   defaultCollapsed?: boolean
   children?: AnchorItem[]
@@ -18,11 +20,6 @@ export interface AnchorItem {
 export type AnchorActiveStrategy = 'heading' | 'visible-section'
 
 export const anchorProps = buildProps({
-  mode: {
-    type: String,
-    values: ['anchor', 'router'] as const,
-    default: 'anchor',
-  },
   modelValue: { type: String, default: '' },
   items: { type: definePropType<AnchorItem[]>(Array), default: () => [] },
   offset: { type: Number, default: 88 },
@@ -71,9 +68,9 @@ export const anchorEmits = {
   'update:modelValue': (value: string) => typeof value === 'string',
   change: (value: string) => typeof value === 'string',
   click: (item: AnchorItem, event: MouseEvent) =>
-    typeof item.href === 'string' && event instanceof MouseEvent,
+    typeof item.title === 'string' && event instanceof MouseEvent,
   collapseChange: (item: AnchorItem, collapsed: boolean) =>
-    typeof item.href === 'string' && typeof collapsed === 'boolean',
+    typeof item.title === 'string' && typeof collapsed === 'boolean',
 }
 
 export type AnchorProps = ExtractPropTypes<typeof anchorProps>

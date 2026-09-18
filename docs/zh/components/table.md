@@ -18,7 +18,7 @@ PROPS:
     usage: '/zh/components/table/large-data-and-visualization.html#chart-integration'
   - name: 'find-config'
     type: 'Boolean | TableFindConfig'
-    description: '开启查找面板、搜索范围、转换和处理上限。'
+    description: '开启纯 API 查找，或配置范围、转换、键盘行为和处理上限；界面需显式使用 $find 工具栏渲染器。'
     default: false
     usage: '/zh/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'clipboard-config'
@@ -163,13 +163,11 @@ PROPS:
     usage: '/zh/components/table/row-selection.html#row-selection'
   - name: multiple
     type: Boolean
-    values: 'true | false'
     description: 开启多行选择。
     default: 'false'
     usage: '/zh/components/table/row-selection.html#row-selection'
   - name: striped
     type: Boolean
-    values: 'true | false'
     description: 交替显示行背景。
     default: 'false'
     usage: '/zh/components/table/data-and-column-definitions.html#configuration-object'
@@ -210,7 +208,6 @@ PROPS:
     usage: '/zh/components/table/data-and-column-definitions.html#slots-and-renderers'
   - name: show-header
     type: Boolean
-    values: 'true | false'
     description: 是否显示配置生成的表头。
     default: true
     usage: '/zh/components/table/data-and-column-definitions.html#configuration-object'
@@ -221,7 +218,6 @@ PROPS:
     usage: '/zh/components/table/data-and-column-definitions.html#configuration-object'
   - name: loading
     type: Boolean
-    values: 'true | false'
     description: 在表格上显示加载遮罩。
     default: 'false'
     usage: '/zh/components/table/data-and-column-definitions.html#configuration-object'
@@ -352,8 +348,7 @@ CHILD_PROPS:
     default: null
     usage: '/zh/components/table/column-layout-and-management.html#column-resizing'
   - name: type
-    type: String
-    values: seq | checkbox | radio | expand
+    type: TableColumnType
     description: 生成序号、复选、单选或详情展开列，使用内置控件。
     default: null
   - name: field
@@ -373,19 +368,16 @@ CHILD_PROPS:
     description: 弹性列的最小宽度；满足所有最小宽度后，各弹性列均分剩余空间。
     default: null
   - name: align
-    type: String
-    values: left | center | right
+    type: TableAlign
     description: 表头和单元格的对齐方式。
     default: left
   - name: fixed
-    type: Boolean | String
-    values: 'true | false | left | right'
+    type: TableColumnFixed
     description: 将列固定在左侧或右侧；true 等价于 left。未设置时继承父组，false 解除继承的固定位置。
     default: null
     usage: '/zh/components/table/large-data-and-visualization.html#virtual-rows-and-dynamic-heights'
   - name: tree-node
     type: Boolean
-    values: 'true | false'
     description: 在当前列放置树形缩进和展开按钮。
     default: 'false'
   - name: renderer
@@ -404,7 +396,6 @@ CHILD_PROPS:
     usage: '/zh/components/table/sorting-and-filtering.html#sorting-and-multiple-fields'
   - name: sort-method
     type: 'TableSortMethod'
-    values: 'number | string | Function'
     description: '逐列指定数字、字符串或自定义排序。函数支持布尔值、0/1 和标准数值比较结果；true/正数表示升序时 a 排在 b 后面。'
     default: null
     usage: '/zh/components/table/sorting-and-filtering.html#column-sorting-rules'
@@ -536,7 +527,7 @@ EVENTS:
     usage: '/zh/components/table/trees-and-groups.html#row-grouping-and-aggregation'
   - name: 'contextMenuOpen'
     type: '(context: TableContextMenuContext) => void'
-    description: '菜单打开，提供所在区域及对应行列上下文。'
+    description: '菜单打开，提供所在区域、对应行列上下文及单元格选区快照。'
     default: null
     usage: '/zh/components/table/spreadsheet-interactions.html#context-menus'
   - name: 'contextMenuSelect'
@@ -546,7 +537,7 @@ EVENTS:
     usage: '/zh/components/table/spreadsheet-interactions.html#context-menus'
   - name: 'contextMenuClose'
     type: '(context: TableContextMenuContext) => void'
-    description: '菜单关闭，提供原上下文。'
+    description: '菜单关闭，提供原上下文及打开时的单元格选区快照。'
     default: null
     usage: '/zh/components/table/spreadsheet-interactions.html#context-menus'
   - name: 'update:activeCell'
@@ -932,7 +923,7 @@ EXPOSES:
     usage: '/zh/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'openFind'
     type: '() => Promise<boolean>'
-    description: '打开并聚焦内置面板；未启用或 panel: false 时返回 false。'
+    description: '打开并聚焦已挂载的 $find 工具栏面板；未挂载 $find 或查找被禁用时返回 false。'
     default: null
     usage: '/zh/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'closeFind'

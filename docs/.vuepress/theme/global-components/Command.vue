@@ -162,8 +162,9 @@ const { copied, copy } = useClipboard({
 
   .tab:focus-visible,
   .con-copy:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: -3px;
+    background: rgb(255 255 255 / 0.14);
+    color: #fff;
+    outline: none;
   }
 
   .slots {

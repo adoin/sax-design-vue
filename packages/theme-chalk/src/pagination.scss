@@ -48,8 +48,8 @@
   }
 
   &:focus-visible {
-    outline: 1px solid getCssVar(pagination-hover-color);
-    outline-offset: -1px;
+    outline: none;
+    background-color: getCssVar(pagination-button-bg-hover);
     @include control-surface-shadow(focus);
   }
 }

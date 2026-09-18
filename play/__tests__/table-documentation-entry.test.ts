@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import {
   resolveTableDocumentationOverviewRedirect,
+  shouldPreserveTableDocumentationApiHash,
   tableDocumentationLandingPath,
 } from '../../docs/.vuepress/theme/shared/tableDocumentation'
 
@@ -29,6 +30,24 @@ describe('Table documentation entry', () => {
         '#api',
       ),
     ).toBeUndefined()
+  })
+
+  it('preserves the API hash only when active-header scrolling tries to clear it', () => {
+    const api = { path: '/zh/components/table.html', hash: '#api' }
+    const overview = { path: '/zh/components/table.html', hash: '' }
+    expect(shouldPreserveTableDocumentationApiHash(overview, api, true)).toBe(
+      true,
+    )
+    expect(shouldPreserveTableDocumentationApiHash(overview, api, false)).toBe(
+      false,
+    )
+    expect(
+      shouldPreserveTableDocumentationApiHash(
+        { path: '/zh/components/table/data-and-column-definitions.html' },
+        api,
+        true,
+      ),
+    ).toBe(false)
   })
 
   it('removes the feature-guide block and points the sidebar at the landing page', () => {

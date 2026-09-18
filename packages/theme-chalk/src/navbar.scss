@@ -78,7 +78,7 @@
 
   @include when(text-white) {
     color: $color-white;
-    background: hsl(var(--sax-color));
+    background: #{getColor(color)};
   }
 
   @include when(padding-scroll) {

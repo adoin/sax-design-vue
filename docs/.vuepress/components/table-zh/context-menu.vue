@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, shallowRef } from 'vue'
+import { createTableSvgChartAdapter } from 'sax-design-vue'
 import type {
   TableContextMenuConfig,
   TableContextMenuSelectParams,
   TableExposes,
 } from 'sax-design-vue'
 const table = ref<TableExposes>()
+const chartConfig = { adapter: createTableSvgChartAdapter() }
 const locked = shallowRef(false)
 const message = shallowRef('右键或按 Shift + F10 打开菜单。')
 const rows = ref([
@@ -32,6 +34,11 @@ const menu: TableContextMenuConfig = {
   body: (context) => [
     { label: '查看记录', value: 'inspect', disabled: locked.value },
     {
+      label: '用选区生成图表',
+      value: 'chart',
+      disabled: locked.value || !context.rangeBounds,
+    },
+    {
       label: '编辑此单元格',
       value: 'edit',
       disabled: locked.value || context.column.field !== 'name',
@@ -46,8 +53,21 @@ const menu: TableContextMenuConfig = {
     },
   ],
 }
-const selected = ({ context, item }: TableContextMenuSelectParams) => {
+const selected = async ({ context, item }: TableContextMenuSelectParams) => {
   message.value = `${item.label} · ${context.column.title}${context.area === 'body' ? ` / ${context.rowKey}` : ''}`
+  if (item.value === 'chart' && context.rangeBounds) {
+    const result = await table.value?.openChart({
+      scope: 'selection',
+      bounds: context.rangeBounds,
+      category: 'name',
+      series: [{ column: 'count', name: '数量' }],
+      title: '已选项目',
+    })
+    message.value = result?.success
+      ? '已根据右键时的选区打开图表。'
+      : `未生成图表：${result?.reason}`
+    return
+  }
   if (item.value === 'sort' && context.column.field)
     table.value?.setSort([{ field: context.column.field, order: 'asc' }])
   if (item.value === 'edit' && context.area === 'body')
@@ -69,8 +89,10 @@ const selected = ({ context, item }: TableContextMenuSelectParams) => {
       v-model:data="rows"
       row-key="id"
       keyboard-config
+      range-config
       edit-config
       change-config
+      :chart-config="chartConfig"
       :context-menu-config="menu"
       :tree-config="{}"
       :expanded-keys="[1]"

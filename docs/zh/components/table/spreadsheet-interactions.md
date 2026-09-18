@@ -80,19 +80,19 @@ description: 'Table 的表格式交互功能、配置方式与可运行示例。
 
 <template #template>
 
-@[code{21-66}](../../../.vuepress/components/table-zh/range.vue)
+@[code{22-67}](../../../.vuepress/components/table-zh/range.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-19}](../../../.vuepress/components/table-zh/range.vue)
+@[code{1-20}](../../../.vuepress/components/table-zh/range.vue)
 
 </template>
 
 <template #style>
 
-@[code{68-75}](../../../.vuepress/components/table-zh/range.vue)
+@[code{69-76}](../../../.vuepress/components/table-zh/range.vue)
 
 </template>
 
@@ -190,7 +190,7 @@ description: 'Table 的表格式交互功能、配置方式与可运行示例。
 
 ### 查找与替换
 
-开启 `find-config` 后显示搜索面板。表格单元格获得焦点时，Ctrl / Command + F 打开查找，Ctrl / Command + H 聚焦替换框，F3 / Shift + F3 导航匹配。面板内按 Enter 执行查找，Escape 取消等待或关闭面板。`panel: false` 用于只通过 API 集成；`keyboard: false` 关闭表格快捷键。
+在 `toolbar-config.left` 或 `toolbar-config.right` 中放置内置 `$find` 渲染器，即可添加查找与替换的入口和面板。该渲染器会显式开启查找能力；`find-config` 只配置范围、转换、键盘行为和处理上限，也可在不渲染界面的情况下开启纯 API 集成。挂载 `$find` 后，表格单元格获得焦点时可按 Ctrl / Command + F 打开查找、Ctrl / Command + H 聚焦替换框、F3 / Shift + F3 导航匹配。面板内按 Enter 执行查找，Escape 取消等待或关闭面板；`keyboard: false` 可关闭这些快捷键。
 
 查询按字面文本匹配，可选区分大小写和匹配整个单元格。当前视图搜索当前筛选页中已展开的行；选中区域搜索当前矩形选区。两者按可见视觉列顺序遍历，合并单元格只计一次。已提供数据范围跨页搜索所有已提供的行和已加载的树子节点，不受筛选限制，搜索可见列对应的原始字段；不会请求其他远程页面或懒加载子节点。定位会展开已加载的祖先、分组并请求切页；若筛选隐藏目标行或受控视图拒绝导航，则返回 `false`，不会清除筛选条件。
 
@@ -198,19 +198,19 @@ description: 'Table 的表格式交互功能、配置方式与可运行示例。
 
 <template #template>
 
-@[code{57-103}](../../../.vuepress/components/table-zh/find.vue)
+@[code{58-104}](../../../.vuepress/components/table-zh/find.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-56}](../../../.vuepress/components/table-zh/find.vue)
+@[code{1-57}](../../../.vuepress/components/table-zh/find.vue)
 
 </template>
 
 <template #style>
 
-@[code{104-115}](../../../.vuepress/components/table-zh/find.vue)
+@[code{105-116}](../../../.vuepress/components/table-zh/find.vue)
 
 </template>
 
@@ -220,7 +220,7 @@ description: 'Table 的表格式交互功能、配置方式与可运行示例。
 
 ### 巨量数据查找与替换
 
-`find-config` 默认最多检查 100000 个位置、保留 1000 个匹配格、处理 2000000 文本字符。本例将 `maxCells` 降为 4096。搜索未完成时会保留明确的上限状态，`replaceAll` 拒绝部分结果，`replaceMatch` 仍可替换一个已返回的匹配格。可缩小范围或主动调整上限。对象值需要格式化函数；文本与单元格上限不衡量已提供对象占用的内存。
+本例由 `$find` 工具栏渲染器提供界面。`find-config` 默认最多检查 100000 个位置、保留 1000 个匹配格、处理 2000000 文本字符；本例只用它将 `maxCells` 降为 4096。搜索未完成时会保留明确的上限状态，`replaceAll` 拒绝部分结果，`replaceMatch` 仍可替换一个已返回的匹配格。可缩小范围或主动调整上限。对象值需要格式化函数；文本与单元格上限不衡量已提供对象占用的内存。
 
 来源为百万行、十万列。查找已选中的末端合并区域，在面板中填写替换值，即可更新跨固定列边界的合并起点。数据适配器只保存发生变化的字段，定位复用虚拟行列窗口。
 
@@ -228,19 +228,19 @@ description: 'Table 的表格式交互功能、配置方式与可运行示例。
 
 <template #template>
 
-@[code{95-135}](../../../.vuepress/components/table-zh/find-source.vue)
+@[code{96-137}](../../../.vuepress/components/table-zh/find-source.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-94}](../../../.vuepress/components/table-zh/find-source.vue)
+@[code{1-95}](../../../.vuepress/components/table-zh/find-source.vue)
 
 </template>
 
 <template #style>
 
-@[code{136-147}](../../../.vuepress/components/table-zh/find-source.vue)
+@[code{138-149}](../../../.vuepress/components/table-zh/find-source.vue)
 
 </template>
 
@@ -252,25 +252,27 @@ description: 'Table 的表格式交互功能、配置方式与可运行示例。
 
 通过 `context-menu-config.header`、`body` 和 `footer` 分别提供菜单项数组，或接收上下文并返回数组的同步函数。`visibleMethod` 返回 false、当前区域没有菜单项或配置关闭时，保留浏览器原生右键菜单。工厂函数异常时同样回退到原生菜单。
 
-`context.area` 区分 `header`、`body` 与 `footer`，三者都有 `column`、`columnIndex`。表头另有 `group`，分组表头提供分组列，索引指向当前渲染标题段的首个叶子列；数据区提供 `row`、`rowKey`、`rowIndex`、原始 `value` 及树节点上下文；表尾提供汇总行、表尾行索引及原始值。`contextMenuSelect` 返回 `{ context, item }`，组件不会自动修改数据或执行删除等业务动作。
+`context.area` 区分 `header`、`body` 与 `footer`，三者都有 `column`、`columnIndex`。表头另有 `group`，分组表头提供分组列，索引指向当前渲染标题段的首个叶子列；数据区提供 `row`、`rowKey`、`rowIndex`、原始 `value` 及树节点上下文；表尾提供汇总行、表尾行索引及原始值。
+
+所有上下文还会在菜单打开时捕获 `range` 与归一化后的 `rangeBounds`；没有单元格选区时两者为 `null`。菜单打开期间这份快照保持不变，因此动作可以把 `context.rangeBounds` 传给 `openChart({ scope: 'selection', bounds: ... })`，也可以据此执行应用自己的聚合，而不必重新读取一个可能已经变化的选区。`contextMenuSelect` 返回 `{ context, item }`，组件不会自动修改数据或执行删除等业务动作。
 
 <template #example><table-zh-context-menu /></template>
 
 <template #template>
 
-@[code{58-98}](../../../.vuepress/components/table-zh/context-menu.vue)
+@[code{78-120}](../../../.vuepress/components/table-zh/context-menu.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-56}](../../../.vuepress/components/table-zh/context-menu.vue)
+@[code{1-76}](../../../.vuepress/components/table-zh/context-menu.vue)
 
 </template>
 
 <template #style>
 
-@[code{100-114}](../../../.vuepress/components/table-zh/context-menu.vue)
+@[code{122-136}](../../../.vuepress/components/table-zh/context-menu.vue)
 
 </template>
 

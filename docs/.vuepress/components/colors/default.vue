@@ -24,38 +24,48 @@
     transition: all 0.25s ease;
     cursor: default;
     &.primary {
-      box-shadow: 0px 20px 35px -10px hsl(var(--sax-primary) / 0.5);
-      background: hsl(var(--sax-primary));
+      box-shadow: 0px 20px 35px -10px
+        color-mix(in srgb, var(--sax-css-primary) 50%, transparent);
+      background: var(--sax-css-primary);
       &:hover {
-        box-shadow: 0px 0px 0px 0px hsl(var(--sax-primary) / 0.5);
+        box-shadow: 0px 0px 0px 0px
+          color-mix(in srgb, var(--sax-css-primary) 50%, transparent);
       }
     }
     &.success {
-      box-shadow: 0px 20px 35px -10px hsl(var(--sax-success) / 0.5);
-      background: hsl(var(--sax-success));
+      box-shadow: 0px 20px 35px -10px
+        color-mix(in srgb, var(--sax-css-success) 50%, transparent);
+      background: var(--sax-css-success);
       &:hover {
-        box-shadow: 0px 0px 0px 0px hsl(var(--sax-success) / 0.5);
+        box-shadow: 0px 0px 0px 0px
+          color-mix(in srgb, var(--sax-css-success) 50%, transparent);
       }
     }
     &.danger {
-      box-shadow: 0px 20px 35px -10px hsl(var(--sax-danger) / 0.5);
-      background: hsl(var(--sax-danger));
+      box-shadow: 0px 20px 35px -10px
+        color-mix(in srgb, var(--sax-css-danger) 50%, transparent);
+      background: var(--sax-css-danger);
       &:hover {
-        box-shadow: 0px 0px 0px 0px hsl(var(--sax-danger) / 0.5);
+        box-shadow: 0px 0px 0px 0px
+          color-mix(in srgb, var(--sax-css-danger) 50%, transparent);
       }
     }
     &.warn {
-      box-shadow: 0px 20px 35px -10px hsl(var(--sax-warn) / 0.5);
-      background: hsl(var(--sax-warn));
+      box-shadow: 0px 20px 35px -10px
+        color-mix(in srgb, var(--sax-css-warn) 50%, transparent);
+      background: var(--sax-css-warn);
       &:hover {
-        box-shadow: 0px 0px 0px 0px hsl(var(--sax-warn) / 0.5);
+        box-shadow: 0px 0px 0px 0px
+          color-mix(in srgb, var(--sax-css-warn) 50%, transparent);
       }
     }
     &.dark {
-      box-shadow: 0px 20px 35px -10px hsl(var(--sax-dark) / 0.5);
-      background: hsl(var(--sax-dark));
+      box-shadow: 0px 20px 35px -10px
+        color-mix(in srgb, var(--sax-css-dark) 50%, transparent);
+      background: var(--sax-css-dark);
       &:hover {
-        box-shadow: 0px 0px 0px 0px hsl(var(--sax-dark) / 0.5);
+        box-shadow: 0px 0px 0px 0px
+          color-mix(in srgb, var(--sax-css-dark) 50%, transparent);
       }
     }
     &:hover {

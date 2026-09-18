@@ -122,7 +122,9 @@
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 3px getColor(primary, 0.18);
+      background: getColor(background, 0.66);
+      color: getColor(primary);
+      box-shadow: none;
     }
 
     @include when(active) {

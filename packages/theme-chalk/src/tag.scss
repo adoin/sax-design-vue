@@ -8,8 +8,8 @@
   --sax-tag-accent: currentColor;
   --sax-tag-arrow-tip: 0.875rem;
   --sax-tag-shadow:
-    0 1px 2px hsl(var(--sax-primary) / 0.08),
-    0 4px 10px hsl(var(--sax-primary) / 0.1);
+    0 1px 2px #{getColor(primary, 0.08)},
+    0 4px 10px #{getColor(primary, 0.1)};
   position: relative;
   display: inline-flex;
   align-items: center;

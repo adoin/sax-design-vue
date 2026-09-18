@@ -583,7 +583,7 @@
     }
 
     @include when(today) {
-      box-shadow: inset 0 0 0 2px getColor('color', 0.35);
+      box-shadow: inset 0 0 8px -4px getColor('color', 0.72);
     }
 
     &:hover:not(:disabled):not(.is-selected) {
@@ -620,7 +620,7 @@
     }
 
     @include when(today) {
-      box-shadow: inset 0 0 0 2px getColor('color', 0.35);
+      box-shadow: inset 0 0 8px -4px getColor('color', 0.72);
     }
 
     &:hover:not(:disabled):not(.is-selected) {
@@ -714,7 +714,7 @@
     &:focus {
       border-color: getColor('color', 0.4);
       background: getColor('background');
-      box-shadow: 0 0 0 3px getColor('color', 0.1);
+      box-shadow: 0 8px 18px -14px getColor('color', 0.62);
     }
   }
 

@@ -38,8 +38,10 @@
       cursor: zoom-in;
 
       &:focus-visible {
-        outline: 3px solid rgb(var(--sax-primary));
-        outline-offset: 3px;
+        outline: none;
+        box-shadow: 0 12px 24px -18px #{getColor(primary, 0.9)};
+        filter: brightness(1.03) saturate(1.04);
+        transform: translateY(-1px);
       }
     }
   }

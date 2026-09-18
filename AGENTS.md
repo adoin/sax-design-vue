@@ -3,12 +3,15 @@
 ## Project specifications
 
 - Read relevant records in `.agents/notes/active/` and `.agents/notes/prohibited/` before implementation. Treat proposed records as unapproved, prohibited records as approaches that must not be repeated unless their `reopen_only_if` condition is met, and implemented records as verified project contracts.
+- 当前尚未完成的 Table 生成数据错误导航目标记录在 `.agents/notes/active/table-generated-error-navigation.md`。递归 API 类型详情已经记录在 `.agents/notes/implemented/recursive-api-type-details.md`，并继续遵守 `.agents/notes/prohibited/flat-api-type-details-popover.md`。
 - Move a project specification to `.agents/notes/implemented/` only after its implementation and required verification pass. Preserve superseded decisions in `.agents/notes/superseded/` when the replacement needs historical context.
 - For Table work, read `.agents/notes/implemented/table-component-architecture.md`, `.agents/notes/implemented/table-documentation-information-architecture.md`, and `.agents/notes/implemented/table-single-component-business-shell.md`, plus their linked prohibited approaches.
 - Component-wide tabular and lining numeral defaults are recorded in `.agents/notes/implemented/component-numeric-typography.md`.
+- Project-wide borderless keyboard focus and state feedback is recorded in `.agents/notes/implemented/component-borderless-focus-treatment.md`; do not reintroduce CSS outlines or ring shadows as component boundaries.
 - Route-boundary wheel ownership, nested-scroll isolation, and directional progress parity are recorded in `.agents/notes/implemented/anchor-route-boundary-scroll-ownership.md` and `.agents/notes/implemented/anchor-route-boundary-progress-parity.md`.
-- Anchor documentation groups scroll-container configuration under router mode as recorded in `.agents/notes/implemented/anchor-documentation-information-architecture.md`.
+- Anchor documentation groups scroll-container configuration under mixed route/local-anchor navigation as recorded in `.agents/notes/implemented/anchor-documentation-information-architecture.md`.
 - Implemented Scrollbar outside placement and Watermark blind mode are recorded in `.agents/notes/implemented/scrollbar-outside-placement.md` and `.agents/notes/implemented/watermark-blind-mode.md`.
+- Two-layer color tokens are recorded in `.agents/notes/implemented/css-color-token-layer.md`; do not inline `hsl(var(--sax-*))` in component properties.
 
 ## Documentation examples
 

@@ -24,7 +24,7 @@
 
   p {
     margin-top: 5px;
-    color: getColor(text, secondary);
+    color: getColor(text-color, secondary);
     font-size: 12px;
     line-height: 1.5;
   }
@@ -40,7 +40,7 @@
   border: 0;
   border-radius: var(--sax-radius-circle);
   background: getColor(gray-2);
-  color: getColor(text, secondary);
+  color: getColor(text-color, secondary);
   cursor: pointer;
   transition:
     background var(--sax-motion-duration-fast),
@@ -80,7 +80,7 @@
   padding: 0 10px 0 13px;
   border-radius: var(--sax-radius-md);
   background: getColor(gray-2);
-  color: getColor(text, secondary);
+  color: getColor(text-color, secondary);
   box-shadow: 0 7px 14px -14px getColor(text, 0.42) inset;
   transition:
     background var(--sax-motion-duration-fast),
@@ -128,7 +128,7 @@
   border: 0;
   border-radius: var(--sax-radius-circle);
   background: transparent;
-  color: getColor(text, secondary);
+  color: getColor(text-color, secondary);
   cursor: pointer;
 
   &:hover,
@@ -146,7 +146,7 @@
   justify-content: space-between;
   gap: 12px;
   padding: 8px 3px 6px;
-  color: getColor(text, secondary);
+  color: getColor(text-color, secondary);
   font-size: 11px;
 
   code {
@@ -187,7 +187,7 @@
   border: 0;
   border-radius: var(--sax-radius-md);
   background: getColor(gray-2);
-  color: getColor(text, secondary);
+  color: getColor(text-color, secondary);
   cursor: pointer;
   box-shadow: 0 5px 12px getColor(text, 0.04);
   transition:
@@ -265,7 +265,7 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
-  color: getColor(text, secondary);
+  color: getColor(text-color, secondary);
   text-align: center;
 
   strong {
@@ -332,7 +332,7 @@
   }
 
   span {
-    color: getColor(text, secondary);
+    color: getColor(text-color, secondary);
     font-size: 11px;
   }
 }
@@ -341,7 +341,7 @@
   display: flex;
   flex-direction: column;
   gap: 7px;
-  color: getColor(text, secondary);
+  color: getColor(text-color, secondary);
   font-size: 11px;
   font-weight: 600;
 
@@ -379,7 +379,7 @@
   }
 
   > span {
-    color: getColor(text, secondary);
+    color: getColor(text-color, secondary);
     font-size: 10px;
     line-height: 1.4;
   }

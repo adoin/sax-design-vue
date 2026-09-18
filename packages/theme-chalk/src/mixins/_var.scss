@@ -13,8 +13,15 @@
   #{joinVarName($name)}: #{$value};
 }
 
-@mixin set-color($name, $color) {
+@mixin set-css-color($args...) {
+  #{getCssColorName($args...)}: hsl(#{getCssVar($args...)});
+}
+
+@mixin set-color($name, $color, $css-color: true) {
   @include set-var-value($name, #{hex2hsl($color)});
+  @if $css-color {
+    @include set-css-color($name);
+  }
 }
 
 // @include set-var-type('color', 'primary', $map);
@@ -127,6 +134,17 @@
       )
   );
   @include css-var-from-global(($type, 'dark-2'), ($type, 'hover'));
+
+  @if not $dark {
+    @include set-css-color($type);
+    @each $i, $offset in (3: 12%, 5: 22%, 7: 32%, 8: 38%, 9: 44%) {
+      @include set-css-color($type, 'light', $i);
+    }
+    @include set-css-color($type, 'hover');
+    @include set-css-color($type, 'active');
+    @include set-css-color($type, 'subtle');
+    @include set-css-color($type, 'dark-2');
+  }
 }
 
 // set all css var for component by map
@@ -140,13 +158,13 @@
   }
 }
 
-@mixin set-component-color($component, $variables) {
+@mixin set-component-color($component, $variables, $css-color: true) {
   @each $name, $color in $variables {
     $separator: '';
     @if $component != '' and $name != '' {
       $separator: '-';
     }
-    @include set-color($component + $separator + $name, $color);
+    @include set-color($component + $separator + $name, $color, $css-color);
   }
 }
 

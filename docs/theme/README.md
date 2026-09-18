@@ -52,7 +52,7 @@ const theme = {
 
 ## CSS
 
-When using CSS directly, provide HSL channels without `hsl()`.
+When using CSS directly, provide HSL channels without `hsl()`, or override the complete color token with any CSS color.
 
 <command>
 
@@ -64,6 +64,10 @@ When using CSS directly, provide HSL channels without `hsl()`.
   --sax-theme-primary-dark-h: var(--sax-theme-primary-h);
   --sax-theme-primary-dark-s: 82%;
   --sax-theme-primary-dark-l: 72%;
+}
+
+.marketing {
+  --sax-css-primary: oklch(0.62 0.18 264);
 }
 ```
 

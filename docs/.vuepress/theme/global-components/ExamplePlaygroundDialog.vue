@@ -113,8 +113,7 @@ const restoreTriggerFocus = async () => {
 }
 
 .example-playground-dialog__close:focus-visible {
-  outline: 2px solid hsl(var(--sax-danger) / 0.36);
-  outline-offset: 2px;
+  outline: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

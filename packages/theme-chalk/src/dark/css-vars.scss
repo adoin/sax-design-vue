@@ -39,31 +39,31 @@ html.dark {
     'input-shadow',
     (
       0 1px 2px hsl(0deg 0% 0% / 0.36),
-      0 8px 22px hsl(var(--sax-primary) / 0.14),
-      inset 0 0 0 1px hsl(var(--sax-primary) / 0.2)
+      0 8px 22px #{getColor(primary, 0.14)},
+      inset 0 0 0 1px #{getColor(primary, 0.2)}
     )
   );
   @include set-var-value(
     'input-shadow-hover',
     (
       0 2px 6px hsl(0deg 0% 0% / 0.44),
-      0 10px 26px hsl(var(--sax-primary) / 0.18),
-      inset 0 0 0 1px hsl(var(--sax-primary) / 0.32)
+      0 10px 26px #{getColor(primary, 0.18)},
+      inset 0 0 0 1px #{getColor(primary, 0.32)}
     )
   );
   @include set-var-value(
     'input-shadow-focus',
     (
       0 3px 9px hsl(0deg 0% 0% / 0.5),
-      0 14px 32px hsl(var(--sax-primary) / 0.22),
-      inset 0 0 0 1px hsl(var(--sax-primary) / 0.5)
+      0 14px 32px #{getColor(primary, 0.22)},
+      inset 0 0 0 1px #{getColor(primary, 0.5)}
     )
   );
   @include set-var-value(
     'popper-shadow',
     (
       0 18px 40px -16px hsl(0deg 0% 0% / 0.62),
-      0 8px 20px -12px hsl(var(--sax-primary) / 0.28)
+      0 8px 20px -12px #{getColor(primary, 0.28)}
     )
   );
 
@@ -83,15 +83,19 @@ html.dark {
   @include set-component-var('box-shadow', $box-shadow);
 
   // color-scheme
-  @include set-component-color('', $moreColor);
+  @include set-component-color('', $moreColor, false);
   // Background --vs-bg-color-#{$type}
-  @include set-component-color('bg-color', $bg-color);
+  @include set-component-color('bg-color', $bg-color, false);
   // --vs-text-color-#{$type}
-  @include set-component-color('text-color', $text-color);
+  @include set-component-color('text-color', $text-color, false);
   // --vs-border-color-#{$type}
-  @include set-component-color('border-color', $border-color);
+  @include set-component-color('border-color', $border-color, false);
   // Fill --vs-fill-color-#{$type}
-  @include set-component-color('fill-color', map.remove($fill-color, 'blank'));
+  @include set-component-color(
+    'fill-color',
+    map.remove($fill-color, 'blank'),
+    false
+  );
   @include set-var-value('fill-color-blank', map.get($fill-color, 'blank'));
   @include set-component-var('mask-color', $mask-color);
 }

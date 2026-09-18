@@ -540,8 +540,9 @@
     touch-action: manipulation;
 
     &:focus-visible {
-      outline: 3px solid getColor(color, 0.28);
-      outline-offset: 3px;
+      outline: none;
+      filter: brightness(1.02) saturate(1.04);
+      transform: translateY(-1px);
     }
 
     &:active:not(.is-loading) {
@@ -562,18 +563,13 @@
   @include when(hover-glow) {
     &:hover:not(.is-loading),
     &:focus-visible:not(.is-loading) {
-      border-color: getColor(color, 0.48);
-      box-shadow:
-        0 0 0 3px getColor(color, 0.12),
-        0 14px 34px getColor(color, 0.18);
+      box-shadow: 0 14px 34px getColor(color, 0.2);
     }
   }
 
   @include when(selected) {
-    border-color: getColor(color, 0.62);
-    box-shadow:
-      0 0 0 3px getColor(color, 0.16),
-      0 12px 30px getColor(black, 0.1);
+    background: getColor(color, 0.05);
+    box-shadow: 0 12px 30px getColor(color, 0.16);
   }
 
   @include when(loading) {

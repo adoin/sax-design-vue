@@ -210,6 +210,7 @@ Table 还注册了以下工具栏专用渲染器：
 | `button`        | 渲染一个 `SButton`；存在 `props.children` 时通过 `SPopper` 显示子操作 |
 | `$refresh`      | 刷新当前 Table 的查询或数据代理请求                                   |
 | `$columnConfig` | 打开关联当前 Table 的 `STableColumnConfig`                            |
+| `$find`         | 挂载当前 Table 的查找与替换入口及面板                                 |
 
 输入轮廓型渲染器用于 Table 编辑时默认接收 `shape: 'square'`，使轮廓贴合单元格边缘。显式设置的 `props.shape` 优先；Form 与 Table 筛选仍使用正常的形状解析。
 

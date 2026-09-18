@@ -5,6 +5,7 @@ import { SButton } from '@vuesax-alpha/components/button'
 import { SDialog } from '@vuesax-alpha/components/dialog'
 import { SFocusTrap } from '@vuesax-alpha/components/focus-trap'
 import { SIcon } from '@vuesax-alpha/components/icon'
+import { STooltip } from '@vuesax-alpha/components/tooltip'
 import prism from 'prismjs'
 import { useClipboard } from '@vueuse/core'
 import { useDocLocaleUi } from '../composables/docLocale'
@@ -26,39 +27,71 @@ const props = defineProps<{
 
 const { t } = useDocLocaleUi()
 const labels = computed(() => t.value.apiColumns)
+const hasValues = computed(() =>
+  props.rows.some(
+    (row) => row.values != null && String(row.values).trim() !== '',
+  ),
+)
 // Keep compact action tracks fixed; let text tracks share the remaining space.
-// Their combined minimum (844px) fits the desktop documentation content area.
-const columns = computed<TableColumn[]>(() => [
-  {
-    field: 'name',
-    title:
-      (t.value.apiRowNames as Record<string, string>)[props.tableKey] ||
-      labels.value.property,
-    minWidth: 128,
-  },
-  {
-    field: 'type',
-    title: labels.value.type,
-    minWidth: 132,
-    className: 'api-column-type',
-  },
-  {
-    field: 'values',
-    title:
-      (t.value.apiValueColumns as Record<string, string>)[props.tableKey] ||
-      labels.value.values,
-    minWidth: 108,
-  },
-  { field: 'description', title: labels.value.description, minWidth: 220 },
-  {
-    field: 'default',
-    title: labels.value.default,
-    minWidth: 80,
-    className: 'api-column-default',
-  },
-  { field: 'example', title: labels.value.example, width: 88 },
-  { field: 'more', title: labels.value.more, width: 88, align: 'center' },
-])
+// The base minimum is 704px, or 812px when a section has explicit values.
+const columns = computed<TableColumn[]>(() => {
+  const result: TableColumn[] = [
+    {
+      field: 'name',
+      title:
+        (t.value.apiRowNames as Record<string, string>)[props.tableKey] ||
+        labels.value.property,
+      minWidth: 128,
+      slots: { default: 'apiName' },
+    },
+    {
+      field: 'type',
+      title: labels.value.type,
+      minWidth: 132,
+      className: 'api-column-type',
+      slots: { default: 'apiType' },
+    },
+    {
+      field: 'description',
+      title: labels.value.description,
+      minWidth: 220,
+      slots: { default: 'apiDescription' },
+    },
+    {
+      field: 'default',
+      title: labels.value.default,
+      minWidth: 80,
+      className: 'api-column-default',
+      slots: { default: 'apiDefault' },
+    },
+    {
+      field: 'example',
+      title: labels.value.example,
+      width: 88,
+      slots: { default: 'apiExample' },
+    },
+    {
+      field: 'more',
+      title: labels.value.more,
+      width: 56,
+      align: 'center',
+      slots: { default: 'apiMore' },
+    },
+  ]
+
+  if (hasValues.value) {
+    result.splice(2, 0, {
+      field: 'values',
+      title:
+        (t.value.apiValueColumns as Record<string, string>)[props.tableKey] ||
+        labels.value.values,
+      minWidth: 108,
+      slots: { default: 'apiValues' },
+    })
+  }
+
+  return result
+})
 
 const getTypeDetails = (expression?: string | null) => {
   const definitions: Record<string, ThemeApiTypeDefinition> = {}
@@ -114,7 +147,7 @@ const restoreCodeFocus = async () => {
 <template>
   <div class="api-table" role="region" :aria-label="`${pageTitle} · ${label}`">
     <STable :data="data" :columns="columns" row-key="name">
-      <template #cell-name="{ row }">
+      <template #apiName="{ row }">
         <span
           :id="`api-${tableKey.toLowerCase().replaceAll('_', '-')}-${row.name}`"
           class="api-name"
@@ -139,16 +172,16 @@ const restoreCodeFocus = async () => {
           />
         </span>
       </template>
-      <template #cell-type="{ row }">
+      <template #apiType="{ row }">
         <ApiTypeDetails
-          v-if="Object.keys(row.typeDetails).length"
+          v-if="row.type"
           :type="row.type"
           :definitions="row.typeDetails"
           :labels="labels"
         />
         <span v-else>{{ row.type || '—' }}</span>
       </template>
-      <template #cell-values="{ row }">
+      <template #apiValues="{ row }">
         <template v-if="row.valuesList.length">
           <span
             v-for="(value, index) in row.valuesList"
@@ -159,17 +192,29 @@ const restoreCodeFocus = async () => {
         </template>
         <span v-else>—</span>
       </template>
-      <template #cell-description="{ row }">
+      <template #apiDescription="{ row }">
         <span v-html="row.description || '—'" />
       </template>
-      <template #cell-default="{ row }">{{
+      <template #apiDefault="{ row }">{{
         displayDefault(row.default)
       }}</template>
-      <template #cell-example="{ row }">
+      <template #apiExample="{ row }">
         <div class="api-actions">
-          <a v-if="row.usage" :href="row.usage" class="api-action">
-            {{ labels.usage }} <SIcon name="bx:code-block" />
-          </a>
+          <STooltip
+            v-if="row.usage"
+            placement="top"
+            :trigger="['hover', 'focus']"
+            :show-after="180"
+          >
+            <a
+              :href="row.usage"
+              :aria-label="`${labels.usage}: ${row.name}`"
+              class="api-icon-action"
+            >
+              <SIcon name="bx:code-block" />
+            </a>
+            <template #content>{{ labels.usage }}</template>
+          </STooltip>
           <SButton
             v-if="row.code"
             size="mini"
@@ -182,26 +227,24 @@ const restoreCodeFocus = async () => {
           <span v-if="!row.usage && !row.code" class="api-empty">—</span>
         </div>
       </template>
-      <template #cell-more="{ row }">
+      <template #apiMore="{ row }">
         <div class="api-actions api-more">
-          <a
-            :href="issueLink(row.name)"
-            :aria-label="`${t.examples.reportIssue}: ${row.name}`"
-            class="api-icon-action"
-            rel="noreferrer"
-            target="_blank"
+          <STooltip
+            placement="top"
+            :trigger="['hover', 'focus']"
+            :show-after="180"
           >
-            <SIcon name="bx:bug" />
-          </a>
-          <a
-            href="https://github.com/adoin/sax-design-vue/"
-            :aria-label="`${t.examples.viewSource}: ${row.name}`"
-            class="api-icon-action"
-            rel="noreferrer"
-            target="_blank"
-          >
-            <SIcon name="bx:terminal" />
-          </a>
+            <a
+              :href="issueLink(row.name)"
+              :aria-label="`${t.examples.createIssue}: ${row.name}`"
+              class="api-icon-action"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <SIcon name="bx:bug" />
+            </a>
+            <template #content>{{ t.examples.createIssue }}</template>
+          </STooltip>
         </div>
       </template>
     </STable>
@@ -312,7 +355,6 @@ const restoreCodeFocus = async () => {
   justify-content: center;
   flex-wrap: nowrap;
 }
-.api-action,
 .api-icon-action {
   display: inline-flex;
   align-items: center;
@@ -323,19 +365,13 @@ const restoreCodeFocus = async () => {
   background: hsl(var(--sax-primary) / 0.1);
   color: hsl(var(--sax-primary)) !important;
 }
-.api-action {
-  min-height: 28px;
-  padding: 4px 6px;
-  font-size: 0.75rem;
-}
 .api-icon-action {
   width: 28px;
   height: 28px;
 }
-.api-action:focus-visible,
 .api-icon-action:focus-visible {
-  outline: 2px solid hsl(var(--sax-primary));
-  outline-offset: 2px;
+  outline: none;
+  background: hsl(var(--sax-primary) / 0.16);
 }
 .api-empty {
   color: hsl(var(--sax-theme-color) / 0.45);

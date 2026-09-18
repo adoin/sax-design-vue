@@ -6,8 +6,10 @@ import type {
 } from '@vuesax-alpha/components/context-menu'
 import type { TableCoreEmitFn, TableCoreProps } from '../table'
 import type {
+  TableContextMenuAreaContext,
   TableContextMenuConfig,
   TableContextMenuContext,
+  TableContextMenuSelectionSnapshot,
 } from '../table-context-menu'
 
 export interface TableContextMenuController {
@@ -17,7 +19,7 @@ export interface TableContextMenuController {
   items: ComputedRef<ContextMenuItem[]>
   context: ShallowRef<TableContextMenuContext | undefined>
   open: (
-    current: TableContextMenuContext,
+    current: TableContextMenuAreaContext,
     event: MouseEvent | KeyboardEvent,
   ) => void
   close: () => void
@@ -31,6 +33,7 @@ export function useTableContextMenu(
   options: {
     root: () => HTMLElement | undefined
     context: WatchSource[]
+    selection: () => TableContextMenuSelectionSnapshot
   },
 ): TableContextMenuController {
   const menu = ref<ContextMenuInstance>()
@@ -66,7 +69,7 @@ export function useTableContextMenu(
     onClose()
   }
   const open = (
-    current: TableContextMenuContext,
+    current: TableContextMenuAreaContext,
     event: MouseEvent | KeyboardEvent,
   ) => {
     if (!enabled.value || event.defaultPrevented) return
@@ -96,7 +99,11 @@ export function useTableContextMenu(
     )
       return
     const previous = context.value
-    context.value = current
+    const snapshot: TableContextMenuContext = {
+      ...current,
+      ...options.selection(),
+    }
+    context.value = snapshot
     if (!items.value.length) {
       context.value = previous
       return
@@ -105,7 +112,7 @@ export function useTableContextMenu(
     announced = true
     // Call synchronously so the shared menu can suppress the native event.
     menu.value?.show(event, anchor)
-    emit('contextMenuOpen', current)
+    emit('contextMenuOpen', snapshot)
   }
   const select = (item: ContextMenuItem) => {
     const current = context.value

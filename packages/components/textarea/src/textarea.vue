@@ -57,7 +57,7 @@ import {
   watch,
 } from 'vue'
 import { useColor, useId, useNamespace, useShape } from '@vuesax-alpha/hooks'
-import { getVsColor } from '@vuesax-alpha/utils'
+import { getCssColor } from '@vuesax-alpha/utils'
 import { textareaEmits, textareaProps } from './textarea'
 import type { CSSProperties } from 'vue'
 
@@ -108,10 +108,8 @@ watch(isOverCounter, (val) => {
   emit('update:counterDanger', Boolean(val))
 })
 
-const resolveFocusColor = (colorValue: string) => {
-  const resolved = getVsColor(colorValue)
-  return resolved ? `hsl(${resolved})` : 'hsl(var(--sax-primary))'
-}
+const resolveFocusColor = (colorValue: string) =>
+  getCssColor(colorValue) || 'var(--sax-css-primary)'
 
 const wrapperStyle = computed(() => ({
   '--sax-textarea-focus-color': resolveFocusColor(

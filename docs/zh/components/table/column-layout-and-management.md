@@ -112,7 +112,7 @@ description: 'Table 的列布局与管理功能、配置方式与可运行示例
 
 <template #template>
 
-@[code{8-19}](../../../.vuepress/components/table-zh/column-persistence.vue)
+@[code{8-17}](../../../.vuepress/components/table-zh/column-persistence.vue)
 
 </template>
 

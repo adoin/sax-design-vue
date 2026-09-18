@@ -84,8 +84,7 @@ const active = shallowRef<'tsx' | 'h'>('tsx')
     }
 
     &:focus-visible {
-      outline: 2px solid hsl(var(--sax-primary) / 0.24);
-      outline-offset: 1px;
+      outline: none;
     }
   }
 }

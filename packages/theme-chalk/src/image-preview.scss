@@ -75,8 +75,10 @@ body.s-popup-parent--hidden {
 .s-image-preview__close:focus-visible,
 .s-image-preview__arrow:focus-visible,
 .s-image-preview__tool:focus-visible {
-  outline: 2px solid white;
-  outline-offset: 2px;
+  outline: none;
+  background: hsl(0deg 0% 100% / 0.22);
+  color: white;
+  filter: brightness(1.08);
 }
 
 .s-image-preview__close {

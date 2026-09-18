@@ -98,7 +98,7 @@ export interface AnchorGlobalConfig {
   activeStrategy?: 'heading' | 'visible-section'
   /** Heading activation line in pixels; defaults to Anchor's offset. */
   activeOffset?: number
-  /** Router used by every Anchor in router mode unless locally overridden. */
+  /** Router used by every Anchor for non-local same-origin hrefs unless locally overridden. */
   router?: AnchorRouterAdapter
   /** Defaults for automatically generated route boundaries. */
   routeBoundary?: false | AnchorRouteBoundaryOptions

@@ -10,8 +10,8 @@
       <div
         v-if="shouldRender"
         v-show="shouldShow"
-        ref="contentRef"
         :id="popperId"
+        ref="contentRef"
         :class="popperKls"
         :style="popperStyle"
         :data-popper-placement="placement"
@@ -138,6 +138,11 @@ let stopHandle: (() => void) | undefined
 
 const onAfterShow = () => {
   onShow()
+}
+
+const startClickOutside = () => {
+  stopHandle?.()
+  if (!props.closeOnClickOutside) return
   stopHandle = onClickOutside(
     computed(() => {
       return unrefElement(contentRef)
@@ -149,6 +154,7 @@ const onAfterShow = () => {
         onClose()
       }
     },
+    { ignore: computed(() => props.outsideClickIgnore) },
   )
 }
 
@@ -159,12 +165,12 @@ onMounted(() => {
 watch(
   () => unref(open),
   (val) => {
-    if (!val) {
-      stopHandle?.()
-    }
+    if (val) startClickOutside()
+    else stopHandle?.()
   },
   {
     flush: 'post',
+    immediate: true,
   },
 )
 

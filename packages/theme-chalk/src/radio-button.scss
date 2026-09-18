@@ -31,7 +31,9 @@
     cursor: pointer;
 
     &:focus-visible ~ .#{$namespace}-radio-button__content {
-      box-shadow: 0 0 0 3px getColor(primary, 0.18);
+      background: getColor(primary, 0.08);
+      color: getColor(primary);
+      box-shadow: none;
     }
 
     &:disabled {

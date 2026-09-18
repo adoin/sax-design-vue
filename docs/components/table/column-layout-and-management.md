@@ -112,7 +112,7 @@ Uncontrolled tables restore saved settings on mount. Controlled tables use the p
 
 <template #template>
 
-@[code{8-19}](../../.vuepress/components/table/column-persistence.vue)
+@[code{8-17}](../../.vuepress/components/table/column-persistence.vue)
 
 </template>
 

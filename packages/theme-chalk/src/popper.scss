@@ -15,14 +15,14 @@
   box-sizing: border-box;
   padding: 12px 16px;
   border-radius: var(--sax-radius);
-  color: hsl(var(--sax-text));
+  color: #{getColor(text)};
   font-size: 0.875rem;
   line-height: 1.6;
 }
 
 @include b(popper) {
-  background-color: hsl(var(--sax-background));
-  border: 1px solid hsl(var(--sax-primary) / 0.1);
+  background-color: #{getColor(background)};
+  border: 1px solid #{getColor(primary, 0.1)};
   box-shadow: var(--sax-popper-shadow);
 
   @include when(not-arrow) {

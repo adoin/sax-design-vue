@@ -96,6 +96,111 @@ afterEach(() => {
 })
 
 describe('STable range integration', () => {
+  it('keeps a grouped pointer gesture when the controlled range rerenders an equivalent inline group config', async () => {
+    const selected = shallowRef<TableCellRange | null>(null)
+    const wrapper = mount(
+      defineComponent({
+        setup: () => () =>
+          h(Table, {
+            data,
+            columns,
+            rowKey: 'id',
+            rangeConfig: true,
+            groupConfig: { fields: ['team'] },
+            cellRange: selected.value,
+            'onUpdate:cellRange': (value: TableCellRange | null) => {
+              selected.value = value
+            },
+          }),
+      }),
+      { attachTo: document.body },
+    )
+    wrappers.push(wrapper)
+    await settle()
+    const targetCell = wrapper.get(
+      '[data-table-row-index="1"] [role="cell"]',
+    ).element
+    const pointAtDescriptor = Object.getOwnPropertyDescriptor(
+      document,
+      'elementFromPoint',
+    )
+    Object.defineProperty(document, 'elementFromPoint', {
+      configurable: true,
+      value: () => targetCell,
+    })
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      left: 0,
+      top: 0,
+      right: 600,
+      bottom: 200,
+      width: 600,
+      height: 200,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    })
+    try {
+      const event = new MouseEvent('pointerdown', {
+        bubbles: true,
+        cancelable: true,
+        button: 0,
+      })
+      Object.defineProperties(event, {
+        pointerId: { value: 1 },
+        pointerType: { value: 'mouse' },
+      })
+      wrapper
+        .get('[data-table-row-index="0"] [role="cell"]')
+        .element.dispatchEvent(event)
+      await settle()
+      expect(selected.value).not.toBeNull()
+      expect(
+        (wrapper.get('.s-table').element as HTMLElement).style.userSelect,
+      ).toBe('none')
+      for (const type of ['pointermove', 'pointerup']) {
+        const next = new MouseEvent(type, {
+          bubbles: true,
+          clientX: 20,
+          clientY: 20,
+        })
+        Object.defineProperty(next, 'pointerId', { value: 1 })
+        document.dispatchEvent(next)
+      }
+      await settle()
+      expect(selected.value?.anchor.rowKey).toBe(0)
+      expect(selected.value?.focus.rowKey).toBe(1)
+      expect(wrapper.findAll('.is-range-cell')).toHaveLength(2)
+      expect(
+        (wrapper.get('.s-table').element as HTMLElement).style.userSelect,
+      ).toBe('')
+      const nextGesture = new MouseEvent('pointerdown', {
+        bubbles: true,
+        cancelable: true,
+        button: 0,
+      })
+      Object.defineProperties(nextGesture, {
+        pointerId: { value: 2 },
+        pointerType: { value: 'mouse' },
+      })
+      wrapper
+        .get('[data-table-row-index="0"] [role="cell"]')
+        .element.dispatchEvent(nextGesture)
+      await settle()
+      expect(
+        (wrapper.get('.s-table').element as HTMLElement).style.userSelect,
+      ).toBe('none')
+      await wrapper.get('.s-table__group-toggle').trigger('click')
+      await settle()
+      expect(
+        (wrapper.get('.s-table').element as HTMLElement).style.userSelect,
+      ).toBe('')
+    } finally {
+      if (pointAtDescriptor)
+        Object.defineProperty(document, 'elementFromPoint', pointAtDescriptor)
+      else Reflect.deleteProperty(document, 'elementFromPoint')
+    }
+  })
+
   it('keeps dragging when controlled updates recreate an equivalent inline merge config', async () => {
     const selected = shallowRef<TableCellRange | null>(null)
     const wrapper = mount(

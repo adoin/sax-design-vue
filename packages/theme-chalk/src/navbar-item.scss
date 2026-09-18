@@ -34,7 +34,7 @@
     left: 13px;
     height: 2px;
     border-radius: 999px;
-    background: hsl(var(--sax-color));
+    background: #{getColor(color)};
     opacity: 0;
     transform: scaleX(0.25);
     transition:
@@ -44,14 +44,16 @@
   }
 
   &:hover:not(:disabled) {
-    background: hsl(var(--sax-color) / 0.09);
+    background: #{getColor(color, 0.09)};
     opacity: 1;
     transform: translateY(-1px);
   }
 
   &:focus-visible {
-    outline: 3px solid hsl(var(--sax-color) / 0.22);
-    outline-offset: 2px;
+    background: #{getColor(color, 0.09)};
+    outline: none;
+    opacity: 1;
+    transform: translateY(-1px);
   }
 
   &:disabled {
@@ -60,8 +62,8 @@
   }
 
   @include when(active) {
-    background: hsl(var(--sax-color) / 0.11);
-    color: hsl(var(--sax-color));
+    background: #{getColor(color, 0.11)};
+    color: #{getColor(color)};
     opacity: 1;
 
     &::after {
@@ -88,8 +90,8 @@
     justify-content: center;
     padding-inline: 5px;
     border-radius: 999px;
-    background: hsl(var(--sax-color) / 0.14);
-    color: hsl(var(--sax-color));
+    background: #{getColor(color, 0.14)};
+    color: #{getColor(color)};
     font-size: 0.68rem;
   }
 

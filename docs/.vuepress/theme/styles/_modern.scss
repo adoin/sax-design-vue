@@ -212,7 +212,7 @@ body,
 @media (hover: hover) and (pointer: fine) {
   .page :is(.content__default, .con-api) code.docs-inline-code-copy:hover {
     background: hsl(var(--sax-accent-color) / 0.15);
-    box-shadow: 0 0 0 2px hsl(var(--sax-accent-color) / 0.11);
+    box-shadow: 0 5px 12px hsl(var(--sax-accent-color) / 0.1);
     color: hsl(var(--sax-theme-color));
   }
 }
@@ -220,15 +220,14 @@ body,
 .page
   :is(.content__default, .con-api)
   code.docs-inline-code-copy:focus-visible {
-  outline: 2px solid hsl(var(--sax-accent-color) / 0.72);
-  outline-offset: 2px;
+  background: hsl(var(--sax-accent-color) / 0.15);
+  box-shadow: 0 5px 12px hsl(var(--sax-accent-color) / 0.1);
+  outline: none;
 }
 
 .page :is(.content__default, .con-api) code.docs-inline-code-copy.is-copied {
   background: hsl(var(--sax-accent-color) / 0.2);
-  box-shadow:
-    0 0 0 2px hsl(var(--sax-accent-color) / 0.16),
-    0 5px 12px hsl(var(--sax-accent-color) / 0.12);
+  box-shadow: 0 5px 12px hsl(var(--sax-accent-color) / 0.12);
   color: hsl(var(--sax-theme-color));
   transform: translateY(-1px);
 }

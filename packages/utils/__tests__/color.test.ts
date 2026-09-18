@@ -3,6 +3,7 @@ import {
   applyThemeConfig,
   colorToHsl,
   createThemeCssVars,
+  getCssColor,
   getVsColor,
 } from '..'
 
@@ -15,6 +16,8 @@ describe('HSL theme colors', () => {
     })
     expect(getVsColor('rgb(25, 91, 255)')).toBe('222.783deg 100% 54.902%')
     expect(getVsColor('hsl(222 100% 55%)')).toBe('222deg 100% 55%')
+    expect(getCssColor('primary')).toBe('var(--sax-css-primary)')
+    expect(getCssColor('#195bff')).toBe('hsl(222.783deg 100% 54.902%)')
   })
 
   it('keeps the primary hue while deriving a dark primary', () => {

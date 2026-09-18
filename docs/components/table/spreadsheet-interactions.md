@@ -80,19 +80,19 @@ Enable `range-config` and drag across cells to select a rectangle. Shift + click
 
 <template #template>
 
-@[code{21-68}](../../.vuepress/components/table/range.vue)
+@[code{22-69}](../../.vuepress/components/table/range.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-19}](../../.vuepress/components/table/range.vue)
+@[code{1-20}](../../.vuepress/components/table/range.vue)
 
 </template>
 
 <template #style>
 
-@[code{70-77}](../../.vuepress/components/table/range.vue)
+@[code{71-78}](../../.vuepress/components/table/range.vue)
 
 </template>
 
@@ -190,7 +190,7 @@ Generated sources locate stable row keys through `change-config.indexOf` and acc
 
 ### Find and replace
 
-Enable `find-config` to show the search panel. Focus a table cell and press Ctrl / Command + F to find, Ctrl / Command + H to focus replacement, or F3 / Shift + F3 to navigate matches. Enter runs the panel query; Escape cancels pending work or closes the panel. Set `panel: false` for API-only integration, or `keyboard: false` to disable table shortcuts.
+Place the built-in `$find` renderer in `toolbar-config.left` or `toolbar-config.right` to add the find-and-replace trigger and panel. The renderer explicitly enables the capability; `find-config` only customizes scope, conversion, keyboard behavior and processing limits, and can enable API-only integration without rendering UI. Focus a table cell and press Ctrl / Command + F to find, Ctrl / Command + H to focus replacement, or F3 / Shift + F3 to navigate matches while `$find` is mounted. Enter runs the panel query; Escape cancels pending work or closes the panel. Set `keyboard: false` to disable these shortcuts.
 
 Queries are literal text, with optional case-sensitive and whole-cell matching. The current view searches expanded rows on the current filtered page; selection searches the current rectangular range. Both use visible visual-column order and count merged owners once. The supplied-data scope searches all provided rows and loaded tree children, across pages and independently of filters; it searches raw fields in visible columns. It does not fetch other remote pages or lazy children. Positioning can expand loaded ancestors and groups and request a page change. If filters hide a row or a controlled view rejects navigation, positioning returns `false` without clearing the filters.
 
@@ -198,19 +198,19 @@ Queries are literal text, with optional case-sensitive and whole-cell matching. 
 
 <template #template>
 
-@[code{57-107}](../../.vuepress/components/table/find.vue)
+@[code{58-108}](../../.vuepress/components/table/find.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-56}](../../.vuepress/components/table/find.vue)
+@[code{1-57}](../../.vuepress/components/table/find.vue)
 
 </template>
 
 <template #style>
 
-@[code{108-119}](../../.vuepress/components/table/find.vue)
+@[code{109-120}](../../.vuepress/components/table/find.vue)
 
 </template>
 
@@ -220,7 +220,7 @@ Queries are literal text, with optional case-sensitive and whole-cell matching. 
 
 ### Finding in generated data
 
-`find-config` defaults to at most 100000 visited positions, 1000 matching cells and 2000000 processed text characters. This example lowers `maxCells` to 4096. Incomplete searches retain their explicit limit status; `replaceAll` refuses a partial result, while `replaceMatch` can target an individual returned match. Narrow the scope or adjust limits deliberately. Object values need a formatter; text and cell limits do not measure the memory retained by supplied objects.
+The `$find` toolbar renderer supplies this example's UI. `find-config` defaults to at most 100000 visited positions, 1000 matching cells and 2000000 processed text characters; this example uses it only to lower `maxCells` to 4096. Incomplete searches retain their explicit limit status; `replaceAll` refuses a partial result, while `replaceMatch` can target an individual returned match. Narrow the scope or adjust limits deliberately. Object values need a formatter; text and cell limits do not measure the memory retained by supplied objects.
 
 The source contains a million rows and a hundred thousand columns. Search the selected last merged range, edit the replacement text, and replace its owner across the fixed-column boundary. Only changed fields are stored by the data adapter; navigation reuses the virtual row and column windows.
 
@@ -228,19 +228,19 @@ The source contains a million rows and a hundred thousand columns. Search the se
 
 <template #template>
 
-@[code{95-137}](../../.vuepress/components/table/find-source.vue)
+@[code{96-139}](../../.vuepress/components/table/find-source.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-94}](../../.vuepress/components/table/find-source.vue)
+@[code{1-95}](../../.vuepress/components/table/find-source.vue)
 
 </template>
 
 <template #style>
 
-@[code{138-149}](../../.vuepress/components/table/find-source.vue)
+@[code{140-151}](../../.vuepress/components/table/find-source.vue)
 
 </template>
 
@@ -252,25 +252,27 @@ The source contains a million rows and a hundred thousand columns. Search the se
 
 Provide item arrays or synchronous context-to-items functions through `context-menu-config.header`, `body` and `footer`. A false `visibleMethod`, an empty region or a disabled configuration preserves the browser's native context menu. A throwing factory also falls back to the native menu.
 
-`context.area` is `header`, `body` or `footer`; all include `column` and `columnIndex`. Headers add `group`, with grouped headers supplying the group column; their index identifies the first leaf in the rendered header segment. Body contexts include `row`, `rowKey`, `rowIndex`, the raw `value` and tree-node context. Footer contexts contain the summary row, footer row index and raw value. `contextMenuSelect` returns `{ context, item }`; the table does not automatically change data or execute business actions such as deletion.
+`context.area` is `header`, `body` or `footer`; all include `column` and `columnIndex`. Headers add `group`, with grouped headers supplying the group column; their index identifies the first leaf in the rendered header segment. Body contexts include `row`, `rowKey`, `rowIndex`, the raw `value` and tree-node context. Footer contexts contain the summary row, footer row index and raw value.
+
+Every context also captures `range` and normalized `rangeBounds` when the menu opens; both are `null` when no cell range exists. The snapshot stays stable while the menu is open, so an action can pass `context.rangeBounds` to `openChart({ scope: 'selection', bounds: ... })` or use it for application-specific aggregation without rereading a changed selection. `contextMenuSelect` returns `{ context, item }`; the table does not automatically change data or execute business actions such as deletion.
 
 <template #example><table-context-menu /></template>
 
 <template #template>
 
-@[code{58-98}](../../.vuepress/components/table/context-menu.vue)
+@[code{78-120}](../../.vuepress/components/table/context-menu.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-56}](../../.vuepress/components/table/context-menu.vue)
+@[code{1-76}](../../.vuepress/components/table/context-menu.vue)
 
 </template>
 
 <template #style>
 
-@[code{100-114}](../../.vuepress/components/table/context-menu.vue)
+@[code{122-136}](../../.vuepress/components/table/context-menu.vue)
 
 </template>
 

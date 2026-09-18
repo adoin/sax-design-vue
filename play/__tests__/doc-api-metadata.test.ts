@@ -19,6 +19,50 @@ const apiSections = new Set([
 ])
 
 describe('documentation API metadata', () => {
+  it('renders API extensions through explicit Table slots and exposes every type', () => {
+    const tableSource = readFileSync(
+      resolve(projectRoot, 'docs/.vuepress/theme/components/ApiTable.vue'),
+      'utf8',
+    )
+    for (const slot of [
+      'apiName',
+      'apiType',
+      'apiValues',
+      'apiDescription',
+      'apiDefault',
+      'apiExample',
+      'apiMore',
+    ]) {
+      expect(tableSource).toContain(`slots: { default: '${slot}' }`)
+      expect(tableSource).toContain(`<template #${slot}=`)
+    }
+    expect(tableSource).toContain('v-if="row.type"')
+    expect(tableSource).not.toContain('#cell-type')
+    expect(tableSource).toContain('const hasValues = computed')
+    expect(tableSource).toContain('if (hasValues.value)')
+    expect(tableSource).toContain("import { STooltip }")
+    expect(tableSource).toContain(":trigger=\"['hover', 'focus']\"")
+    expect(tableSource).toContain('t.examples.createIssue')
+    expect(tableSource).not.toContain('name="bx:terminal"')
+    expect(tableSource).toContain(':aria-label="`${labels.usage}: ${row.name}`"')
+    expect(tableSource).toContain('<template #content>{{ labels.usage }}</template>')
+    expect(tableSource).not.toContain('class="api-action"')
+
+    const detailsSource = readFileSync(
+      resolve(
+        projectRoot,
+        'docs/.vuepress/theme/components/ApiTypeDetails.vue',
+      ),
+      'utf8',
+    )
+    expect(detailsSource).toContain("import ApiTypeTokens from './ApiTypeTokens.vue'")
+    expect(detailsSource).toContain('virtual-triggering')
+    expect(detailsSource).toContain(':trigger="[]"')
+    expect(detailsSource).toContain(':close-on-click-outside="index === 0"')
+    expect(detailsSource).toContain(':outside-click-ignore="[stackSelector]"')
+    expect(detailsSource).not.toContain('trigger="hover"')
+  })
+
   it('covers the Table family runtime API and statically declared defaults', () => {
     const pages = auditTableApi()
     expect(pages).toHaveLength(4)

@@ -71,8 +71,8 @@
     }
   }
   &:focus-visible {
-    outline: 2px solid getColor(primary, 0.7);
-    outline-offset: 1px;
+    outline: none;
+    filter: brightness(1.05) saturate(1.05);
   }
   @include e(content) {
     padding: getCssVar(padding);

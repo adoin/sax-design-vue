@@ -33,7 +33,7 @@
 
     &:focus-visible {
       outline: none;
-      box-shadow: 0 0 0 3px #{getColor(primary, 0.18)};
+      background: getColor(primary, 0.13);
     }
 
     &:disabled {
@@ -113,7 +113,7 @@
       &::before {
         border-inline-start-color: getColor(primary);
         background: getColor(primary, 0.09);
-        box-shadow: inset 0 0 0 2px #{getColor(primary, 0.2)};
+        box-shadow: 0 8px 14px -12px #{getColor(primary, 0.5)};
       }
     }
   }
@@ -209,7 +209,7 @@
 
     &.is-drop-inside {
       background: getColor(primary, 0.09);
-      box-shadow: inset 0 0 0 2px #{getColor(primary, 0.24)};
+      box-shadow: 0 8px 14px -12px #{getColor(primary, 0.5)};
     }
 
     &.is-nested-layout.is-drop-inside {
@@ -433,7 +433,7 @@
       opacity: 1;
     }
     &:focus-visible {
-      box-shadow: inset 0 0 0 2px #{getColor(primary, 0.35)};
+      box-shadow: none;
     }
     @media (prefers-reduced-motion: reduce) {
       &::after {
@@ -524,12 +524,10 @@
       inset: -6px;
       content: '';
     }
-    &:hover:not(:disabled) {
-      background: transparent;
-    }
+    &:hover:not(:disabled),
     &:focus-visible {
-      outline: 2px solid #{getColor(primary, 0.5)};
-      outline-offset: 2px;
+      background: getColor(primary, 0.08);
+      outline: none;
     }
     &:disabled {
       opacity: 0.4;
@@ -593,7 +591,7 @@
         var(--s-table-row-surface)
       );
       // A soft, tightly contained accent; the surface tint identifies the row.
-      box-shadow: 0 2px 6px -4px hsl(var(--sax-primary) / 0.12);
+      box-shadow: 0 2px 6px -4px #{getColor(primary, 0.12)};
     }
 
     @include when(striped-row) {
@@ -605,8 +603,8 @@
       z-index: 1;
       background: var(--s-table-highlight-surface);
       box-shadow:
-        0 3px 6px -4px hsl(var(--sax-text-color) / 0.3),
-        inset 0 0 10px -7px hsl(var(--sax-text-color) / 0.24);
+        0 3px 6px -4px #{getColor(text-color, 0.3)},
+        inset 0 0 10px -7px #{getColor(text-color, 0.24)};
     }
   }
 
@@ -700,8 +698,10 @@
     }
   }
   @include e(find-panel) {
+    width: 100%;
     margin-top: 8px;
     padding: 14px;
+    box-sizing: border-box;
     border-radius: var(--sax-radius);
     &.is-square {
       border-radius: 0;
@@ -716,6 +716,22 @@
     p {
       margin: 10px 0 0;
       color: getColor(text, 0.72);
+    }
+  }
+  @include e(find) {
+    display: inline-flex;
+    min-width: 0;
+
+    @include when(open) {
+      display: grid;
+      width: 100%;
+      min-width: min(520px, 100%);
+      flex: 1 0 100%;
+      grid-template-columns: minmax(0, 1fr);
+
+      > .#{$namespace}-button {
+        justify-self: start;
+      }
     }
   }
   @include e(find-fields) {
@@ -783,7 +799,7 @@
     padding: 0;
     border: 0;
     border-radius: var(--sax-radius-sm);
-    color: hsl(var(--sax-primary));
+    color: #{getColor(primary)};
     background: transparent;
     cursor: pointer;
 
@@ -793,13 +809,14 @@
       transition: transform 160ms ease;
     }
 
-    &:hover .#{$namespace}-icon {
+    &:hover .#{$namespace}-icon,
+    &:focus-visible .#{$namespace}-icon {
       transform: scale(1.14);
     }
 
     &:focus-visible {
-      outline: 2px solid hsl(var(--sax-primary) / 0.28);
-      outline-offset: 1px;
+      background: #{getColor(primary, 0.08)};
+      outline: none;
     }
 
     &:disabled {
@@ -918,8 +935,9 @@
     &.is-editable-cell {
       cursor: text;
       &:focus-visible:not(.is-active-cell) {
+        background: getColor(primary, 0.06);
         outline: none;
-        box-shadow: inset 0 0 0 2px #{getColor(primary, 0.22)};
+        box-shadow: none;
       }
     }
     &.is-editing-cell {
@@ -976,8 +994,8 @@
     }
 
     &:focus-visible {
-      outline: 2px solid #{getColor(danger, 0.5)};
-      outline-offset: 1px;
+      background: #{getColor(danger, 0.12)};
+      outline: none;
     }
   }
 
@@ -1080,8 +1098,9 @@
     }
 
     &:focus-visible {
-      outline: 2px solid #{getColor(primary, 0.5)};
-      outline-offset: 1px;
+      background: getColor(primary, 0.12);
+      color: getColor(primary);
+      outline: none;
     }
   }
 
@@ -1113,7 +1132,7 @@
       left: var(--s-table-fixed-left-width);
       background: linear-gradient(
         to right,
-        hsl(var(--sax-primary) / 0.16),
+        #{getColor(primary, 0.16)},
         transparent
       );
     }
@@ -1122,7 +1141,7 @@
       right: var(--s-table-fixed-right-width);
       background: linear-gradient(
         to left,
-        hsl(var(--sax-primary) / 0.16),
+        #{getColor(primary, 0.16)},
         transparent
       );
     }
@@ -1165,8 +1184,8 @@
     }
 
     &:focus-visible {
-      outline: 2px solid getColor(primary, 0.7);
-      outline-offset: 2px;
+      background: getColor(primary, 0.07);
+      outline: none;
       border-radius: 3px;
     }
   }
@@ -1190,7 +1209,6 @@
       background: getColor(primary, 0.1);
       color: getColor(primary);
       outline: none;
-      box-shadow: 0 0 0 2px getColor(primary, 0.22);
     }
 
     &.is-active {
@@ -1235,8 +1253,9 @@
       color: getColor(primary);
     }
     &:focus-visible {
-      outline: 2px solid getColor(primary, 0.6);
-      outline-offset: 1px;
+      background: getColor(primary, 0.1);
+      color: getColor(primary);
+      outline: none;
     }
     &:disabled {
       cursor: not-allowed;
@@ -1416,14 +1435,14 @@
     &:hover,
     &:focus-visible {
       background: transparent;
-      color: hsl(var(--sax-primary));
+      color: #{getColor(primary)};
       outline: none;
       box-shadow: none;
     }
 
     &:hover .#{$namespace}-icon,
     &:focus-visible .#{$namespace}-icon {
-      filter: drop-shadow(0 1px 3px hsl(var(--sax-primary) / 0.32));
+      filter: drop-shadow(0 1px 3px #{getColor(primary, 0.32)});
     }
 
     @include when(expanded) {
@@ -1600,8 +1619,7 @@
         var(--s-table-surface)
       );
       box-shadow:
-        0 6px 12px -8px #{getColor(primary, 0.68)},
-        inset 0 0 0 1px #{getColor(primary, 0.14)};
+        0 6px 12px -8px #{getColor(primary, 0.68)};
       outline: none;
     }
   }
@@ -1852,6 +1870,10 @@ html.dark .#{$namespace}-table-wrapper {
     flex-wrap: wrap;
     align-items: center;
     gap: 10px;
+
+    &:has(.#{$namespace}-table__find.is-open) {
+      flex-basis: 100%;
+    }
   }
 
   @include e(right) {
@@ -1863,6 +1885,10 @@ html.dark .#{$namespace}-table-wrapper {
     justify-content: flex-end;
     gap: 8px;
     margin-inline-start: auto;
+
+    &:has(.#{$namespace}-table__find.is-open) {
+      flex: 1 1 100%;
+    }
   }
 
   @include e(title) {

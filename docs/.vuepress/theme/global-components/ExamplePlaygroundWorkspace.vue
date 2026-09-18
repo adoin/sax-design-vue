@@ -151,8 +151,7 @@ const copySource = async () => {
 }
 
 .example-playground-workspace__copy:focus-visible {
-  outline: 2px solid hsl(var(--sax-accent-color) / 0.45);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .example-playground-workspace__body {

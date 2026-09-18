@@ -67,6 +67,14 @@ export const popperContentProps = buildProps({
     type: Boolean,
     default: true,
   },
+  closeOnClickOutside: {
+    type: Boolean,
+    default: true,
+  },
+  outsideClickIgnore: {
+    type: definePropType<string[]>(Array),
+    default: () => [],
+  },
   flip: {
     type: definePropType<FlipOptions | boolean>([Object, Boolean]),
     default: () => ({}),

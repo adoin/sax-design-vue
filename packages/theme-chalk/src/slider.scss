@@ -126,9 +126,7 @@
   &:has(.#{bem('slider', 'input')}:hover),
   &:has(.#{bem('slider', 'input')}:focus-visible) {
     @include e(thumb) {
-      box-shadow:
-        0 0 0 7px var(--sax-slider-accent-halo),
-        0 7px 18px hsl(225deg 30% 20% / 0.24);
+      box-shadow: 0 7px 18px hsl(225deg 30% 20% / 0.28);
       transform: translate(-50%, -50%) scale(1.08);
     }
     @include e(text) {

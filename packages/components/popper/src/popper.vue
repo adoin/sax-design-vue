@@ -24,6 +24,8 @@
     :placement="popperPlacement"
     :content="content"
     :interactivity="props.interactivity"
+    :close-on-click-outside="props.closeOnClickOutside"
+    :outside-click-ignore="props.outsideClickIgnore"
     :popper-class="popperClass"
     :popper-style="[
       popperStyle,
@@ -202,7 +204,9 @@ const observeReference = (reference?: ReferenceElement) => {
         style.visibility !== 'hidden'
 
       referenceVisible.value = visible
-      if (!visible && open.value) onClose()
+      if (!visible && open.value) {
+        onClose()
+      }
     },
     { threshold: 0 },
   )

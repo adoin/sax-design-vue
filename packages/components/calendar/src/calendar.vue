@@ -911,7 +911,7 @@ const timedEventsForDate = (date: Date) =>
   )
 const eventStyle = (event: CalendarEvent) => ({
   '--sax-calendar-event-color':
-    event.color || props.eventColor || 'hsl(var(--sax-primary))',
+    event.color || props.eventColor || 'var(--sax-css-primary)',
 })
 const timeEventStyle = (event: CalendarEvent) => {
   const start = eventStart(event)!

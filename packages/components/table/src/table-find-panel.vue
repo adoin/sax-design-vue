@@ -1,15 +1,28 @@
 <script setup lang="ts">
-import { computed, nextTick, shallowRef, watch } from 'vue'
+import {
+  computed,
+  inject,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  shallowRef,
+  watch,
+} from 'vue'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SInput } from '@vuesax-alpha/components/input'
 import { SCheckbox } from '@vuesax-alpha/components/checkbox'
 import { SSelect } from '@vuesax-alpha/components/select'
 import { useId, useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { tableFindRuntimeKey } from './table-find-context'
 import type { ButtonInstance } from '@vuesax-alpha/components/button'
-import type { TableFindController } from './composables/use-table-find'
 import type { TableFindScope } from './table-find'
 
-const props = defineProps<{ finder: TableFindController }>()
+defineOptions({ name: 'STableFindPanel' })
+
+const props = defineProps<{ disabled?: boolean; label?: string }>()
+const runtime = inject(tableFindRuntimeKey)
+if (!runtime) throw new Error('STableFindPanel must be rendered inside STable')
+const finder = runtime.finder
 const ns = useNamespace('table')
 const shape = useShape()
 const { t } = useLocale()
@@ -21,14 +34,12 @@ const text = shallowRef('')
 const replacement = shallowRef('')
 const caseSensitive = shallowRef(false)
 const wholeCell = shallowRef(false)
-const scope = shallowRef<TableFindScope>(
-  props.finder.config.value.scope ?? 'view',
-)
+const scope = shallowRef<TableFindScope>(finder.config.value.scope ?? 'view')
 const message = shallowRef('')
 let sequence = 0
-const state = computed(() => props.finder.getFindState())
+const state = computed(() => finder.getFindState())
 watch(
-  [() => props.finder.query.value, () => props.finder.scan.value],
+  [() => finder.query.value, () => finder.scan.value],
   () => {
     message.value = ''
   },
@@ -58,10 +69,10 @@ const status = computed(() => {
 const clearResults = () => {
   sequence++
   message.value = ''
-  props.finder.clearFind()
+  finder.clearFind()
 }
 const open = async (replace = false) => {
-  if (!props.finder.enabled.value) return false
+  if (props.disabled || !finder.enabled.value) return false
   message.value = ''
   const current = state.value
   text.value = current.query.text
@@ -79,7 +90,7 @@ const open = async (replace = false) => {
 }
 const close = () => {
   sequence++
-  props.finder.cancelFind()
+  finder.cancelFind()
   const ownFocus = panel.value?.contains(
     panel.value.ownerDocument.activeElement,
   )
@@ -89,7 +100,7 @@ const close = () => {
 const search = async () => {
   const request = ++sequence
   message.value = ''
-  const result = await props.finder.findCells(
+  const result = await finder.findCells(
     {
       text: text.value,
       caseSensitive: caseSensitive.value,
@@ -99,21 +110,20 @@ const search = async () => {
   )
   if (request !== sequence) return
   if (!result.success) message.value = t(`vs.table.findReason_${result.reason}`)
-  else if (result.state.matches.length)
-    await props.finder.findNext({ focus: false })
+  else if (result.state.matches.length) await finder.findNext({ focus: false })
 }
 const navigate = async (backwards = false) => {
   message.value = ''
-  const located = await (
-    backwards ? props.finder.findPrevious : props.finder.findNext
-  )({ focus: false })
+  const located = await (backwards ? finder.findPrevious : finder.findNext)({
+    focus: false,
+  })
   if (!located) message.value = t('vs.table.findUnavailable')
 }
 const replace = async (all: boolean) => {
   const request = ++sequence
-  const result = await (
-    all ? props.finder.replaceAll : props.finder.replaceMatch
-  )(replacement.value)
+  const result = await (all ? finder.replaceAll : finder.replaceMatch)(
+    replacement.value,
+  )
   if (request !== sequence) return
   message.value = result.applied
     ? t('vs.table.findReplaced', { count: result.changedCells })
@@ -133,7 +143,7 @@ const keydown = (event: KeyboardEvent) => {
   if (!wrapper || target.closest(`.${ns.b('wrapper')}`) !== wrapper) return
   const ownPanel = panel.value?.contains(target)
   if (
-    props.finder.config.value.keyboard === false &&
+    finder.config.value.keyboard === false &&
     !(ownPanel && event.key === 'Escape')
   )
     return
@@ -155,31 +165,39 @@ const keydown = (event: KeyboardEvent) => {
     event.preventDefault()
     event.stopPropagation()
     if (ownPanel) navigate(event.shiftKey)
-    else (event.shiftKey ? props.finder.findPrevious : props.finder.findNext)()
+    else (event.shiftKey ? finder.findPrevious : finder.findNext)()
   } else if (event.key === 'Escape' && (opened.value || busy.value)) {
     event.preventDefault()
     event.stopPropagation()
     if (busy.value) {
       sequence++
-      props.finder.cancelFind()
+      finder.cancelFind()
       message.value = t('vs.table.findReason_cancelled')
     } else close()
   }
 }
-defineExpose({ open, close, keydown })
+const api = { open, close, keydown }
+onMounted(() => {
+  runtime.panel.value = api
+})
+onBeforeUnmount(() => {
+  if (runtime.panel.value === api) runtime.panel.value = undefined
+})
+defineExpose(api)
 </script>
 
 <template>
-  <div :class="ns.e('find')">
+  <div :class="[ns.e('find'), ns.is('open', opened)]">
     <s-button
       ref="trigger"
       size="small"
       flat
+      :disabled="disabled || !finder.enabled.value"
       :aria-expanded="opened"
       :aria-controls="id"
       @click="opened ? close() : open()"
     >
-      {{ t('vs.table.findTitle') }}
+      {{ label || t('vs.table.findTitle') }}
     </s-button>
     <div
       v-if="opened"

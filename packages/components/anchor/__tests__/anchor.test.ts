@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import ConfigProvider from '../../config-provider/src/config-provider'
 import AnchorRouteBoundary from '../src/anchor-route-boundary.vue'
 import Anchor from '../src/anchor.vue'
+import { resolveAnchorNavigation } from '../src/anchor-router'
 import {
   advanceAnchorRouteBoundaryIntent,
   createAnchorRouteBoundaryIntent,
@@ -43,10 +44,30 @@ afterEach(() => {
 })
 
 describe('Anchor hierarchy', () => {
+  it('classifies each href without a navigation mode', () => {
+    expect(
+      resolveAnchorNavigation(
+        '/guide.html#api',
+        'http://localhost/guide.html#intro',
+      ),
+    ).toEqual({ kind: 'hash', hash: '#api' })
+    expect(
+      resolveAnchorNavigation(
+        '/guide/data.html#first',
+        'http://localhost/guide.html',
+      ),
+    ).toEqual({ kind: 'route' })
+    expect(
+      resolveAnchorNavigation(
+        'https://example.com/guide',
+        'http://localhost/guide.html',
+      ),
+    ).toEqual({ kind: 'native' })
+  })
+
   it('keeps the route marker when no local hash is active', () => {
     const wrapper = mount(Anchor, {
       props: {
-        mode: 'router',
         router: {
           currentRoute: ref({ path: '/guide/data' }),
           push: vi.fn(),
@@ -120,7 +141,7 @@ describe('Anchor hierarchy', () => {
       },
     ]
     const wrapper = mount(Anchor, {
-      props: { items: routeItems, mode: 'router', router },
+      props: { items: routeItems, router },
     })
     await wrapper.vm.$nextTick()
 
@@ -152,7 +173,61 @@ describe('Anchor hierarchy', () => {
     expect(wrapper.find('.s-anchor-route-boundaries').exists()).toBe(false)
   })
 
-  it('updates hash headings without losing the active route in router mode', async () => {
+  it('prefers an exact hash route when sibling items share one pathname', async () => {
+    const currentRoute = ref({
+      path: '/guide.html',
+      fullPath: '/guide.html#api',
+    })
+    const wrapper = mount(Anchor, {
+      props: {
+        router: { currentRoute, push: vi.fn(), replace: vi.fn() },
+        items: [
+          {
+            title: 'Examples',
+            collapsible: true,
+            children: [
+              { href: '/guide/data.html', title: 'Data' },
+              { href: '/guide/query.html', title: 'Query' },
+            ],
+          },
+          {
+            href: '/guide.html#api',
+            title: 'API',
+            boundary: true,
+            children: [{ href: '#api-props', title: 'Props' }],
+          },
+        ],
+      },
+    })
+    expect(
+      wrapper.get('.s-anchor__item[aria-current="page"]').attributes('href'),
+    ).toBe('/guide.html#api')
+    expect(
+      wrapper
+        .findAll('.s-anchor-route-boundary__link')
+        .map((item) => item.attributes('href')),
+    ).toEqual(['/guide/query.html'])
+    expect(wrapper.findAll('.s-anchor__item')[0].element.tagName).toBe('SPAN')
+    expect(
+      wrapper
+        .findAll('.s-anchor__item')
+        .some((item) => item.attributes('href') === '#api-props'),
+    ).toBe(true)
+
+    currentRoute.value = {
+      path: '/guide/query.html',
+      fullPath: '/guide/query.html',
+    }
+    await wrapper.vm.$nextTick()
+    expect(
+      wrapper
+        .findAll('.s-anchor-route-boundary__link')
+        .map((item) => item.attributes('href')),
+    ).toEqual(['/guide/data.html', '/guide.html#api'])
+    wrapper.unmount()
+  })
+
+  it('updates hash headings without losing the active route', async () => {
     const container = document.createElement('div')
     Object.defineProperties(container, {
       clientHeight: { value: 200 },
@@ -173,7 +248,6 @@ describe('Anchor hierarchy', () => {
 
     const wrapper = mount(Anchor, {
       props: {
-        mode: 'router',
         router: {
           currentRoute: ref({ path: '/guide/selection' }),
           push: vi.fn(),
@@ -253,7 +327,6 @@ describe('Anchor hierarchy', () => {
 
     const wrapper = mount(Anchor, {
       props: {
-        mode: 'router',
         router: { currentRoute: ref({ path: '/guide/data' }), push: vi.fn() },
         items: [
           {
@@ -326,7 +399,6 @@ describe('Anchor hierarchy', () => {
     })
     const wrapper = mount(Anchor, {
       props: {
-        mode: 'router',
         router: { currentRoute, push },
         getContainer: () => container,
         items: [
@@ -422,7 +494,6 @@ describe('Anchor hierarchy', () => {
     })
     const wrapper = mount(Anchor, {
       props: {
-        mode: 'router',
         activeStrategy: 'visible-section',
         router: { currentRoute, push },
         getContainer: () => container,
@@ -499,7 +570,7 @@ describe('Anchor hierarchy', () => {
     const wrapper = mount(ConfigProvider, {
       props: { anchor: { router } },
       slots: {
-        default: () => h(Anchor, { items: routeItems, mode: 'router' }),
+        default: () => h(Anchor, { items: routeItems }),
       },
     })
     await wrapper.vm.$nextTick()
@@ -551,7 +622,6 @@ describe('Anchor hierarchy', () => {
       slots: {
         default: () =>
           h(Anchor, {
-            mode: 'router',
             router: {
               currentRoute: ref({ path: '/guide/data' }),
               push: vi.fn(),

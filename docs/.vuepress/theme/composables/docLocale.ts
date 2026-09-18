@@ -117,8 +117,7 @@ const ui = {
       unavailableDescription:
         'Open this page from a component example to load its exact source.',
       loadingExample: 'Loading example…',
-      reportIssue: 'Report an issue',
-      viewSource: 'View source',
+      createIssue: 'Create an issue on GitHub',
     },
     colorNotice: {
       allowedTitle: 'Allowed values',
@@ -287,8 +286,7 @@ const ui = {
       unavailable: '示例不可用',
       unavailableDescription: '请从组件示例进入此页面，以载入对应源码。',
       loadingExample: '正在加载示例…',
-      reportIssue: '反馈问题',
-      viewSource: '查看源码',
+      createIssue: '前往 GitHub 创建 Issue',
     },
     colorNotice: {
       allowedTitle: '可用值',

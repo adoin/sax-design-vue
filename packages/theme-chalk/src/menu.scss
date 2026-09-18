@@ -69,7 +69,7 @@
 .s-menu-node__button:focus-visible {
   background: getColor(primary, 0.1);
   color: getColor(primary);
-  box-shadow: 0 0 0 3px getColor(primary, 0.12);
+  box-shadow: none;
 }
 
 .s-menu-node.is-active > .s-menu-node__button {
@@ -144,7 +144,7 @@
   flex: 0 0 auto;
   border-radius: 50%;
   background: getColor(primary);
-  box-shadow: 0 0 0 4px getColor(primary, 0.1);
+  filter: drop-shadow(0 2px 4px getColor(primary, 0.32));
 }
 
 .s-menu-node__arrow {

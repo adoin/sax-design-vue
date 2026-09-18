@@ -10,7 +10,7 @@
   height: 40px;
   align-items: center;
   justify-content: center;
-  border: 1px solid getColor(primary, 0.16);
+  border: 0;
   border-radius: var(--sax-radius-lg);
   background: getColor(background);
   box-shadow: 0 10px 28px getColor(primary, 0.16);
@@ -18,7 +18,8 @@
   cursor: pointer;
   transition: transform var(--sax-motion-duration-fast) var(--sax-motion-easing-standard), box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard), background var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     transform: translateY(-2px);
     background: getColor(primary);
     box-shadow: 0 14px 30px getColor(primary, 0.28);
@@ -33,8 +34,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid getColor(primary, 0.35);
-    outline-offset: 3px;
+    outline: none;
   }
 
   @include e(icon) {

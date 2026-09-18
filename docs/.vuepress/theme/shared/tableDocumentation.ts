@@ -82,6 +82,20 @@ export const resolveTableDocumentationOverviewRedirect = (
     return tableDocumentationLandingPath('zh')
 }
 
+export const shouldPreserveTableDocumentationApiHash = (
+  to: { path: string; hash?: string },
+  from: { path: string; hash?: string },
+  activeHeaderScroll: boolean,
+) =>
+  activeHeaderScroll &&
+  !to.hash &&
+  from.hash === '#api' &&
+  to.path === from.path &&
+  (to.path === '/components/table' ||
+    to.path === '/components/table.html' ||
+    to.path === '/zh/components/table' ||
+    to.path === '/zh/components/table.html')
+
 export const tableDocumentationSectionSlug = (path: string) =>
   path.match(/\/components\/table\/([^/]+)\.html$/)?.[1]
 

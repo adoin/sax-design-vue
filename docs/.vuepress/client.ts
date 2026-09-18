@@ -5,7 +5,10 @@ import '@vuesax-alpha/theme-chalk/src/index.scss'
 import '@vuesax-alpha/theme-chalk/src/dark/css-vars.scss'
 
 import 'virtual:sax-icons/register'
-import { resolveTableDocumentationOverviewRedirect } from './theme/shared/tableDocumentation'
+import {
+  resolveTableDocumentationOverviewRedirect,
+  shouldPreserveTableDocumentationApiHash,
+} from './theme/shared/tableDocumentation'
 import { createDocumentationHashScrollBehavior } from './theme/shared/documentationHashScroll'
 
 const siteBase = import.meta.env.BASE_URL || '/'
@@ -49,7 +52,18 @@ export default defineClientConfig({
     })
     // @ts-expect-error
     app.use(SaxDesignVue)
-    router.beforeEach((to) => {
+    router.beforeEach((to, from) => {
+      // active-header-links temporarily removes scrollBehavior while replacing
+      // the current hash. The Table API is a real overview route, so clearing
+      // its required #api hash must not fall through to the landing redirect.
+      if (
+        shouldPreserveTableDocumentationApiHash(
+          to,
+          from,
+          router.options.scrollBehavior === undefined,
+        )
+      )
+        return false
       const redirect = resolveTableDocumentationOverviewRedirect(
         to.path,
         to.hash,

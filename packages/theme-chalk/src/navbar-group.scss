@@ -25,13 +25,12 @@
 
     &:hover,
     &:focus-visible {
-      background: hsl(var(--sax-color) / 0.09);
+      background: #{getColor(color, 0.09)};
       opacity: 1;
     }
 
     &:focus-visible {
-      outline: 3px solid hsl(var(--sax-color) / 0.22);
-      outline-offset: 2px;
+      outline: none;
     }
   }
 
@@ -79,8 +78,8 @@
 
   @include when(active) {
     @include e(trigger) {
-      background: hsl(var(--sax-color) / 0.11);
-      color: hsl(var(--sax-color));
+      background: #{getColor(color, 0.11)};
+      color: #{getColor(color)};
       opacity: 1;
     }
   }

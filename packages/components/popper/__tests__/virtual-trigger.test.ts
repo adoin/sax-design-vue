@@ -33,6 +33,81 @@ const anchor = (x: number) => ({
 })
 
 describe('Popper virtual anchor', () => {
+  it('treats ignored teleported descendants as part of one outside-click boundary', async () => {
+    const ignored = document.createElement('button')
+    ignored.className = 'shared-popper-boundary'
+    document.body.append(ignored)
+    const outside = document.createElement('button')
+    document.body.append(outside)
+    const wrapper = mount(Popper, {
+      attachTo: document.body,
+      props: {
+        trigger: 'click',
+        teleported: false,
+        showAfter: 0,
+        outsideClickIgnore: ['.shared-popper-boundary'],
+      },
+      slots: {
+        default: () => h('button', 'Open'),
+        content: () => h('div', 'Layer content'),
+      },
+    })
+
+    await wrapper.get('button').trigger('click')
+    await flushPromises()
+    await vi.waitFor(() =>
+      expect(wrapper.get('.s-popper').isVisible()).toBe(true),
+    )
+
+    ignored.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }))
+    ignored.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))
+    await flushPromises()
+    expect(wrapper.get('.s-popper').isVisible()).toBe(true)
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    outside.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }))
+    outside.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))
+    await flushPromises()
+    await vi.waitFor(() =>
+      expect(wrapper.get('.s-popper').isVisible()).toBe(false),
+    )
+
+    wrapper.unmount()
+    ignored.remove()
+    outside.remove()
+  })
+
+  it('can delegate outside-click ownership to another popper layer', async () => {
+    const outside = document.createElement('button')
+    document.body.append(outside)
+    const wrapper = mount(Popper, {
+      attachTo: document.body,
+      props: {
+        trigger: 'click',
+        teleported: false,
+        showAfter: 0,
+        closeOnClickOutside: false,
+      },
+      slots: {
+        default: () => h('button', 'Open'),
+        content: () => h('div', 'Child layer content'),
+      },
+    })
+
+    await wrapper.get('button').trigger('click')
+    await flushPromises()
+    await vi.waitFor(() =>
+      expect(wrapper.get('.s-popper').isVisible()).toBe(true),
+    )
+    outside.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }))
+    outside.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))
+    await flushPromises()
+    expect(wrapper.get('.s-popper').isVisible()).toBe(true)
+
+    wrapper.unmount()
+    outside.remove()
+  })
+
   it('immediately stops painting when a real virtual anchor is clipped', async () => {
     let intersection: IntersectionObserverCallback | undefined
     vi.stubGlobal(

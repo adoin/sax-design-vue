@@ -16,6 +16,7 @@ const history = ref<TableHistoryState>({
   canUndo: false,
   canRedo: false,
 })
+const toolbarConfig = { left: [{ itemRender: '$find' }] }
 const rows = ref(
   Array.from({ length: 12 }, (_, index) => ({
     id: index + 1,
@@ -85,7 +86,7 @@ const searchAll = async () => {
       v-model:data="rows"
       :columns="columns"
       row-key="id"
-      find-config
+      :toolbar-config="toolbarConfig"
       range-config
       edit-config
       change-config

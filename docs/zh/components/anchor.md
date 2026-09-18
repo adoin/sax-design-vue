@@ -1,10 +1,5 @@
 ---
 PROPS:
-  - name: mode
-    type: String
-    values: 'anchor / router'
-    description: anchor 处理页内哈希；router 根据同级路由项自动生成前后边界并使用路由适配器导航。
-    default: anchor
   - name: model-value
     type: String
     values: 'href'
@@ -17,8 +12,8 @@ PROPS:
     default: "''"
   - name: items
     type: Array
-    values: '{ href, title, disabled?, collapsible?, defaultCollapsed?, children? }[]'
-    description: 递归导航配置；href 为哈希时在当前页滚动，为路由或 URL 时渲染普通链接。children 可继续嵌套，collapsible 控制该项是否允许收起子级。
+    values: '{ href?, title, disabled?, boundary?, collapsible?, defaultCollapsed?, children? }[]'
+    description: 递归导航配置；省略 href 时仅作为分组标题，#hash 在当前页滚动，其他同源路径使用已配置的路由器；boundary 可覆盖其是否进入扁平化的前后边界顺序。
     default: '[]'
   - name: router
     type: AnchorRouterAdapter
@@ -27,7 +22,7 @@ PROPS:
     default: null
   - name: route-boundary
     type: Boolean | AnchorRouteBoundaryOptions
-    description: router 模式下自动生成的悬浮前后边界；false 关闭，也可配置 threshold、armDelay 和 routeCooldown。
+    description: 为扁平化后的可用路由顺序自动生成悬浮前后边界；false 关闭，也可配置 threshold、armDelay 和 routeCooldown。
     default: true
   - name: offset
     type: Number
@@ -88,7 +83,7 @@ EVENTS:
   - name: change
     description: 激活锚点变化时触发。
   - name: click
-    description: 导航前触发，参数为当前项和 MouseEvent；router 模式随后将普通路由点击交给已配置的适配器。
+    description: 导航前触发，参数为当前项和 MouseEvent；普通的同源路由点击随后交给已配置的适配器。
   - name: collapse-change
     description: 可折叠锚点项展开或收起时触发，参数为当前项与收起状态。
 SLOTS:
@@ -98,11 +93,11 @@ SLOTS:
     default: null
   - name: route-previous
     type: 'Slot<{ item: AnchorRouteBoundaryItem, direction: previous, visible: boolean, navigating: boolean, progress: number }>'
-    description: 替换 router 模式自动生成的上一条路由提示文字，保留链接、图标和进度指示。
+    description: 替换自动生成的上一条路由提示文字，保留链接、图标和进度指示。
     default: null
   - name: route-next
     type: 'Slot<{ item: AnchorRouteBoundaryItem, direction: next, visible: boolean, navigating: boolean, progress: number }>'
-    description: 替换 router 模式自动生成的下一条路由提示文字，保留链接、图标和进度指示。
+    description: 替换自动生成的下一条路由提示文字，保留链接、图标和进度指示。
     default: null
 description: '用于在当前页面的内容区块或相关路由之间快速导航。'
 ---
@@ -119,7 +114,7 @@ description: '用于在当前页面的内容区块或相关路由之间快速导
 
 使用哈希 `href` 定位当前页面的标题，也可以传入相对路径、根路径或完整 URL 跳转到其他路由。Anchor 使用语义化链接渲染，因此路由项保留在新标签页打开、复制链接地址等浏览器标准行为。
 
-Anchor 本身不依赖路由库。使用 `router` 模式时，在组件或 Anchor 全局配置中提供兼容路由即可自动接管普通点击；带 Ctrl、Command 或 Shift 的点击仍使用原生链接行为，可正常在新标签页打开。
+Anchor 本身不依赖路由库。当配置中包含同源页面路径时，在组件或 Anchor 全局配置中提供兼容路由即可；Anchor 会逐项自动判断导航方式。普通点击交给路由器，带 Ctrl、Command 或 Shift 的点击仍保留原生链接行为，可正常在新标签页打开。
 
 <template #example>
 
@@ -151,7 +146,7 @@ Anchor 本身不依赖路由库。使用 `router` 模式时，在组件或 Ancho
 
 <h2 id="anchor-hierarchy">分级锚点</h2>
 
-通过 `children` 递归组织任意层级。父级仍是正常的跳转目标；设置 `collapsible: true` 后可单独收起其子级，`defaultCollapsed` 控制初始状态。当前锚点位于已收起分支时，组件会展开祖先以保持定位可见。
+通过 `children` 递归组织任意层级。带 `href` 的父级仍是正常跳转目标；仅作为分组标题时可以省略 `href`。设置 `collapsible: true` 后可单独收起其子级，`defaultCollapsed` 控制初始状态。当前锚点位于已收起分支时，组件会展开祖先以保持定位可见。
 
 激活标记默认直接渲染内联定位 SVG，因此不依赖任何图标集合。在 `SConfigProvider` 或组件库安装配置中传入 `anchor: { activeIcon: 'collection:name' }` 可统一替换图标；`active-icon` 插槽优先级最高，并接收当前激活项的 `item` 与 `href`。
 
@@ -217,9 +212,9 @@ Anchor 本身不依赖路由库。使用 `router` 模式时，在组件或 Ancho
 
 <card>
 
-<h2 id="anchor-route-boundary">路由模式</h2>
+<h2 id="anchor-route-boundary">路由与页内锚点混合导航</h2>
 
-当一份目录同时包含跨路由章节和章节内标题时，使用 `mode="router"`。路由项标识当前页面并提供悬浮的上／下一章边界；该路由下的 `#hash` 子项标识页内标题，随页面滚动更新。哈希子项不进入跨路由顺序。向下越过页底会从下一章开头继续，向上越过页首会从上一章末尾继续；普通路由链接点击仍遵循路由器的常规落点。
+当一份目录同时包含跨路由章节和章节内标题时，只需提供 `router`，不再设置模式。Anchor 会逐项判断：裸 `#hash` 在当前文档滚动，其他同源 pathname 使用路由器，pathname 加 hash 则只在目标文档不同时走路由。前后边界会跨分组扁平化，默认纳入不带 hash 的完整路由；可用 `boundary: true` 纳入 API 这类跨文档 hash，也可用 `false` 排除普通路由。向下越过页底会从下一项开头继续，向上越过页首会从上一项末尾继续。
 
 跨路由的页面落点由路由器和页面滚动容器管理，应瞬时进入新页面，而不要依赖全局平滑滚动样式把旧页面的滚动位置动画带到新页面。页内哈希点击仍使用 Anchor 的 `scroll-behavior` 设置，默认值为 `smooth`。
 
@@ -238,7 +233,6 @@ const router = useRouter()
 const items: AnchorItem[] = [
   {
     title: 'Table 指南',
-    href: '/zh/table',
     children: [
       { title: '数据定义', href: '/zh/table/data' },
       { title: '行选择', href: '/zh/table/selection' },
@@ -250,7 +244,7 @@ const items: AnchorItem[] = [
 
 <template>
   <aside>
-    <SAnchor mode="router" :items="items" :router="router" />
+    <SAnchor :items="items" :router="router" />
   </aside>
   <RouterView />
 </template>
@@ -310,12 +304,12 @@ const routerAdapter: AnchorRouterAdapter = {
 `current()` 应读取响应式路由状态；路由没有响应式位置时，可改为通过 Anchor 的 `v-model` 同步当前地址。
 
 ::: tip 实际体验
-[前往 Table 分章节文档体验路由模式 →](/zh/components/table/large-data-and-visualization.html)
+[前往 Table 分章节文档体验混合导航 →](/zh/components/table/large-data-and-visualization.html)
 :::
 
 <h3 id="anchor-container">滚动容器</h3>
 
-普通锚点和路由模式默认都监听页面 window。用于面板或虚拟页面时，可通过 `get-container` 返回实际滚动元素；锚点导航、高亮计算和路由边界会使用同一个容器。
+页内锚点和包含路由项的目录默认都监听页面 window。用于面板或虚拟页面时，可通过 `get-container` 返回实际滚动元素；锚点导航、高亮计算和路由边界会使用同一个容器。
 
 <template #example>
 

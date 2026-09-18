@@ -138,7 +138,7 @@
   width: min(520px, calc(100vw - 24px));
   max-height: 360px;
   overflow: hidden;
-  border: 1px solid hsl(var(--sax-primary) / 0.1);
+  border: 1px solid #{getColor(primary, 0.1)};
   border-radius: var(--sax-radius);
   background: getColor(background);
   box-shadow: var(--sax-popper-shadow);

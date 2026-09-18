@@ -29,8 +29,7 @@ Anchor route items remain semantic links and emit both the selected item and nat
 
 `SAnchor` generates route continuation internally in `router` mode. The active item's route siblings supply optional previous and next edges; no content wrapper or separately installed public component is required. The boundary exposes localized direction, continued-scroll, loading, and progress labels; hidden edges are removed from the accessibility tree and tab order. Its default inline direction SVG does not depend on an icon collection, reduced-motion users receive no repeated nudge animation, and the `route-previous` and `route-next` slots can replace edge copy without replacing link or progress semantics.
 
-The Anchor reference documents the automatic router mode rather than requiring the live Table guide to explain wiring. The example passes normal recursive items and a router object to `SAnchor`; Anchor derives adjacent items, preserves modified native clicks, delegates ordinary activation to `push` or `replace`, and links to the Table chapters for live interaction. A second example shows application-wide adapter registration. The adapter is structural and keeps Anchor free of runtime dependencies on Vue Router, vue-smart-router, or another routing package.
-
+The Anchor reference documents automatic per-item navigation rather than requiring the live Table guide to explain wiring. The example passes normal recursive items and a router object to `SAnchor`; Anchor distinguishes group labels, local hashes, route pages and cross-document hashes, derives eligible adjacent routes, preserves modified native clicks, delegates ordinary route activation to `push` or `replace`, and links to the Table chapters for live interaction. A second example shows application-wide adapter registration. The adapter is structural and keeps Anchor free of runtime dependencies on Vue Router, vue-smart-router, or another routing package.
 
 ## Verification
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, nextTick, shallowRef, useId, useTemplateRef } from 'vue'
-import { useEscapeKeydown } from '@vuesax-alpha/hooks'
-import { SIcon } from '@vuesax-alpha/components/icon'
+import { nextTick, shallowRef, useId, watch } from 'vue'
+import { useEscapeKeydown, useZIndex } from '@vuesax-alpha/hooks'
 import { SPopper } from '@vuesax-alpha/components/popper'
 
+import ApiTypeTokens from './ApiTypeTokens.vue'
 import type { ThemeApiTypeDefinition } from '../shared/frontmatter/normal'
 
 interface Props {
@@ -20,226 +20,232 @@ interface Props {
   }
 }
 
+interface TypeLayer {
+  key: number
+  definition: ThemeApiTypeDefinition
+  trigger: HTMLElement
+  triggerTokenIndex: number
+  zIndex: number
+}
+
 const props = withDefaults(defineProps<Props>(), {
   definitions: () => ({}),
 })
 
-const open = shallowRef(false)
-const trigger = useTemplateRef<HTMLButtonElement>('trigger')
-const contentId = `api-type-details-${useId()}`
-const referencedDefinitions = computed(() => Object.values(props.definitions))
-const triggerLabel = computed(() =>
-  open.value ? props.labels.closeTypeDetails : props.labels.openTypeDetails,
-)
+const layers = shallowRef<TypeLayer[]>([])
+const rootTrigger = shallowRef<HTMLElement>()
+const { nextZIndex } = useZIndex()
+const instanceId = useId().replace(/[^a-zA-Z0-9_-]/g, '')
+const stackClass = `api-type-stack-${instanceId}`
+const stackSelector = `.${stackClass}`
+let layerKey = 0
+
+const closeStack = async (restoreFocus = false) => {
+  const focusTarget = restoreFocus ? rootTrigger.value : undefined
+  layers.value = []
+  rootTrigger.value = undefined
+  if (focusTarget) {
+    await nextTick()
+    focusTarget.focus()
+  }
+}
+
+const openReference = (
+  name: string,
+  tokenIndex: number,
+  parentIndex: number,
+  event: MouseEvent,
+) => {
+  const definition = props.definitions[name]
+  const trigger = event.currentTarget
+  if (!definition || !(trigger instanceof HTMLElement)) return
+
+  const targetIndex = parentIndex + 1
+  const activeLayer = layers.value[targetIndex]
+  if (
+    activeLayer?.definition.name === name &&
+    activeLayer.trigger === trigger
+  ) {
+    layers.value = layers.value.slice(0, targetIndex)
+    if (targetIndex === 0) rootTrigger.value = undefined
+    return
+  }
+
+  if (
+    layers.value
+      .slice(0, targetIndex)
+      .some((layer) => layer.definition.name === name)
+  ) {
+    return
+  }
+
+  if (targetIndex === 0) rootTrigger.value = trigger
+  layers.value = [
+    ...layers.value.slice(0, targetIndex),
+    {
+      key: ++layerKey,
+      definition,
+      trigger,
+      triggerTokenIndex: tokenIndex,
+      zIndex: nextZIndex(),
+    },
+  ]
+}
+
+const updateLayerVisible = (index: number, visible: boolean) => {
+  if (!visible && index === 0) closeStack()
+}
+
+const pathThrough = (index: number) =>
+  layers.value.slice(0, index + 1).map((layer) => layer.definition.name)
 
 useEscapeKeydown((event) => {
-  if (event.key !== 'Escape' || !open.value) return
-  open.value = false
-  nextTick(() => trigger.value?.focus())
+  if (event.key === 'Escape' && layers.value.length) closeStack(true)
 })
+
+watch([() => props.type, () => props.definitions], () => closeStack())
 </script>
 
 <template>
+  <span class="api-type-details-root" :class="stackClass">
+    <ApiTypeTokens
+      class="api-type-expression"
+      :expression="type"
+      :definitions="definitions"
+      :active-reference="layers[0]?.definition.name"
+      :active-reference-index="layers[0]?.triggerTokenIndex"
+      :open-label="labels.openTypeDetails"
+      :close-label="labels.closeTypeDetails"
+      @open-reference="
+        (name, tokenIndex, event) => openReference(name, tokenIndex, -1, event)
+      "
+    />
+  </span>
+
   <SPopper
-    v-model:visible="open"
-    trigger="click"
-    placement="bottom-start"
+    v-for="(layer, index) in layers"
+    :key="layer.key"
+    :visible="true"
+    :virtual-ref="layer.trigger"
+    virtual-triggering
+    :trigger="[]"
+    :placement="index === 0 ? 'bottom-start' : 'right-start'"
     :offset="8"
+    :z-index="layer.zIndex"
     :show-arrow="true"
-    popper-class="api-type-popper"
+    :close-on-click-outside="index === 0"
+    :outside-click-ignore="[stackSelector]"
+    :popper-class="['api-type-popper', stackClass]"
+    @update:visible="updateLayerVisible(index, $event)"
   >
-    <button
-      ref="trigger"
-      class="api-type-trigger"
-      type="button"
-      :aria-controls="contentId"
-      :aria-expanded="open"
-      :aria-label="`${triggerLabel}: ${type}`"
-    >
-      <span>{{ type }}</span>
-      <SIcon
-        class="api-type-trigger__icon"
-        :class="{ 'is-open': open }"
-        name="bx:chevron-down"
-        aria-hidden="true"
-      />
-    </button>
-
     <template #content>
-      <section
-        :id="contentId"
-        class="api-type-details"
+      <article
+        :id="`api-type-layer-${instanceId}-${index}`"
+        class="api-type-definition"
+        :data-layer="index + 1"
         role="region"
-        :aria-label="labels.typeDetailsTitle"
+        :aria-label="`${labels.typeDetailsTitle}: ${layer.definition.name}`"
       >
-        <header class="api-type-details__header">
-          <strong>{{ labels.typeDetailsTitle }}</strong>
-          <span>{{ labels.currentType }}</span>
+        <header class="api-type-definition__header">
+          <strong>{{ layer.definition.name }}</strong>
+          <span :title="layer.definition.source">
+            {{ labels.source }} · {{ layer.definition.source }}
+          </span>
         </header>
-
-        <code class="api-type-details__expression">{{ type }}</code>
-
-        <div v-if="referencedDefinitions.length" class="api-type-details__list">
-          <h4>{{ labels.referencedTypes }}</h4>
-          <article
-            v-for="definition in referencedDefinitions"
-            :key="`${definition.source}:${definition.name}`"
-            class="api-type-definition"
-          >
-            <header class="api-type-definition__header">
-              <code>{{ definition.name }}</code>
-              <span>{{ labels.source }} · {{ definition.source }}</span>
-            </header>
-            <pre><code>{{ definition.declaration }}</code></pre>
-          </article>
-        </div>
-
-        <p v-else class="api-type-details__empty">
-          {{ labels.noReferencedTypes }}
-        </p>
-      </section>
+        <pre class="api-type-definition__code"><ApiTypeTokens
+          :expression="layer.definition.declaration"
+          :definitions="definitions"
+          :references="layer.definition.references"
+          :disabled-references="pathThrough(index)"
+          :active-reference="layers[index + 1]?.definition.name"
+          :active-reference-index="layers[index + 1]?.triggerTokenIndex"
+          :open-label="labels.openTypeDetails"
+          :close-label="labels.closeTypeDetails"
+          @open-reference="
+            (name, tokenIndex, event) =>
+              openReference(name, tokenIndex, index, event)
+          "
+        /></pre>
+      </article>
     </template>
   </SPopper>
 </template>
 
 <style scoped lang="scss">
-.api-type-trigger {
-  display: inline-flex;
-  min-height: 30px;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 7px;
-  border: 0;
-  border-radius: 7px;
-  background: hsl(var(--sax-accent-secondary) / 0.08);
-  color: hsl(var(--sax-accent-secondary));
-  cursor: pointer;
-  font: inherit;
-  line-height: 1.35;
-  text-align: left;
-  transition:
-    background-color 160ms ease,
-    box-shadow 160ms ease;
+.api-type-details-root {
+  display: inline;
+  min-width: 0;
 }
 
-.api-type-trigger:hover,
-.api-type-trigger[aria-expanded='true'] {
-  background: hsl(var(--sax-accent-secondary) / 0.14);
+.api-type-expression {
+  overflow-wrap: anywhere;
+  font-size: 0.78rem;
+  line-height: 1.55;
 }
 
-.api-type-trigger:focus-visible {
-  outline: 2px solid hsl(var(--sax-primary));
-  outline-offset: 2px;
-}
-
-.api-type-trigger__icon {
-  flex: 0 0 auto;
-  transition: transform 160ms ease;
-}
-
-.api-type-trigger__icon.is-open {
-  transform: rotate(180deg);
-}
-
-.api-type-details {
-  width: min(620px, calc(100vw - 24px));
-  max-height: min(480px, calc(100vh - 32px));
-  padding: 16px;
+.api-type-definition {
+  width: min(560px, calc(100vw - 24px));
+  max-height: min(440px, calc(100vh - 32px));
   overflow: auto;
+  user-select: text;
   color: hsl(var(--sax-theme-color));
 }
 
-.api-type-details__header,
 .api-type-definition__header {
+  position: sticky;
+  z-index: 1;
+  top: 0;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.08);
+  background: hsl(var(--sax-background));
 }
 
-.api-type-details__header strong {
-  font-size: 0.92rem;
-}
-
-.api-type-details__header span,
-.api-type-definition__header span {
-  color: hsl(var(--sax-theme-color) / 0.72);
-  font-size: 0.68rem;
-}
-
-.api-type-details__expression {
-  display: block;
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 9px;
-  background: hsl(var(--sax-primary) / 0.09);
+.api-type-definition__header strong {
   color: hsl(var(--sax-accent-secondary));
-  font-size: 0.8rem;
-  overflow-wrap: anywhere;
-}
-
-.api-type-details__list {
-  display: grid;
-  gap: 10px;
-  margin-top: 16px;
-}
-
-.api-type-details__list h4 {
-  margin: 0;
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-.api-type-definition {
-  min-width: 0;
-  overflow: hidden;
-  border-radius: 10px;
-  background: hsl(var(--sax-theme-color) / 0.055);
-}
-
-.api-type-definition__header {
-  padding: 9px 11px;
-  border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.07);
+  font-size: 0.84rem;
 }
 
 .api-type-definition__header span {
-  max-width: 65%;
+  max-width: 68%;
   overflow: hidden;
+  color: hsl(var(--sax-theme-color) / 0.62);
+  font-size: 0.66rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.api-type-definition pre {
-  max-height: 240px;
+.api-type-definition__code {
   margin: 0;
-  padding: 12px;
+  padding: 14px;
   overflow: auto;
   background: transparent;
-  color: hsl(var(--sax-theme-color));
   font-size: 0.72rem;
-  line-height: 1.55;
+  line-height: 1.65;
+  tab-size: 2;
   white-space: pre;
 }
 
-.api-type-definition pre code {
-  padding: 0;
-  background: transparent;
-  color: hsl(var(--sax-theme-color)) !important;
-  font: inherit;
-  -webkit-text-fill-color: currentcolor;
+.api-type-definition__code :deep(.api-type-code) {
+  white-space: pre;
 }
 
-.api-type-details__empty {
-  margin: 12px 0 0;
-  color: hsl(var(--sax-theme-color) / 0.72);
-  font-size: 0.74rem;
-}
+@media (max-width: 720px) {
+  .api-type-definition {
+    width: min(92vw, 560px);
+  }
 
-@media (prefers-reduced-motion: reduce) {
-  .api-type-trigger,
-  .api-type-trigger__icon {
-    transition: none;
+  .api-type-definition__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .api-type-definition__header span {
+    max-width: 100%;
   }
 }
 </style>

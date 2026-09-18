@@ -9,6 +9,7 @@ import {
 } from '@vuesax-alpha/components/form'
 import { SButton } from '@vuesax-alpha/components/button'
 import TableColumnConfig from './table-column-config.vue'
+import TableFindPanel from './table-find-panel.vue'
 import TableToolbarButton from './table-toolbar-button.vue'
 import type {
   TableCellRenderParams,
@@ -298,5 +299,20 @@ formRenderer.mixin({
         ...(options.attrs ?? {}),
         disabled: params.disabled || Boolean(options.props?.disabled),
       }),
+  },
+  $find: {
+    renderToolbar: (options, params) => {
+      const source = params.source as TableToolbarRendererParams
+      const content =
+        typeof options.content === 'function'
+          ? options.content(source as never)
+          : options.content
+      return h(TableFindPanel, {
+        ...(options.props ?? {}),
+        ...(options.attrs ?? {}),
+        disabled: params.disabled || Boolean(options.props?.disabled),
+        label: typeof content === 'string' ? content : undefined,
+      })
+    },
   },
 })

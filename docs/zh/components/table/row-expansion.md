@@ -10,29 +10,29 @@ description: 'Table 的行展开功能、配置方式与可运行示例。'
 
 详情行在当前记录下方展开补充内容，并可与异步加载和虚拟滚动组合使用。
 
-### 详情展开行
+### 表中表变更明细
 
-添加 `type: 'expand'` 列，通过 `#detail` 放置详情、表单或子表格。`v-model:detail-expanded-keys` 使用稳定行键，与树节点的 `expanded-keys` 分别控制；展开按钮支持 Tab 聚焦、Enter 和空格操作。
+外层 Table 每行展示一个字段的变更梗概，再通过 `#detail` 渲染另一个 `STable`，列出完整的修改前、修改后和处理结果。细致记录留在同一阅读流中，不再打开单独的弹出层。
 
-未绑定模型时可用 `detailConfig.defaultExpandedKeys` 设置初始展开项，`expandableMethod` 控制哪些行可展开。表单值由业务保存，详情收起或虚拟滚动离开视口时，插槽组件会卸载。
+`v-model:detail-expanded-keys` 使用稳定行键控制哪些梗概已展开。展开按钮支持 Tab 聚焦、Enter 和空格操作；收起父行时只卸载对应的明细子表。
 
 <template #example><table-zh-details /></template>
 
 <template #template>
 
-@[code{35-66}](../../../.vuepress/components/table-zh/details.vue)
+@[code{217-274}](../../../.vuepress/components/table-zh/details.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-33}](../../../.vuepress/components/table-zh/details.vue)
+@[code{1-215}](../../../.vuepress/components/table-zh/details.vue)
 
 </template>
 
 <template #style>
 
-@[code{68-86}](../../../.vuepress/components/table-zh/details.vue)
+@[code{276-326}](../../../.vuepress/components/table-zh/details.vue)
 
 </template>
 

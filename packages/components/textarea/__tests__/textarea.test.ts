@@ -41,7 +41,7 @@ describe('Textarea', () => {
     })
 
     expect(wrapper.attributes('style')).toContain(
-      '--sax-textarea-focus-color: hsl(var(--sax-primary))',
+      '--sax-textarea-focus-color: var(--sax-css-primary)',
     )
 
     await wrapper.get('textarea').trigger('focus')

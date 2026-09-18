@@ -10,29 +10,29 @@ description: 'Table row expansion behavior, configuration, and runnable examples
 
 Detail rows expand supporting content below a record and can be combined with asynchronous loading and virtual scrolling.
 
-### Detail rows
+### Nested change table
 
-Add a `type: 'expand'` column and use `#detail` for details, forms or nested tables. `v-model:detail-expanded-keys` uses stable row keys independently of tree `expanded-keys`. Focus the trigger with Tab and activate it with Enter or Space.
+Use the outer Table for one summary per changed field, then render another `STable` from `#detail` for the complete change list. This keeps dense before/after records in the same reading flow instead of opening a separate popover.
 
-Without a controlled model, use `detailConfig.defaultExpandedKeys` for initial expansion and `expandableMethod` to restrict eligible rows. Keep form values in application state: slot components unmount when collapsed or outside the virtual window.
+`v-model:detail-expanded-keys` controls the open summary rows with stable keys. Focus an expand trigger with Tab and activate it with Enter or Space; collapsing the parent removes only its nested detail table.
 
 <template #example><table-details /></template>
 
 <template #template>
 
-@[code{35-68}](../../.vuepress/components/table/details.vue)
+@[code{217-274}](../../.vuepress/components/table/details.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-33}](../../.vuepress/components/table/details.vue)
+@[code{1-215}](../../.vuepress/components/table/details.vue)
 
 </template>
 
 <template #style>
 
-@[code{70-88}](../../.vuepress/components/table/details.vue)
+@[code{276-326}](../../.vuepress/components/table/details.vue)
 
 </template>
 

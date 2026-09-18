@@ -82,7 +82,7 @@
   border: 0;
   border-radius: var(--sax-radius-sm);
   background: transparent;
-  color: getColor(text, secondary);
+  color: getColor(text-color, secondary);
   font-size: 13px;
   line-height: 1.45;
   text-align: left;
@@ -163,7 +163,7 @@
   border: 0;
   border-radius: var(--sax-radius-sm);
   background: transparent;
-  color: getColor(text, secondary);
+  color: getColor(text-color, secondary);
   cursor: pointer;
 
   &:hover,
@@ -171,7 +171,6 @@
     background: getColor(primary, 0.08);
     color: getColor(primary);
     outline: none;
-    box-shadow: 0 0 0 2px getColor(primary, 0.14);
   }
 
   .s-icon {
@@ -275,8 +274,9 @@
   }
 
   &:focus-visible {
-    outline: 2px solid getColor(primary, 0.28);
-    outline-offset: -2px;
+    background: getColor(primary, 0.08);
+    color: getColor(primary);
+    outline: none;
   }
 }
 

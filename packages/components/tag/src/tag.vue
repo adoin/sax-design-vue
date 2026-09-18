@@ -36,7 +36,7 @@
           />
           <feOffset in="ambient-blur" dy="1" result="ambient-offset" />
           <feFlood
-            flood-color="hsl(var(--sax-primary))"
+            flood-color="var(--sax-css-primary)"
             flood-opacity="0.18"
             result="ambient-color"
           />
@@ -53,7 +53,7 @@
           />
           <feOffset in="depth-blur" dy="3" result="depth-offset" />
           <feFlood
-            flood-color="hsl(var(--sax-primary))"
+            flood-color="var(--sax-css-primary)"
             flood-opacity="0.2"
             result="depth-color"
           />
@@ -132,7 +132,7 @@ import {
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
+import { getCssColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { tagEmits, tagProps } from './tag'
 import type { Color } from '@vuesax-alpha/constants'
 import type { CSSProperties } from 'vue'
@@ -202,27 +202,20 @@ const tagStyle = computed((): CSSProperties => {
   const colorValue = semanticColor.value || color.value
   if (!colorValue || isVsColor(themeColor.value)) return {}
 
-  const resolved = getVsColor(colorValue)
+  const resolved = getCssColor(colorValue)
   if (!resolved) return {}
 
   if (props.transparent) {
-    const surface = resolved.startsWith('var(')
-      ? `color-mix(in srgb, ${resolved} 15%, transparent)`
-      : `rgba(${resolved}, 0.15)`
-    const foreground = resolved.startsWith('var(')
-      ? resolved
-      : `rgb(${resolved})`
     return {
-      '--sax-tag-surface': surface,
-      '--sax-tag-accent': foreground,
-      '--sax-tag-text': foreground,
+      '--sax-tag-surface': `color-mix(in srgb, ${resolved} 15%, transparent)`,
+      '--sax-tag-accent': resolved,
+      '--sax-tag-text': resolved,
     }
   }
 
-  const foreground = resolved.startsWith('var(') ? resolved : `rgb(${resolved})`
   return {
-    '--sax-tag-surface': foreground,
-    '--sax-tag-accent': foreground,
+    '--sax-tag-surface': resolved,
+    '--sax-tag-accent': resolved,
     '--sax-tag-text': 'hsl(0deg 0% 100% / 0.94)',
   }
 })

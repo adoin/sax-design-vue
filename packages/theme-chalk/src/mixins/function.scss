@@ -1,4 +1,6 @@
 @use 'sass:color';
+@use 'sass:list';
+@use 'sass:math';
 @use 'sass:meta';
 @use 'sass:string';
 @use 'config';
@@ -88,13 +90,83 @@
   @return $name;
 }
 
-@function getColor($var, $alpha: 1) {
-  $color: getCssVar($var);
-  @if $color == 'inherit' {
-    @return $color;
-  } @else {
-    @return string.unquote('hsl(#{$color} / #{$alpha})');
+// Complete CSS color tokens wrap HSL channels:
+// --sax-primary: 222.8deg 100% 54.9%;
+// --sax-css-primary: hsl(var(--sax-primary));
+@function getCssColorName($args...) {
+  $name: '--' + config.$css-var-namespace + '-css';
+  @each $item in $args {
+    @if $item != '' {
+      $name: $name + '-' + $item;
+    }
   }
+  @return $name;
+}
+
+@function getCssColor($args...) {
+  @return var(
+    #{getCssColorName($args...)},
+    hsl(#{getCssVar($args...)})
+  );
+}
+
+@function is-color-alpha($value) {
+  @if meta.type-of($value) == 'number' {
+    @return true;
+  }
+
+  $text: '#{$value}';
+  @return string.index($text, 'var(') == 1 or string.index($text, 'calc(') == 1;
+}
+
+@function color-alpha-percent($alpha) {
+  @if meta.type-of($alpha) == 'number' {
+    @if math.unit($alpha) == '%' {
+      @return $alpha;
+    }
+    @return calc(#{$alpha} * 100%);
+  }
+
+  @return calc(#{$alpha} * 100%);
+}
+
+// getColor(primary) => var(--sax-css-primary)
+// getColor(primary, 0.12) => color-mix(in srgb, var(--sax-css-primary) 12%, transparent)
+// getColor(text-color, secondary) => var(--sax-css-text-color-secondary)
+@function getColor($args...) {
+  $count: list.length($args);
+  @if $count == 0 {
+    @return inherit;
+  }
+
+  $alpha: 1;
+  $name-count: $count;
+
+  @if $count > 1 and is-color-alpha(list.nth($args, $count)) {
+    $alpha: list.nth($args, $count);
+    $name-count: $count - 1;
+  }
+
+  $name: list.nth($args, 1);
+  @if $name-count > 1 {
+    @for $i from 2 through $name-count {
+      $name: $name + '-' + list.nth($args, $i);
+    }
+  }
+
+  $channels: getCssVar($name);
+  @if $channels == 'inherit' {
+    @return $channels;
+  }
+
+  $complete: getCssColor($name);
+  @if $alpha == 1 {
+    @return $complete;
+  }
+
+  @return string.unquote(
+    'color-mix(in srgb, #{$complete} #{color-alpha-percent($alpha)}, transparent)'
+  );
 }
 
 @function hex2hsl($color) {

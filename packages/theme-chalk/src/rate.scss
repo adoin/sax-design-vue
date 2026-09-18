@@ -38,9 +38,7 @@ $rate-size: map.merge(
 
   &:focus {
     outline: none;
-    box-shadow:
-      0 0 0 5px hsl(226deg 100% 55% / 0.1),
-      0 7px 18px hsl(225deg 24% 20% / 0.1);
+    box-shadow: 0 7px 18px hsl(225deg 24% 20% / 0.14);
     transform: translateY(-1px);
   }
 

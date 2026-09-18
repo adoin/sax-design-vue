@@ -12,7 +12,10 @@
 
 // common
 :root {
-  @include set-color('color', $color-base);
+  // `--sax-color` is a per-component slot. Do not publish `--sax-css-color` on
+  // :root: custom properties inherit computed values, so a root complete color
+  // would freeze to the base ink and ignore local `--sax-color` overrides.
+  @include set-color('color', $color-base, false);
   @include set-color('white', $color-white);
   @include set-color('black', $color-black);
 
@@ -141,35 +144,35 @@
   @include set-var-value('motion-blur-large', 8px);
 
   // Input surfaces stay distinct without bringing back conventional borders.
-  // Primary is stored as HSL channels, so alpha tints stay in sync with themes.
+  // Complete CSS colors wrap HSL channels so alpha tints stay in sync with themes.
   @include set-var-value(
     'input-shadow',
     (
-      0 1px 2px hsl(var(--sax-primary) / 0.08),
-      0 6px 18px hsl(var(--sax-primary) / 0.08),
-      inset 0 0 0 1px hsl(var(--sax-primary) / 0.08)
+      0 1px 2px #{getColor(primary, 0.08)},
+      0 6px 18px #{getColor(primary, 0.08)},
+      inset 0 0 0 1px #{getColor(primary, 0.08)}
     )
   );
   @include set-var-value(
     'input-shadow-hover',
     (
-      0 2px 5px hsl(var(--sax-primary) / 0.12),
-      0 8px 22px hsl(var(--sax-primary) / 0.1),
-      inset 0 0 0 1px hsl(var(--sax-primary) / 0.14)
+      0 2px 5px #{getColor(primary, 0.12)},
+      0 8px 22px #{getColor(primary, 0.1)},
+      inset 0 0 0 1px #{getColor(primary, 0.14)}
     )
   );
   @include set-var-value(
     'input-shadow-focus',
     (
-      0 3px 8px hsl(var(--sax-primary) / 0.16),
-      0 12px 28px hsl(var(--sax-primary) / 0.14),
-      inset 0 0 0 1px hsl(var(--sax-primary) / 0.3)
+      0 3px 8px #{getColor(primary, 0.16)},
+      0 12px 28px #{getColor(primary, 0.14)},
+      inset 0 0 0 1px #{getColor(primary, 0.3)}
     )
   );
   @include set-var-value(
     'popper-shadow',
     (
-      0 18px 40px -16px hsl(var(--sax-primary) / 0.3),
+      0 18px 40px -16px #{getColor(primary, 0.3)},
       0 8px 20px -12px hsl(226.415deg 58.242% 17.843% / 0.24)
     )
   );
@@ -262,8 +265,10 @@
 @each $type in (primary, success, warn, danger, error, info, dark) {
   [class*='--#{$type}'] {
     @include css-var-from-global(color, $type);
+    @include set-css-color(color);
   }
 }
 [class*='component--default'] {
   @include css-var-from-global(color, primary);
+  @include set-css-color(color);
 }

@@ -18,7 +18,7 @@ PROPS:
     usage: '/components/table/large-data-and-visualization.html#chart-integration'
   - name: 'find-config'
     type: 'Boolean | TableFindConfig'
-    description: 'Enable search UI, scopes, conversions and processing limits.'
+    description: 'Enable API-only finding or configure scopes, conversions, keyboard behavior and processing limits; UI is provided explicitly by the $find toolbar renderer.'
     default: false
     usage: '/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'clipboard-config'
@@ -163,13 +163,11 @@ PROPS:
     usage: '/components/table/row-selection.html#row-selection'
   - name: multiple
     type: Boolean
-    values: 'true | false'
     description: Enables multiple row selection.
     default: 'false'
     usage: '/components/table/row-selection.html#row-selection'
   - name: striped
     type: Boolean
-    values: 'true | false'
     description: Alternates row backgrounds.
     default: 'false'
     usage: '/components/table/data-and-column-definitions.html#configuration-object'
@@ -210,7 +208,6 @@ PROPS:
     usage: '/components/table/data-and-column-definitions.html#slots-and-renderers'
   - name: show-header
     type: Boolean
-    values: 'true | false'
     description: Shows the configured column header.
     default: true
     usage: '/components/table/data-and-column-definitions.html#configuration-object'
@@ -221,7 +218,6 @@ PROPS:
     usage: '/components/table/data-and-column-definitions.html#configuration-object'
   - name: loading
     type: Boolean
-    values: 'true | false'
     description: Displays a loading mask over the table.
     default: 'false'
     usage: '/components/table/data-and-column-definitions.html#configuration-object'
@@ -352,8 +348,7 @@ CHILD_PROPS:
     default: null
     usage: '/components/table/column-layout-and-management.html#column-resizing'
   - name: type
-    type: String
-    values: seq | checkbox | radio | expand
+    type: TableColumnType
     description: Renders sequence, checkbox, radio or detail expansion columns using built-in controls.
     default: null
   - name: field
@@ -373,19 +368,16 @@ CHILD_PROPS:
     description: Minimum width for a flexible column; after all minimums fit, flexible columns share the remaining space equally.
     default: null
   - name: align
-    type: String
-    values: left | center | right
+    type: TableAlign
     description: Header and cell alignment.
     default: left
   - name: fixed
-    type: Boolean | String
-    values: 'true | false | left | right'
+    type: TableColumnFixed
     description: Pins the column to either edge; true means left. Inherits the parent group when omitted; false overrides an inherited fixed side.
     default: null
     usage: '/components/table/large-data-and-visualization.html#virtual-rows-and-dynamic-heights'
   - name: tree-node
     type: Boolean
-    values: 'true | false'
     description: Places tree indentation and the expand control in this column.
     default: 'false'
   - name: renderer
@@ -404,7 +396,6 @@ CHILD_PROPS:
     usage: '/components/table/sorting-and-filtering.html#sorting-and-multiple-fields'
   - name: sort-method
     type: 'TableSortMethod'
-    values: 'number | string | Function'
     description: 'Per-column numeric, lexical string, or custom comparison. Functions return boolean, 0/1, or a signed number; true/positive means a follows b in ascending order.'
     default: null
     usage: '/components/table/sorting-and-filtering.html#column-sorting-rules'
@@ -536,7 +527,7 @@ EVENTS:
     usage: '/components/table/trees-and-groups.html#row-grouping-and-aggregation'
   - name: 'contextMenuOpen'
     type: '(context: TableContextMenuContext) => void'
-    description: 'A menu opens with its area and row/column context.'
+    description: 'A menu opens with its area, row/column context and captured cell-range snapshot.'
     default: null
     usage: '/components/table/spreadsheet-interactions.html#context-menus'
   - name: 'contextMenuSelect'
@@ -546,7 +537,7 @@ EVENTS:
     usage: '/components/table/spreadsheet-interactions.html#context-menus'
   - name: 'contextMenuClose'
     type: '(context: TableContextMenuContext) => void'
-    description: 'A menu closes with its previous context.'
+    description: 'A menu closes with its original context and cell-range snapshot.'
     default: null
     usage: '/components/table/spreadsheet-interactions.html#context-menus'
   - name: 'update:activeCell'
@@ -932,7 +923,7 @@ EXPOSES:
     usage: '/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'openFind'
     type: '() => Promise<boolean>'
-    description: 'Open and focus the built-in panel; false when disabled or panel: false.'
+    description: 'Open and focus the mounted $find toolbar panel; false when no $find renderer is mounted or finding is disabled.'
     default: null
     usage: '/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'closeFind'

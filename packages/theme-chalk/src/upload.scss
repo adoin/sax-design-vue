@@ -5,7 +5,7 @@
   --sax-upload-radius: var(--sax-radius-md);
 
   width: 100%;
-  color: hsl(var(--sax-text));
+  color: #{getColor(text)};
 
   @include e(dropzone) {
     position: relative;
@@ -16,19 +16,19 @@
     gap: 18px;
     padding: 28px;
     overflow: hidden;
-    border: 1px dashed hsl(var(--sax-primary) / 0.32);
+    border: 1px dashed #{getColor(primary, 0.32)};
     border-radius: var(--sax-upload-radius);
     background:
       radial-gradient(
         circle at 50% 0%,
-        hsl(var(--sax-primary) / 0.1),
+        #{getColor(primary, 0.1)},
         transparent 58%
       ),
-      hsl(var(--sax-background) / 0.72);
+      #{getColor(background, 0.72)};
     box-shadow:
-      0 1px 2px hsl(var(--sax-primary) / 0.08),
-      0 12px 30px -24px hsl(var(--sax-primary) / 0.55),
-      inset 0 0 0 1px hsl(var(--sax-background) / 0.6);
+      0 1px 2px #{getColor(primary, 0.08)},
+      0 12px 30px -24px #{getColor(primary, 0.55)},
+      inset 0 0 0 1px #{getColor(background, 0.6)};
     cursor: pointer;
     transition:
       border-color 0.2s ease,
@@ -38,10 +38,8 @@
 
     &:hover,
     &:focus-visible {
-      border-color: hsl(var(--sax-primary) / 0.68);
-      box-shadow:
-        0 0 0 3px hsl(var(--sax-primary) / 0.1),
-        0 18px 34px -24px hsl(var(--sax-primary) / 0.65);
+      border-color: #{getColor(primary, 0.68)};
+      box-shadow: 0 18px 34px -24px #{getColor(primary, 0.72)};
       outline: none;
       transform: translateY(-1px);
     }
@@ -54,7 +52,7 @@
 
     @include when(limit) {
       border-style: solid;
-      background: hsl(var(--sax-text) / 0.035);
+      background: #{getColor(text, 0.035)};
     }
   }
 
@@ -75,21 +73,21 @@
     align-items: center;
     justify-content: center;
     border-radius: 18px;
-    background: hsl(var(--sax-primary));
-    color: hsl(var(--sax-background));
+    background: #{getColor(primary)};
+    color: #{getColor(background)};
     box-shadow:
-      0 10px 22px -12px hsl(var(--sax-primary) / 0.78),
-      inset 0 0 0 1px hsl(var(--sax-background) / 0.2);
+      0 10px 22px -12px #{getColor(primary, 0.78)},
+      inset 0 0 0 1px #{getColor(background, 0.2)};
     font-size: 1.45rem;
     transition: transform 0.2s ease;
   }
 
   @include when(dragging) {
     @include e(dropzone) {
-      border-color: hsl(var(--sax-primary));
+      border-color: #{getColor(primary)};
       border-style: solid;
-      background: hsl(var(--sax-primary) / 0.12);
-      box-shadow: 0 0 0 4px hsl(var(--sax-primary) / 0.12);
+      background: #{getColor(primary, 0.12)};
+      box-shadow: 0 18px 34px -24px #{getColor(primary, 0.72)};
       transform: scale(1.005);
     }
 
@@ -105,30 +103,30 @@
   }
 
   @include e(title) {
-    color: hsl(var(--sax-text));
+    color: #{getColor(text)};
     font-size: 0.98rem;
     font-weight: 700;
   }
 
   @include e((description, restriction)) {
-    color: hsl(var(--sax-text) / 0.58);
+    color: #{getColor(text, 0.58)};
     font-size: 0.78rem;
     line-height: 1.5;
   }
 
   @include e(restriction) {
-    color: hsl(var(--sax-primary) / 0.78);
+    color: #{getColor(primary, 0.78)};
   }
 
   @include e(queue) {
     margin-top: 14px;
     padding: 14px;
     border-radius: var(--sax-upload-radius);
-    background: hsl(var(--sax-background) / 0.82);
+    background: #{getColor(background, 0.82)};
     box-shadow:
-      0 1px 2px hsl(var(--sax-primary) / 0.06),
-      0 10px 24px -22px hsl(var(--sax-text) / 0.42),
-      inset 0 0 0 1px hsl(var(--sax-primary) / 0.08);
+      0 1px 2px #{getColor(primary, 0.06)},
+      0 10px 24px -22px #{getColor(text, 0.42)},
+      inset 0 0 0 1px #{getColor(primary, 0.08)};
   }
 
   @include e(queue-head) {
@@ -150,7 +148,7 @@
   }
 
   @include e(queue-count) {
-    color: hsl(var(--sax-text) / 0.5);
+    color: #{getColor(text, 0.5)};
     font-size: 0.72rem;
   }
 
@@ -163,17 +161,18 @@
     padding: 0 12px;
     border: none;
     border-radius: calc(var(--sax-upload-radius) * 0.72);
-    background: hsl(var(--sax-primary));
-    color: hsl(var(--sax-background));
-    box-shadow: 0 7px 16px -10px hsl(var(--sax-primary) / 0.85);
+    background: #{getColor(primary)};
+    color: #{getColor(background)};
+    box-shadow: 0 7px 16px -10px #{getColor(primary, 0.85)};
     cursor: pointer;
     font: inherit;
     font-size: 0.75rem;
     font-weight: 700;
 
     &:focus-visible {
-      outline: 3px solid hsl(var(--sax-primary) / 0.22);
-      outline-offset: 2px;
+      outline: none;
+      filter: brightness(1.06) saturate(1.05);
+      transform: translateY(-1px);
     }
 
     &:disabled {
@@ -187,13 +186,13 @@
     margin: -3px 0 12px;
     overflow: hidden;
     border-radius: 99px;
-    background: hsl(var(--sax-primary) / 0.1);
+    background: #{getColor(primary, 0.1)};
 
     > span {
       display: block;
       height: 100%;
       border-radius: inherit;
-      background: hsl(var(--sax-primary));
+      background: #{getColor(primary)};
       transition: width 0.2s ease;
     }
   }
@@ -218,27 +217,27 @@
     min-width: 0;
     padding: 9px;
     border-radius: calc(var(--sax-upload-radius) * 0.78);
-    background: hsl(var(--sax-text) / 0.035);
-    box-shadow: inset 0 0 0 1px hsl(var(--sax-text) / 0.055);
+    background: #{getColor(text, 0.035)};
+    box-shadow: inset 0 0 10px -8px #{getColor(text, 0.28)};
     transition:
       background-color 0.2s ease,
       box-shadow 0.2s ease,
       transform 0.2s ease;
 
     &:hover {
-      background: hsl(var(--sax-primary) / 0.055);
+      background: #{getColor(primary, 0.055)};
       box-shadow:
-        inset 0 0 0 1px hsl(var(--sax-primary) / 0.12),
-        0 8px 18px -16px hsl(var(--sax-primary) / 0.55);
+        inset 0 0 0 1px #{getColor(primary, 0.12)},
+        0 8px 18px -16px #{getColor(primary, 0.55)};
     }
 
     @include when(error) {
-      background: hsl(var(--sax-danger) / 0.07);
-      box-shadow: inset 0 0 0 1px hsl(var(--sax-danger) / 0.18);
+      background: #{getColor(danger, 0.07)};
+      box-shadow: inset 0 0 12px -6px #{getColor(danger, 0.38)};
     }
 
     @include when(success) {
-      box-shadow: inset 3px 0 0 hsl(var(--sax-success));
+      box-shadow: inset 3px 0 0 #{getColor(success)};
     }
   }
 
@@ -258,7 +257,7 @@
         width: 100%;
         height: 96px;
         border-radius: 0;
-        background: hsl(var(--sax-primary) / 0.07);
+        background: #{getColor(primary, 0.07)};
       }
 
       @include e(meta) {
@@ -280,8 +279,8 @@
     justify-content: center;
     overflow: hidden;
     border-radius: calc(var(--sax-upload-radius) * 0.6);
-    background: hsl(var(--sax-primary) / 0.1);
-    color: hsl(var(--sax-primary));
+    background: #{getColor(primary, 0.1)};
+    color: #{getColor(primary)};
     font-size: 1.1rem;
   }
 
@@ -306,7 +305,7 @@
   }
 
   @include e(detail) {
-    color: hsl(var(--sax-text) / 0.52);
+    color: #{getColor(text, 0.52)};
     font-size: 0.68rem;
   }
 
@@ -314,19 +313,19 @@
     height: 3px;
     overflow: hidden;
     border-radius: 99px;
-    background: hsl(var(--sax-primary) / 0.12);
+    background: #{getColor(primary, 0.12)};
   }
 
   @include e(progress-value) {
     display: block;
     height: 100%;
     border-radius: inherit;
-    background: hsl(var(--sax-primary));
+    background: #{getColor(primary)};
     transition: width 0.2s ease;
   }
 
   @include e(error-message) {
-    color: hsl(var(--sax-danger));
+    color: #{getColor(danger)};
     font-size: 0.67rem;
     line-height: 1.35;
   }
@@ -344,33 +343,38 @@
     justify-content: center;
     border: none;
     border-radius: calc(var(--sax-upload-radius) * 0.55);
-    background: hsl(var(--sax-primary) / 0.09);
-    color: hsl(var(--sax-primary));
+    background: #{getColor(primary, 0.09)};
+    color: #{getColor(primary)};
     cursor: pointer;
 
     &:hover {
-      background: hsl(var(--sax-primary) / 0.16);
+      background: #{getColor(primary, 0.16)};
     }
 
     &:focus-visible {
-      outline: 2px solid hsl(var(--sax-primary) / 0.28);
-      outline-offset: 1px;
+      background: #{getColor(primary, 0.16)};
+      outline: none;
     }
   }
 
   @include m(action-remove) {
     background: transparent;
-    color: hsl(var(--sax-text) / 0.5);
+    color: #{getColor(text, 0.5)};
 
     &:hover {
-      background: hsl(var(--sax-danger) / 0.1);
-      color: hsl(var(--sax-danger));
+      background: #{getColor(danger, 0.1)};
+      color: #{getColor(danger)};
+    }
+
+    &:focus-visible {
+      background: #{getColor(danger, 0.1)};
+      color: #{getColor(danger)};
     }
   }
 
   @include e(tip) {
     margin-top: 8px;
-    color: hsl(var(--sax-text) / 0.55);
+    color: #{getColor(text, 0.55)};
     font-size: 0.72rem;
     line-height: 1.5;
   }

@@ -11,7 +11,6 @@ export interface TableFindConfig<
 > extends TableFindLimits {
   enabled?: boolean
   keyboard?: boolean
-  panel?: boolean
   scope?: TableFindScope
   formatCell?: (
     value: unknown,

@@ -60,6 +60,7 @@ function host(
           rowKey: 'id',
           columns,
           findConfig: true,
+          toolbarConfig: { left: [{ itemRender: '$find' }] },
           changeConfig: true,
           historyConfig: true,
           editConfig: true,
@@ -299,13 +300,16 @@ describe('Table find integration', () => {
     expect(values.get(999_998)).toBe('Needle')
   })
   it('is opt-in and keeps returned state independent from its internal matches', async () => {
-    const { api, settings, table } = host({ findConfig: false })
+    const { api, settings, table } = host({
+      findConfig: false,
+      toolbarConfig: false,
+    })
     expect(await api.value!.findCells('A')).toMatchObject({
       success: false,
       reason: 'disabled',
     })
     expect(table.emitted('findChange')).toBeUndefined()
-    settings.value = { findConfig: true }
+    settings.value = { findConfig: true, toolbarConfig: false }
     await nextTick()
     const result = await api.value!.findCells('A')
     expect(result).toMatchObject({
@@ -314,6 +318,23 @@ describe('Table find integration', () => {
     })
     result.state.matches[0].text = 'Caller changed'
     expect(api.value!.getFindState().matches[0].text).toBe('A')
+  })
+
+  it('renders no panel from findConfig alone and lets the $find toolbar renderer enable the UI', async () => {
+    const plain = host({ toolbarConfig: false })
+    expect(plain.table.find('.s-table__find').exists()).toBe(false)
+    expect(await plain.api.value!.openFind()).toBe(false)
+    expect(await plain.api.value!.findCells('A')).toMatchObject({
+      success: true,
+    })
+
+    const rendered = host({ findConfig: false })
+    expect(rendered.table.find('.s-table__find').exists()).toBe(true)
+    expect(await rendered.api.value!.openFind()).toBe(true)
+    expect(rendered.table.find('[role="search"]').exists()).toBe(true)
+    expect(await rendered.api.value!.findCells('A')).toMatchObject({
+      success: true,
+    })
   })
 
   it('navigates matches in both directions and respects controlled active-cell rejection', async () => {

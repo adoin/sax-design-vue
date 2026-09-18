@@ -162,6 +162,8 @@ describe('table context menus', () => {
         ?.at(-1)?.[0] as TableContextMenuContext
       expect(context.area).toBe(area)
       expect(context.column.field).toBe('name')
+      expect(context.range).toBeNull()
+      expect(context.rangeBounds).toBeNull()
       expect(document.activeElement?.getAttribute('role')).toBe('menuitem')
       expect(wrapper.element.contains(document.activeElement)).toBe(false)
       ;(document.activeElement as HTMLButtonElement).click()
@@ -181,6 +183,36 @@ describe('table context menus', () => {
         .props('teleported'),
     ).toBe(true)
     expect(wrapper.emitted('update:highlight')).toBeUndefined()
+  })
+  it('captures the current cell range when the menu opens', async () => {
+    const wrapper = setup({ rangeConfig: true })
+    const selected = {
+      anchor: { rowKey: 1, columnKey: 'name' },
+      focus: { rowKey: 2, columnKey: 'id' },
+    }
+    expect(await wrapper.vm.setCellRange(selected)).toBe(true)
+    await invoke(wrapper.get('.s-table__data-cell').element)
+    const context = wrapper
+      .emitted('contextMenuOpen')
+      ?.at(-1)?.[0] as TableContextMenuContext
+    expect(context.range).toEqual(selected)
+    expect(context.rangeBounds).toEqual({
+      rowStart: 0,
+      rowEnd: 2,
+      colStart: 0,
+      colEnd: 2,
+    })
+    const snapshotRange = context.range
+    const snapshotBounds = context.rangeBounds
+    expect(
+      await wrapper.vm.setCellRange({
+        anchor: { rowKey: 1, columnKey: 'id' },
+        focus: { rowKey: 1, columnKey: 'id' },
+      }),
+    ).toBe(true)
+    expect(context.range).toBe(snapshotRange)
+    expect(context.rangeBounds).toBe(snapshotBounds)
+    expect(context.range).toEqual(selected)
   })
   it('supports Shift+F10, disabled items, wrapping navigation and Escape focus restoration', async () => {
     const wrapper = setup({

@@ -52,7 +52,7 @@ const theme = {
 
 ## CSS
 
-直接使用 CSS 时只填写 HSL 通道，不包含 `hsl()`。
+直接使用 CSS 时只填写 HSL 通道，不包含 `hsl()`；也可以把完整颜色令牌覆盖成任意 CSS 颜色。
 
 <command>
 
@@ -64,6 +64,10 @@ const theme = {
   --sax-theme-primary-dark-h: var(--sax-theme-primary-h);
   --sax-theme-primary-dark-s: 82%;
   --sax-theme-primary-dark-l: 72%;
+}
+
+.marketing {
+  --sax-css-primary: oklch(0.62 0.18 264);
 }
 ```
 

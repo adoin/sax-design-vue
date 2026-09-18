@@ -13,6 +13,7 @@ const history = ref<TableHistoryState>({
   canUndo: false,
   canRedo: false,
 })
+const toolbarConfig = { left: [{ itemRender: '$find' }] }
 const values = shallowRef(new Map<number, Record<string, unknown>>())
 const column = (index: number) => ({
   key: String(index),
@@ -122,6 +123,7 @@ const limited = async () => {
         dynamic: true,
       }"
       :find-config="{ maxCells: 4096 }"
+      :toolbar-config="toolbarConfig"
       :range-config="{ rowIndexOf: Number }"
       edit-config
       :change-config="changeConfig"

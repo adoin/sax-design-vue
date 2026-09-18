@@ -15,9 +15,8 @@
 }
 
 .s-carousel:focus-visible .s-carousel__viewport {
-  box-shadow:
-    0 0 0 3px getColor(primary, 0.16),
-    0 16px 38px getColor(primary, 0.14);
+  box-shadow: 0 16px 38px getColor(primary, 0.18);
+  filter: brightness(1.02) saturate(1.03);
 }
 
 .s-carousel__viewport {
@@ -25,7 +24,7 @@
   height: 100%;
   overflow: hidden;
   border-radius: var(--s-carousel-radius, var(--sax-radius-lg));
-  background: getColor(fill, light);
+  background: getColor(fill-color, light);
   box-shadow: 0 14px 34px getColor(primary, 0.12);
   transform-style: preserve-3d;
   transition: box-shadow var(--sax-motion-duration)
@@ -109,10 +108,10 @@
   background:
     radial-gradient(
       ellipse at 50% 84%,
-      hsl(var(--sax-primary) / 0.2),
+      #{getColor(primary, 0.2)},
       transparent 46%
     ),
-    hsl(var(--sax-fill-color-light));
+    #{getColor(fill-color-light)};
 }
 
 .s-carousel--effect-orbit .s-carousel__viewport::after {
@@ -124,7 +123,7 @@
   border-radius: var(--sax-radius-circle);
   background: radial-gradient(
     ellipse,
-    hsl(var(--sax-primary) / 0.14),
+    #{getColor(primary, 0.14)},
     transparent 72%
   );
   z-index: 0;
@@ -149,10 +148,8 @@
   inset: 0;
   overflow: hidden;
   border-radius: var(--s-carousel-radius, var(--sax-radius-lg));
-  background: hsl(var(--sax-fill-color-light));
-  box-shadow:
-    0 0 0 1px hsl(var(--sax-primary) / 0.08),
-    0 24px 54px hsl(var(--sax-primary) / 0.26);
+  background: #{getColor(fill-color-light)};
+  box-shadow: 0 24px 54px #{getColor(primary, 0.26)};
   contain: layout paint;
   isolation: isolate;
   will-change: transform, opacity;
@@ -189,7 +186,7 @@
   height: 30%;
   overflow: visible;
   backface-visibility: visible;
-  box-shadow: 0 16px 38px hsl(var(--sax-primary) / 0.14);
+  box-shadow: 0 16px 38px #{getColor(primary, 0.14)};
   transform-style: preserve-3d;
   transition:
     transform var(--s-carousel-duration, 480ms)
@@ -213,9 +210,9 @@
   border: 0;
   background: transparent;
   box-shadow:
-    inset 0 14px 26px hsl(var(--sax-primary) / 0.09),
-    inset 0 -16px 24px hsl(var(--sax-background) / 0.38),
-    0 18px 36px hsl(var(--sax-primary) / 0.09);
+    inset 0 14px 26px #{getColor(primary, 0.09)},
+    inset 0 -16px 24px #{getColor(background, 0.38)},
+    0 18px 36px #{getColor(primary, 0.09)};
 
   &::after {
     position: absolute;
@@ -226,7 +223,7 @@
     border-radius: var(--sax-radius-circle);
     background: radial-gradient(
       ellipse,
-      hsl(var(--sax-primary) / 0.2),
+      #{getColor(primary, 0.2)},
       transparent 72%
     );
     filter: blur(6px);
@@ -236,8 +233,8 @@
 
 .s-carousel.is-layered.s-carousel--effect-orbit .s-carousel__item.is-active {
   box-shadow:
-    0 0 0 2px hsl(var(--sax-primary) / 0.3),
-    0 18px 38px hsl(var(--sax-primary) / 0.28);
+    0 0 0 2px #{getColor(primary, 0.3)},
+    0 18px 38px #{getColor(primary, 0.28)};
 }
 
 .s-carousel--effect-prism .s-carousel__viewport {
@@ -246,10 +243,10 @@
   background:
     radial-gradient(
       ellipse at 50% 78%,
-      hsl(var(--sax-primary) / 0.18),
+      #{getColor(primary, 0.18)},
       transparent 44%
     ),
-    hsl(var(--sax-fill-color-light));
+    #{getColor(fill-color-light)};
 }
 
 .s-carousel.is-layered.s-carousel--effect-prism .s-carousel__track {
@@ -263,15 +260,15 @@
   width: 54%;
   height: 72%;
   backface-visibility: visible;
-  box-shadow: 0 18px 42px hsl(var(--sax-primary) / 0.14);
+  box-shadow: 0 18px 42px #{getColor(primary, 0.14)};
   transform-style: preserve-3d;
   will-change: transform, filter, opacity;
 }
 
 .s-carousel.is-layered.s-carousel--effect-prism .s-carousel__item.is-active {
   box-shadow:
-    0 0 0 1px hsl(var(--sax-primary) / 0.2),
-    0 26px 58px hsl(var(--sax-primary) / 0.26);
+    0 0 0 1px #{getColor(primary, 0.2)},
+    0 26px 58px #{getColor(primary, 0.26)};
 }
 
 .s-carousel.is-layered.s-carousel--vertical.s-carousel--effect-deck

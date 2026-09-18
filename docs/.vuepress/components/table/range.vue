@@ -9,6 +9,7 @@ const table = ref<TableExposes>()
 const selected = shallowRef<TableCellRange | null>(null)
 const bounds = shallowRef<TableCellRangeBounds | null>(null)
 const grouped = ref(false)
+const groupConfig = { fields: ['team'] }
 const rows = Array.from({ length: 40 }, (_, id) => ({
   id,
   name: `Project ${id + 1}`,
@@ -29,7 +30,7 @@ const rows = Array.from({ length: 40 }, (_, id) => ({
       :data="rows"
       row-key="id"
       range-config
-      :group-config="grouped ? { fields: ['team'] } : false"
+      :group-config="grouped ? groupConfig : false"
       :merge-config="{ body: [{ row: 1, col: 1, rowspan: 2, colspan: 2 }] }"
       :virtual-config="{
         enabled: true,

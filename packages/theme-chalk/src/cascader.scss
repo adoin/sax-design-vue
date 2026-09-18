@@ -226,8 +226,9 @@
 }
 .s-cascader__option:focus-visible,
 .s-cascader__search-option:focus-visible {
-  outline: 2px solid getColor(primary, 0.35);
-  outline-offset: -2px;
+  background: getColor(primary, 0.1);
+  color: getColor(primary);
+  outline: none;
 }
 .s-cascader__option.is-disabled,
 .s-cascader__search-option.is-disabled {
@@ -283,7 +284,7 @@
 .s-cascader__header,
 .s-cascader__footer {
   padding: 8px 10px;
-  background: getColor(fill, light);
+  background: getColor(fill-color, light);
   color: getColor(text-color-secondary);
   font-size: 12px;
 }

@@ -24,7 +24,7 @@ For tree-shaking, register only the components you need — see [Using Component
 
 ## Color tokens
 
-Color tokens store **three HSL channels**. Components reuse them with expressions such as `hsl(var(--sax-primary) / 0.12)`. Theme keys expose H/S/L separately; interaction states preserve H and apply only S/L offsets.
+Color tokens have two layers. Channel tokens such as `--sax-primary` store HSL values. Complete color tokens such as `--sax-css-primary` wrap them as `hsl(var(--sax-primary))`. Components consume the complete color tokens (`var(--sax-css-primary)` or `color-mix(in srgb, var(--sax-css-primary) 12%, transparent)`), so a theme can still edit H/S/L while an application can override `--sax-css-primary` with any CSS color.
 
 <command>
 
@@ -37,11 +37,15 @@ Color tokens store **three HSL channels**. Components reuse them with expression
   --sax-theme-primary-dark-s: 92%;
   --sax-theme-primary-dark-l: 70%;
 }
+
+.hero {
+  --sax-css-primary: oklch(0.62 0.18 264);
+}
 ```
 
 </command>
 
-Pass `theme` to `SConfigProvider`, or call `applyThemeConfig()`, with HEX, RGB, or HSL values. Both generate the base primary, dark primary, and hover / active / subtle variables. See [Color themes](/theme/) for examples. Composite tokens such as `--sax-primary` remain readable, but theme customization should target the `--sax-theme-primary-*` keys.
+Pass `theme` to `SConfigProvider`, or call `applyThemeConfig()`, with HEX, RGB, or HSL values. Both generate the base primary, dark primary, and hover / active / subtle variables. See [Color themes](/theme/) for examples. Composite tokens such as `--sax-primary` remain readable, but theme customization should target the `--sax-theme-primary-*` keys. Override `--sax-css-*` when a complete CSS color is needed.
 
 </card>
 

@@ -24,7 +24,7 @@ app.use(SaxDesignVue)
 
 ## 颜色令牌
 
-颜色令牌保存 **HSL 三通道**，组件通过 `hsl(var(--sax-primary) / 0.12)` 等方式复用并添加透明度。主题主键拆分 H/S/L，交互态保持 H 不变，只对 S/L 应用偏移。
+颜色令牌分为两层。`--sax-primary` 这类通道令牌保存 HSL 值；`--sax-css-primary` 这类完整颜色令牌包装为 `hsl(var(--sax-primary))`。组件读取完整颜色令牌（`var(--sax-css-primary)` 或 `color-mix(in srgb, var(--sax-css-primary) 12%, transparent)`），因此主题仍可编辑 H/S/L，应用也可以把 `--sax-css-primary` 覆盖成任意 CSS 颜色。
 
 <command>
 
@@ -37,11 +37,15 @@ app.use(SaxDesignVue)
   --sax-theme-primary-dark-s: 92%;
   --sax-theme-primary-dark-l: 70%;
 }
+
+.hero {
+  --sax-css-primary: oklch(0.62 0.18 264);
+}
 ```
 
 </command>
 
-`SConfigProvider` 的 `theme` 属性或 `applyThemeConfig()` 可直接接收 HEX、RGB、HSL，并生成主色、暗色主色与 hover / active / subtle 状态变量。完整示例见[颜色主题](/zh/theme/)。`--sax-primary` 等组合令牌仍可读取，但自定义主题应优先修改 `--sax-theme-primary-*` 主键。
+`SConfigProvider` 的 `theme` 属性或 `applyThemeConfig()` 可直接接收 HEX、RGB、HSL，并生成主色、暗色主色与 hover / active / subtle 状态变量。完整示例见[颜色主题](/zh/theme/)。`--sax-primary` 等组合令牌仍可读取，但自定义主题应优先修改 `--sax-theme-primary-*` 主键。需要完整 CSS 颜色时覆盖 `--sax-css-*`。
 
 </card>
 

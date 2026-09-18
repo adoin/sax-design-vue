@@ -5,7 +5,6 @@
         class="docs-outline"
         :items="anchorItems"
         :model-value="activeAnchorHref"
-        :mode="isTableDocument ? 'router' : 'anchor'"
         active-strategy="visible-section"
         :router="isTableDocument ? router : undefined"
         :offset="anchorTargetOffset"
@@ -134,15 +133,15 @@ const tableAnchorItems = (pageHeaders: MarkdownItHeader[]): AnchorItem[] => {
 
   return [
     {
-      href: overviewPath,
       title: t.value.outline.examples,
       collapsible: true,
       children: sections,
     },
     apiChildren.length
       ? {
-          href: '#api',
+          href: `${overviewPath}#api`,
           title: 'API',
+          boundary: true,
           collapsible: true,
           defaultCollapsed: true,
           children: apiChildren,
@@ -150,6 +149,7 @@ const tableAnchorItems = (pageHeaders: MarkdownItHeader[]): AnchorItem[] => {
       : {
           href: `${overviewPath}#api`,
           title: 'API',
+          boundary: true,
         },
   ]
 }

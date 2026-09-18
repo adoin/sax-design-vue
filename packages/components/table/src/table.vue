@@ -143,6 +143,15 @@ const toolbar = computed(() => {
     right: (config.right ?? []).map(withDefaults),
   }
 })
+const toolbarEnablesFind = computed(() => {
+  if (toolbar.value.enabled === false) return false
+  const includesFind = (items: TableToolbarRendererOptions[] = []) =>
+    items.some((item) => item.itemRender === '$find' && item.visible !== false)
+  return (
+    (!slots.toolbar_left && includesFind(toolbar.value.left)) ||
+    (!slots.toolbar_right && includesFind(toolbar.value.right))
+  )
+})
 const toolbarEnabled = computed(
   () =>
     toolbar.value.enabled !== false &&
@@ -185,6 +194,11 @@ const tableOptions = computed(() => ({
   filterConfig: filterConfig.value,
   sortBy: query.sorts.value,
   filters: query.filters.value,
+  // The toolbar renderer is itself an explicit opt-in to the capability.
+  // findConfig remains available for API-only use and behavioral limits.
+  findConfig: toolbarEnablesFind.value
+    ? props.findConfig || true
+    : props.findConfig,
 }))
 const tableAttrs = computed(() =>
   shellEnabled.value ? omit(attrs, ['class', 'style']) : attrs,

@@ -6,6 +6,8 @@
 
 @include b(scrollbar) {
   @include set-component-var('scrollbar', $scrollbar);
+  @include set-css-color(scrollbar-thumb-color);
+  @include set-css-color(scrollbar-bar-color);
 }
 
 @include b(scrollbar) {
@@ -26,8 +28,16 @@
       min-height: 0;
 
       &:focus-visible {
-        outline: 2px solid getColor(primary, 0.5);
-        outline-offset: -2px;
+        outline: none;
+      }
+    }
+
+    > .#{$namespace}-scrollbar__wrap:focus-visible
+      ~ .#{$namespace}-scrollbar__bar {
+      background-color: getColor(primary, 0.12);
+
+      .#{$namespace}-scrollbar__thumb {
+        background-color: getColor(primary, 0.5);
       }
     }
 

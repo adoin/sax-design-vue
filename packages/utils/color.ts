@@ -227,6 +227,24 @@ export const getVsColor = (
   return newColor
 }
 
+/**
+ * Resolve a color to a complete CSS color.
+ *
+ * Theme tokens become `var(--sax-css-primary)`. Literal HEX/RGB/HSL values
+ * become `hsl(...)` so they can override the second color layer directly.
+ */
+export const getCssColor = (
+  colorRef: MaybeRef<string | undefined>,
+  namespace = CSS_VAR_NAMESPACE,
+): string => {
+  const channels = getVsColor(colorRef, namespace)
+  if (!channels) return ''
+
+  const token = channels.match(new RegExp(`^var\\(--${namespace}-(.+)\\)$`))
+  if (token) return `var(--${namespace}-css-${token[1]})`
+  return `hsl(${channels})`
+}
+
 const stateKeys = ['hover', 'active', 'subtle'] as const
 
 const pushStateVars = (

@@ -1,11 +1,6 @@
 <template>
   <nav
-    :class="[
-      ns.b(),
-      ns.m(direction),
-      ns.is('affix', affix),
-      ns.is('router', mode === 'router'),
-    ]"
+    :class="[ns.b(), ns.m(direction), ns.is('affix', affix)]"
     :aria-label="t('vs.anchor.navigation')"
   >
     <div
@@ -23,7 +18,8 @@
       }"
     >
       <div :class="ns.e('row')">
-        <a
+        <component
+          :is="entry.item.href ? 'a' : 'span'"
           :class="[
             ns.e('item'),
             ns.is('active', isActiveItem(entry.item)),
@@ -31,17 +27,21 @@
             ns.is('collapsible', entry.collapsible),
             ns.is('disabled', entry.item.disabled),
           ]"
-          :href="entry.item.disabled ? undefined : entry.item.href"
+          :href="
+            entry.item.href && !entry.item.disabled
+              ? entry.item.href
+              : undefined
+          "
           :aria-disabled="entry.item.disabled || undefined"
           :aria-current="
             isActiveItem(entry.item)
-              ? entry.item.href.startsWith('#')
+              ? entry.item.href?.startsWith('#')
                 ? 'location'
                 : 'page'
               : undefined
           "
           :tabindex="entry.item.disabled ? -1 : undefined"
-          @click="navigate(entry.item, $event)"
+          @click="entry.item.href ? navigate(entry.item, $event) : undefined"
         >
           <span :class="ns.e('item-label')">
             <span
@@ -52,7 +52,7 @@
               <slot
                 name="active-icon"
                 :item="entry.item"
-                :href="entry.item.href"
+                :href="entry.item.href || ''"
               >
                 <SIcon v-if="activeIcon" :name="activeIcon" />
                 <svg
@@ -73,7 +73,7 @@
             </span>
             <span>{{ entry.item.title }}</span>
           </span>
-        </a>
+        </component>
 
         <button
           v-if="entry.collapsible"
@@ -120,6 +120,7 @@ import {
   findAnchorRouteContext,
   isPlainAnchorRouteClick,
   readAnchorRouterLocation,
+  resolveAnchorNavigation,
 } from './anchor-router'
 import type { AnchorItem } from './anchor'
 import type {
@@ -182,26 +183,31 @@ const routerLocation = computed(
     (!props.modelValue.startsWith('#') ? props.modelValue : ''),
 )
 const routeContext = computed(() =>
-  props.mode === 'router' && routerLocation.value
+  routerLocation.value
     ? findAnchorRouteContext(props.items, routerLocation.value)
     : undefined,
 )
-const routeBoundaryContext = computed(() =>
-  routerAdapter.value && routeBoundaryOptions.value
-    ? routeContext.value
-    : undefined,
-)
+const routeBoundaryContext = computed(() => {
+  const context = routeContext.value
+  return routerAdapter.value &&
+    routeBoundaryOptions.value &&
+    (context?.previous || context?.next)
+    ? context
+    : undefined
+})
 const isActiveItem = (item: AnchorItem) =>
-  current.value === item.href ||
-  (props.mode === 'router' &&
-    !item.href.startsWith('#') &&
-    routeContext.value?.current.href === item.href)
+  Boolean(item.href) &&
+  (current.value === item.href ||
+    (!item.href!.startsWith('#') &&
+      routeContext.value?.current.href === item.href))
 
+type NavigableAnchorItem = AnchorItem & { href: string }
 const routeHashItems = computed(() => {
-  const result: AnchorItem[] = []
+  const result: NavigableAnchorItem[] = []
   const visit = (items: AnchorItem[]) => {
     items.forEach((item) => {
-      if (item.href.startsWith('#') && !item.disabled) result.push(item)
+      if (item.href?.startsWith('#') && !item.disabled)
+        result.push(item as NavigableAnchorItem)
       if (item.children?.length) visit(item.children)
     })
   }
@@ -214,15 +220,16 @@ const hasActiveRouteHash = computed(() =>
 const isActiveIconItem = (item: AnchorItem) =>
   isActiveItem(item) &&
   !(
-    props.mode === 'router' &&
+    routeContext.value &&
+    item.href &&
     !item.href.startsWith('#') &&
     hasActiveRouteHash.value
   )
 const hashItems = computed(() =>
-  props.mode === 'router'
+  routeContext.value
     ? routeHashItems.value
-    : flatItems.value.filter(
-        (item) => item.href.startsWith('#') && !item.disabled,
+    : flatItems.value.filter((item): item is NavigableAnchorItem =>
+        Boolean(item.href?.startsWith('#') && !item.disabled),
       ),
 )
 
@@ -249,7 +256,7 @@ const syncCollapsedState = () => {
   const liveKeys = new Set<string>()
   const visit = (items: AnchorItem[], path: string) => {
     items.forEach((item, index) => {
-      const key = `${path}${index}:${item.href}`
+      const key = `${path}${index}:${item.href ?? `group:${item.title}`}`
       liveKeys.add(key)
       if (!initializedCollapseKeys.has(key)) {
         initializedCollapseKeys.add(key)
@@ -278,7 +285,7 @@ const visibleItems = computed<AnchorEntry[]>(() => {
   const result: AnchorEntry[] = []
   const visit = (items: AnchorItem[], depth: number, path: string) => {
     items.forEach((item, index) => {
-      const key = `${path}${index}:${item.href}`
+      const key = `${path}${index}:${item.href ?? `group:${item.title}`}`
       const collapsible = Boolean(
         props.direction === 'vertical' &&
         item.collapsible &&
@@ -324,32 +331,9 @@ const navigateRoute = (href: string) => {
   const method = props.replace && router.replace ? router.replace : router.push
   return method.call(router, href)
 }
-const navigate = (item: AnchorItem, event: MouseEvent) => {
-  if (item.disabled) {
-    event.preventDefault()
-    return
-  }
-  emit('click', item, event)
-  if (!item.href.startsWith('#')) {
-    stopFollowingRouteEnd()
-    previousRouteEntry = undefined
-    nextRouteEntry = undefined
-    if (routeEntryFrame !== undefined) cancelAnimationFrame(routeEntryFrame)
-    if (
-      props.mode === 'router' &&
-      routerAdapter.value &&
-      isPlainAnchorRouteClick(event)
-    ) {
-      event.preventDefault()
-      navigateRoute(item.href)
-      setCurrent(item.href)
-    } else if (isPlainAnchorRouteClick(event)) setCurrent(item.href)
-    return
-  }
-
-  event.preventDefault()
-  pendingHref.value = item.href
-  const target = getTarget(item.href)
+const navigateHash = (hash: string, activeHref: string) => {
+  pendingHref.value = hash
+  const target = getTarget(hash)
   if (target) {
     if (!scrollContainer || scrollContainer === window) {
       window.scrollTo({
@@ -372,8 +356,37 @@ const navigate = (item: AnchorItem, event: MouseEvent) => {
     }
   }
   const method = props.replace ? 'replaceState' : 'pushState'
-  window.history[method](null, '', item.href)
-  setCurrent(item.href)
+  window.history[method](null, '', activeHref)
+  setCurrent(activeHref)
+}
+const navigate = (item: AnchorItem, event: MouseEvent) => {
+  const href = item.href
+  if (item.disabled || !href) {
+    event.preventDefault()
+    return
+  }
+  emit('click', item, event)
+  const navigation = resolveAnchorNavigation(
+    href,
+    routerLocation.value || window.location.href,
+  )
+  if (navigation.kind === 'route') {
+    stopFollowingRouteEnd()
+    previousRouteEntry = undefined
+    nextRouteEntry = undefined
+    if (routeEntryFrame !== undefined) cancelAnimationFrame(routeEntryFrame)
+    if (routerAdapter.value && isPlainAnchorRouteClick(event)) {
+      event.preventDefault()
+      navigateRoute(href)
+      setCurrent(href)
+    }
+    return
+  }
+  if (navigation.kind === 'hash' && navigation.hash) {
+    if (!href.startsWith('#') && !isPlainAnchorRouteClick(event)) return
+    event.preventDefault()
+    navigateHash(navigation.hash, href)
+  }
 }
 const handleRouteBoundaryNavigate = (
   params: AnchorRouteBoundaryNavigateParams,
@@ -524,7 +537,7 @@ const updateCurrent = () => {
     const viewportTop = containerTop + props.offset
     const currentRouteKey = anchorRouteKey(routerLocation.value)
     if (
-      props.mode === 'router' &&
+      routeContext.value &&
       nextRouteEntry &&
       nextRouteEntry === currentRouteKey
     ) {
@@ -545,7 +558,7 @@ const updateCurrent = () => {
     const firstHoldDistance = Math.min(120, usableHeight * 0.15)
     const readingLine = viewportTop + usableHeight * 0.35
     const holdFirst =
-      props.mode === 'router' &&
+      routeContext.value &&
       first &&
       (scrollStart <= firstHoldDistance ||
         (current.value === first.href && nextTop > readingLine))
@@ -564,8 +577,8 @@ const updateCurrent = () => {
     return
   }
 
-  if (props.mode === 'router' && routeContext.value) {
-    let active: AnchorItem | undefined
+  if (routeContext.value) {
+    let active: NavigableAnchorItem | undefined
     for (const item of routeHashItems.value) {
       const target = getTarget(item.href)
       if (
@@ -583,16 +596,18 @@ const updateCurrent = () => {
     return
   }
   const targetTop = (index: number) => {
-    const target = getTarget(flatItems.value[index]?.href ?? '')
+    const href = flatItems.value[index]?.href
+    const target = href ? getTarget(href) : null
     return target
       ? target.getBoundingClientRect().top - containerTop
       : Number.POSITIVE_INFINITY
   }
   let index = flatItems.value.findIndex((item) => item.href === current.value)
-  let active: AnchorItem | undefined
+  let active: NavigableAnchorItem | undefined
   if (index < 0) {
     flatItems.value.forEach((item, itemIndex) => {
-      if (targetTop(itemIndex) <= threshold) active = item
+      if (item.href && targetTop(itemIndex) <= threshold)
+        active = item as NavigableAnchorItem
     })
   } else {
     while (index > 0 && targetTop(index) > threshold) index--
@@ -601,7 +616,8 @@ const updateCurrent = () => {
       targetTop(index + 1) <= threshold
     )
       index++
-    if (targetTop(index) <= threshold) active = flatItems.value[index]
+    if (flatItems.value[index]?.href && targetTop(index) <= threshold)
+      active = flatItems.value[index] as NavigableAnchorItem
   }
 
   if (
@@ -611,7 +627,11 @@ const updateCurrent = () => {
       (scrollContainer as HTMLElement).clientHeight >=
       (scrollContainer as HTMLElement).scrollHeight - props.bounds
   ) {
-    active = [...flatItems.value].reverse().find((item) => !item.disabled)
+    active = [...flatItems.value]
+      .reverse()
+      .find((item): item is NavigableAnchorItem =>
+        Boolean(item.href && !item.disabled),
+      )
   }
 
   if (active) setCurrent(active.href)

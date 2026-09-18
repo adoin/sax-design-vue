@@ -61,7 +61,7 @@ const syncScroll = (event: Event) => {
   tab-size: 2;
 
   &:focus-within {
-    box-shadow: inset 0 0 0 2px hsl(var(--sax-accent-color) / 0.6);
+    box-shadow: 0 10px 24px -18px hsl(var(--sax-accent-color) / 0.72);
   }
 }
 

@@ -47,7 +47,6 @@ export interface TableGlobalConfig {
   findConfig?: TableGlobalFeature<{
     enabled?: boolean
     keyboard?: boolean
-    panel?: boolean
     scope?: 'view' | 'selection' | 'data'
     maxCells?: number
     maxMatches?: number

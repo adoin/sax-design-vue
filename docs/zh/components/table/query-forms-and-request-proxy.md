@@ -22,7 +22,7 @@ description: 'Table 的查询表单与请求代理功能、配置方式与可运
 
 指定 `pagerConfig.currentPage` 或 `pageSize` 后，对应字段受控；使用 `v-model:pager-config` 接受更新。父组件拒绝第一页请求、字段校验失败、条件在异步校验期间改变、加载中或卸载后，查询方法返回 `false`，不会发出有效查询。未开启代理时，返回 `true` 只表示已发出事件；开启代理后，表示查询响应已被接受。
 
-将 `toolbarConfig.left` 和 `toolbarConfig.right` 配置为使用 `itemRender` 的有序全局渲染器列表。内置 `button` 会把自身或子操作的 `code` 交给 `toolbarClick`，子操作通过 `SPopper` 打开；`$refresh` 刷新当前查询或代理请求，`$columnConfig` 打开当前 Table 的列设置。自定义渲染器可实现 `renderToolbar(options, params)`；`params.source` 包含 Table API、查询上下文、所在侧和忙碌状态。
+将 `toolbarConfig.left` 和 `toolbarConfig.right` 配置为使用 `itemRender` 的有序全局渲染器列表。内置 `button` 会把自身或子操作的 `code` 交给 `toolbarClick`，子操作通过 `SPopper` 打开；`$refresh` 刷新当前查询或代理请求，`$columnConfig` 打开列设置，`$find` 为当前 Table 提供查找与替换入口及面板。自定义渲染器可实现 `renderToolbar(options, params)`；`params.source` 包含 Table API、查询上下文、所在侧和忙碌状态。
 
 <template #example>
 <table-zh-business />

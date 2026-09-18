@@ -21,8 +21,8 @@
 }
 
 .s-steps__item {
-  --s-steps-state-color: hsl(var(--sax-text) / 0.52);
-  --s-steps-state-soft: hsl(var(--sax-text) / 0.075);
+  --s-steps-state-color: #{getColor(text, 0.52)};
+  --s-steps-state-soft: #{getColor(text, 0.075)};
 
   position: relative;
   min-width: 0;
@@ -173,23 +173,23 @@ button.s-steps__trigger {
 .s-steps__item--process,
 .s-steps__item--finish,
 .s-steps__item--loading {
-  --s-steps-state-color: hsl(var(--sax-primary));
-  --s-steps-state-soft: hsl(var(--sax-primary) / 0.12);
+  --s-steps-state-color: #{getColor(primary)};
+  --s-steps-state-soft: #{getColor(primary, 0.12)};
 }
 
 .s-steps__item--success {
-  --s-steps-state-color: hsl(var(--sax-success));
-  --s-steps-state-soft: hsl(var(--sax-success) / 0.12);
+  --s-steps-state-color: #{getColor(success)};
+  --s-steps-state-soft: #{getColor(success, 0.12)};
 }
 
 .s-steps__item--error {
-  --s-steps-state-color: hsl(var(--sax-danger));
-  --s-steps-state-soft: hsl(var(--sax-danger) / 0.12);
+  --s-steps-state-color: #{getColor(danger)};
+  --s-steps-state-soft: #{getColor(danger, 0.12)};
 }
 
 .s-steps__item--disabled {
-  --s-steps-state-color: hsl(var(--sax-text) / 0.38);
-  --s-steps-state-soft: hsl(var(--sax-text) / 0.055);
+  --s-steps-state-color: #{getColor(text, 0.38)};
+  --s-steps-state-soft: #{getColor(text, 0.055)};
 }
 
 .s-steps__item--process .s-steps__marker,
@@ -198,7 +198,7 @@ button.s-steps__trigger {
 .s-steps__item--error .s-steps__marker,
 .s-steps__item--loading .s-steps__marker {
   background: var(--s-steps-state-color);
-  color: hsl(var(--sax-white));
+  color: #{getColor(white)};
   box-shadow:
     0 0 0 7px var(--s-steps-state-soft),
     0 12px 26px -14px var(--s-steps-state-color);
@@ -222,9 +222,9 @@ button.s-steps__trigger {
 }
 
 .s-steps__item.is-clickable:hover .s-steps__marker {
-  box-shadow:
-    0 0 0 8px var(--s-steps-state-soft),
-    0 17px 34px -15px var(--s-steps-state-color);
+  box-shadow: 0 17px 34px -15px var(--s-steps-state-color);
+  filter: brightness(1.06);
+  transform: translateY(-1px) scale(1.04);
 }
 
 .s-steps__item.is-clickable:hover .s-steps__title {
@@ -232,10 +232,9 @@ button.s-steps__trigger {
 }
 
 .s-steps__trigger:focus-visible .s-steps__marker {
-  box-shadow:
-    0 0 0 4px getColor(background),
-    0 0 0 8px var(--s-steps-state-soft),
-    0 15px 32px -16px var(--s-steps-state-color);
+  box-shadow: 0 15px 32px -16px var(--s-steps-state-color);
+  filter: brightness(1.06);
+  transform: translateY(-1px) scale(1.04);
 }
 
 .s-steps__item.is-disabled {

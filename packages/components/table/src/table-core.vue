@@ -60,11 +60,6 @@
     <div v-if="$slots.header" :class="ns.be('wrapper', 'header')">
       <slot name="header" />
     </div>
-    <TableFindPanel
-      v-if="finder.enabled.value && finder.config.value.panel !== false"
-      ref="findPanelRef"
-      :finder="finder"
-    />
     <TableChartPanel
       v-if="chart.enabled.value"
       :chart="chart"
@@ -577,7 +572,10 @@ import { useTableChart } from './composables/use-table-chart'
 import { createTableChartScope } from './composables/table-chart-scope'
 import TableChartPanel from './table-chart-panel.vue'
 import { createTableFindScope } from './composables/table-find-scope'
-import TableFindPanel from './table-find-panel.vue'
+import {
+  type TableFindPanelApi,
+  tableFindRuntimeKey,
+} from './table-find-context'
 import TableValidationOverlay from './table-validation-overlay.vue'
 import { useTableRangeInteraction } from './composables/use-table-range-interaction'
 import {
@@ -2127,6 +2125,10 @@ watch(
 )
 const contextMenu = useTableContextMenu(props, emit, {
   root: () => tableScrollRef.value,
+  selection: () => ({
+    range: cellRange.getRange(),
+    rangeBounds: cellRange.getBounds(),
+  }),
   context: [
     () => props.data,
     () => props.virtualSource,
@@ -2293,9 +2295,29 @@ const navigateEditTab = async (
     editTabPending = false
   }
 }
+const rangeGroupLayoutContext = computed(() => {
+  const layout = groups.layout.value
+  if (!groups.enabled.value) return `ungrouped:${layout.dataCount}`
+  const structure: [string, number, number, boolean][] = []
+  const stack = [...groups.state.value.groups].reverse()
+  while (stack.length) {
+    const group = stack.pop()!
+    structure.push([
+      group.key,
+      group.rowStart,
+      group.rowCount,
+      groups.keys.value.has(group.key),
+    ])
+    for (let index = group.children.length - 1; index >= 0; index--)
+      stack.push(group.children[index])
+  }
+  // Equivalent config objects can rebuild the group model during controlled
+  // range updates. Only a changed visible structure should cancel a gesture.
+  return JSON.stringify([layout.count, layout.dataCount, structure])
+})
 const rangeContext = [
-  () => (props.virtualSource ? undefined : flatRows.value),
-  groups.layout,
+  () => (props.virtualSource ? undefined : pagination.rows.value),
+  rangeGroupLayoutContext,
   () => props.virtualSource?.row,
   () => props.virtualSource?.rowCount,
   () => props.virtualSource?.columnCount,
@@ -2555,7 +2577,8 @@ const finder = useTableFind(props, emit, {
     () => props.virtualSource?.column,
   ],
 })
-const findPanelRef = shallowRef<InstanceType<typeof TableFindPanel>>()
+const findPanelRef = shallowRef<TableFindPanelApi>()
+provide(tableFindRuntimeKey, { finder, panel: findPanelRef })
 const chart = useTableChart(props, emit, {
   editing: () => Boolean(editing.active.value || rowDrag.session.value),
   selection: cellRange.getBounds,

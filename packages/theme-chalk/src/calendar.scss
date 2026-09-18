@@ -203,7 +203,8 @@
 .s-calendar__cell.is-today.is-selected .s-calendar__day {
   background: getColor(primary);
   color: getColor(white);
-  box-shadow: 0 0 0 3px getColor(primary, 0.16);
+  box-shadow: 0 7px 16px -11px getColor(primary, 0.72);
+  transform: scale(1.04);
 }
 .s-calendar__cell.is-disabled {
   cursor: not-allowed;
@@ -239,7 +240,7 @@
 }
 .s-calendar__event,
 .s-calendar__time-event {
-  --sax-calendar-event-color: hsl(var(--sax-primary));
+  --sax-calendar-event-color: #{getColor(primary)};
   border: 0;
   background: color-mix(
     in srgb,
@@ -394,7 +395,7 @@
   background: getColor(primary, 0.045);
 }
 .s-calendar__overflow-event-main {
-  --sax-calendar-event-color: hsl(var(--sax-primary));
+  --sax-calendar-event-color: #{getColor(primary)};
   display: grid;
   min-width: 0;
   gap: 2px;
@@ -543,7 +544,8 @@
 .s-calendar__schedule-day.is-today.is-selected strong {
   background: getColor(primary);
   color: getColor(white);
-  box-shadow: 0 0 0 3px getColor(primary, 0.16);
+  box-shadow: 0 7px 16px -11px getColor(primary, 0.72);
+  transform: scale(1.04);
 }
 .s-calendar__all-day-row {
   position: sticky;

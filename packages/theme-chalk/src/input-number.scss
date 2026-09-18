@@ -6,6 +6,8 @@
 
 @include b(input-number) {
   @include set-component-var('input-number', $input-number);
+  @include set-css-color(input-number-color);
+  @include set-css-color(input-number-background);
 }
 
 @include b(input-number) {
