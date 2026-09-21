@@ -307,11 +307,17 @@ formRenderer.mixin({
         typeof options.content === 'function'
           ? options.content(source as never)
           : options.content
+      const configuredContent = options.props?.content
       return h(TableFindPanel, {
         ...(options.props ?? {}),
         ...(options.attrs ?? {}),
         disabled: params.disabled || Boolean(options.props?.disabled),
-        label: typeof content === 'string' ? content : undefined,
+        content:
+          typeof configuredContent === 'string'
+            ? configuredContent
+            : typeof content === 'string'
+              ? content
+              : undefined,
       })
     },
   },

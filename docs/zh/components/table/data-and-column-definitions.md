@@ -18,6 +18,8 @@ description: 'Table 的数据与列定义功能、配置方式与可运行示例
 
 `width` 指定固定列宽；未设置 `width` 的列以 `minWidth`（默认 120px）为基础，均分剩余空间。容器宽度不足时，可横向滚动查看其余列。
 
+`align` 同时控制表头和单元格的左中右对齐。列上的 `align` 仍覆盖这两个表面；列或表格上的 `headerAlign` 只覆盖表头。都未声明时继承 `SConfigProvider.table.align` / `table.headerAlign`，再默认为居左。
+
 <template #example><table-zh-default /></template>
 
 <template #template>

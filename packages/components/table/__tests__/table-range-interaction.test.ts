@@ -315,8 +315,11 @@ describe('table range gestures', () => {
     const t = setup()
     await settle()
     expect(t.pointer('pointerdown').defaultPrevented).toBe(true)
+    expect(document.documentElement.style.userSelect).toBe('none')
     await settle()
-    t.pointer('pointermove', document, 150, 65)
+    expect(t.pointer('pointermove', document, 150, 65).defaultPrevented).toBe(
+      true,
+    )
     t.pointer('pointermove', document, 250, 105)
     expect(t.state.getBounds()?.rowEnd).toBe(1)
     t.frame()
@@ -333,6 +336,7 @@ describe('table range gestures', () => {
     expect(t.focus).toHaveBeenCalledTimes(1)
     expect(t.frames.size).toBe(0)
     expect(t.root.value!.style.userSelect).toBe('')
+    expect(document.documentElement.style.userSelect).toBe('')
     expect(
       t.pointer('click', t.cell(), 50, 20, { detail: 1 }).defaultPrevented,
     ).toBe(true)
@@ -369,7 +373,7 @@ describe('table range gestures', () => {
     })
   })
 
-  it('supports Shift click, select-all, Home/End and clear without resetting focus', async () => {
+  it('supports Shift click, select-all, Home/End and clear without leaving an active cell', async () => {
     const t = setup()
     await settle()
     t.key('ArrowRight')
@@ -406,7 +410,8 @@ describe('table range gestures', () => {
     t.key('Escape')
     await settle()
     expect(t.state.getRange()).toBeNull()
-    expect(t.focus).toHaveBeenCalledTimes(calls)
+    expect(t.focus).toHaveBeenCalledTimes(calls + 1)
+    expect(t.focus).toHaveBeenLastCalledWith(undefined)
   })
 
   it.each(['pointercancel', 'escape', 'blur'])(
@@ -436,10 +441,22 @@ describe('table range gestures', () => {
     const t = setup()
     await settle()
     t.pointer('pointerdown')
-    t.pointer('pointermove', document, 800, 300, { pointerId: 9 })
+    expect(
+      t.pointer('pointermove', document, 800, 300, { pointerId: 9 })
+        .defaultPrevented,
+    ).toBe(false)
     t.frame()
     expect(t.scrollBy).not.toHaveBeenCalled()
-    t.pointer('pointermove', document, 800, 300)
+    expect(t.pointer('pointermove', document, 800, 300).defaultPrevented).toBe(
+      true,
+    )
+    const wheel = new WheelEvent('wheel', {
+      bubbles: true,
+      cancelable: true,
+      deltaY: 80,
+    })
+    document.dispatchEvent(wheel)
+    expect(wheel.defaultPrevented).toBe(true)
     t.frame(32)
     expect(t.scrollBy.mock.calls[0][0]).toBeGreaterThan(0)
     expect(t.scrollBy.mock.calls[0][1]).toBeGreaterThan(0)
@@ -517,7 +534,8 @@ describe('table range gestures', () => {
       }
       await settle()
       expect(t.state.pending.value).toBe(false)
-      expect(t.focus).not.toHaveBeenCalled()
+      if (action === 'escape') expect(t.focus).toHaveBeenCalledWith(undefined)
+      else expect(t.focus).not.toHaveBeenCalled()
       expect(t.state.getRange()).toBeNull()
     },
   )

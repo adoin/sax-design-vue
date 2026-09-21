@@ -1,5 +1,10 @@
 # Project Rules
 
+## Git workflow
+
+- Work directly on `main`. Do not create feature branches, `cursor/*` snapshot branches, or pull-request branches unless the user explicitly asks for a branch.
+- Commit and push to `main`. After any temporary branch is merged, delete it locally and on the remote.
+
 ## Project specifications
 
 - Read relevant records in `.agents/notes/active/` and `.agents/notes/prohibited/` before implementation. Treat proposed records as unapproved, prohibited records as approaches that must not be repeated unless their `reopen_only_if` condition is met, and implemented records as verified project contracts.

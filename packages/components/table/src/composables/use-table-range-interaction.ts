@@ -4,6 +4,7 @@ import {
   ownedTableRangeCell,
   tableRangeEdgeDelta,
 } from './table-range-hit'
+import { lockTableRangeOutsideScroll } from './table-range-scroll'
 import type { WatchSource } from 'vue'
 import type { TableRangeViewport } from './table-range-hit'
 import type {
@@ -25,7 +26,7 @@ interface Options {
     key: string,
     backwards: boolean,
   ) => TableCellCoordinate | undefined
-  focus: (point: TableCellCoordinate) => boolean | Promise<boolean>
+  focus: (point: TableCellCoordinate | undefined) => boolean | Promise<boolean>
   /** Scroll logical pixels through the existing table/virtual-list scrolling pipeline. */
   scrollBy: (x: number, y: number) => void
   blocked: () => boolean
@@ -160,10 +161,12 @@ export function useTableRangeInteraction(
     }
     const move = (e: PointerEvent) => {
       if (e.pointerId !== pointerId) return
+      e.preventDefault()
       x = e.clientX
       y = e.clientY
       moved ||= Math.hypot(x - startX, y - startY) >= 3
     }
+    const preventScroll = (e: Event) => e.preventDefault()
     const up = (e: PointerEvent) => {
       if (e.pointerId !== pointerId) return
       move(e)
@@ -185,30 +188,46 @@ export function useTableRangeInteraction(
       cancel(true)
     }
     const blur = () => cancel(true)
+    const html = doc.documentElement
     const oldUserSelect = root.style.userSelect
+    const oldHtmlUserSelect = html.style.userSelect
     const oldCursor = root.style.cursor
     event.preventDefault()
     dragging.value = true
     desiredFocus = undefined
     root.style.userSelect = 'none'
+    html.style.userSelect = 'none'
     root.style.cursor = 'cell'
-    doc.addEventListener('pointermove', move)
+    const unlockScroll = lockTableRangeOutsideScroll(root)
+    doc.addEventListener('pointermove', move, { passive: false })
     doc.addEventListener('pointerup', up)
     doc.addEventListener('pointercancel', abort)
     doc.addEventListener('keydown', escape, true)
+    doc.addEventListener('wheel', preventScroll, {
+      passive: false,
+      capture: true,
+    })
+    doc.addEventListener('touchmove', preventScroll, {
+      passive: false,
+      capture: true,
+    })
     root.addEventListener('lostpointercapture', abort)
     win.addEventListener('blur', blur)
     disposePointer = () => {
       win.cancelAnimationFrame(frame)
+      unlockScroll()
       doc.removeEventListener('pointermove', move)
       doc.removeEventListener('pointerup', up)
       doc.removeEventListener('pointercancel', abort)
       doc.removeEventListener('keydown', escape, true)
+      doc.removeEventListener('wheel', preventScroll, true)
+      doc.removeEventListener('touchmove', preventScroll, true)
       root.removeEventListener('lostpointercapture', abort)
       win.removeEventListener('blur', blur)
       if (root.hasPointerCapture?.(pointerId))
         root.releasePointerCapture(pointerId)
       root.style.userSelect = oldUserSelect
+      html.style.userSelect = oldHtmlUserSelect
       root.style.cursor = oldCursor
     }
     try {
@@ -279,7 +298,9 @@ export function useTableRangeInteraction(
         event.preventDefault()
         event.stopPropagation()
         cancel()
-        state.clear()
+        state.clear().then((accepted) => {
+          if (accepted && !disposed) options.focus(undefined)
+        })
       }
       return
     } else {

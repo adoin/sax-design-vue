@@ -28,7 +28,7 @@ PROPS:
     usage: '/components/table/spreadsheet-interactions.html#copy-cut-and-paste'
   - name: 'range-config'
     type: 'Boolean | TableRangeConfig'
-    description: 'Enable rectangular range selection, with independent mouse, keyboard and edge-scrolling options.'
+    description: 'Enable rectangular range selection, with independent mouse, keyboard and table-owned edge-scrolling options.'
     default: 'false'
     usage: '/components/table/spreadsheet-interactions.html#cell-range-selection'
   - name: 'cell-range'
@@ -211,6 +211,16 @@ PROPS:
     description: Shows the configured column header.
     default: true
     usage: '/components/table/data-and-column-definitions.html#configuration-object'
+  - name: align
+    type: TableAlign
+    description: Default alignment for headers and cells when a column omits align. Column align still controls both surfaces; header-align overrides the header only.
+    default: left
+    usage: '/components/table/data-and-column-definitions.html#configuration-object'
+  - name: header-align
+    type: TableAlign
+    description: Default header alignment when a column omits both header-align and align. Does not change body cells.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#configuration-object'
   - name: empty-text
     type: String
     description: Text displayed when there are no rows or columns.
@@ -329,7 +339,7 @@ CHILD_PROPS:
     usage: '/components/table/footers-and-summaries.html#footer-data-rows'
   - name: footer-align
     type: TableAlign
-    description: Footer alignment, falling back to the column align value.
+    description: Footer alignment, falling back to the column align value, then the table align default.
     default: null
     usage: '/components/table/footers-and-summaries.html#footer-data-rows'
   - name: show-footer-overflow
@@ -369,8 +379,14 @@ CHILD_PROPS:
     default: null
   - name: align
     type: TableAlign
-    description: Header and cell alignment.
-    default: left
+    description: Header and cell alignment. Omitted columns inherit the table or ConfigProvider table.align value, then left.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#configuration-object'
+  - name: header-align
+    type: TableAlign
+    description: Header alignment for this column. Falls back to the column align value, then table or ConfigProvider table.headerAlign, then table.align, then left.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#configuration-object'
   - name: fixed
     type: TableColumnFixed
     description: Pins the column to either edge; true means left. Inherits the parent group when omitted; false overrides an inherited fixed side.
@@ -908,7 +924,7 @@ EXPOSES:
     usage: '/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'getFindState'
     type: '() => TableFindState'
-    description: 'Return query, scope, match summaries, active index, progress and limits.'
+    description: 'Return query, scope, match summaries including whether each match is replaceable, active index, progress and limits.'
     default: null
     usage: '/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'clearFind'
@@ -923,7 +939,7 @@ EXPOSES:
     usage: '/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'openFind'
     type: '() => Promise<boolean>'
-    description: 'Open and focus the mounted $find toolbar panel; false when no $find renderer is mounted or finding is disabled.'
+    description: 'Open and focus the $find popper, resetting the form and previous matches; false when no $find renderer is mounted or finding is disabled.'
     default: null
     usage: '/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'closeFind'
@@ -958,7 +974,7 @@ EXPOSES:
     usage: '/components/table/spreadsheet-interactions.html#cell-range-selection'
   - name: 'clearCellRange'
     type: '() => Promise<boolean>'
-    description: 'Clear the range while preserving the active cell.'
+    description: 'Clear the range and the leftover active cell from that selection.'
     default: null
     usage: '/components/table/spreadsheet-interactions.html#cell-range-selection'
   - name: 'getCellRange'

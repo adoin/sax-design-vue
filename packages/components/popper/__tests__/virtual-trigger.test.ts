@@ -251,4 +251,93 @@ describe('Popper virtual anchor', () => {
     expect(wrapper.vm.triggerRef).toBe(wrapper.get('button').element)
     wrapper.unmount()
   })
+
+  it('peeks through the floating layer and restores opacity from the content', async () => {
+    const wrapper = mount(Popper, {
+      attachTo: document.body,
+      props: {
+        trigger: 'click',
+        teleported: false,
+        showAfter: 0,
+        translucent: true,
+        visible: true,
+      },
+      slots: {
+        default: () => h('button', 'Open'),
+        content: () => h('div', 'Peeking content'),
+      },
+    })
+    await flushPromises()
+    const layer = wrapper.get('.s-popper')
+    expect(layer.classes()).toContain('is-translucent')
+    await layer.trigger('mouseenter')
+    expect(wrapper.emitted('update:translucent')?.[0]).toEqual([false])
+    wrapper.unmount()
+  })
+
+  it('shows a close control when outside clicks do not dismiss the layer', async () => {
+    const wrapper = mount(Popper, {
+      attachTo: document.body,
+      props: {
+        trigger: 'click',
+        teleported: false,
+        showAfter: 0,
+        closeOnClickOutside: false,
+      },
+      slots: {
+        default: () => h('button', 'Open'),
+        content: () => h('div', 'Pinned content'),
+      },
+    })
+    await wrapper.get('button').trigger('click')
+    await flushPromises()
+    const layer = wrapper.get('.s-popper')
+    expect(layer.classes()).toContain('is-closeable')
+    expect(layer.isVisible()).toBe(true)
+    await wrapper.get('.s-popper__close').trigger('click')
+    await flushPromises()
+    await vi.waitFor(() => expect(layer.isVisible()).toBe(false))
+    wrapper.unmount()
+  })
+
+  it('can keep an open popper when its reference leaves the viewport', async () => {
+    let intersection: IntersectionObserverCallback | undefined
+    vi.stubGlobal(
+      'IntersectionObserver',
+      class {
+        constructor(callback: IntersectionObserverCallback) {
+          intersection = callback
+        }
+        observe() {}
+        disconnect() {}
+      },
+    )
+    const reference = document.createElement('button')
+    document.body.append(reference)
+    const wrapper = mount(Popper, {
+      attachTo: document.body,
+      props: {
+        virtualTriggering: true,
+        virtualRef: reference,
+        visible: true,
+        trigger: [],
+        content: 'Pinned content',
+        persistent: true,
+        teleported: false,
+        closeOnReferenceHidden: false,
+      },
+    })
+    await flushPromises()
+    intersection?.(
+      [{ isIntersecting: false } as IntersectionObserverEntry],
+      {} as IntersectionObserver,
+    )
+    await wrapper.vm.$nextTick()
+    expect(wrapper.get('.s-popper').isVisible()).toBe(true)
+    expect(wrapper.get('.s-popper').attributes('style') ?? '').not.toContain(
+      'visibility: hidden',
+    )
+    wrapper.unmount()
+    reference.remove()
+  })
 })

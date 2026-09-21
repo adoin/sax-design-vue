@@ -90,6 +90,36 @@ PROPS:
     values: "CSS values"
     description: Customize rendered floating content and layer order.
     default: null
+  - name: close-on-click-outside
+    type: Boolean
+    values: "true | false"
+    description: Close the floating content when clicking outside it. Set false to require the built-in close control.
+    default: 'true'
+  - name: outside-click-ignore
+    type: Array
+    values: "CSS selectors"
+    description: Selectors treated as inside the floating layer for outside-click checks.
+    default: '[]'
+  - name: close-on-reference-hidden
+    type: Boolean
+    values: "true | false"
+    description: Close when the trigger leaves the viewport. Set false to keep an explicit session open.
+    default: 'true'
+  - name: show-close
+    type: Boolean
+    values: "true | false"
+    description: Show a top-right close control. Defaults to true when close-on-click-outside is false.
+    default: null
+  - name: translucent
+    type: Boolean
+    values: "true | false"
+    description: Render the floating content semi-transparent so underlying UI remains visible.
+    default: 'false'
+  - name: v-model:translucent
+    type: Boolean
+    values: "true | false"
+    description: Restore full opacity from pointer or keyboard focus on the floating content.
+    default: 'false'
 EVENTS:
   - name: before-show
     description: Fired during the visibility lifecycle.

@@ -72,7 +72,7 @@ This example generates one million rows and 100,000 columns on demand. Select th
 
 ### Cell range selection
 
-Enable `range-config` and drag across cells to select a rectangle. Shift + click or Shift + arrow extends it, Ctrl / Command + A selects the current view, and Escape clears it. Drag near a viewport edge to scroll; Escape during dragging restores the previous range. Ranges, row highlighting and active-cell focus are independent.
+Enable `range-config` and drag across cells to select a rectangle. Shift + click or Shift + arrow extends it, Ctrl / Command + A selects the current view, and Escape or `clearCellRange` clears both the range and the last drop-point caret. Drag near a table viewport edge to scroll remaining table content; a short table does not scroll the page. Escape during dragging restores the previous range. Row highlighting stays independent; keyboard navigation still uses `v-model:active-cell` when it should keep its own address.
 
 `v-model:cell-range` stores stable `{ anchor, focus }` addresses. Intersecting merged cells are included in full. Ranges follow row and column keys after sorting or reordering; hidden endpoints, collapsed groups or page changes request clearing when an endpoint is no longer visible. Controlled models must accept updates.
 
@@ -190,9 +190,11 @@ Generated sources locate stable row keys through `change-config.indexOf` and acc
 
 ### Find and replace
 
-Place the built-in `$find` renderer in `toolbar-config.left` or `toolbar-config.right` to add the find-and-replace trigger and panel. The renderer explicitly enables the capability; `find-config` only customizes scope, conversion, keyboard behavior and processing limits, and can enable API-only integration without rendering UI. Focus a table cell and press Ctrl / Command + F to find, Ctrl / Command + H to focus replacement, or F3 / Shift + F3 to navigate matches while `$find` is mounted. Enter runs the panel query; Escape cancels pending work or closes the panel. Set `keyboard: false` to disable these shortcuts.
+Place the built-in `$find` renderer in `toolbar-config.left` or `toolbar-config.right` to add a find-and-replace trigger. The trigger is an icon by default; pass `content` or `props.content` to show a label after the icon. Clicking it opens a teleported form panel; each open resets the form and previous matches. After a successful search, the panel collapses to a compact results bar so you can step through matches without the query fields. Expand restores the form; the compact close control, the form popper close control, or Escape dismisses the panel. Clicking the table does not dismiss it. The renderer explicitly enables the capability; `find-config` only customizes scope, conversion, keyboard behavior and processing limits, and can enable API-only integration without rendering UI. Focus a table cell and press Ctrl / Command + F to find, Ctrl / Command + H to focus replacement, or F3 / Shift + F3 to navigate matches while `$find` is mounted. Enter runs the panel query. Set `keyboard: false` to disable these shortcuts.
 
-Queries are literal text, with optional case-sensitive and whole-cell matching. The current view searches expanded rows on the current filtered page; selection searches the current rectangular range. Both use visible visual-column order and count merged owners once. The supplied-data scope searches all provided rows and loaded tree children, across pages and independently of filters; it searches raw fields in visible columns. It does not fetch other remote pages or lazy children. Positioning can expand loaded ancestors and groups and request a page change. If filters hide a row or a controlled view rejects navigation, positioning returns `false` without clearing the filters.
+Queries are literal text, with optional case-sensitive and whole-cell matching. The current view searches expanded rows on the current filtered page; selection searches the current rectangular range. Both use visible visual-column order and count merged owners once. On generated or horizontally virtualized grids, the current view is the painted window — fixed columns plus the current row and column ranges — not every logical column. The supplied-data scope searches all provided rows and loaded tree children, across pages and independently of filters; it searches raw fields in visible columns. It does not fetch other remote pages or lazy children. Positioning can expand loaded ancestors and groups and request a page change. If filters hide a row or a controlled view rejects navigation, positioning returns `false` without clearing the filters.
+
+Replace current stays disabled when the active match is not writable, or when the draft replacement cannot convert into that cell (for example replacing `0` with `x` inside a number). After a search, the panel moves to the first match that can accept the current replacement text. Replace all stays disabled when the search is incomplete, or when no returned match is both writable and able to accept the draft replacement. Replace all still updates writable text matches when other hits cannot accept the replacement, for example a number cell that would become non-numeric.
 
 <template #example><table-find /></template>
 
@@ -220,15 +222,15 @@ Queries are literal text, with optional case-sensitive and whole-cell matching. 
 
 ### Finding in generated data
 
-The `$find` toolbar renderer supplies this example's UI. `find-config` defaults to at most 100000 visited positions, 1000 matching cells and 2000000 processed text characters; this example uses it only to lower `maxCells` to 4096. Incomplete searches retain their explicit limit status; `replaceAll` refuses a partial result, while `replaceMatch` can target an individual returned match. Narrow the scope or adjust limits deliberately. Object values need a formatter; text and cell limits do not measure the memory retained by supplied objects.
+The `$find` toolbar renderer supplies this example's UI. `find-config` defaults to at most 100000 visited positions, 1000 matching cells and 2000000 processed text characters. Incomplete searches retain their explicit limit status; `replaceAll` refuses a partial result, while `replaceMatch` can target an individual returned match. Narrow the scope or adjust limits deliberately. Object values need a formatter; text and cell limits do not measure the memory retained by supplied objects.
 
-The source contains a million rows and a hundred thousand columns. Search the selected last merged range, edit the replacement text, and replace its owner across the fixed-column boundary. Only changed fields are stored by the data adapter; navigation reuses the virtual row and column windows.
+The source contains a million rows and a hundred thousand columns. Current-view search covers the painted window, so values like `3/3` that are already on screen are found without spending the scan budget on off-screen columns of row 0. Search the selected last merged range, edit the replacement text, and replace its owner across the fixed-column boundary. Only changed fields are stored by the data adapter; navigation reuses the virtual row and column windows. Use the supplied-data scope when you need to demonstrate the scan limit.
 
 <template #example><table-find-source /></template>
 
 <template #template>
 
-@[code{96-139}](../../.vuepress/components/table/find-source.vue)
+@[code{96-138}](../../.vuepress/components/table/find-source.vue)
 
 </template>
 
@@ -240,7 +242,7 @@ The source contains a million rows and a hundred thousand columns. Search the se
 
 <template #style>
 
-@[code{140-151}](../../.vuepress/components/table/find-source.vue)
+@[code{139-150}](../../.vuepress/components/table/find-source.vue)
 
 </template>
 

@@ -31,6 +31,8 @@ interface Options {
     focus: boolean,
   ) => Promise<boolean>
   toggle: (context: TableEditContext, expanded?: boolean) => Promise<void>
+  /** Painted row/column runs for view scope. Empty falls back to the full page. */
+  viewWindows?: () => readonly TableCellRangeBounds[]
 }
 
 /** Search scope selection does not mount cells or fetch unprovided pages/tree nodes. */
@@ -51,49 +53,65 @@ export function createTableFindScope(props: TableCoreProps, options: Options) {
       selectedColumns.has(column.key ?? column.field ?? String(index)) ||
       selectedColumns.has(String(index))
     if (scope !== 'data') {
-      const bounds =
+      const explicit =
         selected.bounds ??
-        (scope === 'selection'
-          ? options.selection()
-          : {
+        (scope === 'selection' ? options.selection() : undefined)
+      const windows = explicit
+        ? [explicit]
+        : (options
+            .viewWindows?.()
+            .filter(
+              (window) =>
+                window.rowEnd > window.rowStart &&
+                window.colEnd > window.colStart,
+            ) ?? [])
+      const boundsList = windows.length
+        ? windows
+        : [
+            {
               rowStart: 0,
               rowEnd: count.rows,
               colStart: 0,
               colEnd: count.columns,
-            })
-      if (!bounds) return
-      if (
-        ![bounds.rowStart, bounds.rowEnd, bounds.colStart, bounds.colEnd].every(
-          (n) => Number.isSafeInteger(n) && n >= 0,
-        ) ||
-        bounds.rowStart > bounds.rowEnd ||
-        bounds.colStart > bounds.colEnd ||
-        bounds.rowEnd > count.rows ||
-        bounds.colEnd > count.columns
-      )
-        throw new RangeError('Find bounds are outside the current view')
-      if (
-        bounds.rowStart === bounds.rowEnd ||
-        bounds.colStart === bounds.colEnd
-      )
-        return
-      const cellAt = options.cells(bounds)
-      for (let row = bounds.rowStart; row < bounds.rowEnd; row++)
-        for (let col = bounds.colStart; col < bounds.colEnd; col++)
-          yield () => {
-            const cell = cellAt(row, col)
-            if (
-              !cell ||
-              !acceptsColumn(cell.context.column, cell.context.columnIndex)
-            )
-              return
-            return {
-              context: cell.context,
-              isCurrent: current,
-              locate: (valid, focus) =>
-                options.locateView(row, col, valid, focus),
+            },
+          ]
+      for (const bounds of boundsList) {
+        if (
+          ![
+            bounds.rowStart,
+            bounds.rowEnd,
+            bounds.colStart,
+            bounds.colEnd,
+          ].every((n) => Number.isSafeInteger(n) && n >= 0) ||
+          bounds.rowStart > bounds.rowEnd ||
+          bounds.colStart > bounds.colEnd ||
+          bounds.rowEnd > count.rows ||
+          bounds.colEnd > count.columns
+        )
+          throw new RangeError('Find bounds are outside the current view')
+        if (
+          bounds.rowStart === bounds.rowEnd ||
+          bounds.colStart === bounds.colEnd
+        )
+          continue
+        const cellAt = options.cells(bounds)
+        for (let row = bounds.rowStart; row < bounds.rowEnd; row++)
+          for (let col = bounds.colStart; col < bounds.colEnd; col++)
+            yield () => {
+              const cell = cellAt(row, col)
+              if (
+                !cell ||
+                !acceptsColumn(cell.context.column, cell.context.columnIndex)
+              )
+                return
+              return {
+                context: cell.context,
+                isCurrent: current,
+                locate: (valid, focus) =>
+                  options.locateView(row, col, valid, focus),
+              }
             }
-          }
+      }
       return
     }
     if (selected.bounds)

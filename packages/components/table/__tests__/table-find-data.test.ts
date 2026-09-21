@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import {
   TableFindLimitError,
+  canTableFindMatchAcceptReplacement,
   planTableFindReplace,
   scanTableFind,
 } from '../src/find-data'
@@ -230,6 +231,42 @@ describe('Table lazy find and replace data', () => {
     await expect(
       planTableFindReplace({ result, replacement: 'X', writable }),
     ).rejects.toThrow('not finite')
+    const mixed = [
+      () => makeCell({ id: 1, name: 'Alpha 1' }),
+      () =>
+        makeCell(
+          { id: 2, name: 61 },
+          { field: 'name', editor: { type: 'number' } },
+        ),
+    ]
+    const mixedScan = await scanTableFind({
+      query: { text: '1' },
+      cells: mixed,
+    })
+    const mixedPlan = await planTableFindReplace({
+      result: mixedScan,
+      replacement: 'X',
+      writable,
+    })
+    expect(mixedPlan).toMatchObject({ replaced: 1, skipped: 1 })
+    expect(mixedPlan.drafts[0].draftRow.name).toBe('Alpha X')
+    expect(mixed[1]()!.context.row.name).toBe(61)
+    expect(
+      canTableFindMatchAcceptReplacement(
+        mixedScan.matches[0],
+        mixedScan.query,
+        'X',
+        writable,
+      ),
+    ).toBe(true)
+    expect(
+      canTableFindMatchAcceptReplacement(
+        mixedScan.matches[1],
+        mixedScan.query,
+        'X',
+        writable,
+      ),
+    ).toBe(false)
     await expect(
       planTableFindReplace({
         result,

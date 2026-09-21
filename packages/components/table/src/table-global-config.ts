@@ -1,3 +1,5 @@
+import type { TableAlign } from './table-align'
+
 export type TableGlobalOverflow = boolean | 'ellipsis' | 'title' | 'tooltip'
 export type TableGlobalFeature<Config> = boolean | Config
 
@@ -101,6 +103,8 @@ export interface TableGlobalConfig {
     shape?: '' | 'circle' | 'square'
   }>
   showHeader?: boolean
+  align?: TableAlign
+  headerAlign?: TableAlign
   striped?: boolean
   multiple?: boolean
 }

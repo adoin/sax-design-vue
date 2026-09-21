@@ -346,9 +346,10 @@
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    // Clip rounded corners without creating a second sticky scroll container.
+    // Clip only the top corners. Square bottom corners keep native overlay
+    // scrollbars unclipped, matching the Ant Design Vue table chrome.
     overflow: clip;
-    border-radius: var(--sax-radius-lg);
+    border-radius: var(--sax-radius-lg) var(--sax-radius-lg) 0 0;
     background: var(--s-table-surface);
   }
 
@@ -388,7 +389,6 @@
   }
 
   .is-group-header {
-    justify-content: center;
     box-shadow:
       inset 3px 0 5px -5px #{getColor(primary, 0.22)},
       inset -3px 0 5px -5px #{getColor(primary, 0.22)},
@@ -647,7 +647,82 @@
   }
 
   @include e(find) {
-    margin-bottom: 10px;
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: 6px;
+  }
+  @include e(find-trigger) {
+    display: block;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    overflow: visible;
+    color: getColor(text);
+    cursor: pointer;
+    outline: none;
+
+    &[aria-disabled='true'] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+  @include e(find-caption) {
+    min-width: 0;
+    color: getColor(text);
+    font-size: 12px;
+    line-height: 1.2;
+    cursor: pointer;
+  }
+  @include e(find-mark-lens) {
+    fill: getColor(background);
+    stroke: currentColor;
+  }
+  @include e(find-mark-stroke) {
+    fill: none;
+    stroke: currentColor;
+  }
+  @include e(find-mark-letter) {
+    fill: currentColor;
+  }
+  @include e(find-mark-forward) {
+    fill: none;
+    stroke: getColor(primary);
+  }
+  @include e(find-mark-forward-head) {
+    fill: getColor(primary);
+    stroke: getColor(primary);
+  }
+  @include e(find-mark-back) {
+    fill: none;
+    stroke: getColor(success);
+  }
+  @include e(find-action-mark) {
+    display: block;
+    width: 20px;
+    height: 20px;
+    overflow: visible;
+    color: getColor(text);
+  }
+  @include e(find-action-page) {
+    fill: getColor(background);
+    stroke: currentColor;
+  }
+  @include e(find-action-line) {
+    fill: none;
+    stroke: getColor(text-color, placeholder);
+  }
+  @include e(find-action-match) {
+    fill: none;
+    stroke: getColor(primary);
+  }
+  @include e(find-action-badge) {
+    fill: getColor(success);
+    stroke: getColor(background);
+  }
+  @include e(find-action-glyph) {
+    fill: none;
+    stroke: getColor(background);
   }
   @include e(chart-theme) {
     display: none;
@@ -698,41 +773,48 @@
     }
   }
   @include e(find-panel) {
-    width: 100%;
-    margin-top: 8px;
+    width: min(520px, calc(100vw - 32px));
+    max-height: calc(100dvh - 16px);
+    overflow: auto;
     padding: 14px;
     box-sizing: border-box;
-    border-radius: var(--sax-radius);
+    border: 0;
+    border-radius: var(--sax-radius-lg);
+    color: getColor(text);
+    background: getColor(background);
+    box-shadow: var(--sax-popper-shadow);
+    font-size: 0.85rem;
     &.is-square {
       border-radius: 0;
     }
-    background: color-mix(
-      in srgb,
-      #{getColor(primary)} 4%,
-      #{getColor(background)}
-    );
-    box-shadow: 0 3px 9px -6px #{getColor(primary, 0.25)};
-    font-size: 0.85rem;
+    &.is-closeable {
+      padding-top: 40px;
+    }
     p {
       margin: 10px 0 0;
       color: getColor(text, 0.72);
     }
-  }
-  @include e(find) {
-    display: inline-flex;
-    min-width: 0;
-
-    @include when(open) {
-      display: grid;
-      width: 100%;
-      min-width: min(520px, 100%);
-      flex: 1 0 100%;
-      grid-template-columns: minmax(0, 1fr);
-
-      > .#{$namespace}-button {
-        justify-self: start;
-      }
+    &.is-compact {
+      width: max-content;
+      max-width: calc(100vw - 24px);
+      padding: 6px 8px;
+      overflow: visible;
     }
+  }
+  @include e(find-body) {
+    outline: none;
+  }
+  @include e(find-form) {
+    position: relative;
+    margin: 0;
+  }
+  @include e(find-autofill-shield) {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
   }
   @include e(find-fields) {
     display: grid;
@@ -746,13 +828,60 @@
       display: block;
       margin-bottom: 6px;
     }
+    .#{$namespace}-select {
+      @include set-var-value(('select', 'min-height'), 30px);
+      @include set-var-value(('select', 'label-font-size'), 0.75rem);
+      @include set-var-value(('select', 'placeholder-font-size'), 0.75rem);
+    }
+    .#{$namespace}-select__input {
+      padding-top: 4px;
+      padding-bottom: 4px;
+      font-size: 0.75rem;
+    }
+    .#{$namespace}-input__original {
+      padding-top: 4px;
+      padding-bottom: 4px;
+      font-size: 0.75rem;
+    }
   }
   @include e(find-actions) {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: 8px 12px;
     margin-top: 12px;
+    .s-button {
+      margin-left: 0;
+    }
+  }
+  @include e(find-tools) {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+  }
+  @include e(find-tool) {
+    display: inline-flex;
+    flex-shrink: 0;
+    .s-button {
+      margin-left: 0;
+    }
+  }
+  @include e(find-results) {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    .s-button {
+      margin-left: 0;
+    }
+    [role='status'] {
+      margin: 0;
+      padding: 0 4px;
+      color: getColor(text, 0.72);
+      white-space: nowrap;
+      font-size: 12px;
+    }
   }
 
   @include e(group-row) {
@@ -1558,8 +1687,6 @@
 
   @include e(virtual-body) {
     .#{$namespace}-vl__window {
-      --s-vl-scrollbar-track-inset: 4px;
-
       width: 100%;
     }
 
@@ -1618,8 +1745,7 @@
         #{getColor(primary)} 13%,
         var(--s-table-surface)
       );
-      box-shadow:
-        0 6px 12px -8px #{getColor(primary, 0.68)};
+      box-shadow: 0 6px 12px -8px #{getColor(primary, 0.68)};
       outline: none;
     }
   }
@@ -1704,7 +1830,7 @@
   @include e(footer) {
     padding: 8px 10px;
     background: var(--s-table-header-surface);
-    border-radius: 0 0 var(--sax-radius-lg) var(--sax-radius-lg);
+    border-radius: 0;
   }
 
   &-wrapper {
@@ -1718,7 +1844,7 @@
     min-width: 0;
     contain: inline-size;
     // box-shadow: 0px 5px 22px 0px rgba(0,0,0, -var(shadow-opacity));
-    border-radius: var(--sax-radius-lg);
+    border-radius: var(--sax-radius-lg) var(--sax-radius-lg) 0 0;
 
     &__header {
       width: 100%;
@@ -1727,7 +1853,7 @@
       border-radius: var(--sax-radius-lg) var(--sax-radius-lg) 0 0;
 
       & ~ .#{$namespace}-table .#{$namespace}-table__data-view {
-        border-radius: 0 0 var(--sax-radius-lg) var(--sax-radius-lg);
+        border-radius: 0;
       }
     }
   }
@@ -1870,10 +1996,6 @@ html.dark .#{$namespace}-table-wrapper {
     flex-wrap: wrap;
     align-items: center;
     gap: 10px;
-
-    &:has(.#{$namespace}-table__find.is-open) {
-      flex-basis: 100%;
-    }
   }
 
   @include e(right) {
@@ -1885,10 +2007,6 @@ html.dark .#{$namespace}-table-wrapper {
     justify-content: flex-end;
     gap: 8px;
     margin-inline-start: auto;
-
-    &:has(.#{$namespace}-table__find.is-open) {
-      flex: 1 1 100%;
-    }
   }
 
   @include e(title) {

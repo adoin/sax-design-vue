@@ -18,6 +18,8 @@ Type that object as `SaxGridSetting<Row, QueryForm>`. `Row` flows into column fi
 
 `width` sets a fixed column width. Columns without it start from `minWidth` (120px by default) and share the remaining space equally. When the container is too narrow, scroll horizontally to see the remaining columns.
 
+`align` is the shared left/center/right default for a header and its cells. Column `align` still covers both surfaces; `headerAlign` on the column or table overrides the header only. Undeclared values inherit `SConfigProvider.table.align` / `table.headerAlign`, then left.
+
 <template #example><table-default /></template>
 
 <template #template>

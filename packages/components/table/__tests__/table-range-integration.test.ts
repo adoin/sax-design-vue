@@ -276,8 +276,12 @@ describe('STable range integration', () => {
       expect(wrapper.emitted('cellRangeChange')?.[0][0]).toMatchObject({
         reason: 'programmatic',
       })
+      expect(await wrapper.vm.setActiveCell(2, 2)).toBe(true)
+      expect(wrapper.find('.is-active-cell').exists()).toBe(true)
       expect(await wrapper.vm.clearCellRange()).toBe(true)
       expect(wrapper.findAll('.is-range-cell')).toHaveLength(0)
+      expect(wrapper.vm.getActiveCell()).toBeNull()
+      expect(wrapper.find('.is-active-cell').exists()).toBe(false)
     }
   })
   it('uses existing keyboard focus and handles Shift extension without enabling keyboard-config separately', async () => {
@@ -297,7 +301,8 @@ describe('STable range integration', () => {
     await wrapper.get('.s-table').trigger('keydown', { key: 'Escape' })
     await settle()
     expect(wrapper.vm.getCellRange()).toBeNull()
-    expect(wrapper.vm.getActiveCell()).toEqual({ rowKey: 0, columnKey: 'name' })
+    expect(wrapper.vm.getActiveCell()).toBeNull()
+    expect(wrapper.find('.is-active-cell').exists()).toBe(false)
   })
   it('honors a rejected model and recomputes an externally replaced range', async () => {
     const wrapper = setup({ cellRange: null })

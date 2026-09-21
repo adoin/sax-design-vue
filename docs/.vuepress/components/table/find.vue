@@ -50,9 +50,9 @@ const selectNames = async () => {
   })
 }
 const searchAll = async () => {
+  await table.value?.openFind()
   const result = await table.value?.findCells('Alpha', { scope: 'data' })
   if (result?.success) await table.value?.findNext({ focus: false })
-  await table.value?.openFind()
 }
 </script>
 <template>

@@ -57,6 +57,7 @@ export const popperEmits = [
   'show',
   'before-hide',
   'hide',
+  'update:translucent',
 ]
 
 export type PopperEmits = typeof popperEmits

@@ -1,0 +1,10 @@
+---
+description: Always work on main; do not create new branches
+alwaysApply: true
+---
+
+# Work on main
+
+- Do all implementation on `main`. Do not create a feature branch, `cursor/*` snapshot branch, or pull-request branch unless the user explicitly asks for one.
+- Commit and push to `main`.
+- If a temporary branch already exists, merge it into `main`, then delete the local and remote copies. Do not keep Cursor snapshot branches around.

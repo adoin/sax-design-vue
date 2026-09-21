@@ -71,6 +71,17 @@ export const popperContentProps = buildProps({
     type: Boolean,
     default: true,
   },
+  closeOnReferenceHidden: {
+    type: Boolean,
+    default: true,
+  },
+  showClose: {
+    type: definePropType<boolean | null>(Boolean),
+    default: undefined,
+  },
+  translucent: {
+    type: Boolean,
+  },
   outsideClickIgnore: {
     type: definePropType<string[]>(Array),
     default: () => [],
@@ -129,6 +140,7 @@ export const popperContentEmits = {
   focus: () => true,
   blur: () => true,
   close: () => true,
+  'update:translucent': (value: boolean) => typeof value === 'boolean',
 }
 export type PopperContentEmits = typeof popperContentEmits
 export type PopperContentEmitFn = EmitFn<PopperContentEmits>

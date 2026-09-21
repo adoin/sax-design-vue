@@ -15,9 +15,19 @@
         :class="popperKls"
         :style="popperStyle"
         :data-popper-placement="placement"
-        @mouseenter="onContentEnter"
+        @mouseenter="handleContentEnter"
         @mouseleave="onContentLeave"
+        @focusin="restoreOpaqueFromFocus"
       >
+        <button
+          v-if="showCloseButton"
+          type="button"
+          :class="ns.e('close')"
+          :aria-label="t('vs.common.close')"
+          @click="onClose"
+        >
+          <IconClose hover="less" />
+        </button>
         <template v-if="!destroyed">
           <template v-if="content">
             <template v-if="rawContent">
@@ -48,7 +58,8 @@ import {
   watch,
 } from 'vue'
 import { onClickOutside, unrefElement } from '@vueuse/core'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { IconClose } from '@vuesax-alpha/components/icon'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { popperContextKey } from '@vuesax-alpha/tokens'
 import { composeEventHandlers } from '@vuesax-alpha/utils'
 import { popperContentEmits, popperContentProps } from './content'
@@ -58,6 +69,7 @@ defineOptions({
 })
 
 const ns = useNamespace('popper')
+const { t } = useLocale()
 
 const {
   contentRef,
@@ -74,7 +86,7 @@ const {
 } = inject(popperContextKey, undefined)!
 
 const props = defineProps(popperContentProps)
-defineEmits(popperContentEmits)
+const emit = defineEmits(popperContentEmits)
 
 const destroyed = ref(false)
 
@@ -95,9 +107,15 @@ const shouldShow = computed(() => {
   return props.disabled ? false : unref(open)
 })
 
+const showCloseButton = computed(
+  () => props.showClose ?? !props.closeOnClickOutside,
+)
+
 const popperKls = computed(() => [
   ns.b(),
   ns.is('not-arrow', !props.showArrow),
+  ns.is('closeable', showCloseButton.value),
+  ns.is('translucent', props.translucent),
   props.popperClass,
 ])
 
@@ -109,11 +127,29 @@ const stopWhenControlled = () => {
   if (unref(controlled)) return true
 }
 
+const restoreOpaque = () => {
+  if (props.translucent) emit('update:translucent', false)
+}
+
+const restoreOpaqueFromFocus = (event: FocusEvent) => {
+  const target = event.target
+  if (target instanceof Element && target.closest('button, [role="button"]'))
+    return
+  const from = event.relatedTarget
+  if (from instanceof Node && contentRef.value?.contains(from)) return
+  restoreOpaque()
+}
+
 const onContentEnter = composeEventHandlers(stopWhenControlled, () => {
   if (props.interactivity && unref(trigger) === 'hover') {
     onOpen()
   }
 })
+
+const handleContentEnter = (event: MouseEvent) => {
+  restoreOpaque()
+  onContentEnter(event)
+}
 
 const onContentLeave = composeEventHandlers(stopWhenControlled, () => {
   if (unref(trigger) === 'hover') {

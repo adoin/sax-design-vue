@@ -18,6 +18,7 @@ import type {
 } from 'vue'
 import type Table from './table.vue'
 import type { FieldPath, Recordable } from '../../types'
+import type { TableAlign } from './table-align'
 import type {
   TableChartConfig,
   TableChartOptions,
@@ -137,7 +138,13 @@ export type TableRowKey = string | number
 /** Dynamic fallback used when an application does not supply its own row type. */
 export type TableRow = Recordable
 export type TableModelValueType = string | number | object
-export type TableAlign = 'left' | 'center' | 'right'
+export type { TableAlign } from './table-align'
+export {
+  DEFAULT_TABLE_ALIGN,
+  resolveTableCellAlign,
+  resolveTableFooterAlign,
+  resolveTableHeaderAlign,
+} from './table-align'
 export type TableColumnType = 'seq' | 'checkbox' | 'radio' | 'expand'
 export type TableColumnFixed = boolean | 'left' | 'right'
 export interface TableColumnPlacement {
@@ -382,6 +389,7 @@ export interface TableColumnOptions<Row extends object = TableRow> {
   /** Show a drag handle when rowDragConfig is enabled. */
   dragSort?: boolean
   align?: TableAlign
+  headerAlign?: TableAlign
   footerAlign?: TableAlign
   fixed?: TableColumnFixed
   className?: string
@@ -510,6 +518,7 @@ export interface TableHeaderGroup<Row extends object = TableRow> {
   key: string
   title?: string
   align?: TableAlign
+  headerAlign?: TableAlign
   className?: string
   header?: TableHeaderRenderer<Row>
   slots?: TableColumnSlots<Row>
@@ -727,6 +736,13 @@ export const tableCoreProps = buildProps({
   },
   emptyText: String,
   showHeader: { type: Boolean, default: true },
+  align: {
+    type: definePropType<TableAlign>(String),
+    default: 'left',
+  },
+  headerAlign: {
+    type: definePropType<TableAlign>(String),
+  },
   striped: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
   multiple: { type: Boolean, default: false },

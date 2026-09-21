@@ -28,7 +28,7 @@ PROPS:
     usage: '/zh/components/table/spreadsheet-interactions.html#copy-cut-and-paste'
   - name: 'range-config'
     type: 'Boolean | TableRangeConfig'
-    description: '开启矩形区域选择，可分别控制鼠标、键盘和边缘自动滚动。'
+    description: '开启矩形区域选择，可分别控制鼠标、键盘和仅作用于表格自身的边缘滚动。'
     default: 'false'
     usage: '/zh/components/table/spreadsheet-interactions.html#cell-range-selection'
   - name: 'cell-range'
@@ -211,6 +211,16 @@ PROPS:
     description: 是否显示配置生成的表头。
     default: true
     usage: '/zh/components/table/data-and-column-definitions.html#configuration-object'
+  - name: align
+    type: TableAlign
+    description: 列未设置 align 时，表头和单元格使用的默认对齐。列上的 align 仍同时控制表头和单元格；header-align 只覆盖表头。
+    default: left
+    usage: '/zh/components/table/data-and-column-definitions.html#configuration-object'
+  - name: header-align
+    type: TableAlign
+    description: 列未设置 header-align 和 align 时，表头使用的默认对齐。不改变表体单元格。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#configuration-object'
   - name: empty-text
     type: String
     description: 没有行或列时显示的文字。
@@ -329,7 +339,7 @@ CHILD_PROPS:
     usage: '/zh/components/table/footers-and-summaries.html#footer-data-rows'
   - name: footer-align
     type: TableAlign
-    description: 表尾对齐方式，默认使用该列 align。
+    description: 表尾对齐方式，默认使用该列 align，再回退到表格 align。
     default: null
     usage: '/zh/components/table/footers-and-summaries.html#footer-data-rows'
   - name: show-footer-overflow
@@ -369,8 +379,14 @@ CHILD_PROPS:
     default: null
   - name: align
     type: TableAlign
-    description: 表头和单元格的对齐方式。
-    default: left
+    description: 表头和单元格的对齐方式。省略时继承表格或 ConfigProvider 的 table.align，再默认为居左。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#configuration-object'
+  - name: header-align
+    type: TableAlign
+    description: 当前列表头对齐。未设置时依次回退到该列 align、表格或 ConfigProvider 的 table.headerAlign、table.align，最后居左。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#configuration-object'
   - name: fixed
     type: TableColumnFixed
     description: 将列固定在左侧或右侧；true 等价于 left。未设置时继承父组，false 解除继承的固定位置。
@@ -908,7 +924,7 @@ EXPOSES:
     usage: '/zh/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'getFindState'
     type: '() => TableFindState'
-    description: '读取查询、范围、匹配摘要、活动索引、进度和上限状态。'
+    description: '读取查询、范围、匹配摘要（含是否可替换）、活动索引、进度和上限状态。'
     default: null
     usage: '/zh/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'clearFind'
@@ -923,7 +939,7 @@ EXPOSES:
     usage: '/zh/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'openFind'
     type: '() => Promise<boolean>'
-    description: '打开并聚焦已挂载的 $find 工具栏面板；未挂载 $find 或查找被禁用时返回 false。'
+    description: '打开并聚焦 $find 弹出层，同时重置表单和上次匹配；未挂载 $find 或查找被禁用时返回 false。'
     default: null
     usage: '/zh/components/table/spreadsheet-interactions.html#find-and-replace'
   - name: 'closeFind'
@@ -958,7 +974,7 @@ EXPOSES:
     usage: '/zh/components/table/spreadsheet-interactions.html#cell-range-selection'
   - name: 'clearCellRange'
     type: '() => Promise<boolean>'
-    description: '清空选区，保留活动单元格。'
+    description: '清空选区，同时清除最后落点留下的活动单元格。'
     default: null
     usage: '/zh/components/table/spreadsheet-interactions.html#cell-range-selection'
   - name: 'getCellRange'

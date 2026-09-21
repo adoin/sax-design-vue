@@ -1,5 +1,5 @@
 import { defineComponent, h, nextTick, ref, shallowRef } from 'vue'
-import { mount } from '@vue/test-utils'
+import { DOMWrapper, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Table from '../src/table.vue'
 import type {
@@ -40,6 +40,32 @@ const columns: TableColumn[] = [
   { field: 'count', title: 'Count', editor: { type: 'number' } },
 ]
 const bounds = { rowStart: 0, rowEnd: 2, colStart: 0, colEnd: 2 }
+const findPanel = () => {
+  const panels = [
+    ...document.querySelectorAll<HTMLElement>('.s-table__find-panel'),
+  ]
+  return (
+    panels.findLast((panel) => getComputedStyle(panel).display !== 'none') ??
+    panels.at(-1) ??
+    null
+  )
+}
+const panelControl = (selector: string) => {
+  const node =
+    findPanel()?.querySelector<HTMLElement>(selector) ??
+    document.querySelector<HTMLElement>(selector)
+  if (!node) throw new Error(`Missing find panel control: ${selector}`)
+  return new DOMWrapper(node)
+}
+const panelAction = (label: string) => {
+  const buttons = [...(findPanel()?.querySelectorAll('button') ?? [])].filter(
+    (node) => node.getAttribute('aria-label') === label,
+  )
+  const button =
+    buttons.find((node) => node.getClientRects().length > 0) ?? buttons[0]
+  if (!button) throw new Error(`Missing find action: ${label}`)
+  return button
+}
 function host(
   extra: Partial<TableProps> = {},
   accepts = true,
@@ -100,35 +126,32 @@ describe('Table find integration', () => {
   })
 
   it('replaces stale panel feedback when a new query is started through the public API', async () => {
-    const { api, table, settings } = host()
+    const { api, settings } = host()
+    await api.value!.openFind()
     await api.value!.findCells('A')
     await api.value!.findNext({ focus: false })
-    await api.value!.openFind()
-    await table.find('[data-find-replacement] input').setValue('C')
-    const replace = table
-      .findAll('.s-table__find-panel button')
-      .find((button) => button.text() === 'Replace current')!
-    await replace.trigger('click')
+    await panelControl('[data-find-replacement] input').setValue('C')
+    panelAction('Replace current').click()
     await vi.waitFor(() =>
-      expect(table.find('.s-table__find-panel > p').text()).toContain(
-        'Updated 1',
-      ),
+      expect(
+        findPanel()!.querySelector('[role="status"]')!.textContent,
+      ).toContain('Updated 1'),
     )
     await api.value!.undo()
     await nextTick()
-    expect(table.find('.s-table__find-panel > p').text()).not.toContain(
-      'Updated',
-    )
+    expect(
+      findPanel()!.querySelector('[role="status"]')?.textContent ?? '',
+    ).not.toContain('Updated')
     settings.value = { findConfig: { maxCells: 1 } }
     await nextTick()
     await api.value!.findCells('unmatched')
     await nextTick()
-    expect(table.find('.s-table__find-panel > p').text()).toContain(
-      'Limit reached',
-    )
-    expect(table.find('.s-table__find-panel > p').text()).not.toContain(
-      'Updated',
-    )
+    expect(
+      findPanel()!.querySelector('[role="status"]')!.textContent,
+    ).toContain('Limit reached')
+    expect(
+      findPanel()!.querySelector('[role="status"]')!.textContent,
+    ).not.toContain('Updated')
   })
 
   it('uses current tree expansion state in data-scope replacement conditions', async () => {
@@ -149,6 +172,48 @@ describe('Table find integration', () => {
     })
     expect(data.value[0].name).toBe('B')
     expect((data.value[0].children as TableRow[])[0].name).toBe('A')
+  })
+
+  it('finds generated cells in the painted view without spending the scan budget on off-screen columns', async () => {
+    const { api } = host({
+      virtualSource: {
+        rowCount: 1_000_000,
+        columnCount: 100_000,
+        columnWidth: 140,
+        fixedLeftCount: 1,
+        fixedRightCount: 1,
+        rowKey: (index) => index,
+        row: (index) =>
+          new Proxy(
+            { id: index },
+            {
+              get: (target, key, receiver) =>
+                typeof key === 'string' && /^c\d+$/.test(key)
+                  ? `${index}/${key.slice(1)}`
+                  : Reflect.get(target, key, receiver),
+              has: (target, key) =>
+                (typeof key === 'string' && /^c\d+$/.test(key)) ||
+                key in target,
+            },
+          ),
+        column: (index) => ({
+          key: String(index),
+          field: `c${index}`,
+          width: 140,
+          editor: index !== 0,
+        }),
+      },
+      virtualConfig: { height: 280, rowHeight: 44, horizontal: true },
+      findConfig: { maxCells: 4096 },
+    })
+    await nextTick()
+    await nextTick()
+    const result = await api.value!.findCells('3/3', { scope: 'view' })
+    expect(result.state.complete).toBe(true)
+    expect(result.state.visited).toBeLessThan(4096)
+    expect(result.state.matches.some((match) => match.text === '3/3')).toBe(
+      true,
+    )
   })
 
   it('finishes an empty column scope without reading generated data', async () => {
@@ -189,14 +254,14 @@ describe('Table find integration', () => {
   })
 
   it('keeps the refreshed match and active cell aligned after replacement without taking focus', async () => {
-    const { api, table } = host({}, true, [
+    const { api } = host({}, true, [
       { id: 1, name: 'A', count: 1 },
       { id: 2, name: 'A', count: 2 },
     ])
+    await api.value!.openFind()
     await api.value!.findCells('A')
     await api.value!.findNext({ focus: false })
-    await api.value!.openFind()
-    const input = table.find('[data-find-query] input').element
+    const input = panelControl('[data-find-query] input').element
     expect(document.activeElement).toBe(input)
     expect(await api.value!.replaceMatch('B')).toMatchObject({ applied: true })
     expect(api.value!.getFindState()).toMatchObject({
@@ -214,8 +279,7 @@ describe('Table find integration', () => {
     const { api, table } = host()
     await table.find('.s-table').trigger('keydown', { key: 'f', ctrlKey: true })
     await nextTick()
-    const input = table.find('[data-find-query] input')
-    expect(input.exists()).toBe(true)
+    const input = panelControl('[data-find-query] input')
     expect(document.activeElement).toBe(input.element)
     await input.setValue('A')
     await input.trigger('keydown', { key: 'Enter' })
@@ -223,10 +287,223 @@ describe('Table find integration', () => {
       expect(api.value!.getFindState().matches).toHaveLength(1),
     )
     await input.trigger('keydown', { key: 'Escape' })
-    expect(table.find('[role="search"]').exists()).toBe(false)
+    expect(
+      table.find('.s-table__find-trigger').attributes('aria-expanded'),
+    ).toBe('false')
     expect(document.activeElement).toBe(
-      table.find('.s-table__find > button').element,
+      table.find('.s-table__find-trigger').element,
     )
+  })
+
+  it('opens the teleported SPopper from an SVG icon trigger', async () => {
+    const { table, api } = host()
+    const trigger = table.get('.s-table__find-trigger')
+    expect(trigger.element.tagName).toBe('svg')
+    expect(trigger.attributes('role')).toBe('button')
+    expect(trigger.attributes('aria-expanded')).toBe('false')
+    await trigger.trigger('click')
+    await nextTick()
+    expect(trigger.attributes('aria-expanded')).toBe('true')
+    expect(findPanel()?.querySelector('[role="search"]')).not.toBeNull()
+    await panelControl('[data-find-query] input').setValue('A')
+    await panelControl('[data-find-query] input').trigger('keydown', {
+      key: 'Enter',
+    })
+    await vi.waitFor(() =>
+      expect(api.value!.getFindState().matches).toHaveLength(1),
+    )
+    await trigger.trigger('click')
+    await nextTick()
+    expect(trigger.attributes('aria-expanded')).toBe('false')
+    await trigger.trigger('click')
+    await nextTick()
+    expect(trigger.attributes('aria-expanded')).toBe('true')
+    expect(api.value!.getFindState().matches).toEqual([])
+    expect(
+      (panelControl('[data-find-query] input').element as HTMLInputElement)
+        .value,
+    ).toBe('')
+  })
+
+  it('opens the form without empty-state copy and uses small field controls', async () => {
+    const { api } = host()
+    await api.value!.openFind()
+    const panel = findPanel()!
+    expect(panel.textContent).not.toContain(
+      'Enter text and choose a search scope.',
+    )
+    expect(panel.querySelector('p[role="status"]')).toBeNull()
+    expect(panel.querySelectorAll('.s-input--small')).toHaveLength(2)
+  })
+
+  it('defaults to an icon trigger and shows optional content after the icon', async () => {
+    const labeled = host({
+      toolbarConfig: { left: [{ itemRender: '$find', content: 'Find cells' }] },
+    })
+    const labeledTrigger = labeled.table.get('.s-table__find-trigger')
+    expect(labeledTrigger.classes()).not.toContain('is-icon-only')
+    expect(labeled.table.get('.s-table__find-caption').text()).toContain(
+      'Find cells',
+    )
+
+    const { table } = host()
+    const trigger = table.get('.s-table__find-trigger')
+    expect(trigger.classes()).toContain('is-icon-only')
+    expect(trigger.attributes('aria-label')).toBe('Find and replace')
+    expect(trigger.text()).not.toContain('Find and replace')
+  })
+
+  it('shows the icon action purpose in a hover tooltip', async () => {
+    const { api } = host()
+    await api.value!.openFind()
+    const find = panelAction('Find')
+    find
+      .closest('.s-table__find-tool')!
+      .dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
+    await vi.waitFor(() =>
+      expect(
+        [...document.querySelectorAll('.s-tooltip')].some((node) =>
+          node.textContent?.includes('Find'),
+        ),
+      ).toBe(true),
+    )
+  })
+
+  it('keeps the teleported panel open until Close and collapses to result controls after search', async () => {
+    const { table, api } = host()
+    expect(await api.value!.openFind()).toBe(true)
+    const trigger = table.get('.s-table__find-trigger')
+    const layer = findPanel()!
+    const outside = document.createElement('button')
+    document.body.append(outside)
+    outside.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }))
+    outside.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))
+    await nextTick()
+    expect(trigger.attributes('aria-expanded')).toBe('true')
+    outside.remove()
+    await panelControl('[data-find-query] input').setValue('A')
+    panelAction('Find').click()
+    await vi.waitFor(() =>
+      expect(api.value!.getFindState().matches).toHaveLength(1),
+    )
+    await vi.waitFor(() =>
+      expect(layer.classList.contains('is-compact')).toBe(true),
+    )
+    expect(layer.classList.contains('is-translucent')).toBe(false)
+    expect(layer.querySelector('.s-popper__close')).toBeNull()
+    expect(
+      getComputedStyle(layer.querySelector('.s-table__find-form')!).display,
+    ).toBe('none')
+    expect(
+      getComputedStyle(layer.querySelector('.s-table__find-results')!).display,
+    ).not.toBe('none')
+    panelAction('Show find options').click()
+    await nextTick()
+    expect(layer.classList.contains('is-compact')).toBe(false)
+    expect(layer.querySelector('.s-popper__close')).not.toBeNull()
+    panelAction('Find').click()
+    await vi.waitFor(() =>
+      expect(layer.classList.contains('is-compact')).toBe(true),
+    )
+    panelAction('Close').click()
+    await vi.waitFor(() =>
+      expect(trigger.attributes('aria-expanded')).toBe('false'),
+    )
+  })
+
+  it('resets the form and previous matches each time the trigger opens the panel', async () => {
+    const { api } = host()
+    await api.value!.openFind()
+    await panelControl('[data-find-query] input').setValue('A')
+    await panelControl('[data-find-replacement] input').setValue('Z')
+    await panelControl('[data-find-query] input').trigger('keydown', {
+      key: 'Enter',
+    })
+    api.value!.closeFind()
+    await nextTick()
+    expect(api.value!.getFindState().matches).toHaveLength(1)
+    expect(await api.value!.openFind()).toBe(true)
+    await nextTick()
+    expect(api.value!.getFindState().matches).toEqual([])
+    expect(
+      (panelControl('[data-find-query] input').element as HTMLInputElement)
+        .value,
+    ).toBe('')
+    expect(
+      (
+        panelControl('[data-find-replacement] input')
+          .element as HTMLInputElement
+      ).value,
+    ).toBe('')
+  })
+
+  it('keeps replacement text when find is requested while the panel is already open', async () => {
+    const { api } = host()
+    await api.value!.openFind()
+    await panelControl('[data-find-query] input').setValue('A')
+    await panelControl('[data-find-replacement] input').setValue('Keep me')
+    expect(await api.value!.openFind()).toBe(true)
+    await nextTick()
+    expect(
+      (panelControl('[data-find-query] input').element as HTMLInputElement)
+        .value,
+    ).toBe('A')
+    expect(
+      (
+        panelControl('[data-find-replacement] input')
+          .element as HTMLInputElement
+      ).value,
+    ).toBe('Keep me')
+  })
+
+  it('keeps replacement text after search collapses and the form is expanded again', async () => {
+    const { api } = host()
+    await api.value!.openFind()
+    await panelControl('[data-find-query] input').setValue('A')
+    await panelControl('[data-find-replacement] input').setValue('Keep me')
+    const input = panelControl('[data-find-replacement] input')
+      .element as HTMLInputElement
+    expect(input.id).not.toMatch(/replace|password/i)
+    expect(input.name).not.toMatch(/replace|password/i)
+    panelAction('Find').click()
+    await vi.waitFor(() =>
+      expect(findPanel()!.classList.contains('is-compact')).toBe(true),
+    )
+    expect(panelControl('[data-find-replacement] input').element).toBe(input)
+    panelAction('Show find options').click()
+    await nextTick()
+    expect(input.value).toBe('Keep me')
+    input.value = ''
+    input.dispatchEvent(
+      new InputEvent('input', {
+        bubbles: true,
+        cancelable: true,
+        data: '',
+        inputType: 'insertReplacementText',
+      }),
+    )
+    await nextTick()
+    expect(input.value).toBe('Keep me')
+  })
+
+  it('keeps replacement text typed after the compact bar is expanded', async () => {
+    const { api } = host()
+    await api.value!.openFind()
+    await panelControl('[data-find-query] input').setValue('A')
+    panelAction('Find').click()
+    await vi.waitFor(() =>
+      expect(findPanel()!.classList.contains('is-compact')).toBe(true),
+    )
+    panelAction('Show find options').click()
+    await nextTick()
+    await panelControl('[data-find-replacement] input').setValue('X')
+    await nextTick()
+    expect(
+      (
+        panelControl('[data-find-replacement] input')
+          .element as HTMLInputElement
+      ).value,
+    ).toBe('X')
   })
 
   it('respects rejected page changes without discarding data-scope results', async () => {
@@ -331,7 +608,7 @@ describe('Table find integration', () => {
     const rendered = host({ findConfig: false })
     expect(rendered.table.find('.s-table__find').exists()).toBe(true)
     expect(await rendered.api.value!.openFind()).toBe(true)
-    expect(rendered.table.find('[role="search"]').exists()).toBe(true)
+    expect(document.querySelector('[role="search"]')).not.toBeNull()
     expect(await rendered.api.value!.findCells('A')).toMatchObject({
       success: true,
     })
@@ -477,6 +754,105 @@ describe('Table find integration', () => {
     expect(
       await limited.api.value!.replaceMatch('C', { index: 0 }),
     ).toMatchObject({ applied: true })
+  })
+
+  it('replaces writable text and skips number cells that cannot accept the replacement', async () => {
+    const { api, data } = host(
+      {
+        columns: [
+          { field: 'id', title: 'Id' },
+          { field: 'name', title: 'Name', editor: true },
+          { field: 'score', title: 'Score', editor: { type: 'number' } },
+        ],
+        validationConfig: true,
+        validationRules: {
+          name: { required: true, max: 24 },
+          score: { type: 'number', min: 0, max: 100 },
+        },
+      },
+      true,
+      [{ id: 1, name: 'Alpha 1', score: 61 }],
+    )
+    await api.value!.openFind()
+    await panelControl('[data-find-query] input').setValue('1')
+    await panelControl('[data-find-replacement] input').setValue('X')
+    panelAction('Find').click()
+    await vi.waitFor(() =>
+      expect(api.value!.getFindState().matches).toHaveLength(3),
+    )
+    expect(
+      api.value!.getFindState().matches[api.value!.getFindState().activeIndex],
+    ).toMatchObject({ field: 'name', text: 'Alpha 1', replaceable: true })
+    expect(panelAction('Replace current')).toHaveProperty('disabled', false)
+    expect(await api.value!.replaceAll('X')).toMatchObject({
+      applied: true,
+      changedCells: 1,
+      skippedCells: 2,
+    })
+    expect(data.value[0]).toMatchObject({
+      id: 1,
+      name: 'Alpha X',
+      score: 61,
+    })
+  })
+
+  it('disables replace actions when every match is read-only', async () => {
+    const { api } = host(
+      {
+        columns: [
+          { field: 'id', title: 'Id' },
+          { field: 'name', title: 'Name', editor: true },
+        ],
+      },
+      true,
+      [{ id: 1, name: 'Alpha' }],
+    )
+    await api.value!.openFind()
+    await api.value!.findCells('1')
+    await api.value!.findNext({ focus: false })
+    expect(api.value!.getFindState()).toMatchObject({
+      complete: true,
+      activeIndex: 0,
+      matches: [{ text: '1', replaceable: false }],
+    })
+    expect(panelAction('Replace current')).toHaveProperty('disabled', true)
+    expect(panelAction('Replace all')).toHaveProperty('disabled', true)
+  })
+
+  it('disables replace actions when the draft replacement cannot convert into the active cell', async () => {
+    const { api } = host(
+      {
+        columns: [
+          { field: 'id', title: 'Id' },
+          { field: 'name', title: 'Name', editor: true },
+          { field: 'score', title: 'Score', editor: { type: 'number' } },
+        ],
+      },
+      true,
+      [{ id: 1, name: 'Alpha', score: 60 }],
+    )
+    await api.value!.openFind()
+    await panelControl('[data-find-query] input').setValue('0')
+    await panelControl('[data-find-replacement] input').setValue('X')
+    panelAction('Find').click()
+    await vi.waitFor(() =>
+      expect(api.value!.getFindState().matches).toHaveLength(1),
+    )
+    expect(api.value!.getFindState().matches[0]).toMatchObject({
+      field: 'score',
+      text: '60',
+      replaceable: true,
+    })
+    expect(panelAction('Replace current')).toHaveProperty('disabled', true)
+    expect(panelAction('Replace all')).toHaveProperty('disabled', true)
+    panelAction('Show find options').click()
+    await nextTick()
+    await panelControl('[data-find-replacement] input').setValue('9')
+    expect(panelAction('Replace current')).toHaveProperty('disabled', true)
+    await vi.waitFor(() => {
+      expect(panelAction('Replace current')).toHaveProperty('disabled', false)
+      expect(panelAction('Replace all')).toHaveProperty('disabled', false)
+    })
   })
 
   it('cancels never-ending validation and suppresses stale replacement feedback', async () => {

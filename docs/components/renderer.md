@@ -210,7 +210,7 @@ Table also registers these toolbar-only renderers:
 | `button`        | One `SButton`, or an `SPopper` action menu when `props.children` is present |
 | `$refresh`      | Refresh the current Table query or proxy request                            |
 | `$columnConfig` | Open `STableColumnConfig` for the current Table                             |
-| `$find`         | Mount the current Table's find-and-replace trigger and panel                |
+| `$find`         | Mount an icon trigger that opens a find-and-replace panel in `SPopper`; pass `content` or `props.content` for a label. Each open resets the form. A successful search collapses to result controls; expand restores the form, and close or Escape dismisses the panel. |
 
 Input-surface renderers receive `shape: 'square'` by default during Table editing so their outline meets the cell edges. An explicit `props.shape` value overrides that default. Form fields and Table filters retain normal shape resolution.
 

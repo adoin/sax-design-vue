@@ -5,6 +5,7 @@ import { tableFieldValue, tableOverflowMode } from './data-utils'
 import TableRendererOutlet from './renderer-outlet'
 import TableHierarchyGuides from './table-hierarchy-guides.vue'
 import { tableHierarchyStyle } from './table-hierarchy'
+import { resolveTableFooterAlign, useTableAlignContext } from './table-align'
 import { useTableFooterHeights } from './composables/use-table-footer-heights'
 import type { TableMergeRegion } from './composables/table-merge-regions'
 import type { TableHierarchyState } from './table-hierarchy'
@@ -47,6 +48,7 @@ const emit = defineEmits<{
 }>()
 defineSlots<{ cell(params: TableFooterCellRenderParams): unknown }>()
 const ns = useNamespace('table')
+const tableAlign = useTableAlignContext()
 const { heights, setElement, measure } = useTableFooterHeights(
   () => props.retainHeights,
 )
@@ -173,8 +175,10 @@ defineExpose({ measure })
             entry.style,
             fixedStyle(entry),
             {
-              textAlign:
-                entry.column.footerAlign ?? entry.column.align ?? 'left',
+              textAlign: resolveTableFooterAlign(
+                entry.column,
+                tableAlign.align,
+              ),
             },
             isHierarchyCell(entry) ? hierarchyCellStyle : undefined,
           ]"

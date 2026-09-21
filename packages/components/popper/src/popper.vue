@@ -25,6 +25,8 @@
     :content="content"
     :interactivity="props.interactivity"
     :close-on-click-outside="props.closeOnClickOutside"
+    :show-close="props.showClose"
+    :translucent="props.translucent"
     :outside-click-ignore="props.outsideClickIgnore"
     :popper-class="popperClass"
     :popper-style="[
@@ -38,6 +40,7 @@
     :show-arrow="props.showArrow"
     @blur="onBlur"
     @close="onClose"
+    @update:translucent="emit('update:translucent', $event)"
   >
     <slot name="content" />
   </popper-content>
@@ -203,8 +206,8 @@ const observeReference = (reference?: ReferenceElement) => {
         style.display !== 'none' &&
         style.visibility !== 'hidden'
 
-      referenceVisible.value = visible
-      if (!visible && open.value) {
+      referenceVisible.value = visible || !props.closeOnReferenceHidden
+      if (!visible && open.value && props.closeOnReferenceHidden) {
         onClose()
       }
     },

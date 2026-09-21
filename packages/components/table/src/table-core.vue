@@ -124,8 +124,11 @@
                 entry.style,
                 fixedBandStyle(entry),
                 {
-                  textAlign:
-                    entry.column.align ?? (entry.group ? 'center' : 'left'),
+                  textAlign: resolveTableHeaderAlign(
+                    entry.column,
+                    props.align,
+                    props.headerAlign,
+                  ),
                 },
               ]"
               role="columnheader"
@@ -525,13 +528,17 @@ import { useId, useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SContextMenu } from '@vuesax-alpha/components/context-menu'
 import { SLogoLoading } from '@vuesax-alpha/components/icon'
 import { tableCoreEmits, tableCoreProps } from './table'
+import { resolveTableHeaderAlign, tableAlignContextKey } from './table-align'
 import { useTableColumnRegistry } from './composables/use-table-column-registry'
 import {
   useTable,
   useTableColumnVirtualization,
   useTableTree,
 } from './composables'
-import { resolveColumnPixelWidth } from './composables/use-table-column-virtualization'
+import {
+  getUniformVirtualColumnRange,
+  resolveColumnPixelWidth,
+} from './composables/use-table-column-virtualization'
 import { createTableBodyRow } from './table-body-row'
 import TableMergeLayer from './table-merge-layer.vue'
 import { useTableMergeGeometry } from './composables/use-table-merge-geometry'
@@ -605,6 +612,7 @@ import type { VirtualListInstance } from '@vuesax-alpha/components/virtual-list'
 import type { CSSProperties, Slots } from 'vue'
 import type { TableFooterConfig } from './table-footer-config'
 import type {
+  TableCellRange,
   TableCellRenderParams,
   TableCellRenderer,
   TableColumn,
@@ -633,6 +641,13 @@ const ns = useNamespace('table')
 const { t } = useLocale()
 const props = defineProps(tableCoreProps)
 const emit = defineEmits(tableCoreEmits)
+provide(
+  tableAlignContextKey,
+  computed(() => ({
+    align: props.align,
+    headerAlign: props.headerAlign,
+  })),
+)
 const toolbarRuntime = inject(tableToolbarRuntimeKey, undefined)
 const virtualListRef = ref<VirtualListInstance>()
 const footerRowsRef = ref<InstanceType<typeof TableFooterRows>>()
@@ -2364,7 +2379,10 @@ const rangeInteraction = useTableRangeInteraction(cellRange, {
     if (!y) return
     if (virtualListRef.value) virtualListRef.value.scrollBy(y)
     else if (tableScrollRef.value) {
-      const scroll = tableRangeScrollParent(tableScrollRef.value)
+      const scroll = tableRangeScrollParent(
+        tableScrollRef.value,
+        dataBodyRef.value ?? tableScrollRef.value,
+      )
       if (scroll) scroll.scrollTop += y
     }
   },
@@ -2488,6 +2506,77 @@ const findCellsInScope = createTableFindScope(props, {
   columnAt: mergeColumn,
   selection: cellRange.getBounds,
   cells: clipboardCells,
+  viewWindows: () => {
+    if (!virtualSourceActive.value && !horizontalVirtualActive.value) return []
+    const rows = effectiveRowCount.value
+    const columns = keyboardCoordinates.countColumns()
+    if (!rows || !columns) return []
+    const layout = columnManager.layout.value
+    const left = layout.left.length
+    const right = layout.right.length
+    const raw = columnRange.value
+    const centerWidth = Math.max(
+      1,
+      resolveColumnPixelWidth(sourceColumnWidth(left)) ?? 120,
+    )
+    const centerCount = Math.max(0, columns - left - right)
+    const available = columnVirtualization.availableWidth.value
+    const plausibleViewport =
+      available > 0 && available < centerWidth * 64
+        ? available
+        : centerWidth * 8
+    const overscan = virtualOptions.value.columnOverscan
+    const clipped =
+      horizontalVirtualActive.value &&
+      raw.end > raw.start &&
+      raw.end - raw.start <=
+        Math.ceil(plausibleViewport / centerWidth) + overscan * 2 + 2
+    const center = clipped
+      ? raw
+      : virtualSourceActive.value
+        ? getUniformVirtualColumnRange(
+            centerCount,
+            centerWidth,
+            columnVirtualization.logicalScrollLeft.value,
+            Math.max(plausibleViewport, centerWidth),
+            overscan,
+          )
+        : raw
+    const runs: { start: number; end: number }[] = []
+    const push = (start: number, end: number) => {
+      const from = Math.max(0, Math.min(start, columns))
+      const to = Math.max(from, Math.min(end, columns))
+      if (to > from) runs.push({ start: from, end: to })
+    }
+    push(0, left)
+    push(left + center.start, left + center.end)
+    push(columns - right, columns)
+    let rowStart = 0
+    let rowEnd = rows
+    if (virtualEnabled.value) {
+      const mounted = virtualListRef.value?.getItemRange()
+      if (mounted && mounted.end > mounted.start) {
+        rowStart = Math.max(0, Math.min(mounted.start, rows))
+        rowEnd = Math.max(rowStart, Math.min(mounted.end, rows))
+      } else {
+        const height =
+          typeof virtualOptions.value.height === 'number'
+            ? virtualOptions.value.height
+            : 360
+        rowEnd = Math.min(
+          rows,
+          Math.ceil(height / virtualOptions.value.estimateSize) +
+            virtualOptions.value.overscan,
+        )
+      }
+    }
+    return runs.map((run) => ({
+      rowStart,
+      rowEnd,
+      colStart: run.start,
+      colEnd: run.end,
+    }))
+  },
   toggle: (context, expanded) => toggleRowExpand(context.row, expanded),
   locateView: async (row, col, current, focus) => {
     if (!current()) return false
@@ -2926,6 +3015,16 @@ const handleTableScrollCapture = () => {
   overflow.close()
   contextMenu.close()
 }
+const setCellRange = async (range: TableCellRange | null) => {
+  const accepted = await cellRange.select(range)
+  if (accepted && range == null) await keyboard.clear()
+  return accepted
+}
+const clearCellRange = async () => {
+  const accepted = await cellRange.clear()
+  if (accepted) await keyboard.clear()
+  return accepted
+}
 const setActiveCell = (rowIndex: number, columnIndex: number) => {
   const target = mergeCoordinates.at(
     props.virtualSource ? sourceViewIndex(rowIndex) : rowIndex,
@@ -2954,8 +3053,8 @@ defineExpose({
   cutCells: clipboard.cutCells,
   pasteCells: clipboard.pasteCells,
   cancelClipboard: clipboard.cancelClipboard,
-  setCellRange: cellRange.select,
-  clearCellRange: cellRange.clear,
+  setCellRange,
+  clearCellRange,
   getCellRange: cellRange.getRange,
   getCellRangeBounds: cellRange.getBounds,
   setGroupExpandedKeys: groups.setExpandedKeys,

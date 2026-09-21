@@ -36,6 +36,7 @@ export interface TableFindMatchInfo {
   field: string
   text: string
   occurrences: number
+  replaceable: boolean
 }
 export interface TableFindState {
   query: TableFindQuery

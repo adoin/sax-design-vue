@@ -417,4 +417,27 @@ describe('VirtualList', () => {
       rect.mockRestore()
     }
   })
+
+  it('exposes the mounted half-open item range including overscan', async () => {
+    const wrapper = mount(VirtualList, {
+      props: {
+        count: 1_000_000,
+        estimateSize: 44,
+        height: 280,
+        overscan: 6,
+        dynamic: false,
+        itemAt: (index: number) => ({ id: index }),
+      },
+    })
+    await nextTick()
+    const range = wrapper.vm.getItemRange()
+    expect(range).toEqual({
+      start: expect.any(Number),
+      end: expect.any(Number),
+    })
+    expect(range!.end).toBeGreaterThan(range!.start)
+    expect(range!.end).toBeGreaterThan(3)
+    expect(range!.end - range!.start).toBeLessThan(40)
+    wrapper.unmount()
+  })
 })

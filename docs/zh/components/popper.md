@@ -91,6 +91,36 @@ PROPS:
     values: "CSS values"
     description: 自定义浮层内容和层级。
     default: null
+  - name: close-on-click-outside
+    type: Boolean
+    values: "true | false"
+    description: 点击浮层外部时关闭。设为 false 后改为右上角关闭控件。
+    default: 'true'
+  - name: outside-click-ignore
+    type: Array
+    values: "CSS 选择器"
+    description: 外部点击判定中视为浮层内部的选择器。
+    default: '[]'
+  - name: close-on-reference-hidden
+    type: Boolean
+    values: "true | false"
+    description: 触发器离开视口时关闭。设为 false 可保持本次明确打开的会话。
+    default: 'true'
+  - name: show-close
+    type: Boolean
+    values: "true | false"
+    description: 显示右上角关闭控件。close-on-click-outside 为 false 时默认开启。
+    default: null
+  - name: translucent
+    type: Boolean
+    values: "true | false"
+    description: 让浮层半透明，以便看到下方界面。
+    default: 'false'
+  - name: v-model:translucent
+    type: Boolean
+    values: "true | false"
+    description: 指针或键盘回到浮层时恢复不透明。
+    default: 'false'
 EVENTS:
   - name: before-show
     description: 在可见性生命周期内触发。

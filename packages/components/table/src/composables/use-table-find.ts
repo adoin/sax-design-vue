@@ -2,6 +2,8 @@ import { computed, onBeforeUnmount, shallowRef, watch } from 'vue'
 import { cloneDeep, isEqual } from 'lodash-unified'
 import {
   TableFindLimitError,
+  canTableFindMatchAcceptReplacement,
+  isTableFindMatchReplaceable,
   planTableFindReplace,
   scanTableFind,
 } from '../find-data'
@@ -75,6 +77,9 @@ export function useTableFind(
   let navigation: AbortController | undefined
   let revision = 0
   let disposed = false
+  const writable = (context: TableEditContext) =>
+    options.writable(context) &&
+    config.value.replaceableMethod?.(context) !== false
   const getState = (): TableFindState => ({
     query: { ...query.value },
     scope: selected.value.scope ?? 'view',
@@ -87,6 +92,7 @@ export function useTableFind(
         field: context.column.field!,
         text,
         occurrences,
+        replaceable: isTableFindMatchReplaceable(context, writable),
       }),
     ),
     activeIndex: active.value,
@@ -97,6 +103,32 @@ export function useTableFind(
   })
   const notify = () => {
     if (!disposed) emit('findChange', getState())
+  }
+  const acceptsReplacement = (replacement: string, index = active.value) => {
+    const match = scan.value?.matches[index]
+    if (!match || !scan.value) return false
+    return canTableFindMatchAcceptReplacement(
+      match,
+      scan.value.query,
+      replacement,
+      writable,
+      config.value.parseCell,
+    )
+  }
+  const hasAcceptableReplacement = (replacement: string) => {
+    const current = scan.value
+    return Boolean(
+      current?.complete &&
+      current.matches.some((match) =>
+        canTableFindMatchAcceptReplacement(
+          match,
+          current.query,
+          replacement,
+          writable,
+          config.value.parseCell,
+        ),
+      ),
+    )
   }
   const cancel = () => {
     request?.controller.abort()
@@ -234,9 +266,6 @@ export function useTableFind(
       if (navigation === controller) navigation = undefined
     }
   }
-  const writable = (context: TableEditContext) =>
-    options.writable(context) &&
-    config.value.replaceableMethod?.(context) !== false
   const replace = async (
     all: boolean,
     replacement: string,
@@ -447,6 +476,8 @@ export function useTableFind(
     clearFind: clear,
     cancelFind: cancel,
     getFindState: getState,
+    acceptsReplacement,
+    hasAcceptableReplacement,
   }
 }
 export type TableFindController = ReturnType<typeof useTableFind>

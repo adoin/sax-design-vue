@@ -22,7 +22,7 @@ The `query` event provides a `{ reason, form, pager, sortBy, filters }` snapshot
 
 Explicit `pagerConfig.currentPage` and `pageSize` fields are controlled; accept updates with `v-model:pager-config`. Query methods return `false` when page-one acceptance is rejected, validation fails, conditions change during asynchronous validation, the grid is loading, or the component is unmounted. Without a proxy, `true` only means the event was emitted. With a proxy, it means the query response was accepted.
 
-Configure `toolbarConfig.left` and `toolbarConfig.right` as ordered global renderer lists using `itemRender`. The built-in `button` emits its own or a child action's `code` through `toolbarClick`; child actions open through `SPopper`. `$refresh` calls the current query or proxy refresh, `$columnConfig` opens column settings, and `$find` supplies the find-and-replace trigger and panel for this Table. A custom renderer can implement `renderToolbar(options, params)`, where `params.source` contains the Table API, query context, side and busy state.
+Configure `toolbarConfig.left` and `toolbarConfig.right` as ordered global renderer lists using `itemRender`. The built-in `button` emits its own or a child action's `code` through `toolbarClick`; child actions open through `SPopper`. `$refresh` calls the current query or proxy refresh, `$columnConfig` opens column settings, and `$find` supplies an icon trigger that opens this Table's find-and-replace panel in `SPopper`. Pass `content` or `props.content` to append a label after the icon. A custom renderer can implement `renderToolbar(options, params)`, where `params.source` contains the Table API, query context, side and busy state.
 
 <template #example>
 <table-business />

@@ -1,7 +1,7 @@
 ---
 status: implemented
 kind: project-specification
-updated_at: 2026-09-16
+updated_at: 2026-09-20
 completed_at: 2026-09-07
 modules:
   - packages/components/table
@@ -30,9 +30,11 @@ Interactive column layout remains separate from the structural `columns` definit
 
 Reusable Table defaults follow [global-component-defaults.md](global-component-defaults.md). `SConfigProvider.table` owns only cross-instance feature and presentation policies; an explicit Table prop overrides it, object-valued feature props shallow-merge over it, and `false` disables a globally enabled feature. Data, controlled state, record-specific callbacks, renderers, and business configuration remain local.
 
+Header and cell alignment share one resolution chain. Column `align` sets both surfaces; optional column `headerAlign` overrides the header only; omitted columns inherit table `headerAlign` then table `align`, then `SConfigProvider.table` of the same names, then left. Footer cells use `footerAlign`, then column `align`, then table `align`, then left. Group titles follow the header chain instead of a CSS-forced center.
+
 Highlighted rows use `v-model:highlight` for a row or row array. Their pale warm surface derives from the primary HSL hue and uses a contained weak shadow without a border, remaining distinct from the header in both themes.
 
-Cell-range gestures select grouped data rows while skipping group bands. Controlled range updates must not interrupt a pointer gesture merely because an equivalent group configuration object was recreated; actual visible group-layout changes still cancel the old gesture and reconcile its endpoints.
+Cell-range gestures select grouped data rows while skipping group bands. Clearing a range also clears the last drop-point active cell so it is not left painted as a one-cell selection. Range-drag auto-scroll uses only table-owned scrollers; when that edge has no remaining content, the gesture does not scroll the page or other ancestors. Controlled range updates must not interrupt a pointer gesture merely because an equivalent group configuration object was recreated; actual visible group-layout changes still cancel the old gesture and reconcile its endpoints.
 
 Eligibility callbacks use capability-specific names: `selectableMethod` for row selection, `expandableMethod` for details, `editableMethod` for table and column editing, `draggableMethod` for row pickup, `writableMethod` for clipboard writes, and `replaceableMethod` for find-and-replace. The ambiguous `checkMethod` name is not part of these Table contracts.
 
@@ -50,7 +52,7 @@ Row and column virtualization are independently configurable. Virtual tables pre
 
 Virtual row scrollbar interaction follows [virtual-list-scrollbar-track-navigation.md](virtual-list-scrollbar-track-navigation.md): an empty-track click navigates immediately across the full range, while pressing the current thumb preserves native dragging and measurement locking.
 
-Rounded virtual Table viewports inset native scrollbar tracks by 4px and narrow the painted thumb with a transparent border. Do not force a stable scrollbar gutter: on overlay-scrollbar devices it shifts the full right fixed band left and leaves an unwanted blank strip at the table edge. The inset keeps both axes clear of clipped corners without adding another scroll owner; direct track navigation uses the same inset geometry.
+Table chrome rounds only the top two corners. The data viewport, wrapper, and wrapper header use `border-radius` on the top-left and top-right; the bottom two corners stay square so native overlay scrollbars are not clipped. A toolbar or query header already owns the top radius, so the data viewport below it is square. Do not wrap Table in `SScrollbar` or force a stable native gutter to unclip thumbs: an extra scroll owner or overlay-scrollbar gutter shifts the right fixed band and leaves a blank strip at the table edge. Track navigation still follows [virtual-list-scrollbar-track-navigation.md](virtual-list-scrollbar-track-navigation.md) with VirtualList's default zero inset.
 
 ## Visual and interaction details
 
@@ -74,7 +76,7 @@ Every header, body, and footer context-menu context captures the current cell ra
 
 Table footers accept either explicit `footerData` records or locally derived `footerConfig` rows. Each footer row combines fixed values with `count`, `sum`, `average`, `min`, `max`, or custom aggregate definitions and can target all supplied data, filtered data, or the current page. Custom aggregates primarily accept an ordered cell-array function returning a string or number; the accumulator object form remains available when large local data requires constant auxiliary memory. Built-in numeric summaries use `decimal.js`; decimal strings are accepted and decimal results remain strings so monetary values do not pass through native binary floating-point arithmetic. A nonempty `footerData` value takes precedence. Both sources then use the same leaf-column footer slots, renderers, formatters and raw-value fallback. Nested declaration columns participate after their leaf fields are resolved. `virtualSource` summaries must be supplied through `footerData` because the complete logical dataset may not exist in local memory.
 
-Table toolbars expose `toolbar_left` and `toolbar_right`. Both sides accept slots or ordered `toolbarConfig.left` / `toolbarConfig.right` renderer lists using `itemRender`. Column settings are provided by `STableColumnConfig`; the built-in `$columnConfig` toolbar renderer mounts that same component in either list. Find-and-replace UI follows the same rule: `$find` mounts its trigger and panel and explicitly enables the capability, while `findConfig` only configures behavior or enables API-only use and never inserts UI. `TableCore` provides the current contexts but does not hardcode or automatically place either tool.
+Table toolbars expose `toolbar_left` and `toolbar_right`. Both sides accept slots or ordered `toolbarConfig.left` / `toolbarConfig.right` renderer lists using `itemRender`. Column settings are provided by `STableColumnConfig`; the built-in `$columnConfig` toolbar renderer mounts that same component in either list. Find-and-replace UI follows the same rule: `$find` mounts an icon trigger that opens a teleported `SPopper` panel and explicitly enables the capability, while `findConfig` only configures behavior or enables API-only use and never inserts UI. Pass `content` or `props.content` to append a label after the icon. Each time the panel opens, the form and previous matches reset. After a successful search, the panel collapses to a compact results bar for match navigation; expand restores the form. Replace current and replace all stay disabled when the active match, or every complete-scan match, cannot accept the draft replacement because it is read-only or the editor cannot convert the result. After a search, the panel moves to the first match that can accept the current replacement text. On generated or horizontally virtualized grids, current-view search uses the painted window (fixed bands plus the current row and column ranges) instead of every logical column. The panel does not close on outside clicks; the compact close control, the form popper close control, and Escape dismiss it. `TableCore` provides the current contexts but does not hardcode or automatically place either tool.
 
 ## Verification
 

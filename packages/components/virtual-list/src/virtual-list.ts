@@ -80,6 +80,7 @@ export interface VirtualListInstance {
   measure: () => void
   measureVisible: () => void
   getVisibleRange: () => { start: number; end: number } | undefined
+  getItemRange: () => { start: number; end: number } | undefined
   resetMeasurements: () => Promise<void>
   getScrollElement: () => HTMLElement | undefined
   virtualizer: unknown

@@ -85,7 +85,9 @@
         ]"
         :style="[
           entry.style,
-          { textAlign: entry.column.align ?? 'left' },
+          {
+            textAlign: resolveTableCellAlign(entry.column, tableAlign.align),
+          },
           isHierarchyCell(entry) ? hierarchyCellStyle : undefined,
         ]"
         role="cell"
@@ -304,6 +306,7 @@ import { tableFieldValue, tableOverflowMode } from './data-utils'
 import TableCellEditor from './table-cell-editor.vue'
 import TableHierarchyGuides from './table-hierarchy-guides.vue'
 import { tableHierarchyStyle } from './table-hierarchy'
+import { resolveTableCellAlign, useTableAlignContext } from './table-align'
 import { tableValidationId } from './validation-utils'
 import type { TableValidation } from './composables/use-table-validation'
 import type { TableEditing } from './composables/use-table-edit'
@@ -370,6 +373,7 @@ const emit = defineEmits<{
 
 const ns = useNamespace('table')
 const { t } = useLocale()
+const tableAlign = useTableAlignContext()
 const overflowMode = (column: TableColumn) =>
   tableOverflowMode(column.showOverflow ?? props.overflow)
 

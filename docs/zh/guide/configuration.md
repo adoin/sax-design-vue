@@ -196,7 +196,7 @@ Drawer 可统一 `placement`、`size`、关闭按钮、遮罩关闭和 Teleport�
 
 ## Table 全局默认值
 
-`table` 用于统一多个 Table 实例的功能策略和显示默认值。它支持编辑、校验、历史、变更追踪、拖拽、键盘、区域、剪贴板、查找、图表、上下文菜单、列宽调整、虚拟滚动、多列排序、选择、分页、溢出显示、父级提示、表头、斑马纹、单复选模式和 `rowKey` 等可复用配置。
+`table` 用于统一多个 Table 实例的功能策略和显示默认值。它支持编辑、校验、历史、变更追踪、拖拽、键盘、区域、剪贴板、查找、图表、上下文菜单、列宽调整、虚拟滚动、多列排序、选择、分页、溢出显示、父级提示、表头、对齐、斑马纹、单复选模式和 `rowKey` 等可复用配置。未声明时 `align` 让表头和单元格都居左；`headerAlign` 只覆盖表头。
 
 <command>
 
@@ -206,6 +206,8 @@ import type { TableGlobalConfig } from 'sax-design-vue'
 
 const tableDefaults: TableGlobalConfig = {
   striped: true,
+  align: 'left',
+  headerAlign: 'center',
   showOverflow: 'tooltip',
   editConfig: {
     mode: 'cell',

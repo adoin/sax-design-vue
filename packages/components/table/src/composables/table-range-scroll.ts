@@ -38,14 +38,57 @@ export function tableRangeViewport(root: HTMLElement, body: HTMLElement) {
   return view.right > view.left && view.bottom > view.top ? view : undefined
 }
 
-export function tableRangeScrollParent(root: HTMLElement) {
+/** Vertically overflowing scroller owned by the table; never the page. */
+export function tableRangeScrollParent(
+  root: HTMLElement,
+  start: HTMLElement = root,
+) {
   const win = root.ownerDocument.defaultView!
-  for (let node: HTMLElement | null = root; node; node = node.parentElement) {
+  let node: HTMLElement | null = root.contains(start) ? start : root
+  while (node) {
+    const style = win.getComputedStyle(node)
     if (
       node.scrollHeight > node.clientHeight &&
-      /(auto|scroll)/.test(win.getComputedStyle(node).overflowY)
+      /(auto|scroll)/.test(style.overflowY || style.overflow)
     )
       return node
+    if (node === root) break
+    node = node.parentElement
   }
-  return root.ownerDocument.scrollingElement
+}
+
+/** Freeze page and ancestor scroll while a range drag is active. */
+export function lockTableRangeOutsideScroll(root: HTMLElement) {
+  const doc = root.ownerDocument
+  const win = doc.defaultView
+  if (!win) return () => undefined
+  const snapshots: Array<{ node: Element; top: number; left: number }> = []
+  for (
+    let node: HTMLElement | null = root.parentElement;
+    node;
+    node = node.parentElement
+  )
+    snapshots.push({ node, top: node.scrollTop, left: node.scrollLeft })
+  const scrolling = doc.scrollingElement
+  if (scrolling && snapshots.every((item) => item.node !== scrolling))
+    snapshots.push({
+      node: scrolling,
+      top: scrolling.scrollTop,
+      left: scrolling.scrollLeft,
+    })
+  const pageX = win.scrollX
+  const pageY = win.scrollY
+  const restore = (event?: Event) => {
+    const target = event?.target
+    if (target instanceof Node && (target === root || root.contains(target)))
+      return
+    for (const item of snapshots) {
+      if (item.node.scrollTop !== item.top) item.node.scrollTop = item.top
+      if (item.node.scrollLeft !== item.left) item.node.scrollLeft = item.left
+    }
+    if (win.scrollX !== pageX || win.scrollY !== pageY)
+      win.scrollTo(pageX, pageY)
+  }
+  doc.addEventListener('scroll', restore, true)
+  return () => doc.removeEventListener('scroll', restore, true)
 }

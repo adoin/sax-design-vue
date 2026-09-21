@@ -19,7 +19,7 @@ Pressing the current thumb remains a native drag. During that gesture, dynamic r
 
 Scrollbar hit testing supports reserved native gutters, CSS-scaled elements, left-side vertical scrollbars, and Chromium-style overlay scrollbars that do not reduce `clientWidth` or `clientHeight`. The bottom scrollbar corner does not navigate either axis.
 
-`--s-vl-scrollbar-track-inset` reserves transparent space at both ends of each native track. Standalone VirtualList defaults to zero; rounded Table viewports set 4px so horizontal and vertical thumbs do not enter clipped corners. Thumb geometry and direct track navigation use the same computed inset, and clicks in the reserved end space do not navigate.
+`--s-vl-scrollbar-track-inset` reserves transparent space at both ends of each native track. Standalone VirtualList and Table both default to zero. Table keeps bottom corners square instead of insetting thumbs away from a rounded clip. Thumb geometry and direct track navigation use the same computed inset, and clicks in the reserved end space do not navigate.
 
 ## Implementation
 

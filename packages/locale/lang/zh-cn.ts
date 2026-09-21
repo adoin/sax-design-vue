@@ -312,7 +312,7 @@ export default {
       findReplaceAll: '全部替换',
       findCancel: '取消操作',
       findClose: '关闭',
-      findHint: '输入查找内容并选择搜索范围。',
+      findExpand: '展开查找条件',
       findWorking: '正在处理…',
       findCount: '匹配单元格 {current} / {total}',
       findLimited:

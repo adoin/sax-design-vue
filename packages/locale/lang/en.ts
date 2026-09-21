@@ -342,7 +342,7 @@ export default {
       findReplaceAll: 'Replace all',
       findCancel: 'Cancel operation',
       findClose: 'Close',
-      findHint: 'Enter text and choose a search scope.',
+      findExpand: 'Show find options',
       findWorking: 'Processing…',
       findCount: '{current} / {total} matching cells',
       findLimited:

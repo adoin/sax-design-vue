@@ -351,6 +351,15 @@ function getVisibleRange() {
   return { start: first.index, end: last.index }
 }
 
+function getItemRange() {
+  const items = virtualItems.value
+  if (!items.length) return undefined
+  return {
+    start: items[0].index,
+    end: items[items.length - 1].index + 1,
+  }
+}
+
 function handleScroll(event: Event) {
   if (sparseMode.value && event.currentTarget instanceof HTMLElement)
     sparseVirtualizer.handleScroll(event.currentTarget)
@@ -476,6 +485,7 @@ defineExpose({
   measure,
   measureVisible,
   getVisibleRange,
+  getItemRange,
   resetMeasurements,
   getScrollElement: () => scrollRef.value,
   virtualizer,

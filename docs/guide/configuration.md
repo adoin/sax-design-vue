@@ -196,7 +196,7 @@ Drawer can share its placement, size, close button, mask dismissal, and Teleport
 
 ## Global Table defaults
 
-Use `table` to share feature policies and presentation defaults across Table instances. It accepts reusable editing, validation, history, change tracking, dragging, keyboard, range, clipboard, find, chart, context-menu, resizing, virtualization, multi-sort, selection, pagination, overflow, parent-indicator, header, striped, selection-mode, and `rowKey` settings.
+Use `table` to share feature policies and presentation defaults across Table instances. It accepts reusable editing, validation, history, change tracking, dragging, keyboard, range, clipboard, find, chart, context-menu, resizing, virtualization, multi-sort, selection, pagination, overflow, parent-indicator, header, alignment, striped, selection-mode, and `rowKey` settings. `align` defaults both headers and cells to left when omitted; `headerAlign` overrides headers only.
 
 <command>
 
@@ -206,6 +206,8 @@ import type { TableGlobalConfig } from 'sax-design-vue'
 
 const tableDefaults: TableGlobalConfig = {
   striped: true,
+  align: 'left',
+  headerAlign: 'center',
   showOverflow: 'tooltip',
   editConfig: {
     mode: 'cell',

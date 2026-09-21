@@ -84,13 +84,13 @@ const last = async () => {
 }
 const findLast = async () => {
   await last()
+  await table.value?.openFind()
   await table.value?.findCells('999998', { scope: 'selection' })
   await table.value?.findNext({ focus: false })
-  await table.value?.openFind()
 }
 const limited = async () => {
-  await table.value?.findCells('unmatched', { scope: 'data' })
   await table.value?.openFind()
+  await table.value?.findCells('unmatched', { scope: 'data' })
 }
 </script>
 <template>
@@ -124,7 +124,6 @@ const limited = async () => {
         horizontal: true,
         dynamic: true,
       }"
-      :find-config="{ maxCells: 4096 }"
       :toolbar-config="toolbarConfig"
       :range-config="{ rowIndexOf: Number }"
       edit-config

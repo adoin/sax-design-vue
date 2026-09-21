@@ -1,7 +1,7 @@
 ---
 status: implemented
 kind: project-specification
-updated_at: 2026-09-14
+updated_at: 2026-09-20
 completed_at: 2026-09-14
 modules:
   - packages/components/config-provider
@@ -37,7 +37,7 @@ Global defaults never own instance data, controlled state, application content, 
 
 ## Table boundary
 
-Eligible Table defaults are history, change-tracking enablement, validation behavior, editing behavior excluding record-specific permission callbacks, row-drag mechanics, keyboard behavior, cell-range mechanics, clipboard limits and shortcuts, find limits and shortcuts, chart limits, context-menu sizing, resizing, row-key convention, parent indicator, virtualization, multi-sort behavior, selection behavior, pagination presentation, overflow modes, header visibility, striped rows, and selection mode.
+Eligible Table defaults are history, change-tracking enablement, validation behavior, editing behavior excluding record-specific permission callbacks, row-drag mechanics, keyboard behavior, cell-range mechanics, clipboard limits and shortcuts, find limits and shortcuts, chart limits, context-menu sizing, resizing, row-key convention, parent indicator, virtualization, multi-sort behavior, selection behavior, pagination presentation, overflow modes, header visibility, header and cell alignment, striped rows, and selection mode.
 
 Table data, columns, virtual sources, controlled expansion/sort/filter/selection state, validation rules, renderers, row classes, record-specific permission and conversion callbacks, remote sort/filter behavior, detail loading, grouping, merging, footer aggregation, query forms, toolbars, and request proxies remain local because they depend on an instance's data or business model.
 

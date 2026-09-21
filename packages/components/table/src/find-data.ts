@@ -46,6 +46,53 @@ export class TableFindLimitError extends Error {
   }
 }
 
+export const isTableFindMatchReplaceable = (
+  context: TableEditContext,
+  writable: (context: TableEditContext) => boolean,
+) => {
+  const editor =
+    typeof context.column.editor === 'object'
+      ? context.column.editor
+      : undefined
+  return (
+    !editor?.props?.disabled && !editor?.props?.readonly && writable(context)
+  )
+}
+export const tableFindReplacedText = (
+  text: string,
+  query: TableFindQuery,
+  replacement: string,
+) => text.replace(expressionFor(query), () => replacement)
+export const convertTableFindReplacement = (
+  match: Pick<TableFindMatch, 'text' | 'context'>,
+  query: TableFindQuery,
+  replacement: string,
+  parse?: (text: string, context: TableEditContext) => unknown,
+) => {
+  const value = (parse ?? parseTableCellText)(
+    tableFindReplacedText(match.text, query, replacement),
+    match.context,
+  )
+  if (value && typeof (value as PromiseLike<unknown>).then === 'function')
+    throw new TypeError('Replacement conversion must be synchronous')
+  return value
+}
+export const canTableFindMatchAcceptReplacement = (
+  match: Pick<TableFindMatch, 'text' | 'context'>,
+  query: TableFindQuery,
+  replacement: string,
+  writable: (context: TableEditContext) => boolean,
+  parse?: (text: string, context: TableEditContext) => unknown,
+) => {
+  if (!isTableFindMatchReplaceable(match.context, writable)) return false
+  try {
+    convertTableFindReplacement(match, query, replacement, parse)
+    return true
+  } catch {
+    return false
+  }
+}
+
 const limitsFor = (options: TableFindLimits) => {
   const limits = {
     maxCells: options.maxCells ?? 100_000,
@@ -195,7 +242,9 @@ export async function scanTableFind(
   return finish()
 }
 
-/** Build one transaction for the chosen matches; never apply a partial "replace all". */
+/** Build one transaction for the chosen matches; never apply a partial "replace all".
+ * Incomplete scans still refuse replace-all. Unwritable cells and values an editor
+ * cannot convert are skipped so remaining writable matches can still update. */
 export async function planTableFindReplace(
   options: TableWork &
     TableFindLimits & {
@@ -237,15 +286,7 @@ export async function planTableFindReplace(
     seen.add(match)
     if (!match.isCurrent()) throw new TableDataBatchConflictError()
     const context = match.context
-    const editor =
-      typeof context.column.editor === 'object'
-        ? context.column.editor
-        : undefined
-    if (
-      editor?.props?.disabled ||
-      editor?.props?.readonly ||
-      !options.writable(context)
-    ) {
+    if (!isTableFindMatchReplaceable(context, options.writable)) {
       skipped++
       continue
     }
@@ -259,10 +300,25 @@ export async function planTableFindReplace(
     )
       throw new TableFindLimitError('characters')
     characters += length
-    const text = match.text.replace(expressionFor(query), () => replacement)
-    const value = (options.parse ?? parseTableCellText)(text, context)
-    if (value && typeof (value as PromiseLike<unknown>).then === 'function')
-      throw new TypeError('Replacement conversion must be synchronous')
+    let value: unknown
+    try {
+      value = convertTableFindReplacement(
+        match,
+        query,
+        replacement,
+        options.parse,
+      )
+    } catch (error) {
+      if (
+        selected.length === 1 ||
+        error instanceof TableFindLimitError ||
+        error instanceof TableDataBatchConflictError
+      )
+        throw error
+      characters -= length
+      skipped++
+      continue
+    }
     if (!match.isCurrent()) throw new TableDataBatchConflictError()
     plan.add(context, value, match.before)
     replaced += match.occurrences

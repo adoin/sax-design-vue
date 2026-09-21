@@ -27,7 +27,7 @@ const tableOptions = computed<SaxGridSetting<UserRow>>(() => ({
       cell: ({ row }) => row.name,
     },
     { field: 'role', title: '岗位' },
-    { field: 'email', title: '邮箱', minWidth: 220 },
+    { field: 'email', title: '邮箱', minWidth: 220, headerAlign: 'right' },
   ],
   rowKey: 'id',
   striped: true,
