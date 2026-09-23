@@ -15,6 +15,7 @@ describe('Steps theme', () => {
     expect(css).toContain('.s-steps__check')
     expect(css).toContain('stroke: currentColor')
     expect(css).toContain('.s-steps__item--success .s-steps__marker')
+    expect(css).toContain('var(--s-steps-state-color) 55%')
     expect(css).toContain('@media (prefers-reduced-motion: reduce)')
   })
 

@@ -273,7 +273,12 @@ button.s-steps__trigger {
 }
 
 .s-steps__item--success .s-steps__marker {
-  color: getColor(dark);
+  background: color-mix(
+    in srgb,
+    var(--s-steps-state-color) 55%,
+    #{getColor(dark)}
+  );
+  color: #{getColor(white)};
 }
 
 .s-steps__item.is-clickable:hover .s-steps__marker {
