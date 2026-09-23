@@ -2,6 +2,7 @@
 @use 'common/var' as *;
 
 @include b(breadcrumb) {
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
@@ -23,9 +24,22 @@
     display: flex;
     flex-flow: row wrap;
     align-items: center;
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
     list-style: none;
     margin: 0;
     padding: 0.75rem 1rem;
+
+    @include when(data) {
+      flex-wrap: nowrap;
+      overflow: hidden;
+
+      > .#{$namespace}-breadcrumb__item:first-child,
+      > .#{$namespace}-breadcrumb__item:last-child {
+        flex: 0 1 auto;
+      }
+    }
 
     li {
       display: flex;
@@ -39,13 +53,14 @@
     }
 
     a {
-      color: hsl(0deg 0% 0% / 0.4);
+      color: getColor(text, 0.72);
       text-decoration: none;
-      transition: color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+      transition: color var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
 
       &:hover,
-      &:focus {
-        color: hsl(0deg 0% 0% / 0.7);
+      &:focus-visible {
+        color: getColor(primary);
       }
     }
   }
@@ -55,6 +70,7 @@
     display: flex;
     align-items: center;
     flex: 0 0 auto;
+    min-width: 0;
     font-size: 0.9rem;
 
     @include when(active) {
@@ -66,23 +82,38 @@
       opacity: 0.5;
       pointer-events: none;
     }
-
   }
 
   @include e(link) {
-    color: hsl(0deg 0% 0% / 0.4);
+    display: inline-block;
+    min-width: 0;
+    overflow: hidden;
+    color: getColor(text, 0.72);
+    text-overflow: ellipsis;
+    white-space: nowrap;
     text-decoration: none;
-    transition: color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+    transition: color var(--sax-motion-duration-fast)
+      var(--sax-motion-easing-standard);
 
     &:hover,
-    &:focus {
-      color: hsl(0deg 0% 0% / 0.7);
+    &:focus-visible {
+      color: getColor(primary);
     }
+  }
+
+  @include e(text) {
+    display: inline-block;
+    min-width: 0;
+    overflow: hidden;
+    color: getColor(text);
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   @include e(separator) {
     padding: 0 0.5rem;
-    color: hsl(0deg 0% 0% / 0.4);
+    flex: none;
+    color: getColor(text, 0.44);
     user-select: none;
 
     .#{$namespace}-icon {
@@ -105,6 +136,82 @@
   @include e(tree-trigger) {
     display: inline-flex;
     align-items: center;
+    min-width: 0;
+  }
+
+  @include e(menu-toggle) {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 24px;
+    height: 28px;
+    margin-left: 2px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--sax-radius-sm);
+    background: transparent;
+    color: getColor(text, 0.72);
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      outline: none;
+      background: getColor(primary, 0.1);
+      color: getColor(primary);
+    }
+  }
+
+  @include e(overflow-trigger) {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    min-width: 30px;
+    height: 28px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: var(--sax-radius-sm);
+    background: getColor(primary, 0.07);
+    color: getColor(text);
+    cursor: pointer;
+    font: inherit;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1;
+
+    &:hover,
+    &:focus-visible,
+    &[aria-expanded='true'] {
+      outline: none;
+      background: getColor(primary, 0.13);
+      color: getColor(primary);
+    }
+  }
+
+  @include e(measure) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: max-content;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    visibility: hidden;
+    white-space: nowrap;
+    list-style: none;
+    pointer-events: none;
+  }
+
+  @include e(measure-item) {
+    flex: none;
+  }
+
+  @include e(measure-toggle) {
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 28px;
+    margin-left: 2px;
   }
 
   @include e(menu-trigger-wrap) {
@@ -116,7 +223,10 @@
     border-radius: var(--sax-radius-sm);
     color: getColor(text);
     cursor: pointer;
-    transition: background var(--sax-motion-duration-fast) var(--sax-motion-easing-standard), color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+    transition:
+      background var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard),
+      color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 
     .#{$namespace}-breadcrumb__menu-link {
       flex: 1;
@@ -147,6 +257,7 @@
   @include e(menu) {
     display: grid;
     min-width: 154px;
+    max-width: min(320px, calc(100vw - 24px));
     margin: 0;
     padding: 8px;
     list-style: none;
@@ -163,7 +274,6 @@
       opacity: 0.45;
       pointer-events: none;
     }
-
   }
 
   @include e(menu-link) {
@@ -176,7 +286,8 @@
     font-size: 0.84rem;
     line-height: 1.2;
     text-decoration: none;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
 
     &:hover,
     &:focus {
@@ -189,9 +300,8 @@
   // Official Vuesax 3.x slot typo class
   .s-breadcrum--separator {
     padding: 0 0.5rem;
-    color: hsl(0deg 0% 0% / 0.4);
+    color: getColor(text, 0.44);
     user-select: none;
-
   }
 
   @each $type in (primary, success, warn, danger, dark, info) {
@@ -200,6 +310,111 @@
         color: getColor($type);
       }
     }
+  }
+}
+
+.#{$namespace}-breadcrumb__overflow-popper {
+  z-index: 2000;
+  max-width: calc(100vw - 24px);
+  border-radius: var(--sax-radius);
+  background: getColor(background);
+  box-shadow: 0 14px 32px getColor(primary, 0.18);
+}
+
+.#{$namespace}-breadcrumb__overflow-preview {
+  min-width: 200px;
+  max-width: min(360px, calc(100vw - 32px));
+  padding: 12px 14px;
+  color: getColor(text);
+
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: inline-flex;
+    align-items: baseline;
+    min-width: 0;
+    font-size: 0.84rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$namespace}-breadcrumb__overflow-preview-separator {
+    flex: none;
+    padding: 0 7px;
+    color: getColor(text, 0.4);
+  }
+
+  .#{$namespace}-breadcrumb__overflow-preview-label {
+    min-width: 0;
+  }
+}
+
+.#{$namespace}-breadcrumb__overflow-panel {
+  width: min(460px, calc(100vw - 28px));
+  padding: 12px 14px 14px;
+  color: getColor(text);
+}
+
+.#{$namespace}-breadcrumb__overflow-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+
+  strong {
+    font-size: 0.8rem;
+  }
+
+  button {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: var(--sax-radius-sm);
+    background: transparent;
+    color: getColor(text, 0.7);
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      outline: none;
+      background: getColor(primary, 0.1);
+      color: getColor(primary);
+    }
+  }
+}
+
+.#{$namespace}-breadcrumb__overflow-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 0;
+  max-height: min(50vh, 360px);
+  margin: 0;
+  padding: 4px 0;
+  overflow-y: auto;
+  list-style: none;
+
+  .#{$namespace}-breadcrumb__item {
+    flex: 0 1 auto;
+    max-width: 100%;
+  }
+
+  .#{$namespace}-breadcrumb__link,
+  .#{$namespace}-breadcrumb__text {
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }
 

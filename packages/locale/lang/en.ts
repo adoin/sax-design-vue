@@ -130,6 +130,10 @@ export default {
     },
     breadcrumb: {
       label: 'breadcrumb',
+      hiddenLevels: 'Hidden levels',
+      fullTrail: 'Full breadcrumb',
+      closeFullTrail: 'Close full breadcrumb',
+      expandChildren: 'Show child locations',
     },
     layout: {
       collapseOutside: 'Collapse attached tools',

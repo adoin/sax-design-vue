@@ -1,140 +1,144 @@
-<template>
-  <nav
-    :class="[ns.b(), ns.m(`align-${align}`)]"
-    :aria-label="t('vs.breadcrumb.label')"
-  >
-    <ol :class="ns.e('list')">
-      <slot />
-      <template v-if="!$slots.default">
-        <li
-          v-for="item in items"
-          :key="item.title"
-          :class="[
-            ns.e('item'),
-            {
-              [ns.is('active')]: item.active,
-              [ns.is('disabled')]: item.disabled,
-              [ns.is('has-children')]: item.children?.length,
-            },
-          ]"
-          :aria-current="item.active ? 'page' : undefined"
-        >
-          <s-popper
-            v-if="item.children?.length"
-            :trigger="trigger"
-            placement="bottom-start"
-            strategy="fixed"
-            :offset="8"
-            :hide-after="120"
-            :show-arrow="false"
-            persistent
-            popper-class="s-breadcrumb__tree-popper"
-          >
-            <span :class="ns.e('tree-trigger')">
-              <a
-                v-if="!item.active && !item.disabled"
-                :href="item.url || '#'"
-                :title="item.title"
-                :class="ns.e('link')"
-              >
-                {{ item.title }}
-              </a>
-              <span
-                v-else-if="!item.active && item.disabled"
-                :class="[ns.e('link'), ns.is('disabled')]"
-                :title="item.title"
-              >
-                {{ item.title }}
-              </span>
-              <span
-                v-else
-                :class="[ns.e('text'), textColorClass]"
-                :style="textStyle"
-              >
-                {{ item.title }}
-              </span>
-              <span :class="ns.e('menu-trigger')" aria-hidden="true" />
-            </span>
-            <template #content>
-              <breadcrumb-tree-menu :items="item.children" :trigger="trigger" />
-            </template>
-          </s-popper>
-          <template v-else>
-            <a
-              v-if="!item.active && !item.disabled"
-              :href="item.url || '#'"
-              :title="item.title"
-              :class="ns.e('link')"
-            >
-              {{ item.title }}
-            </a>
-            <span
-              v-else-if="!item.active && item.disabled"
-              :class="[ns.e('link'), ns.is('disabled')]"
-              :title="item.title"
-            >
-              {{ item.title }}
-            </span>
-            <span
-              v-else
-              :class="[ns.e('text'), textColorClass]"
-              :style="textStyle"
-            >
-              {{ item.title }}
-            </span>
-          </template>
-          <span
-            v-if="!item.active"
-            :class="ns.e('separator')"
-            aria-hidden="true"
-          >
-            <SIcon
-              v-if="isIconSeparator(separator)" :name="separator"
-            />
-            <template v-else>{{ separator }}</template>
-          </span>
-        </li>
-      </template>
-    </ol>
-  </nav>
-</template>
-
-<script lang="ts" setup>
-import { computed, provide, toRef } from 'vue'
+<script setup lang="ts">
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  shallowRef,
+  toRef,
+  useSlots,
+  useTemplateRef,
+  watch,
+} from 'vue'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { SPopper } from '@vuesax-alpha/components/popper'
-import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { breadcrumbProps } from './breadcrumb'
 import { breadcrumbContextKey } from './constants'
-import BreadcrumbTreeMenu from './breadcrumb-tree-menu.vue'
+import { planBreadcrumbOverflow } from './breadcrumb-overflow'
+import BreadcrumbItemNode from './breadcrumb-item-node.vue'
+import BreadcrumbOverflow from './breadcrumb-overflow.vue'
+import type { BreadcrumbItem } from './breadcrumb'
 
-defineOptions({
-  name: 'SBreadcrumb',
-})
+defineOptions({ name: 'SBreadcrumb' })
 
 const props = defineProps(breadcrumbProps)
-
+const slots = useSlots()
 const ns = useNamespace('breadcrumb')
 const { t } = useLocale()
 
-const isIconSeparator = (sep: string) => sep.length > 1
+const navRef = useTemplateRef<HTMLElement>('nav')
+const listRef = useTemplateRef<HTMLOListElement>('list')
+const measureRef = useTemplateRef<HTMLOListElement>('measurement-list')
+const availableWidth = shallowRef(0)
+const itemWidths = shallowRef<number[]>([])
+const overflowWidth = shallowRef(0)
 
-const themeColor = computed(() => normalizeVsColor(props.color))
-
-const textColorClass = computed(() =>
-  isVsColor(themeColor.value) ? ns.em('text', themeColor.value) : '',
+const overflowPlan = computed(() =>
+  props.collapse &&
+  !slots.default &&
+  props.items.length > 2 &&
+  itemWidths.value.length === props.items.length
+    ? planBreadcrumbOverflow(
+        itemWidths.value,
+        availableWidth.value,
+        overflowWidth.value,
+      )
+    : {
+        collapsed: false,
+        prefixCount: props.items.length,
+        suffixCount: 0,
+      },
 )
 
-const textStyle = computed(() => {
-  if (!props.color || isVsColor(themeColor.value)) {
-    return undefined
+type VisibleEntry =
+  | { kind: 'item'; item: BreadcrumbItem; index: number; key: string }
+  | { kind: 'overflow'; hiddenItems: BreadcrumbItem[]; key: string }
+
+const visibleEntries = computed<VisibleEntry[]>(() => {
+  const { collapsed, prefixCount, suffixCount } = overflowPlan.value
+  const head = props.items.slice(0, prefixCount).map((item, index) => ({
+    kind: 'item' as const,
+    item,
+    index,
+    key: `item-${index}`,
+  }))
+  if (!collapsed) return head
+
+  const suffixStart = props.items.length - suffixCount
+  const tail = props.items.slice(suffixStart).map((item, offset) => ({
+    kind: 'item' as const,
+    item,
+    index: suffixStart + offset,
+    key: `item-${suffixStart + offset}`,
+  }))
+  return [
+    ...head,
+    {
+      kind: 'overflow',
+      hiddenItems: props.items.slice(prefixCount, suffixStart),
+      key: 'overflow',
+    },
+    ...tail,
+  ]
+})
+
+const measureLayout = () => {
+  const nav = navRef.value
+  const list = listRef.value
+  const measuringList = measureRef.value
+  if (!nav || !list || !measuringList || slots.default) return
+
+  const style = window.getComputedStyle(list)
+  const padding =
+    (Number.parseFloat(style.paddingLeft) || 0) +
+    (Number.parseFloat(style.paddingRight) || 0)
+  const width = Math.max(0, nav.clientWidth - padding)
+  const widths = Array.from(
+    measuringList.querySelectorAll<HTMLElement>('.s-breadcrumb__measure-item'),
+    (item) => item.getBoundingClientRect().width,
+  )
+  const ellipsisWidth =
+    measuringList
+      .querySelector<HTMLElement>('.s-breadcrumb__overflow-measure')
+      ?.getBoundingClientRect().width ?? 0
+
+  if (width !== availableWidth.value) availableWidth.value = width
+  if (
+    widths.length !== itemWidths.value.length ||
+    widths.some((itemWidth, index) => itemWidth !== itemWidths.value[index])
+  ) {
+    itemWidths.value = widths
   }
-  const resolved = getVsColor(props.color)
-  if (!resolved) return undefined
-  return {
-    color: resolved.startsWith('var(') ? resolved : `rgb(${resolved})`,
+  if (ellipsisWidth !== overflowWidth.value) overflowWidth.value = ellipsisWidth
+}
+
+let resizeObserver: ResizeObserver | undefined
+let disposed = false
+
+onMounted(() => {
+  nextTick(measureLayout)
+  window.addEventListener('resize', measureLayout)
+  if (typeof ResizeObserver !== 'undefined') {
+    resizeObserver = new ResizeObserver(measureLayout)
+    if (navRef.value) resizeObserver.observe(navRef.value)
+    if (measureRef.value) resizeObserver.observe(measureRef.value)
   }
+  document.fonts?.ready.then(() => {
+    if (!disposed) measureLayout()
+  })
+})
+
+watch(
+  () => [props.items, props.separator, props.collapse],
+  () => nextTick(measureLayout),
+  { deep: true, flush: 'post' },
+)
+
+onBeforeUnmount(() => {
+  disposed = true
+  resizeObserver?.disconnect()
+  window.removeEventListener('resize', measureLayout)
 })
 
 provide(breadcrumbContextKey, {
@@ -142,3 +146,68 @@ provide(breadcrumbContextKey, {
   color: toRef(props, 'color'),
 })
 </script>
+
+<template>
+  <nav
+    ref="nav"
+    :class="[
+      ns.b(),
+      ns.m(`align-${align}`),
+      ns.is('collapsed', overflowPlan.collapsed),
+    ]"
+    :aria-label="t('vs.breadcrumb.label')"
+  >
+    <ol ref="list" :class="[ns.e('list'), ns.is('data', !$slots.default)]">
+      <slot />
+      <template v-if="!$slots.default">
+        <template v-for="entry in visibleEntries" :key="entry.key">
+          <BreadcrumbOverflow
+            v-if="entry.kind === 'overflow'"
+            :items="items"
+            :hidden-items="entry.hiddenItems"
+            :separator="separator"
+            :color="color"
+            :trigger="trigger"
+          />
+          <BreadcrumbItemNode
+            v-else
+            :item="entry.item"
+            :is-last="entry.index === items.length - 1"
+            :separator="separator"
+            :color="color"
+            :trigger="trigger"
+          />
+        </template>
+      </template>
+    </ol>
+
+    <ol
+      v-if="collapse && !$slots.default && items.length > 2"
+      ref="measurement-list"
+      :class="ns.e('measure')"
+      aria-hidden="true"
+    >
+      <li
+        v-for="(item, index) in items"
+        :key="`measure-${index}`"
+        :class="[ns.e('measure-item'), ns.e('item')]"
+      >
+        <span :class="ns.e('link')">{{ item.title }}</span>
+        <span v-if="item.children?.length" :class="ns.e('measure-toggle')">
+          <span :class="ns.e('menu-trigger')" />
+        </span>
+        <span v-if="index < items.length - 1" :class="ns.e('separator')">
+          <SIcon v-if="separator.length > 1" :name="separator" />
+          <template v-else>{{ separator }}</template>
+        </span>
+      </li>
+      <li :class="[ns.e('overflow-measure'), ns.e('item')]">
+        <span :class="ns.e('overflow-trigger')">…</span>
+        <span :class="ns.e('separator')">
+          <SIcon v-if="separator.length > 1" :name="separator" />
+          <template v-else>{{ separator }}</template>
+        </span>
+      </li>
+    </ol>
+  </nav>
+</template>

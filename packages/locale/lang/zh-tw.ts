@@ -106,6 +106,13 @@ export default {
       placeholder: '請選擇',
       noData: '無資料',
     },
+    breadcrumb: {
+      label: '麵包屑導覽',
+      hiddenLevels: '已省略的層級',
+      fullTrail: '完整麵包屑',
+      closeFullTrail: '關閉完整麵包屑',
+      expandChildren: '展開子層位置',
+    },
     pagination: {
       goto: '前往',
       pagesize: '項/頁',

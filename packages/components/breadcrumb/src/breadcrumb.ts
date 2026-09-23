@@ -37,6 +37,10 @@ export const breadcrumbProps = buildProps({
     ]),
     default: 'hover',
   },
+  collapse: {
+    type: Boolean,
+    default: true,
+  },
 } as const)
 
 export type BreadcrumbProps = ExtractPropTypes<typeof breadcrumbProps>

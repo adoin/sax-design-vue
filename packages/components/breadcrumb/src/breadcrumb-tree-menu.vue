@@ -29,6 +29,7 @@
             :href="item.url || '#'"
             :class="ns.e('menu-link')"
             role="menuitem"
+            @click="emit('navigate')"
           >
             {{ item.title }}
           </a>
@@ -38,7 +39,11 @@
           <span :class="ns.e('menu-trigger')" aria-hidden="true" />
         </span>
         <template #content>
-          <breadcrumb-tree-menu :items="item.children" :trigger="trigger" />
+          <breadcrumb-tree-menu
+            :items="item.children"
+            :trigger="trigger"
+            @navigate="emit('navigate')"
+          />
         </template>
       </s-popper>
       <a
@@ -46,6 +51,7 @@
         :href="item.url || '#'"
         :class="ns.e('menu-link')"
         role="menuitem"
+        @click="emit('navigate')"
       >
         {{ item.title }}
       </a>
@@ -78,6 +84,7 @@ defineProps({
     required: true,
   },
 })
+const emit = defineEmits<{ navigate: [] }>()
 
 const ns = useNamespace('breadcrumb')
 </script>

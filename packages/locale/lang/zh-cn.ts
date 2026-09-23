@@ -119,6 +119,10 @@ export default {
     },
     breadcrumb: {
       label: '面包屑导航',
+      hiddenLevels: '已省略的层级',
+      fullTrail: '完整面包屑',
+      closeFullTrail: '关闭完整面包屑',
+      expandChildren: '展开子级位置',
     },
     layout: {
       collapseOutside: '收起外挂工具',
