@@ -28,4 +28,19 @@ describe('Steps theme', () => {
     expect(css).toContain('transform: translateX(-5.9%)')
     expect(css).not.toContain('scale(1.04)')
   })
+
+  it('keeps vertical connectors continuous and outside the timeline card', () => {
+    const css = compile(join(themeSource, 'steps.scss'), {
+      loadPaths: [themeSource],
+    }).css
+
+    expect(css).toContain('--s-steps-vertical-marker-offset:')
+    expect(css).toContain('var(--s-steps-vertical-marker-offset)')
+    expect(css).toContain(
+      '.s-steps--timeline .s-steps__item.is-active .s-steps__frame::before',
+    )
+    expect(css).toContain(
+      'var(--s-steps-marker-track-size) + var(--s-steps-gap) - 12px',
+    )
+  })
 })

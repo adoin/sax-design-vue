@@ -6,6 +6,10 @@
   --s-steps-marker-active-size: 42px;
   --s-steps-marker-track-size: 48px;
   --s-steps-gap: 14px;
+  --s-steps-stack-gap: 4px;
+  --s-steps-vertical-marker-offset: calc(
+    8px + (var(--s-steps-marker-track-size) - var(--s-steps-marker-size)) / 2
+  );
 
   display: flex;
   width: 100%;
@@ -321,7 +325,7 @@ button.s-steps__trigger {
 
 .s-steps--vertical {
   flex-direction: column;
-  gap: 4px;
+  gap: var(--s-steps-stack-gap);
 }
 
 .s-steps--vertical .s-steps__item {
@@ -346,7 +350,9 @@ button.s-steps__trigger {
 
 .s-steps--vertical .s-steps__line {
   top: calc(var(--s-steps-marker-track-size) / 2);
-  bottom: calc(-1 * var(--s-steps-gap));
+  bottom: calc(
+    -1 * (var(--s-steps-stack-gap) + var(--s-steps-vertical-marker-offset))
+  );
   left: calc(var(--s-steps-marker-track-size) / 2 - 1px);
   width: 2px;
 }
@@ -361,10 +367,28 @@ button.s-steps__trigger {
 }
 
 .s-steps--timeline .s-steps__item.is-active .s-steps__frame {
+  background: transparent;
+  box-shadow: none;
+}
+
+.s-steps--timeline .s-steps__item.is-active .s-steps__frame::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0 0 0
+    calc(var(--s-steps-marker-track-size) + var(--s-steps-gap) - 12px);
+  border-radius: var(--sax-radius-lg);
   background: var(--s-steps-state-soft);
   box-shadow:
     0 18px 42px -30px var(--s-steps-state-color),
     0 6px 18px -14px getColor(text, 0.2);
+  content: '';
+  pointer-events: none;
+}
+
+.s-steps--timeline .s-steps__item.is-active .s-steps__trigger,
+.s-steps--timeline .s-steps__item.is-active .s-steps__context {
+  position: relative;
+  z-index: 1;
 }
 
 .s-steps--timeline .s-steps__item.is-active .s-steps__trigger {
@@ -447,7 +471,7 @@ button.s-steps__trigger {
 @media (max-width: 720px) {
   .s-steps--horizontal.is-responsive {
     flex-direction: column;
-    gap: 4px;
+    gap: var(--s-steps-stack-gap);
   }
 
   .s-steps--horizontal.is-responsive .s-steps__item {
@@ -473,7 +497,9 @@ button.s-steps__trigger {
 
   .s-steps--horizontal.is-responsive .s-steps__line {
     top: calc(var(--s-steps-marker-track-size) / 2);
-    bottom: calc(-1 * var(--s-steps-gap));
+    bottom: calc(
+      -1 * (var(--s-steps-stack-gap) + var(--s-steps-vertical-marker-offset))
+    );
     left: calc(var(--s-steps-marker-track-size) / 2 - 1px);
     width: 2px;
     height: auto;
