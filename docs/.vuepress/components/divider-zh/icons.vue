@@ -1,17 +1,13 @@
 <template>
   <div class="center">
-    <s-divider icon="cb:arrow-down" aria-label="More content" />
+    <s-divider icon="cb:arrow-down" aria-label="更多内容" />
     <s-divider
       color="primary"
       variant="soft"
       icon="cb:star"
-      aria-label="Featured content"
+      aria-label="精选内容"
     />
-    <s-divider
-      color="success"
-      icon="cb:checkmark"
-      aria-label="Completed section"
-    />
+    <s-divider color="success" icon="cb:checkmark" aria-label="已完成的章节" />
   </div>
 </template>
 

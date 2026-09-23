@@ -1,10 +1,10 @@
 <template>
   <div class="center">
-    <s-divider position="left">left</s-divider>
-    <s-divider position="left-center">left-center</s-divider>
-    <s-divider position="center">center</s-divider>
-    <s-divider position="right-center">right-center</s-divider>
-    <s-divider position="right">right</s-divider>
+    <s-divider position="left">Start</s-divider>
+    <s-divider position="left-center">Near start</s-divider>
+    <s-divider position="center">Center</s-divider>
+    <s-divider position="right-center">Near end</s-divider>
+    <s-divider position="right">End</s-divider>
   </div>
 </template>
 

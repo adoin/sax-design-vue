@@ -1,8 +1,8 @@
 <template>
   <div class="center">
-    <p>Content above the divider.</p>
+    <p>Account overview</p>
     <s-divider />
-    <p>Content below the divider.</p>
+    <p>Recent activity</p>
   </div>
 </template>
 

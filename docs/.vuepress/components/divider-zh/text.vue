@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <s-divider>Section details</s-divider>
+    <s-divider>章节详情</s-divider>
   </div>
 </template>
 

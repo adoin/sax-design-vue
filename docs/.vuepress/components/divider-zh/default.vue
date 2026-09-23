@@ -1,6 +1,8 @@
 <template>
   <div class="center">
-    <s-divider>Section details</s-divider>
+    <p>账户概览</p>
+    <s-divider />
+    <p>最近动态</p>
   </div>
 </template>
 

@@ -2,13 +2,43 @@
 @use 'common/var' as *;
 
 @include b(divider) {
-  width: 100%;
+  --s-divider-accent: #{getColor(primary)};
+  --s-divider-line-color: #{getColor(divider)};
+  --s-divider-content-ink: #{getColor(text)};
+  --s-divider-gap: 12px;
+  --s-divider-line-width: 1px;
+  --s-divider-line-style: solid;
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  margin: 15px 0;
+  width: 100%;
+  min-width: 0;
+  column-gap: var(--s-divider-gap);
+  margin-block: 15px;
   clear: both;
+
+  @include when(colored) {
+    --s-divider-line-color: color-mix(
+      in srgb,
+      var(--s-divider-accent) 38%,
+      #{getColor(divider)}
+    );
+    --s-divider-content-ink: color-mix(
+      in srgb,
+      var(--s-divider-accent) 46%,
+      #{getColor(text)}
+    );
+  }
+
+  @include m(left-center) {
+    --s-divider-before-grow: 1;
+    --s-divider-after-grow: 3;
+  }
+
+  @include m(right-center) {
+    --s-divider-before-grow: 3;
+    --s-divider-after-grow: 1;
+  }
 
   @include m(vertical) {
     display: inline-flex;
@@ -21,68 +51,90 @@
   }
 
   @include e(border) {
-    position: relative;
     display: block;
-    width: 100%;
-    flex-shrink: 1;
+    flex: 1 1 0;
     min-width: 0;
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: getColor('divider');
+    border-top: var(--s-divider-line-width) var(--s-divider-line-style)
+      var(--s-divider-line-color);
+
+    @include when(before) {
+      flex-grow: var(--s-divider-before-grow, 1);
+    }
+
+    @include when(after) {
+      flex-grow: var(--s-divider-after-grow, 1);
+    }
 
     @include when(vertical) {
       flex: none;
       width: 0;
       height: 100%;
       border-top: 0;
-      border-inline-start-width: 1px;
-      border-inline-start-style: solid;
-      border-inline-start-color: getColor('divider');
+      border-inline-start: var(--s-divider-line-width)
+        var(--s-divider-line-style) var(--s-divider-line-color);
     }
   }
 
   @include e(text) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    max-width: 100%;
+    min-height: 22px;
+    padding-inline: 2px;
+    color: var(--s-divider-label-color, var(--s-divider-content-ink));
     cursor: default;
-    user-select: none;
-    position: relative;
-    flex-shrink: 0;
+    font-size: 0.8125em;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.35;
+    text-align: center;
     white-space: nowrap;
-    background: getColor('white');
-    padding: 0 12px;
-    font-size: 0.9375em;
   }
 
   @include e(icon) {
-    font-size: 1.25em;
+    flex: none;
+    font-size: 1.125em;
     line-height: 1;
   }
 
-  @each $type in (primary, success, warn, warning, danger, info, dark, light) {
-    $color-type: $type;
-    @if $type == warning {
-      $color-type: warn;
-    }
-
-    @include e(border) {
-      @include m($type) {
-        border-top-color: getColor($color-type);
-
-        &.is-vertical {
-          border-inline-start-color: getColor($color-type);
-        }
-      }
-    }
-
+  @include m(soft) {
     @include e(text) {
-      @include m($type) {
-        color: getColor($color-type);
-      }
+      min-height: 26px;
+      padding: 3px 10px;
+      border: 1px solid
+        color-mix(in srgb, var(--s-divider-accent) 16%, transparent);
+      border-radius: var(--sax-radius-pill);
+      background: color-mix(in srgb, var(--s-divider-accent) 10%, transparent);
     }
+  }
 
-    @include e(background) {
-      @include m($type) {
-        background: getColor($color-type);
-      }
+  @include m(solid) {
+    @include e(text) {
+      min-height: 26px;
+      padding: 3px 11px;
+      border-radius: var(--sax-radius-pill);
+      background: var(--s-divider-accent);
+    }
+  }
+
+  @include when(custom-background) {
+    @include e(text) {
+      min-height: 26px;
+      padding: 3px 11px;
+      border-radius: var(--sax-radius-pill);
+      background: var(--s-divider-background);
+    }
+  }
+
+  @include when(solid-danger) {
+    @include e(text) {
+      background: color-mix(
+        in srgb,
+        var(--s-divider-accent) 80%,
+        #{getColor(dark)}
+      );
     }
   }
 }

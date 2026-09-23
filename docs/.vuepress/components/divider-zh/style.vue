@@ -1,11 +1,11 @@
 <template>
   <div class="center">
-    <s-divider border-style="solid">Solid · 1px</s-divider>
+    <s-divider border-style="solid">实线 · 1px</s-divider>
     <s-divider border-style="dashed" border-height="2px" color="primary">
-      Dashed · 2px
+      虚线 · 2px
     </s-divider>
     <s-divider border-style="dotted" border-height="2px" color="success">
-      Dotted · 2px
+      点线 · 2px
     </s-divider>
   </div>
 </template>

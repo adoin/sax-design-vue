@@ -1,13 +1,13 @@
 <template>
   <div class="center">
-    <s-divider>Transparent</s-divider>
+    <s-divider>透明背景</s-divider>
     <s-divider background="#edf1ff" label-color="#334888">
-      Lavender surface
+      淡紫色表面
     </s-divider>
     <s-divider background="#e8f7f1" label-color="#246853">
-      Mint surface
+      薄荷色表面
     </s-divider>
-    <s-divider background="dark">Dark surface</s-divider>
+    <s-divider background="dark">深色表面</s-divider>
   </div>
 </template>
 

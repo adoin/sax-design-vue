@@ -1,139 +1,85 @@
-<script lang="ts" setup>
-import { computed } from 'vue'
+<script setup lang="ts">
+import { computed, useSlots } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { getVsColor, isVsColor } from '@vuesax-alpha/utils'
+import { getCssColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { dividerProps } from './divider'
-import type { CSSProperties } from 'vue'
+import { readableDividerLabelColor } from './divider-color'
 
-defineOptions({
-  name: 'SDivider',
-})
+defineOptions({ name: 'SDivider' })
 
 const props = defineProps(dividerProps)
-
+const slots = useSlots()
 const ns = useNamespace('divider')
+
 const isVertical = computed(() => props.direction === 'vertical')
-const rootClass = computed(() => [ns.b(), ns.m(props.direction)])
-
-const DEFAULT_COLOR = 'hsl(0deg 0% 0% / 0.1)'
-
-const normalizeThemeColor = (color: string) =>
-  color === 'warning' ? 'warn' : color
-
-const normalizedColor = computed(() => normalizeThemeColor(props.color))
-const normalizedBackground = computed(() =>
-  normalizeThemeColor(props.background),
+const hasContent = computed(() => Boolean(props.icon || slots.default))
+const hasBackground = computed(() =>
+  Boolean(props.background && props.background !== 'transparent'),
 )
+const resolveColor = (value: string) =>
+  getCssColor(normalizeVsColor(value)) || value
 
-const widthAfter = computed(() => {
-  switch (props.position) {
-    case 'left':
-      return '0%'
-    case 'left-center':
-      return '25%'
-    case 'right-center':
-      return '75%'
-    case 'right':
-      return '100%'
-    default:
-      return '100%'
+const automaticLabelColor = computed(() => {
+  if (props.labelColor) return resolveColor(props.labelColor)
+
+  if (hasBackground.value) {
+    const background = normalizeVsColor(props.background)
+    if (['primary', 'dark', 'black'].includes(background))
+      return 'var(--sax-css-white)'
+    if (['danger', 'error', 'white'].includes(background))
+      return 'var(--sax-css-black)'
+    if (['success', 'warn', 'light', 'info'].includes(background))
+      return 'var(--sax-css-dark)'
+    return readableDividerLabelColor(props.background)
   }
+
+  if (props.variant === 'solid') {
+    const color = normalizeVsColor(props.color)
+    const literalColor = readableDividerLabelColor(props.color)
+    if (literalColor) return literalColor
+    return ['success', 'warn', 'light', 'info'].includes(color)
+      ? 'var(--sax-css-dark)'
+      : 'var(--sax-css-white)'
+  }
+
+  return undefined
 })
 
-const widthBefore = computed(() => {
-  switch (props.position) {
-    case 'left':
-      return '100%'
-    case 'left-center':
-      return '75%'
-    case 'right-center':
-      return '25%'
-    case 'right':
-      return '0%'
-    default:
-      return '100%'
+const rootClass = computed(() => [
+  ns.b(),
+  ns.m(props.direction),
+  ns.m(props.variant),
+  ns.m(props.position),
+  ns.is('colored', props.color !== 'default'),
+  ns.is('custom-background', hasBackground.value),
+  ns.is(
+    'solid-danger',
+    props.variant === 'solid' &&
+      !hasBackground.value &&
+      ['danger', 'error'].includes(normalizeVsColor(props.color)),
+  ),
+])
+
+const rootStyle = computed(() => {
+  const style: Record<string, string> = {
+    '--s-divider-gap': props.gap,
+    '--s-divider-line-width': props.borderHeight,
+    '--s-divider-line-style': props.borderStyle,
   }
-})
 
-const resolveInlineColor = (color: string) => {
-  if (!color || color === DEFAULT_COLOR || color === 'transparent')
-    return undefined
-  if (isVsColor(normalizeThemeColor(color))) return undefined
-  const resolved = getVsColor(color)
-  if (resolved) {
-    return resolved.startsWith('var(') ? resolved : `hsl(${resolved})`
+  if (props.color !== 'default') {
+    style['--s-divider-accent'] = resolveColor(props.color)
   }
-  return color
-}
-
-const borderColorClass = computed(() =>
-  isVsColor(normalizedColor.value)
-    ? ns.em('border', normalizedColor.value)
-    : ns.em('border', 'default'),
-)
-
-const borderFlexStyle = (width: string): CSSProperties => {
-  if (width === '0%') {
-    return { flex: '0 0 0', width: 0, minWidth: 0 }
+  if (hasBackground.value) {
+    style['--s-divider-background'] = resolveColor(props.background)
   }
-  if (width === '100%') {
-    return { flex: '1 1 0', minWidth: 0, width: 'auto' }
+  if (automaticLabelColor.value) {
+    style['--s-divider-label-color'] = automaticLabelColor.value
   }
-  return { flex: `0 1 ${width}`, width, minWidth: 0 }
-}
 
-const afterStyle = computed((): CSSProperties => ({
-  ...borderFlexStyle(widthAfter.value),
-  borderTopWidth: props.borderHeight,
-  borderTopStyle: props.borderStyle as CSSProperties['borderTopStyle'],
-  borderTopColor: resolveInlineColor(props.color),
-}))
-
-const beforeStyle = computed((): CSSProperties => ({
-  ...borderFlexStyle(widthBefore.value),
-  borderTopWidth: props.borderHeight,
-  borderTopStyle: props.borderStyle as CSSProperties['borderTopStyle'],
-  borderTopColor: resolveInlineColor(props.color),
-}))
-
-const verticalStyle = computed((): CSSProperties => ({
-  borderInlineStartWidth: props.borderHeight,
-  borderInlineStartStyle:
-    props.borderStyle as CSSProperties['borderInlineStartStyle'],
-  borderInlineStartColor: resolveInlineColor(props.color),
-}))
-
-const textStyle = computed(() => {
-  const style: Record<string, string> = {}
-  const textColor = resolveInlineColor(
-    props.color !== DEFAULT_COLOR ? props.color : '',
-  )
-  if (textColor) style.color = textColor
-  const background = resolveInlineColor(props.background)
-  if (background && props.background !== 'transparent') {
-    style.background = background
-  }
   return style
 })
-
-const textColorClass = computed(() =>
-  isVsColor(normalizedColor.value)
-    ? ns.em('text', normalizedColor.value)
-    : ns.em('text', 'default'),
-)
-
-const backgroundColorClass = computed(() =>
-  isVsColor(normalizedBackground.value)
-    ? ns.em('background', normalizedBackground.value)
-    : ns.em('background', 'default'),
-)
-
-const rootStyle = computed(() =>
-  isVsColor(normalizedColor.value)
-    ? ns.cssVar({ color: getVsColor(normalizedColor.value) })
-    : undefined,
-)
 </script>
 
 <template>
@@ -145,27 +91,28 @@ const rootStyle = computed(() =>
   >
     <span
       v-if="isVertical"
-      :class="[ns.e('border'), ns.is('vertical'), borderColorClass]"
-      :style="verticalStyle"
+      :class="[ns.e('border'), ns.is('vertical')]"
+      aria-hidden="true"
     />
     <template v-else>
       <span
-        :class="[ns.e('border'), ns.is('after'), borderColorClass]"
-        :style="afterStyle"
+        v-if="!hasContent || props.position !== 'left'"
+        :class="[ns.e('border'), ns.is('before')]"
+        aria-hidden="true"
       />
-      <span
-        v-if="icon || $slots.default"
-        :class="[ns.e('text'), textColorClass, backgroundColorClass]"
-        :style="textStyle"
-      >
-        <template v-if="!icon">
-          <slot />
-        </template>
-        <SIcon v-else :name="icon" :class="ns.e('icon')" />
+      <span v-if="hasContent" :class="ns.e('text')">
+        <SIcon
+          v-if="props.icon"
+          :name="props.icon"
+          :class="ns.e('icon')"
+          aria-hidden="true"
+        />
+        <slot v-else />
       </span>
       <span
-        :class="[ns.e('border'), ns.is('before'), borderColorClass]"
-        :style="beforeStyle"
+        v-if="hasContent && props.position !== 'right'"
+        :class="[ns.e('border'), ns.is('after')]"
+        aria-hidden="true"
       />
     </template>
   </div>

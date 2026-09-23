@@ -11,11 +11,24 @@ export const dividerProps = buildProps({
   },
   color: {
     type: String,
-    default: 'hsl(0deg 0% 0% / 0.1)',
+    default: 'default',
+  },
+  variant: {
+    type: String,
+    values: ['plain', 'soft', 'solid'] as const,
+    default: 'plain',
   },
   background: {
     type: String,
     default: 'transparent',
+  },
+  labelColor: {
+    type: String,
+    default: '',
+  },
+  gap: {
+    type: String,
+    default: '12px',
   },
   icon: {
     type: String,
@@ -23,6 +36,7 @@ export const dividerProps = buildProps({
   },
   borderStyle: {
     type: String,
+    values: ['solid', 'dashed', 'dotted'] as const,
     default: 'solid',
   },
   borderHeight: {
@@ -37,4 +51,5 @@ export const dividerProps = buildProps({
 } as const)
 
 export type DividerProps = ExtractPropTypes<typeof dividerProps>
+export type DividerVariant = DividerProps['variant']
 export type DividerInstance = InstanceType<typeof Divider>
