@@ -112,6 +112,18 @@ PROPS:
     values: "true | false"
     description: 控制清空、禁用、加载状态和整行宽度。clearable 保留为兼容别名。
     default: false
+  - name: label
+    type: String
+    values: 文本
+    description: 在控件上方显示标签；启用 label-float 且值为空时显示在控件内部。
+    default: null
+    usage: '#label'
+  - name: label-float
+    type: Boolean
+    values: "true | false"
+    description: 聚焦、展开或已有选中值时上浮标签。
+    default: false
+    usage: '#label'
   - name: placeholder
     type: String
     values: "展示内容"
@@ -259,6 +271,34 @@ SLOTS:
 <template #style>
 
 @[code{25-37}](../../.vuepress/components/cascader/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 标签
+
+`label` 在控件上方显示常驻标签；加上 `label-float` 后，空值时标签显示在控件内，聚焦、展开或选中后上浮。`placeholder` 仍用于普通占位文本。
+
+<template #example><cascader-zh-label /></template>
+
+<template #template>
+
+@[code{20-43}](../../.vuepress/components/cascader-zh/label.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-18}](../../.vuepress/components/cascader-zh/label.vue)
+
+</template>
+
+<template #style>
+
+@[code{45-52}](../../.vuepress/components/cascader-zh/label.vue)
 
 </template>
 

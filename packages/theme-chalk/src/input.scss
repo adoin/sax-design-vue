@@ -764,11 +764,13 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
       left: 13px;
       right: 13px;
       opacity: 1;
-      color: getColor(text);
+      color: getColor(color);
       visibility: visible;
       pointer-events: auto;
       transform: translate(-3%, -80%);
       font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.015em;
     }
   }
   @include e(placeholder-text) {
@@ -791,6 +793,9 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     pointer-events: auto;
     transform: translate(-2px, -77%);
     font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.015em;
+    color: getColor(color);
   }
   @include e(progress) {
     width: 95%;

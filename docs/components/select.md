@@ -203,14 +203,6 @@ PROPS:
     link: null
     usage: '#label'
     code: null
-  - name: label-placeholder
-    type: String
-    values: 'String'
-    description: Add a placeholder that when in focus or with value becomes a label.
-    default: null
-    link: null
-    usage: '#label'
-    code: null
   - name: filter
     type: Boolean
     values: 'true, false'
@@ -592,7 +584,7 @@ Change the color of the component with the `color` property, the allowed values 
 
 ## Label
 
-Add a label to the select easily with the `label` property, you can also add a `label-placeholder` which as its name says is a placeholder that encourages label, and finally the placeholder with the `placeholder` property
+Use `label` for a persistent label, or combine it with `label-float` to place the label inside an empty Select and float it when open or selected. Use `placeholder` for ordinary placeholder text. The examples compare all three treatments.
 
 <template #example>
 <select-label />

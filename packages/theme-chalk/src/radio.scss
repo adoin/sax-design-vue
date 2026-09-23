@@ -20,7 +20,7 @@
   color: getColor('text', 0.78);
   cursor: pointer;
   touch-action: manipulation;
-  // Keep the label and hit area still; only the circular control moves.
+  // Keep the label and hit area still; only the circular control scales.
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(.is-disabled, .is-loading) {
       --sax-radio-shadow:
@@ -28,7 +28,7 @@
         0 7px 16px #{getColor('color', 0.18)};
 
       .#{$namespace}-radio {
-        transform: translateY(-2px) scale(1.04);
+        transform: scale(1.04);
       }
     }
   }

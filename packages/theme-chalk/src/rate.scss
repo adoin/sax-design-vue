@@ -33,13 +33,11 @@ $rate-size: map.merge(
   padding: 4px 5px;
   border-radius: var(--sax-radius-md);
   transition:
-    box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
-    transform var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+    box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 
   &:focus {
     outline: none;
     box-shadow: 0 7px 18px hsl(225deg 24% 20% / 0.14);
-    transform: translateY(-1px);
   }
 
   svg {

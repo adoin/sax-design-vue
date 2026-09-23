@@ -4,7 +4,6 @@
 @use './virtual-list.scss';
 
 $clearableRight: 34px;
-$iconActiveMargin: -4px;
 $suffixSafeArea: 36px;
 $clearableSafeArea: 64px;
 
@@ -32,6 +31,12 @@ $clearableSafeArea: 64px;
   }
   &[data-popper-placement='bottom'] {
     transform: translate(0, calc(-1 * var(--sax-motion-distance-base)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s-select__label {
+    transition: none;
   }
 }
 
@@ -248,7 +253,6 @@ $clearableSafeArea: 64px;
     transition: getCssVar(transition-ease);
     z-index: 9;
 
-    margin-top: $iconActiveMargin;
     right: $clearableRight;
   }
   @include e(input) {
@@ -477,32 +481,17 @@ $clearableSafeArea: 64px;
     }
   }
   @include when(hovering) {
-    @include e(arrow) {
-      transform: translateY(calc(-50% - 4px));
-    }
     @include e(input) {
-      transform: translateY(-4px);
       background: getColor('background');
       box-shadow: 0 5px 25px -4px getColor(black, getCssVar(shadow-opacity));
     }
     @include e(tags) {
       background: getColor('background');
-      transform: translateY(-4px);
-    }
-    @include e(label) {
-      @include when(placeholder) {
-        top: 50%;
-        transform: translateY(calc(-50% - 4px));
-      }
-    }
-    @include e(placeholder) {
-      transform: translateY(calc(-50% - 4px));
     }
   }
   @include when(open) {
     @include e(arrow) {
-      transform: translateY(calc(-50% - 4px)) rotate(180deg);
-      margin-top: -2px !important;
+      transform: translateY(-50%) rotate(180deg);
     }
     @include e(input) {
       border-radius: var(--sax-radius);
@@ -513,7 +502,6 @@ $clearableSafeArea: 64px;
         height 0s;
       border: 2px solid transparent;
       color: getColor('text');
-      transform: translateY(-4px);
 
       &-filter {
         background: transparent;
@@ -527,37 +515,19 @@ $clearableSafeArea: 64px;
     @include e(label) {
       top: 0;
       transform: translateY(calc(-100% - getCssVar(select-label-offset)));
-
-      @include when(placeholder) {
-        top: 50%;
-        transform: translateY(calc(-50% - 4px));
-      }
-    }
-    @include e(placeholder) {
-      transform: translateY(calc(-50% - 4px));
-      font-size: 0.75rem;
     }
 
     @include e(clearable) {
-      margin-top: $iconActiveMargin;
       right: $clearableRight;
     }
     @include e(tags) {
       border-radius: var(--sax-radius);
       background: getColor('background');
-      transform: translate(0, -4px);
       transition:
         getCssVar(transition-ease),
         height 0s;
       &:after {
         opacity: 0;
-      }
-    }
-    @include e(label) {
-      @include when(placeholder) {
-        margin-top: -30px;
-        opacity: 1;
-        font-size: 0.75rem;
       }
     }
   }
@@ -592,7 +562,9 @@ $clearableSafeArea: 64px;
     text-overflow: ellipsis;
     white-space: nowrap;
     z-index: 500;
-    color: getColor('text');
+    color: getColor('color');
+    font-weight: 600;
+    letter-spacing: 0.015em;
 
     @include when(placeholder) {
       top: 50%;
@@ -601,6 +573,8 @@ $clearableSafeArea: 64px;
       visibility: visible;
       pointer-events: auto;
       font-size: getCssVar(select-placeholder-font-size);
+      font-weight: 400;
+      letter-spacing: normal;
       color: getColor(text-color-placeholder);
     }
   }

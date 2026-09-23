@@ -47,6 +47,84 @@ const options = [
 ]
 
 describe('Cascader', () => {
+  it('matches Select label-float behavior across empty, open, and selected states', async () => {
+    const wrapper = mountCascader({
+      defaultOpen: false,
+      modelValue: [],
+      options,
+      label: 'Destination',
+      labelFloat: true,
+      placeholder: 'Choose a destination',
+    })
+    const label = wrapper.get('.s-cascader__label')
+
+    expect(wrapper.get('.s-cascader').classes()).toContain(
+      's-cascader--has-label',
+    )
+    expect(wrapper.get('.s-cascader').attributes('aria-label')).toBe(
+      'Destination',
+    )
+    expect(label.classes()).toContain('is-placeholder')
+    expect(wrapper.find('.s-cascader__value.is-placeholder').exists()).toBe(
+      false,
+    )
+
+    wrapper.getComponent(PopperStub).vm.$emit('update:visible', true)
+    await nextTick()
+    expect(label.classes()).not.toContain('is-placeholder')
+
+    wrapper.getComponent(PopperStub).vm.$emit('update:visible', false)
+    await wrapper.setProps({ modelValue: ['zhejiang', 'hangzhou'] })
+    expect(label.classes()).not.toContain('is-placeholder')
+
+    await wrapper.get('.s-cascader__clear').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([[]])
+    await wrapper.setProps({ modelValue: [] })
+    expect(label.classes()).toContain('is-placeholder')
+  })
+
+  it('keeps a persistent label and supports floating labels in searchable multiple mode', async () => {
+    const persistent = mountCascader({
+      modelValue: [],
+      options,
+      label: 'Destination',
+      placeholder: 'Choose a destination',
+    })
+    expect(persistent.get('.s-cascader__label').classes()).not.toContain(
+      'is-placeholder',
+    )
+    expect(persistent.get('.s-cascader__value.is-placeholder').text()).toBe(
+      'Choose a destination',
+    )
+
+    const searchable = mountCascader({
+      defaultOpen: false,
+      modelValue: [],
+      options,
+      multiple: true,
+      showSearch: true,
+      label: 'Destination',
+      labelFloat: true,
+    })
+    const input = searchable.get<HTMLInputElement>('.s-cascader__search-input')
+    expect(input.attributes('placeholder')).toBe('')
+    expect(input.attributes('aria-label')).toBe('Destination')
+    expect(searchable.get('.s-cascader__label').classes()).toContain(
+      'is-placeholder',
+    )
+
+    await input.setValue('hang')
+    expect(searchable.get('.s-cascader__label').classes()).not.toContain(
+      'is-placeholder',
+    )
+
+    await input.setValue('')
+    await searchable.setProps({ modelValue: [['zhejiang', 'hangzhou']] })
+    expect(searchable.get('.s-cascader__label').classes()).not.toContain(
+      'is-placeholder',
+    )
+  })
+
   it('matches flat menus to the trigger while sizing hierarchical menus by content', async () => {
     const wrapper = mountCascader({ modelValue: [], options })
     wrapper.getComponent(PopperStub).vm.$emit('update:visible', true)

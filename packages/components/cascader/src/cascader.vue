@@ -24,10 +24,12 @@
         ns.is('open', mergedOpen),
         ns.is('multiple', multiple),
         ns.is('block', block),
+        { [ns.m('has-label')]: label || labelFloat },
         ns.is(resolvedShape),
       ]"
       role="combobox"
       :tabindex="disabled || showSearchEnabled ? -1 : 0"
+      :aria-label="label || resolvedPlaceholder"
       :aria-disabled="disabled"
       :aria-expanded="mergedOpen"
       aria-haspopup="listbox"
@@ -94,20 +96,30 @@
           type="text"
           autocomplete="off"
           :disabled="disabled"
-          :placeholder="showPlaceholder ? resolvedPlaceholder : ''"
-          :aria-label="resolvedPlaceholder"
+          :placeholder="
+            showPlaceholder && !hasFloatingLabel ? resolvedPlaceholder : ''
+          "
+          :aria-label="label || resolvedPlaceholder"
           @input="handleSearchInput"
           @focus="handleFocus"
           @blur="handleBlur"
           @keydown="handleTriggerKeydown"
         />
         <span
-          v-else-if="showPlaceholder"
+          v-else-if="showPlaceholder && !hasFloatingLabel"
           :class="[ns.e('value'), ns.is('placeholder')]"
         >
           {{ resolvedPlaceholder }}
         </span>
       </div>
+
+      <span
+        v-if="label"
+        :class="[ns.e('label'), ns.is('placeholder', labelIsPlaceholder)]"
+        aria-hidden="true"
+      >
+        {{ label }}
+      </span>
 
       <button
         v-if="showClear"
@@ -433,6 +445,16 @@ const selectedCount = computed(() =>
 )
 const resolvedPlaceholder = computed(
   () => props.placeholder || t('vs.cascader.placeholder'),
+)
+const hasFloatingLabel = computed(() =>
+  Boolean(props.label && props.labelFloat),
+)
+const labelIsPlaceholder = computed(
+  () =>
+    hasFloatingLabel.value &&
+    !mergedOpen.value &&
+    selectedCount.value === 0 &&
+    !searchText.value,
 )
 const showPlaceholder = computed(
   () => selectedCount.value === 0 && !searchText.value,

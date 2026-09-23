@@ -14,16 +14,13 @@
   --sax-checkbox-shadow:
     0 2px 4px #{getColor('color', 0.14)}, 0 4px 12px #{getColor('color', 0.1)};
 
-  // Move only the visual box; the native input and label keep a stable hit area.
+  // Keep hover feedback in the shadow so the checkmark stays aligned.
   @media (hover: hover) and (pointer: fine) {
     &:not(.is-disabled):not(.is-loading):hover {
       --sax-checkbox-shadow:
         0 3px 6px #{getColor('color', 0.2)},
         0 7px 16px #{getColor('color', 0.18)};
 
-      .#{bem('checkbox', 'input', 'mask')} {
-        transform: translateY(-2px) scale(1.04);
-      }
     }
   }
 

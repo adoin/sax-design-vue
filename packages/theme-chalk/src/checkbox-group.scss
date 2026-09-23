@@ -134,7 +134,6 @@
         0 7px 18px -10px getColor(primary, 0.48),
         0 2px 6px getColor(primary, 0.1);
       font-weight: 600;
-      transform: translateY(-1px);
     }
 
     @include when(disabled) {

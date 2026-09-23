@@ -397,17 +397,13 @@
     background: getColor(color);
     color: #fff;
     box-shadow: 0 8px 20px -6px getColor(color);
-    transform: translate(0, -3px);
     &:hover {
-      box-shadow: 0 8px 20px -6px getColor(color);
-      transform: translate(0, -6px);
+      box-shadow: 0 12px 24px -8px getColor(color);
     }
     &:focus {
-      transform: translate(0, 0);
       box-shadow: 0 0 0 0 getColor(color);
     }
     &.#{$namespace}-button--active {
-      transform: translate(0, 0);
       box-shadow: 0 0 0 0 getColor(color);
     }
   }
@@ -479,14 +475,12 @@
     }
 
     &:hover {
-      transform: translate(0, -3px);
       box-shadow: 0 10px 20px -10px getColor('color', 0.7);
       &::before {
         opacity: 0;
       }
     }
     &.#{$namespace}-button--active {
-      transform: translate(0, -3px);
       box-shadow: 0 10px 20px -10px hsl(0deg 0% 0% / 0.35);
     }
   }
@@ -588,15 +582,12 @@
     overflow: hidden;
     box-shadow: 0 0 0 0 getColor(black, getCssVar(shadow-opacity));
     &:active:not(.#{$namespace}-button--active) {
-      transform: translate(0, -1px);
       box-shadow: 0 5px 15px 0 getColor(black, getCssVar(shadow-opacity)) !important;
     }
     &:hover {
-      transform: translate(0, -3px);
       box-shadow: 0 8px 25px 0 getColor(black, getCssVar(shadow-opacity));
     }
     &.#{$namespace}-button--active {
-      transform: translate(0, -3px);
       box-shadow: 0 8px 25px 0 getColor(black, getCssVar(shadow-opacity));
     }
   }

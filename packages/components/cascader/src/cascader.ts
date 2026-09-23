@@ -80,6 +80,8 @@ export const cascaderProps = buildProps({
     type: definePropType<CascaderFieldNames>(Object),
     default: () => ({}),
   },
+  label: String,
+  labelFloat: Boolean,
   placeholder: String,
   separator: { type: String, default: ' / ' },
   disabled: Boolean,

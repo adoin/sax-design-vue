@@ -76,7 +76,6 @@
       box-shadow:
         0 0 0 5px hsl(226deg 100% 55% / 0.1),
         0 8px 20px hsl(225deg 24% 20% / 0.14);
-      transform: translateY(-2px);
     }
   }
 
@@ -125,11 +124,6 @@
     }
   }
 
-  @include when(focused) {
-    @include e(visual) {
-      transform: translateY(-1px);
-    }
-  }
 
   @include when(error) {
     @include e(cell) {

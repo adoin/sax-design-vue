@@ -16,11 +16,12 @@
   box-shadow: 0 10px 28px getColor(primary, 0.16);
   color: getColor(primary);
   cursor: pointer;
-  transition: transform var(--sax-motion-duration-fast) var(--sax-motion-easing-standard), box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard), background var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+  transition:
+    box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+    background var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 
   &:hover,
   &:focus-visible {
-    transform: translateY(-2px);
     background: getColor(primary);
     box-shadow: 0 14px 30px getColor(primary, 0.28);
     color: getColor(white);

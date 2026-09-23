@@ -8,7 +8,7 @@ const value3 = ref('')
 
 <template>
   <div class="center con-selects">
-    <s-select v-model="value1" label="Label">
+    <s-select v-model="value1" label="标签">
       <s-option label="Sax Design" value="1"> Sax Design </s-option>
       <s-option label="Vue" value="2"> Vue </s-option>
       <s-option label="Javascript" value="3"> Javascript </s-option>
@@ -18,7 +18,7 @@ const value3 = ref('')
       <s-option label="Nodejs" value="7"> Nodejs </s-option>
     </s-select>
 
-    <s-select v-model="value2" label="Floating label" label-float>
+    <s-select v-model="value2" label="浮动标签" label-float>
       <s-option label="Sax Design" value="1"> Sax Design </s-option>
       <s-option label="Vue" value="2"> Vue </s-option>
       <s-option label="Javascript" value="3"> Javascript </s-option>
@@ -28,7 +28,7 @@ const value3 = ref('')
       <s-option label="Nodejs" value="7"> Nodejs </s-option>
     </s-select>
 
-    <s-select v-model="value3" placeholder="Placeholder">
+    <s-select v-model="value3" placeholder="占位文本">
       <s-option label="Sax Design" value="1"> Sax Design </s-option>
       <s-option label="Vue" value="2"> Vue </s-option>
       <s-option label="Javascript" value="3"> Javascript </s-option>

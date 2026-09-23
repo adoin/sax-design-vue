@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use 'mixins/mixins' as *;
 @use 'common/var' as *;
 
@@ -39,6 +40,9 @@
   display: flex;
   width: 100%;
 }
+.s-cascader--has-label {
+  margin-top: 24px;
+}
 .s-cascader.is-square {
   border-radius: 0;
 }
@@ -68,6 +72,37 @@
 }
 .s-cascader__value.is-placeholder {
   color: getColor(text-color-placeholder);
+}
+.s-cascader__label {
+  position: absolute;
+  z-index: 500;
+  top: 0;
+  left: map.get($select, 'label-left');
+  max-width: calc(100% - #{map.get($select, 'label-left')} - 36px);
+  overflow: hidden;
+  color: getColor(primary);
+  cursor: default;
+  font-size: map.get($select, 'label-font-size');
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transform: translateY(calc(-100% - #{map.get($select, 'label-offset')}));
+  transition: getCssVar(transition-ease);
+}
+.s-cascader__label.is-placeholder {
+  top: 50%;
+  color: getColor(text-color-placeholder);
+  font-size: map.get($select, 'placeholder-font-size');
+  font-weight: 400;
+  letter-spacing: normal;
+  transform: translateY(-50%);
+}
+.s-cascader:focus-within .s-cascader__label.is-placeholder {
+  top: 0;
+  color: getColor(primary);
+  font-size: map.get($select, 'label-font-size');
+  transform: translateY(calc(-100% - #{map.get($select, 'label-offset')}));
 }
 .s-cascader__search-input {
   width: 24px;
@@ -318,6 +353,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .s-cascader,
+  .s-cascader__label,
   .s-cascader__suffix .s-icon {
     transition: none;
   }

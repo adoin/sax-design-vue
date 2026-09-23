@@ -23,8 +23,7 @@
   transition:
     color var(--sax-motion-duration-fast, 180ms) ease,
     background-color var(--sax-motion-duration-fast, 180ms) ease,
-    opacity var(--sax-motion-duration-fast, 180ms) ease,
-    transform var(--sax-motion-duration-fast, 180ms) ease;
+    opacity var(--sax-motion-duration-fast, 180ms) ease;
 
   &::after {
     content: '';
@@ -46,14 +45,12 @@
   &:hover:not(:disabled) {
     background: #{getColor(color, 0.09)};
     opacity: 1;
-    transform: translateY(-1px);
   }
 
   &:focus-visible {
     background: #{getColor(color, 0.09)};
     outline: none;
     opacity: 1;
-    transform: translateY(-1px);
   }
 
   &:disabled {

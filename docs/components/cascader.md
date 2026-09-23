@@ -108,6 +108,18 @@ PROPS:
     values: "true | false"
     description: Control clearing, disabled/loading states, and full-width layout. clearable remains an alias.
     default: false
+  - name: label
+    type: String
+    values: text
+    description: Show a label above the control, or inside it when label-float is enabled and the value is empty.
+    default: null
+    usage: '#label'
+  - name: label-float
+    type: Boolean
+    values: "true | false"
+    description: Float the label on focus, while open, or when a value is selected.
+    default: false
+    usage: '#label'
   - name: placeholder
     type: String
     values: "display content"
@@ -252,6 +264,34 @@ Selection commits on a leaf by default. Use `change-on-select` to commit at any 
 <template #style>
 
 @[code{25-37}](../.vuepress/components/cascader/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Label
+
+Use `label` for a persistent label above the control. Add `label-float` to display that label inside an empty control and float it when the control is focused, open, or selected. `placeholder` remains a separate ordinary placeholder.
+
+<template #example><cascader-label /></template>
+
+<template #template>
+
+@[code{20-43}](../.vuepress/components/cascader/label.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-18}](../.vuepress/components/cascader/label.vue)
+
+</template>
+
+<template #style>
+
+@[code{45-52}](../.vuepress/components/cascader/label.vue)
 
 </template>
 

@@ -111,6 +111,9 @@
       padding: 0;
       background: transparent;
       font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.015em;
+      color: var(--sax-textarea-focus-color, #{getColor(primary)});
       transform: translateY(calc(-100% - 4px));
     }
   }

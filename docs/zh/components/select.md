@@ -160,14 +160,6 @@ PROPS:
     link: null
     usage: '#label'
     code: null
-  - name: label-placeholder
-    type: String
-    values: 'String'
-    description: 设置在聚焦或有值时变为标签的占位文本。
-    default: null
-    link: null
-    usage: '#label'
-    code: null
   - name: filter
     type: Boolean
     values: 'true, false'
@@ -549,27 +541,27 @@ SLOTS:
 
 ## 标签
 
-通过 `label` 可为选择器添加标签；`label-placeholder` 用于聚焦或有值时浮动为标签，`placeholder` 用于常规占位文本。
+`label` 用于常驻标签；与 `label-float` 组合时，空值标签显示在 Select 内，展开或选中后上浮。`placeholder` 用于普通占位文本。下面并列展示这三种用法。
 
 <template #example>
-<select-label />
+<select-zh-label />
 </template>
 
 <template #template>
 
-@[code{9-41}](../../.vuepress/components/select/label.vue)
+@[code{9-41}](../../.vuepress/components/select-zh/label.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-7}](../../.vuepress/components/select/label.vue)
+@[code{1-7}](../../.vuepress/components/select-zh/label.vue)
 
 </template>
 
 <template #style>
 
-@[code{43-47}](../../.vuepress/components/select/label.vue)
+@[code{43-47}](../../.vuepress/components/select-zh/label.vue)
 
 </template>
 

@@ -30,7 +30,6 @@
       box-shadow:
         0 0 0 5px hsl(226deg 100% 55% / 0.12),
         var(--sax-switch-shadow);
-      transform: translateY(-1px);
     }
   }
 
@@ -48,9 +47,7 @@
     transition:
       background-color var(--sax-motion-duration)
         var(--sax-motion-easing-standard),
-      box-shadow var(--sax-motion-duration) var(--sax-motion-easing-standard),
-      transform var(--sax-motion-duration-fast)
-        var(--sax-motion-easing-standard);
+      box-shadow var(--sax-motion-duration) var(--sax-motion-easing-standard);
   }
 
   @include e(circle) {
@@ -109,7 +106,6 @@
 
   &:hover:not(.is-disabled) {
     @include e(track) {
-      transform: translateY(-1px);
       box-shadow:
         inset 0 2px 5px hsl(225deg 20% 20% / 0.12),
         0 5px 12px hsl(225deg 24% 20% / 0.12);

@@ -60,7 +60,6 @@
       box-shadow: getCssVar(alert, shadow--icon-close);
 
       &:hover {
-        transform: translate(0, -2px);
         box-shadow: getCssVar(alert, shadow--icon-close-hover);
       }
       svg {
@@ -108,7 +107,6 @@
       color: $color-white;
       box-shadow: getCssVar(alert, shadow--icon-close);
       &:hover {
-        transform: translate(0, -2px);
         box-shadow: getCssVar(alert, shadow--icon-close-hover);
       }
       svg {
@@ -157,7 +155,6 @@
       color: $color-white;
       box-shadow: getCssVar(alert, shadow--icon-close);
       &:hover {
-        transform: translate(0, -2px);
         background: rgba($color-black, 0.2);
         box-shadow: getCssVar(alert, shadow--icon-close-hover);
       }
@@ -212,11 +209,7 @@
     padding: 0px;
 
     &:hover {
-      transform: translate(0, -2px);
       box-shadow: 0px 5px 18px 0px getColor(color, 0.3);
-    }
-    &:active {
-      transform: translate(0, -1px);
     }
     svg {
       fill: getColor(color);

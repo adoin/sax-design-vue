@@ -276,13 +276,6 @@
 
 .s-menu--horizontal
   > .s-menu__list
-  > .s-menu-node
-  > .s-menu-node__button:hover:not(:disabled):not([aria-disabled='true']) {
-  transform: translateY(-1px);
-}
-
-.s-menu--horizontal
-  > .s-menu__list
   > .s-menu-node.is-open
   > .s-menu-node__button,
 .s-menu--horizontal

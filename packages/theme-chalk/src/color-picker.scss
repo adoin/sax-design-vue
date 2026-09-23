@@ -417,7 +417,6 @@
   &:focus-visible {
     background: getColor(background);
     outline: 0;
-    transform: translateY(-2px);
   }
 
   &.is-active {

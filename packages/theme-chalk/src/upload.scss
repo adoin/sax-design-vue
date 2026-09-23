@@ -172,7 +172,6 @@
     &:focus-visible {
       outline: none;
       filter: brightness(1.06) saturate(1.05);
-      transform: translateY(-1px);
     }
 
     &:disabled {
