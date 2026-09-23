@@ -37,10 +37,25 @@ describe('Steps theme', () => {
     expect(css).toContain('--s-steps-vertical-marker-offset:')
     expect(css).toContain('var(--s-steps-vertical-marker-offset)')
     expect(css).toContain(
+      'top: calc(var(--s-steps-vertical-marker-offset) + var(--s-steps-marker-size))',
+    )
+    expect(css).toContain(
       '.s-steps--timeline .s-steps__item.is-active .s-steps__frame::before',
     )
     expect(css).toContain(
       'var(--s-steps-marker-track-size) + var(--s-steps-gap) - 12px',
     )
+  })
+
+  it('uses the actual current and next marker sizes for horizontal endpoints', () => {
+    const css = compile(join(themeSource, 'steps.scss'), {
+      loadPaths: [themeSource],
+    }).css
+
+    expect(css).toContain('--s-steps-current-marker-size:')
+    expect(css).toContain('--s-steps-next-marker-size:')
+    expect(css).toContain('var(--s-steps-current-marker-size) / 2')
+    expect(css).toContain('var(--s-steps-next-marker-size)')
+    expect(css).toContain('.s-steps__line.is-next-active')
   })
 })

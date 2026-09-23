@@ -94,8 +94,7 @@ button.s-steps__trigger {
     color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
     background-color var(--sax-motion-duration-fast)
       var(--sax-motion-easing-standard),
-    box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
-    transform var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+    box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 }
 
 .s-steps__marker .s-icon {
@@ -183,11 +182,22 @@ button.s-steps__trigger {
 }
 
 .s-steps__line {
+  --s-steps-current-marker-size: var(--s-steps-marker-size);
+  --s-steps-next-marker-size: var(--s-steps-marker-size);
+
   position: absolute;
   z-index: 0;
   overflow: hidden;
   border-radius: var(--sax-radius-pill);
   background: getColor(text, 0.12);
+}
+
+.s-steps__item.is-active .s-steps__line {
+  --s-steps-current-marker-size: var(--s-steps-marker-active-size);
+}
+
+.s-steps__line.is-next-active {
+  --s-steps-next-marker-size: var(--s-steps-marker-active-size);
 }
 
 .s-steps__line::after {
@@ -269,7 +279,6 @@ button.s-steps__trigger {
 .s-steps__item.is-clickable:hover .s-steps__marker {
   box-shadow: 0 17px 34px -15px var(--s-steps-state-color);
   filter: brightness(1.06);
-  transform: translateY(-1px);
 }
 
 .s-steps__item.is-clickable:hover .s-steps__title {
@@ -279,7 +288,6 @@ button.s-steps__trigger {
 .s-steps__trigger:focus-visible .s-steps__marker {
   box-shadow: 0 15px 32px -16px var(--s-steps-state-color);
   filter: brightness(1.06);
-  transform: translateY(-1px);
 }
 
 .s-steps__item.is-disabled {
@@ -318,8 +326,11 @@ button.s-steps__trigger {
 
 .s-steps--horizontal .s-steps__line {
   top: calc(var(--s-steps-marker-track-size) / 2 - 1px);
-  left: calc(50% + var(--s-steps-marker-size) / 2);
-  width: calc(100% - var(--s-steps-marker-size));
+  left: calc(50% + var(--s-steps-current-marker-size) / 2);
+  width: calc(
+    100% -
+      (var(--s-steps-current-marker-size) + var(--s-steps-next-marker-size)) / 2
+  );
   height: 2px;
 }
 
@@ -349,12 +360,18 @@ button.s-steps__trigger {
 }
 
 .s-steps--vertical .s-steps__line {
-  top: calc(var(--s-steps-marker-track-size) / 2);
+  top: calc(var(--s-steps-vertical-marker-offset) + var(--s-steps-marker-size));
   bottom: calc(
     -1 * (var(--s-steps-stack-gap) + var(--s-steps-vertical-marker-offset))
   );
   left: calc(var(--s-steps-marker-track-size) / 2 - 1px);
   width: 2px;
+}
+
+.s-steps--vertical .s-steps__item.is-active .s-steps__line {
+  top: calc(
+    var(--s-steps-vertical-marker-offset) + var(--s-steps-marker-active-size)
+  );
 }
 
 .s-steps--vertical .s-steps__line::after {
@@ -496,13 +513,38 @@ button.s-steps__trigger {
   }
 
   .s-steps--horizontal.is-responsive .s-steps__line {
-    top: calc(var(--s-steps-marker-track-size) / 2);
+    top: calc(
+      var(--s-steps-vertical-marker-offset) + var(--s-steps-marker-size)
+    );
     bottom: calc(
       -1 * (var(--s-steps-stack-gap) + var(--s-steps-vertical-marker-offset))
     );
     left: calc(var(--s-steps-marker-track-size) / 2 - 1px);
     width: 2px;
     height: auto;
+  }
+
+  .s-steps--horizontal.is-responsive .s-steps__item.is-active .s-steps__line {
+    top: calc(
+      8px +
+        (var(--s-steps-marker-track-size) - var(--s-steps-marker-active-size)) /
+        2 + var(--s-steps-marker-active-size)
+    );
+  }
+
+  .s-steps--horizontal.is-responsive .s-steps__line.is-next-active {
+    bottom: calc(
+      -1 *
+        (
+          var(--s-steps-stack-gap) + 8px +
+            (
+              var(--s-steps-marker-track-size) - var(
+                  --s-steps-marker-active-size
+                )
+            ) /
+            2
+        )
+    );
   }
 
   .s-steps--horizontal.is-responsive .s-steps__line::after {

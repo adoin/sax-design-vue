@@ -189,6 +189,7 @@ const contextId = (index: number) => `${stepsId}-context-${index}`
         :class="[
           ns.e('line'),
           ns.is('complete', isFinished(resolveStatus(item, index))),
+          ns.is('next-active', index + 1 === active),
         ]"
         aria-hidden="true"
       />

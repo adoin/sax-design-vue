@@ -36,6 +36,9 @@ describe('Steps', () => {
     expect(wrapper.findAll('.s-steps__item')[2].classes()).toContain(
       's-steps__item--wait',
     )
+    expect(wrapper.findAll('.s-steps__line')[0].classes()).toContain(
+      'is-next-active',
+    )
     expect(wrapper.findAll('button')[1].attributes('aria-current')).toBe('step')
     const activeMain = wrapper.findAll('.s-steps__main')[1]
     expect(activeMain.element.children[0].classList).toContain('s-steps__title')
