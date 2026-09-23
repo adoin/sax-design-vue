@@ -7,7 +7,6 @@ import { codesandboxContextKey, vsThemeKey } from './type'
 import Layout from './layouts/Layout.vue'
 import NotFound from './layouts/NotFound.vue'
 import type { codesandboxContext, vsThemeContext } from './type'
-// import Sidebar from "./layouts/Sidebar.vue";
 
 import './styles/sax-design-vue'
 import '../global-renderers'

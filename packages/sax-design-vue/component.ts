@@ -64,11 +64,6 @@ import { SResult } from '@vuesax-alpha/components/result'
 import { SRow } from '@vuesax-alpha/components/row'
 import { SScrollbar } from '@vuesax-alpha/components/scrollbar'
 import { SOption, SOptionGroup, SSelect } from '@vuesax-alpha/components/select'
-import {
-  SSidebar,
-  SSidebarGroup,
-  SSidebarItem,
-} from '@vuesax-alpha/components/sidebar'
 import { SSlider } from '@vuesax-alpha/components/slider'
 import { SSpacer } from '@vuesax-alpha/components/spacer'
 import { SSplitter, SSplitterItem } from '@vuesax-alpha/components/splitter'
@@ -172,9 +167,6 @@ export default [
   SScrollbar,
   SSelect,
   SSwitch,
-  SSidebar,
-  SSidebarGroup,
-  SSidebarItem,
   SSlider,
   SSpacer,
   SSplitter,

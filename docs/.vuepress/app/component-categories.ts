@@ -67,7 +67,6 @@ export const componentCategories: ComponentCategory[] = [
       component('Menu', '菜单', '/components/menu'),
       component('Navbar', '导航栏', '/components/navbar'),
       component('Pagination', '分页', '/components/pagination'),
-      component('Sidebar', '侧边栏', '/components/sidebar'),
       component('Steps', '步骤条', '/components/steps'),
       component('Tabs', '标签页', '/components/tabs'),
     ],

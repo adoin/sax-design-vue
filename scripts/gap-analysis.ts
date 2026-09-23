@@ -57,6 +57,10 @@ const ALIAS: Record<string, string[]> = {
   popper: ['dropdown'],
 }
 
+// SLayout's aside slot and SMenu replace the retired standalone Sidebar API.
+const retired = new Set(['sidebar'])
+const expected = ORIGINAL.filter((name) => !retired.has(name))
+
 const resolved = new Set<string>()
 for (const name of implemented) {
   resolved.add(name)
@@ -65,9 +69,10 @@ for (const name of implemented) {
   }
 }
 
-const missing = ORIGINAL.filter((c) => !resolved.has(c))
-const done = ORIGINAL.filter((c) => resolved.has(c))
+const missing = expected.filter((c) => !resolved.has(c))
+const done = expected.filter((c) => resolved.has(c))
 
-console.log('Implemented:', done.length, '/', ORIGINAL.length)
+console.log('Implemented:', done.length, '/', expected.length)
 console.log('Done:', done.join(', '))
 console.log('Missing:', missing.join(', ') || '(none)')
+console.log('Retired:', [...retired].join(', '))

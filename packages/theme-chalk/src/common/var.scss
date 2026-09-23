@@ -643,16 +643,6 @@ $select: map.merge(
   $select
 );
 
-// Sidebar
-// css3 var in packages/theme-chalk/src/sidebar.scss
-$sidebar: () !default;
-$sidebar: map.merge(
-  (
-    'z-index': getCssVar(z-index-top),
-  ),
-  $sidebar
-);
-
 // Radio
 // css3 var in packages/theme-chalk/src/radio.scss
 $radio: () !default;
