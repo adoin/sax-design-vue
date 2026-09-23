@@ -373,7 +373,7 @@ Use `expand-trigger="hover"` to expand on hover. For lazy nodes, set `isLeaf` to
 
 ## Popup and content customization
 
-`popup-config` matches Select and supports trigger width matching, size constraints, mount targets, offsets, and styles. Use `header`, `footer`, and `option` slots to customize content.
+A single-level menu is at least as wide as its trigger. When options can expand, each column follows its content and keeps its width as new levels appear. Long options wrap within a width limit, and columns can scroll horizontally when they exceed the viewport. Set `popup-config.full` or `popup-config.matchTriggerWidth` to force trigger-width matching; explicit size limits, mount targets, offsets, and styles are also available through `popup-config`. Use the `header`, `footer`, and `option` slots to customize content.
 
 <template #example><cascader-popup /></template>
 

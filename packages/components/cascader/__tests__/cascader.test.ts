@@ -9,6 +9,7 @@ const PopperStub = defineComponent({
   name: 'SPopper',
   props: {
     visible: Boolean,
+    popperStyle: [Object, Array],
   },
   emits: ['update:visible'],
   setup(_, { expose }) {
@@ -46,6 +47,48 @@ const options = [
 ]
 
 describe('Cascader', () => {
+  it('matches flat menus to the trigger while sizing hierarchical menus by content', async () => {
+    const wrapper = mountCascader({ modelValue: [], options })
+    wrapper.getComponent(PopperStub).vm.$emit('update:visible', true)
+    await nextTick()
+    await nextTick()
+
+    expect(
+      (wrapper.getComponent(PopperStub).props('popperStyle') as object[])[0],
+    ).toMatchObject({ minWidth: undefined })
+
+    const configured = mountCascader({
+      modelValue: [],
+      options,
+      popupConfig: { minWidth: 240 },
+    })
+    expect(
+      (configured.getComponent(PopperStub).props('popperStyle') as object[])[0],
+    ).toMatchObject({ minWidth: '240px' })
+
+    const flatOptions = [{ value: 'frontend', label: 'Frontend' }]
+    const flat = mountCascader({ modelValue: [], options: flatOptions })
+    vi.spyOn(
+      flat.get('.s-cascader').element,
+      'getBoundingClientRect',
+    ).mockReturnValue({ width: 220 } as DOMRect)
+    flat.getComponent(PopperStub).vm.$emit('update:visible', true)
+    await nextTick()
+    await nextTick()
+    expect(
+      (flat.getComponent(PopperStub).props('popperStyle') as object[])[0],
+    ).toMatchObject({ minWidth: '220px' })
+
+    const fixed = mountCascader({
+      modelValue: [],
+      options: flatOptions,
+      popupConfig: { width: 300 },
+    })
+    expect(
+      (fixed.getComponent(PopperStub).props('popperStyle') as object[])[0],
+    ).toMatchObject({ width: '300px', minWidth: undefined })
+  })
+
   it('applies square geometry to the trigger', () => {
     const wrapper = mountCascader({ modelValue: [], options, shape: 'square' })
 

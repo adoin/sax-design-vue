@@ -239,6 +239,9 @@ const fields = computed(() => resolveFieldNames(props.fieldNames))
 const nodes = computed(() =>
   normalizeCascaderNodes(props.options, fields.value),
 )
+const hasChildren = (node: CascaderNode) =>
+  node.children.length > 0 || (!node.isLeaf && Boolean(props.loadData))
+const isSingleLevel = computed(() => !nodes.value.some(hasChildren))
 const flatNodes = computed(() => flattenCascaderNodes(nodes.value))
 const showSearchEnabled = computed(
   () => Boolean(props.showSearch) && !props.loadData,
@@ -253,6 +256,7 @@ const popperClass = computed(() =>
   [
     ns.e('content'),
     ns.is('square', resolvedShape.value === 'square'),
+    ns.is('single-level', isSingleLevel.value),
     props.popupClassName,
     popupConfig.value.className,
   ]
@@ -266,9 +270,26 @@ const popupMatchesTrigger = computed(
     popupConfig.value.matchTriggerWidth ||
     searchConfig.value.matchInputWidth,
 )
+const autoMatchSingleLevel = computed(() => {
+  if (!isSingleLevel.value || popupMatchesTrigger.value) return false
+  const { width, minWidth, maxWidth, style } = popupConfig.value
+  const dropdownStyle = props.dropdownStyle
+  return [
+    width,
+    minWidth,
+    maxWidth,
+    style?.width,
+    style?.minWidth,
+    style?.maxWidth,
+    dropdownStyle.width,
+    dropdownStyle.minWidth,
+    dropdownStyle.maxWidth,
+  ].every((value) => value === undefined)
+})
 const toCssSize = (value: number | string | undefined) =>
   typeof value === 'number' ? `${value}px` : value
 const popupStyle = computed<CSSProperties>(() => ({
+  '--sax-cascader-trigger-width': toCssSize(popupWidth.value),
   width: popupMatchesTrigger.value
     ? toCssSize(popupWidth.value)
     : toCssSize(
@@ -276,7 +297,10 @@ const popupStyle = computed<CSSProperties>(() => ({
           ? undefined
           : popupConfig.value.width,
       ),
-  minWidth: toCssSize(popupConfig.value.minWidth ?? popupWidth.value),
+  minWidth: toCssSize(
+    popupConfig.value.minWidth ??
+      (autoMatchSingleLevel.value ? popupWidth.value : undefined),
+  ),
   maxWidth: toCssSize(popupConfig.value.maxWidth),
   maxHeight: toCssSize(popupConfig.value.maxHeight),
 }))
@@ -325,9 +349,6 @@ const isActive = (node: CascaderNode) =>
 const isNodeLoading = (node: CascaderNode) =>
   loadingKeys.value.has(pathKey(node.pathValues)) ||
   Boolean(node.option.loading)
-const hasChildren = (node: CascaderNode) =>
-  node.children.length > 0 || (!node.isLeaf && Boolean(props.loadData))
-
 const selectedSingleNode = computed(() =>
   findCascaderNode(nodes.value, singleValue.value),
 )
@@ -664,7 +685,10 @@ const measureTags = async () => {
     38,
   )
 }
-useResizeObserver(triggerRef, measureTags)
+useResizeObserver(triggerRef, () => {
+  measureTags()
+  popupWidth.value = triggerRef.value?.getBoundingClientRect().width
+})
 watch(tagItems, measureTags, { flush: 'post' })
 watch(searchResults, () => {
   searchActiveIndex.value = 0

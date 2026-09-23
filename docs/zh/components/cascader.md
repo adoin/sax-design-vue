@@ -380,7 +380,7 @@ SLOTS:
 
 ## 弹层与内容定制
 
-`popup-config` 与 Select 保持一致，支持跟随触发器宽度、宽高限制、挂载目标、偏移和样式。`header`、`footer`、`option` 等插槽可定制弹层内容。
+只有一级选项时，弹层至少与触发器同宽；存在可展开节点时，各级菜单按内容稳定定宽，展开后不会收窄已有列。长选项在宽度上限内换行，列数超出视口时可横向滚动。需要强制与触发器同宽时，可设置 `popup-config.full` 或 `popup-config.matchTriggerWidth`；显式宽度限制、挂载目标、偏移和样式也可通过 `popup-config` 配置。`header`、`footer`、`option` 等插槽可定制弹层内容。
 
 <template #example><cascader-popup /></template>
 
