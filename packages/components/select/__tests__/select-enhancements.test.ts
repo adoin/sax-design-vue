@@ -11,6 +11,8 @@ const PopperStub = defineComponent({
   name: 'SPopper',
   props: {
     popperClass: [String, Array, Object],
+    popperStyle: [Object, Array],
+    fit: Boolean,
   },
   setup(_, { expose }) {
     expose({
@@ -277,5 +279,38 @@ describe('Select enhanced capabilities', () => {
     await nextTick()
 
     expect(virtualScrollToIndex).toHaveBeenCalledTimes(1)
+  })
+
+  it('keeps popup width under Select control during Popper repositioning', async () => {
+    const auto = mountSelect({
+      modelValue: '',
+      options: [{ value: 'a', label: 'Option A' }],
+    })
+    vi.spyOn(
+      auto.get('.s-select').element,
+      'getBoundingClientRect',
+    ).mockReturnValue({ width: 200.4 } as DOMRect)
+    await auto.get('.s-select').trigger('mouseenter')
+    await auto.get('.s-select').trigger('click')
+    await nextTick()
+    await nextTick()
+
+    const autoPopper = auto.getComponent(PopperStub)
+    expect(autoPopper.props('fit')).toBe(false)
+    expect(
+      (autoPopper.props('popperStyle') as Record<string, string>[])[1].width,
+    ).toBe('200.4px')
+
+    const explicit = mountSelect({
+      modelValue: '',
+      options: [{ value: 'a', label: 'Option A' }],
+      popupConfig: { width: 260 },
+    })
+    const explicitPopper = explicit.getComponent(PopperStub)
+    expect(explicitPopper.props('fit')).toBe(false)
+    expect(
+      (explicitPopper.props('popperStyle') as Record<string, string>[])[1]
+        .width,
+    ).toBe('260px')
   })
 })

@@ -7,7 +7,7 @@
     persistent
     :animation="optionsAnimation"
     :flip="flip"
-    :fit="fit"
+    :fit="false"
     :hide-after="hideAfter"
     :show-after="showAfter"
     :loading="loading"
@@ -914,7 +914,7 @@ const syncPopupWidth = () => {
   if (!popupMatchesTrigger.value) return
 
   const width = selectWrapper.value?.getBoundingClientRect().width
-  popupWidth.value = width ? Math.ceil(width) : undefined
+  popupWidth.value = width || undefined
 }
 
 watch(dropMenuVisible, (visible) => {
