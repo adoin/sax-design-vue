@@ -3,7 +3,7 @@ description: 'Navigate long collections one page at a time.'
 PROPS:
   - name: v-model:current-page
     type: Number
-    values: "number"
+    values: 'number'
     description: Determine the page where the user is.
     default: 1
     link: null
@@ -12,8 +12,8 @@ PROPS:
       <s-pagination v-model:current-page="page" :total="20" />
   - name: total
     type: Number
-    values: "number"
-    description: It is the total number of pages that the component has.
+    values: 'number'
+    description: Total number of records; use page-count when only the page count is known.
     default: null
     link: null
     usage: '#default'
@@ -21,7 +21,7 @@ PROPS:
       <s-pagination v-model:current-page="page" :total="20" />
   - name: color
     type: String
-    values: "Theme colors, RGB, HEX"
+    values: 'Theme colors, RGB, HEX'
     description: Change the base color of the component.
     default: primary
     link: null
@@ -31,7 +31,7 @@ PROPS:
 
   - name: disabled
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: Determine if the entire component is in the disabled state.
     default: false
     link: null
@@ -41,19 +41,19 @@ PROPS:
 
   - name: shape
     type: String
-    values: "circle, square"
-    description: Change the style of the buttons making them completely round or totally square.
+    values: 'circle, square'
+    description: Use circular or square page buttons.
     default: null
     link: null
     usage: '#shape'
     code: >
       <s-pagination shape="circle" v-model:current-page="page" :total="20" />
 
-      <s-pagination square v-model:current-page="page" :total="20" />
+      <s-pagination shape="square" v-model:current-page="page" :total="20" />
 
   - name: buttons-dotted
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: Makes the buttons not have the internal number and changes its size.
     default: false
     link: null
@@ -63,9 +63,9 @@ PROPS:
 
   - name: disabled-items
     type: Number[]
-    values: "null"
+    values: 'number[]'
     description: Determine which items are in the disabled state.
-    default: null
+    default: []
     link: null
     usage: '#disabled-items'
     code: >
@@ -73,9 +73,9 @@ PROPS:
 
   - name: loading-items
     type: Number[]
-    values: "null"
+    values: 'number[]'
     description: Determine which items are in the charging state.
-    default: null
+    default: []
     link: null
     usage: '#loading-items'
     code: >
@@ -83,7 +83,7 @@ PROPS:
 
   - name: not-margin
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: Change the margin between the items causing them to be fully glued and the radius is removed making them square.
     default: false
     link: null
@@ -93,7 +93,7 @@ PROPS:
 
   - name: progress
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: Add a progress bar to the component determined by the current page and the total of pages.
     default: false
     link: null
@@ -103,7 +103,7 @@ PROPS:
 
   - name: infinite
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: Determine if the pagination is infinite.
     default: false
     link: null
@@ -113,16 +113,16 @@ PROPS:
 
   - name: v-model:page-size
     type: Number
-    values: "null"
+    values: 'null'
     description: item count of each page.
     default: 10
     link: null
-    usage: '#default'
+    usage: '#layout'
     code: null
 
   - name: default-page-size
     type: Number
-    values: "null"
+    values: 'null'
     description: default initial value of page size
     default: null
     link: null
@@ -131,7 +131,7 @@ PROPS:
 
   - name: page-count
     type: Number
-    values: "null"
+    values: 'null'
     description: total page count. Set either total or page-count and pages will be displayed; if you need page-sizes, total is required
     default: null
     link: null
@@ -140,7 +140,7 @@ PROPS:
 
   - name: pager-count
     type: Number
-    values: "5, 7, 9, 11, 13, 15, 17, 19, 21"
+    values: '5, 7, 9, 11, 13, 15, 17, 19, 21'
     description: number of pagers. Pagination collapses when the total page count exceeds this value
     default: 7
     link: null
@@ -149,7 +149,7 @@ PROPS:
 
   - name: default-current-page
     type: Number
-    values: "null"
+    values: 'null'
     description: default initial value of current-page
     default: null
     link: null
@@ -158,16 +158,16 @@ PROPS:
 
   - name: layout
     type: String, String[]
-    values: "prev, pager, next, jumper, ->, total, slot, sizes"
+    values: 'prev, pager, next, jumper, ->, total, slot, sizes'
     description: layout of Pagination, an array or elements separated with a comma
     default: [prev, pager, next, jumper, ->, total, slot, sizes]
     link: null
-    usage: '#default'
+    usage: '#layout'
     code: null
 
   - name: page-sizes
     type: Array
-    values: "number[]"
+    values: 'number[]'
     description: options of item count per page
     default: [10, 20, 30, 40, 50, 100]
     link: null
@@ -176,16 +176,16 @@ PROPS:
 
   - name: hide-on-single-page
     type: Boolean
-    values: "true, false"
-    description: options of item count per page
+    values: 'true, false'
+    description: Hide the pagination when only one page exists.
     default: false
     link: null
-    usage: '#hide-on-single-page'
+    usage: null
     code: null
 
   - name: prev-text
     type: String
-    values: "null"
+    values: 'null'
     description: text for the prev button
     default: null
     link: null
@@ -194,16 +194,16 @@ PROPS:
 
   - name: prev-icon
     type: String, Component
-    values: "null"
+    values: 'null'
     description: icon for the prev button, higher priority of prev-text
-    default: ChevronLeft
+    default: cb:chevron-left
     link: null
     usage: null
     code: null
 
   - name: next-text
     type: String
-    values: "null"
+    values: 'null'
     description: text for the next button
     default: null
     link: null
@@ -212,9 +212,9 @@ PROPS:
 
   - name: next-icon
     type: String, Component
-    values: "null"
+    values: 'null'
     description: icon for the next button, higher priority of next-text
-    default: ChevronRight
+    default: cb:chevron-right
     link: null
     usage: null
     code: null
@@ -241,15 +241,15 @@ EVENTS:
 SLOTS:
   - name: default
     type: slot
-    values: "null"
-    description: Custom content. To use this, need to declare slot in layout
+    values: 'currentPage, total, pageSize, pageSizes, pagerCount'
+    description: Custom content placed where layout includes slot.
     default: null
     link: null
-    usage: '#slot'
+    usage: '#layout'
     code: >
-      <s-pagination v-model:current-page="page" :total="20">
-        <template #default="{ currentPage, total, pageSize, pageSizes, pageCount }">
-          // do something
+      <s-pagination v-model:current-page="page" :total="20" layout="prev,pager,slot,next">
+        <template #default="{ currentPage }">
+          <span>Page {{ currentPage }}</span>
         </template>
       </s-pagination>
 ---
@@ -260,31 +260,7 @@ SLOTS:
 
 ## Default
 
-<docs-warn />
-
-### Layout
-
-Set layout of Pagination, pass an array or elements separated with a comma
-
-The accepted values:
-
-- `prev` a button navigating to the previous page
-- `next` a button navigating to the next page
-- `jumper` a jump-to input
-- `pager` page list
-- `sizes` a select to determine page size
-- `total` total item count
-- `->` Every element after this symbol will be pulled to the right
-
-::: warning NOTE
-We'll detect some deprecated usages, if your pagination don't appeared or worked as expected, please check rules below:
-
-You have to define one of total and page-count, otherwise we can't determine count of total pages.When both defined, page-count taken as priority.
-If current-page is defined, you have to listen current-page change, by also define @update:current-page, otherwise pagination didn't work.
-If page-size is defined while page size selector displayed(sizes included in layout), you have to listen page-size change as well, by define @update:page-size, otherwise change of page size didn't work.
-:::
-
-Easily add a pagination with the `s-pagination` component, the required properties are `total`
+Pass the total number of records and bind the current page. With 50 records, this example uses the component's default layout: page navigation, a jump input, total count, and page-size selection. Use `v-model:page-size` when the page-size selector is shown.
 
 <template #example>
 <pagination-default />
@@ -292,19 +268,49 @@ Easily add a pagination with the `s-pagination` component, the required properti
 
 <template #template>
 
-@[code{1-9}](../.vuepress/components/pagination/default.vue)
+@[code{8-16}](../.vuepress/components/pagination/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{11-15}](../.vuepress/components/pagination/default.vue)
+@[code{1-6}](../.vuepress/components/pagination/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{17-30}](../.vuepress/components/pagination/default.vue)
+@[code{18-24}](../.vuepress/components/pagination/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Layout
+
+Choose which parts to show with a comma-separated string or an array. `prev`, `pager`, and `next` provide navigation; `total`, `sizes`, and `jumper` add counts and input controls. Use `slot` for custom content, and `->` to align subsequent parts to the right. Provide either `total` or `page-count`; `total` is required when showing the page-size selector.
+
+<template #example>
+<pagination-layout />
+</template>
+
+<template #template>
+
+@[code{10-44}](../.vuepress/components/pagination/layout.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-8}](../.vuepress/components/pagination/layout.vue)
+
+</template>
+
+<template #style>
+
+@[code{46-64}](../.vuepress/components/pagination/layout.vue)
 
 </template>
 
@@ -314,7 +320,7 @@ Easily add a pagination with the `s-pagination` component, the required properti
 
 ## Color
 
-<coloren />
+Set a semantic color token or a custom RGB/HEX value.
 
 <template #example>
 <pagination-color />
@@ -322,19 +328,19 @@ Easily add a pagination with the `s-pagination` component, the required properti
 
 <template #template>
 
-@[code{1-17}](../.vuepress/components/pagination/color.vue)
+@[code{9-23}](../.vuepress/components/pagination/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{19-25}](../.vuepress/components/pagination/color.vue)
+@[code{1-7}](../.vuepress/components/pagination/color.vue)
 
 </template>
 
 <template #style>
 
-@[code{27-49}](../.vuepress/components/pagination/color.vue)
+@[code{25-39}](../.vuepress/components/pagination/color.vue)
 
 </template>
 
@@ -374,59 +380,27 @@ Change the disabled state of the component with the `disabled` property, this pr
 
 ## Shape
 
-### Circle
-
-Change the radius of all the elements that make up the component by making them circular with the `circle` property, this property is a boolean so it does not need value
+Use `shape="circle"` for circular page buttons or `shape="square"` for square corners.
 
 <template #example>
-<pagination-circle />
+<pagination-shape />
 </template>
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/pagination/circle.vue)
+@[code{8-29}](../.vuepress/components/pagination/shape.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11}](../.vuepress/components/pagination/circle.vue)
+@[code{1-6}](../.vuepress/components/pagination/shape.vue)
 
 </template>
 
 <template #style>
 
-@[code{13-26}](../.vuepress/components/pagination/circle.vue)
-
-</template>
-
-</card>
-
-<card>
-
-### Square
-
-Change the radius of all the elements that make up the component making them square with the `square` property, this property is a boolean so it does not need value
-
-<template #example>
-<pagination-square />
-</template>
-
-<template #template>
-
-@[code{1-5}](../.vuepress/components/pagination/square.vue)
-
-</template>
-
-<template #script>
-
-@[code{7-11}](../.vuepress/components/pagination/square.vue)
-
-</template>
-
-<template #style>
-
-@[code{13-26}](../.vuepress/components/pagination/square.vue)
+@[code{31-49}](../.vuepress/components/pagination/shape.vue)
 
 </template>
 

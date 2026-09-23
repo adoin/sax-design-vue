@@ -1,30 +1,24 @@
+<script setup lang="ts">
+import { shallowRef } from 'vue'
+
+const page = shallowRef(1)
+const pageSize = shallowRef(10)
+</script>
+
 <template>
-  <div class="center con-pagination">
+  <div class="pagination-default-demo">
     <s-pagination
       v-model:current-page="page"
-      :layout="['total', 'prev', 'pager', 'next', 'jumper', 'sizes']"
+      v-model:page-size="pageSize"
       :total="50"
     />
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-
-const page = ref(1)
-</script>
-
-<style lang="scss" scoped>
-.con-pagination {
-  .s-pagination {
-    margin: 10px 0px;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .con-pagination {
-    overflow: scroll;
-    justify-content: flex-start;
-  }
+<style scoped>
+.pagination-default-demo {
+  width: 100%;
+  overflow-x: auto;
+  padding: 6px 0;
 }
 </style>
