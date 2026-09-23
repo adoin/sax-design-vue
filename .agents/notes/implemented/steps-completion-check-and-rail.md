@@ -1,0 +1,32 @@
+---
+status: implemented
+kind: project-specification
+updated_at: 2026-09-23
+completed_at: 2026-09-23
+modules:
+  - packages/components/steps
+  - packages/theme-chalk/src/steps.scss
+  - docs/components/steps.md
+  - docs/zh/components/steps.md
+supersedes: []
+---
+
+# Steps 完成勾线与默认轨道
+
+## 用户原始需求
+
+> step的打勾希望跟Checkbox那种一样，有个绘制过程，而且这个勾也太不显眼了。默认的这个样式也不好看
+
+## 项目契约
+
+- Steps 的默认完成态和成功态复用 Checkbox 所用的 `IconCheck` SVG 勾线，并在状态改变前保留路径节点，使进行中到完成的切换能绘制勾线；自定义 `icon` 与完整 `item` 插槽继续覆盖默认呈现。
+- 完成标记、当前标记和连接轨道使用已解析的主题语义颜色。`steps.scss` 必须显式导入颜色函数；不能把字面量 `getColor(...)` 输出到浏览器。
+- 默认轨道采用清晰但克制的状态层级：完成标记中的勾线要足够大，当前步骤保持焦点，连接线较细，不能用硬环形阴影假装焦点边界。
+- 成功态亮绿底使用深色勾保证对比度；普通完成态蓝底使用白色勾。减弱动态效果设置下不播放绘制过渡。
+- 横向轨道、纵向时间线、加载、禁用、交互和本地化 Code / Playground 示例保持一致。
+
+## 验证
+
+- Steps 与主题颜色测试 2 个文件、9 项通过；Web 类型检查、主题构建通过。
+- 文档示例测试 4 个文件、18 项通过；文档生产构建 201 页通过。
+- 浏览器验证横向和时间线的完成态、加载态与状态色；完成勾节点在切换前后持续挂载；中英文默认示例的 Code 与 Playground 都能显示完整内容和新的完成标记。

@@ -1,9 +1,10 @@
 @use 'common/var' as *;
+@use 'mixins/function' as *;
 
 .s-steps {
-  --s-steps-marker-size: 36px;
-  --s-steps-marker-active-size: 48px;
-  --s-steps-marker-track-size: 52px;
+  --s-steps-marker-size: 34px;
+  --s-steps-marker-active-size: 42px;
+  --s-steps-marker-track-size: 48px;
   --s-steps-gap: 14px;
 
   display: flex;
@@ -71,6 +72,7 @@ button.s-steps__trigger {
 }
 
 .s-steps__marker {
+  position: relative;
   display: grid;
   width: var(--s-steps-marker-size);
   height: var(--s-steps-marker-size);
@@ -78,22 +80,47 @@ button.s-steps__trigger {
   border-radius: var(--sax-radius-circle);
   background: var(--s-steps-state-soft);
   color: var(--s-steps-state-color);
-  font-size: 15px;
+  font-size: calc(var(--s-steps-marker-size) * 0.5);
   font-weight: 700;
   line-height: 1;
-  box-shadow: 0 7px 18px -14px var(--s-steps-state-color);
+  box-shadow: 0 7px 18px -15px var(--s-steps-state-color);
   transition:
     width var(--sax-motion-duration-fast) var(--sax-motion-easing-emphasized),
     height var(--sax-motion-duration-fast) var(--sax-motion-easing-emphasized),
     color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
     background-color var(--sax-motion-duration-fast)
       var(--sax-motion-easing-standard),
-    box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+    box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard),
+    transform var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 }
 
 .s-steps__marker .s-icon {
   width: 1em;
   height: 1em;
+}
+
+.s-steps__check {
+  position: absolute;
+  width: calc(var(--s-steps-marker-size) * 0.66);
+  height: calc(var(--s-steps-marker-size) * 0.66);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--sax-motion-duration-quick)
+    var(--sax-motion-easing-standard);
+}
+
+.s-steps__check .s-icon-check__check {
+  width: 100%;
+  height: 100%;
+}
+
+.s-steps__check .s-icon-check__check path {
+  stroke: currentColor;
+}
+
+.s-steps__item--finish .s-steps__check,
+.s-steps__item--success .s-steps__check {
+  opacity: 1;
 }
 
 .s-steps__number {
@@ -151,7 +178,7 @@ button.s-steps__trigger {
   z-index: 0;
   overflow: hidden;
   border-radius: var(--sax-radius-pill);
-  background: getColor(text, 0.095);
+  background: getColor(text, 0.12);
 }
 
 .s-steps__line::after {
@@ -200,25 +227,34 @@ button.s-steps__trigger {
   background: var(--s-steps-state-color);
   color: #{getColor(white)};
   box-shadow:
-    0 0 0 7px var(--s-steps-state-soft),
-    0 12px 26px -14px var(--s-steps-state-color);
+    inset 0 1px 0 #{getColor(white, 0.24)},
+    0 10px 22px -13px var(--s-steps-state-color);
+}
+
+.s-steps__item.is-active .s-steps__title {
+  color: var(--s-steps-state-color);
 }
 
 .s-steps__item.is-active .s-steps__marker {
   width: var(--s-steps-marker-active-size);
   height: var(--s-steps-marker-active-size);
   box-shadow:
-    0 0 0 8px var(--s-steps-state-soft),
-    0 15px 32px -16px var(--s-steps-state-color);
+    inset 0 1px 0 #{getColor(white, 0.28)},
+    0 14px 30px -13px var(--s-steps-state-color);
 }
 
 .s-steps__item--loading .s-steps__marker {
   background: getColor(background);
+  color: var(--s-steps-state-color);
 
   .s-logo-loading {
     width: 72%;
     height: 72%;
   }
+}
+
+.s-steps__item--success .s-steps__marker {
+  color: getColor(dark);
 }
 
 .s-steps__item.is-clickable:hover .s-steps__marker {
@@ -272,10 +308,10 @@ button.s-steps__trigger {
 }
 
 .s-steps--horizontal .s-steps__line {
-  top: calc(var(--s-steps-marker-track-size) / 2 - 2px);
+  top: calc(var(--s-steps-marker-track-size) / 2 - 1px);
   left: calc(50% + var(--s-steps-marker-size) / 2);
   width: calc(100% - var(--s-steps-marker-size));
-  height: 4px;
+  height: 2px;
 }
 
 .s-steps--vertical {
@@ -306,8 +342,8 @@ button.s-steps__trigger {
 .s-steps--vertical .s-steps__line {
   top: calc(var(--s-steps-marker-track-size) / 2);
   bottom: calc(-1 * var(--s-steps-gap));
-  left: calc(var(--s-steps-marker-track-size) / 2 - 2px);
-  width: 4px;
+  left: calc(var(--s-steps-marker-track-size) / 2 - 1px);
+  width: 2px;
 }
 
 .s-steps--vertical .s-steps__line::after {
@@ -371,9 +407,9 @@ button.s-steps__trigger {
 }
 
 .s-steps--small {
-  --s-steps-marker-size: 28px;
-  --s-steps-marker-active-size: 38px;
-  --s-steps-marker-track-size: 42px;
+  --s-steps-marker-size: 26px;
+  --s-steps-marker-active-size: 34px;
+  --s-steps-marker-track-size: 40px;
   --s-steps-gap: 10px;
 }
 
@@ -389,9 +425,9 @@ button.s-steps__trigger {
 }
 
 .s-steps--large {
-  --s-steps-marker-size: 44px;
-  --s-steps-marker-active-size: 56px;
-  --s-steps-marker-track-size: 60px;
+  --s-steps-marker-size: 42px;
+  --s-steps-marker-active-size: 50px;
+  --s-steps-marker-track-size: 58px;
   --s-steps-gap: 18px;
 }
 
@@ -433,8 +469,8 @@ button.s-steps__trigger {
   .s-steps--horizontal.is-responsive .s-steps__line {
     top: calc(var(--s-steps-marker-track-size) / 2);
     bottom: calc(-1 * var(--s-steps-gap));
-    left: calc(var(--s-steps-marker-track-size) / 2 - 2px);
-    width: 4px;
+    left: calc(var(--s-steps-marker-track-size) / 2 - 1px);
+    width: 2px;
     height: auto;
   }
 
@@ -460,6 +496,8 @@ button.s-steps__trigger {
 @media (prefers-reduced-motion: reduce) {
   .s-steps__frame,
   .s-steps__marker,
+  .s-steps__check,
+  .s-steps__check *,
   .s-steps__line::after {
     transition: none !important;
   }

@@ -40,8 +40,26 @@ describe('Steps', () => {
     const activeMain = wrapper.findAll('.s-steps__main')[1]
     expect(activeMain.element.children[0].classList).toContain('s-steps__title')
     expect(activeMain.get('.s-steps__status').text()).toContain('2 / 3')
-    expect(wrapper.getComponent({ name: 'SIcon' }).props('name')).toBe(
-      'cb:checkmark',
+    expect(wrapper.findAll('.s-steps__check')).toHaveLength(3)
+    expect(wrapper.findAll('.s-steps__check')[0].classes()).toContain(
+      'is-active',
+    )
+    expect(wrapper.findAll('.s-steps__check')[1].classes()).not.toContain(
+      'is-active',
+    )
+  })
+
+  it('keeps the check path mounted so completion can draw in', async () => {
+    const wrapper = mount(Steps, { props: { active: 1, items } })
+    const check = wrapper.findAll('.s-steps__check')[1]
+    const path = check.get('path').element
+
+    await wrapper.setProps({ active: 2 })
+
+    expect(wrapper.findAll('.s-steps__check')[1].element).toBe(check.element)
+    expect(wrapper.findAll('.s-steps__check')[1].get('path').element).toBe(path)
+    expect(wrapper.findAll('.s-steps__check')[1].classes()).toContain(
+      'is-active',
     )
   })
 

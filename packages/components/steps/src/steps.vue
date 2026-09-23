@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, useId, useTemplateRef } from 'vue'
-import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
+import { IconCheck, SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace, useSize } from '@vuesax-alpha/hooks'
 import { stepsEmits, stepsProps } from './steps'
 
@@ -224,18 +224,31 @@ const contextId = (index: number) => `${stepsId}-context-${index}`
             <span :class="ns.e('marker-track')" aria-hidden="true">
               <span :class="ns.e('marker')">
                 <slot name="icon" v-bind="createSlotProps(item, index)">
+                  <IconCheck
+                    :active="isFinished(resolveStatus(item, index))"
+                    :class="ns.e('check')"
+                  />
                   <SLogoLoading
                     v-if="
+                      !isFinished(resolveStatus(item, index)) &&
                       resolveStatus(item, index) === 'loading' &&
                       !resolveIcon(item, resolveStatus(item, index))
                     "
                     size="72%"
                   />
                   <SIcon
-                    v-else-if="resolveIcon(item, resolveStatus(item, index))"
+                    v-else-if="
+                      !isFinished(resolveStatus(item, index)) &&
+                      resolveIcon(item, resolveStatus(item, index))
+                    "
                     :name="resolveIcon(item, resolveStatus(item, index))"
                   />
-                  <span v-else :class="ns.e('number')">{{ index + 1 }}</span>
+                  <span
+                    v-else-if="!isFinished(resolveStatus(item, index))"
+                    :class="ns.e('number')"
+                  >
+                    {{ index + 1 }}
+                  </span>
                 </slot>
               </span>
             </span>

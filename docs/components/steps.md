@@ -101,7 +101,7 @@ description: 'Steps with a focus rail, contextual timeline, semantic states, and
 
 ## Focus rail
 
-For linear flows such as onboarding and configuration, with a strong active-step focus.
+For linear flows such as onboarding and configuration. Completed markers fill and draw a checkmark when a step finishes; the current step remains the primary visual focus.
 
 <template #example><steps-default /></template>
 
