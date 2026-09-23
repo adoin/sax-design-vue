@@ -101,10 +101,13 @@ button.s-steps__trigger {
 
 .s-steps__check {
   position: absolute;
+  top: 50%;
+  left: 50%;
   width: calc(var(--s-steps-marker-size) * 0.66);
   height: calc(var(--s-steps-marker-size) * 0.66);
   opacity: 0;
   pointer-events: none;
+  transform: translate(-50%, -50%);
   transition: opacity var(--sax-motion-duration-quick)
     var(--sax-motion-easing-standard);
 }
@@ -112,6 +115,8 @@ button.s-steps__trigger {
 .s-steps__check .s-icon-check__check {
   width: 100%;
   height: 100%;
+  // IconCheck's visible path is 1.414 / 24 viewBox units right of center.
+  transform: translateX(-5.9%);
 }
 
 .s-steps__check .s-icon-check__check path {
@@ -260,7 +265,7 @@ button.s-steps__trigger {
 .s-steps__item.is-clickable:hover .s-steps__marker {
   box-shadow: 0 17px 34px -15px var(--s-steps-state-color);
   filter: brightness(1.06);
-  transform: translateY(-1px) scale(1.04);
+  transform: translateY(-1px);
 }
 
 .s-steps__item.is-clickable:hover .s-steps__title {
@@ -270,7 +275,7 @@ button.s-steps__trigger {
 .s-steps__trigger:focus-visible .s-steps__marker {
   box-shadow: 0 15px 32px -16px var(--s-steps-state-color);
   filter: brightness(1.06);
-  transform: translateY(-1px) scale(1.04);
+  transform: translateY(-1px);
 }
 
 .s-steps__item.is-disabled {
