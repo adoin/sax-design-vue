@@ -26,6 +26,55 @@ const variableDeclaration = {
   alias: 'variable',
 }
 
+const typeReference = [
+  {
+    pattern:
+      /(\b(?:as|extends|implements|satisfies)\s+|=>[ \t]*)[A-Z_$][\w$]*(?=[ \t]*(?:<|\[|[>,|&)=;?:{}.]|=>|\r?$))/m,
+    lookbehind: true,
+    alias: 'class-name',
+  },
+  {
+    pattern: /(:\s*)[A-Z_$][\w$]*(?=[ \t]*(?:<|\[|[>,|&)=;?:{}.]|=>|\r?$))/m,
+    lookbehind: true,
+    alias: 'class-name',
+  },
+  {
+    pattern:
+      /([<|&]\s*)[A-Z_$][\w$]*(?=[ \t]*(?:<|\[|[>,|&)=;?:{}.]|=>|\r?$))/m,
+    lookbehind: true,
+    alias: 'class-name',
+  },
+  {
+    pattern: /(,\s*)[A-Z_$][\w$]*(?=[ \t]*(?:<|\[|[>,|&)=;?{}.]|=>|\r?$))/m,
+    lookbehind: true,
+    alias: 'class-name',
+  },
+]
+
+const typeImport = {
+  pattern: /(\bimport\s+type\s*{\s*)[A-Z_$][\w$]*(?=\s*(?:,|}))/,
+  lookbehind: true,
+  alias: 'class-name',
+}
+
+const tsxGenericArrow = {
+  pattern:
+    /<(?=(?:const\s+)?[A-Z_$][\w$]*\b)(?:[^<>]|<(?:[^<>]|<[^<>]*>)*>)*>(?=\s*\()/,
+  greedy: true,
+  alias: ['generic', 'class-name'],
+  inside: {
+    'type-reference': {
+      pattern: /\b[A-Z_$][\w$]*\b/,
+      alias: 'class-name',
+    },
+    keyword: /\b(?:const|extends|in|keyof|out)\b/,
+    builtin:
+      /\b(?:any|bigint|boolean|never|number|object|string|symbol|unknown)\b/,
+    operator: /[&|?=:]/,
+    punctuation: /[<>{}[\](),.]/,
+  },
+}
+
 const ensureVariableDeclarationTokens = () => {
   for (const language of ['javascript', 'typescript']) {
     if (!Prism.languages[language]?.['variable-declaration'])
@@ -34,6 +83,28 @@ const ensureVariableDeclarationTokens = () => {
       })
   }
 }
+
+const ensureTypeReferenceTokens = () => {
+  for (const language of ['typescript', 'tsx']) {
+    if (!Prism.languages[language]?.['type-import'])
+      Prism.languages.insertBefore(language, 'class-name', {
+        'type-import': typeImport,
+        'type-reference': typeReference,
+      })
+  }
+
+  if (!Prism.languages.tsx?.['generic-arrow'])
+    Prism.languages.insertBefore('tsx', 'tag', {
+      'generic-arrow': tsxGenericArrow,
+    })
+}
+
+const ensureSourceHighlightTokens = () => {
+  ensureVariableDeclarationTokens()
+  ensureTypeReferenceTokens()
+}
+
+ensureSourceHighlightTokens()
 
 const languageForBlock = (tag: string, openingTag: string) => {
   const lang = openingTag.match(/\blang\s*=\s*["']([^"']+)["']/i)?.[1]
@@ -80,7 +151,7 @@ const vueSourceSections = (source: string) => {
 }
 
 const grammarFor = (language: string) => {
-  ensureVariableDeclarationTokens()
+  ensureSourceHighlightTokens()
   return Prism.languages[language] ?? Prism.languages.markup
 }
 
@@ -130,3 +201,17 @@ export const highlightVueSfcHtml = (source: string) =>
       Prism.highlight(section, grammarFor(language), language),
     )
     .join('')
+
+export const highlightTypeScriptHtml = (
+  source: string,
+  language: 'typescript' | 'tsx',
+) => Prism.highlight(source, grammarFor(language), language)
+
+export const highlightTypeScriptSegments = (
+  source: string,
+  language: 'typescript' | 'tsx',
+) => {
+  const segments: SourceHighlightSegment[] = []
+  appendSegments(Prism.tokenize(source, grammarFor(language)), [], segments)
+  return segments
+}

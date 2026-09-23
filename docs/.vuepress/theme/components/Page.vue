@@ -177,6 +177,7 @@ import { upperFirst } from 'lodash-unified'
 import { componentNamesZh } from '../../app/component-categories'
 import { endingSlashRE, normalize, outboundRE } from '../util'
 import { useDocLocaleUi } from '../composables/docLocale'
+import { restoreTypeScriptFenceHighlight } from '../util/restoreTypeScriptFenceHighlight'
 
 import SidebarRight from './SidebarRight.vue'
 import Api from './Api.vue'
@@ -400,6 +401,7 @@ const syncStickyLayout = () => {
 }
 
 onMounted(() => {
+  if ($page.value) restoreTypeScriptFenceHighlight($page.value)
   window.addEventListener('scroll', syncStickyLayout)
   window.addEventListener('resize', syncStickyLayout)
   syncStickyLayout()

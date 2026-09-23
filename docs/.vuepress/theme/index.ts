@@ -7,7 +7,10 @@ import { containerPlugin } from '@vuepress/plugin-container'
 import { gitPlugin } from '@vuepress/plugin-git'
 import { prismjsPlugin } from '@vuepress/plugin-prismjs'
 import { createApiTypeDetailsResolver } from './node/apiTypeDetails'
-import { highlightVueSfcHtml } from './util/highlightVueSource'
+import {
+  highlightTypeScriptHtml,
+  highlightVueSfcHtml,
+} from './util/highlightVueSource'
 
 import type { SaxDesignVueThemeOptions } from './saxDesignVueTheme'
 import type { Page, Plugin, Theme } from '@vuepress/core'
@@ -62,10 +65,13 @@ const vueSfcHighlightPlugin: Plugin = {
   name: 'vuepress-vue-sfc-highlight',
   extendsMarkdown(md) {
     const fallback = md.options.highlight
-    md.options.highlight = (source, language, attrs) =>
-      language === 'vue'
-        ? highlightVueSfcHtml(source)
-        : (fallback?.(source, language, attrs) ?? '')
+    md.options.highlight = (source, language, attrs) => {
+      if (language === 'vue') return highlightVueSfcHtml(source)
+      if (language === 'tsx') return highlightTypeScriptHtml(source, 'tsx')
+      if (language === 'ts' || language === 'typescript')
+        return highlightTypeScriptHtml(source, 'typescript')
+      return fallback?.(source, language, attrs) ?? ''
+    }
   },
 }
 
