@@ -205,7 +205,7 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 
 ## 超出收纳
 
-默认 `overflow="collapse"`。空间不足时保留当前标签，并把其余标签收进“更多”浮层。
+默认 `overflow="collapse"`。空间不足时保留当前标签，并把放不下的标签收进“更多”浮层。示例使用窄容器展示收纳效果。
 
 <template #example><tabs-overflow /></template>
 

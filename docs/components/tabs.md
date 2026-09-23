@@ -205,7 +205,7 @@ Switch line, pill, card, position, size, and panel motion in one example.
 
 ## Overflow collapse
 
-The default `overflow="collapse"` keeps the active tab visible and moves remaining tabs into a More popover.
+The default `overflow="collapse"` keeps the active tab visible and moves tabs that do not fit into a More popover. This example uses a narrow container to show the collapse behavior.
 
 <template #example><tabs-overflow /></template>
 

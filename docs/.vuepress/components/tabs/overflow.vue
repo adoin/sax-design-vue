@@ -68,7 +68,7 @@ const tabNames = [
 
 <style scoped>
 .tabs-overflow-demo {
-  width: min(100%, 590px);
+  width: min(100%, 360px);
 }
 
 .tabs-overflow-demo__panel {
