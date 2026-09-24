@@ -218,6 +218,13 @@ defineExpose({ validate, clearValidate, resetField, focus, error })
       :class="ns.e('label')"
       :style="labelStyle"
     >
+      <span v-if="isRequired" :class="ns.e('required-mark')" aria-hidden="true">
+        <svg viewBox="0 0 16 16" focusable="false">
+          <path
+            d="M8 1.4c.45 0 .87.18 1.19.49l4.92 4.92a1.68 1.68 0 0 1 0 2.38l-4.92 4.92a1.68 1.68 0 0 1-2.38 0L1.89 9.19a1.68 1.68 0 0 1 0-2.38l4.92-4.92c.32-.31.74-.49 1.19-.49Z"
+          />
+        </svg>
+      </span>
       <slot
         :id="controlId"
         name="label"

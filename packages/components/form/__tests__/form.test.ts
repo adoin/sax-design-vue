@@ -131,16 +131,19 @@ describe('Form schema renderer', () => {
     const wrapper = mountForm({ name: '' }, [item])
 
     expect(wrapper.get('.s-form-item__label').text()).toBe('Name')
+    expect(wrapper.get('.s-form-item__required-mark svg').exists()).toBe(true)
     await wrapper.setProps({ items: [{ ...item, title: undefined }] })
 
     expect(wrapper.get('.s-form-item').classes()).toContain('is-required')
     expect(wrapper.get('.s-form-item__label').text()).toBe('')
+    expect(wrapper.get('.s-form-item__required-mark svg').exists()).toBe(true)
 
     const explicit = mountForm({}, [{ field: 'code', required: true }])
-    expect(explicit.find('.s-form-item__label').exists()).toBe(true)
+    expect(explicit.find('.s-form-item__required-mark svg').exists()).toBe(true)
 
     const optional = mountForm({}, [{ field: 'note' }])
     expect(optional.find('.s-form-item__label').exists()).toBe(false)
+    expect(optional.find('.s-form-item__required-mark').exists()).toBe(false)
   })
 
   it('keeps explicit label width and alignment overrides', () => {

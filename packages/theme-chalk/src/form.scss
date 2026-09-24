@@ -62,10 +62,20 @@
   text-align: left;
 }
 
-.s-form-item.is-required .s-form-item__label::before {
+.s-form-item__required-mark {
+  display: inline-flex;
+  width: 0.6em;
+  height: 0.6em;
   margin-right: 4px;
   color: getColor(danger);
-  content: '*';
+  vertical-align: middle;
+}
+
+.s-form-item__required-mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentcolor;
 }
 
 .s-form-item__body {
