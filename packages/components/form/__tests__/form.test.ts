@@ -121,6 +121,28 @@ describe('Form schema renderer', () => {
     )
   })
 
+  it('keeps a required marker when a field title is removed', async () => {
+    const item: FormItemConfig = {
+      field: 'name',
+      title: 'Name',
+      rules: { required: true, message: 'Enter a name' },
+      itemRender: { name: 'TestInput' },
+    }
+    const wrapper = mountForm({ name: '' }, [item])
+
+    expect(wrapper.get('.s-form-item__label').text()).toBe('Name')
+    await wrapper.setProps({ items: [{ ...item, title: undefined }] })
+
+    expect(wrapper.get('.s-form-item').classes()).toContain('is-required')
+    expect(wrapper.get('.s-form-item__label').text()).toBe('')
+
+    const explicit = mountForm({}, [{ field: 'code', required: true }])
+    expect(explicit.find('.s-form-item__label').exists()).toBe(true)
+
+    const optional = mountForm({}, [{ field: 'note' }])
+    expect(optional.find('.s-form-item__label').exists()).toBe(false)
+  })
+
   it('keeps explicit label width and alignment overrides', () => {
     const model = reactive({ name: '' })
     const wrapper = mountForm(

@@ -59,6 +59,7 @@ const rules = computed<FormRule[]>(() => {
 const hasRequiredRule = computed(() =>
   rules.value.some((rule) => rule.required),
 )
+const isRequired = computed(() => props.required || hasRequiredRule.value)
 const hasLabel = computed(() => !!labelText.value || !!slots.label)
 const hasMessageArea = computed(
   () =>
@@ -203,7 +204,7 @@ defineExpose({ validate, clearValidate, resetField, focus, error })
     :class="[
       ns.b(),
       ns.is('error', !!error),
-      ns.is('required', required || hasRequiredRule),
+      ns.is('required', isRequired),
       ns.is('nested', nested),
       ns.is(`label-${labelPosition}`),
       ns.is(`align-${align}`),
@@ -212,7 +213,7 @@ defineExpose({ validate, clearValidate, resetField, focus, error })
     :data-prop="fieldProp"
   >
     <label
-      v-if="hasLabel"
+      v-if="hasLabel || isRequired"
       :for="fieldProp ? controlId : undefined"
       :class="ns.e('label')"
       :style="labelStyle"
@@ -221,7 +222,7 @@ defineExpose({ validate, clearValidate, resetField, focus, error })
         :id="controlId"
         name="label"
         :label="labelText"
-        :required="required || hasRequiredRule"
+        :required="isRequired"
       >
         {{ labelText }}
       </slot>
