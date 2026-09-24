@@ -20,23 +20,27 @@ PROPS:
   - name: label-float
     type: Boolean
     values: "true | false"
-    description: 是否让输入标签始终显示在值上方。
+    description: 聚焦或已有值时，将输入标签浮到值上方。
     default: false
+    usage: '#labels'
   - name: label
     type: String
     values: "标签文字"
     description: 设置单值选择器或范围起始输入的标签。
     default: null
+    usage: '#labels'
   - name: start-label
     type: String
     values: "标签文字"
     description: 设置范围起始输入的标签。
     default: null
+    usage: '#labels'
   - name: end-label
     type: String
     values: "标签文字"
     description: 设置范围结束输入的标签。
     default: null
+    usage: '#labels'
   - name: auto-close
     type: Boolean
     values: "true | false"
@@ -254,24 +258,52 @@ EVENTS:
 使用 Date Picker 选择日期。示例同时展示单值、范围输入的自定义主题色和浮动标签。
 
 <template #example>
-<date-picker-default />
+<date-picker-zh-default />
 </template>
 
 <template #template>
 
-@[code{1-19}](../../.vuepress/components/date-picker/default.vue)
+@[code{8-26}](../../.vuepress/components/date-picker-zh/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{21-26}](../../.vuepress/components/date-picker/default.vue)
+@[code{1-6}](../../.vuepress/components/date-picker-zh/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{28-34}](../../.vuepress/components/date-picker/default.vue)
+@[code{28-34}](../../.vuepress/components/date-picker-zh/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 标签
+
+使用 `label` 显示常驻标签；加上 `label-float` 后，聚焦或选定日期时标签浮到值上方。范围选择可分别设置 `start-label` 和 `end-label`。
+
+<template #example><date-picker-zh-labels /></template>
+
+<template #template>
+
+@[code{9-25}](../../.vuepress/components/date-picker-zh/labels.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-7}](../../.vuepress/components/date-picker-zh/labels.vue)
+
+</template>
+
+<template #style>
+
+@[code{27-38}](../../.vuepress/components/date-picker-zh/labels.vue)
 
 </template>
 

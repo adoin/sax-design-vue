@@ -24,31 +24,31 @@ PROPS:
   - name: label-float
     type: Boolean
     values: "true | false"
-    description: Keep the input label visible above its value.
+    description: Float the input label on focus or when it has a value.
     default: false
     link: null
-    usage: '#default'
+    usage: '#labels'
   - name: label
     type: String
     values: "label text"
     description: Set the label for a single picker or range start input.
     default: null
     link: null
-    usage: '#default'
+    usage: '#labels'
   - name: start-label
     type: String
     values: "label text"
     description: Set the range start input label.
     default: null
     link: null
-    usage: '#default'
+    usage: '#labels'
   - name: end-label
     type: String
     values: "label text"
     description: Set the range end input label.
     default: null
     link: null
-    usage: '#default'
+    usage: '#labels'
   - name: auto-close
     type: Boolean
     values: "true | false"
@@ -297,6 +297,34 @@ labels for single and range triggers.
 <template #style>
 
 @[code{28-34}](../.vuepress/components/date-picker/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Labels
+
+Use `label` for a persistent label. Add `label-float` to move it above the value on focus or after a date is selected. Range pickers can set `start-label` and `end-label` independently.
+
+<template #example><date-picker-labels /></template>
+
+<template #template>
+
+@[code{9-25}](../.vuepress/components/date-picker/labels.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-7}](../.vuepress/components/date-picker/labels.vue)
+
+</template>
+
+<template #style>
+
+@[code{27-38}](../.vuepress/components/date-picker/labels.vue)
 
 </template>
 
