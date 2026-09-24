@@ -50,6 +50,42 @@ Configure `toolbarConfig.left` and `toolbarConfig.right` as ordered global rende
 
 <card>
 
+### Toolbar renderers
+
+`toolbarConfig.left` and `toolbarConfig.right` are ordered lists of `itemRender` entries. Table calls the selected registry entry's `renderToolbar` with its side, inherited size, busy state, Table methods, and query context. The built-in `button` below emits a code through `toolbarClick`; `$columnConfig` opens the column settings panel. Try adding a row and changing column visibility.
+
+<template #example><table-toolbar-renderers /></template>
+
+<template #template>
+
+@[code{42-53}](../../.vuepress/components/table/toolbar-renderers.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-40}](../../.vuepress/components/table/toolbar-renderers.vue)
+
+</template>
+
+<template #style>
+
+@[code{55-64}](../../.vuepress/components/table/toolbar-renderers.vue)
+
+</template>
+
+</card>
+
+<card>
+
+### Query item renderers
+
+`queryConfig.items[].itemRender` uses the same configuration and `renderFormItem` method as [Form schema items](../form.md#schema-renderers-and-nested-layout). The query model, field value, and `setValue` come from that Form instance. See [Form's custom renderer example](../form.md#custom-renderer) for the callback contract; Table adds query orchestration after Form validates. The query and toolbar example above uses `$input` and `$select` in its items.
+
+</card>
+
+<card>
+
 ### Slots and nested columns
 
 Map a query item's `default`, `label`, or `error` entry in `queryConfig.items[].slots` directly to an identically named application slot. Names are used as written; Table does not add a `query-` prefix. Replace query buttons through `query-actions`, the two toolbar regions through `toolbar_left` and `toolbar_right`, and its title through `toolbar-title`. The `query` slot can add `s-form-item` controls to the same form.

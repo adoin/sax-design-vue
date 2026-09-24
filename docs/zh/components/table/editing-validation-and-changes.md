@@ -40,6 +40,34 @@ description: 'Table 的编辑、校验与变更功能、配置方式与可运行
 
 <card>
 
+### 编辑渲染器
+
+给列设置 `editor: true`，并在 `columns[].renderer` 中指定已注册的控件名称。Table 用该注册项的 `renderEdit` 渲染草稿，静止展示仍由 `renderDefault` 负责。下面的内置 `$input` 与 `$select` 编辑表格显示的同一份数据。双击单元格、修改并提交后，应用通过 `editCommit` 的 `updatedRow` 接收结果。
+
+<template #example><table-zh-edit-renderers /></template>
+
+<template #template>
+
+@[code{47-59}](../../../.vuepress/components/table-zh/edit-renderers.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-45}](../../../.vuepress/components/table-zh/edit-renderers.vue)
+
+</template>
+
+<template #style>
+
+@[code{61-70}](../../../.vuepress/components/table-zh/edit-renderers.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ### 编辑生命周期
 
 通过 `edit-config.onSwitch` 设置切换单元格时的行为，默认 `commit`；通过 `onContextChange` 设置排序、筛选、分页或列变更时的行为，默认 `cancel`。受控查询只有在父组件接受新状态后才结束编辑。Enter 提交草稿，Escape 放弃草稿。

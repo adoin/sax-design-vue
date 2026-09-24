@@ -50,6 +50,42 @@ description: 'Table 的查询表单与请求代理功能、配置方式与可运
 
 <card>
 
+### 工具栏渲染器
+
+`toolbarConfig.left` 与 `toolbarConfig.right` 是按顺序排列的 `itemRender` 列表。Table 调用注册项的 `renderToolbar`，提供所在侧、继承尺寸、忙碌状态、Table 方法和查询上下文。下面的内置 `button` 通过 `toolbarClick` 发出操作码；`$columnConfig` 打开列设置。可以试着新增一行并调整列可见性。
+
+<template #example><table-zh-toolbar-renderers /></template>
+
+<template #template>
+
+@[code{42-53}](../../../.vuepress/components/table-zh/toolbar-renderers.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-40}](../../../.vuepress/components/table-zh/toolbar-renderers.vue)
+
+</template>
+
+<template #style>
+
+@[code{55-64}](../../../.vuepress/components/table-zh/toolbar-renderers.vue)
+
+</template>
+
+</card>
+
+<card>
+
+### 查询项渲染器
+
+`queryConfig.items[].itemRender` 沿用 [Form 配置项](../form.md#schema-renderers-and-nested-layout)的写法与 `renderFormItem` 方法。查询模型、字段值和 `setValue` 由该 Form 实例提供。[Form 的自定义渲染器示例](../form.md#custom-renderer)说明回调契约；Form 校验通过后，Table 才执行查询。上面的查询与工具栏示例已在配置项中使用 `$input` 和 `$select`。
+
+</card>
+
+<card>
+
 ### 插槽与嵌套列
 
 通过 `queryConfig.items[].slots` 将查询项的 `default`、`label` 或 `error` 显式映射到同名业务插槽。名称按原样使用，不会自动添加 `query-` 前缀。`query-actions` 替换查询按钮区，`toolbar_left` 与 `toolbar_right` 替换工具栏两侧，`toolbar-title` 替换标题。`query` 插槽可以追加 `s-form-item`，所有查询控件共用一个表单。

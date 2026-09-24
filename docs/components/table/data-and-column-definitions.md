@@ -68,9 +68,37 @@ Give columns rendered with `v-for` stable keys. Changing their order updates hea
 
 <card>
 
+### Default renderers
+
+Set `columns[].renderer` to a registered name or a `{ name, props, options, events }` configuration. In a body cell, Table calls that renderer's `renderDefault`. This example uses the built-in `$input` display and `$buttons` actions; clicking Inspect reports the row supplied to the action handler. The same registry entry can supply `renderEdit` when the column also enables `editor`.
+
+<template #example><table-default-renderers /></template>
+
+<template #template>
+
+@[code{42-47}](../../.vuepress/components/table/default-renderers.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-40}](../../.vuepress/components/table/default-renderers.vue)
+
+</template>
+
+<template #style>
+
+@[code{49-58}](../../.vuepress/components/table/default-renderers.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ### Slots and renderers
 
-In configured columns, `slots.default` accepts either a named slot string or a direct cell render function. Table does not derive implicit `cell-*`, `header-*`, `edit-*`, or `footer-*` names from field values. For a column-specific template, map an application-owned unique name through `columns[].slots`, or use a local slot inside `STableColumn`. Reusable display, edit, Form, filter, and toolbar behavior comes from the shared global [`renderer` registry](./renderer.md); the dedicated guide covers registration, usage locations, callback contracts, and every built-in name.
+In configured columns, `slots.default` accepts either a named slot string or a direct cell render function. Table does not derive implicit `cell-*`, `header-*`, `edit-*`, or `footer-*` names from field values. For a column-specific template, map an application-owned unique name through `columns[].slots`, or use a local slot inside `STableColumn`. Reusable behavior comes from the shared global [`renderer` registry](../renderer.md); the dedicated guide covers registration, callback contracts, and built-in names. See the [edit renderer](./editing-validation-and-changes.md#edit-renderers) and [toolbar renderer](./query-forms-and-request-proxy.md#toolbar-renderers) examples; query items use [Form's renderer configuration](../form.md#schema-renderers-and-nested-layout).
 
 The cell function receives `TableCellRenderParams`, including `row`, `column`, `value`, `index`, and `rowIndex`; switch the code sample to TSX to see the JSX form. Rendering precedence is: an explicitly mapped default slot, the generic cell slot, an inline or local renderer, a global renderer, then the raw field value.
 

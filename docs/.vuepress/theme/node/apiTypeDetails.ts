@@ -28,11 +28,20 @@ const walkTypeScriptFiles = (directory: string): string[] => {
   const files: string[] = []
 
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
-    if (entry.name === 'node_modules' || entry.name === 'dist') continue
+    if (
+      entry.name === 'node_modules' ||
+      entry.name === 'dist' ||
+      entry.name === '__tests__'
+    )
+      continue
 
     const path = resolve(directory, entry.name)
     if (entry.isDirectory()) files.push(...walkTypeScriptFiles(path))
-    else if (entry.isFile() && /\.(?:ts|tsx)$/.test(entry.name))
+    else if (
+      entry.isFile() &&
+      /\.(?:ts|tsx)$/.test(entry.name) &&
+      !/\.(?:test|spec)\.(?:ts|tsx)$/.test(entry.name)
+    )
       files.push(path)
   }
 

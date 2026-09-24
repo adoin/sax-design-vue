@@ -448,6 +448,32 @@ CHILD_PROPS:
     default: null
     usage: '/components/table/data-and-column-definitions.html#text-overflow-and-tooltips'
 RENDERERS:
+  - name: renderDefault
+    type: '(options: RendererOptions<Row>, params: TableDefaultRendererParams<Row>) => VNodeChild'
+    description: Shared renderer method used by columns[].renderer for body-cell display.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#default-renderers'
+  - name: renderEdit
+    type: '(options: RendererOptions<Row>, params: TableGlobalEditRendererParams<Row>) => VNodeChild'
+    description: Shared renderer method used by an editable column's renderer during a draft.
+    default: null
+    usage: '/components/table/editing-validation-and-changes.html#edit-renderers'
+  - name: renderToolbar
+    type: '(options: RendererOptions, params: TableGlobalToolbarRendererParams<Row, QueryForm>) => VNodeChild'
+    description: Shared renderer method used by toolbarConfig.left and toolbarConfig.right itemRender entries.
+    default: null
+    usage: '/components/table/query-forms-and-request-proxy.html#toolbar-renderers'
+  - name: 'queryConfig.items[].itemRender'
+    type: 'RendererOptions<QueryForm>'
+    description: Form schema renderer configuration reused by Table query items; it invokes renderFormItem.
+    default: null
+    usage: '/components/form.html#schema-renderers-and-nested-layout'
+  - name: renderFormItem
+    type: '(options: RendererOptions<QueryForm>, params: FormRendererParams<QueryForm>) => VNodeChild'
+    description: Form's shared renderer method used by queryConfig.items; see Form for its callback and example.
+    default: null
+    link: '/components/form.html#custom-renderer'
+    usage: '/components/form.html#custom-renderer'
   - name: name
     type: string
     description: Required global renderer name in TableRendererOptions.

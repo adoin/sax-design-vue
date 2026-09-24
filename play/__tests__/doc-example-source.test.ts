@@ -271,7 +271,7 @@ describe('documentation example source', () => {
     const cards = markdown.map((localePages) =>
       localePages.flatMap(exampleCards),
     )
-    expect(cards[0]).toHaveLength(65)
+    expect(cards[0]).toHaveLength(68)
     expect(cards[1]).toHaveLength(cards[0].length)
 
     markdown.forEach((localePages, localeIndex) => {
@@ -288,7 +288,7 @@ describe('documentation example source', () => {
       })
       expect(
         localePages.flatMap((source) => source.match(/^###\s+.+$/gm) ?? []),
-      ).toHaveLength(65)
+      ).toHaveLength(69)
     })
 
     markdown.forEach((localePages) => {

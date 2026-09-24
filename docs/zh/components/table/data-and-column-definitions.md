@@ -68,9 +68,37 @@ description: 'Table 的数据与列定义功能、配置方式与可运行示例
 
 <card>
 
+### 默认渲染器
+
+在 `columns[].renderer` 中填写已注册名称，或传入 `{ name, props, options, events }` 配置。Table 展示正文单元格时调用该渲染器的 `renderDefault`。此例使用内置 `$input` 展示文本，并用 `$buttons` 提供行操作；点击“查看”会显示操作处理器收到的行。列同时启用 `editor` 后，同一个注册项还可以提供 `renderEdit`。
+
+<template #example><table-zh-default-renderers /></template>
+
+<template #template>
+
+@[code{42-47}](../../../.vuepress/components/table-zh/default-renderers.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-40}](../../../.vuepress/components/table-zh/default-renderers.vue)
+
+</template>
+
+<template #style>
+
+@[code{49-58}](../../../.vuepress/components/table-zh/default-renderers.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ### 插槽与渲染器
 
-配置列的 `slots.default` 既可填写具名插槽字符串，也可直接传入单元格渲染函数。表格不会根据字段名隐式生成 `cell-*`、`header-*`、`edit-*` 或 `footer-*` 插槽；需要列专属模板时，通过 `columns[].slots` 显式映射应用自己的唯一名称，或在 `STableColumn` 内使用局部插槽。可复用的显示、编辑、表单、筛选和工具栏行为来自共享的全局 [`renderer` 注册表](./renderer.md)；独立说明集中介绍注册方式、使用位置、回调契约和所有内置名称。
+配置列的 `slots.default` 既可填写具名插槽字符串，也可直接传入单元格渲染函数。表格不会根据字段名隐式生成 `cell-*`、`header-*`、`edit-*` 或 `footer-*` 插槽；需要列专属模板时，通过 `columns[].slots` 显式映射应用自己的唯一名称，或在 `STableColumn` 内使用局部插槽。可复用行为来自共享的全局 [`renderer` 注册表](../renderer.md)；独立说明集中介绍注册方式、回调契约和内置名称。其他使用位置见[编辑渲染器](./editing-validation-and-changes.md#edit-renderers)和[工具栏渲染器](./query-forms-and-request-proxy.md#toolbar-renderers)示例；查询项沿用 [Form 的渲染器配置](../form.md#schema-renderers-and-nested-layout)。
 
 单元格函数接收 `TableCellRenderParams`，包括 `row`、`column`、`value`、`index` 和 `rowIndex`；切换示例代码的 TSX 写法可查看 JSX 形式。渲染优先级为：配置显式映射的 default 插槽、通用单元格插槽、内联或局部渲染器、全局渲染器、字段原始值。
 

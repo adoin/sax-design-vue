@@ -448,6 +448,32 @@ CHILD_PROPS:
     default: null
     usage: '/zh/components/table/data-and-column-definitions.html#text-overflow-and-tooltips'
 RENDERERS:
+  - name: renderDefault
+    type: '(options: RendererOptions<Row>, params: TableDefaultRendererParams<Row>) => VNodeChild'
+    description: columns[].renderer 展示正文单元格时调用的共享渲染器方法。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#default-renderers'
+  - name: renderEdit
+    type: '(options: RendererOptions<Row>, params: TableGlobalEditRendererParams<Row>) => VNodeChild'
+    description: 可编辑列生成草稿时调用的共享渲染器方法。
+    default: null
+    usage: '/zh/components/table/editing-validation-and-changes.html#edit-renderers'
+  - name: renderToolbar
+    type: '(options: RendererOptions, params: TableGlobalToolbarRendererParams<Row, QueryForm>) => VNodeChild'
+    description: toolbarConfig.left 和 toolbarConfig.right 的 itemRender 调用的共享渲染器方法。
+    default: null
+    usage: '/zh/components/table/query-forms-and-request-proxy.html#toolbar-renderers'
+  - name: 'queryConfig.items[].itemRender'
+    type: 'RendererOptions<QueryForm>'
+    description: Table 查询项复用 Form 的配置式渲染，调用 renderFormItem。
+    default: null
+    usage: '/zh/components/form.html#schema-renderers-and-nested-layout'
+  - name: renderFormItem
+    type: '(options: RendererOptions<QueryForm>, params: FormRendererParams<QueryForm>) => VNodeChild'
+    description: queryConfig.items 复用的 Form 渲染器方法；回调与示例见 Form 文档。
+    default: null
+    link: '/zh/components/form.html#custom-renderer'
+    usage: '/zh/components/form.html#custom-renderer'
   - name: name
     type: string
     description: TableRendererOptions 中必填的全局渲染器注册名。

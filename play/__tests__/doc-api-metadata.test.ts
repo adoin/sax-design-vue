@@ -87,6 +87,11 @@ describe('documentation API metadata', () => {
         'modelEvent',
       )
       expect(table.RENDERERS.map((row: { name: string }) => row.name)).toEqual([
+        'renderDefault',
+        'renderEdit',
+        'renderToolbar',
+        'queryConfig.items[].itemRender',
+        'renderFormItem',
         'name',
         'props',
         'attrs',
@@ -98,6 +103,14 @@ describe('documentation API metadata', () => {
         'edit',
         'filter',
       ])
+      const formItemRenderer = table.RENDERERS.find(
+        (row: { name: string }) => row.name === 'renderFormItem',
+      )
+      expect(formItemRenderer.link).toBe(
+        root === docsRoots[1]
+          ? '/zh/components/form.html#custom-renderer'
+          : '/components/form.html#custom-renderer',
+      )
     }
   })
 
@@ -310,6 +323,7 @@ describe('documentation API metadata', () => {
     expect(
       resolveTypeDetails('table', ['String | Boolean | Function']),
     ).toEqual({})
+    expect(resolveTypeDetails('table', ['Row'])).toEqual({})
 
     const crossComponentDetails = resolveTypeDetails('calendar', [
       'ContextMenuItem[]',

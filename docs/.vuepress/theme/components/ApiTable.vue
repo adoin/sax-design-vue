@@ -324,6 +324,13 @@ const restoreCodeFocus = async () => {
 .api-table :deep(.s-table__data-cell.api-column-type) {
   color: hsl(var(--sax-accent-secondary));
 }
+.api-table :deep(.s-table__data-cell .api-type-code),
+.api-table :deep(.s-table__data-cell .api-type-reference) {
+  overflow-wrap: anywhere;
+}
+.api-table :deep(.s-table__data-cell .api-type-reference) {
+  white-space: normal;
+}
 .api-table :deep(.s-table__data-cell.api-column-default) {
   color: hsl(var(--sax-badge-tip-color));
 }

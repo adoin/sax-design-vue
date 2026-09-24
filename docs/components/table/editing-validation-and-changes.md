@@ -40,6 +40,34 @@ Editing updates a draft. Without `change-config`, accept `updatedRow` or `change
 
 <card>
 
+### Edit renderers
+
+Set `editor: true` on a column and give `columns[].renderer` a registered control name. Table uses that entry's `renderEdit` for the draft while keeping `renderDefault` for its resting display. The built-in `$input` and `$select` below edit the same data the Table displays. Double-click a cell, change it, then commit; `editCommit` supplies `updatedRow` for the application to accept.
+
+<template #example><table-edit-renderers /></template>
+
+<template #template>
+
+@[code{47-59}](../../.vuepress/components/table/edit-renderers.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-45}](../../.vuepress/components/table/edit-renderers.vue)
+
+</template>
+
+<template #style>
+
+@[code{61-70}](../../.vuepress/components/table/edit-renderers.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ### Editing lifecycle
 
 Choose `edit-config.onSwitch` for moving to another cell (`commit` by default), and `onContextChange` for accepted sort, filter, page or column changes (`cancel` by default). Controlled query requests only end editing after the parent accepts the new state. Enter submits the draft; Escape discards it.
