@@ -1,5 +1,7 @@
 ---
 description: '支持排序、筛选、分页、树形数据与虚拟滚动的数据表格。'
+API_TITLES:
+  RENDERERS: 渲染器
 PROPS:
   - name: 'row'
     type: 'TableRow | TableRow[] | null'
@@ -445,6 +447,57 @@ CHILD_PROPS:
     description: '覆盖该列的表头溢出处理；未设置时继承表格。'
     default: null
     usage: '/zh/components/table/data-and-column-definitions.html#text-overflow-and-tooltips'
+RENDERERS:
+  - name: name
+    type: string
+    description: TableRendererOptions 中必填的全局渲染器注册名。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: props
+    type: 'Record<string, unknown>'
+    description: TableRendererOptions 的组件属性；props.size 覆盖所在 Table 区域继承的尺寸。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: attrs
+    type: 'Record<string, unknown>'
+    description: TableRendererOptions 中传给组件的其他属性。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: events
+    type: 'Record<string, TableRendererEvent<Row>>'
+    description: TableRendererOptions 的事件处理器先接收当前阶段的 Table 上下文，再接收组件事件参数。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: options
+    type: 'unknown[]'
+    description: TableRendererOptions 传给全局渲染器的数据选项。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: cell
+    type: 'TableCellRenderer<Row>'
+    description: TableRenderer 的局部正文单元格渲染函数，位于列专属及通用插槽之后。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: header
+    type: 'TableHeaderRenderer<Row>'
+    description: TableRenderer 的局部表头单元格渲染函数。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: footer
+    type: 'TableFooterRenderer<Row>'
+    description: TableRenderer 的局部表尾单元格渲染函数。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: edit
+    type: 'TableEditRenderer<Row>'
+    description: TableRenderer 的局部单元格编辑函数，独立于展示渲染器。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: filter
+    type: 'TableFilterRenderer<Row>'
+    description: TableRenderer 的局部列筛选控件渲染函数。
+    default: null
+    usage: '/zh/components/table/data-and-column-definitions.html#slots-and-renderers'
 EVENTS:
   - name: 'proxyStateChange'
     type: '(state: TableProxyState) => void'

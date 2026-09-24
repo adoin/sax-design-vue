@@ -47,6 +47,9 @@ let headingObserver: MutationObserver | undefined
 const apiTableKeys: ThemeNormalApiTableKey[] = [
   'PROPS',
   'CHILD_PROPS',
+  'ITEMS',
+  'RULES',
+  'RENDERERS',
   'EVENTS',
   'SLOTS',
   'EXPOSES',

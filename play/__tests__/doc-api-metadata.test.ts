@@ -13,12 +13,46 @@ const docsRoots = [
 const apiSections = new Set([
   'PROPS',
   'CHILD_PROPS',
+  'ITEMS',
+  'RULES',
+  'RENDERERS',
   'EVENTS',
   'SLOTS',
   'EXPOSES',
 ])
 
 describe('documentation API metadata', () => {
+  it('keeps Form ownership and Table renderer contracts in generated API sections', () => {
+    for (const root of docsRoots) {
+      const formSource = readFileSync(resolve(root, 'form.md'), 'utf8')
+      const form = matter(formSource).data
+      const table = matter(readFileSync(resolve(root, 'table.md'), 'utf8')).data
+
+      expect(formSource).not.toMatch(/^## (API ownership|API 归属)$/m)
+      expect(form.ITEMS.map((row: { name: string }) => row.name)).toContain(
+        'children',
+      )
+      expect(form.RULES.map((row: { name: string }) => row.name)).toContain(
+        'validator',
+      )
+      expect(form.RENDERERS.map((row: { name: string }) => row.name)).toContain(
+        'modelEvent',
+      )
+      expect(table.RENDERERS.map((row: { name: string }) => row.name)).toEqual([
+        'name',
+        'props',
+        'attrs',
+        'events',
+        'options',
+        'cell',
+        'header',
+        'footer',
+        'edit',
+        'filter',
+      ])
+    }
+  })
+
   it('renders API extensions through explicit Table slots and exposes every type', () => {
     const tableSource = readFileSync(
       resolve(projectRoot, 'docs/.vuepress/theme/components/ApiTable.vue'),

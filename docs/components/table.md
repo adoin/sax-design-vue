@@ -1,5 +1,7 @@
 ---
 description: 'Data tables with sorting, filtering, pagination, tree data and virtual scrolling.'
+API_TITLES:
+  RENDERERS: Renderers
 PROPS:
   - name: 'row'
     type: 'TableRow | TableRow[] | null'
@@ -445,6 +447,57 @@ CHILD_PROPS:
     description: 'Overrides header overflow for this column; otherwise inherits the table.'
     default: null
     usage: '/components/table/data-and-column-definitions.html#text-overflow-and-tooltips'
+RENDERERS:
+  - name: name
+    type: string
+    description: Required global renderer name in TableRendererOptions.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: props
+    type: 'Record<string, unknown>'
+    description: Component props in TableRendererOptions; props.size overrides the inherited Table region size.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: attrs
+    type: 'Record<string, unknown>'
+    description: Additional component attributes in TableRendererOptions.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: events
+    type: 'Record<string, TableRendererEvent<Row>>'
+    description: TableRendererOptions handlers receive the stage-specific Table context before component event arguments.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: options
+    type: 'unknown[]'
+    description: Data options forwarded by TableRendererOptions to the selected global renderer.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: cell
+    type: 'TableCellRenderer<Row>'
+    description: Local TableRenderer function for body cells after column-specific and generic slots.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: header
+    type: 'TableHeaderRenderer<Row>'
+    description: Local TableRenderer function for header cells.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: footer
+    type: 'TableFooterRenderer<Row>'
+    description: Local TableRenderer function for footer cells.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: edit
+    type: 'TableEditRenderer<Row>'
+    description: Local TableRenderer function for a cell editor, independent of its display renderer.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#slots-and-renderers'
+  - name: filter
+    type: 'TableFilterRenderer<Row>'
+    description: Local TableRenderer function for a column filter control.
+    default: null
+    usage: '/components/table/data-and-column-definitions.html#slots-and-renderers'
 EVENTS:
   - name: 'proxyStateChange'
     type: '(state: TableProxyState) => void'

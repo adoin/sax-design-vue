@@ -2,6 +2,9 @@
 API_TITLES:
   PROPS: SForm props
   CHILD_PROPS: SFormItem props
+  ITEMS: items[] configuration (FormItemConfig)
+  RULES: Validation rules (FormRule)
+  RENDERERS: Renderer options (RendererOptions)
   EVENTS: SForm events
   EXPOSES: SForm exposed methods
 PROPS:
@@ -23,7 +26,7 @@ PROPS:
   - name: items
     type: FormItemConfig[]
     values: 'tree configuration with children'
-    description: Render schema-driven items and recursively compose complex layouts.
+    description: Render schema-driven items; each node accepts SFormItem fields plus the items[] options below.
     default: '[]'
   - name: label-width
     type: String | Number
@@ -165,6 +168,129 @@ CHILD_PROPS:
     type: RendererOptions
     description: Render a registered or custom control when no default slot is supplied.
     default: null
+ITEMS:
+  - name: key
+    type: 'string | number'
+    description: Stable Vue key for an items node; prop, field, then index are the fallbacks.
+    default: null
+    usage: '#schema-renderers-and-nested-layout'
+  - name: children
+    type: 'FormItemConfig[]'
+    description: Recursively creates nested Form Item grids.
+    default: null
+    usage: '#schema-renderers-and-nested-layout'
+  - name: visible
+    type: boolean
+    description: Statically controls whether this configuration node renders.
+    default: true
+    usage: '#schema-renderers-and-nested-layout'
+  - name: visibleMethod
+    type: '({ model, item }) => boolean'
+    description: Dynamically decides whether the node renders from its model and configuration.
+    default: null
+    usage: '#schema-renderers-and-nested-layout'
+  - name: disabled
+    type: 'boolean | (model) => boolean'
+    description: Overrides or derives the disabled state for this configuration node.
+    default: inherited
+    usage: '#schema-renderers-and-nested-layout'
+  - name: readonly
+    type: 'boolean | (model) => boolean'
+    description: Overrides or derives the readonly state for this configuration node.
+    default: inherited
+    usage: '#schema-renderers-and-nested-layout'
+  - name: class
+    type: 'string | string[] | Record<string, boolean>'
+    description: Class forwarded to the generated Form Item.
+    default: null
+    usage: '#schema-renderers-and-nested-layout'
+  - name: style
+    type: CSSProperties
+    description: Inline style forwarded to the generated Form Item.
+    default: null
+    usage: '#schema-renderers-and-nested-layout'
+  - name: slots
+    type: '{ label?: string; default?: string; error?: string }'
+    description: Names scoped slots declared on SForm for this configuration node.
+    default: null
+    usage: '#schema-renderers-and-nested-layout'
+RULES:
+  - name: required
+    type: boolean
+    description: Rejects undefined, null, an empty string, or an empty array.
+    default: false
+    usage: '#validation-and-triggers'
+  - name: message
+    type: string
+    description: Fallback for required failure or a validator returning false; a returned error string takes precedence.
+    default: null
+    usage: '#validation-and-triggers'
+  - name: validator
+    type: '(value, model) => boolean | string | Promise<boolean | string>'
+    description: Returns true when valid, false for the fallback message, or an error string to display.
+    default: null
+    usage: '#validation-and-triggers'
+  - name: trigger
+    type: "'blur' | 'change' | Array<'blur' | 'change'>"
+    description: Interaction trigger; omitted rules run on blur and all rules run on submit.
+    default: null
+    usage: '#validation-and-triggers'
+RENDERERS:
+  - name: name
+    type: string
+    description: Required name of a registered renderer.
+    default: null
+    usage: '#custom-renderer'
+  - name: component
+    type: 'Component | string'
+    description: Overrides the component registered under name.
+    default: null
+    usage: '#custom-renderer'
+  - name: props
+    type: 'Record<string, unknown>'
+    description: Component props forwarded to the rendered control.
+    default: null
+    usage: '#custom-renderer'
+  - name: attrs
+    type: 'Record<string, unknown>'
+    description: Additional HTML or component attributes.
+    default: null
+    usage: '#custom-renderer'
+  - name: events
+    type: 'Record<string, (params, ...args) => unknown>'
+    description: Event handlers receiving the renderer context before component event arguments.
+    default: null
+    usage: '#custom-renderer'
+  - name: modelProp
+    type: string
+    description: Model prop for a custom control; the Form field value overrides a same-named prop.
+    default: modelValue
+    usage: '#custom-renderer'
+  - name: modelEvent
+    type: string
+    description: Model update event; its first argument is written directly to the Form field.
+    default: 'update:modelValue'
+    usage: '#custom-renderer'
+  - name: content
+    type: 'string | (params) => VNodeChild'
+    description: Default slot text or a content rendering function.
+    default: null
+    usage: '#custom-renderer'
+  - name: options
+    type: 'unknown[]'
+    description: Options forwarded to data-driven controls such as Select and Radio Group.
+    default: null
+    usage: '#custom-renderer'
+  - name: optionProps
+    type: 'Record<string, string>'
+    description: Option field mapping available to custom renderers.
+    default: null
+    usage: '#custom-renderer'
+  - name: children
+    type: 'RendererOptions[]'
+    description: Nested rendering nodes for composite controls.
+    default: null
+    usage: '#custom-renderer'
 EVENTS:
   - name: validate
     description: Fired after a field validates with field, valid, and message.
@@ -338,66 +464,5 @@ The existing `<s-form-item>` API remains compatible. Add `nested` to a parent It
 @[code{1-11}](../.vuepress/components/form/nested.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API ownership
-
-Form has three related public inputs. Their fields intentionally overlap, but they are not interchangeable:
-
-| Passed to                      | Public type       | Reference below            |
-| ------------------------------ | ----------------- | -------------------------- |
-| `<s-form>`                     | `FormProps`       | **SForm props**            |
-| `<s-form-item>`                | `FormItemProps`   | **SFormItem props**        |
-| each node in `<s-form :items>` | `FormItemConfig`  | **items[] configuration**  |
-| each entry in `rules`          | `FormRule`        | **Validation rule**        |
-| `itemRender` on an Item/config | `RendererOptions` | **Renderer configuration** |
-
-### `items[]` configuration (`FormItemConfig`)
-
-Each `items` node accepts the same fields as `SFormItem` using camelCase names, such as `labelWidth`, `labelPosition`, `reserveErrorSpace`, and `itemRender`. It additionally supports these schema-only fields:
-
-| Property        | Type                                            | Description                                                         |
-| --------------- | ----------------------------------------------- | ------------------------------------------------------------------- |
-| `key`           | `string \| number`                              | Stable Vue key; falls back to `prop`, `field`, then the item index. |
-| `children`      | `FormItemConfig[]`                              | Recursively creates a nested Form Item grid.                        |
-| `visible`       | `boolean`                                       | Statically include or omit this node.                               |
-| `visibleMethod` | `({ model, item }) => boolean`                  | Compute visibility from the current model and config node.          |
-| `disabled`      | `boolean \| (model) => boolean`                 | Static or model-driven disabled state.                              |
-| `readonly`      | `boolean \| (model) => boolean`                 | Static or model-driven readonly state.                              |
-| `class`         | `string \| string[] \| Record<string, boolean>` | Class forwarded to the generated Form Item.                         |
-| `style`         | `CSSProperties`                                 | Inline style forwarded to the generated Form Item.                  |
-| `slots`         | `{ label?, default?, error? }`                  | Names of scoped slots declared on `SForm`.                          |
-
-### Validation rule (`FormRule`)
-
-| Property    | Type                                                | Description                                                                  |
-| ----------- | --------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `required`  | `boolean`                                           | Reject `undefined`, `null`, empty strings, and empty arrays.                 |
-| `message`   | `string`                                            | Error text used by required or custom validation.                            |
-| `validator` | `(value, model) => boolean \| string \| Promise<…>` | Return `true` when valid, or `false` / an error string when invalid.         |
-| `trigger`   | `'blur' \| 'change' \| Array<'blur' \| 'change'>`   | Interaction that runs the rule; omitted interaction rules default to `blur`. |
-
-### Renderer configuration (`RendererOptions`)
-
-| Property      | Type                                           | Description                                                          |
-| ------------- | ---------------------------------------------- | -------------------------------------------------------------------- |
-| `name`        | `string`                                       | Required renderer registration name.                                 |
-| `component`   | `Component \| string`                          | Override the component registered for `name`.                        |
-| `props`       | `Record<string, unknown>`                      | Component props.                                                     |
-| `attrs`       | `Record<string, unknown>`                      | Additional component attributes.                                     |
-| `events`      | `Record<string, (params, ...args) => unknown>` | Event handlers receiving renderer context first.                     |
-| `modelProp`   | `string`                                       | Model prop name; defaults to `modelValue`.                           |
-| `modelEvent`  | `string`                                       | Model update event; defaults to `update:modelValue`.                 |
-| `content`     | `string \| (params) => VNodeChild`             | Default slot content or a content renderer.                          |
-| `options`     | `unknown[]`                                    | Data options forwarded to components such as Select and Radio Group. |
-| `optionProps` | `Record<string, string>`                       | Option-field mapping available to custom renderers.                  |
-| `children`    | `RendererOptions[]`                            | Nested renderer nodes for composite controls.                        |
-
-The shared registry includes `$input`, `$textarea`, `$date`, `$dateRange`, `$time`, `$timePicker`, `$select`, `$radio`, `$checkbox`, `$checkboxGroup`, `$treeSelect`, `$cascader`, `$rate`, `$slider`, `$switch`, `$verCode`, and `$buttons`. Existing component-name registrations such as `SInput` and `SSelect` remain available.
-
-The API tables below are separated by owner: `SForm props` only apply to the Form container, while `SFormItem props` apply to a declarative Item and to same-named `items[]` fields.
 
 </card>

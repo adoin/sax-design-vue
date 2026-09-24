@@ -23,6 +23,9 @@ const tables = computed<Tables>(() => {
   const source = {
     PROPS: pageFrontmatter.value.PROPS,
     CHILD_PROPS: pageFrontmatter.value.CHILD_PROPS,
+    ITEMS: pageFrontmatter.value.ITEMS,
+    RULES: pageFrontmatter.value.RULES,
+    RENDERERS: pageFrontmatter.value.RENDERERS,
     EVENTS: pageFrontmatter.value.EVENTS,
     SLOTS: pageFrontmatter.value.SLOTS,
     EXPOSES: pageFrontmatter.value.EXPOSES,

@@ -25,7 +25,14 @@ export interface ThemeApiTypeDefinition {
 }
 
 export type ThemeNormalApiTableKey =
-  'PROPS' | 'CHILD_PROPS' | 'SLOTS' | 'EVENTS' | 'EXPOSES'
+  | 'PROPS'
+  | 'CHILD_PROPS'
+  | 'ITEMS'
+  | 'RULES'
+  | 'RENDERERS'
+  | 'SLOTS'
+  | 'EVENTS'
+  | 'EXPOSES'
 
 export interface ThemeNormalApiFrontmatter extends PageFrontmatter {
   description?: string
@@ -33,6 +40,9 @@ export interface ThemeNormalApiFrontmatter extends PageFrontmatter {
   API_TYPE_DETAILS?: Record<string, ThemeApiTypeDefinition>
   PROPS?: ThemeNormalPropsFrontmatter[]
   CHILD_PROPS?: ThemeNormalPropsFrontmatter[]
+  ITEMS?: ThemeNormalPropsFrontmatter[]
+  RULES?: ThemeNormalPropsFrontmatter[]
+  RENDERERS?: ThemeNormalPropsFrontmatter[]
   SLOTS?: ThemeNormalPropsFrontmatter[]
   EVENTS?: ThemeNormalPropsFrontmatter[]
   EXPOSES?: ThemeNormalPropsFrontmatter[]

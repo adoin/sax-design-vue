@@ -2,6 +2,9 @@
 API_TITLES:
   PROPS: SForm 属性
   CHILD_PROPS: SFormItem 属性
+  ITEMS: items[] 配置（FormItemConfig）
+  RULES: 校验规则（FormRule）
+  RENDERERS: 渲染器配置（RendererOptions）
   EVENTS: SForm 事件
   EXPOSES: SForm 暴露方法
 PROPS:
@@ -23,7 +26,7 @@ PROPS:
   - name: items
     type: FormItemConfig[]
     values: '支持 children 的树形配置'
-    description: 配置式渲染表单项，并通过 children 递归组织复杂布局。
+    description: 配置式渲染表单项；每个节点支持 SFormItem 字段及下方 items[] 的额外配置。
     default: '[]'
   - name: label-width
     type: String | Number
@@ -165,6 +168,129 @@ CHILD_PROPS:
     type: RendererOptions
     description: 未提供默认插槽时渲染已注册或自定义控件。
     default: null
+ITEMS:
+  - name: key
+    type: 'string | number'
+    description: 配置节点的稳定 Vue key；缺省依次使用 prop、field 和索引。
+    default: null
+    usage: '#schema-renderers-and-nested-layout'
+  - name: children
+    type: 'FormItemConfig[]'
+    description: 递归创建嵌套的 Form Item 栅格。
+    default: null
+    usage: '#schema-renderers-and-nested-layout'
+  - name: visible
+    type: boolean
+    description: 静态决定当前配置节点是否渲染。
+    default: true
+    usage: '#schema-renderers-and-nested-layout'
+  - name: visibleMethod
+    type: '({ model, item }) => boolean'
+    description: 根据当前模型和配置节点动态决定是否渲染。
+    default: null
+    usage: '#schema-renderers-and-nested-layout'
+  - name: disabled
+    type: 'boolean | (model) => boolean'
+    description: 覆盖当前配置节点的禁用状态，或根据模型计算。
+    default: 继承
+    usage: '#schema-renderers-and-nested-layout'
+  - name: readonly
+    type: 'boolean | (model) => boolean'
+    description: 覆盖当前配置节点的只读状态，或根据模型计算。
+    default: 继承
+    usage: '#schema-renderers-and-nested-layout'
+  - name: class
+    type: 'string | string[] | Record<string, boolean>'
+    description: 传给生成的 Form Item 的 class。
+    default: null
+    usage: '#schema-renderers-and-nested-layout'
+  - name: style
+    type: CSSProperties
+    description: 传给生成的 Form Item 的行内样式。
+    default: null
+    usage: '#schema-renderers-and-nested-layout'
+  - name: slots
+    type: '{ label?: string; default?: string; error?: string }'
+    description: 引用在 SForm 上声明的作用域插槽名称。
+    default: null
+    usage: '#schema-renderers-and-nested-layout'
+RULES:
+  - name: required
+    type: boolean
+    description: 拒绝 undefined、null、空字符串和空数组。
+    default: false
+    usage: '#validation-and-triggers'
+  - name: message
+    type: string
+    description: 必填失败或 validator 返回 false 时使用；validator 返回错误字符串时后者优先。
+    default: null
+    usage: '#validation-and-triggers'
+  - name: validator
+    type: '(value, model) => boolean | string | Promise<boolean | string>'
+    description: 合法时返回 true，非法时返回 false 或直接返回要显示的错误文字。
+    default: null
+    usage: '#validation-and-triggers'
+  - name: trigger
+    type: "'blur' | 'change' | Array<'blur' | 'change'>"
+    description: 交互触发时机；未声明时默认在 blur 运行，提交时运行所有规则。
+    default: null
+    usage: '#validation-and-triggers'
+RENDERERS:
+  - name: name
+    type: string
+    description: 必填的渲染器注册名称。
+    default: null
+    usage: '#custom-renderer'
+  - name: component
+    type: 'Component | string'
+    description: 覆盖 name 对应的已注册组件。
+    default: null
+    usage: '#custom-renderer'
+  - name: props
+    type: 'Record<string, unknown>'
+    description: 传给渲染控件的组件属性。
+    default: null
+    usage: '#custom-renderer'
+  - name: attrs
+    type: 'Record<string, unknown>'
+    description: 传给控件的其他 HTML 或组件属性。
+    default: null
+    usage: '#custom-renderer'
+  - name: events
+    type: 'Record<string, (params, ...args) => unknown>'
+    description: 事件处理器先接收渲染上下文，再接收组件事件参数。
+    default: null
+    usage: '#custom-renderer'
+  - name: modelProp
+    type: string
+    description: 自定义控件的模型属性；Form 字段值覆盖同名 props。
+    default: modelValue
+    usage: '#custom-renderer'
+  - name: modelEvent
+    type: string
+    description: 模型更新事件；事件首参直接写回 Form 字段。
+    default: 'update:modelValue'
+    usage: '#custom-renderer'
+  - name: content
+    type: 'string | (params) => VNodeChild'
+    description: 默认插槽文字或内容渲染函数。
+    default: null
+    usage: '#custom-renderer'
+  - name: options
+    type: 'unknown[]'
+    description: 传给 Select、Radio Group 等数据驱动组件的选项。
+    default: null
+    usage: '#custom-renderer'
+  - name: optionProps
+    type: 'Record<string, string>'
+    description: 自定义渲染器可使用的选项字段映射。
+    default: null
+    usage: '#custom-renderer'
+  - name: children
+    type: 'RendererOptions[]'
+    description: 用于组合控件的嵌套渲染节点。
+    default: null
+    usage: '#custom-renderer'
 EVENTS:
   - name: validate
     description: 单个字段校验结束后触发，参数为 field、valid、message。
@@ -339,66 +465,5 @@ Form 同时支持传统插槽写法与配置式 `items`。配置式 API 采用�
 @[code{1-11}](../../.vuepress/components/form/nested.vue)
 
 </template>
-
-</card>
-
-<card>
-
-## API 归属
-
-Form 有三类相互关联的公开入参。它们存在同名字段，但使用位置不同：
-
-| 传入位置                       | 公开类型          | 对应说明           |
-| ------------------------------ | ----------------- | ------------------ |
-| `<s-form>`                     | `FormProps`       | **SForm 属性**     |
-| `<s-form-item>`                | `FormItemProps`   | **SFormItem 属性** |
-| `<s-form :items>` 的每个节点   | `FormItemConfig`  | **items[] 配置**   |
-| `rules` 中的每条规则           | `FormRule`        | **校验规则**       |
-| Item / 配置项中的 `itemRender` | `RendererOptions` | **渲染器配置**     |
-
-### `items[]` 配置（`FormItemConfig`）
-
-每个 `items` 节点都支持 `SFormItem` 的同名字段，配置对象使用 camelCase，例如 `labelWidth`、`labelPosition`、`reserveErrorSpace` 和 `itemRender`。此外还有以下仅用于配置式渲染的字段：
-
-| 属性            | 类型                                            | 说明                                                    |
-| --------------- | ----------------------------------------------- | ------------------------------------------------------- |
-| `key`           | `string \| number`                              | 稳定的 Vue key；未传时依次使用 `prop`、`field` 和索引。 |
-| `children`      | `FormItemConfig[]`                              | 递归创建嵌套的 Form Item 栅格。                         |
-| `visible`       | `boolean`                                       | 静态决定是否渲染当前节点。                              |
-| `visibleMethod` | `({ model, item }) => boolean`                  | 根据当前模型和配置节点动态决定是否渲染。                |
-| `disabled`      | `boolean \| (model) => boolean`                 | 静态或根据模型计算禁用状态。                            |
-| `readonly`      | `boolean \| (model) => boolean`                 | 静态或根据模型计算只读状态。                            |
-| `class`         | `string \| string[] \| Record<string, boolean>` | 传给生成的 Form Item 的 class。                         |
-| `style`         | `CSSProperties`                                 | 传给生成的 Form Item 的行内样式。                       |
-| `slots`         | `{ label?, default?, error? }`                  | 引用声明在 `SForm` 上的作用域插槽名称。                 |
-
-### 校验规则（`FormRule`）
-
-| 属性        | 类型                                                | 说明                                                     |
-| ----------- | --------------------------------------------------- | -------------------------------------------------------- |
-| `required`  | `boolean`                                           | 拒绝 `undefined`、`null`、空字符串和空数组。             |
-| `message`   | `string`                                            | 必填或自定义校验失败时显示的错误文字。                   |
-| `validator` | `(value, model) => boolean \| string \| Promise<…>` | 合法时返回 `true`，非法时返回 `false` 或错误字符串。     |
-| `trigger`   | `'blur' \| 'change' \| Array<'blur' \| 'change'>`   | 指定交互触发时机；未声明时，交互校验默认按 `blur` 运行。 |
-
-### 渲染器配置（`RendererOptions`）
-
-| 属性          | 类型                                           | 说明                                            |
-| ------------- | ---------------------------------------------- | ----------------------------------------------- |
-| `name`        | `string`                                       | 必填的渲染器注册名称。                          |
-| `component`   | `Component \| string`                          | 覆盖 `name` 对应的已注册组件。                  |
-| `props`       | `Record<string, unknown>`                      | 传给控件的组件属性。                            |
-| `attrs`       | `Record<string, unknown>`                      | 传给控件的其他 HTML / 组件属性。                |
-| `events`      | `Record<string, (params, ...args) => unknown>` | 事件处理器；第一个参数固定为当前渲染上下文。    |
-| `modelProp`   | `string`                                       | 模型属性名，默认为 `modelValue`。               |
-| `modelEvent`  | `string`                                       | 模型更新事件，默认为 `update:modelValue`。      |
-| `content`     | `string \| (params) => VNodeChild`             | 默认插槽文字或内容渲染函数。                    |
-| `options`     | `unknown[]`                                    | 传给 Select、Radio Group 等数据驱动组件的选项。 |
-| `optionProps` | `Record<string, string>`                       | 自定义渲染器可使用的选项字段映射。              |
-| `children`    | `RendererOptions[]`                            | 用于组合控件的嵌套渲染节点。                    |
-
-共享注册表内置 `$input`、`$textarea`、`$date`、`$dateRange`、`$time`、`$timePicker`、`$select`、`$radio`、`$checkbox`、`$checkboxGroup`、`$treeSelect`、`$cascader`、`$rate`、`$slider`、`$switch`、`$verCode` 和 `$buttons`。原有的 `SInput`、`SSelect` 等组件名注册仍然可用。
-
-下面的 API 表已按归属拆开：`SForm 属性` 只用于 Form 容器，`SFormItem 属性` 用于声明式 Item，也对应 `items[]` 中的同名字段。
 
 </card>

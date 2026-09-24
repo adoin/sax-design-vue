@@ -15,7 +15,16 @@ import {
 import type { SaxDesignVueThemeOptions } from './saxDesignVueTheme'
 import type { Page, Plugin, Theme } from '@vuepress/core'
 
-const apiTableKeys = ['PROPS', 'CHILD_PROPS', 'SLOTS', 'EVENTS', 'EXPOSES']
+const apiTableKeys = [
+  'PROPS',
+  'CHILD_PROPS',
+  'ITEMS',
+  'RULES',
+  'RENDERERS',
+  'EVENTS',
+  'SLOTS',
+  'EXPOSES',
+]
 const resolveApiTypeDetails = createApiTypeDetailsResolver(
   path.resolve(__dirname, '../../../packages/components'),
 )

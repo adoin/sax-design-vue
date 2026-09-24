@@ -29,6 +29,9 @@ const ui = {
     apiTables: {
       PROPS: 'PROPS',
       CHILD_PROPS: 'CHILD PROPS',
+      ITEMS: 'ITEMS',
+      RULES: 'VALIDATION RULES',
+      RENDERERS: 'RENDERERS',
       SLOTS: 'SLOTS',
       EVENTS: 'EVENTS',
       EXPOSES: 'EXPOSES',
@@ -36,6 +39,9 @@ const ui = {
     apiRowNames: {
       PROPS: 'Property',
       CHILD_PROPS: 'Property',
+      ITEMS: 'Field',
+      RULES: 'Rule',
+      RENDERERS: 'Option',
       EVENTS: 'Event',
       SLOTS: 'Slot',
       EXPOSES: 'Method',
@@ -43,6 +49,9 @@ const ui = {
     apiValueColumns: {
       PROPS: 'Values',
       CHILD_PROPS: 'Values',
+      ITEMS: 'Values',
+      RULES: 'Values',
+      RENDERERS: 'Values',
       EVENTS: 'Payload',
       SLOTS: 'Scope',
       EXPOSES: 'Parameters',
@@ -199,6 +208,9 @@ const ui = {
     apiTables: {
       PROPS: '属性',
       CHILD_PROPS: '子控件属性',
+      ITEMS: '配置项',
+      RULES: '校验规则',
+      RENDERERS: '渲染器',
       SLOTS: '插槽',
       EVENTS: '事件',
       EXPOSES: '暴露',
@@ -206,6 +218,9 @@ const ui = {
     apiRowNames: {
       PROPS: '属性名',
       CHILD_PROPS: '属性名',
+      ITEMS: '字段名',
+      RULES: '规则名',
+      RENDERERS: '配置名',
       EVENTS: '事件名',
       SLOTS: '插槽名',
       EXPOSES: '方法名',
@@ -213,6 +228,9 @@ const ui = {
     apiValueColumns: {
       PROPS: '可选值',
       CHILD_PROPS: '可选值',
+      ITEMS: '可选值',
+      RULES: '可选值',
+      RENDERERS: '可选值',
       EVENTS: '参数',
       SLOTS: '作用域参数',
       EXPOSES: '参数',
