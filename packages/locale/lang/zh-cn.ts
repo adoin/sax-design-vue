@@ -6,6 +6,14 @@ export default {
       more: '展开',
       less: '收起',
     },
+    textEllipsis: {
+      expand: '展开全文',
+      collapse: '收起全文',
+    },
+    contentEllipsis: {
+      expand: '展开内容',
+      collapse: '收起内容',
+    },
     colorpicker: {
       confirm: '确定',
       clear: '清空',

@@ -1,6 +1,14 @@
 export default {
   name: 'zh-tw',
   vs: {
+    textEllipsis: {
+      expand: '展開全文',
+      collapse: '收起全文',
+    },
+    contentEllipsis: {
+      expand: '展開內容',
+      collapse: '收起內容',
+    },
     colorpicker: {
       confirm: '確認',
       clear: '清空',

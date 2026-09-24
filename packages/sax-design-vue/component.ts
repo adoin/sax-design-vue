@@ -17,6 +17,7 @@ import { SCheckbox, SCheckboxGroup } from '@vuesax-alpha/components/checkbox'
 import { SCol } from '@vuesax-alpha/components/col'
 import { SColorPicker } from '@vuesax-alpha/components/color-picker'
 import { SConfigProvider } from '@vuesax-alpha/components/config-provider'
+import { SContentEllipsis } from '@vuesax-alpha/components/content-ellipsis'
 import { SContextMenu } from '@vuesax-alpha/components/context-menu'
 import { SControlGroup } from '@vuesax-alpha/components/control-group'
 import { SCollapse, SCollapseItem } from '@vuesax-alpha/components/collapse'
@@ -112,6 +113,7 @@ export default [
   SCol,
   SColorPicker,
   SConfigProvider,
+  SContentEllipsis,
   SContextMenu,
   SControlGroup,
   SCollapse,

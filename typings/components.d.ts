@@ -15,6 +15,7 @@ declare module '@vue/runtime-core' {
     SCheckbox: (typeof import('../packages/sax-design-vue'))['SCheckbox']
     SCheckboxGroup: (typeof import('../packages/sax-design-vue'))['SCheckboxGroup']
     SCol: (typeof import('../packages/sax-design-vue'))['SCol']
+    SContentEllipsis: (typeof import('../packages/sax-design-vue'))['SContentEllipsis']
     SCollapseTransition: (typeof import('../packages/sax-design-vue'))['SCollapseTransition']
     SDialog: (typeof import('../packages/sax-design-vue'))['SDialog']
     SIcon: (typeof import('../packages/sax-design-vue'))['SIcon']

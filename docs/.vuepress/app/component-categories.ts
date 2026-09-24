@@ -37,6 +37,7 @@ export const componentCategories: ComponentCategory[] = [
     textZh: '通用',
     children: [
       component('Button', '按钮', '/components/'),
+      component('Content ellipsis', '内容省略', '/components/content-ellipsis'),
       component('Link', '链接', '/components/link'),
       component('Renderer', '渲染器', '/components/renderer'),
       component('Text', '文本', '/components/text'),

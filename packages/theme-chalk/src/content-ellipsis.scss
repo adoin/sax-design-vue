@@ -1,0 +1,100 @@
+@use 'common/var' as *;
+@use 'mixins/function' as *;
+
+:root {
+  --resize-dur: 300ms;
+  --resize-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.t-resize {
+  transition:
+    width var(--resize-dur) var(--resize-ease),
+    height var(--resize-dur) var(--resize-ease);
+  will-change: width, height;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-resize {
+    transition: none !important;
+  }
+}
+
+.s-content-ellipsis {
+  position: relative;
+  display: block;
+  width: 100%;
+  color: getColor(text);
+}
+
+.s-content-ellipsis__viewport {
+  width: 100%;
+}
+
+.s-content-ellipsis__viewport.is-clipped {
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  mask-image: linear-gradient(to bottom, #000 70%, transparent);
+}
+
+.s-content-ellipsis__content {
+  display: flow-root;
+  width: 100%;
+}
+
+.s-content-ellipsis__limit {
+  position: absolute;
+  width: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.s-content-ellipsis__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.s-content-ellipsis__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 26px;
+  padding: 3px 10px;
+  border: 0;
+  border-radius: getCssVar(radius-pill);
+  outline: 0;
+  background: getColor(primary, 0.08);
+  color: getColor(primary);
+  font: inherit;
+  font-size: 0.84em;
+  font-weight: 600;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.s-content-ellipsis__toggle:hover,
+.s-content-ellipsis__toggle:focus-visible {
+  background: getColor(primary, 0.14);
+  color: getColor(primary);
+}
+
+.s-content-ellipsis__toggle:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.s-content-ellipsis__chevron {
+  flex: none;
+  transition: transform var(--resize-dur) var(--resize-ease);
+}
+
+.s-content-ellipsis.is-expanded .s-content-ellipsis__chevron {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s-content-ellipsis__chevron {
+    transition: none;
+  }
+}

@@ -3,13 +3,15 @@ PROPS:
   - name: expand-text
     type: String
     values: "action labels"
-    description: Customize labels used to expand and collapse content.
-    default: 'Expand'
+    description: Override the action text shown while the text is collapsed.
+    default: 'Read more'
+    usage: '#default'
   - name: collapse-text
     type: String
     values: "action labels"
-    description: Customize labels used to expand and collapse content.
-    default: 'Collapse'
+    description: Override the action text shown while the text is expanded.
+    default: 'Read less'
+    usage: '#default'
   - name: content
     type: String
     values: "text"
@@ -37,17 +39,23 @@ EVENTS:
 
 # Text Ellipsis
 
-<card><template #example><text-ellipsis-default /></template>
+<card>
+
+## Default
+
+Set `line-clamp` and `expandable` to truncate long text. The expand action stays beside the final visible line and moves below the text only when the container is too narrow.
+
+<template #example><text-ellipsis-default /></template>
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/text-ellipsis/default.vue)
+@[code{9-16}](../.vuepress/components/text-ellipsis/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{9-14}](../.vuepress/components/text-ellipsis/default.vue)
+@[code{1-7}](../.vuepress/components/text-ellipsis/default.vue)
 
 </template>
 

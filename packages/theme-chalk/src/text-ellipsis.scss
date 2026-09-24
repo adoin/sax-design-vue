@@ -1,6 +1,122 @@
 @use 'common/var' as *;
+@use 'mixins/function' as *;
 
-.s-text-ellipsis { display: block; color: getColor(text); }
-.s-text-ellipsis__content { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; line-height: 1.55; }
-.s-text-ellipsis__toggle { margin: 5px 0 0; padding: 0; border: 0; background: transparent; color: getColor(primary); font-size: 13px; cursor: pointer; }
-.s-text-ellipsis__toggle:hover { color: getColor(primary, .8); text-decoration: underline; }
+.s-text-ellipsis {
+  position: relative;
+  display: block;
+  color: getColor(text);
+}
+
+.s-text-ellipsis__content {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  line-height: 1.55;
+}
+
+.s-text-ellipsis.is-expanded .s-text-ellipsis__content {
+  display: inline;
+  overflow: visible;
+}
+
+.s-text-ellipsis.is-expandable:not(.is-expanded):not(.is-compact)
+  .s-text-ellipsis__content {
+  // Keep earlier lines intact while making room for the action on the last line.
+  -webkit-mask-image:
+    linear-gradient(
+      to right,
+      #000 calc(100% - var(--sax-text-ellipsis-tail-width) - 16px),
+      transparent calc(100% - var(--sax-text-ellipsis-tail-width) + 2px)
+    ),
+    linear-gradient(#000, #000);
+  mask-image:
+    linear-gradient(
+      to right,
+      #000 calc(100% - var(--sax-text-ellipsis-tail-width) - 16px),
+      transparent calc(100% - var(--sax-text-ellipsis-tail-width) + 2px)
+    ),
+    linear-gradient(#000, #000);
+  -webkit-mask-position: bottom, top;
+  mask-position: bottom, top;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%, 100% calc(100% - 1.55em);
+  mask-size: 100% 100%, 100% calc(100% - 1.55em);
+}
+
+.s-text-ellipsis__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  vertical-align: baseline;
+}
+
+.s-text-ellipsis.is-expandable:not(.is-expanded):not(.is-compact)
+  .s-text-ellipsis__toggle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.s-text-ellipsis.is-expanded .s-text-ellipsis__toggle {
+  margin-left: 4px;
+}
+
+.s-text-ellipsis.is-compact .s-text-ellipsis__toggle {
+  margin-top: 5px;
+}
+
+.s-text-ellipsis__ellipsis {
+  color: getColor(text);
+  line-height: 1;
+}
+
+.s-text-ellipsis__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 26px;
+  padding: 3px 10px;
+  border-radius: getCssVar(radius-pill);
+  background: getColor(primary, 0.08);
+  color: getColor(primary);
+  font-size: 0.84em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.s-text-ellipsis__toggle:hover .s-text-ellipsis__pill,
+.s-text-ellipsis__toggle:focus-visible .s-text-ellipsis__pill {
+  background: getColor(primary, 0.14);
+  color: getColor(primary);
+}
+
+.s-text-ellipsis__toggle:focus-visible .s-text-ellipsis__pill {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.s-text-ellipsis__chevron {
+  flex: none;
+}
+
+.s-text-ellipsis.is-expanded .s-text-ellipsis__chevron {
+  transform: rotate(180deg);
+}
+
+@supports not (mask-image: linear-gradient(#000, transparent)) {
+  .s-text-ellipsis.is-expandable:not(.is-expanded):not(.is-compact)
+    .s-text-ellipsis__content {
+    padding-right: calc(var(--sax-text-ellipsis-tail-width) + 12px);
+  }
+}

@@ -6,6 +6,14 @@ export default {
       more: 'More',
       less: 'Less',
     },
+    textEllipsis: {
+      expand: 'Read more',
+      collapse: 'Read less',
+    },
+    contentEllipsis: {
+      expand: 'Show more',
+      collapse: 'Show less',
+    },
     colorpicker: {
       confirm: 'OK',
       clear: 'Clear',

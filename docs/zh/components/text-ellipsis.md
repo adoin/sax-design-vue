@@ -3,13 +3,15 @@ PROPS:
   - name: expand-text
     type: String
     values: "操作文案"
-    description: 自定义展开和收起内容时的按钮文案。
-    default: '展开'
+    description: 自定义文本收起时的展开文案。
+    default: '展开全文'
+    usage: '#default'
   - name: collapse-text
     type: String
     values: "操作文案"
-    description: 自定义展开和收起内容时的按钮文案。
-    default: '收起'
+    description: 自定义文本展开时的收起文案。
+    default: '收起全文'
+    usage: '#default'
   - name: content
     type: String
     values: "text"
@@ -37,17 +39,23 @@ EVENTS:
 
 # Text Ellipsis 文本省略
 
-<card><template #example><text-ellipsis-default /></template>
+<card>
+
+## 默认
+
+设置 `line-clamp` 和 `expandable` 省略较长的文本。展开操作紧贴末行文字；容器过窄时，操作会移到文字下方。
+
+<template #example><text-ellipsis-zh-default /></template>
 
 <template #template>
 
-@[code{1-8}](../../.vuepress/components/text-ellipsis/default.vue)
+@[code{9-16}](../../.vuepress/components/text-ellipsis-zh/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{9-14}](../../.vuepress/components/text-ellipsis/default.vue)
+@[code{1-7}](../../.vuepress/components/text-ellipsis-zh/default.vue)
 
 </template>
 

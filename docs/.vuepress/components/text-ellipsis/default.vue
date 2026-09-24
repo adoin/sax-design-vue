@@ -1,3 +1,11 @@
+<script lang="ts" setup>
+import { shallowRef } from 'vue'
+
+const expanded = shallowRef(false)
+const content =
+  'Sax Design Vue keeps typography and interaction consistent across complex product screens. A shared visual language for spacing, color, and motion helps teams move between dense dashboards and focused detail views without losing context.'
+</script>
+
 <template>
   <s-text-ellipsis
     v-model:expanded="expanded"
@@ -6,9 +14,3 @@
     :content="content"
   />
 </template>
-<script lang="ts" setup>
-import { ref } from 'vue'
-const expanded = ref(false)
-const content =
-  'Sax Design Vue keeps component typography compact while preserving access to long descriptions. Expand this block to reveal the complete message without changing the surrounding layout.'
-</script>
