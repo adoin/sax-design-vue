@@ -4,6 +4,7 @@ import TableToolbarItem from './table-toolbar-item'
 import type { TableExposes } from './table'
 import type {
   TableQueryContext,
+  TableSize,
   TableToolbarConfig,
   TableToolbarRendererParams,
 } from './table-business'
@@ -13,6 +14,7 @@ const props = defineProps<{
   busy: boolean
   table: TableExposes
   context: TableQueryContext
+  size: TableSize
 }>()
 const emit = defineEmits<{
   action: [code: string, event: MouseEvent]
@@ -31,6 +33,7 @@ const rendererParams = (
   context: props.context,
   placement,
   busy: props.busy,
+  size: props.size,
 })
 </script>
 

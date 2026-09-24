@@ -7,7 +7,7 @@ import {
   watch,
 } from 'vue'
 import { createTableDataIndex, validTableDataKey } from '../change-data'
-import { planTableRowReorder } from '../row-reorder'
+import { planTableRowReorder, resolveTableRowDrop } from '../row-reorder'
 import type {
   TableCoreEmitFn,
   TableCoreProps,
@@ -18,6 +18,7 @@ import type {
 import type {
   TableRowDragContext,
   TableRowDragResult,
+  TableRowDragTreeConfig,
   TableRowDropContext,
   TableRowDropPosition,
   TableRowReorderRequest,
@@ -28,6 +29,8 @@ export interface RowReorderOptions {
   count: () => number
   blocked: () => boolean
   children: (row: TableRow, key: TableRowKey) => TableRow[]
+  revision: () => unknown
+  expand: (key: TableRowKey) => void | Promise<void>
   changed: () => void
 }
 
@@ -40,6 +43,10 @@ export function useTableRowReorder(
   const config = computed(() =>
     typeof props.rowDragConfig === 'object' ? props.rowDragConfig : {},
   )
+  const treeConfig = computed<TableRowDragTreeConfig | undefined>(() => {
+    if (!props.treeConfig || !config.value.tree) return
+    return config.value.tree === true ? {} : config.value.tree
+  })
   const pending = shallowRef(false)
   const enabled = computed(
     () =>
@@ -55,6 +62,11 @@ export function useTableRowReorder(
     row: row.row,
     rowKey: row.key,
     rowIndex: index,
+    depth: row.depth,
+    parentKey: row.parentKey,
+    hasChildren: row.hasChildren,
+    expanded: row.expanded,
+    childCount: options.children(row.row, row.key).length,
   })
   const key = (row: TableRow): TableRowKey => {
     const value =
@@ -78,6 +90,32 @@ export function useTableRowReorder(
       return false
     }
   }
+  let indexedData: TableRow[] | undefined
+  let indexedRevision: unknown
+  let indexedChildrenField: string | undefined
+  let index: ReturnType<typeof createTableDataIndex> | undefined
+  const dataIndex = () => {
+    const data = toRaw(props.data)
+    const revision = options.revision()
+    const childrenField = props.treeConfig?.children ?? 'children'
+    if (
+      !index ||
+      indexedData !== data ||
+      indexedRevision !== revision ||
+      indexedChildrenField !== childrenField
+    ) {
+      indexedData = data
+      indexedRevision = revision
+      indexedChildrenField = childrenField
+      index = createTableDataIndex({
+        data,
+        childrenField,
+        key,
+        children: options.children,
+      })
+    }
+    return index
+  }
   const dropContext = (
     from: number,
     to: number,
@@ -91,16 +129,79 @@ export function useTableRowReorder(
       !canStart(row, from) ||
       row.key === target.key ||
       target.loading ||
-      row.parentKey !== target.parentKey ||
-      (position !== 'before' && position !== 'after')
+      !['before', 'inside', 'after'].includes(position)
     )
       return
+    const targetChildren = options.children(target.row, target.key)
+    const source = props.virtualSource
+    let destination: {
+      oldIndex: number
+      newIndex: number
+      oldParentKey?: TableRowKey
+      newParentKey?: TableRowKey
+      newDepth: number
+      subtreeDepth: number
+      reparented: boolean
+    }
+    if (source) {
+      if (position === 'inside') return
+      const oldIndex = row.index
+      const insertion = target.index + (position === 'after' ? 1 : 0)
+      destination = {
+        oldIndex,
+        newIndex: oldIndex < insertion ? insertion - 1 : insertion,
+        newDepth: 0,
+        subtreeDepth: 0,
+        reparented: false,
+      }
+    } else {
+      const tree = treeConfig.value
+      if (!tree && row.parentKey !== target.parentKey) return
+      if (position === 'inside' && (!tree || tree.allowDropInside === false))
+        return
+      if (
+        position === 'inside' &&
+        target.hasChildren &&
+        targetChildren.length === 0
+      )
+        return
+      const resolved = resolveTableRowDrop(
+        dataIndex(),
+        row.key,
+        target.key,
+        position,
+        tree?.insidePosition,
+      )
+      if (resolved.reparented && (!tree || tree.allowReparent === false)) return
+      if (
+        tree?.maxDepth != null &&
+        (!Number.isSafeInteger(tree.maxDepth) ||
+          tree.maxDepth < 0 ||
+          resolved.newDepth + resolved.subtreeDepth > tree.maxDepth)
+      )
+        return
+      destination = {
+        oldIndex: resolved.oldIndex,
+        newIndex: resolved.newIndex,
+        oldParentKey: resolved.oldParentKey,
+        newParentKey: resolved.newParentKey,
+        newDepth: resolved.newDepth,
+        subtreeDepth: resolved.subtreeDepth,
+        reparented: resolved.reparented,
+      }
+    }
     const value = {
       ...context(row, from),
       targetRow: target.row,
       targetKey: target.key,
       targetIndex: to,
+      targetDepth: target.depth,
+      targetParentKey: target.parentKey,
+      targetHasChildren: target.hasChildren,
+      targetExpanded: target.expanded,
+      targetChildCount: targetChildren.length,
       position,
+      ...destination,
     }
     if (config.value.dropMethod?.(value) === false) return
     return value
@@ -134,29 +235,23 @@ export function useTableRowReorder(
       const drop = dropContext(from, to, position)
       if (!drop) return finish({ applied: false, reason: 'invalid' })
       const source = props.virtualSource
-      const sourceIndex = options.rowAt(from)!.index
-      const targetIndex = options.rowAt(to)!.index
       const plan = source
         ? {
-            oldIndex: sourceIndex,
-            newIndex:
-              targetIndex +
-              (position === 'after' ? 1 : 0) -
-              (sourceIndex < targetIndex + (position === 'after' ? 1 : 0)
-                ? 1
-                : 0),
+            oldIndex: drop.oldIndex,
+            newIndex: drop.newIndex,
+            oldParentKey: undefined,
+            newParentKey: undefined,
+            newDepth: 0,
+            subtreeDepth: 0,
+            reparented: false,
             data: undefined,
           }
         : planTableRowReorder(
-            createTableDataIndex({
-              data: props.data,
-              childrenField: props.treeConfig?.children ?? 'children',
-              key,
-              children: options.children,
-            }),
+            dataIndex(),
             drop.rowKey,
             drop.targetKey,
             position,
+            treeConfig.value?.insidePosition,
           )
       if (plan.newIndex === plan.oldIndex)
         return finish({ applied: false, reason: 'empty' })
@@ -190,6 +285,12 @@ export function useTableRowReorder(
         if (actual !== drop.rowKey)
           return finish({ applied: false, reason: 'rejected', request })
       }
+      if (
+        !source &&
+        position === 'inside' &&
+        treeConfig.value?.expandOnDrop !== false
+      )
+        await options.expand(drop.targetKey)
       options.changed()
       return finish({ applied: true, request })
     } catch (error) {
@@ -214,7 +315,15 @@ export function useTableRowReorder(
     },
     { flush: 'sync' },
   )
-  watch([enabled, () => config.value.apply, () => props.rowKey], cancel)
+  watch(
+    [
+      enabled,
+      () => config.value.apply,
+      () => config.value.tree,
+      () => props.rowKey,
+    ],
+    cancel,
+  )
   watch(options.blocked, (blocked) => {
     if (blocked) cancel()
   })
@@ -224,6 +333,7 @@ export function useTableRowReorder(
   })
   return {
     config,
+    treeConfig,
     enabled,
     pending,
     canStart,

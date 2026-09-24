@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import Scrollbar from '../src/scrollbar.vue'
 
-describe('Scrollbar outside placement', () => {
+describe('Scrollbar', () => {
   async function createScrollbar(always = true) {
     const wrapper = mount(Scrollbar, {
       props: { placement: 'outside', height: 200, always },
@@ -94,6 +94,130 @@ describe('Scrollbar outside placement', () => {
     expect(
       wrapper.get('.s-scrollbar__wrap').attributes('tabindex'),
     ).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('reveals vertical fades from the current scroll position and removes them when content fits', async () => {
+    const wrapper = mount(Scrollbar, {
+      props: { height: 200, fade: true },
+      slots: { default: '<div>Scrollable content</div>' },
+    })
+    const viewport = wrapper.vm.wrapRef!
+    const dimensions = {
+      offsetHeight: 200,
+      offsetWidth: 300,
+      clientHeight: 200,
+      clientWidth: 300,
+      scrollHeight: 800,
+      scrollWidth: 300,
+    }
+    for (const key of Object.keys(dimensions) as (keyof typeof dimensions)[])
+      Object.defineProperty(viewport, key, {
+        configurable: true,
+        get: () => dimensions[key],
+      })
+
+    wrapper.vm.update()
+    await nextTick()
+    expect(wrapper.get('.s-scrollbar__wrap').classes()).toContain('is-fade-y')
+    expect(viewport.style.getPropertyValue('--s-scrollbar-fade-top')).toContain(
+      '* 0)',
+    )
+    expect(
+      viewport.style.getPropertyValue('--s-scrollbar-fade-bottom'),
+    ).toContain('* 1)')
+
+    viewport.scrollTop = 48
+    await wrapper.get('.s-scrollbar__wrap').trigger('scroll')
+    expect(viewport.style.getPropertyValue('--s-scrollbar-fade-top')).toContain(
+      '* 0.5)',
+    )
+
+    viewport.scrollTop = 600
+    await wrapper.get('.s-scrollbar__wrap').trigger('scroll')
+    expect(
+      viewport.style.getPropertyValue('--s-scrollbar-fade-bottom'),
+    ).toContain('* 0)')
+
+    dimensions.scrollHeight = dimensions.clientHeight
+    viewport.scrollTop = 0
+    wrapper.vm.update()
+    await nextTick()
+    expect(viewport.style.getPropertyValue('--s-scrollbar-fade-top')).toContain(
+      '* 0)',
+    )
+    expect(
+      viewport.style.getPropertyValue('--s-scrollbar-fade-bottom'),
+    ).toContain('* 0)')
+    wrapper.unmount()
+  })
+
+  it('supports horizontal, sized and RTL logical-edge fades', async () => {
+    const wrapper = mount(Scrollbar, {
+      props: {
+        height: 120,
+        fade: { direction: 'x', size: '15%' },
+      },
+      slots: { default: '<div>Wide content</div>' },
+    })
+    const viewport = wrapper.vm.wrapRef!
+    const dimensions = {
+      offsetHeight: 120,
+      offsetWidth: 300,
+      clientHeight: 120,
+      clientWidth: 300,
+      scrollHeight: 120,
+      scrollWidth: 900,
+    }
+    for (const key of Object.keys(dimensions) as (keyof typeof dimensions)[])
+      Object.defineProperty(viewport, key, {
+        configurable: true,
+        get: () => dimensions[key],
+      })
+
+    wrapper.vm.update()
+    await nextTick()
+    expect(viewport.classList).toContain('is-fade-x')
+    expect(viewport.classList).not.toContain('is-fade-y')
+    expect(viewport.style.getPropertyValue('--s-scrollbar-fade-size')).toBe(
+      '15%',
+    )
+    expect(
+      viewport.style.getPropertyValue('--s-scrollbar-fade-left'),
+    ).toContain('* 0)')
+    expect(
+      viewport.style.getPropertyValue('--s-scrollbar-fade-right'),
+    ).toContain('* 1)')
+
+    await wrapper.setProps({
+      fade: { direction: 'start', size: 24 },
+    })
+    wrapper.element.setAttribute('dir', 'rtl')
+    await nextTick()
+    wrapper.vm.update()
+    expect(viewport.style.getPropertyValue('--s-scrollbar-fade-size')).toBe(
+      '24px',
+    )
+    expect(viewport.style.getPropertyValue('--s-scrollbar-fade-left')).toBe(
+      '0px',
+    )
+    expect(
+      viewport.style.getPropertyValue('--s-scrollbar-fade-right'),
+    ).toContain('* 0)')
+    viewport.scrollLeft = -48
+    await wrapper.get('.s-scrollbar__wrap').trigger('scroll')
+    expect(
+      viewport.style.getPropertyValue('--s-scrollbar-fade-right'),
+    ).toContain('* 0.5)')
+
+    await wrapper.setProps({ fade: 't' })
+    await nextTick()
+    wrapper.vm.update()
+    expect(viewport.classList).toContain('is-fade-y')
+    expect(viewport.classList).not.toContain('is-fade-x')
+    expect(viewport.style.getPropertyValue('--s-scrollbar-fade-bottom')).toBe(
+      '0px',
+    )
     wrapper.unmount()
   })
 })

@@ -55,7 +55,7 @@ function setup(
             columnKey: String(merged ? 0 : col),
           },
         }
-  const focus = vi.fn((point: TableCellCoordinate) => {
+  const focus = vi.fn((point: TableCellCoordinate | undefined) => {
     current.value = point
     return true
   })

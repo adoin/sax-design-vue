@@ -5,6 +5,11 @@ API_TITLES:
   GROUP_TABS_PROPS: "RadioGroupTabs props"
   BUTTON_PROPS: "RadioButton props"
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: Set or inherit the radio control size; Radio Group passes it to descendants.
+    default: null
   - name: v-model
     type: String | Number | Boolean
     values: 'selected radio value'
@@ -67,6 +72,11 @@ PROPS:
     code: null
 
 GROUP_PROPS:
+  - name: size
+    type: ComponentSize
+    description: Set or inherit the size of RadioGroup and its options.
+    default: null
+    usage: '#size'
   - name: "v-model"
     type: RadioValue
     description: "The group's single selected value."
@@ -277,6 +287,34 @@ SLOTS:
 <template #style>
 
 @[code{96-142}](../.vuepress/components/radio/patterns.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><radio-size /></template>
+
+<template #template>
+
+@[code{7-13}](../.vuepress/components/radio/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/radio/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../.vuepress/components/radio/size.vue)
 
 </template>
 

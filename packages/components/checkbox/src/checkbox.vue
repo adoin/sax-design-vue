@@ -53,6 +53,7 @@ import {
   useColor,
   useId,
   useNamespace,
+  useSize,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { getVsColor } from '@vuesax-alpha/utils'
@@ -69,6 +70,7 @@ const props = defineProps(checkboxProps)
 const slots = useSlots()
 const emit = defineEmits(checkboxEmits)
 const ns = useNamespace('checkbox')
+const size = useSize()
 
 const checkboxId = props.id ?? useId()
 
@@ -85,6 +87,7 @@ const { resolvedIconAnimation } = useCheckboxIconAnimation(
 const vsBaseClasses = useVuesaxBaseComponent(useColor())
 const checkboxKls = computed(() => [
   ns.b(),
+  ns.m(size.value || 'default'),
   vsBaseClasses,
   ns.is('disabled', isDisabled.value),
   ns.is('checked', isChecked.value),

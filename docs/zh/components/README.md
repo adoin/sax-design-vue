@@ -223,6 +223,32 @@ EVENTS:
     type: MouseEvent
     description: 可用且非加载状态的按钮被激活，并经过防抖或节流处理后触发。
 SLOTS:
+  - name: prefix
+    type: slot
+    values: 'null'
+    description: 在按钮文字前放置图标。默认加载态会用品牌加载图标替换该插槽；两个图标插槽同时存在时优先使用 prefix。
+    default: null
+    link: null
+    code: >
+      <s-button>
+        <template #prefix><s-icon name="bxs:save" /></template>
+        保存更改
+      </s-button>
+    usage: '#loading'
+  # _______________________________________
+  - name: suffix
+    type: slot
+    values: 'null'
+    description: 在按钮文字后放置图标。默认加载态仅在没有 prefix 时用品牌加载图标替换该插槽。
+    default: null
+    link: null
+    code: >
+      <s-button>
+        继续
+        <template #suffix><s-icon name="bx:right-arrow-alt" /></template>
+      </s-button>
+    usage: '#loading'
+  # _______________________________________
   - name: loading
     type: slot
     values: 'null'
@@ -572,6 +598,8 @@ NEWS:
 
 通过 `size` 设置按钮整体尺寸，包括内边距、字号和边框。
 
+Button 保留五档尺寸，其中与其他组件共用的 `small`、`default`、`large` 分别采用 32px、36px、40px 控件高度；`mini` 与 `xl` 只负责向共享尺寸范围的两端扩展。
+
 可选值：
 
 - xl
@@ -581,18 +609,18 @@ NEWS:
 - mini
 
 <template #example>
-<button-size />
+<button-zh-size />
 </template>
 
 <template #template>
 
-@[code{1-17}](../../.vuepress/components/button/size.vue)
+@[code{7-23}](../../.vuepress/components/button-zh/size.vue)
 
 </template>
 
 <template #script>
 
-@[code{19-23}](../../.vuepress/components/button/size.vue)
+@[code{1-5}](../../.vuepress/components/button-zh/size.vue)
 
 </template>
 
@@ -602,27 +630,27 @@ NEWS:
 
 ## 加载
 
-操作执行期间可设置 `loading`。默认在透明覆盖层上显示共用的 Sax 标志加载器，同时保留原文字可见。也可通过 `loading-type` 显式选择 `pulse`（呼吸光轨）、`ripple`（双层脉冲波）或 `shimmer`（流光扫描）。所有模式都会保持按钮尺寸并阻止点击；完全自定义时使用 `#loading` 插槽。
+使用 `#prefix` 与 `#suffix` 分别放置文字前后的图标；不需要专用位置时，仍可把图标直接放在默认插槽。启用 `loading-type="default"` 后，原图标会先淡出、品牌加载图标淡入，随后才播放前摇；结束加载时则先完整播放后摇并恢复，再淡回原图标。品牌加载图标优先使用 `prefix`；没有 `prefix` 时使用 `suffix`，两个插槽同时存在时以前者为准。两个图标插槽都没有时，加载图标继续显示在居中的透明覆盖层。也可选择 `pulse`（呼吸光轨）、`ripple`（双层脉冲波）或 `shimmer`（流光扫描）。所有模式都会保持按钮尺寸并阻止点击；完全自定义时使用 `#loading` 插槽。
 
 <template #example>
-<button-loading />
+<button-zh-loading />
 </template>
 
 <template #template>
 
-@[code{1-52}](../../.vuepress/components/button/loading.vue)
+@[code{1-53}](../../.vuepress/components/button-zh/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{54-93}](../../.vuepress/components/button/loading.vue)
+@[code{55-66}](../../.vuepress/components/button-zh/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{95-131}](../../.vuepress/components/button/loading.vue)
+@[code{68-104}](../../.vuepress/components/button-zh/loading.vue)
 
 </template>
 
@@ -752,7 +780,7 @@ NEWS:
 
 <template #style>
 
-@[code{81-88}](../../.vuepress/components/button/social.vue)
+@[code{81-93}](../../.vuepress/components/button/social.vue)
 
 </template>
 

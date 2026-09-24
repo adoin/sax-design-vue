@@ -14,25 +14,27 @@ Merged regions work with ordinary data, editing and detail rows, and virtual win
 
 Use `merge-config.body` and `merge-config.footer` for body and footer ranges. Each range has zero-based `row` and `col` positions, plus positive `rowspan` and `colspan` values. A merged region displays its starting cell, retaining that column's slots, formatting and interactions.
 
+For the common case of vertically merging consecutive equal JSON values, use `createTableRowspanMerges(rows, { field, col })`. It follows the supplied row order, supports dot-separated fields, omits single-row runs, and returns `colspan: 1` ranges ready for `merge-config.body`. Call it once per field when several columns need independent vertical merging; pass `equals` only when values need custom normalization. Continue to write explicit ranges for horizontal or intersecting merges.
+
 For ordinary data, `row` refers to the current displayed rows after sorting, filtering, pagination and tree expansion; footer rows refer to the resolved rows from `footer-config` or `footer-data`. `col` follows visible fixed-left, center and fixed-right column order. Static ranges follow positions, so a query, page or column-order change applies them to the cells at the new positions. Recalculate ranges when grouping by content.
 
 <template #example><table-merging /></template>
 
 <template #template>
 
-@[code{40-52}](../../.vuepress/components/table/merging.vue)
+@[code{38-50}](../../.vuepress/components/table/merging.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-38}](../../.vuepress/components/table/merging.vue)
+@[code{1-36}](../../.vuepress/components/table/merging.vue)
 
 </template>
 
 <template #style>
 
-@[code{54-61}](../../.vuepress/components/table/merging.vue)
+@[code{52-59}](../../.vuepress/components/table/merging.vue)
 
 </template>
 

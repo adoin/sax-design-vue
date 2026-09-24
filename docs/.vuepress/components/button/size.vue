@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import { shallowRef } from 'vue'
+
+const active = shallowRef(0)
+</script>
+
 <template>
   <div class="center">
     <s-button size="xl" :active="active == 0" @click="active = 0">
@@ -15,9 +21,3 @@
     </s-button>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-
-const active = ref<number>(0)
-</script>

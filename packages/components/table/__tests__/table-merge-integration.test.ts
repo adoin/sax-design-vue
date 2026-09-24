@@ -225,6 +225,18 @@ describe('table merge integration', () => {
       value: 'Row 0',
     })
     expect(wrapper.vm.getActiveCell()).toEqual({ rowKey: 0, columnKey: 'name' })
+    const fragments = wrapper.findAll('[data-merge-region]')
+    expect(
+      fragments.every((fragment) => fragment.classes('is-active-cell')),
+    ).toBe(true)
+    await continuation.trigger('mouseenter')
+    expect(
+      fragments.every((fragment) => fragment.classes('is-merge-hovered')),
+    ).toBe(true)
+    await continuation.trigger('mouseleave')
+    expect(
+      fragments.some((fragment) => fragment.classes('is-merge-hovered')),
+    ).toBe(false)
     await continuation.trigger('dblclick')
     await settle()
     expect(wrapper.findAll('[data-table-merge-layer] input')).toHaveLength(1)

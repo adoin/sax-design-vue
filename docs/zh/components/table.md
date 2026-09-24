@@ -3,6 +3,11 @@ description: '支持排序、筛选、分页、树形数据与虚拟滚动的数
 API_TITLES:
   RENDERERS: 渲染器
 PROPS:
+  - name: 'size'
+    type: 'ComponentSize'
+    description: '表格控件和渲染器的默认尺寸。query-config.size、toolbar-config.size 分别覆盖对应区域，单个渲染器的 props.size 再覆盖所在区域。'
+    default: null
+    usage: '/zh/components/table/query-forms-and-request-proxy.html#query-and-toolbar'
   - name: 'row'
     type: 'TableRow | TableRow[] | null'
     description: '旧版具名选择模型，请迁移到 v-model:highlight；显式 highlight 优先。'
@@ -70,7 +75,7 @@ PROPS:
     usage: '/zh/components/table/spreadsheet-interactions.html#keyboard-navigation'
   - name: 'row-drag-config'
     type: 'Boolean | TableRowDragConfig'
-    description: '开启行拖拽，配置禁用条件、放置条件、自动滚动和受控适配器。'
+    description: '开启行拖拽，配置树形跨父节点与内部落点、丰富判定、自动滚动和受控适配器。'
     default: false
     usage: '/zh/components/table/spreadsheet-interactions.html#row-reordering'
   - name: 'history-config'
@@ -280,12 +285,12 @@ PROPS:
     usage: '/zh/components/table/query-forms-and-request-proxy.html#request-proxy'
   - name: 'query-config'
     type: 'Boolean | TableQueryConfig<QueryForm>'
-    description: '查询表单配置；model、items、rules 和布局参数沿用 SForm。'
+    description: '查询表单配置；size、model、items、rules 和布局参数沿用 SForm，fixedButtons 配置固定操作区。'
     default: false
     usage: '/zh/components/table/query-forms-and-request-proxy.html#query-and-toolbar'
   - name: 'toolbar-config'
     type: 'Boolean | TableToolbarConfig<Row, QueryForm>'
-    description: '工具栏标题和有序的 left/right 渲染器列表；内置 button、$refresh 与 $columnConfig。'
+    description: '工具栏尺寸、标题和有序的 left/right 渲染器列表；内置 button、$refresh 与 $columnConfig。'
     default: false
     usage: '/zh/components/table/query-forms-and-request-proxy.html#query-and-toolbar'
 CHILD_PROPS:
@@ -844,8 +849,8 @@ SLOTS:
     usage: '/zh/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
   - name: 'query-actions'
     type: Slot
-    scope: "TableExposes & { busy: boolean }"
-    description: '替换查询操作，接收 query、resetQuery、refresh、busy 等。'
+    scope: "TableExposes & TableQueryActionsState & { busy: boolean }"
+    description: '替换固定查询操作区，接收 Table 方法、busy、expanded、hasMore 和 toggleMore()。'
     default: null
     usage: '/zh/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
   - name: 'toolbar_left'

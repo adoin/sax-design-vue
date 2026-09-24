@@ -1,6 +1,11 @@
 ---
 description: '从预设或生成的时间列表中选择时间。'
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: 设置或继承 Select 触发器尺寸。
+    default: null
   - name: shape
     type: String
     values: 'rounded | square'
@@ -79,6 +84,34 @@ EVENTS:
 <template #style>
 
 @[code{19-23}](../../.vuepress/components/time-select/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><time-select-zh-size /></template>
+
+<template #template>
+
+@[code{7-13}](../../.vuepress/components/time-select-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/time-select-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../../.vuepress/components/time-select-zh/size.vue)
 
 </template>
 

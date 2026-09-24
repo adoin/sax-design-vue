@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import type { TableColumn, TableInstance } from 'sax-design-vue'
 const table = ref<TableInstance>()
-const rows = Array.from({ length: 5 }, (_, index) => ({
+const rows = Array.from({ length: 20 }, (_, index) => ({
   id: index + 1,
   name: `成员 ${index + 1}`,
   team: '研发团队',
@@ -39,7 +39,7 @@ const columns: TableColumn[] = [
       <s-button
         size="small"
         type="flat"
-        @click="table?.scrollToRow(rows[4], 'center')"
+        @click="table?.scrollToRow(rows[rows.length - 1], 'center')"
         >定位最后一行</s-button
       >
     </div>
@@ -56,6 +56,9 @@ const columns: TableColumn[] = [
 <style scoped>
 .fixed-example {
   width: 100%;
+}
+.fixed-example :deep(.s-table) {
+  max-height: 320px;
 }
 .table-controls {
   display: flex;

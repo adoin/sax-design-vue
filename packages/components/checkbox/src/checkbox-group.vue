@@ -2,7 +2,7 @@
 import { computed, nextTick, toRaw } from 'vue'
 import { isEqual } from 'lodash-unified'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { provideGlobalConfig, useNamespace, useSize } from '@vuesax-alpha/hooks'
 import SCheckbox from './checkbox.vue'
 import CheckboxGroupProvider from './checkbox-group-provider.vue'
 import {
@@ -33,6 +33,8 @@ const slots = defineSlots<{
   empty?(): unknown
 }>()
 const ns = useNamespace('checkbox-group')
+const size = useSize()
+provideGlobalConfig(computed(() => ({ size: size.value || 'default' })))
 
 const dataOptions = computed(() => props.options as CheckboxGroupItem[])
 const flatOptions = computed(() =>

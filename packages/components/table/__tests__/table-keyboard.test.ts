@@ -432,6 +432,9 @@ describe('table cell keyboard navigation', () => {
     })
     await settle()
     const viewport = wrapper.get<HTMLElement>('.s-vl__window').element
+    const overlay = () => wrapper.get('.s-table__fixed-boundary-overlay')
+    expect(overlay().classes()).not.toContain('is-fixed-left')
+    expect(overlay().classes()).toContain('is-fixed-right')
     viewport.scrollLeft = 2500
     viewport.dispatchEvent(new Event('scroll'))
     await settle()
@@ -443,13 +446,20 @@ describe('table cell keyboard navigation', () => {
     expect(
       wrapper.get('.s-table__data-cell[data-column-index="99"]').classes(),
     ).not.toContain('is-edge-fragment')
-    const overlay = wrapper.get('.s-table__fixed-boundary-overlay')
-    expect(overlay.attributes('style')).toContain(
+    expect(overlay().classes()).toContain('is-fixed-left')
+    expect(overlay().classes()).toContain('is-fixed-right')
+    expect(overlay().attributes('style')).toContain(
       '--s-table-fixed-left-width: 140px',
     )
-    expect(overlay.attributes('style')).toContain(
+    expect(overlay().attributes('style')).toContain(
       '--s-table-fixed-right-width: 140px',
     )
+    viewport.scrollLeft = 13_400
+    viewport.dispatchEvent(new Event('scroll'))
+    await vi.waitFor(() => {
+      expect(overlay().classes()).toContain('is-fixed-left')
+      expect(overlay().classes()).not.toContain('is-fixed-right')
+    })
   })
   it('moves the continuous fixed shadow with an ordinary horizontal scroll', async () => {
     // Native scrollbar gutters can make the paint box wider than clientWidth.
@@ -464,15 +474,23 @@ describe('table cell keyboard navigation', () => {
     })
     await settle()
     const table = wrapper.get<HTMLElement>('.s-table').element
+    const overlay = () => wrapper.get('.s-table__fixed-boundary-overlay')
+    expect(overlay().classes()).not.toContain('is-fixed-left')
+    expect(overlay().classes()).toContain('is-fixed-right')
     table.scrollLeft = 160
     table.dispatchEvent(new Event('scroll'))
-    await settle()
-    expect(
-      wrapper.get('.s-table__fixed-boundary-overlay').attributes('style'),
-    ).toContain('left: 160px')
-    expect(
-      wrapper.get('.s-table__fixed-boundary-overlay').attributes('style'),
-    ).toContain('width: 610px')
+    await vi.waitFor(() => {
+      expect(overlay().classes()).toContain('is-fixed-left')
+      expect(overlay().classes()).toContain('is-fixed-right')
+    })
+    expect(overlay().attributes('style')).toContain('left: 160px')
+    expect(overlay().attributes('style')).toContain('width: 610px')
+    table.scrollLeft = 200
+    table.dispatchEvent(new Event('scroll'))
+    await vi.waitFor(() => {
+      expect(overlay().classes()).toContain('is-fixed-left')
+      expect(overlay().classes()).not.toContain('is-fixed-right')
+    })
     expect(
       wrapper.get('.s-table__data-row .is-fixed-right').attributes('style'),
     ).toContain('right: 0px')

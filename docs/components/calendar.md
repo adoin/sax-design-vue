@@ -95,8 +95,8 @@ PROPS:
     default: '[]'
   - name: get-context-menu-items
     type: Function
-    values: "(context) => ContextMenuItem[]"
-    description: Resolve menu items for the right-clicked event, date, or time. Receives { type, date, event? }.
+    values: "(context: CalendarContextMenuContext) => ContextMenuItem[]"
+    description: Resolve menu items for the right-clicked event, date, or time. The context contains type, date, dates, and an optional event.
     default: null
   - name: context-menu-min-width
     type: Number
@@ -156,9 +156,9 @@ EVENTS:
   - name: panel-change
     description: Active view and visible date changes.
   - name: context-menu
-    description: Open context and selected menu item. Selection returns { item, context }; context.dates is the selected date range.
+    description: Emits the `CalendarContextMenuContext` when the menu opens; `context.dates` is the current selected date range.
   - name: context-menu-select
-    description: Open context and selected menu item. Selection returns { item, context }; context.dates is the selected date range.
+    description: Emits `{ item, context }` after a menu item is selected; context is the same menu-open snapshot.
 EXPOSES:
   - name: clearSelection
     description: Clears the current date, range, or multiple-date selection and synchronizes v-model.

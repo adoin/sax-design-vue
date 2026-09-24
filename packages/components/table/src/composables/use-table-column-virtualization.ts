@@ -300,6 +300,12 @@ export const useTableColumnVirtualization = (
       logicalScrollableWidth.value,
     )
   })
+  const atStart = computed(() => logicalScrollLeft.value <= 1)
+  const atEnd = computed(
+    () =>
+      logicalScrollableWidth.value <= 1 ||
+      logicalScrollLeft.value >= logicalScrollableWidth.value - 1,
+  )
   const toPhysicalScrollLeft = (logicalLeft: number) =>
     mapLogicalToPhysicalScroll(
       logicalLeft,
@@ -648,6 +654,8 @@ export const useTableColumnVirtualization = (
     availableWidth,
     scrollLeft,
     logicalScrollLeft,
+    atStart,
+    atEnd,
     range,
     renderBefore,
     renderAfter,

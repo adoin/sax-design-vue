@@ -3,10 +3,11 @@
 @use 'common/var' as *;
 
 .s-cascader {
+  --sax-cascader-height: 36px;
   position: relative;
   display: inline-flex;
   width: 220px;
-  min-height: 36px;
+  min-height: var(--sax-cascader-height);
   align-items: center;
   gap: 6px;
   padding: 4px 8px 4px 10px;
@@ -23,6 +24,18 @@
       var(--sax-motion-easing-standard),
     box-shadow var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
   box-sizing: border-box;
+}
+
+.s-cascader--small {
+  --sax-cascader-height: 32px;
+  padding-block: 2px;
+  font-size: 12px;
+}
+
+.s-cascader--large {
+  --sax-cascader-height: 40px;
+  padding-block: 6px;
+  font-size: 15px;
 }
 
 .s-cascader:hover:not(.is-disabled) {

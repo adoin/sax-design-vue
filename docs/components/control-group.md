@@ -2,6 +2,11 @@
 description: 'Join related form controls with a lightweight puzzle seam.'
 lastUpdated: false
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: Force one shared size on every direct component control in the group.
+    default: null
   - name: block
     type: Boolean
     values: "true | false"
@@ -25,7 +30,7 @@ SLOTS:
 
 <card>
 
-Control Group joins related controls with a lightweight non-layout puzzle seam while each child keeps its own value, events, validation, and popup behavior. It uses a 24-column grid: direct children can declare `span`, while children without it evenly share the remaining space.
+Control Group joins related controls with a lightweight non-layout puzzle seam while each child keeps its own value, events, validation, and popup behavior. It uses a 24-column grid: direct children can declare `span`, while children without it evenly share the remaining space. The group's resolved `size` is authoritative for direct component controls so mixed local sizes cannot break the continuous surface.
 
 </card>
 
@@ -52,6 +57,34 @@ Place a Select and Input next to each other when users need to choose a prefix b
 <template #style>
 
 @[code{23-36}](../.vuepress/components/control-group/basic.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><control-group-size /></template>
+
+<template #template>
+
+@[code{7-25}](../.vuepress/components/control-group/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/control-group/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{27-32}](../.vuepress/components/control-group/size.vue)
 
 </template>
 

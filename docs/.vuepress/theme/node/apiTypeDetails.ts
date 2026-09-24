@@ -194,7 +194,10 @@ const readDeclarations = (
   return declarations
 }
 
-const createRegistry = (componentsRoot: string): TypeRegistry => {
+const createRegistry = (
+  componentsRoot: string,
+  sharedTypeRoots: string[],
+): TypeRegistry => {
   const byComponent = new Map<string, Map<string, IndexedTypeDefinition>>()
   const byName = new Map<string, IndexedTypeDefinition[]>()
 
@@ -214,6 +217,27 @@ const createRegistry = (componentsRoot: string): TypeRegistry => {
       const namedDefinitions = byName.get(definition.name) ?? []
       namedDefinitions.push(definition)
       byName.set(definition.name, namedDefinitions)
+    }
+  }
+
+  for (const sharedRoot of sharedTypeRoots) {
+    for (const file of walkTypeScriptFiles(sharedRoot)) {
+      const component = '__shared__'
+      const componentTypes = byComponent.get(component) ?? new Map()
+      byComponent.set(component, componentTypes)
+
+      for (const definition of readDeclarations(
+        readFileSync(file, 'utf8'),
+        component,
+        relative(resolve(componentsRoot, '../..'), file).replaceAll('\\', '/'),
+      )) {
+        if (!componentTypes.has(definition.name)) {
+          componentTypes.set(definition.name, definition)
+        }
+        const namedDefinitions = byName.get(definition.name) ?? []
+        namedDefinitions.push(definition)
+        byName.set(definition.name, namedDefinitions)
+      }
     }
   }
 
@@ -245,11 +269,14 @@ const createRegistry = (componentsRoot: string): TypeRegistry => {
   return { byComponent, byName }
 }
 
-export const createApiTypeDetailsResolver = (componentsRoot: string) => {
+export const createApiTypeDetailsResolver = (
+  componentsRoot: string,
+  sharedTypeRoots: string[] = [],
+) => {
   let registry: TypeRegistry | undefined
 
   const getRegistry = () => {
-    registry ??= createRegistry(componentsRoot)
+    registry ??= createRegistry(componentsRoot, sharedTypeRoots)
     return registry
   }
 

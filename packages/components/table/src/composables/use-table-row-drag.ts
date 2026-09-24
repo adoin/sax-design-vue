@@ -3,6 +3,7 @@ import type { WatchSource } from 'vue'
 import type { TableCoreEmitFn, TableFlatRow, TableRowKey } from '../table'
 import type {
   TableRowDragResult,
+  TableRowDropContext,
   TableRowDropPosition,
 } from '../table-row-drag'
 import type { TableRowReorder } from './use-table-row-reorder'
@@ -12,6 +13,9 @@ interface DragSession {
   key: TableRowKey
   target?: number
   targetKey?: TableRowKey
+  indicator?: number
+  subtreeEnd?: number
+  preview?: TableRowDropContext
   position: TableRowDropPosition
   keyboard: boolean
 }
@@ -20,6 +24,7 @@ interface RowDragOptions {
   scroll: () => HTMLElement | undefined
   rowAt: (index: number) => TableFlatRow | undefined
   count: () => number
+  indent: () => number
   changes: WatchSource[]
   focus: (key: TableRowKey, generatedIndex?: number) => void | Promise<void>
   scrollTo: (index: number) => void
@@ -51,21 +56,46 @@ export function useTableRowDrag(
       emit('rowDragEnd', { applied: false, reason: 'cancelled' })
     }
   }
-  const choose = (index: number, position: TableRowDropPosition) => {
+  const choose = (
+    index: number,
+    position: TableRowDropPosition,
+    clearInvalid = true,
+  ) => {
     const current = session.value
-    if (!current) return
-    let valid = false
+    if (!current) return false
+    let preview: TableRowDropContext | undefined
     try {
-      valid = Boolean(reorder.dropContext(current.from, index, position))
+      preview = reorder.dropContext(current.from, index, position)
     } catch {
       /* Invalid consumer predicates cannot leave a stale drop target. */
     }
-    session.value = {
-      ...current,
-      target: valid ? index : undefined,
-      targetKey: valid ? options.rowAt(index)?.key : undefined,
-      position,
-    }
+    if (preview) {
+      let subtreeEnd = index
+      const depth = options.rowAt(index)?.depth ?? preview.targetDepth
+      while (
+        subtreeEnd + 1 < options.count() &&
+        (options.rowAt(subtreeEnd + 1)?.depth ?? -1) > depth
+      )
+        subtreeEnd++
+      session.value = {
+        ...current,
+        target: index,
+        targetKey: options.rowAt(index)?.key,
+        indicator: preview.position === 'after' ? subtreeEnd : index,
+        subtreeEnd,
+        preview,
+        position,
+      }
+    } else if (clearInvalid)
+      session.value = {
+        ...current,
+        target: undefined,
+        targetKey: undefined,
+        indicator: undefined,
+        subtreeEnd: undefined,
+        preview: undefined,
+      }
+    return Boolean(preview)
   }
   const drop = async () => {
     const current = session.value
@@ -121,7 +151,14 @@ export function useTableRowDrag(
         y < Math.max(0, rect.top) ||
         y > Math.min(win.innerHeight, rect.bottom)
       ) {
-        session.value = { ...current, target: undefined, targetKey: undefined }
+        session.value = {
+          ...current,
+          target: undefined,
+          targetKey: undefined,
+          indicator: undefined,
+          subtreeEnd: undefined,
+          preview: undefined,
+        }
         return
       }
       const element = doc
@@ -133,14 +170,62 @@ export function useTableRowDrag(
         element.closest('[role="table"]') !==
           root.querySelector('[role="table"]')
       ) {
-        session.value = { ...current, target: undefined, targetKey: undefined }
+        session.value = {
+          ...current,
+          target: undefined,
+          targetKey: undefined,
+          indicator: undefined,
+          subtreeEnd: undefined,
+          preview: undefined,
+        }
         return
       }
+      const targetIndex = Number(element.dataset.tableRowIndex)
+      const target = options.rowAt(targetIndex)
+      if (!target) return
       const box = element.getBoundingClientRect()
-      choose(
-        Number(element.dataset.tableRowIndex),
-        y < box.top + box.height / 2 ? 'before' : 'after',
-      )
+      const ratio = (y - box.top) / Math.max(1, box.height)
+      const inside =
+        reorder.treeConfig.value &&
+        reorder.treeConfig.value.allowDropInside !== false
+      if (inside && ratio >= 0.25 && ratio <= 0.75) {
+        choose(targetIndex, 'inside')
+        return
+      }
+      const before = ratio < 0.5
+      const adjacentIndex = targetIndex + (before ? -1 : 1)
+      const adjacent = options.rowAt(adjacentIndex)
+      const boundaryDistance = before ? y - box.top : box.bottom - y
+      if (
+        boundaryDistance <= 4 &&
+        adjacent &&
+        adjacent.depth !== target.depth
+      ) {
+        const upperIndex = before ? adjacentIndex : targetIndex
+        const lowerIndex = before ? targetIndex : adjacentIndex
+        const upper = options.rowAt(upperIndex)!
+        const lower = options.rowAt(lowerIndex)!
+        const deeperIsUpper = upper.depth > lower.depth
+        const deeperIndex = deeperIsUpper ? upperIndex : lowerIndex
+        const shallowIndex = deeperIsUpper ? lowerIndex : upperIndex
+        const deeperPosition = deeperIsUpper ? 'after' : 'before'
+        const shallowPosition = deeperIsUpper ? 'before' : 'after'
+        const deeperDepth = Math.max(upper.depth, lower.depth)
+        const threshold = rect.left + 28 + deeperDepth * options.indent()
+        const previousDepth = current.preview?.newDepth
+        const preferDeeper =
+          previousDepth === deeperDepth
+            ? x >= threshold - 4
+            : x >= threshold + 4
+        if (
+          choose(
+            preferDeeper ? deeperIndex : shallowIndex,
+            preferDeeper ? deeperPosition : shallowPosition,
+          )
+        )
+          return
+      }
+      choose(targetIndex, before ? 'before' : 'after')
     }
     const tick = () => {
       if (!session.value) return
@@ -247,26 +332,50 @@ export function useTableRowDrag(
       return
     }
     const current = session.value
-    if (!current?.keyboard || !['ArrowUp', 'ArrowDown'].includes(event.key))
+    if (!current?.keyboard) return
+    if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+      if (current.target === undefined) return
+      event.preventDefault()
+      event.stopPropagation()
+      choose(
+        current.target,
+        event.key === 'ArrowRight'
+          ? 'inside'
+          : options.rowAt(current.from)?.parentKey ===
+              options.rowAt(current.target)?.key
+            ? 'after'
+            : current.target < current.from
+              ? 'before'
+              : 'after',
+        false,
+      )
       return
+    }
+    if (!['ArrowUp', 'ArrowDown'].includes(event.key)) return
     event.preventDefault()
     event.stopPropagation()
     const direction = event.key === 'ArrowUp' ? -1 : 1
-    const row = options.rowAt(current.from)!
     for (
       let target = (current.target ?? current.from) + direction;
       target >= 0 && target < options.count();
       target += direction
     ) {
       if (target === current.from) {
-        session.value = { ...current, target: undefined, targetKey: undefined }
+        session.value = {
+          ...current,
+          target: undefined,
+          targetKey: undefined,
+          indicator: undefined,
+          subtreeEnd: undefined,
+          preview: undefined,
+        }
         options.scrollTo(target)
         break
       }
-      if (options.rowAt(target)?.parentKey !== row.parentKey) continue
-      choose(target, direction < 0 ? 'before' : 'after')
-      options.scrollTo(target)
-      break
+      if (choose(target, direction < 0 ? 'before' : 'after', false)) {
+        options.scrollTo(target)
+        break
+      }
     }
   }
   watch(options.changes, () => {

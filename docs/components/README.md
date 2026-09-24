@@ -223,6 +223,32 @@ EVENTS:
     type: MouseEvent
     description: Fires after debounce or throttle handling when an enabled, non-loading button is activated.
 SLOTS:
+  - name: prefix
+    type: slot
+    values: 'null'
+    description: Place an icon before the button label. During default loading, the brand loader replaces this slot; prefix takes priority when both icon slots exist.
+    default: null
+    link: null
+    code: >
+      <s-button>
+        <template #prefix><s-icon name="bxs:save" /></template>
+        Save changes
+      </s-button>
+    usage: '#loading'
+  # _______________________________________
+  - name: suffix
+    type: slot
+    values: 'null'
+    description: Place an icon after the button label. During default loading, the brand loader replaces this slot when prefix is absent.
+    default: null
+    link: null
+    code: >
+      <s-button>
+        Continue
+        <template #suffix><s-icon name="bx:right-arrow-alt" /></template>
+      </s-button>
+    usage: '#loading'
+  # _______________________________________
   - name: loading
     type: slot
     values: 'null'
@@ -570,6 +596,8 @@ You can make all the corners completely straight with the `Square` property, the
 
 Change the size of the entire button including padding, font-size and border with the `size` property
 
+Button keeps five size values. Its shared `small`, `default`, and `large` values use the same 32px, 36px, and 40px control heights as other components; `mini` and `xl` extend below and above that common scale.
+
 values:
 
 - xl
@@ -584,13 +612,13 @@ values:
 
 <template #template>
 
-@[code{1-17}](../.vuepress/components/button/size.vue)
+@[code{7-23}](../.vuepress/components/button/size.vue)
 
 </template>
 
 <template #script>
 
-@[code{19-23}](../.vuepress/components/button/size.vue)
+@[code{1-5}](../.vuepress/components/button/size.vue)
 
 </template>
 
@@ -600,7 +628,7 @@ values:
 
 ## Loading
 
-Use `loading` while an action is running. The default places the shared Sax logo loader on a transparent overlay while the original label remains visible. Select `pulse`, `ripple`, or `shimmer` with `loading-type` for another surface animation. Every mode preserves button size and prevents clicks. Use `#loading` for fully custom content.
+Use `#prefix` and `#suffix` for icons before or after the label. Icons may still be passed through the default slot when no dedicated placement is needed. While `loading-type="default"` is active, the original icon fades into the brand loader before its lead-in begins. When loading ends, the loader completes its restoration motion before fading back to the original icon. The loader uses `prefix`, or `suffix` when no prefix exists; with both slots, prefix takes priority. If neither icon slot exists, the loader keeps its centered transparent overlay. Select `pulse`, `ripple`, or `shimmer` for another surface animation. Every mode preserves button size and prevents clicks. Use `#loading` for fully custom content.
 
 <template #example>
 <button-loading />
@@ -608,19 +636,19 @@ Use `loading` while an action is running. The default places the shared Sax logo
 
 <template #template>
 
-@[code{1-52}](../.vuepress/components/button/loading.vue)
+@[code{1-53}](../.vuepress/components/button/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{54-93}](../.vuepress/components/button/loading.vue)
+@[code{55-66}](../.vuepress/components/button/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{95-131}](../.vuepress/components/button/loading.vue)
+@[code{68-104}](../.vuepress/components/button/loading.vue)
 
 </template>
 
@@ -750,7 +778,7 @@ Supported colors: (`facebook`, `twitter`, `youtube`, `pinterest`, `linkedin`, `s
 
 <template #style>
 
-@[code{81-88}](../.vuepress/components/button/social.vue)
+@[code{81-93}](../.vuepress/components/button/social.vue)
 
 </template>
 

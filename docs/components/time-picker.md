@@ -166,6 +166,34 @@ Use Time Picker for arbitrary time input with hour/minute/second spinners.
 
 <card>
 
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><time-picker-size /></template>
+
+<template #template>
+
+@[code{7-13}](../.vuepress/components/time-picker/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/time-picker/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../.vuepress/components/time-picker/size.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Label
 
 Use `label` for a persistent label. Add `label-float` to move it above the value when focused or filled.

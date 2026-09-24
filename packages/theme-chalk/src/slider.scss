@@ -26,6 +26,18 @@
   min-height: 44px;
   user-select: none;
 
+  @include m(small) {
+    --sax-slider-track-height: 3px;
+    --sax-slider-thumb-size: 14px;
+    min-height: 32px;
+  }
+
+  @include m(large) {
+    --sax-slider-track-height: 5px;
+    --sax-slider-thumb-size: 18px;
+    min-height: 52px;
+  }
+
   @include e(track) {
     position: absolute;
     top: 50%;

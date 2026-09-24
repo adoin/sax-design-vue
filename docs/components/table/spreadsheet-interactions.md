@@ -340,21 +340,23 @@ Space or Enter picks up a row, arrow keys choose a target, Enter drops it and Es
 
 <card>
 
-### Tree sibling reordering
+### Tree reparenting
 
-Tree rows move within the same parent. Expanded descendants follow their parent; dropping into another parent is not supported. Loaded lazy children follow the same rules as ordinary children, without requesting unloaded nodes. Reordering does not mutate supplied row objects. This example combines nested columns, fixed columns, virtualization and dynamic row heights.
+Tree rows stay within their current sibling list by default. Set `rowDragConfig.tree` to `true`, or provide its object form, to enable cross-parent moves. Dropping on the upper or lower quarter inserts before or after that row. At an expanded parent / first-child boundary, entering from the child's top means “before the first child”; entering from the parent's bottom means “after the parent,” and that preview line is rendered after the parent's complete visible subtree because that is where the row will appear. The middle half uses `position: 'inside'` and makes the row a child. The middle of any loaded row can therefore turn a former leaf into a parent and create another nested level, subject to `maxDepth` and `dropMethod`. Within four pixels of a shared cross-depth boundary, horizontal intent chooses the deeper or shallower destination. Child placement highlights the target's visible branch; sibling placement uses an insertion line beginning at the proposed depth. Keyboard dragging uses Up/Down to choose a target, Right to move inside it, and Left to promote a direct child after its parent.
+
+The tree configuration can independently disable `allowReparent` or `allowDropInside`, choose `insidePosition: 'first' | 'last'`, limit the complete moved subtree with zero-based `maxDepth`, and control `expandOnDrop`. `draggableMethod` receives the source depth, parent, expansion state and loaded child count. `dropMethod` additionally receives the corresponding target fields plus `oldIndex`, `newIndex`, `newParentKey`, `newDepth`, `subtreeDepth` and `reparented`, so applications can reject locked parents, non-folder targets, full branches or domain-specific combinations. An unloaded lazy target must be expanded and loaded before it accepts an inside drop; dragging never fetches it implicitly. Reordering copies only affected arrays and ancestor rows; it does not mutate incoming row objects. This example uses configuration-object columns.
 
 <template #example><table-row-drag-tree /></template>
 
 <template #template>
 
-@[code{35-58}](../../.vuepress/components/table/row-drag-tree.vue)
+@[code{86-99}](../../.vuepress/components/table/row-drag-tree.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-33}](../../.vuepress/components/table/row-drag-tree.vue)
+@[code{1-84}](../../.vuepress/components/table/row-drag-tree.vue)
 
 </template>
 

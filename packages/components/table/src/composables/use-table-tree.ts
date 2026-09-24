@@ -82,6 +82,10 @@ export function useTableTree<Row extends object>(
     internalExpandedKeys.value = new Set(keys)
     options.onExpandedKeysChange(keys)
   }
+  const expandKey = (key: TableRowKey) => {
+    if (internalExpandedKeys.value.has(key)) return
+    setExpandedKeys([...internalExpandedKeys.value, key])
+  }
 
   const flatRows = computed<TableFlatRow<Row>[]>(() => {
     const result: TableFlatRow<Row>[] = []
@@ -237,6 +241,7 @@ export function useTableTree<Row extends object>(
       return rows
     },
     setExpandedKeys,
+    expandKey,
     toggleRowExpand,
   }
 }

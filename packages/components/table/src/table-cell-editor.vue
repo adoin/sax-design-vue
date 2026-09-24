@@ -81,7 +81,32 @@ const params = computed(() => ({
 }))
 const modelValue = computed(() => props.editing.valueFor(props.context))
 const popupVisible = shallowRef(false)
+const composing = shallowRef(false)
+const recentlyComposed = shallowRef(false)
 const control = shallowRef<{ hidePanel?: () => void }>()
+let compositionReleaseTimer: ReturnType<typeof setTimeout> | undefined
+const releaseRecentComposition = () => {
+  if (compositionReleaseTimer) clearTimeout(compositionReleaseTimer)
+  compositionReleaseTimer = undefined
+  recentlyComposed.value = false
+}
+const onCompositionStart = () => {
+  releaseRecentComposition()
+  composing.value = true
+}
+const onCompositionEnd = () => {
+  composing.value = false
+  recentlyComposed.value = true
+  compositionReleaseTimer = setTimeout(releaseRecentComposition, 80)
+}
+const interceptImeKeydown = (event: KeyboardEvent) => {
+  if (composing.value || event.isComposing || event.keyCode === 229) return true
+  if (!recentlyComposed.value || event.key !== 'Enter') return false
+  releaseRecentComposition()
+  event.preventDefault()
+  event.stopPropagation()
+  return true
+}
 const builtin = () => {
   const type = editorType.value
   const components = {
@@ -180,8 +205,7 @@ watch(
 )
 const onCommitShortcut = (event: KeyboardEvent) => {
   if (
-    event.isComposing ||
-    event.keyCode === 229 ||
+    interceptImeKeydown(event) ||
     event.key !== 'Enter' ||
     (!event.ctrlKey && !event.metaKey)
   )
@@ -191,8 +215,7 @@ const onCommitShortcut = (event: KeyboardEvent) => {
   props.editing.commit('enter')
 }
 const onKeydown = (event: KeyboardEvent) => {
-  if (event.isComposing || event.keyCode === 229 || event.defaultPrevented)
-    return
+  if (interceptImeKeydown(event) || event.defaultPrevented) return
   const popupOpen =
     popupVisible.value ||
     root.value?.querySelector('[aria-expanded="true"],.s-select.is-open')
@@ -246,6 +269,7 @@ const onKeydown = (event: KeyboardEvent) => {
 }
 onBeforeUnmount(() => {
   disposed = true
+  releaseRecentComposition()
   detach?.()
   const cell = root.value?.closest<HTMLElement>('[role="cell"]')
   const restore = root.value?.contains(document.activeElement)
@@ -262,6 +286,8 @@ onBeforeUnmount(() => {
     tabindex="-1"
     @click.stop
     @dblclick.stop
+    @compositionstart.capture="onCompositionStart"
+    @compositionend.capture="onCompositionEnd"
     @keydown="onKeydown"
     @keydown.capture="onCommitShortcut"
     @focusin="editing.focus(context)"

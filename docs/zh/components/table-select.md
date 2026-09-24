@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: "small | default | large"
+    description: 触发器、弹层 Table 和注册渲染器继承的尺寸。
+    default: null
   - name: "empty-text"
     type: "String"
     description: "表格没有数据时显示的文本，省略时使用当前语言的默认文案。"
@@ -392,6 +397,7 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行数据。'
 
 # Table Select 表格选择器
 
+
 <card>
 
 ## 树形数据
@@ -415,6 +421,34 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行数据。'
 <template #style>
 
 @[code{57-67}](../../.vuepress/components/table-select/tree.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><table-select-zh-size /></template>
+
+<template #template>
+
+@[code{13-39}](../../.vuepress/components/table-select-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-11}](../../.vuepress/components/table-select-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{41-48}](../../.vuepress/components/table-select-zh/size.vue)
 
 </template>
 

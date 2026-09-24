@@ -10,6 +10,8 @@ export interface AnchorRouteLocation {
 export interface AnchorRouterAdapter {
   push: (href: string) => unknown
   replace?: (href: string) => unknown
+  /** Loads a route module without navigating. Used only when route prefetching is enabled. */
+  prefetch?: (href: string) => unknown
   current?: () => string
   currentRoute?: AnchorRouteLocation | { value: AnchorRouteLocation }
 }

@@ -3,6 +3,22 @@ import { describe, expect, it } from 'vitest'
 import Textarea from '../src/textarea.vue'
 
 describe('Textarea', () => {
+  it('defers controlled updates until an IME composition ends', async () => {
+    const wrapper = mount(Textarea, { props: { modelValue: 'old' } })
+    const textarea = wrapper.get<HTMLTextAreaElement>('textarea')
+
+    await textarea.trigger('compositionstart')
+    textarea.element.value = '中文草稿'
+    await textarea.trigger('input', { isComposing: true })
+    await wrapper.setProps({ modelValue: 'stale' })
+
+    expect(textarea.element.value).toBe('中文草稿')
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+
+    await textarea.trigger('compositionend')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['中文草稿'])
+  })
+
   it('applies square geometry from the shape prop', () => {
     const wrapper = mount(Textarea, { props: { shape: 'square' } })
 

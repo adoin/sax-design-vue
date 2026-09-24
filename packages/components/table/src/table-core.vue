@@ -4,32 +4,37 @@
     @keydown="findPanelRef?.keydown($event)"
   >
     <slot />
-    <TableToolbar
+    <SConfigProvider
       v-if="toolbarRuntime?.enabled.value"
-      :config="toolbarRuntime.config.value"
-      :busy="toolbarRuntime.busy.value"
-      :table="toolbarRuntime.table"
-      :context="toolbarRuntime.context()"
-      @action="toolbarRuntime.action"
+      :size="toolbarRuntime.size.value"
     >
-      <template v-if="$slots['toolbar-title']" #title>
-        <slot name="toolbar-title" />
-      </template>
-      <template v-if="$slots.toolbar_left" #left>
-        <slot
-          name="toolbar_left"
-          v-bind="toolbarRuntime.table"
-          :busy="toolbarRuntime.busy.value"
-        />
-      </template>
-      <template v-if="$slots.toolbar_right" #right>
-        <slot
-          name="toolbar_right"
-          v-bind="toolbarRuntime.table"
-          :busy="toolbarRuntime.busy.value"
-        />
-      </template>
-    </TableToolbar>
+      <TableToolbar
+        :config="toolbarRuntime.config.value"
+        :busy="toolbarRuntime.busy.value"
+        :table="toolbarRuntime.table"
+        :context="toolbarRuntime.context()"
+        :size="toolbarRuntime.size.value"
+        @action="toolbarRuntime.action"
+      >
+        <template v-if="$slots['toolbar-title']" #title>
+          <slot name="toolbar-title" />
+        </template>
+        <template v-if="$slots.toolbar_left" #left>
+          <slot
+            name="toolbar_left"
+            v-bind="toolbarRuntime.table"
+            :busy="toolbarRuntime.busy.value"
+          />
+        </template>
+        <template v-if="$slots.toolbar_right" #right>
+          <slot
+            name="toolbar_right"
+            v-bind="toolbarRuntime.table"
+            :busy="toolbarRuntime.busy.value"
+          />
+        </template>
+      </TableToolbar>
+    </SConfigProvider>
     <span
       v-if="clipboard.enabled.value"
       :class="ns.e('range-status')"
@@ -400,6 +405,7 @@
           :body="merges.body.value"
           :footer="merges.footer.value"
           :range-selected="isRangeMergeSelected"
+          :active="isActiveMergeSurface"
           @continuation-click="mergeContinuationClick"
           @continuation-dblclick="mergeContinuationDblclick"
           @continuation-contextmenu="mergeContinuationContextmenu"
@@ -421,8 +427,14 @@
           ref="fixedBoundaryOverlayRef"
           :class="[
             ns.e('fixed-boundary-overlay'),
-            ns.is('fixed-left', fixedPixelMetrics.left > 0),
-            ns.is('fixed-right', fixedPixelMetrics.right > 0),
+            ns.is(
+              'fixed-left',
+              fixedPixelMetrics.left > 0 && !columnVirtualization.atStart.value,
+            ),
+            ns.is(
+              'fixed-right',
+              fixedPixelMetrics.right > 0 && !columnVirtualization.atEnd.value,
+            ),
           ]"
           :style="fixedBoundaryOverlayStyle"
           role="presentation"
@@ -455,10 +467,13 @@
         rowDrag.session.value?.target !== undefined
           ? t('vs.table.dragRowTarget', {
               row: rowDrag.session.value.target + 1,
+              level: (rowDrag.session.value.preview?.newDepth ?? 0) + 1,
               position: t(
                 rowDrag.session.value.position === 'before'
                   ? 'vs.table.dragBefore'
-                  : 'vs.table.dragAfter',
+                  : rowDrag.session.value.position === 'inside'
+                    ? 'vs.table.dragInside'
+                    : 'vs.table.dragAfter',
               ),
             })
           : rowDrag.announcement.value
@@ -526,6 +541,7 @@ import { SPagination } from '@vuesax-alpha/components/pagination'
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
 import { useId, useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SContextMenu } from '@vuesax-alpha/components/context-menu'
+import { SConfigProvider } from '@vuesax-alpha/components/config-provider'
 import { SLogoLoading } from '@vuesax-alpha/components/icon'
 import { tableCoreEmits, tableCoreProps } from './table'
 import { resolveTableHeaderAlign, tableAlignContextKey } from './table-align'
@@ -570,6 +586,7 @@ import { useTableRowReorder } from './composables/use-table-row-reorder'
 import { useTableRowDrag } from './composables/use-table-row-drag'
 import { useTableKeyboard } from './composables/use-table-keyboard'
 import { tableFocusVisible } from './composables/table-focus-visibility'
+import { tableEditorRevealDelta } from './composables/table-editor-visibility'
 import { useTableKeyboardCoordinates } from './composables/use-table-keyboard-coordinates'
 import { useTableRangeController } from './composables/use-table-range-controller'
 import { useTableClipboard } from './composables/use-table-clipboard'
@@ -1524,7 +1541,14 @@ const resolveCellRenderer = (
   const options = rendererOptions(column.renderer)
   const global = globalRendererEntry(column)?.renderDefault
   return global && options
-    ? (params) => resolveGlobalDefaultRenderer(params, options)
+    ? (params) =>
+        resolveGlobalDefaultRenderer(
+          params,
+          options,
+          props.size === 'small' || props.size === 'large'
+            ? props.size
+            : 'default',
+        )
     : undefined
 }
 
@@ -1541,7 +1565,14 @@ const resolveEditRenderer = (
   const options = rendererOptions(column.renderer)
   const global = globalRendererEntry(column)?.renderEdit
   return global && options
-    ? (params) => resolveGlobalEditRenderer(params, options)
+    ? (params) =>
+        resolveGlobalEditRenderer(
+          params,
+          options,
+          props.size === 'small' || props.size === 'large'
+            ? props.size
+            : 'default',
+        )
     : undefined
 }
 
@@ -1564,7 +1595,14 @@ const resolveFilterRenderer = (
   if (local && typeof local === 'object' && local.filter) return local.filter
   const global = tableRenderer.get(options.name)?.renderFilter
   return global
-    ? (params) => resolveGlobalFilterRenderer(params, options)
+    ? (params) =>
+        resolveGlobalFilterRenderer(
+          params,
+          options,
+          props.size === 'small' || props.size === 'large'
+            ? props.size
+            : 'default',
+        )
     : undefined
 }
 
@@ -1785,6 +1823,111 @@ watch(
   () => overflow.close(),
 )
 
+const EDITOR_REVEAL_MARGIN = 10
+const activeEditorCell = () => {
+  const active = editing.active.value
+  if (!active || !dataViewRef.value) return
+  return [
+    ...dataViewRef.value.querySelectorAll<HTMLElement>(
+      `[data-column-index="${active.columnIndex}"]`,
+    ),
+  ].find((cell) => {
+    const row = cell.closest<HTMLElement>('[data-row-key]')
+    return (
+      cell.closest('[role="table"]') === dataViewRef.value &&
+      row?.dataset.rowKey === String(active.rowKey)
+    )
+  })
+}
+const revealActiveEditorCell = () => {
+  const active = editing.active.value
+  const cell = activeEditorCell()
+  if (!active || !cell) return false
+
+  const horizontal = columnScrollRef.value
+  const centerIndex = props.virtualSource
+    ? columnManager.layout.value.centerIndexOf(active.columnIndex)
+    : columnPartitions.value.center.findIndex(
+        (entry) => entry.index === active.columnIndex,
+      )
+  if (horizontal && centerIndex >= 0) {
+    const viewport = horizontal.getBoundingClientRect()
+    const target = cell.getBoundingClientRect()
+    const scale = horizontal.offsetWidth
+      ? viewport.width / horizontal.offsetWidth
+      : 1
+    const start =
+      viewport.left +
+      horizontal.clientLeft * scale +
+      fixedPixelMetrics.value.left * scale
+    const end =
+      viewport.left +
+      (horizontal.clientLeft + horizontal.clientWidth) * scale -
+      fixedPixelMetrics.value.right * scale
+    const delta = tableEditorRevealDelta(
+      target.left,
+      target.right,
+      start,
+      end,
+      EDITOR_REVEAL_MARGIN * scale,
+    )
+    if (Math.abs(delta) > 0.5) {
+      if (horizontalVirtualActive.value)
+        columnVirtualization.scrollBy(delta / scale)
+      else {
+        const next = Math.max(
+          0,
+          Math.min(
+            horizontal.scrollLeft + delta / scale,
+            horizontal.scrollWidth - horizontal.clientWidth,
+          ),
+        )
+        if (Math.abs(next - horizontal.scrollLeft) > 0.5)
+          horizontal.scrollTo({ left: next, behavior: 'auto' })
+      }
+    }
+  }
+
+  // Merge-layer owners are clipped to the visible fragment; their logical
+  // origin may be far outside the viewport.
+  if (cell.closest('[data-merge-primary]')) return true
+
+  const vertical =
+    virtualListRef.value?.getScrollElement() ?? tableScrollRef.value
+  if (
+    vertical &&
+    vertical.scrollHeight > vertical.clientHeight + 1 &&
+    vertical.clientHeight > 0
+  ) {
+    const viewport = vertical.getBoundingClientRect()
+    const target = cell.getBoundingClientRect()
+    const scale = vertical.offsetHeight
+      ? viewport.height / vertical.offsetHeight
+      : 1
+    const start = viewport.top + vertical.clientTop * scale
+    const end = start + vertical.clientHeight * scale
+    const delta = tableEditorRevealDelta(
+      target.top,
+      target.bottom,
+      start,
+      end,
+      EDITOR_REVEAL_MARGIN * scale,
+    )
+    if (Math.abs(delta) > 0.5) {
+      const next = Math.max(
+        0,
+        Math.min(
+          vertical.scrollTop + delta / scale,
+          vertical.scrollHeight - vertical.clientHeight,
+        ),
+      )
+      if (Math.abs(next - vertical.scrollTop) > 0.5)
+        vertical.scrollTo({ top: next, behavior: 'auto' })
+    }
+  }
+  return true
+}
+
 const startEdit = async (
   rowOrIndex: TableRow | number,
   columnOrIndex: TableColumn | string | number,
@@ -1850,9 +1993,12 @@ const startEdit = async (
     toggleExpand: async (value) => toggleRowExpand(editFlat.row, value),
   })
   if (started) {
-    scrollToRow(props.virtualSource ? flat.index : flat.row)
-    scrollToColumn(requestedColumn)
+    if (!activeEditorCell()) {
+      scrollToRow(props.virtualSource ? flat.index : flat.row)
+      scrollToColumn(requestedColumn)
+    }
     await nextTick()
+    revealActiveEditorCell()
   }
   return started
 }
@@ -1896,22 +2042,13 @@ watch(
   () =>
     nextTick(() => {
       const active = editing.active.value
-      const activeCellMounted =
-        active &&
-        [
-          ...(dataViewRef.value?.querySelectorAll<HTMLElement>(
-            `[data-column-index="${active.columnIndex}"]`,
-          ) ?? []),
-        ].some((cell) => {
-          const row = cell.closest<HTMLElement>('[data-row-key]')
-          return (
-            cell.closest('[role="table"]') === dataViewRef.value &&
-            row?.dataset.rowKey === String(active.rowKey)
-          )
-        })
+      const activeCellMounted = Boolean(activeEditorCell())
       if (active && !activeCellMounted) {
         scrollToRow(props.virtualSource ? active.rowIndex : active.row)
         scrollToColumn(active.columnIndex)
+        nextTick(() => revealActiveEditorCell())
+      } else if (active) {
+        revealActiveEditorCell()
       }
       virtualListRef.value?.resetMeasurements()
     }),
@@ -1945,6 +2082,8 @@ const rowReorder = useTableRowReorder(props, emit, {
     )
   },
   children: tree.getChildren,
+  revision: () => flatRows.value,
+  expand: tree.expandKey,
   changed: () => {
     validation.clear()
     measure()
@@ -1969,6 +2108,7 @@ const rowDrag = useTableRowDrag(rowReorder, emit, {
   },
   rowAt: dragRowAt,
   count: () => effectiveRowCount.value,
+  indent: () => treeIndent.value,
   changes: [
     () => props.data,
     () => props.virtualSource,
@@ -2754,6 +2894,12 @@ const isRangeMergeSelected = (surface: TableMergeSurface) => {
     : surface.rowStart
   return row != null && cellRange.contains(row, surface.colStart)
 }
+const isActiveMergeSurface = (surface: TableMergeSurface) => {
+  if (surface.area !== 'body') return false
+  const row = mergeFlatRow(surface.region.row)
+  const column = mergeColumn(surface.region.col)
+  return Boolean(row && column && keyboard.isActive(row.key, column.index))
+}
 const TableBodyRow = createTableBodyRow({
   slots: tableSlots,
   cellSlotName,
@@ -2894,6 +3040,7 @@ const TableMergedCell = ({
     return h(TableBodyRow, {
       renderSlots,
       flatRow,
+      'data-row-key': String(flatRow.key),
       displayIndex: props.virtualSource
         ? (groups.layout.value.dataIndexNear(surface.region.row, 'forward') ??
           0)

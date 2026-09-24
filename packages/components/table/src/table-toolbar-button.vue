@@ -87,9 +87,10 @@ const run = (code: string | undefined, event: MouseEvent) => {
           v-for="child in children"
           :key="child.code"
           v-bind="child.props"
-          type="transparent"
-          size="mini"
-          block
+          :type="child.props?.type ?? 'transparent'"
+          :size="child.props?.size ?? buttonProps.size"
+          :color="child.props?.color ?? 'dark'"
+          :block="child.props?.block ?? true"
           role="menuitem"
           :disabled="disabled || child.disabled || child.props?.disabled"
           :loading="child.loading || child.props?.loading"

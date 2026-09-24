@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: 设置或继承控件尺寸。
+    default: null
   - name: shape
     type: String
     values: 'rounded | square'
@@ -185,6 +190,34 @@ NEWS:
 <template #script>
 
 @[code{9-12}](../../.vuepress/components/textarea/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><textarea-zh-size /></template>
+
+<template #template>
+
+@[code{7-13}](../../.vuepress/components/textarea-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/textarea-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../../.vuepress/components/textarea-zh/size.vue)
 
 </template>
 

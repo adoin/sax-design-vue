@@ -20,6 +20,7 @@ import type {
   TableRow,
 } from './table'
 import type {
+  TableSize,
   TableToolbarRendererOptions,
   TableToolbarRendererParams,
 } from './table-business'
@@ -108,9 +109,10 @@ const rendererUsesArray = (options: TableRendererOptions) =>
 const formOptions = (
   options: TableRendererOptions,
   source: Parameters<TableRendererEvent>[0],
+  size: TableSize,
 ): RendererOptions => ({
   name: options.name,
-  props: options.props,
+  props: { ...(size ? { size } : {}), ...(options.props ?? {}) },
   attrs: options.attrs,
   options: options.options,
   events: Object.entries(options.events ?? {}).reduce<
@@ -125,10 +127,12 @@ const formOptions = (
 const baseParams = (
   source: Parameters<TableRendererEvent>[0],
   value: unknown,
+  size: TableSize,
 ): Omit<FormRendererParams, 'model' | 'item' | 'setValue'> => ({
   field: source.column.field,
   prop: source.column.field,
   value,
+  size,
   disabled: 'disabled' in source ? source.disabled : false,
   readonly: false,
   validate: async () => true,
@@ -140,12 +144,13 @@ const baseParams = (
 export const resolveGlobalDefaultRenderer = (
   params: TableCellRenderParams,
   options: TableRendererOptions,
+  size: TableSize,
 ) => {
   const definition = formRenderer.get(options.name)
   if (!definition?.renderDefault) return
-  return definition.renderDefault(formOptions(options, params), {
+  return definition.renderDefault(formOptions(options, params, size), {
     ...params,
-    ...baseParams(params, params.value),
+    ...baseParams(params, params.value, size),
     model: params.row,
     item: { field: params.column.field },
     setValue: () => undefined,
@@ -155,6 +160,7 @@ export const resolveGlobalDefaultRenderer = (
 export const resolveGlobalEditRenderer = (
   params: TableEditSlotParams,
   options: TableRendererOptions,
+  size: TableSize,
 ) => {
   const definition = formRenderer.get(options.name)
   if (!definition?.renderEdit) return
@@ -164,9 +170,9 @@ export const resolveGlobalEditRenderer = (
         props: { shape: 'square', ...(options.props ?? {}) },
       }
     : options
-  return definition.renderEdit(formOptions(editOptions, params), {
+  return definition.renderEdit(formOptions(editOptions, params, size), {
     ...params,
-    ...baseParams(params, params.value),
+    ...baseParams(params, params.value, size),
     model: params.draftRow,
     item: { field: params.column.field },
     setValue: params.setValue,
@@ -178,14 +184,15 @@ export const resolveGlobalEditRenderer = (
 export const resolveGlobalFilterRenderer = (
   params: TableFilterSlotParams,
   options: TableRendererOptions,
+  size: TableSize,
 ) => {
   const definition = formRenderer.get(options.name)
   if (!definition?.renderFilter) return
   const multiple = rendererUsesArray(options)
   const value = multiple ? params.values : params.values[0]
-  return definition.renderFilter(formOptions(options, params), {
+  return definition.renderFilter(formOptions(options, params, size), {
     ...params,
-    ...baseParams(params, value),
+    ...baseParams(params, value, size),
     model: { value },
     item: { field: 'value' },
     setValue: (next) => {
@@ -210,7 +217,10 @@ const toolbarOptions = (
   const content = options.content
   return {
     name: options.itemRender,
-    props: options.props,
+    props: {
+      ...(params.size ? { size: params.size } : {}),
+      ...(options.props ?? {}),
+    },
     attrs: options.attrs,
     options: options.options,
     content: typeof content === 'function' ? () => content(params) : content,
@@ -235,6 +245,7 @@ export const resolveGlobalToolbarRenderer = (
       ...params,
     },
     placement: params.placement,
+    size: params.size,
     disabled: params.busy || options.disabled === true,
     action: (code, event) => {
       const handler = options.events?.[code]

@@ -21,11 +21,15 @@ import {
   useLocale,
   useNamespace,
   useShape,
+  useSize,
   useZIndex,
 } from '@vuesax-alpha/hooks'
 import { tableFindRuntimeKey } from './table-find-context'
 import TableFindActionMark from './table-find-action-mark.vue'
+import type { InputValue } from '@vuesax-alpha/components/input'
 import type { TableFindScope } from './table-find'
+import type { ComponentSize } from '@vuesax-alpha/constants'
+import type { TableSize } from './table-business'
 
 defineOptions({ name: 'STableFindPanel' })
 
@@ -33,12 +37,19 @@ const props = defineProps<{
   disabled?: boolean
   content?: string
   label?: string
+  size?: ComponentSize
 }>()
 const runtime = inject(tableFindRuntimeKey)
 if (!runtime) throw new Error('STableFindPanel must be rendered inside STable')
 const finder = runtime.finder
 const ns = useNamespace('table')
 const shape = useShape()
+const inheritedSize = useSize()
+const resolvedSize = computed<TableSize>(() =>
+  inheritedSize.value === 'small' || inheritedSize.value === 'large'
+    ? inheritedSize.value
+    : 'default',
+)
 const { t } = useLocale()
 const { currentZIndex } = useZIndex()
 const tooltipZIndex = computed(() => currentZIndex.value + 1)
@@ -413,9 +424,9 @@ const enterSearch = (input: Event | KeyboardEvent) => {
     search()
   }
 }
-const setReplacement = (value: string) => {
+const setReplacement = (value: InputValue) => {
   if (compact.value) return
-  replacement.value = value
+  replacement.value = value == null ? '' : String(value)
 }
 const ignoreBrowserFill = (event: Event) => {
   const inputEvent = event as InputEvent
@@ -509,7 +520,11 @@ defineExpose(api)
     >
       <svg
         ref="trigger"
-        :class="[ns.e('find-trigger'), ns.is('icon-only', !triggerText)]"
+        :class="[
+          ns.e('find-trigger'),
+          ns.em('find-trigger', resolvedSize),
+          ns.is('icon-only', !triggerText),
+        ]"
         viewBox="0 0 128 128"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -608,7 +623,7 @@ defineExpose(api)
                   data-form-type="other"
                   :spellcheck="false"
                   :disabled="compact"
-                  size="small"
+                  :size="resolvedSize"
                   block
                   @update:model-value="clearResults"
                   @keydown.enter="enterSearch"
@@ -628,7 +643,7 @@ defineExpose(api)
                   data-form-type="other"
                   :spellcheck="false"
                   :disabled="compact"
-                  size="small"
+                  :size="resolvedSize"
                   block
                   @update:model-value="setReplacement"
                 />
@@ -668,7 +683,7 @@ defineExpose(api)
                   <span :class="ns.e('find-tool')">
                     <SButton
                       icon
-                      size="small"
+                      :size="resolvedSize"
                       :flat="!tool.primary"
                       :debounce="false"
                       :disabled="tool.disabled"
@@ -707,7 +722,7 @@ defineExpose(api)
               <span :class="ns.e('find-tool')">
                 <SButton
                   icon
-                  size="small"
+                  :size="resolvedSize"
                   flat
                   :debounce="false"
                   :disabled="tool.disabled"

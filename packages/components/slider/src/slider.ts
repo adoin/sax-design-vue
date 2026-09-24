@@ -1,11 +1,12 @@
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import { useColorProp } from '@vuesax-alpha/hooks'
+import { useColorProp, useSizeProp } from '@vuesax-alpha/hooks'
 import { buildProps, isNumber } from '@vuesax-alpha/utils'
 
 import type { ExtractPropTypes } from 'vue'
 import type Slider from './slider.vue'
 
 export const sliderProps = buildProps({
+  size: useSizeProp,
   modelValue: {
     type: Number,
     default: 0,

@@ -30,7 +30,7 @@ Fixed left and right columns also work without virtualization. The center scroll
 
 <template #style>
 
-@[code{56-66}](../../.vuepress/components/table/fixed-columns.vue)
+@[code{56-69}](../../.vuepress/components/table/fixed-columns.vue)
 
 </template>
 

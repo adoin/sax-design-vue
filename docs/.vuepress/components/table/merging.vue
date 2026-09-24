@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue'
+import { createTableRowspanMerges } from 'sax-design-vue'
 import type { TableColumn, TableMergeConfig } from 'sax-design-vue'
 
 const merged = shallowRef(true)
@@ -29,10 +30,7 @@ const columns: TableColumn[] = [
 ]
 const footer = [{ team: 'Total planned hours', hours: 46 }]
 const merges: TableMergeConfig = {
-  body: [
-    { row: 0, col: 0, rowspan: 2, colspan: 1 },
-    { row: 2, col: 0, rowspan: 2, colspan: 1 },
-  ],
+  body: createTableRowspanMerges(rows, { field: 'team', col: 0 }),
   footer: [{ row: 0, col: 0, rowspan: 1, colspan: 3 }],
 }
 </script>

@@ -17,9 +17,14 @@ PROPS:
     default: '[]'
   - name: router
     type: AnchorRouterAdapter
-    values: '{ push, replace?, current?, currentRoute? }'
+    values: '{ push, replace?, prefetch?, current?, currentRoute? }'
     description: Router used by this Anchor. Local configuration overrides global anchor.router and structurally supports Vue Router-compatible routers.
     default: null
+  - name: route-prefetch
+    type: Boolean
+    values: 'true / false'
+    description: Prefetches the adjacent route modules while idle through router.prefetch. Local configuration overrides global anchor.routePrefetch.
+    default: false
   - name: route-boundary
     type: Boolean | AnchorRouteBoundaryOptions
     description: Automatic floating previous/next boundary for the flattened eligible route sequence; false disables it, or configure threshold, armDelay and routeCooldown.
@@ -236,6 +241,8 @@ The router and page scroll owner control route-entry scrolling. Keep route chang
 
 The documentation outline uses `active-strategy="visible-section"` so its highlighted hash follows the section occupying most of the readable page area. The library default remains `heading` for existing applications. Set `active-strategy` on one Anchor, or set `anchor: { activeStrategy: 'visible-section', activeOffset: 160 }` in `SConfigProvider` or the installation options for a shared default. An explicit component prop takes precedence; `activeOffset` only changes the `heading` strategy.
 
+Adjacent-route prefetching is opt-in and disabled by default. Set `route-prefetch` locally, or `anchor: { routePrefetch: true }` globally, and provide a `router.prefetch(href)` adapter that loads the matching lazy route module without navigating. Anchor schedules only the previous and next eligible routes while idle, deduplicates them by route path, and never mounts their components or loads their page data itself.
+
 When entering the next route through a boundary, the outline waits for its scroll position to settle at the new page start before selecting a page hash. The first heading stays active through the beginning of the chapter; later headings take over as they enter the reading area.
 
 Pass a Vue Router-compatible object locally through `router`. For example, use [vue-smart-router](https://www.npmjs.com/package/vue-smart-router) or another compatible router to handle navigation.
@@ -269,28 +276,36 @@ const items: AnchorItem[] = [
 For application-wide reuse, provide the router once when installing Sax Design Vue. A local `router` prop always takes precedence:
 
 ```ts
-import { createApp } from 'vue'
+import { type Component, createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import SaxDesignVue from 'sax-design-vue'
+import SaxDesignVue, { type AnchorRouterAdapter } from 'sax-design-vue'
 import App from './App.vue'
 
+const routeLoaders: Record<string, () => Promise<{ default: Component }>> = {
+  '/table/data': () => import('./DataGuide.vue'),
+  '/table/selection': () => import('./SelectionGuide.vue'),
+  '/table/sorting': () => import('./SortingGuide.vue'),
+}
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    { path: '/table/data', component: () => import('./DataGuide.vue') },
-    {
-      path: '/table/selection',
-      component: () => import('./SelectionGuide.vue'),
-    },
-    { path: '/table/sorting', component: () => import('./SortingGuide.vue') },
-  ],
+  routes: Object.entries(routeLoaders).map(([path, component]) => ({
+    path,
+    component,
+  })),
 })
+const anchorRouter: AnchorRouterAdapter = {
+  currentRoute: router.currentRoute,
+  push: (href) => router.push(href),
+  replace: (href) => router.replace(href),
+  prefetch: (href) => routeLoaders[router.resolve(href).path]?.(),
+}
 const app = createApp(App)
 
 app.use(router)
 app.use(SaxDesignVue, {
   anchor: {
-    router,
+    router: anchorRouter,
+    routePrefetch: true,
     activeStrategy: 'visible-section',
     activeOffset: 160,
     routeBoundary: {
@@ -302,7 +317,7 @@ app.use(SaxDesignVue, {
 })
 ```
 
-Set `:route-boundary="false"` to disable edge scrolling for one Anchor, or pass an object to override the boundary thresholds locally. Routers with another API can be adapted once with `{ current, push, replace }`.
+Set `:route-boundary="false"` to disable edge scrolling for one Anchor, or pass an object to override the boundary thresholds locally. Routers with another API can be adapted once with `{ current, push, replace, prefetch }`; omit `prefetch` when route prefetching is not used.
 
 ```ts
 import type { AnchorRouterAdapter } from 'sax-design-vue'

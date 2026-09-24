@@ -322,6 +322,8 @@ export default {
       requestFailed: 'Request failed. Please try again.',
       query: 'Search',
       reset: 'Reset',
+      queryMore: 'More',
+      queryLess: 'Less',
       refresh: 'Refresh',
       toolbar: 'Table toolbar',
       rangeSelected: 'Selected range: {rows} rows by {columns} columns.',
@@ -383,8 +385,9 @@ export default {
       dragRow: 'Reorder row {row}',
       dragRowHint:
         'Space to pick up, arrow keys to choose a position, Enter to drop, Escape to cancel.',
-      dragRowTarget: 'Drop {position} row {row}.',
+      dragRowTarget: 'Drop {position} row {row}, level {level}.',
       dragBefore: 'before',
+      dragInside: 'inside',
       dragAfter: 'after',
       dragStatus: {
         grabbed: 'Row picked up.',

@@ -1,28 +1,85 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { TableRow, TableRowDragResult } from 'sax-design-vue'
-const rows = ref<TableRow[]>([
-  { id: 1, name: '工作区', lazy: true },
+import { ref, shallowRef } from 'vue'
+import type {
+  TableColumn,
+  TableRowDragConfig,
+  TableRowDragResult,
+} from 'sax-design-vue'
+interface ProjectRow {
+  id: number
+  name: string
+  note: string
+  kind: 'folder' | 'item'
+  locked?: boolean
+  children?: ProjectRow[]
+}
+const columns: TableColumn<ProjectRow>[] = [
+  {
+    field: 'name',
+    title: '项目',
+    width: 240,
+    fixed: 'left',
+    treeNode: true,
+    dragSort: true,
+  },
+  { field: 'note', title: '说明', minWidth: 350 },
+  { field: 'id', title: 'ID', width: 100, fixed: 'right' },
+]
+const rows = ref<ProjectRow[]>([
+  {
+    id: 1,
+    name: '工作区',
+    note: '应用包目录。',
+    kind: 'folder',
+    children: [
+      { id: 11, name: '组件库', note: '可复用控件。', kind: 'item' },
+      { id: 12, name: '交互预览', note: '在线示例。', kind: 'item' },
+    ],
+  },
   {
     id: 2,
     name: '文档',
+    note: '开发者指南。',
+    kind: 'folder',
     children: [
-      { id: 21, name: '介绍' },
-      { id: 22, name: '示例' },
+      { id: 21, name: '介绍', note: '快速开始。', kind: 'item' },
+      { id: 22, name: '示例', note: '用法参考。', kind: 'item' },
     ],
   },
+  {
+    id: 3,
+    name: '归档',
+    note: '锁定目录。',
+    kind: 'folder',
+    locked: true,
+  },
 ])
-const expanded = ref([2])
-const message = ref('展开工作区加载子节点，然后调整同级顺序。')
-const load = async () => [
-  { id: 11, name: '组件库', note: '可复用控件与共享样式。' },
-  { id: 12, name: '交互预览', note: '直接在浏览器中编辑组件示例。' },
-  { id: 13, name: '发布', note: '准备下个版本。' },
-]
-const report = (result: TableRowDragResult) => {
-  message.value = result.applied
-    ? '同级顺序已更新。'
-    : '只能调整同级节点的顺序。'
+const expanded = ref([1, 2])
+const message = shallowRef(
+  '拖到文件夹中部可更换父节点，拖到上下边缘则插入前后位置。',
+)
+const rowDragConfig: TableRowDragConfig<ProjectRow> = {
+  tree: {
+    allowReparent: true,
+    allowDropInside: true,
+    maxDepth: 2,
+    expandOnDrop: true,
+  },
+  draggableMethod: ({ row }) => !row.locked,
+  dropMethod: ({ targetRow, position, targetChildCount }) =>
+    !targetRow.locked && (position !== 'inside' || targetChildCount < 4),
+}
+const report = (result: TableRowDragResult<ProjectRow>) => {
+  if (result.reason === 'cancelled') {
+    message.value = '已取消拖拽。'
+    return
+  }
+  if (!result.applied || !result.request) {
+    message.value = '当前目标不允许放置。'
+    return
+  }
+  const { row, targetRow, position, reparented } = result.request
+  message.value = `${row.name} 已移动到 ${targetRow.name}${position === 'inside' ? ' 内部' : position === 'before' ? ' 之前' : ' 之后'}${reparented ? '，父节点已改变' : ''}。`
 }
 </script>
 
@@ -31,22 +88,12 @@ const report = (result: TableRowDragResult) => {
     <s-table
       v-model:data="rows"
       v-model:expanded-keys="expanded"
-      row-drag-config
-      :tree-config="{ hasChildren: 'lazy', load }"
+      :columns="columns"
+      :row-drag-config="rowDragConfig"
+      :tree-config="{}"
       :virtual-config="{ height: 260, dynamic: true, horizontal: true }"
       @row-drag-end="report"
-    >
-      <s-table-column
-        field="name"
-        title="项目"
-        :width="240"
-        fixed="left"
-        tree-node
-        drag-sort
-      />
-      <s-table-column field="note" title="说明" :min-width="350" />
-      <s-table-column field="id" title="ID" :width="100" fixed="right" />
-    </s-table>
+    />
     <p role="status">{{ message }}</p>
   </div>
 </template>

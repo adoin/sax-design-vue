@@ -73,7 +73,10 @@ const mountSelect = (
       stubs: {
         SPopper: PopperStub,
         SScrollbar: { template: '<div><slot /></div>' },
-        STag: { template: '<span><slot /></span>' },
+        STag: {
+          props: ['size'],
+          template: '<span class="tag-stub" :data-size="size"><slot /></span>',
+        },
         SIcon: { template: '<i class="icon-stub" />' },
         IconClose: { template: '<i />' },
         IconLoading: { template: '<i />' },
@@ -88,6 +91,35 @@ afterEach(() => {
 })
 
 describe('Select enhanced capabilities', () => {
+  it.each(['small', 'default', 'large'] as const)(
+    'renders the inherited %s size class',
+    (size) => {
+      const wrapper = mountSelect({ size })
+      expect(wrapper.get('.s-select').classes()).toContain(`s-select--${size}`)
+    },
+  )
+
+  it.each(['small', 'default', 'large'] as const)(
+    'uses the %s size for visible and measured multiple tags',
+    async (size) => {
+      const wrapper = mountSelect({
+        size,
+        multiple: true,
+        modelValue: ['ada', 'grace'],
+        options: [
+          { label: 'Ada', value: 'ada' },
+          { label: 'Grace', value: 'grace' },
+        ],
+      })
+      await nextTick()
+      const tags = wrapper.findAll('.tag-stub')
+      expect(tags.length).toBeGreaterThan(2)
+      expect(tags.every((tag) => tag.attributes('data-size') === size)).toBe(
+        true,
+      )
+    },
+  )
+
   it('disables the native trigger and cancels keyboard opening when disabled', async () => {
     const wrapper = mountSelect({
       disabled: true,

@@ -2,7 +2,6 @@
   <div class="orientation-grid">
     <s-card
       orientation="vertical"
-      variant="outlined"
       title="Vertical"
       subtitle="Media above content"
       text="Suitable for galleries, products, and article summaries."
@@ -14,7 +13,6 @@
 
     <s-card
       orientation="horizontal"
-      variant="soft"
       color="success"
       title="Horizontal"
       subtitle="Media beside content"

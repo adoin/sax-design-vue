@@ -1,5 +1,5 @@
 import { popperProps } from '@vuesax-alpha/components/popper'
-import { useColorProp, useShapeProp } from '@vuesax-alpha/hooks'
+import { useColorProp, useShapeProp, useSizeProp } from '@vuesax-alpha/hooks'
 import {
   buildProps,
   definePropType,
@@ -53,6 +53,7 @@ export type TableSelectLabelFormatter = (row: TableRow) => string
 export type TableSelectSelectable = (row: TableRow) => boolean
 
 export const tableSelectProps = buildProps({
+  size: useSizeProp,
   modelValue: {
     type: definePropType<TableRowKey | undefined>([String, Number]),
   },

@@ -16,13 +16,17 @@ description: 'Table 的查询表单与请求代理功能、配置方式与可运
 
 `s-table` 接受 [Table](./table.md) 的属性、事件和插槽，使用同一套分页、排序、筛选和行选择行为。通过 `query-config` 添加 [Form](./form.md) 查询表单，通过 `toolbar-config` 添加业务按钮。
 
-`queryConfig.model` 应为响应式对象，字段更新和重置遵循 SForm 的模型契约。`items`、`rules`、`labelPosition` 等沿用表单配置，`itemRender` 可直接使用 `$input`、`$select` 等内置渲染器。点击查询或在表单内提交，会先校验字段；通过后请求第一页，再发出 `query`。重置恢复字段挂载时的初始值并请求第一页；刷新保留当前页和条件，不执行字段校验。
+`queryConfig.model` 应为响应式对象，字段更新和重置遵循 SForm 的模型契约。本项目不另设查询 `defaultValue`：字段首次挂载时会深拷贝 `model` 中的值作为重置基准。`items`、`rules`、`labelPosition` 等沿用表单配置；`labelPosition` 默认是 `right`，标签与控件同行且文字右对齐，`left` 保持同行但文字左对齐，只有显式设置 `top` 才把标签放到控件上方。配置项渲染器与插槽追加的表单项遵循同一规则。`itemRender` 可直接使用 `$input`、`$select` 等内置渲染器。点击查询或在表单内提交，会先校验字段；通过后请求第一页，再发出 `query`。重置恢复初始快照并请求第一页；刷新保留当前页和条件，不执行字段校验。
+
+`queryConfig.fixedButtons` 是固定操作区的有序配置，默认值为 `['submit', 'reset']`；可加入 `more`，用它展开或收起 `items` 中 `visible: false` 的查询项。传入 `[]` 会移除全部内置按钮，供 `query-actions` 插槽完全接管。固定操作区保留自身完整宽度并位于查询区右侧，字段在剩余轨道内等分和换行；容器较窄时操作区换到下一行并继续靠右。可通过 `SConfigProvider` 的 `table.queryConfig.fixedButtons` 设置全局默认，组件局部数组（包括空数组）会覆盖它。
+
+尺寸使用统一继承链：`SConfigProvider.size` 或 `SConfigProvider.table.size`，再到 `s-table size`，再到 `queryConfig.size` 或 `toolbarConfig.size`，最后由单个控件或渲染器的 `props.size` 覆盖。所有渲染器方法都可从 `params.size` 读取当前层继承值，`options.props.size` 则是控件最终采用的覆盖值。查询按钮、刷新、查找和列设置等内置渲染器遵循同一规则。
 
 `query` 提供 `{ reason, form, pager, sortBy, filters }` 快照，`reason` 为 `submit`、`reset` 或 `refresh`。本例由事件处理函数筛选本地数据；Table 不会自动把表单字段映射成表格筛选，也不会自动发送网络请求。远程业务可接收该事件，自行更新 `data`、`loading` 和分页总数。
 
 指定 `pagerConfig.currentPage` 或 `pageSize` 后，对应字段受控；使用 `v-model:pager-config` 接受更新。父组件拒绝第一页请求、字段校验失败、条件在异步校验期间改变、加载中或卸载后，查询方法返回 `false`，不会发出有效查询。未开启代理时，返回 `true` 只表示已发出事件；开启代理后，表示查询响应已被接受。
 
-将 `toolbarConfig.left` 和 `toolbarConfig.right` 配置为使用 `itemRender` 的有序全局渲染器列表。内置 `button` 会把自身或子操作的 `code` 交给 `toolbarClick`，子操作通过 `SPopper` 打开；`$refresh` 刷新当前查询或代理请求，`$columnConfig` 打开列设置，`$find` 提供图标触发器，在 `SPopper` 中打开当前 Table 的查找与替换面板。可通过 `content` 或 `props.content` 在图标后追加文案。自定义渲染器可实现 `renderToolbar(options, params)`；`params.source` 包含 Table API、查询上下文、所在侧和忙碌状态。
+将 `toolbarConfig.left` 和 `toolbarConfig.right` 配置为使用 `itemRender` 的有序全局渲染器列表。内置 `button` 会把自身或子操作的 `code` 交给 `toolbarClick`，子操作通过 `SPopper` 打开；`$refresh` 刷新当前查询或代理请求，`$columnConfig` 打开列设置，`$find` 提供图标触发器，在 `SPopper` 中打开当前 Table 的查找与替换面板。可通过 `content` 或 `props.content` 在图标后追加文案。自定义渲染器可实现 `renderToolbar(options, params)`；`params.source` 包含 Table API、查询上下文、所在侧、继承尺寸和忙碌状态。
 
 <template #example>
 <table-zh-business />
@@ -30,19 +34,19 @@ description: 'Table 的查询表单与请求代理功能、配置方式与可运
 
 <template #template>
 
-@[code{88-126}](../../../.vuepress/components/table-zh/business.vue)
+@[code{89-127}](../../../.vuepress/components/table-zh/business.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-86}](../../../.vuepress/components/table-zh/business.vue)
+@[code{1-87}](../../../.vuepress/components/table-zh/business.vue)
 
 </template>
 
 <template #style>
 
-@[code{128-132}](../../../.vuepress/components/table-zh/business.vue)
+@[code{129-133}](../../../.vuepress/components/table-zh/business.vue)
 
 </template>
 
@@ -88,7 +92,7 @@ description: 'Table 的查询表单与请求代理功能、配置方式与可运
 
 ### 插槽与嵌套列
 
-通过 `queryConfig.items[].slots` 将查询项的 `default`、`label` 或 `error` 显式映射到同名业务插槽。名称按原样使用，不会自动添加 `query-` 前缀。`query-actions` 替换查询按钮区，`toolbar_left` 与 `toolbar_right` 替换工具栏两侧，`toolbar-title` 替换标题。`query` 插槽可以追加 `s-form-item`，所有查询控件共用一个表单。
+通过 `queryConfig.items[].slots` 将查询项的 `default`、`label` 或 `error` 显式映射到同名业务插槽。名称按原样使用，不会自动添加 `query-` 前缀。`query-actions` 替换查询按钮区；完全自定义时将 `fixedButtons` 设为 `[]`。该插槽除 Table 方法和 `busy` 外，还接收 `expanded`、`hasMore` 和 `toggleMore()`。`toolbar_left` 与 `toolbar_right` 替换工具栏两侧，`toolbar-title` 替换标题。`query` 插槽可以追加 `s-form-item`，所有查询控件共用一个表单。
 
 其余插槽继续传给 Table，包括 `header`、`footer`、单元格与编辑插槽，以及默认插槽中的 `s-table-column`。下例把嵌套列、树节点展开、左右固定列和虚拟滚动组合使用；应用条件后显示收到的关键词，树数据保持原样。
 
@@ -166,13 +170,13 @@ description: 'Table 的查询表单与请求代理功能、配置方式与可运
 
 <template #template>
 
-@[code{118-142}](../../../.vuepress/components/table-zh/proxy-query.vue)
+@[code{117-141}](../../../.vuepress/components/table-zh/proxy-query.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-116}](../../../.vuepress/components/table-zh/proxy-query.vue)
+@[code{1-115}](../../../.vuepress/components/table-zh/proxy-query.vue)
 
 </template>
 

@@ -98,7 +98,9 @@
     display: flex;
     width: fit-content;
     max-width: 100%;
-    padding: 4px;
+    // Scrolling clips paint; reserve room for the active tab and Checkbox
+    // shadows at the first and last positions.
+    padding: 8px;
     overflow-x: auto;
     gap: 4px;
     border-radius: var(--sax-radius-md);

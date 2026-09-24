@@ -137,7 +137,7 @@ interface RendererMethods<Row extends object, QueryForm extends object> {
 }
 ```
 
-下表列出的就是各个 `params` 对象中可直接读取或调用的主要字段：
+下表列出的就是各个 `params` 对象中可直接读取或调用的主要字段。每个方法还会收到继承后的控件 `size`；在单个渲染器上设置 `options.props.size` 可覆盖该次渲染组件的尺寸。
 
 | 方法             | `params` 可用字段                                                                                            |
 | ---------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -145,7 +145,7 @@ interface RendererMethods<Row extends object, QueryForm extends object> {
 | `renderEdit`     | `row`、`draftRow`、`column`、`value`、`setValue`、`commit`、`cancel`、校验状态                               |
 | `renderFormItem` | `model`、`field`、`value`、`setValue`、`validate`、`submit`、`reset`                                         |
 | `renderFilter`   | `column`、`values`、`setValues`、`apply`、`reset`、`close`；`value` 是当前控件草稿                           |
-| `renderToolbar`  | `placement`、`disabled`、`action`、`source.table`、`source.context`、`source.busy`                           |
+| `renderToolbar`  | `size`、`placement`、`disabled`、`action`、`source.table`、`source.context`、`source.busy`                   |
 
 正文、编辑和筛选参数还包含 `FormRendererParams` 的通用字段；`params.source` 指向进入共享渲染器之前的原始 Table 上下文。`events` 回调先接收对应阶段的 `params`，再接收组件事件参数。
 
@@ -201,15 +201,15 @@ interface RendererOptions<Model extends object = FormModel> {
 | `$verCode`       | `SVerificationCode`                        |
 | `$buttons`       | 用于通用显示、表单操作和表格工具栏的操作组 |
 
-`$buttons.options` 接收操作数组，每项可配置 `code`、`text`、`icon`、`visible`、`disabled`、`loading`、`props` 和可选的 `onClick`。`props.maxVisible` 指定直接显示的数量，其余操作进入 `SPopper`；`props.trigger` 支持 `click` 或 `hover`。在 Form 中，未单独处理的 `submit` 与 `reset` 会调用当前表单方法。
+`$buttons.options` 接收操作数组，每项可配置 `code`、`text`、`icon`、`visible`、`disabled`、`loading`、`props` 和可选的 `onClick`。省略 `props.maxVisible` 时会直接显示全部可见操作；显式设置后，仅指定数量保持行内，其余操作进入 `SPopper`。收纳入口默认使用竖向三点图标，也可通过 `props.moreIcon` 明确替换；`props.trigger` 支持 `click` 或 `hover`。在 Form 中，未单独处理的 `submit` 与 `reset` 会调用当前表单方法。
 
 Table 还注册了以下工具栏专用渲染器：
 
-| 渲染器          | 行为                                                                  |
-| --------------- | --------------------------------------------------------------------- |
-| `button`        | 渲染一个 `SButton`；存在 `props.children` 时通过 `SPopper` 显示子操作 |
-| `$refresh`      | 刷新当前 Table 的查询或数据代理请求                                   |
-| `$columnConfig` | 打开关联当前 Table 的 `STableColumnConfig`                            |
+| 渲染器          | 行为                                                                                                                                                                            |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `button`        | 渲染一个 `SButton`；存在 `props.children` 时通过 `SPopper` 显示子操作                                                                                                           |
+| `$refresh`      | 刷新当前 Table 的查询或数据代理请求                                                                                                                                             |
+| `$columnConfig` | 打开关联当前 Table 的 `STableColumnConfig`                                                                                                                                      |
 | `$find`         | 挂载图标触发器，在 `SPopper` 中打开查找与替换面板；可用 `content` 或 `props.content` 追加文案。每次打开重置表单。查找成功后收成结果控件，展开回到表单，关闭或 Escape 关掉面板。 |
 
 输入轮廓型渲染器用于 Table 编辑时默认接收 `shape: 'square'`，使轮廓贴合单元格边缘。显式设置的 `props.shape` 优先；Form 与 Table 筛选仍使用正常的形状解析。

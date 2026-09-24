@@ -4,7 +4,13 @@ import { useResizeObserver } from '@vueuse/core'
 import { IconLoading, SIcon } from '@vuesax-alpha/components/icon'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { STable } from '@vuesax-alpha/components/table'
-import { useId, useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import {
+  useId,
+  useLocale,
+  useNamespace,
+  useShape,
+  useSize,
+} from '@vuesax-alpha/hooks'
 import { getVsColor } from '@vuesax-alpha/utils'
 import { tableSelectEmits, tableSelectProps } from './table-select'
 import type { TableSelectExposes } from './table-select'
@@ -46,6 +52,7 @@ const slots = defineSlots<{
 
 const ns = useNamespace('table-select')
 const resolvedShape = useShape()
+const resolvedSize = useSize()
 const { t } = useLocale()
 const triggerRef = useTemplateRef<HTMLElement>('triggerRef')
 const tableRef = useTemplateRef<TableInstance>('tableRef')
@@ -73,6 +80,7 @@ const suffixIconName = computed(
 const popperClass = computed(() =>
   [
     ns.e('panel'),
+    ns.em('panel', resolvedSize.value || 'default'),
     ns.is('square', resolvedShape.value === 'square'),
     popupConfig.value.className,
   ].filter((className): className is string => Boolean(className)),
@@ -264,6 +272,7 @@ defineExpose({
       ref="triggerRef"
       :class="[
         ns.b(),
+        ns.m(resolvedSize || 'default'),
         ns.is('open', mergedOpen),
         ns.is('disabled', disabled),
         ns.is('loading', loading),
@@ -355,6 +364,7 @@ defineExpose({
         </div>
         <STable
           ref="tableRef"
+          :size="resolvedSize || 'default'"
           :data="data"
           :columns="columns"
           :row-key="rowKey"

@@ -311,6 +311,34 @@ EVENTS:
 
 <card>
 
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><date-picker-zh-size /></template>
+
+<template #template>
+
+@[code{7-13}](../../.vuepress/components/date-picker-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/date-picker-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../../.vuepress/components/date-picker-zh/size.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## 外形
 
 设置 `shape="square"` 可让输入触发器与传送到外层的日历面板统一使用直角外观。

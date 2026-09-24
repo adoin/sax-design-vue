@@ -137,7 +137,7 @@ interface RendererMethods<Row extends object, QueryForm extends object> {
 }
 ```
 
-The following fields are the main values available directly on each `params` object:
+The following fields are the main values available directly on each `params` object. Every method also receives the inherited control `size`; set `options.props.size` on one renderer to override it for that rendered component.
 
 | Method           | Available `params` fields                                                                                    |
 | ---------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -145,7 +145,7 @@ The following fields are the main values available directly on each `params` obj
 | `renderEdit`     | `row`, `draftRow`, `column`, `value`, `setValue`, `commit`, `cancel`, validation state                       |
 | `renderFormItem` | `model`, `field`, `value`, `setValue`, `validate`, `submit`, `reset`                                         |
 | `renderFilter`   | `column`, `values`, `setValues`, `apply`, `reset`, `close`; `value` is the current control draft             |
-| `renderToolbar`  | `placement`, `disabled`, `action`, `source.table`, `source.context`, `source.busy`                           |
+| `renderToolbar`  | `size`, `placement`, `disabled`, `action`, `source.table`, `source.context`, `source.busy`                   |
 
 Body, edit, and filter parameters also contain the common `FormRendererParams` fields. `params.source` points to the original Table context before it enters the shared renderer. An `events` callback receives the matching stage `params` first, followed by the component event arguments.
 
@@ -201,15 +201,15 @@ The input renderers show plain text through `renderDefault` and use the correspo
 | `$verCode`       | `SVerificationCode`                                                 |
 | `$buttons`       | Reusable action group for display, Form actions, and Table toolbars |
 
-`$buttons.options` contains action records with `code`, `text`, `icon`, `visible`, `disabled`, `loading`, `props`, and optional `onClick`. `props.maxVisible` keeps a chosen number inline and moves the rest into `SPopper`; `props.trigger` accepts `click` or `hover`. In Form, unhandled `submit` and `reset` codes call the current Form methods.
+`$buttons.options` contains action records with `code`, `text`, `icon`, `visible`, `disabled`, `loading`, `props`, and optional `onClick`. Omit `props.maxVisible` to keep every visible action inline; when it is set, the chosen number stays inline and the rest move into `SPopper`. The overflow trigger uses a vertical three-dot icon by default and accepts `props.moreIcon` as an explicit replacement. `props.trigger` accepts `click` or `hover`. In Form, unhandled `submit` and `reset` codes call the current Form methods.
 
 Table also registers these toolbar-only renderers:
 
-| Renderer        | Behavior                                                                    |
-| --------------- | --------------------------------------------------------------------------- |
-| `button`        | One `SButton`, or an `SPopper` action menu when `props.children` is present |
-| `$refresh`      | Refresh the current Table query or proxy request                            |
-| `$columnConfig` | Open `STableColumnConfig` for the current Table                             |
+| Renderer        | Behavior                                                                                                                                                                                                                                                               |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `button`        | One `SButton`, or an `SPopper` action menu when `props.children` is present                                                                                                                                                                                            |
+| `$refresh`      | Refresh the current Table query or proxy request                                                                                                                                                                                                                       |
+| `$columnConfig` | Open `STableColumnConfig` for the current Table                                                                                                                                                                                                                        |
 | `$find`         | Mount an icon trigger that opens a find-and-replace panel in `SPopper`; pass `content` or `props.content` for a label. Each open resets the form. A successful search collapses to result controls; expand restores the form, and close or Escape dismisses the panel. |
 
 Input-surface renderers receive `shape: 'square'` by default during Table editing so their outline meets the cell edges. An explicit `props.shape` value overrides that default. Form fields and Table filters retain normal shape resolution.

@@ -1,6 +1,11 @@
 ---
 description: 'Select associated data level by level in one popup.'
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: Set or inherit the trigger size.
+    default: null
   - name: shape
     type: String
     values: "rounded | square"
@@ -195,23 +200,23 @@ EVENTS:
 SLOTS:
   - name: option
     type: Slot
-    scope: "{ node: CascaderNode; path: CascaderOption[] }"
+    scope: "{ option: CascaderOption; path: CascaderOption[]; selected: boolean; active: boolean }"
     description: Customize normal options or search results.
   - name: searchResult
     type: Slot
-    scope: "{ option: CascaderOption; path: CascaderOption[]; selected: boolean; active: boolean }"
+    scope: "{ node: CascaderNode; path: CascaderOption[] }"
     description: Customize normal options or search results.
   - name: tag-render
     type: Slot
-    scope: "{ labels: string[]; selectedOptions: CascaderOption[] }"
+    scope: "{ option: CascaderOption; path: CascaderOption[]; label: string }"
     description: Customize multiple tags, overflow count, and single selected content.
   - name: max-tag-placeholder
     type: Slot
-    scope: "{ option: CascaderOption; path: CascaderOption[]; label: string }"
+    scope: "{ omittedValues: CascaderPathValue[] }"
     description: Customize multiple tags, overflow count, and single selected content.
   - name: display-render
     type: Slot
-    scope: "{ omittedValues: CascaderPathValue[] }"
+    scope: "{ labels: string[]; selectedOptions: CascaderOption[] }"
     description: Customize multiple tags, overflow count, and single selected content.
   - name: suffix-icon
     type: slot
@@ -237,6 +242,7 @@ SLOTS:
     type: slot
     values: "-"
     description: Append content above or below the option area.
+
 ---
 
 # Cascader
@@ -264,6 +270,34 @@ Selection commits on a leaf by default. Use `change-on-select` to commit at any 
 <template #style>
 
 @[code{25-37}](../.vuepress/components/cascader/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><cascader-size /></template>
+
+<template #template>
+
+@[code{16-36}](../.vuepress/components/cascader/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-14}](../.vuepress/components/cascader/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{38-45}](../.vuepress/components/cascader/size.vue)
 
 </template>
 

@@ -4,6 +4,7 @@ import {
   useColor,
   useNamespace,
   useShape,
+  useSize,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { getVsColor } from '@vuesax-alpha/utils'
@@ -20,6 +21,7 @@ const props = defineProps(switchProps)
 const emit = defineEmits(switchEmits)
 const ns = useNamespace('switch')
 const shape = useShape()
+const size = useSize()
 const color = useColor('primary')
 const { isLoading, checked, isDisabled, isIndeterminate, handleChange } =
   useSwitch(props, emit)
@@ -27,6 +29,7 @@ const vsBaseClasses = useVuesaxBaseComponent(color)
 const switchKls = computed(() => [
   vsBaseClasses,
   ns.b(),
+  ns.m(size.value || 'default'),
   ns.is('loading', isLoading.value),
   ns.is(shape.value),
   ns.is('indeterminate', isIndeterminate.value),

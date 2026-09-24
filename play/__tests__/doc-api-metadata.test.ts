@@ -64,9 +64,9 @@ describe('documentation API metadata', () => {
       expect(checkbox.GROUP_TABS_PROPS.length).toBeGreaterThan(0)
       expect(radio.BUTTON_PROPS.length).toBeGreaterThan(0)
       expect(tag.GROUP_PROPS.length).toBeGreaterThan(0)
-      expect(upload.PICKER_API.map((row: { name: string }) => row.name)).toEqual(
-        ['SUpload.pick', 'pickUploadFiles'],
-      )
+      expect(
+        upload.PICKER_API.map((row: { name: string }) => row.name),
+      ).toEqual(['SUpload.pick', 'pickUploadFiles'])
     }
   })
 
@@ -135,12 +135,16 @@ describe('documentation API metadata', () => {
     expect(tableSource).not.toContain('#cell-type')
     expect(tableSource).toContain('const hasValues = computed')
     expect(tableSource).toContain('if (hasValues.value)')
-    expect(tableSource).toContain("import { STooltip }")
+    expect(tableSource).toContain('import { STooltip }')
     expect(tableSource).toContain(":trigger=\"['hover', 'focus']\"")
     expect(tableSource).toContain('t.examples.createIssue')
     expect(tableSource).not.toContain('name="bx:terminal"')
-    expect(tableSource).toContain(':aria-label="`${labels.usage}: ${row.name}`"')
-    expect(tableSource).toContain('<template #content>{{ labels.usage }}</template>')
+    expect(tableSource).toContain(
+      ':aria-label="`${labels.usage}: ${row.name}`"',
+    )
+    expect(tableSource).toContain(
+      '<template #content>{{ labels.usage }}</template>',
+    )
     expect(tableSource).not.toContain('class="api-action"')
 
     const detailsSource = readFileSync(
@@ -150,7 +154,9 @@ describe('documentation API metadata', () => {
       ),
       'utf8',
     )
-    expect(detailsSource).toContain("import ApiTypeTokens from './ApiTypeTokens.vue'")
+    expect(detailsSource).toContain(
+      "import ApiTypeTokens from './ApiTypeTokens.vue'",
+    )
     expect(detailsSource).toContain('virtual-triggering')
     expect(detailsSource).toContain(':trigger="[]"')
     expect(detailsSource).toContain(':close-on-click-outside="index === 0"')
@@ -262,6 +268,55 @@ describe('documentation API metadata', () => {
     expect(missing).toEqual([])
   })
 
+  it('resolves shared public aliases used by component API metadata', () => {
+    const resolveTypeDetails = createApiTypeDetailsResolver(
+      resolve(projectRoot, 'packages/components'),
+      [resolve(projectRoot, 'packages/constants')],
+    )
+
+    expect(resolveTypeDetails('cascader', ['ComponentSize'])).toMatchObject({
+      ComponentSize: {
+        name: 'ComponentSize',
+        declaration:
+          'export type ComponentSize = (typeof componentSizes)[number]',
+        source: 'packages/constants/size.ts',
+      },
+    })
+    expect(resolveTypeDetails('text', ['TextEffect'])).toMatchObject({
+      TextEffect: {
+        name: 'TextEffect',
+        declaration: 'export type TextEffect = (typeof textEffects)[number]',
+        source: 'packages/components/text/src/text.ts',
+      },
+    })
+    expect(
+      resolveTypeDetails('card', ['CardType', 'CardTexture', 'CardEffect']),
+    ).toMatchObject({
+      CardType: {
+        declaration: 'export type CardType = (typeof cardTypes)[number]',
+        source: 'packages/components/card/src/card.ts',
+      },
+      CardEffect: {
+        declaration: 'export type CardEffect = (typeof cardEffects)[number]',
+        source: 'packages/components/card/src/card.ts',
+      },
+      CardTexture: {
+        declaration: 'export type CardTexture = (typeof cardTextures)[number]',
+        source: 'packages/components/card/src/card.ts',
+      },
+    })
+    const scrollbarDetails = resolveTypeDetails('scrollbar', ['ScrollbarFade'])
+    expect(scrollbarDetails.ScrollbarFade.declaration).toContain(
+      'ScrollbarFadeDirection',
+    )
+    expect(scrollbarDetails.ScrollbarFadeOptions.declaration).toContain(
+      'size?: number | string',
+    )
+    expect(scrollbarDetails.ScrollbarFadeDirection.declaration).toContain(
+      '(typeof scrollbarFadeDirections)[number]',
+    )
+  })
+
   it('resolves API types and their referenced local declarations', () => {
     const resolveTypeDetails = createApiTypeDetailsResolver(
       resolve(projectRoot, 'packages/components'),
@@ -333,61 +388,6 @@ describe('documentation API metadata', () => {
     )
   })
 
-  it('keeps every API entry on its own row', () => {
-    const groupedRows: string[] = []
-    const parseFailures: string[] = []
-    const invalidValues: string[] = []
-    const invalidDefaults: string[] = []
-
-    for (const root of docsRoots) {
-      for (const filename of readdirSync(root).filter((file) =>
-        file.endsWith('.md'),
-      )) {
-        const path = resolve(root, filename)
-        const source = readFileSync(path, 'utf8')
-        const lines = source.split(/\r?\n/)
-        let inFrontmatter = false
-        let frontmatterClosed = false
-        let section = ''
-
-        try {
-          const frontmatter = matter(source).data as Record<
-            string,
-            | Array<{
-                name?: unknown
-                values?: unknown
-                default?: unknown
-              }>
-            | undefined
-          >
-          apiSections.forEach((apiSection) => {
-            frontmatter[apiSection]?.forEach((row) => {
-              if (row.values !== undefined && typeof row.values !== 'string') {
-                invalidValues.push(
-                  `${path} — ${apiSection}.${String(row.name)} values must be a string`,
-                )
-              }
-              if (row.default === '-' || row.default === '—') {
-                invalidDefaults.push(
-                  `${path} — ${apiSection}.${String(row.name)} uses a dash as its default`,
-                )
-              }
-            })
-          })
-        } catch (error) {
-          parseFailures.push(
-            `${path} — ${error instanceof Error ? error.message : String(error)}`,
-          )
-        }
-
-        lines.forEach((line, index) => {
-          if (line === '---' && !frontmatterClosed) {
-            if (!inFrontmatter) inFrontmatter = true
-            else {
-              inFrontmatter = false
-              frontmatterClosed = true
-            }
-            return
   it('documents every scoped slot with typed, clickable scope references in both locales', () => {
     const resolveTypeDetails = createApiTypeDetailsResolver(
       resolve(projectRoot, 'packages/components'),
@@ -445,6 +445,61 @@ describe('documentation API metadata', () => {
     expect(themeSource).toContain('typeExpressions.push(row.scope)')
   })
 
+  it('keeps every API entry on its own row', () => {
+    const groupedRows: string[] = []
+    const parseFailures: string[] = []
+    const invalidValues: string[] = []
+    const invalidDefaults: string[] = []
+
+    for (const root of docsRoots) {
+      for (const filename of readdirSync(root).filter((file) =>
+        file.endsWith('.md'),
+      )) {
+        const path = resolve(root, filename)
+        const source = readFileSync(path, 'utf8')
+        const lines = source.split(/\r?\n/)
+        let inFrontmatter = false
+        let frontmatterClosed = false
+        let section = ''
+
+        try {
+          const frontmatter = matter(source).data as Record<
+            string,
+            | Array<{
+                name?: unknown
+                values?: unknown
+                default?: unknown
+              }>
+            | undefined
+          >
+          apiSections.forEach((apiSection) => {
+            frontmatter[apiSection]?.forEach((row) => {
+              if (row.values !== undefined && typeof row.values !== 'string') {
+                invalidValues.push(
+                  `${path} — ${apiSection}.${String(row.name)} values must be a string`,
+                )
+              }
+              if (row.default === '-' || row.default === '—') {
+                invalidDefaults.push(
+                  `${path} — ${apiSection}.${String(row.name)} uses a dash as its default`,
+                )
+              }
+            })
+          })
+        } catch (error) {
+          parseFailures.push(
+            `${path} — ${error instanceof Error ? error.message : String(error)}`,
+          )
+        }
+
+        lines.forEach((line, index) => {
+          if (line === '---' && !frontmatterClosed) {
+            if (!inFrontmatter) inFrontmatter = true
+            else {
+              inFrontmatter = false
+              frontmatterClosed = true
+            }
+            return
           }
           if (!inFrontmatter) return
 

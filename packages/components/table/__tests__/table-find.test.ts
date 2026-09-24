@@ -45,7 +45,10 @@ const findPanel = () => {
     ...document.querySelectorAll<HTMLElement>('.s-table__find-panel'),
   ]
   return (
-    panels.findLast((panel) => getComputedStyle(panel).display !== 'none') ??
+    panels
+      .slice()
+      .reverse()
+      .find((panel) => getComputedStyle(panel).display !== 'none') ??
     panels.at(-1) ??
     null
   )
@@ -203,7 +206,7 @@ describe('Table find integration', () => {
           editor: index !== 0,
         }),
       },
-      virtualConfig: { height: 280, rowHeight: 44, horizontal: true },
+      virtualConfig: { height: 280, estimateSize: 44, horizontal: true },
       findConfig: { maxCells: 4096 },
     })
     await nextTick()
@@ -325,7 +328,7 @@ describe('Table find integration', () => {
     ).toBe('')
   })
 
-  it('opens the form without empty-state copy and uses small field controls', async () => {
+  it('opens the form without empty-state copy and inherits field size', async () => {
     const { api } = host()
     await api.value!.openFind()
     const panel = findPanel()!
@@ -333,7 +336,7 @@ describe('Table find integration', () => {
       'Enter text and choose a search scope.',
     )
     expect(panel.querySelector('p[role="status"]')).toBeNull()
-    expect(panel.querySelectorAll('.s-input--small')).toHaveLength(2)
+    expect(panel.querySelectorAll('.s-input--default')).toHaveLength(2)
   })
 
   it('defaults to an icon trigger and shows optional content after the icon', async () => {

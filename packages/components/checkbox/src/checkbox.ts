@@ -1,4 +1,4 @@
-import { useColorProp } from '@vuesax-alpha/hooks'
+import { useColorProp, useSizeProp } from '@vuesax-alpha/hooks'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import {
   buildProps,
@@ -26,6 +26,7 @@ export const checkboxIconAnimationValues = [
 export type CheckboxIconAnimation = (typeof checkboxIconAnimationValues)[number]
 
 export const checkboxProps = buildProps({
+  size: useSizeProp,
   /**
    * @description Component color - Accept Sax Design color tokens, Hex, rgb
    */

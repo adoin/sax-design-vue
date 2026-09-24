@@ -1,6 +1,11 @@
 ---
 description: 'Enter one-time codes with one real input and borderless visual slots.'
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: Set or inherit the verification cell size and spacing.
+    default: null
   - name: shape
     type: String
     values: 'rounded | square'
@@ -78,6 +83,34 @@ The default `mode="numeric"` accepts digits only. Use `mode="alphanumeric"` for 
 <template #style>
 
 @[code{43-54}](../.vuepress/components/verification-code/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><verification-code-size /></template>
+
+<template #template>
+
+@[code{7-13}](../.vuepress/components/verification-code/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/verification-code/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-20}](../.vuepress/components/verification-code/size.vue)
 
 </template>
 

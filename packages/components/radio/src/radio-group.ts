@@ -1,4 +1,5 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
+import { useSizeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type RadioGroup from './radio-group.vue'
 
@@ -11,6 +12,7 @@ export interface RadioOption {
 }
 
 export const radioGroupProps = buildProps({
+  size: useSizeProp,
   modelValue: {
     type: definePropType<RadioValue>([String, Number, Boolean]),
     default: '',

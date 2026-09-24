@@ -1,35 +1,21 @@
 <template>
-  <div class="center">
-    <s-card
-      type="classic"
-      title="时尚穿搭"
-      text="适合展示图片、简短描述和常用操作。"
-    >
-      <template #img>
-        <img src="/foto5.png" alt="身穿夏日系列服装的模特" />
+  <div class="default-card-demo">
+    <s-card title="项目概览">
+      <template #extra>
+        <s-button size="small" type="flat">详情</s-button>
       </template>
-      <template #interactions>
-        <s-button color="danger" icon aria-label="收藏">
-          <s-icon name="bx:heart" />
-        </s-button>
-        <s-button class="btn-chat" type="shadow" aria-label="54 条评论">
-          <s-icon name="bx:chat" />
-          <span class="span">54</span>
-        </s-button>
+      <p>将标题、辅助内容与可选操作收纳在一个安静、清晰的表面中。</p>
+      <template #actions>
+        <s-button size="small">继续</s-button>
       </template>
     </s-card>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.btn-chat {
-  i {
-    font-size: 1.2rem;
-  }
-
-  .span {
-    padding-left: 5px;
-    font-weight: bold;
-  }
+.default-card-demo {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 </style>

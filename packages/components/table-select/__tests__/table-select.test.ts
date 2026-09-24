@@ -133,8 +133,12 @@ describe('TableSelect', () => {
   })
 
   it('forwards columns and scoped cell slots to Table', async () => {
+    const columns = [
+      { field: 'name', title: 'Name', slots: { default: 'cell-name' } },
+      baseColumns[1],
+    ]
     const wrapper = mountTableSelect(
-      {},
+      { columns },
       {
         'cell-name': ({ row }: { row: Record<string, unknown> }) => [
           h('strong', { class: 'custom-name' }, String(row.name)),
@@ -145,7 +149,7 @@ describe('TableSelect', () => {
     await wrapper.get('.s-table-select__trigger').trigger('click')
 
     expect(wrapper.getComponent({ name: 'STable' }).props('columns')).toEqual(
-      baseColumns,
+      columns,
     )
     expect(wrapper.findAll('.custom-name')).toHaveLength(2)
     expect(wrapper.findAll('.custom-name')[0].text()).toBe('Alpha')

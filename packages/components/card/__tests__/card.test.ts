@@ -20,7 +20,7 @@ describe('Card content', () => {
   it('renders a title prop without requiring body text', () => {
     const wrapper = mount(Card, { props: { title: 'Title only' } })
 
-    expect(wrapper.find('.s-card__text').exists()).toBe(true)
+    expect(wrapper.find('.s-card__header').exists()).toBe(true)
     expect(wrapper.get('.s-card__title-text').text()).toBe('Title only')
   })
 
@@ -44,22 +44,37 @@ describe('Card content', () => {
     expect(wrapper.text()).not.toContain('Prop text')
   })
 
-  it('uses the classic preset by default and preserves its DOM structure', () => {
+  it('uses the simple default layout by default', () => {
     const wrapper = mount(Card, { props: { title: 'Surface' } })
+    const card = wrapper.get('.s-card')
+
+    expect(wrapper.get('.s-card-content').classes()).toContain('type-default')
+    expect(card.element.tagName).toBe('ARTICLE')
+    expect(card.classes()).toEqual(expect.arrayContaining(['s-card']))
+    expect(card.attributes('style')).toContain('--sax-color')
+    expect(card.attributes('role')).toBeUndefined()
+    expect(card.attributes('tabindex')).toBeUndefined()
+    expect(wrapper.get('.s-card__header .s-card__title-text').text()).toBe(
+      'Surface',
+    )
+    expect(wrapper.find('.s-card__effect').exists()).toBe(false)
+  })
+
+  it('preserves the explicit classic preset DOM structure', () => {
+    const wrapper = mount(Card, {
+      props: { type: 'classic', title: 'Surface' },
+    })
     const card = wrapper.get('.s-card')
 
     expect(wrapper.get('.s-card-content').classes()).toContain('type-classic')
     expect(card.element.tagName).toBe('DIV')
-    expect(card.classes()).toEqual(['s-card'])
     expect(card.attributes('style')).toBeUndefined()
-    expect(card.attributes('role')).toBeUndefined()
-    expect(card.attributes('tabindex')).toBeUndefined()
+    expect(card.classes()).not.toContain('is-has-media')
   })
 
-  it('combines visual, layout, hover, color, and shape props independently', () => {
+  it('combines layout, hover, color, and shape props independently', () => {
     const wrapper = mount(Card, {
       props: {
-        variant: 'soft',
         orientation: 'horizontal',
         hoverEffect: 'glow',
         shape: 'square',
@@ -68,22 +83,70 @@ describe('Card content', () => {
     })
     const card = wrapper.get('.s-card')
 
+    expect(wrapper.get('.s-card-content').classes()).toContain('type-default')
     expect(wrapper.get('.s-card-content').classes()).toContain('is-horizontal')
     expect(card.classes()).toEqual(
-      expect.arrayContaining(['s-card--soft', 'is-hover-glow', 'is-square']),
+      expect.arrayContaining(['is-hover-glow', 'is-square']),
     )
     expect(card.attributes('style')).toContain('--sax-color')
     expect(card.attributes('style')).toContain('--sax-success')
+  })
+
+  it('keeps media-first content while arranging it horizontally', () => {
+    const wrapper = mount(Card, {
+      props: {
+        type: 'classic',
+        orientation: 'horizontal',
+        hoverEffect: 'lift',
+      },
+      slots: { img: '<img alt="Preview" />' },
+    })
+
+    expect(wrapper.get('.s-card-content').classes()).toContain('type-classic')
+    expect(wrapper.get('.s-card-content').classes()).toContain('is-horizontal')
+    expect(wrapper.get('.s-card').element.tagName).toBe('DIV')
+    expect(wrapper.get('.s-card').classes()).toEqual(
+      expect.arrayContaining(['is-hover-lift', 'is-has-media']),
+    )
+  })
+
+  it.each([
+    'default',
+    'classic',
+    'overlay',
+    'split',
+    'frosted',
+    'reveal',
+    'profile',
+    'metric',
+    'article',
+  ] as const)('supports horizontal arrangement for %s content', (type) => {
+    const wrapper = mount(Card, {
+      props: { type, orientation: 'horizontal' },
+    })
+
+    expect(wrapper.get('.s-card-content').classes()).toContain('is-horizontal')
+  })
+
+  it('keeps the profile avatar slot in a horizontal layout', () => {
+    const wrapper = mount(Card, {
+      props: { type: 'profile', orientation: 'horizontal' },
+      slots: { img: '<img alt="Portrait" />' },
+    })
+
+    expect(wrapper.get('.s-card-content').classes()).toContain('is-horizontal')
+    expect(wrapper.get('.s-card__img img').attributes('alt')).toBe('Portrait')
   })
 
   it('maps numeric compatibility aliases to named presets', () => {
     const wrapper = mount(Card, { props: { type: 4 } })
 
     expect(wrapper.get('.s-card-content').classes()).toContain('type-frosted')
-    expect(wrapper.get('.s-card').classes()).not.toContain('s-card--elevated')
+    expect(wrapper.get('.s-card').classes()).not.toContain('s-card--4')
   })
 
   it.each([
+    'default',
     'classic',
     'overlay',
     'split',
@@ -96,6 +159,142 @@ describe('Card content', () => {
     const wrapper = mount(Card, { props: { type } })
 
     expect(wrapper.get('.s-card-content').classes()).toContain(`type-${type}`)
+  })
+
+  it('keeps textures independent from layout presets', () => {
+    const wrapper = mount(Card, {
+      props: { type: 'metric', texture: 'liquid-glass' },
+    })
+
+    expect(wrapper.get('.s-card-content').classes()).toContain('type-metric')
+    expect(wrapper.get('.s-card').classes()).toContain(
+      'is-texture-liquid-glass',
+    )
+    expect(
+      wrapper.get('.s-card__texture--liquid-glass').attributes(),
+    ).toHaveProperty('aria-hidden', 'true')
+  })
+
+  it('creates an isolated optical displacement filter for each liquid glass card', () => {
+    const wrapper = mount({
+      components: { Card },
+      template:
+        '<div><Card texture="liquid-glass" /><Card texture="liquid-glass" /></div>',
+    })
+    const filters = wrapper.findAll('filter')
+    const cards = wrapper.findAll('.s-card')
+    const ids = filters.map((filter) => filter.attributes('id'))
+
+    expect(filters).toHaveLength(2)
+    expect(new Set(ids).size).toBe(2)
+    filters.forEach((filter) => {
+      expect(filter.find('[result="noise"]').exists()).toBe(true)
+      expect(filter.find('[stdDeviation="4"]').exists()).toBe(true)
+      expect(filter.find('[scale="48"]').exists()).toBe(true)
+    })
+    cards.forEach((card, index) => {
+      expect(card.attributes('style')).toContain(
+        `--sax-card-liquid-filter: url(#${ids[index]})`,
+      )
+    })
+  })
+
+  it('uses the alternate specular SVG graph for liquid glass 2', () => {
+    const wrapper = mount({
+      components: { Card },
+      template:
+        '<div><Card texture="liquid-glass-2" /><Card texture="liquid-glass-2" /></div>',
+    })
+    const filters = wrapper.findAll('filter')
+    const cards = wrapper.findAll('.s-card')
+    const ids = filters.map((filter) => filter.attributes('id'))
+
+    expect(filters).toHaveLength(2)
+    expect(new Set(ids).size).toBe(2)
+    filters.forEach((filter) => {
+      expect(filter.find('[result="mapped"]').exists()).toBe(true)
+      expect(filter.find('[result="specular-light"]').exists()).toBe(true)
+      expect(filter.find('[scale="150"]').exists()).toBe(true)
+    })
+    cards.forEach((card, index) => {
+      expect(card.classes()).toContain('is-texture-liquid-glass-2')
+      expect(card.attributes('style')).toContain(
+        `--sax-card-liquid-filter: url(#${ids[index]})`,
+      )
+    })
+  })
+
+  it('combines texture and effect layers without replacing either one', () => {
+    const wrapper = mount(Card, {
+      props: { texture: 'liquid-glass', effect: 'gradient-glow' },
+    })
+    const card = wrapper.get('.s-card')
+
+    expect(card.classes()).toEqual(
+      expect.arrayContaining([
+        'is-texture-liquid-glass',
+        'is-effect-gradient-glow',
+      ]),
+    )
+    expect(wrapper.find('.s-card__texture--liquid-glass').exists()).toBe(true)
+    expect(wrapper.find('.s-card__effect--gradient-glow').exists()).toBe(true)
+  })
+
+  it('tracks the pointer locally for the spotlight effect', async () => {
+    const wrapper = mount(Card, { props: { effect: 'spotlight' } })
+    const card = wrapper.get('.s-card')
+    vi.spyOn(card.element, 'getBoundingClientRect').mockReturnValue({
+      left: 10,
+      top: 20,
+      width: 300,
+      height: 180,
+      right: 310,
+      bottom: 200,
+      x: 10,
+      y: 20,
+      toJSON: () => ({}),
+    })
+
+    card.element.dispatchEvent(
+      new MouseEvent('pointermove', {
+        bubbles: true,
+        clientX: 90,
+        clientY: 75,
+      }),
+    )
+    await new Promise((resolve) => setTimeout(resolve, 30))
+
+    expect(card.attributes('style')).toContain('--sax-card-spotlight-x: 80px')
+    expect(card.attributes('style')).toContain('--sax-card-spotlight-y: 55px')
+    expect(wrapper.find('.s-card__effect--spotlight').exists()).toBe(true)
+  })
+
+  it('derives a local edge angle for the gradient glow effect', async () => {
+    const wrapper = mount(Card, { props: { effect: 'gradient-glow' } })
+    const card = wrapper.get('.s-card')
+    vi.spyOn(card.element, 'getBoundingClientRect').mockReturnValue({
+      left: 10,
+      top: 20,
+      width: 300,
+      height: 180,
+      right: 310,
+      bottom: 200,
+      x: 10,
+      y: 20,
+      toJSON: () => ({}),
+    })
+
+    card.element.dispatchEvent(
+      new MouseEvent('pointermove', {
+        bubbles: true,
+        clientX: 300,
+        clientY: 110,
+      }),
+    )
+    await new Promise((resolve) => setTimeout(resolve, 30))
+
+    expect(card.attributes('style')).toContain('--sax-card-glow-angle: 90deg')
+    expect(wrapper.find('.s-card__effect--gradient-glow').exists()).toBe(true)
   })
 
   it('uses structured slots for the new complete presets', () => {
@@ -162,7 +361,6 @@ describe('Card content', () => {
 
   it('supports modern structural slots and compatibility aliases', () => {
     const wrapper = mount(Card, {
-      props: { variant: 'elevated' },
       slots: {
         header: '<strong class="header-slot">Header</strong>',
         extra: '<span class="extra-slot">Extra</span>',
@@ -181,6 +379,7 @@ describe('Card content', () => {
 
   it('keeps the legacy buttons slot in its original direct wrapper', () => {
     const wrapper = mount(Card, {
+      props: { type: 'classic' },
       slots: {
         buttons: '<button class="legacy-button">Action</button>',
       },

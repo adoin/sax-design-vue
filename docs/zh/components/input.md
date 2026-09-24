@@ -844,18 +844,24 @@ SLOTS:
 通过 `size` 设置小号、默认或大号输入框。
 
 <template #example>
-<input-size />
+<input-zh-size />
 </template>
 
 <template #template>
 
-@[code{1-7}](../../.vuepress/components/input/size.vue)
+@[code{7-13}](../../.vuepress/components/input-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/input-zh/size.vue)
 
 </template>
 
 <template #style>
 
-@[code{9-16}](../../.vuepress/components/input/size.vue)
+@[code{15-22}](../../.vuepress/components/input-zh/size.vue)
 
 </template>
 

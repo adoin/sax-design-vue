@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-unified'
-import { useColorProp, useShapeProp } from '@vuesax-alpha/hooks'
+import { useColorProp, useShapeProp, useSizeProp } from '@vuesax-alpha/hooks'
 import {
   buildProps,
   definePropType,
@@ -73,6 +73,7 @@ export interface SelectVirtualConfig {
 }
 
 export const selectProps = buildProps({
+  size: useSizeProp,
   showAfter: {
     type: Number,
     default: 0,

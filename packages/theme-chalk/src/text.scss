@@ -27,6 +27,89 @@
     -webkit-box-orient: vertical;
   }
 
+  @include when(shimmer) {
+    --s-text-shimmer-angle: 20deg;
+    --s-text-shimmer-duration: 2s;
+    --s-text-shimmer-spread: calc(3ch + 40px);
+    --s-text-shimmer-base: currentColor;
+    --s-text-shimmer-highlight: color-mix(
+      in oklab,
+      currentColor 20%,
+      transparent
+    );
+
+    @supports (color: oklch(from red l c h)) {
+      --s-text-shimmer-highlight: oklch(
+        from currentColor l c h / calc(alpha * 0.2)
+      );
+    }
+
+    background-image: linear-gradient(
+      calc(90deg + var(--s-text-shimmer-angle)),
+      var(--s-text-shimmer-base) calc(50% - var(--s-text-shimmer-spread)),
+      color-mix(
+          in oklch,
+          var(--s-text-shimmer-highlight),
+          var(--s-text-shimmer-base) 50%
+        )
+        calc(50% - var(--s-text-shimmer-spread) * 0.5),
+      var(--s-text-shimmer-highlight) 50%,
+      color-mix(
+          in oklch,
+          var(--s-text-shimmer-highlight),
+          var(--s-text-shimmer-base) 50%
+        )
+        calc(50% + var(--s-text-shimmer-spread) * 0.5),
+      var(--s-text-shimmer-base) calc(50% + var(--s-text-shimmer-spread))
+    );
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: calc(200% + var(--s-text-shimmer-spread) * 2) 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: s-text-shimmer var(--s-text-shimmer-duration) linear infinite;
+
+    &:where([dir='rtl'], [dir='rtl'] *) {
+      animation-direction: reverse;
+    }
+  }
+
+  @include when(rainbow) {
+    animation: s-text-rainbow 4s linear infinite;
+  }
+
+  @include when(neon) {
+    --s-text-neon-glow: color-mix(in oklab, currentColor 72%, transparent);
+
+    animation: s-text-neon 1.5s ease-in-out infinite alternate;
+  }
+
+  @include when(shadow) {
+    --s-text-shadow-color: color-mix(in oklab, currentColor 48%, transparent);
+
+    position: relative;
+    z-index: 0;
+    display: inline-block;
+    isolation: isolate;
+    animation: s-text-shadow-move 3s ease-in-out infinite;
+
+    &[data-text]::after {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(45deg, getColor(primary), getColor(danger));
+      background-clip: text;
+      color: transparent;
+      content: attr(data-text);
+      filter: blur(8px);
+      pointer-events: none;
+      animation: s-text-shadow-follow 3s ease-in-out infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
   @include e(typing-caret) {
     display: inline-block;
     width: 0.08em;
@@ -50,8 +133,121 @@
   }
 }
 
+@keyframes s-text-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
+@keyframes s-text-rainbow {
+  0%,
+  100% {
+    color: getColor(danger);
+  }
+
+  20% {
+    color: getColor(warning);
+  }
+
+  40% {
+    color: color-mix(in oklab, getColor(warning) 70%, white);
+  }
+
+  60% {
+    color: getColor(primary);
+  }
+
+  80% {
+    color: getColor(success);
+  }
+}
+
+@keyframes s-text-neon {
+  from {
+    text-shadow:
+      0 0 3px currentColor,
+      0 0 7px var(--s-text-neon-glow),
+      0 0 16px var(--s-text-neon-glow),
+      0 0 32px var(--s-text-neon-glow);
+  }
+
+  to {
+    text-shadow:
+      0 0 2px currentColor,
+      0 0 4px var(--s-text-neon-glow),
+      0 0 8px var(--s-text-neon-glow),
+      0 0 16px var(--s-text-neon-glow);
+  }
+}
+
+@keyframes s-text-shadow-move {
+  0%,
+  100% {
+    text-shadow: 2px 2px 10px var(--s-text-shadow-color);
+  }
+
+  50% {
+    text-shadow: -2px -2px 10px var(--s-text-shadow-color);
+  }
+}
+
+@keyframes s-text-shadow-follow {
+  0%,
+  100% {
+    transform: translate(5px, 5px);
+  }
+
+  50% {
+    transform: translate(-5px, -5px);
+  }
+}
+
+html.dark .#{$namespace}-text.is-shimmer {
+  --s-text-shimmer-highlight: color-mix(in oklab, currentColor 45%, white);
+
+  @supports (color: oklch(from red l c h)) {
+    --s-text-shimmer-highlight: oklch(
+      from currentColor max(0.8, calc(l + 0.4)) c h / calc(alpha + 0.4)
+    );
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .#{$namespace}-text__typing-caret {
     animation: none;
+  }
+
+  .#{$namespace}-text.is-shimmer {
+    background-image: none;
+    -webkit-text-fill-color: currentColor;
+    animation: none;
+  }
+
+  .#{$namespace}-text.is-rainbow {
+    background: none;
+    color: getColor(primary);
+    animation: none;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  .#{$namespace}-text.is-neon {
+    text-shadow:
+      0 0 2px currentColor,
+      0 0 8px var(--s-text-neon-glow);
+    animation: none;
+  }
+
+  .#{$namespace}-text.is-shadow {
+    text-shadow: 2px 2px 10px var(--s-text-shadow-color);
+    animation: none;
+
+    &[data-text]::after {
+      transform: translate(4px, 4px);
+      animation: none;
+    }
   }
 }

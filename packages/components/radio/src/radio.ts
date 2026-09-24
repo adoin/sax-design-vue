@@ -5,12 +5,14 @@ import {
   type SvgIconAnimation,
   svgIconAnimationValues,
   useColorProp,
+  useSizeProp,
 } from '@vuesax-alpha/hooks'
 import type { EmitFn } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type Radio from './radio.vue'
 
 export const radioProps = buildProps({
+  size: useSizeProp,
   color: useColorProp,
   modelValue: {
     type: [Boolean, String, Number],

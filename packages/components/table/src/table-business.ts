@@ -4,6 +4,7 @@ import type {
   FormProps,
 } from '@vuesax-alpha/components/form'
 import type { VNodeChild } from 'vue'
+import type { ComponentSize } from '@vuesax-alpha/constants'
 import type {
   TableChangeRecords,
   TableExposes,
@@ -14,13 +15,27 @@ import type {
   TableValidateOptions,
 } from './table'
 
+export type TableSize = Exclude<ComponentSize, ''>
+
+export type TableQueryFixedButton = 'submit' | 'reset' | 'more'
+
 export interface TableQueryConfig<
   QueryForm extends object = FormModel,
 > extends Partial<FormProps<QueryForm>> {
   enabled?: boolean
+  size?: ComponentSize
+  /** Ordered built-in actions; an empty array leaves the fixed area to its slot. */
+  fixedButtons?: TableQueryFixedButton[]
+  /** @deprecated Use fixedButtons instead. */
   showActions?: boolean
   submitText?: string
   resetText?: string
+}
+
+export interface TableQueryActionsState {
+  expanded: boolean
+  hasMore: boolean
+  toggleMore: () => void
 }
 
 export interface TableToolbarRendererParams<
@@ -30,6 +45,7 @@ export interface TableToolbarRendererParams<
   table: TableExposes<Row, QueryForm>
   context: TableQueryContext<Row, QueryForm>
   placement: 'left' | 'right'
+  size: TableSize
   busy: boolean
 }
 
@@ -64,6 +80,7 @@ export interface TableToolbarConfig<
   QueryForm extends object = FormModel,
 > {
   enabled?: boolean
+  size?: ComponentSize
   title?: string
   left?: TableToolbarRendererOptions<Row, QueryForm>[]
   right?: TableToolbarRendererOptions<Row, QueryForm>[]

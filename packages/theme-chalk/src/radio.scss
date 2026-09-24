@@ -148,6 +148,34 @@
   }
 }
 
+.s-radio-wrapper--small {
+  --sax-radio-width: 18px;
+  --sax-radio-height: 18px;
+  --sax-radio-min-width: 18px;
+  --sax-radio-min-height: 18px;
+  min-height: 32px;
+  gap: 6px;
+  padding: 4px 8px 4px 6px;
+
+  .s-radio__label {
+    font-size: 0.75rem;
+  }
+}
+
+.s-radio-wrapper--large {
+  --sax-radio-width: 24px;
+  --sax-radio-height: 24px;
+  --sax-radio-min-width: 24px;
+  --sax-radio-min-height: 24px;
+  min-height: 40px;
+  gap: 10px;
+  padding: 6px 12px 6px 8px;
+
+  .s-radio__label {
+    font-size: 1rem;
+  }
+}
+
 @include b(radio) {
   display: grid;
   width: getCssVar(radio, 'width');

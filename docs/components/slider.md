@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: Set or inherit track, thumb, and interaction height.
+    default: null
   - name: variant
     type: String
     values: "classic | soft | steps"
@@ -129,6 +134,34 @@ NEWS:
 <template #style>
 
 @[code{44-57}](../.vuepress/components/slider/variants.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><slider-size /></template>
+
+<template #template>
+
+@[code{7-13}](../.vuepress/components/slider/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/slider/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-20}](../.vuepress/components/slider/size.vue)
 
 </template>
 

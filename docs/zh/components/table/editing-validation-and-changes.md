@@ -12,7 +12,7 @@ description: 'Table 的编辑、校验与变更功能、配置方式与可运行
 
 ### 单元格与整行编辑
 
-设置 `edit-config` 并为列添加 `editor`，再通过共享渲染器注册表选择控件；本例使用 `$input`、`$select`、`$date` 和 `$switch`，渲染器的 `props`、`options` 会传给对应组件。输入框、文本域、选择器、级联选择器、日期和时间等带输入轮廓的编辑器，在表格单元格内默认使用 `shape="square"`，使轮廓贴合单元格；渲染器或编辑器显式传入的 `props.shape` 仍然优先。默认双击进入单元格编辑；`mode: 'row'` 开启整行编辑，`trigger` 可选 `click`、`dblclick` 或 `manual`，`editableMethod` 限制可编辑行或单元格。此例的归档项目不可编辑。
+设置 `edit-config` 并为列添加 `editor`，再通过共享渲染器注册表选择控件；本例使用 `$input`、`$select`、`$date` 和 `$switch`，渲染器的 `props`、`options` 会传给对应组件。输入框、文本域、选择器、级联选择器、日期和时间等带输入轮廓的编辑器，在表格单元格内默认使用 `shape="square"`，使轮廓贴合单元格；渲染器或编辑器显式传入的 `props.shape` 仍然优先。激活后的输入型编辑器会占满单元格的实际宽高；Table 会在本次编辑期间保留进入编辑前的行高下限，因此由折行或多行内容撑高的行不会在替换为编辑器时收缩，Switch 等紧凑控件则保持在同一满单元格编辑层内居中。进入编辑时，Table 只执行让单元格避开固定列和视口边缘所需的最小内部滚动；已经完整可见的单元格保持原位。默认双击进入单元格编辑；`mode: 'row'` 开启整行编辑，`trigger` 可选 `click`、`dblclick` 或 `manual`，`editableMethod` 限制可编辑行或单元格。此例的归档项目不可编辑。
 
 默认编辑只改变草稿。未开启 `change-config` 时，接收 `editCommit` 的 `updatedRow` 或 `changes` 后，由应用更新 `data` 或提交到服务端；组件不会直接修改业务记录。普通输入按 Enter 提交、Escape 取消，选择器和日期面板优先处理自身按键，也可使用保存按钮或 Ctrl/⌘ + Enter。Tab 可进入可编辑单元格，再按 Enter 或 F2 开始。
 

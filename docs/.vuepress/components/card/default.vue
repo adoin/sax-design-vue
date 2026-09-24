@@ -1,35 +1,24 @@
 <template>
-  <div class="center">
-    <s-card
-      type="classic"
-      title="Trendy clothing"
-      text="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
-    >
-      <template #img>
-        <img src="/foto5.png" alt="Model wearing the summer collection" />
+  <div class="default-card-demo">
+    <s-card title="Project overview">
+      <template #extra>
+        <s-button size="small" type="flat">Details</s-button>
       </template>
-      <template #interactions>
-        <s-button color="danger" icon aria-label="Favorite">
-          <s-icon name="bx:heart" />
-        </s-button>
-        <s-button class="btn-chat" type="shadow" aria-label="54 comments">
-          <s-icon name="bx:chat" />
-          <span class="span">54</span>
-        </s-button>
+      <p>
+        Keep the title, supporting content, and optional actions in one quiet
+        surface.
+      </p>
+      <template #actions>
+        <s-button size="small">Continue</s-button>
       </template>
     </s-card>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.btn-chat {
-  i {
-    font-size: 1.2rem;
-  }
-
-  .span {
-    padding-left: 5px;
-    font-weight: bold;
-  }
+.default-card-demo {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 </style>

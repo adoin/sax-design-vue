@@ -1,5 +1,6 @@
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { buildProps, definePropType, isArray } from '@vuesax-alpha/utils'
+import { useSizeProp } from '@vuesax-alpha/hooks'
 
 import type { ExtractPropTypes } from 'vue'
 import type { CheckboxValueType } from './checkbox'
@@ -39,6 +40,7 @@ export const flattenCheckboxGroupOptions = (
   }, [])
 
 export const checkboxGroupProps = buildProps({
+  size: useSizeProp,
   /**
    * @description binding value
    */

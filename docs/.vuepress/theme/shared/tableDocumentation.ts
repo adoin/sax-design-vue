@@ -10,6 +10,7 @@ export const tableDocumentationSections: TableDocumentationSection[] = [
     title: 'Data and column definitions',
     titleZh: '数据与列定义',
   },
+  { slug: 'appearance', title: 'Appearance', titleZh: '外观' },
   { slug: 'row-selection', title: 'Row selection', titleZh: '行选择' },
   {
     slug: 'sorting-and-filtering',

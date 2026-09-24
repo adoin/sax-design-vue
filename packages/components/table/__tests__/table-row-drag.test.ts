@@ -100,8 +100,29 @@ describe('source row reorder planning', () => {
     ).toEqual([2, 3, 1])
     expect(children.map((row) => row.id)).toEqual([1, 2, 3])
     expect(planTableRowReorder(source, 1, 2, 'before').data).toBe(data)
-    expect(() => planTableRowReorder(source, 1, 20, 'before')).toThrow(
-      'same source parent',
+    const reparented = planTableRowReorder(source, 1, 20, 'before')
+    expect(reparented).toMatchObject({
+      oldParentKey: 10,
+      newParentKey: undefined,
+      oldIndex: 0,
+      newIndex: 1,
+      reparented: true,
+    })
+    expect(reparented.data.map((row) => row.id)).toEqual([10, 1, 20])
+    expect(
+      ((reparented.data[0] as TableRow).children as TableRow[]).map(
+        (row) => row.id,
+      ),
+    ).toEqual([2, 3])
+    const nested = planTableRowReorder(source, 20, 10, 'inside')
+    expect(nested.data.map((row) => row.id)).toEqual([10])
+    expect(
+      ((nested.data[0] as TableRow).children as TableRow[]).map(
+        (row) => row.id,
+      ),
+    ).toEqual([1, 2, 3, 20])
+    expect(() => planTableRowReorder(source, 10, 1, 'inside')).toThrow(
+      'own descendant',
     )
   })
 })
@@ -268,6 +289,117 @@ describe('Table row dragging', () => {
     )
     expect(parent).not.toHaveProperty('children')
     expect((await table.value!.moveRow(0, 1)).reason).toBe('invalid')
+    root.unmount()
+  })
+
+  it('does not fetch an unloaded lazy target during an inside drop', async () => {
+    const load = vi.fn(async () => [{ id: 21, name: 'loaded' }])
+    const { root, table } = setup(
+      {
+        columns: [{ ...columns[0], treeNode: true }],
+        treeConfig: { hasChildren: 'lazy', load },
+        rowDragConfig: { tree: true },
+      },
+      [
+        { id: 1, name: 'movable' },
+        { id: 2, name: 'lazy', lazy: true },
+      ],
+    )
+    expect((await table.value!.moveRow(0, 1, 'inside')).reason).toBe('invalid')
+    expect(load).not.toHaveBeenCalled()
+    root.unmount()
+  })
+
+  it('reparents loaded tree rows with rich drop predicates and depth limits', async () => {
+    const first = {
+      id: 10,
+      name: 'first',
+      children: [
+        { id: 11, name: 'one' },
+        { id: 12, name: 'two' },
+      ],
+    }
+    const second = {
+      id: 20,
+      name: 'second',
+      children: [{ id: 21, name: 'three' }],
+    }
+    const dropMethod = vi.fn(() => true)
+    const { root, table, data } = setup(
+      {
+        columns: [{ ...columns[0], treeNode: true }],
+        treeConfig: {},
+        expandedKeys: [10],
+        rowDragConfig: {
+          tree: { maxDepth: 2 },
+          draggableMethod: ({ depth, childCount }) =>
+            depth < 2 && childCount < 3,
+          dropMethod,
+        },
+      },
+      [first, second],
+    )
+    await root
+      .findAll('.s-table__row-drag-handle')[1]
+      .trigger('keydown', { key: ' ' })
+    await root.get('.s-table').trigger('keydown', { key: 'ArrowUp' })
+    await root.get('.s-table').trigger('keydown', { key: 'ArrowLeft' })
+    expect(root.get('.is-drop-after').text()).toContain('two')
+    expect(root.get('.is-drop-after').attributes('style')).toContain(
+      '--s-table-drop-indent: 12px',
+    )
+    await root.get('.s-table').trigger('keydown', { key: 'Escape' })
+    await root
+      .findAll('.s-table__row-drag-handle')[1]
+      .trigger('keydown', { key: ' ' })
+    await root.get('.s-table').trigger('keydown', { key: 'ArrowDown' })
+    await root.get('.s-table').trigger('keydown', { key: 'ArrowDown' })
+    await root.get('.s-table').trigger('keydown', { key: 'ArrowRight' })
+    expect(root.find('.s-table__drop-indicator').exists()).toBe(false)
+    const insideGroup = root.findAll('.is-drop-inside-group')
+    expect(insideGroup).toHaveLength(1)
+    expect(insideGroup[0].classes()).toEqual(
+      expect.arrayContaining(['is-drop-inside-start', 'is-drop-inside-end']),
+    )
+    expect(insideGroup[0].attributes('style')).toContain(
+      '--s-table-drop-indent',
+    )
+    await root.get('.s-table').trigger('keydown', { key: 'Escape' })
+    const result = await table.value!.moveRow(1, 3, 'inside')
+    expect(result.applied).toBe(true)
+    expect(result.request).toMatchObject({
+      rowKey: 11,
+      targetKey: 20,
+      position: 'inside',
+      oldParentKey: 10,
+      newParentKey: 20,
+      oldIndex: 0,
+      newIndex: 1,
+      newDepth: 1,
+      subtreeDepth: 0,
+      reparented: true,
+    })
+    expect(dropMethod).toHaveBeenCalledWith(
+      expect.objectContaining({
+        depth: 1,
+        parentKey: 10,
+        childCount: 0,
+        targetDepth: 0,
+        targetParentKey: undefined,
+        targetChildCount: 1,
+        newParentKey: 20,
+      }),
+    )
+    expect((data.value[0].children as TableRow[]).map((row) => row.id)).toEqual(
+      [12],
+    )
+    expect((data.value[1].children as TableRow[]).map((row) => row.id)).toEqual(
+      [21, 11],
+    )
+    expect(
+      root.findComponent(Table).emitted('update:expandedKeys')?.at(-1),
+    ).toEqual([[10, 20]])
+    expect((await table.value!.moveRow(2, 3, 'inside')).reason).toBe('invalid')
     root.unmount()
   })
 

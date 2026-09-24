@@ -1,9 +1,25 @@
 import type { TableAlign } from './table-align'
+import type { TableQueryFixedButton } from './table-business'
+import type { ComponentSize } from '@vuesax-alpha/constants'
 
 export type TableGlobalOverflow = boolean | 'ellipsis' | 'title' | 'tooltip'
 export type TableGlobalFeature<Config> = boolean | Config
 
 export interface TableGlobalConfig {
+  size?: ComponentSize
+  queryConfig?: TableGlobalFeature<{
+    enabled?: boolean
+    size?: ComponentSize
+    fixedButtons?: TableQueryFixedButton[]
+    /** @deprecated Use fixedButtons instead. */
+    showActions?: boolean
+    submitText?: string
+    resetText?: string
+  }>
+  toolbarConfig?: TableGlobalFeature<{
+    enabled?: boolean
+    size?: ComponentSize
+  }>
   historyConfig?: TableGlobalFeature<{ enabled?: boolean; limit?: number }>
   changeConfig?: TableGlobalFeature<{ enabled?: boolean }>
   validationConfig?: TableGlobalFeature<{

@@ -18,6 +18,8 @@ $rate-size: () !default;
 $rate-size: map.merge(
   (
     'small': 14px,
+    'default': 20px,
+    'large': 24px,
   ),
   $rate-size
 );
@@ -126,7 +128,7 @@ $rate-size: map.merge(
     color: getCssVar('rate', 'text-color');
   }
 
-  @each $size in (large, small) {
+  @each $size in (large, default, small) {
     @include m($size) {
       height: map.get($rate-height, $size);
       & .#{bem('rate', 'icon')} {

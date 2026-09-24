@@ -1,5 +1,23 @@
 ---
 description: '用灵活的内容表面组织媒体、正文、操作与交互状态。'
+EXAMPLE_GROUPS:
+  - title: 类型
+    items:
+      [
+        default,
+        classic,
+        overlay,
+        split,
+        frosted,
+        reveal,
+        profile,
+        metric,
+        article,
+      ]
+  - title: 纹理
+    items: [default-solid, liquid-glass, liquid-glass-2]
+  - title: 特效
+    items: [no-effect, spotlight, gradient-glow]
 PROPS:
   - name: title
     type: String
@@ -24,17 +42,23 @@ PROPS:
     values: Sax Design 颜色 | RGB | HEX
     description: 彩色表面与交互效果使用的语义强调色。
     default: primary
-    usage: '#extended-surface-variants'
-  - name: variant
-    type: String
-    values: elevated | outlined | soft | solid | plain | glass
-    description: 表面样式，与布局和交互行为彼此独立。
-    default: null
-    usage: '#extended-surface-variants'
+    usage: '#complete-configuration'
+  - name: texture
+    type: CardTexture
+    values: default | liquid-glass | liquid-glass-2
+    description: 表面材质，与布局和装饰特效彼此独立。
+    default: default
+    usage: '#default-solid'
+  - name: effect
+    type: CardEffect
+    values: default | spotlight | gradient-glow
+    description: 装饰性交互特效，与布局和纹理彼此独立。
+    default: default
+    usage: '#no-effect'
   - name: orientation
     type: String
     values: vertical | horizontal
-    description: 垂直或水平排列媒体与内容。
+    description: 在保留所选类型表现的同时，垂直或水平排列媒体与内容。
     default: null
     usage: '#orientation'
   - name: hover-effect
@@ -74,11 +98,11 @@ PROPS:
     default: 'false'
     usage: '#selection-and-loading'
   - name: type
-    type: String
-    values: classic | overlay | split | frosted | reveal | profile | metric | article
+    type: CardType
+    values: default | classic | overlay | split | frosted | reveal | profile | metric | article
     description: 选择一套有明确语义的完整卡片预设；数字 1-5 仅作为兼容别名保留。
-    default: classic
-    usage: '#article'
+    default: default
+    usage: '#default'
 EVENTS:
   - name: update:selected
     type: Boolean
@@ -155,7 +179,7 @@ SLOTS:
 
 ## 默认
 
-`classic` 是默认预设，适合常见的图片、文字与操作布局。
+`default` 是无需显式传入的默认预设，用简洁的标题区、正文区和可选操作区组织内容。
 
 <template #example>
 <card-zh-default />
@@ -163,13 +187,37 @@ SLOTS:
 
 <template #template>
 
-@[code{1-22}](../../.vuepress/components/card-zh/default.vue)
+@[code{1-13}](../../.vuepress/components/card-zh/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{24-35}](../../.vuepress/components/card-zh/default.vue)
+@[code{15-21}](../../.vuepress/components/card-zh/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 经典图文
+
+设置 `type="classic"`，使用原有的媒体优先布局与覆盖式媒体操作。
+
+<template #example>
+<card-zh-classic />
+</template>
+
+<template #template>
+
+@[code{1-22}](../../.vuepress/components/card-zh/classic.vue)
+
+</template>
+
+<template #style>
+
+@[code{24-35}](../../.vuepress/components/card-zh/classic.vue)
 
 </template>
 
@@ -351,29 +399,143 @@ SLOTS:
 
 <card>
 
-## 扩展表面样式
+## 默认纯色
 
-八种具名 `type` 是 Card 的主要预设。只有需要明确组合表面效果时，才使用 `variant` 扩展能力。
+使用 `texture="default"`，保留常规纯色表面，不增加额外材质层。
 
 <template #example>
-<card-zh-variants />
+<card-zh-texture-default />
 </template>
 
 <template #template>
 
-@[code{12-23}](../../.vuepress/components/card-zh/variants.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-10}](../../.vuepress/components/card-zh/variants.vue)
+@[code{1-7}](../../.vuepress/components/card-zh/texture-default.vue)
 
 </template>
 
 <template #style>
 
-@[code{25-46}](../../.vuepress/components/card-zh/variants.vue)
+@[code{9-18}](../../.vuepress/components/card-zh/texture-default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 液态镜片
+
+`texture="liquid-glass"` 使用实例级 SVG 位移图，让半透明表面真正弯折后方内容；不支持 URL backdrop-filter 的浏览器会降级为饱和模糊玻璃。
+
+<template #example>
+<card-zh-texture-liquid-glass />
+</template>
+
+<template #template>
+
+@[code{1-7}](../../.vuepress/components/card-zh/texture-liquid-glass.vue)
+
+</template>
+
+<template #style>
+
+@[code{9-112}](../../.vuepress/components/card-zh/texture-liquid-glass.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 液态镜片 2
+
+`texture="liquid-glass-2"` 保持完全相同的 Card 表面、标题、模糊、高光与动态背景，只替换为带 component transfer 和镜面光照的另一套 SVG 滤镜，便于直接比较。
+
+<template #example>
+<card-zh-texture-liquid-glass-2 />
+</template>
+
+<template #template>
+
+@[code{1-7}](../../.vuepress/components/card-zh/texture-liquid-glass-2.vue)
+
+</template>
+
+<template #style>
+
+@[code{9-112}](../../.vuepress/components/card-zh/texture-liquid-glass-2.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 无特效
+
+使用 `effect="default"`，让 Card 不渲染交互装饰。
+
+<template #example>
+<card-zh-effect-default />
+</template>
+
+<template #template>
+
+@[code{1-7}](../../.vuepress/components/card-zh/effect-default.vue)
+
+</template>
+
+<template #style>
+
+@[code{9-21}](../../.vuepress/components/card-zh/effect-default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 聚光边框
+
+`spotlight` 不改变内部颜色，只在指针附近显示局部单色边框高光。
+
+<template #example>
+<card-zh-effect-spotlight />
+</template>
+
+<template #template>
+
+@[code{1-7}](../../.vuepress/components/card-zh/effect-spotlight.vue)
+
+</template>
+
+<template #style>
+
+@[code{9-23}](../../.vuepress/components/card-zh/effect-spotlight.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 渐变光晕
+
+`gradient-glow` 组合随指针转向的多色边缘光弧、模糊外层光晕与克制的内部微光。
+
+<template #example>
+<card-zh-effect-gradient-glow />
+</template>
+
+<template #template>
+
+@[code{1-7}](../../.vuepress/components/card-zh/effect-gradient-glow.vue)
+
+</template>
+
+<template #style>
+
+@[code{9-23}](../../.vuepress/components/card-zh/effect-gradient-glow.vue)
 
 </template>
 
@@ -391,13 +553,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-28}](../../.vuepress/components/card-zh/hover-effects.vue)
+@[code{1-26}](../../.vuepress/components/card-zh/hover-effects.vue)
 
 </template>
 
 <template #style>
 
-@[code{30-38}](../../.vuepress/components/card-zh/hover-effects.vue)
+@[code{28-36}](../../.vuepress/components/card-zh/hover-effects.vue)
 
 </template>
 
@@ -407,7 +569,7 @@ SLOTS:
 
 ## 排列方向
 
-使用 `horizontal` 将媒体放在内容侧面；窄屏下会自动恢复为垂直排列。
+使用 `horizontal` 将媒体放在内容侧面，同时保留所选类型的表现；窄屏下会自动恢复为竖排。
 
 <template #example>
 <card-zh-orientation />
@@ -415,13 +577,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-31}](../../.vuepress/components/card-zh/orientation.vue)
+@[code{1-29}](../../.vuepress/components/card-zh/orientation.vue)
 
 </template>
 
 <template #style>
 
-@[code{33-40}](../../.vuepress/components/card-zh/orientation.vue)
+@[code{31-38}](../../.vuepress/components/card-zh/orientation.vue)
 
 </template>
 
@@ -469,13 +631,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-16}](../../.vuepress/components/card-zh/shape.vue)
+@[code{1-14}](../../.vuepress/components/card-zh/shape.vue)
 
 </template>
 
 <template #style>
 
-@[code{18-26}](../../.vuepress/components/card-zh/shape.vue)
+@[code{16-24}](../../.vuepress/components/card-zh/shape.vue)
 
 </template>
 
@@ -483,23 +645,29 @@ SLOTS:
 
 <card>
 
-## 组合
+## 综合配置
 
-需要横向滚动排列卡片时使用 `s-card-group`；它不会改变单个卡片的样式。
+在一个示例中调节 Card 的布局、排列方向、纹理、特效、外形、颜色与交互状态。
 
 <template #example>
-<card-zh-group />
+<card-zh-configurator />
 </template>
 
 <template #template>
 
-@[code{1-26}](../../.vuepress/components/card-zh/group.vue)
+@[code{65-140}](../../.vuepress/components/card-zh/configurator.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-63}](../../.vuepress/components/card-zh/configurator.vue)
 
 </template>
 
 <template #style>
 
-@[code{28-39}](../../.vuepress/components/card-zh/group.vue)
+@[code{142-203}](../../.vuepress/components/card-zh/configurator.vue)
 
 </template>
 

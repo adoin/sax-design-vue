@@ -25,6 +25,7 @@ export default defineComponent({
       const field = props.item.prop ?? props.item.field
       const params: FormRendererParams = {
         model: form?.model.value || {},
+        size: form?.size.value || '',
         field,
         prop: field,
         value: field ? form?.getValue(field) : undefined,

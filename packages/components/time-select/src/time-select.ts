@@ -1,11 +1,12 @@
 import { IconClose } from '@vuesax-alpha/components/icon'
 
 import { definePropType } from '@vuesax-alpha/utils'
-import { useShapeProp } from '@vuesax-alpha/hooks'
+import { useShapeProp, useSizeProp } from '@vuesax-alpha/hooks'
 import type { Component, ExtractPropTypes, PropType } from 'vue'
 import type TimeSelect from './time-select.vue'
 
 export const timeSelectProps = {
+  size: useSizeProp,
   shape: useShapeProp,
   format: {
     type: String,

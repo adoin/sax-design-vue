@@ -1,7 +1,12 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { SRadioButton } from '@vuesax-alpha/components/radio-button'
-import { useId, useNamespace } from '@vuesax-alpha/hooks'
+import {
+  provideGlobalConfig,
+  useId,
+  useNamespace,
+  useSize,
+} from '@vuesax-alpha/hooks'
 import SRadio from './radio.vue'
 import RadioGroupProvider from './radio-group-provider.vue'
 import { radioGroupEmits, radioGroupProps } from './radio-group'
@@ -18,6 +23,8 @@ const slots = defineSlots<{
 }>()
 
 const ns = useNamespace('radio-group')
+const size = useSize()
+provideGlobalConfig(computed(() => ({ size: size.value || 'default' })))
 const groupId = useId()
 const groupName = computed(() => props.name || `${groupId.value}-option`)
 const gapValue = computed(() =>

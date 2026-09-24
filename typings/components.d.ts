@@ -11,7 +11,6 @@ declare module '@vue/runtime-core' {
     SButton: (typeof import('../packages/sax-design-vue'))['SButton']
     SButtonGroup: (typeof import('../packages/sax-design-vue'))['SButtonGroup']
     SCard: (typeof import('../packages/sax-design-vue'))['SCard']
-    SCardGroup: (typeof import('../packages/sax-design-vue'))['SCardGroup']
     SCheckbox: (typeof import('../packages/sax-design-vue'))['SCheckbox']
     SCheckboxGroup: (typeof import('../packages/sax-design-vue'))['SCheckboxGroup']
     SCol: (typeof import('../packages/sax-design-vue'))['SCol']

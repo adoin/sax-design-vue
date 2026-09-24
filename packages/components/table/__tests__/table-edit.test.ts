@@ -143,7 +143,41 @@ describe('table editing integration', () => {
     wrapper.unmount()
   })
 
-  it('does not horizontally relocate a cell that was double-clicked in place', async () => {
+  it('does not commit on the trailing Enter immediately after IME composition', async () => {
+    const wrapper = mount(Table, {
+      attachTo: document.body,
+      props: { data, columns, editConfig: true },
+    })
+    const cell = wrapper
+      .findAll('.s-table__data-row')[0]
+      .get('[data-column-index="0"]')
+    await cell.trigger('dblclick')
+    await nextTick()
+    const input = wrapper.get<HTMLInputElement>('.s-table__cell-editor input')
+
+    await input.trigger('compositionstart')
+    input.element.value = '中文'
+    await input.trigger('input', { isComposing: true })
+    await wrapper.setProps({ striped: true })
+    expect(input.element.value).toBe('中文')
+    await input.trigger('compositionend')
+    await input.trigger('keydown', { key: 'Enter', keyCode: 13 })
+
+    expect(wrapper.find('.s-table__cell-editor').exists()).toBe(true)
+    expect(wrapper.emitted('editCommit')).toBeUndefined()
+
+    await new Promise((resolve) => setTimeout(resolve, 90))
+    await input.trigger('keydown', { key: 'Enter' })
+    await nextTick()
+    expect(wrapper.find('.s-table__cell-editor').exists()).toBe(false)
+    expect(
+      (wrapper.emitted('editCommit')![0][0] as TableEditEndParams).updatedRow
+        .name,
+    ).toBe('中文')
+    wrapper.unmount()
+  })
+
+  it('does not horizontally relocate a fully visible cell that was double-clicked in place', async () => {
     const wrapper = mount(Table, {
       props: {
         data,
@@ -164,6 +198,78 @@ describe('table editing integration', () => {
 
     expect(wrapper.find('.s-table__cell-editor').exists()).toBe(true)
     expect(scrollTo).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('minimally reveals an editor that is partially covered by a fixed column', async () => {
+    const wrapper = mount(Table, {
+      props: { data, columns, editConfig: true },
+    })
+    await flushPromises()
+    const scroller = wrapper.get<HTMLElement>('.s-table')
+    const cell = wrapper
+      .findAll('.s-table__data-row')[0]
+      .get<HTMLElement>('[data-column-index="1"]')
+    Object.defineProperties(scroller.element, {
+      clientWidth: { configurable: true, value: 600 },
+      offsetWidth: { configurable: true, value: 600 },
+      scrollWidth: { configurable: true, value: 616 },
+    })
+    scroller.element.scrollLeft = 16
+    vi.spyOn(scroller.element, 'getBoundingClientRect').mockReturnValue({
+      left: 0,
+      right: 600,
+      top: 0,
+      bottom: 200,
+      width: 600,
+      height: 200,
+    } as DOMRect)
+    vi.spyOn(cell.element, 'getBoundingClientRect').mockReturnValue({
+      left: 164,
+      right: 304,
+      top: 44,
+      bottom: 88,
+      width: 140,
+      height: 44,
+    } as DOMRect)
+
+    await cell.trigger('dblclick')
+    await flushPromises()
+
+    expect(wrapper.find('.s-table__cell-editor').exists()).toBe(true)
+    expect(scroller.element.scrollLeft).toBe(0)
+    wrapper.unmount()
+  })
+
+  it('preserves the rendered row height while a cell editor is active', async () => {
+    const wrapper = mount(Table, {
+      props: { data, columns, editConfig: true },
+    })
+    const row = wrapper.findAll('.s-table__data-row')[0]
+    vi.spyOn(row.element, 'getBoundingClientRect').mockReturnValue({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      right: 600,
+      bottom: 72,
+      width: 600,
+      height: 72,
+      toJSON: () => ({}),
+    })
+    const cell = row.get('[data-column-index="0"]')
+
+    await cell.trigger('dblclick')
+    await nextTick()
+
+    expect(row.attributes('style')).toContain('min-height: 72px')
+    expect(wrapper.find('.s-table__cell-editor').exists()).toBe(true)
+
+    await wrapper
+      .get<HTMLInputElement>('.s-table__cell-editor input')
+      .trigger('keydown', { key: 'Escape' })
+    await nextTick()
+    expect(row.attributes('style') ?? '').not.toContain('min-height: 72px')
     wrapper.unmount()
   })
 

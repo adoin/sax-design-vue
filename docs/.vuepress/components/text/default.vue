@@ -1,29 +1,55 @@
 <template>
   <div class="text-demo">
     <div class="text-demo__item">
-      <span class="text-demo__label">Typing / 打字效果</span>
+      <span class="text-demo__label">Effect</span>
+      <div class="text-demo__effects">
+        <div class="text-demo__effect">
+          <span class="text-demo__value">effect = "shimmer"</span>
+          <s-text
+            content="Generating response…"
+            effect="shimmer"
+            status="primary"
+          />
+        </div>
+        <div class="text-demo__effect">
+          <span class="text-demo__value">effect = "rainbow"</span>
+          <s-text content="Spectrum" effect="rainbow" />
+        </div>
+        <div class="text-demo__effect">
+          <span class="text-demo__value">effect = "neon"</span>
+          <s-text content="Neon signal" effect="neon" status="primary" />
+        </div>
+        <div class="text-demo__effect">
+          <span class="text-demo__value">effect = "shadow"</span>
+          <s-text content="Moving shadow" effect="shadow" status="info" />
+        </div>
+      </div>
+    </div>
+
+    <div class="text-demo__item">
+      <span class="text-demo__label">Typing</span>
       <s-text
-        content="像 ChatGPT 一样，让内容随着思路一个字一个字自然出现。"
+        content="Reveal an answer naturally, one character at a time."
+        effect="typing"
         status="primary"
-        :typing="45"
       />
     </div>
 
     <div class="text-demo__item">
-      <span class="text-demo__label">Line clamp / 文本省略</span>
+      <span class="text-demo__label">Line clamp</span>
       <span class="text-demo__value">line-clamp = false</span>
       <s-text
-        content="False 会完整展示文本，不限制行数，也不会添加省略号。"
+        content="False shows the full text without a line limit or ellipsis."
         :line-clamp="false"
       />
       <span class="text-demo__value">line-clamp = 1</span>
       <s-text
-        content="Line clamp 设为 1 时，较长的文字会在同一行末尾自动显示省略号。"
+        content="With line clamp set to 1, long text is truncated on one line with an ellipsis."
         :line-clamp="1"
       />
       <span class="text-demo__value">line-clamp = 2</span>
       <s-text
-        content="Line clamp 设为 2 时，文本最多展示两行，适合需要保持高度稳定的卡片和列表内容。设为 false 时则会完整显示，不进行省略。"
+        content="With line clamp set to 2, text uses at most two lines so cards and list rows can keep a stable height."
         :line-clamp="2"
       />
     </div>
@@ -40,6 +66,22 @@
 .text-demo__item {
   display: grid;
   gap: 10px;
+}
+
+.text-demo__effects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.text-demo__effect {
+  display: grid;
+  align-content: center;
+  gap: 9px;
+  min-height: 74px;
+  padding: 12px;
+  border-radius: var(--sax-radius-sm);
+  background: var(--sax-css-color-gray-1);
 }
 
 .text-demo__label {

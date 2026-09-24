@@ -21,6 +21,8 @@ import {
   useGlobalComponentProps,
   useNamespace,
   useShape,
+  useSize,
+  useSizeProp,
 } from '@vuesax-alpha/hooks'
 import { paginationContextKey } from '@vuesax-alpha/tokens'
 
@@ -43,6 +45,7 @@ type LayoutKey =
   'prev' | 'pager' | 'next' | 'jumper' | '->' | 'total' | 'slot' | 'sizes'
 
 export const paginationProps = buildProps({
+  size: useSizeProp,
   /**
    * @description Component color - Accept Sax Design color tokens, Hex, rgb
    */
@@ -191,6 +194,7 @@ export default defineComponent({
     const resolvedShape = computed(() =>
       shape.value === 'rounded' ? '' : shape.value,
     )
+    const size = useSize()
 
     const vnodeProps = getCurrentInstance()!.vnode.props || {}
 
@@ -464,6 +468,7 @@ export default defineComponent({
           'aria-label': 'pagination',
           class: [
             ns.b(),
+            ns.m(size.value || 'default'),
             ns.is(resolvedShape.value),
             ns.is('buttons-dotted', props.buttonsDotted),
             ns.is('not-margin', props.notMargin),

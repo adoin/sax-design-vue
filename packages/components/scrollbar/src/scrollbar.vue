@@ -84,10 +84,56 @@ const barRef = ref<BarInstance>()
 const ratioY = ref(1)
 const ratioX = ref(1)
 
+const FADE_REVEAL_DISTANCE = 96
+const normalizeFadeDirection = (direction: string) =>
+  ({ t: 'top', b: 'bottom', l: 'left', r: 'right', s: 'start', e: 'end' })[
+    direction
+  ] ?? direction
+const fadeConfig = computed(() => {
+  const value = props.fade
+  if (value === false)
+    return { enabled: false, direction: 'y' as const, size: '0px' }
+  if (value === true)
+    return {
+      enabled: true,
+      direction: 'y' as const,
+      size: 'min(12%, 40px)',
+    }
+  if (typeof value === 'number')
+    return {
+      enabled: true,
+      direction: 'y' as const,
+      size: `${Math.max(0, value)}px`,
+    }
+  if (typeof value === 'string')
+    return {
+      enabled: true,
+      direction: normalizeFadeDirection(value),
+      size: 'min(12%, 40px)',
+    }
+  return {
+    enabled: true,
+    direction: normalizeFadeDirection(value.direction ?? 'y'),
+    size:
+      typeof value.size === 'number'
+        ? `${Math.max(0, value.size)}px`
+        : value.size || 'min(12%, 40px)',
+  }
+})
+const fadeAxes = computed(() => {
+  const direction = fadeConfig.value.direction
+  return {
+    x: ['x', 'left', 'right', 'start', 'end'].includes(direction),
+    y: ['y', 'top', 'bottom'].includes(direction),
+  }
+})
+
 const style = computed<StyleValue>(() => {
   const style: CSSProperties = {}
   if (props.height) style.height = addUnit(props.height)
   if (props.maxHeight) style.maxHeight = addUnit(props.maxHeight)
+  if (fadeConfig.value.enabled)
+    style['--s-scrollbar-fade-size'] = fadeConfig.value.size
   return [props.wrapStyle, style]
 })
 
@@ -96,6 +142,8 @@ const wrapKls = computed(() => {
     props.wrapClass,
     ns.e('wrap'),
     { [ns.em('wrap', 'hidden-default')]: !props.native },
+    ns.is('fade-x', fadeConfig.value.enabled && fadeAxes.value.x),
+    ns.is('fade-y', fadeConfig.value.enabled && fadeAxes.value.y),
   ]
 })
 
@@ -103,9 +151,74 @@ const resizeKls = computed(() => {
   return [ns.e('view'), props.viewClass]
 })
 
+const fadeProgress = (distance: number) =>
+  Math.max(0, Math.min(1, distance / FADE_REVEAL_DISTANCE))
+const updateFade = () => {
+  const element = wrapRef.value
+  if (!element) return
+  const direction = fadeConfig.value.direction
+  const enabled = fadeConfig.value.enabled
+  const rtl =
+    element.matches("[dir='rtl'], [dir='rtl'] *") ||
+    getComputedStyle(element).direction === 'rtl'
+  const maxY = Math.max(0, element.scrollHeight - element.clientHeight)
+  const maxX = Math.max(0, element.scrollWidth - element.clientWidth)
+  const topDistance = Math.max(0, Math.min(element.scrollTop, maxY))
+  const bottomDistance = Math.max(0, maxY - topDistance)
+  const rawLeft = element.scrollLeft
+  const logicalStartDistance = rtl
+    ? rawLeft <= 0
+      ? Math.max(0, Math.min(-rawLeft, maxX))
+      : Math.max(0, Math.min(maxX - rawLeft, maxX))
+    : Math.max(0, Math.min(rawLeft, maxX))
+  const logicalEndDistance = Math.max(0, maxX - logicalStartDistance)
+  const leftDistance = rtl ? logicalEndDistance : logicalStartDistance
+  const rightDistance = rtl ? logicalStartDistance : logicalEndDistance
+  const top = enabled && (direction === 'y' || direction === 'top')
+  const bottom = enabled && (direction === 'y' || direction === 'bottom')
+  const left =
+    enabled &&
+    (direction === 'x' ||
+      direction === 'left' ||
+      (direction === 'start' && !rtl) ||
+      (direction === 'end' && rtl))
+  const right =
+    enabled &&
+    (direction === 'x' ||
+      direction === 'right' ||
+      (direction === 'start' && rtl) ||
+      (direction === 'end' && !rtl))
+
+  element.style.setProperty(
+    '--s-scrollbar-fade-top',
+    top
+      ? `calc(var(--s-scrollbar-fade-size) * ${fadeProgress(topDistance)})`
+      : '0px',
+  )
+  element.style.setProperty(
+    '--s-scrollbar-fade-bottom',
+    bottom
+      ? `calc(var(--s-scrollbar-fade-size) * ${fadeProgress(bottomDistance)})`
+      : '0px',
+  )
+  element.style.setProperty(
+    '--s-scrollbar-fade-left',
+    left
+      ? `calc(var(--s-scrollbar-fade-size) * ${fadeProgress(leftDistance)})`
+      : '0px',
+  )
+  element.style.setProperty(
+    '--s-scrollbar-fade-right',
+    right
+      ? `calc(var(--s-scrollbar-fade-size) * ${fadeProgress(rightDistance)})`
+      : '0px',
+  )
+}
+
 const handleScroll = () => {
   if (wrapRef.value) {
     barRef.value?.handleScroll(wrapRef.value)
+    updateFade()
 
     emit('scroll', {
       scrollTop: wrapRef.value.scrollTop,
@@ -164,6 +277,7 @@ const update = () => {
   sizeHeight.value = height + GAP < offsetHeight ? `${height}px` : ''
   sizeWidth.value = width + GAP < offsetWidth ? `${width}px` : ''
   barRef.value?.handleScroll(wrapRef.value)
+  updateFade()
 }
 const scheduleUpdate = () => {
   if (updateFrame !== undefined) return
@@ -200,6 +314,12 @@ watch(
   },
 )
 
+watch(
+  () => props.fade,
+  () => nextTick(updateFade),
+  { deep: true },
+)
+
 provide(
   scrollbarContextKey,
   reactive({
@@ -208,12 +328,7 @@ provide(
   }),
 )
 
-onMounted(() => {
-  if (!props.native)
-    nextTick(() => {
-      update()
-    })
-})
+onMounted(() => nextTick(update))
 
 onUpdated(scheduleUpdate)
 

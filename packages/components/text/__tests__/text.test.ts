@@ -39,10 +39,40 @@ describe('Text', () => {
     expect(wrapper.attributes('title')).toBeUndefined()
   })
 
+  it('keeps the default effect inert and exposes shimmer as an opt-in class', async () => {
+    const wrapper = mount(Text, {
+      props: { content: 'Generating response' },
+    })
+
+    expect(wrapper.props('effect')).toBe('default')
+    expect(wrapper.classes()).not.toContain('is-shimmer')
+    expect(wrapper.text()).toBe('Generating response')
+
+    await wrapper.setProps({ effect: 'shimmer', status: 'primary' })
+    expect(wrapper.classes()).toContain('is-shimmer')
+    expect(wrapper.classes()).toContain('s-text--primary')
+    expect(wrapper.text()).toBe('Generating response')
+  })
+
+  it.each(['rainbow', 'neon', 'shadow'] as const)(
+    'exposes the %s text effect without changing its accessible text',
+    (effect) => {
+      const wrapper = mount(Text, {
+        props: { content: 'Visual text', effect },
+      })
+
+      expect(wrapper.classes()).toContain(`is-${effect}`)
+      expect(wrapper.text()).toBe('Visual text')
+      expect(wrapper.attributes('data-text')).toBe(
+        effect === 'shadow' ? 'Visual text' : undefined,
+      )
+    },
+  )
+
   it('types content character by character and removes the caret on finish', async () => {
     vi.useFakeTimers()
     const wrapper = mount(Text, {
-      props: { content: '你好', typing: 10 },
+      props: { content: '你好', effect: 'typing' },
     })
     await nextTick()
 
@@ -51,11 +81,11 @@ describe('Text', () => {
     expect(wrapper.attributes('aria-label')).toBe('你好')
     expect(wrapper.attributes('aria-busy')).toBe('true')
 
-    vi.advanceTimersByTime(10)
+    vi.advanceTimersByTime(40)
     await nextTick()
     expect(wrapper.text()).toBe('你')
 
-    vi.advanceTimersByTime(10)
+    vi.advanceTimersByTime(40)
     await nextTick()
     expect(wrapper.text()).toBe('你好')
     expect(wrapper.find('.s-text__typing-caret').exists()).toBe(false)
@@ -65,7 +95,7 @@ describe('Text', () => {
   it('shows the full text immediately when reduced motion is preferred', async () => {
     vi.stubGlobal('matchMedia', () => ({ matches: true }))
     const wrapper = mount(Text, {
-      props: { content: 'Accessible text', typing: true },
+      props: { content: 'Accessible text', effect: 'typing' },
     })
 
     await nextTick()
@@ -76,13 +106,13 @@ describe('Text', () => {
   it('cancels the previous typing run when content changes', async () => {
     vi.useFakeTimers()
     const wrapper = mount(Text, {
-      props: { content: 'Old', typing: 10 },
+      props: { content: 'Old', effect: 'typing' },
     })
     await nextTick()
 
     await wrapper.setProps({ content: 'New' })
     await nextTick()
-    vi.advanceTimersByTime(30)
+    vi.advanceTimersByTime(120)
     await nextTick()
 
     expect(wrapper.text()).toBe('New')

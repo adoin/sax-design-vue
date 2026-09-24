@@ -340,21 +340,23 @@ description: 'Table 的表格式交互功能、配置方式与可运行示例。
 
 <card>
 
-### 树形同级重排
+### 树形跨层重排
 
-树形数据仅在同级之间移动，展开的后代随父节点一起移动；不会把节点重新挂到另一父节点。已加载的懒节点子数组与普通 children 使用相同规则，不请求未加载子节点。重排不会直接修改传入的行对象。下例组合嵌套列、左右固定列、虚拟滚动和动态行高。
+树形行默认仍只在当前同级数组内移动。将 `rowDragConfig.tree` 设为 `true`，或使用对象配置，即可开启跨父节点移动。拖到某行上、下四分之一区域分别插入该行之前、之后。在展开父节点与首个子节点的边界，从子节点顶部进入表示“插入第一个子节点之前”；从父节点底部进入则表示“放到父节点之后”，此时预览线会画在父节点完整可见子树之后，因为那里才是最终显示位置。中间区域使用 `position: 'inside'`，将当前行放到目标节点内部。因此，任意已加载行的中部都可以让原叶子节点变成父节点、继续生成下一层，但仍受 `maxDepth` 与 `dropMethod` 限制。跨深度公共边界 4px 内由横向位置选择较深或较浅目标。子节点语义高亮目标的完整可见分支，同级语义则显示从最终层级开始的插入线。键盘拖拽使用上/下方向键选择目标，右方向键进入目标内部；直接子节点选中父节点后按左方向键，可提升到父节点之后。
+
+树形配置可以分别关闭 `allowReparent` 或 `allowDropInside`，通过 `insidePosition: 'first' | 'last'` 选择子节点插入端，使用从 0 开始的 `maxDepth` 限制完整子树最大深度，并通过 `expandOnDrop` 控制放入后是否展开目标。`draggableMethod` 可读取源节点深度、父节点、展开状态和已加载子节点数量；`dropMethod` 还会得到对应的目标字段，以及 `oldIndex`、`newIndex`、`newParentKey`、`newDepth`、`subtreeDepth`、`reparented`，可据此拒绝锁定目录、非文件夹目标、已满分支或其他业务组合。未加载的懒节点必须先展开并完成加载，才能接收内部落点；拖拽不会隐式请求它。重排只复制受影响的数组与祖先行，不直接修改传入对象。下例优先使用配置式列。
 
 <template #example><table-zh-row-drag-tree /></template>
 
 <template #template>
 
-@[code{29-52}](../../../.vuepress/components/table-zh/row-drag-tree.vue)
+@[code{86-99}](../../../.vuepress/components/table-zh/row-drag-tree.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-27}](../../../.vuepress/components/table-zh/row-drag-tree.vue)
+@[code{1-84}](../../../.vuepress/components/table-zh/row-drag-tree.vue)
 
 </template>
 

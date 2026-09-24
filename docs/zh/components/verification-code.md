@@ -1,6 +1,11 @@
 ---
 description: '使用一个真实输入框完成短信验证码输入，并以无边框视觉格展示。'
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: 设置或继承验证码单元格尺寸与间距。
+    default: null
   - name: shape
     type: String
     values: 'rounded | square'
@@ -78,6 +83,34 @@ EVENTS:
 <template #style>
 
 @[code{43-54}](../../.vuepress/components/verification-code/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><verification-code-zh-size /></template>
+
+<template #template>
+
+@[code{7-13}](../../.vuepress/components/verification-code-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/verification-code-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-20}](../../.vuepress/components/verification-code-zh/size.vue)
 
 </template>
 

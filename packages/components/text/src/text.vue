@@ -6,6 +6,7 @@
     :title="title || tooltipText"
     :aria-label="typingEnabled ? sourceText : undefined"
     :aria-busy="isTyping || undefined"
+    :data-text="effectTextLayer"
   >
     <template v-if="typingEnabled">
       <span aria-hidden="true">{{ displayedContent }}</span>
@@ -42,15 +43,12 @@ const sourceText = computed(() => `${props.content ?? ''}`)
 const clampLines = computed(() =>
   typeof props.lineClamp === 'number' ? props.lineClamp : 0,
 )
-const typingDelay = computed(() =>
-  props.typing === true
-    ? 40
-    : typeof props.typing === 'number'
-      ? props.typing
-      : 0,
-)
+const typingDelay = computed(() => (props.effect === 'typing' ? 40 : 0))
 const typingEnabled = computed(
   () => typingDelay.value > 0 && sourceText.value.length > 0,
+)
+const effectTextLayer = computed(() =>
+  props.effect === 'shadow' && sourceText.value ? sourceText.value : undefined,
 )
 
 const classes = computed(() => [
@@ -59,6 +57,10 @@ const classes = computed(() => [
   ns.is('ellipsis', clampLines.value === 1),
   ns.is('clamp', clampLines.value > 1),
   ns.is('typing', typingEnabled.value),
+  ns.is('shimmer', props.effect === 'shimmer'),
+  ns.is('rainbow', props.effect === 'rainbow'),
+  ns.is('neon', props.effect === 'neon'),
+  ns.is('shadow', props.effect === 'shadow'),
 ])
 const style = computed<CSSProperties>(() =>
   clampLines.value > 1 ? { WebkitLineClamp: clampLines.value } : {},
@@ -112,7 +114,7 @@ const startTyping = async () => {
   typingTimer = setTimeout(typeNextCharacter, typingDelay.value)
 }
 
-watch([sourceText, () => props.typing], () => {
+watch([sourceText, () => props.effect], () => {
   if (isMounted) startTyping()
 })
 

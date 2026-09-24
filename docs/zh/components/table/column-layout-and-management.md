@@ -30,7 +30,7 @@ description: 'Table 的列布局与管理功能、配置方式与可运行示例
 
 <template #style>
 
-@[code{56-66}](../../../.vuepress/components/table-zh/fixed-columns.vue)
+@[code{56-69}](../../../.vuepress/components/table-zh/fixed-columns.vue)
 
 </template>
 

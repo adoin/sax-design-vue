@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: Set or inherit the control size.
+    default: null
   - name: shape
     type: String
     values: 'rounded | square'
@@ -185,6 +190,34 @@ Bind text with `v-model` for controlled input.
 <template #script>
 
 @[code{9-12}](../.vuepress/components/textarea/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><textarea-size /></template>
+
+<template #template>
+
+@[code{7-13}](../.vuepress/components/textarea/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/textarea/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../.vuepress/components/textarea/size.vue)
 
 </template>
 

@@ -3,8 +3,10 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { STableColumn } from '@vuesax-alpha/components/table'
 import { SInput } from '@vuesax-alpha/components/input'
+import ConfigProvider from '../../config-provider/src/config-provider'
 import Table from '../src/table.vue'
 import TableCore from '../src/table-core.vue'
+import TableHeaderCell from '../src/table-header-cell.vue'
 import { tableRenderer } from '../src/table-renderer'
 import type {
   TableColumn,
@@ -58,6 +60,7 @@ beforeEach(() => {
 })
 afterEach(() => {
   tableRenderer.delete('$toolbarTest')
+  tableRenderer.delete('$sizeProbe')
   vi.unstubAllGlobals()
   if (scrollDescriptor)
     Object.defineProperty(
@@ -351,6 +354,53 @@ describe('Table business configuration', () => {
     root.unmount()
   })
 
+  it('orders fixed query buttons and reveals hidden items through more', async () => {
+    const model = reactive({ term: 'initial', owner: 'Alex' })
+    const root = mount(Table, {
+      props: {
+        data: rows,
+        columns,
+        queryConfig: {
+          model,
+          fixedButtons: ['reset', 'more', 'submit'],
+          items: [
+            { ...items[0], rules: undefined },
+            {
+              field: 'owner',
+              title: 'Owner',
+              visible: false,
+              itemRender: { name: 'SInput', component: SInput },
+            },
+          ],
+        },
+      },
+    })
+    const actions = () =>
+      root
+        .findAll('[data-query-action]')
+        .map((button) => button.attributes('data-query-action'))
+
+    expect(actions()).toEqual(['reset', 'more', 'submit'])
+    expect(
+      root.findAll('.s-table-shell__query-form .s-form-item'),
+    ).toHaveLength(1)
+    await root.get('[data-query-action="more"]').trigger('click')
+    expect(
+      root.get('[data-query-action="more"]').attributes('aria-expanded'),
+    ).toBe('true')
+    expect(
+      root.findAll('.s-table-shell__query-form .s-form-item'),
+    ).toHaveLength(2)
+    const inputs = root.findAll('.s-table-shell__query-form input')
+    await inputs[0].setValue('changed')
+    await inputs[1].setValue('Morgan')
+    await root.get('[data-query-action="more"]').trigger('click')
+    await root.get('[data-query-action="reset"]').trigger('click')
+    await flushPromises()
+    expect(model).toEqual({ term: 'initial', owner: 'Alex' })
+    root.unmount()
+  })
+
   it('waits for controlled page acceptance before emitting a search', async () => {
     const pager = ref<TablePagerConfig>({ currentPage: 2, pageSize: 1 })
     const api = shallowRef<TableExposes>()
@@ -529,6 +579,10 @@ describe('Table business configuration', () => {
       ),
     ).find((button) => button.textContent?.includes('Delete'))
     expect(deleteAction).toBeDefined()
+    expect(deleteAction!.classList.contains('s-button__size--default')).toBe(
+      true,
+    )
+    expect(deleteAction!.classList.contains('s-button__size--mini')).toBe(false)
     deleteAction!.click()
     await vi.waitFor(() =>
       expect(root.emitted('toolbarClick')?.at(-1)?.[0]).toBe('delete'),
@@ -540,6 +594,131 @@ describe('Table business configuration', () => {
         reason: 'refresh',
       }),
     )
+    root.unmount()
+  })
+
+  it('inherits size by table layer and lets renderer props override it', async () => {
+    const seen: Record<string, { params: unknown; props: unknown }> = {}
+    tableRenderer.add('$sizeProbe', {
+      renderDefault: (options, params) => {
+        seen.default = { params: params.size, props: options.props?.size }
+        return h('span', { class: 'size-default' }, String(params.value))
+      },
+      renderEdit: (options, params) => {
+        seen.edit = { params: params.size, props: options.props?.size }
+        return h('input', { class: 'size-edit' })
+      },
+      renderFormItem: (options, params) => {
+        seen.form = { params: params.size, props: options.props?.size }
+        return h('span', { class: 'size-form' })
+      },
+      renderFilter: (options, params) => {
+        seen.filter = { params: params.size, props: options.props?.size }
+        return h('span', { class: 'size-filter' })
+      },
+      renderToolbar: (options, params) => {
+        seen.toolbar = { params: params.size, props: options.props?.size }
+        return h('span', { class: 'size-toolbar' })
+      },
+    })
+    const root = mount(Table, {
+      props: {
+        size: 'large',
+        data: rows.slice(0, 1),
+        columns: [
+          {
+            field: 'name',
+            title: 'Name',
+            editor: true,
+            renderer: { name: '$sizeProbe', props: { size: 'small' } },
+            filterRender: {
+              name: '$sizeProbe',
+              props: { size: 'small' },
+            },
+          },
+        ],
+        editConfig: { mode: 'cell', trigger: 'manual' },
+        queryConfig: {
+          size: 'small',
+          model: { term: '' },
+          items: [
+            {
+              field: 'term',
+              itemRender: {
+                name: '$sizeProbe',
+                props: { size: 'large' },
+              },
+            },
+          ],
+        },
+        toolbarConfig: {
+          size: 'small',
+          left: [
+            {
+              itemRender: '$sizeProbe',
+              props: { size: 'large' },
+            },
+            { itemRender: '$refresh' },
+            { itemRender: '$columnConfig' },
+          ],
+        },
+      },
+    })
+    await flushPromises()
+    expect(seen.default).toEqual({ params: 'large', props: 'small' })
+    expect(seen.form).toEqual({ params: 'small', props: 'large' })
+    expect(seen.toolbar).toEqual({ params: 'small', props: 'large' })
+    expect(root.get('.s-form').classes()).toContain('s-form--small')
+    expect(root.get('.s-table').classes()).toContain('s-table--large')
+    expect(
+      root
+        .findAll('.s-table-shell__query-fixed-buttons .s-button')
+        .every((button) => button.classes().includes('s-button__size--small')),
+    ).toBe(true)
+    expect(
+      root
+        .get('.s-table__column-manager-trigger')
+        .classes()
+        .includes('s-button__size--small'),
+    ).toBe(true)
+    expect(
+      root
+        .findAll('.s-table-shell__toolbar .s-button')
+        .every((button) => button.classes().includes('s-button__size--small')),
+    ).toBe(true)
+
+    expect(await root.vm.startEdit(0, 'name')).toBe(true)
+    await nextTick()
+    expect(seen.edit).toEqual({ params: 'large', props: 'small' })
+
+    const popper = root
+      .getComponent(TableHeaderCell)
+      .getComponent({ name: 'SPopper' })
+    popper.vm.$emit('update:visible', true)
+    await flushPromises()
+    expect(seen.filter).toEqual({ params: 'large', props: 'small' })
+    root.unmount()
+  })
+
+  it('uses the global Table size when no component size is declared', () => {
+    const root = mount(ConfigProvider, {
+      props: {
+        size: 'large',
+        table: { size: 'small' },
+      },
+      slots: {
+        default: () =>
+          h(Table, {
+            toolbarConfig: { right: [{ itemRender: '$refresh' }] },
+          }),
+      },
+    })
+    expect(
+      root
+        .get('.s-table-shell__right .s-button')
+        .classes()
+        .includes('s-button__size--small'),
+    ).toBe(true)
     root.unmount()
   })
 
@@ -612,6 +791,7 @@ describe('Table business configuration', () => {
         columns,
         queryConfig: {
           model,
+          fixedButtons: [],
           items: [{ field: 'term', slots: { default: 'businessTerm' } }],
         },
       },
@@ -640,5 +820,51 @@ describe('Table business configuration', () => {
     expect(root.emitted('query')).toHaveLength(1)
     expect(root.findAll('.s-table__data-row b')).toHaveLength(3)
     root.unmount()
+  })
+
+  it('inherits global fixed query buttons and lets an empty local list remove them', () => {
+    const model = reactive({ term: '' })
+    const withoutLocal = mount(ConfigProvider, {
+      props: { table: { queryConfig: { fixedButtons: ['reset'] } } },
+      slots: {
+        default: () => h(Table, { data: rows, columns }),
+      },
+    })
+    expect(withoutLocal.find('.s-table-shell__query').exists()).toBe(false)
+    withoutLocal.unmount()
+
+    const configured = mount(ConfigProvider, {
+      props: { table: { queryConfig: { fixedButtons: ['reset'] } } },
+      slots: {
+        default: () =>
+          h(Table, {
+            data: rows,
+            columns,
+            queryConfig: { model, items },
+          }),
+      },
+    })
+    expect(
+      configured
+        .findAll('[data-query-action]')
+        .map((button) => button.attributes('data-query-action')),
+    ).toEqual(['reset'])
+    configured.unmount()
+
+    const local = mount(ConfigProvider, {
+      props: { table: { queryConfig: { fixedButtons: ['reset'] } } },
+      slots: {
+        default: () =>
+          h(Table, {
+            data: rows,
+            columns,
+            queryConfig: { model, items, fixedButtons: [] },
+          }),
+      },
+    })
+    expect(local.find('.s-table-shell__query-fixed-buttons').exists()).toBe(
+      false,
+    )
+    local.unmount()
   })
 })

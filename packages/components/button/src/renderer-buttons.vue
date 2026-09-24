@@ -52,6 +52,7 @@ const run = (action: RendererButtonAction, event: MouseEvent) => {
       v-for="action in inlineActions"
       :key="action.code"
       v-bind="action.props"
+      :size="action.props?.size || options.size || undefined"
       :disabled="disabledFor(action)"
       :loading="loadingFor(action)"
       @click="run(action, $event)"
@@ -72,13 +73,13 @@ const run = (action: RendererButtonAction, event: MouseEvent) => {
     >
       <Button
         type="transparent"
-        size="mini"
+        :size="options.size || undefined"
         icon
         :aria-label="options.moreText ?? 'More actions'"
         :aria-expanded="open"
       >
         <SIcon
-          :name="options.moreIcon ?? 'cb:overflow-menu-horizontal'"
+          :name="options.moreIcon ?? 'cb:overflow-menu-vertical'"
           aria-hidden="true"
         />
       </Button>
@@ -88,9 +89,10 @@ const run = (action: RendererButtonAction, event: MouseEvent) => {
             v-for="action in overflowActions"
             :key="action.code"
             v-bind="action.props"
-            type="transparent"
-            size="mini"
-            block
+            :type="action.props?.type ?? 'transparent'"
+            :size="action.props?.size || options.size || undefined"
+            :color="action.props?.color ?? 'dark'"
+            :block="action.props?.block ?? true"
             role="menuitem"
             :disabled="disabledFor(action)"
             :loading="loadingFor(action)"

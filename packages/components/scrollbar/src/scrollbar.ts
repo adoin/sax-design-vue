@@ -2,6 +2,30 @@ import { buildProps, definePropType, isNumber } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes, StyleValue } from 'vue'
 import type Scrollbar from './scrollbar.vue'
 
+export const scrollbarFadeDirections = [
+  'y',
+  'x',
+  'top',
+  'bottom',
+  'left',
+  'right',
+  'start',
+  'end',
+  't',
+  'b',
+  'l',
+  'r',
+  's',
+  'e',
+] as const
+export type ScrollbarFadeDirection = (typeof scrollbarFadeDirections)[number]
+export interface ScrollbarFadeOptions {
+  direction?: ScrollbarFadeDirection
+  size?: number | string
+}
+export type ScrollbarFade =
+  boolean | number | ScrollbarFadeDirection | ScrollbarFadeOptions
+
 export const scrollbarProps = buildProps({
   /** @description placement of custom scrollbar tracks relative to the viewport */
   placement: {
@@ -34,6 +58,25 @@ export const scrollbarProps = buildProps({
   native: {
     type: Boolean,
     default: false,
+  },
+  /** @description scroll-aware content edge fade */
+  fade: {
+    type: definePropType<ScrollbarFade>([Boolean, Number, String, Object]),
+    default: false,
+    validator: (value: ScrollbarFade) => {
+      if (typeof value === 'boolean') return true
+      if (typeof value === 'number') return Number.isFinite(value) && value >= 0
+      if (typeof value === 'string')
+        return scrollbarFadeDirections.includes(value as ScrollbarFadeDirection)
+      return (
+        (!value.direction ||
+          scrollbarFadeDirections.includes(value.direction)) &&
+        (value.size == null ||
+          (typeof value.size === 'number'
+            ? Number.isFinite(value.size) && value.size >= 0
+            : typeof value.size === 'string'))
+      )
+    },
   },
   /**
    * @description style of wrap

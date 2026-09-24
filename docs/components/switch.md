@@ -1,6 +1,11 @@
 ---
 description: 'Toggle a boolean setting between two states.'
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: Set or inherit the switch track and thumb size.
+    default: null
   - name: variant
     type: String
     values: 'classic | soft | text'
@@ -213,6 +218,34 @@ Use `variant` to choose a classic moving knob, a soft inset control, or a text s
 <template #style>
 
 @[code{37-49}](../.vuepress/components/switch/variants.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><switch-size /></template>
+
+<template #template>
+
+@[code{7-13}](../.vuepress/components/switch/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/switch/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../.vuepress/components/switch/size.vue)
 
 </template>
 

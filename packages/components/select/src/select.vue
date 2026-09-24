@@ -52,6 +52,7 @@
           <s-tag
             v-for="(item, cIndex) in showTagList"
             :key="cIndex + 'tag'"
+            :size="resolvedSize"
             :shape="resolvedShape"
             :disabled="selectDisabled || item.isDisabled"
             :hit="item.hit"
@@ -63,6 +64,7 @@
           <s-tag
             v-if="hasCollapsedTags"
             :show-close="false"
+            :size="resolvedSize"
             :shape="resolvedShape"
             :hit="collapseTagList.some((item) => item.hit)"
           >
@@ -79,6 +81,7 @@
               v-for="(item, measureIndex) in selectedArray"
               :key="`${measureIndex}-measure`"
               data-select-measure-tag
+              :size="resolvedSize"
               :shape="resolvedShape"
               :disabled="selectDisabled || item.isDisabled"
             >
@@ -87,6 +90,7 @@
             <s-tag
               data-select-measure-overflow
               :show-close="false"
+              :size="resolvedSize"
               :shape="resolvedShape"
             >
               + {{ selectedArray.length }}
@@ -478,6 +482,7 @@ import {
   useLocale,
   useNamespace,
   useShape,
+  useSize,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { escapeStringRegexp, getVsColor, isClient } from '@vuesax-alpha/utils'
@@ -503,6 +508,7 @@ const props = defineProps(selectProps)
 const emit = defineEmits(selectEmits)
 const ns = useNamespace('select')
 const resolvedShape = useShape()
+const resolvedSize = useSize()
 const { t } = useLocale()
 const slots = useSlots()
 
@@ -520,6 +526,7 @@ const baseComponentClasses = useVuesaxBaseComponent(color)
 const popperClass = computed(() =>
   [
     ns.e('content'),
+    ns.em('content', resolvedSize.value || 'default'),
     ns.is('square', resolvedShape.value === 'square'),
     ...baseComponentClasses,
     popupConfig.value.className,
@@ -1150,6 +1157,7 @@ const selectKls = computed(() => [
   ns.is('block', props.block),
 
   ns.b(),
+  ns.m(resolvedSize.value || 'default'),
   ns.em('state', props.state),
   ns.is('open', dropMenuVisible.value),
   ns.is('hovering', states.mouseEnter),

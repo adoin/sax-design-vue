@@ -1,4 +1,14 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs'
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  utimesSync,
+  writeFileSync,
+} from 'node:fs'
+import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { resolveTitleFromToken } from '@mdit-vue/shared'
 import { createMarkdown } from '@vuepress/markdown'
@@ -60,6 +70,47 @@ const slugs = (items: ReturnType<typeof headings>) =>
   items.map((item) => item.slug)
 
 describe('localized documentation heading slugs', () => {
+  it('refreshes canonical slugs when the English headings change during development', () => {
+    const temporaryDocsRoot = mkdtempSync(
+      path.resolve(tmpdir(), 'sax-heading-slugs-'),
+    )
+    const englishFile = path.resolve(temporaryDocsRoot, 'card.md')
+    const chineseFile = path.resolve(temporaryDocsRoot, 'zh/card.md')
+    mkdirSync(path.dirname(chineseFile), { recursive: true })
+    writeFileSync(chineseFile, '# Card\n\n## 默认\n\n## 经典图文\n')
+    writeFileSync(englishFile, '# Card\n\n## Types\n\n## Default\n')
+
+    const localMarkdown = createMarkdown({
+      anchor: {
+        slugifyWithState: createLocalizedHeadingSlugify(temporaryDocsRoot),
+      },
+      assets: false,
+      emoji: false,
+      headers: false,
+      importCode: false,
+      links: false,
+      sfc: false,
+      title: false,
+      toc: false,
+      vPre: false,
+    })
+    const readSlugs = () =>
+      localMarkdown
+        .parse(readFileSync(chineseFile, 'utf8'), { filePath: chineseFile })
+        .filter((token) => token.type === 'heading_open')
+        .map((token) => token.attrGet('id'))
+
+    try {
+      expect(readSlugs()).toEqual(['card', 'types', 'default'])
+      writeFileSync(englishFile, '# Card\n\n## Default\n\n## Classic\n')
+      const changedTime = new Date(Date.now() + 5000)
+      utimesSync(englishFile, changedTime, changedTime)
+      expect(readSlugs()).toEqual(['card', 'default', 'classic'])
+    } finally {
+      rmSync(temporaryDocsRoot, { recursive: true, force: true })
+    }
+  })
+
   it('uses the English heading values for every paired Chinese document', () => {
     for (const zhFile of markdownFiles(zhRoot)) {
       const canonicalFile = path.resolve(

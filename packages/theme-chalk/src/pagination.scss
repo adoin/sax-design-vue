@@ -350,6 +350,21 @@
       width: 100px;
     }
   }
+
+  @include m(large) {
+    .btn-prev,
+    .btn-next,
+    .#{$namespace}-pager button {
+      min-width: 40px;
+      height: 40px;
+      font-size: 16px;
+      line-height: 40px;
+    }
+
+    .#{$namespace}-select {
+      --sax-select-control-height: 40px;
+    }
+  }
 }
 
 @include b(pager) {

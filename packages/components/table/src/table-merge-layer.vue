@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, shallowRef, watch } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { layoutTableMergeBoxes } from './composables/table-merge-geometry'
 import type { TableMergeBox } from './composables/table-merge-geometry'
@@ -12,6 +12,7 @@ const props = defineProps<{
   footer: TableMergeIndex
   bodyHost?: HTMLElement | null
   rangeSelected?: (surface: TableMergeSurface) => boolean
+  active?: (surface: TableMergeSurface) => boolean
 }>()
 export interface TableMergeSurface extends TableMergeBox {
   area: 'body' | 'footer'
@@ -32,6 +33,16 @@ const surfaces = computed<TableMergeSurface[]>(() => {
   }
   return result
 })
+const hoveredRegion = shallowRef<string>()
+const regionIdentity = (surface: TableMergeSurface) =>
+  `${surface.area}:${surface.region.key}`
+watch(surfaces, (value) => {
+  if (
+    hoveredRegion.value &&
+    !value.some((surface) => regionIdentity(surface) === hoveredRegion.value)
+  )
+    hoveredRegion.value = undefined
+})
 </script>
 
 <template>
@@ -47,7 +58,9 @@ const surfaces = computed<TableMergeSurface[]>(() => {
         :class="[
           ns.e('merge-fragment'),
           ns.is('footer-merge', surface.area === 'footer'),
+          ns.is('merge-hovered', hoveredRegion === regionIdentity(surface)),
           ns.is('range-cell', rangeSelected?.(surface)),
+          ns.is('active-cell', active?.(surface)),
         ]"
         :style="{
           left: `${surface.left + (bodyHost && surface.area === 'body' ? bodyHost.scrollLeft - geometry.body.clip.left : 0)}px`,
@@ -61,6 +74,12 @@ const surfaces = computed<TableMergeSurface[]>(() => {
         :data-merge-col-start="surface.colStart"
         :aria-hidden="surface.primary ? undefined : true"
         role="presentation"
+        @mouseenter="hoveredRegion = regionIdentity(surface)"
+        @mouseleave="
+          hoveredRegion === regionIdentity(surface)
+            ? (hoveredRegion = undefined)
+            : undefined
+        "
         @click="!surface.primary && emit('continuationClick', surface, $event)"
         @dblclick="
           !surface.primary && emit('continuationDblclick', surface, $event)

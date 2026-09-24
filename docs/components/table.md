@@ -3,6 +3,11 @@ description: 'Data tables with sorting, filtering, pagination, tree data and vir
 API_TITLES:
   RENDERERS: Renderers
 PROPS:
+  - name: 'size'
+    type: 'ComponentSize'
+    description: 'Default size for Table controls and renderers. query-config.size and toolbar-config.size override their regions; an individual renderer props.size overrides its region.'
+    default: null
+    usage: '/components/table/query-forms-and-request-proxy.html#query-and-toolbar'
   - name: 'row'
     type: 'TableRow | TableRow[] | null'
     description: 'Deprecated named selection model; migrate to v-model:highlight. An explicit highlight takes precedence.'
@@ -70,7 +75,7 @@ PROPS:
     usage: '/components/table/spreadsheet-interactions.html#keyboard-navigation'
   - name: 'row-drag-config'
     type: 'Boolean | TableRowDragConfig'
-    description: 'Enable row dragging, predicates, edge scrolling and controlled adapters.'
+    description: 'Enable row dragging, tree reparenting and inside drops, rich predicates, edge scrolling and controlled adapters.'
     default: false
     usage: '/components/table/spreadsheet-interactions.html#row-reordering'
   - name: 'history-config'
@@ -280,12 +285,12 @@ PROPS:
     usage: '/components/table/query-forms-and-request-proxy.html#request-proxy'
   - name: 'query-config'
     type: 'Boolean | TableQueryConfig<QueryForm>'
-    description: 'Query form configuration, including SForm model, items, rules and layout.'
+    description: 'Query form configuration, including size, SForm model, items and rules plus the fixedButtons action region.'
     default: false
     usage: '/components/table/query-forms-and-request-proxy.html#query-and-toolbar'
   - name: 'toolbar-config'
     type: 'Boolean | TableToolbarConfig<Row, QueryForm>'
-    description: 'Toolbar title and ordered left/right renderer lists; built-ins include button, $refresh and $columnConfig.'
+    description: 'Toolbar size, title and ordered left/right renderer lists; built-ins include button, $refresh and $columnConfig.'
     default: false
     usage: '/components/table/query-forms-and-request-proxy.html#query-and-toolbar'
 CHILD_PROPS:
@@ -844,8 +849,8 @@ SLOTS:
     usage: '/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
   - name: 'query-actions'
     type: Slot
-    scope: "TableExposes & { busy: boolean }"
-    description: 'Replace query actions; receives query, resetQuery, refresh, busy and other Table methods.'
+    scope: "TableExposes & TableQueryActionsState & { busy: boolean }"
+    description: 'Replace the fixed query action region; receives Table methods, busy, expanded, hasMore and toggleMore().'
     default: null
     usage: '/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
   - name: 'toolbar_left'

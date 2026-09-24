@@ -1,6 +1,12 @@
 ---
 description: 'Choose one or more values from a searchable option list.'
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: Set the trigger and inherited form-control density.
+    default: null
+    usage: '#default'
   - name: label-float
     type: Boolean
     values: 'true | false'
@@ -439,13 +445,13 @@ EVENTS:
 SLOTS:
   - name: header
     type: Slot
-    scope: "{ query: string; selectedCount: number; filteredCount: number; totalCount: number; actions: { selectAll: () => void; invert: () => void; clear: () => void } }"
+    scope: "{ query: string; selectedCount: number }"
     description: Customize popup header, bulk tools and footer. The footer exposes state and actions without built-in refresh behavior.
     default: null
     usage: '#multiple-selection-tools'
   - name: tools
     type: Slot
-    scope: "{ query: string; selectedCount: number }"
+    scope: "{ query: string; selectedCount: number; filteredCount: number; totalCount: number; actions: { selectAll: () => void; invert: () => void; clear: () => void } }"
     description: Customize popup header, bulk tools and footer. The footer exposes state and actions without built-in refresh behavior.
     default: null
     usage: '#multiple-selection-tools'
@@ -492,17 +498,17 @@ SLOTS:
           Nodejs
         </s-option>
       </s-select>
----
-
-# Select
-
-<card>
-
   - name: option
     type: Slot
     scope: "{ option: SelectDataOption; group?: SelectDataOption }"
     description: Customize an option's content; group is available for grouped options.
     default: null
+
+---
+
+# Select
+
+<card>
 
 ## Default
 
@@ -557,6 +563,34 @@ Use `shape="square"` to keep the trigger, selected tags, options, and popup surf
 <template #style>
 
 @[code{35-47}](../.vuepress/components/select/shape.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Use `size` for the shared `small`, `default`, and `large` control scale. An omitted value inherits the nearest Form, Control Group, or Config Provider size.
+
+<template #example><select-size /></template>
+
+<template #template>
+
+@[code{11-31}](../.vuepress/components/select/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-9}](../.vuepress/components/select/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{33-40}](../.vuepress/components/select/size.vue)
 
 </template>
 

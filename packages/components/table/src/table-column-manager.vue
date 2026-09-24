@@ -9,6 +9,8 @@ import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import TableColumnSetting from './table-column-setting.vue'
 import TableColumnSettingBranch from './table-column-setting-branch.vue'
 import type { VirtualListInstance } from '@vuesax-alpha/components/virtual-list'
+import type { ButtonInstance } from '@vuesax-alpha/components/button'
+import type { TableSize } from './table-business'
 import type {
   ManagedColumn,
   useTableColumnManager,
@@ -17,6 +19,7 @@ import type {
 const props = defineProps<{
   manager: ReturnType<typeof useTableColumnManager>
   disabled: boolean
+  size: TableSize
 }>()
 const ns = useNamespace('table')
 const shape = useShape()
@@ -35,7 +38,7 @@ const nestedVisibility = (visible: boolean) => {
 }
 onBeforeUnmount(() => clearTimeout(nestedCloseTimer))
 const canClose = () => !nestedOpen
-const trigger = shallowRef<HTMLButtonElement>()
+const trigger = shallowRef<ButtonInstance>()
 const panel = shallowRef<HTMLElement>()
 const list = shallowRef<VirtualListInstance>()
 const fixedOptions = computed(() => [
@@ -115,7 +118,7 @@ const togglePanel = () => {
 const afterHide = () => {
   // The popper may retain its trapped content until the leave transition ends.
   if (restoreTriggerFocus && !open.value && !props.disabled)
-    trigger.value?.focus()
+    trigger.value?.$el?.focus()
   restoreTriggerFocus = false
 }
 const focusPanel = () => {
@@ -411,10 +414,12 @@ watch(panelContentReady, (ready) => {
       @show="focusPanel"
       @hide="afterHide"
     >
-      <button
+      <SButton
         ref="trigger"
-        type="button"
         :class="ns.e('column-manager-trigger')"
+        :size="size"
+        flat
+        :debounce="false"
         :disabled="disabled"
         :aria-expanded="open"
         aria-haspopup="dialog"
@@ -422,7 +427,7 @@ watch(panelContentReady, (ready) => {
       >
         <SIcon name="cb:settings" aria-hidden="true" />
         {{ t('vs.table.columnSettings') }}
-      </button>
+      </SButton>
       <template #content>
         <SFocusTrap
           :trapped="open"
@@ -557,12 +562,12 @@ watch(panelContentReady, (ready) => {
             <div :class="ns.e('column-panel-actions')">
               <SButton
                 type="flat"
-                size="small"
+                :size="size"
                 :disabled="disabled || !manager.state.value.length"
                 @click="manager.reset()"
                 >{{ t('vs.table.resetColumns') }}</SButton
               >
-              <SButton size="small" @click="close">{{
+              <SButton :size="size" @click="close">{{
                 t('vs.common.close')
               }}</SButton>
             </div>

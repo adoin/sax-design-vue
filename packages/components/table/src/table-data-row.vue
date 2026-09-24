@@ -1,31 +1,35 @@
 <template>
   <div
+    ref="row"
     :class="[
       ns.e('data-row'),
       ns.is('selected', selected),
       ns.is('striped-row', striped && displayIndex % 2 === 1),
       ns.is('dragging-row', drag?.session.value?.key === flatRow.key),
+      ns.is('drop-before', dropPreview?.position === 'before'),
+      ns.is('drop-after', dropPreview?.position === 'after'),
       ns.is(
-        'drop-before',
+        'drop-inside',
         drag?.session.value?.targetKey === flatRow.key &&
-          drag.session.value.position === 'before',
+          drag.session.value.position === 'inside',
       ),
-      ns.is(
-        'drop-after',
-        drag?.session.value?.targetKey === flatRow.key &&
-          drag.session.value.position === 'after',
-      ),
+      ns.is('drop-inside-group', dropInsideGroup),
+      ns.is('drop-inside-start', dropInsideStart),
+      ns.is('drop-inside-end', dropInsideEnd),
       resolvedRowClass,
     ]"
     role="row"
-    :style="
-      minimumHeight == null ? undefined : { minHeight: `${minimumHeight}px` }
-    "
+    :style="rowStyle"
     :data-table-row-index="displayIndex"
     :aria-selected="selected"
     :aria-rowindex="rowOffset == null ? undefined : displayIndex + rowOffset"
     @click="handleRowClick"
   >
+    <div
+      v-if="dropPreview && dropPreview.position !== 'inside'"
+      :class="ns.e('drop-indicator')"
+      aria-hidden="true"
+    />
     <template v-for="entry in entries" :key="entry.key">
       <div
         v-if="entry.kind === 'spacer'"
@@ -297,7 +301,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeUnmount } from 'vue'
+import {
+  computed,
+  onBeforeUnmount,
+  shallowRef,
+  useTemplateRef,
+  watch,
+} from 'vue'
 import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 import { SCheckbox } from '@vuesax-alpha/components/checkbox'
 import { SRadio } from '@vuesax-alpha/components/radio'
@@ -374,6 +384,24 @@ const emit = defineEmits<{
 const ns = useNamespace('table')
 const { t } = useLocale()
 const tableAlign = useTableAlignContext()
+const rowRef = useTemplateRef<HTMLElement>('row')
+const editingMinimumHeight = shallowRef<number>()
+const editingSession = computed(() => {
+  const active = props.editing?.active.value
+  return active?.rowKey === props.flatRow.key ? active.id : undefined
+})
+watch(
+  editingSession,
+  (session) => {
+    if (session == null) {
+      editingMinimumHeight.value = undefined
+      return
+    }
+    const height = rowRef.value?.getBoundingClientRect().height
+    editingMinimumHeight.value = height && height > 0 ? height : undefined
+  },
+  { flush: 'sync' },
+)
 const overflowMode = (column: TableColumn) =>
   tableOverflowMode(column.showOverflow ?? props.overflow)
 
@@ -392,6 +420,47 @@ const resolvedRowClass = computed(() =>
     ? props.rowClass(props.flatRow)
     : props.rowClass,
 )
+const dropSession = computed(() => props.drag?.session.value)
+const dropPreview = computed(() => {
+  const session = dropSession.value
+  return session?.indicator === props.displayIndex ? session.preview : undefined
+})
+const dropInsideGroup = computed(() => {
+  const session = dropSession.value
+  return Boolean(
+    session?.preview?.position === 'inside' &&
+    session.target != null &&
+    props.displayIndex >= session.target &&
+    props.displayIndex <= (session.subtreeEnd ?? session.target),
+  )
+})
+const dropInsideStart = computed(
+  () =>
+    dropInsideGroup.value && dropSession.value?.target === props.displayIndex,
+)
+const dropInsideEnd = computed(
+  () =>
+    dropInsideGroup.value &&
+    (dropSession.value?.subtreeEnd ?? dropSession.value?.target) ===
+      props.displayIndex,
+)
+const rowStyle = computed(() => {
+  const preview =
+    dropPreview.value ??
+    (dropInsideGroup.value ? dropSession.value?.preview : undefined)
+  const minimumHeight = Math.max(
+    props.minimumHeight ?? 0,
+    editingMinimumHeight.value ?? 0,
+  )
+  return {
+    ...(minimumHeight ? { minHeight: `${minimumHeight}px` } : {}),
+    ...(preview
+      ? {
+          '--s-table-drop-indent': `${12 + preview.newDepth * props.indent}px`,
+        }
+      : {}),
+  }
+})
 
 const getValue = (column: TableColumn) => {
   if (column.type === 'seq')

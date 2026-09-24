@@ -1,16 +1,16 @@
+<script setup lang="ts">
+import { reactive } from 'vue'
+
+const values = reactive({ large: 2, default: 2, small: 2 })
+</script>
+
 <template>
   <div class="demo-rate center">
-    <s-rate v-model="value" size="large" />
-    <s-rate v-model="value" />
-    <s-rate v-model="value" size="small" />
+    <s-rate v-model="values.large" size="large" />
+    <s-rate v-model="values.default" />
+    <s-rate v-model="values.small" size="small" />
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-
-const value = ref(2)
-</script>
 
 <style scoped lang="scss">
 .demo-rate {

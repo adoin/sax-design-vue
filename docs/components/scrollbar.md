@@ -1,23 +1,23 @@
 ---
-description: "Provide styled scroll areas with programmatic scroll control."
+description: 'Provide styled scroll areas with programmatic scroll control.'
 PROPS:
   - name: placement
     type: String
-    values: "inside, outside"
+    values: 'inside, outside'
     description: Custom track placement. outside reserves space beside the viewport; ignored in native mode.
     default: inside
     usage: '#outside-scrollbars'
 
   - name: gap
     type: Number
-    values: "number"
+    values: 'number'
     description: Gap in pixels between outside tracks and the viewport. Negative values are clamped to zero.
     default: 6
     usage: '#outside-scrollbars'
 
   - name: height
     type: String, Number
-    values: "number"
+    values: 'number'
     description: height of scrollbar
     default:
     link: null
@@ -26,7 +26,7 @@ PROPS:
 
   - name: max-height
     type: String, Number
-    values: "number"
+    values: 'number'
     description: max height of scrollbar
     default: null
     link: null
@@ -35,16 +35,23 @@ PROPS:
 
   - name: native
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: whether to use the native scrollbar
     default: false
     link: null
     usage: null
     code: null
 
+  - name: fade
+    type: ScrollbarFade
+    values: 'false | true | y | x | top/t | bottom/b | left/l | right/r | start/s | end/e | number | ScrollbarFadeOptions'
+    description: Scroll-aware content edge fade. `true` uses both vertical edges; a number sets their size in pixels; options select a direction and CSS size.
+    default: false
+    usage: '#edge-fade'
+
   - name: wrap-style
     type: String, Object, Array
-    values: "CSSProperties, CSSProperties[], string[]"
+    values: 'CSSProperties, CSSProperties[], string[]'
     description: style of wrap container
     default: null
     link: null
@@ -53,7 +60,7 @@ PROPS:
 
   - name: wrap-class
     type: String
-    values: "string"
+    values: 'string'
     description: class of wrap container
     default: null
     link: null
@@ -62,7 +69,7 @@ PROPS:
 
   - name: view-style
     type: String, Object, Array
-    values: "CSSProperties, CSSProperties[], string[]"
+    values: 'CSSProperties, CSSProperties[], string[]'
     description: style of view container
     default: null
     link: null
@@ -71,7 +78,7 @@ PROPS:
 
   - name: view-class
     type: String
-    values: "string"
+    values: 'string'
     description: class of view container
     default: null
     link: null
@@ -80,7 +87,7 @@ PROPS:
 
   - name: noresize
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: do not respond to container size changes, if the container size does not change, it is better to set it to optimize performance
     default: false
     link: null
@@ -89,7 +96,7 @@ PROPS:
 
   - name: tag
     type: string
-    values: "HTML Tag"
+    values: 'HTML Tag'
     description: element tag of the view
     default: div
     link: null
@@ -98,7 +105,7 @@ PROPS:
 
   - name: always
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: always show scrollbar
     default: true
     link: null
@@ -107,7 +114,7 @@ PROPS:
 
   - name: min-size
     type: Number
-    values: ""
+    values: ''
     description: minimum size of scrollbar
     default: 20
     link: null
@@ -116,7 +123,7 @@ PROPS:
 
   - name: thickness
     type: Number, String
-    values: "number"
+    values: 'number'
     description: thumb width
     default: 6
     link: null
@@ -126,7 +133,7 @@ PROPS:
 EVENTS:
   - name: scroll
     type: function
-    values: "({ scrollLeft: number, scrollTop: number }) => void"
+    values: '({ scrollLeft: number, scrollTop: number }) => void'
     description: triggers when scrolling, return distance of scrolling
     default: null
     link: null
@@ -136,7 +143,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: slot
-    values: ""
+    values: ''
     description: customize default content
     default: null
     example: null
@@ -147,7 +154,7 @@ SLOTS:
 EXPOSES:
   - name: handleScroll
     type: function
-    values: "() => void"
+    values: '() => void'
     description: handle scroll event
     default: null
     example: null
@@ -157,7 +164,7 @@ EXPOSES:
 
   - name: scrollTo
     type: function
-    values: "(options: ScrollToOptions | number, yCoord?: number) => void"
+    values: '(options: ScrollToOptions | number, yCoord?: number) => void'
     description: scrolls to a particular set of coordinates
     default: null
     example: null
@@ -167,7 +174,7 @@ EXPOSES:
 
   - name: setScrollTop
     type: function
-    values: "(scrollTop: number) => void"
+    values: '(scrollTop: number) => void'
     description: Set distance to scroll top
     default: null
     example: null
@@ -177,7 +184,7 @@ EXPOSES:
 
   - name: setScrollLeft
     type: function
-    values: "(scrollLeft: number) => void"
+    values: '(scrollLeft: number) => void'
     description: Set distance to scroll left
     default: null
     example: null
@@ -187,7 +194,7 @@ EXPOSES:
 
   - name: update
     type: function
-    values: "() => void"
+    values: '() => void'
     description: update scrollbar state manually
     default: null
     example: null
@@ -197,7 +204,7 @@ EXPOSES:
 
   - name: wrapRef
     type: object
-    values: "Ref HTMLElement"
+    values: 'Ref HTMLElement'
     description: scrollbar wrap ref
     default: null
     example: null
@@ -207,6 +214,38 @@ EXPOSES:
 ---
 
 # Scrollbar
+
+<card>
+
+## Edge fade
+
+Set `fade` to hint that more content remains beyond a scroll edge. `true` and `"y"` cover both vertical edges; `"x"` covers both horizontal edges. Use `top`, `bottom`, `left`, or `right` for physical edges and `start` or `end` for direction-aware inline edges. The shadcn-style aliases `t`, `b`, `l`, `r`, `s`, and `e` are accepted too. A number is a vertical fade size in pixels, while `{ direction, size }` accepts a CSS length or percentage.
+
+The fade follows actual overflow and scroll position. Content that fits is never masked, and each edge clears as it is reached. The implementation uses Scrollbar's existing measurements rather than adding another scroll owner.
+
+<template #example>
+<scrollbar-fade />
+</template>
+
+<template #template>
+
+@[code{21-40}](../.vuepress/components/scrollbar/fade.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-19}](../.vuepress/components/scrollbar/fade.vue)
+
+</template>
+
+<template #style>
+
+@[code{42-68}](../.vuepress/components/scrollbar/fade.vue)
+
+</template>
+
+</card>
 
 <card>
 

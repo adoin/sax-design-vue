@@ -44,6 +44,10 @@ export const anchorProps = buildProps({
     type: definePropType<AnchorRouterAdapter>(Object),
     default: undefined,
   },
+  routePrefetch: {
+    type: Boolean,
+    default: undefined,
+  },
   routeBoundary: {
     type: definePropType<boolean | AnchorRouteBoundaryOptions>([
       Boolean,

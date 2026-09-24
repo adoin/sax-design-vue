@@ -1,5 +1,23 @@
 ---
 description: 'Compose content, media, actions, and interaction states on a flexible surface.'
+EXAMPLE_GROUPS:
+  - title: Types
+    items:
+      [
+        default,
+        classic,
+        overlay,
+        split,
+        frosted,
+        reveal,
+        profile,
+        metric,
+        article,
+      ]
+  - title: Textures
+    items: [default-solid, liquid-glass, liquid-glass-2]
+  - title: Effects
+    items: [no-effect, spotlight, gradient-glow]
 PROPS:
   - name: title
     type: String
@@ -24,17 +42,23 @@ PROPS:
     values: Sax Design colors | RGB | HEX
     description: Semantic accent used by colored surfaces and effects.
     default: primary
-    usage: '#extended-surface-variants'
-  - name: variant
-    type: String
-    values: elevated | outlined | soft | solid | plain | glass
-    description: Surface treatment, independent from layout and behavior.
-    default: null
-    usage: '#extended-surface-variants'
+    usage: '#complete-configuration'
+  - name: texture
+    type: CardTexture
+    values: default | liquid-glass | liquid-glass-2
+    description: Surface material, independent from layout and decorative effects.
+    default: default
+    usage: '#default-solid'
+  - name: effect
+    type: CardEffect
+    values: default | spotlight | gradient-glow
+    description: Decorative interaction treatment, independent from layout and texture.
+    default: default
+    usage: '#no-effect'
   - name: orientation
     type: String
     values: vertical | horizontal
-    description: Arrange media and content vertically or horizontally.
+    description: Arrange media and content vertically or horizontally while retaining the selected type's presentation.
     default: null
     usage: '#orientation'
   - name: hover-effect
@@ -74,11 +98,11 @@ PROPS:
     default: 'false'
     usage: '#selection-and-loading'
   - name: type
-    type: String
-    values: classic | overlay | split | frosted | reveal | profile | metric | article
+    type: CardType
+    values: default | classic | overlay | split | frosted | reveal | profile | metric | article
     description: Select a complete, named card preset. Numeric values 1-5 remain compatibility aliases.
-    default: classic
-    usage: '#article'
+    default: default
+    usage: '#default'
 EVENTS:
   - name: update:selected
     type: Boolean
@@ -155,7 +179,7 @@ SLOTS:
 
 ## Default
 
-`classic` is the default preset for a familiar media, text, and actions layout.
+`default` is the implicit preset: a quiet title-and-body surface with optional header extras and footer actions.
 
 <template #example>
 <card-default />
@@ -163,13 +187,37 @@ SLOTS:
 
 <template #template>
 
-@[code{1-22}](../.vuepress/components/card/default.vue)
+@[code{1-16}](../.vuepress/components/card/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{24-35}](../.vuepress/components/card/default.vue)
+@[code{18-24}](../.vuepress/components/card/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Classic
+
+Set `type="classic"` for the established media-first layout with overlay interactions.
+
+<template #example>
+<card-classic />
+</template>
+
+<template #template>
+
+@[code{1-22}](../.vuepress/components/card/classic.vue)
+
+</template>
+
+<template #style>
+
+@[code{24-35}](../.vuepress/components/card/classic.vue)
 
 </template>
 
@@ -351,29 +399,143 @@ Set `type="reveal"` for a centered caption that emerges below the media.
 
 <card>
 
-## Extended surface variants
+## Default solid
 
-The eight named `type` presets remain the primary Card styles. Use `variant` only when an application needs an explicit composable surface treatment.
+Use `texture="default"` for the regular solid surface without an additional material layer.
 
 <template #example>
-<card-variants />
+<card-texture-default />
 </template>
 
 <template #template>
 
-@[code{12-23}](../.vuepress/components/card/variants.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-10}](../.vuepress/components/card/variants.vue)
+@[code{1-9}](../.vuepress/components/card/texture-default.vue)
 
 </template>
 
 <template #style>
 
-@[code{25-46}](../.vuepress/components/card/variants.vue)
+@[code{11-20}](../.vuepress/components/card/texture-default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Liquid glass
+
+`texture="liquid-glass"` uses a per-instance SVG displacement map to bend the actual backdrop through the translucent surface. Browsers without URL backdrop-filter support receive a saturated blur fallback.
+
+<template #example>
+<card-texture-liquid-glass />
+</template>
+
+<template #template>
+
+@[code{1-10}](../.vuepress/components/card/texture-liquid-glass.vue)
+
+</template>
+
+<template #style>
+
+@[code{12-115}](../.vuepress/components/card/texture-liquid-glass.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Liquid glass 2
+
+`texture="liquid-glass-2"` keeps the same Card surface, title, blur, shine, and animated backdrop, but swaps in the alternate component-transfer and specular SVG filter graph for direct comparison.
+
+<template #example>
+<card-texture-liquid-glass-2 />
+</template>
+
+<template #template>
+
+@[code{1-10}](../.vuepress/components/card/texture-liquid-glass-2.vue)
+
+</template>
+
+<template #style>
+
+@[code{12-115}](../.vuepress/components/card/texture-liquid-glass-2.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## No effect
+
+Use `effect="default"` when the Card should render without interactive decoration.
+
+<template #example>
+<card-effect-default />
+</template>
+
+<template #template>
+
+@[code{1-7}](../.vuepress/components/card/effect-default.vue)
+
+</template>
+
+<template #style>
+
+@[code{9-21}](../.vuepress/components/card/effect-default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Spotlight
+
+`spotlight` keeps the interior unchanged and reveals a local single-color border highlight near the pointer.
+
+<template #example>
+<card-effect-spotlight />
+</template>
+
+<template #template>
+
+@[code{1-10}](../.vuepress/components/card/effect-spotlight.vue)
+
+</template>
+
+<template #style>
+
+@[code{12-26}](../.vuepress/components/card/effect-spotlight.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Gradient glow
+
+`gradient-glow` combines a pointer-directed multicolor edge arc, a blurred outer glow, and a restrained inner highlight.
+
+<template #example>
+<card-effect-gradient-glow />
+</template>
+
+<template #template>
+
+@[code{1-10}](../.vuepress/components/card/effect-gradient-glow.vue)
+
+</template>
+
+<template #style>
+
+@[code{12-26}](../.vuepress/components/card/effect-gradient-glow.vue)
 
 </template>
 
@@ -391,13 +553,13 @@ Cards stay static by default. Add `interactive` for keyboard semantics and choos
 
 <template #template>
 
-@[code{1-28}](../.vuepress/components/card/hover-effects.vue)
+@[code{1-26}](../.vuepress/components/card/hover-effects.vue)
 
 </template>
 
 <template #style>
 
-@[code{30-38}](../.vuepress/components/card/hover-effects.vue)
+@[code{28-36}](../.vuepress/components/card/hover-effects.vue)
 
 </template>
 
@@ -407,7 +569,7 @@ Cards stay static by default. Add `interactive` for keyboard semantics and choos
 
 ## Orientation
 
-Use `horizontal` for media beside content. It automatically returns to a vertical layout on narrow screens.
+Use `horizontal` to place media beside content while retaining the selected type's presentation. On narrow screens, the arrangement returns to vertical.
 
 <template #example>
 <card-orientation />
@@ -415,13 +577,13 @@ Use `horizontal` for media beside content. It automatically returns to a vertica
 
 <template #template>
 
-@[code{1-31}](../.vuepress/components/card/orientation.vue)
+@[code{1-29}](../.vuepress/components/card/orientation.vue)
 
 </template>
 
 <template #style>
 
-@[code{33-40}](../.vuepress/components/card/orientation.vue)
+@[code{31-38}](../.vuepress/components/card/orientation.vue)
 
 </template>
 
@@ -469,13 +631,13 @@ Set `shape="square"` locally or inherit it from `s-config-provider`.
 
 <template #template>
 
-@[code{1-16}](../.vuepress/components/card/shape.vue)
+@[code{1-14}](../.vuepress/components/card/shape.vue)
 
 </template>
 
 <template #style>
 
-@[code{18-26}](../.vuepress/components/card/shape.vue)
+@[code{16-24}](../.vuepress/components/card/shape.vue)
 
 </template>
 
@@ -483,29 +645,29 @@ Set `shape="square"` locally or inherit it from `s-config-provider`.
 
 <card>
 
-## Group
+## Complete configuration
 
-Use `s-card-group` when cards need a horizontal scrolling layout. It does not change individual card styling.
+Adjust Card layout, orientation, texture, effect, geometry, color, and interaction states in one place.
 
 <template #example>
-<card-group />
+<card-configurator />
 </template>
 
 <template #template>
 
-@[code{1-26}](../.vuepress/components/card/group.vue)
+@[code{65-148}](../.vuepress/components/card/configurator.vue)
 
 </template>
 
 <template #script>
 
-@[code{28-33}](../.vuepress/components/card/group.vue)
+@[code{1-63}](../.vuepress/components/card/configurator.vue)
 
 </template>
 
 <template #style>
 
-@[code{34-44}](../.vuepress/components/card/group.vue)
+@[code{150-211}](../.vuepress/components/card/configurator.vue)
 
 </template>
 

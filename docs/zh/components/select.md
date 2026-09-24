@@ -1,6 +1,11 @@
 ---
 description: '从可搜索选项列表中选择一个或多个值。'
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: 设置触发器尺寸，并继承表单或配置提供者的控件密度。
+    default: null
   - name: v-model
     type: SelectValue
     values: '选项值或选项值数组'
@@ -396,13 +401,13 @@ EVENTS:
 SLOTS:
   - name: header
     type: Slot
-    scope: "{ query: string; selectedCount: number; filteredCount: number; totalCount: number; actions: { selectAll: () => void; invert: () => void; clear: () => void } }"
+    scope: "{ query: string; selectedCount: number }"
     description: 自定义下拉框头部、批量工具和底部内容；footer 仅提供状态与操作，不内置刷新。
     default: null
     usage: '#multiple-selection-tools'
   - name: tools
     type: Slot
-    scope: "{ query: string; selectedCount: number }"
+    scope: "{ query: string; selectedCount: number; filteredCount: number; totalCount: number; actions: { selectAll: () => void; invert: () => void; clear: () => void } }"
     description: 自定义下拉框头部、批量工具和底部内容；footer 仅提供状态与操作，不内置刷新。
     default: null
     usage: '#multiple-selection-tools'
@@ -449,17 +454,17 @@ SLOTS:
           Nodejs
         </s-option>
       </s-select>
----
-
-# Select 选择器
-
-<card>
   - name: option
     type: Slot
     scope: "{ option: SelectDataOption; group?: SelectDataOption }"
     description: 自定义选项内容；分组选项还会提供 group。
     default: null
 
+---
+
+# Select 选择器
+
+<card>
 
 ## 默认
 
@@ -514,6 +519,34 @@ SLOTS:
 <template #style>
 
 @[code{35-47}](../../.vuepress/components/select/shape.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+通过 `size` 使用统一的 `small`、`default`、`large` 三档控件尺寸；未声明时继承最近的 Form、Control Group 或 Config Provider 尺寸。
+
+<template #example><select-zh-size /></template>
+
+<template #template>
+
+@[code{11-27}](../../.vuepress/components/select-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-9}](../../.vuepress/components/select-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{29-36}](../../.vuepress/components/select-zh/size.vue)
 
 </template>
 

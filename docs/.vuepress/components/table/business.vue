@@ -17,8 +17,8 @@ const model = reactive({ term: '', team: '' })
 const message = ref('Change the conditions, then select Search.')
 const queryConfig: TableQueryConfig = {
   model,
-  labelPosition: 'top',
   reserveErrorSpace: false,
+  fixedButtons: ['submit', 'reset', 'more'],
   items: [
     {
       field: 'term',
@@ -36,6 +36,7 @@ const queryConfig: TableQueryConfig = {
     {
       field: 'team',
       title: 'Team',
+      visible: false,
       span: { xs: 24, md: 12 },
       itemRender: {
         name: '$select',

@@ -36,7 +36,7 @@ const search = (context: TableQueryContext) => {
       :data="rows"
       :query-config="{
         model,
-        labelPosition: 'top',
+        fixedButtons: [],
         items: [
           {
             field: 'term',

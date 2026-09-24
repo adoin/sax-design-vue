@@ -16,13 +16,17 @@ Continue using `s-table` when a table needs a query area, toolbar or request pro
 
 `s-table` accepts [Table](./table.md) props, events and slots, sharing its pagination, sorting, filtering and selection behavior. Add a [Form](./form.md) with `query-config` and business actions with `toolbar-config`.
 
-Provide a reactive `queryConfig.model`; field changes and reset follow the SForm model contract. Configure `items`, `rules`, `labelPosition` and other form options as usual, and use built-in renderer names such as `$input` and `$select` in `itemRender`. Search or native form submission validates fields, requests page one, then emits `query`. Reset restores initial field values and requests page one. Refresh keeps the current page and conditions without validating fields.
+Provide a reactive `queryConfig.model`; field changes and reset follow the SForm model contract. There is no separate query `defaultValue`: when a field first mounts, Form deep-clones its value from `model` as the reset baseline. Configure `items`, `rules`, `labelPosition` and other form options as usual. `labelPosition` defaults to `right`, which keeps the label beside the control with right-aligned text; `left` keeps the same side-by-side layout with left-aligned text, and only an explicit `top` places the label above the control. Configured renderers and form items appended through slots follow the same rule. Use built-in renderer names such as `$input` and `$select` in `itemRender`. Search or native form submission validates fields, requests page one, then emits `query`. Reset restores the initial snapshot and requests page one. Refresh keeps the current page and conditions without validating fields.
+
+`queryConfig.fixedButtons` is the ordered fixed-action region and defaults to `['submit', 'reset']`. Add `more` to reveal or collapse query items whose `visible` value is `false`. Pass `[]` to remove all built-in buttons and let the `query-actions` slot own the region. The action region preserves its complete width at the right while fields share and wrap within the remaining track; in a narrow container it moves to the next line and stays right-aligned. Set a reusable default through `SConfigProvider` at `table.queryConfig.fixedButtons`; a local array, including an empty array, replaces it.
+
+Size follows one predictable chain: `SConfigProvider.size` or `SConfigProvider.table.size`, then `s-table size`, then `queryConfig.size` or `toolbarConfig.size`, and finally an individual control or renderer `props.size`. Every renderer method receives the inherited value as `params.size`; its `options.props.size` is the effective component override. Built-in query actions, refresh, find and column settings follow the same chain.
 
 The `query` event provides a `{ reason, form, pager, sortBy, filters }` snapshot; `reason` is `submit`, `reset` or `refresh`. This example filters local data in the handler. Table does not automatically map form fields into table filters or send network requests. For remote data, handle the event and update `data`, `loading` and the pagination total yourself.
 
 Explicit `pagerConfig.currentPage` and `pageSize` fields are controlled; accept updates with `v-model:pager-config`. Query methods return `false` when page-one acceptance is rejected, validation fails, conditions change during asynchronous validation, the grid is loading, or the component is unmounted. Without a proxy, `true` only means the event was emitted. With a proxy, it means the query response was accepted.
 
-Configure `toolbarConfig.left` and `toolbarConfig.right` as ordered global renderer lists using `itemRender`. The built-in `button` emits its own or a child action's `code` through `toolbarClick`; child actions open through `SPopper`. `$refresh` calls the current query or proxy refresh, `$columnConfig` opens column settings, and `$find` supplies an icon trigger that opens this Table's find-and-replace panel in `SPopper`. Pass `content` or `props.content` to append a label after the icon. A custom renderer can implement `renderToolbar(options, params)`, where `params.source` contains the Table API, query context, side and busy state.
+Configure `toolbarConfig.left` and `toolbarConfig.right` as ordered global renderer lists using `itemRender`. The built-in `button` emits its own or a child action's `code` through `toolbarClick`; child actions open through `SPopper`. `$refresh` calls the current query or proxy refresh, `$columnConfig` opens column settings, and `$find` supplies an icon trigger that opens this Table's find-and-replace panel in `SPopper`. Pass `content` or `props.content` to append a label after the icon. A custom renderer can implement `renderToolbar(options, params)`, where `params.source` contains the Table API, query context, side, inherited size and busy state.
 
 <template #example>
 <table-business />
@@ -30,19 +34,19 @@ Configure `toolbarConfig.left` and `toolbarConfig.right` as ordered global rende
 
 <template #template>
 
-@[code{88-126}](../../.vuepress/components/table/business.vue)
+@[code{89-127}](../../.vuepress/components/table/business.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-86}](../../.vuepress/components/table/business.vue)
+@[code{1-87}](../../.vuepress/components/table/business.vue)
 
 </template>
 
 <template #style>
 
-@[code{128-132}](../../.vuepress/components/table/business.vue)
+@[code{129-133}](../../.vuepress/components/table/business.vue)
 
 </template>
 
@@ -88,7 +92,7 @@ Configure `toolbarConfig.left` and `toolbarConfig.right` as ordered global rende
 
 ### Slots and nested columns
 
-Map a query item's `default`, `label`, or `error` entry in `queryConfig.items[].slots` directly to an identically named application slot. Names are used as written; Table does not add a `query-` prefix. Replace query buttons through `query-actions`, the two toolbar regions through `toolbar_left` and `toolbar_right`, and its title through `toolbar-title`. The `query` slot can add `s-form-item` controls to the same form.
+Map a query item's `default`, `label`, or `error` entry in `queryConfig.items[].slots` directly to an identically named application slot. Names are used as written; Table does not add a `query-` prefix. Replace query buttons through `query-actions` and set `fixedButtons: []` for a fully custom region. In addition to the Table API and `busy`, the slot receives `expanded`, `hasMore`, and `toggleMore()`. Replace the two toolbar regions through `toolbar_left` and `toolbar_right`, and its title through `toolbar-title`. The `query` slot can add `s-form-item` controls to the same form.
 
 Other slots pass through to Table, including `header`, `footer`, cells, editors and default `s-table-column` declarations. This example combines nested columns, tree expansion, fixed columns and virtual scrolling. Applying conditions displays the submitted keyword while preserving the tree data.
 
@@ -166,13 +170,13 @@ This example simulates a service with delays and supports pagination, sorting, t
 
 <template #template>
 
-@[code{118-142}](../../.vuepress/components/table/proxy-query.vue)
+@[code{117-141}](../../.vuepress/components/table/proxy-query.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-116}](../../.vuepress/components/table/proxy-query.vue)
+@[code{1-115}](../../.vuepress/components/table/proxy-query.vue)
 
 </template>
 

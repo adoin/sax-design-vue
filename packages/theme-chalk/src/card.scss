@@ -3,6 +3,47 @@
 @use 'common/var' as *;
 
 .#{$namespace}-card-content {
+  &.type-default {
+    width: 100%;
+
+    > .#{$namespace}-card {
+      max-width: 420px;
+      border-color: getColor(text, 0.09);
+      background: getColor(background, 0.96);
+      box-shadow:
+        0 10px 28px getColor(black, 0.08),
+        0 2px 7px getColor(black, 0.04);
+
+      > .#{$namespace}-card__header {
+        min-height: 54px;
+        padding: 14px 18px;
+        border-bottom: 1px solid getColor(text, 0.08);
+      }
+
+      .#{$namespace}-card__title {
+        padding: 0;
+      }
+
+      .#{$namespace}-card__title-text {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      > .#{$namespace}-card__body {
+        padding: 18px;
+        color: getColor(text, 0.76);
+      }
+
+      > .#{$namespace}-card__footer {
+        padding: 0 18px 18px;
+      }
+
+      > .#{$namespace}-card__img {
+        border-radius: 0;
+      }
+    }
+  }
+
   &.type-classic,
   &.type-overlay,
   &.type-split,
@@ -404,7 +445,9 @@
         width: 100%;
         height: 100%;
         max-height: none;
-        border-radius: inherit 0 0 inherit;
+        border-radius: 0;
+        border-top-left-radius: inherit;
+        border-bottom-left-radius: inherit;
 
         img {
           width: 100%;
@@ -452,6 +495,219 @@
       }
     }
   }
+
+  &.type-classic,
+  &.type-overlay,
+  &.type-frosted {
+    > .#{$namespace}-card > .#{$namespace}-card__img {
+      border-radius: 0;
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+    }
+  }
+
+  &.type-split {
+    > .#{$namespace}-card > .#{$namespace}-card__img {
+      border-radius: 0;
+      border-top-left-radius: inherit;
+      border-bottom-left-radius: inherit;
+    }
+  }
+
+  &.type-metric:not(.is-horizontal) {
+    > .#{$namespace}-card > .#{$namespace}-card__img {
+      border-radius: 0;
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+    }
+
+    > .#{$namespace}-card
+      > .#{$namespace}-card__header
+      ~ .#{$namespace}-card__img {
+      border-radius: 0;
+    }
+  }
+
+  &.type-reveal {
+    > .#{$namespace}-card {
+      > .#{$namespace}-card__img,
+      &:hover > .#{$namespace}-card__img {
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+      }
+    }
+  }
+
+  &.type-classic:not(.is-horizontal)
+    > .#{$namespace}-card
+    > .#{$namespace}-card__button {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 16px 16px;
+  }
+
+  &.type-overlay:not(.is-horizontal) > .#{$namespace}-card {
+    > .#{$namespace}-card__text {
+      padding-right: 80px;
+    }
+
+    > .#{$namespace}-card__button {
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      z-index: 12;
+      display: flex;
+    }
+  }
+
+  &.type-frosted:not(.is-horizontal) > .#{$namespace}-card {
+    > .#{$namespace}-card__text {
+      padding-bottom: 58px;
+    }
+
+    > .#{$namespace}-card__button {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      z-index: 12;
+      display: flex;
+    }
+
+    &.is-texture-liquid-glass > .#{$namespace}-card__text,
+    &.is-texture-liquid-glass-2 > .#{$namespace}-card__text {
+      background: getColor(black, 0.36);
+    }
+  }
+
+  &.type-reveal:not(.is-horizontal) > .#{$namespace}-card {
+    > .#{$namespace}-card__text {
+      padding-bottom: 54px;
+    }
+
+    &.is-texture-liquid-glass > .#{$namespace}-card__text,
+    &.is-texture-liquid-glass-2 > .#{$namespace}-card__text {
+      background: getColor(black, 0.46);
+    }
+
+    > .#{$namespace}-card__button {
+      position: relative;
+      z-index: 11;
+      display: flex;
+      justify-content: flex-end;
+      width: calc(100% - 30px);
+      margin-top: -48px;
+      padding: 0 16px 14px;
+      transform: translateY(12px);
+      opacity: 0;
+      transition:
+        opacity var(--sax-motion-duration) var(--sax-motion-easing-standard),
+        transform var(--sax-motion-duration) var(--sax-motion-easing-emphasized);
+    }
+
+    &:hover > .#{$namespace}-card__button,
+    &:focus-within > .#{$namespace}-card__button,
+    &:focus-within > .#{$namespace}-card__text {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  &.type-split:not(.is-horizontal):not(.is-vertical) > .#{$namespace}-card {
+    > .#{$namespace}-card__text {
+      padding-bottom: 56px;
+    }
+
+    > .#{$namespace}-card__button {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      z-index: 1;
+      display: flex;
+    }
+  }
+
+  &.type-split.is-vertical > .#{$namespace}-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+
+    > .#{$namespace}-card__img,
+    > .#{$namespace}-card__text,
+    > .#{$namespace}-card__button {
+      grid-column: 1;
+    }
+
+    > .#{$namespace}-card__img {
+      grid-row: 1;
+      width: 100%;
+      height: 210px;
+      max-height: none;
+      border-radius: 0;
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+
+      img {
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        object-fit: cover;
+      }
+    }
+
+    > .#{$namespace}-card__text {
+      grid-row: 2;
+      padding: 16px 18px 8px;
+    }
+
+    > .#{$namespace}-card__button {
+      grid-row: 3;
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 18px 18px;
+    }
+  }
+
+  &.type-article
+    > .#{$namespace}-card
+    > .#{$namespace}-card__footer
+    .#{$namespace}-card__button {
+    justify-content: flex-start;
+  }
+
+  &.type-article.is-vertical > .#{$namespace}-card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    max-width: 440px;
+    min-height: 0;
+
+    > .#{$namespace}-card__header,
+    > .#{$namespace}-card__img,
+    > .#{$namespace}-card__text,
+    > .#{$namespace}-card__body,
+    > .#{$namespace}-card__footer {
+      grid-column: 1;
+      grid-row: auto;
+    }
+
+    > .#{$namespace}-card__img {
+      height: 210px;
+      border-radius: 0;
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+
+      img {
+        min-height: 0;
+      }
+    }
+
+    > .#{$namespace}-card__footer {
+      padding-bottom: 20px;
+    }
+  }
+
+  > .#{$namespace}-card.is-square:hover > .#{$namespace}-card__img {
+    border-radius: 0;
+  }
 }
 
 @include b(card) {
@@ -475,56 +731,194 @@
   position: relative;
   isolation: isolate;
 
-  @include m(elevated) {
-    background: getColor('background');
-    border-color: transparent;
-    box-shadow:
-      0 12px 30px getColor(black, 0.1),
-      0 2px 8px getColor(black, 0.06);
-  }
+  @include e(texture) {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
 
-  @include m(outlined) {
-    background: getColor('background');
-    border-color: getColor(text, 0.14);
-    box-shadow: none;
-  }
+    &--liquid-glass,
+    &--liquid-glass-2 {
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(
+        135deg,
+        getColor(background, 0.24),
+        getColor(background, 0.08)
+      );
+      &::before {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(
+          145deg,
+          getColor(white, 0.18),
+          transparent 34%,
+          transparent 68%,
+          getColor(color, 0.08)
+        );
+        content: '';
+      }
 
-  @include m(soft) {
-    background: getColor(color, 0.1);
-    border-color: getColor(color, 0.14);
-    box-shadow: none;
+      &::after {
+        position: absolute;
+        top: -26%;
+        left: -16%;
+        width: 62%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          getColor(white, 0.26),
+          transparent 68%
+        );
+        content: '';
+        filter: blur(10px);
+        opacity: 0.7;
+        animation: card-liquid-caustic 8s var(--sax-motion-easing-in-out)
+          infinite alternate;
+      }
+    }
 
-    @include e(title-text) {
-      color: getColor(color);
+    &--liquid-glass {
+      -webkit-backdrop-filter: saturate(180%) blur(14px);
+      backdrop-filter: saturate(180%) blur(14px);
+
+      @supports (backdrop-filter: url('#s-card-liquid-glass-support')) {
+        backdrop-filter: var(--sax-card-liquid-filter);
+      }
+
+      &::before {
+        -webkit-backdrop-filter: saturate(180%) brightness(1.08) blur(3px);
+        backdrop-filter: saturate(180%) brightness(1.08) blur(3px);
+      }
+    }
+
+    &--liquid-glass-2 {
+      -webkit-backdrop-filter: blur(3px);
+      backdrop-filter: blur(3px);
+      filter: var(--sax-card-liquid-filter);
     }
   }
 
-  @include m(solid) {
-    background: getColor(color);
-    border-color: getColor(color);
-    color: getColor(white);
-    box-shadow: 0 12px 26px getColor(color, 0.24);
+  @include e(effect) {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
 
-    @include e(subtitle) {
-      color: inherit;
-      opacity: 0.78;
+    @include m(spotlight) {
+      z-index: 3;
+      padding: 2px;
+      background: radial-gradient(
+        circle 120px at var(--sax-card-spotlight-x) var(--sax-card-spotlight-y),
+        getColor(color, 0.88),
+        getColor(color, 0.2) 42%,
+        transparent 72%
+      );
+      opacity: 0;
+      transition: opacity var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+    }
+
+    @include m(gradient-glow) {
+      z-index: 3;
+      inset: -1px;
+      opacity: 0.38;
+      transition: opacity var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
+
+      &::before,
+      &::after {
+        position: absolute;
+        inset: 0;
+        padding: 2px;
+        border-radius: inherit;
+        background: conic-gradient(
+          from var(--sax-card-glow-angle),
+          transparent 0deg,
+          getColor(color, 0.12) 10deg,
+          getColor(color, 0.92) 42deg,
+          getColor(success, 0.88) 76deg,
+          getColor(primary, 0.76) 104deg,
+          transparent 132deg,
+          transparent 360deg
+        );
+        content: '';
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+      }
+
+      &::before {
+        filter: blur(12px);
+        opacity: 0.72;
+      }
     }
   }
 
-  @include m(plain) {
+  &.is-texture-liquid-glass,
+  &.is-texture-liquid-glass-2 {
+    border-color: getColor(white, 0.18);
     background: transparent;
-    border-color: transparent;
-    box-shadow: none;
+    color: getColor(white, 0.96);
+    box-shadow:
+      0 20px 46px getColor(black, 0.13),
+      inset 0 1px 0 getColor(white, 0.22);
+
+    > .#{$namespace}-card__header {
+      border-bottom-color: getColor(white, 0.16);
+    }
+
+    > .#{$namespace}-card__body,
+    > .#{$namespace}-card__text {
+      color: getColor(white, 0.86);
+    }
+
+    .#{$namespace}-card__title-text {
+      color: getColor(white, 0.98);
+      text-shadow: 0 1px 12px getColor(black, 0.18);
+    }
   }
 
-  @include m(glass) {
-    background: getColor(background, 0.72);
-    border-color: getColor(text, 0.12);
-    box-shadow:
-      0 16px 38px getColor(black, 0.12),
-      inset 0 1px 0 getColor(white, 0.18);
-    -webkit-backdrop-filter: saturate(155%) blur(18px);
-    backdrop-filter: saturate(155%) blur(18px);
+  @include when(effect-spotlight) {
+    --sax-card-spotlight-x: 50%;
+    --sax-card-spotlight-y: 50%;
+
+    &:hover,
+    &:focus-within,
+    &:focus-visible {
+      > .#{$namespace}-card__effect--spotlight {
+        opacity: 1;
+      }
+    }
+  }
+
+  @include when(effect-gradient-glow) {
+    --sax-card-spotlight-x: 50%;
+    --sax-card-spotlight-y: 50%;
+    --sax-card-glow-angle: 0deg;
+
+    &:hover,
+    &:focus-within,
+    &:focus-visible {
+      > .#{$namespace}-card__effect--gradient-glow {
+        opacity: 1;
+      }
+    }
   }
 
   @include when(square) {
@@ -739,9 +1133,52 @@
       height: 10px;
     }
   }
+
+  @include e(texture-filter) {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
 }
 
-.#{$namespace}-card-content.is-horizontal {
+.#{$namespace}-card-content > .#{$namespace}-card.is-texture-liquid-glass,
+.#{$namespace}-card-content > .#{$namespace}-card.is-texture-liquid-glass-2 {
+  border-color: getColor(white, 0.34);
+  background: transparent;
+  box-shadow:
+    0 20px 46px getColor(black, 0.13),
+    inset 1px 1px 0 getColor(white, 0.42),
+    inset -1px -1px 0 getColor(text, 0.12);
+
+  > .#{$namespace}-card__header {
+    border-bottom-color: getColor(white, 0.16);
+  }
+
+  > .#{$namespace}-card__body,
+  > .#{$namespace}-card__text {
+    color: getColor(white, 0.86);
+  }
+
+  .#{$namespace}-card__title-text {
+    color: getColor(white, 0.98);
+  }
+}
+
+.#{$namespace}-card-content > .#{$namespace}-card.is-effect-gradient-glow {
+  background-image: radial-gradient(
+    circle 150px at var(--sax-card-spotlight-x) var(--sax-card-spotlight-y),
+    getColor(color, 0.12),
+    transparent 76%
+  );
+}
+
+.#{$namespace}-card-content.is-horizontal:is(
+    .type-default,
+    .type-metric,
+    .type-article
+  ) {
   width: 100%;
 
   .#{$namespace}-card {
@@ -768,21 +1205,227 @@
       grid-column: 1;
     }
 
-    &__img {
+    > .#{$namespace}-card__footer .#{$namespace}-card__button {
+      justify-content: flex-start;
+    }
+  }
+
+  > .#{$namespace}-card > .#{$namespace}-card__img {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+
+    img {
+      width: 100%;
+      height: 100%;
+      min-height: 180px;
+    }
+  }
+}
+
+.#{$namespace}-card-content.is-horizontal:is(
+    .type-classic,
+    .type-overlay,
+    .type-split,
+    .type-frosted,
+    .type-reveal
+  ) {
+  width: 100%;
+
+  > .#{$namespace}-card {
+    display: grid;
+    grid-template-columns: minmax(140px, 38%) minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    max-width: 680px;
+    min-height: 240px;
+
+    &:not(.is-has-media) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    > .#{$namespace}-card__img {
       grid-column: 1;
       grid-row: 1 / -1;
       width: 100%;
       height: 100%;
       max-height: none;
-      border-radius: inherit 0 0 inherit;
+      border-radius: 0;
+      border-top-left-radius: inherit;
+      border-bottom-left-radius: inherit;
 
       img {
         width: 100%;
         height: 100%;
-        min-height: 180px;
+        min-width: 0;
+        min-height: 220px;
+        object-fit: cover;
+      }
+    }
+
+    > .#{$namespace}-card__text {
+      grid-column: 2;
+      grid-row: 1;
+      position: relative;
+      inset: auto;
+      z-index: 1;
+      width: auto;
+      min-width: 0;
+      margin: 0;
+      padding: 24px 22px 16px;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      text-align: left;
+      transform: none;
+      opacity: 1;
+    }
+
+    > .#{$namespace}-card__button {
+      grid-column: 2;
+      grid-row: 2;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: flex-start;
+      padding: 0 22px 18px;
+    }
+
+    &:not(.is-has-media) > .#{$namespace}-card__text,
+    &:not(.is-has-media) > .#{$namespace}-card__button {
+      grid-column: 1;
+    }
+  }
+
+  &.type-overlay > .#{$namespace}-card {
+    > .#{$namespace}-card__text {
+      background: linear-gradient(
+        110deg,
+        getColor(black, 0.16),
+        getColor(black, 0.42)
+      );
+      color: getColor(white);
+      transform: translateX(-12px);
+      opacity: 0.78;
+    }
+
+    &:hover > .#{$namespace}-card__text,
+    &:focus-within > .#{$namespace}-card__text {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  &.type-frosted > .#{$namespace}-card > .#{$namespace}-card__text {
+    background: getColor(background, 0.18);
+    backdrop-filter: saturate(180%) blur(20px);
+    border-top-right-radius: inherit;
+  }
+
+  &.type-frosted > .#{$namespace}-card > .#{$namespace}-card__button {
+    background: getColor(background, 0.18);
+    backdrop-filter: saturate(180%) blur(20px);
+  }
+
+  &.type-reveal > .#{$namespace}-card {
+    > .#{$namespace}-card__text {
+      width: calc(100% + 20px);
+      margin-left: -20px;
+      border-radius: var(--sax-radius-sm) var(--sax-radius-xl) 0 0;
+      background: getColor(background, 0.18);
+      backdrop-filter: saturate(160%) blur(16px);
+      transform: translateX(-12px);
+      opacity: 0.85;
+    }
+
+    > .#{$namespace}-card__button {
+      width: calc(100% + 20px);
+      margin-left: -20px;
+      border-radius: 0 0 var(--sax-radius-sm) var(--sax-radius-sm);
+      background: getColor(background, 0.18);
+      backdrop-filter: saturate(160%) blur(16px);
+      transform: translateX(-12px);
+      opacity: 0.85;
+    }
+
+    &:hover > .#{$namespace}-card__text,
+    &:focus-within > .#{$namespace}-card__text,
+    &:hover > .#{$namespace}-card__button,
+    &:focus-within > .#{$namespace}-card__button {
+      transform: none;
+      opacity: 1;
+    }
+  }
+}
+
+.#{$namespace}-card-content.is-horizontal.type-profile {
+  width: 100%;
+
+  > .#{$namespace}-card {
+    display: grid;
+    grid-template-columns: minmax(140px, 32%) minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    max-width: 680px;
+    min-height: 240px;
+
+    > .#{$namespace}-card__header,
+    > .#{$namespace}-card__text,
+    > .#{$namespace}-card__body,
+    > .#{$namespace}-card__footer {
+      grid-column: 2;
+    }
+
+    > .#{$namespace}-card__img {
+      grid-column: 1;
+      grid-row: 1 / -1;
+      width: 96px;
+      height: 96px;
+      max-height: none;
+      margin: auto;
+      border-radius: 50%;
+    }
+
+    &.is-square > .#{$namespace}-card__img {
+      border-radius: 0;
+    }
+
+    > .#{$namespace}-card__text,
+    > .#{$namespace}-card__body {
+      text-align: left;
+    }
+
+    > .#{$namespace}-card__text {
+      padding: 24px 24px 12px 0;
+    }
+
+    > .#{$namespace}-card__body {
+      margin: 0 24px 0 0;
+    }
+
+    > .#{$namespace}-card__footer {
+      padding: 0 24px 20px 0;
+
+      .#{$namespace}-card__button {
+        justify-content: flex-start;
       }
     }
   }
+}
+
+.#{$namespace}-card-content
+  > .#{$namespace}-card.is-square
+  > .#{$namespace}-card__text,
+.#{$namespace}-card-content.is-horizontal.type-reveal
+  > .#{$namespace}-card.is-square
+  > .#{$namespace}-card__text,
+.#{$namespace}-card-content.is-horizontal.type-reveal
+  > .#{$namespace}-card.is-square
+  > .#{$namespace}-card__button {
+  border-radius: 0;
 }
 
 @keyframes card-skeleton {
@@ -795,8 +1438,22 @@
   }
 }
 
+@keyframes card-liquid-caustic {
+  0% {
+    transform: translate3d(-5%, -3%, 0) scale(0.96);
+  }
+
+  100% {
+    transform: translate3d(9%, 7%, 0) scale(1.08);
+  }
+}
+
 @media (max-width: 600px) {
-  .#{$namespace}-card-content.is-horizontal {
+  .#{$namespace}-card-content.is-horizontal:is(
+      .type-default,
+      .type-metric,
+      .type-article
+    ) {
     .#{$namespace}-card {
       grid-template-columns: minmax(0, 1fr);
 
@@ -807,15 +1464,116 @@
       &__footer {
         grid-column: 1;
       }
+    }
 
-      &__img {
-        grid-row: auto;
+    > .#{$namespace}-card > .#{$namespace}-card__img {
+      grid-row: auto;
+      height: auto;
+      border-radius: inherit;
+
+      img {
+        min-height: 0;
+      }
+    }
+  }
+
+  .#{$namespace}-card-content.is-horizontal:is(.type-default, .type-metric)
+    > .#{$namespace}-card
+    > .#{$namespace}-card__footer
+    .#{$namespace}-card__button {
+    justify-content: flex-end;
+  }
+
+  .#{$namespace}-card-content.is-horizontal:is(
+      .type-classic,
+      .type-overlay,
+      .type-split,
+      .type-frosted,
+      .type-reveal
+    ) {
+    > .#{$namespace}-card {
+      display: flex;
+      flex-direction: column;
+      max-width: 350px;
+      min-height: 0;
+
+      > .#{$namespace}-card__img {
+        width: 100%;
         height: auto;
-        border-radius: inherit;
+        max-height: 250px;
+        border-radius: 0;
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
 
         img {
+          height: auto;
           min-height: 0;
         }
+      }
+
+      > .#{$namespace}-card__text {
+        width: auto;
+        margin: 0;
+        border-radius: 0;
+        transform: none;
+        opacity: 1;
+      }
+
+      > .#{$namespace}-card__button {
+        align-self: stretch;
+        justify-content: flex-end;
+        padding: 0 16px 16px;
+      }
+    }
+
+    &.type-overlay,
+    &.type-reveal {
+      > .#{$namespace}-card > .#{$namespace}-card__text,
+      > .#{$namespace}-card > .#{$namespace}-card__button {
+        width: auto;
+        margin: 0;
+        border-radius: 0;
+        transform: none;
+        opacity: 1;
+      }
+    }
+  }
+
+  .#{$namespace}-card-content.is-horizontal.type-profile > .#{$namespace}-card {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 340px;
+
+    > .#{$namespace}-card__header,
+    > .#{$namespace}-card__img,
+    > .#{$namespace}-card__text,
+    > .#{$namespace}-card__body,
+    > .#{$namespace}-card__footer {
+      grid-column: 1;
+      grid-row: auto;
+    }
+
+    > .#{$namespace}-card__img {
+      margin: 32px auto 6px;
+    }
+
+    > .#{$namespace}-card__text,
+    > .#{$namespace}-card__body {
+      text-align: center;
+    }
+
+    > .#{$namespace}-card__text {
+      padding: 0 24px 18px;
+    }
+
+    > .#{$namespace}-card__body {
+      margin: 0 24px;
+    }
+
+    > .#{$namespace}-card__footer {
+      padding: 0 24px 24px;
+
+      .#{$namespace}-card__button {
+        justify-content: center;
       }
     }
   }
@@ -836,7 +1594,9 @@
 
       > .#{$namespace}-card__img {
         height: 190px;
-        border-radius: inherit inherit 0 0;
+        border-radius: 0;
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
 
         img {
           min-height: 0;
@@ -862,6 +1622,19 @@
 
     &__skeleton {
       animation: none;
+    }
+
+    &__texture--liquid-glass::after,
+    &__texture--liquid-glass-2::after {
+      animation: none;
+    }
+
+    &__effect--spotlight {
+      transition: none;
+    }
+
+    &__effect--gradient-glow {
+      transition: none;
     }
 
     &__img img {

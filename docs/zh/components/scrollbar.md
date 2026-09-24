@@ -1,23 +1,23 @@
 ---
-description: "提供可编程控制的自定义滚动区域。"
+description: '提供可编程控制的自定义滚动区域。'
 PROPS:
   - name: placement
     type: String
-    values: "inside, outside"
+    values: 'inside, outside'
     description: 自定义滚动轨道的位置。outside 在内容区外预留独立空间；native 模式不生效。
     default: inside
     usage: '#outside-scrollbars'
 
   - name: gap
     type: Number
-    values: "number"
+    values: 'number'
     description: 外置轨道与内容区的间距，单位 px；负数按 0 处理。
     default: 6
     usage: '#outside-scrollbars'
 
   - name: height
     type: String, Number
-    values: "number"
+    values: 'number'
     description: 滚动条高度。
     default:
     link: null
@@ -26,7 +26,7 @@ PROPS:
 
   - name: max-height
     type: String, Number
-    values: "number"
+    values: 'number'
     description: 滚动条最大高度。
     default: null
     link: null
@@ -35,16 +35,23 @@ PROPS:
 
   - name: native
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: 是否使用原生滚动条。
     default: false
     link: null
     usage: null
     code: null
 
+  - name: fade
+    type: ScrollbarFade
+    values: 'false | true | y | x | top/t | bottom/b | left/l | right/r | start/s | end/e | number | ScrollbarFadeOptions'
+    description: 随滚动状态变化的内容边缘渐隐。`true` 表示纵向两端，数字表示纵向渐隐像素尺寸，配置对象可指定方向与 CSS 尺寸。
+    default: false
+    usage: '#edge-fade'
+
   - name: wrap-style
     type: String, Object, Array
-    values: "CSSProperties, CSSProperties[], string[]"
+    values: 'CSSProperties, CSSProperties[], string[]'
     description: 外层容器样式。
     default: null
     link: null
@@ -53,7 +60,7 @@ PROPS:
 
   - name: wrap-class
     type: String
-    values: "string"
+    values: 'string'
     description: 外层容器类名。
     default: null
     link: null
@@ -62,7 +69,7 @@ PROPS:
 
   - name: view-style
     type: String, Object, Array
-    values: "CSSProperties, CSSProperties[], string[]"
+    values: 'CSSProperties, CSSProperties[], string[]'
     description: 内容容器样式。
     default: null
     link: null
@@ -71,7 +78,7 @@ PROPS:
 
   - name: view-class
     type: String
-    values: "string"
+    values: 'string'
     description: 内容容器类名。
     default: null
     link: null
@@ -80,7 +87,7 @@ PROPS:
 
   - name: noresize
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: 不响应容器尺寸变化；容器尺寸固定时建议开启以优化性能。
     default: false
     link: null
@@ -89,7 +96,7 @@ PROPS:
 
   - name: tag
     type: string
-    values: "HTML Tag"
+    values: 'HTML Tag'
     description: 内容区域元素标签。
     default: div
     link: null
@@ -98,7 +105,7 @@ PROPS:
 
   - name: always
     type: Boolean
-    values: "true, false"
+    values: 'true, false'
     description: 始终显示滚动条。
     default: true
     link: null
@@ -107,7 +114,7 @@ PROPS:
 
   - name: min-size
     type: Number
-    values: ""
+    values: ''
     description: 滚动条最小尺寸。
     default: 20
     link: null
@@ -116,7 +123,7 @@ PROPS:
 
   - name: thickness
     type: Number, String
-    values: "number"
+    values: 'number'
     description: 滑块宽度。
     default: 6
     link: null
@@ -126,7 +133,7 @@ PROPS:
 EVENTS:
   - name: scroll
     type: function
-    values: "({ scrollLeft: number, scrollTop: number }) => void"
+    values: '({ scrollLeft: number, scrollTop: number }) => void'
     description: 滚动时触发，返回滚动距离。
     default: null
     link: null
@@ -136,7 +143,7 @@ EVENTS:
 SLOTS:
   - name: default
     type: slot
-    values: ""
+    values: ''
     description: 自定义默认内容。
     default: null
     example: null
@@ -147,7 +154,7 @@ SLOTS:
 EXPOSES:
   - name: handleScroll
     type: function
-    values: "() => void"
+    values: '() => void'
     description: 处理滚动事件。
     default: null
     example: null
@@ -157,7 +164,7 @@ EXPOSES:
 
   - name: scrollTo
     type: function
-    values: "(options: ScrollToOptions | number, yCoord?: number) => void"
+    values: '(options: ScrollToOptions | number, yCoord?: number) => void'
     description: 滚动到指定坐标。
     default: null
     example: null
@@ -167,7 +174,7 @@ EXPOSES:
 
   - name: setScrollTop
     type: function
-    values: "(scrollTop: number) => void"
+    values: '(scrollTop: number) => void'
     description: 设置距顶部滚动距离。
     default: null
     example: null
@@ -177,7 +184,7 @@ EXPOSES:
 
   - name: setScrollLeft
     type: function
-    values: "(scrollLeft: number) => void"
+    values: '(scrollLeft: number) => void'
     description: 设置距左侧滚动距离。
     default: null
     example: null
@@ -187,7 +194,7 @@ EXPOSES:
 
   - name: update
     type: function
-    values: "() => void"
+    values: '() => void'
     description: 手动更新滚动条状态。
     default: null
     example: null
@@ -197,7 +204,7 @@ EXPOSES:
 
   - name: wrapRef
     type: object
-    values: "Ref HTMLElement"
+    values: 'Ref HTMLElement'
     description: 滚动条外层容器引用。
     default: null
     example: null
@@ -207,6 +214,38 @@ EXPOSES:
 ---
 
 # Scrollbar 滚动条
+
+<card>
+
+## 边缘渐隐
+
+设置 `fade`，提示滚动区域边缘之外仍有内容。`true` 与 `"y"` 表示纵向两端，`"x"` 表示横向两端；`top`、`bottom`、`left`、`right` 指定物理边，`start`、`end` 会跟随文字方向，也支持与 shadcn utility 一致的 `t`、`b`、`l`、`r`、`s`、`e` 缩写。数字表示纵向渐隐的像素尺寸，`{ direction, size }` 可以同时传入方向和 CSS 长度或百分比。
+
+渐隐跟随实际溢出和滚动位置：内容没有溢出时不会遮罩，到达某一边缘时该侧渐隐自动消失。实现复用 Scrollbar 已有的测量，不增加第二个滚动容器。
+
+<template #example>
+<scrollbar-zh-fade />
+</template>
+
+<template #template>
+
+@[code{21-33}](../../.vuepress/components/scrollbar-zh/fade.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-19}](../../.vuepress/components/scrollbar-zh/fade.vue)
+
+</template>
+
+<template #style>
+
+@[code{35-61}](../../.vuepress/components/scrollbar-zh/fade.vue)
+
+</template>
+
+</card>
 
 <card>
 

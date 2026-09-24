@@ -2,10 +2,14 @@
 import { computed, provide, ref, useAttrs } from 'vue'
 import { mapValues, omit, pick } from 'lodash-unified'
 import { SAlert } from '@vuesax-alpha/components/alert'
+import { SConfigProvider } from '@vuesax-alpha/components/config-provider'
 import {
+  provideGlobalConfig,
   useGlobalComponentProps,
+  useGlobalConfig,
   useLocale,
   useNamespace,
+  useSize,
 } from '@vuesax-alpha/hooks'
 import TableCore from './table-core.vue'
 import TableQueryForm from './table-query-form.vue'
@@ -34,13 +38,38 @@ import type {
 } from './table'
 import type {
   TableBusinessExposes,
+  TableQueryActionsState,
+  TableSize,
   TableToolbarRendererOptions,
 } from './table-business'
 
 defineOptions({ name: 'STable', inheritAttrs: false })
 
 const rawProps = defineProps(tableProps)
-const props = useGlobalComponentProps('table', rawProps)
+const inheritedProps = useGlobalComponentProps('table', rawProps)
+const tableConfig = useGlobalConfig('table')
+const queryConfig = computed(() => {
+  const local = rawProps.queryConfig
+  if (!local) return false
+  const configured = tableConfig.value?.queryConfig
+  const defaults =
+    configured && typeof configured === 'object' ? configured : {}
+  if (local === true)
+    return Object.keys(defaults).length ? { ...defaults } : true
+  return { ...defaults, ...local }
+})
+const props = new Proxy(inheritedProps, {
+  get(target, property, receiver) {
+    return property === 'queryConfig'
+      ? queryConfig.value
+      : Reflect.get(target, property, receiver)
+  },
+})
+const size = useSize(computed(() => props.size))
+const resolvedSize = computed<TableSize>(() =>
+  size.value === 'small' || size.value === 'large' ? size.value : 'default',
+)
+provideGlobalConfig(computed(() => ({ size: resolvedSize.value })))
 const emit = defineEmits(tableEmits)
 const table = ref<TableCoreExposes>()
 const queryForm = ref<{ getForm: () => FormInstance | undefined }>()
@@ -70,7 +99,9 @@ const attrs = useAttrs()
 const slots = defineSlots<{
   [name: string]: ((params: any) => unknown) | undefined
   query?(params: TableExposes & { model: FormModel }): unknown
-  'query-actions'?(params: TableExposes & { busy: boolean }): unknown
+  'query-actions'?(
+    params: TableExposes & { busy: boolean } & TableQueryActionsState,
+  ): unknown
   toolbar_left?(params: TableExposes & { busy: boolean }): unknown
   toolbar_right?(params: TableExposes & { busy: boolean }): unknown
   'toolbar-title'?(): unknown
@@ -139,6 +170,7 @@ const toolbar = computed(() => {
       : item
   return {
     ...config,
+    size: config.size || resolvedSize.value,
     left: (config.left ?? []).map(withDefaults),
     right: (config.right ?? []).map(withDefaults),
   }
@@ -187,6 +219,7 @@ const filterConfig = computed(() =>
 )
 const tableOptions = computed(() => ({
   ...pick(props, Object.keys(tableCoreProps)),
+  size: resolvedSize.value,
   data: proxy.data.value,
   loading: props.loading || proxy.state.value.loading,
   pagerConfig: proxy.pager.value,
@@ -241,6 +274,7 @@ const listeners = mapValues(
 
 provide(tableToolbarRuntimeKey, {
   enabled: toolbarEnabled,
+  size: computed(() => toolbar.value.size || resolvedSize.value),
   config: toolbar,
   busy,
   table: exposed,
@@ -257,25 +291,34 @@ provide(tableToolbarRuntimeKey, {
     :style="attrs.style"
     :aria-busy="busy || undefined"
   >
-    <TableQueryForm
+    <SConfigProvider
       v-if="query.enabled.value"
-      ref="queryForm"
-      :config="query.queryConfig.value"
-      :model="query.model.value"
-      :busy="busy"
-      @query="businessApi.query"
-      @reset="businessApi.resetQuery"
+      :size="query.queryConfig.value.size || resolvedSize"
     >
-      <template v-if="$slots.query" #default>
-        <slot name="query" :model="query.model.value" v-bind="exposed" />
-      </template>
-      <template v-if="$slots['query-actions']" #actions>
-        <slot name="query-actions" v-bind="exposed" :busy="busy" />
-      </template>
-      <template v-for="name in formSlots()" #[name]="params">
-        <slot :name="name" v-bind="params || {}" />
-      </template>
-    </TableQueryForm>
+      <TableQueryForm
+        ref="queryForm"
+        :config="query.queryConfig.value"
+        :model="query.model.value"
+        :busy="busy"
+        :size="query.queryConfig.value.size || resolvedSize"
+        @query="businessApi.query"
+        @reset="businessApi.resetQuery"
+      >
+        <template v-if="$slots.query" #default>
+          <slot name="query" :model="query.model.value" v-bind="exposed" />
+        </template>
+        <template v-if="$slots['query-actions']" #actions="actionState">
+          <slot
+            name="query-actions"
+            v-bind="{ ...exposed, ...actionState }"
+            :busy="busy"
+          />
+        </template>
+        <template v-for="name in formSlots()" #[name]="params">
+          <slot :name="name" v-bind="params || {}" />
+        </template>
+      </TableQueryForm>
+    </SConfigProvider>
     <div v-if="proxyFeedback" :class="ns.e('error')">
       <slot name="proxy-error" :state="proxy.state.value" v-bind="exposed">
         <SAlert color="danger" type="flat">{{ proxyFeedback }}</SAlert>

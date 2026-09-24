@@ -348,3 +348,23 @@
     transform: none !important;
   }
 }
+
+.s-checkbox--small {
+  --sax-checkbox-width: 18px;
+  --sax-checkbox-height: 18px;
+
+  .s-checkbox__label {
+    padding: 5px;
+    font-size: 0.75rem;
+  }
+}
+
+.s-checkbox--large {
+  --sax-checkbox-width: 26px;
+  --sax-checkbox-height: 26px;
+
+  .s-checkbox__label {
+    padding: 8px;
+    font-size: 1rem;
+  }
+}

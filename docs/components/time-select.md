@@ -1,6 +1,11 @@
 ---
 description: 'Choose a time from a predefined or generated list.'
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: Set or inherit the Select trigger size.
+    default: null
   - name: shape
     type: String
     values: 'rounded | square'
@@ -79,6 +84,34 @@ The available time range is 00:00 to 23:59
 <template #style>
 
 @[code{19-23}](../.vuepress/components/time-select/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><time-select-size /></template>
+
+<template #template>
+
+@[code{7-13}](../.vuepress/components/time-select/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/time-select/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../.vuepress/components/time-select/size.vue)
 
 </template>
 

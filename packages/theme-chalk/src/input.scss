@@ -16,37 +16,6 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
-// vue transition
-.clearable-transition {
-  &-enter-active {
-    animation: clearable-transition var(--sax-motion-duration)
-      var(--sax-motion-easing-in-out);
-  }
-  &-leave-active {
-    animation: clearable-transition var(--sax-motion-duration)
-      var(--sax-motion-easing-in-out) reverse;
-  }
-}
-
-@keyframes clearable-transition {
-  0% {
-    transform: translateX(
-      calc(
-        getCssVar(input-default-icon-right) - getCssVar(
-            input-default-icon-init-right
-          )
-      )
-    );
-    opacity: 0.2;
-  }
-  30% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
 @mixin state($color) {
   @include e(original) {
     background: getColor($color, 0.1) !important;
@@ -912,7 +881,49 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
   }
 }
 
+// Clear and visibility actions stay centered while appearing in place.
+.clearable-transition {
+  &-enter-active,
+  &-leave-active {
+    transform-origin: center;
+    will-change: opacity, transform;
+  }
+
+  &-enter-active {
+    transition:
+      opacity var(--sax-motion-duration-quick)
+        var(--sax-motion-easing-out),
+      transform var(--sax-motion-duration-quick)
+        var(--sax-motion-easing-smooth-out);
+  }
+
+  &-leave-active {
+    transition:
+      opacity var(--sax-motion-duration-micro)
+        var(--sax-motion-easing-out),
+      transform var(--sax-motion-duration-micro)
+        var(--sax-motion-easing-out);
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.88);
+  }
+
+  &-enter-to,
+  &-leave-from {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .clearable-transition-enter-active,
+  .clearable-transition-leave-active {
+    transition: none !important;
+  }
+
   .#{$namespace}-input--has-color .#{$namespace}-input__affects--2 {
     transition-duration: 0.01ms;
   }

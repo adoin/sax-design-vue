@@ -146,6 +146,34 @@ EVENTS:
 
 <card>
 
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><time-picker-zh-size /></template>
+
+<template #template>
+
+@[code{7-13}](../../.vuepress/components/time-picker-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/time-picker-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../../.vuepress/components/time-picker-zh/size.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## 标签
 
 使用 `label` 显示常驻标签；同时设置 `label-float` 后，标签会在聚焦或已有值时上浮。

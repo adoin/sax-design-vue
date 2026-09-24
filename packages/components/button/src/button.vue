@@ -9,7 +9,73 @@
     @mousedown="mouseDown"
   >
     <div :class="ns.e('content')">
+      <span
+        v-if="$slots.prefix"
+        :class="[
+          ns.e('prefix'),
+          inlineLoadingPlacement === 'prefix' && 't-icon-swap',
+        ]"
+        :data-state="
+          inlineLoadingPlacement === 'prefix'
+            ? inlineLoaderShown
+              ? 'loading'
+              : 'content'
+            : undefined
+        "
+        @transitionend="handleInlineSwapTransitionEnd($event, 'prefix')"
+      >
+        <span
+          v-if="inlineLoadingPlacement === 'prefix'"
+          class="t-icon"
+          data-icon="content"
+          :aria-hidden="inlineLoaderShown ? 'true' : undefined"
+        >
+          <slot name="prefix" />
+        </span>
+        <slot v-else name="prefix" />
+        <IconLoading
+          v-if="inlineLoadingPlacement === 'prefix'"
+          class="t-icon"
+          data-icon="loading"
+          :active="inlineLoaderActive"
+          @restored="handleInlineLoaderRestored('prefix')"
+        />
+      </span>
+
       <slot />
+
+      <span
+        v-if="$slots.suffix"
+        :class="[
+          ns.e('suffix'),
+          inlineLoadingPlacement === 'suffix' && 't-icon-swap',
+        ]"
+        :data-state="
+          inlineLoadingPlacement === 'suffix'
+            ? inlineLoaderShown
+              ? 'loading'
+              : 'content'
+            : undefined
+        "
+        @transitionend="handleInlineSwapTransitionEnd($event, 'suffix')"
+      >
+        <span
+          v-if="inlineLoadingPlacement === 'suffix'"
+          class="t-icon"
+          data-icon="content"
+          :aria-hidden="inlineLoaderShown ? 'true' : undefined"
+        >
+          <slot name="suffix" />
+        </span>
+        <slot v-else name="suffix" />
+        <IconLoading
+          v-if="inlineLoadingPlacement === 'suffix'"
+          class="t-icon"
+          data-icon="loading"
+          :active="inlineLoaderActive"
+          @restored="handleInlineLoaderRestored('suffix')"
+        />
+      </span>
     </div>
 
     <div
@@ -20,7 +86,15 @@
     </div>
 
     <Transition :name="ns.b('loading')" appear>
-      <div v-if="loading" :class="ns.e('loading')">
+      <div
+        v-if="
+          props.loading &&
+          ($slots.loading ||
+            props.loadingType !== 'default' ||
+            (!$slots.prefix && !$slots.suffix))
+        "
+        :class="ns.e('loading')"
+      >
         <slot name="loading">
           <IconLoading v-if="props.loadingType === 'default'" />
           <span v-else :class="ns.e('loading-track')" aria-hidden="true" />
@@ -31,7 +105,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, ref, useSlots, watch } from 'vue'
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  shallowRef,
+  watch,
+} from 'vue'
 import {
   useColor,
   useGlobalComponentProps,
@@ -58,13 +139,134 @@ const props = useGlobalComponentProps('button', rawProps)
 const emit = defineEmits<{
   (event: 'click', value: MouseEvent): void
 }>()
-const slots = useSlots()
+const slots = defineSlots<{
+  default?(): unknown
+  prefix?(): unknown
+  suffix?(): unknown
+  animate?(): unknown
+  loading?(): unknown
+}>()
 
 const ns = useNamespace('button')
 const shape = useShape<'circle' | 'square'>()
 const size = useSize<string | number>()
 
 const root$ = ref<HTMLButtonElement>()
+type InlineLoadingPlacement = 'prefix' | 'suffix'
+
+const inlineLoadingPlacement = computed<InlineLoadingPlacement | undefined>(
+  () => {
+    if (slots.prefix) return 'prefix'
+    if (slots.suffix) return 'suffix'
+    return undefined
+  },
+)
+const inlineLoaderShown = shallowRef(false)
+const inlineLoaderActive = shallowRef(false)
+let inlineLoaderFirstPaintFrame: number | undefined
+let inlineLoaderStartFrame: number | undefined
+
+const isInlineDefaultLoadingRequested = () =>
+  props.loading &&
+  props.loadingType === 'default' &&
+  !slots.loading &&
+  inlineLoadingPlacement.value !== undefined
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+const startInlineLoaderAfterSwap = () => {
+  if (!inlineLoaderShown.value || !isInlineDefaultLoadingRequested()) return
+  inlineLoaderActive.value = true
+}
+
+const syncInlineLoader = () => {
+  if (isInlineDefaultLoadingRequested()) {
+    const wasShown = inlineLoaderShown.value
+    inlineLoaderShown.value = true
+
+    if (wasShown) {
+      inlineLoaderActive.value = true
+      return
+    }
+
+    if (prefersReducedMotion()) inlineLoaderActive.value = true
+    return
+  }
+
+  if (!inlineLoaderShown.value) return
+
+  if (inlineLoaderActive.value) {
+    inlineLoaderActive.value = false
+    return
+  }
+
+  inlineLoaderShown.value = false
+}
+
+const clearInitialInlineLoaderFrames = () => {
+  if (inlineLoaderFirstPaintFrame !== undefined) {
+    cancelAnimationFrame(inlineLoaderFirstPaintFrame)
+    inlineLoaderFirstPaintFrame = undefined
+  }
+
+  if (inlineLoaderStartFrame !== undefined) {
+    cancelAnimationFrame(inlineLoaderStartFrame)
+    inlineLoaderStartFrame = undefined
+  }
+}
+
+const scheduleInitialInlineLoader = () => {
+  if (
+    !isInlineDefaultLoadingRequested() ||
+    prefersReducedMotion() ||
+    typeof requestAnimationFrame !== 'function'
+  ) {
+    syncInlineLoader()
+    return
+  }
+
+  inlineLoaderFirstPaintFrame = requestAnimationFrame(() => {
+    inlineLoaderFirstPaintFrame = undefined
+    inlineLoaderStartFrame = requestAnimationFrame(() => {
+      inlineLoaderStartFrame = undefined
+      syncInlineLoader()
+    })
+  })
+}
+
+const handleInlineSwapTransitionEnd = (
+  event: TransitionEvent,
+  placement: InlineLoadingPlacement,
+) => {
+  if (
+    placement !== inlineLoadingPlacement.value ||
+    event.propertyName !== 'opacity' ||
+    !(event.target instanceof HTMLElement) ||
+    event.target.dataset.icon !== 'loading'
+  )
+    return
+
+  if (isInlineDefaultLoadingRequested()) {
+    startInlineLoaderAfterSwap()
+    return
+  }
+
+  inlineLoaderShown.value = false
+}
+
+const handleInlineLoaderRestored = (placement: InlineLoadingPlacement) => {
+  if (placement !== inlineLoadingPlacement.value) return
+
+  if (isInlineDefaultLoadingRequested()) {
+    inlineLoaderActive.value = true
+    return
+  }
+
+  inlineLoaderShown.value = false
+}
 
 let debounceTimer: ReturnType<typeof setTimeout> | undefined
 let throttleTimer: ReturnType<typeof setTimeout> | undefined
@@ -112,7 +314,12 @@ watch([() => props.disabled, () => props.loading], () => {
   clearClickLimitTimers()
 })
 
+watch([() => props.loading, () => props.loadingType], syncInlineLoader)
+
+onMounted(scheduleInitialInlineLoader)
+
 onBeforeUnmount(clearClickLimitTimers)
+onBeforeUnmount(clearInitialInlineLoaderFrames)
 
 const vsBaseClasses = useVuesaxBaseComponent(useColor())
 

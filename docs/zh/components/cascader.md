@@ -1,6 +1,11 @@
 ---
 description: '在同一弹层中逐级选择关联数据。'
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: 设置或继承触发器尺寸。
+    default: null
   - name: shape
     type: String
     values: "rounded | square"
@@ -202,23 +207,23 @@ EVENTS:
 SLOTS:
   - name: option
     type: Slot
-    scope: "{ node: CascaderNode; path: CascaderOption[] }"
+    scope: "{ option: CascaderOption; path: CascaderOption[]; selected: boolean; active: boolean }"
     description: 自定义普通选项或搜索结果内容。
   - name: searchResult
     type: Slot
-    scope: "{ option: CascaderOption; path: CascaderOption[]; selected: boolean; active: boolean }"
+    scope: "{ node: CascaderNode; path: CascaderOption[] }"
     description: 自定义普通选项或搜索结果内容。
   - name: tag-render
     type: Slot
-    scope: "{ labels: string[]; selectedOptions: CascaderOption[] }"
+    scope: "{ option: CascaderOption; path: CascaderOption[]; label: string }"
     description: 自定义多选标签、折叠数量和单选回填内容。
   - name: max-tag-placeholder
     type: Slot
-    scope: "{ option: CascaderOption; path: CascaderOption[]; label: string }"
+    scope: "{ omittedValues: CascaderPathValue[] }"
     description: 自定义多选标签、折叠数量和单选回填内容。
   - name: display-render
     type: Slot
-    scope: "{ omittedValues: CascaderPathValue[] }"
+    scope: "{ labels: string[]; selectedOptions: CascaderOption[] }"
     description: 自定义多选标签、折叠数量和单选回填内容。
   - name: suffix-icon
     type: slot
@@ -244,6 +249,7 @@ SLOTS:
     type: slot
     values: "-"
     description: 在选项区域上方或下方追加内容。
+
 ---
 
 # Cascader 级联选择器
@@ -271,6 +277,34 @@ SLOTS:
 <template #style>
 
 @[code{25-37}](../../.vuepress/components/cascader/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><cascader-zh-size /></template>
+
+<template #template>
+
+@[code{16-36}](../../.vuepress/components/cascader-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-14}](../../.vuepress/components/cascader-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{38-45}](../../.vuepress/components/cascader-zh/size.vue)
 
 </template>
 

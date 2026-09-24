@@ -8,6 +8,7 @@ import type { InputEmitsFn, InputProps, InputValue } from '../input'
 export const useInput = (props: InputProps, emit: InputEmitsFn) => {
   const localValue = shallowRef<InputValue>(props.modelValue)
   const committedValue = shallowRef<InputValue>(props.modelValue)
+  const composing = shallowRef(false)
 
   const countLimit = computed(() => {
     const value = props.maxLength ?? props.maxlength
@@ -108,6 +109,7 @@ export const useInput = (props: InputProps, emit: InputEmitsFn) => {
   watch(
     () => props.modelValue,
     (value) => {
+      if (composing.value) return
       localValue.value = value
       committedValue.value = value
     },
@@ -157,17 +159,19 @@ export const useInput = (props: InputProps, emit: InputEmitsFn) => {
     handleKeydown,
   } = useInputEvent({ inputRef })
 
-  const composing = shallowRef(false)
   const handleCompositionStart = () => {
     composing.value = true
   }
   const handleCompositionEnd = (event: CompositionEvent) => {
     composing.value = false
     handleInput(event)
+    if (props.immediate) commitModelValue()
   }
   const handleInput = (event: Event) => {
     const target = event.target as HTMLInputElement
-    if (!composing.value && !(event as InputEvent).isComposing) {
+    if (composing.value || (event as InputEvent).isComposing) {
+      localValue.value = target.value
+    } else {
       model.value = target.value
       target.value = String(model.value ?? '')
     }

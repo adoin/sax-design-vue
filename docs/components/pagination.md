@@ -1,6 +1,12 @@
 ---
 description: 'Navigate long collections one page at a time.'
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: Set or inherit pager buttons and page-size Select density.
+    default: null
+    usage: '#size'
   - name: v-model:current-page
     type: Number
     values: 'number'
@@ -311,6 +317,34 @@ Choose which parts to show with a comma-separated string or an array. `prev`, `p
 <template #style>
 
 @[code{46-64}](../.vuepress/components/pagination/layout.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><pagination-size /></template>
+
+<template #template>
+
+@[code{7-27}](../.vuepress/components/pagination/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/pagination/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{29-34}](../.vuepress/components/pagination/size.vue)
 
 </template>
 

@@ -314,13 +314,13 @@ Rate 支持 `small`、`default`、`large` 三种尺寸。
 
 <template #template>
 
-@[code{1-7}](../../.vuepress/components/rate/size.vue)
+@[code{7-13}](../../.vuepress/components/rate/size.vue)
 
 </template>
 
 <template #script>
 
-@[code{9-13}](../../.vuepress/components/rate/size.vue)
+@[code{1-5}](../../.vuepress/components/rate/size.vue)
 
 </template>
 

@@ -8,7 +8,7 @@ import {
   h,
   isVNode,
 } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useNamespace, useSize } from '@vuesax-alpha/hooks'
 import { controlGroupProps } from './control-group'
 import type { RenderedControlGroupItem } from './control-group'
 import type { PropType, VNode } from 'vue'
@@ -21,6 +21,7 @@ const slots = defineSlots<{
 
 const props = defineProps(controlGroupProps)
 const ns = useNamespace('control-group')
+const size = useSize()
 
 const GRID_COLUMNS = 24
 
@@ -90,12 +91,20 @@ const getGroupItems = (): RenderedControlGroupItem[] =>
   flattenControls(slots.default?.() ?? []).map((vnode, index) => ({
     key: vnode.key ?? index,
     span: normalizeSpan(vnode.props?.span),
-    vnode: cloneVNode(vnode, { span: undefined }),
+    vnode: cloneVNode(
+      vnode,
+      typeof vnode.type === 'string'
+        ? { span: undefined }
+        : { span: undefined, size: size.value || 'default' },
+    ),
   }))
 </script>
 
 <template>
-  <div :class="[ns.b(), ns.is('block', props.block)]" role="group">
+  <div
+    :class="[ns.b(), ns.m(size || 'default'), ns.is('block', props.block)]"
+    role="group"
+  >
     <ControlGroupItem
       v-for="item in getGroupItems()"
       :key="item.key"

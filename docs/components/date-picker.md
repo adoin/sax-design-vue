@@ -332,6 +332,34 @@ Use `label` for a persistent label. Add `label-float` to move it above the value
 
 <card>
 
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><date-picker-size /></template>
+
+<template #template>
+
+@[code{7-13}](../.vuepress/components/date-picker/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/date-picker/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../.vuepress/components/date-picker/size.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Shape
 
 Use `shape="square"` to apply square geometry to both the input trigger and teleported calendar panel.

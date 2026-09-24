@@ -95,8 +95,8 @@ PROPS:
     default: '[]'
   - name: get-context-menu-items
     type: Function
-    values: "(context) => ContextMenuItem[]"
-    description: 根据被右键的事件、日期或时间动态返回菜单项。参数为 { type, date, event? }。
+    values: "(context: CalendarContextMenuContext) => ContextMenuItem[]"
+    description: 根据被右键的事件、日期或时间动态返回菜单项；context 包含 type、date、dates 与可选 event。
     default: null
   - name: context-menu-min-width
     type: Number
@@ -156,9 +156,9 @@ EVENTS:
   - name: panel-change
     description: 当前视图和展示日期变更。
   - name: context-menu
-    description: 菜单打开上下文与菜单项选中事件。选中事件返回 { item, context }；context.dates 为当前选中的日期范围。
+    description: 菜单打开时返回 `CalendarContextMenuContext`；`context.dates` 为当前选中的日期范围。
   - name: context-menu-select
-    description: 菜单打开上下文与菜单项选中事件。选中事件返回 { item, context }；context.dates 为当前选中的日期范围。
+    description: 选中菜单项后返回 `{ item, context }`；context 是菜单打开时的同一份快照。
 EXPOSES:
   - name: clearSelection
     description: 清空当前单日、范围或多日期选区，并同步 v-model。

@@ -115,6 +115,7 @@ import { useGlobalConfig, useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import AnchorRouteBoundary from './anchor-route-boundary.vue'
 import { selectVisibleAnchorSection } from './anchor-active-section'
 import { anchorEmits, anchorProps } from './anchor'
+import { useAnchorRoutePrefetch } from './use-anchor-route-prefetch'
 import {
   anchorRouteKey,
   findAnchorRouteContext,
@@ -162,6 +163,9 @@ let previousRouteEntry: string | undefined
 let nextRouteEntry: string | undefined
 
 const routerAdapter = computed(() => props.router || anchorConfig.value?.router)
+const routePrefetch = computed(
+  () => props.routePrefetch ?? anchorConfig.value?.routePrefetch ?? false,
+)
 const routeBoundaryOptions = computed<AnchorRouteBoundaryOptions | undefined>(
   () => {
     const globalValue = anchorConfig.value?.routeBoundary
@@ -187,6 +191,11 @@ const routeContext = computed(() =>
     ? findAnchorRouteContext(props.items, routerLocation.value)
     : undefined,
 )
+useAnchorRoutePrefetch({
+  enabled: routePrefetch,
+  router: routerAdapter,
+  context: routeContext,
+})
 const routeBoundaryContext = computed(() => {
   const context = routeContext.value
   return routerAdapter.value &&

@@ -1,7 +1,7 @@
 ---
 status: implemented
 kind: project-specification
-updated_at: 2026-09-16
+updated_at: 2026-09-22
 completed_at: 2026-09-16
 modules:
   - docs/.vuepress/theme/components
@@ -26,6 +26,7 @@ supersedes: []
 
 - 类型详情由点击触发，不以悬停作为主要交互。
 - 对 `Boolean | TableClipboardConfig` 这类复合表达式，只允许可解析的自定义类型 `TableClipboardConfig` 点击；基础类型、运算符、标点和无法解析的标识符只负责高亮显示。
+- 公共 API 中具名导出的类型别名（包括组件包之外的共享类型，如 `ComponentSize`）必须进入同一类型注册表并保持逐层点击能力；不得为了绕过未解析声明而把类型元数据降级成 `String` 或无交互纯文字。
 - 点击一个类型只打开该类型自己的声明，不能把所有可达声明聚合到同一个扁平面板中。
 - 根类型表达式和每一层声明从第一层开始就必须有语法高亮。
 - 声明中引用的其他可解析类型可以继续点击，并在更高一层打开；已经打开的祖先层保持可见。
@@ -36,6 +37,7 @@ supersedes: []
 ## 架构约束
 
 - `docs/.vuepress/theme/node/apiTypeDetails.ts` 负责生成声明、来源路径和直接引用关系；递归交互应复用这份类型注册表，而不是再实现一套扫描器。
+- 类型注册表同时扫描组件本地类型与显式配置的共享公共类型根；共享声明仍通过唯一名称解析，不能在页面或组件层为某个别名写专用映射。
 - `docs/.vuepress/theme/components/ApiTable.vue` 负责把非空类型交给类型详情渲染，不应恢复依赖整段表达式的单按钮交互。
 - `docs/.vuepress/theme/components/ApiTypeDetails.vue` 及其拆分组件负责类型 token 渲染和层级栈状态。
 - 浮层继续复用共享 `SPopper` 的 Teleport、定位、翻转、偏移、层级和滚动跟踪能力；如果共享 clickoutside 需要扩展，应在共享浮层能力上完成，不能新建平行的绝对定位系统。
@@ -73,4 +75,5 @@ supersedes: []
 ## 禁止方案
 
 - [整段类型表达式的扁平弹层](../prohibited/flat-api-type-details-popover.md)：不得保留“整段表达式一个按钮、一个面板聚合所有声明、悬停主导”的实现。
+- [公共 API 类型别名退化为纯文字](../prohibited/plain-text-public-api-type-alias.md)：不得用基础类型或不可交互文本掩盖类型注册表遗漏。
 - [公共文档写入对话过程](../prohibited/conversation-history-in-public-docs.md)：公共文档只描述最终交付能力，不写本次对话或迁移过程。

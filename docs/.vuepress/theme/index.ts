@@ -31,6 +31,7 @@ const apiTableKeys = [
 ]
 const resolveApiTypeDetails = createApiTypeDetailsResolver(
   path.resolve(__dirname, '../../../packages/components'),
+  [path.resolve(__dirname, '../../../packages/constants')],
 )
 
 const escapeInlineScriptEnd = (page: Page) => {

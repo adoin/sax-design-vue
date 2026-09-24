@@ -17,9 +17,14 @@ PROPS:
     default: '[]'
   - name: router
     type: AnchorRouterAdapter
-    values: '{ push, replace?, current?, currentRoute? }'
+    values: '{ push, replace?, prefetch?, current?, currentRoute? }'
     description: 当前 Anchor 使用的路由对象；局部配置优先于全局 anchor.router，兼容 Vue Router 及同形路由。
     default: null
+  - name: route-prefetch
+    type: Boolean
+    values: 'true / false'
+    description: 空闲时通过 router.prefetch 预取相邻路由模块；局部配置优先于全局 anchor.routePrefetch。
+    default: false
   - name: route-boundary
     type: Boolean | AnchorRouteBoundaryOptions
     description: 为扁平化后的可用路由顺序自动生成悬浮前后边界；false 关闭，也可配置 threshold、armDelay 和 routeCooldown。
@@ -223,6 +228,8 @@ Anchor 本身不依赖路由库。当配置中包含同源页面路径时，在�
 
 文档右侧目录采用 `active-strategy="visible-section"`，让哈希高亮跟随可读视口内占比最大的内容区间。组件库对现有应用的默认值仍为 `heading`。可在单个 Anchor 上传 `active-strategy`，或通过 `SConfigProvider`、安装配置中的 `anchor: { activeStrategy: 'visible-section', activeOffset: 160 }` 统一设置；组件局部值优先。`activeOffset` 只影响 `heading` 算法。
 
+相邻路由预取默认关闭。可在单个组件上开启 `route-prefetch`，或用全局配置 `anchor: { routePrefetch: true }` 开启，同时由 `router.prefetch(href)` 适配器加载匹配的懒路由模块而不执行导航。Anchor 只会在空闲时预取前后两个可用路由，并按路由路径去重；它不会挂载目标组件，也不会自行加载页面数据。
+
 通过边界进入下一路由时，目录会先等待新页面的滚动位置稳定在页首，再选中页内哈希。章节开头保持第一个标题激活；继续向下阅读、后续标题进入阅读区域后再切换。
 
 通过 `router` 局部传入兼容 Vue Router 的对象。比如：[vue-smart-router](https://www.npmjs.com/package/vue-smart-router) **等**来实现对路由的操作。
@@ -256,31 +263,36 @@ const items: AnchorItem[] = [
 多个 Anchor 共用路由时，可以在安装 Sax Design Vue 时全局提供一次；组件上的 `router` 始终优先：
 
 ```ts
-import { createApp } from 'vue'
+import { type Component, createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import SaxDesignVue from 'sax-design-vue'
+import SaxDesignVue, { type AnchorRouterAdapter } from 'sax-design-vue'
 import App from './App.vue'
 
+const routeLoaders: Record<string, () => Promise<{ default: Component }>> = {
+  '/zh/table/data': () => import('./DataGuide.vue'),
+  '/zh/table/selection': () => import('./SelectionGuide.vue'),
+  '/zh/table/sorting': () => import('./SortingGuide.vue'),
+}
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    { path: '/zh/table/data', component: () => import('./DataGuide.vue') },
-    {
-      path: '/zh/table/selection',
-      component: () => import('./SelectionGuide.vue'),
-    },
-    {
-      path: '/zh/table/sorting',
-      component: () => import('./SortingGuide.vue'),
-    },
-  ],
+  routes: Object.entries(routeLoaders).map(([path, component]) => ({
+    path,
+    component,
+  })),
 })
+const anchorRouter: AnchorRouterAdapter = {
+  currentRoute: router.currentRoute,
+  push: (href) => router.push(href),
+  replace: (href) => router.replace(href),
+  prefetch: (href) => routeLoaders[router.resolve(href).path]?.(),
+}
 const app = createApp(App)
 
 app.use(router)
 app.use(SaxDesignVue, {
   anchor: {
-    router,
+    router: anchorRouter,
+    routePrefetch: true,
     activeStrategy: 'visible-section',
     activeOffset: 160,
     routeBoundary: {
@@ -292,7 +304,7 @@ app.use(SaxDesignVue, {
 })
 ```
 
-单个 Anchor 可用 `:route-boundary="false"` 关闭边界滚动，或传入对象覆盖本地阈值。接口不同的路由只需统一适配成 `{ current, push, replace }`。
+单个 Anchor 可用 `:route-boundary="false"` 关闭边界滚动，或传入对象覆盖本地阈值。接口不同的路由只需统一适配成 `{ current, push, replace, prefetch }`；未启用路由预取时可省略 `prefetch`。
 
 ```ts
 import type { AnchorRouterAdapter } from 'sax-design-vue'

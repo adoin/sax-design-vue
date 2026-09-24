@@ -4,6 +4,7 @@ import {
   useColor,
   useId,
   useNamespace,
+  useSize,
   useSvgIconAnimation,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
@@ -26,6 +27,7 @@ const ns = useNamespace('radio')
 const props = defineProps(radioProps)
 const emit = defineEmits(radioEmits)
 const uid = useId()
+const size = useSize()
 
 const { isDisabled, loading, model, checked, radioName } = useRadio(props, emit)
 const customIconElement = useTemplateRef<HTMLElement>('customIcon')
@@ -40,6 +42,7 @@ const vsBaseClasses = useVuesaxBaseComponent(color)
 const radioKls = computed(() => [
   vsBaseClasses,
   ns.b('wrapper'),
+  ns.bm('wrapper', size.value || 'default'),
   ns.is('loading', loading.value),
   ns.is('disabled', isDisabled.value),
   ns.is('active', checked.value),

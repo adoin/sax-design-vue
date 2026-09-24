@@ -11,6 +11,7 @@
       :label-float="labelFloat"
       :placeholder="placeholder"
       :shape="resolvedShape"
+      :size="size"
       default-first-option
       :filter="editable"
       @update:model-value="(event) => $emit('update:modelValue', event)"

@@ -1,11 +1,11 @@
-@use 'sass:map';
-
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
 
 @include b(control-group) {
   $input-controls: '.#{$namespace}-input, .#{$namespace}-select, .#{$namespace}-cascader, .#{$namespace}-date-picker, .#{$namespace}-time-picker, input:not([type="button"]):not([type="submit"]):not([type="reset"]), select, textarea';
+
+  --s-control-group-height: 36px;
 
   display: inline-flex;
   align-items: flex-start;
@@ -16,6 +16,14 @@
   @include control-surface-shadow;
   transition: box-shadow var(--sax-motion-duration-fast)
     var(--sax-motion-easing-standard);
+
+  @include m(small) {
+    --s-control-group-height: 32px;
+  }
+
+  @include m(large) {
+    --s-control-group-height: 40px;
+  }
 
   &:hover {
     @include control-surface-shadow(hover);
@@ -112,16 +120,16 @@
   > .#{$namespace}-control-group__item
     > .#{$namespace}-input
     .#{$namespace}-input__wrapper {
-    min-height: map.get($select, 'min-height');
+    min-height: var(--s-control-group-height);
   }
 
-  > .#{$namespace}-control-group__item > .#{$namespace}-cascader {
-    min-height: map.get($select, 'min-height');
-  }
-
+  > .#{$namespace}-control-group__item > .#{$namespace}-select,
+  > .#{$namespace}-control-group__item > .#{$namespace}-cascader,
   > .#{$namespace}-control-group__item > .#{$namespace}-date-picker,
-  > .#{$namespace}-control-group__item > .#{$namespace}-time-picker {
-    min-height: map.get($select, 'min-height');
+  > .#{$namespace}-control-group__item > .#{$namespace}-time-picker,
+  > .#{$namespace}-control-group__item > .#{$namespace}-button {
+    min-height: var(--s-control-group-height);
+    height: var(--s-control-group-height);
   }
 
   > .#{$namespace}-control-group__item:first-child

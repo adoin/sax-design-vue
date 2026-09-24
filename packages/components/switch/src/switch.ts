@@ -1,6 +1,6 @@
 import { buildProps, isBoolean, isNumber, isString } from '@vuesax-alpha/utils'
 
-import { useColorProp, useShapeProp } from '@vuesax-alpha/hooks'
+import { useColorProp, useShapeProp, useSizeProp } from '@vuesax-alpha/hooks'
 import {
   CHANGE_EVENT,
   INPUT_EVENT,
@@ -11,6 +11,7 @@ import type { ExtractPropTypes } from 'vue'
 import type Switch from './switch.vue'
 
 export const switchProps = buildProps({
+  size: useSizeProp,
   color: useColorProp,
   modelValue: {
     type: [Boolean, String, Number],

@@ -68,6 +68,50 @@
     overflow: auto;
     height: 100%;
 
+    &.is-fade-y,
+    &.is-fade-x {
+      --s-scrollbar-fade-top: 0px;
+      --s-scrollbar-fade-bottom: 0px;
+      --s-scrollbar-fade-left: 0px;
+      --s-scrollbar-fade-right: 0px;
+      --s-scrollbar-fade-mask-y: linear-gradient(
+        to bottom,
+        transparent 0,
+        #000 var(--s-scrollbar-fade-top),
+        #000 calc(100% - var(--s-scrollbar-fade-bottom)),
+        transparent 100%
+      );
+      --s-scrollbar-fade-mask-x: linear-gradient(
+        to right,
+        transparent 0,
+        #000 var(--s-scrollbar-fade-left),
+        #000 calc(100% - var(--s-scrollbar-fade-right)),
+        transparent 100%
+      );
+
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    &.is-fade-y:not(.is-fade-x) {
+      -webkit-mask-image: var(--s-scrollbar-fade-mask-y);
+      mask-image: var(--s-scrollbar-fade-mask-y);
+    }
+
+    &.is-fade-x:not(.is-fade-y) {
+      -webkit-mask-image: var(--s-scrollbar-fade-mask-x);
+      mask-image: var(--s-scrollbar-fade-mask-x);
+    }
+
+    &.is-fade-y.is-fade-x {
+      -webkit-mask-image:
+        var(--s-scrollbar-fade-mask-y), var(--s-scrollbar-fade-mask-x);
+      mask-image:
+        var(--s-scrollbar-fade-mask-y), var(--s-scrollbar-fade-mask-x);
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+    }
+
     @include m(hidden-default) {
       scrollbar-width: none;
       &::-webkit-scrollbar {

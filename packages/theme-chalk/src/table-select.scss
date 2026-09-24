@@ -2,11 +2,22 @@
 @use 'common/var' as *;
 
 .s-table-select {
+  --sax-table-select-height: 36px;
   position: relative;
   display: inline-flex;
   width: 240px;
   max-width: 100%;
   color: getColor(text);
+}
+
+.s-table-select--small {
+  --sax-table-select-height: 32px;
+  font-size: 12px;
+}
+
+.s-table-select--large {
+  --sax-table-select-height: 40px;
+  font-size: 15px;
 }
 
 .s-table-select.is-block {
@@ -23,7 +34,7 @@
 .s-table-select__trigger {
   display: inline-flex;
   width: 100%;
-  min-height: 36px;
+  min-height: var(--sax-table-select-height);
   align-items: center;
   gap: 7px;
   padding: 4px 8px 4px 10px;

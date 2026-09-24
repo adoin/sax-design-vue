@@ -5,11 +5,13 @@ import type {
   RendererButtonsOptions,
 } from '@vuesax-alpha/components/button'
 import type { Component, VNodeChild } from 'vue'
+import type { ComponentSize } from '@vuesax-alpha/constants'
 import type { FormItemConfig, FormModel, FormRuleTrigger } from './form'
 import type { FieldPath } from '../../types'
 
 export interface FormRendererParams<Model extends object = FormModel> {
   model: Model
+  size: ComponentSize
   field?: FieldPath<Model>
   prop?: FieldPath<Model>
   value: unknown
@@ -28,6 +30,7 @@ export interface FormRendererParams<Model extends object = FormModel> {
 export interface RendererToolbarParams {
   source?: unknown
   placement: 'left' | 'right'
+  size: ComponentSize
   disabled: boolean
   action: (code: string, event: MouseEvent) => unknown
 }
@@ -171,6 +174,7 @@ const renderDefaultItem = (
   const modelEvent =
     options.modelEvent ?? definition.modelEvent ?? 'update:modelValue'
   const componentProps: Record<string, unknown> = {
+    ...(params.size ? { size: params.size } : {}),
     disabled: params.disabled,
     readonly: params.readonly,
     ...(definition.defaultProps || {}),
@@ -300,9 +304,16 @@ export const renderFormItemRenderer = (
   options: RendererOptions,
   params: FormRendererParams,
 ): VNodeChild => {
-  const definition = formRenderer.get(options.name) || {}
+  const inheritedOptions: RendererOptions = {
+    ...options,
+    props: {
+      ...(params.size ? { size: params.size } : {}),
+      ...(options.props ?? {}),
+    },
+  }
+  const definition = formRenderer.get(inheritedOptions.name) || {}
   const render = definition.renderFormItem ?? definition.renderItem
   return render
-    ? render(options, params)
-    : renderDefaultItem(options, params, definition)
+    ? render(inheritedOptions, params)
+    : renderDefaultItem(inheritedOptions, params, definition)
 }

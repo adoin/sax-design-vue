@@ -124,7 +124,9 @@
   gap: 2px;
   max-width: 50%;
   overflow-x: auto;
-  padding: 3px;
+  // The active view has an outset shadow and this row scrolls on narrow
+  // widths, so it needs an internal paint inset on every edge.
+  padding: 8px;
   border-radius: var(--sax-radius-md);
   background: getColor(primary, 0.06);
 }

@@ -30,7 +30,8 @@
     display: inline-flex;
     width: fit-content;
     max-width: 100%;
-    padding: 4px;
+    // Preserve the raised selected-state shadow inside the scrollport.
+    padding: 8px;
     overflow-x: auto;
     flex-wrap: nowrap;
     gap: 4px;
@@ -87,7 +88,8 @@
     display: flex;
     width: fit-content;
     max-width: 100%;
-    padding: 4px;
+    // Preserve the raised active-tab shadow inside the scrollport.
+    padding: 8px;
     overflow-x: auto;
     gap: 4px;
     border-radius: var(--sax-radius-lg);

@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync, statSync } from 'node:fs'
 import path from 'node:path'
 import { slugify } from '@mdit-vue/shared'
 import { createMarkdown } from '@vuepress/markdown'
@@ -21,11 +21,15 @@ const canonicalMarkdown = createMarkdown({
   vPre: false,
 })
 
-const canonicalSlugCache = new Map<string, string[]>()
+const canonicalSlugCache = new Map<
+  string,
+  { modifiedAt: number; slugs: string[] }
+>()
 
 const readCanonicalHeadingSlugs = (filePath: string) => {
+  const modifiedAt = statSync(filePath).mtimeMs
   const cached = canonicalSlugCache.get(filePath)
-  if (cached) return cached
+  if (cached?.modifiedAt === modifiedAt) return cached.slugs
 
   const tokens = canonicalMarkdown.parse(readFileSync(filePath, 'utf8'), {
     filePath,
@@ -35,7 +39,7 @@ const readCanonicalHeadingSlugs = (filePath: string) => {
     .map((token) => token.attrGet('id'))
     .filter((slug): slug is string => Boolean(slug))
 
-  canonicalSlugCache.set(filePath, slugs)
+  canonicalSlugCache.set(filePath, { modifiedAt, slugs })
   return slugs
 }
 

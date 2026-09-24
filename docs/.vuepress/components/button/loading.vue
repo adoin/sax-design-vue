@@ -6,7 +6,7 @@
       class="loading-demo__preset"
     >
       <div class="loading-demo__heading">
-        <strong>{{ labels.types[loadingType] }}</strong>
+        <strong>{{ labels[loadingType] }}</strong>
         <code>loading-type="{{ loadingType }}"</code>
       </div>
 
@@ -16,8 +16,9 @@
           :loading-type="loadingType"
           color="primary"
         >
-          <s-icon name="bxs:save" />
-          {{ labels.save }}
+          <template #prefix><s-icon name="bxs:save" /></template>
+          Save changes
+          <template #suffix><s-icon name="bx:right-arrow-alt" /></template>
         </s-button>
 
         <s-button
@@ -26,9 +27,9 @@
           icon
           color="success"
           type="flat"
-          :aria-label="labels.call"
+          aria-label="Call"
         >
-          <s-icon name="bxs:phone-call" />
+          <template #prefix><s-icon name="bxs:phone-call" /></template>
         </s-button>
 
         <s-button
@@ -37,8 +38,8 @@
           color="danger"
           type="border"
         >
-          <s-icon name="bxs:heart" />
-          {{ labels.like }}
+          Like
+          <template #suffix><s-icon name="bxs:heart" /></template>
         </s-button>
       </div>
     </section>
@@ -46,50 +47,22 @@
 
   <div class="loading-demo__control">
     <s-button type="flat" @click="loading = !loading">
-      {{ loading ? labels.showContent : labels.showLoading }}
+      {{ loading ? 'Show content' : 'Show loading' }}
     </s-button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { shallowRef } from 'vue'
 
-const route = useRoute()
-const loading = ref(true)
+const loading = shallowRef(true)
 const loadingTypes = ['default', 'pulse', 'ripple', 'shimmer'] as const
-
-const labels = computed(() => {
-  const isZh = route.path.startsWith('/zh/')
-
-  return isZh
-    ? {
-        save: '保存更改',
-        call: '拨打电话',
-        like: '喜欢',
-        showContent: '查看原内容',
-        showLoading: '查看加载态',
-        types: {
-          default: '品牌标志',
-          pulse: '呼吸光轨',
-          ripple: '双层脉冲波',
-          shimmer: '流光扫描',
-        },
-      }
-    : {
-        save: 'Save changes',
-        call: 'Call',
-        like: 'Like',
-        showContent: 'Show content',
-        showLoading: 'Show loading',
-        types: {
-          default: 'Brand mark',
-          pulse: 'Pulse rail',
-          ripple: 'Double pulse wave',
-          shimmer: 'Surface shimmer',
-        },
-      }
-})
+const labels = {
+  default: 'Brand mark',
+  pulse: 'Pulse rail',
+  ripple: 'Double pulse wave',
+  shimmer: 'Surface shimmer',
+} as const
 </script>
 
 <style scoped>

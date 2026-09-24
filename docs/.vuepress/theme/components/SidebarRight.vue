@@ -6,7 +6,8 @@
         :items="anchorItems"
         :model-value="activeAnchorHref"
         active-strategy="visible-section"
-        :router="isTableDocument ? router : undefined"
+        :router="isTableDocument ? tableRouterAdapter : undefined"
+        :route-prefetch="isTableDocument"
         :offset="anchorTargetOffset"
         :target-offset="anchorTargetOffset"
         replace
@@ -17,7 +18,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { usePageData, usePageFrontmatter } from '@vuepress/client'
+import { usePageData, usePageFrontmatter, useRoutes } from '@vuepress/client'
 import { useRouter } from 'vue-router'
 import { useDocLocaleUi } from '../composables/docLocale'
 import {
@@ -29,7 +30,10 @@ import {
 } from '../shared/tableDocumentation'
 import { documentationHashOffset } from '../shared/documentationHashScroll'
 import type { MarkdownItHeader } from '@mdit-vue/types'
-import type { AnchorItem } from '@vuesax-alpha/components/anchor'
+import type {
+  AnchorItem,
+  AnchorRouterAdapter,
+} from '@vuesax-alpha/components/anchor'
 import type {
   ThemeNormalApiFrontmatter,
   ThemeNormalApiTableKey,
@@ -38,11 +42,19 @@ import type {
 const pageFrontmatter = usePageFrontmatter<ThemeNormalApiFrontmatter>()
 const pageData = usePageData()
 const router = useRouter()
+const routes = useRoutes()
 const { t } = useDocLocaleUi()
 const domPageItems = ref<AnchorItem[]>([])
 const anchorTargetOffset = documentationHashOffset
 let collectFrame: number | undefined
 let headingObserver: MutationObserver | undefined
+
+const tableRouterAdapter: AnchorRouterAdapter = {
+  currentRoute: router.currentRoute,
+  push: (href) => router.push(href),
+  replace: (href) => router.replace(href),
+  prefetch: (href) => routes.value[router.resolve(href).path]?.loader(),
+}
 
 const apiTableKeys: ThemeNormalApiTableKey[] = [
   'PROPS',

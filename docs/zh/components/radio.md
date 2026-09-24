@@ -5,6 +5,11 @@ API_TITLES:
   GROUP_TABS_PROPS: "RadioGroupTabs 属性"
   BUTTON_PROPS: "RadioButton 属性"
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: 设置或继承单选控件尺寸；Radio Group 会传给后代控件。
+    default: null
   - name: v-model
     type: String | Number | Boolean
     values: '已选单选值'
@@ -61,6 +66,11 @@ PROPS:
     code: null
 
 GROUP_PROPS:
+  - name: size
+    type: ComponentSize
+    description: 设置或继承 RadioGroup 及其选项的尺寸。
+    default: null
+    usage: '#size'
   - name: "v-model"
     type: RadioValue
     description: "组内唯一选中值。"
@@ -271,6 +281,34 @@ SLOTS:
 <template #style>
 
 @[code{96-142}](../../.vuepress/components/radio/patterns.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><radio-zh-size /></template>
+
+<template #template>
+
+@[code{7-13}](../../.vuepress/components/radio-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/radio-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../../.vuepress/components/radio-zh/size.vue)
 
 </template>
 

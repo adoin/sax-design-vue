@@ -899,13 +899,19 @@ Use `size` to render a small, default, or large input.
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/input/size.vue)
+@[code{7-13}](../.vuepress/components/input/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/input/size.vue)
 
 </template>
 
 <template #style>
 
-@[code{9-16}](../.vuepress/components/input/size.vue)
+@[code{15-22}](../.vuepress/components/input/size.vue)
 
 </template>
 

@@ -2,7 +2,6 @@
   <div class="orientation-grid">
     <s-card
       orientation="vertical"
-      variant="outlined"
       title="纵向排列"
       subtitle="媒体位于内容上方"
       text="适合画廊、商品和文章摘要等场景。"
@@ -14,7 +13,6 @@
 
     <s-card
       orientation="horizontal"
-      variant="soft"
       color="success"
       title="横向排列"
       subtitle="媒体位于内容侧面"

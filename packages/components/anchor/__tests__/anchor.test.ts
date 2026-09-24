@@ -173,6 +173,85 @@ describe('Anchor hierarchy', () => {
     expect(wrapper.find('.s-anchor-route-boundaries').exists()).toBe(false)
   })
 
+  it('prefetches only adjacent route modules when explicitly enabled', async () => {
+    vi.useFakeTimers()
+    const currentRoute = ref({ path: '/guide/selection' })
+    const prefetch = vi.fn()
+    const router = {
+      currentRoute,
+      push: vi.fn(),
+      prefetch,
+    }
+    const routeItems: AnchorItem[] = [
+      { href: '/guide/data', title: 'Data' },
+      { href: '/guide/selection', title: 'Selection' },
+      { href: '/guide/sorting', title: 'Sorting' },
+      { href: '/guide/summary', title: 'Summary' },
+    ]
+    const wrapper = mount(Anchor, {
+      props: { items: routeItems, router },
+    })
+
+    await vi.runAllTimersAsync()
+    expect(prefetch).not.toHaveBeenCalled()
+
+    await wrapper.setProps({ routePrefetch: true })
+    await vi.runAllTimersAsync()
+    expect(prefetch.mock.calls.map(([href]) => href)).toEqual([
+      '/guide/data',
+      '/guide/sorting',
+    ])
+
+    currentRoute.value = { path: '/guide/sorting' }
+    await wrapper.vm.$nextTick()
+    await vi.runAllTimersAsync()
+    expect(prefetch.mock.calls.map(([href]) => href)).toEqual([
+      '/guide/data',
+      '/guide/sorting',
+      '/guide/summary',
+    ])
+    wrapper.unmount()
+  })
+
+  it('inherits route prefetching globally and lets a local false disable it', async () => {
+    vi.useFakeTimers()
+    const prefetch = vi.fn()
+    const router = {
+      currentRoute: ref({ path: '/guide/selection' }),
+      push: vi.fn(),
+      prefetch,
+    }
+    const routeItems: AnchorItem[] = [
+      { href: '/guide/data', title: 'Data' },
+      { href: '/guide/selection', title: 'Selection' },
+      { href: '/guide/sorting', title: 'Sorting' },
+    ]
+    const inherited = mount(ConfigProvider, {
+      props: { anchor: { router, routePrefetch: true } },
+      slots: {
+        default: () => h(Anchor, { items: routeItems }),
+      },
+    })
+
+    await vi.runAllTimersAsync()
+    expect(prefetch.mock.calls.map(([href]) => href)).toEqual([
+      '/guide/data',
+      '/guide/sorting',
+    ])
+    inherited.unmount()
+    prefetch.mockClear()
+
+    const disabled = mount(ConfigProvider, {
+      props: { anchor: { router, routePrefetch: true } },
+      slots: {
+        default: () => h(Anchor, { items: routeItems, routePrefetch: false }),
+      },
+    })
+    await vi.runAllTimersAsync()
+    expect(prefetch).not.toHaveBeenCalled()
+    disabled.unmount()
+  })
+
   it('prefers an exact hash route when sibling items share one pathname', async () => {
     const currentRoute = ref({
       path: '/guide.html',

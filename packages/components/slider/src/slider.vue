@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, watch } from 'vue'
-import { useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useNamespace, useShape, useSize } from '@vuesax-alpha/hooks'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { sliderEmits, sliderProps } from './slider'
 import type { CSSProperties } from 'vue'
@@ -11,6 +11,7 @@ const props = defineProps(sliderProps)
 const emit = defineEmits(sliderEmits)
 const ns = useNamespace('slider')
 const shape = useShape()
+const size = useSize()
 const safeMin = computed(() => Math.min(props.min, props.max))
 const safeMax = computed(() => Math.max(props.min, props.max))
 const range = computed(() => safeMax.value - safeMin.value)
@@ -79,6 +80,7 @@ watch(
   <div
     :class="[
       ns.b(),
+      ns.m(size || 'default'),
       themeColorClass,
       ns.is(variant),
       ns.is(shape),

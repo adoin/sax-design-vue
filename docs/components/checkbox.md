@@ -4,6 +4,11 @@ API_TITLES:
   GROUP_PROPS: "CheckboxGroup props"
   GROUP_TABS_PROPS: "CheckboxGroupTabs props"
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: Set or inherit the checkbox and label size.
+    default: null
   - name: disabled
     type: Boolean
     values: "true | false"
@@ -176,6 +181,11 @@ PROPS:
       </template>
 
 GROUP_PROPS:
+  - name: size
+    type: ComponentSize
+    description: Set or inherit the size of CheckboxGroup and its options.
+    default: null
+    usage: '#size'
   - name: "v-model"
     type: CheckboxGroupValueType
     description: "Flat array containing every selected child value."
@@ -403,6 +413,34 @@ Add a checkbox type input easily and with a beautiful animation
 <template #script>
 
 @[code{6-10}](../.vuepress/components/checkbox/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><checkbox-size /></template>
+
+<template #template>
+
+@[code{7-13}](../.vuepress/components/checkbox/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/checkbox/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../.vuepress/components/checkbox/size.vue)
 
 </template>
 

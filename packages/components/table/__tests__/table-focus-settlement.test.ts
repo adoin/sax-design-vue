@@ -3,6 +3,7 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useTableKeyboard } from '../src/composables/use-table-keyboard'
 import { tableFocusVisible } from '../src/composables/table-focus-visibility'
+import { tableEditorRevealDelta } from '../src/composables/table-editor-visibility'
 import type { TableCellCoordinate } from '../src/composables/use-table-keyboard'
 import type { TableCoreProps } from '../src/table'
 
@@ -221,5 +222,12 @@ describe('table focus viewport geometry', () => {
     expect(tableFocusVisible(cell, viewport)).toBe(true)
     rect.mockReturnValue({ top: 100, bottom: 230, height: 130 } as DOMRect)
     expect(tableFocusVisible(cell, viewport)).toBe(false)
+  })
+
+  it('calculates only the nearest editor reveal distance with a safe margin', () => {
+    expect(tableEditorRevealDelta(84, 164, 100, 300, 10)).toBe(-26)
+    expect(tableEditorRevealDelta(230, 314, 100, 300, 10)).toBe(24)
+    expect(tableEditorRevealDelta(110, 290, 100, 300, 10)).toBe(0)
+    expect(tableEditorRevealDelta(80, 320, 100, 300, 10)).toBe(0)
   })
 })

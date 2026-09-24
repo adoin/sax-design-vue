@@ -1,6 +1,11 @@
 ---
 description: '在两个状态之间切换布尔设置。'
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: 设置或继承开关轨道与滑块尺寸。
+    default: null
   - name: variant
     type: String
     values: 'classic | soft | text'
@@ -213,6 +218,34 @@ SLOTS:
 <template #style>
 
 @[code{37-49}](../../.vuepress/components/switch/variants.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><switch-zh-size /></template>
+
+<template #template>
+
+@[code{7-13}](../../.vuepress/components/switch-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/switch-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../../.vuepress/components/switch-zh/size.vue)
 
 </template>
 

@@ -1,6 +1,12 @@
 ---
 description: '按页浏览较长的数据集合。'
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: 设置或继承分页按钮与每页条数 Select 的尺寸。
+    default: null
+    usage: '#size'
   - name: v-model:current-page
     type: Number
     values: 'number'
@@ -311,6 +317,34 @@ SLOTS:
 <template #style>
 
 @[code{44-62}](../../.vuepress/components/pagination-zh/layout.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><pagination-zh-size /></template>
+
+<template #template>
+
+@[code{7-27}](../../.vuepress/components/pagination-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/pagination-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{29-34}](../../.vuepress/components/pagination-zh/size.vue)
 
 </template>
 

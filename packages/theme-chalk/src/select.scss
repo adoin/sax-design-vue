@@ -118,13 +118,33 @@ $clearableSafeArea: 64px;
 
 @include b(select) {
   position: relative;
+  --sax-select-control-height: 36px;
+  --sax-select-line-height: 18px;
+  --sax-select-padding-y: 7px;
+  --sax-select-tags-padding-y: 3px;
   display: inline-flex;
   flex-direction: column;
   align-items: stretch;
-  min-height: getCssVar(select, min-height);
+  min-height: var(--sax-select-control-height);
   height: fit-content;
   width: getCssVar(select, width);
   max-width: 100%;
+
+  @include m(small) {
+    --sax-select-control-height: 32px;
+    --sax-select-line-height: 16px;
+    --sax-select-padding-y: 6px;
+    --sax-select-tags-padding-y: 4px;
+    font-size: 0.75rem;
+  }
+
+  @include m(large) {
+    --sax-select-control-height: 40px;
+    --sax-select-line-height: 20px;
+    --sax-select-padding-y: 8px;
+    --sax-select-tags-padding-y: 2px;
+    font-size: 1rem;
+  }
 
   @include e(content) {
     transition: none;
@@ -266,8 +286,11 @@ $clearableSafeArea: 64px;
       height 0s;
     background: getColor('gray-2');
     color: getColor('text');
-    min-height: getCssVar(select, min-height);
-    padding: 7px $suffixSafeArea 7px 10px;
+    min-height: var(--sax-select-control-height);
+    height: var(--sax-select-control-height);
+    padding: var(--sax-select-padding-y) $suffixSafeArea
+      var(--sax-select-padding-y) 10px;
+    line-height: var(--sax-select-line-height);
     width: 100%;
     box-sizing: border-box;
     @include control-surface-shadow;
@@ -295,7 +318,7 @@ $clearableSafeArea: 64px;
       position: relative;
       border: 0px solid transparent;
       background: transparent;
-      margin: 2px 3px;
+      margin: 0 3px;
       min-width: 30px;
       max-width: 100%;
       color: getColor('text');
@@ -328,11 +351,12 @@ $clearableSafeArea: 64px;
     background: getColor('gray-2');
     border-radius: var(--sax-radius);
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
     flex-wrap: wrap;
-    padding: 5px;
-    min-height: getCssVar(select, min-height);
+    padding: var(--sax-select-tags-padding-y) 5px;
+    min-height: var(--sax-select-control-height);
+    box-sizing: border-box;
     @include control-surface-shadow;
     transition:
       getCssVar(transition-ease),
@@ -733,10 +757,9 @@ $clearableSafeArea: 64px;
 @include b(select) {
   @include b(tag) {
     position: relative;
-    margin: 1px 3px 2px 3px;
+    margin: 0 4px 0 0;
     border-radius: var(--sax-radius);
     padding: 3px 10px 3px 6px;
-    font-size: 0.84rem;
     border: 1px solid getColor(gray-2);
     color: getColor(text);
     display: flex;

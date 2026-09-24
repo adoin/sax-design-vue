@@ -2,6 +2,11 @@
 description: '用轻量拼图纹理将相关表单控件拼接成连续输入区域。'
 lastUpdated: false
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: 强制组内所有直接组件控件采用同一尺寸。
+    default: null
   - name: block
     type: Boolean
     values: "true | false"
@@ -25,7 +30,7 @@ SLOTS:
 
 <card>
 
-Control Group 通过不占布局空间的轻量拼图接缝，将相关控件拼成连续输入区域，同时保留每个子控件自己的值、事件、校验和弹层行为。组合使用 24 栅格，直接子控件可通过 `span` 指定占用栅格；未声明 `span` 的控件会均分剩余空间。
+Control Group 通过不占布局空间的轻量拼图接缝，将相关控件拼成连续输入区域，同时保留每个子控件自己的值、事件、校验和弹层行为。组合使用 24 栅格，直接子控件可通过 `span` 指定占用栅格；未声明 `span` 的控件会均分剩余空间。组合解析后的 `size` 对直接组件控件具有强制优先级，避免子控件尺寸混用破坏连续表面。
 
 </card>
 
@@ -52,6 +57,34 @@ Control Group 通过不占布局空间的轻量拼图接缝，将相关控件拼
 <template #style>
 
 @[code{23-36}](../../.vuepress/components/control-group/basic.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><control-group-zh-size /></template>
+
+<template #template>
+
+@[code{7-25}](../../.vuepress/components/control-group-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/control-group-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{27-32}](../../.vuepress/components/control-group-zh/size.vue)
 
 </template>
 

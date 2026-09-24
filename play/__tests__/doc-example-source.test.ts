@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path'
 import { parse } from '@vue/compiler-sfc'
 import { mount } from '@vue/test-utils'
 import { createMemoryHistory, createRouter } from 'vue-router'
+import matter from 'gray-matter'
 import { describe, expect, it } from 'vitest'
 import '../../docs/.vuepress/global-renderers'
 import { compileDemoSfc } from '../compile-demo-sfc'
@@ -13,6 +14,46 @@ const docsRoots = [
   resolve(projectRoot, 'docs/components'),
   resolve(projectRoot, 'docs/zh/components'),
 ]
+const sizeExampleComponents = [
+  'button',
+  'cascader',
+  'checkbox',
+  'control-group',
+  'date-picker',
+  'form',
+  'input',
+  'pagination',
+  'radio',
+  'rate',
+  'select',
+  'slider',
+  'switch',
+  'table',
+  'table-select',
+  'textarea',
+  'time-picker',
+  'time-select',
+  'verification-code',
+] as const
+const interactiveSizeExampleComponents = [
+  'cascader',
+  'checkbox',
+  'control-group',
+  'date-picker',
+  'form',
+  'input',
+  'pagination',
+  'radio',
+  'rate',
+  'select',
+  'slider',
+  'switch',
+  'table-select',
+  'textarea',
+  'time-picker',
+  'time-select',
+  'verification-code',
+] as const
 const markdownFiles = (root: string): string[] =>
   readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
     const filePath = resolve(root, entry.name)
@@ -64,6 +105,7 @@ const tableSections = [
     'Data and column definitions',
     '数据与列定义',
   ],
+  ['appearance', 'Appearance', '外观'],
   ['row-selection', 'Row selection', '行选择'],
   ['sorting-and-filtering', 'Sorting and filtering', '排序与筛选'],
   ['trees-and-groups', 'Trees and groups', '树形与分组'],
@@ -98,6 +140,171 @@ const normalizedBlock = (value?: string) =>
   (value ?? '').replace(/\r\n?/g, '\n').trim()
 
 describe('documentation example source', () => {
+  it('keeps a localized size example for every public size component', () => {
+    for (const component of sizeExampleComponents) {
+      const englishPage = readFileSync(
+        resolve(
+          projectRoot,
+          'docs/components',
+          component === 'button'
+            ? 'README.md'
+            : component === 'table'
+              ? 'table/appearance.md'
+              : `${component}.md`,
+        ),
+        'utf8',
+      )
+      const chinesePage = readFileSync(
+        resolve(
+          projectRoot,
+          'docs/zh/components',
+          component === 'button'
+            ? 'README.md'
+            : component === 'table'
+              ? 'table/appearance.md'
+              : `${component}.md`,
+        ),
+        'utf8',
+      )
+
+      expect(englishPage, `${component}: English Size heading`).toMatch(
+        component === 'table' ? /^### Size$/m : /^## Sizes?$/m,
+      )
+      expect(chinesePage, `${component}: Chinese Size heading`).toMatch(
+        component === 'table' ? /^### 尺寸$/m : /^## 尺寸$/m,
+      )
+      expect(englishPage, `${component}: English size example`).toContain(
+        `<${component}-size />`,
+      )
+      expect(chinesePage, `${component}: Chinese size example`).toContain(
+        component === 'rate' ? '<rate-size />' : `<${component}-zh-size />`,
+      )
+
+      if (component !== 'table') {
+        expect(
+          englishPage.indexOf(component === 'input' ? '## Sizes' : '## Size'),
+          `${component}: English Size follows the primary example`,
+        ).toBeGreaterThan(englishPage.indexOf('<template #example>'))
+        expect(
+          chinesePage.indexOf('## 尺寸'),
+          `${component}: Chinese Size follows the primary example`,
+        ).toBeGreaterThan(chinesePage.indexOf('<template #example>'))
+      }
+    }
+  })
+
+  it('keeps Card examples uniform while grouping their outline', () => {
+    for (const [
+      locale,
+      typeGroup,
+      typeChildren,
+      textureGroup,
+      textureChildren,
+      effectGroup,
+      effectChildren,
+    ] of [
+      [
+        'en',
+        'Types',
+        [
+          'Default',
+          'Classic',
+          'Overlay',
+          'Split',
+          'Frosted',
+          'Reveal',
+          'Profile',
+          'Metric',
+          'Article',
+        ],
+        'Textures',
+        ['Default solid', 'Liquid glass', 'Liquid glass 2'],
+        'Effects',
+        ['No effect', 'Spotlight', 'Gradient glow'],
+      ],
+      [
+        'zh',
+        '类型',
+        [
+          '默认',
+          '经典图文',
+          '图片叠层',
+          '横向分栏',
+          '毛玻璃说明',
+          '居中浮现',
+          '人物资料',
+          '数据指标',
+          '文章卡片',
+        ],
+        '纹理',
+        ['默认纯色', '液态镜片', '液态镜片 2'],
+        '特效',
+        ['无特效', '聚光边框', '渐变光晕'],
+      ],
+    ] as const) {
+      const markdown = readFileSync(
+        resolve(
+          projectRoot,
+          'docs',
+          locale === 'zh' ? 'zh/components/card.md' : 'components/card.md',
+        ),
+        'utf8',
+      )
+      const frontmatter = matter(markdown).data
+      const configuredGroups = frontmatter.EXAMPLE_GROUPS as Array<{
+        title: string
+        items: string[]
+      }>
+      const cards = exampleCards(markdown)
+      const headings = cards.map((card) => card.match(/^##\s+(.+)$/m)?.[1])
+      const groupTitles = [typeGroup, textureGroup, effectGroup]
+      const groupChildren = [typeChildren, textureChildren, effectChildren]
+
+      expect(configuredGroups.map((group) => group.title)).toEqual(groupTitles)
+      configuredGroups.forEach((group, index) => {
+        expect(group.items).toHaveLength(groupChildren[index].length)
+        expect(headings).toEqual(expect.arrayContaining(groupChildren[index]))
+      })
+      expect(
+        cards.every((card) => (card.match(/^##\s+/gm) ?? []).length === 1),
+      ).toBe(true)
+      expect(cards.every((card) => !/^###\s+/m.test(card))).toBe(true)
+      expect(headings.at(-1)).toBe(
+        locale === 'zh' ? '综合配置' : 'Complete configuration',
+      )
+      expect(markdown).not.toContain('<card-effects />')
+      expect(markdown).not.toContain('<card-zh-effects />')
+      expect(markdown).not.toMatch(/s-card-group|card-group/)
+    }
+  })
+
+  it('keeps editable size examples controlled by reactive models', () => {
+    for (const component of interactiveSizeExampleComponents) {
+      for (const locale of ['en', 'zh'] as const) {
+        const directory =
+          locale === 'zh' && component !== 'rate'
+            ? `${component}-zh`
+            : component
+        const examplePath = resolve(
+          projectRoot,
+          'docs/.vuepress/components',
+          directory,
+          'size.vue',
+        )
+        const example = readFileSync(examplePath, 'utf8')
+
+        expect(
+          example,
+          `${component}: ${locale} reactive size example`,
+        ).toMatch(/\bv-model(?::[\w-]+)?=/)
+        expect(
+          example,
+          `${component}: ${locale} has no fixed model value`,
+        ).not.toMatch(/(?:^|\s):?model-value=/m)
+      }
+    }
+  })
+
   it('keeps massive table data inside the virtual-scrolling example in both locales', () => {
     for (const root of docsRoots) {
       const markdownPath = resolve(
@@ -271,7 +478,7 @@ describe('documentation example source', () => {
     const cards = markdown.map((localePages) =>
       localePages.flatMap(exampleCards),
     )
-    expect(cards[0]).toHaveLength(68)
+    expect(cards[0]).toHaveLength(69)
     expect(cards[1]).toHaveLength(cards[0].length)
 
     markdown.forEach((localePages, localeIndex) => {
@@ -288,7 +495,7 @@ describe('documentation example source', () => {
       })
       expect(
         localePages.flatMap((source) => source.match(/^###\s+.+$/gm) ?? []),
-      ).toHaveLength(69)
+      ).toHaveLength(70)
     })
 
     markdown.forEach((localePages) => {

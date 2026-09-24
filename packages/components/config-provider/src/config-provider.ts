@@ -100,6 +100,8 @@ export interface AnchorGlobalConfig {
   activeOffset?: number
   /** Router used by every Anchor for non-local same-origin hrefs unless locally overridden. */
   router?: AnchorRouterAdapter
+  /** Prefetch adjacent route modules through router.prefetch. Disabled by default. */
+  routePrefetch?: boolean
   /** Defaults for automatically generated route boundaries. */
   routeBoundary?: false | AnchorRouteBoundaryOptions
 }

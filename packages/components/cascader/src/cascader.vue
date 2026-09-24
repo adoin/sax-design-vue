@@ -20,6 +20,7 @@
       ref="triggerRef"
       :class="[
         ns.b(),
+        ns.m(resolvedSize || 'default'),
         ns.is('disabled', disabled),
         ns.is('open', mergedOpen),
         ns.is('multiple', multiple),
@@ -205,7 +206,7 @@ import { computed, nextTick, shallowRef, useTemplateRef, watch } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import { IconLoading, SIcon } from '@vuesax-alpha/components/icon'
 import SPopper from '@vuesax-alpha/components/popper'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace, useShape, useSize } from '@vuesax-alpha/hooks'
 import CascaderPanel from './cascader-panel.vue'
 import { SHOW_PARENT, cascaderEmits, cascaderProps } from './cascader'
 import {
@@ -233,6 +234,7 @@ const props = defineProps(cascaderProps)
 const emit = defineEmits(cascaderEmits)
 const ns = useNamespace('cascader')
 const resolvedShape = useShape()
+const resolvedSize = useSize()
 const { t } = useLocale()
 const triggerRef = useTemplateRef<HTMLElement>('triggerRef')
 const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
@@ -267,6 +269,7 @@ const popupConfig = computed(() => props.popupConfig)
 const popperClass = computed(() =>
   [
     ns.e('content'),
+    ns.em('content', resolvedSize.value || 'default'),
     ns.is('square', resolvedShape.value === 'square'),
     ns.is('single-level', isSingleLevel.value),
     props.popupClassName,

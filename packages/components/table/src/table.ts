@@ -1,4 +1,5 @@
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
+import { useSizeProp } from '@vuesax-alpha/hooks'
 import {
   buildProps,
   definePropType,
@@ -531,6 +532,7 @@ export type TableRowClass<Row extends object = TableRow> =
   string | ((params: TableFlatRow<Row>) => string | string[] | undefined)
 
 export const tableCoreProps = buildProps({
+  size: useSizeProp,
   historyConfig: {
     type: definePropType<boolean | TableHistoryConfig>([Boolean, Object]),
     default: false,

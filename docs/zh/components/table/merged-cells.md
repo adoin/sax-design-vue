@@ -14,25 +14,27 @@ description: 'Table 的单元格合并功能、配置方式与可运行示例。
 
 通过 `merge-config.body` 和 `merge-config.footer` 分别指定正文与表尾的合并区域。每项包含从零开始的 `row`、`col`，以及大于零的 `rowspan`、`colspan`。合并区域显示起点单元格的内容，继续使用其列插槽、格式化和交互。
 
+对于连续 JSON 行中同一字段值相同这一常见场景，可使用 `createTableRowspanMerges(rows, { field, col })`。它按传入行的当前顺序计算，支持点路径字段，忽略无需合并的单行区间，并返回可直接赋给 `merge-config.body`、固定为 `colspan: 1` 的范围。多列独立纵向合并时可分别调用；只有需要归一化比较时才传 `equals`。横向或相交区域继续显式配置。
+
 普通数据的 `row` 对应排序、筛选、分页和树展开后的当前显示行；表尾的 `row` 对应 `footer-config` 或 `footer-data` 解析后的表尾行。`col` 按左固定列、中心列、右固定列的可见顺序计算。固定范围跟随位置，查询、分页或列重排后会应用到新位置的单元格；需要按内容分组时应重新计算范围。
 
 <template #example><table-zh-merging /></template>
 
 <template #template>
 
-@[code{28-40}](../../../.vuepress/components/table-zh/merging.vue)
+@[code{26-38}](../../../.vuepress/components/table-zh/merging.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-26}](../../../.vuepress/components/table-zh/merging.vue)
+@[code{1-24}](../../../.vuepress/components/table-zh/merging.vue)
 
 </template>
 
 <template #style>
 
-@[code{42-49}](../../../.vuepress/components/table-zh/merging.vue)
+@[code{40-47}](../../../.vuepress/components/table-zh/merging.vue)
 
 </template>
 

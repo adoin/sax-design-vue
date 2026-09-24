@@ -3,42 +3,32 @@
 @use 'common/var' as *;
 
 @include b(table) {
+  --s-table-row-min-height: 44px;
+  --s-table-cell-padding: 10px 14px;
+  --s-table-font-size: 0.8rem;
+
+  font-size: var(--s-table-font-size);
+
+  @include m(small) {
+    --s-table-row-min-height: 36px;
+    --s-table-cell-padding: 6px 10px;
+    --s-table-font-size: 0.75rem;
+  }
+
+  @include m(large) {
+    --s-table-row-min-height: 52px;
+    --s-table-cell-padding: 12px 16px;
+    --s-table-font-size: 0.9rem;
+  }
+
   @include e(column-manager) {
     display: flex;
     justify-content: flex-end;
   }
 
   @include e(column-manager-trigger) {
-    display: inline-flex;
-    min-height: 28px;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 10px;
-    border: 0;
-    border-radius: var(--sax-radius-sm);
-    background: getColor(primary, 0.08);
-    color: getColor(primary);
-    font-size: 12px;
-    line-height: 1;
-    cursor: pointer;
-    transition:
-      background-color var(--sax-motion-duration-fast)
-        var(--sax-motion-easing-standard),
-      box-shadow var(--sax-motion-duration-fast)
-        var(--sax-motion-easing-standard);
-
-    &:hover {
-      background: getColor(primary, 0.13);
-    }
-
-    &:focus-visible {
-      outline: none;
-      background: getColor(primary, 0.13);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    .s-button__content {
+      gap: 5px;
     }
   }
 
@@ -132,7 +122,9 @@
     grid-template-columns: minmax(0, 1fr) 110px 44px;
     align-items: center;
     gap: 4px;
-    padding: 0 6px;
+    // The row is also the paint inset for raised controls inside the clipped
+    // settings scrollport. Keep the Checkbox shadow clear of either edge.
+    padding: 0 10px;
     box-sizing: border-box;
     border-radius: var(--sax-radius-md);
 
@@ -152,9 +144,12 @@
 
     > .#{$namespace}-checkbox {
       min-width: 0;
+      max-width: 100%;
       margin-inline-start: var(--s-table-column-depth, 0px);
-      overflow: hidden;
+
       .#{$namespace}-checkbox__label {
+        min-width: 0;
+        flex: 1;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -336,6 +331,34 @@
   font-size: 0.9rem;
   margin: 0px;
   overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #{getColor(primary, 0.34)} transparent;
+
+  @supports selector(::-webkit-scrollbar) {
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border: 1px solid transparent;
+    border-radius: var(--sax-radius-pill);
+    background: #{getColor(primary, 0.3)};
+    background-clip: padding-box;
+  }
+
+  &::-webkit-scrollbar-track,
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #{getColor(primary, 0.52)};
+  }
 
   @include when(horizontal-virtual) {
     overflow-x: hidden;
@@ -357,7 +380,7 @@
     position: relative;
     z-index: 2;
     display: flex;
-    min-height: 44px;
+    min-height: var(--s-table-row-min-height);
     align-items: stretch;
     background: var(--s-table-header-surface);
     color: getCssVar(text-color, primary);
@@ -369,7 +392,7 @@
     display: flex;
     min-width: 0;
     align-items: center;
-    padding: 10px 14px;
+    padding: var(--s-table-cell-padding);
     line-height: 1.45;
 
     @include when(fixed-column) {
@@ -381,7 +404,7 @@
 
   @include e(grouped-header) {
     display: grid;
-    grid-auto-rows: minmax(44px, auto);
+    grid-auto-rows: minmax(var(--s-table-row-min-height), auto);
   }
 
   @include e(header-row) {
@@ -548,7 +571,7 @@
 
   @include e(footer-row) {
     display: flex;
-    min-height: 44px;
+    min-height: var(--s-table-row-min-height);
     align-items: stretch;
     background: var(--s-table-footer-surface);
     color: getCssVar(text-color, primary);
@@ -560,7 +583,7 @@
     display: flex;
     min-width: 0;
     align-items: center;
-    padding: 10px 14px;
+    padding: var(--s-table-cell-padding);
     line-height: 1.5;
 
     @include when(fixed-column) {
@@ -575,7 +598,7 @@
 
     display: flex;
     width: 100%;
-    min-height: 44px;
+    min-height: var(--s-table-row-min-height);
     align-items: stretch;
     background: var(--s-table-row-surface);
     transition:
@@ -609,9 +632,38 @@
   }
 
   @include e(cell-editor) {
+    display: flex;
     width: 100%;
+    height: 100%;
     min-width: 0;
+    min-height: 0;
+    align-items: center;
     outline: none;
+
+    :where(
+      .#{$namespace}-input,
+      .#{$namespace}-select,
+      .#{$namespace}-textarea,
+      .#{$namespace}-date-picker,
+      .#{$namespace}-time-picker,
+      .#{$namespace}-time-select,
+      .#{$namespace}-cascader,
+      .#{$namespace}-table-select
+    ) {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+    }
+
+    :where(
+      .#{$namespace}-input__wrapper,
+      .#{$namespace}-input__original,
+      .#{$namespace}-select__input,
+      .#{$namespace}-textarea__inner
+    ) {
+      height: 100%;
+      min-height: 0;
+    }
 
     .#{$namespace}-textarea {
       margin-bottom: 0;
@@ -661,6 +713,16 @@
     color: getColor(text);
     cursor: pointer;
     outline: none;
+
+    @include m(small) {
+      width: 26px;
+      height: 26px;
+    }
+
+    @include m(large) {
+      width: 40px;
+      height: 40px;
+    }
 
     &[aria-disabled='true'] {
       opacity: 0.5;
@@ -1009,11 +1071,83 @@
       var(--s-table-row-surface)
     );
   }
-  .is-drop-before > .#{$namespace}-table__data-cell {
-    box-shadow: inset 0 3px 5px -2px #{getColor(primary, 0.7)};
+  .is-drop-before,
+  .is-drop-after,
+  .is-drop-inside {
+    position: relative;
+    z-index: 6;
   }
-  .is-drop-after > .#{$namespace}-table__data-cell {
-    box-shadow: inset 0 -3px 5px -2px #{getColor(primary, 0.7)};
+  .is-drop-inside-group > .#{$namespace}-table__data-cell {
+    background: color-mix(
+      in srgb,
+      #{getColor(primary)} 8%,
+      var(--s-table-row-surface)
+    );
+  }
+  .is-drop-inside-group::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--s-table-drop-indent, 12px);
+    z-index: 8;
+    width: 2px;
+    pointer-events: none;
+    background: getColor(primary, 0.68);
+    content: '';
+  }
+  .is-drop-inside-start::after,
+  .is-drop-inside-end::after {
+    position: absolute;
+    right: 10px;
+    left: var(--s-table-drop-indent, 12px);
+    z-index: 8;
+    height: 2px;
+    pointer-events: none;
+    background: getColor(primary, 0.68);
+    content: '';
+  }
+  .is-drop-inside-start::after {
+    top: 0;
+  }
+  .is-drop-inside-end::after {
+    bottom: 0;
+  }
+  .is-drop-inside-start.is-drop-inside-end::after {
+    top: 0;
+    bottom: 0;
+    height: auto;
+    background: transparent;
+    box-shadow:
+      inset 0 2px #{getColor(primary, 0.68)},
+      inset 0 -2px #{getColor(primary, 0.68)};
+  }
+  @include e(drop-indicator) {
+    position: absolute;
+    right: 10px;
+    left: var(--s-table-drop-indent, 12px);
+    z-index: 8;
+    height: 2px;
+    pointer-events: none;
+    background: getColor(primary);
+    box-shadow: 0 2px 6px -3px #{getColor(primary, 0.55)};
+
+    &::before {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: getColor(primary);
+      content: '';
+      transform: translate(-50%, -50%);
+    }
+  }
+  .is-drop-before > .#{$namespace}-table__drop-indicator {
+    top: -1px;
+  }
+  .is-drop-after > .#{$namespace}-table__drop-indicator {
+    bottom: -1px;
   }
 
   @include e(cell-main) {
@@ -1077,11 +1211,42 @@
         var(--s-table-row-surface)
       );
       box-shadow: inset 0 2px 7px -4px #{getColor(primary, 0.25)};
+
+      > .#{$namespace}-table__cell-main {
+        position: absolute;
+        inset: 0;
+        height: 100%;
+      }
+    }
+
+    &.is-fixed-column.is-editing-cell {
+      z-index: 7;
+      isolation: isolate;
+
+      :where(
+        .#{$namespace}-input__wrapper,
+        .#{$namespace}-select__input,
+        .#{$namespace}-textarea
+      ) {
+        box-shadow: none;
+      }
+
+      &::after {
+        position: absolute;
+        z-index: 2;
+        inset: 0;
+        box-shadow:
+          0 3px 8px #{getColor(primary, 0.16)},
+          0 12px 28px #{getColor(primary, 0.14)},
+          inset 0 0 10px -6px #{getColor(primary, 0.58)};
+        content: '';
+        pointer-events: none;
+      }
     }
     display: flex;
     min-width: 0;
     align-items: center;
-    padding: 10px 14px;
+    padding: var(--s-table-cell-padding);
     line-height: 1.5;
 
     @include when(invalid) {
@@ -1637,6 +1802,23 @@
       background: var(--s-table-footer-surface);
     }
 
+    &.is-merge-hovered {
+      background: color-mix(
+        in srgb,
+        #{getColor(primary)} 5.5%,
+        var(--s-table-surface)
+      );
+
+      > .#{$namespace}-table__data-row {
+        background: color-mix(
+          in srgb,
+          #{getColor(primary)} 5.5%,
+          var(--s-table-row-surface)
+        );
+        box-shadow: 0 2px 6px -4px #{getColor(primary, 0.12)};
+      }
+    }
+
     &.is-range-cell {
       background: color-mix(
         in srgb,
@@ -1644,6 +1826,15 @@
         var(--s-table-surface)
       );
       box-shadow: inset 0 0 8px -5px #{getColor(primary, 0.3)};
+    }
+
+    &.is-active-cell {
+      background: color-mix(
+        in srgb,
+        #{getColor(primary)} 9%,
+        var(--s-table-surface)
+      );
+      box-shadow: inset 0 0 9px -4px #{getColor(primary, 0.5)};
     }
 
     > .#{$namespace}-table__data-row,
@@ -1968,14 +2159,57 @@ html.dark .#{$namespace}-table-wrapper {
 
   @include e(query) {
     margin-bottom: 16px;
+    container: table-query / inline-size;
   }
 
-  @include e(query-actions) {
-    grid-column: 1 / -1;
+  @include e(query-layout) {
+    display: grid;
+    min-width: 0;
+
+    @include when(with-fixed-buttons) {
+      grid-template-columns: minmax(0, 1fr) max-content;
+      gap: 12px;
+    }
+
+    > .#{$namespace}-table-shell__query-form.is-label-top
+      + .#{$namespace}-table-shell__query-fixed-buttons {
+      align-self: end;
+    }
+  }
+
+  @include e(query-form) {
+    min-width: 0;
+
+    &:not(.is-inline) > .#{$namespace}-form__grid {
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+
+      > .#{$namespace}-form-item {
+        grid-column: auto;
+      }
+    }
+  }
+
+  @include e(query-fixed-buttons) {
     display: flex;
+    min-width: max-content;
     flex-wrap: wrap;
     align-items: center;
+    align-self: start;
+    justify-content: flex-end;
     gap: 8px;
+  }
+
+  @container table-query (max-width: 560px) {
+    @include e(query-layout) {
+      @include when(with-fixed-buttons) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @include e(query-fixed-buttons) {
+      min-width: 0;
+      justify-self: end;
+    }
   }
 
   @include e(toolbar) {

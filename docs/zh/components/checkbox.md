@@ -4,6 +4,11 @@ API_TITLES:
   GROUP_PROPS: "CheckboxGroup 属性"
   GROUP_TABS_PROPS: "CheckboxGroupTabs 属性"
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: 'small | default | large'
+    description: 设置或继承复选框及标签尺寸。
+    default: null
   - name: disabled
     type: Boolean
     values: "true | false"
@@ -176,6 +181,11 @@ PROPS:
       </template>
 
 GROUP_PROPS:
+  - name: size
+    type: ComponentSize
+    description: 设置或继承 CheckboxGroup 及其选项的尺寸。
+    default: null
+    usage: '#size'
   - name: "v-model"
     type: CheckboxGroupValueType
     description: "所有已选子项组成的扁平数组。"
@@ -403,6 +413,34 @@ SLOTS:
 <template #script>
 
 @[code{6-10}](../../.vuepress/components/checkbox/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><checkbox-zh-size /></template>
+
+<template #template>
+
+@[code{7-13}](../../.vuepress/components/checkbox-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/checkbox-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{15-22}](../../.vuepress/components/checkbox-zh/size.vue)
 
 </template>
 

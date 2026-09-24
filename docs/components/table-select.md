@@ -1,5 +1,10 @@
 ---
 PROPS:
+  - name: size
+    type: ComponentSize
+    values: "small | default | large"
+    description: Size inherited by the trigger, popup Table, and registered renderers.
+    default: null
   - name: "empty-text"
     type: "String"
     description: "Text displayed when the table has no rows; falls back to the current locale."
@@ -392,6 +397,7 @@ description: 'Select a row from a flat, virtualized, or tree-structured Table.'
 
 # Table Select
 
+
 <card>
 
 ## Tree data
@@ -415,6 +421,34 @@ Tree selection is one Table data mode. Parent rows expand in place while selecta
 <template #style>
 
 @[code{57-67}](../.vuepress/components/table-select/tree.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><table-select-size /></template>
+
+<template #template>
+
+@[code{13-39}](../.vuepress/components/table-select/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-11}](../.vuepress/components/table-select/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{41-48}](../.vuepress/components/table-select/size.vue)
 
 </template>
 

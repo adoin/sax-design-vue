@@ -2,6 +2,7 @@
   <div
     :class="[
       ns.b(),
+      ns.m(size || 'default'),
       props.color && ns.m(props.color),
       ns.is(shape),
       {
@@ -20,7 +21,7 @@
       :id="textareaId"
       ref="textareaRef"
       v-bind="$attrs"
-      :value="modelValue"
+      :value="pendingValue"
       :class="ns.e('inner')"
       :readonly="readonly || !editable"
       :disabled="disabled"
@@ -32,6 +33,8 @@
       :cols="cols"
       :style="textareaStyle"
       @input="handleInput"
+      @compositionstart="handleCompositionStart"
+      @compositionend="handleCompositionEnd"
       @change="handleChange"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -56,7 +59,13 @@ import {
   useTemplateRef,
   watch,
 } from 'vue'
-import { useColor, useId, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import {
+  useColor,
+  useId,
+  useNamespace,
+  useShape,
+  useSize,
+} from '@vuesax-alpha/hooks'
 import { getCssColor } from '@vuesax-alpha/utils'
 import { textareaEmits, textareaProps } from './textarea'
 import type { CSSProperties } from 'vue'
@@ -71,6 +80,7 @@ const emit = defineEmits(textareaEmits)
 
 const ns = useNamespace('textarea')
 const shape = useShape()
+const size = useSize()
 const color = useColor('primary')
 const attrs = useAttrs()
 const generatedId = useId()
@@ -78,6 +88,7 @@ const generatedId = useId()
 const isFocus = shallowRef(false)
 const textareaRef = useTemplateRef<HTMLTextAreaElement>('textareaRef')
 const pendingValue = shallowRef(props.modelValue || '')
+const composing = shallowRef(false)
 const textareaId = computed(() => String(attrs.id || generatedId.value))
 
 const countLimit = computed(() => props.counter ?? resolvedMaxLength.value)
@@ -152,6 +163,7 @@ watch(
 watch(
   () => props.modelValue,
   (value) => {
+    if (composing.value) return
     pendingValue.value = value || ''
   },
 )
@@ -161,9 +173,19 @@ onMounted(() => resizeTextarea())
 const handleInput = (evt: Event) => {
   const target = evt.target as HTMLTextAreaElement
   pendingValue.value = target.value
-  if (props.immediate) emit('update:modelValue', target.value)
+  if (props.immediate && !composing.value && !(evt as InputEvent).isComposing)
+    emit('update:modelValue', target.value)
   emit('input', target.value)
   resizeTextarea()
+}
+
+const handleCompositionStart = () => {
+  composing.value = true
+}
+
+const handleCompositionEnd = (evt: CompositionEvent) => {
+  composing.value = false
+  handleInput(evt)
 }
 
 const handleChange = (evt: Event) => {

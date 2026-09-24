@@ -3,7 +3,6 @@
     <s-card
       interactive
       hover-effect="none"
-      variant="outlined"
       title="None"
       text="Stable surface without decorative movement."
       aria-label="Open card without a hover effect"
@@ -18,7 +17,6 @@
     <s-card
       interactive
       hover-effect="glow"
-      variant="outlined"
       color="success"
       title="Glow"
       text="Uses the semantic color for focus and edge emphasis."

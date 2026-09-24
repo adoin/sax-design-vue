@@ -1,9 +1,14 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 import type { TableExposes } from './table'
-import type { TableQueryContext, TableToolbarConfig } from './table-business'
+import type {
+  TableQueryContext,
+  TableSize,
+  TableToolbarConfig,
+} from './table-business'
 
 export interface TableToolbarRuntime {
   enabled: ComputedRef<boolean>
+  size: ComputedRef<TableSize>
   config: ComputedRef<TableToolbarConfig>
   busy: ComputedRef<boolean>
   table: TableExposes

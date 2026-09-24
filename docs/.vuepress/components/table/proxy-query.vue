@@ -93,7 +93,6 @@ const tableOptions = computed<SaxGridSetting<ProjectRow, ProjectQueryForm>>(
     proxyConfig,
     queryConfig: {
       model,
-      labelPosition: 'top',
       reserveErrorSpace: false,
       items: [
         {

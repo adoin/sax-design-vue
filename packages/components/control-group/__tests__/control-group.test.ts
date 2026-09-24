@@ -2,6 +2,7 @@ import { Fragment, h } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import ControlGroup from '../src/control-group.vue'
+import Input from '../../input/src/input.vue'
 
 describe('ControlGroup', () => {
   it('renders ordered controls as one semantic group', () => {
@@ -23,6 +24,19 @@ describe('ControlGroup', () => {
     const wrapper = mount(ControlGroup, { props: { block: true } })
 
     expect(wrapper.classes()).toContain('is-block')
+  })
+
+  it('forces its resolved size onto direct component controls', () => {
+    const wrapper = mount(ControlGroup, {
+      props: { size: 'small' },
+      slots: {
+        default: () => h(Input, { size: 'large', modelValue: '' }),
+      },
+    })
+
+    expect(wrapper.classes()).toContain('s-control-group--small')
+    expect(wrapper.getComponent(Input).props('size')).toBe('small')
+    expect(wrapper.getComponent(Input).classes()).toContain('s-input--small')
   })
 
   it('uses a 24-column span and shares the remainder between unset items', () => {

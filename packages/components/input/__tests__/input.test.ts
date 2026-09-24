@@ -24,6 +24,22 @@ describe('Input behavior', () => {
     expect(wrapper.emitted('input')).toEqual([['Sax']])
   })
 
+  it('keeps an IME draft when a controlled value changes during composition', async () => {
+    const wrapper = mountInput({ modelValue: 'old' })
+    const input = wrapper.get<HTMLInputElement>('input')
+
+    await input.trigger('compositionstart')
+    input.element.value = '拼音'
+    await input.trigger('input', { isComposing: true })
+    await wrapper.setProps({ modelValue: 'stale' })
+
+    expect(input.element.value).toBe('拼音')
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+
+    await input.trigger('compositionend')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['拼音'])
+  })
+
   it('shows the allow-clear action while active and clears the value', async () => {
     const wrapper = mountInput({ modelValue: 'Clear me', allowClear: true })
     const input = wrapper.get('input')

@@ -11,6 +11,18 @@
   cursor: text;
   -webkit-tap-highlight-color: transparent;
 
+  @include m(small) {
+    --sax-verification-code-cell-size: 36px;
+    --sax-verification-code-gap: 6px;
+    min-height: 40px;
+  }
+
+  @include m(large) {
+    --sax-verification-code-cell-size: 52px;
+    --sax-verification-code-gap: 10px;
+    min-height: 56px;
+  }
+
   @include e(input) {
     position: absolute;
     inset: 0;
