@@ -6,6 +6,8 @@ export type TabsType =
   'line' | 'pill' | 'card' | 'connected-card' | 'editable-card'
 export type TabsOverflow = 'collapse' | 'scroll' | 'wrap'
 export type TabsSize = 'small' | 'default' | 'large'
+export const tabsRenderModes = ['all', 'lazy', 'active-only'] as const
+export type TabsRenderMode = (typeof tabsRenderModes)[number]
 
 export interface TabPaneContext {
   uid: number
@@ -21,8 +23,7 @@ export interface TabPaneContext {
 export interface TabsContext {
   activeUid: Ref<number | undefined>
   animated: Ref<boolean>
-  lazy: Ref<boolean>
-  destroyOnHide: Ref<boolean>
+  renderMode: Ref<TabsRenderMode>
   registerPane: (pane: TabPaneContext) => void
   updatePane: (uid: number, pane: Partial<TabPaneContext>) => void
   unregisterPane: (uid: number) => void

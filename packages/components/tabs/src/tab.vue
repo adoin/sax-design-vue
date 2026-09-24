@@ -10,6 +10,7 @@ import {
   watch,
 } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
+import { debugWarn } from '@vuesax-alpha/utils'
 import { tabsContextKey } from './constants'
 import { tabProps } from './tab'
 
@@ -29,14 +30,26 @@ if (!tabs || !instance) throw new Error('[STab] must be used inside STabs')
 const uid = instance.uid
 const isActive = computed(() => tabs.activeUid.value === uid)
 const hasRendered = shallowRef(false)
+const renderMode = computed(
+  () => props.renderMode ?? (props.forceRender ? 'all' : tabs.renderMode.value),
+)
 const shouldRender = computed(() => {
-  if (props.forceRender) return true
-  if (tabs.destroyOnHide.value) return isActive.value
-  if (!tabs.lazy.value) return true
+  if (renderMode.value === 'all') return true
+  if (renderMode.value === 'active-only') return isActive.value
   return hasRendered.value
 })
 const transitionName = computed(() =>
   tabs.animated.value ? ns.e('pane-fade') : undefined,
+)
+
+watch(
+  () => [props.renderMode, props.forceRender] as const,
+  ([mode, forceRender]) => {
+    if (mode && forceRender) {
+      debugWarn('STab', '`render-mode` overrides `force-render`.')
+    }
+  },
+  { immediate: true },
 )
 
 const paneData = () => ({
@@ -76,7 +89,7 @@ onBeforeUnmount(() => tabs.unregisterPane(uid))
 </script>
 
 <template>
-  <Transition :name="transitionName">
+  <Transition :name="transitionName" :css="tabs.animated.value">
     <div
       v-if="shouldRender"
       v-show="isActive"

@@ -21,14 +21,19 @@ import {
   useOrderedChildren,
   useSize,
 } from '@vuesax-alpha/hooks'
-import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
+import {
+  debugWarn,
+  getVsColor,
+  isVsColor,
+  normalizeVsColor,
+} from '@vuesax-alpha/utils'
 import { tabsContextKey } from './constants'
 import { tabsEmits, tabsProps } from './tabs'
 import { calculateTabsOverflowLayout } from './tabs-overflow'
 import TabsOverflowTrigger from './tabs-overflow-trigger.vue'
 
 import type { CSSProperties } from 'vue'
-import type { TabPaneContext, TabValue } from './constants'
+import type { TabPaneContext, TabValue, TabsRenderMode } from './constants'
 import type { TabsOverflowResult } from './tabs-overflow'
 
 defineOptions({ name: 'STabs' })
@@ -72,6 +77,26 @@ const isEditable = computed(
   () => props.editable || props.type === 'editable-card',
 )
 const showLine = computed(() => props.type === 'line')
+const renderMode = computed<TabsRenderMode>(() => {
+  if (props.renderMode) return props.renderMode
+  if (props.destroyOnHide) return 'active-only'
+  return props.lazy ? 'lazy' : 'all'
+})
+
+watch(
+  () => [props.renderMode, props.lazy, props.destroyOnHide] as const,
+  ([mode, lazy, destroyOnHide]) => {
+    if (mode && (lazy || destroyOnHide)) {
+      debugWarn(
+        'STabs',
+        '`render-mode` overrides `lazy` and `destroy-on-hide`.',
+      )
+    } else if (lazy && destroyOnHide) {
+      debugWarn('STabs', '`destroy-on-hide` takes precedence over `lazy`.')
+    }
+  },
+  { immediate: true },
+)
 
 const themeColor = computed(() => normalizeVsColor(props.color))
 const isThemeColor = computed(() => isVsColor(themeColor.value))
@@ -401,8 +426,7 @@ useResizeObserver(navWrapRef, measureTabs)
 provide(tabsContextKey, {
   activeUid,
   animated: toRef(props, 'animated'),
-  lazy: toRef(props, 'lazy'),
-  destroyOnHide: toRef(props, 'destroyOnHide'),
+  renderMode,
   registerPane,
   updatePane,
   unregisterPane,

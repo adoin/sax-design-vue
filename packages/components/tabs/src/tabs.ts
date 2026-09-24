@@ -7,6 +7,7 @@ import {
   isString,
 } from '@vuesax-alpha/utils'
 
+import { tabsRenderModes } from './constants'
 import type { ExtractPropTypes } from 'vue'
 import type Tabs from './tabs.vue'
 import type {
@@ -14,6 +15,7 @@ import type {
   TabValue,
   TabsOverflow,
   TabsPosition,
+  TabsRenderMode,
   TabsSize,
   TabsType,
 } from './constants'
@@ -55,8 +57,14 @@ export const tabsProps = buildProps({
   animated: { type: Boolean, default: true },
   /** Show add and close controls independently from the visual type. */
   editable: Boolean,
-  /** Mount a pane only after its first activation, then keep it mounted. */
+  /** Mounting policy for all panes; individual panes may override it. */
+  renderMode: {
+    type: definePropType<TabsRenderMode>(String),
+    values: tabsRenderModes,
+  },
+  /** @deprecated use renderMode="lazy" instead. */
   lazy: Boolean,
+  /** @deprecated use renderMode="active-only" instead. */
   destroyOnHide: Boolean,
   hideAdd: Boolean,
   ariaLabel: String,

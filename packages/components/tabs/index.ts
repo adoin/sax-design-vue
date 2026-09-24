@@ -10,3 +10,4 @@ export default STabs
 
 export * from './src/tabs'
 export * from './src/tab'
+export type { TabsRenderMode } from './src/constants'

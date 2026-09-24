@@ -41,16 +41,24 @@ PROPS:
     values: "true / false"
     description: Animate panel and navigation changes.
     default: 'true'
+  - name: render-mode
+    type: "'all' | 'lazy' | 'active-only'"
+    values: "all | lazy | active-only"
+    description: Mount all panes, retain visited panes, or keep only the active pane mounted.
+    default: all
+    usage: '#render-modes'
   - name: destroy-on-hide
     type: Boolean
     values: "true / false"
-    description: Unmount hidden panel content.
+    description: Deprecated compatibility alias for render-mode="active-only". An explicit render-mode wins.
     default: 'false'
+    usage: '#render-modes'
   - name: lazy
     type: Boolean
     values: "true / false"
-    description: Mount each panel on first activation, then keep visited panels mounted.
+    description: Deprecated compatibility alias for render-mode="lazy". An explicit render-mode wins.
     default: 'false'
+    usage: '#render-modes'
   - name: editable
     type: Boolean
     values: "true / false"
@@ -102,11 +110,18 @@ CHILD_PROPS:
     values: "false"
     description: Disable a tab or allow closing it when editing controls are enabled.
     default: true
+  - name: render-mode
+    type: "'all' | 'lazy' | 'active-only'"
+    values: "all | lazy | active-only"
+    description: Override the parent mounting policy for this pane.
+    default: null
+    usage: '#pane-override'
   - name: force-render
     type: Boolean
     values: "true / false"
-    description: Keep this panel mounted when destroy-on-hide is enabled.
+    description: Deprecated compatibility alias for this pane's render-mode="all". An explicit pane render-mode wins.
     default: 'false'
+    usage: '#pane-override'
 EVENTS:
   - name: change
     description: Emits value and pane when the active tab changes.
@@ -141,33 +156,63 @@ SLOTS:
 
 Tabs uses semantic `tablist / tab / tabpanel` roles with arrow, Home, and End keyboard navigation. Every visual mode uses spacing, surface depth, and shadow instead of visible borders.
 
-`lazy` mounts a panel on first activation and keeps it for later switches; `destroy-on-hide` continuously unmounts inactive panels.
+Choose one `render-mode`: `all` mounts every pane immediately, `lazy` mounts visited panes and keeps them, and `active-only` unmounts a pane when it becomes inactive. Use `active-only` for expensive panes when retaining every visited subtree would consume too much memory; state that must survive belongs outside the pane.
+
+The former `lazy`, `destroy-on-hide`, and `force-render` props remain compatibility aliases. Explicit `render-mode` wins; if both parent aliases are true, `destroy-on-hide` wins as before.
 
 </card>
 
 <card>
 
-## Lazy mounting
+## Render modes
 
-Add `lazy` when panel content is expensive. Only the active panel mounts initially; each visited panel mounts once and remains available for later switches.
+Switch modes and tabs to compare how many pane subtrees are mounted. `all` keeps every pane, `lazy` grows as panes are visited, and `active-only` keeps one pane at a time. The example disables animation so the mount count updates without a leaving pane's brief transition overlap.
 
-<template #example><tabs-lazy /></template>
+<template #example><tabs-render-mode /></template>
 
 <template #template>
 
-@[code{31-52}](../.vuepress/components/tabs/lazy.vue)
+@[code{36-57}](../.vuepress/components/tabs/render-mode.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-29}](../.vuepress/components/tabs/lazy.vue)
+@[code{1-34}](../.vuepress/components/tabs/render-mode.vue)
 
 </template>
 
 <template #style>
 
-@[code{54-66}](../.vuepress/components/tabs/lazy.vue)
+@[code{59-71}](../.vuepress/components/tabs/render-mode.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Pane override
+
+Set `render-mode` on one `s-tab` when its state should be retained while the parent uses `active-only` for other panes. The mounted count shows that the draft pane remains in the DOM while the active pane changes.
+
+<template #example><tabs-pane-render-mode /></template>
+
+<template #template>
+
+@[code{23-42}](../.vuepress/components/tabs/pane-render-mode.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-21}](../.vuepress/components/tabs/pane-render-mode.vue)
+
+</template>
+
+<template #style>
+
+@[code{44-56}](../.vuepress/components/tabs/pane-render-mode.vue)
 
 </template>
 

@@ -41,16 +41,24 @@ PROPS:
     values: "true / false"
     description: 是否启用面板与列表切换动效。
     default: 'true'
+  - name: render-mode
+    type: "'all' | 'lazy' | 'active-only'"
+    values: "all | lazy | active-only"
+    description: 分别选择全部挂载、访问后保留，或仅挂载当前面板。
+    default: all
+    usage: '#render-modes'
   - name: destroy-on-hide
     type: Boolean
     values: "true / false"
-    description: 隐藏后是否卸载面板内容。
+    description: 兼容旧用法，等同 render-mode="active-only"；显式 render-mode 优先。
     default: 'false'
+    usage: '#render-modes'
   - name: lazy
     type: Boolean
     values: "true / false"
-    description: 面板首次激活时才挂载，访问后继续保留。
+    description: 兼容旧用法，等同 render-mode="lazy"；显式 render-mode 优先。
     default: 'false'
+    usage: '#render-modes'
   - name: editable
     type: Boolean
     values: "true / false"
@@ -102,11 +110,18 @@ CHILD_PROPS:
     values: "false"
     description: 禁用标签，或控制开启编辑操作时是否允许关闭。
     default: true
+  - name: render-mode
+    type: "'all' | 'lazy' | 'active-only'"
+    values: "all | lazy | active-only"
+    description: 为当前面板覆盖父级挂载策略。
+    default: null
+    usage: '#pane-override'
   - name: force-render
     type: Boolean
     values: "true / false"
-    description: 即使 destroy-on-hide 开启也保留该面板。
+    description: 兼容旧用法，等同当前面板的 render-mode="all"；面板显式 render-mode 优先。
     default: 'false'
+    usage: '#pane-override'
 EVENTS:
   - name: change
     description: 激活项变化时返回 value 与 pane。
@@ -141,33 +156,63 @@ SLOTS:
 
 Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End。所有形态均不依赖可见边框，通过间距、背景层次和阴影组织结构。
 
-`lazy` 会在面板首次激活时挂载并在后续切换中保留；`destroy-on-hide` 则会持续卸载非活动面板。
+用一个 `render-mode` 选择挂载策略：`all` 立即挂载全部面板，`lazy` 首次访问后保留，`active-only` 在面板离开时卸载内容。大量重型面板不宜保留所有已访问的子树，可用 `active-only`；需要跨切换保留的数据应放在面板外维护。
+
+旧的 `lazy`、`destroy-on-hide` 和 `force-render` 暂作兼容别名。显式 `render-mode` 优先；父级两个旧属性同时为 true 时，仍以 `destroy-on-hide` 为准。
 
 </card>
 
 <card>
 
-## 延迟挂载
+## 渲染策略
 
-面板内容开销较大时可添加 `lazy`。初始只挂载当前面板；每个访问过的面板只挂载一次，并在后续切换中保留。
+切换策略和标签，直接比较当前挂载的面板数。`all` 始终保留全部面板，`lazy` 随访问逐步增加，`active-only` 只保留当前面板。示例关闭了动效，因此退场面板不会在动画期间短暂重叠。
 
-<template #example><tabs-lazy /></template>
+<template #example><tabs-zh-render-mode /></template>
 
 <template #template>
 
-@[code{31-52}](../../.vuepress/components/tabs/lazy.vue)
+@[code{32-52}](../../.vuepress/components/tabs-zh/render-mode.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-29}](../../.vuepress/components/tabs/lazy.vue)
+@[code{1-30}](../../.vuepress/components/tabs-zh/render-mode.vue)
 
 </template>
 
 <template #style>
 
-@[code{54-66}](../../.vuepress/components/tabs/lazy.vue)
+@[code{54-66}](../../.vuepress/components/tabs-zh/render-mode.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 面板级覆盖
+
+父级使用 `active-only` 时，可在需要保留状态的单个 `s-tab` 上设置 `render-mode`。挂载计数会显示草稿面板始终留在 DOM 中，而当前面板随切换变化。
+
+<template #example><tabs-zh-pane-render-mode /></template>
+
+<template #template>
+
+@[code{23-41}](../../.vuepress/components/tabs-zh/pane-render-mode.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-21}](../../.vuepress/components/tabs-zh/pane-render-mode.vue)
+
+</template>
+
+<template #style>
+
+@[code{43-55}](../../.vuepress/components/tabs-zh/pane-render-mode.vue)
 
 </template>
 

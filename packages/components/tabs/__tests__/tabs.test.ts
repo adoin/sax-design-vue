@@ -1,4 +1,4 @@
-import { defineComponent, h, nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import zhCn from '@vuesax-alpha/locale/lang/zh-cn'
@@ -139,7 +139,7 @@ describe('Tabs', () => {
 
   it('lazily mounts panes on first activation and keeps visited panes', async () => {
     const wrapper = mountTabs(
-      { modelValue: 'overview', lazy: true },
+      { modelValue: 'overview', renderMode: 'lazy' },
       { default: panes },
     )
     await nextTick()
@@ -154,6 +154,152 @@ describe('Tabs', () => {
     expect(wrapper.findAll('[role="tabpanel"]')).toHaveLength(2)
     expect(wrapper.text()).toContain('Overview panel')
     expect(wrapper.text()).toContain('Files panel')
+  })
+
+  it.each([
+    ['all', 3],
+    ['lazy', 1],
+    ['active-only', 1],
+  ] as const)('mounts %s panes initially', async (renderMode, count) => {
+    const wrapper = mountTabs(
+      { modelValue: 'overview', renderMode, animated: false },
+      { default: panes },
+    )
+    await nextTick()
+    expect(wrapper.findAll('[role="tabpanel"]')).toHaveLength(count)
+  })
+
+  it('unmounts inactive pane subtrees and remounts them on return', async () => {
+    const mounts = vi.fn()
+    const unmounts = vi.fn()
+    const PaneBody = defineComponent({
+      props: { name: { type: String, required: true } },
+      setup(props) {
+        onMounted(() => mounts(props.name))
+        onUnmounted(() => unmounts(props.name))
+        return () => h('span', `${props.name} content`)
+      },
+    })
+    const wrapper = mountTabs(
+      { modelValue: 'first', renderMode: 'active-only', animated: false },
+      {
+        default: () =>
+          ['first', 'second', 'third'].map((name) =>
+            h(Tab, { name, label: name }, () => h(PaneBody, { name })),
+          ),
+      },
+    )
+    await nextTick()
+    expect(wrapper.findAll('[role="tabpanel"]')).toHaveLength(1)
+    expect(mounts.mock.calls).toEqual([['first']])
+
+    await wrapper.findAll('[role="tab"]')[1].trigger('click')
+    await nextTick()
+    expect(wrapper.findAll('[role="tabpanel"]')).toHaveLength(1)
+    expect(unmounts.mock.calls).toEqual([['first']])
+    expect(mounts.mock.calls).toEqual([['first'], ['second']])
+
+    await wrapper.findAll('[role="tab"]')[0].trigger('click')
+    await nextTick()
+    expect(wrapper.findAll('[role="tabpanel"]')).toHaveLength(1)
+    expect(mounts.mock.calls).toEqual([['first'], ['second'], ['first']])
+  })
+
+  it('lets one pane override the parent mounting policy', async () => {
+    const wrapper = mountTabs(
+      { modelValue: 'first', renderMode: 'active-only', animated: false },
+      {
+        default: () => [
+          h(
+            Tab,
+            { name: 'first', label: 'First', renderMode: 'all' },
+            () => 'First panel',
+          ),
+          h(Tab, { name: 'second', label: 'Second' }, () => 'Second panel'),
+        ],
+      },
+    )
+    await nextTick()
+    expect(wrapper.findAll('[role="tabpanel"]')).toHaveLength(1)
+
+    await wrapper.findAll('[role="tab"]')[1].trigger('click')
+    await nextTick()
+    expect(wrapper.findAll('[role="tabpanel"]')).toHaveLength(2)
+    expect(wrapper.text()).toContain('First panel')
+    expect(wrapper.text()).toContain('Second panel')
+  })
+
+  it('keeps force-render compatible but prefers an explicit pane mode', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    const legacy = mountTabs(
+      { modelValue: 'second', renderMode: 'active-only', animated: false },
+      {
+        default: () => [
+          h(
+            Tab,
+            { name: 'first', label: 'First', forceRender: true },
+            () => 'First panel',
+          ),
+          h(Tab, { name: 'second', label: 'Second' }, () => 'Second panel'),
+        ],
+      },
+    )
+    await nextTick()
+    expect(legacy.findAll('[role="tabpanel"]')).toHaveLength(2)
+
+    const explicit = mountTabs(
+      { modelValue: 'second', renderMode: 'active-only', animated: false },
+      {
+        default: () => [
+          h(
+            Tab,
+            {
+              name: 'first',
+              label: 'First',
+              forceRender: true,
+              renderMode: 'active-only',
+            },
+            () => 'First panel',
+          ),
+          h(Tab, { name: 'second', label: 'Second' }, () => 'Second panel'),
+        ],
+      },
+    )
+    await nextTick()
+    expect(explicit.findAll('[role="tabpanel"]')).toHaveLength(1)
+    expect(warn).toHaveBeenCalled()
+  })
+
+  it('keeps legacy flags compatible while explicit render-mode wins', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    const legacy = mountTabs(
+      {
+        modelValue: 'overview',
+        lazy: true,
+        destroyOnHide: true,
+        animated: false,
+      },
+      { default: panes },
+    )
+    await nextTick()
+    await legacy.findAll('[role="tab"]')[1].trigger('click')
+    await nextTick()
+    expect(legacy.findAll('[role="tabpanel"]')).toHaveLength(1)
+
+    const explicit = mountTabs(
+      {
+        modelValue: 'overview',
+        renderMode: 'lazy',
+        destroyOnHide: true,
+        animated: false,
+      },
+      { default: panes },
+    )
+    await nextTick()
+    await explicit.findAll('[role="tab"]')[1].trigger('click')
+    await nextTick()
+    expect(explicit.findAll('[role="tabpanel"]')).toHaveLength(2)
+    expect(warn).toHaveBeenCalled()
   })
 
   it('renders the connected-card appearance modifier', async () => {
