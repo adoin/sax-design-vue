@@ -300,6 +300,34 @@ EVENTS:
     description: Fired with errors, model, and native event after submission fails validation.
   - name: reset
     description: Fired after native reset restores initial values.
+SLOTS:
+  - name: SForm.default
+    type: Slot
+    description: Compose Form Item controls or nested schema content.
+  - name: SFormItem.default
+    type: Slot
+    scope: "{ id: string; error: string; validate: (trigger?: FormRuleTrigger | 'submit') => Promise<boolean> }"
+    description: Render the field control using its generated id, validation message, and validation action.
+  - name: SFormItem.label
+    type: Slot
+    scope: "{ id: string; label: string; required: boolean }"
+    description: Customize the field label and required state.
+  - name: SFormItem.error
+    type: Slot
+    scope: "{ error: string; description: string | undefined }"
+    description: Customize validation and helper content.
+  - name: 'items[].slots.default'
+    type: Slot
+    scope: "{ model: FormModel; size: string; item: FormItemConfig; field: string | undefined; prop: string | undefined; value: unknown; disabled: boolean; readonly: boolean; setValue: (value: unknown) => void; id: string }"
+    description: Render a configured field using the current model and value setter.
+  - name: 'items[].slots.label'
+    type: Slot
+    scope: "{ model: FormModel; size: string; item: FormItemConfig; field: string | undefined; prop: string | undefined; value: unknown; disabled: boolean; readonly: boolean; setValue: (value: unknown) => void; id: string; label: string; required: boolean }"
+    description: Render a configured field label with its model context.
+  - name: 'items[].slots.error'
+    type: Slot
+    scope: "{ model: FormModel; size: string; item: FormItemConfig; field: string | undefined; prop: string | undefined; value: unknown; disabled: boolean; readonly: boolean; setValue: (value: unknown) => void; error: string; description: string | undefined }"
+    description: Render a configured field's error or helper content.
 EXPOSES:
   - name: validate
     type: () => Promise<boolean>

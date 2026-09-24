@@ -201,24 +201,24 @@ EVENTS:
     description: 组件获得或失去焦点时触发。
 SLOTS:
   - name: option
-    type: scoped slot
-    values: "option | path | selected | active"
+    type: Slot
+    scope: "{ node: CascaderNode; path: CascaderOption[] }"
     description: 自定义普通选项或搜索结果内容。
   - name: searchResult
-    type: scoped slot
-    values: "option | path | selected | active"
+    type: Slot
+    scope: "{ option: CascaderOption; path: CascaderOption[]; selected: boolean; active: boolean }"
     description: 自定义普通选项或搜索结果内容。
   - name: tag-render
-    type: scoped slot
-    values: "label | option | path | omittedValues | labels | selectedOptions"
+    type: Slot
+    scope: "{ labels: string[]; selectedOptions: CascaderOption[] }"
     description: 自定义多选标签、折叠数量和单选回填内容。
   - name: max-tag-placeholder
-    type: scoped slot
-    values: "label | option | path | omittedValues | labels | selectedOptions"
+    type: Slot
+    scope: "{ option: CascaderOption; path: CascaderOption[]; label: string }"
     description: 自定义多选标签、折叠数量和单选回填内容。
   - name: display-render
-    type: scoped slot
-    values: "label | option | path | omittedValues | labels | selectedOptions"
+    type: Slot
+    scope: "{ omittedValues: CascaderPathValue[] }"
     description: 自定义多选标签、折叠数量和单选回填内容。
   - name: suffix-icon
     type: slot
@@ -228,10 +228,10 @@ SLOTS:
     type: slot
     values: "-"
     description: 自定义后缀、清空、层级展开图标和空状态。
-  - name: expand-icon
-    type: slot
-    values: "-"
-    description: 自定义后缀、清空、层级展开图标和空状态。
+  - name: expandIcon
+    type: Slot
+    scope: "{ option: CascaderOption }"
+    description: 自定义级联选项的展开图标。
   - name: empty
     type: slot
     values: "-"

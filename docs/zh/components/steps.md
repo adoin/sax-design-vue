@@ -79,18 +79,32 @@ EVENTS:
     description: 点击可用步骤时触发，返回下标和步骤项。
 SLOTS:
   - name: item
+    type: Slot
+    scope: "StepSlotProps"
     description: 完整替换单个步骤内容，参数为 item、index、status、statusLabel、icon、active、disabled、interactive。
   - name: icon
+    type: Slot
+    scope: "StepSlotProps"
     description: 自定义标记图标，参数同 item。
   - name: title
+    type: Slot
+    scope: "StepSlotProps"
     description: 自定义对应文本，参数同 item。
   - name: description
+    type: Slot
+    scope: "StepSlotProps"
     description: 自定义对应文本，参数同 item。
   - name: meta
+    type: Slot
+    scope: "StepSlotProps"
     description: 自定义对应文本，参数同 item。
   - name: content
+    type: Slot
+    scope: "StepSlotProps"
     description: 时间线当前步骤的上下文内容，参数同 item。
   - name: actions
+    type: Slot
+    scope: "StepSlotProps"
     description: 时间线当前步骤的操作区，参数同 item。
 description: '支持聚焦轨道、上下文时间线、完整状态与可组合内容的步骤组件。'
 ---

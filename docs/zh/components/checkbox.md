@@ -280,14 +280,14 @@ SLOTS:
     default: null
     usage: '#checkbox-group'
   - name: CheckboxGroup.option
-    type: slot
-    values: '{ option, checked }'
+    type: Slot
+    scope: "{ option: CheckboxGroupOption; checked: boolean }"
     description: 自定义数据驱动的选项内容。
     default: null
     usage: '#data-driven-groups'
   - name: CheckboxGroup.group-label
-    type: slot
-    values: '{ group, checked, indeterminate }'
+    type: Slot
+    scope: "{ group: CheckboxGroupSection; checked: boolean; indeterminate: boolean }"
     description: 自定义分组选中控制项的标签。
     default: null
     usage: '#data-driven-groups'
@@ -297,20 +297,20 @@ SLOTS:
     default: null
     usage: '#data-driven-groups'
   - name: CheckboxGroupTabs.tab
-    type: slot
-    values: '{ tab, active, checked, indeterminate, selectedCount }'
+    type: Slot
+    scope: "{ tab: CheckboxGroupTab; active: boolean; checked: boolean; indeterminate: boolean; selectedCount: number }"
     description: 自定义页签触发器，同时保留当前选择状态。
     default: null
     usage: '#checkbox-group-tabs'
   - name: CheckboxGroupTabs.option
-    type: slot
-    values: '{ option, checked }'
+    type: Slot
+    scope: "{ option: CheckboxGroupOption; checked: boolean }"
     description: 自定义当前页签的选项内容。
     default: null
     usage: '#checkbox-group-tabs'
   - name: CheckboxGroupTabs.group-label
-    type: slot
-    values: '{ group, checked, indeterminate }'
+    type: Slot
+    scope: "{ group: CheckboxGroupSection; checked: boolean; indeterminate: boolean }"
     description: 自定义当前页签内的分组标签。
     default: null
     usage: '#checkbox-group-tabs'
@@ -320,8 +320,8 @@ SLOTS:
     default: null
     usage: '#checkbox-group-tabs'
   - name: icon
-    type: slot
-    values: "checked, indeterminate"
+    type: Slot
+    scope: "{ checked: boolean; indeterminate: boolean }"
     description: 自定义组件图标，并获取当前选中与不确定状态。
     default: null
     link: null

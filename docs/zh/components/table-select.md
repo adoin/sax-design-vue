@@ -295,7 +295,8 @@ EVENTS:
     usage: "#tree-data"
 SLOTS:
   - name: "selected"
-    type: "{ row: TableRow; label: string }"
+    type: Slot
+    scope: "{ row: TableRow; label: string }"
     description: "触发器中的选中行标签。"
     default: null
     usage: "#custom-rendering"
@@ -305,7 +306,8 @@ SLOTS:
     default: null
     usage: "#custom-rendering"
   - name: "suffix"
-    type: "{ open: boolean; selectedRow: TableRow | null }"
+    type: Slot
+    scope: "{ open: boolean; selectedRow: TableRow | null }"
     description: "触发器后缀装饰，不替换内置操作。"
     default: null
     usage: "#custom-rendering"
@@ -315,22 +317,26 @@ SLOTS:
     default: null
     usage: "#custom-rendering"
   - name: "cell"
-    type: "TableCellRenderParams"
+    type: Slot
+    scope: "TableCellRenderParams"
     description: "转发到 STable 的通用数据单元格插槽。"
     default: null
     usage: "#custom-rendering"
   - name: "cell-[key]"
-    type: "TableCellRenderParams"
+    type: Slot
+    scope: "TableCellRenderParams"
     description: "指定列的数据单元格插槽。"
     default: null
     usage: "#custom-rendering"
   - name: "header-cell"
-    type: "TableHeaderRenderParams"
+    type: Slot
+    scope: "TableHeaderRenderParams"
     description: "转发到 STable 的通用表头插槽。"
     default: null
     usage: "#custom-rendering"
   - name: "header-[key]"
-    type: "TableHeaderRenderParams"
+    type: Slot
+    scope: "TableHeaderRenderParams"
     description: "指定列的表头插槽。"
     default: null
     usage: "#custom-rendering"
@@ -340,7 +346,8 @@ SLOTS:
     default: null
     usage: "#custom-rendering"
   - name: "popup-footer"
-    type: "{ selectedRow: TableRow | null; close: () => void }"
+    type: Slot
+    scope: "{ selectedRow: TableRow | null; close: () => void }"
     description: "弹层内表格下方的内容，提供关闭方法。"
     default: null
     usage: "#custom-rendering"

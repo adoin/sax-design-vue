@@ -787,32 +787,50 @@ EVENTS:
     usage: '/components/table/row-selection.html#multiple-selection'
 SLOTS:
   - name: 'proxy-error'
-    type: 'TableExposes & { state: TableProxyState }'
+    type: Slot
+    scope: "TableExposes & { state: TableProxyState }"
     description: 'Customize request error content; receives state and Table methods.'
     default: null
     usage: '/components/table/query-forms-and-request-proxy.html#request-proxy'
   - name: 'query'
-    type: 'TableExposes & { model: FormModel }'
+    type: Slot
+    scope: "TableExposes & { model: FormModel }"
     description: 'Additional SFormItem controls inside the same form; receives model and Table methods.'
     default: null
     usage: '/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
-  - name: '[queryConfig.items[].slots]'
-    type: 'Scoped slot'
-    description: 'Field, label or error slot explicitly mapped by a query item; field content receives model, item, field, prop, value, disabled, readonly and setValue(value).'
+  - name: '[queryConfig.items[].slots.default]'
+    type: Slot
+    scope: "{ model: FormModel; size: string; item: FormItemConfig; field: string | undefined; prop: string | undefined; value: unknown; disabled: boolean; readonly: boolean; setValue: (value: unknown) => void; id: string }"
+    description: 'Field content slot explicitly mapped by a query item.'
+    default: null
+    usage: '/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
+  - name: '[queryConfig.items[].slots.label]'
+    type: Slot
+    scope: "{ model: FormModel; size: string; item: FormItemConfig; field: string | undefined; prop: string | undefined; value: unknown; disabled: boolean; readonly: boolean; setValue: (value: unknown) => void; id: string; label: string; required: boolean }"
+    description: 'Label slot explicitly mapped by a query item.'
+    default: null
+    usage: '/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
+  - name: '[queryConfig.items[].slots.error]'
+    type: Slot
+    scope: "{ model: FormModel; size: string; item: FormItemConfig; field: string | undefined; prop: string | undefined; value: unknown; disabled: boolean; readonly: boolean; setValue: (value: unknown) => void; error: string; description: string | undefined }"
+    description: 'Error or helper slot explicitly mapped by a query item.'
     default: null
     usage: '/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
   - name: 'query-actions'
-    type: 'TableExposes & { busy: boolean }'
+    type: Slot
+    scope: "TableExposes & { busy: boolean }"
     description: 'Replace query actions; receives query, resetQuery, refresh, busy and other Table methods.'
     default: null
     usage: '/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
   - name: 'toolbar_left'
-    type: 'TableExposes & { busy: boolean }'
+    type: Slot
+    scope: "TableExposes & { busy: boolean }"
     description: 'Replace the left toolbar region; receives Table methods and busy.'
     default: null
     usage: '/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
   - name: 'toolbar_right'
-    type: 'TableExposes & { busy: boolean }'
+    type: Slot
+    scope: "TableExposes & { busy: boolean }"
     description: 'Replace the right toolbar region; receives Table methods and busy.'
     default: null
     usage: '/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
@@ -822,72 +840,86 @@ SLOTS:
     default: null
     usage: '/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
   - name: 'STableColumn.default'
-    type: 'TableCellRenderParams'
+    type: Slot
+    scope: "TableCellRenderParams"
     description: 'Cell content on a nested column.'
     default: null
     usage: '/components/table/data-and-column-definitions.html#nested-columns'
   - name: 'STableColumn.header'
-    type: 'TableHeaderRenderParams'
+    type: Slot
+    scope: "TableHeaderRenderParams"
     description: 'Header content on a nested leaf or grouped column.'
     default: null
     usage: '/components/table/header-structures.html#nested-grouped-headers'
   - name: 'group-header'
-    type: '{ group: TableGroupNode; expanded: boolean }'
+    type: Slot
+    scope: "{ group: TableGroupNode; expanded: boolean }"
     description: 'Group heading content alongside the built-in expand button.'
     default: null
     usage: '/components/table/trees-and-groups.html#row-grouping-and-aggregation'
   - name: 'group-summary'
-    type: 'TableFooterCellRenderParams & { group?: TableGroupNode; kind: string }'
+    type: Slot
+    scope: "TableFooterCellRenderParams & { group?: TableGroupNode; kind: string }"
     description: 'Subtotal or overall summary cell.'
     default: null
     usage: '/components/table/trees-and-groups.html#row-grouping-and-aggregation'
   - name: 'parent-indicator'
-    type: 'TableParentIndicatorSlotParams'
+    type: Slot
+    scope: "TableParentIndicatorSlotParams"
     description: 'Customizes the indicator content after the fixed return icon; exposes parentKey, label, and jump.'
     default: null
     usage: '/components/table/trees-and-groups.html#remote-groups-and-virtual-rows'
   - name: '[columns.slots.edit]'
-    type: 'TableEditSlotParams'
+    type: Slot
+    scope: "TableEditSlotParams"
     description: 'Editor slot explicitly mapped by a column configuration.'
     default: null
     usage: '/components/table/editing-validation-and-changes.html#custom-editors'
   - name: 'edit-cell'
-    type: 'TableEditSlotParams'
+    type: Slot
+    scope: "TableEditSlotParams"
     description: 'Generic editor slot with value, draftRow, setValue, commit and cancel.'
     default: null
     usage: '/components/table/editing-validation-and-changes.html#custom-editors'
   - name: 'STableColumn.edit'
-    type: 'TableEditSlotParams'
+    type: Slot
+    scope: "TableEditSlotParams"
     description: 'Editor slot on a nested column.'
     default: null
     usage: '/components/table/editing-validation-and-changes.html#custom-editors'
   - name: 'detail'
-    type: 'TableDetailSlotParams'
+    type: Slot
+    scope: "TableDetailSlotParams"
     description: 'Detail content with row, key, index, loaded data, reload and close.'
     default: null
     usage: '/components/table/row-expansion.html#nested-change-table'
   - name: 'detail-loading'
-    type: 'TableDetailSlotParams'
+    type: Slot
+    scope: "TableDetailSlotParams"
     description: 'Detail loading content.'
     default: null
     usage: '/components/table/row-expansion.html#async-details'
   - name: 'detail-error'
-    type: 'TableDetailSlotParams'
+    type: Slot
+    scope: "TableDetailSlotParams"
     description: 'Detail error content; call reload to retry.'
     default: null
     usage: '/components/table/row-expansion.html#async-details'
   - name: '[columns.slots.footer]'
-    type: TableFooterCellRenderParams
+    type: Slot
+    scope: "TableFooterCellRenderParams"
     description: Footer slot explicitly mapped by a leaf-column configuration.
     default: null
     usage: '/components/table/footers-and-summaries.html#footer-data-rows'
   - name: footer-cell
-    type: TableFooterCellRenderParams
+    type: Slot
+    scope: "TableFooterCellRenderParams"
     description: Fallback slot for all footer cells.
     default: null
     usage: '/components/table/footers-and-summaries.html#footer-data-rows'
   - name: STableColumn.footer
-    type: TableFooterCellRenderParams
+    type: Slot
+    scope: "TableFooterCellRenderParams"
     description: Footer render slot on a nested column.
     default: null
     usage: '/components/table/footers-and-summaries.html#footer-data-rows'
@@ -899,16 +931,20 @@ SLOTS:
     type: Slot
     description: Nested s-table-column definitions.
   - name: '[columns.slots.default]'
-    type: TableCellRenderParams
+    type: Slot
+    scope: "TableCellRenderParams"
     description: Body-cell slot explicitly mapped by a column configuration, receiving row, column, value and rowIndex.
   - name: cell
-    type: TableCellRenderParams
+    type: Slot
+    scope: "TableCellRenderParams"
     description: Fallback cell content for every column.
   - name: '[columns.slots.header]'
-    type: TableHeaderRenderParams
+    type: Slot
+    scope: "TableHeaderRenderParams"
     description: Header slot explicitly mapped by a column configuration.
   - name: header-cell
-    type: TableHeaderRenderParams
+    type: Slot
+    scope: "TableHeaderRenderParams"
     description: Fallback header content for every column.
   - name: header
     type: Slot
@@ -920,7 +956,8 @@ SLOTS:
     type: Slot
     description: Empty-state content.
   - name: '[columns.slots.filter]'
-    type: 'TableFilterSlotParams'
+    type: Slot
+    scope: "TableFilterSlotParams"
     description: 'Custom filter slot named by the column; receives values, setValues, apply, reset and close.'
     default: null
     usage: '/components/table/sorting-and-filtering.html#filters-and-custom-filters'

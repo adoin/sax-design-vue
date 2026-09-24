@@ -137,6 +137,8 @@ EVENTS:
     description: 标签发生右键事件时返回 value、事件与 pane。
 SLOTS:
   - name: label
+    type: Slot
+    scope: "{ pane: TabPaneContext; active: boolean; value: TabValue }"
     description: 自定义全部标签标题，参数为 pane、active、value。
   - name: s-tab#label
     description: 自定义单个标签标题，可组合 ContextMenu。
@@ -145,6 +147,8 @@ SLOTS:
   - name: add-icon
     description: 替换添加、关闭和更多图标。
   - name: close-icon
+    type: Slot
+    scope: "{ pane: TabPaneContext }"
     description: 替换添加、关闭和更多图标。
   - name: more-icon
     description: 替换添加、关闭和更多图标。

@@ -164,15 +164,25 @@ EXPOSES:
     description: Clears the current date, range, or multiple-date selection and synchronizes v-model.
 SLOTS:
   - name: date-cell
+    type: Slot
+    scope: "{ cell: CalendarCell }"
     description: Custom cell content. Receives CalendarCell.
   - name: event
+    type: Slot
+    scope: "{ event: CalendarEvent; date: string; display: CalendarEventDisplay; allDay: boolean }"
     description: Custom month/all-day event content. Receives { event, date, display, allDay }.
   - name: event-overflow
+    type: Slot
+    scope: "{ event: CalendarEvent; date: string; display: CalendarEventDisplay; allDay: boolean; edit: () => void; remove: () => void }"
     description: Custom overflow row. Receives { event, date, display, allDay, edit, remove }.
   - name: time-event
+    type: Slot
+    scope: "{ event: CalendarEvent; date: string; display: CalendarEventDisplay }"
     description: Custom week/day timed-event content. Receives { event, date, display }.
   - name: context-menu
-    description: Custom menu content. Receives { context, close }.
+    type: Slot
+    scope: "{ context: CalendarContextMenuContext; close: () => void }"
+    description: Custom menu content. Receives `{ context, close }`.
 description: 'Event calendar with month, week, and day schedules.'
 ---
 

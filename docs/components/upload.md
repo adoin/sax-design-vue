@@ -295,6 +295,8 @@ EVENTS:
     description: Compatibility event emitted after validation or upload failure.
 SLOTS:
   - name: trigger
+    type: Slot
+    scope: "{ choose: () => void; dragging: boolean; disabled: boolean }"
     description: Replaces the dropzone content. Receives choose, dragging, and disabled.
   - name: tip
     description: Replaces the supporting tip below the upload flow.

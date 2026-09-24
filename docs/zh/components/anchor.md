@@ -88,15 +88,18 @@ EVENTS:
     description: 可折叠锚点项展开或收起时触发，参数为当前项与收起状态。
 SLOTS:
   - name: active-icon
-    type: 'Slot<{ item: AnchorItem, href: string }>'
+    type: Slot
+    scope: "{ item: AnchorItem; href: string }"
     description: 替换激活标记，优先级高于 Anchor 全局图标配置。
     default: null
   - name: route-previous
-    type: 'Slot<{ item: AnchorRouteBoundaryItem, direction: previous, visible: boolean, navigating: boolean, progress: number }>'
+    type: Slot
+    scope: "AnchorRouteBoundarySlotParams"
     description: 替换自动生成的上一条路由提示文字，保留链接、图标和进度指示。
     default: null
   - name: route-next
-    type: 'Slot<{ item: AnchorRouteBoundaryItem, direction: next, visible: boolean, navigating: boolean, progress: number }>'
+    type: Slot
+    scope: "AnchorRouteBoundarySlotParams"
     description: 替换自动生成的下一条路由提示文字，保留链接、图标和进度指示。
     default: null
 description: '用于在当前页面的内容区块或相关路由之间快速导航。'

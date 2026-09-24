@@ -162,12 +162,20 @@ EXPOSES:
     description: 命令式恢复或暂停自动播放。
 SLOTS:
   - name: item
+    type: Slot
+    scope: "{ item: CarouselItem; index: number; active: boolean; offset: number }"
     description: 自定义轮播内容，接收 item、index、active 和相对 offset。
   - name: prev
+    type: Slot
+    scope: "{ disabled: boolean }"
     description: 自定义箭头内容，接收 disabled。
   - name: next
+    type: Slot
+    scope: "{ disabled: boolean }"
     description: 自定义箭头内容，接收 disabled。
   - name: indicator
+    type: Slot
+    scope: "{ item: CarouselItem; index: number; active: boolean }"
     description: 自定义指示器，接收 item、index 和 active。
 description: '支持受控状态、层叠卡组、空间 3D 和无障碍导航的轮播组件。'
 ---

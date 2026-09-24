@@ -194,24 +194,24 @@ EVENTS:
     description: Fire when the control gains or loses focus.
 SLOTS:
   - name: option
-    type: scoped slot
-    values: "option | path | selected | active"
+    type: Slot
+    scope: "{ node: CascaderNode; path: CascaderOption[] }"
     description: Customize normal options or search results.
   - name: searchResult
-    type: scoped slot
-    values: "option | path | selected | active"
+    type: Slot
+    scope: "{ option: CascaderOption; path: CascaderOption[]; selected: boolean; active: boolean }"
     description: Customize normal options or search results.
   - name: tag-render
-    type: scoped slot
-    values: "label | option | path | omittedValues | labels | selectedOptions"
+    type: Slot
+    scope: "{ labels: string[]; selectedOptions: CascaderOption[] }"
     description: Customize multiple tags, overflow count, and single selected content.
   - name: max-tag-placeholder
-    type: scoped slot
-    values: "label | option | path | omittedValues | labels | selectedOptions"
+    type: Slot
+    scope: "{ option: CascaderOption; path: CascaderOption[]; label: string }"
     description: Customize multiple tags, overflow count, and single selected content.
   - name: display-render
-    type: scoped slot
-    values: "label | option | path | omittedValues | labels | selectedOptions"
+    type: Slot
+    scope: "{ omittedValues: CascaderPathValue[] }"
     description: Customize multiple tags, overflow count, and single selected content.
   - name: suffix-icon
     type: slot
@@ -221,10 +221,10 @@ SLOTS:
     type: slot
     values: "-"
     description: Customize suffix, clear and expand icons, or empty state.
-  - name: expand-icon
-    type: slot
-    values: "-"
-    description: Customize suffix, clear and expand icons, or empty state.
+  - name: expandIcon
+    type: Slot
+    scope: "{ option: CascaderOption }"
+    description: Customize the expansion affordance for a cascader option.
   - name: empty
     type: slot
     values: "-"

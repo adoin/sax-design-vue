@@ -29,7 +29,9 @@ const { t } = useDocLocaleUi()
 const labels = computed(() => t.value.apiColumns)
 const hasValues = computed(() =>
   props.rows.some(
-    (row) => row.values != null && String(row.values).trim() !== '',
+    (row) =>
+      (row.scope != null && row.scope.trim() !== '') ||
+      (row.values != null && String(row.values).trim() !== ''),
   ),
 )
 // Keep compact action tracks fixed; let text tracks share the remaining space.
@@ -85,7 +87,7 @@ const columns = computed<TableColumn[]>(() => {
       title:
         (t.value.apiValueColumns as Record<string, string>)[props.tableKey] ||
         labels.value.values,
-      minWidth: 108,
+      minWidth: props.tableKey === 'SLOTS' ? 220 : 108,
       slots: { default: 'apiValues' },
     })
   }
@@ -109,6 +111,7 @@ const data = computed(() =>
   props.rows.map((row) => ({
     ...row,
     typeDetails: getTypeDetails(row.type),
+    scopeDetails: getTypeDetails(row.scope),
     valuesList:
       row.values == null || row.values === ''
         ? []
@@ -182,7 +185,13 @@ const restoreCodeFocus = async () => {
         <span v-else>{{ row.type || '—' }}</span>
       </template>
       <template #apiValues="{ row }">
-        <template v-if="row.valuesList.length">
+        <ApiTypeDetails
+          v-if="row.scope"
+          :type="row.scope"
+          :definitions="row.scopeDetails"
+          :labels="labels"
+        />
+        <template v-else-if="row.valuesList.length">
           <span
             v-for="(value, index) in row.valuesList"
             :key="index"

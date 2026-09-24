@@ -79,18 +79,32 @@ EVENTS:
     description: Fired with the index and item when an enabled step is clicked.
 SLOTS:
   - name: item
+    type: Slot
+    scope: "StepSlotProps"
     description: Replaces a whole step. Receives item, index, status, statusLabel, icon, active, disabled, and interactive.
   - name: icon
+    type: Slot
+    scope: "StepSlotProps"
     description: Custom marker icon. Receives the item slot props.
   - name: title
+    type: Slot
+    scope: "StepSlotProps"
     description: Custom text regions. Receive the item slot props.
   - name: description
+    type: Slot
+    scope: "StepSlotProps"
     description: Custom text regions. Receive the item slot props.
   - name: meta
+    type: Slot
+    scope: "StepSlotProps"
     description: Custom text regions. Receive the item slot props.
   - name: content
+    type: Slot
+    scope: "StepSlotProps"
     description: Context content for the active timeline step.
   - name: actions
+    type: Slot
+    scope: "StepSlotProps"
     description: Action region for the active timeline step.
 description: 'Steps with a focus rail, contextual timeline, semantic states, and composable content.'
 ---

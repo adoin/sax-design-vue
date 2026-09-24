@@ -438,20 +438,20 @@ EVENTS:
     description: Fires when persisted pinned values finish loading.
 SLOTS:
   - name: header
-    type: slot
-    values: 'scoped slot'
+    type: Slot
+    scope: "{ query: string; selectedCount: number; filteredCount: number; totalCount: number; actions: { selectAll: () => void; invert: () => void; clear: () => void } }"
     description: Customize popup header, bulk tools and footer. The footer exposes state and actions without built-in refresh behavior.
     default: null
     usage: '#multiple-selection-tools'
   - name: tools
-    type: slot
-    values: 'scoped slot'
+    type: Slot
+    scope: "{ query: string; selectedCount: number }"
     description: Customize popup header, bulk tools and footer. The footer exposes state and actions without built-in refresh behavior.
     default: null
     usage: '#multiple-selection-tools'
   - name: footer
-    type: slot
-    values: 'scoped slot'
+    type: Slot
+    scope: "{ query: string; selectedCount: number; filteredCount: number; totalCount: number; actions: { selectAll: () => void; invert: () => void; clear: () => void } }"
     description: Customize popup header, bulk tools and footer. The footer exposes state and actions without built-in refresh behavior.
     default: null
     usage: '#multiple-selection-tools'
@@ -497,6 +497,12 @@ SLOTS:
 # Select
 
 <card>
+
+  - name: option
+    type: Slot
+    scope: "{ option: SelectDataOption; group?: SelectDataOption }"
+    description: Customize an option's content; group is available for grouped options.
+    default: null
 
 ## Default
 

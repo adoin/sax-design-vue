@@ -395,20 +395,20 @@ EVENTS:
     description: 持久化固定项加载完成时触发。
 SLOTS:
   - name: header
-    type: slot
-    values: 'scoped slot'
+    type: Slot
+    scope: "{ query: string; selectedCount: number; filteredCount: number; totalCount: number; actions: { selectAll: () => void; invert: () => void; clear: () => void } }"
     description: 自定义下拉框头部、批量工具和底部内容；footer 仅提供状态与操作，不内置刷新。
     default: null
     usage: '#multiple-selection-tools'
   - name: tools
-    type: slot
-    values: 'scoped slot'
+    type: Slot
+    scope: "{ query: string; selectedCount: number }"
     description: 自定义下拉框头部、批量工具和底部内容；footer 仅提供状态与操作，不内置刷新。
     default: null
     usage: '#multiple-selection-tools'
   - name: footer
-    type: slot
-    values: 'scoped slot'
+    type: Slot
+    scope: "{ query: string; selectedCount: number; filteredCount: number; totalCount: number; actions: { selectAll: () => void; invert: () => void; clear: () => void } }"
     description: 自定义下拉框头部、批量工具和底部内容；footer 仅提供状态与操作，不内置刷新。
     default: null
     usage: '#multiple-selection-tools'
@@ -454,6 +454,12 @@ SLOTS:
 # Select 选择器
 
 <card>
+  - name: option
+    type: Slot
+    scope: "{ option: SelectDataOption; group?: SelectDataOption }"
+    description: 自定义选项内容；分组选项还会提供 group。
+    default: null
+
 
 ## 默认
 

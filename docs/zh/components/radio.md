@@ -196,8 +196,8 @@ SLOTS:
     default: null
     usage: '#default'
   - name: RadioGroup.option
-    type: slot
-    values: '{ option, checked }'
+    type: Slot
+    scope: "{ option: RadioOption; checked: boolean }"
     description: 自定义数据驱动的单选项内容。
     default: null
     usage: '#default'
@@ -207,14 +207,14 @@ SLOTS:
     default: null
     usage: '#default'
   - name: RadioGroupTabs.tab
-    type: slot
-    values: '{ tab, active, selected, selectedOption }'
+    type: Slot
+    scope: "{ tab: RadioGroupTab; active: boolean; selected: boolean; selectedOption?: RadioOption }"
     description: 根据激活和选中状态自定义页签触发器。
     default: null
     usage: '#default'
   - name: RadioGroupTabs.option
-    type: slot
-    values: '{ option, checked }'
+    type: Slot
+    scope: "{ option: RadioOption; checked: boolean }"
     description: 自定义当前页签的选项内容。
     default: null
     usage: '#default'
@@ -233,8 +233,8 @@ SLOTS:
     code: null
 
   - name: icon
-    type: slot
-    values: 'checked'
+    type: Slot
+    scope: "{ checked: boolean }"
     description: 替换选中态中心 SVG，并获取当前选中状态。
     default: null
     link: null

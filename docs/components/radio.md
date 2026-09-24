@@ -202,8 +202,8 @@ SLOTS:
     default: null
     usage: '#default'
   - name: RadioGroup.option
-    type: slot
-    values: '{ option, checked }'
+    type: Slot
+    scope: "{ option: RadioOption; checked: boolean }"
     description: Customize a data-driven radio option.
     default: null
     usage: '#default'
@@ -213,14 +213,14 @@ SLOTS:
     default: null
     usage: '#default'
   - name: RadioGroupTabs.tab
-    type: slot
-    values: '{ tab, active, selected, selectedOption }'
+    type: Slot
+    scope: "{ tab: RadioGroupTab; active: boolean; selected: boolean; selectedOption?: RadioOption }"
     description: Customize a tab trigger using its active and selection state.
     default: null
     usage: '#default'
   - name: RadioGroupTabs.option
-    type: slot
-    values: '{ option, checked }'
+    type: Slot
+    scope: "{ option: RadioOption; checked: boolean }"
     description: Customize an option in the active tab.
     default: null
     usage: '#default'
@@ -239,8 +239,8 @@ SLOTS:
     code: null
 
   - name: icon
-    type: slot
-    values: 'checked'
+    type: Slot
+    scope: "{ checked: boolean }"
     description: Replace the selected center SVG and receive the current checked state.
     default: null
     link: null

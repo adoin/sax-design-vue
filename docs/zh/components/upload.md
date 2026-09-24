@@ -295,6 +295,8 @@ EVENTS:
     description: 校验或上传失败后的兼容事件。
 SLOTS:
   - name: trigger
+    type: Slot
+    scope: "{ choose: () => void; dragging: boolean; disabled: boolean }"
     description: 替换上传区内容，提供 choose、dragging 和 disabled。
   - name: tip
     description: 替换上传流程下方的辅助说明。

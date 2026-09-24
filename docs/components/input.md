@@ -474,14 +474,13 @@ SLOTS:
     usage: '#message'
   - name: prefix
     type: Slot
-    values: "suffix: { count"
     description: Customize either affix. The suffix slot replaces the default counter and receives its current count and limit.
     default: null
     link: null
     usage: '#affixes'
   - name: suffix
     type: Slot
-    values: "limit }"
+    scope: "{ count: number; limit: number | undefined }"
     description: Customize either affix. The suffix slot replaces the default counter and receives its current count and limit.
     default: null
     link: null

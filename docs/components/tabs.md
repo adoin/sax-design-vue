@@ -137,6 +137,8 @@ EVENTS:
     description: Emits value, event, and pane for a tab context-menu event.
 SLOTS:
   - name: label
+    type: Slot
+    scope: "{ pane: TabPaneContext; active: boolean; value: TabValue }"
     description: Customizes every label with pane, active, and value.
   - name: s-tab#label
     description: Customizes one label and can compose ContextMenu.
@@ -145,6 +147,8 @@ SLOTS:
   - name: add-icon
     description: Replaces editable and overflow icons.
   - name: close-icon
+    type: Slot
+    scope: "{ pane: TabPaneContext }"
     description: Replaces editable and overflow icons.
   - name: more-icon
     description: Replaces editable and overflow icons.

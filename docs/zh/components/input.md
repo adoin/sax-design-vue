@@ -426,13 +426,12 @@ SLOTS:
     usage: '#message'
   - name: prefix
     type: Slot
-    values: "suffix: { count"
     description: 自定义输入框前后缀；suffix 插槽会替换默认计数器，并提供当前计数和限制值。
     default: null
     usage: '#affixes'
   - name: suffix
     type: Slot
-    values: "limit }"
+    scope: "{ count: number; limit: number | undefined }"
     description: 自定义输入框前后缀；suffix 插槽会替换默认计数器，并提供当前计数和限制值。
     default: null
     usage: '#affixes'

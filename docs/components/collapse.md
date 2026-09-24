@@ -37,8 +37,8 @@ SLOTS:
     values: "-"
     description: Render the panel content or its clickable heading.
   - name: icon-arrow
-    type: scoped slot
-    values: "open | disabled"
+    type: Slot
+    scope: "{ open: boolean; disabled: boolean }"
     description: Render a custom expand icon from the current panel state.
 EXPOSES: []
 description: "Expand and collapse content panels with multiple visual styles."

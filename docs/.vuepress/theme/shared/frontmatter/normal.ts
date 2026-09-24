@@ -10,6 +10,7 @@ export interface ThemeNormalPropsFrontmatter {
   state?: ApiState
   type?: string
   values?: unknown
+  scope?: string
   description?: string
   default?: unknown
   link?: string

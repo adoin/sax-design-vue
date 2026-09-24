@@ -240,8 +240,8 @@ EVENTS:
     description: 点击上一页或下一页后，携带结果页码触发。
 SLOTS:
   - name: default
-    type: slot
-    values: 'currentPage, total, pageSize, pageSizes, pagerCount'
+    type: Slot
+    scope: "{ currentPage: number; total: number; pageSize: number; pageSizes: number[]; pagerCount: number }"
     description: 在 layout 包含 slot 的位置插入自定义内容。
     default: null
     link: null

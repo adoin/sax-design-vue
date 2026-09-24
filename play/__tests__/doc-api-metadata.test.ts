@@ -374,6 +374,63 @@ describe('documentation API metadata', () => {
               frontmatterClosed = true
             }
             return
+  it('documents every scoped slot with typed, clickable scope references in both locales', () => {
+    const resolveTypeDetails = createApiTypeDetailsResolver(
+      resolve(projectRoot, 'packages/components'),
+      [resolve(projectRoot, 'packages/constants')],
+    )
+    const missing: string[] = []
+    const scopesByLocale: Array<Record<string, Record<string, string>>> = []
+    const builtIns = new Set(['Array', 'Function', 'Promise', 'Record'])
+
+    for (const root of docsRoots) {
+      const pages: Record<string, Record<string, string>> = {}
+      for (const filename of readdirSync(root).filter((file) =>
+        file.endsWith('.md'),
+      )) {
+        const component = filename.slice(0, -3)
+        const metadata = matter(
+          readFileSync(resolve(root, filename), 'utf8'),
+        ).data
+        const rows = (metadata.SLOTS ?? []) as Array<{
+          name: string
+          type?: string
+          values?: unknown
+          scope?: string
+        }>
+        for (const row of rows) {
+          if (!row.scope) continue
+          expect(row.type, `${filename} ${row.name}`).toBe('Slot')
+          expect(row.values, `${filename} ${row.name}`).toBeUndefined()
+          const details = resolveTypeDetails(component, [row.scope])
+          for (const name of row.scope.match(/\b[A-Z][A-Za-z0-9_]*/g) ?? []) {
+            if (!builtIns.has(name) && !details[name]?.declaration)
+              missing.push(`${filename} ${row.name}: ${name}`)
+          }
+          pages[component] ??= {}
+          pages[component][row.name] = row.scope
+        }
+      }
+      scopesByLocale.push(pages)
+    }
+
+    expect(missing).toEqual([])
+    expect(Object.keys(scopesByLocale[0]).length).toBeGreaterThan(10)
+    expect(scopesByLocale[1]).toEqual(scopesByLocale[0])
+
+    const tableSource = readFileSync(
+      resolve(projectRoot, 'docs/.vuepress/theme/components/ApiTable.vue'),
+      'utf8',
+    )
+    const themeSource = readFileSync(
+      resolve(projectRoot, 'docs/.vuepress/theme/index.ts'),
+      'utf8',
+    )
+    expect(tableSource).toContain('scopeDetails: getTypeDetails(row.scope)')
+    expect(tableSource).toContain(':definitions="row.scopeDetails"')
+    expect(themeSource).toContain('typeExpressions.push(row.scope)')
+  })
+
           }
           if (!inFrontmatter) return
 

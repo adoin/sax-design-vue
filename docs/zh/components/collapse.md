@@ -37,8 +37,8 @@ SLOTS:
     values: "-"
     description: 渲染面板内容或可交互标题。
   - name: icon-arrow
-    type: scoped slot
-    values: "open | disabled"
+    type: Slot
+    scope: "{ open: boolean; disabled: boolean }"
     description: 根据当前面板状态渲染自定义展开图标。
 EXPOSES: []
 description: "可展开/折叠的内容面板，多种视觉样式。"

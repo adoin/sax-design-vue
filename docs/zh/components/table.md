@@ -787,32 +787,50 @@ EVENTS:
     usage: '/zh/components/table/row-selection.html#multiple-selection'
 SLOTS:
   - name: 'proxy-error'
-    type: 'TableExposes & { state: TableProxyState }'
+    type: Slot
+    scope: "TableExposes & { state: TableProxyState }"
     description: '自定义请求错误内容，接收 state 和 Table 方法。'
     default: null
     usage: '/zh/components/table/query-forms-and-request-proxy.html#request-proxy'
   - name: 'query'
-    type: 'TableExposes & { model: FormModel }'
+    type: Slot
+    scope: "TableExposes & { model: FormModel }"
     description: '在同一个表单中追加 SFormItem，接收 model 和 Table 方法。'
     default: null
     usage: '/zh/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
-  - name: '[queryConfig.items[].slots]'
-    type: 'Scoped slot'
-    description: '由查询项显式映射的字段、标签或错误插槽；字段内容可获取 model、item、field、prop、value、disabled、readonly 和 setValue(value)。'
+  - name: '[queryConfig.items[].slots.default]'
+    type: Slot
+    scope: "{ model: FormModel; size: string; item: FormItemConfig; field: string | undefined; prop: string | undefined; value: unknown; disabled: boolean; readonly: boolean; setValue: (value: unknown) => void; id: string }"
+    description: '由查询项显式映射的字段内容插槽。'
+    default: null
+    usage: '/zh/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
+  - name: '[queryConfig.items[].slots.label]'
+    type: Slot
+    scope: "{ model: FormModel; size: string; item: FormItemConfig; field: string | undefined; prop: string | undefined; value: unknown; disabled: boolean; readonly: boolean; setValue: (value: unknown) => void; id: string; label: string; required: boolean }"
+    description: '由查询项显式映射的标签插槽。'
+    default: null
+    usage: '/zh/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
+  - name: '[queryConfig.items[].slots.error]'
+    type: Slot
+    scope: "{ model: FormModel; size: string; item: FormItemConfig; field: string | undefined; prop: string | undefined; value: unknown; disabled: boolean; readonly: boolean; setValue: (value: unknown) => void; error: string; description: string | undefined }"
+    description: '由查询项显式映射的错误或辅助说明插槽。'
     default: null
     usage: '/zh/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
   - name: 'query-actions'
-    type: 'TableExposes & { busy: boolean }'
+    type: Slot
+    scope: "TableExposes & { busy: boolean }"
     description: '替换查询操作，接收 query、resetQuery、refresh、busy 等。'
     default: null
     usage: '/zh/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
   - name: 'toolbar_left'
-    type: 'TableExposes & { busy: boolean }'
+    type: Slot
+    scope: "TableExposes & { busy: boolean }"
     description: '替换工具栏左侧区域，接收 Table 方法和 busy。'
     default: null
     usage: '/zh/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
   - name: 'toolbar_right'
-    type: 'TableExposes & { busy: boolean }'
+    type: Slot
+    scope: "TableExposes & { busy: boolean }"
     description: '替换工具栏右侧区域，接收 Table 方法和 busy。'
     default: null
     usage: '/zh/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
@@ -822,72 +840,86 @@ SLOTS:
     default: null
     usage: '/zh/components/table/query-forms-and-request-proxy.html#slots-and-nested-columns'
   - name: 'STableColumn.default'
-    type: 'TableCellRenderParams'
+    type: Slot
+    scope: "TableCellRenderParams"
     description: '嵌套列的数据单元格内容。'
     default: null
     usage: '/zh/components/table/data-and-column-definitions.html#nested-columns'
   - name: 'STableColumn.header'
-    type: 'TableHeaderRenderParams'
+    type: Slot
+    scope: "TableHeaderRenderParams"
     description: '嵌套叶子列或分组列的表头内容。'
     default: null
     usage: '/zh/components/table/header-structures.html#nested-grouped-headers'
   - name: 'group-header'
-    type: '{ group: TableGroupNode; expanded: boolean }'
+    type: Slot
+    scope: "{ group: TableGroupNode; expanded: boolean }"
     description: '组标题内容，保留内置展开按钮。'
     default: null
     usage: '/zh/components/table/trees-and-groups.html#row-grouping-and-aggregation'
   - name: 'group-summary'
-    type: 'TableFooterCellRenderParams & { group?: TableGroupNode; kind: string }'
+    type: Slot
+    scope: "TableFooterCellRenderParams & { group?: TableGroupNode; kind: string }"
     description: '小计或整体汇总单元格。'
     default: null
     usage: '/zh/components/table/trees-and-groups.html#row-grouping-and-aggregation'
   - name: 'parent-indicator'
-    type: 'TableParentIndicatorSlotParams'
+    type: Slot
+    scope: "TableParentIndicatorSlotParams"
     description: '自定义固定回退图标以外的提示条内容；可获取 parentKey、label 和 jump。'
     default: null
     usage: '/zh/components/table/trees-and-groups.html#remote-groups-and-virtual-rows'
   - name: '[columns.slots.edit]'
-    type: 'TableEditSlotParams'
+    type: Slot
+    scope: "TableEditSlotParams"
     description: '由列配置显式映射的编辑插槽。'
     default: null
     usage: '/zh/components/table/editing-validation-and-changes.html#custom-editors'
   - name: 'edit-cell'
-    type: 'TableEditSlotParams'
+    type: Slot
+    scope: "TableEditSlotParams"
     description: '通用编辑插槽；接收 value、draftRow、setValue、commit 和 cancel。'
     default: null
     usage: '/zh/components/table/editing-validation-and-changes.html#custom-editors'
   - name: 'STableColumn.edit'
-    type: 'TableEditSlotParams'
+    type: Slot
+    scope: "TableEditSlotParams"
     description: '嵌套列的编辑插槽。'
     default: null
     usage: '/zh/components/table/editing-validation-and-changes.html#custom-editors'
   - name: 'detail'
-    type: 'TableDetailSlotParams'
+    type: Slot
+    scope: "TableDetailSlotParams"
     description: '详情内容；接收行、键、索引、加载结果以及 reload 和 close。'
     default: null
     usage: '/zh/components/table/row-expansion.html#nested-change-table'
   - name: 'detail-loading'
-    type: 'TableDetailSlotParams'
+    type: Slot
+    scope: "TableDetailSlotParams"
     description: '详情加载中的内容。'
     default: null
     usage: '/zh/components/table/row-expansion.html#async-details'
   - name: 'detail-error'
-    type: 'TableDetailSlotParams'
+    type: Slot
+    scope: "TableDetailSlotParams"
     description: '详情加载失败的内容；可调用 reload 重试。'
     default: null
     usage: '/zh/components/table/row-expansion.html#async-details'
   - name: '[columns.slots.footer]'
-    type: TableFooterCellRenderParams
+    type: Slot
+    scope: "TableFooterCellRenderParams"
     description: 由叶子列配置显式映射的表尾插槽。
     default: null
     usage: '/zh/components/table/footers-and-summaries.html#footer-data-rows'
   - name: footer-cell
-    type: TableFooterCellRenderParams
+    type: Slot
+    scope: "TableFooterCellRenderParams"
     description: 所有表尾单元格的后备插槽。
     default: null
     usage: '/zh/components/table/footers-and-summaries.html#footer-data-rows'
   - name: STableColumn.footer
-    type: TableFooterCellRenderParams
+    type: Slot
+    scope: "TableFooterCellRenderParams"
     description: 嵌套列的表尾渲染插槽。
     default: null
     usage: '/zh/components/table/footers-and-summaries.html#footer-data-rows'
@@ -899,16 +931,20 @@ SLOTS:
     type: Slot
     description: 嵌套的 s-table-column 列定义。
   - name: '[columns.slots.default]'
-    type: TableCellRenderParams
+    type: Slot
+    scope: "TableCellRenderParams"
     description: 由列配置显式映射的正文单元格插槽，可获取 row、column、value 和 rowIndex。
   - name: cell
-    type: TableCellRenderParams
+    type: Slot
+    scope: "TableCellRenderParams"
     description: 所有列共用的后备单元格插槽。
   - name: '[columns.slots.header]'
-    type: TableHeaderRenderParams
+    type: Slot
+    scope: "TableHeaderRenderParams"
     description: 由列配置显式映射的表头插槽。
   - name: header-cell
-    type: TableHeaderRenderParams
+    type: Slot
+    scope: "TableHeaderRenderParams"
     description: 所有列共用的后备表头插槽。
   - name: header
     type: Slot
@@ -920,7 +956,8 @@ SLOTS:
     type: Slot
     description: 空数据状态内容。
   - name: '[columns.slots.filter]'
-    type: 'TableFilterSlotParams'
+    type: Slot
+    scope: "TableFilterSlotParams"
     description: '列配置指定的自定义筛选插槽，可获取 values、setValues、apply、reset、close。'
     default: null
     usage: '/zh/components/table/sorting-and-filtering.html#filters-and-custom-filters'

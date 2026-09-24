@@ -162,12 +162,20 @@ EXPOSES:
     description: Resume or pause autoplay imperatively.
 SLOTS:
   - name: item
+    type: Slot
+    scope: "{ item: CarouselItem; index: number; active: boolean; offset: number }"
     description: Custom slide content. Receives item, index, active, and relative offset.
   - name: prev
+    type: Slot
+    scope: "{ disabled: boolean }"
     description: Custom arrow content. Receives disabled.
   - name: next
+    type: Slot
+    scope: "{ disabled: boolean }"
     description: Custom arrow content. Receives disabled.
   - name: indicator
+    type: Slot
+    scope: "{ item: CarouselItem; index: number; active: boolean }"
     description: Custom indicator content. Receives item, index, and active.
 description: 'Carousel with controlled state, deck layouts, spatial 3D effects, and accessible navigation.'
 ---

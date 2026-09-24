@@ -240,8 +240,8 @@ EVENTS:
     description: Fire with the resulting page after a previous or next action.
 SLOTS:
   - name: default
-    type: slot
-    values: 'currentPage, total, pageSize, pageSizes, pagerCount'
+    type: Slot
+    scope: "{ currentPage: number; total: number; pageSize: number; pageSizes: number[]; pagerCount: number }"
     description: Custom content placed where layout includes slot.
     default: null
     link: null

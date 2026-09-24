@@ -164,15 +164,25 @@ EXPOSES:
     description: 清空当前单日、范围或多日期选区，并同步 v-model。
 SLOTS:
   - name: date-cell
+    type: Slot
+    scope: "{ cell: CalendarCell }"
     description: 自定义日期单元格，接收 CalendarCell。
   - name: event
+    type: Slot
+    scope: "{ event: CalendarEvent; date: string; display: CalendarEventDisplay; allDay: boolean }"
     description: 自定义月视图和全天日程内容，接收 { event, date, display, allDay }。
   - name: event-overflow
+    type: Slot
+    scope: "{ event: CalendarEvent; date: string; display: CalendarEventDisplay; allDay: boolean; edit: () => void; remove: () => void }"
     description: 自定义溢出日程行，接收 { event, date, display, allDay, edit, remove }。
   - name: time-event
+    type: Slot
+    scope: "{ event: CalendarEvent; date: string; display: CalendarEventDisplay }"
     description: 自定义周、日视图的定时日程内容，接收 { event, date, display }。
   - name: context-menu
-    description: 自定义右键菜单内容，接收 { context, close }。
+    type: Slot
+    scope: "{ context: CalendarContextMenuContext; close: () => void }"
+    description: 自定义右键菜单内容，接收 `{ context, close }`。
 description: '支持月、周、日视图的日程日历。'
 ---
 

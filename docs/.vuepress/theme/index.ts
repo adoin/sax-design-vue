@@ -53,6 +53,14 @@ const escapeInlineScriptEnd = (page: Page) => {
       if (
         typeof row === 'object' &&
         row !== null &&
+        'scope' in row &&
+        typeof row.scope === 'string'
+      ) {
+        typeExpressions.push(row.scope)
+      }
+      if (
+        typeof row === 'object' &&
+        row !== null &&
         'code' in row &&
         typeof row.code === 'string'
       ) {

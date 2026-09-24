@@ -280,14 +280,14 @@ SLOTS:
     default: null
     usage: '#checkbox-group'
   - name: CheckboxGroup.option
-    type: slot
-    values: '{ option, checked }'
+    type: Slot
+    scope: "{ option: CheckboxGroupOption; checked: boolean }"
     description: Customize a data-driven option.
     default: null
     usage: '#data-driven-groups'
   - name: CheckboxGroup.group-label
-    type: slot
-    values: '{ group, checked, indeterminate }'
+    type: Slot
+    scope: "{ group: CheckboxGroupSection; checked: boolean; indeterminate: boolean }"
     description: Customize a section select-all label.
     default: null
     usage: '#data-driven-groups'
@@ -297,20 +297,20 @@ SLOTS:
     default: null
     usage: '#data-driven-groups'
   - name: CheckboxGroupTabs.tab
-    type: slot
-    values: '{ tab, active, checked, indeterminate, selectedCount }'
+    type: Slot
+    scope: "{ tab: CheckboxGroupTab; active: boolean; checked: boolean; indeterminate: boolean; selectedCount: number }"
     description: Customize a tab trigger while keeping its selection state.
     default: null
     usage: '#checkbox-group-tabs'
   - name: CheckboxGroupTabs.option
-    type: slot
-    values: '{ option, checked }'
+    type: Slot
+    scope: "{ option: CheckboxGroupOption; checked: boolean }"
     description: Customize an option in the active tab.
     default: null
     usage: '#checkbox-group-tabs'
   - name: CheckboxGroupTabs.group-label
-    type: slot
-    values: '{ group, checked, indeterminate }'
+    type: Slot
+    scope: "{ group: CheckboxGroupSection; checked: boolean; indeterminate: boolean }"
     description: Customize a section label in the active tab.
     default: null
     usage: '#checkbox-group-tabs'
@@ -320,8 +320,8 @@ SLOTS:
     default: null
     usage: '#checkbox-group-tabs'
   - name: icon
-    type: slot
-    values: "checked, indeterminate"
+    type: Slot
+    scope: "{ checked: boolean; indeterminate: boolean }"
     description: Change the component icon and receive its current checked and indeterminate states.
     default: null
     link: null

@@ -88,15 +88,18 @@ EVENTS:
     description: Fired when a collapsible item opens or closes, with the item and collapsed state.
 SLOTS:
   - name: active-icon
-    type: 'Slot<{ item: AnchorItem, href: string }>'
+    type: Slot
+    scope: "{ item: AnchorItem; href: string }"
     description: Replaces the active marker. It takes precedence over the global Anchor icon.
     default: null
   - name: route-previous
-    type: 'Slot<{ item: AnchorRouteBoundaryItem, direction: previous, visible: boolean, navigating: boolean, progress: number }>'
+    type: Slot
+    scope: "AnchorRouteBoundarySlotParams"
     description: Replaces the automatic previous-route copy while keeping its link, icon and progress indicator.
     default: null
   - name: route-next
-    type: 'Slot<{ item: AnchorRouteBoundaryItem, direction: next, visible: boolean, navigating: boolean, progress: number }>'
+    type: Slot
+    scope: "AnchorRouteBoundarySlotParams"
     description: Replaces the automatic next-route copy while keeping its link, icon and progress indicator.
     default: null
 description: 'Navigate between sections on the current page or related routes.'

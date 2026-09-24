@@ -226,23 +226,23 @@ EVENTS:
     description: 响应式折叠状态变化时触发。
 SLOTS:
   - name: brand
-    type: slot
-    values: "collapsed, scrolled"
+    type: Slot
+    scope: "{ collapsed: boolean; scrolled: boolean }"
     description: 品牌区域；优先于旧的 left 插槽。
     default: null
   - name: navigation
-    type: slot
-    values: "collapsed, scrolled"
+    type: Slot
+    scope: "{ collapsed: boolean; scrolled: boolean }"
     description: 主导航区域；优先于默认插槽。
     default: null
   - name: actions
-    type: slot
-    values: "collapsed, scrolled"
+    type: Slot
+    scope: "{ collapsed: boolean; scrolled: boolean }"
     description: 操作区域；优先于旧的 right 插槽。
     default: null
   - name: default
-    type: slot
-    values: "null"
+    type: Slot
+    scope: "{ collapsed: boolean; scrolled: boolean }"
     description: 在组件中部添加元素。
     default: null
     link: null
@@ -254,8 +254,8 @@ SLOTS:
         </s-navbar-item>
       </s-navbar>
   - name: left
-    type: slot
-    values: "null"
+    type: Slot
+    scope: "{ collapsed: boolean; scrolled: boolean }"
     description: 在组件左侧添加元素。
     default: null
     link: null
@@ -265,8 +265,8 @@ SLOTS:
         <img src="/sax-logo-mark.svg" alt="">
       </template>
   - name: right
-    type: slot
-    values: "null"
+    type: Slot
+    scope: "{ collapsed: boolean; scrolled: boolean }"
     description: 在组件右侧添加元素。
     default: null
     link: null

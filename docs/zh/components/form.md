@@ -300,6 +300,34 @@ EVENTS:
     description: 提交校验未通过后触发，参数为 errors、model 和原生事件。
   - name: reset
     description: 原生重置操作恢复初始值后触发。
+SLOTS:
+  - name: SForm.default
+    type: Slot
+    description: 组合 Form Item 控件或嵌套配置内容。
+  - name: SFormItem.default
+    type: Slot
+    scope: "{ id: string; error: string; validate: (trigger?: FormRuleTrigger | 'submit') => Promise<boolean> }"
+    description: 使用生成的 id、校验消息与校验方法渲染字段控件。
+  - name: SFormItem.label
+    type: Slot
+    scope: "{ id: string; label: string; required: boolean }"
+    description: 自定义字段标签与必填状态。
+  - name: SFormItem.error
+    type: Slot
+    scope: "{ error: string; description: string | undefined }"
+    description: 自定义校验消息与辅助说明。
+  - name: 'items[].slots.default'
+    type: Slot
+    scope: "{ model: FormModel; size: string; item: FormItemConfig; field: string | undefined; prop: string | undefined; value: unknown; disabled: boolean; readonly: boolean; setValue: (value: unknown) => void; id: string }"
+    description: 使用当前模型和赋值方法渲染配置字段。
+  - name: 'items[].slots.label'
+    type: Slot
+    scope: "{ model: FormModel; size: string; item: FormItemConfig; field: string | undefined; prop: string | undefined; value: unknown; disabled: boolean; readonly: boolean; setValue: (value: unknown) => void; id: string; label: string; required: boolean }"
+    description: 使用模型上下文渲染配置字段的标签。
+  - name: 'items[].slots.error'
+    type: Slot
+    scope: "{ model: FormModel; size: string; item: FormItemConfig; field: string | undefined; prop: string | undefined; value: unknown; disabled: boolean; readonly: boolean; setValue: (value: unknown) => void; error: string; description: string | undefined }"
+    description: 渲染配置字段的错误或辅助说明。
 EXPOSES:
   - name: validate
     type: () => Promise<boolean>

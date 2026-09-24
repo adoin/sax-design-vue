@@ -295,7 +295,8 @@ EVENTS:
     usage: "#tree-data"
 SLOTS:
   - name: "selected"
-    type: "{ row: TableRow; label: string }"
+    type: Slot
+    scope: "{ row: TableRow; label: string }"
     description: "Selected row label in the trigger."
     default: null
     usage: "#custom-rendering"
@@ -305,7 +306,8 @@ SLOTS:
     default: null
     usage: "#custom-rendering"
   - name: "suffix"
-    type: "{ open: boolean; selectedRow: TableRow | null }"
+    type: Slot
+    scope: "{ open: boolean; selectedRow: TableRow | null }"
     description: "Trailing decoration; does not replace reserved trigger actions."
     default: null
     usage: "#custom-rendering"
@@ -315,22 +317,26 @@ SLOTS:
     default: null
     usage: "#custom-rendering"
   - name: "cell"
-    type: "TableCellRenderParams"
+    type: Slot
+    scope: "TableCellRenderParams"
     description: "Generic data cell slot forwarded to STable."
     default: null
     usage: "#custom-rendering"
   - name: "cell-[key]"
-    type: "TableCellRenderParams"
+    type: Slot
+    scope: "TableCellRenderParams"
     description: "Column-specific data cell slot."
     default: null
     usage: "#custom-rendering"
   - name: "header-cell"
-    type: "TableHeaderRenderParams"
+    type: Slot
+    scope: "TableHeaderRenderParams"
     description: "Generic header slot forwarded to STable."
     default: null
     usage: "#custom-rendering"
   - name: "header-[key]"
-    type: "TableHeaderRenderParams"
+    type: Slot
+    scope: "TableHeaderRenderParams"
     description: "Column-specific header slot."
     default: null
     usage: "#custom-rendering"
@@ -340,7 +346,8 @@ SLOTS:
     default: null
     usage: "#custom-rendering"
   - name: "popup-footer"
-    type: "{ selectedRow: TableRow | null; close: () => void }"
+    type: Slot
+    scope: "{ selectedRow: TableRow | null; close: () => void }"
     description: "Content below the popup table, with a close action."
     default: null
     usage: "#custom-rendering"

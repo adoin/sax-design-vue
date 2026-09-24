@@ -226,23 +226,23 @@ EVENTS:
     description: Fires when the responsive collapsed state changes.
 SLOTS:
   - name: brand
-    type: slot
-    values: "collapsed, scrolled"
+    type: Slot
+    scope: "{ collapsed: boolean; scrolled: boolean }"
     description: Brand region; takes priority over the legacy left slot.
     default: null
   - name: navigation
-    type: slot
-    values: "collapsed, scrolled"
+    type: Slot
+    scope: "{ collapsed: boolean; scrolled: boolean }"
     description: Primary navigation region; takes priority over the default slot.
     default: null
   - name: actions
-    type: slot
-    values: "collapsed, scrolled"
+    type: Slot
+    scope: "{ collapsed: boolean; scrolled: boolean }"
     description: Action region; takes priority over the legacy right slot.
     default: null
   - name: default
-    type: slot
-    values: "null"
+    type: Slot
+    scope: "{ collapsed: boolean; scrolled: boolean }"
     description: Add the elements in the center of the component.
     default: null
     link: null
@@ -254,8 +254,8 @@ SLOTS:
         </s-navbar-item>
       </s-navbar>
   - name: left
-    type: slot
-    values: "null"
+    type: Slot
+    scope: "{ collapsed: boolean; scrolled: boolean }"
     description: Add the elements on the left side of the component.
     default: null
     link: null
@@ -265,8 +265,8 @@ SLOTS:
         <img src="/sax-logo-mark.svg" alt="">
       </template>
   - name: right
-    type: slot
-    values: "null"
+    type: Slot
+    scope: "{ collapsed: boolean; scrolled: boolean }"
     description: Add the elements on the right side of the component.
     default: null
     link: null
