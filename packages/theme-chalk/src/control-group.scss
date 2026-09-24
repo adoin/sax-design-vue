@@ -5,6 +5,8 @@
 @use 'common/var' as *;
 
 @include b(control-group) {
+  $input-controls: '.#{$namespace}-input, .#{$namespace}-select, .#{$namespace}-cascader, .#{$namespace}-date-picker, .#{$namespace}-time-picker, input:not([type="button"]):not([type="submit"]):not([type="reset"]), select, textarea';
+
   display: inline-flex;
   align-items: flex-start;
   max-width: 100%;
@@ -31,7 +33,9 @@
     margin: 0 !important;
   }
 
-  > .#{$namespace}-control-group__item:not(:first-child) {
+  // Only two adjacent input controls share the puzzle seam.
+  > .#{$namespace}-control-group__item:has(> :is(#{$input-controls}))
+    + .#{$namespace}-control-group__item:has(> :is(#{$input-controls})) {
     &::before {
       content: '';
       position: absolute;
