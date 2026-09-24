@@ -102,12 +102,12 @@ PROPS:
     type: 'Boolean | TableDetailConfig'
     description: '详情展开配置；expand 列自动开启，false 关闭。生成数据源需显式开启。'
     default: null
-    usage: '/zh/components/table/row-expansion.html#detail-rows'
+    usage: '/zh/components/table/row-expansion.html#nested-change-table'
   - name: 'detail-expanded-keys'
     type: 'TableRowKey[]'
     description: '通过 v-model:detail-expanded-keys 控制展开键，独立于树节点展开。'
     default: null
-    usage: '/zh/components/table/row-expansion.html#detail-rows'
+    usage: '/zh/components/table/row-expansion.html#nested-change-table'
   - name: footer-data
     type: TableRow[]
     description: 应用或服务端直接提供的表尾记录；叶子列的表尾插槽、渲染函数和格式化仍分别控制各单元格。
@@ -678,12 +678,12 @@ EVENTS:
     type: '(keys: TableRowKey[]) => void'
     description: '请求更新完整的详情展开键数组。'
     default: null
-    usage: '/zh/components/table/row-expansion.html#detail-rows'
+    usage: '/zh/components/table/row-expansion.html#nested-change-table'
   - name: 'detailExpand'
     type: '(params: TableDetailExpandParams) => void'
     description: '用户或 toggleRowDetail 请求展开或收起时触发；受控模式需更新模型才会生效。'
     default: null
-    usage: '/zh/components/table/row-expansion.html#detail-rows'
+    usage: '/zh/components/table/row-expansion.html#nested-change-table'
   - name: 'detailLoad'
     type: '(params: TableDetailParams & { data: unknown }) => void'
     description: '当前有效的异步详情加载成功时触发。'
@@ -865,7 +865,7 @@ SLOTS:
     type: 'TableDetailSlotParams'
     description: '详情内容；接收行、键、索引、加载结果以及 reload 和 close。'
     default: null
-    usage: '/zh/components/table/row-expansion.html#detail-rows'
+    usage: '/zh/components/table/row-expansion.html#nested-change-table'
   - name: 'detail-loading'
     type: 'TableDetailSlotParams'
     description: '详情加载中的内容。'
@@ -1214,7 +1214,7 @@ EXPOSES:
     type: '(keys: TableRowKey[]) => void'
     description: '设置详情展开键；受控时仅发出模型更新。'
     default: null
-    usage: '/zh/components/table/row-expansion.html#detail-rows'
+    usage: '/zh/components/table/row-expansion.html#nested-change-table'
   - name: 'reloadRowDetail'
     type: '(rowOrIndex: TableRow | number) => Promise<void>'
     description: '重新加载已展开的详情，行和索引规则同 toggleRowDetail。'

@@ -102,12 +102,12 @@ PROPS:
     type: 'Boolean | TableDetailConfig'
     description: 'Detail expansion configuration; an expand column enables it automatically, false disables it. Enable explicitly with virtualSource.'
     default: null
-    usage: '/components/table/row-expansion.html#detail-rows'
+    usage: '/components/table/row-expansion.html#nested-change-table'
   - name: 'detail-expanded-keys'
     type: 'TableRowKey[]'
     description: 'Controlled detail keys through v-model:detail-expanded-keys, independent of tree expansion.'
     default: null
-    usage: '/components/table/row-expansion.html#detail-rows'
+    usage: '/components/table/row-expansion.html#nested-change-table'
   - name: footer-data
     type: TableRow[]
     description: Explicit application- or server-owned footer records; leaf-column footer slots, renderers and formatters still control each cell.
@@ -678,12 +678,12 @@ EVENTS:
     type: '(keys: TableRowKey[]) => void'
     description: 'Requests the complete next detail key array.'
     default: null
-    usage: '/components/table/row-expansion.html#detail-rows'
+    usage: '/components/table/row-expansion.html#nested-change-table'
   - name: 'detailExpand'
     type: '(params: TableDetailExpandParams) => void'
     description: 'Emitted when a trigger or toggleRowDetail requests expansion or collapse; controlled state requires parent acceptance.'
     default: null
-    usage: '/components/table/row-expansion.html#detail-rows'
+    usage: '/components/table/row-expansion.html#nested-change-table'
   - name: 'detailLoad'
     type: '(params: TableDetailParams & { data: unknown }) => void'
     description: 'Emitted when the current detail request succeeds.'
@@ -865,7 +865,7 @@ SLOTS:
     type: 'TableDetailSlotParams'
     description: 'Detail content with row, key, index, loaded data, reload and close.'
     default: null
-    usage: '/components/table/row-expansion.html#detail-rows'
+    usage: '/components/table/row-expansion.html#nested-change-table'
   - name: 'detail-loading'
     type: 'TableDetailSlotParams'
     description: 'Detail loading content.'
@@ -1214,7 +1214,7 @@ EXPOSES:
     type: '(keys: TableRowKey[]) => void'
     description: 'Set detail keys; controlled mode emits a model update.'
     default: null
-    usage: '/components/table/row-expansion.html#detail-rows'
+    usage: '/components/table/row-expansion.html#nested-change-table'
   - name: 'reloadRowDetail'
     type: '(rowOrIndex: TableRow | number) => Promise<void>'
     description: 'Reload an expanded detail; row and index rules match toggleRowDetail.'
