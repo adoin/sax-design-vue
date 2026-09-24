@@ -10,6 +10,11 @@ PROPS:
     values: 'reactive form data'
     description: Required. The single data source read and written by field paths.
     default: null
+  - name: size
+    type: ComponentSize
+    values: 'default / small / large'
+    description: Default size inherited by schema renderers and slotted controls unless they declare their own size.
+    default: null
   - name: rules
     type: FormRules
     values: '{ [field]: FormRule | FormRule[] }'
@@ -237,6 +242,34 @@ Validation is implemented inside Form without an external validation runtime. Ru
 <template #style>
 
 @[code{73-103}](../.vuepress/components/form/headless-validation.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Size
+
+Compare the inherited `small`, `default`, and `large` component sizes.
+
+<template #example><form-size /></template>
+
+<template #template>
+
+@[code{7-20}](../.vuepress/components/form/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/form/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-27}](../.vuepress/components/form/size.vue)
 
 </template>
 

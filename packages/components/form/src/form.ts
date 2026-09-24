@@ -1,4 +1,5 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
+import { useSizeProp } from '@vuesax-alpha/hooks'
 import type { CSSProperties, ExtractPropTypes } from 'vue'
 import type { RendererOptions } from './renderer'
 import type { FieldPath, Recordable } from '../../types'
@@ -70,6 +71,7 @@ export interface FormItemConfig<Model extends object = FormModel> {
 
 export const formProps = buildProps({
   model: { type: definePropType<FormModel>(Object), required: true },
+  size: useSizeProp,
   rules: { type: definePropType<FormRules>(Object), default: () => ({}) },
   items: {
     type: definePropType<FormItemConfig[]>(Array),

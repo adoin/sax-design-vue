@@ -1,4 +1,5 @@
 import type { InjectionKey, Ref } from 'vue'
+import type { ComponentSize } from '@vuesax-alpha/constants'
 import type { FormModel, FormRuleTrigger } from './form'
 
 export interface FormFieldContext {
@@ -12,6 +13,7 @@ export interface FormFieldContext {
 
 export interface FormContext {
   model: Ref<FormModel>
+  size: Ref<ComponentSize>
   labelWidth: Ref<string | number>
   labelPosition: Ref<'left' | 'right' | 'top'>
   labelAlign: Ref<'left' | 'right'>

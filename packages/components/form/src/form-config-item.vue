@@ -31,6 +31,7 @@ const isVisible = computed(() => {
 })
 const slotParams = computed(() => ({
   model: form?.model.value || {},
+  size: form?.size.value || '',
   item: props.item,
   field: field.value,
   prop: field.value,

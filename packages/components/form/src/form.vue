@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, nextTick, provide, toRef } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useGlobalConfig, useNamespace, useSize } from '@vuesax-alpha/hooks'
+import { configProviderContextKey } from '@vuesax-alpha/tokens'
 import FormConfigItem from './form-config-item.vue'
 import { formContextKey } from './constants'
 import { formEmits, formProps } from './form'
@@ -13,6 +14,8 @@ defineOptions({ name: 'SForm' })
 const props = defineProps(formProps)
 const emit = defineEmits(formEmits)
 const ns = useNamespace('form')
+const size = useSize()
+const parentConfig = useGlobalConfig()
 const fields = new Set<FormFieldContext>()
 const initialValues = new Map<string, unknown>()
 
@@ -23,6 +26,15 @@ const formStyle = computed<CSSProperties>(() => ({
   '--sax-form-column-gap': toCssUnit(props.columnGap),
   '--sax-form-row-gap': toCssUnit(props.rowGap),
 }))
+
+// Let controls rendered through the default slot inherit Form's resolved size.
+provide(
+  configProviderContextKey,
+  computed(() => ({
+    ...parentConfig.value,
+    size: size.value || parentConfig.value?.size,
+  })),
+)
 
 const getSegments = (prop: string) => prop.split('.').filter(Boolean)
 const cloneInitialValue = (value: unknown): unknown => {
@@ -132,6 +144,7 @@ const getItemKey = (item: FormItemConfig, index: number) =>
 
 provide(formContextKey, {
   model: toRef(props, 'model'),
+  size,
   labelWidth: toRef(props, 'labelWidth'),
   labelPosition: toRef(props, 'labelPosition'),
   labelAlign: toRef(props, 'labelAlign'),
@@ -165,6 +178,7 @@ defineExpose({
   <form
     :class="[
       ns.b(),
+      ns.m(size || 'default'),
       ns.is('inline', inline),
       ns.is(`label-${labelPosition}`),
       ns.is(`label-align-${labelAlign}`),

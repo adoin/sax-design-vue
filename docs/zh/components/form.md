@@ -10,6 +10,11 @@ PROPS:
     values: '响应式表单数据'
     description: 必填。表单唯一数据源，按字段路径读写。
     default: null
+  - name: size
+    type: ComponentSize
+    values: 'default / small / large'
+    description: 配置渲染器和插槽控件继承的默认尺寸；控件自身声明的 size 优先。
+    default: null
   - name: rules
     type: FormRules
     values: '{ [field]: FormRule | FormRule[] }'
@@ -238,6 +243,34 @@ Form 同时支持传统插槽写法与配置式 `items`。配置式 API 采用�
 <template #style>
 
 @[code{73-103}](../../.vuepress/components/form/headless-validation.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 尺寸
+
+对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+
+<template #example><form-zh-size /></template>
+
+<template #template>
+
+@[code{7-20}](../../.vuepress/components/form-zh/size.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/form-zh/size.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-27}](../../.vuepress/components/form-zh/size.vue)
 
 </template>
 

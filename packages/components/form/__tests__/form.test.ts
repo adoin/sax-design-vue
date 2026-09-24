@@ -1,6 +1,7 @@
 import { defineComponent, h, reactive } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import Input from '../../input/src/input.vue'
 import Form from '../src/form.vue'
 import FormItem from '../src/form-item.vue'
 import { formRenderer, renderer } from '../src/renderer'
@@ -39,6 +40,35 @@ afterEach(() => {
 })
 
 describe('Form schema renderer', () => {
+  it('passes its size to slotted controls and keeps explicit child size', async () => {
+    const wrapper = mount(Form, {
+      props: { model: {}, size: 'small' },
+      slots: {
+        default: () =>
+          h(FormItem, { label: 'Name' }, { default: () => h(Input) }),
+      },
+    })
+
+    expect(wrapper.get('.s-input').classes()).toContain('s-input--small')
+    await wrapper.setProps({ size: 'large' })
+    expect(wrapper.get('.s-input').classes()).toContain('s-input--large')
+
+    const explicit = mount(Form, {
+      props: { model: {}, size: 'small' },
+      slots: {
+        default: () =>
+          h(
+            FormItem,
+            { label: 'Name' },
+            {
+              default: () => h(Input, { size: 'large' }),
+            },
+          ),
+      },
+    })
+    expect(explicit.get('.s-input').classes()).toContain('s-input--large')
+  })
+
   it('provides VXE-style built-ins and allows extra global registration', () => {
     const controls = [
       '$input',

@@ -88,6 +88,7 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
 
 @include b(input) {
   @include flex(center, flex-start);
+  --sax-input-control-height: 36px;
   flex-direction: column;
   position: relative;
   width: fit-content;
@@ -505,6 +506,9 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     position: relative;
     border-radius: var(--sax-radius);
     width: 100%;
+    min-height: var(--sax-input-control-height);
+    height: var(--sax-input-control-height);
+    line-height: 18px;
     box-shadow: var(--sax-input-shadow);
     transition: box-shadow var(--sax-motion-duration)
       var(--sax-motion-easing-standard);
@@ -542,6 +546,8 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     transition: getCssVar(transition-ease);
     padding-left: 10px;
     width: 200px;
+    min-height: var(--sax-input-control-height);
+    box-sizing: border-box;
   }
   @include m(has-prefix) {
     @include e(original) {
@@ -864,35 +870,45 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
   }
 
   @include m(small) {
-    @include e(original) {
-      width: 176px;
-      padding-top: 4px;
-      padding-bottom: 4px;
-      font-size: 0.75rem;
-    }
-
-    @include e(icon) {
-      width: 30px;
-      height: 30px;
-    }
-
-    @include e(placeholder) {
-      font-size: 0.75rem;
-    }
+    --sax-input-control-height: 32px;
   }
 
   @include m(large) {
-    @include e(original) {
-      width: 224px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      font-size: 1rem;
-    }
+    --sax-input-control-height: 40px;
+  }
+}
 
-    @include e(icon) {
-      width: 42px;
-      height: 42px;
-    }
+.s-input--small {
+  .s-input__original {
+    width: 176px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 0.75rem;
+    line-height: 16px;
+  }
+
+  .s-input__icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .s-input__placeholder {
+    font-size: 0.75rem;
+  }
+}
+
+.s-input--large {
+  .s-input__original {
+    width: 224px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 1rem;
+    line-height: 20px;
+  }
+
+  .s-input__icon {
+    width: 40px;
+    height: 40px;
   }
 }
 
