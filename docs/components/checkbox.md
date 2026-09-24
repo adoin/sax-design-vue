@@ -1,5 +1,8 @@
 ---
 description: 'Choose one or more boolean options.'
+API_TITLES:
+  GROUP_PROPS: "CheckboxGroup props"
+  GROUP_TABS_PROPS: "CheckboxGroupTabs props"
 PROPS:
   - name: disabled
     type: Boolean
@@ -64,7 +67,7 @@ PROPS:
     description: Add a line in the center of the label when checked.
     default: false
     link: null
-    usage: '#linethrough'
+    usage: '#line-through'
     code: >
       <template>
         <s-checkbox line-through v-model="option">
@@ -86,7 +89,7 @@ PROPS:
     description: Change the default checkbox icon to a line that represents undetermined data.
     default: false
     link: null
-    usage: '#Indeterminate'
+    usage: '#indeterminate'
     code: >
       <template>
         <s-checkbox indeterminate v-model="option">
@@ -172,6 +175,88 @@ PROPS:
         </s-checkbox>
       </template>
 
+GROUP_PROPS:
+  - name: "v-model"
+    type: CheckboxGroupValueType
+    description: "Flat array containing every selected child value."
+    default: "[]"
+    usage: "#checkbox-group"
+  - name: "options"
+    type: "(CheckboxGroupOption | CheckboxGroupSection)[]"
+    description: "Data-driven options; an item with `options` becomes a selectable section. Keep child values unique within a group or tab."
+    default: "[]"
+    usage: "#checkbox-group"
+  - name: "columns"
+    type: "number"
+    description: "Default column count. A section can override it with its own `columns`."
+    default: "1"
+    usage: "#checkbox-group"
+  - name: "gap"
+    type: "number | string"
+    description: "Row and column gap. Numbers are treated as pixels."
+    default: "12"
+    usage: "#checkbox-group"
+  - name: "disabled-values"
+    type: CheckboxGroupValueType
+    description: "Disable child values and preserve them during section select/clear actions."
+    default: "[]"
+    usage: "#checkbox-group"
+  - name: "disabled-group-values"
+    type: CheckboxGroupValueType
+    description: "Disable select-all for the specified sections."
+    default: "[]"
+    usage: "#checkbox-group"
+  - name: "disabled"
+    type: "boolean"
+    description: "Disable the whole group."
+    default: "false"
+    usage: "#checkbox-group"
+  - name: "min"
+    type: "number"
+    description: "Minimum selected value count."
+    default: null
+    usage: "#checkbox-group"
+  - name: "max"
+    type: "number"
+    description: "Maximum selected value count."
+    default: null
+    usage: "#checkbox-group"
+GROUP_TABS_PROPS:
+  - name: "v-model"
+    type: CheckboxGroupTabsModelValue
+    description: "Selected values stored independently by tab value."
+    default: "{}"
+    usage: "#checkbox-group-tabs"
+  - name: "tabs"
+    type: "CheckboxGroupTab[]"
+    description: "Tabs containing `label`, `value`, and grouped `options`."
+    default: "[]"
+    usage: "#checkbox-group-tabs"
+  - name: "active-key"
+    type: "string | number"
+    description: "Active tab."
+    default: "First enabled tab"
+    usage: "#checkbox-group-tabs"
+  - name: "v-model:active-key"
+    type: "string | number"
+    description: "Active tab."
+    default: "First enabled tab"
+    usage: "#checkbox-group-tabs"
+  - name: "columns"
+    type: "number"
+    description: "Default content column count."
+    default: "2"
+    usage: "#checkbox-group-tabs"
+  - name: "gap"
+    type: "number | string"
+    description: "Content row and column gap."
+    default: "12"
+    usage: "#checkbox-group-tabs"
+  - name: "disabled"
+    type: "boolean"
+    description: "Disable every tab and option."
+    default: "false"
+    usage: "#checkbox-group-tabs"
 EVENTS:
   - name: update:modelValue
     type: CheckboxModelType | CheckboxGroupValueType
@@ -189,6 +274,51 @@ EVENTS:
     type: '(value: CheckboxGroupTabsModelValue, activeKey: String | Number)'
     description: Fires with the complete grouped value and active tab after a tabbed selection changes.
 SLOTS:
+  - name: CheckboxGroup.default
+    type: slot
+    description: Compose Checkbox children manually when options is omitted.
+    default: null
+    usage: '#checkbox-group'
+  - name: CheckboxGroup.option
+    type: slot
+    values: '{ option, checked }'
+    description: Customize a data-driven option.
+    default: null
+    usage: '#data-driven-groups'
+  - name: CheckboxGroup.group-label
+    type: slot
+    values: '{ group, checked, indeterminate }'
+    description: Customize a section select-all label.
+    default: null
+    usage: '#data-driven-groups'
+  - name: CheckboxGroup.empty
+    type: slot
+    description: Render content when no options or manual children are available.
+    default: null
+    usage: '#data-driven-groups'
+  - name: CheckboxGroupTabs.tab
+    type: slot
+    values: '{ tab, active, checked, indeterminate, selectedCount }'
+    description: Customize a tab trigger while keeping its selection state.
+    default: null
+    usage: '#checkbox-group-tabs'
+  - name: CheckboxGroupTabs.option
+    type: slot
+    values: '{ option, checked }'
+    description: Customize an option in the active tab.
+    default: null
+    usage: '#checkbox-group-tabs'
+  - name: CheckboxGroupTabs.group-label
+    type: slot
+    values: '{ group, checked, indeterminate }'
+    description: Customize a section label in the active tab.
+    default: null
+    usage: '#checkbox-group-tabs'
+  - name: CheckboxGroupTabs.empty
+    type: slot
+    description: Render content when no active tab is available.
+    default: null
+    usage: '#checkbox-group-tabs'
   - name: icon
     type: slot
     values: "checked, indeterminate"
@@ -310,7 +440,7 @@ Set `disabled` to prevent interaction. Disabled checkboxes use a neutral fill an
 
 <card>
 
-## color
+## Color
 
 Change the color of the component with the `color` property, the allowed values ​​are (main colors of Sax Design, RGB, HEX)
 
@@ -334,7 +464,7 @@ Change the color of the component with the `color` property, the allowed values 
 
 <card>
 
-## Boolean Value
+## Boolean value
 
 By default the component is used with a boolean value that when being checked returns `true` and when not being checked returns `false`
 
@@ -364,7 +494,7 @@ By default the component is used with a boolean value that when being checked re
 
 <card>
 
-## String Value
+## String value
 
 You may need to return a string when the component is checked for it use the `value` property with the `string` you want to return
 
@@ -485,6 +615,10 @@ Pass `options` to let `CheckboxGroup` render flat or sectioned choices. A sectio
 </card>
 
 <card>
+
+## Object values
+
+CheckboxGroup can bind objects as option values. The current selected objects are shown below the controls.
 
 <template #example>
 <checkbox-object />
@@ -608,7 +742,7 @@ Add a loading status to the component with the property `loading`
 
 <card>
 
-## Line Through
+## Line through
 
 Add a line in the middle of the label when the checkbox is checked with the property `line-through`
 
@@ -651,40 +785,5 @@ There are some cases where you have several checkboxes and you need one that man
 @[code{6-10}](../.vuepress/components/checkbox/indeterminate.vue)
 
 </template>
-
-</card>
-
-<card>
-
-### CheckboxGroup
-
-| Property                | Type                                              | Default | Description                                                                 |
-| ----------------------- | ------------------------------------------------- | ------- | --------------------------------------------------------------------------- |
-| `v-model`               | `CheckboxValue[]`                                 | `[]`    | Flat array containing every selected child value.                           |
-| `options`               | `(CheckboxGroupOption \| CheckboxGroupSection)[]` | `[]`    | Data-driven options; an item with `options` becomes a selectable section.   |
-| `columns`               | `number`                                          | `1`     | Default column count. A section can override it with its own `columns`.     |
-| `gap`                   | `number \| string`                                | `12`    | Row and column gap. Numbers are treated as pixels.                          |
-| `disabled-values`       | `CheckboxValue[]`                                 | `[]`    | Disable child values and preserve them during section select/clear actions. |
-| `disabled-group-values` | `CheckboxValue[]`                                 | `[]`    | Disable select-all for the specified sections.                              |
-| `disabled`              | `boolean`                                         | `false` | Disable the whole group.                                                    |
-| `min` / `max`           | `number`                                          | `-`     | Minimum and maximum selected value counts.                                  |
-
-`CheckboxGroupOption` supports `label`, `value`, `disabled`, and `description`. `CheckboxGroupSection` supports `label`, `value`, `options`, `disabled`, and `columns`.
-Child `value` entries must remain unique within a CheckboxGroup or tab.
-
-Events: `update:modelValue(value)` and `change(value)`. Slots: `option`, `group-label`, and `empty`. The default slot remains compatible with manually composed Checkbox children when `options` is omitted.
-
-### CheckboxGroupTabs
-
-| Property                            | Type                              | Default           | Description                                              |
-| ----------------------------------- | --------------------------------- | ----------------- | -------------------------------------------------------- |
-| `v-model`                           | `Record<string, CheckboxValue[]>` | `{}`              | Selected values stored independently by tab value.       |
-| `tabs`                              | `CheckboxGroupTab[]`              | `[]`              | Tabs containing `label`, `value`, and grouped `options`. |
-| `active-key` / `v-model:active-key` | `string \| number`                | First enabled tab | Active tab.                                              |
-| `columns`                           | `number`                          | `2`               | Default content column count.                            |
-| `gap`                               | `number \| string`                | `12`              | Content row and column gap.                              |
-| `disabled`                          | `boolean`                         | `false`           | Disable every tab and option.                            |
-
-Events: `update:modelValue(value)`, `change(value, activeKey)`, `update:activeKey(activeKey)`, and `tabChange(activeKey)`. Slots: `tab`, `option`, `group-label`, and `empty`.
 
 </card>

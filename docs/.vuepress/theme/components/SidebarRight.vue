@@ -47,6 +47,10 @@ let headingObserver: MutationObserver | undefined
 const apiTableKeys: ThemeNormalApiTableKey[] = [
   'PROPS',
   'CHILD_PROPS',
+  'GROUP_PROPS',
+  'GROUP_TABS_PROPS',
+  'BUTTON_PROPS',
+  'PICKER_API',
   'ITEMS',
   'RULES',
   'RENDERERS',
@@ -85,6 +89,44 @@ const toAnchorItem = (header: MarkdownItHeader): AnchorItem => ({
     ? header.children.map(toAnchorItem)
     : undefined,
 })
+
+const groupExampleItems = (
+  items: AnchorItem[],
+  configuredGroups: ThemeNormalApiFrontmatter['EXAMPLE_GROUPS'],
+): AnchorItem[] => {
+  if (!configuredGroups?.length) return items
+
+  type ExampleGroup = NonNullable<
+    ThemeNormalApiFrontmatter['EXAMPLE_GROUPS']
+  >[number]
+  const groupsByHref = new Map<string, ExampleGroup>()
+  configuredGroups.forEach((group) => {
+    group.items.forEach((slug) => groupsByHref.set(`#${slug}`, group))
+  })
+  const itemsByHref = new Map(items.map((item) => [item.href, item]))
+  const addedGroups = new Set<ExampleGroup>()
+
+  return items.flatMap((item) => {
+    const group = groupsByHref.get(item.href || '')
+    if (!group) return [item]
+    if (addedGroups.has(group)) return []
+    addedGroups.add(group)
+    const children = group.items
+      .map((slug) => itemsByHref.get(`#${slug}`))
+      .filter((child): child is AnchorItem => Boolean(child))
+
+    return children.length
+      ? [
+          {
+            title: group.title,
+            collapsible: true,
+            defaultCollapsed: true,
+            children,
+          },
+        ]
+      : [item]
+  })
+}
 
 const tableLocale = computed<'en' | 'zh'>(() =>
   pageData.value.path.startsWith('/zh/') ? 'zh' : 'en',
@@ -227,7 +269,7 @@ const anchorItems = computed<AnchorItem[]>(() => {
   const exampleHeaders = pageHeaders.filter(
     (header) => header.level === 2 && header.slug !== 'api',
   )
-  const exampleItems = exampleHeaders.length
+  const flatExampleItems = exampleHeaders.length
     ? exampleHeaders.map((header) => {
         const item = toAnchorItem(header)
         return {
@@ -237,6 +279,10 @@ const anchorItems = computed<AnchorItem[]>(() => {
         }
       })
     : domPageItems.value
+  const exampleItems = groupExampleItems(
+    flatExampleItems,
+    pageFrontmatter.value.EXAMPLE_GROUPS,
+  )
   const apiChildren = apiTableKeys
     .filter((key) => {
       const rows = pageFrontmatter.value[key]

@@ -111,7 +111,7 @@ PROPS:
     description: When the dialog is opened, the page scroll is deleted.
     default: false
     link: null
-    usage: '#lock-scroll'
+    usage: '#lock-scroll-body'
     code: null
 
   - name: auto-width
@@ -604,8 +604,6 @@ You can add a blur style to all the elements behind the dialog with the `overlay
 <card>
 
 ## Shape
-
-### Square
 
 Change the dialog style by removing the border radius and making it rectangular
 

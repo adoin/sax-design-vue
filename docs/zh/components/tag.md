@@ -1,4 +1,6 @@
 ---
+API_TITLES:
+  GROUP_PROPS: "TagGroup 属性"
 PROPS:
   - name: v-model
     type: Boolean
@@ -151,7 +153,78 @@ PROPS:
     default: cb:close
     link: null
     usage: '#closable'
+GROUP_PROPS:
+  - name: "v-model"
+    type: "TagGroupItem[]"
+    description: "直接绑定字符串、数字或对象组成的标签数据，无需手写 STag 子组件。"
+    default: "[]"
+    usage: "#add-and-remove-items"
+  - name: "label-key"
+    type: "string"
+    description: "对象项中用于显示标签文本的字段。"
+    default: "label"
+    usage: "#add-and-remove-items"
+  - name: "value-key"
+    type: "string"
+    description: "对象项中用于生成稳定节点键的字段。"
+    default: "value"
+    usage: "#add-and-remove-items"
+  - name: "create-item"
+    type: "(label: string) => TagGroupItem"
+    description: "将新增文本转换为业务对象；未传时新增字符串。"
+    default: null
+    usage: "#add-and-remove-items"
+  - name: "color"
+    type: "string"
+    description: "组内标签和新增按钮使用的颜色。"
+    default: "primary"
+    usage: "#add-and-remove-items"
+  - name: "placeholder"
+    type: "string"
+    description: "新建可编辑标签的占位文本。"
+    default: "''"
+    usage: "#add-and-remove-items"
+  - name: "addable"
+    type: "boolean"
+    description: "是否显示无边框新增按钮。"
+    default: "true"
+    usage: "#add-and-remove-items"
+  - name: "closable"
+    type: "boolean"
+    description: "是否显示每个标签自己的关闭按钮。"
+    default: "true"
+    usage: "#add-and-remove-items"
+  - name: "add-icon"
+    type: "string"
+    description: "新增按钮图标。"
+    default: "cb:add"
+    usage: "#add-and-remove-items"
+  - name: "remove-icon"
+    type: "string"
+    description: "每个标签的关闭图标。"
+    default: "cb:close"
+    usage: "#add-and-remove-items"
+  - name: "add-aria-label"
+    type: "string"
+    description: "新增按钮的无障碍名称。"
+    default: "Add tag"
+    usage: "#add-and-remove-items"
 EVENTS:
+  - name: TagGroup.update:modelValue
+    type: 'TagGroupItem[]'
+    description: 可编辑标签集合更新时触发。
+    default: null
+    usage: '#add-and-remove-items'
+  - name: TagGroup.add
+    type: TagGroupItem
+    description: 新增操作创建标签后触发，参数为新增项。
+    default: null
+    usage: '#add-and-remove-items'
+  - name: TagGroup.remove
+    type: '(item: TagGroupItem, index: number)'
+    description: 移除标签后触发，参数为移除项及其原索引。
+    default: null
+    usage: '#add-and-remove-items'
   - name: update:modelValue
     params: boolean
     description: 可见性变化时触发（可关闭）。
@@ -461,27 +534,5 @@ NEWS:
 @[code{31-36}](../../.vuepress/components/tag/group.vue)
 
 </template>
-
-</card>
-
-<card>
-
-### TagGroup API
-
-| 属性             | 类型                              | 默认值     | 说明                                         |
-| ---------------- | --------------------------------- | ---------- | -------------------------------------------- |
-| `v-model`        | `TagGroupItem[]`                  | `[]`       | 直接绑定字符串、数字或对象组成的标签数据。   |
-| `label-key`      | `string`                          | `label`    | 对象项中用于显示标签文本的字段。             |
-| `value-key`      | `string`                          | `value`    | 对象项中用于生成稳定节点键的字段。           |
-| `create-item`    | `(label: string) => TagGroupItem` | `-`        | 将新增文本转换为业务对象；未传时新增字符串。 |
-| `color`          | `string`                          | `primary`  | 组内标签和新增按钮使用的颜色。               |
-| `placeholder`    | `string`                          | `''`       | 新建可编辑标签的占位文本。                   |
-| `addable`        | `boolean`                         | `true`     | 是否显示无边框新增按钮。                     |
-| `closable`       | `boolean`                         | `true`     | 是否显示每个标签自己的关闭按钮。             |
-| `add-icon`       | `string`                          | `cb:add`   | 新增按钮图标。                               |
-| `remove-icon`    | `string`                          | `cb:close` | 每个标签的关闭图标。                         |
-| `add-aria-label` | `string`                          | `Add tag`  | 新增按钮的无障碍名称。                       |
-
-事件：`update:modelValue(items)`、`add(item)`、`remove(item, index)`。默认渲染由数据驱动，不需要手写 `s-tag` 子组件。
 
 </card>

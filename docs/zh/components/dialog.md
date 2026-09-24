@@ -131,7 +131,7 @@ PROPS:
     description: 打开对话框时锁定页面滚动。
     default: false
     link: null
-    usage: '#lock-scroll'
+    usage: '#lock-scroll-body'
     code: null
 
   - name: auto-width
@@ -580,8 +580,6 @@ SLOTS:
 <card>
 
 ## 形状
-
-### 直角
 
 移除对话框圆角，使其变为直角矩形。
 

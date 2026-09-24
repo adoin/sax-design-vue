@@ -13,6 +13,10 @@ const docsRoots = [
 const apiSections = new Set([
   'PROPS',
   'CHILD_PROPS',
+  'GROUP_PROPS',
+  'GROUP_TABS_PROPS',
+  'BUTTON_PROPS',
+  'PICKER_API',
   'ITEMS',
   'RULES',
   'RENDERERS',
@@ -22,6 +26,50 @@ const apiSections = new Set([
 ])
 
 describe('documentation API metadata', () => {
+  it('keeps legacy card subsections in the shared example and API hierarchy', () => {
+    const names = [
+      'avatar',
+      'calendar',
+      'checkbox',
+      'dialog',
+      'radio',
+      'tag',
+      'upload',
+    ]
+    for (const root of docsRoots) {
+      for (const name of names) {
+        const source = readFileSync(resolve(root, `${name}.md`), 'utf8')
+        const cards = [...source.matchAll(/<card[^>]*>[\s\S]*?<\/card>/g)]
+        for (const [card] of cards) {
+          expect(card, `${name} card has no nested heading`).not.toMatch(
+            /^###\s/m,
+          )
+          if (card.includes('<template #example>'))
+            expect(
+              [...card.matchAll(/^##\s/gm)],
+              `${name} example card owns one H2`,
+            ).toHaveLength(1)
+        }
+      }
+
+      const checkbox = matter(
+        readFileSync(resolve(root, 'checkbox.md'), 'utf8'),
+      ).data
+      const radio = matter(readFileSync(resolve(root, 'radio.md'), 'utf8')).data
+      const tag = matter(readFileSync(resolve(root, 'tag.md'), 'utf8')).data
+      const upload = matter(
+        readFileSync(resolve(root, 'upload.md'), 'utf8'),
+      ).data
+      expect(checkbox.GROUP_PROPS.length).toBeGreaterThan(0)
+      expect(checkbox.GROUP_TABS_PROPS.length).toBeGreaterThan(0)
+      expect(radio.BUTTON_PROPS.length).toBeGreaterThan(0)
+      expect(tag.GROUP_PROPS.length).toBeGreaterThan(0)
+      expect(upload.PICKER_API.map((row: { name: string }) => row.name)).toEqual(
+        ['SUpload.pick', 'pickUploadFiles'],
+      )
+    }
+  })
+
   it('keeps Form ownership and Table renderer contracts in generated API sections', () => {
     for (const root of docsRoots) {
       const formSource = readFileSync(resolve(root, 'form.md'), 'utf8')

@@ -113,27 +113,12 @@ body,
     > h3 {
       position: relative;
       margin: 1.8rem 20px 0.85rem;
-      padding: 0 0 0 14px;
+      padding: 0;
       color: hsl(var(--sax-theme-color));
       font-size: 1.05rem;
       font-weight: 700;
       letter-spacing: -0.015em;
       line-height: 1.45;
-
-      &::before {
-        position: absolute;
-        top: 0.3em;
-        bottom: 0.3em;
-        left: 0;
-        width: 4px;
-        border-radius: 999px;
-        background: linear-gradient(
-          180deg,
-          hsl(var(--sax-accent-color)),
-          hsl(var(--sax-accent-secondary))
-        );
-        content: '';
-      }
     }
   }
 }
@@ -159,10 +144,6 @@ body,
   border-bottom: 1px solid hsl(var(--sax-accent-color) / 0.1);
   font-size: 1.28rem;
   letter-spacing: -0.02em;
-
-  &::before {
-    content: none;
-  }
 
   + p {
     margin-top: 14px;

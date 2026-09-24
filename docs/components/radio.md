@@ -1,5 +1,9 @@
 ---
 description: 'Choose exactly one option from a related group.'
+API_TITLES:
+  GROUP_PROPS: "RadioGroup props"
+  GROUP_TABS_PROPS: "RadioGroupTabs props"
+  BUTTON_PROPS: "RadioButton props"
 PROPS:
   - name: v-model
     type: String | Number | Boolean
@@ -62,6 +66,119 @@ PROPS:
     usage: '#default'
     code: null
 
+GROUP_PROPS:
+  - name: "v-model"
+    type: RadioValue
+    description: "The group's single selected value."
+    default: "''"
+    usage: "#default"
+  - name: "options"
+    type: "RadioOption[]"
+    description: "Data-driven options supporting `label`, `value`, `description`, and `disabled`."
+    default: "[]"
+    usage: "#default"
+  - name: "type"
+    type: "default | button"
+    description: "Primitive Radio or borderless RadioButton presentation."
+    default: "default"
+    usage: "#default"
+  - name: "columns"
+    type: "number"
+    description: "Column count for the standard data-driven layout; collapses to one column on small screens."
+    default: "1"
+    usage: "#default"
+  - name: "gap"
+    type: "number | string"
+    description: "Option spacing. Numbers are treated as pixels."
+    default: "8"
+    usage: "#default"
+  - name: "disabled-values"
+    type: "RadioValue[]"
+    description: "Disable specific option values."
+    default: "[]"
+    usage: "#default"
+  - name: "disabled"
+    type: "boolean"
+    description: "Disable the whole group."
+    default: "false"
+    usage: "#default"
+  - name: "name"
+    type: "string"
+    description: "Shared native radio name for arrow-key navigation."
+    default: "generated"
+    usage: "#default"
+GROUP_TABS_PROPS:
+  - name: "v-model"
+    type: RadioGroupTabsModelValue
+    description: "Stores one selected value under each tab key."
+    default: "{}"
+    usage: "#default"
+  - name: "tabs"
+    type: "RadioGroupTab[]"
+    description: "Tabs and their `options`; each tab may define `disabled`, `columns`, and disabled option values."
+    default: "[]"
+    usage: "#default"
+  - name: "active-key"
+    type: "string | number"
+    description: "Current panel; supports `v-model:active-key`."
+    default: "first enabled tab"
+    usage: "#default"
+  - name: "v-model:active-key"
+    type: RadioGroupTabValue
+    description: Two-way binding for the active tab key.
+    default: null
+    usage: '#default'
+  - name: "columns"
+    type: "number"
+    description: "Panel column count when a tab does not override it."
+    default: "2"
+    usage: "#default"
+  - name: "gap"
+    type: "number | string"
+    description: "Spacing between panel options."
+    default: "12"
+    usage: "#default"
+  - name: "disabled"
+    type: "boolean"
+    description: "Disable the whole tabbed group."
+    default: "false"
+    usage: "#default"
+BUTTON_PROPS:
+  - name: v-model
+    type: RadioButtonValue
+    description: Two-way selected value when using RadioButton directly.
+    default: null
+    usage: '#default'
+  - name: model-value
+    type: RadioButtonValue
+    description: Selected value without v-model syntax.
+    default: null
+    usage: '#default'
+  - name: value
+    type: RadioButtonValue
+    description: Value represented by this button.
+    default: "''"
+    usage: '#default'
+  - name: label
+    type: 'String | Number | Boolean'
+    description: Visible option label.
+    default: "''"
+    usage: '#default'
+  - name: description
+    type: String
+    description: Supporting text shown beneath the label.
+    default: "''"
+    usage: '#default'
+  - name: disabled
+    type: Boolean
+    description: Disable this button without losing its selected state.
+    default: false
+    usage: '#default'
+  - name: name
+    type: String
+    description: Shared native radio name when composing buttons directly.
+    default: "''"
+    usage: '#default'
 EVENTS:
   - name: update:modelValue
     type: RadioValue
@@ -79,6 +196,39 @@ EVENTS:
     type: '(value: RadioGroupTabsModelValue, activeKey: String | Number)'
     description: Fires with the complete grouped value and active tab after a tabbed selection changes.
 SLOTS:
+  - name: RadioGroup.default
+    type: slot
+    description: Compose Radio or RadioButton children manually when options is omitted.
+    default: null
+    usage: '#default'
+  - name: RadioGroup.option
+    type: slot
+    values: '{ option, checked }'
+    description: Customize a data-driven radio option.
+    default: null
+    usage: '#default'
+  - name: RadioGroup.empty
+    type: slot
+    description: Render content when no options or manual children are available.
+    default: null
+    usage: '#default'
+  - name: RadioGroupTabs.tab
+    type: slot
+    values: '{ tab, active, selected, selectedOption }'
+    description: Customize a tab trigger using its active and selection state.
+    default: null
+    usage: '#default'
+  - name: RadioGroupTabs.option
+    type: slot
+    values: '{ option, checked }'
+    description: Customize an option in the active tab.
+    default: null
+    usage: '#default'
+  - name: RadioGroupTabs.empty
+    type: slot
+    description: Render content when no active tab is available.
+    default: null
+    usage: '#default'
   - name: default
     type: slot
     values: 'null'
@@ -102,7 +252,7 @@ SLOTS:
 
 <card>
 
-## Radio, group, tabs, and button
+## Default
 
 <docs-warn />
 
@@ -279,41 +429,5 @@ The outer disc and default center dot share one SVG coordinate system, independe
 @[code{67-80}](../.vuepress/components/radio/icons.vue)
 
 </template>
-
-</card>
-
-<card>
-
-### RadioGroup
-
-| Property          | Type                          | Default   | Description                                                                                 |
-| ----------------- | ----------------------------- | --------- | ------------------------------------------------------------------------------------------- |
-| `v-model`         | `string \| number \| boolean` | `''`      | The group's single selected value.                                                          |
-| `options`         | `RadioOption[]`               | `[]`      | Data-driven options supporting `label`, `value`, `description`, and `disabled`.             |
-| `type`            | `default \| button`           | `default` | Primitive Radio or borderless RadioButton presentation.                                     |
-| `columns`         | `number`                      | `1`       | Column count for the standard data-driven layout; collapses to one column on small screens. |
-| `gap`             | `number \| string`            | `8`       | Option spacing. Numbers are treated as pixels.                                              |
-| `disabled-values` | `RadioValue[]`                | `[]`      | Disable specific option values.                                                             |
-| `disabled`        | `boolean`                     | `false`   | Disable the whole group.                                                                    |
-| `name`            | `string`                      | generated | Shared native radio name for arrow-key navigation.                                          |
-
-Events: `update:modelValue(value)` and `change(value)`. Slots: `option` and `empty`. Without `options`, Radio or RadioButton children in the default slot automatically join the group model.
-
-### RadioGroupTabs
-
-| Property     | Type                         | Default           | Description                                                                                      |
-| ------------ | ---------------------------- | ----------------- | ------------------------------------------------------------------------------------------------ |
-| `v-model`    | `Record<string, RadioValue>` | `{}`              | Stores one selected value under each tab key.                                                    |
-| `tabs`       | `RadioGroupTab[]`            | `[]`              | Tabs and their `options`; each tab may define `disabled`, `columns`, and disabled option values. |
-| `active-key` | `string \| number`           | first enabled tab | Current panel; supports `v-model:active-key`.                                                    |
-| `columns`    | `number`                     | `2`               | Panel column count when a tab does not override it.                                              |
-| `gap`        | `number \| string`           | `12`              | Spacing between panel options.                                                                   |
-| `disabled`   | `boolean`                    | `false`           | Disable the whole tabbed group.                                                                  |
-
-Events: `update:modelValue(value)`, `change(value, activeKey)`, `update:activeKey(key)`, and `tabChange(key)`. Slots: `tab`, `option`, and `empty`. Tabs support arrow keys, `Home`, and `End` navigation.
-
-### RadioButton
-
-Prefer `RadioButton` through `<s-radio-group type="button" />`. Direct composition still supports `v-model`, `value`, `label`, `description`, `disabled`, and `name`. Its active state combines a familiar radio indicator with color, surface, and shadow instead of borders.
 
 </card>

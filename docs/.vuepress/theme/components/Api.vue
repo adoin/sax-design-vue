@@ -23,6 +23,10 @@ const tables = computed<Tables>(() => {
   const source = {
     PROPS: pageFrontmatter.value.PROPS,
     CHILD_PROPS: pageFrontmatter.value.CHILD_PROPS,
+    GROUP_PROPS: pageFrontmatter.value.GROUP_PROPS,
+    GROUP_TABS_PROPS: pageFrontmatter.value.GROUP_TABS_PROPS,
+    BUTTON_PROPS: pageFrontmatter.value.BUTTON_PROPS,
+    PICKER_API: pageFrontmatter.value.PICKER_API,
     ITEMS: pageFrontmatter.value.ITEMS,
     RULES: pageFrontmatter.value.RULES,
     RENDERERS: pageFrontmatter.value.RENDERERS,

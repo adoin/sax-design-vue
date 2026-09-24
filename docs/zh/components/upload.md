@@ -1,4 +1,6 @@
 ---
+API_TITLES:
+  PICKER_API: Promise 文件选择器
 PROPS:
   - name: model-value
     type: File | File[] | null
@@ -228,6 +230,17 @@ PROPS:
     description: 禁用文件选择和拖放。
     default: 'false'
     usage: '#complete-flow'
+PICKER_API:
+  - name: SUpload.pick
+    type: PickUploadFiles
+    description: 无需挂载界面即可选取文件；multiple 或 directory 返回 File[]，取消解析为 undefined，校验失败抛出 UploadPickError。
+    default: null
+    usage: '#promise-picker'
+  - name: pickUploadFiles
+    type: PickUploadFiles
+    description: 与 SUpload.pick 共用实现及返回契约的具名导出。
+    default: null
+    usage: '#promise-picker'
 EVENTS:
   - name: update:modelValue
     params: File | File[] | null
@@ -361,13 +374,6 @@ NEWS:
 @[code{47-54}](../../.vuepress/components/upload-zh/promise.vue)
 
 </template>
-
-### Promise API
-
-| API                        | 返回值                                 | 说明                                                       |
-| -------------------------- | -------------------------------------- | ---------------------------------------------------------- |
-| `SUpload.pick(options)`    | `Promise<File \| File[] \| undefined>` | `multiple` 或 `directory` 返回数组；取消返回 `undefined`。 |
-| `pickUploadFiles(options)` | 同上                                   | 与静态方法实现一致的具名导出。                             |
 
 </card>
 

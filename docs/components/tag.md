@@ -1,4 +1,6 @@
 ---
+API_TITLES:
+  GROUP_PROPS: "TagGroup props"
 PROPS:
   - name: v-model
     type: Boolean
@@ -151,7 +153,78 @@ PROPS:
     default: cb:close
     link: null
     usage: '#closable'
+GROUP_PROPS:
+  - name: "v-model"
+    type: "TagGroupItem[]"
+    description: "Bind strings, numbers, or objects directly; handwritten STag children are not required."
+    default: "[]"
+    usage: "#add-and-remove-items"
+  - name: "label-key"
+    type: "string"
+    description: "Object field used as the visible tag label."
+    default: "label"
+    usage: "#add-and-remove-items"
+  - name: "value-key"
+    type: "string"
+    description: "Object field used to create a stable rendered key."
+    default: "value"
+    usage: "#add-and-remove-items"
+  - name: "create-item"
+    type: "(label: string) => TagGroupItem"
+    description: "Convert new text into a domain object; strings are used by default."
+    default: null
+    usage: "#add-and-remove-items"
+  - name: "color"
+    type: "string"
+    description: "Color shared by the tags and add action."
+    default: "primary"
+    usage: "#add-and-remove-items"
+  - name: "placeholder"
+    type: "string"
+    description: "Placeholder for the temporary editable tag."
+    default: "''"
+    usage: "#add-and-remove-items"
+  - name: "addable"
+    type: "boolean"
+    description: "Show the borderless add action."
+    default: "true"
+    usage: "#add-and-remove-items"
+  - name: "closable"
+    type: "boolean"
+    description: "Show each tag's own close action."
+    default: "true"
+    usage: "#add-and-remove-items"
+  - name: "add-icon"
+    type: "string"
+    description: "Add action icon."
+    default: "cb:add"
+    usage: "#add-and-remove-items"
+  - name: "remove-icon"
+    type: "string"
+    description: "Close icon used by each tag."
+    default: "cb:close"
+    usage: "#add-and-remove-items"
+  - name: "add-aria-label"
+    type: "string"
+    description: "Accessible name for the add action."
+    default: "Add tag"
+    usage: "#add-and-remove-items"
 EVENTS:
+  - name: TagGroup.update:modelValue
+    type: 'TagGroupItem[]'
+    description: Emits the updated editable tag collection.
+    default: null
+    usage: '#add-and-remove-items'
+  - name: TagGroup.add
+    type: TagGroupItem
+    description: Emits the item created by the add action.
+    default: null
+    usage: '#add-and-remove-items'
+  - name: TagGroup.remove
+    type: '(item: TagGroupItem, index: number)'
+    description: Emits the removed item and its previous index.
+    default: null
+    usage: '#add-and-remove-items'
   - name: update:modelValue
     params: boolean
     description: Emitted when visibility changes (closable).
@@ -436,7 +509,7 @@ When `closable` is enabled, remove the tag from your data in the `close` event.
 
 <card>
 
-## Add and Remove Items
+## Add and remove items
 
 `s-tag-group` manages tag data directly through `v-model`. The add action creates a borderless editable tag; Enter or blur confirms, Escape cancels, and each existing tag remains individually removable. Map object arrays with `label-key`, `value-key`, and `create-item`.
 
@@ -461,27 +534,5 @@ When `closable` is enabled, remove the tag from your data in the `close` event.
 @[code{31-36}](../.vuepress/components/tag/group.vue)
 
 </template>
-
-</card>
-
-<card>
-
-### TagGroup API
-
-| Property         | Type                              | Default    | Description                                                         |
-| ---------------- | --------------------------------- | ---------- | ------------------------------------------------------------------- |
-| `v-model`        | `TagGroupItem[]`                  | `[]`       | Bind tag data made of strings, numbers, or objects directly.        |
-| `label-key`      | `string`                          | `label`    | Object field used as the visible tag label.                         |
-| `value-key`      | `string`                          | `value`    | Object field used to create a stable rendered key.                  |
-| `create-item`    | `(label: string) => TagGroupItem` | `-`        | Convert new text into a domain object; strings are used by default. |
-| `color`          | `string`                          | `primary`  | Color shared by the tags and add action.                            |
-| `placeholder`    | `string`                          | `''`       | Placeholder for the temporary editable tag.                         |
-| `addable`        | `boolean`                         | `true`     | Show the borderless add action.                                     |
-| `closable`       | `boolean`                         | `true`     | Show each tag's own close action.                                   |
-| `add-icon`       | `string`                          | `cb:add`   | Add action icon.                                                    |
-| `remove-icon`    | `string`                          | `cb:close` | Close icon used by each tag.                                        |
-| `add-aria-label` | `string`                          | `Add tag`  | Accessible name for the add action.                                 |
-
-Events: `update:modelValue(items)`, `add(item)`, and `remove(item, index)`. Default rendering is data-driven, so handwritten `s-tag` children are not required.
 
 </card>

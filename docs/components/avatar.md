@@ -1,5 +1,8 @@
 ---
 description: "Represent a user, team, or entity with an image, icon, or initials."
+EXAMPLE_GROUPS:
+  - title: Shape
+    items: [circle, square]
 PROPS:
   - name: badge-position
     type: String
@@ -47,7 +50,7 @@ PROPS:
     description: Change the style of the avatar by circulating it.
     default: false
     link: null
-    usage: '#shape'
+    usage: '#circle'
     code: null
 
   - name: writing
@@ -148,7 +151,7 @@ SLOTS:
     description: Add a space to put icons next to the avatar.
     default: null
     link: null
-    usage: '#icons'
+    usage: '#action-icons'
     code: >
       <s-avatar>
         <img src="/avatars/avatar-1.png" alt="">
@@ -294,9 +297,7 @@ The maximum length of characters is **5**. When that limit is exceeded, changes 
 
 <card>
 
-## Shape
-
-### Circle
+## Circle
 
 Change the border-radius of the entire component to `50%` with the `circle` property making it fully circular
 
@@ -320,7 +321,7 @@ Change the border-radius of the entire component to `50%` with the `circle` prop
 
 <card>
 
-### Square
+## Square
 
 Change the border-radius of the entire component to `0%` with the `square` property making it completely square
 
@@ -406,13 +407,13 @@ Add a loading animation to the component, this property is a `boolean` so you ca
 
 <template #template>
 
-@[code{1-30}](../.vuepress/components/avatar/square.vue)
+@[code{1-26}](../.vuepress/components/avatar/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{31-37}](../.vuepress/components/avatar/square.vue)
+@[code{27-33}](../.vuepress/components/avatar/loading.vue)
 
 </template>
 
@@ -420,7 +421,7 @@ Add a loading animation to the component, this property is a `boolean` so you ca
 
 <card>
 
-## Icons
+## Action icons
 
 Add a space next to the avatar with the slot `icons` where you can put icons for some dynamic action of that user in specific
 

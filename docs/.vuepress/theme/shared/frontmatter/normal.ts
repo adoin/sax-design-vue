@@ -27,6 +27,10 @@ export interface ThemeApiTypeDefinition {
 export type ThemeNormalApiTableKey =
   | 'PROPS'
   | 'CHILD_PROPS'
+  | 'GROUP_PROPS'
+  | 'GROUP_TABS_PROPS'
+  | 'BUTTON_PROPS'
+  | 'PICKER_API'
   | 'ITEMS'
   | 'RULES'
   | 'RENDERERS'
@@ -36,10 +40,15 @@ export type ThemeNormalApiTableKey =
 
 export interface ThemeNormalApiFrontmatter extends PageFrontmatter {
   description?: string
+  EXAMPLE_GROUPS?: Array<{ title: string; items: string[] }>
   API_TITLES?: Partial<Record<ThemeNormalApiTableKey, string>>
   API_TYPE_DETAILS?: Record<string, ThemeApiTypeDefinition>
   PROPS?: ThemeNormalPropsFrontmatter[]
   CHILD_PROPS?: ThemeNormalPropsFrontmatter[]
+  GROUP_PROPS?: ThemeNormalPropsFrontmatter[]
+  GROUP_TABS_PROPS?: ThemeNormalPropsFrontmatter[]
+  BUTTON_PROPS?: ThemeNormalPropsFrontmatter[]
+  PICKER_API?: ThemeNormalPropsFrontmatter[]
   ITEMS?: ThemeNormalPropsFrontmatter[]
   RULES?: ThemeNormalPropsFrontmatter[]
   RENDERERS?: ThemeNormalPropsFrontmatter[]

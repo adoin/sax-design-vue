@@ -1,4 +1,7 @@
 ---
+EXAMPLE_GROUPS:
+  - title: Display
+    items: [switchable-views, locked-view]
 PROPS:
   - name: size
     type: "'small' | 'medium' | 'large'"
@@ -177,9 +180,7 @@ description: 'Event calendar with month, week, and day schedules.'
 
 <card>
 
-## Display
-
-### Switchable views
+## Switchable views
 
 <template #example><calendar-default /></template>
 
@@ -205,7 +206,7 @@ description: 'Event calendar with month, week, and day schedules.'
 
 <card>
 
-### Locked view
+## Locked view
 
 Pass one item to `views` when a calendar should keep a single presentation and hide the view switcher.
 

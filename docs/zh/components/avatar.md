@@ -1,5 +1,8 @@
 ---
 description: "使用图片、图标或首字母表示用户、团队或实体。"
+EXAMPLE_GROUPS:
+  - title: 形状
+    items: [circle, square]
 PROPS:
   - name: badge-position
     type: String
@@ -47,7 +50,7 @@ PROPS:
     description: 设置头像为圆形或方形样式。
     default: false
     link: null
-    usage: '#shape'
+    usage: '#circle'
     code: null
 
   - name: writing
@@ -148,7 +151,7 @@ SLOTS:
     description: 用于在头像旁放置图标的插槽。
     default: null
     link: null
-    usage: '#icons'
+    usage: '#action-icons'
     code: >
       <s-avatar>
         <img src="/avatars/avatar-1.png" alt="">
@@ -294,9 +297,7 @@ SLOTS:
 
 <card>
 
-## 形状
-
-### 圆形
+## 圆形
 
 通过 `circle` 将组件的 `border-radius` 设为 `50%`，形成完整圆形。
 
@@ -320,7 +321,7 @@ SLOTS:
 
 <card>
 
-### 方形
+## 方形
 
 通过 `square` 将组件的 `border-radius` 设为 `0%`，形成方形。
 
@@ -406,13 +407,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-30}](../../.vuepress/components/avatar/square.vue)
+@[code{1-26}](../../.vuepress/components/avatar/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{31-37}](../../.vuepress/components/avatar/square.vue)
+@[code{27-33}](../../.vuepress/components/avatar/loading.vue)
 
 </template>
 
@@ -420,7 +421,7 @@ SLOTS:
 
 <card>
 
-## 图标
+## 操作图标
 
 通过 `icons` 插槽可在头像旁添加图标，用于用户相关操作。
 

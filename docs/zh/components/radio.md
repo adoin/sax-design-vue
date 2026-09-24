@@ -1,5 +1,9 @@
 ---
 description: '在一组关联选项中选择唯一值。'
+API_TITLES:
+  GROUP_PROPS: "RadioGroup 属性"
+  GROUP_TABS_PROPS: "RadioGroupTabs 属性"
+  BUTTON_PROPS: "RadioButton 属性"
 PROPS:
   - name: v-model
     type: String | Number | Boolean
@@ -56,6 +60,119 @@ PROPS:
     usage: '#default'
     code: null
 
+GROUP_PROPS:
+  - name: "v-model"
+    type: RadioValue
+    description: "组内唯一选中值。"
+    default: "''"
+    usage: "#default"
+  - name: "options"
+    type: "RadioOption[]"
+    description: "数据驱动选项。每项支持 `label`、`value`、`description`、`disabled`。"
+    default: "[]"
+    usage: "#default"
+  - name: "type"
+    type: "default | button"
+    description: "基础 Radio 或无边框 RadioButton 形态。"
+    default: "default"
+    usage: "#default"
+  - name: "columns"
+    type: "number"
+    description: "普通数据分组的列数；小屏自动回落为单列。"
+    default: "1"
+    usage: "#default"
+  - name: "gap"
+    type: "number | string"
+    description: "选项间距，数字按像素处理。"
+    default: "8"
+    usage: "#default"
+  - name: "disabled-values"
+    type: "RadioValue[]"
+    description: "按值禁用指定选项。"
+    default: "[]"
+    usage: "#default"
+  - name: "disabled"
+    type: "boolean"
+    description: "禁用整个组。"
+    default: "false"
+    usage: "#default"
+  - name: "name"
+    type: "string"
+    description: "原生 Radio 的共享名称，用于键盘方向键切换。"
+    default: "自动生成"
+    usage: "#default"
+GROUP_TABS_PROPS:
+  - name: "v-model"
+    type: RadioGroupTabsModelValue
+    description: "按页签值保存每个面板的单选结果。"
+    default: "{}"
+    usage: "#default"
+  - name: "tabs"
+    type: "RadioGroupTab[]"
+    description: "页签及其 `options`；页签支持 `disabled`、`columns`、禁用值配置。"
+    default: "[]"
+    usage: "#default"
+  - name: "active-key"
+    type: "string | number"
+    description: "当前面板；支持 `v-model:active-key`。"
+    default: "首个可用页签"
+    usage: "#default"
+  - name: "v-model:active-key"
+    type: RadioGroupTabValue
+    description: 当前页签键的双向绑定。
+    default: null
+    usage: '#default'
+  - name: "columns"
+    type: "number"
+    description: "页签未单独指定时的面板列数。"
+    default: "2"
+    usage: "#default"
+  - name: "gap"
+    type: "number | string"
+    description: "面板选项间距。"
+    default: "12"
+    usage: "#default"
+  - name: "disabled"
+    type: "boolean"
+    description: "禁用整个页签分组。"
+    default: "false"
+    usage: "#default"
+BUTTON_PROPS:
+  - name: v-model
+    type: RadioButtonValue
+    description: 直接使用 RadioButton 时双向绑定的选中值。
+    default: null
+    usage: '#default'
+  - name: model-value
+    type: RadioButtonValue
+    description: 不使用 v-model 语法时设置选中值。
+    default: null
+    usage: '#default'
+  - name: value
+    type: RadioButtonValue
+    description: 当前按钮代表的选项值。
+    default: "''"
+    usage: '#default'
+  - name: label
+    type: 'String | Number | Boolean'
+    description: 可见的选项标签。
+    default: "''"
+    usage: '#default'
+  - name: description
+    type: String
+    description: 标签下方的辅助说明。
+    default: "''"
+    usage: '#default'
+  - name: disabled
+    type: Boolean
+    description: 禁用当前按钮但保留选中状态。
+    default: false
+    usage: '#default'
+  - name: name
+    type: String
+    description: 直接组合按钮时共用的原生 radio 名称。
+    default: "''"
+    usage: '#default'
 EVENTS:
   - name: update:modelValue
     type: RadioValue
@@ -73,6 +190,39 @@ EVENTS:
     type: '(value: RadioGroupTabsModelValue, activeKey: String | Number)'
     description: 页签分组选项变化后，携带完整分组值与当前页签触发。
 SLOTS:
+  - name: RadioGroup.default
+    type: slot
+    description: 未提供 options 时手动组合 Radio 或 RadioButton 子组件。
+    default: null
+    usage: '#default'
+  - name: RadioGroup.option
+    type: slot
+    values: '{ option, checked }'
+    description: 自定义数据驱动的单选项内容。
+    default: null
+    usage: '#default'
+  - name: RadioGroup.empty
+    type: slot
+    description: 无选项且未手动提供子控件时显示的内容。
+    default: null
+    usage: '#default'
+  - name: RadioGroupTabs.tab
+    type: slot
+    values: '{ tab, active, selected, selectedOption }'
+    description: 根据激活和选中状态自定义页签触发器。
+    default: null
+    usage: '#default'
+  - name: RadioGroupTabs.option
+    type: slot
+    values: '{ option, checked }'
+    description: 自定义当前页签的选项内容。
+    default: null
+    usage: '#default'
+  - name: RadioGroupTabs.empty
+    type: slot
+    description: 没有活动页签时显示的内容。
+    default: null
+    usage: '#default'
   - name: default
     type: slot
     values: 'null'
@@ -96,7 +246,7 @@ SLOTS:
 
 <card>
 
-## 基础、分组、页签与按钮
+## 默认
 
 <docs-warn />
 
@@ -273,41 +423,5 @@ SLOTS:
 @[code{67-80}](../../.vuepress/components/radio/icons.vue)
 
 </template>
-
-</card>
-
-<card>
-
-### RadioGroup
-
-| 属性              | 类型                          | 默认值    | 说明                                                                 |
-| ----------------- | ----------------------------- | --------- | -------------------------------------------------------------------- |
-| `v-model`         | `string \| number \| boolean` | `''`      | 组内唯一选中值。                                                     |
-| `options`         | `RadioOption[]`               | `[]`      | 数据驱动选项。每项支持 `label`、`value`、`description`、`disabled`。 |
-| `type`            | `default \| button`           | `default` | 基础 Radio 或无边框 RadioButton 形态。                               |
-| `columns`         | `number`                      | `1`       | 普通数据分组的列数；小屏自动回落为单列。                             |
-| `gap`             | `number \| string`            | `8`       | 选项间距，数字按像素处理。                                           |
-| `disabled-values` | `RadioValue[]`                | `[]`      | 按值禁用指定选项。                                                   |
-| `disabled`        | `boolean`                     | `false`   | 禁用整个组。                                                         |
-| `name`            | `string`                      | 自动生成  | 原生 Radio 的共享名称，用于键盘方向键切换。                          |
-
-事件：`update:modelValue(value)`、`change(value)`。插槽：`option`、`empty`；不传 `options` 时，默认插槽中的 `Radio` 或 `RadioButton` 会自动接入组模型。
-
-### RadioGroupTabs
-
-| 属性         | 类型                         | 默认值       | 说明                                                             |
-| ------------ | ---------------------------- | ------------ | ---------------------------------------------------------------- |
-| `v-model`    | `Record<string, RadioValue>` | `{}`         | 按页签值保存每个面板的单选结果。                                 |
-| `tabs`       | `RadioGroupTab[]`            | `[]`         | 页签及其 `options`；页签支持 `disabled`、`columns`、禁用值配置。 |
-| `active-key` | `string \| number`           | 首个可用页签 | 当前面板；支持 `v-model:active-key`。                            |
-| `columns`    | `number`                     | `2`          | 页签未单独指定时的面板列数。                                     |
-| `gap`        | `number \| string`           | `12`         | 面板选项间距。                                                   |
-| `disabled`   | `boolean`                    | `false`      | 禁用整个页签分组。                                               |
-
-事件：`update:modelValue(value)`、`change(value, activeKey)`、`update:activeKey(key)`、`tabChange(key)`。插槽：`tab`、`option`、`empty`。页签支持方向键、`Home` 和 `End` 导航。
-
-### RadioButton
-
-`RadioButton` 推荐通过 `<s-radio-group type="button" />` 使用；直接组合时仍支持 `v-model`、`value`、`label`、`description`、`disabled` 与 `name`。选中态使用圆形单选标记、颜色、表面与阴影共同表达，不依赖边框。
 
 </card>

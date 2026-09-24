@@ -18,6 +18,10 @@ import type { Page, Plugin, Theme } from '@vuepress/core'
 const apiTableKeys = [
   'PROPS',
   'CHILD_PROPS',
+  'GROUP_PROPS',
+  'GROUP_TABS_PROPS',
+  'BUTTON_PROPS',
+  'PICKER_API',
   'ITEMS',
   'RULES',
   'RENDERERS',

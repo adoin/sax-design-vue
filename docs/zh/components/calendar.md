@@ -1,4 +1,7 @@
 ---
+EXAMPLE_GROUPS:
+  - title: 视图
+    items: [switchable-views, locked-view]
 PROPS:
   - name: size
     type: "'small' | 'medium' | 'large'"
@@ -177,9 +180,7 @@ description: '支持月、周、日视图的日程日历。'
 
 <card>
 
-## 展示
-
-### 默认可切换视图
+## 默认可切换视图
 
 <template #example><calendar-default /></template>
 
@@ -205,7 +206,7 @@ description: '支持月、周、日视图的日程日历。'
 
 <card>
 
-### 固定视图
+## 固定视图
 
 仅传入一个 `views` 项即可固定某一种展示形态，并隐藏视图切换器。
 

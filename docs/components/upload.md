@@ -1,11 +1,13 @@
 ---
+API_TITLES:
+  PICKER_API: Promise file picker
 PROPS:
   - name: model-value
     type: File | File[] | null
     values: selected files
     description: Controls the selected file collection through v-model.
     default: null
-    usage: '#default'
+    usage: '#complete-flow'
   - name: shape
     type: String
     values: rounded | square
@@ -17,7 +19,7 @@ PROPS:
     values: true | false
     description: Accepts files dropped on the upload surface.
     default: 'true'
-    usage: '#default'
+    usage: '#complete-flow'
   - name: list-type
     type: String
     values: auto | list | card
@@ -41,13 +43,13 @@ PROPS:
     values: true | false
     description: Allows selecting and dropping more than one file.
     default: 'false'
-    usage: '#default'
+    usage: '#complete-flow'
   - name: single-upload
     type: Boolean
     values: true | false
     description: Replaces the current queue with each new valid selection.
     default: 'false'
-    usage: '#default'
+    usage: '#complete-flow'
   - name: accept
     type: String
     values: MIME type | extension list
@@ -65,19 +67,19 @@ PROPS:
     values: positive number
     description: Limits the number of files kept in the queue.
     default: null
-    usage: '#default'
+    usage: '#complete-flow'
   - name: limit-count
     type: Number | String
     values: positive number
     description: Compatibility alias of limit.
     default: null
-    usage: '#default'
+    usage: '#complete-flow'
   - name: limit-size
     type: Number | String
     values: megabytes
     description: Rejects individual files larger than the configured size.
     default: null
-    usage: '#default'
+    usage: '#complete-flow'
   - name: automatic
     type: Boolean
     values: true | false
@@ -101,7 +103,7 @@ PROPS:
     values: ({ file, option, updateProgress }) => Promise
     description: Replaces the built-in request and can report progress through updateProgress.
     default: null
-    usage: '#default'
+    usage: '#complete-flow'
   - name: file-name
     type: String
     values: form field name
@@ -125,49 +127,49 @@ PROPS:
     values: ({ file }) => boolean | Promise<boolean>
     description: Applies application validation before a file enters the queue.
     default: null
-    usage: '#default'
+    usage: '#complete-flow'
   - name: before-remove-method
     type: Function
     values: ({ option }) => boolean | Promise<boolean>
     description: Guards removal of a queued file.
     default: null
-    usage: '#default'
+    usage: '#complete-flow'
   - name: text
     type: String
     values: text
     description: Sets the upload surface title.
     default: Upload File
-    usage: '#default'
+    usage: '#complete-flow'
   - name: text-max
     type: String
     values: text
     description: Replaces the title shown after the file limit is reached.
     default: null
-    usage: '#default'
+    usage: '#complete-flow'
   - name: button-text
     type: String
     values: text
     description: Compatibility title that takes precedence over text.
     default: null
-    usage: '#default'
+    usage: '#complete-flow'
   - name: show-tip
     type: Boolean
     values: true | false
     description: Shows the supporting tip below the component.
     default: 'false'
-    usage: '#default'
+    usage: '#complete-flow'
   - name: tip-text
     type: String
     values: text
     description: Sets the built-in supporting tip.
     default: null
-    usage: '#default'
+    usage: '#complete-flow'
   - name: show-list
     type: Boolean
     values: true | false
     description: Shows the selected file queue.
     default: 'true'
-    usage: '#default'
+    usage: '#complete-flow'
   - name: show-preview
     type: Boolean
     values: true | false
@@ -191,43 +193,54 @@ PROPS:
     values: true | false
     description: Shows the remove action on queue items.
     default: 'true'
-    usage: '#default'
+    usage: '#complete-flow'
   - name: show-upload-button
     type: Boolean
     values: true | false
     description: Shows the manual queue upload action.
     default: 'true'
-    usage: '#default'
+    usage: '#complete-flow'
   - name: show-submit-button
     type: Boolean
     values: true | false
     description: Shows the manual queue upload action.
     default: 'true'
-    usage: '#default'
+    usage: '#complete-flow'
   - name: show-button-icon
     type: Boolean
     values: true | false
     description: Shows the icon in the manual upload action.
     default: 'true'
-    usage: '#default'
+    usage: '#complete-flow'
   - name: show-button-text
     type: Boolean
     values: true | false
     description: Shows the label in the manual upload action.
     default: 'true'
-    usage: '#default'
+    usage: '#complete-flow'
   - name: readonly
     type: Boolean
     values: true | false
     description: Displays files without selection, removal, retry, or upload controls.
     default: 'false'
-    usage: '#default'
+    usage: '#complete-flow'
   - name: disabled
     type: Boolean
     values: true | false
     description: Disables file picking and dropping.
     default: 'false'
-    usage: '#default'
+    usage: '#complete-flow'
+PICKER_API:
+  - name: SUpload.pick
+    type: PickUploadFiles
+    description: Selects files without mounting UI; multiple or directory returns File[], cancellation resolves undefined, and validation rejects with UploadPickError.
+    default: null
+    usage: '#promise-picker'
+  - name: pickUploadFiles
+    type: PickUploadFiles
+    description: Named export with the same implementation and return contract as SUpload.pick.
+    default: null
+    usage: '#promise-picker'
 EVENTS:
   - name: update:modelValue
     params: File | File[] | null
@@ -361,13 +374,6 @@ This API selects files only. Continue with your own request after the Promise re
 @[code{37-44}](../.vuepress/components/upload/promise.vue)
 
 </template>
-
-### Promise API
-
-| API                        | Return                                 | Notes                                                                   |
-| -------------------------- | -------------------------------------- | ----------------------------------------------------------------------- |
-| `SUpload.pick(options)`    | `Promise<File \| File[] \| undefined>` | `multiple` or `directory` returns an array; cancel returns `undefined`. |
-| `pickUploadFiles(options)` | Same as above                          | Named export with the same implementation.                              |
 
 </card>
 

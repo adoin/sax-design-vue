@@ -1,5 +1,8 @@
 ---
 description: '选择一个或多个布尔选项。'
+API_TITLES:
+  GROUP_PROPS: "CheckboxGroup 属性"
+  GROUP_TABS_PROPS: "CheckboxGroupTabs 属性"
 PROPS:
   - name: disabled
     type: Boolean
@@ -64,7 +67,7 @@ PROPS:
     description: 选中时为标签添加中划线。
     default: false
     link: null
-    usage: '#linethrough'
+    usage: '#line-through'
     code: >
       <template>
         <s-checkbox line-through v-model="option">
@@ -86,7 +89,7 @@ PROPS:
     description: 将默认图标改为表示不确定状态的横线。
     default: false
     link: null
-    usage: '#Indeterminate'
+    usage: '#indeterminate'
     code: >
       <template>
         <s-checkbox indeterminate v-model="option">
@@ -172,6 +175,88 @@ PROPS:
         </s-checkbox>
       </template>
 
+GROUP_PROPS:
+  - name: "v-model"
+    type: CheckboxGroupValueType
+    description: "所有已选子项组成的扁平数组。"
+    default: "[]"
+    usage: "#checkbox-group"
+  - name: "options"
+    type: "(CheckboxGroupOption | CheckboxGroupSection)[]"
+    description: "数据驱动选项；带 `options` 的项会作为可全选的分组，同一组合或页签中的子项 value 应保持唯一。"
+    default: "[]"
+    usage: "#checkbox-group"
+  - name: "columns"
+    type: "number"
+    description: "默认列数，分组可通过自身 `columns` 覆盖。"
+    default: "1"
+    usage: "#checkbox-group"
+  - name: "gap"
+    type: "number | string"
+    description: "行列间距。数字按像素处理。"
+    default: "12"
+    usage: "#checkbox-group"
+  - name: "disabled-values"
+    type: CheckboxGroupValueType
+    description: "禁用指定子项，并在分组全选/清空时保留其值。"
+    default: "[]"
+    usage: "#checkbox-group"
+  - name: "disabled-group-values"
+    type: CheckboxGroupValueType
+    description: "禁用指定分组标题的全选控制。"
+    default: "[]"
+    usage: "#checkbox-group"
+  - name: "disabled"
+    type: "boolean"
+    description: "禁用整个组。"
+    default: "false"
+    usage: "#checkbox-group"
+  - name: "min"
+    type: "number"
+    description: "Minimum selected value count."
+    default: null
+    usage: "#checkbox-group"
+  - name: "max"
+    type: "number"
+    description: "Maximum selected value count."
+    default: null
+    usage: "#checkbox-group"
+GROUP_TABS_PROPS:
+  - name: "v-model"
+    type: CheckboxGroupTabsModelValue
+    description: "按页签值保存各自的选中数组。"
+    default: "{}"
+    usage: "#checkbox-group-tabs"
+  - name: "tabs"
+    type: "CheckboxGroupTab[]"
+    description: "页签数据，每项包含 `label`、`value` 与 `options`。"
+    default: "[]"
+    usage: "#checkbox-group-tabs"
+  - name: "active-key"
+    type: "string | number"
+    description: "当前页签。"
+    default: "首个可用页签"
+    usage: "#checkbox-group-tabs"
+  - name: "v-model:active-key"
+    type: "string | number"
+    description: "当前页签。"
+    default: "首个可用页签"
+    usage: "#checkbox-group-tabs"
+  - name: "columns"
+    type: "number"
+    description: "内容区默认列数。"
+    default: "2"
+    usage: "#checkbox-group-tabs"
+  - name: "gap"
+    type: "number | string"
+    description: "内容区行列间距。"
+    default: "12"
+    usage: "#checkbox-group-tabs"
+  - name: "disabled"
+    type: "boolean"
+    description: "禁用所有页签及选项。"
+    default: "false"
+    usage: "#checkbox-group-tabs"
 EVENTS:
   - name: update:modelValue
     type: CheckboxModelType | CheckboxGroupValueType
@@ -189,6 +274,51 @@ EVENTS:
     type: '(value: CheckboxGroupTabsModelValue, activeKey: String | Number)'
     description: 页签分组选项变化后，携带完整分组值与当前页签触发。
 SLOTS:
+  - name: CheckboxGroup.default
+    type: slot
+    description: 未提供 options 时手动组合 Checkbox 子组件。
+    default: null
+    usage: '#checkbox-group'
+  - name: CheckboxGroup.option
+    type: slot
+    values: '{ option, checked }'
+    description: 自定义数据驱动的选项内容。
+    default: null
+    usage: '#data-driven-groups'
+  - name: CheckboxGroup.group-label
+    type: slot
+    values: '{ group, checked, indeterminate }'
+    description: 自定义分组选中控制项的标签。
+    default: null
+    usage: '#data-driven-groups'
+  - name: CheckboxGroup.empty
+    type: slot
+    description: 无选项且未手动提供子控件时显示的内容。
+    default: null
+    usage: '#data-driven-groups'
+  - name: CheckboxGroupTabs.tab
+    type: slot
+    values: '{ tab, active, checked, indeterminate, selectedCount }'
+    description: 自定义页签触发器，同时保留当前选择状态。
+    default: null
+    usage: '#checkbox-group-tabs'
+  - name: CheckboxGroupTabs.option
+    type: slot
+    values: '{ option, checked }'
+    description: 自定义当前页签的选项内容。
+    default: null
+    usage: '#checkbox-group-tabs'
+  - name: CheckboxGroupTabs.group-label
+    type: slot
+    values: '{ group, checked, indeterminate }'
+    description: 自定义当前页签内的分组标签。
+    default: null
+    usage: '#checkbox-group-tabs'
+  - name: CheckboxGroupTabs.empty
+    type: slot
+    description: 没有活动页签时显示的内容。
+    default: null
+    usage: '#checkbox-group-tabs'
   - name: icon
     type: slot
     values: "checked, indeterminate"
@@ -486,6 +616,10 @@ SLOTS:
 
 <card>
 
+## 对象值
+
+CheckboxGroup 可将对象作为选项值；下方会显示当前选中的对象数组。
+
 <template #example>
 <checkbox-object />
 </template>
@@ -650,40 +784,5 @@ SLOTS:
 @[code{6-10}](../../.vuepress/components/checkbox/indeterminate.vue)
 
 </template>
-
-</card>
-
-<card>
-
-### CheckboxGroup
-
-| 属性                    | 类型                                              | 默认值  | 说明                                                |
-| ----------------------- | ------------------------------------------------- | ------- | --------------------------------------------------- |
-| `v-model`               | `CheckboxValue[]`                                 | `[]`    | 所有已选子项组成的扁平数组。                        |
-| `options`               | `(CheckboxGroupOption \| CheckboxGroupSection)[]` | `[]`    | 数据驱动选项；带 `options` 的项会作为可全选的分组。 |
-| `columns`               | `number`                                          | `1`     | 默认列数，分组可通过自身 `columns` 覆盖。           |
-| `gap`                   | `number \| string`                                | `12`    | 行列间距。数字按像素处理。                          |
-| `disabled-values`       | `CheckboxValue[]`                                 | `[]`    | 禁用指定子项，并在分组全选/清空时保留其值。         |
-| `disabled-group-values` | `CheckboxValue[]`                                 | `[]`    | 禁用指定分组标题的全选控制。                        |
-| `disabled`              | `boolean`                                         | `false` | 禁用整个组。                                        |
-| `min` / `max`           | `number`                                          | `-`     | 限制最少或最多选中数量。                            |
-
-`CheckboxGroupOption` 支持 `label`、`value`、`disabled`、`description`；`CheckboxGroupSection` 支持 `label`、`value`、`options`、`disabled`、`columns`。
-同一个 CheckboxGroup 或页签内的子项 `value` 应保持唯一。
-
-事件：`update:modelValue(value)`、`change(value)`。插槽：`option`、`group-label`、`empty`，不传 `options` 时默认插槽仍兼容原有的手写 Checkbox 用法。
-
-### CheckboxGroupTabs
-
-| 属性                                | 类型                              | 默认值       | 说明                                               |
-| ----------------------------------- | --------------------------------- | ------------ | -------------------------------------------------- |
-| `v-model`                           | `Record<string, CheckboxValue[]>` | `{}`         | 按页签值保存各自的选中数组。                       |
-| `tabs`                              | `CheckboxGroupTab[]`              | `[]`         | 页签数据，每项包含 `label`、`value` 与 `options`。 |
-| `active-key` / `v-model:active-key` | `string \| number`                | 首个可用页签 | 当前页签。                                         |
-| `columns`                           | `number`                          | `2`          | 内容区默认列数。                                   |
-| `gap`                               | `number \| string`                | `12`         | 内容区行列间距。                                   |
-| `disabled`                          | `boolean`                         | `false`      | 禁用所有页签及选项。                               |
-
-事件：`update:modelValue(value)`、`change(value, activeKey)`、`update:activeKey(activeKey)`、`tabChange(activeKey)`。插槽：`tab`、`option`、`group-label`、`empty`。
 
 </card>
