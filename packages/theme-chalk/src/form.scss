@@ -2,7 +2,7 @@
 @use 'mixins/function' as *;
 
 .s-form {
-  --sax-form-label-padding-top: 7px;
+  --sax-form-control-height: 36px;
   --sax-form-label-font-size: 14px;
   --sax-form-label-line-height: 20px;
 
@@ -10,13 +10,13 @@
 }
 
 .s-form--small {
-  --sax-form-label-padding-top: 5px;
+  --sax-form-control-height: 32px;
   --sax-form-label-font-size: 12px;
   --sax-form-label-line-height: 18px;
 }
 
 .s-form--large {
-  --sax-form-label-padding-top: 9px;
+  --sax-form-control-height: 40px;
   --sax-form-label-font-size: 16px;
   --sax-form-label-line-height: 22px;
 }
@@ -50,7 +50,10 @@
 .s-form-item__label {
   flex: 0 0 auto;
   box-sizing: border-box;
-  padding: var(--sax-form-label-padding-top) 12px 0 0;
+  padding: calc(
+      (var(--sax-form-control-height) - var(--sax-form-label-line-height)) / 2
+    )
+    12px 0 0;
   color: getColor(text);
   font-size: var(--sax-form-label-font-size);
   line-height: var(--sax-form-label-line-height);
