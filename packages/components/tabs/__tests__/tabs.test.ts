@@ -49,6 +49,62 @@ afterEach(() => {
 })
 
 describe('Tabs', () => {
+  it('places the line from layout geometry during the initial tab animation', async () => {
+    vi.spyOn(HTMLElement.prototype, 'offsetParent', 'get').mockImplementation(
+      function (this: HTMLElement) {
+        if (
+          this.classList.contains('s-tabs__item') ||
+          this.classList.contains('s-tabs__nav-list') ||
+          this.classList.contains('s-tabs__nav')
+        )
+          return this.parentElement
+        return null
+      },
+    )
+    vi.spyOn(HTMLElement.prototype, 'offsetLeft', 'get').mockImplementation(
+      function (this: HTMLElement) {
+        if (this.classList.contains('s-tabs__nav-list')) return 5
+        return this.classList.contains('s-tabs__item') &&
+          this.previousElementSibling
+          ? 80
+          : 0
+      },
+    )
+    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockImplementation(
+      function (this: HTMLElement) {
+        return this.classList.contains('s-tabs__item') ? 74 : 0
+      },
+    )
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(
+      function (this: HTMLElement) {
+        const transformed = this.classList.contains('s-tabs__item')
+        return {
+          left: transformed ? 20 : 0,
+          width: transformed ? 71 : 0,
+        } as DOMRect
+      },
+    )
+
+    const wrapper = mountTabs({ modelValue: 'overview' }, { default: panes })
+    await flushPromises()
+
+    expect(wrapper.get('.s-tabs__indicator').attributes('style')).toContain(
+      'width: 74px; transform: translate3d(5px, 0, 0)',
+    )
+
+    await wrapper.findAll('[role="tab"]')[1].trigger('click')
+    await flushPromises()
+    expect(wrapper.get('.s-tabs__indicator').attributes('style')).toContain(
+      'width: 74px; transform: translate3d(85px, 0, 0)',
+    )
+
+    await wrapper.findAll('[role="tab"]')[0].trigger('click')
+    await flushPromises()
+    expect(wrapper.get('.s-tabs__indicator').attributes('style')).toContain(
+      'width: 74px; transform: translate3d(5px, 0, 0)',
+    )
+  })
+
   it('uses stable tab names and exposes accessible tab relationships', async () => {
     const wrapper = mountTabs({ modelValue: 'overview' }, { default: panes })
     await nextTick()

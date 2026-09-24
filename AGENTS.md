@@ -8,6 +8,7 @@
 ## Project specifications
 
 - Read relevant records in `.agents/notes/active/` and `.agents/notes/prohibited/` before implementation. Treat proposed records as unapproved, prohibited records as approaches that must not be repeated unless their `reopen_only_if` condition is met, and implemented records as verified project contracts.
+- Tabs 首次加载的激活横线对齐契约见 `.agents/notes/implemented/tabs-indicator-initial-alignment.md`。
 - 当前尚未完成的 Table 生成数据错误导航目标记录在 `.agents/notes/active/table-generated-error-navigation.md`。递归 API 类型详情已经记录在 `.agents/notes/implemented/recursive-api-type-details.md`，并继续遵守 `.agents/notes/prohibited/flat-api-type-details-popover.md`。
 - Move a project specification to `.agents/notes/implemented/` only after its implementation and required verification pass. Preserve superseded decisions in `.agents/notes/superseded/` when the replacement needs historical context.
 - For Table work, read `.agents/notes/implemented/table-component-architecture.md`, `.agents/notes/implemented/table-documentation-information-architecture.md`, and `.agents/notes/implemented/table-single-component-business-shell.md`, plus their linked prohibited approaches.

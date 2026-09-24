@@ -67,8 +67,10 @@ const reflowDirection = shallowRef<'forward' | 'backward'>('forward')
 
 const navWrapRef = useTemplateRef<HTMLElement>('navWrap')
 const navViewportRef = useTemplateRef<HTMLElement>('navViewport')
+const navListRef = useTemplateRef<HTMLElement>('navList')
 const measureRef = useTemplateRef<HTMLElement>('measure')
 const extraRef = useTemplateRef<HTMLElement>('extra')
+const activeItemRef = shallowRef<HTMLElement>()
 
 const isHorizontal = computed(
   () => props.position === 'top' || props.position === 'bottom',
@@ -142,26 +144,40 @@ const syncActiveFromModel = () => {
 }
 
 const updateLine = () => {
-  if (!showLine.value) return
+  if (!showLine.value) {
+    activeItemRef.value = undefined
+    return
+  }
   const viewport = navViewportRef.value
   const activeElement = viewport?.querySelector<HTMLElement>(
     `.${ns.e('item')}.${ns.is('active')}`,
   )
+  activeItemRef.value = activeElement ?? undefined
   if (!viewport || !activeElement) {
     lineStyle.value = {}
     return
   }
 
-  const viewportRect = viewport.getBoundingClientRect()
-  const activeRect = activeElement.getBoundingClientRect()
+  // Offset geometry excludes the transforms applied by TransitionGroup on entry.
+  let position = 0
+  let element: HTMLElement | null = activeElement
+  while (element && element !== viewport) {
+    position += isHorizontal.value ? element.offsetLeft : element.offsetTop
+    element = element.offsetParent as HTMLElement | null
+  }
+  if (element !== viewport) {
+    lineStyle.value = {}
+    return
+  }
+
   lineStyle.value = isHorizontal.value
     ? {
-        width: `${activeRect.width}px`,
-        transform: `translate3d(${activeRect.left - viewportRect.left}px, 0, 0)`,
+        width: `${activeElement.offsetWidth}px`,
+        transform: `translate3d(${position}px, 0, 0)`,
       }
     : {
-        height: `${activeRect.height}px`,
-        transform: `translate3d(0, ${activeRect.top - viewportRect.top}px, 0)`,
+        height: `${activeElement.offsetHeight}px`,
+        transform: `translate3d(0, ${position}px, 0)`,
       }
 }
 
@@ -422,6 +438,8 @@ watch(
 )
 
 useResizeObserver(navWrapRef, measureTabs)
+useResizeObserver(navListRef, measureTabs)
+useResizeObserver(activeItemRef, measureTabs)
 
 provide(tabsContextKey, {
   activeUid,
@@ -476,6 +494,7 @@ onBeforeUnmount(() => {
           </Transition>
 
           <TransitionGroup
+            ref="navList"
             tag="ul"
             :name="ns.e('nav-item')"
             :class="ns.e('nav-list')"
