@@ -23,6 +23,12 @@ if [[ "$release_version" != "$built_version" ]]; then
   exit 1
 fi
 
+icon_version="$(node -p "require('./packages/iconify/package.json').version")"
+published_icon_version="$(npm view sax-design-vue-iconify version)"
+if [[ "$icon_version" != "$published_icon_version" ]]; then
+  npm publish ./packages/iconify --access public --provenance
+fi
+
 npm publish ./dist/sax-design-vue --access public --provenance
 
 echo "✅ Published sax-design-vue@$release_version"

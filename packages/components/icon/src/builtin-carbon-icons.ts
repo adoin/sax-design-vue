@@ -74,14 +74,6 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
       viewBox: '0 0 32 32',
     },
   },
-  close: {
-    body: '<path fill="currentColor" d="M17.414 16L24 9.414L22.586 8L16 14.586L9.414 8L8 9.414L14.586 16L8 22.586L9.414 24L16 17.414L22.586 24L24 22.586z"/>',
-    attributes: {
-      width: '1em',
-      height: '1em',
-      viewBox: '0 0 32 32',
-    },
-  },
   'cloud-upload': {
     body: '<path fill="currentColor" d="m11 18l1.41 1.41L15 16.83V29h2V16.83l2.59 2.58L21 18l-5-5z"/><path fill="currentColor" d="M23.5 22H23v-2h.5a4.5 4.5 0 0 0 .36-9H23l-.1-.82a7 7 0 0 0-13.88 0L9 11h-.86a4.5 4.5 0 0 0 .36 9H9v2h-.5A6.5 6.5 0 0 1 7.2 9.14a9 9 0 0 1 17.6 0A6.5 6.5 0 0 1 23.5 22"/>',
     attributes: {
