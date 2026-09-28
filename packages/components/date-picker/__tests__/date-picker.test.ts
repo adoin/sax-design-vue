@@ -7,6 +7,8 @@ import { getCalendarWeek } from '@vuesax-alpha/utils'
 import ConfigProvider from '../../config-provider/src/config-provider'
 import DatePicker from '../src/date-picker.vue'
 import DatePanel from '../src/date-panel.vue'
+import DatePickerTags from '../src/date-picker-tags.vue'
+import DatePickerAction from '../src/date-picker-action.vue'
 import Calendar from '../../calendar/src/calendar.vue'
 import { parseWeekValue, withWeekRules } from '../src/utils'
 
@@ -32,7 +34,8 @@ const InputStub = defineComponent({
     suffixIcon: String,
   },
   emits: ['update:modelValue'],
-  template: '<div class="input-stub" />',
+  template:
+    '<div class="input-stub"><slot name="prefix" /><slot name="suffix" /></div>',
 })
 
 const PopperStub = defineComponent({
@@ -79,6 +82,27 @@ const mountPicker = (props = {}) =>
   })
 
 describe('DatePicker input presentation', () => {
+  it('removes one multiple date and clears through the single suffix action', async () => {
+    const wrapper = mountPicker({
+      multiple: true,
+      clearable: true,
+      valueFormat: 'YYYY-MM-DD',
+      modelValue: ['2026-09-17', '2026-09-19'],
+    })
+    wrapper.getComponent(DatePickerTags).vm.$emit('remove', 0)
+    await wrapper.vm.$nextTick()
+    await wrapper.get('.s-date-picker').trigger('mouseenter')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toEqual([
+      '2026-09-19',
+    ])
+    expect(wrapper.getComponent(DatePickerAction).props('clear')).toBe(true)
+    wrapper.getComponent(DatePickerAction).vm.$emit('clear')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBeNull()
+    expect(wrapper.getComponent(DatePickerAction).props('clear')).toBe(false)
+    wrapper.unmount()
+  })
+
   it('applies global week rules to Calendar and preserves a local override', async () => {
     const wrapper = mount(ConfigProvider, {
       props: { firstDayOfWeek: 0, firstWeekContainsDate: 1 },
@@ -287,7 +311,7 @@ describe('DatePicker input presentation', () => {
       color: '#123456',
       size: 'large',
       shape: 'square',
-      suffixIcon: 'cb:calendar',
+      suffixIcon: undefined,
     })
     expect(wrapper.get('.s-date-picker').attributes('style')).toContain(
       '--sax-color: 210deg 65.385% 20.392%',
@@ -322,7 +346,7 @@ describe('DatePicker input presentation', () => {
         labelFloat: true,
         color: 'success',
         size: 'small',
-        suffixIcon: 'cb:calendar',
+        suffixIcon: undefined,
       })
     }
   })

@@ -28,10 +28,21 @@
         ns.is('year', props.type === 'year'),
         ns.is('week', props.type === 'week'),
         ns.is('range', isRange),
+        ns.is('multiple', isMultiple && innerDates.length > 0),
         ns.is('with-time', showTimePanel),
         ns.is(resolvedShape),
       ]"
       :style="themeStyle"
+      @mouseenter="triggerHovered = true"
+      @mouseleave="triggerHovered = false"
+      @focusin="triggerFocused = true"
+      @focusout="
+        triggerFocused = Boolean(
+          ($event.currentTarget as HTMLElement).contains(
+            $event.relatedTarget as Node | null,
+          ),
+        )
+      "
     >
       <div v-if="isRange" :class="ns.e('range-input')">
         <s-input
@@ -44,13 +55,14 @@
           :size="resolvedSize"
           :shape="resolvedShape"
           :disabled="disabled"
-          :readonly="!editable || readonly"
+          :readonly="isMultiple || !editable || readonly"
           :aria-label="t('vs.datepicker.startDate')"
-          suffix-icon="cb:calendar"
+          :suffix-icon="undefined"
           @update:model-value="handleRangeInput('start', $event)"
           @focus="(e) => $emit('focus', e)"
           @blur="(e) => $emit('blur', e)"
-        />
+          ><template #suffix><DatePickerAction :clear="false" /></template
+        ></s-input>
         <span :class="ns.e('range-separator')" aria-hidden="true">
           {{ rangeSeparator }}
         </span>
@@ -64,15 +76,19 @@
           :size="resolvedSize"
           :shape="resolvedShape"
           :disabled="disabled"
-          :readonly="!editable || readonly"
-          :clearable="clearable && !disabled"
+          :readonly="isMultiple || !editable || readonly"
+          :clearable="false"
           :aria-label="t('vs.datepicker.endDate')"
-          suffix-icon="cb:calendar"
+          :suffix-icon="undefined"
           @update:model-value="handleRangeInput('end', $event)"
           @clear="handleClear"
           @focus="(e) => $emit('focus', e)"
           @blur="(e) => $emit('blur', e)"
-        />
+          ><template #suffix
+            ><DatePickerAction
+              :clear="canClear && (triggerHovered || triggerFocused)"
+              @clear="handleClear" /></template
+        ></s-input>
       </div>
 
       <s-input
@@ -87,14 +103,30 @@
         :size="resolvedSize"
         :shape="resolvedShape"
         :disabled="disabled"
-        :readonly="!editable || readonly"
-        :clearable="clearable && !disabled"
-        suffix-icon="cb:calendar"
+        :readonly="isMultiple || !editable || readonly"
+        :clearable="false"
+        :suffix-icon="undefined"
         @update:model-value="handleInput"
         @clear="handleClear"
         @focus="(e) => $emit('focus', e)"
         @blur="(e) => $emit('blur', e)"
-      />
+      >
+        <template v-if="isMultiple && innerDates.length" #prefix>
+          <DatePickerTags
+            :labels="
+              innerDates.map((date) => formatDisplay(date, displayFormat))
+            "
+            :disabled="disabled || readonly"
+            :shape="resolvedShape"
+            @remove="removeDateTag"
+          />
+        </template>
+        <template #suffix
+          ><DatePickerAction
+            :clear="canClear && (triggerHovered || triggerFocused)"
+            @clear="handleClear"
+        /></template>
+      </s-input>
     </div>
 
     <template #content>
@@ -119,6 +151,7 @@
             ns.e('body'),
             ns.is('with-time', showTimePanel),
             ns.is('range', isRange),
+
             ns.is('range-mode', isDateTimeRange),
           ]"
         >
@@ -376,6 +409,8 @@ import {
   toTimeZoneWallTime,
 } from '@vuesax-alpha/utils'
 import SDatePanel from './date-panel.vue'
+import DatePickerAction from './date-picker-action.vue'
+import DatePickerTags from './date-picker-tags.vue'
 import STimePanel from './time-panel.vue'
 import { datePickerEmits, datePickerProps } from './date-picker'
 import {
@@ -396,6 +431,8 @@ import type { InputInstance } from '@vuesax-alpha/components/input'
 defineOptions({ name: 'SDatePicker' })
 
 const props = defineProps(datePickerProps)
+const triggerHovered = ref(false)
+const triggerFocused = ref(false)
 const emit = defineEmits(datePickerEmits)
 const { firstDayOfWeek, firstWeekContainsDate } = useWeekConfig(
   () => props.startDay,
@@ -670,6 +707,19 @@ watch(
   },
 )
 
+const canClear = computed(
+  () =>
+    props.clearable &&
+    !props.disabled &&
+    !props.readonly &&
+    Boolean(innerDate.value || innerEndDate.value || innerDates.value.length),
+)
+const removeDateTag = (index: number) => {
+  if (props.disabled || props.readonly) return
+  innerDates.value.splice(index, 1)
+  innerDate.value = innerDates.value[0] ?? null
+  emitValue(buildMultipleOutput())
+}
 const displayText = computed(() => {
   if (isMultiple.value) {
     return innerDates.value

@@ -143,7 +143,7 @@ PROPS:
   - name: multiple
     type: Boolean
     values: ""
-    description: Toggle multiple values and optionally cap the selected count.
+    description: Choose multiple dates from the calendar. Tags collapse to +N according to available width; remove individual tags or hover to read the full date list.
     default: 'false'
     link: null
     usage: '#other-types'

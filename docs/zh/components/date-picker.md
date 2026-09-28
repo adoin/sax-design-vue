@@ -123,7 +123,7 @@ PROPS:
   - name: multiple
     type: Boolean
     values: ""
-    description: 开启多选，并可限制最多选中数量。
+    description: 通过日历选择多个日期，输入框以 Tag 展示，按宽度自动收缩为 +N；可删除单个 Tag，悬停查看完整日期列表。
     default: 'false'
     link: null
     usage: '#other-types'
@@ -131,7 +131,7 @@ PROPS:
   - name: limit-count
     type: Number
     values: ""
-    description: 开启多选，并可限制最多选中数量。
+    description: 限制多选时最多可选中的日期数量。
     default: null
     link: null
     usage: '#other-types'

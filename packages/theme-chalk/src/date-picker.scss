@@ -815,3 +815,54 @@
     &.is-today.is-selected { box-shadow: none; }
   }
 }
+@include b(date-picker) {
+  @include e(action) {
+    display: inline-grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    button {
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      &:hover, &:focus-visible { color: getColor('color'); }
+    }
+  }
+  @include when(multiple) {
+    .#{$namespace}-input__prefix {
+      width: calc(100% - 48px);
+      max-width: calc(100% - 48px);
+      pointer-events: auto;
+    }
+    .#{$namespace}-input__original {
+      color: transparent;
+      caret-color: transparent;
+    }
+  }
+  @include e(tags) {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    > .#{$namespace}-tag { flex-shrink: 0; }
+  }
+  @include e(tag-measure) {
+    position: absolute;
+    display: flex;
+    width: max-content;
+    gap: 4px;
+    visibility: hidden;
+    pointer-events: none;
+    > .#{$namespace}-tag { flex-shrink: 0; }
+  }
+}
