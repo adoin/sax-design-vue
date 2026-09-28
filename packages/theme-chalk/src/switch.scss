@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
@@ -268,4 +269,13 @@
   &.is-checked .s-switch__circle {
     left: calc(100% - 28px);
   }
+}
+
+.#{$namespace}-switch:is(.is-loading, [aria-busy="true"]), .#{$namespace}-switch .is-loading, .#{$namespace}-switch [aria-busy="true"] {
+  @include loading-cursor;
+}
+
+.#{$namespace}-switch.is-loading {
+  pointer-events: auto;
+  > * { pointer-events: none; }
 }

@@ -1,3 +1,5 @@
+@use 'mixins/loading-cursor' as *;
+@use 'mixins/config' as *;
 @use 'common/var' as *;
 @use 'mixins/function' as *;
 
@@ -290,4 +292,8 @@
   .s-button__content {
     gap: 6px;
   }
+}
+
+.#{$namespace}-form-group[aria-busy='true'] {
+  @include loading-cursor;
 }

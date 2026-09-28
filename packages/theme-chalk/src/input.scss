@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
@@ -927,4 +928,8 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
   .#{$namespace}-input--has-color .#{$namespace}-input__affects--2 {
     transition-duration: 0.01ms;
   }
+}
+
+.#{$namespace}-input:has(.#{$namespace}-input__loading) {
+  @include loading-cursor;
 }

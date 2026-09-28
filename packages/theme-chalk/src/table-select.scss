@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 @use 'common/var' as *;
 
@@ -216,4 +217,8 @@
   .s-table-select__action .s-icon {
     transition: none;
   }
+}
+
+.#{$namespace}-table-select:is(.is-loading, [aria-busy="true"]), .#{$namespace}-table-select .is-loading, .#{$namespace}-table-select [aria-busy="true"] {
+  @include loading-cursor;
 }

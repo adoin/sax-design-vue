@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'sass:map';
 
 @use 'mixins/mixins' as *;
@@ -454,4 +455,13 @@
       }
     }
   }
+}
+
+.#{$namespace}-pagination:is(.is-loading, [aria-busy="true"]), .#{$namespace}-pagination .is-loading, .#{$namespace}-pagination [aria-busy="true"] {
+  @include loading-cursor;
+}
+
+.#{$namespace}-pagination .is-loading {
+  pointer-events: auto;
+  > * { pointer-events: none; }
 }

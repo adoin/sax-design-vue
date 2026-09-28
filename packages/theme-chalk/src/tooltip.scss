@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
@@ -128,4 +129,8 @@
     @include set-var-value(color, getCssVar(gray-3));
     color: $color-white;
   }
+}
+
+.#{$namespace}-tooltip:is(.is-loading, [aria-busy="true"]), .#{$namespace}-tooltip .is-loading, .#{$namespace}-tooltip [aria-busy="true"] {
+  @include loading-cursor;
 }

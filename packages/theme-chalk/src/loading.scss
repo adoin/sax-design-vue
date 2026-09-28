@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
@@ -697,4 +698,8 @@
     transform: scaleX(0.2);
     opacity: 0.4;
   }
+}
+
+.#{$namespace}-loading {
+  @include loading-cursor;
 }

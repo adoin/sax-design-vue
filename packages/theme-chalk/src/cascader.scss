@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'sass:map';
 @use 'mixins/mixins' as *;
 @use 'common/var' as *;
@@ -370,4 +371,8 @@
   .s-cascader__suffix .s-icon {
     transition: none;
   }
+}
+
+.#{$namespace}-cascader:has(.#{$namespace}-cascader__loading), .#{$namespace}-cascader__option:has(.#{$namespace}-cascader__loading) {
+  @include loading-cursor;
 }

@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
@@ -391,4 +392,13 @@
     padding: 8px;
     font-size: 1rem;
   }
+}
+
+.#{$namespace}-checkbox:is(.is-loading, [aria-busy="true"]), .#{$namespace}-checkbox .is-loading, .#{$namespace}-checkbox [aria-busy="true"] {
+  @include loading-cursor;
+}
+
+.#{$namespace}-checkbox.is-loading {
+  pointer-events: auto;
+  > * { pointer-events: none; }
 }

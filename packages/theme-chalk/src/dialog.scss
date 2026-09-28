@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
@@ -210,4 +211,8 @@
     max-width: calc(100vw - 20px);
     margin: auto 10px;
   }
+}
+
+.#{$namespace}-dialog:has(.#{$namespace}-dialog__loading) {
+  @include loading-cursor;
 }

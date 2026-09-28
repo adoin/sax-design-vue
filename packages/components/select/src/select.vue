@@ -11,7 +11,7 @@
     :hide-after="hideAfter"
     :show-after="showAfter"
     :loading="loading"
-    :disabled="disabled"
+    :disabled="disabled || loading"
     :on-blur="onBlur"
     :on-focus="onFocus"
     :on-click="onClick"

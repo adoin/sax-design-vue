@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 
 @include b(images) {
@@ -299,4 +300,8 @@
       animation: none;
     }
   }
+}
+
+.#{$namespace}-images__item:has(.is-loading) {
+  @include loading-cursor;
 }

@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
@@ -2254,4 +2255,8 @@ html.dark .#{$namespace}-table-wrapper {
       flex: 1 1 100%;
     }
   }
+}
+
+.#{$namespace}-table:is(.is-loading, [aria-busy="true"]), .#{$namespace}-table .is-loading, .#{$namespace}-table [aria-busy="true"] {
+  @include loading-cursor;
 }

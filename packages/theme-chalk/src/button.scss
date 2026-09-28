@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 @use 'mixins/loading-track' as *;
 @use 'mixins/var' as *;
@@ -274,7 +275,7 @@
   @include m(loading) {
     pointer-events: none;
     user-select: none;
-    cursor: wait;
+    cursor: progress;
 
     @include e(content) {
       opacity: 0.92;
@@ -674,4 +675,13 @@
       box-shadow: 0 8px 25px 0 getColor(black, getCssVar(shadow-opacity));
     }
   }
+}
+
+.#{$namespace}-button--loading {
+  @include loading-cursor;
+}
+
+.#{$namespace}-button--loading {
+  pointer-events: auto;
+  > * { pointer-events: none; }
 }

@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
@@ -490,7 +491,7 @@ $clearableSafeArea: 64px;
     }
 
     @include when(loading) {
-      cursor: wait;
+      cursor: progress;
       opacity: 0.5;
       pointer-events: none;
     }
@@ -795,4 +796,17 @@ $clearableSafeArea: 64px;
       }
     }
   }
+}
+
+.#{$namespace}-select:is(.is-loading, [aria-busy="true"]), .#{$namespace}-select .is-loading, .#{$namespace}-select [aria-busy="true"] {
+  @include loading-cursor;
+}
+
+.#{$namespace}-select.is-loading {
+  pointer-events: auto;
+  > * { pointer-events: none; }
+}
+
+.#{$namespace}-select__option:has(.is-loading) {
+  @include loading-cursor;
 }

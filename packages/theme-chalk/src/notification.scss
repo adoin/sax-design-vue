@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
@@ -428,4 +429,8 @@
       }
     }
   }
+}
+
+.#{$namespace}-notification:is(.is-loading, [aria-busy="true"]), .#{$namespace}-notification .is-loading, .#{$namespace}-notification [aria-busy="true"] {
+  @include loading-cursor;
 }

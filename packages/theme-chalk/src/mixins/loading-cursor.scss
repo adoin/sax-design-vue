@@ -1,0 +1,7 @@
+// Loading feedback takes precedence over pointer, text, and disabled cursors.
+@mixin loading-cursor {
+  &,
+  * {
+    cursor: progress !important;
+  }
+}
