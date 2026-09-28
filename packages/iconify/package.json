@@ -25,6 +25,11 @@
       "types": "./src/virtual.d.ts"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adoin/sax-design-vue.git",
+    "directory": "packages/iconify"
+  },
   "publishConfig": {
     "access": "public"
   },

@@ -1,6 +1,6 @@
 ## Changelog
 
-### 1.1.0
+### 1.1.1
 
 - Added shared week-start and week-number rules for DatePicker, DatePanel, and Calendar, whole-week selection, current-period styling, and date-range hover previews.
 - Added native email, URL, required, and pattern validation with Input/Form integration and localized messages.
