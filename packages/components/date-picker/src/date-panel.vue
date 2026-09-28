@@ -1,5 +1,5 @@
 <template>
-  <div :class="ns.b()" :style="themeStyle">
+  <div :class="ns.b()" :style="themeStyle" @mouseleave="emit('hover', null)">
     <div :class="ns.e('header')">
       <button
         type="button"
@@ -58,7 +58,7 @@
       <div :class="ns.e('weekdays')">
         <span v-for="week in weekLabels" :key="week">{{ week }}</span>
       </div>
-      <div :class="ns.e('dates')">
+      <div :class="ns.e('dates')" @mouseleave="emit('hover', null)">
         <button
           v-for="cell in calendarCells"
           :key="cell.date.valueOf()"
@@ -67,6 +67,12 @@
           :style="festival(cell.date)?.style"
           :disabled="isCellDisabled(cell.date)"
           @click="pickDate(cell.date)"
+          @mouseenter="
+            emit('hover', isCellDisabled(cell.date) ? null : cell.date)
+          "
+          @focus="emit('hover', isCellDisabled(cell.date) ? null : cell.date)"
+          @mouseleave="emit('hover', null)"
+          @blur="emit('hover', null)"
         >
           <span :class="ns.e('cell-value')">{{ cell.date.date() }}</span>
           <span
@@ -164,6 +170,7 @@ const props = defineProps<{
   selectedDates?: dayjs.Dayjs[]
   rangeStart?: dayjs.Dayjs | null
   rangeEnd?: dayjs.Dayjs | null
+  rangeHover?: dayjs.Dayjs | null
   disabledDate?: (date: Date) => boolean
   festivalMethod?: DateFestivalMethod
   defaultDate?: dayjs.Dayjs | null
@@ -173,6 +180,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   pick: [value: dayjs.Dayjs]
+  hover: [value: dayjs.Dayjs | null]
   'panel-change': [value: dayjs.Dayjs]
 }>()
 
@@ -370,6 +378,10 @@ const pickYear = (year: dayjs.Dayjs) => {
 
 const cellClass = (cell: { type: string; date: dayjs.Dayjs }) => {
   const { date, type } = cell
+  let start = props.rangeStart ?? null
+  let end = props.rangeEnd ?? props.rangeHover ?? null
+  const preview = Boolean(start && !props.rangeEnd && props.rangeHover)
+  if (start && end && end.isBefore(start, 'day')) [start, end] = [end, start]
   const selected = selectedValues.value.some((value) =>
     props.pickerType === 'week'
       ? isSameWeek(date, value)
@@ -383,19 +395,21 @@ const cellClass = (cell: { type: string; date: dayjs.Dayjs }) => {
     ns.is('selected', selected),
     festival(date)?.className,
     ns.is('festival-important', festival(date)?.important),
+    ns.is('range-preview', preview && isDateInRange(date, start, end)),
     ns.is(
-      'in-range',
-      isDateInRange(date, props.rangeStart ?? null, props.rangeEnd ?? null),
+      'preview-target',
+      preview && isSameDay(date, props.rangeHover ?? null),
     ),
+    ns.is('in-range', isDateInRange(date, start, end)),
     ns.is(
       'range-start',
-      isSameDay(date, props.rangeStart ?? null) ||
+      isSameDay(date, start) ||
         (props.pickerType === 'week' &&
           isSameWeek(date, props.rangeStart ?? null)),
     ),
     ns.is(
       'range-end',
-      isSameDay(date, props.rangeEnd ?? null) ||
+      isSameDay(date, end) ||
         (props.pickerType === 'week' &&
           isSameWeek(date, props.rangeEnd ?? null)),
     ),

@@ -476,6 +476,11 @@
       border-radius: 0 var(--sax-radius-md) var(--sax-radius-md) 0;
     }
 
+    &.is-range-preview.is-preview-target {
+      background: getColor('color', 0.18);
+      color: getColor('color');
+    }
+
     @include when(selected) {
       background: getColor('color');
       color: getColor('white');

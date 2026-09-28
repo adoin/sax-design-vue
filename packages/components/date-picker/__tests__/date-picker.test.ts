@@ -38,8 +38,9 @@ const DatePanelStub = defineComponent({
     defaultDate: Object,
     rangeStart: Object,
     rangeEnd: Object,
+    rangeHover: Object,
   },
-  emits: ['pick', 'panel-change'],
+  emits: ['pick', 'hover', 'panel-change'],
   template: '<div class="date-panel-stub" />',
 })
 
@@ -65,6 +66,53 @@ const mountPicker = (props = {}) =>
   })
 
 describe('DatePicker input presentation', () => {
+  it('shares a temporary range preview across panels without committing it', async () => {
+    const wrapper = mountPicker({ type: 'daterange' })
+    const panels = wrapper.findAllComponents(DatePanelStub)
+    panels[0].vm.$emit('pick', dayjs('2026-09-18'))
+    await wrapper.vm.$nextTick()
+    panels[1].vm.$emit('hover', dayjs('2026-10-13'))
+    await wrapper.vm.$nextTick()
+    expect((panels[0].props('rangeHover') as Dayjs).format('YYYY-MM-DD')).toBe(
+      '2026-10-13',
+    )
+    expect(panels[0].props('rangeEnd')).toBeNull()
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    panels[1].vm.$emit('hover', null)
+    await wrapper.vm.$nextTick()
+    expect(panels[0].props('rangeHover')).toBeNull()
+    panels[1].vm.$emit('pick', dayjs('2026-10-13'))
+    await wrapper.vm.$nextTick()
+    panels[0].vm.$emit('hover', dayjs('2026-09-05'))
+    await wrapper.vm.$nextTick()
+    expect(panels[0].props('rangeHover')).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('previews backwards ranges and clears a disabled hover target', async () => {
+    const wrapper = mount(DatePanel, {
+      props: {
+        pickerType: 'date',
+        defaultDate: dayjs('2026-09-01'),
+        rangeStart: dayjs('2026-09-18'),
+        rangeHover: dayjs('2026-09-12'),
+        disabledDate: (date: Date) => date.getDate() === 11,
+      },
+    })
+    expect(wrapper.findAll('.is-range-preview')).toHaveLength(7)
+    expect(wrapper.get('.is-range-start').text()).toBe('12')
+    expect(wrapper.get('.is-range-end').text()).toBe('18')
+    const disabled = wrapper
+      .findAll('.s-date-panel__cell')
+      .find((cell) => cell.text() === '11')!
+    await wrapper.get('.is-range-start').trigger('mouseleave')
+    await disabled.trigger('mouseenter')
+    expect(wrapper.emitted('hover')?.at(-1)).toEqual([null])
+    await wrapper.setProps({ rangeHover: null })
+    expect(wrapper.findAll('.is-range-preview')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
   it('passes floating label, color, and size to its input', () => {
     const wrapper = mountPicker({
       label: 'Appointment date',

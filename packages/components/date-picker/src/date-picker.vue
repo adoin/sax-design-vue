@@ -132,11 +132,13 @@
                   :selected-dates="innerDates"
                   :range-start="rangeStart"
                   :range-end="rangeEnd"
+                  :range-hover="rangeStep === 1 ? rangeHover : null"
                   :disabled-date="isDateDisabled"
                   :festival-method="festivalInTimezone"
                   :default-date="leftValue || defaultStartDate || currentDate"
                   :start-day="startDay"
                   :select-day="selectDay"
+                  @hover="rangeHover = $event"
                   @pick="handlePick"
                   @panel-change="handleLeftPanelChange"
                 />
@@ -147,11 +149,13 @@
                   :selected-dates="innerDates"
                   :range-start="rangeStart"
                   :range-end="rangeEnd"
+                  :range-hover="rangeStep === 1 ? rangeHover : null"
                   :disabled-date="isDateDisabled"
                   :festival-method="festivalInTimezone"
                   :default-date="rightValue || defaultEndDate || rightPanelDate"
                   :start-day="startDay"
                   :select-day="selectDay"
+                  @hover="rangeHover = $event"
                   @pick="handlePick"
                   @panel-change="handleRightPanelChange"
                 />
@@ -247,11 +251,13 @@
                 :selected-dates="innerDates"
                 :range-start="rangeStart"
                 :range-end="rangeEnd"
+                :range-hover="rangeStep === 1 ? rangeHover : null"
                 :disabled-date="isDateDisabled"
                 :festival-method="festivalInTimezone"
                 :default-date="leftValue || defaultStartDate || currentDate"
                 :start-day="startDay"
                 :select-day="selectDay"
+                @hover="rangeHover = $event"
                 @pick="handlePick"
                 @panel-change="handleLeftPanelChange"
               />
@@ -263,11 +269,13 @@
                 :selected-dates="innerDates"
                 :range-start="rangeStart"
                 :range-end="rangeEnd"
+                :range-hover="rangeStep === 1 ? rangeHover : null"
                 :disabled-date="isDateDisabled"
                 :festival-method="festivalInTimezone"
                 :default-date="rightValue || defaultEndDate || rightPanelDate"
                 :start-day="startDay"
                 :select-day="selectDay"
+                @hover="rangeHover = $event"
                 @pick="handlePick"
                 @panel-change="handleRightPanelChange"
               />
@@ -514,6 +522,10 @@ const innerDates = ref<dayjs.Dayjs[]>([])
 const innerTime = ref<dayjs.Dayjs>(getTimeZoneNow(resolvedTimezone.value))
 const innerEndTime = ref<dayjs.Dayjs>(getTimeZoneNow(resolvedTimezone.value))
 const rangeStep = ref<0 | 1>(0)
+const rangeHover = ref<dayjs.Dayjs | null>(null)
+watch([rangeStep, visible], () => {
+  rangeHover.value = null
+})
 const rightPanelDate = ref(
   getTimeZoneNow(resolvedTimezone.value).add(1, 'month'),
 )
