@@ -20,6 +20,11 @@
     box-shadow var(--sax-motion-duration-fast) ease,
     transform var(--sax-motion-duration-fast) ease;
 
+  &[data-radio-surface-moving] {
+    // Selection colors are animated on the same timeline as the traveling dot.
+    transition-property: transform;
+  }
+
   input {
     position: absolute;
     inset: 0;

@@ -85,6 +85,51 @@ const setup = (type: 'default' | 'button', extra = {}) => {
 }
 
 describe('grouped radio dot motion', () => {
+  it('crossfades button surfaces for the full multi-hop duration and cleans up interruptions', async () => {
+    const wrapper = setup('button', {
+      direction: 'horizontal',
+      options: ['a', 'b', 'c', 'd'].map((value) => ({ label: value, value })),
+    })
+    const computedStyle = window.getComputedStyle.bind(window)
+    vi.spyOn(window, 'getComputedStyle').mockImplementation((element) => {
+      if (!element.classList.contains('s-radio-button'))
+        return computedStyle(element)
+      const active = element.classList.contains('is-active')
+      return {
+        backgroundColor: active ? 'rgb(255, 255, 255)' : 'rgba(0, 0, 0, 0)',
+        color: active ? 'rgb(0, 0, 255)' : 'rgb(100, 100, 100)',
+        boxShadow: 'none',
+      } as CSSStyleDeclaration
+    })
+    const surfaceAnimate = vi.fn(() => ({ cancel: vi.fn() }))
+    wrapper.findAll('.s-radio-button').forEach(({ element }) => {
+      Object.defineProperty(element, 'animate', {
+        value: surfaceAnimate,
+        configurable: true,
+      })
+    })
+    await wrapper.setProps({ modelValue: 'd' })
+    await nextTick()
+    expect(surfaceAnimate).toHaveBeenCalledTimes(2)
+    const calls = surfaceAnimate.mock.calls as unknown as [
+      Keyframe[],
+      KeyframeAnimationOptions,
+    ][]
+    const dotCalls = animate.mock.calls as unknown as [
+      Keyframe[],
+      KeyframeAnimationOptions,
+    ][]
+    expect(calls[0][1].duration).toBe(dotCalls[0][1].duration)
+    expect(calls[1][1].duration).toBe(dotCalls[0][1].duration)
+    expect(calls[0][0][1].backgroundColor).toBe('rgba(0, 0, 0, 0)')
+    expect(calls[1][0][1].backgroundColor).toBe('rgb(255, 255, 255)')
+    await wrapper.setProps({ animated: false })
+    surfaceAnimate.mock.results.forEach(({ value }) =>
+      expect(value.cancel).toHaveBeenCalledOnce(),
+    )
+    expect(wrapper.findAll('[data-radio-surface-moving]')).toHaveLength(0)
+  })
+
   it.each(['default', 'button'] as const)(
     'inherits reactive global motion defaults and preserves local overrides for %s',
     async (type) => {

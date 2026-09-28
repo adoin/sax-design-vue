@@ -17,10 +17,16 @@ export function useRadioDotMotion(
 ) {
   let animation: Animation | undefined
   let owners: HTMLElement[] = []
+  let surfaces: HTMLElement[] = []
+  let surfaceAnimations: Animation[] = []
   let revision = 0
   let reduced: MediaQueryList | undefined
 
   const stop = () => {
+    surfaceAnimations.forEach((item) => item.cancel())
+    surfaceAnimations = []
+    surfaces.forEach((item) => delete item.dataset.radioSurfaceMoving)
+    surfaces = []
     if (animation) {
       animation.onfinish = null
       animation.cancel()
@@ -51,6 +57,22 @@ export function useRadioDotMotion(
     async () => {
       const previous = activeDot()
       const from = previous?.getBoundingClientRect()
+      // Capture in-flight colors before cancellation so rapid changes stay continuous.
+      const backgrounds = Array.from(
+        root.value?.querySelectorAll<HTMLElement>('.s-radio-button') ?? [],
+      )
+        .filter((item) => item.closest('[role="radiogroup"]') === root.value)
+        .map((item) => {
+          const style = getComputedStyle(item)
+          return {
+            item,
+            from: {
+              backgroundColor: style.backgroundColor,
+              color: style.color,
+              boxShadow: style.boxShadow,
+            },
+          }
+        })
       cancel()
       const current = revision
       if (
@@ -64,6 +86,10 @@ export function useRadioDotMotion(
         return
 
       owners = [ownerOf(previous)]
+      surfaces = backgrounds.map(({ item }) => item)
+      surfaces.forEach((item) => {
+        item.dataset.radioSurfaceMoving = ''
+      })
       owners[0].dataset.radioDotMoving = ''
       await nextTick()
       if (current !== revision) return
@@ -146,13 +172,37 @@ export function useRadioDotMotion(
       points.push({ x: 0, y: 0 })
       const baseDuration = Number.isFinite(duration) ? duration : 350
       const hops = points.length - 1
+      const travelDuration =
+        hops === 1
+          ? baseDuration
+          : Math.min(baseDuration * 1.6, baseDuration * 0.55 * hops)
+      for (const { item, from: background } of backgrounds) {
+        if (typeof item.animate !== 'function') continue
+        const target = getComputedStyle(item)
+        const to = {
+          backgroundColor: target.backgroundColor,
+          color: target.color,
+          boxShadow: target.boxShadow,
+        }
+        if (
+          Object.keys(to).every(
+            (key) =>
+              to[key as keyof typeof to] ===
+              background[key as keyof typeof background],
+          )
+        )
+          continue
+        surfaceAnimations.push(
+          item.animate([background, to], {
+            duration: travelDuration,
+            easing: 'linear',
+          }),
+        )
+      }
       animation = dot.animate(
         radioDotKeyframes(points, fill, flight, horizontal),
         {
-          duration:
-            hops === 1
-              ? baseDuration
-              : Math.min(baseDuration * 1.6, baseDuration * 0.55 * hops),
+          duration: travelDuration,
           easing: horizontal ? 'linear' : 'cubic-bezier(0.22, 1, 0.36, 1)',
         },
       )
