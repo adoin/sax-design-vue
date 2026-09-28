@@ -92,7 +92,9 @@ const columns = computed<TableColumn[]>(() => {
     })
   }
 
-  return result
+  return props.tableKey === 'SLOTS'
+    ? result.filter((column) => column.field !== 'type')
+    : result
 })
 
 const getTypeDetails = (expression?: string | null) => {
