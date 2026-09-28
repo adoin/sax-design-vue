@@ -113,6 +113,10 @@ PROPS:
     code: null
 
 CHILD_PROPS:
+  - name: shape
+    type: "'rounded' | 'square'"
+    description: Choose the circular or square loading orbit. Inherits the shared shape configuration when omitted.
+    default: rounded
   - name: active
     type: Boolean
     values: 'true, false'

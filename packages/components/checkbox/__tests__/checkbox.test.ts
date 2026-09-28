@@ -36,7 +36,10 @@ describe('Checkbox custom icon animation', () => {
       expect(input.element.disabled).toBe(true)
       expect(input.attributes('aria-busy')).toBe('true')
       expect(input.element.checked).toBe(modelValue)
-      expect(wrapper.find('.s-icon-loading').exists()).toBe(false)
+      expect(wrapper.find('.s-icon-loading').exists()).toBe(true)
+      expect(
+        wrapper.getComponent({ name: 'SLogoLoading' }).props('shape'),
+      ).toBe('square')
       expect(wrapper.find('.s-icon-check').exists()).toBe(true)
       await input.setValue(!modelValue)
       expect(wrapper.emitted('update:modelValue')).toBeUndefined()

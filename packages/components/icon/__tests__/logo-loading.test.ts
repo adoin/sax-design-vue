@@ -5,6 +5,27 @@ import LoadingIcon from '../src/loading.vue'
 import { LogoLoadingMotion } from '../src/logo-loading-motion'
 
 describe('LogoLoading', () => {
+  it('preserves the logo and lifecycle while using a square running orbit', async () => {
+    const motion = new LogoLoadingMotion()
+    const logo = motion.frame()
+    expect(motion.frame('square')).toEqual(logo)
+    motion.start()
+    motion.advance(2300)
+    expect(motion.frame('square').topAccent).not.toBe(motion.frame().topAccent)
+    motion.stop()
+    motion.advance(3400)
+    expect(motion.frame('square').top).toBe(logo.top)
+    const wrapper = mount(LogoLoading, {
+      props: { shape: 'square', reducedMotion: true },
+    })
+    await wrapper.vm.$nextTick()
+    expect(
+      wrapper.get('.s-logo-loading__ring').element.tagName.toLowerCase(),
+    ).toBe('path')
+    expect(wrapper.find('circle').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
   let frame = 0
 
   beforeEach(() => {

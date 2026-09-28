@@ -112,9 +112,29 @@
     pointer-events: none;
 
     .#{bem('checkbox', 'input', 'mask')} {
-      &:before,
+      box-shadow: none;
+      &:before {
+        opacity: 1;
+        transform: scale(0.78);
+      }
       &:after {
-        animation: sax-checkbox-loading-breathe 1.4s ease-in-out infinite;
+        opacity: 0;
+      }
+      .#{$namespace}-icon-loading {
+        z-index: 1;
+        transform: scale(1.25);
+      }
+      .#{$namespace}-icon-check__check {
+        transform: scale(0.72);
+        path {
+          stroke: getColor('color');
+        }
+      }
+      .#{bem('checkbox', 'custom-icon')} {
+        color: getColor('color');
+        > .#{$namespace}-icon {
+          color: getColor('color') !important;
+        }
       }
     }
   }
@@ -370,22 +390,5 @@
   .s-checkbox__label {
     padding: 8px;
     font-size: 1rem;
-  }
-}
-
-@keyframes sax-checkbox-loading-breathe {
-  0%,
-  100% {
-    filter: brightness(1);
-  }
-  50% {
-    filter: brightness(0.78);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .#{$namespace}-checkbox.is-loading .#{$namespace}-checkbox__input--mask::before,
-  .#{$namespace}-checkbox.is-loading .#{$namespace}-checkbox__input--mask::after {
-    animation: none;
   }
 }

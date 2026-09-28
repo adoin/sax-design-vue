@@ -1,4 +1,5 @@
 import { buildProps, definePropType, isNumber } from '@vuesax-alpha/utils'
+import { useShapeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type LogoLoading from './logo-loading.vue'
 
@@ -12,6 +13,7 @@ export const logoLoadingPhases = [
 export type LogoLoadingPhase = (typeof logoLoadingPhases)[number]
 
 export const logoLoadingProps = buildProps({
+  shape: useShapeProp,
   /** Start the logo-to-orbit loading motion. */
   active: { type: Boolean, default: true },
   /** Square display size. Numbers use pixels; strings accept any CSS length. */

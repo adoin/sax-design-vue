@@ -754,24 +754,24 @@ CheckboxGroup 可将对象作为选项值；下方会显示当前选中的对象
 通过 `loading` 属性为组件添加加载状态。
 
 <template #example>
-<checkbox-loading />
+<checkbox-zh-loading />
 </template>
 
 <template #template>
 
-@[code{1-6}](../../.vuepress/components/checkbox/loading.vue)
+@[code{1-7}](../../.vuepress/components/checkbox-zh/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{8-13}](../../.vuepress/components/checkbox/loading.vue)
+@[code{9-15}](../../.vuepress/components/checkbox-zh/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{15-20}](../../.vuepress/components/checkbox/loading.vue)
+@[code{17-23}](../../.vuepress/components/checkbox-zh/loading.vue)
 
 </template>
 

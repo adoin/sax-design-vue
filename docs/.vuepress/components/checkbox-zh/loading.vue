@@ -1,8 +1,8 @@
 <template>
   <div class="center con-checkbox">
-    <s-switch v-model="loading">Loading</s-switch>
-    <s-checkbox v-model="option" :loading="loading">Checked</s-checkbox>
-    <s-checkbox v-model="option2" :loading="loading">Unchecked</s-checkbox>
+    <s-switch v-model="loading">加载状态</s-switch>
+    <s-checkbox v-model="option" :loading="loading">选中</s-checkbox>
+    <s-checkbox v-model="option2" :loading="loading">未选中</s-checkbox>
   </div>
 </template>
 

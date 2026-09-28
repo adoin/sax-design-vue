@@ -760,19 +760,19 @@ Add a loading status to the component with the property `loading`
 
 <template #template>
 
-@[code{1-6}](../.vuepress/components/checkbox/loading.vue)
+@[code{1-7}](../.vuepress/components/checkbox/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{8-13}](../.vuepress/components/checkbox/loading.vue)
+@[code{9-15}](../.vuepress/components/checkbox/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{15-20}](../.vuepress/components/checkbox/loading.vue)
+@[code{17-23}](../.vuepress/components/checkbox/loading.vue)
 
 </template>
 

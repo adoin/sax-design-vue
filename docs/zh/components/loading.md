@@ -113,6 +113,10 @@ PROPS:
     code: null
 
 CHILD_PROPS:
+  - name: shape
+    type: "'rounded' | 'square'"
+    description: 选择圆形或方形加载轨迹，省略时继承全局 shape 配置。
+    default: rounded
   - name: active
     type: Boolean
     values: 'true, false'

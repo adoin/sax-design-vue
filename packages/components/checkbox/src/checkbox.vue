@@ -16,6 +16,7 @@
         @change="handleChange"
       />
       <div :class="ns.em('input', 'mask')">
+        <icon-loading v-if="loading" shape="square" />
         <svg
           v-if="!$slots.icon && indeterminate"
           :class="ns.e('indeterminate')"
@@ -64,7 +65,7 @@ import {
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { getVsColor } from '@vuesax-alpha/utils'
-import { IconCheck } from '@vuesax-alpha/components/icon'
+import { IconCheck, IconLoading } from '@vuesax-alpha/components/icon'
 import { checkboxEmits, checkboxProps } from './checkbox'
 import { useCheckbox, useCheckboxIconAnimation } from './composables'
 

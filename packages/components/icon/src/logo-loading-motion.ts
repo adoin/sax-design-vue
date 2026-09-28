@@ -250,6 +250,26 @@ const pathData = (points: readonly Point[]) =>
     )
     .join('')
 
+// Radial projection preserves the logo's two-strand choreography on a square orbit.
+const squarePoint = (point: Point, amount = 1): Point => {
+  const x = point.x - CENTER.x
+  const y = point.y - CENTER.y
+  const radius = Math.hypot(x, y)
+  if (!radius) return point
+  const factor =
+    (Math.abs(x / radius) ** 8 + Math.abs(y / radius) ** 8) ** (-1 / 8)
+  return {
+    x: CENTER.x + x * mix(1, factor, amount),
+    y: CENTER.y + y * mix(1, factor, amount),
+  }
+}
+
+export const squareLoadingOrbit = `${pathData(
+  Array.from({ length: 129 }, (_, index) =>
+    squarePoint(circlePoint((index / 128) * TAU)),
+  ),
+)}Z`
+
 export class LogoLoadingMotion {
   phase: LogoLoadingPhase = 'idle'
   progress = 0
@@ -350,7 +370,17 @@ export class LogoLoadingMotion {
     return strand.source.at(distance - route.total)
   }
 
-  frame(): LogoLoadingFrame {
+  frame(shape: 'rounded' | 'square' = 'rounded'): LogoLoadingFrame {
+    const squareAmount =
+      shape !== 'square' || this.phase === 'idle'
+        ? 0
+        : this.phase === 'starting'
+          ? smooth(this.progress)
+          : this.phase === 'stopping'
+            ? 1 - smooth(this.progress)
+            : 1
+    const position = (strand: Strand, progress: number) =>
+      squarePoint(this.position(strand, progress), squareAmount)
     if (this.phase === 'stopping') {
       this.returnRoutes = strands.map((strand) =>
         stopRoute(strand, this.stopAngle),
@@ -362,7 +392,7 @@ export class LogoLoadingMotion {
     const accents = strands.map((strand) =>
       pathData(
         Array.from({ length: ACCENT_SAMPLES + 1 }, (_, index) =>
-          this.position(strand, mix(strand.accent, 1, index / ACCENT_SAMPLES)),
+          position(strand, mix(strand.accent, 1, index / ACCENT_SAMPLES)),
         ),
       ),
     )
@@ -377,7 +407,7 @@ export class LogoLoadingMotion {
     const paths = strands.map((strand) =>
       pathData(
         Array.from({ length: PATH_SAMPLES + 1 }, (_, index) =>
-          this.position(strand, index / PATH_SAMPLES),
+          position(strand, index / PATH_SAMPLES),
         ),
       ),
     )

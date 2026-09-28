@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, shallowRef, watch } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { logoLoadingEmits, logoLoadingProps } from './logo-loading'
 import {
   LogoLoadingMotion,
+  squareLoadingOrbit,
   subscribeLogoLoadingFrame,
 } from './logo-loading-motion'
 import type { LogoLoadingPhase } from './logo-loading'
@@ -13,6 +14,7 @@ defineOptions({ name: 'SLogoLoading' })
 const props = defineProps(logoLoadingProps)
 const emit = defineEmits(logoLoadingEmits)
 const ns = useNamespace('logo-loading')
+const shape = useShape()
 const phase = shallowRef<LogoLoadingPhase>('idle')
 const mounted = shallowRef(false)
 let unsubscribe: (() => void) | undefined
@@ -23,7 +25,7 @@ const motion = new LogoLoadingMotion((nextPhase, restored) => {
   emit('phaseChange', nextPhase)
   if (restored) emit('restored')
 })
-const frame = shallowRef(motion.frame())
+const frame = shallowRef(motion.frame(shape.value))
 
 const sizeValue = computed(() =>
   typeof props.size === 'number' ? `${props.size}px` : props.size,
@@ -33,7 +35,7 @@ const styles = computed(() => ({
 }))
 const reduced = () => props.reducedMotion ?? motionPreference?.matches ?? false
 const renderFrame = () => {
-  frame.value = motion.frame()
+  frame.value = motion.frame(shape.value)
 }
 
 const stopFrames = () => {
@@ -93,6 +95,7 @@ const reset = () => {
 }
 
 watch(() => props.active, syncActive)
+watch(shape, renderFrame)
 watch(
   () => props.reducedMotion,
   () => syncActive(),
@@ -134,7 +137,12 @@ defineExpose({ start, stop, reset, phase })
     >
       <g transform="translate(14 15.5)">
         <template v-if="frame.phase === 'running'">
-          <circle :class="ns.e('ring')" cx="28" cy="26.5" r="27" />
+          <path
+            v-if="shape === 'square'"
+            :class="ns.e('ring')"
+            :d="squareLoadingOrbit"
+          />
+          <circle v-else :class="ns.e('ring')" cx="28" cy="26.5" r="27" />
           <path
             :class="[ns.e('stroke'), ns.is('top-accent')]"
             :d="frame.topAccent"
