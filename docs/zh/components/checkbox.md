@@ -91,7 +91,7 @@ PROPS:
   - name: indeterminate
     type: Boolean
     values: "true, false"
-    description: 将默认图标改为表示不确定状态的横线。
+    description: 用实心方块表示半选，独立于 modelValue。视觉上优先于选中状态，并提供 aria-checked="mixed" 语义。
     default: false
     link: null
     usage: '#indeterminate'
@@ -805,7 +805,7 @@ CheckboxGroup 可将对象作为选项值；下方会显示当前选中的对象
 
 ## 不确定
 
-存在多个复选框且需要一个统一管理项时，可使用 `indeterminate` 为该复选框添加不确定状态样式。
+设置 `indeterminate` 可用实心方块表示半选状态。该状态可独立复用，视觉上优先于选中状态，不改变 `v-model`。根据子项的选择情况更新它；CheckboxGroup 分组标题与 CheckboxGroupTabs 页签会自动计算半选。全部选中或全部取消时，应将 `indeterminate` 设为 `false`。
 
 <template #example>
 <checkbox-indeterminate />

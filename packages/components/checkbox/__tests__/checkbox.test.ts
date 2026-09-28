@@ -28,6 +28,27 @@ afterEach(() => {
 })
 
 describe('Checkbox custom icon animation', () => {
+  it.each([false, true])(
+    'renders mixed state independently of modelValue=%s',
+    async (modelValue) => {
+      const wrapper = mount(Checkbox, {
+        props: { modelValue, indeterminate: true },
+      })
+      expect(wrapper.classes()).toContain('is-indeterminate')
+      expect(wrapper.classes()).not.toContain('is-checked')
+      expect(wrapper.get('input').element.indeterminate).toBe(true)
+      expect(wrapper.get('input').attributes('aria-checked')).toBe('mixed')
+      expect(wrapper.find('.s-checkbox__indeterminate rect').exists()).toBe(
+        true,
+      )
+      await wrapper.setProps({ indeterminate: false })
+      expect(wrapper.get('input').element.checked).toBe(modelValue)
+      expect(wrapper.find('.s-checkbox__indeterminate').exists()).toBe(false)
+      expect(wrapper.classes().includes('is-checked')).toBe(modelValue)
+      wrapper.unmount()
+    },
+  )
+
   it('honors controlled false after a previous user selection', async () => {
     const wrapper = mount(Checkbox, { props: { modelValue: false } })
     const input = wrapper.get('input')

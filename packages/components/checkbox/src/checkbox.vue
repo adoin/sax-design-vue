@@ -15,8 +15,16 @@
         @change="handleChange"
       />
       <div :class="ns.em('input', 'mask')">
+        <svg
+          v-if="!$slots.icon && indeterminate"
+          :class="ns.e('indeterminate')"
+          viewBox="0 0 20 20"
+          aria-hidden="true"
+        >
+          <rect x="5" y="5" width="10" height="10" rx="1.5" />
+        </svg>
         <icon-check
-          v-if="!$slots.icon"
+          v-else-if="!$slots.icon"
           :active="isChecked"
           :indeterminate="indeterminate"
         />
@@ -90,7 +98,8 @@ const checkboxKls = computed(() => [
   ns.m(size.value || 'default'),
   vsBaseClasses,
   ns.is('disabled', isDisabled.value),
-  ns.is('checked', isChecked.value),
+  ns.is('checked', isChecked.value && !props.indeterminate),
+  ns.is('indeterminate', props.indeterminate),
   ns.is('label-before', props.labelBefore),
   ns.is('loading', props.loading),
 ])

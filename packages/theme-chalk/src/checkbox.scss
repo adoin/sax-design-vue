@@ -296,6 +296,49 @@
     }
   }
 
+  @include e(indeterminate) {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    fill: getColor('color');
+  }
+
+  @include when(indeterminate) {
+    .#{bem('checkbox', 'input', 'mask')} {
+      &:before {
+        opacity: 1;
+        transform: none;
+      }
+      &:after {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+    }
+
+    .#{bem('checkbox', 'input')} .#{bem('checkbox', 'input', 'mask')} .#{bem('checkbox', 'custom-icon')} {
+      clip-path: none;
+      opacity: 1;
+      transform: none;
+      color: getColor('color');
+
+      > .#{$namespace}-icon {
+        color: getColor('color') !important;
+      }
+
+      &[data-animation='draw'] [data-sax-checkbox-draw] {
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+    }
+
+    @include when(disabled) {
+      .#{bem('checkbox', 'indeterminate')} {
+        fill: getColor('text', 0.58);
+      }
+    }
+  }
+
   // native input here
   @include e(original) {
     @include absolute-full;

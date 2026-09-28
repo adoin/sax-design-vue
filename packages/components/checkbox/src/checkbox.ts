@@ -75,7 +75,7 @@ export const checkboxProps = buildProps({
     default: null,
   },
 
-  /** @description Set indeterminate state, only responsible for style control */
+  /** @description Show a mixed selection independently of modelValue; exposes aria-checked="mixed". */
   indeterminate: {
     type: Boolean,
   },

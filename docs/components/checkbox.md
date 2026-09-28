@@ -91,7 +91,7 @@ PROPS:
   - name: indeterminate
     type: Boolean
     values: "true, false"
-    description: Change the default checkbox icon to a line that represents undetermined data.
+    description: Display a solid square for partial selection, independently of modelValue. Takes visual precedence over checked and exposes aria-checked="mixed".
     default: false
     link: null
     usage: '#indeterminate'
@@ -806,7 +806,7 @@ Add a line in the middle of the label when the checkbox is checked with the prop
 
 ## Indeterminate
 
-There are some cases where you have several checkboxes and you need one that manages all the others for this you can do it with the indeterminate property that adds a different style to the checkbox
+Set `indeterminate` to show partial selection as a solid square. This reusable state takes visual precedence over checked without changing `v-model`. Update it from the selected children; CheckboxGroup section headings and CheckboxGroupTabs tab checkboxes calculate it automatically. Clear `indeterminate` when all or none of the children are selected.
 
 <template #example>
 <checkbox-indeterminate />

@@ -97,6 +97,11 @@ describe('CheckboxGroupTabs', () => {
       },
     })
 
+    const first = wrapper.get('.s-checkbox-group-tabs__tab .s-checkbox')
+    expect(first.classes()).toContain('is-indeterminate')
+    expect(first.get('input').attributes('aria-checked')).toBe('mixed')
+    expect(first.find('.s-checkbox__indeterminate rect').exists()).toBe(true)
+
     await wrapper.findAll('[role="tab"]')[1].trigger('click')
 
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
