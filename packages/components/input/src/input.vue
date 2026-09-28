@@ -125,7 +125,7 @@
           @click="clear"
           @mousedown.prevent="NOOP"
         >
-          <icon-close />
+          <icon-close :size="14" />
         </button>
       </transition>
 

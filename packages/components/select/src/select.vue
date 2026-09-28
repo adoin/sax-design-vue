@@ -209,7 +209,7 @@
           :class="ns.e('clearable')"
           @click="handleClearClick"
         >
-          <icon-close hover="less" scale="0.675" />
+          <icon-close :size="14" />
         </span>
       </transition>
 

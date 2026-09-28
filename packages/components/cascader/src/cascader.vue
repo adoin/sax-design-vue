@@ -129,7 +129,7 @@
         :aria-label="t('vs.cascader.clear')"
         @click.stop="clear"
       >
-        <slot name="clear-icon"><IconClose :scale="0.8" size="14" /></slot>
+        <slot name="clear-icon"><IconClose :size="14" /></slot>
       </button>
       <span v-else :class="ns.e('suffix')" aria-hidden="true">
         <slot name="suffix-icon">

@@ -503,9 +503,6 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     font: inherit;
     background-color: getColor(gray-2);
 
-    .#{$namespace}-icon-close {
-      transform: scale(0.7);
-    }
   }
   @include e(original) {
     border: 2px solid transparent;

@@ -90,7 +90,7 @@ defineExpose({ focusSearch })
         :aria-label="t('vs.iconPicker.clearSearch')"
         @click="query = ''"
       >
-        <IconClose :scale="0.8" size="1em" />
+        <IconClose :size="14" />
       </button>
     </div>
 

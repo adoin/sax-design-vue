@@ -339,7 +339,7 @@ defineExpose({
           :aria-label="t('vs.cascader.clear')"
           @click.stop="clear"
         >
-          <slot name="clear-icon"><IconClose :scale="0.8" size="1em" /></slot>
+          <slot name="clear-icon"><IconClose :size="14" /></slot>
         </button>
 
         <span :class="ns.e('action')" aria-hidden="true">

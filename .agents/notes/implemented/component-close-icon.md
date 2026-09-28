@@ -10,4 +10,5 @@ updated_at: 2026-09-28
 - Use `IconClose` in component templates and `sax:close` for dynamic icon-name defaults. Preserve custom icon slots and explicit icon data.
 - Do not add text X/× close controls, CSS crossed lines, or separate hand-drawn close paths. Mathematical multiplication symbols are unrelated.
 - Preserve each control's accessible name and click target. The SVG uses currentColor; size and scale adapt to the surface. DatePicker uses a centered 14px SVG within its fixed 20px action area.
+- Clear actions in Input, Select, DatePicker, Cascader, TableSelect, and IconPicker search use the same 14px SVG without extra scaling. TimePicker and TimeSelect inherit the Input/Select treatment. Dialog close and tag removal retain their own contextual sizes.
 - Component tests, Web type checking, theme build, and the 203-page documentation build passed for the shared artwork migration.
