@@ -4,6 +4,14 @@ import { describe, expect, it } from 'vitest'
 import Input from '../src/input.vue'
 
 describe('Input native validation', () => {
+  it('keeps untouched inputs neutral and preserves explicit states', async () => {
+    const wrapper = mount(Input, { props: { modelValue: 'hello' } })
+    expect(wrapper.classes()).not.toContain('s-input--state-danger')
+    await wrapper.setProps({ state: 'success' })
+    expect(wrapper.classes()).toContain('s-input--state-success')
+    expect(wrapper.classes()).not.toContain('s-input--state-danger')
+    wrapper.unmount()
+  })
   it.each(['email', 'url'] as const)(
     'reports %s on blur while preserving the entered text',
     async (type) => {
@@ -11,7 +19,9 @@ describe('Input native validation', () => {
         props: { type, modelValue: 'unfinished' },
       })
       expect(wrapper.find('[role="alert"]').exists()).toBe(false)
+      expect(wrapper.classes()).not.toContain('s-input--state-danger')
       await wrapper.get('input').trigger('blur')
+      expect(wrapper.classes()).toContain('s-input--state-danger')
       expect(wrapper.get('input').element.value).toBe('unfinished')
       expect(wrapper.get('input').attributes('aria-invalid')).toBe('true')
       expect(wrapper.findAll('[role="alert"]')).toHaveLength(1)
@@ -22,6 +32,7 @@ describe('Input native validation', () => {
       await nextTick()
       await nextTick()
       expect(wrapper.find('[role="alert"]').exists()).toBe(false)
+      expect(wrapper.classes()).not.toContain('s-input--state-danger')
       wrapper.unmount()
     },
   )

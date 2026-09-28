@@ -442,8 +442,8 @@ const inputKls = computed(() => [
   ns.is('text-white', props.textWhite),
 
   {
-    [ns.m(`state-${validationError ? 'danger' : props.state}`)]:
-      !!props.state || !!validationError,
+    [ns.m(`state-${validationError.value ? 'danger' : props.state}`)]:
+      !!props.state || !!validationError.value,
   },
   { [ns.m('has-label')]: props.label || props.labelFloat },
   { [ns.m('has-color')]: props.color },
