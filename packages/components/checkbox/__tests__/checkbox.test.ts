@@ -28,6 +28,28 @@ afterEach(() => {
 })
 
 describe('Checkbox custom icon animation', () => {
+  it('retains the square loader until its exit completes and ignores stale completion', async () => {
+    const wrapper = mount(Checkbox, {
+      props: { loading: true, modelValue: true },
+    })
+    await wrapper.setProps({ loading: false })
+    const loader = wrapper.getComponent({ name: 'IconLoading' })
+    expect(wrapper.find('.s-icon-loading').exists()).toBe(true)
+    loader.vm.$emit('phaseChange', 'stopping')
+    await nextTick()
+    expect(wrapper.classes()).toContain('is-loading-exiting')
+    await wrapper.setProps({ loading: true })
+    loader.vm.$emit('restored')
+    await nextTick()
+    expect(wrapper.find('.s-icon-loading').exists()).toBe(true)
+    await wrapper.setProps({ loading: false })
+    loader.vm.$emit('restored')
+    await nextTick()
+    expect(wrapper.find('.s-icon-loading').exists()).toBe(false)
+    expect(wrapper.classes()).toContain('is-checked')
+    wrapper.unmount()
+  })
+
   it.each([false, true])(
     'preserves selection %s while loading and blocks changes',
     async (modelValue) => {

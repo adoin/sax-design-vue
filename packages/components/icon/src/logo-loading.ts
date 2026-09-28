@@ -14,6 +14,12 @@ export type LogoLoadingPhase = (typeof logoLoadingPhases)[number]
 
 export const logoLoadingProps = buildProps({
   shape: useShapeProp,
+  /** Square orbit can clear at its corners instead of restoring the logo. */
+  stopBehavior: {
+    type: String,
+    values: ['restore', 'corners'] as const,
+    default: 'restore',
+  },
   /** Start the logo-to-orbit loading motion. */
   active: { type: Boolean, default: true },
   /** Square display size. Numbers use pixels; strings accept any CSS length. */

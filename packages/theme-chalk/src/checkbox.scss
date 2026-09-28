@@ -109,9 +109,7 @@
     }
   }
 
-  @include when(loading) {
-    pointer-events: none;
-
+  @include when(loading-visual) {
     .#{bem('checkbox', 'input', 'mask')} {
       box-shadow: none;
       &:before {
@@ -120,10 +118,6 @@
       }
       &:after {
         opacity: 0;
-      }
-      .#{$namespace}-icon-loading {
-        z-index: 1;
-        transform: scale(1.25);
       }
       .#{$namespace}-icon-check__check {
         transform: scale(0.72);
@@ -147,6 +141,10 @@
     z-index: 1;
 
     @include m(mask) {
+      .#{$namespace}-icon-loading {
+        z-index: 1;
+        transform: scale(1.25);
+      }
       position: absolute;
       z-index: -1;
       width: 100%;
@@ -358,6 +356,24 @@
   }
 }
 
+// One quarter of the logo orbit at the default 2.5x playback speed.
+.#{$namespace}-checkbox.is-loading-exiting {
+  .#{$namespace}-checkbox__input--mask::before,
+  .#{$namespace}-checkbox__input--mask::after {
+    transition: opacity 220ms linear, transform 220ms linear;
+  }
+  .#{$namespace}-icon-check,
+  .#{$namespace}-checkbox__indeterminate,
+  .#{$namespace}-checkbox__custom-icon {
+    animation: sax-checkbox-loading-reveal 220ms ease-out;
+  }
+}
+
+@keyframes sax-checkbox-loading-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .#{bem('checkbox', 'input', 'mask')},
   .#{bem('checkbox', 'input', 'mask')}::before,
@@ -367,6 +383,7 @@
   .#{$namespace}-checkbox__custom-icon,
   .#{$namespace}-checkbox__custom-icon [data-sax-checkbox-draw] {
     transition: none !important;
+    animation: none !important;
   }
 
   .#{bem('checkbox', 'input', 'mask')} {

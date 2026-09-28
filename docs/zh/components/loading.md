@@ -113,6 +113,10 @@ PROPS:
     code: null
 
 CHILD_PROPS:
+  - name: stop-behavior
+    type: "'restore' | 'corners'"
+    description: 方形轨迹可设为 corners，线段经过角点消失，最多移动一条边后清空。默认还原 Logo；两种模式完成后均触发 restored。
+    default: restore
   - name: shape
     type: "'rounded' | 'square'"
     description: 选择圆形或方形加载轨迹，省略时继承全局 shape 配置。

@@ -16,7 +16,14 @@
         @change="handleChange"
       />
       <div :class="ns.em('input', 'mask')">
-        <icon-loading v-if="loading" shape="square" />
+        <icon-loading
+          v-if="loadingVisible"
+          shape="square"
+          stop-behavior="corners"
+          :active="loading"
+          @phase-change="handleLoadingPhase"
+          @restored="finishLoading"
+        />
         <svg
           v-if="!$slots.icon && indeterminate"
           :class="ns.e('indeterminate')"
@@ -56,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, useSlots, useTemplateRef } from 'vue'
+import { computed, ref, useSlots, useTemplateRef, watch } from 'vue'
 import {
   useColor,
   useId,
@@ -68,6 +75,7 @@ import { getVsColor } from '@vuesax-alpha/utils'
 import { IconCheck, IconLoading } from '@vuesax-alpha/components/icon'
 import { checkboxEmits, checkboxProps } from './checkbox'
 import { useCheckbox, useCheckboxIconAnimation } from './composables'
+import type { LogoLoadingPhase } from '@vuesax-alpha/components/icon'
 
 defineOptions({
   name: 'SCheckbox',
@@ -79,6 +87,25 @@ const slots = useSlots()
 const emit = defineEmits(checkboxEmits)
 const ns = useNamespace('checkbox')
 const size = useSize()
+const loadingVisible = ref(props.loading)
+const loadingExiting = ref(false)
+watch(
+  () => props.loading,
+  (loading) => {
+    if (loading) {
+      loadingVisible.value = true
+      loadingExiting.value = false
+    }
+  },
+)
+const handleLoadingPhase = (phase: LogoLoadingPhase) => {
+  loadingExiting.value = phase === 'stopping'
+}
+const finishLoading = () => {
+  if (props.loading) return
+  loadingVisible.value = false
+  loadingExiting.value = false
+}
 
 const checkboxId = props.id ?? useId()
 
@@ -102,6 +129,8 @@ const checkboxKls = computed(() => [
   ns.is('indeterminate', props.indeterminate),
   ns.is('label-before', props.labelBefore),
   ns.is('loading', props.loading),
+  ns.is('loading-visual', loadingVisible.value && !loadingExiting.value),
+  ns.is('loading-exiting', loadingExiting.value),
 ])
 
 const checkboxStyles = computed(() => [

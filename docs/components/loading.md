@@ -113,6 +113,10 @@ PROPS:
     code: null
 
 CHILD_PROPS:
+  - name: stop-behavior
+    type: "'restore' | 'corners'"
+    description: With square shape, corners clears the orbit at each corner within one edge of travel. The default restores the logo. Completion emits restored in both modes.
+    default: restore
   - name: shape
     type: "'rounded' | 'square'"
     description: Choose the circular or square loading orbit. Inherits the shared shape configuration when omitted.

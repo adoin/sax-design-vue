@@ -276,6 +276,7 @@ export class LogoLoadingMotion {
   angle = 0
   stopAngle = 0
   private pendingStop = false
+  private cornerStop = false
   private returnRoutes: ReturnRoute[] = []
   private returnTravel = 0
 
@@ -293,14 +294,24 @@ export class LogoLoadingMotion {
   }
 
   start() {
+    if (this.phase === 'stopping' && this.cornerStop) {
+      this.angle = this.stopAngle + (this.progress * Math.PI) / 2
+      this.cornerStop = false
+      this.pendingStop = false
+      this.progress = 1
+      this.setPhase('running')
+      return
+    }
     this.progress = 0
     this.angle = 0
     this.stopAngle = 0
     this.pendingStop = false
+    this.cornerStop = false
     this.setPhase('starting')
   }
 
-  stop() {
+  stop(atCorners = false) {
+    this.cornerStop = atCorners
     if (this.phase === 'starting') {
       this.pendingStop = true
       return
@@ -312,6 +323,7 @@ export class LogoLoadingMotion {
   }
 
   reset() {
+    this.cornerStop = false
     this.progress = 0
     this.angle = 0
     this.stopAngle = 0
@@ -334,12 +346,14 @@ export class LogoLoadingMotion {
         this.progress = 1
         this.angle = 0
         this.setPhase('running')
-        if (this.pendingStop) this.stop()
+        if (this.pendingStop) this.stop(this.cornerStop)
       }
       return
     }
     if (this.phase === 'stopping') {
-      this.progress = clamp(this.progress + milliseconds / STOP_DURATION)
+      this.progress = clamp(
+        this.progress + milliseconds / (this.cornerStop ? 550 : STOP_DURATION),
+      )
       if (this.progress >= 1) {
         this.progress = 0
         this.angle = 0
@@ -371,6 +385,60 @@ export class LogoLoadingMotion {
   }
 
   frame(shape: 'rounded' | 'square' = 'rounded'): LogoLoadingFrame {
+    if (this.phase === 'idle' && this.cornerStop) {
+      return {
+        phase: this.phase,
+        top: '',
+        bottom: '',
+        topAccent: '',
+        bottomAccent: '',
+      }
+    }
+    if (this.phase === 'stopping' && this.cornerStop) {
+      // Each point travels forward only until its next corner. Split paths at
+      // corners so the surviving pieces never bridge an already-cleared edge.
+      const travel = (this.progress * Math.PI) / 2
+      const clipped = (start: number, end: number) => {
+        const pieces: string[] = []
+        let cursor = start
+        while (cursor < end - 0.00001) {
+          const corner =
+            ((Math.floor((cursor - Math.PI / 4) / (Math.PI / 2) + 0.000001) +
+              1) *
+              Math.PI) /
+              2 +
+            Math.PI / 4
+          const segmentEnd = Math.min(end, corner)
+          if (cursor + travel < corner) {
+            const from = cursor + travel
+            const to = Math.min(segmentEnd + travel, corner)
+            pieces.push(
+              pathData(
+                Array.from({ length: 25 }, (_, i) =>
+                  squarePoint(circlePoint(mix(from, to, i / 24))),
+                ),
+              ),
+            )
+          }
+          cursor = segmentEnd
+        }
+        return pieces.join('')
+      }
+      const base = strands.map((strand) => strand.angle + this.stopAngle)
+      return {
+        phase: this.phase,
+        top: clipped(base[0], base[0] + Math.PI),
+        bottom: clipped(base[1], base[1] + Math.PI),
+        topAccent: clipped(
+          base[0] + strands[0].accent * Math.PI,
+          base[0] + Math.PI,
+        ),
+        bottomAccent: clipped(
+          base[1] + strands[1].accent * Math.PI,
+          base[1] + Math.PI,
+        ),
+      }
+    }
     const squareAmount =
       shape !== 'square' || this.phase === 'idle'
         ? 0
