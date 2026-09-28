@@ -773,12 +773,13 @@ $clearableSafeArea: 64px;
 
     .#{$namespace}-icon-close {
       background: getColor(gray-4);
-      padding: 14px;
+      padding: 4px;
       position: absolute;
       top: -11px;
       right: -11px;
-      width: 15px;
-      height: 15px;
+      width: 28px;
+      height: 28px;
+      color: getColor(text);
       border-radius: var(--sax-radius-circle);
       font-size: 0.75rem;
       cursor: pointer;
@@ -792,6 +793,7 @@ $clearableSafeArea: 64px;
 
       &:hover {
         @include set-var-value(color, getCssVar(white));
+        color: getColor(white);
         background: getColor(danger);
       }
     }

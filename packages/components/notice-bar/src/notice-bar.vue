@@ -20,7 +20,7 @@
         :aria-label="t('vs.noticeBar.close')"
         @click.stop="close"
       >
-        ×
+        <IconClose :scale="0.8" size="1em" />
       </button>
     </div>
   </transition>
@@ -28,6 +28,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
+import { IconClose } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { noticeBarEmits, noticeBarProps } from './notice-bar'
 

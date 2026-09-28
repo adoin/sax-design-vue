@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, nextTick, shallowRef, useTemplateRef, watch } from 'vue'
+import { IconClose, IconLoading, SIcon } from '@vuesax-alpha/components/icon'
 import { useResizeObserver } from '@vueuse/core'
-import { IconLoading, SIcon } from '@vuesax-alpha/components/icon'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { STable } from '@vuesax-alpha/components/table'
 import {
@@ -339,7 +339,7 @@ defineExpose({
           :aria-label="t('vs.cascader.clear')"
           @click.stop="clear"
         >
-          <slot name="clear-icon"><SIcon name="cb:close" /></slot>
+          <slot name="clear-icon"><IconClose :scale="0.8" size="1em" /></slot>
         </button>
 
         <span :class="ns.e('action')" aria-hidden="true">

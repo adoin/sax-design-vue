@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { computed, shallowRef, toRef, useTemplateRef } from 'vue'
+import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SColorPicker } from '@vuesax-alpha/components/color-picker'
 import { SDialog } from '@vuesax-alpha/components/dialog'
-import { SIcon } from '@vuesax-alpha/components/icon'
 import { SInputNumber } from '@vuesax-alpha/components/input-number'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import IconPickerPanel from './icon-picker-panel.vue'
@@ -97,7 +97,7 @@ const confirm = (icon = selectedIcon.value) => {
           :aria-label="t('vs.iconPicker.cancel')"
           @click="cancel"
         >
-          <SIcon name="cb:close" />
+          <IconClose :scale="0.8" size="1em" />
         </button>
       </header>
     </template>

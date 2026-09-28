@@ -1,7 +1,11 @@
 <template>
   <section :class="[ns.b(), ns.m(status)]">
     <div :class="ns.e('icon')" aria-hidden="true">
-      <slot name="icon">{{ symbol }}</slot>
+      <slot name="icon"
+        ><IconClose v-if="status === 'error'" size="1em" /><template v-else>{{
+          symbol
+        }}</template></slot
+      >
     </div>
     <h3 v-if="title || $slots.title" :class="ns.e('title')">
       <slot name="title">{{ title }}</slot>
@@ -18,6 +22,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { IconClose } from '@vuesax-alpha/components/icon'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { resultProps } from './result'
 
@@ -26,6 +31,6 @@ defineOptions({ name: 'SResult' })
 const props = defineProps(resultProps)
 const ns = useNamespace('result')
 const symbol = computed(
-  () => ({ success: '✓', warning: '!', error: '×', info: 'i' })[props.status],
+  () => ({ success: '✓', warning: '!', error: '', info: 'i' })[props.status],
 )
 </script>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, useTemplateRef } from 'vue'
+import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
 import { STable } from '@vuesax-alpha/components/table'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SDialog } from '@vuesax-alpha/components/dialog'
 import { SFocusTrap } from '@vuesax-alpha/components/focus-trap'
-import { SIcon } from '@vuesax-alpha/components/icon'
 import { STooltip } from '@vuesax-alpha/components/tooltip'
 import prism from 'prismjs'
 import { useClipboard } from '@vueuse/core'
@@ -291,7 +291,7 @@ const restoreCodeFocus = async () => {
               type="transparent"
               :aria-label="t.examples.closeCode"
               @click="codeOpen = false"
-              ><SIcon name="bx:x"
+              ><IconClose size="1em"
             /></SButton>
           </div>
         </header>

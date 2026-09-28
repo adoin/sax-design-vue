@@ -61,7 +61,7 @@ export const DEFAULT_ICON_LIST = [
   'cb:add',
   'cb:add-alt',
   'cb:subtract',
-  'cb:close',
+  'sax:close',
   'cb:checkmark',
   'cb:checkmark-outline',
   'cb:edit',

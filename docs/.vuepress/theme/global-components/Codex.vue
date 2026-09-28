@@ -57,7 +57,7 @@
                 :title="t.examples.closeCode"
                 @click="closeCode"
               >
-                <s-icon name="bx:x" />
+                <IconClose size="1em" />
               </button>
             </div>
           </header>
@@ -144,6 +144,7 @@
 
 <script lang="ts" setup>
 import { computed, shallowRef, useSlots, useTemplateRef } from 'vue'
+import { IconClose } from '@vuesax-alpha/components/icon'
 import { useClipboard } from '@vueuse/core'
 
 import CodeCopied from '../components/CodeCopied.vue'

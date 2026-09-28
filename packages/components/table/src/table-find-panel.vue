@@ -188,7 +188,7 @@ const replaceAllDisabled = computed(() => {
 const cancelTool = (): FindTool => ({
   key: 'cancel',
   label: t('vs.table.findCancel'),
-  icon: 'cb:close',
+  icon: 'sax:close',
   disabled: false,
   run: () => finder.cancelFind(),
 })
@@ -410,7 +410,7 @@ const resultTools = computed((): FindTool[] => {
     {
       key: 'close',
       label: t('vs.table.findClose'),
-      icon: 'cb:close',
+      icon: 'sax:close',
       disabled: false,
       run: close,
     },

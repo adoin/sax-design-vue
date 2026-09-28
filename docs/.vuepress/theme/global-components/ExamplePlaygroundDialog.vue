@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { nextTick, shallowRef, useTemplateRef, watch } from 'vue'
+import { IconClose } from '@vuesax-alpha/components/icon'
 import { SDialog, SFocusTrap } from 'sax-design-vue'
 import { useDocLocaleUi } from '../composables/docLocale'
 import ExamplePlaygroundWorkspace from './ExamplePlaygroundWorkspace.vue'
@@ -74,7 +75,7 @@ const restoreTriggerFocus = async () => {
               :aria-label="t.examples.closePlayground"
               @click="close"
             >
-              <s-icon name="bx:x" />
+              <IconClose size="1em" />
             </button>
           </template>
         </ExamplePlaygroundWorkspace>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SIcon } from '@vuesax-alpha/components/icon'
+import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
 import { useNamespace } from '@vuesax-alpha/hooks'
 
 interface Props {
@@ -53,7 +53,7 @@ const ns = useNamespace('image-preview')
     :title="labels.close"
     @click="$emit('close')"
   >
-    <SIcon name="cb:close" />
+    <IconClose :scale="0.8" size="1em" />
   </button>
 
   <button

@@ -24,7 +24,7 @@
             :aria-label="t('vs.common.close')"
             @click="close"
           >
-            ×
+            <IconClose :scale="0.8" size="1em" />
           </button>
         </header>
         <div :class="ns.e('body')"><slot /></div>
@@ -37,6 +37,7 @@
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { IconClose } from '@vuesax-alpha/components/icon'
 import {
   useGlobalComponentProps,
   useLocale,

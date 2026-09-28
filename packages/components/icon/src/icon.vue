@@ -28,6 +28,7 @@ import { useNamespace } from '@vuesax-alpha/hooks'
 import { getIconData } from 'sax-design-vue-iconify'
 import { iconProps } from './icon'
 import { builtinCarbonIcons } from './builtin-carbon-icons'
+import { closeIconData } from './close-artwork'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
@@ -44,6 +45,7 @@ const isRolling = computed(
 )
 const resolvedIconData = computed(() => {
   if (props.iconData || !props.name) return props.iconData
+  if (props.name === 'sax:close') return closeIconData
   const registered = getIconData(props.name)
   if (registered) return registered
   const [prefix, name] = props.name.split(':')

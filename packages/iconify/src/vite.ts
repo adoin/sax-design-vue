@@ -123,6 +123,8 @@ function transformStaticIcons(
       if (/\b(?:icon-data|iconData)\s*=/.test(attributes)) return tag
       const nameMatch = attributes.match(/(?:^|\s)name\s*=\s*(["'])([^"']+)\1/)
       if (!nameMatch) return tag
+      // Library-owned artwork is resolved by SIcon, independently of Iconify collections.
+      if (nameMatch[2] === 'sax:close') return tag
 
       const icon = parseIconName(nameMatch[2], options.collections)
       if (!icon) {

@@ -150,7 +150,7 @@ PROPS:
     type: String
     values: 'Material icon name'
     description: Close button icon.
-    default: cb:close
+    default: sax:close
     link: null
     usage: '#closable'
 GROUP_PROPS:
@@ -202,7 +202,7 @@ GROUP_PROPS:
   - name: "remove-icon"
     type: "string"
     description: "Close icon used by each tag."
-    default: "cb:close"
+    default: "sax:close"
     usage: "#add-and-remove-items"
   - name: "add-aria-label"
     type: "string"

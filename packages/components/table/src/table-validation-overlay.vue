@@ -7,7 +7,7 @@ import {
   shallowRef,
   watch,
 } from 'vue'
-import { SIcon } from '@vuesax-alpha/components/icon'
+import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { tableValidationId } from './validation-utils'
@@ -206,7 +206,7 @@ onBeforeUnmount(() => {
       :aria-label="t('vs.table.validationClose')"
       @click="validation.closeNavigation"
     >
-      <SIcon name="cb:close" aria-hidden="true" />
+      <IconClose :scale="0.8" aria-hidden="true" />
     </button>
   </div>
 </template>

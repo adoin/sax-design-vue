@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, nextTick, shallowRef, toRef, useTemplateRef } from 'vue'
-import { SIcon } from '@vuesax-alpha/components/icon'
+import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { normalizeIconList } from './icon-picker'
 import type { Language } from '@vuesax-alpha/locale'
@@ -90,7 +90,7 @@ defineExpose({ focusSearch })
         :aria-label="t('vs.iconPicker.clearSearch')"
         @click="query = ''"
       >
-        <SIcon name="cb:close" />
+        <IconClose :scale="0.8" size="1em" />
       </button>
     </div>
 

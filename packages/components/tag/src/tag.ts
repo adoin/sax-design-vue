@@ -52,7 +52,7 @@ export const tagProps = buildProps({
     values: tagStatusList,
   },
   icon: { type: String, default: null },
-  closeIcon: { type: String, default: 'cb:close' },
+  closeIcon: { type: String, default: 'sax:close' },
   disabled: Boolean,
   transparent: Boolean,
   /** Compatibility alias for `variant="outline"`. */

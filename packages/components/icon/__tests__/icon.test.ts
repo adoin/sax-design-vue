@@ -1,8 +1,20 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import Icon from '../src/icon.vue'
+import Close from '../src/close.vue'
+import { closePath } from '../src/close-artwork'
 
 describe('Icon rolling', () => {
+  it('shares the soft close artwork between component and dynamic icon names', () => {
+    const close = mount(Close, { props: { size: 14 } })
+    const icon = mount(Icon, { props: { name: 'sax:close' } })
+    expect(close.get('path').attributes('d')).toBe(closePath)
+    expect(icon.get('path').attributes('d')).toBe(closePath)
+    expect(close.attributes('viewBox')).toBe('0 0 24 24')
+    expect(close.attributes('style')).toContain('width: 14px')
+    close.unmount()
+    icon.unmount()
+  })
   it('renders a bundled component fallback without an external collection', () => {
     const name = ['cb', 'chevron-down'].join(':')
     const wrapper = mount(Icon, { props: { name } })

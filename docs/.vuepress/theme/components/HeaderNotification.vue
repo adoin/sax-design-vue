@@ -14,7 +14,7 @@
         👉 {{ t.shell.notificationMore }}
       </button>
       <button class="btn-x" @click="handleRemove">
-        <s-icon name="bx:x" />
+        <IconClose size="1em" />
       </button>
     </div>
   </div>
@@ -22,6 +22,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { IconClose } from '@vuesax-alpha/components/icon'
 import { useRouter } from 'vue-router'
 import { useDocLocaleUi } from '../composables/docLocale'
 

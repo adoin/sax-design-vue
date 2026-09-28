@@ -74,7 +74,7 @@
           :title="removeLabel"
           @click="$emit('remove', file)"
         >
-          <SIcon name="cb:close" />
+          <IconClose :scale="0.8" size="1em" />
         </button>
       </div>
     </article>
@@ -82,8 +82,8 @@
 </template>
 
 <script setup lang="ts">
+import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import { SIcon } from '@vuesax-alpha/components/icon'
 import type { UploadFileItem } from './upload'
 
 interface Props {

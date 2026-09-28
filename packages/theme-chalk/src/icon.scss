@@ -156,38 +156,15 @@
   @include set-component-var(iclose, $icon);
   width: getCssVar(iclose, height);
   height: getCssVar(iclose, height);
-  display: flex;
+  display: inline-flex;
+  vertical-align: middle;
   align-items: center;
   justify-content: center;
   position: relative;
   transition: getCssVar(transition-ease);
 
-  &::before,
-  &::after {
-    background: getColor(color);
-    content: '';
-    position: absolute;
-    width: 16px;
-    height: 2px;
-    border-radius: var(--sax-radius-xs);
-    transition: getCssVar(transition-ease);
-  }
-
-  @include pseudo(before) {
-    transform: rotate(-45deg);
-  }
-  @include pseudo(after) {
-    transform: rotate(45deg);
-  }
-  &-hover--less {
-    &:hover {
-      &:before,
-      &:after {
-        width: 12px;
-        transform: rotate(180deg);
-      }
-    }
-  }
+  color: inherit;
+  flex-shrink: 0;
 }
 
 // icon loading

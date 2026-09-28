@@ -16,7 +16,7 @@ const { t } = useLocale()
       @mousedown.prevent
       @click.stop="emit('clear')"
     >
-      <IconClose />
+      <IconClose :size="14" />
     </button>
     <SIcon v-else name="cb:calendar" aria-hidden="true" />
   </span>

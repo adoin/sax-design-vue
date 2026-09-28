@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, shallowRef, watch } from 'vue'
+import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
-import { SIcon } from '@vuesax-alpha/components/icon'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import BreadcrumbItemNode from './breadcrumb-item-node.vue'
 import type { BreadcrumbItem } from './breadcrumb'
@@ -124,7 +124,7 @@ const closeFull = () => {
             :aria-label="t('vs.breadcrumb.closeFullTrail')"
             @click="closeFull"
           >
-            <SIcon name="bx:x" aria-hidden="true" />
+            <IconClose :scale="0.8" aria-hidden="true" />
           </button>
         </div>
       </template>

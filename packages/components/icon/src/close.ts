@@ -9,6 +9,7 @@ import type { ExtractPropTypes } from 'vue'
 import type Close from './close.vue'
 
 export const closeProps = buildProps({
+  size: { type: definePropType<string | number>([String, Number]) },
   hover: {
     type: String,
   },

@@ -15,7 +15,7 @@ export const tagGroupProps = buildProps({
   },
   color: { ...useColorProp, default: 'primary' },
   placeholder: { type: String, default: '' },
-  removeIcon: { type: String, default: 'cb:close' },
+  removeIcon: { type: String, default: 'sax:close' },
   addIcon: { type: String, default: 'cb:add' },
   addAriaLabel: { type: String, default: 'Add tag' },
   addable: { type: Boolean, default: true },

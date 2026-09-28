@@ -49,7 +49,7 @@ export const promptProps = buildProps({
   cancelText: String,
   closeIcon: {
     type: String,
-    default: 'cb:close',
+    default: 'sax:close',
   },
   text: {
     type: String,

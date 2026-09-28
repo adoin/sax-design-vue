@@ -13,8 +13,8 @@ import {
   useTemplateRef,
   watch,
 } from 'vue'
+import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
 import { useResizeObserver } from '@vueuse/core'
-import { SIcon } from '@vuesax-alpha/components/icon'
 import {
   useLocale,
   useNamespace,
@@ -557,7 +557,7 @@ onBeforeUnmount(() => {
                 @click="handleRemove(pane, $event)"
               >
                 <slot name="close-icon" :pane="pane">
-                  <SIcon name="cb:close" />
+                  <IconClose :scale="0.8" size="1em" />
                 </slot>
               </button>
             </li>
@@ -622,7 +622,7 @@ onBeforeUnmount(() => {
         <span v-if="pane.badge !== undefined" :class="ns.e('badge')">
           {{ pane.badge }}
         </span>
-        <SIcon v-if="isEditable && pane.closable" name="cb:close" />
+        <IconClose v-if="isEditable && pane.closable" :scale="0.8" />
       </span>
       <span
         data-tabs-measure-more

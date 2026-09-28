@@ -23,6 +23,15 @@ afterEach(() => {
 })
 
 describe('saxIcons', () => {
+  it('preserves the library close icon in strict transforms', async () => {
+    const plugin = saxIcons({ ...config, strict: true })
+    const transform = hook<(code: string, id: string) => any>(plugin.transform)
+    const result = await transform(
+      '<template><s-icon name="sax:close" /></template>',
+      'Close.vue',
+    )
+    expect(result).toBeUndefined()
+  })
   it('exports the three selectable default API endpoints', () => {
     expect(DEFAULT_API_ENDPOINTS).toEqual([
       'https://api.iconify.design',

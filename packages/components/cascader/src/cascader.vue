@@ -59,7 +59,7 @@
                 :disabled="disabled"
                 @click.stop="removeTag(item.node)"
               >
-                <SIcon name="cb:close" size="12" />
+                <IconClose :scale="0.8" size="12" />
               </button>
             </slot>
           </span>
@@ -129,7 +129,7 @@
         :aria-label="t('vs.cascader.clear')"
         @click.stop="clear"
       >
-        <slot name="clear-icon"><SIcon name="cb:close" size="14" /></slot>
+        <slot name="clear-icon"><IconClose :scale="0.8" size="14" /></slot>
       </button>
       <span v-else :class="ns.e('suffix')" aria-hidden="true">
         <slot name="suffix-icon">
@@ -151,7 +151,7 @@
           :class="ns.e('tag')"
         >
           <span :class="ns.e('tag-label')">{{ item.label }}</span>
-          <SIcon name="cb:close" size="12" />
+          <IconClose :scale="0.8" size="12" />
         </span>
         <span
           data-cascader-measure-overflow
@@ -203,8 +203,8 @@
 
 <script setup lang="ts">
 import { computed, nextTick, shallowRef, useTemplateRef, watch } from 'vue'
+import { IconClose, IconLoading, SIcon } from '@vuesax-alpha/components/icon'
 import { useResizeObserver } from '@vueuse/core'
-import { IconLoading, SIcon } from '@vuesax-alpha/components/icon'
 import SPopper from '@vuesax-alpha/components/popper'
 import { useLocale, useNamespace, useShape, useSize } from '@vuesax-alpha/hooks'
 import CascaderPanel from './cascader-panel.vue'
