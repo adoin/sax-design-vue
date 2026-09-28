@@ -260,7 +260,7 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     }
     @include e(original) {
       background: transparent;
-      border-radius: 0px;
+      border-radius: inherit;
       border: 2px solid transparent;
     }
     @include when(focus) {
