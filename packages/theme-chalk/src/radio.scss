@@ -59,13 +59,11 @@
     }
 
     .#{$namespace}-radio__custom-icon {
-      clip-path: inset(0 round 0);
       opacity: 1;
       transform: none;
       transition:
-        opacity 0.12s 0.08s ease-out,
-        transform 0.2s 0.06s cubic-bezier(0.2, 0.8, 0.2, 1.15),
-        clip-path 0.18s 0.06s ease-out;
+        opacity 0.08s 0.02s ease-out,
+        transform 0.32s 0.06s cubic-bezier(0.22, 1.35, 0.36, 1);
 
       &[data-animation='none'] {
         transition: none;
@@ -73,6 +71,7 @@
 
       &[data-animation='draw'] {
         transform: none;
+        transition: opacity 0.04s ease-out;
 
         [data-sax-icon-draw] {
           stroke-dashoffset: 0;
@@ -228,17 +227,15 @@
     justify-content: center;
     overflow: visible;
     grid-area: 1 / 1;
-    clip-path: inset(50% 50% 50% 50% round 50%);
     color: white;
     font-size: 10px;
     line-height: 1;
     opacity: 0;
-    transform: scale(0.45) rotate(-8deg);
+    transform: scale(0.4) rotate(-12deg);
     transform-origin: center;
     transition:
       opacity 0.12s ease-in,
-      transform 0.14s ease-in,
-      clip-path 0.14s ease-in;
+      transform 0.14s ease-in;
 
     > .#{$namespace}-icon {
       color: white !important;
