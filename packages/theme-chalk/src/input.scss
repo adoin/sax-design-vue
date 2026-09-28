@@ -379,7 +379,7 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
 
     @include e(icon) {
       left: auto;
-      right: 2px;
+      right: 0;
       box-shadow: -12px 0px 10px -10px
         getColor(black, getCssVar('shadow-opacity'));
     }
