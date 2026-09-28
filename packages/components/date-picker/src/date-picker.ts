@@ -126,7 +126,8 @@ export const datePickerProps = buildProps({
   },
   startDay: {
     type: Number,
-    default: 0,
+    validator: (value: number) =>
+      Number.isInteger(value) && value >= 0 && value <= 6,
   },
   selectDay: Number,
   timeConfig: {

@@ -127,6 +127,7 @@
               <div v-show="rangePickerMode === 'date'" :class="ns.e('panels')">
                 <s-date-panel
                   :picker-type="panelType"
+                  :current-date="currentDate"
                   :color="props.color"
                   :model-value="leftValue"
                   :selected-dates="innerDates"
@@ -136,7 +137,7 @@
                   :disabled-date="isDateDisabled"
                   :festival-method="festivalInTimezone"
                   :default-date="leftValue || defaultStartDate || currentDate"
-                  :start-day="startDay"
+                  :start-day="firstDayOfWeek"
                   :select-day="selectDay"
                   @hover="rangeHover = $event"
                   @pick="handlePick"
@@ -144,6 +145,7 @@
                 />
                 <s-date-panel
                   :picker-type="panelType"
+                  :current-date="currentDate"
                   :color="props.color"
                   :model-value="rightValue"
                   :selected-dates="innerDates"
@@ -153,7 +155,7 @@
                   :disabled-date="isDateDisabled"
                   :festival-method="festivalInTimezone"
                   :default-date="rightValue || defaultEndDate || rightPanelDate"
-                  :start-day="startDay"
+                  :start-day="firstDayOfWeek"
                   :select-day="selectDay"
                   @hover="rangeHover = $event"
                   @pick="handlePick"
@@ -246,6 +248,7 @@
             <div :class="ns.e('panels')">
               <s-date-panel
                 :picker-type="panelType"
+                :current-date="currentDate"
                 :color="props.color"
                 :model-value="leftValue"
                 :selected-dates="innerDates"
@@ -255,7 +258,7 @@
                 :disabled-date="isDateDisabled"
                 :festival-method="festivalInTimezone"
                 :default-date="leftValue || defaultStartDate || currentDate"
-                :start-day="startDay"
+                :start-day="firstDayOfWeek"
                 :select-day="selectDay"
                 @hover="rangeHover = $event"
                 @pick="handlePick"
@@ -264,6 +267,7 @@
               <s-date-panel
                 v-if="isRange"
                 :picker-type="panelType"
+                :current-date="currentDate"
                 :color="props.color"
                 :model-value="rightValue"
                 :selected-dates="innerDates"
@@ -273,7 +277,7 @@
                 :disabled-date="isDateDisabled"
                 :festival-method="festivalInTimezone"
                 :default-date="rightValue || defaultEndDate || rightPanelDate"
-                :start-day="startDay"
+                :start-day="firstDayOfWeek"
                 :select-day="selectDay"
                 @hover="rangeHover = $event"
                 @pick="handlePick"
@@ -363,6 +367,7 @@ import {
   useNamespace,
   useShape,
   useSize,
+  useWeekConfig,
 } from '@vuesax-alpha/hooks'
 import {
   getTimeZoneNow,
@@ -374,12 +379,15 @@ import SDatePanel from './date-panel.vue'
 import STimePanel from './time-panel.vue'
 import { datePickerEmits, datePickerProps } from './date-picker'
 import {
-  formatDisplay,
-  formatValue,
+  formatDisplay as baseFormatDisplay,
+  formatValue as baseFormatValue,
+  parseToDayjs as baseParseToDayjs,
   getDefaultFormat,
   hasTime,
   isRangeType,
-  parseToDayjs,
+  parseWeekValue,
+  startOfConfiguredWeek,
+  withWeekRules,
 } from './utils'
 import type { DatePickerValue, DateShortcut } from './utils'
 import type { PopperInstance } from '@vuesax-alpha/components/popper'
@@ -389,6 +397,36 @@ defineOptions({ name: 'SDatePicker' })
 
 const props = defineProps(datePickerProps)
 const emit = defineEmits(datePickerEmits)
+const { firstDayOfWeek, firstWeekContainsDate } = useWeekConfig(
+  () => props.startDay,
+)
+const weekDate = (date: dayjs.Dayjs | null) =>
+  date
+    ? withWeekRules(date, firstDayOfWeek.value, firstWeekContainsDate.value)
+    : null
+const formatDisplay: typeof baseFormatDisplay = (date, format) =>
+  baseFormatDisplay(weekDate(date), format)
+const formatValue: typeof baseFormatValue = (
+  date,
+  format,
+  valueFormat,
+  timezone,
+) => {
+  if (date && valueFormat && valueFormat !== 'timestamp')
+    return weekDate(toTimeZoneWallTime(date, timezone))!.format(valueFormat)
+  return baseFormatValue(date, format, valueFormat, timezone)
+}
+const parseToDayjs: typeof baseParseToDayjs = (value, format, timezone) => {
+  if (typeof value === 'string' && format === 'gggg-[W]ww') {
+    const date = parseWeekValue(
+      value,
+      firstDayOfWeek.value,
+      firstWeekContainsDate.value,
+    )
+    return date ? toTimeZoneWallTime(date, timezone) : null
+  }
+  return baseParseToDayjs(value, format, timezone)
+}
 
 const ns = useNamespace('date-picker')
 const resolvedShape = useShape()
@@ -617,9 +655,20 @@ const parseModel = () => {
   else innerTime.value = defaultStartTime || now
 }
 
-watch([() => props.modelValue, resolvedTimezone], parseModel, {
-  immediate: true,
-})
+watch(
+  [
+    () => props.modelValue,
+    resolvedTimezone,
+    () =>
+      props.valueFormat === 'gggg-[W]ww'
+        ? `${firstDayOfWeek.value}:${firstWeekContainsDate.value}`
+        : null,
+  ],
+  parseModel,
+  {
+    immediate: true,
+  },
+)
 
 const displayText = computed(() => {
   if (isMultiple.value) {
@@ -734,7 +783,12 @@ const handlePick = (date: dayjs.Dayjs) => {
   } else if (props.type === 'year') {
     picked = picked.startOf('year')
   } else if (props.type === 'week') {
-    picked = picked.startOf('week')
+    picked = startOfConfiguredWeek(picked, firstDayOfWeek.value).add(
+      props.selectDay === undefined
+        ? 0
+        : (props.selectDay - firstDayOfWeek.value + 7) % 7,
+      'day',
+    )
   } else if (!showTimePanel.value) {
     picked = picked.startOf('day')
   }

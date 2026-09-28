@@ -118,7 +118,7 @@ export const formatDisplay = (
   return date.format(displayFormat)
 }
 
-export const getCalendarCells = (year: number, month: number, startDay = 0) => {
+export const getCalendarCells = (year: number, month: number, startDay = 1) => {
   const first = dayjs().year(year).month(month).startOf('month')
   const last = first.endOf('month')
   const startOffset = (first.day() - startDay + 7) % 7
@@ -185,6 +185,55 @@ export const isSameYear = (a: dayjs.Dayjs | null, b: dayjs.Dayjs | null) =>
 
 export const isSameWeek = (a: dayjs.Dayjs | null, b: dayjs.Dayjs | null) =>
   !!a && !!b && a.isSame(b, 'week')
+
+export const startOfConfiguredWeek = (date: dayjs.Dayjs, firstDay: number) =>
+  date.startOf('day').subtract((date.day() - firstDay + 7) % 7, 'day')
+
+/** Instance-local locale rules; never change Day.js's application-wide locale. */
+export const withWeekRules = (
+  date: dayjs.Dayjs,
+  firstDay: number,
+  firstWeekDate: number,
+) => {
+  const locales = (dayjs as unknown as { Ls: Record<string, ILocale> }).Ls
+  const baseName = date.locale().split('-sax-week-')[0]
+  const name = `${baseName}-sax-week-${firstDay}-${firstWeekDate}`
+  if (!locales[name])
+    dayjs.locale(
+      {
+        ...locales[baseName],
+        name,
+        weekStart: firstDay,
+        yearStart: firstWeekDate,
+      } as ILocale,
+      undefined,
+      true,
+    )
+  return date.locale(name)
+}
+
+export const parseWeekValue = (
+  value: string,
+  firstDay: number,
+  firstWeekDate: number,
+) => {
+  const match = /^(\d{4})-W(\d{2})$/.exec(value)
+  if (!match) return null
+  const year = Number(match[1])
+  const week = Number(match[2])
+  const start = startOfConfiguredWeek(
+    dayjs().year(year).month(0).date(firstWeekDate),
+    firstDay,
+  )
+  const result = withWeekRules(
+    start.add((week - 1) * 7, 'day'),
+    firstDay,
+    firstWeekDate,
+  )
+  return week > 0 && week <= 53 && result.format('gggg-[W]ww') === value
+    ? result
+    : null
+}
 
 export const isDateInRange = (
   date: dayjs.Dayjs,

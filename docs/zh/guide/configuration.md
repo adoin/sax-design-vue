@@ -344,3 +344,21 @@ import 'sax-design-vue/theme-chalk/dark/css-vars.css'
 SSR 相关说明见 [Nuxt 集成](/zh/guide/nuxt.html)。
 
 </card>
+
+<card>
+
+## 全局周规则
+
+`firstDayOfWeek` 统一 DatePicker、DatePanel 与 Calendar 的星期表头、日期网格、周选择和周视图，取值 0–6（周日到周六），默认 1。`firstWeekContainsDate` 为 1–7，指定必须属于第一周的 1 月日期，默认 4；默认组合对应 ISO 周规则，周日开头且包含 1 月 1 日的组合为 0 / 1。Calendar 周编号与 DatePicker 的 `gggg-[W]ww` 使用同一规则。组件显式 `start-day` / `first-day-of-week` 优先于最近 Provider，再继承应用安装配置。
+
+```ts
+app.use(SaxDesignVue, { firstDayOfWeek: 1, firstWeekContainsDate: 4 })
+```
+
+```vue
+<s-config-provider :first-day-of-week="0" :first-week-contains-date="1">
+  <app />
+</s-config-provider>
+```
+
+</card>

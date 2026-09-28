@@ -126,7 +126,7 @@ PROPS:
   - name: first-day-of-week
     type: Number
     values: "0 - 6"
-    description: 每周起始日，0 为周日，1 为周一。
+    description: 每周起始日，0 为周日，1 为周一；省略时继承全局 firstDayOfWeek。周编号同时遵循全局 firstWeekContainsDate（默认 4）。
     default: '1'
   - name: disabled-date
     type: Function

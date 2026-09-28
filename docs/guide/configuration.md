@@ -344,3 +344,21 @@ This resolver imports components from the package root; it does not need a files
 See [Usage with Nuxt](/guide/nuxt.html) for SSR-specific notes.
 
 </card>
+
+<card>
+
+## Global week rules
+
+`firstDayOfWeek` unifies weekday headings, date grids, week selection, and Calendar week views. Values are 0–6 (Sunday–Saturday), default 1. `firstWeekContainsDate` is the January date that must belong to week one, from 1–7, default 4. Defaults match ISO weeks; use 0 / 1 for Sunday-first weeks containing January 1. Calendar week numbers and DatePicker `gggg-[W]ww` share these rules. Explicit component `start-day` / `first-day-of-week` takes precedence over the nearest Provider and application installation configuration.
+
+```ts
+app.use(SaxDesignVue, { firstDayOfWeek: 1, firstWeekContainsDate: 4 })
+```
+
+```vue
+<s-config-provider :first-day-of-week="0" :first-week-contains-date="1">
+  <app />
+</s-config-provider>
+```
+
+</card>

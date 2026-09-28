@@ -142,7 +142,11 @@ export const calendarProps = buildProps({
   range: Boolean,
   /** Allows arbitrary date toggling. Drag and Shift add contiguous dates to the selection. */
   multiple: Boolean,
-  firstDayOfWeek: { type: Number, default: 1 },
+  firstDayOfWeek: {
+    type: Number,
+    validator: (value: number) =>
+      Number.isInteger(value) && value >= 0 && value <= 6,
+  },
   showWeekNumber: Boolean,
   hourStart: { type: Number, default: 0 },
   hourEnd: { type: Number, default: 24 },

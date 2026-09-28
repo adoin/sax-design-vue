@@ -203,15 +203,15 @@ PROPS:
   - name: start-day
     type: Number
     values: "0-6"
-    description: 设置每周第一天及周选择时返回的日期。
-    default: '0'
+    description: 设置每周第一天，0 为周日，1 为周一；省略时继承全局 firstDayOfWeek，默认周一。
+    default: '1'
     link: null
     usage: '#other-types'
     code: null
   - name: select-day
     type: Number
     values: "0-6"
-    description: 设置每周第一天及周选择时返回的日期。
+    description: 周选择返回该周中的指定星期；省略时返回该周第一天。
     default: null
     link: null
     usage: '#other-types'
@@ -589,6 +589,30 @@ EVENTS:
 <template #script>
 
 @[code{7-17}](../../.vuepress/components/date-picker/festival.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 周规则
+
+Week 按整行选择，悬停或聚焦整行预览，方向键上/下移动，Enter 或空格确认。包含禁用日期的整周不可选。当前日期、月份、季度、年份与周使用一致的浅主题色标记，实心背景表示已选中。全局 `firstDayOfWeek` 控制起始星期，`firstWeekContainsDate` 指定必须属于第一周的 1 月日期（默认 4）；周编号采用周所属年份，跨年时可能与日历年份不同。`start-day` 仅覆盖当前组件的周起始日。
+
+<template #example>
+<date-picker-zh-week-rules />
+</template>
+
+<template #template>
+
+@[code{1-14}](../../.vuepress/components/date-picker-zh/week-rules.vue)
+
+</template>
+
+<template #script>
+
+@[code{16-20}](../../.vuepress/components/date-picker-zh/week-rules.vue)
 
 </template>
 

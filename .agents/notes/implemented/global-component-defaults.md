@@ -30,6 +30,7 @@ Global defaults never own instance data, controlled state, application content, 
 ## Shared and component-specific defaults
 
 - `size` applies only to components using the shared `small` / `default` / `large` scale.
+- `firstDayOfWeek` (default Monday, 1) and `firstWeekContainsDate` (default January 4) unify DatePicker, DatePanel, and Calendar grids, week selection, and week numbering. DatePicker/DatePanel `startDay` and Calendar `firstDayOfWeek` explicitly override the global weekday. Week identifiers use the week-year; no application-wide Day.js locale mutation is permitted. Week picker rows containing disabled dates cannot be selected. Current day/month/quarter/year/week use the same subtle theme-color treatment, distinct from solid selection.
 - Existing `shape`, locale, time zone, date/time Now behavior, Anchor settings, namespace, z-index, and theme contracts remain intact.
 - Anchor `activeStrategy` and `activeOffset` are reusable application/subtree policies. An explicit Anchor prop overrides the nearest configured field; `activeOffset` falls back to the established local `offset` when no dedicated value is supplied.
 - `button`, `dialog`, `drawer`, `notification`, `pagination`, and direct `popper` usage expose only their reusable interaction and presentation policies.

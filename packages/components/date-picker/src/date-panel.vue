@@ -58,7 +58,42 @@
       <div :class="ns.e('weekdays')">
         <span v-for="week in weekLabels" :key="week">{{ week }}</span>
       </div>
-      <div :class="ns.e('dates')" @mouseleave="emit('hover', null)">
+      <div v-if="pickerType === 'week'" :class="ns.e('week-rows')">
+        <button
+          v-for="week in calendarWeeks"
+          :key="week[0].date.valueOf()"
+          type="button"
+          :class="[
+            ns.e('week-row'),
+            ns.is('today', sameWeek(week[0].date, today)),
+            ns.is(
+              'selected',
+              selectedValues.some((value) => sameWeek(week[0].date, value)),
+            ),
+          ]"
+          :disabled="week.some((cell) => isCellDisabled(cell.date))"
+          :aria-label="`${week[0].date.format('YYYY-MM-DD')} – ${week[6].date.format('YYYY-MM-DD')}`"
+          :aria-pressed="
+            selectedValues.some((value) => sameWeek(week[0].date, value))
+          "
+          @click="pickDate(week[0].date)"
+          @keydown="handleWeekKeydown"
+        >
+          <span
+            v-for="cell in week"
+            :key="cell.date.valueOf()"
+            :class="[
+              ns.e('week-day'),
+              ns.is(cell.type, true),
+              ns.is('today', cell.date.isSame(today, 'day')),
+            ]"
+            :title="festival(cell.date)?.label"
+          >
+            {{ cell.date.date() }}
+          </span>
+        </button>
+      </div>
+      <div v-else :class="ns.e('dates')" @mouseleave="emit('hover', null)">
         <button
           v-for="cell in calendarCells"
           :key="cell.date.valueOf()"
@@ -140,10 +175,14 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import dayjs from 'dayjs'
 import SIcon from '@vuesax-alpha/components/icon'
-import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
-import { getVsColor } from '@vuesax-alpha/utils'
+import {
+  useGlobalConfig,
+  useLocale,
+  useNamespace,
+  useWeekConfig,
+} from '@vuesax-alpha/hooks'
+import { getTimeZoneNow, getVsColor } from '@vuesax-alpha/utils'
 import {
   getCalendarCells,
   getMonthTable,
@@ -152,9 +191,10 @@ import {
   isDateInRange,
   isSameDay,
   isSameMonth,
-  isSameWeek,
   isSameYear,
+  startOfConfiguredWeek,
 } from './utils'
+import type dayjs from 'dayjs'
 import type {
   DateFestivalInfo,
   DateFestivalMethod,
@@ -176,6 +216,7 @@ const props = defineProps<{
   defaultDate?: dayjs.Dayjs | null
   startDay?: number
   selectDay?: number
+  currentDate?: dayjs.Dayjs
 }>()
 
 const emit = defineEmits<{
@@ -202,8 +243,13 @@ const viewMode = ref<ViewMode>(
         : 'date',
 )
 
+const timezone = useGlobalConfig('timezone')
+const today = computed(
+  () => props.currentDate ?? getTimeZoneNow(timezone.value),
+)
+
 const panelDate = ref(
-  props.modelValue || props.defaultDate || props.rangeStart || dayjs(),
+  props.modelValue || props.defaultDate || props.rangeStart || today.value,
 )
 
 watch(
@@ -231,7 +277,47 @@ watch(
   },
 )
 
-const normalizedStartDay = computed(() => ((props.startDay ?? 0) + 7) % 7)
+const { firstDayOfWeek: normalizedStartDay } = useWeekConfig(
+  () => props.startDay,
+)
+const sameWeek = (a: dayjs.Dayjs | null, b: dayjs.Dayjs | null) =>
+  Boolean(
+    a &&
+    b &&
+    startOfConfiguredWeek(a, normalizedStartDay.value).isSame(
+      startOfConfiguredWeek(b, normalizedStartDay.value),
+      'day',
+    ),
+  )
+const calendarWeeks = computed(() =>
+  Array.from({ length: calendarCells.value.length / 7 }, (_, index) =>
+    calendarCells.value.slice(index * 7, index * 7 + 7),
+  ),
+)
+const handleWeekKeydown = (event: KeyboardEvent) => {
+  if (!['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return
+  event.preventDefault()
+  const button = event.currentTarget as HTMLButtonElement
+  const rows = Array.from(
+    button.parentElement!.querySelectorAll<HTMLButtonElement>(
+      'button:not(:disabled)',
+    ),
+  )
+  const index = rows.indexOf(button)
+  const next =
+    event.key === 'Home'
+      ? 0
+      : event.key === 'End'
+        ? rows.length - 1
+        : Math.max(
+            0,
+            Math.min(
+              rows.length - 1,
+              index + (event.key === 'ArrowUp' ? -1 : 1),
+            ),
+          )
+  rows[next]?.focus()
+}
 
 const weekLabels = computed(() =>
   ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
@@ -384,14 +470,14 @@ const cellClass = (cell: { type: string; date: dayjs.Dayjs }) => {
   if (start && end && end.isBefore(start, 'day')) [start, end] = [end, start]
   const selected = selectedValues.value.some((value) =>
     props.pickerType === 'week'
-      ? isSameWeek(date, value)
+      ? sameWeek(date, value)
       : isSameDay(date, value),
   )
 
   return [
     ns.e('cell'),
     ns.is(type, true),
-    ns.is('today', date.isSame(dayjs(), 'day')),
+    ns.is('today', date.isSame(today.value, 'day')),
     ns.is('selected', selected),
     festival(date)?.className,
     ns.is('festival-important', festival(date)?.important),
@@ -405,19 +491,23 @@ const cellClass = (cell: { type: string; date: dayjs.Dayjs }) => {
       'range-start',
       isSameDay(date, start) ||
         (props.pickerType === 'week' &&
-          isSameWeek(date, props.rangeStart ?? null)),
+          sameWeek(date, props.rangeStart ?? null)),
     ),
     ns.is(
       'range-end',
       isSameDay(date, end) ||
-        (props.pickerType === 'week' &&
-          isSameWeek(date, props.rangeEnd ?? null)),
+        (props.pickerType === 'week' && sameWeek(date, props.rangeEnd ?? null)),
     ),
   ]
 }
 
 const quarterClass = (quarter: dayjs.Dayjs) => [
   ns.e('quarter'),
+  ns.is(
+    'today',
+    quarter.year() === today.value.year() &&
+      Math.floor(quarter.month() / 3) === Math.floor(today.value.month() / 3),
+  ),
   ns.is(
     'selected',
     selectedValues.value.some(
@@ -434,7 +524,7 @@ const monthClass = (month: dayjs.Dayjs) => [
     'selected',
     selectedValues.value.some((value) => isSameMonth(month, value)),
   ),
-  ns.is('today', month.isSame(dayjs(), 'month')),
+  ns.is('today', month.isSame(today.value, 'month')),
 ]
 
 const yearClass = (year: dayjs.Dayjs) => [
@@ -443,6 +533,6 @@ const yearClass = (year: dayjs.Dayjs) => [
     'selected',
     selectedValues.value.some((value) => isSameYear(year, value)),
   ),
-  ns.is('today', year.isSame(dayjs(), 'year')),
+  ns.is('today', year.isSame(today.value, 'year')),
 ]
 </script>

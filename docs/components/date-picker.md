@@ -223,15 +223,15 @@ PROPS:
   - name: start-day
     type: Number
     values: "0-6"
-    description: Set the first weekday and the returned day for week selection.
-    default: '0'
+    description: First weekday (0 Sunday, 1 Monday). Inherits global firstDayOfWeek; defaults to Monday.
+    default: '1'
     link: null
     usage: '#other-types'
     code: null
   - name: select-day
     type: Number
     values: "0-6"
-    description: Set the first weekday and the returned day for week selection.
+    description: Return this weekday within the selected week; defaults to the first day of that week.
     default: null
     link: null
     usage: '#other-types'
@@ -614,6 +614,30 @@ for business dates without changing the picker theme.
 <template #script>
 
 @[code{7-17}](../.vuepress/components/date-picker/festival.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Week rules
+
+Week selects an entire row. Hover or focus previews the row; Up/Down moves focus and Enter or Space selects it. A week containing a disabled date cannot be selected. Current days, months, quarters, years, and weeks share a subtle theme-color treatment; solid backgrounds indicate selection. Global `firstDayOfWeek` controls the first weekday, while `firstWeekContainsDate` specifies the January date that belongs to week one (default 4). Week numbers use the week-year, which can differ from the calendar year. Local `start-day` overrides the first weekday for one component.
+
+<template #example>
+<date-picker-week-rules />
+</template>
+
+<template #template>
+
+@[code{1-14}](../.vuepress/components/date-picker/week-rules.vue)
+
+</template>
+
+<template #script>
+
+@[code{16-20}](../.vuepress/components/date-picker/week-rules.vue)
 
 </template>
 

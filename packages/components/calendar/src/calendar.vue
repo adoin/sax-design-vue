@@ -536,7 +536,8 @@ import { SContextMenu } from '@vuesax-alpha/components/context-menu'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { STooltip } from '@vuesax-alpha/components/tooltip'
-import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace, useWeekConfig } from '@vuesax-alpha/hooks'
+import { getCalendarWeek } from '@vuesax-alpha/utils'
 import { calendarEmits, calendarProps } from './calendar'
 import type {
   CalendarCell,
@@ -552,6 +553,9 @@ import type { ContextMenuItem } from '@vuesax-alpha/components/context-menu'
 defineOptions({ name: 'SCalendar' })
 
 const props = defineProps(calendarProps)
+const { firstDayOfWeek, firstWeekContainsDate } = useWeekConfig(
+  () => props.firstDayOfWeek,
+)
 const emit = defineEmits(calendarEmits)
 const slots = useSlots()
 const ns = useNamespace('calendar')
@@ -629,8 +633,8 @@ const isDateInPreview = (value: string) => {
 }
 const weekdays = computed(() =>
   weekdayKeys
-    .slice(props.firstDayOfWeek)
-    .concat(weekdayKeys.slice(0, props.firstDayOfWeek))
+    .slice(firstDayOfWeek.value)
+    .concat(weekdayKeys.slice(0, firstDayOfWeek.value))
     .map((day) => t(`vs.datepicker.weeks.${day}`)),
 )
 // A schedule never renders past midnight. Clamp public inputs here so an
@@ -669,7 +673,7 @@ const hasContextMenu = computed(
 const visibleDays = computed(() => {
   if (activeView.value === 'day') return [startOfDay(viewDate.value)]
   const start = startOfDay(viewDate.value)
-  const offset = (start.getDay() - props.firstDayOfWeek + 7) % 7
+  const offset = (start.getDay() - firstDayOfWeek.value + 7) % 7
   start.setDate(start.getDate() - offset)
   return Array.from({ length: 7 }, (_, index) => {
     const date = new Date(start)
@@ -724,7 +728,7 @@ const weeks = computed<CalendarCell[][]>(() => {
   const year = viewDate.value.getFullYear()
   const month = viewDate.value.getMonth()
   const first = new Date(year, month, 1)
-  const offset = (first.getDay() - props.firstDayOfWeek + 7) % 7
+  const offset = (first.getDay() - firstDayOfWeek.value + 7) % 7
   const start = new Date(year, month, 1 - offset)
   const range = selectedValues.value
     .map(toDate)
@@ -1202,17 +1206,8 @@ const dropEvent = (day: Date, mouseEvent: DragEvent) => {
   })
   draggedEvent.value = undefined
 }
-const getWeekNumber = (date: Date) => {
-  const target = new Date(
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
-  )
-  const day = target.getUTCDay() || 7
-  target.setUTCDate(target.getUTCDate() + 4 - day)
-  const yearStart = new Date(Date.UTC(target.getUTCFullYear(), 0, 1))
-  return Math.ceil(
-    ((target.getTime() - yearStart.getTime()) / 86400000 + 1) / 7,
-  )
-}
+const getWeekNumber = (date: Date) =>
+  getCalendarWeek(date, firstDayOfWeek.value, firstWeekContainsDate.value).week
 
 const clearSelection = () => {
   rangeSelectionAnchor.value = undefined

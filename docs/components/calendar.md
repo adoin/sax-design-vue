@@ -126,7 +126,7 @@ PROPS:
   - name: first-day-of-week
     type: Number
     values: "0 - 6"
-    description: Week start day, 0 for Sunday and 1 for Monday.
+    description: Week start day, 0 for Sunday and 1 for Monday. Inherits global firstDayOfWeek when omitted; week numbers also follow global firstWeekContainsDate (default 4).
     default: '1'
   - name: disabled-date
     type: Function

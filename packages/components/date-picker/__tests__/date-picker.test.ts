@@ -1,10 +1,23 @@
 import { defineComponent, h } from 'vue'
 import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { useGlobalConfig } from '@vuesax-alpha/hooks'
 import dayjs, { type Dayjs } from 'dayjs'
+import { getCalendarWeek } from '@vuesax-alpha/utils'
 import ConfigProvider from '../../config-provider/src/config-provider'
 import DatePicker from '../src/date-picker.vue'
 import DatePanel from '../src/date-panel.vue'
+import Calendar from '../../calendar/src/calendar.vue'
+import { parseWeekValue, withWeekRules } from '../src/utils'
+
+const globalConfig = useGlobalConfig()
+const originalConfig = globalConfig.value
+beforeEach(() => {
+  globalConfig.value = {}
+})
+afterEach(() => {
+  globalConfig.value = originalConfig
+})
 
 const InputStub = defineComponent({
   name: 'SInput',
@@ -66,6 +79,151 @@ const mountPicker = (props = {}) =>
   })
 
 describe('DatePicker input presentation', () => {
+  it('applies global week rules to Calendar and preserves a local override', async () => {
+    const wrapper = mount(ConfigProvider, {
+      props: { firstDayOfWeek: 0, firstWeekContainsDate: 1 },
+      slots: {
+        default: () =>
+          h('div', [
+            h(Calendar, { date: '2021-01-01', showWeekNumber: true }),
+            h(Calendar, {
+              date: '2021-01-01',
+              firstDayOfWeek: 1,
+              showWeekNumber: true,
+            }),
+          ]),
+      },
+    })
+    const calendars = wrapper.findAllComponents(Calendar)
+    const firstWeekday = (index: number) =>
+      calendars[index].findAll('.s-calendar__weekday')[1].text()
+    expect(firstWeekday(0)).not.toBe(firstWeekday(1))
+    await wrapper.setProps({ firstDayOfWeek: 1, firstWeekContainsDate: 4 })
+    expect(firstWeekday(0)).toBe(firstWeekday(1))
+    expect(calendars[0].get('.s-calendar__week-number').text()).toBe('53')
+    wrapper.unmount()
+  })
+
+  it('keeps configured week-year formatting in a timezone and round-trips week values', async () => {
+    const wrapper = mountPicker({
+      type: 'week',
+      timezone: 'Asia/Shanghai',
+      valueFormat: 'gggg-[W]ww',
+      modelValue: '2020-W53',
+    })
+    const panel = wrapper.getComponent(DatePanelStub)
+    expect((panel.props('modelValue') as Dayjs).format('YYYY-MM-DD')).toBe(
+      '2020-12-28',
+    )
+    panel.vm.$emit('pick', dayjs('2021-01-01'))
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBe('2020-W53')
+    wrapper.unmount()
+  })
+
+  it('blocks a week with any disabled day and navigates enabled rows with arrow keys', async () => {
+    const wrapper = mount(DatePanel, {
+      attachTo: document.body,
+      props: {
+        pickerType: 'week',
+        defaultDate: dayjs('2026-09-01'),
+        disabledDate: (date: Date) => date.getDate() === 9,
+      },
+    })
+    const rows = wrapper.findAll<HTMLButtonElement>('.s-date-panel__week-row')
+    expect(rows[1].element.disabled).toBe(true)
+    await rows[1].trigger('click')
+    expect(wrapper.emitted('pick')).toBeUndefined()
+    rows[0].element.focus()
+    await rows[0].trigger('keydown', { key: 'ArrowDown' })
+    expect(document.activeElement).toBe(rows[2].element)
+    wrapper.unmount()
+  })
+
+  it('uses consistent cross-year week numbering without changing the global locale', () => {
+    const locale = dayjs.locale()
+    for (const firstDay of [0, 1, 6]) {
+      for (const firstWeekDate of [1, 4, 7]) {
+        for (const text of [
+          '2020-12-27',
+          '2020-12-31',
+          '2021-01-01',
+          '2021-01-04',
+        ]) {
+          const date = dayjs(text)
+          const info = getCalendarWeek(date.toDate(), firstDay, firstWeekDate)
+          const formatted = withWeekRules(date, firstDay, firstWeekDate).format(
+            'gggg-[W]ww',
+          )
+          expect(formatted).toBe(
+            `${info.year}-W${String(info.week).padStart(2, '0')}`,
+          )
+          expect(
+            parseWeekValue(formatted, firstDay, firstWeekDate)?.day(),
+          ).toBe(firstDay)
+        }
+      }
+    }
+    expect(dayjs.locale()).toBe(locale)
+    expect(parseWeekValue('2021-W53', 1, 4)).toBeNull()
+  })
+
+  it('selects whole weeks and preserves selectDay through the picker', async () => {
+    const wrapper = mountPicker({
+      type: 'week',
+      startDay: 1,
+      selectDay: 3,
+      valueFormat: 'YYYY-MM-DD',
+    })
+    wrapper.getComponent(DatePanelStub).vm.$emit('pick', dayjs('2026-09-23'))
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBe('2026-09-23')
+    wrapper.unmount()
+  })
+
+  it('renders a current week row, selects it as one unit and responds to global week changes', async () => {
+    const wrapper = mount(ConfigProvider, {
+      props: { firstDayOfWeek: 1 },
+      slots: {
+        default: () =>
+          h(DatePanel, {
+            pickerType: 'week',
+            defaultDate: dayjs('2026-09-01'),
+            currentDate: dayjs('2026-09-23'),
+          }),
+      },
+    })
+    const panel = wrapper.getComponent(DatePanel)
+    const current = panel.get('.s-date-panel__week-row.is-today')
+    expect(current.findAll('.s-date-panel__week-day')).toHaveLength(7)
+    expect(current.attributes('aria-label')).toBe('2026-09-21 – 2026-09-27')
+    await current.trigger('click')
+    expect(
+      (panel.emitted('pick')?.[0]?.[0] as Dayjs).format('YYYY-MM-DD'),
+    ).toBe('2026-09-21')
+    await wrapper.setProps({ firstDayOfWeek: 0 })
+    expect(
+      panel.get('.s-date-panel__week-row.is-today').attributes('aria-label'),
+    ).toBe('2026-09-20 – 2026-09-26')
+    wrapper.unmount()
+  })
+
+  it.each(['date', 'month', 'quarter', 'year'] as const)(
+    'marks the current %s independently of selection',
+    (pickerType) => {
+      const wrapper = mount(DatePanel, {
+        props: {
+          pickerType,
+          defaultDate: dayjs('2026-09-01'),
+          currentDate: dayjs('2026-09-23'),
+        },
+      })
+      expect(wrapper.findAll('.is-today')).toHaveLength(1)
+      expect(wrapper.get('.is-today').classes()).not.toContain('is-selected')
+      wrapper.unmount()
+    },
+  )
+
   it('shares a temporary range preview across panels without committing it', async () => {
     const wrapper = mountPicker({ type: 'daterange' })
     const panels = wrapper.findAllComponents(DatePanelStub)

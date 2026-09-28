@@ -112,6 +112,18 @@ export interface AnchorGlobalConfig {
 }
 
 export const configProviderProps = buildProps({
+  /** First weekday: 0 Sunday through 6 Saturday. Defaults to Monday. */
+  firstDayOfWeek: {
+    type: Number,
+    validator: (value: number) =>
+      Number.isInteger(value) && value >= 0 && value <= 6,
+  },
+  /** January date that must belong to week one. Defaults to 4 (ISO with Monday). */
+  firstWeekContainsDate: {
+    type: Number,
+    validator: (value: number) =>
+      Number.isInteger(value) && value >= 1 && value <= 7,
+  },
   /**
    * @description global Initial zIndex
    */

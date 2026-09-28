@@ -758,3 +758,60 @@
     }
   }
 }
+
+@include b(date-panel) {
+  @include e(week-rows) {
+    display: grid;
+    gap: 3px;
+  }
+  @include e(week-row) {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--sax-radius-md);
+    background: transparent;
+    color: getColor('text');
+    cursor: pointer;
+    &:hover:not(:disabled):not(.is-selected), &:focus-visible:not(:disabled):not(.is-selected) {
+      background: getColor('color', 0.12);
+      color: getColor('color');
+    }
+    &.is-selected {
+      background: getColor('color');
+      color: getColor('white');
+    }
+    &:disabled { opacity: 0.35; cursor: not-allowed; }
+  }
+  @include e(week-day) {
+    position: relative;
+    display: grid;
+    min-height: 34px;
+    place-items: center;
+    font-size: 0.8rem;
+    &.is-prev, &.is-next { opacity: 0.5; }
+    &.is-today::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+  }
+  .#{$namespace}-date-panel__cell,
+  .#{$namespace}-date-panel__month,
+  .#{$namespace}-date-panel__quarter,
+  .#{$namespace}-date-panel__year,
+  .#{$namespace}-date-panel__week-row {
+    &.is-today:not(.is-selected):not(.is-range-start):not(.is-range-end) {
+      color: getColor('color');
+      background: getColor('color', 0.06);
+      font-weight: 600;
+      box-shadow: none;
+    }
+    &.is-today.is-selected { box-shadow: none; }
+  }
+}
