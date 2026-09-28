@@ -4,6 +4,7 @@ import { viteBundler } from '@vuepress/bundler-vite'
 import { defineUserConfig } from 'vuepress'
 import { saxIcons } from 'sax-design-vue-iconify/vite'
 import saxIconConfig from '../../sax-icons.config'
+import { collectDocumentationIconNames } from './node/documentationIcons'
 import {
   enNavbar,
   enSearchData,
@@ -29,7 +30,21 @@ export default defineUserConfig({
   bundler: viteBundler({
     viteOptions: {
       // client.ts imports the registry already; avoid a duplicate HTML entry.
-      plugins: [saxIcons({ ...saxIconConfig, autoRegister: false })],
+      plugins: [
+        saxIcons({
+          ...saxIconConfig,
+          autoRegister: false,
+          safelist: collectDocumentationIconNames(
+            [
+              path.resolve(__dirname, 'components'),
+              path.resolve(__dirname, 'theme'),
+              path.resolve(pkgRoot, 'components'),
+            ],
+            Object.keys(saxIconConfig.collections),
+            saxIconConfig.safelist,
+          ),
+        }),
+      ],
       css: {
         preprocessorOptions: {
           scss: {
