@@ -358,40 +358,32 @@
 }
 
 .#{$namespace}-breadcrumb__overflow-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 8px;
   width: min(460px, calc(100vw - 28px));
   padding: 12px 14px 14px;
   color: getColor(text);
 }
 
-.#{$namespace}-breadcrumb__overflow-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
+.#{$namespace}-breadcrumb__overflow-close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--sax-radius-sm);
+  background: transparent;
+  color: getColor(text, 0.7);
+  cursor: pointer;
 
-  strong {
-    font-size: 0.8rem;
-  }
-
-  button {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 36px;
-    height: 36px;
-    border: 0;
-    border-radius: var(--sax-radius-sm);
-    background: transparent;
-    color: getColor(text, 0.7);
-    cursor: pointer;
-
-    &:hover,
-    &:focus-visible {
-      outline: none;
-      background: getColor(primary, 0.1);
-      color: getColor(primary);
-    }
+  &:hover,
+  &:focus-visible {
+    outline: none;
+    background: getColor(primary, 0.1);
+    color: getColor(primary);
   }
 }
 

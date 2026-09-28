@@ -104,16 +104,6 @@ const closeFull = () => {
           :class="ns.e('overflow-panel')"
           @keydown.esc.stop="closeFull"
         >
-          <div :class="ns.e('overflow-heading')">
-            <strong>{{ t('vs.breadcrumb.fullTrail') }}</strong>
-            <button
-              type="button"
-              :aria-label="t('vs.breadcrumb.closeFullTrail')"
-              @click="closeFull"
-            >
-              <SIcon name="bx:x" aria-hidden="true" />
-            </button>
-          </div>
           <nav :aria-label="t('vs.breadcrumb.fullTrail')">
             <ol :class="ns.e('overflow-list')">
               <BreadcrumbItemNode
@@ -128,6 +118,14 @@ const closeFull = () => {
               />
             </ol>
           </nav>
+          <button
+            type="button"
+            :class="ns.e('overflow-close')"
+            :aria-label="t('vs.breadcrumb.closeFullTrail')"
+            @click="closeFull"
+          >
+            <SIcon name="bx:x" aria-hidden="true" />
+          </button>
         </div>
       </template>
     </SPopper>
