@@ -19,6 +19,11 @@ export const radioGroupProps = buildProps({
   },
   options: { type: definePropType<RadioOption[]>(Array), default: () => [] },
   disabled: Boolean,
+  animated: { type: Boolean, default: true },
+  direction: {
+    type: String,
+    values: ['horizontal', 'vertical'] as const,
+  },
   type: {
     type: String,
     values: ['default', 'button'] as const,

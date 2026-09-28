@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 import { SRadioButton } from '@vuesax-alpha/components/radio-button'
 import {
   provideGlobalConfig,
@@ -10,6 +10,7 @@ import {
 import SRadio from './radio.vue'
 import RadioGroupProvider from './radio-group-provider.vue'
 import { radioGroupEmits, radioGroupProps } from './radio-group'
+import { useRadioDotMotion } from './use-radio-dot-motion'
 import type { RadioOption, RadioValue } from './radio-group'
 
 defineOptions({ name: 'SRadioGroup' })
@@ -23,6 +24,8 @@ const slots = defineSlots<{
 }>()
 
 const ns = useNamespace('radio-group')
+const root = useTemplateRef<HTMLElement>('root')
+useRadioDotMotion(root, props)
 const size = useSize()
 provideGlobalConfig(computed(() => ({ size: size.value || 'default' })))
 const groupId = useId()
@@ -51,11 +54,14 @@ const update = (value: RadioValue) => {
 
 <template>
   <div
+    ref="root"
     :class="[
       ns.b(),
       ns.m(props.type),
       ns.is('disabled', props.disabled),
       ns.is('data-driven', props.options.length > 0),
+      ns.is('horizontal', props.direction === 'horizontal'),
+      ns.is('vertical', props.direction === 'vertical'),
     ]"
     :style="groupStyles"
     role="radiogroup"

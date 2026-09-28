@@ -66,6 +66,16 @@ PROPS:
     code: null
 
 GROUP_PROPS:
+  - name: direction
+    type: "'horizontal' | 'vertical'"
+    description: 普通和按钮分组的排列方向，显式设置时覆盖 columns；省略时保持原有列布局或按钮布局。横向圆点依次经过中间可用项，纵向直接移动至目标。
+    default: null
+    usage: '#direction-and-dot-motion'
+  - name: animated
+    type: boolean
+    description: 在 Radio 与 RadioButton 分组的选中项之间播放默认圆点跳跃动画；遵循系统减少动态效果设置。
+    default: true
+    usage: '#default'
   - name: size
     type: ComponentSize
     description: 设置或继承 RadioGroup 及其选项的尺寸。
@@ -258,6 +268,8 @@ SLOTS:
 
 ## 默认
 
+RadioGroup 的普通形态和按钮形态都会在选中项之间播放默认圆点跳跃动画。设置 `:animated="false"` 可关闭选项间的圆点位移；系统减少动态效果设置会自动关闭位移，自定义图标保留自身动画。
+
 <docs-warn />
 
 `Radio` 是基础单选项；`RadioGroup` 管理一组唯一值；`RadioGroupTabs` 在多个页签中分别保留一项选择；设置 `type="button"` 后则使用无边框 `RadioButton` 分段样式。四种形态都沿用清晰的 `v-model` 数据流。
@@ -281,6 +293,34 @@ SLOTS:
 <template #style>
 
 @[code{96-142}](../../.vuepress/components/radio/patterns.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 排列方向与圆点动效
+
+设置 `direction="horizontal"` 或 `direction="vertical"` 控制排列方向。横向从第 1 项切到第 4 项时，圆点会依次经过第 2、3 项；纵向直接移动到目标。中间项只参与视觉路径，选中值与 change 事件只更新一次。禁用项会被跳过，连续点击会从圆点当前位置接续。
+
+<template #example><radio-zh-motion /></template>
+
+<template #template>
+
+@[code{18-44}](../../.vuepress/components/radio-zh/motion.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-16}](../../.vuepress/components/radio-zh/motion.vue)
+
+</template>
+
+<template #style>
+
+@[code{46-60}](../../.vuepress/components/radio-zh/motion.vue)
 
 </template>
 

@@ -54,8 +54,11 @@
       0 2px 6px getColor(primary, 0.1);
 
     .#{$namespace}-radio-button__indicator {
-      background: getColor(primary);
       box-shadow: 0 0 10px getColor(primary, 0.3);
+    }
+
+    .#{$namespace}-radio-button__surface {
+      fill: getColor(primary);
     }
 
     .#{$namespace}-radio-button__dot {
@@ -83,29 +86,29 @@
   }
 
   @include e(indicator) {
-    display: flex;
+    display: block;
     width: 20px;
     height: 20px;
     flex: 0 0 20px;
-    align-items: center;
-    justify-content: center;
+    overflow: visible;
     border-radius: var(--sax-radius-circle);
-    background: getColor(text, 0.11);
     transition:
       background-color var(--sax-motion-duration-fast) ease,
       box-shadow var(--sax-motion-duration-fast) ease,
       transform var(--sax-motion-duration-fast) ease;
   }
 
+  @include e(surface) {
+    fill: getColor(text, 0.11);
+    transition: fill var(--sax-motion-duration-fast) ease;
+  }
+
   @include e(dot) {
-    display: block;
-    width: 8px;
-    height: 8px;
-    border-radius: var(--sax-radius-circle);
-    background: white;
+    fill: white;
     opacity: 0;
     transform: scale(0.3);
     transform-origin: center;
+    transform-box: fill-box;
     transition:
       opacity 0.14s ease-out,
       transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1.25);
@@ -139,6 +142,7 @@
 @media (prefers-reduced-motion: reduce) {
   .#{$namespace}-radio-button,
   .#{$namespace}-radio-button__indicator,
+  .#{$namespace}-radio-button__surface,
   .#{$namespace}-radio-button__dot,
   .#{$namespace}-radio-button__label {
     transition: none !important;

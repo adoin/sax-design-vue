@@ -51,9 +51,16 @@ const select = (event: Event) => {
     />
 
     <span :class="ns.e('content')">
-      <span :class="ns.e('indicator')" aria-hidden="true">
-        <span :class="ns.e('dot')" />
-      </span>
+      <svg
+        :class="ns.e('indicator')"
+        viewBox="0 0 20 20"
+        aria-hidden="true"
+        focusable="false"
+        shape-rendering="geometricPrecision"
+      >
+        <circle :class="ns.e('surface')" cx="10" cy="10" r="10" />
+        <circle :class="ns.e('dot')" cx="10" cy="10" r="4" />
+      </svg>
 
       <span :class="ns.e('copy')">
         <span :class="ns.e('label')">

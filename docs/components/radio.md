@@ -72,6 +72,16 @@ PROPS:
     code: null
 
 GROUP_PROPS:
+  - name: direction
+    type: "'horizontal' | 'vertical'"
+    description: Explicit arrangement for regular and button groups. Overrides columns; when omitted, preserves the existing columns/button layout. Horizontal dot travel visits intermediate enabled options; vertical travel goes directly to the target.
+    default: null
+    usage: '#direction-and-dot-motion'
+  - name: animated
+    type: boolean
+    description: Animate the default dot between accepted selections in Radio and RadioButton groups. Respects reduced-motion preferences.
+    default: true
+    usage: '#default'
   - name: size
     type: ComponentSize
     description: Set or inherit the size of RadioGroup and its options.
@@ -264,6 +274,8 @@ SLOTS:
 
 ## Default
 
+RadioGroup animates the default dot between selected options in both regular and button presentations. Set `:animated="false"` to disable dot travel. Reduced-motion preferences disable travel automatically; custom icons keep their own animation.
+
 <docs-warn />
 
 `Radio` is the primitive option. `RadioGroup` owns one selected value, `RadioGroupTabs` preserves one selection per tab, and `type="button"` provides the borderless `RadioButton` segmented presentation. All four forms keep an explicit `v-model` data flow.
@@ -287,6 +299,34 @@ SLOTS:
 <template #style>
 
 @[code{96-142}](../.vuepress/components/radio/patterns.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Direction and dot motion
+
+Set `direction="horizontal"` or `direction="vertical"` to choose the arrangement. A horizontal jump from option 1 to 4 visits options 2 and 3; vertical movement goes directly to its target. Intermediate options are visual waypoints: the selected value and change event update only once. Disabled options are skipped, and rapid changes continue from the dot’s current position.
+
+<template #example><radio-motion /></template>
+
+<template #template>
+
+@[code{18-44}](../.vuepress/components/radio/motion.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-16}](../.vuepress/components/radio/motion.vue)
+
+</template>
+
+<template #style>
+
+@[code{46-60}](../.vuepress/components/radio/motion.vue)
 
 </template>
 

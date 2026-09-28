@@ -4,6 +4,7 @@
 @include b(radio-group) {
   --sax-radio-group-columns: 1;
   --sax-radio-group-gap: 8px;
+  --sax-radio-dot-flight-color: #{getColor(primary)};
 
   display: inline-flex;
   min-width: 0;
@@ -12,7 +13,7 @@
   gap: var(--sax-radio-group-gap);
 
   @include when(data-driven) {
-    &:not(.#{$namespace}-radio-group--button) {
+    &:not(.#{$namespace}-radio-group--button, .is-horizontal, .is-vertical) {
       display: grid;
       width: 100%;
       grid-template-columns: repeat(
@@ -69,6 +70,22 @@
     white-space: nowrap;
   }
 
+  &.is-horizontal,
+  &.is-vertical {
+    display: inline-flex;
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  &.is-horizontal {
+    flex-direction: row;
+  }
+
+  &.is-vertical {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
   @include e(description) {
     display: block;
     margin-top: 2px;
@@ -77,6 +94,20 @@
     font-weight: 400;
     line-height: 1.35;
     white-space: normal;
+  }
+}
+
+.#{$namespace}-radio-wrapper[data-radio-dot-moving],
+.#{$namespace}-radio-button[data-radio-dot-moving] {
+  z-index: 1;
+
+  &.is-active {
+    z-index: 2;
+  }
+
+  .#{$namespace}-radio__dot,
+  .#{$namespace}-radio-button__dot {
+    transition: none;
   }
 }
 
