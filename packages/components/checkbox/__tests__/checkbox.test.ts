@@ -29,6 +29,25 @@ afterEach(() => {
 
 describe('Checkbox custom icon animation', () => {
   it.each([false, true])(
+    'preserves selection %s while loading and blocks changes',
+    async (modelValue) => {
+      const wrapper = mount(Checkbox, { props: { modelValue, loading: true } })
+      const input = wrapper.get('input')
+      expect(input.element.disabled).toBe(true)
+      expect(input.attributes('aria-busy')).toBe('true')
+      expect(input.element.checked).toBe(modelValue)
+      expect(wrapper.find('.s-icon-loading').exists()).toBe(false)
+      expect(wrapper.find('.s-icon-check').exists()).toBe(true)
+      await input.setValue(!modelValue)
+      expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+      expect(wrapper.emitted('change')).toBeUndefined()
+      await wrapper.setProps({ loading: false })
+      expect(input.element.disabled).toBe(false)
+      wrapper.unmount()
+    },
+  )
+
+  it.each([false, true])(
     'renders mixed state independently of modelValue=%s',
     async (modelValue) => {
       const wrapper = mount(Checkbox, {

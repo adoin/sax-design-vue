@@ -87,7 +87,7 @@ export const useCheckbox = (
     },
 
     set(val: CheckboxValueType) {
-      if (isDisabled.value || isLimitExceeded.value) return
+      if (props.loading || isDisabled.value || isLimitExceeded.value) return
 
       if (isGroup.value && isArray(val)) {
         isLimitExceeded.value =
@@ -145,7 +145,7 @@ export const useCheckbox = (
   }
 
   const handleChange = (e: Event) => {
-    if (isLimitExceeded.value) return
+    if (props.loading || isDisabled.value || isLimitExceeded.value) return
 
     const target = e.target as HTMLInputElement
     emit('change', getCheckboxValue(target.checked))

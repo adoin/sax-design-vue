@@ -111,52 +111,13 @@
   @include when(loading) {
     pointer-events: none;
 
-    // Icon loading: unchecked
-    &:not(.is-checked) {
-      .#{$namespace}-icon-loading {
-        // class of component icon check
-        color: getColor('divider') !important;
-      }
-    }
-
-    @include when(checked) {
-      @include e(input) {
-        @include m(mask) {
-          opacity: 0;
-          transition:
-            opacity var(--sax-motion-duration-fast) linear,
-            background-color var(--sax-motion-duration-fast) linear;
-          background: transparent !important;
-
-          &:after {
-            transition:
-              transform var(--sax-motion-duration-fast) linear,
-              opacity 0.5s linear;
-            transform: scale(0.5);
-          }
-        }
-      }
-    }
-
-    @include e(input) {
-      @include m(mask) {
-        background: transparent !important;
-        box-shadow: none !important;
-
-        &:before {
-          opacity: 0 !important;
-          border-radius: var(--sax-radius-circle);
-          // transition: opacity .08s linear;
-        }
-        &:after {
-          opacity: 0 !important;
-          border-radius: var(--sax-radius-circle);
-          transform: scale(0.5);
-        }
+    .#{bem('checkbox', 'input', 'mask')} {
+      &:before,
+      &:after {
+        animation: sax-checkbox-loading-breathe 1.4s ease-in-out infinite;
       }
     }
   }
-
   @include e(input) {
     width: getCssVar(checkbox-width);
     height: getCssVar(checkbox-height);
@@ -409,5 +370,22 @@
   .s-checkbox__label {
     padding: 8px;
     font-size: 1rem;
+  }
+}
+
+@keyframes sax-checkbox-loading-breathe {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(0.78);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-checkbox.is-loading .#{$namespace}-checkbox__input--mask::before,
+  .#{$namespace}-checkbox.is-loading .#{$namespace}-checkbox__input--mask::after {
+    animation: none;
   }
 }

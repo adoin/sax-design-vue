@@ -7,7 +7,8 @@
         v-model="model"
         :value="value"
         :name="name"
-        :disabled="isDisabled"
+        :disabled="isDisabled || loading"
+        :aria-busy="loading || undefined"
         :indeterminate="indeterminate"
         :aria-checked="indeterminate ? 'mixed' : isChecked"
         :class="ns.e('original')"
@@ -41,8 +42,6 @@
           />
         </span>
       </div>
-
-      <icon-loading v-if="loading" />
     </div>
     <label
       v-if="hasOwnLabel"
@@ -65,7 +64,7 @@ import {
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { getVsColor } from '@vuesax-alpha/utils'
-import { IconCheck, IconLoading } from '@vuesax-alpha/components/icon'
+import { IconCheck } from '@vuesax-alpha/components/icon'
 import { checkboxEmits, checkboxProps } from './checkbox'
 import { useCheckbox, useCheckboxIconAnimation } from './composables'
 
