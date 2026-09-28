@@ -1,6 +1,13 @@
 export default {
   name: 'zh-cn',
   vs: {
+    inputValidation: {
+      required: '请填写此项。',
+      email: '请输入有效的邮箱地址。',
+      url: '请输入包含协议的有效网址。',
+      pattern: '输入内容不符合要求的格式。',
+      invalid: '请输入有效的值。',
+    },
     common: {
       close: '关闭',
       more: '展开',

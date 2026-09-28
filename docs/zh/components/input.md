@@ -333,6 +333,11 @@ PROPS:
     default: null
     usage: '#native-constraints'
 
+  - name: validation-message
+    type: string
+    description: 自定义原生格式、必填及 pattern 约束的错误文案。Form 规则的文案优先。
+    default: null
+    usage: '#format-validation'
   - name: pattern
     type: String
     values: "正则表达式文本"
@@ -353,6 +358,16 @@ PROPS:
     description: 为支持的输入类型透传原生多值提示。
     default: null
     usage: '#native-constraints'
+
+EXPOSES:
+  - name: validate
+    type: '() => boolean'
+    description: 校验当前原生输入约束，更新错误状态并返回是否有效。
+    usage: '#format-validation'
+  - name: clearValidate
+    type: '() => void'
+    description: 清除 Input 自身校验提示，不修改输入值。表单错误使用 Form.clearValidate 清除。
+    usage: '#format-validation'
 
 EVENTS:
   - name: update:modelValue
@@ -976,6 +991,30 @@ SLOTS:
 <template #script>
 
 @[code{1-5}](../../.vuepress/components/input/constraints.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 格式校验
+
+`email`、`url` 在失焦或表单校验时检查原生格式。`tel` 不内置地区号码规则，可通过 `pattern` 指定业务格式。未设置 `required` 时允许空值；输入过程中不拦截字符，修正后清除错误。独立 Input 显示自身提示，FormItem 中统一显示表单错误，已有 Form 规则文案优先。`validation-message` 可自定义原生约束的错误提示。本例电话号码格式仅用于演示自定义规则。可调用 Input 的 `validate()`（返回 boolean）和 `clearValidate()`。
+
+<template #example>
+<input-zh-validation />
+</template>
+
+<template #template>
+
+@[code{1-30}](../../.vuepress/components/input-zh/validation.vue)
+
+</template>
+
+<template #script>
+
+@[code{32-43}](../../.vuepress/components/input-zh/validation.vue)
 
 </template>
 

@@ -2,8 +2,10 @@
 import {
   computed,
   inject,
+  nextTick,
   onBeforeUnmount,
   onMounted,
+  provide,
   readonly,
   shallowRef,
   useSlots,
@@ -11,11 +13,13 @@ import {
   watch,
 } from 'vue'
 import { useId, useNamespace } from '@vuesax-alpha/hooks'
+import { inputValidationContextKey } from '@vuesax-alpha/tokens'
 import FormRenderer from './form-renderer'
 import { formContextKey } from './constants'
 import { FORM_DEFAULT_LABEL_WIDTH } from './form'
 import { formItemProps } from './form-item'
 import { formRuleMatchesTrigger, validateFormValue } from './form-validator'
+import type { InputValidationControl } from '@vuesax-alpha/tokens'
 import type { CSSProperties } from 'vue'
 import type {
   FormItemConfig,
@@ -33,6 +37,7 @@ const form = inject(formContextKey)
 const rootRef = useTemplateRef<HTMLElement>('root')
 const controlId = useId(computed(() => props.id || ''))
 const error = shallowRef('')
+const inputControls = new Set<InputValidationControl>()
 let validationSequence = 0
 
 const fieldProp = computed(() => props.prop ?? props.field)
@@ -109,8 +114,13 @@ const spanStyle = computed<CSSProperties>(() => {
 const validate = (trigger?: FormRuleTrigger | 'submit') => {
   const prop = fieldProp.value
   if (!prop) return Promise.resolve(true)
-  if (!rules.value.some((rule) => formRuleMatchesTrigger(rule, trigger)))
+  if (
+    !inputControls.size &&
+    !rules.value.some((rule) => formRuleMatchesTrigger(rule, trigger))
+  ) {
+    if (!rules.value.length) error.value = ''
     return Promise.resolve(true)
+  }
   const sequence = ++validationSequence
   const validation = validateFormValue({
     field: prop,
@@ -120,12 +130,21 @@ const validate = (trigger?: FormRuleTrigger | 'submit') => {
     rules: rules.value,
     trigger,
   })
-  const applyResult = (result: Awaited<typeof validation>) => {
+  const applyNativeResult = (result: Awaited<typeof validation>) => {
     if (sequence !== validationSequence) return false
-    error.value = result.message
-    form?.emitValidate(prop, result.valid, result.message)
-    return result.valid
+    const nativeMessage =
+      Array.from(inputControls, (control) =>
+        control.validate(trigger !== 'change'),
+      ).find(Boolean) || ''
+    error.value = result.message || nativeMessage
+    const valid = result.valid && !nativeMessage
+    form?.emitValidate(prop, valid, error.value)
+    return valid
   }
+  const applyResult = (result: Awaited<typeof validation>) =>
+    inputControls.size
+      ? nextTick(() => applyNativeResult(result))
+      : applyNativeResult(result)
   return validation instanceof Promise
     ? validation.then(applyResult)
     : Promise.resolve(applyResult(validation))
@@ -134,6 +153,7 @@ const validate = (trigger?: FormRuleTrigger | 'submit') => {
 const clearValidate = () => {
   validationSequence++
   error.value = ''
+  inputControls.forEach((control) => control.clear())
 }
 const resetField = () => clearValidate()
 const focus = () => {
@@ -174,6 +194,15 @@ const field = {
   resetField,
   focus,
 }
+
+if (fieldProp.value)
+  provide(inputValidationContextKey, {
+    error: readonly(error),
+    messageId: `${controlId.value}-validation`,
+    register: (control) => inputControls.add(control),
+    unregister: (control) => inputControls.delete(control),
+    validate: () => validate('submit'),
+  })
 
 watch(fieldValue, () => validate('change'), {
   deep: true,
@@ -246,6 +275,7 @@ defineExpose({ validate, clearValidate, resetField, focus, error })
       </div>
       <div
         v-if="hasMessageArea"
+        :id="`${controlId}-validation`"
         :class="ns.e('message')"
         :aria-hidden="!error"
         aria-live="polite"

@@ -346,6 +346,11 @@ PROPS:
     link: null
     usage: '#native-constraints'
 
+  - name: validation-message
+    type: string
+    description: Override native format, required, and pattern validation messages. Form rule messages take precedence.
+    default: null
+    usage: '#format-validation'
   - name: pattern
     type: String
     values: "regular expression source"
@@ -401,6 +406,16 @@ PROPS:
     default: null
     link: null
     usage: '#default'
+
+EXPOSES:
+  - name: validate
+    type: '() => boolean'
+    description: Check native input constraints, update the error state, and return validity.
+    usage: '#format-validation'
+  - name: clearValidate
+    type: '() => void'
+    description: Clear this Input validation state without changing its value. Use Form.clearValidate for form errors.
+    usage: '#format-validation'
 
 EVENTS:
   - name: update:modelValue
@@ -1026,6 +1041,30 @@ Common native constraints such as `min`, `max`, `step`, `input-mode`, `pattern`,
 <template #script>
 
 @[code{1-5}](../.vuepress/components/input/constraints.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Format validation
+
+`email` and `url` check native syntax on blur or form validation. `tel` has no regional phone rule; use `pattern` for your format. Empty values are allowed unless `required` is set. Typing is not filtered, and correcting the value clears the error. Standalone Input shows its own message; FormItem presents a single form message, prioritizing explicit Form rules. Use `validation-message` to customize native constraint errors. The phone pattern here is only an example. Input also exposes `validate()` (boolean) and `clearValidate()`.
+
+<template #example>
+<input-validation />
+</template>
+
+<template #template>
+
+@[code{1-30}](../.vuepress/components/input/validation.vue)
+
+</template>
+
+<template #script>
+
+@[code{32-43}](../.vuepress/components/input/validation.vue)
 
 </template>
 

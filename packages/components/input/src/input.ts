@@ -128,6 +128,8 @@ export const inputProps = buildProps({
     ] as const,
   },
   pattern: String,
+  /** Overrides the message for native constraint validation. */
+  validationMessage: String,
   spellcheck: {
     type: definePropType<boolean | 'true' | 'false'>([Boolean, String]),
   },

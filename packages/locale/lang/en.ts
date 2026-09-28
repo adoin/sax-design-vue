@@ -1,6 +1,13 @@
 export default {
   name: 'en',
   vs: {
+    inputValidation: {
+      required: 'Please fill out this field.',
+      email: 'Please enter a valid email address.',
+      url: 'Please enter a valid URL, including its protocol.',
+      pattern: 'Please match the requested format.',
+      invalid: 'Please enter a valid value.',
+    },
     common: {
       close: 'Close',
       more: 'More',

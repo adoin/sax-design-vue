@@ -41,14 +41,33 @@
         :pattern="pattern"
         :spellcheck="spellcheck"
         :required="required"
+        :aria-invalid="
+          validationError
+            ? true
+            : ($attrs['aria-invalid'] as boolean | undefined)
+        "
+        :aria-describedby="
+          [
+            $attrs['aria-describedby'],
+            validationError && (formMessageId || `${inputId}-validation`),
+          ]
+            .filter(Boolean)
+            .join(' ') || undefined
+        "
         :style="nativeInputStyle"
         :class="[ns.e('original'), ns.is('disabled', disabled)]"
         placeholder=""
+        @invalid.prevent="validateInvalid"
         @input="handleInput"
         @compositionstart="handleCompositionStart"
         @compositionend="handleCompositionEnd"
         @focus="handleFocus"
-        @blur="handleBlur"
+        @blur="
+          (event) => {
+            handleBlur(event)
+            validateBlur()
+          }
+        "
         @change="onChange"
         @keydown="handleKeydownWithActions"
         @keyup="(event) => emit('keyup', event)"
@@ -172,9 +191,22 @@
       />
     </div>
 
+    <div
+      v-if="localValidationError && !$slots['message-danger']"
+      :id="`${inputId}-validation`"
+      :class="[ns.e('message'), ns.em('message', 'danger')]"
+      role="alert"
+    >
+      {{ localValidationError }}
+    </div>
     <s-collapse-transition v-for="message in messageType" :key="message">
       <div
         v-if="$slots[`message-${message}`]"
+        :id="
+          message === 'danger' && localValidationError
+            ? `${inputId}-validation`
+            : undefined
+        "
         :class="[ns.e('message'), ns.em('message', message)]"
       >
         <slot :name="`message-${message}`" />
@@ -200,6 +232,7 @@ import {
 import { NOOP, getVsColor } from '@vuesax-alpha/utils'
 import { inputEmits, inputProps } from './input'
 import { useInput } from './composables'
+import { useInputValidation } from './composables/use-input-validation'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
@@ -386,6 +419,15 @@ const hasInputValue = computed(() => !!model.value || model.value === 0)
 const isPlaceholderFloatActive = computed(
   () => props.labelFloat && (focused.value || hasInputValue.value),
 )
+const {
+  validationError,
+  localValidationError,
+  formMessageId,
+  validate,
+  clearValidate,
+  validateBlur,
+  validateInvalid,
+} = useInputValidation(props, inputRef, model)
 const inputKls = computed(() => [
   vsBaseClasses,
   ns.b(),
@@ -399,7 +441,10 @@ const inputKls = computed(() => [
   ns.is(shape.value),
   ns.is('text-white', props.textWhite),
 
-  { [ns.m(`state-${props.state}`)]: !!props.state },
+  {
+    [ns.m(`state-${validationError ? 'danger' : props.state}`)]:
+      !!props.state || !!validationError,
+  },
   { [ns.m('has-label')]: props.label || props.labelFloat },
   { [ns.m('has-color')]: props.color },
 
@@ -443,6 +488,8 @@ onMounted(() => {
 })
 
 defineExpose({
+  validate,
+  clearValidate,
   /** @description HTML input element native method */
   focus,
   /** @description HTML input element native method */

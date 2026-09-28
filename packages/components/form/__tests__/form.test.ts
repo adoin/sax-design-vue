@@ -30,7 +30,7 @@ const mountForm = (
   mount(Form, {
     props: { model, items, ...extraProps },
     global: {
-      components: { TestInput },
+      components: { TestInput, SInput: Input },
     },
   })
 
@@ -40,6 +40,41 @@ afterEach(() => {
 })
 
 describe('Form schema renderer', () => {
+  it('validates native input formats without explicit rules and uses one FormItem message', async () => {
+    const model = reactive({ email: 'bad' })
+    const wrapper = mountForm(model, [
+      {
+        field: 'email',
+        title: 'Email',
+        itemRender: { name: '$input', props: { type: 'email' } },
+      },
+    ])
+    expect(await wrapper.vm.validate()).toBe(false)
+    expect(wrapper.findAll('.s-form-item__error')).toHaveLength(1)
+    expect(wrapper.find('.s-input__message--danger').exists()).toBe(false)
+    expect(wrapper.get('input').attributes('aria-invalid')).toBe('true')
+    model.email = 'valid@example.com'
+    expect(await wrapper.vm.validate()).toBe(true)
+    expect(wrapper.find('.s-form-item__error').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('prioritizes a custom form rule message over native format errors', async () => {
+    const wrapper = mountForm({ email: 'bad' }, [
+      {
+        field: 'email',
+        rules: { validator: () => 'Business message' },
+        itemRender: { name: '$input', props: { type: 'email' } },
+      },
+    ])
+    expect(await wrapper.vm.validate()).toBe(false)
+    expect(wrapper.get('.s-form-item__error').text()).toBe('Business message')
+    wrapper.vm.clearValidate()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.get('input').attributes('aria-invalid')).toBeUndefined()
+    wrapper.unmount()
+  })
+
   it('passes its size to slotted controls and keeps explicit child size', async () => {
     const wrapper = mount(Form, {
       props: { model: {}, size: 'small' },
