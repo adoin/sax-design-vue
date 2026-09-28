@@ -796,27 +796,27 @@ SLOTS:
 
 ## 边框与阴影
 
-通过 `input-style` 设置组件整体样式；可选值为 `border`、`shadow`、`transparent`。
+`input-style` 控制表面样式：`border` 使用底线，`shadow` 使用阴影突出输入区域，`transparent` 去掉底色和阴影，适合嵌入已有容器。下方使用相同尺寸和中性配色对比；透明样式的前后图标也不会出现独立底块或阴影。
 
 <template #example>
-<input-style />
+<input-zh-style />
 </template>
 
 <template #template>
 
-@[code{1-31}](../../.vuepress/components/input/style.vue)
+@[code{1-20}](../../.vuepress/components/input-zh/style.vue)
 
 </template>
 
 <template #script>
 
-@[code{33-39}](../../.vuepress/components/input/style.vue)
+@[code{22-27}](../../.vuepress/components/input-zh/style.vue)
 
 </template>
 
 <template #style>
 
-@[code{41-52}](../../.vuepress/components/input/style.vue)
+@[code{29-40}](../../.vuepress/components/input-zh/style.vue)
 
 </template>
 

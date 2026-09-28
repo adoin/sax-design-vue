@@ -82,6 +82,14 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     }
   }
   @include when(transparent) {
+    @include e(wrapper) {
+      box-shadow: none !important;
+      background: transparent;
+    }
+    @include e(icon) {
+      background: transparent !important;
+      box-shadow: none !important;
+    }
     @include e(original) {
       background-color: transparent !important;
     }
@@ -267,8 +275,6 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
       @include e(icon) {
         background: getColor('background') !important;
         opacity: 1;
-        box-shadow: 0px 10px 20px -5px
-          getColor(black, getCssVar('shadow-opacity')) !important;
       }
       @include e(affects) {
         @include m(1) {
@@ -670,9 +676,12 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     transform: translateY(-50%);
     right: auto;
     width: 36px;
-    height: 36px;
+    height: 100%;
+    max-height: 100%;
+    box-sizing: border-box;
     @include flex(center, center);
-    box-shadow: 12px 0px 10px -10px getColor(black, getCssVar('shadow-opacity'));
+    // The wrapper owns elevation; icon shadows must not protrude on hover/focus.
+    box-shadow: none !important;
     transition: getCssVar(transition-ease);
     border-radius: inherit;
     background: getColor('gray-2');
@@ -856,7 +865,7 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
 
   .s-input__icon {
     width: 32px;
-    height: 32px;
+    height: 100%;
   }
 
   .s-input__placeholder {
@@ -875,7 +884,7 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
 
   .s-input__icon {
     width: 40px;
-    height: 40px;
+    height: 100%;
   }
 }
 

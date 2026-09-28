@@ -846,7 +846,7 @@ Use `type` for text-oriented inputs: `text`, `password`, `search`, `number`,
 
 ## Border - Shadow
 
-Change everything is style of the component with the `input-style` property, the property is a `String` with values `border` . `shadow` . `transparent`
+`input-style` controls the surface: `border` uses an underline, `shadow` emphasizes the field with a shadow, and `transparent` removes the fill and shadow for embedding in another surface. These examples use matching sizes and neutral colors. Transparent icons also remain free of separate backgrounds and shadows.
 
 <template #example>
 <input-style />
@@ -854,19 +854,19 @@ Change everything is style of the component with the `input-style` property, the
 
 <template #template>
 
-@[code{1-31}](../.vuepress/components/input/style.vue)
+@[code{1-24}](../.vuepress/components/input/style.vue)
 
 </template>
 
 <template #script>
 
-@[code{33-39}](../.vuepress/components/input/style.vue)
+@[code{26-31}](../.vuepress/components/input/style.vue)
 
 </template>
 
 <template #style>
 
-@[code{41-52}](../.vuepress/components/input/style.vue)
+@[code{33-44}](../.vuepress/components/input/style.vue)
 
 </template>
 
