@@ -24,8 +24,12 @@
         placeholder="123-4567"
       />
     </s-form-item>
-    <s-button @click="check">Validate</s-button>
-    <p role="status">{{ status }}</p>
+    <s-form-item>
+      <s-button @click="check">Validate</s-button>
+    </s-form-item>
+    <s-form-item>
+      <p role="status">{{ status }}</p>
+    </s-form-item>
   </s-form>
 </template>
 

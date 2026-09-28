@@ -1008,13 +1008,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-30}](../../.vuepress/components/input-zh/validation.vue)
+@[code{1-34}](../../.vuepress/components/input-zh/validation.vue)
 
 </template>
 
 <template #script>
 
-@[code{32-43}](../../.vuepress/components/input-zh/validation.vue)
+@[code{36-47}](../../.vuepress/components/input-zh/validation.vue)
 
 </template>
 

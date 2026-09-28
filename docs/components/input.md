@@ -1058,13 +1058,13 @@ Common native constraints such as `min`, `max`, `step`, `input-mode`, `pattern`,
 
 <template #template>
 
-@[code{1-30}](../.vuepress/components/input/validation.vue)
+@[code{1-34}](../.vuepress/components/input/validation.vue)
 
 </template>
 
 <template #script>
 
-@[code{32-43}](../.vuepress/components/input/validation.vue)
+@[code{36-47}](../.vuepress/components/input/validation.vue)
 
 </template>
 
