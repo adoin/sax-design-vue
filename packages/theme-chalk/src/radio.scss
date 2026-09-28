@@ -81,6 +81,15 @@
               ease-out,
             opacity 0.02s calc(0.08s + var(--sax-icon-path-delay));
         }
+        [data-sax-icon-fill] {
+          fill-opacity: 1;
+          stroke-opacity: 0;
+          transition:
+            stroke-dashoffset 0.42s calc(0.06s + var(--sax-icon-path-delay)) linear,
+            fill-opacity 0.12s calc(0.36s + var(--sax-icon-path-delay)) ease-out,
+            stroke-opacity 0.08s calc(0.48s + var(--sax-icon-path-delay)) ease-out,
+            opacity 0.02s 0.06s;
+        }
       }
     }
   }
@@ -264,6 +273,15 @@
         transition:
           stroke-dashoffset 0.22s ease-in,
           opacity 0.02s 0.2s;
+      }
+      [data-sax-icon-fill] {
+        fill: var(--sax-icon-original-fill, currentColor) !important;
+        fill-opacity: 0;
+        stroke-width: var(--sax-icon-outline-width);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-opacity: 1;
+        transition: fill-opacity 0.1s ease-in, stroke-dashoffset 0.14s ease-in;
       }
     }
   }

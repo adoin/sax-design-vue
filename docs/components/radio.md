@@ -56,7 +56,7 @@ PROPS:
   - name: icon-animation
     type: String
     values: 'auto, draw, pop, none'
-    description: Animate a custom center icon. Stroke SVGs draw their paths and filled icons use a pop reveal.
+    description: Animate a custom center icon. Stroke SVGs draw their paths and filled SVGs trace their contours before filling in. Use pop explicitly for a pop reveal.
     default: auto
     link: null
     usage: '#icon'
@@ -486,7 +486,7 @@ Loading replaces the radio control with the shared Sax logo loader while keeping
 
 ## Icon
 
-The outer disc and default center dot share one SVG coordinate system, independent from the native input and positional layout. Replace the selected center SVG with the `icon` slot, which exposes `checked`. `icon-animation="auto"` draws stroked SVG geometry and gives filled icons a pop reveal; set `draw`, `pop`, or `none` explicitly when needed.
+The outer disc and default center dot share one SVG coordinate system, independent from the native input and positional layout. Replace the selected center SVG with the `icon` slot, which exposes `checked`. `icon-animation="auto"` draws stroked SVG geometry and traces filled SVG contours before revealing the fill; set `draw`, `pop`, or `none` explicitly when needed.
 
 <template #example>
 <radio-icons />

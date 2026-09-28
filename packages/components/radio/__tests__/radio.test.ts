@@ -109,7 +109,7 @@ describe('Radio', () => {
     expect(wrapper.classes()).toContain('is-active')
   })
 
-  it('falls back to pop animation for filled icons', async () => {
+  it('draws the contour of filled icons before revealing their fill', async () => {
     const wrapper = mount(Radio, {
       slots: {
         icon: () =>
@@ -124,7 +124,19 @@ describe('Radio', () => {
 
     expect(
       wrapper.get('.s-radio__custom-icon').attributes('data-animation'),
-    ).toBe('pop')
+    ).toBe('draw')
+    expect(wrapper.get('path').attributes()).toHaveProperty(
+      'data-sax-icon-fill',
+    )
+    await wrapper.setProps({ iconAnimation: 'pop' })
+    await nextTick()
+    await nextTick()
+    expect(wrapper.get('path').attributes()).not.toHaveProperty(
+      'data-sax-icon-draw',
+    )
+    expect(wrapper.get('path').attributes()).not.toHaveProperty(
+      'data-sax-icon-fill',
+    )
   })
 
   it('supports disabling custom icon motion', async () => {

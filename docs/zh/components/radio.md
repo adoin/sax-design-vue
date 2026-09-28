@@ -50,7 +50,7 @@ PROPS:
   - name: icon-animation
     type: String
     values: 'auto, draw, pop, none'
-    description: 设置自定义中心图标动画；描边 SVG 自动绘制，填充图标使用弹入动画。
+    description: 设置自定义中心图标动画；描边 SVG 自动绘制，填充 SVG 先描出轮廓再填实；pop 可显式使用弹入。
     default: auto
     link: null
     usage: '#icon'
@@ -480,7 +480,7 @@ RadioGroup 的普通形态和按钮形态都会在选中项之间播放默认圆
 
 ## 图标
 
-外圆和默认中心圆使用同一个 SVG 坐标系绘制，不依赖 input 或定位计算。通过 `icon` 插槽可替换选中态中心 SVG；插槽提供 `checked`。`icon-animation="auto"` 会自动识别描边 SVG 并播放路径绘制动画，填充图标则使用弹入动画，也可显式设置 `draw`、`pop` 或 `none`。
+外圆和默认中心圆使用同一个 SVG 坐标系绘制，不依赖 input 或定位计算。通过 `icon` 插槽可替换选中态中心 SVG；插槽提供 `checked`。`icon-animation="auto"` 会自动识别描边 SVG 并播放路径绘制动画，填充 SVG 则先描出轮廓，再填实颜色，也可显式设置 `draw`、`pop` 或 `none`。
 
 <template #example>
 <radio-icons />

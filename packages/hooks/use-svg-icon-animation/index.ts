@@ -29,8 +29,11 @@ const isDrawableStroke = (element: SVGElement, svg: SVGSVGElement) => {
 const clearDrawableGeometry = (root: HTMLElement) => {
   root.querySelectorAll<HTMLElement>('[data-sax-icon-draw]').forEach((item) => {
     delete item.dataset.saxIconDraw
+    delete item.dataset.saxIconFill
     item.style.removeProperty('--sax-icon-path-length')
     item.style.removeProperty('--sax-icon-path-delay')
+    item.style.removeProperty('--sax-icon-original-fill')
+    item.style.removeProperty('--sax-icon-outline-width')
   })
 }
 
@@ -71,7 +74,11 @@ export const useSvgIconAnimation = (
 
     const drawableElements = Array.from(
       svg.querySelectorAll<DrawableGeometry>(geometrySelector),
-    ).filter((element) => isDrawableStroke(element, svg))
+    ).filter(
+      (element) =>
+        isDrawableStroke(element, svg) ||
+        !isTransparentFill(window.getComputedStyle(element).fill),
+    )
 
     let drawableIndex = 0
     for (const element of drawableElements) {
@@ -85,6 +92,22 @@ export const useSvgIconAnimation = (
       }
       if (!Number.isFinite(length) || length <= 0) continue
 
+      const filled = !isDrawableStroke(element, svg)
+      const originalFill = filled ? window.getComputedStyle(element).fill : ''
+      if (filled) {
+        element.dataset.saxIconFill = ''
+        element.style.setProperty('--sax-icon-original-fill', originalFill)
+        const viewBox = svg
+          .getAttribute('viewBox')
+          ?.trim()
+          .split(/[\s,]+/)
+          .map(Number)
+        const width = viewBox?.[2] || 24
+        element.style.setProperty(
+          '--sax-icon-outline-width',
+          `${(width / 24) * 1.2}`,
+        )
+      }
       element.dataset.saxIconDraw = ''
       element.style.setProperty('--sax-icon-path-length', `${length}`)
       element.style.setProperty(
