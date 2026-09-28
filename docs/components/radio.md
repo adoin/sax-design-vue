@@ -74,7 +74,7 @@ PROPS:
 GROUP_PROPS:
   - name: direction
     type: "'horizontal' | 'vertical'"
-    description: Explicit arrangement for regular and button groups. Overrides columns; when omitted, preserves the existing columns/button layout. Horizontal dot travel visits intermediate enabled options; vertical travel goes directly to the target.
+    description: Explicit arrangement for regular and button groups. Overrides columns; when omitted, preserves the existing columns/button layout. Horizontal dot travel visits intermediate enabled options; vertical travel follows a leftward arc to the target.
     default: null
     usage: '#direction-and-dot-motion'
   - name: animated
@@ -308,7 +308,7 @@ RadioGroup animates the default dot between selected options in both regular and
 
 ## Direction and dot motion
 
-Set `direction="horizontal"` or `direction="vertical"` to choose the arrangement. A horizontal jump from option 1 to 4 visits options 2 and 3; vertical movement goes directly to its target. Intermediate options are visual waypoints: the selected value and change event update only once. Disabled options are skipped, and rapid changes continue from the dot’s current position.
+Set `direction="horizontal"` or `direction="vertical"` to choose the arrangement. A horizontal jump from option 1 to 4 visits options 2 and 3; vertical movement bows left before landing on its target, both upward and downward. Intermediate options are visual waypoints: the selected value and change event update only once. Disabled options are skipped, and rapid changes continue from the dot’s current position.
 
 <template #example><radio-motion /></template>
 

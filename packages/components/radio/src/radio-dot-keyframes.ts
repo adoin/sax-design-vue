@@ -23,11 +23,14 @@ export function radioDotKeyframes(
     const from = points[hop]
     const to = points[hop + 1]
     const distance = Math.hypot(to.x - from.x, to.y - from.y)
-    const lift = horizontal ? Math.min(18, Math.max(8, distance * 0.2)) : 0
+    const lift = horizontal
+      ? Math.min(18, Math.max(8, distance * 0.2))
+      : Math.min(20, Math.max(10, distance * 0.18))
     for (let step = 1; step <= 8; step++) {
       const t = step / 8
-      const x = from.x + (to.x - from.x) * t
-      const y = from.y + (to.y - from.y) * t - Math.sin(Math.PI * t) * lift
+      const arc = Math.sin(Math.PI * t) * lift
+      const x = from.x + (to.x - from.x) * t - (horizontal ? 0 : arc)
+      const y = from.y + (to.y - from.y) * t - (horizontal ? arc : 0)
       const landing = step === 8
       const final = landing && hop === hops - 1
       frames.push({

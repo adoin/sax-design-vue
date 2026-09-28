@@ -2,6 +2,7 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import RadioGroup from '../src/radio-group.vue'
+import { radioDotKeyframes } from '../src/radio-dot-keyframes'
 
 const wrappers: { unmount(): void }[] = []
 const animations: {
@@ -78,6 +79,20 @@ const setup = (type: 'default' | 'button', extra = {}) => {
 }
 
 describe('grouped radio dot motion', () => {
+  it.each([-160, 160])('bows left when moving vertically from y=%s', (y) => {
+    const frames = radioDotKeyframes(
+      [
+        { x: 0, y },
+        { x: 0, y: 0 },
+      ],
+      'white',
+      'blue',
+      false,
+    )
+    expect(frames[0].transform).toBe(`translate(0px, ${y}px) scale(1)`)
+    expect(frames[4].transform).toBe(`translate(-20px, ${y / 2}px) scale(1.12)`)
+    expect(frames.at(-1)?.transform).toBe('translate(0, 0) scale(1)')
+  })
   it('visits enabled intermediate options in reverse order and skips disabled ones', async () => {
     const wrapper = setup('button', {
       direction: 'horizontal',
@@ -119,7 +134,7 @@ describe('grouped radio dot motion', () => {
     },
   )
 
-  it('travels directly in vertical mode and cancels when direction changes', async () => {
+  it('uses one arc in vertical mode and cancels when direction changes', async () => {
     const wrapper = setup('button', {
       direction: 'vertical',
       options: ['a', 'b', 'c', 'd'].map((value) => ({ label: value, value })),

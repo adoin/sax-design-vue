@@ -68,7 +68,7 @@ PROPS:
 GROUP_PROPS:
   - name: direction
     type: "'horizontal' | 'vertical'"
-    description: 普通和按钮分组的排列方向，显式设置时覆盖 columns；省略时保持原有列布局或按钮布局。横向圆点依次经过中间可用项，纵向直接移动至目标。
+    description: 普通和按钮分组的排列方向，显式设置时覆盖 columns；省略时保持原有列布局或按钮布局。横向圆点依次经过中间可用项，纵向沿向左拱起的弧线移动至目标。
     default: null
     usage: '#direction-and-dot-motion'
   - name: animated
@@ -302,7 +302,7 @@ RadioGroup 的普通形态和按钮形态都会在选中项之间播放默认圆
 
 ## 排列方向与圆点动效
 
-设置 `direction="horizontal"` 或 `direction="vertical"` 控制排列方向。横向从第 1 项切到第 4 项时，圆点会依次经过第 2、3 项；纵向直接移动到目标。中间项只参与视觉路径，选中值与 change 事件只更新一次。禁用项会被跳过，连续点击会从圆点当前位置接续。
+设置 `direction="horizontal"` 或 `direction="vertical"` 控制排列方向。横向从第 1 项切到第 4 项时，圆点会依次经过第 2、3 项；纵向先向左拱起，再落到目标，向上和向下切换都保持左侧弧线。中间项只参与视觉路径，选中值与 change 事件只更新一次。禁用项会被跳过，连续点击会从圆点当前位置接续。
 
 <template #example><radio-zh-motion /></template>
 
