@@ -432,7 +432,7 @@ You can customize icons by passing `icons` an array with three elements or a obj
 
 <template #script>
 
-@[code{12-21}](../.vuepress/components/rate/more-icons.vue)
+@[code{12-17}](../.vuepress/components/rate/more-icons.vue)
 
 </template>
 

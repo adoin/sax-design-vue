@@ -3,13 +3,13 @@
 import { createRequire } from 'node:module'
 import { mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises'
 import { createServer } from 'node:http'
-import type { AddressInfo } from 'node:net'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { getIconData, iconToSVG } from '@iconify/utils'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { saxIcons } from '../src/vite'
+import type { AddressInfo } from 'node:net'
 
 import type { IconifyJSON } from '@iconify/types'
 
@@ -61,7 +61,9 @@ document.querySelector('#app')!.textContent = staticIconName
   const server = createServer((request, response) => {
     const url = new URL(request.url || '/', 'http://127.0.0.1')
     const prefix = url.pathname.replace(/^\/+|\.json$/g, '')
-    const names = (url.searchParams.get('icons') || '').split(',').filter(Boolean)
+    const names = (url.searchParams.get('icons') || '')
+      .split(',')
+      .filter(Boolean)
     const icons: IconifyJSON['icons'] = {}
 
     names.forEach((name) => {

@@ -73,7 +73,7 @@ const toggleGroup = (index: number) => {
 
 const resolveOpenGroupIndex = (
   route: RouteLocationNormalizedLoaded,
-  sidebar: SidebarConfigArray
+  sidebar: SidebarConfigArray,
 ) => {
   // console.log(sidebar);
 
@@ -83,7 +83,7 @@ const resolveOpenGroupIndex = (
     if (
       'children' in item &&
       item.children.some((c) =>
-        isMathcedPath(route, isString(c) ? c : c.link || '')
+        isMathcedPath(route, isString(c) ? c : c.link || ''),
       )
     ) {
       return i

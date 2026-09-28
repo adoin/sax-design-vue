@@ -499,19 +499,19 @@ SNotification({ ...options })
 
 <template #template>
 
-@[code{1-100}](../../.vuepress/components/notification/icons.vue)
+@[code{1-80}](../../.vuepress/components/notification/icons.vue)
 
 </template>
 
 <template #script>
 
-@[code{102-133}](../../.vuepress/components/notification/icons.vue)
+@[code{82-113}](../../.vuepress/components/notification/icons.vue)
 
 </template>
 
 <template #style>
 
-@[code{135-156}](../../.vuepress/components/notification/icons.vue)
+@[code{115-136}](../../.vuepress/components/notification/icons.vue)
 
 </template>
 

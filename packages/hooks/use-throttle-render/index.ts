@@ -25,7 +25,7 @@ export const useThrottleRender = (loading: Ref<boolean>, throttle = 0) => {
       } else {
         throttled.value = val
       }
-    }
+    },
   )
   return throttled
 }

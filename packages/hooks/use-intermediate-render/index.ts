@@ -42,7 +42,7 @@ export const useDelayedRender = ({
           }
         })
       }
-    }
+    },
   )
 
   // because we don't always set the value ourselves, so that we
@@ -55,6 +55,6 @@ export const useDelayedRender = ({
       } else {
         afterHide?.()
       }
-    }
+    },
   )
 }

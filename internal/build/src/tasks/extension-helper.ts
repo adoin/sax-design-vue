@@ -48,20 +48,20 @@ const isDir = (file: string) =>
 const compileDir = (
   path: string,
   webTypes: Record<string, any>,
-  options: compileTemplateOptions
+  options: compileTemplateOptions,
 ) => {
   const dir = readdirSync(path)
   dir.forEach((filename) => {
     const filePath = resolve(path, filename)
-    isDir(filePath) && compileDir(filePath, webTypes, options)
-    isMD(filePath) && compileMD(filePath, webTypes, options)
+    if (isDir(filePath)) compileDir(filePath, webTypes, options)
+    if (isMD(filePath)) compileMD(filePath, webTypes, options)
   })
 }
 
 const compileMD = (
   path: string,
   webTypes: Record<string, any>,
-  options: compileTemplateOptions
+  options: compileTemplateOptions,
 ) => {
   const md = readFileSync(path, 'utf-8')
   const match = path.match(COMPONENT_NAME_RE)
@@ -74,7 +74,7 @@ const compileMD = (
       md,
       options.titleAttributes,
       options.titleEvents,
-      options.titleSlots
+      options.titleSlots,
     )
 
     const table = {
@@ -89,7 +89,7 @@ const compileMD = (
 const compileWebTypes = (
   table: Record<string, any>,
   webTypes: Record<string, any>,
-  componentName: string
+  componentName: string,
 ) => {
   const { attributesTable, eventsTable, slotsTable } = table
   const attributes = attributesTable.map((row: any) => ({
@@ -172,7 +172,7 @@ const compileTable = (
   md: string,
   propsRe: RegExp,
   eventRe: RegExp,
-  slotRe: RegExp
+  slotRe: RegExp,
 ) => {
   const apiMatched = md.match(API_RE)
   if (!apiMatched) {

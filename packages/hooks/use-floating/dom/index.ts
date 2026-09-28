@@ -16,7 +16,7 @@ export * from './types'
 export const computePosition = (
   reference: ReferenceElement,
   floating: FloatingElement,
-  options?: Partial<ComputePositionConfig>
+  options?: Partial<ComputePositionConfig>,
 ) => {
   const cache = new Map<ReferenceElement, Array<Element>>()
   const mergedOptions = { platform, ...options }

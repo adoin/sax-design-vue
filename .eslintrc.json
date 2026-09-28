@@ -1,4 +1,12 @@
 {
   "root": true,
-  "extends": ["@vuesax-alpha/eslint-config"]
+  "extends": ["@vuesax-alpha/eslint-config"],
+  "overrides": [
+    {
+      "files": ["scripts/**/*.{js,ts,mjs}"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
 }

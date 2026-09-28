@@ -1,6 +1,6 @@
 <template>
   <div :class="{ copied }" class="noti-code">
-    <s-icon  name="bx:check" /> {{ text || t.examples.codeCopied }}
+    <s-icon name="bx:check" /> {{ text || t.examples.codeCopied }}
   </div>
 </template>
 

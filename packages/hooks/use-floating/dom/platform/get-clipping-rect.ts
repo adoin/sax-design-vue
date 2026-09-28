@@ -41,7 +41,7 @@ type PlatformWithCache = Platform & {
 // Returns the inner client rect, subtracting scrollbars if present.
 function getInnerBoundingClientRect(
   element: Element,
-  strategy: Strategy
+  strategy: Strategy,
 ): Rect {
   const clientRect = getBoundingClientRect(element, true, strategy === 'fixed')
   const top = clientRect.top + element.clientTop
@@ -63,7 +63,7 @@ function getInnerBoundingClientRect(
 function getClientRectFromClippingAncestor(
   element: Element,
   clippingAncestor: Element | RootBoundary,
-  strategy: Strategy
+  strategy: Strategy,
 ): ClientRectObject {
   let rect: Rect
 
@@ -103,7 +103,7 @@ function hasFixedPositionAncestor(element: Element, stopNode: Node): boolean {
 
 function getClippingElementAncestors(
   element: Element,
-  cache: PlatformWithCache['_c']
+  cache: PlatformWithCache['_c'],
 ): Array<Element> {
   const cachedResult = cache?.get(element)
   if (cachedResult) {
@@ -111,7 +111,7 @@ function getClippingElementAncestors(
   }
 
   let result = getOverflowAncestors(element, [], false).filter(
-    (el) => isElement(el) && getNodeName(el) !== 'body'
+    (el) => isElement(el) && getNodeName(el) !== 'body',
   ) as Array<Element>
   let currentContainingBlockComputedStyle: CSSStyleDeclaration | null = null
   const elementIsFixed = getComputedStyle(element).position === 'fixed'
@@ -133,7 +133,7 @@ function getClippingElementAncestors(
           computedStyle.position === 'static' &&
           !!currentContainingBlockComputedStyle &&
           ['absolute', 'fixed'].includes(
-            currentContainingBlockComputedStyle.position
+            currentContainingBlockComputedStyle.position,
           )) ||
         (isOverflowElement(currentNode) &&
           !currentNodeIsContaining &&
@@ -167,7 +167,7 @@ export function getClippingRect(
     boundary: Boundary
     rootBoundary: RootBoundary
     strategy: Strategy
-  }
+  },
 ): Rect {
   const elementClippingAncestors =
     boundary === 'clippingAncestors'
@@ -181,7 +181,7 @@ export function getClippingRect(
       const rect = getClientRectFromClippingAncestor(
         element,
         clippingAncestor,
-        strategy
+        strategy,
       )
 
       accRect.top = max(rect.top, accRect.top)
@@ -191,7 +191,7 @@ export function getClippingRect(
 
       return accRect
     },
-    getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy)
+    getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy),
   )
 
   return {

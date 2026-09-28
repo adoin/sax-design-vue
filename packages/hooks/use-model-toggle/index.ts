@@ -56,7 +56,7 @@ export const createModelToggleComposable = <T extends string>(name: T) => {
       disabled: boolean
     }
     const hasUpdateHandler = computed(() =>
-      isFunction(props[updateEventKeyRaw])
+      isFunction(props[updateEventKeyRaw]),
     )
     // when it matches the default value we say this is absent
     // though this could be mistakenly passed from the user but we need to rule out that
@@ -169,7 +169,7 @@ export const createModelToggleComposable = <T extends string>(name: T) => {
           if (shouldHideWhenRouteChanges.value && indicator.value) {
             hide()
           }
-        }
+        },
       )
     }
 

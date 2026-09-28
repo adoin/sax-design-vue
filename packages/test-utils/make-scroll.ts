@@ -3,7 +3,7 @@ import sleep from './sleep'
 const makeScroll = (
   dom: Element,
   name: 'scrollTop' | 'scrollLeft',
-  offset: number
+  offset: number,
 ) => {
   const eventTarget = dom === document.documentElement ? window : dom
   dom[name] = offset

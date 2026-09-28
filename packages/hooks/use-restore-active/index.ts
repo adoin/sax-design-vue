@@ -7,7 +7,7 @@ import type { Ref } from 'vue'
  */
 export const useRestoreActive = (
   toggle: Ref<boolean>,
-  initialFocus?: Ref<HTMLElement>
+  initialFocus?: Ref<HTMLElement>,
 ) => {
   let previousActive: HTMLElement
   watch(
@@ -25,6 +25,6 @@ export const useRestoreActive = (
           previousActive.focus()
         }
       }
-    }
+    },
   )
 }

@@ -4,7 +4,7 @@
     class="footer-code"
     @click="$emit('toggleCode')"
   >
-    <s-icon  name="bx:hide" />
+    <s-icon name="bx:hide" />
   </footer>
 </template>
 

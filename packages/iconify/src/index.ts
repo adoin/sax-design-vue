@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference -- Include the ambient virtual module without creating a runtime import.
 /// <reference path="./virtual.d.ts" />
 
 export interface SaxIconData {

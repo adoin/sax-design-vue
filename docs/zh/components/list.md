@@ -95,7 +95,7 @@ NEWS:
 
 <template #template>
 
-@[code{1-26}](../../.vuepress/components/list/icon.vue)
+@[code{1-30}](../../.vuepress/components/list/icon.vue)
 
 </template>
 

@@ -10,7 +10,7 @@
     :exact-active-class="''"
   >
     {{ navItem.text }}
-    <s-icon v-if="arrow"  name="bx:chevron-down" />
+    <s-icon v-if="arrow" name="bx:chevron-down" />
   </router-link>
   <a
     v-else
@@ -27,7 +27,7 @@
         : 'noopener noreferrer'
     "
   >
-    {{ navItem.text }} <s-icon  name="bx:link-external" />
+    {{ navItem.text }} <s-icon name="bx:link-external" />
   </a>
 </template>
 

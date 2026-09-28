@@ -156,15 +156,13 @@ export interface NotificationHandle {
 }
 
 export type NotificationParamsTyped =
-  | Partial<NotificationOptionsTyped>
-  | string
-  | VNode
+  Partial<NotificationOptionsTyped> | string | VNode
 
 export type NotificationParams = Partial<NotificationOptions> | string
 
 export type NotifyFn = (options?: NotificationParams) => NotificationHandle
 export type NotifyTypedFn = (
-  options?: NotificationParamsTyped
+  options?: NotificationParamsTyped,
 ) => NotificationHandle
 
 export interface Notify extends NotifyFn {

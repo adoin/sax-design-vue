@@ -66,11 +66,11 @@
           </div>
           <footer>
             <s-button shape="circle" icon type="border">
-              <s-icon  name="bxs:share-alt" />
+              <s-icon name="bxs:share-alt" />
             </s-button>
             <s-button shape="circle"> Message </s-button>
             <s-button shape="circle" icon type="border">
-              <s-icon  name="bx:like" />
+              <s-icon name="bx:like" />
             </s-button>
           </footer>
         </div>

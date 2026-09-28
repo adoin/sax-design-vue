@@ -1,7 +1,7 @@
 <template>
   <div class="center">
     <s-button type="flat" icon @click="openNotification(null, 'primary')">
-      <s-icon  name="bx:border-radius" class="b-r" />
+      <s-icon name="bx:border-radius" class="b-r" />
     </s-button>
     <s-button
       type="flat"
@@ -9,7 +9,7 @@
       icon
       @click="openNotification('top-right', 'success')"
     >
-      <s-icon  name="bx:border-radius" class="t-r" />
+      <s-icon name="bx:border-radius" class="t-r" />
     </s-button>
     <s-button
       type="flat"
@@ -17,7 +17,7 @@
       icon
       @click="openNotification('top-left', 'danger')"
     >
-      <s-icon  name="bx:border-radius" class="t-l" />
+      <s-icon name="bx:border-radius" class="t-l" />
     </s-button>
     <s-button
       type="flat"
@@ -25,7 +25,7 @@
       icon
       @click="openNotification('bottom-left', 'warn')"
     >
-      <s-icon  name="bx:border-radius" class="b-l" />
+      <s-icon name="bx:border-radius" class="b-l" />
     </s-button>
     <s-button
       type="flat"
@@ -33,7 +33,7 @@
       icon
       @click="openNotification('bottom-center', 'dark')"
     >
-      <s-icon  name="bx:border-bottom" />
+      <s-icon name="bx:border-bottom" />
     </s-button>
     <s-button
       type="flat"
@@ -41,7 +41,7 @@
       icon
       @click="openNotification('top-center', '#7d33ff')"
     >
-      <s-icon  name="bx:border-top" />
+      <s-icon name="bx:border-top" />
     </s-button>
     <s-button
       type="flat"
@@ -49,7 +49,7 @@
       icon
       @click="openNotification(null, 'rgb(59,222,200)')"
     >
-      <s-icon  name="bx:border-radius" class="b-r" />
+      <s-icon name="bx:border-radius" class="b-r" />
     </s-button>
   </div>
 </template>

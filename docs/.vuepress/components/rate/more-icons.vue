@@ -13,9 +13,5 @@
 import { ref } from 'vue'
 
 const value = ref(3)
-const icons = [
-  'bxs:heart',
-  'bxs:heart',
-  'bxs:heart',
-]
+const icons = ['bxs:heart', 'bxs:heart', 'bxs:heart']
 </script>

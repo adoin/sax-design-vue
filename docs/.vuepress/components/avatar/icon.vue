@@ -1,22 +1,22 @@
 <template>
   <div class="center con-avatars">
     <s-avatar>
-      <s-icon  name="bx:user" />
+      <s-icon name="bx:user" />
     </s-avatar>
     <s-avatar>
-      <s-icon  name="bxs:camera" />
+      <s-icon name="bxs:camera" />
     </s-avatar>
     <s-avatar>
-      <s-icon  name="bx:world" />
+      <s-icon name="bx:world" />
     </s-avatar>
     <s-avatar>
-      <s-icon  name="bx:support" />
+      <s-icon name="bx:support" />
     </s-avatar>
     <s-avatar>
-      <s-icon  name="bx:trophy" />
+      <s-icon name="bx:trophy" />
     </s-avatar>
     <s-avatar>
-      <s-icon  name="bx:map" />
+      <s-icon name="bx:map" />
     </s-avatar>
   </div>
 </template>

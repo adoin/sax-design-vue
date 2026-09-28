@@ -2,7 +2,7 @@ import { isClient } from '../browser'
 
 export const isInContainer = (
   el?: Element,
-  container?: Element | Window
+  container?: Element | Window,
 ): boolean => {
   if (!isClient || !el || !container) return false
 
@@ -41,7 +41,7 @@ export const getOffsetTop = (el: HTMLElement) => {
 
 export const getOffsetTopDistance = (
   el: HTMLElement,
-  containerEl: HTMLElement
+  containerEl: HTMLElement,
 ) => {
   return Math.abs(getOffsetTop(el) - getOffsetTop(containerEl))
 }

@@ -11,7 +11,7 @@ const defineGetter = (
   obj: Record<string, any>,
   prop: string,
   value: any,
-  defaultValue?: any
+  defaultValue?: any,
 ) => {
   let oldValue = defaultValue
   const { get, configurable } = Object.getOwnPropertyDescriptor(obj, prop) || {}
@@ -21,7 +21,7 @@ const defineGetter = (
       oldValue = obj[prop]
     } catch {
       throw new Error(
-        `TypeError: Illegal invocation. Cannot read ${prop} of '${obj}', '${obj}' might be a prototype,  please specify default value instead.`
+        `TypeError: Illegal invocation. Cannot read ${prop} of '${obj}', '${obj}' might be a prototype,  please specify default value instead.`,
       )
     }
   }

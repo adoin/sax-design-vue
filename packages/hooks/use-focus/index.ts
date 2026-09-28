@@ -3,7 +3,7 @@ import type { Ref } from 'vue'
 export const useFocus = (
   el: Ref<{
     focus: () => void
-  } | null>
+  } | null>,
 ) => {
   return {
     focus: () => {

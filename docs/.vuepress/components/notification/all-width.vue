@@ -1,14 +1,14 @@
 <template>
   <div class="center">
     <s-button type="shadow" icon @click="openNotification(null, '')">
-      <s-icon  name="bx:border-bottom" />
+      <s-icon name="bx:border-bottom" />
     </s-button>
     <s-button
       type="flat"
       icon
       @click="openNotification('top-center', 'primary', 'auto')"
     >
-      <s-icon  name="bx:border-radius" class="b-r" />
+      <s-icon name="bx:border-radius" class="b-r" />
     </s-button>
   </div>
 </template>

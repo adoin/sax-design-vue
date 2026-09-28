@@ -57,7 +57,7 @@ export function ensureExt(path: string) {
 
 export function isMathcedPath(
   route: RouteLocationNormalizedLoaded,
-  path: string
+  path: string,
 ) {
   const routeHash = route.hash
   const linkHash = getHash(path)
@@ -65,10 +65,10 @@ export function isMathcedPath(
     return false
   }
   const routePath = ensureLeadingSlash(
-    ensureEndingSlash(normalize(route.fullPath))
+    ensureEndingSlash(normalize(route.fullPath)),
   ).toLowerCase()
   const pagePath = ensureLeadingSlash(
-    ensureEndingSlash(normalize(path))
+    ensureEndingSlash(normalize(path)),
   ).toLowerCase()
 
   return routePath === pagePath
@@ -76,7 +76,7 @@ export function isMathcedPath(
 
 export function isMatchedHeader(
   route: RouteLocationNormalizedLoaded,
-  path: string
+  path: string,
 ) {
   const routeHash = decodeURIComponent(route.hash || '')
   const linkHash = decodeURIComponent(getHash(path) || '')
@@ -128,7 +128,7 @@ export function isMatchedHeader(
 export function resolveSidebarItems(
   pageData: PageData,
   themeOptions: SaxDesignVueThemeOptions,
-  localePath: RouteLocale = '/'
+  localePath: RouteLocale = '/',
 ): SidebarConfigArray {
   const { locales } = themeOptions
 
@@ -149,7 +149,7 @@ export function resolveSidebarItems(
 
 function resolveHeaders(
   headers: MarkdownItHeader[],
-  page: PageData
+  page: PageData,
 ): SidebarConfigArray {
   return [
     {
@@ -160,14 +160,14 @@ function resolveHeaders(
           text: h.title,
           link: `#${h.slug}`,
           children: resolveHeaders(h.children, page),
-        })
+        }),
       ),
     },
   ]
 }
 
 export function groupHeaders(
-  headers: MarkdownItHeader[] = []
+  headers: MarkdownItHeader[] = [],
 ): MarkdownItHeader[] {
   // group h3s under h2
   headers = headers.map((h) => Object.assign({}, h))
@@ -184,7 +184,7 @@ export function groupHeaders(
 }
 
 export function resolveTypeNavLinkItem(
-  linkItem: NavbarGroup | NavbarItem | string
+  linkItem: NavbarGroup | NavbarItem | string,
 ) {
   let type = 'link'
 
@@ -198,7 +198,7 @@ export function resolveTypeNavLinkItem(
 
 export function resolveMatchingConfig(
   localePath: RouteLocale,
-  config: SidebarConfig
+  config: SidebarConfig,
 ) {
   if (Array.isArray(config)) {
     return {

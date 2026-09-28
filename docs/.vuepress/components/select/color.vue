@@ -1,6 +1,11 @@
 <template>
   <div class="center con-selects">
-    <s-select v-model="value" label="Sax Design color" label-float color="danger">
+    <s-select
+      v-model="value"
+      label="Sax Design color"
+      label-float
+      color="danger"
+    >
       <s-option label="Sax Design" value="1"> Sax Design </s-option>
       <s-option label="Vue" value="2"> Vue </s-option>
       <s-option label="Javascript" value="3"> Javascript </s-option>

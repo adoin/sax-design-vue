@@ -6,7 +6,7 @@ async function main() {
   let output: string
   const diffOutput = await fs.readFile(
     path.resolve(__dirname, '..', 'tmp/diff.txt'),
-    'utf-8'
+    'utf-8',
   )
   const fileDiffs = diffOutput
     .split('\n')
@@ -30,7 +30,7 @@ async function main() {
   ${row}|${status}|`
       },
       `| Filename | Status |
-  |:---|:---:|`
+  |:---|:---:|`,
     )
 
     output = `**Total changed files:** ${fileDiffs.length}

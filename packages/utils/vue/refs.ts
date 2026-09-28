@@ -3,7 +3,7 @@ import { isFunction } from '../types'
 import type { ComponentPublicInstance, Ref } from 'vue'
 
 export type RefSetter = (
-  el: Element | ComponentPublicInstance | undefined
+  el: Element | ComponentPublicInstance | undefined,
 ) => void
 
 export const composeRefs = (

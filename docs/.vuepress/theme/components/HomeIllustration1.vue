@@ -43,7 +43,9 @@ const handleRouter = (link?: string) => {
   padding: 13px 25px;
   border-radius: 15px;
   box-sizing: border-box;
-  transition: all 0.25s ease, background-color 0.1s ease;
+  transition:
+    all 0.25s ease,
+    background-color 0.1s ease;
   box-shadow: 0px 0px 0px 0px -color('primary', 0.6);
   font-size: 0.8rem;
   background: -color('primary');

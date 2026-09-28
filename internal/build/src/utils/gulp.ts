@@ -8,5 +8,5 @@ export const withTaskName = <T extends TaskFunction>(name: string, fn: T) =>
 
 export const runTask = (name: string) =>
   withTaskName(`shellTask:${name}`, () =>
-    run(`pnpm run start ${name}`, buildRoot)
+    run(`pnpm run start ${name}`, buildRoot),
   )

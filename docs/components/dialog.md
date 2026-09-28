@@ -433,19 +433,19 @@ There are cases where you need a scroll because there is a lot of information wi
 
 <template #template>
 
-@[code{1-79}](../.vuepress/components/dialog/scroll.vue)
+@[code{1-80}](../.vuepress/components/dialog/scroll.vue)
 
 </template>
 
 <template #script>
 
-@[code{81-85}](../.vuepress/components/dialog/scroll.vue)
+@[code{82-86}](../.vuepress/components/dialog/scroll.vue)
 
 </template>
 
 <template #style>
 
-@[code{87-97}](../.vuepress/components/dialog/scroll.vue)
+@[code{88-98}](../.vuepress/components/dialog/scroll.vue)
 
 </template>
 

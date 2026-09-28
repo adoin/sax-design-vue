@@ -6,7 +6,7 @@ import type { PopperTriggerType } from './trigger'
 
 export const isTriggerType = (
   trigger: Arrayable<PopperTriggerType>,
-  type: PopperTriggerType
+  type: PopperTriggerType,
 ) => {
   if (isArray(trigger)) {
     return trigger.includes(type)
@@ -17,9 +17,9 @@ export const isTriggerType = (
 export const whenTrigger = (
   trigger: Ref<Arrayable<PopperTriggerType>>,
   type: PopperTriggerType,
-  handler: (e: Event) => void
+  handler: (e: Event) => void,
 ) => {
   return (e: Event) => {
-    isTriggerType(unref(trigger), type) && handler(e)
+    if (isTriggerType(unref(trigger), type)) handler(e)
   }
 }

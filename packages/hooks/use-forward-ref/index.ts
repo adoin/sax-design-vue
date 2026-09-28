@@ -23,7 +23,7 @@ export const useForwardRef = <T>(forwardRef: Ref<T | null>) => {
 }
 
 export const useForwardRefDirective = (
-  setForwardRef: ForwardRefSetter
+  setForwardRef: ForwardRefSetter,
 ): ObjectDirective => {
   return {
     mounted(el) {

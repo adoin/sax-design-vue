@@ -7,11 +7,11 @@
       @click="handleClickMail"
     >
       <span v-if="!successMail">
-        <s-icon  name="bx:mail-send" />
+        <s-icon name="bx:mail-send" />
         Send
       </span>
 
-      <s-icon v-else  name="bx:check" />
+      <s-icon v-else name="bx:check" />
     </s-button>
 
     <s-button
@@ -20,9 +20,9 @@
       color="facebook"
       @click="handleClickFace"
     >
-      <s-icon  name="bxl:facebook-square" />
+      <s-icon name="bxl:facebook-square" />
       {{ successFace ? 'Logout' : 'Facebook' }}
-      <template #animate> <s-icon  name="bx:user" /> Login </template>
+      <template #animate> <s-icon name="bx:user" /> Login </template>
     </s-button>
   </div>
 </template>

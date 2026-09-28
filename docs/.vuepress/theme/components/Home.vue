@@ -44,9 +44,9 @@
               @mouseleave="time('github')"
               @mouseenter=";((nativeButtons.github = true), (expand = true))"
             >
-              <s-icon  name="bxl:github" />
+              <s-icon name="bxl:github" />
               <span title="Stargazers" class="badge-star">
-                <s-icon  name="bxs:star" />
+                <s-icon name="bxs:star" />
                 {{ numberWithCommas }}
               </span>
             </a>
@@ -94,7 +94,6 @@ import { computed, reactive, ref } from 'vue'
 import { usePageFrontmatter } from '@vuepress/client'
 // @ts-ignore
 import { useThemeData } from '@vuepress/plugin-theme-data/client'
-import { SThemeHomeFeatureOption } from '../shared/frontmatter/home'
 import NavLink from './NavLink.vue'
 import Footer from './Footer.vue'
 import Illustration1 from './HomeIllustration1.vue'
@@ -104,7 +103,10 @@ import Illustration4 from './HomeIllustration4.vue'
 import HomeComponent from './HomeComponent.vue'
 import HomeTwitter from './HomeTwitter.vue'
 import HomeUses from './HomeUses.vue'
-import type { SThemeProjectHomePageFrontmatter } from '../shared/frontmatter/home'
+import type {
+  SThemeHomeFeatureOption,
+  SThemeProjectHomePageFrontmatter,
+} from '../shared/frontmatter/home'
 
 import type { SaxDesignVueThemeOptions } from '~/saxDesignVueTheme'
 

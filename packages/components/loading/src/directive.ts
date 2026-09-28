@@ -19,12 +19,12 @@ export interface ElementLoading extends HTMLElement {
 
 const createInstance = (
   el: ElementLoading,
-  binding: DirectiveBinding<LoadingBinding>
+  binding: DirectiveBinding<LoadingBinding>,
 ) => {
   const vm = binding.instance
 
   const getBindingProp = <K extends keyof LoadingParams>(
-    key: K
+    key: K,
   ): LoadingParams[K] =>
     isObject(binding.value) ? binding.value[key] : undefined
 
@@ -38,7 +38,7 @@ const createInstance = (
     resolveExpression(
       getBindingProp(name) ??
         el.getAttribute(`element-loading-${hyphenate(name)}`) ??
-        def
+        def,
     )
 
   const options: LoadingParams = {
@@ -61,7 +61,7 @@ const createInstance = (
 
 const updateOptions = (
   newOptions: UnwrapRef<LoadingParams>,
-  originalOptions: LoadingParams
+  originalOptions: LoadingParams,
 ) => {
   for (const key of Object.keys(originalOptions)) {
     if (isRef(originalOptions[key])) {

@@ -96,7 +96,7 @@ watch(
       entranceTimer = undefined
     }
     percentx.value = val
-  }
+  },
 )
 
 onMounted(() => {

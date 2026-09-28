@@ -2,7 +2,7 @@
   <div v-if="active == number" class="header-notification">
     <div class="con-text-n" @click="handleClick">
       <div class="icon-n">
-        <s-icon  name="bxs:megaphone" />
+        <s-icon name="bxs:megaphone" />
       </div>
       <div class="text-n">
         <h3>{{ t.shell.notificationTitle }}</h3>
@@ -14,7 +14,7 @@
         👉 {{ t.shell.notificationMore }}
       </button>
       <button class="btn-x" @click="handleRemove">
-        <s-icon  name="bx:x" />
+        <s-icon name="bx:x" />
       </button>
     </div>
   </div>

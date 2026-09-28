@@ -46,7 +46,7 @@
               {{ suggestion.title || suggestion.path }}
             </span>
             <span v-if="suggestion.header" class="header">
-              <s-icon  name="bx:chevron-right" />
+              <s-icon name="bx:chevron-right" />
               {{ suggestion.header }}
             </span>
           </router-link>

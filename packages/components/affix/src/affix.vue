@@ -74,7 +74,8 @@ const update = () => {
 
   const rootRect = root.value.getBoundingClientRect()
   rootWidth.value = rootRect.width
-  contentHeight.value = root.value.firstElementChild?.getBoundingClientRect().height || 0
+  contentHeight.value =
+    root.value.firstElementChild?.getBoundingClientRect().height || 0
 
   const targetRect =
     scrollTarget.value === window

@@ -39,7 +39,7 @@ describe('dom style', () => {
 
       const path = document.createElementNS(
         'http://www.w3.org/2000/svg',
-        'path'
+        'path',
       )
       path.setAttribute('class', 'path-a path-b')
       expect(hasClass(path, 'a')).toBe(false)
@@ -92,7 +92,7 @@ describe('dom style', () => {
 
       const path = document.createElementNS(
         'http://www.w3.org/2000/svg',
-        'path'
+        'path',
       )
       addClass(path, 'path-abc path')
       expect(hasClass(path, 'path')).toBe(true)
@@ -156,7 +156,7 @@ describe('dom style', () => {
 
       const path = document.createElementNS(
         'http://www.w3.org/2000/svg',
-        'path'
+        'path',
       )
       addClass(path, 'path-abc path')
       expect(hasClass(path, 'path')).toBe(true)

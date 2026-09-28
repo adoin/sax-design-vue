@@ -46,10 +46,10 @@ export const buildProp = <
   Value = never,
   Validator = never,
   Default extends SPropMergeType<Type, Value, Validator> = never,
-  Required extends boolean = false
+  Required extends boolean = false,
 >(
   prop: SPropInput<Type, Value, Validator, Default, Required>,
-  key?: string
+  key?: string,
 ): SPropFinalized<Type, Value, Validator, Default, Required> => {
   // filter native prop type and nested prop, e.g `null`, `undefined` (from `buildProps`)
   if (!isObject(prop) || isVsProp(prop)) return prop as any
@@ -79,8 +79,8 @@ export const buildProp = <
               `Invalid prop: validation failed${
                 key ? ` for prop "${key}"` : ''
               }. Expected one of [${allowValuesText}], got value ${JSON.stringify(
-                val
-              )}.`
+                val,
+              )}.`,
             )
           }
           return valid
@@ -101,9 +101,9 @@ export const buildProps = <
   Props extends Record<
     string,
     { [vsPropKey]: true } | NativePropType | SPropInput<any, any, any, any, any>
-  >
+  >,
 >(
-  props: Props
+  props: Props,
 ): {
   [K in keyof Props]: IfVsProp<
     Props[K],
@@ -115,5 +115,5 @@ export const buildProps = <
     Object.entries(props).map(([key, option]) => [
       key,
       buildProp(option as any, key),
-    ])
+    ]),
   ) as any

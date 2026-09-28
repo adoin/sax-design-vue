@@ -33,7 +33,7 @@ const firstName = ref('')
 const lastName = ref('')
 
 const validName = computed(
-  () => firstName.value.length > 0 && lastName.value.length > 0
+  () => firstName.value.length > 0 && lastName.value.length > 0,
 )
 
 const reset = () => {

@@ -9,22 +9,22 @@ export const useAvatarStatus = (slots: ComponentInternalInstance['slots']) => {
   const avatarGroup = useGroupInject(avatarGroupContextKey)
 
   const isHidden = computed(
-    () => avatarGroup && avatarGroup.index.value > avatarGroup.max - 1
+    () => avatarGroup && avatarGroup.index.value > avatarGroup.max - 1,
   )
 
   const isLastest = computed(
-    () => !!avatarGroup?.max && avatarGroup.index.value === avatarGroup.max - 1
+    () => !!avatarGroup?.max && avatarGroup.index.value === avatarGroup.max - 1,
   )
 
   const moreNumber = computed(
     () =>
-      avatarGroup && avatarGroup.children.length - avatarGroup.index.value - 1
+      avatarGroup && avatarGroup.children.length - avatarGroup.index.value - 1,
   )
 
   const showLastest = computed(
     () =>
       avatarGroup &&
-      avatarGroup.children.length - avatarGroup.index.value - 1 != 0
+      avatarGroup.children.length - avatarGroup.index.value - 1 != 0,
   )
 
   // split text: 'Evan You' -> EY, lyli -> lyli

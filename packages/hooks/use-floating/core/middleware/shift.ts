@@ -30,7 +30,7 @@ export type ShiftOptions = Partial<
 >
 
 export const shift = (
-  options: ShiftOptions | Derivable<ShiftOptions> = {}
+  options: ShiftOptions | Derivable<ShiftOptions> = {},
 ): Middleware => ({
   name: 'shift',
   options,
@@ -103,7 +103,7 @@ export type LimitShiftOptions = Partial<{
 }>
 
 export const limitShift = (
-  options: LimitShiftOptions | Derivable<LimitShiftOptions> = {}
+  options: LimitShiftOptions | Derivable<LimitShiftOptions> = {},
 ): {
   options: any
   fn: (state: MiddlewareState) => Coords

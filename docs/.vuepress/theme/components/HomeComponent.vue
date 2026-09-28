@@ -15,7 +15,7 @@
       <div class="github-logo__3" />
     </div>
     <div class="con-logo github-logo">
-      <s-icon  name="bxl:github" />
+      <s-icon name="bxl:github" />
       <div class="github-logo__1" />
       <div class="github-logo__2" />
       <div class="github-logo__3" />
@@ -81,7 +81,7 @@
       </div>
 
       <div class="component5">
-        <s-icon  name="bxs:star" />
+        <s-icon name="bxs:star" />
         <div class="con-img">
           <img src="/vue-logo.png" alt="" />
         </div>
@@ -95,7 +95,7 @@
 
       <div class="component6">
         <s-button icon color="dark" type="transparent">
-          <s-icon  name="bx:dots-vertical-rounded" />
+          <s-icon name="bx:dots-vertical-rounded" />
         </s-button>
 
         <div class="con-load" />
@@ -103,18 +103,18 @@
 
       <div class="component7">
         <div class="con-img">
-          <s-icon  name="bx:video" />
+          <s-icon name="bx:video" />
           <img class="not-darken" src="/foto4.png" alt="" />
           <img class="has-darken" src="/foto11.png" alt="" />
         </div>
 
         <header>
           <s-button icon color="dark" type="shadow">
-            <s-icon  name="bxs:heart" />
+            <s-icon name="bxs:heart" />
           </s-button>
 
           <s-button color="dark" type="shadow">
-            <s-icon  name="bxs:chat" />
+            <s-icon name="bxs:chat" />
             12
           </s-button>
         </header>
@@ -131,7 +131,7 @@
           <s-input v-model="input1" placeholder="Comment" />
           <div>
             <s-button icon type="flat">
-              <s-icon  name="bx:send" />
+              <s-icon name="bx:send" />
             </s-button>
           </div>
         </footer>
@@ -139,7 +139,7 @@
 
       <div class="component8">
         <div class="con-icon">
-          <s-icon  name="bxs:heart" />
+          <s-icon name="bxs:heart" />
         </div>
 
         <div class="con-img">
@@ -147,7 +147,7 @@
           <img class="has-darken" src="/foto13.png" alt="" />
 
           <div class="play">
-            <s-icon  name="bxs:right-arrow" />
+            <s-icon name="bxs:right-arrow" />
           </div>
         </div>
 
@@ -177,7 +177,7 @@
             @blur="handleBur"
             @click="handleClick"
           />
-          <s-icon  name="bx:chevron-down" />
+          <s-icon name="bx:chevron-down" />
         </header>
 
         <ul :class="{ active: focusSelect }">
@@ -189,13 +189,13 @@
 
       <div class="component10">
         <s-button color="danger" icon>
-          <s-icon  name="bx:play" />
+          <s-icon name="bx:play" />
         </s-button>
         <s-button color="warn" icon>
-          <s-icon  name="bx:git-pull-request" />
+          <s-icon name="bx:git-pull-request" />
         </s-button>
         <s-button icon>
-          <s-icon  name="bxl:github" />
+          <s-icon name="bxl:github" />
         </s-button>
       </div>
 
@@ -210,7 +210,7 @@
             @blur="handleBurDrop"
             @click="handleClickDrop"
           />
-          <s-icon  name="bx:chevron-down" />
+          <s-icon name="bx:chevron-down" />
         </header>
 
         <div class="liquid" />
@@ -227,7 +227,7 @@
       <div class="component12">
         <s-input v-model="input2" placeholder="Search" />
         <s-button icon>
-          <s-icon  name="bx:search" />
+          <s-icon name="bx:search" />
         </s-button>
       </div>
 
@@ -235,7 +235,7 @@
         <header>
           <s-input v-model="input3" placeholder="location" />
           <button>
-            <s-icon  name="bx:chevron-right" />
+            <s-icon name="bx:chevron-right" />
           </button>
         </header>
 

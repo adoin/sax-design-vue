@@ -4,7 +4,7 @@ import type { ComponentInternalInstance, InjectionKey } from '@vue/runtime-core'
 
 export const useGroupProvide = <T extends Record<string, unknown>>(
   key: InjectionKey<ParentProvide<T>>,
-  data: T
+  data: T,
 ) => {
   const children: ComponentInternalInstance[] = reactive([])
 

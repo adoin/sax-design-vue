@@ -12,10 +12,10 @@ export const isVisible = (element: HTMLElement) => {
 }
 
 export const obtainAllFocusableElements = (
-  element: HTMLElement
+  element: HTMLElement,
 ): HTMLElement[] => {
   return Array.from(
-    element.querySelectorAll<HTMLElement>(FOCUSABLE_ELEMENT_SELECTORS)
+    element.querySelectorAll<HTMLElement>(FOCUSABLE_ELEMENT_SELECTORS),
   ).filter((item: HTMLElement) => isFocusable(item) && isVisible(item))
 }
 
@@ -110,7 +110,7 @@ export const isLeaf = (el: HTMLElement) => !el.getAttribute('aria-owns')
 export const getSibling = (
   el: HTMLElement,
   distance: number,
-  elClass: string
+  elClass: string,
 ) => {
   const { parentNode } = el
   if (!parentNode) return null
@@ -122,5 +122,5 @@ export const getSibling = (
 export const focusNode = (el: HTMLElement) => {
   if (!el) return
   el.focus()
-  !isLeaf(el) && el.click()
+  if (!isLeaf(el)) el.click()
 }

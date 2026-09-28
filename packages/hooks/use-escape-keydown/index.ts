@@ -8,7 +8,7 @@ const cachedHandler = (e: Event) => {
   const event = e as KeyboardEvent
   if (event.key === EVENT_CODE.esc) {
     registeredEscapeHandlers.forEach((registeredHandler) =>
-      registeredHandler(event)
+      registeredHandler(event),
     )
   }
 }
@@ -23,7 +23,7 @@ export const useEscapeKeydown = (handler: (e: KeyboardEvent) => void) => {
 
   onBeforeUnmount(() => {
     registeredEscapeHandlers = registeredEscapeHandlers.filter(
-      (registeredHandler) => registeredHandler !== handler
+      (registeredHandler) => registeredHandler !== handler,
     )
     if (registeredEscapeHandlers.length === 0) {
       if (isClient) document.removeEventListener('keydown', cachedHandler)

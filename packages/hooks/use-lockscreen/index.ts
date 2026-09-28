@@ -21,7 +21,7 @@ export const useLockscreen = (trigger: Ref<boolean>) => {
   if (!isRef(trigger)) {
     throwError(
       '[useLockscreen]',
-      'You need to pass a ref param to this function'
+      'You need to pass a ref param to this function',
     )
   }
 

@@ -5,96 +5,76 @@
       icon
       @click="openNotification(null, null, notificationIcons.time)"
     >
-      <s-icon  name="bx:border-radius" class="b-r" />
-      <s-icon  name="bxs:time" />
+      <s-icon name="bx:border-radius" class="b-r" />
+      <s-icon name="bxs:time" />
     </s-button>
     <s-button
       type="flat"
       icon
-      @click="
-        openNotification(null, 'primary', notificationIcons.user)
-      "
+      @click="openNotification(null, 'primary', notificationIcons.user)"
     >
-      <s-icon  name="bx:border-radius" class="b-r" />
-      <s-icon  name="bxs:user-pin" />
+      <s-icon name="bx:border-radius" class="b-r" />
+      <s-icon name="bxs:user-pin" />
     </s-button>
     <s-button
       type="flat"
       color="success"
       icon
       @click="
-        openNotification(
-          'top-right',
-          'success',
-          notificationIcons.select,
-        )
+        openNotification('top-right', 'success', notificationIcons.select)
       "
     >
-      <s-icon  name="bx:border-radius" class="t-r" />
-      <s-icon  name="bx:select-multiple" />
+      <s-icon name="bx:border-radius" class="t-r" />
+      <s-icon name="bx:select-multiple" />
     </s-button>
     <s-button
       type="flat"
       color="danger"
       icon
-      @click="
-        openNotification('top-left', 'danger', notificationIcons.bug)
-      "
+      @click="openNotification('top-left', 'danger', notificationIcons.bug)"
     >
-      <s-icon  name="bx:border-radius" class="t-l" />
-      <s-icon  name="bxs:bug" />
+      <s-icon name="bx:border-radius" class="t-l" />
+      <s-icon name="bxs:bug" />
     </s-button>
     <s-button
       type="flat"
       color="warn"
       icon
-      @click="
-        openNotification('bottom-left', 'warn', notificationIcons.error)
-      "
+      @click="openNotification('bottom-left', 'warn', notificationIcons.error)"
     >
-      <s-icon  name="bx:border-radius" class="b-l" />
-      <s-icon  name="bx:error" />
+      <s-icon name="bx:border-radius" class="b-l" />
+      <s-icon name="bx:error" />
     </s-button>
     <s-button
       type="flat"
       color="dark"
       icon
       @click="
-        openNotification(
-          'bottom-center',
-          'dark',
-          notificationIcons.folder,
-        )
+        openNotification('bottom-center', 'dark', notificationIcons.folder)
       "
     >
-      <s-icon  name="bx:border-bottom" />
-      <s-icon  name="bx:folder-open" />
+      <s-icon name="bx:border-bottom" />
+      <s-icon name="bx:folder-open" />
     </s-button>
     <s-button
       type="flat"
       color="#7d33ff"
       icon
-      @click="
-        openNotification('top-center', '#7d33ff', notificationIcons.bell)
-      "
+      @click="openNotification('top-center', '#7d33ff', notificationIcons.bell)"
     >
-      <s-icon  name="bx:border-top" />
-      <s-icon  name="bx:bell" />
+      <s-icon name="bx:border-top" />
+      <s-icon name="bx:bell" />
     </s-button>
     <s-button
       type="flat"
       color="rgb(59,222,200)"
       icon
       @click="
-        openNotification(
-          null,
-          'rgb(59,222,200)',
-          notificationIcons.calendar,
-        )
+        openNotification(null, 'rgb(59,222,200)', notificationIcons.calendar)
       "
     >
-      <s-icon  name="bx:border-radius" class="b-r" />
-      <s-icon  name="bx:calendar" />
+      <s-icon name="bx:border-radius" class="b-r" />
+      <s-icon name="bx:calendar" />
     </s-button>
   </div>
 </template>

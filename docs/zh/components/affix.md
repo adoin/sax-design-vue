@@ -44,19 +44,19 @@ description: "将内容固定在视口或滚动容器边缘。"
 
 <template #template>
 
-@[code{1-11}](../../.vuepress/components/affix/viewport.vue)
+@[code{1-15}](../../.vuepress/components/affix/viewport.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-18}](../../.vuepress/components/affix/viewport.vue)
+@[code{17-22}](../../.vuepress/components/affix/viewport.vue)
 
 </template>
 
 <template #style>
 
-@[code{20-24}](../../.vuepress/components/affix/viewport.vue)
+@[code{24-28}](../../.vuepress/components/affix/viewport.vue)
 
 </template>
 

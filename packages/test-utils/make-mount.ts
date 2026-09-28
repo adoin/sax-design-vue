@@ -16,7 +16,7 @@ interface Options {
 }
 
 export const makeMountFunc = <T extends Record<string, unknown>>(
-  defaultOptions: T
+  defaultOptions: T,
 ) => {
   return (template: string, options: Options) => {
     return mount({

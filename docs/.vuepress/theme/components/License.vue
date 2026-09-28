@@ -65,22 +65,22 @@
                 <span v-if="typeof tr[1] === 'string'">
                   {{ tr[1] }}
                 </span>
-                <s-icon v-else-if="tr[1]"  name="bx:check" />
-                <s-icon v-else  name="bx:x" />
+                <s-icon v-else-if="tr[1]" name="bx:check" />
+                <s-icon v-else name="bx:x" />
               </td>
               <td :class="{ none: !tr[2] && typeof tr[2] !== 'string' }">
                 <span v-if="typeof tr[1] === 'string'">
                   {{ tr[1] }}
                 </span>
-                <s-icon v-if="tr[2]"  name="bx:check" />
-                <s-icon v-else  name="bx:x" />
+                <s-icon v-if="tr[2]" name="bx:check" />
+                <s-icon v-else name="bx:x" />
               </td>
               <td :class="{ none: !tr[3] && typeof tr[3] !== 'string' }">
                 <span v-if="typeof tr[1] === 'string'" @click="openContact">
                   {{ tr[1] }}
                 </span>
-                <s-icon v-else-if="tr[3]"  name="bx:check" />
-                <s-icon v-else  name="bx:x" />
+                <s-icon v-else-if="tr[3]" name="bx:check" />
+                <s-icon v-else name="bx:x" />
               </td>
             </tr>
           </tbody>

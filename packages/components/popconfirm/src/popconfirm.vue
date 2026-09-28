@@ -98,9 +98,9 @@ const cancel = (e: MouseEvent) => {
 }
 
 const finalConfirmButtonText = computed(
-  () => props.confirmButtonText || t('vs.popconfirm.confirmButtonText')
+  () => props.confirmButtonText || t('vs.popconfirm.confirmButtonText'),
 )
 const finalCancelButtonText = computed(
-  () => props.cancelButtonText || t('vs.popconfirm.cancelButtonText')
+  () => props.cancelButtonText || t('vs.popconfirm.cancelButtonText'),
 )
 </script>

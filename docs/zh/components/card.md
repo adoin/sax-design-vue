@@ -631,13 +631,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-14}](../../.vuepress/components/card-zh/shape.vue)
+@[code{1-6}](../../.vuepress/components/card-zh/shape.vue)
 
 </template>
 
 <template #style>
 
-@[code{16-24}](../../.vuepress/components/card-zh/shape.vue)
+@[code{8-16}](../../.vuepress/components/card-zh/shape.vue)
 
 </template>
 

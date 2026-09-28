@@ -5,7 +5,7 @@ import type { Ref } from 'vue'
 export const usePreventGlobal = <E extends keyof DocumentEventMap>(
   indicator: Ref<boolean>,
   evt: E,
-  cb: (e: DocumentEventMap[E]) => boolean
+  cb: (e: DocumentEventMap[E]) => boolean,
 ) => {
   const prevent = (e: DocumentEventMap[E]) => {
     if (cb(e)) e.stopImmediatePropagation()
@@ -20,6 +20,6 @@ export const usePreventGlobal = <E extends keyof DocumentEventMap>(
         stop?.()
       }
     },
-    { immediate: true }
+    { immediate: true },
   )
 }

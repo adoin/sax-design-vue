@@ -26,7 +26,7 @@ export const OnlyChild = defineComponent({
     return () => {
       const forwardRefInjection = inject(FORWARD_REF_INJECTION_KEY, undefined)
       const forwardRefDirective = useForwardRefDirective(
-        forwardRefInjection?.setForwardRef ?? NOOP
+        forwardRefInjection?.setForwardRef ?? NOOP,
       )
 
       const defaultSlot = slots.default?.(attrs)
@@ -84,7 +84,7 @@ function wrapTextContent(s: string | VNode) {
     {
       className: ns.e('content'),
     },
-    s
+    s,
   )
 }
 

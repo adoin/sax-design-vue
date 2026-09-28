@@ -3,12 +3,12 @@ import type { ParentProvide } from '@vuesax-alpha/tokens'
 import type { InjectionKey } from 'vue'
 
 export const useGroupInject = <T extends Record<string, unknown>>(
-  key: InjectionKey<ParentProvide<T>>
+  key: InjectionKey<ParentProvide<T>>,
 ) => {
   const instance = getCurrentInstance()
   if (!instance) {
     throw new Error(
-      'useInject hook must be called inside setup function or <script setup>'
+      'useInject hook must be called inside setup function or <script setup>',
     )
   }
 

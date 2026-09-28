@@ -125,7 +125,7 @@ watch(
       forwardRef.value = focusTrapEl
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 watch(forwardRef, (forwardRef, oldForwardRef) => {
   if (forwardRef) {
@@ -225,7 +225,7 @@ const startTrap = async () => {
           if (focusStartEl === 'first') {
             focusFirstDescendant(
               obtainAllFocusableElements(trapContainer),
-              true
+              true,
             )
           }
           if (
@@ -275,7 +275,7 @@ onMounted(() => {
       } else {
         stopTrap()
       }
-    }
+    },
   )
 })
 

@@ -10,7 +10,7 @@ import type { Ref, VNode } from 'vue'
 
 export const useTeleport = (
   contentRenderer: () => VNode,
-  appendToBody: Ref<boolean>
+  appendToBody: Ref<boolean>,
 ) => {
   const isTeleportVisible = ref(false)
 
@@ -46,8 +46,8 @@ export const useTeleport = (
     return appendToBody.value !== true
       ? contentRenderer()
       : isTeleportVisible.value
-      ? [h(Teleport, { to: $el }, contentRenderer())]
-      : undefined
+        ? [h(Teleport, { to: $el }, contentRenderer())]
+        : undefined
   }
 
   onUnmounted(hideTeleport)

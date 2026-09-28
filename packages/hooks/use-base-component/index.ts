@@ -4,7 +4,7 @@ import { useNamespace } from '../use-namespace'
 import type { MaybeRef } from '@vuesax-alpha/utils'
 
 export const useVuesaxBaseComponent = (
-  color?: MaybeRef<string | undefined>
+  color?: MaybeRef<string | undefined>,
 ) => {
   const ns = useNamespace('component')
 

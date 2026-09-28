@@ -20,7 +20,7 @@ export function getBoundingClientRect(
   element: Element | VirtualElement,
   includeScale = false,
   isFixedStrategy = false,
-  offsetParent?: Element | Window
+  offsetParent?: Element | Window,
 ): ClientRectObject {
   const clientRect = element.getBoundingClientRect()
   const domElement = unwrapElement(element)
@@ -39,7 +39,7 @@ export function getBoundingClientRect(
   const visualOffsets = shouldAddVisualOffsets(
     domElement,
     isFixedStrategy,
-    offsetParent
+    offsetParent,
   )
     ? getVisualOffsets(domElement)
     : createCoords(0)

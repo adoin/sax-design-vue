@@ -35,9 +35,7 @@ export type AnimateWithInOut = {
 }
 
 export type AnimateDirectiveOptions =
-  | AnimateName
-  | AnimateOptions
-  | AnimateWithInOut
+  AnimateName | AnimateOptions | AnimateWithInOut
 
 const animated = (element: HTMLElement, animation: string) => {
   const animationName = `${animateCssPrefix}${animation}`
@@ -55,7 +53,7 @@ const animated = (element: HTMLElement, animation: string) => {
 const Animate: ObjectDirective<HTMLElement, AnimateDirectiveOptions> = {
   beforeMount(
     element: HTMLElement,
-    binding: DirectiveBinding<AnimateDirectiveOptions>
+    binding: DirectiveBinding<AnimateDirectiveOptions>,
   ) {
     const value = binding.value
     let animationName = ''

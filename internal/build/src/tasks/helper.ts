@@ -201,7 +201,7 @@ export const buildHelper: TaskFunction = (done) => {
 
   let entry = `${path.resolve(
     projRoot,
-    'docs/components'
+    'docs/components',
   )}/!(datetime-picker).md`
   if (os.platform() === 'win32') {
     entry = entry.replace(/\\/g, '/')

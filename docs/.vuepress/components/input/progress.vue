@@ -10,8 +10,8 @@
       @click-icon="hasVisiblePassword = !hasVisiblePassword"
     >
       <template #icon>
-        <s-icon v-if="!hasVisiblePassword"  name="bx:show-alt" />
-        <s-icon v-else  name="bx:hide" />
+        <s-icon v-if="!hasVisiblePassword" name="bx:show-alt" />
+        <s-icon v-else name="bx:hide" />
       </template>
 
       <template v-if="getProgress >= 100" #message-success>
@@ -27,7 +27,7 @@ const value = ref('')
 const hasVisiblePassword = ref(false)
 
 const inputType = computed(() =>
-  hasVisiblePassword.value ? 'text' : 'password'
+  hasVisiblePassword.value ? 'text' : 'password',
 )
 
 const getProgress = computed(() => {

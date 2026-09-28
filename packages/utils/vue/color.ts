@@ -9,7 +9,7 @@ export const getComponentColor = () => {
   if (!instance) {
     debugWarn(
       'use-attrs',
-      'getCurrentInstance() returned null. getComponentColor() must be called at the top of a setup function'
+      'getCurrentInstance() returned null. getComponentColor() must be called at the top of a setup function',
     )
     return computed(() => null)
   }
@@ -18,7 +18,7 @@ export const getComponentColor = () => {
 
   return computed(() => {
     const propColor = componentColors.find(
-      (color) => attrs.value[color] === true
+      (color) => attrs.value[color] === true,
     )
     if (propColor) return propColor
 

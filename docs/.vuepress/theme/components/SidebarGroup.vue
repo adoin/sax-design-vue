@@ -30,7 +30,7 @@
       @click="$emit('toggle')"
     >
       <span>{{ item.text }}</span>
-      <s-icon  name="bx:chevron-right" />
+      <s-icon name="bx:chevron-right" />
     </p>
 
     <DropdownTransition>

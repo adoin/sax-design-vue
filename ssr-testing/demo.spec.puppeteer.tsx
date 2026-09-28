@@ -35,7 +35,7 @@ describe('Cypress Button', () => {
           'dist',
           'vuesax-alpha',
           'dist',
-          'index.css'
+          'index.css',
         ),
       })
 

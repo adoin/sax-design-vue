@@ -18,7 +18,7 @@ export const RepeatClick: ObjectDirective<
   beforeMount(el, binding) {
     const value = binding.value
     const { interval = REPEAT_INTERVAL, delay = REPEAT_DELAY } = isFunction(
-      value
+      value,
     )
       ? {}
       : value

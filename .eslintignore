@@ -5,7 +5,13 @@ CHANGELOG.en-US.md
 coverage
 play
 ssr-testing/cases/*
+# Keep hidden source/config directories, including docs/.vuepress, in scope.
 !.*
+.git/
+# Agent reference material contains illustrative and intentionally invalid code.
+.agents/skills/
+.codex/
 docs/components.d.ts
-docs/.vuepress/.cache
-docs/.vuepress/.temp
+# VuePress also creates named temporary/cache directories for validation builds.
+docs/.vuepress/.cache*
+docs/.vuepress/.temp*

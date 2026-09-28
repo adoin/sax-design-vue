@@ -48,7 +48,7 @@ export interface Platform {
   }) => Promisable<Rect>
   getOffsetParent?: (
     element: Element,
-    polyfill?: (element: HTMLElement) => Element | null
+    polyfill?: (element: HTMLElement) => Element | null,
   ) => Promisable<Element | Window>
   isElement?: (value: unknown) => Promisable<boolean>
   getDocumentElement?: (element: Element) => Promisable<HTMLElement>

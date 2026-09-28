@@ -42,6 +42,6 @@ export const isTel = (path?: string): path is `tel:${string}` =>
   !!path?.startsWith('tel:')
 
 export const isExternal = (
-  path?: string
+  path?: string,
 ): path is `mailto:${string}` | `tel:${string}` | `http${string}` =>
   isLinkExternal(path) || isMailto(path) || isTel(path) || false

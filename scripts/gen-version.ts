@@ -19,7 +19,7 @@ async function main() {
   consola.info(`Version: ${version}`)
   await writeFile(
     path.resolve(vsRoot, 'version.ts'),
-    `export const version = '${version}'\n`
+    `export const version = '${version}'\n`,
   )
 }
 

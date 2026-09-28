@@ -20,7 +20,8 @@
     <span v-if="!active && !hideSeparator" :class="ns.e('separator')">
       <slot name="separator">
         <SIcon
-          v-if="isIconSeparator(resolvedSeparator)" :name="resolvedSeparator"
+          v-if="isIconSeparator(resolvedSeparator)"
+          :name="resolvedSeparator"
         />
         <template v-else>{{ resolvedSeparator }}</template>
       </slot>
@@ -48,17 +49,17 @@ const breadcrumb = inject(breadcrumbContextKey, null)
 const isIconSeparator = (sep: string) => sep.length > 1
 
 const resolvedSeparator = computed(
-  () => props.separator ?? breadcrumb?.separator.value ?? '/'
+  () => props.separator ?? breadcrumb?.separator.value ?? '/',
 )
 
 const themeColor = computed(() =>
-  normalizeVsColor(breadcrumb?.color.value || 'primary')
+  normalizeVsColor(breadcrumb?.color.value || 'primary'),
 )
 
 const activeTextColorClass = computed(() =>
   props.active && isVsColor(themeColor.value)
     ? ns.em('text', themeColor.value)
-    : ''
+    : '',
 )
 
 const activeTextStyle = computed(() => {

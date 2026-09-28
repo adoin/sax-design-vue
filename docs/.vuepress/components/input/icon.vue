@@ -2,13 +2,13 @@
   <div class="center content-inputs">
     <s-input v-model="value1" placeholder="User name">
       <template #icon>
-        <s-icon  name="bx:user" />
+        <s-icon name="bx:user" />
       </template>
     </s-input>
 
     <s-input v-model="value2" type="password" icon-after placeholder="Password">
       <template #icon>
-        <s-icon  name="bx:lock-open-alt" />
+        <s-icon name="bx:lock-open-alt" />
       </template>
     </s-input>
   </div>

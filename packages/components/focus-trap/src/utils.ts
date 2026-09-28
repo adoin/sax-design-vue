@@ -15,7 +15,7 @@ export type FocusLayer = {
 export type FocusStack = FocusLayer[]
 
 export const obtainAllFocusableElements = (
-  element: HTMLElement
+  element: HTMLElement,
 ): HTMLElement[] => {
   const nodes: HTMLElement[] = []
   const walker = document.createTreeWalker(element, NodeFilter.SHOW_ELEMENT, {
@@ -25,7 +25,7 @@ export const obtainAllFocusableElements = (
         hidden: boolean
         type: string
         tabIndex: number
-      }
+      },
     ) => {
       const isHiddenInput = node.tagName === 'INPUT' && node.type === 'hidden'
       if (node.disabled || node.hidden || isHiddenInput)
@@ -42,7 +42,7 @@ export const obtainAllFocusableElements = (
 
 export const getVisibleElement = (
   elements: HTMLElement[],
-  container: HTMLElement
+  container: HTMLElement,
 ) => {
   for (const element of elements) {
     if (!isHidden(element, container)) return element
@@ -70,14 +70,14 @@ export const getEdges = (container: HTMLElement) => {
 }
 
 const isSelectable = (
-  element: any
+  element: any,
 ): element is HTMLInputElement & { select: () => void } => {
   return element instanceof HTMLInputElement && 'select' in element
 }
 
 export const tryFocus = (
   element?: HTMLElement | { focus: () => void } | null,
-  shouldSelect?: boolean
+  shouldSelect?: boolean,
 ) => {
   if (element && element.focus) {
     const prevFocusedElement = document.activeElement
@@ -131,7 +131,7 @@ const createFocusableStack = () => {
 
 export const focusFirstDescendant = (
   elements: HTMLElement[],
-  shouldSelect = false
+  shouldSelect = false,
 ) => {
   const prevFocusedElement = document.activeElement
   for (const element of elements) {
@@ -187,7 +187,7 @@ export const useFocusReason = (): {
 }
 
 export const createFocusOutPreventedEvent = (
-  detail: CustomEventInit['detail']
+  detail: CustomEventInit['detail'],
 ) => {
   return new CustomEvent(focusoutPrevented, {
     ...focusoutPreventedOpts,

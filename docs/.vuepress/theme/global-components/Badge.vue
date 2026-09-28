@@ -14,7 +14,7 @@ withDefaults(
   {
     type: 'tip',
     vertical: 'top',
-  }
+  },
 )
 </script>
 

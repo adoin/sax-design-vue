@@ -10,7 +10,7 @@ import type { Coords, ElementRects, Placement } from '../utils'
 export function computeCoordsFromPlacement(
   { reference, floating }: ElementRects,
   placement: Placement,
-  rtl?: boolean
+  rtl?: boolean,
 ): Coords {
   const sideAxis = getSideAxis(placement)
   const alignmentAxis = getAlignmentAxis(placement)

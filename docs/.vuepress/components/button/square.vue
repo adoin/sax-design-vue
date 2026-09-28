@@ -12,7 +12,7 @@
       :active="active == 1"
       @click="active = 1"
     >
-      <s-icon  name="bxs:phone-call" />
+      <s-icon name="bxs:phone-call" />
     </s-button>
 
     <s-button
@@ -22,7 +22,7 @@
       :active="active == 2"
       @click="active = 2"
     >
-      <s-icon  name="bxs:heart" /> Like
+      <s-icon name="bxs:heart" /> Like
     </s-button>
 
     <s-button
@@ -32,7 +32,7 @@
       :active="active == 3"
       @click="active = 3"
     >
-      Notifications <s-icon  name="bxs:bell-ring" />
+      Notifications <s-icon name="bxs:bell-ring" />
     </s-button>
     <s-button
       shape="square"
@@ -42,7 +42,7 @@
       :active="active == 5"
       @click="active = 5"
     >
-      <s-icon  name="bxs:paper-plane" />
+      <s-icon name="bxs:paper-plane" />
     </s-button>
     <s-button
       shape="square"
@@ -52,7 +52,7 @@
       :active="active == 6"
       @click="active = 6"
     >
-      <s-icon  name="bxs:purchase-tag" />
+      <s-icon name="bxs:purchase-tag" />
     </s-button>
   </div>
 </template>

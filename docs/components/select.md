@@ -608,13 +608,13 @@ Change the color of the component with the `color` property, the allowed values 
 
 <template #template>
 
-@[code{1-23}](../.vuepress/components/select/color.vue)
+@[code{1-28}](../.vuepress/components/select/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{25-29}](../.vuepress/components/select/color.vue)
+@[code{30-34}](../.vuepress/components/select/color.vue)
 
 </template>
 

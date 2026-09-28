@@ -26,10 +26,10 @@
           </div>
           <footer>
             <a :href="item.normal.svg" :download="`vuesax-${item.mini.title}`">
-              <s-icon  name="bx:download" /> .Svg
+              <s-icon name="bx:download" /> .Svg
             </a>
             <a :href="item.normal.png" :download="`vuesax-${item.mini.title}`">
-              <s-icon  name="bx:download" /> .Png
+              <s-icon name="bx:download" /> .Png
             </a>
           </footer>
         </div>
@@ -43,10 +43,10 @@
           </div>
           <footer>
             <a :href="item.normal.svg" :download="`vuesax-${item.mini.title}`">
-              <s-icon  name="bx:download" /> .Svg
+              <s-icon name="bx:download" /> .Svg
             </a>
             <a :href="item.normal.png" :download="`vuesax-${item.mini.title}`">
-              <s-icon  name="bx:download" /> .Png
+              <s-icon name="bx:download" /> .Png
             </a>
           </footer>
         </div>
@@ -196,7 +196,9 @@ const images = [
         border: 2px solid #e9eeee;
         border-radius: 0px 25px 0px 25px;
         background-size: 20px 20px;
-        background-position: 0 0, 30px 30px;
+        background-position:
+          0 0,
+          30px 30px;
         display: flex;
         align-items: center;
         justify-content: center;

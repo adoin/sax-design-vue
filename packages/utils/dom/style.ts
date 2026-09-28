@@ -28,7 +28,7 @@ export const removeClass = (el: Element, cls: string) => {
 
 export const getStyle = (
   element: HTMLElement,
-  styleName: keyof CSSProperties
+  styleName: keyof CSSProperties,
 ): string => {
   if (!isClient || !element || !styleName) return ''
 
@@ -47,13 +47,13 @@ export const getStyle = (
 export const setStyle = (
   element: HTMLElement,
   styleName: CSSProperties | keyof CSSProperties,
-  value?: string | number
+  value?: string | number,
 ) => {
   if (!element || !styleName) return
 
   if (isObject(styleName)) {
     entriesOf(styleName).forEach(([prop, value]) =>
-      setStyle(element, prop, value)
+      setStyle(element, prop, value),
     )
   } else {
     const key: any = camelize(styleName)
@@ -63,7 +63,7 @@ export const setStyle = (
 
 export const removeStyle = (
   element: HTMLElement,
-  style: CSSProperties | keyof CSSProperties
+  style: CSSProperties | keyof CSSProperties,
 ) => {
   if (!element || !style) return
 

@@ -9,15 +9,15 @@
         <p>Change theme</p>
         <s-switch v-model="active2">
           <template #circle>
-            <s-icon v-if="!active2"  name="bxs:moon" />
-            <s-icon v-else  name="bxs:sun" />
+            <s-icon v-if="!active2" name="bxs:moon" />
+            <s-icon v-else name="bxs:sun" />
           </template>
         </s-switch>
       </li>
       <li>
         <p>Desktop notifications</p>
         <s-switch v-model="active3">
-          <s-icon  name="bxs:message" />
+          <s-icon name="bxs:message" />
         </s-switch>
       </li>
       <li>
@@ -31,10 +31,10 @@
         <p>Allow to send test data to improve this product</p>
         <s-switch v-model="active5" color="success">
           <template #off>
-            <s-icon  name="bx:x" />
+            <s-icon name="bx:x" />
           </template>
           <template #on>
-            <s-icon  name="bx:check" />
+            <s-icon name="bx:check" />
           </template>
         </s-switch>
       </li>

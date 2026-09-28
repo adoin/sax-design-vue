@@ -21,19 +21,19 @@ import type {
 export { detectOverflow, offset } from '@vuesax-alpha/hooks/use-floating/core'
 
 export const shift: (
-  options?: ShiftOptions | Derivable<ShiftOptions>
+  options?: ShiftOptions | Derivable<ShiftOptions>,
 ) => Middleware = shiftCore
 
 export const flip: (
-  options?: FlipOptions | Derivable<FlipOptions>
+  options?: FlipOptions | Derivable<FlipOptions>,
 ) => Middleware = flipCore
 
 export const arrow: (
-  options: ArrowOptions | Derivable<ArrowOptions>
+  options: ArrowOptions | Derivable<ArrowOptions>,
 ) => Middleware = arrowCore
 
 export const limitShift: (
-  options?: LimitShiftOptions | Derivable<LimitShiftOptions>
+  options?: LimitShiftOptions | Derivable<LimitShiftOptions>,
 ) => {
   options: any
   fn: (state: MiddlewareState) => Coords

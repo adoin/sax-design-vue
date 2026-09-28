@@ -5,5 +5,5 @@ export type AvatarGroupContext = {
 }
 
 export const avatarGroupContextKey: InjectionKey<AvatarGroupContext> = Symbol(
-  'AvatarGroupContextKey'
+  'AvatarGroupContextKey',
 )

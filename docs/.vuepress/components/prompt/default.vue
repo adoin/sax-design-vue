@@ -71,7 +71,7 @@ const options1 = [
 ]
 
 const validName = computed(
-  () => valMultiple.value1.length > 0 && valMultiple.value2.length > 0
+  () => valMultiple.value1.length > 0 && valMultiple.value2.length > 0,
 )
 </script>
 

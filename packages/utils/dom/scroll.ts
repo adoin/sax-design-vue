@@ -17,7 +17,7 @@ export const isScroll = (el: HTMLElement, isVertical?: boolean): boolean => {
 
 export const getScrollContainer = (
   el: HTMLElement,
-  isVertical?: boolean
+  isVertical?: boolean,
 ): Window | HTMLElement | undefined => {
   if (!isClient) return
 
@@ -67,7 +67,7 @@ export const getScrollBarWidth = (namespace: string): number => {
  */
 export function scrollIntoView(
   container: HTMLElement,
-  selected: HTMLElement
+  selected: HTMLElement,
 ): void {
   if (!isClient) return
 

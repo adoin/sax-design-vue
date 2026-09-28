@@ -4,7 +4,7 @@
     class="sidebar-button"
     @click="$emit('toggle-sidebar')"
   >
-    <s-icon  name="bx:menu" />
+    <s-icon name="bx:menu" />
   </button>
 </template>
 

@@ -51,21 +51,18 @@ export type SPropMergeType<Type, Value, Validator> =
  */
 export type SPropInputDefault<
   Required extends boolean,
-  Default
+  Default,
 > = Required extends true
   ? never
   : Default extends Record<string, unknown> | Array<any>
-  ? () => Default
-  : (() => Default) | Default
+    ? () => Default
+    : (() => Default) | Default
 
 /**
  * Native prop types, e.g: `BooleanConstructor`, `StringConstructor`, `null`, `undefined`, etc.
  */
 export type NativePropType =
-  | ((...args: any) => any)
-  | { new (...args: any): any }
-  | undefined
-  | null
+  ((...args: any) => any) | { new (...args: any): any } | undefined | null
 export type IfNativePropType<T, Y, N> = [T] extends [NativePropType] ? Y : N
 
 /**
@@ -87,7 +84,7 @@ export type SPropInput<
   Value,
   Validator,
   Default extends SPropMergeType<Type, Value, Validator>,
-  Required extends boolean
+  Required extends boolean,
 > = {
   type?: Type
   required?: Required
@@ -125,15 +122,16 @@ export type IfVsProp<T, Y, N> = T extends { [vsPropKey]: true } ? Y : N
 /**
  * Converting input to output.
  */
-export type SPropConvert<Input> = Input extends SPropInput<
-  infer Type,
-  infer Value,
-  infer Validator,
-  any,
-  infer Required
->
-  ? SPropFinalized<Type, Value, Validator, Input['default'], Required>
-  : never
+export type SPropConvert<Input> =
+  Input extends SPropInput<
+    infer Type,
+    infer Value,
+    infer Validator,
+    any,
+    infer Required
+  >
+    ? SPropFinalized<Type, Value, Validator, Input['default'], Required>
+    : never
 
 /**
  * Finalized conversion output

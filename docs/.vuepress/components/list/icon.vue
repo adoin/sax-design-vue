@@ -11,7 +11,11 @@
       title="Sapporo Haru"
       subtitle="An excellent polish restaurant, quick delivery and hearty, filling meals"
     />
-    <s-list-header icon="cb:user-certification" title="Group 2" color="success" />
+    <s-list-header
+      icon="cb:user-certification"
+      title="Group 2"
+      color="success"
+    />
     <s-list-item
       icon="cb:user-certification"
       title="Enid's"

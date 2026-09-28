@@ -83,7 +83,7 @@ export function isValidElementNode(node: unknown): node is VNode {
  */
 function getChildren(
   node: VNodeNormalizedChildren | VNodeChild,
-  depth: number
+  depth: number,
 ): VNodeNormalizedChildren | VNodeChild {
   if (isComment(node)) return
   if (isFragment(node) || isTemplate(node)) {
@@ -94,7 +94,7 @@ function getChildren(
 
 export const getFirstValidNode = (
   nodes: VNodeNormalizedChildren,
-  maxDepth = 3
+  maxDepth = 3,
 ) => {
   if (Array.isArray(nodes)) {
     return getChildren(nodes[0], maxDepth)
@@ -111,7 +111,7 @@ export function renderIf(
 }
 
 export function renderBlock(...args: Parameters<typeof createBlock>) {
-  return openBlock(), createBlock(...args)
+  return (openBlock(), createBlock(...args))
 }
 
 export const getNormalizedProps = (node: VNode) => {
@@ -147,7 +147,7 @@ export const ensureOnlyChild = (children: VNodeArrayChildren | undefined) => {
 export type FlattenVNodes = Array<VNodeChildAtom | RawSlots>
 
 export const flattedChildren = (
-  children: FlattenVNodes | VNode | VNodeNormalizedChildren
+  children: FlattenVNodes | VNode | VNodeNormalizedChildren,
 ): FlattenVNodes => {
   const vNodes = isArray(children) ? children : [children]
   const result: FlattenVNodes = []

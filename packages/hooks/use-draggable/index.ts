@@ -5,7 +5,7 @@ import type { ComputedRef, Ref } from 'vue'
 export const useDraggable = (
   targetRef: Ref<HTMLElement | undefined>,
   dragRef: Ref<HTMLElement | undefined>,
-  draggable: ComputedRef<boolean>
+  draggable: ComputedRef<boolean>,
 ) => {
   let transform = {
     offsetX: 0,
@@ -34,11 +34,11 @@ export const useDraggable = (
     const onMousemove = (e: MouseEvent) => {
       const moveX = Math.min(
         Math.max(offsetX + e.clientX - downX, minLeft),
-        maxLeft
+        maxLeft,
       )
       const moveY = Math.min(
         Math.max(offsetY + e.clientY - downY, minTop),
-        maxTop
+        maxTop,
       )
 
       transform = {
@@ -46,7 +46,7 @@ export const useDraggable = (
         offsetY: moveY,
       }
       targetRef.value!.style.transform = `translate(${addUnit(
-        moveX
+        moveX,
       )}, ${addUnit(moveY)})`
     }
 

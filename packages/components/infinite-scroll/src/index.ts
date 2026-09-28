@@ -52,7 +52,7 @@ type InfiniteScrollEl = HTMLElement & {
 
 const getScrollOptions = (
   el: HTMLElement,
-  instance: ComponentPublicInstance
+  instance: ComponentPublicInstance,
 ): ScrollOptions => {
   return Object.entries(attributes).reduce((acm, [name, option]) => {
     const { type, default: defaultValue } = option
@@ -152,7 +152,7 @@ const InfiniteScroll: ObjectDirective<
 
     if (immediate) {
       const observer = new MutationObserver(
-        throttle(checkFull.bind(null, el, cb), CHECK_INTERVAL)
+        throttle(checkFull.bind(null, el, cb), CHECK_INTERVAL),
       )
       el[SCOPE].observer = observer
       observer.observe(el, { childList: true, subtree: true })

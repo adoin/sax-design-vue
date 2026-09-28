@@ -12,7 +12,7 @@ export const useTooltipDeprecated = (props: TooltipProps) => {
       replacement: 'placement',
       ref: 'https://vuesax-alpha.vercel.app/components/tooltip#props',
     },
-    computed(() => props.top || props.right || props.bottom || props.left)
+    computed(() => props.top || props.right || props.bottom || props.left),
   )
 
   useDeprecated(
@@ -24,7 +24,7 @@ export const useTooltipDeprecated = (props: TooltipProps) => {
       replacement: 'trigger',
       ref: 'https://vuesax-alpha.vercel.app/components/tooltip#props',
     },
-    computed(() => props.notHover)
+    computed(() => props.notHover),
   )
 
   useDeprecated(
@@ -36,7 +36,7 @@ export const useTooltipDeprecated = (props: TooltipProps) => {
       replacement: 'type',
       ref: 'https://vuesax-alpha.vercel.app/components/tooltip#props',
     },
-    computed(() => props.border || props.borderThick)
+    computed(() => props.border || props.borderThick),
   )
 
   useDeprecated(
@@ -48,7 +48,7 @@ export const useTooltipDeprecated = (props: TooltipProps) => {
       replacement: 'type',
       ref: 'https://vuesax-alpha.vercel.app/components/tooltip#props',
     },
-    computed(() => props.shadow)
+    computed(() => props.shadow),
   )
 
   useDeprecated(
@@ -60,6 +60,6 @@ export const useTooltipDeprecated = (props: TooltipProps) => {
       replacement: 'shape',
       ref: 'https://vuesax-alpha.vercel.app/components/tooltip#props',
     },
-    computed(() => props.square || props.circle)
+    computed(() => props.square || props.circle),
   )
 }

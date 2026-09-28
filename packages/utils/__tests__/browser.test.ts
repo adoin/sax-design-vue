@@ -20,7 +20,7 @@ describe('browser', () => {
     ] as const
     for (const [userAgent, value] of userAgents) {
       vi.spyOn(navigator, 'userAgent', 'get').mockImplementation(
-        () => userAgent
+        () => userAgent,
       )
       expect(isFirefox()).toBe(value)
     }
