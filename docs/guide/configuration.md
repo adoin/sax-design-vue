@@ -155,7 +155,7 @@ Components such as Calendar and Navbar have their own size vocabularies (for exa
 
 ## Common interaction defaults
 
-Application-wide interaction policies can be shared through `button`, `dialog`, `drawer`, `notification`, `pagination`, and `popper`. Each object accepts only reusable defaults; content, controlled values, callbacks, and business data remain local to component instances.
+Application-wide interaction policies can be shared through `button`, `dialog`, `drawer`, `notification`, `pagination`, `radioGroup`, and `popper`. Each object accepts only reusable defaults; content, controlled values, callbacks, and business data remain local to component instances. `radioGroup` accepts `animated` (enabled by default) and `direction`; explicit component props take precedence.
 
 <command>
 
@@ -180,6 +180,7 @@ const paginationDefaults = {
     :dialog="dialogDefaults"
     :notification="notificationDefaults"
     :pagination="paginationDefaults"
+    :radio-group="{ animated: true }"
   >
     <app />
   </s-config-provider>

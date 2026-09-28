@@ -24,6 +24,11 @@ import type {
   Strategy,
 } from '@vuesax-alpha/hooks/use-floating/vue'
 
+export interface RadioGroupGlobalConfig {
+  animated?: boolean
+  direction?: 'horizontal' | 'vertical'
+}
+
 export interface ButtonGlobalConfig {
   debounce?: number | false
   throttle?: number | false
@@ -163,6 +168,10 @@ export const configProviderProps = buildProps({
   /** Defaults for Button interaction timing and loading feedback. */
   button: {
     type: definePropType<ButtonGlobalConfig>(Object),
+  },
+  /** Defaults for RadioGroup dot motion and arrangement. */
+  radioGroup: {
+    type: definePropType<RadioGroupGlobalConfig>(Object),
   },
   /** Defaults for Dialog dismissal and scroll-lock behavior. */
   dialog: {

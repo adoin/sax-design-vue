@@ -3,6 +3,7 @@ import { computed, useTemplateRef } from 'vue'
 import { SRadioButton } from '@vuesax-alpha/components/radio-button'
 import {
   provideGlobalConfig,
+  useGlobalComponentProps,
   useId,
   useNamespace,
   useSize,
@@ -15,7 +16,8 @@ import type { RadioOption, RadioValue } from './radio-group'
 
 defineOptions({ name: 'SRadioGroup' })
 
-const props = defineProps(radioGroupProps)
+const rawProps = defineProps(radioGroupProps)
+const props = useGlobalComponentProps('radioGroup', rawProps)
 const emit = defineEmits(radioGroupEmits)
 const slots = defineSlots<{
   default?(): unknown

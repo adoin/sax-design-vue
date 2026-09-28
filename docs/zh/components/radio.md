@@ -73,7 +73,7 @@ GROUP_PROPS:
     usage: '#direction-and-dot-motion'
   - name: animated
     type: boolean
-    description: 在 Radio 与 RadioButton 分组的选中项之间播放默认圆点跳跃动画；遵循系统减少动态效果设置。
+    description: 在 Radio 与 RadioButton 分组的选中项之间播放默认圆点跳跃动画。默认开启，继承全局 radioGroup.animated，局部参数优先；遵循系统减少动态效果设置。
     default: true
     usage: '#default'
   - name: size
@@ -301,6 +301,8 @@ RadioGroup 的普通形态和按钮形态都会在选中项之间播放默认圆
 <card>
 
 ## 排列方向与圆点动效
+
+动效默认开启。可通过 `app.use(SaxDesignVue, { radioGroup: { animated: true } })` 或 `<s-config-provider :radio-group="{ animated: true }">` 统一设置；同一配置对象也支持 `direction`。组件显式传入的参数优先，`:animated="false"` 可单独关闭动效。
 
 设置 `direction="horizontal"` 或 `direction="vertical"` 控制排列方向。横向从第 1 项切到第 4 项时，圆点会依次经过第 2、3 项；纵向先向左拱起，再落到目标，向上和向下切换都保持左侧弧线。中间项只参与视觉路径，选中值与 change 事件只更新一次。禁用项会被跳过，连续点击会从圆点当前位置接续。
 

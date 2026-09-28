@@ -79,7 +79,7 @@ GROUP_PROPS:
     usage: '#direction-and-dot-motion'
   - name: animated
     type: boolean
-    description: Animate the default dot between accepted selections in Radio and RadioButton groups. Respects reduced-motion preferences.
+    description: Animate the default dot between accepted selections in Radio and RadioButton groups. Enabled by default; inherits global radioGroup.animated unless explicitly overridden. Respects reduced-motion preferences.
     default: true
     usage: '#default'
   - name: size
@@ -307,6 +307,8 @@ RadioGroup animates the default dot between selected options in both regular and
 <card>
 
 ## Direction and dot motion
+
+Motion is enabled by default. Configure it with `app.use(SaxDesignVue, { radioGroup: { animated: true } })` or `<s-config-provider :radio-group="{ animated: true }">`; the same object also accepts `direction`. Explicit component props take precedence, and `:animated="false"` disables motion for one group.
 
 Set `direction="horizontal"` or `direction="vertical"` to choose the arrangement. A horizontal jump from option 1 to 4 visits options 2 and 3; vertical movement bows left before landing on its target, both upward and downward. Intermediate options are visual waypoints: the selected value and change event update only once. Disabled options are skipped, and rapid changes continue from the dot’s current position.
 

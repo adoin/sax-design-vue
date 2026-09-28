@@ -1,7 +1,9 @@
-import { nextTick } from 'vue'
+import { h, nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { useGlobalConfig } from '@vuesax-alpha/hooks'
 import RadioGroup from '../src/radio-group.vue'
+import ConfigProvider from '../../config-provider/src/config-provider'
 import { radioDotKeyframes } from '../src/radio-dot-keyframes'
 
 const wrappers: { unmount(): void }[] = []
@@ -19,6 +21,8 @@ const originalAnimate = Object.getOwnPropertyDescriptor(
   'animate',
 )
 let reduced = false
+const globalConfig = useGlobalConfig()
+const originalConfig = globalConfig.value
 const rect = (x: number, width: number) => ({
   x,
   y: 0,
@@ -32,6 +36,7 @@ const rect = (x: number, width: number) => ({
 })
 
 beforeEach(() => {
+  globalConfig.value = {}
   reduced = false
   vi.stubGlobal('matchMedia', () => ({
     matches: reduced,
@@ -53,6 +58,7 @@ beforeEach(() => {
 
 afterEach(() => {
   wrappers.splice(0).forEach((wrapper) => wrapper.unmount())
+  globalConfig.value = originalConfig
   animations.length = 0
   animate.mockClear()
   vi.restoreAllMocks()
@@ -79,6 +85,54 @@ const setup = (type: 'default' | 'button', extra = {}) => {
 }
 
 describe('grouped radio dot motion', () => {
+  it.each(['default', 'button'] as const)(
+    'inherits reactive global motion defaults and preserves local overrides for %s',
+    async (type) => {
+      const value = ref('a')
+      const wrapper = mount(ConfigProvider, {
+        props: { radioGroup: { animated: false, direction: 'vertical' } },
+        slots: {
+          default: () =>
+            h(
+              ConfigProvider,
+              { radioGroup: { direction: 'horizontal' } },
+              {
+                default: () =>
+                  [undefined, true, false].map((animated) =>
+                    h(RadioGroup, {
+                      type,
+                      modelValue: value.value,
+                      options: [
+                        { label: 'A', value: 'a' },
+                        { label: 'B', value: 'b' },
+                      ],
+                      ...(animated === undefined
+                        ? {}
+                        : { animated, direction: 'vertical' }),
+                    }),
+                  ),
+              },
+            ),
+        },
+      })
+      wrappers.push(wrapper)
+      const groups = wrapper.findAllComponents(RadioGroup)
+      expect(groups[0].classes()).toContain('is-horizontal')
+      expect(groups[1].classes()).toContain('is-vertical')
+      value.value = 'b'
+      await nextTick()
+      await nextTick()
+      expect(animate).toHaveBeenCalledTimes(1)
+      await wrapper.setProps({ radioGroup: { animated: true } })
+      value.value = 'a'
+      await nextTick()
+      await nextTick()
+      expect(animate).toHaveBeenCalledTimes(3)
+      await wrapper.setProps({ radioGroup: { animated: false } })
+      expect(animations[1].cancel).toHaveBeenCalled()
+    },
+  )
+
   it.each([-160, 160])('bows left when moving vertically from y=%s', (y) => {
     const frames = radioDotKeyframes(
       [
