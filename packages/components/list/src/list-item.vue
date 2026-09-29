@@ -7,12 +7,16 @@
       <SIcon :name="icon" />
     </div>
     <div :class="ns.e('titles')">
-      <div v-if="title" :class="ns.e('title')">{{ title }}</div>
-      <slot v-else name="title" />
-      <div v-if="subtitle" :class="ns.e('subtitle')">{{ subtitle }}</div>
-      <slot v-else name="subtitle" />
+      <div v-if="title || $slots.title" :class="ns.e('title')">
+        <template v-if="title">{{ title }}</template
+        ><slot v-else name="title" />
+      </div>
+      <div v-if="subtitle || $slots.subtitle" :class="ns.e('subtitle')">
+        <template v-if="subtitle">{{ subtitle }}</template
+        ><slot v-else name="subtitle" />
+      </div>
     </div>
-    <div :class="ns.e('slot')">
+    <div v-if="$slots.default" :class="ns.e('slot')">
       <slot />
     </div>
   </div>

@@ -89,12 +89,12 @@ NEWS:
 使用 `s-list-item` 显示标题与副标题行。
 
 <template #example>
-<list-default />
+<list-zh-default />
 </template>
 
 <template #template>
 
-@[code{1-8}](../../.vuepress/components/list/default.vue)
+@[code{1-8}](../../.vuepress/components/list-zh/default.vue)
 
 </template>
 

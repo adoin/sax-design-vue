@@ -1,8 +1,14 @@
 <template>
   <s-list>
-    <s-list-item title="One text" />
-    <s-list-item title="Another text" subtitle="A little text" />
-    <s-list-item title="Some more text" />
-    <s-list-item title="Even more text" subtitle="Another little text" />
+    <s-list-item title="Project overview" />
+    <s-list-item
+      title="Design resources"
+      subtitle="Components, patterns, and shared assets"
+    />
+    <s-list-item title="Team activity" />
+    <s-list-item
+      title="Release notes"
+      subtitle="Recent improvements and fixes"
+    />
   </s-list>
 </template>

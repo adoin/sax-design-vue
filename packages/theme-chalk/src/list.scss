@@ -3,104 +3,121 @@
 
 @include b(list) {
   width: 100%;
+  min-width: 0;
   position: relative;
-  padding: 5px;
+  display: grid;
+  gap: 6px;
+  color: getColor(text-color);
 
   @include e(item) {
-    border-bottom: 1px solid hsl(0deg 0% 0% / 0.08);
-    padding: 5px;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    gap: 12px;
+    min-width: 0;
+    min-height: 52px;
+    padding: 12px 14px;
+    box-sizing: border-box;
+    border-radius: var(--sax-radius-sm);
+    background: getColor(background, 0.6);
 
-    &:last-child {
-      border-bottom: 1px solid hsl(0deg 0% 0% / 0.08);
+    &:focus-within {
+      background: getColor(primary, 0.05);
     }
   }
 
   @include e(avatar) {
     display: flex;
     align-items: center;
-    margin-right: 4px;
+    justify-content: center;
+    flex: none;
   }
 
   @include e(icon) {
-    padding: 6px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--sax-radius-sm);
+    background: getColor(primary, 0.08);
+    color: getColor(primary);
     .#{$namespace}-icon {
-      font-size: 1.2rem !important;
+      font-size: 18px;
     }
   }
 
   @include e(titles) {
+    display: grid;
+    gap: 4px;
     flex: 1;
     min-width: 0;
+    overflow-wrap: anywhere;
   }
-
   @include e(title) {
-    font-weight: bold;
-    line-height: 1.4;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
   }
-
   @include e(subtitle) {
-    font-size: 0.8rem;
-    line-height: 1.35;
-    color: hsl(0deg 0% 0% / 0.55);
+    font-size: 12px;
+    line-height: 1.6;
+    color: getColor(text-color-secondary);
   }
-
   @include e(slot) {
     margin-left: auto;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    flex-shrink: 0;
+    justify-content: flex-end;
+    gap: 8px;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 50%;
   }
 
   @include e(header) {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    padding: 8px 0;
-    margin-bottom: 5px;
-    font-weight: bold;
-    box-shadow: 0 7px 7px -5px hsl(0deg 0% 0% / 0.08);
-    color: getColor(primary);
-
-    @include when(with-icon) {
-      @include e(icon) {
-        padding-left: 0;
-      }
-    }
-  }
-
-  @include e(header-titles) {
-    flex: 1;
-    display: flex;
-    align-items: center;
+    gap: 10px;
     min-width: 0;
-
-    &::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      margin-left: 12px;
-      background: currentColor;
-      opacity: 0.35;
+    padding: 10px 14px;
+    margin-top: 12px;
+    border-radius: var(--sax-radius-sm);
+    color: getColor(primary);
+    background: color-mix(in srgb, currentColor 6%, transparent);
+    &:first-child {
+      margin-top: 0;
+    }
+    .#{$namespace}-list__icon {
+      background: transparent;
+      color: inherit;
     }
   }
-
+  @include e(header-titles) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
   @include e(header-title) {
-    flex-shrink: 0;
-    font-weight: bold;
-    line-height: 1.4;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  @include e(header-subtitle) {
+    font-size: 12px;
+    line-height: 1.5;
+    color: getColor(text-color-secondary);
+    font-weight: 400;
   }
 
-  @include e(header-subtitle) {
-    font-size: 0.8rem;
-    color: hsl(0deg 0% 0% / 0.55);
-    font-weight: 400;
+  // Padding belongs to the measured wrapper so virtual rows retain the same spacing.
+  > .#{$namespace}-vl .#{$namespace}-vl__item {
+    padding-block: 3px;
   }
 
   @each $type in (primary, success, warn, danger, info, dark) {

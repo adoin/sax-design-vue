@@ -94,7 +94,7 @@ Display title and subtitle rows with `s-list-item`.
 
 <template #template>
 
-@[code{1-8}](../.vuepress/components/list/default.vue)
+@[code{1-14}](../.vuepress/components/list/default.vue)
 
 </template>
 
