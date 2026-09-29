@@ -52,6 +52,8 @@ export interface TableSelectPopupConfig {
 export type TableSelectLabelFormatter = (row: TableRow) => string
 export type TableSelectSelectable = (row: TableRow) => boolean
 
+export type TableSelectCheckedStrategy = 'leaf' | 'all' | 'parent'
+
 export type TableSelectValue = TableRowKey | TableRowKey[] | undefined
 
 export const tableSelectProps = buildProps({
@@ -61,6 +63,11 @@ export const tableSelectProps = buildProps({
   },
   multiple: Boolean,
   checkStrictly: Boolean,
+  checkedStrategy: {
+    type: definePropType<TableSelectCheckedStrategy>(String),
+    values: ['leaf', 'all', 'parent'] as const,
+    default: 'leaf',
+  },
   maxCollapseTags: { type: Number, default: 2 },
   data: {
     type: definePropType<TableRow[]>(Array),

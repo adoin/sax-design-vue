@@ -1,5 +1,11 @@
 ---
 PROPS:
+  - name: checked-strategy
+    type: TableSelectCheckedStrategy
+    values: "leaf | all | parent"
+    default: leaf
+    description: "Project linked tree selection into model keys and tags: leaf retains selectable leaves, all retains all checked nodes, parent compresses fully checked branches. Ignored for strict or flat selection."
+    usage: '#multiple-selection'
   - name: multiple
     type: Boolean
     default: false
@@ -617,7 +623,7 @@ Set `loading` while options or values are being loaded. The trailing indicator m
 
 ## Multiple selection
 
-`multiple` works with flat and tree data. Bind an array of row keys; the popup stays open by default. Selected tags can be removed and collapse beyond `max-collapse-tags`. Tree selection links loaded selectable descendants and includes parent keys when all descendants are selected; disabled branches are excluded. Set `check-strictly` for independent selection. Unloaded nodes are not automatically selected.
+`multiple` works with flat and tree data. Bind an array of row keys; the popup stays open by default. Selected tags can be removed and collapse beyond `max-collapse-tags`. Tree selection links loaded selectable descendants and derives parent check states independently of the checked-strategy output; disabled branches are excluded. Set `check-strictly` for independent selection. The default `checked-strategy="leaf"` outputs selectable leaves; `all` outputs all checked nodes and `parent` compresses fully checked branches. The strategy controls both model keys and tags while parent check states remain derived. Unloaded nodes are not automatically selected.
 
 <template #example>
 <table-select-multiple />
@@ -625,13 +631,13 @@ Set `loading` while options or values are being loaded. The trailing indicator m
 
 <template #template>
 
-@[code{22-43}](../.vuepress/components/table-select/multiple.vue)
+@[code{32-59}](../.vuepress/components/table-select/multiple.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-20}](../.vuepress/components/table-select/multiple.vue)
+@[code{1-30}](../.vuepress/components/table-select/multiple.vue)
 
 </template>
 

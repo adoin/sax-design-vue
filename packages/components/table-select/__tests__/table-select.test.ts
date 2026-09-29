@@ -88,6 +88,7 @@ describe('TableSelect', () => {
   it('links loaded tree descendants and shows indeterminate parents', async () => {
     const wrapper = mountTableSelect({
       multiple: true,
+      checkedStrategy: 'all',
       modelValue: ['a'],
       defaultOpen: true,
       data: [
@@ -158,9 +159,66 @@ describe('TableSelect', () => {
     table.vm.$emit('rowClick', child, new MouseEvent('click'))
     expect(
       new Set(wrapper.emitted('update:modelValue')?.at(-1)?.[0] as string[]),
-    ).toEqual(new Set(['child', 'root']))
+    ).toEqual(new Set(['child']))
     wrapper.unmount()
   })
+
+  it.each([
+    ['leaf', ['a', 'b']],
+    ['all', ['root', 'a', 'b']],
+    ['parent', ['root']],
+  ] as const)(
+    'projects %s keys while retaining tree content after reopening',
+    async (strategy, expected) => {
+      const wrapper = mountTableSelect({
+        multiple: true,
+        checkedStrategy: strategy,
+        modelValue: [],
+        defaultOpen: true,
+        data: [
+          {
+            id: 'root',
+            name: 'Root',
+            children: [
+              { id: 'a', name: 'A' },
+              { id: 'b', name: 'B' },
+            ],
+          },
+        ],
+        columns: [{ field: 'name', treeNode: true }],
+        treeConfig: { children: 'children', defaultExpandedKeys: ['root'] },
+      })
+      await nextTick()
+      await wrapper.findAll('input[type="checkbox"]')[0].setValue(true)
+      const keys = wrapper.emitted('update:modelValue')?.at(-1)?.[0] as string[]
+      expect(new Set(keys)).toEqual(new Set(expected))
+      await wrapper.setProps({ modelValue: keys })
+      expect(wrapper.findAll('.s-tag').map((tag) => tag.text())).toEqual(
+        strategy === 'leaf'
+          ? ['A', 'B']
+          : strategy === 'parent'
+            ? ['Root']
+            : ['Root', 'A', '+1'],
+      )
+      wrapper.getComponent(PopperStub).vm.$emit('update:visible', false)
+      await nextTick()
+      wrapper.getComponent(PopperStub).vm.$emit('update:visible', true)
+      await nextTick()
+      expect(
+        wrapper.findAll('.s-table__cell-content').map((cell) => cell.text()),
+      ).toEqual(expect.arrayContaining(['Root', 'A', 'B']))
+      expect(wrapper.find('.s-table__tree-toggle').exists()).toBe(true)
+      expect(
+        wrapper
+          .findAll('.s-table__tree-leading')
+          .slice(1)
+          .every((node) => node.attributes('style')?.includes('20px')),
+      ).toBe(true)
+      await wrapper.findAll('input[type="checkbox"]')[1].setValue(false)
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['b']])
+      wrapper.unmount()
+    },
+  )
 
   it('shows the shared loader and blocks popup opening without dropping its value', async () => {
     const wrapper = mountTableSelect({

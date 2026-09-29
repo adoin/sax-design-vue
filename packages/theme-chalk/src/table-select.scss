@@ -194,8 +194,8 @@
 }
 
 .s-table-select__panel .s-table__data-row.is-selected {
-  background: getColor(color, 0.08);
-  color: getColor(color);
+  // Use semantic ink; the generic color token can be white in a popup.
+  color: getColor(text-color);
 }
 
 .s-table-select__panel .s-table__data-row.is-disabled-option {

@@ -1,5 +1,11 @@
 ---
 PROPS:
+  - name: checked-strategy
+    type: TableSelectCheckedStrategy
+    values: "leaf | all | parent"
+    default: leaf
+    description: 树形联动时控制输出键和标签：leaf 仅可选叶子、all 全部选中节点、parent 合并为已全选父节点。check-strictly 或普通数据不受此策略影响。
+    usage: '#multiple-selection'
   - name: multiple
     type: Boolean
     default: false
@@ -617,7 +623,7 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行或多行�
 
 ## 多选
 
-`multiple` 适用于普通表格和树形数据。多选模型为行键数组，弹层默认保持打开；标签可移除并在超过 `max-collapse-tags` 后折叠。树形数据默认联动已加载的可选后代，全部选中时自动包含父节点键；禁用节点不参与联动。设置 `check-strictly` 可独立选择各节点。未加载的节点不会自动加入选中值。
+`multiple` 适用于普通表格和树形数据。多选模型为行键数组，弹层默认保持打开；标签可移除并在超过 `max-collapse-tags` 后折叠。树形数据默认联动已加载的可选后代，父节点勾选状态由后代推导，输出键由 checked-strategy 控制；禁用节点不参与联动。设置 `check-strictly` 可独立选择各节点。`checked-strategy` 默认为 `leaf`，只输出可选叶子；`all` 输出全部选中节点，`parent` 将全选分支合并为父节点。策略同时控制模型和标签，父节点仍显示全选或半选。未加载的节点不会自动加入选中值。
 
 <template #example>
 <table-select-zh-multiple />
@@ -625,13 +631,13 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行或多行�
 
 <template #template>
 
-@[code{22-43}](../../.vuepress/components/table-select-zh/multiple.vue)
+@[code{32-59}](../../.vuepress/components/table-select-zh/multiple.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-20}](../../.vuepress/components/table-select-zh/multiple.vue)
+@[code{1-30}](../../.vuepress/components/table-select-zh/multiple.vue)
 
 </template>
 

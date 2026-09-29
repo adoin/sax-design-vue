@@ -199,7 +199,23 @@ const entries = computed(() => {
 const multipleKeys = computed(() =>
   Array.isArray(props.modelValue) ? props.modelValue : [],
 )
-const keySet = computed(() => new Set(multipleKeys.value))
+const linked = computed(() => Boolean(props.treeConfig) && !props.checkStrictly)
+const keySet = computed(() => {
+  const keys = new Set(multipleKeys.value)
+  if (linked.value) {
+    for (const key of multipleKeys.value) {
+      const row = entriesByKey.value.get(key)?.row
+      if (row && isRowSelectable(row)) {
+        for (const child of descendants(row).filter(isRowSelectable)) {
+          const childKey = rowKeyOf(child)
+          if (childKey !== undefined) keys.add(childKey)
+        }
+      }
+    }
+    normalizeParents(keys)
+  }
+  return keys
+})
 const entriesByKey = computed(
   () => new Map(entries.value.map((entry) => [entry.key, entry])),
 )
@@ -216,7 +232,7 @@ const checkedRows = computed(() =>
     .map((entry) => entry.row),
 )
 const visibleKeys = computed(() =>
-  multipleKeys.value.slice(0, Math.max(1, props.maxCollapseTags)),
+  displayKeys.value.slice(0, Math.max(1, props.maxCollapseTags)),
 )
 const descendants = (row: TableRow): TableRow[] => {
   const result: TableRow[] = []
@@ -235,6 +251,55 @@ const targets = (row: TableRow) =>
     ? [row, ...descendants(row)]
     : [row]
   ).filter(isRowSelectable)
+const normalizeParents = (keys: Set<TableRowKey>) => {
+  for (const entry of [...entries.value].reverse()) {
+    if (!isRowSelectable(entry.row) || !getChildren(entry.row).length) continue
+    const children = descendants(entry.row).filter(isRowSelectable)
+    if (!children.length) continue
+    if (children.every((child) => keys.has(rowKeyOf(child)!)))
+      keys.add(entry.key)
+    else keys.delete(entry.key)
+  }
+}
+const projectKeys = (keys: Set<TableRowKey>) => {
+  if (!linked.value || props.checkedStrategy === 'all') return [...keys]
+  return [...keys].filter((key) => {
+    const entry = entriesByKey.value.get(key)
+    if (!entry) return true
+    if (props.checkedStrategy === 'leaf')
+      return !descendants(entry.row).some(isRowSelectable)
+    let parent = entry.parent
+    while (parent !== undefined) {
+      if (keys.has(parent)) return false
+      parent = entriesByKey.value.get(parent)?.parent
+    }
+    return true
+  })
+}
+const displayKeys = computed(() => projectKeys(keySet.value))
+const emitMultiple = (keys: TableRowKey[]) => {
+  emit('update:modelValue', keys)
+  emit(
+    'change',
+    keys,
+    keys
+      .map((key) => entriesByKey.value.get(key)?.row)
+      .filter((row): row is TableRow => Boolean(row)),
+  )
+}
+watch(
+  () => [props.checkedStrategy, props.checkStrictly],
+  () => {
+    if (!props.multiple) return
+    const keys = displayKeys.value
+    if (
+      keys.length !== multipleKeys.value.length ||
+      keys.some((key, index) => key !== multipleKeys.value[index])
+    )
+      emitMultiple(keys)
+  },
+)
+
 const stateOf = (row: TableRow) => {
   const candidates = targets(row)
   const leaves =
@@ -260,7 +325,7 @@ const toggleMultiple = (row: TableRow, checked = !stateOf(row).checked) => {
     !isRowSelectable(row)
   )
     return
-  const next = new Set(multipleKeys.value)
+  const next = new Set(keySet.value)
   for (const target of targets(row)) {
     const key = rowKeyOf(target)
     if (key !== undefined) {
@@ -268,33 +333,15 @@ const toggleMultiple = (row: TableRow, checked = !stateOf(row).checked) => {
       else next.delete(key)
     }
   }
-  if (props.treeConfig && !props.checkStrictly) {
-    for (const entry of [...entries.value].reverse()) {
-      if (!isRowSelectable(entry.row) || !getChildren(entry.row).length)
-        continue
-      const children = descendants(entry.row).filter(isRowSelectable)
-      if (!children.length) continue
-      if (children.every((child) => next.has(rowKeyOf(child)!)))
-        next.add(entry.key)
-      else next.delete(entry.key)
-    }
-  }
-  const keys = [...next]
-  emit('update:modelValue', keys)
-  emit(
-    'change',
-    keys,
-    entries.value
-      .filter((entry) => next.has(entry.key))
-      .map((entry) => entry.row),
-  )
+  if (linked.value) normalizeParents(next)
+  emitMultiple(projectKeys(next))
   if (props.closeOnSelect === true) close()
 }
 const removeKey = (key: TableRowKey) => {
   const row = entries.value.find((entry) => entry.key === key)?.row
   if (row) toggleMultiple(row, false)
   else if (!props.disabled && !props.loading) {
-    const keys = multipleKeys.value.filter((value) => value !== key)
+    const keys = displayKeys.value.filter((value) => value !== key)
     emit('update:modelValue', keys)
     emit(
       'change',
@@ -503,13 +550,10 @@ defineExpose({
         <span
           :class="[
             ns.e('value'),
-            ns.is(
-              'placeholder',
-              multiple ? !multipleKeys.length : !selectedRow,
-            ),
+            ns.is('placeholder', multiple ? !displayKeys.length : !selectedRow),
           ]"
         >
-          <span v-if="multiple && multipleKeys.length" :class="ns.e('tags')">
+          <span v-if="multiple && displayKeys.length" :class="ns.e('tags')">
             <STag
               v-for="key in visibleKeys"
               :key="key"
@@ -521,12 +565,12 @@ defineExpose({
               >{{ labelFor(key) }}</STag
             >
             <STag
-              v-if="multipleKeys.length > visibleKeys.length"
+              v-if="displayKeys.length > visibleKeys.length"
               size="small"
               :title="
-                multipleKeys.slice(visibleKeys.length).map(labelFor).join(', ')
+                displayKeys.slice(visibleKeys.length).map(labelFor).join(', ')
               "
-              >+{{ multipleKeys.length - visibleKeys.length }}</STag
+              >+{{ displayKeys.length - visibleKeys.length }}</STag
             >
           </span>
           <slot
@@ -556,7 +600,7 @@ defineExpose({
         <button
           v-if="
             clearable &&
-            (multiple ? multipleKeys.length > 0 : modelValue !== undefined) &&
+            (multiple ? displayKeys.length > 0 : modelValue !== undefined) &&
             !loading
           "
           :class="ns.e('clear')"
