@@ -3,6 +3,39 @@ import { describe, expect, it } from 'vitest'
 import Textarea from '../src/textarea.vue'
 
 describe('Textarea', () => {
+  it.each(['loading', 'disabled'] as const)(
+    'preserves content and blocks commits while %s',
+    async (state) => {
+      const wrapper = mount(Textarea, {
+        props: {
+          modelValue: '  Saved text  ',
+          trim: true,
+          immediate: false,
+          [state]: true,
+        },
+      })
+      const textarea = wrapper.get<HTMLTextAreaElement>('textarea')
+      expect(textarea.element.disabled).toBe(true)
+      expect(textarea.element.value).toBe('  Saved text  ')
+      expect(wrapper.classes()).toContain(`is-${state}`)
+      if (state === 'loading') {
+        expect(wrapper.classes()).not.toContain('is-disabled')
+        expect(wrapper.find('.s-control-loading').exists()).toBe(true)
+        expect(wrapper.attributes('aria-busy')).toBe('true')
+      }
+      textarea.element.dispatchEvent(new Event('input'))
+      textarea.element.dispatchEvent(new Event('change'))
+      textarea.element.dispatchEvent(new FocusEvent('blur'))
+      expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+      expect(wrapper.emitted('change')).toBeUndefined()
+      await wrapper.setProps({ [state]: false })
+      expect(textarea.element.disabled).toBe(false)
+      await textarea.setValue('New text')
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['New text'])
+      wrapper.unmount()
+    },
+  )
+
   it('defers controlled updates until an IME composition ends', async () => {
     const wrapper = mount(Textarea, { props: { modelValue: 'old' } })
     const textarea = wrapper.get<HTMLTextAreaElement>('textarea')

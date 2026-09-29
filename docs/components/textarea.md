@@ -1,5 +1,11 @@
 ---
 PROPS:
+  - name: loading
+    type: Boolean
+    values: "true | false"
+    default: false
+    description: Show the shared loader at the top right, preserve content and normal emphasis, and block editing and value commits.
+    usage: '#loading'
   - name: size
     type: ComponentSize
     values: 'small | default | large'
@@ -94,7 +100,7 @@ PROPS:
     values: 'true | false'
     description: Disable editing and interaction.
     default: false
-    usage: '#advanced'
+    usage: '#disabled'
   - name: editable
     type: Boolean
     values: 'true | false'
@@ -366,6 +372,66 @@ Use `max-length`, `show-word-count`, `auto-size` and `trim` for a bounded, autom
 <template #script>
 
 @[code{13-17}](../.vuepress/components/textarea/advanced.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Disabled
+
+`disabled` prevents editing and focus, using reduced opacity and an unavailable cursor.
+
+<template #example>
+<textarea-disabled />
+</template>
+
+<template #template>
+
+@[code{9-22}](../.vuepress/components/textarea/disabled.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-7}](../.vuepress/components/textarea/disabled.vue)
+
+</template>
+
+<template #style>
+
+@[code{24-36}](../.vuepress/components/textarea/disabled.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Loading
+
+`loading` preserves text and normal emphasis, shows the shared loader at the top right, and uses a progress cursor. Input and value commits are blocked, including trimming on blur.
+
+<template #example>
+<textarea-loading />
+</template>
+
+<template #template>
+
+@[code{9-22}](../.vuepress/components/textarea/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-7}](../.vuepress/components/textarea/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{24-36}](../.vuepress/components/textarea/loading.vue)
 
 </template>
 

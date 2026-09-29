@@ -1,3 +1,4 @@
+@use 'mixins/loading-cursor' as *;
 @use 'mixins/mixins' as *;
 @use 'common/var' as *;
 
@@ -120,7 +121,7 @@
     }
   }
 
-  &:hover:not(.is-focus):not(.is-disabled) {
+  &:hover:not(.is-focus):not(.is-disabled):not(.is-loading) {
     background: getColor('background');
     @include control-surface-shadow(hover);
   }
@@ -135,6 +136,22 @@
     @include e(count) {
       background: getColor(danger);
       opacity: 1;
+    }
+  }
+
+  @include e(loading) {
+    position: absolute;
+    right: var(--sax-textarea-padding);
+    top: var(--sax-textarea-padding);
+    pointer-events: none;
+  }
+  @include when(loading) {
+    @include loading-cursor;
+    @include e(inner) {
+      padding-right: calc(var(--sax-textarea-padding) + 28px);
+    }
+    @include e(label) {
+      max-width: calc(100% - 52px);
     }
   }
 

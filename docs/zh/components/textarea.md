@@ -1,5 +1,11 @@
 ---
 PROPS:
+  - name: loading
+    type: Boolean
+    values: "true | false"
+    default: false
+    description: 右上角显示共享加载图标，保留内容和正常明度，阻止编辑与值提交。
+    usage: '#loading'
   - name: size
     type: ComponentSize
     values: 'small | default | large'
@@ -94,7 +100,7 @@ PROPS:
     values: 'true | false'
     description: 禁用编辑与交互。
     default: false
-    usage: '#advanced'
+    usage: '#disabled'
   - name: editable
     type: Boolean
     values: 'true | false'
@@ -366,6 +372,66 @@ NEWS:
 <template #script>
 
 @[code{13-17}](../../.vuepress/components/textarea/advanced.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 禁用
+
+`disabled` 禁止编辑和聚焦，以降低明度及禁止光标表达不可用状态。
+
+<template #example>
+<textarea-zh-disabled />
+</template>
+
+<template #template>
+
+@[code{7-20}](../../.vuepress/components/textarea-zh/disabled.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/textarea-zh/disabled.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-34}](../../.vuepress/components/textarea-zh/disabled.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 加载
+
+`loading` 保留现有文本和正常明度，右上角显示共享加载图标，光标显示处理中。加载时不接受输入，也不会因失焦裁剪文字或提交未完成的输入。
+
+<template #example>
+<textarea-zh-loading />
+</template>
+
+<template #template>
+
+@[code{7-20}](../../.vuepress/components/textarea-zh/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/textarea-zh/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-34}](../../.vuepress/components/textarea-zh/loading.vue)
 
 </template>
 

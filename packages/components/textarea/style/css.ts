@@ -1,2 +1,4 @@
 import '@vuesax-alpha/components/base/style/css'
 import '@vuesax-alpha/theme-chalk/vs-textarea.css'
+
+import '@vuesax-alpha/components/icon/style/css'

@@ -8,11 +8,13 @@
       {
         [ns.is('focus')]: isFocus,
         [ns.is('disabled')]: disabled,
+        [ns.is('loading')]: loading,
         [ns.is('danger')]: isDanger,
         [ns.is('label-active')]: isLabelActive,
       },
     ]"
     :style="wrapperStyle"
+    :aria-busy="loading"
   >
     <label v-if="label" :class="ns.e('label')" :for="textareaId">
       {{ label }}
@@ -25,7 +27,7 @@
       :value="pendingValue"
       :class="ns.e('inner')"
       :readonly="readonly || !editable"
-      :disabled="disabled"
+      :disabled="inactive"
       :placeholder="placeholder"
       :name="name"
       :form="form"
@@ -43,6 +45,8 @@
       @keyup="(event) => emit('keyup', event)"
       @click="(event) => emit('click', event)"
     />
+
+    <IconControlLoading v-if="loading" :class="ns.e('loading')" />
 
     <div v-if="showCount" :class="ns.e('count')">
       {{ wordCount }}<template v-if="countLimit"> / {{ countLimit }}</template>
@@ -67,6 +71,7 @@ import {
   useShape,
   useSize,
 } from '@vuesax-alpha/hooks'
+import { IconControlLoading } from '@vuesax-alpha/components/icon'
 import { getCssColor } from '@vuesax-alpha/utils'
 import { textareaEmits, textareaProps } from './textarea'
 import type { CSSProperties } from 'vue'
@@ -90,6 +95,16 @@ const isFocus = shallowRef(false)
 const textareaRef = useTemplateRef<HTMLTextAreaElement>('textareaRef')
 const pendingValue = shallowRef(props.modelValue || '')
 const composing = shallowRef(false)
+const inactive = computed(() => props.disabled || props.loading)
+const cannotEdit = computed(
+  () => inactive.value || props.readonly || !props.editable,
+)
+watch(inactive, (value) => {
+  if (!value) return
+  composing.value = false
+  isFocus.value = false
+  textareaRef.value?.blur()
+})
 const textareaId = computed(() => String(attrs.id || generatedId.value))
 
 const countLimit = computed(() => props.counter ?? resolvedMaxLength.value)
@@ -156,7 +171,7 @@ const resizeTextarea = () => {
 }
 
 watch(
-  () => [props.modelValue, autoSizeConfig.value],
+  () => [props.modelValue, autoSizeConfig.value, props.loading],
   () => nextTick(resizeTextarea),
   { deep: true },
 )
@@ -172,6 +187,7 @@ watch(
 onMounted(() => resizeTextarea())
 
 const handleInput = (evt: Event) => {
+  if (cannotEdit.value) return
   const target = evt.target as HTMLTextAreaElement
   pendingValue.value = target.value
   if (props.immediate && !composing.value && !(evt as InputEvent).isComposing)
@@ -181,6 +197,7 @@ const handleInput = (evt: Event) => {
 }
 
 const handleCompositionStart = () => {
+  if (cannotEdit.value) return
   composing.value = true
 }
 
@@ -190,6 +207,7 @@ const handleCompositionEnd = (evt: CompositionEvent) => {
 }
 
 const handleChange = (evt: Event) => {
+  if (cannotEdit.value) return
   const target = evt.target as HTMLTextAreaElement
   const value = props.trim ? target.value.trim() : target.value
   if (value !== target.value) target.value = value
@@ -200,13 +218,18 @@ const handleChange = (evt: Event) => {
 }
 
 const handleFocus = (evt: FocusEvent) => {
+  if (inactive.value) return
   isFocus.value = true
   emit('focus', evt)
 }
 
 const handleBlur = (evt: FocusEvent) => {
   isFocus.value = false
-  if (props.trim && pendingValue.value !== pendingValue.value.trim()) {
+  if (
+    !cannotEdit.value &&
+    props.trim &&
+    pendingValue.value !== pendingValue.value.trim()
+  ) {
     pendingValue.value = pendingValue.value.trim()
     emit('update:modelValue', pendingValue.value)
   }

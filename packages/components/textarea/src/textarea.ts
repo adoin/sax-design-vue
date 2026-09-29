@@ -35,6 +35,7 @@ export const textareaProps = buildProps({
     default: true,
   },
   disabled: Boolean,
+  loading: Boolean,
   placeholder: String,
   name: String,
   form: String,
