@@ -48,10 +48,14 @@ See the full guide on the [documentation website](https://sax-design.emssion.com
 ## Programmatic dialogs
 
 ```ts
-import { SPromptBox } from 'sax-design-vue'
+import { SDialogBox } from 'sax-design-vue'
 
-await SPromptBox.alert('Saved successfully')
-await SPromptBox.confirm('Delete this item?')
+await SDialogBox.alert('Saved successfully')
+try {
+  await SDialogBox.confirm('Delete this item?')
+} catch {
+  // The user cancelled or closed the dialog
+}
 ```
 
 ## Development

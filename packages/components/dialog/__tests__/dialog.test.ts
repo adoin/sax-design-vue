@@ -3,6 +3,7 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useGlobalConfig } from '@vuesax-alpha/hooks'
 import Dialog from '../src/dialog.vue'
+import dialogBox from '../src/dialog-box'
 import ConfigProvider from '../../config-provider/src/config-provider'
 import type { DialogExposes } from '../src/dialog'
 
@@ -80,6 +81,104 @@ describe('Dialog minimization and ownership', () => {
       )
     },
   )
+
+  it('validates once before confirmation and allows a rejected attempt to retry', async () => {
+    let resolve!: (value: boolean) => void
+    const beforeConfirm = vi.fn(
+      () =>
+        new Promise<boolean>((done) => {
+          resolve = done
+        }),
+    )
+    const wrapper = mountDialog({
+      fullScreen: false,
+      showFooter: true,
+      showConfirmButton: true,
+      beforeConfirm,
+    })
+    await settle()
+    const dialog = wrapper.vm as unknown as DialogExposes
+    await wrapper.setProps({ confirmDisabled: true })
+    await dialog.confirm()
+    expect(beforeConfirm).not.toHaveBeenCalled()
+    await wrapper.setProps({ confirmDisabled: false })
+    const first = dialog.confirm()!
+    const second = dialog.confirm()!
+    expect(beforeConfirm).toHaveBeenCalledTimes(1)
+    resolve(false)
+    await Promise.all([first, second])
+    expect(dialog.visible).toBe(true)
+    expect(wrapper.emitted('confirm')).toBeUndefined()
+    const retry = dialog.confirm()!
+    resolve(true)
+    await retry
+    expect(wrapper.emitted('confirm')).toHaveLength(1)
+    expect(dialog.visible).toBe(false)
+  })
+
+  it('ignores stale async confirmation after closing and reports validation errors', async () => {
+    let resolve!: (value: boolean) => void
+    const wrapper = mountDialog({
+      beforeConfirm: () =>
+        new Promise<boolean>((done) => {
+          resolve = done
+        }),
+    })
+    await settle()
+    const dialog = wrapper.vm as unknown as DialogExposes
+    const pending = dialog.confirm()!
+    dialog.close()
+    resolve(true)
+    await pending
+    expect(wrapper.emitted('confirm')).toBeUndefined()
+    const error = new Error('Validation failed')
+    await wrapper.setProps({ modelValue: false })
+    await wrapper.setProps({
+      modelValue: true,
+      beforeConfirm: () => Promise.reject(error),
+    })
+    await settle()
+    await dialog.confirm()
+    expect(wrapper.emitted('confirmError')?.at(-1)).toEqual([error])
+    expect(dialog.visible).toBe(true)
+  })
+
+  it('resolves imperative results after disposal and rejects cancelled confirmation', async () => {
+    const accepted = dialogBox({ title: 'Service test', content: 'Continue?' })
+    await settle()
+    const buttons = document.querySelectorAll<HTMLButtonElement>(
+      '.s-dialog__actions button',
+    )
+    buttons[buttons.length - 1].click()
+    await expect(accepted).resolves.toBe('confirm')
+    expect(document.querySelector('[data-s-dialog-service]')).toBeNull()
+    const cancelled = dialogBox
+      .confirm('Continue?', 'Cancel test')
+      .catch((action) => action)
+    await settle()
+    document
+      .querySelector<HTMLButtonElement>('.s-dialog__actions button')!
+      .click()
+    await expect(cancelled).resolves.toBe('cancel')
+    expect(document.querySelector('[data-s-dialog-service]')).toBeNull()
+  })
+
+  it('does not resolve an imperative confirmation when beforeClose denies it', async () => {
+    let allowed = false
+    const result = dialogBox({ beforeClose: (done) => done(!allowed) })
+    await settle()
+    const buttons = document.querySelectorAll<HTMLButtonElement>(
+      '.s-dialog__actions button',
+    )
+    buttons[buttons.length - 1].click()
+    await settle()
+    expect(document.querySelector('[data-s-dialog-service]')).not.toBeNull()
+    expect(document.querySelector('.s-dialog-original')).not.toBeNull()
+    allowed = true
+    document.querySelector<HTMLButtonElement>('.s-dialog__close')!.click()
+    await expect(result).resolves.toBe('close')
+    expect(document.querySelector('[data-s-dialog-service]')).toBeNull()
+  })
 
   it('retains content state while minimized without closing the model', async () => {
     const unmounted = vi.fn()

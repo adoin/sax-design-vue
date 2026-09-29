@@ -29,7 +29,6 @@ const ORIGINAL = [
   'pagination',
   'popup',
   'progress',
-  'prompt',
   'radio',
   'select',
   'sidebar',

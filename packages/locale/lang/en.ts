@@ -157,11 +157,6 @@ export default {
     menu: {
       label: 'Menu',
     },
-    prompt: {
-      accept: 'Accept',
-      cancel: 'Cancel',
-      title: 'Dialog',
-    },
     noticeBar: {
       close: 'Close',
     },

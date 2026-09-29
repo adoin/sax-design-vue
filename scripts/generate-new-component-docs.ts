@@ -167,27 +167,6 @@ const text = ref('Hello textarea')
 `,
   },
   {
-    name: 'prompt',
-    title: 'Prompt',
-    vueContent: `<template>
-  <div>
-    <s-button @click="open = true">Open</s-button>
-    <s-prompt
-      v-model="open"
-      title="Confirm"
-      text="Continue?"
-      type="confirm"
-    />
-  </div>
-</template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-const open = ref(false)
-</script>
-`,
-  },
-  {
     name: 'tabs',
     title: 'Tabs',
     vueContent: `<template>

@@ -163,28 +163,6 @@ const components = {
       { id: 'more', title: 'More Options', demo: `<template>\n  <s-images alternating not-margin>\n    <s-image src="https://picsum.photos/seed/m1/300" />\n    <s-image src="https://picsum.photos/seed/m2/300" />\n    <s-image src="https://picsum.photos/seed/m3/300" />\n    <s-image src="https://picsum.photos/seed/m4/300" />\n  </s-images>\n</template>` },
     ],
   },
-  prompt: {
-    props: [
-      ['v-model', 'Boolean', 'true, false', 'Dialog visibility.', 'false', '#default'],
-      ['title', 'String', 'String', 'Dialog title.', 'Dialog', '#default'],
-      ['text', 'String', 'String', 'Dialog body text.', null, '#default'],
-      ['type', 'String', 'alert, confirm', 'Prompt type.', 'alert', '#default'],
-      ['color', 'String', 'primary, success, danger', 'Accent color.', 'primary', '#default'],
-      ['accept-text', 'String', 'String', 'Accept button label.', 'Accept', '#default'],
-      ['cancel-text', 'String', 'String', 'Cancel button label.', 'Cancel', '#default'],
-      ['buttons-hidden', 'Boolean', 'true, false', 'Hide action buttons.', 'false', '#default'],
-    ],
-    events: [
-      ['update:modelValue', 'boolean', 'Visibility change.'],
-      ['accept', null, 'Accept button clicked.'],
-      ['cancel', null, 'Cancel button clicked.'],
-      ['close', null, 'Dialog closed.'],
-    ],
-    sections: [
-      { id: 'default', title: 'Default', demo: `<template>\n  <s-button @click="active = true">Open prompt</s-button>\n  <s-prompt v-model="active" title="Confirm action" text="Do you want to continue?" type="confirm" @accept="active = false" @cancel="active = false" />\n</template>\n\n<script setup lang="ts">\nimport { ref } from 'vue'\nconst active = ref(false)\n</script>` },
-      { id: 'alert', title: 'Alert', demo: `<template>\n  <s-button @click="active = true">Alert</s-button>\n  <s-prompt v-model="active" type="alert" title="Notice" text="Saved successfully." @accept="active = false" />\n</template>\n\n<script setup lang="ts">\nimport { ref } from 'vue'\nconst active = ref(false)\n</script>` },
-    ],
-  },
   tabs: {
     props: [
       ['v-model', 'Number, String', 'index or name', 'Active tab index.', '0', '#default'],
@@ -369,13 +347,6 @@ const componentMeta = {
       more: 'Fine-tune spacing and corners with `alternating` and margin props.',
     },
   },
-  prompt: {
-    description: 'Modal prompts for alerts and confirmations with customizable actions.',
-    leads: {
-      default: 'Open a confirm dialog bound with `v-model`.',
-      alert: 'Show a single-action alert-style prompt.',
-    },
-  },
   tabs: {
     description: 'Organize content into switchable tab panels.',
     leads: {
@@ -546,16 +517,6 @@ const componentMetaZh = {
       more: '通过 `alternating` 与 margin 属性微调间距与圆角。',
     },
     props: { hover: '悬停动画样式。', alternating: '交替项偏移。', radius: '禁用圆角。' },
-  },
-  prompt: {
-    description: '用于提醒与确认的模态提示框，可自定义操作。',
-    sectionTitles: { default: '默认', alert: '警告' },
-    leads: { default: '使用 `v-model` 打开确认对话框。', alert: '显示单按钮的警告式提示。' },
-    props: {
-      'v-model': '可见性。', type: '提示类型。', title: '对话框标题。', text: '对话框正文。',
-      acceptText: '确认按钮文案。', cancelText: '取消按钮文案。', buttonsHidden: '隐藏操作按钮。',
-    },
-    events: { accept: '点击确认时触发。', cancel: '点击取消时触发。', close: '对话框关闭时触发。' },
   },
   tabs: {
     description: '将内容组织为可切换的标签面板。',

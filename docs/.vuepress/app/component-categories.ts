@@ -141,7 +141,6 @@ export const componentCategories: ComponentCategory[] = [
       component('Notice bar', '公告栏', '/components/notice-bar'),
       component('Notification', '通知', '/components/notification'),
       component('Progress', '进度条', '/components/progress'),
-      component('Prompt', '提示框', '/components/prompt'),
       component('Result', '结果', '/components/result'),
       component('Tooltip', '文字提示', '/components/tooltip'),
     ],

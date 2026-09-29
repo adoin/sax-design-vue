@@ -2,7 +2,7 @@ import { SInfiniteScroll } from '@vuesax-alpha/components/infinite-scroll'
 import { SIconPicker } from '@vuesax-alpha/components/icon-picker'
 import { SLoading } from '@vuesax-alpha/components/loading'
 import { SNotification } from '@vuesax-alpha/components/notification'
-import { SPromptBox } from '@vuesax-alpha/components/prompt'
+import { SDialogBox } from '@vuesax-alpha/components/dialog'
 
 import type { Plugin } from 'vue'
 
@@ -11,5 +11,5 @@ export default [
   SIconPicker,
   SLoading,
   SNotification,
-  SPromptBox,
+  SDialogBox,
 ] as Plugin[]

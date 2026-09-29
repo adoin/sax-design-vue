@@ -262,11 +262,6 @@ export const enSearchData: SearchDataOption[] = [
     headers: [{ title: 'Default', slug: 'default' }],
   },
   {
-    title: 'Prompt',
-    path: 'components/prompt',
-    headers: [{ title: 'Default', slug: 'default' }],
-  },
-  {
     title: 'Slider',
     path: 'components/slider',
     headers: [{ title: 'Default', slug: 'default' }],

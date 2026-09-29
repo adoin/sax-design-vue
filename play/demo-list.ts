@@ -10,7 +10,6 @@ export const PLAY_DEMOS = [
   'collapse',
   'list',
   'images',
-  'prompt',
   'tabs',
   'slider',
   'upload',

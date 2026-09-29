@@ -1,6 +1,16 @@
 ---
 description: 'Present focused modal content and require a user decision.'
 PROPS:
+  - name: before-confirm
+    type: DialogBeforeConfirmFn
+    default: null
+    description: Validate before confirming, synchronously or asynchronously. Returning false keeps the dialog open; success emits confirm and follows confirm-closable. Errors emit confirm-error and keep it open.
+    usage: '#before-confirm'
+  - name: confirm-disabled
+    type: Boolean
+    default: false
+    description: Disable the built-in confirmation action.
+    usage: '#before-confirm'
   - name: minimizable
     type: Boolean
     default: null
@@ -258,6 +268,10 @@ PROPS:
     code: null
 
 EVENTS:
+  - name: confirm-error
+    type: "(error: unknown) => void"
+    description: Emitted when before-confirm throws or rejects.
+    usage: '#before-confirm'
   - name: minimize
     description: Emitted after minimizing; does not change v-model.
   - name: restore
@@ -275,6 +289,10 @@ EVENTS:
       </s-dialog>
 
 EXPOSES:
+  - name: confirm
+    type: "() => Promise<void> | undefined"
+    description: Run the same validation and confirmation flow as the built-in button.
+    usage: '#before-confirm'
   - name: minimize
     type: '() => void'
     description: Minimize an open dialog when minimization is enabled.
@@ -309,8 +327,8 @@ SLOTS:
     code: null
 
   - name: footer
-    type: slot
-    values: "null"
+    type: Slot
+    scope: DialogFooterScope
     description: slot footer of Dialog
     default: null
     link: null
@@ -325,13 +343,7 @@ SLOTS:
 
 # Dialog
 
-<card>
 
-**Dialog is a general-purpose modal container** — header, body, and footer are all yours via slots.
-
-For simple **confirm / alert** flows with built-in Accept and Cancel buttons, use [Prompt](/components/prompt) instead. Prompt is not redundant: it targets “Are you sure?”-style interactions; Dialog targets arbitrary UI (forms, wizards, nested modals, fullscreen views).
-
-</card>
 
 <card>
 
@@ -738,6 +750,68 @@ By default, dialogs and bubbles are disposed with their owner. Set `global` when
 <template #style>
 
 @[code{63-77}](../.vuepress/components/dialog/global.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Imperative
+
+After `app.use(SaxDesignVue)`, `$dialog` is available. Import `SDialogBox` for direct calls, or install it with `app.use(SDialogBox)` to bind the application context.
+
+`SDialogBox` and `$dialog` reuse Dialog rendering and lifecycle without a template. alert() resolves an action; confirm() resolves true on confirmation and rejects with cancel or close otherwise. Calling SDialogBox directly resolves confirm, cancel, or close after the closing animation and disposal. Imperative instances own their lifetime; handle confirmation cancellation explicitly.
+
+<template #example>
+<dialog-imperative />
+</template>
+
+<template #template>
+
+@[code{23-31}](../.vuepress/components/dialog/imperative.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-21}](../.vuepress/components/dialog/imperative.vue)
+
+</template>
+
+<template #style>
+
+@[code{33-46}](../.vuepress/components/dialog/imperative.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Before confirm
+
+`before-confirm` can run SForm.validate() and await asynchronous work. Return false to keep the dialog open. The confirm button shows loading and ignores duplicate requests while pending; stale results after cancellation or close cannot confirm. Handle confirm-error to display business errors. Custom footers receive confirm, cancel, pending and disabled to reuse the same flow.
+
+<template #example>
+<dialog-validation />
+</template>
+
+<template #template>
+
+@[code{32-49}](../.vuepress/components/dialog/validation.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-30}](../.vuepress/components/dialog/validation.vue)
+
+</template>
+
+<template #style>
+
+@[code{51-60}](../.vuepress/components/dialog/validation.vue)
 
 </template>
 

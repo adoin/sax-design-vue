@@ -42,7 +42,7 @@ declare module '@vue/runtime-core' {
 
   interface ComponentCustomProperties {
     $notification: (typeof import('sax-design-vue'))['SNotification']
-    $prompt: (typeof import('sax-design-vue'))['SPromptBox']
+    $dialog: (typeof import('sax-design-vue'))['SDialogBox']
     $loading: (typeof import('sax-design-vue'))['SLoadingFn']
   }
 }

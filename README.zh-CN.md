@@ -48,10 +48,14 @@ createApp(App).use(SaxDesignVue).mount('#app')
 ## 命令式弹窗
 
 ```ts
-import { SPromptBox } from 'sax-design-vue'
+import { SDialogBox } from 'sax-design-vue'
 
-await SPromptBox.alert('保存成功')
-await SPromptBox.confirm('确定删除？')
+await SDialogBox.alert('保存成功')
+try {
+  await SDialogBox.confirm('确定删除？')
+} catch {
+  // 用户取消或关闭
+}
 ```
 
 ## 本地开发

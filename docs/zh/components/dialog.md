@@ -1,6 +1,16 @@
 ---
 description: '展示聚焦的模态内容并要求用户作出决定。'
 PROPS:
+  - name: before-confirm
+    type: DialogBeforeConfirmFn
+    default: null
+    description: 提交前同步或异步校验。返回 false 保持打开；通过后触发 confirm，并按 confirm-closable 关闭。异常触发 confirm-error 并保持打开。
+    usage: '#before-confirm'
+  - name: confirm-disabled
+    type: Boolean
+    default: false
+    description: 禁用内置确认操作。
+    usage: '#before-confirm'
   - name: minimizable
     type: Boolean
     default: null
@@ -234,6 +244,10 @@ PROPS:
     usage: '#advanced'
 
 EVENTS:
+  - name: confirm-error
+    type: "(error: unknown) => void"
+    description: 提交前校验抛错或 Promise 拒绝时触发。
+    usage: '#before-confirm'
   - name: minimize
     description: 最小化后触发，不修改 v-model。
   - name: restore
@@ -251,6 +265,10 @@ EVENTS:
       </s-dialog>
 
 EXPOSES:
+  - name: confirm
+    type: "() => Promise<void> | undefined"
+    description: 执行与内置确认按钮相同的校验和提交流程。
+    usage: '#before-confirm'
   - name: minimize
     type: '() => void'
     description: 将已打开且允许最小化的弹窗收起到底部。
@@ -285,8 +303,8 @@ SLOTS:
     code: null
 
   - name: footer
-    type: slot
-    values: "null"
+    type: Slot
+    scope: DialogFooterScope
     description: Dialog 页脚插槽。
     default: null
     link: null
@@ -301,13 +319,7 @@ SLOTS:
 
 # Dialog 对话框
 
-<card>
 
-**Dialog 是通用模态容器**，通过插槽自定义 header、内容与 footer。
-
-若只是 **确认 / 警告** 类交互，且需要内置「确定 / 取消」按钮，请用 [Prompt（提示框）](/zh/components/prompt)。两者不重复：Prompt 面向“你确定吗？”式流程；Dialog 面向任意复杂界面（表单、向导、嵌套弹窗、全屏等）。
-
-</card>
 
 <card>
 
@@ -714,6 +726,68 @@ SLOTS:
 <template #style>
 
 @[code{60-74}](../../.vuepress/components/dialog-zh/global.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 命令式调用
+
+完整安装 `app.use(SaxDesignVue)` 后可用 `$dialog`；按需使用可导入 `SDialogBox`，也可通过 `app.use(SDialogBox)` 绑定应用上下文。
+
+`SDialogBox` 与 `$dialog` 复用 Dialog 的内容、按钮和生命周期，无需声明模板。`alert()` 返回动作；`confirm()` 确认后返回 true，取消或关闭时拒绝为 cancel 或 close。直接调用返回 confirm、cancel、close 之一，并在关闭动画结束及实例清理后完成。命令式实例自行管理生命周期，调用方必须处理 confirm() 的取消分支。
+
+<template #example>
+<dialog-zh-imperative />
+</template>
+
+<template #template>
+
+@[code{23-31}](../../.vuepress/components/dialog-zh/imperative.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-21}](../../.vuepress/components/dialog-zh/imperative.vue)
+
+</template>
+
+<template #style>
+
+@[code{33-46}](../../.vuepress/components/dialog-zh/imperative.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 提交前校验
+
+`before-confirm` 可调用 `SForm.validate()` 并等待异步操作。返回 false 时保留弹窗，等待期间确认按钮显示 loading，重复提交会被忽略；取消或关闭后，过期结果不会再次触发 confirm。抛错会触发 confirm-error，可用于显示业务错误。自定义 footer 可使用其作用域中的 confirm、cancel、pending、disabled，复用同一流程。
+
+<template #example>
+<dialog-zh-validation />
+</template>
+
+<template #template>
+
+@[code{29-46}](../../.vuepress/components/dialog-zh/validation.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-27}](../../.vuepress/components/dialog-zh/validation.vue)
+
+</template>
+
+<template #style>
+
+@[code{48-57}](../../.vuepress/components/dialog-zh/validation.vue)
 
 </template>
 

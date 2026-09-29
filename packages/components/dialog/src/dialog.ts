@@ -8,6 +8,14 @@ import type Dialog from './dialog.vue'
 
 type DoneFn = (cancel?: boolean) => void
 export type DialogBeforeCloseFn = (done: DoneFn) => void
+export type DialogBeforeConfirmFn = () =>
+  boolean | void | Promise<boolean | void>
+export interface DialogFooterScope {
+  confirm: () => Promise<void>
+  cancel: () => void
+  pending: boolean
+  disabled: boolean
+}
 
 export const dialogProps = buildProps({
   /**
@@ -59,6 +67,8 @@ export const dialogProps = buildProps({
   showCancelButton: Boolean,
   cancelButtonText: String,
   showConfirmButton: Boolean,
+  confirmDisabled: Boolean,
+  beforeConfirm: { type: definePropType<DialogBeforeConfirmFn>(Function) },
   confirmButtonText: String,
   cancelClosable: {
     type: Boolean,
@@ -206,6 +216,9 @@ export const dialogEmits = {
   minimize: () => true,
   restore: () => true,
   confirm: () => true,
+  // Accept any rejected value while preserving the public event payload type.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  confirmError: (_error: unknown) => true,
   cancel: () => true,
   [UPDATE_MODEL_EVENT]: (value: boolean) => isBoolean(value),
 }
@@ -219,6 +232,7 @@ export interface DialogExposes {
   minimized: boolean
   open: () => void
   close: () => void
+  confirm: () => Promise<void> | undefined
   minimize: () => void
   restore: () => void
 }

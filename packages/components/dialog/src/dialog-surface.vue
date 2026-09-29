@@ -81,7 +81,13 @@
           </div>
 
           <div v-if="$slots.footer || props.showFooter" :class="ns.e('footer')">
-            <slot name="footer">
+            <slot
+              name="footer"
+              :confirm="handleConfirm"
+              :cancel="handleCancel"
+              :pending="confirmPending"
+              :disabled="props.confirmDisabled || props.loading"
+            >
               <div :class="ns.e('actions')">
                 <s-button
                   v-if="showCancelButton"
@@ -90,7 +96,12 @@
                 >
                   {{ cancelButtonText || t('vs.dialog.cancel') }}
                 </s-button>
-                <s-button v-if="showConfirmButton" @click="handleConfirm">
+                <s-button
+                  v-if="showConfirmButton"
+                  :loading="confirmPending"
+                  :disabled="props.confirmDisabled || props.loading"
+                  @click="handleConfirm"
+                >
                   {{ confirmButtonText || t('vs.dialog.confirm') }}
                 </s-button>
               </div>
@@ -286,9 +297,42 @@ const handleCancel = () => {
   emit('cancel')
   if (props.cancelClosable) close()
 }
-const handleConfirm = () => {
-  emit('confirm')
-  if (props.confirmClosable) close()
+const confirmPending = shallowRef(false)
+let confirmVersion = 0
+watch(
+  visible,
+  (value) => {
+    if (!value) {
+      confirmVersion++
+      confirmPending.value = false
+    }
+  },
+  { flush: 'sync' },
+)
+onBeforeUnmount(() => {
+  confirmVersion++
+})
+const handleConfirm = async () => {
+  if (
+    !visible.value ||
+    confirmPending.value ||
+    props.confirmDisabled ||
+    props.loading
+  )
+    return
+  const version = ++confirmVersion
+  confirmPending.value = true
+  try {
+    const accepted = await props.beforeConfirm?.()
+    if (version !== confirmVersion || !visible.value || accepted === false)
+      return
+    emit('confirm')
+    if (props.confirmClosable) close()
+  } catch (error) {
+    if (version === confirmVersion && visible.value) emit('confirmError', error)
+  } finally {
+    if (version === confirmVersion) confirmPending.value = false
+  }
 }
 
 defineExpose({
@@ -297,6 +341,7 @@ defineExpose({
   minimized,
   minimize,
   restore,
+  confirm: handleConfirm,
   /** @description dialog close method */
   close,
   open: () => {

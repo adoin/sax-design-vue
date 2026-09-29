@@ -96,6 +96,7 @@ export default defineComponent({
       minimized: computed(() => surface.value?.minimized ?? false),
       open: () => surface.value?.open(),
       close: () => surface.value?.close(),
+      confirm: () => surface.value?.confirm(),
       minimize: () => surface.value?.minimize(),
       restore: () => surface.value?.restore(),
     })

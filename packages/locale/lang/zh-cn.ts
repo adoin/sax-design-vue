@@ -146,11 +146,6 @@ export default {
     menu: {
       label: '菜单',
     },
-    prompt: {
-      accept: '确定',
-      cancel: '取消',
-      title: '提示',
-    },
     noticeBar: {
       close: '关闭',
     },

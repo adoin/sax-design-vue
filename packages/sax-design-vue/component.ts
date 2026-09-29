@@ -57,7 +57,6 @@ import { SPopper } from '@vuesax-alpha/components/popper'
 import { SProgress } from '@vuesax-alpha/components/progress'
 import { SPrint } from '@vuesax-alpha/components/print'
 import { SPrintPageBreak } from '@vuesax-alpha/components/print-page-break'
-import { SPrompt } from '@vuesax-alpha/components/prompt'
 import { SRadio, SRadioGroup } from '@vuesax-alpha/components/radio'
 import { SRadioButton } from '@vuesax-alpha/components/radio-button'
 import { SRate } from '@vuesax-alpha/components/rate'
@@ -158,7 +157,6 @@ export default [
   SProgress,
   SPrint,
   SPrintPageBreak,
-  SPrompt,
   SRadio,
   SRadioGroup,
   SRadioButton,

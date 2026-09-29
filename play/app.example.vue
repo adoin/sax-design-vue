@@ -36,7 +36,6 @@ const newDemos = [
   { path: 'collapse', label: 'Collapse' },
   { path: 'list', label: 'List' },
   { path: 'images', label: 'Images' },
-  { path: 'prompt', label: 'Prompt' },
   { path: 'tabs', label: 'Tabs' },
   { path: 'slider', label: 'Slider' },
   { path: 'upload', label: 'Upload' },
