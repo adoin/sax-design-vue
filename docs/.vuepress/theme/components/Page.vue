@@ -214,9 +214,9 @@ const displayTitle = computed(() => {
     .sort((a, b) => b.length - a.length)
     .find(
       (name) =>
-        title === name ||
-        title.startsWith(`${name} `) ||
-        title.startsWith(`${name}（`),
+        title.toLowerCase() === name.toLowerCase() ||
+        title.toLowerCase().startsWith(`${name.toLowerCase()} `) ||
+        title.toLowerCase().startsWith(`${name.toLowerCase()}（`),
     )
 
   return componentName
