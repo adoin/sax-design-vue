@@ -65,7 +65,7 @@ PROPS:
     description: 禁用交互。
     default: false
     link: null
-    usage: '#default'
+    usage: '#disabled'
 
   - name: color
     type: String
@@ -294,6 +294,30 @@ NEWS:
 <template #script>
 
 @[code{5-8}](../../.vuepress/components/slider/text-fixed.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 禁用
+
+设置 `disabled` 禁用拖动、轨道点击和键盘调整，保留当前值。使用开关切换禁用状态。
+
+<template #example>
+<slider-zh-disabled />
+</template>
+
+<template #template>
+
+@[code{1-12}](../../.vuepress/components/slider-zh/disabled.vue)
+
+</template>
+
+<template #script>
+
+@[code{14-18}](../../.vuepress/components/slider-zh/disabled.vue)
 
 </template>
 

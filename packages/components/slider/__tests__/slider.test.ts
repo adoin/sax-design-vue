@@ -15,6 +15,23 @@ describe('Slider', () => {
     },
   )
 
+  it('blocks value events while disabled and resumes when enabled', async () => {
+    const wrapper = mount(Slider, { props: { modelValue: 40, disabled: true } })
+    const input = wrapper.get('input').element as HTMLInputElement
+    expect(input.disabled).toBe(true)
+    expect(wrapper.classes()).toContain('is-disabled')
+    input.value = '70'
+    input.dispatchEvent(new Event('input', { bubbles: true }))
+    input.dispatchEvent(new Event('change', { bubbles: true }))
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('change')).toBeUndefined()
+    await wrapper.setProps({ disabled: false })
+    expect(input.disabled).toBe(false)
+    await wrapper.get('input').setValue('60')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([60])
+    wrapper.unmount()
+  })
+
   it('snaps relative to a non-zero minimum', async () => {
     const wrapper = mount(Slider, {
       props: { modelValue: 11, min: 5, max: 25, step: 4 },

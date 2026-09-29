@@ -65,7 +65,7 @@ PROPS:
     description: Disable interaction.
     default: false
     link: null
-    usage: '#default'
+    usage: '#disabled'
 
   - name: color
     type: String
@@ -297,6 +297,30 @@ Append a suffix such as `%` next to the current value.
 <template #script>
 
 @[code{5-8}](../.vuepress/components/slider/text-fixed.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Disabled
+
+Set `disabled` to prevent dragging, track clicks and keyboard adjustments while preserving the current value. Use the switch to toggle the disabled state.
+
+<template #example>
+<slider-disabled />
+</template>
+
+<template #template>
+
+@[code{1-12}](../.vuepress/components/slider/disabled.vue)
+
+</template>
+
+<template #script>
+
+@[code{14-18}](../.vuepress/components/slider/disabled.vue)
 
 </template>
 

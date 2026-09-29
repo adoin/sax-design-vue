@@ -57,6 +57,7 @@ const tickValues = computed(() => {
 const tickPercent = (value: number) =>
   range.value <= 0 ? 0 : ((value - safeMin.value) / range.value) * 100
 const commit = (value: number, change = false) => {
+  if (props.disabled) return
   const next = snap(value)
   emit('update:modelValue', next)
   if (change) emit('change', next)
