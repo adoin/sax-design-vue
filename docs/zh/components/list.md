@@ -194,13 +194,13 @@ NEWS:
 
 <template #script>
 
-@[code{32-46}](../../.vuepress/components/list-zh/virtual.vue)
+@[code{32-48}](../../.vuepress/components/list-zh/virtual.vue)
 
 </template>
 
 <template #style>
 
-@[code{48-61}](../../.vuepress/components/list-zh/virtual.vue)
+@[code{50-63}](../../.vuepress/components/list-zh/virtual.vue)
 
 </template>
 

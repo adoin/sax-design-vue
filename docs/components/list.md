@@ -194,13 +194,13 @@ Pass data through `items` and enable `virtual`, using `#item` for custom content
 
 <template #script>
 
-@[code{32-46}](../.vuepress/components/list/virtual.vue)
+@[code{32-48}](../.vuepress/components/list/virtual.vue)
 
 </template>
 
 <template #style>
 
-@[code{48-61}](../.vuepress/components/list/virtual.vue)
+@[code{50-63}](../.vuepress/components/list/virtual.vue)
 
 </template>
 
