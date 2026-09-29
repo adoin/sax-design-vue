@@ -1,4 +1,4 @@
-import { defineComponent, h, nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, ref, toRaw } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import zhCn from '@vuesax-alpha/locale/lang/zh-cn'
@@ -413,6 +413,41 @@ describe('Select enhanced capabilities', () => {
     expect(
       wrapper.findAll('.s-select__selection-tool').map((tool) => tool.text()),
     ).toEqual(['全选', '反选', '清空'])
+  })
+
+  it('only writes hover state on the previous and next option', async () => {
+    const wrapper = mountSelect({
+      virtual: true,
+      virtualConfig: { threshold: 1 },
+      options: Array.from({ length: 100 }, (_, value) => ({
+        value,
+        label: `Item ${value}`,
+      })),
+    })
+    await nextTick()
+    let writes = 0
+    const items = wrapper
+      .getComponent(VirtualListStub)
+      .props('items') as Array<{ hover: boolean }>
+    for (const option of items) {
+      let hover = option.hover
+      Object.defineProperty(toRaw(option), 'hover', {
+        configurable: true,
+        get: () => hover,
+        set: (value: boolean) => {
+          writes++
+          hover = value
+        },
+      })
+    }
+    const rows = wrapper.findAll('.s-select__option')
+    await rows[1].trigger('mouseenter')
+    expect(writes).toBe(1)
+    writes = 0
+    await rows[50].trigger('mouseenter')
+    expect(writes).toBe(2)
+    expect(items[1].hover).toBe(false)
+    expect(items[50].hover).toBe(true)
   })
 
   it('only scrolls a virtual list for keyboard navigation, not mouse hover', async () => {

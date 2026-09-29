@@ -750,7 +750,7 @@ const getVirtualOptionKls = (option: SelectOptionContext) => [
 ]
 
 const hoverVirtualOption = (option: SelectOptionContext) => {
-  states.hoverIndex = optionsArray.value.indexOf(option)
+  states.hoverIndex = option.index
 }
 
 watch(

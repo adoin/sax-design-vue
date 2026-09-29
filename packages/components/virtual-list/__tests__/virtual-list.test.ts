@@ -33,6 +33,24 @@ describe('VirtualList', () => {
     vi.clearAllMocks()
   })
 
+  it('uses bounded sparse virtualization for large arrays as well as lazy sources', async () => {
+    const wrapper = mount(VirtualList, {
+      props: {
+        items: Array.from({ length: 10000 }, (_, id) => ({ id })),
+        itemKey: (item: unknown) => (item as { id: number }).id,
+        dynamic: true,
+      },
+    })
+    await nextTick()
+    expect(virtualizerMocks.options?.value.count).toBe(0)
+    expect(wrapper.findAll('.s-vl__item').length).toBeLessThan(40)
+    wrapper.vm.scrollToIndex(9000, 'start')
+    await nextTick()
+    expect(virtualizerMocks.scrollToIndex).not.toHaveBeenCalled()
+    expect(wrapper.vm.getVisibleRange()?.start).toBe(9000)
+    wrapper.unmount()
+  })
+
   it('scrolls normal lists by a relative logical pixel distance', async () => {
     const wrapper = mount(VirtualList, { props: { items: [{ id: 'alpha' }] } })
     await nextTick()

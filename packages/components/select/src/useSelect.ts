@@ -315,14 +315,12 @@ export const useSelect = (
   watch(
     () => states.hoverIndex,
     (val) => {
-      if (val > -1) {
-        hoverOption.value = optionsArray.value[val]
-      } else {
-        hoverOption.value = undefined
-      }
-      optionsArray.value.forEach((option) => {
-        option.hover = isEqual(hoverOption.value, option)
-      })
+      const previous = hoverOption.value
+      const next = val > -1 ? optionsArray.value[val] : undefined
+      if (previous === next) return
+      if (previous) previous.hover = false
+      hoverOption.value = next
+      if (next) next.hover = true
     },
   )
 

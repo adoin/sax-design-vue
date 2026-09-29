@@ -89,9 +89,8 @@ const measurementRefCallbacks = new Map<
   number,
   (element: Element | ComponentPublicInstance | null) => void
 >()
-const sparseMode = computed(
-  () => props.count != null && itemCount.value >= 10_000,
-)
+// Large arrays and lazy data sources share the same bounded-cost scroll path.
+const sparseMode = computed(() => itemCount.value >= 10_000)
 const estimateSize = computed(() => Math.max(1, props.estimateSize))
 const overscan = computed(() => Math.max(0, props.overscan))
 
