@@ -23,8 +23,32 @@ $E: null;
   }
 }
 
+// Track feedback keeps scroll geometry stable and uses the active theme color.
+@mixin scrollbar-track-feedback {
+  --s-scrollbar-track-background: transparent;
+  &:hover {
+    --s-scrollbar-track-background: #{getColor(primary, 0.07)};
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: var(--sax-radius-pill);
+    background: var(--s-scrollbar-track-background);
+  }
+  &::-webkit-scrollbar-track:hover {
+    background: getColor(primary, 0.13);
+  }
+  &::-webkit-scrollbar-track:active {
+    background: getColor(primary, 0.2);
+  }
+  @supports not selector(::-webkit-scrollbar) {
+    &:hover {
+      scrollbar-color: #{getColor(primary, 0.52)} #{getColor(primary, 0.09)};
+    }
+  }
+}
+
 // Scrollbar
 @mixin scroll-bar {
+  @include scrollbar-track-feedback;
   $scrollbar-thumb-background: getCssVar('text-color', 'disabled');
   $scrollbar-track-background: getCssVar('fill-color', 'blank');
 
@@ -47,10 +71,10 @@ $E: null;
     }
 
     &-track {
-      background: $scrollbar-track-background;
+      background: var(--s-scrollbar-track-background);
 
       &-piece {
-        background: $scrollbar-track-background;
+        background: transparent;
         width: 6px;
       }
     }

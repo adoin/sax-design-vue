@@ -145,12 +145,16 @@
     bottom: 2px;
     z-index: 1;
     border-radius: var(--sax-radius-xs);
-    // padding: 2px;
+    background-color: transparent;
+    transition: background-color getCssVar(transition-duration-fast) linear;
 
     &:hover,
     &.highlight {
-      background-color: getColor(scrollbar-thumb-color, 0.15);
-      transition: background-color getCssVar(transition-duration-fast) linear;
+      background-color: getColor(scrollbar-thumb-color, 0.13);
+    }
+
+    &:active {
+      background-color: getColor(scrollbar-thumb-color, 0.2);
     }
 
     @include when(vertical) {
