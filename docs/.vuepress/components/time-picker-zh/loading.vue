@@ -3,7 +3,10 @@
     <s-switch v-model="loading">加载状态</s-switch>
     <div class="loading-demo__fields">
       <s-time-picker
+        v-for="size in sizes"
+        :key="size"
         v-model="value"
+        :size="size"
         :loading="loading"
         label="时间"
         label-float
@@ -15,6 +18,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+const sizes = ['small', 'default', 'large'] as const
 const loading = ref(true)
 const value = ref('09:30:00')
 </script>

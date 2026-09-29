@@ -245,19 +245,19 @@ EVENTS:
 
 <template #template>
 
-@[code{1-14}](../../.vuepress/components/time-picker-zh/loading.vue)
+@[code{1-17}](../../.vuepress/components/time-picker-zh/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{16-20}](../../.vuepress/components/time-picker-zh/loading.vue)
+@[code{19-24}](../../.vuepress/components/time-picker-zh/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{22-35}](../../.vuepress/components/time-picker-zh/loading.vue)
+@[code{26-39}](../../.vuepress/components/time-picker-zh/loading.vue)
 
 </template>
 

@@ -9,8 +9,16 @@
 
 @include b(time-picker) {
   display: inline-flex;
-  width: 112px;
+  // Reserve room for HH:mm:ss plus the loader or clear/suffix actions.
+  width: 144px;
   max-width: 100%;
+
+  @include m(small) {
+    width: 128px;
+  }
+  @include m(large) {
+    width: 160px;
+  }
 
   @include when(block) {
     display: flex;

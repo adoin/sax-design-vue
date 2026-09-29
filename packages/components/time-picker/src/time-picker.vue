@@ -17,7 +17,12 @@
     :popper-style="themeStyle"
   >
     <div
-      :class="[ns.b(), ns.is('block', block), ns.is(resolvedShape)]"
+      :class="[
+        ns.b(),
+        ns.m(resolvedSize || 'default'),
+        ns.is('block', block),
+        ns.is(resolvedShape),
+      ]"
       :style="themeStyle"
     >
       <s-input
