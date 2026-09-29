@@ -44,7 +44,7 @@ const showAction = (action: string, params: unknown) => {
   lastAction.value = `${action}: ${row.ticket}`
 }
 
-const columns: TableColumn<WorkItemRow>[] = [
+const columns = computed<TableColumn<WorkItemRow>[]>(() => [
   { field: 'id', title: 'ID', width: 76, fixed: 'left' },
   { field: 'ticket', title: 'Work item', minWidth: 210, sortable: true },
   { field: 'owner', title: 'Owner', width: 132 },
@@ -77,7 +77,7 @@ const columns: TableColumn<WorkItemRow>[] = [
   {
     key: 'actions',
     title: 'Actions',
-    width: 176,
+    width: { small: 260, default: 300, large: 360 }[size.value],
     fixed: 'right',
     renderer: {
       name: '$buttons',
@@ -93,7 +93,7 @@ const columns: TableColumn<WorkItemRow>[] = [
       },
     },
   },
-]
+])
 
 const owners = ['Avery', 'Morgan', 'Riley', 'Jordan']
 const priorities: WorkItemRow['priority'][] = ['High', 'Medium', 'Low']
@@ -157,7 +157,7 @@ const tableOptions = computed<SaxGridSetting<WorkItemRow, WorkItemQuery>>(
   () => ({
     size: size.value,
     rowKey: 'id',
-    columns,
+    columns: columns.value,
     proxyConfig,
     queryConfig: {
       model,

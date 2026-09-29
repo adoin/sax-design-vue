@@ -15,9 +15,15 @@
 
 .s-renderer-buttons {
   display: inline-flex;
+  flex-wrap: wrap;
   max-width: 100%;
   align-items: center;
   gap: 6px;
+
+  > .s-button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
 }
 
 .s-renderer-buttons__popper {
@@ -683,5 +689,7 @@
 
 .#{$namespace}-button--loading {
   pointer-events: auto;
-  > * { pointer-events: none; }
+  > * {
+    pointer-events: none;
+  }
 }
