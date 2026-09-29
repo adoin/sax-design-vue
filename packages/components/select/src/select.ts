@@ -17,10 +17,27 @@ import type {
 } from '@vuesax-alpha/hooks/use-floating/vue'
 import type { SelectOptionValue, SelectValue } from './tokens'
 
-import type { CSSProperties, ExtractPropTypes } from 'vue'
+import type { CSSProperties, ExtractPropTypes, VNodeChild } from 'vue'
 import type Select from './select.vue'
 
 export type SelectDataOption = Record<string, unknown>
+
+export interface SelectRenderItemContext {
+  /** Current search input, including when highlighting is disabled. */
+  keyword: string
+  /** Whether the label contains the nonempty keyword (case-insensitive). */
+  matched: boolean
+  label: string
+  selected: boolean
+  group?: SelectDataOption
+  /** Render escaped text with the same highlight-search behavior as default labels. */
+  highlight: (text: string) => VNodeChild
+}
+
+export type SelectRenderItem = (
+  option: SelectDataOption,
+  context: SelectRenderItemContext,
+) => VNodeChild
 
 export type SelectSelectionTool = 'all' | 'invert' | 'clear'
 
@@ -153,6 +170,9 @@ export const selectProps = buildProps({
     default: () => [],
   },
   /** Highlight the matching part of data-driven option labels. */
+  renderItem: {
+    type: definePropType<SelectRenderItem>(Function),
+  },
   highlightSearch: { type: Boolean, default: false },
   /** Decide whether an option matches the current search text. */
   filterOption: {

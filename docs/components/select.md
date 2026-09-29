@@ -1,6 +1,11 @@
 ---
 description: 'Choose one or more values from a searchable option list.'
 PROPS:
+  - name: render-item
+    type: SelectRenderItem
+    description: Customize data option content, including grouped and virtual lists. The option slot takes precedence.
+    default: null
+    usage: "#custom-option-rendering"
   - name: options
     type: SelectDataOption[]
     description: Data-driven options. Reads value, label, and disabled by default; customize the fields with option-props.
@@ -500,7 +505,7 @@ SLOTS:
         </s-select>
   - name: option
     type: Slot
-    scope: "{ option: SelectDataOption; group?: SelectDataOption }"
+    scope: "SelectRenderItemContext & { option: SelectDataOption }"
     description: Customize an option's content; group is available for grouped options.
     default: null
 
@@ -902,6 +907,30 @@ Use `popup-config` to control panel sizing, trigger-width matching, offset, moun
 
 <card>
 
+## Custom option rendering
+
+`render-item(option, context)` returns option content; the `option` slot takes precedence. Normal, grouped and virtual lists share this context. `keyword` is the current search text; `matched` indicates that the label contains the nonempty keyword (case-insensitive), independently of `filter-option`. `highlight(text)` safely renders matching text and respects `highlight-search`. The context also provides `label`, `selected` and optional `group`; the `option` slot receives the same fields.
+
+<template #example>
+<select-render-item />
+</template>
+
+<template #template>
+
+@[code{1-10}](../.vuepress/components/select/render-item.vue)
+
+</template>
+
+<template #script>
+
+@[code{12-29}](../.vuepress/components/select/render-item.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Search matching and highlighting
 
 Use `filter-option` for matching, `highlight-search` to mark the matching text and `show-selected-mark` for a selected indicator.
@@ -1012,7 +1041,7 @@ Set `pin-key` to persist pinned values in local storage. Hover an option to reve
 
 ## Virtual options
 
-Enable `virtual` for large flat `options` arrays. Filtering, keyboard navigation and selected-value caching stay available while only visible rows mount. Dynamic measurement is on by default, so wrapped labels and custom option content may use different row heights; set `virtual-config.dynamic` to `false` only for truly fixed rows.
+Enable `virtual` for large flat `options` arrays. This example uses 10,000 options and `render-item` with single-line labels, wrapped descriptions and third-line details, retaining search highlights through `highlight(text)`. Filtering, keyboard navigation and selected-value caching stay available while only visible rows mount. Dynamic measurement is on by default, so wrapped labels and custom option content may use different row heights; set `virtual-config.dynamic` to `false` only for truly fixed rows.
 
 <template #example>
 <select-virtual />
@@ -1020,19 +1049,19 @@ Enable `virtual` for large flat `options` arrays. Filtering, keyboard navigation
 
 <template #template>
 
-@[code{1-27}](../.vuepress/components/select/virtual.vue)
+@[code{1-22}](../.vuepress/components/select/virtual.vue)
 
 </template>
 
 <template #script>
 
-@[code{29-42}](../.vuepress/components/select/virtual.vue)
+@[code{24-48}](../.vuepress/components/select/virtual.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-61}](../.vuepress/components/select/virtual.vue)
+@[code{50-67}](../.vuepress/components/select/virtual.vue)
 
 </template>
 

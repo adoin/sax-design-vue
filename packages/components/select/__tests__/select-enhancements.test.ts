@@ -240,6 +240,72 @@ describe('Select enhanced capabilities', () => {
     ).toBe('Cached result')
   })
 
+  it.each(['normal', 'grouped', 'virtual'])(
+    'renders custom %s options with reactive search context',
+    async (mode) => {
+      vi.useFakeTimers()
+      const option = { value: 'hz', name: 'Hangzhou' }
+      const group = { label: 'Cities', options: [option] }
+      const renderItem = vi.fn((item, context) =>
+        h(
+          'strong',
+          { class: 'custom-option' },
+          context.highlight(context.label),
+        ),
+      )
+      const wrapper = mountSelect({
+        modelValue: 'hz',
+        filterable: true,
+        highlightSearch: true,
+        optionProps: { label: 'name' },
+        options: mode === 'grouped' ? [] : [option],
+        optionGroups: mode === 'grouped' ? [group] : [],
+        virtual: mode === 'virtual',
+        virtualConfig: { threshold: 1 },
+        renderItem,
+      })
+      await nextTick()
+      expect(wrapper.get('.custom-option').text()).toBe('Hangzhou')
+      expect(renderItem).toHaveBeenLastCalledWith(
+        option,
+        expect.objectContaining({
+          keyword: 'Hangzhou',
+          matched: true,
+          selected: true,
+          group: mode === 'grouped' ? group : undefined,
+        }),
+      )
+      await wrapper.get('.s-select').trigger('click')
+      await wrapper.get('.s-select__input').setValue('ZHOU')
+      vi.runAllTimers()
+      await nextTick()
+      expect(wrapper.get('.custom-option mark').text()).toBe('zhou')
+      expect(renderItem).toHaveBeenLastCalledWith(
+        option,
+        expect.objectContaining({ keyword: 'ZHOU', matched: true }),
+      )
+      await wrapper.setProps({ highlightSearch: false })
+      expect(wrapper.find('.custom-option mark').exists()).toBe(false)
+      expect(renderItem).toHaveBeenLastCalledWith(
+        option,
+        expect.objectContaining({ keyword: 'ZHOU', matched: true }),
+      )
+    },
+  )
+
+  it('prefers the option slot over renderItem and exposes search helpers', async () => {
+    const renderItem = vi.fn(() => 'callback')
+    const wrapper = mountSelect(
+      { options: [{ value: 'a', label: 'Alpha' }], renderItem },
+      {
+        option: ({ label, highlight }) => h('em', highlight(label)),
+      },
+    )
+    await nextTick()
+    expect(wrapper.get('em').text()).toBe('Alpha')
+    expect(renderItem).not.toHaveBeenCalled()
+  })
+
   it('highlights text matched by data-driven filtering', async () => {
     vi.useFakeTimers()
     const wrapper = mountSelect({

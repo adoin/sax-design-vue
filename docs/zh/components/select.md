@@ -1,6 +1,11 @@
 ---
 description: '从可搜索选项列表中选择一个或多个值。'
 PROPS:
+  - name: render-item
+    type: SelectRenderItem
+    description: 自定义数据选项内容，支持分组和虚拟列表；option 插槽优先。
+    default: null
+    usage: "#custom-option-rendering"
   - name: options
     type: SelectDataOption[]
     description: 数据驱动选项列表，默认读取 value、label、disabled 字段，可通过 option-props 映射。
@@ -456,7 +461,7 @@ SLOTS:
         </s-select>
   - name: option
     type: Slot
-    scope: "{ option: SelectDataOption; group?: SelectDataOption }"
+    scope: "SelectRenderItemContext & { option: SelectDataOption }"
     description: 自定义选项内容；分组选项还会提供 group。
     default: null
 
@@ -858,6 +863,30 @@ SLOTS:
 
 <card>
 
+## 自定义选项渲染
+
+`render-item(option, context)` 返回选项内容；`option` 插槽优先。普通、分组与虚拟列表共用此参数。`keyword` 是当前搜索文字；`matched` 表示标签包含非空关键词（忽略大小写），不代表 `filter-option` 的过滤结果。`highlight(text)` 安全渲染匹配文字，遵循 `highlight-search`。上下文还提供 `label`、`selected`、可选的 `group`；`option` 插槽同样获得这些参数。
+
+<template #example>
+<select-zh-render-item />
+</template>
+
+<template #template>
+
+@[code{1-10}](../../.vuepress/components/select-zh/render-item.vue)
+
+</template>
+
+<template #script>
+
+@[code{12-29}](../../.vuepress/components/select-zh/render-item.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## 搜索匹配与高亮
 
 使用 `filter-option` 定义匹配规则，`highlight-search` 标记匹配文字，`show-selected-mark` 显示选中标记。
@@ -968,27 +997,27 @@ SLOTS:
 
 ## 虚拟选项
 
-大数据平铺 `options` 可开启 `virtual`。筛选、键盘导航与已选值缓存保留，同时只挂载可见行。动态测量默认开启，换行标签和自定义选项内容可以使用不同高度；只有行高完全固定时才需要将 `virtual-config.dynamic` 设为 `false`。
+大数据平铺 `options` 可开启 `virtual`。本例使用 10,000 条数据与 `render-item`，混合单行、换行说明和第三行内容，并通过 `highlight(text)` 保留搜索高亮。筛选、键盘导航与已选值缓存保留，同时只挂载可见行。动态测量默认开启，换行标签和自定义选项内容可以使用不同高度；只有行高完全固定时才需要将 `virtual-config.dynamic` 设为 `false`。
 
 <template #example>
-<select-virtual />
+<select-zh-virtual />
 </template>
 
 <template #template>
 
-@[code{1-27}](../../.vuepress/components/select/virtual.vue)
+@[code{1-22}](../../.vuepress/components/select-zh/virtual.vue)
 
 </template>
 
 <template #script>
 
-@[code{29-42}](../../.vuepress/components/select/virtual.vue)
+@[code{24-48}](../../.vuepress/components/select-zh/virtual.vue)
 
 </template>
 
 <template #style>
 
-@[code{44-61}](../../.vuepress/components/select/virtual.vue)
+@[code{50-67}](../../.vuepress/components/select-zh/virtual.vue)
 
 </template>
 

@@ -12,12 +12,12 @@
       }"
       :options="options"
       :option-props="{ value: 'id', label: 'text' }"
-      placeholder="Search 10,000 cities"
+      placeholder="搜索 10,000 个城市"
       :popup-config="{ width: 280, height: 260 }"
       :render-item="renderItem"
       highlight-search
     />
-    <small>Selected: {{ value || '—' }}</small>
+    <small>已选择： {{ value || '—' }}</small>
   </div>
 </template>
 
@@ -28,10 +28,10 @@ import type { SelectRenderItem } from 'sax-design-vue'
 const value = ref('')
 const options = Array.from({ length: 10000 }, (_, index) => ({
   id: `city-${index + 1}`,
-  text: `City ${String(index + 1).padStart(5, '0')}`,
+  text: `城市 ${String(index + 1).padStart(5, '0')}`,
   description:
     index % 7 === 0
-      ? 'A longer secondary line makes this row taller and is measured after rendering.'
+      ? '较长的详细说明会自动换行，虚拟列表按实际内容测量这一行的高度。'
       : '',
   disabled: index % 97 === 0,
 }))
@@ -42,7 +42,7 @@ const renderItem: SelectRenderItem = (option, { label, highlight }) =>
       ? h('small', highlight(String(option.description)))
       : null,
     Number(String(option.id).split('-')[1]) % 13 === 0
-      ? h('small', 'Additional details on a third line.')
+      ? h('small', '第三行附加信息。')
       : null,
   ])
 </script>

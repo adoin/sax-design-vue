@@ -285,19 +285,7 @@
           :option-index="pinningEnabled ? index : -1"
         >
           <span :class="ns.e('option-content')">
-            <slot name="option" :option="option">
-              <template
-                v-for="(part, partIndex) in getHighlightedParts(
-                  getOptionLabel(option),
-                )"
-                :key="partIndex"
-              >
-                <mark v-if="part.match" :class="ns.e('option-highlight')">{{
-                  part.text
-                }}</mark>
-                <template v-else>{{ part.text }}</template>
-              </template>
-            </slot>
+            <option-content :option="option" />
           </span>
           <s-icon
             v-if="showSelectedMark && isValueSelected(getOptionValue(option))"
@@ -339,19 +327,7 @@
             :data="option"
           >
             <span :class="ns.e('option-content')">
-              <slot name="option" :option="option" :group="group">
-                <template
-                  v-for="(part, partIndex) in getHighlightedParts(
-                    getOptionLabel(option),
-                  )"
-                  :key="partIndex"
-                >
-                  <mark v-if="part.match" :class="ns.e('option-highlight')">{{
-                    part.text
-                  }}</mark>
-                  <template v-else>{{ part.text }}</template>
-                </template>
-              </slot>
+              <option-content :option="option" :group="group" />
             </span>
             <s-icon
               v-if="showSelectedMark && isValueSelected(getOptionValue(option))"
@@ -395,21 +371,7 @@
                 @click="handleOptionSelect(option, true)"
               >
                 <span :class="ns.e('option-content')">
-                  <slot name="option" :option="option.data">
-                    <template
-                      v-for="(part, partIndex) in getHighlightedParts(
-                        option.currentLabel,
-                      )"
-                      :key="partIndex"
-                    >
-                      <mark
-                        v-if="part.match"
-                        :class="ns.e('option-highlight')"
-                        >{{ part.text }}</mark
-                      >
-                      <template v-else>{{ part.text }}</template>
-                    </template>
-                  </slot>
+                  <option-content :option="option.data!" />
                 </span>
                 <s-icon
                   v-if="showSelectedMark && isValueSelected(option.value)"
@@ -464,6 +426,7 @@
 <script lang="ts" setup>
 import {
   computed,
+  h,
   nextTick,
   onMounted,
   provide,
@@ -504,7 +467,11 @@ import { selectEmits, selectProps } from './select'
 import { useSelect, useSelectStates } from './useSelect'
 import { sortOptionsByPinnedValues, useSelectPinning } from './useSelectPinning'
 import { calculateVisibleTagCount } from './tag-overflow'
-import type { SelectSelectionTool } from './select'
+import type {
+  SelectDataOption,
+  SelectRenderItemContext,
+  SelectSelectionTool,
+} from './select'
 import type { SelectOptionContext, SelectOptionValue } from './tokens'
 
 defineOptions({
@@ -646,6 +613,37 @@ const getHighlightedParts = (label: string) => {
       text,
       match: text.toLocaleLowerCase() === searchValue.toLocaleLowerCase(),
     }))
+}
+
+// One renderer keeps slots, callbacks and search highlighting consistent in every list mode.
+const OptionContent = ({
+  option,
+  group,
+}: {
+  option: SelectDataOption
+  group?: SelectDataOption
+}) => {
+  const label = getOptionLabel(option)
+  const keyword = `${states.query}`
+  const highlight = (text: string) =>
+    getHighlightedParts(text).map((part) =>
+      part.match
+        ? h('mark', { class: ns.e('option-highlight') }, part.text)
+        : part.text,
+    )
+  const context: SelectRenderItemContext = {
+    keyword,
+    matched:
+      keyword.length > 0 &&
+      label.toLocaleLowerCase().includes(keyword.toLocaleLowerCase()),
+    label,
+    selected: isValueSelected(getOptionValue(option)),
+    group,
+    highlight,
+  }
+  if (slots.option) return slots.option({ option, ...context })
+  if (props.renderItem) return props.renderItem(option, context)
+  return highlight(label)
 }
 
 const virtualEnabled = computed(
