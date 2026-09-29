@@ -1,6 +1,26 @@
 ---
 description: 'Choose one or more values from a searchable option list.'
 PROPS:
+  - name: options
+    type: SelectDataOption[]
+    description: Data-driven options. Reads value, label, and disabled by default; customize the fields with option-props.
+    default: '[]'
+    usage: '#data-source'
+  - name: option-props
+    type: '{ value?: string; label?: string; disabled?: string }'
+    description: Field names for option values, labels, and disabled states. Unspecified fields use value, label, and disabled respectively.
+    default: '{}'
+    usage: '#data-source'
+  - name: option-groups
+    type: SelectDataOption[]
+    description: Grouped options using label and options fields by default. Options within each group use option-props.
+    default: '[]'
+    usage: '#data-source'
+  - name: option-group-props
+    type: '{ options?: string; label?: string }'
+    description: Field names for a group's option list and title, defaulting to options and label respectively.
+    default: '{}'
+    usage: '#data-source'
   - name: size
     type: ComponentSize
     values: 'small | default | large'

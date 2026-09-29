@@ -1,6 +1,26 @@
 ---
 description: '从可搜索选项列表中选择一个或多个值。'
 PROPS:
+  - name: options
+    type: SelectDataOption[]
+    description: 数据驱动选项列表，默认读取 value、label、disabled 字段，可通过 option-props 映射。
+    default: '[]'
+    usage: '#data-source'
+  - name: option-props
+    type: '{ value?: string; label?: string; disabled?: string }'
+    description: 选项值、显示文本和禁用状态的字段名映射；未配置的字段分别使用 value、label、disabled。
+    default: '{}'
+    usage: '#data-source'
+  - name: option-groups
+    type: SelectDataOption[]
+    description: 分组选项数据，默认读取 label 和 options 字段；组内选项仍使用 option-props 映射。
+    default: '[]'
+    usage: '#data-source'
+  - name: option-group-props
+    type: '{ options?: string; label?: string }'
+    description: 分组内选项列表和分组标题的字段名映射，默认分别为 options 和 label。
+    default: '{}'
+    usage: '#data-source'
   - name: size
     type: ComponentSize
     values: 'small | default | large'
