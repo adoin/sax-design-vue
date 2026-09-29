@@ -247,6 +247,8 @@ describe('table cell keyboard navigation', () => {
     expect(wrapper.vm.getActiveCell()?.columnKey).not.toBe('id')
   })
   it('scrolls both virtual axes before focusing the wrapped editor', async () => {
+    // Keep only one row visible so moving to the next row requires vertical scrolling.
+    vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(44)
     const wrapper = setup({
       editConfig: true,
       virtualSource: {

@@ -142,6 +142,8 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
     const count = options.count.value
     if (!count) return 0
     const target = Math.max(0, offset)
+    if (!measuredIndexes.size)
+      return Math.min(count - 1, Math.floor(target / rowEstimate()))
     let low = 0
     let high = count
     while (low < high) {
@@ -346,6 +348,8 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
     align: 'auto' | 'start' | 'center' | 'end' = 'auto',
   ) => {
     if (index < 0 || index >= options.count.value) return
+    if (options.scrollElement.value)
+      viewportSize.value = options.scrollElement.value.clientHeight
     if (index === options.count.value - 1 && align === 'end') {
       scrollToOffset(logicalRange())
       return

@@ -265,7 +265,7 @@ PROPS:
   - name: virtual
     type: Boolean
     values: 'threshold | estimateSize | overscan | dynamic'
-    description: 对平铺的 options 数据开启 TanStack Virtual，并支持动态行高测量。分组和手写 Option 保持普通渲染。
+    description: 对平铺的 options 数据开启共享虚拟列表，并支持动态行高测量。分组和手写 Option 保持普通渲染。
     default: false
     link: null
     usage: '#virtual-options'
@@ -273,7 +273,7 @@ PROPS:
   - name: virtual-config
     type: Object
     values: 'threshold | estimateSize | overscan | dynamic'
-    description: 对平铺的 options 数据开启 TanStack Virtual，并支持动态行高测量。分组和手写 Option 保持普通渲染。
+    description: 对平铺的 options 数据开启共享虚拟列表，并支持动态行高测量。分组和手写 Option 保持普通渲染。
     default: '{}'
     link: null
     usage: '#virtual-options'

@@ -67,7 +67,7 @@ EXPOSES:
     description: 清空历史高度并重新测量当前布局，保留可见行锚点。列宽或内容变化可能使行变矮时调用。
 NEWS:
   - dynamic-height
-description: '基于 TanStack Virtual 的窗口化列表，支持真实测量动态行高。'
+description: '基于共享高度差索引的窗口化列表，支持真实测量动态行高。'
 ---
 
 # Virtual List 虚拟列表

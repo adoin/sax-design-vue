@@ -309,7 +309,7 @@ PROPS:
   - name: virtual
     type: Boolean
     values: 'threshold | estimateSize | overscan | dynamic'
-    description: Window flat data-driven options with TanStack Virtual and optionally measure dynamic row heights. Option groups and custom Option children retain normal rendering.
+    description: Window flat data-driven options with the shared virtual list and optionally measure dynamic row heights. Option groups and custom Option children retain normal rendering.
     default: false
     link: null
     usage: '#virtual-options'
@@ -317,7 +317,7 @@ PROPS:
   - name: virtual-config
     type: Object
     values: 'threshold | estimateSize | overscan | dynamic'
-    description: Window flat data-driven options with TanStack Virtual and optionally measure dynamic row heights. Option groups and custom Option children retain normal rendering.
+    description: Window flat data-driven options with the shared virtual list and optionally measure dynamic row heights. Option groups and custom Option children retain normal rendering.
     default: '{}'
     link: null
     usage: '#virtual-options'

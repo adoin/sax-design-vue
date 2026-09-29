@@ -81,7 +81,6 @@
   },
   "dependencies": {
     "@ctrl/tinycolor": "^4.2.0",
-    "@tanstack/vue-virtual": "^3.13.33",
     "@types/lodash": "^4.17.24",
     "@types/lodash-es": "^4.17.12",
     "@vueuse/core": "^14.3.0",

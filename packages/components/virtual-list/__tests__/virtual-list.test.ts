@@ -1,276 +1,108 @@
-import { nextTick, reactive } from 'vue'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import VirtualList from '../src/virtual-list.vue'
 
-const virtualizerMocks = vi.hoisted(() => ({
-  options: undefined as
-    | undefined
-    | { value: { count: number; estimateSize: (index: number) => number } },
-  measure: vi.fn(),
-  resizeItem: vi.fn(),
-  scrollToIndex: vi.fn(),
-  scrollToOffset: vi.fn(),
-  getTotalSize: vi.fn(() => 40),
-  shouldAdjustScrollPositionOnItemSizeChange: undefined as
-    (() => boolean) | undefined,
-  getVirtualItems: vi.fn(() => [
-    { index: 0, key: 'alpha', start: 0, size: 40, end: 40, lane: 0 },
-  ]),
-}))
-
-vi.mock('@tanstack/vue-virtual', () => ({
-  useVirtualizer: (options: {
-    value: { count: number; estimateSize: (index: number) => number }
-  }) => {
-    virtualizerMocks.options = options
-    return { value: virtualizerMocks }
-  },
-}))
+const settle = async () => {
+  await nextTick()
+  await Promise.resolve()
+  await nextTick()
+}
 
 describe('VirtualList', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
+  afterEach(() => vi.restoreAllMocks())
 
-  it('uses bounded sparse virtualization for large arrays as well as lazy sources', async () => {
+  it.each([40, 400, 10000])(
+    'windows and locates fixed-height arrays of %i rows',
+    async (count) => {
+      const wrapper = mount(VirtualList, {
+        props: {
+          items: Array.from({ length: count }, (_, id) => ({ id })),
+          estimateSize: 40,
+          dynamic: false,
+          overscan: 3,
+        },
+      })
+      await settle()
+      const element = wrapper.vm.getScrollElement()!
+      Object.defineProperty(element, 'clientHeight', { value: 200 })
+      wrapper.vm.measure()
+      wrapper.vm.scrollToIndex(count - 10, 'start')
+      await settle()
+      expect(element.scrollTop).toBe((count - 10) * 40)
+      expect(wrapper.vm.getVisibleRange()?.start).toBe(count - 10)
+      expect(wrapper.findAll('.s-vl__item').length).toBeLessThan(20)
+      wrapper.vm.scrollBy(-80)
+      expect(element.scrollTop).toBe((count - 12) * 40)
+      wrapper.vm.scrollBy(Number.NaN)
+      expect(element.scrollTop).toBe((count - 12) * 40)
+      wrapper.unmount()
+    },
+  )
+
+  it('measures small dynamic lists and resets retained heights', async () => {
+    let height = 72
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(
+      () => ({ height }) as DOMRect,
+    )
     const wrapper = mount(VirtualList, {
       props: {
-        items: Array.from({ length: 10000 }, (_, id) => ({ id })),
+        items: Array.from({ length: 400 }, (_, id) => ({ id })),
+        dynamic: true,
+        retainMaxSize: true,
+        estimateSize: 40,
         itemKey: (item: unknown) => (item as { id: number }).id,
-        dynamic: true,
       },
     })
-    await nextTick()
-    expect(virtualizerMocks.options?.value.count).toBe(0)
-    expect(wrapper.findAll('.s-vl__item').length).toBeLessThan(40)
-    wrapper.vm.scrollToIndex(9000, 'start')
-    await nextTick()
-    expect(virtualizerMocks.scrollToIndex).not.toHaveBeenCalled()
-    expect(wrapper.vm.getVisibleRange()?.start).toBe(9000)
-    wrapper.unmount()
-  })
-
-  it('scrolls normal lists by a relative logical pixel distance', async () => {
-    const wrapper = mount(VirtualList, { props: { items: [{ id: 'alpha' }] } })
-    await nextTick()
-    const element = wrapper.vm.getScrollElement()!
-    element.scrollTop = 100
-    wrapper.vm.scrollBy(16)
-    expect(virtualizerMocks.scrollToOffset).toHaveBeenLastCalledWith(116, {
-      behavior: 'auto',
-    })
-    wrapper.vm.scrollBy(-200)
-    expect(virtualizerMocks.scrollToOffset).toHaveBeenLastCalledWith(0, {
-      behavior: 'auto',
-    })
-    virtualizerMocks.scrollToOffset.mockClear()
-    wrapper.vm.scrollBy(Number.NaN)
-    expect(virtualizerMocks.scrollToOffset).not.toHaveBeenCalled()
-    wrapper.unmount()
-  })
-
-  it('does not multiply relative scrolling by the compressed sparse scrollbar ratio', async () => {
-    const wrapper = mount(VirtualList, {
-      props: {
-        count: 1_000_000,
-        estimateSize: 44,
-        dynamic: false,
-        itemAt: (index: number) => ({ id: index }),
-      },
-    })
-    await nextTick()
-    const element = wrapper.vm.getScrollElement()!
-    Object.defineProperties(element, {
-      clientHeight: { configurable: true, value: 200 },
-      scrollHeight: {
-        configurable: true,
-        get: () =>
-          Number.parseFloat(
-            wrapper
-              .get('.s-vl__content')
-              .attributes('style')
-              ?.match(/height:\s*([\d.]+)px/)?.[1] ?? '0',
-          ),
-      },
-    })
-    wrapper.vm.scrollToOffset(1000)
-    const before = element.scrollTop
-    wrapper.vm.scrollBy(22)
-    wrapper.vm.scrollBy(22)
-    await nextTick()
-    const after = element.scrollTop
-    expect(after).toBeGreaterThan(before)
-    expect(after - before).toBeCloseTo(
-      (44 * (element.scrollHeight - 200)) / (44_000_000 - 200),
-      6,
+    await settle()
+    expect(wrapper.findAll('.s-vl__item')[1].attributes('style')).toContain(
+      '--s-vl-item-start: 72px',
     )
-    wrapper.vm.scrollToOffset(1044)
-    expect(element.scrollTop).toBeCloseTo(after, 6)
-    expect(virtualizerMocks.scrollToOffset).not.toHaveBeenCalled()
-    wrapper.unmount()
-  })
-
-  it('corrects the visible anchor once for a batch, excluding the visible row itself', async () => {
-    const rows = ['alpha', 'beta', 'gamma'].map((key, index) => ({
-      index,
-      key,
-      start: index * 40,
-      end: (index + 1) * 40,
-      size: 40,
-      lane: 0,
-    }))
-    virtualizerMocks.getVirtualItems.mockReturnValue(rows)
-    const rect = vi
-      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
-      .mockReturnValue({ height: 40 } as DOMRect)
-    const wrapper = mount(VirtualList, {
-      props: {
-        items: rows.map(({ key }) => ({ id: key })),
-        itemKey: (item: unknown) => (item as { id: string }).id,
-        dynamic: true,
-      },
-    })
-    await nextTick()
-    wrapper.vm.getScrollElement()!.scrollTop = 100
-    virtualizerMocks.scrollToOffset.mockClear()
-    virtualizerMocks.resizeItem.mockClear()
-    rect.mockReturnValue({ height: 70 } as DOMRect)
+    height = 44
     wrapper.vm.measureVisible()
-    expect(virtualizerMocks.resizeItem).toHaveBeenCalledTimes(3)
-    expect(virtualizerMocks.scrollToOffset).toHaveBeenCalledTimes(1)
-    expect(virtualizerMocks.scrollToOffset).toHaveBeenLastCalledWith(160, {
-      behavior: 'auto',
-    })
-    await nextTick()
-    // The already queued microtask must not replay compensation after the batch.
-    expect(virtualizerMocks.scrollToOffset).toHaveBeenCalledTimes(1)
-    wrapper.unmount()
-    rect.mockRestore()
-    virtualizerMocks.getVirtualItems.mockReturnValue([rows[0]])
-  })
-
-  it('caches dynamic row heights by stable item key', async () => {
-    const rect = vi
-      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
-      .mockReturnValue({ height: 64 } as DOMRect)
-    const items = reactive([{ id: 'alpha', hover: false }])
-    const wrapper = mount(VirtualList, {
-      props: {
-        items,
-        itemKey: (item: unknown) => (item as { id: string }).id,
-        dynamic: true,
-      },
-    })
-    await nextTick()
-
-    expect(virtualizerMocks.resizeItem).toHaveBeenCalledWith(0, 64)
-    expect(virtualizerMocks.options?.value.estimateSize(0)).toBe(64)
-    virtualizerMocks.resizeItem.mockClear()
-
-    items[0].hover = true
-    await nextTick()
-
-    expect(virtualizerMocks.resizeItem).not.toHaveBeenCalled()
-
-    rect.mockReturnValue({ height: 92 } as DOMRect)
-    wrapper.vm.measureVisible()
-
-    expect(virtualizerMocks.resizeItem).toHaveBeenCalledWith(0, 92)
-    expect(virtualizerMocks.options?.value.estimateSize(0)).toBe(92)
-  })
-
-  it('retains the largest measured height when requested', async () => {
-    const rect = vi
-      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
-      .mockReturnValue({ height: 92 } as DOMRect)
-    const wrapper = mount(VirtualList, {
-      props: {
-        items: [{ id: 'alpha' }],
-        itemKey: (item: unknown) => (item as { id: string }).id,
-        dynamic: true,
-        retainMaxSize: true,
-      },
-    })
-    await nextTick()
-
-    expect(virtualizerMocks.resizeItem).toHaveBeenLastCalledWith(0, 92)
-    rect.mockReturnValue({ height: 52 } as DOMRect)
-    virtualizerMocks.resizeItem.mockClear()
-    wrapper.vm.measureVisible()
-
-    expect(virtualizerMocks.resizeItem).not.toHaveBeenCalled()
-    expect(virtualizerMocks.options?.value.estimateSize(0)).toBe(92)
-  })
-
-  it('resets measurements when the sizing mode changes', async () => {
-    const wrapper = mount(VirtualList, {
-      props: {
-        items: [{ id: 'alpha' }],
-        dynamic: true,
-      },
-    })
-    virtualizerMocks.measure.mockClear()
-
-    await wrapper.setProps({ dynamic: false })
-    await nextTick()
-
-    expect(virtualizerMocks.measure).toHaveBeenCalledTimes(1)
-  })
-
-  it('drops retained maximum heights after a real layout reset', async () => {
-    const rect = vi
-      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
-      .mockReturnValue({ height: 92 } as DOMRect)
-    const wrapper = mount(VirtualList, {
-      props: {
-        items: [{ id: 'alpha' }],
-        itemKey: (item: unknown) => (item as { id: string }).id,
-        dynamic: true,
-        retainMaxSize: true,
-      },
-    })
-    await nextTick()
-    expect(virtualizerMocks.options?.value.estimateSize(0)).toBe(92)
-    rect.mockReturnValue({ height: 52 } as DOMRect)
+    await settle()
+    expect(wrapper.findAll('.s-vl__item')[1].attributes('style')).toContain(
+      '--s-vl-item-start: 72px',
+    )
     await wrapper.vm.resetMeasurements()
-    expect(virtualizerMocks.options?.value.estimateSize(0)).toBe(52)
-    expect(virtualizerMocks.resizeItem).toHaveBeenLastCalledWith(0, 52)
+    await settle()
+    expect(wrapper.findAll('.s-vl__item')[1].attributes('style')).toContain(
+      '--s-vl-item-start: 44px',
+    )
+    await wrapper.setProps({ dynamic: false })
+    await settle()
+    expect(wrapper.findAll('.s-vl__item')[1].attributes('style')).toContain(
+      '--s-vl-item-start: 40px',
+    )
     wrapper.unmount()
-    rect.mockRestore()
   })
 
-  it('suspends normal-list anchoring only while the native scrollbar is held', async () => {
-    const wrapper = mount(VirtualList, {
-      props: { items: [{ id: 'alpha' }], dynamic: true },
-    })
-    await nextTick()
-    const element = wrapper.find('.s-vl__window').element as HTMLElement
-    Object.defineProperties(element, {
-      clientHeight: { value: 100 },
-      clientWidth: { value: 190 },
-      offsetHeight: { value: 100 },
-      offsetWidth: { value: 200 },
-      scrollHeight: { value: 1000 },
-    })
-    const rect = vi.spyOn(element, 'getBoundingClientRect').mockReturnValue({
-      left: 0,
-      top: 0,
-      width: 200,
-      height: 100,
-    } as DOMRect)
-    element.dispatchEvent(
-      new MouseEvent('mousedown', { button: 0, clientX: 195, clientY: 20 }),
+  it('replaces equal-length data without retaining stale row heights', async () => {
+    let height = 72
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(
+      () => ({ height }) as DOMRect,
     )
-    expect(
-      virtualizerMocks.shouldAdjustScrollPositionOnItemSizeChange?.(),
-    ).toBe(false)
-    window.dispatchEvent(new MouseEvent('mouseup'))
-    expect(
-      virtualizerMocks.shouldAdjustScrollPositionOnItemSizeChange,
-    ).toBeUndefined()
+    const wrapper = mount(VirtualList, {
+      props: {
+        items: ['a', 'b', 'c'],
+        dynamic: true,
+        estimateSize: 40,
+        itemKey: (item: unknown) => String(item),
+      },
+    })
+    await settle()
+    height = 36
+    await wrapper.setProps({ items: ['c', 'b', 'a'] })
+    await settle()
+    expect(wrapper.findAll('.s-vl__item')[1].attributes('style')).toContain(
+      '--s-vl-item-start: 36px',
+    )
+    await wrapper.setProps({ items: [] })
+    expect(wrapper.findAll('.s-vl__item')).toHaveLength(0)
+    await wrapper.setProps({ items: ['z'] })
+    await settle()
+    expect(wrapper.findAll('.s-vl__item')).toHaveLength(1)
     wrapper.unmount()
-    rect.mockRestore()
   })
 
   it('resolves generated items only for the rendered window', () => {
@@ -288,7 +120,6 @@ describe('VirtualList', () => {
 
     expect(wrapper.text()).toContain('row-0')
     expect(itemAt.mock.calls.length).toBeLessThan(20)
-    expect(virtualizerMocks.options?.value.count).toBe(0)
     expect(wrapper.find('.s-vl__item').attributes('style')).toContain(
       '--s-vl-item-start: 0px',
     )
@@ -383,7 +214,6 @@ describe('VirtualList', () => {
     const rows = wrapper.findAll('.s-vl__item')
     expect(rows.length).toBeGreaterThan(1)
     expect(rows[1].attributes('style')).toContain('--s-vl-item-start: 72px')
-    expect(virtualizerMocks.resizeItem).not.toHaveBeenCalled()
   })
 
   it('keeps sparse row offsets at the largest visited-window height', async () => {

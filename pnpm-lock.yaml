@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@tanstack/vue-virtual':
-        specifier: ^3.13.33
-        version: 3.13.33(vue@3.5.41(typescript@5.9.3))
       '@types/lodash':
         specifier: ^4.17.24
         version: 4.17.24
@@ -537,9 +534,6 @@ importers:
       '@ctrl/tinycolor':
         specifier: ^4.2.0
         version: 4.2.0
-      '@tanstack/vue-virtual':
-        specifier: ^3.13.33
-        version: 3.13.33(vue@3.5.41(typescript@5.9.3))
       '@types/lodash':
         specifier: ^4.17.24
         version: 4.17.24
@@ -2561,14 +2555,6 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
-
-  '@tanstack/virtual-core@3.17.5':
-    resolution: {integrity: sha512-AXfBC3sq6PuYSwyxYORqqgHCNjPGAvKJvZuBBJ1klhztWBB5cgqgwsq8+fNfaQJG7/K4xYBja9S90QFn2zmQAg==}
-
-  '@tanstack/vue-virtual@3.13.33':
-    resolution: {integrity: sha512-R1j/o/5pdgzDqV3Us/s7VEV1Il6ocTsElKxK9g04rq66V3m7kIULgKXD04BAQwCO0IMemXsw3ex6LSH4ug3Feg==}
-    peerDependencies:
-      vue: ^2.7.0 || ^3.0.0
 
   '@ts-morph/common@0.28.1':
     resolution: {integrity: sha512-W74iWf7ILp1ZKNYXY5qbddNaml7e9Sedv5lvU1V8lftlitkc9Pq1A+jlH23ltDgWYeZFFEqGCD1Ies9hqu3O+g==}
@@ -9042,13 +9028,6 @@ snapshots:
   '@simple-libs/stream-utils@2.0.0': {}
 
   '@standard-schema/spec@1.1.0': {}
-
-  '@tanstack/virtual-core@3.17.5': {}
-
-  '@tanstack/vue-virtual@3.13.33(vue@3.5.41(typescript@5.9.3))':
-    dependencies:
-      '@tanstack/virtual-core': 3.17.5
-      vue: 3.5.41(typescript@5.9.3)
 
   '@ts-morph/common@0.28.1':
     dependencies:

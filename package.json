@@ -51,7 +51,6 @@
     "vue": "^3.5.0"
   },
   "dependencies": {
-    "@tanstack/vue-virtual": "^3.13.33",
     "@types/lodash": "^4.17.24",
     "@types/lodash-es": "^4.17.12",
     "@vuesax-alpha/components": "workspace:*",

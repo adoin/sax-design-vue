@@ -67,7 +67,7 @@ EXPOSES:
     description: Clear recorded heights and measure the current layout again while retaining the visible row anchor. Call after changes to column widths or content that can reduce row heights.
 NEWS:
   - dynamic-height
-description: 'Windowed list rendering backed by TanStack Virtual, with measured dynamic row heights.'
+description: 'Windowed list rendering using a shared height-delta index, with measured dynamic row heights.'
 ---
 
 # Virtual List

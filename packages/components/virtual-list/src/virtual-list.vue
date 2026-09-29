@@ -54,7 +54,6 @@ import {
   useTemplateRef,
   watch,
 } from 'vue'
-import { useVirtualizer } from '@tanstack/vue-virtual'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { virtualListEmits, virtualListProps } from './virtual-list'
 import { useSparseVirtualizer } from './use-sparse-virtualizer'
@@ -80,7 +79,6 @@ const itemCount = computed(() =>
     : Math.max(0, Math.floor(props.count)),
 )
 const getItem = (index: number) => props.itemAt?.(index) ?? props.items[index]
-const measuredSizeCache = new Map<VirtualListKey, number>()
 const resettingMeasurements = shallowRef(false)
 const measuredElements = new Map<number, HTMLElement>()
 const measuredElementKeys = new WeakMap<HTMLElement, VirtualListKey>()
@@ -89,19 +87,14 @@ const measurementRefCallbacks = new Map<
   number,
   (element: Element | ComponentPublicInstance | null) => void
 >()
-// Large arrays and lazy data sources share the same bounded-cost scroll path.
-const sparseMode = computed(() => itemCount.value >= 10_000)
 const estimateSize = computed(() => Math.max(1, props.estimateSize))
 const overscan = computed(() => Math.max(0, props.overscan))
 
 const resolveItemKey = (index: number): VirtualListKey =>
   props.itemKeyAt?.(index) ?? props.itemKey?.(getItem(index), index) ?? index
 
-const estimateItemSize = (index: number) =>
-  measuredSizeCache.get(resolveItemKey(index)) ?? estimateSize.value
-
 const sparseVirtualizer = useSparseVirtualizer({
-  enabled: sparseMode,
+  enabled: computed(() => true),
   count: itemCount,
   estimateSize,
   overscan,
@@ -112,39 +105,10 @@ const sparseVirtualizer = useSparseVirtualizer({
   onRangeChange: (range) => emit('range-change', range),
 })
 
-const virtualizerOptions = computed(() => {
-  return {
-    count: sparseMode.value ? 0 : itemCount.value,
-    enabled: !sparseMode.value,
-    getScrollElement: () => scrollRef.value ?? null,
-    estimateSize: estimateItemSize,
-    overscan: Math.max(0, props.overscan),
-    getItemKey: resolveItemKey,
-    useAnimationFrameWithResizeObserver: true,
-    onChange: (instance: {
-      getVirtualItems: () => Array<{ index: number }>
-    }) => {
-      const rows = instance.getVirtualItems()
-      if (!rows.length) return
-      emit('range-change', {
-        start: rows[0].index,
-        end: rows[rows.length - 1].index,
-      })
-    },
-  }
-})
-
-const virtualizer = useVirtualizer<HTMLElement, HTMLElement>(virtualizerOptions)
 const dragTotalSize = shallowRef<number>()
 watch(
   scrollbarDragging,
   (dragging) => {
-    // A programmatic correction cancels Chromium's native thumb drag.
-    // Restore TanStack's default anchoring predicate after release.
-    virtualizer.value.shouldAdjustScrollPositionOnItemSizeChange = dragging
-      ? () => false
-      : undefined
-
     const element = scrollRef.value
     if (dragging) {
       // Keep the native track geometry stable as newly visited rows are sized.
@@ -167,19 +131,9 @@ watch(
   },
   { flush: 'post' },
 )
-const virtualItems = computed(() =>
-  sparseMode.value
-    ? sparseVirtualizer.virtualItems.value
-    : virtualizer.value.getVirtualItems(),
-)
-const totalSize = computed(() =>
-  sparseMode.value
-    ? sparseVirtualizer.physicalSize.value
-    : virtualizer.value.getTotalSize(),
-)
-const compressed = computed(
-  () => sparseMode.value && sparseVirtualizer.compressed.value,
-)
+const virtualItems = sparseVirtualizer.virtualItems
+const totalSize = sparseVirtualizer.physicalSize
+const compressed = sparseVirtualizer.compressed
 const viewportHeight = computed(() =>
   typeof props.height === 'number' ? `${props.height}px` : props.height,
 )
@@ -208,6 +162,7 @@ export interface PendingRowMeasurement {
 const pendingMeasurements = new Map<number, PendingRowMeasurement>()
 let measurementScheduled = false
 let destroyed = false
+let navigationVersion = 0
 
 const flushMeasurements = () => {
   measurementScheduled = false
@@ -231,42 +186,7 @@ const flushMeasurements = () => {
         measurement.size ?? measurement.element.getBoundingClientRect().height,
     })
   }
-  if (sparseMode.value) {
-    sparseVirtualizer.resizeItems(measurements)
-    return
-  }
-
-  const instance = virtualizer.value
-  const offset = scrollRef.value?.scrollTop ?? 0
-  const rows = instance.getVirtualItems()
-  const anchor = rows.find((row) => row.end > offset)
-  let correction = 0
-  const previousPredicate = instance.shouldAdjustScrollPositionOnItemSizeChange
-  // Apply one anchor correction for the entire batch, never one scroll per row.
-  instance.shouldAdjustScrollPositionOnItemSizeChange = () => false
-  try {
-    for (const { index, key, size } of measurements) {
-      if (!Number.isFinite(size) || size <= 0) continue
-      const cached = measuredSizeCache.get(key)
-      const nextSize = props.retainMaxSize
-        ? Math.max(cached ?? 0, Math.ceil(size))
-        : Math.ceil(size)
-      if (cached === nextSize) continue
-      const oldSize =
-        rows.find((row) => row.index === index)?.size ??
-        cached ??
-        estimateSize.value
-      if (anchor && index < anchor.index) correction += nextSize - oldSize
-      measuredSizeCache.set(key, nextSize)
-      instance.resizeItem(index, nextSize)
-    }
-  } finally {
-    instance.shouldAdjustScrollPositionOnItemSizeChange = previousPredicate
-  }
-  if (correction && !scrollbarDragging.value)
-    instance.scrollToOffset(Math.max(0, offset + correction), {
-      behavior: 'auto',
-    })
+  sparseVirtualizer.resizeItems(measurements)
 }
 
 const queueMeasurement = (
@@ -354,9 +274,7 @@ function measureVisible() {
 function getVisibleRange() {
   const element = scrollRef.value
   if (!element) return undefined
-  const startOffset = sparseMode.value
-    ? sparseVirtualizer.scrollOffset.value
-    : element.scrollTop
+  const startOffset = sparseVirtualizer.scrollOffset.value
   const endOffset = startOffset + Math.max(element.clientHeight, 1)
   const items = virtualItems.value
   const first = items.find((item) => item.end > startOffset)
@@ -379,12 +297,14 @@ function getItemRange() {
 }
 
 function handleScroll(event: Event) {
-  if (sparseMode.value && event.currentTarget instanceof HTMLElement)
+  if (event.currentTarget instanceof HTMLElement)
     sparseVirtualizer.handleScroll(event.currentTarget)
   emit('scroll', event)
 }
 
 function handleWheel(event: WheelEvent) {
+  // User input supersedes an asynchronous layout-reset anchor.
+  if (event.deltaY && !event.ctrlKey) navigationVersion++
   if (
     !compressed.value ||
     event.defaultPrevented ||
@@ -427,65 +347,73 @@ function scrollToIndex(
   align: 'auto' | 'start' | 'center' | 'end' = 'auto',
 ) {
   if (!Number.isInteger(index) || index < 0 || index >= itemCount.value) return
-  if (sparseMode.value) sparseVirtualizer.scrollToIndex(index, align)
-  else virtualizer.value.scrollToIndex(index, { align })
+  navigationVersion++
+  sparseVirtualizer.scrollToIndex(index, align)
 }
 
 function scrollToOffset(offset: number, behavior: ScrollBehavior = 'auto') {
-  if (sparseMode.value) sparseVirtualizer.scrollToOffset(offset, behavior)
-  else virtualizer.value.scrollToOffset(offset, { behavior })
+  navigationVersion++
+  sparseVirtualizer.scrollToOffset(offset, behavior)
 }
 
 function scrollBy(delta: number) {
   if (!Number.isFinite(delta) || !delta || !scrollRef.value) return
-  const current = sparseMode.value
+  const current = compressed.value
     ? sparseVirtualizer.scrollOffset.value
     : scrollRef.value.scrollTop
   scrollToOffset(Math.max(0, current + delta))
 }
 
 function measure() {
-  if (sparseMode.value) sparseVirtualizer.measureViewport()
-  else virtualizer.value.measure()
+  sparseVirtualizer.measureViewport()
   if (props.dynamic) nextTick(measureVisible)
 }
 
 async function resetMeasurements() {
   if (resettingMeasurements.value || destroyed) return
+  const request = navigationVersion
   const element = scrollRef.value
-  const top = sparseMode.value
-    ? sparseVirtualizer.scrollOffset.value
-    : (element?.scrollTop ?? 0)
+  const top = sparseVirtualizer.scrollOffset.value
   const anchor = virtualItems.value.find((item) => item.start + item.size > top)
   const delta = anchor ? Math.max(0, top - anchor.start) : 0
   resettingMeasurements.value = true
   pendingMeasurements.clear()
-  measuredSizeCache.clear()
-  if (sparseMode.value) sparseVirtualizer.resetMeasurements()
-  else virtualizer.value.measure()
+  sparseVirtualizer.resetMeasurements()
   await nextTick()
   if (destroyed) return
-  if (anchor) scrollToIndex(anchor.index, 'start')
+  if (anchor && request === navigationVersion)
+    sparseVirtualizer.scrollToIndex(anchor.index, 'start')
   await nextTick()
   if (destroyed) return
   if (props.dynamic) measureVisible()
   await nextTick()
   if (destroyed) return
   resettingMeasurements.value = false
-  if (anchor) {
-    scrollToIndex(anchor.index, 'start')
+  if (anchor && request === navigationVersion) {
+    sparseVirtualizer.scrollToIndex(anchor.index, 'start')
     if (delta && element)
-      scrollToOffset(
-        (sparseMode.value
-          ? sparseVirtualizer.scrollOffset.value
-          : element.scrollTop) + delta,
-      )
+      scrollToOffset(sparseVirtualizer.scrollOffset.value + delta)
   }
 }
 
 watch(
   () => [props.dynamic, props.estimateSize, props.retainMaxSize] as const,
-  () => nextTick(measure),
+  () => {
+    pendingMeasurements.clear()
+    sparseVirtualizer.resetMeasurements()
+    nextTick(measure)
+  },
+)
+
+// Replacement/filtering/reordering may keep the same length but change row identities.
+watch(
+  () => [props.items.slice(), props.itemAt, props.itemKey, props.itemKeyAt],
+  () => {
+    pendingMeasurements.clear()
+    sparseVirtualizer.resetMeasurements()
+    nextTick(measure)
+  },
+  { flush: 'post' },
 )
 
 onBeforeUnmount(() => {
@@ -506,6 +434,6 @@ defineExpose({
   getItemRange,
   resetMeasurements,
   getScrollElement: () => scrollRef.value,
-  virtualizer,
+  virtualizer: sparseVirtualizer,
 })
 </script>

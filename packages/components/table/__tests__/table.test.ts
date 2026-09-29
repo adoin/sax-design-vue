@@ -28,25 +28,47 @@ const virtualizerMocks = vi.hoisted(() => ({
   scrollToOffset: vi.fn(),
 }))
 
-vi.mock('@tanstack/vue-virtual', () => ({
-  useVirtualizer: (options: { value: { count: number } }) => ({
-    value: {
-      ...virtualizerMocks,
-      getTotalSize: () => options.value.count * 48,
-      getVirtualItems: () =>
-        Array.from(
-          { length: Math.min(options.value.count, 4) },
-          (_, index) => ({
-            index,
-            key: index,
-            start: index * 48,
-            size: 48,
-            end: (index + 1) * 48,
-          }),
-        ),
-    },
-  }),
-}))
+vi.mock(
+  '@vuesax-alpha/components/virtual-list/src/use-sparse-virtualizer',
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import('@vuesax-alpha/components/virtual-list/src/use-sparse-virtualizer')
+      >()
+    return {
+      ...actual,
+      useSparseVirtualizer: (
+        ...args: Parameters<typeof actual.useSparseVirtualizer>
+      ) => {
+        const instance = actual.useSparseVirtualizer(...args)
+        return {
+          ...instance,
+          resetMeasurements: () => {
+            virtualizerMocks.measure()
+            instance.resetMeasurements()
+          },
+          measureViewport: () => {
+            virtualizerMocks.measure()
+            instance.measureViewport()
+          },
+          resizeItems: (rows: Parameters<typeof instance.resizeItems>[0]) => {
+            rows.forEach((row) =>
+              virtualizerMocks.resizeItem(row.index, row.size),
+            )
+            instance.resizeItems(rows)
+          },
+          scrollToIndex: (
+            index: number,
+            align: 'auto' | 'start' | 'end' | 'center' = 'auto',
+          ) => {
+            virtualizerMocks.scrollToIndex(index, { align })
+            instance.scrollToIndex(index, align)
+          },
+        }
+      },
+    }
+  },
+)
 
 const columns: TableColumn[] = [
   {
@@ -601,7 +623,8 @@ describe('Table data mode', () => {
     })
     await nextTick()
 
-    expect(wrapper.findAll('.s-table__data-row')).toHaveLength(4)
+    expect(wrapper.findAll('.s-table__data-row').length).toBeGreaterThan(0)
+    expect(wrapper.findAll('.s-table__data-row').length).toBeLessThan(20)
     expect(wrapper.find('.s-vl__window').attributes('style')).toContain(
       'height: 220px',
     )
