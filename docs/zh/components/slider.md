@@ -311,13 +311,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-12}](../../.vuepress/components/slider-zh/disabled.vue)
+@[code{1-15}](../../.vuepress/components/slider-zh/disabled.vue)
 
 </template>
 
 <template #script>
 
-@[code{14-18}](../../.vuepress/components/slider-zh/disabled.vue)
+@[code{17-21}](../../.vuepress/components/slider-zh/disabled.vue)
+
+</template>
+
+<template #style>
+
+@[code{23-38}](../../.vuepress/components/slider-zh/disabled.vue)
 
 </template>
 

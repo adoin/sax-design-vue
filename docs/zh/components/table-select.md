@@ -431,13 +431,19 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行或多行�
 
 <template #template>
 
-@[code{16-31}](../../.vuepress/components/table-select-zh/flat-single.vue)
+@[code{16-33}](../../.vuepress/components/table-select-zh/flat-single.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-14}](../../.vuepress/components/table-select-zh/flat-single.vue)
+
+</template>
+
+<template #style>
+
+@[code{35-53}](../../.vuepress/components/table-select-zh/flat-single.vue)
 
 </template>
 
@@ -455,13 +461,19 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行或多行�
 
 <template #template>
 
-@[code{16-32}](../../.vuepress/components/table-select-zh/flat-multiple.vue)
+@[code{16-34}](../../.vuepress/components/table-select-zh/flat-multiple.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-14}](../../.vuepress/components/table-select-zh/flat-multiple.vue)
+
+</template>
+
+<template #style>
+
+@[code{36-54}](../../.vuepress/components/table-select-zh/flat-multiple.vue)
 
 </template>
 
@@ -479,13 +491,19 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行或多行�
 
 <template #template>
 
-@[code{22-42}](../../.vuepress/components/table-select-zh/tree-single.vue)
+@[code{22-44}](../../.vuepress/components/table-select-zh/tree-single.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-20}](../../.vuepress/components/table-select-zh/tree-single.vue)
+
+</template>
+
+<template #style>
+
+@[code{46-64}](../../.vuepress/components/table-select-zh/tree-single.vue)
 
 </template>
 
@@ -503,13 +521,19 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行或多行�
 
 <template #template>
 
-@[code{32-59}](../../.vuepress/components/table-select-zh/multiple.vue)
+@[code{32-69}](../../.vuepress/components/table-select-zh/multiple.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-30}](../../.vuepress/components/table-select-zh/multiple.vue)
+
+</template>
+
+<template #style>
+
+@[code{71-101}](../../.vuepress/components/table-select-zh/multiple.vue)
 
 </template>
 

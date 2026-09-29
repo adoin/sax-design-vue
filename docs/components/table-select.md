@@ -431,13 +431,19 @@ Bind one row key. Selecting an enabled row closes the popup by default; disabled
 
 <template #template>
 
-@[code{16-31}](../.vuepress/components/table-select/flat-single.vue)
+@[code{16-33}](../.vuepress/components/table-select/flat-single.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-14}](../.vuepress/components/table-select/flat-single.vue)
+
+</template>
+
+<template #style>
+
+@[code{35-53}](../.vuepress/components/table-select/flat-single.vue)
 
 </template>
 
@@ -455,13 +461,19 @@ Enable `multiple` and bind an array of keys. Toggle rows with clicks or checkbox
 
 <template #template>
 
-@[code{16-32}](../.vuepress/components/table-select/flat-multiple.vue)
+@[code{16-34}](../.vuepress/components/table-select/flat-multiple.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-14}](../.vuepress/components/table-select/flat-multiple.vue)
+
+</template>
+
+<template #style>
+
+@[code{36-54}](../.vuepress/components/table-select/flat-multiple.vue)
 
 </template>
 
@@ -479,13 +491,19 @@ Use `tree-config` for hierarchical data. This example uses `selectable` to allow
 
 <template #template>
 
-@[code{22-42}](../.vuepress/components/table-select/tree-single.vue)
+@[code{22-44}](../.vuepress/components/table-select/tree-single.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-20}](../.vuepress/components/table-select/tree-single.vue)
+
+</template>
+
+<template #style>
+
+@[code{46-64}](../.vuepress/components/table-select/tree-single.vue)
 
 </template>
 
@@ -503,13 +521,19 @@ Use `tree-config` for hierarchical data. This example uses `selectable` to allow
 
 <template #template>
 
-@[code{32-59}](../.vuepress/components/table-select/multiple.vue)
+@[code{32-72}](../.vuepress/components/table-select/multiple.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-30}](../.vuepress/components/table-select/multiple.vue)
+
+</template>
+
+<template #style>
+
+@[code{74-104}](../.vuepress/components/table-select/multiple.vue)
 
 </template>
 

@@ -30,13 +30,24 @@ const data = [
 </script>
 
 <template>
-  <div>
-    <s-switch v-model="strict">Independent parent and child selection</s-switch>
-    <s-select
-      v-model="strategy"
-      :options="strategies"
-      aria-label="Checked value strategy"
-    />
+  <div class="table-select-example">
+    <div class="table-select-example__controls">
+      <div class="table-select-example__control">
+        <s-switch
+          v-model="strict"
+          aria-label="Independent parent and child selection"
+        />
+        <span>Independent selection</span>
+      </div>
+      <div class="table-select-example__control">
+        <span>Checked values</span>
+        <s-select
+          v-model="strategy"
+          :options="strategies"
+          aria-label="Checked value strategy"
+        />
+      </div>
+    </div>
     <s-table-select
       v-model="value"
       multiple
@@ -54,6 +65,40 @@ const data = [
       block
       placeholder="Select multiple nodes"
     />
-    <p>Selected keys: {{ value }}</p>
+    <p class="table-select-example__result">
+      <span>Selected keys</span><code>{{ value }}</code>
+    </p>
   </div>
 </template>
+
+<style scoped>
+.table-select-example {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+}
+.table-select-example__result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+}
+.table-select-example__result code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.table-select-example__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+}
+.table-select-example__control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+</style>

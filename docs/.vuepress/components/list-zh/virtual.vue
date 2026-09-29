@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <s-button @click="list?.scrollToIndex(0, 'start')">回到首项</s-button>
-    <s-button @click="list?.scrollToIndex(9999, 'end')">定位末项</s-button>
+  <div class="list-virtual-example">
+    <div class="list-virtual-example__actions">
+      <s-button @click="list?.scrollToIndex(0, 'start')">回到首项</s-button>
+      <s-button @click="list?.scrollToIndex(9999, 'end')">定位末项</s-button>
+    </div>
     <s-list
       ref="list"
       :items="items"
@@ -42,3 +44,18 @@ const items = Array.from({ length: 10000 }, (_, index) => ({
       : '简短说明',
 }))
 </script>
+
+<style scoped>
+.list-virtual-example {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+}
+.list-virtual-example__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+</style>

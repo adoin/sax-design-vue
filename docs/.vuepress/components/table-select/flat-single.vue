@@ -14,7 +14,7 @@ const data = [
 </script>
 
 <template>
-  <div>
+  <div class="table-select-example">
     <s-table-select
       v-model="value"
       :data="data"
@@ -26,6 +26,28 @@ const data = [
       :popup-config="{ width: 360 }"
       placeholder="Choose an option"
     />
-    <p>Selected keys: {{ value ?? '—' }}</p>
+    <p class="table-select-example__result">
+      <span>Selected keys</span><code>{{ value ?? '—' }}</code>
+    </p>
   </div>
 </template>
+
+<style scoped>
+.table-select-example {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+}
+.table-select-example__result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+}
+.table-select-example__result code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+</style>

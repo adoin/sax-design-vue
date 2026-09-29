@@ -188,13 +188,19 @@ NEWS:
 
 <template #template>
 
-@[code{1-28}](../../.vuepress/components/list-zh/virtual.vue)
+@[code{1-30}](../../.vuepress/components/list-zh/virtual.vue)
 
 </template>
 
 <template #script>
 
-@[code{30-44}](../../.vuepress/components/list-zh/virtual.vue)
+@[code{32-46}](../../.vuepress/components/list-zh/virtual.vue)
+
+</template>
+
+<template #style>
+
+@[code{48-61}](../../.vuepress/components/list-zh/virtual.vue)
 
 </template>
 
