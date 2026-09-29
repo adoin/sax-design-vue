@@ -93,6 +93,45 @@ describe('VirtualList', () => {
     wrapper.unmount()
   })
 
+  it('corrects the visible anchor once for a batch, excluding the visible row itself', async () => {
+    const rows = ['alpha', 'beta', 'gamma'].map((key, index) => ({
+      index,
+      key,
+      start: index * 40,
+      end: (index + 1) * 40,
+      size: 40,
+      lane: 0,
+    }))
+    virtualizerMocks.getVirtualItems.mockReturnValue(rows)
+    const rect = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockReturnValue({ height: 40 } as DOMRect)
+    const wrapper = mount(VirtualList, {
+      props: {
+        items: rows.map(({ key }) => ({ id: key })),
+        itemKey: (item: unknown) => (item as { id: string }).id,
+        dynamic: true,
+      },
+    })
+    await nextTick()
+    wrapper.vm.getScrollElement()!.scrollTop = 100
+    virtualizerMocks.scrollToOffset.mockClear()
+    virtualizerMocks.resizeItem.mockClear()
+    rect.mockReturnValue({ height: 70 } as DOMRect)
+    wrapper.vm.measureVisible()
+    expect(virtualizerMocks.resizeItem).toHaveBeenCalledTimes(3)
+    expect(virtualizerMocks.scrollToOffset).toHaveBeenCalledTimes(1)
+    expect(virtualizerMocks.scrollToOffset).toHaveBeenLastCalledWith(160, {
+      behavior: 'auto',
+    })
+    await nextTick()
+    // The already queued microtask must not replay compensation after the batch.
+    expect(virtualizerMocks.scrollToOffset).toHaveBeenCalledTimes(1)
+    wrapper.unmount()
+    rect.mockRestore()
+    virtualizerMocks.getVirtualItems.mockReturnValue([rows[0]])
+  })
+
   it('caches dynamic row heights by stable item key', async () => {
     const rect = vi
       .spyOn(HTMLElement.prototype, 'getBoundingClientRect')

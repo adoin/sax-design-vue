@@ -17,6 +17,8 @@
     position: relative;
     overflow: auto;
     overscroll-behavior: contain;
+    // The virtualizer owns anchoring; native anchoring must not compensate twice.
+    overflow-anchor: none;
     scrollbar-width: thin;
     scrollbar-color: #{getColor(primary, 0.34)} transparent;
 

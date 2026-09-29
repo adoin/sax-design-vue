@@ -200,34 +200,21 @@ const itemStyle = (start: number, size: number): CSSProperties => {
   return style
 }
 
-const measureElementAt = (index: number, element: HTMLElement) => {
-  const size = Math.ceil(element.getBoundingClientRect().height)
-  if (!Number.isFinite(size) || size <= 0) return
-
-  const key = resolveItemKey(index)
-  const cachedSize = measuredSizeCache.get(key)
-  const nextSize = props.retainMaxSize ? Math.max(cachedSize ?? 0, size) : size
-  if (cachedSize === nextSize) return
-
-  measuredSizeCache.set(key, nextSize)
-  virtualizer.value.resizeItem(index, nextSize)
-}
-
-export interface PendingSparseMeasurement {
+export interface PendingRowMeasurement {
   element: HTMLElement
   key: VirtualListKey
   size?: number
 }
 
-const pendingSparseMeasurements = new Map<number, PendingSparseMeasurement>()
-let sparseMeasurementScheduled = false
+const pendingMeasurements = new Map<number, PendingRowMeasurement>()
+let measurementScheduled = false
 let destroyed = false
 
-const flushSparseMeasurements = () => {
-  sparseMeasurementScheduled = false
-  const pending = [...pendingSparseMeasurements]
-  pendingSparseMeasurements.clear()
-  if (destroyed || !sparseMode.value) return
+const flushMeasurements = () => {
+  measurementScheduled = false
+  const pending = [...pendingMeasurements]
+  pendingMeasurements.clear()
+  if (destroyed) return
   const measurements: { index: number; key: VirtualListKey; size: number }[] =
     []
   for (const [index, measurement] of pending) {
@@ -245,10 +232,45 @@ const flushSparseMeasurements = () => {
         measurement.size ?? measurement.element.getBoundingClientRect().height,
     })
   }
-  sparseVirtualizer.resizeItems(measurements)
+  if (sparseMode.value) {
+    sparseVirtualizer.resizeItems(measurements)
+    return
+  }
+
+  const instance = virtualizer.value
+  const offset = scrollRef.value?.scrollTop ?? 0
+  const rows = instance.getVirtualItems()
+  const anchor = rows.find((row) => row.end > offset)
+  let correction = 0
+  const previousPredicate = instance.shouldAdjustScrollPositionOnItemSizeChange
+  // Apply one anchor correction for the entire batch, never one scroll per row.
+  instance.shouldAdjustScrollPositionOnItemSizeChange = () => false
+  try {
+    for (const { index, key, size } of measurements) {
+      if (!Number.isFinite(size) || size <= 0) continue
+      const cached = measuredSizeCache.get(key)
+      const nextSize = props.retainMaxSize
+        ? Math.max(cached ?? 0, Math.ceil(size))
+        : Math.ceil(size)
+      if (cached === nextSize) continue
+      const oldSize =
+        rows.find((row) => row.index === index)?.size ??
+        cached ??
+        estimateSize.value
+      if (anchor && index < anchor.index) correction += nextSize - oldSize
+      measuredSizeCache.set(key, nextSize)
+      instance.resizeItem(index, nextSize)
+    }
+  } finally {
+    instance.shouldAdjustScrollPositionOnItemSizeChange = previousPredicate
+  }
+  if (correction && !scrollbarDragging.value)
+    instance.scrollToOffset(Math.max(0, offset + correction), {
+      behavior: 'auto',
+    })
 }
 
-const queueSparseMeasurement = (
+const queueMeasurement = (
   index: number,
   element: HTMLElement,
   size?: number,
@@ -261,14 +283,14 @@ const queueSparseMeasurement = (
     return
   const key = measuredElementKeys.get(element)
   if (key == null) return
-  pendingSparseMeasurements.set(index, {
+  pendingMeasurements.set(index, {
     element,
     size,
     key,
   })
-  if (sparseMeasurementScheduled) return
-  sparseMeasurementScheduled = true
-  queueMicrotask(flushSparseMeasurements)
+  if (measurementScheduled) return
+  measurementScheduled = true
+  queueMicrotask(flushMeasurements)
 }
 
 const resizeObserver =
@@ -280,12 +302,10 @@ const resizeObserver =
           if (!(element instanceof HTMLElement)) continue
           const index = Number(element.dataset.index)
           if (!Number.isInteger(index)) continue
-          if (sparseMode.value) {
-            const borderBox = Array.isArray(entry.borderBoxSize)
-              ? entry.borderBoxSize[0]
-              : entry.borderBoxSize
-            queueSparseMeasurement(index, element, borderBox?.blockSize)
-          } else measureElementAt(index, element)
+          const borderBox = Array.isArray(entry.borderBoxSize)
+            ? entry.borderBoxSize[0]
+            : entry.borderBoxSize
+          queueMeasurement(index, element, borderBox?.blockSize)
         }
       })
 
@@ -312,8 +332,7 @@ function setMeasuredElement(
     resizeObserver?.observe(element)
   }
   measuredElementKeys.set(element, key)
-  if (sparseMode.value) queueSparseMeasurement(index, element)
-  else measureElementAt(index, element)
+  queueMeasurement(index, element)
 }
 
 const measurementRefAt = (index: number, key: VirtualListKey) => {
@@ -328,9 +347,9 @@ const measurementRefAt = (index: number, key: VirtualListKey) => {
 
 function measureVisible() {
   for (const [index, element] of measuredElements) {
-    if (sparseMode.value) queueSparseMeasurement(index, element)
-    else measureElementAt(index, element)
+    queueMeasurement(index, element)
   }
+  flushMeasurements()
 }
 
 function getVisibleRange() {
@@ -441,7 +460,7 @@ async function resetMeasurements() {
   const anchor = virtualItems.value.find((item) => item.start + item.size > top)
   const delta = anchor ? Math.max(0, top - anchor.start) : 0
   resettingMeasurements.value = true
-  pendingSparseMeasurements.clear()
+  pendingMeasurements.clear()
   measuredSizeCache.clear()
   if (sparseMode.value) sparseVirtualizer.resetMeasurements()
   else virtualizer.value.measure()
@@ -472,7 +491,7 @@ watch(
 
 onBeforeUnmount(() => {
   destroyed = true
-  pendingSparseMeasurements.clear()
+  pendingMeasurements.clear()
   measurementRefCallbacks.clear()
   measurementRefKeys.clear()
   resizeObserver?.disconnect()
