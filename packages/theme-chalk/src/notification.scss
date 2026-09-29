@@ -333,10 +333,20 @@
     position: absolute;
     border: 0;
     background: transparent;
-    top: 2px;
-    right: 2px;
-    transform: scale(0.75);
+    top: 6px;
+    right: 6px;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
     padding: 0;
+    border-radius: var(--sax-radius-sm);
+    cursor: pointer;
+    &:hover,
+    &:focus-visible {
+      background: getColor(text, 0.08);
+      outline: none;
+    }
   }
   @include e(icon) {
     position: absolute;
@@ -431,6 +441,13 @@
   }
 }
 
-.#{$namespace}-notification:is(.is-loading, [aria-busy="true"]), .#{$namespace}-notification .is-loading, .#{$namespace}-notification [aria-busy="true"] {
+.#{$namespace}-notification:is(.is-loading, [aria-busy='true']),
+.#{$namespace}-notification .is-loading,
+.#{$namespace}-notification [aria-busy='true'] {
   @include loading-cursor;
+}
+
+.#{$namespace}-notification:has(.#{$namespace}-notification__close)
+  .#{$namespace}-notification__content {
+  padding-right: 28px;
 }

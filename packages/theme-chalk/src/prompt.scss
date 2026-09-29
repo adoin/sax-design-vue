@@ -72,11 +72,17 @@
 
   @include e(close) {
     border: none;
-    background: hsl(0deg 0% 100%);
-    box-shadow: 0 2px 8px hsl(0deg 0% 0% / 0.1);
-    border-radius: var(--sax-radius-circle);
-    width: 32px;
-    height: 32px;
+    background: transparent;
+    color: getColor(text-color-secondary);
+    border-radius: var(--sax-radius-sm);
+    width: 44px;
+    height: 44px;
+    &:hover,
+    &:focus-visible {
+      background: getColor(primary, 0.08);
+      color: getColor(primary);
+      outline: none;
+    }
     cursor: pointer;
     display: flex;
     align-items: center;

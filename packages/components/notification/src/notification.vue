@@ -46,11 +46,12 @@
 
       <button
         v-if="props.showClose"
+        type="button"
         :class="ns.e('close')"
         :aria-label="t('vs.notification.close')"
         @click="handleClickClose"
       >
-        <icon-close hover="less" />
+        <icon-close :size="16" />
       </button>
 
       <div

@@ -4,8 +4,7 @@
 
     <icon-close
       v-if="!disabled && showClose"
-      hover="less"
-      scale="0.5"
+      :size="16"
       @click="onClose"
       @mouseenter="onMouseEnterClose"
       @mouseleave="onMouseLeaveClose"

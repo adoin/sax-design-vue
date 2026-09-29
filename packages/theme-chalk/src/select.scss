@@ -771,41 +771,33 @@ $clearableSafeArea: 64px;
     }
 
     .#{$namespace}-icon-close {
-      background: getColor(gray-4);
-      padding: 4px;
-      position: absolute;
-      top: -11px;
-      right: -11px;
-      width: 28px;
-      height: 28px;
-      color: getColor(text);
-      border-radius: var(--sax-radius-circle);
-      font-size: 0.75rem;
+      position: static;
+      flex: none;
+      margin-left: 6px;
+      padding: 2px;
+      box-sizing: border-box;
+      color: getColor(text-color-secondary);
+      border-radius: var(--sax-radius-xs);
       cursor: pointer;
-      transition:
-        color var(--sax-motion-duration) var(--sax-motion-easing-standard),
-        background-color var(--sax-motion-duration)
-          var(--sax-motion-easing-standard),
-        transform var(--sax-motion-duration) var(--sax-motion-easing-standard);
-
-      @include set-var-value(color, getCssVar(text));
-
       &:hover {
-        @include set-var-value(color, getCssVar(white));
-        color: getColor(white);
-        background: getColor(danger);
+        color: getColor(danger);
+        background: getColor(danger, 0.1);
       }
     }
   }
 }
 
-.#{$namespace}-select:is(.is-loading, [aria-busy="true"]), .#{$namespace}-select .is-loading, .#{$namespace}-select [aria-busy="true"] {
+.#{$namespace}-select:is(.is-loading, [aria-busy='true']),
+.#{$namespace}-select .is-loading,
+.#{$namespace}-select [aria-busy='true'] {
   @include loading-cursor;
 }
 
 .#{$namespace}-select.is-loading {
   pointer-events: auto;
-  > * { pointer-events: none; }
+  > * {
+    pointer-events: none;
+  }
 }
 
 .#{$namespace}-select__option:has(.is-loading) {
