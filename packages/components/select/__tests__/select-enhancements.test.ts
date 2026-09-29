@@ -91,6 +91,53 @@ afterEach(() => {
 })
 
 describe('Select enhanced capabilities', () => {
+  it('uses placeholder as the floating label and prioritizes an explicit label', async () => {
+    const wrapper = mountSelect({
+      modelValue: '',
+      labelFloat: true,
+      placeholder: 'Choose a city',
+      options: [{ label: 'Paris', value: 'paris' }],
+    })
+    expect(wrapper.get('.s-select__label').text()).toBe('Choose a city')
+    expect(wrapper.get('.s-select__label').classes()).toContain(
+      'is-placeholder',
+    )
+    await wrapper.setProps({ modelValue: 'paris' })
+    expect(wrapper.get('.s-select__label').classes()).not.toContain(
+      'is-placeholder',
+    )
+    await wrapper.setProps({ label: 'City' })
+    expect(wrapper.get('.s-select__label').text()).toBe('City')
+    await wrapper.setProps({
+      label: '',
+      placeholder: 'Choose again',
+      modelValue: '',
+    })
+    expect(wrapper.get('.s-select__label').text()).toBe('Choose again')
+    expect(wrapper.get('.s-select__label').classes()).toContain(
+      'is-placeholder',
+    )
+    wrapper.unmount()
+  })
+
+  it('keeps an empty multiple floating label inside without duplicate placeholder text', () => {
+    const wrapper = mountSelect({
+      modelValue: [],
+      multiple: true,
+      filterable: true,
+      labelFloat: true,
+      placeholder: 'Choose cities',
+    })
+    expect(wrapper.get('.s-select__label').text()).toBe('Choose cities')
+    expect(wrapper.get('.s-select__label').classes()).toContain(
+      'is-placeholder',
+    )
+    expect(
+      wrapper.get('.s-select__input-filter').attributes('placeholder'),
+    ).toBe('')
+    wrapper.unmount()
+  })
+
   it.each(['small', 'default', 'large'] as const)(
     'renders the inherited %s size class',
     (size) => {

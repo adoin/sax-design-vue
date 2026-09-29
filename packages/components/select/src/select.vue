@@ -117,7 +117,9 @@
               ? searchPlaceholder
               : selectedArray.length
                 ? ''
-                : states.currentPlaceholder || ''
+                : labelFloat
+                  ? ''
+                  : states.currentPlaceholder || ''
           "
           :disabled="selectDisabled"
           @focus="handleFocus"
@@ -142,7 +144,9 @@
         :id="inputId"
         ref="reference"
         v-model="states.selectedLabel"
-        :aria-label="($attrs['aria-label'] as string | undefined) ?? label"
+        :aria-label="
+          ($attrs['aria-label'] as string | undefined) ?? resolvedLabel
+        "
         :class="[ns.e('input'), ns.is('multiple', multiple)]"
         :disabled="selectDisabled"
         :readonly="readonly"
@@ -169,7 +173,7 @@
       />
 
       <label
-        v-if="label"
+        v-if="resolvedLabel"
         :for="inputId"
         :class="[
           ns.e('label'),
@@ -177,12 +181,14 @@
             'placeholder',
             labelFloat &&
               !dropMenuVisible &&
-              (isEqual(modelValue, notValue) ||
-                (!modelValue && modelValue != 0)),
+              (multiple
+                ? selectedArray.length === 0
+                : isEqual(modelValue, notValue) ||
+                  (!modelValue && modelValue != 0)),
           ),
         ]"
       >
-        {{ label }}
+        {{ resolvedLabel }}
       </label>
 
       <span
@@ -505,6 +511,9 @@ defineOptions({
 const messageTypes = ['success', 'warn', 'danger', 'primary', 'dark']
 
 const props = defineProps(selectProps)
+const resolvedLabel = computed(
+  () => props.label || (props.labelFloat ? props.placeholder : ''),
+)
 const emit = defineEmits(selectEmits)
 const ns = useNamespace('select')
 const resolvedShape = useShape()
