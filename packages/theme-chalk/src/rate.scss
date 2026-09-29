@@ -54,6 +54,9 @@ $rate-size: map.merge(
     vertical-align: middle;
     color: var(--sax-rate-void-color, #c8cedb);
     line-height: normal;
+    > .#{bem('rate', 'icon')} {
+      transform: translateX(var(--sax-rate-pixel-offset, 0px));
+    }
   }
 
   .#{bem('rate', 'icon')} {

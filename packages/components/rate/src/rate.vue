@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="root"
     :class="[rateClasses, ns.is('disabled', rateDisabled)]"
     role="slider"
     :aria-label="label || t('vs.rate.label')"
@@ -70,6 +71,7 @@ import { isArray, isObject, isString } from '@vuesax-alpha/utils'
 import { IconStarFilled, SIcon } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace, useSize } from '@vuesax-alpha/hooks'
 import RateStar from './rate-star.vue'
+import { useRatePixelAlignment } from './use-rate-pixel-alignment'
 import { rateEmits, rateProps } from './rate'
 import type { iconPropType } from '@vuesax-alpha/utils'
 import type { CSSProperties, Component } from 'vue'
@@ -103,6 +105,9 @@ const emit = defineEmits(rateEmits)
 
 const rateSize = useSize()
 const ns = useNamespace('rate')
+const root = ref<HTMLElement>()
+const alignPixels = useRatePixelAlignment(root, ns.e('item'), ns.e('icon'))
+watch(() => [props.max, rateSize.value], alignPixels, { flush: 'post' })
 const { t } = useLocale()
 
 const currentValue = ref(props.modelValue)
@@ -268,12 +273,14 @@ function setCurrentValue(value: number, event: MouseEvent) {
     const item = event.currentTarget as HTMLElement
     const icon = item.querySelector<HTMLElement>(`.${ns.e('icon')}`)
     const itemLeft = item.getBoundingClientRect().left
-    const iconWidth = icon?.clientWidth ?? item.clientWidth
+    const iconRect = icon?.getBoundingClientRect()
+    const iconWidth = iconRect?.width || icon?.clientWidth || item.clientWidth
+    const iconLeft = iconRect?.width ? iconRect.left : itemLeft
 
-    // Always measure against the stable item box. `event.target` may be the
+    // Always measure against the stable full icon box. `event.target` may be the
     // full icon, the clipped decimal layer, or an SVG child, each of which has
     // a different coordinate system and caused the half-star state to flicker.
-    pointerAtLeftHalf.value = event.clientX - itemLeft <= iconWidth / 2
+    pointerAtLeftHalf.value = event.clientX - iconLeft <= iconWidth / 2
     currentValue.value = pointerAtLeftHalf.value ? value - 0.5 : value
   } else {
     currentValue.value = value

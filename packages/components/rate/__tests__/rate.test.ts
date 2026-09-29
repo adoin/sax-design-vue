@@ -1,8 +1,21 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import Rate from '../src/rate.vue'
+import { getRatePixelOffset } from '../src/use-rate-pixel-alignment'
 
 describe('Rate', () => {
+  it.each([0.75, 1, 1.25, 1.5, 2])(
+    'aligns the star axis to physical pixels at ratio %s',
+    (ratio) => {
+      const center = 781.666687
+      const offset = getRatePixelOffset(center, ratio)
+      expect((center + offset) * ratio).toBeCloseTo(
+        Math.round(center * ratio),
+        8,
+      )
+      expect(Math.abs(offset) * ratio).toBeLessThanOrEqual(0.5)
+    },
+  )
   it('keeps the overlay fallback for custom icons', () => {
     const wrapper = mount(Rate, {
       props: {
