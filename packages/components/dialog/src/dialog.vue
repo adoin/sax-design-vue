@@ -19,8 +19,14 @@
             <icon-loading />
           </div>
 
-          <button v-if="showClose" :class="ns.e('close')" @click="close">
-            <icon-close :hover="'x'" />
+          <button
+            v-if="showClose"
+            type="button"
+            :class="ns.e('close')"
+            :aria-label="t('vs.common.close')"
+            @click="close"
+          >
+            <icon-close :size="18" />
           </button>
 
           <div

@@ -171,36 +171,34 @@
     }
   }
   @include e(close) {
-    @include set-var-value(color, getCssVar(text));
     position: absolute;
-    top: -6px;
-    right: -6px;
-    padding: 0px;
-    margin: 0px;
+    top: 4px;
+    right: 4px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
     @include flex(center, center);
-    background: inherit;
-    border-radius: var(--sax-radius);
-    box-shadow: 0px 5px 20px 0px getColor(black, getCssVar('shadow-opacity'));
-    transition: getCssVar(transition-ease);
+    border: 0;
+    border-radius: var(--sax-radius-sm);
+    background: transparent;
+    color: getColor(text-color-secondary);
+    box-shadow: none;
+    cursor: pointer;
     z-index: 200;
-    border: 0px;
-    i {
-      width: 34px;
-      height: 34px;
-      opacity: 0.7;
-      &:after {
-        width: 14px;
-      }
-      &:before {
-        width: 14px;
-      }
+    transition:
+      background-color var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard),
+      color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+
+    &:hover,
+    &:focus-visible {
+      background: getColor(primary, 0.08);
+      color: getColor(primary);
+      outline: none;
     }
-    &:hover {
-      box-shadow: 0px 0px 4px 0px getColor(black, getCssVar('shadow-opacity'));
-      transform: translate(-2px, 2px);
-      i {
-        opacity: 1;
-      }
+    &:active {
+      background: getColor(primary, 0.13);
     }
   }
 }
@@ -215,4 +213,18 @@
 
 .#{$namespace}-dialog:has(.#{$namespace}-dialog__loading) {
   @include loading-cursor;
+}
+
+// A headerless dialog still reserves space for its close action unless content
+// explicitly opts into edge-to-edge rendering.
+.#{$namespace}-dialog-original:not(.#{$namespace}-dialog--not-padding)
+  > .#{$namespace}-dialog__close
+  + .#{$namespace}-dialog__content {
+  padding-top: 52px;
+}
+
+.#{$namespace}-dialog-original:not(.#{$namespace}-dialog--not-padding)
+  > .#{$namespace}-dialog__close
+  + .#{$namespace}-dialog__header {
+  padding: 14px 52px;
 }
