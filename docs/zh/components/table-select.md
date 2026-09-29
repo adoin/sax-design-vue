@@ -1,5 +1,20 @@
 ---
 PROPS:
+  - name: multiple
+    type: Boolean
+    default: false
+    description: 启用多选，v-model 为行键数组。
+    usage: '#multiple-selection'
+  - name: check-strictly
+    type: Boolean
+    default: false
+    description: 树形多选时父子独立选择；默认联动已加载的可选后代，并显示半选。
+    usage: '#multiple-selection'
+  - name: max-collapse-tags
+    type: Number
+    default: 2
+    description: 触发器最多展示的已选标签数，其余显示 +N。
+    usage: '#multiple-selection'
   - name: size
     type: ComponentSize
     values: "small | default | large"
@@ -22,14 +37,14 @@ PROPS:
     values: "true | false"
     usage: "#tree-data"
   - name: model-value
-    type: String | Number
+    type: TableSelectValue
     values: "行键值"
-    description: 通过 row-key 解析的已选行键值。
+    description: 通过 row-key 解析的已选行键；多选时为行键数组。
     default: null
   - name: v-model
-    type: String | Number
+    type: TableSelectValue
     values: "行键值"
-    description: 通过 row-key 解析的已选行键值。
+    description: 通过 row-key 解析的已选行键；多选时为行键数组。
     default: null
   - name: data
     type: "TableRow[]"
@@ -117,8 +132,8 @@ PROPS:
   - name: close-on-select
     type: "Boolean"
     values: "true | false"
-    description: "选中行后关闭弹层。"
-    default: true
+    description: "选中后是否关闭；省略时单选关闭，多选保持打开。"
+    default: null
     usage: "#tree-data"
   - name: clearable
     type: "Boolean"
@@ -224,8 +239,8 @@ PROPS:
     usage: "#tree-data"
 EVENTS:
   - name: "update:modelValue"
-    type: "(value: TableRowKey | undefined) => void"
-    description: "选中键更新，清除时发出 undefined。"
+    type: "(value: TableSelectValue) => void"
+    description: "选中键更新；单选清除为 undefined，多选清除为 []。"
     default: null
     usage: "#tree-data"
   - name: "update:open"
@@ -244,7 +259,7 @@ EVENTS:
     default: null
     usage: "#tree-data"
   - name: "change"
-    type: "(value: TableRowKey, row: TableRow) => void"
+    type: "(value: TableRowKey | TableRowKey[], row: TableRow | TableRow[]) => void"
     description: "选中了可选行，清除操作单独触发 clear。"
     default: null
     usage: "#tree-data"
@@ -392,7 +407,7 @@ EXPOSES:
     description: "重新测量已挂载的内部表格布局与虚拟行。"
     default: null
     usage: "#tree-data"
-description: '从普通、虚拟滚动或树形 Table 中选择一行数据。'
+description: '从普通、虚拟滚动或树形 Table 中选择一行或多行数据。'
 ---
 
 # Table Select 表格选择器
@@ -593,6 +608,30 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行数据。'
 <template #style>
 
 @[code{41-54}](../../.vuepress/components/table-select-zh/loading.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 多选
+
+`multiple` 适用于普通表格和树形数据。多选模型为行键数组，弹层默认保持打开；标签可移除并在超过 `max-collapse-tags` 后折叠。树形数据默认联动已加载的可选后代，全部选中时自动包含父节点键；禁用节点不参与联动。设置 `check-strictly` 可独立选择各节点。未加载的节点不会自动加入选中值。
+
+<template #example>
+<table-select-zh-multiple />
+</template>
+
+<template #template>
+
+@[code{22-43}](../../.vuepress/components/table-select-zh/multiple.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-20}](../../.vuepress/components/table-select-zh/multiple.vue)
 
 </template>
 

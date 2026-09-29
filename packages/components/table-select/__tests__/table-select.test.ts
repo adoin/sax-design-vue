@@ -61,6 +61,107 @@ const mountTableSelect = (
   })
 
 describe('TableSelect', () => {
+  it('selects multiple flat rows, stays open, removes tags and clears to an array', async () => {
+    const wrapper = mountTableSelect({
+      multiple: true,
+      modelValue: [],
+      defaultOpen: true,
+      clearable: true,
+    })
+    await wrapper.findAll('.s-table__data-row')[0].trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['alpha']])
+    await wrapper.setProps({ modelValue: ['alpha'] })
+    await wrapper.findAll('.s-table__data-row')[1].trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([
+      ['alpha', 'beta'],
+    ])
+    expect(wrapper.find('.popper-content-stub').exists()).toBe(true)
+    await wrapper.setProps({ modelValue: ['alpha', 'beta'] })
+    expect(wrapper.findAll('.s-tag')).toHaveLength(2)
+    await wrapper.findAll('.s-tag__close')[0].trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['beta']])
+    await wrapper.get('.s-table-select__clear').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([[]])
+    wrapper.unmount()
+  })
+
+  it('links loaded tree descendants and shows indeterminate parents', async () => {
+    const wrapper = mountTableSelect({
+      multiple: true,
+      modelValue: ['a'],
+      defaultOpen: true,
+      data: [
+        {
+          id: 'root',
+          name: 'Root',
+          children: [
+            { id: 'a', name: 'A' },
+            { id: 'b', name: 'B' },
+            { id: 'disabled', name: 'Disabled', disabled: true },
+          ],
+        },
+      ],
+      columns: [{ field: 'name', treeNode: true }],
+      treeConfig: { children: 'children', defaultExpandedKeys: ['root'] },
+    })
+    await nextTick()
+    const checkboxes = wrapper.findAll('input[type="checkbox"]')
+    expect((checkboxes[0].element as HTMLInputElement).indeterminate).toBe(true)
+    await checkboxes[0].setValue(true)
+    const keys = wrapper.emitted('update:modelValue')?.at(-1)?.[0] as string[]
+    expect(new Set(keys)).toEqual(new Set(['root', 'a', 'b']))
+    await wrapper.setProps({ modelValue: keys })
+    expect(
+      (wrapper.findAll('input[type="checkbox"]')[0].element as HTMLInputElement)
+        .indeterminate,
+    ).toBe(false)
+    await wrapper.findAll('input[type="checkbox"]')[1].setValue(false)
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['b']])
+    wrapper.unmount()
+  })
+
+  it('supports independent tree checks and explicit close-on-select', async () => {
+    const wrapper = mountTableSelect({
+      multiple: true,
+      checkStrictly: true,
+      modelValue: [],
+      closeOnSelect: true,
+      defaultOpen: true,
+      data: [
+        {
+          id: 'root',
+          name: 'Root',
+          children: [{ id: 'child', name: 'Child' }],
+        },
+      ],
+      treeConfig: { children: 'children' },
+    })
+    await wrapper.findAll('.s-table__data-row')[0].trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['root']])
+    expect(wrapper.find('.popper-content-stub').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('resolves children supplied by the internal table lazy-load event', async () => {
+    const root = { id: 'root', name: 'Root', leaf: false }
+    const child = { id: 'child', name: 'Child' }
+    const wrapper = mountTableSelect({
+      multiple: true,
+      modelValue: [],
+      defaultOpen: true,
+      data: [root],
+      treeConfig: { children: 'children' },
+    })
+    const table = wrapper.findComponent({ name: 'STable' })
+    table.vm.$emit('lazyLoad', root, [child])
+    await nextTick()
+    table.vm.$emit('rowClick', child, new MouseEvent('click'))
+    expect(
+      new Set(wrapper.emitted('update:modelValue')?.at(-1)?.[0] as string[]),
+    ).toEqual(new Set(['child', 'root']))
+    wrapper.unmount()
+  })
+
   it('shows the shared loader and blocks popup opening without dropping its value', async () => {
     const wrapper = mountTableSelect({
       modelValue: 'alpha',

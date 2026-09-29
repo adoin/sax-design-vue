@@ -52,11 +52,16 @@ export interface TableSelectPopupConfig {
 export type TableSelectLabelFormatter = (row: TableRow) => string
 export type TableSelectSelectable = (row: TableRow) => boolean
 
+export type TableSelectValue = TableRowKey | TableRowKey[] | undefined
+
 export const tableSelectProps = buildProps({
   size: useSizeProp,
   modelValue: {
-    type: definePropType<TableRowKey | undefined>([String, Number]),
+    type: definePropType<TableSelectValue>([String, Number, Array]),
   },
+  multiple: Boolean,
+  checkStrictly: Boolean,
+  maxCollapseTags: { type: Number, default: 2 },
   data: {
     type: definePropType<TableRow[]>(Array),
     default: () => [],
@@ -102,7 +107,7 @@ export const tableSelectProps = buildProps({
   showHeader: { type: Boolean, default: true },
   striped: Boolean,
   tableLoading: Boolean,
-  closeOnSelect: { type: Boolean, default: true },
+  closeOnSelect: { type: Boolean, default: undefined },
   placeholder: String,
   clearable: Boolean,
   disabled: popperProps.disabled,
@@ -135,13 +140,18 @@ export const tableSelectProps = buildProps({
 } as const)
 
 export const tableSelectEmits = {
-  'update:modelValue': (value: TableRowKey | undefined) =>
-    value === undefined || isString(value) || isNumber(value),
+  'update:modelValue': (value: TableSelectValue) =>
+    value === undefined ||
+    isString(value) ||
+    isNumber(value) ||
+    (Array.isArray(value) &&
+      value.every((key) => isString(key) || isNumber(key))),
   'update:open': (value: boolean) => isBoolean(value),
   'update:expandedKeys': (keys: TableRowKey[]) => Array.isArray(keys),
   'visible-change': (value: boolean) => isBoolean(value),
-  change: (value: TableRowKey, row: TableRow) =>
-    (isString(value) || isNumber(value)) && isObject(row),
+  change: (value: TableRowKey | TableRowKey[], row: TableRow | TableRow[]) =>
+    (isString(value) || isNumber(value) || Array.isArray(value)) &&
+    (isObject(row) || Array.isArray(row)),
   clear: () => true,
   rowClick: (row: TableRow, event: MouseEvent) =>
     isObject(row) && event instanceof MouseEvent,

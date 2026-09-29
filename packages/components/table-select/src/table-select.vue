@@ -1,5 +1,13 @@
 <script lang="ts" setup>
-import { computed, nextTick, shallowRef, useTemplateRef, watch } from 'vue'
+import {
+  computed,
+  h,
+  nextTick,
+  shallowRef,
+  toRaw,
+  useTemplateRef,
+  watch,
+} from 'vue'
 import {
   IconClose,
   IconControlLoading,
@@ -7,6 +15,8 @@ import {
 } from '@vuesax-alpha/components/icon'
 import { useResizeObserver } from '@vueuse/core'
 import { SPopper } from '@vuesax-alpha/components/popper'
+import SCheckbox from '@vuesax-alpha/components/checkbox'
+import STag from '@vuesax-alpha/components/tag'
 import { STable } from '@vuesax-alpha/components/table'
 import {
   useId,
@@ -20,6 +30,7 @@ import { tableSelectEmits, tableSelectProps } from './table-select'
 import type { TableSelectExposes } from './table-select'
 import type {
   TableCellRenderParams,
+  TableColumn,
   TableFlatRow,
   TableHeaderRenderParams,
   TableInstance,
@@ -124,11 +135,14 @@ const getFieldValue = (row: TableRow, field: string) =>
       row,
     )
 
+const lazyChildren = shallowRef(new Map<TableRow, TableRow[]>())
 const getChildren = (row: TableRow) => {
   const children = (row as Record<string, unknown>)[
     props.treeConfig?.children ?? 'children'
   ]
-  return Array.isArray(children) ? (children as TableRow[]) : []
+  return Array.isArray(children)
+    ? (children as TableRow[])
+    : (lazyChildren.value.get(toRaw(row)) ?? [])
 }
 
 const resolveRowKey = (row: TableRow, index: number): TableRowKey => {
@@ -156,7 +170,7 @@ const findRowEntry = (
 }
 
 const selectedEntry = computed(() => {
-  if (props.modelValue === undefined) return undefined
+  if (props.multiple || props.modelValue === undefined) return undefined
   return findRowEntry((_, key) => key === props.modelValue)
 })
 const selectedRow = computed(() => selectedEntry.value?.row ?? null)
@@ -169,6 +183,160 @@ const selectedLabel = computed(() => {
 
 const isRowSelectable = (row: TableRow) =>
   !(row as { disabled?: boolean }).disabled && (props.selectable?.(row) ?? true)
+
+const entries = computed(() => {
+  const result: { row: TableRow; key: TableRowKey; parent?: TableRowKey }[] = []
+  const walk = (rows: TableRow[], parent?: TableRowKey) => {
+    for (const row of rows) {
+      const key = resolveRowKey(row, result.length)
+      result.push({ row, key, parent })
+      walk(getChildren(row), key)
+    }
+  }
+  walk(props.data)
+  return result
+})
+const multipleKeys = computed(() =>
+  Array.isArray(props.modelValue) ? props.modelValue : [],
+)
+const keySet = computed(() => new Set(multipleKeys.value))
+const entriesByKey = computed(
+  () => new Map(entries.value.map((entry) => [entry.key, entry])),
+)
+const labelFor = (key: TableRowKey) => {
+  const row = entriesByKey.value.get(key)?.row
+  return row
+    ? (props.labelFormatter?.(row) ??
+        String(getFieldValue(row, props.labelKey) ?? key))
+    : String(key)
+}
+const checkedRows = computed(() =>
+  entries.value
+    .filter((entry) => keySet.value.has(entry.key))
+    .map((entry) => entry.row),
+)
+const visibleKeys = computed(() =>
+  multipleKeys.value.slice(0, Math.max(1, props.maxCollapseTags)),
+)
+const descendants = (row: TableRow): TableRow[] => {
+  const result: TableRow[] = []
+  for (const child of getChildren(row)) {
+    if ((child as { disabled?: boolean }).disabled) continue
+    result.push(child, ...descendants(child))
+  }
+  return result
+}
+const entriesByRow = computed(
+  () => new Map(entries.value.map((entry) => [toRaw(entry.row), entry])),
+)
+const rowKeyOf = (row: TableRow) => entriesByRow.value.get(toRaw(row))?.key
+const targets = (row: TableRow) =>
+  (props.treeConfig && !props.checkStrictly
+    ? [row, ...descendants(row)]
+    : [row]
+  ).filter(isRowSelectable)
+const stateOf = (row: TableRow) => {
+  const candidates = targets(row)
+  const leaves =
+    props.treeConfig && !props.checkStrictly
+      ? candidates.filter(
+          (candidate) => !descendants(candidate).some(isRowSelectable),
+        )
+      : candidates
+  const keys = leaves
+    .map(rowKeyOf)
+    .filter((key): key is TableRowKey => key !== undefined)
+  const count = keys.filter((key) => keySet.value.has(key)).length
+  return {
+    checked: keys.length > 0 && count === keys.length,
+    indeterminate: count > 0 && count < keys.length,
+  }
+}
+const toggleMultiple = (row: TableRow, checked = !stateOf(row).checked) => {
+  if (
+    props.disabled ||
+    props.loading ||
+    props.tableLoading ||
+    !isRowSelectable(row)
+  )
+    return
+  const next = new Set(multipleKeys.value)
+  for (const target of targets(row)) {
+    const key = rowKeyOf(target)
+    if (key !== undefined) {
+      if (checked) next.add(key)
+      else next.delete(key)
+    }
+  }
+  if (props.treeConfig && !props.checkStrictly) {
+    for (const entry of [...entries.value].reverse()) {
+      if (!isRowSelectable(entry.row) || !getChildren(entry.row).length)
+        continue
+      const children = descendants(entry.row).filter(isRowSelectable)
+      if (!children.length) continue
+      if (children.every((child) => next.has(rowKeyOf(child)!)))
+        next.add(entry.key)
+      else next.delete(entry.key)
+    }
+  }
+  const keys = [...next]
+  emit('update:modelValue', keys)
+  emit(
+    'change',
+    keys,
+    entries.value
+      .filter((entry) => next.has(entry.key))
+      .map((entry) => entry.row),
+  )
+  if (props.closeOnSelect === true) close()
+}
+const removeKey = (key: TableRowKey) => {
+  const row = entries.value.find((entry) => entry.key === key)?.row
+  if (row) toggleMultiple(row, false)
+  else if (!props.disabled && !props.loading) {
+    const keys = multipleKeys.value.filter((value) => value !== key)
+    emit('update:modelValue', keys)
+    emit(
+      'change',
+      keys,
+      entries.value
+        .filter((entry) => keys.includes(entry.key))
+        .map((entry) => entry.row),
+    )
+  }
+}
+const tableColumns = computed<TableColumn[]>(() =>
+  props.multiple
+    ? [
+        {
+          key: '__table_select_checkbox',
+          width: 42,
+          slots: {
+            default: ({ row }) =>
+              h(
+                'span',
+                { onClick: (event: MouseEvent) => event.stopPropagation() },
+                [
+                  h(SCheckbox, {
+                    modelValue: stateOf(row).checked,
+                    indeterminate: stateOf(row).indeterminate,
+                    disabled:
+                      props.disabled ||
+                      props.loading ||
+                      props.tableLoading ||
+                      !isRowSelectable(row),
+                    'aria-label': labelFor(rowKeyOf(row) ?? ''),
+                    'onUpdate:modelValue': (value: unknown) =>
+                      toggleMultiple(row, Boolean(value)),
+                  }),
+                ],
+              ),
+          },
+        },
+        ...props.columns,
+      ]
+    : props.columns,
+)
 
 const resolveRowClass = (flatRow: TableFlatRow) => {
   const custom =
@@ -218,24 +386,42 @@ const handleTriggerKeydown = (event: KeyboardEvent) => {
 }
 const handleRowClick = (row: TableRow, event: MouseEvent) => {
   emit('rowClick', row, event)
-  if (!isRowSelectable(row)) return
-  const entry = findRowEntry((candidate) => candidate === row)
+  if (
+    props.disabled ||
+    props.loading ||
+    props.tableLoading ||
+    !isRowSelectable(row)
+  )
+    return
+  if (props.multiple) {
+    toggleMultiple(row)
+    return
+  }
+  const entry = findRowEntry((candidate) => toRaw(candidate) === toRaw(row))
   if (!entry) return
   emit('update:modelValue', entry.key)
   emit('change', entry.key, row)
-  if (props.closeOnSelect) close()
+  if (props.closeOnSelect ?? true) close()
 }
 const clear = () => {
   if (props.disabled || props.loading) return
-  emit('update:modelValue', undefined)
+  emit('update:modelValue', props.multiple ? [] : undefined)
   emit('clear')
 }
 const handleCellClick = (params: TableCellRenderParams, event: MouseEvent) =>
   emit('cellClick', params, event)
 const handleTreeExpand = (row: TableRow, expanded: boolean) =>
   emit('treeExpand', row, expanded)
-const handleLazyLoad = (row: TableRow, children: TableRow[]) =>
+const handleLazyLoad = (row: TableRow, children: TableRow[]) => {
+  lazyChildren.value = new Map(lazyChildren.value).set(toRaw(row), children)
   emit('lazyLoad', row, children)
+}
+watch(
+  () => props.data,
+  () => {
+    lazyChildren.value = new Map()
+  },
+)
 
 watch(
   () => props.disabled || props.loading,
@@ -314,9 +500,37 @@ defineExpose({
           </slot>
         </span>
 
-        <span :class="[ns.e('value'), ns.is('placeholder', !selectedRow)]">
+        <span
+          :class="[
+            ns.e('value'),
+            ns.is(
+              'placeholder',
+              multiple ? !multipleKeys.length : !selectedRow,
+            ),
+          ]"
+        >
+          <span v-if="multiple && multipleKeys.length" :class="ns.e('tags')">
+            <STag
+              v-for="key in visibleKeys"
+              :key="key"
+              size="small"
+              :shape="resolvedShape"
+              :closable="!disabled && !loading"
+              :disabled="disabled || loading"
+              @close="removeKey(key)"
+              >{{ labelFor(key) }}</STag
+            >
+            <STag
+              v-if="multipleKeys.length > visibleKeys.length"
+              size="small"
+              :title="
+                multipleKeys.slice(visibleKeys.length).map(labelFor).join(', ')
+              "
+              >+{{ multipleKeys.length - visibleKeys.length }}</STag
+            >
+          </span>
           <slot
-            v-if="selectedRow"
+            v-else-if="selectedRow"
             name="selected"
             :row="selectedRow"
             :label="selectedLabel"
@@ -340,7 +554,11 @@ defineExpose({
         </span>
 
         <button
-          v-if="clearable && modelValue !== undefined && !loading"
+          v-if="
+            clearable &&
+            (multiple ? multipleKeys.length > 0 : modelValue !== undefined) &&
+            !loading
+          "
           :class="ns.e('clear')"
           type="button"
           :aria-label="t('vs.cascader.clear')"
@@ -373,7 +591,7 @@ defineExpose({
           ref="tableRef"
           :size="resolvedSize || 'default'"
           :data="data"
-          :columns="columns"
+          :columns="tableColumns"
           :row-key="rowKey"
           :tree-config="treeConfig"
           :virtual-config="virtualConfig"
@@ -384,7 +602,7 @@ defineExpose({
           :show-header="showHeader"
           :striped="striped"
           :loading="tableLoading"
-          :highlight="selectedRow"
+          :highlight="multiple ? checkedRows : selectedRow"
           @row-click="handleRowClick"
           @cell-click="handleCellClick"
           @update:expanded-keys="emit('update:expandedKeys', $event)"

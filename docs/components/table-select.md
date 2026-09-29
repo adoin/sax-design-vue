@@ -1,5 +1,20 @@
 ---
 PROPS:
+  - name: multiple
+    type: Boolean
+    default: false
+    description: Enable multiple selection with an array of row keys.
+    usage: '#multiple-selection'
+  - name: check-strictly
+    type: Boolean
+    default: false
+    description: Select tree nodes independently. By default loaded selectable descendants are linked with indeterminate feedback.
+    usage: '#multiple-selection'
+  - name: max-collapse-tags
+    type: Number
+    default: 2
+    description: Maximum visible selected tags; remaining values appear as +N.
+    usage: '#multiple-selection'
   - name: size
     type: ComponentSize
     values: "small | default | large"
@@ -22,14 +37,14 @@ PROPS:
     values: "true | false"
     usage: "#tree-data"
   - name: model-value
-    type: String | Number
+    type: TableSelectValue
     values: "row key"
-    description: Key of the selected row, resolved through row-key.
+    description: Selected row key resolved through row-key; an array of keys in multiple mode.
     default: null
   - name: v-model
-    type: String | Number
+    type: TableSelectValue
     values: "row key"
-    description: Key of the selected row, resolved through row-key.
+    description: Selected row key resolved through row-key; an array of keys in multiple mode.
     default: null
   - name: data
     type: "TableRow[]"
@@ -117,8 +132,8 @@ PROPS:
   - name: close-on-select
     type: "Boolean"
     values: "true | false"
-    description: "Close the popup after accepting a row selection."
-    default: true
+    description: "Whether to close after selection. Defaults to true for single selection and false for multiple selection."
+    default: null
     usage: "#tree-data"
   - name: clearable
     type: "Boolean"
@@ -224,8 +239,8 @@ PROPS:
     usage: "#tree-data"
 EVENTS:
   - name: "update:modelValue"
-    type: "(value: TableRowKey | undefined) => void"
-    description: "Selected key update; clearing emits undefined."
+    type: "(value: TableSelectValue) => void"
+    description: "Selected key update; clearing emits undefined in single mode or [] in multiple mode."
     default: null
     usage: "#tree-data"
   - name: "update:open"
@@ -244,7 +259,7 @@ EVENTS:
     default: null
     usage: "#tree-data"
   - name: "change"
-    type: "(value: TableRowKey, row: TableRow) => void"
+    type: "(value: TableRowKey | TableRowKey[], row: TableRow | TableRow[]) => void"
     description: "A selectable row was chosen; clearing uses clear instead."
     default: null
     usage: "#tree-data"
@@ -392,7 +407,7 @@ EXPOSES:
     description: "Remeasure the mounted internal table layout and virtual rows."
     default: null
     usage: "#tree-data"
-description: 'Select a row from a flat, virtualized, or tree-structured Table.'
+description: 'Select one or multiple rows from a flat, virtualized, or tree-structured Table.'
 ---
 
 # Table Select
@@ -593,6 +608,30 @@ Set `loading` while options or values are being loaded. The trailing indicator m
 <template #style>
 
 @[code{45-58}](../.vuepress/components/table-select/loading.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Multiple selection
+
+`multiple` works with flat and tree data. Bind an array of row keys; the popup stays open by default. Selected tags can be removed and collapse beyond `max-collapse-tags`. Tree selection links loaded selectable descendants and includes parent keys when all descendants are selected; disabled branches are excluded. Set `check-strictly` for independent selection. Unloaded nodes are not automatically selected.
+
+<template #example>
+<table-select-multiple />
+</template>
+
+<template #template>
+
+@[code{22-43}](../.vuepress/components/table-select/multiple.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-20}](../.vuepress/components/table-select/multiple.vue)
 
 </template>
 
