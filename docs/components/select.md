@@ -1041,7 +1041,7 @@ Set `pin-key` to persist pinned values in local storage. Hover an option to reve
 
 ## Virtual options
 
-Enable `virtual` for large flat `options` arrays. This example uses 10,000 options and `render-item` with single-line labels, wrapped descriptions and third-line details, retaining search highlights through `highlight(text)`. Filtering, keyboard navigation and selected-value caching stay available while only visible rows mount. Dynamic measurement is on by default, so wrapped labels and custom option content may use different row heights; set `virtual-config.dynamic` to `false` only for truly fixed rows.
+Enable `virtual` for large flat `options` arrays. This example compares 10,000 and 400 options with the same virtual scrolling configuration and `render-item` with single-line labels, wrapped descriptions and third-line details, retaining search highlights through `highlight(text)`. Filtering, keyboard navigation and selected-value caching stay available while only visible rows mount. Dynamic measurement is on by default, so wrapped labels and custom option content may use different row heights; set `virtual-config.dynamic` to `false` only for truly fixed rows.
 
 <template #example>
 <select-virtual />
@@ -1049,19 +1049,19 @@ Enable `virtual` for large flat `options` arrays. This example uses 10,000 optio
 
 <template #template>
 
-@[code{1-22}](../.vuepress/components/select/virtual.vue)
+@[code{1-29}](../.vuepress/components/select/virtual.vue)
 
 </template>
 
 <template #script>
 
-@[code{24-48}](../.vuepress/components/select/virtual.vue)
+@[code{31-69}](../.vuepress/components/select/virtual.vue)
 
 </template>
 
 <template #style>
 
-@[code{50-67}](../.vuepress/components/select/virtual.vue)
+@[code{71-94}](../.vuepress/components/select/virtual.vue)
 
 </template>
 

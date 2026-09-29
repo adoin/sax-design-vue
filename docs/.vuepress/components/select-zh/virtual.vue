@@ -1,23 +1,30 @@
 <template>
-  <div class="select-virtual-demo">
-    <s-select
-      v-model="value"
-      filterable
-      virtual
-      :virtual-config="{
-        threshold: 100,
-        estimateSize: 40,
-        overscan: 8,
-        dynamic: true,
-      }"
-      :options="options"
-      :option-props="{ value: 'id', label: 'text' }"
-      placeholder="搜索 10,000 个城市"
-      :popup-config="{ width: 280, height: 260 }"
-      :render-item="renderItem"
-      highlight-search
-    />
-    <small>已选择： {{ value || '—' }}</small>
+  <div class="select-virtual-comparison">
+    <div
+      v-for="(demo, index) in demos"
+      :key="demo.count"
+      class="select-virtual-demo"
+    >
+      <strong>{{ demo.label }}</strong>
+      <s-select
+        v-model="values[index]"
+        filterable
+        virtual
+        :virtual-config="{
+          threshold: 100,
+          estimateSize: 40,
+          overscan: 8,
+          dynamic: true,
+        }"
+        :options="demo.options"
+        :option-props="{ value: 'id', label: 'text' }"
+        :placeholder="demo.placeholder"
+        :popup-config="{ width: 280, height: 260 }"
+        :render-item="renderItem"
+        highlight-search
+      />
+      <small>已选择： {{ values[index] || '—' }}</small>
+    </div>
   </div>
 </template>
 
@@ -25,7 +32,7 @@
 import { h, ref } from 'vue'
 import type { SelectRenderItem } from 'sax-design-vue'
 
-const value = ref('')
+const values = ref(['', ''])
 const options = Array.from({ length: 10000 }, (_, index) => ({
   id: `city-${index + 1}`,
   text: `城市 ${String(index + 1).padStart(5, '0')}`,
@@ -35,6 +42,20 @@ const options = Array.from({ length: 10000 }, (_, index) => ({
       : '',
   disabled: index % 97 === 0,
 }))
+const demos = [
+  {
+    count: 10000,
+    label: '10,000 条选项',
+    placeholder: '搜索 10,000 个城市',
+    options,
+  },
+  {
+    count: 400,
+    label: '400 条选项',
+    placeholder: '搜索 400 个城市',
+    options: options.slice(0, 400),
+  },
+]
 const renderItem: SelectRenderItem = (option, { label, highlight }) =>
   h('span', { class: 'select-virtual-option' }, [
     h('strong', highlight(label)),
@@ -48,6 +69,12 @@ const renderItem: SelectRenderItem = (option, { label, highlight }) =>
 </script>
 
 <style>
+.select-virtual-comparison {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
 .select-virtual-demo {
   display: grid;
   gap: 10px;

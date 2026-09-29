@@ -997,7 +997,7 @@ SLOTS:
 
 ## 虚拟选项
 
-大数据平铺 `options` 可开启 `virtual`。本例使用 10,000 条数据与 `render-item`，混合单行、换行说明和第三行内容，并通过 `highlight(text)` 保留搜索高亮。筛选、键盘导航与已选值缓存保留，同时只挂载可见行。动态测量默认开启，换行标签和自定义选项内容可以使用不同高度；只有行高完全固定时才需要将 `virtual-config.dynamic` 设为 `false`。
+大数据平铺 `options` 可开启 `virtual`。本例并排展示 10,000 条与 400 条数据，使用相同的虚拟滚动配置与 `render-item`，混合单行、换行说明和第三行内容，并通过 `highlight(text)` 保留搜索高亮。筛选、键盘导航与已选值缓存保留，同时只挂载可见行。动态测量默认开启，换行标签和自定义选项内容可以使用不同高度；只有行高完全固定时才需要将 `virtual-config.dynamic` 设为 `false`。
 
 <template #example>
 <select-zh-virtual />
@@ -1005,19 +1005,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-22}](../../.vuepress/components/select-zh/virtual.vue)
+@[code{1-29}](../../.vuepress/components/select-zh/virtual.vue)
 
 </template>
 
 <template #script>
 
-@[code{24-48}](../../.vuepress/components/select-zh/virtual.vue)
+@[code{31-69}](../../.vuepress/components/select-zh/virtual.vue)
 
 </template>
 
 <template #style>
 
-@[code{50-67}](../../.vuepress/components/select-zh/virtual.vue)
+@[code{71-94}](../../.vuepress/components/select-zh/virtual.vue)
 
 </template>
 
