@@ -7,6 +7,7 @@
       ns.is(shape),
       {
         [ns.is('focus')]: isFocus,
+        [ns.is('disabled')]: disabled,
         [ns.is('danger')]: isDanger,
         [ns.is('label-active')]: isLabelActive,
       },

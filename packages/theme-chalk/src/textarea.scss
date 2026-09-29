@@ -10,14 +10,13 @@
   width: 100%;
   margin-bottom: 16px;
   box-sizing: border-box;
-  border: 1px solid hsl(0deg 0% 0% / 0.08);
-  border-radius: var(--sax-radius-sm);
+  border: none;
+  border-radius: var(--sax-radius);
   background: getColor('gray-2');
-  box-shadow: var(--sax-input-shadow);
+  @include control-surface-shadow;
   transition:
     background-color var(--sax-motion-duration)
       var(--sax-motion-easing-standard),
-    border-color 0.25s ease,
     box-shadow var(--sax-motion-duration) var(--sax-motion-easing-standard);
 
   @include e(label) {
@@ -60,7 +59,7 @@
     font-family: inherit;
     font-size: var(--sax-textarea-font-size);
     line-height: 1.5;
-    color: hsl(0deg 0% 0% / 0.8);
+    color: getColor(text-color);
 
     &::placeholder {
       color: getColor(text-color-placeholder);
@@ -99,9 +98,8 @@
   }
 
   @include when(focus) {
-    border-color: var(--sax-textarea-focus-color);
     background: getColor('background');
-    box-shadow: var(--sax-input-shadow-focus);
+    @include control-surface-shadow(focus);
 
     @include e(label) {
       color: var(--sax-textarea-focus-color);
@@ -122,13 +120,12 @@
     }
   }
 
-  &:hover:not(.is-focus) {
+  &:hover:not(.is-focus):not(.is-disabled) {
     background: getColor('background');
-    box-shadow: var(--sax-input-shadow-hover);
+    @include control-surface-shadow(hover);
   }
 
   @include when(danger) {
-    border-color: getColor(danger, 0.4) !important;
     box-shadow: 0 4px 20px getColor(danger, 0.1);
 
     @include e(inner) {
@@ -138,6 +135,14 @@
     @include e(count) {
       background: getColor(danger);
       opacity: 1;
+    }
+  }
+
+  @include when(disabled) {
+    opacity: 0.6;
+    cursor: not-allowed;
+    @include e(inner) {
+      cursor: not-allowed;
     }
   }
 
