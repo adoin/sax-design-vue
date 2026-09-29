@@ -113,7 +113,7 @@ PROPS:
     description: 隐藏对话框关闭按钮。
     default: false
     link: null
-    usage: '#not-close'
+    usage: '#no-close-button'
     code: null
 
   - name: scroll
@@ -369,9 +369,9 @@ SLOTS:
 
 <card>
 
-## 不可关闭
+## 无关闭按钮
 
-通过 `not-close` 属性隐藏关闭按钮。
+通过 `not-close` 属性隐藏右上角的关闭按钮。其他关闭方式仍由各自的配置控制。
 
 <template #example>
 <dialog-zh-not-close />

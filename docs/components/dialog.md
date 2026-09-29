@@ -93,7 +93,7 @@ PROPS:
     description: Remove the close button from the dialog.
     default: false
     link: null
-    usage: '#not-close'
+    usage: '#no-close-button'
     code: null
 
   - name: scroll
@@ -393,9 +393,9 @@ Add a loading animation to the dialog with the `loading` property
 
 <card>
 
-## Not close
+## No close button
 
-You can remove the close button with the `not-close` property
+Use `not-close` to hide the top-right close button. Other dismissal methods remain controlled by their respective settings.
 
 <template #example>
 <dialog-not-close />
