@@ -644,18 +644,18 @@ SLOTS:
 不需要复杂 slot 时，可用 title、content 和内置确认/取消按钮；slot 仍然优先。
 
 <template #example>
-<dialog-advanced />
+<dialog-zh-advanced />
 </template>
 
 <template #template>
 
-@[code{1-14}](../../.vuepress/components/dialog/advanced.vue)
+@[code{1-14}](../../.vuepress/components/dialog-zh/advanced.vue)
 
 </template>
 
 <template #script>
 
-@[code{16-21}](../../.vuepress/components/dialog/advanced.vue)
+@[code{16-21}](../../.vuepress/components/dialog-zh/advanced.vue)
 
 </template>
 

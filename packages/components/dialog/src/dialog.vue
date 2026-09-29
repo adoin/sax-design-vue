@@ -52,16 +52,18 @@
 
           <div v-if="$slots.footer || props.showFooter" :class="ns.e('footer')">
             <slot name="footer">
-              <s-button
-                v-if="showCancelButton"
-                type="flat"
-                @click="handleCancel"
-              >
-                {{ cancelButtonText || t('vs.dialog.cancel') }}
-              </s-button>
-              <s-button v-if="showConfirmButton" @click="handleConfirm">
-                {{ confirmButtonText || t('vs.dialog.confirm') }}
-              </s-button>
+              <div :class="ns.e('actions')">
+                <s-button
+                  v-if="showCancelButton"
+                  type="flat"
+                  @click="handleCancel"
+                >
+                  {{ cancelButtonText || t('vs.dialog.cancel') }}
+                </s-button>
+                <s-button v-if="showConfirmButton" @click="handleConfirm">
+                  {{ confirmButtonText || t('vs.dialog.confirm') }}
+                </s-button>
+              </div>
             </slot>
           </div>
         </div>
