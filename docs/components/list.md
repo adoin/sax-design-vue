@@ -1,5 +1,25 @@
 ---
 PROPS:
+  - name: items
+    type: ListDataItem[]
+    description: Data items; default content reads title or label and subtitle.
+    default: '[]'
+    usage: '#virtual-list'
+  - name: item-key
+    type: ListItemKey
+    description: Return a stable unique row key. Defaults to the index; provide it when sorting or changing items.
+    default: null
+    usage: '#virtual-list'
+  - name: virtual
+    type: Boolean
+    description: Window the items array, mounting only visible and overscan rows.
+    default: 'false'
+    usage: '#virtual-list'
+  - name: virtual-config
+    type: ListVirtualConfig
+    description: Viewport height defaults to 320, estimateSize to 48, overscan to 5 and dynamic to true.
+    default: '{}'
+    usage: '#virtual-list'
   - name: title
     type: String
     values: "String"
@@ -32,7 +52,24 @@ PROPS:
     link: null
     usage: '#header'
 EVENTS: []
-EXPOSES: []
+EXPOSES:
+  - name: scrollToIndex
+    type: "(index: number, align?: 'auto' | 'start' | 'center' | 'end') => void"
+    description: Scroll to a data index in virtual mode.
+    usage: '#virtual-list'
+  - name: measure
+    type: '() => void'
+    description: Remeasure the virtual viewport and mounted rows.
+SLOTS:
+  - name: default
+    type: Slot
+    description: Manual list content or a header before data rows; this content is not virtualized.
+  - name: item
+    type: Slot
+    scope: '{ item: ListDataItem; index: number }'
+    description: Custom data-row content shared by normal and virtual modes.
+    usage: '#virtual-list'
+
 description: "Structured lists with headers, icons, avatars, and custom slots."
 NEWS:
   - default
@@ -134,6 +171,30 @@ Use the `avatar` slot for profile images or initials.
 <template #template>
 
 @[code{1-30}](../.vuepress/components/list/avatar.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Virtual list
+
+Pass data through `items` and enable `virtual`, using `#item` for custom content. This example contains 10,000 variable-height records and uses the shared height-delta index. Dynamic measurement is enabled by default; for fixed rows, disable `virtual-config.dynamic` and set `estimateSize` to the actual height. Default-slot headers stay outside the viewport; handwritten children are not automatically virtualized.
+
+<template #example>
+<list-virtual />
+</template>
+
+<template #template>
+
+@[code{1-28}](../.vuepress/components/list/virtual.vue)
+
+</template>
+
+<template #script>
+
+@[code{30-44}](../.vuepress/components/list/virtual.vue)
 
 </template>
 

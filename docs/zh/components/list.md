@@ -1,5 +1,25 @@
 ---
 PROPS:
+  - name: items
+    type: ListDataItem[]
+    description: 数据列表；默认读取 title 或 label 和 subtitle。
+    default: '[]'
+    usage: '#virtual-list'
+  - name: item-key
+    type: ListItemKey
+    description: 返回稳定且唯一的行键；省略时使用索引，排序或增删时建议提供。
+    default: null
+    usage: '#virtual-list'
+  - name: virtual
+    type: Boolean
+    description: 虚拟渲染 items，仅挂载可见行及预渲染行。
+    default: 'false'
+    usage: '#virtual-list'
+  - name: virtual-config
+    type: ListVirtualConfig
+    description: 视口 height 默认 320、估算行高 estimateSize 默认 48、overscan 默认 5、dynamic 默认 true。
+    default: '{}'
+    usage: '#virtual-list'
   - name: title
     type: String
     values: "String"
@@ -32,7 +52,24 @@ PROPS:
     link: null
     usage: '#header'
 EVENTS: []
-EXPOSES: []
+EXPOSES:
+  - name: scrollToIndex
+    type: "(index: number, align?: 'auto' | 'start' | 'center' | 'end') => void"
+    description: 虚拟模式下定位指定数据索引。
+    usage: '#virtual-list'
+  - name: measure
+    type: '() => void'
+    description: 重新测量虚拟视口及已挂载行。
+SLOTS:
+  - name: default
+    type: Slot
+    description: 手写列表内容或数据列表前的标题；此部分不参与虚拟化。
+  - name: item
+    type: Slot
+    scope: '{ item: ListDataItem; index: number }'
+    description: 自定义数据行，普通和虚拟模式共用。
+    usage: '#virtual-list'
+
 description: "结构化列表，支持标题、图标、头像与自定义插槽。"
 NEWS:
   - default
@@ -134,6 +171,30 @@ NEWS:
 <template #template>
 
 @[code{1-30}](../../.vuepress/components/list/avatar.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 虚拟列表
+
+将数据传给 `items` 并开启 `virtual`，通过 `#item` 自定义内容。此例包含 10,000 条不同高度的记录，复用共享虚拟列表的高度差索引。`virtual-config.dynamic` 默认开启；固定行高时可关闭，并将 `estimateSize` 设为实际行高。默认插槽中的标题保留在滚动区外，手写子组件不会自动虚拟化。
+
+<template #example>
+<list-zh-virtual />
+</template>
+
+<template #template>
+
+@[code{1-28}](../../.vuepress/components/list-zh/virtual.vue)
+
+</template>
+
+<template #script>
+
+@[code{30-44}](../../.vuepress/components/list-zh/virtual.vue)
 
 </template>
 
