@@ -80,6 +80,11 @@ export const dialogProps = buildProps({
   /**
    * @description Makes the dialog the size of the window.
    */
+  /** Keep an opened dialog alive after its declaring component unmounts. Set at mount time. */
+  global: Boolean,
+  /** Defaults to true for full-screen dialogs. */
+  minimizable: { type: Boolean, default: undefined },
+  minimizedLabel: String,
   fullScreen: {
     default: false,
     type: Boolean,
@@ -198,6 +203,8 @@ export const dialogEmits = {
    * @description triggers when the Dialog closing animation ends
    */
   closed: () => true,
+  minimize: () => true,
+  restore: () => true,
   confirm: () => true,
   cancel: () => true,
   [UPDATE_MODEL_EVENT]: (value: boolean) => isBoolean(value),
@@ -207,4 +214,12 @@ export type DialogEmits = typeof dialogEmits
 export type DialogEmitFn = EmitFn<DialogEmits>
 
 export type DialogProps = ExtractPropTypes<typeof dialogProps>
-export type DialogInstance = InstanceType<typeof Dialog>
+export interface DialogExposes {
+  visible: boolean
+  minimized: boolean
+  open: () => void
+  close: () => void
+  minimize: () => void
+  restore: () => void
+}
+export type DialogInstance = InstanceType<typeof Dialog> & DialogExposes

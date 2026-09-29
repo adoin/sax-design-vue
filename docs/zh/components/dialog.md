@@ -1,6 +1,21 @@
 ---
 description: '展示聚焦的模态内容并要求用户作出决定。'
 PROPS:
+  - name: minimizable
+    type: Boolean
+    default: null
+    description: 是否显示最小化入口；省略时全屏弹窗默认开启，普通弹窗默认关闭。
+    usage: '#full-screen'
+  - name: global
+    type: Boolean
+    default: false
+    description: 创建时决定是否独立于所属组件存活。开启后，已打开的弹窗和最小化气泡在所属组件销毁后保留，最终关闭时释放。
+    usage: '#global-lifetime'
+  - name: minimized-label
+    type: String
+    default: null
+    description: 底部气泡的名称，默认使用 title，未提供时使用本地化通用名称。
+    usage: '#full-screen'
   - name: before-close
     type: Function
     values: "(done: (cancel?: boolean) => void) => void"
@@ -219,6 +234,10 @@ PROPS:
     usage: '#advanced'
 
 EVENTS:
+  - name: minimize
+    description: 最小化后触发，不修改 v-model。
+  - name: restore
+    description: 从底部气泡恢复后触发。
   - name: close
     type: Function
     values: "null"
@@ -231,6 +250,21 @@ EVENTS:
         ...
       </s-dialog>
 
+EXPOSES:
+  - name: minimize
+    type: '() => void'
+    description: 将已打开且允许最小化的弹窗收起到底部。
+    usage: '#full-screen'
+  - name: restore
+    type: '() => void'
+    description: 恢复最小化弹窗并还原焦点。
+    usage: '#full-screen'
+  - name: open
+    type: '() => void'
+    description: 打开弹窗。
+  - name: close
+    type: '() => void'
+    description: 通过 before-close 请求关闭。
 SLOTS:
   - name: default
     type: slot
@@ -521,7 +555,7 @@ SLOTS:
 
 ## 全屏
 
-需要让对话框占满整个窗口时，可使用 `full-screen` 属性。
+`full-screen` 弹窗默认显示最小化入口；`:minimizable="false"` 可隐藏入口。最小化保留内容实例与表单状态，不改变 `v-model`，并释放遮罩和页面滚动锁。底部气泡可恢复或关闭弹窗，关闭仍遵循 `before-close`；多个气泡并排展示。使用 `minimized-label` 设置气泡名称。
 
 <template #example>
 <dialog-zh-full-screen />
@@ -529,19 +563,13 @@ SLOTS:
 
 <template #template>
 
-@[code{1-35}](../../.vuepress/components/dialog-zh/full-screen.vue)
+@[code{7-21}](../../.vuepress/components/dialog-zh/full-screen.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../../.vuepress/components/dialog-zh/full-screen.vue)
-
-</template>
-
-<template #style>
-
-@[code{44-97}](../../.vuepress/components/dialog-zh/full-screen.vue)
+@[code{1-5}](../../.vuepress/components/dialog-zh/full-screen.vue)
 
 </template>
 
@@ -656,6 +684,36 @@ SLOTS:
 <template #script>
 
 @[code{16-21}](../../.vuepress/components/dialog-zh/advanced.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 全局生命周期
+
+默认情况下，弹窗和气泡随所属组件销毁。创建时传入 `global` 后，同一弹窗实例在所属组件销毁后仍可恢复，直到用户关闭；页面刷新不保留。请在创建实例前确定 `global`，运行中切换该属性不会迁移实例。全局实例保留当时的插槽、注入上下文与回调；所属组件销毁后不再接收它的新属性。调用方负责回调引用、异步任务和订阅资源，避免访问已销毁的页面实例。
+
+<template #example>
+<dialog-zh-global />
+</template>
+
+<template #template>
+
+@[code{40-58}](../../.vuepress/components/dialog-zh/global.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-38}](../../.vuepress/components/dialog-zh/global.vue)
+
+</template>
+
+<template #style>
+
+@[code{60-74}](../../.vuepress/components/dialog-zh/global.vue)
 
 </template>
 

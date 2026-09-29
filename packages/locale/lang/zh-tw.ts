@@ -130,6 +130,9 @@ export default {
         '偵測到已過時的使用方式，請參閱 pagination 說明文件以了解更多資訊',
     },
     dialog: {
+      minimize: '最小化',
+      restore: '還原對話框',
+      minimized: '已最小化的對話框',
       close: '關閉此對話框',
     },
     drawer: {

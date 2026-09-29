@@ -257,6 +257,9 @@ export default {
       error: '输入的数据不合法!',
     },
     dialog: {
+      minimize: '最小化',
+      restore: '恢复对话框',
+      minimized: '已最小化的对话框',
       close: '关闭对话框',
       confirm: '确定',
       cancel: '取消',

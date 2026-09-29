@@ -1,150 +1,111 @@
-<template>
-  <teleport :to="selector">
-    <transition
-      :name="ns.b()"
-      @after-enter="afterEnter"
-      @after-leave="afterLeave"
-      @before-leave="beforeLeave"
-    >
-      <div
-        v-if="visible"
-        :class="rootKls"
-        :style="{ zIndex }"
-        @click="clickDialog.onClick"
-        @mousedown="clickDialog.onMousedown"
-        @mouseup="clickDialog.onMouseup"
-      >
-        <div :style="dialogStyles" :class="dialogKls">
-          <div v-if="loading" :class="ns.e('loading')">
-            <icon-loading />
-          </div>
-
-          <button
-            v-if="showClose"
-            type="button"
-            :class="ns.e('close')"
-            :aria-label="t('vs.common.close')"
-            @click="close"
-          >
-            <icon-close :size="18" />
-          </button>
-
-          <div
-            v-if="props.showHeader && ($slots.header || title)"
-            :class="ns.e('header')"
-          >
-            <slot name="header"
-              ><span :class="ns.e('title')">{{ title }}</span></slot
-            >
-          </div>
-
-          <div
-            :class="[
-              ns.e('content'),
-              { notFooter: !($slots.footer || props.showFooter) },
-            ]"
-          >
-            <slot>
-              <span v-if="useHtml" v-html="content" />
-              <template v-else>{{ content }}</template>
-            </slot>
-          </div>
-
-          <div v-if="$slots.footer || props.showFooter" :class="ns.e('footer')">
-            <slot name="footer">
-              <div :class="ns.e('actions')">
-                <s-button
-                  v-if="showCancelButton"
-                  type="flat"
-                  @click="handleCancel"
-                >
-                  {{ cancelButtonText || t('vs.dialog.cancel') }}
-                </s-button>
-                <s-button v-if="showConfirmButton" @click="handleConfirm">
-                  {{ confirmButtonText || t('vs.dialog.confirm') }}
-                </s-button>
-              </div>
-            </slot>
-          </div>
-        </div>
-      </div>
-    </transition>
-  </teleport>
-</template>
-
-<script lang="ts" setup>
-import { computed } from 'vue'
-import SButton from '@vuesax-alpha/components/button'
-import { IconClose, IconLoading } from '@vuesax-alpha/components/icon'
+<script lang="ts">
 import {
-  useGlobalComponentProps,
-  useLocale,
-  useModal,
-  useNamespace,
-  usePopperContainer,
-  usePopperContainerId,
-  useSameTarget,
-} from '@vuesax-alpha/hooks'
+  computed,
+  createVNode,
+  defineComponent,
+  getCurrentInstance,
+  h,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  onUpdated,
+  proxyRefs,
+  render,
+  shallowRef,
+} from 'vue'
+import { useGlobalComponentProps, useShape } from '@vuesax-alpha/hooks'
+import DialogSurface from './dialog-surface.vue'
 import { dialogEmits, dialogProps } from './dialog'
-import { useDialog } from './composables'
-import { dialogDeprecated } from './deprecated'
+import type { AppContext } from 'vue'
 
-defineOptions({
+type Surface = InstanceType<typeof DialogSurface>
+
+export default defineComponent({
   name: 'SDialog',
-})
-
-const rawProps = defineProps(dialogProps)
-const props = useGlobalComponentProps('dialog', rawProps)
-const emit = defineEmits(dialogEmits)
-
-usePopperContainer()
-const { selector } = usePopperContainerId()
-
-const ns = useNamespace('dialog')
-const { t } = useLocale()
-
-dialogDeprecated(props)
-
-const {
-  visible,
-  zIndex,
-  dialogKls,
-  dialogStyles,
-  close,
-  afterEnter,
-  afterLeave,
-  beforeLeave,
-  handleClose,
-} = useDialog(props, emit)
-
-useModal({ handleClose }, visible)
-
-const clickDialog = useSameTarget(() => {
-  if (props.maskClosable) handleClose()
-})
-
-const rootKls = computed(() => [
-  ns.b(),
-  ns.is('full-screen', props.fullScreen),
-  ns.is('blur', props.overlayBlur),
-  ns.is('mask', props.mask),
-])
-
-const showClose = computed(() => !props.notClose && props.showClose)
-const handleCancel = () => {
-  emit('cancel')
-  if (props.cancelClosable) close()
-}
-const handleConfirm = () => {
-  emit('confirm')
-  if (props.confirmClosable) close()
-}
-
-defineExpose({
-  /** @description whether the dialog is visible */
-  visible,
-  /** @description dialog close method */
-  close,
-  open: () => (visible.value = true),
+  inheritAttrs: false,
+  props: dialogProps,
+  emits: dialogEmits,
+  setup(rawProps, { attrs, slots, emit, expose }) {
+    const props = useGlobalComponentProps('dialog', rawProps)
+    const shape = useShape()
+    const owner = getCurrentInstance()!
+    const globalMode = props.global
+    const surface = shallowRef<Surface>()
+    let host: HTMLElement | undefined
+    let orphaned = false
+    let disposed = false
+    const dispose = () => {
+      if (disposed) return
+      disposed = true
+      if (host) {
+        render(null, host)
+        host.remove()
+        host = undefined
+      }
+      surface.value = undefined
+    }
+    const listeners: Record<string, (...args: unknown[]) => void> = {}
+    for (const event of Object.keys(dialogEmits)) {
+      const handler = `on${event[0].toUpperCase()}${event.slice(1)}`
+      listeners[handler] = (...args) => {
+        if (event === 'closed' && orphaned) nextTick(dispose)
+        if (orphaned) {
+          // These callbacks deliberately outlive their declaring component.
+          const callback = owner.vnode.props?.[handler]
+          for (const fn of Array.isArray(callback) ? callback : [callback])
+            if (typeof fn === 'function') fn(...args)
+        } else {
+          // Vue's emit overload is a union of all event signatures.
+          ;(emit as (name: string, ...payload: unknown[]) => void)(
+            event,
+            ...args,
+          )
+        }
+      }
+    }
+    const updateGlobal = () => {
+      if (!host || disposed || orphaned) return
+      const vnode = createVNode(
+        DialogSurface,
+        { ...attrs, ...props, shape: shape.value, ...listeners },
+        slots,
+      )
+      vnode.appContext = {
+        ...owner.appContext,
+        provides: (owner as typeof owner & { provides: AppContext['provides'] })
+          .provides,
+      }
+      render(vnode, host)
+      if (vnode.component?.exposed)
+        surface.value = proxyRefs(vnode.component.exposed) as Surface
+    }
+    onMounted(() => {
+      if (!globalMode) return
+      host = document.createElement('div')
+      host.dataset.sDialogHost = ''
+      document.body.appendChild(host)
+      updateGlobal()
+    })
+    onUpdated(updateGlobal)
+    onBeforeUnmount(() => {
+      if (globalMode && surface.value?.visible) orphaned = true
+      else dispose()
+    })
+    expose({
+      visible: computed(() => surface.value?.visible ?? false),
+      minimized: computed(() => surface.value?.minimized ?? false),
+      open: () => surface.value?.open(),
+      close: () => surface.value?.close(),
+      minimize: () => surface.value?.minimize(),
+      restore: () => surface.value?.restore(),
+    })
+    return () => {
+      // Track props/attrs even for the independently mounted global surface.
+      const input = { ...attrs, ...props, shape: shape.value, ...listeners }
+      return globalMode
+        ? null
+        : h(DialogSurface, { ...input, ref: surface }, slots)
+    }
+  },
 })
 </script>

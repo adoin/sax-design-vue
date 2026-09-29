@@ -12,6 +12,17 @@ import { useNamespace } from '../use-namespace'
 
 import type { Ref } from 'vue'
 
+const locks = new Map<
+  string,
+  {
+    count: number
+    width: string
+    adjusted: boolean
+    owned: boolean
+    timer?: ReturnType<typeof setTimeout>
+  }
+>()
+
 /**
  * Hook that monitoring the ref value to lock or unlock the screen.
  * When the trigger became true, it assumes modal is now opened and vice versa.
@@ -29,44 +40,52 @@ export const useLockscreen = (trigger: Ref<boolean>) => {
 
   const hiddenCls = computed(() => ns.bm('parent', 'hidden'))
 
-  if (!isClient || hasClass(document.body, hiddenCls.value)) {
-    return
-  }
-
-  let scrollBarWidth = 0
-  let withoutHiddenClass = false
-  let bodyWidth = '0'
-
-  const cleanup = () => {
-    setTimeout(() => {
-      removeClass(document.body, hiddenCls.value)
-      if (withoutHiddenClass) {
-        document.body.style.width = bodyWidth
-      }
+  if (!isClient) return
+  let acquired = false
+  let acquiredKey = ''
+  const release = () => {
+    if (!acquired) return
+    acquired = false
+    const key = acquiredKey
+    const state = locks.get(key)
+    if (!state || --state.count > 0) return
+    state.timer = setTimeout(() => {
+      if (state.count > 0) return
+      if (state.owned) removeClass(document.body, key)
+      if (state.adjusted) document.body.style.width = state.width
+      locks.delete(key)
     }, 200)
   }
-  watch(trigger, (val) => {
-    if (!val) {
-      cleanup()
-      return
-    }
-
-    withoutHiddenClass = !hasClass(document.body, hiddenCls.value)
-    if (withoutHiddenClass) {
-      bodyWidth = document.body.style.width
-    }
-    scrollBarWidth = getScrollBarWidth(ns.namespace.value)
-    const bodyHasOverflow =
-      document.documentElement.clientHeight < document.body.scrollHeight
-    const bodyOverflowY = getStyle(document.body, 'overflowY')
-    if (
-      scrollBarWidth > 0 &&
-      (bodyHasOverflow || bodyOverflowY === 'scroll') &&
-      withoutHiddenClass
-    ) {
-      document.body.style.width = `calc(100% - ${scrollBarWidth}px)`
-    }
-    addClass(document.body, hiddenCls.value)
-  })
-  onScopeDispose(() => cleanup())
+  watch(
+    trigger,
+    (active) => {
+      if (!active) {
+        release()
+        return
+      }
+      if (acquired) return
+      acquired = true
+      const key = hiddenCls.value
+      acquiredKey = key
+      const existing = locks.get(key)
+      if (existing) {
+        clearTimeout(existing.timer)
+        existing.count++
+        return
+      }
+      const owned = !hasClass(document.body, key)
+      const width = document.body.style.width
+      const scrollBarWidth = getScrollBarWidth(ns.namespace.value)
+      const overflow =
+        document.documentElement.clientHeight < document.body.scrollHeight ||
+        getStyle(document.body, 'overflowY') === 'scroll'
+      const adjusted = owned && scrollBarWidth > 0 && overflow
+      if (adjusted)
+        document.body.style.width = `calc(100% - ${scrollBarWidth}px)`
+      locks.set(key, { count: 1, width, adjusted, owned })
+      addClass(document.body, key)
+    },
+    { immediate: true, flush: 'sync' },
+  )
+  onScopeDispose(release)
 }

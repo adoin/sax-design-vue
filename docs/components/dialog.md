@@ -1,6 +1,21 @@
 ---
 description: 'Present focused modal content and require a user decision.'
 PROPS:
+  - name: minimizable
+    type: Boolean
+    default: null
+    description: Show the minimize action. Defaults to enabled for full-screen dialogs and disabled otherwise.
+    usage: '#full-screen'
+  - name: global
+    type: Boolean
+    default: false
+    description: Set at creation time to retain an opened dialog and its bubble after the owner unmounts; closing releases the retained instance.
+    usage: '#global-lifetime'
+  - name: minimized-label
+    type: String
+    default: null
+    description: Bubble label. Falls back to title, then a localized generic label.
+    usage: '#full-screen'
   - name: before-close
     type: Function
     values: "(done: (cancel?: boolean) => void) => void"
@@ -243,6 +258,10 @@ PROPS:
     code: null
 
 EVENTS:
+  - name: minimize
+    description: Emitted after minimizing; does not change v-model.
+  - name: restore
+    description: Emitted after restoring from the dock.
   - name: close
     type: Function
     values: "null"
@@ -255,6 +274,21 @@ EVENTS:
         ...
       </s-dialog>
 
+EXPOSES:
+  - name: minimize
+    type: '() => void'
+    description: Minimize an open dialog when minimization is enabled.
+    usage: '#full-screen'
+  - name: restore
+    type: '() => void'
+    description: Restore a minimized dialog and its focus.
+    usage: '#full-screen'
+  - name: open
+    type: '() => void'
+    description: Open the dialog.
+  - name: close
+    type: '() => void'
+    description: Request closing through before-close.
 SLOTS:
   - name: default
     type: slot
@@ -545,7 +579,7 @@ You can nest as many `s-dialog` as you need without problem
 
 ## Full Screen
 
-If you need the dialog to be the total window size you can do it with the `full-screen` property
+`full-screen` dialogs expose minimization by default; set `:minimizable="false"` to hide it. Minimization preserves content and form state without changing `v-model`, releasing the mask and scroll lock. Dock bubbles can restore or close dialogs, respecting `before-close`; multiple bubbles appear together. Use `minimized-label` to name the bubble.
 
 <template #example>
 <dialog-full-screen />
@@ -553,19 +587,13 @@ If you need the dialog to be the total window size you can do it with the `full-
 
 <template #template>
 
-@[code{1-35}](../.vuepress/components/dialog/full-screen.vue)
+@[code{9-23}](../.vuepress/components/dialog/full-screen.vue)
 
 </template>
 
 <template #script>
 
-@[code{36-43}](../.vuepress/components/dialog/full-screen.vue)
-
-</template>
-
-<template #style>
-
-@[code{44-97}](../.vuepress/components/dialog/full-screen.vue)
+@[code{1-7}](../.vuepress/components/dialog/full-screen.vue)
 
 </template>
 
@@ -680,6 +708,36 @@ Use title, content and action-button props when slots would be unnecessary; cust
 <template #script>
 
 @[code{16-21}](../.vuepress/components/dialog/advanced.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Global lifetime
+
+By default, dialogs and bubbles are disposed with their owner. Set `global` when creating the instance to retain the same dialog after its owner unmounts, until the user closes it; page reloads do not preserve it. Changing global at runtime does not migrate an instance. Retained dialogs keep their slots, injected context, and callbacks but stop receiving owner prop updates after unmount. Callers own callback references, asynchronous tasks, and subscriptions, and must avoid accessing destroyed page instances.
+
+<template #example>
+<dialog-global />
+</template>
+
+<template #template>
+
+@[code{42-61}](../.vuepress/components/dialog/global.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-40}](../.vuepress/components/dialog/global.vue)
+
+</template>
+
+<template #style>
+
+@[code{63-77}](../.vuepress/components/dialog/global.vue)
 
 </template>
 

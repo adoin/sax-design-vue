@@ -1,4 +1,4 @@
-import { watch } from 'vue'
+import { onScopeDispose, watch } from 'vue'
 import { useEventListener } from '@vueuse/core'
 import { isClient } from '@vuesax-alpha/utils'
 import { EVENT_CODE } from '@vuesax-alpha/constants'
@@ -21,13 +21,19 @@ const closeModal = (e: KeyboardEvent) => {
 }
 
 export const useModal = (instance: ModalInstance, visibleRef: Ref<boolean>) => {
-  watch(visibleRef, (val) => {
-    if (val) {
-      modalStack.push(instance)
-    } else {
-      modalStack.splice(modalStack.indexOf(instance), 1)
-    }
-  })
+  const remove = () => {
+    const index = modalStack.indexOf(instance)
+    if (index !== -1) modalStack.splice(index, 1)
+  }
+  watch(
+    visibleRef,
+    (val) => {
+      remove()
+      if (val) modalStack.push(instance)
+    },
+    { immediate: true, flush: 'sync' },
+  )
+  onScopeDispose(remove)
 }
 
 if (isClient) useEventListener(document, 'keydown', closeModal)

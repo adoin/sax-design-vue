@@ -269,6 +269,9 @@ export default {
       label: 'rating',
     },
     dialog: {
+      minimize: 'Minimize',
+      restore: 'Restore dialog',
+      minimized: 'Minimized dialog',
       close: 'Close this dialog',
       confirm: 'Confirm',
       cancel: 'Cancel',

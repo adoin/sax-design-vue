@@ -15,6 +15,8 @@ import type { DialogEmitFn, DialogProps } from '../dialog'
 export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
   const rebound = ref(false)
   const visible = ref(false)
+  const minimized = ref(false)
+  const surfaceVisible = computed(() => visible.value && !minimized.value)
   const closed = ref(false)
   const ns = useNamespace('dialog')
   const shape = useShape()
@@ -83,9 +85,7 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
     close()
   }
 
-  if (props.lockScroll) {
-    useLockscreen(visible)
-  }
+  useLockscreen(computed(() => surfaceVisible.value && props.lockScroll))
 
   watch(
     () => props.modelValue,
@@ -97,17 +97,11 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
         open()
         zIndex.value = props.zIndex ?? nextZIndex()
 
-        if (props.lockScroll) {
-          document.body.style.overflow = 'hidden'
-        }
         nextTick(() => {
           emit('open')
         })
       } else {
         rebound.value = false
-        if (props.lockScroll) {
-          document.body.style.overflow = ''
-        }
         if (visible.value) {
           close()
         }
@@ -164,6 +158,8 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
     zIndex,
     closed,
     visible,
+    minimized,
+    surfaceVisible,
     dialogKls,
     dialogStyles,
   }

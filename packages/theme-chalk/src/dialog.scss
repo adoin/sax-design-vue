@@ -241,3 +241,102 @@
   + .#{$namespace}-dialog__header {
   padding: 14px 52px;
 }
+
+.#{$namespace}-dialog__minimize {
+  position: absolute;
+  top: 4px;
+  right: 48px;
+  z-index: 200;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--sax-radius-sm);
+  background: transparent;
+  color: getColor(text-color-secondary);
+  cursor: pointer;
+  &:hover,
+  &:focus-visible {
+    outline: none;
+    background: getColor(primary, 0.08);
+    color: getColor(primary);
+  }
+}
+.#{$namespace}-dialog.is-minimizable .#{$namespace}-dialog__header {
+  padding-right: 100px;
+  padding-left: 100px;
+}
+.#{$namespace}-dialog-original:focus {
+  outline: none;
+}
+.#{$namespace}-dialog__dock {
+  position: fixed;
+  right: 16px;
+  left: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  max-height: 35vh;
+  overflow-y: auto;
+  pointer-events: none;
+}
+.#{$namespace}-dialog__minimized {
+  display: inline-flex;
+  align-items: center;
+  max-width: min(320px, 100%);
+  min-width: 0;
+  border-radius: var(--sax-radius-pill);
+  background: getColor(background);
+  color: getColor(text-color);
+  box-shadow: var(--sax-popper-shadow);
+  pointer-events: auto;
+  &.is-square {
+    border-radius: 0;
+  }
+}
+.#{$namespace}-dialog__restore,
+.#{$namespace}-dialog__dock-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  font: inherit;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  &:hover,
+  &:focus-visible {
+    outline: none;
+    background: getColor(primary, 0.08);
+    color: getColor(primary);
+  }
+}
+.#{$namespace}-dialog__restore {
+  min-width: 0;
+  gap: 8px;
+  padding: 0 14px;
+  border-radius: inherit;
+}
+.#{$namespace}-dialog__dock-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.#{$namespace}-dialog__dock-indicator {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: getColor(primary);
+}
+.#{$namespace}-dialog__dock-close {
+  flex: 0 0 44px;
+  width: 44px;
+  border-radius: inherit;
+}
