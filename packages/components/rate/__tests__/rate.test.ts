@@ -3,17 +3,34 @@ import { describe, expect, it, vi } from 'vitest'
 import Rate from '../src/rate.vue'
 
 describe('Rate', () => {
+  it('keeps the overlay fallback for custom icons', () => {
+    const wrapper = mount(Rate, {
+      props: {
+        modelValue: 2.5,
+        allowHalf: true,
+        icons: ['cb:add', 'cb:add', 'cb:add'],
+        voidIcon: 'cb:add',
+      },
+    })
+    expect(
+      (wrapper.get('.s-rate__decimal').element as HTMLElement).style.clipPath,
+    ).toBe('inset(0 50% 0 0)')
+    wrapper.unmount()
+  })
+
   it.each(['small', 'default', 'large'] as const)(
-    'clips a full-size overlay at its midpoint for %s',
+    'splits a single star path at its SVG midpoint for %s',
     (size) => {
       const wrapper = mount(Rate, {
         props: { modelValue: 2.5, allowHalf: true, size },
       })
-      const decimal = wrapper.get('.s-rate__decimal')
-      expect((decimal.element as HTMLElement).style.clipPath).toBe(
-        'inset(0 50% 0 0)',
-      )
-      expect((decimal.element as HTMLElement).style.width).toBe('')
+      const star = wrapper.findAll('.s-rate__item')[2]
+      expect(star.findAll('svg')).toHaveLength(1)
+      expect(star.findAll('path')).toHaveLength(1)
+      expect(
+        star.findAll('stop').map((stop) => stop.attributes('offset')),
+      ).toEqual(['50%', '50%'])
+      expect(star.get('linearGradient').attributes('x2')).toBe('1024')
       wrapper.unmount()
     },
   )
@@ -21,8 +38,8 @@ describe('Rate', () => {
   it('preserves the fractional proportion for a read-only score', () => {
     const wrapper = mount(Rate, { props: { modelValue: 2.25, disabled: true } })
     expect(
-      (wrapper.get('.s-rate__decimal').element as HTMLElement).style.clipPath,
-    ).toBe('inset(0 75% 0 0)')
+      wrapper.findAll('stop').map((stop) => stop.attributes('offset')),
+    ).toEqual(['25%', '25%'])
     wrapper.unmount()
   })
   it('renders built-in star assets without runtime icon configuration', () => {
@@ -50,8 +67,8 @@ describe('Rate', () => {
 
     await firstItem.trigger('mousemove', { clientX: 105 })
     expect(wrapper.attributes('aria-valuenow')).toBe('0.5')
-    expect(firstItem.find('.s-rate__decimal').exists()).toBe(true)
-    expect(firstItem.findAll('svg')).toHaveLength(2)
+    expect(firstItem.find('linearGradient').exists()).toBe(true)
+    expect(firstItem.findAll('svg')).toHaveLength(1)
 
     await firstItem.trigger('mousemove', { clientX: 115 })
     expect(wrapper.attributes('aria-valuenow')).toBe('1')

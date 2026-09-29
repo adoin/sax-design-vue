@@ -26,7 +26,13 @@
           ns.is('active', item <= currentValue),
         ]"
       >
-        <template v-if="showDecimalIcon(item)">
+        <rate-star
+          v-if="showDecimalIcon(item) && useSingleStar"
+          :percentage="decimalPercentage"
+          :color="activeColor"
+          :void-color="rateDisabled ? disabledVoidColor : voidColor"
+        />
+        <template v-else-if="showDecimalIcon(item)">
           <s-icon v-if="isString(voidComponent)" :name="voidComponent" />
           <component :is="voidComponent" v-else />
         </template>
@@ -40,7 +46,7 @@
           <component :is="voidComponent" v-else />
         </template>
         <span
-          v-if="showDecimalIcon(item)"
+          v-if="showDecimalIcon(item) && !useSingleStar"
           :style="decimalStyle"
           :class="[ns.e('icon'), ns.e('decimal')]"
         >
@@ -61,8 +67,9 @@
 import { computed, markRaw, ref, watch } from 'vue'
 import { EVENT_CODE, UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { isArray, isObject, isString } from '@vuesax-alpha/utils'
-import { SIcon } from '@vuesax-alpha/components/icon'
+import { IconStarFilled, SIcon } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace, useSize } from '@vuesax-alpha/hooks'
+import RateStar from './rate-star.vue'
 import { rateEmits, rateProps } from './rate'
 import type { iconPropType } from '@vuesax-alpha/utils'
 import type { CSSProperties, Component } from 'vue'
@@ -141,11 +148,13 @@ const activeColor = computed(() => {
   // {value: '', excluded: true} returned
   return isObject(color) ? '' : color
 })
+const decimalPercentage = computed(() =>
+  rateDisabled.value ? valueDecimal.value : 50,
+)
 const decimalStyle = computed(() => {
-  const percentage = rateDisabled.value ? valueDecimal.value : 50
   return {
     color: activeColor.value,
-    clipPath: `inset(0 ${100 - percentage}% 0 0)`,
+    clipPath: `inset(0 ${100 - decimalPercentage.value}% 0 0)`,
   }
 })
 const componentMap = computed(() => {
@@ -177,6 +186,11 @@ const voidComponent = computed(() =>
 )
 const activeComponent = computed(() =>
   getValueFromMap(currentValue.value, componentMap.value),
+)
+const useSingleStar = computed(
+  () =>
+    decimalIconComponent.value === IconStarFilled &&
+    voidComponent.value === IconStarFilled,
 )
 
 function showDecimalIcon(item: number) {
