@@ -5,22 +5,22 @@ PROPS:
     values: "leaf | all | parent"
     default: leaf
     description: "Project linked tree selection into model keys and tags: leaf retains selectable leaves, all retains all checked nodes, parent compresses fully checked branches. Ignored for strict or flat selection."
-    usage: '#multiple-selection'
+    usage: '#tree-multiple-selection'
   - name: multiple
     type: Boolean
     default: false
     description: Enable multiple selection with an array of row keys.
-    usage: '#multiple-selection'
+    usage: '#tree-multiple-selection'
   - name: check-strictly
     type: Boolean
     default: false
     description: Select tree nodes independently. By default loaded selectable descendants are linked with indeterminate feedback.
-    usage: '#multiple-selection'
+    usage: '#tree-multiple-selection'
   - name: max-collapse-tags
     type: Number
     default: 2
     description: Maximum visible selected tags; remaining values appear as +N.
-    usage: '#multiple-selection'
+    usage: '#tree-multiple-selection'
   - name: size
     type: ComponentSize
     values: "small | default | large"
@@ -30,18 +30,18 @@ PROPS:
     type: "String"
     description: "Text displayed when the table has no rows; falls back to the current locale."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "placeholder"
     type: "String"
     description: "Trigger placeholder when no row is selected; falls back to the current locale."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "disabled"
     type: "Boolean"
     description: "Disable trigger actions and close an open popup."
     default: false
     values: "true | false"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: model-value
     type: TableSelectValue
     values: "row key"
@@ -57,25 +57,25 @@ PROPS:
     values: ""
     description: "Rows passed to STable; children follow tree-config."
     default: "[]"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: columns
     type: "TableColumn[]"
     values: ""
     description: "Column configuration forwarded to STable."
     default: "[]"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: row-key
     type: "TableRowKeyGetter"
     values: ""
     description: "Stable row key field or resolver; the selected key is the model value."
     default: "id"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: label-key
     type: "String"
     values: ""
     description: "Field path used for the trigger label; falls back to the selected key."
     default: "label"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: label-formatter
     type: "TableSelectLabelFormatter"
     values: ""
@@ -87,13 +87,13 @@ PROPS:
     values: ""
     description: "Configure child rows, indentation, expansion and lazy loading through STable."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: expanded-keys
     type: "TableRowKey[]"
     values: ""
     description: "Controlled tree expansion keys; bind with v-model:expanded-keys."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: virtual-config
     type: Boolean | TableVirtualConfig
     values: "true / false / '{ height, estimateSize, overscan, dynamic }'"
@@ -110,43 +110,43 @@ PROPS:
     values: ""
     description: "Custom row classes; a function receives the flattened row context."
     default: ""
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: selectable
     type: "TableSelectSelectable"
     values: ""
     description: "Return false to prevent selecting a row. Rows with disabled set remain unselectable."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: show-header
     type: "Boolean"
     values: "true | false"
     description: "Show the table column headers."
     default: true
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: striped
     type: "Boolean"
     values: "true | false"
     description: "Use alternating row backgrounds."
     default: false
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: table-loading
     type: "Boolean"
     values: "true | false"
     description: "Show the internal table loading state."
     default: false
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: close-on-select
     type: "Boolean"
     values: "true | false"
     description: "Whether to close after selection. Defaults to true for single selection and false for multiple selection."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: clearable
     type: "Boolean"
     values: "true | false"
     description: "Show a clear action for the selected value."
     default: false
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: loading
     type: "Boolean"
     values: "true | false"
@@ -158,7 +158,7 @@ PROPS:
     values: "true | false"
     description: "Make the trigger fill the available width."
     default: false
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: shape
     type: String
     values: "rounded | square"
@@ -170,13 +170,13 @@ PROPS:
     values: ""
     description: "Primary visual color of the trigger and popup."
     default: "primary"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: state
     type: "Color"
     values: ""
     description: "State color; when provided, takes precedence over color."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: prefix-icon
     type: "String"
     values: ""
@@ -206,119 +206,119 @@ PROPS:
     values: "true | false"
     description: "Controlled popup visibility; bind with v-model:open."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: default-open
     type: "Boolean"
     values: "true | false"
     description: "Initial popup visibility when open is not controlled."
     default: false
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: popup-config
     type: "TableSelectPopupConfig"
     values: ""
     description: "Popup size, position and mount target; configured fields override their corresponding top-level props."
     default: "{}"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: placement
     type: "String"
     values: ""
     description: "Preferred popup placement relative to the trigger."
     default: "bottom-start"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: teleported
     type: "Boolean"
     values: "true | false"
     description: "Teleport the popup outside ancestor clipping containers."
     default: true
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: flip
     type: "Boolean"
     values: "true | false"
     description: "Flip the popup placement when viewport space is insufficient."
     default: true
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: strategy
     type: "String"
     values: "absolute | fixed"
     description: "Positioning strategy passed to the shared Popper."
     default: "absolute"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
 EVENTS:
   - name: "update:modelValue"
     type: "(value: TableSelectValue) => void"
     description: "Selected key update; clearing emits undefined in single mode or [] in multiple mode."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "update:open"
     type: "(value: boolean) => void"
     description: "Request a popup visibility update."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "update:expanded-keys"
     type: "(keys: TableRowKey[]) => void"
     description: "Tree expansion keys updated by STable."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "visible-change"
     type: "(value: boolean) => void"
     description: "An accepted open or close request; controlled visibility still depends on open."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "change"
     type: "(value: TableRowKey | TableRowKey[], row: TableRow | TableRow[]) => void"
     description: "A selectable row was chosen; clearing uses clear instead."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "clear"
     type: "() => void"
     description: "The clear action was activated."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "row-click"
     type: "(row: TableRow, event: MouseEvent) => void"
     description: "Table row click, including clicks on unselectable rows."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "cell-click"
     type: "(params: TableCellRenderParams, event: MouseEvent) => void"
     description: "Table data cell click with its render context."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "tree-expand"
     type: "(row: TableRow, expanded: boolean) => void"
     description: "A tree row expanded or collapsed."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "lazy-load"
     type: "(row: TableRow, children: TableRow[]) => void"
     description: "Lazy child rows finished loading."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "scroll"
     type: "(event: Event) => void"
     description: "Internal table viewport scroll event."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "focus"
     type: "(event: FocusEvent) => void"
     description: "The trigger received focus."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "blur"
     type: "(event: FocusEvent) => void"
     description: "The trigger lost focus."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "prefix-click"
     type: "(event: MouseEvent) => void"
     description: "Leading affix click."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "suffix-click"
     type: "(event: MouseEvent) => void"
     description: "Trailing affix click."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
 SLOTS:
   - name: "selected"
     type: Slot
@@ -387,32 +387,32 @@ EXPOSES:
     type: "() => void"
     description: "Request opening the popup; disabled or loading prevents opening."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "close"
     type: "() => void"
     description: "Request closing the popup; controlled mode emits update:open."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "toggleRowExpand"
     type: "(row: TableRow, expanded?: boolean) => Promise<void> | undefined"
     description: "Toggle or set tree expansion through the mounted internal table."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "setExpandedKeys"
     type: "(keys: TableRowKey[]) => void"
     description: "Set expanded tree keys through the internal table."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "scrollToRow"
     type: "(rowOrIndex: TableRow | TableRowKey, align?: 'auto' | 'start' | 'center' | 'end') => void"
     description: "Scroll the mounted table to a row object or key; a number is used as a visible-row index only if no visible key matches."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "measure"
     type: "() => Promise<void> | undefined"
     description: "Remeasure the mounted internal table layout and virtual rows."
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
 description: 'Select one or multiple rows from a flat, virtualized, or tree-structured Table.'
 ---
 
@@ -421,27 +421,95 @@ description: 'Select one or multiple rows from a flat, virtualized, or tree-stru
 
 <card>
 
-## Tree data
+## Flat single selection
 
-Tree selection is one Table data mode. Parent rows expand in place while selectable leaf rows update the bound key.
+Bind one row key. Selecting an enabled row closes the popup by default; disabled rows cannot be selected.
 
-<template #example><table-select-tree /></template>
+<template #example>
+<table-select-flat-single />
+</template>
 
 <template #template>
 
-@[code{36-55}](../.vuepress/components/table-select/tree.vue)
+@[code{16-31}](../.vuepress/components/table-select/flat-single.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-34}](../.vuepress/components/table-select/tree.vue)
+@[code{1-14}](../.vuepress/components/table-select/flat-single.vue)
 
 </template>
 
-<template #style>
+</card>
 
-@[code{57-67}](../.vuepress/components/table-select/tree.vue)
+<card>
+
+## Flat multiple selection
+
+Enable `multiple` and bind an array of keys. Toggle rows with clicks or checkboxes; the popup stays open by default. Remove selected tags or clear the selection.
+
+<template #example>
+<table-select-flat-multiple />
+</template>
+
+<template #template>
+
+@[code{16-32}](../.vuepress/components/table-select/flat-multiple.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-14}](../.vuepress/components/table-select/flat-multiple.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Tree single selection
+
+Use `tree-config` for hierarchical data. This example uses `selectable` to allow leaf selection; parent nodes expand and collapse.
+
+<template #example>
+<table-select-tree-single />
+</template>
+
+<template #template>
+
+@[code{22-42}](../.vuepress/components/table-select/tree-single.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-20}](../.vuepress/components/table-select/tree-single.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Tree multiple selection
+
+`multiple` works with flat and tree data. Bind an array of row keys; the popup stays open by default. Selected tags can be removed and collapse beyond `max-collapse-tags`. Tree selection links loaded selectable descendants and derives parent check states independently of the checked-strategy output; disabled branches are excluded. Set `check-strictly` for independent selection. The default `checked-strategy="leaf"` outputs selectable leaves; `all` outputs all checked nodes and `parent` compresses fully checked branches. The strategy controls both model keys and tags while parent check states remain derived. Unloaded nodes are not automatically selected.
+
+<template #example>
+<table-select-multiple />
+</template>
+
+<template #template>
+
+@[code{32-59}](../.vuepress/components/table-select/multiple.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-30}](../.vuepress/components/table-select/multiple.vue)
 
 </template>
 
@@ -614,30 +682,6 @@ Set `loading` while options or values are being loaded. The trailing indicator m
 <template #style>
 
 @[code{45-58}](../.vuepress/components/table-select/loading.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Multiple selection
-
-`multiple` works with flat and tree data. Bind an array of row keys; the popup stays open by default. Selected tags can be removed and collapse beyond `max-collapse-tags`. Tree selection links loaded selectable descendants and derives parent check states independently of the checked-strategy output; disabled branches are excluded. Set `check-strictly` for independent selection. The default `checked-strategy="leaf"` outputs selectable leaves; `all` outputs all checked nodes and `parent` compresses fully checked branches. The strategy controls both model keys and tags while parent check states remain derived. Unloaded nodes are not automatically selected.
-
-<template #example>
-<table-select-multiple />
-</template>
-
-<template #template>
-
-@[code{32-59}](../.vuepress/components/table-select/multiple.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-30}](../.vuepress/components/table-select/multiple.vue)
 
 </template>
 

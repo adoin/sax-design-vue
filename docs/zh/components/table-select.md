@@ -5,22 +5,22 @@ PROPS:
     values: "leaf | all | parent"
     default: leaf
     description: 树形联动时控制输出键和标签：leaf 仅可选叶子、all 全部选中节点、parent 合并为已全选父节点。check-strictly 或普通数据不受此策略影响。
-    usage: '#multiple-selection'
+    usage: '#tree-multiple-selection'
   - name: multiple
     type: Boolean
     default: false
     description: 启用多选，v-model 为行键数组。
-    usage: '#multiple-selection'
+    usage: '#tree-multiple-selection'
   - name: check-strictly
     type: Boolean
     default: false
     description: 树形多选时父子独立选择；默认联动已加载的可选后代，并显示半选。
-    usage: '#multiple-selection'
+    usage: '#tree-multiple-selection'
   - name: max-collapse-tags
     type: Number
     default: 2
     description: 触发器最多展示的已选标签数，其余显示 +N。
-    usage: '#multiple-selection'
+    usage: '#tree-multiple-selection'
   - name: size
     type: ComponentSize
     values: "small | default | large"
@@ -30,18 +30,18 @@ PROPS:
     type: "String"
     description: "表格没有数据时显示的文本，省略时使用当前语言的默认文案。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "placeholder"
     type: "String"
     description: "未选择行时的占位文本，省略时使用当前语言的默认文案。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "disabled"
     type: "Boolean"
     description: "禁用触发器交互，并关闭已打开的弹层。"
     default: false
     values: "true | false"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: model-value
     type: TableSelectValue
     values: "行键值"
@@ -57,25 +57,25 @@ PROPS:
     values: ""
     description: "传入 STable 的行数据，子节点按 tree-config 解析。"
     default: "[]"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: columns
     type: "TableColumn[]"
     values: ""
     description: "转发给 STable 的列配置。"
     default: "[]"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: row-key
     type: "TableRowKeyGetter"
     values: ""
     description: "稳定行键字段或取值函数，选中行的键作为模型值。"
     default: "id"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: label-key
     type: "String"
     values: ""
     description: "触发器标签的字段路径，字段缺失时显示选中的键。"
     default: "label"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: label-formatter
     type: "TableSelectLabelFormatter"
     values: ""
@@ -87,13 +87,13 @@ PROPS:
     values: ""
     description: "通过 STable 配置子节点、缩进、展开及懒加载。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: expanded-keys
     type: "TableRowKey[]"
     values: ""
     description: "受控的树节点展开键，通过 v-model:expanded-keys 绑定。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: virtual-config
     type: Boolean | TableVirtualConfig
     values: "true / false / '{ height, estimateSize, overscan, dynamic }'"
@@ -110,43 +110,43 @@ PROPS:
     values: ""
     description: "自定义行类名，函数接收扁平化行上下文。"
     default: ""
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: selectable
     type: "TableSelectSelectable"
     values: ""
     description: "返回 false 禁止选中该行；disabled 为真的行始终不可选。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: show-header
     type: "Boolean"
     values: "true | false"
     description: "显示表格列标题。"
     default: true
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: striped
     type: "Boolean"
     values: "true | false"
     description: "使用交替行背景。"
     default: false
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: table-loading
     type: "Boolean"
     values: "true | false"
     description: "显示内部表格的加载状态。"
     default: false
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: close-on-select
     type: "Boolean"
     values: "true | false"
     description: "选中后是否关闭；省略时单选关闭，多选保持打开。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: clearable
     type: "Boolean"
     values: "true | false"
     description: "为选中值显示清除操作。"
     default: false
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: loading
     type: "Boolean"
     values: "true | false"
@@ -158,7 +158,7 @@ PROPS:
     values: "true | false"
     description: "触发器占满可用宽度。"
     default: false
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: shape
     type: String
     values: "rounded | square"
@@ -170,13 +170,13 @@ PROPS:
     values: ""
     description: "触发器与弹层的主视觉颜色。"
     default: "primary"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: state
     type: "Color"
     values: ""
     description: "状态颜色，提供时优先于 color。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: prefix-icon
     type: "String"
     values: ""
@@ -206,119 +206,119 @@ PROPS:
     values: "true | false"
     description: "受控弹层可见性，通过 v-model:open 绑定。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: default-open
     type: "Boolean"
     values: "true | false"
     description: "open 非受控时的初始弹层可见性。"
     default: false
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: popup-config
     type: "TableSelectPopupConfig"
     values: ""
     description: "弹层尺寸、位置和挂载目标；其中配置的字段优先于对应顶层属性。"
     default: "{}"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: placement
     type: "String"
     values: ""
     description: "弹层相对触发器的首选位置。"
     default: "bottom-start"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: teleported
     type: "Boolean"
     values: "true | false"
     description: "将弹层传送到祖先裁剪容器之外。"
     default: true
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: flip
     type: "Boolean"
     values: "true | false"
     description: "视口空间不足时翻转弹层位置。"
     default: true
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: strategy
     type: "String"
     values: "absolute | fixed"
     description: "传给共享 Popper 的定位策略。"
     default: "absolute"
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
 EVENTS:
   - name: "update:modelValue"
     type: "(value: TableSelectValue) => void"
     description: "选中键更新；单选清除为 undefined，多选清除为 []。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "update:open"
     type: "(value: boolean) => void"
     description: "请求更新弹层可见性。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "update:expanded-keys"
     type: "(keys: TableRowKey[]) => void"
     description: "STable 更新树节点展开键。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "visible-change"
     type: "(value: boolean) => void"
     description: "已接受的打开或关闭请求；受控可见性仍由 open 决定。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "change"
     type: "(value: TableRowKey | TableRowKey[], row: TableRow | TableRow[]) => void"
     description: "选中了可选行，清除操作单独触发 clear。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "clear"
     type: "() => void"
     description: "触发了清除操作。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "row-click"
     type: "(row: TableRow, event: MouseEvent) => void"
     description: "表格行点击，包含不可选行的点击。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "cell-click"
     type: "(params: TableCellRenderParams, event: MouseEvent) => void"
     description: "数据单元格点击，携带其渲染上下文。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "tree-expand"
     type: "(row: TableRow, expanded: boolean) => void"
     description: "树节点展开或折叠。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "lazy-load"
     type: "(row: TableRow, children: TableRow[]) => void"
     description: "懒加载子节点完成。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "scroll"
     type: "(event: Event) => void"
     description: "内部表格视口滚动事件。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "focus"
     type: "(event: FocusEvent) => void"
     description: "触发器获得焦点。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "blur"
     type: "(event: FocusEvent) => void"
     description: "触发器失去焦点。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "prefix-click"
     type: "(event: MouseEvent) => void"
     description: "点击前缀内容。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "suffix-click"
     type: "(event: MouseEvent) => void"
     description: "点击后缀内容。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
 SLOTS:
   - name: "selected"
     type: Slot
@@ -387,32 +387,32 @@ EXPOSES:
     type: "() => void"
     description: "请求打开弹层，禁用或加载时不打开。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "close"
     type: "() => void"
     description: "请求关闭弹层，受控模式通过 update:open 通知。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "toggleRowExpand"
     type: "(row: TableRow, expanded?: boolean) => Promise<void> | undefined"
     description: "通过已挂载的内部表格切换或设置树节点展开状态。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "setExpandedKeys"
     type: "(keys: TableRowKey[]) => void"
     description: "通过内部表格设置树节点展开键。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "scrollToRow"
     type: "(rowOrIndex: TableRow | TableRowKey, align?: 'auto' | 'start' | 'center' | 'end') => void"
     description: "按行对象或行键定位已挂载的内部表格；数字未匹配到可见行键时，才按可见行索引定位。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
   - name: "measure"
     type: "() => Promise<void> | undefined"
     description: "重新测量已挂载的内部表格布局与虚拟行。"
     default: null
-    usage: "#tree-data"
+    usage: "#tree-single-selection"
 description: '从普通、虚拟滚动或树形 Table 中选择一行或多行数据。'
 ---
 
@@ -421,27 +421,95 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行或多行�
 
 <card>
 
-## 树形数据
+## 平铺单选
 
-树形选择只是 Table 的一种数据模式。父行原地展开，可选叶子行负责更新绑定键值。
+绑定单个行键，点击可选行后默认关闭弹层；禁用行不可选。
 
-<template #example><table-select-tree /></template>
+<template #example>
+<table-select-zh-flat-single />
+</template>
 
 <template #template>
 
-@[code{36-55}](../../.vuepress/components/table-select/tree.vue)
+@[code{16-31}](../../.vuepress/components/table-select-zh/flat-single.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-34}](../../.vuepress/components/table-select/tree.vue)
+@[code{1-14}](../../.vuepress/components/table-select-zh/flat-single.vue)
 
 </template>
 
-<template #style>
+</card>
 
-@[code{57-67}](../../.vuepress/components/table-select/tree.vue)
+<card>
+
+## 平铺多选
+
+设置 `multiple`，绑定行键数组。点击行或复选框切换选择，默认保持弹层打开；支持标签移除和清空。
+
+<template #example>
+<table-select-zh-flat-multiple />
+</template>
+
+<template #template>
+
+@[code{16-32}](../../.vuepress/components/table-select-zh/flat-multiple.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-14}](../../.vuepress/components/table-select-zh/flat-multiple.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 树形单选
+
+使用 `tree-config` 展示层级。本例通过 `selectable` 限制为选择叶子节点，父节点用于展开和折叠。
+
+<template #example>
+<table-select-zh-tree-single />
+</template>
+
+<template #template>
+
+@[code{22-42}](../../.vuepress/components/table-select-zh/tree-single.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-20}](../../.vuepress/components/table-select-zh/tree-single.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 树形多选
+
+`multiple` 适用于普通表格和树形数据。多选模型为行键数组，弹层默认保持打开；标签可移除并在超过 `max-collapse-tags` 后折叠。树形数据默认联动已加载的可选后代，父节点勾选状态由后代推导，输出键由 checked-strategy 控制；禁用节点不参与联动。设置 `check-strictly` 可独立选择各节点。`checked-strategy` 默认为 `leaf`，只输出可选叶子；`all` 输出全部选中节点，`parent` 将全选分支合并为父节点。策略同时控制模型和标签，父节点仍显示全选或半选。未加载的节点不会自动加入选中值。
+
+<template #example>
+<table-select-zh-multiple />
+</template>
+
+<template #template>
+
+@[code{32-59}](../../.vuepress/components/table-select-zh/multiple.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-30}](../../.vuepress/components/table-select-zh/multiple.vue)
 
 </template>
 
@@ -614,30 +682,6 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行或多行�
 <template #style>
 
 @[code{41-54}](../../.vuepress/components/table-select-zh/loading.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 多选
-
-`multiple` 适用于普通表格和树形数据。多选模型为行键数组，弹层默认保持打开；标签可移除并在超过 `max-collapse-tags` 后折叠。树形数据默认联动已加载的可选后代，父节点勾选状态由后代推导，输出键由 checked-strategy 控制；禁用节点不参与联动。设置 `check-strictly` 可独立选择各节点。`checked-strategy` 默认为 `leaf`，只输出可选叶子；`all` 输出全部选中节点，`parent` 将全选分支合并为父节点。策略同时控制模型和标签，父节点仍显示全选或半选。未加载的节点不会自动加入选中值。
-
-<template #example>
-<table-select-zh-multiple />
-</template>
-
-<template #template>
-
-@[code{32-59}](../../.vuepress/components/table-select-zh/multiple.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-30}](../../.vuepress/components/table-select-zh/multiple.vue)
 
 </template>
 
