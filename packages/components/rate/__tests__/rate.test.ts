@@ -3,6 +3,28 @@ import { describe, expect, it, vi } from 'vitest'
 import Rate from '../src/rate.vue'
 
 describe('Rate', () => {
+  it.each(['small', 'default', 'large'] as const)(
+    'clips a full-size overlay at its midpoint for %s',
+    (size) => {
+      const wrapper = mount(Rate, {
+        props: { modelValue: 2.5, allowHalf: true, size },
+      })
+      const decimal = wrapper.get('.s-rate__decimal')
+      expect((decimal.element as HTMLElement).style.clipPath).toBe(
+        'inset(0 50% 0 0)',
+      )
+      expect((decimal.element as HTMLElement).style.width).toBe('')
+      wrapper.unmount()
+    },
+  )
+
+  it('preserves the fractional proportion for a read-only score', () => {
+    const wrapper = mount(Rate, { props: { modelValue: 2.25, disabled: true } })
+    expect(
+      (wrapper.get('.s-rate__decimal').element as HTMLElement).style.clipPath,
+    ).toBe('inset(0 75% 0 0)')
+    wrapper.unmount()
+  })
   it('renders built-in star assets without runtime icon configuration', () => {
     const wrapper = mount(Rate, { props: { modelValue: 3 } })
 

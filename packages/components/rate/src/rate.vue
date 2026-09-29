@@ -142,15 +142,10 @@ const activeColor = computed(() => {
   return isObject(color) ? '' : color
 })
 const decimalStyle = computed(() => {
-  let width = ''
-  if (rateDisabled.value) {
-    width = `${valueDecimal.value}%`
-  } else if (props.allowHalf) {
-    width = '50%'
-  }
+  const percentage = rateDisabled.value ? valueDecimal.value : 50
   return {
     color: activeColor.value,
-    width,
+    clipPath: `inset(0 ${100 - percentage}% 0 0)`,
   }
 })
 const componentMap = computed(() => {

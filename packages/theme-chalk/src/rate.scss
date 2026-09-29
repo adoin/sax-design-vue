@@ -97,11 +97,12 @@ $rate-size: map.merge(
     top: 0;
     left: 0;
     display: inline-block;
-    overflow: hidden;
+    width: 100%;
+    height: 100%;
     color: getCssVar('rate', 'fill-color');
 
-    // Keep the glyph at the full-star size and clip its container. Sizing the
-    // glyph to the 50% container made a half star render as a tiny full star.
+    // Keep both glyphs on the same full-size box. Clip the painted layer rather
+    // than a half-width overflow box, whose edge can snap under fractional zoom.
     &.#{bem('rate', 'icon')} {
       position: absolute;
       display: block;
@@ -111,8 +112,8 @@ $rate-size: map.merge(
 
       > svg,
       > .s-icon {
-        width: 1em;
-        height: 1em;
+        width: 100%;
+        height: 100%;
       }
 
       > .s-icon > svg {
