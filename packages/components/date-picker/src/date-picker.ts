@@ -63,6 +63,7 @@ export const datePickerProps = buildProps({
   startPlaceholder: String,
   endPlaceholder: String,
   disabled: Boolean,
+  loading: Boolean,
   clearable: {
     type: Boolean,
     default: true,

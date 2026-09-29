@@ -1,6 +1,11 @@
 ---
 description: '通过可编辑输入框和时间列选择时间值。'
 PROPS:
+  - name: loading
+    type: boolean
+    description: 在尾部显示统一加载图标，保留当前值并禁用编辑、清除和弹层操作。
+    default: false
+    usage: '#loading'
   - name: shape
     type: String
     values: 'rounded | square'
@@ -223,6 +228,36 @@ EVENTS:
 <template #style>
 
 @[code{25-37}](../../.vuepress/components/time-picker/shape.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 加载
+
+通过 `loading` 表示正在加载数据；尾部图标与 Input、Select 一致，当前值保持可见，加载结束后恢复交互。
+
+<template #example>
+<time-picker-zh-loading />
+</template>
+
+<template #template>
+
+@[code{1-14}](../../.vuepress/components/time-picker-zh/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{16-20}](../../.vuepress/components/time-picker-zh/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-35}](../../.vuepress/components/time-picker-zh/loading.vue)
 
 </template>
 

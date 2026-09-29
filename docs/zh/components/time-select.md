@@ -1,6 +1,11 @@
 ---
 description: '从预设或生成的时间列表中选择时间。'
 PROPS:
+  - name: loading
+    type: boolean
+    description: 在尾部显示统一加载图标，保留当前值并禁用编辑、清除和弹层操作。
+    default: false
+    usage: '#loading'
   - name: size
     type: ComponentSize
     values: 'small | default | large'
@@ -252,6 +257,36 @@ EVENTS:
 <template #script>
 
 @[code{14-18}](../../.vuepress/components/time-select/disabled.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 加载
+
+通过 `loading` 表示正在加载数据；尾部图标与 Input、Select 一致，当前值保持可见，加载结束后恢复交互。
+
+<template #example>
+<time-select-zh-loading />
+</template>
+
+<template #template>
+
+@[code{1-13}](../../.vuepress/components/time-select-zh/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{15-19}](../../.vuepress/components/time-select-zh/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{21-34}](../../.vuepress/components/time-select-zh/loading.vue)
 
 </template>
 

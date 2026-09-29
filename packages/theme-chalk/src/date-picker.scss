@@ -34,6 +34,10 @@
 @include b(date-picker) {
   @include set-var-value(color, getCssVar(primary));
 
+  .#{$namespace}-input.is-loading .#{$namespace}-input__original {
+    padding-right: 40px;
+  }
+
   display: inline-flex;
   width: getCssVar(select, width);
   max-width: 100%;

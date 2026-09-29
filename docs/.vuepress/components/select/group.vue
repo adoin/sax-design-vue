@@ -1,33 +1,19 @@
 <template>
   <div class="center con-selects">
-    <s-select v-model="value1" label="Group" placeholder="Group">
-      <s-option-group label="Vuejs">
-        <!-- PROP: label is required -->
-        <s-option label="Sax Design" value="1"> Sax Design </s-option>
-        <s-option label="Vue" value="2"> Vue </s-option>
-        <s-option label="Javascript" value="3"> Javascript </s-option>
-      </s-option-group>
-      <s-option-group label="Others">
-        <s-option label="Sass" value="4"> Sass </s-option>
-        <s-option label="Typescript" value="5"> Typescript </s-option>
-        <s-option label="Webpack" value="6"> Webpack </s-option>
-        <s-option label="Nodejs" value="7"> Nodejs </s-option>
-      </s-option-group>
-    </s-select>
+    <s-select
+      v-model="value1"
+      label="Group"
+      placeholder="Group"
+      :option-groups="groups"
+    />
 
-    <s-select v-model="value2" label="Group Filter" filter placeholder="Filter">
-      <s-option-group label="Vuejs">
-        <s-option label="Sax Design" value="1"> Sax Design </s-option>
-        <s-option label="Vue" value="2"> Vue </s-option>
-        <s-option label="Javascript" value="3"> Javascript </s-option>
-      </s-option-group>
-      <s-option-group label="Others">
-        <s-option label="Sass" value="4"> Sass </s-option>
-        <s-option label="Typescript" value="5"> Typescript </s-option>
-        <s-option label="Webpack" value="6"> Webpack </s-option>
-        <s-option label="Nodejs" value="7"> Nodejs </s-option>
-      </s-option-group>
-    </s-select>
+    <s-select
+      v-model="value2"
+      label="Group Filter"
+      filter
+      placeholder="Filter"
+      :option-groups="groups"
+    />
 
     <s-select
       v-model="value3"
@@ -35,28 +21,36 @@
       filter
       multiple
       placeholder="Group Multiple Filter"
-    >
-      <s-option-group label="Vuejs">
-        <s-option label="Sax Design" value="1"> Sax Design </s-option>
-        <s-option label="Vue" value="2"> Vue </s-option>
-        <s-option label="Javascript" value="3"> Javascript </s-option>
-      </s-option-group>
-      <s-option-group label="Others">
-        <s-option label="Sass" value="4"> Sass </s-option>
-        <s-option label="Typescript" value="5"> Typescript </s-option>
-        <s-option label="Webpack" value="6"> Webpack </s-option>
-        <s-option label="Nodejs" value="7"> Nodejs </s-option>
-      </s-option-group>
-    </s-select>
+      :option-groups="groups"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const value1 = ref(['3'])
-const value2 = ref(['4'])
+const value1 = ref('3')
+const value2 = ref('4')
 const value3 = ref(['1'])
+const groups = [
+  {
+    label: 'Vuejs',
+    options: [
+      { label: 'Sax Design', value: '1' },
+      { label: 'Vue', value: '2' },
+      { label: 'Javascript', value: '3' },
+    ],
+  },
+  {
+    label: 'Others',
+    options: [
+      { label: 'Sass', value: '4' },
+      { label: 'Typescript', value: '5' },
+      { label: 'Webpack', value: '6' },
+      { label: 'Nodejs', value: '7' },
+    ],
+  },
+]
 </script>
 
 <style scoped lang="scss">

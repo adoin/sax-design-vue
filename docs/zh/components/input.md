@@ -197,8 +197,8 @@ PROPS:
   - name: loading
     type: Boolean
     values: "Boolean"
-    description: 为输入框添加加载动画。
-    default: null
+    description: 在尾部显示统一加载图标，保留当前值并禁用编辑、清除和弹层操作。
+    default: false
     link: null
     usage: '#loading'
     code: >
@@ -743,18 +743,24 @@ SLOTS:
 通过 `loading` 添加输入框加载动画；该属性为 Boolean，可直接添加。
 
 <template #example>
-<input-loading />
+<input-zh-loading />
 </template>
 
 <template #template>
 
-@[code{1-5}](../../.vuepress/components/input/loading.vue)
+@[code{1-14}](../../.vuepress/components/input-zh/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11}](../../.vuepress/components/input/loading.vue)
+@[code{16-20}](../../.vuepress/components/input-zh/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-35}](../../.vuepress/components/input-zh/loading.vue)
 
 </template>
 

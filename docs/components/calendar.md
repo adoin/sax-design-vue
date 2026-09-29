@@ -274,19 +274,19 @@ Calendar renders flat `CalendarEvent[]`, but your application can retain any sch
 
 <template #template>
 
-@[code{1-139}](../.vuepress/components/calendar/schedule-adapter.vue)
+@[code{1-140}](../.vuepress/components/calendar/schedule-adapter.vue)
 
 </template>
 
 <template #script>
 
-@[code{141-785}](../.vuepress/components/calendar/schedule-adapter.vue)
+@[code{142-786}](../.vuepress/components/calendar/schedule-adapter.vue)
 
 </template>
 
 <template #style>
 
-@[code{787-852}](../.vuepress/components/calendar/schedule-adapter.vue)
+@[code{788-853}](../.vuepress/components/calendar/schedule-adapter.vue)
 
 </template>
 

@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { computed, nextTick, shallowRef, useTemplateRef, watch } from 'vue'
-import { IconClose, IconLoading, SIcon } from '@vuesax-alpha/components/icon'
+import {
+  IconClose,
+  IconControlLoading,
+  SIcon,
+} from '@vuesax-alpha/components/icon'
 import { useResizeObserver } from '@vueuse/core'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { STable } from '@vuesax-alpha/components/table'
@@ -60,7 +64,9 @@ const panelId = useId()
 const internalOpen = shallowRef(props.defaultOpen)
 const popupWidth = shallowRef<number>()
 
-const mergedOpen = computed(() => props.open ?? internalOpen.value)
+const mergedOpen = computed(
+  () => !props.loading && (props.open ?? internalOpen.value),
+)
 const popupConfig = computed(() => props.popupConfig)
 const accentColor = computed(() => props.state || props.color)
 const colorCssVar = computed(() =>
@@ -220,6 +226,7 @@ const handleRowClick = (row: TableRow, event: MouseEvent) => {
   if (props.closeOnSelect) close()
 }
 const clear = () => {
+  if (props.disabled || props.loading) return
   emit('update:modelValue', undefined)
   emit('clear')
 }
@@ -343,7 +350,7 @@ defineExpose({
         </button>
 
         <span :class="ns.e('action')" aria-hidden="true">
-          <IconLoading v-if="loading" :class="ns.e('loading')" />
+          <IconControlLoading v-if="loading" :class="ns.e('loading')" />
           <SIcon
             v-else
             :class="ns.is('rotated', mergedOpen)"

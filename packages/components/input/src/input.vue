@@ -24,7 +24,8 @@
         ref="inputRef"
         :value="model ?? ''"
         :type="inputType"
-        :disabled="disabled"
+        :disabled="disabled || loading"
+        :aria-busy="loading || undefined"
         :readonly="readonly || !editable"
         :name="name"
         :title="title"
@@ -132,7 +133,7 @@
         <slot name="icon" />
       </span>
       <div v-if="loading" :class="ns.e('loading')">
-        <icon-loading />
+        <icon-control-loading />
       </div>
 
       <transition name="clearable-transition">
@@ -217,7 +218,11 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, useSlots } from 'vue'
-import { IconClose, IconLoading, SIcon } from '@vuesax-alpha/components/icon'
+import {
+  IconClose,
+  IconControlLoading,
+  SIcon,
+} from '@vuesax-alpha/components/icon'
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import {
   useColor,
@@ -438,6 +443,7 @@ const inputKls = computed(() => [
   ns.is('block', props.block),
   ns.is('focus', focused.value),
   ns.is('hovering', hovering.value),
+  ns.is('loading', props.loading),
   ns.is(shape.value),
   ns.is('text-white', props.textWhite),
 

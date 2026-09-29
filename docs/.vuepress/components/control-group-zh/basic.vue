@@ -1,0 +1,37 @@
+<script setup lang="ts">
+import { shallowRef } from 'vue'
+
+const protocol = shallowRef('https://')
+const address = shallowRef('sax-design.dev')
+const selectOptions1 = [
+  { label: 'HTTPS', value: 'https://' },
+  { label: 'HTTP', value: 'http://' },
+]
+</script>
+
+<template>
+  <div class="control-group-demo">
+    <span id="website-address-label" class="control-group-demo__label">
+      网站地址
+    </span>
+    <s-control-group aria-labelledby="website-address-label">
+      <s-select v-model="protocol" :span="8" :options="selectOptions1" />
+      <s-input v-model="address" placeholder="域名" />
+    </s-control-group>
+  </div>
+</template>
+
+<style scoped>
+.control-group-demo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.control-group-demo__label {
+  color: var(--sax-text-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+</style>

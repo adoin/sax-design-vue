@@ -14,6 +14,7 @@ export const timeSelectProps = {
   },
   modelValue: { type: String },
   disabled: { type: Boolean },
+  loading: { type: Boolean },
   editable: {
     type: Boolean,
     default: true,

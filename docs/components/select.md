@@ -192,7 +192,7 @@ PROPS:
   - name: loading
     type: Boolean
     values: 'true, false'
-    description: Determine if the component is in the loading state and add an animation.
+    description: Show the shared trailing loader, preserve the value, and block editing, clearing, and popup interaction.
     default: false
     link: null
     usage: '#loading'
@@ -492,32 +492,12 @@ SLOTS:
       <s-select
         placeholder="Success"
         v-model="value"
+        :options="[{ label: 'Sax Design', value: '1' }, { label: 'Vue', value: '2' }]"
       >
         <template #message-success>
           Option Valid
         </template>
-        <s-option label="Sax Design" value="1">
-          Sax Design
-        </s-option>
-        <s-option label="Vue" value="2">
-          Vue
-        </s-option>
-        <s-option label="Javascript" value="3">
-          Javascript
-        </s-option>
-        <s-option label="Sass" value="4">
-          Sass
-        </s-option>
-        <s-option label="Typescript" value="5">
-          Typescript
-        </s-option>
-        <s-option label="Webpack" value="6">
-          Webpack
-        </s-option>
-        <s-option label="Nodejs" value="7">
-          Nodejs
-        </s-option>
-      </s-select>
+        </s-select>
   - name: option
     type: Slot
     scope: "{ option: SelectDataOption; group?: SelectDataOption }"
@@ -534,7 +514,7 @@ SLOTS:
 
 <docs-warn />
 
-Add a select element with the `s-select` component and the `s-option` sub component
+Prefer `options` to supply Select data. Each item contains `label` and `value`; add `disabled` to disable an option. Use slots when custom option content is needed.
 
 <template #example>
 <select-default />
@@ -628,13 +608,13 @@ Change the color of the component with the `color` property, the allowed values 
 
 <template #template>
 
-@[code{1-28}](../.vuepress/components/select/color.vue)
+@[code{1-19}](../.vuepress/components/select/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{30-34}](../.vuepress/components/select/color.vue)
+@[code{21-34}](../.vuepress/components/select/color.vue)
 
 </template>
 
@@ -652,19 +632,19 @@ Use `label` for a persistent label, or combine it with `label-float` to place th
 
 <template #template>
 
-@[code{9-41}](../.vuepress/components/select/label.vue)
+@[code{18-31}](../.vuepress/components/select/label.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-7}](../.vuepress/components/select/label.vue)
+@[code{1-16}](../.vuepress/components/select/label.vue)
 
 </template>
 
 <template #style>
 
-@[code{43-47}](../.vuepress/components/select/label.vue)
+@[code{33-37}](../.vuepress/components/select/label.vue)
 
 </template>
 
@@ -674,7 +654,7 @@ Use `label` for a persistent label, or combine it with `label-float` to place th
 
 ## Group
 
-Group options within the select with the sub-component `s-option-group`, as the required prop is the `title` to add a title to the item group
+Use `option-groups` for grouped data. Each group has a `label` and an `options` array. The same data supports filtering and multiple selection.
 
 <template #example>
 <select-group />
@@ -682,19 +662,19 @@ Group options within the select with the sub-component `s-option-group`, as the 
 
 <template #template>
 
-@[code{1-52}](../.vuepress/components/select/group.vue)
+@[code{1-27}](../.vuepress/components/select/group.vue)
 
 </template>
 
 <template #script>
 
-@[code{54-60}](../.vuepress/components/select/group.vue)
+@[code{29-54}](../.vuepress/components/select/group.vue)
 
 </template>
 
 <template #style>
 
-@[code{62-77}](../.vuepress/components/select/group.vue)
+@[code{56-71}](../.vuepress/components/select/group.vue)
 
 </template>
 
@@ -712,19 +692,19 @@ You can add the functionality of filtering options with the `filter` property, t
 
 <template #template>
 
-@[code{1-41}](../.vuepress/components/select/filter.vue)
+@[code{1-25}](../.vuepress/components/select/filter.vue)
 
 </template>
 
 <template #script>
 
-@[code{43-49}](../.vuepress/components/select/filter.vue)
+@[code{27-52}](../.vuepress/components/select/filter.vue)
 
 </template>
 
 <template #style>
 
-@[code{51-66}](../.vuepress/components/select/filter.vue)
+@[code{54-69}](../.vuepress/components/select/filter.vue)
 
 </template>
 
@@ -748,19 +728,19 @@ The value of the select must be an array
 
 <template #template>
 
-@[code{1-54}](../.vuepress/components/select/multiple.vue)
+@[code{1-33}](../.vuepress/components/select/multiple.vue)
 
 </template>
 
 <template #script>
 
-@[code{56-62}](../.vuepress/components/select/multiple.vue)
+@[code{35-50}](../.vuepress/components/select/multiple.vue)
 
 </template>
 
 <template #style>
 
-@[code{64-72}](../.vuepress/components/select/multiple.vue)
+@[code{52-60}](../.vuepress/components/select/multiple.vue)
 
 </template>
 
@@ -778,19 +758,19 @@ Add a loading animation to the select with the `loading` property, this property
 
 <template #template>
 
-@[code{1-23}](../.vuepress/components/select/loading.vue)
+@[code{1-24}](../.vuepress/components/select/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{25-30}](../.vuepress/components/select/loading.vue)
+@[code{26-35}](../.vuepress/components/select/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{32-48}](../.vuepress/components/select/loading.vue)
+@[code{37-50}](../.vuepress/components/select/loading.vue)
 
 </template>
 
@@ -812,19 +792,19 @@ This property can be used to indicate a missing field to the user or when someth
 
 <template #template>
 
-@[code{1-20}](../.vuepress/components/select/state.vue)
+@[code{1-13}](../.vuepress/components/select/state.vue)
 
 </template>
 
 <template #script>
 
-@[code{22-47}](../.vuepress/components/select/state.vue)
+@[code{15-50}](../.vuepress/components/select/state.vue)
 
 </template>
 
 <template #style>
 
-@[code{49-55}](../.vuepress/components/select/state.vue)
+@[code{52-58}](../.vuepress/components/select/state.vue)
 
 </template>
 
@@ -842,19 +822,19 @@ Add an item below the select showing a message to the user
 
 <template #template>
 
-@[code{1-38}](../.vuepress/components/select/message.vue)
+@[code{1-17}](../.vuepress/components/select/message.vue)
 
 </template>
 
 <template #script>
 
-@[code{39-45}](../.vuepress/components/select/message.vue)
+@[code{18-33}](../.vuepress/components/select/message.vue)
 
 </template>
 
 <template #style>
 
-@[code{47-54}](../.vuepress/components/select/message.vue)
+@[code{35-42}](../.vuepress/components/select/message.vue)
 
 </template>
 

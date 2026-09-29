@@ -91,6 +91,20 @@ afterEach(() => {
 })
 
 describe('Select enhanced capabilities', () => {
+  it('uses a trailing control loader and blocks input without clearing the selection', () => {
+    const wrapper = mountSelect({
+      modelValue: 'a',
+      loading: true,
+      options: [{ value: 'a', label: 'Alpha' }],
+    })
+    expect(wrapper.find('.s-control-loading').exists()).toBe(true)
+    expect(wrapper.find('.s-select__arrow').exists()).toBe(false)
+    expect(
+      wrapper.get<HTMLInputElement>('.s-select__input').element.disabled,
+    ).toBe(true)
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    wrapper.unmount()
+  })
   it('uses placeholder as the floating label and prioritizes an explicit label', async () => {
     const wrapper = mountSelect({
       modelValue: '',

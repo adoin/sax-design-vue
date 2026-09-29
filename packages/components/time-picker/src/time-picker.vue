@@ -8,7 +8,7 @@
     :shift="{ padding: 12 }"
     :fit="true"
     :show-arrow="false"
-    :disabled="disabled"
+    :disabled="disabled || loading"
     :offset="4"
     :popper-class="[
       ns.e('popper'),
@@ -30,9 +30,10 @@
         :size="resolvedSize"
         :shape="resolvedShape"
         :disabled="disabled"
+        :loading="loading"
         :readonly="!editable || readonly"
-        :clearable="clearable && !disabled"
-        suffix-icon="cb:time"
+        :clearable="clearable && !disabled && !loading"
+        :suffix-icon="loading ? undefined : 'cb:time'"
         @update:model-value="handleInput"
         @clear="handleClear"
         @focus="(e) => $emit('focus', e)"
@@ -116,6 +117,15 @@ const themeStyle = computed(() =>
 )
 
 const visible = ref(false)
+watch(
+  () => props.loading,
+  (loading) => {
+    if (loading) {
+      visible.value = false
+      parseModel()
+    }
+  },
+)
 const inputRef = ref<InputInstance>()
 const innerValue = ref<dayjs.Dayjs>(getTimeZoneNow(resolvedTimezone.value))
 
@@ -188,15 +198,18 @@ const disabledTime = (date: Date) => {
 }
 
 const handlePick = (value: dayjs.Dayjs) => {
+  if (props.disabled || props.loading) return
   innerValue.value = value
 }
 
 const confirmPick = () => {
+  if (props.disabled || props.loading) return
   emitValue(buildOutput(innerValue.value))
   visible.value = false
 }
 
 const handleNow = () => {
+  if (props.disabled || props.loading) return
   innerValue.value = getTimeZoneNow(resolvedTimezone.value)
   if (resolvedAutoApplyNow.value !== false) {
     emitValue(buildOutput(innerValue.value))
@@ -205,12 +218,13 @@ const handleNow = () => {
 }
 
 const handleClear = () => {
+  if (props.disabled || props.loading) return
   emitValue(null)
   emit('clear')
 }
 
 const handleInput = (value: string | number | null | undefined) => {
-  if (!props.editable) return
+  if (!props.editable || props.disabled || props.loading) return
   const text = value == null ? '' : String(value)
   const parsed = parseToDayjs(text, props.format, resolvedTimezone.value)
   if (parsed?.isValid()) {

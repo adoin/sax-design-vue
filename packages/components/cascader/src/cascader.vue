@@ -8,7 +8,7 @@
     :append-to="popupConfig.appendTo"
     :offset="popupConfig.offset ?? 6"
     :fit="popupMatchesTrigger"
-    :disabled="disabled"
+    :disabled="disabled || loading"
     :popper-class="popperClass"
     :popper-style="[popupStyle, dropdownStyle, popupConfig.style]"
     :z-index="popupConfig.zIndex"
@@ -22,6 +22,7 @@
         ns.b(),
         ns.m(resolvedSize || 'default'),
         ns.is('disabled', disabled),
+        ns.is('loading', loading),
         ns.is('open', mergedOpen),
         ns.is('multiple', multiple),
         ns.is('block', block),
@@ -29,9 +30,10 @@
         ns.is(resolvedShape),
       ]"
       role="combobox"
-      :tabindex="disabled || showSearchEnabled ? -1 : 0"
+      :tabindex="disabled || loading || showSearchEnabled ? -1 : 0"
       :aria-label="label || resolvedPlaceholder"
-      :aria-disabled="disabled"
+      :aria-disabled="disabled || loading"
+      :aria-busy="loading || undefined"
       :aria-expanded="mergedOpen"
       aria-haspopup="listbox"
       @keydown="handleTriggerKeydown"
@@ -56,7 +58,7 @@
                 type="button"
                 :class="ns.e('tag-remove')"
                 :aria-label="t('vs.common.close')"
-                :disabled="disabled"
+                :disabled="disabled || loading"
                 @click.stop="removeTag(item.node)"
               >
                 <IconClose :scale="0.8" size="12" />
@@ -96,7 +98,7 @@
           :class="ns.e('search-input')"
           type="text"
           autocomplete="off"
-          :disabled="disabled"
+          :disabled="disabled || loading"
           :placeholder="
             showPlaceholder && !hasFloatingLabel ? resolvedPlaceholder : ''
           "
@@ -132,10 +134,9 @@
         <slot name="clear-icon"><IconClose :size="14" /></slot>
       </button>
       <span v-else :class="ns.e('suffix')" aria-hidden="true">
-        <slot name="suffix-icon">
-          <IconLoading v-if="loading" :class="ns.e('loading')" />
+        <IconControlLoading v-if="loading" :class="ns.e('loading')" />
+        <slot v-else name="suffix-icon">
           <SIcon
-            v-else
             :class="ns.is('rotated', mergedOpen)"
             name="cb:chevron-down"
             size="15"
@@ -203,7 +204,11 @@
 
 <script setup lang="ts">
 import { computed, nextTick, shallowRef, useTemplateRef, watch } from 'vue'
-import { IconClose, IconLoading, SIcon } from '@vuesax-alpha/components/icon'
+import {
+  IconClose,
+  IconControlLoading,
+  SIcon,
+} from '@vuesax-alpha/components/icon'
 import { useResizeObserver } from '@vueuse/core'
 import SPopper from '@vuesax-alpha/components/popper'
 import { useLocale, useNamespace, useShape, useSize } from '@vuesax-alpha/hooks'
@@ -264,7 +269,9 @@ const searchConfig = computed(() =>
   typeof props.showSearch === 'object' ? props.showSearch : {},
 )
 const searchText = computed(() => props.searchValue ?? internalSearch.value)
-const mergedOpen = computed(() => props.open ?? internalOpen.value)
+const mergedOpen = computed(
+  () => !props.loading && (props.open ?? internalOpen.value),
+)
 const popupConfig = computed(() => props.popupConfig)
 const popperClass = computed(() =>
   [
@@ -465,6 +472,7 @@ const showPlaceholder = computed(
 const showClear = computed(
   () =>
     !props.disabled &&
+    !props.loading &&
     (props.allowClear || props.clearable) &&
     (selectedCount.value > 0 || Boolean(searchText.value)),
 )
@@ -512,7 +520,7 @@ const searchResults = computed(() => {
 })
 
 const setOpen = (value: boolean) => {
-  if (props.disabled) return
+  if (value && (props.disabled || props.loading)) return
   if (props.open === undefined) internalOpen.value = value
   emit('update:open', value)
   emit('dropdownVisibleChange', value)
@@ -527,7 +535,14 @@ const setOpen = (value: boolean) => {
     })
   }
 }
+watch(
+  () => props.loading,
+  (loading) => {
+    if (loading) setOpen(false)
+  },
+)
 const setSearch = (value: string) => {
+  if (props.disabled || props.loading) return
   if (props.searchValue === undefined) internalSearch.value = value
   emit('update:searchValue', value)
   emit('search', value)
@@ -591,6 +606,7 @@ const commitMultipleLeaves = (leaves: CascaderNode[]) => {
   emit('change', value, selectedOptions)
 }
 const toggleMultipleNode = (node: CascaderNode) => {
+  if (props.disabled || props.loading) return
   const affected = selectableLeafNodes(node)
   if (!affected.length) return
   const selected = new Map(
@@ -607,6 +623,7 @@ const toggleMultipleNode = (node: CascaderNode) => {
   commitMultipleLeaves([...selected.values()])
 }
 const selectNode = (node: CascaderNode) => {
+  if (props.disabled || props.loading) return
   if (node.disabled) return
   if (props.multiple) {
     toggleMultipleNode(node)
@@ -619,6 +636,7 @@ const selectNode = (node: CascaderNode) => {
   commitSingle(node)
 }
 const removeTag = (node: CascaderNode) => {
+  if (props.disabled || props.loading) return
   const removeKeys = new Set(
     selectableLeafNodes(node).map((item) => pathKey(item.pathValues)),
   )
@@ -630,6 +648,7 @@ const removeTag = (node: CascaderNode) => {
   emit('removeTag', node.pathValues)
 }
 const clear = () => {
+  if (props.disabled || props.loading) return
   activePath.value = []
   setSearch('')
   const value: CascaderModelValue = []
@@ -639,7 +658,7 @@ const clear = () => {
 }
 
 const handleTriggerKeydown = (event: KeyboardEvent) => {
-  if (props.disabled) return
+  if (props.disabled || props.loading) return
   const searching =
     event.target instanceof HTMLInputElement &&
     Boolean(searchText.value) &&

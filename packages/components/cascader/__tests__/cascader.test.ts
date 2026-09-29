@@ -47,6 +47,22 @@ const options = [
 ]
 
 describe('Cascader', () => {
+  it('prioritizes loading over clear/custom suffix and closes the popup', async () => {
+    const wrapper = mountCascader({
+      options,
+      modelValue: ['zhejiang', 'hangzhou'],
+      clearable: true,
+    })
+    await wrapper.setProps({ loading: true })
+    expect(wrapper.find('.s-control-loading').exists()).toBe(true)
+    expect(wrapper.find('.s-cascader__clear').exists()).toBe(false)
+    expect(wrapper.getComponent(PopperStub).props('visible')).toBe(false)
+    expect(wrapper.get('[role="combobox"]').attributes('aria-busy')).toBe(
+      'true',
+    )
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    wrapper.unmount()
+  })
   it('matches Select label-float behavior across empty, open, and selected states', async () => {
     const wrapper = mountCascader({
       defaultOpen: false,

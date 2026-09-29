@@ -26,6 +26,7 @@ const InputStub = defineComponent({
   inheritAttrs: false,
   props: {
     modelValue: [String, Number],
+    loading: Boolean,
     label: String,
     labelFloat: Boolean,
     color: String,
@@ -82,6 +83,27 @@ const mountPicker = (props = {}) =>
   })
 
 describe('DatePicker input presentation', () => {
+  it('forwards loading to both range inputs and ignores date selection while loading', async () => {
+    const wrapper = mountPicker({
+      type: 'daterange',
+      loading: true,
+      modelValue: ['2026-09-01', '2026-09-10'],
+    })
+    expect(
+      wrapper
+        .findAllComponents(InputStub)
+        .map((input) => input.props('loading')),
+    ).toEqual([true, true])
+    expect(wrapper.findComponent(DatePickerAction).exists()).toBe(false)
+    wrapper.getComponent(DatePanelStub).vm.$emit('pick', dayjs('2026-10-10'))
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    await wrapper.setProps({ loading: false })
+    expect(wrapper.getComponent(InputStub).props('modelValue')).toBe(
+      '2026-09-01',
+    )
+    wrapper.unmount()
+  })
   it('removes one multiple date and clears through the single suffix action', async () => {
     const wrapper = mountPicker({
       multiple: true,

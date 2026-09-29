@@ -1,6 +1,11 @@
 ---
 description: 'Choose a time from a predefined or generated list.'
 PROPS:
+  - name: loading
+    type: boolean
+    description: Show the shared trailing loader, preserve the value, and block editing, clearing, and popup interaction.
+    default: false
+    usage: '#loading'
   - name: size
     type: ComponentSize
     values: 'small | default | large'
@@ -252,6 +257,36 @@ whether TimeSelect is disabled
 <template #script>
 
 @[code{14-18}](../.vuepress/components/time-select/disabled.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Loading
+
+Set `loading` while options or values are being loaded. The trailing indicator matches Input and Select; current values stay visible and interaction resumes when loading ends.
+
+<template #example>
+<time-select-loading />
+</template>
+
+<template #template>
+
+@[code{1-13}](../.vuepress/components/time-select/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{15-19}](../.vuepress/components/time-select/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{21-34}](../.vuepress/components/time-select/loading.vue)
 
 </template>
 

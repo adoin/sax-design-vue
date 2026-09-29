@@ -148,7 +148,7 @@ PROPS:
   - name: loading
     type: Boolean
     values: 'true, false'
-    description: 是否处于加载状态，并显示加载动画。
+    description: 在尾部显示统一加载图标，保留当前值并禁用编辑、清除和弹层操作。
     default: false
     link: null
     usage: '#loading'
@@ -446,34 +446,14 @@ SLOTS:
     usage: '#message'
     code: >
       <s-select
-        placeholder="Success"
+        placeholder="成功"
         v-model="value"
+        :options="[{ label: 'Sax Design', value: '1' }, { label: 'Vue', value: '2' }]"
       >
         <template #message-success>
-          Option Valid
+          选项有效
         </template>
-        <s-option label="Sax Design" value="1">
-          Sax Design
-        </s-option>
-        <s-option label="Vue" value="2">
-          Vue
-        </s-option>
-        <s-option label="Javascript" value="3">
-          Javascript
-        </s-option>
-        <s-option label="Sass" value="4">
-          Sass
-        </s-option>
-        <s-option label="Typescript" value="5">
-          Typescript
-        </s-option>
-        <s-option label="Webpack" value="6">
-          Webpack
-        </s-option>
-        <s-option label="Nodejs" value="7">
-          Nodejs
-        </s-option>
-      </s-select>
+        </s-select>
   - name: option
     type: Slot
     scope: "{ option: SelectDataOption; group?: SelectDataOption }"
@@ -490,7 +470,7 @@ SLOTS:
 
 <docs-warn />
 
-使用 `s-select` 与 `s-option` 子组件创建选择器。
+优先通过 `options` 提供选项数据；每项包含 `label`、`value`，可设置 `disabled` 禁用选项。需要自定义选项内容时再使用插槽。
 
 <template #example>
 <select-default />
@@ -579,18 +559,18 @@ SLOTS:
 通过 `color` 设置组件颜色，支持主题色、**RGB**、**HEX**。
 
 <template #example>
-<select-color />
+<select-zh-color />
 </template>
 
 <template #template>
 
-@[code{1-28}](../../.vuepress/components/select/color.vue)
+@[code{1-19}](../../.vuepress/components/select-zh/color.vue)
 
 </template>
 
 <template #script>
 
-@[code{30-34}](../../.vuepress/components/select/color.vue)
+@[code{21-34}](../../.vuepress/components/select-zh/color.vue)
 
 </template>
 
@@ -608,19 +588,19 @@ SLOTS:
 
 <template #template>
 
-@[code{9-41}](../../.vuepress/components/select-zh/label.vue)
+@[code{18-31}](../../.vuepress/components/select-zh/label.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-7}](../../.vuepress/components/select-zh/label.vue)
+@[code{1-16}](../../.vuepress/components/select-zh/label.vue)
 
 </template>
 
 <template #style>
 
-@[code{43-47}](../../.vuepress/components/select-zh/label.vue)
+@[code{33-37}](../../.vuepress/components/select-zh/label.vue)
 
 </template>
 
@@ -630,27 +610,27 @@ SLOTS:
 
 ## 分组
 
-通过 `s-option-group` 子组件对选项分组；使用必填的 `title` 为分组添加标题。
+通过 `option-groups` 提供分组数据，每组包含 `label` 和 `options` 数组；同一份数据可用于筛选和多选。
 
 <template #example>
-<select-group />
+<select-zh-group />
 </template>
 
 <template #template>
 
-@[code{1-52}](../../.vuepress/components/select/group.vue)
+@[code{1-27}](../../.vuepress/components/select-zh/group.vue)
 
 </template>
 
 <template #script>
 
-@[code{54-60}](../../.vuepress/components/select/group.vue)
+@[code{29-54}](../../.vuepress/components/select-zh/group.vue)
 
 </template>
 
 <template #style>
 
-@[code{62-77}](../../.vuepress/components/select/group.vue)
+@[code{56-71}](../../.vuepress/components/select-zh/group.vue)
 
 </template>
 
@@ -663,24 +643,24 @@ SLOTS:
 添加布尔属性 `filter`，即可启用选项筛选。
 
 <template #example>
-<select-filter />
+<select-zh-filter />
 </template>
 
 <template #template>
 
-@[code{1-41}](../../.vuepress/components/select/filter.vue)
+@[code{1-25}](../../.vuepress/components/select-zh/filter.vue)
 
 </template>
 
 <template #script>
 
-@[code{43-49}](../../.vuepress/components/select/filter.vue)
+@[code{27-52}](../../.vuepress/components/select-zh/filter.vue)
 
 </template>
 
 <template #style>
 
-@[code{51-66}](../../.vuepress/components/select/filter.vue)
+@[code{54-69}](../../.vuepress/components/select-zh/filter.vue)
 
 </template>
 
@@ -699,24 +679,24 @@ SLOTS:
 :::
 
 <template #example>
-<select-multiple />
+<select-zh-multiple />
 </template>
 
 <template #template>
 
-@[code{1-54}](../../.vuepress/components/select/multiple.vue)
+@[code{1-33}](../../.vuepress/components/select-zh/multiple.vue)
 
 </template>
 
 <template #script>
 
-@[code{56-62}](../../.vuepress/components/select/multiple.vue)
+@[code{35-50}](../../.vuepress/components/select-zh/multiple.vue)
 
 </template>
 
 <template #style>
 
-@[code{64-72}](../../.vuepress/components/select/multiple.vue)
+@[code{52-60}](../../.vuepress/components/select-zh/multiple.vue)
 
 </template>
 
@@ -729,24 +709,24 @@ SLOTS:
 添加布尔属性 `loading`，即可为选择器显示加载动画。
 
 <template #example>
-<select-loading />
+<select-zh-loading />
 </template>
 
 <template #template>
 
-@[code{1-23}](../../.vuepress/components/select/loading.vue)
+@[code{1-24}](../../.vuepress/components/select-zh/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{25-30}](../../.vuepress/components/select/loading.vue)
+@[code{26-35}](../../.vuepress/components/select-zh/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{32-48}](../../.vuepress/components/select/loading.vue)
+@[code{37-50}](../../.vuepress/components/select-zh/loading.vue)
 
 </template>
 
@@ -763,24 +743,24 @@ SLOTS:
 :::
 
 <template #example>
-<select-state />
+<select-zh-state />
 </template>
 
 <template #template>
 
-@[code{1-20}](../../.vuepress/components/select/state.vue)
+@[code{1-13}](../../.vuepress/components/select-zh/state.vue)
 
 </template>
 
 <template #script>
 
-@[code{22-47}](../../.vuepress/components/select/state.vue)
+@[code{15-50}](../../.vuepress/components/select-zh/state.vue)
 
 </template>
 
 <template #style>
 
-@[code{49-55}](../../.vuepress/components/select/state.vue)
+@[code{52-58}](../../.vuepress/components/select-zh/state.vue)
 
 </template>
 
@@ -793,24 +773,24 @@ SLOTS:
 在选择器下方添加提示信息。
 
 <template #example>
-<select-message />
+<select-zh-message />
 </template>
 
 <template #template>
 
-@[code{1-38}](../../.vuepress/components/select/message.vue)
+@[code{1-15}](../../.vuepress/components/select-zh/message.vue)
 
 </template>
 
 <template #script>
 
-@[code{39-45}](../../.vuepress/components/select/message.vue)
+@[code{16-31}](../../.vuepress/components/select-zh/message.vue)
 
 </template>
 
 <template #style>
 
-@[code{47-54}](../../.vuepress/components/select/message.vue)
+@[code{33-40}](../../.vuepress/components/select-zh/message.vue)
 
 </template>
 

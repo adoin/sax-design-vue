@@ -1,6 +1,11 @@
 ---
 description: 'Select dates, date ranges, and date-time values.'
 PROPS:
+  - name: loading
+    type: boolean
+    description: Show the shared trailing loader, preserve the value, and block editing, clearing, and popup interaction.
+    default: false
+    usage: '#loading'
   - name: shape
     type: String
     values: "rounded | square"
@@ -638,6 +643,36 @@ Week selects an entire row. Hover or focus previews the row; Up/Down moves focus
 <template #script>
 
 @[code{16-20}](../.vuepress/components/date-picker/week-rules.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Loading
+
+Set `loading` while options or values are being loaded. The trailing indicator matches Input and Select; current values stay visible and interaction resumes when loading ends.
+
+<template #example>
+<date-picker-loading />
+</template>
+
+<template #template>
+
+@[code{1-23}](../.vuepress/components/date-picker/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{25-30}](../.vuepress/components/date-picker/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{32-45}](../.vuepress/components/date-picker/loading.vue)
 
 </template>
 

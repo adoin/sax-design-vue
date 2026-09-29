@@ -129,9 +129,9 @@ PROPS:
   - name: loading
     type: "Boolean"
     values: "true | false"
-    description: "显示触发器加载反馈，阻止交互并关闭弹层。"
+    description: 在尾部显示统一加载图标，保留当前值并禁用编辑、清除和弹层操作。
     default: false
-    usage: "#tree-data"
+    usage: '#loading'
   - name: block
     type: "Boolean"
     values: "true | false"
@@ -563,6 +563,36 @@ description: '从普通、虚拟滚动或树形 Table 中选择一行数据。'
 <template #style>
 
 @[code{90-129}](../../.vuepress/components/table-select/custom-render.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 加载
+
+通过 `loading` 表示正在加载数据；尾部图标与 Input、Select 一致，当前值保持可见，加载结束后恢复交互。
+
+<template #example>
+<table-select-zh-loading />
+</template>
+
+<template #template>
+
+@[code{1-26}](../../.vuepress/components/table-select-zh/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{28-39}](../../.vuepress/components/table-select-zh/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{41-54}](../../.vuepress/components/table-select-zh/loading.vue)
 
 </template>
 

@@ -4,6 +4,17 @@ import { describe, expect, it } from 'vitest'
 import Input from '../src/input.vue'
 
 describe('Input native validation', () => {
+  it('preserves the value and disables the native input while loading', () => {
+    const wrapper = mount(Input, {
+      props: { loading: true, modelValue: 'Keep me', clearable: true },
+    })
+    expect(wrapper.get('input').element.value).toBe('Keep me')
+    expect(wrapper.get('input').element.disabled).toBe(true)
+    expect(wrapper.get('input').attributes('aria-busy')).toBe('true')
+    expect(wrapper.find('.s-control-loading').exists()).toBe(true)
+    expect(wrapper.find('.s-input__clearable').exists()).toBe(false)
+    wrapper.unmount()
+  })
   it('keeps untouched inputs neutral and preserves explicit states', async () => {
     const wrapper = mount(Input, { props: { modelValue: 'hello' } })
     expect(wrapper.classes()).not.toContain('s-input--state-danger')

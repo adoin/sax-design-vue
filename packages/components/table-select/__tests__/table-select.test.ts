@@ -61,6 +61,19 @@ const mountTableSelect = (
   })
 
 describe('TableSelect', () => {
+  it('shows the shared loader and blocks popup opening without dropping its value', async () => {
+    const wrapper = mountTableSelect({
+      modelValue: 'alpha',
+      loading: true,
+      clearable: true,
+    })
+    expect(wrapper.find('.s-control-loading').exists()).toBe(true)
+    expect(wrapper.find('.s-table-select__clear').exists()).toBe(false)
+    await wrapper.get('.popper-trigger-stub').trigger('click')
+    expect(wrapper.getComponent(PopperStub).props('visible')).toBe(false)
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    wrapper.unmount()
+  })
   it('exposes safe pre-mount methods and forwards tree, scrolling and measurement after opening', async () => {
     const parent = {
       id: 'root',

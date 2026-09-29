@@ -5,6 +5,7 @@ import Arrow from './src/arrow.vue'
 import Check from './src/check.vue'
 import Close from './src/close.vue'
 import Loading from './src/loading.vue'
+import ControlLoading from './src/control-loading.vue'
 import LogoLoading from './src/logo-loading.vue'
 import Plus from './src/plus.vue'
 import Star from './src/star.vue'
@@ -17,6 +18,7 @@ export const IconArrow = withInstall(Arrow)
 export const IconCheck = withInstall(Check)
 export const IconClose = withInstall(Close)
 export const IconLoading = withInstall(Loading)
+export const IconControlLoading = withInstall(ControlLoading)
 export const SLogoLoading = withInstall(LogoLoading)
 export const IconPlus = withInstall(Plus)
 export const IconStar = withInstall(Star)

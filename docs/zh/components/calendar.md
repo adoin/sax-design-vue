@@ -274,19 +274,19 @@ Calendar 只渲染扁平 `CalendarEvent[]`，业务侧可保留任意日程数�
 
 <template #template>
 
-@[code{1-139}](../../.vuepress/components/calendar/schedule-adapter.vue)
+@[code{1-140}](../../.vuepress/components/calendar/schedule-adapter.vue)
 
 </template>
 
 <template #script>
 
-@[code{141-785}](../../.vuepress/components/calendar/schedule-adapter.vue)
+@[code{142-786}](../../.vuepress/components/calendar/schedule-adapter.vue)
 
 </template>
 
 <template #style>
 
-@[code{787-852}](../../.vuepress/components/calendar/schedule-adapter.vue)
+@[code{788-853}](../../.vuepress/components/calendar/schedule-adapter.vue)
 
 </template>
 

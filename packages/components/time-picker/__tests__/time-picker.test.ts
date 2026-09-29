@@ -8,6 +8,7 @@ const InputStub = defineComponent({
   inheritAttrs: false,
   props: {
     modelValue: [String, Number],
+    loading: Boolean,
     label: String,
     labelFloat: Boolean,
     color: String,
@@ -48,6 +49,22 @@ const mountPicker = (props = {}) =>
   })
 
 describe('TimePicker input presentation', () => {
+  it('forwards loading and prevents confirmation and clearing during loading', async () => {
+    const wrapper = mountPicker({
+      loading: true,
+      modelValue: '12:00:00',
+      valueFormat: 'HH:mm:ss',
+    })
+    expect(wrapper.getComponent(InputStub).props('loading')).toBe(true)
+    expect(wrapper.getComponent(InputStub).props('suffixIcon')).toBeUndefined()
+    for (const button of wrapper.findAllComponents(ButtonStub))
+      button.vm.$emit('click')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    await wrapper.setProps({ loading: false })
+    expect(wrapper.getComponent(InputStub).props('modelValue')).toBe('12:00:00')
+    wrapper.unmount()
+  })
   it('shares floating label, color, and size with its trigger and panel', () => {
     const wrapper = mountPicker({
       label: 'Start time',

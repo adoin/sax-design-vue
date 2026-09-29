@@ -40,23 +40,23 @@ Control Group 通过不占布局空间的轻量拼图接缝，将相关控件拼
 
 需要先选择前缀、再输入内容时，可将 Select 与 Input 连续组合。下例 Select 使用 `span="8"`，未声明的 Input 自动占据剩余 16 栅格。
 
-<template #example><control-group-basic /></template>
+<template #example><control-group-zh-basic /></template>
 
 <template #template>
 
-@[code{8-21}](../../.vuepress/components/control-group/basic.vue)
+@[code{12-22}](../../.vuepress/components/control-group-zh/basic.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-6}](../../.vuepress/components/control-group/basic.vue)
+@[code{1-10}](../../.vuepress/components/control-group-zh/basic.vue)
 
 </template>
 
 <template #style>
 
-@[code{23-36}](../../.vuepress/components/control-group/basic.vue)
+@[code{24-37}](../../.vuepress/components/control-group-zh/basic.vue)
 
 </template>
 
@@ -96,23 +96,23 @@ Control Group 通过不占布局空间的轻量拼图接缝，将相关控件拼
 
 多个控件连续拼接时，可混合 Select、Input、Cascader、Date Picker 与 Time Picker，并为固定宽度的子控件设置 `span`。第一行已声明的栅格为 4、4、7、4，中间未声明的 Input 自动占用剩余 5 栅格；第二行展示日期、时间与普通输入的连续拼接。
 
-<template #example><control-group-spans /></template>
+<template #example><control-group-zh-spans /></template>
 
 <template #template>
 
-@[code{37-84}](../../.vuepress/components/control-group/spans.vue)
+@[code{49-87}](../../.vuepress/components/control-group-zh/spans.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-35}](../../.vuepress/components/control-group/spans.vue)
+@[code{1-47}](../../.vuepress/components/control-group-zh/spans.vue)
 
 </template>
 
 <template #style>
 
-@[code{86-99}](../../.vuepress/components/control-group/spans.vue)
+@[code{89-102}](../../.vuepress/components/control-group-zh/spans.vue)
 
 </template>
 
@@ -124,23 +124,23 @@ Control Group 通过不占布局空间的轻量拼图接缝，将相关控件拼
 
 使用 `block` 让连续控件占满容器。
 
-<template #example><control-group-block /></template>
+<template #example><control-group-zh-block /></template>
 
 <template #template>
 
-@[code{8-21}](../../.vuepress/components/control-group/block.vue)
+@[code{12-22}](../../.vuepress/components/control-group-zh/block.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-6}](../../.vuepress/components/control-group/block.vue)
+@[code{1-10}](../../.vuepress/components/control-group-zh/block.vue)
 
 </template>
 
 <template #style>
 
-@[code{23-36}](../../.vuepress/components/control-group/block.vue)
+@[code{24-37}](../../.vuepress/components/control-group-zh/block.vue)
 
 </template>
 

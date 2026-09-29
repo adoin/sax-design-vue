@@ -7,6 +7,7 @@ const SelectStub = defineComponent({
   name: 'SSelect',
   props: {
     modelValue: String,
+    loading: Boolean,
     label: String,
     labelFloat: Boolean,
     placeholder: String,
@@ -17,6 +18,14 @@ const SelectStub = defineComponent({
 })
 
 describe('TimeSelect input presentation', () => {
+  it('inherits the Select loading state', () => {
+    const wrapper = mount(TimeSelect, {
+      props: { loading: true, modelValue: '10:00' },
+      global: { stubs: { SSelect: SelectStub, SOption: true } },
+    })
+    expect(wrapper.getComponent(SelectStub).props('loading')).toBe(true)
+    wrapper.unmount()
+  })
   it('passes persistent and floating label props to Select', () => {
     const wrapper = mount(TimeSelect, {
       props: {

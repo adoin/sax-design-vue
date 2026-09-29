@@ -36,6 +36,7 @@
       v-click-outside:[popperPaneRef]="handleClose"
       :class="selectKls"
       :style="selectStyle"
+      :aria-busy="loading || undefined"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
       @click="toggleMenu"
@@ -203,9 +204,9 @@
         {{ states.currentPlaceholder }}
       </span>
 
-      <icon-loading v-if="loading" class="vs-select__loading" />
+      <icon-control-loading v-if="loading" :class="ns.e('loading')" />
 
-      <span :class="ns.e('arrow')" aria-hidden="true">
+      <span v-if="!loading" :class="ns.e('arrow')" aria-hidden="true">
         <s-icon name="cb:chevron-down" size="14" />
       </span>
 
@@ -478,7 +479,10 @@ import { toRefs, unrefElement, useResizeObserver } from '@vueuse/core'
 import { isEqual } from 'lodash-unified'
 import { ClickOutside as vClickOutside } from '@vuesax-alpha/directives'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
-import SIcon, { IconClose, IconLoading } from '@vuesax-alpha/components/icon'
+import SIcon, {
+  IconClose,
+  IconControlLoading,
+} from '@vuesax-alpha/components/icon'
 import SCollapseTransition from '@vuesax-alpha/components/collapse-transition'
 import SScrollbar from '@vuesax-alpha/components/scrollbar'
 import SVirtualList from '@vuesax-alpha/components/virtual-list'
@@ -1171,7 +1175,7 @@ const selectKls = computed(() => [
   ns.is('open', dropMenuVisible.value),
   ns.is('hovering', states.mouseEnter),
   ns.is('focus', states.softFocus),
-  ns.is('disabled', selectDisabled.value),
+  ns.is('disabled', props.disabled),
   ns.is('clearable', props.clearable),
   ns.is('multiple', props.multiple),
   ns.is('loading', props.loading),

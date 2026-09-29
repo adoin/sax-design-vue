@@ -166,8 +166,8 @@ PROPS:
   - name: loading
     type: Boolean
     values: "Boolean"
-    description: Add a loading animation to the input.
-    default: null
+    description: Show the shared trailing loader, preserve the value, and block editing, clearing, and popup interaction.
+    default: false
     link: null
     usage: '#loading'
     code: >
@@ -798,13 +798,19 @@ Add a loading animation to the input with the `loading` property, the property i
 
 <template #template>
 
-@[code{1-5}](../.vuepress/components/input/loading.vue)
+@[code{1-14}](../.vuepress/components/input/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{7-11}](../.vuepress/components/input/loading.vue)
+@[code{16-20}](../.vuepress/components/input/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-35}](../.vuepress/components/input/loading.vue)
 
 </template>
 

@@ -223,9 +223,6 @@ $clearableSafeArea: 64px;
 
   @include when(loading) {
     pointer-events: none;
-    *:not(.#{$namespace}-select__loading):not(.#{$namespace}-select__label) {
-      opacity: 0.6;
-    }
     .#{$namespace}-select__label {
       pointer-events: none !important;
     }
@@ -648,12 +645,14 @@ $clearableSafeArea: 64px;
     position: absolute;
     width: 20px;
     height: 20px;
-    right: 7px;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     left: auto;
     pointer-events: none;
     border-radius: var(--sax-radius-circle);
     box-sizing: border-box;
-    background: inherit;
+    background: transparent;
     cursor: default;
     z-index: 600;
 

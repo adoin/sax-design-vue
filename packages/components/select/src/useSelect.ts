@@ -89,7 +89,7 @@ export const useSelect = (
     () => !filterable.value || props.multiple || !states.visible,
   )
 
-  const selectDisabled = computed(() => props.disabled)
+  const selectDisabled = computed(() => props.disabled || props.loading)
   watch(
     selectDisabled,
     (disabled) => {

@@ -1,6 +1,11 @@
 ---
 description: 'Select a time value with an editable input and time columns.'
 PROPS:
+  - name: loading
+    type: boolean
+    description: Show the shared trailing loader, preserve the value, and block editing, clearing, and popup interaction.
+    default: false
+    usage: '#loading'
   - name: shape
     type: String
     values: 'rounded | square'
@@ -243,6 +248,36 @@ Use `shape="square"` to apply square geometry to both the input trigger and tele
 <template #style>
 
 @[code{25-37}](../.vuepress/components/time-picker/shape.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Loading
+
+Set `loading` while options or values are being loaded. The trailing indicator matches Input and Select; current values stay visible and interaction resumes when loading ends.
+
+<template #example>
+<time-picker-loading />
+</template>
+
+<template #template>
+
+@[code{1-14}](../.vuepress/components/time-picker/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{16-20}](../.vuepress/components/time-picker/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{22-35}](../.vuepress/components/time-picker/loading.vue)
 
 </template>
 

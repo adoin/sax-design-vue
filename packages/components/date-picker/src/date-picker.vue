@@ -9,7 +9,7 @@
     :flip="{ padding: 12 }"
     :shift="{ padding: 12 }"
     :show-arrow="false"
-    :disabled="disabled"
+    :disabled="disabled || loading"
     :offset="8"
     :teleported="props.popupConfig?.transfer ?? true"
     :z-index="props.popupConfig?.zIndex"
@@ -55,13 +55,15 @@
           :size="resolvedSize"
           :shape="resolvedShape"
           :disabled="disabled"
+          :loading="loading"
           :readonly="isMultiple || !editable || readonly"
           :aria-label="t('vs.datepicker.startDate')"
           :suffix-icon="undefined"
           @update:model-value="handleRangeInput('start', $event)"
           @focus="(e) => $emit('focus', e)"
           @blur="(e) => $emit('blur', e)"
-          ><template #suffix><DatePickerAction :clear="false" /></template
+          ><template #suffix
+            ><DatePickerAction v-if="!loading" :clear="false" /></template
         ></s-input>
         <span :class="ns.e('range-separator')" aria-hidden="true">
           {{ rangeSeparator }}
@@ -76,6 +78,7 @@
           :size="resolvedSize"
           :shape="resolvedShape"
           :disabled="disabled"
+          :loading="loading"
           :readonly="isMultiple || !editable || readonly"
           :clearable="false"
           :aria-label="t('vs.datepicker.endDate')"
@@ -86,6 +89,7 @@
           @blur="(e) => $emit('blur', e)"
           ><template #suffix
             ><DatePickerAction
+              v-if="!loading"
               :clear="canClear && (triggerHovered || triggerFocused)"
               @clear="handleClear" /></template
         ></s-input>
@@ -103,6 +107,7 @@
         :size="resolvedSize"
         :shape="resolvedShape"
         :disabled="disabled"
+        :loading="loading"
         :readonly="isMultiple || !editable || readonly"
         :clearable="false"
         :suffix-icon="undefined"
@@ -116,13 +121,14 @@
             :labels="
               innerDates.map((date) => formatDisplay(date, displayFormat))
             "
-            :disabled="disabled || readonly"
+            :disabled="disabled || loading || readonly"
             :shape="resolvedShape"
             @remove="removeDateTag"
           />
         </template>
         <template #suffix
           ><DatePickerAction
+            v-if="!loading"
             :clear="canClear && (triggerHovered || triggerFocused)"
             @clear="handleClear"
         /></template>
@@ -481,6 +487,15 @@ const currentDate = computed(() => getTimeZoneNow(resolvedTimezone.value))
 
 const popperAnimation = computed(() => `${ns.b()}-fade`)
 const visible = ref(false)
+watch(
+  () => props.loading,
+  (loading) => {
+    if (loading) {
+      visible.value = false
+      parseModel()
+    }
+  },
+)
 const popperRef = ref<PopperInstance>()
 const inputRef = ref<InputInstance>()
 const rangeStartInputRef = ref<InputInstance>()
@@ -711,11 +726,12 @@ const canClear = computed(
   () =>
     props.clearable &&
     !props.disabled &&
+    !props.loading &&
     !props.readonly &&
     Boolean(innerDate.value || innerEndDate.value || innerDates.value.length),
 )
 const removeDateTag = (index: number) => {
-  if (props.disabled || props.readonly) return
+  if (props.disabled || props.loading || props.readonly) return
   innerDates.value.splice(index, 1)
   innerDate.value = innerDates.value[0] ?? null
   emitValue(buildMultipleOutput())
@@ -757,6 +773,7 @@ const rangeStartTimeText = computed(() => innerTime.value.format('HH:mm:ss'))
 const rangeEndTimeText = computed(() => innerEndTime.value.format('HH:mm:ss'))
 
 const emitValue = (value: DatePickerValue) => {
+  if (props.disabled || props.loading) return
   emit(UPDATE_MODEL_EVENT, value)
   emit('change', value)
 }
@@ -817,6 +834,7 @@ const isSamePickedValue = (left: dayjs.Dayjs, right: dayjs.Dayjs) => {
 }
 
 const handlePick = (date: dayjs.Dayjs) => {
+  if (props.disabled || props.loading) return
   let picked = date
 
   if (showTimePanel.value) {
@@ -998,6 +1016,7 @@ const handleNow = () => {
 }
 
 const handleClear = () => {
+  if (props.disabled || props.loading) return
   innerDate.value = null
   innerEndDate.value = null
   innerDates.value = []

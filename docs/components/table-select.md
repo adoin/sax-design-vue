@@ -129,9 +129,9 @@ PROPS:
   - name: loading
     type: "Boolean"
     values: "true | false"
-    description: "Show trigger loading feedback, block interaction and close the popup."
+    description: Show the shared trailing loader, preserve the value, and block editing, clearing, and popup interaction.
     default: false
-    usage: "#tree-data"
+    usage: '#loading'
   - name: block
     type: "Boolean"
     values: "true | false"
@@ -563,6 +563,36 @@ Use `columns.slots.default` or `columns.slots.header` to assign custom column sl
 <template #style>
 
 @[code{90-129}](../.vuepress/components/table-select/custom-render.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Loading
+
+Set `loading` while options or values are being loaded. The trailing indicator matches Input and Select; current values stay visible and interaction resumes when loading ends.
+
+<template #example>
+<table-select-loading />
+</template>
+
+<template #template>
+
+@[code{1-26}](../.vuepress/components/table-select/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{28-43}](../.vuepress/components/table-select/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{45-58}](../.vuepress/components/table-select/loading.vue)
 
 </template>
 

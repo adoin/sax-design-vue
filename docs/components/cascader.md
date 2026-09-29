@@ -106,8 +106,9 @@ PROPS:
   - name: loading
     type: Boolean
     values: "true | false"
-    description: Control clearing, disabled/loading states, and full-width layout. clearable remains an alias.
+    description: Show the shared trailing loader, preserve the value, and block editing, clearing, and popup interaction.
     default: false
+    usage: '#loading'
   - name: block
     type: Boolean
     values: "true | false"
@@ -466,6 +467,36 @@ A single-level menu is at least as wide as its trigger. When options can expand,
 <template #style>
 
 @[code{41-49}](../.vuepress/components/cascader/popup.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Loading
+
+Set `loading` while options or values are being loaded. The trailing indicator matches Input and Select; current values stay visible and interaction resumes when loading ends.
+
+<template #example>
+<cascader-loading />
+</template>
+
+<template #template>
+
+@[code{1-14}](../.vuepress/components/cascader/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{16-27}](../.vuepress/components/cascader/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{29-42}](../.vuepress/components/cascader/loading.vue)
 
 </template>
 

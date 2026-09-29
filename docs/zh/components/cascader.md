@@ -110,8 +110,9 @@ PROPS:
   - name: loading
     type: Boolean
     values: "true | false"
-    description: 控制清空、禁用、加载状态和整行宽度。clearable 保留为兼容别名。
+    description: 在尾部显示统一加载图标，保留当前值并禁用编辑、清除和弹层操作。
     default: false
+    usage: '#loading'
   - name: block
     type: Boolean
     values: "true | false"
@@ -473,6 +474,36 @@ SLOTS:
 <template #style>
 
 @[code{41-49}](../../.vuepress/components/cascader/popup.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 加载
+
+通过 `loading` 表示正在加载数据；尾部图标与 Input、Select 一致，当前值保持可见，加载结束后恢复交互。
+
+<template #example>
+<cascader-zh-loading />
+</template>
+
+<template #template>
+
+@[code{1-14}](../../.vuepress/components/cascader-zh/loading.vue)
+
+</template>
+
+<template #script>
+
+@[code{16-27}](../../.vuepress/components/cascader-zh/loading.vue)
+
+</template>
+
+<template #style>
+
+@[code{29-42}](../../.vuepress/components/cascader-zh/loading.vue)
 
 </template>
 

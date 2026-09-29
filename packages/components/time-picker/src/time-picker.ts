@@ -37,6 +37,7 @@ export const timePickerProps = buildProps({
   },
   placeholder: String,
   disabled: Boolean,
+  loading: Boolean,
   clearable: {
     type: Boolean,
     default: true,

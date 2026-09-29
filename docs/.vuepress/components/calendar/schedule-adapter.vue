@@ -41,14 +41,15 @@
         block
         fit
         :label="labels.kind"
-      >
-        <s-option :label="labels.dailyMoment" value="daily-moment" />
-        <s-option :label="labels.dailyRange" value="daily-range" />
-        <s-option :label="labels.mergedRange" value="merged-range" />
-        <s-option :label="labels.holidaySource" value="holiday" />
-        <s-option :label="labels.workdayMoment" value="workday-moment" />
-        <s-option :label="labels.workdayRange" value="workday-range" />
-      </s-select>
+        :options="[
+          { label: labels.dailyMoment, value: 'daily-moment' },
+          { label: labels.dailyRange, value: 'daily-range' },
+          { label: labels.mergedRange, value: 'merged-range' },
+          { label: labels.holidaySource, value: 'holiday' },
+          { label: labels.workdayMoment, value: 'workday-moment' },
+          { label: labels.workdayRange, value: 'workday-range' },
+        ]"
+      />
 
       <template v-if="showMetadata">
         <s-input v-model="draft.title" block :label="labels.title" />

@@ -3,6 +3,10 @@ import { shallowRef } from 'vue'
 
 const protocol = shallowRef('https://')
 const address = shallowRef('sax-design.dev')
+const selectOptions1 = [
+  { label: 'HTTPS', value: 'https://' },
+  { label: 'HTTP', value: 'http://' },
+]
 </script>
 
 <template>
@@ -11,10 +15,7 @@ const address = shallowRef('sax-design.dev')
       Website address
     </span>
     <s-control-group aria-labelledby="website-address-label">
-      <s-select v-model="protocol" :span="8">
-        <s-option label="HTTPS" value="https://">HTTPS</s-option>
-        <s-option label="HTTP" value="http://">HTTP</s-option>
-      </s-select>
+      <s-select v-model="protocol" :span="8" :options="selectOptions1" />
       <s-input v-model="address" placeholder="Domain" />
     </s-control-group>
   </div>

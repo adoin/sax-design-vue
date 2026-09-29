@@ -1,48 +1,50 @@
 <template>
-  <div class="center con-selects">
-    <s-select v-model="value1" placeholder="Success" loading>
-      <s-option label="Sax Design" value="1"> Sax Design </s-option>
-      <s-option label="Vue" value="2"> Vue </s-option>
-      <s-option label="Javascript" value="3"> Javascript </s-option>
-      <s-option label="Sass" value="4"> Sass </s-option>
-      <s-option label="Typescript" value="5"> Typescript </s-option>
-      <s-option label="Webpack" value="6"> Webpack </s-option>
-      <s-option label="Nodejs" value="7"> Nodejs </s-option>
-    </s-select>
-
-    <s-select v-model="value2" placeholder="Warn" loading multiple>
-      <s-option label="Sax Design" value="1"> Sax Design </s-option>
-      <s-option label="Vue" value="2"> Vue </s-option>
-      <s-option label="Javascript" value="3"> Javascript </s-option>
-      <s-option label="Sass" value="4"> Sass </s-option>
-      <s-option label="Typescript" value="5"> Typescript </s-option>
-      <s-option label="Webpack" value="6"> Webpack </s-option>
-      <s-option label="Nodejs" value="7"> Nodejs </s-option>
-    </s-select>
+  <div class="loading-demo">
+    <s-switch v-model="loading">Loading</s-switch>
+    <div class="loading-demo__fields">
+      <s-select
+        v-model="value"
+        :options="options"
+        :loading="loading"
+        label="Single selection"
+        label-float
+        clearable
+      />
+      <s-select
+        v-model="multipleValue"
+        :options="options"
+        :loading="loading"
+        label="Multiple selection"
+        label-float
+        multiple
+        clearable
+      />
+    </div>
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-
-const value1 = ref('3')
-const value2 = ref(['4', '1', '3'])
+const loading = ref(true)
+const value = ref('vue')
+const multipleValue = ref(['vue', 'ts'])
+const options = [
+  { value: 'vue', label: 'Vue' },
+  { value: 'ts', label: 'TypeScript' },
+]
 </script>
 
-<style scoped lang="scss">
-.con-selects {
+<style scoped>
+.loading-demo {
+  display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  .s-select-content {
-    margin: 10px;
-    max-width: 40%;
-  }
+  gap: 24px;
 }
-
-@media (max-width: 500px) {
-  .con-selects {
-    .s-select-content {
-      max-width: 100%;
-    }
-  }
+.loading-demo__fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
 }
 </style>

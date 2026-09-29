@@ -32,6 +32,18 @@ const deploymentOptions = [
     ],
   },
 ]
+const selectOptions1 = [
+  { label: 'GET', value: 'GET' },
+  { label: 'POST', value: 'POST' },
+]
+const selectOptions2 = [
+  { label: 'HTTPS', value: 'https://' },
+  { label: 'HTTP', value: 'http://' },
+]
+const selectOptions3 = [
+  { label: 'China', value: 'CN' },
+  { label: 'Global', value: 'GLOBAL' },
+]
 </script>
 
 <template>
@@ -40,14 +52,8 @@ const deploymentOptions = [
       Request address
     </span>
     <s-control-group block aria-labelledby="request-address-label">
-      <s-select v-model="method" :span="4">
-        <s-option label="GET" value="GET">GET</s-option>
-        <s-option label="POST" value="POST">POST</s-option>
-      </s-select>
-      <s-select v-model="protocol" :span="4">
-        <s-option label="HTTPS" value="https://">HTTPS</s-option>
-        <s-option label="HTTP" value="http://">HTTP</s-option>
-      </s-select>
+      <s-select v-model="method" :span="4" :options="selectOptions1" />
+      <s-select v-model="protocol" :span="4" :options="selectOptions2" />
       <s-input v-model="address" placeholder="Domain or IP" />
       <s-cascader
         v-model="deployment"
@@ -55,10 +61,7 @@ const deploymentOptions = [
         :span="7"
         placeholder="Deployment"
       />
-      <s-select v-model="region" :span="4">
-        <s-option label="China" value="CN">China</s-option>
-        <s-option label="Global" value="GLOBAL">Global</s-option>
-      </s-select>
+      <s-select v-model="region" :span="4" :options="selectOptions3" />
     </s-control-group>
     <s-control-group block :aria-label="isZh ? '日期与时间' : 'Date and time'">
       <s-date-picker

@@ -826,16 +826,15 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     }
   }
   @include e(loading) {
-    @include absolute-full;
-    border-radius: inherit;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
     @include flex(center, center);
-    background-color: getColor('gray-2', 0.3);
-    z-index: getCssVar(transition-ease);
-    cursor: default;
-
-    @include b(icon-loading) {
-      transform: scale(0.5);
-    }
+    z-index: 3;
+    pointer-events: none;
   }
   @include e(count) {
     color: getColor('text', 0.5);
@@ -852,6 +851,14 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
   @include m(large) {
     --sax-input-control-height: 40px;
   }
+}
+
+.#{$namespace}-input.is-loading {
+  .#{$namespace}-input__wrapper > * { pointer-events: none !important; }
+  .#{$namespace}-input__original { padding-right: 40px; }
+  .#{$namespace}-input__suffix { right: 36px; }
+  &.#{$namespace}-input--has-suffix .#{$namespace}-input__original { padding-right: 64px; }
+  .#{$namespace}-input__action { visibility: hidden; }
 }
 
 .s-input--small {

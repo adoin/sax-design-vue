@@ -26,8 +26,7 @@
   width: 100%;
 }
 
-.s-table-select.is-disabled,
-.s-table-select.is-loading {
+.s-table-select.is-disabled {
   cursor: not-allowed;
   opacity: 0.55;
 }

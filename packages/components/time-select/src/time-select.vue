@@ -4,6 +4,7 @@
       ref="selectInstance"
       :model-value="value"
       :disabled="disabled"
+      :loading="loading"
       :clearable="clearable"
       :clear-icon="clearIcon"
       :effect="effect"
