@@ -63,7 +63,7 @@ PROPS:
   - name: loading
     type: Boolean
     values: 'true, false'
-    description: Replace the thumb with the shared Sax logo loading indicator.
+    description: Show a circular or square loading outline matching shape and disable interaction.
     default: false
     link: null
     usage: '#loading'
@@ -407,7 +407,7 @@ Set `shape="square"` to use a square track and thumb. Loading and indeterminate 
 
 ## Loading
 
-Set `loading` to replace the moving thumb with the shared Sax logo loader. It stays at the current state position for both rounded and square switches.
+Set `loading` to outline the thumb with the shared loader, matching `shape`: a circular orbit for rounded switches and a square orbit for square switches. The thumb stays in place and interaction is blocked while loading.
 
 <template #example>
 <switch-loading />
@@ -415,7 +415,7 @@ Set `loading` to replace the moving thumb with the shared Sax logo loader. It st
 
 <template #template>
 
-@[code{9-24}](../.vuepress/components/switch/loading.vue)
+@[code{9-27}](../.vuepress/components/switch/loading.vue)
 
 </template>
 
@@ -427,7 +427,7 @@ Set `loading` to replace the moving thumb with the shared Sax logo loader. It st
 
 <template #style>
 
-@[code{26-34}](../.vuepress/components/switch/loading.vue)
+@[code{29-44}](../.vuepress/components/switch/loading.vue)
 
 </template>
 

@@ -63,7 +63,7 @@ PROPS:
   - name: loading
     type: Boolean
     values: 'true, false'
-    description: 将滑块替换为共用的 Sax 标志加载指示器。
+    description: 在滑块边缘显示随 shape 切换的圆形或方形加载描边，并禁用交互。
     default: false
     link: null
     usage: '#loading'
@@ -407,27 +407,27 @@ SLOTS:
 
 ## 加载
 
-设置 `loading` 后，移动滑块本体会替换为共用的 Sax 标志加载器，并在圆角和方形开关中都停留于当前状态对应的位置。
+设置 `loading` 后，滑块保持当前位置，并使用与 `shape` 一致的加载描边：圆角为圆形，方形为正方形。加载期间禁止切换状态。
 
 <template #example>
-<switch-loading />
+<switch-zh-loading />
 </template>
 
 <template #template>
 
-@[code{9-24}](../../.vuepress/components/switch/loading.vue)
+@[code{9-27}](../../.vuepress/components/switch-zh/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-7}](../../.vuepress/components/switch/loading.vue)
+@[code{1-7}](../../.vuepress/components/switch-zh/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{26-34}](../../.vuepress/components/switch/loading.vue)
+@[code{29-44}](../../.vuepress/components/switch-zh/loading.vue)
 
 </template>
 

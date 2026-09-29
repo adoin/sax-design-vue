@@ -85,7 +85,13 @@ describe('Switch', () => {
     })
 
     expect(wrapper.classes()).toContain('is-square')
-    expect(wrapper.findComponent({ name: 'SLogoLoading' }).exists()).toBe(true)
+    expect(wrapper.getComponent({ name: 'SLogoLoading' }).props('shape')).toBe(
+      'square',
+    )
+    expect(wrapper.getComponent({ name: 'SLogoLoading' }).props('size')).toBe(
+      '150%',
+    )
+    expect(wrapper.get('input').attributes('aria-busy')).toBe('true')
   })
 
   it('leaves indeterminate mode after the model enters a definite state', async () => {

@@ -55,13 +55,14 @@ defineExpose({ checked, isIndeterminate })
       :disabled="isDisabled"
       :indeterminate="isIndeterminate"
       :readonly="isDisabled"
+      :aria-busy="isLoading"
       :aria-checked="isIndeterminate ? 'mixed' : undefined"
       :class="ns.e('input')"
       @change="handleChange"
     />
     <span :class="ns.e('track')" aria-hidden="true">
       <span :class="ns.e('circle')">
-        <SLogoLoading v-if="isLoading" :size="18" />
+        <SLogoLoading v-if="isLoading" :shape="shape" size="150%" />
         <slot v-else-if="!isLoading" name="circle" />
       </span>
       <span :class="ns.e('text')">

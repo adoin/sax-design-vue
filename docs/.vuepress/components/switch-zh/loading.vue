@@ -9,19 +9,19 @@ const squareValue = shallowRef(true)
 <template>
   <div class="switch-state-examples">
     <div class="switch-loading-control">
-      <s-switch v-model="loading" aria-label="Loading state" />
-      <span>Loading state</span>
+      <s-switch v-model="loading" aria-label="加载状态" />
+      <span>加载状态</span>
     </div>
     <s-switch
       v-model="roundedValue"
       :loading="loading"
-      aria-label="Rounded loading switch"
+      aria-label="圆角加载开关"
     />
     <s-switch
       v-model="squareValue"
       :loading="loading"
       shape="square"
-      aria-label="Square loading switch"
+      aria-label="方形加载开关"
     />
   </div>
 </template>
