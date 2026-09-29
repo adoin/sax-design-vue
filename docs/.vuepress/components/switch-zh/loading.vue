@@ -4,6 +4,7 @@ import { shallowRef } from 'vue'
 const loading = shallowRef(true)
 const roundedValue = shallowRef(false)
 const squareValue = shallowRef(true)
+const textValue = shallowRef(true)
 </script>
 
 <template>
@@ -22,6 +23,12 @@ const squareValue = shallowRef(true)
       :loading="loading"
       shape="square"
       aria-label="方形加载开关"
+    />
+    <s-switch
+      v-model="textValue"
+      :loading="loading"
+      variant="text"
+      aria-label="文字加载开关"
     />
   </div>
 </template>

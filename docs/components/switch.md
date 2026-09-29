@@ -407,7 +407,7 @@ Set `shape="square"` to use a square track and thumb. Loading and indeterminate 
 
 ## Loading
 
-Set `loading` to outline the thumb with the shared loader, matching `shape`: a circular orbit for rounded switches and a square orbit for square switches. The thumb stays in place and interaction is blocked while loading.
+Set `loading` to outline the thumb with the shared loader, matching `shape`: a circular orbit for rounded switches and a square orbit for square switches. The thumb stays in place and interaction is blocked while loading. On exit, the outline advances and clears at four boundaries before interaction resumes. The text variant centers its loader over the reserved label area, with the label fading back in during exit.
 
 <template #example>
 <switch-loading />
@@ -415,19 +415,19 @@ Set `loading` to outline the thumb with the shared loader, matching `shape`: a c
 
 <template #template>
 
-@[code{9-27}](../.vuepress/components/switch/loading.vue)
+@[code{10-34}](../.vuepress/components/switch/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-7}](../.vuepress/components/switch/loading.vue)
+@[code{1-8}](../.vuepress/components/switch/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{29-44}](../.vuepress/components/switch/loading.vue)
+@[code{36-51}](../.vuepress/components/switch/loading.vue)
 
 </template>
 

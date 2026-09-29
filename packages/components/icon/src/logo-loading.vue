@@ -61,7 +61,7 @@ const syncActive = () => {
     return
   }
   if (props.active) motion.start()
-  else motion.stop(props.stopBehavior === 'corners' && shape.value === 'square')
+  else motion.stop(props.stopBehavior === 'corners')
   renderFrame()
   if (motion.phase !== 'idle') startFrames()
 }
@@ -84,7 +84,7 @@ const stop = () => {
     renderFrame()
     return
   }
-  motion.stop(props.stopBehavior === 'corners' && shape.value === 'square')
+  motion.stop(props.stopBehavior === 'corners')
   renderFrame()
   startFrames()
 }

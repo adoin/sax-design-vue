@@ -5,32 +5,35 @@ import LoadingIcon from '../src/loading.vue'
 import { LogoLoadingMotion } from '../src/logo-loading-motion'
 
 describe('LogoLoading', () => {
-  it('clears square strands at corners within one edge and can resume during exit', () => {
-    const motion = new LogoLoadingMotion()
-    motion.start()
-    motion.advance(2300)
-    motion.advance(137)
-    motion.stop(true)
-    expect(motion.phase).toBe('stopping')
-    const initial = motion.frame('square')
-    motion.advance(275)
-    const halfway = motion.frame('square')
-    expect(halfway.top).not.toBe(initial.top)
-    expect(halfway.top).not.toBe('')
-    motion.start()
-    expect(motion.phase).toBe('running')
-    motion.stop(true)
-    motion.advance(550)
-    expect(motion.frame('square')).toEqual({
-      phase: 'idle',
-      top: '',
-      bottom: '',
-      topAccent: '',
-      bottomAccent: '',
-    })
-    motion.reset()
-    expect(motion.frame('square').top).not.toBe('')
-  })
+  it.each(['square', 'rounded'] as const)(
+    'clears %s strands at four boundaries and can resume during exit',
+    (shape) => {
+      const motion = new LogoLoadingMotion()
+      motion.start()
+      motion.advance(2300)
+      motion.advance(137)
+      motion.stop(true)
+      expect(motion.phase).toBe('stopping')
+      const initial = motion.frame(shape)
+      motion.advance(275)
+      const halfway = motion.frame(shape)
+      expect(halfway.top).not.toBe(initial.top)
+      expect(halfway.top).not.toBe('')
+      motion.start()
+      expect(motion.phase).toBe('running')
+      motion.stop(true)
+      motion.advance(550)
+      expect(motion.frame(shape)).toEqual({
+        phase: 'idle',
+        top: '',
+        bottom: '',
+        topAccent: '',
+        bottomAccent: '',
+      })
+      motion.reset()
+      expect(motion.frame(shape).top).not.toBe('')
+    },
+  )
 
   it('preserves the logo and lifecycle while using a square running orbit', async () => {
     const motion = new LogoLoadingMotion()

@@ -415,7 +415,9 @@ export class LogoLoadingMotion {
             pieces.push(
               pathData(
                 Array.from({ length: 25 }, (_, i) =>
-                  squarePoint(circlePoint(mix(from, to, i / 24))),
+                  shape === 'square'
+                    ? squarePoint(circlePoint(mix(from, to, i / 24)))
+                    : circlePoint(mix(from, to, i / 24)),
                 ),
               ),
             )

@@ -1,4 +1,4 @@
-import { h } from 'vue'
+import { h, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import Switch from '../src/switch.vue'
@@ -74,8 +74,34 @@ describe('Switch', () => {
     expect(wrapper.classes()).toContain('is-loading')
     expect(wrapper.classes()).not.toContain('is-disabled')
     expect(wrapper.get('input').attributes('disabled')).toBeDefined()
-    expect(wrapper.find('.custom-circle-icon').exists()).toBe(false)
+    expect(wrapper.find('.custom-circle-icon').exists()).toBe(true)
+    expect(wrapper.classes()).toContain('is-loading-visual')
     expect(wrapper.findComponent({ name: 'SLogoLoading' }).exists()).toBe(true)
+  })
+
+  it('keeps the loader through exit, resumes safely, then restores interaction', async () => {
+    const wrapper = mount(Switch, {
+      props: { loading: true, variant: 'text' },
+      global: { stubs: { SLogoLoading: true } },
+    })
+    const loader = wrapper.getComponent({ name: 'SLogoLoading' })
+    expect(loader.props('stopBehavior')).toBe('corners')
+    await wrapper.setProps({ loading: false })
+    expect(loader.props('active')).toBe(false)
+    expect(wrapper.get('input').attributes('disabled')).toBeDefined()
+    loader.vm.$emit('phaseChange', 'stopping')
+    await nextTick()
+    expect(wrapper.classes()).toContain('is-loading-exiting')
+    await wrapper.setProps({ loading: true })
+    loader.vm.$emit('restored')
+    await nextTick()
+    expect(wrapper.findComponent({ name: 'SLogoLoading' }).exists()).toBe(true)
+    await wrapper.setProps({ loading: false })
+    loader.vm.$emit('restored')
+    await nextTick()
+    expect(wrapper.findComponent({ name: 'SLogoLoading' }).exists()).toBe(false)
+    expect(wrapper.get('input').attributes('disabled')).toBeUndefined()
+    wrapper.unmount()
   })
 
   it('uses the same brand loader for square geometry', () => {

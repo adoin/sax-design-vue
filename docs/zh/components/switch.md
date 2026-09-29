@@ -407,7 +407,7 @@ SLOTS:
 
 ## 加载
 
-设置 `loading` 后，滑块保持当前位置，并使用与 `shape` 一致的加载描边：圆角为圆形，方形为正方形。加载期间禁止切换状态。
+设置 `loading` 后，滑块保持当前位置，并使用与 `shape` 一致的加载描边：圆角为圆形，方形为正方形。加载期间禁止切换状态。 结束加载时，描边继续前进并在四处分段消失，再恢复交互。`text` 风格在文字中央显示加载器，保留文字占位，退出时文字淡入。
 
 <template #example>
 <switch-zh-loading />
@@ -415,19 +415,19 @@ SLOTS:
 
 <template #template>
 
-@[code{9-27}](../../.vuepress/components/switch-zh/loading.vue)
+@[code{10-34}](../../.vuepress/components/switch-zh/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-7}](../../.vuepress/components/switch-zh/loading.vue)
+@[code{1-8}](../../.vuepress/components/switch-zh/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{29-44}](../../.vuepress/components/switch-zh/loading.vue)
+@[code{36-51}](../../.vuepress/components/switch-zh/loading.vue)
 
 </template>
 

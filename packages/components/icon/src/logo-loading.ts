@@ -14,7 +14,7 @@ export type LogoLoadingPhase = (typeof logoLoadingPhases)[number]
 
 export const logoLoadingProps = buildProps({
   shape: useShapeProp,
-  /** Square orbit can clear at its corners instead of restoring the logo. */
+  /** Clear the orbit at four quadrant boundaries instead of restoring the logo. */
   stopBehavior: {
     type: String,
     values: ['restore', 'corners'] as const,
