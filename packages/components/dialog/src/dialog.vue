@@ -16,6 +16,7 @@ import {
 import { useGlobalComponentProps, useShape } from '@vuesax-alpha/hooks'
 import DialogSurface from './dialog-surface.vue'
 import { dialogEmits, dialogProps } from './dialog'
+import { resolveDialogMaskClosable } from './composables/dialog-dismissal'
 import type { AppContext } from 'vue'
 
 type Surface = InstanceType<typeof DialogSurface>
@@ -30,6 +31,13 @@ export default defineComponent({
     const shape = useShape()
     const owner = getCurrentInstance()!
     const globalMode = props.global
+    const surfaceProps = () => ({
+      ...attrs,
+      ...props,
+      maskClosable: resolveDialogMaskClosable(props, owner.vnode.props),
+      shape: shape.value,
+      ...listeners,
+    })
     const surface = shallowRef<Surface>()
     let host: HTMLElement | undefined
     let orphaned = false
@@ -65,11 +73,7 @@ export default defineComponent({
     }
     const updateGlobal = () => {
       if (!host || disposed || orphaned) return
-      const vnode = createVNode(
-        DialogSurface,
-        { ...attrs, ...props, shape: shape.value, ...listeners },
-        slots,
-      )
+      const vnode = createVNode(DialogSurface, surfaceProps(), slots)
       vnode.appContext = {
         ...owner.appContext,
         provides: (owner as typeof owner & { provides: AppContext['provides'] })
@@ -103,7 +107,7 @@ export default defineComponent({
     })
     return () => {
       // Track props/attrs even for the independently mounted global surface.
-      const input = { ...attrs, ...props, shape: shape.value, ...listeners }
+      const input = surfaceProps()
       return globalMode
         ? null
         : h(DialogSurface, { ...input, ref: surface }, slots)

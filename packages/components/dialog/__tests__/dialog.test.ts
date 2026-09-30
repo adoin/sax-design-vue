@@ -206,6 +206,7 @@ describe('Dialog minimization and ownership', () => {
         showCancelButton: true,
         showConfirmButton: true,
         beforeClose,
+        maskClosable: entry === 'mask' ? true : undefined,
       })
       await settle()
       if (entry === 'button')
@@ -230,6 +231,89 @@ describe('Dialog minimization and ownership', () => {
       expect((wrapper.vm as unknown as DialogExposes).visible).toBe(true)
     },
   )
+  it.each([false, true])(
+    'requires explicit mask opt-in with a guard despite inherited defaults (global=%s)',
+    async (global) => {
+      useGlobalConfig().value = { dialog: { maskClosable: true } }
+      const beforeClose = vi.fn(() => Promise.reject('Keep open'))
+      const wrapper = mountDialog({
+        global,
+        fullScreen: false,
+        beforeClose,
+        closeAnimation: false,
+      })
+      const clickMask = async () => {
+        const mask = document.querySelector<HTMLElement>('.s-dialog')!
+        for (const event of ['mousedown', 'mouseup', 'click'])
+          mask.dispatchEvent(new MouseEvent(event, { bubbles: true }))
+        await settle()
+      }
+      await settle()
+      await clickMask()
+      expect(beforeClose).not.toHaveBeenCalled()
+      await wrapper.setProps({ maskClosable: true })
+      await clickMask()
+      expect(beforeClose).toHaveBeenCalledTimes(1)
+      await wrapper.setProps({ maskClosable: undefined })
+      await clickMask()
+      expect(beforeClose).toHaveBeenCalledTimes(1)
+      await wrapper.setProps({ maskClosable: false })
+      await clickMask()
+      expect(beforeClose).toHaveBeenCalledTimes(1)
+      await wrapper.setProps({ beforeClose: undefined })
+      await (wrapper.vm as unknown as DialogExposes).close()
+    },
+  )
+
+  it.each([undefined, false, true])(
+    'uses the same explicit mask policy for imperative calls (%s)',
+    async (maskClosable) => {
+      const beforeClose = vi.fn(() => Promise.resolve())
+      const result = dialogBox({
+        title: 'Mask policy',
+        beforeClose,
+        maskClosable,
+        closeAnimation: false,
+      })
+      await settle()
+      const mask = document.querySelector<HTMLElement>('.s-dialog')!
+      for (const event of ['mousedown', 'mouseup', 'click'])
+        mask.dispatchEvent(new MouseEvent(event, { bubbles: true }))
+      await settle()
+      expect(beforeClose).toHaveBeenCalledTimes(maskClosable === true ? 1 : 0)
+      if (maskClosable !== true)
+        document.querySelector<HTMLButtonElement>('.s-dialog__close')!.click()
+      await expect(result).resolves.toBe('close')
+    },
+  )
+
+  it('keeps ordinary mask closing and handles bare Boolean opt-in', async () => {
+    const ordinary = mountDialog({ fullScreen: false, closeAnimation: false })
+    await settle()
+    const clickMask = async () => {
+      const mask = document.querySelector<HTMLElement>('.s-dialog')!
+      for (const event of ['mousedown', 'mouseup', 'click'])
+        mask.dispatchEvent(new MouseEvent(event, { bubbles: true }))
+      await settle()
+    }
+    await clickMask()
+    expect((ordinary.vm as unknown as DialogExposes).visible).toBe(false)
+    await vi.waitFor(() =>
+      expect(document.querySelector('.s-dialog')).toBeNull(),
+    )
+    const guard = vi.fn(() => Promise.resolve())
+    const explicit = mountDialog({
+      fullScreen: false,
+      beforeClose: guard,
+      'mask-closable': '',
+      closeAnimation: false,
+    })
+    await settle()
+    await clickMask()
+    expect(guard).toHaveBeenCalledTimes(1)
+    expect((explicit.vm as unknown as DialogExposes).visible).toBe(false)
+  })
+
   it.each([false, true])(
     'inherits shape and dialog defaults with global=%s',
     async (global) => {

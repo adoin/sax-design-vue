@@ -3,6 +3,7 @@ import { onBeforeUnmount, ref } from 'vue'
 import type { DialogBeforeCloseFn } from 'sax-design-vue'
 const visible = ref(false)
 const allowed = ref(false)
+const maskClosable = ref(false)
 const checks = ref(0)
 let timer: ReturnType<typeof setTimeout> | undefined
 let finishWait: (() => void) | undefined
@@ -35,6 +36,7 @@ onBeforeUnmount(() => {
       :width="460"
       title="Async close approval"
       :before-close="beforeClose"
+      :mask-closable="maskClosable"
     >
       <div class="close-guard-content">
         <p>
@@ -42,6 +44,9 @@ onBeforeUnmount(() => {
           You can also minimize the dialog and try closing its bubble.
         </p>
         <s-checkbox v-model="allowed">Allow this dialog to close</s-checkbox>
+        <s-checkbox v-model="maskClosable"
+          >Allow overlay clicks to request closing</s-checkbox
+        >
       </div>
     </s-dialog>
   </div>

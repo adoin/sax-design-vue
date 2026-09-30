@@ -259,10 +259,10 @@ PROPS:
   - name: mask-closable
     type: Boolean
     values: "true | false"
-    description: Control overlay and dismissal behavior.
-    default: true
+    description: Request closing on overlay clicks. With before-close, only an explicit true on this instance enables it; component and global defaults do not opt in.
+    default: "true without before-close; guarded dialogs require explicit true"
     link: null
-    usage: '#custom-footer'
+    usage: '#before-close'
     code: null
 
   - name: show-close
@@ -780,6 +780,8 @@ Dialogs close with an SVG particle dissolve by default. Set `:close-animation="f
 
 ## Before close
 
+With `before-close`, overlay clicks do nothing by default. Explicitly set `:mask-closable="true"` on this instance to let them request closing and run the guard. Neither the component default nor global `dialog.maskClosable` enables this entry. Close buttons, Escape, confirmation/cancellation, and programmatic requests still follow their existing configuration.
+
 `before-close` is `() => Promise<void>` and takes no callback argument. Return `Promise.resolve()` or fulfill an `async` function to continue closing. `Promise.reject('reason')` or a thrown `Error` blocks closing and displays its reason. Close buttons, overlay clicks, Escape, cancellation, closing after confirmation, dock bubbles, instance `close()`, and controlled `v-model` close requests use the same check. Minimizing does not run it.
 
 While pending, the dialog and overlay stay mounted, close buttons show loading, and repeated requests share one check. Rejecting a controlled close emits `v-model=true` to restore visibility. Use `close-error` for logging; custom footers receive `closePending`. Results from an unmounted or reopened instance cannot close a new instance or display a stale notification. `SDialogBox` also waits for actual closing and disposal before settling its outer Promise. The close indicator finishes its lead-in, then its colored strands clear at four points before the dialog exits. Confirmation buttons retain the default logo restoration. Instant checks that never show a loader add no wait; reduced-motion mode and hidden pages finish the visual motion immediately.
@@ -790,19 +792,19 @@ While pending, the dialog and overlay stay mounted, close buttons show loading, 
 
 <template #template>
 
-@[code{27-48}](../.vuepress/components/dialog/before-close.vue)
+@[code{28-53}](../.vuepress/components/dialog/before-close.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-25}](../.vuepress/components/dialog/before-close.vue)
+@[code{1-26}](../.vuepress/components/dialog/before-close.vue)
 
 </template>
 
 <template #style>
 
-@[code{50-63}](../.vuepress/components/dialog/before-close.vue)
+@[code{55-68}](../.vuepress/components/dialog/before-close.vue)
 
 </template>
 

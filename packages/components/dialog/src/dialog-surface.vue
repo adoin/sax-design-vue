@@ -181,6 +181,7 @@
 <script lang="ts" setup>
 import {
   computed,
+  getCurrentInstance,
   nextTick,
   onBeforeUnmount,
   shallowRef,
@@ -205,6 +206,7 @@ import { acquireDialogDock, releaseDialogDock } from './dialog-dock'
 import { dialogEmits, dialogProps } from './dialog'
 import { useDialog } from './composables'
 import { useDialogDissolve } from './composables/use-dialog-dissolve'
+import { resolveDialogMaskClosable } from './composables/dialog-dismissal'
 import { dialogDeprecated } from './deprecated'
 
 defineOptions({
@@ -212,6 +214,7 @@ defineOptions({
 })
 
 const rawProps = defineProps(dialogProps)
+const instance = getCurrentInstance()!
 const props = useGlobalComponentProps('dialog', rawProps)
 const emit = defineEmits(dialogEmits)
 
@@ -360,7 +363,7 @@ watch(visible, (value) => {
 onBeforeUnmount(releaseDock)
 
 const clickDialog = useSameTarget(() => {
-  if (props.maskClosable) handleClose()
+  if (resolveDialogMaskClosable(props, instance.vnode.props)) handleClose()
 })
 
 const rootKls = computed(() => [

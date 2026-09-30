@@ -76,8 +76,9 @@ PROPS:
   - name: mask-closable
     type: Boolean
     values: "true | false"
-    description: 点击遮罩后是否关闭对话框。
-    default: true
+    description: 点击遮罩是否申请关闭。配置 before-close 时，仅实例显式传入 true 才启用，组件和全局默认值不作为允许依据。
+    default: "无 before-close 时 true；有校验时需显式 true"
+    usage: '#before-close'
   - name: min-height
     type: String | Number
     values: "CSS 长度"
@@ -756,6 +757,8 @@ SLOTS:
 
 ## 关闭前校验
 
+配置 `before-close` 后，默认不响应遮罩点击；只有在当前实例明确设置 `:mask-closable="true"` 时，点击遮罩才会申请关闭并执行校验。组件默认值或全局 `dialog.maskClosable` 不会自动开启此入口。关闭按钮、Escape、确认／取消及程序调用仍按原有配置进入校验。
+
 `before-close` 使用 `() => Promise<void>`，不接收回调参数。返回 `Promise.resolve()` 或完成 `async` 函数才会进入关闭流程；`Promise.reject('原因')` 或抛出 `Error` 会阻止关闭并弹出原因。关闭按钮、遮罩、Escape、取消、确认后的关闭、气泡关闭、实例 `close()` 及 `v-model` 关闭请求共用这一校验。最小化本身不触发校验。
 
 等待期间保留弹窗与遮罩，关闭按钮显示 loading，重复请求复用同一次校验。拒绝受控关闭时会回写 `v-model=true`。`close-error` 可用于记录拒绝；自定义 footer 提供 `closePending`。卸载或重新打开后，过期结果不会关闭新实例或弹出提示。`SDialogBox` 也遵循此流程，并在真正关闭及清理后才结束调用 Promise。 关闭指示器先完成前摇，再让彩色线条在四个点收起消失，之后进入退出流程；确认按钮仍使用默认的标志还原后摇。瞬间完成而未显示的 loading 不额外等待，减少动态效果或页面不可见时直接结束动效。
@@ -766,19 +769,19 @@ SLOTS:
 
 <template #template>
 
-@[code{25-45}](../../.vuepress/components/dialog-zh/before-close.vue)
+@[code{26-48}](../../.vuepress/components/dialog-zh/before-close.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-23}](../../.vuepress/components/dialog-zh/before-close.vue)
+@[code{1-24}](../../.vuepress/components/dialog-zh/before-close.vue)
 
 </template>
 
 <template #style>
 
-@[code{47-60}](../../.vuepress/components/dialog-zh/before-close.vue)
+@[code{50-63}](../../.vuepress/components/dialog-zh/before-close.vue)
 
 </template>
 
