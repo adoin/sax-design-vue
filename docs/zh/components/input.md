@@ -506,6 +506,36 @@ SLOTS:
 
 <card>
 
+## 占位提示动画
+
+普通 `placeholder` 在空值聚焦时消散，空值失焦时重新聚合。输入后立即隐藏，避免遮挡内容。两个输入框的动画独立运行，快速切换焦点会从当前进度反向播放；系统开启减少动态效果时直接切换状态。`label-float` 使用浮动标签行为。
+
+<template #example>
+<input-zh-placeholder />
+</template>
+
+<template #template>
+
+@[code{7-24}](../../.vuepress/components/input-zh/placeholder.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/input-zh/placeholder.vue)
+
+</template>
+
+<template #style>
+
+@[code{26-34}](../../.vuepress/components/input-zh/placeholder.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## 外形
 
 设置 `shape="square"` 可使用直角外观。外形与边框、阴影、颜色、状态和前后缀样式相互独立。

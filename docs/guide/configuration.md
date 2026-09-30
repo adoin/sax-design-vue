@@ -394,4 +394,6 @@ The composable acquires the graph after mount and releases its consumer when the
 
 Outside Vue setup, call `svgFilter.acquire(definition, { cache: true })`, apply the returned `url`, and call `release()` when the consumer is removed. `svgFilter.getId(definition, scope?)` returns a deterministic ID without creating DOM. `svgFilter.clearUnused(document?)` removes idle cached graphs while preserving those still used by any application. An explicit `document` option keeps iframe registries separate.
 
+Input's animated placeholders keep mutable filter nodes inside each component instead of sharing them. Their IDs use Vue's native `useId()` and remain stable during SSR hydration; the nodes and animation callbacks are removed on unmount. When mounting multiple Vue apps in one document, give each app a distinct `app.config.idPrefix` on both server and client so their local SVG IDs cannot collide.
+
 </card>

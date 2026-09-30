@@ -556,6 +556,36 @@ Add an elements input facilitate with the component `input`
 
 <card>
 
+## Placeholder animation
+
+An ordinary `placeholder` dissolves when an empty input gains focus and reassembles when it loses focus. Entering a value hides it immediately so fragments cannot cover typed content. Each input animates independently; rapid focus changes reverse from the current progress. Reduced-motion mode switches states immediately. `label-float` retains its floating-label behavior.
+
+<template #example>
+<input-placeholder />
+</template>
+
+<template #template>
+
+@[code{7-24}](../.vuepress/components/input/placeholder.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../.vuepress/components/input/placeholder.vue)
+
+</template>
+
+<template #style>
+
+@[code{26-34}](../.vuepress/components/input/placeholder.vue)
+
+</template>
+
+</card>
+
+<card>
+
 ## Shape
 
 Use `shape="square"` for straight corners. Shape is independent from border, shadow, color, state, and affix styling.

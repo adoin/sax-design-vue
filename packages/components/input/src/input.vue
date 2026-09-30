@@ -120,6 +120,7 @@
         :class="[
           ns.e('placeholder'),
           { [ns.em('placeholder', 'float')]: labelFloat },
+          { [ns.em('placeholder', 'dissolve')]: !labelFloat },
           {
             [ns.em('placeholder', 'float-active')]: isPlaceholderFloatActive,
           },
@@ -129,7 +130,14 @@
         ]"
         @mousedown.prevent="NOOP"
       >
-        <span :class="ns.e('placeholder-text')">{{ placeholderText }}</span>
+        <span v-if="labelFloat" :class="ns.e('placeholder-text')">{{
+          placeholderText
+        }}</span>
+        <InputPlaceholder
+          v-else
+          :text="placeholderText"
+          :dissolved="focused || hasInputValue"
+        />
       </label>
 
       <label
@@ -278,6 +286,7 @@ import { useInput } from './composables'
 import { useInputValidation } from './composables/use-input-validation'
 import { useInputAutocomplete } from './composables/use-input-autocomplete'
 import InputAutocomplete from './input-autocomplete.vue'
+import InputPlaceholder from './input-placeholder.vue'
 import type { CSSProperties } from 'vue'
 
 defineOptions({

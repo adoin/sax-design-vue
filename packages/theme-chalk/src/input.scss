@@ -914,8 +914,7 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
   }
 }
 
-// Match the native text inset before fading so typing does not reveal a
-// differently positioned replacement for the ordinary placeholder.
+// Keep the placeholder's layout fixed while its instance-owned SVG dissolves.
 .#{$namespace}-input .#{$namespace}-input__wrapper .#{$namespace}-input__placeholder:not(.#{$namespace}-input__placeholder--float),
 .#{$namespace}-input.is-focus .#{$namespace}-input__wrapper .#{$namespace}-input__placeholder:not(.#{$namespace}-input__placeholder--float) {
   left: calc(var(--sax-input-text-inset, 10px) + 2px);
@@ -923,12 +922,43 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
   padding: 0;
   transform: none;
   filter: none;
-  transition: opacity var(--sax-motion-duration) var(--sax-motion-easing-out);
+  transition: none;
+  &:not(.#{$namespace}-input__placeholder--hidden) {
+    opacity: 1;
+    visibility: visible;
+  }
   .#{$namespace}-input__placeholder-text {
+    display: flex;
+    align-items: center;
     transform: none;
     filter: none;
     transition: none;
+    overflow: visible;
+    width: 100%;
   }
+  .#{$namespace}-input__placeholder-dissolve {
+    display: inline-block;
+    box-sizing: content-box;
+    max-width: 100%;
+    min-width: 0;
+    vertical-align: middle;
+    padding: 20px 38px;
+    margin: -20px -38px;
+  }
+  .#{$namespace}-input__placeholder-content {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.#{$namespace}-input__placeholder-filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

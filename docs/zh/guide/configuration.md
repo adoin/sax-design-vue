@@ -394,4 +394,6 @@ const { url } = useSvgFilter(shadow, { cache: true })
 
 在 Vue setup 外可调用 `svgFilter.acquire(definition, { cache: true })`，应用返回的 `url`，并在使用者移除时调用 `release()`。`svgFilter.getId(definition, scope?)` 无需创建 DOM 即可获得确定性 ID。`svgFilter.clearUnused(document?)` 清理未使用的缓存，保留任何应用仍在引用的定义。显式 `document` 选项可用于隔离 iframe 中的注册表。
 
+Input 的占位提示动画把可变滤镜节点保留在各组件内部。ID 使用 Vue 原生 `useId()`，在 SSR 水合时保持稳定；组件卸载会移除节点并取消动画回调。同一文档挂载多个 Vue 应用时，请在服务端与客户端为各应用配置不同的 `app.config.idPrefix`，避免本地 SVG ID 冲突。
+
 </card>

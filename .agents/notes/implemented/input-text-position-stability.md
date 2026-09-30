@@ -16,7 +16,7 @@ modules:
 ## Contract
 
 - Hover and focus must preserve Input's native horizontal padding, wrapper position, width, and ordinary placeholder text position. Motion audits must include padding, margins, widths, and alignment in addition to transform and left/right.
-- Ordinary placeholders fade using opacity only. Both the label and its inner text explicitly disable transforms and filters; focus and resting states share the same inset, margin, and padding. Floating labels retain their explicit label transition; reduced-motion users receive no fade animation.
+- Ordinary placeholder layout keeps its inset, margin, padding, and transforms unchanged through focus. The original opacity-only fade is superseded by the user-provided SVG dissolve/reassembly animation in [input-placeholder-dissolve.md](input-placeholder-dissolve.md). Only the filtered graphic's fragments scatter; the text container and native input remain stationary. Floating labels retain their explicit label transition; reduced-motion users receive an immediate state change.
 - Native text and ordinary placeholders share the `--sax-input-text-inset` layout variable, including legacy icon slots, icon-after, and prefix layouts. Do not restore the legacy 38px-to-40px focus padding change.
 - When allowClear or clearable is configured, reserve its trailing space even while the action is hidden. Visibility remains controlled by showClear. Hover must not shrink the native text viewport or shift center/right aligned values merely to show an action.
 - Native Input transitions enumerate background color, text color, and box shadow. Do not animate its padding, width, margins, or position through transition-all.
