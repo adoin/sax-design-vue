@@ -9,12 +9,11 @@ import {
 import type { MaybeRefOrGetter, Ref } from 'vue'
 
 const clamp = (value: number) => Math.max(0, Math.min(1, value))
-const ease = (value: number) =>
-  value < 0.5 ? 4 * value ** 3 : 1 - (-2 * value + 2) ** 3 / 2
+const ease = (value: number) => 1 - (1 - value) ** 3
 
 export const placeholderDissolveFrame = (progress: number) => {
   const p = clamp(progress)
-  const erosion = clamp((p - 0.08) / 0.78)
+  const erosion = clamp(p / 0.7)
   const scatter = clamp((p - 0.28) / 0.72) ** 2
   return {
     slope: 8 + erosion * 18,
@@ -67,7 +66,8 @@ export const usePlaceholderDissolve = (
     const distance = Math.abs(target - from)
     if (!distance) return
     const started = view.performance.now()
-    const duration = 950 * distance
+    // Focus feedback must start promptly; reassembly can settle more softly.
+    const duration = (target === 1 ? 480 : 650) * distance
     const tick = (now: number) => {
       const elapsed = clamp((now - started) / duration)
       progress = from + (target - from) * ease(elapsed)

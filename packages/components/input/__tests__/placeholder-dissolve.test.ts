@@ -50,6 +50,24 @@ afterEach(() => {
 })
 
 describe('Instance placeholder dissolve', () => {
+  it('starts eroding during the first 80ms after focus instead of holding an opaque mask', async () => {
+    const wrapper = mount(Input, { props: { placeholder: 'Search' } })
+    await wrapper.get('input').trigger('focus')
+    expect(frames.size).toBe(1)
+    advance(16)
+    const threshold = wrapper.get('[data-dissolve-threshold]').element
+    expect(number(threshold, 'intercept')).toBeLessThan(1)
+    advance(80)
+    // A representative noise sample already has partial alpha: real grain,
+    // rather than changed attributes whose result remains clamped to white.
+    const maskAlpha =
+      number(threshold, 'slope') * 0.4 + number(threshold, 'intercept')
+    expect(maskAlpha).toBeLessThan(1)
+    expect(wrapper.get('[data-dissolve-alpha]').attributes('slope')).toBe('1')
+    advance(480)
+    expect(wrapper.get('[data-dissolve-alpha]').attributes('slope')).toBe('0')
+    expect(frames.size).toBe(0)
+  })
   it('keeps the complete resting state and fully dissolves then aggregates', async () => {
     const wrapper = mount(Placeholder, {
       props: { text: 'Search', dissolved: false },
@@ -62,14 +80,14 @@ describe('Instance placeholder dissolve', () => {
     expect(number(alpha, 'slope')).toBe(1)
     expect(frames.size).toBe(0)
     await wrapper.setProps({ dissolved: true })
-    advance(475)
+    advance(160)
     expect(number(threshold, 'intercept')).toBeLessThan(1)
     expect(number(displacement, 'scale')).toBeGreaterThan(0)
-    advance(950)
+    advance(480)
     expect(number(alpha, 'slope')).toBe(0)
     expect(frames.size).toBe(0)
     await wrapper.setProps({ dissolved: false })
-    advance(1900)
+    advance(1130)
     expect(number(threshold, 'intercept')).toBe(1)
     expect(number(displacement, 'scale')).toBe(0)
     expect(number(alpha, 'slope')).toBe(1)
@@ -82,12 +100,12 @@ describe('Instance placeholder dissolve', () => {
     })
     const threshold = wrapper.get('[data-dissolve-threshold]')
     await wrapper.setProps({ dissolved: true })
-    advance(475)
+    advance(160)
     const before = threshold.attributes('intercept')
     await wrapper.setProps({ dissolved: false })
     expect(threshold.attributes('intercept')).toBe(before)
     expect(frames.size).toBe(1)
-    advance(950)
+    advance(810)
     expect(threshold.attributes('intercept')).toBe('1')
     expect(frames.size).toBe(0)
   })
@@ -105,7 +123,7 @@ describe('Instance placeholder dissolve', () => {
     const filters = wrapper.findAll('filter')
     expect(filters[0].attributes('id')).not.toBe(filters[1].attributes('id'))
     await wrapper.setProps({ active: true })
-    advance(475)
+    advance(160)
     expect(
       number(filters[0].get('[data-dissolve-threshold]').element, 'intercept'),
     ).toBeLessThan(1)
@@ -133,7 +151,7 @@ describe('Instance placeholder dissolve', () => {
       props: { text: 'Search', dissolved: false },
     })
     await wrapper.setProps({ dissolved: true })
-    advance(475)
+    advance(160)
     reduceMotion = true
     mediaChange?.()
     expect(wrapper.get('[data-dissolve-alpha]').attributes('slope')).toBe('0')
@@ -211,7 +229,7 @@ describe('Instance placeholder dissolve', () => {
     const wrapper = mount(Host, { props: { shown: true, active: false } })
     const id = wrapper.get('filter').attributes('id')
     await wrapper.setProps({ active: true })
-    advance(475)
+    advance(160)
     expect(frames.size).toBe(1)
     await wrapper.setProps({ shown: false })
     expect(frames.size).toBe(0)
