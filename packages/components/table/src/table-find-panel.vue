@@ -601,12 +601,8 @@ defineExpose(api)
         >
           <div v-show="!compact" :inert="compact" :class="ns.e('find-form')">
             <div :class="ns.e('find-autofill-shield')" aria-hidden="true">
-              <input tabindex="-1" type="text" autocomplete="username" />
-              <input
-                tabindex="-1"
-                type="password"
-                autocomplete="current-password"
-              />
+              <input tabindex="-1" type="text" autocomplete="off" />
+              <input tabindex="-1" type="password" autocomplete="off" />
             </div>
             <div :class="ns.e('find-fields')">
               <div data-find-query @input.capture="ignoreBrowserFill">

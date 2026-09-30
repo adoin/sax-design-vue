@@ -1,6 +1,7 @@
 <template>
   <div :class="inputKls" :style="inputStyle">
     <div
+      ref="autocompleteAnchor"
       :class="[ns.e('wrapper'), ns.is('disabled', disabled)]"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
@@ -22,6 +23,7 @@
         v-bind="$attrs"
         :id="inputId"
         ref="inputRef"
+        autocomplete="off"
         :value="model ?? ''"
         :type="inputType"
         :disabled="disabled || loading"
@@ -30,7 +32,17 @@
         :name="name"
         :title="title"
         :form="form"
-        :autocomplete="autoComplete ?? autocomplete"
+        :role="
+          autocompleteEnabled ? 'combobox' : ($attrs.role as string | undefined)
+        "
+        :aria-autocomplete="autocompleteEnabled ? 'list' : undefined"
+        :aria-expanded="autocompleteEnabled ? autocompleteVisible : undefined"
+        :aria-controls="autocompleteEnabled ? autocompleteId : undefined"
+        :aria-activedescendant="
+          autocompleteVisible && autocompleteActiveIndex >= 0
+            ? `${autocompleteId}-${autocompleteActiveIndex}`
+            : undefined
+        "
         :autofocus="autoFocus"
         :maxlength="nativeMaxLength"
         :minlength="minLength"
@@ -72,7 +84,12 @@
         @change="onChange"
         @keydown="handleKeydownWithActions"
         @keyup="(event) => emit('keyup', event)"
-        @click="(event) => emit('click', event)"
+        @click="
+          (event) => {
+            openAutocomplete()
+            emit('click', event)
+          }
+        "
         @wheel="(event) => emit('wheel', event)"
       />
 
@@ -213,11 +230,32 @@
         <slot :name="`message-${message}`" />
       </div>
     </s-collapse-transition>
+    <InputAutocomplete
+      v-if="autocompleteEnabled"
+      :id="autocompleteId"
+      v-model:visible="autocompleteVisible"
+      v-model:active-index="autocompleteActiveIndex"
+      :reference="autocompleteAnchor"
+      :keyword="autocompleteKeyword"
+      :options="autocompleteOptions"
+      :shape="shape"
+      :size="size || 'default'"
+      :theme-style="
+        ns.cssVar({
+          color: getVsColor(props.color || props.state || 'primary'),
+        })
+      "
+      @select="pickAutocomplete"
+    >
+      <template v-if="$slots['autocomplete-option']" #option="scope">
+        <slot name="autocomplete-option" v-bind="scope" />
+      </template>
+    </InputAutocomplete>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, useSlots } from 'vue'
+import { computed, onMounted, useSlots, useTemplateRef } from 'vue'
 import {
   IconClose,
   IconControlLoading,
@@ -238,6 +276,8 @@ import { NOOP, getVsColor } from '@vuesax-alpha/utils'
 import { inputEmits, inputProps } from './input'
 import { useInput } from './composables'
 import { useInputValidation } from './composables/use-input-validation'
+import { useInputAutocomplete } from './composables/use-input-autocomplete'
+import InputAutocomplete from './input-autocomplete.vue'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
@@ -314,11 +354,14 @@ const shape = useShape(computed(() => (props.square ? 'square' : undefined)))
 const size = useSize()
 
 const inputId = props.id ?? useId()
+const autocompleteId = `${inputId}-autocomplete`
+const autocompleteAnchor = useTemplateRef<HTMLElement>('autocompleteAnchor')
 
 const messageType = ['success', 'warn', 'danger', 'primary', 'dark']
 
 const {
   model,
+  composing,
   inputType,
   isVisiblePassword,
   isShowPassword,
@@ -348,6 +391,24 @@ const {
   nativeMaxLength,
 } = useInput(props, emit)
 
+const {
+  enabled: autocompleteEnabled,
+  keyword: autocompleteKeyword,
+  options: autocompleteOptions,
+  visible: autocompleteVisible,
+  activeIndex: autocompleteActiveIndex,
+  open: openAutocomplete,
+  pick: pickAutocomplete,
+  keydown: autocompleteKeydown,
+} = useInputAutocomplete(props, {
+  model,
+  focused,
+  composing,
+  inputRef,
+  commitModelValue,
+  emit,
+})
+
 const onChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   model.value = props.trim ? target.value.trim() : target.value
@@ -360,6 +421,8 @@ const onChange = (event: Event) => {
 
 const handleKeydownWithActions = (event: KeyboardEvent) => {
   handleKeydown(event)
+  if (composing.value || event.isComposing || event.keyCode === 229) return
+  if (autocompleteKeydown(event)) return
   if (
     event.key === 'Escape' &&
     (props.allowClear || props.clearable) &&

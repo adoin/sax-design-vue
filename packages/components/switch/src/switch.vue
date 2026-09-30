@@ -75,6 +75,7 @@ defineExpose({ checked, isIndeterminate })
   <label :class="switchKls" :style="switchStyles">
     <input
       v-bind="$attrs"
+      autocomplete="off"
       type="checkbox"
       :checked="checked"
       :disabled="interactionDisabled"

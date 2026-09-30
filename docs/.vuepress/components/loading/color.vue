@@ -1,7 +1,7 @@
 <template>
   <div :class="{ hasOpenLoading }" class="center">
     <div :style="`background: ${color};`" class="con-input">
-      <input v-model="color" type="color" />
+      <input v-model="color" autocomplete="off" type="color" />
       <s-icon name="bxs:color-fill" />
     </div>
     <div ref="$loadings" class="con-loadings">

@@ -14,6 +14,18 @@ import type { EmitFn } from '@vuesax-alpha/utils'
 import type Input from './input.vue'
 
 export type InputValue = string | number | null | undefined
+export interface InputAutocompleteOption {
+  value: string
+  label?: string
+  description?: string
+  disabled?: boolean
+}
+export type InputAutocompleteItem = string | InputAutocompleteOption
+export interface InputAutocompleteScope {
+  option: InputAutocompleteOption
+  keyword: string
+  active: boolean
+}
 export interface InputCountParams {
   value: string
 }
@@ -81,9 +93,14 @@ export const inputProps = buildProps({
   name: String,
   title: String,
   form: String,
+  /** @deprecated native completion is disabled; use autocomplete suggestions */
   autoComplete: String,
-  /** @deprecated use autoComplete */
-  autocomplete: String,
+  /** Component suggestions. Legacy native autocomplete strings are ignored. */
+  autocomplete: {
+    type: definePropType<InputAutocompleteItem[] | string>([Array, String]),
+  },
+  autocompleteLimit: { type: Number, default: 20 },
+  autocompleteMinLength: { type: Number, default: 0 },
   autoFocus: Boolean,
   align: {
     type: String,
@@ -303,6 +320,8 @@ export const inputEmits = {
   'toggle-visible': (visible: boolean) => typeof visible === 'boolean',
   'prefix-click': (evt: MouseEvent) => evt instanceof MouseEvent,
   'suffix-click': (evt: MouseEvent) => evt instanceof MouseEvent,
+  'autocomplete-select': (option: InputAutocompleteOption) =>
+    isString(option.value),
 }
 
 export type InputEmits = typeof inputEmits

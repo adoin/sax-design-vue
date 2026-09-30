@@ -170,6 +170,7 @@
           <input
             id="select"
             v-model="selectValue"
+            autocomplete="off"
             placeholder="Select"
             readonly
             type="text"
@@ -203,6 +204,7 @@
         <header>
           <input
             id=""
+            autocomplete="off"
             placeholder="Dropdown"
             readonly
             type="text"

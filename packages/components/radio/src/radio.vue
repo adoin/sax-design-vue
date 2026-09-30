@@ -62,6 +62,7 @@ const radioStyles = computed(() => [
       v-bind="$attrs"
       :id="uid"
       v-model="model"
+      autocomplete="off"
       :class="ns.e('original')"
       :value="value"
       type="radio"

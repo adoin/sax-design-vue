@@ -5,6 +5,7 @@
         v-bind="$attrs"
         :id="checkboxId"
         v-model="model"
+        autocomplete="off"
         :value="value"
         :name="name"
         :disabled="isDisabled || loading"

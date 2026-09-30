@@ -41,6 +41,7 @@
         <label :class="ns.e('slider')">
           <span class="s-sr-only">{{ t('vs.colorpicker.hue') }}</span>
           <input
+            autocomplete="off"
             class="is-hue"
             type="range"
             min="0"
@@ -54,6 +55,7 @@
         <label v-if="showAlpha" :class="ns.e('slider')">
           <span class="s-sr-only">{{ t('vs.colorpicker.opacity') }}</span>
           <input
+            autocomplete="off"
             class="is-alpha"
             type="range"
             min="0"
@@ -94,7 +96,12 @@
     <div :class="[ns.e('fields'), ns.m(format)]">
       <label v-if="format === 'hex'" :class="ns.e('field')">
         <span>HEX</span>
-        <input :value="hexText" spellcheck="false" @change="updateTextValue" />
+        <input
+          autocomplete="off"
+          :value="hexText"
+          spellcheck="false"
+          @change="updateTextValue"
+        />
       </label>
 
       <template v-else-if="format === 'rgb'">
@@ -105,6 +112,7 @@
         >
           <span>{{ channel.label }}</span>
           <input
+            autocomplete="off"
             inputmode="decimal"
             :value="channel.value"
             @change="
@@ -125,6 +133,7 @@
         >
           <span>{{ channel.label }}</span>
           <input
+            autocomplete="off"
             inputmode="decimal"
             :value="channel.value"
             @change="

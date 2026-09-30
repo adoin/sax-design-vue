@@ -73,6 +73,7 @@
           <li class="theme-color-layout" :title="t.shell.layoutColor">
             <s-icon name="bx:paint-roll" />
             <input
+              autocomplete="off"
               type="color"
               value="#2564ff"
               @change="
@@ -82,7 +83,12 @@
           </li>
           <li class="theme-color-primary" :title="t.shell.primaryColor">
             <s-icon name="bxs:color-fill" />
-            <input type="color" value="#2564ff" @change="changeColor" />
+            <input
+              autocomplete="off"
+              type="color"
+              value="#2564ff"
+              @change="changeColor"
+            />
           </li>
 
           <svg

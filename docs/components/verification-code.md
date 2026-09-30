@@ -60,7 +60,7 @@ EVENTS:
 
 ## Borderless variants
 
-The component always renders one native input. The cells are a visual overlay, so paste, password managers, mobile one-time-code autofill, selection, and keyboard input continue to work as one field.
+The component always renders one native input. The cells are a visual overlay, so paste, selection, and keyboard input continue to work as one field. Browser completion is disabled by default; pass `autocomplete="one-time-code"` explicitly when mobile code autofill is needed.
 
 The default `mode="numeric"` accepts digits only. Use `mode="alphanumeric"` for verification codes containing English letters and digits.
 

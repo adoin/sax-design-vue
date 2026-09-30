@@ -107,6 +107,7 @@ watch(
     </span>
     <input
       v-bind="$attrs"
+      autocomplete="off"
       :class="ns.e('input')"
       type="range"
       :min="safeMin"

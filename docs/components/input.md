@@ -1,6 +1,21 @@
 ---
 description: 'Capture a single line of text with validation and state feedback.'
 PROPS:
+  - name: autocomplete
+    type: InputAutocompleteItem[]
+    description: Component suggestions. String entries fill themselves; objects fill value and may provide label, description, and disabled. Legacy browser tokens are ignored.
+    default: null
+    usage: '#autocomplete'
+  - name: autocomplete-limit
+    type: Number
+    description: Maximum number of suggestions rendered.
+    default: 20
+    usage: '#autocomplete'
+  - name: autocomplete-min-length
+    type: Number
+    description: Minimum input length before showing suggestions; zero also shows suggestions on focus.
+    default: 0
+    usage: '#autocomplete'
   - name: block
     type: Boolean
     values: "true | false"
@@ -418,6 +433,10 @@ EXPOSES:
     usage: '#format-validation'
 
 EVENTS:
+  - name: autocomplete-select
+    type: '(option: InputAutocompleteOption) => void'
+    description: Fires with the selected option after its value is committed.
+    usage: '#autocomplete'
   - name: update:modelValue
     type: String | Number
     description: Fire while the bound input value changes.
@@ -472,6 +491,11 @@ EVENTS:
     type: Boolean
     description: Fires when password visibility changes.
 SLOTS:
+  - name: autocomplete-option
+    type: Slot
+    scope: InputAutocompleteScope
+    description: Customize suggestion content. Keep the option selection and keyboard interaction provided by Input.
+    usage: '#autocomplete'
   - name: icon
     type: Slot
     values: "null"
@@ -1071,6 +1095,36 @@ Common native constraints such as `min`, `max`, `step`, `input-mode`, `pattern`,
 <template #script>
 
 @[code{36-47}](../.vuepress/components/input/validation.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Autocomplete
+
+Pass a string array or objects with `value`, `label`, `description`, and `disabled` to `autocomplete`. Suggestions match the value, label, and description without restricting free input. `autocomplete-min-length` controls when suggestions appear; `autocomplete-limit` caps the rendered list (default 20). Browser completion is disabled. Use ↑/↓ to navigate, Enter to fill, Escape to dismiss, and Tab to continue. Password and number inputs do not show suggestions. Selecting a suggestion commits the value even with `immediate="false"` and emits `autocomplete-select`.
+
+<template #example>
+<input-autocomplete />
+</template>
+
+<template #template>
+
+@[code{47-73}](../.vuepress/components/input/autocomplete.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-45}](../.vuepress/components/input/autocomplete.vue)
+
+</template>
+
+<template #style>
+
+@[code{75-86}](../.vuepress/components/input/autocomplete.vue)
 
 </template>
 

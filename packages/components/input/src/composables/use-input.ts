@@ -235,6 +235,7 @@ export const useInput = (props: InputProps, emit: InputEmitsFn) => {
 
   return {
     model,
+    composing,
     inputType,
     isVisiblePassword,
     inputRef,

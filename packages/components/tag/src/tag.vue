@@ -81,6 +81,7 @@
       <input
         v-if="editable"
         ref="editor"
+        autocomplete="off"
         :class="ns.e('editor')"
         :value="draftText"
         :size="editorSize"

@@ -38,7 +38,7 @@ export const verificationCodeProps = buildProps({
   readonly: Boolean,
   autocomplete: {
     type: String,
-    default: 'one-time-code',
+    default: 'off',
   },
 } as const)
 

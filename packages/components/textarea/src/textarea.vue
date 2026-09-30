@@ -24,6 +24,7 @@
       :id="textareaId"
       ref="textareaRef"
       v-bind="$attrs"
+      autocomplete="off"
       :value="pendingValue"
       :class="ns.e('inner')"
       :readonly="readonly || !editable"

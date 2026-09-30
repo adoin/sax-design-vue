@@ -1,6 +1,21 @@
 ---
 description: '通过校验和状态反馈采集单行文本。'
 PROPS:
+  - name: autocomplete
+    type: InputAutocompleteItem[]
+    description: 组件补全数据。字符串直接填入；对象填入 value，并可提供 label、description、disabled。旧的浏览器补全字符串不再生效。
+    default: null
+    usage: '#autocomplete'
+  - name: autocomplete-limit
+    type: Number
+    description: 最多展示的建议数量。
+    default: 20
+    usage: '#autocomplete'
+  - name: autocomplete-min-length
+    type: Number
+    description: 出现建议的最少输入长度；设为零时聚焦即可展示。
+    default: 0
+    usage: '#autocomplete'
   - name: align
     type: String
     values: "left | center | right"
@@ -370,6 +385,10 @@ EXPOSES:
     usage: '#format-validation'
 
 EVENTS:
+  - name: autocomplete-select
+    type: '(option: InputAutocompleteOption) => void'
+    description: 选择建议并提交值后触发，入参为所选选项对象。
+    usage: '#autocomplete'
   - name: update:modelValue
     type: String | Number
     description: 输入值变化时触发。
@@ -424,6 +443,11 @@ EVENTS:
     type: Boolean
     description: 密码可见状态变化时触发。
 SLOTS:
+  - name: autocomplete-option
+    type: Slot
+    scope: InputAutocompleteScope
+    description: 自定义建议内容，保留 Input 提供的选项选择和键盘交互。
+    usage: '#autocomplete'
   - name: icon
     type: Slot
     values: "null"
@@ -1021,6 +1045,36 @@ SLOTS:
 <template #script>
 
 @[code{36-47}](../../.vuepress/components/input-zh/validation.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 自动补全
+
+为 `autocomplete` 传入字符串数组，或包含 `value`、`label`、`description`、`disabled` 的对象数组。建议按值、文字和说明匹配，不限制自由输入。通过 `autocomplete-min-length` 设置出现建议的最少输入长度，`autocomplete-limit` 限制展示数量（默认 20）。浏览器原生补全保持关闭。上下键移动、Enter 填入、Escape 收起、Tab 继续到下一个控件。密码和数字类型不展示建议。选择建议会立即提交值（包括 `immediate="false"`），并触发 `autocomplete-select`。
+
+<template #example>
+<input-zh-autocomplete />
+</template>
+
+<template #template>
+
+@[code{31-57}](../../.vuepress/components/input-zh/autocomplete.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-29}](../../.vuepress/components/input-zh/autocomplete.vue)
+
+</template>
+
+<template #style>
+
+@[code{59-70}](../../.vuepress/components/input-zh/autocomplete.vue)
 
 </template>
 

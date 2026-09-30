@@ -5,6 +5,75 @@
 
 $inputState: 'success', 'danger', 'dark', 'primary', 'warn';
 
+@include b(input) {
+  @include e(autocomplete) {
+    &.#{$namespace}-popper {
+      padding: 6px;
+      min-width: min(280px, calc(100vw - 24px));
+      max-width: calc(100vw - 24px);
+      border: 0;
+      border-radius: var(--sax-radius);
+      background: getColor(background);
+      color: getColor(text);
+      box-shadow: var(--sax-popper-shadow);
+    }
+    @include when(square) {
+      &.#{$namespace}-popper, .#{$namespace}-input__suggestion {
+        border-radius: 0;
+      }
+    }
+    &.#{$namespace}-input--small {
+      .#{$namespace}-input__suggestion { padding: 8px 10px; }
+      .#{$namespace}-input__suggestion-label { font-size: 0.82rem; }
+    }
+    &.#{$namespace}-input--large {
+      .#{$namespace}-input__suggestion { padding: 12px 14px; }
+      .#{$namespace}-input__suggestion-label { font-size: 1rem; }
+    }
+  }
+  @include e(suggestions) {
+    @include scroll-bar;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    max-height: 280px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    list-style: none;
+  }
+  @include e(suggestion) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: 44px;
+    gap: 3px;
+    padding: 10px 12px;
+    border-radius: var(--sax-radius-sm);
+    cursor: pointer;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+    transition: background-color var(--sax-motion-duration-fast);
+    & + & { margin-top: 3px; }
+    @include when(active) {
+      background: getColor(color, 0.09);
+      color: getColor(color);
+    }
+    @include when(disabled) {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  }
+  @include e(suggestion-label) { font-size: 0.9rem; font-weight: 500; }
+  @include e(suggestion-description) { font-size: 0.78rem; color: getColor(text, 0.62); }
+  @include e(suggestion-highlight) {
+    padding: 0 1px;
+    border-radius: 3px;
+    background: color-mix(in srgb, getColor(warn) 20%, getColor(background));
+    color: color-mix(in srgb, getColor(warn) 42%, black);
+  }
+}
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

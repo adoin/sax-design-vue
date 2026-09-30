@@ -21,6 +21,7 @@
     >
       <input
         ref="inputRef"
+        autocomplete="off"
         :class="ns.e('input')"
         type="file"
         :accept="effectiveAccept"

@@ -42,6 +42,7 @@ const select = (event: Event) => {
     :class="[ns.b(), ns.is('active', active), ns.is('disabled', isDisabled)]"
   >
     <input
+      autocomplete="off"
       :checked="active"
       type="radio"
       :value="value"

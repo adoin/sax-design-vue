@@ -3,7 +3,7 @@
     class="play-container demo"
     style="display: flex; flex-direction: row; align-items: center; gap: 16px; flex-wrap: wrap; width: 100%"
   >
-    <input v-model="colorx" type="color" aria-label="Breadcrumb color" />
+    <input autocomplete="off" v-model="colorx" type="color" aria-label="Breadcrumb color" />
     <s-breadcrumb :color="colorx" :items="items" style="width: auto" />
   </div>
 </template>

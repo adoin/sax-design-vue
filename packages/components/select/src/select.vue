@@ -103,6 +103,7 @@
           v-if="filterable && !selectDisabled"
           ref="input"
           v-model="query"
+          autocomplete="off"
           type="text"
           :class="[
             ns.e('input-filter'),
@@ -145,6 +146,7 @@
         :id="inputId"
         ref="reference"
         v-model="states.selectedLabel"
+        autocomplete="off"
         :aria-label="
           ($attrs['aria-label'] as string | undefined) ?? resolvedLabel
         "
