@@ -1,10 +1,19 @@
-import { createSSRApp, h } from 'vue'
-import { mount } from '@vue/test-utils'
+import { createSSRApp, h, nextTick } from 'vue'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { renderToString } from 'vue/server-renderer'
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import {
+  getSvgFilterId,
+  svgFilter,
+  tagShapeShadowFilter,
+} from '@vuesax-alpha/utils'
 import { STag } from '..'
 import Tag from '../src/tag.vue'
 import TagGroup from '../src/tag-group.vue'
+
+enableAutoUnmount(afterEach)
+beforeEach(() => svgFilter.clearUnused())
+afterEach(() => svgFilter.clearUnused())
 
 describe('Tag', () => {
   it('keeps variant and shape as independent visual contracts', () => {
@@ -87,31 +96,32 @@ describe('Tag', () => {
     expect(wrapper.classes()).toContain('is-pill')
   })
 
-  it('uses a compensated SVG shadow filter for clipped variants', () => {
+  it('uses a shared compensated SVG shadow filter for clipped variants', async () => {
     const wrapper = mount(Tag, {
       props: { variant: 'arrow' },
       slots: { default: 'Arrow' },
       global: { stubs: { SIcon: true } },
     })
 
-    const filter = wrapper.get('filter')
-    expect(filter.attributes('id')).toMatch(/^s-tag-shape-shadow-/)
-    expect(wrapper.attributes('style')).toContain(
-      `url("#${filter.attributes('id')}")`,
-    )
-    expect(wrapper.find('feMorphology').exists()).toBe(true)
-    expect(wrapper.findAll('feGaussianBlur')).toHaveLength(2)
+    await nextTick()
+    const id = getSvgFilterId(tagShapeShadowFilter)
+    const filter = document.querySelector(`#${id}`)!
+    expect(wrapper.find('filter').exists()).toBe(false)
+    expect(wrapper.attributes('style')).toContain(`url("#${id}")`)
+    expect(filter.querySelector('feMorphology')).not.toBeNull()
+    expect(filter.querySelectorAll('feGaussianBlur')).toHaveLength(2)
     expect(wrapper.find('.s-tag__shape-surface').exists()).toBe(true)
   })
 
-  it('renders deterministic SVG filter references during SSR', async () => {
+  it('renders a CSS shadow fallback without touching the document during SSR', async () => {
     const app = createSSRApp({
       render: () => h(Tag, { variant: 'flag' }, { default: () => 'SSR flag' }),
     })
     const html = await renderToString(app)
 
-    expect(html).toContain('id="s-tag-shape-shadow-v-0"')
-    expect(html).toContain('filter:url(&quot;#s-tag-shape-shadow-v-0&quot;)')
+    expect(html).not.toContain('<filter')
+    expect(html).toContain('filter:drop-shadow(')
+    expect(document.querySelector('[data-sax-svg-filters]')).toBeNull()
     expect(html).toContain('s-tag__shape-surface')
   })
 

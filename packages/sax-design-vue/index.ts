@@ -9,6 +9,16 @@ export {
   colorToHsl,
   createThemeCssVars,
   hslToChannels,
+  svgFilter,
+  defineSvgFilter,
+} from '@vuesax-alpha/utils'
+export type {
+  SvgFilterDefinition,
+  SvgFilterNode,
+  SvgFilterLease,
+  SvgFilterOptions,
+  SvgFilterPrimitive,
+  SvgFilterManager,
 } from '@vuesax-alpha/utils'
 export * from './make-installer'
 

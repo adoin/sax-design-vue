@@ -362,3 +362,36 @@ app.use(SaxDesignVue, { firstDayOfWeek: 1, firstWeekContainsDate: 4 })
 ```
 
 </card>
+
+<card>
+
+## Shared SVG filters
+
+Card liquid-glass textures and Tag mark/arrow/flag shadows register their static graphs automatically. The document-wide registry reuses identical definitions across component instances and Vue applications, including multiple library imports. The three built-in graphs stay cached for reuse after route changes. Each element still renders the shared graph against its own bounds.
+
+Use `defineSvgFilter` and `useSvgFilter` for custom component filters. The graph is an immutable snapshot. Its key, attributes, primitive nodes, and optional scope determine its identity; different parameters cannot overwrite an existing definition.
+
+```vue
+<script setup lang="ts">
+import { defineSvgFilter, useSvgFilter } from 'sax-design-vue'
+
+const shadow = defineSvgFilter({
+  key: 'soft-shadow',
+  nodes: [{
+    tag: 'feDropShadow',
+    attrs: { dx: 0, dy: 2, stdDeviation: 2, 'flood-opacity': 0.15 },
+  }],
+})
+const { url } = useSvgFilter(shadow, { cache: true })
+</script>
+
+<template>
+  <s-tag :style="{ filter: url }">Shared shadow</s-tag>
+</template>
+```
+
+The composable acquires the graph after mount and releases its consumer when the component unmounts. Without `cache: true`, the last release removes the graph. Pass a document-unique `scope` for independently animated instances; avoid caching changing instance graphs. The returned `id`, `url`, `ready`, and `element` are refs. Until `ready` is true, SSR and hydration use the component's CSS fallback and create no server-side DOM. Card and Tag provide their own fallbacks.
+
+Outside Vue setup, call `svgFilter.acquire(definition, { cache: true })`, apply the returned `url`, and call `release()` when the consumer is removed. `svgFilter.getId(definition, scope?)` returns a deterministic ID without creating DOM. `svgFilter.clearUnused(document?)` removes idle cached graphs while preserving those still used by any application. An explicit `document` option keeps iframe registries separate.
+
+</card>

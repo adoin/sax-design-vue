@@ -786,7 +786,7 @@
       backdrop-filter: saturate(180%) blur(14px);
 
       @supports (backdrop-filter: url('#s-card-liquid-glass-support')) {
-        backdrop-filter: var(--sax-card-liquid-filter);
+        backdrop-filter: var(--sax-card-liquid-filter, saturate(180%) blur(14px));
       }
 
       &::before {
@@ -798,7 +798,7 @@
     &--liquid-glass-2 {
       -webkit-backdrop-filter: blur(3px);
       backdrop-filter: blur(3px);
-      filter: var(--sax-card-liquid-filter);
+      filter: var(--sax-card-liquid-filter, none);
     }
   }
 
@@ -1135,13 +1135,6 @@
     }
   }
 
-  @include e(texture-filter) {
-    position: absolute;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
 }
 
 .#{$namespace}-card-content > .#{$namespace}-card.is-texture-liquid-glass,

@@ -47,9 +47,16 @@ export const generateTypesDefinitions = async () => {
   typeCheck(project)
   consola.success('Type check passed!')
 
-  await project.emit({
+  const declarationEmit = await project.emit({
     emitOnlyDtsFiles: true,
   })
+  const declarationDiagnostics = declarationEmit.getDiagnostics()
+  if (declarationDiagnostics.length) {
+    consola.error(
+      project.formatDiagnosticsWithColorAndContext(declarationDiagnostics),
+    )
+    throw new Error('Failed to emit declarations.')
+  }
 
   const tasks = sourceFiles.map(async (sourceFile) => {
     const relativePath = path.relative(pkgRoot, sourceFile.getFilePath())
@@ -133,11 +140,14 @@ async function addSourceFiles(project: Project) {
               'date-picker.vue',
               'form-group.vue',
               'form.vue',
+              'icon-picker.vue',
+              'input-number.vue',
               'sizes.vue',
               'table-column-manager.vue',
               'table-find-panel.vue',
               'table-query-form.vue',
               'time-select.vue',
+              'time-picker.vue',
             ].includes(path.basename(file))
             const skipSyntheticCheck = ['form-group.vue'].includes(
               path.basename(file),

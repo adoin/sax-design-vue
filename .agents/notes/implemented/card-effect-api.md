@@ -25,7 +25,7 @@ supersedes: []
 - Card 不再提供额外的 `variant` 表面样式轴；先前的六种 `variant` 与对应示例、综合配置控件已按用户决定移除，避免与 `type` 和 `texture` 重叠。
 - `orientation="horizontal"` 适用于全部具名 `type`；媒体优先型需把图片与内容并排，同时保留遮罩、磨砂、浮现等可辨识表现，`profile` 保留头像处理。不可禁用横排或让原预设静默忽略横排。图片只继承与外框接触的角，`shape="square"` 在悬停时也维持直角。
 - `texture="default"` 不添加材质层，保持常规纯色表面；`effect="default"` 不添加装饰层。
-- `texture="liquid-glass"` 必须通过 SVG `feTurbulence`、模糊噪声和 `feDisplacementMap` 对真实背景产生可观察的光学位移，不能用透明度、渐变或普通模糊冒充折射。每个 Card 实例使用 SSR 稳定且唯一的滤镜 ID；不支持 URL backdrop filter 时降级为饱和模糊玻璃。
+- `texture="liquid-glass"` 必须通过 SVG `feTurbulence`、模糊噪声和 `feDisplacementMap` 对真实背景产生可观察的光学位移，不能用透明度、渐变或普通模糊冒充折射。滤镜资源按 [全局 SVG 注册表](shared-svg-filter-registry.md) 的确定性定义 ID 共享，替代旧的实例级 ID；SSR/hydration 挂载前及不支持 URL backdrop filter 时使用饱和模糊玻璃降级。
 - 液态镜片在位移层之上保留轻量的饱和、亮度与 3px backdrop blur，文字使用高亮白标题与柔和浅色正文。文档示例的两个背景色球使用不同周期的 transform 动画，并在 reduced-motion 下保持静止。
 - 位移滤镜只处理内部背景，平滑边框由未参与 displacement 的 Card 外壳绘制。紧凑卡片使用经过平滑的噪声（`stdDeviation=4`）和 48px 位移幅度，避免边缘出现锯齿状采样断层。
 - `texture="liquid-glass-2"` 作为第二套 SVG 光学滤镜对照：使用 component transfer、specular lighting、composite 与 150px displacement，并通过 `filter: url(...)` 处理已经 3px backdrop blur 的纹理层。它必须与 `liquid-glass` 共用标题、正文、尺寸、边框、tint、shine 和动态背景，只允许滤镜图与必要的滤镜应用路径不同。

@@ -1,6 +1,12 @@
-import { mount } from '@vue/test-utils'
-import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { svgFilter } from '@vuesax-alpha/utils'
 import Card from '../src/card.vue'
+
+enableAutoUnmount(afterEach)
+beforeEach(() => svgFilter.clearUnused())
+afterEach(() => svgFilter.clearUnused())
 
 describe('Card content', () => {
   it('renders title and text props with card content classes', () => {
@@ -175,51 +181,56 @@ describe('Card content', () => {
     ).toHaveProperty('aria-hidden', 'true')
   })
 
-  it('creates an isolated optical displacement filter for each liquid glass card', () => {
+  it('shares one optical displacement filter across liquid glass cards', async () => {
     const wrapper = mount({
       components: { Card },
       template:
         '<div><Card texture="liquid-glass" /><Card texture="liquid-glass" /></div>',
     })
-    const filters = wrapper.findAll('filter')
+    await nextTick()
+    const filters = Array.from(
+      document.querySelectorAll('[data-sax-svg-filters] filter'),
+    )
     const cards = wrapper.findAll('.s-card')
-    const ids = filters.map((filter) => filter.attributes('id'))
+    const id = filters[0].id
 
-    expect(filters).toHaveLength(2)
-    expect(new Set(ids).size).toBe(2)
+    expect(filters).toHaveLength(1)
+    expect(wrapper.find('filter').exists()).toBe(false)
     filters.forEach((filter) => {
-      expect(filter.find('[result="noise"]').exists()).toBe(true)
-      expect(filter.find('[stdDeviation="4"]').exists()).toBe(true)
-      expect(filter.find('[scale="48"]').exists()).toBe(true)
+      expect(filter.querySelector('[result="noise"]')).not.toBeNull()
+      expect(filter.querySelector('[stdDeviation="4"]')).not.toBeNull()
+      expect(filter.querySelector('[scale="48"]')).not.toBeNull()
     })
-    cards.forEach((card, index) => {
+    cards.forEach((card) => {
       expect(card.attributes('style')).toContain(
-        `--sax-card-liquid-filter: url(#${ids[index]})`,
+        `--sax-card-liquid-filter: url("#${id}")`,
       )
     })
   })
 
-  it('uses the alternate specular SVG graph for liquid glass 2', () => {
+  it('shares the alternate specular SVG graph for liquid glass 2', async () => {
     const wrapper = mount({
       components: { Card },
       template:
         '<div><Card texture="liquid-glass-2" /><Card texture="liquid-glass-2" /></div>',
     })
-    const filters = wrapper.findAll('filter')
+    await nextTick()
+    const filters = Array.from(
+      document.querySelectorAll('[data-sax-svg-filters] filter'),
+    )
     const cards = wrapper.findAll('.s-card')
-    const ids = filters.map((filter) => filter.attributes('id'))
+    const id = filters[0].id
 
-    expect(filters).toHaveLength(2)
-    expect(new Set(ids).size).toBe(2)
+    expect(filters).toHaveLength(1)
     filters.forEach((filter) => {
-      expect(filter.find('[result="mapped"]').exists()).toBe(true)
-      expect(filter.find('[result="specular-light"]').exists()).toBe(true)
-      expect(filter.find('[scale="150"]').exists()).toBe(true)
+      expect(filter.querySelector('[result="mapped"]')).not.toBeNull()
+      expect(filter.querySelector('[result="specular-light"]')).not.toBeNull()
+      expect(filter.querySelector('[scale="150"]')).not.toBeNull()
     })
-    cards.forEach((card, index) => {
+    cards.forEach((card) => {
       expect(card.classes()).toContain('is-texture-liquid-glass-2')
       expect(card.attributes('style')).toContain(
-        `--sax-card-liquid-filter: url(#${ids[index]})`,
+        `--sax-card-liquid-filter: url("#${id}")`,
       )
     })
   })

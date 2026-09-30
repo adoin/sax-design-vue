@@ -362,3 +362,36 @@ app.use(SaxDesignVue, { firstDayOfWeek: 1, firstWeekContainsDate: 4 })
 ```
 
 </card>
+
+<card>
+
+## 共享 SVG 滤镜
+
+Card 的液态玻璃纹理和 Tag 的 mark/arrow/flag 阴影会自动注册静态滤镜。同一文档内的组件实例、Vue 应用以及多份组件库导入会复用相同定义。三套内置定义保留缓存，切换页面后可继续使用；每个元素仍按自己的边界分别渲染滤镜效果。
+
+自定义组件可使用 `defineSvgFilter` 和 `useSvgFilter`。定义会保存为不可变快照，名称、属性、滤镜节点及可选作用域共同确定身份；不同参数不会覆盖已有定义。
+
+```vue
+<script setup lang="ts">
+import { defineSvgFilter, useSvgFilter } from 'sax-design-vue'
+
+const shadow = defineSvgFilter({
+  key: 'soft-shadow',
+  nodes: [{
+    tag: 'feDropShadow',
+    attrs: { dx: 0, dy: 2, stdDeviation: 2, 'flood-opacity': 0.15 },
+  }],
+})
+const { url } = useSvgFilter(shadow, { cache: true })
+</script>
+
+<template>
+  <s-tag :style="{ filter: url }">共享阴影</s-tag>
+</template>
+```
+
+组合函数在挂载后注册，组件卸载时释放其引用。未设置 `cache: true` 时，最后一个引用释放后会删除定义。独立动画实例应传入文档内唯一的 `scope`，避免缓存不断变化的实例定义。返回的 `id`、`url`、`ready`、`element` 均为 ref；`ready` 为真之前，SSR 和 hydration 使用组件的 CSS 降级效果，不创建服务端 DOM。Card 和 Tag 已提供相应降级。
+
+在 Vue setup 外可调用 `svgFilter.acquire(definition, { cache: true })`，应用返回的 `url`，并在使用者移除时调用 `release()`。`svgFilter.getId(definition, scope?)` 无需创建 DOM 即可获得确定性 ID。`svgFilter.clearUnused(document?)` 清理未使用的缓存，保留任何应用仍在引用的定义。显式 `document` 选项可用于隔离 iframe 中的注册表。
+
+</card>

@@ -1,7 +1,16 @@
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, useAttrs, useId, useTemplateRef } from 'vue'
-import { useColor, useNamespace, useShape } from '@vuesax-alpha/hooks'
-import { getVsColor } from '@vuesax-alpha/utils'
+import { computed, onBeforeUnmount, useAttrs, useTemplateRef } from 'vue'
+import {
+  useColor,
+  useNamespace,
+  useShape,
+  useSvgFilter,
+} from '@vuesax-alpha/hooks'
+import {
+  cardLiquidGlassFilter,
+  cardLiquidGlassSpecularFilter,
+  getVsColor,
+} from '@vuesax-alpha/utils'
 import { cardEmits, cardProps } from './card'
 import type { CardType, LegacyCardType } from './card'
 import type { CSSProperties } from 'vue'
@@ -34,14 +43,15 @@ const attrs = useAttrs()
 const color = useColor('primary')
 const resolvedShape = useShape()
 const cardRef = useTemplateRef<HTMLElement>('cardRef')
-const liquidGlassFilterId = `s-card-liquid-glass-${useId().replace(
-  /[^a-zA-Z0-9_-]/g,
-  '',
-)}`
-const liquidGlassFilterId2 = `s-card-liquid-glass-2-${useId().replace(
-  /[^a-zA-Z0-9_-]/g,
-  '',
-)}`
+const liquidGlassFilter = useSvgFilter(
+  () =>
+    props.texture === 'liquid-glass'
+      ? cardLiquidGlassFilter
+      : props.texture === 'liquid-glass-2'
+        ? cardLiquidGlassSpecularFilter
+        : undefined,
+  { document: () => cardRef.value?.ownerDocument, cache: true },
+)
 let pointerEffectFrame: number | undefined
 let pointerEffectX = 0
 let pointerEffectY = 0
@@ -102,11 +112,8 @@ const cardStyles = computed<CSSProperties | undefined>(() => {
     ? ns.cssVar({ color: getVsColor(color.value) })
     : {}
 
-  if (props.texture === 'liquid-glass') {
-    styles['--sax-card-liquid-filter'] = `url(#${liquidGlassFilterId})`
-  } else if (props.texture === 'liquid-glass-2') {
-    styles['--sax-card-liquid-filter'] = `url(#${liquidGlassFilterId2})`
-  }
+  if (liquidGlassFilter.url.value)
+    styles['--sax-card-liquid-filter'] = liquidGlassFilter.url.value
 
   return Object.keys(styles).length ? styles : undefined
 })
@@ -385,102 +392,5 @@ onBeforeUnmount(() => {
         <span :class="[ns.e('skeleton'), ns.em('skeleton', 'line-short')]" />
       </div>
     </component>
-
-    <svg
-      v-if="texture === 'liquid-glass'"
-      :class="ns.e('texture-filter')"
-      width="0"
-      height="0"
-      focusable="false"
-      aria-hidden="true"
-    >
-      <defs>
-        <filter
-          :id="liquidGlassFilterId"
-          x="-20%"
-          y="-20%"
-          width="140%"
-          height="140%"
-          color-interpolation-filters="sRGB"
-        >
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.008 0.008"
-            numOctaves="2"
-            seed="92"
-            result="noise"
-          />
-          <feGaussianBlur in="noise" stdDeviation="4" result="blurred-noise" />
-          <feDisplacementMap
-            in="SourceGraphic"
-            in2="blurred-noise"
-            scale="48"
-            xChannelSelector="R"
-            yChannelSelector="G"
-          />
-        </filter>
-      </defs>
-    </svg>
-
-    <svg
-      v-else-if="texture === 'liquid-glass-2'"
-      :class="ns.e('texture-filter')"
-      width="0"
-      height="0"
-      focusable="false"
-      aria-hidden="true"
-    >
-      <defs>
-        <filter
-          :id="liquidGlassFilterId2"
-          x="0%"
-          y="0%"
-          width="100%"
-          height="100%"
-          filterUnits="objectBoundingBox"
-          color-interpolation-filters="sRGB"
-        >
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.01 0.01"
-            numOctaves="1"
-            seed="5"
-            result="turbulence"
-          />
-          <feComponentTransfer in="turbulence" result="mapped">
-            <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
-            <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
-            <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
-          </feComponentTransfer>
-          <feGaussianBlur in="turbulence" stdDeviation="3" result="soft-map" />
-          <feSpecularLighting
-            in="soft-map"
-            surfaceScale="5"
-            specularConstant="1"
-            specularExponent="100"
-            lighting-color="white"
-            result="specular-light"
-          >
-            <fePointLight x="-200" y="-200" z="300" />
-          </feSpecularLighting>
-          <feComposite
-            in="specular-light"
-            operator="arithmetic"
-            k1="0"
-            k2="1"
-            k3="1"
-            k4="0"
-            result="lit-image"
-          />
-          <feDisplacementMap
-            in="SourceGraphic"
-            in2="soft-map"
-            scale="150"
-            xChannelSelector="R"
-            yChannelSelector="G"
-          />
-        </filter>
-      </defs>
-    </svg>
   </div>
 </template>

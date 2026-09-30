@@ -1,76 +1,12 @@
 <template>
   <div
     v-if="visible"
+    ref="tagRef"
     :class="tagKls"
     :style="[tagStyle, shapeShadowStyle]"
     :aria-disabled="disabled || undefined"
     @click="handleClick"
   >
-    <svg
-      v-if="usesShapeShadow"
-      :class="ns.e('shadow-filter')"
-      width="0"
-      height="0"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <defs>
-        <filter
-          :id="shapeShadowFilterId"
-          x="-60%"
-          y="-80%"
-          width="220%"
-          height="260%"
-          color-interpolation-filters="sRGB"
-        >
-          <feMorphology
-            in="SourceAlpha"
-            operator="dilate"
-            radius="0.35"
-            result="expanded-alpha"
-          />
-          <feGaussianBlur
-            in="expanded-alpha"
-            stdDeviation="0.8"
-            result="ambient-blur"
-          />
-          <feOffset in="ambient-blur" dy="1" result="ambient-offset" />
-          <feFlood
-            flood-color="var(--sax-css-primary)"
-            flood-opacity="0.18"
-            result="ambient-color"
-          />
-          <feComposite
-            in="ambient-color"
-            in2="ambient-offset"
-            operator="in"
-            result="ambient-shadow"
-          />
-          <feGaussianBlur
-            in="expanded-alpha"
-            stdDeviation="2.4"
-            result="depth-blur"
-          />
-          <feOffset in="depth-blur" dy="3" result="depth-offset" />
-          <feFlood
-            flood-color="var(--sax-css-primary)"
-            flood-opacity="0.2"
-            result="depth-color"
-          />
-          <feComposite
-            in="depth-color"
-            in2="depth-offset"
-            operator="in"
-            result="depth-shadow"
-          />
-          <feMerge>
-            <feMergeNode in="depth-shadow" />
-            <feMergeNode in="ambient-shadow" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-    </svg>
     <span
       v-if="usesShapeShadow"
       :class="ns.e('shape-surface')"
@@ -120,7 +56,6 @@ import {
   nextTick,
   onMounted,
   shallowRef,
-  useId,
   useTemplateRef,
   watch,
 } from 'vue'
@@ -130,10 +65,16 @@ import {
   useNamespace,
   useShape,
   useSize,
+  useSvgFilter,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { getCssColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
+import {
+  getCssColor,
+  isVsColor,
+  normalizeVsColor,
+  tagShapeShadowFilter,
+} from '@vuesax-alpha/utils'
 import { tagEmits, tagProps } from './tag'
 import type { Color } from '@vuesax-alpha/constants'
 import type { CSSProperties } from 'vue'
@@ -180,9 +121,20 @@ const resolvedShape = computed(() => (props.round ? 'pill' : shape.value))
 const usesShapeShadow = computed(() =>
   ['mark', 'arrow', 'flag'].includes(resolvedVariant.value),
 )
-const shapeShadowFilterId = `s-tag-shape-shadow-${useId()}`
+const tagRef = useTemplateRef<HTMLElement>('tagRef')
+const shapeShadowFilter = useSvgFilter(
+  () =>
+    visible.value && usesShapeShadow.value ? tagShapeShadowFilter : undefined,
+  { document: () => tagRef.value?.ownerDocument, cache: true },
+)
 const shapeShadowStyle = computed((): CSSProperties =>
-  usesShapeShadow.value ? { filter: `url("#${shapeShadowFilterId}")` } : {},
+  usesShapeShadow.value
+    ? {
+        filter:
+          shapeShadowFilter.url.value ??
+          'drop-shadow(0 1px 0.8px color-mix(in srgb, var(--sax-css-primary) 18%, transparent)) drop-shadow(0 3px 2.4px color-mix(in srgb, var(--sax-css-primary) 20%, transparent))',
+      }
+    : {},
 )
 
 const tagKls = computed(() => [
