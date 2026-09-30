@@ -208,10 +208,10 @@ PROPS:
   - name: prevent-close
     type: Boolean
     values: "true, false"
-    description: 禁止点击遮罩或按 Esc 关闭对话框。
+    description: 限制遮罩点击和 Esc 关闭，不影响主动关闭入口。
     default: false
     link: null
-    usage: null
+    usage: '#restrict-dismissal'
     code: null
   - name: title
     type: String | Number
@@ -658,9 +658,9 @@ SLOTS:
 
 <card>
 
-## 禁止关闭
+## 限制关闭方式
 
-使用 `prevent-close` 后，点击遮罩或按 **Esc** 键不会关闭对话框。
+设置 `prevent-close` 后，点击遮罩或按 **Esc** 键不会关闭对话框。关闭按钮、确认／取消操作以及程序调用仍遵循各自的关闭配置和 `before-close` 校验。
 
 <template #example>
 <dialog-zh-prevent-close />

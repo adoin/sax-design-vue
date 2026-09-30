@@ -188,10 +188,10 @@ PROPS:
   - name: prevent-close
     type: Boolean
     values: "true, false"
-    description: It makes the dialog cannot be closed by clicking outside or by pressing the esc key.
+    description: Block overlay-click and Escape dismissal without disabling explicit close actions.
     default: false
     link: null
-    usage: null
+    usage: '#restrict-dismissal'
     code: null
   - name: title
     type: String | Number
@@ -682,9 +682,9 @@ Change the dialog style by removing the border radius and making it rectangular
 
 <card>
 
-## Prevent Close
+## Restrict dismissal
 
-With the `prevent-close` property you do not close the dialog by clicking outside or pressing the **esc** key
+Set `prevent-close` to block closing by clicking the overlay or pressing **Escape**. Close buttons, confirmation/cancellation actions, and programmatic requests still follow their own closing configuration and the `before-close` guard.
 
 <template #example>
 <dialog-prevent-close />
