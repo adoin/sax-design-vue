@@ -3,10 +3,16 @@ import { computed, inject, toRefs } from 'vue'
 import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { radioGroupContextKey } from '@vuesax-alpha/tokens'
 import type { RadioEmitFn, RadioProps } from './radio'
+import type { Ref } from 'vue'
 
-export const useRadio = (props: RadioProps, emit: RadioEmitFn) => {
+export const useRadio = (
+  props: RadioProps,
+  emit: RadioEmitFn,
+  loadingVisible: Ref<boolean>,
+) => {
   const radioGroup = inject(radioGroupContextKey, undefined)
-  const { disabled, loading } = toRefs(props)
+  const { disabled } = toRefs(props)
+  const loading = computed(() => props.loading || loadingVisible.value)
   const isDisabled = computed(
     () => disabled.value || loading.value || radioGroup?.disabled.value,
   )

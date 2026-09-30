@@ -63,6 +63,7 @@
             <icon-loading
               v-if="closeIndicatorShown"
               :active="closeLoadingActive"
+              stop-behavior="corners"
               :size="18"
             />
             <icon-close v-else :size="18" />
@@ -157,6 +158,7 @@
         <icon-loading
           v-if="closeIndicatorShown"
           :active="closeLoadingActive"
+          stop-behavior="corners"
           :size="14"
         />
         <icon-close v-else :size="14" />

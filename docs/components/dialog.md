@@ -722,19 +722,19 @@ Customize the action layout with the `footer` slot. Its `confirm` and `cancel` c
 
 <template #template>
 
-@[code{29-66}](../.vuepress/components/dialog/footer.vue)
+@[code{30-69}](../.vuepress/components/dialog/footer.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-27}](../.vuepress/components/dialog/footer.vue)
+@[code{1-28}](../.vuepress/components/dialog/footer.vue)
 
 </template>
 
 <template #style>
 
-@[code{68-98}](../.vuepress/components/dialog/footer.vue)
+@[code{71-101}](../.vuepress/components/dialog/footer.vue)
 
 </template>
 
@@ -746,7 +746,7 @@ Customize the action layout with the `footer` slot. Its `confirm` and `cancel` c
 
 `before-close` is `() => Promise<void>` and takes no callback argument. Return `Promise.resolve()` or fulfill an `async` function to continue closing. `Promise.reject('reason')` or a thrown `Error` blocks closing and displays its reason. Close buttons, overlay clicks, Escape, cancellation, closing after confirmation, dock bubbles, instance `close()`, and controlled `v-model` close requests use the same check. Minimizing does not run it.
 
-While pending, the dialog and overlay stay mounted, close buttons show loading, and repeated requests share one check. Rejecting a controlled close emits `v-model=true` to restore visibility. Use `close-error` for logging; custom footers receive `closePending`. Results from an unmounted or reopened instance cannot close a new instance or display a stale notification. `SDialogBox` also waits for actual closing and disposal before settling its outer Promise. An already-visible default loader completes its starting and stopping motion before the exit begins. Instant checks that never show a loader add no wait; reduced-motion mode and hidden pages finish the visual motion immediately.
+While pending, the dialog and overlay stay mounted, close buttons show loading, and repeated requests share one check. Rejecting a controlled close emits `v-model=true` to restore visibility. Use `close-error` for logging; custom footers receive `closePending`. Results from an unmounted or reopened instance cannot close a new instance or display a stale notification. `SDialogBox` also waits for actual closing and disposal before settling its outer Promise. The close indicator finishes its lead-in, then its colored strands clear at four points before the dialog exits. Confirmation buttons retain the default logo restoration. Instant checks that never show a loader add no wait; reduced-motion mode and hidden pages finish the visual motion immediately.
 
 <template #example>
 <dialog-before-close />

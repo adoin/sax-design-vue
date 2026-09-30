@@ -8,12 +8,12 @@ const loading = ref(false)
 <template>
   <div class="radio-loading-example">
     <div class="loading-control">
-      <s-switch v-model="loading" aria-label="Loading" />
-      <span>Loading</span>
+      <s-switch v-model="loading" aria-label="加载状态" />
+      <span>加载状态</span>
     </div>
     <div class="radio-options">
-      <s-radio v-model="picked" :loading="loading" value="1">Option 1</s-radio>
-      <s-radio v-model="picked" :loading="loading" value="2">Option 2</s-radio>
+      <s-radio v-model="picked" :loading="loading" value="1">选项 1</s-radio>
+      <s-radio v-model="picked" :loading="loading" value="2">选项 2</s-radio>
     </div>
   </div>
 </template>

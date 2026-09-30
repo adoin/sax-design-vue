@@ -698,7 +698,7 @@ SLOTS:
 
 <template #template>
 
-@[code{29-66}](../../.vuepress/components/dialog-zh/footer.vue)
+@[code{29-68}](../../.vuepress/components/dialog-zh/footer.vue)
 
 </template>
 
@@ -710,7 +710,7 @@ SLOTS:
 
 <template #style>
 
-@[code{68-98}](../../.vuepress/components/dialog-zh/footer.vue)
+@[code{70-100}](../../.vuepress/components/dialog-zh/footer.vue)
 
 </template>
 
@@ -722,7 +722,7 @@ SLOTS:
 
 `before-close` 使用 `() => Promise<void>`，不接收回调参数。返回 `Promise.resolve()` 或完成 `async` 函数才会进入关闭流程；`Promise.reject('原因')` 或抛出 `Error` 会阻止关闭并弹出原因。关闭按钮、遮罩、Escape、取消、确认后的关闭、气泡关闭、实例 `close()` 及 `v-model` 关闭请求共用这一校验。最小化本身不触发校验。
 
-等待期间保留弹窗与遮罩，关闭按钮显示 loading，重复请求复用同一次校验。拒绝受控关闭时会回写 `v-model=true`。`close-error` 可用于记录拒绝；自定义 footer 提供 `closePending`。卸载或重新打开后，过期结果不会关闭新实例或弹出提示。`SDialogBox` 也遵循此流程，并在真正关闭及清理后才结束调用 Promise。 已显示的默认 loading 会补完前摇与后摇后再进入退出流程；瞬间完成而未显示的 loading 不额外等待，减少动态效果或页面不可见时直接结束动效。
+等待期间保留弹窗与遮罩，关闭按钮显示 loading，重复请求复用同一次校验。拒绝受控关闭时会回写 `v-model=true`。`close-error` 可用于记录拒绝；自定义 footer 提供 `closePending`。卸载或重新打开后，过期结果不会关闭新实例或弹出提示。`SDialogBox` 也遵循此流程，并在真正关闭及清理后才结束调用 Promise。 关闭指示器先完成前摇，再让彩色线条在四个点收起消失，之后进入退出流程；确认按钮仍使用默认的标志还原后摇。瞬间完成而未显示的 loading 不额外等待，减少动态效果或页面不可见时直接结束动效。
 
 <template #example>
 <dialog-zh-before-close />

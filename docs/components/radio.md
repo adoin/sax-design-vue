@@ -456,7 +456,7 @@ Add a label to the radio with the `default` slot, if you need the label to be be
 
 ## Loading
 
-Loading replaces the radio control with the shared Sax logo loader while keeping the label in place. Interaction is disabled until loading finishes.
+Loading replaces the radio control with the shared Sax logo loader while keeping the label in place. When loading ends, its colored strands clear at four points before the radio icon returns. Interaction stays disabled until this short exit finishes; an unfinished lead-in completes first.
 
 <template #example>
 <radio-loading />
@@ -464,19 +464,19 @@ Loading replaces the radio control with the shared Sax logo loader while keeping
 
 <template #template>
 
-@[code{7-12}](../.vuepress/components/radio/loading.vue)
+@[code{8-19}](../.vuepress/components/radio/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-5}](../.vuepress/components/radio/loading.vue)
+@[code{1-6}](../.vuepress/components/radio/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{14-20}](../.vuepress/components/radio/loading.vue)
+@[code{21-39}](../.vuepress/components/radio/loading.vue)
 
 </template>
 

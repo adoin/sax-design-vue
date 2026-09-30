@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, useTemplateRef } from 'vue'
+import { computed, shallowRef, useTemplateRef, watch } from 'vue'
 import {
   useColor,
   useId,
@@ -29,7 +29,21 @@ const emit = defineEmits(radioEmits)
 const uid = useId()
 const size = useSize()
 
-const { isDisabled, loading, model, checked, radioName } = useRadio(props, emit)
+const loadingVisible = shallowRef(props.loading)
+watch(
+  () => props.loading,
+  (value) => {
+    if (value) loadingVisible.value = true
+  },
+)
+const finishLoading = () => {
+  if (!props.loading) loadingVisible.value = false
+}
+const { isDisabled, loading, model, checked, radioName } = useRadio(
+  props,
+  emit,
+  loadingVisible,
+)
 const customIconElement = useTemplateRef<HTMLElement>('customIcon')
 const { resolvedIconAnimation } = useSvgIconAnimation(
   customIconElement,
@@ -73,7 +87,13 @@ const radioStyles = computed(() => [
     />
 
     <span :class="ns.b()" aria-hidden="true">
-      <SLogoLoading v-if="loading" :size="20" />
+      <SLogoLoading
+        v-if="loadingVisible"
+        :size="20"
+        :active="props.loading"
+        stop-behavior="corners"
+        @restored="finishLoading"
+      />
       <svg
         v-else
         :class="ns.e('graphic')"

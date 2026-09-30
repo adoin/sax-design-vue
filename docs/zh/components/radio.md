@@ -450,27 +450,27 @@ RadioGroup 的普通形态和按钮形态都会在选中项之间播放默认圆
 
 ## 加载
 
-加载时使用共用的 Sax 标志加载器替换单选控件，标签位置保持不变；此时交互行为等同于 `disabled`。
+加载时使用共用的 Sax 标志加载器替换单选控件，标签位置保持不变。结束时彩色线条在四个点收起消失，再恢复单选图标；短后摇完成前保持禁用，尚未结束的前摇会先播放完。
 
 <template #example>
-<radio-loading />
+<radio-zh-loading />
 </template>
 
 <template #template>
 
-@[code{7-12}](../../.vuepress/components/radio/loading.vue)
+@[code{8-19}](../../.vuepress/components/radio-zh/loading.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-5}](../../.vuepress/components/radio/loading.vue)
+@[code{1-6}](../../.vuepress/components/radio-zh/loading.vue)
 
 </template>
 
 <template #style>
 
-@[code{14-20}](../../.vuepress/components/radio/loading.vue)
+@[code{21-39}](../../.vuepress/components/radio-zh/loading.vue)
 
 </template>
 

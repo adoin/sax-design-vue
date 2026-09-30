@@ -60,41 +60,46 @@ const mountDialog = (props = {}) => {
 }
 
 describe('Dialog loading completion', () => {
-  it('finishes starting and stopping before an approved close, including a dock bubble', async () => {
-    let approve!: () => void
-    const dialog = mountDialog({
-      minimizable: true,
-      beforeClose: () =>
-        new Promise<void>((resolve) => {
-          approve = resolve
-        }),
-    })
-    await settle()
-    dialog.minimize()
-    await settle()
-    const closing = dialog.close()!
-    await settle()
-    await step()
-    expect(
-      document
-        .querySelector('.s-dialog__dock-close .s-logo-loading')
-        ?.getAttribute('data-phase'),
-    ).toBe('starting')
-    approve()
-    await settle()
-    expect(dialog.visible).toBe(true)
-    expect(dialog.closePending).toBe(true)
-    await advance(25)
-    expect(
-      document
-        .querySelector('.s-dialog__dock-close .s-logo-loading')
-        ?.getAttribute('data-phase'),
-    ).toBe('stopping')
-    expect(dialog.visible).toBe(true)
-    await advance(36)
-    await expect(closing).resolves.toBe(true)
-    expect(dialog.visible).toBe(false)
-  })
+  it.each([false, true])(
+    'finishes the lead-in then clears four points before closing (minimized: %s)',
+    async (minimized) => {
+      let approve!: () => void
+      const dialog = mountDialog({
+        minimizable: true,
+        beforeClose: () =>
+          new Promise<void>((resolve) => {
+            approve = resolve
+          }),
+      })
+      await settle()
+      if (minimized) dialog.minimize()
+      await settle()
+      const selector = minimized
+        ? '.s-dialog__dock-close .s-logo-loading'
+        : '.s-dialog__close .s-logo-loading'
+      const closing = dialog.close()!
+      await settle()
+      await step()
+      expect(document.querySelector(selector)?.getAttribute('data-phase')).toBe(
+        'starting',
+      )
+      approve()
+      await settle()
+      expect(dialog.visible).toBe(true)
+      expect(dialog.closePending).toBe(true)
+      await advance(25)
+      expect(document.querySelector(selector)?.getAttribute('data-phase')).toBe(
+        'stopping',
+      )
+      expect(dialog.visible).toBe(true)
+      // The compact tail is 550 / 2.5 = 220ms, not the logo restoration's 1360ms.
+      await advance(4)
+      expect(dialog.visible).toBe(true)
+      await advance(2)
+      await expect(closing).resolves.toBe(true)
+      expect(dialog.visible).toBe(false)
+    },
+  )
 
   it('keeps the confirmation button alive through its full loader restoration', async () => {
     let approve!: () => void
