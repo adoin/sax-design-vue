@@ -31,6 +31,7 @@ PROPS:
     values: "(done: (cancel?: boolean) => void) => void"
     description: 关闭前运行守卫；调用 done 后继续关闭。
     default: null
+    usage: '#advanced'
   - name: cancel-button-text
     type: String
     values: "按钮文字"
@@ -223,7 +224,7 @@ PROPS:
     values: "content text"
     description: 未使用默认插槽时显示的内置内容。
     default: null
-    usage: '#advanced'
+    usage: '#imperative'
   - name: show-footer
     type: Boolean
     values: "true | false"
@@ -235,13 +236,13 @@ PROPS:
     values: "true | false"
     description: 是否在内置操作区显示取消按钮。
     default: false
-    usage: '#advanced'
+    usage: '#before-confirm'
   - name: show-confirm-button
     type: Boolean
     values: "true | false"
     description: 是否在内置操作区显示确认按钮。
     default: false
-    usage: '#advanced'
+    usage: '#before-confirm'
 
 EVENTS:
   - name: confirm-error
@@ -308,7 +309,7 @@ SLOTS:
     description: Dialog 页脚插槽。
     default: null
     link: null
-    usage: '#default'
+    usage: '#advanced'
     code: >
       <s-dialog>
         <template #footer>
@@ -681,7 +682,7 @@ SLOTS:
 
 ## 高级能力
 
-不需要复杂 slot 时，可用 title、content 和内置确认/取消按钮；slot 仍然优先。
+将表单校验、异步提交、错误重试与关闭保护组合成完整的发布流程。自定义 `footer` 使用 Dialog 提供的 `confirm`、`cancel`、`pending` 和 `disabled`，保持确认流程与按钮状态一致；`before-close` 在请求期间拦截关闭，并在放弃未保存内容前提供选择。示例请求为本地模拟：首次失败，重试后成功。
 
 <template #example>
 <dialog-zh-advanced />
@@ -689,13 +690,19 @@ SLOTS:
 
 <template #template>
 
-@[code{1-14}](../../.vuepress/components/dialog-zh/advanced.vue)
+@[code{142-211}](../../.vuepress/components/dialog-zh/advanced.vue)
 
 </template>
 
 <template #script>
 
-@[code{16-21}](../../.vuepress/components/dialog-zh/advanced.vue)
+@[code{1-140}](../../.vuepress/components/dialog-zh/advanced.vue)
+
+</template>
+
+<template #style>
+
+@[code{213-254}](../../.vuepress/components/dialog-zh/advanced.vue)
 
 </template>
 

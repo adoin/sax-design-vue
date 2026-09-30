@@ -29,3 +29,15 @@ modules:
 ## 验证
 
 Dialog 的确认校验、异步防重、过期结果、异常、命令式取消与清理及关闭拦截测试通过。ConfigProvider 和 Image Preview 回归通过；文档测试、类型检查、主题与完整组件库构建通过。已验证构建入口导出 SDialogBox 且不再导出 Prompt。中英文示例及 Playground 已核对。
+
+## 高级能力示例（2026-09-30）
+
+用户反馈：
+
+> Dialog这个高级能力一点也不高级啊。。。换个title太傻了
+
+- Advanced 示例展示完整的工作区更新发布流程：SForm 内置 `$input` / `$textarea` 字段校验、异步请求、首次失败与重试成功、保留草稿和发布结果。
+- 自定义 footer 使用 DialogFooterScope 的 confirm/cancel/pending/disabled，复用组件的确认流程和防重行为。请求中禁用编辑，关闭守卫提示等待；请求结束立即清理等待提示。
+- 未保存内容关闭时，在同一 Dialog 内通过 SAlert 和 SButton 提供继续编辑或放弃选择；取消不会丢失内容。组件卸载取消本地模拟请求，清理待关闭回调。
+- 请求明确标注为本地模拟，不执行真实发布。公开说明聚焦 API 用法；中英文示例文本、完整 SFC 源码和 API 用法链接同步更新，保留 canonical `#advanced`。
+- 21 项文档检查通过。浏览器验证空值错误、提交中关闭拦截、失败草稿保留、重试成功、继续编辑和放弃关闭；核对按钮布局及中英文 Code/Playground 的完整性和预览运行。

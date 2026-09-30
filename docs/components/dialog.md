@@ -31,6 +31,7 @@ PROPS:
     values: "(done: (cancel?: boolean) => void) => void"
     description: Run a guard before closing; call done to continue.
     default: null
+    usage: '#advanced'
   - name: color
     type: String
     values: "theme color | RGB | HEX | HSL"
@@ -206,7 +207,7 @@ PROPS:
     description: Set built-in content when the default slot is not used.
     default: null
     link: null
-    usage: '#advanced'
+    usage: '#imperative'
     code: null
   - name: show-header
     type: Boolean
@@ -230,7 +231,7 @@ PROPS:
     description: Render built-in action footer and modal events.
     default: false
     link: null
-    usage: '#advanced'
+    usage: '#before-confirm'
     code: null
   - name: show-confirm-button
     type: Boolean
@@ -238,7 +239,7 @@ PROPS:
     description: Render built-in action footer and modal events.
     default: false
     link: null
-    usage: '#advanced'
+    usage: '#before-confirm'
     code: null
   - name: mask
     type: Boolean
@@ -332,7 +333,7 @@ SLOTS:
     description: slot footer of Dialog
     default: null
     link: null
-    usage: '#default'
+    usage: '#advanced'
     code: >
       <s-dialog>
         <template #footer>
@@ -705,7 +706,7 @@ With the `prevent-close` property you do not close the dialog by clicking outsid
 
 ## Advanced
 
-Use title, content and action-button props when slots would be unnecessary; custom slots keep priority.
+A publishing workflow combines form validation, asynchronous submission, error retry, and close guards. Its custom `footer` uses Dialog's `confirm`, `cancel`, `pending`, and `disabled` scope to keep actions synchronized with the confirmation flow. `before-close` blocks closing during the request and offers a choice before discarding unsaved edits. The request is simulated locally: the first attempt fails and retrying succeeds.
 
 <template #example>
 <dialog-advanced />
@@ -713,13 +714,19 @@ Use title, content and action-button props when slots would be unnecessary; cust
 
 <template #template>
 
-@[code{1-14}](../.vuepress/components/dialog/advanced.vue)
+@[code{145-214}](../.vuepress/components/dialog/advanced.vue)
 
 </template>
 
 <template #script>
 
-@[code{16-21}](../.vuepress/components/dialog/advanced.vue)
+@[code{1-143}](../.vuepress/components/dialog/advanced.vue)
+
+</template>
+
+<template #style>
+
+@[code{216-257}](../.vuepress/components/dialog/advanced.vue)
 
 </template>
 
