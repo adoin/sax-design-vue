@@ -42,9 +42,10 @@ const value5 = ref('')
 
 <style lang="scss" scoped>
 .content-inputs {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  align-items: start;
+  justify-items: center;
   gap: 28px 20px;
 }
 </style>

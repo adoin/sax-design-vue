@@ -39,29 +39,21 @@ $clearableSafeArea: 64px;
   .s-select__label {
     transition: none;
   }
+  .v-clearable-enter-active,
+  .v-clearable-leave-active {
+    transition: none;
+  }
 }
 
 .v-clearable {
   &-enter-active {
-    animation: v-clearable var(--sax-motion-duration)
-      var(--sax-motion-easing-in-out) forwards;
+    transition: opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-out);
   }
   &-leave-active {
-    animation: v-clearable var(--sax-motion-duration)
-      var(--sax-motion-easing-in-out) reverse;
+    transition: opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-out);
   }
-}
-
-@keyframes v-clearable {
-  0% {
-    transform: translateX(calc(#{$clearableRight} - 10px));
-    opacity: 0.2;
-  }
-  10% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateX(0);
+  &-enter-from, &-leave-to {
+    opacity: 0;
   }
 }
 
@@ -435,10 +427,6 @@ $clearableSafeArea: 64px;
     &.is-hover:not(.is-disabled) {
       background: getColor('color', 0.015);
       color: getColor('color');
-
-      .#{$namespace}-select__option-content {
-        transform: translateX(4px);
-      }
     }
 
     @include when(disabled) {
@@ -458,7 +446,7 @@ $clearableSafeArea: 64px;
     line-height: 1.4;
     white-space: normal;
     overflow-wrap: anywhere;
-    transition: transform 0.2s ease;
+    transition: color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
   }
   @include e(option-mark) {
     flex: none;

@@ -73,7 +73,7 @@ onMounted(() => {
   &:hover {
     .con-text-n {
       .icon-n {
-        width: 60px;
+        background: color-mix(in srgb, var(--sax-css-primary) 12%, transparent);
       }
     }
   }

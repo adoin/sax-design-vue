@@ -628,7 +628,7 @@ SLOTS:
 
 <template #style>
 
-@[code{52-61}](../../.vuepress/components/input/color.vue)
+@[code{52-60}](../../.vuepress/components/input/color.vue)
 
 </template>
 
@@ -720,7 +720,7 @@ SLOTS:
 
 <template #style>
 
-@[code{43-50}](../../.vuepress/components/input/state.vue)
+@[code{43-51}](../../.vuepress/components/input/state.vue)
 
 </template>
 

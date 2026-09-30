@@ -63,7 +63,6 @@
 .s-menu-node__button:hover:not(:disabled):not([aria-disabled='true']) {
   background: getColor(primary, 0.08);
   color: getColor(primary);
-  transform: translateX(2px);
 }
 
 .s-menu-node__button:focus-visible {
@@ -160,7 +159,7 @@
 .s-menu-node.is-open.is-popup:not(.is-horizontal-root)
   > .s-menu-node__button
   .s-menu-node__arrow {
-  transform: translateX(2px);
+  color: getColor(primary);
 }
 
 .s-menu-node.is-open.is-horizontal-root
@@ -522,7 +521,6 @@
   .s-menu-node__button:hover:not(:disabled):not([aria-disabled='true']) {
   background: getColor(primary, 0.09);
   box-shadow: 0 9px 22px getColor(primary, 0.1);
-  transform: translateX(3px);
 }
 
 .s-menu-popup--horizontal-root .s-menu-node__description {

@@ -678,7 +678,7 @@ Change the color of the component and add a border below with the `color` proper
 
 <template #style>
 
-@[code{52-61}](../.vuepress/components/input/color.vue)
+@[code{52-60}](../.vuepress/components/input/color.vue)
 
 </template>
 
@@ -770,7 +770,7 @@ Change the color of the input for some state, the allowed states are (primary, s
 
 <template #style>
 
-@[code{43-50}](../.vuepress/components/input/state.vue)
+@[code{43-51}](../.vuepress/components/input/state.vue)
 
 </template>
 

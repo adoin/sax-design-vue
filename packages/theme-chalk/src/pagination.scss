@@ -435,11 +435,11 @@
     }
 
     &.btn-quickprev svg {
-      transform: translate(calc(-50% + 4px), -50%);
+      transform: translate(-50%, -50%);
     }
 
     &.btn-quicknext svg {
-      transform: translate(calc(-50% - 4px), -50%);
+      transform: translate(-50%, -50%);
     }
 
     &:hover {

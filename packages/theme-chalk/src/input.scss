@@ -223,9 +223,6 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
       &:not(.#{$namespace}-input__placeholder--float-active) {
         opacity: 0;
       }
-      &:not(.#{$namespace}-input__placeholder--float) {
-        filter: blur(3px);
-      }
     }
   }
   @include when(hovering) {
@@ -571,7 +568,10 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     color: getColor('text');
     padding: 7px 13px;
     border-radius: inherit;
-    transition: getCssVar(transition-ease);
+    transition:
+      background-color var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      color var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      box-shadow var(--sax-motion-duration) var(--sax-motion-easing-standard);
     padding-left: var(--sax-input-text-inset);
     width: 200px;
     min-height: var(--sax-input-control-height);
@@ -795,10 +795,7 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     opacity: 1;
 
     &:not(.#{$namespace}-input__placeholder--float) {
-      filter: blur(0);
-      transition:
-        opacity var(--sax-motion-duration) var(--sax-motion-easing-out),
-        filter var(--sax-motion-duration) var(--sax-motion-easing-out);
+      transition: opacity var(--sax-motion-duration) var(--sax-motion-easing-out);
     }
 
     @include m(hidden) {
@@ -919,17 +916,25 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
 
 // Match the native text inset before fading so typing does not reveal a
 // differently positioned replacement for the ordinary placeholder.
-.#{$namespace}-input .#{$namespace}-input__placeholder:not(.#{$namespace}-input__placeholder--float) {
-  left: calc(var(--sax-input-text-inset) + 2px);
+.#{$namespace}-input .#{$namespace}-input__wrapper .#{$namespace}-input__placeholder:not(.#{$namespace}-input__placeholder--float),
+.#{$namespace}-input.is-focus .#{$namespace}-input__wrapper .#{$namespace}-input__placeholder:not(.#{$namespace}-input__placeholder--float) {
+  left: calc(var(--sax-input-text-inset, 10px) + 2px);
+  margin: 0;
+  padding: 0;
+  transform: none;
+  filter: none;
+  transition: opacity var(--sax-motion-duration) var(--sax-motion-easing-out);
+  .#{$namespace}-input__placeholder-text {
+    transform: none;
+    filter: none;
+    transition: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .#{$namespace}-input__placeholder:not(.#{$namespace}-input__placeholder--float) {
+  .#{$namespace}-input .#{$namespace}-input__wrapper .#{$namespace}-input__placeholder:not(.#{$namespace}-input__placeholder--float),
+  .#{$namespace}-input.is-focus .#{$namespace}-input__wrapper .#{$namespace}-input__placeholder:not(.#{$namespace}-input__placeholder--float) {
     transition: none;
-    filter: none;
-  }
-  .#{$namespace}-input.is-focus .#{$namespace}-input__placeholder:not(.#{$namespace}-input__placeholder--float) {
-    filter: none;
   }
 }
 

@@ -207,12 +207,16 @@ h1 {
       margin: 0px;
       border-bottom: 0px;
       padding-bottom: 10px;
-      transition: all 0.25s ease;
+      transition: color var(--sax-motion-duration-fast)
+        var(--sax-motion-easing-standard);
       z-index: 200;
       position: relative;
 
       &:hover {
-        padding-left: 40px;
+        color: var(--sax-css-primary);
+        .header-anchor {
+          opacity: 1;
+        }
       }
     }
     h2 {

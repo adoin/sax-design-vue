@@ -829,7 +829,11 @@ const handleBurDrop = () => {
           transition: all 0.25s ease;
           cursor: pointer;
           &:hover {
-            padding-left: 12px;
+            background: color-mix(
+              in srgb,
+              var(--sax-css-primary) 8%,
+              transparent
+            );
             color: -color('primary');
           }
         }

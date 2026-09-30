@@ -1310,7 +1310,7 @@
         getColor(black, 0.42)
       );
       color: getColor(white);
-      transform: translateX(-12px);
+      transform: none;
       opacity: 0.78;
     }
 
@@ -1339,7 +1339,7 @@
       border-radius: var(--sax-radius-sm) var(--sax-radius-xl) 0 0;
       background: getColor(background, 0.18);
       backdrop-filter: saturate(160%) blur(16px);
-      transform: translateX(-12px);
+      transform: none;
       opacity: 0.85;
     }
 
@@ -1349,7 +1349,7 @@
       border-radius: 0 0 var(--sax-radius-sm) var(--sax-radius-sm);
       background: getColor(background, 0.18);
       backdrop-filter: saturate(160%) blur(16px);
-      transform: translateX(-12px);
+      transform: none;
       opacity: 0.85;
     }
 

@@ -48,17 +48,36 @@
         }
       }
       &:hover:not(.#{$namespace}-avatar-content--hasIcons) {
-        transform: translate(-10px);
+        z-index: 4;
+        box-shadow: 0 6px 18px getColor(primary, 0.16);
         .#{$namespace}-avatar {
           transform: scale(1);
         }
       }
       &--hasIcons {
-        margin-right: 0px;
-        &:hover {
-          transform: translate(-34px) !important;
+        margin-right: 28px;
+        > .#{$namespace}-avatar__icons {
+          left: calc(100% + 4px);
+          right: auto;
+          z-index: 4;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+        }
+        &:hover, &:focus-within {
+          z-index: 5;
+          > .#{$namespace}-avatar__icons {
+            opacity: 1;
+            pointer-events: auto;
+          }
         }
       }
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-avatar__group .#{$namespace}-avatar__icons {
+    transition: none;
   }
 }

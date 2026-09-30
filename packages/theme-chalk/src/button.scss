@@ -186,10 +186,12 @@
       }
       @include pseudo(hover) {
         @include e(content) {
-          transform: translate(-100%);
+          transform: none;
+          opacity: 0;
         }
         @include e(animate) {
-          transform: translate(0%);
+          transform: none;
+          opacity: 1;
         }
       }
       &.#{$namespace}-button {
@@ -241,9 +243,11 @@
     width: 100%;
     height: 100%;
     @include flex(center, center);
-    transition: transform var(--sax-motion-duration)
-      var(--sax-motion-easing-standard);
-    transform: translate(100%);
+    transition:
+      transform var(--sax-motion-duration) var(--sax-motion-easing-standard),
+      opacity var(--sax-motion-duration) var(--sax-motion-easing-standard);
+    transform: none;
+    opacity: 0;
     pointer-events: none;
 
     @include m(vertical) {
@@ -685,6 +689,14 @@
 
 .#{$namespace}-button--loading {
   @include loading-cursor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-button__content,
+  .#{$namespace}-button__animate {
+    transition: none !important;
+    filter: none !important;
+  }
 }
 
 .#{$namespace}-button--loading {

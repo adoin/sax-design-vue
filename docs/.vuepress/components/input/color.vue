@@ -51,11 +51,10 @@ const value7 = ref('')
 
 <style lang="scss" scoped>
 .content-inputs {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .s-input {
-    margin: 10px !important;
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  align-items: start;
+  justify-items: center;
+  gap: 28px 20px;
 }
 </style>

@@ -192,7 +192,7 @@
 }
 
 .s-layout-aside__outside-toggle-icon {
-  transition: transform 0.2s ease;
+  transition: color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
 }
 
 .s-layout-aside__outside-toggle:hover,
@@ -226,7 +226,7 @@
   > .s-layout-aside__outside.is-collapsed
   .s-layout-aside__outside-toggle:focus-visible
   .s-layout-aside__outside-toggle-icon {
-  transform: translateX(-2px);
+  color: getColor(primary);
 }
 
 .s-layout-aside.is-outside-end
@@ -245,7 +245,7 @@
   > .s-layout-aside__outside:not(.is-collapsed)
   .s-layout-aside__outside-toggle:focus-visible
   .s-layout-aside__outside-toggle-icon {
-  transform: translateX(2px);
+  color: getColor(primary);
 }
 
 .s-layout-aside__outside.is-collapsed {
