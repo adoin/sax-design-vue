@@ -521,7 +521,7 @@ const inputKls = computed(() => [
   { [ns.m('icon-after')]: props.iconAfter },
   { [ns.m('icon-eye')]: hasEndAction.value },
   { [ns.m('icon-search')]: showSearchControl.value },
-  { [ns.m('icon-clearable')]: showClear.value },
+  { [ns.m('icon-clearable')]: props.allowClear || props.clearable },
   { [ns.m('has-prefix')]: hasPrefix.value },
   { [ns.m('has-prefix-icon')]: hasPrefixIconOnly.value },
   { [ns.m('has-suffix')]: hasSuffix.value },
