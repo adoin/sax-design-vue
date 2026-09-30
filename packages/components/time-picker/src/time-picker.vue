@@ -27,6 +27,7 @@
     >
       <s-input
         ref="inputRef"
+        autocomplete="off"
         :model-value="displayText"
         :placeholder="inputPlaceholder"
         :label="label"

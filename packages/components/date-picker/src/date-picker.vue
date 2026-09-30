@@ -47,6 +47,7 @@
       <div v-if="isRange" :class="ns.e('range-input')">
         <s-input
           ref="rangeStartInputRef"
+          autocomplete="off"
           :model-value="rangeStartText"
           :placeholder="startPlaceholder || t('vs.datepicker.startDate')"
           :label="startLabel || label"
@@ -70,6 +71,7 @@
         </span>
         <s-input
           ref="rangeEndInputRef"
+          autocomplete="off"
           :model-value="rangeEndText"
           :placeholder="endPlaceholder || t('vs.datepicker.endDate')"
           :label="endLabel"
@@ -98,6 +100,7 @@
       <s-input
         v-else
         ref="inputRef"
+        autocomplete="off"
         :aria-label="($attrs['aria-label'] as string | undefined) ?? label"
         :model-value="displayText"
         :placeholder="inputPlaceholder"

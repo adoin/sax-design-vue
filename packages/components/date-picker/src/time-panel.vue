@@ -65,6 +65,7 @@
       <input
         :class="ns.e('input-field')"
         :value="pad(currentHour)"
+        autocomplete="off"
         inputmode="numeric"
         maxlength="2"
         :aria-label="t('vs.timepicker.hours')"
@@ -74,6 +75,7 @@
       <input
         :class="ns.e('input-field')"
         :value="pad(currentMinute)"
+        autocomplete="off"
         inputmode="numeric"
         maxlength="2"
         :aria-label="t('vs.timepicker.minutes')"
@@ -83,6 +85,7 @@
       <input
         :class="ns.e('input-field')"
         :value="pad(currentSecond)"
+        autocomplete="off"
         inputmode="numeric"
         maxlength="2"
         :aria-label="t('vs.timepicker.seconds')"
