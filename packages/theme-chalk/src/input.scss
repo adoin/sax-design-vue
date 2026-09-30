@@ -182,12 +182,6 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
           box-shadow: 15px 10px 10px -10px
             getColor(black, getCssVar('shadow-opacity'));
         }
-
-        @include e(placeholder) {
-          &:not(.#{$namespace}-input__placeholder--float-active) {
-            left: 48px;
-          }
-        }
       }
       &.#{$namespace}-input--icon-after {
         @include e(label) {
@@ -230,7 +224,9 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     @include e(placeholder) {
       &:not(.#{$namespace}-input__placeholder--float-active) {
         opacity: 0;
-        left: 20px;
+      }
+      &:not(.#{$namespace}-input__placeholder--float) {
+        filter: blur(3px);
       }
     }
   }
@@ -806,6 +802,13 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     color: getColor(text-color-placeholder);
     opacity: 1;
 
+    &:not(.#{$namespace}-input__placeholder--float) {
+      filter: blur(0);
+      transition:
+        opacity var(--sax-motion-duration) var(--sax-motion-easing-out),
+        filter var(--sax-motion-duration) var(--sax-motion-easing-out);
+    }
+
     @include m(hidden) {
       opacity: 0;
       visibility: hidden;
@@ -919,6 +922,16 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
 
   @include m(large) {
     --sax-input-control-height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .#{$namespace}-input__placeholder:not(.#{$namespace}-input__placeholder--float) {
+    transition: none;
+    filter: none;
+  }
+  .#{$namespace}-input.is-focus .#{$namespace}-input__placeholder:not(.#{$namespace}-input__placeholder--float) {
+    filter: none;
   }
 }
 
