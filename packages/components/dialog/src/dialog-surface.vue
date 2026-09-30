@@ -26,6 +26,7 @@
             )
           "
           tabindex="-1"
+          :aria-busy="closePending || confirmPending || undefined"
           @keydown.tab="trapFocus"
         >
           <div v-if="loading" :class="ns.e('loading')">
@@ -54,9 +55,12 @@
             type="button"
             :class="ns.e('close')"
             :aria-label="t('vs.common.close')"
+            :disabled="closePending"
+            :aria-busy="closePending || undefined"
             @click="close"
           >
-            <icon-close :size="18" />
+            <icon-loading v-if="closePending" :size="18" />
+            <icon-close v-else :size="18" />
           </button>
 
           <div
@@ -86,12 +90,14 @@
               :confirm="handleConfirm"
               :cancel="handleCancel"
               :pending="confirmPending"
-              :disabled="props.confirmDisabled || props.loading"
+              :close-pending="closePending"
+              :disabled="props.confirmDisabled || props.loading || closePending"
             >
               <div :class="ns.e('actions')">
                 <s-button
                   v-if="showCancelButton"
                   type="flat"
+                  :disabled="closePending"
                   @click="handleCancel"
                 >
                   {{ cancelButtonText || t('vs.dialog.cancel') }}
@@ -99,7 +105,9 @@
                 <s-button
                   v-if="showConfirmButton"
                   :loading="confirmPending"
-                  :disabled="props.confirmDisabled || props.loading"
+                  :disabled="
+                    props.confirmDisabled || props.loading || closePending
+                  "
                   @click="handleConfirm"
                 >
                   {{ confirmButtonText || t('vs.dialog.confirm') }}
@@ -128,9 +136,12 @@
         type="button"
         :class="ns.e('dock-close')"
         :aria-label="`${t('vs.dialog.close')}: ${dockLabel}`"
+        :disabled="closePending"
+        :aria-busy="closePending || undefined"
         @click="close"
       >
-        <icon-close :size="14" />
+        <icon-loading v-if="closePending" :size="14" />
+        <icon-close v-else :size="14" />
       </button>
     </div>
   </teleport>
@@ -187,6 +198,8 @@ const {
   dialogKls,
   dialogStyles,
   close,
+  closePending,
+  open: openDialog,
   afterEnter,
   afterLeave,
   beforeLeave,
@@ -317,7 +330,8 @@ const handleConfirm = async () => {
     !visible.value ||
     confirmPending.value ||
     props.confirmDisabled ||
-    props.loading
+    props.loading ||
+    closePending.value
   )
     return
   const version = ++confirmVersion
@@ -327,7 +341,7 @@ const handleConfirm = async () => {
     if (version !== confirmVersion || !visible.value || accepted === false)
       return
     emit('confirm')
-    if (props.confirmClosable) close()
+    if (props.confirmClosable) await close()
   } catch (error) {
     if (version === confirmVersion && visible.value) emit('confirmError', error)
   } finally {
@@ -339,6 +353,7 @@ defineExpose({
   /** @description whether the dialog is visible */
   visible,
   minimized,
+  closePending,
   minimize,
   restore,
   confirm: handleConfirm,
@@ -346,7 +361,7 @@ defineExpose({
   close,
   open: () => {
     if (minimized.value) restore()
-    else visible.value = true
+    else openDialog()
   },
 })
 </script>

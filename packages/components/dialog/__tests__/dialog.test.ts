@@ -34,6 +34,10 @@ afterEach(async () => {
     '.s-dialog__dock-close, .s-dialog__close',
   ))
     button.click()
+  for (const button of document.querySelectorAll<HTMLButtonElement>(
+    '.s-notification__close',
+  ))
+    button.click()
   await vi.waitFor(() =>
     expect(document.querySelectorAll('[data-s-dialog-host]')).toHaveLength(0),
   )
@@ -42,6 +46,184 @@ afterEach(async () => {
 })
 
 describe('Dialog minimization and ownership', () => {
+  it('waits for close approval, merges repeated requests and exposes pending state', async () => {
+    let approve!: () => void
+    const beforeClose = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          approve = resolve
+        }),
+    )
+    const wrapper = mountDialog({ fullScreen: false, beforeClose })
+    await settle()
+    const dialog = wrapper.vm as unknown as DialogExposes
+    const first = dialog.close()!
+    const second = dialog.close()!
+    expect(first).toBe(second)
+    await settle()
+    expect(beforeClose).toHaveBeenCalledTimes(1)
+    expect(dialog.visible).toBe(true)
+    expect(dialog.closePending).toBe(true)
+    expect(
+      document.querySelector<HTMLButtonElement>('.s-dialog__close')!.disabled,
+    ).toBe(true)
+    approve()
+    await expect(first).resolves.toBe(true)
+    expect(dialog.visible).toBe(false)
+    expect(dialog.closePending).toBe(false)
+  })
+
+  it.each(['saved draft is not ready', new Error('Please finish uploading')])(
+    'keeps the dialog open and displays a rejected close reason: %s',
+    async (reason) => {
+      const wrapper = mountDialog({ beforeClose: () => Promise.reject(reason) })
+      await settle()
+      const dialog = wrapper.vm as unknown as DialogExposes
+      await expect(dialog.close()).resolves.toBe(false)
+      await settle()
+      expect(dialog.visible).toBe(true)
+      expect(dialog.closePending).toBe(false)
+      expect(wrapper.emitted('closeError')?.at(-1)).toEqual([reason])
+      expect(
+        document.querySelector('.s-notification__text')?.textContent,
+      ).toContain(typeof reason === 'string' ? reason : reason.message)
+      expect(wrapper.emitted('closed')).toBeUndefined()
+    },
+  )
+
+  it('does not treat a synchronous void return as close approval', async () => {
+    const wrapper = mountDialog({ beforeClose: () => undefined })
+    await settle()
+    const dialog = wrapper.vm as unknown as DialogExposes
+    await expect(dialog.close()).resolves.toBe(false)
+    expect(dialog.visible).toBe(true)
+    expect(wrapper.emitted('closeError')).toHaveLength(1)
+  })
+
+  it('restores a rejected controlled model update', async () => {
+    const wrapper = mountDialog({
+      beforeClose: () => Promise.reject('Blocked'),
+    })
+    await settle()
+    await wrapper.setProps({ modelValue: false })
+    await settle()
+    expect((wrapper.vm as unknown as DialogExposes).visible).toBe(true)
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([true])
+  })
+
+  it('ignores late approval after reopening and late rejection after unmount', async () => {
+    let approve!: () => void
+    const wrapper = mountDialog({
+      beforeClose: () =>
+        new Promise<void>((resolve) => {
+          approve = resolve
+        }),
+    })
+    await settle()
+    const dialog = wrapper.vm as unknown as DialogExposes
+    const old = dialog.close()!
+    await settle()
+    let deny!: (error: unknown) => void
+    await wrapper.setProps({
+      beforeClose: () =>
+        new Promise<void>((_, reject) => {
+          deny = reject
+        }),
+    })
+    dialog.open()
+    approve()
+    await expect(old).resolves.toBe(false)
+    expect(dialog.visible).toBe(true)
+    const current = dialog.close()!
+    await settle()
+    wrapper.unmount()
+    wrappers.splice(wrappers.indexOf(wrapper), 1)
+    deny('Late error')
+    await expect(current).resolves.toBe(false)
+    expect(wrapper.emitted('closeError')).toBeUndefined()
+  })
+
+  it('ignores a pending close approval after the instance is reopened', async () => {
+    let approve!: () => void
+    const wrapper = mountDialog({
+      beforeClose: () =>
+        new Promise<void>((resolve) => {
+          approve = resolve
+        }),
+    })
+    await settle()
+    const dialog = wrapper.vm as unknown as DialogExposes
+    const closing = dialog.close()!
+    await settle()
+    dialog.open()
+    approve()
+    await expect(closing).resolves.toBe(false)
+    expect(dialog.visible).toBe(true)
+    expect(dialog.closePending).toBe(false)
+  })
+
+  it('keeps an orphaned global bubble alive until its pending close is approved', async () => {
+    let approve!: () => void
+    const wrapper = mountDialog({
+      global: true,
+      beforeClose: () =>
+        new Promise<void>((resolve) => {
+          approve = resolve
+        }),
+    })
+    await settle()
+    ;(wrapper.vm as unknown as DialogExposes).minimize()
+    await settle()
+    document.querySelector<HTMLButtonElement>('.s-dialog__dock-close')!.click()
+    await settle()
+    wrapper.unmount()
+    wrappers.splice(wrappers.indexOf(wrapper), 1)
+    expect(document.querySelector('[data-s-dialog-host]')).not.toBeNull()
+    expect(
+      document.querySelector<HTMLButtonElement>('.s-dialog__dock-close')!
+        .disabled,
+    ).toBe(true)
+    approve()
+    await vi.waitFor(() =>
+      expect(document.querySelector('[data-s-dialog-host]')).toBeNull(),
+    )
+    expect(document.querySelector('.s-dialog__minimized')).toBeNull()
+  })
+
+  it.each(['button', 'mask', 'escape', 'cancel', 'confirm'])(
+    'routes %s closing through the async guard',
+    async (entry) => {
+      const beforeClose = vi.fn(() => Promise.reject('Keep open'))
+      const wrapper = mountDialog({
+        fullScreen: false,
+        showFooter: true,
+        showCancelButton: true,
+        showConfirmButton: true,
+        beforeClose,
+      })
+      await settle()
+      if (entry === 'button')
+        document.querySelector<HTMLButtonElement>('.s-dialog__close')!.click()
+      else if (entry === 'escape')
+        document.dispatchEvent(
+          new KeyboardEvent('keydown', { code: 'Escape', bubbles: true }),
+        )
+      else if (entry === 'mask') {
+        const mask = document.querySelector<HTMLElement>('.s-dialog')!
+        for (const event of ['mousedown', 'mouseup', 'click'])
+          mask.dispatchEvent(new MouseEvent(event, { bubbles: true }))
+      } else {
+        const actions = [...document.querySelectorAll('.s-dialog__actions')].at(
+          -1,
+        )!
+        const buttons = actions.querySelectorAll<HTMLButtonElement>('button')
+        buttons[entry === 'cancel' ? 0 : 1].click()
+      }
+      await settle()
+      await vi.waitFor(() => expect(beforeClose).toHaveBeenCalledTimes(1))
+      expect((wrapper.vm as unknown as DialogExposes).visible).toBe(true)
+    },
+  )
   it.each([false, true])(
     'inherits shape and dialog defaults with global=%s',
     async (global) => {
@@ -165,7 +347,10 @@ describe('Dialog minimization and ownership', () => {
 
   it('does not resolve an imperative confirmation when beforeClose denies it', async () => {
     let allowed = false
-    const result = dialogBox({ beforeClose: (done) => done(!allowed) })
+    const result = dialogBox({
+      beforeClose: () =>
+        allowed ? Promise.resolve() : Promise.reject('Not allowed'),
+    })
     await settle()
     const buttons = document.querySelectorAll<HTMLButtonElement>(
       '.s-dialog__actions button',
@@ -265,7 +450,7 @@ describe('Dialog minimization and ownership', () => {
   it('respects beforeClose on the bubble and removes unused hidden global hosts', async () => {
     const wrapper = mountDialog({
       global: true,
-      beforeClose: (done: (cancel?: boolean) => void) => done(true),
+      beforeClose: () => Promise.reject('Not allowed'),
     })
     await settle()
     ;(wrapper.vm as unknown as DialogExposes).minimize()

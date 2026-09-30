@@ -22,6 +22,7 @@ const text = {
   closeBusy: '正在发布，请等待请求结束后再关闭。',
   discardTitle: '有未保存的草稿',
   discardText: '关闭将放弃已填写的标题和更新说明。',
+  kept: '草稿已保留，请继续编辑。',
   keep: '继续编辑',
   discard: '放弃并关闭',
   pending: '正在校验并发布…',
@@ -37,12 +38,12 @@ const model = reactive({ name: '', notes: '' })
 const submitting = ref(false)
 const accepted = ref(false)
 const error = ref('')
-const closeHint = ref('')
 const discardVisible = ref(false)
 const publishedName = ref('')
 let attempts = 0
 let request: AbortController | undefined
-let pendingClose: Parameters<DialogBeforeCloseFn>[0] | undefined
+let pendingClose:
+  { resolve: () => void; reject: (reason: unknown) => void } | undefined
 const dirty = computed(
   () => Boolean(model.name || model.notes) && !accepted.value,
 )
@@ -71,7 +72,6 @@ const open = () => {
   attempts = 0
   accepted.value = false
   error.value = ''
-  closeHint.value = ''
   discardVisible.value = false
   pendingClose = undefined
   visible.value = true
@@ -92,7 +92,6 @@ const publish = (fail: boolean, signal: AbortSignal) =>
   })
 const beforeConfirm = async () => {
   error.value = ''
-  closeHint.value = ''
   if (!(await form.value?.validate())) return false
   const controller = new AbortController()
   request = controller
@@ -102,30 +101,30 @@ const beforeConfirm = async () => {
     accepted.value = true
   } finally {
     submitting.value = false
-    closeHint.value = ''
     request = undefined
   }
 }
-const beforeClose: DialogBeforeCloseFn = (done) => {
-  if (submitting.value) {
-    closeHint.value = text.closeBusy
-    return
-  }
+const beforeClose: DialogBeforeCloseFn = () => {
+  if (submitting.value) return Promise.reject(text.closeBusy)
   if (dirty.value) {
-    pendingClose = done
     discardVisible.value = true
-    return
+    return new Promise<void>((resolve, reject) => {
+      pendingClose = { resolve, reject }
+    })
   }
-  done()
+  return Promise.resolve()
 }
 const keepEditing = () => {
+  const pending = pendingClose
   pendingClose = undefined
   discardVisible.value = false
+  pending?.reject(text.kept)
 }
 const discard = () => {
-  const done = pendingClose
-  keepEditing()
-  done?.()
+  const pending = pendingClose
+  pendingClose = undefined
+  discardVisible.value = false
+  pending?.resolve()
 }
 const confirmed = () => {
   publishedName.value = model.name
@@ -135,6 +134,7 @@ const failed = (reason: unknown) => {
 }
 onBeforeUnmount(() => {
   request?.abort()
+  pendingClose?.reject(new DOMException('Aborted', 'AbortError'))
   pendingClose = undefined
 })
 </script>
@@ -171,9 +171,6 @@ onBeforeUnmount(() => {
           <template #title>{{ text.errorTitle }}</template>
           {{ error }}
         </s-alert>
-        <s-alert v-if="closeHint" color="warn" type="flat" role="status">{{
-          closeHint
-        }}</s-alert>
         <s-alert v-if="discardVisible" color="warn" type="flat" role="alert">
           <template #title>{{ text.discardTitle }}</template>
           <p>{{ text.discardText }}</p>
@@ -188,15 +185,18 @@ onBeforeUnmount(() => {
         </s-alert>
         <p class="workflow-note">{{ text.simulation }}</p>
       </div>
-      <template #footer="{ confirm, cancel, pending, disabled }">
+      <template #footer="{ confirm, cancel, pending, closePending, disabled }">
         <div class="workflow-footer">
           <span class="workflow-footer-note" role="status">{{
             pending ? text.pending : text.idle
           }}</span>
           <div class="workflow-actions">
-            <s-button type="flat" :disabled="pending" @click="cancel">{{
-              text.cancel
-            }}</s-button>
+            <s-button
+              type="flat"
+              :disabled="pending || closePending"
+              @click="cancel"
+              >{{ text.cancel }}</s-button
+            >
             <s-button
               :loading="pending"
               :disabled="disabled"

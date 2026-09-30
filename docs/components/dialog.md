@@ -27,11 +27,11 @@ PROPS:
     description: Bubble label. Falls back to title, then a localized generic label.
     usage: '#full-screen'
   - name: before-close
-    type: Function
-    values: "(done: (cancel?: boolean) => void) => void"
-    description: Run a guard before closing; call done to continue.
+    type: DialogBeforeCloseFn
+    values: "() => Promise<void>"
+    description: Async close approval with no arguments. Only Promise resolution permits closing. Rejection or an exception keeps it open and displays the string or Error.message in a Notification. A non-Promise return blocks closing.
     default: null
-    usage: '#advanced'
+    usage: '#before-close'
   - name: color
     type: String
     values: "theme color | RGB | HEX | HSL"
@@ -269,6 +269,10 @@ PROPS:
     code: null
 
 EVENTS:
+  - name: close-error
+    type: '(error: unknown) => void'
+    description: Emitted when close approval is rejected, throws, or returns no Promise. Dialog also displays the rejection reason.
+    usage: '#before-close'
   - name: confirm-error
     type: "(error: unknown) => void"
     description: Emitted when before-confirm throws or rejects.
@@ -290,6 +294,10 @@ EVENTS:
       </s-dialog>
 
 EXPOSES:
+  - name: closePending
+    type: Boolean
+    description: Whether close approval is pending. Repeated close requests share the same check.
+    usage: '#before-close'
   - name: confirm
     type: "() => Promise<void> | undefined"
     description: Run the same validation and confirmation flow as the built-in button.
@@ -306,8 +314,8 @@ EXPOSES:
     type: '() => void'
     description: Open the dialog.
   - name: close
-    type: '() => void'
-    description: Request closing through before-close.
+    type: '() => Promise<boolean> | undefined'
+    description: Request closing through before-close and return whether closing was approved. Observe closed for animation and disposal completion.
 SLOTS:
   - name: default
     type: slot
@@ -727,6 +735,38 @@ A publishing workflow combines form validation, asynchronous submission, error r
 <template #style>
 
 @[code{216-257}](../.vuepress/components/dialog/advanced.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Before close
+
+`before-close` is `() => Promise<void>` and takes no callback argument. Return `Promise.resolve()` or fulfill an `async` function to continue closing. `Promise.reject('reason')` or a thrown `Error` blocks closing and displays its reason. Close buttons, overlay clicks, Escape, cancellation, closing after confirmation, dock bubbles, instance `close()`, and controlled `v-model` close requests use the same check. Minimizing does not run it.
+
+While pending, the dialog and overlay stay mounted, close buttons show loading, and repeated requests share one check. Rejecting a controlled close emits `v-model=true` to restore visibility. Use `close-error` for logging; custom footers receive `closePending`. Results from an unmounted or reopened instance cannot close a new instance or display a stale notification. `SDialogBox` also waits for actual closing and disposal before settling its outer Promise.
+
+<template #example>
+<dialog-before-close />
+</template>
+
+<template #template>
+
+@[code{27-48}](../.vuepress/components/dialog/before-close.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-25}](../.vuepress/components/dialog/before-close.vue)
+
+</template>
+
+<template #style>
+
+@[code{50-63}](../.vuepress/components/dialog/before-close.vue)
 
 </template>
 

@@ -264,6 +264,9 @@ export default {
       label: 'rating',
     },
     dialog: {
+      closeBlocked: 'Dialog kept open',
+      closeBlockedMessage:
+        'Closing was not approved. Complete the current action and try again.',
       minimize: 'Minimize',
       restore: 'Restore dialog',
       minimized: 'Minimized dialog',

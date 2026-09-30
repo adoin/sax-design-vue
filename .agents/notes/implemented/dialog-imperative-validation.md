@@ -23,6 +23,7 @@ modules:
 - confirmDisabled 禁用确认入口；实例 confirm() 和 footer 的 confirm/cancel/pending/disabled 作用域复用相同流程。
 - SDialogBox() 在关闭动画结束及实例清理后返回 confirm/cancel/close。alert() 是单确认按钮入口；confirm() 成功返回 true，取消或关闭拒绝为 cancel/close，调用方必须处理取消。
 - 命令式实例独立管理生命周期。beforeClose 阻止关闭时不能提前结束 Promise；创建失败及最终关闭均须清理挂载节点。
+- beforeClose 的无参数 Promise 校验、关闭原因通知及统一关闭入口遵循 [dialog-async-close-guard.md](dialog-async-close-guard.md)。Advanced 的草稿选择以 resolve/reject 表达，不再使用 done 回调。
 - Prompt、SPromptBox、$prompt 的实现、注册、样式、公共类型、导航和示例已移除；README 与生成脚本同步更新。
 - 保留 Dialog 最小化及 global 生命周期契约。
 

@@ -94,6 +94,7 @@ export default defineComponent({
     expose({
       visible: computed(() => surface.value?.visible ?? false),
       minimized: computed(() => surface.value?.minimized ?? false),
+      closePending: computed(() => surface.value?.closePending ?? false),
       open: () => surface.value?.open(),
       close: () => surface.value?.close(),
       confirm: () => surface.value?.confirm(),

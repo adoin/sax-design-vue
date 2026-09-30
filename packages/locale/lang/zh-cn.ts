@@ -252,6 +252,8 @@ export default {
       error: '输入的数据不合法!',
     },
     dialog: {
+      closeBlocked: '弹窗未关闭',
+      closeBlockedMessage: '未获准关闭，请完成当前操作后再试。',
       minimize: '最小化',
       restore: '恢复对话框',
       minimized: '已最小化的对话框',

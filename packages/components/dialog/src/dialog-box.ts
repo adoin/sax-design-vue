@@ -13,6 +13,7 @@ export type DialogBoxOptions = Partial<
 > & {
   content?: string | number | (() => VNodeChild)
   onConfirmError?: (error: unknown) => void
+  onCloseError?: (error: unknown) => void
   onConfirm?: () => void
   onCancel?: () => void
   onClose?: () => void
@@ -36,7 +37,7 @@ const dialogBox: DialogBoxFn = ((options: DialogBoxOptions | string = {}) => {
   if (!isClient) return Promise.resolve('close' as DialogBoxAction)
   const normalized =
     typeof options === 'string' ? { content: options } : options
-  const { content, onConfirm, onCancel, onClose, beforeClose, ...settings } =
+  const { content, onConfirm, onCancel, onClose, onCloseError, ...settings } =
     normalized
   const host = document.createElement('div')
   host.dataset.sDialogService = ''
@@ -69,13 +70,10 @@ const dialogBox: DialogBoxFn = ((options: DialogBoxOptions | string = {}) => {
         confirmClosable: true,
         cancelClosable: true,
         content: typeof content === 'function' ? undefined : content,
-        beforeClose: beforeClose
-          ? (done: (cancel?: boolean) => void) =>
-              beforeClose((cancel) => {
-                if (cancel) action = 'close'
-                done(cancel)
-              })
-          : undefined,
+        onCloseError: (error: unknown) => {
+          action = 'close'
+          onCloseError?.(error)
+        },
         onConfirm: () => {
           action = 'confirm'
         },

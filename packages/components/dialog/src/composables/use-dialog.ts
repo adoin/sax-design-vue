@@ -1,7 +1,8 @@
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useTimeoutFn } from '@vueuse/core'
 import {
   useColor,
+  useLocale,
   useLockscreen,
   useNamespace,
   useShape,
@@ -10,6 +11,7 @@ import {
 } from '@vuesax-alpha/hooks'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { getVsColor, isClient } from '@vuesax-alpha/utils'
+import { SNotification } from '@vuesax-alpha/components/notification'
 import type { DialogEmitFn, DialogProps } from '../dialog'
 
 export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
@@ -21,6 +23,16 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
   const ns = useNamespace('dialog')
   const shape = useShape()
   const { nextZIndex } = useZIndex()
+  const { t } = useLocale()
+  const closePending = ref(false)
+  let closeTask: Promise<boolean> | undefined
+  let closeVersion = 0
+  let disposed = false
+  const invalidateClose = () => {
+    closeVersion++
+    closeTask = undefined
+    closePending.value = false
+  }
   const vsBaseClasses = useVuesaxBaseComponent(useColor())
 
   const zIndex = ref(props.zIndex ?? nextZIndex())
@@ -57,23 +69,71 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
   }
 
   const open = () => {
+    invalidateClose()
     doOpen()
   }
 
   const close = () => {
-    const hide = (shouldCancel?: boolean) => {
-      if (shouldCancel) return
+    if (disposed || !visible.value) return Promise.resolve(false)
+    if (closeTask) return closeTask
+    const guard = props.beforeClose
+    if (!guard) {
       closed.value = true
-      visible.value = false
-    }
-
-    if (props.beforeClose) {
-      props.beforeClose(hide)
-    } else {
       doClose()
+      return Promise.resolve(true)
     }
-    // doClose()
+    const version = ++closeVersion
+    closePending.value = true
+    // Assign the shared task before invoking user code to prevent reentry.
+    closeTask = Promise.resolve().then(async () => {
+      try {
+        const approval = guard()
+        if (!approval || typeof approval.then !== 'function')
+          throw new Error(t('vs.dialog.closeBlockedMessage'))
+        await approval
+        if (disposed || version !== closeVersion || !visible.value) return false
+        closed.value = true
+        doClose()
+        return true
+      } catch (reason) {
+        if (disposed || version !== closeVersion || !visible.value) return false
+        const message =
+          typeof reason === 'string'
+            ? reason
+            : reason &&
+                typeof reason === 'object' &&
+                'message' in reason &&
+                typeof reason.message === 'string'
+              ? reason.message
+              : ''
+        emit('closeError', reason)
+        SNotification({
+          title: t('vs.dialog.closeBlocked'),
+          content: message.trim() || t('vs.dialog.closeBlockedMessage'),
+          dangerousHtmlString: false,
+          color: 'warn',
+          position: 'top-right',
+          duration: 3500,
+          zIndex: nextZIndex(),
+          shape: shape.value === 'square' ? 'square' : '',
+        })
+        // Keep a rejected controlled close in sync with the visible surface.
+        if (!props.modelValue) emit(UPDATE_MODEL_EVENT, true)
+        return false
+      } finally {
+        if (version === closeVersion) {
+          closeTask = undefined
+          closePending.value = false
+        }
+      }
+    })
+    return closeTask
   }
+
+  onBeforeUnmount(() => {
+    disposed = true
+    invalidateClose()
+  })
 
   const handleClose = () => {
     if (props.preventClose) {
@@ -154,6 +214,8 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
     beforeLeave,
     handleClose,
     close,
+    closePending,
+    open,
     doClose,
     zIndex,
     closed,

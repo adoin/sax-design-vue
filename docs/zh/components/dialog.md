@@ -27,11 +27,11 @@ PROPS:
     description: 底部气泡的名称，默认使用 title，未提供时使用本地化通用名称。
     usage: '#full-screen'
   - name: before-close
-    type: Function
-    values: "(done: (cancel?: boolean) => void) => void"
-    description: 关闭前运行守卫；调用 done 后继续关闭。
+    type: DialogBeforeCloseFn
+    values: "() => Promise<void>"
+    description: 无参数的异步关闭校验。仅 Promise resolve 时继续关闭；reject 或抛错时保留弹窗，并用 Notification 显示字符串或 Error.message。未返回 Promise 时阻止关闭。
     default: null
-    usage: '#advanced'
+    usage: '#before-close'
   - name: cancel-button-text
     type: String
     values: "按钮文字"
@@ -245,6 +245,10 @@ PROPS:
     usage: '#before-confirm'
 
 EVENTS:
+  - name: close-error
+    type: '(error: unknown) => void'
+    description: 关闭校验被拒绝、抛错或未返回 Promise 时触发；组件同时显示拒绝提示。
+    usage: '#before-close'
   - name: confirm-error
     type: "(error: unknown) => void"
     description: 提交前校验抛错或 Promise 拒绝时触发。
@@ -266,6 +270,10 @@ EVENTS:
       </s-dialog>
 
 EXPOSES:
+  - name: closePending
+    type: Boolean
+    description: 是否正在等待关闭校验。同一校验期间重复关闭请求会合并。
+    usage: '#before-close'
   - name: confirm
     type: "() => Promise<void> | undefined"
     description: 执行与内置确认按钮相同的校验和提交流程。
@@ -282,8 +290,8 @@ EXPOSES:
     type: '() => void'
     description: 打开弹窗。
   - name: close
-    type: '() => void'
-    description: 通过 before-close 请求关闭。
+    type: '() => Promise<boolean> | undefined'
+    description: 通过 before-close 请求关闭，返回是否获准进入关闭流程；最终关闭完成通过 closed 事件观察。
 SLOTS:
   - name: default
     type: slot
@@ -703,6 +711,38 @@ SLOTS:
 <template #style>
 
 @[code{213-254}](../../.vuepress/components/dialog-zh/advanced.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 关闭前校验
+
+`before-close` 使用 `() => Promise<void>`，不接收回调参数。返回 `Promise.resolve()` 或完成 `async` 函数才会进入关闭流程；`Promise.reject('原因')` 或抛出 `Error` 会阻止关闭并弹出原因。关闭按钮、遮罩、Escape、取消、确认后的关闭、气泡关闭、实例 `close()` 及 `v-model` 关闭请求共用这一校验。最小化本身不触发校验。
+
+等待期间保留弹窗与遮罩，关闭按钮显示 loading，重复请求复用同一次校验。拒绝受控关闭时会回写 `v-model=true`。`close-error` 可用于记录拒绝；自定义 footer 提供 `closePending`。卸载或重新打开后，过期结果不会关闭新实例或弹出提示。`SDialogBox` 也遵循此流程，并在真正关闭及清理后才结束调用 Promise。
+
+<template #example>
+<dialog-zh-before-close />
+</template>
+
+<template #template>
+
+@[code{25-45}](../../.vuepress/components/dialog-zh/before-close.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-23}](../../.vuepress/components/dialog-zh/before-close.vue)
+
+</template>
+
+<template #style>
+
+@[code{47-60}](../../.vuepress/components/dialog-zh/before-close.vue)
 
 </template>
 

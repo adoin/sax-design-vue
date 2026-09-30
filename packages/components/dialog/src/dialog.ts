@@ -6,14 +6,14 @@ import type { EmitFn } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type Dialog from './dialog.vue'
 
-type DoneFn = (cancel?: boolean) => void
-export type DialogBeforeCloseFn = (done: DoneFn) => void
+export type DialogBeforeCloseFn = () => Promise<void>
 export type DialogBeforeConfirmFn = () =>
   boolean | void | Promise<boolean | void>
 export interface DialogFooterScope {
   confirm: () => Promise<void>
   cancel: () => void
   pending: boolean
+  closePending: boolean
   disabled: boolean
 }
 
@@ -219,6 +219,8 @@ export const dialogEmits = {
   // Accept any rejected value while preserving the public event payload type.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   confirmError: (_error: unknown) => true,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  closeError: (_error: unknown) => true,
   cancel: () => true,
   [UPDATE_MODEL_EVENT]: (value: boolean) => isBoolean(value),
 }
@@ -230,8 +232,9 @@ export type DialogProps = ExtractPropTypes<typeof dialogProps>
 export interface DialogExposes {
   visible: boolean
   minimized: boolean
+  closePending: boolean
   open: () => void
-  close: () => void
+  close: () => Promise<boolean> | undefined
   confirm: () => Promise<void> | undefined
   minimize: () => void
   restore: () => void
