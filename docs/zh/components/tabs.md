@@ -71,7 +71,7 @@ PROPS:
     default: 'false'
   - name: color
     type: String
-    values: "主题色 / RGB / HEX"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 激活色。
     default: primary
   - name: aria-label

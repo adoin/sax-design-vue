@@ -28,7 +28,7 @@ PROPS:
     code: null
   - name: color
     type: String
-    values: 'Theme colors, RGB, HEX'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Change the color of the radio.
     default: primary
     link: null

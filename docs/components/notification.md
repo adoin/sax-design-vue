@@ -73,7 +73,7 @@ PROPS:
       })
   - name: color
     type: String
-    values: 'Sax Design colors, rgb, hex'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Change the base color of the entire component.
     default: null
     link: null
@@ -87,7 +87,7 @@ PROPS:
       })
   - name: border
     type: String
-    values: 'Sax Design colors, rgb, hex'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Add a color border to the notification.
     default: null
     link: null

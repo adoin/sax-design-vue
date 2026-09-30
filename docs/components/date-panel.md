@@ -2,7 +2,7 @@
 PROPS:
   - name: color
     type: String
-    values: Sax Design theme color / RGB / HEX / HSL
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Accent color for selected and interactive panel states.
     default: primary
   - name: picker-type

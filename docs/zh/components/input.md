@@ -150,7 +150,7 @@ PROPS:
       </template>
   - name: color
     type: String
-    values: "theme colors, RGB, HEX"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 设置组件颜色。
     default: null
     link: null
@@ -195,7 +195,7 @@ PROPS:
 
   - name: state
     type: String
-    values: "theme colors, RGB, HEX"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 通过状态改变组件背景颜色。
     default: null
     link: null

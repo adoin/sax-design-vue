@@ -15,7 +15,7 @@ PROPS:
     #__________________________________
   - name: color
     type: String
-    values: 'All colors of Sax Design (RGB y HEX)'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Change the color of the loading animation.
     default: primary
     link: /theme/
@@ -24,7 +24,7 @@ PROPS:
     #__________________________________
   - name: background
     type: String
-    values: 'All colors of Sax Design (RGB y HEX)'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Change the background color of the loading.
     default: '#fff'
     link: /theme/

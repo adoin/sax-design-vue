@@ -31,7 +31,7 @@ PROPS:
     usage: '#label'
   - name: color
     type: String
-    values: '主题色 | RGB | HEX | HSL'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 设置文本域与计数器的强调色。
     default: primary
     usage: '#default'

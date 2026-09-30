@@ -73,7 +73,7 @@ PROPS:
       })
   - name: color
     type: String
-    values: 'Sax Design colors, rgb, hex'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 修改整个通知的基础颜色。
     default: null
     link: null
@@ -87,7 +87,7 @@ PROPS:
       })
   - name: border
     type: String
-    values: 'Sax Design colors, rgb, hex'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 为通知添加指定颜色的边框。
     default: null
     link: null

@@ -39,7 +39,7 @@ PROPS:
     usage: '#default'
   - name: color
     type: String
-    values: Sax Design 颜色 | RGB | HEX
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 彩色表面与交互效果使用的语义强调色。
     default: primary
     usage: '#complete-configuration'

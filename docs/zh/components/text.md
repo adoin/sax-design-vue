@@ -7,7 +7,7 @@ PROPS:
     default: 'span'
   - name: status
     type: String
-    values: '主题状态'
+    values: "primary | success | warning | danger | info"
     description: 选择渲染元素和语义颜色状态。
     default: null
   - name: content

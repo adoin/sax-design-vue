@@ -14,7 +14,7 @@ PROPS:
     usage: '#shape'
   - name: color
     type: String
-    values: "theme color | RGB | HEX | HSL"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Set the accent color shared by the trigger and picker panel.
     default: null
     link: null

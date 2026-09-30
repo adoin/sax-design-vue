@@ -34,7 +34,7 @@ PROPS:
 
   - name: background
     type: String
-    values: '主题色、RGB、HEX 或 CSS 颜色'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA | CSS 颜色"
     description: 可选的标签表面实色；不透明 HEX/RGB/HSL 色自动选择黑字或白字，其他 CSS 颜色可用 label-color 指定。
     default: transparent
     link: null
@@ -42,7 +42,7 @@ PROPS:
 
   - name: label-color
     type: String
-    values: '主题色、RGB、HEX 或 CSS 颜色'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA | CSS 颜色"
     description: 显式指定标签文字颜色，覆盖 variant 和 background 的自动颜色。
     default: null
     link: null

@@ -15,7 +15,7 @@ PROPS:
     #__________________________________
   - name: color
     type: String
-    values: 'Theme colors, RGB, HEX'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 设置加载动画颜色。
     default: primary
     link: /theme/
@@ -24,7 +24,7 @@ PROPS:
     #__________________________________
   - name: background
     type: String
-    values: 'Theme colors, RGB, HEX'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 设置加载层背景颜色。
     default: '#fff'
     link: /theme/

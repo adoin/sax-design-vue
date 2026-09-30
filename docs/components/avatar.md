@@ -11,7 +11,7 @@ PROPS:
     default: top-right
   - name: color
     type: String
-    values: "Theme colors, RGB, HEX"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: color of the component.
     default: --sax-gray-2
     link: null
@@ -37,7 +37,7 @@ PROPS:
 
   - name: badge-color
     type: String
-    values: "Theme colors,RGB,HEX"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Change the color of the badge inside the avatar.
     default: primary
     link: null

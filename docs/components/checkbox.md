@@ -35,7 +35,7 @@ PROPS:
 
   - name: color
     type: String
-    values: "Sax Design colors, RGB, HEX"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Change the color of the component.
     default: false
     link: null

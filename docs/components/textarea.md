@@ -31,7 +31,7 @@ PROPS:
     usage: '#label'
   - name: color
     type: String
-    values: 'theme color | RGB | HEX | HSL'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Set the field and counter accent color.
     default: primary
     usage: '#default'

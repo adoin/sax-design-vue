@@ -27,7 +27,7 @@ PROPS:
       <s-pagination v-model:current-page="page" :total="20" />
   - name: color
     type: String
-    values: 'Theme colors, RGB, HEX'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Change the base color of the component.
     default: primary
     link: null

@@ -22,7 +22,7 @@ PROPS:
     default: null
   - name: color
     type: String
-    values: 'Theme colors, RGB, HEX'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 设置单选框颜色。
     default: primary
     link: null

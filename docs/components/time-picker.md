@@ -14,7 +14,7 @@ PROPS:
     usage: '#shape'
   - name: color
     type: String
-    values: 'Sax Design theme color / RGB / HEX / HSL'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Set the theme color shared by the time trigger and popup.
     default: null
     link: null

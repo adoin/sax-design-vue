@@ -17,6 +17,16 @@ supersedes: []
 
 # 公共 API 类型交互与尺寸示例完整性
 
+## 颜色可选值（2026-09-30）
+
+用户要求：
+
+> 别偷懒写个主题色，把primary success等等那些写进来呗，其他地方也看看是否如此
+
+- 颜色 API 的常用预设应明确列出 `primary`、`success`、`danger`、`warn`（兼容 `warning`）、`dark`、`text`、`light`、`secondary`，并按实际能力列出 RGB/RGBA/HEX/HSL/HSLA 等自定义格式；不以“主题色”“Theme colors”“Sax Design colors”等统称代替名称。
+- 独立状态枚举沿用组件实际集合。Text 的 status 为 `primary | success | warning | danger | info`，不能套用通用颜色预设。
+- 已同步 19 个组件的 38 篇中英文文档、50 个可选值条目，包含 color/state/badge-color/background/border/label-color；21 项文档检查通过，Dialog 页面已确认显示具体名称。
+
 ## 项目目标
 
 保持生成式 API 文档的公共具名类型都可通过既有递归类型详情交互逐层查看，并确保每个公开 `size` 属性的组件都有可运行、可复制、可进入 Playground 的双语尺寸示例。

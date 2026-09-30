@@ -144,7 +144,7 @@ PROPS:
     default: null
   - name: color
     type: Color
-    values: 'Theme colors, RGB, HEX'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 设置组件颜色。
     default: primary
     link: null
@@ -232,7 +232,7 @@ PROPS:
     code: null
   - name: state
     type: String
-    values: 'Theme colors'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 使用指定颜色设置组件状态。
     default: false
     link: null

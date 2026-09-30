@@ -119,7 +119,7 @@ PROPS:
       </template>
   - name: color
     type: String
-    values: "Sax Design colors, RGB, HEX"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Change component color.
     default: null
     link: null
@@ -164,7 +164,7 @@ PROPS:
 
   - name: state
     type: String
-    values: "Sax Design colors,RGB,HEX"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Change the background color of the component by changing its status.
     default: null
     link: null

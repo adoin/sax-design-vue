@@ -2,7 +2,7 @@
 PROPS:
   - name: color
     type: String
-    values: Sax Design 主题色 / RGB / HEX / HSL
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 面板的选中态与交互强调色。
     default: primary
   - name: picker-type

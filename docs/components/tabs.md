@@ -71,7 +71,7 @@ PROPS:
     default: 'false'
   - name: color
     type: String
-    values: "theme color / RGB / HEX"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Active color.
     default: primary
   - name: aria-label

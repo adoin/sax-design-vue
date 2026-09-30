@@ -60,7 +60,7 @@ PROPS:
     default: true
   - name: color
     type: String
-    values: "主题色 | RGB | HEX | HSL"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 设置对话框强调色。
     default: primary
   - name: height

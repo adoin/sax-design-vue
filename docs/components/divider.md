@@ -34,7 +34,7 @@ PROPS:
 
   - name: background
     type: String
-    values: 'Theme color, RGB, HEX, or CSS color'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA | CSS color"
     description: Optional exact label surface color; opaque HEX/RGB/HSL colors choose black or white text automatically. Use label-color for other CSS colors.
     default: transparent
     link: null
@@ -42,7 +42,7 @@ PROPS:
 
   - name: label-color
     type: String
-    values: 'Theme color, RGB, HEX, or CSS color'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA | CSS color"
     description: Explicit label foreground color; overrides the automatic color used by variant and background.
     default: null
     link: null

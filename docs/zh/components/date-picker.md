@@ -14,7 +14,7 @@ PROPS:
     usage: '#shape'
   - name: color
     type: String
-    values: "主题色 | RGB | HEX | HSL"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 设置触发输入和选择面板共用的强调色。
     default: null
   - name: size

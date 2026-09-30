@@ -188,7 +188,7 @@ PROPS:
     usage: '#default'
   - name: color
     type: Color
-    values: 'Main colors of Sax Design, RGB, HEX'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Change the color of the component.
     default: primary
     link: null
@@ -276,7 +276,7 @@ PROPS:
     code: null
   - name: state
     type: String
-    values: 'Theme colors'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: Change the state of the component to the color provided.
     default: false
     link: null

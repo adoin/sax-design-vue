@@ -54,7 +54,7 @@ PROPS:
 
   - name: color
     type: String
-    values: "Theme colors, RGB, HEX"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: color of the tooltip.
     default: text
     link: null

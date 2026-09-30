@@ -35,7 +35,7 @@ PROPS:
 
   - name: color
     type: String
-    values: "theme colors, RGB, HEX"
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 设置组件颜色。
     default: false
     link: null

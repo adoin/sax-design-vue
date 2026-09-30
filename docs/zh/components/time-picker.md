@@ -14,7 +14,7 @@ PROPS:
     usage: '#shape'
   - name: color
     type: String
-    values: 'Sax Design 主题色 / RGB / HEX / HSL'
+    values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
     description: 设置时间输入触发器与弹层的主题色。
     default: null
   - name: size

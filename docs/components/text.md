@@ -7,7 +7,7 @@ PROPS:
     default: 'span'
   - name: status
     type: String
-    values: 'theme status'
+    values: "primary | success | warning | danger | info"
     description: Select the rendered element and semantic color state.
     default: null
   - name: content
