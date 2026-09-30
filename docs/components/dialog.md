@@ -199,7 +199,7 @@ PROPS:
     description: Set the built-in title when the header slot is not used.
     default: null
     link: null
-    usage: '#advanced'
+    usage: '#publishing-and-draft-protection'
     code: null
   - name: content
     type: String | Number
@@ -215,7 +215,7 @@ PROPS:
     description: Render the built-in header area.
     default: true
     link: null
-    usage: '#advanced'
+    usage: '#publishing-and-draft-protection'
     code: null
   - name: show-footer
     type: Boolean
@@ -223,7 +223,7 @@ PROPS:
     description: Render built-in action footer and modal events.
     default: false
     link: null
-    usage: '#advanced'
+    usage: '#publishing-and-draft-protection'
     code: null
   - name: show-cancel-button
     type: Boolean
@@ -247,7 +247,7 @@ PROPS:
     description: Control overlay and dismissal behavior.
     default: true
     link: null
-    usage: '#advanced'
+    usage: '#publishing-and-draft-protection'
     code: null
 
   - name: mask-closable
@@ -256,7 +256,7 @@ PROPS:
     description: Control overlay and dismissal behavior.
     default: true
     link: null
-    usage: '#advanced'
+    usage: '#publishing-and-draft-protection'
     code: null
 
   - name: show-close
@@ -265,7 +265,7 @@ PROPS:
     description: Control overlay and dismissal behavior.
     default: true
     link: null
-    usage: '#advanced'
+    usage: '#publishing-and-draft-protection'
     code: null
 
 EVENTS:
@@ -341,7 +341,7 @@ SLOTS:
     description: slot footer of Dialog
     default: null
     link: null
-    usage: '#advanced'
+    usage: '#publishing-and-draft-protection'
     code: >
       <s-dialog>
         <template #footer>
@@ -712,7 +712,7 @@ With the `prevent-close` property you do not close the dialog by clicking outsid
 
 <card>
 
-## Advanced
+## Publishing and draft protection
 
 A publishing workflow combines form validation, asynchronous submission, error retry, and close guards. Its custom `footer` uses Dialog's `confirm`, `cancel`, `pending`, and `disabled` scope to keep actions synchronized with the confirmation flow. `before-close` blocks closing during the request and offers a choice before discarding unsaved edits. The request is simulated locally: the first attempt fails and retrying succeeds.
 
