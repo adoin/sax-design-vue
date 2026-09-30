@@ -7,13 +7,15 @@ const props = withDefaults(
     filterId: string
     dissolved: boolean
     region?: 'text' | 'surface'
+    dissolveDuration?: number
     assembleDuration?: number
   }>(),
-  { region: 'text', assembleDuration: 650 },
+  { region: 'text', dissolveDuration: 480, assembleDuration: 650 },
 )
 const emit = defineEmits<{ settled: [dissolved: boolean] }>()
 const filter = useTemplateRef<SVGFilterElement>('filter')
 const initial = useSvgDissolve(() => props.dissolved, filter, {
+  dissolveDuration: () => props.dissolveDuration,
   assembleDuration: props.assembleDuration,
   onSettled: (value) => emit('settled', value),
 })

@@ -65,6 +65,12 @@ export const dialogProps = buildProps({
   },
   /** Particle dissolve on the surface when closing; never filter the overlay. */
   closeAnimation: { type: Boolean, default: true },
+  /** Surface dissolve duration in milliseconds. Zero skips the motion. */
+  closeAnimationDuration: {
+    type: Number,
+    default: 220,
+    validator: (value: number) => Number.isFinite(value) && value >= 0,
+  },
   showFooter: Boolean,
   showCancelButton: Boolean,
   cancelButtonText: String,

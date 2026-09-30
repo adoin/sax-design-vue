@@ -3,6 +3,12 @@ import { ref } from 'vue'
 
 const visible = ref(false)
 const closeAnimation = ref(true)
+const duration = ref(220)
+const durations = [
+  { label: 'Fast · 120ms', value: 120 },
+  { label: 'Default · 220ms', value: 220 },
+  { label: 'Slow · 480ms', value: 480 },
+]
 </script>
 
 <template>
@@ -11,10 +17,18 @@ const closeAnimation = ref(true)
       <s-switch v-model="closeAnimation" aria-label="Close animation" />
       <span>Close animation</span>
     </div>
+    <s-select
+      v-model="duration"
+      :options="durations"
+      label="Close duration"
+      label-float
+      style="width: 180px"
+    />
     <s-button @click="visible = true">Open dialog</s-button>
     <s-dialog
       v-model="visible"
       :close-animation="closeAnimation"
+      :close-animation-duration="duration"
       :width="440"
       title="Particle dissolve on close"
       minimizable

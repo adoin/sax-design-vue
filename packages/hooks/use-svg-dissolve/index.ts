@@ -30,6 +30,7 @@ export const useSvgDissolve = (
   dissolved: MaybeRefOrGetter<boolean>,
   filter: Readonly<Ref<SVGFilterElement | null>>,
   options: {
+    dissolveDuration?: MaybeRefOrGetter<number>
     assembleDuration?: number
     onSettled?: (dissolved: boolean) => void
   } = {},
@@ -78,8 +79,16 @@ export const useSvgDissolve = (
     if (!distance) return options.onSettled?.(target === 1)
     const started = view.performance.now()
     // Focus feedback must start promptly; reassembly can settle more softly.
+    const requestedDuration =
+      target === 1
+        ? toValue(options.dissolveDuration ?? 480)
+        : (options.assembleDuration ?? 650)
     const duration =
-      (target === 1 ? 480 : (options.assembleDuration ?? 650)) * distance
+      (Number.isFinite(requestedDuration)
+        ? Math.max(0, requestedDuration)
+        : target === 1
+          ? 480
+          : 650) * distance
     if (!duration) return settle()
     const tick = (now: number) => {
       const elapsed = clamp((now - started) / duration)

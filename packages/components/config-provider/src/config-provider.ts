@@ -37,6 +37,7 @@ export interface ButtonGlobalConfig {
 }
 export interface DialogGlobalConfig {
   closeAnimation?: boolean
+  closeAnimationDuration?: number
   overlayBlur?: boolean
   showHeader?: boolean
   showClose?: boolean

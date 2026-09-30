@@ -1,4 +1,4 @@
-import { nextTick, shallowRef } from 'vue'
+import { shallowRef } from 'vue'
 import { useId } from '@vuesax-alpha/hooks'
 
 /** Own one mutable filter/timeline for this surface, including retained globals. */
@@ -37,7 +37,6 @@ export const useDialogDissolve = () => {
     })
     dissolved.value = true
     await completed
-    await nextTick()
     // Leave the zero-alpha filter installed until removal or cancellation.
   }
   return { filterId, dissolved, play, cancel, settled }

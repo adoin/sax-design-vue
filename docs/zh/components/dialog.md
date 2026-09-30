@@ -1,6 +1,12 @@
 ---
 description: '展示聚焦的模态内容并要求用户作出决定。'
 PROPS:
+  - name: close-animation-duration
+    type: Number
+    values: "非负毫秒数"
+    description: 关闭消散时长；默认 220ms，0 直接结束。仅控制弹窗本体或气泡。
+    default: 220
+    usage: '#close-animation'
   - name: close-animation
     type: Boolean
     values: "true | false"
@@ -727,6 +733,8 @@ SLOTS:
 
 ## 关闭动画
 
+默认关闭消散时长为 **220ms**。通过 `close-animation-duration` 设置毫秒数，`0` 直接结束；命令式调用及全局 Dialog 配置使用 `closeAnimationDuration`。消散完成时同步移除弹窗与遮罩，不追加遮罩淡出等待。
+
 默认使用 SVG 粒子消散关闭弹窗，设置 `:close-animation="false"` 可关闭动画。效果仅作用于弹窗本体或最小化气泡，遮罩在消散期间保持不变。配置 `before-close` 时，校验通过且 loading 完成后才开始消散；拒绝关闭时不会播放。命令式调用也支持 `closeAnimation: false`。减少动态效果或页面不可见时直接完成关闭。
 
 <template #example>
@@ -735,19 +743,19 @@ SLOTS:
 
 <template #template>
 
-@[code{8-27}](../../.vuepress/components/dialog-zh/close-animation.vue)
+@[code{14-41}](../../.vuepress/components/dialog-zh/close-animation.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-6}](../../.vuepress/components/dialog-zh/close-animation.vue)
+@[code{1-12}](../../.vuepress/components/dialog-zh/close-animation.vue)
 
 </template>
 
 <template #style>
 
-@[code{29-44}](../../.vuepress/components/dialog-zh/close-animation.vue)
+@[code{43-58}](../../.vuepress/components/dialog-zh/close-animation.vue)
 
 </template>
 

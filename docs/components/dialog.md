@@ -1,6 +1,12 @@
 ---
 description: 'Present focused modal content and require a user decision.'
 PROPS:
+  - name: close-animation-duration
+    type: Number
+    values: "non-negative milliseconds"
+    description: Duration of the closing dissolve. Defaults to 220ms; 0 finishes immediately. Applies only to the surface or bubble.
+    default: 220
+    usage: '#close-animation'
   - name: close-animation
     type: Boolean
     values: "true | false"
@@ -750,6 +756,8 @@ Customize the action layout with the `footer` slot. Its `confirm` and `cancel` c
 
 ## Close animation
 
+The closing dissolve defaults to **220ms**. Set `close-animation-duration` in milliseconds; `0` finishes immediately. Imperative calls and global Dialog configuration use `closeAnimationDuration`. The surface and overlay are removed together when dissolution finishes, without an additional overlay fade.
+
 Dialogs close with an SVG particle dissolve by default. Set `:close-animation="false"` to disable it. Only the surface or minimized bubble is filtered; the overlay stays unchanged during the dissolve. With `before-close`, dissolution begins after approval and loading completion. Rejected closing does not animate. Imperative calls also accept `closeAnimation: false`. Reduced motion and hidden pages skip the dissolve.
 
 <template #example>
@@ -758,19 +766,19 @@ Dialogs close with an SVG particle dissolve by default. Set `:close-animation="f
 
 <template #template>
 
-@[code{8-28}](../.vuepress/components/dialog/close-animation.vue)
+@[code{14-42}](../.vuepress/components/dialog/close-animation.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-6}](../.vuepress/components/dialog/close-animation.vue)
+@[code{1-12}](../.vuepress/components/dialog/close-animation.vue)
 
 </template>
 
 <template #style>
 
-@[code{30-45}](../.vuepress/components/dialog/close-animation.vue)
+@[code{44-59}](../.vuepress/components/dialog/close-animation.vue)
 
 </template>
 

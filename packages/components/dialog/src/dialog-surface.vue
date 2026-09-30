@@ -3,6 +3,7 @@
     <SvgDissolveFilter
       :filter-id="exitDissolve.filterId"
       :dissolved="exitDissolve.dissolved.value"
+      :dissolve-duration="props.closeAnimationDuration"
       :assemble-duration="0"
       region="surface"
       @settled="exitDissolve.settled"
@@ -12,6 +13,7 @@
       @after-enter="afterEnter"
       @after-leave="afterLeave"
       @before-leave="beforeLeave"
+      @leave="leaveImmediately"
     >
       <div
         v-if="visible"
@@ -229,6 +231,8 @@ dialogDeprecated(props)
 
 const waitForLoading = provideLoadingCompletion()
 const exitDissolve = useDialogDissolve()
+// The surface has already dissolved; remove the mask in this same Vue patch.
+const leaveImmediately = (_element: Element, done: () => void) => done()
 const cancelExitMotion = () => {
   exitDissolve.cancel()
   confirmVersion++

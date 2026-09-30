@@ -63,6 +63,32 @@ const create = (props = {}) => {
 }
 
 describe('Dialog surface dissolve', () => {
+  it.each([60, 0])(
+    'honors %sms and removes the mask without another transition tail',
+    async (duration) => {
+      const wrapper = mount(Dialog, {
+        attachTo: document.body,
+        props: { modelValue: true, closeAnimationDuration: duration },
+        global: { stubs: { transition: false } },
+      })
+      wrappers.push(wrapper)
+      const dialog = wrapper.vm as unknown as DialogExposes
+      await settle()
+      const mask = document.querySelector<HTMLElement>('.s-dialog')!
+      const closing = dialog.close()!
+      await settle()
+      if (duration) {
+        await advance(duration - 1)
+        expect(mask.isConnected).toBe(true)
+        expect(dialog.visible).toBe(true)
+        await advance(duration)
+      }
+      await expect(closing).resolves.toBe(true)
+      expect(mask.isConnected).toBe(false)
+      expect(wrapper.emitted('closed')).toHaveLength(1)
+    },
+  )
+
   it('inherits animation opt-out from ConfigProvider', async () => {
     const wrapper = mount(ConfigProvider, {
       attachTo: document.body,
@@ -108,7 +134,7 @@ describe('Dialog surface dissolve', () => {
             .getAttribute('intercept'),
         ),
       ).toBeLessThan(1)
-      await advance(480)
+      await advance(220)
       await expect(closing).resolves.toBe(true)
       expect(dialog.visible).toBe(false)
     },
