@@ -3,8 +3,8 @@
     ref="root$"
     :class="buttonClasses"
     :style="buttonStyles"
-    :disabled="disabled || loading"
-    :aria-busy="loading ? 'true' : undefined"
+    :disabled="disabled || visualLoading"
+    :aria-busy="visualLoading ? 'true' : undefined"
     @click="handleClick"
     @mousedown="mouseDown"
   >
@@ -88,15 +88,20 @@
     <Transition :name="ns.b('loading')" appear>
       <div
         v-if="
-          props.loading &&
-          ($slots.loading ||
-            props.loadingType !== 'default' ||
-            (!$slots.prefix && !$slots.suffix))
+          overlayLoaderShown ||
+          (props.loading &&
+            ($slots.loading ||
+              props.loadingType !== 'default' ||
+              (!$slots.prefix && !$slots.suffix)))
         "
         :class="ns.e('loading')"
       >
         <slot name="loading">
-          <IconLoading v-if="props.loadingType === 'default'" />
+          <IconLoading
+            v-if="props.loadingType === 'default'"
+            :active="overlayLoaderActive"
+            @restored="overlayLoaderShown = false"
+          />
           <span v-else :class="ns.e('loading-track')" aria-hidden="true" />
         </slot>
       </div>
@@ -163,6 +168,32 @@ const inlineLoadingPlacement = computed<InlineLoadingPlacement | undefined>(
 )
 const inlineLoaderShown = shallowRef(false)
 const inlineLoaderActive = shallowRef(false)
+const overlayLoaderShown = shallowRef(false)
+const overlayLoaderActive = shallowRef(false)
+const overlayLoaderRequested = computed(
+  () =>
+    !!props.loading &&
+    props.loadingType === 'default' &&
+    !slots.loading &&
+    !inlineLoadingPlacement.value,
+)
+watch(
+  overlayLoaderRequested,
+  (value) => {
+    if (
+      props.loadingType !== 'default' ||
+      slots.loading ||
+      inlineLoadingPlacement.value
+    )
+      overlayLoaderShown.value = false
+    if (value) overlayLoaderShown.value = true
+    overlayLoaderActive.value = value
+  },
+  { immediate: true },
+)
+const visualLoading = computed(
+  () => props.loading || inlineLoaderShown.value || overlayLoaderShown.value,
+)
 let inlineLoaderFirstPaintFrame: number | undefined
 let inlineLoaderStartFrame: number | undefined
 
@@ -351,8 +382,8 @@ const buttonClasses = computed(() => {
     props.animateInactive && ns.m('animate-inactive'),
     props.block && ns.m('block'),
     props.icon && ns.m('icon'),
-    props.loading && ns.m('loading'),
-    props.loading && ns.m(`loading-${props.loadingType}`),
+    visualLoading.value && ns.m('loading'),
+    visualLoading.value && ns.m(`loading-${props.loadingType}`),
     ns.em('size', String(size.value)),
     ns.m(resolvedType.value),
     props.upload && ns.m('upload'),
@@ -368,7 +399,7 @@ const buttonStyles = computed(() => {
 })
 
 const mouseDown = (evs: MouseEvent) => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || visualLoading.value) return
 
   // ripple effect
   if (props.ripple === 'reverse') {
@@ -391,7 +422,7 @@ const mouseDown = (evs: MouseEvent) => {
 }
 
 const handleClick = (event: MouseEvent) => {
-  if (props.disabled || props.loading) {
+  if (props.disabled || visualLoading.value) {
     event.preventDefault()
     return
   }
@@ -401,7 +432,7 @@ const handleClick = (event: MouseEvent) => {
 
     debounceTimer = setTimeout(() => {
       debounceTimer = undefined
-      if (!props.disabled && !props.loading) emit('click', event)
+      if (!props.disabled && !visualLoading.value) emit('click', event)
     }, props.debounce)
     return
   }

@@ -38,6 +38,7 @@
             type="button"
             :class="ns.e('minimize')"
             :aria-label="t('vs.dialog.minimize')"
+            :disabled="closePending"
             @click="minimize"
           >
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
@@ -59,7 +60,11 @@
             :aria-busy="closePending || undefined"
             @click="close"
           >
-            <icon-loading v-if="closePending" :size="18" />
+            <icon-loading
+              v-if="closeIndicatorShown"
+              :active="closeLoadingActive"
+              :size="18"
+            />
             <icon-close v-else :size="18" />
           </button>
 
@@ -89,9 +94,14 @@
               name="footer"
               :confirm="handleConfirm"
               :cancel="handleCancel"
-              :pending="confirmPending"
+              :pending="confirmLoadingActive"
               :close-pending="closePending"
-              :disabled="props.confirmDisabled || props.loading || closePending"
+              :disabled="
+                props.confirmDisabled ||
+                props.loading ||
+                closePending ||
+                confirmPending
+              "
             >
               <div :class="ns.e('actions')">
                 <s-button
@@ -104,9 +114,12 @@
                 </s-button>
                 <s-button
                   v-if="showConfirmButton"
-                  :loading="confirmPending"
+                  :loading="confirmLoadingActive"
                   :disabled="
-                    props.confirmDisabled || props.loading || closePending
+                    props.confirmDisabled ||
+                    props.loading ||
+                    closePending ||
+                    confirmPending
                   "
                   @click="handleConfirm"
                 >
@@ -127,6 +140,7 @@
         :class="ns.e('restore')"
         :title="dockLabel"
         :aria-label="`${t('vs.dialog.restore')}: ${dockLabel}`"
+        :disabled="closePending"
         @click="restore"
       >
         <span :class="ns.e('dock-indicator')" aria-hidden="true" />
@@ -140,7 +154,11 @@
         :aria-busy="closePending || undefined"
         @click="close"
       >
-        <icon-loading v-if="closePending" :size="14" />
+        <icon-loading
+          v-if="closeIndicatorShown"
+          :active="closeLoadingActive"
+          :size="14"
+        />
         <icon-close v-else :size="14" />
       </button>
     </div>
@@ -168,6 +186,7 @@ import {
   useSameTarget,
   useZIndex,
 } from '@vuesax-alpha/hooks'
+import { provideLoadingCompletion } from '@vuesax-alpha/hooks/use-loading-completion'
 import { acquireDialogDock, releaseDialogDock } from './dialog-dock'
 import { dialogEmits, dialogProps } from './dialog'
 import { useDialog } from './composables'
@@ -190,6 +209,13 @@ const { nextZIndex } = useZIndex()
 
 dialogDeprecated(props)
 
+const waitForLoading = provideLoadingCompletion()
+const finishExitLoading = async () => {
+  confirmVersion++
+  cancelConfirmIndicator()
+  confirmLoadingActive.value = false
+  await waitForLoading()
+}
 const {
   visible,
   minimized,
@@ -199,12 +225,17 @@ const {
   dialogStyles,
   close,
   closePending,
+  closeLoadingActive,
+  closeIndicatorShown,
   open: openDialog,
   afterEnter,
   afterLeave,
   beforeLeave,
   handleClose,
-} = useDialog(props, emit)
+} = useDialog(props, emit, {
+  beforeExit: finishExitLoading,
+  settled: waitForLoading,
+})
 
 useModal({ handleClose }, surfaceVisible)
 const dialogElement = useTemplateRef<HTMLElement>('dialogElement')
@@ -311,19 +342,29 @@ const handleCancel = () => {
   if (props.cancelClosable) close()
 }
 const confirmPending = shallowRef(false)
+const confirmLoadingActive = shallowRef(false)
 let confirmVersion = 0
+let confirmIndicatorFrame: number | undefined
+const cancelConfirmIndicator = () => {
+  if (confirmIndicatorFrame !== undefined)
+    cancelAnimationFrame(confirmIndicatorFrame)
+  confirmIndicatorFrame = undefined
+}
 watch(
   visible,
   (value) => {
     if (!value) {
       confirmVersion++
+      cancelConfirmIndicator()
       confirmPending.value = false
+      confirmLoadingActive.value = false
     }
   },
   { flush: 'sync' },
 )
 onBeforeUnmount(() => {
   confirmVersion++
+  cancelConfirmIndicator()
 })
 const handleConfirm = async () => {
   if (
@@ -336,16 +377,32 @@ const handleConfirm = async () => {
     return
   const version = ++confirmVersion
   confirmPending.value = true
+  if (props.beforeConfirm && typeof requestAnimationFrame === 'function') {
+    confirmIndicatorFrame = requestAnimationFrame(() => {
+      confirmIndicatorFrame = undefined
+      if (version === confirmVersion && visible.value && confirmPending.value)
+        confirmLoadingActive.value = true
+    })
+  }
   try {
     const accepted = await props.beforeConfirm?.()
+    if (version !== confirmVersion || !visible.value) return
+    cancelConfirmIndicator()
+    confirmLoadingActive.value = false
+    if (accepted !== false) emit('confirm')
+    await waitForLoading()
     if (version !== confirmVersion || !visible.value || accepted === false)
       return
-    emit('confirm')
     if (props.confirmClosable) await close()
   } catch (error) {
     if (version === confirmVersion && visible.value) emit('confirmError', error)
   } finally {
-    if (version === confirmVersion) confirmPending.value = false
+    if (version === confirmVersion) {
+      cancelConfirmIndicator()
+      confirmLoadingActive.value = false
+      await waitForLoading()
+      if (version === confirmVersion) confirmPending.value = false
+    }
   }
 }
 

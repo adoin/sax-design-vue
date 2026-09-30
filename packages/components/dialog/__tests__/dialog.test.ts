@@ -9,6 +9,11 @@ import type { DialogExposes } from '../src/dialog'
 
 const originalConfig = useGlobalConfig().value
 beforeEach(() => {
+  vi.stubGlobal('matchMedia', () => ({
+    matches: true,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }))
   useGlobalConfig().value = {}
 })
 
@@ -43,6 +48,7 @@ afterEach(async () => {
   )
   await new Promise((resolve) => setTimeout(resolve, 220))
   useGlobalConfig().value = originalConfig
+  vi.unstubAllGlobals()
 })
 
 describe('Dialog minimization and ownership', () => {
@@ -309,8 +315,9 @@ describe('Dialog minimization and ownership', () => {
     await settle()
     const dialog = wrapper.vm as unknown as DialogExposes
     const pending = dialog.confirm()!
-    dialog.close()
+    const closing = dialog.close()
     resolve(true)
+    await closing
     await pending
     expect(wrapper.emitted('confirm')).toBeUndefined()
     const error = new Error('Validation failed')

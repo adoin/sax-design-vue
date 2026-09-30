@@ -14,7 +14,14 @@ import { getVsColor, isClient } from '@vuesax-alpha/utils'
 import { SNotification } from '@vuesax-alpha/components/notification'
 import type { DialogEmitFn, DialogProps } from '../dialog'
 
-export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
+export const useDialog = (
+  props: DialogProps,
+  emit: DialogEmitFn,
+  motion: {
+    beforeExit?: () => Promise<void>
+    settled?: () => Promise<void>
+  } = {},
+) => {
   const rebound = ref(false)
   const visible = ref(false)
   const minimized = ref(false)
@@ -25,13 +32,23 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
   const { nextZIndex } = useZIndex()
   const { t } = useLocale()
   const closePending = ref(false)
+  const closeLoadingActive = ref(false)
+  const closeIndicatorShown = ref(false)
   let closeTask: Promise<boolean> | undefined
   let closeVersion = 0
   let disposed = false
+  let indicatorFrame: number | undefined
+  const cancelIndicatorStart = () => {
+    if (indicatorFrame !== undefined) cancelAnimationFrame(indicatorFrame)
+    indicatorFrame = undefined
+  }
   const invalidateClose = () => {
+    cancelIndicatorStart()
     closeVersion++
     closeTask = undefined
     closePending.value = false
+    closeLoadingActive.value = false
+    closeIndicatorShown.value = false
   }
   const vsBaseClasses = useVuesaxBaseComponent(useColor())
 
@@ -77,21 +94,37 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
     if (disposed || !visible.value) return Promise.resolve(false)
     if (closeTask) return closeTask
     const guard = props.beforeClose
-    if (!guard) {
+    if (!guard && !motion.beforeExit) {
       closed.value = true
       doClose()
       return Promise.resolve(true)
     }
     const version = ++closeVersion
     closePending.value = true
+    closeIndicatorShown.value = false
+    closeLoadingActive.value = !!guard
+    if (guard && typeof requestAnimationFrame === 'function') {
+      indicatorFrame = requestAnimationFrame(() => {
+        indicatorFrame = undefined
+        if (!disposed && version === closeVersion && closeLoadingActive.value)
+          closeIndicatorShown.value = true
+      })
+    }
     // Assign the shared task before invoking user code to prevent reentry.
     closeTask = Promise.resolve().then(async () => {
       try {
-        const approval = guard()
-        if (!approval || typeof approval.then !== 'function')
-          throw new Error(t('vs.dialog.closeBlockedMessage'))
-        await approval
+        if (guard) {
+          const approval = guard()
+          if (!approval || typeof approval.then !== 'function')
+            throw new Error(t('vs.dialog.closeBlockedMessage'))
+          await approval
+        }
         if (disposed || version !== closeVersion || !visible.value) return false
+        cancelIndicatorStart()
+        closeLoadingActive.value = false
+        await motion.beforeExit?.()
+        if (disposed || version !== closeVersion || !visible.value) return false
+        cancelIndicatorStart()
         closed.value = true
         doClose()
         return true
@@ -117,13 +150,18 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
           zIndex: nextZIndex(),
           shape: shape.value === 'square' ? 'square' : '',
         })
+        closeLoadingActive.value = false
+        await motion.settled?.()
+        if (disposed || version !== closeVersion || !visible.value) return false
         // Keep a rejected controlled close in sync with the visible surface.
         if (!props.modelValue) emit(UPDATE_MODEL_EVENT, true)
         return false
       } finally {
         if (version === closeVersion) {
           closeTask = undefined
+          cancelIndicatorStart()
           closePending.value = false
+          closeIndicatorShown.value = false
         }
       }
     })
@@ -215,6 +253,8 @@ export const useDialog = (props: DialogProps, emit: DialogEmitFn) => {
     handleClose,
     close,
     closePending,
+    closeLoadingActive,
+    closeIndicatorShown,
     open,
     doClose,
     zIndex,

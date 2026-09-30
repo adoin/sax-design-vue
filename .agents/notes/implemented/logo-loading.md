@@ -22,6 +22,8 @@ modules:
 
 The public component supports `active`, `size`, `speed`, `reducedMotion`, and `label`. Its default speed is `2.5`. Setting `active` to false restores the mark before returning to idle; exposed methods support explicit start, stop, and reset control.
 
+Rendered completion, default Button presence and Dialog exit coordination follow [loading-motion-completion.md](loading-motion-completion.md). The restored signal follows the final SVG patch, and already-started loading motion is retained through its return path.
+
 `IconLoading` is the internal compatibility wrapper used by component loading states. Existing components that use their default loading indication resolve to the shared Sax loader. `SLoading` changes only its `default` type to this loader; explicitly selected named animations such as `atom`, `ball`, `waves`, `border`, `points`, `square`, `circles`, `corners`, `gradient`, `rectangle`, and `square-rotate` keep their original visuals.
 
 The Button default loading state centers the Sax loader in a transparent overlay. It keeps the original label visible, adds no white disk or opaque background, preserves the button footprint, and blocks interaction. Explicit `pulse`, `ripple`, and `shimmer` button loading styles and the `loading` slot remain available.

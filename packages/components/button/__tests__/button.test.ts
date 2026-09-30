@@ -19,6 +19,23 @@ const finishIconSwap = async (wrapper: ReturnType<typeof mount>) => {
 }
 
 describe('Button loading presets', () => {
+  it('retains the default overlay and blocks clicks until the loader is restored', async () => {
+    const wrapper = mount(Button, {
+      props: { loading: true, debounce: false },
+      global: { stubs: { IconLoading: IconLoadingStub } },
+    })
+    await wrapper.setProps({ loading: false })
+    expect(wrapper.find('.s-button__loading').exists()).toBe(true)
+    expect(wrapper.get('button').attributes('disabled')).toBeDefined()
+    await wrapper.trigger('click')
+    expect(wrapper.emitted('click')).toBeUndefined()
+    wrapper.findComponent(IconLoadingStub).vm.$emit('restored')
+    await wrapper.vm.$nextTick()
+    await vi.waitFor(() =>
+      expect(wrapper.find('.s-button__loading').exists()).toBe(false),
+    )
+    expect(wrapper.get('button').attributes('disabled')).toBeUndefined()
+  })
   afterEach(() => {
     vi.unstubAllGlobals()
   })

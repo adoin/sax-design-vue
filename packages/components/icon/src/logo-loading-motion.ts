@@ -279,6 +279,12 @@ export class LogoLoadingMotion {
   private cornerStop = false
   private returnRoutes: ReturnRoute[] = []
   private returnTravel = 0
+  get restoring() {
+    return (
+      this.phase === 'stopping' ||
+      (this.phase === 'starting' && this.pendingStop)
+    )
+  }
 
   constructor(
     private readonly onPhaseChange?: (

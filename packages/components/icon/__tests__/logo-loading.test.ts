@@ -105,6 +105,7 @@ describe('LogoLoading', () => {
     await wrapper.setProps({ active: false })
     expect(wrapper.attributes('data-phase')).toBe('idle')
     expect(wrapper.find('.s-logo-loading__ring').exists()).toBe(false)
+    await wrapper.vm.$nextTick()
     expect(wrapper.emitted('restored')).toHaveLength(1)
     wrapper.unmount()
   })

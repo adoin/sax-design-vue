@@ -746,7 +746,7 @@ A publishing workflow combines form validation, asynchronous submission, error r
 
 `before-close` is `() => Promise<void>` and takes no callback argument. Return `Promise.resolve()` or fulfill an `async` function to continue closing. `Promise.reject('reason')` or a thrown `Error` blocks closing and displays its reason. Close buttons, overlay clicks, Escape, cancellation, closing after confirmation, dock bubbles, instance `close()`, and controlled `v-model` close requests use the same check. Minimizing does not run it.
 
-While pending, the dialog and overlay stay mounted, close buttons show loading, and repeated requests share one check. Rejecting a controlled close emits `v-model=true` to restore visibility. Use `close-error` for logging; custom footers receive `closePending`. Results from an unmounted or reopened instance cannot close a new instance or display a stale notification. `SDialogBox` also waits for actual closing and disposal before settling its outer Promise.
+While pending, the dialog and overlay stay mounted, close buttons show loading, and repeated requests share one check. Rejecting a controlled close emits `v-model=true` to restore visibility. Use `close-error` for logging; custom footers receive `closePending`. Results from an unmounted or reopened instance cannot close a new instance or display a stale notification. `SDialogBox` also waits for actual closing and disposal before settling its outer Promise. An already-visible default loader completes its starting and stopping motion before the exit begins. Instant checks that never show a loader add no wait; reduced-motion mode and hidden pages finish the visual motion immediately.
 
 <template #example>
 <dialog-before-close />
