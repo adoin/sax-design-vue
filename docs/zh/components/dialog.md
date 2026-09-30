@@ -218,7 +218,7 @@ PROPS:
     values: "header text"
     description: 未使用 header 插槽时显示的内置标题。
     default: null
-    usage: '#publishing-and-draft-protection'
+    usage: '#custom-footer'
   - name: content
     type: String | Number
     values: "content text"
@@ -230,7 +230,7 @@ PROPS:
     values: "true | false"
     description: 是否显示内置操作区。
     default: false
-    usage: '#publishing-and-draft-protection'
+    usage: '#custom-footer'
   - name: show-cancel-button
     type: Boolean
     values: "true | false"
@@ -317,7 +317,7 @@ SLOTS:
     description: Dialog 页脚插槽。
     default: null
     link: null
-    usage: '#publishing-and-draft-protection'
+    usage: '#custom-footer'
     code: >
       <s-dialog>
         <template #footer>
@@ -688,29 +688,29 @@ SLOTS:
 
 <card>
 
-## 发布流程与草稿保护
+## 自定义页脚
 
-将表单校验、异步提交、错误重试与关闭保护组合成完整的发布流程。自定义 `footer` 使用 Dialog 提供的 `confirm`、`cancel`、`pending` 和 `disabled`，保持确认流程与按钮状态一致；`before-close` 在请求期间拦截关闭，并在放弃未保存内容前提供选择。示例请求为本地模拟：首次失败，重试后成功。
+通过 `footer` 插槽自定义操作区布局。使用作用域中的 `confirm`、`cancel` 回调复用确认和取消流程，通过 `pending`、`closePending` 和 `disabled` 同步按钮及状态提示。示例设置 `confirm-closable="false"`，异步确认后保持打开，便于观察事件；取消后关闭。
 
 <template #example>
-<dialog-zh-advanced />
+<dialog-zh-footer />
 </template>
 
 <template #template>
 
-@[code{142-211}](../../.vuepress/components/dialog-zh/advanced.vue)
+@[code{29-66}](../../.vuepress/components/dialog-zh/footer.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-140}](../../.vuepress/components/dialog-zh/advanced.vue)
+@[code{1-27}](../../.vuepress/components/dialog-zh/footer.vue)
 
 </template>
 
 <template #style>
 
-@[code{213-254}](../../.vuepress/components/dialog-zh/advanced.vue)
+@[code{68-98}](../../.vuepress/components/dialog-zh/footer.vue)
 
 </template>
 
