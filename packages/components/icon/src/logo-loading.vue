@@ -29,9 +29,19 @@ let unsubscribe: (() => void) | undefined
 let motionPreference: MediaQueryList | undefined
 const restoreWaiters = new Set<() => void>()
 let phaseVersion = 0
+let completionFrame: number | undefined
+let completionPending = false
 const resolveRestoration = () => {
+  if (completionFrame !== undefined) cancelAnimationFrame(completionFrame)
+  completionFrame = undefined
+  completionPending = false
   for (const resolve of restoreWaiters) resolve()
   restoreWaiters.clear()
+}
+const publishRestored = (version: number) => {
+  if (!mounted.value || version !== phaseVersion || !completionPending) return
+  emit('restored')
+  resolveRestoration()
 }
 
 const motion = new LogoLoadingMotion((nextPhase, restored) => {
@@ -39,18 +49,24 @@ const motion = new LogoLoadingMotion((nextPhase, restored) => {
   phase.value = nextPhase
   emit('phaseChange', nextPhase)
   if (restored) {
-    // Publish completion after the final SVG frame has been patched.
+    completionPending = true
+    // Compact clearing must paint its empty SVG before replacement content.
     nextTick(() => {
       if (!mounted.value || version !== phaseVersion) return
-      emit('restored')
-      resolveRestoration()
+      if (props.stopBehavior === 'corners' && !reduced() && !document.hidden) {
+        completionFrame = requestAnimationFrame(() => {
+          completionFrame = requestAnimationFrame(() =>
+            publishRestored(version),
+          )
+        })
+      } else publishRestored(version)
     })
   } else if (nextPhase === 'idle') resolveRestoration()
 })
 registerLoadingCompletion({
-  stopping: () => motion.restoring,
+  stopping: () => motion.restoring || completionPending,
   restored: () =>
-    motion.phase === 'idle'
+    motion.phase === 'idle' && !completionPending
       ? Promise.resolve()
       : new Promise<void>((resolve) => restoreWaiters.add(resolve)),
 })
@@ -81,11 +97,12 @@ const startFrames = () => {
   })
 }
 const finishHiddenRestoration = () => {
-  if (document.hidden && motion.restoring) {
+  if (!document.hidden) return
+  if (motion.restoring) {
     stopFrames()
     motion.reduce(false)
     renderFrame()
-  }
+  } else if (completionPending) publishRestored(phaseVersion)
 }
 
 const syncActive = () => {
@@ -95,6 +112,10 @@ const syncActive = () => {
     stopFrames()
     motion.reduce(props.active)
     renderFrame()
+    if (!props.active && completionPending) {
+      const version = phaseVersion
+      nextTick(() => publishRestored(version))
+    }
     return
   }
   if (props.active) motion.start()

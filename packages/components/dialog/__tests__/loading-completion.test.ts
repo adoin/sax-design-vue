@@ -96,6 +96,13 @@ describe('Dialog loading completion', () => {
       await advance(4)
       expect(dialog.visible).toBe(true)
       await advance(2)
+      expect(document.querySelector(selector)?.getAttribute('data-phase')).toBe(
+        'idle',
+      )
+      expect(dialog.visible).toBe(true)
+      await advance(1)
+      expect(dialog.visible).toBe(true)
+      await advance(1)
       await expect(closing).resolves.toBe(true)
       expect(dialog.visible).toBe(false)
     },

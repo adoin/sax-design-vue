@@ -44,3 +44,11 @@ User request:
 - Dialog retains existing approval/rejection, duplicate suppression, global lifetime and completion coordination. Confirmation Button loading keeps the default restore tail. The previous long-tail close sampling above is historical; compact close verification is recorded below.
 - Radio documentation adds separate localized loading toggle examples; paired Code/Playground sources and descriptions explain the compact exit.
 - Verification: 84 focused Radio/Dialog/logo/Button tests, 21 documentation checks, web/Vitest type checks and module compilation passed. Browser sampling measured Radio stopping-to-restored at 217ms, Dialog close rejection restoration at 234ms and dock removal at 235ms. Both localized Radio demos, full Code sources and Playground loading switches were exercised; rejected Dialog closing retains its surface and approved dock closing waits for the compact tail.
+
+### Empty-frame handoff correction
+
+> 不太行线条还没收拾完无loading的内容就出来了
+
+- Compact `corners` completion keeps the empty SVG mounted across a browser paint before emitting `restored`. Patching SVG and replacement content in adjacent Vue ticks must not collapse into one paint. The default `restore` tail retains its existing completion timing.
+- Completion-scope participants remain pending during this handoff, so Dialog does not bypass it when motion phase becomes idle. Restart/unmount cancels stale callbacks; hidden pages and reduced motion settle without waiting for browser paints.
+- Verification: 59 Radio/Dialog/logo/Checkbox/Switch/Button tests passed. Deterministic tests verify empty path data, absent replacement content and blocked input before handoff; restart and hidden-page cases settle safely. Chromium samples recorded empty SVG with disabled Radio at 283ms and 293ms, then normal content at 314ms, with no overlap.
