@@ -36,6 +36,7 @@ export interface ButtonGlobalConfig {
   ripple?: 'cut' | 'reverse'
 }
 export interface DialogGlobalConfig {
+  closeAnimation?: boolean
   overlayBlur?: boolean
   showHeader?: boolean
   showClose?: boolean

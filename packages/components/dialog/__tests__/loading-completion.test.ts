@@ -53,7 +53,12 @@ afterEach(async () => {
 const mountDialog = (props = {}) => {
   const wrapper = mount(Dialog, {
     attachTo: document.body,
-    props: { modelValue: true, title: 'Motion', ...props },
+    props: {
+      modelValue: true,
+      title: 'Motion',
+      closeAnimation: false,
+      ...props,
+    },
   })
   wrappers.push(wrapper)
   return wrapper.vm as unknown as DialogExposes

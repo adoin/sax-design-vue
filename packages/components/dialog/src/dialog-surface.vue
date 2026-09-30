@@ -1,5 +1,12 @@
 <template>
   <teleport :to="selector">
+    <SvgDissolveFilter
+      :filter-id="exitDissolve.filterId"
+      :dissolved="exitDissolve.dissolved.value"
+      :assemble-duration="0"
+      region="surface"
+      @settled="exitDissolve.settled"
+    />
     <transition
       :name="ns.b()"
       @after-enter="afterEnter"
@@ -134,7 +141,11 @@
     </transition>
   </teleport>
   <teleport v-if="dockTarget && visible && minimized" :to="dockTarget">
-    <div :class="[ns.e('minimized'), ns.is(props.shape)]" :style="{ zIndex }">
+    <div
+      ref="dockElement"
+      :class="[ns.e('minimized'), ns.is(props.shape)]"
+      :style="{ zIndex }"
+    >
       <button
         ref="restoreButton"
         type="button"
@@ -177,6 +188,7 @@ import {
   watch,
 } from 'vue'
 import SButton from '@vuesax-alpha/components/button'
+import SvgDissolveFilter from '@vuesax-alpha/components/base/src/svg-dissolve-filter.vue'
 import { IconClose, IconLoading } from '@vuesax-alpha/components/icon'
 import {
   useGlobalComponentProps,
@@ -192,6 +204,7 @@ import { provideLoadingCompletion } from '@vuesax-alpha/hooks/use-loading-comple
 import { acquireDialogDock, releaseDialogDock } from './dialog-dock'
 import { dialogEmits, dialogProps } from './dialog'
 import { useDialog } from './composables'
+import { useDialogDissolve } from './composables/use-dialog-dissolve'
 import { dialogDeprecated } from './deprecated'
 
 defineOptions({
@@ -212,11 +225,23 @@ const { nextZIndex } = useZIndex()
 dialogDeprecated(props)
 
 const waitForLoading = provideLoadingCompletion()
+const exitDissolve = useDialogDissolve()
+const cancelExitMotion = () => {
+  exitDissolve.cancel()
+  confirmVersion++
+  cancelConfirmIndicator()
+  confirmPending.value = false
+  confirmLoadingActive.value = false
+}
 const finishExitLoading = async () => {
   confirmVersion++
   cancelConfirmIndicator()
   confirmLoadingActive.value = false
   await waitForLoading()
+  if (visible.value && closePending.value && props.closeAnimation)
+    await exitDissolve.play(
+      minimized.value ? dockElement.value : dialogElement.value,
+    )
 }
 const {
   visible,
@@ -237,10 +262,12 @@ const {
 } = useDialog(props, emit, {
   beforeExit: finishExitLoading,
   settled: waitForLoading,
+  cancelExit: cancelExitMotion,
 })
 
 useModal({ handleClose }, surfaceVisible)
 const dialogElement = useTemplateRef<HTMLElement>('dialogElement')
+const dockElement = useTemplateRef<HTMLElement>('dockElement')
 const restoreButton = useTemplateRef<HTMLButtonElement>('restoreButton')
 const dockTarget = shallowRef<HTMLElement>()
 const canMinimize = computed(() => props.minimizable ?? props.fullScreen)
@@ -284,7 +311,13 @@ const trapFocus = (event: KeyboardEvent) => {
   }
 }
 const minimize = () => {
-  if (!visible.value || minimized.value || !canMinimize.value) return
+  if (
+    !visible.value ||
+    minimized.value ||
+    !canMinimize.value ||
+    closePending.value
+  )
+    return
   savedFocus =
     document.activeElement instanceof HTMLElement
       ? document.activeElement
@@ -298,7 +331,7 @@ const minimize = () => {
   nextTick(() => restoreButton.value?.focus())
 }
 const restore = () => {
-  if (!visible.value || !minimized.value) return
+  if (!visible.value || !minimized.value || closePending.value) return
   minimized.value = false
   zIndex.value = props.zIndex ?? nextZIndex()
   emit('restore')
@@ -336,6 +369,7 @@ const rootKls = computed(() => [
   ns.is('blur', props.overlayBlur),
   ns.is('mask', props.mask),
   ns.is('minimizable', canMinimize.value),
+  ns.is('instant-exit', !props.closeAnimation || exitDissolve.dissolved.value),
 ])
 
 const showClose = computed(() => !props.notClose && props.showClose)

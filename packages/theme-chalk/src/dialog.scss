@@ -23,6 +23,17 @@
         var(--sax-motion-easing-smooth-out);
   }
 }
+// Dissolve runs before removal on the surface only. Keep the mask stationary
+// until that completes, then remove it without the legacy scale/fade tail.
+.#{$namespace}-dialog.is-instant-exit.#{$namespace}-dialog-leave-active,
+.#{$namespace}-dialog.is-instant-exit.#{$namespace}-dialog-leave-to {
+  opacity: 1;
+  transition: none;
+  .#{$namespace}-dialog-original {
+    transform: none !important;
+    transition: none;
+  }
+}
 .#{$namespace}-dialog-enter-from,
 .#{$namespace}-dialog-leave-to {
   opacity: 0;

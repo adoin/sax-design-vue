@@ -63,6 +63,8 @@ export const dialogProps = buildProps({
     type: Boolean,
     default: true,
   },
+  /** Particle dissolve on the surface when closing; never filter the overlay. */
+  closeAnimation: { type: Boolean, default: true },
   showFooter: Boolean,
   showCancelButton: Boolean,
   cancelButtonText: String,

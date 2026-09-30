@@ -20,6 +20,7 @@ export const useDialog = (
   motion: {
     beforeExit?: () => Promise<void>
     settled?: () => Promise<void>
+    cancelExit?: () => void
   } = {},
 ) => {
   const rebound = ref(false)
@@ -43,6 +44,7 @@ export const useDialog = (
     indicatorFrame = undefined
   }
   const invalidateClose = () => {
+    motion.cancelExit?.()
     cancelIndicatorStart()
     closeVersion++
     closeTask = undefined

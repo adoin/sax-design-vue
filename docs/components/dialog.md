@@ -1,6 +1,12 @@
 ---
 description: 'Present focused modal content and require a user decision.'
 PROPS:
+  - name: close-animation
+    type: Boolean
+    values: "true | false"
+    description: Dissolve the dialog surface or minimized bubble when closing; false disables close animation. The overlay is never filtered.
+    default: true
+    usage: '#close-animation'
   - name: before-confirm
     type: DialogBeforeConfirmFn
     default: null
@@ -296,7 +302,7 @@ EVENTS:
 EXPOSES:
   - name: closePending
     type: Boolean
-    description: Whether close approval is pending. Repeated close requests share the same check.
+    description: Whether close approval, loading completion or dissolution is pending. Repeated close requests share the same task.
     usage: '#before-close'
   - name: confirm
     type: "() => Promise<void> | undefined"
@@ -735,6 +741,36 @@ Customize the action layout with the `footer` slot. Its `confirm` and `cancel` c
 <template #style>
 
 @[code{71-101}](../.vuepress/components/dialog/footer.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Close animation
+
+Dialogs close with an SVG particle dissolve by default. Set `:close-animation="false"` to disable it. Only the surface or minimized bubble is filtered; the overlay stays unchanged during the dissolve. With `before-close`, dissolution begins after approval and loading completion. Rejected closing does not animate. Imperative calls also accept `closeAnimation: false`. Reduced motion and hidden pages skip the dissolve.
+
+<template #example>
+<dialog-close-animation />
+</template>
+
+<template #template>
+
+@[code{8-28}](../.vuepress/components/dialog/close-animation.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/dialog/close-animation.vue)
+
+</template>
+
+<template #style>
+
+@[code{30-45}](../.vuepress/components/dialog/close-animation.vue)
 
 </template>
 

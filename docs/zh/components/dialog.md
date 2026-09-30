@@ -1,6 +1,12 @@
 ---
 description: '展示聚焦的模态内容并要求用户作出决定。'
 PROPS:
+  - name: close-animation
+    type: Boolean
+    values: "true | false"
+    description: 关闭时对弹窗本体或最小化气泡播放粒子消散；false 关闭动画，遮罩不应用滤镜。
+    default: true
+    usage: '#close-animation'
   - name: before-confirm
     type: DialogBeforeConfirmFn
     default: null
@@ -272,7 +278,7 @@ EVENTS:
 EXPOSES:
   - name: closePending
     type: Boolean
-    description: 是否正在等待关闭校验。同一校验期间重复关闭请求会合并。
+    description: 是否正在等待关闭校验、loading 收尾或消散动画。期间重复关闭请求会合并。
     usage: '#before-close'
   - name: confirm
     type: "() => Promise<void> | undefined"
@@ -711,6 +717,36 @@ SLOTS:
 <template #style>
 
 @[code{70-100}](../../.vuepress/components/dialog-zh/footer.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 关闭动画
+
+默认使用 SVG 粒子消散关闭弹窗，设置 `:close-animation="false"` 可关闭动画。效果仅作用于弹窗本体或最小化气泡，遮罩在消散期间保持不变。配置 `before-close` 时，校验通过且 loading 完成后才开始消散；拒绝关闭时不会播放。命令式调用也支持 `closeAnimation: false`。减少动态效果或页面不可见时直接完成关闭。
+
+<template #example>
+<dialog-zh-close-animation />
+</template>
+
+<template #template>
+
+@[code{8-27}](../../.vuepress/components/dialog-zh/close-animation.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../../.vuepress/components/dialog-zh/close-animation.vue)
+
+</template>
+
+<template #style>
+
+@[code{29-44}](../../.vuepress/components/dialog-zh/close-animation.vue)
 
 </template>
 
