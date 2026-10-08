@@ -62,10 +62,18 @@ try {
 
 ```bash
 pnpm install
-pnpm dev          # play app
-pnpm docs:dev     # documentation site
+pnpm dev          # full documentation site (also pnpm docs:dev)
+pnpm dev --component textarea          # one component, both languages
+pnpm dev --component textarea --locale zh # Chinese only
+pnpm play:dev     # isolated component playground
 pnpm build        # library build
 ```
+
+Focused development includes the selected component's nested pages and referenced
+examples, with matching navigation and search. Restart with a different component
+to change the scope. Git timestamps are collected only for production builds.
+Generated icon, API type, syntax highlighting and Sass caches survive restarts;
+source edits invalidate the corresponding cached data. Sass changes still hot update.
 
 ## License
 

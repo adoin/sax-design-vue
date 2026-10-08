@@ -41,7 +41,7 @@
     "typecheck:vitest": "vue-tsc -p tsconfig.vitest.json --composite false --noEmit",
     "typecheck:table-types": "vue-tsc -p tsconfig.table-types.json",
     "typecheck:renderer-docs": "vue-tsc -p tsconfig.renderer-docs.json",
-    "docs:dev": "pnpm run -C docs dev",
+    "docs:dev": "tsx scripts/dev-docs.ts",
     "docs:build": "pnpm run -C docs build",
     "stub": "pnpm run -r --parallel stub",
     "prepare": "husky install",

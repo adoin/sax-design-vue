@@ -40,6 +40,7 @@ function toChinesePath(path: string) {
 }
 
 const alternates = computed<Alternate[]>(() => {
+  if (import.meta.env.SAX_DOCS_DEV_LOCALE !== 'both') return []
   const current = route.path
   const isZh = routeLocale.value === '/zh/'
   const items: Alternate[] = []

@@ -1,11 +1,15 @@
 import { path } from '@vuepress/utils'
 
 import { activeHeaderLinksPlugin } from '@vuepress/plugin-active-header-links'
-import { registerComponentsPlugin } from '@vuepress/plugin-register-components'
+import {
+  prepareClientConfigFile,
+  registerComponentsPlugin,
+} from '@vuepress/plugin-register-components'
 import { themeDataPlugin } from '@vuepress/plugin-theme-data'
 import { containerPlugin } from '@vuepress/plugin-container'
 import { gitPlugin } from '@vuepress/plugin-git'
 import { prismjsPlugin } from '@vuepress/plugin-prismjs'
+import { contentKey, documentationCache } from '../node/persistentCache'
 import { createApiTypeDetailsResolver } from './node/apiTypeDetails'
 import {
   highlightTypeScriptHtml,
@@ -32,7 +36,13 @@ const apiTableKeys = [
 const resolveApiTypeDetails = createApiTypeDetailsResolver(
   path.resolve(__dirname, '../../../packages/components'),
   [path.resolve(__dirname, '../../../packages/constants')],
+  documentationCache('api-declarations', [
+    path.resolve(__dirname, 'node/apiTypeDetails.ts'),
+  ]),
 )
+const highlightCache = documentationCache('source-highlighting', [
+  path.resolve(__dirname, 'util/highlightVueSource.ts'),
+])
 
 const escapeInlineScriptEnd = (page: Page) => {
   const component = page.path.match(/\/components\/([^/.]+)\.html$/)?.[1]
@@ -88,10 +98,18 @@ const vueSfcHighlightPlugin: Plugin = {
   extendsMarkdown(md) {
     const fallback = md.options.highlight
     md.options.highlight = (source, language, attrs) => {
-      if (language === 'vue') return highlightVueSfcHtml(source)
-      if (language === 'tsx') return highlightTypeScriptHtml(source, 'tsx')
+      if (language === 'vue')
+        return highlightCache.get(contentKey(`vue:${source}`), () =>
+          highlightVueSfcHtml(source),
+        )
+      if (language === 'tsx')
+        return highlightCache.get(contentKey(`tsx:${source}`), () =>
+          highlightTypeScriptHtml(source, 'tsx'),
+        )
       if (language === 'ts' || language === 'typescript')
-        return highlightTypeScriptHtml(source, 'typescript')
+        return highlightCache.get(contentKey(`typescript:${source}`), () =>
+          highlightTypeScriptHtml(source, 'typescript'),
+        )
       return fallback?.(source, language, attrs) ?? ''
     }
   },
@@ -99,6 +117,11 @@ const vueSfcHighlightPlugin: Plugin = {
 
 export const saxDesignVueTheme = (
   options: SaxDesignVueThemeOptions = {},
+  development: {
+    examples?: Record<string, string>
+    getExamples?: () => Record<string, string>
+    onExamplesChanged?: () => void
+  } = {},
 ): Theme => {
   return {
     name: 'vuepress-theme-sax-design-vue',
@@ -135,17 +158,58 @@ export const saxDesignVueTheme = (
       registerComponentsPlugin({
         componentsDir: path.resolve(__dirname, 'global-components'),
       }),
-      registerComponentsPlugin({
-        componentsDir: path.resolve(__dirname, '../components'),
-      }),
+      development.examples
+        ? {
+            name: 'sax-focused-example-registration',
+            clientConfigFile: (app) =>
+              prepareClientConfigFile(
+                app,
+                {
+                  components: development.examples!,
+                  componentsDir: null,
+                  componentsPatterns: [],
+                  getComponentName: (name) => name,
+                },
+                'focused-examples',
+              ),
+            async onPageUpdated(app) {
+              if (!development.getExamples) return
+              const next = development.getExamples()
+              if (JSON.stringify(next) === JSON.stringify(development.examples))
+                return
+              development.examples = next
+              await prepareClientConfigFile(
+                app,
+                {
+                  components: next,
+                  componentsDir: null,
+                  componentsPatterns: [],
+                  getComponentName: (name) => name,
+                },
+                'focused-examples',
+              )
+              development.onExamplesChanged?.()
+            },
+          }
+        : registerComponentsPlugin({
+            componentsDir: path.resolve(__dirname, '../components'),
+          }),
       safeInlinePageDataPlugin,
       // The theme only renders `pageData.git.updatedTime`. Disabling unused
       // metadata avoids hundreds of concurrent Git subprocesses during page
       // initialization, which can fail intermittently on Windows.
-      gitPlugin({
-        createdTime: false,
-        contributors: false,
-      }),
+      (app) =>
+        app.env.isDev
+          ? {
+              name: 'sax-development-git-disabled',
+              extendsPage: (page) => {
+                page.data.git = {}
+              },
+            }
+          : gitPlugin({
+              createdTime: false,
+              contributors: false,
+            })(app),
     ],
   }
 }

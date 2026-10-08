@@ -29,7 +29,11 @@ export declare type SearchDataHeaderOption = {
   slug: string
 }
 
-export declare const saxDesignVueTheme: ({
-  themePlugins,
-  ...localeOptions
-}?: SaxDesignVueThemeOptions) => Theme
+export declare const saxDesignVueTheme: (
+  { themePlugins, ...localeOptions }?: SaxDesignVueThemeOptions,
+  development?: {
+    examples?: Record<string, string>
+    getExamples?: () => Record<string, string>
+    onExamplesChanged?: () => void
+  },
+) => Theme

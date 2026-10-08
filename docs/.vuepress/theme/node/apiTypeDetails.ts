@@ -1,7 +1,9 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
 
+import { fileKey } from '../../node/persistentCache'
 import type { ThemeApiTypeDefinition } from '../shared/frontmatter/normal'
+import type { PersistentCache } from '../../node/persistentCache'
 
 type DeclarationKind = 'interface' | 'type' | 'enum'
 
@@ -197,6 +199,7 @@ const readDeclarations = (
 const createRegistry = (
   componentsRoot: string,
   sharedTypeRoots: string[],
+  cache?: PersistentCache,
 ): TypeRegistry => {
   const byComponent = new Map<string, Map<string, IndexedTypeDefinition>>()
   const byName = new Map<string, IndexedTypeDefinition[]>()
@@ -206,11 +209,15 @@ const createRegistry = (
     const componentTypes = byComponent.get(component) ?? new Map()
     byComponent.set(component, componentTypes)
 
-    for (const definition of readDeclarations(
-      readFileSync(file, 'utf8'),
-      component,
-      relative(resolve(componentsRoot, '../..'), file).replaceAll('\\', '/'),
-    )) {
+    const parse = () =>
+      readDeclarations(
+        readFileSync(file, 'utf8'),
+        component,
+        relative(resolve(componentsRoot, '../..'), file).replaceAll('\\', '/'),
+      )
+    for (const definition of cache
+      ? cache.get(`types:${fileKey(file)}`, parse)
+      : parse()) {
       if (!componentTypes.has(definition.name)) {
         componentTypes.set(definition.name, definition)
       }
@@ -226,11 +233,18 @@ const createRegistry = (
       const componentTypes = byComponent.get(component) ?? new Map()
       byComponent.set(component, componentTypes)
 
-      for (const definition of readDeclarations(
-        readFileSync(file, 'utf8'),
-        component,
-        relative(resolve(componentsRoot, '../..'), file).replaceAll('\\', '/'),
-      )) {
+      const parse = () =>
+        readDeclarations(
+          readFileSync(file, 'utf8'),
+          component,
+          relative(resolve(componentsRoot, '../..'), file).replaceAll(
+            '\\',
+            '/',
+          ),
+        )
+      for (const definition of cache
+        ? cache.get(`types:${fileKey(file)}`, parse)
+        : parse()) {
         if (!componentTypes.has(definition.name)) {
           componentTypes.set(definition.name, definition)
         }
@@ -272,11 +286,12 @@ const createRegistry = (
 export const createApiTypeDetailsResolver = (
   componentsRoot: string,
   sharedTypeRoots: string[] = [],
+  cache?: PersistentCache,
 ) => {
   let registry: TypeRegistry | undefined
 
   const getRegistry = () => {
-    registry ??= createRegistry(componentsRoot, sharedTypeRoots)
+    registry ??= createRegistry(componentsRoot, sharedTypeRoots, cache)
     return registry
   }
 

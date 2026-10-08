@@ -62,10 +62,17 @@ try {
 
 ```bash
 pnpm install
-pnpm dev          # Play 调试
-pnpm docs:dev     # 文档站点
+pnpm dev          # 完整文档站点（也可用 pnpm docs:dev）
+pnpm dev --component textarea             # 仅开发一个组件，保留双语
+pnpm dev --component textarea --locale zh # 仅中文
+pnpm play:dev     # 独立组件调试
 pnpm build        # 构建组件库
 ```
+
+单组件模式包含该组件的子页面和引用的示例，并同步缩小导航及搜索范围。
+切换开发组件时重新启动命令。Git 更新时间仅在生产构建时采集。
+图标、API 类型、源码高亮和 Sass 的生成缓存可跨重启复用，修改源文件后会重新生成；
+Sass 样式修改仍支持热更新。
 
 ## 许可证
 

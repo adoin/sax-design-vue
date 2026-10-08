@@ -109,6 +109,7 @@
       </button>
 
       <router-link
+        v-if="allowLocaleSwitch"
         class="btn-lang theme-translate"
         :to="languageTarget.link"
         :title="languageTarget.label"
@@ -200,6 +201,7 @@ const languageTarget = computed(() => {
       (isChinese ? 'English' : '简体中文'),
   }
 })
+const allowLocaleSwitch = import.meta.env.SAX_DOCS_DEV_LOCALE === 'both'
 
 const getThemeShellElements = () => ({
   sidebar: document.querySelector<HTMLElement>(

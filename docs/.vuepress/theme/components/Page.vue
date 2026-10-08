@@ -122,7 +122,11 @@
 
     <footer class="page-edit">
       <div
-        v-if="themeData.lastUpdated && pageFrontmatter.lastUpdated !== false"
+        v-if="
+          themeData.lastUpdated &&
+          pageFrontmatter.lastUpdated !== false &&
+          pageData.git?.updatedTime
+        "
         class="last-updated"
       >
         <span class="prefix">{{ lastUpdatedText }}: </span>
@@ -316,7 +320,7 @@ const lastUpdatedText = computed(() => {
 })
 
 const lastUpdatedTime = useDateFormat(
-  computed(() => pageData.value.git.updatedTime),
+  computed(() => pageData.value.git?.updatedTime),
   'YYYY-MM-DD, HH:mm:ss',
 )
 

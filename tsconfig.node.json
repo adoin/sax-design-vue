@@ -10,6 +10,7 @@
     "internal/**/*",
     "internal/**/*.json",
     "scripts/**/*",
+    "docs/.vuepress/node/devScope.ts",
     "packages/theme-chalk/*",
     "packages/iconify/src/**/*.ts",
     "sax-icons.config.ts",
