@@ -63,6 +63,47 @@ const create = (props = {}) => {
 }
 
 describe('Dialog surface dissolve', () => {
+  it('allocates no particle graphs for 100 idle dialog instances or pending approval', async () => {
+    const host = mount(
+      {
+        render: () =>
+          h(
+            'div',
+            Array.from({ length: 100 }, () => h(Dialog, { modelValue: false })),
+          ),
+      },
+      { attachTo: document.body },
+    )
+    wrappers.push(host)
+    await settle()
+    expect(
+      document.querySelectorAll('filter[id^="sax-dialog-dissolve"]'),
+    ).toHaveLength(0)
+    let approve!: () => void
+    const wrapper = create({
+      beforeClose: () =>
+        new Promise<void>((resolve) => {
+          approve = resolve
+        }),
+    })
+    const dialog = wrapper.vm as unknown as DialogExposes
+    await settle()
+    const closing = dialog.close()!
+    await settle()
+    expect(
+      document.querySelectorAll('filter[id^="sax-dialog-dissolve"]'),
+    ).toHaveLength(0)
+    approve()
+    await settle()
+    expect(
+      document.querySelectorAll('filter[id^="sax-dialog-dissolve"]'),
+    ).toHaveLength(1)
+    await advance(220)
+    await expect(closing).resolves.toBe(true)
+    expect(
+      document.querySelectorAll('filter[id^="sax-dialog-dissolve"]'),
+    ).toHaveLength(0)
+  })
   it.each([60, 0])(
     'honors %sms and removes the mask without another transition tail',
     async (duration) => {
@@ -75,6 +116,9 @@ describe('Dialog surface dissolve', () => {
       const dialog = wrapper.vm as unknown as DialogExposes
       await settle()
       const mask = document.querySelector<HTMLElement>('.s-dialog')!
+      expect(
+        document.querySelectorAll('filter[id^="sax-dialog-dissolve"]'),
+      ).toHaveLength(0)
       const closing = dialog.close()!
       await settle()
       if (duration) {
@@ -86,6 +130,9 @@ describe('Dialog surface dissolve', () => {
       await expect(closing).resolves.toBe(true)
       expect(mask.isConnected).toBe(false)
       expect(wrapper.emitted('closed')).toHaveLength(1)
+      expect(
+        document.querySelectorAll('filter[id^="sax-dialog-dissolve"]'),
+      ).toHaveLength(0)
     },
   )
 
@@ -147,8 +194,14 @@ describe('Dialog surface dissolve', () => {
       (rejected.vm as unknown as DialogExposes).close(),
     ).resolves.toBe(false)
     expect(
+      document.querySelectorAll('filter[id^="sax-dialog-dissolve"]'),
+    ).toHaveLength(0)
+    expect(
       document.querySelector<HTMLElement>('.s-dialog-original')!.style.filter,
     ).toBe('')
+    expect(
+      document.querySelectorAll('filter[id^="sax-dialog-dissolve"]'),
+    ).toHaveLength(0)
     rejected.unmount()
     wrappers.splice(wrappers.indexOf(rejected), 1)
     const disabled = create({ closeAnimation: false })
@@ -164,12 +217,18 @@ describe('Dialog surface dissolve', () => {
     const second = create({ global: true })
     const a = first.vm as unknown as DialogExposes
     await settle()
-    const filters = [...document.querySelectorAll('filter')].filter((node) =>
-      node.id.startsWith('sax-dialog-dissolve'),
-    )
-    expect(new Set(filters.map((node) => node.id)).size).toBe(filters.length)
+    expect(
+      document.querySelectorAll('filter[id^="sax-dialog-dissolve"]'),
+    ).toHaveLength(0)
     const closing = a.close()!
     await settle()
+    const secondClose = (second.vm as unknown as DialogExposes).close()!
+    await settle()
+    const filters = [
+      ...document.querySelectorAll('filter[id^="sax-dialog-dissolve"]'),
+    ]
+    expect(filters).toHaveLength(2)
+    expect(new Set(filters.map((node) => node.id)).size).toBe(2)
     await advance(160)
     a.open()
     await settle()
@@ -178,15 +237,12 @@ describe('Dialog surface dissolve', () => {
     expect(
       document.querySelector<HTMLElement>('.s-dialog-original')!.style.filter,
     ).toBe('')
+    expect(filters[0].isConnected).toBe(false)
+    await advance(480)
+    await secondClose
     expect(
-      filters.every(
-        (node) =>
-          node.querySelector('[data-dissolve-alpha]')!.getAttribute('slope') ===
-          '1',
-      ),
-    ).toBe(true)
-    reduced = true
-    await (second.vm as unknown as DialogExposes).close()
+      document.querySelectorAll('filter[id^="sax-dialog-dissolve"]'),
+    ).toHaveLength(0)
   })
 
   it('allows confirmation again when reopened during its dissolve', async () => {
@@ -222,8 +278,8 @@ describe('Dialog surface dissolve', () => {
     await settle()
     await expect(closing).resolves.toBe(true)
     expect(
-      document.querySelector('[data-dissolve-alpha]')!.getAttribute('slope'),
-    ).toBe('0')
+      document.querySelector('filter[id^="sax-dialog-dissolve"]'),
+    ).toBeNull()
   })
   it('cancels an in-flight dissolve on owner teardown', async () => {
     const wrapper = create()

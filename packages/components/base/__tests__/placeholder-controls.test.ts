@@ -53,10 +53,16 @@ describe('shared placeholder animation in independent controls', () => {
       props: { text: 'Dialog', dissolved: false },
     })
     await nextTick()
+    expect(document.querySelectorAll('filter')).toHaveLength(0)
+    await first.setProps({ dissolved: true })
+    advance(80)
     const firstId = first.get('filter').attributes('id')
+    const firstFrame = first
+      .get('[data-dissolve-threshold]')
+      .attributes('intercept')
+    await second.setProps({ dissolved: true })
     const secondId = second.get('filter').attributes('id')
     expect(firstId).not.toBe(secondId)
-    await second.setProps({ dissolved: true })
     advance(160)
     expect(document.querySelector(`[id="${secondId}"]`)).toBe(
       second.get('filter').element,
@@ -64,9 +70,10 @@ describe('shared placeholder animation in independent controls', () => {
     expect(
       second.get('.s-placeholder-text__dissolve').attributes('style'),
     ).toContain(secondId)
-    expect(first.get('[data-dissolve-threshold]').attributes('intercept')).toBe(
-      '1',
-    )
+    expect(firstFrame).not.toBe('1')
+    expect(
+      first.get('[data-dissolve-threshold]').attributes('intercept'),
+    ).not.toBe(second.get('[data-dissolve-threshold]').attributes('intercept'))
     first.unmount()
     second.unmount()
   })
@@ -126,15 +133,15 @@ describe('shared placeholder animation in independent controls', () => {
         props: props as any,
       })
       const placeholder = wrapper.get('.s-placeholder-text')
-      const threshold = placeholder.get('[data-dissolve-threshold]')
-      const alpha = placeholder.get('[data-dissolve-alpha]')
-      expect(threshold.attributes('intercept')).toBe('1')
+      expect(placeholder.find('filter').exists()).toBe(false)
       expect(
         placeholder.get('.s-placeholder-text__dissolve').attributes('style') ||
           '',
       ).not.toContain('url(')
       await wrapper.get(target).trigger('focus')
       await wrapper.get(target).trigger('focusin')
+      const threshold = placeholder.get('[data-dissolve-threshold]')
+      const alpha = placeholder.get('[data-dissolve-alpha]')
       advance(16)
       expect(
         placeholder.get('.s-placeholder-text__dissolve').attributes('style') ||
@@ -144,15 +151,18 @@ describe('shared placeholder animation in independent controls', () => {
       advance(480)
       await nextTick()
       expect(alpha.attributes('slope')).toBe('0')
+      expect(placeholder.find('filter').exists()).toBe(false)
       expect(
         placeholder.get('.s-placeholder-text__dissolve').attributes('style') ||
           '',
       ).not.toContain('url(')
       await wrapper.get(target).trigger('blur')
       await wrapper.get(target).trigger('focusout')
+      const aggregate = placeholder.get('[data-dissolve-threshold]')
       advance(1130)
-      expect(alpha.attributes('slope')).toBe('1')
-      expect(threshold.attributes('intercept')).toBe('1')
+      await nextTick()
+      expect(aggregate.attributes('intercept')).toBe('1')
+      expect(placeholder.find('filter').exists()).toBe(false)
       wrapper.unmount()
     },
   )
@@ -187,6 +197,6 @@ describe('shared placeholder animation in independent controls', () => {
       },
     })
     expect(wrapper.get('.s-placeholder-text').classes()).toContain('is-hidden')
-    expect(wrapper.get('[data-dissolve-alpha]').attributes('slope')).toBe('0')
+    expect(wrapper.find('filter').exists()).toBe(false)
   })
 })

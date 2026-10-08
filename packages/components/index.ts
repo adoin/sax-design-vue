@@ -1,4 +1,5 @@
 export * from './types'
+export * from './base'
 export * from './alert'
 export * from './affix'
 export * from './anchor'

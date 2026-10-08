@@ -1,6 +1,7 @@
 <template>
   <teleport :to="selector">
     <SvgDissolveFilter
+      v-if="exitDissolve.active.value"
       :filter-id="exitDissolve.filterId"
       :dissolved="exitDissolve.dissolved.value"
       :dissolve-duration="props.closeAnimationDuration"
@@ -230,7 +231,7 @@ const { nextZIndex } = useZIndex()
 dialogDeprecated(props)
 
 const waitForLoading = provideLoadingCompletion()
-const exitDissolve = useDialogDissolve()
+const exitDissolve = useDialogDissolve(() => props.closeAnimationDuration)
 // The surface has already dissolved; remove the mask in this same Vue patch.
 const leaveImmediately = (_element: Element, done: () => void) => done()
 const cancelExitMotion = () => {

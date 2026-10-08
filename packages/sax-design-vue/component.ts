@@ -1,4 +1,5 @@
 import { SAlert } from '@vuesax-alpha/components/alert'
+import { SSvgFilterAnimation } from '@vuesax-alpha/components/base'
 import { SAffix } from '@vuesax-alpha/components/affix'
 import { SAnchor } from '@vuesax-alpha/components/anchor'
 import { SAvatar, SAvatarGroup } from '@vuesax-alpha/components/avatar'
@@ -92,6 +93,7 @@ import type { Plugin } from 'vue'
 
 export default [
   SAlert,
+  SSvgFilterAnimation,
   SAffix,
   SAnchor,
   SAvatar,

@@ -11,11 +11,12 @@ let sequence = 0
 let frames: Map<number, FrameRequestCallback>
 let reduceMotion = false
 let mediaChange: (() => void) | undefined
-const advance = (time: number) => {
+const advance = async (time: number) => {
   clock = time
   const pending = [...frames.values()]
   frames.clear()
   pending.forEach((callback) => callback(time))
+  await nextTick()
 }
 const number = (element: Element, name: string) =>
   Number(element.getAttribute(name))
@@ -49,138 +50,143 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe('Instance placeholder dissolve', () => {
-  it('starts eroding during the first 80ms after focus instead of holding an opaque mask', async () => {
+describe('Lazy instance placeholder dissolve', () => {
+  it('starts during the first 80ms and releases its graph after completion', async () => {
     const wrapper = mount(Input, { props: { placeholder: 'Search' } })
+    expect(wrapper.find('filter').exists()).toBe(false)
     await wrapper.get('input').trigger('focus')
     expect(frames.size).toBe(1)
-    advance(16)
     const threshold = wrapper.get('[data-dissolve-threshold]').element
+    await advance(16)
     expect(number(threshold, 'intercept')).toBeLessThan(1)
-    advance(80)
-    // A representative noise sample already has partial alpha: real grain,
-    // rather than changed attributes whose result remains clamped to white.
-    const maskAlpha =
-      number(threshold, 'slope') * 0.4 + number(threshold, 'intercept')
-    expect(maskAlpha).toBeLessThan(1)
-    expect(wrapper.get('[data-dissolve-alpha]').attributes('slope')).toBe('1')
-    advance(480)
-    expect(wrapper.get('[data-dissolve-alpha]').attributes('slope')).toBe('0')
+    await advance(80)
+    expect(
+      number(threshold, 'slope') * 0.4 + number(threshold, 'intercept'),
+    ).toBeLessThan(1)
+    await advance(480)
+    expect(wrapper.find('filter').exists()).toBe(false)
     expect(frames.size).toBe(0)
-  })
-  it('keeps the complete resting state and fully dissolves then aggregates', async () => {
-    const wrapper = mount(Placeholder, {
-      props: { text: 'Search', dissolved: false },
-    })
-    const threshold = wrapper.get('[data-dissolve-threshold]').element
-    const displacement = wrapper.get('feDisplacementMap').element
-    const alpha = wrapper.get('[data-dissolve-alpha]').element
-    expect(number(threshold, 'intercept')).toBe(1)
-    expect(number(displacement, 'scale')).toBe(0)
-    expect(number(alpha, 'slope')).toBe(1)
-    expect(frames.size).toBe(0)
-    await wrapper.setProps({ dissolved: true })
-    advance(160)
-    expect(number(threshold, 'intercept')).toBeLessThan(1)
-    expect(number(displacement, 'scale')).toBeGreaterThan(0)
-    advance(480)
-    expect(number(alpha, 'slope')).toBe(0)
-    expect(frames.size).toBe(0)
-    await wrapper.setProps({ dissolved: false })
-    advance(1130)
-    expect(number(threshold, 'intercept')).toBe(1)
-    expect(number(displacement, 'scale')).toBe(0)
-    expect(number(alpha, 'slope')).toBe(1)
-    expect(frames.size).toBe(0)
+    expect(
+      wrapper.get('.s-placeholder-text__dissolve').attributes('style'),
+    ).toContain('opacity: 0')
   })
 
-  it('reverses from the current progress without resetting or leaving two loops', async () => {
+  it('creates a new graph for aggregation and returns to ordinary text', async () => {
     const wrapper = mount(Placeholder, {
       props: { text: 'Search', dissolved: false },
     })
-    const threshold = wrapper.get('[data-dissolve-threshold]')
+    expect(wrapper.find('filter').exists()).toBe(false)
     await wrapper.setProps({ dissolved: true })
-    advance(160)
+    const first = wrapper.get('filter').element
+    await advance(480)
+    expect(wrapper.find('filter').exists()).toBe(false)
+    await wrapper.setProps({ dissolved: false })
+    const next = wrapper.get('filter').element
+    expect(next).not.toBe(first)
+    expect(wrapper.get('[data-dissolve-alpha]').attributes('slope')).toBe('0')
+    await advance(1130)
+    expect(wrapper.find('filter').exists()).toBe(false)
+    expect(
+      wrapper.get('.s-placeholder-text__dissolve').attributes('style') || '',
+    ).not.toContain('url(')
+  })
+
+  it('reverses using the same live graph and does not reset progress', async () => {
+    const wrapper = mount(Placeholder, {
+      props: { text: 'Search', dissolved: false },
+    })
+    await wrapper.setProps({ dissolved: true })
+    await advance(160)
+    const filter = wrapper.get('filter').element
+    const threshold = wrapper.get('[data-dissolve-threshold]')
     const before = threshold.attributes('intercept')
     await wrapper.setProps({ dissolved: false })
+    expect(wrapper.get('filter').element).toBe(filter)
     expect(threshold.attributes('intercept')).toBe(before)
     expect(frames.size).toBe(1)
-    advance(810)
-    expect(threshold.attributes('intercept')).toBe('1')
+    await advance(810)
+    expect(wrapper.find('filter').exists()).toBe(false)
     expect(frames.size).toBe(0)
   })
 
-  it('gives sibling instances separate IDs and mutable graphs', async () => {
+  it('keeps 500 idle placeholders free of filter graphs and animation frames', async () => {
     const Host = defineComponent({
-      props: { active: Boolean },
+      props: { active: { type: Number, default: -1 } },
       setup: (props) => () =>
-        h('div', [
-          h(Placeholder, { text: 'First', dissolved: props.active }),
-          h(Placeholder, { text: 'Second', dissolved: false }),
-        ]),
+        h(
+          'div',
+          Array.from({ length: 500 }, (_, index) =>
+            h(Placeholder, {
+              text: String(index),
+              dissolved: index === props.active,
+            }),
+          ),
+        ),
     })
-    const wrapper = mount(Host, { props: { active: false } })
-    const filters = wrapper.findAll('filter')
-    expect(filters[0].attributes('id')).not.toBe(filters[1].attributes('id'))
-    await wrapper.setProps({ active: true })
-    advance(160)
-    expect(
-      number(filters[0].get('[data-dissolve-threshold]').element, 'intercept'),
-    ).toBeLessThan(1)
-    expect(
-      number(filters[1].get('[data-dissolve-threshold]').element, 'intercept'),
-    ).toBe(1)
-    expect(wrapper.find('[data-sax-svg-filters]').exists()).toBe(false)
+    const wrapper = mount(Host)
+    expect(wrapper.findAll('filter')).toHaveLength(0)
+    expect(frames.size).toBe(0)
+    await wrapper.setProps({ active: 27 })
+    expect(wrapper.findAll('filter')).toHaveLength(1)
+    await advance(480)
+    expect(wrapper.findAll('filter')).toHaveLength(0)
+    expect(frames.size).toBe(0)
   })
 
-  it('cancels the timeline and removes local filters on unmount', async () => {
+  it('cancels frames and removes listeners on owner teardown', async () => {
     const wrapper = mount(Placeholder, {
       attachTo: document.body,
       props: { text: 'Search', dissolved: false },
     })
-    const id = wrapper.get('filter').attributes('id')!
+    const remove = vi.spyOn(document, 'removeEventListener')
     await wrapper.setProps({ dissolved: true })
-    expect(frames.size).toBe(1)
+    const id = wrapper.get('filter').attributes('id')!
     wrapper.unmount()
     expect(frames.size).toBe(0)
     expect(document.querySelector(`[id="${id}"]`)).toBeNull()
+    expect(
+      remove.mock.calls.filter(([name]) => name === 'visibilitychange'),
+    ).toHaveLength(1)
   })
 
-  it('settles instantly in reduced motion and when the preference changes mid-flight', async () => {
+  it('allocates no graph for reduced motion and releases one if the preference changes', async () => {
+    reduceMotion = true
     const wrapper = mount(Placeholder, {
       props: { text: 'Search', dissolved: false },
     })
     await wrapper.setProps({ dissolved: true })
-    advance(160)
+    expect(wrapper.find('filter').exists()).toBe(false)
+    expect(frames.size).toBe(0)
+    reduceMotion = false
+    await wrapper.setProps({ dissolved: false })
+    expect(wrapper.find('filter').exists()).toBe(true)
+    await advance(160)
     reduceMotion = true
     mediaChange?.()
-    expect(wrapper.get('[data-dissolve-alpha]').attributes('slope')).toBe('0')
-    expect(frames.size).toBe(0)
-    await wrapper.setProps({ dissolved: false })
-    expect(
-      wrapper.get('[data-dissolve-threshold]').attributes('intercept'),
-    ).toBe('1')
+    await nextTick()
+    expect(wrapper.find('filter').exists()).toBe(false)
     expect(frames.size).toBe(0)
   })
 
-  it('does not animate initial occupied fields or float labels', async () => {
+  it('does not allocate graphs for occupied, float-label, or hidden fields', async () => {
     const occupied = mount(Input, {
       props: { placeholder: 'Name', modelValue: 'Alice' },
     })
-    expect(occupied.get('.s-input__placeholder').classes()).toContain(
-      's-input__placeholder--hidden',
-    )
-    expect(occupied.get('[data-dissolve-alpha]').attributes('slope')).toBe('0')
-    expect(frames.size).toBe(0)
+    expect(occupied.find('filter').exists()).toBe(false)
     const floating = mount(Input, {
       props: { placeholder: 'Name', labelFloat: true },
     })
     await floating.get('input').trigger('focus')
     expect(floating.find('filter').exists()).toBe(false)
+    const hidden = mount(Placeholder, {
+      props: { text: 'Name', dissolved: false, hidden: true },
+    })
+    await hidden.setProps({ dissolved: true })
+    expect(hidden.find('filter').exists()).toBe(false)
     expect(frames.size).toBe(0)
   })
 
-  it('preserves server IDs during hydration with no initial animation', async () => {
+  it('hydrates without server-side filter graphs or initial animation', async () => {
     const Host = defineComponent({
       setup: () => () =>
         h('div', [
@@ -189,24 +195,17 @@ describe('Instance placeholder dissolve', () => {
         ]),
     })
     const server = createSSRApp(Host)
-    server.config.idPrefix = 'search'
     const html = await renderToString(server)
+    expect(html).not.toContain('<filter')
     const container = document.createElement('div')
     container.innerHTML = html
     document.body.append(container)
-    const ids = [...container.querySelectorAll('filter')].map(
-      (element) => element.id,
-    )
-    expect(new Set(ids).size).toBe(2)
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const client = createSSRApp(Host)
-    client.config.idPrefix = 'search'
     try {
       client.mount(container)
       await nextTick()
-      expect(
-        [...container.querySelectorAll('filter')].map((element) => element.id),
-      ).toEqual(ids)
+      expect(container.querySelectorAll('filter')).toHaveLength(0)
       expect(warn).not.toHaveBeenCalled()
       expect(frames.size).toBe(0)
     } finally {
@@ -215,7 +214,7 @@ describe('Instance placeholder dissolve', () => {
     }
   })
 
-  it('stops work when cached content is deactivated and restores a settled state', async () => {
+  it('releases deactivated graphs and restores a settled cached state', async () => {
     const Host = defineComponent({
       props: { shown: Boolean, active: Boolean },
       setup: (props) => () =>
@@ -227,17 +226,13 @@ describe('Instance placeholder dissolve', () => {
         }),
     })
     const wrapper = mount(Host, { props: { shown: true, active: false } })
-    const id = wrapper.get('filter').attributes('id')
     await wrapper.setProps({ active: true })
-    advance(160)
+    await advance(160)
     expect(frames.size).toBe(1)
     await wrapper.setProps({ shown: false })
     expect(frames.size).toBe(0)
     await wrapper.setProps({ shown: true, active: false })
-    expect(wrapper.get('filter').attributes('id')).toBe(id)
-    expect(
-      wrapper.get('[data-dissolve-threshold]').attributes('intercept'),
-    ).toBe('1')
+    expect(wrapper.find('filter').exists()).toBe(false)
     expect(frames.size).toBe(0)
   })
 })

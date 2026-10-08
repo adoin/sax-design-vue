@@ -2,7 +2,8 @@
 import {
   computed,
   getCurrentInstance,
-  onMounted,
+  onActivated,
+  onDeactivated,
   shallowRef,
   useId,
   useTemplateRef,
@@ -21,35 +22,44 @@ const props = withDefaults(
   { hidden: false, multiline: false },
 )
 // Animated graphs belong to each instance, including SSR/hydration.
-const filterId = shallowRef(`sax-placeholder-dissolve-${useId()}`)
-const placeholder = useTemplateRef<HTMLElement>('placeholder')
 const instanceId = getCurrentInstance()!.uid
-onMounted(() => {
-  // Imperative overlays can render another root with the same Vue ID prefix.
-  // Keep native SSR IDs, then disambiguate only actual mounted collisions.
-  const root = placeholder.value?.getRootNode() as
-    Document | ShadowRoot | undefined
-  const ownFilter = placeholder.value?.querySelector('filter')
-  const original = filterId.value
-  let suffix = 0
-  while (
-    root?.getElementById?.(filterId.value) &&
-    // eslint-disable-next-line unicorn/prefer-query-selector -- Vue ID prefixes may contain selector punctuation.
-    root.getElementById(filterId.value) !== ownFilter
-  )
-    filterId.value = `${original}-${instanceId}-${++suffix}`
-})
+const placeholder = useTemplateRef<HTMLElement>('placeholder')
+// No filter ID is emitted during SSR. Vue's runtime UID also separates
+// imperative render roots that share a native useId prefix.
+const filterId = `sax-placeholder-dissolve-${useId()}-${instanceId}`
 const animating = shallowRef(false)
+const initialDissolved = shallowRef(props.dissolved)
+let active = true
+onDeactivated(() => {
+  active = false
+  animating.value = false
+})
+onActivated(() => {
+  active = true
+})
 watch(
-  () => props.dissolved,
-  () => {
+  () => [props.dissolved, props.hidden] as const,
+  ([target, hidden], [previous]) => {
+    const document = placeholder.value?.ownerDocument
+    if (
+      !active ||
+      hidden ||
+      document?.hidden ||
+      document?.defaultView?.matchMedia?.('(prefers-reduced-motion: reduce)')
+        .matches
+    ) {
+      animating.value = false
+      return
+    }
+    if (target === previous) return
+    if (!animating.value) initialDissolved.value = previous
     animating.value = true
   },
-  { flush: 'sync' },
+  { flush: 'post' },
 )
 const filterStyle = computed(() => ({
   // Resting content is ordinary text; hidden content needs no filter raster.
-  filter: animating.value ? `url("#${filterId.value}")` : undefined,
+  filter: animating.value ? `url("#${filterId}")` : undefined,
   opacity: !animating.value && props.dissolved ? 0 : undefined,
 }))
 const ns = useNamespace('placeholder-text')
@@ -62,8 +72,11 @@ const ns = useNamespace('placeholder-text')
     aria-hidden="true"
   >
     <SvgDissolveFilter
+      v-if="animating"
       :filter-id="filterId"
       :dissolved="dissolved"
+      :initial-dissolved="initialDissolved"
+      animate-on-mount
       @settled="animating = false"
     />
     <span :class="ns.e('dissolve')" :style="filterStyle">

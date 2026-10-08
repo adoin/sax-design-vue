@@ -377,10 +377,12 @@ import { defineSvgFilter, useSvgFilter } from 'sax-design-vue'
 
 const shadow = defineSvgFilter({
   key: 'soft-shadow',
-  nodes: [{
-    tag: 'feDropShadow',
-    attrs: { dx: 0, dy: 2, stdDeviation: 2, 'flood-opacity': 0.15 },
-  }],
+  nodes: [
+    {
+      tag: 'feDropShadow',
+      attrs: { dx: 0, dy: 2, stdDeviation: 2, 'flood-opacity': 0.15 },
+    },
+  ],
 })
 const { url } = useSvgFilter(shadow, { cache: true })
 </script>
@@ -394,6 +396,86 @@ The composable acquires the graph after mount and releases its consumer when the
 
 Outside Vue setup, call `svgFilter.acquire(definition, { cache: true })`, apply the returned `url`, and call `release()` when the consumer is removed. `svgFilter.getId(definition, scope?)` returns a deterministic ID without creating DOM. `svgFilter.clearUnused(document?)` removes idle cached graphs while preserving those still used by any application. An explicit `document` option keeps iframe registries separate.
 
-Input's animated placeholders keep mutable filter nodes inside each component instead of sharing them. Their IDs use Vue's native `useId()` and remain stable during SSR hydration; the nodes and animation callbacks are removed on unmount. When mounting multiple Vue apps in one document, give each app a distinct `app.config.idPrefix` on both server and client so their local SVG IDs cannot collide.
+Animated placeholders and Dialog closing use private, transient filter graphs. Idle instances and SSR output contain no animation filters. A graph is created only for an actual animation and released after completion or cancellation. Dialog waits for close validation and loading completion before creating it; reduced motion, hidden-page closing and animation opt-out skip allocation. Independent instances never share mutable filter nodes.
+
+</card>
+
+<card>
+
+## SVG filter animation modules
+
+`defineSvgFilterAnimation` declares an immutable module: a filter definition, attribute bindings addressed by primitive-child index paths, and a pure `frame(progress)` function. Progress ranges from 0 to 1. `svgFilterAnimations.add()` registers it without creating DOM; duplicate names with different declarations are rejected. The built-in `dissolve` module supplies the current particle effect.
+
+Register reusable modules in your application entry or a dedicated startup file:
+
+```ts
+import { defineSvgFilterAnimation, svgFilterAnimations } from 'sax-design-vue'
+
+export const softBlur = defineSvgFilterAnimation({
+  name: 'soft-blur',
+  duration: 240,
+  reverseDuration: 320,
+  definition: {
+    key: 'animation-soft-blur',
+    nodes: [
+      { tag: 'feGaussianBlur', attrs: { stdDeviation: 0, result: 'blurred' } },
+      {
+        tag: 'feComponentTransfer',
+        attrs: { in: 'blurred' },
+        children: [{ tag: 'feFuncA', attrs: { type: 'linear', slope: 1 } }],
+      },
+    ],
+  },
+  bindings: [
+    { path: [0], attribute: 'stdDeviation', channel: 'blur' },
+    { path: [1, 0], attribute: 'slope', channel: 'alpha' },
+  ],
+  frame: (progress) => ({ blur: progress * 8, alpha: 1 - progress }),
+})
+svgFilterAnimations.add(softBlur)
+```
+
+`SSvgFilterAnimation` creates a named module's graph only while playing and removes it on completion or cancellation. Static instances create no graph. Mount it only during playback to also avoid idle component instances. Set `initial-progress` before a fresh playback, `progress` to its destination, and `animate-on-mount` to start immediately. Changing the destination reverses from the current progress; changing modules requires remounting. `settled` reports the final progress. Duration overrides use milliseconds.
+
+```vue
+<script setup lang="ts">
+import { shallowRef, useId } from 'vue'
+import { SButton, SSvgFilterAnimation } from 'sax-design-vue'
+import './svg-animations' // registers soft-blur above
+
+const id = `soft-blur-${useId()}`
+const hidden = shallowRef(false)
+const running = shallowRef(false)
+const initial = shallowRef(0)
+const toggle = () => {
+  if (!running.value) initial.value = hidden.value ? 1 : 0
+  hidden.value = !hidden.value
+  running.value = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+</script>
+
+<template>
+  <SButton @click="toggle">Toggle</SButton>
+  <SSvgFilterAnimation
+    v-if="running"
+    animation="soft-blur"
+    :filter-id="id"
+    :initial-progress="initial"
+    :progress="hidden ? 1 : 0"
+    animate-on-mount
+    @settled="running = false"
+  />
+  <span
+    :style="{
+      filter: running ? `url(#${id})` : undefined,
+      opacity: !running && hidden ? 0 : 1,
+    }"
+  >
+    Animated content
+  </span>
+</template>
+```
+
+Use a document-unique filter ID for independently mounted applications. At completion, apply the intended ordinary CSS end state before removing the graph; this prevents a missing filter reference from briefly showing hidden content. Static shared filters continue to use `svgFilter` and `useSvgFilter`; animation modules share declarations, not playback state or DOM nodes.
 
 </card>

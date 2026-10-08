@@ -11,6 +11,8 @@ export {
   hslToChannels,
   svgFilter,
   defineSvgFilter,
+  defineSvgFilterAnimation,
+  svgFilterAnimations,
 } from '@vuesax-alpha/utils'
 export type {
   SvgFilterDefinition,
@@ -19,6 +21,9 @@ export type {
   SvgFilterOptions,
   SvgFilterPrimitive,
   SvgFilterManager,
+  SvgFilterAnimationModule,
+  SvgFilterAnimationBinding,
+  SvgFilterAnimationFrame,
 } from '@vuesax-alpha/utils'
 export * from './make-installer'
 

@@ -377,10 +377,12 @@ import { defineSvgFilter, useSvgFilter } from 'sax-design-vue'
 
 const shadow = defineSvgFilter({
   key: 'soft-shadow',
-  nodes: [{
-    tag: 'feDropShadow',
-    attrs: { dx: 0, dy: 2, stdDeviation: 2, 'flood-opacity': 0.15 },
-  }],
+  nodes: [
+    {
+      tag: 'feDropShadow',
+      attrs: { dx: 0, dy: 2, stdDeviation: 2, 'flood-opacity': 0.15 },
+    },
+  ],
 })
 const { url } = useSvgFilter(shadow, { cache: true })
 </script>
@@ -394,6 +396,86 @@ const { url } = useSvgFilter(shadow, { cache: true })
 
 在 Vue setup 外可调用 `svgFilter.acquire(definition, { cache: true })`，应用返回的 `url`，并在使用者移除时调用 `release()`。`svgFilter.getId(definition, scope?)` 无需创建 DOM 即可获得确定性 ID。`svgFilter.clearUnused(document?)` 清理未使用的缓存，保留任何应用仍在引用的定义。显式 `document` 选项可用于隔离 iframe 中的注册表。
 
-Input 的占位提示动画把可变滤镜节点保留在各组件内部。ID 使用 Vue 原生 `useId()`，在 SSR 水合时保持稳定；组件卸载会移除节点并取消动画回调。同一文档挂载多个 Vue 应用时，请在服务端与客户端为各应用配置不同的 `app.config.idPrefix`，避免本地 SVG ID 冲突。
+占位提示和 Dialog 关闭使用各自独立的临时滤镜。静止实例及 SSR 输出不包含动画滤镜；仅在实际播放时创建，完成或取消后释放。Dialog 等关闭校验及 loading 收尾完成后才创建滤镜；减少动态效果、后台页面关闭和显式关闭动画时跳过创建。不同实例不会共享可变滤镜节点。
+
+</card>
+
+<card>
+
+## SVG 滤镜动画模组
+
+`defineSvgFilterAnimation` 声明不可变模组，包括滤镜定义、按子节点索引路径定位的属性绑定，以及纯函数 `frame(progress)`。进度范围是 0 到 1。`svgFilterAnimations.add()` 注册时不创建 DOM；不同定义重复使用同一名称会被拒绝。内置 `dissolve` 模组提供当前粒子效果。
+
+在应用入口或专用启动文件中注册可复用模组：
+
+```ts
+import { defineSvgFilterAnimation, svgFilterAnimations } from 'sax-design-vue'
+
+export const softBlur = defineSvgFilterAnimation({
+  name: 'soft-blur',
+  duration: 240,
+  reverseDuration: 320,
+  definition: {
+    key: 'animation-soft-blur',
+    nodes: [
+      { tag: 'feGaussianBlur', attrs: { stdDeviation: 0, result: 'blurred' } },
+      {
+        tag: 'feComponentTransfer',
+        attrs: { in: 'blurred' },
+        children: [{ tag: 'feFuncA', attrs: { type: 'linear', slope: 1 } }],
+      },
+    ],
+  },
+  bindings: [
+    { path: [0], attribute: 'stdDeviation', channel: 'blur' },
+    { path: [1, 0], attribute: 'slope', channel: 'alpha' },
+  ],
+  frame: (progress) => ({ blur: progress * 8, alpha: 1 - progress }),
+})
+svgFilterAnimations.add(softBlur)
+```
+
+`SSvgFilterAnimation` 仅在播放时创建指定模组的滤镜，完成或取消后移除，静止实例不创建滤镜。仅在播放期间挂载组件还能避免闲置组件实例；新播放设置 `initial-progress`，目标由 `progress` 指定，`animate-on-mount` 在挂载后立即启动。目标改变时从当前进度反向播放；切换模组时需要重新挂载。`settled` 返回最终进度，时间参数使用毫秒。
+
+```vue
+<script setup lang="ts">
+import { shallowRef, useId } from 'vue'
+import { SButton, SSvgFilterAnimation } from 'sax-design-vue'
+import './svg-animations' // 注册上面的 soft-blur
+
+const id = `soft-blur-${useId()}`
+const hidden = shallowRef(false)
+const running = shallowRef(false)
+const initial = shallowRef(0)
+const toggle = () => {
+  if (!running.value) initial.value = hidden.value ? 1 : 0
+  hidden.value = !hidden.value
+  running.value = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+</script>
+
+<template>
+  <SButton @click="toggle">切换</SButton>
+  <SSvgFilterAnimation
+    v-if="running"
+    animation="soft-blur"
+    :filter-id="id"
+    :initial-progress="initial"
+    :progress="hidden ? 1 : 0"
+    animate-on-mount
+    @settled="running = false"
+  />
+  <span
+    :style="{
+      filter: running ? `url(#${id})` : undefined,
+      opacity: !running && hidden ? 0 : 1,
+    }"
+  >
+    动画内容
+  </span>
+</template>
+```
+
+独立挂载的应用应使用文档内唯一的滤镜 ID。结束时先落实普通 CSS 终态再移除滤镜，避免引用失效后隐藏内容短暂闪回。静态共享滤镜仍使用 `svgFilter` 和 `useSvgFilter`；动画模组共享声明，不共享播放状态或 DOM 节点。
 
 </card>
