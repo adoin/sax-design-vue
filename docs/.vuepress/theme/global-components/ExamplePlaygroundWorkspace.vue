@@ -129,7 +129,7 @@ const copySource = async () => {
 
 .example-playground-workspace__copy {
   display: inline-flex;
-  min-height: 38px;
+  min-height: 44px;
   align-items: center;
   gap: 6px;
   padding: 0 12px;
