@@ -139,7 +139,7 @@
         <InputPlaceholder
           v-else
           :text="placeholderText"
-          :dissolved="focused || hasInputValue"
+          :dissolved="placeholderActive || hasInputValue"
         />
       </label>
 
@@ -266,7 +266,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, useSlots, useTemplateRef } from 'vue'
+import { computed, inject, onMounted, useSlots, useTemplateRef } from 'vue'
 import {
   IconClose,
   IconControlLoading,
@@ -284,6 +284,7 @@ import {
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { NOOP, getVsColor } from '@vuesax-alpha/utils'
+import { inputInteractionContextKey } from '@vuesax-alpha/tokens'
 import { inputEmits, inputProps } from './input'
 import { useInput } from './composables'
 import { useInputValidation } from './composables/use-input-validation'
@@ -496,8 +497,16 @@ const placeholderText = computed(() =>
   props.labelFloat ? props.label || props.placeholder : props.placeholder,
 )
 const hasInputValue = computed(() => !!model.value || model.value === 0)
+const inputInteraction = inject(inputInteractionContextKey, undefined)
+const placeholderActive = computed(
+  () =>
+    focused.value ||
+    (!!inputInteraction?.active.value &&
+      !!inputRef.value &&
+      !!inputInteraction.triggerRef.value?.contains(inputRef.value)),
+)
 const isPlaceholderFloatActive = computed(
-  () => props.labelFloat && (focused.value || hasInputValue.value),
+  () => props.labelFloat && (placeholderActive.value || hasInputValue.value),
 )
 const {
   validationError,

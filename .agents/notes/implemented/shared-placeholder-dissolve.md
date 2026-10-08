@@ -12,6 +12,7 @@ updated_at: 2026-10-08
 - Covered independent controls: Input, Textarea, Select (including multiple/search fields), Cascader, TableSelect, editable Tag, IconPicker search, and the documentation navbar search.
 - DatePicker (including ranges), TimePicker, InputNumber and their composed usages inherit Input's implementation. TimeSelect inherits Select. TreeSelect inherits TableSelect. TagGroup inherits editable Tag.
 - Focus/open dissolves a plain hint; an empty blurred/closed control reassembles it. Entered or selected content hides the hint immediately. Floating labels keep their existing floating behavior instead of receiving a dissolve filter.
+- DatePicker and TimePicker keep their trigger hints dissolved (and floating labels raised) for the whole open-panel interaction, including uncommitted selections and focus moving into the teleported panel. A scoped input interaction context combines native focus with panel visibility; DOM containment limits that context to trigger inputs, preserving independent inputs in custom panel footers. Empty hints recover only after the panel closes and native focus leaves.
 - Textarea retains multiline hints, line breaks, wrapping, native editing/IME/deferred commits, independent labels, disabled/loading behavior, and reserved loader space.
 - Each playback owns a transient mutable graph and timeline, driven by the registered `dissolve` animation module. Idle placeholders and SSR emit no filter graph. Client playback IDs combine Vue's native ID and runtime instance UID to isolate separate imperative roots; no filter ID is emitted during hydration. Unmount/KeepAlive/reduced-motion handling releases the graph and timeline.
 - Stable visible/hidden states retain neither a URL filter nor graph/listeners; filter rasterization is enabled only while an animation is running. Existing opacity/layout transitions must not erase the SVG animation before it completes.
@@ -22,6 +23,7 @@ updated_at: 2026-10-08
 
 ## Verification
 
+- Picker interaction correction (2026-10-08): six component test files / 69 tests passed, including ten regressions covering staged time edits, confirmation, empty closing, native-focus retention, date/datetime/range inputs, floating labels, siblings and independent footer inputs. Component typecheck and targeted ESLint passed. Browser verified empty DatePicker/TimePicker triggers remain at opacity 0 with no URL filter after focus moves into the time panel; an empty DatePicker recovers to opacity 1 after outside closing.
 - Component regression suite: nine files, 119 tests passed. Additional final ownership/idle/hydration/API suite: three files, 27 tests passed, including the newly added cross-root isolation case.
 - API tests use reduced motion for deterministic picker result/disposal checks; particle timing, reversal, independent IDs, reduced motion and hydration have dedicated tests.
 - Component typecheck and targeted ESLint passed.

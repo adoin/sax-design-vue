@@ -19,6 +19,7 @@
     @hide="handleHide"
   >
     <div
+      ref="triggerRef"
       :class="[
         ns.b(),
         ns.is('block', block),
@@ -396,13 +397,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { computed, provide, ref, shallowRef, watch } from 'vue'
 import dayjs from 'dayjs'
 import SButton from '@vuesax-alpha/components/button'
 import SIcon from '@vuesax-alpha/components/icon'
 import SInput from '@vuesax-alpha/components/input'
 import SPopper from '@vuesax-alpha/components/popper'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
+import { inputInteractionContextKey } from '@vuesax-alpha/tokens'
 import {
   useGlobalConfig,
   useLocale,
@@ -490,6 +492,11 @@ const currentDate = computed(() => getTimeZoneNow(resolvedTimezone.value))
 
 const popperAnimation = computed(() => `${ns.b()}-fade`)
 const visible = ref(false)
+const triggerRef = shallowRef<HTMLElement>()
+provide(inputInteractionContextKey, {
+  active: computed(() => visible.value),
+  triggerRef,
+})
 watch(
   () => props.loading,
   (loading) => {

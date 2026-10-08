@@ -17,6 +17,7 @@
     :popper-style="themeStyle"
   >
     <div
+      ref="triggerRef"
       :class="[
         ns.b(),
         ns.m(resolvedSize || 'default'),
@@ -74,12 +75,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { computed, provide, ref, shallowRef, watch } from 'vue'
 import dayjs from 'dayjs'
 import SButton from '@vuesax-alpha/components/button'
 import SInput from '@vuesax-alpha/components/input'
 import SPopper from '@vuesax-alpha/components/popper'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
+import { inputInteractionContextKey } from '@vuesax-alpha/tokens'
 import {
   useGlobalConfig,
   useLocale,
@@ -123,6 +125,11 @@ const themeStyle = computed(() =>
 )
 
 const visible = ref(false)
+const triggerRef = shallowRef<HTMLElement>()
+provide(inputInteractionContextKey, {
+  active: computed(() => visible.value),
+  triggerRef,
+})
 watch(
   () => props.loading,
   (loading) => {
