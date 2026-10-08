@@ -1,0 +1,38 @@
+@use 'mixins/mixins' as *;
+
+@include b(placeholder-text) {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  pointer-events: none;
+  user-select: none;
+
+  @include when(hidden) {
+    visibility: hidden;
+  }
+  @include e(dissolve) {
+    display: block;
+    box-sizing: content-box;
+    min-width: 0;
+    max-width: 100%;
+    padding: 20px 38px;
+    margin: -20px -38px;
+  }
+  @include e(content) {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @include when(multiline) {
+    @include e(content) {
+      max-height: 100%;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+    }
+    @include e(dissolve) {
+      height: 100%;
+    }
+  }
+}

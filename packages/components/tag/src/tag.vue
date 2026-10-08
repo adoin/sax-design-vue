@@ -14,23 +14,31 @@
     />
 
     <span :class="ns.e('text')">
-      <input
-        v-if="editable"
-        ref="editor"
-        autocomplete="off"
-        :class="ns.e('editor')"
-        :value="draftText"
-        :size="editorSize"
-        :placeholder="editPlaceholder"
-        :aria-label="editPlaceholder || text || 'Edit tag'"
-        type="text"
-        @click.stop
-        @focus="handleEditorFocus"
-        @input="handleEditorInput"
-        @blur="confirmEdit"
-        @keydown.enter.prevent="confirmEdit"
-        @keydown.esc.prevent="cancelEdit"
-      />
+      <span v-if="editable" :class="ns.e('editor-wrap')">
+        <input
+          ref="editor"
+          autocomplete="off"
+          :class="ns.e('editor')"
+          :value="draftText"
+          :size="editorSize"
+          placeholder=""
+          :aria-label="editPlaceholder || text || 'Edit tag'"
+          type="text"
+          @click.stop
+          @focus="handleEditorFocus"
+          @input="handleEditorInput"
+          @blur="handleEditorBlur"
+          @keydown.enter.prevent="confirmEdit"
+          @keydown.esc.prevent="cancelEdit"
+        />
+        <PlaceholderText
+          v-if="editPlaceholder"
+          :class="ns.e('placeholder')"
+          :text="editPlaceholder"
+          :dissolved="editorFocused || !!draftText"
+          :hidden="!!draftText"
+        />
+      </span>
       <template v-else>
         <SIcon v-if="icon" :name="icon" :class="ns.e('icon')" />
         <slot>{{ text }}</slot>
@@ -69,6 +77,7 @@ import {
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
+import PlaceholderText from '@vuesax-alpha/components/base/src/placeholder-text.vue'
 import {
   getCssColor,
   isVsColor,
@@ -102,6 +111,7 @@ const isClosable = computed(
   () => props.closable !== false && props.closable !== '',
 )
 const draftText = shallowRef(props.text || '')
+const editorFocused = shallowRef(false)
 const editStartText = shallowRef(props.text || '')
 const isFinishingEdit = shallowRef(false)
 const editorRef = useTemplateRef<HTMLInputElement>('editor')
@@ -187,8 +197,13 @@ const handleEditorInput = (event: Event) => {
 }
 
 const handleEditorFocus = () => {
+  editorFocused.value = true
   editStartText.value = props.text || ''
   isFinishingEdit.value = false
+}
+const handleEditorBlur = () => {
+  editorFocused.value = false
+  confirmEdit()
 }
 
 const confirmEdit = () => {

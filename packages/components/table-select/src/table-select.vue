@@ -15,6 +15,7 @@ import {
 } from '@vuesax-alpha/components/icon'
 import { useResizeObserver } from '@vueuse/core'
 import { SPopper } from '@vuesax-alpha/components/popper'
+import PlaceholderText from '@vuesax-alpha/components/base/src/placeholder-text.vue'
 import SCheckbox from '@vuesax-alpha/components/checkbox'
 import STag from '@vuesax-alpha/components/tag'
 import { STable } from '@vuesax-alpha/components/table'
@@ -66,6 +67,7 @@ const slots = defineSlots<{
 }>()
 
 const ns = useNamespace('table-select')
+const placeholderFocused = shallowRef(false)
 const resolvedShape = useShape()
 const resolvedSize = useSize()
 const { t } = useLocale()
@@ -522,10 +524,18 @@ defineExpose({
         ns.is('has-suffix', hasSuffix()),
       ]"
       :style="colorCssVar"
+      @focusin="placeholderFocused = true"
+      @focusout="placeholderFocused = false"
     >
       <div
         :class="ns.e('trigger')"
         role="combobox"
+        :aria-label="
+          ($attrs['aria-label'] as string | undefined) ||
+          (!(multiple ? displayKeys.length : selectedRow)
+            ? placeholder || t('vs.select.placeholder')
+            : undefined)
+        "
         :tabindex="disabled || loading ? -1 : 0"
         :aria-controls="mergedOpen ? panelId : undefined"
         :aria-disabled="disabled"
@@ -581,9 +591,13 @@ defineExpose({
           >
             {{ selectedLabel }}
           </slot>
-          <template v-else>{{
-            placeholder || t('vs.select.placeholder')
-          }}</template>
+          <PlaceholderText
+            v-else
+            :text="placeholder || t('vs.select.placeholder')"
+            :dissolved="
+              !(disabled || loading) && (placeholderFocused || mergedOpen)
+            "
+          />
         </span>
 
         <span

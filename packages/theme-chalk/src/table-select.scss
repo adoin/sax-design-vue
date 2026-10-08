@@ -82,6 +82,7 @@
 }
 
 .s-table-select__value.is-placeholder {
+  overflow: visible;
   color: getColor(text-color-placeholder);
 }
 
@@ -218,7 +219,9 @@
   }
 }
 
-.#{$namespace}-table-select:is(.is-loading, [aria-busy="true"]), .#{$namespace}-table-select .is-loading, .#{$namespace}-table-select [aria-busy="true"] {
+.#{$namespace}-table-select:is(.is-loading, [aria-busy='true']),
+.#{$namespace}-table-select .is-loading,
+.#{$namespace}-table-select [aria-busy='true'] {
   @include loading-cursor;
 }
 
@@ -227,5 +230,9 @@
   align-items: center;
   gap: 4px;
   min-width: 0;
-  .s-tag { min-width: 0; max-width: 100%; flex-shrink: 1; }
+  .s-tag {
+    min-width: 0;
+    max-width: 100%;
+    flex-shrink: 1;
+  }
 }

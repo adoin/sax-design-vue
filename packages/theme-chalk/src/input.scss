@@ -936,29 +936,6 @@ input[class*='#{$namespace}'][type='search']::-webkit-search-results-decoration 
     overflow: visible;
     width: 100%;
   }
-  .#{$namespace}-input__placeholder-dissolve {
-    display: inline-block;
-    box-sizing: content-box;
-    max-width: 100%;
-    min-width: 0;
-    vertical-align: middle;
-    padding: 20px 38px;
-    margin: -20px -38px;
-  }
-  .#{$namespace}-input__placeholder-content {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-.#{$namespace}-input__placeholder-filter {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

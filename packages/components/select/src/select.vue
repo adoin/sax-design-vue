@@ -40,6 +40,8 @@
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
       @click="toggleMenu"
+      @focusin="placeholderFocused = true"
+      @focusout="placeholderFocused = false"
     >
       <div v-if="multiple" ref="tags" :class="[ns.e('tags')]">
         <span
@@ -114,15 +116,8 @@
             ),
             ns.be('tags', 'input'),
           ]"
-          :placeholder="
-            dropMenuVisible
-              ? searchPlaceholder
-              : selectedArray.length
-                ? ''
-                : labelFloat
-                  ? ''
-                  : states.currentPlaceholder || ''
-          "
+          placeholder=""
+          :aria-label="searchPlaceholder || resolvedLabel || placeholder"
           :disabled="selectDisabled"
           @focus="handleFocus"
           @blur="handleBlur"
@@ -148,16 +143,13 @@
         v-model="states.selectedLabel"
         autocomplete="off"
         :aria-label="
-          ($attrs['aria-label'] as string | undefined) ?? resolvedLabel
+          ($attrs['aria-label'] as string | undefined) ??
+          (resolvedLabel || placeholder || undefined)
         "
         :class="[ns.e('input'), ns.is('multiple', multiple)]"
         :disabled="selectDisabled"
         :readonly="readonly"
-        :placeholder="
-          !multiple && filterable && dropMenuVisible
-            ? searchPlaceholder
-            : undefined
-        "
+        placeholder=""
         @focus="handleFocus"
         @blur="handleBlur"
         @mouseenter="handleTarget('input-filter', !readonly)"
@@ -194,17 +186,20 @@
         {{ resolvedLabel }}
       </label>
 
-      <span
-        v-if="
-          !multiple &&
-          !labelFloat &&
-          states.currentPlaceholder &&
-          !(filterable && dropMenuVisible && searchPlaceholder)
+      <PlaceholderText
+        v-if="(!labelFloat && placeholder) || (filterable && searchPlaceholder)"
+        :class="ns.e('placeholder')"
+        :text="
+          dropMenuVisible && filterable && searchPlaceholder
+            ? searchPlaceholder
+            : placeholder || ''
         "
-        :class="[ns.e('placeholder'), ns.is('hidden', !!modelValue)]"
-      >
-        {{ states.currentPlaceholder }}
-      </span>
+        :dissolved="
+          placeholderOccupied ||
+          (!selectDisabled && (placeholderFocused || dropMenuVisible))
+        "
+        :hidden="placeholderOccupied || (labelFloat && !dropMenuVisible)"
+      />
 
       <icon-control-loading v-if="loading" :class="ns.e('loading')" />
 
@@ -452,6 +447,7 @@ import SCollapseTransition from '@vuesax-alpha/components/collapse-transition'
 import SScrollbar from '@vuesax-alpha/components/scrollbar'
 import SVirtualList from '@vuesax-alpha/components/virtual-list'
 import SPopper from '@vuesax-alpha/components/popper'
+import PlaceholderText from '@vuesax-alpha/components/base/src/placeholder-text.vue'
 import {
   useColor,
   useLocale,
@@ -486,6 +482,16 @@ const messageTypes = ['success', 'warn', 'danger', 'primary', 'dark']
 const props = defineProps(selectProps)
 const resolvedLabel = computed(
   () => props.label || (props.labelFloat ? props.placeholder : ''),
+)
+const placeholderFocused = shallowRef(false)
+const placeholderOccupied = computed(() =>
+  props.multiple
+    ? selectedArray.value.length > 0 || !!query.value
+    : !!states.selectedLabel ||
+      (!isEqual(props.modelValue, props.notValue) &&
+        props.modelValue !== undefined &&
+        props.modelValue !== null &&
+        props.modelValue !== ''),
 )
 const emit = defineEmits(selectEmits)
 const ns = useNamespace('select')

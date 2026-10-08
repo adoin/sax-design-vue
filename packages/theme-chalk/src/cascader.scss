@@ -70,12 +70,22 @@
   opacity: 0.5;
 }
 .s-cascader__selection {
+  position: relative;
   display: flex;
   min-width: 0;
   flex: 1;
   align-items: center;
   gap: 4px;
-  overflow: hidden;
+  overflow: visible;
+}
+.s-cascader__placeholder {
+  overflow: visible;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: getColor(text-color-placeholder);
+  font-size: 13px;
 }
 .s-cascader__value {
   min-width: 0;
@@ -373,6 +383,7 @@
   }
 }
 
-.#{$namespace}-cascader:has(.#{$namespace}-cascader__loading), .#{$namespace}-cascader__option:has(.#{$namespace}-cascader__loading) {
+.#{$namespace}-cascader:has(.#{$namespace}-cascader__loading),
+.#{$namespace}-cascader__option:has(.#{$namespace}-cascader__loading) {
   @include loading-cursor;
 }

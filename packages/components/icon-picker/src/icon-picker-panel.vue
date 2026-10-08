@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, nextTick, shallowRef, toRef, useTemplateRef } from 'vue'
 import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
+import PlaceholderText from '@vuesax-alpha/components/base/src/placeholder-text.vue'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { normalizeIconList } from './icon-picker'
 import type { Language } from '@vuesax-alpha/locale'
@@ -21,6 +22,7 @@ const emit = defineEmits<{
 const ns = useNamespace('icon-picker')
 const { t } = useLocale(toRef(props, 'locale'))
 const searchRef = useTemplateRef<HTMLInputElement>('searchRef')
+const searchFocused = shallowRef(false)
 const gridRef = useTemplateRef<HTMLElement>('gridRef')
 const optionRefs = useTemplateRef<HTMLButtonElement[]>('optionRef')
 const query = shallowRef('')
@@ -73,16 +75,26 @@ defineExpose({ focusSearch })
   <section :class="ns.e('catalog')">
     <div :class="ns.e('search-wrap')">
       <SIcon name="cb:search" />
-      <input
-        ref="searchRef"
-        v-model="query"
-        :class="ns.e('search')"
-        type="search"
-        :aria-label="t('vs.iconPicker.search')"
-        :placeholder="t('vs.iconPicker.search')"
-        autocomplete="off"
-        @keydown.down.prevent="focusFirstOption"
-      />
+      <span :class="ns.e('search-field')">
+        <input
+          ref="searchRef"
+          v-model="query"
+          :class="ns.e('search')"
+          type="search"
+          :aria-label="t('vs.iconPicker.search')"
+          placeholder=""
+          autocomplete="off"
+          @keydown.down.prevent="focusFirstOption"
+          @focus="searchFocused = true"
+          @blur="searchFocused = false"
+        />
+        <PlaceholderText
+          :class="ns.e('search-placeholder')"
+          :text="t('vs.iconPicker.search')"
+          :dissolved="searchFocused || !!query"
+          :hidden="!!query"
+        />
+      </span>
       <button
         v-if="query"
         :class="ns.e('search-clear')"

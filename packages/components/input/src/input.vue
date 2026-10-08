@@ -28,6 +28,9 @@
         :type="inputType"
         :disabled="disabled || loading"
         :aria-busy="loading || undefined"
+        :aria-label="
+          ($attrs['aria-label'] as string | undefined) ?? (label || placeholder)
+        "
         :readonly="readonly || !editable"
         :name="name"
         :title="title"

@@ -39,6 +39,8 @@
       @keydown="handleTriggerKeydown"
       @focus="handleFocus"
       @blur="handleBlur"
+      @focusin="placeholderFocused = true"
+      @focusout="placeholderFocused = false"
     >
       <div :class="ns.e('selection')">
         <template v-if="multiple && !searchText">
@@ -99,21 +101,23 @@
           type="text"
           autocomplete="off"
           :disabled="disabled || loading"
-          :placeholder="
-            showPlaceholder && !hasFloatingLabel ? resolvedPlaceholder : ''
-          "
+          placeholder=""
           :aria-label="label || resolvedPlaceholder"
           @input="handleSearchInput"
           @focus="handleFocus"
           @blur="handleBlur"
           @keydown="handleTriggerKeydown"
         />
-        <span
-          v-else-if="showPlaceholder && !hasFloatingLabel"
-          :class="[ns.e('value'), ns.is('placeholder')]"
-        >
-          {{ resolvedPlaceholder }}
-        </span>
+        <PlaceholderText
+          v-if="!hasFloatingLabel"
+          :class="[ns.e('value'), ns.e('placeholder'), ns.is('placeholder')]"
+          :text="resolvedPlaceholder"
+          :dissolved="
+            !showPlaceholder ||
+            (!(disabled || loading) && (placeholderFocused || mergedOpen))
+          "
+          :hidden="!showPlaceholder"
+        />
       </div>
 
       <span
@@ -211,6 +215,7 @@ import {
 } from '@vuesax-alpha/components/icon'
 import { useResizeObserver } from '@vueuse/core'
 import SPopper from '@vuesax-alpha/components/popper'
+import PlaceholderText from '@vuesax-alpha/components/base/src/placeholder-text.vue'
 import { useLocale, useNamespace, useShape, useSize } from '@vuesax-alpha/hooks'
 import CascaderPanel from './cascader-panel.vue'
 import { SHOW_PARENT, cascaderEmits, cascaderProps } from './cascader'
@@ -247,6 +252,7 @@ const measureRef = useTemplateRef<HTMLElement>('measureRef')
 const popperRef = useTemplateRef<PopperInstance>('popperRef')
 
 const internalOpen = shallowRef(props.defaultOpen)
+const placeholderFocused = shallowRef(false)
 const internalSearch = shallowRef('')
 const activePath = shallowRef<CascaderPathValue>([])
 const loadingKeys = shallowRef(new Set<string>())

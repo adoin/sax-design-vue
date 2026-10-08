@@ -28,6 +28,14 @@ const iconData = {
 const missingIcon = ['bx', 'missing'].join(':')
 
 beforeAll(() => {
+  // These tests verify picker results and disposal. Particle timing has its
+  // own suite; do not depend on real animation frames in jsdom API tests.
+  vi.stubGlobal('matchMedia', (query: string) => ({
+    matches: query.includes('prefers-reduced-motion'),
+    media: query,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }))
   vi.stubGlobal(
     'IntersectionObserver',
     class {

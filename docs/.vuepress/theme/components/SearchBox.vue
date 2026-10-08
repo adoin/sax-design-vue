@@ -6,7 +6,7 @@
         v-model="query"
         :aria-label="t.shell.search"
         :class="{ focused: focused }"
-        :placeholder="placeholder"
+        placeholder=""
         autocomplete="off"
         spellcheck="false"
         @focus=";((focused = true), emits('focus'))"
@@ -14,6 +14,13 @@
         @keyup.enter="go(focusIndex)"
         @keyup.up="onUp"
         @keyup.down="onDown"
+      />
+      <PlaceholderText
+        v-if="placeholder"
+        class="search-placeholder"
+        :text="placeholder"
+        :dissolved="focused || !!query"
+        :hidden="!!query"
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -58,6 +65,7 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import PlaceholderText from '@vuesax-alpha/components/base/src/placeholder-text.vue'
 import { useRouteLocale } from '@vuepress/client'
 // @ts-ignore
 import { useThemeData } from '@vuepress/plugin-theme-data/client'
@@ -252,7 +260,7 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
     position: relative;
-    svg {
+    > svg {
       position: absolute;
       right: 10px;
       width: 20px;
@@ -260,6 +268,14 @@ onBeforeUnmount(() => {
       transition: all 0.2s ease;
       fill: -color('theme-color');
     }
+  }
+  .search-placeholder {
+    position: absolute;
+    left: 20px;
+    width: calc(100% - 50px);
+    font-size: 0.85rem;
+    line-height: 2rem;
+    color: -color('theme-color');
   }
   input {
     cursor: text;
@@ -286,7 +302,7 @@ onBeforeUnmount(() => {
       color: -color('theme-color');
     }
     &:focus {
-      width: 25rem;
+      width: 15rem;
       cursor: auto;
       & ~ svg {
         transform: scale(1.15);

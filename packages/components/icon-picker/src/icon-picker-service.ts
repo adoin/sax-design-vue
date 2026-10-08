@@ -1,4 +1,4 @@
-import { createVNode, render } from 'vue'
+import { createVNode, nextTick, render } from 'vue'
 import { SConfigProvider } from '@vuesax-alpha/components/config-provider'
 import { isClient } from '@vuesax-alpha/utils'
 import IconPickerConstructor from './icon-picker.vue'
@@ -64,7 +64,9 @@ const iconPicker = ((options: IconPickerOptions = {}) => {
                   : selection.svg
             },
             onCancel: () => (result = undefined),
-            onClosed: finish,
+            // Let the dialog's leave transition finish removing its nodes
+            // before unmounting the complete programmatic application.
+            onClosed: () => nextTick(finish),
           }),
       },
     )

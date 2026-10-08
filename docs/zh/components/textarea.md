@@ -50,7 +50,7 @@ PROPS:
   - name: placeholder
     type: String
     values: '占位文字'
-    description: 设置原生 textarea 的占位文字。
+    description: 空字段提示；聚焦时消散，空值失焦后聚合，支持换行和自动折行。
     default: null
     usage: '#default'
   - name: name
@@ -176,6 +176,30 @@ NEWS:
 ---
 
 # Textarea 多行输入框
+
+<card>
+
+## 占位提示动画
+
+普通 `placeholder` 在稳定态保持清晰，聚焦时粒子消散，空值失焦后重新聚合。多行提示保留换行；输入内容后立即隐藏提示。动画遵循系统的减少动态效果设置，标签独立显示。
+
+<template #example>
+<textarea-zh-placeholder />
+</template>
+
+<template #template>
+
+@[code{7-14}](../../.vuepress/components/textarea-zh/placeholder.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-5}](../../.vuepress/components/textarea-zh/placeholder.vue)
+
+</template>
+
+</card>
 
 <card>
 

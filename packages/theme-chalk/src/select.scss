@@ -47,12 +47,15 @@ $clearableSafeArea: 64px;
 
 .v-clearable {
   &-enter-active {
-    transition: opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-out);
+    transition: opacity var(--sax-motion-duration-fast)
+      var(--sax-motion-easing-out);
   }
   &-leave-active {
-    transition: opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-out);
+    transition: opacity var(--sax-motion-duration-fast)
+      var(--sax-motion-easing-out);
   }
-  &-enter-from, &-leave-to {
+  &-enter-from,
+  &-leave-to {
     opacity: 0;
   }
 }
@@ -446,7 +449,8 @@ $clearableSafeArea: 64px;
     line-height: 1.4;
     white-space: normal;
     overflow-wrap: anywhere;
-    transition: color var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+    transition: color var(--sax-motion-duration-fast)
+      var(--sax-motion-easing-standard);
   }
   @include e(option-mark) {
     flex: none;
@@ -595,13 +599,13 @@ $clearableSafeArea: 64px;
     top: 50%;
     transform: translateY(-50%);
     font-size: getCssVar(select-placeholder-font-size);
-    transition: getCssVar(transition-ease);
+    transition: none;
     cursor: default;
     user-select: none;
     pointer-events: none;
     opacity: 1;
     width: auto;
-    overflow: hidden;
+    overflow: visible;
     text-overflow: ellipsis;
     white-space: nowrap;
     z-index: 10;

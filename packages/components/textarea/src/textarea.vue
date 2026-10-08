@@ -29,7 +29,10 @@
       :class="ns.e('inner')"
       :readonly="readonly || !editable"
       :disabled="inactive"
-      :placeholder="placeholder"
+      placeholder=""
+      :aria-label="
+        ($attrs['aria-label'] as string | undefined) || label || placeholder
+      "
       :name="name"
       :form="form"
       :maxlength="resolvedMaxLength"
@@ -45,6 +48,15 @@
       @keydown="(event) => emit('keydown', event)"
       @keyup="(event) => emit('keyup', event)"
       @click="(event) => emit('click', event)"
+    />
+
+    <PlaceholderText
+      v-if="placeholder"
+      :class="ns.e('placeholder')"
+      :text="placeholder"
+      :dissolved="isFocus || !!pendingValue"
+      :hidden="!!pendingValue"
+      multiline
     />
 
     <IconControlLoading v-if="loading" :class="ns.e('loading')" />
@@ -73,6 +85,7 @@ import {
   useSize,
 } from '@vuesax-alpha/hooks'
 import { IconControlLoading } from '@vuesax-alpha/components/icon'
+import PlaceholderText from '@vuesax-alpha/components/base/src/placeholder-text.vue'
 import { getCssColor } from '@vuesax-alpha/utils'
 import { textareaEmits, textareaProps } from './textarea'
 import type { CSSProperties } from 'vue'

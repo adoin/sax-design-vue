@@ -376,10 +376,9 @@ describe('Select enhanced capabilities', () => {
     expect(wrapper.find('.s-select__selection-text').exists()).toBe(false)
     expect(
       wrapper.get('.s-select__input-filter').attributes('placeholder'),
-    ).toBe('Filter members')
-    expect(wrapper.get('.s-select__input').attributes('placeholder')).toBe(
-      undefined,
-    )
+    ).toBe('')
+    expect(wrapper.get('.s-select__placeholder').text()).toBe('Filter members')
+    expect(wrapper.get('.s-select__input').attributes('placeholder')).toBe('')
   })
 
   it('keeps the placeholder visible for an empty filterable multiple select', async () => {
@@ -393,7 +392,8 @@ describe('Select enhanced capabilities', () => {
     await nextTick()
 
     const filterInput = wrapper.get('.s-select__input-filter')
-    expect(filterInput.attributes('placeholder')).toBe('Choose members')
+    expect(filterInput.attributes('placeholder')).toBe('')
+    expect(wrapper.get('.s-select__placeholder').text()).toBe('Choose members')
     expect(filterInput.classes()).not.toContain('is-idle')
   })
 

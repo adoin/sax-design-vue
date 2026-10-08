@@ -98,6 +98,17 @@
     user-select: none;
   }
 
+  @include e(placeholder) {
+    position: absolute;
+    top: var(--sax-textarea-padding);
+    bottom: var(--sax-textarea-padding);
+    left: var(--sax-textarea-padding);
+    width: calc(100% - var(--sax-textarea-padding) * 2);
+    font-size: var(--sax-textarea-font-size);
+    line-height: 1.5;
+    color: getColor(text-color-placeholder);
+  }
+
   @include when(focus) {
     background: getColor('background');
     @include control-surface-shadow(focus);
@@ -152,6 +163,9 @@
     }
     @include e(label) {
       max-width: calc(100% - 52px);
+    }
+    @include e(placeholder) {
+      width: calc(100% - var(--sax-textarea-padding) * 2 - 28px);
     }
   }
 

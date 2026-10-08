@@ -50,7 +50,7 @@ PROPS:
   - name: placeholder
     type: String
     values: 'placeholder text'
-    description: Set the native textarea placeholder.
+    description: Empty-field hint; dissolves on focus and reassembles after blur. Supports line breaks and wrapping.
     default: null
     usage: '#default'
   - name: name
@@ -176,6 +176,30 @@ NEWS:
 ---
 
 # Textarea
+
+<card>
+
+## Placeholder animation
+
+The `placeholder` of an empty field stays readable at rest, dissolves on focus, and reassembles when an empty field loses focus. Multiline hints retain their line breaks. Entered text hides the hint immediately. The animation follows the system's reduced-motion preference; the label remains separate.
+
+<template #example>
+<textarea-placeholder />
+</template>
+
+<template #template>
+
+@[code{8-15}](../.vuepress/components/textarea/placeholder.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/textarea/placeholder.vue)
+
+</template>
+
+</card>
 
 <card>
 
