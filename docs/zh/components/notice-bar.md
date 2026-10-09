@@ -85,6 +85,10 @@ PROPS:
     description: "显示独立的关闭按钮。"
     default: false
     usage: "#controlled-visibility"
+  - name: "before-close"
+    type: "() => Promise<void>"
+    description: "关闭按钮、插槽 close() 和实例 close() 的异步许可。resolve 后关闭；reject、抛错或未返回 Promise 则保留公告并触发 close-error。等待时合并重复请求并暂停轮播。"
+    usage: "#before-close"
   - name: "scrollable"
     type: "Boolean"
     values: "true | false"
@@ -254,7 +258,11 @@ EVENTS:
     description: "公告栏或内容区被点击；内置控件和操作区不会冒泡触发。"
     type: "MouseEvent"
   - name: "close"
-    description: "申请关闭时触发。"
+    description: "关闭获准后触发；等待许可或拒绝关闭时不触发。"
+  - name: "close-error"
+    type: "(reason: unknown) => void"
+    description: "关闭许可被拒绝、抛错或未返回 Promise 时触发，携带原始原因。"
+    usage: "#before-close"
   - name: "closed"
     description: "退出动画结束时触发。"
   - name: "scroll-end"
@@ -264,8 +272,13 @@ EXPOSES:
     type: "() => void"
     description: "申请显示。"
   - name: "close"
-    type: "() => void"
-    description: "申请关闭。"
+    type: "() => Promise<boolean>"
+    description: "申请关闭并等待许可；获准返回 true，拒绝或取消返回 false。退出动画完成由 closed 表示。"
+    usage: "#before-close"
+  - name: "closePending"
+    type: "Boolean"
+    description: "正在等待关闭许可；所有插槽作用域也提供此状态。"
+    usage: "#before-close"
   - name: "next"
     type: "() => void"
     description: "切换下一条，遵循 loop 配置。"
@@ -569,6 +582,36 @@ wrapable 完整展示换行后的公告；scrollable=false 保留静止单行，
 <template #style>
 
 @[code{22-39}](../../.vuepress/components/notice-bar-zh/visibility.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 关闭前选择
+
+通过 `before-close` 等待用户选择、保存偏好或完成其他异步操作。Promise resolve 后允许关闭，reject 则保留公告。示例使用 Dialog 选择本次关闭或永久关闭，并由应用将偏好保存到 localStorage；重置按钮可清除此示例保存的偏好。
+
+内置按钮、插槽 `close()` 和实例 `close()` 都会调用钩子，直接修改 `v-model` 仍由调用方控制显示状态。等待期间暂停自动运动并禁用重复按钮请求；实例及插槽作用域提供 `closePending`。需要展示拒绝原因时可监听 `close-error`。
+
+<template #example><notice-bar-zh-before-close /></template>
+
+<template #template>
+
+@[code{66-116}](../../.vuepress/components/notice-bar-zh/before-close.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-64}](../../.vuepress/components/notice-bar-zh/before-close.vue)
+
+</template>
+
+<template #style>
+
+@[code{118-136}](../../.vuepress/components/notice-bar-zh/before-close.vue)
 
 </template>
 

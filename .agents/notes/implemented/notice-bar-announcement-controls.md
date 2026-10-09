@@ -11,7 +11,7 @@ Status: implemented
 - Clone only rendered DOM for the decorative marquee copy. Do not mount scoped Vue slot content twice. Copies are inert, hidden from assistive technology, have remapped SVG identifiers and do not join native forms.
 - Timer, animation measurement, observers and document listeners are cleaned up with component lifetime.
 - Counter alignment trims font metric whitespace when supported, with an optical fallback; navigation and content use centered flex layout.
-- All ten examples are localized in English and Chinese, with complete synchronized Code and Playground sources and canonical English hashes.
+- All examples are localized in English and Chinese, with complete synchronized Code and Playground sources and canonical English hashes.
 
 ## Verification
 

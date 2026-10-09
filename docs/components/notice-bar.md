@@ -85,6 +85,10 @@ PROPS:
     description: "Display an independent close control."
     default: false
     usage: "#controlled-visibility"
+  - name: "before-close"
+    type: "() => Promise<void>"
+    description: "Async approval for the built-in close button, slot close() and instance close(). Fulfillment permits closing; rejection or throwing retains the notice and emits close-error. Pending requests merge and pause autoplay."
+    usage: "#before-close"
   - name: "scrollable"
     type: "Boolean"
     values: "true | false"
@@ -254,7 +258,11 @@ EVENTS:
     description: "Click on the bar/content; reserved controls and actions stop propagation."
     type: "MouseEvent"
   - name: "close"
-    description: "Close requested."
+    description: "An approved close request; not emitted while awaiting approval or after rejection."
+  - name: "close-error"
+    type: "(reason: unknown) => void"
+    description: "Close approval rejected, threw or returned a non-Promise; receives the original reason."
+    usage: "#before-close"
   - name: "closed"
     description: "Exit animation completed."
   - name: "scroll-end"
@@ -264,8 +272,13 @@ EXPOSES:
     type: "() => void"
     description: "Request visibility."
   - name: "close"
-    type: "() => void"
-    description: "Request closing."
+    type: "() => Promise<boolean>"
+    description: "Request guarded closing; resolves true after approval or false after rejection/cancellation. closed reports the completed exit animation."
+    usage: "#before-close"
+  - name: "closePending"
+    type: "Boolean"
+    description: "Close approval is pending; also available in every slot scope."
+    usage: "#before-close"
   - name: "next"
     type: "() => void"
     description: "Next notice, respecting loop."
@@ -539,6 +552,36 @@ Use v-model to show a previously closed notice again. close reports the close re
 <template #style>
 
 @[code{19-36}](../.vuepress/components/notice-bar/visibility.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Before close
+
+Use `before-close` to wait for a choice, save a preference or complete other asynchronous work before closing. Resolve the Promise to approve; reject to keep the notice visible. The example uses Dialog to choose temporary or permanent dismissal, with the application saving the preference in localStorage. Reset clears this example's saved preference.
+
+The built-in button, slot `close()` and instance `close()` use the hook. Direct changes to `v-model` remain controlled by the owner. Waiting pauses automatic motion and disables duplicate button requests; `closePending` is available on the instance and in slot scopes. Handle `close-error` when rejected reasons need feedback.
+
+<template #example><notice-bar-before-close /></template>
+
+<template #template>
+
+@[code{66-110}](../.vuepress/components/notice-bar/before-close.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-64}](../.vuepress/components/notice-bar/before-close.vue)
+
+</template>
+
+<template #style>
+
+@[code{112-130}](../.vuepress/components/notice-bar/before-close.vue)
 
 </template>
 

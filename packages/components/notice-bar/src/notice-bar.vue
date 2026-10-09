@@ -42,10 +42,12 @@ const track = useTemplateRef<HTMLElement>('track')
 const hovering = shallowRef(false)
 const focused = shallowRef(false)
 const manualPause = shallowRef(false)
+const closePending = shallowRef(false)
 const playback = useNoticePlayback(
   root,
   () =>
     props.paused ||
+    closePending.value ||
     manualPause.value ||
     (props.pauseOnHover && hovering.value) ||
     (props.pauseOnFocus && focused.value),
@@ -53,7 +55,7 @@ const playback = useNoticePlayback(
 )
 const { paused, reducedMotion } = playback
 const readingTime = shallowRef(0)
-const state = useNoticeState(props, emit, paused, readingTime)
+const state = useNoticeState(props, emit, paused, readingTime, closePending)
 const { visible, index, notices, item, next, prev, close, open, goTo } = state
 const clearGestures = () => {
   hovering.value = false
@@ -116,6 +118,7 @@ const scope = computed<NoticeBarSlotScope>(() => ({
   count: notices.value.length,
   paused: paused.value,
   scrolling: scrolling.value,
+  closePending: closePending.value,
   close,
   next,
   prev,
@@ -149,6 +152,7 @@ defineExpose({
   activeIndex: index,
   paused,
   scrolling,
+  closePending,
 })
 </script>
 
@@ -180,6 +184,7 @@ defineExpose({
             : 'polite')
       "
       aria-atomic="true"
+      :aria-busy="closePending || undefined"
       @click="emit('click', $event)"
       @mouseenter="hovering = true"
       @mouseleave="hovering = false"
@@ -300,6 +305,8 @@ defineExpose({
         type="button"
         :class="[ns.e('control'), ns.e('close')]"
         :aria-label="t('vs.noticeBar.close')"
+        :disabled="closePending"
+        :aria-busy="closePending || undefined"
         @click.stop="close"
       >
         <slot name="close-icon" v-bind="scope"

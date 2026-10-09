@@ -13,6 +13,7 @@ export const noticeBarTypes = [
   'danger',
 ] as const
 export type NoticeBarType = (typeof noticeBarTypes)[number]
+export type NoticeBarBeforeCloseFn = () => Promise<void>
 export interface NoticeBarItem {
   id?: string | number
   content: string
@@ -28,7 +29,8 @@ export interface NoticeBarSlotScope {
   count: number
   paused: boolean
   scrolling: boolean
-  close: () => void
+  closePending: boolean
+  close: () => Promise<boolean>
   next: () => void
   prev: () => void
 }
@@ -48,6 +50,9 @@ export const noticeBarProps = buildProps({
   },
   scrollable: { type: Boolean, default: true },
   closable: Boolean,
+  beforeClose: {
+    type: definePropType<NoticeBarBeforeCloseFn>(Function),
+  },
   duration: { type: Number, default: 12 },
   speed: Number,
   delay: { type: Number, default: 1000 },
@@ -91,6 +96,7 @@ export const noticeBarProps = buildProps({
 
 export const noticeBarEmits = {
   close: () => true,
+  closeError: (...args: [unknown]) => args.length === 1,
   click: (event: MouseEvent) => event instanceof MouseEvent,
   'update:modelValue': (value: boolean) => typeof value === 'boolean',
   'update:activeIndex': (value: number) => Number.isInteger(value),

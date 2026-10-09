@@ -18,6 +18,7 @@ export const useNoticeState = (
   emit: NoticeBarEmitFn,
   paused: Readonly<Ref<boolean>>,
   readingTime: Readonly<Ref<number>>,
+  closePending: Ref<boolean>,
 ) => {
   const localVisible = shallowRef(true)
   const localIndex = shallowRef(0)
@@ -53,13 +54,56 @@ export const useNoticeState = (
     )
   const next = () => step(1)
   const prev = () => step(-1)
-  const close = () => {
-    if (!visible.value) return
+  let closeVersion = 0
+  let closeTask: Promise<boolean> | undefined
+  let disposed = false
+  const invalidateClose = () => {
+    closeVersion++
+    closeTask = undefined
+    closePending.value = false
+  }
+  const commitClose = () => {
     if (props.modelValue === undefined) localVisible.value = false
     emit('update:modelValue', false)
     emit('close')
   }
+  const close = (): Promise<boolean> => {
+    if (disposed || !visible.value || suspended.value)
+      return Promise.resolve(false)
+    if (closeTask) return closeTask
+    const guard = props.beforeClose
+    if (!guard) {
+      commitClose()
+      return Promise.resolve(true)
+    }
+    const version = ++closeVersion
+    closePending.value = true
+    // Publish the shared task before running consumer code, including reentry.
+    closeTask = Promise.resolve().then(async () => {
+      try {
+        if (disposed || version !== closeVersion || !visible.value) return false
+        const approval = guard()
+        if (!approval || typeof approval.then !== 'function')
+          throw new TypeError('NoticeBar beforeClose must return a Promise')
+        await approval
+        if (disposed || version !== closeVersion || !visible.value) return false
+        commitClose()
+        return true
+      } catch (reason) {
+        if (!disposed && version === closeVersion && visible.value)
+          emit('closeError', reason)
+        return false
+      } finally {
+        if (version === closeVersion) {
+          closeTask = undefined
+          closePending.value = false
+        }
+      }
+    })
+    return closeTask
+  }
   const open = () => {
+    invalidateClose()
     if (props.modelValue === undefined) localVisible.value = true
     emit('update:modelValue', true)
   }
@@ -103,6 +147,9 @@ export const useNoticeState = (
     { immediate: true },
   )
   watch(index, (value) => emit('change', value, item.value))
+  watch(visible, (shown) => {
+    if (!shown) invalidateClose()
+  })
   watch(
     () => props.items,
     () => {
@@ -113,12 +160,17 @@ export const useNoticeState = (
     { deep: true },
   )
   onDeactivated(() => {
+    invalidateClose()
     suspended.value = true
   })
   onActivated(() => {
     suspended.value = false
   })
-  onBeforeUnmount(stopTimer)
+  onBeforeUnmount(() => {
+    disposed = true
+    invalidateClose()
+    stopTimer()
+  })
   return {
     notices,
     visible,
