@@ -10,8 +10,8 @@
     :fit="false"
     :hide-after="hideAfter"
     :show-after="showAfter"
-    :loading="loading"
-    :disabled="disabled || loading"
+    :loading="loadingVisible"
+    :disabled="disabled || loadingVisible"
     :on-blur="onBlur"
     :on-focus="onFocus"
     :on-click="onClick"
@@ -36,7 +36,7 @@
       v-click-outside:[popperPaneRef]="handleClose"
       :class="selectKls"
       :style="selectStyle"
-      :aria-busy="loading || undefined"
+      :aria-busy="loadingVisible || undefined"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
       @click="toggleMenu"
@@ -201,9 +201,15 @@
         :hidden="placeholderOccupied || (labelFloat && !dropMenuVisible)"
       />
 
-      <icon-control-loading v-if="loading" :class="ns.e('loading')" />
+      <icon-control-loading
+        v-if="loadingVisible"
+        :class="ns.e('loading')"
+        :active="loading"
+        :shape="resolvedShape"
+        @restored="finishLoading"
+      />
 
-      <span v-if="!loading" :class="ns.e('arrow')" aria-hidden="true">
+      <span v-if="!loadingVisible" :class="ns.e('arrow')" aria-hidden="true">
         <s-icon name="cb:chevron-down" size="14" />
       </span>
 
@@ -258,7 +264,7 @@
 
       <s-scrollbar
         v-if="!virtualEnabled"
-        v-show="states.options.size > 0 && !loading"
+        v-show="states.options.size > 0 && !loadingVisible"
         :max-height="popupConfig.maxHeight ?? popupConfig.height ?? 200"
         thickness="3"
         :wrap-class="[
@@ -338,7 +344,7 @@
       </s-scrollbar>
 
       <div
-        v-else-if="states.options.size > 0 && !loading"
+        v-else-if="states.options.size > 0 && !loadingVisible"
         :class="[
           ns.e('options'),
           ns.is('empty', virtualVisibleOptions.length === 0),
@@ -403,7 +409,7 @@
         v-if="
           emptyText &&
           (!allowCreate ||
-            loading ||
+            loadingVisible ||
             (allowCreate && states.options.size === 0))
         "
       >
@@ -450,6 +456,7 @@ import SPopper from '@vuesax-alpha/components/popper'
 import PlaceholderText from '@vuesax-alpha/components/base/src/placeholder-text.vue'
 import {
   useColor,
+  useControlLoading,
   useLocale,
   useNamespace,
   useShape,
@@ -480,6 +487,7 @@ defineOptions({
 const messageTypes = ['success', 'warn', 'danger', 'primary', 'dark']
 
 const props = defineProps(selectProps)
+const { loadingVisible, finishLoading } = useControlLoading(() => props.loading)
 const resolvedLabel = computed(
   () => props.label || (props.labelFloat ? props.placeholder : ''),
 )
@@ -835,7 +843,7 @@ const {
   optionsArray,
   cachedOptionsArray,
   selectedArray,
-} = useSelect(props, states, emit)
+} = useSelect(props, states, emit, loadingVisible)
 
 // The template compiler binds this named template ref at runtime.
 // eslint-disable-next-line no-void
@@ -1184,7 +1192,7 @@ const selectKls = computed(() => [
   ns.is('disabled', props.disabled),
   ns.is('clearable', props.clearable),
   ns.is('multiple', props.multiple),
-  ns.is('loading', props.loading),
+  ns.is('loading', loadingVisible.value),
   ns.is(resolvedShape.value),
   ns.is(popperRef.value?.popperPlacement ?? 'bottom'),
   { [ns.m('has-label')]: props.label || props.labelFloat },

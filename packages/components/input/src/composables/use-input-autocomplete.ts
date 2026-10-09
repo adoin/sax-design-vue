@@ -12,6 +12,7 @@ export const useInputAutocomplete = (
   context: {
     model: Ref<InputValue>
     focused: Ref<boolean>
+    loading?: Ref<boolean>
     composing: Ref<boolean>
     inputRef: Ref<HTMLInputElement | undefined>
     commitModelValue: (value?: InputValue) => void
@@ -32,7 +33,7 @@ export const useInputAutocomplete = (
     () =>
       enabled.value &&
       !props.disabled &&
-      !props.loading &&
+      !(context.loading?.value ?? props.loading) &&
       !props.readonly &&
       props.editable &&
       props.type !== 'password' &&

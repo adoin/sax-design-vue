@@ -39,7 +39,7 @@ describe('Picker placeholder interaction', () => {
     original.focus()
     wrapper.getComponent(PopperStub).vm.$emit('update:visible', true)
     await nextTick()
-    wrapper.get('.s-time-panel__input-field').element.focus()
+    wrapper.get<HTMLInputElement>('.s-time-panel__input-field').element.focus()
     await nextTick()
     await wrapper.get('.s-time-panel__input-field').setValue('01')
     expect(wrapper.emitted('blur')).toHaveLength(1)

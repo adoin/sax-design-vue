@@ -9,7 +9,7 @@
     :flip="{ padding: 12 }"
     :shift="{ padding: 12 }"
     :show-arrow="false"
-    :disabled="disabled || loading"
+    :disabled="disabled || loadingVisible"
     :offset="8"
     :teleported="props.popupConfig?.transfer ?? true"
     :z-index="props.popupConfig?.zIndex"
@@ -65,7 +65,9 @@
           @focus="(e) => $emit('focus', e)"
           @blur="(e) => $emit('blur', e)"
           ><template #suffix
-            ><DatePickerAction v-if="!loading" :clear="false" /></template
+            ><DatePickerAction
+              v-if="!loadingVisible"
+              :clear="false" /></template
         ></s-input>
         <span :class="ns.e('range-separator')" aria-hidden="true">
           {{ rangeSeparator }}
@@ -92,7 +94,7 @@
           @blur="(e) => $emit('blur', e)"
           ><template #suffix
             ><DatePickerAction
-              v-if="!loading"
+              v-if="!loadingVisible"
               :clear="canClear && (triggerHovered || triggerFocused)"
               @clear="handleClear" /></template
         ></s-input>
@@ -125,14 +127,14 @@
             :labels="
               innerDates.map((date) => formatDisplay(date, displayFormat))
             "
-            :disabled="disabled || loading || readonly"
+            :disabled="disabled || loadingVisible || readonly"
             :shape="resolvedShape"
             @remove="removeDateTag"
           />
         </template>
         <template #suffix
           ><DatePickerAction
-            v-if="!loading"
+            v-if="!loadingVisible"
             :clear="canClear && (triggerHovered || triggerFocused)"
             @clear="handleClear"
         /></template>
@@ -403,9 +405,11 @@ import SButton from '@vuesax-alpha/components/button'
 import SIcon from '@vuesax-alpha/components/icon'
 import SInput from '@vuesax-alpha/components/input'
 import SPopper from '@vuesax-alpha/components/popper'
+import { provideLoadingCompletion } from '@vuesax-alpha/hooks/use-loading-completion'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { inputInteractionContextKey } from '@vuesax-alpha/tokens'
 import {
+  useControlLoading,
   useGlobalConfig,
   useLocale,
   useNamespace,
@@ -442,6 +446,11 @@ import type { InputInstance } from '@vuesax-alpha/components/input'
 defineOptions({ name: 'SDatePicker' })
 
 const props = defineProps(datePickerProps)
+const waitForLoading = provideLoadingCompletion()
+const { loadingVisible } = useControlLoading(
+  () => props.loading,
+  waitForLoading,
+)
 const triggerHovered = ref(false)
 const triggerFocused = ref(false)
 const emit = defineEmits(datePickerEmits)
@@ -498,7 +507,7 @@ provide(inputInteractionContextKey, {
   triggerRef,
 })
 watch(
-  () => props.loading,
+  () => loadingVisible.value,
   (loading) => {
     if (loading) {
       visible.value = false
@@ -743,12 +752,12 @@ const canClear = computed(
   () =>
     props.clearable &&
     !props.disabled &&
-    !props.loading &&
+    !loadingVisible.value &&
     !props.readonly &&
     Boolean(innerDate.value || innerEndDate.value || innerDates.value.length),
 )
 const removeDateTag = (index: number) => {
-  if (props.disabled || props.loading || props.readonly) return
+  if (props.disabled || loadingVisible.value || props.readonly) return
   innerDates.value.splice(index, 1)
   innerDate.value = innerDates.value[0] ?? null
   emitValue(buildMultipleOutput())
@@ -790,7 +799,7 @@ const rangeStartTimeText = computed(() => innerTime.value.format('HH:mm:ss'))
 const rangeEndTimeText = computed(() => innerEndTime.value.format('HH:mm:ss'))
 
 const emitValue = (value: DatePickerValue) => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   emit(UPDATE_MODEL_EVENT, value)
   emit('change', value)
 }
@@ -851,7 +860,7 @@ const isSamePickedValue = (left: dayjs.Dayjs, right: dayjs.Dayjs) => {
 }
 
 const handlePick = (date: dayjs.Dayjs) => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   let picked = date
 
   if (showTimePanel.value) {
@@ -1033,7 +1042,7 @@ const handleNow = () => {
 }
 
 const handleClear = () => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   innerDate.value = null
   innerEndDate.value = null
   innerDates.value = []

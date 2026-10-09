@@ -8,13 +8,13 @@
       {
         [ns.is('focus')]: isFocus,
         [ns.is('disabled')]: disabled,
-        [ns.is('loading')]: loading,
+        [ns.is('loading')]: loadingVisible,
         [ns.is('danger')]: isDanger,
         [ns.is('label-active')]: isLabelActive,
       },
     ]"
     :style="wrapperStyle"
-    :aria-busy="loading"
+    :aria-busy="loadingVisible"
   >
     <label v-if="label" :class="ns.e('label')" :for="textareaId">
       {{ label }}
@@ -59,7 +59,13 @@
       multiline
     />
 
-    <IconControlLoading v-if="loading" :class="ns.e('loading')" />
+    <IconControlLoading
+      v-if="loadingVisible"
+      :class="ns.e('loading')"
+      :active="loading"
+      :shape="shape"
+      @restored="finishLoading"
+    />
 
     <div v-if="showCount" :class="ns.e('count')">
       {{ wordCount }}<template v-if="countLimit"> / {{ countLimit }}</template>
@@ -79,6 +85,7 @@ import {
 } from 'vue'
 import {
   useColor,
+  useControlLoading,
   useId,
   useNamespace,
   useShape,
@@ -96,6 +103,7 @@ defineOptions({
 })
 
 const props = defineProps(textareaProps)
+const { loadingVisible, finishLoading } = useControlLoading(() => props.loading)
 const emit = defineEmits(textareaEmits)
 
 const ns = useNamespace('textarea')
@@ -109,7 +117,7 @@ const isFocus = shallowRef(false)
 const textareaRef = useTemplateRef<HTMLTextAreaElement>('textareaRef')
 const pendingValue = shallowRef(props.modelValue || '')
 const composing = shallowRef(false)
-const inactive = computed(() => props.disabled || props.loading)
+const inactive = computed(() => props.disabled || loadingVisible.value)
 const cannotEdit = computed(
   () => inactive.value || props.readonly || !props.editable,
 )
@@ -185,7 +193,7 @@ const resizeTextarea = () => {
 }
 
 watch(
-  () => [props.modelValue, autoSizeConfig.value, props.loading],
+  () => [props.modelValue, autoSizeConfig.value, loadingVisible.value],
   () => nextTick(resizeTextarea),
   { deep: true },
 )

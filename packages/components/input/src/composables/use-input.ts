@@ -4,8 +4,14 @@ import { inputTypes } from '../input'
 import { useInputEvent } from './use-input-event'
 import { useInputClearable } from './use-input-clearable'
 import type { InputEmitsFn, InputProps, InputValue } from '../input'
+import type { Ref } from 'vue'
 
-export const useInput = (props: InputProps, emit: InputEmitsFn) => {
+export const useInput = (
+  props: InputProps,
+  emit: InputEmitsFn,
+  loading?: Ref<boolean>,
+) => {
+  const interactionLoading = computed(() => loading?.value ?? props.loading)
   const localValue = shallowRef<InputValue>(props.modelValue)
   const committedValue = shallowRef<InputValue>(props.modelValue)
   const composing = shallowRef(false)
@@ -118,7 +124,7 @@ export const useInput = (props: InputProps, emit: InputEmitsFn) => {
   const model = computed({
     get: () => localValue.value,
     set: (value: string | number | null | undefined) => {
-      if (props.disabled || props.loading) return
+      if (props.disabled || interactionLoading.value) return
       const nextValue = normalizeValue(value)
       if (Object.is(localValue.value, nextValue)) return
 
@@ -131,7 +137,7 @@ export const useInput = (props: InputProps, emit: InputEmitsFn) => {
   })
 
   const commitModelValue = (value: InputValue = localValue.value) => {
-    if (props.disabled || props.loading) return
+    if (props.disabled || interactionLoading.value) return
     const nextValue = normalizeValue(value)
     localValue.value = nextValue
     if (Object.is(committedValue.value, nextValue)) return
@@ -190,7 +196,7 @@ export const useInput = (props: InputProps, emit: InputEmitsFn) => {
   })
 
   const clear = () => {
-    if (props.disabled || props.loading) return
+    if (props.disabled || interactionLoading.value) return
     localValue.value = ''
     commitModelValue('')
     emit('change', '')
@@ -224,11 +230,11 @@ export const useInput = (props: InputProps, emit: InputEmitsFn) => {
     () =>
       (props.showPassword || (props.type === 'password' && props.controls)) &&
       !props.disabled &&
-      !props.loading &&
+      !interactionLoading.value &&
       Boolean(String(localValue.value)),
   )
   const handleShowPassword = () => {
-    if (props.disabled || props.loading) return
+    if (props.disabled || interactionLoading.value) return
     isVisiblePassword.value = !isVisiblePassword.value
     emit('toggle-visible', isVisiblePassword.value)
   }

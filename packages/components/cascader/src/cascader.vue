@@ -8,7 +8,7 @@
     :append-to="popupConfig.appendTo"
     :offset="popupConfig.offset ?? 6"
     :fit="popupMatchesTrigger"
-    :disabled="disabled || loading"
+    :disabled="disabled || loadingVisible"
     :popper-class="popperClass"
     :popper-style="[popupStyle, dropdownStyle, popupConfig.style]"
     :z-index="popupConfig.zIndex"
@@ -22,7 +22,7 @@
         ns.b(),
         ns.m(resolvedSize || 'default'),
         ns.is('disabled', disabled),
-        ns.is('loading', loading),
+        ns.is('loading', loadingVisible),
         ns.is('open', mergedOpen),
         ns.is('multiple', multiple),
         ns.is('block', block),
@@ -30,10 +30,10 @@
         ns.is(resolvedShape),
       ]"
       role="combobox"
-      :tabindex="disabled || loading || showSearchEnabled ? -1 : 0"
+      :tabindex="disabled || loadingVisible || showSearchEnabled ? -1 : 0"
       :aria-label="label || resolvedPlaceholder"
-      :aria-disabled="disabled || loading"
-      :aria-busy="loading || undefined"
+      :aria-disabled="disabled || loadingVisible"
+      :aria-busy="loadingVisible || undefined"
       :aria-expanded="mergedOpen"
       aria-haspopup="listbox"
       @keydown="handleTriggerKeydown"
@@ -60,7 +60,7 @@
                 type="button"
                 :class="ns.e('tag-remove')"
                 :aria-label="t('vs.common.close')"
-                :disabled="disabled || loading"
+                :disabled="disabled || loadingVisible"
                 @click.stop="removeTag(item.node)"
               >
                 <IconClose :scale="0.8" size="12" />
@@ -100,7 +100,7 @@
           :class="ns.e('search-input')"
           type="text"
           autocomplete="off"
-          :disabled="disabled || loading"
+          :disabled="disabled || loadingVisible"
           placeholder=""
           :aria-label="label || resolvedPlaceholder"
           @input="handleSearchInput"
@@ -114,7 +114,8 @@
           :text="resolvedPlaceholder"
           :dissolved="
             !showPlaceholder ||
-            (!(disabled || loading) && (placeholderFocused || mergedOpen))
+            (!(disabled || loadingVisible) &&
+              (placeholderFocused || mergedOpen))
           "
           :hidden="!showPlaceholder"
         />
@@ -138,7 +139,13 @@
         <slot name="clear-icon"><IconClose :size="14" /></slot>
       </button>
       <span v-else :class="ns.e('suffix')" aria-hidden="true">
-        <IconControlLoading v-if="loading" :class="ns.e('loading')" />
+        <IconControlLoading
+          v-if="loadingVisible"
+          :class="ns.e('loading')"
+          :active="loading"
+          :shape="resolvedShape"
+          @restored="finishLoading"
+        />
         <slot v-else name="suffix-icon">
           <SIcon
             :class="ns.is('rotated', mergedOpen)"
@@ -216,7 +223,13 @@ import {
 import { useResizeObserver } from '@vueuse/core'
 import SPopper from '@vuesax-alpha/components/popper'
 import PlaceholderText from '@vuesax-alpha/components/base/src/placeholder-text.vue'
-import { useLocale, useNamespace, useShape, useSize } from '@vuesax-alpha/hooks'
+import {
+  useControlLoading,
+  useLocale,
+  useNamespace,
+  useShape,
+  useSize,
+} from '@vuesax-alpha/hooks'
 import CascaderPanel from './cascader-panel.vue'
 import { SHOW_PARENT, cascaderEmits, cascaderProps } from './cascader'
 import {
@@ -241,6 +254,7 @@ import type { CSSProperties } from 'vue'
 defineOptions({ name: 'SCascader', inheritAttrs: false })
 
 const props = defineProps(cascaderProps)
+const { loadingVisible, finishLoading } = useControlLoading(() => props.loading)
 const emit = defineEmits(cascaderEmits)
 const ns = useNamespace('cascader')
 const resolvedShape = useShape()
@@ -276,7 +290,7 @@ const searchConfig = computed(() =>
 )
 const searchText = computed(() => props.searchValue ?? internalSearch.value)
 const mergedOpen = computed(
-  () => !props.loading && (props.open ?? internalOpen.value),
+  () => !loadingVisible.value && (props.open ?? internalOpen.value),
 )
 const popupConfig = computed(() => props.popupConfig)
 const popperClass = computed(() =>
@@ -478,7 +492,7 @@ const showPlaceholder = computed(
 const showClear = computed(
   () =>
     !props.disabled &&
-    !props.loading &&
+    !loadingVisible.value &&
     (props.allowClear || props.clearable) &&
     (selectedCount.value > 0 || Boolean(searchText.value)),
 )
@@ -526,7 +540,7 @@ const searchResults = computed(() => {
 })
 
 const setOpen = (value: boolean) => {
-  if (value && (props.disabled || props.loading)) return
+  if (value && (props.disabled || loadingVisible.value)) return
   if (props.open === undefined) internalOpen.value = value
   emit('update:open', value)
   emit('dropdownVisibleChange', value)
@@ -542,13 +556,13 @@ const setOpen = (value: boolean) => {
   }
 }
 watch(
-  () => props.loading,
+  () => loadingVisible.value,
   (loading) => {
     if (loading) setOpen(false)
   },
 )
 const setSearch = (value: string) => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   if (props.searchValue === undefined) internalSearch.value = value
   emit('update:searchValue', value)
   emit('search', value)
@@ -612,7 +626,7 @@ const commitMultipleLeaves = (leaves: CascaderNode[]) => {
   emit('change', value, selectedOptions)
 }
 const toggleMultipleNode = (node: CascaderNode) => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   const affected = selectableLeafNodes(node)
   if (!affected.length) return
   const selected = new Map(
@@ -629,7 +643,7 @@ const toggleMultipleNode = (node: CascaderNode) => {
   commitMultipleLeaves([...selected.values()])
 }
 const selectNode = (node: CascaderNode) => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   if (node.disabled) return
   if (props.multiple) {
     toggleMultipleNode(node)
@@ -642,7 +656,7 @@ const selectNode = (node: CascaderNode) => {
   commitSingle(node)
 }
 const removeTag = (node: CascaderNode) => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   const removeKeys = new Set(
     selectableLeafNodes(node).map((item) => pathKey(item.pathValues)),
   )
@@ -654,7 +668,7 @@ const removeTag = (node: CascaderNode) => {
   emit('removeTag', node.pathValues)
 }
 const clear = () => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   activePath.value = []
   setSearch('')
   const value: CascaderModelValue = []
@@ -664,7 +678,7 @@ const clear = () => {
 }
 
 const handleTriggerKeydown = (event: KeyboardEvent) => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   const searching =
     event.target instanceof HTMLInputElement &&
     Boolean(searchText.value) &&

@@ -28,6 +28,7 @@ import {
 import { useId, useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import type { PopperExpose } from '@vuesax-alpha/components/popper'
 import type { SelectEmitsFn, SelectProps } from './select'
+import type { Ref } from 'vue'
 
 import type {
   SelectOptionContext,
@@ -67,6 +68,7 @@ export const useSelect = (
   props: SelectProps,
   states: SelectStates,
   emit: SelectEmitsFn,
+  loading?: Ref<boolean>,
 ) => {
   const ns = useNamespace('select')
   const { t } = useLocale()
@@ -89,7 +91,9 @@ export const useSelect = (
     () => !filterable.value || props.multiple || !states.visible,
   )
 
-  const selectDisabled = computed(() => props.disabled || props.loading)
+  const selectDisabled = computed(
+    () => props.disabled || (loading?.value ?? props.loading),
+  )
   watch(
     selectDisabled,
     (disabled) => {
@@ -777,7 +781,7 @@ export const useSelect = (
   }
 
   const showClearable = computed(() => {
-    if (!props.clearable || props.disabled || props.loading) return false
+    if (!props.clearable || selectDisabled.value) return false
     if (optionsArray.value.length === 0) return false
 
     const ignoreDisabledOptions = optionsArray.value.filter(

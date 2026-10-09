@@ -1,6 +1,7 @@
 export * from './use-attrs'
 export * from './use-base-component'
 export * from './use-common-props'
+export * from './use-control-loading'
 export * from './use-cursor'
 export * from './use-delayed-toggle'
 export * from './use-deprecated'

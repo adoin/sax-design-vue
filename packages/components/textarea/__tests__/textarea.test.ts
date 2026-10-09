@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import Textarea from '../src/textarea.vue'
+import ControlLoading from '../../icon/src/control-loading.vue'
 
 describe('Textarea', () => {
   it.each(['loading', 'disabled'] as const)(
@@ -29,6 +30,11 @@ describe('Textarea', () => {
       expect(wrapper.emitted('update:modelValue')).toBeUndefined()
       expect(wrapper.emitted('change')).toBeUndefined()
       await wrapper.setProps({ [state]: false })
+      if (state === 'loading') {
+        expect(textarea.element.disabled).toBe(true)
+        wrapper.getComponent(ControlLoading).vm.$emit('restored')
+        await wrapper.vm.$nextTick()
+      }
       expect(textarea.element.disabled).toBe(false)
       await textarea.setValue('New text')
       expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['New text'])

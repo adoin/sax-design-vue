@@ -20,6 +20,7 @@ import SCheckbox from '@vuesax-alpha/components/checkbox'
 import STag from '@vuesax-alpha/components/tag'
 import { STable } from '@vuesax-alpha/components/table'
 import {
+  useControlLoading,
   useId,
   useLocale,
   useNamespace,
@@ -43,6 +44,7 @@ import type { CSSProperties } from 'vue'
 defineOptions({ name: 'STableSelect' })
 
 const props = defineProps(tableSelectProps)
+const { loadingVisible, finishLoading } = useControlLoading(() => props.loading)
 const emit = defineEmits(tableSelectEmits)
 const slots = defineSlots<{
   prefix?(): unknown
@@ -78,7 +80,7 @@ const internalOpen = shallowRef(props.defaultOpen)
 const popupWidth = shallowRef<number>()
 
 const mergedOpen = computed(
-  () => !props.loading && (props.open ?? internalOpen.value),
+  () => !loadingVisible.value && (props.open ?? internalOpen.value),
 )
 const popupConfig = computed(() => props.popupConfig)
 const accentColor = computed(() => props.state || props.color)
@@ -322,7 +324,7 @@ const stateOf = (row: TableRow) => {
 const toggleMultiple = (row: TableRow, checked = !stateOf(row).checked) => {
   if (
     props.disabled ||
-    props.loading ||
+    loadingVisible.value ||
     props.tableLoading ||
     !isRowSelectable(row)
   )
@@ -342,7 +344,7 @@ const toggleMultiple = (row: TableRow, checked = !stateOf(row).checked) => {
 const removeKey = (key: TableRowKey) => {
   const row = entries.value.find((entry) => entry.key === key)?.row
   if (row) toggleMultiple(row, false)
-  else if (!props.disabled && !props.loading) {
+  else if (!props.disabled && !loadingVisible.value) {
     const keys = displayKeys.value.filter((value) => value !== key)
     emit('update:modelValue', keys)
     emit(
@@ -371,7 +373,7 @@ const tableColumns = computed<TableColumn[]>(() =>
                     indeterminate: stateOf(row).indeterminate,
                     disabled:
                       props.disabled ||
-                      props.loading ||
+                      loadingVisible.value ||
                       props.tableLoading ||
                       !isRowSelectable(row),
                     'aria-label': labelFor(rowKeyOf(row) ?? ''),
@@ -413,7 +415,7 @@ const measurePopup = () => {
   popupWidth.value = triggerRef.value?.getBoundingClientRect().width
 }
 const setOpen = (value: boolean) => {
-  if (value && (props.disabled || props.loading)) return
+  if (value && (props.disabled || loadingVisible.value)) return
   if (props.open === undefined) internalOpen.value = value
   emit('update:open', value)
   emit('visible-change', value)
@@ -437,7 +439,7 @@ const handleRowClick = (row: TableRow, event: MouseEvent) => {
   emit('rowClick', row, event)
   if (
     props.disabled ||
-    props.loading ||
+    loadingVisible.value ||
     props.tableLoading ||
     !isRowSelectable(row)
   )
@@ -453,7 +455,7 @@ const handleRowClick = (row: TableRow, event: MouseEvent) => {
   if (props.closeOnSelect ?? true) close()
 }
 const clear = () => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   emit('update:modelValue', props.multiple ? [] : undefined)
   emit('clear')
 }
@@ -473,7 +475,7 @@ watch(
 )
 
 watch(
-  () => props.disabled || props.loading,
+  () => props.disabled || loadingVisible.value,
   (inactive) => {
     if (inactive && mergedOpen.value) close()
   },
@@ -500,7 +502,7 @@ defineExpose({
     :placement="popupConfig.placement ?? placement"
     :teleported="popupConfig.transfer ?? teleported"
     :append-to="popupConfig.appendTo"
-    :disabled="disabled || loading"
+    :disabled="disabled || loadingVisible"
     :strategy="strategy"
     :flip="flip"
     :offset="popupConfig.offset ?? 8"
@@ -517,7 +519,7 @@ defineExpose({
         ns.m(resolvedSize || 'default'),
         ns.is('open', mergedOpen),
         ns.is('disabled', disabled),
-        ns.is('loading', loading),
+        ns.is('loading', loadingVisible),
         ns.is('block', block),
         ns.is('square', resolvedShape === 'square'),
         ns.is('has-prefix', hasPrefix()),
@@ -536,11 +538,11 @@ defineExpose({
             ? placeholder || t('vs.select.placeholder')
             : undefined)
         "
-        :tabindex="disabled || loading ? -1 : 0"
+        :tabindex="disabled || loadingVisible ? -1 : 0"
         :aria-controls="mergedOpen ? panelId : undefined"
         :aria-disabled="disabled"
         :aria-expanded="mergedOpen"
-        :aria-busy="loading"
+        :aria-busy="loadingVisible"
         aria-haspopup="grid"
         @focus="emit('focus', $event)"
         @blur="emit('blur', $event)"
@@ -569,8 +571,8 @@ defineExpose({
               :key="key"
               size="small"
               :shape="resolvedShape"
-              :closable="!disabled && !loading"
-              :disabled="disabled || loading"
+              :closable="!disabled && !loadingVisible"
+              :disabled="disabled || loadingVisible"
               @close="removeKey(key)"
               >{{ labelFor(key) }}</STag
             >
@@ -595,7 +597,8 @@ defineExpose({
             v-else
             :text="placeholder || t('vs.select.placeholder')"
             :dissolved="
-              !(disabled || loading) && (placeholderFocused || mergedOpen)
+              !(disabled || loadingVisible) &&
+              (placeholderFocused || mergedOpen)
             "
           />
         </span>
@@ -615,7 +618,7 @@ defineExpose({
           v-if="
             clearable &&
             (multiple ? displayKeys.length > 0 : modelValue !== undefined) &&
-            !loading
+            !loadingVisible
           "
           :class="ns.e('clear')"
           type="button"
@@ -626,7 +629,13 @@ defineExpose({
         </button>
 
         <span :class="ns.e('action')" aria-hidden="true">
-          <IconControlLoading v-if="loading" :class="ns.e('loading')" />
+          <IconControlLoading
+            v-if="loadingVisible"
+            :class="ns.e('loading')"
+            :active="loading"
+            :shape="resolvedShape"
+            @restored="finishLoading"
+          />
           <SIcon
             v-else
             :class="ns.is('rotated', mergedOpen)"

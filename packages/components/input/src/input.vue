@@ -26,8 +26,8 @@
         autocomplete="off"
         :value="model ?? ''"
         :type="inputType"
-        :disabled="disabled || loading"
-        :aria-busy="loading || undefined"
+        :disabled="disabled || loadingVisible"
+        :aria-busy="loadingVisible || undefined"
         :aria-label="
           ($attrs['aria-label'] as string | undefined) ?? (label || placeholder)
         "
@@ -160,13 +160,17 @@
       >
         <slot name="icon" />
       </span>
-      <div v-if="loading" :class="ns.e('loading')">
-        <icon-control-loading />
+      <div v-if="loadingVisible" :class="ns.e('loading')">
+        <icon-control-loading
+          :active="loading"
+          :shape="shape"
+          @restored="finishLoading"
+        />
       </div>
 
       <transition name="clearable-transition">
         <button
-          v-if="showClear"
+          v-if="showClear && !loadingVisible"
           type="button"
           :class="ns.e('clearable')"
           aria-label="Clear input"
@@ -275,6 +279,7 @@ import {
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import {
   useColor,
+  useControlLoading,
   useDeprecated,
   useId,
   useNamespace,
@@ -300,6 +305,7 @@ defineOptions({
 
 const props = defineProps(inputProps)
 const emit = defineEmits(inputEmits)
+const { loadingVisible, finishLoading } = useControlLoading(() => props.loading)
 const slots = useSlots()
 
 useDeprecated(
@@ -402,7 +408,7 @@ const {
   countLimit,
   countValue,
   nativeMaxLength,
-} = useInput(props, emit)
+} = useInput(props, emit, loadingVisible)
 
 const {
   enabled: autocompleteEnabled,
@@ -420,6 +426,7 @@ const {
   inputRef,
   commitModelValue,
   emit,
+  loading: loadingVisible,
 })
 
 const onChange = (event: Event) => {
@@ -433,6 +440,7 @@ const onChange = (event: Event) => {
 }
 
 const handleKeydownWithActions = (event: KeyboardEvent) => {
+  if (loadingVisible.value) return
   handleKeydown(event)
   if (composing.value || event.isComposing || event.keyCode === 229) return
   if (autocompleteKeydown(event)) return
@@ -527,7 +535,7 @@ const inputKls = computed(() => [
   ns.is('block', props.block),
   ns.is('focus', focused.value),
   ns.is('hovering', hovering.value),
-  ns.is('loading', props.loading),
+  ns.is('loading', loadingVisible.value),
   ns.is(shape.value),
   ns.is('text-white', props.textWhite),
 

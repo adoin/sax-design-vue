@@ -8,7 +8,7 @@
     :shift="{ padding: 12 }"
     :fit="true"
     :show-arrow="false"
-    :disabled="disabled || loading"
+    :disabled="disabled || loadingVisible"
     :offset="4"
     :popper-class="[
       ns.e('popper'),
@@ -39,8 +39,8 @@
         :disabled="disabled"
         :loading="loading"
         :readonly="!editable || readonly"
-        :clearable="clearable && !disabled && !loading"
-        :suffix-icon="loading ? undefined : 'cb:time'"
+        :clearable="clearable && !disabled && !loadingVisible"
+        :suffix-icon="loadingVisible ? undefined : 'cb:time'"
         @update:model-value="handleInput"
         @clear="handleClear"
         @focus="(e) => $emit('focus', e)"
@@ -80,9 +80,11 @@ import dayjs from 'dayjs'
 import SButton from '@vuesax-alpha/components/button'
 import SInput from '@vuesax-alpha/components/input'
 import SPopper from '@vuesax-alpha/components/popper'
+import { provideLoadingCompletion } from '@vuesax-alpha/hooks/use-loading-completion'
 import { UPDATE_MODEL_EVENT } from '@vuesax-alpha/constants'
 import { inputInteractionContextKey } from '@vuesax-alpha/tokens'
 import {
+  useControlLoading,
   useGlobalConfig,
   useLocale,
   useNamespace,
@@ -103,6 +105,11 @@ import type { InputInstance } from '@vuesax-alpha/components/input'
 defineOptions({ name: 'STimePicker' })
 
 const props = defineProps(timePickerProps)
+const waitForLoading = provideLoadingCompletion()
+const { loadingVisible } = useControlLoading(
+  () => props.loading,
+  waitForLoading,
+)
 const emit = defineEmits(timePickerEmits)
 
 const ns = useNamespace('time-picker')
@@ -131,7 +138,7 @@ provide(inputInteractionContextKey, {
   triggerRef,
 })
 watch(
-  () => props.loading,
+  () => loadingVisible.value,
   (loading) => {
     if (loading) {
       visible.value = false
@@ -216,18 +223,18 @@ const timeConstraint = computed(() =>
 )
 
 const handlePick = (value: dayjs.Dayjs) => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   innerValue.value = value
 }
 
 const confirmPick = () => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   emitValue(buildOutput(innerValue.value))
   visible.value = false
 }
 
 const handleNow = () => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   innerValue.value = getTimeZoneNow(resolvedTimezone.value)
   if (resolvedAutoApplyNow.value !== false) {
     emitValue(buildOutput(innerValue.value))
@@ -236,13 +243,13 @@ const handleNow = () => {
 }
 
 const handleClear = () => {
-  if (props.disabled || props.loading) return
+  if (props.disabled || loadingVisible.value) return
   emitValue(null)
   emit('clear')
 }
 
 const handleInput = (value: string | number | null | undefined) => {
-  if (!props.editable || props.disabled || props.loading) return
+  if (!props.editable || props.disabled || loadingVisible.value) return
   const text = value == null ? '' : String(value)
   const parsed = parseToDayjs(text, props.format, resolvedTimezone.value)
   if (parsed?.isValid()) {
