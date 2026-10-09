@@ -2,6 +2,7 @@
 
 ### Unreleased
 
+- Expanded Notice Bar with multiple-notice navigation and autoplay, overflow-aware scrolling, pause controls, wrapping, links, fixed action slots, controlled visibility, semantic colors, sizes and shape variants. Added ten paired documentation examples and corrected counter glyph alignment and the documented scrolling duration unit.
 - Fixed Brand Loading color tips collapsing and expanding during final logo restoration; each returning strand now smoothly restores its original sampling length.
 - Redesigned Empty with an animated inline SVG of a completely empty open box with shared perspective geometry and synchronized one-time hinge opening, brief glowing star accents, soft paper surfaces and a replayable documentation example, theme-aware colors, an animation toggle, offscreen/hidden-page pausing and reduced-motion support. Preserved custom image URLs, image-size and illustration slots, with paired documentation examples.
 - Expanded Drawer with Promise/callback close approval, delayed opening/closing, content caching and destruction, container mounting, focus management, nested push behavior, loading, and controlled pointer/keyboard resizing.

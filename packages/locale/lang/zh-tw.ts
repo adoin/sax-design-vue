@@ -1,6 +1,11 @@
 export default {
   name: 'zh-tw',
   vs: {
+    noticeBar: {
+      close: '關閉',
+      previous: '上一則公告',
+      next: '下一則公告',
+    },
     drawer: {
       close: '關閉抽屜',
       title: '抽屜',

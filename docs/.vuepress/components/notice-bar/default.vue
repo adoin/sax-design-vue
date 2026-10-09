@@ -1,6 +1,5 @@
 <template>
   <s-notice-bar
-    closable
-    content="Maintenance starts at 02:00 UTC. Save unfinished work first."
+    content="A new update is available. Read the release notes when you are ready."
   />
 </template>

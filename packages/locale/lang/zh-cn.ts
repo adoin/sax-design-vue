@@ -154,6 +154,8 @@ export default {
     },
     noticeBar: {
       close: '关闭',
+      previous: '上一条公告',
+      next: '下一条公告',
     },
     carousel: {
       previous: '上一张',

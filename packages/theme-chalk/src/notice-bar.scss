@@ -1,14 +1,226 @@
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
+
 @include b(notice-bar) {
-  display: flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid getColor(info, .18); border-radius: var(--sax-radius-md); background: getColor(info, .09); color: getColor(info); font-size: 13px;
-  @include e(viewport) { flex: 1; overflow: hidden; white-space: nowrap; }
-  @include e(content) { display: inline-block; padding: 8px 0; }
-  @include e(close) { margin-left: 10px; border: 0; background: transparent; color: currentColor; cursor: pointer; font-size: 18px; line-height: 1; }
-  @each $type in (success, warning, danger) { @include m($type) { border-color: getColor($type, .18); background: getColor($type, .09); color: getColor($type); } }
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 2px 10px 2px 14px;
+  box-sizing: border-box;
+  border-radius: var(--sax-radius-md);
+  color: var(
+    --sax-notice-text,
+    color-mix(in srgb, var(--sax-notice-color) 75%, #{getColor(text)})
+  );
+  background: color-mix(
+    in srgb,
+    var(--sax-notice-color) 10%,
+    #{getColor(background)}
+  );
+  font-size: 14px;
+  line-height: 1.5;
+  &.is-reduced-motion {
+    --sax-motion-duration: 0.01ms;
+  }
+  &.is-square {
+    border-radius: 0;
+  }
+  &.is-solid {
+    background: var(--sax-notice-color);
+    color: var(--sax-notice-text, #{getColor(light)});
+  }
+  &.is-plain {
+    background: transparent;
+  }
+  &.s-notice-bar--small {
+    min-height: 36px;
+    font-size: 12px;
+    gap: 8px;
+  }
+  &.s-notice-bar--large {
+    min-height: 52px;
+    font-size: 16px;
+    gap: 12px;
+  }
+  &.is-solid.s-notice-bar--warning,
+  &.is-solid.s-notice-bar--warn,
+  &.is-solid.s-notice-bar--success,
+  &.is-solid.s-notice-bar--info {
+    color: var(--sax-notice-text, #{getColor(dark)});
+  }
+  @include e(icon) {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+  }
+  @include e(prefix) {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  @include e(body) {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    padding: 6px 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+    &.is-interactive {
+      cursor: pointer;
+      border-radius: var(--sax-radius-sm);
+    }
+    &.is-interactive:hover,
+    &.is-interactive:focus-visible {
+      background: color-mix(in srgb, currentColor 6%, transparent);
+    }
+  }
+  @include e(viewport) {
+    overflow: hidden;
+    min-width: 0;
+    min-height: 1.5em;
+  }
+  @include e(track) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    &.is-moving {
+      width: max-content;
+      gap: var(--sax-notice-gap);
+      animation: s-notice-bar-scroll var(--sax-notice-duration) linear
+        var(--sax-notice-delay) infinite;
+    }
+  }
+  @include e(content) {
+    display: block;
+    flex: none;
+    min-width: 0;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  @include e(copy) {
+    pointer-events: none;
+    user-select: none;
+  }
+  &.is-wrapable .s-notice-bar__content {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  &.is-paused .s-notice-bar__track {
+    animation-play-state: paused;
+  }
+  @include e(actions) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+  }
+  @include e(suffix) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+  }
+  @include e(navigation) {
+    display: flex;
+    align-items: center;
+    flex: none;
+    gap: 2px;
+  }
+  @include e(indicator) {
+    font-size: 12px;
+    line-height: 1;
+    padding-block-start: 0.25em;
+    opacity: 0.8;
+    white-space: nowrap;
+  }
+  @include e(control) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    border-radius: var(--sax-radius-sm);
+    cursor: pointer;
+    &:hover,
+    &:focus-visible {
+      background: color-mix(in srgb, currentColor 12%, transparent);
+    }
+    &:disabled {
+      opacity: 0.35;
+      cursor: default;
+      background: transparent;
+    }
+  }
+  &.s-notice-bar--small .s-notice-bar__control {
+    width: 32px;
+    height: 32px;
+  }
+  &.s-notice-bar--large .s-notice-bar__control {
+    width: 44px;
+    height: 44px;
+  }
 }
-.s-notice-bar__content.is-scrollable { min-width: 100%; animation: s-notice-bar-scroll linear infinite; }
-@keyframes s-notice-bar-scroll { from { transform: translateX(0); } to { transform: translateX(-100%); } }
-.s-notice-bar-fade-enter-active, .s-notice-bar-fade-leave-active { transition: opacity var(--sax-motion-duration) var(--sax-motion-easing-standard); }
-.s-notice-bar-fade-enter-from, .s-notice-bar-fade-leave-to { opacity: 0; }
+@supports (text-box-trim: trim-both) and (text-box-edge: cap alphabetic) {
+  .s-notice-bar__indicator {
+    padding-block-start: 0;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+  }
+}
+@keyframes s-notice-bar-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--sax-notice-distance));
+  }
+}
+.s-notice-bar-fade-enter-active,
+.s-notice-bar-fade-leave-active,
+.s-notice-bar-item-enter-active,
+.s-notice-bar-item-leave-active {
+  transition:
+    opacity var(--sax-motion-duration) var(--sax-motion-easing-standard),
+    transform var(--sax-motion-duration) var(--sax-motion-easing-standard);
+}
+.s-notice-bar-fade-enter-from,
+.s-notice-bar-fade-leave-to {
+  opacity: 0;
+}
+.s-notice-bar-item-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.s-notice-bar-item-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-notice-bar:not(.is-motion-forced) .s-notice-bar__track {
+    animation: none !important;
+    transform: none !important;
+  }
+  .s-notice-bar:not(.is-motion-forced).s-notice-bar-fade-enter-active,
+  .s-notice-bar:not(.is-motion-forced).s-notice-bar-fade-leave-active,
+  .s-notice-bar:not(.is-motion-forced) .s-notice-bar-item-enter-active,
+  .s-notice-bar:not(.is-motion-forced) .s-notice-bar-item-leave-active {
+    transition-duration: 0.01ms !important;
+    transform: none !important;
+  }
+}

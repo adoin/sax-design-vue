@@ -166,6 +166,8 @@ export default {
     },
     noticeBar: {
       close: 'Close',
+      previous: 'Previous notice',
+      next: 'Next notice',
     },
     carousel: {
       previous: 'Previous slide',
