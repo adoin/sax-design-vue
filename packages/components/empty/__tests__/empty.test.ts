@@ -31,6 +31,66 @@ afterEach(() => {
 })
 
 describe('Empty illustration', () => {
+  it('stops on the open pose after the sparkle and can replay when re-enabled', async () => {
+    const wrapper = mount(Empty)
+    const svg = wrapper.get('svg').element as SVGSVGElement
+    svg.pauseAnimations = vi.fn()
+    svg.setCurrentTime = vi.fn()
+    observers[0].notify([{ isIntersecting: true }])
+    await nextTick()
+    expect(wrapper.find('animate[data-empty-completion]').exists()).toBe(true)
+    wrapper
+      .get('animate[data-empty-completion]')
+      .element.dispatchEvent(new Event('endEvent'))
+    await nextTick()
+    expect(wrapper.find('animate').exists()).toBe(false)
+    expect(wrapper.find('.s-empty__surprise').exists()).toBe(false)
+    expect(svg.pauseAnimations).toHaveBeenCalled()
+    const openPose = wrapper.get('.s-empty__flap-back path').attributes('d')
+    await wrapper.setProps({ animated: false })
+    await wrapper.setProps({ animated: true })
+    expect(wrapper.find('animate[data-empty-completion]').exists()).toBe(true)
+    expect(wrapper.get('.s-empty__flap-back path').attributes('d')).toBe(
+      openPose,
+    )
+  })
+  it('controls the native SVG clock and removes motion for reduced-motion preferences', async () => {
+    let changed = () => {}
+    const preference = {
+      matches: false,
+      addEventListener: vi.fn((_name: string, listener: () => void) => {
+        changed = listener
+      }),
+      removeEventListener: vi.fn(),
+    }
+    vi.stubGlobal('matchMedia', () => preference)
+    const wrapper = mount(Empty)
+    const svg = wrapper.get('svg').element as SVGSVGElement
+    svg.pauseAnimations = vi.fn()
+    svg.unpauseAnimations = vi.fn()
+    svg.setCurrentTime = vi.fn()
+    observers[0].notify([{ isIntersecting: true }])
+    await nextTick()
+    expect(svg.unpauseAnimations).toHaveBeenCalled()
+    expect(wrapper.find('animate').exists()).toBe(true)
+    preference.matches = true
+    changed()
+    await nextTick()
+    expect(svg.pauseAnimations).toHaveBeenCalled()
+    expect(svg.setCurrentTime).toHaveBeenCalledWith(0)
+    expect(wrapper.find('animate').exists()).toBe(false)
+    preference.matches = false
+    changed()
+    await nextTick()
+    expect(wrapper.find('animate').exists()).toBe(true)
+    await wrapper.setProps({ animated: false })
+    expect(wrapper.find('animate').exists()).toBe(false)
+    wrapper.unmount()
+    expect(preference.removeEventListener).toHaveBeenCalledWith(
+      'change',
+      expect.any(Function),
+    )
+  })
   it('uses decorative inline SVG while preserving description and action slots', () => {
     const wrapper = mount(Empty, {
       props: { description: 'No records' },

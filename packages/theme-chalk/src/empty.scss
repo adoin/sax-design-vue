@@ -33,34 +33,6 @@
     height: 100%;
     overflow: visible;
     color: getColor(primary);
-    --sax-empty-animation-duration: 8400ms;
-
-    [data-motion] {
-      transform-box: view-box;
-      animation-duration: var(--sax-empty-animation-duration);
-      animation-timing-function: ease-in-out;
-      animation-iteration-count: infinite;
-    }
-    &.is-animated {
-      .s-empty__flap-back {
-        animation-name: s-empty-flap-back;
-      }
-      .s-empty__flap-left {
-        animation-name: s-empty-flap-left;
-      }
-      .s-empty__flap-right {
-        animation-name: s-empty-flap-right;
-      }
-      .s-empty__interior-light {
-        animation-name: s-empty-light;
-      }
-      .s-empty__spark {
-        animation-name: s-empty-spark;
-      }
-    }
-    &.is-paused [data-motion] {
-      animation-play-state: paused;
-    }
   }
 
   @include e(tone-accent) {
@@ -69,32 +41,35 @@
   @include e(tone-surface) {
     color: getColor(background);
   }
+  @include e(tone-paper) {
+    color: color-mix(in srgb, #{getColor(warn)} 4%, #{getColor(background)});
+  }
   @include e(tone-tint) {
-    color: color-mix(
-      in srgb,
-      #{getColor(primary)} 18%,
-      #{getColor(background)}
-    );
+    color: color-mix(in srgb, #{getColor(primary)} 6%, #{getColor(background)});
   }
   @include e(orbit) {
     color: getColor(primary);
     opacity: 0.28;
   }
   @include e(ground) {
-    color: getColor(primary);
-    opacity: 0.09;
+    color: getColor(text);
+    opacity: 0.035;
   }
-  @include e(flap-back) {
-    transform-origin: 128px 78px;
+  @include e(contact-shadow) {
+    color: getColor(text);
+    opacity: 0.065;
   }
-  @include e(flap-left) {
-    transform-origin: 78px 78px;
+  @include e(flap) {
+    color: color-mix(in srgb, #{getColor(primary)} 30%, #{getColor(text)});
   }
-  @include e(flap-right) {
-    transform-origin: 177px 78px;
+  @include e(tray) {
+    color: color-mix(in srgb, #{getColor(primary)} 25%, #{getColor(text)});
   }
-  @include e(interior-light) {
-    transform-origin: 127px 115px;
+  @include e(surprise) {
+    color: color-mix(in srgb, #{getColor(warn)} 80%, #{getColor(text)});
+  }
+  @include e(spark-core) {
+    color: color-mix(in srgb, #{getColor(warn)} 12%, #{getColor(light)});
   }
   @include e(spark) {
     transform-origin: 130px 90px;
@@ -110,85 +85,5 @@
 
   @include e(bottom) {
     margin-top: 16px;
-  }
-}
-
-// Independent pivots and dwell periods keep the empty tray visually anchored.
-@keyframes s-empty-flap-back {
-  0%,
-  12%,
-  82%,
-  100% {
-    transform: scaleY(1);
-  }
-  35%,
-  50% {
-    transform: scaleY(1.04);
-  }
-  65% {
-    transform: scaleY(0.99);
-  }
-}
-@keyframes s-empty-flap-left {
-  0%,
-  16%,
-  78%,
-  100% {
-    transform: rotate(0deg);
-  }
-  35%,
-  48% {
-    transform: rotate(3deg);
-  }
-  63% {
-    transform: rotate(-1deg);
-  }
-}
-@keyframes s-empty-flap-right {
-  0%,
-  22%,
-  84%,
-  100% {
-    transform: rotate(0deg);
-  }
-  43%,
-  56% {
-    transform: rotate(-3deg);
-  }
-  70% {
-    transform: rotate(1deg);
-  }
-}
-@keyframes s-empty-light {
-  0%,
-  15%,
-  85%,
-  100% {
-    opacity: 0.4;
-    transform: scaleX(0.9);
-  }
-  40%,
-  55% {
-    opacity: 0.85;
-    transform: scaleX(1.05);
-  }
-}
-@keyframes s-empty-spark {
-  0%,
-  18%,
-  78%,
-  100% {
-    opacity: 0.35;
-    transform: scale(0.85);
-  }
-  38%,
-  48% {
-    opacity: 0.85;
-    transform: scale(1.05);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .s-empty__illustration [data-motion] {
-    animation: none !important;
   }
 }

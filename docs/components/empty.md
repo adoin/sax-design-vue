@@ -22,7 +22,7 @@ PROPS:
   - name: animated
     type: Boolean
     values: true | false
-    description: Animate the built-in illustration. Reduced motion shows a static scene; offscreen or hidden pages pause playback. Does not affect custom images or the image slot.
+    description: Enable a one-time opening animation followed by a brief sparkle. It finishes on the open box; reduced motion shows that static pose. Offscreen or hidden pages pause playback. Does not affect custom images or the image slot.
     default: true
     usage: '#animation'
 SLOTS:
@@ -59,25 +59,25 @@ An open, completely empty box conveys missing content. Explain the state with de
 
 ## Animation
 
-Use animated to control the built-in scene. The empty interior stays visible while the open flaps and soft lighting move in staggered phases. Reduced motion keeps the scene static; offscreen or hidden pages pause it.
+Use animated to control the built-in scene. The three rectangular flaps open together from a partly open pose, revealing the empty interior. A few luminous stars briefly appear, then fade; the box stays open. Replay the example with the button, or restart an application instance by remounting it or re-enabling animated. Reduced motion keeps the scene static; offscreen or hidden pages pause it.
 
 <template #example><empty-animation /></template>
 
 <template #template>
 
-@[code{6-12}](../.vuepress/components/empty/animation.vue)
+@[code{7-27}](../.vuepress/components/empty/animation.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-4}](../.vuepress/components/empty/animation.vue)
+@[code{1-5}](../.vuepress/components/empty/animation.vue)
 
 </template>
 
 <template #style>
 
-@[code{14-21}](../.vuepress/components/empty/animation.vue)
+@[code{29-43}](../.vuepress/components/empty/animation.vue)
 
 </template>
 
