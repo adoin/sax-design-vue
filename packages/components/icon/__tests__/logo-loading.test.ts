@@ -4,7 +4,77 @@ import LogoLoading from '../src/logo-loading.vue'
 import LoadingIcon from '../src/loading.vue'
 import { LogoLoadingMotion } from '../src/logo-loading-motion'
 
+const pathPoints = (path: string) => {
+  const values = path.match(/-?\d+(?:\.\d+)?/g)?.map(Number) ?? []
+  return Array.from({ length: values.length / 2 }, (_, index) => [
+    values[index * 2],
+    values[index * 2 + 1],
+  ])
+}
+const pathLength = (path: string) => {
+  const points = pathPoints(path)
+  return points
+    .slice(1)
+    .reduce(
+      (total, point, index) =>
+        total +
+        Math.hypot(point[0] - points[index][0], point[1] - points[index][1]),
+      0,
+    )
+}
+
 describe('LogoLoading', () => {
+  it.each(['rounded', 'square'] as const)(
+    'keeps %s color strands intact through restoration and the final idle handoff',
+    (shape) => {
+      for (const angle of [0, 0.4, 1.5, 3, 5.6]) {
+        const motion = new LogoLoadingMotion()
+        const idle = motion.frame(shape)
+        motion.start()
+        motion.advance(2300)
+        motion.advance((angle / (Math.PI * 2)) * 2200)
+        const running = motion.frame(shape)
+        motion.stop()
+        const initial = motion.frame(shape)
+        expect(initial.topAccent).toBe(running.topAccent)
+        expect(initial.bottomAccent).toBe(running.bottomAccent)
+        for (let elapsed = 17; elapsed < 3400; elapsed += 17) {
+          motion.advance(17)
+          const frame = motion.frame(shape)
+          expect(pathLength(frame.topAccent)).toBeGreaterThan(10)
+          expect(pathLength(frame.bottomAccent)).toBeGreaterThan(10)
+        }
+        motion.advance(16)
+        const last = motion.frame(shape)
+        expect(motion.phase).toBe('stopping')
+        for (const key of [
+          'top',
+          'bottom',
+          'topAccent',
+          'bottomAccent',
+        ] as const) {
+          const restored = pathPoints(idle[key])
+          const pending = pathPoints(last[key])
+          expect(pending.length).toBe(restored.length)
+          pending.forEach((point, index) =>
+            expect(
+              Math.hypot(
+                point[0] - restored[index][0],
+                point[1] - restored[index][1],
+              ),
+            ).toBeLessThan(0.03),
+          )
+        }
+        expect(
+          Math.abs(
+            pathLength(last.bottomAccent) - pathLength(idle.bottomAccent),
+          ),
+        ).toBeLessThan(0.05)
+        motion.advance(1)
+        expect(motion.frame(shape)).toEqual(idle)
+      }
+    },
+  )
   it.each(['square', 'rounded'] as const)(
     'clears %s strands at four boundaries and can resume during exit',
     (shape) => {

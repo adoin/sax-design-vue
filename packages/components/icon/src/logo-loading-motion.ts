@@ -278,7 +278,7 @@ export class LogoLoadingMotion {
   private pendingStop = false
   private cornerStop = false
   private returnRoutes: ReturnRoute[] = []
-  private returnTravel = 0
+  private returnProgress = 0
   get restoring() {
     return (
       this.phase === 'stopping' ||
@@ -385,7 +385,13 @@ export class LogoLoadingMotion {
     if (this.phase === 'running')
       return circlePoint(strand.angle + this.angle + progress * Math.PI)
     const route = this.returnRoutes[strands.indexOf(strand)]
-    const distance = progress * HALF_CIRCUMFERENCE + this.returnTravel
+    // Move each strand's window home and restore its original arc length.
+    // Keeping a half-circle-sized window would clamp its colored tip into a
+    // zero-length point before the idle logo abruptly restores the accent.
+    const distance =
+      route.total * this.returnProgress +
+      progress *
+        mix(HALF_CIRCUMFERENCE, strand.source.length, this.returnProgress)
     if (distance <= route.total) return route.at(distance)
     return strand.source.at(distance - route.total)
   }
@@ -461,9 +467,7 @@ export class LogoLoadingMotion {
       this.returnRoutes = strands.map((strand) =>
         stopRoute(strand, this.stopAngle),
       )
-      this.returnTravel =
-        Math.max(...this.returnRoutes.map((route) => route.total)) *
-        smooth(this.progress)
+      this.returnProgress = smooth(this.progress)
     }
     const accents = strands.map((strand) =>
       pathData(

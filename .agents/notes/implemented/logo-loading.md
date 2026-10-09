@@ -22,6 +22,8 @@ modules:
 
 The public component supports `active`, `size`, `speed`, `reducedMotion`, and `label`. Its default speed is `2.5`. Setting `active` to false restores the mark before returning to idle; exposed methods support explicit start, stop, and reset control.
 
+The restored colored strands must remain intact into the idle mark. Their return sampling windows follow each route's length and converge to its source length, as verified in [logo-loading-color-restoration.md](logo-loading-color-restoration.md).
+
 Rendered completion, default Button presence and Dialog exit coordination follow [loading-motion-completion.md](loading-motion-completion.md). The restored signal follows the final SVG patch, and already-started loading motion is retained through its return path.
 
 `IconLoading` is the internal compatibility wrapper used by component loading states. Existing components that use their default loading indication resolve to the shared Sax loader. `SLoading` changes only its `default` type to this loader; explicitly selected named animations such as `atom`, `ball`, `waves`, `border`, `points`, `square`, `circles`, `corners`, `gradient`, `rectangle`, and `square-rotate` keep their original visuals.
