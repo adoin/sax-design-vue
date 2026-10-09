@@ -48,7 +48,7 @@ describe('shared context menu', () => {
     wrappers.push(wrapper)
     const menus = wrapper.findAllComponents(SContextMenu)
     const menu = (name: string) =>
-      menus.find((item) => item.props('items')[0].label === name)!
+      menus.find((item) => item.props('items')?.[0]?.label === name)!
     return { wrapper, menus, menu }
   }
 
