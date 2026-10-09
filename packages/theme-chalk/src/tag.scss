@@ -9,7 +9,7 @@
   --sax-tag-arrow-tip: 0.875rem;
   --sax-tag-padding-y: 3px;
   --sax-tag-padding-left: 10px;
-  --sax-tag-avatar-padding-left: 2px;
+  --sax-tag-avatar-padding-left: 4px;
   --sax-tag-shadow:
     0 1px 2px #{getColor(primary, 0.08)}, 0 4px 10px #{getColor(primary, 0.1)};
   position: relative;
@@ -19,7 +19,7 @@
   width: fit-content;
   max-width: 100%;
   min-height: 28px;
-  margin: 2px 2px 3px 0;
+  margin: 0;
   padding: var(--sax-tag-padding-y) 10px;
   padding-left: var(--sax-tag-padding-left);
   border: 0;
