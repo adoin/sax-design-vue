@@ -46,7 +46,7 @@ export const notification: NotifyFn & Partial<Notify> = (options = {}) => {
 
   const vm = createVNode(
     NotificationConstructor,
-    { ...options, position },
+    { ...options, position, onDestroy: () => render(null, container) },
     isVNode(options.content)
       ? {
           default: () => (isObject(options) ? options.content : null),

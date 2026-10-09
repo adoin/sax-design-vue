@@ -1,6 +1,22 @@
 ---
 description: 'Show temporary, programmatic notifications outside the main flow.'
 PROPS:
+  - name: close-animation
+    type: Boolean
+    values: 'true | false'
+    description: Dissolve the notification before closing. False closes immediately; reduced motion skips the effect.
+    default: true
+    usage: '#close-animation'
+  - name: close-animation-duration
+    type: Number
+    values: 'Non-negative milliseconds'
+    description: Particle close duration in milliseconds; zero closes immediately.
+    default: 220
+    usage: '#close-animation'
+  - name: on-close
+    type: () => void
+    description: Called once after closing finishes, including manual, automatic and handle.close() dismissal.
+    usage: '#close-animation'
   - name: dangerous-html-string
     type: Boolean
     values: 'true | false'
@@ -24,12 +40,12 @@ PROPS:
   - name: show-close
     type: Boolean
     values: 'true | false'
-    description: Control close affordance and handle close interaction.
+    description: Show the close button.
     default: 'true'
   - name: on-click-close
     type: Function
     values: 'close callback'
-    description: Control close affordance and handle close interaction.
+    description: Called when the close button is clicked; return false to keep the notification open.
     default: null
   - name: title
     type: String
@@ -786,6 +802,36 @@ Create a VNode from an imported component and pass it to `content` to render cus
 <template #style>
 
 @[code{55-66}](../.vuepress/components/notification/example.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Close animation
+
+Notifications close with a 220ms particle dissolve by default. The close button, automatic expiry and `handle.close()` share this behavior. Set `closeAnimation: false` or `closeAnimationDuration: 0` for immediate dismissal; `onClose` runs once after closing finishes.
+
+<template #example>
+<notification-close-animation />
+</template>
+
+<template #template>
+
+@[code{24-32}](../.vuepress/components/notification/close-animation.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-22}](../.vuepress/components/notification/close-animation.vue)
+
+</template>
+
+<template #style>
+
+@[code{34-45}](../.vuepress/components/notification/close-animation.vue)
 
 </template>
 

@@ -1,6 +1,22 @@
 ---
 description: '在主内容流外展示短暂的程序化通知。'
 PROPS:
+  - name: close-animation
+    type: Boolean
+    values: 'true | false'
+    description: 关闭前播放通知表面的粒子溶解；false 立即关闭。系统减少动态效果时跳过动画。
+    default: true
+    usage: '#close-animation'
+  - name: close-animation-duration
+    type: Number
+    values: '非负毫秒数'
+    description: 粒子关闭动画时长，单位为毫秒；零表示立即关闭。
+    default: 220
+    usage: '#close-animation'
+  - name: on-close
+    type: () => void
+    description: 关闭完成后调用一次，适用于手动关闭、自动到期和 handle.close()。
+    usage: '#close-animation'
   - name: dangerous-html-string
     type: Boolean
     values: 'true | false'
@@ -24,12 +40,12 @@ PROPS:
   - name: show-close
     type: Boolean
     values: 'true | false'
-    description: 控制关闭入口并处理关闭交互。
+    description: 是否显示关闭按钮。
     default: 'true'
   - name: on-click-close
     type: Function
     values: '关闭回调'
-    description: 控制关闭入口并处理关闭交互。
+    description: 点击关闭按钮时调用，返回 false 则保持通知显示。
     default: null
   - name: title
     type: String
@@ -786,6 +802,36 @@ SNotification({ ...options })
 <template #style>
 
 @[code{55-66}](../../.vuepress/components/notification/example.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 关闭动画
+
+通知默认通过 220ms 粒子溶解关闭。关闭按钮、自动到期和 `handle.close()` 使用相同效果。设置 `closeAnimation: false` 或 `closeAnimationDuration: 0` 可立即关闭；`onClose` 在关闭完成后调用一次。
+
+<template #example>
+<notification-zh-close-animation />
+</template>
+
+<template #template>
+
+@[code{24-32}](../../.vuepress/components/notification-zh/close-animation.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-22}](../../.vuepress/components/notification-zh/close-animation.vue)
+
+</template>
+
+<template #style>
+
+@[code{34-45}](../../.vuepress/components/notification-zh/close-animation.vue)
 
 </template>
 

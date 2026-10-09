@@ -1,9 +1,10 @@
 <template>
   <transition
-    name="vs-notification"
+    :name="ns.b()"
     @before-enter="onTransitionBeforeEnter"
     @enter="onTransitionEnter"
     @leave="onTransitionLeave"
+    @after-leave="afterLeave"
   >
     <div
       v-show="visible"
@@ -12,6 +13,17 @@
       :style="notifyStyles"
       @click="handleClick"
     >
+      <teleport to="body">
+        <SvgDissolveFilter
+          v-if="exitDissolve.active.value"
+          :filter-id="exitDissolve.filterId"
+          :dissolved="exitDissolve.dissolved.value"
+          :dissolve-duration="props.closeAnimationDuration"
+          :assemble-duration="0"
+          region="surface"
+          @settled="exitDissolve.settled"
+        />
+      </teleport>
       <template v-if="!loading">
         <template v-if="icon">
           <div
@@ -49,7 +61,7 @@
         type="button"
         :class="ns.e('close')"
         :aria-label="t('vs.notification.close')"
-        @click="handleClickClose"
+        @click.stop="handleClickClose"
       >
         <icon-close :size="16" />
       </button>
@@ -63,7 +75,14 @@
   </transition>
 </template>
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, onMounted, ref, unref } from 'vue'
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  shallowRef,
+  unref,
+} from 'vue'
 import { useTimeoutFn } from '@vueuse/core'
 import {
   useColor,
@@ -71,17 +90,20 @@ import {
   useGlobalComponentSettings,
   useLocale,
   useShape,
+  useSurfaceDissolve,
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import { IconClose, SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 import { addUnit, getVsColor } from '@vuesax-alpha/utils'
-import { notificationProps } from './notification'
+import SvgDissolveFilter from '@vuesax-alpha/components/base/src/svg-dissolve-filter.vue'
+import { notificationEmits, notificationProps } from './notification'
 
 defineOptions({
   name: 'SNotification',
 })
 
 const rawProps = defineProps(notificationProps)
+const emit = defineEmits(notificationEmits)
 const props = useGlobalComponentProps('notification', rawProps)
 const shape = useShape<'square' | ''>()
 const resolvedShape = computed(() =>
@@ -97,6 +119,12 @@ const color = useColor()
 
 const notifyRef = ref<HTMLElement>()
 const visible = ref(false)
+const closing = shallowRef(false)
+const exitDissolve = useSurfaceDissolve(
+  () => props.closeAnimationDuration,
+  'sax-notification-dissolve',
+)
+let closeVersion = 0
 let timer: (() => void) | undefined = undefined
 
 const vsBaseClasses = useVuesaxBaseComponent(color)
@@ -132,12 +160,11 @@ const handleClick = () => {
 }
 
 const handleClickClose = () => {
+  if (closing.value) return
   if (!props.onClickClose?.()) {
     return
   }
-  visible.value = false
-
-  props.onClose?.()
+  close()
 }
 
 const onTransitionBeforeEnter = (el: Element) => {
@@ -160,11 +187,15 @@ const onTransitionEnter = (el: Element, done: () => void) => {
 }
 
 const onTransitionLeave = (_: Element, done: () => void) => {
-  setTimeout(() => {
-    notifyRef.value?.remove()
-    done()
-    props.onClose?.()
-  }, 150)
+  // The particle timeline already finished; do not append a CSS exit tail.
+  done()
+}
+const afterLeave = () => {
+  if (visible.value) return
+  closing.value = false
+  exitDissolve.cancel()
+  props.onClose?.()
+  emit('destroy')
 }
 
 const startTimer = () => {
@@ -180,19 +211,36 @@ const clearTimer = () => {
 }
 
 const open = () => {
+  closeVersion++
+  exitDissolve.cancel()
+  closing.value = false
   clearTimer()
+  clearProgress()
+  currentProgress.value = 0
   startTimer()
   nextZIndex()
 
   visible.value = true
+  handleProgress()
 }
 
-const close = () => {
+const close = async () => {
+  if (!visible.value || closing.value) return
+  const run = ++closeVersion
+  closing.value = true
+  clearTimer()
+  clearProgress()
+  if (props.closeAnimation) await exitDissolve.play(notifyRef.value)
+  if (run !== closeVersion) return
   visible.value = false
 }
 
 let intervalProgress: ReturnType<typeof setInterval> | undefined
 const currentProgress = ref(0)
+const clearProgress = () => {
+  if (intervalProgress !== undefined) clearInterval(intervalProgress)
+  intervalProgress = undefined
+}
 
 const handleProgress = () => {
   if (props.progressAuto && props.duration > 0) {
@@ -204,11 +252,13 @@ const handleProgress = () => {
 
 onMounted(() => {
   open()
-  handleProgress()
 })
 
 onBeforeUnmount(() => {
-  if (intervalProgress !== undefined) clearInterval(intervalProgress)
+  closeVersion++
+  clearTimer()
+  clearProgress()
+  exitDissolve.cancel()
 })
 
 defineExpose({

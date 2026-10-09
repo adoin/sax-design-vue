@@ -38,6 +38,14 @@ export const notificationProps = buildProps({
     type: Number,
     default: 4500,
   },
+  /** Particle dissolution before closing; false closes immediately. */
+  closeAnimation: { type: Boolean, default: true },
+  /** Particle dissolution duration in milliseconds; zero skips motion. */
+  closeAnimationDuration: {
+    type: Number,
+    default: 220,
+    validator: (value: number) => Number.isFinite(value) && value >= 0,
+  },
   flat: { type: Boolean },
   /**
    * @description custom icon component.
