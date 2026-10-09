@@ -10,6 +10,7 @@ updated_at: 2026-10-09
 
 - `texture` supports `default`, `bubbles`, `waves` and `sparkle`; default preserves the plain fill. `textureAnimated`, `textureDuration` and `textureOpacity` configure decorative playback independently of progress values.
 - Texture is clipped to the determinate fill or indeterminate segment. It does not decorate the unfinished track, capture pointer input or add accessibility content.
+- The indeterminate segment uses a 3-second movement cycle, independent of texture playback duration.
 - Bubble appearance follows the carman popup.png principle: a shared 110 × 64 translucent microbubble tile over a semantic-colored fill, moving vertically. Deterministic SVG microbubble resources replace external image requests.
 - Sea waves use native SVG path morphing through lift, curl, downward break and spread. A cyclic Catmull–Rom control curve is sampled into 49 continuous morph values. Adjacent waves are offset by half a cycle. After landing, controls unfold into a single-valued surface without a reverse-folded lip.
 - Sparkle uses independent phased brightness, scale and ray expansion. It does not move the whole pattern horizontally. Inline SVG pattern/gradient identifiers are unique through the shared ID context.

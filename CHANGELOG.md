@@ -2,6 +2,7 @@
 
 ### Unreleased
 
+- Slowed the Progress indeterminate segment from a 1.2-second to a 3-second cycle while retaining independent texture animation timing.
 - Added Progress SVG fill textures: dense microbubbles, continuously breaking sea waves with alternating crests, and phased sparkle. Added proportional height scaling, animation timing/opacity controls, visibility-aware playback and reduced-motion support; preserved the plain default, with paired examples, proper CSS height/color handling and accessible progress values.
 - Refined Notification icon examples with consistent outline icons, labeled controls, responsive spacing and localized English/Chinese Code and Playground sources.
 - Added Notice Bar Promise-based beforeClose approval with merged requests, pending state and rejection events, plus localized examples choosing temporary or persistent dismissal.
