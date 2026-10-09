@@ -32,9 +32,19 @@ PROPS:
     default: hover
   - name: placement
     type: String
-    values: "floating-ui placement | pixels | absolute | fixed"
-    description: Configure the floating content position.
-    default: 'bottom'
+    values: "top | top-start | top-end | bottom | bottom-start | bottom-end | left | left-start | left-end | right | right-start | right-end"
+    description: Preferred direction. When omitted, tries top, bottom, right and left against the visible clipping area. If none fits, chooses the side with the least overflow. Explicit values keep that direction as the initial preference.
+    default: null
+  - name: flip
+    type: Boolean | Object
+    values: "true | false | FlipOptions"
+    description: Enable collision-driven direction changes or customize fallback placements and clipping boundaries. false keeps the preferred direction.
+    default: '{}'
+  - name: shift
+    type: Boolean | Object
+    values: "true | false | ShiftOptions"
+    description: Adjust alignment along the selected side to stay inside the visible clipping area. false disables this adjustment.
+    default: '{}'
   - name: offset
     type: Number | Object
     values: "floating-ui placement | pixels | absolute | fixed"
@@ -157,6 +167,8 @@ description: 'Position floating content next to a trigger element.'
 ## Default
 
 Popovers include padding, rounded corners and a theme shadow. Add details or controls through the `content` slot. Click the trigger to open and click outside to close.
+
+Without `placement`, Popper prefers the top and chooses another direction when there is insufficient visible space. Scrolling and resizing recalculate the position. Set `placement` to choose an initial direction, or `:flip="false"` to prevent direction changes.
 
 <template #example>
 <popper-default />

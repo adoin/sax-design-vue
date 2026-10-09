@@ -79,9 +79,9 @@ import {
 import { popperEmits, popperProps, usePopperModelToggle } from './popper'
 import popperContent from './content.vue'
 import popperTrigger from './trigger.vue'
-import type { Ref } from 'vue'
 import type {
   Middleware,
+  Placement,
   ReferenceElement,
 } from '@vuesax-alpha/hooks/use-floating/vue'
 
@@ -137,17 +137,28 @@ const {
   floatingStyles,
 } = useFloating(triggerRef, contentRef, {
   open,
-  middleware: ref([
-    !isEmpty(props.offset) && offsetMiddleware(props.offset),
-    !isEmpty(props.flip) &&
-      flipMiddleware(isBoolean(props.flip) ? undefined : props.flip),
-    !isEmpty(props.shift) &&
-      shiftMiddleware(isBoolean(props.shift) ? undefined : props.shift),
-    arrowMiddleware({
-      element: arrowRef,
-    }),
-  ]) as Ref<Middleware[]>,
-  placement: computed(() => props.placement),
+  middleware: computed(() =>
+    [
+      !isEmpty(props.offset) && offsetMiddleware(props.offset),
+      props.flip !== false &&
+        flipMiddleware({
+          ...(props.placement === undefined
+            ? {
+                fallbackPlacements: ['bottom', 'right', 'left'] as Placement[],
+                // Shift can recover alignment overflow without changing sides.
+                crossAxis: props.shift === false,
+              }
+            : {}),
+          ...(isBoolean(props.flip) ? {} : props.flip),
+        }),
+      props.shift !== false &&
+        shiftMiddleware(isBoolean(props.shift) ? undefined : props.shift),
+      arrowMiddleware({
+        element: arrowRef,
+      }),
+    ].filter((middleware): middleware is Middleware => !!middleware),
+  ),
+  placement: computed(() => props.placement ?? 'top'),
   strategy: computed(() => props.strategy),
   transform: false,
   fit: computed(() => props.fit),

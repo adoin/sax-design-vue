@@ -53,18 +53,18 @@ PROPS:
         <template #tooltip> This is a beautiful button </template>
       </s-tooltip>
 
-  - name: left, right, bottom
-    type: Boolean
-    values: "true,false"
-    description: 提示框位置。
-    default: top
-    link: null
-    usage: '#position'
-    code: >
-      <s-tooltip left>
-        <s-button border> left </s-button>
-        <template #tooltip> This is a beautiful button </template>
-      </s-tooltip>
+  - name: placement
+    type: String
+    values: "top | top-start | top-end | bottom | bottom-start | bottom-end | left | left-start | left-end | right | right-start | right-end"
+    description: 首选方向。未设置时根据可视空间依次尝试上、下、右、左；均无法容纳时选择溢出最少的方向。
+    default: null
+    usage: '#placement'
+  - name: flip
+    type: Boolean | Object
+    values: "true | false | FlipOptions"
+    description: 启用空间不足时的方向切换，或配置候选方向。false 保持首选方向。
+    default: '{}'
+    usage: '#placement'
 
   - name: border
     type: Boolean
@@ -282,12 +282,7 @@ SLOTS:
 
 ## 位置
 
-通过以下属性设置提示框位置：
-
-- top
-- bottom <Badge text=默认 />
-- left
-- right
+未设置 `placement` 时优先显示在上方，可视空间不足时自动选择其他方向。滚动或调整窗口大小会重新定位。设置 `placement` 可指定初始方向，并支持 `-start`、`-end` 对齐变体。设置 `:flip="false"` 可禁用方向切换。
 
 <template #example>
 <tooltip-placement />

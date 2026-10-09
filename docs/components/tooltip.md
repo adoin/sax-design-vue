@@ -65,18 +65,18 @@ PROPS:
         <template #tooltip> This is a beautiful button </template>
       </s-tooltip>
 
-  - name: left, right, bottom
-    type: Boolean
-    values: "true,false"
-    description: position of the tooltip.
-    default: top
-    link: null
-    usage: '#position'
-    code: >
-      <s-tooltip left>
-        <s-button border> left </s-button>
-        <template #tooltip> This is a beautiful button </template>
-      </s-tooltip>
+  - name: placement
+    type: String
+    values: "top | top-start | top-end | bottom | bottom-start | bottom-end | left | left-start | left-end | right | right-start | right-end"
+    description: Preferred direction. When omitted, tries top, bottom, right and left according to visible space; when none fits, chooses the least overflowing side.
+    default: null
+    usage: '#placement'
+  - name: flip
+    type: Boolean | Object
+    values: "true | false | FlipOptions"
+    description: Enable collision-driven direction changes or configure fallback placements. false keeps the preferred direction.
+    default: '{}'
+    usage: '#placement'
 
   - name: border
     type: Boolean
@@ -294,12 +294,7 @@ The `tooltip` slot is the content inside the tooltip
 
 ## Placement
 
-Change the placement of the tooltip with the properties
-
-- top
-- bottom <Badge text=Default />
-- left
-- right
+Without `placement`, Tooltip prefers the top and automatically chooses another direction when visible space is insufficient. Scrolling and resizing recalculate the position. Set `placement` to choose an initial direction, including `-start` and `-end` alignment variants. Set `:flip="false"` to prevent direction changes.
 
 <template #example>
 <tooltip-placement />

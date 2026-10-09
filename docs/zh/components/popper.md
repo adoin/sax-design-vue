@@ -33,9 +33,19 @@ PROPS:
     default: hover
   - name: placement
     type: String
-    values: "floating-ui placement | pixels | absolute | fixed"
-    description: 配置浮层内容的位置。
-    default: 'bottom'
+    values: "top | top-start | top-end | bottom | bottom-start | bottom-end | left | left-start | left-end | right | right-start | right-end"
+    description: 首选方向。未设置时，根据可视裁剪区域依次尝试上、下、右、左；均无法容纳时选择溢出最少的方向。显式设置时以该方向作为初始首选。
+    default: null
+  - name: flip
+    type: Boolean | Object
+    values: "true | false | FlipOptions"
+    description: 启用空间不足时的方向切换，或配置候选方向和裁剪边界。false 保持首选方向。
+    default: '{}'
+  - name: shift
+    type: Boolean | Object
+    values: "true | false | ShiftOptions"
+    description: 沿选定方向调整对齐位置，尽量保持在可视裁剪区域内。false 禁用此调整。
+    default: '{}'
   - name: offset
     type: Number | Object
     values: "floating-ui placement | pixels | absolute | fixed"
@@ -157,6 +167,8 @@ SLOTS:
 ## 默认
 
 浮层默认提供内边距、圆角和主题阴影，可在 `content` 插槽中放入说明或操作。点击触发按钮打开，点击外部关闭。
+
+未设置 `placement` 时优先显示在上方，可视空间不足时自动选择其他方向。滚动或调整窗口大小会重新定位。设置 `placement` 可指定初始方向，设置 `:flip="false"` 可禁用方向切换。
 
 <template #example>
 <popper-zh-default />

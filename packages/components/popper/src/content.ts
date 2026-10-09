@@ -58,7 +58,7 @@ export const popperContentProps = buildProps({
   placement: {
     type: definePropType<Placement>(String),
     values: placements,
-    default: 'bottom',
+    default: undefined,
   },
   zIndex: {
     type: Number,
