@@ -1,6 +1,12 @@
 export default {
   name: 'zh-tw',
   vs: {
+    drawer: {
+      close: '關閉抽屜',
+      title: '抽屜',
+      resize: '調整抽屜尺寸',
+      closeBlockedMessage: '關閉校驗需要返回 Promise 或呼叫 done()。',
+    },
     textEllipsis: {
       expand: '展開全文',
       collapse: '收起全文',
@@ -133,9 +139,6 @@ export default {
       minimize: '最小化',
       restore: '還原對話框',
       minimized: '已最小化的對話框',
-      close: '關閉此對話框',
-    },
-    drawer: {
       close: '關閉此對話框',
     },
     messagebox: {

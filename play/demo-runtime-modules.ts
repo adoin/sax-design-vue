@@ -1,15 +1,19 @@
-import * as VueRouter from 'vue-router'
 import { defineAsyncComponent } from 'vue'
+import * as VueRouter from 'vue-router'
 import dayjs from 'dayjs'
 
 import * as VuesaxHooks from '../packages/hooks/index'
 import * as SaxDesignVue from '../packages/sax-design-vue/index'
+import * as SaxLocales from '../packages/sax-design-vue/locales'
 
 import type { DemoRuntimeModules } from './compile-demo-sfc'
 
 export const demoRuntimeModules: DemoRuntimeModules = {
   'vue-router': VueRouter,
   'sax-design-vue': SaxDesignVue,
+  'sax-design-vue/locales': SaxLocales,
+  'sax-design-vue/es/locales': SaxLocales,
+  'sax-design-vue/lib/locales': SaxLocales,
   '@vuesax-alpha/hooks': VuesaxHooks,
   dayjs: { default: dayjs },
   './call.vue': {

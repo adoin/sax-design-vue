@@ -1,5 +1,11 @@
 ## Changelog
 
+### Unreleased
+
+- Expanded Drawer with Promise/callback close approval, delayed opening/closing, content caching and destruction, container mounting, focus management, nested push behavior, loading, and controlled pointer/keyboard resizing.
+- Added scoped Drawer header, title, extra, footer, close-icon, loading, mask, and resizer slots, region styles/classes, compatibility aliases, and ten paired English/Chinese documentation examples.
+- Enabled public locale imports in documentation Code/Playground previews and fixed Drawer default body mounting when no container is specified.
+
 ### 2.0.0 — 2026-09-30
 
 #### Breaking changes and migration

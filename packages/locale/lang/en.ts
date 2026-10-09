@@ -1,6 +1,13 @@
 export default {
   name: 'en',
   vs: {
+    drawer: {
+      close: 'Close drawer',
+      title: 'Drawer',
+      resize: 'Resize drawer',
+      closeBlockedMessage:
+        'The close hook must return a Promise or call done().',
+    },
     inputValidation: {
       required: 'Please fill out this field.',
       email: 'Please enter a valid email address.',
@@ -279,9 +286,6 @@ export default {
     },
     notification: {
       close: 'Close notification',
-    },
-    drawer: {
-      close: 'Close this dialog',
     },
     messagebox: {
       title: 'Message',

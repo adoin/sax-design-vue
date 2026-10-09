@@ -1,4 +1,4 @@
-import { onScopeDispose, watch } from 'vue'
+import { onScopeDispose, shallowReactive, watch } from 'vue'
 import { useEventListener } from '@vueuse/core'
 import { isClient } from '@vuesax-alpha/utils'
 import { EVENT_CODE } from '@vuesax-alpha/constants'
@@ -9,7 +9,7 @@ type ModalInstance = {
   handleClose: () => void
 }
 
-const modalStack: ModalInstance[] = []
+const modalStack = shallowReactive<ModalInstance[]>([])
 
 const closeModal = (e: KeyboardEvent) => {
   if (modalStack.length === 0) return
@@ -34,6 +34,7 @@ export const useModal = (instance: ModalInstance, visibleRef: Ref<boolean>) => {
     { immediate: true, flush: 'sync' },
   )
   onScopeDispose(remove)
+  return { isTopModal: () => modalStack[modalStack.length - 1] === instance }
 }
 
 if (isClient) useEventListener(document, 'keydown', closeModal)

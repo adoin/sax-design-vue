@@ -1,6 +1,12 @@
 export default {
   name: 'zh-cn',
   vs: {
+    drawer: {
+      close: '关闭抽屉',
+      title: '抽屉',
+      resize: '调整抽屉尺寸',
+      closeBlockedMessage: '关闭校验需要返回 Promise 或调用 done()。',
+    },
     inputValidation: {
       required: '请填写此项。',
       email: '请输入有效的邮箱地址。',

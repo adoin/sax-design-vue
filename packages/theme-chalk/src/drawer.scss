@@ -1,61 +1,137 @@
 @use 'mixins/mixins' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
-.s-drawer__mask {
+
+.s-drawer__root {
   position: fixed;
   inset: 0;
-  z-index: 2000;
-  background: hsl(222.222deg 47.368% 11.176% / 0.36);
+  pointer-events: auto;
+  &.is-inline {
+    position: absolute;
+  }
+  &.is-penetrable {
+    pointer-events: none;
+  }
+  &.is-closing .s-drawer__wrapper {
+    pointer-events: none;
+  }
+}
+.s-drawer__mask {
+  position: absolute;
+  inset: 0;
+  background: getColor(text, 0.26);
   backdrop-filter: blur(2px);
 }
+.s-drawer__wrapper {
+  position: absolute;
+  z-index: 1;
+  max-width: 100%;
+  max-height: 100%;
+  pointer-events: auto;
+  &.s-drawer--right,
+  &.s-drawer--left {
+    top: 0;
+    bottom: 0;
+  }
+  &.s-drawer--right {
+    right: 0;
+  }
+  &.s-drawer--left {
+    left: 0;
+  }
+  &.s-drawer--top,
+  &.s-drawer--bottom {
+    right: 0;
+    left: 0;
+  }
+  &.s-drawer--top {
+    top: 0;
+  }
+  &.s-drawer--bottom {
+    bottom: 0;
+  }
+}
 .s-drawer {
-  position: fixed;
-  z-index: 2001;
+  position: relative;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
   background: getColor(background);
-  box-shadow: 0 20px 55px hsl(222.222deg 47.368% 11.176% / 0.2);
-}
-.s-drawer--right,
-.s-drawer--left {
-  top: 0;
-  bottom: 0;
-}
-.s-drawer--right {
-  right: 0;
-}
-.s-drawer--left {
-  left: 0;
-}
-.s-drawer--top,
-.s-drawer--bottom {
-  right: 0;
-  left: 0;
-}
-.s-drawer--top {
-  top: 0;
-}
-.s-drawer--bottom {
-  bottom: 0;
+  color: getColor(text);
+  box-shadow: 0 20px 55px getColor(text, 0.2);
+  transition: transform var(--sax-motion-duration)
+    var(--sax-motion-easing-standard);
+  &.is-resizing {
+    transition: none;
+  }
+  &.is-rounded.s-drawer--right {
+    border-radius: var(--sax-radius-lg) 0 0 var(--sax-radius-lg);
+  }
+  &.is-rounded.s-drawer--left {
+    border-radius: 0 var(--sax-radius-lg) var(--sax-radius-lg) 0;
+  }
+  &.is-rounded.s-drawer--top {
+    border-radius: 0 0 var(--sax-radius-lg) var(--sax-radius-lg);
+  }
+  &.is-rounded.s-drawer--bottom {
+    border-radius: var(--sax-radius-lg) var(--sax-radius-lg) 0 0;
+  }
 }
 .s-drawer__header {
   display: flex;
-  min-height: 58px;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  border-bottom: 1px solid getColor(border, 0.7);
+  gap: 12px;
+  flex: none;
+  min-height: 64px;
+  padding: 8px 12px 8px 20px;
+  box-shadow: inset 0 -8px 12px -12px getColor(text, 0.3);
+}
+.s-drawer__heading {
+  flex: 1;
+  min-width: 0;
+}
+.s-drawer__title {
   color: getColor(text);
+  font-size: 1rem;
   font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.s-drawer__extra {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.s-drawer__scrollbar {
+  flex: 1;
+  min-height: 0;
+}
+.s-drawer__scroll-wrap {
+  height: 100%;
 }
 .s-drawer__body {
-  flex: 1;
-  overflow: auto;
   padding: 20px;
 }
+.s-drawer.is-headerless .s-drawer__body {
+  padding-top: 64px;
+}
+.s-drawer__loading {
+  display: flex;
+  min-height: 80px;
+  align-items: center;
+  justify-content: center;
+}
 .s-drawer__footer {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
   padding: 16px 20px;
-  border-top: 1px solid getColor(border, 0.7);
+  box-shadow: inset 0 8px 12px -12px getColor(text, 0.3);
 }
 .s-drawer__close {
   display: inline-flex;
@@ -70,47 +146,92 @@
   background: transparent;
   color: getColor(text-color-secondary);
   cursor: pointer;
-  font-size: 22px;
+  font-size: 18px;
   &:hover,
   &:focus-visible {
     background: getColor(primary, 0.08);
     color: getColor(primary);
-    outline: none;
+  }
+  &:disabled {
+    cursor: default;
+  }
+  &.s-drawer__close--floating {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    z-index: 2;
+  }
+}
+.s-drawer__resizer {
+  position: absolute;
+  z-index: 3;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  touch-action: none;
+  &:hover,
+  &:focus-visible {
+    background: getColor(primary, 0.1);
+  }
+  &.s-drawer__resizer--left,
+  &.s-drawer__resizer--right {
+    top: 64px;
+    bottom: 16px;
+    width: 12px;
+    cursor: ew-resize;
+  }
+  &.s-drawer__resizer--left {
+    right: -6px;
+  }
+  &.s-drawer__resizer--right {
+    left: -6px;
+  }
+  &.s-drawer__resizer--top,
+  &.s-drawer__resizer--bottom {
+    left: 16px;
+    right: 16px;
+    height: 12px;
+    cursor: ns-resize;
+  }
+  &.s-drawer__resizer--top {
+    bottom: -6px;
+  }
+  &.s-drawer__resizer--bottom {
+    top: -6px;
   }
 }
 .s-drawer-mask-enter-active,
 .s-drawer-mask-leave-active {
-  transition: opacity var(--sax-motion-duration-fast)
+  transition: opacity var(--sax-motion-duration)
     var(--sax-motion-easing-standard);
 }
 .s-drawer-mask-enter-from,
 .s-drawer-mask-leave-to {
   opacity: 0;
 }
-.s-drawer-right-enter-active,
-.s-drawer-right-leave-active,
-.s-drawer-left-enter-active,
-.s-drawer-left-leave-active,
-.s-drawer-top-enter-active,
-.s-drawer-top-leave-active,
-.s-drawer-bottom-enter-active,
-.s-drawer-bottom-leave-active {
-  transition: transform var(--sax-motion-duration)
-    var(--sax-motion-easing-standard);
+@each $placement,
+  $transform
+    in (
+      right: translateX(100%),
+      left: translateX(-100%),
+      top: translateY(-100%),
+      bottom: translateY(100%)
+    )
+{
+  .s-drawer-#{$placement}-enter-active,
+  .s-drawer-#{$placement}-leave-active {
+    transition: transform
+      var(--sax-motion-duration)
+      var(--sax-motion-easing-standard);
+  }
+  .s-drawer-#{$placement}-enter-from,
+  .s-drawer-#{$placement}-leave-to {
+    transform: $transform;
+  }
 }
-.s-drawer-right-enter-from,
-.s-drawer-right-leave-to {
-  transform: translateX(100%);
-}
-.s-drawer-left-enter-from,
-.s-drawer-left-leave-to {
-  transform: translateX(-100%);
-}
-.s-drawer-top-enter-from,
-.s-drawer-top-leave-to {
-  transform: translateY(-100%);
-}
-.s-drawer-bottom-enter-from,
-.s-drawer-bottom-leave-to {
-  transform: translateY(100%);
+@media (prefers-reduced-motion: reduce) {
+  .s-drawer,
+  [class*='s-drawer-'][class*='-active'] {
+    transition-duration: 0.01ms !important;
+  }
 }
