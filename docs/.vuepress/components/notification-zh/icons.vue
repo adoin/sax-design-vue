@@ -1,55 +1,56 @@
 <script setup lang="ts">
 import { defineComponent, h, onBeforeUnmount } from 'vue'
 import { SIcon, SNotification } from 'sax-design-vue'
+import { zhCn } from 'sax-design-vue/locales'
 import type { NotificationHandle } from 'sax-design-vue'
 
 const examples = [
   {
     name: 'cb:time',
-    label: 'Reminder',
-    content: 'A reminder is ready to review.',
+    label: '提醒',
+    content: '有一条提醒等待查看。',
     color: 'primary',
   },
   {
     name: 'cb:help',
-    label: 'Help',
-    content: 'Open the help center for more information.',
+    label: '帮助',
+    content: '前往帮助中心获取更多说明。',
     color: 'primary',
   },
   {
     name: 'cb:checkmark',
-    label: 'Completed',
-    content: 'Your changes have been saved.',
+    label: '完成',
+    content: '更改已保存。',
     color: 'success',
   },
   {
     name: 'cb:warning-alt',
-    label: 'Warning',
-    content: 'Please check the details before continuing.',
+    label: '警告',
+    content: '继续之前请检查相关信息。',
     color: 'warn',
   },
   {
     name: 'cb:locked',
-    label: 'Security',
-    content: 'Your security settings have been updated.',
+    label: '安全',
+    content: '安全设置已更新。',
     color: 'primary',
   },
   {
     name: 'cb:document',
-    label: 'Document',
-    content: 'A new document is available.',
+    label: '文档',
+    content: '有一份新文档可供查看。',
     color: 'primary',
   },
   {
     name: 'cb:cloud-upload',
-    label: 'Upload',
-    content: 'The upload has finished successfully.',
+    label: '上传',
+    content: '文件上传已完成。',
     color: 'success',
   },
   {
     name: 'cb:calendar',
-    label: 'Schedule',
-    content: 'Your schedule has been updated.',
+    label: '日程',
+    content: '日程已更新。',
     color: 'primary',
   },
 ].map((example) => ({
@@ -75,19 +76,21 @@ onBeforeUnmount(() => handles.forEach((handle) => handle.close()))
 </script>
 
 <template>
-  <div class="notification-icon-grid">
-    <s-button
-      v-for="example in examples"
-      :key="example.name"
-      class="notification-icon-trigger"
-      type="flat"
-      block
-      @click="openNotification(example)"
-    >
-      <template #prefix><s-icon :name="example.name" :size="20" /></template>
-      {{ example.label }}
-    </s-button>
-  </div>
+  <s-config-provider :locale="zhCn">
+    <div class="notification-icon-grid">
+      <s-button
+        v-for="example in examples"
+        :key="example.name"
+        class="notification-icon-trigger"
+        type="flat"
+        block
+        @click="openNotification(example)"
+      >
+        <template #prefix><s-icon :name="example.name" :size="20" /></template>
+        {{ example.label }}
+      </s-button>
+    </div>
+  </s-config-provider>
 </template>
 
 <style scoped>

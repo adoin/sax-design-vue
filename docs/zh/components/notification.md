@@ -507,27 +507,27 @@ SNotification({ ...options })
 
 ## 图标
 
-将 `icon` 属性提供的图标添加到通知中。
+通过 `icon` 传入图标组件。点击下方按钮，查看带有对应图标的通知。
 
 <template #example>
-<notification-icons />
+<notification-zh-icons />
 </template>
 
 <template #template>
 
-@[code{1-80}](../../.vuepress/components/notification/icons.vue)
+@[code{78-94}](../../.vuepress/components/notification-zh/icons.vue)
 
 </template>
 
 <template #script>
 
-@[code{82-113}](../../.vuepress/components/notification/icons.vue)
+@[code{1-76}](../../.vuepress/components/notification-zh/icons.vue)
 
 </template>
 
 <template #style>
 
-@[code{115-136}](../../.vuepress/components/notification/icons.vue)
+@[code{96-108}](../../.vuepress/components/notification-zh/icons.vue)
 
 </template>
 

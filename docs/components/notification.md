@@ -507,7 +507,7 @@ Allowed values ​​are:
 
 ## Icons
 
-Add the icon provided as the value of the `icon` property to the notification
+Pass an icon component through `icon`. Click a labeled button to view the corresponding notification.
 
 <template #example>
 <notification-icons />
@@ -515,19 +515,19 @@ Add the icon provided as the value of the `icon` property to the notification
 
 <template #template>
 
-@[code{1-80}](../.vuepress/components/notification/icons.vue)
+@[code{77-91}](../.vuepress/components/notification/icons.vue)
 
 </template>
 
 <template #script>
 
-@[code{82-113}](../.vuepress/components/notification/icons.vue)
+@[code{1-75}](../.vuepress/components/notification/icons.vue)
 
 </template>
 
 <template #style>
 
-@[code{115-136}](../.vuepress/components/notification/icons.vue)
+@[code{93-105}](../.vuepress/components/notification/icons.vue)
 
 </template>
 

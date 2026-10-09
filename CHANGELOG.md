@@ -2,6 +2,7 @@
 
 ### Unreleased
 
+- Refined Notification icon examples with consistent outline icons, labeled controls, responsive spacing and localized English/Chinese Code and Playground sources.
 - Added Notice Bar Promise-based beforeClose approval with merged requests, pending state and rejection events, plus localized examples choosing temporary or persistent dismissal.
 - Added Notification particle close animation with configurable timing and opt-out, shared lazy surface-filter lifecycle, and synchronized manual/automatic/programmatic dismissal. Fixed duplicate close callbacks and disposal of imperative notification instances.
 - Expanded Notice Bar with multiple-notice navigation and autoplay, overflow-aware scrolling, pause controls, wrapping, links, fixed action slots, controlled visibility, semantic colors, sizes and shape variants. Added ten paired documentation examples and corrected counter glyph alignment and the documented scrolling duration unit.
