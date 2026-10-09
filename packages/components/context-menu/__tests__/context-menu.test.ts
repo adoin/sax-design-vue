@@ -13,6 +13,102 @@ const wrappers: { unmount(): void }[] = []
 afterEach(() => wrappers.splice(0).forEach((wrapper) => wrapper.unmount()))
 
 describe('shared context menu', () => {
+  const nested = (innerDisabled = false) => {
+    const layer = (
+      name: string,
+      children = () => h('button', { class: `${name}-origin` }, name),
+    ) =>
+      h(
+        SContextMenu,
+        {
+          items: [{ label: name }],
+          disabled: name === 'inner' && innerDisabled,
+        },
+        { default: children },
+      )
+    const wrapper = mount(
+      defineComponent({
+        setup: () => () =>
+          h('div', [
+            layer('outer', () =>
+              h('div', [
+                h('button', { class: 'outer-origin' }, 'Outer'),
+                layer('middle', () =>
+                  h('div', [
+                    h('button', { class: 'middle-origin' }, 'Middle'),
+                    layer('inner'),
+                  ]),
+                ),
+              ]),
+            ),
+          ]),
+      }),
+      { attachTo: document.body },
+    )
+    wrappers.push(wrapper)
+    const menus = wrapper.findAllComponents(SContextMenu)
+    const menu = (name: string) =>
+      menus.find((item) => item.props('items')[0].label === name)!
+    return { wrapper, menus, menu }
+  }
+
+  it.each([
+    ['contextmenu', {}],
+    ['keydown', { key: 'ContextMenu' }],
+    ['keydown', { key: 'F10', shiftKey: true }],
+  ])(
+    'only opens the innermost of three nested menus for %s %j',
+    async (event, options) => {
+      const { wrapper, menus, menu } = nested()
+      await wrapper.get('.inner-origin').trigger(event, options)
+      await settle()
+      expect(menu('inner').emitted('open')).toHaveLength(1)
+      expect(menu('middle').emitted('open')).toBeUndefined()
+      expect(menu('outer').emitted('open')).toBeUndefined()
+      expect(
+        menus.filter((item) => item.emitted('update:modelValue')?.[0]?.[0]),
+      ).toHaveLength(1)
+      expect(document.activeElement?.textContent).toBe('inner')
+    },
+  )
+
+  it('lets each enclosing region handle right-clicks outside its nested trigger', async () => {
+    const { wrapper, menu } = nested()
+    await wrapper.get('.middle-origin').trigger('contextmenu')
+    await settle()
+    expect(menu('middle').emitted('open')).toHaveLength(1)
+    expect(menu('inner').emitted('open')).toBeUndefined()
+    expect(menu('outer').emitted('open')).toBeUndefined()
+    menu('middle').vm.close(false)
+    await settle()
+    await wrapper.get('.outer-origin').trigger('contextmenu')
+    await settle()
+    expect(menu('outer').emitted('open')).toHaveLength(1)
+    expect(menu('middle').emitted('open')).toHaveLength(1)
+    expect(menu('inner').emitted('open')).toBeUndefined()
+  })
+
+  it('falls back to the nearest enabled ancestor when the innermost menu is disabled', async () => {
+    const { wrapper, menu } = nested(true)
+    await wrapper.get('.inner-origin').trigger('contextmenu')
+    await settle()
+    expect(menu('inner').emitted('open')).toBeUndefined()
+    expect(menu('middle').emitted('open')).toHaveLength(1)
+    expect(menu('outer').emitted('open')).toBeUndefined()
+  })
+
+  it('respects an event already prevented by the target without opening an ancestor', async () => {
+    const { wrapper, menus } = nested()
+    const event = new MouseEvent('contextmenu', {
+      bubbles: true,
+      cancelable: true,
+    })
+    event.preventDefault()
+    wrapper.get('.inner-origin').element.dispatchEvent(event)
+    await settle()
+    expect(menus.every((menu) => !menu.emitted('open'))).toBe(true)
+  })
+
   it('preserves native menus when disabled and exposes keyboard focus through the menu key', async () => {
     const wrapper = mount(SContextMenu, {
       attachTo: document.body,
