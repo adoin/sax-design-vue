@@ -42,17 +42,17 @@
       animation-iteration-count: infinite;
     }
     &.is-animated {
-      .s-empty__ticket {
-        animation-name: s-empty-ticket;
-      }
-      .s-empty__search {
-        animation-name: s-empty-search;
+      .s-empty__flap-back {
+        animation-name: s-empty-flap-back;
       }
       .s-empty__flap-left {
-        animation-name: s-empty-flap;
+        animation-name: s-empty-flap-left;
       }
-      .s-empty__scan {
-        animation-name: s-empty-scan;
+      .s-empty__flap-right {
+        animation-name: s-empty-flap-right;
+      }
+      .s-empty__interior-light {
+        animation-name: s-empty-light;
       }
       .s-empty__spark {
         animation-name: s-empty-spark;
@@ -84,21 +84,20 @@
     color: getColor(primary);
     opacity: 0.09;
   }
-  @include e(ticket) {
-    transform-origin: 108px 120px;
+  @include e(flap-back) {
+    transform-origin: 128px 78px;
   }
   @include e(flap-left) {
-    transform-origin: 66px 99px;
+    transform-origin: 78px 78px;
   }
-  @include e(search) {
-    transform-origin: 176px 109px;
+  @include e(flap-right) {
+    transform-origin: 177px 78px;
   }
-  @include e(scan) {
-    transform-origin: 176px 109px;
-    opacity: 0;
+  @include e(interior-light) {
+    transform-origin: 127px 115px;
   }
   @include e(spark) {
-    transform-origin: 163px 52px;
+    transform-origin: 130px 90px;
     opacity: 0.6;
   }
 
@@ -115,69 +114,63 @@
 }
 
 // Independent pivots and dwell periods keep the empty tray visually anchored.
-@keyframes s-empty-ticket {
+@keyframes s-empty-flap-back {
   0%,
   12%,
   82%,
   100% {
-    transform: translateY(0) rotate(0deg);
+    transform: scaleY(1);
   }
-  32%,
-  48% {
-    transform: translateY(-7px) rotate(-3deg);
+  35%,
+  50% {
+    transform: scaleY(1.04);
   }
   65% {
-    transform: translateY(-3px) rotate(1deg);
+    transform: scaleY(0.99);
   }
 }
-@keyframes s-empty-search {
-  0%,
-  12%,
-  82%,
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  30% {
-    transform: translate(-4px, -3px) rotate(-8deg);
-  }
-  45%,
-  55% {
-    transform: translate(3px, -2px) rotate(5deg);
-  }
-  68% {
-    transform: translate(0, 1px) rotate(-2deg);
-  }
-}
-@keyframes s-empty-flap {
+@keyframes s-empty-flap-left {
   0%,
   16%,
-  75%,
+  78%,
   100% {
     transform: rotate(0deg);
   }
   35%,
   48% {
-    transform: rotate(-4deg);
+    transform: rotate(3deg);
   }
-  62% {
+  63% {
+    transform: rotate(-1deg);
+  }
+}
+@keyframes s-empty-flap-right {
+  0%,
+  22%,
+  84%,
+  100% {
+    transform: rotate(0deg);
+  }
+  43%,
+  56% {
+    transform: rotate(-3deg);
+  }
+  70% {
     transform: rotate(1deg);
   }
 }
-@keyframes s-empty-scan {
+@keyframes s-empty-light {
   0%,
-  28%,
-  65%,
+  15%,
+  85%,
   100% {
-    opacity: 0;
-    transform: scale(0.65);
+    opacity: 0.4;
+    transform: scaleX(0.9);
   }
-  40% {
-    opacity: 0.7;
-    transform: scale(0.8);
-  }
-  54% {
-    opacity: 0;
-    transform: scale(1.18);
+  40%,
+  55% {
+    opacity: 0.85;
+    transform: scaleX(1.05);
   }
 }
 @keyframes s-empty-spark {

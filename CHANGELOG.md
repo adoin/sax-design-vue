@@ -2,7 +2,7 @@
 
 ### Unreleased
 
-- Redesigned Empty with an animated inline SVG scene, theme-aware colors, an animation toggle, offscreen/hidden-page pausing and reduced-motion support. Preserved custom image URLs, image-size and illustration slots, with paired documentation examples.
+- Redesigned Empty with an animated inline SVG of a completely empty open box, theme-aware colors, an animation toggle, offscreen/hidden-page pausing and reduced-motion support. Preserved custom image URLs, image-size and illustration slots, with paired documentation examples.
 - Expanded Drawer with Promise/callback close approval, delayed opening/closing, content caching and destruction, container mounting, focus management, nested push behavior, loading, and controlled pointer/keyboard resizing.
 - Added scoped Drawer header, title, extra, footer, close-icon, loading, mask, and resizer slots, region styles/classes, compatibility aliases, and ten paired English/Chinese documentation examples.
 - Enabled public locale imports in documentation Code/Playground previews and fixed Drawer default body mounting when no container is specified.

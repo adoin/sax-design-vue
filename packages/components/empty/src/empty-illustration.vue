@@ -40,11 +40,11 @@ const playing = useEmptyMotion(scene, () => props.animated)
         />
       </radialGradient>
       <linearGradient
-        :id="`${id}-paper`"
+        :id="`${id}-flap`"
         x1="75"
-        y1="38"
+        y1="45"
         x2="130"
-        y2="117"
+        y2="130"
         gradientUnits="userSpaceOnUse"
       >
         <stop :class="ns.e('tone-surface')" stop-color="currentColor" />
@@ -53,9 +53,9 @@ const playing = useEmptyMotion(scene, () => props.animated)
       <linearGradient
         :id="`${id}-inside`"
         x1="128"
-        y1="94"
+        y1="78"
         x2="128"
-        y2="147"
+        y2="127"
         gradientUnits="userSpaceOnUse"
       >
         <stop
@@ -81,88 +81,46 @@ const playing = useEmptyMotion(scene, () => props.animated)
         <stop :class="ns.e('tone-surface')" stop-color="currentColor" />
         <stop offset="1" :class="ns.e('tone-tint')" stop-color="currentColor" />
       </linearGradient>
-      <linearGradient
-        :id="`${id}-glass`"
-        x1="155"
-        y1="88"
-        x2="196"
-        y2="131"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop
-          :class="ns.e('tone-surface')"
-          stop-color="currentColor"
-          stop-opacity=".9"
-        />
-        <stop
-          offset="1"
-          :class="ns.e('tone-accent')"
-          stop-color="currentColor"
-          stop-opacity=".13"
-        />
-      </linearGradient>
-      <clipPath :id="`${id}-lens`">
-        <circle cx="176" cy="109" r="22" />
-      </clipPath>
     </defs>
 
-    <ellipse cx="128" cy="103" rx="114" ry="88" :fill="paint('halo')" />
+    <ellipse cx="128" cy="108" rx="114" ry="84" :fill="paint('halo')" />
     <g :class="ns.e('orbit')" stroke="currentColor" stroke-linecap="round">
       <path
-        d="M39 116C24 77 53 38 94 30M150 28C184 30 217 57 223 85"
+        d="M28 93C23 124 35 149 57 161M204 40C222 50 233 69 236 86"
         stroke-dasharray="2 7"
       />
-      <path d="M34 148H44M214 166H228M42 58H48M45 55V61" opacity=".6" />
-      <circle cx="204" cy="49" r="3" />
-      <circle cx="28" cy="100" r="2" />
+      <path d="M30 153H40M217 158H229" opacity=".6" />
+      <circle cx="38" cy="58" r="2" />
+      <circle cx="219" cy="131" r="2" />
     </g>
     <ellipse
       :class="ns.e('ground')"
-      cx="130"
-      cy="179"
+      cx="129"
+      cy="177"
       rx="85"
       ry="8"
       fill="currentColor"
     />
 
-    <g :class="ns.e('ticket')" data-motion="ticket">
+    <g :class="ns.e('flap-back')" data-motion="flap-back">
       <path
-        d="M85 39H124L140 55V115C140 120 136 124 131 124H85C80 124 76 120 76 115V48C76 43 80 39 85 39Z"
-        :fill="paint('paper')"
-      />
-      <path
-        d="M85 39H124L140 55V115C140 120 136 124 131 124H85C80 124 76 120 76 115V48C76 43 80 39 85 39Z"
-        stroke="currentColor"
-        stroke-opacity=".28"
-        stroke-width="1.5"
-      />
-      <path
-        d="M124 39V51C124 54 126 56 129 56H140"
+        d="M78 78L66 49C65 46 68 44 72 44H182C186 44 188 46 186 50L177 78Z"
+        :fill="paint('flap')"
         stroke="currentColor"
         stroke-opacity=".3"
         stroke-width="1.5"
-      />
-      <rect
-        x="87"
-        y="63"
-        width="42"
-        height="40"
-        rx="5"
-        stroke="currentColor"
-        stroke-opacity=".28"
-        stroke-dasharray="3 4"
+        stroke-linejoin="round"
       />
       <path
-        d="M103 83H113M108 78V88"
+        d="M71 49H181M78 74H177"
         stroke="currentColor"
-        stroke-opacity=".38"
-        stroke-width="1.8"
+        stroke-opacity=".14"
         stroke-linecap="round"
       />
       <path
-        d="M91 112H108M113 112H125"
+        d="M71 50L82 72M180 50L173 72"
+        :class="ns.e('tone-surface')"
         stroke="currentColor"
-        stroke-opacity=".18"
         stroke-width="2"
         stroke-linecap="round"
       />
@@ -170,170 +128,112 @@ const playing = useEmptyMotion(scene, () => props.animated)
 
     <g :class="ns.e('tray')">
       <path
-        d="M74 90H179C184 90 187 93 189 99L204 139H55L65 101C67 94 69 90 74 90Z"
+        d="M78 78H177L201 127H55Z"
         :fill="paint('inside')"
         stroke="currentColor"
         stroke-opacity=".3"
         stroke-width="1.5"
+        stroke-linejoin="round"
       />
       <path
-        d="M76 101H177L188 132H66L76 101Z"
+        d="M78 78L82 105H173L177 78"
+        stroke="currentColor"
+        stroke-opacity=".18"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M82 105H173L185 124H69Z"
         :class="ns.e('tone-surface')"
         fill="currentColor"
-        fill-opacity=".55"
+        fill-opacity=".75"
       />
       <path
-        d="M76 101H177M66 132H188"
-        stroke="currentColor"
-        stroke-opacity=".15"
-        stroke-linecap="round"
-      />
-      <path
-        d="M82 119H99M155 119H173"
+        d="M55 127L82 105M201 127L173 105M82 105H173"
         stroke="currentColor"
         stroke-opacity=".13"
-        stroke-width="1.5"
-        stroke-dasharray="3 4"
+        stroke-linejoin="round"
       />
-      <g :class="ns.e('flap-left')" data-motion="flap">
+      <ellipse
+        :class="[ns.e('interior-light'), ns.e('tone-surface')]"
+        data-motion="light"
+        cx="127"
+        cy="115"
+        rx="39"
+        ry="7"
+        fill="currentColor"
+        fill-opacity=".5"
+      />
+
+      <g :class="ns.e('flap-left')" data-motion="flap-left">
         <path
-          d="M66 99L47 115C44 118 45 121 49 123L64 131L88 106L66 99Z"
-          :fill="paint('paper')"
+          d="M78 78L49 63C46 61 43 63 41 67L28 100C27 103 28 106 31 108L55 127Z"
+          :fill="paint('flap')"
           stroke="currentColor"
-          stroke-opacity=".25"
+          stroke-opacity=".28"
           stroke-width="1.5"
           stroke-linejoin="round"
         />
         <path
-          d="M50 118L65 124L81 108"
+          d="M46 68L34 100L54 116"
           stroke="currentColor"
           stroke-opacity=".13"
           stroke-linecap="round"
         />
       </g>
+      <g :class="ns.e('flap-right')" data-motion="flap-right">
+        <path
+          d="M177 78L209 62C213 60 216 62 218 66L234 99C236 103 234 106 231 108L201 127Z"
+          :fill="paint('flap')"
+          stroke="currentColor"
+          stroke-opacity=".28"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M212 67L228 100L202 118"
+          stroke="currentColor"
+          stroke-opacity=".13"
+          stroke-linecap="round"
+        />
+      </g>
+
       <path
-        d="M187 99L211 116C215 119 213 122 209 124L196 132L166 106L187 99Z"
-        :fill="paint('paper')"
-        stroke="currentColor"
-        stroke-opacity=".25"
-        stroke-width="1.5"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M55 139H92C97 139 99 143 101 148L104 153H153L157 146C159 141 161 139 166 139H204L201 165C200 172 196 176 189 176H71C63 176 59 172 58 165L55 139Z"
+        d="M55 127H92C97 127 99 130 101 135L104 141H153L157 135C159 130 161 127 166 127H201L197 163C196 170 192 173 185 173H71C63 173 59 170 58 163Z"
         :fill="paint('front')"
         stroke="currentColor"
-        stroke-opacity=".32"
+        stroke-opacity=".34"
         stroke-width="1.5"
         stroke-linejoin="round"
       />
       <path
-        d="M61 143H89C93 143 95 145 97 150L101 157H156L160 150C162 145 165 143 169 143H198"
+        d="M61 131H89C93 131 95 133 97 138L101 145H156L160 138C162 133 165 131 169 131H195"
         :class="ns.e('tone-surface')"
         stroke="currentColor"
-        stroke-opacity=".85"
+        stroke-opacity=".9"
         stroke-width="2"
         stroke-linecap="round"
       />
       <path
-        d="M63 158L64 165C64 168 66 170 70 170H83"
+        d="M63 155L64 162C64 165 66 168 70 168H83"
         stroke="currentColor"
         stroke-opacity=".15"
         stroke-linecap="round"
       />
       <rect
         x="111"
-        y="162"
+        y="155"
         width="35"
         height="5"
         rx="2.5"
         fill="currentColor"
-        fill-opacity=".15"
+        fill-opacity=".16"
       />
-      <circle cx="180" cy="163" r="2" fill="currentColor" fill-opacity=".2" />
+      <circle cx="180" cy="158" r="2" fill="currentColor" fill-opacity=".2" />
     </g>
-
-    <g :class="ns.e('search')" data-motion="search">
-      <path
-        d="M192 126L213 150C215 152 219 152 221 150C223 148 223 145 221 143L198 121"
-        :class="ns.e('tone-accent')"
-        fill="currentColor"
-        fill-opacity=".8"
-      />
-      <path
-        d="M201 133L216 149"
-        :class="ns.e('tone-surface')"
-        stroke="currentColor"
-        stroke-opacity=".4"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
-      <circle
-        cx="176"
-        cy="109"
-        r="27"
-        :class="ns.e('tone-surface')"
-        fill="currentColor"
-      />
-      <circle
-        cx="176"
-        cy="109"
-        r="26"
-        stroke="currentColor"
-        stroke-width="3"
-        stroke-opacity=".65"
-      />
-      <circle cx="176" cy="109" r="22" :fill="paint('glass')" />
-      <g :clip-path="paint('lens')">
-        <path
-          d="M151 117L186 82H196L158 124Z"
-          :class="ns.e('tone-surface')"
-          fill="currentColor"
-          fill-opacity=".65"
-        />
-        <path
-          d="M170 105H182M176 99V111"
-          stroke="currentColor"
-          stroke-opacity=".25"
-          stroke-width="1.5"
-          stroke-linecap="round"
-        />
-        <circle
-          :class="ns.e('scan')"
-          data-motion="scan"
-          cx="176"
-          cy="109"
-          r="15"
-          stroke="currentColor"
-          stroke-opacity=".3"
-          stroke-dasharray="2 5"
-        />
-      </g>
-      <path
-        d="M158 104C160 94 166 90 175 89"
-        :class="ns.e('tone-surface')"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
-    </g>
-    <g
-      :class="ns.e('spark')"
-      data-motion="spark"
-      stroke="currentColor"
-      stroke-linecap="round"
-      stroke-width="1.5"
-    >
-      <path d="M163 47V57M158 52H168" />
-      <path d="M53 83V89M50 86H56" opacity=".5" />
-      <circle
-        cx="224"
-        cy="126"
-        r="2"
-        fill="currentColor"
-        stroke="none"
-        opacity=".55"
-      />
+    <g :class="ns.e('spark')" data-motion="spark" fill="currentColor">
+      <circle cx="55" cy="36" r="1.5" opacity=".5" />
+      <circle cx="201" cy="31" r="2" opacity=".55" />
+      <circle cx="227" cy="145" r="1.5" opacity=".4" />
     </g>
   </svg>
 </template>

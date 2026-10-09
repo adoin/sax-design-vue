@@ -43,7 +43,7 @@ SLOTS:
 
 ## Default
 
-An empty tray and magnifier convey missing content. Explain the state with description and offer the next action in the default slot.
+An open, completely empty box conveys missing content. Explain the state with description and offer the next action in the default slot.
 
 <template #example><empty-default /></template>
 
@@ -59,7 +59,7 @@ An empty tray and magnifier convey missing content. Explain the state with descr
 
 ## Animation
 
-Use animated to control the built-in scene. The tray stays anchored while the paper, flap, magnifier and highlights move in staggered phases. Reduced motion keeps the scene static; offscreen or hidden pages pause it.
+Use animated to control the built-in scene. The empty interior stays visible while the open flaps and soft lighting move in staggered phases. Reduced motion keeps the scene static; offscreen or hidden pages pause it.
 
 <template #example><empty-animation /></template>
 
