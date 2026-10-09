@@ -7,6 +7,8 @@
   --sax-tag-text: hsl(0deg 0% 0% / 0.7);
   --sax-tag-accent: currentColor;
   --sax-tag-arrow-tip: 0.875rem;
+  --sax-tag-padding-left: 10px;
+  --sax-tag-avatar-padding-left: 2px;
   --sax-tag-shadow:
     0 1px 2px #{getColor(primary, 0.08)}, 0 4px 10px #{getColor(primary, 0.1)};
   position: relative;
@@ -18,6 +20,7 @@
   min-height: 28px;
   margin: 2px 2px 3px 0;
   padding: 3px 10px;
+  padding-left: var(--sax-tag-padding-left);
   border: 0;
   border-radius: var(--sax-radius-sm);
   background: var(--sax-tag-surface);
@@ -40,6 +43,12 @@
     justify-content: center;
     gap: 0.35rem;
     min-width: 0;
+  }
+
+  &:has(
+    > .#{$namespace}-tag__text > .#{$namespace}-avatar-content:first-child
+  ) {
+    padding-left: var(--sax-tag-avatar-padding-left);
   }
 
   @include e(icon) {
@@ -181,14 +190,16 @@
   }
 
   @include when(style-mark) {
-    padding-left: 1.15rem;
+    --sax-tag-padding-left: 1.15rem;
+    --sax-tag-avatar-padding-left: calc(1.15rem - 8px);
 
     & > .#{$namespace}-tag__shape-surface {
       clip-path: polygon(100% 0, 100% 100%, 0.55rem 100%, 0 50%, 0.55rem 0);
     }
 
     @include when(pill) {
-      padding-left: 1.3rem;
+      --sax-tag-padding-left: 1.3rem;
+      --sax-tag-avatar-padding-left: calc(1.3rem - 8px);
 
       & > .#{$namespace}-tag__shape-surface {
         border-radius: inherit;
@@ -311,7 +322,7 @@
   .#{$namespace}-avatar-content {
     width: 24px;
     height: 24px;
-    margin: 2px 4px 2px -8px;
+    margin: 2px 4px 2px 0;
     flex-shrink: 0;
 
     .#{$namespace}-avatar {
