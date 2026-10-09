@@ -1,22 +1,25 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue'
+import { zhCn } from 'sax-design-vue/locales'
 const acknowledged = shallowRef(false)
 </script>
 
 <template>
-  <s-result
-    :status="'success'"
-    :title="acknowledged ? 'Result acknowledged' : 'Completed successfully'"
-    description="Your changes are saved. You can continue to the next step."
-  >
-    <template #extra
-      ><s-button :disabled="acknowledged" @click="acknowledged = true"
-        >Confirm result</s-button
-      ><s-button type="flat" @click="acknowledged = false"
-        >Reset</s-button
-      ></template
+  <s-config-provider :locale="zhCn">
+    <s-result
+      :status="'success'"
+      :title="acknowledged ? '结果已确认' : '操作成功'"
+      description="更改已保存，可以继续下一步。"
     >
-  </s-result>
+      <template #extra
+        ><s-button :disabled="acknowledged" @click="acknowledged = true"
+          >确认结果</s-button
+        ><s-button type="flat" @click="acknowledged = false"
+          >重置</s-button
+        ></template
+      >
+    </s-result>
+  </s-config-provider>
 </template>
 
 <style scoped>

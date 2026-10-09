@@ -1,4 +1,5 @@
 import { buildProps } from '@vuesax-alpha/utils'
+import { useSizeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type Result from './result.vue'
 
@@ -14,6 +15,13 @@ export const resultProps = buildProps({
   title: String,
   content: String,
   description: String,
+  size: useSizeProp,
+  layout: {
+    type: String,
+    values: ['vertical', 'horizontal'] as const,
+    default: 'vertical',
+  },
+  animated: { type: Boolean, default: true },
 } as const)
 
 export type ResultProps = ExtractPropTypes<typeof resultProps>

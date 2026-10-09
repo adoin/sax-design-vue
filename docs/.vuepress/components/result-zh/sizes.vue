@@ -1,22 +1,26 @@
 <script setup lang="ts">
-import { shallowRef } from 'vue'
-const acknowledged = shallowRef(false)
+import { zhCn } from 'sax-design-vue/locales'
+const sizes = [
+  { value: 'small', label: '小尺寸' },
+  { value: 'default', label: '标准尺寸' },
+  { value: 'large', label: '大尺寸' },
+] as const
 </script>
 
 <template>
-  <s-result
-    :status="'success'"
-    :title="acknowledged ? 'Result acknowledged' : 'Completed successfully'"
-    description="Your changes are saved. You can continue to the next step."
-  >
-    <template #extra
-      ><s-button :disabled="acknowledged" @click="acknowledged = true"
-        >Confirm result</s-button
-      ><s-button type="flat" @click="acknowledged = false"
-        >Reset</s-button
-      ></template
-    >
-  </s-result>
+  <s-config-provider :locale="zhCn">
+    <div class="result-demo-stack">
+      <s-result
+        v-for="item in sizes"
+        :key="item.value"
+        status="success"
+        :size="item.value"
+        :title="item.label"
+        description="插画、文字与内容间距随尺寸一起调整。"
+        :animated="false"
+      />
+    </div>
+  </s-config-provider>
 </template>
 
 <style scoped>

@@ -1,22 +1,29 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue'
-const acknowledged = shallowRef(false)
+import { zhCn } from 'sax-design-vue/locales'
+const animated = shallowRef(true)
+const revision = shallowRef(0)
 </script>
 
 <template>
-  <s-result
-    :status="'success'"
-    :title="acknowledged ? 'Result acknowledged' : 'Completed successfully'"
-    description="Your changes are saved. You can continue to the next step."
-  >
-    <template #extra
-      ><s-button :disabled="acknowledged" @click="acknowledged = true"
-        >Confirm result</s-button
-      ><s-button type="flat" @click="acknowledged = false"
-        >Reset</s-button
-      ></template
-    >
-  </s-result>
+  <s-config-provider :locale="zhCn">
+    <div class="result-demo-stack">
+      <div class="result-demo-controls">
+        <s-switch v-model="animated" aria-label="启用入场动画"
+          >启用入场动画</s-switch
+        ><s-button size="small" type="flat" @click="revision++"
+          >重新播放</s-button
+        >
+      </div>
+      <s-result
+        :key="revision"
+        status="success"
+        title="操作完成"
+        description="确认标记出现后，图案保持稳定。"
+        :animated="animated"
+      />
+    </div>
+  </s-config-provider>
 </template>
 
 <style scoped>

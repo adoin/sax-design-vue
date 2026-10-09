@@ -1,19 +1,32 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue'
-const acknowledged = shallowRef(false)
+const detailsVisible = shallowRef(false)
 </script>
 
 <template>
-  <s-result
-    :status="'success'"
-    :title="acknowledged ? 'Result acknowledged' : 'Completed successfully'"
-    description="Your changes are saved. You can continue to the next step."
-  >
+  <s-result status="info">
+    <template #icon><s-icon name="cb:cloud-upload" :size="40" /></template>
+    <template #title
+      >File is ready<small class="result-reference">S-2048</small></template
+    >
+    <p>View the result details or continue working with other files.</p>
+    <template v-if="detailsVisible" #details
+      ><dl class="result-detail-list">
+        <div>
+          <dt>Status</dt>
+          <dd>Completed</dd>
+        </div>
+        <div>
+          <dt>Reference</dt>
+          <dd>S-2048</dd>
+        </div>
+      </dl></template
+    >
     <template #extra
-      ><s-button :disabled="acknowledged" @click="acknowledged = true"
-        >Confirm result</s-button
-      ><s-button type="flat" @click="acknowledged = false"
-        >Reset</s-button
+      ><s-button
+        :aria-expanded="detailsVisible"
+        @click="detailsVisible = !detailsVisible"
+        >{{ detailsVisible ? 'Hide details' : 'View details' }}</s-button
       ></template
     >
   </s-result>

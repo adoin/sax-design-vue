@@ -5,13 +5,13 @@ const acknowledged = shallowRef(false)
 
 <template>
   <s-result
-    :status="'success'"
-    :title="acknowledged ? 'Result acknowledged' : 'Completed successfully'"
-    description="Your changes are saved. You can continue to the next step."
+    :status="acknowledged ? 'info' : 'error'"
+    :title="acknowledged ? 'Retry acknowledged' : 'Unable to complete'"
+    description="Check the relevant information and try again, or contact support."
   >
     <template #extra
       ><s-button :disabled="acknowledged" @click="acknowledged = true"
-        >Confirm result</s-button
+        >Try again</s-button
       ><s-button type="flat" @click="acknowledged = false"
         >Reset</s-button
       ></template

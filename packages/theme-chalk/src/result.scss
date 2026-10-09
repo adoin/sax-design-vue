@@ -3,32 +3,217 @@
 @use 'common/var' as *;
 
 @include b(result) {
+  --sax-result-accent: #{getColor(info)};
+  --sax-result-art-size: 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 34px 24px;
+  gap: 14px;
+  width: 100%;
+  min-width: 0;
+  padding: 24px;
+  box-sizing: border-box;
   text-align: center;
-
   @include e(icon) {
-    display: grid;
-    width: 58px;
-    height: 58px;
-    place-items: center;
-    border-radius: var(--sax-radius-xl);
-    background: getColor(info, 0.12);
-    color: getColor(info);
-    font-size: 29px;
-    font-weight: 650;
-    box-shadow: 0 12px 28px getColor(info, 0.14);
+    width: var(--sax-result-art-size);
+    max-width: 100%;
+    flex: none;
+    color: var(--sax-result-accent);
   }
-  @include e(title) { margin: 16px 0 0; color: getColor(text); font-size: 18px; line-height: 1.4; }
-  @include e(description) { max-width: 480px; margin: 8px 0 0; color: getColor(text, 0.58); font-size: 14px; line-height: 1.6; }
-  @include e(extra) { margin-top: 20px; }
-
-  @each $type in (success, warning, danger) {
-    @include m($type) {
-      .#{bem('result', 'icon')} { background: getColor($type, 0.12); color: getColor($type); box-shadow: 0 12px 28px getColor($type, 0.14); }
+  @include e(illustration) {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  @include e(body) {
+    min-width: 0;
+    width: 100%;
+    max-width: 560px;
+  }
+  @include e(title) {
+    margin: 0;
+    color: #{getColor(text)};
+    font-size: 22px;
+    font-weight: 650;
+    line-height: 1.4;
+  }
+  @include e(description) {
+    margin-top: 10px;
+    color: #{getColor(text, 0.72)};
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+    > :first-child {
+      margin-top: 0;
+    }
+    > :last-child {
+      margin-bottom: 0;
     }
   }
-  @include m(error) { .#{bem('result', 'icon')} { background: getColor(danger, 0.12); color: getColor(danger); box-shadow: 0 12px 28px getColor(danger, 0.14); } }
+  @include e(details) {
+    margin-top: 20px;
+    text-align: start;
+  }
+  @include e(extra) {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 22px;
+  }
+  .#{bem('result', 'icon')}.is-custom {
+    display: grid;
+    place-items: center;
+    width: 68px;
+    height: 68px;
+    margin-block: 12px;
+    border-radius: var(--sax-radius-xl);
+    background: color-mix(in srgb, var(--sax-result-accent) 10%, transparent);
+    box-shadow: 0 12px 28px
+      color-mix(in srgb, var(--sax-result-accent) 12%, transparent);
+  }
+  &.is-horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 28px;
+    text-align: start;
+    .#{bem('result', 'body')} {
+      flex: 1;
+      min-width: min(100%, 240px);
+    }
+    .#{bem('result', 'extra')} {
+      justify-content: flex-start;
+    }
+  }
+  @include m(small) {
+    --sax-result-art-size: 112px;
+    padding: 16px;
+    gap: 10px;
+    .#{bem('result', 'title')} {
+      font-size: 18px;
+    }
+    .#{bem('result', 'description')} {
+      font-size: 13px;
+    }
+  }
+  @include m(large) {
+    --sax-result-art-size: 208px;
+    padding: 32px;
+    gap: 18px;
+    .#{bem('result', 'title')} {
+      font-size: 26px;
+    }
+    .#{bem('result', 'description')} {
+      font-size: 16px;
+    }
+  }
+  @each $status,
+    $tone in (success: success, warning: warn, error: danger, info: info)
+  {
+    @include m($status) {
+      --sax-result-accent: #{getColor($tone)};
+    }
+  }
+  @include e(mark) {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+  .#{bem('result', 'illustration')}.is-pending {
+    .#{bem('result', 'seal')} {
+      opacity: 0;
+    }
+    .#{bem('result', 'mark')} {
+      stroke-dashoffset: 1;
+    }
+  }
+  .#{bem('result', 'illustration')}.is-revealing {
+    .#{bem('result', 'seal')} {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: sax-result-seal-in 700ms var(--sax-motion-easing-smooth-out)
+        both;
+    }
+    .#{bem('result', 'paper')} {
+      animation: sax-result-paper-in 600ms var(--sax-motion-easing-smooth-out)
+        both;
+    }
+    .#{bem('result', 'mark')} {
+      animation: sax-result-mark-in 480ms var(--sax-motion-easing-smooth-out)
+        100ms both;
+    }
+    .#{bem('result', 'glints')} {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: sax-result-glints-in 650ms var(--sax-motion-easing-smooth-out)
+        30ms both;
+    }
+  }
+  .#{bem('result', 'illustration')}.is-paused * {
+    animation-play-state: paused !important;
+  }
+}
+@keyframes sax-result-seal-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.7) rotate(-12deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.05) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes sax-result-paper-in {
+  from {
+    opacity: 0.4;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes sax-result-mark-in {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes sax-result-glints-in {
+  from {
+    opacity: 0;
+    transform: scale(0.75);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (max-width: 640px) {
+  .#{bem('result')}.is-horizontal {
+    flex-direction: column;
+    text-align: center;
+    .#{bem('result', 'extra')} {
+      justify-content: center;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .#{bem('result', 'illustration')} * {
+    animation: none !important;
+  }
+  .#{bem('result', 'illustration')}.is-pending .#{bem('result', 'seal')} {
+    opacity: 1;
+  }
+  .#{bem('result', 'illustration')}.is-pending .#{bem('result', 'mark')} {
+    stroke-dashoffset: 0;
+  }
 }
