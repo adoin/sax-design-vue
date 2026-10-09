@@ -177,7 +177,7 @@
                   :range-start="rangeStart"
                   :range-end="rangeEnd"
                   :range-hover="rangeStep === 1 ? rangeHover : null"
-                  :disabled-date="isDateDisabled"
+                  :disabled-date="dateConstraint"
                   :festival-method="festivalInTimezone"
                   :default-date="leftValue || defaultStartDate || currentDate"
                   :start-day="firstDayOfWeek"
@@ -195,7 +195,7 @@
                   :range-start="rangeStart"
                   :range-end="rangeEnd"
                   :range-hover="rangeStep === 1 ? rangeHover : null"
-                  :disabled-date="isDateDisabled"
+                  :disabled-date="dateConstraint"
                   :festival-method="festivalInTimezone"
                   :default-date="rightValue || defaultEndDate || rightPanelDate"
                   :start-day="firstDayOfWeek"
@@ -216,7 +216,7 @@
                   }}</span>
                   <s-time-panel
                     :model-value="innerTime"
-                    :disabled-date="isDateDisabled"
+                    :disabled-date="dateConstraint"
                     :time-config="timeConfig"
                     @update:model-value="updateStartTime"
                   />
@@ -227,7 +227,7 @@
                   }}</span>
                   <s-time-panel
                     :model-value="innerEndTime"
-                    :disabled-date="isDateDisabled"
+                    :disabled-date="dateConstraint"
                     :time-config="timeConfig"
                     @update:model-value="updateEndTime"
                   />
@@ -298,7 +298,7 @@
                 :range-start="rangeStart"
                 :range-end="rangeEnd"
                 :range-hover="rangeStep === 1 ? rangeHover : null"
-                :disabled-date="isDateDisabled"
+                :disabled-date="dateConstraint"
                 :festival-method="festivalInTimezone"
                 :default-date="leftValue || defaultStartDate || currentDate"
                 :start-day="firstDayOfWeek"
@@ -317,7 +317,7 @@
                 :range-start="rangeStart"
                 :range-end="rangeEnd"
                 :range-hover="rangeStep === 1 ? rangeHover : null"
-                :disabled-date="isDateDisabled"
+                :disabled-date="dateConstraint"
                 :festival-method="festivalInTimezone"
                 :default-date="rightValue || defaultEndDate || rightPanelDate"
                 :start-day="firstDayOfWeek"
@@ -336,7 +336,7 @@
                   }}</span>
                   <s-time-panel
                     :model-value="innerTime"
-                    :disabled-date="isDateDisabled"
+                    :disabled-date="dateConstraint"
                     :time-config="timeConfig"
                     @update:model-value="updateStartTime"
                   />
@@ -347,7 +347,7 @@
                   }}</span>
                   <s-time-panel
                     :model-value="innerEndTime"
-                    :disabled-date="isDateDisabled"
+                    :disabled-date="dateConstraint"
                     :time-config="timeConfig"
                     @update:model-value="updateEndTime"
                   />
@@ -356,7 +356,7 @@
               <s-time-panel
                 v-else
                 :model-value="innerTime"
-                :disabled-date="isDateDisabled"
+                :disabled-date="dateConstraint"
                 :time-config="timeConfig"
                 @update:model-value="updateStartTime"
               />
@@ -598,6 +598,8 @@ const maximumDate = computed(() =>
   ),
 )
 const isDateDisabled = (date: Date) => {
+  if (!props.disabledDate && !minimumDate.value && !maximumDate.value)
+    return false
   const value = toTimeZoneWallTime(dayjs(date), resolvedTimezone.value)
   return (
     !!props.disabledDate?.(value.toDate()) ||
@@ -605,6 +607,11 @@ const isDateDisabled = (date: Date) => {
     !!maximumDate.value?.isBefore(value, 'day')
   )
 }
+const dateConstraint = computed(() =>
+  props.disabledDate || minimumDate.value || maximumDate.value
+    ? isDateDisabled
+    : undefined,
+)
 const festivalInTimezone = (
   params: Parameters<NonNullable<typeof props.festivalMethod>>[0],
 ) =>

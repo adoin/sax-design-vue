@@ -71,7 +71,7 @@
               selectedValues.some((value) => sameWeek(week[0].date, value)),
             ),
           ]"
-          :disabled="week.some((cell) => isCellDisabled(cell.date))"
+          :disabled="week.some((cell) => cell.disabled)"
           :aria-label="`${week[0].date.format('YYYY-MM-DD')} – ${week[6].date.format('YYYY-MM-DD')}`"
           :aria-pressed="
             selectedValues.some((value) => sameWeek(week[0].date, value))
@@ -87,7 +87,7 @@
               ns.is(cell.type, true),
               ns.is('today', cell.date.isSame(today, 'day')),
             ]"
-            :title="festival(cell.date)?.label"
+            :title="cell.festival?.label"
           >
             {{ cell.date.date() }}
           </span>
@@ -95,38 +95,33 @@
       </div>
       <div v-else :class="ns.e('dates')" @mouseleave="emit('hover', null)">
         <button
-          v-for="cell in calendarCells"
+          v-for="cell in dateCells"
           :key="cell.date.valueOf()"
           type="button"
           :class="cellClass(cell)"
-          :style="festival(cell.date)?.style"
-          :disabled="isCellDisabled(cell.date)"
+          :style="cell.festival?.style"
+          :disabled="cell.disabled"
           @click="pickDate(cell.date)"
-          @mouseenter="
-            emit('hover', isCellDisabled(cell.date) ? null : cell.date)
-          "
-          @focus="emit('hover', isCellDisabled(cell.date) ? null : cell.date)"
+          @mouseenter="emit('hover', cell.disabled ? null : cell.date)"
+          @focus="emit('hover', cell.disabled ? null : cell.date)"
           @mouseleave="emit('hover', null)"
           @blur="emit('hover', null)"
         >
           <span :class="ns.e('cell-value')">{{ cell.date.date() }}</span>
           <span
-            v-if="festival(cell.date)?.notice"
+            v-if="cell.festival?.notice"
             :class="ns.e('cell-notice')"
             aria-hidden="true"
           />
           <span
-            v-if="festival(cell.date)?.label"
+            v-if="cell.festival?.label"
             :class="ns.e('cell-label')"
-            :title="festival(cell.date)?.label"
+            :title="cell.festival?.label"
           >
-            {{ festival(cell.date)?.label }}
+            {{ cell.festival?.label }}
           </span>
-          <span
-            v-else-if="festival(cell.date)?.extra"
-            :class="ns.e('cell-extra')"
-          >
-            {{ festival(cell.date)?.extra }}
+          <span v-else-if="cell.festival?.extra" :class="ns.e('cell-extra')">
+            {{ cell.festival?.extra }}
           </span>
         </button>
       </div>
@@ -290,8 +285,8 @@ const sameWeek = (a: dayjs.Dayjs | null, b: dayjs.Dayjs | null) =>
     ),
   )
 const calendarWeeks = computed(() =>
-  Array.from({ length: calendarCells.value.length / 7 }, (_, index) =>
-    calendarCells.value.slice(index * 7, index * 7 + 7),
+  Array.from({ length: dateCells.value.length / 7 }, (_, index) =>
+    dateCells.value.slice(index * 7, index * 7 + 7),
   ),
 )
 const handleWeekKeydown = (event: KeyboardEvent) => {
@@ -364,6 +359,16 @@ const festival = (date: dayjs.Dayjs): DateFestivalInfo | undefined =>
     type: props.pickerType,
     viewType: props.pickerType === 'week' ? 'week' : 'date',
   }) || undefined
+
+// Decorations and disabled callbacks are shared by every binding for a cell.
+// Hover/selection changes do not need to evaluate them again for all 42 dates.
+const dateCells = computed(() =>
+  calendarCells.value.map((cell) => ({
+    ...cell,
+    disabled: isCellDisabled(cell.date),
+    festival: festival(cell.date),
+  })),
+)
 
 const isMonthDisabled = (month: dayjs.Dayjs) =>
   props.disabledDate?.(month.toDate()) ?? false
@@ -462,7 +467,11 @@ const pickYear = (year: dayjs.Dayjs) => {
   emit('panel-change', panelDate.value)
 }
 
-const cellClass = (cell: { type: string; date: dayjs.Dayjs }) => {
+const cellClass = (cell: {
+  type: string
+  date: dayjs.Dayjs
+  festival?: DateFestivalInfo
+}) => {
   const { date, type } = cell
   let start = props.rangeStart ?? null
   let end = props.rangeEnd ?? props.rangeHover ?? null
@@ -479,8 +488,8 @@ const cellClass = (cell: { type: string; date: dayjs.Dayjs }) => {
     ns.is(type, true),
     ns.is('today', date.isSame(today.value, 'day')),
     ns.is('selected', selected),
-    festival(date)?.className,
-    ns.is('festival-important', festival(date)?.important),
+    cell.festival?.className,
+    ns.is('festival-important', cell.festival?.important),
     ns.is('range-preview', preview && isDateInRange(date, start, end)),
     ns.is(
       'preview-target',

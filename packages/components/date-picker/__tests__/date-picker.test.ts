@@ -1,6 +1,6 @@
 import { defineComponent, h } from 'vue'
 import { mount } from '@vue/test-utils'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useGlobalConfig } from '@vuesax-alpha/hooks'
 import dayjs, { type Dayjs } from 'dayjs'
 import { getCalendarWeek } from '@vuesax-alpha/utils'
@@ -81,6 +81,45 @@ const mountPicker = (props = {}) =>
       },
     },
   })
+
+describe('DatePanel callback evaluation', () => {
+  it('shares decorations and disabled results between bindings and range previews', async () => {
+    const festivalMethod = vi.fn(() => ({
+      label: 'Holiday',
+      notice: true,
+      important: true,
+      className: 'holiday',
+    }))
+    const disabledDate = vi.fn(() => false)
+    const wrapper = mount(DatePanel, {
+      props: {
+        pickerType: 'date',
+        defaultDate: dayjs('2026-10-01'),
+        festivalMethod,
+        disabledDate,
+      },
+    })
+    expect(wrapper.findAll('.s-date-panel__cell')).toHaveLength(42)
+    expect(festivalMethod).toHaveBeenCalledTimes(42)
+    expect(disabledDate).toHaveBeenCalledTimes(42)
+    expect(wrapper.findAll('.s-date-panel__cell-label')).toHaveLength(42)
+    await wrapper.setProps({
+      rangeStart: dayjs('2026-10-01'),
+      rangeHover: dayjs('2026-10-05'),
+    })
+    expect(wrapper.find('.is-range-preview').exists()).toBe(true)
+    expect(festivalMethod).toHaveBeenCalledTimes(42)
+    expect(disabledDate).toHaveBeenCalledTimes(42)
+    await wrapper.setProps({
+      disabledDate: () => true,
+      festivalMethod: () => ({ extra: 'Updated' }),
+    })
+    expect(wrapper.findAll('.s-date-panel__cell:disabled')).toHaveLength(42)
+    expect(wrapper.findAll('.s-date-panel__cell-label')).toHaveLength(0)
+    expect(wrapper.findAll('.s-date-panel__cell-extra')).toHaveLength(42)
+    wrapper.unmount()
+  })
+})
 
 describe('DatePicker input presentation', () => {
   it('forwards loading to both range inputs and ignores date selection while loading', async () => {

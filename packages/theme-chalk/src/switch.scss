@@ -85,11 +85,12 @@
     display: grid;
     flex: 1 0 auto;
     place-items: center;
-    padding: 0 7px 0 28px;
+    // Balance compact CJK glyphs against the Latin font's descent space.
+    padding: 1px 7px 0 28px;
     color: getColor(text, 0.72);
     font-size: 10px;
     font-weight: 700;
-    line-height: 1;
+    line-height: 1.4;
     text-align: center;
     white-space: nowrap;
     transition: color var(--sax-motion-duration)
@@ -174,7 +175,7 @@
       display: none;
     }
     @include e(text) {
-      padding: 0 12px;
+      padding: 1px 12px 0;
     }
     &.is-checked {
       @include e(track) {
@@ -182,7 +183,7 @@
         box-shadow: var(--sax-switch-shadow);
       }
       @include e(text) {
-        padding: 0 12px;
+        padding: 1px 12px 0;
       }
     }
   }
@@ -276,13 +277,17 @@
   }
 }
 
-.#{$namespace}-switch:is(.is-loading, [aria-busy="true"]), .#{$namespace}-switch .is-loading, .#{$namespace}-switch [aria-busy="true"] {
+.#{$namespace}-switch:is(.is-loading, [aria-busy='true']),
+.#{$namespace}-switch .is-loading,
+.#{$namespace}-switch [aria-busy='true'] {
   @include loading-cursor;
 }
 
 .#{$namespace}-switch.is-loading {
   pointer-events: auto;
-  > * { pointer-events: none; }
+  > * {
+    pointer-events: none;
+  }
 }
 
 .s-switch__circle-content {
@@ -309,5 +314,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .s-switch__circle-content,
-  .s-switch.is-text .s-switch__text { transition: none; }
+  .s-switch.is-text .s-switch__text {
+    transition: none;
+  }
 }

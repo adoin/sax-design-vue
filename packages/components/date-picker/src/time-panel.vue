@@ -156,30 +156,36 @@ const isDisabled = (date: dayjs.Dayjs) =>
   props.disabledDate?.(date.toDate()) ?? false
 
 const isHourDisabled = (hour: number) => {
-  const base = props.modelValue ?? dayjs()
-  return (
+  if (
     hours.value.find((item) => item.value === hour)?.disabled ||
-    !!props.timeConfig?.hourDisabledMethod?.({ hour }) ||
-    isDisabled(base.hour(hour).minute(0).second(0))
+    props.timeConfig?.hourDisabledMethod?.({ hour })
   )
+    return true
+  if (!props.disabledDate) return false
+  const base = props.modelValue ?? dayjs()
+  return isDisabled(base.hour(hour).minute(0).second(0))
 }
 
 const isMinuteDisabled = (minute: number) => {
-  const base = props.modelValue ?? dayjs()
-  return (
+  if (
     minutes.value.find((item) => item.value === minute)?.disabled ||
-    !!props.timeConfig?.minuteDisabledMethod?.({ minute }) ||
-    isDisabled(base.minute(minute).second(0))
+    props.timeConfig?.minuteDisabledMethod?.({ minute })
   )
+    return true
+  if (!props.disabledDate) return false
+  const base = props.modelValue ?? dayjs()
+  return isDisabled(base.minute(minute).second(0))
 }
 
 const isSecondDisabled = (second: number) => {
-  const base = props.modelValue ?? dayjs()
-  return (
+  if (
     seconds.value.find((item) => item.value === second)?.disabled ||
-    !!props.timeConfig?.secondDisabledMethod?.({ second }) ||
-    isDisabled(base.second(second))
+    props.timeConfig?.secondDisabledMethod?.({ second })
   )
+    return true
+  if (!props.disabledDate) return false
+  const base = props.modelValue ?? dayjs()
+  return isDisabled(base.second(second))
 }
 
 const update = (hour: number, minute: number, second: number) => {

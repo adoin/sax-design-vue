@@ -1,7 +1,7 @@
 ---
 status: implemented
 kind: project-specification
-updated_at: 2026-10-08
+updated_at: 2026-10-09
 ---
 
 # Transient SVG filter animation modules
@@ -14,6 +14,7 @@ updated_at: 2026-10-08
 - Idle placeholder controls and idle/open dialogs allocate no animation filter DOM or per-filter listeners. Placeholder focus/blur creates the graph from its previous state; quick reversal retains the active graph/progress. Occupied fields, reduced motion and inactive content do not allocate a graph.
 - Dialog creation occurs only after close approval and loading completion. Zero-duration/reduced-motion/hidden-page exits skip allocation. Completion holds the target transparent with CSS while restoring its original filter and releasing the graph; cancellation restores opacity/filter/inert state and invalidates pending graph creation. The mask never receives the filter.
 - Animation definitions may be shared; mutable nodes/playback state remain independent. Static filter sharing continues through the existing `svgFilter` manager.
+- Consumers already owning a lazy playback lifecycle may mount the shared internal graph directly. Placeholder uses this path and the dissolve module's `padded-text` region; the public controller and dialog adapters retain their existing lifecycle and regions.
 
 ## Verification
 

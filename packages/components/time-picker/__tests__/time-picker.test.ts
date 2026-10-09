@@ -49,6 +49,18 @@ const mountPicker = (props = {}) =>
   })
 
 describe('TimePicker input presentation', () => {
+  it('only connects a time constraint when a disabled callback is configured', async () => {
+    const wrapper = mountPicker()
+    const panel = wrapper.getComponent({ name: 'STimePanel' })
+    expect(panel.props('disabledDate')).toBeUndefined()
+    await wrapper.setProps({ disabledHours: () => [1] })
+    expect(typeof panel.props('disabledDate')).toBe('function')
+    expect(panel.props('disabledDate')(new Date(2026, 9, 9, 1))).toBe(true)
+    expect(panel.props('disabledDate')(new Date(2026, 9, 9, 2))).toBe(false)
+    await wrapper.setProps({ disabledHours: undefined })
+    expect(panel.props('disabledDate')).toBeUndefined()
+    wrapper.unmount()
+  })
   it('forwards loading and prevents confirmation and clearing during loading', async () => {
     const wrapper = mountPicker({
       loading: true,

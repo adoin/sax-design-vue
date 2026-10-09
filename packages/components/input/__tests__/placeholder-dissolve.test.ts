@@ -56,6 +56,12 @@ describe('Lazy instance placeholder dissolve', () => {
     expect(wrapper.find('filter').exists()).toBe(false)
     await wrapper.get('input').trigger('focus')
     expect(frames.size).toBe(1)
+    expect(wrapper.get('filter').attributes()).toMatchObject({
+      x: '0%',
+      y: '0%',
+      width: '100%',
+      height: '100%',
+    })
     const threshold = wrapper.get('[data-dissolve-threshold]').element
     await advance(16)
     expect(number(threshold, 'intercept')).toBeLessThan(1)

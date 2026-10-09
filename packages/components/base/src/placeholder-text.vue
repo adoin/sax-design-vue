@@ -10,7 +10,7 @@ import {
   watch,
 } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
-import SvgDissolveFilter from './svg-dissolve-filter.vue'
+import SvgFilterAnimationGraph from './svg-filter-animation-graph.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -55,7 +55,9 @@ watch(
     if (!animating.value) initialDissolved.value = previous
     animating.value = true
   },
-  { flush: 'post' },
+  // Decide playback before this component patches, so graph and URL appear
+  // together instead of mounting through another post-render update.
+  { flush: 'pre' },
 )
 const filterStyle = computed(() => ({
   // Resting content is ordinary text; hidden content needs no filter raster.
@@ -71,11 +73,13 @@ const ns = useNamespace('placeholder-text')
     :class="[ns.b(), ns.is('hidden', hidden), ns.is('multiline', multiline)]"
     aria-hidden="true"
   >
-    <SvgDissolveFilter
+    <SvgFilterAnimationGraph
       v-if="animating"
+      animation="dissolve"
+      region="padded-text"
       :filter-id="filterId"
-      :dissolved="dissolved"
-      :initial-dissolved="initialDissolved"
+      :progress="dissolved ? 1 : 0"
+      :initial-progress="initialDissolved ? 1 : 0"
       animate-on-mount
       @settled="animating = false"
     />

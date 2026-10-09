@@ -22,6 +22,8 @@ export const dissolveAnimationDefinition: SvgFilterAnimationModule = {
   frame: svgDissolveFrame,
   regions: {
     text: { x: '-100%', y: '-250%', width: '300%', height: '600%' },
+    // Placeholder padding already exceeds the maximum 25px/16.5px scatter.
+    'padded-text': { x: '0%', y: '0%', width: '100%', height: '100%' },
     surface: { x: '-10%', y: '-10%', width: '120%', height: '120%' },
   },
   definition: {

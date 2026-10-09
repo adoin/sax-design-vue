@@ -52,7 +52,7 @@
       <div :class="ns.e('dropdown')">
         <s-time-panel
           :model-value="innerValue"
-          :disabled-date="disabledTime"
+          :disabled-date="timeConstraint"
           :time-config="timeConfig"
           @update:model-value="handlePick"
         />
@@ -209,6 +209,11 @@ const disabledTime = (date: Date) => {
   }
   return false
 }
+const timeConstraint = computed(() =>
+  props.disabledHours || props.disabledMinutes || props.disabledSeconds
+    ? disabledTime
+    : undefined,
+)
 
 const handlePick = (value: dayjs.Dayjs) => {
   if (props.disabled || props.loading) return
