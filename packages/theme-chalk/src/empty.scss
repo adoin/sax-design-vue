@@ -14,8 +14,9 @@
 
   @include e(image) {
     display: grid;
-    width: 96px;
-    height: 72px;
+    width: 160px;
+    height: 128px;
+    max-width: 100%;
     place-items: center;
 
     img {
@@ -27,28 +28,78 @@
   }
 
   @include e(illustration) {
-    position: relative;
-    display: flex;
-    align-items: end;
-    justify-content: center;
-    width: 72px;
-    height: 52px;
-    gap: 6px;
-    border: 1px solid getColor(primary, 0.16);
-    border-radius: var(--sax-radius-xl) var(--sax-radius-xl) var(--sax-radius) var(--sax-radius);
-    background: linear-gradient(145deg, getColor(primary, 0.1), getColor(primary, 0.03));
-    box-shadow: 0 12px 24px getColor(primary, 0.08);
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    color: getColor(primary);
+    --sax-empty-animation-duration: 8400ms;
 
-    i {
-      display: block;
-      width: 6px;
-      border-radius: var(--sax-radius-pill);
-      background: getColor(primary, 0.5);
+    [data-motion] {
+      transform-box: view-box;
+      animation-duration: var(--sax-empty-animation-duration);
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
     }
+    &.is-animated {
+      .s-empty__ticket {
+        animation-name: s-empty-ticket;
+      }
+      .s-empty__search {
+        animation-name: s-empty-search;
+      }
+      .s-empty__flap-left {
+        animation-name: s-empty-flap;
+      }
+      .s-empty__scan {
+        animation-name: s-empty-scan;
+      }
+      .s-empty__spark {
+        animation-name: s-empty-spark;
+      }
+    }
+    &.is-paused [data-motion] {
+      animation-play-state: paused;
+    }
+  }
 
-    i:nth-child(1) { height: 14px; }
-    i:nth-child(2) { height: 24px; background: getColor(primary, 0.75); }
-    i:nth-child(3) { height: 10px; }
+  @include e(tone-accent) {
+    color: getColor(primary);
+  }
+  @include e(tone-surface) {
+    color: getColor(background);
+  }
+  @include e(tone-tint) {
+    color: color-mix(
+      in srgb,
+      #{getColor(primary)} 18%,
+      #{getColor(background)}
+    );
+  }
+  @include e(orbit) {
+    color: getColor(primary);
+    opacity: 0.28;
+  }
+  @include e(ground) {
+    color: getColor(primary);
+    opacity: 0.09;
+  }
+  @include e(ticket) {
+    transform-origin: 108px 120px;
+  }
+  @include e(flap-left) {
+    transform-origin: 66px 99px;
+  }
+  @include e(search) {
+    transform-origin: 176px 109px;
+  }
+  @include e(scan) {
+    transform-origin: 176px 109px;
+    opacity: 0;
+  }
+  @include e(spark) {
+    transform-origin: 163px 52px;
+    opacity: 0.6;
   }
 
   @include e(description) {
@@ -60,5 +111,91 @@
 
   @include e(bottom) {
     margin-top: 16px;
+  }
+}
+
+// Independent pivots and dwell periods keep the empty tray visually anchored.
+@keyframes s-empty-ticket {
+  0%,
+  12%,
+  82%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  32%,
+  48% {
+    transform: translateY(-7px) rotate(-3deg);
+  }
+  65% {
+    transform: translateY(-3px) rotate(1deg);
+  }
+}
+@keyframes s-empty-search {
+  0%,
+  12%,
+  82%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  30% {
+    transform: translate(-4px, -3px) rotate(-8deg);
+  }
+  45%,
+  55% {
+    transform: translate(3px, -2px) rotate(5deg);
+  }
+  68% {
+    transform: translate(0, 1px) rotate(-2deg);
+  }
+}
+@keyframes s-empty-flap {
+  0%,
+  16%,
+  75%,
+  100% {
+    transform: rotate(0deg);
+  }
+  35%,
+  48% {
+    transform: rotate(-4deg);
+  }
+  62% {
+    transform: rotate(1deg);
+  }
+}
+@keyframes s-empty-scan {
+  0%,
+  28%,
+  65%,
+  100% {
+    opacity: 0;
+    transform: scale(0.65);
+  }
+  40% {
+    opacity: 0.7;
+    transform: scale(0.8);
+  }
+  54% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+@keyframes s-empty-spark {
+  0%,
+  18%,
+  78%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  38%,
+  48% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-empty__illustration [data-motion] {
+    animation: none !important;
   }
 }

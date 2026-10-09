@@ -8,6 +8,7 @@ export const emptyProps = buildProps({
     type: [Number, String] as PropType<number | string>,
   },
   description: String,
+  animated: { type: Boolean, default: true },
 } as const)
 
 export type EmptyProps = ExtractPropTypes<typeof emptyProps>
