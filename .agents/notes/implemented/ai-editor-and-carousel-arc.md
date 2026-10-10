@@ -28,6 +28,7 @@ The pre-development checkpoint was committed and pushed on main as `6aea5de`. Im
 ## AI Editor
 
 - `SAiEditor` is globally installable and individually importable, with style entries, type exports, generated offline icon fallbacks and English/Chinese locale strings.
+- Assistant identity uses a theme-colored, decorative inline SVG by default. `ai-icon` accepts image URLs (PNG/SVG/data URLs); the `ai-icon` slot takes precedence and receives `status` and `busy`. The same icon appears in the selection and prompt toolbar, inside a fixed 22px contain-fit box. Custom brand artwork is not forcibly animated; the existing loading status remains independent.
 - Controlled plain text and `v-model:marks` persist independently. Formatting ranges use UTF-16 indices with inclusive starts and exclusive ends; overlapping bold, italic, underline, strike and code formatting is supported.
 - Own document rendering creates only known tags and text nodes. Paste/drop transfers and answers stay plain text; no provider HTML is rendered. Composition, external updates, caret restoration and undo/redo are handled by the document module.
 - Selection controls reuse SPopper positioning, clipping, teleport and outside-close behavior. Asking joins the shared focus layer so the prompt works in Dialog/Playground. The preserved selection survives toolbar focus, and explicit dismissal does not reopen on a repeated selection event.
@@ -38,6 +39,8 @@ The pre-development checkpoint was committed and pushed on main as `6aea5de`. Im
 - The shared category catalog exposes English “AI” and Chinese “AI相关” across navigation surfaces.
 
 ## Verification
+
+- Assistant icon extension: 23 AI Editor tests passed, including default SVG, reactive PNG/SVG URLs, slot precedence and prompt-mode persistence. Both localized icon examples passed rendered, complete Code, and Playground checks; theme build passed.
 
 - 2026-10-10 mouse-selection regression: 43 AI Editor/Popper tests passed. Real browser dragging, moving to the AI button, and opening the prompt passed.
 

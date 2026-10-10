@@ -1,6 +1,11 @@
 ---
 description: "Selection-based document formatting and AI assistance connected to your own service."
 PROPS:
+  - name: ai-icon
+    type: "String"
+    description: "Assistant image URL, including PNG, SVG and data URLs. Uses the built-in SVG when omitted."
+    default: null
+    usage: '#ai-icon'
   - name: v-model
     type: "String"
     description: "Plain document text. HTML is treated as literal text."
@@ -138,6 +143,10 @@ EXPOSES:
     type: "(mode: 'replace' | 'insert') => boolean"
     description: "Replace selected text or insert after its paragraph with a complete answer."
 SLOTS:
+  - name: ai-icon
+    type: Slot
+    scope: "{ status: AiEditorStatus; busy: boolean }"
+    description: "Assistant icon in the toolbar and prompt. Takes precedence over ai-icon."
   - name: title
     type: Slot
     scope: "{}"
@@ -153,6 +162,34 @@ SLOTS:
 ---
 
 # AI Editor
+
+<card>
+
+## AI icon
+
+Use `ai-icon` for PNG or SVG image URLs, or the `ai-icon` slot for inline SVG and icon components. The slot takes precedence and receives `status` and `busy`. Icons fit a 22px box and are decorative; controls retain their accessible names.
+
+<template #example><ai-editor-ai-icon /></template>
+
+<template #template>
+
+@[code{16-46}](../.vuepress/components/ai-editor/ai-icon.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-14}](../.vuepress/components/ai-editor/ai-icon.vue)
+
+</template>
+
+<template #style>
+
+@[code{48-60}](../.vuepress/components/ai-editor/ai-icon.vue)
+
+</template>
+
+</card>
 
 <card>
 

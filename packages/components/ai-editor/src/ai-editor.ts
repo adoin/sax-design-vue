@@ -50,6 +50,7 @@ export const aiEditorProps = buildProps({
   label: String,
   placeholder: String,
   promptPlaceholder: String,
+  aiIcon: String,
   request: { type: definePropType<AiEditorRequestHandler>(Function) },
   answer: String,
   disabled: Boolean,

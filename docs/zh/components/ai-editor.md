@@ -1,6 +1,11 @@
 ---
 description: "围绕文档选区提供格式操作与可接入 AI 服务的辅助编辑。"
 PROPS:
+  - name: ai-icon
+    type: "String"
+    description: "助手图片地址，支持 PNG、SVG 和 data URL。不设置时使用内置 SVG。"
+    default: null
+    usage: '#ai-icon'
   - name: v-model
     type: "String"
     description: "文档纯文本，HTML 按普通文字处理。"
@@ -138,6 +143,10 @@ EXPOSES:
     type: "(mode: 'replace' | 'insert') => boolean"
     description: "使用完整回答替换选区，或插入选区所在段落下方。"
 SLOTS:
+  - name: ai-icon
+    type: Slot
+    scope: "{ status: AiEditorStatus; busy: boolean }"
+    description: "工具栏和提问状态的助手图标，优先于 ai-icon 属性。"
   - name: title
     type: Slot
     scope: "{}"
@@ -153,6 +162,34 @@ SLOTS:
 ---
 
 # AI Editor AI编辑器
+
+<card>
+
+## AI 图标
+
+通过 `ai-icon` 传入 PNG 或 SVG 图片地址，也可以使用 `ai-icon` 插槽渲染内联 SVG 或图标组件。插槽优先于图片地址，并提供 `status` 和 `busy`。图标适配 22px 容器，作为装饰内容；操作按钮保留可访问名称。
+
+<template #example><ai-editor-zh-ai-icon /></template>
+
+<template #template>
+
+@[code{16-46}](../../.vuepress/components/ai-editor-zh/ai-icon.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-14}](../../.vuepress/components/ai-editor-zh/ai-icon.vue)
+
+</template>
+
+<template #style>
+
+@[code{48-60}](../../.vuepress/components/ai-editor-zh/ai-icon.vue)
+
+</template>
+
+</card>
 
 <card>
 

@@ -4,6 +4,7 @@ import { SInput } from '@vuesax-alpha/components/input'
 import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 import { useLocale } from '@vuesax-alpha/hooks'
 import { segmentEditorText } from './segment-text'
+import AiEditorIcon from './ai-editor-icon.vue'
 import type {
   AiEditorFormat,
   AiEditorSelection,
@@ -13,6 +14,7 @@ import type {
 
 const props = defineProps<{
   asking: boolean
+  aiIcon?: string
   prompt: string
   response: string
   error: string
@@ -90,9 +92,9 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
           @pointerdown.prevent
           @click="emit('ask')"
         >
-          <span class="s-ai-editor__orb" aria-hidden="true" />{{
-            t('vs.aiEditor.ask')
-          }}
+          <AiEditorIcon :src="aiIcon" :busy="false">
+            <slot name="ai-icon" :status="status" :busy="busy" /> </AiEditorIcon
+          >{{ t('vs.aiEditor.ask') }}
         </button>
         <span
           v-if="!readonly"
@@ -121,11 +123,9 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
         </slot>
       </template>
       <template v-else>
-        <span
-          class="s-ai-editor__orb"
-          :class="{ 'is-busy': busy }"
-          aria-hidden="true"
-        />
+        <AiEditorIcon :src="aiIcon" :busy="busy">
+          <slot name="ai-icon" :status="status" :busy="busy" />
+        </AiEditorIcon>
         <SInput
           v-if="status === 'idle' || status === 'error'"
           :model-value="prompt"

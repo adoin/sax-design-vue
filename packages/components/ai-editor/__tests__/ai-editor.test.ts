@@ -34,6 +34,50 @@ afterEach(() => {
 })
 
 describe('AI Editor document and request lifecycle', () => {
+  it('uses the default SVG or a custom image in both toolbar modes', async () => {
+    const wrapper = create({ answer: 'Answer' })
+    wrapper.vm.select(0, 5)
+    await flushPromises()
+    expect(document.querySelector('.s-ai-editor__ai-icon svg')).not.toBeNull()
+    await wrapper.setProps({ aiIcon: '/assistant.png' })
+    const image = () =>
+      document.querySelector<HTMLImageElement>('.s-ai-editor__ai-icon img')!
+    expect(image().getAttribute('src')).toBe('/assistant.png')
+    expect(image().alt).toBe('')
+    document.querySelector<HTMLButtonElement>('.s-ai-editor__ask')!.click()
+    await flushPromises()
+    expect(image().getAttribute('src')).toBe('/assistant.png')
+    await wrapper.setProps({ aiIcon: '/assistant.svg' })
+    expect(image().getAttribute('src')).toBe('/assistant.svg')
+  })
+
+  it('gives the custom icon slot precedence and exposes the assistant state', async () => {
+    const wrapper = mount(AiEditor, {
+      attachTo: document.body,
+      props: { modelValue: 'Hello', aiIcon: '/ignored.png', answer: 'Answer' },
+      slots: {
+        'ai-icon': ({ status, busy }: { status: string; busy: boolean }) =>
+          h('svg', { 'data-status': status, 'data-busy': String(busy) }),
+      },
+    })
+    wrappers.push(wrapper)
+    wrapper.vm.select(0, 5)
+    await flushPromises()
+    expect(document.querySelector('.s-ai-editor__ai-icon img')).toBeNull()
+    expect(
+      document
+        .querySelector('.s-ai-editor__ai-icon svg')
+        ?.getAttribute('data-status'),
+    ).toBe('idle')
+    document.querySelector<HTMLButtonElement>('.s-ai-editor__ask')!.click()
+    await flushPromises()
+    expect(
+      document
+        .querySelector('.s-ai-editor__ai-icon svg')
+        ?.getAttribute('data-busy'),
+    ).toBe('false')
+  })
+
   it('keeps the toolbar open through the click that finishes a mouse selection', async () => {
     const wrapper = create({ answer: 'Answer' })
     const root = wrapper.get('[role="textbox"]')

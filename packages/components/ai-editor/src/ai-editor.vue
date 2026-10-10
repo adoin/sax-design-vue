@@ -24,6 +24,7 @@ import type { PopperInstance } from '@vuesax-alpha/components/popper'
 
 defineOptions({ name: 'SAiEditor' })
 defineSlots<{
+  'ai-icon'(props: { status: AiEditorStatus; busy: boolean }): unknown
   title(): unknown
   toolbar(props: {
     selection: AiEditorSelection
@@ -344,6 +345,7 @@ defineExpose({
             v-if="document.selection.value"
             v-model:prompt="prompt"
             :asking="asking"
+            :ai-icon="aiIcon"
             :busy="busy"
             :status="status"
             :status-label="statusLabel"
@@ -368,6 +370,9 @@ defineExpose({
             @resize="nextTick(() => popper?.updatePopper())"
             @keydown.esc.stop.prevent="close(true)"
           >
+            <template v-if="$slots['ai-icon']" #ai-icon="slotProps">
+              <slot name="ai-icon" v-bind="slotProps" />
+            </template>
             <template v-if="$slots.toolbar" #toolbar="slotProps"
               ><slot name="toolbar" v-bind="slotProps"
             /></template>
