@@ -1,6 +1,12 @@
 ---
 description: '使用无障碍按钮样式和状态触发操作。'
 PROPS:
+  - name: shape
+    type: String
+    values: rounded | circle | square
+    description: 按钮几何形态。显式 rounded 可覆盖全局 square 配置；circle 与 square 保持兼容。
+    default: null
+    usage: '#shape'
   - name: color
     type: String
     values: 'primary, success, danger, warning, dark, RGB, HEX'
@@ -587,6 +593,34 @@ NEWS:
 <template #script>
 
 @[code{60-64}](../../.vuepress/components/button/square.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 形状
+
+通过 shape 明确选择圆角、方角或圆形。这里的全局配置为方角，局部 rounded 仍保留圆角外观。
+
+<template #example><button-shape-zh /></template>
+
+<template #template>
+
+@[code{6-29}](../../.vuepress/components/button/shape-zh.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-4}](../../.vuepress/components/button/shape-zh.vue)
+
+</template>
+
+<template #style>
+
+@[code{31-38}](../../.vuepress/components/button/shape-zh.vue)
 
 </template>
 

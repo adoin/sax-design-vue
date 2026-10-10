@@ -1,3 +1,16 @@
+import { SReasoningSteps } from '@vuesax-alpha/components/reasoning-steps'
+import { SChatHistory } from '@vuesax-alpha/components/chat-history'
+import { SFileDiff } from '@vuesax-alpha/components/file-diff'
+import { SImageGeneration } from '@vuesax-alpha/components/image-generation'
+import { SStreamingText } from '@vuesax-alpha/components/streaming-text'
+import { SInlineCitations } from '@vuesax-alpha/components/inline-citations'
+import { SCodeBlock } from '@vuesax-alpha/components/code-block'
+import { STaskList } from '@vuesax-alpha/components/task-list'
+import { SChatInput } from '@vuesax-alpha/components/chat-input'
+import { SPlanCard } from '@vuesax-alpha/components/plan-card'
+import { SQuestionCard } from '@vuesax-alpha/components/question-card'
+import { SMessage } from '@vuesax-alpha/components/message'
+import { SMessageScroller } from '@vuesax-alpha/components/message-scroller'
 import { SAlert } from '@vuesax-alpha/components/alert'
 import { SSvgFilterAnimation } from '@vuesax-alpha/components/base'
 import { SAffix } from '@vuesax-alpha/components/affix'
@@ -97,6 +110,20 @@ export default [
   SSvgFilterAnimation,
   SAffix,
   SAiEditor,
+  SReasoningSteps,
+  SChatHistory,
+  SFileDiff,
+  SImageGeneration,
+  SStreamingText,
+  SInlineCitations,
+  SCodeBlock,
+  STaskList,
+  SChatInput,
+  SPlanCard,
+  SQuestionCard,
+  SMessage,
+  SMessageScroller,
+
   SAnchor,
   SAvatar,
   SAvatarGroup,

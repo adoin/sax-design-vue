@@ -4,6 +4,20 @@ import '@vue/runtime-core'
 declare module '@vue/runtime-core' {
   // GlobalComponents for Volar
   export interface GlobalComponents {
+    SReasoningSteps: (typeof import('../packages/sax-design-vue'))['SReasoningSteps']
+    SChatHistory: (typeof import('../packages/sax-design-vue'))['SChatHistory']
+    SFileDiff: (typeof import('../packages/sax-design-vue'))['SFileDiff']
+    SImageGeneration: (typeof import('../packages/sax-design-vue'))['SImageGeneration']
+    SStreamingText: (typeof import('../packages/sax-design-vue'))['SStreamingText']
+    SInlineCitations: (typeof import('../packages/sax-design-vue'))['SInlineCitations']
+    SCodeBlock: (typeof import('../packages/sax-design-vue'))['SCodeBlock']
+    STaskList: (typeof import('../packages/sax-design-vue'))['STaskList']
+    SChatInput: (typeof import('../packages/sax-design-vue'))['SChatInput']
+    SPlanCard: (typeof import('../packages/sax-design-vue'))['SPlanCard']
+    SQuestionCard: (typeof import('../packages/sax-design-vue'))['SQuestionCard']
+    SMessage: (typeof import('../packages/sax-design-vue'))['SMessage']
+    SMessageScroller: (typeof import('../packages/sax-design-vue'))['SMessageScroller']
+
     SAiEditor: (typeof import('../packages/sax-design-vue'))['SAiEditor']
     SAlert: (typeof import('../packages/sax-design-vue'))['SAlert']
     SAvatar: (typeof import('../packages/sax-design-vue'))['SAvatar']

@@ -109,12 +109,12 @@ export const buttonProps = buildProps({
   },
 
   /**
-   * @description Change the style of the avatar by making it [square | circulating | rounded]
-   * @enum | `circle` | `square` |
+   * @description Button geometry; rounded follows the normal control radius.
+   * @enum | `rounded` | `circle` | `square` |
    */
   shape: {
     type: String,
-    values: ['circle', 'square'] as const,
+    values: ['rounded', 'circle', 'square'] as const,
   },
 
   /**

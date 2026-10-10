@@ -1,6 +1,12 @@
 ---
 description: 'Trigger actions with accessible button styles and states.'
 PROPS:
+  - name: shape
+    type: String
+    values: rounded | circle | square
+    description: Button geometry. Explicit rounded overrides a global square configuration; circle and square remain compatible.
+    default: null
+    usage: '#shape'
   - name: color
     type: String
     values: 'primary, success, danger, warning, dark, RGB, HEX'
@@ -585,6 +591,34 @@ You can make all the corners completely straight with the `Square` property, the
 <template #script>
 
 @[code{60-64}](../.vuepress/components/button/square.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Shape
+
+Choose rounded, square or circle geometry with shape. The global configuration here is square; the local rounded override keeps the normal rounded treatment.
+
+<template #example><button-shape /></template>
+
+<template #template>
+
+@[code{6-29}](../.vuepress/components/button/shape.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-4}](../.vuepress/components/button/shape.vue)
+
+</template>
+
+<template #style>
+
+@[code{31-38}](../.vuepress/components/button/shape.vue)
 
 </template>
 

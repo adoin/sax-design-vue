@@ -1,0 +1,45 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import type { FileDiffLine } from 'sax-design-vue'
+const expanded = ref(true)
+const decision = ref('')
+const lines: FileDiffLine[] = [
+  {
+    type: 'context',
+    content: 'export function greeting(name: string) {',
+    oldLine: 1,
+    newLine: 1,
+  },
+  { type: 'remove', content: '  return name;', oldLine: 2 },
+  { type: 'add', content: '  return `Hello, ${name}`;', newLine: 2 },
+  { type: 'context', content: '}', oldLine: 3, newLine: 3 },
+]
+</script>
+
+<template>
+  <div class="agent-demo">
+    <s-file-diff
+      v-model:expanded="expanded"
+      filename="greeting.ts"
+      :lines="lines"
+      @apply="decision = 'Change accepted'"
+      @reject="decision = 'Change rejected'"
+    />
+    <s-tag v-if="decision">{{ decision }}</s-tag>
+  </div>
+</template>
+
+<style scoped>
+.agent-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+}
+.agent-demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+</style>

@@ -7,6 +7,7 @@
 
 ## Project specifications
 
+- AI 相关的 Agent 组件开发范围与无边框设计要求见 `.agents/notes/implemented/ai-agent-components.md`；既有 AI Editor 与弧形轮播契约见 `.agents/notes/implemented/ai-editor-and-carousel-arc.md`。
 - Read relevant records in `.agents/notes/active/` and `.agents/notes/prohibited/` before implementation. Treat proposed records as unapproved, prohibited records as approaches that must not be repeated unless their `reopen_only_if` condition is met, and implemented records as verified project contracts.
 - Tabs 首次加载的激活横线对齐契约见 `.agents/notes/implemented/tabs-indicator-initial-alignment.md`。
 - 当前尚未完成的目标记录在 `.agents/notes/active/table-generated-error-navigation.md`。文档源码类型高亮已记录在 `.agents/notes/implemented/documentation-code-type-highlighting.md`，公共 API 类型与尺寸示例已记录在 `.agents/notes/implemented/public-api-type-and-size-documentation.md`，递归 API 类型详情已记录在 `.agents/notes/implemented/recursive-api-type-details.md`；继续遵守 `.agents/notes/prohibited/flat-api-type-details-popover.md` 与 `.agents/notes/prohibited/plain-text-public-api-type-alias.md`。
