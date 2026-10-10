@@ -175,3 +175,10 @@ Added component-owned bounded scroll navigation followed by a two-cycle backgrou
 Replaced the sparse monochrome Canvas dot field with seven flowing SVG strands following the actual Sax S path, plus five subtle background curves. Colors match SLogoLoading: indigo, purple, teal. Progress changes intensity without replacing paths or restarting CSS animation. No JavaScript frame loop; non-running and reduced-motion states stay static. Gradient references are unique per instance.
 
 Browser samples observed dash offset continuously advancing from -9 through -87 while progress advanced from 0 to 40%, confirming that progress updates do not restart motion. Chinese and English Code/Playground previews rendered; cancellation leaves no moving field after the existing exit transition. 33 Agent regressions and theme build passed. Preview saved as image-generation-logo-flow.png.
+
+
+## Image Generation dot-matrix correction — 2026-10-10
+
+User clarified that the dot matrix must remain the primary visual. Removed the independent S artwork and then the three solid stroke accents. Logo colors now travel through a 38×28 matrix as curved illumination fronts; each dot changes color, opacity and radius. Fronts travel beyond both vertical edges, giving full-canvas coverage instead of remaining in the middle. Progress redraws the current frame without restarting motion. Reduced motion stays static, and unmount cancels the only frame loop. A numerical coverage check evaluates all 1,064 dots across a complete front sweep.
+
+Final correction: no solid strokes remain. The 3.4-second color-front cycle numerically reaches every one of the 1,064 points, including all four edges. Browser preview confirmed the point-only design. 33 Agent tests, 21 documentation checks and web/vitest types passed; bilingual Code/Playground previews rendered.

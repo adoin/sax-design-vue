@@ -87,17 +87,28 @@ describe('Agent process, result and safety contracts', () => {
     expect(vi.getTimerCount()).toBe(0)
   })
 
-  it('isolates generation gradient references and retains the animated field across progress updates', async () => {
-    const first = create(GenerationField, { active: true, progress: 10 })
-    const second = create(GenerationField, { active: true, progress: 20 })
-    const gradient = first.get('linearGradient').attributes('id')
-    expect(second.get('linearGradient').attributes('id')).not.toBe(gradient)
-    const ribbon = first.get('.s-agent-generation-ribbon').element
-    await first.setProps({ progress: 80 })
-    expect(first.get('.s-agent-generation-ribbon').element).toBe(ribbon)
-    expect(first.get('svg').classes()).toContain('is-active')
-    await first.setProps({ active: false })
-    expect(first.get('svg').classes()).not.toContain('is-active')
+  it('keeps the dot field frame loop continuous through progress updates and cleans up', async () => {
+    vi.useFakeTimers()
+    const context = {
+      setTransform: vi.fn(),
+      clearRect: vi.fn(),
+      beginPath: vi.fn(),
+      arc: vi.fn(),
+      fill: vi.fn(),
+      moveTo: vi.fn(),
+      lineTo: vi.fn(),
+      stroke: vi.fn(),
+    } as unknown as CanvasRenderingContext2D
+    vi.mocked(HTMLCanvasElement.prototype.getContext).mockReturnValue(context)
+    const wrapper = create(GenerationField, { active: true, progress: 10 })
+    await vi.advanceTimersByTimeAsync(50)
+    expect(context.arc).toHaveBeenCalled()
+    const field = wrapper.get('canvas').element
+    await wrapper.setProps({ progress: 70 })
+    expect(wrapper.get('canvas').element).toBe(field)
+    expect(vi.getTimerCount()).toBeLessThanOrEqual(1)
+    wrapper.unmount()
+    expect(vi.getTimerCount()).toBe(0)
   })
 
   it('selects question letter shortcuts without intercepting custom answer typing', async () => {

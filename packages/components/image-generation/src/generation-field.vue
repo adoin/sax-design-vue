@@ -1,66 +1,95 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useId } from '@vuesax-alpha/hooks'
-
+import { onBeforeUnmount, onMounted, useTemplateRef, watch } from 'vue'
 const props = defineProps<{ active: boolean; progress: number }>()
-const id = useId()
-const gradientId = computed(() => `s-generation-ribbon-${id.value}`)
-const intensity = computed(
-  () => 0.65 + Math.max(0, Math.min(100, props.progress)) / 300,
+const canvas = useTemplateRef<HTMLCanvasElement>('canvas')
+let frame: number | undefined
+let resize: ResizeObserver | undefined
+let preference: MediaQueryList | undefined
+let time = 0
+const stop = () => {
+  if (frame !== undefined) cancelAnimationFrame(frame)
+  frame = undefined
+}
+const draw = (timestamp = time) => {
+  const element = canvas.value
+  const context = element?.getContext('2d')
+  if (!element || !context) return false
+  const width = element.clientWidth
+  const height = element.clientHeight
+  const ratio = Math.min(window.devicePixelRatio || 1, 2)
+  if (
+    element.width !== Math.round(width * ratio) ||
+    element.height !== Math.round(height * ratio)
+  ) {
+    element.width = Math.round(width * ratio)
+    element.height = Math.round(height * ratio)
+  }
+  context.setTransform(ratio, 0, 0, ratio, 0, 0)
+  context.clearRect(0, 0, width, height)
+  const style = getComputedStyle(element)
+  const colors = ['indigo', 'purple', 'teal'].map((color) =>
+    style.getPropertyValue(`--sax-generation-${color}`).trim(),
+  )
+  const phase = props.active && !preference?.matches ? timestamp / 850 : 0
+  const brightness = 0.55 + Math.max(0, Math.min(100, props.progress)) / 300
+  // Three traveling fronts sweep the whole height, including both edges.
+  const pathY = (x: number, lane: number) =>
+    -0.22 +
+    1.44 * ((phase * 0.25 + lane / 3) % 1) +
+    Math.sin(x * 6.2 - phase * 0.65 + lane * 1.7) * 0.11
+  // The matrix remains the main visual: moving color currents light up nearby dots.
+  for (let row = 0; row < 28; row++) {
+    for (let col = 0; col < 38; col++) {
+      const x = (col + 0.5) / 38
+      const y = (row + 0.5) / 28
+      let strength = 0
+      let lane = 0
+      for (let n = 0; n < 3; n++) {
+        const glow = Math.exp(-(((y - pathY(x, n)) / 0.055) ** 2))
+        if (glow > strength) {
+          strength = glow
+          lane = n
+        }
+      }
+      context.fillStyle = strength > 0.08 ? colors[lane] : style.color
+      context.globalAlpha = 0.07 + strength * brightness
+      context.beginPath()
+      context.arc(x * width, y * height, 0.9 + strength * 0.65, 0, Math.PI * 2)
+      context.fill()
+    }
+  }
+  return true
+}
+const tick = (timestamp: number) => {
+  time = timestamp
+  draw()
+  frame = requestAnimationFrame(tick)
+}
+const refresh = () => {
+  stop()
+  if (draw() && props.active && !preference?.matches)
+    frame = requestAnimationFrame(tick)
+}
+onMounted(() => {
+  preference = window.matchMedia?.('(prefers-reduced-motion: reduce)')
+  preference?.addEventListener('change', refresh)
+  if (typeof ResizeObserver !== 'undefined') {
+    resize = new ResizeObserver(() => draw())
+    if (canvas.value) resize.observe(canvas.value)
+  }
+  refresh()
+})
+watch(() => props.active, refresh)
+watch(
+  () => props.progress,
+  () => draw(),
 )
-const logoPath =
-  'M43 9H22C14.3 9 9 13.2 9 19s5.3 10 13 10h12c5.4 0 9 3.4 9 7.5S39.4 44 34 44H13'
-const strands = [-3, -2, -1, 0, 1, 2, 3]
+onBeforeUnmount(() => {
+  stop()
+  resize?.disconnect()
+  preference?.removeEventListener('change', refresh)
+})
 </script>
-
 <template>
-  <svg
-    class="s-agent-generation-field"
-    :class="{ 'is-active': active }"
-    :style="{ '--sax-generation-intensity': intensity }"
-    viewBox="0 0 400 300"
-    fill="none"
-    aria-hidden="true"
-    focusable="false"
-  >
-    <defs>
-      <linearGradient
-        :id="gradientId"
-        x1="0"
-        y1="1"
-        x2="1"
-        y2="0"
-        gradientUnits="objectBoundingBox"
-      >
-        <stop offset="0" stop-color="var(--sax-generation-teal)" />
-        <stop offset=".48" stop-color="var(--sax-generation-indigo)" />
-        <stop offset="1" stop-color="var(--sax-generation-purple)" />
-      </linearGradient>
-    </defs>
-    <g class="s-agent-generation-waves" :stroke="`url(#${gradientId})`">
-      <path
-        v-for="n in 5"
-        :key="n"
-        :d="`M-40 ${130 + n * 12} C70 ${15 + n * 8} 135 ${265 - n * 10} 220 ${150 + n * 6} S350 ${35 + n * 12} 450 ${155 + n * 10}`"
-        :style="{ '--sax-generation-phase': `${n * -0.3}s` }"
-        pathLength="100"
-      />
-    </g>
-    <g class="s-agent-generation-logo" transform="translate(97 57) scale(3.6)">
-      <g
-        v-for="strand in strands"
-        :key="strand"
-        :transform="`translate(${strand * 0.85} ${strand * 0.75})`"
-        :stroke="`url(#${gradientId})`"
-        :style="{ '--sax-generation-phase': `${(strand + 3) * -0.08}s` }"
-      >
-        <path class="s-agent-generation-track" :d="logoPath" />
-        <path
-          class="s-agent-generation-ribbon"
-          :d="logoPath"
-          pathLength="100"
-        />
-      </g>
-    </g>
-  </svg>
+  <canvas ref="canvas" class="s-agent-generation-field" aria-hidden="true" />
 </template>
