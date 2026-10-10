@@ -46,6 +46,8 @@ description: "Right-click context menu."
 
 <card>
 
+## Default
+
 Right-click or focus the trigger and press Shift + F10 / the context-menu key. Arrows and Home / End move focus, Enter / Space selects, Escape closes and restores focus, and Tab closes before continuing navigation. The shared floating layer shifts menus into the viewport and teleports them by default.
 
 <template #example><context-menu-default /></template>
@@ -65,6 +67,36 @@ Right-click or focus the trigger and press Shift + F10 / the context-menu key. A
 <template #style>
 
 @[code{49-147}](../.vuepress/components/context-menu/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Nested menus
+
+Nest trigger regions to provide different menus at different levels. The nearest enabled Context Menu handles a right-click, the context-menu key or Shift + F10; enclosing menus do not open for the same event. Right-click the exposed part of an enclosing region to open its own menu.
+
+Disable the inner menu below to let the middle menu handle that area. Focus a region with Tab to try the keyboard shortcuts. Menu actions update the selection shown below.
+
+<template #example><context-menu-nested /></template>
+
+<template #template>
+
+@[code{12-65}](../.vuepress/components/context-menu/nested.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-10}](../.vuepress/components/context-menu/nested.vue)
+
+</template>
+
+<template #style>
+
+@[code{67-132}](../.vuepress/components/context-menu/nested.vue)
 
 </template>
 

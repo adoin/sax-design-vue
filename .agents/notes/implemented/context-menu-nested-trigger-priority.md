@@ -15,3 +15,7 @@ scope:
 ## Verification
 
 The existing implementation was confirmed without runtime changes. All nine Context Menu tests passed, including three-level nested pointer/keyboard opening, enclosing regions, disabled-child fallback, prevented events, and existing focus/outside-close behavior. Test TypeScript and targeted ESLint checks passed.
+
+## Documentation example
+
+Added on 2026-10-10: English and Chinese `nested` examples show three visible nested regions, distinct menu actions, a disabled-inner switch, and last-opened/selected feedback. Source slots reconstruct complete localized SFCs. Both rendered locales and their Code/Playground surfaces were verified in the browser, including inner priority and disabled fallback. All 21 documentation checks and targeted ESLint passed.

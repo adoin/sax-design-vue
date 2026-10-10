@@ -46,6 +46,8 @@ description: "右键菜单。"
 
 <card>
 
+## 默认
+
 右键或聚焦触发区域后按 Shift + F10 / 菜单键打开。方向键、Home / End 移动菜单焦点，Enter / Space 选择，Escape 关闭并恢复焦点；Tab 关闭并继续浏览。菜单使用共享弹层进行视口避让，默认传送到页面弹层。
 
 <template #example><context-menu-default /></template>
@@ -65,6 +67,36 @@ description: "右键菜单。"
 <template #style>
 
 @[code{49-147}](../../.vuepress/components/context-menu/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 嵌套菜单
+
+嵌套触发区域可以为不同层级提供不同菜单。右键、菜单键或 Shift + F10 由距离触发点最近的可用 Context Menu 处理，外层菜单不会因同一次事件打开。在外层区域未被内层覆盖的部分右键，可打开该层自己的菜单。
+
+禁用下方最内层菜单后，该区域交给中层菜单处理。使用 Tab 聚焦某一层区域后，可体验键盘快捷键；选择菜单项会更新下方的结果。
+
+<template #example><context-menu-zh-nested /></template>
+
+<template #template>
+
+@[code{12-65}](../../.vuepress/components/context-menu-zh/nested.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-10}](../../.vuepress/components/context-menu-zh/nested.vue)
+
+</template>
+
+<template #style>
+
+@[code{67-132}](../../.vuepress/components/context-menu-zh/nested.vue)
 
 </template>
 
