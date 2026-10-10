@@ -67,19 +67,13 @@ PROPS:
     values: "true | false"
     description: "允许选区和 AI 提问，阻止编辑、格式修改和应用回答。"
     default: "false"
-    usage: '#shape'
+    usage: '#default'
   - name: disabled
     type: "Boolean"
     values: "true | false"
     description: "禁用文档交互，并关闭、取消浮动辅助会话。"
     default: "false"
-    usage: '#shape'
-  - name: shape
-    type: "String"
-    values: "rounded | square"
-    description: "文档及浮动工具栏的外形，继承共享外形配置。"
-    default: null
-    usage: '#shape'
+    usage: '#default'
   - name: animate
     type: "Boolean"
     values: "true | false"
@@ -165,37 +159,9 @@ SLOTS:
 
 <card>
 
-## AI 图标
-
-通过 `ai-icon` 传入 PNG 或 SVG 图片地址，也可以使用 `ai-icon` 插槽渲染内联 SVG 或图标组件。插槽优先于图片地址，并提供 `status` 和 `busy`。图标适配 22px 容器，作为装饰内容；操作按钮保留可访问名称。
-
-<template #example><ai-editor-zh-ai-icon /></template>
-
-<template #template>
-
-@[code{16-46}](../../.vuepress/components/ai-editor-zh/ai-icon.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-14}](../../.vuepress/components/ai-editor-zh/ai-icon.vue)
-
-</template>
-
-<template #style>
-
-@[code{48-60}](../../.vuepress/components/ai-editor-zh/ai-icon.vue)
-
-</template>
-
-</card>
-
-<card>
-
 ## 默认
 
-可直接编辑正文，或选中文字打开浮动工具栏。Ctrl/Cmd + B、I、U 切换支持的格式，Ctrl/Cmd + Enter 打开 AI 提问，Escape 关闭工具栏。本地示例使用固定回答，不调用远程 AI 服务。
+可直接编辑正文，或选中文字打开浮动工具栏。Ctrl/Cmd + B、I、U 切换支持的格式，Ctrl/Cmd + Enter 打开 AI 提问，Escape 关闭工具栏。以客户门户的周度工作汇报为例，选中第一句话并输入“更简洁地表达成果”，查看润色结果后替换原文。本地回答用于演示编辑流程。
 
 <template #example><ai-editor-zh-default /></template>
 
@@ -223,25 +189,25 @@ SLOTS:
 
 ## 行内格式
 
-同时绑定 v-model 和 v-model:marks，可分别持久化正文与格式。格式可以重叠，工具栏操作会保留选区，Ctrl/Cmd + Z / Shift + Z 可撤销、重做编辑。格式范围使用当前正文的 UTF-16 索引。
+同时绑定 v-model 和 v-model:marks，可分别持久化正文与格式。示例将成果、风险和计划分段呈现，选中成果段落后可调整格式或询问 AI。格式可以重叠，工具栏操作会保留选区，Ctrl/Cmd + Z / Shift + Z 可撤销、重做编辑。格式范围使用当前正文的 UTF-16 索引。
 
 <template #example><ai-editor-zh-formatting /></template>
 
 <template #template>
 
-@[code{9-25}](../../.vuepress/components/ai-editor-zh/formatting.vue)
+@[code{12-29}](../../.vuepress/components/ai-editor-zh/formatting.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-7}](../../.vuepress/components/ai-editor-zh/formatting.vue)
+@[code{1-10}](../../.vuepress/components/ai-editor-zh/formatting.vue)
 
 </template>
 
 <template #style>
 
-@[code{27-42}](../../.vuepress/components/ai-editor-zh/formatting.vue)
+@[code{31-46}](../../.vuepress/components/ai-editor-zh/formatting.vue)
 
 </template>
 
@@ -285,47 +251,19 @@ SLOTS:
 
 <template #template>
 
-@[code{19-31}](../../.vuepress/components/ai-editor-zh/streaming.vue)
+@[code{21-33}](../../.vuepress/components/ai-editor-zh/streaming.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-17}](../../.vuepress/components/ai-editor-zh/streaming.vue)
+@[code{1-19}](../../.vuepress/components/ai-editor-zh/streaming.vue)
 
 </template>
 
 <template #style>
 
-@[code{33-42}](../../.vuepress/components/ai-editor-zh/streaming.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 外形与状态
-
-对比圆角与直角外形及其对应的浮动控件。只读文档仍可选区和提问，禁用文档不会打开辅助会话。未设置 shape 时继承 SConfigProvider 的共享外形默认值。
-
-<template #example><ai-editor-zh-shape /></template>
-
-<template #template>
-
-@[code{10-35}](../../.vuepress/components/ai-editor-zh/shape.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-8}](../../.vuepress/components/ai-editor-zh/shape.vue)
-
-</template>
-
-<template #style>
-
-@[code{37-58}](../../.vuepress/components/ai-editor-zh/shape.vue)
+@[code{35-44}](../../.vuepress/components/ai-editor-zh/streaming.vue)
 
 </template>
 
@@ -341,13 +279,41 @@ SLOTS:
 
 <template #template>
 
-@[code{7-19}](../../.vuepress/components/ai-editor-zh/slots.vue)
+@[code{8-20}](../../.vuepress/components/ai-editor-zh/slots.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-5}](../../.vuepress/components/ai-editor-zh/slots.vue)
+@[code{1-6}](../../.vuepress/components/ai-editor-zh/slots.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## AI 图标
+
+通过 `ai-icon` 传入 PNG 或 SVG 图片地址，也可以使用 `ai-icon` 插槽渲染内联 SVG 或图标组件。插槽优先于图片地址，并提供 `status` 和 `busy`。图标适配 22px 容器，作为装饰内容；操作按钮保留可访问名称。
+
+<template #example><ai-editor-zh-ai-icon /></template>
+
+<template #template>
+
+@[code{18-49}](../../.vuepress/components/ai-editor-zh/ai-icon.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-16}](../../.vuepress/components/ai-editor-zh/ai-icon.vue)
+
+</template>
+
+<template #style>
+
+@[code{51-63}](../../.vuepress/components/ai-editor-zh/ai-icon.vue)
 
 </template>
 

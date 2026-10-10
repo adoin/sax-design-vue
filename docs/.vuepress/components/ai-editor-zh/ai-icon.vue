@@ -3,12 +3,14 @@ import { computed, ref, shallowRef } from 'vue'
 import type { AiEditorInstance } from 'sax-design-vue'
 const editor = ref<AiEditorInstance>()
 const mode = shallowRef('default')
-const text = shallowRef('选中这句话，试试自定义助手图标。')
+const text = shallowRef(
+  '本周完成客户门户登录改版，下一步将扩大灰度并评估全量发布条件。',
+)
 const icon = computed(() =>
   mode.value === 'png'
     ? '/vue-logo.png'
     : mode.value === 'svg'
-      ? '/vuesax-brand-dark.svg'
+      ? '/sax-logo-mark.svg'
       : undefined,
 )
 </script>
@@ -28,7 +30,8 @@ const icon = computed(() =>
       ref="editor"
       v-model="text"
       :ai-icon="icon"
-      answer="为你的助手使用自己的品牌图标。"
+      title="工作汇报助手"
+      answer="本周已交付登录改版；下周重点是扩大灰度、验证稳定性并形成发布结论。"
     >
       <template v-if="mode === 'slot'" #ai-icon>
         <svg

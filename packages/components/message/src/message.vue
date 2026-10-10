@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
 
@@ -10,7 +10,6 @@ defineOptions({ name: 'SMessage' })
 const props = defineProps(messageProps)
 const emit = defineEmits(messageEmits)
 const ns = useNamespace('message')
-const shape = useShape()
 const { t } = useLocale()
 const showActions = computed(() => props.actions ?? props.role === 'assistant')
 const toggleTime = (event: Event) => {
@@ -37,7 +36,7 @@ const vote = (value: 'like' | 'dislike') => {
 
 <template>
   <article
-    :class="[ns.b(), 's-agent-message', `is-${role}`, `is-${shape}`]"
+    :class="[ns.b(), 's-agent-message', `is-${role}`]"
     :aria-busy="loading"
   >
     <div v-if="author || $slots.avatar" class="s-agent-message-avatar">
@@ -95,7 +94,7 @@ const vote = (value: 'like' | 'dislike') => {
             size="small"
             :aria-label="copied ? t('vs.agent.copied') : t('vs.agent.copy')"
             type="flat"
-            :shape="shape"
+            shape="rounded"
             :disabled="disabled || loading"
             @click="copy"
             ><SIcon :name="copied ? 'cb:checkmark' : 'cb:copy'" /><span
@@ -108,7 +107,7 @@ const vote = (value: 'like' | 'dislike') => {
               size="small"
               :aria-label="t('vs.agent.like')"
               type="flat"
-              :shape="shape"
+              shape="rounded"
               :active="feedback === 'like'"
               :aria-pressed="feedback === 'like'"
               :disabled="disabled || loading"
@@ -121,7 +120,7 @@ const vote = (value: 'like' | 'dislike') => {
               size="small"
               :aria-label="t('vs.agent.dislike')"
               type="flat"
-              :shape="shape"
+              shape="rounded"
               :active="feedback === 'dislike'"
               :aria-pressed="feedback === 'dislike'"
               :disabled="disabled || loading"
@@ -134,7 +133,7 @@ const vote = (value: 'like' | 'dislike') => {
               size="small"
               :aria-label="t('vs.agent.regenerate')"
               type="flat"
-              :shape="shape"
+              shape="rounded"
               :disabled="disabled || loading"
               @click="emit('regenerate')"
               ><SIcon name="cb:renew" /><span class="s-agent-sr-only">{{

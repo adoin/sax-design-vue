@@ -61,10 +61,6 @@ export const aiEditorProps = buildProps({
   },
   animate: { type: Boolean, default: true },
   streamInterval: { type: Number, default: 18 },
-  shape: {
-    type: definePropType<'rounded' | 'square'>(String),
-    values: ['rounded', 'square'],
-  },
 } as const)
 
 export const aiEditorEmits = {

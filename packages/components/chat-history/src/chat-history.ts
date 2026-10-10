@@ -1,11 +1,9 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
-import { useShapeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type ChatHistory from './chat-history.vue'
 import type { AgentHistoryMessage } from '../../ai-editor/src/agent-shared/types'
 
 export const chatHistoryProps = buildProps({
-  shape: useShapeProp,
   messages: {
     type: definePropType<AgentHistoryMessage[]>(Array),
     default: () => [],

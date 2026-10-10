@@ -3,12 +3,12 @@ import { ref } from 'vue'
 import type { AiEditorInstance, AiEditorRequest } from 'sax-design-vue'
 const editor = ref<AiEditorInstance>()
 const text = ref(
-  'Streamed answers can arrive progressively while the reader keeps the original passage in view.',
+  'Next week: continue the portal release, finish permission migration, monitor sign-in metrics, and update the business team.',
 )
 async function* request({ signal, report }: AiEditorRequest) {
-  report({ status: 'researching', sources: [{ label: 'Original passage' }] })
+  report({ status: 'researching', sources: [{ label: 'Weekly project plan' }] })
   const answer =
-    'Keep the original passage visible. Present new information in small, readable pieces, and give the reader a clear way to stop or apply the answer.'
+    'Next week we will focus on three actions:\n1. Complete permission migration and acceptance for 12 enterprise customers by Wednesday.\n2. Expand the rollout from 30% to 60% while monitoring sign-in success and alerts.\n3. Share the release assessment, remaining risks, and next steps with the business team on Friday.'
   const pieces = answer.match(/.{1,8}/g) || []
   for (const piece of pieces) {
     await new Promise((resolve) => setTimeout(resolve, 120))
@@ -26,7 +26,7 @@ async function* request({ signal, report }: AiEditorRequest) {
     <s-ai-editor
       ref="editor"
       v-model="text"
-      title="Progressive answers"
+      title="Expand next week’s action plan"
       :request="request"
     />
   </div>

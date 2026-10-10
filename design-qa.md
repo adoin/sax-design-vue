@@ -156,3 +156,10 @@ Implemented compact composition rather than uniform large cards: a single-row co
 Verification: 54 component tests passed, followed by a final 31-test Agent pass after Plan Card polish; 21 documentation checks, web/vitest/play types and theme build passed. All 46 bilingual Code/Playground example previews rendered. Browser checks confirmed history overlay, 49px composer, citation paging, timestamp reveal, live Canvas, question keyboard/next, 3-to-5 plan expansion and scroll controls. Narrow available component widths around 420px showed no internal overflow. The requested 375px viewport override was not the observed effective width and is not counted as that test.
 
 Review result: ready for user acceptance. Geometry and color intentionally follow Sax; identical external branding and automatic plan approval were not reproduced.
+
+
+## AI rounded-only and weekly report examples — 2026-10-10
+
+Removed AI component geometry props, provider shape resolution, square SCSS selectors and 26 obsolete shape example sources. Shared child controls remain explicitly rounded. Replaced the default assistant artwork with a small outlined sparkle; preserved custom PNG/SVG and slots. All six AI Editor examples now use a portal weekly-report workflow with results, migration risks and next-week actions. Default comes first in both locales. Formatting includes a working demo answer and selects the complete results paragraph.
+
+Browser verification: all 38 bilingual remaining Code/Playground previews rendered; no removed shape heading appeared. The formatting demo completes Ask AI and replace-selection while retaining risk and next-step paragraphs. Tests: 55 component tests, 21 documentation checks, web/play/vitest types and theme build passed. Ready for user review.

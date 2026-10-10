@@ -1,10 +1,8 @@
 import { buildProps } from '@vuesax-alpha/utils'
-import { useShapeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type MessageScroller from './message-scroller.vue'
 
 export const messageScrollerProps = buildProps({
-  shape: useShapeProp,
   height: { type: [String, Number], default: 360 },
   autoFollow: { type: Boolean, default: true },
   threshold: { type: Number, default: 48 },

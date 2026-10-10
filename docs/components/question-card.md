@@ -36,11 +36,6 @@ PROPS:
     description: "Disable component actions."
     default: "false"
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "Geometry resolved from the component and SConfigProvider."
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "update:modelValue"
     type: "(answers: AgentAnswer[]) => void"
@@ -85,34 +80,6 @@ Bind answers and activeIndex together. Only an enabled option or nonempty custom
 <template #style>
 
 @[code{46-59}](../.vuepress/components/question-card/default.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Shape
-
-Compare rounded and square geometry side by side. Both previews share controlled state so the same content and actions can be compared. Omitting shape follows the global configuration.
-
-<template #example><question-card-shape /></template>
-
-<template #template>
-
-@[code{34-59}](../.vuepress/components/question-card/shape.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-32}](../.vuepress/components/question-card/shape.vue)
-
-</template>
-
-<template #style>
-
-@[code{61-80}](../.vuepress/components/question-card/shape.vue)
 
 </template>
 

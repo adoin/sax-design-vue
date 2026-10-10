@@ -1,5 +1,4 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
-import { useShapeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type ReasoningSteps from './reasoning-steps.vue'
 import type {
@@ -8,7 +7,6 @@ import type {
 } from '../../ai-editor/src/agent-shared/types'
 
 export const reasoningStepsProps = buildProps({
-  shape: useShapeProp,
   steps: { type: definePropType<AgentTask[]>(Array), default: () => [] },
   expanded: { type: Boolean, default: false },
   title: String,

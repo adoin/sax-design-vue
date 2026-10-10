@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, shallowRef } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 
 import { STaskList } from '@vuesax-alpha/components/task-list'
@@ -11,7 +11,6 @@ defineOptions({ name: 'SPlanCard' })
 const props = defineProps(planCardProps)
 const emit = defineEmits(planCardEmits)
 const ns = useNamespace('plan-card')
-const shape = useShape()
 const { t } = useLocale()
 const showAllTasks = shallowRef(false)
 const visibleTasks = computed(() =>
@@ -35,7 +34,7 @@ const downloadPlan = () => {
 
 <template>
   <section
-    :class="[ns.b(), 's-agent-surface', `is-${shape}`]"
+    :class="[ns.b(), 's-agent-surface']"
     @keydown.enter.ctrl.prevent="
       !disabled && status === 'pending' && emit('approve')
     "
@@ -52,7 +51,7 @@ const downloadPlan = () => {
         icon
         size="small"
         type="flat"
-        :shape="shape"
+        shape="rounded"
         :aria-label="t('vs.agent.download')"
         @click="downloadPlan"
         ><SIcon name="cb:download" /><span class="s-agent-sr-only">{{
@@ -68,7 +67,7 @@ const downloadPlan = () => {
           >{{ t('vs.agent.tasks') }}</span
         ><span class="s-agent-muted">{{ tasks.length }}</span>
       </div>
-      <STaskList :tasks="visibleTasks" :shape="shape" /><button
+      <STaskList :tasks="visibleTasks" /><button
         v-if="tasks.length > 3"
         type="button"
         class="s-agent-control s-agent-text-button"
@@ -102,13 +101,13 @@ const downloadPlan = () => {
       </button>
       <template v-if="status === 'pending'"
         ><SButton
-          :shape="shape"
+          shape="rounded"
           :disabled="disabled"
           @click="emit('approve')"
           >{{ t('vs.agent.approve') }}</SButton
         ><SButton
           type="flat"
-          :shape="shape"
+          shape="rounded"
           :disabled="disabled"
           @click="emit('reject')"
           >{{ t('vs.agent.reject') }}</SButton

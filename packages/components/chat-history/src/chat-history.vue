@@ -7,7 +7,7 @@ import {
   useTemplateRef,
 } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { chatHistoryEmits, chatHistoryProps } from './chat-history'
@@ -17,7 +17,6 @@ defineOptions({ name: 'SChatHistory' })
 const props = defineProps(chatHistoryProps)
 const emit = defineEmits(chatHistoryEmits)
 const ns = useNamespace('chat-history')
-const shape = useShape()
 const { t } = useLocale()
 const root = useTemplateRef<HTMLElement>('root')
 const transcript = useTemplateRef<HTMLElement>('transcript')
@@ -46,7 +45,7 @@ const select = (message: AgentHistoryMessage) => {
 </script>
 
 <template>
-  <div ref="root" :class="[ns.b(), `is-${shape}`]">
+  <div ref="root" :class="[ns.b()]">
     <div
       v-if="$slots.default"
       ref="transcript"
@@ -62,9 +61,7 @@ const select = (message: AgentHistoryMessage) => {
       trigger="click"
       :show-arrow="false"
       placement="top-start"
-      :popper-class="
-        ['s-agent-popper', 's-agent-history-panel', `is-${shape}`].join(' ')
-      "
+      :popper-class="['s-agent-popper', 's-agent-history-panel'].join(' ')"
       :popper-style="{
         width: `${panelWidth}px`,
         maxHeight: `${panelHeight}px`,

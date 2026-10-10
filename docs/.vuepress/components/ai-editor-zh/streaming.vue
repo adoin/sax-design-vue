@@ -2,11 +2,13 @@
 import { ref } from 'vue'
 import type { AiEditorInstance, AiEditorRequest } from 'sax-design-vue'
 const editor = ref<AiEditorInstance>()
-const text = ref('流式回答可以逐步到达，让读者始终看到正在讨论的原文。')
+const text = ref(
+  '下周计划：继续推进客户门户发布，补齐权限迁移，观察登录数据，并向业务团队同步进展。',
+)
 async function* request({ signal, report }: AiEditorRequest) {
-  report({ status: 'researching', sources: [{ label: '当前原文' }] })
+  report({ status: 'researching', sources: [{ label: '周度项目计划' }] })
   const answer =
-    '保留原文可见，以小段、易读的内容逐步呈现新信息，并给读者一个明确的停止或应用回答的入口。'
+    '下周重点分为三项：\n1. 周三前完成 12 家企业客户的权限迁移与联合验收。\n2. 灰度从 30% 扩大至 60%，持续观察登录成功率与异常告警。\n3. 周五提交发布评估，向业务团队同步结果、风险和下一步安排。'
   const pieces = answer.match(/.{1,8}/g) || []
   for (const piece of pieces) {
     await new Promise((resolve) => setTimeout(resolve, 120))
@@ -24,7 +26,7 @@ async function* request({ signal, report }: AiEditorRequest) {
     <s-ai-editor
       ref="editor"
       v-model="text"
-      title="逐步显示回答"
+      title="补充下周行动计划"
       :request="request"
     />
   </div>

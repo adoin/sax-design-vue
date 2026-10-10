@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, shallowRef, watch } from 'vue'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 
 import { safeAgentHref } from '../../ai-editor/src/agent-shared/utils'
@@ -20,7 +20,6 @@ defineOptions({ name: 'SReasoningSteps' })
 const props = defineProps(reasoningStepsProps)
 const emit = defineEmits(reasoningStepsEmits)
 const ns = useNamespace('reasoning-steps')
-const shape = useShape()
 const { t } = useLocale()
 const complete = computed(
   () => props.steps.filter((step) => step.status === 'complete').length,
@@ -89,7 +88,7 @@ const summaryText = computed(
 </script>
 
 <template>
-  <section :class="[ns.b(), `is-${shape}`]" :aria-busy="!!current">
+  <section :class="[ns.b()]" :aria-busy="!!current">
     <button
       class="s-reasoning-steps__summary s-agent-control"
       type="button"
@@ -101,7 +100,7 @@ const summaryText = computed(
         :active="!!current"
         stop-behavior="corners"
         :size="14"
-        :shape="shape"
+        shape="rounded"
         aria-hidden="true"
         @restored="loadingRestored"
       />

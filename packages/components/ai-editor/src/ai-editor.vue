@@ -10,7 +10,7 @@ import {
 } from 'vue'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SFocusTrap } from '@vuesax-alpha/components/focus-trap'
-import { useId, useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useId, useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { aiEditorEmits, aiEditorProps } from './ai-editor'
 import { useAiEditorDocument } from './use-ai-editor-document'
 import { useAiEditorAssistant } from './use-ai-editor-assistant'
@@ -43,7 +43,6 @@ const initialContent = props.modelValue
 const emit = defineEmits(aiEditorEmits)
 const { t } = useLocale()
 const ns = useNamespace('ai-editor')
-const shape = useShape()
 const root = ref<HTMLElement>()
 const documentId = useId()
 const outsideClickIgnore = computed(() => [`[id="${documentId.value}"]`])
@@ -275,12 +274,7 @@ defineExpose({
 
 <template>
   <section
-    :class="[
-      ns.b(),
-      ns.is(shape),
-      ns.is('disabled', disabled),
-      ns.is('animated', animate),
-    ]"
+    :class="[ns.b(), ns.is('disabled', disabled), ns.is('animated', animate)]"
   >
     <header v-if="title || $slots.title" :class="ns.e('title')">
       <slot name="title">{{ title }}</slot>
@@ -324,7 +318,7 @@ defineExpose({
       :offset="10"
       :close-on-reference-hidden="true"
       :persistent="false"
-      :popper-class="[ns.e('popper'), ns.is(shape)]"
+      :popper-class="[ns.e('popper')]"
       :shift="{ padding: 12 }"
       :flip="{ padding: 12 }"
       @update:visible="
@@ -359,7 +353,6 @@ defineExpose({
             :can-ask="canAsk"
             :prompt-placeholder="promptPlaceholder"
             :animated="animate"
-            :shape="shape"
             @ask="enterAsk"
             @submit="ask()"
             @close="close(true)"

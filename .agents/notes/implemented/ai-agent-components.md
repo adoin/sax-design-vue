@@ -107,3 +107,5 @@ supersedes: []
 - 其余 12 个组件的结构与交互细化、角色操作默认值、引用来源元数据与最终验证详见 [AI Agent 组件完整交互复核](ai-agent-interaction-fidelity.md)。
 
 - Reasoning Steps 停止 Loading 时先将 active 设为 false，以 corners 后摇清空轨道；保持实例挂载至 restored，再隐藏。后摇期间新一轮 running 不得被旧 restored 移除。
+
+- 2026-10-10 用户要求取消 AI 分类方角能力；本记录中 AI shape 的旧契约已被 [AI 组件圆角与工作汇报编辑示例](ai-rounded-editor-report.md) 替代。其他组件的几何契约不受影响。

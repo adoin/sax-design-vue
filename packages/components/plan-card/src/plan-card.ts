@@ -1,11 +1,9 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
-import { useShapeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type PlanCard from './plan-card.vue'
 import type { AgentTask } from '../../ai-editor/src/agent-shared/types'
 
 export const planCardProps = buildProps({
-  shape: useShapeProp,
   title: { type: String, default: '' },
   description: String,
   tasks: { type: definePropType<AgentTask[]>(Array), default: () => [] },

@@ -41,11 +41,6 @@ PROPS:
     description: "Disable component actions."
     default: "false"
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "Geometry resolved from the component and SConfigProvider."
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "update:expanded"
     type: "(value: boolean) => void"
@@ -92,34 +87,6 @@ A plan remains pending until the consumer changes its status. Expand its details
 <template #style>
 
 @[code{32-45}](../.vuepress/components/plan-card/default.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Shape
-
-Compare rounded and square geometry side by side. Both previews share controlled state so the same content and actions can be compared. Omitting shape follows the global configuration.
-
-<template #example><plan-card-shape /></template>
-
-<template #template>
-
-@[code{12-47}](../.vuepress/components/plan-card/shape.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-10}](../.vuepress/components/plan-card/shape.vue)
-
-</template>
-
-<template #style>
-
-@[code{49-68}](../.vuepress/components/plan-card/shape.vue)
 
 </template>
 

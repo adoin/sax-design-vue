@@ -1,5 +1,4 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
-import { useShapeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type QuestionCard from './question-card.vue'
 import type {
@@ -8,7 +7,6 @@ import type {
 } from '../../ai-editor/src/agent-shared/types'
 
 export const questionCardProps = buildProps({
-  shape: useShapeProp,
   questions: {
     type: definePropType<AgentQuestion[]>(Array),
     default: () => [],

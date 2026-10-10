@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SImage } from '@vuesax-alpha/components/images'
@@ -12,17 +12,13 @@ defineOptions({ name: 'SImageGeneration' })
 const props = defineProps(imageGenerationProps)
 const emit = defineEmits(imageGenerationEmits)
 const ns = useNamespace('image-generation')
-const shape = useShape()
 const { t } = useLocale()
 const progressValue = computed(() => clampProgress(props.progress))
 const busy = computed(() => props.status === 'running')
 </script>
 
 <template>
-  <section
-    :class="[ns.b(), 's-agent-surface', `is-${shape}`]"
-    :aria-busy="busy"
-  >
+  <section :class="[ns.b(), 's-agent-surface']" :aria-busy="busy">
     <div class="s-agent-image-canvas">
       <span class="s-agent-generation-resolution">{{ resolution }}</span>
       <Transition name="s-agent-reveal" mode="out-in"
@@ -76,7 +72,7 @@ const busy = computed(() => props.status === 'running')
         size="small"
         :aria-label="t('vs.agent.cancel')"
         type="flat"
-        :shape="shape"
+        shape="rounded"
         :disabled="disabled"
         @click="emit('cancel')"
         ><SIcon name="cb:close" /><span class="s-agent-sr-only">{{
@@ -84,14 +80,14 @@ const busy = computed(() => props.status === 'running')
         }}</span></SButton
       ><SButton
         v-if="status === 'error' || status === 'cancelled'"
-        :shape="shape"
+        shape="rounded"
         :disabled="disabled"
         @click="emit('retry')"
         >{{ t('vs.agent.retry') }}</SButton
       ><SButton
         v-if="status === 'complete' && src"
         type="flat"
-        :shape="shape"
+        shape="rounded"
         :disabled="disabled"
         @click="emit('download', src!)"
         >{{ t('vs.agent.download') }}</SButton

@@ -29,7 +29,6 @@ const props = defineProps<{
   canAsk: boolean
   promptPlaceholder?: string
   animated: boolean
-  shape: 'rounded' | 'square'
 }>()
 const emit = defineEmits<{
   'update:prompt': [value: string]
@@ -134,7 +133,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
           :aria-label="t('vs.aiEditor.promptLabel')"
           :placeholder="promptPlaceholder || t('vs.aiEditor.promptPlaceholder')"
           class="s-ai-editor__prompt"
-          :shape="shape"
+          shape="rounded"
           @update:model-value="emit('update:prompt', String($event ?? ''))"
           @keydown.enter.prevent="emit('submit')"
         />
@@ -178,7 +177,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
       <SLogoLoading
         :active="loading"
         size="18"
-        :shape="shape"
+        shape="rounded"
         :reduced-motion="!animated ? true : undefined"
         stop-behavior="corners"
         @restored="finishLoading"

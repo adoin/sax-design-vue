@@ -21,6 +21,8 @@
 - Implemented Scrollbar outside placement and Watermark blind mode are recorded in `.agents/notes/implemented/scrollbar-outside-placement.md` and `.agents/notes/implemented/watermark-blind-mode.md`.
 - Two-layer color tokens are recorded in `.agents/notes/implemented/css-color-token-layer.md`; do not inline `hsl(var(--sax-*))` in component properties.
 
+- AI 分类组件暂不提供 `shape` 或方角能力，内部共享控件固定圆角；详见 `.agents/notes/implemented/ai-rounded-editor-report.md`。此要求优先于下文通用 shape 扩展约定。
+
 ## Documentation examples
 
 - Write public documentation for developers using the library: explain APIs, behavior, and usage choices. Keep task instructions, implementation constraints, conversation history, and verification reports in internal records rather than example descriptions or demo copy.

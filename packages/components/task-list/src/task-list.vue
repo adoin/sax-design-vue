@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 
 import { clampProgress } from '../../ai-editor/src/agent-shared/utils'
 import { taskListEmits, taskListProps } from './task-list'
@@ -20,7 +20,6 @@ defineOptions({ name: 'STaskList' })
 const props = defineProps(taskListProps)
 const emit = defineEmits(taskListEmits)
 const ns = useNamespace('task-list')
-const shape = useShape()
 const { t } = useLocale()
 const complete = computed(
   () => props.tasks.filter((task) => task.status === 'complete').length,
@@ -28,7 +27,7 @@ const complete = computed(
 </script>
 
 <template>
-  <section :class="[ns.b(), 's-agent-surface', `is-${shape}`]">
+  <section :class="[ns.b(), 's-agent-surface']">
     <button
       type="button"
       class="s-agent-heading s-agent-control"
@@ -38,7 +37,7 @@ const complete = computed(
       <SLogoLoading
         v-if="tasks.some((task) => task.status === 'running')"
         :size="14"
-        :shape="shape"
+        shape="rounded"
         aria-hidden="true"
       /><SIcon v-else name="cb:task-complete" aria-hidden="true" /><span
         class="s-agent-grow"

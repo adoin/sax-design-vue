@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useTemplateRef } from 'vue'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { messageScrollerEmits, messageScrollerProps } from './message-scroller'
@@ -10,7 +10,6 @@ defineOptions({ name: 'SMessageScroller' })
 const props = defineProps(messageScrollerProps)
 const emit = defineEmits(messageScrollerEmits)
 const ns = useNamespace('message-scroller')
-const shape = useShape()
 const { t } = useLocale()
 const viewport = useTemplateRef<HTMLElement>('viewport')
 const content = useTemplateRef<HTMLElement>('content')
@@ -31,11 +30,7 @@ defineExpose({ scrollToTop, scrollToBottom, following, viewport })
 
 <template>
   <section
-    :class="[
-      ns.b(),
-      `is-${shape}`,
-      { 'is-away-top': !atTop, 'is-away-bottom': !atBottom },
-    ]"
+    :class="[ns.b(), { 'is-away-top': !atTop, 'is-away-bottom': !atBottom }]"
   >
     <div
       ref="viewport"
@@ -57,7 +52,7 @@ defineExpose({ scrollToTop, scrollToBottom, following, viewport })
         size="small"
         type="flat"
         :aria-label="t('vs.agent.oldest')"
-        :shape="shape"
+        shape="rounded"
         @click="scrollToTop"
         ><SIcon name="cb:arrow-up" /><span class="s-agent-sr-only">{{
           t('vs.agent.oldest')
@@ -68,7 +63,7 @@ defineExpose({ scrollToTop, scrollToBottom, following, viewport })
         size="small"
         :aria-label="t('vs.agent.latest')"
         type="flat"
-        :shape="shape"
+        shape="rounded"
         @click="scrollToBottom()"
         ><SIcon name="cb:arrow-down" /><span class="s-agent-sr-only">{{
           t('vs.agent.latest')

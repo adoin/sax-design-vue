@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 const text = ref(
-  'A focused toolbar can offer only the formatting actions your document needs.',
+  'Support tickets are down and user feedback looks positive. The sign-in redesign seems to help.',
 )
 const answer =
-  'Use the toolbar slot to expose a smaller set of document actions.'
+  'During the sign-in rollout, support tickets fell 18% week over week. We will continue collecting user feedback and evaluate the redesign with data from the full release.'
 </script>
 
 <template>
-  <s-ai-editor v-model="text" title="Custom selection actions" :answer="answer">
+  <s-ai-editor v-model="text" title="Executive update" :answer="answer">
     <template #toolbar="{ selection, format }">
       <s-button size="small" @mousedown.prevent @click="format('underline')"
         >Underline</s-button

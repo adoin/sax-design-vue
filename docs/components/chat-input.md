@@ -46,11 +46,6 @@ PROPS:
     description: "Maximum input length, forwarded to STextarea."
     default: null
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "Geometry resolved from the component and SConfigProvider."
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "update:modelValue"
     type: "(text: string) => void"
@@ -109,34 +104,6 @@ Use v-model for text and loading for an active response. Sending does not clear 
 <template #style>
 
 @[code{44-57}](../.vuepress/components/chat-input/default.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Shape
-
-Compare rounded and square geometry side by side. Both previews share controlled state so the same content and actions can be compared. Omitting shape follows the global configuration.
-
-<template #example><chat-input-shape /></template>
-
-<template #template>
-
-@[code{30-59}](../.vuepress/components/chat-input/shape.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-28}](../.vuepress/components/chat-input/shape.vue)
-
-</template>
-
-<template #style>
-
-@[code{61-80}](../.vuepress/components/chat-input/shape.vue)
 
 </template>
 

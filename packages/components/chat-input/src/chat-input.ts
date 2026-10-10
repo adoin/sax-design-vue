@@ -1,11 +1,9 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
-import { useShapeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type ChatInput from './chat-input.vue'
 import type { AgentAttachment } from '../../ai-editor/src/agent-shared/types'
 
 export const chatInputProps = buildProps({
-  shape: useShapeProp,
   modelValue: { type: String, default: '' },
   attachments: {
     type: definePropType<AgentAttachment[]>(Array),

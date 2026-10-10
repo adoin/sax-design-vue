@@ -61,11 +61,6 @@ PROPS:
     description: "Disable component actions."
     default: "false"
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "Geometry resolved from the component and SConfigProvider."
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "update:showTime"
     type: "(value: boolean) => void"
@@ -119,34 +114,6 @@ Use content for plain text or compose richer content in the default slot. User c
 <template #style>
 
 @[code{33-46}](../.vuepress/components/message/default.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Shape
-
-Compare rounded and square geometry side by side. Both previews share controlled state so the same content and actions can be compared. Omitting shape follows the global configuration.
-
-<template #example><message-shape /></template>
-
-<template #template>
-
-@[code{10-39}](../.vuepress/components/message/shape.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-8}](../.vuepress/components/message/shape.vue)
-
-</template>
-
-<template #style>
-
-@[code{41-60}](../.vuepress/components/message/shape.vue)
 
 </template>
 

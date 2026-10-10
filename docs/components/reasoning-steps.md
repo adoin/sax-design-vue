@@ -36,11 +36,6 @@ PROPS:
     description: "Source chips. icon accepts an SIcon name; iconSrc accepts a PNG/SVG URL and takes precedence. Only absolute HTTP and HTTPS links are enabled."
     default: "[]"
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "Geometry resolved from the component and SConfigProvider."
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "update:expanded"
     type: "(value: boolean) => void"
@@ -85,34 +80,6 @@ Shows the current stage and source chips, then displays incoming reasoning parag
 <template #style>
 
 @[code{85-95}](../.vuepress/components/reasoning-steps/default.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Shape
-
-Compare rounded and square geometry side by side. Both previews share controlled state so the same content and actions can be compared. Omitting shape follows the global configuration.
-
-<template #example><reasoning-steps-shape /></template>
-
-<template #template>
-
-@[code{31-58}](../.vuepress/components/reasoning-steps/shape.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-29}](../.vuepress/components/reasoning-steps/shape.vue)
-
-</template>
-
-<template #style>
-
-@[code{60-79}](../.vuepress/components/reasoning-steps/shape.vue)
 
 </template>
 

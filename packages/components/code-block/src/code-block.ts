@@ -1,10 +1,8 @@
 import { buildProps } from '@vuesax-alpha/utils'
-import { useShapeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type CodeBlock from './code-block.vue'
 
 export const codeBlockProps = buildProps({
-  shape: useShapeProp,
   code: { type: String, default: '' },
   filename: String,
   language: { type: String, default: 'text' },

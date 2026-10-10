@@ -336,7 +336,7 @@ describe('Agent process, result and safety contracts', () => {
     await flushPromises()
     expect(wrapper.emitted('copy-error')).toHaveLength(1)
   })
-  it('inherits square geometry through the shared provider', () => {
+  it('keeps Agent surfaces rounded inside a square provider', () => {
     const wrapper = create(
       defineComponent({
         setup: () => () =>
@@ -347,20 +347,21 @@ describe('Agent process, result and safety contracts', () => {
           ),
       }),
     )
-    expect(wrapper.find('.s-task-list').classes()).toContain('is-square')
+    expect(wrapper.find('.s-task-list').classes()).not.toContain('is-square')
+    expect('shape' in TaskList.props).toBe(false)
   })
-  it('forwards a local rounded override to action buttons inside a square provider', () => {
+  it('keeps action controls rounded inside a square provider', () => {
     const wrapper = create(
       defineComponent({
         setup: () => () =>
           h(
             SConfigProvider,
             { shape: 'square' },
-            { default: () => h(PlanCard, { shape: 'rounded', title: 'Plan' }) },
+            { default: () => h(PlanCard, { title: 'Plan' }) },
           ),
       }),
     )
-    expect(wrapper.find('.s-plan-card').classes()).toContain('is-rounded')
+    expect(wrapper.find('.s-plan-card').classes()).not.toContain('is-square')
     const buttons = wrapper.findAllComponents({ name: 'SButton' })
     expect(buttons.every((button) => button.props('shape') === 'rounded')).toBe(
       true,

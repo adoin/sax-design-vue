@@ -16,11 +16,6 @@ PROPS:
     description: "Disable component actions."
     default: "false"
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "Geometry resolved from the component and SConfigProvider."
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "open"
     type: "() => void"
@@ -62,34 +57,6 @@ Click or press Enter on the source label to review the source list. The shared f
 <template #style>
 
 @[code{32-45}](../.vuepress/components/inline-citations/default.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Shape
-
-Compare rounded and square geometry side by side. Both previews share controlled state so the same content and actions can be compared. Omitting shape follows the global configuration.
-
-<template #example><inline-citations-shape /></template>
-
-<template #template>
-
-@[code{23-40}](../.vuepress/components/inline-citations/shape.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-21}](../.vuepress/components/inline-citations/shape.vue)
-
-</template>
-
-<template #style>
-
-@[code{42-61}](../.vuepress/components/inline-citations/shape.vue)
 
 </template>
 

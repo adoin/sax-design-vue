@@ -36,11 +36,6 @@ PROPS:
     description: "Disable component actions."
     default: "false"
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "Geometry resolved from the component and SConfigProvider."
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "cancel"
     type: "() => void"
@@ -91,34 +86,6 @@ Your service controls status, progress and the resulting URL. Cancellation and r
 <template #style>
 
 @[code{53-66}](../.vuepress/components/image-generation/default.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Shape
-
-Compare rounded and square geometry side by side. Both previews share controlled state so the same content and actions can be compared. Omitting shape follows the global configuration.
-
-<template #example><image-generation-shape /></template>
-
-<template #template>
-
-@[code{32-75}](../.vuepress/components/image-generation/shape.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-30}](../.vuepress/components/image-generation/shape.vue)
-
-</template>
-
-<template #style>
-
-@[code{77-96}](../.vuepress/components/image-generation/shape.vue)
 
 </template>
 

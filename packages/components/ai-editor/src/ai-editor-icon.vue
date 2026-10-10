@@ -12,13 +12,16 @@ defineProps<{ src?: string; busy: boolean }>()
       <img v-if="src" :src="src" alt="" draggable="false" />
       <svg v-else viewBox="0 0 24 24" fill="none" focusable="false">
         <path
-          d="M10 3.5 12.2 9.8 18.5 12l-6.3 2.2L10 20.5l-2.2-6.3L1.5 12l6.3-2.2L10 3.5Z"
-          fill="currentColor"
+          d="M10 4c.9 4.6 2.4 6.1 7 7-4.6.9-6.1 2.4-7 7-.9-4.6-2.4-6.1-7-7 4.6-.9 6.1-2.4 7-7Z"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linejoin="round"
         />
         <path
-          d="m19 2 .9 2.6 2.6.9-2.6.9L19 9l-.9-2.6-2.6-.9 2.6-.9L19 2Z"
-          fill="currentColor"
-          opacity=".6"
+          d="M19 3v4m-2-2h4M19 16v4m-2-2h4"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
         />
       </svg>
     </slot>

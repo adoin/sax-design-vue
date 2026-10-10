@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useTemplateRef } from 'vue'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SButton } from '@vuesax-alpha/components/button'
 
@@ -12,7 +12,6 @@ defineOptions({ name: 'SChatInput' })
 const props = defineProps(chatInputProps)
 const emit = defineEmits(chatInputEmits)
 const ns = useNamespace('chat-input')
-const shape = useShape()
 const { t } = useLocale()
 const input = useTemplateRef<InstanceType<typeof STextarea>>('input')
 const canSubmit = computed(
@@ -41,7 +40,7 @@ defineExpose({ focus: () => input.value?.focus(), submit })
 </script>
 <template>
   <section
-    :class="[ns.b(), 's-agent-surface', `is-${shape}`]"
+    :class="[ns.b(), 's-agent-surface']"
     :aria-busy="loading"
     role="group"
     :aria-label="label || t('vs.agent.inputLabel')"
@@ -52,7 +51,7 @@ defineExpose({ focus: () => input.value?.focus(), submit })
           v-for="attachment in attachments"
           :key="attachment.id"
           closable
-          :shape="shape"
+          shape="rounded"
           :disabled="disabled || loading || attachment.disabled"
           @close="emit('remove-attachment', attachment)"
           >{{ attachment.name }}</STag
@@ -64,7 +63,7 @@ defineExpose({ focus: () => input.value?.focus(), submit })
         icon
         size="small"
         type="flat"
-        :shape="shape"
+        shape="rounded"
         :aria-label="t('vs.agent.attach')"
         :disabled="disabled || loading"
         @click="emit('attach')"
@@ -77,7 +76,7 @@ defineExpose({ focus: () => input.value?.focus(), submit })
         :model-value="modelValue"
         :aria-label="label || t('vs.agent.inputLabel')"
         :placeholder="placeholder || t('vs.agent.placeholder')"
-        :shape="shape"
+        shape="rounded"
         :disabled="disabled"
         :readonly="loading"
         :max-length="maxLength"
@@ -91,7 +90,7 @@ defineExpose({ focus: () => input.value?.focus(), submit })
         v-if="loading"
         icon
         size="small"
-        :shape="shape"
+        shape="rounded"
         :aria-label="t('vs.agent.stop')"
         :disabled="disabled"
         @click="emit('stop')"
@@ -103,7 +102,7 @@ defineExpose({ focus: () => input.value?.focus(), submit })
         v-else
         icon
         size="small"
-        :shape="shape"
+        shape="rounded"
         :aria-label="t('vs.agent.send')"
         :disabled="!canSubmit"
         @click="submit"

@@ -36,11 +36,6 @@ PROPS:
     description: "来源标签；icon 为 SIcon 名称，iconSrc 为 PNG/SVG 地址且优先。仅允许绝对 HTTP 与 HTTPS 链接。"
     default: "[]"
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "几何形态由组件属性与 SConfigProvider 共同解析。"
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "update:expanded"
     type: "(value: boolean) => void"
@@ -85,34 +80,6 @@ SLOTS:
 <template #style>
 
 @[code{85-95}](../../.vuepress/components/reasoning-steps/default-zh.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 形状
-
-圆角与方角并排展示。两侧共用受控状态，便于比较相同内容与操作；省略 shape 时会遵循全局配置。
-
-<template #example><reasoning-steps-shape-zh /></template>
-
-<template #template>
-
-@[code{31-58}](../../.vuepress/components/reasoning-steps/shape-zh.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-29}](../../.vuepress/components/reasoning-steps/shape-zh.vue)
-
-</template>
-
-<template #style>
-
-@[code{60-79}](../../.vuepress/components/reasoning-steps/shape-zh.vue)
 
 </template>
 

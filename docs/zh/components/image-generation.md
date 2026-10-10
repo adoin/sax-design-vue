@@ -36,11 +36,6 @@ PROPS:
     description: "禁用组件操作。"
     default: "false"
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "几何形态由组件属性与 SConfigProvider 共同解析。"
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "cancel"
     type: "() => void"
@@ -91,34 +86,6 @@ SLOTS:
 <template #style>
 
 @[code{53-66}](../../.vuepress/components/image-generation/default-zh.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 形状
-
-圆角与方角并排展示。两侧共用受控状态，便于比较相同内容与操作；省略 shape 时会遵循全局配置。
-
-<template #example><image-generation-shape-zh /></template>
-
-<template #template>
-
-@[code{32-75}](../../.vuepress/components/image-generation/shape-zh.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-30}](../../.vuepress/components/image-generation/shape-zh.vue)
-
-</template>
-
-<template #style>
-
-@[code{77-96}](../../.vuepress/components/image-generation/shape-zh.vue)
 
 </template>
 

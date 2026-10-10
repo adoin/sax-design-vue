@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SInput } from '@vuesax-alpha/components/input'
 import { SIcon } from '@vuesax-alpha/components/icon'
@@ -14,7 +14,6 @@ defineOptions({ name: 'SQuestionCard' })
 const props = defineProps(questionCardProps)
 const emit = defineEmits(questionCardEmits)
 const ns = useNamespace('question-card')
-const shape = useShape()
 const { t } = useLocale()
 const index = computed(() =>
   Math.min(
@@ -95,10 +94,7 @@ const keydown = (event: KeyboardEvent) => {
 </script>
 
 <template>
-  <section
-    :class="[ns.b(), 's-agent-surface', `is-${shape}`]"
-    @keydown="keydown"
-  >
+  <section :class="[ns.b(), 's-agent-surface']" @keydown="keydown">
     <div class="s-agent-heading">
       <span class="s-agent-card-heading-icon"
         ><SIcon name="cb:chat" aria-hidden="true"
@@ -147,7 +143,7 @@ const keydown = (event: KeyboardEvent) => {
             :aria-label="t('vs.agent.customAnswer')"
             :placeholder="t('vs.agent.customAnswer')"
             :disabled="disabled"
-            :shape="shape"
+            shape="rounded"
             @update:model-value="update(String($event ?? ''), true)"
           />
         </div>
@@ -163,19 +159,19 @@ const keydown = (event: KeyboardEvent) => {
       <SButton
         v-if="index > 0"
         type="flat"
-        :shape="shape"
+        shape="rounded"
         :disabled="disabled"
         @click="emit('update:activeIndex', index - 1)"
         >{{ t('vs.agent.previous') }}</SButton
       ><SButton
         v-if="question?.optional"
         type="flat"
-        :shape="shape"
+        shape="rounded"
         :disabled="disabled"
         @click="skip"
         >{{ t('vs.agent.skip') }}</SButton
       ><SButton
-        :shape="shape"
+        shape="rounded"
         :disabled="disabled || !validAnswer"
         @click="next"
         >{{

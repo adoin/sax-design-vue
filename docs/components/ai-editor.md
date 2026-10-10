@@ -67,19 +67,13 @@ PROPS:
     values: "true | false"
     description: "Allow selection and AI questions, but block editing, formatting and applying answers."
     default: "false"
-    usage: '#shape'
+    usage: '#default'
   - name: disabled
     type: "Boolean"
     values: "true | false"
     description: "Disable document interaction and close/cancel the floating assistance session."
     default: "false"
-    usage: '#shape'
-  - name: shape
-    type: "String"
-    values: "rounded | square"
-    description: "Document and floating toolbar geometry. Inherits the shared shape configuration."
-    default: null
-    usage: '#shape'
+    usage: '#default'
   - name: animate
     type: "Boolean"
     values: "true | false"
@@ -165,37 +159,9 @@ SLOTS:
 
 <card>
 
-## AI icon
-
-Use `ai-icon` for PNG or SVG image URLs, or the `ai-icon` slot for inline SVG and icon components. The slot takes precedence and receives `status` and `busy`. Icons fit a 22px box and are decorative; controls retain their accessible names.
-
-<template #example><ai-editor-ai-icon /></template>
-
-<template #template>
-
-@[code{16-46}](../.vuepress/components/ai-editor/ai-icon.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-14}](../.vuepress/components/ai-editor/ai-icon.vue)
-
-</template>
-
-<template #style>
-
-@[code{48-60}](../.vuepress/components/ai-editor/ai-icon.vue)
-
-</template>
-
-</card>
-
-<card>
-
 ## Default
 
-Edit the document directly or select text to show its floating toolbar. Ctrl/Cmd + B, I and U toggle supported formats; Ctrl/Cmd + Enter opens Ask AI; Escape closes the toolbar. This local example uses a fixed answer and does not call a remote AI service.
+Edit the document directly or select text to show its floating toolbar. Ctrl/Cmd + B, I and U toggle supported formats; Ctrl/Cmd + Enter opens Ask AI; Escape closes the toolbar. Select the opening sentence of the weekly portal report, ask for a concise summary of the results, and replace the original with the revised answer. Responses are local demo data.
 
 <template #example><ai-editor-default /></template>
 
@@ -223,25 +189,25 @@ Edit the document directly or select text to show its floating toolbar. Ctrl/Cmd
 
 ## Formatting
 
-Bind both v-model and v-model:marks to persist plain text and formatting independently. Formats may overlap. Toolbar actions preserve the selection, and Ctrl/Cmd + Z / Shift + Z undo and redo edits. Ranges refer to the current text using UTF-16 indices.
+Bind both v-model and v-model:marks to persist plain text and formatting independently. Formats may overlap. Highlight key results and use AI to polish the selected opening text. Toolbar actions preserve the selection, and Ctrl/Cmd + Z / Shift + Z undo and redo edits. Ranges refer to the current text using UTF-16 indices.
 
 <template #example><ai-editor-formatting /></template>
 
 <template #template>
 
-@[code{11-29}](../.vuepress/components/ai-editor/formatting.vue)
+@[code{13-32}](../.vuepress/components/ai-editor/formatting.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-9}](../.vuepress/components/ai-editor/formatting.vue)
+@[code{1-11}](../.vuepress/components/ai-editor/formatting.vue)
 
 </template>
 
 <template #style>
 
-@[code{31-46}](../.vuepress/components/ai-editor/formatting.vue)
+@[code{34-49}](../.vuepress/components/ai-editor/formatting.vue)
 
 </template>
 
@@ -257,19 +223,19 @@ Provide request to connect your own AI service. Its context includes the prompt,
 
 <template #template>
 
-@[code{30-45}](../.vuepress/components/ai-editor/request.vue)
+@[code{33-48}](../.vuepress/components/ai-editor/request.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-28}](../.vuepress/components/ai-editor/request.vue)
+@[code{1-31}](../.vuepress/components/ai-editor/request.vue)
 
 </template>
 
 <template #style>
 
-@[code{47-59}](../.vuepress/components/ai-editor/request.vue)
+@[code{50-62}](../.vuepress/components/ai-editor/request.vue)
 
 </template>
 
@@ -305,34 +271,6 @@ Return an `AsyncIterable<string>` for incremental chunks; the component appends 
 
 <card>
 
-## Shape
-
-Compare rounded and square geometry with matching floating controls. Readonly documents still support selection and AI questions; disabled documents do not start an assistance session. The shared SConfigProvider shape default applies when shape is omitted.
-
-<template #example><ai-editor-shape /></template>
-
-<template #template>
-
-@[code{15-40}](../.vuepress/components/ai-editor/shape.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-13}](../.vuepress/components/ai-editor/shape.vue)
-
-</template>
-
-<template #style>
-
-@[code{42-63}](../.vuepress/components/ai-editor/shape.vue)
-
-</template>
-
-</card>
-
-<card>
-
 ## Slots
 
 Use toolbar for focused format actions and answer for custom answer presentation. The slot scope contains the selection and component-owned commands so examples do not need to reimplement range manipulation or request state.
@@ -348,6 +286,34 @@ Use toolbar for focused format actions and answer for custom answer presentation
 <template #script>
 
 @[code{1-8}](../.vuepress/components/ai-editor/slots.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## AI icon
+
+Use `ai-icon` for PNG or SVG image URLs, or the `ai-icon` slot for inline SVG and icon components. The slot takes precedence and receives `status` and `busy`. Icons fit a 22px box and are decorative; controls retain their accessible names.
+
+<template #example><ai-editor-ai-icon /></template>
+
+<template #template>
+
+@[code{18-49}](../.vuepress/components/ai-editor/ai-icon.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-16}](../.vuepress/components/ai-editor/ai-icon.vue)
+
+</template>
+
+<template #style>
+
+@[code{51-63}](../.vuepress/components/ai-editor/ai-icon.vue)
 
 </template>
 

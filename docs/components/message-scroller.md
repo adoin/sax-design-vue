@@ -21,11 +21,6 @@ PROPS:
     description: "Accessible name, with a localized default."
     default: null
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "Geometry resolved from the component and SConfigProvider."
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "follow-change"
     type: "(following: boolean) => void"
@@ -80,34 +75,6 @@ New content follows the viewport while you are near the bottom. Scroll upward to
 <template #style>
 
 @[code{37-50}](../.vuepress/components/message-scroller/default.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Shape
-
-Compare rounded and square geometry side by side. Both previews share controlled state so the same content and actions can be compared. Omitting shape follows the global configuration.
-
-<template #example><message-scroller-shape /></template>
-
-<template #template>
-
-@[code{21-52}](../.vuepress/components/message-scroller/shape.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-19}](../.vuepress/components/message-scroller/shape.vue)
-
-</template>
-
-<template #style>
-
-@[code{54-73}](../.vuepress/components/message-scroller/shape.vue)
 
 </template>
 

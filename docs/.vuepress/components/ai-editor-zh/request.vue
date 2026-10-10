@@ -3,24 +3,24 @@ import { ref } from 'vue'
 import type { AiEditorInstance, AiEditorRequest } from 'sax-design-vue'
 const editor = ref<AiEditorInstance>()
 const text = ref(
-  '可复用的组件应该让常用流程更简单，同时为应用自己的行为保留扩展空间。',
+  '当前风险：12 家企业客户尚未完成权限迁移，可能影响下周的全量发布。计划由客户成功团队逐一确认账号映射，研发提供迁移校验工具，周三前完成联合验收。',
 )
 const rejectRequest = ref(false)
-const request = async ({ selection, signal, report }: AiEditorRequest) => {
+const request = async ({ signal, report }: AiEditorRequest) => {
   report({ status: 'thinking' })
   await new Promise((resolve) => setTimeout(resolve, 500))
   if (signal.aborted) throw new Error('请求已取消')
   report({
     status: 'researching',
-    sources: [{ label: '组件设计指南' }, { label: '文档上下文' }],
+    sources: [{ label: '项目进度台账' }, { label: '权限迁移清单' }],
   })
   await new Promise((resolve) => setTimeout(resolve, 600))
   if (signal.aborted) throw new Error('请求已取消')
   if (rejectRequest.value)
     throw new Error('演示服务暂时不可用，请关闭模拟失败后重试。')
   return {
-    text: `“${selection.text}”可以简化为：简化常用流程，并提供清晰的扩展入口。`,
-    sources: [{ label: '组件设计指南' }],
+    text: '当前风险：12 家企业客户的权限迁移尚未完成。应对措施：客户成功团队确认账号映射，研发补齐校验工具；双方在周三前联合验收，验收通过后再扩大灰度。',
+    sources: [{ label: '项目进度台账' }],
   }
 }
 </script>
@@ -36,7 +36,7 @@ const request = async ({ selection, signal, report }: AiEditorRequest) => {
     <s-ai-editor
       ref="editor"
       v-model="text"
-      title="异步辅助"
+      title="完善风险与应对措施"
       :request="request"
     />
   </div>

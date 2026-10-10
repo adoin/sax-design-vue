@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
 
@@ -12,7 +12,6 @@ defineOptions({ name: 'SCodeBlock' })
 const props = defineProps(codeBlockProps)
 const emit = defineEmits(codeBlockEmits)
 const ns = useNamespace('code-block')
-const shape = useShape()
 const { t } = useLocale()
 const lines = computed(() => tokenizeAgentCode(props.code, props.language))
 const { copied, copy } = useAgentCopy(
@@ -28,7 +27,7 @@ defineExpose({ copy, download: downloadCode })
 </script>
 
 <template>
-  <figure :class="[ns.b(), 's-agent-surface', `is-${shape}`]">
+  <figure :class="[ns.b(), 's-agent-surface']">
     <figcaption class="s-agent-heading">
       <button
         type="button"
@@ -48,7 +47,7 @@ defineExpose({ copy, download: downloadCode })
           icon
           size="small"
           type="flat"
-          :shape="shape"
+          shape="rounded"
           :aria-label="copied ? t('vs.agent.copied') : t('vs.agent.copy')"
           @click="copy"
           ><SIcon :name="copied ? 'cb:checkmark' : 'cb:copy'" /><span
@@ -61,7 +60,7 @@ defineExpose({ copy, download: downloadCode })
           size="small"
           :aria-label="t('vs.agent.download')"
           type="flat"
-          :shape="shape"
+          shape="rounded"
           @click="downloadCode"
           ><SIcon name="cb:download" /><span class="s-agent-sr-only">{{
             t('vs.agent.download')

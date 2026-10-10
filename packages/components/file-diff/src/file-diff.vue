@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { tokenizeAgentCode } from '../../code-block/src/tokenize-code'
@@ -11,7 +11,6 @@ defineOptions({ name: 'SFileDiff' })
 const props = defineProps(fileDiffProps)
 const emit = defineEmits(fileDiffEmits)
 const ns = useNamespace('file-diff')
-const shape = useShape()
 const highlighted = computed(() =>
   props.lines.map((line) =>
     tokenizeAgentCode(line.content, 'ts').reduce<AgentCodeToken[]>(
@@ -30,7 +29,7 @@ const removed = computed(
 </script>
 
 <template>
-  <figure :class="[ns.b(), 's-agent-surface', `is-${shape}`]">
+  <figure :class="[ns.b(), 's-agent-surface']">
     <figcaption class="s-agent-heading">
       <button
         type="button"
@@ -76,12 +75,12 @@ const removed = computed(
     >
     <slot name="actions"
       ><div class="s-agent-actions">
-        <SButton :shape="shape" :disabled="disabled" @click="emit('apply')">{{
+        <SButton shape="rounded" :disabled="disabled" @click="emit('apply')">{{
           t('vs.agent.apply')
         }}</SButton
         ><SButton
           type="flat"
-          :shape="shape"
+          shape="rounded"
           :disabled="disabled"
           @click="emit('reject')"
           >{{ t('vs.agent.reject') }}</SButton

@@ -258,13 +258,6 @@
   color: inherit;
   border-radius: var(--sax-radius-sm);
 }
-.s-ai-editor.is-square,
-.s-ai-editor__popper.is-square .s-ai-editor__toolbar,
-.s-ai-editor__popper.is-square .s-ai-editor__tool,
-.s-ai-editor__popper.is-square .s-ai-editor__ask,
-.s-ai-editor__popper.is-square .s-ai-editor__actions button {
-  border-radius: 0;
-}
 @keyframes s-ai-editor-shimmer {
   to {
     background-position: -250% 0;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, shallowRef, watch } from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { safeAgentHref } from '../../ai-editor/src/agent-shared/utils'
@@ -11,7 +11,6 @@ defineOptions({ name: 'SInlineCitations' })
 const props = defineProps(inlineCitationsProps)
 const emit = defineEmits(inlineCitationsEmits)
 const ns = useNamespace('inline-citations')
-const shape = useShape()
 const { t } = useLocale()
 const activeIndex = shallowRef(0)
 const activeSource = computed(() => props.sources[activeIndex.value])
@@ -27,13 +26,13 @@ watch(
 </script>
 
 <template>
-  <span :class="[ns.b(), `is-${shape}`]"
+  <span :class="[ns.b()]"
     ><SPopper
       trigger="click"
       placement="bottom-start"
       :disabled="disabled || !sources.length"
       :show-arrow="false"
-      :popper-class="['s-agent-popper', `is-${shape}`].join(' ')"
+      :popper-class="['s-agent-popper'].join(' ')"
       @show="emit('open')"
       ><button
         type="button"

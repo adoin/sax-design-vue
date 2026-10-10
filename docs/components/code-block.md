@@ -36,11 +36,6 @@ PROPS:
     description: "Show the local text-file download action."
     default: "true"
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "Geometry resolved from the component and SConfigProvider."
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "update:expanded"
     type: "(value: boolean) => void"
@@ -95,34 +90,6 @@ Copy preserves exact source text and line breaks. Download creates a local text 
 <template #style>
 
 @[code{19-32}](../.vuepress/components/code-block/default.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Shape
-
-Compare rounded and square geometry side by side. Both previews share controlled state so the same content and actions can be compared. Omitting shape follows the global configuration.
-
-<template #example><code-block-shape /></template>
-
-<template #template>
-
-@[code{8-31}](../.vuepress/components/code-block/shape.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-6}](../.vuepress/components/code-block/shape.vue)
-
-</template>
-
-<template #style>
-
-@[code{33-52}](../.vuepress/components/code-block/shape.vue)
 
 </template>
 

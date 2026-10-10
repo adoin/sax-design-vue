@@ -46,11 +46,6 @@ PROPS:
     description: "最大输入长度，传给 STextarea。"
     default: null
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "几何形态由组件属性与 SConfigProvider 共同解析。"
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "update:modelValue"
     type: "(text: string) => void"
@@ -109,34 +104,6 @@ EXPOSES:
 <template #style>
 
 @[code{44-57}](../../.vuepress/components/chat-input/default-zh.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 形状
-
-圆角与方角并排展示。两侧共用受控状态，便于比较相同内容与操作；省略 shape 时会遵循全局配置。
-
-<template #example><chat-input-shape-zh /></template>
-
-<template #template>
-
-@[code{30-59}](../../.vuepress/components/chat-input/shape-zh.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-28}](../../.vuepress/components/chat-input/shape-zh.vue)
-
-</template>
-
-<template #style>
-
-@[code{61-80}](../../.vuepress/components/chat-input/shape-zh.vue)
 
 </template>
 

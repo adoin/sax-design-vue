@@ -36,11 +36,6 @@ PROPS:
     description: "显示本地文本文件下载操作。"
     default: "true"
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "几何形态由组件属性与 SConfigProvider 共同解析。"
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "update:expanded"
     type: "(value: boolean) => void"
@@ -95,34 +90,6 @@ EXPOSES:
 <template #style>
 
 @[code{19-32}](../../.vuepress/components/code-block/default-zh.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 形状
-
-圆角与方角并排展示。两侧共用受控状态，便于比较相同内容与操作；省略 shape 时会遵循全局配置。
-
-<template #example><code-block-shape-zh /></template>
-
-<template #template>
-
-@[code{8-31}](../../.vuepress/components/code-block/shape-zh.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-6}](../../.vuepress/components/code-block/shape-zh.vue)
-
-</template>
-
-<template #style>
-
-@[code{33-52}](../../.vuepress/components/code-block/shape-zh.vue)
 
 </template>
 

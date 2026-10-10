@@ -49,3 +49,5 @@ The pre-development checkpoint was committed and pushed on main as `6aea5de`. Im
 - All 21 documentation checks passed; source normalization covered every new example.
 - Theme build passed. The full documentation build rendered 203 pages successfully; existing plugin-time/chunk-size diagnostics were non-blocking.
 - Six AI Editor examples plus Arc were checked in both rendered locales, their complete Code source blocks and the shared Playground. Real UI checks covered formatting, prompting, applying answers and carousel navigation. At an actual 375 CSS-pixel viewport, the prompt panel measured 351px with 12px gutters. Temporary viewport overrides and verification tabs were restored/closed.
+
+- 2026-10-10 用户要求取消 AI 分类方角能力；本记录中 AI shape 的旧契约已被 [AI 组件圆角与工作汇报编辑示例](ai-rounded-editor-report.md) 替代。其他组件的几何契约不受影响。

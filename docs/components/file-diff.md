@@ -26,11 +26,6 @@ PROPS:
     description: "Disable component actions."
     default: "false"
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "Geometry resolved from the component and SConfigProvider."
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "update:expanded"
     type: "(value: boolean) => void"
@@ -71,34 +66,6 @@ Provide context, add and remove rows with their original line numbers. Apply and
 <template #style>
 
 @[code{32-45}](../.vuepress/components/file-diff/default.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## Shape
-
-Compare rounded and square geometry side by side. Both previews share controlled state so the same content and actions can be compared. Omitting shape follows the global configuration.
-
-<template #example><file-diff-shape /></template>
-
-<template #template>
-
-@[code{19-46}](../.vuepress/components/file-diff/shape.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-17}](../.vuepress/components/file-diff/shape.vue)
-
-</template>
-
-<template #style>
-
-@[code{48-67}](../.vuepress/components/file-diff/shape.vue)
 
 </template>
 

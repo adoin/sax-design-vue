@@ -3,12 +3,12 @@ import { ref } from 'vue'
 import type { AiEditorInstance } from 'sax-design-vue'
 const editor = ref<AiEditorInstance>()
 const text = ref(
-  '好的文档会给每个想法留一点思考的空间。选中一句话，可以调整强调方式、解释含义，或探索另一种表达。\n\n编辑器将正文和行内格式分开保存，让它们都能跟随文档持久化。',
+  '本周完成了客户门户的登录改版，灰度覆盖 30% 的用户，登录成功率由 96.8% 提升至 99.2%。\n\n项目进展：完成单点登录接入与异常监控，客服工单较上周减少 18%。剩余的旧账号迁移将在下周三完成。\n\n风险与计划：少量企业账号仍依赖旧权限模型。下周将先补齐迁移校验，再扩大灰度，并在周五复盘转化数据。',
 )
 const answer =
-  '先表达一个清晰的观点，再用一句简短的话补充说明。这样既能保留原意，也能让段落更易阅读。'
+  '本周交付客户门户登录改版，已覆盖 30% 用户；登录成功率提升 2.4 个百分点，达到 99.2%。'
 const selectSentence = () => {
-  const end = text.value.search(/[.!?。！？]/)
+  const end = text.value.search(/[!?。！？]|\.(?=\s|$)/)
   editor.value?.select(0, end < 0 ? Math.min(36, text.value.length) : end + 1)
 }
 </script>
@@ -19,7 +19,7 @@ const selectSentence = () => {
     <s-ai-editor
       ref="editor"
       v-model="text"
-      title="留一点思考的空间"
+      title="客户门户 · 本周工作汇报"
       :answer="answer"
     />
   </div>

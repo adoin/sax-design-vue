@@ -1,10 +1,8 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
-import { useShapeProp } from '@vuesax-alpha/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type Message from './message.vue'
 
 export const messageProps = buildProps({
-  shape: useShapeProp,
   role: {
     type: definePropType<'user' | 'assistant' | 'system' | 'tool'>(String),
     default: 'assistant',

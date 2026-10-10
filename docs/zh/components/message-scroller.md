@@ -21,11 +21,6 @@ PROPS:
     description: "无障碍名称，默认使用本地化文本。"
     default: null
     usage: "#default"
-  - name: "shape"
-    type: "'rounded' | 'square'"
-    description: "几何形态由组件属性与 SConfigProvider 共同解析。"
-    default: null
-    usage: "#shape"
 EVENTS:
   - name: "follow-change"
     type: "(following: boolean) => void"
@@ -80,34 +75,6 @@ EXPOSES:
 <template #style>
 
 @[code{37-50}](../../.vuepress/components/message-scroller/default-zh.vue)
-
-</template>
-
-</card>
-
-<card>
-
-## 形状
-
-圆角与方角并排展示。两侧共用受控状态，便于比较相同内容与操作；省略 shape 时会遵循全局配置。
-
-<template #example><message-scroller-shape-zh /></template>
-
-<template #template>
-
-@[code{21-52}](../../.vuepress/components/message-scroller/shape-zh.vue)
-
-</template>
-
-<template #script>
-
-@[code{1-19}](../../.vuepress/components/message-scroller/shape-zh.vue)
-
-</template>
-
-<template #style>
-
-@[code{54-73}](../../.vuepress/components/message-scroller/shape-zh.vue)
 
 </template>
 
