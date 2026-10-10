@@ -15,6 +15,8 @@ export interface AgentSource {
   description?: string
   icon?: string
   iconSrc?: string
+  publisher?: string
+  date?: string
 }
 export interface AgentHistoryMessage {
   id: string

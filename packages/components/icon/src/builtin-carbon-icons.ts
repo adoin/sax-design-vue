@@ -10,8 +10,32 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
       viewBox: '0 0 32 32',
     },
   },
+  'arrow-down': {
+    body: '<path fill="currentColor" d="M24.59 16.59L17 24.17V4h-2v20.17l-7.59-7.58L6 18l10 10l10-10z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'arrow-left': {
+    body: '<path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
   'arrow-right': {
     body: '<path fill="currentColor" d="m18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'arrow-up': {
+    body: '<path fill="currentColor" d="M16 4L6 14l1.41 1.41L15 7.83V28h2V7.83l7.59 7.58L26 14z"/>',
     attributes: {
       width: '1em',
       height: '1em',
@@ -42,8 +66,24 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
       viewBox: '0 0 32 32',
     },
   },
+  chat: {
+    body: '<path fill="currentColor" d="M17.74 30L16 29l4-7h6a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h9v2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4h-4.84Z"/><path fill="currentColor" d="M8 10h16v2H8zm0 6h10v2H8z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
   checkmark: {
     body: '<path fill="currentColor" d="m13 24l-9-9l1.414-1.414L13 21.171L26.586 7.586L28 9z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'checkmark-filled': {
+    body: '<path fill="currentColor" d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2m-2 19.59l-5-5L10.59 15L14 18.41L21.41 11l1.596 1.586Z"/><path fill="none" d="m14 21.591l-5-5L10.591 15L14 18.409L21.41 11l1.595 1.585z"/>',
     attributes: {
       width: '1em',
       height: '1em',
@@ -114,6 +154,14 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
       viewBox: '0 0 32 32',
     },
   },
+  copy: {
+    body: '<path fill="currentColor" d="M28 10v18H10V10zm0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2"/><path fill="currentColor" d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4Z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
   document: {
     body: '<path fill="currentColor" d="m25.7 9.3l-7-7c-.2-.2-.4-.3-.7-.3H8c-1.1 0-2 .9-2 2v24c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V10c0-.3-.1-.5-.3-.7M18 4.4l5.6 5.6H18zM24 28H8V4h8v6c0 1.1.9 2 2 2h6z"/><path fill="currentColor" d="M10 22h12v2H10zm0-6h12v2H10z"/>',
     attributes: {
@@ -132,6 +180,14 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
   },
   'double-chevron-right': {
     body: '<path fill="currentColor" d="M16.015 25.9L14.6 24.484L23.086 16L14.6 7.515L16.015 6.1l9.9 9.899zm-8.5 0L6.1 24.484L14.586 16L6.1 7.515L7.515 6.1l9.9 9.899z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  download: {
+    body: '<path fill="currentColor" d="M26 24v4H6v-4H4v4a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2v-4Zm0-10l-1.41-1.41L17 20.17V2h-2v18.17l-7.59-7.58L6 14l10 10z"/>',
     attributes: {
       width: '1em',
       height: '1em',
@@ -226,6 +282,22 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
       viewBox: '0 0 32 32',
     },
   },
+  'radio-button': {
+    body: '<path fill="currentColor" d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2m0 26a12 12 0 1 1 12-12a12 12 0 0 1-12 12"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'recently-viewed': {
+    body: '<path fill="currentColor" d="M20.59 22L15 16.41V7h2v8.58l5 5.01z"/><path fill="currentColor" d="M16 2A13.94 13.94 0 0 0 6 6.23V2H4v8h8V8H7.08A12 12 0 1 1 4 16H2A14 14 0 1 0 16 2"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
   renew: {
     body: '<path fill="currentColor" d="M12 10H6.78A11 11 0 0 1 27 16h2A13 13 0 0 0 6 7.68V4H4v8h8Zm8 12h5.22A11 11 0 0 1 5 16H3a13 13 0 0 0 23 8.32V28h2v-8h-8Z"/>',
     attributes: {
@@ -290,6 +362,22 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
       viewBox: '0 0 32 32',
     },
   },
+  task: {
+    body: '<path fill="currentColor" d="m14 20.18l-3.59-3.59L9 18l5 5l9-9l-1.41-1.42z"/><path fill="currentColor" d="M25 5h-3V4a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v1H7a2 2 0 0 0-2 2v21a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2M12 4h8v4h-8Zm13 24H7V7h3v3h12V7h3Z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'task-complete': {
+    body: '<path fill="currentColor" d="m22 27.18l-2.59-2.59L18 26l4 4l8-8l-1.41-1.41z"/><path fill="currentColor" d="M25 5h-3V4a2.006 2.006 0 0 0-2-2h-8a2.006 2.006 0 0 0-2 2v1H7a2.006 2.006 0 0 0-2 2v21a2.006 2.006 0 0 0 2 2h9v-2H7V7h3v3h12V7h3v11h2V7a2.006 2.006 0 0 0-2-2m-5 3h-8V4h8Z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
   'text-bold': {
     body: '<path fill="currentColor" d="M18.25 25H9V7h8.5a5.25 5.25 0 0 1 4 8.65A5.25 5.25 0 0 1 18.25 25M12 22h6.23a2.25 2.25 0 1 0 0-4.5H12Zm0-7.5h5.5a2.25 2.25 0 1 0 0-4.5H12Z"/>',
     attributes: {
@@ -316,6 +404,22 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
   },
   'text-underline': {
     body: '<path fill="currentColor" d="M4 26h24v2H4zm12-3a7 7 0 0 1-7-7V5h2v11a5 5 0 0 0 10 0V5h2v11a7 7 0 0 1-7 7"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'thumbs-down': {
+    body: '<path fill="currentColor" d="M30 16V9a7.01 7.01 0 0 0-7-7H2v14h6.465l3.577 5.366l.846 5.917A2.01 2.01 0 0 0 14.868 29H17a3.003 3.003 0 0 0 3-3v-6h6a4.005 4.005 0 0 0 4-4M8 14H4V4h4Zm20 2a2.003 2.003 0 0 1-2 2h-8v8a1 1 0 0 1-1 1h-2.133l-.91-6.366L10 14.697V4h13a5.006 5.006 0 0 1 5 5Z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'thumbs-up': {
+    body: '<path fill="currentColor" d="M26 12h-6V6a3.003 3.003 0 0 0-3-3h-2.133a2.01 2.01 0 0 0-1.98 1.717l-.845 5.917L8.465 16H2v14h21a7.01 7.01 0 0 0 7-7v-7a4.005 4.005 0 0 0-4-4M8 28H4V18h4Zm20-5a5.006 5.006 0 0 1-5 5H10V17.303l3.958-5.937l.91-6.366H17a1 1 0 0 1 1 1v8h8a2.003 2.003 0 0 1 2 2Z"/>',
     attributes: {
       width: '1em',
       height: '1em',

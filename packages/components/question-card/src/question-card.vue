@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SInput } from '@vuesax-alpha/components/input'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { questionCardEmits, questionCardProps } from './question-card'
 import type {
   AgentAnswer,
@@ -66,6 +67,23 @@ const skip = () => {
 }
 const keydown = (event: KeyboardEvent) => {
   if (
+    !event.ctrlKey &&
+    !event.metaKey &&
+    !event.altKey &&
+    !event.isComposing &&
+    !(
+      event.target instanceof HTMLElement &&
+      event.target.closest('input, textarea, [contenteditable="true"]')
+    )
+  ) {
+    const option =
+      question.value?.options[event.key.toUpperCase().charCodeAt(0) - 65]
+    if (event.key.length === 1 && option && !option.disabled) {
+      event.preventDefault()
+      update(option.value)
+    }
+  }
+  if (
     event.key === 'Enter' &&
     (event.ctrlKey || event.metaKey) &&
     !event.isComposing
@@ -82,7 +100,10 @@ const keydown = (event: KeyboardEvent) => {
     @keydown="keydown"
   >
     <div class="s-agent-heading">
-      <h3>{{ title || t('vs.agent.questions') }}</h3>
+      <span class="s-agent-card-heading-icon"
+        ><SIcon name="cb:chat" aria-hidden="true"
+      /></span>
+      <h3 class="s-agent-grow">{{ title || t('vs.agent.questions') }}</h3>
       <span class="s-agent-muted"
         >{{ t('vs.agent.answered') }} {{ answered }}/{{
           questions.length
@@ -97,7 +118,7 @@ const keydown = (event: KeyboardEvent) => {
         </p>
         <div class="s-agent-options" role="group" :aria-label="question.title">
           <button
-            v-for="option in question.options"
+            v-for="(option, optionIndex) in question.options"
             :key="option.value"
             type="button"
             class="s-agent-option s-agent-control"
@@ -108,21 +129,28 @@ const keydown = (event: KeyboardEvent) => {
             :disabled="disabled || option.disabled"
             @click="update(option.value)"
           >
-            <span>{{ option.label }}</span
+            <kbd class="s-agent-option-key" aria-hidden="true">{{
+              String.fromCharCode(65 + optionIndex)
+            }}</kbd
+            ><span>{{ option.label }}</span
             ><small v-if="option.description" class="s-agent-muted">{{
               option.description
             }}</small>
           </button>
         </div>
-        <SInput
-          v-if="question.allowCustom"
-          :model-value="answer?.custom ? answer.value : ''"
-          :label="t('vs.agent.customAnswer')"
-          :placeholder="t('vs.agent.customAnswer')"
-          :disabled="disabled"
-          :shape="shape"
-          @update:model-value="update(String($event ?? ''), true)"
-        />
+        <div v-if="question.allowCustom" class="s-agent-custom-option">
+          <kbd class="s-agent-option-key" aria-hidden="true">{{
+            String.fromCharCode(65 + question.options.length)
+          }}</kbd
+          ><SInput
+            :model-value="answer?.custom ? answer.value : ''"
+            :aria-label="t('vs.agent.customAnswer')"
+            :placeholder="t('vs.agent.customAnswer')"
+            :disabled="disabled"
+            :shape="shape"
+            @update:model-value="update(String($event ?? ''), true)"
+          />
+        </div>
         <slot
           name="question"
           :question="question"

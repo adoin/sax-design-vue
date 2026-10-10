@@ -79,19 +79,19 @@ A plan remains pending until the consumer changes its status. Expand its details
 
 <template #template>
 
-@[code{12-27}](../.vuepress/components/plan-card/default.vue)
+@[code{15-30}](../.vuepress/components/plan-card/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-10}](../.vuepress/components/plan-card/default.vue)
+@[code{1-13}](../.vuepress/components/plan-card/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{29-42}](../.vuepress/components/plan-card/default.vue)
+@[code{32-45}](../.vuepress/components/plan-card/default.vue)
 
 </template>
 

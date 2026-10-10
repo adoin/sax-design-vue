@@ -4,12 +4,16 @@ const sources: AgentSource[] = [
   {
     id: 'vue',
     title: 'Vue',
+    publisher: 'Vue.js',
+    icon: 'cb:document',
     href: 'https://vuejs.org/guide/',
     description: 'The official Vue guide.',
   },
   {
     id: 'mdn',
     title: 'MDN',
+    publisher: 'MDN Web Docs',
+    icon: 'cb:document',
     href: 'https://developer.mozilla.org/en-US/docs/Web/API',
     description: 'Web platform documentation.',
   },

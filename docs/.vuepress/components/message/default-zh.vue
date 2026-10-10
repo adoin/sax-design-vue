@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 const showTime = ref(false)
+const userTime = ref(false)
 const feedback = ref<'like' | 'dislike' | null>(null)
 const content = ref('回答已准备好。可以展开时间或提供反馈。')
 </script>
 
 <template>
   <div class="agent-demo">
+    <s-message
+      v-model:show-time="userTime"
+      role="user"
+      author="KS"
+      content="可以帮我审阅这份文档吗？"
+      sent-at="今天 09:29"
+    />
+
     <s-message
       v-model:show-time="showTime"
       v-model:feedback="feedback"

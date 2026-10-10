@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
+import { SIcon } from '@vuesax-alpha/components/icon'
 
 import { useAgentCopy } from '../../ai-editor/src/agent-shared/use-copy'
 import { messageEmits, messageProps } from './message'
@@ -10,6 +12,18 @@ const emit = defineEmits(messageEmits)
 const ns = useNamespace('message')
 const shape = useShape()
 const { t } = useLocale()
+const showActions = computed(() => props.actions ?? props.role === 'assistant')
+const toggleTime = (event: Event) => {
+  const target = event.target
+  if (
+    target instanceof Element &&
+    target !== event.currentTarget &&
+    target.closest('a, button, input, textarea, select')
+  )
+    return
+  if (props.sentAt && !props.disabled && !props.loading)
+    emit('update:showTime', !props.showTime)
+}
 const { copied, copy } = useAgentCopy(
   () => props.content,
   () => emit('copy'),
@@ -26,13 +40,16 @@ const vote = (value: 'like' | 'dislike') => {
     :class="[ns.b(), 's-agent-message', `is-${role}`, `is-${shape}`]"
     :aria-busy="loading"
   >
-    <div class="s-agent-message-avatar">
+    <div v-if="author || $slots.avatar" class="s-agent-message-avatar">
       <slot name="avatar">{{
         (author || t(`vs.agent.${role}`)).slice(0, 2)
       }}</slot>
     </div>
     <div class="s-agent-grow">
-      <header class="s-agent-heading">
+      <header
+        v-if="$slots.header || (author && role !== 'user')"
+        class="s-agent-heading"
+      >
         <slot name="header"
           ><strong>{{ author || t(`vs.agent.${role}`) }}</strong
           ><button
@@ -47,7 +64,17 @@ const vote = (value: 'like' | 'dislike') => {
           </button></slot
         >
       </header>
-      <div class="s-agent-message-body">
+      <div
+        class="s-agent-message-body"
+        :class="{ 'is-time-interactive': !!sentAt }"
+        :role="sentAt ? 'button' : undefined"
+        :tabindex="sentAt && !disabled ? 0 : undefined"
+        :aria-label="sentAt ? t('vs.agent.showTime') : undefined"
+        :aria-expanded="sentAt ? showTime : undefined"
+        @click="toggleTime"
+        @keydown.enter.self.prevent="toggleTime($event)"
+        @keydown.space.self.prevent="toggleTime($event)"
+      >
         <slot
           ><span class="s-agent-stream">{{ content }}</span
           ><span v-if="loading" class="s-agent-caret" aria-hidden="true"
@@ -61,37 +88,58 @@ const vote = (value: 'like' | 'dislike') => {
           >{{ sentAt }}</time
         ></Transition
       >
-      <div v-if="actions" class="s-agent-actions">
+      <div v-if="showActions" class="s-agent-actions">
         <slot name="actions" :copy="copy" :feedback="feedback"
           ><SButton
+            icon
+            size="small"
+            :aria-label="copied ? t('vs.agent.copied') : t('vs.agent.copy')"
             type="flat"
             :shape="shape"
             :disabled="disabled || loading"
             @click="copy"
-            >{{ copied ? t('vs.agent.copied') : t('vs.agent.copy') }}</SButton
+            ><SIcon :name="copied ? 'cb:checkmark' : 'cb:copy'" /><span
+              class="s-agent-sr-only"
+              >{{ copied ? t('vs.agent.copied') : t('vs.agent.copy') }}</span
+            ></SButton
           ><template v-if="role === 'assistant'"
             ><SButton
+              icon
+              size="small"
+              :aria-label="t('vs.agent.like')"
               type="flat"
               :shape="shape"
               :active="feedback === 'like'"
               :aria-pressed="feedback === 'like'"
               :disabled="disabled || loading"
               @click="vote('like')"
-              >{{ t('vs.agent.like') }}</SButton
+              ><SIcon name="cb:thumbs-up" /><span class="s-agent-sr-only">{{
+                t('vs.agent.like')
+              }}</span></SButton
             ><SButton
+              icon
+              size="small"
+              :aria-label="t('vs.agent.dislike')"
               type="flat"
               :shape="shape"
               :active="feedback === 'dislike'"
               :aria-pressed="feedback === 'dislike'"
               :disabled="disabled || loading"
               @click="vote('dislike')"
-              >{{ t('vs.agent.dislike') }}</SButton
+              ><SIcon name="cb:thumbs-down" /><span class="s-agent-sr-only">{{
+                t('vs.agent.dislike')
+              }}</span></SButton
             ><SButton
+              icon
+              size="small"
+              :aria-label="t('vs.agent.regenerate')"
               type="flat"
               :shape="shape"
               :disabled="disabled || loading"
               @click="emit('regenerate')"
-              >{{ t('vs.agent.regenerate') }}</SButton
+              ><SIcon name="cb:renew" /><span class="s-agent-sr-only">{{
+                t('vs.agent.regenerate')
+              }}</span></SButton
             ></template
           ></slot
         >

@@ -3,7 +3,7 @@ description: "行内引用入口与支持键盘的浮层来源预览。"
 PROPS:
   - name: "sources"
     type: "AgentSource[]"
-    description: "引用来源；仅允许绝对 HTTP 与 HTTPS 链接。"
+    description: "引用来源；publisher、date、icon 与 iconSrc 可定制来源卡片。多个来源可前后翻页；仅允许绝对 HTTP 与 HTTPS 链接。"
     default: "[]"
     usage: "#default"
   - name: "label"
@@ -49,19 +49,19 @@ SLOTS:
 
 <template #template>
 
-@[code{19-26}](../../.vuepress/components/inline-citations/default-zh.vue)
+@[code{23-30}](../../.vuepress/components/inline-citations/default-zh.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-17}](../../.vuepress/components/inline-citations/default-zh.vue)
+@[code{1-21}](../../.vuepress/components/inline-citations/default-zh.vue)
 
 </template>
 
 <template #style>
 
-@[code{28-41}](../../.vuepress/components/inline-citations/default-zh.vue)
+@[code{32-45}](../../.vuepress/components/inline-citations/default-zh.vue)
 
 </template>
 
@@ -77,19 +77,19 @@ SLOTS:
 
 <template #template>
 
-@[code{19-36}](../../.vuepress/components/inline-citations/shape-zh.vue)
+@[code{23-40}](../../.vuepress/components/inline-citations/shape-zh.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-17}](../../.vuepress/components/inline-citations/shape-zh.vue)
+@[code{1-21}](../../.vuepress/components/inline-citations/shape-zh.vue)
 
 </template>
 
 <template #style>
 
-@[code{38-57}](../../.vuepress/components/inline-citations/shape-zh.vue)
+@[code{42-61}](../../.vuepress/components/inline-citations/shape-zh.vue)
 
 </template>
 

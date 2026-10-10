@@ -1,11 +1,12 @@
 import { defineComponent, h, nextTick, shallowRef } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { renderToString } from '@vue/server-renderer'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ReasoningSteps from '../../../../reasoning-steps/src/reasoning-steps.vue'
 import TaskList from '../../../../task-list/src/task-list.vue'
 import FileDiff from '../../../../file-diff/src/file-diff.vue'
 import ImageGeneration from '../../../../image-generation/src/image-generation.vue'
+import GenerationCanvas from '../../../../image-generation/src/generation-canvas.vue'
 import StreamingText from '../../../../streaming-text/src/streaming-text.vue'
 import InlineCitations from '../../../../inline-citations/src/inline-citations.vue'
 import ChatHistory from '../../../../chat-history/src/chat-history.vue'
@@ -34,6 +35,9 @@ const tasks = [
   { id: '1', title: 'Research', status: 'running', progress: 150 },
   { id: '2', title: 'Write', status: 'complete' },
 ]
+beforeEach(() => {
+  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null)
+})
 afterEach(() => {
   wrappers.splice(0).forEach((wrapper) => wrapper.unmount())
   vi.useRealTimers()
@@ -42,6 +46,60 @@ afterEach(() => {
 })
 
 describe('Agent process, result and safety contracts', () => {
+  it('keeps the generation canvas frame loop bounded and cancels it on unmount', async () => {
+    vi.useFakeTimers()
+    const context = {
+      setTransform: vi.fn(),
+      clearRect: vi.fn(),
+      beginPath: vi.fn(),
+      arc: vi.fn(),
+      fill: vi.fn(),
+    } as unknown as CanvasRenderingContext2D
+    vi.mocked(HTMLCanvasElement.prototype.getContext).mockReturnValue(context)
+    const wrapper = create(GenerationCanvas, { active: true, progress: 50 })
+    await vi.advanceTimersByTimeAsync(100)
+    expect(context.arc).toHaveBeenCalled()
+    expect(vi.getTimerCount()).toBeLessThanOrEqual(1)
+    wrapper.unmount()
+    expect(vi.getTimerCount()).toBe(0)
+  })
+
+  it('selects question letter shortcuts without intercepting custom answer typing', async () => {
+    const wrapper = create(QuestionCard, {
+      questions: [
+        {
+          id: 'q',
+          title: 'Choose',
+          allowCustom: true,
+          options: [
+            { value: 'a', label: 'First' },
+            { value: 'b', label: 'Second' },
+          ],
+        },
+      ],
+    })
+    await wrapper.trigger('keydown', { key: 'b' })
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([
+      [{ questionId: 'q', value: 'b', custom: false }],
+    ])
+    await wrapper.get('input').trigger('keydown', { key: 'a' })
+    expect(wrapper.emitted('update:modelValue')).toHaveLength(1)
+  })
+
+  it('previews only three plan tasks until more is explicitly expanded', async () => {
+    const wrapper = create(PlanCard, {
+      tasks: Array.from({ length: 5 }, (_, i) => ({
+        id: String(i),
+        title: `Task ${i}`,
+        status: 'pending',
+      })),
+    })
+    expect(wrapper.findAll('.s-agent-plan-tasks li')).toHaveLength(3)
+    await wrapper.get('.s-agent-plan-tasks > button').trigger('click')
+    expect(wrapper.findAll('.s-agent-plan-tasks li')).toHaveLength(5)
+    expect(wrapper.emitted('approve')).toBeUndefined()
+  })
+
   it('replaces source chips with incoming reasoning and collapses at completion', async () => {
     vi.useFakeTimers()
     const wrapper = create(ReasoningSteps, {
@@ -457,7 +515,7 @@ describe('Input, confirmation and message actions', () => {
       sentAt: 'Today',
     })
     expect(wrapper.find('b').exists()).toBe(false)
-    await wrapper.find('.s-agent-time-toggle').trigger('click')
+    await wrapper.find('.s-agent-message-body').trigger('click')
     expect(wrapper.emitted('update:showTime')).toEqual([[true]])
     await wrapper
       .findAllComponents({ name: 'SButton' })[1]

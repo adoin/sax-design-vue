@@ -32,7 +32,7 @@ const summary = computed(
   () =>
     current.value ??
     props.steps.find((step) => step.status === 'error') ??
-    props.steps.at(-1),
+    props.steps[props.steps.length - 1],
 )
 defineSlots<{
   default(): unknown

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import { SLogoLoading } from '@vuesax-alpha/components/icon'
 
 import { useTextReveal } from '../../ai-editor/src/agent-shared/use-text-reveal'
 import { streamingTextEmits, streamingTextProps } from './streaming-text'
@@ -22,6 +23,11 @@ defineExpose({ finish, replay })
 
 <template>
   <div :class="[ns.b(), 's-agent-stream']" :aria-busy="busy || streaming">
+    <div v-if="busy || streaming" class="s-agent-stream-status">
+      <SLogoLoading :size="14" aria-hidden="true" /><span>{{
+        t('vs.agent.running')
+      }}</span>
+    </div>
     <slot :text="revealed" :busy="busy"
       ><span
         v-for="(chunk, index) in chunks"

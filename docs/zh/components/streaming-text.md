@@ -55,7 +55,7 @@ EXPOSES:
 
 <template #template>
 
-@[code{26-45}](../../.vuepress/components/streaming-text/default-zh.vue)
+@[code{26-57}](../../.vuepress/components/streaming-text/default-zh.vue)
 
 </template>
 
@@ -67,7 +67,7 @@ EXPOSES:
 
 <template #style>
 
-@[code{47-60}](../../.vuepress/components/streaming-text/default-zh.vue)
+@[code{59-72}](../../.vuepress/components/streaming-text/default-zh.vue)
 
 </template>
 

@@ -6,6 +6,9 @@ const status = ref<'pending' | 'approved' | 'rejected'>('pending')
 const tasks: AgentTask[] = [
   { id: '1', title: '阅读文档', status: 'pending' },
   { id: '2', title: '撰写回答', status: 'pending' },
+  { id: '3', title: '比较证据', status: 'pending' },
+  { id: '4', title: '检查最终草稿', status: 'pending' },
+  { id: '5', title: '添加来源引用', status: 'pending' },
 ]
 </script>
 

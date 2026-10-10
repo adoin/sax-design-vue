@@ -3,6 +3,8 @@ export default {
   vs: {
     agent: {
       reasoning: 'Reasoning',
+      showLess: 'Show less',
+      moreTasks: '{count} more',
       thoughtDuration: 'Thought for {seconds}s',
       tasks: 'Tasks',
       pending: 'Not started',

@@ -145,3 +145,14 @@ No actionable P0, P1, or P2 findings remain.
 - P3: a future compact-density option could reduce navigator control size while retaining the existing focus hit area.
 
 final result: passed
+
+
+## AI Agent component fidelity review — 2026-10-10
+
+Reference: Kobra public pages for Chat History, File Diff, Image Generation, Streaming Text, Inline Citations, Code Block, Task List, Chat Input, Plan Card, Question Card, Message, and Message Scroller. Observed interactive states include history overlay, citation paging, question progression, timestamp reveal and time-sampled generation/task/streaming stages. No claim of access to premium source or every backend completion state.
+
+Implemented compact composition rather than uniform large cards: a single-row composer, user bubbles over blurred history, filename headers and code gutters, paged citation metadata, inline task progress, three-task plan preview, letter-key questions, assistant action icons, and floating scroll controls. Preserved Sax typography, token colors, borderless surfaces, global geometry, SPopper ownership and explicit business events. Image-generation motion is procedural Canvas driven by consumer progress, with reduced-motion support and cleanup.
+
+Verification: 54 component tests passed, followed by a final 31-test Agent pass after Plan Card polish; 21 documentation checks, web/vitest/play types and theme build passed. All 46 bilingual Code/Playground example previews rendered. Browser checks confirmed history overlay, 49px composer, citation paging, timestamp reveal, live Canvas, question keyboard/next, 3-to-5 plan expansion and scroll controls. Narrow available component widths around 420px showed no internal overflow. The requested 375px viewport override was not the observed effective width and is not counted as that test.
+
+Review result: ready for user acceptance. Geometry and color intentionally follow Sax; identical external branding and automatic plan approval were not reproduced.

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, useTemplateRef } from 'vue'
 import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { SButton } from '@vuesax-alpha/components/button'
 
 import { STextarea } from '@vuesax-alpha/components/textarea'
@@ -38,7 +39,6 @@ const keydown = (event: KeyboardEvent) => {
 }
 defineExpose({ focus: () => input.value?.focus(), submit })
 </script>
-
 <template>
   <section
     :class="[ns.b(), 's-agent-surface', `is-${shape}`]"
@@ -46,8 +46,8 @@ defineExpose({ focus: () => input.value?.focus(), submit })
     role="group"
     :aria-label="label || t('vs.agent.inputLabel')"
   >
-    <slot name="attachments" :attachments="attachments"
-      ><div v-if="attachments.length" class="s-agent-actions">
+    <slot name="attachments" :attachments="attachments">
+      <div v-if="attachments.length" class="s-agent-actions">
         <STag
           v-for="attachment in attachments"
           :key="attachment.id"
@@ -57,39 +57,60 @@ defineExpose({ focus: () => input.value?.focus(), submit })
           @close="emit('remove-attachment', attachment)"
           >{{ attachment.name }}</STag
         >
-      </div></slot
-    ><STextarea
-      ref="input"
-      :model-value="modelValue"
-      :label="label || t('vs.agent.inputLabel')"
-      :placeholder="placeholder || t('vs.agent.placeholder')"
-      :shape="shape"
-      :disabled="disabled"
-      :readonly="loading"
-      :max-length="maxLength"
-      :auto-size="{ minRows: 2, maxRows: 8 }"
-      @update:model-value="emit('update:modelValue', $event)"
-      @keydown="keydown"
-    />
-    <div class="s-agent-heading">
-      <div class="s-agent-actions">
-        <SButton
-          type="flat"
-          :shape="shape"
-          :disabled="disabled || loading"
-          @click="emit('attach')"
-          >{{ t('vs.agent.attach') }}</SButton
-        ><slot name="tools" />
       </div>
+    </slot>
+    <div class="s-agent-composer-row">
       <SButton
-        v-if="loading"
+        icon
+        size="small"
+        type="flat"
+        :shape="shape"
+        :aria-label="t('vs.agent.attach')"
+        :disabled="disabled || loading"
+        @click="emit('attach')"
+        ><SIcon name="cb:add" /><span class="s-agent-sr-only">{{
+          t('vs.agent.attach')
+        }}</span></SButton
+      >
+      <STextarea
+        ref="input"
+        :model-value="modelValue"
+        :aria-label="label || t('vs.agent.inputLabel')"
+        :placeholder="placeholder || t('vs.agent.placeholder')"
         :shape="shape"
         :disabled="disabled"
+        :readonly="loading"
+        :max-length="maxLength"
+        :auto-size="{ minRows: 1, maxRows: 8 }"
+        :rows="1"
+        @update:model-value="emit('update:modelValue', $event)"
+        @keydown="keydown"
+      />
+      <div class="s-agent-actions"><slot name="tools" /></div>
+      <SButton
+        v-if="loading"
+        icon
+        size="small"
+        :shape="shape"
+        :aria-label="t('vs.agent.stop')"
+        :disabled="disabled"
         @click="emit('stop')"
-        >{{ t('vs.agent.stop') }}</SButton
-      ><SButton v-else :shape="shape" :disabled="!canSubmit" @click="submit">{{
-        t('vs.agent.send')
-      }}</SButton>
+        ><SIcon name="cb:stop" /><span class="s-agent-sr-only">{{
+          t('vs.agent.stop')
+        }}</span></SButton
+      >
+      <SButton
+        v-else
+        icon
+        size="small"
+        :shape="shape"
+        :aria-label="t('vs.agent.send')"
+        :disabled="!canSubmit"
+        @click="submit"
+        ><SIcon name="cb:arrow-up" /><span class="s-agent-sr-only">{{
+          t('vs.agent.send')
+        }}</span></SButton
+      >
     </div>
     <slot />
   </section>

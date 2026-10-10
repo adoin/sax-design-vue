@@ -18,7 +18,7 @@ PROPS:
     usage: "#default"
   - name: "sent-at"
     type: "String"
-    description: "时间按钮展开后显示的时间文本。"
+    description: "点击消息正文或时间入口后显示的时间文本。"
     default: null
     usage: "#default"
   - name: "datetime"
@@ -44,7 +44,7 @@ PROPS:
   - name: "actions"
     type: "Boolean"
     description: "显示操作栏；助手消息包含反馈与重新生成操作。"
-    default: "true"
+    default: null
     usage: "#default"
   - name: "v-model:feedback"
     type: "'like' | 'dislike' | null"
@@ -100,25 +100,25 @@ SLOTS:
 
 ## 基础用法
 
-使用 content 显示纯文本，或通过默认插槽组合更丰富的内容。时间显示和反馈均受控。助手操作发出意图，由消费方重新生成或保存评价。
+使用 content 显示纯文本，或通过默认插槽组合更丰富的内容。用户消息采用紧凑气泡；点击消息正文或时间入口可展开受控时间。反馈均受控。助手操作发出意图，由消费方重新生成或保存评价。
 
 <template #example><message-default-zh /></template>
 
 <template #template>
 
-@[code{8-20}](../../.vuepress/components/message/default-zh.vue)
+@[code{9-29}](../../.vuepress/components/message/default-zh.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-6}](../../.vuepress/components/message/default-zh.vue)
+@[code{1-7}](../../.vuepress/components/message/default-zh.vue)
 
 </template>
 
 <template #style>
 
-@[code{22-35}](../../.vuepress/components/message/default-zh.vue)
+@[code{31-44}](../../.vuepress/components/message/default-zh.vue)
 
 </template>
 

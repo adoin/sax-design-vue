@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 const showTime = ref(false)
+const userTime = ref(false)
 const feedback = ref<'like' | 'dislike' | null>(null)
 const content = ref(
   'Your answer is ready. Open the timestamp or leave feedback.',
@@ -9,6 +10,14 @@ const content = ref(
 
 <template>
   <div class="agent-demo">
+    <s-message
+      v-model:show-time="userTime"
+      role="user"
+      author="KS"
+      content="Can you review this document?"
+      sent-at="Today, 09:29"
+    />
+
     <s-message
       v-model:show-time="showTime"
       v-model:feedback="feedback"

@@ -103,3 +103,5 @@ supersedes: []
 - 浏览器读数：向上阅读时追加消息前后 scrollTop 均为 0；前插历史使 scrollHeight 从 720 增至 840，同时 scrollTop 从 0 增至 120，保留原视图。全局 square 下局部 rounded / square / circle 按钮实测圆角为 12px / 0px / 50%。
 - 最终四份本地化图像示例源码与 Playground 素材均为 /sax-logo-mark.svg，图片 complete=true、naturalWidth=175；浅色与深色样式均已观察。
 - 静态文档浏览器存在通用 hydration mismatch 提示，已在未改动的既有 AiEditor 页复现；所有本次示例完成挂载后可实际交互，未发现新组件特有运行错误。
+
+- 其余 12 个组件的结构与交互细化、角色操作默认值、引用来源元数据与最终验证详见 [AI Agent 组件完整交互复核](ai-agent-interaction-fidelity.md)。

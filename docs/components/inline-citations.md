@@ -3,7 +3,7 @@ description: "Inline source triggers with keyboard-accessible floating previews.
 PROPS:
   - name: "sources"
     type: "AgentSource[]"
-    description: "Citation sources. Only absolute HTTP and HTTPS links are enabled."
+    description: "Citation sources. publisher, date, icon and iconSrc customize the source card. Multiple sources can be paged with Previous/Next. Only absolute HTTP and HTTPS links are enabled."
     default: "[]"
     usage: "#default"
   - name: "label"
@@ -49,19 +49,19 @@ Click or press Enter on the source label to review the source list. The shared f
 
 <template #template>
 
-@[code{19-26}](../.vuepress/components/inline-citations/default.vue)
+@[code{23-30}](../.vuepress/components/inline-citations/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-17}](../.vuepress/components/inline-citations/default.vue)
+@[code{1-21}](../.vuepress/components/inline-citations/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{28-41}](../.vuepress/components/inline-citations/default.vue)
+@[code{32-45}](../.vuepress/components/inline-citations/default.vue)
 
 </template>
 
@@ -77,19 +77,19 @@ Compare rounded and square geometry side by side. Both previews share controlled
 
 <template #template>
 
-@[code{19-36}](../.vuepress/components/inline-citations/shape.vue)
+@[code{23-40}](../.vuepress/components/inline-citations/shape.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-17}](../.vuepress/components/inline-citations/shape.vue)
+@[code{1-21}](../.vuepress/components/inline-citations/shape.vue)
 
 </template>
 
 <template #style>
 
-@[code{38-57}](../.vuepress/components/inline-citations/shape.vue)
+@[code{42-61}](../.vuepress/components/inline-citations/shape.vue)
 
 </template>
 

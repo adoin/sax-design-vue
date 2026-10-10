@@ -78,19 +78,19 @@ SLOTS:
 
 <template #template>
 
-@[code{28-50}](../../.vuepress/components/image-generation/default-zh.vue)
+@[code{32-51}](../../.vuepress/components/image-generation/default-zh.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-26}](../../.vuepress/components/image-generation/default-zh.vue)
+@[code{1-30}](../../.vuepress/components/image-generation/default-zh.vue)
 
 </template>
 
 <template #style>
 
-@[code{52-65}](../../.vuepress/components/image-generation/default-zh.vue)
+@[code{53-66}](../../.vuepress/components/image-generation/default-zh.vue)
 
 </template>
 
@@ -106,19 +106,19 @@ SLOTS:
 
 <template #template>
 
-@[code{28-77}](../../.vuepress/components/image-generation/shape-zh.vue)
+@[code{32-75}](../../.vuepress/components/image-generation/shape-zh.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-26}](../../.vuepress/components/image-generation/shape-zh.vue)
+@[code{1-30}](../../.vuepress/components/image-generation/shape-zh.vue)
 
 </template>
 
 <template #style>
 
-@[code{79-98}](../../.vuepress/components/image-generation/shape-zh.vue)
+@[code{77-96}](../../.vuepress/components/image-generation/shape-zh.vue)
 
 </template>
 

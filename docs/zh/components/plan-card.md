@@ -79,19 +79,19 @@ SLOTS:
 
 <template #template>
 
-@[code{12-25}](../../.vuepress/components/plan-card/default-zh.vue)
+@[code{15-28}](../../.vuepress/components/plan-card/default-zh.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-10}](../../.vuepress/components/plan-card/default-zh.vue)
+@[code{1-13}](../../.vuepress/components/plan-card/default-zh.vue)
 
 </template>
 
 <template #style>
 
-@[code{27-40}](../../.vuepress/components/plan-card/default-zh.vue)
+@[code{30-43}](../../.vuepress/components/plan-card/default-zh.vue)
 
 </template>
 

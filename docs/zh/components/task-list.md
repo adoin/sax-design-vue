@@ -63,19 +63,19 @@ SLOTS:
 
 <template #template>
 
-@[code{23-32}](../../.vuepress/components/task-list/default-zh.vue)
+@[code{39-44}](../../.vuepress/components/task-list/default-zh.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-21}](../../.vuepress/components/task-list/default-zh.vue)
+@[code{1-38}](../../.vuepress/components/task-list/default-zh.vue)
 
 </template>
 
 <template #style>
 
-@[code{34-47}](../../.vuepress/components/task-list/default-zh.vue)
+@[code{45-55}](../../.vuepress/components/task-list/default-zh.vue)
 
 </template>
 

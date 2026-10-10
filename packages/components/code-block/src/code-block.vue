@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
+import { SIcon } from '@vuesax-alpha/components/icon'
 
 import { useAgentCopy } from '../../ai-editor/src/agent-shared/use-copy'
 import { downloadAgentText } from '../../ai-editor/src/agent-shared/utils'
@@ -36,18 +37,35 @@ defineExpose({ copy, download: downloadCode })
         @click="emit('update:expanded', !expanded)"
       >
         {{ filename || language }}
-        <span aria-hidden="true">{{ expanded ? '−' : '+' }}</span>
+        <SIcon name="cb:code" aria-hidden="true" />
+        <SIcon
+          :name="expanded ? 'cb:chevron-up' : 'cb:chevron-down'"
+          aria-hidden="true"
+        />
       </button>
       <div class="s-agent-actions">
-        <SButton type="flat" :shape="shape" @click="copy">{{
-          copied ? t('vs.agent.copied') : t('vs.agent.copy')
-        }}</SButton
+        <SButton
+          icon
+          size="small"
+          type="flat"
+          :shape="shape"
+          :aria-label="copied ? t('vs.agent.copied') : t('vs.agent.copy')"
+          @click="copy"
+          ><SIcon :name="copied ? 'cb:checkmark' : 'cb:copy'" /><span
+            class="s-agent-sr-only"
+            >{{ copied ? t('vs.agent.copied') : t('vs.agent.copy') }}</span
+          ></SButton
         ><SButton
           v-if="download"
+          icon
+          size="small"
+          :aria-label="t('vs.agent.download')"
           type="flat"
           :shape="shape"
           @click="downloadCode"
-          >{{ t('vs.agent.download') }}</SButton
+          ><SIcon name="cb:download" /><span class="s-agent-sr-only">{{
+            t('vs.agent.download')
+          }}</span></SButton
         ><slot name="actions" :copy="copy" :download="downloadCode" />
       </div>
     </figcaption>

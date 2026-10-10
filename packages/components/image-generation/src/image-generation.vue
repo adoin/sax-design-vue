@@ -2,15 +2,12 @@
 import { computed } from 'vue'
 import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { SImage } from '@vuesax-alpha/components/images'
 import { clampProgress } from '../../ai-editor/src/agent-shared/utils'
+import GenerationCanvas from './generation-canvas.vue'
 import { imageGenerationEmits, imageGenerationProps } from './image-generation'
-import type { AgentStatus } from '../../ai-editor/src/agent-shared/types'
 
-const marker = (status: AgentStatus) =>
-  ({ pending: '○', running: '◌', complete: '✓', error: '!', cancelled: '−' })[
-    status
-  ]
 defineOptions({ name: 'SImageGeneration' })
 const props = defineProps(imageGenerationProps)
 const emit = defineEmits(imageGenerationEmits)
@@ -27,6 +24,7 @@ const busy = computed(() => props.status === 'running')
     :aria-busy="busy"
   >
     <div class="s-agent-image-canvas">
+      <span class="s-agent-generation-resolution">{{ resolution }}</span>
       <Transition name="s-agent-reveal" mode="out-in"
         ><SImage
           v-if="status === 'complete' && src"
@@ -46,39 +44,44 @@ const busy = computed(() => props.status === 'running')
           class="s-agent-image-placeholder"
           :class="{ 'is-running': busy }"
         >
-          <span
-            class="s-agent-status-marker"
-            :aria-label="t(`vs.agent.${status}`)"
-            >{{ marker(status) }}</span
-          ><slot name="placeholder" :status="status" :progress="progressValue"
-            ><span>{{ error || t(`vs.agent.${status}`) }}</span></slot
+          <GenerationCanvas :active="busy" :progress="progressValue" />
+          <slot name="placeholder" :status="status" :progress="progressValue"
+            ><span
+              :class="
+                busy || status === 'pending'
+                  ? 's-agent-sr-only'
+                  : 's-agent-generation-error'
+              "
+              >{{ error || t(`vs.agent.${status}`) }}</span
+            ></slot
           >
         </div></Transition
       >
     </div>
-    <div class="s-agent-heading">
-      <span class="s-agent-muted">{{ resolution }}</span
-      ><span v-if="busy">{{ progressValue }}%</span>
-    </div>
     <div
       v-if="busy"
-      class="s-agent-progress"
+      class="s-agent-generation-progress"
       role="progressbar"
       :aria-label="alt || t('vs.agent.generatedImage')"
       :aria-valuenow="progressValue"
       :aria-valuemin="0"
       :aria-valuemax="100"
     >
-      <span :style="{ width: `${progressValue}%` }" />
+      <span>{{ progressValue }}%</span>
     </div>
     <div class="s-agent-actions">
       <SButton
         v-if="busy"
+        icon
+        size="small"
+        :aria-label="t('vs.agent.cancel')"
         type="flat"
         :shape="shape"
         :disabled="disabled"
         @click="emit('cancel')"
-        >{{ t('vs.agent.cancel') }}</SButton
+        ><SIcon name="cb:close" /><span class="s-agent-sr-only">{{
+          t('vs.agent.cancel')
+        }}</span></SButton
       ><SButton
         v-if="status === 'error' || status === 'cancelled'"
         :shape="shape"

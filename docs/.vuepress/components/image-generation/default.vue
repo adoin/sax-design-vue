@@ -10,6 +10,10 @@ function cancel() {
   clearInterval(timer)
   status.value = 'cancelled'
 }
+function fail() {
+  clearInterval(timer)
+  status.value = 'error'
+}
 function generate() {
   clearInterval(timer)
   progress.value = 0
@@ -20,7 +24,7 @@ function generate() {
       clearInterval(timer)
       status.value = 'complete'
     }
-  }, 180)
+  }, 400)
 }
 onBeforeUnmount(() => clearInterval(timer))
 </script>
@@ -39,10 +43,7 @@ onBeforeUnmount(() => clearInterval(timer))
     <div class="agent-demo-actions">
       <s-button :disabled="status === 'running'" @click="generate"
         >Generate preview</s-button
-      ><s-button
-        type="flat"
-        :disabled="status !== 'running'"
-        @click="status = 'error'"
+      ><s-button type="flat" :disabled="status !== 'running'" @click="fail"
         >Simulate failure</s-button
       ><s-tag v-if="action">{{ action }}</s-tag>
     </div>

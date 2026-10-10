@@ -18,7 +18,7 @@ PROPS:
     usage: "#default"
   - name: "sent-at"
     type: "String"
-    description: "Visible timestamp text revealed by the timestamp button."
+    description: "Visible timestamp text revealed by selecting the message body or timestamp control."
     default: null
     usage: "#default"
   - name: "datetime"
@@ -43,8 +43,8 @@ PROPS:
     usage: "#default"
   - name: "actions"
     type: "Boolean"
-    description: "Show the action row. Assistant messages include feedback and regenerate."
-    default: "true"
+    description: "Show icon actions. Defaults to enabled for assistant messages and disabled for other roles; explicitly set actions to override."
+    default: null
     usage: "#default"
   - name: "v-model:feedback"
     type: "'like' | 'dislike' | null"
@@ -100,25 +100,25 @@ SLOTS:
 
 ## Default
 
-Use content for plain text or compose richer content in the default slot. Timestamp visibility and feedback are controlled. Assistant actions emit intent so the consumer can regenerate or persist feedback.
+Use content for plain text or compose richer content in the default slot. User content is a compact bubble; select the message body or its timestamp control to reveal a controlled timestamp. Feedback is controlled. Assistant actions emit intent so the consumer can regenerate or persist feedback.
 
 <template #example><message-default /></template>
 
 <template #template>
 
-@[code{10-22}](../.vuepress/components/message/default.vue)
+@[code{11-31}](../.vuepress/components/message/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-8}](../.vuepress/components/message/default.vue)
+@[code{1-9}](../.vuepress/components/message/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{24-37}](../.vuepress/components/message/default.vue)
+@[code{33-46}](../.vuepress/components/message/default.vue)
 
 </template>
 

@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import type { StreamingTextInstance } from 'sax-design-vue'
 const viewer = ref<StreamingTextInstance>()
 const text = ref(
-  'A streaming response preserves your reading rhythm. Text is displayed safely, including <tags> and emoji 👨‍👩‍👧.',
+  'A response arriving in stages\n\nA streaming response preserves your reading rhythm. Text is displayed safely, including <tags> and emoji 👨‍👩‍👧.\n\nNew observations arrive without restarting the earlier paragraphs. Pause, resume, or append more evidence as the answer develops.',
 )
 const paused = ref(false)
 const streaming = ref(false)
@@ -32,7 +32,19 @@ function onFinish() {
       :paused="paused"
       :streaming="streaming"
       @finish="onFinish"
-    />
+    >
+      <template #default="{ text: revealed }">
+        <h3 v-if="revealed.split('\n\n')[0]">
+          {{ revealed.split('\n\n')[0] }}
+        </h3>
+        <p
+          v-for="(paragraph, index) in revealed.split('\n\n').slice(1)"
+          :key="index"
+        >
+          {{ paragraph }}
+        </p>
+      </template>
+    </s-streaming-text>
     <div class="agent-demo-actions">
       <s-button @click="paused = !paused">{{
         paused ? 'Resume' : 'Pause'

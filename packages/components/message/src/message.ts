@@ -15,7 +15,7 @@ export const messageProps = buildProps({
   datetime: String,
   showTime: Boolean,
   loading: Boolean,
-  actions: { type: Boolean, default: true },
+  actions: { type: Boolean, default: undefined },
   feedback: {
     type: definePropType<'like' | 'dislike' | null>(String),
     default: null,

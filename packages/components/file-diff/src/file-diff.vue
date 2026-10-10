@@ -2,14 +2,24 @@
 import { computed } from 'vue'
 import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
-
+import { SIcon } from '@vuesax-alpha/components/icon'
+import { tokenizeAgentCode } from '../../code-block/src/tokenize-code'
 import { fileDiffEmits, fileDiffProps } from './file-diff'
+import type { AgentCodeToken } from '../../code-block/src/tokenize-code'
 
 defineOptions({ name: 'SFileDiff' })
 const props = defineProps(fileDiffProps)
 const emit = defineEmits(fileDiffEmits)
 const ns = useNamespace('file-diff')
 const shape = useShape()
+const highlighted = computed(() =>
+  props.lines.map((line) =>
+    tokenizeAgentCode(line.content, 'ts').reduce<AgentCodeToken[]>(
+      (tokens, row) => tokens.concat(row),
+      [],
+    ),
+  ),
+)
 const { t } = useLocale()
 const added = computed(
   () => props.lines.filter((line) => line.type === 'add').length,
@@ -29,7 +39,11 @@ const removed = computed(
         @click="emit('update:expanded', !expanded)"
       >
         {{ filename }}
-        <span aria-hidden="true">{{ expanded ? '−' : '+' }}</span></button
+        <SIcon name="cb:code" aria-hidden="true" />
+        <SIcon
+          :name="expanded ? 'cb:chevron-up' : 'cb:chevron-down'"
+          aria-hidden="true"
+        /></button
       ><span class="s-agent-added">+{{ added }}</span
       ><span class="s-agent-removed">−{{ removed }}</span>
     </figcaption>
@@ -49,7 +63,14 @@ const removed = computed(
           ><span class="s-agent-diff-symbol">{{
             line.type === 'add' ? '+' : line.type === 'remove' ? '−' : ' '
           }}</span
-          ><code>{{ line.content }}</code>
+          ><code
+            ><span
+              v-for="(token, tokenIndex) in highlighted[index]"
+              :key="tokenIndex"
+              :class="token.kind && `s-agent-token-${token.kind}`"
+              >{{ token.text }}</span
+            ></code
+          >
         </div>
       </div></Transition
     >

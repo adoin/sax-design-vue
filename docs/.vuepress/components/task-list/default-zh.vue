@@ -1,47 +1,55 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import type { AgentTask } from 'sax-design-vue'
 const expanded = ref(true)
-const tasks = ref<AgentTask[]>([
-  { id: '1', title: '收集资料', status: 'complete' },
-  { id: '2', title: '撰写摘要', status: 'running', progress: 35 },
-  { id: '3', title: '检查结果', status: 'pending' },
-])
-function select(task: AgentTask) {
-  tasks.value = tasks.value.map((item) =>
-    item.id === task.id
-      ? {
-          ...item,
-          status: item.status === 'complete' ? 'pending' : 'complete',
-          progress: item.status === 'complete' ? 0 : 100,
+const tasks = ref<AgentTask[]>([])
+let timer: ReturnType<typeof setInterval> | undefined
+const labels = ['收集资料', '撰写总结', '审阅结果']
+function replay() {
+  clearInterval(timer)
+  tasks.value = labels.map((title, index) => ({
+    id: String(index),
+    title,
+    status: index === 0 ? 'running' : 'pending',
+    progress: index === 0 ? 0 : undefined,
+  }))
+  timer = setInterval(() => {
+    const index = tasks.value.findIndex((task) => task.status === 'running')
+    if (index < 0) {
+      clearInterval(timer)
+      return
+    }
+    const progress = Math.min(100, (tasks.value[index].progress ?? 0) + 5)
+    tasks.value = tasks.value.map((task, i) => {
+      if (i === index)
+        return {
+          ...task,
+          status: progress === 100 ? 'complete' : 'running',
+          progress: progress === 100 ? undefined : progress,
         }
-      : item,
-  )
+      if (progress === 100 && i === index + 1)
+        return { ...task, status: 'running', progress: 0 }
+      return task
+    })
+  }, 120)
 }
+onMounted(replay)
+onBeforeUnmount(() => clearInterval(timer))
 </script>
-
 <template>
   <div class="agent-demo">
-    <s-task-list
-      v-model:expanded="expanded"
-      :tasks="tasks"
-      interactive
-      @task-click="select"
-    />
+    <s-task-list v-model:expanded="expanded" :tasks="tasks" />
+    <s-button size="small" @click="replay">重新播放任务</s-button>
   </div>
 </template>
-
 <style scoped>
 .agent-demo {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 18px;
   width: 100%;
   min-width: 0;
 }
-.agent-demo-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.agent-demo > .s-button {
+  justify-self: start;
 }
 </style>

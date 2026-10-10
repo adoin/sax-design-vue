@@ -55,7 +55,7 @@ Append incoming chunks to text. Pausing preserves the reveal position; replacing
 
 <template #template>
 
-@[code{27-46}](../.vuepress/components/streaming-text/default.vue)
+@[code{27-58}](../.vuepress/components/streaming-text/default.vue)
 
 </template>
 
@@ -67,7 +67,7 @@ Append incoming chunks to text. Pausing preserves the reveal position; replacing
 
 <template #style>
 
-@[code{48-61}](../.vuepress/components/streaming-text/default.vue)
+@[code{60-73}](../.vuepress/components/streaming-text/default.vue)
 
 </template>
 

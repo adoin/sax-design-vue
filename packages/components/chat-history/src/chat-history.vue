@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  shallowRef,
+  useTemplateRef,
+} from 'vue'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 
 import { SPopper } from '@vuesax-alpha/components/popper'
@@ -12,6 +19,23 @@ const emit = defineEmits(chatHistoryEmits)
 const ns = useNamespace('chat-history')
 const shape = useShape()
 const { t } = useLocale()
+const root = useTemplateRef<HTMLElement>('root')
+const transcript = useTemplateRef<HTMLElement>('transcript')
+const panelWidth = shallowRef(320)
+const panelHeight = shallowRef(320)
+let observer: ResizeObserver | undefined
+onMounted(() => {
+  const measure = () => {
+    panelWidth.value = root.value?.clientWidth || 320
+    panelHeight.value = transcript.value?.clientHeight || 320
+  }
+  measure()
+  if (typeof ResizeObserver !== 'undefined') {
+    observer = new ResizeObserver(measure)
+    if (root.value) observer.observe(root.value)
+  }
+})
+onBeforeUnmount(() => observer?.disconnect())
 const userMessages = computed(() =>
   props.messages.filter((message) => message.role === 'user'),
 )
@@ -22,9 +46,10 @@ const select = (message: AgentHistoryMessage) => {
 </script>
 
 <template>
-  <div :class="[ns.b(), `is-${shape}`]">
+  <div ref="root" :class="[ns.b(), `is-${shape}`]">
     <div
       v-if="$slots.default"
+      ref="transcript"
       class="s-agent-history-transcript"
       :class="{ 'is-open': modelValue }"
       :inert="modelValue ? true : undefined"
@@ -37,7 +62,13 @@ const select = (message: AgentHistoryMessage) => {
       trigger="click"
       :show-arrow="false"
       placement="top-start"
-      :popper-class="['s-agent-popper', `is-${shape}`].join(' ')"
+      :popper-class="
+        ['s-agent-popper', 's-agent-history-panel', `is-${shape}`].join(' ')
+      "
+      :popper-style="{
+        width: `${panelWidth}px`,
+        maxHeight: `${panelHeight}px`,
+      }"
       @update:visible="emit('update:modelValue', $event)"
       ><button
         type="button"
@@ -46,12 +77,16 @@ const select = (message: AgentHistoryMessage) => {
         :disabled="!userMessages.length"
       >
         <slot name="trigger"
-          >{{ label || t('vs.agent.history') }} ({{
-            userMessages.length
-          }})</slot
+          ><SIcon name="cb:recently-viewed" aria-hidden="true" />{{
+            label || t('vs.agent.history')
+          }}
+          ({{ userMessages.length }})</slot
         ></button
       ><template #content
-        ><nav :aria-label="label || t('vs.agent.history')">
+        ><nav
+          :aria-label="label || t('vs.agent.history')"
+          @keydown.esc.stop.prevent="emit('update:modelValue', false)"
+        >
           <ul class="s-agent-list">
             <li v-for="message in userMessages" :key="message.id">
               <button
