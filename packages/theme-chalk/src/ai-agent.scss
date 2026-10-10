@@ -24,7 +24,6 @@
   &__summary-text { overflow-wrap: anywhere; }
   &__reasoning { display: grid; gap: 10px; color: #{getColor(text, 0.65)}; }
   &__paragraph { margin: 0; animation: s-agent-word var(--sax-transition-duration) var(--sax-transition-function-ease) both; }
-  &__indicator.is-running { animation: s-reasoning-pulse 1200ms ease-in-out infinite; }
   &__chevron.is-finished { opacity: 0.6; }
   &__chevron { flex: 0 0 auto; font-size: 12px; opacity: 0; }
   &__summary:hover &__chevron,
@@ -68,7 +67,6 @@
   }
   .s-agent-list { margin: 4px 0; padding: 0; }
 }
-@keyframes s-reasoning-pulse { 50% { opacity: 0.25; } }
 .s-reasoning-label-enter-active,
 .s-reasoning-label-leave-active { transition: opacity var(--sax-transition-duration-fast), transform var(--sax-transition-duration-fast), filter var(--sax-transition-duration-fast); }
 .s-reasoning-label-enter-from { opacity: 0; transform: translateY(3px); filter: blur(2px); }
@@ -76,7 +74,6 @@
 @media (prefers-reduced-motion: reduce) {
   .s-reasoning-label-enter-active,
   .s-reasoning-label-leave-active { transition: none; }
-  .s-reasoning-steps__indicator.is-running,
   .s-reasoning-steps__paragraph { animation: none; }
 }
 

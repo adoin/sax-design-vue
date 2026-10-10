@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, shallowRef, watch } from 'vue'
 import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
-import { SIcon } from '@vuesax-alpha/components/icon'
+import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 
 import { safeAgentHref } from '../../ai-editor/src/agent-shared/utils'
 import { reasoningStepsEmits, reasoningStepsProps } from './reasoning-steps'
@@ -85,10 +85,15 @@ const summaryText = computed(
       :aria-expanded="expanded"
       @click="emit('update:expanded', !expanded)"
     >
+      <SLogoLoading
+        v-if="current"
+        :size="14"
+        :shape="shape"
+        aria-hidden="true"
+      />
       <SIcon
-        v-if="!finished"
+        v-else-if="!finished"
         class="s-reasoning-steps__indicator"
-        :class="{ 'is-running': !!current }"
         :name="marker(summary?.status ?? 'pending')"
         aria-hidden="true"
       />

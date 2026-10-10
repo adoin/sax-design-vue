@@ -78,6 +78,7 @@ supersedes: []
 - 共享 ai-agent.scss 复用全局圆角、box-shadow、motion 与完整颜色变量；不加入普通 border、outline 或 ring。保留深色主题、减少动态效果与可见键盘反馈。
 - Reasoning Steps 与 Task List 使用消费方控制的任务状态；折叠和步骤 / 任务选择分别发出事件，不在组件内伪造服务进度。
 - Reasoning Steps 的默认形态为无外层卡片的紧凑状态条，expanded 默认 false。真实 steps 驱动当前阶段；来源标签在 reasoning 尚为空时显示，正文逐段追加后替代来源。全部步骤 complete 后正文收起，显示本轮实际耗时摘要；duration 可覆盖秒数，点击摘要通过受控 expanded 展开正文。保留不传 reasoning 时的步骤列表与 step-click 契约。来源支持 icon / iconSrc 与 source-icon 插槽，优先级为插槽、图片、SIcon 名称、默认文档图标。
+- 运行阶段的左侧标记采用项目默认 SLogoLoading（14px），继承解析后的 shape 与默认 reduced-motion 行为；不继续仿制外站点阵。
 - 2026-10-10 对照 Kobra 原站完整观察两轮（1750ms 阶段、650ms 正文节奏、约 7 秒完成与展开记录），并以可重播本地示例验证对应状态顺序。28 项 Agent 测试、21 项文档测试、test/play 类型检查、主题构建通过；四个中英文示例的渲染、Code 与 Playground 已验证。状态与正文动画遵守 reduced-motion；使用 Sax 的字体、颜色、阴影和无边框设计，未复制来源网站的外层页面或品牌图标。
 - Chat History 只汇集 user 消息，通过 SPopper 展开；可选默认插槽展示 transcript，展开时淡化并设为 inert，关闭时移除 inert；select 提供定位数据。Inline Citations 复用 SPopper，只有绝对 HTTP / HTTPS 来源可以作为链接。
 - File Diff 接收已计算差异行与旧、新行号，明确发出 apply / reject。Code Block 以文本节点安全渲染轻量词法高亮，支持复制、错误事件、折叠、本地下载与 line 插槽。

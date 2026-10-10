@@ -11,7 +11,7 @@ Source: https://kobra.systems/components/reasoning-steps and the supplied incide
 - Content and behavior: reactive application data drives stages and paragraphs. Completion time is measured locally or supplied by duration. The replayable demo follows the observed ordering; English and Chinese copy, Code and Playground are synchronized.
 - Verification: source and implementation screenshots were inspected at matching process states. Original source density is compared at component scale; the surrounding documentation shells intentionally differ. Full cycles, completion disclosure and both geometries passed in the browser. 28 component tests and 21 documentation tests passed, along with TypeScript checks and theme build.
 
-Remaining P3: the library status glyph uses Carbon's small draggable matrix instead of the reference's proprietary animated matrix. Source brand artwork is consumer-provided. No P0/P1/P2 findings remain.
+The running status glyph uses the project's default 14px SLogoLoading, as explicitly requested after the process comparison. Source brand artwork is consumer-provided. No P0/P1/P2 findings remain.
 
 final result: passed
 
