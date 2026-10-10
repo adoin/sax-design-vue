@@ -48,6 +48,7 @@ export default {
       latest: '最新消息',
       oldest: '第一条消息',
       messages: '消息',
+      answeredDuration: '已回答，用时 {seconds} 秒',
       answered: '已回答',
     },
     drawer: {

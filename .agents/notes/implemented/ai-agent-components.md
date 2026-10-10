@@ -116,3 +116,5 @@ supersedes: []
 - Image Generation 的旧 Canvas 点阵已替换为 SVG Logo 流动线束。S 曲线复用 Sax 标志路径，靛蓝 #6366f1、紫 #a855f7、青绿 #2dd4bf 与默认 SLogoLoading 一致；七条主线沿路径连续流动，背景五条淡曲线。运行态主线周期 1.6 秒、背景 2.4 秒，进度仅调亮度，不重新创建节点或重启动画。非运行态与 reduced-motion 不播放，渐变 ID 使用 useId 隔离，移除 Canvas 和手写帧循环。
 
 - 用户澄清 Image Generation 应保留点阵主体：移除独立 S 标志线束和三段实体线。恢复 38×28 点阵，使用 Logo 三色的弯曲光带从画布上方扫至下方，点的色彩、亮度和尺寸响应光带。光带从画布外进入并离开，顶部、底部和边缘均被覆盖；进度只重绘当前时间帧，不重置帧循环。保留 reduced-motion、DPR 上限 2、卸载清理与受控状态。此前 SVG S 形设计不再是当前契约。
+
+- Streaming Text 完成后保留 22px 状态行，显示本轮实际耗时；保留光标占位但隐藏光标，防止完成时高度收缩。Loading active=false 后等待 corners restored 再换完成图标。默认文字以词块渲染，蓝→紫→粉约 180ms 后恢复继承正文色，不做 1.8 秒的青绿/橙色长循环；遵守 animate 与 reduced-motion。slot 增加 chunks、paragraphs、wordClass，安全复用文字动画，replay 刷新文字键以重播。Terminal 示例复用 Code Block，随正文渐入并逐步输出命令，无命令执行。

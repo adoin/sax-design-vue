@@ -1087,3 +1087,28 @@ button.s-agent-heading {
     background-color: #{getColor(primary, 0.15)};
   }
 }
+
+.s-streaming-text .s-agent-stream-status {
+  min-height: 22px;
+  line-height: 22px;
+}
+.s-streaming-text .s-agent-stream-word {
+  white-space: pre-wrap;
+  animation: s-agent-stream-rainbow 180ms linear both;
+}
+@keyframes s-agent-stream-rainbow {
+  0% { color: oklch(0.7 0.14 250); opacity: 0; filter: blur(1px); }
+  25% { color: oklch(0.58 0.17 285); opacity: 1; filter: blur(0); }
+  55% { color: oklch(0.62 0.14 330); }
+  75% { color: oklch(0.57 0.12 350); }
+  100% { color: inherit; opacity: 1; filter: blur(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-streaming-text .s-agent-stream-word { animation: none; }
+}
+
+// Code surfaces override the global Poppins reset, including custom line slots.
+.s-agent-code-line,
+.s-agent-code-line * {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace !important;
+}

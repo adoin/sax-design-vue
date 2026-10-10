@@ -48,6 +48,7 @@ export default {
       latest: 'Latest messages',
       oldest: 'First message',
       messages: 'Messages',
+      answeredDuration: 'Answered in {seconds}s',
       answered: 'Answered',
     },
     drawer: {

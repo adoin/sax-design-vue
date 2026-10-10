@@ -32,8 +32,9 @@ EVENTS:
     description: "The currently accumulated text has finished revealing, including empty text. This does not indicate that the producer has stopped."
 SLOTS:
   - name: "default"
-    type: "{ text: string; busy: boolean }"
-    description: "Replace the default content."
+    type: "Slot"
+    scope: "{ text: string; busy: boolean; chunks: { text: string; key: string }[]; paragraphs: { text: string; key: string }[][]; wordClass: string }"
+    description: "Render structured content with safe chunks, paragraph groups and the matching reveal class."
 EXPOSES:
   - name: "finish"
     type: "() => void"
@@ -49,13 +50,15 @@ EXPOSES:
 
 ## Default
 
+New text arrives with a brief blue, violet and pink tint before returning to the normal text color. The status row and full response remain after completion. Code Block demonstrates a terminal panel reveal and incremental command output; commands are displayed, never executed.
+
 Append incoming chunks to text. Pausing preserves the reveal position; replacing the earlier prefix restarts it. finish reveals all pending text, while replay restarts the current answer. The streaming flag reflects the producer independently of the finish event.
 
 <template #example><streaming-text-default /></template>
 
 <template #template>
 
-@[code{27-58}](../.vuepress/components/streaming-text/default.vue)
+@[code{27-84}](../.vuepress/components/streaming-text/default.vue)
 
 </template>
 
@@ -67,7 +70,7 @@ Append incoming chunks to text. Pausing preserves the reveal position; replacing
 
 <template #style>
 
-@[code{60-73}](../.vuepress/components/streaming-text/default.vue)
+@[code{86-122}](../.vuepress/components/streaming-text/default.vue)
 
 </template>
 

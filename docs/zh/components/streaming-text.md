@@ -32,8 +32,9 @@ EVENTS:
     description: "当前累积文本已展示完成，包含空文本；不表示生产方停止输出。"
 SLOTS:
   - name: "default"
-    type: "{ text: string; busy: boolean }"
-    description: "替换默认内容。"
+    type: "Slot"
+    scope: "{ text: string; busy: boolean; chunks: { text: string; key: string }[]; paragraphs: { text: string; key: string }[][]; wordClass: string }"
+    description: "使用安全文本块、分段数组和 wordClass 动画类渲染结构化内容。"
 EXPOSES:
   - name: "finish"
     type: "() => void"
@@ -49,13 +50,15 @@ EXPOSES:
 
 ## 基础用法
 
+新文字先以短暂的蓝紫粉渐变出现，再恢复正文颜色。完成后保留耗时状态栏与完整回答。示例组合 Code Block，展示 Terminal 面板渐入与命令逐步输出；命令只展示，不执行。
+
 将新片段追加到 text。暂停保留展示位置；替换前缀会重新开始。finish 显示全部剩余文本，replay 重播当前回答；streaming 独立反映生产方状态，不由 finish 事件自动决定。
 
 <template #example><streaming-text-default-zh /></template>
 
 <template #template>
 
-@[code{26-57}](../../.vuepress/components/streaming-text/default-zh.vue)
+@[code{26-83}](../../.vuepress/components/streaming-text/default-zh.vue)
 
 </template>
 
@@ -67,7 +70,7 @@ EXPOSES:
 
 <template #style>
 
-@[code{59-72}](../../.vuepress/components/streaming-text/default-zh.vue)
+@[code{85-121}](../../.vuepress/components/streaming-text/default-zh.vue)
 
 </template>
 

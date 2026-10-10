@@ -182,3 +182,10 @@ Browser samples observed dash offset continuously advancing from -9 through -87 
 User clarified that the dot matrix must remain the primary visual. Removed the independent S artwork and then the three solid stroke accents. Logo colors now travel through a 38×28 matrix as curved illumination fronts; each dot changes color, opacity and radius. Fronts travel beyond both vertical edges, giving full-canvas coverage instead of remaining in the middle. Progress redraws the current frame without restarting motion. Reduced motion stays static, and unmount cancels the only frame loop. A numerical coverage check evaluates all 1,064 dots across a complete front sweep.
 
 Final correction: no solid strokes remain. The 3.4-second color-front cycle numerically reaches every one of the 1,064 points, including all four edges. Browser preview confirmed the point-only design. 33 Agent tests, 21 documentation checks and web/vitest types passed; bilingual Code/Playground previews rendered.
+
+
+## Streaming Text completion and hue fidelity — 2026-10-10
+
+Observed Kobra replay and completed states, including its Terminal block. DOM style samples show a 0.18s word-hue animation: blue/violet/pink briefly appears at the new-text edge, then returns to the normal foreground. Replaced the initial 1.8s green/orange cycle with this short blue/violet/pink treatment. Kept the status row at 22px through completion, showing measured elapsed time and waiting for Loading restoration. Cursor footprint remains after completion. Safe word/paragraph slot data lets the rich demo reuse the animation.
+
+Terminal reuses Code Block: browser samples read `brew `, `brew install `, `brew install sl && `, and the final command. Its panel enters as the stream reaches that paragraph. Fixed the global Poppins reset overriding code fonts with a scoped monospace override. Both bilingual Code/Playground previews rendered; the running and complete status heights measured 22px. 34 Agent tests, 21 documentation checks, web/play/vitest types and theme build passed.

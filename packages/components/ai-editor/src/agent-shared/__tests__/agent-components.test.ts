@@ -419,6 +419,20 @@ describe('Agent process, result and safety contracts', () => {
 })
 
 describe('Streaming lifecycle', () => {
+  it('retains the status row and response when reveal completes, and refreshes keys on replay', async () => {
+    vi.useFakeTimers()
+    const wrapper = create(StreamingText, { text: 'Hello world', interval: 10 })
+    await vi.advanceTimersByTimeAsync(200)
+    expect(wrapper.find('.s-agent-stream-status').exists()).toBe(true)
+    expect(wrapper.find('.s-agent-stream-status').text()).toContain(
+      'Answered in',
+    )
+    expect(wrapper.find('.s-agent-stream').text()).toContain('Hello world')
+    const completed = wrapper.get('.s-agent-stream-word').element
+    ;(wrapper.vm as unknown as { replay(): void }).replay()
+    await vi.advanceTimersByTimeAsync(200)
+    expect(wrapper.get('.s-agent-stream-word').element).not.toBe(completed)
+  })
   it('preserves graphemes, pauses, appends, replaces and finishes once per text', async () => {
     vi.useFakeTimers()
     const wrapper = create(StreamingText, { text: '👨‍👩‍👧你好', interval: 20 })
