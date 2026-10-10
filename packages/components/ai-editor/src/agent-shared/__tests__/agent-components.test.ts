@@ -2,6 +2,7 @@ import { defineComponent, h, nextTick, shallowRef } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { renderToString } from '@vue/server-renderer'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { SLogoLoading } from '../../../../icon'
 import ReasoningSteps from '../../../../reasoning-steps/src/reasoning-steps.vue'
 import TaskList from '../../../../task-list/src/task-list.vue'
 import FileDiff from '../../../../file-diff/src/file-diff.vue'
@@ -98,6 +99,23 @@ describe('Agent process, result and safety contracts', () => {
     await wrapper.get('.s-agent-plan-tasks > button').trigger('click')
     expect(wrapper.findAll('.s-agent-plan-tasks li')).toHaveLength(5)
     expect(wrapper.emitted('approve')).toBeUndefined()
+  })
+
+  it('waits for loading restoration before removing its indicator and survives restart', async () => {
+    const wrapper = create(ReasoningSteps, { steps: [tasks[0]] })
+    const loader = wrapper.findComponent(SLogoLoading)
+    await wrapper.setProps({ steps: [{ ...tasks[0], status: 'complete' }] })
+    expect(wrapper.findComponent(SLogoLoading).exists()).toBe(true)
+    expect(loader.props('active')).toBe(false)
+    expect(loader.props('stopBehavior')).toBe('corners')
+    await wrapper.setProps({ steps: [tasks[0]] })
+    loader.vm.$emit('restored')
+    await nextTick()
+    expect(wrapper.findComponent(SLogoLoading).exists()).toBe(true)
+    await wrapper.setProps({ steps: [{ ...tasks[0], status: 'complete' }] })
+    loader.vm.$emit('restored')
+    await nextTick()
+    expect(wrapper.findComponent(SLogoLoading).exists()).toBe(false)
   })
 
   it('replaces source chips with incoming reasoning and collapses at completion', async () => {

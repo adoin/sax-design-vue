@@ -28,6 +28,17 @@ const complete = computed(
 const current = computed(() =>
   props.steps.find((step) => step.status === 'running'),
 )
+// Keep the instance mounted until its built-in stopping motion has finished.
+const loadingVisible = shallowRef(!!current.value)
+watch(
+  () => !!current.value,
+  (running) => {
+    if (running) loadingVisible.value = true
+  },
+)
+const loadingRestored = () => {
+  if (!current.value) loadingVisible.value = false
+}
 const summary = computed(
   () =>
     current.value ??
@@ -86,10 +97,13 @@ const summaryText = computed(
       @click="emit('update:expanded', !expanded)"
     >
       <SLogoLoading
-        v-if="current"
+        v-if="loadingVisible"
+        :active="!!current"
+        stop-behavior="corners"
         :size="14"
         :shape="shape"
         aria-hidden="true"
+        @restored="loadingRestored"
       />
       <SIcon
         v-else-if="!finished"

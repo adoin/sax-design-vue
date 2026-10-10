@@ -105,3 +105,5 @@ supersedes: []
 - 静态文档浏览器存在通用 hydration mismatch 提示，已在未改动的既有 AiEditor 页复现；所有本次示例完成挂载后可实际交互，未发现新组件特有运行错误。
 
 - 其余 12 个组件的结构与交互细化、角色操作默认值、引用来源元数据与最终验证详见 [AI Agent 组件完整交互复核](ai-agent-interaction-fidelity.md)。
+
+- Reasoning Steps 停止 Loading 时先将 active 设为 false，以 corners 后摇清空轨道；保持实例挂载至 restored，再隐藏。后摇期间新一轮 running 不得被旧 restored 移除。
