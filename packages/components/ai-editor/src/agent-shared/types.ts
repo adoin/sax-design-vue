@@ -13,6 +13,8 @@ export interface AgentSource {
   title: string
   href?: string
   description?: string
+  icon?: string
+  iconSrc?: string
 }
 export interface AgentHistoryMessage {
   id: string

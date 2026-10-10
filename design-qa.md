@@ -1,5 +1,20 @@
 # Grouped column settings design QA
 
+## Reasoning Steps process comparison — 2026-10-10
+
+Source: https://kobra.systems/components/reasoning-steps and the supplied incident-call screenshot. The source was observed across two complete automatic cycles and after expanding its completed “Thought for 7s” control. Local English and Chinese examples were captured and observed across the same source-chip, paragraph-stream, collapsed-completion and expanded-completion states.
+
+- Typography: compact 13px state and body copy with subdued secondary text; the existing Sax font is intentional.
+- Layout: no component card, padded heading or permanent step counter. Sources sit below the status, incoming paragraphs replace sources, and completion collapses to a single duration control. Source chips wrap and preserve rounded/square geometry.
+- Tokens: Sax semantic colors and shared soft shadow replace the source's thin chip borders, preserving the repository's borderless contract.
+- Assets: Carbon library icons provide status and source glyphs; applications can provide source PNG/SVG artwork or a source-icon slot. Teams/Linear branding is not hardcoded into a generic component. No generated imagery is required.
+- Content and behavior: reactive application data drives stages and paragraphs. Completion time is measured locally or supplied by duration. The replayable demo follows the observed ordering; English and Chinese copy, Code and Playground are synchronized.
+- Verification: source and implementation screenshots were inspected at matching process states. Original source density is compared at component scale; the surrounding documentation shells intentionally differ. Full cycles, completion disclosure and both geometries passed in the browser. 28 component tests and 21 documentation tests passed, along with TypeScript checks and theme build.
+
+Remaining P3: the library status glyph uses Carbon's small draggable matrix instead of the reference's proprietary animated matrix. Source brand artwork is consumer-provided. No P0/P1/P2 findings remain.
+
+final result: passed
+
 ## Comparison target
 
 - Source visual truth: `D:\\codex_home\\generated_images\\01a06660-cacc-7d40-adf1-9439dacb2017\\exec-52fd2c60-f68a-4a51-bb3c-a23fc7f87d62.png`

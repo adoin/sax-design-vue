@@ -1,6 +1,16 @@
 ---
 description: "可折叠的推理步骤，支持受控过程状态与来源。"
 PROPS:
+  - name: reasoning
+    type: "string[]"
+    description: "逐段追加的推理正文。运行时自动显示并替代来源标签，完成后通过摘要展开。"
+    default: "[]"
+    usage: '#default'
+  - name: duration
+    type: "Number"
+    description: "完成摘要的耗时（秒）。不设置时测量组件本轮运行的时间。"
+    default: null
+    usage: '#default'
   - name: "steps"
     type: "AgentTask[]"
     description: "有序步骤，提供稳定 id 与外部控制的状态。"
@@ -9,21 +19,21 @@ PROPS:
   - name: "v-model:expanded"
     type: "Boolean"
     description: "受控展开状态，使用 v-model:expanded 接收切换。"
-    default: "true"
+    default: "false"
     usage: "#default"
   - name: "expanded"
     type: "Boolean"
     description: "受控展开状态，使用 v-model:expanded 接收切换。"
-    default: "true"
+    default: "false"
     usage: "#default"
   - name: "title"
     type: "String"
-    description: "标题文本；过程列表默认使用本地化标题。"
+    description: "覆盖摘要文字；默认显示当前运行步骤，完成后显示耗时。"
     default: null
     usage: "#default"
   - name: "sources"
     type: "AgentSource[]"
-    description: "引用来源；仅允许绝对 HTTP 与 HTTPS 链接。"
+    description: "来源标签；icon 为 SIcon 名称，iconSrc 为 PNG/SVG 地址且优先。仅允许绝对 HTTP 与 HTTPS 链接。"
     default: "[]"
     usage: "#default"
   - name: "shape"
@@ -39,6 +49,10 @@ EVENTS:
     type: "(step: AgentTask) => void"
     description: "选择步骤。"
 SLOTS:
+  - name: source-icon
+    type: Slot
+    scope: '{ source: AgentSource }'
+    description: '自定义来源图标，优先于来源的 iconSrc 和 icon。'
   - name: "default"
     description: "替换默认内容。"
   - name: "step"
@@ -52,25 +66,25 @@ SLOTS:
 
 ## 基础用法
 
-随工作推进更新步骤状态。展开状态受控，选择步骤会发出对应条目；来源使用安全的绝对链接。
+先展示当前阶段和来源标签，再随 reasoning 逐段追加显示推理正文。所有步骤完成后收起正文，显示耗时摘要；点击摘要重新展开。此本地示例可重复播放，实际应用由服务响应更新步骤与正文。
 
 <template #example><reasoning-steps-default-zh /></template>
 
 <template #template>
 
-@[code{31-36}](../../.vuepress/components/reasoning-steps/default-zh.vue)
+@[code{73-83}](../../.vuepress/components/reasoning-steps/default-zh.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-29}](../../.vuepress/components/reasoning-steps/default-zh.vue)
+@[code{1-71}](../../.vuepress/components/reasoning-steps/default-zh.vue)
 
 </template>
 
 <template #style>
 
-@[code{38-51}](../../.vuepress/components/reasoning-steps/default-zh.vue)
+@[code{85-95}](../../.vuepress/components/reasoning-steps/default-zh.vue)
 
 </template>
 
@@ -86,7 +100,7 @@ SLOTS:
 
 <template #template>
 
-@[code{31-52}](../../.vuepress/components/reasoning-steps/shape-zh.vue)
+@[code{31-58}](../../.vuepress/components/reasoning-steps/shape-zh.vue)
 
 </template>
 
@@ -98,7 +112,7 @@ SLOTS:
 
 <template #style>
 
-@[code{54-73}](../../.vuepress/components/reasoning-steps/shape-zh.vue)
+@[code{60-79}](../../.vuepress/components/reasoning-steps/shape-zh.vue)
 
 </template>
 

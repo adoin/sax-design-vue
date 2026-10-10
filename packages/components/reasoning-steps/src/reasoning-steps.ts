@@ -10,8 +10,10 @@ import type {
 export const reasoningStepsProps = buildProps({
   shape: useShapeProp,
   steps: { type: definePropType<AgentTask[]>(Array), default: () => [] },
-  expanded: { type: Boolean, default: true },
+  expanded: { type: Boolean, default: false },
   title: String,
+  reasoning: { type: definePropType<string[]>(Array), default: () => [] },
+  duration: { type: Number },
   sources: { type: definePropType<AgentSource[]>(Array), default: () => [] },
 } as const)
 export const reasoningStepsEmits = {

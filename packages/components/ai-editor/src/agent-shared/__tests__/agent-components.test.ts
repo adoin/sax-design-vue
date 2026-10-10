@@ -42,8 +42,38 @@ afterEach(() => {
 })
 
 describe('Agent process, result and safety contracts', () => {
+  it('replaces source chips with incoming reasoning and collapses at completion', async () => {
+    vi.useFakeTimers()
+    const wrapper = create(ReasoningSteps, {
+      steps: tasks,
+      sources: [{ id: 's', title: 'Source', iconSrc: '/source.svg' }],
+    })
+    expect(wrapper.find('.s-reasoning-steps__sources').exists()).toBe(true)
+    expect(wrapper.find('img').attributes('src')).toBe('/source.svg')
+    await wrapper.setProps({
+      reasoning: ['First observation', 'Second observation'],
+    })
+    await vi.advanceTimersByTimeAsync(250)
+    expect(wrapper.find('.s-reasoning-steps__sources').exists()).toBe(false)
+    expect(wrapper.findAll('.s-reasoning-steps__paragraph')).toHaveLength(2)
+    await vi.advanceTimersByTimeAsync(6750)
+    await wrapper.setProps({
+      steps: tasks.map((task) => ({ ...task, status: 'complete' })),
+    })
+    await vi.advanceTimersByTimeAsync(250)
+    expect(wrapper.find('.s-reasoning-steps__summary-text').text()).toBe(
+      'Thought for 7s',
+    )
+    expect(wrapper.find('.s-reasoning-steps__reasoning').exists()).toBe(false)
+    expect(wrapper.emitted('update:expanded')?.at(-1)).toEqual([false])
+    await wrapper.find('button').trigger('click')
+    expect(wrapper.emitted('update:expanded')?.at(-1)).toEqual([true])
+    await wrapper.setProps({ expanded: true })
+    expect(wrapper.findAll('.s-reasoning-steps__paragraph')).toHaveLength(2)
+  })
+
   it('keeps controlled reasoning expansion and reports the selected step', async () => {
-    const wrapper = create(ReasoningSteps, { steps: tasks })
+    const wrapper = create(ReasoningSteps, { steps: tasks, expanded: true })
     expect(wrapper.attributes('aria-busy')).toBe('true')
     await wrapper.find('button').trigger('click')
     await new Promise((resolve) => setTimeout(resolve, 65))

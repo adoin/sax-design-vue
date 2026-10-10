@@ -3,6 +3,7 @@ export default {
   vs: {
     agent: {
       reasoning: '推理过程',
+      thoughtDuration: '已思考 {seconds} 秒',
       tasks: '任务',
       pending: '未开始',
       running: '进行中',

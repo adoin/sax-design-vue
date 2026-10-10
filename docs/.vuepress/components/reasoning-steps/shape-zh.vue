@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { AgentTask } from 'sax-design-vue'
-const expanded = ref(true)
+const expanded = ref(false)
 const steps = ref<AgentTask[]>([
   {
     id: 'read',
@@ -36,6 +36,9 @@ function advance() {
         v-model:expanded="expanded"
         shape="rounded"
         :steps="steps"
+        :sources="[
+          { id: 'source', title: steps[1].title, icon: 'cb:document' },
+        ]"
       />
       <s-button @click="advance">完成当前步骤</s-button>
     </div>
@@ -45,6 +48,9 @@ function advance() {
         v-model:expanded="expanded"
         shape="square"
         :steps="steps"
+        :sources="[
+          { id: 'source', title: steps[1].title, icon: 'cb:document' },
+        ]"
       />
       <s-button @click="advance">完成当前步骤</s-button>
     </div>
