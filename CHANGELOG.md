@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Added Carousel `effect="arc"` with a curved portrait-card fan, bounded looping windows, progressive side-card emphasis, shared navigation/drag/autoplay support and an active `caption` slot, plus paired localized examples inspired by Kobra Carousel.
+- Added the AI component category and `SAiEditor`: editable plain text with independent formatting marks, selection-based floating controls, provider-neutral cancellable Promise/async-iterable assistance, progress and source feedback, progressive answers, replace/insert/copy actions, readonly/disabled states, shape parity and scoped slots. Added six paired documentation examples with synchronized Code and Playground sources.
 - Made Context Menu openings mutually exclusive per document, including nested regions, sibling component trees, imperative calls and controlled visibility. Replaced menus close without restoring old focus; session ownership is released on closing, unmounting and deactivation.
 - Added paired Context Menu examples demonstrating three nested trigger regions, innermost pointer/keyboard priority and disabled-child fallback, with localized Code and Playground sources.
 - Made Tooltip and Popper choose a viewport-aware direction when placement is omitted, preferring top before bottom and horizontal alternatives. Fixed default collision middleware activation and reactive positioning options; retained explicit placement preferences, custom fallback options and flip/shift opt-outs.

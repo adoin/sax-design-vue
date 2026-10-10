@@ -24,6 +24,7 @@ defineSlots<{
     index: number
     active: boolean
   }): unknown
+  caption(props: { item: CarouselItem; index: number }): unknown
 }>()
 
 const props = defineProps(carouselProps)
@@ -60,6 +61,7 @@ const {
 
 const orbitCursor = shallowRef(activeIndex.value)
 const prismCursor = shallowRef(activeIndex.value)
+const arcCursor = shallowRef(activeIndex.value)
 
 watch(
   activeIndex,
@@ -69,6 +71,8 @@ watch(
 
     if (props.effect === 'prism') prismCursor.value += movementDelta.value
     else prismCursor.value = value
+    if (props.effect === 'arc') arcCursor.value += movementDelta.value
+    else arcCursor.value = value
   },
   { flush: 'sync' },
 )
@@ -78,6 +82,7 @@ watch(
   () => {
     orbitCursor.value = current.value
     prismCursor.value = current.value
+    arcCursor.value = current.value
   },
   { flush: 'sync' },
 )
@@ -116,6 +121,21 @@ const orbitSlotCount = computed(
 const normalizeItemIndex = (index: number, length: number) =>
   ((index % length) + length) % length
 const renderedItems = computed<RenderedCarouselItem[]>(() => {
+  if (props.effect === 'arc' && props.loop && props.items.length >= 5) {
+    return Array.from({ length: 7 }, (_, index) => {
+      const renderIndex = arcCursor.value - 3 + index
+      const sourceIndex = normalizeItemIndex(renderIndex, props.items.length)
+      const item = props.items[sourceIndex]
+      return {
+        item,
+        sourceIndex,
+        renderIndex,
+        cloned: renderIndex !== sourceIndex,
+        virtualEdge: Math.abs(renderIndex - arcCursor.value) > 2,
+        key: `arc-${String(item.name ?? sourceIndex)}-${renderIndex}`,
+      }
+    })
+  }
   if (props.effect !== 'orbit') {
     return props.items.map((item, sourceIndex) => ({
       item,
@@ -277,14 +297,18 @@ const activeOrbitKey = computed(
 )
 
 const isRenderedActive = (rendered: RenderedCarouselItem) =>
-  props.effect === 'orbit'
-    ? rendered.renderIndex === activeOrbitRenderIndex.value
-    : rendered.sourceIndex === current.value
+  props.effect === 'arc' && props.loop && props.items.length >= 5
+    ? rendered.renderIndex === arcCursor.value
+    : props.effect === 'orbit'
+      ? rendered.renderIndex === activeOrbitRenderIndex.value
+      : rendered.sourceIndex === current.value
 
 const getRenderedOffset = (rendered: RenderedCarouselItem) =>
-  props.effect === 'orbit' && orbitStep.value
-    ? getOrbitAngle(rendered.renderIndex, false) / orbitStep.value
-    : getRelativeOffset(rendered.sourceIndex)
+  props.effect === 'arc' && props.loop && props.items.length >= 5
+    ? rendered.renderIndex - arcCursor.value
+    : props.effect === 'orbit' && orbitStep.value
+      ? getOrbitAngle(rendered.renderIndex, false) / orbitStep.value
+      : getRelativeOffset(rendered.sourceIndex)
 
 const orbitTransform = (renderIndex: number, active: boolean) => {
   const isVertical = props.direction === 'vertical'
@@ -356,13 +380,27 @@ const layeredTransform = (offset: number) => {
 
 const getItemStyle = (rendered: RenderedCarouselItem): CSSProperties => {
   const { renderIndex, sourceIndex } = rendered
-  const offset = getRelativeOffset(sourceIndex)
+  const offset = getRenderedOffset(rendered)
   const distance = Math.abs(offset)
   if (props.effect === 'slide') return {}
   if (props.effect === 'fade') {
     return {
       zIndex: sourceIndex === current.value ? 2 : 1,
       opacity: sourceIndex === current.value ? 1 : 0,
+    }
+  }
+  if (props.effect === 'arc') {
+    const drag = dragOffset.value * 0.25
+    const position = offset * 78
+    const curve = distance * distance * 6
+    return {
+      zIndex: 100 - distance,
+      opacity: distance > 2 ? 0 : Math.max(0.22, 1 - distance * 0.28),
+      transform:
+        props.direction === 'vertical'
+          ? `translate(-50%, -50%) translate3d(${curve}%, calc(${position}% + ${drag}px), 0) rotate(${-offset * 15}deg) scale(${1 - Math.min(distance, 3) * 0.07})`
+          : `translateX(-50%) translate3d(calc(${position}% + ${drag}px), ${curve}%, 0) rotate(${offset * 15}deg) scale(${1 - Math.min(distance, 3) * 0.07})`,
+      pointerEvents: distance > 2 ? 'none' : undefined,
     }
   }
   if (props.effect === 'orbit') {
@@ -595,7 +633,23 @@ const cancelPointer = (event: PointerEvent) => {
 }
 
 const handleKeydown = (event: KeyboardEvent) => {
-  if (!props.keyboard) return
+  if (
+    !props.keyboard ||
+    event.defaultPrevented ||
+    event.isComposing ||
+    event.ctrlKey ||
+    event.metaKey ||
+    event.altKey
+  )
+    return
+  const target = event.target
+  if (
+    target instanceof Element &&
+    target.closest(
+      'input, textarea, select, [contenteditable="true"], [role="textbox"], [role="slider"]',
+    )
+  )
+    return
   const previousKey = props.direction === 'vertical' ? 'ArrowUp' : 'ArrowLeft'
   const nextKey = props.direction === 'vertical' ? 'ArrowDown' : 'ArrowRight'
   if (event.key === previousKey) {
@@ -722,7 +776,10 @@ defineExpose({
                   draggable="false"
                 />
                 <div
-                  v-if="rendered.item.title || rendered.item.description"
+                  v-if="
+                    effect !== 'arc' &&
+                    (rendered.item.title || rendered.item.description)
+                  "
                   :class="ns.e('caption')"
                 >
                   <strong v-if="rendered.item.title">{{
@@ -764,6 +821,18 @@ defineExpose({
       </button>
     </div>
 
+    <div
+      v-if="effect === 'arc' && items[current]"
+      :class="ns.e('arc-caption')"
+      aria-live="polite"
+    >
+      <slot name="caption" :item="items[current]" :index="current">
+        <strong v-if="items[current].title">{{ items[current].title }}</strong>
+        <span v-if="items[current].description">{{
+          items[current].description
+        }}</span>
+      </slot>
+    </div>
     <div v-if="showIndicators" :class="ns.e('indicators')" role="tablist">
       <button
         v-for="(item, index) in items"

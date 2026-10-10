@@ -2,7 +2,8 @@ import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes, Ref } from 'vue'
 import type Carousel from './carousel.vue'
 
-export type CarouselEffect = 'slide' | 'fade' | 'deck' | 'orbit' | 'prism'
+export type CarouselEffect =
+  'slide' | 'fade' | 'deck' | 'orbit' | 'prism' | 'arc'
 export type CarouselDirection = 'horizontal' | 'vertical'
 export type CarouselArrow = 'always' | 'hover' | 'never'
 export type CarouselIndicatorPosition =
@@ -67,7 +68,7 @@ export const carouselProps = buildProps({
   },
   effect: {
     type: definePropType<CarouselEffect>(String),
-    values: ['slide', 'fade', 'deck', 'orbit', 'prism'],
+    values: ['slide', 'fade', 'deck', 'orbit', 'prism', 'arc'],
     default: 'slide',
   },
   direction: {

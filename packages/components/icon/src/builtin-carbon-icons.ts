@@ -10,6 +10,14 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
       viewBox: '0 0 32 32',
     },
   },
+  'arrow-right': {
+    body: '<path fill="currentColor" d="m18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
   calendar: {
     body: '<path fill="currentColor" d="M26 4h-4V2h-2v2h-8V2h-2v2H6c-1.1 0-2 .9-2 2v20c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 22H6V12h20zm0-16H6V6h4v2h2V6h8v2h2V6h4z"/>',
     attributes: {
@@ -76,6 +84,14 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
   },
   'cloud-upload': {
     body: '<path fill="currentColor" d="m11 18l1.41 1.41L15 16.83V29h2V16.83l2.59 2.58L21 18l-5-5z"/><path fill="currentColor" d="M23.5 22H23v-2h.5a4.5 4.5 0 0 0 .36-9H23l-.1-.82a7 7 0 0 0-13.88 0L9 11h-.86a4.5 4.5 0 0 0 .36 9H9v2h-.5A6.5 6.5 0 0 1 7.2 9.14a9 9 0 0 1 17.6 0A6.5 6.5 0 0 1 23.5 22"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  code: {
+    body: '<path fill="currentColor" d="m31 16l-7 7l-1.41-1.41L28.17 16l-5.58-5.59L24 9zM1 16l7-7l1.41 1.41L3.83 16l5.58 5.59L8 23zm11.42 9.484L17.64 6l1.932.517L14.352 26z"/>',
     attributes: {
       width: '1em',
       height: '1em',
@@ -250,8 +266,48 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
       viewBox: '0 0 32 32',
     },
   },
+  stop: {
+    body: '<path fill="currentColor" d="M24 8v16H8V8zm0-2H8a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
   subtract: {
     body: '<path fill="currentColor" d="M8 15h16v2H8z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'text-bold': {
+    body: '<path fill="currentColor" d="M18.25 25H9V7h8.5a5.25 5.25 0 0 1 4 8.65A5.25 5.25 0 0 1 18.25 25M12 22h6.23a2.25 2.25 0 1 0 0-4.5H12Zm0-7.5h5.5a2.25 2.25 0 1 0 0-4.5H12Z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'text-italic': {
+    body: '<path fill="currentColor" d="M25 9V7H12v2h5.14l-4.37 14H7v2h13v-2h-5.14l4.37-14z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'text-strikethrough': {
+    body: '<path fill="currentColor" d="M28 15H17.956a40 40 0 0 0-1.338-.335c-2.808-.664-4.396-1.15-4.396-3.423a2.87 2.87 0 0 1 .787-2.145a4.8 4.8 0 0 1 3.013-1.09c2.83-.07 4.135.89 5.202 2.35l1.615-1.18a7.47 7.47 0 0 0-6.83-3.17a6.77 6.77 0 0 0-4.4 1.661a4.83 4.83 0 0 0-1.386 3.574A4.37 4.37 0 0 0 11.957 15H4v2h13.652c1.967.57 3.143 1.312 3.173 3.358a3.12 3.12 0 0 1-.862 2.393A5.82 5.82 0 0 1 16.243 24a6.63 6.63 0 0 1-5.145-2.691l-1.533 1.284A8.53 8.53 0 0 0 16.212 26h.1a7.67 7.67 0 0 0 5.048-1.819a5.08 5.08 0 0 0 1.465-3.853A4.95 4.95 0 0 0 21.675 17H28Z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'text-underline': {
+    body: '<path fill="currentColor" d="M4 26h24v2H4zm12-3a7 7 0 0 1-7-7V5h2v11a5 5 0 0 0 10 0V5h2v11a7 7 0 0 1-7 7"/>',
     attributes: {
       width: '1em',
       height: '1em',

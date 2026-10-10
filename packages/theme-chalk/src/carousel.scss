@@ -82,6 +82,89 @@
 .s-carousel.is-layered .s-carousel__item.is-active {
   cursor: default;
 }
+
+.s-carousel--effect-arc {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+.s-carousel--effect-arc .s-carousel__viewport {
+  height: 100%;
+  min-height: 0;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+  perspective: none;
+}
+.s-carousel--effect-arc .s-carousel__track {
+  overflow: hidden;
+  transform-style: flat;
+}
+.s-carousel.is-layered.s-carousel--effect-arc .s-carousel__item {
+  top: 8%;
+  left: 50%;
+  width: min(20%, 160px);
+  height: 74%;
+  transform-origin: center;
+  box-shadow: 0 12px 22px #{getColor(text, 0.12)};
+}
+.s-carousel--effect-arc.s-carousel--vertical .s-carousel__item {
+  top: 50%;
+  width: 62%;
+  height: 32%;
+}
+.s-carousel--effect-arc .s-carousel__arc-caption {
+  display: flex;
+  min-height: 80px;
+  padding: 4px 50px 12px;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  text-align: center;
+  color: #{getColor(text)};
+}
+.s-carousel__arc-caption > strong {
+  font-size: clamp(16px, 3vw, 22px);
+  line-height: 1.4;
+}
+.s-carousel__arc-caption > span {
+  font-size: 13px;
+  color: #{getColor(text, 0.65)};
+  line-height: 1.5;
+}
+.s-carousel--effect-arc .s-carousel__arrow {
+  top: auto;
+  bottom: -40px;
+  width: 34px;
+  height: 34px;
+  z-index: 250;
+  transform: none;
+  background: #{getColor(text, 0.07)};
+  color: #{getColor(text)};
+  box-shadow: none;
+}
+.s-carousel--effect-arc .s-carousel__arrow:hover:not(:disabled) {
+  transform: none;
+  background: #{getColor(primary, 0.12)};
+  color: #{getColor(primary)};
+}
+.s-carousel--effect-arc .s-carousel__arrow-prev {
+  left: 6%;
+}
+.s-carousel--effect-arc .s-carousel__arrow-next {
+  right: 6%;
+}
+.s-carousel--effect-arc.s-carousel--vertical .s-carousel__arrow-prev {
+  top: auto;
+  left: 6%;
+  right: auto;
+}
+.s-carousel--effect-arc.s-carousel--vertical .s-carousel__arrow-next {
+  top: auto;
+  left: auto;
+  right: 6%;
+}
 .s-carousel.is-dragging {
   cursor: grabbing;
   user-select: none;
@@ -204,8 +287,7 @@
   transform-style: preserve-3d;
 }
 
-.s-carousel.is-layered.s-carousel--effect-orbit
-  .s-carousel__orbit-placeholder {
+.s-carousel.is-layered.s-carousel--effect-orbit .s-carousel__orbit-placeholder {
   box-sizing: border-box;
   border: 0;
   background: transparent;
@@ -327,7 +409,10 @@
   flex-direction: column;
   gap: 4px;
   padding: 34px 24px 20px;
-  background: linear-gradient(transparent, hsl(228.889deg 41.538% 12.745% / 0.76));
+  background: linear-gradient(
+    transparent,
+    hsl(228.889deg 41.538% 12.745% / 0.76)
+  );
   color: getColor(white);
   font-size: 13px;
 }

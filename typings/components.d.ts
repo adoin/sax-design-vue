@@ -4,6 +4,7 @@ import '@vue/runtime-core'
 declare module '@vue/runtime-core' {
   // GlobalComponents for Volar
   export interface GlobalComponents {
+    SAiEditor: (typeof import('../packages/sax-design-vue'))['SAiEditor']
     SAlert: (typeof import('../packages/sax-design-vue'))['SAlert']
     SAvatar: (typeof import('../packages/sax-design-vue'))['SAvatar']
     SAvatarGroup: (typeof import('../packages/sax-design-vue'))['SAvatarGroup']

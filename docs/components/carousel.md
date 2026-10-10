@@ -27,8 +27,8 @@ PROPS:
     default: 'true'
   - name: effect
     type: String
-    values: "slide / fade / deck / orbit / prism"
-    description: Transition presentation. Deck, orbit, and prism use CSS 3D perspective.
+    values: "slide / fade / deck / orbit / prism / arc"
+    description: Transition presentation. Arc arranges portrait cards on a curved fan with a separate active caption. Deck, orbit, and prism use CSS 3D perspective.
     default: slide
   - name: direction
     type: String
@@ -161,6 +161,11 @@ EXPOSES:
   - name: pause
     description: Resume or pause autoplay imperatively.
 SLOTS:
+  - name: caption
+    type: Slot
+    scope: "{ item: CarouselItem; index: number }"
+    description: Active-item caption and actions below an arc fan. Defaults to the item's title and description.
+    usage: '#arc-fan'
   - name: item
     type: Slot
     scope: "{ item: CarouselItem; index: number; active: boolean; offset: number }"
@@ -233,6 +238,34 @@ Controlled index, autoplay, arrows, and line indicators use stable defaults.
 <template #style>
 
 @[code{101-148}](../.vuepress/components/carousel/deck.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Arc fan
+
+Use `effect="arc"` for a curved fan of portrait cards. The active card stays upright while neighboring cards tilt and fade with distance. The shared navigation, dragging, disabled items and autoplay behavior still apply. Use `caption` for the active title, description and actions. Example photography comes from [Kobra's public Carousel preview](https://kobra.systems/components/carousel).
+
+<template #example><carousel-arc /></template>
+
+<template #template>
+
+@[code{44-68}](../.vuepress/components/carousel/arc.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-42}](../.vuepress/components/carousel/arc.vue)
+
+</template>
+
+<template #style>
+
+@[code{70-80}](../.vuepress/components/carousel/arc.vue)
 
 </template>
 

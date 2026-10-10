@@ -27,8 +27,8 @@ PROPS:
     default: 'true'
   - name: effect
     type: String
-    values: "slide / fade / deck / orbit / prism"
-    description: 切换形态；deck、orbit 与 prism 使用 CSS 3D 透视。
+    values: "slide / fade / deck / orbit / prism / arc"
+    description: 切换形态；arc 将竖向卡片排列成弧形扇面，并单独显示当前项说明。deck、orbit 与 prism 使用 CSS 3D 透视。
     default: slide
   - name: direction
     type: String
@@ -161,6 +161,11 @@ EXPOSES:
   - name: pause
     description: 命令式恢复或暂停自动播放。
 SLOTS:
+  - name: caption
+    type: Slot
+    scope: "{ item: CarouselItem; index: number }"
+    description: 弧形扇面下方的当前项说明及操作，默认显示当前项的 title 和 description。
+    usage: '#arc-fan'
   - name: item
     type: Slot
     scope: "{ item: CarouselItem; index: number; active: boolean; offset: number }"
@@ -233,6 +238,34 @@ description: '支持受控状态、层叠卡组、空间 3D 和无障碍导航�
 <template #style>
 
 @[code{101-148}](../../.vuepress/components/carousel/deck.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 弧形扇面
+
+设置 `effect="arc"` 可将竖向卡片排列成弧形扇面，当前项保持直立，相邻项根据距离倾斜并淡出。继续支持统一的导航、拖动、禁用项和自动播放，通过 `caption` 插槽添加当前项的标题、说明与操作。示例图片来自 [Kobra 的公开轮播预览](https://kobra.systems/components/carousel)。
+
+<template #example><carousel-zh-arc /></template>
+
+<template #template>
+
+@[code{44-66}](../../.vuepress/components/carousel-zh/arc.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-42}](../../.vuepress/components/carousel-zh/arc.vue)
+
+</template>
+
+<template #style>
+
+@[code{68-78}](../../.vuepress/components/carousel-zh/arc.vue)
 
 </template>
 

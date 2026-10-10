@@ -34,6 +34,61 @@ const createPointerEvent = (type: string) => {
 }
 
 describe('Carousel effects and navigation', () => {
+  it('keeps keyboard editing inside slide inputs independent from carousel navigation', async () => {
+    const wrapper = mount(Carousel, {
+      props: { items, autoplay: false, effect: 'arc' },
+      slots: { item: '<input aria-label="Slide input" />' },
+    })
+    await wrapper.find('input').trigger('keydown', { key: 'ArrowRight' })
+    expect(wrapper.vm.activeIndex).toBe(0)
+    await wrapper.trigger('keydown', { key: 'ArrowRight' })
+    expect(wrapper.vm.activeIndex).toBe(2)
+    wrapper.unmount()
+  })
+  it('renders a bounded arc window with a separate active caption and stable loop navigation', async () => {
+    const wrapper = mountCarousel({
+      effect: 'arc',
+      items: Array.from({ length: 8 }, (_, index) => ({
+        name: index,
+        title: `Slide ${index}`,
+      })),
+      indicatorPosition: 'none',
+    })
+    expect(wrapper.findAll('.s-carousel__item')).toHaveLength(7)
+    expect(wrapper.findAll('.s-carousel__item.is-active')).toHaveLength(1)
+    expect(wrapper.get('.s-carousel__arc-caption').text()).toBe('Slide 0')
+    await wrapper.vm.prev()
+    expect(wrapper.findAll('.s-carousel__item')).toHaveLength(7)
+    expect(wrapper.get('.s-carousel__arc-caption').text()).toBe('Slide 7')
+    await wrapper.vm.next()
+    expect(wrapper.get('.s-carousel__arc-caption').text()).toBe('Slide 0')
+    expect(
+      wrapper.get('.s-carousel__item.is-active').attributes('style'),
+    ).toContain('rotate(0deg)')
+    wrapper.unmount()
+  })
+
+  it('supports arc vertical placement, small data sets, and custom caption content', async () => {
+    const wrapper = mount(Carousel, {
+      props: {
+        items: items.slice(0, 1),
+        effect: 'arc',
+        direction: 'vertical',
+        autoplay: false,
+      },
+      slots: { caption: ({ item }) => `Caption: ${item.title}` },
+    })
+    expect(wrapper.findAll('.s-carousel__item')).toHaveLength(1)
+    expect(wrapper.get('.s-carousel__arc-caption').text()).toBe(
+      'Caption: First',
+    )
+    expect(wrapper.get('.s-carousel__item').attributes('style')).toContain(
+      'translate(-50%, -50%)',
+    )
+    await wrapper.setProps({ items: [] })
+    expect(wrapper.find('.s-carousel__arc-caption').exists()).toBe(false)
+    wrapper.unmount()
+  })
   afterEach(() => {
     vi.clearAllTimers()
     vi.useRealTimers()
