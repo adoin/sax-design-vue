@@ -46,7 +46,9 @@ const releaseSession = () => {
 }
 const claimSession = () => {
   const document =
-    triggerRef.value?.ownerDocument ?? menuRef.value?.ownerDocument
+    triggerRef.value?.ownerDocument ??
+    menuRef.value?.ownerDocument ??
+    reference.value.contextElement?.ownerDocument
   if (!document) return
   if (sessionDocument !== document) releaseSession()
   sessionDocument = document
@@ -213,6 +215,13 @@ onBeforeUnmount(() => {
 onMounted(() => {
   if (open.value) claimSession()
 })
+watch(
+  menuRef,
+  (element) => {
+    if (element && open.value) claimSession()
+  },
+  { flush: 'post' },
+)
 onDeactivated(() => close(false))
 defineExpose({ show, close })
 </script>

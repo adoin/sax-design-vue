@@ -169,6 +169,36 @@ describe('shared context menu', () => {
     expect(menu('outer').emitted('open')).toBeUndefined()
   })
 
+  it('claims document ownership for slotless imperative and controlled menus', async () => {
+    const origin = document.createElement('button')
+    document.body.append(origin)
+    wrappers.push({ unmount: () => origin.remove() })
+    const first = mount(SContextMenu, {
+      attachTo: document.body,
+      props: { items: [{ label: 'Imperative' }] },
+    })
+    const second = mount(SContextMenu, {
+      attachTo: document.body,
+      props: { items: [{ label: 'Controlled' }] },
+    })
+    wrappers.push(first, second)
+    await first.vm.show(
+      new MouseEvent('contextmenu', { cancelable: true }),
+      origin,
+    )
+    await second.setProps({ modelValue: true })
+    await settle()
+    expect(first.getComponent(SPopper).props('visible')).toBe(false)
+    expect(second.getComponent(SPopper).props('visible')).toBe(true)
+    await first.vm.show(
+      new MouseEvent('contextmenu', { cancelable: true }),
+      origin,
+    )
+    await settle()
+    expect(first.getComponent(SPopper).props('visible')).toBe(true)
+    expect(second.getComponent(SPopper).props('visible')).toBe(false)
+  })
+
   it('respects an event already prevented by the target without opening an ancestor', async () => {
     const { wrapper, menus } = nested()
     const event = new MouseEvent('contextmenu', {
