@@ -76,7 +76,7 @@ Right-click or focus the trigger and press Shift + F10 / the context-menu key. A
 
 ## Nested menus
 
-Nest trigger regions to provide different menus at different levels. The nearest enabled Context Menu handles a right-click, the context-menu key or Shift + F10; enclosing menus do not open for the same event. Right-click the exposed part of an enclosing region to open its own menu.
+Nest trigger regions to provide different menus at different levels. The nearest enabled Context Menu handles a right-click, the context-menu key or Shift + F10; enclosing menus do not open for the same event. Right-click the exposed part of an enclosing region to open its own menu. Only one Context Menu stays open per document: opening another menu closes the previous one, including menus in separate component trees.
 
 Disable the inner menu below to let the middle menu handle that area. Focus a region with Tab to try the keyboard shortcuts. Menu actions update the selection shown below.
 

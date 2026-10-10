@@ -1,10 +1,19 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
+import {
+  nextTick,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  shallowRef,
+  watch,
+} from 'vue'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SFocusTrap } from '@vuesax-alpha/components/focus-trap'
 import { useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { contextMenuEmits, contextMenuProps } from './context-menu'
+import { claimContextMenu, releaseContextMenu } from './session'
 import type { ContextMenuItem } from './context-menu'
 import type { PopperInstance } from '@vuesax-alpha/components/popper'
 
@@ -17,6 +26,7 @@ const triggerRef = ref<HTMLElement>()
 const menuRef = ref<HTMLElement>()
 const popper = ref<PopperInstance>()
 const open = shallowRef(props.modelValue)
+const superseded = ref(false)
 const reference = shallowRef<{
   getBoundingClientRect: () => DOMRect
   contextElement?: Element
@@ -24,6 +34,24 @@ const reference = shallowRef<{
 let origin: HTMLElement | undefined
 let sequence = 0
 let pendingRestore: { request: number; target: HTMLElement } | undefined
+let sessionDocument: Document | undefined
+const dismissForReplacement = () => {
+  superseded.value = true
+  close(false)
+}
+const releaseSession = () => {
+  if (sessionDocument)
+    releaseContextMenu(sessionDocument, dismissForReplacement)
+  sessionDocument = undefined
+}
+const claimSession = () => {
+  const document =
+    triggerRef.value?.ownerDocument ?? menuRef.value?.ownerDocument
+  if (!document) return
+  if (sessionDocument !== document) releaseSession()
+  sessionDocument = document
+  claimContextMenu(document, dismissForReplacement)
+}
 const enabledItems = () => [
   ...(menuRef.value?.querySelectorAll<HTMLButtonElement>(
     '[role="menuitem"]:not(:disabled)',
@@ -35,6 +63,10 @@ const focusMenu = () =>
       (enabledItems()[0] ?? menuRef.value)?.focus({ preventScroll: true })
   })
 const setOpen = (value: boolean) => {
+  if (value) {
+    superseded.value = false
+    claimSession()
+  } else releaseSession()
   if (open.value === value) return
   open.value = value
   emit('update:modelValue', value)
@@ -43,7 +75,7 @@ const setOpen = (value: boolean) => {
     emit('close')
   }
 }
-const close = (restore = true) => {
+const close = (restore = true): void => {
   const shouldRestore =
     restore &&
     menuRef.value?.contains(menuRef.value.ownerDocument.activeElement)
@@ -174,9 +206,14 @@ watch(
   { deep: true },
 )
 onBeforeUnmount(() => {
+  releaseSession()
   sequence++
   pendingRestore = undefined
 })
+onMounted(() => {
+  if (open.value) claimSession()
+})
+onDeactivated(() => close(false))
 defineExpose({ show, close })
 </script>
 
@@ -205,6 +242,7 @@ defineExpose({ show, close })
     :flip="{ padding: 8 }"
     :shift="{ padding: 8 }"
     :popper-class="ns.e('popper')"
+    :popper-style="superseded ? { visibility: 'hidden' } : undefined"
     @update:visible="setOpen"
     @hide="onHidden"
   >

@@ -2,6 +2,7 @@
 
 ### Unreleased
 
+- Made Context Menu openings mutually exclusive per document, including nested regions, sibling component trees, imperative calls and controlled visibility. Replaced menus close without restoring old focus; session ownership is released on closing, unmounting and deactivation.
 - Added paired Context Menu examples demonstrating three nested trigger regions, innermost pointer/keyboard priority and disabled-child fallback, with localized Code and Playground sources.
 - Made Tooltip and Popper choose a viewport-aware direction when placement is omitted, preferring top before bottom and horizontal alternatives. Fixed default collision middleware activation and reactive positioning options; retained explicit placement preferences, custom fallback options and flip/shift opt-outs.
 - Redesigned Result with layered semantic SVG illustrations and one-time confirmation entrances. Added shared sizing, responsive horizontal layout, structured details and scoped customization slots, plus eight localized English/Chinese examples with synchronized Code and Playground sources.

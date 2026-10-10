@@ -88,6 +88,78 @@ describe('shared context menu', () => {
     expect(menu('inner').emitted('open')).toBeUndefined()
   })
 
+  it.each([
+    ['contextmenu', {}],
+    ['keydown', { key: 'F10', shiftKey: true }],
+  ])(
+    'replaces previous menus across consecutive nested %s openings',
+    async (event, options) => {
+      const { wrapper, menu } = nested()
+      for (const name of ['outer', 'middle', 'inner', 'outer']) {
+        await wrapper.get(`.${name}-origin`).trigger(event, options)
+        await settle()
+        expect(
+          wrapper
+            .findAllComponents(SPopper)
+            .filter(
+              (popper) =>
+                popper.props('virtualTriggering') && popper.props('visible'),
+            ),
+        ).toHaveLength(1)
+        expect(document.activeElement?.textContent).toBe(name)
+      }
+      expect(menu('middle').emitted('close')).toHaveLength(1)
+      expect(menu('inner').emitted('close')).toHaveLength(1)
+      expect(menu('outer').emitted('close')).toHaveLength(1)
+      wrapper
+        .findAllComponents(SPopper)
+        .filter(
+          (popper) =>
+            popper.props('virtualTriggering') && !popper.props('visible'),
+        )
+        .forEach((popper) =>
+          expect(popper.props('popperStyle')).toEqual({ visibility: 'hidden' }),
+        )
+      // A late leave callback from the old menu must not restore its origin.
+      wrapper
+        .findAllComponents(SPopper)
+        .forEach((popper) => popper.vm.$emit('hide'))
+      await settle()
+      expect(document.activeElement?.textContent).toBe('outer')
+    },
+  )
+
+  it('replaces an imperative or model-opened menu in another component root and cleans up ownership', async () => {
+    const first = mount(SContextMenu, {
+      attachTo: document.body,
+      props: { items: [{ label: 'First' }] },
+      slots: { default: () => h('button', 'First origin') },
+    })
+    wrappers.push(first)
+    const second = mount(SContextMenu, {
+      attachTo: document.body,
+      props: { items: [{ label: 'Second' }] },
+      slots: { default: () => h('button', 'Second origin') },
+    })
+    wrappers.push(second)
+    await first.vm.show(
+      new MouseEvent('contextmenu', { cancelable: true }),
+      first.get('button').element,
+    )
+    await settle()
+    await second.setProps({ modelValue: true })
+    await settle()
+    expect(first.getComponent(SPopper).props('visible')).toBe(false)
+    expect(first.emitted('update:modelValue')?.at(-1)).toEqual([false])
+    expect(second.getComponent(SPopper).props('visible')).toBe(true)
+    second.unmount()
+    wrappers.pop()
+    await first.get('button').trigger('contextmenu')
+    await settle()
+    expect(first.getComponent(SPopper).props('visible')).toBe(true)
+    expect(second.emitted('close')).toBeUndefined()
+  })
+
   it('falls back to the nearest enabled ancestor when the innermost menu is disabled', async () => {
     const { wrapper, menu } = nested(true)
     await wrapper.get('.inner-origin').trigger('contextmenu')
