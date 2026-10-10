@@ -962,7 +962,43 @@ button.s-agent-heading {
   inset: 0;
   width: 100%;
   height: 100%;
-  color: #{getColor(text)};
+  --sax-generation-indigo: #6366f1;
+  --sax-generation-purple: #a855f7;
+  --sax-generation-teal: #2dd4bf;
+  overflow: hidden;
+}
+.s-agent-generation-track {
+  stroke-width: 0.65;
+  opacity: 0.12;
+}
+.s-agent-generation-ribbon {
+  stroke-width: 1.05;
+  stroke-linecap: round;
+  stroke-dasharray: 24 76;
+  opacity: var(--sax-generation-intensity);
+}
+.s-agent-generation-waves path {
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-dasharray: 12 88;
+  opacity: 0.15;
+}
+.s-agent-generation-field.is-active .s-agent-generation-ribbon {
+  animation: s-agent-generation-flow 1.6s linear infinite;
+  animation-delay: var(--sax-generation-phase);
+}
+.s-agent-generation-field.is-active .s-agent-generation-waves path {
+  animation: s-agent-generation-flow 2.4s linear infinite;
+  animation-delay: var(--sax-generation-phase);
+}
+@keyframes s-agent-generation-flow {
+  to { stroke-dashoffset: -100; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-agent-generation-field.is-active .s-agent-generation-ribbon,
+  .s-agent-generation-field.is-active .s-agent-generation-waves path {
+    animation: none;
+  }
 }
 .s-agent-image-placeholder.is-running {
   background: transparent;

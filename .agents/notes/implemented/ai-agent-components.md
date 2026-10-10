@@ -112,3 +112,5 @@ supersedes: []
 
 - Chat History 内置历史选择定位与高亮：消息根元素以 data-message-id 对应 id；message-target 回调可解析外部已挂载消息。选择后关闭覆盖层，在 nextTick 后仅滚动最近的可滚动视口，scrollend 后对消息气泡闪烁两次，结束自动恢复。减少动态效果时为静态高亮。新选择或卸载清理前一轮计时器、scrollend/animationend 监听与高亮；无匹配目标仍保留 select 事件。
 - 2026-10-10 历史定位补齐：33 项 Agent 回归、21 项文档检查、web/play 类型与主题构建通过。中英文四轮对话实际选择最后项并回到对应位置，高亮出现与自动消失已观察；Code 与 Playground 同步完整 SFC。顺带修正上轮 ESLint 变更导致的中文 AI Editor formatting 源码范围。
+
+- Image Generation 的旧 Canvas 点阵已替换为 SVG Logo 流动线束。S 曲线复用 Sax 标志路径，靛蓝 #6366f1、紫 #a855f7、青绿 #2dd4bf 与默认 SLogoLoading 一致；七条主线沿路径连续流动，背景五条淡曲线。运行态主线周期 1.6 秒、背景 2.4 秒，进度仅调亮度，不重新创建节点或重启动画。非运行态与 reduced-motion 不播放，渐变 ID 使用 useId 隔离，移除 Canvas 和手写帧循环。

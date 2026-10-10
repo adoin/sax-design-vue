@@ -51,3 +51,5 @@ updated_at: 2026-10-10
 - 保留已确认的 Reasoning Steps 与 AI Editor；仅将 Reasoning Steps 的末项访问改为兼容项目 target 的索引写法。
 
 - 2026-10-10 用户要求取消 AI 分类方角能力；本记录中 AI shape 的旧契约已被 [AI 组件圆角与工作汇报编辑示例](ai-rounded-editor-report.md) 替代。其他组件的几何契约不受影响。
+
+- 2026-10-10 用户要求贴合 Logo 配色与 Loading 线条效果；本记录中的 Image Generation procedural Canvas / 25fps 设计已被 SVG S 形流动线束替代，详见 ai-agent-components.md 最新契约。

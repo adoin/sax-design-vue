@@ -7,7 +7,7 @@ import ReasoningSteps from '../../../../reasoning-steps/src/reasoning-steps.vue'
 import TaskList from '../../../../task-list/src/task-list.vue'
 import FileDiff from '../../../../file-diff/src/file-diff.vue'
 import ImageGeneration from '../../../../image-generation/src/image-generation.vue'
-import GenerationCanvas from '../../../../image-generation/src/generation-canvas.vue'
+import GenerationField from '../../../../image-generation/src/generation-field.vue'
 import StreamingText from '../../../../streaming-text/src/streaming-text.vue'
 import InlineCitations from '../../../../inline-citations/src/inline-citations.vue'
 import ChatHistory from '../../../../chat-history/src/chat-history.vue'
@@ -87,22 +87,17 @@ describe('Agent process, result and safety contracts', () => {
     expect(vi.getTimerCount()).toBe(0)
   })
 
-  it('keeps the generation canvas frame loop bounded and cancels it on unmount', async () => {
-    vi.useFakeTimers()
-    const context = {
-      setTransform: vi.fn(),
-      clearRect: vi.fn(),
-      beginPath: vi.fn(),
-      arc: vi.fn(),
-      fill: vi.fn(),
-    } as unknown as CanvasRenderingContext2D
-    vi.mocked(HTMLCanvasElement.prototype.getContext).mockReturnValue(context)
-    const wrapper = create(GenerationCanvas, { active: true, progress: 50 })
-    await vi.advanceTimersByTimeAsync(100)
-    expect(context.arc).toHaveBeenCalled()
-    expect(vi.getTimerCount()).toBeLessThanOrEqual(1)
-    wrapper.unmount()
-    expect(vi.getTimerCount()).toBe(0)
+  it('isolates generation gradient references and retains the animated field across progress updates', async () => {
+    const first = create(GenerationField, { active: true, progress: 10 })
+    const second = create(GenerationField, { active: true, progress: 20 })
+    const gradient = first.get('linearGradient').attributes('id')
+    expect(second.get('linearGradient').attributes('id')).not.toBe(gradient)
+    const ribbon = first.get('.s-agent-generation-ribbon').element
+    await first.setProps({ progress: 80 })
+    expect(first.get('.s-agent-generation-ribbon').element).toBe(ribbon)
+    expect(first.get('svg').classes()).toContain('is-active')
+    await first.setProps({ active: false })
+    expect(first.get('svg').classes()).not.toContain('is-active')
   })
 
   it('selects question letter shortcuts without intercepting custom answer typing', async () => {

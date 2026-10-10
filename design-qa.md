@@ -168,3 +168,10 @@ Browser verification: all 38 bilingual remaining Code/Playground previews render
 ## Chat History selection navigation — 2026-10-10
 
 Added component-owned bounded scroll navigation followed by a two-cycle background spotlight on the actual message bubble. Default mapping uses scoped data-message-id; a message-target resolver supports external mounted lists. Overlay close removes transcript inert before navigation. Reduced motion uses a static tint; reselection/unmount cleans listeners, timers and tint. The four-turn bilingual demo has a real scroll range (Chinese approximately 327px; English 427px). Browser samples confirmed navigation to the last user message, spotlight appearance, and automatic removal. Both localized Code and Playground previews rendered. 33 Agent tests, 21 documentation checks, web/play types and theme build passed.
+
+
+## Image Generation Logo motion — 2026-10-10
+
+Replaced the sparse monochrome Canvas dot field with seven flowing SVG strands following the actual Sax S path, plus five subtle background curves. Colors match SLogoLoading: indigo, purple, teal. Progress changes intensity without replacing paths or restarting CSS animation. No JavaScript frame loop; non-running and reduced-motion states stay static. Gradient references are unique per instance.
+
+Browser samples observed dash offset continuously advancing from -9 through -87 while progress advanced from 0 to 40%, confirming that progress updates do not restart motion. Chinese and English Code/Playground previews rendered; cancellation leaves no moving field after the existing exit transition. 33 Agent regressions and theme build passed. Preview saved as image-generation-logo-flow.png.

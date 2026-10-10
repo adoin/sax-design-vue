@@ -5,7 +5,7 @@ import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SImage } from '@vuesax-alpha/components/images'
 import { clampProgress } from '../../ai-editor/src/agent-shared/utils'
-import GenerationCanvas from './generation-canvas.vue'
+import GenerationField from './generation-field.vue'
 import { imageGenerationEmits, imageGenerationProps } from './image-generation'
 
 defineOptions({ name: 'SImageGeneration' })
@@ -40,7 +40,7 @@ const busy = computed(() => props.status === 'running')
           class="s-agent-image-placeholder"
           :class="{ 'is-running': busy }"
         >
-          <GenerationCanvas :active="busy" :progress="progressValue" />
+          <GenerationField :active="busy" :progress="progressValue" />
           <slot name="placeholder" :status="status" :progress="progressValue"
             ><span
               :class="
