@@ -109,3 +109,6 @@ supersedes: []
 - Reasoning Steps 停止 Loading 时先将 active 设为 false，以 corners 后摇清空轨道；保持实例挂载至 restored，再隐藏。后摇期间新一轮 running 不得被旧 restored 移除。
 
 - 2026-10-10 用户要求取消 AI 分类方角能力；本记录中 AI shape 的旧契约已被 [AI 组件圆角与工作汇报编辑示例](ai-rounded-editor-report.md) 替代。其他组件的几何契约不受影响。
+
+- Chat History 内置历史选择定位与高亮：消息根元素以 data-message-id 对应 id；message-target 回调可解析外部已挂载消息。选择后关闭覆盖层，在 nextTick 后仅滚动最近的可滚动视口，scrollend 后对消息气泡闪烁两次，结束自动恢复。减少动态效果时为静态高亮。新选择或卸载清理前一轮计时器、scrollend/animationend 监听与高亮；无匹配目标仍保留 select 事件。
+- 2026-10-10 历史定位补齐：33 项 Agent 回归、21 项文档检查、web/play 类型与主题构建通过。中英文四轮对话实际选择最后项并回到对应位置，高亮出现与自动消失已观察；Code 与 Playground 同步完整 SFC。顺带修正上轮 ESLint 变更导致的中文 AI Editor formatting 源码范围。

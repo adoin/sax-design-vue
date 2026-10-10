@@ -195,7 +195,7 @@ SLOTS:
 
 <template #template>
 
-@[code{12-29}](../../.vuepress/components/ai-editor-zh/formatting.vue)
+@[code{12-31}](../../.vuepress/components/ai-editor-zh/formatting.vue)
 
 </template>
 
@@ -207,7 +207,7 @@ SLOTS:
 
 <template #style>
 
-@[code{31-46}](../../.vuepress/components/ai-editor-zh/formatting.vue)
+@[code{33-48}](../../.vuepress/components/ai-editor-zh/formatting.vue)
 
 </template>
 

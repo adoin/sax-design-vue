@@ -1069,3 +1069,18 @@ button.s-agent-heading {
   align-items: center;
   gap: 6px;
 }
+
+.s-agent-history-spotlight {
+  animation: s-agent-history-spotlight calc(var(--sax-transition-duration) * 2)
+    var(--sax-transition-function-ease) 2;
+}
+@keyframes s-agent-history-spotlight {
+  0%, 100% { background-color: #{getColor(gray, 0.1)}; }
+  50% { background-color: #{getColor(primary, 0.2)}; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-agent-history-spotlight {
+    animation: none;
+    background-color: #{getColor(primary, 0.15)};
+  }
+}

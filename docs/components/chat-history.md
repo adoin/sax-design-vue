@@ -1,6 +1,11 @@
 ---
-description: "Gather user prompts and request navigation to a selected message."
+description: "Gather user prompts and navigate to a selected message with a brief highlight."
 PROPS:
+  - name: "message-target"
+    type: "(message: AgentHistoryMessage) => HTMLElement | null | undefined"
+    description: "Resolve a message element. By default, matches data-message-id inside the transcript; selection scrolls its owning viewport and briefly highlights the message."
+    default: null
+    usage: "#default"
   - name: "messages"
     type: "AgentHistoryMessage[]"
     description: "Conversation entries. Only user messages are included in the history list."
@@ -49,25 +54,27 @@ SLOTS:
 
 ## Default
 
-Bind visibility and handle select to navigate in your transcript. History renders only user prompts and closes after selection. The example combines Message and Message Scroller.
+Select a past user message to return to it with a brief highlight. Match transcript `data-message-id` values to message ids, or use `message-target` for an external list. Reduced motion uses a static highlight.
+
+Bind visibility and use select to update active-id. History renders only user prompts and closes after selection. The example combines Message and Message Scroller.
 
 <template #example><chat-history-default /></template>
 
 <template #template>
 
-@[code{24-43}](../.vuepress/components/chat-history/default.vue)
+@[code{58-78}](../.vuepress/components/chat-history/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-22}](../.vuepress/components/chat-history/default.vue)
+@[code{1-56}](../.vuepress/components/chat-history/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{45-58}](../.vuepress/components/chat-history/default.vue)
+@[code{80-93}](../.vuepress/components/chat-history/default.vue)
 
 </template>
 

@@ -47,6 +47,46 @@ afterEach(() => {
 })
 
 describe('Agent process, result and safety contracts', () => {
+  it('scrolls the owning history viewport, spotlights the bubble and cleans it on unmount', async () => {
+    vi.useFakeTimers()
+    const wrapper = create(
+      ChatHistory,
+      {
+        modelValue: true,
+        messages: [{ id: '1', role: 'user', content: 'Question' }],
+      },
+      {
+        default:
+          '<div class="history-test-viewport" style="overflow-y:auto"><div data-message-id="1"><span class="s-agent-message-body">Question</span></div></div>',
+      },
+    )
+    const viewport = wrapper.get('.history-test-viewport')
+      .element as HTMLElement
+    Object.defineProperties(viewport, {
+      scrollHeight: { value: 1000 },
+      clientHeight: { value: 300 },
+      scrollTop: { value: 600, writable: true },
+    })
+    const scrollTo = vi.fn()
+    viewport.scrollTo = scrollTo
+    const target = wrapper.get('[data-message-id]').element as HTMLElement
+    target.getBoundingClientRect = () => ({ top: -400 }) as DOMRect
+    viewport.getBoundingClientRect = () => ({ top: 0 }) as DOMRect
+    const item = document.querySelector<HTMLElement>('.s-agent-history-item')!
+    item.click()
+    await nextTick()
+    expect(scrollTo).toHaveBeenCalledWith({ top: 184, behavior: 'smooth' })
+    expect(wrapper.emitted('update:modelValue')).toContainEqual([false])
+    viewport.dispatchEvent(new Event('scrollend'))
+    expect(wrapper.get('.s-agent-message-body').classes()).toContain(
+      's-agent-history-spotlight',
+    )
+    wrapper.unmount()
+    expect(target.querySelector('.s-agent-history-spotlight')).toBeNull()
+    await vi.advanceTimersByTimeAsync(300)
+    expect(vi.getTimerCount()).toBe(0)
+  })
+
   it('keeps the generation canvas frame loop bounded and cancels it on unmount', async () => {
     vi.useFakeTimers()
     const context = {

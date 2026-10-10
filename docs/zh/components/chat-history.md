@@ -1,6 +1,11 @@
 ---
-description: "汇集用户提问并请求定位所选消息。"
+description: "汇集用户提问，定位并短暂高亮所选消息。"
 PROPS:
+  - name: "message-target"
+    type: "(message: AgentHistoryMessage) => HTMLElement | null | undefined"
+    description: "自定义消息元素解析器。默认在 transcript 中按 data-message-id 查找；选择后仅滚动消息所在视口并短暂高亮。"
+    default: null
+    usage: "#default"
   - name: "messages"
     type: "AgentHistoryMessage[]"
     description: "对话条目；历史提问列表仅汇集 user 消息。"
@@ -32,7 +37,7 @@ EVENTS:
     description: "请求更新受控模型。"
   - name: "select"
     type: "(message: AgentHistoryMessage) => void"
-    description: "选择提问，供消费方执行定位。"
+    description: "选择提问时触发，可更新 active-id 或加载外部消息。"
 SLOTS:
   - name: default
     description: "对话内容；历史展开时淡化并暂停内部交互。"
@@ -49,25 +54,27 @@ SLOTS:
 
 ## 基础用法
 
-绑定显示状态，通过 select 在对话中定位。历史列表仅显示用户提问，选择后关闭。示例组合了 Message 与 Message Scroller。
+点击自己的发言历史，可回到对应消息并短暂闪烁突出。为 transcript 消息设置 `data-message-id`，与 messages 的 id 对应；也可通过 `message-target` 对接外部消息列表。减少动态效果时使用静态高亮。
+
+绑定显示状态，通过 select 更新 active-id。历史列表仅显示用户提问，选择后关闭。示例组合了 Message 与 Message Scroller。
 
 <template #example><chat-history-default-zh /></template>
 
 <template #template>
 
-@[code{24-43}](../../.vuepress/components/chat-history/default-zh.vue)
+@[code{58-78}](../../.vuepress/components/chat-history/default-zh.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-22}](../../.vuepress/components/chat-history/default-zh.vue)
+@[code{1-56}](../../.vuepress/components/chat-history/default-zh.vue)
 
 </template>
 
 <template #style>
 
-@[code{45-58}](../../.vuepress/components/chat-history/default-zh.vue)
+@[code{80-93}](../../.vuepress/components/chat-history/default-zh.vue)
 
 </template>
 

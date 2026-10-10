@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   computed,
+  nextTick,
   onBeforeUnmount,
   onMounted,
   shallowRef,
@@ -10,6 +11,7 @@ import { SIcon } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 
 import { SPopper } from '@vuesax-alpha/components/popper'
+import { useHistoryNavigation } from './use-history-navigation'
 import { chatHistoryEmits, chatHistoryProps } from './chat-history'
 import type { AgentHistoryMessage } from '../../ai-editor/src/agent-shared/types'
 
@@ -38,9 +40,19 @@ onBeforeUnmount(() => observer?.disconnect())
 const userMessages = computed(() =>
   props.messages.filter((message) => message.role === 'user'),
 )
-const select = (message: AgentHistoryMessage) => {
+const navigate = useHistoryNavigation()
+const select = async (message: AgentHistoryMessage) => {
   emit('select', message)
   emit('update:modelValue', false)
+  await nextTick()
+  if (!root.value) return
+  const target = props.messageTarget
+    ? props.messageTarget(message)
+    : Array.from(
+        transcript.value?.querySelectorAll<HTMLElement>('[data-message-id]') ??
+          [],
+      ).find((element) => element.dataset.messageId === message.id)
+  if (target) navigate(target)
 }
 </script>
 

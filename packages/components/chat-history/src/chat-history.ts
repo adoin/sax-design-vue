@@ -8,6 +8,11 @@ export const chatHistoryProps = buildProps({
     type: definePropType<AgentHistoryMessage[]>(Array),
     default: () => [],
   },
+  messageTarget: {
+    type: definePropType<
+      (message: AgentHistoryMessage) => HTMLElement | null | undefined
+    >(Function),
+  },
   modelValue: Boolean,
   activeId: String,
   label: String,
