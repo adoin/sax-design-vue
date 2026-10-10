@@ -10,7 +10,7 @@ import {
 } from 'vue'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SFocusTrap } from '@vuesax-alpha/components/focus-trap'
-import { useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
+import { useId, useLocale, useNamespace, useShape } from '@vuesax-alpha/hooks'
 import { aiEditorEmits, aiEditorProps } from './ai-editor'
 import { useAiEditorDocument } from './use-ai-editor-document'
 import { useAiEditorAssistant } from './use-ai-editor-assistant'
@@ -44,6 +44,8 @@ const { t } = useLocale()
 const ns = useNamespace('ai-editor')
 const shape = useShape()
 const root = ref<HTMLElement>()
+const documentId = useId()
+const outsideClickIgnore = computed(() => [`[id="${documentId.value}"]`])
 const popper = ref<PopperInstance>()
 const visible = ref(false)
 const asking = ref(false)
@@ -283,6 +285,7 @@ defineExpose({
       <slot name="title">{{ title }}</slot>
     </header>
     <div
+      :id="documentId"
       ref="root"
       :class="[ns.e('document'), ns.is('empty', !document.text.value)]"
       :contenteditable="!disabled && !readonly && !busy"
@@ -315,6 +318,7 @@ defineExpose({
       virtual-triggering
       :virtual-ref="reference"
       :trigger="[]"
+      :outside-click-ignore="outsideClickIgnore"
       :show-arrow="false"
       :offset="10"
       :close-on-reference-hidden="true"

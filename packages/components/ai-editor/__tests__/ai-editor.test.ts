@@ -34,6 +34,39 @@ afterEach(() => {
 })
 
 describe('AI Editor document and request lifecycle', () => {
+  it('keeps the toolbar open through the click that finishes a mouse selection', async () => {
+    const wrapper = create({ answer: 'Answer' })
+    const root = wrapper.get('[role="textbox"]')
+    await root.trigger('pointerdown')
+    const range = document.createRange()
+    range.setStart(root.element.firstChild!, 0)
+    range.setEnd(root.element.firstChild!, 5)
+    window.getSelection()?.removeAllRanges()
+    window.getSelection()?.addRange(range)
+    await root.trigger('pointerup')
+    await flushPromises()
+    root.element.dispatchEvent(
+      new MouseEvent('click', { bubbles: true, detail: 1 }),
+    )
+    await new Promise((resolve) => setTimeout(resolve, 250))
+    await flushPromises()
+    expect(wrapper.getComponent(SPopper).props('visible')).toBe(true)
+    document.querySelector<HTMLButtonElement>('.s-ai-editor__ask')!.click()
+    await flushPromises()
+    expect(
+      document.querySelector('input[aria-label="Ask about the selection"]'),
+    ).not.toBeNull()
+    document.body.dispatchEvent(
+      new MouseEvent('pointerdown', { bubbles: true }),
+    )
+    document.body.dispatchEvent(
+      new MouseEvent('click', { bubbles: true, detail: 1 }),
+    )
+    await new Promise((resolve) => setTimeout(resolve, 250))
+    await flushPromises()
+    expect(wrapper.getComponent(SPopper).props('visible')).toBe(false)
+  })
+
   it('does not reopen a dismissed toolbar when the preserved selection emits another selectionchange', async () => {
     const wrapper = create({ answer: 'Answer' })
     wrapper.vm.select(0, 5)

@@ -183,8 +183,18 @@ const startClickOutside = () => {
     computed(() => {
       return unrefElement(contentRef)
     }),
-    () => {
+    (event) => {
       if (unref(controlled)) return
+      // A selection can open the panel after pointerdown. Check the completed
+      // click too, because the outside listener did not see that pointerdown.
+      if (
+        props.outsideClickIgnore.some((selector) =>
+          Array.from(
+            contentRef.value?.ownerDocument.querySelectorAll(selector) ?? [],
+          ).some((element) => event.composedPath().includes(element)),
+        )
+      )
+        return
       const $trigger = unref(trigger)
       if ($trigger !== 'hover') {
         onClose()
