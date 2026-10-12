@@ -1,11 +1,11 @@
 ---
-description: "Selection-based document formatting and AI assistance connected to your own service."
+description: "Selection-based document formatting and Agent assistance connected to your own service."
 PROPS:
-  - name: ai-icon
+  - name: agent-icon
     type: "String"
-    description: "Assistant image URL, including PNG, SVG and data URLs. Uses the built-in SVG when omitted."
+    description: "Custom PNG / SVG URL overriding global agentIcon, shared with Message; an empty string restores the default SVG."
     default: null
-    usage: '#ai-icon'
+    usage: '#agent-icon'
   - name: v-model
     type: "String"
     description: "Plain document text. HTML is treated as literal text."
@@ -17,12 +17,12 @@ PROPS:
     default: "''"
     usage: '#default'
   - name: v-model:marks
-    type: "AiEditorMark[]"
+    type: "AgentEditorMark[]"
     description: "Controlled inline ranges. start is inclusive and end exclusive; offsets use UTF-16 code units."
     default: "[]"
     usage: '#formatting'
   - name: marks
-    type: "AiEditorMark[]"
+    type: "AgentEditorMark[]"
     description: "Initial or externally controlled inline formatting ranges."
     default: "[]"
     usage: '#formatting'
@@ -43,21 +43,21 @@ PROPS:
     usage: '#default'
   - name: prompt-placeholder
     type: "String"
-    description: "AI prompt hint; localized by default."
+    description: "Agent prompt hint; localized by default."
     default: null
     usage: '#async-request'
   - name: request
-    type: "AiEditorRequestHandler"
-    description: "Receives prompt, selection, document, AbortSignal and report(). Return text, an AiEditorResult, or an async iterable of incremental text chunks; Promise results are supported. Takes priority over answer."
+    type: "AgentEditorRequestHandler"
+    description: "Receives prompt, selection, document, AbortSignal and report(). Return text, an AgentEditorResult, or an async iterable of incremental text chunks; Promise results are supported. Takes priority over answer."
     default: null
     usage: '#async-request'
   - name: answer
     type: "String"
-    description: "Fixed answer for local previews or predetermined content. Without answer or request, formatting remains available and Ask AI is disabled."
+    description: "Fixed answer for local previews or predetermined content. Without answer or request, formatting remains available and Ask Agent is disabled."
     default: null
     usage: '#default'
   - name: formats
-    type: "AiEditorFormat[]"
+    type: "AgentEditorFormat[]"
     values: "bold | italic | underline | strike | code"
     description: "Available toolbar formats and keyboard format commands."
     default: "['bold', 'italic', 'underline', 'strike', 'code']"
@@ -65,7 +65,7 @@ PROPS:
   - name: readonly
     type: "Boolean"
     values: "true | false"
-    description: "Allow selection and AI questions, but block editing, formatting and applying answers."
+    description: "Allow selection and Agent questions, but block editing, formatting and applying answers."
     default: "false"
     usage: '#default'
   - name: disabled
@@ -91,19 +91,19 @@ EVENTS:
     type: "(text: string) => void"
     description: "Plain text changes."
   - name: "update:marks"
-    type: "(marks: AiEditorMark[]) => void"
+    type: "(marks: AgentEditorMark[]) => void"
     description: "Inline formatting changes."
   - name: "selection-change"
-    type: "(selection: AiEditorSelection | null) => void"
+    type: "(selection: AgentEditorSelection | null) => void"
     description: "Selection changes; null means no selected text."
   - name: "format-change"
-    type: "(format: AiEditorFormat, marks: AiEditorMark[]) => void"
+    type: "(format: AgentEditorFormat, marks: AgentEditorMark[]) => void"
     description: "A format command has been applied."
   - name: "request"
-    type: "(request: AiEditorRequest) => void"
+    type: "(request: AgentEditorRequest) => void"
     description: "A request is submitted. Use the request prop to provide its result."
   - name: "response"
-    type: "(result: AiEditorResult) => void"
+    type: "(result: AgentEditorResult) => void"
     description: "The complete answer and its sources."
   - name: "error"
     type: "(error: unknown) => void"
@@ -122,7 +122,7 @@ EXPOSES:
     type: "(start: number, end: number) => boolean"
     description: "Select a text range and open its toolbar."
   - name: format
-    type: "(format: AiEditorFormat) => void"
+    type: "(format: AgentEditorFormat) => void"
     description: "Toggle one format on the saved selection."
   - name: ask
     type: "(prompt?: string) => Promise<boolean>"
@@ -137,31 +137,31 @@ EXPOSES:
     type: "(mode: 'replace' | 'insert') => boolean"
     description: "Replace selected text or insert after its paragraph with a complete answer."
 SLOTS:
-  - name: ai-icon
+  - name: agent-icon
     type: Slot
-    scope: "{ status: AiEditorStatus; busy: boolean }"
-    description: "Assistant icon in the toolbar and prompt. Takes precedence over ai-icon."
+    scope: "{ status: AgentEditorStatus; busy: boolean }"
+    description: "Assistant icon in the toolbar and prompt. Takes precedence over agent-icon."
   - name: title
     type: Slot
     scope: "{}"
     description: "Document heading."
   - name: toolbar
     type: Slot
-    scope: "{ selection: AiEditorSelection; format: (format: AiEditorFormat) => void; activeFormats: AiEditorFormat[] }"
-    description: "Custom format actions. Ask AI and close controls remain available."
+    scope: "{ selection: AgentEditorSelection; format: (format: AgentEditorFormat) => void; activeFormats: AgentEditorFormat[] }"
+    description: "Custom format actions. Ask Agent and close controls remain available."
   - name: answer
     type: Slot
-    scope: "{ text: string; status: AiEditorStatus; selection: AiEditorSelection; apply: (mode: 'replace' | 'insert') => void }"
+    scope: "{ text: string; status: AgentEditorStatus; selection: AgentEditorSelection; apply: (mode: 'replace' | 'insert') => void }"
     description: "Custom answer content; built-in answer actions remain available."
 ---
 
-# AI Editor
+# Agent Editor
 
 <card>
 
 ## Default
 
-Edit the document directly or select text to show its floating toolbar. Ctrl/Cmd + B, I and U toggle supported formats; Ctrl/Cmd + Enter opens Ask AI; Escape closes the toolbar. Select the opening sentence of the weekly portal report, ask for a concise summary of the results, and replace the original with the revised answer. Responses are local demo data.
+Edit the document directly or select text to show its floating toolbar. Ctrl/Cmd + B, I and U toggle supported formats; Ctrl/Cmd + Enter opens Ask Agent; Escape closes the toolbar. Select the opening sentence of the weekly portal report, ask for a concise summary of the results, and replace the original with the revised answer. Responses are local demo data.
 
 <template #example><ai-editor-default /></template>
 
@@ -189,7 +189,7 @@ Edit the document directly or select text to show its floating toolbar. Ctrl/Cmd
 
 ## Formatting
 
-Bind both v-model and v-model:marks to persist plain text and formatting independently. Formats may overlap. Highlight key results and use AI to polish the selected opening text. Toolbar actions preserve the selection, and Ctrl/Cmd + Z / Shift + Z undo and redo edits. Ranges refer to the current text using UTF-16 indices.
+Bind both v-model and v-model:marks to persist plain text and formatting independently. Formats may overlap. Highlight key results and use Agent to polish the selected opening text. Toolbar actions preserve the selection, and Ctrl/Cmd + Z / Shift + Z undo and redo edits. Ranges refer to the current text using UTF-16 indices.
 
 <template #example><ai-editor-formatting /></template>
 
@@ -217,7 +217,7 @@ Bind both v-model and v-model:marks to persist plain text and formatting indepen
 
 ## Async request
 
-Provide request to connect your own AI service. Its context includes the prompt, selected text, complete document, a cancellation signal and report() for progress labels and sources. Errors remain visible for retry. Closing, stopping or changing the document cancels the session and ignores late results. This example uses a local Promise to demonstrate loading, sources and failure.
+Provide request to connect your own Agent service. Its context includes the prompt, selected text, complete document, a cancellation signal and report() for progress labels and sources. Errors remain visible for retry. Closing, stopping or changing the document cancels the session and ignores late results. This example uses a local Promise to demonstrate loading, sources and failure.
 
 <template #example><ai-editor-request /></template>
 
@@ -293,27 +293,27 @@ Use toolbar for focused format actions and answer for custom answer presentation
 
 <card>
 
-## AI icon
+## Agent icon
 
-Use `ai-icon` for PNG or SVG image URLs, or the `ai-icon` slot for inline SVG and icon components. The slot takes precedence and receives `status` and `busy`. Icons fit a 22px box and are decorative; controls retain their accessible names.
+Use `agent-icon` for PNG or SVG image URLs, or the `agent-icon` slot for inline SVG and icon components. The slot takes precedence and receives `status` and `busy`. Icons fit a 22px box and are decorative; controls retain their accessible names.
 
-<template #example><ai-editor-ai-icon /></template>
+<template #example><ai-editor-agent-icon /></template>
 
 <template #template>
 
-@[code{18-49}](../.vuepress/components/ai-editor/ai-icon.vue)
+@[code{18-49}](../.vuepress/components/ai-editor/agent-icon.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-16}](../.vuepress/components/ai-editor/ai-icon.vue)
+@[code{1-16}](../.vuepress/components/ai-editor/agent-icon.vue)
 
 </template>
 
 <template #style>
 
-@[code{51-63}](../.vuepress/components/ai-editor/ai-icon.vue)
+@[code{51-63}](../.vuepress/components/ai-editor/agent-icon.vue)
 
 </template>
 

@@ -1,6 +1,11 @@
 ---
 description: "Compose role-based messages with timestamps, feedback and content slots."
 PROPS:
+  - name: "agent-icon"
+    type: "String"
+    description: "Assistant PNG / SVG URL overriding global agentIcon; an empty string restores the default SVG."
+    default: null
+    usage: "#shared-agent-icon"
   - name: "role"
     type: "'user' | 'assistant' | 'system' | 'tool'"
     description: "Message role controlling author fallback and assistant actions."
@@ -78,6 +83,10 @@ EVENTS:
     type: "() => void"
     description: "Regenerate the assistant response."
 SLOTS:
+  - name: "agent-icon"
+    type: "Slot"
+    scope: "{ busy: boolean }"
+    description: "Customize the default assistant icon; avatar takes precedence."
   - name: "default"
     description: "Replace the default content."
   - name: "avatar"
@@ -101,7 +110,7 @@ Use content for plain text or compose richer content in the default slot. User c
 
 <template #template>
 
-@[code{11-31}](../.vuepress/components/message/default.vue)
+@[code{11-36}](../.vuepress/components/message/default.vue)
 
 </template>
 
@@ -113,7 +122,35 @@ Use content for plain text or compose richer content in the default slot. User c
 
 <template #style>
 
-@[code{33-46}](../.vuepress/components/message/default.vue)
+@[code{38-51}](../.vuepress/components/message/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Shared Agent icon
+
+Set agent-icon once on SConfigProvider to replace the default Agent icon in both Message and Agent Editor, or configure app.use(SaxDesignVue, { agentIcon: "/assistant.svg" }). A component agent-icon overrides the shared value, and slots take precedence over URLs. PNG and SVG are supported; an empty string restores the default icon.
+
+<template #example><message-shared-icon /></template>
+
+<template #template>
+
+@[code{8-23}](../.vuepress/components/message/shared-icon.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-7}](../.vuepress/components/message/shared-icon.vue)
+
+</template>
+
+<template #style>
+
+@[code{24-31}](../.vuepress/components/message/shared-icon.vue)
 
 </template>
 

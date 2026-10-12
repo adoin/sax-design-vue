@@ -11,10 +11,15 @@ const content = ref('回答已准备好。可以展开时间或提供反馈。')
     <s-message
       v-model:show-time="userTime"
       role="user"
-      author="KS"
+      author="用户"
       content="可以帮我审阅这份文档吗？"
       sent-at="今天 09:29"
-    />
+    >
+      <template #avatar
+        ><s-avatar :size="30" shape="circle"
+          ><img src="/avatars/avatar-5.png" alt="用户头像" /></s-avatar
+      ></template>
+    </s-message>
 
     <s-message
       v-model:show-time="showTime"

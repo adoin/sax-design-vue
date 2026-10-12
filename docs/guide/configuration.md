@@ -479,3 +479,26 @@ const toggle = () => {
 Use a document-unique filter ID for independently mounted applications. At completion, apply the intended ordinary CSS end state before removing the graph; this prevents a missing filter reference from briefly showing hidden content. Static shared filters continue to use `svgFilter` and `useSvgFilter`; animation modules share declarations, not playback state or DOM nodes.
 
 </card>
+
+<card>
+
+## Shared Agent icon
+
+Global agentIcon accepts a PNG or SVG URL shared by the default Agent Editor and Message assistant icons. Component agent-icon props and icon slots can override it.
+
+<command>
+
+```ts
+app.use(SaxDesignVue, { agentIcon: '/assistant.svg' })
+```
+
+```vue
+<s-config-provider agent-icon="/assistant.png">
+  <s-message content="Assistant answer" />
+  <s-agent-editor v-model="document" />
+</s-config-provider>
+```
+
+</command>
+
+</card>

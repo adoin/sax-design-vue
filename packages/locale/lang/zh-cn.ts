@@ -224,13 +224,13 @@ export default {
       previous: '上一条公告',
       next: '下一条公告',
     },
-    aiEditor: {
+    agentEditor: {
       document: '文档',
-      placeholder: '输入内容，选中文字后格式化或向 AI 提问…',
+      placeholder: '输入内容，选中文字后格式化或向 Agent 提问…',
       toolbar: '选区操作',
-      ask: '询问 AI',
+      ask: '询问 Agent',
       promptLabel: '针对选中文字提问',
-      promptPlaceholder: '向 AI 提问…',
+      promptPlaceholder: '向 Agent 提问…',
       send: '发送',
       stop: '停止生成',
       close: '关闭工具栏',

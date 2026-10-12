@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { AiEditorInstance, AiEditorRequest } from 'sax-design-vue'
-const editor = ref<AiEditorInstance>()
+import type { AgentEditorInstance, AgentEditorRequest } from 'sax-design-vue'
+const editor = ref<AgentEditorInstance>()
 const text = ref(
   '当前风险：12 家企业客户尚未完成权限迁移，可能影响下周的全量发布。计划由客户成功团队逐一确认账号映射，研发提供迁移校验工具，周三前完成联合验收。',
 )
 const rejectRequest = ref(false)
-const request = async ({ signal, report }: AiEditorRequest) => {
+const request = async ({ signal, report }: AgentEditorRequest) => {
   report({ status: 'thinking' })
   await new Promise((resolve) => setTimeout(resolve, 500))
   if (signal.aborted) throw new Error('请求已取消')
@@ -33,7 +33,7 @@ const request = async ({ signal, report }: AiEditorRequest) => {
       >
       <s-checkbox v-model="rejectRequest">模拟请求失败</s-checkbox>
     </div>
-    <s-ai-editor
+    <s-agent-editor
       ref="editor"
       v-model="text"
       title="完善风险与应对措施"

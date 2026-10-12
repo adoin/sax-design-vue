@@ -1,31 +1,31 @@
 import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
 import { segmentEditorText } from './segment-text'
 import type {
-  AiEditorProps,
-  AiEditorRequest,
-  AiEditorResult,
-  AiEditorSelection,
-  AiEditorSource,
-  AiEditorStatus,
+  AgentEditorProps,
+  AgentEditorRequest,
+  AgentEditorResult,
+  AgentEditorSelection,
+  AgentEditorSource,
+  AgentEditorStatus,
 } from './ai-editor'
 
 type AssistantEmit = {
-  (event: 'request', request: AiEditorRequest): void
-  (event: 'response', result: AiEditorResult): void
+  (event: 'request', request: AgentEditorRequest): void
+  (event: 'response', result: AgentEditorResult): void
   (event: 'error', error: unknown): void
   (event: 'cancel'): void
 }
 
-export function useAiEditorAssistant(
-  props: AiEditorProps,
+export function useAgentEditorAssistant(
+  props: AgentEditorProps,
   emit: AssistantEmit,
   getDocument: () => string,
 ) {
-  const status = ref<AiEditorStatus>('idle')
+  const status = ref<AgentEditorStatus>('idle')
   const response = ref('')
   const error = ref('')
   const statusLabel = ref('')
-  const sources = shallowRef<AiEditorSource[]>([])
+  const sources = shallowRef<AgentEditorSource[]>([])
   const busy = computed(() =>
     ['thinking', 'researching', 'streaming'].includes(status.value),
   )
@@ -60,7 +60,7 @@ export function useAiEditorAssistant(
         Math.max(0, props.streamInterval),
       )
     })
-  const ask = async (prompt: string, selection: AiEditorSelection) => {
+  const ask = async (prompt: string, selection: AgentEditorSelection) => {
     if (
       !prompt.trim() ||
       !selection.text ||
@@ -98,7 +98,7 @@ export function useAiEditorAssistant(
         )
       })
     status.value = 'thinking'
-    const request: AiEditorRequest = {
+    const request: AgentEditorRequest = {
       prompt: prompt.trim(),
       selection: { ...selection },
       document: getDocument(),
@@ -137,7 +137,7 @@ export function useAiEditorAssistant(
         const text = typeof result === 'string' ? result : result.text
         if (typeof text !== 'string')
           throw new Error(
-            'AI Editor request must return text or an async text stream.',
+            'Agent Editor request must return text or an async text stream.',
           )
         if (typeof result === 'object' && result.sources)
           sources.value = result.sources

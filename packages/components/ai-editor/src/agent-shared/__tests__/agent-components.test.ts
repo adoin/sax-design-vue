@@ -18,6 +18,7 @@ import ChatInput from '../../../../chat-input/src/chat-input.vue'
 import PlanCard from '../../../../plan-card/src/plan-card.vue'
 import QuestionCard from '../../../../question-card/src/question-card.vue'
 import Message from '../../../../message/src/message.vue'
+import AgentEditor from '../../ai-editor.vue'
 import MessageScroller from '../../../../message-scroller/src/message-scroller.vue'
 import { SConfigProvider } from '../../../../config-provider'
 import { clampProgress, safeAgentHref } from '../utils'
@@ -492,6 +493,52 @@ describe('Streaming lifecycle', () => {
 })
 
 describe('Input, confirmation and message actions', () => {
+  it('shares the configured Agent icon between editor and assistant, with local override and default restoration', async () => {
+    const icon = shallowRef('/shared.svg')
+    const local = shallowRef<string>()
+    const harness = defineComponent(
+      () => () =>
+        h(
+          SConfigProvider,
+          { agentIcon: icon.value },
+          {
+            default: () =>
+              h('div', [
+                h(AgentEditor, {
+                  modelValue: 'Hello',
+                  animate: false,
+                  agentIcon: local.value,
+                }),
+                h(Message, { author: 'Assistant', agentIcon: local.value }),
+              ]),
+          },
+        ),
+    )
+    const wrapper = create(harness)
+    wrapper.findComponent(AgentEditor).vm.select(0, 5)
+    await flushPromises()
+    const sources = () =>
+      [...document.querySelectorAll<HTMLImageElement>('.s-agent-icon img')].map(
+        (item) => item.getAttribute('src'),
+      )
+    expect(sources()).toEqual(['/shared.svg', '/shared.svg'])
+    icon.value = '/shared.png'
+    await nextTick()
+    expect(sources()).toEqual(['/shared.png', '/shared.png'])
+    local.value = '/local.svg'
+    await nextTick()
+    expect(sources()).toEqual(['/local.svg', '/local.svg'])
+    local.value = ''
+    await nextTick()
+    expect(sources()).toEqual([])
+    expect(document.querySelectorAll('.s-agent-icon svg')).toHaveLength(2)
+    icon.value = ''
+    local.value = undefined
+    await nextTick()
+    expect(sources()).toEqual([])
+    expect(document.querySelectorAll('.s-agent-icon svg')).toHaveLength(2)
+  })
+
   it('uses the real shared picker, retains raw files and revokes image previews on removal', async () => {
     const createObjectURL = vi.fn(() => 'blob:chat-preview')
     const revokeObjectURL = vi.fn()

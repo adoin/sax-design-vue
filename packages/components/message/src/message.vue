@@ -4,6 +4,7 @@ import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
 
+import AgentIcon from '../../ai-editor/src/agent-shared/agent-icon.vue'
 import { useAgentCopy } from '../../ai-editor/src/agent-shared/use-copy'
 import { messageEmits, messageProps } from './message'
 defineOptions({ name: 'SMessage' })
@@ -39,10 +40,19 @@ const vote = (value: 'like' | 'dislike') => {
     :class="[ns.b(), 's-agent-message', `is-${role}`]"
     :aria-busy="loading"
   >
-    <div v-if="author || $slots.avatar" class="s-agent-message-avatar">
-      <slot name="avatar">{{
-        (author || t(`vs.agent.${role}`)).slice(0, 2)
-      }}</slot>
+    <div
+      v-if="author || $slots.avatar || role === 'assistant'"
+      class="s-agent-message-avatar"
+    >
+      <slot name="avatar">
+        <AgentIcon v-if="role === 'assistant'" :src="agentIcon" :busy="loading"
+          ><template v-if="$slots['agent-icon']" #default
+            ><slot name="agent-icon" :busy="loading" /></template
+        ></AgentIcon>
+        <template v-else>{{
+          (author || t(`vs.agent.${role}`)).slice(0, 2)
+        }}</template>
+      </slot>
     </div>
     <div class="s-agent-grow">
       <header

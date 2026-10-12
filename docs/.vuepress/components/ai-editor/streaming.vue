@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { AiEditorInstance, AiEditorRequest } from 'sax-design-vue'
-const editor = ref<AiEditorInstance>()
+import type { AgentEditorInstance, AgentEditorRequest } from 'sax-design-vue'
+const editor = ref<AgentEditorInstance>()
 const text = ref(
   'Next week: continue the portal release, finish permission migration, monitor sign-in metrics, and update the business team.',
 )
-async function* request({ signal, report }: AiEditorRequest) {
+async function* request({ signal, report }: AgentEditorRequest) {
   report({ status: 'researching', sources: [{ label: 'Weekly project plan' }] })
   const answer =
     'Next week we will focus on three actions:\n1. Complete permission migration and acceptance for 12 enterprise customers by Wednesday.\n2. Expand the rollout from 30% to 60% while monitoring sign-in success and alerts.\n3. Share the release assessment, remaining risks, and next steps with the business team on Friday.'
@@ -23,7 +23,7 @@ async function* request({ signal, report }: AiEditorRequest) {
     <s-button size="small" @click="editor?.select(0, text.length)"
       >Select the paragraph</s-button
     >
-    <s-ai-editor
+    <s-agent-editor
       ref="editor"
       v-model="text"
       title="Expand next week’s action plan"

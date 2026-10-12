@@ -1,81 +1,82 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
-import type AiEditor from './ai-editor.vue'
+import type AgentEditor from './ai-editor.vue'
 
-export type AiEditorFormat = 'bold' | 'italic' | 'underline' | 'strike' | 'code'
-export type AiEditorStatus =
+export type AgentEditorFormat =
+  'bold' | 'italic' | 'underline' | 'strike' | 'code'
+export type AgentEditorStatus =
   'idle' | 'thinking' | 'researching' | 'streaming' | 'complete' | 'error'
-export interface AiEditorMark {
+export interface AgentEditorMark {
   start: number
   end: number
-  format: AiEditorFormat
+  format: AgentEditorFormat
 }
-export interface AiEditorSelection {
+export interface AgentEditorSelection {
   start: number
   end: number
   text: string
 }
-export interface AiEditorSource {
+export interface AgentEditorSource {
   label: string
   href?: string
 }
-export interface AiEditorProgress {
+export interface AgentEditorProgress {
   status?: 'thinking' | 'researching'
   label?: string
-  sources?: AiEditorSource[]
+  sources?: AgentEditorSource[]
 }
-export interface AiEditorResult {
+export interface AgentEditorResult {
   text: string
-  sources?: AiEditorSource[]
+  sources?: AgentEditorSource[]
 }
-export interface AiEditorRequest {
+export interface AgentEditorRequest {
   prompt: string
-  selection: AiEditorSelection
+  selection: AgentEditorSelection
   document: string
   signal: AbortSignal
-  report: (progress: AiEditorProgress) => void
+  report: (progress: AgentEditorProgress) => void
 }
-export type AiEditorRequestHandler = (
-  request: AiEditorRequest,
+export type AgentEditorRequestHandler = (
+  request: AgentEditorRequest,
 ) =>
   | string
-  | AiEditorResult
+  | AgentEditorResult
   | AsyncIterable<string>
-  | Promise<string | AiEditorResult | AsyncIterable<string>>
+  | Promise<string | AgentEditorResult | AsyncIterable<string>>
 
-export const aiEditorProps = buildProps({
+export const agentEditorProps = buildProps({
   modelValue: { type: String, default: '' },
-  marks: { type: definePropType<AiEditorMark[]>(Array), default: () => [] },
+  marks: { type: definePropType<AgentEditorMark[]>(Array), default: () => [] },
   title: String,
   label: String,
   placeholder: String,
   promptPlaceholder: String,
-  aiIcon: String,
-  request: { type: definePropType<AiEditorRequestHandler>(Function) },
+  agentIcon: String,
+  request: { type: definePropType<AgentEditorRequestHandler>(Function) },
   answer: String,
   disabled: Boolean,
   readonly: Boolean,
   formats: {
-    type: definePropType<AiEditorFormat[]>(Array),
+    type: definePropType<AgentEditorFormat[]>(Array),
     default: () => ['bold', 'italic', 'underline', 'strike', 'code'],
   },
   animate: { type: Boolean, default: true },
   streamInterval: { type: Number, default: 18 },
 } as const)
 
-export const aiEditorEmits = {
+export const agentEditorEmits = {
   'update:modelValue': (text: string) => typeof text === 'string',
-  'update:marks': (marks: AiEditorMark[]) => Array.isArray(marks),
-  'selection-change': (selection: AiEditorSelection | null) =>
+  'update:marks': (marks: AgentEditorMark[]) => Array.isArray(marks),
+  'selection-change': (selection: AgentEditorSelection | null) =>
     selection === null || typeof selection.text === 'string',
-  'format-change': (format: AiEditorFormat, marks: AiEditorMark[]) =>
+  'format-change': (format: AgentEditorFormat, marks: AgentEditorMark[]) =>
     !!format && Array.isArray(marks),
-  request: (request: AiEditorRequest) => typeof request.prompt === 'string',
-  response: (result: AiEditorResult) => typeof result.text === 'string',
+  request: (request: AgentEditorRequest) => typeof request.prompt === 'string',
+  response: (result: AgentEditorResult) => typeof result.text === 'string',
   error: (error: unknown) => error !== undefined,
   cancel: () => true,
   apply: (text: string, mode: 'replace' | 'insert') =>
     typeof text === 'string' && !!mode,
 }
-export type AiEditorProps = ExtractPropTypes<typeof aiEditorProps>
-export type AiEditorInstance = InstanceType<typeof AiEditor>
+export type AgentEditorProps = ExtractPropTypes<typeof agentEditorProps>
+export type AgentEditorInstance = InstanceType<typeof AgentEditor>

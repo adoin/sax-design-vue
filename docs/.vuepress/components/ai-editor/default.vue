@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { AiEditorInstance } from 'sax-design-vue'
-const editor = ref<AiEditorInstance>()
+import type { AgentEditorInstance } from 'sax-design-vue'
+const editor = ref<AgentEditorInstance>()
 const text = ref(
   'This week we shipped the customer portal sign-in redesign to 30% of users. Sign-in success increased from 96.8% to 99.2%.\n\nProgress: single sign-on and error monitoring are complete. Support tickets fell 18% week over week. The remaining legacy accounts will be migrated by Wednesday.\n\nRisks and next steps: a small set of enterprise accounts still uses legacy permissions. Next week we will validate migration, expand the rollout, and review conversion data on Friday.',
 )
@@ -18,7 +18,7 @@ const selectSentence = () => {
     <s-button size="small" @click="selectSentence"
       >Select the first sentence</s-button
     >
-    <s-ai-editor
+    <s-agent-editor
       ref="editor"
       v-model="text"
       title="Customer portal · Weekly report"

@@ -1554,8 +1554,7 @@ button.s-agent-heading {
 .s-plan-card__heading-icon {
   transition:
     color var(--sax-motion-duration) var(--sax-motion-easing),
-    background-color var(--sax-motion-duration)
-      var(--sax-motion-easing);
+    background-color var(--sax-motion-duration) var(--sax-motion-easing);
 }
 .s-plan-card.is-approved .s-plan-card__heading-icon {
   color: #{getColor(success)};
@@ -1662,4 +1661,32 @@ button.s-agent-heading {
   .s-plan-card-decision-leave-to {
     transform: none;
   }
+}
+
+.s-agent-message {
+  align-items: flex-start;
+}
+.s-agent-message.is-user > .s-agent-message-avatar {
+  order: 1;
+}
+.s-agent-message-avatar > .s-avatar-content {
+  margin: 0;
+}
+.s-agent-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  color: #{getColor(primary)};
+}
+.s-agent-icon > * {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.s-agent-message-avatar .s-agent-icon {
+  margin: 0;
 }

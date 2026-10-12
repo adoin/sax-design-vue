@@ -479,3 +479,26 @@ const toggle = () => {
 独立挂载的应用应使用文档内唯一的滤镜 ID。结束时先落实普通 CSS 终态再移除滤镜，避免引用失效后隐藏内容短暂闪回。静态共享滤镜仍使用 `svgFilter` 和 `useSvgFilter`；动画模组共享声明，不共享播放状态或 DOM 节点。
 
 </card>
+
+<card>
+
+## 共享 Agent 图标
+
+全局 agentIcon 接受 PNG 或 SVG 图片地址，供 Agent Editor 和 Message 的默认助手图标共同使用。组件自身的 agent-icon 和图标插槽可单独覆盖。
+
+<command>
+
+```ts
+app.use(SaxDesignVue, { agentIcon: '/assistant.svg' })
+```
+
+```vue
+<s-config-provider agent-icon="/assistant.png">
+  <s-message content="助手回答" />
+  <s-agent-editor v-model="document" />
+</s-config-provider>
+```
+
+</command>
+
+</card>

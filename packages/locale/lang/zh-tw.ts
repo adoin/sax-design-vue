@@ -1,13 +1,13 @@
 export default {
   name: 'zh-tw',
   vs: {
-    aiEditor: {
+    agentEditor: {
       document: '文件',
-      placeholder: '輸入內容，選取文字後設定格式或向 AI 提問…',
+      placeholder: '輸入內容，選取文字後設定格式或向 Agent 提問…',
       toolbar: '選取範圍操作',
-      ask: '詢問 AI',
+      ask: '詢問 Agent',
       promptLabel: '針對選取文字提問',
-      promptPlaceholder: '向 AI 提問…',
+      promptPlaceholder: '向 Agent 提問…',
       send: '傳送',
       stop: '停止產生',
       close: '關閉工具列',

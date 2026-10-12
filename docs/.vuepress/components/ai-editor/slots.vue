@@ -8,7 +8,7 @@ const answer =
 </script>
 
 <template>
-  <s-ai-editor v-model="text" title="Executive update" :answer="answer">
+  <s-agent-editor v-model="text" title="Executive update" :answer="answer">
     <template #toolbar="{ selection, format }">
       <s-button size="small" @mousedown.prevent @click="format('underline')"
         >Underline</s-button
@@ -18,5 +18,5 @@ const answer =
     <template #answer="{ text: reply }">
       <s-text color="primary">{{ reply }}</s-text>
     </template>
-  </s-ai-editor>
+  </s-agent-editor>
 </template>

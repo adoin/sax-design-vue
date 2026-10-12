@@ -7,6 +7,8 @@
 
 ## Project specifications
 
+- Agent 公开命名、Message 头像布局与共享 agentIcon 配置见 `.agents/notes/implemented/agent-naming-and-message-avatars.md`；新增公开 API 使用 Agent，不再使用 AI 命名。
+
 - AI 相关的 Agent 组件开发范围与无边框设计要求见 `.agents/notes/implemented/ai-agent-components.md`；既有 AI Editor 与弧形轮播契约见 `.agents/notes/implemented/ai-editor-and-carousel-arc.md`。
 - Agent 组件的覆盖层、紧凑 composer、引用翻页、计划预览与角色消息契约见 `.agents/notes/implemented/ai-agent-interaction-fidelity.md`。
 - Read relevant records in `.agents/notes/active/` and `.agents/notes/prohibited/` before implementation. Treat proposed records as unapproved, prohibited records as approaches that must not be repeated unless their `reopen_only_if` condition is met, and implemented records as verified project contracts.

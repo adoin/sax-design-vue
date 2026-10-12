@@ -114,6 +114,8 @@ export interface AnchorGlobalConfig {
 }
 
 export const configProviderProps = buildProps({
+  /** Default PNG / SVG Agent icon shared by Agent Editor and Message. */
+  agentIcon: String,
   /** First weekday: 0 Sunday through 6 Saturday. Defaults to Monday. */
   firstDayOfWeek: {
     type: Number,

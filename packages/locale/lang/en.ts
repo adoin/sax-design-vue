@@ -238,11 +238,11 @@ export default {
       previous: 'Previous notice',
       next: 'Next notice',
     },
-    aiEditor: {
+    agentEditor: {
       document: 'Document',
-      placeholder: 'Write something, then select text to edit or ask AI…',
+      placeholder: 'Write something, then select text to edit or ask Agent…',
       toolbar: 'Selected text actions',
-      ask: 'Ask AI',
+      ask: 'Ask Agent',
       promptLabel: 'Ask about the selection',
       promptPlaceholder: 'Ask anything…',
       send: 'Send',

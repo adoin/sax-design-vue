@@ -9,6 +9,7 @@ export const messageProps = buildProps({
   },
   content: { type: String, default: '' },
   author: String,
+  agentIcon: String,
   sentAt: String,
   datetime: String,
   showTime: Boolean,

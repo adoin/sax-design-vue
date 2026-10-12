@@ -1,6 +1,11 @@
 ---
 description: "组合带角色、时间、反馈和内容插槽的消息。"
 PROPS:
+  - name: "agent-icon"
+    type: "String"
+    description: "助手图标 PNG / SVG 地址，覆盖全局 agentIcon；空字符串恢复默认 SVG。"
+    default: null
+    usage: "#shared-agent-icon"
   - name: "role"
     type: "'user' | 'assistant' | 'system' | 'tool'"
     description: "消息角色，影响默认作者名称与助手操作。"
@@ -78,6 +83,10 @@ EVENTS:
     type: "() => void"
     description: "请求重新生成助手回答。"
 SLOTS:
+  - name: "agent-icon"
+    type: "Slot"
+    scope: "{ busy: boolean }"
+    description: "自定义默认助手图标；avatar 插槽优先。"
   - name: "default"
     description: "替换默认内容。"
   - name: "avatar"
@@ -95,13 +104,13 @@ SLOTS:
 
 ## 基础用法
 
-使用 content 显示纯文本，或通过默认插槽组合更丰富的内容。用户消息采用紧凑气泡；点击消息正文或时间入口可展开受控时间。反馈均受控。助手操作发出意图，由消费方重新生成或保存评价。
+使用 content 显示纯文本，或通过默认插槽组合更丰富的内容。用户消息采用紧凑气泡，头像在右侧；通过 avatar 插槽复用 SAvatar。助手默认使用与 Agent Editor 相同的 Agent 图标；点击消息正文或时间入口可展开受控时间。反馈均受控。助手操作发出意图，由消费方重新生成或保存评价。
 
 <template #example><message-default-zh /></template>
 
 <template #template>
 
-@[code{9-29}](../../.vuepress/components/message/default-zh.vue)
+@[code{9-34}](../../.vuepress/components/message/default-zh.vue)
 
 </template>
 
@@ -113,7 +122,35 @@ SLOTS:
 
 <template #style>
 
-@[code{31-44}](../../.vuepress/components/message/default-zh.vue)
+@[code{36-49}](../../.vuepress/components/message/default-zh.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 共享 Agent 图标
+
+在 SConfigProvider 设置一次 agent-icon，即可同时替换 Message 和 Agent Editor 的默认 Agent 图标；也可以通过 app.use(SaxDesignVue, { agentIcon: "/assistant.svg" }) 全局配置。组件的 agent-icon 可单独覆盖，插槽优先于图片地址。支持 PNG 和 SVG；空字符串恢复默认图标。
+
+<template #example><message-shared-icon-zh /></template>
+
+<template #template>
+
+@[code{8-23}](../../.vuepress/components/message/shared-icon-zh.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-7}](../../.vuepress/components/message/shared-icon-zh.vue)
+
+</template>
+
+<template #style>
+
+@[code{24-31}](../../.vuepress/components/message/shared-icon-zh.vue)
 
 </template>
 

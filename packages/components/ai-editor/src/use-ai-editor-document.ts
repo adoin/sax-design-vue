@@ -1,19 +1,23 @@
 import { computed, onMounted, ref, shallowRef, watch } from 'vue'
 import type { Ref } from 'vue'
 import type {
-  AiEditorFormat,
-  AiEditorMark,
-  AiEditorProps,
-  AiEditorSelection,
+  AgentEditorFormat,
+  AgentEditorMark,
+  AgentEditorProps,
+  AgentEditorSelection,
 } from './ai-editor'
 
 type DocumentEmit = {
   (event: 'update:modelValue', text: string): void
-  (event: 'update:marks', marks: AiEditorMark[]): void
-  (event: 'selection-change', selection: AiEditorSelection | null): void
-  (event: 'format-change', format: AiEditorFormat, marks: AiEditorMark[]): void
+  (event: 'update:marks', marks: AgentEditorMark[]): void
+  (event: 'selection-change', selection: AgentEditorSelection | null): void
+  (
+    event: 'format-change',
+    format: AgentEditorFormat,
+    marks: AgentEditorMark[],
+  ): void
 }
-const tags: Record<AiEditorFormat, string> = {
+const tags: Record<AgentEditorFormat, string> = {
   bold: 'strong',
   italic: 'em',
   underline: 'u',
@@ -21,27 +25,27 @@ const tags: Record<AiEditorFormat, string> = {
   code: 'code',
 }
 
-export function useAiEditorDocument(
-  props: AiEditorProps,
+export function useAgentEditorDocument(
+  props: AgentEditorProps,
   emit: DocumentEmit,
   root: Ref<HTMLElement | undefined>,
 ) {
   const text = ref(props.modelValue)
-  const marks = shallowRef<AiEditorMark[]>(props.marks)
-  const selection = shallowRef<AiEditorSelection | null>(null)
+  const marks = shallowRef<AgentEditorMark[]>(props.marks)
+  const selection = shallowRef<AgentEditorSelection | null>(null)
   const highlighted = ref(false)
   let composing = false
   let changedDuringComposition = false
-  const history: { text: string; marks: AiEditorMark[] }[] = []
+  const history: { text: string; marks: AgentEditorMark[] }[] = []
   const redoHistory: typeof history = []
-  const flatMapMarks = (map: (mark: AiEditorMark) => AiEditorMark[]) => {
-    const result: AiEditorMark[] = []
+  const flatMapMarks = (map: (mark: AgentEditorMark) => AgentEditorMark[]) => {
+    const result: AgentEditorMark[] = []
     for (const mark of marks.value) result.push(...map(mark))
     return result
   }
 
   const normalizeMarks = (
-    entries: AiEditorMark[],
+    entries: AgentEditorMark[],
     length = text.value.length,
   ) =>
     entries
@@ -106,7 +110,7 @@ export function useAiEditorDocument(
     native?.removeAllRanges()
     native?.addRange(range)
   }
-  const render = (animatedFormat?: AiEditorFormat) => {
+  const render = (animatedFormat?: AgentEditorFormat) => {
     const element = root.value
     if (!element || composing) return
     const doc = element.ownerDocument
@@ -125,7 +129,7 @@ export function useAiEditorDocument(
       const start = positions[index]
       const end = positions[index + 1]
       let node: Node = doc.createTextNode(text.value.slice(start, end))
-      for (const format of Object.keys(tags) as AiEditorFormat[]) {
+      for (const format of Object.keys(tags) as AgentEditorFormat[]) {
         if (
           marks.value.some(
             (mark) =>
@@ -271,7 +275,7 @@ export function useAiEditorDocument(
     replaceRange(start, oldEnd, value.slice(start, newEnd), true)
     if (caret) restore(caret.end)
   }
-  const isFormatted = (format: AiEditorFormat) => {
+  const isFormatted = (format: AgentEditorFormat) => {
     const range = selection.value
     if (!range) return false
     const intervals = marks.value
@@ -286,7 +290,7 @@ export function useAiEditorDocument(
     return false
   }
   const activeFormats = computed(() => props.formats.filter(isFormatted))
-  const format = (value: AiEditorFormat) => {
+  const format = (value: AgentEditorFormat) => {
     const range = selection.value
     if (
       !range ||

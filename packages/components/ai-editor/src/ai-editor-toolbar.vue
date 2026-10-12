@@ -4,27 +4,27 @@ import { SInput } from '@vuesax-alpha/components/input'
 import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 import { useLocale } from '@vuesax-alpha/hooks'
 import { segmentEditorText } from './segment-text'
-import AiEditorIcon from './ai-editor-icon.vue'
+import AgentEditorIcon from './ai-editor-icon.vue'
 import type {
-  AiEditorFormat,
-  AiEditorSelection,
-  AiEditorSource,
-  AiEditorStatus,
+  AgentEditorFormat,
+  AgentEditorSelection,
+  AgentEditorSource,
+  AgentEditorStatus,
 } from './ai-editor'
 
 const props = defineProps<{
   asking: boolean
-  aiIcon?: string
+  agentIcon?: string
   prompt: string
   response: string
   error: string
-  status: AiEditorStatus
+  status: AgentEditorStatus
   statusLabel: string
-  sources: AiEditorSource[]
+  sources: AgentEditorSource[]
   busy: boolean
-  selection: AiEditorSelection
-  formats: AiEditorFormat[]
-  activeFormats: AiEditorFormat[]
+  selection: AgentEditorSelection
+  formats: AgentEditorFormat[]
+  activeFormats: AgentEditorFormat[]
   readonly: boolean
   canAsk: boolean
   promptPlaceholder?: string
@@ -36,7 +36,7 @@ const emit = defineEmits<{
   submit: []
   close: []
   stop: []
-  format: [format: AiEditorFormat]
+  format: [format: AgentEditorFormat]
   apply: [mode: 'replace' | 'insert']
   copy: []
   resize: []
@@ -55,7 +55,7 @@ const finishLoading = () => {
   if (!loading.value) loadingVisible.value = false
 }
 const { t } = useLocale()
-const icons: Record<AiEditorFormat, string> = {
+const icons: Record<AgentEditorFormat, string> = {
   bold: 'cb:text-bold',
   italic: 'cb:text-italic',
   underline: 'cb:text-underline',
@@ -80,7 +80,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
     <div
       class="s-ai-editor__toolbar-row"
       role="toolbar"
-      :aria-label="t('vs.aiEditor.toolbar')"
+      :aria-label="t('vs.agentEditor.toolbar')"
     >
       <template v-if="!asking">
         <button
@@ -91,9 +91,13 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
           @pointerdown.prevent
           @click="emit('ask')"
         >
-          <AiEditorIcon :src="aiIcon" :busy="false">
-            <slot name="ai-icon" :status="status" :busy="busy" /> </AiEditorIcon
-          >{{ t('vs.aiEditor.ask') }}
+          <AgentEditorIcon :src="agentIcon" :busy="false">
+            <slot
+              name="agent-icon"
+              :status="status"
+              :busy="busy"
+            /> </AgentEditorIcon
+          >{{ t('vs.agentEditor.ask') }}
         </button>
         <span
           v-if="!readonly"
@@ -103,7 +107,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
         <slot
           name="toolbar"
           :selection="selection"
-          :format="(value: AiEditorFormat) => emit('format', value)"
+          :format="(value: AgentEditorFormat) => emit('format', value)"
           :active-formats="activeFormats"
         >
           <button
@@ -111,7 +115,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
             :key="format"
             type="button"
             class="s-ai-editor__tool"
-            :aria-label="t(`vs.aiEditor.${format}`)"
+            :aria-label="t(`vs.agentEditor.${format}`)"
             :aria-pressed="activeFormats.includes(format)"
             @mousedown.prevent
             @pointerdown.prevent
@@ -122,16 +126,18 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
         </slot>
       </template>
       <template v-else>
-        <AiEditorIcon :src="aiIcon" :busy="busy">
-          <slot name="ai-icon" :status="status" :busy="busy" />
-        </AiEditorIcon>
+        <AgentEditorIcon :src="agentIcon" :busy="busy">
+          <slot name="agent-icon" :status="status" :busy="busy" />
+        </AgentEditorIcon>
         <SInput
           v-if="status === 'idle' || status === 'error'"
           :model-value="prompt"
           size="small"
           dir="auto"
-          :aria-label="t('vs.aiEditor.promptLabel')"
-          :placeholder="promptPlaceholder || t('vs.aiEditor.promptPlaceholder')"
+          :aria-label="t('vs.agentEditor.promptLabel')"
+          :placeholder="
+            promptPlaceholder || t('vs.agentEditor.promptPlaceholder')
+          "
           class="s-ai-editor__prompt"
           shape="rounded"
           @update:model-value="emit('update:prompt', String($event ?? ''))"
@@ -143,7 +149,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
           type="button"
           class="s-ai-editor__tool is-submit"
           :disabled="!prompt.trim() || !canAsk"
-          :aria-label="t('vs.aiEditor.send')"
+          :aria-label="t('vs.agentEditor.send')"
           @click="emit('submit')"
         >
           <SIcon name="cb:arrow-right" />
@@ -152,7 +158,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
           v-if="busy"
           type="button"
           class="s-ai-editor__tool"
-          :aria-label="t('vs.aiEditor.stop')"
+          :aria-label="t('vs.agentEditor.stop')"
           @click="emit('stop')"
         >
           <SIcon name="cb:stop" />
@@ -161,7 +167,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
       <button
         type="button"
         class="s-ai-editor__tool s-ai-editor__close"
-        :aria-label="t('vs.aiEditor.close')"
+        :aria-label="t('vs.agentEditor.close')"
         @mousedown.prevent
         @click="emit('close')"
       >
@@ -185,7 +191,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
       <span class="s-ai-editor__shimmer">{{
         statusLabel ||
         t(
-          `vs.aiEditor.${status === 'researching' ? 'researching' : 'thinking'}`,
+          `vs.agentEditor.${status === 'researching' ? 'researching' : 'thinking'}`,
         )
       }}</span>
     </div>
@@ -213,20 +219,20 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
           type="button"
           @click="emit('apply', 'replace')"
         >
-          {{ t('vs.aiEditor.replace') }}
+          {{ t('vs.agentEditor.replace') }}
         </button>
         <button v-if="!readonly" type="button" @click="emit('apply', 'insert')">
-          {{ t('vs.aiEditor.insert') }}
+          {{ t('vs.agentEditor.insert') }}
         </button>
         <button type="button" @click="emit('copy')">
-          {{ t('vs.aiEditor.copy') }}
+          {{ t('vs.agentEditor.copy') }}
         </button>
       </div>
     </div>
     <div
       v-if="safeSources.length"
       class="s-ai-editor__sources"
-      :aria-label="t('vs.aiEditor.sources')"
+      :aria-label="t('vs.agentEditor.sources')"
     >
       <template
         v-for="(source, index) in safeSources"

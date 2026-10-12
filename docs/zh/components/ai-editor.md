@@ -1,11 +1,11 @@
 ---
-description: "围绕文档选区提供格式操作与可接入 AI 服务的辅助编辑。"
+description: "围绕文档选区提供格式操作与可接入 Agent 服务的辅助编辑。"
 PROPS:
-  - name: ai-icon
+  - name: agent-icon
     type: "String"
-    description: "助手图片地址，支持 PNG、SVG 和 data URL。不设置时使用内置 SVG。"
+    description: "自定义 PNG / SVG 图标地址，覆盖全局 agentIcon；与 Message 共享全局配置，空字符串恢复默认 SVG。"
     default: null
-    usage: '#ai-icon'
+    usage: '#agent-icon'
   - name: v-model
     type: "String"
     description: "文档纯文本，HTML 按普通文字处理。"
@@ -17,12 +17,12 @@ PROPS:
     default: "''"
     usage: '#default'
   - name: v-model:marks
-    type: "AiEditorMark[]"
+    type: "AgentEditorMark[]"
     description: "受控行内格式范围。start 包含、end 不包含，位置使用 UTF-16 索引。"
     default: "[]"
     usage: '#formatting'
   - name: marks
-    type: "AiEditorMark[]"
+    type: "AgentEditorMark[]"
     description: "初始或外部控制的行内格式范围。"
     default: "[]"
     usage: '#formatting'
@@ -43,21 +43,21 @@ PROPS:
     usage: '#default'
   - name: prompt-placeholder
     type: "String"
-    description: "AI 提问输入框提示，默认使用本地化文案。"
+    description: "Agent 提问输入框提示，默认使用本地化文案。"
     default: null
     usage: '#async-request'
   - name: request
-    type: "AiEditorRequestHandler"
-    description: "接收提问、选区、文档、AbortSignal 和 report()。可返回文本、AiEditorResult 或增量文本块的异步迭代器，也支持 Promise。优先于 answer。"
+    type: "AgentEditorRequestHandler"
+    description: "接收提问、选区、文档、AbortSignal 和 report()。可返回文本、AgentEditorResult 或增量文本块的异步迭代器，也支持 Promise。优先于 answer。"
     default: null
     usage: '#async-request'
   - name: answer
     type: "String"
-    description: "用于本地预览或固定内容的回答。未配置 answer 或 request 时，格式操作可用，AI 提问不可用。"
+    description: "用于本地预览或固定内容的回答。未配置 answer 或 request 时，格式操作可用，Agent 提问不可用。"
     default: null
     usage: '#default'
   - name: formats
-    type: "AiEditorFormat[]"
+    type: "AgentEditorFormat[]"
     values: "bold | italic | underline | strike | code"
     description: "工具栏可用的格式及格式快捷键。"
     default: "['bold', 'italic', 'underline', 'strike', 'code']"
@@ -65,7 +65,7 @@ PROPS:
   - name: readonly
     type: "Boolean"
     values: "true | false"
-    description: "允许选区和 AI 提问，阻止编辑、格式修改和应用回答。"
+    description: "允许选区和 Agent 提问，阻止编辑、格式修改和应用回答。"
     default: "false"
     usage: '#default'
   - name: disabled
@@ -91,19 +91,19 @@ EVENTS:
     type: "(text: string) => void"
     description: "纯文本发生变化。"
   - name: "update:marks"
-    type: "(marks: AiEditorMark[]) => void"
+    type: "(marks: AgentEditorMark[]) => void"
     description: "行内格式发生变化。"
   - name: "selection-change"
-    type: "(selection: AiEditorSelection | null) => void"
+    type: "(selection: AgentEditorSelection | null) => void"
     description: "选区发生变化，null 表示未选中文字。"
   - name: "format-change"
-    type: "(format: AiEditorFormat, marks: AiEditorMark[]) => void"
+    type: "(format: AgentEditorFormat, marks: AgentEditorMark[]) => void"
     description: "执行格式命令后触发。"
   - name: "request"
-    type: "(request: AiEditorRequest) => void"
-    description: "提交 AI 请求时触发，通过 request 属性提供返回结果。"
+    type: "(request: AgentEditorRequest) => void"
+    description: "提交 Agent 请求时触发，通过 request 属性提供返回结果。"
   - name: "response"
-    type: "(result: AiEditorResult) => void"
+    type: "(result: AgentEditorResult) => void"
     description: "回答完成后返回完整文本和来源。"
   - name: "error"
     type: "(error: unknown) => void"
@@ -122,7 +122,7 @@ EXPOSES:
     type: "(start: number, end: number) => boolean"
     description: "选中文本范围并打开工具栏。"
   - name: format
-    type: "(format: AiEditorFormat) => void"
+    type: "(format: AgentEditorFormat) => void"
     description: "在保存的选区中切换指定格式。"
   - name: ask
     type: "(prompt?: string) => Promise<boolean>"
@@ -137,31 +137,31 @@ EXPOSES:
     type: "(mode: 'replace' | 'insert') => boolean"
     description: "使用完整回答替换选区，或插入选区所在段落下方。"
 SLOTS:
-  - name: ai-icon
+  - name: agent-icon
     type: Slot
-    scope: "{ status: AiEditorStatus; busy: boolean }"
-    description: "工具栏和提问状态的助手图标，优先于 ai-icon 属性。"
+    scope: "{ status: AgentEditorStatus; busy: boolean }"
+    description: "工具栏和提问状态的助手图标，优先于 agent-icon 属性。"
   - name: title
     type: Slot
     scope: "{}"
     description: "文档标题。"
   - name: toolbar
     type: Slot
-    scope: "{ selection: AiEditorSelection; format: (format: AiEditorFormat) => void; activeFormats: AiEditorFormat[] }"
-    description: "自定义格式操作，保留 AI 提问和关闭入口。"
+    scope: "{ selection: AgentEditorSelection; format: (format: AgentEditorFormat) => void; activeFormats: AgentEditorFormat[] }"
+    description: "自定义格式操作，保留 Agent 提问和关闭入口。"
   - name: answer
     type: Slot
-    scope: "{ text: string; status: AiEditorStatus; selection: AiEditorSelection; apply: (mode: 'replace' | 'insert') => void }"
+    scope: "{ text: string; status: AgentEditorStatus; selection: AgentEditorSelection; apply: (mode: 'replace' | 'insert') => void }"
     description: "自定义回答内容，保留内置的回答操作。"
 ---
 
-# AI Editor AI编辑器
+# Agent Editor Agent编辑器
 
 <card>
 
 ## 默认
 
-可直接编辑正文，或选中文字打开浮动工具栏。Ctrl/Cmd + B、I、U 切换支持的格式，Ctrl/Cmd + Enter 打开 AI 提问，Escape 关闭工具栏。以客户门户的周度工作汇报为例，选中第一句话并输入“更简洁地表达成果”，查看润色结果后替换原文。本地回答用于演示编辑流程。
+可直接编辑正文，或选中文字打开浮动工具栏。Ctrl/Cmd + B、I、U 切换支持的格式，Ctrl/Cmd + Enter 打开 Agent 提问，Escape 关闭工具栏。以客户门户的周度工作汇报为例，选中第一句话并输入“更简洁地表达成果”，查看润色结果后替换原文。本地回答用于演示编辑流程。
 
 <template #example><ai-editor-zh-default /></template>
 
@@ -189,7 +189,7 @@ SLOTS:
 
 ## 行内格式
 
-同时绑定 v-model 和 v-model:marks，可分别持久化正文与格式。示例将成果、风险和计划分段呈现，选中成果段落后可调整格式或询问 AI。格式可以重叠，工具栏操作会保留选区，Ctrl/Cmd + Z / Shift + Z 可撤销、重做编辑。格式范围使用当前正文的 UTF-16 索引。
+同时绑定 v-model 和 v-model:marks，可分别持久化正文与格式。示例将成果、风险和计划分段呈现，选中成果段落后可调整格式或询问 Agent。格式可以重叠，工具栏操作会保留选区，Ctrl/Cmd + Z / Shift + Z 可撤销、重做编辑。格式范围使用当前正文的 UTF-16 索引。
 
 <template #example><ai-editor-zh-formatting /></template>
 
@@ -217,7 +217,7 @@ SLOTS:
 
 ## 异步请求
 
-通过 request 接入自己的 AI 服务。上下文包含问题、选中文字、完整文档、取消信号，以及更新进度文案和来源的 report()。失败后保留错误提示以便重试，关闭、停止或修改文档会取消会话，并忽略迟到的结果。此示例通过本地 Promise 展示加载、来源和失败状态。
+通过 request 接入自己的 Agent 服务。上下文包含问题、选中文字、完整文档、取消信号，以及更新进度文案和来源的 report()。失败后保留错误提示以便重试，关闭、停止或修改文档会取消会话，并忽略迟到的结果。此示例通过本地 Promise 展示加载、来源和失败状态。
 
 <template #example><ai-editor-zh-request /></template>
 
@@ -293,27 +293,27 @@ SLOTS:
 
 <card>
 
-## AI 图标
+## Agent 图标
 
-通过 `ai-icon` 传入 PNG 或 SVG 图片地址，也可以使用 `ai-icon` 插槽渲染内联 SVG 或图标组件。插槽优先于图片地址，并提供 `status` 和 `busy`。图标适配 22px 容器，作为装饰内容；操作按钮保留可访问名称。
+通过 `agent-icon` 传入 PNG 或 SVG 图片地址，也可以使用 `agent-icon` 插槽渲染内联 SVG 或图标组件。插槽优先于图片地址，并提供 `status` 和 `busy`。图标适配 22px 容器，作为装饰内容；操作按钮保留可访问名称。
 
-<template #example><ai-editor-zh-ai-icon /></template>
+<template #example><ai-editor-zh-agent-icon /></template>
 
 <template #template>
 
-@[code{18-49}](../../.vuepress/components/ai-editor-zh/ai-icon.vue)
+@[code{18-49}](../../.vuepress/components/ai-editor-zh/agent-icon.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-16}](../../.vuepress/components/ai-editor-zh/ai-icon.vue)
+@[code{1-16}](../../.vuepress/components/ai-editor-zh/agent-icon.vue)
 
 </template>
 
 <template #style>
 
-@[code{51-63}](../../.vuepress/components/ai-editor-zh/ai-icon.vue)
+@[code{51-63}](../../.vuepress/components/ai-editor-zh/agent-icon.vue)
 
 </template>
 

@@ -6,7 +6,7 @@ const answer =
 </script>
 
 <template>
-  <s-ai-editor v-model="text" title="管理层汇报摘要" :answer="answer">
+  <s-agent-editor v-model="text" title="管理层汇报摘要" :answer="answer">
     <template #toolbar="{ selection, format }">
       <s-button size="small" @mousedown.prevent @click="format('underline')"
         >下划线</s-button
@@ -16,5 +16,5 @@ const answer =
     <template #answer="{ text: reply }">
       <s-text color="primary">{{ reply }}</s-text>
     </template>
-  </s-ai-editor>
+  </s-agent-editor>
 </template>

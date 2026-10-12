@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
-import type { AiEditorInstance } from 'sax-design-vue'
-const editor = ref<AiEditorInstance>()
+import type { AgentEditorInstance } from 'sax-design-vue'
+const editor = ref<AgentEditorInstance>()
 const mode = shallowRef('default')
 const text = shallowRef(
   '本周完成客户门户登录改版，下一步将扩大灰度并评估全量发布条件。',
@@ -26,14 +26,14 @@ const icon = computed(() =>
         >选中文字</s-button
       >
     </div>
-    <s-ai-editor
+    <s-agent-editor
       ref="editor"
       v-model="text"
-      :ai-icon="icon"
+      :agent-icon="icon"
       title="工作汇报助手"
       answer="本周已交付登录改版；下周重点是扩大灰度、验证稳定性并形成发布结论。"
     >
-      <template v-if="mode === 'slot'" #ai-icon>
+      <template v-if="mode === 'slot'" #agent-icon>
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -44,7 +44,7 @@ const icon = computed(() =>
           <path d="M12 3v3M8 11h.01M16 11h.01M9 15h6" stroke-linecap="round" />
         </svg>
       </template>
-    </s-ai-editor>
+    </s-agent-editor>
   </div>
 </template>
 

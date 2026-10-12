@@ -13,10 +13,15 @@ const content = ref(
     <s-message
       v-model:show-time="userTime"
       role="user"
-      author="KS"
+      author="You"
       content="Can you review this document?"
       sent-at="Today, 09:29"
-    />
+    >
+      <template #avatar
+        ><s-avatar :size="30" shape="circle"
+          ><img src="/avatars/avatar-5.png" alt="Your avatar" /></s-avatar
+      ></template>
+    </s-message>
 
     <s-message
       v-model:show-time="showTime"

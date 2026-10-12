@@ -11,36 +11,36 @@ import {
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SFocusTrap } from '@vuesax-alpha/components/focus-trap'
 import { useId, useLocale, useNamespace } from '@vuesax-alpha/hooks'
-import { aiEditorEmits, aiEditorProps } from './ai-editor'
-import { useAiEditorDocument } from './use-ai-editor-document'
-import { useAiEditorAssistant } from './use-ai-editor-assistant'
-import AiEditorToolbar from './ai-editor-toolbar.vue'
+import { agentEditorEmits, agentEditorProps } from './ai-editor'
+import { useAgentEditorDocument } from './use-ai-editor-document'
+import { useAgentEditorAssistant } from './use-ai-editor-assistant'
+import AgentEditorToolbar from './ai-editor-toolbar.vue'
 import type {
-  AiEditorFormat,
-  AiEditorSelection,
-  AiEditorStatus,
+  AgentEditorFormat,
+  AgentEditorSelection,
+  AgentEditorStatus,
 } from './ai-editor'
 import type { PopperInstance } from '@vuesax-alpha/components/popper'
 
-defineOptions({ name: 'SAiEditor' })
+defineOptions({ name: 'SAgentEditor' })
 defineSlots<{
-  'ai-icon'(props: { status: AiEditorStatus; busy: boolean }): unknown
+  'agent-icon'(props: { status: AgentEditorStatus; busy: boolean }): unknown
   title(): unknown
   toolbar(props: {
-    selection: AiEditorSelection
-    format: (format: AiEditorFormat) => void
-    activeFormats: AiEditorFormat[]
+    selection: AgentEditorSelection
+    format: (format: AgentEditorFormat) => void
+    activeFormats: AgentEditorFormat[]
   }): unknown
   answer(props: {
     text: string
-    status: AiEditorStatus
-    selection: AiEditorSelection
+    status: AgentEditorStatus
+    selection: AgentEditorSelection
     apply: (mode: 'replace' | 'insert') => void
   }): unknown
 }>()
-const props = defineProps(aiEditorProps)
+const props = defineProps(agentEditorProps)
 const initialContent = props.modelValue
-const emit = defineEmits(aiEditorEmits)
+const emit = defineEmits(agentEditorEmits)
 const { t } = useLocale()
 const ns = useNamespace('ai-editor')
 const root = ref<HTMLElement>()
@@ -50,8 +50,12 @@ const popper = ref<PopperInstance>()
 const visible = ref(false)
 const asking = ref(false)
 const prompt = ref('')
-const document = useAiEditorDocument(props, emit, root)
-const assistant = useAiEditorAssistant(props, emit, () => document.text.value)
+const document = useAgentEditorDocument(props, emit, root)
+const assistant = useAgentEditorAssistant(
+  props,
+  emit,
+  () => document.text.value,
+)
 const { busy, status, response, error, sources, statusLabel } = assistant
 const canAsk = computed(
   () =>
@@ -72,7 +76,7 @@ const reference = shallowRef({
 let selectionFrame: number | undefined
 let positionFrame: number | undefined
 let ownerDocument: Document | undefined
-let dismissedSelection: AiEditorSelection | null = null
+let dismissedSelection: AgentEditorSelection | null = null
 
 const close = (restoreFocus = false) => {
   dismissedSelection = document.selection.value
@@ -178,7 +182,7 @@ const copy = async () => {
   try {
     await navigator.clipboard.writeText(response.value)
   } catch (reason) {
-    error.value = t('vs.aiEditor.copyError')
+    error.value = t('vs.agentEditor.copyError')
     emit('error', reason)
   }
 }
@@ -200,7 +204,7 @@ const onKeydown = (event: KeyboardEvent) => {
     document.undo(event.shiftKey)
     return
   }
-  const shortcuts: Record<string, AiEditorFormat> = {
+  const shortcuts: Record<string, AgentEditorFormat> = {
     b: 'bold',
     i: 'italic',
     u: 'underline',
@@ -287,12 +291,12 @@ defineExpose({
       role="textbox"
       aria-multiline="true"
       dir="auto"
-      :aria-label="label || title || t('vs.aiEditor.document')"
+      :aria-label="label || title || t('vs.agentEditor.document')"
       :aria-readonly="readonly || busy"
       :aria-disabled="disabled"
       :aria-busy="busy"
       :tabindex="disabled ? -1 : 0"
-      :data-placeholder="placeholder || t('vs.aiEditor.placeholder')"
+      :data-placeholder="placeholder || t('vs.agentEditor.placeholder')"
       spellcheck="false"
       @input="document.handleInput"
       @beforeinput="onBeforeInput"
@@ -335,11 +339,11 @@ defineExpose({
           @focus-after-released.prevent
           @focusout-prevented.prevent
         >
-          <AiEditorToolbar
+          <AgentEditorToolbar
             v-if="document.selection.value"
             v-model:prompt="prompt"
             :asking="asking"
-            :ai-icon="aiIcon"
+            :agent-icon="agentIcon"
             :busy="busy"
             :status="status"
             :status-label="statusLabel"
@@ -363,8 +367,8 @@ defineExpose({
             @resize="nextTick(() => popper?.updatePopper())"
             @keydown.esc.stop.prevent="close(true)"
           >
-            <template v-if="$slots['ai-icon']" #ai-icon="slotProps">
-              <slot name="ai-icon" v-bind="slotProps" />
+            <template v-if="$slots['agent-icon']" #agent-icon="slotProps">
+              <slot name="agent-icon" v-bind="slotProps" />
             </template>
             <template v-if="$slots.toolbar" #toolbar="slotProps"
               ><slot name="toolbar" v-bind="slotProps"
@@ -372,7 +376,7 @@ defineExpose({
             <template v-if="$slots.answer" #answer="slotProps"
               ><slot name="answer" v-bind="slotProps"
             /></template>
-          </AiEditorToolbar>
+          </AgentEditorToolbar>
         </SFocusTrap>
       </template>
     </SPopper>

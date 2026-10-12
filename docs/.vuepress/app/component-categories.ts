@@ -7,7 +7,7 @@ export type ComponentCategoryKey =
   | 'data-entry'
   | 'data-display'
   | 'feedback'
-  | 'ai'
+  | 'agent'
   | 'other'
 
 interface ComponentItem extends SidebarItem {
@@ -147,11 +147,11 @@ export const componentCategories: ComponentCategory[] = [
     ],
   },
   {
-    key: 'ai',
-    text: 'AI',
-    textZh: 'AI相关',
+    key: 'agent',
+    text: 'Agent',
+    textZh: 'Agent相关',
     children: [
-      component('AI Editor', 'AI编辑器', '/components/ai-editor'),
+      component('Agent Editor', 'Agent编辑器', '/components/ai-editor'),
       component('Reasoning Steps', '推理步骤', '/components/reasoning-steps'),
       component('Chat History', '聊天历史', '/components/chat-history'),
       component('File Diff', '文件差异', '/components/file-diff'),

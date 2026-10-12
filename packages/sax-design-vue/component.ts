@@ -14,7 +14,7 @@ import { SMessageScroller } from '@vuesax-alpha/components/message-scroller'
 import { SAlert } from '@vuesax-alpha/components/alert'
 import { SSvgFilterAnimation } from '@vuesax-alpha/components/base'
 import { SAffix } from '@vuesax-alpha/components/affix'
-import { SAiEditor } from '@vuesax-alpha/components/ai-editor'
+import { SAgentEditor } from '@vuesax-alpha/components/agent-editor'
 import { SAnchor } from '@vuesax-alpha/components/anchor'
 import { SAvatar, SAvatarGroup } from '@vuesax-alpha/components/avatar'
 import { SBacktop } from '@vuesax-alpha/components/backtop'
@@ -109,7 +109,7 @@ export default [
   SAlert,
   SSvgFilterAnimation,
   SAffix,
-  SAiEditor,
+  SAgentEditor,
   SReasoningSteps,
   SChatHistory,
   SFileDiff,

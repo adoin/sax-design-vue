@@ -1,15 +1,15 @@
 import { defineComponent, h, shallowRef } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import AiEditor from '../src/ai-editor.vue'
+import AgentEditor from '../src/ai-editor.vue'
 import { SFocusTrap } from '../../focus-trap'
 import { SPopper } from '../../popper'
 import { segmentEditorText } from '../src/segment-text'
-import type { AiEditorRequest } from '../src/ai-editor'
+import type { AgentEditorRequest } from '../src/ai-editor'
 
 const wrappers: { unmount(): void }[] = []
 const create = (props: Record<string, unknown> = {}) => {
-  const wrapper = mount(AiEditor, {
+  const wrapper = mount(AgentEditor, {
     attachTo: document.body,
     props: {
       modelValue: 'Hello world\nAnother line',
@@ -33,47 +33,53 @@ afterEach(() => {
   vi.useRealTimers()
 })
 
-describe('AI Editor document and request lifecycle', () => {
+describe('Agent Editor document and request lifecycle', () => {
   it('uses the default SVG or a custom image in both toolbar modes', async () => {
     const wrapper = create({ answer: 'Answer' })
     wrapper.vm.select(0, 5)
     await flushPromises()
-    expect(document.querySelector('.s-ai-editor__ai-icon svg')).not.toBeNull()
-    await wrapper.setProps({ aiIcon: '/assistant.png' })
+    expect(
+      document.querySelector('.s-ai-editor__agent-icon svg'),
+    ).not.toBeNull()
+    await wrapper.setProps({ agentIcon: '/assistant.png' })
     const image = () =>
-      document.querySelector<HTMLImageElement>('.s-ai-editor__ai-icon img')!
+      document.querySelector<HTMLImageElement>('.s-ai-editor__agent-icon img')!
     expect(image().getAttribute('src')).toBe('/assistant.png')
     expect(image().alt).toBe('')
     document.querySelector<HTMLButtonElement>('.s-ai-editor__ask')!.click()
     await flushPromises()
     expect(image().getAttribute('src')).toBe('/assistant.png')
-    await wrapper.setProps({ aiIcon: '/assistant.svg' })
+    await wrapper.setProps({ agentIcon: '/assistant.svg' })
     expect(image().getAttribute('src')).toBe('/assistant.svg')
   })
 
   it('gives the custom icon slot precedence and exposes the assistant state', async () => {
-    const wrapper = mount(AiEditor, {
+    const wrapper = mount(AgentEditor, {
       attachTo: document.body,
-      props: { modelValue: 'Hello', aiIcon: '/ignored.png', answer: 'Answer' },
+      props: {
+        modelValue: 'Hello',
+        agentIcon: '/ignored.png',
+        answer: 'Answer',
+      },
       slots: {
-        'ai-icon': ({ status, busy }: { status: string; busy: boolean }) =>
+        'agent-icon': ({ status, busy }: { status: string; busy: boolean }) =>
           h('svg', { 'data-status': status, 'data-busy': String(busy) }),
       },
     })
     wrappers.push(wrapper)
     wrapper.vm.select(0, 5)
     await flushPromises()
-    expect(document.querySelector('.s-ai-editor__ai-icon img')).toBeNull()
+    expect(document.querySelector('.s-ai-editor__agent-icon img')).toBeNull()
     expect(
       document
-        .querySelector('.s-ai-editor__ai-icon svg')
+        .querySelector('.s-ai-editor__agent-icon svg')
         ?.getAttribute('data-status'),
     ).toBe('idle')
     document.querySelector<HTMLButtonElement>('.s-ai-editor__ask')!.click()
     await flushPromises()
     expect(
       document
-        .querySelector('.s-ai-editor__ai-icon svg')
+        .querySelector('.s-ai-editor__agent-icon svg')
         ?.getAttribute('data-busy'),
     ).toBe('false')
   })
@@ -169,7 +175,7 @@ describe('AI Editor document and request lifecycle', () => {
       sources: [],
     })
   })
-  it('keeps the clicked document caret when dismissing an AI prompt highlight', async () => {
+  it('keeps the clicked document caret when dismissing an Agent prompt highlight', async () => {
     const wrapper = create({ answer: 'Reply' })
     wrapper.vm.select(0, 5)
     await wrapper.vm.ask('Explain')
@@ -226,7 +232,7 @@ describe('AI Editor document and request lifecycle', () => {
             {
               default: () =>
                 h('div', { ref: container, tabindex: -1 }, [
-                  h(AiEditor, {
+                  h(AgentEditor, {
                     modelValue: 'Hello world',
                     answer: 'Reply',
                     animate: false,
@@ -239,7 +245,7 @@ describe('AI Editor document and request lifecycle', () => {
     )
     wrappers.push(wrapper)
     await flushPromises()
-    wrapper.getComponent(AiEditor).vm.select(0, 5)
+    wrapper.getComponent(AgentEditor).vm.select(0, 5)
     await flushPromises()
     document.querySelector<HTMLButtonElement>('.s-ai-editor__ask')?.click()
     await flushPromises()
@@ -319,7 +325,7 @@ describe('AI Editor document and request lifecycle', () => {
   })
 
   it('captures prompt, selection and document and applies only the chosen range', async () => {
-    const request = vi.fn(({ report }: AiEditorRequest) => {
+    const request = vi.fn(({ report }: AgentEditorRequest) => {
       report({
         status: 'researching',
         sources: [{ label: 'Docs', href: 'javascript:boom' }],
@@ -356,9 +362,9 @@ describe('AI Editor document and request lifecycle', () => {
 
   it('cancels and ignores late responses when external document content changes', async () => {
     const pending = deferred<string>()
-    let context!: AiEditorRequest
+    let context!: AgentEditorRequest
     const wrapper = create({
-      request: (request: AiEditorRequest) => {
+      request: (request: AgentEditorRequest) => {
         context = request
         return pending.promise
       },
@@ -414,7 +420,7 @@ describe('AI Editor document and request lifecycle', () => {
     })
   })
 
-  it('keeps readonly selection/AI available while blocking mutation and disables all actions when disabled', async () => {
+  it('keeps readonly selection/Agent available while blocking mutation and disables all actions when disabled', async () => {
     const wrapper = create({ readonly: true, answer: 'Answer' })
     wrapper.vm.select(0, 5)
     wrapper.vm.format('bold')

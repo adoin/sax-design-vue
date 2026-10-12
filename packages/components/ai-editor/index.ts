@@ -1,5 +1,5 @@
 import { withInstall } from '@vuesax-alpha/utils'
-import AiEditor from './src/ai-editor.vue'
-export const SAiEditor = withInstall(AiEditor)
-export default SAiEditor
+import AgentEditor from './src/ai-editor.vue'
+export const SAgentEditor = withInstall(AgentEditor)
+export default SAgentEditor
 export * from './src/ai-editor'
