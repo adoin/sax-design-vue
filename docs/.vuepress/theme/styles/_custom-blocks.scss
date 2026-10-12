@@ -1,5 +1,6 @@
 .custom-container {
-  border-radius: 10px 15px 15px 10px !important;
+  border: 0;
+  border-radius: 14px;
   code {
     color: inherit;
   }
@@ -44,8 +45,7 @@
 .custom-container.warning,
 .custom-container.danger {
   padding: 0.1rem 1rem;
-  border-left-width: 0.1rem;
-  border-left-style: solid;
+  border: 0;
   margin: 1rem 0;
   position: relative;
 }

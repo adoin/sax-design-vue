@@ -920,7 +920,7 @@ onBeforeUnmount(() => {
         min-height: 44px;
         gap: 8px;
         padding: 10px 12px;
-        border: 1px solid hsl(var(--sax-theme-color) / 0.1);
+        border: 0;
         border-radius: 12px;
         background: hsl(var(--sax-theme-layout));
         font-size: 0.9rem;

@@ -53,7 +53,7 @@ const editedSource = shallowRef(example.value?.source || '')
 .example-playground-embed {
   margin: 14px auto 30px;
   overflow: hidden;
-  border: 1px solid hsl(var(--sax-accent-color) / 0.13);
+  border: 0;
   border-radius: 20px;
   background: hsl(var(--sax-theme-layout) / 0.88);
   box-shadow: 0 20px 60px rgba(55, 43, 145, 0.12);

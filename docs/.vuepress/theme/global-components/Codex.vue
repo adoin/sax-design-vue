@@ -355,7 +355,7 @@ const openPlayground = (event?: Event) => {
   justify-content: space-between;
   gap: 18px;
   padding: 12px 18px;
-  border-bottom: 1px solid hsl(var(--sax-accent-color) / 0.12);
+  border-bottom: 0;
 
   strong,
   span {
@@ -467,7 +467,7 @@ const openPlayground = (event?: Event) => {
   align-items: center;
   justify-content: flex-end;
   padding: 8px 18px;
-  border-top: 1px solid hsl(var(--sax-accent-color) / 0.12);
+  border-top: 0;
 }
 
 .code-dialog__footer button {

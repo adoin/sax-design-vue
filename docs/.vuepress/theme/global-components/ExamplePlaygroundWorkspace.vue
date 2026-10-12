@@ -93,7 +93,7 @@ const copySource = async () => {
   min-height: 66px;
   flex: 0 0 auto;
   padding: 14px 20px;
-  border-bottom: 1px solid hsl(var(--sax-accent-color) / 0.12);
+  border-bottom: 0;
 }
 
 .example-playground-workspace__identity {
@@ -173,7 +173,7 @@ const copySource = async () => {
 .example-playground-workspace__code-header {
   flex: 0 0 auto;
   color: rgba(255, 255, 255, 0.68);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 0;
   font-size: 0.78rem;
   font-weight: 600;
 }
@@ -190,7 +190,7 @@ const copySource = async () => {
   }
 
   .example-playground-workspace__editor {
-    border-right: 1px solid hsl(var(--sax-accent-color) / 0.12);
+    border-right: 0;
   }
 }
 

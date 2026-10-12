@@ -181,7 +181,6 @@ h1 {
     margin: 18px 0 0;
     padding: 30px 28px;
     border: 0;
-    border-top: 1px solid hsl(var(--sax-accent-color) / 0.1);
     border-radius: 0;
     background: linear-gradient(
       180deg,
@@ -193,7 +192,6 @@ h1 {
   & > .slotcode {
     margin: 0;
     border: 0;
-    border-top: 1px solid hsl(var(--sax-accent-color) / 0.1);
     border-radius: 0;
     background: hsl(var(--sax-theme-layout) / 0.72);
   }

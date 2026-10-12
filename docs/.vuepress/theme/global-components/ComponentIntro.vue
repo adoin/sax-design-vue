@@ -21,7 +21,7 @@ const description = computed(() => frontmatter.value.description || '')
   margin: 0 0 28px;
   padding: 20px 22px;
   border-radius: 16px;
-  border: 1px solid hsl(var(--sax-accent-color) / 0.14);
+  border: 0;
   background: linear-gradient(
     135deg,
     hsl(var(--sax-theme-layout) / 0.96),

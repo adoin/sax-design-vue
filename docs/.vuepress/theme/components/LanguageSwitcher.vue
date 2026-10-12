@@ -82,7 +82,7 @@ const alternates = computed<Alternate[]>(() => {
   font-weight: 600;
   color: hsl(var(--sax-theme-color) / 0.72);
   text-decoration: none;
-  border: 1px solid hsl(var(--sax-accent-color) / 0.18);
+  border: 0;
   background: hsl(var(--sax-theme-layout) / 0.65);
   transition:
     color 0.2s ease,
@@ -91,7 +91,7 @@ const alternates = computed<Alternate[]>(() => {
 
   &:hover {
     color: hsl(var(--sax-accent-color));
-    border-color: hsl(var(--sax-accent-color) / 0.35);
+    box-shadow: var(--sax-box-shadow);
     background: hsl(var(--sax-accent-color) / 0.08);
   }
 }

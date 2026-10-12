@@ -45,7 +45,7 @@ const active = shallowRef<'tsx' | 'h'>('tsx')
 .code-variants {
   overflow: hidden;
   margin: 14px 20px 18px;
-  border: 1px solid hsl(var(--sax-primary) / 0.12);
+  border: 0;
   border-radius: 12px;
   background: hsl(var(--sax-theme-layout) / 0.46);
 }
@@ -57,7 +57,7 @@ const active = shallowRef<'tsx' | 'h'>('tsx')
   justify-content: space-between;
   gap: 12px;
   padding: 6px 8px 6px 16px;
-  border-bottom: 1px solid hsl(var(--sax-primary) / 0.1);
+  border-bottom: 0;
   color: hsl(var(--sax-text-color-secondary));
   font-size: 12px;
 }

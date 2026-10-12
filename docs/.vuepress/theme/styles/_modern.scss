@@ -55,7 +55,7 @@ body,
 .navbar {
   backdrop-filter: blur(14px);
   background: hsl(var(--sax-theme-layout) / 0.78) !important;
-  border-bottom: 1px solid hsl(var(--sax-accent-color) / 0.12);
+  border-bottom: 0;
   border-radius: 0 !important;
   box-shadow: 0 8px 30px rgba(30, 27, 75, 0.06);
 }
@@ -93,7 +93,7 @@ body,
       font-size: 1.28rem;
       letter-spacing: -0.02em;
       color: hsl(var(--sax-theme-color));
-      border-bottom: 1px solid hsl(var(--sax-accent-color) / 0.1);
+      border-bottom: 0;
 
       + p {
         margin-top: 14px;
@@ -141,7 +141,7 @@ body,
   position: static;
   margin: 0;
   padding: 22px 20px 10px;
-  border-bottom: 1px solid hsl(var(--sax-accent-color) / 0.1);
+  border-bottom: 0;
   font-size: 1.28rem;
   letter-spacing: -0.02em;
 
@@ -228,7 +228,7 @@ body,
   max-width: 100%;
   margin: 1.15rem 0 1.5rem;
   overflow: visible;
-  border: 1px solid hsl(var(--sax-accent-color) / 0.1);
+  border: 0;
   border-radius: 14px;
   border-collapse: separate;
   border-spacing: 0;
@@ -262,7 +262,6 @@ body,
   td {
     padding: 12px 15px;
     border: 0;
-    border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.075);
     color: hsl(var(--sax-theme-color) / 0.84);
     text-align: left;
     vertical-align: middle;
@@ -349,8 +348,8 @@ body,
 }
 
 .custom-container.tip {
-  border-radius: 12px;
-  border: 1px solid hsl(var(--sax-accent-color) / 0.22);
+  border-radius: 14px;
+  border: 0;
   background: linear-gradient(
     135deg,
     hsl(var(--sax-accent-color) / 0.1),
@@ -367,7 +366,6 @@ body,
     hsl(var(--sax-theme-layout) / 0.95)
   );
   border: 0;
-  border-top: 1px solid hsl(var(--sax-accent-color) / 0.1);
 }
 
 .card:has(> .slotcode) > .example {
@@ -385,7 +383,6 @@ body,
   border-radius: 0;
   overflow: visible;
   border: 0;
-  border-top: 1px solid hsl(var(--sax-accent-color) / 0.1);
   background: hsl(var(--sax-theme-layout) / 0.72);
 }
 
@@ -396,7 +393,7 @@ body,
 }
 
 .card:has(> .example) > .slotcode .header-codex {
-  border-top: 1px solid hsl(var(--sax-accent-color) / 0.08);
+  border-top: 0;
   background: linear-gradient(
     180deg,
     hsl(var(--sax-theme-bg2) / 0.65),
@@ -440,7 +437,7 @@ body,
 }
 
 .header-page {
-  border-bottom: 1px solid hsl(var(--sax-accent-color) / 0.1);
+  border-bottom: 0;
   background: hsl(var(--sax-theme-layout) / 0.6);
   backdrop-filter: blur(6px);
 }

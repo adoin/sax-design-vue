@@ -71,7 +71,7 @@ watch(
 .live-example-preview > header {
   padding: 10px 14px;
   color: hsl(var(--sax-theme-color) / 0.7);
-  border-bottom: 1px solid hsl(var(--sax-accent-color) / 0.1);
+  border-bottom: 0;
   font-size: 0.78rem;
   font-weight: 700;
 }

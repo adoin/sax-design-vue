@@ -67,7 +67,7 @@ watch(starterSource, resetSource)
 .playground-embed {
   margin: 24px 0;
   overflow: hidden;
-  border: 1px solid hsl(var(--sax-accent-color) / 0.18);
+  border: 0;
   border-radius: 18px;
   background: hsl(var(--sax-theme-layout));
 
@@ -84,7 +84,7 @@ watch(starterSource, resetSource)
   justify-content: space-between;
   gap: 12px;
   padding: 12px 16px;
-  border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.08);
+  border-bottom: 0;
   color: hsl(var(--sax-theme-color));
 }
 
@@ -111,13 +111,13 @@ watch(starterSource, resetSource)
   min-width: 0;
   min-height: 320px;
   flex-direction: column;
-  border-bottom: 1px solid hsl(var(--sax-theme-color) / 0.08);
+  border-bottom: 0;
   background: hsl(var(--sax-theme-code));
 }
 
 .playground-embed__code-header {
   padding: 10px 16px;
-  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  border-bottom: 0;
   color: rgb(255 255 255 / 0.72);
   font-size: 0.8rem;
 }
@@ -128,7 +128,7 @@ watch(starterSource, resetSource)
   }
 
   .playground-embed__editor {
-    border-right: 1px solid hsl(var(--sax-accent-color) / 0.12);
+    border-right: 0;
     border-bottom: 0;
   }
 }

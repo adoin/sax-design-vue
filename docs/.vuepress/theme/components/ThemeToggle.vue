@@ -41,7 +41,7 @@ watch(isDark, syncTheme)
   width: 36px;
   height: 36px;
   margin-right: 8px;
-  border: 1px solid hsl(var(--sax-theme-color) / 0.12);
+  border: 0;
   border-radius: 10px;
   background: hsl(var(--sax-theme-layout) / 0.8);
   color: hsl(var(--sax-theme-color));
@@ -49,7 +49,7 @@ watch(isDark, syncTheme)
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: hsl(var(--sax-accent-color) / 0.35);
+    box-shadow: var(--sax-box-shadow);
     color: hsl(var(--sax-accent-color));
   }
 

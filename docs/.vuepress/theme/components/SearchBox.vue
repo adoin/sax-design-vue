@@ -62,8 +62,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onHotkey))
       aria-keyshortcuts="Control+k Meta+k"
       @click="openSearch"
     >
-      <SIcon name="cb:search" size="18px" />
-      <span>{{ zh ? '搜索文档' : 'Search docs' }}</span>
+      <SIcon name="cb:search" size="16px" />
       <kbd aria-hidden="true">{{ shortcut }}</kbd>
     </button>
     <DocumentationSearchDialog
@@ -77,14 +76,15 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onHotkey))
 <style scoped lang="scss">
 @use '../styles/use' as *;
 .search-box {
-  width: 15rem;
+  flex-shrink: 0;
+  width: auto;
   margin-right: 1rem;
 }
 .docs-search-trigger {
   display: flex;
   align-items: center;
-  gap: 10px;
-  width: 100%;
+  gap: 12px;
+  width: auto;
   height: 40px;
   padding: 0 14px;
   border: 0;
@@ -96,11 +96,8 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onHotkey))
   line-height: 20px;
   cursor: pointer;
 }
-.docs-search-trigger span {
-  flex: 1;
-  text-align: start;
-}
 .docs-search-trigger kbd {
+  white-space: nowrap;
   font: inherit;
   font-size: 11px;
   opacity: 0.55;
@@ -118,7 +115,6 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onHotkey))
     justify-content: center;
     padding: 0;
   }
-  .docs-search-trigger span,
   .docs-search-trigger kbd {
     display: none;
   }
