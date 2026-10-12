@@ -29,6 +29,8 @@
 
 ## Documentation examples
 
+- 全局无边框表面、卡片内凹陷阴影与文档分段要求见 `.agents/notes/active/global-visual-surfaces-and-documentation-reading.md`。
+
 - Write public documentation for developers using the library: explain APIs, behavior, and usage choices. Keep task instructions, implementation constraints, conversation history, and verification reports in internal records rather than example descriptions or demo copy.
 - Treat public documentation as a clean reference for developers and AI. Follow `.agents/notes/prohibited/conversation-history-in-public-docs.md`.
 - Keep localized heading labels separate from their URL values. Paired English and Chinese documents must expose the same concise English heading slug while retaining localized visible text; keep heading order aligned across locales so the build-time pairing remains deterministic.

@@ -1,6 +1,9 @@
 .custom-container {
   border: 0;
   border-radius: 14px;
+  box-shadow:
+    inset 0 2px 5px hsl(var(--sax-theme-color) / 0.075),
+    inset 0 -1px 2px hsl(var(--sax-theme-layout) / 0.8);
   code {
     color: inherit;
   }
@@ -44,9 +47,9 @@
 .custom-container.tip,
 .custom-container.warning,
 .custom-container.danger {
-  padding: 0.1rem 1rem;
+  padding: 0.5rem 1rem;
   border: 0;
-  margin: 1rem 0;
+  margin: 1.25rem 20px;
   position: relative;
 }
 .custom-container.tip p,

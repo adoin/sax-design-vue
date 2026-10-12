@@ -218,6 +218,8 @@ EVENTS:
 | `default`       | 语义化主内容区域。                                                  |
 | `footer`        | 页面级页脚内容。                                                    |
 
-直接使用 `SLayoutAside` 时，使用 `outside` 插槽；只有插槽存在时才会渲染外挂工具表面。两个外挂插槽都会暴露 `collapsed` 和 `toggle`。在 `SLayout` 上设置 `aside-outside-collapsible="false"`，或在 `SLayoutAside` 上设置 `outside-collapsible="false"`，可以关闭内置控件。状态变化时，`SLayout` 会触发 `update:asideOutsideCollapsed` / `aside-outside-collapse`，`SLayoutAside` 会触发 `update:outsideCollapsed` / `outside-collapse`。
+直接使用 `SLayoutAside` 时，使用 `outside` 插槽；只有插槽存在时才会渲染外挂工具表面。两个外挂插槽都会暴露 `collapsed` 和 `toggle`。在 `SLayout` 上设置 `aside-outside-collapsible="false"`，或在 `SLayoutAside` 上设置 `outside-collapsible="false"`，可以关闭内置控件。
+
+状态变化时，`SLayout` 会触发 `update:asideOutsideCollapsed` / `aside-outside-collapse`，`SLayoutAside` 会触发 `update:outsideCollapsed` / `outside-collapse`。
 
 </card>

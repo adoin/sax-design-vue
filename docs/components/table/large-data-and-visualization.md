@@ -12,9 +12,21 @@ Virtual rendering and indexed sources solve different costs. `virtual-config` li
 
 ### Virtual rows and dynamic heights
 
-Enable virtualization with `virtual-config` and set `height` to define the row viewport. A number uses pixels and a CSS length is forwarded as written. Set `height: 'auto'` to let the body consume the space left after the query area, toolbar, header, wrapping footer rows, footer slot and pagination. The table's parent must provide a definite height, either as a sized block or as a shrinkable flex/grid item; otherwise there is no bounded remainder to distribute. Footer wrapping and external size changes automatically update the body's remaining height. With `dynamic`, row height adapts to content; `horizontal` enables column virtualization and `columnOverscan` controls extra columns rendered on each side. Set `fixed="left"` or `fixed="right"` on a column to keep it at that edge.
+Enable virtualization with `virtual-config` and set `height` to define the row viewport. A number uses pixels and a CSS length is forwarded as written. Set `height: 'auto'` to let the body consume the space left after the query area, toolbar, header, wrapping footer rows, footer slot and pagination.
 
-Passing one million objects through `data` still keeps those objects in application memory even though only a small DOM window is mounted. With `virtualSource`, `rowCount` and `columnCount` describe the logical size without allocating rows or columns. Table asks `row(index)` and `column(index)` only for the current window. The callbacks may compute an object or read an existing indexed store; Table itself does not retain an array for the complete logical dataset.
+The table's parent must provide a definite height, either as a sized block or as a shrinkable flex/grid item; otherwise there is no bounded remainder to distribute. Footer wrapping and external size changes automatically update the body's remaining height. With `dynamic`, row height adapts to content; `horizontal` enables column virtualization and `columnOverscan` controls extra columns rendered on each side.
+
+Set `fixed="left"` or `fixed="right"` on a column to keep it at that edge.
+
+::: tip DOM virtualization and data memory
+
+Passing one million objects through `data` still keeps those objects in application memory even though only a small DOM window is mounted.
+
+With `virtualSource`, `rowCount` and `columnCount` describe the logical size without allocating rows or columns. Table asks `row(index)` and `column(index)` only for the current window.
+
+The callbacks may compute an object or read an existing indexed store; Table itself does not retain an array for the complete logical dataset.
+
+:::
 
 `1_000_000` is JavaScript numeric-separator syntax and has exactly the same numeric value as `1000000`. The underscores only make a number literal easier to read; they do not create an array, reserve memory, or enable virtualization. The count becomes meaningful only because `virtualSource` pairs it with the index callbacks.
 

@@ -12,7 +12,9 @@ These examples cover spreadsheet-like operations: keyboard navigation, ranges, c
 
 ### Keyboard navigation
 
-Enable `keyboard-config` to move with arrow keys in visible column order when not editing. Tab / Shift + Tab wraps across rows; native Tab behavior is preserved at either edge of the current page. While editing, Tab / Shift + Tab commits the current cell and opens the next or previous editable cell in left-to-right, top-to-bottom order. Cells without an editor, disabled or readonly editors, and cells excluded by `editableMethod` are skipped. A failed commit validation keeps the current editor open. Fixed columns share the same navigation order, and hidden columns are skipped. Navigation does not change pages automatically.
+Enable `keyboard-config` to move with arrow keys in visible column order when not editing. Tab / Shift + Tab wraps across rows; native Tab behavior is preserved at either edge of the current page. While editing, Tab / Shift + Tab commits the current cell and opens the next or previous editable cell in left-to-right, top-to-bottom order.
+
+Cells without an editor, disabled or readonly editors, and cells excluded by `editableMethod` are skipped. A failed commit validation keeps the current editor open. Fixed columns share the same navigation order, and hidden columns are skipped. Navigation does not change pages automatically.
 
 `v-model:active-cell` stores `{ rowKey, columnKey }`, independently of row selection through `v-model:highlight`. Ordinary columns use `key`, then `field`, or `@originalIndex` for unnamed columns; provide stable keys to persist addresses. Activity follows keys after sorting or reordering. Filtering, collapsing, paging or hiding the active column requests a clear when the target is no longer visible. Controlled models must accept updates.
 
@@ -190,9 +192,36 @@ Generated sources locate stable row keys through `change-config.indexOf` and acc
 
 ### Find and replace
 
-Place the built-in `$find` renderer in `toolbar-config.left` or `toolbar-config.right` to add a find-and-replace trigger. The trigger is an icon by default; pass `content` or `props.content` to show a label after the icon. Clicking it opens a teleported form panel; each open resets the form and previous matches. After a successful search, the panel collapses to a compact results bar so you can step through matches without the query fields. Expand restores the form; the compact close control, the form popper close control, or Escape dismisses the panel. Clicking the table does not dismiss it. The renderer explicitly enables the capability; `find-config` only customizes scope, conversion, keyboard behavior and processing limits, and can enable API-only integration without rendering UI. Focus a table cell and press Ctrl / Command + F to find, Ctrl / Command + H to focus replacement, or F3 / Shift + F3 to navigate matches while `$find` is mounted. Enter runs the panel query. Set `keyboard: false` to disable these shortcuts.
+Place the built-in `$find` renderer in `toolbar-config.left` or `toolbar-config.right` to add a find-and-replace trigger. The trigger is an icon by default; pass `content` or `props.content` to show a label after the icon. Clicking it opens a teleported form panel; each open resets the form and previous matches.
 
-Queries are literal text, with optional case-sensitive and whole-cell matching. The current view searches expanded rows on the current filtered page; selection searches the current rectangular range. Both use visible visual-column order and count merged owners once. On generated or horizontally virtualized grids, the current view is the painted window — fixed columns plus the current row and column ranges — not every logical column. The supplied-data scope searches all provided rows and loaded tree children, across pages and independently of filters; it searches raw fields in visible columns. It does not fetch other remote pages or lazy children. Positioning can expand loaded ancestors and groups and request a page change. If filters hide a row or a controlled view rejects navigation, positioning returns `false` without clearing the filters.
+After a successful search, the panel collapses to a compact results bar so you can step through matches without the query fields. Expand restores the form; the compact close control, the form popper close control, or Escape dismisses the panel. Clicking the table does not dismiss it.
+
+The renderer explicitly enables the capability; `find-config` only customizes scope, conversion, keyboard behavior and processing limits, and can enable API-only integration without rendering UI.
+
+**Keyboard controls** (with `$find` mounted):
+
+- Ctrl / Command + F: open find while a table cell has focus.
+- Ctrl / Command + H: focus replacement.
+- F3 / Shift + F3: navigate matches.
+- Enter: run the query inside the panel.
+
+Set `keyboard: false` to disable these shortcuts.
+
+**Search scopes**: queries are literal text, with optional case-sensitive and whole-cell matching.
+
+- Current view: expanded rows on the current filtered page.
+- Selection: the current rectangular range.
+- Supplied data: all provided rows and loaded tree children, across pages and independently of filters; searches raw fields in visible columns.
+
+Current view and selection use visible visual-column order and count merged owners once.
+
+::: tip Virtualized and remote data scopes
+
+On generated or horizontally virtualized grids, the current view is the painted window — fixed columns plus the current row and column ranges — not every logical column. The supplied-data scope does not fetch other remote pages or lazy children.
+
+:::
+
+Positioning can expand loaded ancestors and groups and request a page change. If filters hide a row or a controlled view rejects navigation, positioning returns `false` without clearing the filters.
 
 Replace current stays disabled when the active match is not writable, or when the draft replacement cannot convert into that cell (for example replacing `0` with `x` inside a number). After a search, the panel moves to the first match that can accept the current replacement text. Replace all stays disabled when the search is incomplete, or when no returned match is both writable and able to accept the draft replacement. Replace all still updates writable text matches when other hits cannot accept the replacement, for example a number cell that would become non-numeric.
 
@@ -342,9 +371,19 @@ Space or Enter picks up a row, arrow keys choose a target, Enter drops it and Es
 
 ### Tree reparenting
 
-Tree rows stay within their current sibling list by default. Set `rowDragConfig.tree` to `true`, or provide its object form, to enable cross-parent moves. Dropping on the upper or lower quarter inserts before or after that row. At an expanded parent / first-child boundary, entering from the child's top means “before the first child”; entering from the parent's bottom means “after the parent,” and that preview line is rendered after the parent's complete visible subtree because that is where the row will appear. The middle half uses `position: 'inside'` and makes the row a child. The middle of any loaded row can therefore turn a former leaf into a parent and create another nested level, subject to `maxDepth` and `dropMethod`. Within four pixels of a shared cross-depth boundary, horizontal intent chooses the deeper or shallower destination. Child placement highlights the target's visible branch; sibling placement uses an insertion line beginning at the proposed depth. Keyboard dragging uses Up/Down to choose a target, Right to move inside it, and Left to promote a direct child after its parent.
+Tree rows stay within their current sibling list by default. Set `rowDragConfig.tree` to `true`, or provide its object form, to enable cross-parent moves. Dropping on the upper or lower quarter inserts before or after that row.
 
-The tree configuration can independently disable `allowReparent` or `allowDropInside`, choose `insidePosition: 'first' | 'last'`, limit the complete moved subtree with zero-based `maxDepth`, and control `expandOnDrop`. `draggableMethod` receives the source depth, parent, expansion state and loaded child count. `dropMethod` additionally receives the corresponding target fields plus `oldIndex`, `newIndex`, `newParentKey`, `newDepth`, `subtreeDepth` and `reparented`, so applications can reject locked parents, non-folder targets, full branches or domain-specific combinations. An unloaded lazy target must be expanded and loaded before it accepts an inside drop; dragging never fetches it implicitly. Reordering copies only affected arrays and ancestor rows; it does not mutate incoming row objects. This example uses configuration-object columns.
+At an expanded parent / first-child boundary, entering from the child's top means “before the first child”; entering from the parent's bottom means “after the parent,” and that preview line is rendered after the parent's complete visible subtree because that is where the row will appear. The middle half uses `position: 'inside'` and makes the row a child.
+
+The middle of any loaded row can therefore turn a former leaf into a parent and create another nested level, subject to `maxDepth` and `dropMethod`. Within four pixels of a shared cross-depth boundary, horizontal intent chooses the deeper or shallower destination. Child placement highlights the target's visible branch; sibling placement uses an insertion line beginning at the proposed depth.
+
+Keyboard dragging uses Up/Down to choose a target, Right to move inside it, and Left to promote a direct child after its parent.
+
+The tree configuration can independently disable `allowReparent` or `allowDropInside`, choose `insidePosition: 'first' | 'last'`, limit the complete moved subtree with zero-based `maxDepth`, and control `expandOnDrop`. `draggableMethod` receives the source depth, parent, expansion state and loaded child count.
+
+`dropMethod` additionally receives the corresponding target fields plus `oldIndex`, `newIndex`, `newParentKey`, `newDepth`, `subtreeDepth` and `reparented`, so applications can reject locked parents, non-folder targets, full branches or domain-specific combinations. An unloaded lazy target must be expanded and loaded before it accepts an inside drop; dragging never fetches it implicitly.
+
+Reordering copies only affected arrays and ancestor rows; it does not mutate incoming row objects. This example uses configuration-object columns.
 
 <template #example><table-row-drag-tree /></template>
 

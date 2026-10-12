@@ -74,7 +74,9 @@ Collapsing, disabling details, replacing the data array or loader, and unmountin
 
 Detail content expands its row automatically, and the table updates its layout when that content changes size or collapses. The panel stays within the visible table width while columns scroll horizontally.
 
-Enable `detail-config` explicitly with a generated source and provide stable `rowKey` values. With **Asynchronous loading** off, `#detail` renders directly from the current row. Turn it on to load expanded rows through `detailConfig.load({ row, signal })`; collapsing a row or switching modes cancels unfinished requests. Switching modes preserves expanded keys and refreshes open content for the selected mode. This example generates one million rows and 100,000 columns on demand. `toggleRowDetail(index)` accepts a global source index; normal data uses the current visible index after sorting, filtering, pagination and tree expansion.
+Enable `detail-config` explicitly with a generated source and provide stable `rowKey` values. With **Asynchronous loading** off, `#detail` renders directly from the current row. Turn it on to load expanded rows through `detailConfig.load({ row, signal })`; collapsing a row or switching modes cancels unfinished requests. Switching modes preserves expanded keys and refreshes open content for the selected mode.
+
+This example generates one million rows and 100,000 columns on demand. `toggleRowDetail(index)` accepts a global source index; normal data uses the current visible index after sorting, filtering, pagination and tree expansion.
 
 <template #example><table-details-source /></template>
 

@@ -12,7 +12,13 @@ This section follows the data-writing workflow: edit values, validate them, then
 
 ### Cell and row editing
 
-Enable `edit-config` and add `editor` to editable columns. Choose controls through the shared renderer registry; this example uses `$input`, `$select`, `$date`, and `$switch`, with renderer `props` and `options` forwarded to each component. Input-surface editors such as input, textarea, select, cascader, date, and time controls default to `shape="square"` inside table cells so their outline follows the cell geometry; an explicit renderer or editor `props.shape` still takes precedence. An active input-surface editor fills the cell's actual width and height. Table preserves the row's pre-edit rendered minimum height for the edit session, so wrapped or multi-line display content does not collapse when it is replaced; compact controls such as Switch remain centered in the same full-cell editor layer. When editing starts, Table makes only the smallest table-owned scroll needed to reveal the cell beyond fixed columns and viewport edges; an already visible cell stays in place. Double-click starts cell editing by default. Use `mode: 'row'` for row editing, `trigger: 'click' | 'dblclick' | 'manual'` for activation, and `editableMethod` for eligibility. The archived project in this example is read-only.
+Enable `edit-config` and add `editor` to editable columns. Choose controls through the shared renderer registry; this example uses `$input`, `$select`, `$date`, and `$switch`, with renderer `props` and `options` forwarded to each component.
+
+Input-surface editors such as input, textarea, select, cascader, date, and time controls default to `shape="square"` inside table cells so their outline follows the cell geometry; an explicit renderer or editor `props.shape` still takes precedence. An active input-surface editor fills the cell's actual width and height.
+
+Table preserves the row's pre-edit rendered minimum height for the edit session, so wrapped or multi-line display content does not collapse when it is replaced; compact controls such as Switch remain centered in the same full-cell editor layer. When editing starts, Table makes only the smallest table-owned scroll needed to reveal the cell beyond fixed columns and viewport edges; an already visible cell stays in place.
+
+Double-click starts cell editing by default. Use `mode: 'row'` for row editing, `trigger: 'click' | 'dblclick' | 'manual'` for activation, and `editableMethod` for eligibility. The archived project in this example is read-only.
 
 Editing updates a draft. Without `change-config`, accept `updatedRow` or `changes` from `editCommit` to update `data` or persist to a server; the table does not mutate business records. Enter commits a text input and Escape cancels; selects and date panels handle their own keys first. Use the Save button or Ctrl/⌘ + Enter for any editor. Tab to an editable cell, then press Enter or F2 to begin.
 
@@ -156,9 +162,15 @@ Leaving the virtual viewport retains the current draft by default. Use `onScroll
 
 Set column `rules` or provide field-based `validation-rules`. Column rules take precedence; `rules: []` disables validation for that column. Rules support required values, types, numeric ranges, string or array lengths, regular expressions and synchronous or asynchronous `validator` functions. Values are not coerced. Optional empty values skip type and range checks but still run custom validators.
 
-Enable `validation-config` explicitly to validate drafts before committing. Cell mode checks the current field; row mode checks every ruled field in that row. A failed check retains the draft without emitting `editCommit`. Manual `validateCell`, `validateRow` and `validate` calls also work without editing enabled. Calling these methods manually first cancels the active editor so an editor and a previous validation state are never shown together. While any validation is pending, Table uses its loading mask and `aria-busy` state and blocks editing and other data-surface interactions until the run completes or is cancelled.
+Enable `validation-config` explicitly to validate drafts before committing. Cell mode checks the current field; row mode checks every ruled field in that row. A failed check retains the draft without emitting `editCommit`. Manual `validateCell`, `validateRow` and `validate` calls also work without editing enabled.
 
-Invalid cells use an inset shadow and error marker that do not change row height. A newly collected, marker-activated or navigated error shows its floating callout for two seconds and then hides it; hover the invalid cell to preview it again. The callout ignores pointer input so it cannot block cell clicks or double-click editing. It teleports into a dedicated clipped overlay inside the Table data view, so it cannot paint beyond that surface when its cell scrolls away. When several errors exist, an overlaid navigator provides previous, next and close actions and reuses the normal error-location pipeline. Starting an editor clears that cell's previous error state. The shadow, marker and callout return only when another commit still fails. Error text remains available to assistive technology through `aria-describedby` and a live region.
+Calling these methods manually first cancels the active editor so an editor and a previous validation state are never shown together. While any validation is pending, Table uses its loading mask and `aria-busy` state and blocks editing and other data-surface interactions until the run completes or is cancelled.
+
+Invalid cells use an inset shadow and error marker that do not change row height. A newly collected, marker-activated or navigated error shows its floating callout for two seconds and then hides it; hover the invalid cell to preview it again. The callout ignores pointer input so it cannot block cell clicks or double-click editing.
+
+It teleports into a dedicated clipped overlay inside the Table data view, so it cannot paint beyond that surface when its cell scrolls away. When several errors exist, an overlaid navigator provides previous, next and close actions and reuses the normal error-location pipeline. Starting an editor clears that cell's previous error state. The shadow, marker and callout return only when another commit still fails.
+
+Error text remains available to assistive technology through `aria-describedby` and a live region.
 
 <template #example><table-validation /></template>
 
@@ -218,7 +230,15 @@ Use `validate({ rowKeys: [...] })` to select ordinary array or tree records by s
 
 Generated sources use global numeric row and column indices. `validateCell(999_999, 99_998)` checks one distant position directly. Use `validate({ rows, columns })` to select targets without scanning the entire generated table. This example generates one million rows and 100,000 columns; one field in the last row is empty.
 
-Full validation reads data on demand, runs built-in rules through a synchronous fast path and yields only when its time slice is spent. Custom validators run in ordered bounded stages; set `validationConfig.concurrency` or the per-call `concurrency` option to control the stage size (default 8, range 1–32). Cancel through an `AbortSignal` or `cancelValidation()`. The default `maxErrors` is 100; each stage is capped by the remaining error capacity, and reaching the limit blocks later reads and returns `truncated: true`. A truncated navigator presents a lower bound rather than an exact total: a limit of 100 displays `99+`, beginning at `1 / 99+`. `checked` counts fields with rules that were checked. Cancellation returns `cancelled: true` without publishing partial results or overwriting prior errors. Check `valid` rather than treating an empty error array as success.
+Full validation reads data on demand, runs built-in rules through a synchronous fast path and yields only when its time slice is spent. Custom validators run in ordered bounded stages; set `validationConfig.concurrency` or the per-call `concurrency` option to control the stage size (default 8, range 1–32). Cancel through an `AbortSignal` or `cancelValidation()`.
+
+The default `maxErrors` is 100; each stage is capped by the remaining error capacity, and reaching the limit blocks later reads and returns `truncated: true`. A truncated navigator presents a lower bound rather than an exact total: a limit of 100 displays `99+`, beginning at `1 / 99+`. `checked` counts fields with rules that were checked.
+
+::: warning Interpreting validation results
+
+Cancellation returns `cancelled: true` without publishing partial results or overwriting prior errors. Check `valid` rather than treating an empty error array as success.
+
+:::
 
 <template #example><table-validation-source /></template>
 

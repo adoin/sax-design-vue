@@ -74,9 +74,13 @@ description: 'Table 的列布局与管理功能、配置方式与可运行示例
 
 在工具栏任一有序区域放置内置 `$columnConfig` 渲染器，即可显示或隐藏列、拖动手柄调整顺序、设置左右固定，以及恢复默认。等价的插槽写法是 `<template #toolbar_right><s-table-column-config /></template>`。两种写法都会关联当前 Table，因此入口可以和任意工具栏内容自由排列，无需额外的 Table 属性。分组列始终以容器包住全部后代；嵌套分组会增加一层内缩表面，并显示直接子列数量，不提供展开或收起操作。拖动时靠近列表边缘会自动滚动；键盘用户可聚焦手柄，按空格拾取、用方向键选择位置，再按回车放置。固定列始终位于对应边缘，顺序调整决定同一区域内的排列。隐藏列不会清除已有的排序、筛选或行选择。
 
-`v-model:column-state` 接收 `TableColumnState[]`；不传时由组件管理。每项用 `key` 标识叶子或分组列；`placement: { parentKey, index }` 覆盖其父级与同级位置，`parentKey: null` 表示顶层。建议为需要保存顺序或层级的叶子和分组提供稳定且唯一的键。使用 `virtualSource` 时以原始列索引字符串标识，且只支持扁平列设置。
+`v-model:column-state` 接收 `TableColumnState[]`；不传时由组件管理。每项用 `key` 标识叶子或分组列；`placement: { parentKey, index }` 覆盖其父级与同级位置，`parentKey: null` 表示顶层。
 
-列设置提交时触发 `update:column-state` 和 `column-state-change`；列宽拖拽或键盘调整提交时触发 `update:column-widths` 和 `column-resize`。前两个更新事件适合受控状态，后两个变化事件适合记录用户操作。`columns` 保持为原始结构定义，不会被这些交互改写；清空列状态和列宽记录即可恢复 `columns` 中声明的顺序、固定位置与宽度。
+建议为需要保存顺序或层级的叶子和分组提供稳定且唯一的键。使用 `virtualSource` 时以原始列索引字符串标识，且只支持扁平列设置。
+
+列设置提交时触发 `update:column-state` 和 `column-state-change`；列宽拖拽或键盘调整提交时触发 `update:column-widths` 和 `column-resize`。前两个更新事件适合受控状态，后两个变化事件适合记录用户操作。
+
+`columns` 保持为原始结构定义，不会被这些交互改写；清空列状态和列宽记录即可恢复 `columns` 中声明的顺序、固定位置与宽度。
 
 <template #example><table-zh-column-manager /></template>
 

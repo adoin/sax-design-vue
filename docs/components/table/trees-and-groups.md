@@ -124,7 +124,11 @@ With a real endpoint, return contiguous group members and `TableGroupRemoteResul
 
 Generated sources use `mode: remote`. The application supplies `remote.groups` with starts, counts, children and aggregates, plus `remote.summary`. The application owns fetching, cancellation and result state, then passes the current server result to `remote`. The table does not scan generated rows to infer groups. Remote ranges use page data indices for ordinary arrays and absolute source indices for generated sources. Sibling ranges must be ordered, disjoint and inside their parent; uncovered rows remain visible.
 
-This example provides formula-based metadata for one million rows and one hundred thousand columns. While scrolling through group members, a temporary bar below the header shows the current parent. `parent-indicator.enabled` controls the feature, and `hideDelay` controls its 1000ms default post-scroll delay. The `parent-indicator` slot keeps the fixed return icon, customizes the remaining content, and exposes `jump` for returning to the parent row. Open last batch updates expansion before locating the final cell. Collapsed members have no visible data address; expand their group before programmatic navigation. Group headings, subtotals and data share a virtual window, with range metadata proportional to group count. Local grouping/aggregation processes supplied rows synchronously, so computation and storage grow with rows and group depth; use server aggregation for large global datasets.
+This example provides formula-based metadata for one million rows and one hundred thousand columns. While scrolling through group members, a temporary bar below the header shows the current parent. `parent-indicator.enabled` controls the feature, and `hideDelay` controls its 1000ms default post-scroll delay.
+
+The `parent-indicator` slot keeps the fixed return icon, customizes the remaining content, and exposes `jump` for returning to the parent row. Open last batch updates expansion before locating the final cell. Collapsed members have no visible data address; expand their group before programmatic navigation. Group headings, subtotals and data share a virtual window, with range metadata proportional to group count.
+
+Local grouping/aggregation processes supplied rows synchronously, so computation and storage grow with rows and group depth; use server aggregation for large global datasets.
 
 <template #example><table-grouping-source /></template>
 

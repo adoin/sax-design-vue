@@ -12,9 +12,21 @@ description: 'Table 的大数据与可视化功能、配置方式与可运行示
 
 ### 虚拟滚动与动态行高
 
-设置 `virtual-config` 可开启虚拟滚动，`height` 指定表体可视区域高度：数字按像素处理，CSS 长度按原值使用。设置 `height: 'auto'` 后，表体会占用查询区、工具栏、表头、可换行表尾、footer 插槽和分页之外的剩余空间。表格的父容器必须具有确定高度，可以是指定尺寸的块容器，也可以是允许收缩的 Flex/Grid 子项；否则不存在可分配的有界剩余空间。表尾换行或外部尺寸变化时，表体会自动调整到新的剩余高度。开启 `dynamic` 后行高会适应内容；`horizontal` 开启横向列虚拟化，`columnOverscan` 控制左右额外渲染的列数。列设置 `fixed="left"` 或 `fixed="right"` 可固定在相应边缘。
+设置 `virtual-config` 可开启虚拟滚动，`height` 指定表体可视区域高度：数字按像素处理，CSS 长度按原值使用。设置 `height: 'auto'` 后，表体会占用查询区、工具栏、表头、可换行表尾、footer 插槽和分页之外的剩余空间。
 
-即使只挂载少量可见 DOM，通过 `data` 传入一百万个对象时，这些对象仍然存在于应用内存中。使用 `virtualSource` 时，`rowCount` 与 `columnCount` 只描述逻辑规模，不会创建对应数量的行列对象；Table 仅针对当前窗口调用 `row(index)` 和 `column(index)`。回调可以即时计算对象，也可以读取应用已有的索引存储，但 Table 自身不会保存完整逻辑数据集的数组。
+表格的父容器必须具有确定高度，可以是指定尺寸的块容器，也可以是允许收缩的 Flex/Grid 子项；否则不存在可分配的有界剩余空间。表尾换行或外部尺寸变化时，表体会自动调整到新的剩余高度。
+
+开启 `dynamic` 后行高会适应内容；`horizontal` 开启横向列虚拟化，`columnOverscan` 控制左右额外渲染的列数。列设置 `fixed="left"` 或 `fixed="right"` 可固定在相应边缘。
+
+::: tip DOM 虚拟化与数据内存
+
+即使只挂载少量可见 DOM，通过 `data` 传入一百万个对象时，这些对象仍然存在于应用内存中。
+
+使用 `virtualSource` 时，`rowCount` 与 `columnCount` 只描述逻辑规模，不会创建对应数量的行列对象；Table 仅针对当前窗口调用 `row(index)` 和 `column(index)`。
+
+回调可以即时计算对象，也可以读取应用已有的索引存储，但 Table 自身不会保存完整逻辑数据集的数组。
+
+:::
 
 `1_000_000` 是 JavaScript 的数字分隔符写法，数值与 `1000000` 完全相同。下划线只用于提高数字字面量的可读性，不会创建数组、预留内存或自动开启虚拟滚动。它之所以能表示逻辑行数，是因为 `virtualSource` 同时提供了按索引读取数据的回调。
 
@@ -50,7 +62,9 @@ description: 'Table 的大数据与可视化功能、配置方式与可运行示
 
 开启 `chart-config` 后，使用 `getChartData(options)` 提取不可变快照；配置 `adapter` 后可用 `openChart(options)` 打开面板。按需导入的 `createTableSvgChartAdapter()` 支持柱状图和折线图，普通表格无需引入图表引擎。面板提供数据表格、类型切换与关闭按钮，支持 Tab 焦点循环及 Escape 关闭。
 
-`scope: 'selection'` 使用当前矩形选区或显式 `bounds`；类别与数值列必须位于选区内，完整合并区域的数值只计一次。`filtered` 使用分页前已提供、已筛选并展开的树行，不加载远程页面或未加载的树节点。`aggregate` 读取现有 `group-config` 统计，默认取根分组；`groupKeys` 可指定子分组，`aggregate: 'summary'` 读取整体汇总。组统计范围沿用分组配置，不会重新统计其他页面。
+`scope: 'selection'` 使用当前矩形选区或显式 `bounds`；类别与数值列必须位于选区内，完整合并区域的数值只计一次。`filtered` 使用分页前已提供、已筛选并展开的树行，不加载远程页面或未加载的树节点。
+
+`aggregate` 读取现有 `group-config` 统计，默认取根分组；`groupKeys` 可指定子分组，`aggregate: 'summary'` 读取整体汇总。组统计范围沿用分组配置，不会重新统计其他页面。
 
 <template #example><table-zh-chart /></template>
 

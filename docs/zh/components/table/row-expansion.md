@@ -74,7 +74,9 @@ description: 'Table 的行展开功能、配置方式与可运行示例。'
 
 详情内容会自动撑开对应行，内容尺寸变化或收起后表格会同步更新布局。详情面板保持可见区域宽度，横向滚动时不会随着虚拟列移出视口。
 
-生成数据源需显式设置 `detail-config` 并提供稳定的 `rowKey`。关闭「异步加载」时，`#detail` 直接使用当前行同步展示内容；开启后通过 `detailConfig.load({ row, signal })` 加载已展开行，收起或切换模式会取消未完成请求。切换模式会保留展开键，并按新模式更新已展开内容。此例按需生成 100 万行、10 万列，`toggleRowDetail(index)` 接受全局行索引；普通数据则使用当前排序、筛选、分页和树展开后的可见索引。
+生成数据源需显式设置 `detail-config` 并提供稳定的 `rowKey`。关闭「异步加载」时，`#detail` 直接使用当前行同步展示内容；开启后通过 `detailConfig.load({ row, signal })` 加载已展开行，收起或切换模式会取消未完成请求。
+
+切换模式会保留展开键，并按新模式更新已展开内容。此例按需生成 100 万行、10 万列，`toggleRowDetail(index)` 接受全局行索引；普通数据则使用当前排序、筛选、分页和树展开后的可见索引。
 
 <template #example><table-zh-details-source /></template>
 
