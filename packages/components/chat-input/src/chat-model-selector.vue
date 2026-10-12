@@ -201,7 +201,6 @@ const resetSettings = () => {
                 />
               </div>
               <SSlider
-                ticks
                 :model-value="reasoningIndex"
                 :min="0"
                 :max="Math.max(1, efforts.length - 1)"
