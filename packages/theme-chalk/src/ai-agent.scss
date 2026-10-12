@@ -1349,7 +1349,7 @@ button.s-agent-heading {
   background: #{getColor(primary, 0.1)};
 }
 .s-popper.s-chat-input__models-panel {
-  width: 285px;
+  width: 255px;
   max-width: calc(100vw - 24px);
   padding: 10px;
   background: #{getColor(background)};
@@ -1384,38 +1384,43 @@ button.s-agent-heading {
 .s-chat-input__model-choice:hover {
   background: #{getColor(text, 0.05)};
 }
-.s-chat-input__fast-setting {
+.s-chat-input__settings-header {
+  display: grid;
+  grid-template-columns: 28px 1fr 28px;
+  align-items: center;
+}
+.s-chat-input__active-effort {
+  text-align: center;
+  font-size: 14px;
+  color: #{getColor(primary)};
+}
+.s-chat-input__settings-reset {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 10px;
-  margin-top: 8px;
-  background: #{getColor(text, 0.035)};
-  border-radius: var(--sax-radius);
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--sax-radius-pill);
+  color: #{getColor(text, 0.5)};
 }
-.s-chat-input__fast-setting > span {
-  flex: 1;
-  font-size: 13px;
+.s-chat-input__settings-reset:hover {
+  background: #{getColor(text, 0.05)};
+}
+.s-chat-input__current-model {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  font-size: 12px;
+  color: #{getColor(text, 0.6)};
+  padding: 2px 8px 4px;
 }
 .s-chat-input__thinking {
   border: 0;
   min-width: 0;
-  margin: 14px 8px 4px;
+  margin: 0;
   padding: 0;
-}
-.s-chat-input__thinking legend {
-  font-size: 12px;
-  color: #{getColor(text, 0.6)};
-  margin-bottom: 10px;
-}
-.s-chat-input__effort-heading {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: #{getColor(text, 0.6)};
-}
-.s-chat-input__effort-heading > span:first-child {
-  color: #{getColor(primary)};
 }
 .s-chat-input__effort-slider {
   position: relative;
@@ -1454,4 +1459,10 @@ button.s-agent-heading {
 }
 .s-chat-input .s-textarea {
   overflow: hidden;
+}
+.s-chat-input__effort-slider .s-slider {
+  --sax-slider-thumb-size: 24px;
+}
+.s-chat-input__effort-slider .s-slider__thumb {
+  background: #{getColor(background)};
 }

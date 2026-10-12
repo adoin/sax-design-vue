@@ -24,6 +24,7 @@ export default {
       copied: '已复制',
       inputLabel: '向智能体发送消息',
       placeholder: '输入你的问题',
+      resetModelSettings: '重置模型设置',
       modelSettings: '模型设置',
       fastMode: 'Fast 模式',
       reasoningEffort: '思考度',

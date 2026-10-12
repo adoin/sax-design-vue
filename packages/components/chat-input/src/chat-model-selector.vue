@@ -2,7 +2,6 @@
 import { computed, shallowRef, watch } from 'vue'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SIcon } from '@vuesax-alpha/components/icon'
-import { SSwitch } from '@vuesax-alpha/components/switch'
 import { SSlider } from '@vuesax-alpha/components/slider'
 import { SProgress } from '@vuesax-alpha/components/progress'
 import { useLocale } from '@vuesax-alpha/hooks'
@@ -21,6 +20,10 @@ const emit = defineEmits<{
 }>()
 const { t } = useLocale()
 const open = shallowRef(false)
+const modelListOpen = shallowRef(false)
+watch(open, (visible) => {
+  if (!visible) modelListOpen.value = false
+})
 const selected = computed(() =>
   props.models.find((item) => item.value === props.model),
 )
@@ -73,12 +76,22 @@ watch(
 )
 const choose = (model: ChatInputModel) => {
   if (props.disabled || model.disabled) return
+  modelListOpen.value = false
   emit('update:model', model.value)
   updateCapabilities(model)
 }
 const toggleFast = () => {
   if (!props.disabled && selected.value?.supportsFast)
     emit('update:fast', !props.fast)
+}
+const resetSettings = () => {
+  if (props.disabled) return
+  emit('update:fast', false)
+  const model = selected.value
+  const level =
+    efforts.value.find((item) => item.value === model?.defaultReasoning) ??
+    efforts.value[0]
+  emit('update:reasoning', level?.value ?? '')
 }
 </script>
 <template>
@@ -110,7 +123,50 @@ const toggleFast = () => {
       </button>
       <template #content>
         <div role="dialog" :aria-label="t('vs.agent.modelSettings')">
-          <div class="s-chat-input__model-list">
+          <div class="s-chat-input__settings-header">
+            <button
+              v-if="selected?.supportsFast"
+              type="button"
+              class="s-agent-control s-chat-input__fast-toggle"
+              :disabled="disabled"
+              :aria-label="t('vs.agent.fastMode')"
+              :aria-pressed="fast"
+              @click="toggleFast"
+            >
+              <SIcon :name="fast ? 'cb:flash-filled' : 'cb:flash'" :size="18" />
+            </button>
+            <span v-else />
+            <span
+              class="s-chat-input__active-effort"
+              :aria-label="t('vs.agent.reasoningEffort')"
+              >{{ reasoningLabel }}</span
+            >
+            <button
+              type="button"
+              class="s-agent-control s-chat-input__settings-reset"
+              :disabled="disabled"
+              :aria-label="t('vs.agent.resetModelSettings')"
+              :title="t('vs.agent.resetModelSettings')"
+              @click="resetSettings"
+            >
+              <SIcon name="cb:reset" :size="16" />
+            </button>
+          </div>
+          <button
+            type="button"
+            class="s-agent-control s-chat-input__current-model"
+            :disabled="disabled"
+            :aria-expanded="modelListOpen"
+            :aria-label="t('vs.agent.chooseModel')"
+            @click="modelListOpen = !modelListOpen"
+          >
+            {{ selected?.label || t('vs.agent.chooseModel')
+            }}<SIcon
+              :name="modelListOpen ? 'cb:chevron-down' : 'cb:chevron-right'"
+              :size="12"
+            />
+          </button>
+          <div v-if="modelListOpen" class="s-chat-input__model-list">
             <button
               v-for="option in models"
               :key="option.value"
@@ -130,33 +186,22 @@ const toggleFast = () => {
               />
             </button>
           </div>
-          <div v-if="selected?.supportsFast" class="s-chat-input__fast-setting">
-            <SIcon name="cb:flash" :size="18" /><span>{{
-              t('vs.agent.fastMode')
-            }}</span
-            ><SSwitch
-              shape="rounded"
-              :model-value="fast"
-              :disabled="disabled"
-              :aria-label="t('vs.agent.fastMode')"
-              @update:model-value="emit('update:fast', Boolean($event))"
-            />
-          </div>
-          <fieldset v-if="efforts.length" class="s-chat-input__thinking">
-            <legend>{{ t('vs.agent.reasoningEffort') }}</legend>
-            <div class="s-chat-input__effort-heading">
-              <span>{{ reasoningLabel }}</span>
-            </div>
+          <fieldset
+            v-if="efforts.length"
+            class="s-chat-input__thinking"
+            :aria-label="t('vs.agent.reasoningEffort')"
+          >
             <div class="s-chat-input__effort-slider">
               <div class="s-chat-input__effort-progress" aria-hidden="true">
                 <SProgress
                   :percent="reasoningPercent"
-                  :height="14"
+                  :height="24"
                   texture="bubbles"
                   :texture-opacity="0.85"
                 />
               </div>
               <SSlider
+                ticks
                 :model-value="reasoningIndex"
                 :min="0"
                 :max="Math.max(1, efforts.length - 1)"

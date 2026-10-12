@@ -24,6 +24,7 @@ export default {
       copied: 'Copied',
       inputLabel: 'Message the agent',
       placeholder: 'Ask anything',
+      resetModelSettings: 'Reset model settings',
       modelSettings: 'Model settings',
       fastMode: 'Fast mode',
       reasoningEffort: 'Reasoning effort',
