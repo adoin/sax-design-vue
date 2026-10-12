@@ -4,8 +4,16 @@
 
 @include b(avatar__group) {
   @include flex(center, center);
-  padding-left: 18px;
+  padding-left: var(--sax-avatar-group-overlap, 18px);
 
+  > .s-avatar-content {
+    flex-shrink: 0;
+  }
+  .s-avatar__group--overflow .s-avatar {
+    background: getColor(gray-1);
+    color: getColor(text);
+    font-weight: 500;
+  }
   &.float {
     @include flex(flex-start, flex-start);
     flex-wrap: wrap;
@@ -22,7 +30,7 @@
 
   &:not(.float) {
     .#{$namespace}-avatar-content {
-      margin-left: -18px;
+      margin-left: calc(-1 * var(--sax-avatar-group-overlap, 18px));
       position: relative;
       z-index: 2;
       border: 3px solid getColor(gray-1);
@@ -62,9 +70,11 @@
           z-index: 4;
           opacity: 0;
           pointer-events: none;
-          transition: opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard);
+          transition: opacity var(--sax-motion-duration-fast)
+            var(--sax-motion-easing-standard);
         }
-        &:hover, &:focus-within {
+        &:hover,
+        &:focus-within {
           z-index: 5;
           > .#{$namespace}-avatar__icons {
             opacity: 1;

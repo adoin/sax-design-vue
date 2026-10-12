@@ -1,4 +1,6 @@
 ---
+API_TITLES:
+  CHILD_PROPS: SAvatarGroup 属性
 description: "使用图片、图标或首字母表示用户、团队或实体。"
 EXAMPLE_GROUPS:
   - title: 形状
@@ -89,23 +91,6 @@ PROPS:
     usage: '#loading'
     code: null
 
-  - name: max
-    type: number
-    values: "number"
-    description: "`s-avatar-group` 中最多显示的头像数量。"
-    default: null
-    link: null
-    usage: '#group'
-    code: null
-  - name: float
-    type: Boolean
-    values: "true,false"
-    description: "`s-avatar-group` 中头像是否并排排列。"
-    default: false
-    link: null
-    usage: '#group'
-    code: null'
-
   - name: pointer
     type: Boolean
     values: "true,false"
@@ -115,7 +100,44 @@ PROPS:
     usage: null
     code: null
 
+CHILD_PROPS:
+  - name: max
+    type: number | string
+    values: "number"
+    description: "`s-avatar-group` 中最多显示的头像数量。"
+    default: null
+    link: null
+    usage: '#group'
+    code: null
+  - name: overlap
+    type: number
+    values: "number"
+    description: (s-avatar-group) 相邻头像的重叠像素。
+    default: 18
+    usage: '#group'
+  - name: size
+    type: number | string
+    values: "number"
+    description: (s-avatar-group) 默认头像尺寸，单个头像可覆盖。
+    default: null
+    usage: '#group'
+  - name: float
+    type: Boolean
+    values: "true,false"
+    description: "`s-avatar-group` 中头像是否并排排列。"
+    default: false
+    link: null
+    usage: '#group'
+    code: null
+
+
 SLOTS:
+  - name: overflow
+    type: slot
+    values: "{ count: number }"
+    description: "(s-avatar-group) 自定义溢出计数内容。"
+    default: null
+    usage: '#group'
   - name: text
     type: slot
     values: "null"
@@ -447,25 +469,29 @@ SLOTS:
 
 ## 组合
 
-通过 `s-avatar-group` 可组合多个头像，常用属性：
+使用 `s-avatar-group` 叠放头像。`max` 限制可见成员数量，超出的成员以独立的 `+N` 头像展示。`overlap` 设置重叠像素，`size` 设置组内默认尺寸，单个 Avatar 的 `size` 优先。使用 `shape="circle"` 展示圆形照片，`float` 改为并排排列。
 
-- **max**：设置最多展示的头像数量，其余数量会汇总显示在最后一个头像中。
-
-- **float**：使头像并排展示，而非相互叠放。
+可通过 `overflow` 插槽自定义计数内容，插槽参数为 `{ count }`。成员列表和 `max` 的变化会自动更新显示数量。
 
 <template #example>
-<avatar-group />
+<avatar-group-zh />
 </template>
 
 <template #template>
 
-@[code{1-69}](../../.vuepress/components/avatar/group.vue)
+@[code{16-32}](../../.vuepress/components/avatar/group-zh.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-14}](../../.vuepress/components/avatar/group-zh.vue)
 
 </template>
 
 <template #style>
 
-@[code{71-94}](../../.vuepress/components/avatar/group.vue)
+@[code{34-41}](../../.vuepress/components/avatar/group-zh.vue)
 
 </template>
 

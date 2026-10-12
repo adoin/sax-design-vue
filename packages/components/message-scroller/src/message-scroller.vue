@@ -10,7 +10,6 @@ import {
 } from 'vue'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
-import { SIcon } from '@vuesax-alpha/components/icon'
 import { SMessage } from '@vuesax-alpha/components/message'
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
 import { messageScrollerEmits, messageScrollerProps } from './message-scroller'
@@ -361,33 +360,34 @@ defineExpose({
       }}</span>
     </div>
     <div class="s-agent-scroll-controls">
-      <SButton
-        v-if="!atTop"
-        icon
-        size="small"
-        type="flat"
-        :aria-label="t('vs.agent.oldest')"
-        shape="rounded"
-        @click="scrollToTop"
-        ><SIcon name="cb:arrow-up" /><span class="s-agent-sr-only">{{
-          t('vs.agent.oldest')
-        }}</span></SButton
-      ><SButton
-        v-if="!atBottom || (!following && autoFollow)"
-        icon
-        size="small"
-        :aria-label="t('vs.agent.latest')"
-        type="flat"
-        shape="rounded"
-        @click="scrollToBottom()"
-        ><SIcon name="cb:arrow-down" /><span class="s-agent-sr-only">{{
-          t('vs.agent.latest')
-        }}</span
-        ><span
-          v-if="unread"
-          class="s-agent-unread-dot"
-          aria-hidden="true" /></SButton
-      ><slot
+      <Transition name="s-message-latest">
+        <SButton
+          v-if="!atBottom || (!following && autoFollow)"
+          class="s-message-scroller__latest"
+          icon
+          :aria-label="t('vs.agent.latest')"
+          type="flat"
+          shape="rounded"
+          @click="scrollToBottom()"
+          ><svg
+            viewBox="0 0 24 24"
+            width="22"
+            height="22"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 4.5v14M6.5 13l5.5 5.5 5.5-5.5"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            /></svg
+          ><span class="s-agent-sr-only">{{ t('vs.agent.latest') }}</span
+          ><span v-if="unread" class="s-agent-unread-dot" aria-hidden="true"
+        /></SButton>
+      </Transition>
+      <slot
         name="controls"
         :following="following"
         :unread="unread"

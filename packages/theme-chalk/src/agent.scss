@@ -862,9 +862,69 @@ button.s-agent-heading {
   min-height: 0;
   gap: 4px;
 }
-.s-message-scroller .s-agent-scroll-controls .s-button {
-  box-shadow: var(--sax-box-shadow);
-  background: #{getColor(background)};
+.s-message-scroller .s-agent-scroll-controls .s-message-scroller__latest {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin: 0;
+  border-radius: var(--sax-radius-circle);
+  color: #{getColor(text)};
+  background: #{getColor(background, 0.94)};
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 4px 16px #{getColor(black, 0.12)},
+    inset 0 1px 2px #{getColor(background)};
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease;
+  &:hover,
+  &:focus-visible {
+    color: #{getColor(primary)};
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px #{getColor(primary, 0.18)};
+  }
+  &:active {
+    transform: translateY(0) scale(0.94);
+  }
+}
+.s-message-latest-enter-active,
+.s-message-latest-leave-active {
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease !important;
+}
+.s-message-latest-enter-from,
+.s-message-latest-leave-to {
+  opacity: 0;
+  transform: translateY(8px) scale(0.9);
+}
+.s-message-scroller__latest .s-agent-unread-dot {
+  width: 7px;
+  height: 7px;
+  inset-inline-end: 3px;
+  top: 3px;
+  animation: s-message-unread-in 200ms ease-out;
+}
+@keyframes s-message-unread-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-message-latest-enter-active,
+  .s-message-latest-leave-active,
+  .s-message-scroller .s-agent-scroll-controls .s-message-scroller__latest {
+    transition: none !important;
+  }
+  .s-message-scroller__latest .s-agent-unread-dot {
+    animation: none;
+  }
 }
 .s-agent-unread-dot {
   position: absolute;

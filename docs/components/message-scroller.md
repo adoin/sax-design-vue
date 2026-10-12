@@ -109,7 +109,7 @@ EXPOSES:
 
 ## Default
 
-New content follows the viewport while you are near the bottom. Scroll upward to read history without being pulled down. Prepending earlier direct message children preserves the viewport position. Use the edge controls to return to the first or latest message.
+New content follows the viewport while you are near the bottom. Scroll upward to read history without being pulled down. Prepending earlier direct message children preserves the viewport position. The floating down arrow returns to the latest message; a dot indicates unread content.
 
 <template #example><message-scroller-default /></template>
 

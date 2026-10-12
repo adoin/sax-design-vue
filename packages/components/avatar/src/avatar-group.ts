@@ -4,9 +4,11 @@ import type { ExtractPropTypes } from 'vue'
 import type AvatarGroup from './avatar-group.vue'
 
 export const avatarGroupProps = buildProps({
-  /**
-   * change the way the avatar is composed by placing one next to the other.
-   */
+  /** Number of pixels shared by adjacent avatars. */
+  overlap: { type: Number, default: 18 },
+  /** Default avatar size; individual avatar sizes take precedence. */
+  size: { type: [String, Number] },
+  /** Place avatars side by side instead of overlapping. */
   float: {
     type: Boolean,
   },

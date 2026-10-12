@@ -1,4 +1,6 @@
 ---
+API_TITLES:
+  CHILD_PROPS: SAvatarGroup props
 description: "Represent a user, team, or entity with an image, icon, or initials."
 EXAMPLE_GROUPS:
   - title: Shape
@@ -89,23 +91,6 @@ PROPS:
     usage: '#loading'
     code: null
 
-  - name: max
-    type: number
-    values: "number"
-    description: (s-avatar-group) determine how many avatars are visible.
-    default: null
-    link: null
-    usage: '#group'
-    code: null
-  - name: float
-    type: Boolean
-    values: "true,false"
-    description: (s-avatar-group) change the way the avatar is composed by placing one next to the other.
-    default: false
-    link: null
-    usage: '#group'
-    code: null'
-
   - name: pointer
     type: Boolean
     values: "true,false"
@@ -115,7 +100,44 @@ PROPS:
     usage: null
     code: null
 
+CHILD_PROPS:
+  - name: max
+    type: number | string
+    values: "number"
+    description: (s-avatar-group) Limit visible members; additional members appear in a separate counter.
+    default: null
+    link: null
+    usage: '#group'
+    code: null
+  - name: overlap
+    type: number
+    values: "number"
+    description: (s-avatar-group) Overlap between adjacent avatars in pixels.
+    default: 18
+    usage: '#group'
+  - name: size
+    type: number | string
+    values: "number"
+    description: (s-avatar-group) Default avatar size; individual avatars may override it.
+    default: null
+    usage: '#group'
+  - name: float
+    type: Boolean
+    values: "true,false"
+    description: (s-avatar-group) change the way the avatar is composed by placing one next to the other.
+    default: false
+    link: null
+    usage: '#group'
+    code: null
+
+
 SLOTS:
+  - name: overflow
+    type: slot
+    values: "{ count: number }"
+    description: "(s-avatar-group) Custom overflow counter content."
+    default: null
+    usage: '#group'
   - name: text
     type: slot
     values: "null"
@@ -447,11 +469,9 @@ Add a space next to the avatar with the slot `icons` where you can put icons for
 
 ## Group
 
-You can group several avatar with the parent component `s-avatar-group`, this component has two interesting properties:
+Use `s-avatar-group` to stack avatars. `max` limits visible members; remaining members appear in a separate `+N` avatar. `overlap` sets the overlap in pixels, and `size` supplies the default size unless an individual Avatar overrides it. Use `shape="circle"` for circular photos and `float` for side-by-side placement.
 
-- **max**: determine the maximum number of avatars to show and the rest hides it generating the number in the last avatar shown
-
-- **float**: causes the avatar components to be placed on each other and the grouping of one on top of the other is eliminated
+The `overflow` slot receives `{ count }` for custom counter content. Changes to members and `max` update the visible count automatically.
 
 <template #example>
 <avatar-group />
@@ -459,13 +479,19 @@ You can group several avatar with the parent component `s-avatar-group`, this co
 
 <template #template>
 
-@[code{1-69}](../.vuepress/components/avatar/group.vue)
+@[code{16-37}](../.vuepress/components/avatar/group.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-14}](../.vuepress/components/avatar/group.vue)
 
 </template>
 
 <template #style>
 
-@[code{71-94}](../.vuepress/components/avatar/group.vue)
+@[code{39-46}](../.vuepress/components/avatar/group.vue)
 
 </template>
 
