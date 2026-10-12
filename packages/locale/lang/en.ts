@@ -1,6 +1,7 @@
 export default {
   name: 'en',
   vs: {
+    input: { clear: 'Clear input' },
     skeleton: { loading: 'Loading' },
     agent: {
       reasoning: 'Reasoning',

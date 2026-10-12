@@ -38,13 +38,29 @@
         :role="
           autocompleteEnabled ? 'combobox' : ($attrs.role as string | undefined)
         "
-        :aria-autocomplete="autocompleteEnabled ? 'list' : undefined"
-        :aria-expanded="autocompleteEnabled ? autocompleteVisible : undefined"
-        :aria-controls="autocompleteEnabled ? autocompleteId : undefined"
+        :aria-autocomplete="
+          autocompleteEnabled
+            ? 'list'
+            : ($attrs['aria-autocomplete'] as
+                'none' | 'inline' | 'list' | 'both' | undefined)
+        "
+        :aria-expanded="
+          autocompleteEnabled
+            ? autocompleteVisible
+            : ($attrs['aria-expanded'] as
+                boolean | 'true' | 'false' | undefined)
+        "
+        :aria-controls="
+          autocompleteEnabled
+            ? autocompleteId
+            : ($attrs['aria-controls'] as string | undefined)
+        "
         :aria-activedescendant="
-          autocompleteVisible && autocompleteActiveIndex >= 0
-            ? `${autocompleteId}-${autocompleteActiveIndex}`
-            : undefined
+          autocompleteEnabled
+            ? autocompleteVisible && autocompleteActiveIndex >= 0
+              ? `${autocompleteId}-${autocompleteActiveIndex}`
+              : undefined
+            : ($attrs['aria-activedescendant'] as string | undefined)
         "
         :autofocus="autoFocus"
         :maxlength="nativeMaxLength"
@@ -173,7 +189,7 @@
           v-if="showClear && !loadingVisible"
           type="button"
           :class="ns.e('clearable')"
-          aria-label="Clear input"
+          :aria-label="t('vs.input.clear')"
           @click="clear"
           @mousedown.prevent="NOOP"
         >
@@ -282,6 +298,7 @@ import {
   useControlLoading,
   useDeprecated,
   useId,
+  useLocale,
   useNamespace,
   useProp,
   useShape,
@@ -304,6 +321,7 @@ defineOptions({
 })
 
 const props = defineProps(inputProps)
+const { t } = useLocale()
 const emit = defineEmits(inputEmits)
 const { loadingVisible, finishLoading } = useControlLoading(() => props.loading)
 const slots = useSlots()

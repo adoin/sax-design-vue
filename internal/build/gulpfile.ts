@@ -63,6 +63,10 @@ export const copyFiles = () =>
   Promise.all([
     normalizeWorkspaceDependencies(),
     copyFile(
+      path.resolve(projRoot, 'CHANGELOG.md'),
+      path.resolve(vsOutput, 'CHANGELOG.md'),
+    ),
+    copyFile(
       path.resolve(projRoot, 'README.md'),
       path.resolve(vsOutput, 'README.md'),
     ),

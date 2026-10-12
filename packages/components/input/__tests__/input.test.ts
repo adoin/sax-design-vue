@@ -16,6 +16,24 @@ const mountInput = (props = {}) =>
   })
 
 describe('Input behavior', () => {
+  it('preserves consumer combobox ARIA when built-in autocomplete is not configured', () => {
+    const wrapper = mount(Input, {
+      attrs: {
+        role: 'combobox',
+        'aria-autocomplete': 'list',
+        'aria-expanded': true,
+        'aria-controls': 'search-results',
+        'aria-activedescendant': 'search-result-1',
+      },
+    })
+    const input = wrapper.get('input')
+    expect(input.attributes('role')).toBe('combobox')
+    expect(input.attributes('aria-autocomplete')).toBe('list')
+    expect(input.attributes('aria-expanded')).toBe('true')
+    expect(input.attributes('aria-controls')).toBe('search-results')
+    expect(input.attributes('aria-activedescendant')).toBe('search-result-1')
+    wrapper.unmount()
+  })
   it('updates immediately by default', async () => {
     const wrapper = mountInput({ modelValue: '' })
     await wrapper.get('input').setValue('Sax')

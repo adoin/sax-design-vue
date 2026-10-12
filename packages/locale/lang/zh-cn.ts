@@ -1,6 +1,7 @@
 export default {
   name: 'zh-cn',
   vs: {
+    input: { clear: '清空输入' },
     skeleton: { loading: '加载中' },
     agent: {
       reasoning: '推理过程',

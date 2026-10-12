@@ -10,6 +10,7 @@ import { containerPlugin } from '@vuepress/plugin-container'
 import { gitPlugin } from '@vuepress/plugin-git'
 import { prismjsPlugin } from '@vuepress/plugin-prismjs'
 import { contentKey, documentationCache } from '../node/persistentCache'
+import { documentationSearchPlugin } from './node/documentationSearch'
 import { createApiTypeDetailsResolver } from './node/apiTypeDetails'
 import {
   highlightTypeScriptHtml,
@@ -127,6 +128,7 @@ export const saxDesignVueTheme = (
     name: 'vuepress-theme-sax-design-vue',
     clientConfigFile: path.resolve(__dirname, 'client.ts'),
     plugins: [
+      documentationSearchPlugin(),
       activeHeaderLinksPlugin({
         headerLinkSelector: '.sidebar-sub-headers a.sidebar-link',
         headerAnchorSelector: '.header-anchor',

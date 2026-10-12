@@ -1,447 +1,126 @@
-<template>
-  <div class="search-box" :class="{ focused, showSuggestions }">
-    <div class="con-input">
-      <input
-        ref="$input"
-        v-model="query"
-        :aria-label="t.shell.search"
-        :class="{ focused: focused }"
-        placeholder=""
-        autocomplete="off"
-        spellcheck="false"
-        @focus=";((focused = true), emits('focus'))"
-        @blur=";((focused = false), emits('blur'))"
-        @keyup.enter="go(focusIndex)"
-        @keyup.up="onUp"
-        @keyup.down="onDown"
-      />
-      <PlaceholderText
-        v-if="placeholder"
-        class="search-placeholder"
-        :text="placeholder"
-        :dissolved="focused || !!query"
-        :hidden="!!query"
-      />
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z"
-        />
-      </svg>
-    </div>
-    <transition name="fade">
-      <ul
-        v-if="showSuggestions"
-        class="suggestions"
-        :class="{ 'align-right': alignRight }"
-        @mouseleave="unfocus"
-      >
-        <li
-          v-for="(suggestion, i) in suggestions"
-          :key="i"
-          class="suggestion"
-          :class="{ focused: i === focusIndex }"
-          @mousedown="go(i)"
-          @mouseenter="focus(i)"
-        >
-          <router-link :to="suggestion.path">
-            <span class="page-title">
-              {{ suggestion.title || suggestion.path }}
-            </span>
-            <span v-if="suggestion.header" class="header">
-              <s-icon name="bx:chevron-right" />
-              {{ suggestion.header }}
-            </span>
-          </router-link>
-        </li>
-      </ul>
-    </transition>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import PlaceholderText from '@vuesax-alpha/components/base/src/placeholder-text.vue'
+import { computed, onBeforeUnmount, onMounted, shallowRef } from 'vue'
 import { useRouteLocale } from '@vuepress/client'
-// @ts-ignore
-import { useThemeData } from '@vuepress/plugin-theme-data/client'
-import { ensureLeadingSlash, removeEndingSlash } from '@vuepress/shared'
-import { useRouter } from 'vue-router'
-import { useDocLocaleUi } from '../composables/docLocale'
-
-import type { SaxDesignVueThemeOptions } from '../saxDesignVueTheme'
-
+import { SIcon } from '@vuesax-alpha/components/icon'
+import { isDocumentationSearchShortcut } from '../util/documentation-search'
+import DocumentationSearchDialog from './DocumentationSearchDialog.vue'
 const emits = defineEmits<{
-  (event: 'showSuggestions', active: boolean): void
-  (event: 'focus'): void
-  (event: 'blur'): void
+  showSuggestions: [active: boolean]
+  focus: []
+  blur: []
 }>()
-
-const router = useRouter()
-const themeData = useThemeData<SaxDesignVueThemeOptions>()
-const routeLocale = useRouteLocale()
-const { t } = useDocLocaleUi()
-
-const SEARCH_MAX_SUGGESTIONS = themeData.value.searchMaxSuggestions || 5
-const SEARCH_HOTKEYS = ['s', '/']
-
-const query = ref<string>('')
-const focused = ref<boolean>(false)
-const focusIndex = ref<number>(0)
-const placeholder = ref<string>('')
-
-const $input = ref<HTMLElement>()!
-
-const showSuggestions = computed(() => {
-  const active = focused.value && suggestions.value?.length
-  return !!active
-})
-
-const matches = ({ title }: { title: string }) =>
-  title.toLowerCase().includes(query.value)
-
-const suggestions = computed(
-  (): {
-    title: string
-    path: string
-    header?: string
-  }[] => {
-    const _query = query.value.trim().toLowerCase()
-    const searchData = themeData.value.searchData?.[routeLocale.value]
-
-    if (!_query || !searchData) {
-      return []
-    }
-
-    const res: {
-      title: string
-      path: string
-      header?: string
-    }[] = []
-
-    for (const page of searchData) {
-      if (res.length >= SEARCH_MAX_SUGGESTIONS) break
-
-      if (matches(page)) {
-        const path = removeEndingSlash(ensureLeadingSlash(page.path))
-        res.push({
-          title: page.title,
-          path,
-        })
-      }
-      if (page.headers) {
-        for (let j = 0; j < page.headers.length; j++) {
-          if (res.length >= SEARCH_MAX_SUGGESTIONS) break
-          const h = page.headers[j]
-          if (matches(h)) {
-            const path = removeEndingSlash(ensureLeadingSlash(page.path))
-            res.push({
-              title: page.title,
-              path: `${path}#${h.slug}`,
-              header: h.title,
-            })
-          }
-        }
-      }
-    }
-    return res
-  },
-)
-
-// make suggestions align right when there are not enough items
-const alignRight = computed(() => {
-  const navCount = (themeData.value.navbar || []).length
-  const repo = themeData.value.repo ? 1 : 0
-  return navCount + repo <= 2
-})
-
-watch([focused, suggestions], () => {
-  const active = focused.value && suggestions.value?.length
-  emits('showSuggestions', !!active)
-})
-
-const onHotkey = (event: KeyboardEvent) => {
-  if (
-    event.srcElement === document.body &&
-    SEARCH_HOTKEYS.includes(event.key)
-  ) {
-    $input.value!.focus()
-    event.preventDefault()
-  }
+const locale = useRouteLocale()
+const zh = computed(() => locale.value.startsWith('/zh/'))
+const open = shallowRef(false)
+const shortcut = shallowRef('Ctrl K')
+const previousFocus = shallowRef<HTMLElement | null>(null)
+const dialog = shallowRef<InstanceType<typeof DocumentationSearchDialog>>()
+function openSearch() {
+  if (!open.value && document.activeElement instanceof HTMLElement)
+    previousFocus.value = document.activeElement
+  open.value = true
+  emits('focus')
+  emits('showSuggestions', true)
+  dialog.value?.focus()
 }
-
-const onUp = () => {
-  if (showSuggestions.value) {
-    if (focusIndex.value > 0) {
-      focusIndex.value--
-    } else {
-      focusIndex.value = suggestions.value.length - 1
-    }
-  }
+function onHotkey(event: KeyboardEvent) {
+  if (event.defaultPrevented) return
+  const target = event.target instanceof Element ? event.target : null
+  const plain =
+    !event.ctrlKey &&
+    !event.metaKey &&
+    !event.altKey &&
+    !event.isComposing &&
+    ['s', '/'].includes(event.key) &&
+    !target?.closest(
+      'input,textarea,select,[contenteditable]:not([contenteditable="false"])',
+    )
+  if (!isDocumentationSearchShortcut(event) && !plain) return
+  event.preventDefault()
+  openSearch()
 }
-
-const onDown = () => {
-  if (showSuggestions.value) {
-    if (focusIndex.value < suggestions.value.length - 1) {
-      focusIndex.value++
-    } else {
-      focusIndex.value = 0
-    }
-  }
+function onClosed() {
+  emits('blur')
+  emits('showSuggestions', false)
 }
-
-const go = (i: number) => {
-  if (!showSuggestions.value) {
-    return
-  }
-  router.push(suggestions.value[i].path)
-  query.value = ''
-  focusIndex.value = 0
-}
-
-const focus = (index: number) => {
-  focusIndex.value = index
-}
-
-const unfocus = () => {
-  focusIndex.value = -1
-}
-
 onMounted(() => {
-  const localeConfig = themeData.value.locales?.[routeLocale.value] as
-    { searchPlaceholder?: string } | undefined
-  placeholder.value =
-    localeConfig?.searchPlaceholder || themeData.value.searchPlaceholder || ''
+  shortcut.value = /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘ K' : 'Ctrl K'
   document.addEventListener('keydown', onHotkey)
 })
-
-onBeforeUnmount(() => {
-  document.removeEventListener('keydown', onHotkey)
-})
+onBeforeUnmount(() => document.removeEventListener('keydown', onHotkey))
 </script>
-
+<template>
+  <div class="search-box">
+    <button
+      class="docs-search-trigger"
+      type="button"
+      :aria-label="
+        zh ? '搜索组件与文档' : 'Search components and documentation'
+      "
+      aria-haspopup="dialog"
+      :aria-expanded="open"
+      aria-keyshortcuts="Control+k Meta+k"
+      @click="openSearch"
+    >
+      <SIcon name="cb:search" size="18px" />
+      <span>{{ zh ? '搜索文档' : 'Search docs' }}</span>
+      <kbd aria-hidden="true">{{ shortcut }}</kbd>
+    </button>
+    <DocumentationSearchDialog
+      ref="dialog"
+      v-model:open="open"
+      :return-focus-to="previousFocus"
+      @closed="onClosed"
+    />
+  </div>
+</template>
 <style scoped lang="scss">
-@use 'sass:color';
 @use '../styles/use' as *;
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.25s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: translate(0, calc(100% + 10px)) !important;
-}
-.darken {
-  .search-box {
-    input {
-      background: rgba(0, 0, 0, 0.25);
-    }
-  }
-}
-
 .search-box {
-  display: inline-block;
+  width: 15rem;
   margin-right: 1rem;
-  position: relative;
-  &.showSuggestions {
-    .con-input {
-      input {
-        background: -color('theme-bg2');
-      }
-    }
-  }
-  .con-input {
-    display: flex;
-    align-items: center;
-    position: relative;
-    > svg {
-      position: absolute;
-      right: 10px;
-      width: 20px;
-      pointer-events: none;
-      transition: all 0.2s ease;
-      fill: -color('theme-color');
-    }
-  }
-  .search-placeholder {
-    position: absolute;
-    left: 20px;
-    width: calc(100% - 50px);
-    font-size: 0.85rem;
-    line-height: 2rem;
-    color: -color('theme-color');
-  }
-  input {
-    cursor: text;
-    width: 15rem;
-    color: -color('theme-color');
-    border: 1px solid color.adjust($borderColor, $lightness: -10%);
-    display: inline-block;
-    border-radius: 2rem;
-    font-size: 0.85rem;
-    line-height: 2rem;
-    padding: 0 0.5rem 0 2rem;
-    outline: none;
-    transition: all 0.2s ease;
-    background: rgba(0, 0, 0, 0.05);
-    background-size: 1rem;
-    display: block;
-    border-radius: 0px;
-    border: 0px;
-    padding: 4px;
-    padding-left: 20px;
-    opacity: 1;
-    border-radius: 14px 5px 14px 14px;
-    &::placeholder {
-      color: -color('theme-color');
-    }
-    &:focus {
-      width: 15rem;
-      cursor: auto;
-      & ~ svg {
-        transform: scale(1.15);
-      }
-    }
-  }
-  .suggestions {
-    background: -color('theme-layout');
-    width: 100%;
-    position: absolute;
-    bottom: 0px;
-    top: auto !important;
-    padding: 10px;
-    list-style-type: none;
-    box-shadow: 0px 5px 20px -5px rgba(0, 0, 0, 0.1);
-    transform: translate(0, calc(100% + 20px));
-    min-width: 25rem;
-    margin: 0px !important;
-    border-radius: 14px;
-    z-index: 1000;
-    &.align-right {
-      right: 0;
-    }
-  }
-  .suggestion {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0.5rem 0.6rem;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    &:hover {
-      background: -color('theme-bg') !important;
-    }
-    a {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      white-space: normal;
-      color: -color('theme-color');
-      box-icon {
-        width: 17px;
-        height: 17px;
-        fill: -color('theme-color');
-        margin-right: 5px;
-      }
-      .page-title {
-        font-weight: 600;
-      }
-      .header {
-        font-size: 0.9em;
-        margin-left: 0.25em;
-        opacity: 0.85;
-        font-weight: normal;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-    &.focused {
-      a {
-        color: -color('theme-color');
-      }
-    }
-  }
 }
-
-@media (max-width: $MQNarrow) {
-  .search-box {
-    input {
-      cursor: pointer;
-      width: 40px;
-      border-color: transparent;
-      position: relative;
-      &::placeholder {
-        color: transparent;
-      }
-      &:focus {
-        cursor: text;
-        left: 0;
-        width: 10rem;
-        &::placeholder {
-          color: inherit;
-        }
-      }
-    }
-  }
+.docs-search-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 40px;
+  padding: 0 14px;
+  border: 0;
+  outline: none;
+  border-radius: var(--sax-radius-lg);
+  background: -color('theme-bg2');
+  color: -color('theme-color');
+  font-size: 0.85rem;
+  line-height: 20px;
+  cursor: pointer;
 }
-
-// Match IE11
-@media all and (-ms-high-contrast: none) {
-  .search-box {
-    input {
-      height: 2rem;
-    }
-  }
+.docs-search-trigger span {
+  flex: 1;
+  text-align: start;
 }
-
-@media (max-width: $MQNarrow) and (min-width: $MQMobile) {
-  .search-box {
-    .suggestions {
-      left: 0;
-    }
-  }
+.docs-search-trigger kbd {
+  font: inherit;
+  font-size: 11px;
+  opacity: 0.55;
 }
-
-@media (max-width: $MQMobile) {
+.docs-search-trigger:hover,
+.docs-search-trigger:focus-visible {
+  box-shadow: var(--sax-box-shadow);
+}
+@media (max-width: 719px) {
   .search-box {
+    width: 40px;
     margin-right: 0;
-    .suggestions {
-      right: 0;
-    }
   }
-}
-
-@media (max-width: 500px) {
-  .search-box {
-    width: 100%;
+  .docs-search-trigger {
+    justify-content: center;
+    padding: 0;
   }
-  .suggestions {
-    width: calc(100vw - 20px) !important;
-    min-width: auto !important;
-    right: auto;
-    left: 0px;
-  }
-  .focused {
-    width: 100%;
-  }
-  input {
-    transition: all 0s ease;
-    color: transparent !important;
-    &:focus {
-      width: 100%;
-      color: inherit !important;
-    }
-    &::placeholder {
-      color: transparent !important;
-    }
+  .docs-search-trigger span,
+  .docs-search-trigger kbd {
+    display: none;
   }
 }
 </style>
