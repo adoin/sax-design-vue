@@ -81,6 +81,7 @@ import { SScrollbar } from '@vuesax-alpha/components/scrollbar'
 import { SOption, SOptionGroup, SSelect } from '@vuesax-alpha/components/select'
 import { SSlider } from '@vuesax-alpha/components/slider'
 import { SSpacer } from '@vuesax-alpha/components/spacer'
+import { SSkeleton } from '@vuesax-alpha/components/skeleton'
 import { SSplitter, SSplitterItem } from '@vuesax-alpha/components/splitter'
 import { SSteps } from '@vuesax-alpha/components/steps'
 import { SSwitch } from '@vuesax-alpha/components/switch'
@@ -199,6 +200,7 @@ export default [
   SSwitch,
   SSlider,
   SSpacer,
+  SSkeleton,
   SSplitter,
   SSplitterItem,
   SSteps,

@@ -2,6 +2,16 @@ import type { SearchDataOption } from '~/saxDesignVueTheme'
 
 export const enSearchData: SearchDataOption[] = [
   {
+    title: 'Skeleton',
+    path: 'components/skeleton',
+    headers: [
+      { title: 'Default', slug: 'default' },
+      { title: 'Declarative rows', slug: 'declarative-rows' },
+      { title: 'Loading content', slug: 'loading-content' },
+      { title: 'Animation', slug: 'animation' },
+    ],
+  },
+  {
     title: 'Renderer',
     path: 'components/renderer',
     headers: [

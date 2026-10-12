@@ -1,6 +1,7 @@
 export default {
   name: 'en',
   vs: {
+    skeleton: { loading: 'Loading' },
     agent: {
       reasoning: 'Reasoning',
       showLess: 'Show less',

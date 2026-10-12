@@ -1,0 +1,104 @@
+@use './mixins/function.scss' as *;
+.s-skeleton {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  --sax-skeleton-fill: #{getColor(text, 0.075)};
+  --sax-skeleton-shine: #{getColor(background, 0.7)};
+}
+.s-skeleton__placeholder-content,
+.s-skeleton__layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sax-skeleton-gap, 16px);
+  min-width: 0;
+}
+.s-skeleton__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sax-skeleton-gap, 16px);
+  min-width: 0;
+}
+.s-skeleton__element {
+  display: block;
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  background: var(--sax-skeleton-fill);
+  isolation: isolate;
+}
+.s-skeleton__element--circle {
+  border-radius: var(--sax-radius-circle);
+}
+.s-skeleton__element--square {
+  border-radius: 0;
+}
+.s-skeleton__element--rectangle {
+  height: 120px;
+  border-radius: var(--sax-radius-sm);
+}
+.s-skeleton__element--line {
+  height: 14px;
+  border-radius: var(--sax-radius-pill);
+}
+.s-skeleton--shimmer .s-skeleton__element::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--sax-skeleton-shine),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: s-skeleton-shimmer 1.6s ease-in-out infinite;
+}
+.s-skeleton--pulse .s-skeleton__placeholder-content {
+  animation: s-skeleton-pulse 1.4s ease-in-out infinite;
+}
+@keyframes s-skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes s-skeleton-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+.s-skeleton__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.s-skeleton-reveal-enter-active,
+.s-skeleton-reveal-leave-active {
+  transition:
+    opacity 240ms ease,
+    filter 240ms ease;
+}
+.s-skeleton-reveal-leave-active {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.s-skeleton-reveal-enter-from,
+.s-skeleton-reveal-leave-to {
+  opacity: 0;
+  filter: blur(2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-skeleton--shimmer .s-skeleton__element::after,
+  .s-skeleton--pulse .s-skeleton__placeholder-content {
+    animation: none;
+  }
+  .s-skeleton-reveal-enter-active,
+  .s-skeleton-reveal-leave-active {
+    transition: none;
+  }
+}

@@ -1,6 +1,7 @@
 export default {
   name: 'zh-cn',
   vs: {
+    skeleton: { loading: '加载中' },
     agent: {
       reasoning: '推理过程',
       showLess: '收起',
