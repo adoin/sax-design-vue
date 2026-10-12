@@ -53,3 +53,12 @@ updated_at: 2026-10-10
 - 2026-10-10 用户要求取消 AI 分类方角能力；本记录中 AI shape 的旧契约已被 [AI 组件圆角与工作汇报编辑示例](ai-rounded-editor-report.md) 替代。其他组件的几何契约不受影响。
 
 - 2026-10-10 用户要求贴合 Logo 配色与 Loading 线条效果；本记录中的 Image Generation procedural Canvas / 25fps 设计已被 SVG S 形流动线束替代，详见 ai-agent-components.md 最新契约。
+
+## Plan Card 自动批准（2026-10-12）
+
+用户通过参考图要求补齐左下角自动批准倒计时，替代本记录原先“不复制自动批准倒计时”的决定。默认仍手动批准；auto-approve 的正数秒数显式开启倒计时。
+
+- 复用 SCountdown 管理时钟和卸载清理；环形进度与本地化倒计时文字显示在操作栏左侧，点击可取消，仅停止自动批准，不拒绝计划。
+- 到期发出 auto-approve 与 approve，状态由应用维护，组件不执行计划或调用服务。手动批准、拒绝、禁用、非 pending 状态或卸载停止时钟；同一次计划决定只发出一次。
+- 配置或计划更新重启倒计时；自动批准默认 0 关闭。双语独立示例提供 5 秒倒计时与重播，Code 和 Playground 同步。
+- Agent 42 项回归与文档 21 项检查通过，主题构建通过；浏览器验证倒计时完成、取消及双语 Code / Playground。

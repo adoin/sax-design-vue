@@ -13,11 +13,18 @@ export const planCardProps = buildProps({
     type: definePropType<'pending' | 'approved' | 'rejected'>(String),
     default: 'pending',
   },
+  autoApprove: {
+    type: Number,
+    default: 0,
+    validator: (value: number) => Number.isFinite(value) && value >= 0,
+  },
   disabled: Boolean,
 } as const)
 export const planCardEmits = {
   'update:expanded': (value: boolean) => typeof value === 'boolean',
   approve: () => true,
+  'auto-approve': () => true,
+  'cancel-auto-approve': () => true,
   reject: () => true,
   download: () => true,
 }

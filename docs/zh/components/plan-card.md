@@ -1,6 +1,11 @@
 ---
 description: "审阅结构化计划并明确批准或拒绝。"
 PROPS:
+  - name: "auto-approve"
+    type: "Number"
+    description: "自动批准倒计时秒数，0 关闭。取消提示仅停止计时，不拒绝计划；配置或计划更新会重启。"
+    default: "0"
+    usage: "#automatic-approval"
   - name: "title"
     type: "String"
     description: "标题文本；过程列表默认使用本地化标题。"
@@ -42,6 +47,12 @@ PROPS:
     default: "false"
     usage: "#default"
 EVENTS:
+  - name: "cancel-auto-approve"
+    type: "() => void"
+    description: "用户取消自动批准倒计时。"
+  - name: "auto-approve"
+    type: "() => void"
+    description: "倒计时结束请求批准，同时触发 approve。"
   - name: "update:expanded"
     type: "(value: boolean) => void"
     description: "请求切换展开状态。"
@@ -87,6 +98,34 @@ SLOTS:
 <template #style>
 
 @[code{30-43}](../../.vuepress/components/plan-card/default-zh.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 自动批准
+
+设置 auto-approve 显示环形倒计时并在结束时触发 approve。点击倒计时提示可取消；手动批准、拒绝、禁用和卸载会停止计时。状态仍由应用控制，组件不会执行计划或调用服务。
+
+<template #example><plan-card-auto-approve-zh /></template>
+
+<template #template>
+
+@[code{20-38}](../../.vuepress/components/plan-card/auto-approve-zh.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-19}](../../.vuepress/components/plan-card/auto-approve-zh.vue)
+
+</template>
+
+<template #style>
+
+@[code{39-51}](../../.vuepress/components/plan-card/auto-approve-zh.vue)
 
 </template>
 

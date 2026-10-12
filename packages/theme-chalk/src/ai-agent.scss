@@ -1494,3 +1494,39 @@ button.s-agent-heading {
 .s-chat-input__model-group + .s-chat-input__model-group {
   margin-top: 8px;
 }
+
+.s-plan-card__footer {
+  flex-wrap: wrap;
+}
+.s-plan-card__auto-approve {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  color: #{getColor(text, 0.6)};
+  font-size: 13px;
+  border-radius: var(--sax-radius-sm);
+}
+.s-plan-card__auto-approve svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: #{getColor(warn)};
+  stroke-width: 1.5;
+  transform: rotate(-90deg);
+  flex-shrink: 0;
+}
+.s-plan-card__timer-track {
+  opacity: 0.2;
+}
+.s-plan-card__timer-progress {
+  stroke-linecap: round;
+}
+.s-plan-card__auto-approve .s-countdown {
+  color: inherit;
+  font-size: inherit;
+}
+.s-plan-card__auto-cancelled {
+  font-size: 12px;
+}
+.s-plan-card__auto-approve .s-countdown { padding: 0; border: 0; background: transparent; font-weight: 400; letter-spacing: 0; }
