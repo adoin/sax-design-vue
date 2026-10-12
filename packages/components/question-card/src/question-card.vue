@@ -8,7 +8,7 @@ import { questionCardEmits, questionCardProps } from './question-card'
 import type {
   AgentAnswer,
   AgentQuestion,
-} from '../../ai-editor/src/agent-shared/types'
+} from '../../agent-editor/src/agent-shared/types'
 
 defineOptions({ name: 'SQuestionCard' })
 const props = defineProps(questionCardProps)

@@ -1,7 +1,7 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type ChatHistory from './chat-history.vue'
-import type { AgentHistoryMessage } from '../../ai-editor/src/agent-shared/types'
+import type { AgentHistoryMessage } from '../../agent-editor/src/agent-shared/types'
 
 export const chatHistoryProps = buildProps({
   messages: {

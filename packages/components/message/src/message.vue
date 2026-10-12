@@ -4,8 +4,8 @@ import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
 
-import AgentIcon from '../../ai-editor/src/agent-shared/agent-icon.vue'
-import { useAgentCopy } from '../../ai-editor/src/agent-shared/use-copy'
+import AgentIcon from '../../agent-editor/src/agent-shared/agent-icon.vue'
+import { useAgentCopy } from '../../agent-editor/src/agent-shared/use-copy'
 import { messageEmits, messageProps } from './message'
 defineOptions({ name: 'SMessage' })
 const props = defineProps(messageProps)

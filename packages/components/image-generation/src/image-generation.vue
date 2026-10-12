@@ -4,7 +4,7 @@ import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SImage } from '@vuesax-alpha/components/images'
-import { clampProgress } from '../../ai-editor/src/agent-shared/utils'
+import { clampProgress } from '../../agent-editor/src/agent-shared/utils'
 import GenerationField from './generation-field.vue'
 import { imageGenerationEmits, imageGenerationProps } from './image-generation'
 

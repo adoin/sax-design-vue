@@ -1,7 +1,7 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type PlanCard from './plan-card.vue'
-import type { AgentTask } from '../../ai-editor/src/agent-shared/types'
+import type { AgentTask } from '../../agent-editor/src/agent-shared/types'
 
 export const planCardProps = buildProps({
   title: { type: String, default: '' },

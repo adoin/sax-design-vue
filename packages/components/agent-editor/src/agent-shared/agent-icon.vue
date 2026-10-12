@@ -8,7 +8,7 @@ const source = computed(() => props.src ?? globalIcon.value)
 
 <template>
   <span
-    class="s-agent-icon s-ai-editor__agent-icon"
+    class="s-agent-icon s-agent-editor__agent-icon"
     :class="{ 'is-busy': busy }"
     aria-hidden="true"
   >

@@ -1,7 +1,7 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type InlineCitations from './inline-citations.vue'
-import type { AgentSource } from '../../ai-editor/src/agent-shared/types'
+import type { AgentSource } from '../../agent-editor/src/agent-shared/types'
 
 export const inlineCitationsProps = buildProps({
   sources: { type: definePropType<AgentSource[]>(Array), default: () => [] },

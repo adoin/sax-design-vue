@@ -4,7 +4,7 @@ import type ReasoningSteps from './reasoning-steps.vue'
 import type {
   AgentSource,
   AgentTask,
-} from '../../ai-editor/src/agent-shared/types'
+} from '../../agent-editor/src/agent-shared/types'
 
 export const reasoningStepsProps = buildProps({
   steps: { type: definePropType<AgentTask[]>(Array), default: () => [] },

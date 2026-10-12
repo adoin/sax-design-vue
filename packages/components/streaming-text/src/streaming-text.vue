@@ -3,8 +3,8 @@ import { computed, shallowRef, watch } from 'vue'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 
-import { useTextReveal } from '../../ai-editor/src/agent-shared/use-text-reveal'
-import { segmentEditorText } from '../../ai-editor/src/segment-text'
+import { useTextReveal } from '../../agent-editor/src/agent-shared/use-text-reveal'
+import { segmentEditorText } from '../../agent-editor/src/segment-text'
 import { streamingTextEmits, streamingTextProps } from './streaming-text'
 defineOptions({ name: 'SStreamingText' })
 const props = defineProps(streamingTextProps)

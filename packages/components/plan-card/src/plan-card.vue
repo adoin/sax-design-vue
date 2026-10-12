@@ -6,7 +6,7 @@ import { SCountdown } from '@vuesax-alpha/components/countdown'
 import { SButton } from '@vuesax-alpha/components/button'
 
 import { STaskList } from '@vuesax-alpha/components/task-list'
-import { downloadAgentText } from '../../ai-editor/src/agent-shared/utils'
+import { downloadAgentText } from '../../agent-editor/src/agent-shared/utils'
 import { planCardEmits, planCardProps } from './plan-card'
 import type { CountdownTime } from '@vuesax-alpha/components/countdown'
 defineOptions({ name: 'SPlanCard' })

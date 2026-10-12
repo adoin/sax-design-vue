@@ -1,7 +1,7 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type ImageGeneration from './image-generation.vue'
-import type { AgentStatus } from '../../ai-editor/src/agent-shared/types'
+import type { AgentStatus } from '../../agent-editor/src/agent-shared/types'
 
 export const imageGenerationProps = buildProps({
   status: { type: definePropType<AgentStatus>(String), default: 'pending' },

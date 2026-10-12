@@ -3,9 +3,9 @@ import { computed } from 'vue'
 import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 
-import { clampProgress } from '../../ai-editor/src/agent-shared/utils'
+import { clampProgress } from '../../agent-editor/src/agent-shared/utils'
 import { taskListEmits, taskListProps } from './task-list'
-import type { AgentStatus } from '../../ai-editor/src/agent-shared/types'
+import type { AgentStatus } from '../../agent-editor/src/agent-shared/types'
 
 const marker = (status: AgentStatus) =>
   ({

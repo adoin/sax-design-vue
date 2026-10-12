@@ -163,23 +163,23 @@ SLOTS:
 
 Edit the document directly or select text to show its floating toolbar. Ctrl/Cmd + B, I and U toggle supported formats; Ctrl/Cmd + Enter opens Ask Agent; Escape closes the toolbar. Select the opening sentence of the weekly portal report, ask for a concise summary of the results, and replace the original with the revised answer. Responses are local demo data.
 
-<template #example><ai-editor-default /></template>
+<template #example><agent-editor-default /></template>
 
 <template #template>
 
-@[code{16-28}](../.vuepress/components/ai-editor/default.vue)
+@[code{16-28}](../.vuepress/components/agent-editor/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-14}](../.vuepress/components/ai-editor/default.vue)
+@[code{1-14}](../.vuepress/components/agent-editor/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{30-39}](../.vuepress/components/ai-editor/default.vue)
+@[code{30-39}](../.vuepress/components/agent-editor/default.vue)
 
 </template>
 
@@ -191,23 +191,23 @@ Edit the document directly or select text to show its floating toolbar. Ctrl/Cmd
 
 Bind both v-model and v-model:marks to persist plain text and formatting independently. Formats may overlap. Highlight key results and use Agent to polish the selected opening text. Toolbar actions preserve the selection, and Ctrl/Cmd + Z / Shift + Z undo and redo edits. Ranges refer to the current text using UTF-16 indices.
 
-<template #example><ai-editor-formatting /></template>
+<template #example><agent-editor-formatting /></template>
 
 <template #template>
 
-@[code{13-32}](../.vuepress/components/ai-editor/formatting.vue)
+@[code{13-32}](../.vuepress/components/agent-editor/formatting.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-11}](../.vuepress/components/ai-editor/formatting.vue)
+@[code{1-11}](../.vuepress/components/agent-editor/formatting.vue)
 
 </template>
 
 <template #style>
 
-@[code{34-49}](../.vuepress/components/ai-editor/formatting.vue)
+@[code{34-49}](../.vuepress/components/agent-editor/formatting.vue)
 
 </template>
 
@@ -219,23 +219,23 @@ Bind both v-model and v-model:marks to persist plain text and formatting indepen
 
 Provide request to connect your own Agent service. Its context includes the prompt, selected text, complete document, a cancellation signal and report() for progress labels and sources. Errors remain visible for retry. Closing, stopping or changing the document cancels the session and ignores late results. This example uses a local Promise to demonstrate loading, sources and failure.
 
-<template #example><ai-editor-request /></template>
+<template #example><agent-editor-request /></template>
 
 <template #template>
 
-@[code{33-48}](../.vuepress/components/ai-editor/request.vue)
+@[code{33-48}](../.vuepress/components/agent-editor/request.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-31}](../.vuepress/components/ai-editor/request.vue)
+@[code{1-31}](../.vuepress/components/agent-editor/request.vue)
 
 </template>
 
 <template #style>
 
-@[code{50-62}](../.vuepress/components/ai-editor/request.vue)
+@[code{50-62}](../.vuepress/components/agent-editor/request.vue)
 
 </template>
 
@@ -247,23 +247,23 @@ Provide request to connect your own Agent service. Its context includes the prom
 
 Return an `AsyncIterable<string>` for incremental chunks; the component appends each chunk without duplicating it. Complete string results can also reveal progressively with `stream-interval`. Stop aborts the request, and applications should pass `signal` to their fetch or stream reader. Finished answers can replace the selection, insert after the current paragraph, or be copied.
 
-<template #example><ai-editor-streaming /></template>
+<template #example><agent-editor-streaming /></template>
 
 <template #template>
 
-@[code{21-33}](../.vuepress/components/ai-editor/streaming.vue)
+@[code{21-33}](../.vuepress/components/agent-editor/streaming.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-19}](../.vuepress/components/ai-editor/streaming.vue)
+@[code{1-19}](../.vuepress/components/agent-editor/streaming.vue)
 
 </template>
 
 <template #style>
 
-@[code{35-44}](../.vuepress/components/ai-editor/streaming.vue)
+@[code{35-44}](../.vuepress/components/agent-editor/streaming.vue)
 
 </template>
 
@@ -275,17 +275,17 @@ Return an `AsyncIterable<string>` for incremental chunks; the component appends 
 
 Use toolbar for focused format actions and answer for custom answer presentation. The slot scope contains the selection and component-owned commands so examples do not need to reimplement range manipulation or request state.
 
-<template #example><ai-editor-slots /></template>
+<template #example><agent-editor-slots /></template>
 
 <template #template>
 
-@[code{10-22}](../.vuepress/components/ai-editor/slots.vue)
+@[code{10-22}](../.vuepress/components/agent-editor/slots.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-8}](../.vuepress/components/ai-editor/slots.vue)
+@[code{1-8}](../.vuepress/components/agent-editor/slots.vue)
 
 </template>
 
@@ -297,23 +297,23 @@ Use toolbar for focused format actions and answer for custom answer presentation
 
 Use `agent-icon` for PNG or SVG image URLs, or the `agent-icon` slot for inline SVG and icon components. The slot takes precedence and receives `status` and `busy`. Icons fit a 22px box and are decorative; controls retain their accessible names.
 
-<template #example><ai-editor-agent-icon /></template>
+<template #example><agent-editor-agent-icon /></template>
 
 <template #template>
 
-@[code{18-49}](../.vuepress/components/ai-editor/agent-icon.vue)
+@[code{18-49}](../.vuepress/components/agent-editor/agent-icon.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-16}](../.vuepress/components/ai-editor/agent-icon.vue)
+@[code{1-16}](../.vuepress/components/agent-editor/agent-icon.vue)
 
 </template>
 
 <template #style>
 
-@[code{51-63}](../.vuepress/components/ai-editor/agent-icon.vue)
+@[code{51-63}](../.vuepress/components/agent-editor/agent-icon.vue)
 
 </template>
 

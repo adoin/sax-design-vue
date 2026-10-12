@@ -15,7 +15,7 @@ updated_at: 2026-10-12
 
 ## 实现契约
 
-- 公开分类为 Agent，编辑器为 Agent Editor / SAgentEditor，公共类型与属性定义使用 AgentEditor* / agentEditorProps / agentEditorEmits。新增 agent-editor 组件及样式入口；既有内部实现目录与文档 URL 保留，以保持链接稳定。
+- 公开分类为 Agent，编辑器为 Agent Editor / SAgentEditor，公共类型与属性定义使用 AgentEditor* / agentEditorProps / agentEditorEmits。新增 agent-editor 组件及样式入口；实现、样式、示例与文档路径统一使用 agent-editor，公共中英文 URL 为 /components/agent-editor.html 与 /zh/components/agent-editor.html；共享样式为 agent.scss。
 - 图片属性及插槽名为 agent-icon，全局配置为 agentIcon。SConfigProvider 与 app.use(SaxDesignVue, { agentIcon }) 共享同一配置链。
 - 共享图标实现位于 agent-shared/agent-icon.vue。Message 与编辑器采用同一个默认 SVG，不复制图形；优先级为自定义插槽、组件 agent-icon、全局 agentIcon、内置 SVG。显式空字符串恢复默认。
 - Message 用户头像在气泡右侧，其他角色保持左侧，头像与消息顶部对齐。文档用户头像复用 SAvatar 与既有图片，助手默认使用 Agent 图标。avatar 插槽可以覆盖整个头像；agent-icon 插槽只替换默认助手图标。

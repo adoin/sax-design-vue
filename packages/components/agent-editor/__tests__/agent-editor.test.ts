@@ -1,11 +1,11 @@
 import { defineComponent, h, shallowRef } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import AgentEditor from '../src/ai-editor.vue'
+import AgentEditor from '../src/agent-editor.vue'
 import { SFocusTrap } from '../../focus-trap'
 import { SPopper } from '../../popper'
 import { segmentEditorText } from '../src/segment-text'
-import type { AgentEditorRequest } from '../src/ai-editor'
+import type { AgentEditorRequest } from '../src/agent-editor'
 
 const wrappers: { unmount(): void }[] = []
 const create = (props: Record<string, unknown> = {}) => {
@@ -39,14 +39,16 @@ describe('Agent Editor document and request lifecycle', () => {
     wrapper.vm.select(0, 5)
     await flushPromises()
     expect(
-      document.querySelector('.s-ai-editor__agent-icon svg'),
+      document.querySelector('.s-agent-editor__agent-icon svg'),
     ).not.toBeNull()
     await wrapper.setProps({ agentIcon: '/assistant.png' })
     const image = () =>
-      document.querySelector<HTMLImageElement>('.s-ai-editor__agent-icon img')!
+      document.querySelector<HTMLImageElement>(
+        '.s-agent-editor__agent-icon img',
+      )!
     expect(image().getAttribute('src')).toBe('/assistant.png')
     expect(image().alt).toBe('')
-    document.querySelector<HTMLButtonElement>('.s-ai-editor__ask')!.click()
+    document.querySelector<HTMLButtonElement>('.s-agent-editor__ask')!.click()
     await flushPromises()
     expect(image().getAttribute('src')).toBe('/assistant.png')
     await wrapper.setProps({ agentIcon: '/assistant.svg' })
@@ -69,17 +71,17 @@ describe('Agent Editor document and request lifecycle', () => {
     wrappers.push(wrapper)
     wrapper.vm.select(0, 5)
     await flushPromises()
-    expect(document.querySelector('.s-ai-editor__agent-icon img')).toBeNull()
+    expect(document.querySelector('.s-agent-editor__agent-icon img')).toBeNull()
     expect(
       document
-        .querySelector('.s-ai-editor__agent-icon svg')
+        .querySelector('.s-agent-editor__agent-icon svg')
         ?.getAttribute('data-status'),
     ).toBe('idle')
-    document.querySelector<HTMLButtonElement>('.s-ai-editor__ask')!.click()
+    document.querySelector<HTMLButtonElement>('.s-agent-editor__ask')!.click()
     await flushPromises()
     expect(
       document
-        .querySelector('.s-ai-editor__agent-icon svg')
+        .querySelector('.s-agent-editor__agent-icon svg')
         ?.getAttribute('data-busy'),
     ).toBe('false')
   })
@@ -101,7 +103,7 @@ describe('Agent Editor document and request lifecycle', () => {
     await new Promise((resolve) => setTimeout(resolve, 250))
     await flushPromises()
     expect(wrapper.getComponent(SPopper).props('visible')).toBe(true)
-    document.querySelector<HTMLButtonElement>('.s-ai-editor__ask')!.click()
+    document.querySelector<HTMLButtonElement>('.s-agent-editor__ask')!.click()
     await flushPromises()
     expect(
       document.querySelector('input[aria-label="Ask about the selection"]'),
@@ -135,8 +137,9 @@ describe('Agent Editor document and request lifecycle', () => {
     const wrapper = create({ answer: 'Answer' })
     wrapper.vm.select(0, 5)
     await flushPromises()
-    const button =
-      document.querySelector<HTMLButtonElement>('.s-ai-editor__ask')!
+    const button = document.querySelector<HTMLButtonElement>(
+      '.s-agent-editor__ask',
+    )!
     button.focus()
     window.getSelection()?.removeAllRanges()
     document.dispatchEvent(new Event('selectionchange'))
@@ -247,7 +250,7 @@ describe('Agent Editor document and request lifecycle', () => {
     await flushPromises()
     wrapper.getComponent(AgentEditor).vm.select(0, 5)
     await flushPromises()
-    document.querySelector<HTMLButtonElement>('.s-ai-editor__ask')?.click()
+    document.querySelector<HTMLButtonElement>('.s-agent-editor__ask')?.click()
     await flushPromises()
     expect(document.activeElement?.tagName).toBe('INPUT')
     expect(document.activeElement?.getAttribute('aria-label')).toBe(
@@ -342,8 +345,8 @@ describe('Agent Editor document and request lifecycle', () => {
     expect(context.prompt).toBe('Rewrite')
     expect(context.selection).toEqual({ start: 6, end: 11, text: 'world' })
     expect(context.document).toBe('Hello world\nAnother line')
-    expect(document.querySelector('.s-ai-editor__response b')).toBeNull()
-    expect(document.querySelector('.s-ai-editor__sources a')).toBeNull()
+    expect(document.querySelector('.s-agent-editor__response b')).toBeNull()
+    expect(document.querySelector('.s-agent-editor__sources a')).toBeNull()
     expect(wrapper.vm.apply('replace')).toBe(true)
     expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([
       'Hello <b>New</b>\nAnother line',
@@ -393,7 +396,7 @@ describe('Agent Editor document and request lifecycle', () => {
     const operation = wrapper.vm.ask('Explain')
     await flushPromises()
     expect(
-      document.querySelector('.s-ai-editor__response')?.textContent,
+      document.querySelector('.s-agent-editor__response')?.textContent,
     ).toContain('First ')
     wrapper.vm.cancel()
     expect(await operation).toBe(false)

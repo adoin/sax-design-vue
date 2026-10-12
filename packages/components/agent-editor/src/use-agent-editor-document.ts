@@ -5,7 +5,7 @@ import type {
   AgentEditorMark,
   AgentEditorProps,
   AgentEditorSelection,
-} from './ai-editor'
+} from './agent-editor'
 
 type DocumentEmit = {
   (event: 'update:modelValue', text: string): void
@@ -143,7 +143,7 @@ export function useAgentEditorDocument(
             start >= selection.value.start &&
             end <= selection.value.end
           )
-            wrapper.className = 's-ai-editor__format-enter'
+            wrapper.className = 's-agent-editor__format-enter'
           wrapper.append(node)
           node = wrapper
         }
@@ -155,7 +155,7 @@ export function useAgentEditorDocument(
         end <= selection.value.end
       ) {
         const wrapper = doc.createElement('span')
-        wrapper.className = 's-ai-editor__selection'
+        wrapper.className = 's-agent-editor__selection'
         wrapper.append(node)
         node = wrapper
       }

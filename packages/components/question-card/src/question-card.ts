@@ -4,7 +4,7 @@ import type QuestionCard from './question-card.vue'
 import type {
   AgentAnswer,
   AgentQuestion,
-} from '../../ai-editor/src/agent-shared/types'
+} from '../../agent-editor/src/agent-shared/types'
 
 export const questionCardProps = buildProps({
   questions: {

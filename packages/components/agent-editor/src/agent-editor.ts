@@ -1,6 +1,6 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
-import type AgentEditor from './ai-editor.vue'
+import type AgentEditor from './agent-editor.vue'
 
 export type AgentEditorFormat =
   'bold' | 'italic' | 'underline' | 'strike' | 'code'

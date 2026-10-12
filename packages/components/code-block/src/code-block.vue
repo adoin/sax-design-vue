@@ -4,8 +4,8 @@ import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SButton } from '@vuesax-alpha/components/button'
 import { SIcon } from '@vuesax-alpha/components/icon'
 
-import { useAgentCopy } from '../../ai-editor/src/agent-shared/use-copy'
-import { downloadAgentText } from '../../ai-editor/src/agent-shared/utils'
+import { useAgentCopy } from '../../agent-editor/src/agent-shared/use-copy'
+import { downloadAgentText } from '../../agent-editor/src/agent-shared/utils'
 import { codeBlockEmits, codeBlockProps } from './code-block'
 import { tokenizeAgentCode } from './tokenize-code'
 defineOptions({ name: 'SCodeBlock' })

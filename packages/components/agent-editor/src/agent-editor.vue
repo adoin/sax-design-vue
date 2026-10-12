@@ -11,15 +11,15 @@ import {
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SFocusTrap } from '@vuesax-alpha/components/focus-trap'
 import { useId, useLocale, useNamespace } from '@vuesax-alpha/hooks'
-import { agentEditorEmits, agentEditorProps } from './ai-editor'
-import { useAgentEditorDocument } from './use-ai-editor-document'
-import { useAgentEditorAssistant } from './use-ai-editor-assistant'
-import AgentEditorToolbar from './ai-editor-toolbar.vue'
+import { agentEditorEmits, agentEditorProps } from './agent-editor'
+import { useAgentEditorDocument } from './use-agent-editor-document'
+import { useAgentEditorAssistant } from './use-agent-editor-assistant'
+import AgentEditorToolbar from './agent-editor-toolbar.vue'
 import type {
   AgentEditorFormat,
   AgentEditorSelection,
   AgentEditorStatus,
-} from './ai-editor'
+} from './agent-editor'
 import type { PopperInstance } from '@vuesax-alpha/components/popper'
 
 defineOptions({ name: 'SAgentEditor' })
@@ -42,7 +42,7 @@ const props = defineProps(agentEditorProps)
 const initialContent = props.modelValue
 const emit = defineEmits(agentEditorEmits)
 const { t } = useLocale()
-const ns = useNamespace('ai-editor')
+const ns = useNamespace('agent-editor')
 const root = ref<HTMLElement>()
 const documentId = useId()
 const outsideClickIgnore = computed(() => [`[id="${documentId.value}"]`])

@@ -3,9 +3,9 @@ import { computed, shallowRef, watch } from 'vue'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 
-import { safeAgentHref } from '../../ai-editor/src/agent-shared/utils'
+import { safeAgentHref } from '../../agent-editor/src/agent-shared/utils'
 import { reasoningStepsEmits, reasoningStepsProps } from './reasoning-steps'
-import type { AgentStatus } from '../../ai-editor/src/agent-shared/types'
+import type { AgentStatus } from '../../agent-editor/src/agent-shared/types'
 
 const marker = (status: AgentStatus) =>
   ({
@@ -47,10 +47,10 @@ const summary = computed(
 defineSlots<{
   default(): unknown
   step(props: {
-    step: import('../../ai-editor/src/agent-shared/types').AgentTask
+    step: import('../../agent-editor/src/agent-shared/types').AgentTask
   }): unknown
   'source-icon'(props: {
-    source: import('../../ai-editor/src/agent-shared/types').AgentSource
+    source: import('../../agent-editor/src/agent-shared/types').AgentSource
   }): unknown
 }>()
 const finished = computed(

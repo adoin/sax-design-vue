@@ -3,7 +3,7 @@ import { onBeforeUnmount, shallowRef, watch } from 'vue'
 import { SImage } from '@vuesax-alpha/components/images'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { useLocale } from '@vuesax-alpha/hooks'
-import type { AgentAttachment } from '../../ai-editor/src/agent-shared/types'
+import type { AgentAttachment } from '../../agent-editor/src/agent-shared/types'
 const props = defineProps<{
   attachments: AgentAttachment[]
   disabled: boolean

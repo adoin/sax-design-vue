@@ -4,13 +4,13 @@ import { SInput } from '@vuesax-alpha/components/input'
 import { SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 import { useLocale } from '@vuesax-alpha/hooks'
 import { segmentEditorText } from './segment-text'
-import AgentEditorIcon from './ai-editor-icon.vue'
+import AgentEditorIcon from './agent-editor-icon.vue'
 import type {
   AgentEditorFormat,
   AgentEditorSelection,
   AgentEditorSource,
   AgentEditorStatus,
-} from './ai-editor'
+} from './agent-editor'
 
 const props = defineProps<{
   asking: boolean
@@ -73,19 +73,19 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
 
 <template>
   <div
-    class="s-ai-editor__toolbar"
+    class="s-agent-editor__toolbar"
     :class="{ 'is-asking': asking, 'is-static': !animated }"
     @pointerdown.stop
   >
     <div
-      class="s-ai-editor__toolbar-row"
+      class="s-agent-editor__toolbar-row"
       role="toolbar"
       :aria-label="t('vs.agentEditor.toolbar')"
     >
       <template v-if="!asking">
         <button
           type="button"
-          class="s-ai-editor__ask"
+          class="s-agent-editor__ask"
           :disabled="!canAsk"
           @mousedown.prevent
           @pointerdown.prevent
@@ -101,7 +101,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
         </button>
         <span
           v-if="!readonly"
-          class="s-ai-editor__divider"
+          class="s-agent-editor__divider"
           aria-hidden="true"
         />
         <slot
@@ -114,7 +114,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
             v-for="format in readonly ? [] : formats"
             :key="format"
             type="button"
-            class="s-ai-editor__tool"
+            class="s-agent-editor__tool"
             :aria-label="t(`vs.agentEditor.${format}`)"
             :aria-pressed="activeFormats.includes(format)"
             @mousedown.prevent
@@ -138,16 +138,16 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
           :placeholder="
             promptPlaceholder || t('vs.agentEditor.promptPlaceholder')
           "
-          class="s-ai-editor__prompt"
+          class="s-agent-editor__prompt"
           shape="rounded"
           @update:model-value="emit('update:prompt', String($event ?? ''))"
           @keydown.enter.prevent="emit('submit')"
         />
-        <span v-else class="s-ai-editor__query">{{ prompt }}</span>
+        <span v-else class="s-agent-editor__query">{{ prompt }}</span>
         <button
           v-if="status === 'idle' || status === 'error'"
           type="button"
-          class="s-ai-editor__tool is-submit"
+          class="s-agent-editor__tool is-submit"
           :disabled="!prompt.trim() || !canAsk"
           :aria-label="t('vs.agentEditor.send')"
           @click="emit('submit')"
@@ -157,7 +157,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
         <button
           v-if="busy"
           type="button"
-          class="s-ai-editor__tool"
+          class="s-agent-editor__tool"
           :aria-label="t('vs.agentEditor.stop')"
           @click="emit('stop')"
         >
@@ -166,7 +166,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
       </template>
       <button
         type="button"
-        class="s-ai-editor__tool s-ai-editor__close"
+        class="s-agent-editor__tool s-agent-editor__close"
         :aria-label="t('vs.agentEditor.close')"
         @mousedown.prevent
         @click="emit('close')"
@@ -176,7 +176,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
     </div>
     <div
       v-if="loadingVisible"
-      class="s-ai-editor__status"
+      class="s-agent-editor__status"
       role="status"
       aria-live="polite"
     >
@@ -188,15 +188,17 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
         stop-behavior="corners"
         @restored="finishLoading"
       />
-      <span class="s-ai-editor__shimmer">{{
+      <span class="s-agent-editor__shimmer">{{
         statusLabel ||
         t(
           `vs.agentEditor.${status === 'researching' ? 'researching' : 'thinking'}`,
         )
       }}</span>
     </div>
-    <div v-if="error" class="s-ai-editor__error" role="alert">{{ error }}</div>
-    <div v-if="response" class="s-ai-editor__response" :aria-busy="busy">
+    <div v-if="error" class="s-agent-editor__error" role="alert">
+      {{ error }}
+    </div>
+    <div v-if="response" class="s-agent-editor__response" :aria-busy="busy">
       <slot
         name="answer"
         :text="response"
@@ -208,12 +210,12 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
           <span
             v-for="(word, index) in responseWords"
             :key="index"
-            class="s-ai-editor__word"
+            class="s-agent-editor__word"
             >{{ word }}</span
           >
         </p>
       </slot>
-      <div v-if="status === 'complete'" class="s-ai-editor__actions">
+      <div v-if="status === 'complete'" class="s-agent-editor__actions">
         <button
           v-if="!readonly"
           type="button"
@@ -231,7 +233,7 @@ const responseWords = computed(() => segmentEditorText(props.response, 'word'))
     </div>
     <div
       v-if="safeSources.length"
-      class="s-ai-editor__sources"
+      class="s-agent-editor__sources"
       :aria-label="t('vs.agentEditor.sources')"
     >
       <template

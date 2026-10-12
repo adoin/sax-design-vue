@@ -18,7 +18,7 @@ import ChatVoiceWave from './chat-voice-wave.vue'
 import { useChatAudioMeter } from './use-chat-audio-meter'
 import { useChatVoice } from './use-chat-voice'
 import { chatInputEmits, chatInputProps } from './chat-input'
-import type { AgentAttachment } from '../../ai-editor/src/agent-shared/types'
+import type { AgentAttachment } from '../../agent-editor/src/agent-shared/types'
 
 defineOptions({ name: 'SChatInput' })
 const props = defineProps(chatInputProps)

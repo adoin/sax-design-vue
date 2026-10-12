@@ -163,23 +163,23 @@ SLOTS:
 
 可直接编辑正文，或选中文字打开浮动工具栏。Ctrl/Cmd + B、I、U 切换支持的格式，Ctrl/Cmd + Enter 打开 Agent 提问，Escape 关闭工具栏。以客户门户的周度工作汇报为例，选中第一句话并输入“更简洁地表达成果”，查看润色结果后替换原文。本地回答用于演示编辑流程。
 
-<template #example><ai-editor-zh-default /></template>
+<template #example><agent-editor-zh-default /></template>
 
 <template #template>
 
-@[code{16-26}](../../.vuepress/components/ai-editor-zh/default.vue)
+@[code{16-26}](../../.vuepress/components/agent-editor-zh/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-14}](../../.vuepress/components/ai-editor-zh/default.vue)
+@[code{1-14}](../../.vuepress/components/agent-editor-zh/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{28-37}](../../.vuepress/components/ai-editor-zh/default.vue)
+@[code{28-37}](../../.vuepress/components/agent-editor-zh/default.vue)
 
 </template>
 
@@ -191,23 +191,23 @@ SLOTS:
 
 同时绑定 v-model 和 v-model:marks，可分别持久化正文与格式。示例将成果、风险和计划分段呈现，选中成果段落后可调整格式或询问 Agent。格式可以重叠，工具栏操作会保留选区，Ctrl/Cmd + Z / Shift + Z 可撤销、重做编辑。格式范围使用当前正文的 UTF-16 索引。
 
-<template #example><ai-editor-zh-formatting /></template>
+<template #example><agent-editor-zh-formatting /></template>
 
 <template #template>
 
-@[code{12-31}](../../.vuepress/components/ai-editor-zh/formatting.vue)
+@[code{12-31}](../../.vuepress/components/agent-editor-zh/formatting.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-10}](../../.vuepress/components/ai-editor-zh/formatting.vue)
+@[code{1-10}](../../.vuepress/components/agent-editor-zh/formatting.vue)
 
 </template>
 
 <template #style>
 
-@[code{33-48}](../../.vuepress/components/ai-editor-zh/formatting.vue)
+@[code{33-48}](../../.vuepress/components/agent-editor-zh/formatting.vue)
 
 </template>
 
@@ -219,23 +219,23 @@ SLOTS:
 
 通过 request 接入自己的 Agent 服务。上下文包含问题、选中文字、完整文档、取消信号，以及更新进度文案和来源的 report()。失败后保留错误提示以便重试，关闭、停止或修改文档会取消会话，并忽略迟到的结果。此示例通过本地 Promise 展示加载、来源和失败状态。
 
-<template #example><ai-editor-zh-request /></template>
+<template #example><agent-editor-zh-request /></template>
 
 <template #template>
 
-@[code{28-43}](../../.vuepress/components/ai-editor-zh/request.vue)
+@[code{28-43}](../../.vuepress/components/agent-editor-zh/request.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-26}](../../.vuepress/components/ai-editor-zh/request.vue)
+@[code{1-26}](../../.vuepress/components/agent-editor-zh/request.vue)
 
 </template>
 
 <template #style>
 
-@[code{45-57}](../../.vuepress/components/ai-editor-zh/request.vue)
+@[code{45-57}](../../.vuepress/components/agent-editor-zh/request.vue)
 
 </template>
 
@@ -247,23 +247,23 @@ SLOTS:
 
 返回 `AsyncIterable<string>` 可逐块输出增量文本，组件按顺序追加而不重复。完整字符串也可通过 `stream-interval` 逐步显示。停止会中止请求，应用应将 `signal` 传给 fetch 或流读取器。回答完成后可替换选区、插入当前段落下方，或复制。
 
-<template #example><ai-editor-zh-streaming /></template>
+<template #example><agent-editor-zh-streaming /></template>
 
 <template #template>
 
-@[code{21-33}](../../.vuepress/components/ai-editor-zh/streaming.vue)
+@[code{21-33}](../../.vuepress/components/agent-editor-zh/streaming.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-19}](../../.vuepress/components/ai-editor-zh/streaming.vue)
+@[code{1-19}](../../.vuepress/components/agent-editor-zh/streaming.vue)
 
 </template>
 
 <template #style>
 
-@[code{35-44}](../../.vuepress/components/ai-editor-zh/streaming.vue)
+@[code{35-44}](../../.vuepress/components/agent-editor-zh/streaming.vue)
 
 </template>
 
@@ -275,17 +275,17 @@ SLOTS:
 
 通过 toolbar 精简格式操作，通过 answer 自定义回答展示。插槽提供选区和组件命令，无需重新实现选区修改或请求状态。
 
-<template #example><ai-editor-zh-slots /></template>
+<template #example><agent-editor-zh-slots /></template>
 
 <template #template>
 
-@[code{8-20}](../../.vuepress/components/ai-editor-zh/slots.vue)
+@[code{8-20}](../../.vuepress/components/agent-editor-zh/slots.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-6}](../../.vuepress/components/ai-editor-zh/slots.vue)
+@[code{1-6}](../../.vuepress/components/agent-editor-zh/slots.vue)
 
 </template>
 
@@ -297,23 +297,23 @@ SLOTS:
 
 通过 `agent-icon` 传入 PNG 或 SVG 图片地址，也可以使用 `agent-icon` 插槽渲染内联 SVG 或图标组件。插槽优先于图片地址，并提供 `status` 和 `busy`。图标适配 22px 容器，作为装饰内容；操作按钮保留可访问名称。
 
-<template #example><ai-editor-zh-agent-icon /></template>
+<template #example><agent-editor-zh-agent-icon /></template>
 
 <template #template>
 
-@[code{18-49}](../../.vuepress/components/ai-editor-zh/agent-icon.vue)
+@[code{18-49}](../../.vuepress/components/agent-editor-zh/agent-icon.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-16}](../../.vuepress/components/ai-editor-zh/agent-icon.vue)
+@[code{1-16}](../../.vuepress/components/agent-editor-zh/agent-icon.vue)
 
 </template>
 
 <template #style>
 
-@[code{51-63}](../../.vuepress/components/ai-editor-zh/agent-icon.vue)
+@[code{51-63}](../../.vuepress/components/agent-editor-zh/agent-icon.vue)
 
 </template>
 

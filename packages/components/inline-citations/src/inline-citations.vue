@@ -4,7 +4,7 @@ import { SIcon } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 
 import { SPopper } from '@vuesax-alpha/components/popper'
-import { safeAgentHref } from '../../ai-editor/src/agent-shared/utils'
+import { safeAgentHref } from '../../agent-editor/src/agent-shared/utils'
 
 import { inlineCitationsEmits, inlineCitationsProps } from './inline-citations'
 defineOptions({ name: 'SInlineCitations' })

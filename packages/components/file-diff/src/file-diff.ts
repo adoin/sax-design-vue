@@ -1,7 +1,7 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type FileDiff from './file-diff.vue'
-import type { FileDiffLine } from '../../ai-editor/src/agent-shared/types'
+import type { FileDiffLine } from '../../agent-editor/src/agent-shared/types'
 
 export const fileDiffProps = buildProps({
   filename: { type: String, default: '' },

@@ -7,7 +7,7 @@ import type {
   AgentEditorSelection,
   AgentEditorSource,
   AgentEditorStatus,
-} from './ai-editor'
+} from './agent-editor'
 
 type AssistantEmit = {
   (event: 'request', request: AgentEditorRequest): void

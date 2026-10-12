@@ -1,7 +1,7 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type ChatInput from './chat-input.vue'
-import type { AgentAttachment } from '../../ai-editor/src/agent-shared/types'
+import type { AgentAttachment } from '../../agent-editor/src/agent-shared/types'
 
 export interface ChatInputReasoningOption {
   value: string

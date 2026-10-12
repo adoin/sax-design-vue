@@ -151,7 +151,7 @@ export const componentCategories: ComponentCategory[] = [
     text: 'Agent',
     textZh: 'Agent相关',
     children: [
-      component('Agent Editor', 'Agent编辑器', '/components/ai-editor'),
+      component('Agent Editor', 'Agent编辑器', '/components/agent-editor'),
       component('Reasoning Steps', '推理步骤', '/components/reasoning-steps'),
       component('Chat History', '聊天历史', '/components/chat-history'),
       component('File Diff', '文件差异', '/components/file-diff'),

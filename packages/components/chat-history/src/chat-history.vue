@@ -13,7 +13,7 @@ import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { useHistoryNavigation } from './use-history-navigation'
 import { chatHistoryEmits, chatHistoryProps } from './chat-history'
-import type { AgentHistoryMessage } from '../../ai-editor/src/agent-shared/types'
+import type { AgentHistoryMessage } from '../../agent-editor/src/agent-shared/types'
 
 defineOptions({ name: 'SChatHistory' })
 const props = defineProps(chatHistoryProps)
