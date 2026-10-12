@@ -1690,3 +1690,50 @@ button.s-agent-heading {
 .s-agent-message-avatar .s-agent-icon {
   margin: 0;
 }
+
+.s-message-scroller__virtual {
+  width: 100%;
+  min-width: 0;
+}
+.s-message-scroller__virtual .s-vl__window {
+  border-radius: var(--sax-radius-lg);
+  background: #{getColor(background)};
+  outline: none;
+  overflow-anchor: none;
+}
+.s-message-scroller__item {
+  padding: 6px 12px;
+  box-sizing: border-box;
+}
+.s-message-scroller.is-away-top .s-message-scroller__virtual .s-vl__window {
+  mask-image: linear-gradient(to bottom, transparent, black 24px);
+}
+.s-message-scroller.is-away-bottom .s-message-scroller__virtual .s-vl__window {
+  mask-image: linear-gradient(to top, transparent, black 24px);
+}
+.s-message-scroller.is-away-top.is-away-bottom
+  .s-message-scroller__virtual
+  .s-vl__window {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 24px,
+    black calc(100% - 24px),
+    transparent
+  );
+}
+.s-message-scroller__history {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+.s-message-scroller__history .s-button {
+  background: #{getColor(background)};
+  box-shadow: var(--sax-box-shadow);
+}
+
+.s-message-scroller__virtual .s-vl__window:focus-visible {
+  background: #{getColor(primary, 0.025)};
+}

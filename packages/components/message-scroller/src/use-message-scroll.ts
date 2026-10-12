@@ -11,7 +11,7 @@ import type { Ref } from 'vue'
 export const useMessageScroll = (
   viewport: Ref<HTMLElement | null>,
   content: Ref<HTMLElement | null>,
-  props: { autoFollow: boolean; threshold: number },
+  props: { autoFollow: boolean; threshold: number; virtual?: boolean },
   emit: {
     (event: 'follow-change', value: boolean): void
     (event: 'reach-top'): void
@@ -26,6 +26,7 @@ export const useMessageScroll = (
   let observer: ResizeObserver | undefined
   let mutation: MutationObserver | undefined
   let active = false
+  let bindingVersion = 0
   let firstElementChild: Element | null = null
   const reducedMotion = () =>
     window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
@@ -44,10 +45,13 @@ export const useMessageScroll = (
       Math.max(0, props.threshold)
     if (atBottom.value) unread.value = false
   }
-  const onScroll = () => {
+  const onScroll = (preserveFollowing = false, pauseFollowing = false) => {
     const wasTop = atTop.value
     sync()
-    setFollowing(props.autoFollow && atBottom.value)
+    if (pauseFollowing) setFollowing(false)
+    else if (!preserveFollowing)
+      setFollowing(props.autoFollow && atBottom.value)
+    else if (following.value && !atBottom.value) update()
     if (!wasTop && atTop.value) emit('reach-top')
   }
   const scrollToBottom = (smooth = true) => {
@@ -81,39 +85,62 @@ export const useMessageScroll = (
         // wrapped message slots. Native scroll anchoring is disabled for parity.
         const newFirst = content.value?.firstElementChild ?? null
         if (
+          !props.virtual &&
           firstElementChild &&
           newFirst !== firstElementChild &&
           content.value?.contains(firstElementChild)
         )
           el.scrollTop += height - lastHeight
-        if (height > lastHeight) unread.value = true
+        if (!props.virtual && height > lastHeight) unread.value = true
       }
       firstElementChild = content.value?.firstElementChild ?? null
       lastHeight = height
       sync()
     })
   }
-  onMounted(async () => {
-    active = true
+  const attach = async () => {
+    const version = ++bindingVersion
+    observer?.disconnect()
+    mutation?.disconnect()
     await nextTick()
-    if (!active) return
-    firstElementChild = content.value?.firstElementChild ?? null
-    lastHeight = viewport.value?.scrollHeight ?? 0
-    if (props.autoFollow) scrollToBottom(false)
+    if (
+      !active ||
+      version !== bindingVersion ||
+      !viewport.value ||
+      !content.value
+    )
+      return
+    firstElementChild = content.value.firstElementChild
+    lastHeight = viewport.value.scrollHeight
+    if (following.value && props.autoFollow) scrollToBottom(false)
     if (typeof ResizeObserver !== 'undefined') {
       observer = new ResizeObserver(update)
-      if (content.value) observer.observe(content.value)
-      if (viewport.value) observer.observe(viewport.value)
+      observer.observe(content.value)
+      observer.observe(viewport.value)
     }
     mutation = new MutationObserver(update)
-    if (content.value)
-      mutation.observe(content.value, {
-        childList: true,
-        subtree: true,
-        characterData: true,
-      })
+    mutation.observe(content.value, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    })
     sync()
+  }
+  onMounted(() => {
+    active = true
+    attach()
   })
+  watch(
+    [viewport, content],
+    () => {
+      if (active) attach()
+    },
+    { flush: 'post' },
+  )
+  const notifyNewContent = () => {
+    if (!following.value) unread.value = true
+    update()
+  }
   watch(
     () => props.autoFollow,
     (value) => {
@@ -123,6 +150,7 @@ export const useMessageScroll = (
   )
   onBeforeUnmount(() => {
     active = false
+    bindingVersion++
     observer?.disconnect()
     mutation?.disconnect()
     if (frame !== undefined) cancelAnimationFrame(frame)
@@ -133,6 +161,8 @@ export const useMessageScroll = (
     atBottom,
     unread,
     onScroll,
+    notifyNewContent,
+    pauseFollow: () => setFollowing(false),
     scrollToTop,
     scrollToBottom,
   }

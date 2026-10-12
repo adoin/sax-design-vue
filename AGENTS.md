@@ -7,6 +7,8 @@
 
 ## Project specifications
 
+- Message Scroller 动态虚拟行高、历史懒加载、阅读锚点与用户滚动意图见 `.agents/notes/implemented/message-scroller-virtual-history.md`；虚拟测量统一复用 SVirtualList。
+
 - Agent 公开命名、Message 头像布局与共享 agentIcon 配置见 `.agents/notes/implemented/agent-naming-and-message-avatars.md`；新增公开 API 使用 Agent，不再使用 AI 命名。
 
 - AI 相关的 Agent 组件开发范围与无边框设计要求见 `.agents/notes/implemented/ai-agent-components.md`；既有 AI Editor 与弧形轮播契约见 `.agents/notes/implemented/ai-editor-and-carousel-arc.md`。

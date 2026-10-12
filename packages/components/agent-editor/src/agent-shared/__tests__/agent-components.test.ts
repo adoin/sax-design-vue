@@ -962,6 +962,101 @@ describe('Input, confirmation and message actions', () => {
 })
 
 describe('Message scroll ownership', () => {
+  const originalScrollTo = Object.getOwnPropertyDescriptor(
+    HTMLElement.prototype,
+    'scrollTo',
+  )
+  beforeEach(() => {
+    Object.defineProperty(HTMLElement.prototype, 'scrollTo', {
+      configurable: true,
+      value: vi.fn(function (this: HTMLElement, options: ScrollToOptions) {
+        this.scrollTop = options.top ?? 0
+      }),
+    })
+  })
+  afterEach(() => {
+    if (originalScrollTo)
+      Object.defineProperty(HTMLElement.prototype, 'scrollTo', originalScrollTo)
+    else Reflect.deleteProperty(HTMLElement.prototype, 'scrollTo')
+  })
+
+  it('uses measured virtualization and merges history against the latest controlled messages', async () => {
+    const items = Array.from({ length: 200 }, (_, i) => ({
+      id: String(i),
+      role: 'assistant' as const,
+      content: `Message ${i}`,
+    }))
+    let resolve!: (value: typeof items) => void
+    const load = vi.fn(
+      () =>
+        new Promise<typeof items>((done) => {
+          resolve = done
+        }),
+    )
+    const wrapper = create(MessageScroller, { items, loadMore: load })
+    await flushPromises()
+    const window = wrapper.get('.s-vl__window')
+    Object.defineProperties(window.element, {
+      clientHeight: { value: 360, configurable: true },
+      scrollHeight: { value: 10000, configurable: true },
+    })
+    await window.trigger('scroll')
+    expect(load).not.toHaveBeenCalled()
+
+    expect(
+      wrapper.findComponent({ name: 'SVirtualList' }).props('dynamic'),
+    ).toBe(true)
+    expect(wrapper.findAll('.s-message-scroller__item').length).toBeLessThan(
+      items.length,
+    )
+    const pending = wrapper.vm.loadMore()
+    await wrapper.vm.loadMore()
+    expect(load).toHaveBeenCalledTimes(1)
+    const current = [
+      ...items,
+      { id: 'new', role: 'user' as const, content: 'A new question' },
+    ]
+    await wrapper.setProps({ items: current })
+    resolve([{ id: 'older', role: 'assistant', content: 'Older' }, items[0]])
+    await pending
+    expect(wrapper.emitted('update:items')?.[0][0]).toEqual([
+      { id: 'older', role: 'assistant', content: 'Older' },
+      ...current,
+    ])
+  })
+  it('reports history errors, retries, and ignores late history after unmount', async () => {
+    const items = [{ id: '1', role: 'user' as const, content: 'Hello' }]
+    const load = vi
+      .fn()
+      .mockRejectedValueOnce(new Error('offline'))
+      .mockResolvedValueOnce([])
+    const wrapper = create(MessageScroller, { items, loadMore: load })
+    await flushPromises()
+    await wrapper.vm.loadMore()
+    expect(wrapper.emitted('load-error')).toHaveLength(1)
+    await wrapper.vm.loadMore()
+    expect(load).toHaveBeenCalledTimes(2)
+    let signal!: AbortSignal
+    let resolve!: (value: typeof items) => void
+    const removed = create(MessageScroller, {
+      items,
+      loadMore: (request: AbortSignal) => {
+        signal = request
+        return new Promise<typeof items>((done) => {
+          resolve = done
+        })
+      },
+    })
+    await flushPromises()
+    const pending = removed.vm.loadMore()
+    removed.unmount()
+    expect(signal.aborted).toBe(true)
+    resolve(items)
+    await pending
+    expect(removed.emitted('update:items')).toBeUndefined()
+    expect(removed.emitted('load-error')).toBeUndefined()
+  })
+
   it('follows new content, pauses when reading history, preserves prepends and cleans observers', async () => {
     Object.defineProperty(HTMLElement.prototype, 'scrollTo', {
       configurable: true,
