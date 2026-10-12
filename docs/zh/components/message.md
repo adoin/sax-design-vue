@@ -48,7 +48,7 @@ PROPS:
     usage: "#default"
   - name: "actions"
     type: "Boolean"
-    description: "显示操作栏；助手消息包含反馈与重新生成操作。"
+    description: "默认显示助手与用户操作栏；助手提供复制、反馈与重新生成，用户提供复制与编辑。系统和工具消息默认隐藏。"
     default: null
     usage: "#default"
   - name: "v-model:feedback"
@@ -82,6 +82,9 @@ EVENTS:
   - name: "regenerate"
     type: "() => void"
     description: "请求重新生成助手回答。"
+  - name: "edit"
+    type: "() => void"
+    description: "请求编辑用户消息。"
 SLOTS:
   - name: "agent-icon"
     type: "Slot"

@@ -60,6 +60,7 @@ export default {
       showTime: '显示消息时间',
       like: '有帮助',
       dislike: '无帮助',
+      editMessage: '编辑消息',
       regenerate: '重新生成',
       questions: '问题',
       customAnswer: '你的回答',

@@ -48,7 +48,7 @@ PROPS:
     usage: "#default"
   - name: "actions"
     type: "Boolean"
-    description: "Show icon actions. Defaults to enabled for assistant messages and disabled for other roles; explicitly set actions to override."
+    description: "Show icon actions. Defaults to enabled for assistant and user messages and disabled for system and tool roles; explicitly set actions to override."
     default: null
     usage: "#default"
   - name: "v-model:feedback"
@@ -82,6 +82,9 @@ EVENTS:
   - name: "regenerate"
     type: "() => void"
     description: "Regenerate the assistant response."
+  - name: "edit"
+    type: "() => void"
+    description: "Request editing a user message."
 SLOTS:
   - name: "agent-icon"
     type: "Slot"

@@ -936,6 +936,21 @@ describe('Input, confirmation and message actions', () => {
     expect(wrapper.emitted('skip')).toHaveLength(1)
     expect(wrapper.emitted('submit')).toEqual([[[]]])
   })
+  it('uses distinct user and assistant action sets and emits edit requests', async () => {
+    const user = create(Message, { role: 'user', content: 'Question' })
+    expect(user.findAll('.s-agent-actions button')).toHaveLength(2)
+    await user.find('button[aria-label="Edit message"]').trigger('click')
+    await new Promise((resolve) => setTimeout(resolve, 65))
+    expect(user.emitted('edit')).toHaveLength(1)
+    expect(user.find('button[aria-pressed]').exists()).toBe(false)
+    const assistant = create(Message, { role: 'assistant', content: 'Answer' })
+    expect(assistant.findAll('.s-agent-actions button')).toHaveLength(4)
+    expect(assistant.find('button[aria-label="Edit message"]').exists()).toBe(
+      false,
+    )
+    const system = create(Message, { role: 'system' })
+    expect(system.find('.s-agent-actions').exists()).toBe(false)
+  })
   it('exposes controlled timestamps and toggled feedback without mutating content', async () => {
     const wrapper = create(Message, {
       content: '<b>Literal</b>',
@@ -980,6 +995,28 @@ describe('Message scroll ownership', () => {
     else Reflect.deleteProperty(HTMLElement.prototype, 'scrollTo')
   })
 
+  it('associates default message actions with data and retains controlled votes', async () => {
+    const items = [
+      { id: 'user', role: 'user', content: 'Question' },
+      { id: 'agent', role: 'assistant', content: 'Answer' },
+    ]
+    const wrapper = create(MessageScroller, { items, virtual: false })
+    const messages = wrapper.findAllComponents(Message)
+    await messages[0].find('button[aria-label="Edit message"]').trigger('click')
+    await new Promise((resolve) => setTimeout(resolve, 65))
+    expect(wrapper.emitted('message-action')?.[0]).toEqual([
+      { item: items[0], index: 0, action: 'edit' },
+    ])
+    await messages[1].find('button[aria-pressed="false"]').trigger('click')
+    await new Promise((resolve) => setTimeout(resolve, 65))
+    expect(messages[1].props('feedback')).toBe('like')
+    await messages[1].find('button[aria-pressed="true"]').trigger('click')
+    await new Promise((resolve) => setTimeout(resolve, 65))
+    expect(messages[1].props('feedback')).toBe(null)
+    expect(wrapper.emitted('message-action')?.[2]).toEqual([
+      { item: items[1], index: 1, action: 'feedback', feedback: null },
+    ])
+  })
   it('uses measured virtualization and merges history against the latest controlled messages', async () => {
     const items = Array.from({ length: 200 }, (_, i) => ({
       id: String(i),

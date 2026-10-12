@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
-import { SButton } from '@vuesax-alpha/components/button'
-import { SIcon } from '@vuesax-alpha/components/icon'
 
 import AgentIcon from '../../agent-editor/src/agent-shared/agent-icon.vue'
 import { useAgentCopy } from '../../agent-editor/src/agent-shared/use-copy'
+import MessageAction from './message-action.vue'
 import { messageEmits, messageProps } from './message'
 defineOptions({ name: 'SMessage' })
 const props = defineProps(messageProps)
 const emit = defineEmits(messageEmits)
 const ns = useNamespace('message')
 const { t } = useLocale()
-const showActions = computed(() => props.actions ?? props.role === 'assistant')
+const showActions = computed(
+  () => props.actions ?? ['assistant', 'user'].includes(props.role),
+)
 const toggleTime = (event: Event) => {
   const target = event.target
   if (
@@ -98,60 +99,43 @@ const vote = (value: 'like' | 'dislike') => {
         ></Transition
       >
       <div v-if="showActions" class="s-agent-actions">
-        <slot name="actions" :copy="copy" :feedback="feedback"
-          ><SButton
-            icon
-            size="small"
-            :aria-label="copied ? t('vs.agent.copied') : t('vs.agent.copy')"
-            type="flat"
-            shape="rounded"
+        <slot name="actions" :copy="copy" :feedback="feedback">
+          <MessageAction
+            :label="copied ? t('vs.agent.copied') : t('vs.agent.copy')"
+            :icon="copied ? 'cb:checkmark' : 'cb:copy'"
             :disabled="disabled || loading"
             @click="copy"
-            ><SIcon :name="copied ? 'cb:checkmark' : 'cb:copy'" /><span
-              class="s-agent-sr-only"
-              >{{ copied ? t('vs.agent.copied') : t('vs.agent.copy') }}</span
-            ></SButton
-          ><template v-if="role === 'assistant'"
-            ><SButton
-              icon
-              size="small"
-              :aria-label="t('vs.agent.like')"
-              type="flat"
-              shape="rounded"
+          />
+          <template v-if="role === 'assistant'">
+            <MessageAction
+              :label="t('vs.agent.like')"
+              icon="cb:thumbs-up"
               :active="feedback === 'like'"
-              :aria-pressed="feedback === 'like'"
               :disabled="disabled || loading"
               @click="vote('like')"
-              ><SIcon name="cb:thumbs-up" /><span class="s-agent-sr-only">{{
-                t('vs.agent.like')
-              }}</span></SButton
-            ><SButton
-              icon
-              size="small"
-              :aria-label="t('vs.agent.dislike')"
-              type="flat"
-              shape="rounded"
+            />
+            <MessageAction
+              :label="t('vs.agent.dislike')"
+              icon="cb:thumbs-down"
               :active="feedback === 'dislike'"
-              :aria-pressed="feedback === 'dislike'"
               :disabled="disabled || loading"
               @click="vote('dislike')"
-              ><SIcon name="cb:thumbs-down" /><span class="s-agent-sr-only">{{
-                t('vs.agent.dislike')
-              }}</span></SButton
-            ><SButton
-              icon
-              size="small"
-              :aria-label="t('vs.agent.regenerate')"
-              type="flat"
-              shape="rounded"
+            />
+            <MessageAction
+              :label="t('vs.agent.regenerate')"
+              icon="cb:renew"
               :disabled="disabled || loading"
               @click="emit('regenerate')"
-              ><SIcon name="cb:renew" /><span class="s-agent-sr-only">{{
-                t('vs.agent.regenerate')
-              }}</span></SButton
-            ></template
-          ></slot
-        >
+            />
+          </template>
+          <MessageAction
+            v-else-if="role === 'user'"
+            :label="t('vs.agent.editMessage')"
+            icon="cb:edit"
+            :disabled="disabled || loading"
+            @click="emit('edit')"
+          />
+        </slot>
       </div>
       <span class="s-agent-sr-only" role="status">{{
         copied ? t('vs.agent.copied') : loading ? t('vs.agent.running') : ''

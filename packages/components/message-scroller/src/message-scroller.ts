@@ -6,6 +6,14 @@ export type MessageScrollerLoadMore = (
   signal: AbortSignal,
 ) => Promise<AgentHistoryMessage[]>
 
+export interface MessageScrollerAction {
+  item: AgentHistoryMessage
+  index: number
+  action: 'copy' | 'edit' | 'regenerate' | 'feedback' | 'copy-error'
+  feedback?: 'like' | 'dislike' | null
+  error?: unknown
+}
+
 export const messageScrollerProps = buildProps({
   items: { type: definePropType<AgentHistoryMessage[]>(Array) },
   virtual: { type: Boolean, default: true },
@@ -20,6 +28,8 @@ export const messageScrollerProps = buildProps({
   label: String,
 } as const)
 export const messageScrollerEmits = {
+  'message-action': (event: MessageScrollerAction) =>
+    !!event.item && typeof event.action === 'string',
   'follow-change': (following: boolean) => typeof following === 'boolean',
   'reach-top': () => true,
   'update:items': (items: AgentHistoryMessage[]) => Array.isArray(items),

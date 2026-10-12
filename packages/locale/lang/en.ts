@@ -62,6 +62,7 @@ export default {
       showTime: 'Show message time',
       like: 'Helpful',
       dislike: 'Not helpful',
+      editMessage: 'Edit message',
       regenerate: 'Regenerate',
       questions: 'Questions',
       customAnswer: 'Your answer',

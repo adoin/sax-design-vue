@@ -62,6 +62,10 @@ PROPS:
     default: null
     usage: "#default"
 EVENTS:
+  - name: "message-action"
+    type: "(event: MessageScrollerAction) => void"
+    description: "Default data-message actions include item, index, action, and optional feedback or error; custom message slots listen to SMessage events directly."
+
   - name: "update:items"
     type: "(items: AgentHistoryMessage[]) => void"
     description: "Requests the merged, deduplicated complete message list."
@@ -111,23 +115,25 @@ EXPOSES:
 
 New content follows the viewport while you are near the bottom. Scroll upward to read history without being pulled down. Prepending earlier direct message children preserves the viewport position. The floating down arrow returns to the latest message; a dot indicates unread content.
 
+Hover a message or focus its action buttons to show the toolbar. Agent messages offer copy, like, dislike, and regenerate; user messages offer copy and edit. Touch devices keep actions visible. The example supports editing questions, toggling feedback, and replacing responses.
+
 <template #example><message-scroller-default /></template>
 
 <template #template>
 
-@[code{30-52}](../.vuepress/components/message-scroller/default.vue)
+@[code{48-88}](../.vuepress/components/message-scroller/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-28}](../.vuepress/components/message-scroller/default.vue)
+@[code{1-46}](../.vuepress/components/message-scroller/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{54-67}](../.vuepress/components/message-scroller/default.vue)
+@[code{90-110}](../.vuepress/components/message-scroller/default.vue)
 
 </template>
 
@@ -143,19 +149,19 @@ Binding v-model:items enables dynamic-height virtualization, rendering only visi
 
 <template #template>
 
-@[code{57-84}](../.vuepress/components/message-scroller/virtual.vue)
+@[code{75-120}](../.vuepress/components/message-scroller/virtual.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-56}](../.vuepress/components/message-scroller/virtual.vue)
+@[code{1-74}](../.vuepress/components/message-scroller/virtual.vue)
 
 </template>
 
 <template #style>
 
-@[code{85-98}](../.vuepress/components/message-scroller/virtual.vue)
+@[code{121-141}](../.vuepress/components/message-scroller/virtual.vue)
 
 </template>
 

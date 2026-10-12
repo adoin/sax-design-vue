@@ -62,6 +62,10 @@ PROPS:
     default: null
     usage: "#default"
 EVENTS:
+  - name: "message-action"
+    type: "(event: MessageScrollerAction) => void"
+    description: "默认数据消息的操作事件，包含 item、index、action 及反馈或错误信息；自定义 message 插槽直接监听 SMessage 事件。"
+
   - name: "update:items"
     type: "(items: AgentHistoryMessage[]) => void"
     description: "请求更新去重后的完整消息集合。"
@@ -111,23 +115,25 @@ EXPOSES:
 
 在底部附近时，新内容跟随视口。向上阅读历史不会被拉回底部。向直接消息子项前面插入更早记录时会保留视口位置。悬浮向下箭头返回最新消息，圆点提示未读内容。
 
+在消息上悬停或聚焦操作按钮显示操作栏。Agent 消息提供复制、赞、踩与重新生成；用户消息提供复制与编辑。触屏设备始终展示操作。示例支持修改提问、切换反馈和更新回答。
+
 <template #example><message-scroller-default-zh /></template>
 
 <template #template>
 
-@[code{30-52}](../../.vuepress/components/message-scroller/default-zh.vue)
+@[code{48-88}](../../.vuepress/components/message-scroller/default-zh.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-28}](../../.vuepress/components/message-scroller/default-zh.vue)
+@[code{1-46}](../../.vuepress/components/message-scroller/default-zh.vue)
 
 </template>
 
 <template #style>
 
-@[code{54-67}](../../.vuepress/components/message-scroller/default-zh.vue)
+@[code{90-110}](../../.vuepress/components/message-scroller/default-zh.vue)
 
 </template>
 
@@ -143,19 +149,19 @@ EXPOSES:
 
 <template #template>
 
-@[code{57-84}](../../.vuepress/components/message-scroller/virtual-zh.vue)
+@[code{75-120}](../../.vuepress/components/message-scroller/virtual-zh.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-56}](../../.vuepress/components/message-scroller/virtual-zh.vue)
+@[code{1-74}](../../.vuepress/components/message-scroller/virtual-zh.vue)
 
 </template>
 
 <template #style>
 
-@[code{85-98}](../../.vuepress/components/message-scroller/virtual-zh.vue)
+@[code{121-141}](../../.vuepress/components/message-scroller/virtual-zh.vue)
 
 </template>
 

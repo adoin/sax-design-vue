@@ -25,6 +25,24 @@ function prepend() {
     content: 'An earlier message loaded from history.',
   })
 }
+const feedback = ref<Record<number, 'like' | 'dislike' | null>>({})
+const editing = ref<number | null>(null)
+const draft = ref('')
+function edit(id: number, content: string) {
+  editing.value = id
+  draft.value = content
+}
+function save(id: number) {
+  const message = messages.value.find((message) => message.id === id)
+  if (message && draft.value.trim()) message.content = draft.value.trim()
+  editing.value = null
+}
+function regenerate(id: number) {
+  const message = messages.value.find((message) => message.id === id)
+  if (message)
+    message.content =
+      'Integration and validation are complete. Track release risks and prioritize monitoring and error handling next week.'
+}
 </script>
 
 <template>
@@ -33,11 +51,29 @@ function prepend() {
       ><s-message
         v-for="message in messages"
         :key="message.id"
+        v-model:feedback="feedback[message.id]"
         :role="message.role"
         :author="message.role === 'user' ? 'You' : 'Agent'"
         :content="message.content"
-        :actions="false"
-        ><template v-if="message.role === 'user'" #avatar
+        @edit="edit(message.id, message.content)"
+        @regenerate="regenerate(message.id)"
+        ><template v-if="editing === message.id" #default>
+          <div class="message-edit">
+            <s-input
+              v-model="draft"
+              block
+              aria-label="Edit message content"
+              @keydown.enter.prevent="save(message.id)"
+            />
+            <div class="agent-demo-actions">
+              <s-button size="small" @click="save(message.id)">Save</s-button
+              ><s-button size="small" type="flat" @click="editing = null"
+                >Cancel</s-button
+              >
+            </div>
+          </div>
+        </template>
+        <template v-if="message.role === 'user'" #avatar
           ><s-avatar :size="30" shape="circle"
             ><img
               src="/avatars/avatar-5.png"
@@ -63,5 +99,12 @@ function prepend() {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+.message-edit {
+  display: grid;
+  gap: 10px;
+  width: 280px;
+  max-width: 100%;
+  min-width: 0;
 }
 </style>

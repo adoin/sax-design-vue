@@ -1797,3 +1797,44 @@ button.s-agent-heading {
 .s-message-scroller__virtual .s-vl__window:focus-visible {
   background: #{getColor(primary, 0.025)};
 }
+
+.s-agent-message.is-user .s-agent-actions {
+  justify-content: flex-end;
+}
+.s-agent-message .s-agent-actions .s-button {
+  margin: 0;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: #{getColor(text, 0.6)};
+  background: transparent;
+  box-shadow: none;
+  &:hover,
+  &:focus-visible {
+    color: #{getColor(text)};
+    background: #{getColor(text, 0.06)};
+  }
+  &[aria-pressed='true'] {
+    color: #{getColor(primary)};
+    background: #{getColor(primary, 0.1)};
+  }
+}
+.s-message-scroller .s-agent-message .s-agent-actions {
+  opacity: 0;
+  pointer-events: none;
+}
+.s-message-scroller .s-agent-message:hover .s-agent-actions,
+.s-message-scroller .s-agent-message:focus-within .s-agent-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (hover: none), (pointer: coarse) {
+  .s-message-scroller .s-agent-message .s-agent-actions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .s-agent-message .s-agent-actions .s-button {
+    width: 44px;
+    height: 44px;
+  }
+}

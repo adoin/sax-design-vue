@@ -53,6 +53,24 @@ function grow() {
   }, 300)
 }
 onBeforeUnmount(() => clearInterval(stream))
+const feedback = ref<Record<string, 'like' | 'dislike' | null>>({})
+const editing = ref<string | null>(null)
+const draft = ref('')
+function edit(id: string, content: string) {
+  editing.value = id
+  draft.value = content
+}
+function save(id: string) {
+  const message = messages.value.find((message) => message.id === id)
+  if (message && draft.value.trim()) message.content = draft.value.trim()
+  editing.value = null
+}
+function regenerate(id: string) {
+  const message = messages.value.find((message) => message.id === id)
+  if (message)
+    message.content =
+      '本周已完成接口联调与验证；当前关注上线风险，下周优先完善监控和异常处理。'
+}
 </script>
 <template>
   <div class="agent-demo">
@@ -65,11 +83,29 @@ onBeforeUnmount(() => clearInterval(stream))
     >
       <template #message="{ item }"
         ><s-message
+          v-model:feedback="feedback[item.id]"
           :role="item.role"
           :content="item.content"
           :author="item.role === 'user' ? '我' : 'Agent'"
-          :actions="false"
-          ><template v-if="item.role === 'user'" #avatar
+          @edit="edit(item.id, item.content)"
+          @regenerate="regenerate(item.id)"
+          ><template v-if="editing === item.id" #default>
+            <div class="message-edit">
+              <s-input
+                v-model="draft"
+                block
+                aria-label="编辑消息内容"
+                @keydown.enter.prevent="save(item.id)"
+              />
+              <div class="agent-demo-actions">
+                <s-button size="small" @click="save(item.id)">保存</s-button
+                ><s-button size="small" type="flat" @click="editing = null"
+                  >取消</s-button
+                >
+              </div>
+            </div>
+          </template>
+          <template v-if="item.role === 'user'" #avatar
             ><s-avatar :size="30" shape="circle"
               ><img
                 src="/avatars/avatar-5.png"
@@ -94,5 +130,12 @@ onBeforeUnmount(() => clearInterval(stream))
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+.message-edit {
+  display: grid;
+  gap: 10px;
+  width: 280px;
+  max-width: 100%;
+  min-width: 0;
 }
 </style>

@@ -28,6 +28,7 @@ export const messageEmits = {
   'update:feedback': (value: 'like' | 'dislike' | null) =>
     value === null || typeof value === 'string',
   regenerate: () => true,
+  edit: () => true,
 }
 export type MessageProps = ExtractPropTypes<typeof messageProps>
 export type MessageInstance = InstanceType<typeof Message>

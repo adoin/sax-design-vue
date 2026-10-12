@@ -15,6 +15,7 @@ import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
 import { messageScrollerEmits, messageScrollerProps } from './message-scroller'
 import { useMessageScroll } from './use-message-scroll'
 import { useMessageHistory } from './use-message-history'
+import type { MessageScrollerAction } from './message-scroller'
 import type { VirtualListInstance } from '@vuesax-alpha/components/virtual-list'
 import type { AgentHistoryMessage } from '../../agent-editor/src/agent-shared/types'
 
@@ -70,6 +71,20 @@ let userMovingAway: boolean | undefined
 let lastScrollTop = 0
 const asMessage = (item: unknown) => item as AgentHistoryMessage
 const itemKey = (item: unknown) => asMessage(item).id
+const feedbackById = shallowRef(new Map<string, 'like' | 'dislike' | null>())
+function messageAction(
+  item: AgentHistoryMessage,
+  index: number,
+  action: MessageScrollerAction['action'],
+  detail?: Pick<MessageScrollerAction, 'feedback' | 'error'>,
+) {
+  if (action === 'feedback') {
+    const next = new Map(feedbackById.value)
+    next.set(item.id, detail?.feedback ?? null)
+    feedbackById.value = next
+  }
+  emit('message-action', { item, index, action, ...detail })
+}
 const bindViewport = async () => {
   const version = ++bindVersion
   await nextTick()
@@ -298,7 +313,20 @@ defineExpose({
             ><SMessage
               :role="asMessage(item).role"
               :content="asMessage(item).content"
-              :actions="false"
+              :feedback="feedbackById.get(asMessage(item).id)"
+              @copy="messageAction(asMessage(item), index, 'copy')"
+              @edit="messageAction(asMessage(item), index, 'edit')"
+              @regenerate="messageAction(asMessage(item), index, 'regenerate')"
+              @update:feedback="
+                messageAction(asMessage(item), index, 'feedback', {
+                  feedback: $event,
+                })
+              "
+              @copy-error="
+                messageAction(asMessage(item), index, 'copy-error', {
+                  error: $event,
+                })
+              "
           /></slot>
         </div>
       </template>
@@ -328,7 +356,22 @@ defineExpose({
               ><SMessage
                 :role="item.role"
                 :content="item.content"
-                :actions="false"
+                :feedback="feedbackById.get(asMessage(item).id)"
+                @copy="messageAction(asMessage(item), index, 'copy')"
+                @edit="messageAction(asMessage(item), index, 'edit')"
+                @regenerate="
+                  messageAction(asMessage(item), index, 'regenerate')
+                "
+                @update:feedback="
+                  messageAction(asMessage(item), index, 'feedback', {
+                    feedback: $event,
+                  })
+                "
+                @copy-error="
+                  messageAction(asMessage(item), index, 'copy-error', {
+                    error: $event,
+                  })
+                "
             /></slot></div
         ></template>
         <slot
