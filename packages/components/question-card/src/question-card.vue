@@ -139,6 +139,7 @@ const keydown = (event: KeyboardEvent) => {
             String.fromCharCode(65 + question.options.length)
           }}</kbd
           ><SInput
+            block
             :model-value="answer?.custom ? answer.value : ''"
             :aria-label="t('vs.agent.customAnswer')"
             :placeholder="t('vs.agent.customAnswer')"
