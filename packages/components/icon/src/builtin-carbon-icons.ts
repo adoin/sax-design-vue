@@ -226,6 +226,22 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
       viewBox: '0 0 32 32',
     },
   },
+  flash: {
+    body: '<path fill="currentColor" d="M11.61 29.92a1 1 0 0 1-.6-1.07L12.83 17H8a1 1 0 0 1-1-1.23l3-13A1 1 0 0 1 11 2h10a1 1 0 0 1 .78.37a1 1 0 0 1 .2.85L20.25 11H25a1 1 0 0 1 .9.56a1 1 0 0 1-.11 1l-13 17A1 1 0 0 1 12 30a1.1 1.1 0 0 1-.39-.08M17.75 13l2-9H11.8L9.26 15h5.91l-1.59 10.28L23 13Z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'flash-filled': {
+    body: '<path fill="currentColor" d="M11.61 29.92a1 1 0 0 1-.6-1.07L12.83 17H8a1 1 0 0 1-1-1.23l3-13A1 1 0 0 1 11 2h10a1 1 0 0 1 .78.37a1 1 0 0 1 .2.85L20.25 11H25a1 1 0 0 1 .9.56a1 1 0 0 1-.11 1l-13 17A1 1 0 0 1 12 30a1.1 1.1 0 0 1-.39-.08"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
   help: {
     body: '<path fill="currentColor" d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2m0 26a12 12 0 1 1 12-12a12 12 0 0 1-12 12"/><circle cx="16" cy="23.5" r="1.5" fill="currentColor"/><path fill="currentColor" d="M17 8h-1.5a4.49 4.49 0 0 0-4.5 4.5v.5h2v-.5a2.5 2.5 0 0 1 2.5-2.5H17a2.5 2.5 0 0 1 0 5h-2v4.5h2V17a4.5 4.5 0 0 0 0-9"/>',
     attributes: {
@@ -244,6 +260,22 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
   },
   locked: {
     body: '<path fill="currentColor" d="M24 14h-2V8a6 6 0 0 0-12 0v6H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V16a2 2 0 0 0-2-2M12 8a4 4 0 0 1 8 0v6h-8Zm12 20H8V16h16Z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  microphone: {
+    body: '<path fill="currentColor" d="M23 14v3a7 7 0 0 1-14 0v-3H7v3a9 9 0 0 0 8 8.94V28h-4v2h10v-2h-4v-2.06A9 9 0 0 0 25 17v-3Z"/><path fill="currentColor" d="M16 22a5 5 0 0 0 5-5V7a5 5 0 0 0-10 0v10a5 5 0 0 0 5 5M13 7a3 3 0 0 1 6 0v10a3 3 0 0 1-6 0Z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  'microphone-off': {
+    body: '<path fill="currentColor" d="M9.18 18.57A7.4 7.4 0 0 1 9 17v-3H7v3a8.8 8.8 0 0 0 .58 3.18ZM13 15V7a3 3 0 0 1 6 0v1.75l2-2A5 5 0 0 0 11 7v8Zm10 2a7 7 0 0 1-11.73 5.14l1.42-1.41A5 5 0 0 0 21 17v-4.58l9-9L28.59 2L2 28.59L3.41 30l6.44-6.44A8.9 8.9 0 0 0 15 25.94V28h-4v2h10v-2h-4v-2.06A9 9 0 0 0 25 17v-3h-2Zm-4 0a3 3 0 0 1-4.9 2.31l4.9-4.89Z"/>',
     attributes: {
       width: '1em',
       height: '1em',
@@ -476,6 +508,14 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
   },
   'warning-alt-filled': {
     body: '<path fill="none" d="M16 26a1.5 1.5 0 1 1 1.5-1.5A1.5 1.5 0 0 1 16 26m-1.125-5h2.25v-9h-2.25Z"/><path fill="currentColor" d="M16.002 6.171h-.004L4.648 27.997l.003.003h22.698l.002-.003ZM14.875 12h2.25v9h-2.25ZM16 26a1.5 1.5 0 1 1 1.5-1.5A1.5 1.5 0 0 1 16 26"/><path fill="currentColor" d="M29 30H3a1 1 0 0 1-.887-1.461l13-25a1 1 0 0 1 1.774 0l13 25A1 1 0 0 1 29 30M4.65 28h22.7l.001-.003L16.002 6.17h-.004L4.648 27.997Z"/>',
+    attributes: {
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 32 32',
+    },
+  },
+  waveform: {
+    body: '<path fill="currentColor" d="M19 19h-2v-6h2zM4 10H2v12h2zm10 0h-2v12h2zm10 0h-2v12h2zM9 6H7v20h2zm20 0h-2v20h2z"/>',
     attributes: {
       width: '1em',
       height: '1em',

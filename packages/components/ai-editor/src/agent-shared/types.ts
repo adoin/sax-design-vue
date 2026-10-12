@@ -26,6 +26,9 @@ export interface AgentHistoryMessage {
 export interface AgentAttachment {
   id: string
   name: string
+  file?: File
+  url?: string
+  type?: string
   disabled?: boolean
 }
 export interface AgentQuestionOption {

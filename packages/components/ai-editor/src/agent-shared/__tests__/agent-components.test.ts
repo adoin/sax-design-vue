@@ -12,6 +12,8 @@ import StreamingText from '../../../../streaming-text/src/streaming-text.vue'
 import InlineCitations from '../../../../inline-citations/src/inline-citations.vue'
 import ChatHistory from '../../../../chat-history/src/chat-history.vue'
 import CodeBlock from '../../../../code-block/src/code-block.vue'
+import { useChatAudioMeter } from '../../../../chat-input/src/use-chat-audio-meter'
+import * as uploadPicker from '../../../../upload'
 import ChatInput from '../../../../chat-input/src/chat-input.vue'
 import PlanCard from '../../../../plan-card/src/plan-card.vue'
 import QuestionCard from '../../../../question-card/src/question-card.vue'
@@ -478,6 +480,196 @@ describe('Streaming lifecycle', () => {
 })
 
 describe('Input, confirmation and message actions', () => {
+  it('uses the real shared picker, retains raw files and revokes image previews on removal', async () => {
+    const createObjectURL = vi.fn(() => 'blob:chat-preview')
+    const revokeObjectURL = vi.fn()
+    vi.stubGlobal(
+      'URL',
+      class extends URL {
+        static createObjectURL = createObjectURL
+        static revokeObjectURL = revokeObjectURL
+      },
+    )
+    const file = new File(['image'], 'report.png', { type: 'image/png' })
+    const pick = vi
+      .spyOn(uploadPicker, 'pickUploadFiles')
+      .mockResolvedValue([file])
+    const wrapper = create(ChatInput)
+    await wrapper
+      .findAllComponents({ name: 'SButton' })[0]
+      .get('button')
+      .trigger('click')
+    await new Promise((resolve) => setTimeout(resolve, 65))
+    await flushPromises()
+    expect(pick).toHaveBeenCalledWith(
+      expect.objectContaining({ multiple: true }),
+    )
+    const selected = wrapper.emitted('update:attachments')![0][0] as Array<{
+      id: string
+      name: string
+      file: File
+    }>
+    expect(selected[0].file).toBe(file)
+    await wrapper.setProps({ attachments: selected })
+    expect(wrapper.classes()).toContain('is-expanded')
+    expect(createObjectURL).toHaveBeenCalledTimes(1)
+    await wrapper.get('.s-chat-input__remove').trigger('click')
+    await wrapper.setProps({ attachments: [] })
+    expect(revokeObjectURL).toHaveBeenCalledWith('blob:chat-preview')
+  })
+  it('switches the primary action and emits controlled model selection', async () => {
+    const wrapper = create(ChatInput, {
+      models: [{ value: 'balanced', label: 'Balanced' }],
+    })
+    expect(
+      wrapper.find('button[aria-label="Start voice input"]').exists(),
+    ).toBe(true)
+    await wrapper.setProps({ modelValue: 'Draft' })
+    expect(wrapper.find('button[aria-label="Send"]').exists()).toBe(true)
+    wrapper
+      .findComponent({ name: 'ChatModelSelector' })
+      .vm.$emit('update:model', 'balanced')
+    expect(wrapper.emitted('update:model')).toEqual([['balanced']])
+  })
+  it('normalizes Fast and reasoning when the selected model lacks capabilities', async () => {
+    const wrapper = create(ChatInput, {
+      model: 'sol',
+      fast: true,
+      reasoning: 'ultra',
+      models: [
+        {
+          value: 'sol',
+          label: 'GPT-6.1 Sol',
+          supportsFast: true,
+          reasoningEfforts: [{ value: 'ultra', label: 'Ultra' }],
+        },
+        {
+          value: 'basic',
+          label: 'Basic',
+          reasoningEfforts: [{ value: 'low', label: 'Low' }],
+          defaultReasoning: 'low',
+        },
+      ],
+    })
+    expect(
+      wrapper.find('.s-chat-input__fast-toggle').attributes('aria-pressed'),
+    ).toBe('true')
+    await wrapper.get('.s-chat-input__fast-toggle').trigger('click')
+    expect(wrapper.emitted('update:fast')).toEqual([[false]])
+    wrapper.findComponent({ name: 'SSlider' }).vm.$emit('update:modelValue', 0)
+    expect(wrapper.emitted('update:reasoning')).toEqual([['ultra']])
+    await wrapper.setProps({ model: 'basic' })
+    expect(wrapper.find('.s-chat-input__fast-toggle').exists()).toBe(false)
+    expect(wrapper.emitted('update:reasoning')).toEqual([['ultra'], ['low']])
+    expect(wrapper.emitted('update:fast')).toEqual([[false], [false]])
+  })
+  it('reads actual analyser bins and releases microphone tracks, context and frame loop', async () => {
+    vi.useFakeTimers()
+    const stopTrack = vi.fn()
+    const disconnect = vi.fn()
+    const close = vi.fn(() => Promise.resolve())
+    const analyser = {
+      fftSize: 256,
+      smoothingTimeConstant: 0,
+      frequencyBinCount: 128,
+      getByteFrequencyData: (bins: Uint8Array) => bins.fill(120),
+    }
+    vi.stubGlobal(
+      'AudioContext',
+      class {
+        resume = () => Promise.resolve()
+        close = close
+        createMediaStreamSource = () => ({ connect: vi.fn(), disconnect })
+        createAnalyser = () => analyser
+      },
+    )
+    const getUserMedia = vi.fn(() =>
+      Promise.resolve({ getTracks: () => [{ stop: stopTrack }] }),
+    )
+    vi.stubGlobal('navigator', { mediaDevices: { getUserMedia } })
+    const active = shallowRef(false)
+    let levels!: ReturnType<typeof useChatAudioMeter>
+    const wrapper = create(
+      defineComponent({
+        setup() {
+          levels = useChatAudioMeter(active)
+          return () => h('div')
+        },
+      }),
+    )
+    active.value = true
+    await flushPromises()
+    await vi.advanceTimersByTimeAsync(64)
+    expect(getUserMedia).toHaveBeenCalledWith(
+      expect.objectContaining({ video: false }),
+    )
+    expect(levels.value.every((level) => level > 0)).toBe(true)
+    wrapper.unmount()
+    expect(stopTrack).toHaveBeenCalledTimes(1)
+    expect(close).toHaveBeenCalledTimes(1)
+    expect(disconnect).toHaveBeenCalledTimes(1)
+    expect(vi.getTimerCount()).toBe(0)
+  })
+  it('receives native speech results and cleans the recognizer on unmount', async () => {
+    const recognitions: FakeRecognition[] = []
+    class FakeRecognition {
+      lang = ''
+      interimResults = false
+      continuous = false
+      onresult:
+        | ((event: {
+            results: ArrayLike<{ isFinal: boolean; 0: { transcript: string } }>
+          }) => void)
+        | null = null
+      onerror: ((event: { error: string }) => void) | null = null
+      onend: (() => void) | null = null
+      start = vi.fn()
+      stop = vi.fn()
+      abort = vi.fn()
+      constructor() {
+        recognitions.push(this)
+      }
+    }
+    vi.stubGlobal('SpeechRecognition', FakeRecognition)
+    const wrapper = create(ChatInput, {
+      modelValue: 'Draft ',
+      speechLanguage: 'en-US',
+    })
+    await wrapper.get('button[aria-label="Dictate"]').trigger('click')
+    await new Promise((resolve) => setTimeout(resolve, 65))
+    const recognition = recognitions[0]
+    expect(recognition.lang).toBe('en-US')
+    recognition.onresult?.({
+      results: [{ isFinal: true, 0: { transcript: 'summary' } }],
+    })
+    expect(wrapper.emitted('update:modelValue')).toEqual([['Draft summary']])
+    recognition.onerror?.({ error: 'not-allowed' })
+    expect(wrapper.emitted('voice-error')).toEqual([['not-allowed']])
+    wrapper.unmount()
+    expect(recognition.abort).toHaveBeenCalled()
+    expect(recognition.onresult).toBeNull()
+  })
+  it('ignores transcription returned after the component is removed', async () => {
+    let resolve!: (text: string) => void
+    let signal!: AbortSignal
+    const pending = new Promise<string>((done) => {
+      resolve = done
+    })
+    const wrapper = create(ChatInput, {
+      transcribe: (abort: AbortSignal) => {
+        signal = abort
+        return pending
+      },
+    })
+    await wrapper.get('button[aria-label="Dictate"]').trigger('click')
+    await new Promise((done) => setTimeout(done, 65))
+    expect(wrapper.emitted('voice-start')).toHaveLength(1)
+    wrapper.unmount()
+    expect(signal.aborted).toBe(true)
+    resolve('Late transcript')
+    await flushPromises()
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+  })
   it('does not send during IME, allows Shift+Enter and submits once on Enter', async () => {
     const wrapper = create(ChatInput, { modelValue: '你好' })
     const textarea = wrapper.find('textarea')
@@ -513,7 +705,7 @@ describe('Input, confirmation and message actions', () => {
       .trigger('click')
     await new Promise((resolve) => setTimeout(resolve, 65))
     expect(wrapper.emitted('submit')).toEqual([['', [attachment]]])
-    wrapper.findComponent({ name: 'STag' }).vm.$emit('close')
+    await wrapper.get('.s-chat-input__remove').trigger('click')
     expect(wrapper.emitted('remove-attachment')).toEqual([[attachment]])
   })
   it('only presents plan decisions while pending and keeps expansion controlled', async () => {
@@ -745,7 +937,7 @@ describe('Server rendering and local downloads', () => {
     ]
     for (const component of components) {
       const html = await renderToString(
-        h(component, { text: 'Hello', content: 'Hello' }),
+        h(component as Component, { text: 'Hello', content: 'Hello' }),
       )
       expect(html).toContain('s-')
     }

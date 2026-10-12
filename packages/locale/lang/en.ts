@@ -24,6 +24,20 @@ export default {
       copied: 'Copied',
       inputLabel: 'Message the agent',
       placeholder: 'Ask anything',
+      modelSettings: 'Model settings',
+      fastMode: 'Fast mode',
+      reasoningEffort: 'Reasoning effort',
+      chooseModel: 'Choose model',
+      dictate: 'Dictate',
+      startVoice: 'Start voice input',
+      stopVoice: 'Stop voice input',
+      voiceUnsupported:
+        'Speech input is unavailable in this browser. Type a message or try another browser.',
+      voiceFailed:
+        'Voice input failed. Check microphone permissions and retry.',
+      fileFailed:
+        'File selection failed. Check the accepted type and size limit.',
+      removeFile: 'Remove {name}',
       attach: 'Add files',
       stop: 'Stop',
       send: 'Send',
