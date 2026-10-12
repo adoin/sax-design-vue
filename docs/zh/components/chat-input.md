@@ -191,7 +191,7 @@ EXPOSES:
 
 使用 v-model 控制文本，loading 表示响应处理中。发送不会自动清空草稿。加号打开真实文件选择，使用 v-model:attachments 保存附件；图片可预览、移除。通过 v-model:model 与 models 配置具体模型；用 v-model:fast 控制闪电模式，v-model:reasoning 控制思考度。思考度使用泡泡纹理进度条，支持拖动和键盘操作，仅展示当前生效的强度名称；配置面板仅显示所选模型支持的能力。空草稿显示语音入口，输入文字或添加附件后切换为发送。语音听写由用户点击启动，需要浏览器支持和麦克风权限；也可传入 transcribe 接入自己的服务。Enter 发送、Shift+Enter 换行，输入法组合过程不会发送。
 
-models 使用 ChatInputModel[]：value 是后端模型标识，label 是显示名称，group 配置列表分组。capabilities.fast 声明 Fast 支持；capabilities.reasoning.options 按强度从低到高排列各模型的 value/label，default 指定默认值。不提供 reasoning 时隐藏滑轨并清空思考值；切换模型保留有效选项，否则使用默认值或首项。不支持 Fast 时自动关闭。示例中的能力配置仅用于演示联动，应用应从自己的模型目录获取实际能力。
+`models` 使用 <doc-type type="ChatInputModel[]" />：value 是后端模型标识，label 是显示名称，group 配置列表分组。capabilities.fast 声明 Fast 支持；capabilities.reasoning.options 按强度从低到高排列各模型的 value/label，default 指定默认值。不提供 reasoning 时隐藏滑轨并清空思考值；切换模型保留有效选项，否则使用默认值或首项。不支持 Fast 时自动关闭。示例中的能力配置仅用于演示联动，应用应从自己的模型目录获取实际能力。
 
 <template #example><chat-input-default-zh /></template>
 

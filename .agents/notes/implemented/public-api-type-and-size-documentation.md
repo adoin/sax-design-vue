@@ -74,3 +74,8 @@ supersedes: []
 - [公共 API 类型别名退化为纯文字](../prohibited/plain-text-public-api-type-alias.md)：类型根遗漏必须修复索引来源，不能靠改写元数据或普通文字掩盖。
 - [整段类型表达式的扁平弹层](../prohibited/flat-api-type-details-popover.md)：不得破坏现有逐引用递归查看能力。
 - [公共文档写入对话过程](../prohibited/conversation-history-in-public-docs.md)：公开页面只描述最终能力，验证和纠错过程留在内部规格。
+
+## 正文类型引用（2026-10-12）
+
+- 示例说明正文中的公共具名类型也须使用共享递归类型交互，不直接写无交互的类型名称。使用 <doc-type type="ChatInputModel[]" /> 引用页面 API_TYPE_DETAILS 的统一声明数据；DocType 只包装 ApiTypeDetails 与本地化标签，不复制类型映射或弹层逻辑。
+- Chat Input 双语正文已验证模型、capabilities 和 reasoning 的连续三层点击，保留父声明与来源。
