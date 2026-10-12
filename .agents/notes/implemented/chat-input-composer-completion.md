@@ -24,3 +24,4 @@ updated_at: 2026-10-12
 - 浏览器验证具体模型、Fast、思考度键盘与档位切换、能力回退、真实选图/预览/移除及双语 Code / Playground。320px 预览宽度与 scrollWidth 均为 320px。
 - 语音识别与实时频段生命周期使用模拟 SpeechRecognition、媒体流和 analyser 验证；未进行真实硬件麦克风录音验收。
 - 模型设置面板采用紧凑布局：顶部 Fast 闪电、当前思考强度、重置；居中的模型名称展开选择列表；底部泡泡纹理滑轨，不显示档位圆点。重置关闭 Fast，并恢复当前模型默认思考度。
+- 具体模型选择使用独立的第二层 SPopper，外层通过实例唯一 outsideClickIgnore 识别子浮层，选择后保持设置面板。模型可按 group 分组；capabilities.fast 与 capabilities.reasoning（options/default）均来自应用数据，组件不内置厂商或档位。旧扁平能力字段仅保留兼容。各厂商示例能力放在双语 demo 中，不作为实际服务能力声明。切换模型保留合法值，否则回退默认/首项；无 reasoning 清空并隐藏，不支持 Fast 自动关闭。新增能力切换回归测试通过，Agent 总计 41 项。

@@ -4,7 +4,7 @@ import { SPopper } from '@vuesax-alpha/components/popper'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { SSlider } from '@vuesax-alpha/components/slider'
 import { SProgress } from '@vuesax-alpha/components/progress'
-import { useLocale } from '@vuesax-alpha/hooks'
+import { useId, useLocale } from '@vuesax-alpha/hooks'
 import type { ChatInputModel } from './chat-input'
 const props = defineProps<{
   model?: string
@@ -19,6 +19,7 @@ const emit = defineEmits<{
   'update:reasoning': [value: string]
 }>()
 const { t } = useLocale()
+const pickerClass = `s-chat-input__model-picker-${useId().value}`
 const open = shallowRef(false)
 const modelListOpen = shallowRef(false)
 watch(open, (visible) => {
@@ -27,13 +28,42 @@ watch(open, (visible) => {
 const selected = computed(() =>
   props.models.find((item) => item.value === props.model),
 )
-const efforts = computed(() => selected.value?.reasoningEfforts ?? [])
+const capabilities = (model?: ChatInputModel) =>
+  model?.capabilities ?? {
+    fast: model?.supportsFast ?? false,
+    reasoning: model?.reasoningEfforts?.length
+      ? { options: model.reasoningEfforts, default: model.defaultReasoning }
+      : undefined,
+  }
+const supportsFast = computed(() => capabilities(selected.value).fast === true)
+const efforts = computed(
+  () => capabilities(selected.value).reasoning?.options ?? [],
+)
+const defaultReasoning = computed(
+  () => capabilities(selected.value).reasoning?.default,
+)
+const modelGroups = computed(() => {
+  const groups = new Map<
+    string,
+    { label?: string; description?: string; models: ChatInputModel[] }
+  >()
+  for (const model of props.models) {
+    const key = model.group?.value ?? ''
+    if (!groups.has(key))
+      groups.set(key, {
+        label: model.group?.label,
+        description: model.group?.description,
+        models: [],
+      })
+    groups.get(key)!.models.push(model)
+  }
+  return [...groups.entries()].map(([value, group]) => ({ value, ...group }))
+})
 const currentReasoning = computed(
   () =>
     efforts.value.find((item) => item.value === props.reasoning)?.value ??
-    efforts.value.find(
-      (item) => item.value === selected.value?.defaultReasoning,
-    )?.value ??
+    efforts.value.find((item) => item.value === defaultReasoning.value)
+      ?.value ??
     efforts.value[0]?.value ??
     '',
 )
@@ -57,12 +87,14 @@ const changeReasoning = (index: number) => {
   if (effort && !props.disabled) emit('update:reasoning', effort.value)
 }
 const updateCapabilities = (model: ChatInputModel) => {
-  if (!model.supportsFast && props.fast) emit('update:fast', false)
-  const levels = model.reasoningEfforts ?? []
+  if (!capabilities(model).fast && props.fast) emit('update:fast', false)
+  const levels = capabilities(model).reasoning?.options ?? []
   if (!levels.some((item) => item.value === props.reasoning))
     emit(
       'update:reasoning',
-      levels.find((item) => item.value === model.defaultReasoning)?.value ??
+      levels.find(
+        (item) => item.value === capabilities(model).reasoning?.default,
+      )?.value ??
         levels[0]?.value ??
         '',
     )
@@ -72,7 +104,7 @@ watch(
   (model) => {
     if (model) updateCapabilities(model)
   },
-  { immediate: true },
+  { immediate: true, deep: true },
 )
 const choose = (model: ChatInputModel) => {
   if (props.disabled || model.disabled) return
@@ -81,15 +113,13 @@ const choose = (model: ChatInputModel) => {
   updateCapabilities(model)
 }
 const toggleFast = () => {
-  if (!props.disabled && selected.value?.supportsFast)
-    emit('update:fast', !props.fast)
+  if (!props.disabled && supportsFast.value) emit('update:fast', !props.fast)
 }
 const resetSettings = () => {
   if (props.disabled) return
   emit('update:fast', false)
-  const model = selected.value
   const level =
-    efforts.value.find((item) => item.value === model?.defaultReasoning) ??
+    efforts.value.find((item) => item.value === defaultReasoning.value) ??
     efforts.value[0]
   emit('update:reasoning', level?.value ?? '')
 }
@@ -103,6 +133,7 @@ const resetSettings = () => {
       :disabled="disabled"
       :show-arrow="false"
       popper-class="s-chat-input__models-panel"
+      :outside-click-ignore="[`.${pickerClass}`]"
       @update:visible="open = $event"
     >
       <button
@@ -152,40 +183,71 @@ const resetSettings = () => {
               <SIcon name="cb:reset" :size="16" />
             </button>
           </div>
-          <button
-            type="button"
-            class="s-agent-control s-chat-input__current-model"
+          <SPopper
+            :visible="modelListOpen"
+            trigger="click"
+            placement="right-start"
             :disabled="disabled"
-            :aria-expanded="modelListOpen"
-            :aria-label="t('vs.agent.chooseModel')"
-            @click="modelListOpen = !modelListOpen"
+            :show-arrow="false"
+            :popper-class="`s-chat-input__model-picker ${pickerClass}`"
+            @update:visible="modelListOpen = $event"
           >
-            {{ selected?.label || t('vs.agent.chooseModel')
-            }}<SIcon
-              :name="modelListOpen ? 'cb:chevron-down' : 'cb:chevron-right'"
-              :size="12"
-            />
-          </button>
-          <div v-if="modelListOpen" class="s-chat-input__model-list">
             <button
-              v-for="option in models"
-              :key="option.value"
               type="button"
-              class="s-agent-control s-chat-input__model-choice"
-              :disabled="disabled || option.disabled"
-              :aria-pressed="option.value === model"
-              @click="choose(option)"
+              class="s-agent-control s-chat-input__current-model"
+              :disabled="disabled"
+              :aria-expanded="modelListOpen"
+              aria-haspopup="dialog"
+              :aria-label="t('vs.agent.chooseModel')"
             >
-              <img v-if="option.icon" :src="option.icon" alt="" /><span>{{
-                option.label
-              }}</span
-              ><SIcon
-                v-if="option.value === model"
-                name="cb:checkmark"
-                :size="16"
-              />
+              {{ selected?.label || t('vs.agent.chooseModel')
+              }}<SIcon name="cb:chevron-right" :size="12" />
             </button>
-          </div>
+            <template #content>
+              <div role="dialog" :aria-label="t('vs.agent.chooseModel')">
+                <div class="s-chat-input__picker-title">
+                  {{ t('vs.agent.chooseModel') }}
+                </div>
+                <div
+                  v-for="group in modelGroups"
+                  :key="group.value"
+                  class="s-chat-input__model-group"
+                >
+                  <div v-if="group.label" class="s-chat-input__group-title">
+                    {{ group.label }}
+                  </div>
+                  <div
+                    v-if="group.description"
+                    class="s-chat-input__group-description"
+                  >
+                    {{ group.description }}
+                  </div>
+                  <div class="s-chat-input__model-list">
+                    <button
+                      v-for="option in group.models"
+                      :key="option.value"
+                      type="button"
+                      class="s-agent-control s-chat-input__model-choice"
+                      :disabled="disabled || option.disabled"
+                      :aria-pressed="option.value === model"
+                      @click="choose(option)"
+                    >
+                      <img
+                        v-if="option.icon"
+                        :src="option.icon"
+                        alt=""
+                      /><span>{{ option.label }}</span
+                      ><SIcon
+                        v-if="option.value === model"
+                        name="cb:checkmark"
+                        :size="16"
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </SPopper>
           <fieldset
             v-if="efforts.length"
             class="s-chat-input__thinking"

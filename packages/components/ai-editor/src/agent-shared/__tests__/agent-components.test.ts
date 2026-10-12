@@ -563,6 +563,66 @@ describe('Input, confirmation and message actions', () => {
     expect(wrapper.emitted('update:reasoning')).toEqual([['ultra'], ['low']])
     expect(wrapper.emitted('update:fast')).toEqual([[false], [false]])
   })
+  it('uses each model capability catalog and clears unsupported reasoning', async () => {
+    const models = [
+      {
+        value: 'gpt',
+        label: 'GPT',
+        capabilities: {
+          fast: true,
+          reasoning: {
+            options: [
+              { value: 'low', label: 'Low' },
+              { value: 'high', label: 'High' },
+            ],
+            default: 'low',
+          },
+        },
+      },
+      {
+        value: 'other',
+        label: 'Other',
+        capabilities: {
+          reasoning: {
+            options: [
+              { value: 'adaptive', label: 'Automatic' },
+              { value: 'extended', label: 'Extended' },
+            ],
+            default: 'adaptive',
+          },
+        },
+      },
+      { value: 'plain', label: 'Plain', capabilities: {} },
+      {
+        value: 'invalid-default',
+        label: 'Fallback',
+        capabilities: {
+          reasoning: {
+            options: [{ value: 'only', label: 'Only' }],
+            default: 'missing',
+          },
+        },
+      },
+    ]
+    const wrapper = create(ChatInput, {
+      models,
+      model: 'gpt',
+      reasoning: 'high',
+      fast: true,
+    })
+    await wrapper.setProps({ model: 'other' })
+    expect(wrapper.emitted('update:reasoning')).toEqual([['adaptive']])
+    expect(wrapper.emitted('update:fast')).toEqual([[false]])
+    await wrapper.setProps({
+      reasoning: 'adaptive',
+      fast: false,
+      model: 'plain',
+    })
+    expect(wrapper.findComponent({ name: 'SSlider' }).exists()).toBe(false)
+    expect(wrapper.emitted('update:reasoning')?.at(-1)).toEqual([''])
+    await wrapper.setProps({ reasoning: '', model: 'invalid-default' })
+    expect(wrapper.emitted('update:reasoning')?.at(-1)).toEqual(['only'])
+  })
   it('reads actual analyser bins and releases microphone tracks, context and frame loop', async () => {
     vi.useFakeTimers()
     const stopTrack = vi.fn()

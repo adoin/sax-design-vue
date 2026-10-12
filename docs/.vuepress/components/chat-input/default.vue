@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { AgentAttachment } from 'sax-design-vue'
+import type { AgentAttachment, ChatInputModel } from 'sax-design-vue'
 const text = ref('')
 const loading = ref(false)
 const sent = ref('')
@@ -16,28 +16,69 @@ const efforts = [
   { value: 'max', label: 'Maximum' },
   { value: 'ultra', label: 'Ultra' },
 ]
-const models = [
+const recommended = {
+  value: 'recommended',
+  label: 'Default',
+  description: 'Recommended models',
+}
+const otherModels = { value: 'others', label: 'Other models' }
+const models: ChatInputModel[] = [
   {
     value: 'gpt-6.1-sol',
     label: 'GPT-6.1 Sol',
-    supportsFast: true,
-    reasoningEfforts: efforts,
-    defaultReasoning: 'medium',
+    group: recommended,
+    capabilities: {
+      fast: true,
+      reasoning: { options: efforts, default: 'medium' },
+    },
   },
   {
     value: 'gpt-6-astra',
     label: 'GPT-6 Astra',
-    supportsFast: true,
-    reasoningEfforts: efforts,
-    defaultReasoning: 'medium',
+    group: recommended,
+    capabilities: {
+      fast: true,
+      reasoning: { options: efforts, default: 'medium' },
+    },
   },
   {
     value: 'gpt-6-luna',
     label: 'GPT-6 Luna',
-    supportsFast: true,
-    reasoningEfforts: efforts.slice(0, 5),
-    defaultReasoning: 'medium',
+    group: recommended,
+    capabilities: {
+      fast: true,
+      reasoning: { options: efforts.slice(0, 5), default: 'medium' },
+    },
   },
+  {
+    value: 'claude',
+    label: 'Claude',
+    group: otherModels,
+    capabilities: {
+      reasoning: {
+        options: [
+          { value: 'off', label: 'Off' },
+          { value: 'adaptive', label: 'Automatic' },
+        ],
+        default: 'adaptive',
+      },
+    },
+  },
+  {
+    value: 'gemini',
+    label: 'Gemini',
+    group: otherModels,
+    capabilities: {
+      reasoning: {
+        options: [
+          { value: 'light', label: 'Light' },
+          { value: 'deep', label: 'Deep' },
+        ],
+        default: 'light',
+      },
+    },
+  },
+  { value: 'chatgpt', label: 'ChatGPT', group: otherModels, capabilities: {} },
 ]
 function send(value: string) {
   sent.value = value || 'Attachment sent'

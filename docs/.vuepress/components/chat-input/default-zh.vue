@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { AgentAttachment } from 'sax-design-vue'
+import type { AgentAttachment, ChatInputModel } from 'sax-design-vue'
 const text = ref('')
 const loading = ref(false)
 const sent = ref('')
@@ -16,28 +16,69 @@ const efforts = [
   { value: 'max', label: '最大' },
   { value: 'ultra', label: '超高' },
 ]
-const models = [
+const recommended = {
+  value: 'recommended',
+  label: '默认',
+  description: '推荐模型集',
+}
+const otherModels = { value: 'others', label: '其他模型' }
+const models: ChatInputModel[] = [
   {
     value: 'gpt-6.1-sol',
     label: 'GPT-6.1 Sol',
-    supportsFast: true,
-    reasoningEfforts: efforts,
-    defaultReasoning: 'medium',
+    group: recommended,
+    capabilities: {
+      fast: true,
+      reasoning: { options: efforts, default: 'medium' },
+    },
   },
   {
     value: 'gpt-6-astra',
     label: 'GPT-6 Astra',
-    supportsFast: true,
-    reasoningEfforts: efforts,
-    defaultReasoning: 'medium',
+    group: recommended,
+    capabilities: {
+      fast: true,
+      reasoning: { options: efforts, default: 'medium' },
+    },
   },
   {
     value: 'gpt-6-luna',
     label: 'GPT-6 Luna',
-    supportsFast: true,
-    reasoningEfforts: efforts.slice(0, 5),
-    defaultReasoning: 'medium',
+    group: recommended,
+    capabilities: {
+      fast: true,
+      reasoning: { options: efforts.slice(0, 5), default: 'medium' },
+    },
   },
+  {
+    value: 'claude',
+    label: 'Claude',
+    group: otherModels,
+    capabilities: {
+      reasoning: {
+        options: [
+          { value: 'off', label: '关闭' },
+          { value: 'adaptive', label: '自动' },
+        ],
+        default: 'adaptive',
+      },
+    },
+  },
+  {
+    value: 'gemini',
+    label: 'Gemini',
+    group: otherModels,
+    capabilities: {
+      reasoning: {
+        options: [
+          { value: 'light', label: '轻量' },
+          { value: 'deep', label: '深入' },
+        ],
+        default: 'light',
+      },
+    },
+  },
+  { value: 'chatgpt', label: 'ChatGPT', group: otherModels, capabilities: {} },
 ]
 function send(value: string) {
   sent.value = value || '已发送附件'

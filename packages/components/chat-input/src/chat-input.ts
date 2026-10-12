@@ -7,11 +7,29 @@ export interface ChatInputReasoningOption {
   value: string
   label: string
 }
+export interface ChatInputReasoningCapability {
+  options: ChatInputReasoningOption[]
+  default?: string
+}
+export interface ChatInputModelCapabilities {
+  fast?: boolean
+  reasoning?: ChatInputReasoningCapability
+}
+export interface ChatInputModelGroup {
+  value: string
+  label: string
+  description?: string
+}
 export interface ChatInputModel {
   value: string
   label: string
+  group?: ChatInputModelGroup
+  capabilities?: ChatInputModelCapabilities
+  /** @deprecated Use capabilities.fast. */
   supportsFast?: boolean
+  /** @deprecated Use capabilities.reasoning.options. */
   reasoningEfforts?: ChatInputReasoningOption[]
+  /** @deprecated Use capabilities.reasoning.default. */
   defaultReasoning?: string
   icon?: string
   disabled?: boolean

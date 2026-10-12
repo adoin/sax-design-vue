@@ -191,23 +191,25 @@ EXPOSES:
 
 Use v-model for text and loading for an active response. Sending does not clear the draft automatically. The add action opens a native file picker. Bind v-model:attachments for image previews and removal, and v-model:model with models for concrete model profiles. Bind v-model:fast for the lightning toggle and v-model:reasoning for reasoning effort. The settings panel shows supported capabilities; its bubbles-textured progress track supports dragging and keyboard control; only the active effort label is displayed. Empty drafts show Voice; text or attachments switch to Send. Dictation requires browser support and microphone permission, or you can provide transcribe for your own service. Enter sends, Shift+Enter inserts a newline, and IME composition never sends.
 
+models accepts ChatInputModel[]: value identifies the backend model, label names it, and group configures list sections. capabilities.fast declares Fast support. capabilities.reasoning.options orders model-specific value/label pairs from lower to higher effort; default selects the default value. Omitting reasoning hides the slider and clears its value. Switching models preserves a supported value, otherwise uses the default or first option; unsupported Fast mode turns off. Example capabilities demonstrate the interaction; applications should use their own model catalog for actual capabilities.
+
 <template #example><chat-input-default /></template>
 
 <template #template>
 
-@[code{53-68}](../.vuepress/components/chat-input/default.vue)
+@[code{94-109}](../.vuepress/components/chat-input/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-51}](../.vuepress/components/chat-input/default.vue)
+@[code{1-92}](../.vuepress/components/chat-input/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{70-83}](../.vuepress/components/chat-input/default.vue)
+@[code{111-124}](../.vuepress/components/chat-input/default.vue)
 
 </template>
 
