@@ -79,7 +79,7 @@ SLOTS:
 
 ## 基础用法
 
-计划保持待确认状态，直到消费方更新 status。查看计划和更多任务都展开同一任务列表，使用 v-model:expanded 控制；approve 或 reject 接入执行流程。下载导出当前计划文本；批准事件不会在组件内部请求服务。
+计划保持待确认状态，直到消费方更新 status。查看计划和更多任务都展开同一任务列表，使用 v-model:expanded 控制，展开后按钮显示“收起计划”；approve 或 reject 接入执行流程。批准后显示绿色确认标记与勾选动画，任务列表保留原状态。下载导出当前计划文本；批准事件不会在组件内部请求服务。
 
 <template #example><plan-card-default-zh /></template>
 

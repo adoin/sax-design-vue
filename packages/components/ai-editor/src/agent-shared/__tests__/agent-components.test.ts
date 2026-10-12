@@ -147,6 +147,9 @@ describe('Agent process, result and safety contracts', () => {
     await wrapper.get('.s-agent-plan-tasks > button').trigger('click')
     expect(wrapper.emitted('update:expanded')).toEqual([[true]])
     await wrapper.setProps({ expanded: true })
+    expect(
+      wrapper.get('.s-plan-card__footer .s-agent-text-button').text(),
+    ).toBe('Hide Plan')
     expect(wrapper.findAll('.s-agent-plan-tasks li')).toHaveLength(5)
     await wrapper
       .get('.s-plan-card__footer .s-agent-text-button')

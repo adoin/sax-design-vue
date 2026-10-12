@@ -1529,4 +1529,134 @@ button.s-agent-heading {
 .s-plan-card__auto-cancelled {
   font-size: 12px;
 }
-.s-plan-card__auto-approve .s-countdown { padding: 0; border: 0; background: transparent; font-weight: 400; letter-spacing: 0; }
+.s-plan-card__auto-approve .s-countdown {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.s-plan-card {
+  transition: background-color var(--sax-motion-duration-slow)
+    var(--sax-motion-easing);
+}
+.s-plan-card.is-approved {
+  background: color-mix(
+    in srgb,
+    #{getColor(success)} 3%,
+    #{getColor(background)}
+  );
+}
+.s-plan-card__heading-icon {
+  transition:
+    color var(--sax-motion-duration) var(--sax-motion-easing),
+    background-color var(--sax-motion-duration)
+      var(--sax-motion-easing);
+}
+.s-plan-card.is-approved .s-plan-card__heading-icon {
+  color: #{getColor(success)};
+  background: #{getColor(success, 0.12)};
+}
+.s-plan-card.is-approved .s-agent-plan-tasks {
+  background: #{getColor(success, 0.045)};
+}
+.s-plan-card__check {
+  width: 20px;
+  height: 20px;
+  overflow: visible;
+}
+.s-plan-card__check path {
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.s-plan-card__decision {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  min-height: 32px;
+  box-sizing: border-box;
+  border-radius: var(--sax-radius-pill);
+  font-size: 13px;
+  font-weight: 500;
+}
+.s-plan-card__decision.is-approved {
+  color: #{getColor(success)};
+  background: #{getColor(success, 0.1)};
+}
+.s-plan-card__decision.is-rejected {
+  color: #{getColor(text, 0.6)};
+  background: #{getColor(text, 0.06)};
+}
+.s-plan-card__footer {
+  min-height: 36px;
+}
+.s-plan-card-check-enter-active {
+  transition:
+    opacity var(--sax-motion-duration-slow) var(--sax-motion-easing-out),
+    transform var(--sax-motion-duration-slow) var(--sax-motion-easing-out);
+}
+.s-plan-card-check-leave-active {
+  transition:
+    opacity var(--sax-motion-duration-fast) var(--sax-motion-easing),
+    transform var(--sax-motion-duration-fast) var(--sax-motion-easing);
+}
+.s-plan-card-check-enter-from {
+  opacity: 0;
+  transform: translateY(4px) scale(0.7) rotate(-12deg);
+}
+.s-plan-card-check-leave-to {
+  opacity: 0;
+  transform: scale(0.7);
+}
+.s-plan-card-check-enter-active .s-plan-card__check path,
+.s-plan-card__check.s-plan-card-check-enter-active path {
+  animation: s-plan-card-check-draw var(--sax-motion-duration-slow)
+    var(--sax-motion-easing-out) both;
+}
+.s-plan-card-decision-enter-active,
+.s-plan-card-decision-leave-active {
+  transition:
+    opacity var(--sax-motion-duration) var(--sax-motion-easing-out),
+    transform var(--sax-motion-duration) var(--sax-motion-easing-out);
+}
+.s-plan-card-decision-enter-from {
+  opacity: 0;
+  transform: translateY(5px) scale(0.96);
+}
+.s-plan-card-decision-leave-to {
+  opacity: 0;
+  transform: translateY(-3px);
+}
+@keyframes s-plan-card-check-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-plan-card,
+  .s-plan-card__heading-icon,
+  .s-plan-card-check-enter-active,
+  .s-plan-card-check-leave-active,
+  .s-plan-card-decision-enter-active,
+  .s-plan-card-decision-leave-active {
+    transition: none;
+  }
+  .s-plan-card-check-enter-active path {
+    animation: none !important;
+  }
+  .s-plan-card-check-enter-from,
+  .s-plan-card-check-leave-to,
+  .s-plan-card-decision-enter-from,
+  .s-plan-card-decision-leave-to {
+    transform: none;
+  }
+}

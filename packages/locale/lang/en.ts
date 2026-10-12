@@ -45,6 +45,7 @@ export default {
       attach: 'Add files',
       stop: 'Stop',
       send: 'Send',
+      hidePlan: 'Hide Plan',
       viewPlan: 'View plan',
       approve: 'Approve',
       approved: 'Approved',

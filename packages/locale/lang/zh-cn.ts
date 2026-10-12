@@ -43,6 +43,7 @@ export default {
       attach: '添加文件',
       stop: '停止',
       send: '发送',
+      hidePlan: '收起计划',
       viewPlan: '查看计划',
       approve: '批准',
       approved: '已批准',

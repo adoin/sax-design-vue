@@ -63,3 +63,4 @@ updated_at: 2026-10-10
 - 配置或计划更新重启倒计时；自动批准默认 0 关闭。双语独立示例提供 5 秒倒计时与重播，Code 和 Playground 同步。
 - Agent 42 项回归与文档 21 项检查通过，主题构建通过；浏览器验证倒计时完成、取消及双语 Code / Playground。
 - 2026-10-12 用户明确“查看计划”与“还有 N 项”为同一任务展开交互：两入口共享受控 expanded / update:expanded，collapsed 显示前三项，expanded 显示全部；移除单独的 content 文本展开区。content 仅用于下载，自定义 default 插槽始终显示。双语文档和浏览器 3→5→3 联动验证同步。
+- 2026-10-12 批准反馈：受控 status 从 pending 进入 approved 后，标题图标用 400ms 勾选描边与缩放淡入替换计划图标；卡面和任务区轻微绿色着色，底部持久绿色批准标记淡入。批准不更改任务执行状态。共享 motion tokens，prefers-reduced-motion 下禁用过渡和描边动画。展开后底部入口改为收起计划 / Hide Plan，收起恢复查看计划 / View plan。浏览器捕获 check-draw 的 0.4s 动画，并验证双语 Code / Playground。

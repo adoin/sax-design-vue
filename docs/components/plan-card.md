@@ -79,7 +79,7 @@ SLOTS:
 
 ## Default
 
-A plan remains pending until the consumer changes its status. View plan and more tasks expand the same task list through v-model:expanded. Use approve or reject to connect your execution policy. Download exports the provided plan text; approval never starts a service inside the component.
+A plan remains pending until the consumer changes its status. View plan and more tasks expand the same task list through v-model:expanded; the expanded action reads Hide Plan. Use approve or reject to connect your execution policy. Approval reveals a green confirmation and an animated check, while tasks retain their own status. Download exports the provided plan text; approval never starts a service inside the component.
 
 <template #example><plan-card-default /></template>
 

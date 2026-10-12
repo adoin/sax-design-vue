@@ -93,14 +93,33 @@ const downloadPlan = () => {
 
 <template>
   <section
-    :class="[ns.b(), 's-agent-surface']"
+    :class="[
+      ns.b(),
+      's-agent-surface',
+      {
+        'is-approved': status === 'approved',
+        'is-rejected': status === 'rejected',
+      },
+    ]"
     @keydown.enter.ctrl.prevent="decide('approve')"
     @keydown.enter.meta.prevent="decide('approve')"
   >
     <div class="s-agent-heading">
-      <span class="s-agent-card-heading-icon"
-        ><SIcon name="cb:task" aria-hidden="true"
-      /></span>
+      <span class="s-agent-card-heading-icon s-plan-card__heading-icon">
+        <Transition name="s-plan-card-check" mode="out-in">
+          <svg
+            v-if="status === 'approved'"
+            key="approved"
+            class="s-plan-card__check"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="m5 12 4.5 4.5L19 7" pathLength="1" />
+          </svg>
+          <SIcon v-else key="plan" name="cb:task" aria-hidden="true" />
+        </Transition>
+      </span>
       <h3 class="s-agent-grow">{{ title }}</h3>
       <SButton
         icon
@@ -185,7 +204,7 @@ const downloadPlan = () => {
         :aria-expanded="expanded"
         @click="toggleExpanded"
       >
-        {{ t('vs.agent.viewPlan') }}
+        {{ t(expanded ? 'vs.agent.hidePlan' : 'vs.agent.viewPlan') }}
         <SIcon
           :name="expanded ? 'cb:chevron-up' : 'cb:chevron-down'"
           aria-hidden="true"
@@ -204,7 +223,23 @@ const downloadPlan = () => {
           @click="decide('reject')"
           >{{ t('vs.agent.reject') }}</SButton
         ></template
-      ><span v-else role="status">{{ t(`vs.agent.${status}`) }}</span
+      >
+      <Transition name="s-plan-card-decision" mode="out-in">
+        <span
+          v-if="status !== 'pending'"
+          :key="status"
+          role="status"
+          class="s-plan-card__decision"
+          :class="{
+            'is-approved': status === 'approved',
+            'is-rejected': status === 'rejected',
+          }"
+          ><SIcon
+            :name="status === 'approved' ? 'cb:checkmark' : 'cb:close'"
+            :size="16"
+            aria-hidden="true"
+          />{{ t(`vs.agent.${status}`) }}</span
+        > </Transition
       ><slot name="actions" :status="status" />
     </div>
   </section>
