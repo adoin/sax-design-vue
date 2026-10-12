@@ -2,31 +2,45 @@
 
 <card>
 
-## What is Sax Design Vue?
+## Starting with Vuesax
 
-Sax Design Vue is a **Vue 3 + TypeScript** component library migrated from the Vuesax ecosystem. It is built for modern tooling (Vite, pnpm workspaces) and focuses on three things developers need most:
+Sax Design Vue began as **an attempt to bring Vuesax back to life**.
 
-1. **How to use** components in real projects
-2. **How to configure** props, slots, and theming
-3. **How to preview** behavior in the [online playground](/guide/playground)
+When active development of its Vue3 version stalled, I still loved its visual language: rounded corners, soft shadows, and expressive controls. The initial idea was simple: let those components keep growing in Vue3, with TypeScript to clarify their APIs.
 
 </card>
 
 <card>
 
-## Quick links
+## A little extra
 
-- [Getting Started](/guide/getting-started.html) — install, register, dark mode
-- [Using Components](/guide/using-components) — examples, props, playground workflow
-- [Configuration](/guide/configuration) — theming, auto-import, global setup
-- [Playground](/guide/playground) — interactive demos in the browser
+As the migration progressed, I decided to try bolder ideas and give Sax Design Vue a direction of its own.
+
+Keeping the visual inspiration from Vuesax, I explored borderless surfaces, inset shadows, materials, and motion. I also added the table capabilities needed by complex data apps, alongside common Agent interactions such as chat, reasoning, and plan approval.
+
+That is where “a little extra” comes from: starting with components I enjoy and expanding what they can do through real development work.
 
 </card>
 
 <card>
 
-## Design philosophy
+## Table inspiration
 
-Like the original Vuesax, we avoid looking like every other Material clone. Components stay visually expressive while remaining practical to configure through props and CSS variables — including **light / dark** themes.
+Table's features and interactions draw inspiration from **vxe-table**. Its work on complex business tables provided a useful reference for editing, validation, trees, groups, and spreadsheet interactions.
+
+I developed the table around Sax Design Vue's visual language and configuration patterns, adding dynamic row heights, row and column virtualization, and indexed data sources so that rich functionality and large-data rendering can work together.
+
+Thanks to Vuesax for its design inspiration, and to vxe-table for its exploration of business tables.
+
+</card>
+
+<card>
+
+## Get started
+
+- [Getting Started](/guide/getting-started.html) — installation and registration
+- [Browse Components](/components/) — examples and APIs
+- [Configuration](/guide/configuration) — themes and global settings
+- [Playground](/guide/playground) — try components online
 
 </card>
