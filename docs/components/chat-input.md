@@ -189,7 +189,7 @@ EXPOSES:
 
 ## Default
 
-Use v-model for text and loading for an active response. Sending does not clear the draft automatically. The add action opens a native file picker. Bind v-model:attachments for image previews and removal, and v-model:model with models for concrete model profiles. Bind v-model:fast for the lightning toggle and v-model:reasoning for reasoning effort. The settings panel shows supported capabilities; its bubbles-textured progress track supports dragging, keyboard control, and clickable levels. Empty drafts show Voice; text or attachments switch to Send. Dictation requires browser support and microphone permission, or you can provide transcribe for your own service. Enter sends, Shift+Enter inserts a newline, and IME composition never sends.
+Use v-model for text and loading for an active response. Sending does not clear the draft automatically. The add action opens a native file picker. Bind v-model:attachments for image previews and removal, and v-model:model with models for concrete model profiles. Bind v-model:fast for the lightning toggle and v-model:reasoning for reasoning effort. The settings panel shows supported capabilities; its bubbles-textured progress track supports dragging and keyboard control; only the active effort label is displayed. Empty drafts show Voice; text or attachments switch to Send. Dictation requires browser support and microphone permission, or you can provide transcribe for your own service. Enter sends, Shift+Enter inserts a newline, and IME composition never sends.
 
 <template #example><chat-input-default /></template>
 

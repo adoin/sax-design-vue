@@ -145,8 +145,7 @@ const toggleFast = () => {
           <fieldset v-if="efforts.length" class="s-chat-input__thinking">
             <legend>{{ t('vs.agent.reasoningEffort') }}</legend>
             <div class="s-chat-input__effort-heading">
-              <span>{{ reasoningLabel }}</span
-              ><span>{{ reasoningIndex + 1 }} / {{ efforts.length }}</span>
+              <span>{{ reasoningLabel }}</span>
             </div>
             <div class="s-chat-input__effort-slider">
               <div class="s-chat-input__effort-progress" aria-hidden="true">
@@ -168,19 +167,6 @@ const toggleFast = () => {
                 :aria-valuetext="reasoningLabel"
                 @update:model-value="changeReasoning"
               />
-            </div>
-            <div class="s-chat-input__effort-labels">
-              <button
-                v-for="(effort, index) in efforts"
-                :key="effort.value"
-                type="button"
-                class="s-agent-control"
-                :disabled="disabled"
-                :aria-pressed="currentReasoning === effort.value"
-                @click="changeReasoning(index)"
-              >
-                {{ effort.label }}
-              </button>
             </div>
           </fieldset>
         </div>

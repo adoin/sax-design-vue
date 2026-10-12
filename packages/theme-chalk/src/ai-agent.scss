@@ -1437,20 +1437,8 @@ button.s-agent-heading {
   background: transparent;
   box-shadow: none;
 }
-.s-chat-input__effort-labels {
-  display: flex;
-  justify-content: space-between;
-  gap: 2px;
-}
-.s-chat-input__effort-labels button {
-  padding: 4px 2px;
-  font-size: 11px;
-  color: #{getColor(text, 0.5)};
-  border-radius: var(--sax-radius-sm);
-}
-.s-chat-input__effort-labels button[aria-pressed='true'] {
-  color: #{getColor(primary)};
-  background: #{getColor(primary, 0.08)};
+.s-chat-input__effort-slider .s-slider__text {
+  display: none;
 }
 
 @container (max-width: 360px) {
