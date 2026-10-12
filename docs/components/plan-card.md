@@ -23,17 +23,17 @@ PROPS:
     usage: "#default"
   - name: "content"
     type: "String"
-    description: "Plain content, replaceable through the default slot."
+    description: "Additional plan text included in the download; View plan does not reveal it."
     default: null
     usage: "#default"
   - name: "v-model:expanded"
     type: "Boolean"
-    description: "Controlled disclosure state. Use v-model:expanded to respond to toggles."
+    description: "Controlled task list disclosure; View plan and more tasks share this state."
     default: "false"
     usage: "#default"
   - name: "expanded"
     type: "Boolean"
-    description: "Controlled disclosure state. Use v-model:expanded to respond to toggles."
+    description: "Controlled task list disclosure; View plan and more tasks share this state."
     default: "false"
     usage: "#default"
   - name: "status"
@@ -67,7 +67,7 @@ EVENTS:
     description: "Download action requested; image results provide their URL."
 SLOTS:
   - name: "default"
-    description: "Replace the default content."
+    description: "Always-visible supplementary content, independent of task disclosure."
   - name: "actions"
     type: "{ status: 'pending' | 'approved' | 'rejected' }"
     description: "Customize the action row."
@@ -79,7 +79,7 @@ SLOTS:
 
 ## Default
 
-A plan remains pending until the consumer changes its status. Expand its details and use approve or reject to connect your execution policy. Download exports the provided plan text; approval never starts a service inside the component.
+A plan remains pending until the consumer changes its status. View plan and more tasks expand the same task list through v-model:expanded. Use approve or reject to connect your execution policy. Download exports the provided plan text; approval never starts a service inside the component.
 
 <template #example><plan-card-default /></template>
 

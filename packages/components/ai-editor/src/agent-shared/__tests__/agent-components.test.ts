@@ -145,7 +145,16 @@ describe('Agent process, result and safety contracts', () => {
     })
     expect(wrapper.findAll('.s-agent-plan-tasks li')).toHaveLength(3)
     await wrapper.get('.s-agent-plan-tasks > button').trigger('click')
+    expect(wrapper.emitted('update:expanded')).toEqual([[true]])
+    await wrapper.setProps({ expanded: true })
     expect(wrapper.findAll('.s-agent-plan-tasks li')).toHaveLength(5)
+    await wrapper
+      .get('.s-plan-card__footer .s-agent-text-button')
+      .trigger('click')
+    expect(wrapper.emitted('update:expanded')?.at(-1)).toEqual([false])
+    await wrapper.setProps({ expanded: false })
+    expect(wrapper.findAll('.s-agent-plan-tasks li')).toHaveLength(3)
+    expect(wrapper.find('.s-agent-stream').exists()).toBe(false)
     expect(wrapper.emitted('approve')).toBeUndefined()
   })
 

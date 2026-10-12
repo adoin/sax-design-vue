@@ -14,10 +14,12 @@ const props = defineProps(planCardProps)
 const emit = defineEmits(planCardEmits)
 const ns = useNamespace('plan-card')
 const { t } = useLocale()
-const showAllTasks = shallowRef(false)
 const visibleTasks = computed(() =>
-  showAllTasks.value ? props.tasks : props.tasks.slice(0, 3),
+  props.expanded ? props.tasks : props.tasks.slice(0, 3),
 )
+const toggleExpanded = () => {
+  if (!props.disabled) emit('update:expanded', !props.expanded)
+}
 const settled = shallowRef(false)
 const cancelled = shallowRef(false)
 const deadline = shallowRef(0)
@@ -124,27 +126,24 @@ const downloadPlan = () => {
         v-if="tasks.length > 3"
         type="button"
         class="s-agent-control s-agent-text-button"
-        :aria-expanded="showAllTasks"
-        @click="showAllTasks = !showAllTasks"
+        :disabled="disabled"
+        :aria-expanded="expanded"
+        @click="toggleExpanded"
       >
         <SIcon
-          v-if="!showAllTasks"
+          v-if="!expanded"
           name="cb:overflow-menu-horizontal"
           :size="16"
           aria-hidden="true"
         />
         {{
-          showAllTasks
+          expanded
             ? t('vs.agent.showLess')
             : t('vs.agent.moreTasks', { count: tasks.length - 3 })
         }}
       </button>
     </div>
-    <Transition name="s-agent-reveal"
-      ><div v-if="expanded" class="s-agent-stream">
-        <slot>{{ content }}</slot>
-      </div></Transition
-    >
+    <div v-if="$slots.default" class="s-agent-stream"><slot /></div>
     <div class="s-agent-actions s-plan-card__footer">
       <button
         v-if="countdownActive"
@@ -182,8 +181,9 @@ const downloadPlan = () => {
       <button
         type="button"
         class="s-agent-control s-agent-text-button"
+        :disabled="disabled"
         :aria-expanded="expanded"
-        @click="emit('update:expanded', !expanded)"
+        @click="toggleExpanded"
       >
         {{ t('vs.agent.viewPlan') }}
         <SIcon

@@ -62,3 +62,4 @@ updated_at: 2026-10-10
 - 到期发出 auto-approve 与 approve，状态由应用维护，组件不执行计划或调用服务。手动批准、拒绝、禁用、非 pending 状态或卸载停止时钟；同一次计划决定只发出一次。
 - 配置或计划更新重启倒计时；自动批准默认 0 关闭。双语独立示例提供 5 秒倒计时与重播，Code 和 Playground 同步。
 - Agent 42 项回归与文档 21 项检查通过，主题构建通过；浏览器验证倒计时完成、取消及双语 Code / Playground。
+- 2026-10-12 用户明确“查看计划”与“还有 N 项”为同一任务展开交互：两入口共享受控 expanded / update:expanded，collapsed 显示前三项，expanded 显示全部；移除单独的 content 文本展开区。content 仅用于下载，自定义 default 插槽始终显示。双语文档和浏览器 3→5→3 联动验证同步。
