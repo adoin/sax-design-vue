@@ -1,5 +1,6 @@
 ---
-status: active
+status: implemented
+completed_at: 2026-10-12
 kind: project-specification
 updated_at: 2026-10-12
 modules:
@@ -37,3 +38,10 @@ supersedes: []
 - 文档示例检查、完整双语言构建通过。
 - 浏览器确认提示的四边无边框，内阴影可见，提示和正文留白一致；Table 分段及强调块可读。
 - 官网与 GitHub Pages 部署并核对最终页面。
+
+## 验证结果
+
+- 21 项文档示例与元数据检查通过；完整构建生成 231 个页面。
+- 中英文 Table 页面确认短段落、快捷键与搜索范围列表，以及虚拟化和校验结果的独立强调块。
+- 官网与 GitHub Pages 均确认提示边框为 0px，使用双层柔和 inset 阴影及 20px 外间距；双站部署成功。
+- 修改仅涉及文档主题、文案与规范，未修改组件包。
