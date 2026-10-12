@@ -127,6 +127,12 @@ const downloadPlan = () => {
         :aria-expanded="showAllTasks"
         @click="showAllTasks = !showAllTasks"
       >
+        <SIcon
+          v-if="!showAllTasks"
+          name="cb:overflow-menu-horizontal"
+          :size="16"
+          aria-hidden="true"
+        />
         {{
           showAllTasks
             ? t('vs.agent.showLess')
