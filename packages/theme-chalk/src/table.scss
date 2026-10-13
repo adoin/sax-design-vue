@@ -2177,12 +2177,29 @@ html.dark .#{$namespace}-table-wrapper {
 
     > .#{$namespace}-table-shell__query-form.is-label-top
       + .#{$namespace}-table-shell__query-fixed-buttons {
-      align-self: end;
+      // Align with the first row of controls, not the reserved validation area
+      // at the bottom of Form. Expanding more fields must not move the actions.
+      align-self: start;
+      padding-block-start: calc(var(--s-table-query-label-line-height, 20px) + 8px);
+    }
+
+    > .#{$namespace}-table-shell__query-form.is-label-top.s-form--small
+      + .#{$namespace}-table-shell__query-fixed-buttons {
+      --s-table-query-label-line-height: 18px;
+    }
+
+    > .#{$namespace}-table-shell__query-form.is-label-top.s-form--large
+      + .#{$namespace}-table-shell__query-fixed-buttons {
+      --s-table-query-label-line-height: 22px;
     }
   }
 
   @include e(query-form) {
     min-width: 0;
+
+    .#{$namespace}-form-item.is-label-top > .#{$namespace}-form-item__label {
+      display: block;
+    }
 
     &:not(.is-inline) > .#{$namespace}-form__grid {
       grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
@@ -2204,6 +2221,12 @@ html.dark .#{$namespace}-table-wrapper {
   }
 
   @container table-query (max-width: 560px) {
+    .#{$namespace}-table-shell__query-layout
+      > .#{$namespace}-table-shell__query-form.is-label-top
+      + .#{$namespace}-table-shell__query-fixed-buttons {
+      padding-block-start: 0;
+    }
+
     @include e(query-layout) {
       @include when(with-fixed-buttons) {
         grid-template-columns: minmax(0, 1fr);
