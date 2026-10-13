@@ -1,5 +1,8 @@
 @use 'reset.scss';
 @use 'var.scss';
+// The default entry must support runtime html.dark switching without a second
+// import. Keep the standalone dark entry available for existing consumers.
+@use 'dark/css-vars.scss';
 @use 'common/transition.scss';
 @use 'icon.scss';
 @use 'ripple.scss';

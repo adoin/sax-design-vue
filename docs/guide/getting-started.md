@@ -54,14 +54,13 @@ import SaxDesignVue from 'sax-design-vue'
 import App from './App.vue'
 
 import 'sax-design-vue/theme-chalk/index.css'
-import 'sax-design-vue/theme-chalk/dark/css-vars.css'
 
 createApp(App).use(SaxDesignVue).mount('#app')
 ```
 
 </command>
 
-Import the dark CSS variables file even if you start in light mode — it enables runtime theme switching.
+The default stylesheet includes dark theme variables. Toggle the `dark` class on `<html>` to switch themes at runtime. The standalone `theme-chalk/dark/css-vars.css` entry remains available for compatibility.
 
 </card>
 
@@ -106,7 +105,6 @@ import { SAlert, SButton } from 'sax-design-vue'
 import App from './App.vue'
 
 import 'sax-design-vue/theme-chalk/index.css'
-import 'sax-design-vue/theme-chalk/dark/css-vars.css'
 
 createApp(App).use(SAlert).use(SButton).mount('#app')
 ```

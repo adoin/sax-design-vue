@@ -54,14 +54,13 @@ import SaxDesignVue from 'sax-design-vue'
 import App from './App.vue'
 
 import 'sax-design-vue/theme-chalk/index.css'
-import 'sax-design-vue/theme-chalk/dark/css-vars.css'
 
 createApp(App).use(SaxDesignVue).mount('#app')
 ```
 
 </command>
 
-即使从浅色模式开始，也建议引入暗色 CSS 变量文件，以支持运行时主题切换。
+默认样式已包含深色主题变量。切换 `<html>` 的 `dark` 类即可在运行时切换主题；独立的 `theme-chalk/dark/css-vars.css` 入口仍保留兼容。
 
 </card>
 
@@ -106,7 +105,6 @@ import { SAlert, SButton } from 'sax-design-vue'
 import App from './App.vue'
 
 import 'sax-design-vue/theme-chalk/index.css'
-import 'sax-design-vue/theme-chalk/dark/css-vars.css'
 
 createApp(App).use(SAlert).use(SButton).mount('#app')
 ```

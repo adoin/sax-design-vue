@@ -24,6 +24,8 @@ Do not inline `hsl(var(--sax-*))` in component properties. The `hsl(var(--sax-*)
 
 ## Implementation
 
+The default `base.scss` entry includes `dark/css-vars.scss`, so the default full CSS bundle supports `html.dark` without a second import. The standalone dark entry remains compatible. This covers Table's semantic background and Input/Select gray surfaces together. Verified by Sass compilation tests, the theme build, and a browser fixture loading only the default CSS in both themes (2026-10-13).
+
 `set-color` / `set-colors` emit `--sax-css-*` on `:root`. `getColor()` returns `var(--sax-css-*, hsl(var(--sax-*)))` and uses `color-mix` for alpha. `getCssColor()` resolves theme tokens and literal colors to that complete color layer for Vue style bindings.
 
 ## Verification
