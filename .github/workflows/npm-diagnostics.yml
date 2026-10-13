@@ -1,0 +1,28 @@
+name: Inspect npm release state
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: Setup npm registry client
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: Install current npm CLI
+        run: npm install --global npm@latest
+      - name: Inspect publisher and sax-design-vue staging records
+        shell: bash
+        run: |
+          npm --version
+          npm whoami
+          npm view sax-design-vue@2.1.1 version --prefer-online || true
+          npm stage list sax-design-vue --json
