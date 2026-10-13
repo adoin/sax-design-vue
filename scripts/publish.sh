@@ -32,4 +32,19 @@ fi
 
 npm publish ./dist/sax-design-vue --access public --provenance
 
+live_version=""
+for attempt in 1 2 3 4; do
+  live_version="$(npm view "sax-design-vue@$release_version" version --prefer-online 2>/dev/null || true)"
+  if [[ "$live_version" == "$release_version" ]]; then
+    break
+  fi
+  if [[ "$attempt" != 4 ]]; then
+    sleep 10
+  fi
+done
+if [[ "$live_version" != "$release_version" ]]; then
+  echo "::error::npm accepted the upload, but sax-design-vue@$release_version is not publicly available. Check staged packages and registry status before declaring this release published." >&2
+  exit 1
+fi
+
 echo "✅ Published sax-design-vue@$release_version"
