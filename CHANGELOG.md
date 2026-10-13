@@ -1,5 +1,11 @@
 ## Changelog
 
+### 2.1.2 — 2026-10-13
+
+- Include dark theme variables in the default stylesheet while retaining the standalone dark entry for compatibility.
+- Align top-label Table query actions with the first control row and preserve CSS container queries in compressed theme bundles.
+- Add regression coverage for default-entry dark surfaces and readable foreground colors.
+
 ### 2.1.1 — 2026-10-13
 
 - Include dark theme variables in the default stylesheet so Table, Input, Select, and other controls switch correctly with `html.dark` without a separate dark CSS import.

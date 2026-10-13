@@ -13,6 +13,12 @@ if [[ "$release_version" != "$manifest_version" ]]; then
   exit 1
 fi
 
+live_version="$(npm view "sax-design-vue@$release_version" version --prefer-online 2>/dev/null || true)"
+if [[ "$live_version" == "$release_version" ]]; then
+  echo "Verified public sax-design-vue@$release_version"
+  exit 0
+fi
+
 pnpm install --frozen-lockfile
 pnpm run gen:version
 pnpm run build
@@ -30,7 +36,8 @@ if [[ "$icon_version" != "$published_icon_version" ]]; then
   npm publish ./packages/iconify --access public --provenance
 fi
 
-npm publish ./dist/sax-design-vue --access public --provenance
+npm stage publish ./dist/sax-design-vue --access public --provenance --json
+npm stage list sax-design-vue --json
 
 live_version=""
 for attempt in 1 2 3 4; do
@@ -43,7 +50,7 @@ for attempt in 1 2 3 4; do
   fi
 done
 if [[ "$live_version" != "$release_version" ]]; then
-  echo "::error::npm accepted the upload, but sax-design-vue@$release_version is not publicly available. Check staged packages and registry status before declaring this release published." >&2
+  echo "::error::sax-design-vue@$release_version was submitted for staged approval. Approve its actual stage record with npm 2FA, then rerun this job to verify public availability and create the GitHub release." >&2
   exit 1
 fi
 
