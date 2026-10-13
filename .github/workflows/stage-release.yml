@@ -1,0 +1,40 @@
+name: Stage npm 2.1.1
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    env:
+      TAG_VERSION: v2.1.1
+      GIT_HEAD: b5ab00e9aa6c933a216733d0a1e3c0e6052a4eab
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: Checkout immutable release source
+        uses: actions/checkout@v4
+        with:
+          ref: v2.1.1
+      - name: Setup Node and registry
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: Enable package manager and current npm
+        run: |
+          corepack enable
+          npm install --global npm@latest
+      - name: Build release artifact
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run gen:version
+          pnpm run build
+          node scripts/verify-theme-css.mjs
+      - name: Submit explicit staged release and list its record
+        run: |
+          npm stage publish ./dist/sax-design-vue --access public --provenance --json
+          npm stage list sax-design-vue --json
