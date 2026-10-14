@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-unified'
-import { buildProps, isNumber } from '@vuesax-alpha/utils'
+import { buildProps, definePropType, isNumber } from '@vuesax-alpha/utils'
 import {
   CHANGE_EVENT,
   INPUT_EVENT,
@@ -48,7 +48,7 @@ export const inputNumberProps = buildProps({
   /**
    * @description binding value
    */
-  modelValue: { type: Number },
+  modelValue: { type: definePropType<number | null>(Number) },
   /**
    * @description same as `readonly` in native input
    */
@@ -98,13 +98,15 @@ export const inputNumberProps = buildProps({
 export type InputNumberProps = ExtractPropTypes<typeof inputNumberProps>
 
 export const inputNumberEmits = {
-  [CHANGE_EVENT]: (cur: number | undefined, prev: number | undefined) =>
-    prev !== cur,
+  [CHANGE_EVENT]: (
+    cur: number | null | undefined,
+    prev: number | null | undefined,
+  ) => prev !== cur,
   blur: (e: FocusEvent) => e instanceof FocusEvent,
   focus: (e: FocusEvent) => e instanceof FocusEvent,
   [INPUT_EVENT]: (val: number | null | undefined) =>
     isNumber(val) || isNil(val),
-  [UPDATE_MODEL_EVENT]: (val: number | undefined) =>
+  [UPDATE_MODEL_EVENT]: (val: number | null | undefined) =>
     isNumber(val) || isNil(val),
 }
 export type InputNumberEmits = typeof inputNumberEmits

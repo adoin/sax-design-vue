@@ -2,6 +2,17 @@ import type { SearchDataOption } from '~/saxDesignVueTheme'
 
 export const enSearchData: SearchDataOption[] = [
   {
+    title: 'Input number',
+    path: 'components/input-number',
+    headers: [
+      { title: 'Default', slug: 'default' },
+      { title: 'Range and step', slug: 'range-and-step' },
+      { title: 'States and controls', slug: 'states-and-controls' },
+      { title: 'Colors', slug: 'colors' },
+      { title: 'Shape', slug: 'shape' },
+    ],
+  },
+  {
     title: 'Skeleton',
     path: 'components/skeleton',
     headers: [

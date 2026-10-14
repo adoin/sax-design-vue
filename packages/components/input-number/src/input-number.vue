@@ -10,24 +10,30 @@
     :style="wrapperStyle"
     @dragstart.prevent
   >
-    <span
+    <button
       v-if="controls"
       v-repeat-click="decrease"
-      role="button"
+      type="button"
+      :aria-label="label ? `${label} −` : '−'"
+      :disabled="isDisabled || readonly || minDisabled"
       :class="[ns.e('decrease'), ns.is('disabled', minDisabled)]"
-      @keydown.enter="decrease"
+      @keydown.enter.prevent="decrease"
+      @keydown.space.prevent="decrease"
     >
       <s-icon name="cb:subtract" />
-    </span>
-    <span
+    </button>
+    <button
       v-if="controls"
       v-repeat-click="increase"
-      role="button"
+      type="button"
+      :aria-label="label ? `${label} +` : '+'"
+      :disabled="isDisabled || readonly || maxDisabled"
       :class="[ns.e('increase'), ns.is('disabled', maxDisabled)]"
-      @keydown.enter="increase"
+      @keydown.enter.prevent="increase"
+      @keydown.space.prevent="increase"
     >
       <s-icon name="cb:add" />
-    </span>
+    </button>
     <s-input
       :id="id"
       ref="input"

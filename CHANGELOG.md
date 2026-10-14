@@ -1,5 +1,11 @@
 ## Changelog
 
+### 2.1.4 — 2026-10-14
+
+- Preserve Input Number foreground and background colors during hover and focus, using borderless inset feedback.
+- Make numeric stepping controls keyboard operable and reflect disabled bounds; allow null in public value and event types to match clearing behavior.
+- Add complete English and Chinese Input Number documentation, five localized examples, navigation, and search entries.
+
 ### 2.1.3 — 2026-10-14
 
 - Size Form fields proportionally to their containing row, deducting gaps only between rendered fields to prevent narrow-container overflow.

@@ -2,6 +2,9 @@ import { enSearchData } from './search'
 import type { SearchDataOption } from '~/saxDesignVueTheme'
 
 const titleZh: Record<string, string> = {
+  'Input number': '数字输入框',
+  'Range and step': '范围与步长',
+  'States and controls': '状态与控制按钮',
   Renderer: '渲染器',
   'Time select': 'Time select',
   'Date picker': 'Date picker',
