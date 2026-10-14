@@ -39,12 +39,14 @@ fi
 npm publish ./dist/sax-design-vue --access public --provenance --tag latest
 
 live_version=""
-for attempt in 1 2 3 4; do
+# npm accepts publication before its asynchronous processing exposes the version.
+# Allow that processing to finish instead of treating a short delay as failure.
+for attempt in $(seq 1 60); do
   live_version="$(npm view "sax-design-vue@$release_version" version --prefer-online 2>/dev/null || true)"
   if [[ "$live_version" == "$release_version" ]]; then
     break
   fi
-  if [[ "$attempt" != 4 ]]; then
+  if [[ "$attempt" != 60 ]]; then
     sleep 10
   fi
 done
