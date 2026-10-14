@@ -434,7 +434,7 @@ Form 同时支持传统插槽写法与配置式 `items`。配置式 API 采用�
 
 ## 配置式渲染与嵌套布局
 
-`children` 可以无限递归；每一层都使用 24 栅格。数字 `span` 在手机端自动回落为整行，也可以传入 `{ xs, sm, md, lg, xl }` 精确控制响应式宽度。`itemRender` 可直接使用内置的 `$input`、`$select`、`$switch` 和 `$textarea`；`$buttons` 能提供 Form 的 `submit`、`reset` 操作，无需重新编写操作插槽。
+`children` 可以无限递归；每一层都按 24 个比例单位分配宽度，并扣除项目之间配置的间距。响应式跨度依据所在表单行的容器宽度，包括嵌套行，不依据浏览器窗口：480px 以下使用 `xs`，480px 起使用 `sm`，768px 起使用 `md`，1024px 起使用 `lg`，1280px 起使用 `xl`。数字 `span` 在容器宽度不足 768px 时回落为整行，也可以传入 `{ xs, sm, md, lg, xl }` 精确控制响应式宽度。`itemRender` 可直接使用内置的 `$input`、`$select`、`$switch` 和 `$textarea`；`$buttons` 能提供 Form 的 `submit`、`reset` 操作，无需重新编写操作插槽。
 
 <template #example><form-default /></template>
 
@@ -491,6 +491,34 @@ Form 同时支持传统插槽写法与配置式 `items`。配置式 API 采用�
 <template #script>
 
 @[code{1-11}](../../.vuepress/components/form/nested.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 容器响应式布局
+
+切换容器宽度，观察同一窗口下字段如何从整行变为两列。示例使用 { xs: 24, sm: 12 }，默认列间距为 16px。
+
+<template #example><form-zh-container /></template>
+
+<template #template>
+
+@[code{20-30}](../../.vuepress/components/form-zh/container.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-19}](../../.vuepress/components/form-zh/container.vue)
+
+</template>
+
+<template #style>
+
+@[code{31-43}](../../.vuepress/components/form-zh/container.vue)
 
 </template>
 

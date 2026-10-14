@@ -25,8 +25,9 @@
 
 .s-form__grid,
 .s-form-item__children {
-  display: grid;
-  grid-template-columns: repeat(24, minmax(0, 1fr));
+  container: sax-form / inline-size;
+  display: flex;
+  flex-wrap: wrap;
   column-gap: var(--sax-form-column-gap, 16px);
   row-gap: var(--sax-form-row-gap, 0);
 }
@@ -40,7 +41,16 @@
 .s-form-item {
   display: flex;
   min-width: 0;
-  grid-column: span var(--sax-form-item-span-xs, 24);
+  --sax-form-item-span: var(--sax-form-item-span-xs, 24);
+  // Allocate gaps between rendered items, rather than 23 empty grid tracks.
+  flex: 0 0
+    max(
+      0px,
+      calc(
+        (100% + var(--sax-form-column-gap, 16px)) * var(--sax-form-item-span) /
+          24 - var(--sax-form-column-gap, 16px)
+      )
+    );
   align-items: flex-start;
   box-sizing: border-box;
 }
@@ -142,8 +152,9 @@
 }
 
 .s-form-item.is-nested > .s-form-item__body > .s-form-item__content {
-  display: grid;
-  grid-template-columns: repeat(24, minmax(0, 1fr));
+  container: sax-form / inline-size;
+  display: flex;
+  flex-wrap: wrap;
   column-gap: var(--sax-form-column-gap, 16px);
   row-gap: var(--sax-form-row-gap, 0);
   padding: 12px 0 0;
@@ -160,38 +171,47 @@
   > .s-form-item__body
   > .s-form-item__content
   > .s-form-item__children {
-  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
 }
 
-@media (min-width: 480px) {
+@container sax-form (min-width: 480px) {
   .s-form-item {
-    grid-column: span
-      var(--sax-form-item-span-sm, var(--sax-form-item-span-xs, 24));
+    --sax-form-item-span: var(
+      --sax-form-item-span-sm,
+      var(--sax-form-item-span-xs, 24)
+    );
   }
 }
 
-@media (min-width: 768px) {
+@container sax-form (min-width: 768px) {
   .s-form-item {
-    grid-column: span
-      var(--sax-form-item-span-md, var(--sax-form-item-span-sm, 24));
+    --sax-form-item-span: var(
+      --sax-form-item-span-md,
+      var(--sax-form-item-span-sm, 24)
+    );
   }
 }
 
-@media (min-width: 1024px) {
+@container sax-form (min-width: 1024px) {
   .s-form-item {
-    grid-column: span
-      var(--sax-form-item-span-lg, var(--sax-form-item-span-md, 24));
+    --sax-form-item-span: var(
+      --sax-form-item-span-lg,
+      var(--sax-form-item-span-md, 24)
+    );
   }
 }
 
-@media (min-width: 1280px) {
+@container sax-form (min-width: 1280px) {
   .s-form-item {
-    grid-column: span
-      var(--sax-form-item-span-xl, var(--sax-form-item-span-lg, 24));
+    --sax-form-item-span: var(
+      --sax-form-item-span-xl,
+      var(--sax-form-item-span-lg, 24)
+    );
   }
 }
 
-@media (max-width: 639px) {
+@container sax-form (max-width: 639px) {
   .s-form-item:not(.is-nested) {
     display: block;
   }
@@ -206,7 +226,7 @@
 .s-form-group {
   width: 100%;
   min-width: 0;
-  grid-column: 1 / -1;
+  flex: 0 0 100%;
 }
 
 .s-form-group__header {

@@ -1,5 +1,11 @@
 ## Changelog
 
+### 2.1.3 — 2026-10-14
+
+- Size Form fields proportionally to their containing row, deducting gaps only between rendered fields to prevent narrow-container overflow.
+- Resolve responsive Form spans and label layouts against each form or nested row's width instead of the viewport.
+- Add English and Chinese container-width examples demonstrating single-column and two-column layouts.
+
 ### 2.1.2 — 2026-10-13
 
 - Include dark theme variables in the default stylesheet while retaining the standalone dark entry for compatibility.

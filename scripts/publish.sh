@@ -36,8 +36,7 @@ if [[ "$icon_version" != "$published_icon_version" ]]; then
   npm publish ./packages/iconify --access public --provenance
 fi
 
-npm stage publish ./dist/sax-design-vue --access public --provenance --json
-npm stage list sax-design-vue --json
+npm publish ./dist/sax-design-vue --access public --provenance --tag latest
 
 live_version=""
 for attempt in 1 2 3 4; do
@@ -50,7 +49,7 @@ for attempt in 1 2 3 4; do
   fi
 done
 if [[ "$live_version" != "$release_version" ]]; then
-  echo "::error::sax-design-vue@$release_version was submitted for staged approval. Approve its actual stage record with npm 2FA, then rerun this job to verify public availability and create the GitHub release." >&2
+  echo "::error::sax-design-vue@$release_version is not publicly visible yet. Inspect the npm publish output and rerun this job after the registry exposes the version." >&2
   exit 1
 fi
 

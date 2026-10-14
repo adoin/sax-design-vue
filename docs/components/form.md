@@ -433,7 +433,7 @@ Compare the inherited `small`, `default`, and `large` component sizes.
 
 ## Schema renderers and nested layout
 
-`children` can recurse to any depth and every level uses the 24-column grid. A numeric `span` collapses to a full row on phones; pass `{ xs, sm, md, lg, xl }` for precise responsive sizing. Use the built-in `$input`, `$select`, `$switch`, and `$textarea` names directly in `itemRender`; `$buttons` can provide Form `submit` and `reset` actions without rebuilding an action slot.
+`children` can recurse to any depth and every level uses 24 proportional units. Item widths account for the configured gap between items. Responsive spans follow the width of their containing form row, including nested rows, rather than the browser window: `xs` below 480px, `sm` from 480px, `md` from 768px, `lg` from 1024px, and `xl` from 1280px. A numeric `span` uses a full row below 768px; pass `{ xs, sm, md, lg, xl }` for precise responsive sizing. Use the built-in `$input`, `$select`, `$switch`, and `$textarea` names directly in `itemRender`; `$buttons` can provide Form `submit` and `reset` actions without rebuilding an action slot.
 
 <template #example><form-default /></template>
 
@@ -490,6 +490,34 @@ The existing `<s-form-item>` API remains compatible. Add `nested` to a parent It
 <template #script>
 
 @[code{1-11}](../.vuepress/components/form/nested.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Container responsive layout
+
+Switch the container width to see fields change from full rows to two columns in the same browser window. This example uses { xs: 24, sm: 12 } with the default 16px column gap.
+
+<template #example><form-container /></template>
+
+<template #template>
+
+@[code{20-30}](../.vuepress/components/form/container.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-19}](../.vuepress/components/form/container.vue)
+
+</template>
+
+<template #style>
+
+@[code{31-43}](../.vuepress/components/form/container.vue)
 
 </template>
 
