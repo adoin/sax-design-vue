@@ -327,3 +327,80 @@ describe('Button click rate limiting', () => {
     expect(wrapper.emitted('click')).toBeUndefined()
   })
 })
+
+describe('Button pointer and keyboard ripple', () => {
+  it('ignores secondary presses, responds immediately and cleans up on unmount', async () => {
+    const wrapper = mount(Button, {
+      props: { debounce: false, ripple: 'expand' },
+    })
+    vi.spyOn(wrapper.element, 'getBoundingClientRect').mockReturnValue({
+      width: 100,
+      height: 40,
+      left: 0,
+      top: 0,
+    } as DOMRect)
+    wrapper.element.dispatchEvent(
+      new MouseEvent('pointerdown', {
+        button: 2,
+        clientX: 20,
+        clientY: 10,
+      }),
+    )
+    expect(wrapper.find('.s-ripple').exists()).toBe(false)
+    wrapper.element.dispatchEvent(
+      new MouseEvent('pointerdown', {
+        button: 0,
+        clientX: 20,
+        clientY: 10,
+      }),
+    )
+    expect(wrapper.find('.s-ripple--default').exists()).toBe(true)
+    wrapper.element.dispatchEvent(
+      new MouseEvent('click', { detail: 0, button: -1 }),
+    )
+    expect(wrapper.findAll('.s-ripple')).toHaveLength(2)
+    const element = wrapper.element
+    wrapper.unmount()
+    expect(element.querySelectorAll('.s-ripple')).toHaveLength(0)
+  })
+  it.each([
+    { disabled: true, loading: false },
+    { disabled: false, loading: true },
+  ])('does not start an effect while blocked', async (props) => {
+    const wrapper = mount(Button, { props })
+    vi.spyOn(wrapper.element, 'getBoundingClientRect').mockReturnValue({
+      width: 100,
+      height: 40,
+      left: 0,
+      top: 0,
+    } as DOMRect)
+    wrapper.element.dispatchEvent(new MouseEvent('pointerdown', { button: 0 }))
+    expect(wrapper.find('.s-ripple').exists()).toBe(false)
+    wrapper.unmount()
+  })
+})
+
+describe('Button semantic defaults', () => {
+  it('uses glow without a generic default value and keeps the named expand mode', async () => {
+    const wrapper = mount(Button)
+    expect(wrapper.props()).toMatchObject({
+      ripple: 'glow',
+      type: 'solid',
+      loadingType: 'logo',
+      size: 'medium',
+    })
+    vi.spyOn(wrapper.element, 'getBoundingClientRect').mockReturnValue({
+      width: 100,
+      height: 40,
+      left: 0,
+      top: 0,
+    } as DOMRect)
+    wrapper.element.dispatchEvent(new MouseEvent('pointerdown', { button: 0 }))
+    expect(wrapper.find('.s-ripple--glow').exists()).toBe(true)
+    await wrapper.setProps({ ripple: 'expand' })
+    wrapper.element.dispatchEvent(new MouseEvent('pointerdown', { button: 0 }))
+    expect(wrapper.find('.s-ripple--default').exists()).toBe(true)
+    expect(wrapper.classes()).toContain('s-button--default')
+    wrapper.unmount()
+  })
+})

@@ -1,6 +1,12 @@
 ---
 description: '使用无障碍按钮样式和状态触发操作。'
 PROPS:
+  - name: size
+    type: String | Number
+    values: xl | large | medium | small | mini | number
+    description: 控件尺寸；未传时为 medium。
+    default: medium
+    usage: '#size'
   - name: shape
     type: String
     values: rounded | circle | square
@@ -17,11 +23,11 @@ PROPS:
     code: >
       <s-button color="success"> Success </s-button>
   # _______________________________________
-  - name: style button
-    type: Prop
-    values: 'flat, border, gradient, transparent, dashed, shadow, relief, floating'
+  - name: type
+    type: String
+    values: 'solid, flat, border, gradient, transparent, shadow, relief, floating'
     description: 设置组件及其状态的展示样式。
-    default: null
+    default: solid
     link: null
     usage: '#flat'
     code: >
@@ -33,7 +39,7 @@ PROPS:
     description: 是否激活组件，并应用激活态样式。
     default: false
     link: null
-    usage: '#default'
+    usage: '#solid-default'
     code: >
       <s-button active> Default </s-button>
   # _______________________________________
@@ -48,9 +54,9 @@ PROPS:
       <s-button loading> 保存更改 </s-button>
   - name: loading-type
     type: String
-    values: 'default, pulse, ripple, shimmer'
+    values: 'logo, pulse, ripple, shimmer'
     description: 通过状态 class 选择加载动效，不改变按钮 DOM 结构。
-    default: default
+    default: logo
     link: null
     usage: '#loading'
     code: >
@@ -62,7 +68,7 @@ PROPS:
     description: 禁用按钮并阻止用户交互。
     default: false
     link: null
-    usage: '#default'
+    usage: '#solid-default'
     code: >
       <s-button disabled> 已禁用 </s-button>
   # _______________________________________
@@ -213,11 +219,11 @@ PROPS:
         </template>
       </s-button>
   # _______________________________________
-  - name: Ripple
+  - name: ripple
     type: String
-    values: 'reverse, cut'
+    values: 'glow, expand, reverse, cut, ring'
     description: 通过 `ripple` 属性设置按钮的水波纹样式。
-    default: undefined
+    default: glow
     usage: '#ripple'
     code: >
       <template>
@@ -291,7 +297,7 @@ NEWS:
 
 <card codesandbox="https://codesandbox.io/embed/reverent-shape-pmyk2?fontsize=14&hidenavigation=1&module=%2Fsrc%2FApp.vue">
 
-## 默认
+## 实色（默认）
 
 <docs-warn />
 
@@ -632,13 +638,13 @@ NEWS:
 
 通过 `size` 设置按钮整体尺寸，包括内边距、字号和边框。
 
-Button 保留五档尺寸，其中与其他组件共用的 `small`、`default`、`large` 分别采用 32px、36px、40px 控件高度；`mini` 与 `xl` 只负责向共享尺寸范围的两端扩展。
+Button 保留五档尺寸，其中与其他组件共用的 `small`、`medium`、`large` 分别采用 32px、36px、40px 控件高度；`mini` 与 `xl` 只负责向共享尺寸范围的两端扩展。
 
 可选值：
 
 - xl
-- l
-- default
+- large
+- medium（默认）
 - small
 - mini
 
@@ -664,7 +670,7 @@ Button 保留五档尺寸，其中与其他组件共用的 `small`、`default`�
 
 ## 加载
 
-使用 `#prefix` 与 `#suffix` 分别放置文字前后的图标；不需要专用位置时，仍可把图标直接放在默认插槽。启用 `loading-type="default"` 后，原图标会先淡出、品牌加载图标淡入，随后才播放前摇；结束加载时则先完整播放后摇并恢复，再淡回原图标。品牌加载图标优先使用 `prefix`；没有 `prefix` 时使用 `suffix`，两个插槽同时存在时以前者为准。
+使用 `#prefix` 与 `#suffix` 分别放置文字前后的图标；不需要专用位置时，仍可把图标直接放在默认插槽。启用 `loading-type="logo"` 后，原图标会先淡出、品牌加载图标淡入，随后才播放前摇；结束加载时则先完整播放后摇并恢复，再淡回原图标。品牌加载图标优先使用 `prefix`；没有 `prefix` 时使用 `suffix`，两个插槽同时存在时以前者为准。
 
 两个图标插槽都没有时，加载图标继续显示在居中的透明覆盖层。也可选择 `pulse`（呼吸光轨）、`ripple`（双层脉冲波）或 `shimmer`（流光扫描）。所有模式都会保持按钮尺寸并阻止点击；完全自定义时使用 `#loading` 插槽。
 
@@ -900,18 +906,21 @@ Button 保留五档尺寸，其中与其他组件共用的 `small`、`default`�
 
 ## 水波纹
 
-通过 `ripple` 可设置按钮水波纹样式，可选值：
+按下时立即触发，效果裁切在按钮内部且不会遮住文字。未传 `ripple` 时使用柔光脉冲（`glow`）；`expand` 从按下位置向外扩散；`reverse` 向内收拢，`cut` 向两侧分离；`ring` 呈现光环扩散，`glow` 呈现柔光脉冲。所有效果只作用于内部光效，不改变按钮的位置或形状。支持鼠标、触摸和键盘，禁用或加载时不触发。可选值：
 
+- `glow`（默认）
+- `expand`
 - `reverse`
 - `cut`
+- `ring`
 
 <template #example>
-<button-ripple />
+<button-zh-ripple />
 </template>
 
 <template #template>
 
-@[code{1-7}](../../.vuepress/components/button/ripple.vue)
+@[code{1-40}](../../.vuepress/components/button-zh/ripple.vue)
 
 </template>
 

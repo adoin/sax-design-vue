@@ -39,7 +39,7 @@ export const tooltipProps = buildProps({
    * */
   shape: {
     type: String,
-    values: ['circle', 'square', 'default'] as const,
+    values: ['circle', 'square', 'rounded', 'default'] as const,
     default: '',
   },
   effect: {

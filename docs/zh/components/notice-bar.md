@@ -69,7 +69,7 @@ PROPS:
     usage: "#shape"
   - name: "size"
     type: "ComponentSize"
-    values: "small | default | large"
+    values: "small | medium | large"
     description: "公告栏尺寸，省略时继承全局尺寸。"
     default: null
     usage: "#size"

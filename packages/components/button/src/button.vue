@@ -6,7 +6,7 @@
     :disabled="disabled || visualLoading"
     :aria-busy="visualLoading ? 'true' : undefined"
     @click="handleClick"
-    @mousedown="mouseDown"
+    @pointerdown="mouseDown"
   >
     <div :class="ns.e('content')">
       <span
@@ -110,6 +110,7 @@
 </template>
 
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import {
   computed,
   onBeforeUnmount,
@@ -127,9 +128,12 @@ import {
   useVuesaxBaseComponent,
 } from '@vuesax-alpha/hooks'
 import {
+  clearRipples,
   getVsColor,
   ripple,
   rippleCut,
+  rippleRing,
+  rippleGlow,
   rippleReverse,
 } from '@vuesax-alpha/utils'
 import { IconLoading } from '@vuesax-alpha/components/icon'
@@ -140,7 +144,10 @@ defineOptions({
 })
 
 const rawProps = defineProps(buttonProps)
-const props = useGlobalComponentProps('button', rawProps)
+const props = resolveVisualEnumProps(
+  'button',
+  useGlobalComponentProps('button', rawProps),
+)
 const emit = defineEmits<{
   (event: 'click', value: MouseEvent): void
 }>()
@@ -398,34 +405,31 @@ const buttonStyles = computed(() => {
   ]
 })
 
-const mouseDown = (evs: MouseEvent) => {
+const mouseDown = (event: MouseEvent) => {
   if (props.disabled || visualLoading.value) return
-
-  // ripple effect
-  if (props.ripple === 'reverse') {
-    rippleReverse(evs)
-  } else if (props.ripple === 'cut') {
-    rippleCut(evs)
-  } else {
-    if (resolvedType.value === 'flat') {
-      ripple(
-        evs,
-        !props.active && document.activeElement !== root$.value
-          ? 'inherit'
-          : undefined,
-        !props.active && document.activeElement !== root$.value,
-      )
-    } else {
-      ripple(evs, undefined, false)
-    }
-  }
+  if (event.type !== 'click' && event.button !== 0) return
+  const ink =
+    ['flat', 'border', 'transparent', 'dashed'].includes(resolvedType.value) &&
+    !props.active
+      ? 'inherit'
+      : undefined
+  if (props.ripple === 'reverse') rippleReverse(event, ink)
+  else if (props.ripple === 'cut') rippleCut(event, ink)
+  else if (props.ripple === 'ring') rippleRing(event, ink)
+  else if (props.ripple === 'glow') rippleGlow(event, ink)
+  else ripple(event, ink)
 }
+onBeforeUnmount(() => {
+  if (root$.value) clearRipples(root$.value)
+})
 
 const handleClick = (event: MouseEvent) => {
   if (props.disabled || visualLoading.value) {
     event.preventDefault()
     return
   }
+
+  if (event.detail === 0) mouseDown(event)
 
   if (isClickLimitDelay(props.debounce)) {
     if (debounceTimer !== undefined) clearTimeout(debounceTimer)

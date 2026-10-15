@@ -144,7 +144,7 @@ SLOTS:
     description: Add text within the avatar component.
     default: null
     link: null
-    usage: '#default'
+    usage: '#rounded-default'
     code: >
       <s-avatar>
         <template #text>
@@ -189,7 +189,7 @@ SLOTS:
 
 <card>
 
-## Default
+## Rounded (default)
 
 <docs-warn />
 

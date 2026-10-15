@@ -31,8 +31,8 @@ export const verificationCodeProps = buildProps({
   },
   status: {
     type: String,
-    values: ['default', 'error', 'success'] as const,
-    default: 'default',
+    values: ['neutral', 'default', 'error', 'success'] as const,
+    default: 'neutral',
   },
   disabled: Boolean,
   readonly: Boolean,

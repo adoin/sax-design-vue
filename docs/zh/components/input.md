@@ -266,9 +266,9 @@ PROPS:
 
   - name: size
     type: String
-    values: "small | default | large"
+    values: "small | medium | large"
     description: 设置输入框尺寸。
-    default: default
+    default: medium
     usage: '#sizes'
 
   - name: immediate

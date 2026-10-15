@@ -16,7 +16,7 @@ import type {
 
 export const useSizeProp = buildProp({
   type: String,
-  values: componentSizes,
+  values: [...componentSizes, 'default'] as const,
   required: false,
 } as const)
 
@@ -56,8 +56,10 @@ export const useSize = <T extends string | number = ComponentSize>(
   const hasExplicitSize = computed(() => instance?.vnode.props?.size != null)
 
   return computed((): T | ComponentSize => {
-    if (hasExplicitSize.value) return size.value ?? ''
-    return unref(fallback) ?? globalSize.value ?? size.value ?? ''
+    const value = hasExplicitSize.value
+      ? size.value
+      : (unref(fallback) ?? globalSize.value ?? size.value)
+    return value === 'medium' ? 'default' : (value ?? '')
   })
 }
 

@@ -17,9 +17,9 @@ PROPS:
     default: null
   - name: effect
     type: TextEffect
-    values: 'default | shimmer | typing | rainbow | neon | shadow'
+    values: 'none | shimmer | typing | rainbow | neon | shadow'
     description: Select a text treatment. `shimmer` sweeps a highlight, `typing` reveals `content`, `rainbow` cycles semantic colors, `neon` pulses a glow, and `shadow` moves a soft gradient shadow. Motion becomes static under reduced-motion preferences.
-    default: 'default'
+    default: none
   - name: line-clamp
     type: false | Number
     values: 'false | positive integer'

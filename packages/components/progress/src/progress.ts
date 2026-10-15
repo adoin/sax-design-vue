@@ -3,13 +3,8 @@ import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type Progress from './progress.vue'
 
-export const progressTextures = [
-  'default',
-  'bubbles',
-  'waves',
-  'sparkle',
-] as const
-export type ProgressTexture = (typeof progressTextures)[number]
+export const progressTextures = ['none', 'bubbles', 'waves', 'sparkle'] as const
+export type ProgressTexture = (typeof progressTextures)[number] | 'default'
 
 export const progressProps = buildProps({
   height: {
@@ -27,8 +22,8 @@ export const progressProps = buildProps({
   },
   texture: {
     type: definePropType<ProgressTexture>(String),
-    values: progressTextures,
-    default: 'default',
+    values: [...progressTextures, 'default'] as const,
+    default: 'none',
   },
   textureAnimated: { type: Boolean, default: true },
   textureDuration: {

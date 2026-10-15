@@ -13,9 +13,9 @@ PROPS:
     default: static
   - name: size
     type: String
-    values: "compact, default, spacious"
+    values: "compact, medium, spacious"
     description: Navigation height and internal density.
-    default: default
+    default: medium
   - name: blurred
     type: Boolean
     values: "true, false"

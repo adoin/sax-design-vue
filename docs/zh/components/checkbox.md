@@ -6,7 +6,7 @@ API_TITLES:
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: 设置或继承复选框及标签尺寸。
     default: null
   - name: disabled

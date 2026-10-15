@@ -39,7 +39,7 @@ PROPS:
     usage: '#placement-and-size'
   - name: 'size'
     type: 'String | Number'
-    values: 'CSS length | default | large'
+    values: 'CSS length | medium | large'
     description: 'Width for left/right and height for top/bottom; default is 360px, large is 736px.'
     default: '360px'
     usage: '#placement-and-size'

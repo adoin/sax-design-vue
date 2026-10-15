@@ -22,9 +22,9 @@ PROPS:
     default: 按 variant 推导
   - name: size
     type: String
-    values: 'small / default / large'
+    values: 'small / medium / large'
     description: 步骤尺寸。
-    default: default
+    default: medium
   - name: finish-status
     type: StepStatus
     values: 'wait / process / finish / success / error / loading / disabled'

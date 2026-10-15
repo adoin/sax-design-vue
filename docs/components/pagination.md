@@ -3,7 +3,7 @@ description: 'Navigate long collections one page at a time.'
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: Set or inherit pager buttons and page-size Select density.
     default: null
     usage: '#size'

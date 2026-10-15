@@ -9,9 +9,9 @@ import type {
 } from 'sax-design-vue'
 
 const settings = reactive({
-  type: 'default' as CardType,
-  texture: 'default' as CardTexture,
-  effect: 'default' as CardEffect,
+  type: 'basic' as CardType,
+  texture: 'solid' as CardTexture,
+  effect: 'none' as CardEffect,
   orientation: '' as CardOrientation | '',
   hoverEffect: 'none' as CardHoverEffect,
   shape: 'rounded' as 'rounded' | 'square',
@@ -23,7 +23,7 @@ const settings = reactive({
 })
 
 const typeOptions = [
-  'default',
+  'basic',
   'classic',
   'overlay',
   'split',
@@ -32,13 +32,17 @@ const typeOptions = [
   'profile',
   'metric',
   'article',
-].map((value) => ({ label: value, value }))
-const textureOptions = ['default', 'liquid-glass', 'liquid-glass-2'].map(
-  (value) => ({ label: value, value }),
+].map((value) => ({
+  label: value === 'basic' ? '基础布局（默认）' : value,
+  value,
+}))
+const textureOptions = ['solid', 'liquid-glass', 'liquid-glass-2'].map(
+  (value) => ({ label: value === 'solid' ? '实色表面（默认）' : value, value }),
 )
-const effectOptions = ['default', 'spotlight', 'gradient-glow'].map(
-  (value) => ({ label: value, value }),
-)
+const effectOptions = ['none', 'spotlight', 'gradient-glow'].map((value) => ({
+  label: value === 'none' ? '无装饰（默认）' : value,
+  value,
+}))
 const orientationOptions = [
   { label: '跟随 type', value: '' },
   { label: 'vertical', value: 'vertical' },

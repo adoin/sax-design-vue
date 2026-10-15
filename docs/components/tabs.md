@@ -33,9 +33,9 @@ PROPS:
     default: top
   - name: size
     type: String
-    values: "small / default / large"
+    values: "small / medium / large"
     description: Tab size.
-    default: default
+    default: medium
   - name: animated
     type: Boolean
     values: "true / false"

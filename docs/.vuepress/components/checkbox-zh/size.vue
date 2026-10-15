@@ -7,7 +7,7 @@ const values = reactive({ small: true, default: true, large: true })
 <template>
   <div class="size-demo">
     <s-checkbox v-model="values.small" size="small">小号</s-checkbox>
-    <s-checkbox v-model="values.default">默认</s-checkbox>
+    <s-checkbox v-model="values.default">中等（默认）</s-checkbox>
     <s-checkbox v-model="values.large" size="large">大号</s-checkbox>
   </div>
 </template>

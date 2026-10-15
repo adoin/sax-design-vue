@@ -8,7 +8,7 @@ PROPS:
     usage: '#loading'
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: Set or inherit the control size.
     default: null
   - name: shape

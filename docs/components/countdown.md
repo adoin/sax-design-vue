@@ -27,9 +27,9 @@ PROPS:
     default: null
   - name: effect
     type: String
-    values: "default | flip | fade | particle | slide"
+    values: "static | flip | fade | particle | slide"
     description: Digit transition effect. Separators remain static.
-    default: default
+    default: static
 EVENTS:
   - name: finish
     description: Fired at zero.

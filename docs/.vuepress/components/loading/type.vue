@@ -25,7 +25,7 @@ const types: LoadingType[] = [
   'square',
   'circles',
   'corners',
-  'default',
+  'logo',
   'gradient',
   'rectangle',
   'square-rotate',

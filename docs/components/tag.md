@@ -16,7 +16,7 @@ PROPS:
     description: Tag label text.
     default: null
     link: null
-    usage: '#default'
+    usage: '#filled-default'
 
   - name: editable
     type: Boolean
@@ -64,7 +64,7 @@ PROPS:
     description: Apply a semantic tag color. A custom color takes priority.
     default: null
     link: null
-    usage: '#default'
+    usage: '#filled-default'
 
   - name: type
     type: String
@@ -72,7 +72,7 @@ PROPS:
     description: Compatibility alias for `status`.
     default: null
     link: null
-    usage: '#default'
+    usage: '#filled-default'
 
   - name: disabled
     type: Boolean
@@ -80,7 +80,7 @@ PROPS:
     description: Disable tag click and close interactions.
     default: 'false'
     link: null
-    usage: '#default'
+    usage: '#filled-default'
 
   - name: border
     type: Boolean
@@ -100,17 +100,17 @@ PROPS:
 
   - name: variant
     type: String
-    values: 'default, outline, dashed, mark, arrow, flag'
+    values: 'filled, outline, dashed, mark, arrow, flag'
     description: Select the tag's visual treatment independently from its geometry.
-    default: default
+    default: filled
     link: null
     usage: '#variants'
 
   - name: tag-style
     type: String
-    values: 'default, outline, dashed, mark, arrow, flag'
+    values: 'filled, outline, dashed, mark, arrow, flag'
     description: Compatibility alias for `variant`.
-    default: default
+    default: filled
     link: null
     usage: '#variants'
 
@@ -132,9 +132,9 @@ PROPS:
 
   - name: size
     type: String
-    values: 'small, default, large'
+    values: 'small, medium, large'
     description: Tag size.
-    default: default
+    default: medium
     link: null
     usage: '#variants'
 
@@ -269,7 +269,7 @@ NEWS:
 
 <card>
 
-## Default
+## Filled (default)
 
 Render simple tags with optional close behavior.
 

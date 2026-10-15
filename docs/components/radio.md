@@ -7,7 +7,7 @@ API_TITLES:
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: Set or inherit the radio control size; Radio Group passes it to descendants.
     default: null
   - name: v-model
@@ -16,7 +16,7 @@ PROPS:
     description: Bind the selected value for the radio or radio group.
     default: null
     link: null
-    usage: '#default'
+    usage: '#radio-options-default'
     code: null
   - name: model-value
     type: String | Number | Boolean
@@ -24,7 +24,7 @@ PROPS:
     description: Bind the selected value for the radio or radio group.
     default: null
     link: null
-    usage: '#default'
+    usage: '#radio-options-default'
     code: null
   - name: color
     type: String
@@ -68,7 +68,7 @@ PROPS:
     description: Value represented by this radio option.
     default: "''"
     link: null
-    usage: '#default'
+    usage: '#radio-options-default'
     code: null
 
 GROUP_PROPS:
@@ -81,7 +81,7 @@ GROUP_PROPS:
     type: boolean
     description: Animate the default dot between accepted selections in Radio and RadioButton groups. Enabled by default; inherits global radioGroup.animated unless explicitly overridden. Respects reduced-motion preferences.
     default: true
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: size
     type: ComponentSize
     description: Set or inherit the size of RadioGroup and its options.
@@ -147,7 +147,7 @@ GROUP_TABS_PROPS:
     type: RadioGroupTabValue
     description: Two-way binding for the active tab key.
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: "columns"
     type: "number"
     description: "Panel column count when a tab does not override it."
@@ -168,37 +168,37 @@ BUTTON_PROPS:
     type: RadioButtonValue
     description: Two-way selected value when using RadioButton directly.
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: model-value
     type: RadioButtonValue
     description: Selected value without v-model syntax.
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: value
     type: RadioButtonValue
     description: Value represented by this button.
     default: "''"
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: label
     type: 'String | Number | Boolean'
     description: Visible option label.
     default: "''"
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: description
     type: String
     description: Supporting text shown beneath the label.
     default: "''"
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: disabled
     type: Boolean
     description: Disable this button without losing its selected state.
     default: false
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: name
     type: String
     description: Shared native radio name when composing buttons directly.
     default: "''"
-    usage: '#default'
+    usage: '#radio-options-default'
 EVENTS:
   - name: update:modelValue
     type: RadioValue
@@ -220,35 +220,35 @@ SLOTS:
     type: slot
     description: Compose Radio or RadioButton children manually when options is omitted.
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: RadioGroup.option
     type: Slot
     scope: "{ option: RadioOption; checked: boolean }"
     description: Customize a data-driven radio option.
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: RadioGroup.empty
     type: slot
     description: Render content when no options or manual children are available.
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: RadioGroupTabs.tab
     type: Slot
     scope: "{ tab: RadioGroupTab; active: boolean; selected: boolean; selectedOption?: RadioOption }"
     description: Customize a tab trigger using its active and selection state.
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: RadioGroupTabs.option
     type: Slot
     scope: "{ option: RadioOption; checked: boolean }"
     description: Customize an option in the active tab.
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: RadioGroupTabs.empty
     type: slot
     description: Render content when no active tab is available.
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: default
     type: slot
     values: 'null'
@@ -272,7 +272,7 @@ SLOTS:
 
 <card>
 
-## Default
+## Radio options (default)
 
 RadioGroup animates the default dot between selected options in both regular and button presentations. Set `:animated="false"` to disable dot travel. Reduced-motion preferences disable travel automatically; custom icons keep their own animation.
 
@@ -338,7 +338,7 @@ Set `direction="horizontal"` or `direction="vertical"` to choose the arrangement
 
 ## Size
 
-Compare the inherited `small`, `default`, and `large` component sizes.
+Compare the inherited `small`, `radio`, and `large` component sizes.
 
 <template #example><radio-size /></template>
 
@@ -426,7 +426,7 @@ Set `disabled` to prevent interaction while preserving the selected state. Enabl
 
 ## Label
 
-Add a label to the radio with the `default` slot, if you need the label to be before the radio you can use the `label-before` property
+Add a label to the radio with the `radio` slot, if you need the label to be before the radio you can use the `label-before` property
 
 <template #example>
 <radio-label />

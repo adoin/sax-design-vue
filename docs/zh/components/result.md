@@ -27,7 +27,7 @@ PROPS:
     usage: '#custom-content'
   - name: size
     type: ComponentSize
-    values: "small | default | large"
+    values: "small | medium | large"
     description: "尺寸，省略时继承全局配置；同时调整插画、文字与间距。"
     default: null
     usage: '#sizes'

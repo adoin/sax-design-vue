@@ -1,6 +1,6 @@
 <template>
   <div class="effect-demo effect-demo--plain">
-    <s-card effect="default" title="No effect">
+    <s-card effect="none" title="No effect">
       <p>The default value adds no decorative layer to the selected layout.</p>
     </s-card>
   </div>

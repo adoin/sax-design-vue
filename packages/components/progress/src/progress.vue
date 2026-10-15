@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import {
   computed,
   onBeforeUnmount,
@@ -26,7 +27,8 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const props = defineProps(progressProps)
+const rawProps = defineProps(progressProps)
+const props = resolveVisualEnumProps('progress', rawProps)
 
 const ns = useNamespace('progress')
 const attrs = useAttrs()
@@ -35,7 +37,9 @@ const clampPercent = (value: number) =>
   Number.isFinite(value) ? Math.min(100, Math.max(0, value)) : 0
 const normalizedPercent = computed(() => clampPercent(props.percent))
 const texture = computed(() =>
-  progressTextures.includes(props.texture) ? props.texture : 'default',
+  progressTextures.some((value) => value === props.texture)
+    ? props.texture
+    : 'default',
 )
 const hasTexture = computed(() => texture.value !== 'default')
 const measuredHeight = shallowRef(5)

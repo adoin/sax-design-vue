@@ -267,9 +267,9 @@ PROPS:
 
   - name: size
     type: String
-    values: "small | default | large"
+    values: "small | medium | large"
     description: Set the input size.
-    default: default
+    default: medium
     link: null
     usage: '#sizes'
 

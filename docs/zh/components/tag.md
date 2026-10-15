@@ -16,7 +16,7 @@ PROPS:
     description: 标签文本。
     default: null
     link: null
-    usage: '#default'
+    usage: '#filled-default'
 
   - name: editable
     type: Boolean
@@ -64,7 +64,7 @@ PROPS:
     description: 使用语义状态色，自定义 `color` 的优先级更高。
     default: null
     link: null
-    usage: '#default'
+    usage: '#filled-default'
 
   - name: type
     type: String
@@ -72,7 +72,7 @@ PROPS:
     description: '`status` 的兼容别名。'
     default: null
     link: null
-    usage: '#default'
+    usage: '#filled-default'
 
   - name: disabled
     type: Boolean
@@ -80,7 +80,7 @@ PROPS:
     description: 禁用标签的点击与关闭交互。
     default: 'false'
     link: null
-    usage: '#default'
+    usage: '#filled-default'
 
   - name: border
     type: Boolean
@@ -100,17 +100,17 @@ PROPS:
 
   - name: variant
     type: String
-    values: 'default, outline, dashed, mark, arrow, flag'
+    values: 'filled, outline, dashed, mark, arrow, flag'
     description: 选择标签的视觉风格，与外形几何相互独立。
-    default: default
+    default: filled
     link: null
     usage: '#variants'
 
   - name: tag-style
     type: String
-    values: 'default, outline, dashed, mark, arrow, flag'
+    values: 'filled, outline, dashed, mark, arrow, flag'
     description: '`variant` 的兼容别名。'
-    default: default
+    default: filled
     link: null
     usage: '#variants'
 
@@ -132,9 +132,9 @@ PROPS:
 
   - name: size
     type: String
-    values: 'small, default, large'
+    values: 'small, medium, large'
     description: 标签尺寸。
-    default: default
+    default: medium
     link: null
     usage: '#variants'
 
@@ -269,7 +269,7 @@ NEWS:
 
 <card>
 
-## 默认
+## 填充（默认）
 
 渲染简单标签，可选关闭行为。
 
@@ -304,18 +304,18 @@ NEWS:
 使用 `variant` 选择 outline、dashed、mark、arrow、flag 等视觉风格；它不控制圆角几何。
 
 <template #example>
-<tag-styles />
+<tag-zh-styles />
 </template>
 
 <template #template>
 
-@[code{1-10}](../../.vuepress/components/tag/styles.vue)
+@[code{1-10}](../../.vuepress/components/tag-zh/styles.vue)
 
 </template>
 
 <template #style>
 
-@[code{12-20}](../../.vuepress/components/tag/styles.vue)
+@[code{12-20}](../../.vuepress/components/tag-zh/styles.vue)
 
 </template>
 
@@ -352,18 +352,18 @@ NEWS:
 使用 `size` 适配紧凑控件或更强调的状态标签。
 
 <template #example>
-<tag-sizes />
+<tag-zh-sizes />
 </template>
 
 <template #template>
 
-@[code{1-7}](../../.vuepress/components/tag/sizes.vue)
+@[code{1-7}](../../.vuepress/components/tag-zh/sizes.vue)
 
 </template>
 
 <template #style>
 
-@[code{9-16}](../../.vuepress/components/tag/sizes.vue)
+@[code{9-16}](../../.vuepress/components/tag-zh/sizes.vue)
 
 </template>
 

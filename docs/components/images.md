@@ -2,9 +2,9 @@
 PROPS:
   - name: hover
     type: String
-    values: 'default, blur, zoom, dark, scale, curtain'
+    values: 'none, blur, zoom, dark, scale, curtain'
     description: Hover animation style.
-    default: default
+    default: none
     link: null
     usage: '#hover'
 
@@ -37,7 +37,7 @@ CHILD_PROPS:
     values: URL
     description: Image source used by SImage.
     default: null
-    usage: '#default'
+    usage: '#no-hover-effect-default'
 
   - name: alt
     type: String
@@ -158,7 +158,7 @@ NEWS:
 
 <card>
 
-## Default
+## No hover effect (default)
 
 Place `s-image` elements inside `s-images`.
 

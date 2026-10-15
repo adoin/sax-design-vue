@@ -28,7 +28,7 @@ PROPS:
     usage: '#data-source'
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: 设置触发器尺寸，并继承表单或配置提供者的控件密度。
     default: null
   - name: v-model

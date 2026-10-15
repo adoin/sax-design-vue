@@ -21,3 +21,5 @@ export * from './svg-filter/definitions'
 export * from './svg-filter-animation'
 export * from './types'
 export * from './typescript'
+
+export * from './visual-enums'

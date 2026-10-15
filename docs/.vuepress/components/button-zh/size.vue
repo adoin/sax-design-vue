@@ -12,7 +12,7 @@ const active = shallowRef(0)
     <s-button size="large" :active="active === 1" @click="active = 1"
       >大号</s-button
     >
-    <s-button :active="active === 2" @click="active = 2">默认</s-button>
+    <s-button :active="active === 2" @click="active = 2">中等（默认）</s-button>
     <s-button size="small" :active="active === 3" @click="active = 3"
       >小号</s-button
     >

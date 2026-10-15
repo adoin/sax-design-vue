@@ -20,19 +20,19 @@ export const loadingTypes = [
   'square',
   'circles',
   'corners',
-  'default',
+  'logo',
   'gradient',
   'rectangle',
   'square-rotate',
 ] as const
 
-export type LoadingType = (typeof loadingTypes)[number]
+export type LoadingType = (typeof loadingTypes)[number] | 'default'
 
 export const loadingProps = buildProps({
   type: {
     type: definePropType<LoadingType>(String),
-    values: loadingTypes,
-    default: 'default',
+    values: [...loadingTypes, 'default'] as const,
+    default: 'logo',
   },
   text: { type: String },
   scale: {

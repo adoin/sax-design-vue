@@ -2,9 +2,9 @@
 PROPS:
   - name: hover
     type: String
-    values: 'default, blur, zoom, dark, scale, curtain'
+    values: 'none, blur, zoom, dark, scale, curtain'
     description: 悬停动画样式。
-    default: default
+    default: none
     link: null
     usage: '#hover'
 
@@ -37,7 +37,7 @@ CHILD_PROPS:
     values: URL
     description: SImage 使用的图片地址。
     default: null
-    usage: '#default'
+    usage: '#no-hover-effect-default'
 
   - name: alt
     type: String
@@ -158,7 +158,7 @@ NEWS:
 
 <card>
 
-## 默认
+## 无悬停特效（默认）
 
 在 `s-images` 内放置 `s-image` 元素。
 

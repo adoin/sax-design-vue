@@ -27,7 +27,7 @@ PROPS:
     usage: '#custom-content'
   - name: size
     type: ComponentSize
-    values: "small | default | large"
+    values: "small | medium | large"
     description: "Inherits global sizing when omitted; adjusts illustration, typography and spacing."
     default: null
     usage: '#sizes'

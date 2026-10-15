@@ -26,8 +26,8 @@ export const radioGroupProps = buildProps({
   },
   type: {
     type: String,
-    values: ['default', 'button'] as const,
-    default: 'default',
+    values: ['radio', 'default', 'button'] as const,
+    default: 'radio',
   },
   name: { type: String, default: '' },
   columns: { type: Number, default: 1 },

@@ -7,7 +7,7 @@ const values = reactive({ small: '', default: '', large: '' })
 <template>
   <div class="size-demo">
     <s-radio v-model="values.small" size="small" value="small">Small</s-radio>
-    <s-radio v-model="values.default" value="default">Default</s-radio>
+    <s-radio v-model="values.default" value="default">Medium (default)</s-radio>
     <s-radio v-model="values.large" size="large" value="large">Large</s-radio>
   </div>
 </template>

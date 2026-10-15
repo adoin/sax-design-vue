@@ -5,7 +5,7 @@ export type TabsPosition = 'top' | 'bottom' | 'left' | 'right'
 export type TabsType =
   'line' | 'pill' | 'card' | 'connected-card' | 'editable-card'
 export type TabsOverflow = 'collapse' | 'scroll' | 'wrap'
-export type TabsSize = 'small' | 'default' | 'large'
+export type TabsSize = 'small' | 'medium' | 'default' | 'large'
 export const tabsRenderModes = ['all', 'lazy', 'active-only'] as const
 export type TabsRenderMode = (typeof tabsRenderModes)[number]
 

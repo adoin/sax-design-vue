@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import { computed, onBeforeUnmount, useAttrs, useTemplateRef } from 'vue'
 import {
   useColor,
@@ -20,7 +21,8 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const props = defineProps(cardProps)
+const rawProps = defineProps(cardProps)
+const props = resolveVisualEnumProps('card', rawProps)
 const emit = defineEmits(cardEmits)
 
 defineSlots<{
@@ -227,12 +229,12 @@ onBeforeUnmount(() => {
       @pointerleave="handlePointerLeave"
     >
       <span
-        v-if="texture !== 'default'"
+        v-if="props.texture !== 'default'"
         :class="[ns.e('texture'), ns.em('texture', texture)]"
         aria-hidden="true"
       />
       <span
-        v-if="effect !== 'default'"
+        v-if="props.effect !== 'default'"
         :class="[ns.e('effect'), ns.em('effect', effect)]"
         aria-hidden="true"
       />

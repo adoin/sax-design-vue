@@ -6,8 +6,8 @@ import type Images from './images.vue'
 export const imagesProps = buildProps({
   hover: {
     type: String,
-    values: ['default', 'blur', 'zoom', 'dark', 'scale', 'curtain'],
-    default: 'default',
+    values: ['none', 'default', 'blur', 'zoom', 'dark', 'scale', 'curtain'],
+    default: 'none',
   },
   alternating: Boolean,
   notBorderRadius: Boolean,

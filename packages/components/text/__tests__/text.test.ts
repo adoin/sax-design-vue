@@ -44,7 +44,7 @@ describe('Text', () => {
       props: { content: 'Generating response' },
     })
 
-    expect(wrapper.props('effect')).toBe('default')
+    expect(wrapper.props('effect')).toBe('none')
     expect(wrapper.classes()).not.toContain('is-shimmer')
     expect(wrapper.text()).toBe('Generating response')
 

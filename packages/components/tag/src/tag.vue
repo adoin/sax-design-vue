@@ -59,6 +59,7 @@
 </template>
 
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import {
   computed,
   nextTick,
@@ -90,7 +91,8 @@ import type { CSSProperties } from 'vue'
 
 defineOptions({ name: 'STag' })
 
-const props = defineProps(tagProps)
+const rawProps = defineProps(tagProps)
+const props = resolveVisualEnumProps('tag', rawProps)
 const emit = defineEmits(tagEmits)
 
 const ns = useNamespace('tag')

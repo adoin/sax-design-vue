@@ -10,7 +10,7 @@ const source = readFileSync(
 describe('Card visual theme', () => {
   it('uses real optical displacement with a blur fallback', () => {
     expect(source).toMatch(
-      /&--liquid-glass \{[\s\S]*backdrop-filter: saturate\(180%\) blur\(14px\)[\s\S]*@supports \(backdrop-filter: url\('#s-card-liquid-glass-support'\)\)[\s\S]*backdrop-filter: var\(--sax-card-liquid-filter\)/,
+      /&--liquid-glass \{[\s\S]*backdrop-filter: saturate\(180%\) blur\(14px\)[\s\S]*@supports \(backdrop-filter: url\('#s-card-liquid-glass-support'\)\)[\s\S]*backdrop-filter: var\(\s*--sax-card-liquid-filter(?:,\s*saturate\(180%\) blur\(14px\)\s*)?\)/,
     )
     expect(source).toMatch(
       /@keyframes card-liquid-caustic[\s\S]*translate3d[\s\S]*@media \(prefers-reduced-motion: reduce\)[\s\S]*&__texture--liquid-glass::after[\s\S]*animation: none/,
@@ -28,7 +28,7 @@ describe('Card visual theme', () => {
       /&--liquid-glass,[\s\S]*&--liquid-glass-2 \{[\s\S]*background: linear-gradient/,
     )
     expect(source).toMatch(
-      /&--liquid-glass-2 \{[\s\S]*backdrop-filter: blur\(3px\);[\s\S]*filter: var\(--sax-card-liquid-filter\)/,
+      /&--liquid-glass-2 \{[\s\S]*backdrop-filter: blur\(3px\);[\s\S]*filter: var\(--sax-card-liquid-filter(?:, none)?\)/,
     )
   })
 

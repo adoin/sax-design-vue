@@ -6,9 +6,9 @@ PROPS:
   #__________________________________
   - name: type
     type: String
-    values: 'atom,ball,scale,waves,border,points,square,circles,corners,default,gradient,rectangle,square-rotate'
+    values: 'atom,ball,scale,waves,border,points,square,circles,corners,logo,gradient,rectangle,square-rotate'
     description: 设置加载动画类型。
-    default: default
+    default: logo
     link: null
     usage: '#type'
     code: null
@@ -188,7 +188,7 @@ CHILD_PROPS:
 
 <card>
 
-## 默认
+## 品牌标志（默认）
 
 <docs-warn />
 
@@ -229,7 +229,7 @@ SLoading.service(options)
 
 ## 类型 <Badge text="Update" type="warn" />
 
-通过 `type` 设置加载动画类型。只有 `default` 使用共用的标志加载器，其他具名类型保留各自原有的动效。
+通过 `type` 设置加载动画类型。只有 `logo` 使用共用的标志加载器，其他具名类型保留各自原有的动效。
 
 可用类型：
 

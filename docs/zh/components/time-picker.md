@@ -19,7 +19,7 @@ PROPS:
     default: null
   - name: size
     type: String
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: 设置时间输入触发器的尺寸。
     default: null
   - name: label-float

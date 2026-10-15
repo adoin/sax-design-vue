@@ -33,9 +33,9 @@ PROPS:
     default: top
   - name: size
     type: String
-    values: "small / default / large"
+    values: "small / medium / large"
     description: 标签尺寸。
-    default: default
+    default: medium
   - name: animated
     type: Boolean
     values: "true / false"

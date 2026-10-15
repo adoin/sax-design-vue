@@ -3,7 +3,7 @@ description: 'Toggle a boolean setting between two states.'
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: Set or inherit the switch track and thumb size.
     default: null
   - name: variant

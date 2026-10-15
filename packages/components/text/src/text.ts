@@ -12,14 +12,14 @@ export const textTypes = [
 export type TextType = (typeof textTypes)[number]
 
 export const textEffects = [
-  'default',
+  'none',
   'shimmer',
   'typing',
   'rainbow',
   'neon',
   'shadow',
 ] as const
-export type TextEffect = (typeof textEffects)[number]
+export type TextEffect = (typeof textEffects)[number] | 'default'
 
 export type TextLineClamp = false | number
 
@@ -38,8 +38,8 @@ export const textProps = buildProps({
   status: { type: String as PropType<TextType> },
   effect: {
     type: String as PropType<TextEffect>,
-    values: textEffects,
-    default: 'default',
+    values: [...textEffects, 'default'] as const,
+    default: 'none',
   },
   lineClamp: {
     type: definePropType<TextLineClamp>([Boolean, Number]),

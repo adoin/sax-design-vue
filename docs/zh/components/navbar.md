@@ -13,9 +13,9 @@ PROPS:
     default: static
   - name: size
     type: String
-    values: "compact, default, spacious"
+    values: "compact, medium, spacious"
     description: 导航栏高度与内部密度。
-    default: default
+    default: medium
   - name: blurred
     type: Boolean
     values: "true, false"
@@ -289,24 +289,24 @@ SLOTS:
 `s-navbar` 是可组合的顶部导航外壳。颜色、表面、尺寸、分组、滚动行为和细节样式都可以在同一个示例中实时调整。
 
 <template #example>
-<navbar-default />
+<navbar-zh-default />
 </template>
 
 <template #template>
 
-@[code{35-177}](../../.vuepress/components/navbar/default.vue)
+@[code{35-177}](../../.vuepress/components/navbar-zh/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-33}](../../.vuepress/components/navbar/default.vue)
+@[code{1-33}](../../.vuepress/components/navbar-zh/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{179-334}](../../.vuepress/components/navbar/default.vue)
+@[code{179-334}](../../.vuepress/components/navbar-zh/default.vue)
 
 </template>
 

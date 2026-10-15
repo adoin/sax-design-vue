@@ -1,6 +1,12 @@
 ---
 description: 'Trigger actions with accessible button styles and states.'
 PROPS:
+  - name: size
+    type: String | Number
+    values: xl | large | medium | small | mini | number
+    description: Control size; omission uses medium.
+    default: medium
+    usage: '#size'
   - name: shape
     type: String
     values: rounded | circle | square
@@ -17,11 +23,11 @@ PROPS:
     code: >
       <s-button color="success"> Success </s-button>
   # _______________________________________
-  - name: style button
-    type: Prop
-    values: 'flat, border, gradient, transparent, dashed, shadow, relief, floating'
+  - name: type
+    type: String
+    values: 'solid, flat, border, gradient, transparent, shadow, relief, floating'
     description: Change the style of the component and its states.
-    default: null
+    default: solid
     link: null
     usage: '#flat'
     code: >
@@ -33,7 +39,7 @@ PROPS:
     description: Determine if the component is active and change its style to that state.
     default: false
     link: null
-    usage: '#default'
+    usage: '#solid-default'
     code: >
       <s-button active> Default </s-button>
   # _______________________________________
@@ -48,9 +54,9 @@ PROPS:
       <s-button loading> Save changes </s-button>
   - name: loading-type
     type: String
-    values: 'default, pulse, ripple, shimmer'
+    values: 'logo, pulse, ripple, shimmer'
     description: Choose the class-driven loading preset without changing the button markup.
-    default: default
+    default: logo
     link: null
     usage: '#loading'
     code: >
@@ -62,7 +68,7 @@ PROPS:
     description: Disable the button and prevent user interaction.
     default: false
     link: null
-    usage: '#default'
+    usage: '#solid-default'
     code: >
       <s-button disabled> Disabled </s-button>
   # _______________________________________
@@ -213,11 +219,11 @@ PROPS:
         </template>
       </s-button>
   # _______________________________________
-  - name: Ripple
+  - name: ripple
     type: String
-    values: 'reverse, cut'
+    values: 'glow, expand, reverse, cut, ring'
     description: Change ripple style of a button with the `ripple` property
-    default: undefined
+    default: glow
     usage: '#ripple'
     code: >
       <template>
@@ -291,7 +297,7 @@ NEWS:
 
 <card codesandbox="https://codesandbox.io/embed/reverent-shape-pmyk2?fontsize=14&hidenavigation=1&module=%2Fsrc%2FApp.vue">
 
-## Default
+## Solid (default)
 
 <docs-warn />
 
@@ -630,13 +636,13 @@ Choose rounded, square or circle geometry with shape. The global configuration h
 
 Change the size of the entire button including padding, font-size and border with the `size` property
 
-Button keeps five size values. Its shared `small`, `default`, and `large` values use the same 32px, 36px, and 40px control heights as other components; `mini` and `xl` extend below and above that common scale.
+Button keeps five size values. Its shared `small`, `medium`, and `large` values use the same 32px, 36px, and 40px control heights as other components; `mini` and `xl` extend below and above that common scale.
 
 values:
 
 - xl
-- l
-- default
+- large
+- medium (default)
 - small
 - mini
 
@@ -662,7 +668,7 @@ values:
 
 ## Loading
 
-Use `#prefix` and `#suffix` for icons before or after the label. Icons may still be passed through the default slot when no dedicated placement is needed. While `loading-type="default"` is active, the original icon fades into the brand loader before its lead-in begins. When loading ends, the loader completes its restoration motion before fading back to the original icon. The loader uses `prefix`, or `suffix` when no prefix exists; with both slots, prefix takes priority. If neither icon slot exists, the loader keeps its centered transparent overlay. Select `pulse`, `ripple`, or `shimmer` for another surface animation. Every mode preserves button size and prevents clicks. Use `#loading` for fully custom content.
+Use `#prefix` and `#suffix` for icons before or after the label. Icons may still be passed through the default slot when no dedicated placement is needed. While `loading-type="logo"` is active, the original icon fades into the brand loader before its lead-in begins. When loading ends, the loader completes its restoration motion before fading back to the original icon. The loader uses `prefix`, or `suffix` when no prefix exists; with both slots, prefix takes priority. If neither icon slot exists, the loader keeps its centered transparent overlay. Select `pulse`, `ripple`, or `shimmer` for another surface animation. Every mode preserves button size and prevents clicks. Use `#loading` for fully custom content.
 
 <template #example>
 <button-loading />
@@ -896,10 +902,7 @@ This is an example of what you can achieve with simple logic and few lines of co
 
 ## Ripple
 
-You can change ripple style of a button with the `ripple` property and the allowed values are
-
-- `reverse`
-- `cut`
+Feedback begins on press and stays clipped inside the button, beneath its text. Omitting `ripple` uses the soft glow pulse (`glow`); `expand` spreads from the press position, `reverse` contracts inward and `cut` splits outward. Use `ring` for an expanding halo or `glow` for a soft light pulse. Only the internal light animates; the button keeps its position and shape. Mouse, touch and keyboard activation are supported; disabled or loading buttons do not trigger an effect.
 
 <template #example>
 <button-ripple />
@@ -907,7 +910,7 @@ You can change ripple style of a button with the `ripple` property and the allow
 
 <template #template>
 
-@[code{1-7}](../.vuepress/components/button/ripple.vue)
+@[code{1-38}](../.vuepress/components/button/ripple.vue)
 
 </template>
 

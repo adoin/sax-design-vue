@@ -23,7 +23,7 @@ PROPS:
     usage: '#tree-multiple-selection'
   - name: size
     type: ComponentSize
-    values: "small | default | large"
+    values: "small | medium | large"
     description: Size inherited by the trigger, popup Table, and registered renderers.
     default: null
   - name: "empty-text"

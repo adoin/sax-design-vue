@@ -207,9 +207,9 @@ PROPS:
   #__________________________________
   - name: size
     type: String
-    values: "large,default, small"
+    values: "large,medium, small"
     description: size of Rate.
-    default: 'default'
+    default: medium
     link: null
     usage: '#size'
     code: >

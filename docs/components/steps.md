@@ -22,9 +22,9 @@ PROPS:
     default: inferred from variant
   - name: size
     type: String
-    values: 'small / default / large'
+    values: 'small / medium / large'
     description: Step size.
-    default: default
+    default: medium
   - name: finish-status
     type: StepStatus
     values: 'wait / process / finish / success / error / loading / disabled'

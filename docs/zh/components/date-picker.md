@@ -19,7 +19,7 @@ PROPS:
     default: null
   - name: size
     type: String
-    values: "small | default | large"
+    values: "small | medium | large"
     description: 设置触发输入框尺寸。
     default: null
   - name: label-float

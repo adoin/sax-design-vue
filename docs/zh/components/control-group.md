@@ -4,7 +4,7 @@ lastUpdated: false
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: 强制组内所有直接组件控件采用同一尺寸。
     default: null
   - name: block

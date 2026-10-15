@@ -4,7 +4,7 @@ import type { ProgressTexture } from 'sax-design-vue'
 const percent = shallowRef(68)
 const animated = shallowRef(true)
 const textures: Array<{ value: ProgressTexture; label: string }> = [
-  { value: 'default', label: 'Plain' },
+  { value: 'none', label: 'Plain fill (default)' },
   { value: 'bubbles', label: 'Bubbles' },
   { value: 'waves', label: 'Sea waves' },
   { value: 'sparkle', label: 'Sparkle' },

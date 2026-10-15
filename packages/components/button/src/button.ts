@@ -5,7 +5,7 @@ import type { ExtractPropTypes } from 'vue'
 import type Button from './button.vue'
 
 export const buttonTypes = [
-  'default',
+  'solid',
   'border',
   'flat',
   'floating',
@@ -15,10 +15,10 @@ export const buttonTypes = [
   'transparent',
 ] as const
 
-export const buttonSizes = ['xl', 'large', 'default', 'small', 'mini'] as const
+export const buttonSizes = ['xl', 'large', 'medium', 'small', 'mini'] as const
 
 export const buttonLoadingTypes = [
-  'default',
+  'logo',
   'pulse',
   'ripple',
   'shimmer',
@@ -99,13 +99,13 @@ export const buttonProps = buildProps({
 
   /**
    * @description Select the loading visual preset. All presets share the same markup and only switch state classes.
-   * @enum `default` | `pulse` | `ripple` | `shimmer`
-   * @default 'default'
+   * @enum `logo` | `pulse` | `ripple` | `shimmer`
+   * @default 'logo'
    */
   loadingType: {
     type: String,
-    values: buttonLoadingTypes,
-    default: 'default',
+    values: [...buttonLoadingTypes, 'default'] as const,
+    default: 'logo',
   },
 
   /**
@@ -119,33 +119,34 @@ export const buttonProps = buildProps({
 
   /**
    * @description Change the size of the avatar component.
-   * @enum | `xl` | `large` | `default` | `small` | `mini` |
-   * @default 'default'
+   * @enum | `xl` | `large` | `medium` | `small` | `mini` |
+   * @default 'medium'
    */
   size: {
     type: [Number, String],
-    values: buttonSizes,
-    default: 'default',
+    values: [...buttonSizes, 'default'] as const,
+    default: 'medium',
   },
 
   /**
    * @description ripple style
-   * @enum `cut` | `reverse`
+   * @enum `cut` | `reverse` | `ring` | `glow`
    */
   ripple: {
     type: String,
-    values: ['cut', 'reverse'] as const,
+    values: ['expand', 'cut', 'reverse', 'ring', 'glow'] as const,
+    default: 'glow',
   },
 
   /**
    * @description Change the style of the component and its states.
-   * @enum `default` | `border` | `flat` | `floating` | `gradient` | `shadow` | `relief` | `transparent`
-   * @default 'default'
+   * @enum `solid` | `border` | `flat` | `floating` | `gradient` | `shadow` | `relief` | `transparent`
+   * @default 'solid'
    */
   type: {
     type: String,
-    values: buttonTypes,
-    default: 'default',
+    values: [...buttonTypes, 'default'] as const,
+    default: 'solid',
   },
 
   /**

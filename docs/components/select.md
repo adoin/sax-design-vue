@@ -28,7 +28,7 @@ PROPS:
     usage: '#data-source'
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: Set the trigger and inherited form-control density.
     default: null
     usage: '#default'

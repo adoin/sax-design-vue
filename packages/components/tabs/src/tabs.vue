@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import {
   computed,
   getCurrentInstance,
@@ -38,7 +39,8 @@ import type { TabsOverflowResult } from './tabs-overflow'
 
 defineOptions({ name: 'STabs' })
 
-const props = defineProps(tabsProps)
+const rawProps = defineProps(tabsProps)
+const props = resolveVisualEnumProps('tabs', rawProps)
 const emit = defineEmits(tabsEmits)
 const slots = useSlots()
 const ns = useNamespace('tabs')
@@ -521,7 +523,7 @@ onBeforeUnmount(() => {
       ns.m(`align-${alignment}`),
       ns.m(`type-${type}`),
       ns.m(`overflow-${overflow}`),
-      ns.m(`size-${size}`),
+      ns.m(`size-${props.size}`),
       ns.is(`reflow-${reflowDirection}`),
     ]"
     :style="rootStyle"

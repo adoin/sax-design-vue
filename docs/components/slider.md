@@ -2,7 +2,7 @@
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: Set or inherit track, thumb, and interaction height.
     default: null
   - name: variant

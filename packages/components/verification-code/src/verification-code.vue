@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import type { StyleValue } from 'vue'
 import { computed, shallowRef, useTemplateRef, watch } from 'vue'
 import {
@@ -14,7 +15,8 @@ import {
 
 defineOptions({ name: 'SVerificationCode', inheritAttrs: false })
 
-const props = defineProps(verificationCodeProps)
+const rawProps = defineProps(verificationCodeProps)
+const props = resolveVisualEnumProps('verification-code', rawProps)
 const nativeAttrs = useNativeAttrs()
 const emit = defineEmits(verificationCodeEmits)
 const ns = useNamespace('verification-code')

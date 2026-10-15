@@ -1,6 +1,6 @@
 <template>
   <div class="texture-demo">
-    <s-card texture="default" title="默认纯色">
+    <s-card texture="solid" title="实色表面（默认）">
       <p>默认纹理保持所选 Card 表面为纯色，不增加额外材质层。</p>
     </s-card>
   </div>

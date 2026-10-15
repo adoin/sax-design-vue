@@ -4,7 +4,7 @@ lastUpdated: false
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: Force one shared size on every direct component control in the group.
     default: null
   - name: block

@@ -3,7 +3,7 @@ description: '使用一个真实输入框完成短信验证码输入，并以无
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: 设置或继承验证码单元格尺寸与间距。
     default: null
   - name: shape
@@ -39,9 +39,9 @@ PROPS:
     default: false
   - name: status
     type: String
-    values: 'default | error | success'
+    values: 'neutral | error | success'
     description: 语义状态。
-    default: default
+    default: neutral
 EVENTS:
   - name: complete
     params: string
@@ -92,7 +92,7 @@ EVENTS:
 
 ## 尺寸
 
-对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+对比组件继承后的 `small`、`neutral`、`large` 三档尺寸。
 
 <template #example><verification-code-zh-size /></template>
 

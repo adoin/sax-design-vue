@@ -132,3 +132,12 @@
 - Forward native form, image and accessibility attributes to the correct semantic element. Do not copy the same event listener to both wrapper and native control.
 - Components using inheritAttrs: false must explicitly preserve outer layout attributes; renderless utilities and floating-layer configuration are exceptions with no ordinary layout root.
 - Reuse the shared useAttrs hook to exclude class/style for native forwarding. Regression tests must change class, style and native attrs after mount to catch stale routing and lost updates.
+
+## Semantic enum names
+
+- Public enum values must describe their actual behavior, appearance, geometry or size. Do not add a generic `default` member. Omission resolves to a concrete named value (for example Button ripple `glow`, Button type `solid`, Card type `basic`, texture `solid`, effect `none`, size `medium`).
+- Document the actual option as “Name (default)” / “名称（默认）” rather than offering a separate Default option. Keep runtime defaults, global configuration, public types, enum option lists, localized examples, Code and Playground synchronized.
+- Existing `default` literals are compatibility aliases only; omit them from canonical option lists and new usage. Internal historical CSS class names may remain stable through the shared visual enum adapter.
+- Card `basic` is the canonical name for the former simple `default` layout. This naming migration supersedes older records listing `default` as its public canonical preset; the established layout and numeric aliases are preserved.
+
+- The semantic default naming matrix and compatibility behavior are recorded in `.agents/notes/implemented/semantic-visual-enum-defaults.md`.

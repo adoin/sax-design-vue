@@ -7,7 +7,7 @@ API_TITLES:
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: 设置或继承单选控件尺寸；Radio Group 会传给后代控件。
     default: null
   - name: v-model
@@ -62,7 +62,7 @@ PROPS:
     description: 当前单选项对应的值。
     default: "''"
     link: null
-    usage: '#default'
+    usage: '#radio-options-default'
     code: null
 
 GROUP_PROPS:
@@ -75,7 +75,7 @@ GROUP_PROPS:
     type: boolean
     description: 在 Radio 与 RadioButton 分组的选中项之间播放默认圆点跳跃动画。默认开启，继承全局 radioGroup.animated，局部参数优先；遵循系统减少动态效果设置。
     default: true
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: size
     type: ComponentSize
     description: 设置或继承 RadioGroup 及其选项的尺寸。
@@ -141,7 +141,7 @@ GROUP_TABS_PROPS:
     type: RadioGroupTabValue
     description: 当前页签键的双向绑定。
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: "columns"
     type: "number"
     description: "页签未单独指定时的面板列数。"
@@ -162,37 +162,37 @@ BUTTON_PROPS:
     type: RadioButtonValue
     description: 直接使用 RadioButton 时双向绑定的选中值。
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: model-value
     type: RadioButtonValue
     description: 不使用 v-model 语法时设置选中值。
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: value
     type: RadioButtonValue
     description: 当前按钮代表的选项值。
     default: "''"
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: label
     type: 'String | Number | Boolean'
     description: 可见的选项标签。
     default: "''"
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: description
     type: String
     description: 标签下方的辅助说明。
     default: "''"
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: disabled
     type: Boolean
     description: 禁用当前按钮但保留选中状态。
     default: false
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: name
     type: String
     description: 直接组合按钮时共用的原生 radio 名称。
     default: "''"
-    usage: '#default'
+    usage: '#radio-options-default'
 EVENTS:
   - name: update:modelValue
     type: RadioValue
@@ -214,35 +214,35 @@ SLOTS:
     type: slot
     description: 未提供 options 时手动组合 Radio 或 RadioButton 子组件。
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: RadioGroup.option
     type: Slot
     scope: "{ option: RadioOption; checked: boolean }"
     description: 自定义数据驱动的单选项内容。
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: RadioGroup.empty
     type: slot
     description: 无选项且未手动提供子控件时显示的内容。
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: RadioGroupTabs.tab
     type: Slot
     scope: "{ tab: RadioGroupTab; active: boolean; selected: boolean; selectedOption?: RadioOption }"
     description: 根据激活和选中状态自定义页签触发器。
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: RadioGroupTabs.option
     type: Slot
     scope: "{ option: RadioOption; checked: boolean }"
     description: 自定义当前页签的选项内容。
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: RadioGroupTabs.empty
     type: slot
     description: 没有活动页签时显示的内容。
     default: null
-    usage: '#default'
+    usage: '#radio-options-default'
   - name: default
     type: slot
     values: 'null'
@@ -266,7 +266,7 @@ SLOTS:
 
 <card>
 
-## 默认
+## 单选选项（默认）
 
 RadioGroup 的普通形态和按钮形态都会在选中项之间播放默认圆点跳跃动画。设置 `:animated="false"` 可关闭选项间的圆点位移；系统减少动态效果设置会自动关闭位移，自定义图标保留自身动画。
 
@@ -332,7 +332,7 @@ RadioGroup 的普通形态和按钮形态都会在选中项之间播放默认圆
 
 ## 尺寸
 
-对比组件继承后的 `small`、`default`、`large` 三档尺寸。
+对比组件继承后的 `small`、`radio`、`large` 三档尺寸。
 
 <template #example><radio-zh-size /></template>
 

@@ -1,97 +1,167 @@
-@use 'mixins/mixins' as *;
-@use 'mixins/var' as *;
-@use 'common/var' as *;
-
-@include b(ripple) {
-  // @include set-var-value(color, inherit);
-  width: 100px;
-  height: 100px;
+.s-ripple {
   position: absolute;
-  width: 100%;
-  pointer-events: none;
+  inset: 0;
+  z-index: 0;
   overflow: hidden;
-  height: 100%;
-  top: 0px;
-  right: 0px;
   border-radius: inherit;
-  z-index: -1;
-
-  @include m(default) {
-    width: 0px;
-    height: 0px;
-    border-radius: var(--sax-radius-circle);
-    opacity: 0;
+  pointer-events: none;
+  > span {
     position: absolute;
-    transform: translate(-50%, -50%);
-    transition:
-      width 0.5s var(--sax-motion-easing-emphasized),
-      height 0.5s var(--sax-motion-easing-emphasized),
-      opacity 0.5s var(--sax-motion-easing-emphasized),
-      transform 0.5s var(--sax-motion-easing-emphasized);
-    background: radial-gradient(
-      circle,
-      getColor(color, 0.05),
-      getColor(color, 0.6)
-    );
-  }
-  @include m(solid) {
-    background: getColor(color);
-    opacity: 1;
-  }
-
-  @include m(invert) {
-    @include set-var-value(color, getCssVar(light));
-    width: 0px;
-    height: 0px;
-    border-radius: var(--sax-radius-circle);
+    pointer-events: none;
     opacity: 0;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    transition:
-      width 0.5s var(--sax-motion-easing-emphasized),
-      height 0.5s var(--sax-motion-easing-emphasized),
-      opacity 0.5s var(--sax-motion-easing-emphasized),
-      transform 0.5s var(--sax-motion-easing-emphasized);
-    background-image: radial-gradient(
-      circle,
-      getColor(color, 0.7),
-      getColor(color, 0)
-    );
+    animation-duration: var(--sax-motion-duration-emphasis, 500ms);
+    animation-timing-function: var(--sax-motion-easing-smooth-out, ease-out);
+    animation-fill-mode: both;
   }
-
-  @include m(cut-1) {
-    width: 0px;
-    height: 0px;
-    opacity: 0;
-    position: absolute;
-    transform: translate(-100%, -50%) skew(20deg);
-    transition:
-      width 0.5s var(--sax-motion-easing-emphasized),
-      height 0.5s var(--sax-motion-easing-emphasized),
-      opacity 0.5s var(--sax-motion-easing-emphasized),
-      transform 0.5s var(--sax-motion-easing-emphasized);
-    background-image: linear-gradient(
-      270deg,
-      hsl(0deg 0% 100% / 0.25) 0%,
-      hsl(0deg 0% 100% / 0) 100%
-    );
+}
+.s-ripple--default,
+.s-ripple--invert {
+  border-radius: 50%;
+}
+.s-ripple--default {
+  background: var(--s-ripple-ink);
+  animation-name: sax-ripple-expand;
+}
+.s-ripple--invert {
+  background: radial-gradient(
+    circle,
+    transparent 40%,
+    var(--s-ripple-ink) 64%,
+    transparent 74%
+  );
+  animation-name: sax-ripple-contract;
+}
+.s-ripple--cut-1,
+.s-ripple--cut-2 {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--s-ripple-ink),
+    transparent
+  );
+}
+.s-ripple--cut-1 {
+  animation-name: sax-ripple-split-left;
+}
+.s-ripple--cut-2 {
+  animation-name: sax-ripple-split-right;
+}
+@keyframes sax-ripple-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0.02);
+    opacity: var(--s-ripple-strength);
   }
-
-  @include m(cut-2) {
-    width: 0px;
-    height: 0px;
+  65% {
+    opacity: var(--s-ripple-strength);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
     opacity: 0;
-    position: absolute;
-    transform: translate(0%, -50%) skew(20deg);
-    transition:
-      width 0.5s var(--sax-motion-easing-emphasized),
-      height 0.5s var(--sax-motion-easing-emphasized),
-      opacity 0.5s var(--sax-motion-easing-emphasized),
-      transform 0.5s var(--sax-motion-easing-emphasized);
-    background-image: linear-gradient(
-      90deg,
-      hsl(0deg 0% 100% / 0.25) 0%,
-      hsl(0deg 0% 100% / 0) 100%
-    );
+  }
+}
+@keyframes sax-ripple-contract {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: var(--s-ripple-strength);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.02);
+    opacity: 0;
+  }
+}
+@keyframes sax-ripple-split-left {
+  0% {
+    transform: translate(-50%, -50%) skewX(-16deg) scaleX(0.1);
+    opacity: 0;
+  }
+  20% {
+    opacity: var(--s-ripple-strength);
+  }
+  100% {
+    transform: translate(calc(-50% - var(--s-ripple-travel)), -50%)
+      skewX(-16deg) scaleX(1);
+    opacity: 0;
+  }
+}
+@keyframes sax-ripple-split-right {
+  0% {
+    transform: translate(-50%, -50%) skewX(-16deg) scaleX(0.1);
+    opacity: 0;
+  }
+  20% {
+    opacity: var(--s-ripple-strength);
+  }
+  100% {
+    transform: translate(calc(-50% + var(--s-ripple-travel)), -50%)
+      skewX(-16deg) scaleX(1);
+    opacity: 0;
+  }
+}
+@keyframes sax-ripple-reduced {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.12;
+  }
+}
+
+.s-ripple--ring {
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    transparent 52%,
+    var(--s-ripple-ink) 56%,
+    var(--s-ripple-ink) 59%,
+    transparent 64%
+  );
+  animation-name: sax-ripple-ring;
+}
+.s-ripple--glow {
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--s-ripple-ink), transparent 65%);
+  animation-name: sax-ripple-glow;
+}
+@keyframes sax-ripple-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0.06);
+    opacity: 0;
+  }
+  15% {
+    opacity: var(--s-ripple-strength);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.35);
+    opacity: 0;
+  }
+}
+@keyframes sax-ripple-glow {
+  0% {
+    transform: translate(-50%, -50%) scale(0.25);
+    opacity: 0;
+  }
+  30% {
+    opacity: var(--s-ripple-strength);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s-ripple > span {
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: none;
+    border-radius: inherit;
+    background: var(--s-ripple-ink);
+    animation: sax-ripple-reduced var(--sax-motion-duration-quick, 150ms)
+      ease-out both;
   }
 }

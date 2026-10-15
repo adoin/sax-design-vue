@@ -10,14 +10,6 @@ export const builtinCarbonIcons: Record<string, SaxIconData> = {
       viewBox: '0 0 32 32',
     },
   },
-  'arrow-down': {
-    body: '<path fill="currentColor" d="M24.59 16.59L17 24.17V4h-2v20.17l-7.59-7.58L6 18l10 10l10-10z"/>',
-    attributes: {
-      width: '1em',
-      height: '1em',
-      viewBox: '0 0 32 32',
-    },
-  },
   'arrow-left': {
     body: '<path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16z"/>',
     attributes: {

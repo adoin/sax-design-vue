@@ -2,9 +2,9 @@
 PROPS:
   - name: texture
     type: String
-    values: 'default | bubbles | waves | sparkle'
+    values: 'none | bubbles | waves | sparkle'
     description: Decorative fill texture, clipped to the filled region. default keeps the plain fill.
-    default: default
+    default: none
     usage: '#textures'
   - name: texture-animated
     type: Boolean
@@ -46,7 +46,7 @@ PROPS:
     description: Determinate progress percentage, clamped to 0–100; non-finite values display zero.
     default: 0
     link: null
-    usage: '#default'
+    usage: '#plain-fill-default'
 
   - name: color
     type: String
@@ -72,7 +72,7 @@ NEWS:
 
 <card>
 
-## Default
+## Plain fill (default)
 
 
 Bind `percent` from 0 to 100 for a standard progress bar.
@@ -174,7 +174,7 @@ Adjust bar thickness with the `height` prop.
 
 ## Textures
 
-Choose a fill pattern with `texture`: bubbles, sea waves or sparkle. `default` keeps the plain fill. Textures remain inside the completed portion and inherit the bar's base color. Move the slider to compare the same progress across patterns; at 0% or 100% texture motion pauses.
+Choose a fill pattern with `texture`: bubbles, sea waves or sparkle. `none` keeps the plain fill. Textures remain inside the completed portion and inherit the bar's base color. Move the slider to compare the same progress across patterns; at 0% or 100% texture motion pauses.
 
 <template #example><progress-textures /></template>
 

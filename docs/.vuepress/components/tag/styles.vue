@@ -1,6 +1,6 @@
 <template>
   <div class="tag-styles">
-    <s-tag color="primary">Default</s-tag>
+    <s-tag color="primary">Filled (default)</s-tag>
     <s-tag color="success" variant="outline">Outline</s-tag>
     <s-tag color="danger" variant="dashed">Dashed</s-tag>
     <s-tag color="warning" variant="mark">Mark</s-tag>

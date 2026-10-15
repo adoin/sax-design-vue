@@ -27,6 +27,7 @@
 </template>
 
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import {
   computed,
   onMounted,
@@ -53,7 +54,8 @@ import type { CSSProperties } from 'vue'
 
 defineOptions({ name: 'SNavbar' })
 
-const props = defineProps(navbarProps)
+const rawProps = defineProps(navbarProps)
+const props = resolveVisualEnumProps('navbar', rawProps)
 const emit = defineEmits(navbarEmits)
 
 const ns = useNamespace('navbar')

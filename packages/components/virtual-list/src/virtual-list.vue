@@ -215,7 +215,8 @@ const queueMeasurement = (
   })
   if (measurementScheduled) return
   measurementScheduled = true
-  queueMicrotask(flushMeasurements)
+  // Let parent data/count updates and recycled row refs settle before reading keys.
+  nextTick(() => queueMicrotask(flushMeasurements))
 }
 
 const resizeObserver =

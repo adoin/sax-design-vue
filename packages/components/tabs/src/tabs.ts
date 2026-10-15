@@ -51,8 +51,8 @@ export const tabsProps = buildProps({
   },
   size: {
     type: definePropType<TabsSize>(String),
-    values: ['small', 'default', 'large'],
-    default: 'default',
+    values: ['medium', 'small', 'default', 'large'],
+    default: 'medium',
   },
   animated: { type: Boolean, default: true },
   /** Show add and close controls independently from the visual type. */

@@ -2,7 +2,8 @@ import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { ExtractPropTypes } from 'vue'
 import type Countdown from './countdown.vue'
 
-export type CountdownEffect = 'default' | 'flip' | 'fade' | 'particle' | 'slide'
+export type CountdownEffect =
+  'static' | 'default' | 'flip' | 'fade' | 'particle' | 'slide'
 
 export interface CountdownTime {
   remaining: number
@@ -32,8 +33,8 @@ export const countdownProps = buildProps({
   },
   effect: {
     type: definePropType<CountdownEffect>(String),
-    values: ['default', 'flip', 'fade', 'particle', 'slide'],
-    default: 'default',
+    values: ['static', 'default', 'flip', 'fade', 'particle', 'slide'],
+    default: 'static',
   },
 } as const)
 export const countdownEmits = {

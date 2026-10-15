@@ -21,7 +21,7 @@ PROPS:
     usage: '#default'
   - name: size
     type: String
-    values: "small | default | large"
+    values: "small | medium | large"
     description: Set the trigger input size.
     default: null
     link: null

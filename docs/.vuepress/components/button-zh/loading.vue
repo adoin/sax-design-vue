@@ -56,9 +56,9 @@
 import { shallowRef } from 'vue'
 
 const loading = shallowRef(true)
-const loadingTypes = ['default', 'pulse', 'ripple', 'shimmer'] as const
+const loadingTypes = ['logo', 'pulse', 'ripple', 'shimmer'] as const
 const labels = {
-  default: '品牌标志',
+  logo: '品牌标志（默认）',
   pulse: '呼吸光轨',
   ripple: '双层脉冲波',
   shimmer: '流光扫描',

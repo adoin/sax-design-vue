@@ -4,7 +4,7 @@ EXAMPLE_GROUPS:
   - title: Types
     items:
       [
-        default,
+        basic-default,
         classic,
         overlay,
         split,
@@ -15,7 +15,7 @@ EXAMPLE_GROUPS:
         article,
       ]
   - title: Textures
-    items: [default-solid, liquid-glass, liquid-glass-2]
+    items: [solid-surface-default, liquid-glass, liquid-glass-2]
   - title: Effects
     items: [no-effect, spotlight, gradient-glow]
 PROPS:
@@ -24,19 +24,19 @@ PROPS:
     values: String
     description: Card title. The title slot takes precedence.
     default: null
-    usage: '#default'
+    usage: '#basic-default'
   - name: subtitle
     type: String
     values: String
     description: Secondary text below the title.
     default: null
-    usage: '#default'
+    usage: '#basic-default'
   - name: text
     type: String
     values: String
     description: Card description. The text slot takes precedence.
     default: null
-    usage: '#default'
+    usage: '#basic-default'
   - name: color
     type: String
     values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
@@ -45,15 +45,15 @@ PROPS:
     usage: '#complete-configuration'
   - name: texture
     type: CardTexture
-    values: default | liquid-glass | liquid-glass-2
+    values: solid | liquid-glass | liquid-glass-2
     description: Surface material, independent from layout and decorative effects.
-    default: default
-    usage: '#default-solid'
+    default: solid
+    usage: '#solid-surface-default'
   - name: effect
     type: CardEffect
-    values: default | spotlight | gradient-glow
+    values: none | spotlight | gradient-glow
     description: Decorative interaction treatment, independent from layout and texture.
-    default: default
+    default: none
     usage: '#no-effect'
   - name: orientation
     type: String
@@ -99,10 +99,10 @@ PROPS:
     usage: '#selection-and-loading'
   - name: type
     type: CardType
-    values: default | classic | overlay | split | frosted | reveal | profile | metric | article
+    values: basic | classic | overlay | split | frosted | reveal | profile | metric | article
     description: Select a complete, named card preset. Numeric values 1-5 remain compatibility aliases.
-    default: default
-    usage: '#default'
+    default: basic
+    usage: '#basic-default'
 EVENTS:
   - name: update:selected
     type: Boolean
@@ -177,9 +177,9 @@ SLOTS:
 
 <card>
 
-## Default
+## Basic (default)
 
-`default` is the implicit preset: a quiet title-and-body surface with optional header extras and footer actions.
+`basic` is the implicit preset: a quiet title-and-body surface with optional header extras and footer actions.
 
 <template #example>
 <card-default />
@@ -399,9 +399,9 @@ Set `type="reveal"` for a centered caption that emerges below the media.
 
 <card>
 
-## Default solid
+## Solid surface (default)
 
-Use `texture="default"` for the regular solid surface without an additional material layer.
+Use `texture="solid"` for the regular solid surface without an additional material layer.
 
 <template #example>
 <card-texture-default />
@@ -473,7 +473,7 @@ Use `texture="default"` for the regular solid surface without an additional mate
 
 ## No effect
 
-Use `effect="default"` when the Card should render without interactive decoration.
+Use `effect="none"` when the Card should render without interactive decoration.
 
 <template #example>
 <card-effect-default />
@@ -655,19 +655,19 @@ Adjust Card layout, orientation, texture, effect, geometry, color, and interacti
 
 <template #template>
 
-@[code{65-148}](../.vuepress/components/card/configurator.vue)
+@[code{72-155}](../.vuepress/components/card/configurator.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-63}](../.vuepress/components/card/configurator.vue)
+@[code{1-70}](../.vuepress/components/card/configurator.vue)
 
 </template>
 
 <template #style>
 
-@[code{150-211}](../.vuepress/components/card/configurator.vue)
+@[code{157-218}](../.vuepress/components/card/configurator.vue)
 
 </template>
 

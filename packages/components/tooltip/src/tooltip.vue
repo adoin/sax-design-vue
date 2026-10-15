@@ -43,6 +43,7 @@
 </template>
 
 <script setup lang="ts">
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import { computed, ref } from 'vue'
 import {
   useColor,
@@ -64,7 +65,8 @@ const ns = useNamespace('tooltip')
 
 const popperRef = ref<PopperExpose>()
 
-const props = defineProps(tooltipProps)
+const rawProps = defineProps(tooltipProps)
+const props = resolveVisualEnumProps('tooltip', rawProps)
 const shape = useShape<'circle' | 'square' | 'default'>()
 const resolvedShape = computed(() =>
   shape.value === 'rounded' ? '' : shape.value,

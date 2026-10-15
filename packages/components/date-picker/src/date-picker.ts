@@ -19,7 +19,7 @@ type DateLike = Date | string | number
 
 export interface DatePickerPopupConfig {
   placement?: 'top' | 'bottom'
-  trigger?: 'default' | 'icon' | 'manual'
+  trigger?: 'field' | 'default' | 'icon' | 'manual'
   transfer?: boolean
   width?: string | number
   height?: string | number

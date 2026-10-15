@@ -26,9 +26,9 @@ PROPS:
 
   - name: color
     type: String
-    values: 'default, primary, success, warning, danger, dark, RGB, HEX'
+    values: 'neutral, primary, success, warning, danger, dark, RGB, HEX'
     description: 线条与标签的强调色；线条会弱化，保持标签易读。
-    default: default
+    default: neutral
     link: null
     usage: '#color'
 

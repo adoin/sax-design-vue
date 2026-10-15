@@ -15,7 +15,7 @@ PROPS:
     default: null
   - name: size
     type: ComponentSize
-    values: 'default / small / large'
+    values: 'medium / small / large'
     description: Default size inherited by schema renderers and slotted controls unless they declare their own size.
     default: null
   - name: rules

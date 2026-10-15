@@ -39,7 +39,7 @@ PROPS:
     usage: '#placement-and-size'
   - name: 'size'
     type: 'String | Number'
-    values: 'CSS length | default | large'
+    values: 'CSS length | medium | large'
     description: '左右方向表示宽度，上下方向表示高度；default 为 360px，large 为 736px。'
     default: '360px'
     usage: '#placement-and-size'

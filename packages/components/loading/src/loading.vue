@@ -60,6 +60,7 @@
 </template>
 
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import { computed, ref, unref } from 'vue'
 import {
   useColor,
@@ -76,7 +77,8 @@ defineOptions({
   name: 'SLoading',
 })
 
-const props = defineProps(loadingProps)
+const rawProps = defineProps(loadingProps)
+const props = resolveVisualEnumProps('loading', rawProps)
 
 const { ns, zIndex } = useGlobalComponentSettings('loading')
 
@@ -85,7 +87,7 @@ const { currentZIndex } = zIndex
 const loadingRef = ref<HTMLElement>()
 const color = useColor('primary')
 const background = useProp<Color>('background')
-const type = useProp<string>('type')
+const type = computed(() => props.type)
 const logoLoadingTypes = new Set<LoadingType>(['default'])
 const usesLogoLoading = computed(() =>
   logoLoadingTypes.has(type.value as LoadingType),

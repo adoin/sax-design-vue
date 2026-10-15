@@ -11,7 +11,7 @@ export const dividerProps = buildProps({
   },
   color: {
     type: String,
-    default: 'default',
+    default: 'neutral',
   },
   variant: {
     type: String,

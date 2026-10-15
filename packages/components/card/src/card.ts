@@ -5,7 +5,7 @@ import type { ExtractPropTypes } from 'vue'
 import type Card from './card.vue'
 
 export const cardTypes = [
-  'default',
+  'basic',
   'classic',
   'overlay',
   'split',
@@ -17,22 +17,18 @@ export const cardTypes = [
 ] as const
 
 const legacyCardTypes = [1, '1', 2, '2', 3, '3', 4, '4', 5, '5'] as const
-const acceptedCardTypes = [...cardTypes, ...legacyCardTypes] as const
+const acceptedCardTypes = [...cardTypes, 'default', ...legacyCardTypes] as const
 
 export const cardOrientations = ['vertical', 'horizontal'] as const
 export const cardHoverEffects = ['none', 'lift', 'glow'] as const
-export const cardTextures = [
-  'default',
-  'liquid-glass',
-  'liquid-glass-2',
-] as const
-export const cardEffects = ['default', 'spotlight', 'gradient-glow'] as const
+export const cardTextures = ['solid', 'liquid-glass', 'liquid-glass-2'] as const
+export const cardEffects = ['none', 'spotlight', 'gradient-glow'] as const
 
 export type CardOrientation = (typeof cardOrientations)[number]
 export type CardHoverEffect = (typeof cardHoverEffects)[number]
-export type CardTexture = (typeof cardTextures)[number]
-export type CardEffect = (typeof cardEffects)[number]
-export type CardType = (typeof cardTypes)[number]
+export type CardTexture = (typeof cardTextures)[number] | 'default'
+export type CardEffect = (typeof cardEffects)[number] | 'default'
+export type CardType = (typeof cardTypes)[number] | 'default'
 export type LegacyCardType = (typeof legacyCardTypes)[number]
 
 export const cardProps = buildProps({
@@ -88,35 +84,35 @@ export const cardProps = buildProps({
   loading: Boolean,
   /**
    * @description Surface texture, independent from the card layout and decorative effect.
-   * @enum `default` | `liquid-glass` | `liquid-glass-2`
-   * @default default
+   * @enum `solid` | `liquid-glass` | `liquid-glass-2`
+   * @default solid
    */
   texture: {
     type: definePropType<CardTexture>(String),
-    values: cardTextures,
-    default: 'default',
+    values: [...cardTextures, 'default'] as const,
+    default: 'solid',
   },
   /**
    * @description Decorative background effect, independent from the card layout preset.
-   * @enum `default` | `spotlight` | `gradient-glow`
-   * @default default
+   * @enum `none` | `spotlight` | `gradient-glow`
+   * @default none
    */
   effect: {
     type: definePropType<CardEffect>(String),
-    values: cardEffects,
-    default: 'default',
+    values: [...cardEffects, 'default'] as const,
+    default: 'none',
   },
   /**
    * @description Named card preset controlling layout and visual style. Numeric values 1-5 remain as compatibility aliases.
-   * @enum `default` | `classic` | `overlay` | `split` | `frosted` | `reveal` | `profile` | `metric` | `article`
-   * @default default
+   * @enum `basic` | `classic` | `overlay` | `split` | `frosted` | `reveal` | `profile` | `metric` | `article`
+   * @default basic
    */
   type: {
     type: definePropType<CardType | LegacyCardType>([String, Number]),
     values: acceptedCardTypes,
     validator: (val: unknown): val is CardType | LegacyCardType =>
       acceptedCardTypes.includes(val as any),
-    default: 'default',
+    default: 'basic',
   },
 } as const)
 

@@ -3,7 +3,7 @@ description: '在两个状态之间切换布尔设置。'
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: 设置或继承开关轨道与滑块尺寸。
     default: null
   - name: variant

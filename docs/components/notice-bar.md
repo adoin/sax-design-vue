@@ -69,7 +69,7 @@ PROPS:
     usage: "#shape"
   - name: "size"
     type: "ComponentSize"
-    values: "small | default | large"
+    values: "small | medium | large"
     description: "Density; inherits the shared size configuration."
     default: null
     usage: "#size"

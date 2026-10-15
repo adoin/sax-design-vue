@@ -8,7 +8,7 @@ PROPS:
     usage: '#loading'
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: 设置或继承控件尺寸。
     default: null
   - name: shape

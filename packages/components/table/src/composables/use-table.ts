@@ -11,7 +11,7 @@ export const useTable = (
 
   const tableKls = computed(() => [
     ns.b(),
-    ns.m(props.size || 'default'),
+    ns.m(props.size === 'medium' ? 'default' : props.size || 'default'),
     ns.is('striped', props.striped),
     ns.is('multiple', props.multiple),
     ns.is('data-mode'),

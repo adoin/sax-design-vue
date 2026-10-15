@@ -35,9 +35,11 @@ export const navbarProps = buildProps({
 
   /** @description Controls the navigation bar height and spacing. */
   size: {
-    type: definePropType<'compact' | 'default' | 'spacious'>(String),
-    values: ['compact', 'default', 'spacious'] as const,
-    default: 'default',
+    type: definePropType<'compact' | 'comfortable' | 'default' | 'spacious'>(
+      String,
+    ),
+    values: ['compact', 'comfortable', 'default', 'spacious'] as const,
+    default: 'comfortable',
   },
 
   /** @description Add a backdrop blur to the surface. */

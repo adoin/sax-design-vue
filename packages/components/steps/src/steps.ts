@@ -7,7 +7,7 @@ export type StepStatus =
 
 export type StepsVariant = 'rail' | 'timeline'
 export type StepsDirection = 'horizontal' | 'vertical'
-export type StepsSize = 'small' | 'default' | 'large'
+export type StepsSize = 'small' | 'medium' | 'default' | 'large'
 
 export interface StepItem {
   key?: string | number
@@ -46,8 +46,8 @@ export const stepsProps = buildProps({
   },
   size: {
     type: String,
-    values: ['small', 'default', 'large'],
-    default: 'default',
+    values: ['medium', 'small', 'default', 'large'],
+    default: 'medium',
   },
   finishStatus: {
     type: String,

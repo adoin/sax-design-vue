@@ -7,9 +7,9 @@ PROPS:
     default: true
   - name: underline-effect
     type: String
-    values: "default | slide | center | double | highlight"
+    values: "plain | slide | center | double | highlight"
     description: 下划线动效；支持左向右、中心展开、双线和标记效果，均兼容跨行文本。
-    default: default
+    default: plain
   - name: href
     type: String
     values: "URL"

@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import {
   computed,
   nextTick,
@@ -31,7 +32,8 @@ import type { CSSProperties } from 'vue'
 
 defineOptions({ name: 'SText' })
 
-const props = defineProps(textProps)
+const rawProps = defineProps(textProps)
+const props = resolveVisualEnumProps('text', rawProps)
 const ns = useNamespace('text')
 const displayedContent = shallowRef('')
 const isTyping = shallowRef(false)

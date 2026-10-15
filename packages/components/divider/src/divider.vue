@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import { computed, useSlots } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { SIcon } from '@vuesax-alpha/components/icon'
@@ -8,7 +9,8 @@ import { readableDividerLabelColor } from './divider-color'
 
 defineOptions({ name: 'SDivider' })
 
-const props = defineProps(dividerProps)
+const rawProps = defineProps(dividerProps)
+const props = resolveVisualEnumProps('divider', rawProps)
 const slots = useSlots()
 const ns = useNamespace('divider')
 

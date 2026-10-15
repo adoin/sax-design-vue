@@ -26,9 +26,9 @@ PROPS:
 
   - name: color
     type: String
-    values: 'default, primary, success, warning, danger, dark, RGB, HEX'
+    values: 'neutral, primary, success, warning, danger, dark, RGB, HEX'
     description: Accent for the line and label; the line is softened to keep the label readable.
-    default: default
+    default: neutral
     link: null
     usage: '#color'
 

@@ -111,7 +111,7 @@ describe('Progress fill textures', () => {
     ).toContain('width: 65%')
     expect(observer).not.toHaveBeenCalled()
   })
-  it.each(progressTextures.filter((value) => value !== 'default'))(
+  it.each(progressTextures.filter((value) => value !== 'none'))(
     'clips the %s texture inside the foreground and keeps it decorative',
     async (texture) => {
       const wrapper = mount(Progress, {

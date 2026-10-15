@@ -22,9 +22,9 @@ PROPS:
     default: true
   - name: underline-effect
     type: String
-    values: "default | slide | center | double | highlight"
+    values: "plain | slide | center | double | highlight"
     description: Underline effect with slide, center-out, double-line, and highlight variants. All variants support wrapped text.
-    default: default
+    default: plain
 description: 'Text link with semantic status.'
 EVENTS:
   - name: click

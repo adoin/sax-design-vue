@@ -3,7 +3,7 @@ description: 'Enter one-time codes with one real input and borderless visual slo
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: Set or inherit the verification cell size and spacing.
     default: null
   - name: shape
@@ -39,9 +39,9 @@ PROPS:
     default: false
   - name: status
     type: String
-    values: 'default | error | success'
+    values: 'neutral | error | success'
     description: Semantic visual state.
-    default: default
+    default: neutral
 EVENTS:
   - name: complete
     params: string
@@ -92,7 +92,7 @@ The default `mode="numeric"` accepts digits only. Use `mode="alphanumeric"` for 
 
 ## Size
 
-Compare the inherited `small`, `default`, and `large` component sizes.
+Compare the inherited `small`, `neutral`, and `large` component sizes.
 
 <template #example><verification-code-size /></template>
 

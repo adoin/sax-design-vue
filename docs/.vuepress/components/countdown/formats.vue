@@ -3,7 +3,7 @@ import { shallowRef } from 'vue'
 import type {
   CountdownEffect,
   CountdownFormatter,
-} from '@vuesax-alpha/components/countdown'
+} from 'sax-design-vue'
 
 const shortDuration = 125 * 1000
 const longDuration = (25 * 60 * 60 + 65) * 1000
@@ -14,11 +14,11 @@ const hoursDeadline = shallowRef(Date.now() + longDuration)
 const fastDeadline = shallowRef(Date.now() + fastDuration)
 const selectedEffect = shallowRef<CountdownEffect>('flip')
 const effectOptions: Array<{ label: string; value: CountdownEffect }> = [
-  { label: 'Default / 默认', value: 'default' },
-  { label: 'Flip / 翻牌', value: 'flip' },
-  { label: 'Fade / 淡入淡出', value: 'fade' },
-  { label: 'Particle / 粒子', value: 'particle' },
-  { label: 'Slide / 滑动', value: 'slide' },
+  { label: 'Static (default)', value: 'static' },
+  { label: 'Flip', value: 'flip' },
+  { label: 'Fade', value: 'fade' },
+  { label: 'Particle', value: 'particle' },
+  { label: 'Slide', value: 'slide' },
 ]
 
 const restartTotalSeconds = () => {
@@ -45,18 +45,18 @@ const formatFastCountdown: CountdownFormatter = ({
   <div class="countdown-formats-demo">
     <div class="countdown-formats-demo__controls">
       <span class="countdown-formats-demo__control-label">
-        Digit effect / 数字动效
+        Digit effect
       </span>
       <s-radio-group
         v-model="selectedEffect"
         :options="effectOptions"
         name="countdown-effect"
-        aria-label="Digit effect / 数字动效"
+        aria-label="Digit effect"
       />
     </div>
 
     <div class="countdown-formats-demo__item">
-      <span class="countdown-formats-demo__label">Total seconds / 总秒数</span>
+      <span class="countdown-formats-demo__label">Total seconds</span>
       <s-countdown
         :value="totalSecondsDeadline"
         format="ss"
@@ -67,7 +67,7 @@ const formatFastCountdown: CountdownFormatter = ({
 
     <div class="countdown-formats-demo__item">
       <span class="countdown-formats-demo__label"
-        >Minutes : seconds / 分 : 秒</span
+        >Minutes : seconds</span
       >
       <s-countdown
         :value="minutesDeadline"
@@ -79,7 +79,7 @@ const formatFastCountdown: CountdownFormatter = ({
 
     <div class="countdown-formats-demo__item">
       <span class="countdown-formats-demo__label"
-        >Hours : minutes : seconds / 时 : 分 : 秒</span
+        >Hours : minutes : seconds</span
       >
       <s-countdown
         :value="hoursDeadline"
@@ -91,7 +91,7 @@ const formatFastCountdown: CountdownFormatter = ({
 
     <div class="countdown-formats-demo__item">
       <span class="countdown-formats-demo__label"
-        >4× formatter / 4 倍速自定义显示</span
+        >4× formatter</span
       >
       <s-countdown
         :value="fastDeadline"

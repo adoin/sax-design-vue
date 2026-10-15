@@ -278,14 +278,15 @@ describe('documentation API metadata', () => {
       ComponentSize: {
         name: 'ComponentSize',
         declaration:
-          'export type ComponentSize = (typeof componentSizes)[number]',
+          "export type ComponentSize = (typeof componentSizes)[number] | 'default'",
         source: 'packages/constants/size.ts',
       },
     })
     expect(resolveTypeDetails('text', ['TextEffect'])).toMatchObject({
       TextEffect: {
         name: 'TextEffect',
-        declaration: 'export type TextEffect = (typeof textEffects)[number]',
+        declaration:
+          "export type TextEffect = (typeof textEffects)[number] | 'default'",
         source: 'packages/components/text/src/text.ts',
       },
     })
@@ -293,15 +294,18 @@ describe('documentation API metadata', () => {
       resolveTypeDetails('card', ['CardType', 'CardTexture', 'CardEffect']),
     ).toMatchObject({
       CardType: {
-        declaration: 'export type CardType = (typeof cardTypes)[number]',
+        declaration:
+          "export type CardType = (typeof cardTypes)[number] | 'default'",
         source: 'packages/components/card/src/card.ts',
       },
       CardEffect: {
-        declaration: 'export type CardEffect = (typeof cardEffects)[number]',
+        declaration:
+          "export type CardEffect = (typeof cardEffects)[number] | 'default'",
         source: 'packages/components/card/src/card.ts',
       },
       CardTexture: {
-        declaration: 'export type CardTexture = (typeof cardTextures)[number]',
+        declaration:
+          "export type CardTexture = (typeof cardTextures)[number] | 'default'",
         source: 'packages/components/card/src/card.ts',
       },
     })

@@ -6,9 +6,9 @@ PROPS:
   #__________________________________
   - name: type
     type: String
-    values: 'atom,ball,scale,waves,border,points,square,circles,corners,default,gradient,rectangle,square-rotate'
+    values: 'atom,ball,scale,waves,border,points,square,circles,corners,logo,gradient,rectangle,square-rotate'
     description: Change the animation of the loading.
-    default: default
+    default: logo
     link: null
     usage: '#type'
     code: null
@@ -188,7 +188,7 @@ CHILD_PROPS:
 
 <card>
 
-## Default
+## Brand mark (default)
 
 <docs-warn />
 
@@ -229,7 +229,7 @@ SLoading.service(options)
 
 ## Type <Badge text="Update" type="warn" />
 
-Change the type of loading with the option `type`. Only `default` uses the shared logo loader; every named alternative keeps its own visual.
+Change the type of loading with the option `type`. Only `logo` uses the shared logo loader; every named alternative keeps its own visual.
 
 Tipos de loading:
 

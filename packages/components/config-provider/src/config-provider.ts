@@ -36,8 +36,8 @@ export interface SelectGlobalConfig {
 export interface ButtonGlobalConfig {
   debounce?: number | false
   throttle?: number | false
-  loadingType?: 'default' | 'pulse' | 'ripple' | 'shimmer'
-  ripple?: 'cut' | 'reverse'
+  loadingType?: 'logo' | 'default' | 'pulse' | 'ripple' | 'shimmer'
+  ripple?: 'expand' | 'cut' | 'reverse' | 'ring' | 'glow'
 }
 export interface DialogGlobalConfig {
   closeAnimation?: boolean
@@ -175,7 +175,7 @@ export const configProviderProps = buildProps({
   /** Default density inherited by components with the shared size scale. */
   size: {
     type: String,
-    values: componentSizes,
+    values: [...componentSizes, 'default'] as const,
   },
   /** Defaults for multiple Select value ordering. */
   select: { type: definePropType<SelectGlobalConfig>(Object) },

@@ -144,7 +144,7 @@ SLOTS:
     description: 在头像组件内添加文本。
     default: null
     link: null
-    usage: '#default'
+    usage: '#rounded-default'
     code: >
       <s-avatar>
         <template #text>
@@ -189,7 +189,7 @@ SLOTS:
 
 <card>
 
-## 默认
+## 圆角（默认）
 
 <docs-warn />
 

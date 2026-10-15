@@ -2,6 +2,18 @@
 
 ### Unreleased
 
+### 2.2.0 — 2026-10-15
+
+- Use semantic visual enum names throughout the library: `solid` Button, `logo` loading, `basic` Card, `solid` Card texture, `none` effects, `static` Countdown, `filled` Tag, `neutral` verification state and `medium` control size. Keep `default` as a compatibility alias while canonical option lists and examples use explicit names.
+- Make long Anchor navigation scroll as one list with an outside scrollbar and keep collapse controls inside its surface.
+- Clip rounded Table corners consistently during horizontal scrolling and preserve Input/control attribute ownership.
+- Defer Virtual List measurement key reads until parent updates and recycled refs settle.
+- Default Button press feedback to `glow`; use `expand`, `reverse`, `cut`, `ring` or `glow` explicitly and configure these modes through ConfigProvider or install options.
+- Synchronize localized API references, selector labels and complete Code/Playground sources with the named defaults.
+
+- Add Button ripple="ring" expanding halos and ripple="glow" soft light pulses without transforming the button.
+- Make Button press ripples visible on solid and light surfaces, with distinct expand, contract and split animations, keyboard/touch support, reduced-motion feedback and bounded cleanup.
+
 - Add Tabs/STab label-extra slots for arbitrary content after the default label, with isolated interaction events and no built-in clear/close action.
 
 - Add Select sortByOptionOrder with local and global defaults, keeping selection order by default and normalizing multi-select values to option appearance order when enabled.

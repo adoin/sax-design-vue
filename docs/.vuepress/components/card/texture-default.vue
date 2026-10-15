@@ -1,6 +1,6 @@
 <template>
   <div class="texture-demo">
-    <s-card texture="default" title="Default solid">
+    <s-card texture="solid" title="Solid surface (default)">
       <p>
         The default texture keeps the selected Card surface solid and plain.
       </p>

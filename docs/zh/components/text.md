@@ -17,9 +17,9 @@ PROPS:
     default: null
   - name: effect
     type: TextEffect
-    values: 'default | shimmer | typing | rainbow | neon | shadow'
+    values: 'none | shimmer | typing | rainbow | neon | shadow'
     description: 选择文字特效；`shimmer` 生成扫光，`typing` 逐字显示 `content`，`rainbow` 循环语义色，`neon` 脉冲发光，`shadow` 移动柔和渐变投影；系统偏好减少动态效果时静态显示。
-    default: 'default'
+    default: none
   - name: line-clamp
     type: false | Number
     values: 'false | 正整数'

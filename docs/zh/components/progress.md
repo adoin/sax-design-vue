@@ -2,9 +2,9 @@
 PROPS:
   - name: texture
     type: String
-    values: 'default | bubbles | waves | sparkle'
+    values: 'none | bubbles | waves | sparkle'
     description: 已填充区域的装饰纹理；default 保持纯色填充，纹理不会覆盖未完成区域。
-    default: default
+    default: none
     usage: '#textures'
   - name: texture-animated
     type: Boolean
@@ -46,7 +46,7 @@ PROPS:
     description: 确定进度百分比，限制在 0–100；非有限值显示为零。
     default: 0
     link: null
-    usage: '#default'
+    usage: '#plain-fill-default'
 
   - name: color
     type: String
@@ -72,7 +72,7 @@ NEWS:
 
 <card>
 
-## 默认
+## 纯色填充（默认）
 
 
 绑定 0–100 的 `percent` 显示标准进度条。
@@ -174,7 +174,7 @@ NEWS:
 
 ## 填充纹理
 
-通过 `texture` 选择气泡、海浪或星光，`default` 保持纯色。纹理只覆盖已完成部分，并保留进度条底色。拖动滑块可以比较相同进度下的不同纹理；0% 或 100% 时纹理运动暂停。
+通过 `texture` 选择气泡、海浪或星光，`none` 保持纯色。纹理只覆盖已完成部分，并保留进度条底色。拖动滑块可以比较相同进度下的不同纹理；0% 或 100% 时纹理运动暂停。
 
 <template #example><progress-zh-textures /></template>
 

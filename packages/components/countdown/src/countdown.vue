@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import { computed, onBeforeUnmount, onMounted, shallowRef, watch } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import CountdownDigit from './countdown-digit.vue'
@@ -7,7 +8,8 @@ import type { CountdownTime } from './countdown'
 
 defineOptions({ name: 'SCountdown' })
 
-const props = defineProps(countdownProps)
+const rawProps = defineProps(countdownProps)
+const props = resolveVisualEnumProps('countdown', rawProps)
 const emit = defineEmits(countdownEmits)
 const ns = useNamespace('countdown')
 const initialNow = Date.now()

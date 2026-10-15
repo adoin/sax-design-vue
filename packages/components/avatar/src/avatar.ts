@@ -60,12 +60,12 @@ export const avatarProps = buildProps({
   /**
    * @description Change the style of the avatar by making it [square | circulating | rounded]
    * @enum | circle | square | default |
-   * @default 'default'
+   * @default 'rounded'
    */
   shape: {
     type: String,
-    values: ['circle', 'square', 'default'] as const,
-    default: 'default',
+    values: ['circle', 'square', 'rounded', 'default'] as const,
+    default: 'rounded',
   },
 
   /**

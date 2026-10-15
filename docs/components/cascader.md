@@ -3,7 +3,7 @@ description: 'Select associated data level by level in one popup.'
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: Set or inherit the trigger size.
     default: null
   - name: shape

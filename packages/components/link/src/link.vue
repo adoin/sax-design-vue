@@ -12,13 +12,15 @@
 </template>
 
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import { computed } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { linkEmits, linkProps } from './link'
 
 defineOptions({ name: 'SLink' })
 
-const props = defineProps(linkProps)
+const rawProps = defineProps(linkProps)
+const props = resolveVisualEnumProps('link', rawProps)
 const emit = defineEmits(linkEmits)
 const ns = useNamespace('link')
 

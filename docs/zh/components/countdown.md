@@ -27,9 +27,9 @@ PROPS:
     default: null
   - name: effect
     type: String
-    values: "default | flip | fade | particle | slide"
+    values: "static | flip | fade | particle | slide"
     description: 数字变化时使用的动效风格；分隔符不会参与动画。
-    default: default
+    default: static
 EVENTS:
   - name: finish
     description: 归零时触发。
@@ -77,23 +77,23 @@ description: '倒计时展示。'
 
 使用 `speed` 调整流速：`0` 表示冻结，`1` 表示正常流速，`2` 表示两倍速。基于标记的显示使用 `format`，自定义文本使用 `formatter(time)`；传入 `formatter` 后会忽略 `format`。Formatter 返回文本中的数字仍由内置数字渲染器处理，因此所选 `effect` 会继续生效。
 
-<template #example><countdown-formats /></template>
+<template #example><countdown-zh-formats /></template>
 
 <template #template>
 
-@[code{44-105}](../../.vuepress/components/countdown/formats.vue)
+@[code{44-105}](../../.vuepress/components/countdown-zh/formats.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-42}](../../.vuepress/components/countdown/formats.vue)
+@[code{1-42}](../../.vuepress/components/countdown-zh/formats.vue)
 
 </template>
 
 <template #style>
 
-@[code{107-144}](../../.vuepress/components/countdown/formats.vue)
+@[code{107-144}](../../.vuepress/components/countdown-zh/formats.vue)
 
 </template>
 

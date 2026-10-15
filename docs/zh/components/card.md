@@ -4,7 +4,7 @@ EXAMPLE_GROUPS:
   - title: 类型
     items:
       [
-        default,
+        basic-default,
         classic,
         overlay,
         split,
@@ -15,7 +15,7 @@ EXAMPLE_GROUPS:
         article,
       ]
   - title: 纹理
-    items: [default-solid, liquid-glass, liquid-glass-2]
+    items: [solid-surface-default, liquid-glass, liquid-glass-2]
   - title: 特效
     items: [no-effect, spotlight, gradient-glow]
 PROPS:
@@ -24,19 +24,19 @@ PROPS:
     values: String
     description: 卡片标题；title 插槽优先。
     default: null
-    usage: '#default'
+    usage: '#basic-default'
   - name: subtitle
     type: String
     values: String
     description: 标题下方的辅助文本。
     default: null
-    usage: '#default'
+    usage: '#basic-default'
   - name: text
     type: String
     values: String
     description: 卡片描述；text 插槽优先。
     default: null
-    usage: '#default'
+    usage: '#basic-default'
   - name: color
     type: String
     values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
@@ -45,15 +45,15 @@ PROPS:
     usage: '#complete-configuration'
   - name: texture
     type: CardTexture
-    values: default | liquid-glass | liquid-glass-2
+    values: solid | liquid-glass | liquid-glass-2
     description: 表面材质，与布局和装饰特效彼此独立。
-    default: default
-    usage: '#default-solid'
+    default: solid
+    usage: '#solid-surface-default'
   - name: effect
     type: CardEffect
-    values: default | spotlight | gradient-glow
+    values: none | spotlight | gradient-glow
     description: 装饰性交互特效，与布局和纹理彼此独立。
-    default: default
+    default: none
     usage: '#no-effect'
   - name: orientation
     type: String
@@ -99,10 +99,10 @@ PROPS:
     usage: '#selection-and-loading'
   - name: type
     type: CardType
-    values: default | classic | overlay | split | frosted | reveal | profile | metric | article
+    values: basic | classic | overlay | split | frosted | reveal | profile | metric | article
     description: 选择一套有明确语义的完整卡片预设；数字 1-5 仅作为兼容别名保留。
-    default: default
-    usage: '#default'
+    default: basic
+    usage: '#basic-default'
 EVENTS:
   - name: update:selected
     type: Boolean
@@ -177,9 +177,9 @@ SLOTS:
 
 <card>
 
-## 默认
+## 基础布局（默认）
 
-`default` 是无需显式传入的默认预设，用简洁的标题区、正文区和可选操作区组织内容。
+`basic` 是无需显式传入的默认预设，用简洁的标题区、正文区和可选操作区组织内容。
 
 <template #example>
 <card-zh-default />
@@ -399,9 +399,9 @@ SLOTS:
 
 <card>
 
-## 默认纯色
+## 实色表面（默认）
 
-使用 `texture="default"`，保留常规纯色表面，不增加额外材质层。
+使用 `texture="solid"`，保留常规纯色表面，不增加额外材质层。
 
 <template #example>
 <card-zh-texture-default />
@@ -473,7 +473,7 @@ SLOTS:
 
 ## 无特效
 
-使用 `effect="default"`，让 Card 不渲染交互装饰。
+使用 `effect="none"`，让 Card 不渲染交互装饰。
 
 <template #example>
 <card-zh-effect-default />
@@ -655,19 +655,19 @@ SLOTS:
 
 <template #template>
 
-@[code{65-140}](../../.vuepress/components/card-zh/configurator.vue)
+@[code{69-144}](../../.vuepress/components/card-zh/configurator.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-63}](../../.vuepress/components/card-zh/configurator.vue)
+@[code{1-67}](../../.vuepress/components/card-zh/configurator.vue)
 
 </template>
 
 <template #style>
 
-@[code{142-203}](../../.vuepress/components/card-zh/configurator.vue)
+@[code{146-207}](../../.vuepress/components/card-zh/configurator.vue)
 
 </template>
 

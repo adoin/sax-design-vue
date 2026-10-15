@@ -1,5 +1,5 @@
 import { nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import VirtualList from '../src/virtual-list.vue'
 
@@ -298,9 +298,7 @@ describe('VirtualList', () => {
         retainMaxSize: true,
       },
     })
-    await nextTick()
-    await Promise.resolve()
-    await nextTick()
+    await flushPromises()
     const queued: VoidFunction[] = []
     const microtask = vi
       .spyOn(globalThis, 'queueMicrotask')
@@ -308,6 +306,7 @@ describe('VirtualList', () => {
     try {
       height = 120
       wrapper.vm.measureVisible()
+      await nextTick()
       expect(queued).toHaveLength(1)
       // The source changes before Vue replaces the old measured elements.
       prefix = 'new'

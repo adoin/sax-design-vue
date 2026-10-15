@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import { computed, useId, useTemplateRef } from 'vue'
 import { IconCheck, SIcon, SLogoLoading } from '@vuesax-alpha/components/icon'
 import { useLocale, useNamespace, useSize } from '@vuesax-alpha/hooks'
@@ -13,7 +14,8 @@ import type {
 
 defineOptions({ name: 'SSteps' })
 
-const props = defineProps(stepsProps)
+const rawProps = defineProps(stepsProps)
+const props = resolveVisualEnumProps('steps', rawProps)
 const emit = defineEmits(stepsEmits)
 const slots = defineSlots<{
   item?(props: StepSlotProps): unknown

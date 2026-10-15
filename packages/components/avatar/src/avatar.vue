@@ -47,6 +47,7 @@
 </template>
 
 <script lang="ts" setup>
+import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import { computed, onMounted, ref, useSlots, watch } from 'vue'
 import {
   useColor,
@@ -64,7 +65,8 @@ defineOptions({
   name: 'SAvatar',
 })
 
-const props = defineProps(avatarProps)
+const rawProps = defineProps(avatarProps)
+const props = resolveVisualEnumProps('avatar', rawProps)
 const slots = useSlots()
 
 const ns = useNamespace('avatar')

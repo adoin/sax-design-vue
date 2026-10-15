@@ -36,7 +36,7 @@ const microbubbles = () => {
 
 /** SVG image resources are shared; sparkle owns an independent inline timeline. */
 export const progressTextureAssets: Record<
-  Exclude<ProgressTexture, 'default' | 'sparkle' | 'waves'>,
+  Exclude<ProgressTexture, 'none' | 'default' | 'sparkle' | 'waves'>,
   ReturnType<typeof tile>
 > = {
   bubbles: tile(110, 64, microbubbles()),

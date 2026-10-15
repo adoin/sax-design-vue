@@ -9,7 +9,7 @@ import type { ExtractPropTypes } from 'vue'
 import type Tag from './tag.vue'
 
 export const tagVariantList = [
-  'default',
+  'filled',
   'outline',
   'dashed',
   'mark',
@@ -27,10 +27,10 @@ export const tagStatusList = [
   'dark',
 ] as const
 
-export type TagVariant = (typeof tagVariantList)[number]
+export type TagVariant = (typeof tagVariantList)[number] | 'default'
 export type TagStatus = (typeof tagStatusList)[number]
 export type TagShape = 'rounded' | 'square' | 'pill'
-export type TagSize = 'small' | 'default' | 'large'
+export type TagSize = 'small' | 'medium' | 'default' | 'large'
 
 export const tagProps = buildProps({
   modelValue: { type: Boolean, default: true },
@@ -60,12 +60,12 @@ export const tagProps = buildProps({
   /** Visual treatment independent from geometry. */
   variant: {
     type: definePropType<TagVariant>(String),
-    default: 'default',
+    default: 'filled',
   },
   /** @deprecated use `variant` instead. */
   tagStyle: {
     type: definePropType<TagVariant>(String),
-    default: 'default',
+    default: 'filled',
   },
   /** Rounded, square, or pill geometry. */
   shape: {
@@ -76,7 +76,7 @@ export const tagProps = buildProps({
   round: Boolean,
   size: {
     type: definePropType<TagSize>(String),
-    default: 'default',
+    default: 'medium',
   },
   /** Marks an item rendered inside `STagGroup`. */
   item: Boolean,

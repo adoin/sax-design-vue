@@ -2,11 +2,11 @@
 import { shallowRef } from 'vue'
 
 type NavbarVariant = 'surface' | 'floating' | 'transparent'
-type NavbarSize = 'compact' | 'default' | 'spacious'
+type NavbarSize = 'compact' | 'comfortable' | 'spacious'
 
 const active = shallowRef('overview')
 const variant = shallowRef<NavbarVariant>('floating')
-const size = shallowRef<NavbarSize>('default')
+const size = shallowRef<NavbarSize>('comfortable')
 const color = shallowRef('#6366F1')
 const gap = shallowRef(12)
 const shadow = shallowRef(false)
@@ -26,7 +26,7 @@ const surfaceOptions = [
 ]
 const sizeOptions = [
   { label: 'Compact', value: 'compact' },
-  { label: 'Default', value: 'default' },
+  { label: 'Comfortable (default)', value: 'comfortable' },
   { label: 'Spacious', value: 'spacious' },
 ]
 const colors = ['#6366F1', '#A855F7', '#2DD4BF', '#F97316']

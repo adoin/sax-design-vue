@@ -18,7 +18,11 @@ export const useDrawerResize = (
   const horizontal = computed(() => ['left', 'right'].includes(placement.value))
   const baseSize = computed(() => {
     const value = (horizontal.value ? props.width : props.height) ?? props.size
-    return value === 'large' ? 736 : value === 'default' ? 360 : value
+    return value === 'large'
+      ? 736
+      : value === 'medium' || value === 'default'
+        ? 360
+        : value
   })
   const resizedSize = shallowRef<number>()
   const resizing = shallowRef(false)

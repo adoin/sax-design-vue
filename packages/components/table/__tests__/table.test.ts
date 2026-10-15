@@ -621,7 +621,7 @@ describe('Table data mode', () => {
         },
       },
     })
-    await nextTick()
+    await flushPromises()
 
     expect(wrapper.findAll('.s-table__data-row').length).toBeGreaterThan(0)
     expect(wrapper.findAll('.s-table__data-row').length).toBeLessThan(20)

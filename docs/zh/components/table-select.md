@@ -23,7 +23,7 @@ PROPS:
     usage: '#tree-multiple-selection'
   - name: size
     type: ComponentSize
-    values: "small | default | large"
+    values: "small | medium | large"
     description: 触发器、弹层 Table 和注册渲染器继承的尺寸。
     default: null
   - name: "empty-text"

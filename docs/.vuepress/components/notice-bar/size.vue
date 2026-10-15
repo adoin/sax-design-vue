@@ -1,7 +1,7 @@
 <template>
   <div class="notice-demo">
     <s-notice-bar size="small" content="Small notice" closable /><s-notice-bar
-      size="default"
+      size="medium"
       content="Default notice"
       closable
     /><s-notice-bar size="large" content="Large notice" closable />

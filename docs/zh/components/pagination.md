@@ -3,7 +3,7 @@ description: '按页浏览较长的数据集合。'
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: 设置或继承分页按钮与每页条数 Select 的尺寸。
     default: null
     usage: '#size'

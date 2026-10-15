@@ -1,200 +1,106 @@
-import { setColor } from './color'
+import { getCssColor } from './color'
 
-const RIPPLE_NAMESPACE = 's'
+const activeRipples = new WeakMap<HTMLElement, Set<() => void>>()
+type RippleMode = 'default' | 'invert' | 'cut' | 'ring' | 'glow'
 
-const ripple = (evs: any, color?: string, solid?: boolean) => {
-  const el = evs.currentTarget
-  const offset = el.getBoundingClientRect()
-  const x = evs.clientX - offset.left
-  const y = evs.clientY - offset.top
-
-  let time = 0.6
-
-  if (el.clientWidth > 150) {
-    time = 1.2
-  }
-
-  const effectContent = document.createElement('div')
-
-  effectContent.className = `${RIPPLE_NAMESPACE}-ripple`
-
-  if (!color) {
-    setColor('color', '#fff', effectContent)
-  }
-
-  const effect = document.createElement('div')
-
-  effect.className = `${RIPPLE_NAMESPACE}-ripple--default`
-  if (solid) {
-    effect.classList.add(`${RIPPLE_NAMESPACE}-ripple--solid`)
-    //   setColor('color', color || 'primary', effectContent)
-  }
-  effect.style.transition = `all ${time}s ease`
-
-  effect.style.left = `${x}px`
-  effect.style.top = `${y}px`
-
-  effectContent.appendChild(effect)
-
-  el.appendChild(effectContent)
-
-  effect.style.width = `${el.clientWidth * 2.5}px`
-  effect.style.height = `${el.clientWidth * 2.5}px`
-  effect.style.opacity = `1`
-
-  let noTime = false
-  setTimeout(() => {
-    noTime = true
-  }, 300)
-
-  function removeEffect(evs: any) {
-    effect.style.transition = `all 0.${time * 600}s ease`
-    setTimeout(
-      () => {
-        effect.style.opacity = '0'
-        setTimeout(() => {
-          el.removeChild(effectContent)
-        }, time * 300)
-      },
-      noTime ? 0 : time * 400,
-    )
-
-    evs.target.removeEventListener('mouseup', removeEffect)
-    evs.target.removeEventListener('mouseleave', removeEffect)
-  }
-
-  evs.target.addEventListener('mouseup', removeEffect)
-  evs.target.addEventListener('mouseleave', removeEffect)
+export const clearRipples = (element: HTMLElement) => {
+  activeRipples.get(element)?.forEach((dispose) => dispose())
+  activeRipples.delete(element)
 }
 
-const rippleReverse = (evs: any) => {
-  const el = evs.currentTarget
-  const offset = el.getBoundingClientRect()
-  const x = evs.clientX - offset.left
-  const y = evs.clientY - offset.top
-
-  let time = 0.6
-
-  if (el.clientWidth > 150) {
-    time = 1.2
+const createRipple = (
+  event: MouseEvent,
+  mode: RippleMode,
+  color?: string,
+  solid?: boolean,
+) => {
+  const element = event.currentTarget
+  if (!(element instanceof HTMLElement)) return
+  const rect = element.getBoundingClientRect()
+  const width = element.clientWidth || rect.width
+  const height = element.clientHeight || rect.height
+  if (!width || !height) return
+  const keyboard = event.type === 'click' && event.detail === 0
+  const x = keyboard
+    ? width / 2
+    : Math.max(
+        0,
+        Math.min(
+          width,
+          ((event.clientX - rect.left) * width) / (rect.width || width),
+        ),
+      )
+  const y = keyboard
+    ? height / 2
+    : Math.max(
+        0,
+        Math.min(
+          height,
+          ((event.clientY - rect.top) * height) / (rect.height || height),
+        ),
+      )
+  const diameter = Math.max(
+    1,
+    Math.hypot(Math.max(x, width - x), Math.max(y, height - y)) * 2,
+  )
+  const layer = document.createElement('span')
+  layer.className = 's-ripple'
+  layer.setAttribute('aria-hidden', 'true')
+  const currentColor = color === 'inherit' || solid
+  layer.style.setProperty(
+    '--s-ripple-ink',
+    currentColor
+      ? 'currentColor'
+      : color
+        ? getCssColor(color) || color
+        : '#fff',
+  )
+  layer.style.setProperty('--s-ripple-strength', currentColor ? '0.22' : '0.4')
+  layer.style.setProperty('--s-ripple-travel', `${diameter * 0.32}px`)
+  for (const name of mode === 'cut' ? ['cut-1', 'cut-2'] : [mode]) {
+    const wave = document.createElement('span')
+    wave.className = `s-ripple--${name}`
+    wave.style.left = `${x}px`
+    wave.style.top = `${y}px`
+    wave.style.width = `${mode === 'cut' ? Math.max(14, diameter * 0.18) : diameter}px`
+    wave.style.height = `${diameter}px`
+    layer.appendChild(wave)
   }
-
-  const effectContent = document.createElement('div')
-
-  effectContent.className = `${RIPPLE_NAMESPACE}-ripple`
-
-  const effect = document.createElement('div')
-
-  effect.className = `${RIPPLE_NAMESPACE}-ripple--invert`
-  // effect.style.transition = `all ${time}s ease`
-
-  effect.style.left = `${x}px`
-  effect.style.top = `${y}px`
-  effect.style.width = `${el.clientWidth * 2.5}px`
-  effect.style.height = `${el.clientWidth * 2.5}px`
-  effect.style.opacity = '0'
-
-  effectContent.appendChild(effect)
-
-  el.appendChild(effectContent)
-
-  setTimeout(() => {
-    effect.style.width = '0px'
-    effect.style.height = '0px'
-    effect.style.opacity = '0.5'
-  }, 1)
-
-  let noTime = false
-  setTimeout(() => {
-    noTime = true
-  }, 300)
-
-  function removeEffect(evs: any) {
-    effect.style.transition = `all 0.${time * 600}s ease`
-    setTimeout(
-      () => {
-        effect.style.opacity = '0'
-        setTimeout(() => {
-          el.removeChild(effectContent)
-        }, time * 300)
-      },
-      noTime ? 0 : time * 400,
-    )
-
-    evs.target.removeEventListener('mouseup', removeEffect)
-    evs.target.removeEventListener('mouseleave', removeEffect)
+  const effects = activeRipples.get(element) || new Set<() => void>()
+  activeRipples.set(element, effects)
+  if (effects.size >= 4) effects.values().next().value?.()
+  let timer: ReturnType<typeof setTimeout>
+  const dispose = () => {
+    clearTimeout(timer)
+    layer.removeEventListener('animationend', dispose)
+    layer.remove()
+    effects.delete(dispose)
+    if (!effects.size) activeRipples.delete(element)
   }
-
-  evs.target.addEventListener('mouseup', removeEffect)
-  evs.target.addEventListener('mouseleave', removeEffect)
+  effects.add(dispose)
+  layer.addEventListener('animationend', dispose, { once: true })
+  element.appendChild(layer)
+  const duration =
+    getComputedStyle(layer.firstElementChild!)
+      .animationDuration.split(',')[0]
+      ?.trim() || '0.5s'
+  const milliseconds =
+    parseFloat(duration) * (duration.endsWith('ms') ? 1 : 1000)
+  timer = setTimeout(
+    dispose,
+    (Number.isFinite(milliseconds) && milliseconds > 0 ? milliseconds : 500) +
+      100,
+  )
 }
 
-//
-const rippleCut = (evs: any) => {
-  const el = evs.currentTarget
-  const offset = el.getBoundingClientRect()
-  const x = evs.clientX - offset.left
-  const y = evs.clientY - offset.top
-
-  let time = 0.6
-
-  if (el.clientWidth > 150) {
-    time = 1.2
-  }
-
-  const effectContent = document.createElement('div')
-
-  effectContent.className = `${RIPPLE_NAMESPACE}-ripple`
-
-  const effect = document.createElement('div')
-  const effect2 = document.createElement('div')
-
-  effect.className = `${RIPPLE_NAMESPACE}-ripple--cut-1`
-  effect2.className = `${RIPPLE_NAMESPACE}-ripple--cut-2`
-  // effect.style.transition = `all ${time}s ease`
-
-  effect.style.left = effect2.style.left = `${x}px`
-  effect.style.top = effect2.style.top = `${y}px`
-  effect.style.width = effect2.style.width = `${el.clientWidth * 2.5}px`
-  effect.style.height = effect2.style.height = `${el.clientWidth * 2.5}px`
-  effect.style.opacity = effect2.style.opacity = `1`
-
-  effectContent.appendChild(effect)
-  effectContent.appendChild(effect2)
-
-  el.appendChild(effectContent)
-
-  setTimeout(() => {
-    effect.style.left = `-${el.clientWidth * 1.3}px`
-    effect.style.opacity = '1'
-
-    effect2.style.left = `${el.clientWidth * 1.3}px`
-    effect2.style.opacity = '1'
-  }, 1)
-
-  let noTime = false
-  setTimeout(() => {
-    noTime = true
-  }, 300)
-
-  function removeEffect(evs: any) {
-    effect.style.transition = `all 0.${time * 600}s ease`
-    setTimeout(
-      () => {
-        effect.style.opacity = '0'
-        setTimeout(() => {
-          el.removeChild(effectContent)
-        }, time * 300)
-      },
-      noTime ? 0 : time * 400,
-    )
-
-    evs.target.removeEventListener('mouseup', removeEffect)
-    evs.target.removeEventListener('mouseleave', removeEffect)
-  }
-
-  evs.target.addEventListener('mouseup', removeEffect)
-  evs.target.addEventListener('mouseleave', removeEffect)
-}
-
-export { rippleReverse, rippleCut, ripple }
+const ripple = (event: MouseEvent, color?: string, solid?: boolean) =>
+  createRipple(event, 'default', color, solid)
+const rippleReverse = (event: MouseEvent, color?: string) =>
+  createRipple(event, 'invert', color)
+const rippleCut = (event: MouseEvent, color?: string) =>
+  createRipple(event, 'cut', color)
+const rippleRing = (event: MouseEvent, color?: string) =>
+  createRipple(event, 'ring', color)
+const rippleGlow = (event: MouseEvent, color?: string) =>
+  createRipple(event, 'glow', color)
+export { rippleReverse, rippleCut, rippleRing, rippleGlow, ripple }

@@ -2,7 +2,7 @@
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: 设置或继承轨道、滑块和交互区域尺寸。
     default: null
   - name: variant

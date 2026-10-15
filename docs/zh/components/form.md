@@ -15,7 +15,7 @@ PROPS:
     default: null
   - name: size
     type: ComponentSize
-    values: 'default / small / large'
+    values: 'medium / small / large'
     description: 配置渲染器和插槽控件继承的默认尺寸；控件自身声明的 size 优先。
     default: null
   - name: rules

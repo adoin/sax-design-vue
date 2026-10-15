@@ -6,7 +6,7 @@ API_TITLES:
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: Set or inherit the checkbox and label size.
     default: null
   - name: disabled

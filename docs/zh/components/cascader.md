@@ -3,7 +3,7 @@ description: '在同一弹层中逐级选择关联数据。'
 PROPS:
   - name: size
     type: ComponentSize
-    values: 'small | default | large'
+    values: 'small | medium | large'
     description: 设置或继承触发器尺寸。
     default: null
   - name: shape
