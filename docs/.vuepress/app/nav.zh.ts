@@ -42,6 +42,10 @@ export const zhNavbar: NavbarConfig = [
             link: 'https://github.com/adoin/sax-design-vue',
           },
           {
+            text: '后台管理模板',
+            link: 'https://github.com/adoin/sax-admin',
+          },
+          {
             text: '上游参考',
             link: 'https://github.com/vuesax-alpha/vuesax-alpha',
           },

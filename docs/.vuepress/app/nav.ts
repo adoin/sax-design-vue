@@ -49,6 +49,10 @@ export const enNavbar: NavbarConfig = [
             link: `https://github.com/adoin/sax-design-vue`,
           },
           {
+            text: `Admin Dashboard Template`,
+            link: `https://github.com/adoin/sax-admin`,
+          },
+          {
             text: `Upstream (reference)`,
             link: `https://github.com/vuesax-alpha/vuesax-alpha`,
           },
