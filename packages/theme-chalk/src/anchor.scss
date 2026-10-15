@@ -385,3 +385,25 @@
     animation: none !important;
   }
 }
+
+.s-anchor__scroll { width: 100%; min-height: 0; }
+.s-anchor__content { display: flex; flex-direction: column; gap: 2px; }
+.s-anchor--horizontal > .s-anchor__scroll { display: contents; }
+
+// Keep the outside rail in the transparent gutter, beyond the navigation surface.
+.s-anchor--vertical {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  box-shadow: none;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 18px 0 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+    background: getColor(background);
+    box-shadow: 0 12px 30px getColor(primary, 0.08);
+  }
+}

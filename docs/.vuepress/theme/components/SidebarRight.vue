@@ -3,6 +3,7 @@
     <div class="content-sidebar">
       <s-anchor
         class="docs-outline"
+        max-height="calc(var(--docs-outline-max-height, 70dvh) - 16px)"
         :items="anchorItems"
         :model-value="activeAnchorHref"
         active-strategy="visible-section"
@@ -347,7 +348,7 @@ onBeforeUnmount(() => {
 .page .sidebar .docs-outline {
   width: 196px;
 
-  > .s-anchor__group > .s-anchor__row > .s-anchor__item {
+  .s-anchor__content > .s-anchor__group > .s-anchor__row > .s-anchor__item {
     font-weight: 650;
   }
 }

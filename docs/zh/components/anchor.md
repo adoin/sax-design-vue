@@ -54,6 +54,10 @@ PROPS:
     values: 'pixels'
     description: 标题激活线与页底判定附近的容差。
     default: '5'
+  - name: max-height
+    type: String | Number
+    description: 竖向目录的最大高度，省略时随可用视口高度调整。超出时使用内置 Scrollbar，支持滚轮、触摸和拖动滑块；目录内部滚动不会推进页面路由边界。
+    default: null
   - name: affix
     type: Boolean
     values: 'true / false'
@@ -347,6 +351,32 @@ const routerAdapter: AnchorRouterAdapter = {
 <template #style>
 
 @[code{31-71}](../../.vuepress/components/anchor-zh/container.vue)
+
+</template>
+
+</card>
+
+<card>
+
+<h2 id="long-navigation">超长目录滚动</h2>
+
+竖向目录默认随可用视口限高，也可用 max-height 指定上限。目录使用外部 Scrollbar 轨道，支持滚轮、键盘与拖动滑块；在目录上下边界滚动不会触发页面路由切换。
+
+<template #example>
+
+<anchor-zh-overflow />
+
+</template>
+
+<template #template>
+
+@[code{12-40}](../../.vuepress/components/anchor-zh/overflow.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-11}](../../.vuepress/components/anchor-zh/overflow.vue)
 
 </template>
 

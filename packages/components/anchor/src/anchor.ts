@@ -32,6 +32,8 @@ export const anchorProps = buildProps({
   targetOffset: { type: Number, default: undefined },
   bounds: { type: Number, default: 5 },
   affix: { type: Boolean, default: false },
+  /** Maximum vertical navigation height; omitted follows the available viewport. */
+  maxHeight: { type: [String, Number], default: undefined },
   getContainer: {
     type: definePropType<() => HTMLElement | Window>(Function),
     default: undefined,

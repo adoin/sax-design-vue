@@ -1008,3 +1008,43 @@ describe('Anchor hierarchy', () => {
     container.remove()
   })
 })
+
+describe('vertical navigation overflow', () => {
+  it('uses an outside scrollbar and keeps explicit maximum height when groups expand', async () => {
+    const wrapper = mount(Anchor, { props: { maxHeight: 220, items } })
+    const scroll = wrapper.get('.s-scrollbar')
+    expect(scroll.classes()).toContain('is-outside')
+    expect(wrapper.get('.s-scrollbar__wrap').attributes('style')).toContain(
+      'max-height: 220px',
+    )
+    await wrapper.get('.s-anchor__collapse').trigger('click')
+    expect(wrapper.get('.s-scrollbar__wrap').attributes('style')).toContain(
+      'max-height: 220px',
+    )
+    wrapper.unmount()
+  })
+  it('updates automatic navigation bounds on viewport changes and honors explicit overrides', async () => {
+    const wrapper = mount(Anchor, { props: { items } })
+    vi.spyOn(wrapper.element, 'getBoundingClientRect').mockReturnValue({
+      top: 120,
+    } as DOMRect)
+    vi.stubGlobal('innerHeight', 700)
+    window.dispatchEvent(new Event('resize'))
+    await wrapper.vm.$nextTick()
+    expect(wrapper.get('.s-scrollbar__wrap').attributes('style')).toContain(
+      'max-height: 548px',
+    )
+    vi.stubGlobal('innerHeight', 500)
+    window.dispatchEvent(new Event('resize'))
+    await wrapper.vm.$nextTick()
+    expect(wrapper.get('.s-scrollbar__wrap').attributes('style')).toContain(
+      'max-height: 348px',
+    )
+    await wrapper.setProps({ maxHeight: '180px' })
+    expect(wrapper.get('.s-scrollbar__wrap').attributes('style')).toContain(
+      'max-height: 180px',
+    )
+    wrapper.unmount()
+    vi.unstubAllGlobals()
+  })
+})

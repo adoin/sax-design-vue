@@ -696,7 +696,7 @@ onBeforeUnmount(() => {
     // JS keeps this aligned to the sidebar's real viewport position. The
     // fallback prevents a flash of unbounded content before hydration.
     max-height: var(--docs-outline-max-height, calc(100dvh - 341px));
-    overflow: auto;
+    overflow: visible;
     transition: 0s !important;
     & > svg {
       display: none;

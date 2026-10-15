@@ -54,6 +54,10 @@ PROPS:
     values: 'pixels'
     description: Detection tolerance around the heading line and page-bottom boundary.
     default: '5'
+  - name: max-height
+    type: String | Number
+    description: Maximum height of the vertical navigation. By default, it follows the available viewport height. Overflow uses the built-in Scrollbar with wheel, touch and draggable-thumb scrolling; nested scrolling never advances page route boundaries.
+    default: null
   - name: affix
     type: Boolean
     values: 'true / false'
@@ -363,6 +367,32 @@ use the same container.
 <template #style>
 
 @[code{31-71}](../.vuepress/components/anchor/container.vue)
+
+</template>
+
+</card>
+
+<card>
+
+<h2 id="long-navigation">Scrolling long navigation</h2>
+
+Vertical navigation follows the available viewport height, or an explicit max-height. Its outside Scrollbar supports wheel, keyboard and thumb dragging. Scrolling at either navigation edge does not trigger page route transitions.
+
+<template #example>
+
+<anchor-overflow />
+
+</template>
+
+<template #template>
+
+@[code{12-43}](../.vuepress/components/anchor/overflow.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-11}](../.vuepress/components/anchor/overflow.vue)
 
 </template>
 

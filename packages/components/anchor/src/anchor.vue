@@ -1,115 +1,134 @@
 <template>
   <nav
+    ref="navigation"
     :class="[ns.b(), ns.m(direction), ns.is('affix', affix)]"
     :aria-label="t('vs.anchor.navigation')"
   >
-    <div
-      v-for="entry in visibleItems"
-      :key="entry.key"
-      :class="[
-        ns.e('group'),
-        ns.is('nested', entry.depth > 0),
-        ns.is('branch-connection', entry.connectToParent),
-        ns.is('branch-closure', entry.closeParentConnection),
-      ]"
-      :style="{
-        '--s-anchor-depth-indent': `${entry.depth * 14}px`,
-        '--s-anchor-guide-offset': `${10 + Math.max(0, entry.depth - 1) * 14}px`,
-      }"
+    <component
+      :is="direction === 'vertical' ? SScrollbar : 'div'"
+      :class="ns.e('scroll')"
+      v-bind="
+        direction === 'vertical'
+          ? {
+              placement: 'outside',
+              gap: 4,
+              maxHeight: navigationMaxHeight,
+              viewClass: ns.e('content'),
+              wrapStyle: { overscrollBehavior: 'contain' },
+              always: false,
+            }
+          : {}
+      "
     >
-      <div :class="ns.e('row')">
-        <component
-          :is="entry.item.href ? 'a' : 'span'"
-          :class="[
-            ns.e('item'),
-            ns.is('active', isActiveItem(entry.item)),
-            ns.is('active-path', entry.activePath),
-            ns.is('collapsible', entry.collapsible),
-            ns.is('disabled', entry.item.disabled),
-          ]"
-          :href="
-            entry.item.href && !entry.item.disabled
-              ? entry.item.href
-              : undefined
-          "
-          :aria-disabled="entry.item.disabled || undefined"
-          :aria-current="
-            isActiveItem(entry.item)
-              ? entry.item.href?.startsWith('#')
-                ? 'location'
-                : 'page'
-              : undefined
-          "
-          :tabindex="entry.item.disabled ? -1 : undefined"
-          @click="entry.item.href ? navigate(entry.item, $event) : undefined"
-        >
-          <span :class="ns.e('item-label')">
-            <span
-              v-if="direction === 'vertical' && isActiveIconItem(entry.item)"
-              :class="ns.e('active-icon')"
-              aria-hidden="true"
-            >
-              <slot
-                name="active-icon"
-                :item="entry.item"
-                :href="entry.item.href || ''"
+      <div
+        v-for="entry in visibleItems"
+        :key="entry.key"
+        :class="[
+          ns.e('group'),
+          ns.is('nested', entry.depth > 0),
+          ns.is('branch-connection', entry.connectToParent),
+          ns.is('branch-closure', entry.closeParentConnection),
+        ]"
+        :style="{
+          '--s-anchor-depth-indent': `${entry.depth * 14}px`,
+          '--s-anchor-guide-offset': `${10 + Math.max(0, entry.depth - 1) * 14}px`,
+        }"
+      >
+        <div :class="ns.e('row')">
+          <component
+            :is="entry.item.href ? 'a' : 'span'"
+            :class="[
+              ns.e('item'),
+              ns.is('active', isActiveItem(entry.item)),
+              ns.is('active-path', entry.activePath),
+              ns.is('collapsible', entry.collapsible),
+              ns.is('disabled', entry.item.disabled),
+            ]"
+            :href="
+              entry.item.href && !entry.item.disabled
+                ? entry.item.href
+                : undefined
+            "
+            :aria-disabled="entry.item.disabled || undefined"
+            :aria-current="
+              isActiveItem(entry.item)
+                ? entry.item.href?.startsWith('#')
+                  ? 'location'
+                  : 'page'
+                : undefined
+            "
+            :tabindex="entry.item.disabled ? -1 : undefined"
+            @click="entry.item.href ? navigate(entry.item, $event) : undefined"
+          >
+            <span :class="ns.e('item-label')">
+              <span
+                v-if="direction === 'vertical' && isActiveIconItem(entry.item)"
+                :class="ns.e('active-icon')"
+                aria-hidden="true"
               >
-                <SIcon v-if="activeIcon" :name="activeIcon" />
-                <svg
-                  v-else
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 32 32"
+                <slot
+                  name="active-icon"
+                  :item="entry.item"
+                  :href="entry.item.href || ''"
                 >
-                  <path d="M0 0h32v32H0z" fill="none" />
-                  <path
-                    fill="currentColor"
-                    d="M16 2A11.013 11.013 0 0 0 5 13a10.9 10.9 0 0 0 2.216 6.6s.3.395.349.452L16 30l8.439-9.953c.044-.053.345-.447.345-.447l.001-.003A10.9 10.9 0 0 0 27 13A11.013 11.013 0 0 0 16 2m0 15a4 4 0 1 1 4-4a4.005 4.005 0 0 1-4 4"
-                  />
-                  <circle cx="16" cy="13" r="4" fill="none" />
-                </svg>
-              </slot>
+                  <SIcon v-if="activeIcon" :name="activeIcon" />
+                  <svg
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 32 32"
+                  >
+                    <path d="M0 0h32v32H0z" fill="none" />
+                    <path
+                      fill="currentColor"
+                      d="M16 2A11.013 11.013 0 0 0 5 13a10.9 10.9 0 0 0 2.216 6.6s.3.395.349.452L16 30l8.439-9.953c.044-.053.345-.447.345-.447l.001-.003A10.9 10.9 0 0 0 27 13A11.013 11.013 0 0 0 16 2m0 15a4 4 0 1 1 4-4a4.005 4.005 0 0 1-4 4"
+                    />
+                    <circle cx="16" cy="13" r="4" fill="none" />
+                  </svg>
+                </slot>
+              </span>
+              <span>{{ entry.item.title }}</span>
             </span>
-            <span>{{ entry.item.title }}</span>
-          </span>
-        </component>
+          </component>
 
-        <button
-          v-if="entry.collapsible"
-          :class="[ns.e('collapse'), ns.is('collapsed', entry.collapsed)]"
-          type="button"
-          :aria-expanded="!entry.collapsed"
-          :aria-label="`${t(entry.collapsed ? 'vs.anchor.expand' : 'vs.anchor.collapse')}: ${entry.item.title}`"
-          @click="toggleCollapse(entry)"
-        >
-          <SIcon name="cb:chevron-down" />
-        </button>
+          <button
+            v-if="entry.collapsible"
+            :class="[ns.e('collapse'), ns.is('collapsed', entry.collapsed)]"
+            type="button"
+            :aria-expanded="!entry.collapsed"
+            :aria-label="`${t(entry.collapsed ? 'vs.anchor.expand' : 'vs.anchor.collapse')}: ${entry.item.title}`"
+            @click="toggleCollapse(entry)"
+          >
+            <SIcon name="cb:chevron-down" />
+          </button>
+        </div>
       </div>
-    </div>
 
-    <AnchorRouteBoundary
-      v-if="routeBoundaryContext"
-      :previous="routeBoundaryContext.previous"
-      :next="routeBoundaryContext.next"
-      :threshold="routeBoundaryOptions?.threshold"
-      :arm-delay="routeBoundaryOptions?.armDelay"
-      :route-cooldown="routeBoundaryOptions?.routeCooldown"
-      :get-container="getContainer"
-      @navigate="handleRouteBoundaryNavigate"
-    >
-      <template v-if="$slots['route-previous']" #previous="slotProps">
-        <slot name="route-previous" v-bind="slotProps" />
-      </template>
-      <template v-if="$slots['route-next']" #next="slotProps">
-        <slot name="route-next" v-bind="slotProps" />
-      </template>
-    </AnchorRouteBoundary>
+      <AnchorRouteBoundary
+        v-if="routeBoundaryContext"
+        :previous="routeBoundaryContext.previous"
+        :next="routeBoundaryContext.next"
+        :threshold="routeBoundaryOptions?.threshold"
+        :arm-delay="routeBoundaryOptions?.armDelay"
+        :route-cooldown="routeBoundaryOptions?.routeCooldown"
+        :get-container="getContainer"
+        @navigate="handleRouteBoundaryNavigate"
+      >
+        <template v-if="$slots['route-previous']" #previous="slotProps">
+          <slot name="route-previous" v-bind="slotProps" />
+        </template>
+        <template v-if="$slots['route-next']" #next="slotProps">
+          <slot name="route-next" v-bind="slotProps" />
+        </template>
+      </AnchorRouteBoundary>
+    </component>
   </nav>
 </template>
 
 <script lang="ts" setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { SScrollbar } from '@vuesax-alpha/components/scrollbar'
 import { SIcon } from '@vuesax-alpha/components/icon'
 import { useGlobalConfig, useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import AnchorRouteBoundary from './anchor-route-boundary.vue'
@@ -135,6 +154,21 @@ defineOptions({ name: 'SAnchor' })
 const props = defineProps(anchorProps)
 const emit = defineEmits(anchorEmits)
 const ns = useNamespace('anchor')
+const navigation = ref<HTMLElement>()
+const availableHeight = ref<number>()
+const navigationMaxHeight = computed(
+  () =>
+    props.maxHeight ??
+    availableHeight.value ??
+    `calc(100dvh - ${props.offset + 32}px)`,
+)
+let navigationObserver: ResizeObserver | undefined
+const measureNavigation = () => {
+  if (props.direction !== 'vertical' || !navigation.value) return
+  const top = Math.max(0, navigation.value.getBoundingClientRect().top)
+  const next = Math.max(48, Math.floor(window.innerHeight - top - 32))
+  if (availableHeight.value !== next) availableHeight.value = next
+}
 const { t } = useLocale()
 const anchorConfig = useGlobalConfig('anchor')
 const activeIcon = computed(() => anchorConfig.value?.activeIcon)
@@ -689,12 +723,25 @@ watch([() => props.items, current], syncCollapsedState, {
   deep: true,
 })
 onMounted(() => {
+  measureNavigation()
+  if (typeof ResizeObserver !== 'undefined') {
+    navigationObserver = new ResizeObserver(measureNavigation)
+    if (navigation.value) navigationObserver.observe(navigation.value)
+  }
+  window.addEventListener('resize', measureNavigation, { passive: true })
+  window.addEventListener('scroll', measureNavigation, {
+    passive: true,
+    capture: true,
+  })
   scrollContainer = props.getContainer?.() || window
   updateCurrent()
   scrollContainer.addEventListener('scroll', handleScroll, { passive: true })
   scrollContainer.addEventListener('scrollend', settleScroll)
 })
 onBeforeUnmount(() => {
+  navigationObserver?.disconnect()
+  window.removeEventListener('resize', measureNavigation)
+  window.removeEventListener('scroll', measureNavigation, true)
   if (scrollSettleTimer) clearTimeout(scrollSettleTimer)
   if (scrollFrame !== undefined) cancelAnimationFrame(scrollFrame)
   if (routeEntryFrame !== undefined) cancelAnimationFrame(routeEntryFrame)
