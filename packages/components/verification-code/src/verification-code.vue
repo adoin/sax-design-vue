@@ -1,6 +1,12 @@
 <script lang="ts" setup>
+import type { StyleValue } from 'vue'
 import { computed, shallowRef, useTemplateRef, watch } from 'vue'
-import { useNamespace, useShape, useSize } from '@vuesax-alpha/hooks'
+import {
+  useAttrs as useNativeAttrs,
+  useNamespace,
+  useShape,
+  useSize,
+} from '@vuesax-alpha/hooks'
 import {
   verificationCodeEmits,
   verificationCodeProps,
@@ -9,6 +15,7 @@ import {
 defineOptions({ name: 'SVerificationCode', inheritAttrs: false })
 
 const props = defineProps(verificationCodeProps)
+const nativeAttrs = useNativeAttrs()
 const emit = defineEmits(verificationCodeEmits)
 const ns = useNamespace('verification-code')
 const shape = useShape()
@@ -98,9 +105,13 @@ defineExpose({ focus, blur, clear, input: inputRef })
 </script>
 
 <template>
-  <div :class="classes" @click="focus">
+  <div
+    :class="[classes, $attrs.class]"
+    :style="$attrs.style as StyleValue"
+    @click="focus"
+  >
     <input
-      v-bind="$attrs"
+      v-bind="nativeAttrs"
       ref="input"
       :class="ns.e('input')"
       :value="normalizedValue"

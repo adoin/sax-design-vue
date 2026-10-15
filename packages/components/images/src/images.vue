@@ -1,5 +1,6 @@
 <template>
   <div
+    v-bind="$attrs"
     :class="[
       ns.b(),
       ns.m(`hover-${hover}`),

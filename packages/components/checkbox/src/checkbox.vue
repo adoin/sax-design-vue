@@ -1,8 +1,11 @@
 <template>
-  <div :class="checkboxKls" :style="checkboxStyles">
+  <div
+    :class="[checkboxKls, $attrs.class]"
+    :style="[checkboxStyles, $attrs.style as StyleValue]"
+  >
     <div :class="ns.e('input')">
       <input
-        v-bind="$attrs"
+        v-bind="nativeAttrs"
         :id="checkboxId"
         v-model="model"
         autocomplete="off"
@@ -64,8 +67,10 @@
 </template>
 
 <script lang="ts" setup>
+import type { StyleValue } from 'vue'
 import { computed, ref, useSlots, useTemplateRef, watch } from 'vue'
 import {
+  useAttrs as useNativeAttrs,
   useColor,
   useId,
   useNamespace,
@@ -84,6 +89,7 @@ defineOptions({
 })
 
 const props = defineProps(checkboxProps)
+const nativeAttrs = useNativeAttrs()
 const slots = useSlots()
 const emit = defineEmits(checkboxEmits)
 const ns = useNamespace('checkbox')

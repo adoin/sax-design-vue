@@ -1,10 +1,11 @@
 <template>
   <li
     :class="[
+      $attrs.class,
       ns.e('item'),
       ns.is('preview', Boolean(preview || previewSrcList.length)),
     ]"
-    :style="itemStyle"
+    :style="[itemStyle, $attrs.style as StyleValue]"
     :role="canPreview ? 'button' : undefined"
     :tabindex="canPreview ? 0 : undefined"
     @click="openPreview"
@@ -13,7 +14,7 @@
   >
     <div :class="ns.e('wrap')" :style="wrapStyle">
       <img
-        v-bind="$attrs"
+        v-bind="nativeAttrs"
         :src="src"
         :alt="alt"
         :class="[
@@ -62,8 +63,9 @@
 </template>
 
 <script lang="ts" setup>
+import type { StyleValue } from 'vue'
 import { computed, shallowRef, watch } from 'vue'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useAttrs as useNativeAttrs, useNamespace } from '@vuesax-alpha/hooks'
 import SImagePreview from '@vuesax-alpha/components/image-preview'
 import { addUnit } from '@vuesax-alpha/utils'
 import { imageEmits, imageProps } from './image'
@@ -74,6 +76,7 @@ defineOptions({
 })
 
 const props = defineProps(imageProps)
+const nativeAttrs = useNativeAttrs()
 const emit = defineEmits(imageEmits)
 
 const ns = useNamespace('images')

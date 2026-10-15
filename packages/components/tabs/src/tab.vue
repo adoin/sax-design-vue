@@ -91,6 +91,7 @@ onBeforeUnmount(() => tabs.unregisterPane(uid))
 <template>
   <Transition :name="transitionName" :css="tabs.animated.value">
     <div
+      v-bind="$attrs"
       v-if="shouldRender"
       v-show="isActive"
       :id="tabs.panelId(uid)"

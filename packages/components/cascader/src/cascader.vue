@@ -20,6 +20,7 @@
       ref="triggerRef"
       :class="[
         ns.b(),
+        $attrs.class,
         ns.m(resolvedSize || 'default'),
         ns.is('disabled', disabled),
         ns.is('loading', loadingVisible),
@@ -30,6 +31,7 @@
         { [ns.m('has-label')]: label || labelFloat },
         ns.is(resolvedShape),
       ]"
+      :style="$attrs.style as StyleValue"
       role="combobox"
       :tabindex="disabled || loadingVisible || showSearchEnabled ? -1 : 0"
       :aria-label="label || resolvedPlaceholder"
@@ -250,7 +252,7 @@ import type {
   CascaderPathValue,
 } from './cascader'
 import type { CascaderNode } from './cascader-utils'
-import type { CSSProperties } from 'vue'
+import type { CSSProperties, StyleValue } from 'vue'
 
 defineOptions({ name: 'SCascader', inheritAttrs: false })
 

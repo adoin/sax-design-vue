@@ -1,13 +1,19 @@
 <script lang="ts" setup>
 import { computed, watch } from 'vue'
-import { useNamespace, useShape, useSize } from '@vuesax-alpha/hooks'
+import {
+  useAttrs as useNativeAttrs,
+  useNamespace,
+  useShape,
+  useSize,
+} from '@vuesax-alpha/hooks'
 import { getVsColor, isVsColor, normalizeVsColor } from '@vuesax-alpha/utils'
 import { sliderEmits, sliderProps } from './slider'
-import type { CSSProperties } from 'vue'
+import type { CSSProperties, StyleValue } from 'vue'
 
 defineOptions({ name: 'SSlider', inheritAttrs: false })
 
 const props = defineProps(sliderProps)
+const nativeAttrs = useNativeAttrs()
 const emit = defineEmits(sliderEmits)
 const ns = useNamespace('slider')
 const shape = useShape()
@@ -80,6 +86,7 @@ watch(
 <template>
   <div
     :class="[
+      $attrs.class,
       ns.b(),
       ns.m(size || 'default'),
       themeColorClass,
@@ -88,7 +95,7 @@ watch(
       ns.is('disabled', disabled),
       ns.is('show-value', showValue),
     ]"
-    :style="rootStyle"
+    :style="[rootStyle, $attrs.style as StyleValue]"
   >
     <span :class="ns.e('track')" aria-hidden="true">
       <span :class="ns.e('line')" />
@@ -106,7 +113,7 @@ watch(
       </span>
     </span>
     <input
-      v-bind="$attrs"
+      v-bind="nativeAttrs"
       autocomplete="off"
       :class="ns.e('input')"
       type="range"

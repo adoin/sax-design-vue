@@ -1,5 +1,8 @@
 <template>
-  <div :class="[ns.b(), ns.is(resolvedShape), ns.is('dragging', isDragging)]">
+  <div
+    v-bind="$attrs"
+    :class="[ns.b(), ns.is(resolvedShape), ns.is('dragging', isDragging)]"
+  >
     <div
       v-if="!readonly"
       :class="[

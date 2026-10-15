@@ -34,8 +34,8 @@
     <div
       ref="selectWrapper"
       v-click-outside:[popperPaneRef]="handleClose"
-      :class="selectKls"
-      :style="selectStyle"
+      :class="[selectKls, $attrs.class]"
+      :style="[selectStyle, $attrs.style as StyleValue]"
       :aria-busy="loadingVisible || undefined"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
@@ -427,6 +427,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { StyleValue } from 'vue'
 import {
   computed,
   h,

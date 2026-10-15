@@ -1,6 +1,8 @@
 <script lang="ts" setup>
+import type { StyleValue } from 'vue'
 import { computed, shallowRef, useTemplateRef, watch } from 'vue'
 import {
+  useAttrs as useNativeAttrs,
   useColor,
   useId,
   useNamespace,
@@ -25,6 +27,7 @@ defineSlots<{
 
 const ns = useNamespace('radio')
 const props = defineProps(radioProps)
+const nativeAttrs = useNativeAttrs()
 const emit = defineEmits(radioEmits)
 const uid = useId()
 const size = useSize()
@@ -71,9 +74,12 @@ const radioStyles = computed(() => [
 </script>
 
 <template>
-  <label :class="radioKls" :style="radioStyles">
+  <label
+    :class="[radioKls, $attrs.class]"
+    :style="[radioStyles, $attrs.style as StyleValue]"
+  >
     <input
-      v-bind="$attrs"
+      v-bind="nativeAttrs"
       :id="uid"
       v-model="model"
       autocomplete="off"

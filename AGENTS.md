@@ -124,3 +124,11 @@
 - Keep the upload surface keyboard operable, provide accessible names for icon-only actions, announce validation and upload outcomes through localized live regions, and never communicate success or failure by color alone.
 - Apply `shape` to the dropzone, queue, previews, and actions together. Keep `listType` responsible only for queue presentation and `previewFit` responsible only for image fitting; neither may change validation or request behavior.
 - Verify picker selection, drag-and-drop rejection, count and size limits, manual and automatic requests, progress, failure retry, removal guards, controlled values, image cards, both shapes, and every localized Code and Playground example together.
+
+
+## Component attribute ownership
+
+- Consumer class and style belong to a public component's outer layout surface or visible trigger, never directly to a nested native input, textarea or image. Merge them with existing component classes and styles.
+- Forward native form, image and accessibility attributes to the correct semantic element. Do not copy the same event listener to both wrapper and native control.
+- Components using inheritAttrs: false must explicitly preserve outer layout attributes; renderless utilities and floating-layer configuration are exceptions with no ordinary layout root.
+- Reuse the shared useAttrs hook to exclude class/style for native forwarding. Regression tests must change class, style and native attrs after mount to catch stale routing and lost updates.

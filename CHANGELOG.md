@@ -1,5 +1,10 @@
 ## Changelog
 
+### Unreleased
+
+- Apply consumer class/style to component layout surfaces rather than nested native controls in Input, Textarea, Checkbox, Radio, Switch, Slider, Verification Code and Image. Preserve native attribute forwarding and dynamic updates.
+- Preserve outer layout attributes in Select, Cascader, Images, Upload and Tab panes when automatic inheritance is disabled.
+
 ### 2.1.7 — 2026-10-15
 
 - Respect explicit Card hover effects across presets without inheriting preset translations.

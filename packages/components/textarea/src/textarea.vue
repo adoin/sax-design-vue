@@ -1,6 +1,7 @@
 <template>
   <div
     :class="[
+      $attrs.class,
       ns.b(),
       ns.m(size || 'default'),
       props.color && ns.m(props.color),
@@ -13,7 +14,7 @@
         [ns.is('label-active')]: isLabelActive,
       },
     ]"
-    :style="wrapperStyle"
+    :style="[wrapperStyle, $attrs.style as StyleValue]"
     :aria-busy="loadingVisible"
   >
     <label v-if="label" :class="ns.e('label')" :for="textareaId">
@@ -23,7 +24,7 @@
     <textarea
       :id="textareaId"
       ref="textareaRef"
-      v-bind="$attrs"
+      v-bind="nativeAttrs"
       autocomplete="off"
       :value="pendingValue"
       :class="ns.e('inner')"
@@ -84,6 +85,7 @@ import {
   watch,
 } from 'vue'
 import {
+  useAttrs as useNativeAttrs,
   useColor,
   useControlLoading,
   useId,
@@ -95,7 +97,7 @@ import { IconControlLoading } from '@vuesax-alpha/components/icon'
 import PlaceholderText from '@vuesax-alpha/components/base/src/placeholder-text.vue'
 import { getCssColor } from '@vuesax-alpha/utils'
 import { textareaEmits, textareaProps } from './textarea'
-import type { CSSProperties } from 'vue'
+import type { CSSProperties, StyleValue } from 'vue'
 
 defineOptions({
   name: 'STextarea',
@@ -103,6 +105,7 @@ defineOptions({
 })
 
 const props = defineProps(textareaProps)
+const nativeAttrs = useNativeAttrs()
 const { loadingVisible, finishLoading } = useControlLoading(() => props.loading)
 const emit = defineEmits(textareaEmits)
 

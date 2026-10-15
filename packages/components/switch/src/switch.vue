@@ -1,6 +1,8 @@
 <script lang="ts" setup>
+import type { StyleValue } from 'vue'
 import { computed, ref, watch } from 'vue'
 import {
+  useAttrs as useNativeAttrs,
   useColor,
   useNamespace,
   useShape,
@@ -19,6 +21,7 @@ defineOptions({
 })
 
 const props = defineProps(switchProps)
+const nativeAttrs = useNativeAttrs()
 const emit = defineEmits(switchEmits)
 const ns = useNamespace('switch')
 const shape = useShape()
@@ -72,9 +75,12 @@ defineExpose({ checked, isIndeterminate })
 </script>
 
 <template>
-  <label :class="switchKls" :style="switchStyles">
+  <label
+    :class="[switchKls, $attrs.class]"
+    :style="[switchStyles, $attrs.style as StyleValue]"
+  >
     <input
-      v-bind="$attrs"
+      v-bind="nativeAttrs"
       autocomplete="off"
       type="checkbox"
       :checked="checked"
