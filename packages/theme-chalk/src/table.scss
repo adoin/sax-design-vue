@@ -332,6 +332,8 @@
   font-size: 0.9rem;
   margin: 0px;
   overflow: auto;
+  // The viewport owns the outer shape; content may translate behind fixed columns.
+  border-radius: var(--sax-radius-lg) var(--sax-radius-lg) 0 0;
   scrollbar-width: thin;
   scrollbar-color: #{getColor(primary, 0.34)} transparent;
   @include scrollbar-track-feedback;
@@ -373,10 +375,9 @@
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    // Clip only the top corners. Square bottom corners keep native overlay
-    // scrollbars unclipped, matching the Ant Design Vue table chrome.
+    // Do not round the translating content: its corners move during horizontal scroll.
     overflow: clip;
-    border-radius: var(--sax-radius-lg) var(--sax-radius-lg) 0 0;
+    border-radius: 0;
     background: var(--s-table-surface);
   }
 
@@ -2047,7 +2048,7 @@
       background: var(--s-table-header-surface);
       border-radius: var(--sax-radius-lg) var(--sax-radius-lg) 0 0;
 
-      & ~ .#{$namespace}-table .#{$namespace}-table__data-view {
+      & ~ .#{$namespace}-table {
         border-radius: 0;
       }
     }
