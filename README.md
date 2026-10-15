@@ -22,6 +22,13 @@ English | [简体中文](./README.zh-CN.md)
 
 </div>
 
+## Sax Admin
+
+A Vue 3 admin application built with Sax Design Vue.
+
+- [Live demo](https://adoin.github.io/sax-admin/)
+- [GitHub repository](https://github.com/adoin/sax-admin)
+
 ## Getting started
 
 Install Vue and **sax-design-vue**:

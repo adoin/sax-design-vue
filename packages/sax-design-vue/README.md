@@ -2,6 +2,11 @@
 
 Vue 3 component library based on the Vuesax 3.x design language.
 
+## Sax Admin
+
+- [Live demo](https://adoin.github.io/sax-admin/)
+- [GitHub repository](https://github.com/adoin/sax-admin)
+
 ## Install
 
 ```bash
