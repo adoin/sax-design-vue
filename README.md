@@ -24,9 +24,9 @@ English | [简体中文](./README.zh-CN.md)
 
 ## Sax Admin
 
-A Vue 3 admin application built with Sax Design Vue.
+A Vue 3 admin dashboard template built with Sax Design Vue.
 
-- [Live demo](https://adoin.github.io/sax-admin/)
+- [Admin Dashboard Template](https://adoin.github.io/sax-admin/)
 - [GitHub repository](https://github.com/adoin/sax-admin)
 
 ## Getting started

@@ -24,9 +24,9 @@
 
 ## Sax Admin 后台管理
 
-基于 Sax Design Vue 构建的 Vue 3 后台管理应用。
+基于 Sax Design Vue 构建的 Vue 3 后台管理模板。
 
-- [在线演示](https://adoin.github.io/sax-admin/)
+- [后台管理模板](https://adoin.github.io/sax-admin/)
 - [GitHub 项目仓库](https://github.com/adoin/sax-admin)
 
 ## 快速开始
