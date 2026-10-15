@@ -545,7 +545,7 @@ Use `effect="default"` when the Card should render without interactive decoratio
 
 ## Hover effects
 
-Cards stay static by default. Add `interactive` for keyboard semantics and choose `lift` or `glow` when the whole card performs an action.
+Omitting `hover-effect` preserves each preset's original hover behavior. Explicit `none` disables surface movement and hover shadow changes; `lift` moves the surface up by 4px, while `glow` adds a shadow without movement. These options replace preset surface movement, scaling, and shadow feedback. Internal media and content reveals remain available. Add `interactive` for keyboard semantics when the whole card performs an action.
 
 <template #example>
 <card-hover-effects />

@@ -1,5 +1,12 @@
 ## Changelog
 
+### 2.1.7 — 2026-10-15
+
+- Respect explicit Card hover effects across presets without inheriting preset translations.
+- Prevent Virtual List spacers from expanding unresolved container heights; follow dynamic parent dimensions automatically with a 320px intrinsic fallback.
+- Bound mounted Virtual List rows with maxRenderedItems (default 500), retain the current scroll anchor, and warn only for sustained visible oversizing in development.
+- Add localized dynamic-container examples covering resizing, hiding and automatic recovery.
+
 ### 2.1.5 — 2026-10-15
 
 - Keep floating-label Select and Cascader controls aligned with Input and their composed date/time controls without fixed-label top spacing.

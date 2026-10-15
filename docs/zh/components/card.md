@@ -545,7 +545,7 @@ SLOTS:
 
 ## 悬停效果
 
-卡片默认保持静态。整张卡片需要执行操作时，添加 `interactive` 获取键盘语义，并选择 `lift` 或 `glow`。
+未设置 `hover-effect` 时保留各预设原有的悬停行为。显式设置 `none` 可关闭卡片表面的悬停位移与阴影变化；`lift` 统一上移 4px，`glow` 只增加发光阴影，不再叠加预设的下压、缩放或抬升。预设内部的图片与内容展开仍保留。整张卡片需要执行操作时，添加 `interactive` 获取键盘语义。
 
 <template #example>
 <card-zh-hover-effects />

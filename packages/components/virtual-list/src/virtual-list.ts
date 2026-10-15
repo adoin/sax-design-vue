@@ -1,4 +1,8 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
+import {
+  DEFAULT_MAX_RENDERED_ITEMS,
+  DEFAULT_VIEWPORT_HEIGHT,
+} from './constants'
 
 import type { ExtractPropTypes } from 'vue'
 
@@ -34,7 +38,7 @@ export const virtualListProps = buildProps({
   /** @description Height of the scroll viewport. */
   height: {
     type: [Number, String],
-    default: 320,
+    default: DEFAULT_VIEWPORT_HEIGHT,
   },
   /** @description Initial row-height estimate used before rows are measured. */
   estimateSize: {
@@ -45,6 +49,12 @@ export const virtualListProps = buildProps({
   overscan: {
     type: Number,
     default: 5,
+  },
+  /** @description Maximum simultaneously rendered rows, including overscan. */
+  maxRenderedItems: {
+    type: Number,
+    default: DEFAULT_MAX_RENDERED_ITEMS,
+    validator: (value: number) => Number.isInteger(value) && value > 0,
   },
   /** @description Measure rendered rows to support dynamic heights. */
   dynamic: {

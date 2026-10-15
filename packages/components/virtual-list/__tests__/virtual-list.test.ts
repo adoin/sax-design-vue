@@ -12,6 +12,28 @@ const settle = async () => {
 describe('VirtualList', () => {
   afterEach(() => vi.restoreAllMocks())
 
+  it('enforces a configurable mounting budget without materializing the generated source', async () => {
+    const wrapper = mount(VirtualList, {
+      props: {
+        count: 100_000,
+        itemAt: (index: number) => index,
+        overscan: 100_000,
+        maxRenderedItems: 40,
+        dynamic: false,
+      },
+    })
+    try {
+      await settle()
+      expect(wrapper.findAll('.s-vl__item')).toHaveLength(40)
+      await wrapper.setProps({ maxRenderedItems: 80 })
+      expect(wrapper.findAll('.s-vl__item')).toHaveLength(80)
+      await wrapper.setProps({ overscan: 3 })
+      expect(wrapper.findAll('.s-vl__item').length).toBeLessThan(10)
+    } finally {
+      wrapper.unmount()
+    }
+  })
+
   it.each([40, 400, 10000])(
     'windows and locates fixed-height arrays of %i rows',
     async (count) => {

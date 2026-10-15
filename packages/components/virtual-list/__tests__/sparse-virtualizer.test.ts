@@ -12,24 +12,28 @@ function fixture(count = 1_000_000, initiallyEnabled = true) {
   const rowCount = shallowRef(count)
   const estimate = shallowRef(64)
   const dragging = shallowRef(false)
+  const viewport = shallowRef(320)
+  const overscan = shallowRef(3)
+  const maxRenderedItems = shallowRef(500)
   const onRangeChange = vi.fn()
   let virtualizer!: ReturnType<typeof useSparseVirtualizer>
   let top = 0
   const write = vi.fn((value: number) => {
     top =
       Math.round(
-        Math.max(0, Math.min(value, element.scrollHeight - 320)) * 64,
+        Math.max(0, Math.min(value, element.scrollHeight - viewport.value)) *
+          64,
       ) / 64
   })
   Object.defineProperties(element, {
     scrollTop: { get: () => top, set: write },
-    clientHeight: { value: 320 },
+    clientHeight: { get: () => viewport.value },
     scrollHeight: { get: () => virtualizer?.physicalSize.value ?? 0 },
     scrollTo: {
       value: vi.fn((options: ScrollToOptions) => {
         element.scrollTop = Math.max(
           0,
-          Math.min(options.top ?? 0, element.scrollHeight - 320),
+          Math.min(options.top ?? 0, element.scrollHeight - viewport.value),
         )
       }),
     },
@@ -41,7 +45,8 @@ function fixture(count = 1_000_000, initiallyEnabled = true) {
           enabled: computed(() => enabled.value),
           count: computed(() => rowCount.value),
           estimateSize: computed(() => estimate.value),
-          overscan: computed(() => 3),
+          overscan: computed(() => overscan.value),
+          maxRenderedItems: computed(() => maxRenderedItems.value),
           retainMaxSize: computed(() => true),
           scrollbarDragging: dragging,
           scrollElement: shallowRef(element),
@@ -61,11 +66,123 @@ function fixture(count = 1_000_000, initiallyEnabled = true) {
     enabled,
     rowCount,
     estimate,
+    viewport,
+    overscan,
+    maxRenderedItems,
     onRangeChange,
   }
 }
 
 describe('compressed sparse row coordinates', () => {
+  it('bounds an oversized viewport immediately and automatically recovers after resizing', async () => {
+    const { wrapper, virtualizer, viewport } = fixture()
+    try {
+      await nextTick()
+      viewport.value = 8_000_000
+      virtualizer.measureViewport()
+      expect(virtualizer.virtualItems.value).toHaveLength(500)
+      viewport.value = 480
+      virtualizer.measureViewport()
+      expect(virtualizer.virtualItems.value.length).toBeLessThan(20)
+      viewport.value = 0
+      virtualizer.measureViewport()
+      viewport.value = 640
+      virtualizer.measureViewport()
+      expect(virtualizer.virtualItems.value.length).toBeGreaterThan(10)
+      expect(virtualizer.virtualItems.value.length).toBeLessThan(20)
+    } finally {
+      wrapper.unmount()
+    }
+  })
+
+  it('keeps the current scroll anchor inside the budget even with excessive overscan', async () => {
+    const { wrapper, virtualizer, overscan, maxRenderedItems } = fixture()
+    try {
+      await nextTick()
+      overscan.value = 1_000_000
+      maxRenderedItems.value = 60
+      virtualizer.scrollToIndex(50_000, 'start')
+      expect(virtualizer.virtualItems.value).toHaveLength(60)
+      expect(
+        virtualizer.virtualItems.value.some((row) => row.index === 50_000),
+      ).toBe(true)
+      maxRenderedItems.value = 100
+      expect(virtualizer.virtualItems.value).toHaveLength(100)
+      overscan.value = 3
+      expect(virtualizer.virtualItems.value.length).toBeLessThan(20)
+      expect(
+        virtualizer.virtualItems.value.some((row) => row.index === 50_000),
+      ).toBe(true)
+    } finally {
+      wrapper.unmount()
+    }
+  })
+
+  it('does not warn for transient layout spikes and warns once for a persistent episode', async () => {
+    vi.useFakeTimers()
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const { wrapper, virtualizer, viewport } = fixture()
+    try {
+      await nextTick()
+      viewport.value = 8_000_000
+      virtualizer.measureViewport()
+      await nextTick()
+      await vi.advanceTimersByTimeAsync(100)
+      viewport.value = 480
+      virtualizer.measureViewport()
+      await nextTick()
+      await vi.advanceTimersByTimeAsync(300)
+      expect(warn).not.toHaveBeenCalled()
+      viewport.value = 8_000_000
+      virtualizer.measureViewport()
+      await nextTick()
+      await vi.advanceTimersByTimeAsync(220)
+      expect(warn).toHaveBeenCalledOnce()
+      expect(String(warn.mock.calls[0][0])).toContain('max-rendered-items')
+      virtualizer.measureViewport()
+      await nextTick()
+      await vi.advanceTimersByTimeAsync(500)
+      expect(warn).toHaveBeenCalledOnce()
+      viewport.value = 320
+      virtualizer.measureViewport()
+      await nextTick()
+      viewport.value = 8_000_000
+      virtualizer.measureViewport()
+      await nextTick()
+      wrapper.unmount()
+      await vi.advanceTimersByTimeAsync(500)
+      expect(warn).toHaveBeenCalledOnce()
+    } finally {
+      wrapper.unmount()
+      warn.mockRestore()
+      vi.useRealTimers()
+    }
+  })
+
+  it('waits for hidden containers to become visible before issuing a sustained-range warning', async () => {
+    vi.useFakeTimers()
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const { wrapper, virtualizer, viewport, maxRenderedItems } = fixture()
+    try {
+      await nextTick()
+      viewport.value = 0
+      maxRenderedItems.value = 1
+      virtualizer.measureViewport()
+      await nextTick()
+      await vi.advanceTimersByTimeAsync(500)
+      expect(warn).not.toHaveBeenCalled()
+      viewport.value = 320
+      virtualizer.measureViewport()
+      await nextTick()
+      await vi.advanceTimersByTimeAsync(220)
+      expect(warn).toHaveBeenCalledOnce()
+    } finally {
+      wrapper.unmount()
+      warn.mockRestore()
+      vi.useRealTimers()
+    }
+  })
+
   it('does not notify unchanged ranges when measurements are reset', async () => {
     const { wrapper, virtualizer, onRangeChange } = fixture()
     try {

@@ -3,7 +3,7 @@
     <div
       ref="scrollRef"
       :class="ns.e('window')"
-      :style="{ height: viewportHeight }"
+      :style="viewportStyle"
       @scroll="handleScroll"
       @wheel="handleWheel"
     >
@@ -58,6 +58,7 @@ import { useNamespace } from '@vuesax-alpha/hooks'
 import { virtualListEmits, virtualListProps } from './virtual-list'
 import { useSparseVirtualizer } from './use-sparse-virtualizer'
 import { useScrollbarDrag } from './use-scrollbar-drag'
+import { DEFAULT_VIEWPORT_HEIGHT } from './constants'
 import type { CSSProperties, ComponentPublicInstance } from 'vue'
 import type { VirtualListKey } from './virtual-list'
 
@@ -98,6 +99,7 @@ const sparseVirtualizer = useSparseVirtualizer({
   count: itemCount,
   estimateSize,
   overscan,
+  maxRenderedItems: computed(() => props.maxRenderedItems),
   retainMaxSize: computed(() => props.retainMaxSize),
   scrollElement: scrollRef,
   scrollbarDragging,
@@ -134,9 +136,13 @@ watch(
 const virtualItems = sparseVirtualizer.virtualItems
 const totalSize = sparseVirtualizer.physicalSize
 const compressed = sparseVirtualizer.compressed
-const viewportHeight = computed(() =>
-  typeof props.height === 'number' ? `${props.height}px` : props.height,
-)
+const viewportStyle = computed<CSSProperties>(() => ({
+  height: typeof props.height === 'number' ? `${props.height}px` : props.height,
+  // Keep the spacer out of intrinsic sizing, including before theme CSS loads.
+  // Real percentage/flex sizes continue to follow their parent automatically.
+  contain: 'size',
+  containIntrinsicSize: `0px ${DEFAULT_VIEWPORT_HEIGHT}px`,
+}))
 
 const itemStyle = (start: number, size: number): CSSProperties => {
   const physicalStart = compressed.value

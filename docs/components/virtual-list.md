@@ -1,5 +1,11 @@
 ---
 PROPS:
+  - name: max-rendered-items
+    type: Number
+    values: 'positive integer'
+    description: Maximum simultaneously mounted rows including overscan. A sustained limit triggers a development warning; normal rendering resumes automatically when layout or overscan recovers. Increase this only for an intentionally dense viewport.
+    default: '500'
+    usage: '#dynamic-container-safety'
   - name: overscan
     type: Number
     values: 'item count'
@@ -15,7 +21,7 @@ PROPS:
   - name: height
     type: Number | String
     values: 'CSS height'
-    description: Scroll viewport height.
+    description: Scroll viewport height. Unresolved percentage or auto layouts use a 320px intrinsic fallback and follow the parent again when its size resolves.
     default: '320'
     link: null
     usage: '#dynamic-height'
@@ -67,6 +73,7 @@ EXPOSES:
     description: Clear recorded heights and measure the current layout again while retaining the visible row anchor. Call after changes to column widths or content that can reduce row heights.
 NEWS:
   - dynamic-height
+  - dynamic-container-safety
 description: 'Windowed list rendering using a shared height-delta index, with measured dynamic row heights.'
 ---
 
@@ -99,6 +106,34 @@ Large generated lists compress the native scroll track when their total row heig
 <template #style>
 
 @[code{53-79}](../.vuepress/components/virtual-list/default.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Dynamic container safety
+
+Percentage, flex, and grid layouts can resize or briefly lose a definite height. The viewport uses size containment with a 320px intrinsic fallback so its spacer cannot expand its own viewport. Once a parent height resolves, the viewport follows it automatically; this is not a permanent height lock. A hidden 0px container remains hidden and is remeasured when shown.
+
+`max-rendered-items` limits mounted rows immediately, including excessive overscan, while keeping the current scroll position inside the rendered window. If the limit persists for 200ms in a visible container, development builds warn once per episode with layout and configuration suggestions. Transient spikes, hidden containers, and unmounted lists do not emit that warning. The mounting limit also applies in production.
+
+This example switches between an unresolved parent, two definite heights, and a hidden container without creating a hundred-thousand-item array. Intentional dense layouts can increase the budget; the limit does not replace correct parent sizing. In flex/grid layouts, ensure the intended scrolling child can shrink, for example with `min-height: 0`.
+
+<template #example>
+<virtual-list-container-safety />
+</template>
+
+<template #template>
+
+@[code{26-73}](../.vuepress/components/virtual-list/container-safety.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-24}](../.vuepress/components/virtual-list/container-safety.vue)
 
 </template>
 

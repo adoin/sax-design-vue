@@ -6,6 +6,8 @@ import {
   shallowRef,
   watch,
 } from 'vue'
+import { debugWarn } from '@vuesax-alpha/utils'
+import { DEFAULT_MAX_RENDERED_ITEMS, LAYOUT_WARNING_DELAY } from './constants'
 import type { ComputedRef, Ref } from 'vue'
 import type { VirtualListKey } from './virtual-list'
 
@@ -37,6 +39,7 @@ interface UseSparseVirtualizerOptions {
   count: ComputedRef<number>
   estimateSize: ComputedRef<number>
   overscan: ComputedRef<number>
+  maxRenderedItems?: ComputedRef<number>
   retainMaxSize: ComputedRef<boolean>
   scrollElement: Ref<HTMLElement | null>
   scrollbarDragging: Ref<boolean>
@@ -154,7 +157,13 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
     return Math.min(count - 1, low)
   }
 
-  const range = computed(() => {
+  const renderBudget = computed(() => {
+    const value = options.maxRenderedItems?.value ?? DEFAULT_MAX_RENDERED_ITEMS
+    return Number.isFinite(value) && value >= 1
+      ? Math.floor(value)
+      : DEFAULT_MAX_RENDERED_ITEMS
+  })
+  const requestedRange = computed(() => {
     trackMeasurements()
     const count = options.count.value
     if (!options.enabled.value || !count) return { start: 0, end: 0 }
@@ -168,6 +177,47 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
       end: Math.min(count, last + 1 + overscan),
     }
   })
+
+  const rangeLimited = computed(
+    () =>
+      requestedRange.value.end - requestedRange.value.start >
+      renderBudget.value,
+  )
+  const range = computed(() => {
+    if (!rangeLimited.value) return requestedRange.value
+    const budget = renderBudget.value
+    const first = findIndexAtOffset(scrollOffset.value)
+    const before = Math.min(
+      Math.max(0, Math.floor(options.overscan.value)),
+      Math.floor(budget / 4),
+    )
+    const start = Math.max(0, first - before)
+    const end = Math.min(options.count.value, start + budget)
+    return { start: Math.max(0, end - budget), end }
+  })
+
+  let warnedForLimitedRange = false
+  watch(
+    () => [rangeLimited.value, viewportSize.value > 0] as const,
+    ([limited, visible], _previous, onCleanup) => {
+      if (!limited) warnedForLimitedRange = false
+      if (!limited || !visible || warnedForLimitedRange) return
+      const timer = setTimeout(() => {
+        warnedForLimitedRange = true
+        debugWarn(
+          'SVirtualList',
+          `The requested range exceeds max-rendered-items (${renderBudget.value}). ` +
+            'Rendering a bounded window to keep the page responsive. ' +
+            'Check the resolved viewport height and overscan; percentage heights need a bounded parent ' +
+            '(and min-height: 0 inside flex/grid layouts). ' +
+            'For an intentionally dense viewport, increase max-rendered-items. ' +
+            'The normal window is restored automatically when the layout recovers.',
+        )
+      }, LAYOUT_WARNING_DELAY)
+      onCleanup(() => clearTimeout(timer))
+    },
+    { immediate: true },
+  )
 
   const virtualItems = computed<SparseVirtualItem[]>(() => {
     trackMeasurements()

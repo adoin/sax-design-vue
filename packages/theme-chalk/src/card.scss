@@ -3,6 +3,14 @@
 @use 'mixins/var' as *;
 @use 'common/var' as *;
 
+// Explicit hover feedback replaces preset surface movement and shadow changes.
+// Preset content reveals remain available independently of this surface axis.
+@mixin preset-hover-feedback {
+  &:not(.is-hover-none, .is-hover-lift, .is-hover-glow) {
+    @content;
+  }
+}
+
 .#{$namespace}-card-content {
   &.type-default {
     width: 100%;
@@ -129,7 +137,9 @@
       box-shadow: none;
       max-width: 300px;
       &:hover {
-        transform: translate(0, -5px);
+        @include preset-hover-feedback {
+          transform: translate(0, -5px);
+        }
         .#{$namespace}-card__img {
           img {
             transform: scale(1);
@@ -173,7 +183,9 @@
       display: flex;
       max-width: 400px;
       &:hover {
-        transform: scale(1.04);
+        @include preset-hover-feedback {
+          transform: scale(1.04);
+        }
       }
 
       &__img {
@@ -200,7 +212,9 @@
       box-shadow: none;
       overflow: hidden;
       &:hover {
-        transform: scale(0.95);
+        @include preset-hover-feedback {
+          transform: scale(0.95);
+        }
         .#{$namespace}-card__img {
           img {
             transform: scale(1.15);
@@ -263,8 +277,10 @@
   &.type-classic {
     .#{$namespace}-card {
       &:hover {
-        box-shadow: 0px 0px 0px 0px getColor(black, getCssVar('shadow-opacity'));
-        transform: translate(0, 5px);
+        @include preset-hover-feedback {
+          box-shadow: 0px 0px 0px 0px getColor(black, getCssVar('shadow-opacity'));
+          transform: translate(0, 5px);
+        }
         .#{$namespace}-card__img {
           img {
             transform: scale(1.15);
@@ -291,10 +307,12 @@
         0 2px 8px getColor(black, 0.05);
 
       &:hover {
-        transform: translateY(-3px);
-        box-shadow:
-          0 22px 48px getColor(black, 0.14),
-          0 4px 10px getColor(black, 0.06);
+        @include preset-hover-feedback {
+          transform: translateY(-3px);
+          box-shadow:
+            0 22px 48px getColor(black, 0.14),
+            0 4px 10px getColor(black, 0.06);
+        }
       }
 
       > .#{$namespace}-card__header {
@@ -369,10 +387,12 @@
       }
 
       &:hover {
-        border-color: getColor(color, 0.3);
-        box-shadow:
-          0 18px 42px getColor(color, 0.14),
-          0 4px 10px getColor(black, 0.05);
+        @include preset-hover-feedback {
+          border-color: getColor(color, 0.3);
+          box-shadow:
+            0 18px 42px getColor(color, 0.14),
+            0 4px 10px getColor(black, 0.05);
+        }
       }
 
       > .#{$namespace}-card__header {
@@ -433,7 +453,9 @@
         0 3px 10px getColor(black, 0.05);
 
       &:hover {
-        transform: translateY(-3px);
+        @include preset-hover-feedback {
+          transform: translateY(-3px);
+        }
 
         > .#{$namespace}-card__img img {
           transform: scale(1.045);
@@ -945,7 +967,9 @@
     &:focus-visible {
       outline: none;
       filter: brightness(1.02) saturate(1.04);
-      transform: translateY(-1px);
+      @include preset-hover-feedback {
+        transform: translateY(-1px);
+      }
     }
 
     &:active:not(.is-loading) {
