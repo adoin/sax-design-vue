@@ -532,6 +532,8 @@ SLOTS:
 
 ## Default
 
+`class` and `style` apply to the complete Input surface, so margins and widths move or size the wrapper and input together. Native attributes such as `name`, `data-*`, and `aria-*` remain on the underlying input.
+
 <docs-warn />
 
 Add an elements input facilitate with the component `input`

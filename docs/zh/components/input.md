@@ -482,6 +482,8 @@ SLOTS:
 
 ## 默认
 
+`class` 和 `style` 作用于整个 Input 外层，外边距和宽度会同时影响外壳与输入框，不会把内部输入面推离外壳。`name`、`data-*`、`aria-*` 等原生属性仍透传给内部 input。
+
 <docs-warn />
 
 使用 `s-input` 快速创建单行文本输入框。

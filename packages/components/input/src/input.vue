@@ -1,5 +1,8 @@
 <template>
-  <div :class="inputKls" :style="inputStyle">
+  <div
+    :class="[inputKls, $attrs.class]"
+    :style="[inputStyle, $attrs.style as StyleValue]"
+  >
     <div
       ref="autocompleteAnchor"
       :class="[ns.e('wrapper'), ns.is('disabled', disabled)]"
@@ -20,7 +23,7 @@
         </slot>
       </span>
       <input
-        v-bind="$attrs"
+        v-bind="nativeAttrs"
         :id="inputId"
         ref="inputRef"
         autocomplete="off"
@@ -294,6 +297,7 @@ import {
 } from '@vuesax-alpha/components/icon'
 import { SCollapseTransition } from '@vuesax-alpha/components/collapse-transition'
 import {
+  useAttrs,
   useColor,
   useControlLoading,
   useDeprecated,
@@ -313,7 +317,7 @@ import { useInputValidation } from './composables/use-input-validation'
 import { useInputAutocomplete } from './composables/use-input-autocomplete'
 import InputAutocomplete from './input-autocomplete.vue'
 import InputPlaceholder from './input-placeholder.vue'
-import type { CSSProperties } from 'vue'
+import type { CSSProperties, StyleValue } from 'vue'
 
 defineOptions({
   name: 'SInput',
@@ -321,6 +325,7 @@ defineOptions({
 })
 
 const props = defineProps(inputProps)
+const nativeAttrs = useAttrs()
 const { t } = useLocale()
 const emit = defineEmits(inputEmits)
 const { loadingVisible, finishLoading } = useControlLoading(() => props.loading)

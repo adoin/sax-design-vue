@@ -1,3 +1,4 @@
+import { h, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import Input from '../src/input.vue'
@@ -16,6 +17,40 @@ const mountInput = (props = {}) =>
   })
 
 describe('Input behavior', () => {
+  it('keeps class and style on the component surface while forwarding native attributes', async () => {
+    const attrs = ref({
+      class: 'layout-margin',
+      style: { marginTop: '8px' },
+      name: 'account',
+      'data-probe': 'first',
+    })
+    const wrapper = mount(() =>
+      h(Input, { ...attrs.value, modelValue: '', 'aria-label': 'Account' }),
+    )
+    const component = wrapper.getComponent(Input)
+    const input = component.get('input')
+    expect(component.classes()).toContain('layout-margin')
+    expect((component.element as HTMLElement).style.marginTop).toBe('8px')
+    expect(input.classes()).not.toContain('layout-margin')
+    expect((input.element as HTMLElement).style.marginTop).toBe('')
+    expect(input.attributes('name')).toBe('account')
+    expect(input.attributes('data-probe')).toBe('first')
+    expect(input.attributes('aria-label')).toBe('Account')
+    attrs.value = {
+      class: 'next-layout',
+      style: { marginTop: '12px' },
+      name: 'next-account',
+      'data-probe': 'next',
+    }
+    await wrapper.vm.$nextTick()
+    expect(component.classes()).toContain('next-layout')
+    expect(component.classes()).not.toContain('layout-margin')
+    expect((component.element as HTMLElement).style.marginTop).toBe('12px')
+    expect(input.attributes('name')).toBe('next-account')
+    expect(input.attributes('data-probe')).toBe('next')
+    wrapper.unmount()
+  })
+
   it('preserves consumer combobox ARIA when built-in autocomplete is not configured', () => {
     const wrapper = mount(Input, {
       attrs: {
