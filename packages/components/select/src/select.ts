@@ -135,6 +135,8 @@ export const selectProps = buildProps({
   noDataText: { type: String },
   allowCreate: { type: Boolean, default: false },
   multiple: { type: Boolean, default: false },
+  /** Order multiple values by option appearance; local settings override global defaults. */
+  sortByOptionOrder: { type: Boolean, default: undefined },
   multipleLimit: {
     type: Number,
     default: 0,

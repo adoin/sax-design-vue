@@ -157,6 +157,8 @@ Components such as Calendar and Navbar have their own size vocabularies (for exa
 
 Application-wide interaction policies can be shared through `button`, `dialog`, `drawer`, `notification`, `pagination`, `radioGroup`, and `popper`. Each object accepts only reusable defaults; content, controlled values, callbacks, and business data remain local to component instances. `radioGroup` accepts `animated` (enabled by default) and `direction`; explicit component props take precedence.
 
+Select supports `select: { sortByOptionOrder: true }` through both installation options and `SConfigProvider`. Local `:sort-by-option-order="false"` overrides the global default. The built-in default is false.
+
 <command>
 
 ```vue

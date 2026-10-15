@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import zhCn from '@vuesax-alpha/locale/lang/zh-cn'
 import { localeContextKey } from '@vuesax-alpha/hooks'
 import Select from '../src/select.vue'
+import ConfigProvider from '../../config-provider/src/config-provider'
 import { selectProps } from '../src/select'
 import type { ComponentMountingOptions } from '@vue/test-utils'
 
@@ -507,4 +508,109 @@ describe('Select enhanced capabilities', () => {
         .width,
     ).toBe('260px')
   })
+})
+
+describe('Select option-ordered multiple values', () => {
+  const options = [
+    { value: 'a', label: 'A' },
+    { value: 'b', label: 'B' },
+    { value: 'c', label: 'C' },
+  ]
+  it.each([undefined, false, true])(
+    'sortByOptionOrder=%s applies to clicks and matching change payloads',
+    async (enabled) => {
+      const wrapper = mountSelect({
+        multiple: true,
+        sortByOptionOrder: enabled,
+        modelValue: [],
+        options,
+      })
+      await nextTick()
+      await wrapper.findAll('.s-select__option')[2].trigger('click')
+      await wrapper.setProps({ modelValue: ['c'] })
+      await wrapper.findAll('.s-select__option')[0].trigger('click')
+      const expected = enabled ? ['a', 'c'] : ['c', 'a']
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([expected])
+      expect(wrapper.emitted('change')?.at(-1)).toEqual([expected])
+      wrapper.unmount()
+    },
+  )
+  it('normalizes existing values, preserves unavailable values, and follows option order changes', async () => {
+    const wrapper = mountSelect({
+      multiple: true,
+      sortByOptionOrder: true,
+      modelValue: ['c', 'missing', 'a'],
+      options,
+    })
+    await nextTick()
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([
+      ['a', 'c', 'missing'],
+    ])
+    await wrapper.setProps({
+      modelValue: ['a', 'c', 'missing'],
+      options: [...options].reverse(),
+    })
+    await nextTick()
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([
+      ['c', 'a', 'missing'],
+    ])
+    wrapper.unmount()
+  })
+  it('applies ordering to bulk selection', async () => {
+    const wrapper = mountSelect({
+      multiple: true,
+      sortByOptionOrder: true,
+      modelValue: ['c'],
+      options,
+      selectionTools: ['all'],
+    })
+    await nextTick()
+    await wrapper.get('.s-select__selection-tool').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([
+      ['a', 'b', 'c'],
+    ])
+    expect(wrapper.emitted('change')?.at(-1)).toEqual([['a', 'b', 'c']])
+    wrapper.unmount()
+  })
+  it('inherits global configuration and allows explicit local false', async () => {
+    const local = ref<boolean>()
+    const wrapper = mount(
+      () =>
+        h(ConfigProvider, { select: { sortByOptionOrder: true } }, () =>
+          h(Select, {
+            multiple: true,
+            modelValue: ['c', 'a'],
+            sortByOptionOrder: local.value,
+            options,
+          }),
+        ),
+      { global: { stubs: { SPopper: PopperStub } } },
+    )
+    await nextTick()
+    const select = wrapper.getComponent(Select)
+    expect(select.emitted('update:modelValue')?.at(-1)).toEqual([['a', 'c']])
+    local.value = false
+    await nextTick()
+    await select.findAll('.s-select__option')[1].trigger('click')
+    expect(select.emitted('update:modelValue')?.at(-1)).toEqual([
+      ['c', 'a', 'b'],
+    ])
+    wrapper.unmount()
+  })
+  it.each(['grouped', 'virtual'])('sorts all values in %s options', async (mode) => {
+    const wrapper = mountSelect({ multiple: true, sortByOptionOrder: true, modelValue: ['c'], options: mode === 'virtual' ? options : [], optionGroups: mode === 'grouped' ? [{ label: 'Group', options }] : [], virtual: mode === 'virtual' })
+    await nextTick()
+    await wrapper.findAll('.s-select__option')[0].trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['a', 'c']])
+    wrapper.unmount()
+  })
+  it('matches object values without mutating the incoming array', async () => {
+    const value = [{ id: 2 }, { id: 1 }]
+    const wrapper = mountSelect({ multiple: true, sortByOptionOrder: true, modelValue: value, options: [{ label: 'One', value: { id: 1 } }, { label: 'Two', value: { id: 2 } }] })
+    await nextTick()
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([[{ id: 1 }, { id: 2 }]])
+    expect(value).toEqual([{ id: 2 }, { id: 1 }])
+    wrapper.unmount()
+  })
+
 })

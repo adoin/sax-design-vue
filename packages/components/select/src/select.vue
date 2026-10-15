@@ -796,6 +796,14 @@ watch(
 
 const optionsAnimation = computed(() => ns.b())
 
+const multipleOptionOrder = computed(() => {
+  if (slots.default) return undefined
+  const data = props.optionGroups.length
+    ? props.optionGroups.reduce<Record<string, unknown>[]>((result, group) => { result.push(...getGroupOptions(group)); return result }, [])
+    : orderedOptions.value
+  return data.map((option) => getOptionValue(option) as SelectOptionValue)
+})
+
 const {
   showNewOption,
   debouncedQueryChange,
@@ -841,10 +849,11 @@ const {
 
   queryChange,
 
+  orderMultipleValue,
   optionsArray,
   cachedOptionsArray,
   selectedArray,
-} = useSelect(props, states, emit, loadingVisible)
+} = useSelect(props, states, emit, loadingVisible, multipleOptionOrder)
 
 // The template compiler binds this named template ref at runtime.
 // eslint-disable-next-line no-void
@@ -1093,7 +1102,8 @@ const visibleSelectableOptions = computed(() =>
   ),
 )
 
-const updateMultipleValue = (nextValue: SelectOptionValue[]) => {
+const updateMultipleValue = (value: SelectOptionValue[]) => {
+  const nextValue = orderMultipleValue(value)
   if (isEqual(props.modelValue, nextValue)) return
   emit(UPDATE_MODEL_EVENT, nextValue)
   emit('change', nextValue)

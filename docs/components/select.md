@@ -266,6 +266,11 @@ PROPS:
     link: null
     usage: '#multiple'
     code: null
+  - name: sort-by-option-order
+    type: Boolean
+    description: "Order multiple values by option appearance. Priority: explicit local value > global select.sortByOptionOrder > false. Single selection is unchanged. Unavailable values remain at the end in their existing order."
+    default: false
+    usage: "#multiple-value-order"
   - name: multiple-limit
     type: Number
     values: 'number'
@@ -1062,6 +1067,33 @@ Enable `virtual` for large flat `options` arrays. This example compares 10,000 a
 <template #style>
 
 @[code{71-94}](../.vuepress/components/select/virtual.vue)
+
+</template>
+
+</card>
+
+
+<card>
+
+<h2 id="multiple-value-order">Multiple value ordering</h2>
+
+Selection order is preserved by default. When enabled, v-model and change follow the complete option order, including group order and pinned placement; filtering does not narrow the ordering scope. Existing values, changed option order, select-all and invert are normalized too. Unavailable values are retained. Configure globally with app.use(SaxDesignVue, { select: { sortByOptionOrder: true } }); an explicit local false overrides it.
+
+<template #example>
+
+<select-value-order />
+
+</template>
+
+<template #template>
+
+@[code{13-47}](../.vuepress/components/select/value-order.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-12}](../.vuepress/components/select/value-order.vue)
 
 </template>
 

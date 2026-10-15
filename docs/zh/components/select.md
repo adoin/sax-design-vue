@@ -222,6 +222,11 @@ PROPS:
     link: null
     usage: '#multiple'
     code: null
+  - name: sort-by-option-order
+    type: Boolean
+    description: "多选值按选项出现顺序排列。优先级：组件显式值 > 全局 select.sortByOptionOrder > false。只作用于多选；未出现在当前选项中的值保留在末尾，并保持彼此顺序。"
+    default: false
+    usage: "#multiple-value-order"
   - name: multiple-limit
     type: Number
     values: 'number'
@@ -1018,6 +1023,33 @@ SLOTS:
 <template #style>
 
 @[code{71-94}](../../.vuepress/components/select-zh/virtual.vue)
+
+</template>
+
+</card>
+
+
+<card>
+
+<h2 id="multiple-value-order">多选值排序</h2>
+
+默认保留选择顺序。开启后，v-model 与 change 按当前完整选项顺序输出；过滤不会缩小排序范围，分组按组内出现顺序展开，置顶会参与显示顺序。已有值、选项顺序变化和全选/反选也会重新归一化；未加载的值不会丢失。全局配置也支持 app.use(SaxDesignVue, { select: { sortByOptionOrder: true } })，组件显式 false 可覆盖。
+
+<template #example>
+
+<select-zh-value-order />
+
+</template>
+
+<template #template>
+
+@[code{13-47}](../../.vuepress/components/select-zh/value-order.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-12}](../../.vuepress/components/select-zh/value-order.vue)
 
 </template>
 

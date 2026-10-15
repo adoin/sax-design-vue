@@ -25,10 +25,15 @@ import {
   scrollIntoView,
   setStyle,
 } from '@vuesax-alpha/utils'
-import { useId, useLocale, useNamespace } from '@vuesax-alpha/hooks'
+import {
+  useGlobalConfig,
+  useId,
+  useLocale,
+  useNamespace,
+} from '@vuesax-alpha/hooks'
 import type { PopperExpose } from '@vuesax-alpha/components/popper'
 import type { SelectEmitsFn, SelectProps } from './select'
-import type { Ref } from 'vue'
+import type { ComputedRef, Ref } from 'vue'
 
 import type {
   SelectOptionContext,
@@ -69,6 +74,7 @@ export const useSelect = (
   states: SelectStates,
   emit: SelectEmitsFn,
   loading?: Ref<boolean>,
+  optionOrder?: ComputedRef<SelectOptionValue[] | undefined>,
 ) => {
   const ns = useNamespace('select')
   const { t } = useLocale()
@@ -516,7 +522,69 @@ export const useSelect = (
     handleQueryChange(e.target.value)
   }, debounce.value)
 
-  const emitChange = (val: SelectValue) => {
+  const globalSelect = useGlobalConfig('select')
+  const sortByOptionOrder = computed(
+    () =>
+      props.sortByOptionOrder ?? globalSelect.value?.sortByOptionOrder ?? false,
+  )
+  const orderingValues = computed(
+    () =>
+      optionOrder?.value ?? optionsArray.value.map((option) => option.value),
+  )
+  const optionRanks = computed(() => {
+    const ranks = new Map<SelectOptionValue, number>()
+    orderingValues.value.forEach((value, index) => {
+      if (!ranks.has(value)) ranks.set(value, index)
+    })
+    return ranks
+  })
+  const orderMultipleValue = (values: SelectOptionValue[]) => {
+    if (!sortByOptionOrder.value) return values
+    const ranked = values.map((value, index) => ({
+      value,
+      index,
+      rank:
+        optionRanks.value.get(value) ??
+        (value !== null && typeof value === 'object'
+          ? orderingValues.value.findIndex((optionValue) =>
+              isEqual(optionValue, value),
+            )
+          : -1),
+    }))
+    return ranked
+      .sort(
+        (a, b) =>
+          (a.rank < 0 ? Infinity : a.rank) - (b.rank < 0 ? Infinity : b.rank) ||
+          a.index - b.index,
+      )
+      .map((item) => item.value)
+  }
+  const emitValue = (value: SelectValue) => {
+    const next =
+      props.multiple && Array.isArray(value) ? orderMultipleValue(value) : value
+    emit(UPDATE_MODEL_EVENT, next)
+    emitChange(next)
+  }
+  watch(
+    [
+      sortByOptionOrder,
+      () => props.modelValue,
+      () => (sortByOptionOrder.value ? orderingValues.value : []),
+    ],
+    () => {
+      if (
+        !props.multiple ||
+        !sortByOptionOrder.value ||
+        !Array.isArray(props.modelValue)
+      )
+        return
+      const next = orderMultipleValue(props.modelValue)
+      if (!isEqual(next, props.modelValue)) emitValue(next)
+    },
+    { deep: true, flush: 'post', immediate: true },
+  )
+
+  function emitChange(val: SelectValue) {
     if (!isEqual(props.modelValue, val)) {
       emit('change', val)
     }
@@ -540,8 +608,7 @@ export const useSelect = (
       const lastNotDisabledIndex = getLastNotDisabledIndex(value)
       if (lastNotDisabledIndex < 0) return
       value.splice(lastNotDisabledIndex, 1)
-      emit(UPDATE_MODEL_EVENT, value)
-      emitChange(value)
+      emitValue(value)
     }
 
     // @ts-ignore
@@ -558,8 +625,7 @@ export const useSelect = (
       // @ts-ignore
       const value = props.modelValue.slice()
       value.splice(index, 1)
-      emit(UPDATE_MODEL_EVENT, value)
-      emitChange(value)
+      emitValue(value)
       emit('remove-tag', tag)
     }
     focus()
@@ -574,8 +640,7 @@ export const useSelect = (
         if (item.isDisabled) value.push(item.value)
       }
     }
-    emit(UPDATE_MODEL_EVENT, value)
-    emitChange(value)
+    emitValue(value)
     states.hoverIndex = -1
     states.visible = false
     emit('clear')
@@ -607,8 +672,7 @@ export const useSelect = (
       ) {
         value.push(option.value)
       }
-      emit(UPDATE_MODEL_EVENT, value)
-      emitChange(value)
+      emitValue(value)
       if (option.created) {
         states.query = ''
         handleQueryChange('')
@@ -890,6 +954,7 @@ export const useSelect = (
   }
 
   return {
+    orderMultipleValue,
     showNewOption,
     inputId,
     optionsArray,

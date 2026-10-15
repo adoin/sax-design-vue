@@ -29,6 +29,10 @@ export interface RadioGroupGlobalConfig {
   direction?: 'horizontal' | 'vertical'
 }
 
+export interface SelectGlobalConfig {
+  sortByOptionOrder?: boolean
+}
+
 export interface ButtonGlobalConfig {
   debounce?: number | false
   throttle?: number | false
@@ -173,6 +177,8 @@ export const configProviderProps = buildProps({
     type: String,
     values: componentSizes,
   },
+  /** Defaults for multiple Select value ordering. */
+  select: { type: definePropType<SelectGlobalConfig>(Object) },
   /** Component-level defaults for Anchor. */
   anchor: {
     type: definePropType<AnchorGlobalConfig>(Object),

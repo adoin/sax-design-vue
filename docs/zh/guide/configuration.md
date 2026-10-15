@@ -157,6 +157,8 @@ Calendar、Navbar 等组件使用自己的尺寸语义（例如 `medium`、`comp
 
 对全应用重复出现的交互策略，可分别通过 `button`、`dialog`、`drawer`、`notification`、`pagination`、`radioGroup` 和 `popper` 设置默认值。它们只接收适合复用的入参；内容、受控值、回调和业务数据仍保留在组件实例上。`radioGroup` 支持 `animated`（默认开启）和 `direction`，组件显式传入的参数优先。
 
+Select 支持通过安装选项或 `SConfigProvider` 的 `select: { sortByOptionOrder: true }` 配置多选值按选项顺序排序。组件可用 `:sort-by-option-order="false"` 显式覆盖全局设置，内置默认值为 false。
+
 <command>
 
 ```vue
