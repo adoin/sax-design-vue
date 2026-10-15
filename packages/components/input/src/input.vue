@@ -562,6 +562,7 @@ const inputKls = computed(() => [
       !!props.state || !!validationError.value,
   },
   { [ns.m('has-label')]: props.label || props.labelFloat },
+  ns.is('label-float', props.labelFloat),
   { [ns.m('has-color')]: props.color },
 
   { [ns.m('has-icon')]: slots.icon },

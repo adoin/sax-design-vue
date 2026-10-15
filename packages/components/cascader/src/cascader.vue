@@ -26,6 +26,7 @@
         ns.is('open', mergedOpen),
         ns.is('multiple', multiple),
         ns.is('block', block),
+        ns.is('label-float', labelFloat),
         { [ns.m('has-label')]: label || labelFloat },
         ns.is(resolvedShape),
       ]"
@@ -122,11 +123,11 @@
       </div>
 
       <span
-        v-if="label"
+        v-if="resolvedLabel"
         :class="[ns.e('label'), ns.is('placeholder', labelIsPlaceholder)]"
         aria-hidden="true"
       >
-        {{ label }}
+        {{ resolvedLabel }}
       </span>
 
       <button
@@ -476,8 +477,11 @@ const selectedCount = computed(() =>
 const resolvedPlaceholder = computed(
   () => props.placeholder || t('vs.cascader.placeholder'),
 )
+const resolvedLabel = computed(
+  () => props.label || (props.labelFloat ? resolvedPlaceholder.value : ''),
+)
 const hasFloatingLabel = computed(() =>
-  Boolean(props.label && props.labelFloat),
+  Boolean(resolvedLabel.value && props.labelFloat),
 )
 const labelIsPlaceholder = computed(
   () =>

@@ -12,6 +12,7 @@ function fixture(count = 1_000_000, initiallyEnabled = true) {
   const rowCount = shallowRef(count)
   const estimate = shallowRef(64)
   const dragging = shallowRef(false)
+  const onRangeChange = vi.fn()
   let virtualizer!: ReturnType<typeof useSparseVirtualizer>
   let top = 0
   const write = vi.fn((value: number) => {
@@ -45,7 +46,7 @@ function fixture(count = 1_000_000, initiallyEnabled = true) {
           scrollbarDragging: dragging,
           scrollElement: shallowRef(element),
           getItemKey: (index) => index,
-          onRangeChange: () => {},
+          onRangeChange,
         })
         return () => h('div')
       },
@@ -60,10 +61,29 @@ function fixture(count = 1_000_000, initiallyEnabled = true) {
     enabled,
     rowCount,
     estimate,
+    onRangeChange,
   }
 }
 
 describe('compressed sparse row coordinates', () => {
+  it('does not notify unchanged ranges when measurements are reset', async () => {
+    const { wrapper, virtualizer, onRangeChange } = fixture()
+    try {
+      await nextTick()
+      onRangeChange.mockClear()
+      for (let index = 0; index < 3; index++) {
+        virtualizer.resetMeasurements()
+        await nextTick()
+      }
+      expect(onRangeChange).not.toHaveBeenCalled()
+      virtualizer.scrollToIndex(500, 'start')
+      await nextTick()
+      expect(onRangeChange).toHaveBeenCalledOnce()
+    } finally {
+      wrapper.unmount()
+    }
+  })
+
   it('allocates only for non-uniform measurements and reuses the index across layout resets', async () => {
     const allocation = vi.spyOn(globalThis, 'Float64Array')
     const { wrapper, virtualizer: s } = fixture()

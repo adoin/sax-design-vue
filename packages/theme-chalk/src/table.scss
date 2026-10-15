@@ -2174,24 +2174,6 @@ html.dark .#{$namespace}-table-wrapper {
       grid-template-columns: minmax(0, 1fr) max-content;
       gap: 12px;
     }
-
-    > .#{$namespace}-table-shell__query-form.is-label-top
-      + .#{$namespace}-table-shell__query-fixed-buttons {
-      // Align with the first row of controls, not the reserved validation area
-      // at the bottom of Form. Expanding more fields must not move the actions.
-      align-self: start;
-      padding-block-start: calc(var(--s-table-query-label-line-height, 20px) + 8px);
-    }
-
-    > .#{$namespace}-table-shell__query-form.is-label-top.s-form--small
-      + .#{$namespace}-table-shell__query-fixed-buttons {
-      --s-table-query-label-line-height: 18px;
-    }
-
-    > .#{$namespace}-table-shell__query-form.is-label-top.s-form--large
-      + .#{$namespace}-table-shell__query-fixed-buttons {
-      --s-table-query-label-line-height: 22px;
-    }
   }
 
   @include e(query-form) {
@@ -2202,6 +2184,7 @@ html.dark .#{$namespace}-table-wrapper {
     }
 
     &:not(.is-inline) > .#{$namespace}-form__grid {
+      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
 
       > .#{$namespace}-form-item {
@@ -2218,15 +2201,10 @@ html.dark .#{$namespace}-table-wrapper {
     align-self: start;
     justify-content: flex-end;
     gap: 8px;
+    margin-block-start: var(--s-table-query-actions-offset, 0px);
   }
 
   @container table-query (max-width: 560px) {
-    .#{$namespace}-table-shell__query-layout
-      > .#{$namespace}-table-shell__query-form.is-label-top
-      + .#{$namespace}-table-shell__query-fixed-buttons {
-      padding-block-start: 0;
-    }
-
     @include e(query-layout) {
       @include when(with-fixed-buttons) {
         grid-template-columns: minmax(0, 1fr);
@@ -2236,6 +2214,7 @@ html.dark .#{$namespace}-table-wrapper {
     @include e(query-fixed-buttons) {
       min-width: 0;
       justify-self: end;
+      margin-block-start: 0;
     }
   }
 

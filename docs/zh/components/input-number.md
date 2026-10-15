@@ -3,86 +3,103 @@ description: "带范围、步长、小数精度与加减按钮的数字输入框
 PROPS:
   - name: v-model
     type: Number
+    values: "number | null"
     default: null
     description: "绑定数字；清空时可以返回 null。"
     usage: '#default'
   - name: min
     type: Number
+    values: "Number"
     default: -Infinity
     description: "允许的最小值。"
     usage: '#range-and-step'
   - name: max
     type: Number
+    values: "Number"
     default: Infinity
     description: "允许的最大值。"
     usage: '#range-and-step'
   - name: step
     type: Number
+    values: "Number"
     default: 1
     description: "每次增减的步长。"
     usage: '#range-and-step'
   - name: step-strictly
     type: Boolean
+    values: "true | false"
     default: false
     description: "提交值限制为步长的整数倍。"
     usage: '#range-and-step'
   - name: precision
     type: Number
+    values: "非负整数"
     default: null
     description: "小数位数，不应小于步长的小数位数。"
     usage: '#range-and-step'
   - name: value-on-clear
     type: String | Number | null
+    values: "min | max | number | null"
     default: null
     description: "清空后使用的值：数字、min、max 或 null。"
     usage: '#range-and-step'
   - name: disabled
     type: Boolean
+    values: "true | false"
     default: false
     description: "禁用编辑和步进。"
     usage: '#states'
   - name: readonly
     type: Boolean
+    values: "true | false"
     default: false
     description: "只读展示，不允许编辑或步进。"
     usage: '#states'
   - name: controls
     type: Boolean
+    values: "true | false"
     default: true
     description: "显示减少和增加按钮。"
     usage: '#states'
   - name: color
     type: String
+    values: "主题色 | CSS 颜色"
     default: light
     description: "数字与按钮的文字色，支持主题色或 CSS 颜色。"
     usage: '#colors'
   - name: background
     type: String
+    values: "主题色 | CSS 颜色"
     default: primary
     description: "控件底色，悬停与聚焦时保持该配色。"
     usage: '#colors'
   - name: shape
     type: String
+    values: "rounded | square"
     default: rounded
     description: "rounded 或 square 几何形状，可继承全局配置。"
     usage: '#shape'
   - name: id
     type: String
+    values: "String"
     default: null
     description: "原生输入框 id。"
     usage: '#default'
   - name: name
     type: String
+    values: "String"
     default: null
     description: "原生输入框 name。"
     usage: '#default'
   - name: label
     type: String
+    values: "String"
     default: null
     description: "输入框标签。"
     usage: '#default'
   - name: placeholder
     type: String
+    values: "String"
     default: null
     description: "值为空时的占位文字。"
     usage: '#default'

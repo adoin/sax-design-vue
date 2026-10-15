@@ -1193,6 +1193,7 @@ const selectKls = computed(() => [
   ns.is('clearable', props.clearable),
   ns.is('multiple', props.multiple),
   ns.is('loading', loadingVisible.value),
+  ns.is('label-float', props.labelFloat),
   ns.is(resolvedShape.value),
   ns.is(popperRef.value?.popperPlacement ?? 'bottom'),
   { [ns.m('has-label')]: props.label || props.labelFloat },

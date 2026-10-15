@@ -390,6 +390,10 @@ $clearableSafeArea: 64px;
   }
   @include m(has-label) {
     margin-top: 24px !important;
+
+    &.is-label-float {
+      margin-top: 0 !important;
+    }
   }
 
   @include e(option) {

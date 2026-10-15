@@ -562,6 +562,11 @@
   }
 
   &.type-frosted:not(.is-horizontal) > .#{$namespace}-card {
+    > .#{$namespace}-card__img {
+      // Frosted media fills the whole surface behind its overlay text.
+      border-radius: inherit;
+    }
+
     > .#{$namespace}-card__text {
       padding-bottom: 58px;
     }
@@ -786,7 +791,10 @@
       backdrop-filter: saturate(180%) blur(14px);
 
       @supports (backdrop-filter: url('#s-card-liquid-glass-support')) {
-        backdrop-filter: var(--sax-card-liquid-filter, saturate(180%) blur(14px));
+        backdrop-filter: var(
+          --sax-card-liquid-filter,
+          saturate(180%) blur(14px)
+        );
       }
 
       &::before {
@@ -1079,6 +1087,19 @@
     border-radius: var(--sax-radius-xl);
     transition: getCssVar(transition-ease);
 
+    // A composed SImage must not inherit collection spacing or clip twice.
+    // Card owns the media corners that meet its outer surface.
+    > .#{$namespace}-images__item {
+      margin: 0;
+      min-width: 0;
+      border-radius: 0;
+
+      > .#{$namespace}-images__wrap {
+        border-radius: 0;
+        background: transparent;
+      }
+    }
+
     img {
       width: 100%;
       border-radius: inherit;
@@ -1134,7 +1155,6 @@
       height: 10px;
     }
   }
-
 }
 
 .#{$namespace}-card-content > .#{$namespace}-card.is-texture-liquid-glass,
@@ -1234,7 +1254,7 @@
   > .#{$namespace}-card {
     display: grid;
     grid-template-columns: minmax(140px, 38%) minmax(0, 1fr);
-    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
     max-width: 680px;
     min-height: 240px;
 
@@ -1285,7 +1305,7 @@
       position: relative;
       z-index: 1;
       display: flex;
-      justify-content: flex-start;
+      justify-content: flex-end;
       padding: 0 22px 18px;
     }
 
@@ -1598,6 +1618,11 @@
       }
     }
   }
+  .#{$namespace}-card-content.is-horizontal.type-frosted
+    > .#{$namespace}-card
+    > .#{$namespace}-card__img {
+    border-radius: inherit;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1647,11 +1672,15 @@
   }
 }
 
-.#{$namespace}-card:is(.is-loading, [aria-busy="true"]), .#{$namespace}-card .is-loading, .#{$namespace}-card [aria-busy="true"] {
+.#{$namespace}-card:is(.is-loading, [aria-busy='true']),
+.#{$namespace}-card .is-loading,
+.#{$namespace}-card [aria-busy='true'] {
   @include loading-cursor;
 }
 
 .#{$namespace}-card.is-loading {
   pointer-events: auto;
-  > * { pointer-events: none; }
+  > * {
+    pointer-events: none;
+  }
 }

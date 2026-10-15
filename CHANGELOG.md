@@ -1,5 +1,13 @@
 ## Changelog
 
+### 2.1.5 — 2026-10-15
+
+- Keep floating-label Select and Cascader controls aligned with Input and their composed date/time controls without fixed-label top spacing.
+- Align Table query actions with the actual control row across container-responsive label layouts, and restore automatic query-field columns.
+- Preserve Card media edges without Image collection margins, clip frosted media to all outside corners, and place horizontal preset actions at the content footer.
+- Avoid duplicate Virtual List range notifications when measurement resets leave the visible range unchanged.
+- Include the Input Number interaction fixes and bilingual documentation from the unreleased 2.1.4 changes.
+
 ### 2.1.4 — 2026-10-14
 
 - Preserve Input Number foreground and background colors during hover and focus, using borderless inset feedback.

@@ -56,6 +56,10 @@
 }
 .s-cascader--has-label {
   margin-top: 24px;
+
+  &.is-label-float {
+    margin-top: 0;
+  }
 }
 .s-cascader.is-square {
   border-radius: 0;

@@ -385,13 +385,10 @@ export const useSparseVirtualizer = (options: UseSparseVirtualizerOptions) => {
   )
 
   watch(
-    range,
-    (nextRange) => {
-      if (nextRange.end > nextRange.start)
-        options.onRangeChange({
-          start: nextRange.start,
-          end: nextRange.end - 1,
-        })
+    () => [range.value.start, range.value.end] as const,
+    ([start, end], previous) => {
+      if (previous && start === previous[0] && end === previous[1]) return
+      if (end > start) options.onRangeChange({ start, end: end - 1 })
     },
     { immediate: true },
   )

@@ -29,6 +29,8 @@ export const buildModules = async () => {
       VueMacros({
         setupComponent: false,
         setupSFC: false,
+        // Vue resolves this generic props interface; betterDefine cannot.
+        betterDefine: { exclude: /table-column\.vue$/ },
         plugins: {
           vue: vue({
             isProduction: false,

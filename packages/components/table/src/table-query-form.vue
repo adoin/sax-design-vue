@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, useSlots, watch } from 'vue'
+import {
+  computed,
+  onActivated,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  shallowRef,
+  useSlots,
+  watch,
+} from 'vue'
 import { pick } from 'lodash-unified'
 import { SForm, formProps } from '@vuesax-alpha/components/form'
 import { SButton } from '@vuesax-alpha/components/button'
@@ -26,6 +35,65 @@ const emit = defineEmits<{ query: []; reset: [] }>()
 const slots = useSlots()
 const { t } = useLocale()
 const form = ref<FormInstance>()
+const layout = ref<HTMLDivElement>()
+const actions = ref<HTMLDivElement>()
+const actionsOffset = shallowRef(0)
+let resizeObserver: ResizeObserver | undefined
+let observedControl: HTMLElement | undefined
+let alignmentFrame: number | undefined
+let mounted = false
+
+const alignActions = () => {
+  const container = layout.value
+  const buttons = actions.value
+  const formElement = container?.querySelector<HTMLElement>(
+    '.s-table-shell__query-form',
+  )
+  if (!container || !buttons || !(formElement instanceof HTMLElement)) return
+  const candidates = formElement.querySelectorAll<HTMLElement>(
+    '.s-form-item:not(.is-nested) > .s-form-item__body > .s-form-item__content',
+  )
+  const control =
+    [...candidates].find((element) => {
+      const rect = element.getBoundingClientRect()
+      return rect.width > 0 && rect.height > 0
+    }) ??
+    formElement.querySelector<HTMLElement>(
+      '.s-input, .s-select, input, select, textarea',
+    ) ??
+    undefined
+  if (observedControl !== control) {
+    if (observedControl) resizeObserver?.unobserve(observedControl)
+    observedControl = control
+    if (control) resizeObserver?.observe(control)
+  }
+  // The fixed area occupies its own row below the form on narrow containers.
+  const columns = getComputedStyle(container)
+    .gridTemplateColumns.trim()
+    .split(/\s+/)
+  if (!control || columns.length < 2) {
+    actionsOffset.value = 0
+    return
+  }
+  const rect = control.getBoundingClientRect()
+  const offset =
+    rect.top +
+    rect.height / 2 -
+    container.getBoundingClientRect().top -
+    buttons.getBoundingClientRect().height / 2
+  actionsOffset.value = Math.max(0, Math.round(offset * 100) / 100)
+}
+const scheduleAlignment = () => {
+  if (!mounted || alignmentFrame !== undefined) return
+  if (typeof requestAnimationFrame !== 'function') {
+    alignActions()
+    return
+  }
+  alignmentFrame = requestAnimationFrame(() => {
+    alignmentFrame = undefined
+    alignActions()
+  })
+}
 const options = computed(() => pick(props.config, Object.keys(formProps)))
 const expanded = shallowRef(false)
 const containsHiddenItem = (items: readonly FormItemConfig[] = []): boolean =>
@@ -70,6 +138,39 @@ const actionsState = computed<TableQueryActionsState>(() => ({
 watch(hasMore, (value) => {
   if (!value) expanded.value = false
 })
+watch(
+  () => [props.config, props.model, props.size, expanded.value],
+  scheduleAlignment,
+  { deep: true, flush: 'post' },
+)
+onMounted(() => {
+  mounted = true
+  if (typeof ResizeObserver !== 'undefined') {
+    resizeObserver = new ResizeObserver(scheduleAlignment)
+    if (layout.value) resizeObserver.observe(layout.value)
+    const formElement = layout.value?.querySelector(
+      '.s-table-shell__query-form',
+    )
+    if (formElement) resizeObserver.observe(formElement)
+    if (actions.value) resizeObserver.observe(actions.value)
+  }
+  alignActions()
+})
+watch(
+  actions,
+  (element, previous) => {
+    if (previous) resizeObserver?.unobserve(previous)
+    if (element) resizeObserver?.observe(element)
+    scheduleAlignment()
+  },
+  { flush: 'post' },
+)
+onActivated(scheduleAlignment)
+onBeforeUnmount(() => {
+  mounted = false
+  resizeObserver?.disconnect()
+  if (alignmentFrame !== undefined) cancelAnimationFrame(alignmentFrame)
+})
 const onSubmit = (event: Event) => {
   event.preventDefault()
   event.stopImmediatePropagation()
@@ -81,6 +182,8 @@ defineExpose({ getForm: () => form.value })
 <template>
   <div class="s-table-shell__query" @submit.capture="onSubmit">
     <div
+      ref="layout"
+      :style="{ '--s-table-query-actions-offset': `${actionsOffset}px` }"
       :class="[
         's-table-shell__query-layout',
         { 'is-with-fixed-buttons': hasFixedRegion },
@@ -108,6 +211,7 @@ defineExpose({ getForm: () => form.value })
       </SForm>
       <div
         v-if="hasFixedRegion"
+        ref="actions"
         class="s-table-shell__query-actions s-table-shell__query-fixed-buttons"
       >
         <slot name="actions" v-bind="actionsState">
