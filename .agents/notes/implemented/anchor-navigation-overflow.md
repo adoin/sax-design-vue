@@ -16,3 +16,6 @@ A real documentation viewport measured scrollHeight=920 and clientHeight=919 whi
 Anchor scrolling content retains max-content height and its groups cannot flex-shrink. The scrollbar root uses natural height instead of inheriting 100% from the Anchor surface.
 
 Verified in the original user tab: one-pixel range and zero tracks. A shorter viewport produced a 211px scroll range, moved the first group by the same amount, exposed the final API entries and left the page scroll unchanged. Anchor and Scrollbar suites: 28 tests passed; theme build and web types passed.
+
+
+The vertical scrollbar grid permanently reserves its 10px outside gutter even when content fits and no bar is rendered. Content has 8px of end padding inside the painted surface. Browser checks with the example group both expanded and collapsed confirm all collapse buttons remain 8px inside the surface edge; removing the track must never widen content underneath the gutter.

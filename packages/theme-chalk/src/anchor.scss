@@ -408,3 +408,13 @@
     box-shadow: 0 12px 30px getColor(primary, 0.08);
   }
 }
+
+// Reserve the outside gutter even when a fitting directory has no rendered bar.
+// Otherwise its viewport grows underneath the transparent gutter on collapse.
+.s-anchor--vertical > .s-anchor__scroll.is-outside {
+  grid-template-columns: minmax(0, 1fr) 10px;
+}
+.s-anchor--vertical .s-anchor__content {
+  box-sizing: border-box;
+  padding-inline-end: 8px;
+}
