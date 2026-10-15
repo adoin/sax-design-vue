@@ -142,6 +142,14 @@ SLOTS:
     description: Customizes every label with pane, active, and value.
   - name: s-tab#label
     description: Customizes one label and can compose ContextMenu.
+  - name: label-extra
+    type: Slot
+    scope: "{ pane: TabPaneContext; active: boolean; value: TabValue }"
+    description: Append content after the default label and badge, before the pane close action. Scope supplies pane, active and value. Content is arbitrary; interaction events are stopped at the slot boundary without preventing native defaults.
+  - name: s-tab#label-extra
+    type: Slot
+    scope: "{ pane: TabPaneContext; active: boolean; value: TabValue }"
+    description: Append content after the default label and badge, before the pane close action. Scope supplies pane, active and value. Content is arbitrary; interaction events are stopped at the slot boundary without preventing native defaults.
   - name: extra
     description: Trailing tab-bar actions.
   - name: add-icon
@@ -329,6 +337,33 @@ Use the `s-tab` label slot with `SContextMenu` to add contextual actions to a ta
 <template #style>
 
 @[code{109-126}](../.vuepress/components/tabs/context-menu.vue)
+
+</template>
+
+</card>
+
+
+<card>
+
+<h2 id="label-extra">Label suffix</h2>
+
+Use label-extra to retain the default title, icon and badge while rendering arbitrary suffix content. Tabs adds no built-in close or clear action here; the close icon below belongs to the example Tag. Clearing the count on an inactive tab does not select or close it. The shared STabs slot takes precedence over a local STab slot.
+
+<template #example>
+
+<tabs-label-extra />
+
+</template>
+
+<template #template>
+
+@[code{7-30}](../.vuepress/components/tabs/label-extra.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../.vuepress/components/tabs/label-extra.vue)
 
 </template>
 

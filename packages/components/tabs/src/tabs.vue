@@ -181,6 +181,39 @@ const updateLine = () => {
       }
 }
 
+const labelExtraListeners = [
+  'click',
+  'dblclick',
+  'contextmenu',
+  'pointerdown',
+  'pointerup',
+  'pointermove',
+  'pointerover',
+  'pointerout',
+  'mousedown',
+  'mouseup',
+  'mousemove',
+  'mouseover',
+  'mouseout',
+  'keydown',
+  'keyup',
+  'input',
+  'change',
+  'focusin',
+  'focusout',
+  'touchstart',
+  'touchmove',
+  'touchend',
+  'dragstart',
+  'dragover',
+  'drop',
+  'wheel',
+].reduce<Record<string, (event: Event) => void>>((listeners, name) => {
+  listeners[name] = (event) => event.stopPropagation()
+  return listeners
+}, {})
+
+const labelExtraWidths = new Map<number, number>()
 const measureTabs = async () => {
   await nextTick()
   if (
@@ -199,6 +232,20 @@ const measureTabs = async () => {
     return
   }
 
+  // Measure the live slot once; never mount a second copy of interactive slot content.
+  navListRef.value
+    ?.querySelectorAll?.<HTMLElement>('[data-tab-uid]')
+    ?.forEach((element) => {
+      const uid = Number(element.dataset.tabUid)
+      labelExtraWidths.set(
+        uid,
+        element.querySelector<HTMLElement>(`.${ns.e('label-extra')}`)
+          ?.offsetWidth ?? 0,
+      )
+    })
+  for (const uid of labelExtraWidths.keys())
+    if (!panes.value.some((pane) => pane.uid === uid))
+      labelExtraWidths.delete(uid)
   const itemElements = Array.from(
     measureRef.value.querySelectorAll<HTMLElement>('[data-tabs-measure-item]'),
   )
@@ -222,7 +269,14 @@ const measureTabs = async () => {
 
   overflowLayout.value = calculateTabsOverflowLayout({
     uids: panes.value.map((pane) => pane.uid),
-    itemSizes: itemElements.map((element) => element.offsetWidth),
+    itemSizes: itemElements.map(
+      (element, index) =>
+        element.offsetWidth +
+        Math.max(
+          0,
+          (labelExtraWidths.get(panes.value[index]?.uid ?? -1) ?? 0) - 8,
+        ),
+    ),
     containerSize: navWrapRef.value.clientWidth,
     reservedSize,
     moreSize: moreElement?.offsetWidth ?? 40,
@@ -510,6 +564,10 @@ onBeforeUnmount(() => {
                 ns.is('active', pane.uid === activeUid),
                 ns.is('disabled', pane.disabled),
                 ns.is('closable', isEditable && pane.closable),
+                ns.is(
+                  'has-label-extra',
+                  !!(slots['label-extra'] || pane.renderLabelExtra),
+                ),
               ]"
               :data-tab-uid="pane.uid"
               @contextmenu="handleContextMenu(pane, $event)"
@@ -549,6 +607,26 @@ onBeforeUnmount(() => {
                   </template>
                 </slot>
               </button>
+              <span
+                v-if="slots['label-extra'] || pane.renderLabelExtra"
+                :class="ns.e('label-extra')"
+                v-on="labelExtraListeners"
+              >
+                <slot
+                  name="label-extra"
+                  :pane="pane"
+                  :active="pane.uid === activeUid"
+                  :value="paneValue(pane, panes.indexOf(pane))"
+                >
+                  <component
+                    :is="pane.renderLabelExtra"
+                    v-if="pane.renderLabelExtra"
+                    :pane="pane"
+                    :active="pane.uid === activeUid"
+                    :value="paneValue(pane, panes.indexOf(pane))"
+                  />
+                </slot>
+              </span>
               <button
                 v-if="isEditable && pane.closable"
                 :class="ns.e('close')"

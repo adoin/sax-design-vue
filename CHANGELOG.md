@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Add Tabs/STab label-extra slots for arbitrary content after the default label, with isolated interaction events and no built-in clear/close action.
+
 - Add Select sortByOptionOrder with local and global defaults, keeping selection order by default and normalizing multi-select values to option appearance order when enabled.
 
 - Apply consumer class/style to component layout surfaces rather than nested native controls in Input, Textarea, Checkbox, Radio, Switch, Slider, Verification Code and Image. Preserve native attribute forwarding and dynamic updates.

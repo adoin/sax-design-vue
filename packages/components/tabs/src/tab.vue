@@ -6,12 +6,13 @@ import {
   onBeforeUnmount,
   onMounted,
   shallowRef,
-  useSlots,
   watch,
 } from 'vue'
 import { useNamespace } from '@vuesax-alpha/hooks'
 import { debugWarn } from '@vuesax-alpha/utils'
 import { tabsContextKey } from './constants'
+import type { TabLabelExtraSlotParams } from './constants'
+import type { VNode } from 'vue'
 import { tabProps } from './tab'
 
 defineOptions({
@@ -20,7 +21,11 @@ defineOptions({
 })
 
 const props = defineProps(tabProps)
-const slots = useSlots()
+const slots = defineSlots<{
+  default?(): VNode[]
+  label?(): VNode[]
+  'label-extra'?(scope: TabLabelExtraSlotParams): VNode[]
+}>()
 const ns = useNamespace('tabs')
 const tabs = inject(tabsContextKey)
 const instance = getCurrentInstance()
@@ -61,6 +66,7 @@ const paneData = () => ({
   disabled: props.disabled,
   closable: props.closable,
   renderLabel: slots.label,
+  renderLabelExtra: slots['label-extra'],
 })
 
 onMounted(() => tabs.registerPane(paneData()))

@@ -533,3 +533,124 @@ describe('Tabs overflow calculation', () => {
     expect(visibleLabels()).toContain('automation')
   })
 })
+
+describe('Tabs label-extra slots', () => {
+  it('retains the default label and badge and keeps a suffix action outside the tab button', async () => {
+    const count = ref(2)
+    const wrapper = mountTabs(
+      { modelValue: 'first', animated: false },
+      {
+        default: () => [
+          h(Tab, { name: 'first', label: 'First' }, () => 'First content'),
+          h(
+            Tab,
+            { name: 'second', label: 'Campaigns', badge: 7 },
+            {
+              default: () => 'Campaign content',
+              'label-extra': ({
+                active,
+                value,
+              }: {
+                active: boolean
+                value: string | number
+              }) =>
+                h(
+                  'button',
+                  {
+                    class: 'clear-selection',
+                    type: 'button',
+                    onClick: () => {
+                      count.value = 0
+                    },
+                  },
+                  `${value}:${active}:${count.value}`,
+                ),
+            },
+          ),
+        ],
+      },
+    )
+    await nextTick()
+    const row = wrapper.findAll('.s-tabs__item')[1]
+    expect(row.get('.s-tabs__label').text()).toBe('Campaigns')
+    expect(row.get('.s-tabs__badge').text()).toBe('7')
+    expect(row.get('.clear-selection').text()).toBe('second:false:2')
+    expect(row.get('[role="tab"]').find('.clear-selection').exists()).toBe(
+      false,
+    )
+    expect(
+      wrapper.get('.s-tabs__measure').find('.clear-selection').exists(),
+    ).toBe(false)
+    await row.get('.clear-selection').trigger('click')
+    expect(row.get('.clear-selection').text()).toBe('second:false:0')
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('tab-click')).toBeUndefined()
+    wrapper.unmount()
+  })
+  it('provides a shared suffix slot with pane, active and value', async () => {
+    const wrapper = mountTabs(
+      { modelValue: 'one', animated: false },
+      {
+        default: () => h(Tab, { name: 'one', label: 'One' }, () => 'Content'),
+        'label-extra': ({ pane, active, value }) =>
+          h(
+            'span',
+            { class: 'shared-extra' },
+            `${pane.label}:${active}:${value}`,
+          ),
+      },
+    )
+    await nextTick()
+    expect(wrapper.get('.shared-extra').text()).toBe('One:true:one')
+    wrapper.unmount()
+  })
+  it('isolates interactive suffix events while preserving child behavior and native defaults', async () => {
+    const ancestor = vi.fn()
+    const childClick = vi.fn()
+    const wrapper = mount(
+      () =>
+        h(
+          'div',
+          {
+            onClick: ancestor,
+            onKeydown: ancestor,
+            onInput: ancestor,
+            onChange: ancestor,
+            onContextmenu: ancestor,
+            onPointerdown: ancestor,
+          },
+          [
+            h(Tabs, { modelValue: 'one', animated: false }, () =>
+              h(
+                Tab,
+                { name: 'one', label: 'One' },
+                {
+                  default: () => 'Content',
+                  'label-extra': () =>
+                    h('input', {
+                      class: 'arbitrary-control',
+                      onClick: childClick,
+                    }),
+                },
+              ),
+            ),
+          ],
+        ),
+      { global: { stubs: { SPopper: PopperStub } } },
+    )
+    await nextTick()
+    const input = wrapper.get('.arbitrary-control')
+    await input.trigger('click')
+    await input.trigger('keydown', { key: 'ArrowRight' })
+    await input.trigger('input')
+    await input.trigger('change')
+    await input.trigger('contextmenu')
+    await input.trigger('pointerdown')
+    expect(childClick).toHaveBeenCalledTimes(1)
+    expect(ancestor).not.toHaveBeenCalled()
+    const event = new Event('click', { bubbles: true, cancelable: true })
+    input.element.dispatchEvent(event)
+    expect(event.defaultPrevented).toBe(false)
+    wrapper.unmount()
+  })
+})

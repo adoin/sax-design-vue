@@ -9,6 +9,12 @@ export type TabsSize = 'small' | 'default' | 'large'
 export const tabsRenderModes = ['all', 'lazy', 'active-only'] as const
 export type TabsRenderMode = (typeof tabsRenderModes)[number]
 
+export interface TabLabelExtraSlotParams {
+  pane: TabPaneContext
+  active: boolean
+  value: TabValue
+}
+
 export interface TabPaneContext {
   uid: number
   name?: TabValue
@@ -18,6 +24,7 @@ export interface TabPaneContext {
   disabled?: boolean
   closable?: boolean
   renderLabel?: () => VNode[]
+  renderLabelExtra?: (scope: TabLabelExtraSlotParams) => VNode[]
 }
 
 export interface TabsContext {

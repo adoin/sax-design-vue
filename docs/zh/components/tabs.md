@@ -142,6 +142,14 @@ SLOTS:
     description: 自定义全部标签标题，参数为 pane、active、value。
   - name: s-tab#label
     description: 自定义单个标签标题，可组合 ContextMenu。
+  - name: label-extra
+    type: Slot
+    scope: "{ pane: TabPaneContext; active: boolean; value: TabValue }"
+    description: 在默认标题和徽标后追加内容，位于标签页关闭按钮之前。作用域提供 pane、active、value，允许渲染任意内容；交互事件在插槽边界停止冒泡，不阻止原生默认行为。
+  - name: s-tab#label-extra
+    type: Slot
+    scope: "{ pane: TabPaneContext; active: boolean; value: TabValue }"
+    description: 在默认标题和徽标后追加内容，位于标签页关闭按钮之前。作用域提供 pane、active、value，允许渲染任意内容；交互事件在插槽边界停止冒泡，不阻止原生默认行为。
   - name: extra
     description: 标签栏尾部操作区。
   - name: add-icon
@@ -329,6 +337,33 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 <template #style>
 
 @[code{109-126}](../../.vuepress/components/tabs/context-menu.vue)
+
+</template>
+
+</card>
+
+
+<card>
+
+<h2 id="label-extra">标题后缀</h2>
+
+使用 label-extra 保留默认标题、图标和徽标，在后面渲染任意内容。Tabs 不给这个插槽自带关闭或清除动作；下面示例中的叉来自调用者放入的 Tag。点击未激活标签里的叉只清空数量，不切换标签，也不关闭标签页。STabs 的同名插槽可统一提供后缀，并优先于 STab 的局部插槽。
+
+<template #example>
+
+<tabs-zh-label-extra />
+
+</template>
+
+<template #template>
+
+@[code{7-30}](../../.vuepress/components/tabs-zh/label-extra.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-6}](../../.vuepress/components/tabs-zh/label-extra.vue)
 
 </template>
 
