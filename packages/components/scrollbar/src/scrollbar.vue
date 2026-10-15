@@ -274,8 +274,12 @@ const update = () => {
     (offsetWidth - originalWidth) /
     (width / (offsetWidth - width))
 
-  sizeHeight.value = height + GAP < offsetHeight ? `${height}px` : ''
-  sizeWidth.value = width + GAP < offsetWidth ? `${width}px` : ''
+  // CSS pixels are rounded independently for scroll/client dimensions. A one-pixel
+  // discrepancy is not a useful scrolling range and must not create a full-length thumb.
+  const overflowY = wrapRef.value.scrollHeight - (wrapRef.value.clientHeight || wrapRef.value.offsetHeight) > 1
+  const overflowX = wrapRef.value.scrollWidth - (wrapRef.value.clientWidth || wrapRef.value.offsetWidth) > 1
+  sizeHeight.value = overflowY && height + GAP < offsetHeight ? `${height}px` : ''
+  sizeWidth.value = overflowX && width + GAP < offsetWidth ? `${width}px` : ''
   barRef.value?.handleScroll(wrapRef.value)
   updateFade()
 }

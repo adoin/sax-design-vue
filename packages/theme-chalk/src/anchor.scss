@@ -386,8 +386,9 @@
   }
 }
 
-.s-anchor__scroll { width: 100%; min-height: 0; }
-.s-anchor__content { display: flex; flex-direction: column; gap: 2px; }
+.s-anchor__scroll { width: 100%; height: auto; min-height: 0; flex: none; }
+.s-anchor__content { display: flex; flex-direction: column; gap: 2px; height: max-content; }
+.s-anchor__content > .s-anchor__group { flex: none; }
 .s-anchor--horizontal > .s-anchor__scroll { display: contents; }
 
 // Keep the outside rail in the transparent gutter, beyond the navigation surface.

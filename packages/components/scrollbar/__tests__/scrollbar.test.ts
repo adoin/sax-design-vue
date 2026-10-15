@@ -51,6 +51,21 @@ describe('Scrollbar', () => {
     wrapper.unmount()
   })
 
+  it('ignores one-pixel layout rounding but restores tracks for real overflow', async () => {
+    const { wrapper, dimensions } = await createScrollbar()
+    dimensions.scrollHeight = dimensions.offsetHeight + 1
+    dimensions.scrollWidth = dimensions.offsetWidth + 1
+    wrapper.vm.update()
+    await nextTick()
+    expect(wrapper.findAll('.s-scrollbar__bar')).toHaveLength(0)
+    dimensions.scrollHeight = dimensions.offsetHeight + 40
+    dimensions.scrollWidth = dimensions.offsetWidth + 40
+    wrapper.vm.update()
+    await nextTick()
+    expect(wrapper.findAll('.s-scrollbar__bar')).toHaveLength(2)
+    wrapper.unmount()
+  })
+
   it('keeps outside track space while hidden and shows tracks on pointer entry', async () => {
     const { wrapper } = await createScrollbar(false)
     const track = wrapper.get('.is-vertical')
