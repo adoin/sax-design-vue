@@ -161,10 +161,20 @@ export function useTableRangeInteraction(
     }
     const move = (e: PointerEvent) => {
       if (e.pointerId !== pointerId) return
-      e.preventDefault()
       x = e.clientX
       y = e.clientY
-      moved ||= Math.hypot(x - startX, y - startY) >= 3
+      if (!moved && Math.hypot(x - startX, y - startY) >= 3) {
+        moved = true
+        root.style.cursor = 'cell'
+        // Capturing on the initial press retargets native click/dblclick to
+        // the table container instead of the cell that owns the editor.
+        try {
+          root.setPointerCapture?.(pointerId)
+        } catch {
+          /* Document listeners still handle synthetic or disconnected pointers. */
+        }
+      }
+      if (moved) e.preventDefault()
     }
     const preventScroll = (e: Event) => e.preventDefault()
     const up = (e: PointerEvent) => {
@@ -192,12 +202,10 @@ export function useTableRangeInteraction(
     const oldUserSelect = root.style.userSelect
     const oldHtmlUserSelect = html.style.userSelect
     const oldCursor = root.style.cursor
-    event.preventDefault()
     dragging.value = true
     desiredFocus = undefined
     root.style.userSelect = 'none'
     html.style.userSelect = 'none'
-    root.style.cursor = 'cell'
     const unlockScroll = lockTableRangeOutsideScroll(root)
     doc.addEventListener('pointermove', move, { passive: false })
     doc.addEventListener('pointerup', up)
@@ -229,11 +237,6 @@ export function useTableRangeInteraction(
       root.style.userSelect = oldUserSelect
       html.style.userSelect = oldHtmlUserSelect
       root.style.cursor = oldCursor
-    }
-    try {
-      root.setPointerCapture?.(pointerId)
-    } catch {
-      /* Document listeners still handle a synthetic pointer or a disconnected trigger. */
     }
     frame = win.requestAnimationFrame(tick)
   }

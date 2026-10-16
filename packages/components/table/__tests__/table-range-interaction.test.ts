@@ -237,6 +237,46 @@ function setup(
 }
 
 describe('table range gestures', () => {
+  it('keeps clicks native and captures the pointer only after the drag threshold', async () => {
+    const t = setup()
+    await settle()
+    const root = t.root.value!
+    const capture = vi.fn()
+    root.setPointerCapture = capture
+    root.style.cursor = 'text'
+    expect(t.pointer('pointerdown').defaultPrevented).toBe(false)
+    expect(capture).not.toHaveBeenCalled()
+    expect(root.style.cursor).toBe('text')
+    expect(t.pointer('pointermove', document, 51, 21).defaultPrevented).toBe(
+      false,
+    )
+    expect(capture).not.toHaveBeenCalled()
+    expect(root.style.cursor).toBe('text')
+    expect(t.pointer('pointerup', document, 51, 21).defaultPrevented).toBe(
+      false,
+    )
+    await settle()
+    expect(t.focus).toHaveBeenCalledTimes(1)
+    const click = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      detail: 1,
+    })
+    t.cell().dispatchEvent(click)
+    expect(click.defaultPrevented).toBe(false)
+    t.pointer('pointerdown')
+    expect(t.pointer('pointermove', document, 60, 20).defaultPrevented).toBe(
+      true,
+    )
+    expect(capture).toHaveBeenCalledExactlyOnceWith(1)
+    expect(root.style.cursor).toBe('cell')
+    t.pointer('pointermove', document, 70, 20)
+    expect(capture).toHaveBeenCalledTimes(1)
+    t.pointer('pointerup', document, 70, 20)
+    expect(root.style.cursor).toBe('text')
+    expect(root.style.userSelect).toBe('')
+  })
+
   it('restores sparse-source endpoint hints when a replacement drag is cancelled', async () => {
     const t = setup(false, false, true)
     await settle()
@@ -314,7 +354,7 @@ describe('table range gestures', () => {
   it('coalesces pointer movement, selects the final endpoint and suppresses only the drag click', async () => {
     const t = setup()
     await settle()
-    expect(t.pointer('pointerdown').defaultPrevented).toBe(true)
+    expect(t.pointer('pointerdown').defaultPrevented).toBe(false)
     expect(document.documentElement.style.userSelect).toBe('none')
     await settle()
     expect(t.pointer('pointermove', document, 150, 65).defaultPrevented).toBe(

@@ -2,6 +2,11 @@
 
 ### Unreleased
 
+### 2.2.1 — 2026-10-16
+
+- Preserve native cell double-click editing when Table range selection is enabled by delaying pointer capture until a drag starts.
+- Show the range-selection cross cursor only during an actual drag, keeping ordinary clicks and small pointer movements unchanged.
+
 ### 2.2.0 — 2026-10-15
 
 - Use semantic visual enum names throughout the library: `solid` Button, `logo` loading, `basic` Card, `solid` Card texture, `none` effects, `static` Countdown, `filled` Tag, `neutral` verification state and `medium` control size. Keep `default` as a compatibility alias while canonical option lists and examples use explicit names.
