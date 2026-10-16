@@ -2,6 +2,9 @@
 
 ### Unreleased
 
+- Refine dark surfaces, semantic colors, Table tints and control shadows; use contrasting ink on night-mode semantic Button and Tag fills while preserving the daytime palette and custom colors.
+- Apply configured Sass night palettes through the shared color-token generator.
+
 ### 2.2.2 — 2026-10-16
 
 - Leave Table range selection when a cell editor opens, preventing the first edited cell from retaining a stale selection highlight across consecutive edits.

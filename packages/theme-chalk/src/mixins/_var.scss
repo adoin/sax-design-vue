@@ -30,9 +30,7 @@
   #{getCssVarName($name, $type)}: #{map.get($variables, $type)};
 }
 
-@mixin set-colors($type, $dark: false) {
-  $base: map.get($colors, $type, 'base');
-
+@mixin set-colors($type, $dark: false, $base: map.get($colors, $type, 'base')) {
   @include set-var-value(($type, 'h'), color.channel($base, 'hue', $space: hsl));
   @include set-var-value(
     ($type, 's'),

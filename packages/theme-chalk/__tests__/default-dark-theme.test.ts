@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { compile } from 'sass'
+import { compile, compileString } from 'sass'
 
 const styles = resolve(process.cwd(), 'packages/theme-chalk/src')
 const options = { logger: { warn: () => {}, debug: () => {} } }
@@ -27,5 +27,23 @@ describe('default theme entry', () => {
     expect(css).toContain('html.dark')
     expect(css).toContain('--sax-background:')
     expect(css).toContain('--sax-text:')
+  })
+
+  it('uses the dark semantic palette and preserves Sass palette overrides', () => {
+    const compilePalette = (override = '') =>
+      compileString(`${override}@use 'dark/css-vars';`, {
+        ...options,
+        loadPaths: [styles],
+      }).css
+    const css = compilePalette()
+    // The mint night color must reach generated channels, instead of falling
+    // back to the daytime green hidden inside the shared mixin's module.
+    expect(css).toMatch(/--sax-success-h:\s*161\./)
+    expect(css).toMatch(/--sax-danger-h:\s*351deg;/)
+    const custom = compilePalette(
+      "@use 'dark/var' with ($colors: ('success': ('base': #b58aef)));",
+    )
+    expect(custom).toMatch(/--sax-success-h:\s*265\./)
+    expect(custom).not.toMatch(/--sax-success-h:\s*161\./)
   })
 })

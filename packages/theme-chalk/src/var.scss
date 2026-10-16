@@ -71,8 +71,8 @@
     color.channel($color-primary, 'lightness', $space: hsl)
   );
   @include set-var-value('theme-primary-dark-h', getCssVar('theme-primary-h'));
-  @include set-var-value('theme-primary-dark-s', 92%);
-  @include set-var-value('theme-primary-dark-l', 70%);
+  @include set-var-value('theme-primary-dark-s', 86%);
+  @include set-var-value('theme-primary-dark-l', 69%);
 
   // vuesax var
   @include set-component-var('', $vsVar);

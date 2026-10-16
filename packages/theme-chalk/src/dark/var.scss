@@ -9,6 +9,21 @@
 $colors: () !default;
 $colors: map.deep-merge(
   (
+    'success': (
+      'base': #42cba1,
+    ),
+    'warn': (
+      'base': #eac16a,
+    ),
+    'danger': (
+      'base': #f0788a,
+    ),
+    'error': (
+      'base': #f0788a,
+    ),
+    'info': (
+      'base': #a0adc3,
+    ),
     'dark': (
       'base': #000000,
     ),
@@ -22,8 +37,8 @@ $colors: map.deep-merge(
   $colors: map.deep-merge(
     (
       $type: (
-        'base': map.get(common.$colors, $type, 'base'),
-      ),
+          'base': map.get(common.$colors, $type, 'base'),
+        ),
     ),
     $colors
   ) !global;
@@ -41,8 +56,7 @@ $colors: map.deep-merge(
   $colors: map.deep-merge(
     (
       $type: (
-        '#{$mode}-#{$number}':
-          color.mix(
+        '#{$mode}-#{$number}': color.mix(
             $mix-color,
             map.get($colors, $type, 'base'),
             math.percentage(math.div($number, 10))
@@ -68,9 +82,9 @@ $colors: map.deep-merge(
 $bg-color: () !default;
 $bg-color: map.merge(
   (
-    '': #17191e,
-    'page': #111317,
-    'overlay': #202329,
+    '': #1b202b,
+    'page': #11151d,
+    'overlay': #252d3b,
   ),
   $bg-color
 );
@@ -86,16 +100,16 @@ $bg-color: map.merge(
 }
 
 // border
-$border-color-base: #f5f7fa;
+$border-color-base: #e7edf7;
 $border-color: () !default;
 $border-color: map.merge(
   (
-    'darker': rgba($border-color-base, 0.35),
-    'dark': rgba($border-color-base, 0.3),
-    '': rgba($border-color-base, 0.25),
-    'light': rgba($border-color-base, 0.2),
-    'lighter': rgba($border-color-base, 0.15),
-    'extra-light': rgba($border-color-base, 0.1),
+    'darker': rgba($border-color-base, 0.2),
+    'dark': rgba($border-color-base, 0.16),
+    '': rgba($border-color-base, 0.13),
+    'light': rgba($border-color-base, 0.1),
+    'lighter': rgba($border-color-base, 0.08),
+    'extra-light': rgba($border-color-base, 0.06),
   ),
   $border-color
 );
@@ -115,17 +129,17 @@ $box-shadow: () !default;
 $box-shadow: map.merge(
   (
     '': (
-      0px 12px 32px 4px hsl(0deg 0% 0% / 0.36),
-      0px 8px 20px hsl(0deg 0% 0% / 0.72),
+      0px 12px 32px 4px hsl(0deg 0% 0% / 0.24),
+      0px 8px 20px hsl(0deg 0% 0% / 0.32),
     ),
     'light': (
-      0px 0px 12px hsl(0deg 0% 0% / 0.72),
+      0px 0px 12px hsl(0deg 0% 0% / 0.32),
     ),
     'lighter': (
-      0px 0px 6px hsl(0deg 0% 0% / 0.72),
+      0px 0px 6px hsl(0deg 0% 0% / 0.32),
     ),
     'dark': (
-      0px 16px 48px 16px hsl(0deg 0% 0% / 0.72),
+      0px 16px 48px 16px hsl(0deg 0% 0% / 0.32),
       0px 12px 32px #000000,
       0px 8px 16px -8px #000000,
     ),
@@ -137,7 +151,7 @@ $vsVar: () !default;
 $vsVar: map.merge(
   (
     'shadow-opacity': 0.3,
-    'background-opacity': 0.6,
+    'background-opacity': 0.72,
   ),
   $vsVar
 );
@@ -145,15 +159,15 @@ $vsVar: map.merge(
 $moreColor: () !default;
 $moreColor: map.merge(
   (
-    'gray-1': #1b1e23,
-    'gray-2': #17191e,
-    'gray-3': #131519,
-    'gray-4': #0f1114,
-    'divider': #343841,
-    'text': #f5f7fa,
-    'background': #1c1f24,
-    'dark': #0b0c0e,
-    'light': #24272e,
+    'gray-1': #252d3a,
+    'gray-2': #202733,
+    'gray-3': #191f2a,
+    'gray-4': #151a24,
+    'divider': #343e50,
+    'text': #e7edf7,
+    'background': #1b202b,
+    'dark': #0c1017,
+    'light': #2c3545,
   ),
   $moreColor
 );

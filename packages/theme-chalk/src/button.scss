@@ -69,6 +69,7 @@
 @include b(button) {
   @include flex(center, center);
   --sax-button-height: 36px;
+  --sax-button-solid-foreground: #fff;
   // margin: getCssVar(margin);
   margin-left: getCssVar(margin);
   min-height: var(--sax-button-height);
@@ -460,7 +461,7 @@
 @include b(button) {
   @include m(default) {
     background: getColor(color);
-    color: #fff;
+    color: var(--sax-button-solid-foreground);
     &.#{$namespace}-button--active {
       box-shadow: 0 10px 20px -10px getColor(color);
     }
@@ -478,7 +479,7 @@
       background: getColor(color, 0.25);
     }
     &:focus {
-      color: #fff;
+      color: var(--sax-button-solid-foreground);
       background: getColor(color);
       transition:
         getCssVar(transition-ease),
@@ -486,12 +487,12 @@
     }
     &.#{$namespace}-button--active {
       background: getColor(color);
-      color: #fff;
+      color: var(--sax-button-solid-foreground);
     }
   }
   @include m(floating) {
     background: getColor(color);
-    color: #fff;
+    color: var(--sax-button-solid-foreground);
     box-shadow: 0 8px 20px -6px getColor(color);
     &:hover {
       box-shadow: 0 12px 24px -8px getColor(color);
@@ -526,17 +527,17 @@
       }
     }
     &:focus {
-      color: #fff;
+      color: var(--sax-button-solid-foreground);
       background: getColor(color);
     }
     &.#{$namespace}-button--active {
       background: getColor(color);
-      color: #fff;
+      color: var(--sax-button-solid-foreground);
     }
   }
   @include m(gradient) {
     background: getColor('color');
-    color: #fff;
+    color: var(--sax-button-solid-foreground);
     overflow: hidden;
     &.#{$namespace}-component--primary,
     &.#{$namespace}-component--success {
@@ -582,7 +583,7 @@
   }
   @include m(relief) {
     background: getColor('color');
-    color: #fff;
+    color: var(--sax-button-solid-foreground);
     overflow: hidden;
     transform: translate(0) scale(1, 1);
     @include e(content) {
@@ -705,5 +706,15 @@
   pointer-events: auto;
   > * {
     pointer-events: none;
+  }
+}
+
+// Light semantic fills need dark ink in the night palette. Custom colors keep
+// their existing foreground and the dark semantic button retains light ink.
+html.dark .#{$namespace}-button {
+  @each $type in (primary, success, warn, danger, error, info) {
+    &.#{$namespace}-component--#{$type} {
+      --sax-button-solid-foreground: #{getColor(bg-color, page)};
+    }
   }
 }

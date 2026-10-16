@@ -33,43 +33,37 @@ html.dark {
     getCssVar('theme-dark-state-subtle-l')
   );
 
-  // Keep controls legible against dark surfaces while preserving the active
-  // theme's primary hue instead of introducing a neutral grey border.
+  // Lift controls with soft light and depth rather than luminous outlines.
   @include set-var-value(
     'input-shadow',
     (
-      0 1px 2px hsl(0deg 0% 0% / 0.36),
-      0 8px 22px #{getColor(primary, 0.14)},
-      inset 0 0 0 1px #{getColor(primary, 0.2)}
+      0 2px 5px hsl(0deg 0% 0% / 0.18),
+      inset 0 1px 3px #{getColor(white, 0.025)}
     )
   );
   @include set-var-value(
     'input-shadow-hover',
-    (
-      0 2px 6px hsl(0deg 0% 0% / 0.44),
-      0 10px 26px #{getColor(primary, 0.18)},
-      inset 0 0 0 1px #{getColor(primary, 0.32)}
-    )
+    (0 3px 9px hsl(0deg 0% 0% / 0.22), 0 5px 16px #{getColor(primary, 0.06)})
   );
   @include set-var-value(
     'input-shadow-focus',
     (
-      0 3px 9px hsl(0deg 0% 0% / 0.5),
-      0 14px 32px #{getColor(primary, 0.22)},
-      inset 0 0 0 1px #{getColor(primary, 0.5)}
+      0 3px 9px hsl(0deg 0% 0% / 0.24),
+      0 6px 20px #{getColor(primary, 0.12)},
+      inset 0 2px 6px #{getColor(primary, 0.06)}
     )
   );
   @include set-var-value(
     'popper-shadow',
     (
-      0 18px 40px -16px hsl(0deg 0% 0% / 0.62),
-      0 8px 20px -12px #{getColor(primary, 0.28)}
+      0 18px 40px -12px hsl(0deg 0% 0% / 0.45),
+      0 5px 16px -6px hsl(0deg 0% 0% / 0.24)
     )
   );
 
   // hex colors
   @each $type in (primary, success, warn, danger, error, info, dark) {
-    @include set-colors($type, true);
+    @include set-colors($type, true, map.get($colors, $type, 'base'));
   }
 
   @include set-var-value('primary-h', getCssVar('theme-primary-dark-h'));

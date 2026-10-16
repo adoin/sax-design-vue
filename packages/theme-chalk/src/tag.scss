@@ -3,8 +3,8 @@
 @use 'common/var' as *;
 
 @include b(tag) {
-  --sax-tag-surface: hsl(0deg 0% 94.118%);
-  --sax-tag-text: hsl(0deg 0% 0% / 0.7);
+  --sax-tag-surface: var(--sax-tag-neutral-surface, hsl(0deg 0% 94.118%));
+  --sax-tag-text: var(--sax-tag-neutral-text, hsl(0deg 0% 0% / 0.7));
   --sax-tag-accent: currentColor;
   --sax-tag-arrow-tip: 0.875rem;
   --sax-tag-padding-y: 3px;
@@ -359,7 +359,7 @@
     @include m($type) {
       --sax-tag-surface: #{getColor($type)};
       --sax-tag-accent: #{getColor($type)};
-      --sax-tag-text: hsl(0deg 0% 100% / 0.94);
+      --sax-tag-text: var(--sax-tag-solid-foreground, hsl(0deg 0% 100% / 0.94));
 
       @include when(transparent) {
         --sax-tag-surface: #{getColor($type, 0.15)};
@@ -371,11 +371,17 @@
   @include m(warning) {
     --sax-tag-surface: #{getColor(warn)};
     --sax-tag-accent: #{getColor(warn)};
-    --sax-tag-text: hsl(0deg 0% 100% / 0.94);
+    --sax-tag-text: var(--sax-tag-solid-foreground, hsl(0deg 0% 100% / 0.94));
 
     @include when(transparent) {
       --sax-tag-surface: #{getColor(warn, 0.15)};
       --sax-tag-text: #{getColor(warn)};
     }
   }
+}
+
+html.dark .#{$namespace}-tag {
+  --sax-tag-neutral-surface: #{getColor(gray-1)};
+  --sax-tag-neutral-text: #{getColor(text)};
+  --sax-tag-solid-foreground: #{getColor(bg-color, page)};
 }

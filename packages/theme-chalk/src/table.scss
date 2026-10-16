@@ -2105,24 +2105,24 @@ html.dark .#{$namespace}-table,
 html.dark .#{$namespace}-table-wrapper {
   --s-table-highlight-surface: color-mix(
     in srgb,
-    var(--s-table-highlight-tint) 20%,
+    var(--s-table-highlight-tint) 14%,
     #{getColor(background)}
   );
   // Use the strongest structural tint for the header, with quieter surfaces
   // for the body and zebra rows. All three follow the active HSL primary.
   --s-table-surface: color-mix(
     in srgb,
-    #{getColor(primary)} 6%,
+    #{getColor(primary)} 2%,
     #{getColor(background)}
   );
   --s-table-header-surface: color-mix(
     in srgb,
-    #{getColor(primary)} 28%,
+    #{getColor(primary)} 12%,
     #{getColor(background)}
   );
   --s-table-striped-surface: color-mix(
     in srgb,
-    #{getColor(primary)} 13%,
+    #{getColor(primary)} 5%,
     #{getColor(background)}
   );
 }
