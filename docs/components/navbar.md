@@ -306,7 +306,7 @@ SLOTS:
 
 <template #style>
 
-@[code{179-334}](../.vuepress/components/navbar/default.vue)
+@[code{179-336}](../.vuepress/components/navbar/default.vue)
 
 </template>
 

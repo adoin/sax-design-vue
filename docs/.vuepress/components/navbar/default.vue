@@ -182,15 +182,15 @@ const colors = ['#6366F1', '#A855F7', '#2DD4BF', '#F97316']
   background:
     radial-gradient(
       circle at 12% 8%,
-      hsl(280deg 72% 58% / 0.12),
+      color-mix(in srgb, var(--sax-css-primary) 10%, transparent),
       transparent 32%
     ),
     radial-gradient(
       circle at 88% 4%,
-      hsl(173deg 68% 50% / 0.12),
+      color-mix(in srgb, var(--sax-css-success) 6%, transparent),
       transparent 28%
     ),
-    hsl(220deg 35% 95%);
+    var(--sax-css-bg-color-page);
 
   &__scroll {
     position: relative;
@@ -232,12 +232,13 @@ const colors = ['#6366F1', '#A855F7', '#2DD4BF', '#F97316']
     justify-content: center;
     gap: 6px;
     border-radius: 24px;
-    background: hsl(0deg 0% 100% / 0.74);
-    box-shadow: 0 16px 40px hsl(231deg 40% 26% / 0.09);
-    color: hsl(236deg 38% 15%);
+    background: var(--sax-css-background);
+    box-shadow: 0 12px 28px -18px
+      color-mix(in srgb, var(--sax-css-black) 20%, transparent);
+    color: var(--sax-css-text);
 
     > span {
-      color: hsl(233deg 14% 52%);
+      color: var(--sax-css-text-color-secondary);
       font-size: 0.78rem;
       text-transform: uppercase;
     }
@@ -257,7 +258,7 @@ const colors = ['#6366F1', '#A855F7', '#2DD4BF', '#F97316']
     gap: 5px;
 
     span {
-      color: hsl(233deg 14% 48%);
+      color: var(--sax-css-text-color-secondary);
       font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 0.06em;
@@ -269,7 +270,7 @@ const colors = ['#6366F1', '#A855F7', '#2DD4BF', '#F97316']
     }
 
     small {
-      color: hsl(233deg 12% 48%);
+      color: var(--sax-css-text-color-secondary);
     }
   }
 
@@ -284,7 +285,7 @@ const colors = ['#6366F1', '#A855F7', '#2DD4BF', '#F97316']
   &__toggle {
     display: flex;
     gap: 8px;
-    color: hsl(233deg 17% 40%);
+    color: var(--sax-css-text-color-regular);
     font-size: 0.75rem;
     font-weight: 600;
   }
@@ -310,8 +311,9 @@ const colors = ['#6366F1', '#A855F7', '#2DD4BF', '#F97316']
     justify-content: space-between;
     padding: 0 13px;
     border-radius: 15px;
-    background: hsl(var(--sax-primary) / 0.055);
-    box-shadow: inset 0 2px 7px hsl(var(--sax-primary) / 0.055);
+    background: color-mix(in srgb, var(--sax-css-primary) 5.5%, transparent);
+    box-shadow: inset 0 2px 7px
+      color-mix(in srgb, var(--sax-css-primary) 5.5%, transparent);
   }
 }
 
