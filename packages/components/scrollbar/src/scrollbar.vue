@@ -55,6 +55,7 @@ import { useNamespace } from '@vuesax-alpha/hooks'
 import { GAP } from './util'
 import Bar from './bar.vue'
 import { scrollbarEmits, scrollbarProps } from './scrollbar'
+import { useScrollProgress } from './use-scroll-progress'
 import type { BarInstance } from './bar'
 import type { CSSProperties, StyleValue } from 'vue'
 
@@ -77,6 +78,10 @@ let updateFrame: number | undefined
 const scrollbarRef = ref<HTMLDivElement>()
 const wrapRef = ref<HTMLDivElement>()
 const resizeRef = ref<HTMLElement>()
+const syncProgress = useScrollProgress(wrapRef, props, (event, value) => {
+  if (event === 'update:x') emit('update:x', value)
+  else emit('update:y', value)
+})
 
 const sizeWidth = ref('0')
 const sizeHeight = ref('0')
@@ -217,6 +222,7 @@ const updateFade = () => {
 
 const handleScroll = () => {
   if (wrapRef.value) {
+    syncProgress()
     barRef.value?.handleScroll(wrapRef.value)
     updateFade()
 
@@ -257,6 +263,7 @@ const setScrollLeft = (value: number) => {
 
 const update = () => {
   if (!wrapRef.value) return
+  syncProgress()
   const offsetHeight = wrapRef.value.offsetHeight - GAP
   const offsetWidth = wrapRef.value.offsetWidth - GAP
 
@@ -276,9 +283,16 @@ const update = () => {
 
   // CSS pixels are rounded independently for scroll/client dimensions. A one-pixel
   // discrepancy is not a useful scrolling range and must not create a full-length thumb.
-  const overflowY = wrapRef.value.scrollHeight - (wrapRef.value.clientHeight || wrapRef.value.offsetHeight) > 1
-  const overflowX = wrapRef.value.scrollWidth - (wrapRef.value.clientWidth || wrapRef.value.offsetWidth) > 1
-  sizeHeight.value = overflowY && height + GAP < offsetHeight ? `${height}px` : ''
+  const overflowY =
+    wrapRef.value.scrollHeight -
+      (wrapRef.value.clientHeight || wrapRef.value.offsetHeight) >
+    1
+  const overflowX =
+    wrapRef.value.scrollWidth -
+      (wrapRef.value.clientWidth || wrapRef.value.offsetWidth) >
+    1
+  sizeHeight.value =
+    overflowY && height + GAP < offsetHeight ? `${height}px` : ''
   sizeWidth.value = overflowX && width + GAP < offsetWidth ? `${width}px` : ''
   barRef.value?.handleScroll(wrapRef.value)
   updateFade()
@@ -298,7 +312,10 @@ watch(
       stopResizeObserver?.()
       stopResizeListener?.()
     } else {
-      ;({ stop: stopResizeObserver } = useResizeObserver(resizeRef, update))
+      ;({ stop: stopResizeObserver } = useResizeObserver(
+        [resizeRef, wrapRef],
+        update,
+      ))
       stopResizeListener = useEventListener('resize', update)
     }
   },
@@ -308,13 +325,12 @@ watch(
 watch(
   () => [props.maxHeight, props.height],
   () => {
-    if (!props.native)
-      nextTick(() => {
-        update()
-        if (wrapRef.value) {
-          barRef.value?.handleScroll(wrapRef.value)
-        }
-      })
+    nextTick(() => {
+      update()
+      if (wrapRef.value) {
+        barRef.value?.handleScroll(wrapRef.value)
+      }
+    })
   },
 )
 

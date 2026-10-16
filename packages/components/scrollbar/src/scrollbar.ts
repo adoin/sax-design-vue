@@ -27,6 +27,10 @@ export type ScrollbarFade =
   boolean | number | ScrollbarFadeDirection | ScrollbarFadeOptions
 
 export const scrollbarProps = buildProps({
+  /** @description horizontal scroll progress from 0 to 100, measured from inline start */
+  x: { type: Number },
+  /** @description vertical scroll progress from 0 to 100 */
+  y: { type: Number },
   /** @description placement of custom scrollbar tracks relative to the viewport */
   placement: {
     type: String,
@@ -146,6 +150,10 @@ export type ScrollEmitParams = {
   scrollLeft: number
 }
 export const scrollbarEmits = {
+  'update:x': (value: number) =>
+    Number.isFinite(value) && value >= 0 && value <= 100,
+  'update:y': (value: number) =>
+    Number.isFinite(value) && value >= 0 && value <= 100,
   scroll: ({ scrollTop, scrollLeft }: ScrollEmitParams) =>
     [scrollTop, scrollLeft].every(isNumber),
 }

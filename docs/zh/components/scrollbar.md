@@ -1,6 +1,20 @@
 ---
 description: '提供可编程控制的自定义滚动区域。'
 PROPS:
+  - name: v-model:x
+    type: Number
+    values: 0–100
+    description: 横向滚动百分比，范围 0–100。0 为行内起点（RTL 为右侧）；写入数值会滚动到对应位置。
+    default: null
+    usage: "#scroll-progress"
+
+  - name: v-model:y
+    type: Number
+    values: 0–100
+    description: 纵向滚动百分比，范围 0–100；写入数值会滚动到对应位置。
+    default: null
+    usage: "#scroll-progress"
+
   - name: placement
     type: String
     values: 'inside, outside'
@@ -131,6 +145,20 @@ PROPS:
     code: null
 
 EVENTS:
+  - name: update:x
+    type: function
+    values: "(value: number) => void"
+    description: 实际滚动百分比变化时触发，包含滚动与容器或内容尺寸变化。
+    default: null
+    usage: "#scroll-progress"
+
+  - name: update:y
+    type: function
+    values: "(value: number) => void"
+    description: 实际滚动百分比变化时触发，包含滚动与容器或内容尺寸变化。
+    default: null
+    usage: "#scroll-progress"
+
   - name: scroll
     type: function
     values: '({ scrollLeft: number, scrollTop: number }) => void'
@@ -214,6 +242,38 @@ EXPOSES:
 ---
 
 # Scrollbar 滚动条
+
+<card>
+
+## 滚动进度与动画
+
+用 `v-model:x`、`v-model:y` 读写 0–100 的滚动百分比，按可滚动距离计算，而非内容总尺寸。可以只绑定一个轴；不需要反向控制时，使用 `@update:y` 等事件即可。直接将数值映射到位移、旋转、透明度或 CSS 变量，无需动画依赖。接入 [GSAP](https://gsap.com/docs/v3/GSAP/Timeline/progress()/) 时，将百分比除以 100 后传给已暂停时间线的 `progress()`；不要在每次滚动时重新创建时间线。
+
+值保留小数，越界值限制到 0–100，非有限值忽略；没有溢出的轴为 0。容器或内容尺寸变化时保留实际像素位置并重新计算百分比，临时隐藏时保留最近进度，重新可见后恢复。设置 `noresize` 后，内容变化需手动调用 `update()`。程序化平滑滚动也会持续输出实际进度；读取事件不会启动新的滚动。
+
+<template #example>
+<scrollbar-zh-progress />
+</template>
+
+<template #template>
+
+@[code{18-43}](../../.vuepress/components/scrollbar-zh/progress.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-16}](../../.vuepress/components/scrollbar-zh/progress.vue)
+
+</template>
+
+<template #style>
+
+@[code{45-112}](../../.vuepress/components/scrollbar-zh/progress.vue)
+
+</template>
+
+</card>
 
 <card>
 

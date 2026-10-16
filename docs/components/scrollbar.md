@@ -1,6 +1,20 @@
 ---
 description: 'Provide styled scroll areas with programmatic scroll control.'
 PROPS:
+  - name: v-model:x
+    type: Number
+    values: 0–100
+    description: Horizontal scroll percentage, 0–100. Zero is inline start (the right edge in RTL); writing a value scrolls to that position.
+    default: null
+    usage: "#scroll-progress"
+
+  - name: v-model:y
+    type: Number
+    values: 0–100
+    description: Vertical scroll percentage, 0–100; writing a value scrolls to that position.
+    default: null
+    usage: "#scroll-progress"
+
   - name: placement
     type: String
     values: 'inside, outside'
@@ -131,6 +145,20 @@ PROPS:
     code: null
 
 EVENTS:
+  - name: update:x
+    type: function
+    values: "(value: number) => void"
+    description: Emitted when actual scroll percentage changes, including scroll and viewport or content resizing.
+    default: null
+    usage: "#scroll-progress"
+
+  - name: update:y
+    type: function
+    values: "(value: number) => void"
+    description: Emitted when actual scroll percentage changes, including scroll and viewport or content resizing.
+    default: null
+    usage: "#scroll-progress"
+
   - name: scroll
     type: function
     values: '({ scrollLeft: number, scrollTop: number }) => void'
@@ -214,6 +242,38 @@ EXPOSES:
 ---
 
 # Scrollbar
+
+<card>
+
+## Scroll progress
+
+Read and write percentages from 0–100 with `v-model:x` and `v-model:y`, measured against the scrollable range rather than total content size. Bind either axis independently; use `@update:y` for observation without two-way control. Map the value directly to translation, rotation, opacity, or a CSS variable without an animation dependency. For [GSAP](https://gsap.com/docs/v3/GSAP/Timeline/progress()/), divide by 100 and pass it to a paused timeline’s `progress()`; create the timeline once rather than on every scroll.
+
+Values retain fractional precision, out-of-range inputs are clamped to 0–100, and non-finite inputs are ignored. An axis without overflow reports 0. Viewport or content resizing preserves the actual pixel position and recalculates the percentage; temporarily hidden viewports retain their last progress and restore it when visible. With `noresize`, call `update()` after content changes. Programmatic smooth scrolling continues to report actual progress; observing updates does not initiate another scroll.
+
+<template #example>
+<scrollbar-progress />
+</template>
+
+<template #template>
+
+@[code{18-47}](../.vuepress/components/scrollbar/progress.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-16}](../.vuepress/components/scrollbar/progress.vue)
+
+</template>
+
+<template #style>
+
+@[code{49-116}](../.vuepress/components/scrollbar/progress.vue)
+
+</template>
+
+</card>
 
 <card>
 
