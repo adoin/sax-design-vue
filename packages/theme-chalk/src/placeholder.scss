@@ -13,6 +13,8 @@
   }
   @include e(dissolve) {
     display: block;
+    // Rasterize the glyphs and scatter padding, not the entire control width.
+    width: fit-content;
     box-sizing: content-box;
     min-width: 0;
     max-width: 100%;
@@ -32,6 +34,7 @@
       overflow-wrap: break-word;
     }
     @include e(dissolve) {
+      width: 100%;
       height: 100%;
     }
   }

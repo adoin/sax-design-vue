@@ -31,6 +31,13 @@ Reference: `svg-dom-dissolve-toggle-v5.html`, supplied by the user.
 
 ## Verification
 
+### Intrinsic text raster bounds (2026-10-16)
+
+- Shared single-line PlaceholderText uses `width: fit-content` on its padded dissolve target. Keep the existing `max-width: 100%` and inner ellipsis so long text stays bounded; multiline placeholders retain full width and their height/wrapping contract. Do not rasterize blank control width for a short prompt.
+- Select's default prompt target shrank from about 228×58 to 113×58 CSS pixels in the in-app browser. One 800ms post-pointerdown trace measured Paint totals of 63ms before and 55ms after; this is a local observation, not a cross-device performance guarantee or proof that all reported stutter is resolved.
+- Paint containment and temporary compositing hints did not show consistent gains during investigation and were not retained. The filter graph, timing, scatter padding, instance ownership and idle cleanup are unchanged.
+- Verified Select open/close, reversal and selection in the in-app browser; existing placeholder, Select and Input motion suites passed (5 files, 52 tests).
+
 - Focus timing refinement: 28 placeholder/Input behavior tests passed. A new regression checks that the mask for a representative noise value is partially transparent by 80ms while final alpha remains one. Chromium sampling at 86ms measured mask alpha 0.373; the animation reached final alpha zero after completion while the sibling filter remained unchanged.
 - 40 Input and Input-motion tests passed, including eight new animation tests for endpoints, reversal, independent IDs/graphs, unmount cleanup, live reduced-motion preference changes, occupied/float behavior, SSR hydration, and KeepAlive deactivation/reactivation.
 - 21 documentation example checks and web/Vitest type checks passed. Theme compilation passed.
