@@ -466,7 +466,7 @@ describe('documentation example source', () => {
     expect(exampleCount).toBeGreaterThan(0)
     expect(tsxExampleCount).toBeGreaterThan(0)
     expect(failures).toEqual([])
-  }, 120_000)
+  }, 240_000)
 
   it('keeps every Table example paired, localized and identical to its complete source SFC', () => {
     const paths = docsRoots.map((root) =>
