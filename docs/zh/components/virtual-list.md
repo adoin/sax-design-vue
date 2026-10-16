@@ -88,24 +88,24 @@ description: '基于共享高度差索引的窗口化列表，支持真实测量
 超大生成数据的总行高超过浏览器布局限制时，组件会压缩原生滚动轨道。`scrollToIndex` 仍使用原始行索引，`scrollToOffset` 使用逻辑内容像素；滚轮保持正常像素步长，拖动原生滑块可遍历完整范围。
 
 <template #example>
-<virtual-list-default />
+<virtual-list-zh-default />
 </template>
 
 <template #template>
 
-@[code{1-27}](../../.vuepress/components/virtual-list/default.vue)
+@[code{1-27}](../../.vuepress/components/virtual-list-zh/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{29-51}](../../.vuepress/components/virtual-list/default.vue)
+@[code{29-51}](../../.vuepress/components/virtual-list-zh/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{53-79}](../../.vuepress/components/virtual-list/default.vue)
+@[code{53-81}](../../.vuepress/components/virtual-list-zh/default.vue)
 
 </template>
 

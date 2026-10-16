@@ -305,6 +305,7 @@
     #{getColor(background)}
   );
   --s-table-striped-surface: #{getColor(gray-1)};
+  --s-table-hierarchy-line-color: #{getColor(primary, 0.68)};
   --s-table-footer-surface: color-mix(
     in srgb,
     #{getColor(primary)} 6%,
@@ -418,23 +419,23 @@
 
   .is-group-header {
     box-shadow:
-      inset 3px 0 5px -5px #{getColor(primary, 0.22)},
-      inset -3px 0 5px -5px #{getColor(primary, 0.22)},
-      inset 0 -3px 5px -5px #{getColor(primary, 0.22)};
+      inset 3px 0 5px -4px #{getColor(primary, 0.34)},
+      inset -3px 0 5px -4px #{getColor(primary, 0.34)},
+      inset 0 -3px 5px -4px #{getColor(primary, 0.34)};
   }
 
   .is-group-boundary-start {
-    box-shadow: inset 3px 0 5px -5px #{getColor(primary, 0.22)};
+    box-shadow: inset 3px 0 5px -4px #{getColor(primary, 0.34)};
   }
 
   .is-group-boundary-end {
-    box-shadow: inset -3px 0 5px -5px #{getColor(primary, 0.22)};
+    box-shadow: inset -3px 0 5px -4px #{getColor(primary, 0.34)};
   }
 
   .is-group-boundary-start.is-group-boundary-end {
     box-shadow:
-      inset 3px 0 5px -5px #{getColor(primary, 0.22)},
-      inset -3px 0 5px -5px #{getColor(primary, 0.22)};
+      inset 3px 0 5px -4px #{getColor(primary, 0.34)},
+      inset -3px 0 5px -4px #{getColor(primary, 0.34)};
   }
 
   @include e(resize-handle) {
@@ -1654,12 +1655,6 @@
   }
 
   @include e(hierarchy-guides) {
-    --s-table-hierarchy-line-color: color-mix(
-      in srgb,
-      #{getColor(primary)} 24%,
-      #{getColor(background)}
-    );
-
     position: absolute;
     z-index: 0;
     inset: 0;
@@ -1719,7 +1714,7 @@
     border: 0;
     border-radius: var(--sax-radius-md);
     background: transparent;
-    color: getCssVar(text-color, secondary);
+    color: var(--s-table-hierarchy-line-color);
     cursor: pointer;
     transition:
       transform 180ms ease,
@@ -2044,6 +2039,7 @@
 
     &__header {
       width: 100%;
+      box-sizing: border-box;
       padding: 10px;
       background: var(--s-table-header-surface);
       border-radius: var(--sax-radius-lg) var(--sax-radius-lg) 0 0;
@@ -2101,11 +2097,43 @@
   }
 }
 
+// Fixed columns cast a directional shadow on the scrolling content in dark mode.
+// A restrained edge reflection separates the raised surface from that shadow.
+html.dark .#{$namespace}-table__fixed-boundary-overlay {
+  &::before,
+  &::after {
+    width: 18px;
+  }
+
+  &.is-fixed-left::before {
+    background:
+      linear-gradient(to right, #{getColor(text, 0.07)}, transparent 1px),
+      linear-gradient(
+        to right,
+        #{getColor(black, 0.42)},
+        #{getColor(black, 0.16)} 35%,
+        transparent
+      );
+  }
+
+  &.is-fixed-right::after {
+    background:
+      linear-gradient(to left, #{getColor(text, 0.07)}, transparent 1px),
+      linear-gradient(
+        to left,
+        #{getColor(black, 0.42)},
+        #{getColor(black, 0.16)} 35%,
+        transparent
+      );
+  }
+}
+
 html.dark .#{$namespace}-table,
 html.dark .#{$namespace}-table-wrapper {
+  --s-table-highlight-tint: #{getColor(primary)};
   --s-table-highlight-surface: color-mix(
     in srgb,
-    var(--s-table-highlight-tint) 14%,
+    var(--s-table-highlight-tint) 20%,
     #{getColor(background)}
   );
   // Use the strongest structural tint for the header, with quieter surfaces
@@ -2125,6 +2153,18 @@ html.dark .#{$namespace}-table-wrapper {
     #{getColor(primary)} 5%,
     #{getColor(background)}
   );
+
+  .#{$namespace}-table__data-row.is-selected {
+    box-shadow: 0 3px 8px -5px #{getColor(black, 0.24)};
+
+    &:hover {
+      background: color-mix(
+        in srgb,
+        var(--s-table-highlight-tint) 27%,
+        #{getColor(background)}
+      );
+    }
+  }
 }
 
 @media (pointer: coarse) {

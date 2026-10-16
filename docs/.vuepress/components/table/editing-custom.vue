@@ -31,16 +31,18 @@ const save = ({ rowKey, updatedRow }: TableEditEndParams) => {
     @edit-cancel="pending = false"
   >
     <template #header>
-      <s-button size="small" :disabled="!pending" @click="table?.commitEdit()"
-        >Save row</s-button
-      >
-      <s-button
-        size="small"
-        flat
-        :disabled="!pending"
-        @click="table?.cancelEdit()"
-        >Cancel</s-button
-      >
+      <div class="custom-editor-actions">
+        <s-button size="small" :disabled="!pending" @click="table?.commitEdit()"
+          >Save row</s-button
+        >
+        <s-button
+          size="small"
+          flat
+          :disabled="!pending"
+          @click="table?.cancelEdit()"
+          >Cancel</s-button
+        >
+      </div>
     </template>
     <s-table-column field="name" title="Task" :min-width="230" editor>
       <template #default="{ value }"
@@ -78,3 +80,12 @@ const save = ({ rowKey, updatedRow }: TableEditEndParams) => {
     </s-table-column>
   </s-table>
 </template>
+
+<style scoped>
+.custom-editor-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+</style>

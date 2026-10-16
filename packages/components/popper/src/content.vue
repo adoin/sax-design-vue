@@ -229,6 +229,8 @@ watch(
 )
 
 onBeforeUnmount(() => {
+  stopHandle?.()
+  stopHandle = undefined
   destroyed.value = true
 })
 </script>

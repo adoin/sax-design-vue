@@ -148,3 +148,24 @@ describe('Popper viewport placement', () => {
     expect(wrapper.get('.s-popper').attributes('style')).toContain('left: 0px')
   })
 })
+
+describe('Popper layer ownership', () => {
+  it('keeps sibling layers stable when another popup requests a newer layer', async () => {
+    const first = await open()
+    const second = await open()
+    const layer = (wrapper: ReturnType<typeof mount>) =>
+      Number((wrapper.get('.s-popper').element as HTMLElement).style.zIndex)
+    const firstLayer = layer(first)
+    const secondLayer = layer(second)
+    expect(secondLayer).toBeGreaterThan(firstLayer)
+    ;(first.vm as InstanceType<typeof Popper>).updatePopper()
+    await flushPromises()
+    expect(layer(first)).toBeGreaterThan(secondLayer)
+    expect(layer(second)).toBe(secondLayer)
+    await first.setProps({ zIndex: 9999 })
+    ;(first.vm as InstanceType<typeof Popper>).updatePopper()
+    await flushPromises()
+    expect(layer(first)).toBe(9999)
+    expect(layer(second)).toBe(secondLayer)
+  })
+})

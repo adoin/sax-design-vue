@@ -102,7 +102,10 @@ const emit = defineEmits(popperEmits)
 
 const { currentZIndex, nextZIndex } = useZIndex()
 
-const zIndex = computed(() => props.zIndex ?? currentZIndex.value)
+// Global allocation must not invalidate every mounted (including hidden) popup.
+// Each popup retains its own layer until it explicitly requests a newer one.
+const allocatedZIndex = ref(currentZIndex.value)
+const zIndex = computed(() => props.zIndex ?? allocatedZIndex.value)
 const popperId = useId()
 
 const triggerRef = ref<ReferenceElement>()
@@ -170,7 +173,8 @@ const controlled = computed(
 
 const updatePopper = (shouldUpdateZIndex = true) => {
   update()
-  if (shouldUpdateZIndex && props.zIndex === undefined) nextZIndex()
+  if (shouldUpdateZIndex && props.zIndex === undefined)
+    allocatedZIndex.value = nextZIndex()
 }
 
 const onBlur = (event?: Event) => {

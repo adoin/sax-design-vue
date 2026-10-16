@@ -4,6 +4,7 @@ import {
   getCurrentInstance,
   onActivated,
   onDeactivated,
+  onBeforeUnmount,
   shallowRef,
   useId,
   useTemplateRef,
@@ -18,8 +19,11 @@ const props = withDefaults(
     dissolved: boolean
     hidden?: boolean
     multiline?: boolean
+    defer?: boolean
+    duration?: number
+    reverseDuration?: number
   }>(),
-  { hidden: false, multiline: false },
+  { hidden: false, multiline: false, defer: false },
 )
 // Animated graphs belong to each instance, including SSR/hydration.
 const instanceId = getCurrentInstance()!.uid
@@ -29,8 +33,18 @@ const placeholder = useTemplateRef<HTMLElement>('placeholder')
 const filterId = `sax-placeholder-dissolve-${useId()}-${instanceId}`
 const animating = shallowRef(false)
 const initialDissolved = shallowRef(props.dissolved)
+const pending = shallowRef(false)
+let pendingFrame = 0
+let pendingView: Window | null = null
+const cancelPending = () => {
+  if (pendingFrame) pendingView?.cancelAnimationFrame(pendingFrame)
+  pendingFrame = 0
+  pending.value = false
+}
+onBeforeUnmount(cancelPending)
 let active = true
 onDeactivated(() => {
+  cancelPending()
   active = false
   animating.value = false
 })
@@ -40,6 +54,8 @@ onActivated(() => {
 watch(
   () => [props.dissolved, props.hidden] as const,
   ([target, hidden], [previous]) => {
+    const wasPending = pending.value
+    cancelPending()
     const document = placeholder.value?.ownerDocument
     if (
       !active ||
@@ -52,7 +68,22 @@ watch(
       return
     }
     if (target === previous) return
-    if (!animating.value) initialDissolved.value = previous
+    if (!animating.value && !wasPending) initialDissolved.value = previous
+    if (!animating.value && initialDissolved.value === target) return
+    if (props.defer && !animating.value && document?.defaultView) {
+      pending.value = true
+      pendingView = document.defaultView
+      // Give the popup one paint before mounting and starting the SVG graph.
+      pendingFrame = pendingView.requestAnimationFrame(() => {
+        pendingFrame = pendingView!.requestAnimationFrame(() => {
+          pendingFrame = 0
+          pending.value = false
+          if (!active || props.hidden || document.hidden) return
+          animating.value = true
+        })
+      })
+      return
+    }
     animating.value = true
   },
   // Decide playback before this component patches, so graph and URL appear
@@ -62,7 +93,11 @@ watch(
 const filterStyle = computed(() => ({
   // Resting content is ordinary text; hidden content needs no filter raster.
   filter: animating.value ? `url("#${filterId}")` : undefined,
-  opacity: !animating.value && props.dissolved ? 0 : undefined,
+  opacity:
+    !animating.value &&
+    (pending.value ? initialDissolved.value : props.dissolved)
+      ? 0
+      : undefined,
 }))
 const ns = useNamespace('placeholder-text')
 </script>
@@ -81,6 +116,8 @@ const ns = useNamespace('placeholder-text')
       :progress="dissolved ? 1 : 0"
       :initial-progress="initialDissolved ? 1 : 0"
       animate-on-mount
+      :duration="duration"
+      :reverse-duration="reverseDuration"
       @settled="animating = false"
     />
     <span :class="ns.e('dissolve')" :style="filterStyle">

@@ -30,23 +30,29 @@ description: "局部打印容器。"
 
 # Print 打印
 
-<card><template #example><print-default /></template>
+<card>
+
+## 发票预览
+
+屏幕预览跟随当前主题；打印使用白底深色文字，不会把夜间预览的深色底带到纸面。
+
+<template #example><print-zh-default /></template>
 
 <template #template>
 
-@[code{1-12}](../../.vuepress/components/print/default.vue)
+@[code{6-17}](../../.vuepress/components/print-zh/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-16}](../../.vuepress/components/print/default.vue)
+@[code{1-4}](../../.vuepress/components/print-zh/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{17-26}](../../.vuepress/components/print/default.vue)
+@[code{19-61}](../../.vuepress/components/print-zh/default.vue)
 
 </template>
 

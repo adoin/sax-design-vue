@@ -2,13 +2,30 @@
 
 ### Unreleased
 
-- Replace the long documentation navbar dropdown with category navigation and a multi-column component catalog, retaining inline sidebar navigation.
-- Keep interactive Popper content open for combined hover/click triggers.
+### 2.3.0 — 2026-10-16
 
-- Use a blue-violet night surface scale and make the documentation shell follow the component palette.
+#### Added
 
-- Refine dark surfaces, semantic colors, Table tints and control shadows; use contrasting ink on night-mode semantic Button and Tag fills while preserving the daytime palette and custom colors.
-- Apply configured Sass night palettes through the shared color-token generator.
+- Add Scrollbar `v-model:x` and `v-model:y` percentage progress (0–100), including independent observation events, programmatic seeking, RTL, resize/visibility recovery and model-echo suppression for native smooth scrolling.
+
+#### Fixed
+
+- Keep Popper z-index allocations local to each instance so opening one popup no longer restyles every mounted persistent popup. Apply the same isolation to Notification and Loading, remove globally reactive layer props from Table Find tooltips, and explicitly clean up outside-click listeners when an open popup unmounts.
+- Keep interactive Popper content open with combined hover/click triggers and preserve focus when moving into popup content.
+- Preserve Select's particle placeholder effect while giving popup painting priority; shorten Select particle playback and popup entry to improve responsiveness. Bound single-line placeholder filter rasterization to its text rather than the whole control width.
+- Use a blue-violet night surface scale across the library and documentation shell, with the configured Sass night palette applied through the shared color-token generator.
+- Improve dark-mode foregrounds and inactive surfaces for Button, Tag, Input Number, Switch, Textarea, Verification Code and List, while preserving explicit custom colors and the daytime palette. Make night-mode disabled buttons easier to read.
+- Refine Table's night-mode selected rows, directional fixed-column shadows, grouped-header separators and matching tree arrows/guides. Preserve rounded viewport clipping, fixed-column states and native scroll ownership.
+- Keep Table custom header padding within its allocated width and align the custom-editor example's Save/Cancel actions with responsive spacing.
+- Replace Image's fixed pale-gray loading surface and bright white sweep with a theme-aware placeholder, bundled image mark and restrained CSS shimmer. Preserve custom slots, reduced-motion behavior and the image reveal; expose pending state through aria-busy.
+- Remove clipped Menu demo brand glow and make Navbar example surfaces follow the active theme.
+
+#### Documentation
+
+- Replace the long navbar component dropdown with category navigation and a multi-column catalog, retaining inline sidebar navigation and keyboard support.
+- Theme keyboard keycaps consistently instead of combining fixed light backgrounds with night-mode text.
+- Adapt and localize Virtual List and Print examples, synchronize their complete Code/Playground sources, and keep printed invoices white with dark ink regardless of preview theme.
+- Add bilingual Scrollbar progress-driven animation examples and synchronize custom Table editor source styles.
 
 ### 2.2.2 — 2026-10-16
 

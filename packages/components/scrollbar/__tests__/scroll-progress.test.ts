@@ -69,7 +69,9 @@ describe('Scrollbar progress models', () => {
       set: write,
     })
     await wrapper.get('.s-scrollbar__wrap').trigger('scroll')
-    await wrapper.setProps({ y: wrapper.emitted('update:y')!.at(-1)![0] })
+    await wrapper.setProps({
+      y: wrapper.emitted<[number]>('update:y')!.at(-1)![0],
+    })
     expect(write).not.toHaveBeenCalled()
     wrapper.unmount()
   })

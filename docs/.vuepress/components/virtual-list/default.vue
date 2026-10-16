@@ -56,24 +56,26 @@ const append = () => items.value.push(...createRows(20))
   gap: 12px;
 }
 .virtual-list-demo__list {
-  border: 1px solid rgba(25, 91, 255, 0.14);
   border-radius: 14px;
-  background: #fff;
+  background: var(--sax-css-background);
+  color: var(--sax-css-text);
+  box-shadow: inset 0 2px 8px rgb(0 0 0 / 0.1);
 }
 .virtual-list-demo__row {
   padding: 12px 16px;
-  border-bottom: 1px solid rgba(25, 91, 255, 0.08);
+  box-shadow: inset 0 -2px 4px -4px
+    color-mix(in srgb, var(--sax-css-primary) 25%, transparent);
   cursor: pointer;
 }
 .virtual-list-demo__row:hover {
-  background: rgba(25, 91, 255, 0.035);
+  background: color-mix(in srgb, var(--sax-css-primary) 7%, transparent);
 }
 .virtual-list-demo__row p {
   margin: 6px 0 0;
-  color: #637083;
+  color: color-mix(in srgb, var(--sax-css-text) 72%, transparent);
   line-height: 1.55;
 }
-.virtual-list-demo__detail {
-  color: #195bff !important;
+.virtual-list-demo__row .virtual-list-demo__detail {
+  color: var(--sax-css-primary);
 }
 </style>

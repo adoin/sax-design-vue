@@ -7,7 +7,7 @@
   position: relative;
   display: grid;
   gap: 6px;
-  color: getColor(text-color);
+  color: getColor(text);
 
   @include e(item) {
     display: flex;

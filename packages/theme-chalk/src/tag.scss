@@ -383,5 +383,20 @@
 html.dark .#{$namespace}-tag {
   --sax-tag-neutral-surface: #{getColor(gray-1)};
   --sax-tag-neutral-text: #{getColor(text)};
-  --sax-tag-solid-foreground: #{getColor(bg-color, page)};
+  --sax-tag-solid-foreground: #{getColor(text)};
+
+  @each $type in (primary, success, warn, warning, danger, info) {
+    &.#{$namespace}-tag--#{$type} {
+      --sax-tag-solid-foreground: #{getColor(bg-color, page)};
+    }
+  }
+
+  &.#{$namespace}-tag--dark {
+    --sax-tag-accent: #{getColor(text, 0.85)};
+
+    &.is-transparent {
+      --sax-tag-text: #{getColor(text)};
+      --sax-tag-surface: #{getColor(text, 0.08)};
+    }
+  }
 }

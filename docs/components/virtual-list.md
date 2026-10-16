@@ -105,7 +105,7 @@ Large generated lists compress the native scroll track when their total row heig
 
 <template #style>
 
-@[code{53-79}](../.vuepress/components/virtual-list/default.vue)
+@[code{53-81}](../.vuepress/components/virtual-list/default.vue)
 
 </template>
 

@@ -92,6 +92,46 @@ afterEach(() => {
 })
 
 describe('Select enhanced capabilities', () => {
+  it('paints the popup before starting a bounded particle animation and cleans up on unmount', async () => {
+    const frames = new Map<number, FrameRequestCallback>()
+    let id = 0
+    const request = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        frames.set(++id, callback)
+        return id
+      })
+    const cancel = vi
+      .spyOn(window, 'cancelAnimationFrame')
+      .mockImplementation((id) => {
+        frames.delete(id)
+      })
+    const advance = async (time: number) => {
+      const callbacks = [...frames.values()]
+      frames.clear()
+      callbacks.forEach((callback) => callback(time))
+      await nextTick()
+    }
+    const wrapper = mountSelect({
+      modelValue: '',
+      placeholder: 'Choose an option',
+      options: [{ value: 'a', label: 'Alpha' }],
+    })
+    await wrapper.get('.s-select').trigger('focusin')
+    expect(wrapper.find('filter').exists()).toBe(false)
+    expect(
+      wrapper.get('.s-placeholder-text__dissolve').attributes('style') || '',
+    ).not.toContain('opacity: 0')
+    await advance(0)
+    expect(wrapper.find('filter').exists()).toBe(false)
+    await advance(16)
+    expect(wrapper.get('feTurbulence').attributes('numOctaves')).toBe('2')
+    wrapper.unmount()
+    expect(frames.size).toBe(0)
+    request.mockRestore()
+    cancel.mockRestore()
+  })
+
   it('uses a trailing control loader and blocks input without clearing the selection', () => {
     const wrapper = mountSelect({
       modelValue: 'a',
@@ -597,20 +637,39 @@ describe('Select option-ordered multiple values', () => {
     ])
     wrapper.unmount()
   })
-  it.each(['grouped', 'virtual'])('sorts all values in %s options', async (mode) => {
-    const wrapper = mountSelect({ multiple: true, sortByOptionOrder: true, modelValue: ['c'], options: mode === 'virtual' ? options : [], optionGroups: mode === 'grouped' ? [{ label: 'Group', options }] : [], virtual: mode === 'virtual' })
-    await nextTick()
-    await wrapper.findAll('.s-select__option')[0].trigger('click')
-    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['a', 'c']])
-    wrapper.unmount()
-  })
+  it.each(['grouped', 'virtual'])(
+    'sorts all values in %s options',
+    async (mode) => {
+      const wrapper = mountSelect({
+        multiple: true,
+        sortByOptionOrder: true,
+        modelValue: ['c'],
+        options: mode === 'virtual' ? options : [],
+        optionGroups: mode === 'grouped' ? [{ label: 'Group', options }] : [],
+        virtual: mode === 'virtual',
+      })
+      await nextTick()
+      await wrapper.findAll('.s-select__option')[0].trigger('click')
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([['a', 'c']])
+      wrapper.unmount()
+    },
+  )
   it('matches object values without mutating the incoming array', async () => {
     const value = [{ id: 2 }, { id: 1 }]
-    const wrapper = mountSelect({ multiple: true, sortByOptionOrder: true, modelValue: value, options: [{ label: 'One', value: { id: 1 } }, { label: 'Two', value: { id: 2 } }] })
+    const wrapper = mountSelect({
+      multiple: true,
+      sortByOptionOrder: true,
+      modelValue: value,
+      options: [
+        { label: 'One', value: { id: 1 } },
+        { label: 'Two', value: { id: 2 } },
+      ],
+    })
     await nextTick()
-    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([[{ id: 1 }, { id: 2 }]])
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([
+      [{ id: 1 }, { id: 2 }],
+    ])
     expect(value).toEqual([{ id: 2 }, { id: 1 }])
     wrapper.unmount()
   })
-
 })

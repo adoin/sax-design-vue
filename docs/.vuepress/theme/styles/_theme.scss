@@ -207,11 +207,21 @@ p {
   }
 }
 kbd {
-  background: #eee;
-  border: solid 0.15rem #ddd;
-  border-bottom: solid 0.25rem #ddd;
-  border-radius: 0.15rem;
-  padding: 0 0.15em;
+  display: inline-block;
+  min-width: 1.4em;
+  box-sizing: border-box;
+  padding: 0.08em 0.4em;
+  border: 0;
+  border-radius: var(--sax-radius-xs);
+  background: var(--sax-css-gray-1);
+  color: var(--sax-css-text);
+  box-shadow: inset 0 -2px 3px rgb(0 0 0 / 0.12);
+  font-size: 0.85em;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  vertical-align: baseline;
+  white-space: nowrap;
 }
 blockquote {
   font-size: 0.9rem;

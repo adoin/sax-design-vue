@@ -35,8 +35,8 @@ html.dark {
   transition:
     top 0s,
     left 0s,
-    transform var(--sax-motion-duration) var(--sax-motion-easing-smooth-out),
-    opacity var(--sax-motion-duration-fast) var(--sax-motion-easing-standard) !important;
+    transform var(--sax-motion-duration-quick) var(--sax-motion-easing-smooth-out),
+    opacity var(--sax-motion-duration-quick) var(--sax-motion-easing-standard) !important;
 }
 
 .#{$namespace}-select-leave-active {

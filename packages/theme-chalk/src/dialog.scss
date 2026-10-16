@@ -303,7 +303,7 @@
   min-width: 0;
   border-radius: var(--sax-radius-pill);
   background: getColor(background);
-  color: getColor(text-color);
+  color: getColor(text);
   box-shadow: var(--sax-popper-shadow);
   pointer-events: auto;
   &.is-square {

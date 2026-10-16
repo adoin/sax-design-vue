@@ -60,7 +60,7 @@
     font-family: inherit;
     font-size: var(--sax-textarea-font-size);
     line-height: 1.5;
-    color: getColor(text-color);
+    color: getColor(text);
 
     &::placeholder {
       color: getColor(text-color-placeholder);
@@ -195,5 +195,11 @@
     --sax-textarea-min-height: 96px;
     --sax-textarea-padding: 11px;
     --sax-textarea-font-size: 1rem;
+  }
+}
+
+@include dark(textarea) {
+  .#{$namespace}-textarea__count {
+    color: getColor(dark);
   }
 }

@@ -52,7 +52,7 @@
     width: 100%;
     aspect-ratio: 1;
     border-radius: var(--sax-radius-md);
-    background: hsl(220deg 20% 96%);
+    background: getColor(gray-2);
     z-index: 2;
   }
 
@@ -81,21 +81,56 @@
     display: grid;
     place-items: center;
     overflow: hidden;
-    background: hsl(220deg 20% 96%);
+    background: getColor(gray-2);
   }
 
   @include e(skeleton) {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      105deg,
-      transparent 32%,
-      hsl(0deg 0% 100% / 0.78) 50%,
-      transparent 68%
-    );
-    transform: translateX(-100%);
-    animation: s-images-skeleton var(--sax-motion-duration-long)
-      var(--sax-motion-easing-in-out) infinite;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+      radial-gradient(
+        ellipse at 20% 10%,
+        getColor(primary, 0.12),
+        transparent 65%
+      ),
+      radial-gradient(
+        ellipse at 90% 100%,
+        getColor(primary, 0.05),
+        transparent 55%
+      ),
+      getColor(gray-2);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        110deg,
+        transparent 25%,
+        getColor(primary, 0.1) 50%,
+        transparent 75%
+      );
+      transform: translateX(-100%);
+      animation: s-images-skeleton 2.4s var(--sax-motion-easing-in-out) infinite;
+    }
+  }
+
+  @include e(loading-mark) {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    color: getColor(primary, 0.5);
+  }
+
+  @include e(loading-track) {
+    width: 28px;
+    height: 3px;
+    border-radius: var(--sax-radius-pill);
+    background: getColor(primary, 0.16);
   }
 
   @include e(error) {
@@ -103,8 +138,8 @@
     inset: 0;
     display: grid;
     place-items: center;
-    background: hsl(220deg 18% 94%);
-    color: hsl(220deg 9% 58%);
+    background: getColor(gray-2);
+    color: getColor(text, 0.5);
   }
 
   @include e(error-mark) {
@@ -297,7 +332,10 @@
     }
 
     @include e(skeleton) {
-      animation: none;
+      &::after {
+        animation: none;
+        display: none;
+      }
     }
   }
 }

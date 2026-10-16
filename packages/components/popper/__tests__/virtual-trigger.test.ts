@@ -33,6 +33,31 @@ const anchor = (x: number) => ({
 })
 
 describe('Popper virtual anchor', () => {
+  it('removes outside-click listeners when an open popup is unmounted', async () => {
+    const add = vi.spyOn(window, 'addEventListener')
+    const remove = vi.spyOn(window, 'removeEventListener')
+    const wrapper = mount(Popper, {
+      attachTo: document.body,
+      props: { visible: true, teleported: false },
+      slots: {
+        default: () => h('button', 'Open'),
+        content: () => h('button', 'Choose'),
+      },
+    })
+    await flushPromises()
+    const outsideListeners = add.mock.calls.filter(([type]) =>
+      ['click', 'pointerdown', 'blur'].includes(type),
+    )
+    expect(outsideListeners.length).toBeGreaterThan(0)
+    wrapper.unmount()
+    for (const [type, listener] of outsideListeners)
+      expect(
+        remove.mock.calls.some(
+          (call) => call[0] === type && call[1] === listener,
+        ),
+      ).toBe(true)
+  })
+
   it('keeps mixed hover/click triggers open while the pointer enters interactive content', async () => {
     const wrapper = mount(Popper, {
       attachTo: document.body,

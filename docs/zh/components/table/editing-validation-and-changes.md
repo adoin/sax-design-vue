@@ -116,13 +116,19 @@ description: 'Table 的编辑、校验与变更功能、配置方式与可运行
 
 <template #template>
 
-@[code{23-80}](../../../.vuepress/components/table-zh/editing-custom.vue)
+@[code{23-82}](../../../.vuepress/components/table-zh/editing-custom.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-21}](../../../.vuepress/components/table-zh/editing-custom.vue)
+
+</template>
+
+<template #style>
+
+@[code{84-91}](../../../.vuepress/components/table-zh/editing-custom.vue)
 
 </template>
 

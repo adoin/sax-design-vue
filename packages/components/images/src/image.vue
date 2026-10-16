@@ -6,6 +6,7 @@
       ns.is('preview', Boolean(preview || previewSrcList.length)),
     ]"
     :style="[itemStyle, $attrs.style as StyleValue]"
+    :aria-busy="isLoading || undefined"
     :role="canPreview ? 'button' : undefined"
     :tabindex="canPreview ? 0 : undefined"
     @click="openPreview"
@@ -31,7 +32,12 @@
 
       <div v-if="isLoading && !isError" :class="ns.e('placeholder')">
         <slot name="placeholder">
-          <span :class="ns.e('skeleton')" aria-hidden="true" />
+          <span :class="ns.e('skeleton')" aria-hidden="true">
+            <span :class="ns.e('loading-mark')">
+              <s-icon name="cb:image" size="32" />
+              <span :class="ns.e('loading-track')" />
+            </span>
+          </span>
         </slot>
       </div>
 
@@ -67,6 +73,7 @@ import type { StyleValue } from 'vue'
 import { computed, shallowRef, watch } from 'vue'
 import { useAttrs as useNativeAttrs, useNamespace } from '@vuesax-alpha/hooks'
 import SImagePreview from '@vuesax-alpha/components/image-preview'
+import { SIcon } from '@vuesax-alpha/components/icon'
 import { addUnit } from '@vuesax-alpha/utils'
 import { imageEmits, imageProps } from './image'
 

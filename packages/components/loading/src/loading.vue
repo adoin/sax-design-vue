@@ -82,7 +82,8 @@ const props = resolveVisualEnumProps('loading', rawProps)
 
 const { ns, zIndex } = useGlobalComponentSettings('loading')
 
-const { currentZIndex } = zIndex
+const { nextZIndex } = zIndex
+const allocatedZIndex = nextZIndex()
 
 const loadingRef = ref<HTMLElement>()
 const color = useColor('primary')
@@ -104,7 +105,7 @@ const loadingStyles = computed(() => [
     background: getVsColor(background),
     opacity: `${unref(props.opacity)}`,
   }),
-  { zIndex: unref(currentZIndex) },
+  { zIndex: allocatedZIndex },
 ])
 
 const close = () => {

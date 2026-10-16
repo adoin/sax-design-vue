@@ -30,23 +30,29 @@ description: "Scoped print container."
 
 # Print
 
-<card><template #example><print-default /></template>
+<card>
+
+## Invoice preview
+
+The screen preview follows the current theme. Printed output uses a white surface and dark text, keeping the night preview background off the page.
+
+<template #example><print-default /></template>
 
 <template #template>
 
-@[code{1-12}](../.vuepress/components/print/default.vue)
+@[code{6-17}](../.vuepress/components/print/default.vue)
 
 </template>
 
 <template #script>
 
-@[code{13-16}](../.vuepress/components/print/default.vue)
+@[code{1-4}](../.vuepress/components/print/default.vue)
 
 </template>
 
 <template #style>
 
-@[code{17-26}](../.vuepress/components/print/default.vue)
+@[code{19-61}](../.vuepress/components/print/default.vue)
 
 </template>
 

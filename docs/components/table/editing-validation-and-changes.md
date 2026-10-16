@@ -114,13 +114,19 @@ Editor precedence is column-specific slot, generic editor slot, column `edit` fu
 
 <template #template>
 
-@[code{23-80}](../../.vuepress/components/table/editing-custom.vue)
+@[code{23-82}](../../.vuepress/components/table/editing-custom.vue)
 
 </template>
 
 <template #script>
 
 @[code{1-21}](../../.vuepress/components/table/editing-custom.vue)
+
+</template>
+
+<template #style>
+
+@[code{84-91}](../../.vuepress/components/table/editing-custom.vue)
 
 </template>
 

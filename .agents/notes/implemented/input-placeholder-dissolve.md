@@ -38,7 +38,22 @@ Reference: `svg-dom-dissolve-toggle-v5.html`, supplied by the user.
 - Paint containment and temporary compositing hints did not show consistent gains during investigation and were not retained. The filter graph, timing, scatter padding, instance ownership and idle cleanup are unchanged.
 - Verified Select open/close, reversal and selection in the in-app browser; existing placeholder, Select and Input motion suites passed (5 files, 52 tests).
 
+### Temporary Select fade experiment — superseded (2026-10-16)
+
+- The user reported that intrinsic raster bounds did not resolve perceived Select stutter. Do not treat that optimization alone as a verified Select responsiveness fix.
+- The temporary experiment opted into an internal PlaceholderText `effect="fade"` path (removed by the particle-preserving revision below). It changes opacity with motion tokens and reduced-motion support; focus, open, close and search do not create SVG filter graphs or run their per-frame animation. Input and Textarea keep the established dissolve effect.
+- The internal effect defaults to `dissolve`; `fade` is an explicit semantic mode. Preserve occupied-placeholder hiding and floating-label behavior independently from the effect.
+- One same-page 800ms post-pointerdown trace measured 126 Paint events / 60ms with dissolve and 82 / 51ms with fade. This is a local sample, not a guarantee that all user-reported stutter has been reproduced or eliminated.
+- Verification: Select, Input dissolve and Textarea suites passed (5 files, 58 tests), including a new Select regression that focuses, opens, closes and blurs without creating a filter. Web component typecheck passed. In-app browser confirmed selection, search and multiple selection with no filter graphs.
+
 - Focus timing refinement: 28 placeholder/Input behavior tests passed. A new regression checks that the mask for a representative noise value is partially transparent by 80ms while final alpha remains one. Chromium sampling at 86ms measured mask alpha 0.373; the animation reached final alpha zero after completion while the sibling filter remained unchanged.
 - 40 Input and Input-motion tests passed, including eight new animation tests for endpoints, reversal, independent IDs/graphs, unmount cleanup, live reduced-motion preference changes, occupied/float behavior, SSR hydration, and KeepAlive deactivation/reactivation.
 - 21 documentation example checks and web/Vitest type checks passed. Theme compilation passed.
 - Browser: one focused input reached threshold intercept -13, displacement 26, and final alpha zero while the sibling retained intercept one, displacement zero, and alpha one. Text x positions and native left padding stayed stable. Both localized Code dialogs exposed complete SFC blocks and both Playground previews rendered the matching localized controls. The active document with its Playground contained no duplicate placeholder filter IDs.
+
+### Select particle-preserving scheduling and faster popup (2026-10-16)
+
+- The user confirmed fade removed the stutter but explicitly requested retaining particles, then asked to speed up dropdown opening. The fade experiment is superseded; Select again uses the original two-octave noise, erosion and scatter graph.
+- Select requests deferred startup: two requestAnimationFrame callbacks give the popup a paint opportunity before mounting the SVG graph. Keep ordinary text visible during this pending period; reversing, hiding, deactivating or unmounting cancels pending frames without a flash. Other placeholder consumers remain immediate by default.
+- Select dissolution uses 240ms and reassembly 300ms; Input/Textarea retain their existing default durations. Popup enter transform uses the shared quick 150ms token instead of 250ms, with enter opacity also 150ms.
+- Web component typecheck passed. The directly affected Select enhancement suite passed 35 tests and Input placeholder suite passed 10 tests, including deferred playback and cancellation. A broader concurrent run failed from host native-memory exhaustion, so do not report it as a passing full suite or claim a reliable new performance comparison from this run.

@@ -174,7 +174,7 @@
   @include pseudo(disabled) {
     pointer-events: none;
     &:not(.#{$namespace}-button--loading) {
-      opacity: 0.35;
+      opacity: var(--sax-button-disabled-opacity, 0.35);
     }
   }
   @include m(animate) {
@@ -712,6 +712,7 @@
 // Light semantic fills need dark ink in the night palette. Custom colors keep
 // their existing foreground and the dark semantic button retains light ink.
 html.dark .#{$namespace}-button {
+  --sax-button-disabled-opacity: 0.55;
   @each $type in (primary, success, warn, danger, error, info) {
     &.#{$namespace}-component--#{$type} {
       --sax-button-solid-foreground: #{getColor(bg-color, page)};

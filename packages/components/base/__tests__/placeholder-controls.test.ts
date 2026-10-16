@@ -140,15 +140,21 @@ describe('shared placeholder animation in independent controls', () => {
       ).not.toContain('url(')
       await wrapper.get(target).trigger('focus')
       await wrapper.get(target).trigger('focusin')
+      if (component === Select) {
+        advance(0)
+        await nextTick()
+        advance(16)
+        await nextTick()
+      }
       const threshold = placeholder.get('[data-dissolve-threshold]')
       const alpha = placeholder.get('[data-dissolve-alpha]')
-      advance(16)
+      advance(32)
       expect(
         placeholder.get('.s-placeholder-text__dissolve').attributes('style') ||
           '',
       ).toContain('url(')
       expect(Number(threshold.attributes('intercept'))).toBeLessThan(1)
-      advance(480)
+      advance(512)
       await nextTick()
       expect(alpha.attributes('slope')).toBe('0')
       expect(placeholder.find('filter').exists()).toBe(false)
@@ -158,8 +164,14 @@ describe('shared placeholder animation in independent controls', () => {
       ).not.toContain('url(')
       await wrapper.get(target).trigger('blur')
       await wrapper.get(target).trigger('focusout')
+      if (component === Select) {
+        advance(528)
+        await nextTick()
+        advance(544)
+        await nextTick()
+      }
       const aggregate = placeholder.get('[data-dissolve-threshold]')
-      advance(1130)
+      advance(1200)
       await nextTick()
       expect(aggregate.attributes('intercept')).toBe('1')
       expect(placeholder.find('filter').exists()).toBe(false)

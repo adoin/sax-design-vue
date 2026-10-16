@@ -81,7 +81,6 @@ import {
   onMounted,
   ref,
   shallowRef,
-  unref,
 } from 'vue'
 import { useTimeoutFn } from '@vueuse/core'
 import {
@@ -114,6 +113,7 @@ const { ns, zIndex } = useGlobalComponentSettings('notification')
 const { t } = useLocale()
 
 const { currentZIndex, nextZIndex } = zIndex
+const allocatedZIndex = shallowRef(currentZIndex.value)
 
 const color = useColor()
 
@@ -147,7 +147,7 @@ const notifyKls = computed(() => [
 
 const notifyStyles = computed(() => [
   {
-    zIndex: unref(currentZIndex),
+    zIndex: allocatedZIndex.value,
   },
   ns.cssVar({
     color: getVsColor(color),
@@ -168,7 +168,6 @@ const handleClickClose = () => {
 }
 
 const onTransitionBeforeEnter = (el: Element) => {
-  nextZIndex()
   const _el = el as HTMLElement
   _el.style.maxHeight = `0`
   _el.style.padding = `0 20px`
@@ -218,7 +217,7 @@ const open = () => {
   clearProgress()
   currentProgress.value = 0
   startTimer()
-  nextZIndex()
+  allocatedZIndex.value = nextZIndex()
 
   visible.value = true
   handleProgress()

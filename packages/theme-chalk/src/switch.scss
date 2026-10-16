@@ -29,7 +29,7 @@
 
     &:focus-visible + .#{bem('switch', 'track')} {
       box-shadow:
-        0 0 0 5px hsl(226deg 100% 55% / 0.12),
+        0 0 12px getColor(color, 0.2),
         var(--sax-switch-shadow);
     }
   }
@@ -227,6 +227,61 @@
     cursor: not-allowed;
     opacity: 0.48;
     filter: saturate(0.45);
+  }
+}
+
+@include dark(switch) {
+  --sax-switch-shadow: 0 3px 10px -4px #{getColor(color, 0.22)};
+  --sax-switch-solid-foreground: #{getColor(white)};
+
+  @each $type in (primary, success, warn, danger, error, info) {
+    &.#{$namespace}-component--#{$type} {
+      --sax-switch-solid-foreground: #{getColor(dark)};
+    }
+  }
+
+  .#{$namespace}-switch__track {
+    background: getColor(light);
+    box-shadow: inset 0 2px 5px getColor(black, 0.18);
+  }
+
+  .#{$namespace}-switch__circle {
+    background: getColor(text, 0.88);
+    color: getColor(dark);
+  }
+
+  .#{$namespace}-switch__text {
+    color: getColor(text, 0.92);
+  }
+
+  &.is-checked {
+    .#{$namespace}-switch__track {
+      background: var(--sax-switch-accent);
+      box-shadow: var(--sax-switch-shadow);
+    }
+    .#{$namespace}-switch__text {
+      color: var(--sax-switch-solid-foreground);
+    }
+  }
+
+  &.is-soft {
+    .#{$namespace}-switch__track {
+      background: getColor(gray-1);
+    }
+    .#{$namespace}-switch__circle {
+      background: getColor(text, 0.65);
+    }
+    &.is-checked {
+      .#{$namespace}-switch__track {
+        background: getColor(color, 0.18);
+      }
+      .#{$namespace}-switch__circle {
+        background: var(--sax-switch-accent);
+      }
+      .#{$namespace}-switch__text {
+        color: getColor(text);
+      }
+    }
   }
 }
 

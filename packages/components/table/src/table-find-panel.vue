@@ -22,7 +22,6 @@ import {
   useNamespace,
   useShape,
   useSize,
-  useZIndex,
 } from '@vuesax-alpha/hooks'
 import { tableFindRuntimeKey } from './table-find-context'
 import TableFindActionMark from './table-find-action-mark.vue'
@@ -51,8 +50,6 @@ const resolvedSize = computed<TableSize>(() =>
     : 'default',
 )
 const { t } = useLocale()
-const { currentZIndex } = useZIndex()
-const tooltipZIndex = computed(() => currentZIndex.value + 1)
 const id = useId()
 const trigger = shallowRef<SVGSVGElement | HTMLElement>()
 const panel = shallowRef<HTMLElement>()
@@ -672,7 +669,6 @@ defineExpose(api)
                   v-for="tool in formTools"
                   :key="tool.key"
                   placement="top"
-                  :z-index="tooltipZIndex"
                   :show-after="200"
                   :hide-after="80"
                 >
@@ -711,7 +707,6 @@ defineExpose(api)
               v-for="tool in resultTools"
               :key="tool.key"
               placement="top"
-              :z-index="tooltipZIndex"
               :show-after="200"
               :hide-after="80"
             >

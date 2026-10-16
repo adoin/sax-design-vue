@@ -188,6 +188,9 @@
 
       <PlaceholderText
         v-if="(!labelFloat && placeholder) || (filterable && searchPlaceholder)"
+        defer
+        :duration="240"
+        :reverse-duration="300"
         :class="ns.e('placeholder')"
         :text="
           dropMenuVisible && filterable && searchPlaceholder

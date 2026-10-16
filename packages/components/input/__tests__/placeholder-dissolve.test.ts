@@ -4,6 +4,7 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Placeholder from '../src/input-placeholder.vue'
 import Input from '../src/input.vue'
+import SharedPlaceholder from '../../base/src/placeholder-text.vue'
 
 enableAutoUnmount(afterEach)
 let clock = 0
@@ -51,6 +52,24 @@ afterEach(() => {
 })
 
 describe('Lazy instance placeholder dissolve', () => {
+  it('cancels a deferred dissolve before its first paint without flashing or leaking frames', async () => {
+    const wrapper = mount(SharedPlaceholder, {
+      props: { text: 'Choose', dissolved: false, defer: true, duration: 240 },
+    })
+    await wrapper.setProps({ dissolved: true })
+    expect(wrapper.find('filter').exists()).toBe(false)
+    expect(frames.size).toBe(1)
+    await wrapper.setProps({ dissolved: false })
+    expect(frames.size).toBe(0)
+    expect(wrapper.find('filter').exists()).toBe(false)
+    expect(
+      wrapper.get('.s-placeholder-text__dissolve').attributes('style') || '',
+    ).not.toContain('opacity: 0')
+    await wrapper.setProps({ dissolved: true })
+    wrapper.unmount()
+    expect(frames.size).toBe(0)
+  })
+
   it('starts during the first 80ms and releases its graph after completion', async () => {
     const wrapper = mount(Input, { props: { placeholder: 'Search' } })
     expect(wrapper.find('filter').exists()).toBe(false)

@@ -15,6 +15,30 @@ const mountImage = (options: Parameters<typeof mount>[1] = {}) =>
   })
 
 describe('SImage', () => {
+  it('shows a decorative loading surface only while the native image is pending', async () => {
+    const wrapper = mountImage({
+      props: { src: 'pending.jpg', alt: 'Landscape' },
+    })
+    expect(wrapper.get('.s-images__item').attributes('aria-busy')).toBe('true')
+    expect(wrapper.get('.s-images__skeleton').attributes('aria-hidden')).toBe(
+      'true',
+    )
+    expect(wrapper.find('.s-images__loading-mark').exists()).toBe(true)
+    await wrapper.get('img.s-images__img').trigger('load')
+    expect(wrapper.find('.s-images__placeholder').exists()).toBe(false)
+    expect(
+      wrapper.get('.s-images__item').attributes('aria-busy'),
+    ).toBeUndefined()
+    await wrapper.setProps({ src: 'another.jpg' })
+    expect(wrapper.find('.s-images__loading-mark').exists()).toBe(true)
+    await wrapper.get('img.s-images__img').trigger('error')
+    expect(wrapper.find('.s-images__loading-mark').exists()).toBe(false)
+    expect(
+      wrapper.get('.s-images__item').attributes('aria-busy'),
+    ).toBeUndefined()
+    wrapper.unmount()
+  })
+
   it('fits a semantic image into an independently sized box', () => {
     const wrapper = mountImage({
       props: {
