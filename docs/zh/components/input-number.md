@@ -64,7 +64,7 @@ PROPS:
   - name: color
     type: String
     values: "主题色 | CSS 颜色"
-    default: light
+    default: light（浅色模式）、dark（深色模式）
     description: "数字与按钮的文字色，支持主题色或 CSS 颜色。"
     usage: '#colors'
   - name: background

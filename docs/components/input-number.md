@@ -64,7 +64,7 @@ PROPS:
   - name: color
     type: String
     values: "theme color | CSS color"
-    default: light
+    default: light (light mode), dark (dark mode)
     description: "Text and control color, using a theme color or CSS color."
     usage: '#colors'
   - name: background

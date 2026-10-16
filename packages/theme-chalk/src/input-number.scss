@@ -10,6 +10,12 @@
   @include set-css-color(input-number-background);
 }
 
+// The night palette lifts solid fills; use dark ink instead of the light surface token.
+// An explicit color prop remains an inline override of this default.
+@include dark(input-number) {
+  @include set-var-value('input-number-color', getCssVar(dark));
+}
+
 @include b(input-number) {
   position: relative;
   display: inline-flex;
