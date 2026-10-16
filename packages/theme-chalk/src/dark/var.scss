@@ -82,9 +82,9 @@ $colors: map.deep-merge(
 $bg-color: () !default;
 $bg-color: map.merge(
   (
-    '': #1b202b,
-    'page': #11151d,
-    'overlay': #252d3b,
+    '': #1e2035,
+    'page': #151626,
+    'overlay': #2b2e49,
   ),
   $bg-color
 );
@@ -100,7 +100,7 @@ $bg-color: map.merge(
 }
 
 // border
-$border-color-base: #e7edf7;
+$border-color-base: #e8e9f6;
 $border-color: () !default;
 $border-color: map.merge(
   (
@@ -159,15 +159,15 @@ $vsVar: map.merge(
 $moreColor: () !default;
 $moreColor: map.merge(
   (
-    'gray-1': #252d3a,
-    'gray-2': #202733,
-    'gray-3': #191f2a,
-    'gray-4': #151a24,
-    'divider': #343e50,
-    'text': #e7edf7,
-    'background': #1b202b,
-    'dark': #0c1017,
-    'light': #2c3545,
+    'gray-1': #2a2d46,
+    'gray-2': #25283f,
+    'gray-3': #1d2035,
+    'gray-4': #191b2e,
+    'divider': #3a3e5b,
+    'text': #e8e9f6,
+    'background': #1e2035,
+    'dark': #11121f,
+    'light': #343852,
   ),
   $moreColor
 );
@@ -201,7 +201,7 @@ $fill-color: map.merge(
 }
 
 // text
-$text-color-base: #f6f7f9;
+$text-color-base: #e8e9f6;
 $text-color: () !default;
 $text-color: map.merge(
   (

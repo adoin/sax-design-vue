@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Use a blue-violet night surface scale and make the documentation shell follow the component palette.
+
 - Refine dark surfaces, semantic colors, Table tints and control shadows; use contrasting ink on night-mode semantic Button and Tag fills while preserving the daytime palette and custom colors.
 - Apply configured Sass night palettes through the shared color-token generator.
 

@@ -34,15 +34,16 @@
 }
 
 .dark {
-  --sax-theme-bg: 220deg 15% 7.843%;
-  --sax-theme-color: 220deg 27.273% 95.686%;
-  --sax-theme-layout: 222.857deg 13.208% 10.392%;
-  --sax-sidebar-surface: 222.857deg 14.286% 9.608%;
-  --sax-theme-bg2: 220deg 13.433% 13.137%;
-  --sax-theme-code: 220deg 16.667% 7.059%;
-  --sax-theme-code2: 220deg 13.846% 12.745%;
-  --sax-border-color: 222.857deg 11.475% 23.922%;
-  --sax-text-color: 218.824deg 9.942% 66.471%;
+  // Documentation surfaces follow the shipped component palette so the
+  // surrounding shell does not turn blue-violet examples into gray islands.
+  --sax-theme-bg: var(--sax-bg-color-page);
+  --sax-theme-color: var(--sax-text);
+  --sax-theme-layout: var(--sax-background);
+  --sax-sidebar-surface: var(--sax-gray-3);
+  --sax-theme-bg2: var(--sax-gray-2);
+  --sax-theme-code: var(--sax-gray-4);
+  --sax-theme-code2: var(--sax-gray-3);
+  --sax-text-color: var(--sax-text-color-secondary);
   --sax-accent-color: 234.454deg 89.474% 73.922%;
   --sax-accent-secondary: 255.135deg 91.736% 76.275%;
 }
