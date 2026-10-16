@@ -111,6 +111,53 @@ describe('table editing integration', () => {
     vi.unstubAllGlobals()
   })
 
+  it('leaves range selection when editing and does not retain the first cell across editor switches', async () => {
+    const wrapper = mount(Table, {
+      attachTo: document.body,
+      props: { data, columns, rangeConfig: true, editConfig: true },
+    })
+    await flushPromises()
+    const api = wrapper.vm as unknown as TableExposes
+    await api.setCellRange({
+      anchor: { rowKey: 1, columnKey: 'name' },
+      focus: { rowKey: 1, columnKey: 'name' },
+    })
+    await nextTick()
+    expect(wrapper.findAll('.is-range-cell')).toHaveLength(1)
+    const cells = wrapper
+      .findAll('.s-table__data-row')
+      .map((row) => row.get('[data-column-index="0"]'))
+    await cells[0].trigger('dblclick')
+    await flushPromises()
+    expect(wrapper.find('.s-table__cell-editor input').element).toHaveProperty(
+      'value',
+      'Alpha',
+    )
+    expect(api.getCellRange()).toBeNull()
+    expect(wrapper.findAll('.is-range-cell')).toHaveLength(0)
+    await cells[1].trigger('dblclick')
+    await flushPromises()
+    expect(wrapper.find('.s-table__cell-editor input').element).toHaveProperty(
+      'value',
+      'Beta',
+    )
+    expect(wrapper.findAll('.is-range-cell')).toHaveLength(0)
+    await wrapper
+      .get('.s-table__cell-editor input')
+      .trigger('keydown', { key: 'Enter' })
+    await flushPromises()
+    expect(wrapper.find('.s-table__cell-editor').exists()).toBe(false)
+    expect(api.getCellRange()).toBeNull()
+    await cells[0].trigger('dblclick')
+    await flushPromises()
+    await wrapper
+      .get('.s-table__cell-editor input')
+      .trigger('keydown', { key: 'Escape' })
+    await flushPromises()
+    expect(wrapper.findAll('.is-range-cell')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
   it('keeps editing opt-in and commits a draft with Enter without mutating data', async () => {
     const wrapper = mount(Table, {
       attachTo: document.body,

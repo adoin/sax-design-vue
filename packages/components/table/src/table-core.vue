@@ -2529,6 +2529,15 @@ const rangeInteraction = useTableRangeInteraction(cellRange, {
   blocked: () => Boolean(editing.active.value || rowDrag.session.value),
   context: rangeContext,
 })
+watch(
+  () => editing.active.value?.id,
+  (id) => {
+    // Editing owns the active-cell feedback. Pointer range gestures pause
+    // while an editor is open, so retaining their old range leaves stale cells.
+    if (id != null && (cellRange.getRange() || cellRange.pending.value))
+      void cellRange.clear()
+  },
+)
 const clipboardCells = createTableClipboardCells({
   count: () => ({
     rows: effectiveRowCount.value,

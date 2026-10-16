@@ -2,6 +2,10 @@
 
 ### Unreleased
 
+### 2.2.2 — 2026-10-16
+
+- Leave Table range selection when a cell editor opens, preventing the first edited cell from retaining a stale selection highlight across consecutive edits.
+
 ### 2.2.1 — 2026-10-16
 
 - Preserve native cell double-click editing when Table range selection is enabled by delaying pointer capture until a drag starts.
