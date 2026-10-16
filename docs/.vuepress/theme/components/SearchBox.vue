@@ -74,7 +74,6 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onHotkey))
   </div>
 </template>
 <style scoped lang="scss">
-@use '../styles/use' as *;
 .search-box {
   flex-shrink: 0;
   width: auto;
@@ -90,21 +89,32 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onHotkey))
   border: 0;
   outline: none;
   border-radius: var(--sax-radius-lg);
-  background: -color('theme-bg2');
-  color: -color('theme-color');
+  background: var(--sax-css-gray-1);
+  color: var(--sax-css-text-color-secondary);
   font-size: 0.85rem;
   line-height: 20px;
   cursor: pointer;
 }
 .docs-search-trigger kbd {
+  padding: 2px 5px;
+  border: 0;
+  border-radius: var(--sax-radius-xs);
+  background: color-mix(in srgb, var(--sax-css-text) 6%, transparent);
+  color: inherit;
   white-space: nowrap;
   font: inherit;
   font-size: 11px;
-  opacity: 0.55;
+  line-height: 18px;
 }
 .docs-search-trigger:hover,
 .docs-search-trigger:focus-visible {
-  box-shadow: var(--sax-box-shadow);
+  background: color-mix(
+    in srgb,
+    var(--sax-css-primary) 10%,
+    var(--sax-css-gray-1)
+  );
+  color: var(--sax-css-primary);
+  box-shadow: var(--sax-input-shadow-hover);
 }
 @media (max-width: 719px) {
   .search-box {
