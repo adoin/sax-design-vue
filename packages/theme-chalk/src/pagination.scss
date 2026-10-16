@@ -465,3 +465,13 @@
   pointer-events: auto;
   > * { pointer-events: none; }
 }
+
+// Dark surfaces need depth without a broad, luminous color halo.
+@include dark(pagination) {
+  .#{$namespace}-pager__aria-active,
+  .#{$namespace}-pager__aria-active.is-change {
+    box-shadow:
+      0 3px 8px -3px hsl(0deg 0% 0% / 0.28),
+      0 2px 8px -3px getColor('color', 0.12);
+  }
+}

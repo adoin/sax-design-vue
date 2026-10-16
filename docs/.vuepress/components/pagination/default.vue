@@ -19,6 +19,6 @@ const pageSize = shallowRef(10)
 .pagination-default-demo {
   width: 100%;
   overflow-x: auto;
-  padding: 6px 0;
+  padding: 20px 12px;
 }
 </style>

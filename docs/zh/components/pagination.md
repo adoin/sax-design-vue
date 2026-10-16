@@ -374,7 +374,7 @@ SLOTS:
 
 <template #style>
 
-@[code{25-39}](../../.vuepress/components/pagination-zh/color.vue)
+@[code{25-40}](../../.vuepress/components/pagination-zh/color.vue)
 
 </template>
 

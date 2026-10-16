@@ -39,7 +39,7 @@ const squarePage = shallowRef(1)
   display: grid;
   gap: 8px;
   overflow-x: auto;
-  padding: 2px 0;
+  padding: 20px 12px;
 }
 
 .pagination-shape-demo__label {

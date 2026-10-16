@@ -374,7 +374,7 @@ Set a semantic color token or a custom RGB/HEX value.
 
 <template #style>
 
-@[code{25-39}](../.vuepress/components/pagination/color.vue)
+@[code{25-40}](../.vuepress/components/pagination/color.vue)
 
 </template>
 

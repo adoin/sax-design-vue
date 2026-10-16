@@ -28,6 +28,7 @@ const color = shallowRef<Color>('success')
   gap: 12px;
   width: 100%;
   overflow-x: auto;
+  padding: 20px 12px;
 }
 
 .pagination-color-demo__options {
