@@ -63,6 +63,7 @@ import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { popperContextKey } from '@vuesax-alpha/tokens'
 import { composeEventHandlers } from '@vuesax-alpha/utils'
 import { popperContentEmits, popperContentProps } from './content'
+import { isTriggerType } from './utils'
 
 defineOptions({
   name: 'SPopper',
@@ -141,7 +142,7 @@ const restoreOpaqueFromFocus = (event: FocusEvent) => {
 }
 
 const onContentEnter = composeEventHandlers(stopWhenControlled, () => {
-  if (props.interactivity && unref(trigger) === 'hover') {
+  if (props.interactivity && isTriggerType(unref(trigger), 'hover')) {
     onOpen()
   }
 })
@@ -152,7 +153,7 @@ const handleContentEnter = (event: MouseEvent) => {
 }
 
 const onContentLeave = composeEventHandlers(stopWhenControlled, () => {
-  if (unref(trigger) === 'hover') {
+  if (isTriggerType(unref(trigger), 'hover')) {
     onClose()
   }
 })

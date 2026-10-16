@@ -173,7 +173,14 @@ const updatePopper = (shouldUpdateZIndex = true) => {
   if (shouldUpdateZIndex && props.zIndex === undefined) nextZIndex()
 }
 
-const onBlur = () => {
+const onBlur = (event?: Event) => {
+  const next = (event as FocusEvent | undefined)?.relatedTarget
+  if (
+    typeof Node !== 'undefined' &&
+    next instanceof Node &&
+    contentRef.value?.contains(next)
+  )
+    return
   if (!props.virtualTriggering) {
     onClose()
   }

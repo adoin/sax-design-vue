@@ -3,7 +3,7 @@
     <div class="content-sidebar">
       <slot name="top" />
       <SidebarLinks :fixed="fixed" :depth="0" :links="sidebar" />
-      <NavLinks />
+      <NavLinks inline-dropdowns />
       <slot name="bottom" />
     </div>
   </nav>

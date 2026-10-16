@@ -6,6 +6,7 @@
           v-if="'children' in navItem"
           :item="navItem"
           :has-fle="true"
+          :inline="inlineDropdowns"
         />
         <NavLink v-else :nav-item="navItem" />
       </template>
@@ -26,6 +27,7 @@ import NavLink from './NavLink.vue'
 import type { SaxDesignVueThemeOptions } from '../saxDesignVueTheme'
 
 const themeData = useThemeData<SaxDesignVueThemeOptions>()
+defineProps<{ inlineDropdowns?: boolean }>()
 const themeLocaleData = useThemeLocaleData<SaxDesignVueThemeOptions>()
 
 const userNav = computed(() => {

@@ -1,5 +1,6 @@
 <template>
-  <div class="dropdown-wrapper" :class="{ open }">
+  <CatalogDropdown v-if="isCatalog" :item="item" />
+  <div v-else class="dropdown-wrapper" :class="{ open }">
     <a class="dropdown-title" @click="toggle">
       <span :class="item.text" class="title">
         <span v-if="item.text !== '...'">
@@ -47,16 +48,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { isString } from '@vue/shared'
 import NavLink from './NavLink.vue'
 import DropdownTransition from './DropdownTransition.vue'
+import CatalogDropdown from './CatalogDropdown.vue'
+import { catalogGroups } from '../util/catalog-navigation'
 import type { NavbarGroup } from 'vuepress-vite'
 
-defineProps<{
+const props = defineProps<{
   item: NavbarGroup
   hasFle?: boolean
+  inline?: boolean
 }>()
+
+const isCatalog = computed(
+  () => !props.inline && catalogGroups(props.item).length >= 4,
+)
 
 const open = ref<boolean>(false)
 

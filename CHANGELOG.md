@@ -2,6 +2,9 @@
 
 ### Unreleased
 
+- Replace the long documentation navbar dropdown with category navigation and a multi-column component catalog, retaining inline sidebar navigation.
+- Keep interactive Popper content open for combined hover/click triggers.
+
 - Use a blue-violet night surface scale and make the documentation shell follow the component palette.
 
 - Refine dark surfaces, semantic colors, Table tints and control shadows; use contrasting ink on night-mode semantic Button and Tag fills while preserving the daytime palette and custom colors.

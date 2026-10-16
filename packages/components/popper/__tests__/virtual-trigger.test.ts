@@ -33,6 +33,35 @@ const anchor = (x: number) => ({
 })
 
 describe('Popper virtual anchor', () => {
+  it('keeps mixed hover/click triggers open while the pointer enters interactive content', async () => {
+    const wrapper = mount(Popper, {
+      attachTo: document.body,
+      props: {
+        trigger: ['hover', 'click'],
+        teleported: false,
+        showAfter: 0,
+        hideAfter: 40,
+      },
+      slots: {
+        default: () => h('button', 'Open'),
+        content: () => h('button', 'Choose'),
+      },
+    })
+    await wrapper.get('button').trigger('mouseenter')
+    await vi.waitFor(() =>
+      expect(wrapper.get('.s-popper').isVisible()).toBe(true),
+    )
+    await wrapper.get('button').trigger('mouseleave')
+    await wrapper.get('.s-popper').trigger('mouseenter')
+    await new Promise((resolve) => setTimeout(resolve, 80))
+    expect(wrapper.get('.s-popper').isVisible()).toBe(true)
+    await wrapper.get('.s-popper').trigger('mouseleave')
+    await vi.waitFor(() =>
+      expect(wrapper.get('.s-popper').isVisible()).toBe(false),
+    )
+    wrapper.unmount()
+  })
+
   it('treats ignored teleported descendants as part of one outside-click boundary', async () => {
     const ignored = document.createElement('button')
     ignored.className = 'shared-popper-boundary'
