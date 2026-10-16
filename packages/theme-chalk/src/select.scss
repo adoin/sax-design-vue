@@ -8,6 +8,29 @@ $clearableRight: 34px;
 $suffixSafeArea: 36px;
 $clearableSafeArea: 64px;
 
+// Hover locates an option; selection remains visible while navigating the list.
+// Options may be teleported, so target their own surface rather than the trigger.
+html.dark {
+  .#{$namespace}-select__option:not(.is-disabled) {
+    &:hover,
+    &.is-hover {
+      background: getColor(text, 0.07);
+      color: getColor(text);
+    }
+
+    &.is-active {
+      background: getColor(color, 0.2);
+      color: color-mix(in srgb, getColor(color) 70%, getColor(text));
+      font-weight: 600;
+
+      &:hover,
+      &.is-hover {
+        background: getColor(color, 0.3);
+      }
+    }
+  }
+}
+
 .#{$namespace}-select-enter-active {
   transition:
     top 0s,
