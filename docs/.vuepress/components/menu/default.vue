@@ -169,7 +169,7 @@ const toggleCollapsed = () => {
   border-radius: 12px;
   background: hsl(var(--sax-primary) / 0.12);
   color: hsl(var(--sax-primary));
-  box-shadow: 0 8px 20px hsl(var(--sax-primary) / 0.14);
+  box-shadow: none;
 }
 
 .menu-demo__brand-name {

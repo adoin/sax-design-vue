@@ -105,7 +105,8 @@ description: 'A multi-level menu with inline, cascading popup, and horizontal na
 
 ## Inline hierarchy
 
-The admin-style sidebar keeps its collapse control in the footer, reduces to an icon rail, and automatically moves child menus into popups.
+The admin-style sidebar keeps its collapse control in the footer,
+reduces to an icon rail, and automatically moves child menus into popups.
 
 <template #example><menu-default /></template>
 
