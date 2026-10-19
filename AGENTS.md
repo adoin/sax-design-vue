@@ -7,6 +7,8 @@
 
 ## Project specifications
 
+- 路由页面固定为可拖动、可缩放窗口的新需求见 `.agents/notes/active/window-and-pinned-route-pages.md`；分工与交互建议见 `.agents/notes/proposed/window-component-and-admin-boundary.md`，不得把 proposed 中尚未确认的选择作为硬性要求。
+
 - Message Scroller 动态虚拟行高、历史懒加载、阅读锚点与用户滚动意图见 `.agents/notes/implemented/message-scroller-virtual-history.md`；虚拟测量统一复用 SVirtualList。
 
 - Agent 公开命名、Message 头像布局与共享 agentIcon 配置见 `.agents/notes/implemented/agent-naming-and-message-avatars.md`；新增公开 API 使用 Agent，不再使用 AI 命名。
