@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/anchor.css'
+import '@vuesax-alpha/theme-chalk/vs-anchor.css'

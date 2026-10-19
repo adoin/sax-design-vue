@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/print.css'
+import '@vuesax-alpha/theme-chalk/vs-print.css'

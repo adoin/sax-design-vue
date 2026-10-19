@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/print-page-break.css'
+import '@vuesax-alpha/theme-chalk/vs-print-page-break.css'

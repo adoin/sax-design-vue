@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/affix.css'
+import '@vuesax-alpha/theme-chalk/vs-affix.css'

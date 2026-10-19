@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/reasoning-steps.css'
+import '@vuesax-alpha/theme-chalk/vs-reasoning-steps.css'

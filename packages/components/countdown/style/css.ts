@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/countdown.css'
+import '@vuesax-alpha/theme-chalk/vs-countdown.css'

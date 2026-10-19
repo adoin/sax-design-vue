@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/text-ellipsis.css'
+import '@vuesax-alpha/theme-chalk/vs-text-ellipsis.css'

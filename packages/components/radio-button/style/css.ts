@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/radio-button.css'
+import '@vuesax-alpha/theme-chalk/vs-radio-button.css'

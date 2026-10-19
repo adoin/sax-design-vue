@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/color-picker.css'
+import '@vuesax-alpha/theme-chalk/vs-color-picker.css'

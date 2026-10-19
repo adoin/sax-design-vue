@@ -1,1 +1,2 @@
-import '@vuesax-alpha/theme-chalk/verification-code.css'
+import '@vuesax-alpha/components/base/style/css'
+import '@vuesax-alpha/theme-chalk/vs-verification-code.css'

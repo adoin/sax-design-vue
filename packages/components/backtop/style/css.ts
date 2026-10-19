@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/backtop.css'
+import '@vuesax-alpha/theme-chalk/vs-backtop.css'

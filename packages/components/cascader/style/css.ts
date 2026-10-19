@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/cascader.css'
+import '@vuesax-alpha/theme-chalk/vs-cascader.css'

@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/form.css'
+import '@vuesax-alpha/theme-chalk/vs-form.css'

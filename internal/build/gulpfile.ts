@@ -113,6 +113,9 @@ export default series(
   ),
 
   parallel(copyTypesDefinitions, copyFiles),
+  withTaskName('verifyStyleEntries', () =>
+    run('node scripts/verify-style-entries.mjs'),
+  ),
 ) as any
 
 export * from './src'

@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/calendar.css'
+import '@vuesax-alpha/theme-chalk/vs-calendar.css'

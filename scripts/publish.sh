@@ -23,6 +23,7 @@ pnpm install --frozen-lockfile
 pnpm run gen:version
 pnpm run build
 node scripts/verify-theme-css.mjs
+node scripts/verify-package-consumer.mjs
 
 built_version="$(node -p "require('./dist/sax-design-vue/package.json').version")"
 if [[ "$release_version" != "$built_version" ]]; then

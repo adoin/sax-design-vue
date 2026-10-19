@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/splitter.css'
+import '@vuesax-alpha/theme-chalk/vs-splitter.css'

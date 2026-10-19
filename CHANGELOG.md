@@ -2,6 +2,11 @@
 
 ### Unreleased
 
+### 2.3.1 — 2026-10-19
+
+- Fix on-demand CSS imports that referenced the absent `theme-chalk/css/` directory; use the published flat `theme-chalk/vs-*.css` paths consistently in ESM and CommonJS entries. Validate every on-demand style dependency during the production build (#3).
+- Fix Verification Code's missing `vs-` CSS prefix and include its base styles in the on-demand entry. Add release checks that bundle every ESM/CJS style entry and render built-in and externally registered icons from minified consumer output.
+
 ### 2.3.0 — 2026-10-16
 
 #### Added

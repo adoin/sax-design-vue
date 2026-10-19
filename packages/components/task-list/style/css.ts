@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/task-list.css'
+import '@vuesax-alpha/theme-chalk/vs-task-list.css'

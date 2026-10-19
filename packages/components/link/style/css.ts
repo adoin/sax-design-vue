@@ -1,1 +1,1 @@
-import '@vuesax-alpha/theme-chalk/css/link.css'
+import '@vuesax-alpha/theme-chalk/vs-link.css'
