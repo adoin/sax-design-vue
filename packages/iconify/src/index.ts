@@ -47,7 +47,15 @@ export interface SaxIconViteOptions {
   strict?: boolean
 }
 
-const iconRegistry = new Map<string, SaxIconData>()
+// ESM, CommonJS and separately bundled copies must register into the same store.
+const registryKey = Symbol.for('sax-design-vue-iconify.registry.v1')
+const registryScope = globalThis as typeof globalThis & {
+  [registryKey]?: Map<string, SaxIconData>
+}
+const iconRegistry = (registryScope[registryKey] ??= new Map<
+  string,
+  SaxIconData
+>())
 
 export function defineSaxIconConfig<T extends SaxIconViteOptions>(
   config: T,

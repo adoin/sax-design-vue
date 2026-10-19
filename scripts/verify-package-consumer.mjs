@@ -80,56 +80,70 @@ for (const [format, extension] of [
 const { saxIcons } = await import(
   pathToFileURL(path.join(repoRoot, 'packages/iconify/dist/vite.mjs')).href
 )
-const runtimeEntry = path.join(fixture, 'runtime.js')
 await writeFile(
-  runtimeEntry,
-  `
+  path.join(fixture, 'cjs-icon.cjs'),
+  "exports.SIcon = require('sax-design-vue/lib/components/icon/index.js').SIcon",
+)
+for (const format of ['es', 'cjs']) {
+  const runtimeEntry = path.join(fixture, `runtime-${format}.js`)
+  await writeFile(
+    runtimeEntry,
+    `
 import { createSSRApp, h } from 'vue'
 import { renderToString } from '@vue/server-renderer'
-import { SIcon } from 'sax-design-vue'
+import { SIcon } from '${format === 'es' ? 'sax-design-vue' : './cjs-icon.cjs'}'
 import 'virtual:sax-icons/register'
 export function renderIcons() {
   return renderToString(createSSRApp({ render: () => h('div',
     ['cb:accessibility', 'bx:home', 'cb:add', 'sax:close'].map(name => h(SIcon, { name }))) }))
 }
 `,
-)
-const runtime = await build({
-  root: fixture,
-  configFile: false,
-  logLevel: 'error',
-  plugins: [
-    saxIcons({
-      collections: { cb: 'carbon', bx: 'bx' },
-      safelist: ['cb:accessibility', 'bx:home'],
-    }),
-  ],
-  resolve: { dedupe: ['vue', 'sax-design-vue-iconify'] },
-  build: {
-    minify: true,
-    write: false,
-    lib: { entry: runtimeEntry, formats: ['es'], fileName: 'runtime' },
-    rolldownOptions: { external: ['vue', '@vue/server-renderer'] },
-  },
-})
-const runtimeChunks = (Array.isArray(runtime) ? runtime : [runtime])
-  .flatMap((output) => output.output)
-  .filter((item) => item.type === 'chunk')
-assert.equal(
-  runtimeChunks.length,
-  1,
-  'Icon smoke fixture should produce one executable chunk',
-)
-const runtimeFile = path.join(fixture, 'runtime.mjs')
-await writeFile(runtimeFile, runtimeChunks[0].code)
-const { renderIcons } = await import(pathToFileURL(runtimeFile).href)
-const html = await renderIcons()
-assert.equal(
-  (html.match(/<svg\b/g) || []).length,
-  4,
-  'Static/built-in, registered external, and close icons must all render after minification',
-)
-console.log(
-  `Production SIcon consumer: 4 SVGs rendered from minified output (${runtimeChunks[0].code.length} JS characters)`,
-)
+  )
+  const runtime = await build({
+    root: fixture,
+    configFile: false,
+    logLevel: 'error',
+    plugins: [
+      saxIcons({
+        collections: { cb: 'carbon', bx: 'bx' },
+        safelist: ['cb:accessibility', 'bx:home'],
+      }),
+    ],
+    resolve: { dedupe: ['vue', 'sax-design-vue-iconify'] },
+    build: {
+      minify: true,
+      write: false,
+      lib: { entry: runtimeEntry, formats: ['es'], fileName: 'runtime' },
+      rolldownOptions: {
+        external: ['vue', '@vue/server-renderer'],
+        output: {
+          banner:
+            format === 'cjs'
+              ? "import {createRequire} from 'node:module'; const require = createRequire(import.meta.url);"
+              : '',
+        },
+      },
+    },
+  })
+  const runtimeChunks = (Array.isArray(runtime) ? runtime : [runtime])
+    .flatMap((output) => output.output)
+    .filter((item) => item.type === 'chunk')
+  assert.equal(
+    runtimeChunks.length,
+    1,
+    'Icon smoke fixture should produce one executable chunk',
+  )
+  const runtimeFile = path.join(fixture, `runtime-${format}.mjs`)
+  await writeFile(runtimeFile, runtimeChunks[0].code)
+  const { renderIcons } = await import(pathToFileURL(runtimeFile).href)
+  const html = await renderIcons()
+  assert.equal(
+    (html.match(/<svg\b/g) || []).length,
+    4,
+    'Static/built-in, registered external, and close icons must all render after minification',
+  )
+  console.log(
+    `Production ${format} SIcon consumer: 4 SVGs rendered from minified output (${runtimeChunks[0].code.length} JS characters)`,
+  )
+}
 console.log(`Consumer fixture: ${fixture}`)

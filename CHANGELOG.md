@@ -6,6 +6,7 @@
 
 - Fix on-demand CSS imports that referenced the absent `theme-chalk/css/` directory; use the published flat `theme-chalk/vs-*.css` paths consistently in ESM and CommonJS entries. Validate every on-demand style dependency during the production build (#3).
 - Fix Verification Code's missing `vs-` CSS prefix and include its base styles in the on-demand entry. Add release checks that bundle every ESM/CJS style entry and render built-in and externally registered icons from minified consumer output.
+- Release `sax-design-vue-iconify` 1.0.2 with one shared registry across ESM, CommonJS and separately bundled copies, preventing registered external icons from disappearing in mixed-format applications. Upgrade the Iconify integration together with the component library.
 
 ### 2.3.0 — 2026-10-16
 
