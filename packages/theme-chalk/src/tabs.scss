@@ -192,8 +192,8 @@
     &:hover,
     &:focus-visible {
       opacity: 1;
-      color: var(--sax-tabs-color);
-      background: color-mix(in srgb, var(--sax-tabs-color) 12%, transparent);
+      color: inherit;
+      background: color-mix(in srgb, currentcolor 12%, transparent);
       box-shadow: 0 7px 16px -12px var(--sax-tabs-color);
       transform: scale(1.06);
     }
