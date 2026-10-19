@@ -124,7 +124,9 @@ EXPOSES:
 
 Drag the title to move; drag an edge or corner to resize. Each window retains its own input. Use the pencil action to rename.
 
-Focus the title and use arrow keys to move. Focus the lower-right handle to resize. Shift increases the step; Escape cancels a pointer gesture. The parent needs positioning and a definite height.
+Click the title, or use Tab to focus it, then press arrow keys to move. Click a resize handle, or Tab to the lower-right handle, then press arrow keys to resize. Hold Shift with an arrow key for a five-times larger step (50px by default).
+
+While dragging or resizing with the mouse button still held, press Escape to return to the starting position and size. Once released, the gesture is committed. Arrow keys inside an input continue to edit text. The parent needs positioning and a definite height.
 
 <template #example><window-default /></template>
 

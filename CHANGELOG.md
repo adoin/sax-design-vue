@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Add an inset shadow to Window content and focus pointer handles so arrow keys, Shift steps and Escape cancellation work after mouse interaction.
+
 - Display documentation update timestamps in explicit UTC so server output and client hydration remain identical across timezones.
 
 ### 2.5.0 — 2026-10-19

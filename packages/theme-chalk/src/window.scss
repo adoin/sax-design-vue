@@ -66,12 +66,26 @@
     gap: 4px;
   }
   &__body {
+    position: relative;
+    isolation: isolate;
     flex: 1;
     min-width: 0;
     min-height: 0;
     overflow: hidden;
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
+    // Draw above slot backgrounds without intercepting content interaction.
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      border-radius: inherit;
+      box-shadow:
+        inset 0 3px 10px getColor(text, 0.1),
+        inset 0 1px 3px getColor(text, 0.06);
+    }
   }
   &__sr {
     position: absolute;

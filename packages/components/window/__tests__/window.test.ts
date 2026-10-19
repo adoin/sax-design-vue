@@ -8,6 +8,55 @@ import { constrainWindowRect, resizeWindowRect } from '../src/window'
 enableAutoUnmount(afterEach)
 const rect = { x: 20, y: 30, width: 400, height: 300 }
 describe('Window', () => {
+  it('focuses pointer handles for arrows and Escape without taking input editing keys', async () => {
+    vi.useFakeTimers()
+    const wrapper = mount(Window, {
+      props: { rect },
+      attachTo: document.body,
+      slots: { default: '<input />' },
+    })
+    const pointer = async (element: Element, type: string, x = 0, y = 0) => {
+      const event = new MouseEvent(type, {
+        button: 0,
+        clientX: x,
+        clientY: y,
+        bubbles: true,
+        cancelable: true,
+      })
+      Object.defineProperty(event, 'pointerId', { value: 1 })
+      element.dispatchEvent(event)
+      await nextTick()
+    }
+    const title = wrapper.get('.s-window__title')
+    await pointer(title.element, 'pointerdown', 20, 30)
+    expect(document.activeElement).toBe(title.element)
+    await pointer(wrapper.element, 'pointermove', 70, 80)
+    await vi.advanceTimersByTimeAsync(20)
+    expect(wrapper.emitted('update:rect')!.at(-1)).toEqual([
+      { ...rect, x: 70, y: 80 },
+    ])
+    await title.trigger('keydown', { key: 'Escape' })
+    expect(wrapper.emitted('update:rect')!.at(-1)).toEqual([rect])
+    await pointer(wrapper.element, 'pointerup', 70, 80)
+    await title.trigger('keydown', { key: 'ArrowRight', shiftKey: true })
+    expect(wrapper.emitted('update:rect')!.at(-1)).toEqual([{ ...rect, x: 70 }])
+    const handle = wrapper.get('.s-window__resize--se')
+    await pointer(handle.element, 'pointerdown')
+    expect(document.activeElement).toBe(handle.element)
+    await pointer(wrapper.element, 'pointerup')
+    await handle.trigger('keydown', { key: 'ArrowDown', shiftKey: true })
+    expect(wrapper.emitted('update:rect')!.at(-1)).toEqual([
+      { ...rect, x: 70, height: 350 },
+    ])
+    const count = wrapper.emitted('update:rect')!.length
+    const input = wrapper.get('input')
+    ;(input.element as HTMLInputElement).focus()
+    await input.trigger('keydown', { key: 'ArrowLeft' })
+    await input.trigger('keydown', { key: 'Escape' })
+    expect(wrapper.emitted('update:rect')).toHaveLength(count)
+    wrapper.unmount()
+    vi.useRealTimers()
+  })
   it('enforces minimum dimensions and bounds, including opposite-edge resizing', () => {
     expect(
       constrainWindowRect({ x: 999, y: -5, width: 900, height: 1 }, 280, 180, {

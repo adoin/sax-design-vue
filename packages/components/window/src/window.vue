@@ -104,6 +104,9 @@ function start(event: PointerEvent, direction?: WindowResizeDirection) {
   )
     return
   event.preventDefault()
+  // Preventing selection also prevents native button focus. Keep subsequent
+  // arrows and Escape on the handle that owns this pointer gesture.
+  ;(event.currentTarget as HTMLElement).focus({ preventScroll: true })
   emit('activate')
   gesture.value = {
     id: event.pointerId,
@@ -173,6 +176,12 @@ function keyboard(event: KeyboardEvent, direction?: WindowResizeDirection) {
   if (direction) emit('resize-end', { ...local.value })
   else emit('drag-end', { ...local.value })
 }
+function escape(event: KeyboardEvent) {
+  if (!gesture.value) return
+  event.preventDefault()
+  event.stopPropagation()
+  finish(true)
+}
 async function rename() {
   draft.value = props.title
   editing.value = true
@@ -230,7 +239,7 @@ defineExpose<WindowExposes>({
     @pointerup="finish()"
     @pointercancel="finish(true)"
     @lostpointercapture="finish()"
-    @keydown.esc="gesture && finish(true)"
+    @keydown.esc="escape"
   >
     <header class="s-window__header">
       <SInput
