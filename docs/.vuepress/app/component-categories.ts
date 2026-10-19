@@ -138,6 +138,7 @@ export const componentCategories: ComponentCategory[] = [
       component('Alert', '警告提示', '/components/alert'),
       component('Dialog', '对话框', '/components/dialog'),
       component('Drawer', '抽屉', '/components/drawer'),
+      component('Window', '窗口', '/components/window'),
       component('Empty', '空状态', '/components/empty'),
       component('Loading', '加载', '/components/loading'),
       component('Skeleton', '骨架屏', '/components/skeleton'),

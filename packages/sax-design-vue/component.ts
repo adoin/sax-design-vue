@@ -102,6 +102,7 @@ import { STooltip } from '@vuesax-alpha/components/tooltip'
 import { SUpload } from '@vuesax-alpha/components/upload'
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
 import { SWatermark } from '@vuesax-alpha/components/watermark'
+import { SWindow } from '@vuesax-alpha/components/window'
 import { SVerificationCode } from '@vuesax-alpha/components/verification-code'
 
 import type { Plugin } from 'vue'
@@ -221,5 +222,6 @@ export default [
   SUpload,
   SVirtualList,
   SWatermark,
+  SWindow,
   SVerificationCode,
 ] as Plugin[]

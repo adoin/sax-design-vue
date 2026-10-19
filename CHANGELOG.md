@@ -4,6 +4,11 @@
 
 - Display documentation update timestamps in explicit UTC so server output and client hydration remain identical across timezones.
 
+### 2.4.0 — 2026-10-19
+
+- Add `SWindow` with controlled geometry and title, pointer and keyboard movement, eight-direction resizing, minimum dimensions, parent boundaries, shared shape configuration and action slots.
+- Add localized window controls and matching English/Chinese documentation, Code and Playground examples.
+
 ### 2.3.1 — 2026-10-19
 
 - Fix on-demand CSS imports that referenced the absent `theme-chalk/css/` directory; use the published flat `theme-chalk/vs-*.css` paths consistently in ESM and CommonJS entries. Validate every on-demand style dependency during the production build (#3).

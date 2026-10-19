@@ -1,6 +1,14 @@
 export default {
   name: 'en',
   vs: {
+    window: {
+      window: 'Window',
+      move: 'Move window',
+      resize: 'Resize window',
+      rename: 'Rename window',
+      keyboard:
+        'Use arrow keys to move or resize; hold Shift for larger steps. Escape cancels dragging.',
+    },
     input: { clear: 'Clear input' },
     skeleton: { loading: 'Loading' },
     agent: {

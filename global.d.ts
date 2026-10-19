@@ -1,6 +1,7 @@
 // GlobalComponents for Volar
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    SWindow: (typeof import('sax-design-vue'))['SWindow']
     SSkeleton: (typeof import('sax-design-vue'))['SSkeleton']
     SAlert: (typeof import('sax-design-vue'))['SAlert']
     SAvatar: (typeof import('sax-design-vue'))['SAvatar']

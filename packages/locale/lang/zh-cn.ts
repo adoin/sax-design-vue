@@ -1,6 +1,14 @@
 export default {
   name: 'zh-cn',
   vs: {
+    window: {
+      window: '窗口',
+      move: '移动窗口',
+      resize: '调整窗口大小',
+      rename: '重命名窗口',
+      keyboard:
+        '使用方向键移动或调整大小，按住 Shift 加大步长；Escape 取消拖动。',
+    },
     input: { clear: '清空输入' },
     skeleton: { loading: '加载中' },
     agent: {

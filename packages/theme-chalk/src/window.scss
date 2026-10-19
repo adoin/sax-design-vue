@@ -1,0 +1,160 @@
+@use 'mixins/var' as *;
+.s-window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  pointer-events: auto;
+  border: 0;
+  border-radius: var(--sax-radius-lg, 16px);
+  background: getColor(background);
+  color: getColor(text);
+  box-shadow:
+    0 12px 42px getColor(text, 0.14),
+    0 2px 8px getColor(text, 0.06);
+  &.is-active {
+    box-shadow:
+      0 16px 56px getColor(text, 0.22),
+      0 4px 14px getColor(primary, 0.08);
+  }
+  &--square {
+    border-radius: 0;
+  }
+  &.is-dragging {
+    user-select: none;
+  }
+  &__header {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 8px;
+    min-height: 48px;
+    padding: 6px 12px;
+  }
+  &__title {
+    flex: 1;
+    min-width: 0;
+    min-height: 36px;
+    border: 0;
+    padding: 4px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+    text-align: start;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: move;
+    touch-action: none;
+    border-radius: 8px;
+  }
+  &__title:focus-visible {
+    background: getColor(primary, 0.1);
+    color: getColor(primary);
+    outline: none;
+  }
+  &__editor {
+    flex: 1;
+    min-width: 0;
+  }
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  &__body {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
+  &__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  &__resize {
+    position: absolute;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    touch-action: none;
+    outline: none;
+  }
+  &__resize--n,
+  &__resize--s {
+    height: 8px;
+    left: 12px;
+    right: 12px;
+    cursor: ns-resize;
+  }
+  &__resize--n {
+    top: 0;
+  }
+  &__resize--s {
+    bottom: 0;
+  }
+  &__resize--e,
+  &__resize--w {
+    width: 8px;
+    top: 12px;
+    bottom: 12px;
+    cursor: ew-resize;
+  }
+  &__resize--e {
+    right: 0;
+  }
+  &__resize--w {
+    left: 0;
+  }
+  &__resize--ne,
+  &__resize--nw,
+  &__resize--se,
+  &__resize--sw {
+    width: 16px;
+    height: 16px;
+  }
+  &__resize--ne,
+  &__resize--nw {
+    top: 0;
+  }
+  &__resize--se,
+  &__resize--sw {
+    bottom: 0;
+  }
+  &__resize--ne,
+  &__resize--se {
+    right: 0;
+  }
+  &__resize--nw,
+  &__resize--sw {
+    left: 0;
+  }
+  &__resize--nw,
+  &__resize--se {
+    cursor: nwse-resize;
+  }
+  &__resize--ne,
+  &__resize--sw {
+    cursor: nesw-resize;
+  }
+  &__resize--se::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    background: getColor(text, 0.28);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  }
+  &__resize--se:focus-visible {
+    background: getColor(primary, 0.2);
+    border-radius: 4px;
+  }
+}
