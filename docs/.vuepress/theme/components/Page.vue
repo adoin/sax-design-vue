@@ -175,7 +175,6 @@ import {
 // @ts-ignore
 import { useThemeData } from '@vuepress/plugin-theme-data/client'
 import { ensureEndingSlash, ensureLeadingSlash } from '@vuepress/shared'
-import { useDateFormat } from '@vueuse/core'
 import { upperFirst } from 'lodash-unified'
 
 import { componentNamesZh } from '../../app/component-categories'
@@ -319,10 +318,13 @@ const lastUpdatedText = computed(() => {
   )
 })
 
-const lastUpdatedTime = useDateFormat(
-  computed(() => pageData.value.git?.updatedTime),
-  'YYYY-MM-DD, HH:mm:ss',
-)
+const lastUpdatedTime = computed(() => {
+  const updatedTime = pageData.value.git?.updatedTime
+  if (updatedTime == null) return ''
+  const date = new Date(updatedTime)
+  if (Number.isNaN(date.getTime())) return ''
+  return `${date.toISOString().slice(0, 19).replace('T', ', ')} UTC`
+})
 
 const prev = computed(() => {
   const frontmatterPrev = pageFrontmatter.value.prev

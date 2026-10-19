@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Display documentation update timestamps in explicit UTC so server output and client hydration remain identical across timezones.
+
 ### 2.3.1 — 2026-10-19
 
 - Fix on-demand CSS imports that referenced the absent `theme-chalk/css/` directory; use the published flat `theme-chalk/vs-*.css` paths consistently in ESM and CommonJS entries. Validate every on-demand style dependency during the production build (#3).
