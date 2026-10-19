@@ -13,7 +13,7 @@ supersedes: []
 
 ## 状态与来源
 
-这些内容是针对 [已明确的窗口化需求](../active/window-and-pinned-route-pages.md) 给出的架构与交互建议。下述命名或交互选择尚未逐项确认，不应直接解释成新的硬性契约。
+这些内容是针对 [已明确的窗口化需求](../implemented/window-and-pinned-route-pages.md) 给出的架构与交互建议。下述命名或交互选择尚未逐项确认，不应直接解释成新的硬性契约。
 
 ## 组件库建议
 

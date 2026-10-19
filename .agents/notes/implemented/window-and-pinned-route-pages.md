@@ -1,5 +1,6 @@
 ---
-status: active
+status: implemented
+completed_at: 2026-10-19
 kind: project-specification
 updated_at: 2026-10-19
 modules:
@@ -40,14 +41,27 @@ supersedes: []
 - Tabs 的既有首次指示线对齐与渲染生命周期契约见 [tabs-indicator-initial-alignment.md](../implemented/tabs-indicator-initial-alignment.md)。
 - 窗口内的下拉、选择器、提示等浮层继续遵守共享 SPopper 契约。
 - 公共组件文档不得包含本次讨论、迁移过程或工作记录，见 [conversation-history-in-public-docs.md](../prohibited/conversation-history-in-public-docs.md)。
-- Admin 侧的页面生命周期要求见相邻 Admin 仓库 `.agents/notes/active/pinned-route-page-windows.md`。
+- Admin 侧的页面生命周期要求见相邻 Admin 仓库 `.agents/notes/implemented/pinned-route-page-windows.md`。
 
 ## 架构建议的状态
 
 先前讨论的通用窗口与业务页面承载层方案，单独记录在 [window-component-and-admin-boundary.md](../proposed/window-component-and-admin-boundary.md)。该文件属于设计建议；其中的组件命名、API、Tab 保留方式和重命名后的恢复行为尚未逐项确认为用户要求。
 
-## 尚待完成的项目目标
+## 已完成的项目目标
 
 - 明确组件库与 Admin 的职责边界，并完成可复用的窗口交互能力与 Admin 页面固定、恢复流程。
 - 完成多窗口、最小尺寸、重命名和原页面状态保持的可操作验收。
 - 为最终新增的组件 API 提供类型、必要回归、英文与中文示例，以及一致的 Code/Playground 源码。
+
+## 本轮实现选择与验证
+
+- 通用 SWindow 仅负责受控 rect/title、拖动、八方向缩放、最小宽高、定位父容器边界、键盘交互、标题编辑和插槽；不接管路由、关闭业务或缓存。
+- Admin 采用 WorkspacePages、稳定 WorkspacePageHost 和布局作用域内的页面窗口管理器。保留固定 Tab，点击固定 Tab 聚焦已有窗口；别名不改写 route.meta.title，恢复后继续使用。
+- 页面内容由同一 Teleport 子树移动，页面自己的 SScrollbar 一起移动；移前记录、移后恢复滚动与原生输入焦点/选择。超过新视口滚动上限时按原生边界夹取。
+- 使用 vue-smart-router 5.4.1 的独立路由上下文及 detached 生命周期。固定/恢复不调用 remove、retain 或 refresh，不改变 fullPath::revision。
+- 组件库交付版本为 2.4.2，Admin 使用公开 npm 依赖；不包含浏览器刷新后的输入或布局持久化。
+- Window 5 项回归、文档示例 21 项、235 页文档构建、web/test 类型检查通过。212 个 ESM/CJS 样式入口、472 个引用及压缩后图标消费检查通过。
+- 2.4.2 发布压缩包逐项核对 7837 个文件、ESM/CJS/类型入口及无链接记录；发布脚本现执行同样检查。Window Sass 颜色函数残留会阻止发布。
+- IAB 验证双语示例、Code、Playground、真实拖动、最小尺寸、重命名、浅/深色不透明表面与无边框阴影。
+- Admin 34 项回归、类型和生产构建通过；生产预览验证同一输入控件 ID、两份草稿及 params/query 隔离、三个窗口、恢复、别名、刷新/关闭和最后普通页面进入 launchpad。
+- Table 最小窗口保留非零数据视图；十万条虚拟列表仅渲染 8–9 行并响应容器宽度；WebGPU 就绪且 Canvas 显示宽度随窗口从 657px 变为 397px。
