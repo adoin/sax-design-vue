@@ -4,6 +4,10 @@
 
 - Display documentation update timestamps in explicit UTC so server output and client hydration remain identical across timezones.
 
+### 2.4.2 — 2026-10-19
+
+- Restore complete ESM/CommonJS package contents and validate every archive file against the staging directory before publication.
+
 ### 2.4.1 — 2026-10-19
 
 - Resolve Window surface, shadow and keyboard-feedback colors through the shared Sass function module. Reject unresolved Window Sass functions during release validation.

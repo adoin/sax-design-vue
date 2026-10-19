@@ -71,6 +71,10 @@ export const copyFiles = () =>
       path.resolve(vsOutput, 'README.md'),
     ),
     copyFile(
+      path.resolve(projRoot, 'LICENSE'),
+      path.resolve(vsOutput, 'LICENSE'),
+    ),
+    copyFile(
       path.resolve(projRoot, 'global.d.ts'),
       path.resolve(vsOutput, 'global.d.ts'),
     ),

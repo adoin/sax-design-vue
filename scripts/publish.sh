@@ -37,7 +37,12 @@ if [[ "$icon_version" != "$published_icon_version" ]]; then
   npm publish ./packages/iconify --access public --provenance
 fi
 
-npm publish ./dist/sax-design-vue --access public --provenance --tag latest
+repo_root="$(pwd)"
+archive_dir="$(mktemp -d)"
+archive_name="$(cd ./dist/sax-design-vue && npm pack --pack-destination "$archive_dir" --silent)"
+archive_path="$archive_dir/$archive_name"
+(cd ./dist/sax-design-vue && node "$repo_root/scripts/verify-release-archive.mjs" "$archive_path")
+npm publish "$archive_path" --access public --provenance --tag latest
 
 live_version=""
 # npm accepts publication before its asynchronous processing exposes the version.
