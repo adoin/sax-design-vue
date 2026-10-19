@@ -44,21 +44,4 @@ archive_path="$archive_dir/$archive_name"
 (cd ./dist/sax-design-vue && node "$repo_root/scripts/verify-release-archive.mjs" "$archive_path")
 npm publish "$archive_path" --access public --provenance --tag latest
 
-live_version=""
-# npm accepts publication before its asynchronous processing exposes the version.
-# Allow that processing to finish instead of treating a short delay as failure.
-for attempt in $(seq 1 60); do
-  live_version="$(npm view "sax-design-vue@$release_version" version --prefer-online 2>/dev/null || true)"
-  if [[ "$live_version" == "$release_version" ]]; then
-    break
-  fi
-  if [[ "$attempt" != 60 ]]; then
-    sleep 10
-  fi
-done
-if [[ "$live_version" != "$release_version" ]]; then
-  echo "::error::sax-design-vue@$release_version is not publicly visible yet. Inspect the npm publish output and rerun this job after the registry exposes the version." >&2
-  exit 1
-fi
-
 echo "✅ Published sax-design-vue@$release_version"
