@@ -21,11 +21,6 @@ PROPS:
     values: "true | false"
     description: 控制浮层内容是否显示。
     default: 'null'
-  - name: visible
-    type: Boolean
-    values: "true | false"
-    description: 控制浮层内容是否显示。
-    default: 'null'
   - name: trigger
     type: String | String[]
     values: "hover | focus | click | contextmenu"
@@ -121,11 +116,6 @@ PROPS:
     values: "true | false"
     description: 显示右上角关闭控件。close-on-click-outside 为 false 时默认开启。
     default: null
-  - name: translucent
-    type: Boolean
-    values: "true | false"
-    description: 让浮层半透明，以便看到下方界面。
-    default: 'false'
   - name: v-model:translucent
     type: Boolean
     values: "true | false"

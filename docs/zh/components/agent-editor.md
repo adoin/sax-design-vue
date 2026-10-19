@@ -11,19 +11,9 @@ PROPS:
     description: "文档纯文本，HTML 按普通文字处理。"
     default: "''"
     usage: '#default'
-  - name: model-value
-    type: "String"
-    description: "受控的文档纯文本。"
-    default: "''"
-    usage: '#default'
   - name: v-model:marks
     type: "AgentEditorMark[]"
     description: "受控行内格式范围。start 包含、end 不包含，位置使用 UTF-16 索引。"
-    default: "[]"
-    usage: '#formatting'
-  - name: marks
-    type: "AgentEditorMark[]"
-    description: "初始或外部控制的行内格式范围。"
     default: "[]"
     usage: '#formatting'
   - name: title

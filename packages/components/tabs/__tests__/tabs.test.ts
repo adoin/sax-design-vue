@@ -43,12 +43,166 @@ const panes = () => [
   ),
 ]
 
+const pointer = async (element: Element, type: string, x = 0, y = 0) => {
+  const event = new MouseEvent(type, {
+    button: 0,
+    clientX: x,
+    clientY: y,
+    bubbles: true,
+    cancelable: true,
+  })
+  Object.defineProperty(event, 'pointerId', { value: 1 })
+  element.dispatchEvent(event)
+  await nextTick()
+}
+const originalElementFromPoint = document.elementFromPoint
+
 afterEach(() => {
+  if (!originalElementFromPoint)
+    Reflect.deleteProperty(document, 'elementFromPoint')
   vi.useRealTimers()
   vi.restoreAllMocks()
 })
 
 describe('Tabs', () => {
+  it('ignores small moves and cancels captured pointer sorting with Escape', async () => {
+    const wrapper = mountTabs(
+      { sortable: true, modelValue: 'overview' },
+      { default: panes },
+    )
+    await flushPromises()
+    const buttons = wrapper.findAll('[role="tab"]')
+    Object.defineProperty(document, 'elementFromPoint', {
+      configurable: true,
+      value: vi.fn(() => buttons[1].element),
+    })
+    await pointer(buttons[0].element, 'pointerdown', 10, 10)
+    await pointer(buttons[0].element, 'pointerup', 12, 10)
+    expect(wrapper.emitted('sort')).toBeUndefined()
+    await pointer(buttons[0].element, 'pointerdown', 10, 10)
+    await pointer(buttons[0].element, 'pointermove', 200, 10)
+    await buttons[0].trigger('keydown', { key: 'Escape' })
+    await pointer(buttons[0].element, 'pointerup', 200, 10)
+    expect(wrapper.emitted('sort')).toBeUndefined()
+    expect(wrapper.find('.is-dragging').exists()).toBe(false)
+    wrapper.unmount()
+  })
+  it('sorts by dragging without changing selection or remounting pane content', async () => {
+    const wrapper = mountTabs(
+      { sortable: true, modelValue: 'a', overflow: 'scroll' },
+      {
+        default: () =>
+          ['a', 'b', 'c'].map((name) =>
+            h(Tab, { name, key: name, label: name }, () =>
+              h('input', { value: name }),
+            ),
+          ),
+      },
+    )
+    await flushPromises()
+    const original = wrapper.findAll('input').map((input) => input.element)
+    const buttons = wrapper.findAll('[role="tab"]')
+    Object.defineProperty(document, 'elementFromPoint', {
+      configurable: true,
+      value: vi.fn(() => buttons[2].element),
+    })
+    await pointer(buttons[0].element, 'pointerdown', 10, 10)
+    await pointer(buttons[0].element, 'pointermove', 200, 10)
+    await pointer(buttons[0].element, 'pointerup', 200, 10)
+    await flushPromises()
+    expect(wrapper.findAll('[role="tab"]').map((tab) => tab.text())).toEqual([
+      'b',
+      'c',
+      'a',
+    ])
+    expect(wrapper.emitted('sort')?.[0]).toEqual([
+      ['b', 'c', 'a'],
+      { value: 'a', oldIndex: 0, newIndex: 2 },
+    ])
+    expect(wrapper.emitted('update:order')?.[0]).toEqual([['b', 'c', 'a']])
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.findAll('input').map((input) => input.element)).toEqual(
+      original,
+    )
+    expect(wrapper.get('[aria-selected="true"]').text()).toBe('a')
+    wrapper.unmount()
+  })
+  it('honors controlled order, omits unknown/duplicate values, and skips disabled sort targets', async () => {
+    const wrapper = mountTabs(
+      {
+        sortable: true,
+        order: ['files', 'files', 'missing'],
+        modelValue: 'overview',
+      },
+      { default: panes },
+    )
+    await flushPromises()
+    expect(wrapper.findAll('[role="tab"]').map((tab) => tab.text())).toEqual([
+      'Files',
+      'Overview',
+      'Settings',
+    ])
+    await wrapper
+      .findAll('[role="tab"]')[1]
+      .trigger('keydown', { key: 'ArrowLeft', altKey: true, shiftKey: true })
+    expect(wrapper.emitted('sort')?.[0]?.[0]).toEqual([
+      'overview',
+      'files',
+      'settings',
+    ])
+    // Controlled props remain authoritative until the consumer updates them.
+    expect(wrapper.findAll('[role="tab"]')[0].text()).toBe('Files')
+    await wrapper.setProps({
+      order: ['overview', 'files', 'settings'],
+      sortable: false,
+    })
+    await pointer(wrapper.findAll('[role="tab"]')[0].element, 'pointerdown')
+    await pointer(wrapper.findAll('[role="tab"]')[0].element, 'pointerup', 200)
+    expect(wrapper.emitted('sort')).toHaveLength(1)
+    wrapper.unmount()
+  })
+  it('lets event-only consumers reorder their source, including later external changes', async () => {
+    const order = ref(['a', 'b', 'c'])
+    const wrapper = mount(
+      defineComponent({
+        setup: () => () =>
+          h(
+            Tabs,
+            {
+              sortable: true,
+              modelValue: 'b',
+              onSort: (next: (string | number)[]) => {
+                order.value = next.map(String)
+              },
+            },
+            () =>
+              order.value.map((name) =>
+                h(Tab, { name, key: name, label: name }, () =>
+                  h('input', { value: name }),
+                ),
+              ),
+          ),
+      }),
+    )
+    await flushPromises()
+    const input = wrapper.findAll('input')[1].element
+    await wrapper
+      .findAll('[role="tab"]')[1]
+      .trigger('keydown', { key: 'ArrowRight', altKey: true, shiftKey: true })
+    await flushPromises()
+    expect(order.value).toEqual(['a', 'c', 'b'])
+    expect(wrapper.findAll('[role="tab"]').map((tab) => tab.text())).toEqual(
+      order.value,
+    )
+    expect(wrapper.get('[aria-selected="true"]').text()).toBe('b')
+    expect(wrapper.findAll('input')[2].element).toBe(input)
+    order.value = ['c', 'b', 'a']
+    await flushPromises()
+    expect(wrapper.findAll('[role="tab"]').map((tab) => tab.text())).toEqual(
+      order.value,
+    )
+    wrapper.unmount()
+  })
   it('places the line from layout geometry during the initial tab animation', async () => {
     vi.spyOn(HTMLElement.prototype, 'offsetParent', 'get').mockImplementation(
       function (this: HTMLElement) {

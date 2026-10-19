@@ -9,6 +9,8 @@ const moduleUrl = import.meta.url
 const root = resolve(fileURLToPath(new URL('../..', moduleUrl)))
 const kebab = (value) =>
   value.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`)
+const modelProp = (name) => name === 'v-model' ? 'model-value'
+  : name.startsWith('v-model:') ? name.slice('v-model:'.length) : name
 const unwrap = (node) => {
   if (!node) throw new Error('Missing API expression')
   while (
@@ -304,7 +306,8 @@ export function auditTableApi({
         const rows = data[section] ?? []
         const documented = rows.map((row) => String(row.name))
         // Vue accepts kebab-case listeners for camelCase emitted event names.
-        const normalize = section === 'EVENTS' ? kebab : (name) => name
+        const normalize = section === 'EVENTS' ? kebab
+          : section === 'PROPS' ? modelProp : (name) => name
         const expected = names.map(normalize)
         const present = documented.map(normalize)
         sections[section] = {
@@ -325,8 +328,7 @@ export function auditTableApi({
               ? []
               : documented.filter(
                   (name) =>
-                    !expected.includes(normalize(name)) &&
-                    !(section === 'PROPS' && name === 'v-model'),
+                    !expected.includes(normalize(name)),
                 ),
         }
       }
@@ -339,7 +341,7 @@ export function auditTableApi({
           continue
         }
         defaults.checked++
-        const row = data.PROPS?.find((row) => row.name === name)
+        const row = data.PROPS?.find((row) => modelProp(row.name) === name)
         const documented = row?.default ?? null
         if (String(documented) !== String(expected))
           defaults.mismatches.push({ name, expected, documented })

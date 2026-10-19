@@ -1,10 +1,5 @@
 ---
 PROPS:
-  - name: model-value
-    type: SplitterModelValue
-    values: "recursive layout tree"
-    description: 整个分割布局的方向和尺寸树。
-    default: "{ type: 'horizontal', size: ['rest', 'rest'] }"
   - name: v-model
     type: SplitterModelValue
     values: "recursive layout tree"

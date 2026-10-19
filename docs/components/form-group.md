@@ -22,6 +22,11 @@ PROPS:
     type: ({ item, index, key, list }) => ContextMenuItem[]
     values: "Function"
     description: Returns right-click menu items for a tab. index is the current array position; key is the stable __index.
+  - name: sortable
+    type: Boolean
+    description: Enable tab sorting by default. Reorders the v-model array from Tabs sort events without passing order. Stable __index identities stay unchanged while array indexes follow the new order.
+    default: 'true'
+    usage: '#basic-usage'
   - name: tabs-type
     type: String
     values: "line / pill / card / connected-card / editable-card"
@@ -58,6 +63,9 @@ PROPS:
     default: '5'
 description: 'Dynamic form groups built from STabs and SForm.'
 EVENTS:
+  - name: sort
+    type: '(items: FormGroupItem[]) => void'
+    description: Emits the final data array after updating the model order.
   - name: add
     type: (item
     description: Fires after a form item is added or removed.
@@ -91,6 +99,8 @@ For validation outside the component, use the exported `createFormValidator(mode
 <card>
 
 ## Basic usage
+
+Drag the form tabs, or focus a tab and press Alt+Shift+Arrow, to change the bound array order. Existing field values, active form and validation identities are preserved. Set sortable to false to disable sorting.
 
 <template #example><form-group-default /></template>
 

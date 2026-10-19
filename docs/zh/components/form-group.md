@@ -22,6 +22,11 @@ PROPS:
     type: ({ item, index, key, list }) => ContextMenuItem[]
     values: "函数"
     description: 返回标签右键菜单项；index 是当前数组下标，key 是稳定的 __index。
+  - name: sortable
+    type: Boolean
+    description: 默认允许拖拽标签排序；通过 Tabs 的 sort 事件重排 v-model 数组，不传 order。__index 保持稳定，数组下标随排序变化。
+    default: 'true'
+    usage: '#basic-usage'
   - name: tabs-type
     type: String
     values: "line / pill / card / connected-card / editable-card"
@@ -58,6 +63,9 @@ PROPS:
     default: '5'
 description: '基于 STabs 与 SForm 的动态表单组。'
 EVENTS:
+  - name: sort
+    type: '(items: FormGroupItem[]) => void'
+    description: 模型数组完成重排后返回最终数组。
   - name: add
     type: (item
     description: 新增或删除表单项时触发。
@@ -91,6 +99,8 @@ EVENTS:
 <card>
 
 ## 基础用法
+
+拖拽表单标签，或聚焦后按 Alt+Shift+方向键，即可调整绑定数组的顺序。字段值、激活表单及校验标识保持不变；设置 sortable 为 false 可关闭排序。
 
 <template #example><form-group-default /></template>
 

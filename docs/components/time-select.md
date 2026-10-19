@@ -37,14 +37,6 @@ PROPS:
     link: null
     usage: '#default'
     code: null
-  - name: model-value
-    type: String
-    values: ''
-    description: binding time value
-    default: false
-    link: null
-    usage: '#default'
-    code: null
 EVENTS:
   - name: update:modelValue
     type: String

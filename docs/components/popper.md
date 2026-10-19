@@ -20,11 +20,6 @@ PROPS:
     values: "true | false"
     description: Control whether the floating content is shown.
     default: 'null'
-  - name: visible
-    type: Boolean
-    values: "true | false"
-    description: Control whether the floating content is shown.
-    default: 'null'
   - name: trigger
     type: String | String[]
     values: "hover | focus | click | contextmenu"
@@ -120,11 +115,6 @@ PROPS:
     values: "true | false"
     description: Show a top-right close control. Defaults to true when close-on-click-outside is false.
     default: null
-  - name: translucent
-    type: Boolean
-    values: "true | false"
-    description: Render the floating content semi-transparent so underlying UI remains visible.
-    default: 'false'
   - name: v-model:translucent
     type: Boolean
     values: "true | false"

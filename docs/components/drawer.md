@@ -1,23 +1,11 @@
 ---
 description: 'An edge panel with close approval, scoped regions, nesting and resizing.'
 PROPS:
-  - name: 'model-value'
-    type: 'Boolean'
-    values: 'true | false'
-    description: 'Controlled visibility; open takes precedence when provided.'
-    default: false
-    usage: '#default'
   - name: 'v-model'
     type: 'Boolean'
     values: 'true | false'
     description: 'Controlled visibility; open takes precedence when provided.'
     default: false
-    usage: '#default'
-  - name: 'open'
-    type: 'Boolean'
-    values: 'true | false'
-    description: 'Controlled visibility; open takes precedence when provided.'
-    default: null
     usage: '#default'
   - name: 'v-model:open'
     type: 'Boolean'

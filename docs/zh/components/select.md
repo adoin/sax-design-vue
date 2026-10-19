@@ -36,11 +36,6 @@ PROPS:
     values: '选项值或选项值数组'
     description: 双向绑定当前选中值。
     default: "''"
-  - name: model-value
-    type: SelectValue
-    values: '选项值或选项值数组'
-    description: 当前选中值。
-    default: "''"
   - name: not-value
     type: SelectOptionValue
     values: '视为空状态的选项值'

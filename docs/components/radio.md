@@ -18,14 +18,6 @@ PROPS:
     link: null
     usage: '#radio-options-default'
     code: null
-  - name: model-value
-    type: String | Number | Boolean
-    values: 'selected radio value'
-    description: Bind the selected value for the radio or radio group.
-    default: null
-    link: null
-    usage: '#radio-options-default'
-    code: null
   - name: color
     type: String
     values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
@@ -138,11 +130,6 @@ GROUP_TABS_PROPS:
     description: "Tabs and their `options`; each tab may define `disabled`, `columns`, and disabled option values."
     default: "[]"
     usage: "#default"
-  - name: "active-key"
-    type: "string | number"
-    description: "Current panel; supports `v-model:active-key`."
-    default: "first enabled tab"
-    usage: "#default"
   - name: "v-model:active-key"
     type: RadioGroupTabValue
     description: Two-way binding for the active tab key.
@@ -167,11 +154,6 @@ BUTTON_PROPS:
   - name: v-model
     type: RadioButtonValue
     description: Two-way selected value when using RadioButton directly.
-    default: null
-    usage: '#radio-options-default'
-  - name: model-value
-    type: RadioButtonValue
-    description: Selected value without v-model syntax.
     default: null
     usage: '#radio-options-default'
   - name: value

@@ -6,11 +6,6 @@ PROPS:
     description: "受控消息数据，稳定且唯一的 id 用于行高缓存与历史定位。"
     default: null
     usage: "#dynamic-virtual-scrolling"
-  - name: "items"
-    type: "AgentHistoryMessage[]"
-    description: "消息数据。提供时启用组件内置列表，不提供时使用原有 default 插槽。"
-    default: null
-    usage: "#dynamic-virtual-scrolling"
   - name: "virtual"
     type: "Boolean"
     description: "使用动态行高虚拟列表；false 渲染全部数据。仅作用于 items 模式。"

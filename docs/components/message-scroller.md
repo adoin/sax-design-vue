@@ -6,11 +6,6 @@ PROPS:
     description: "Controlled messages; stable unique ids retain measurements and history position."
     default: null
     usage: "#dynamic-virtual-scrolling"
-  - name: "items"
-    type: "AgentHistoryMessage[]"
-    description: "Message data enables the built-in list; omit it to use the original default slot."
-    default: null
-    usage: "#dynamic-virtual-scrolling"
   - name: "virtual"
     type: "Boolean"
     description: "Use dynamic-height virtualization; false renders all items. Applies only to items mode."

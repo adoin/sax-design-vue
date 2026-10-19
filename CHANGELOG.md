@@ -4,6 +4,12 @@
 
 - Display documentation update timestamps in explicit UTC so server output and client hydration remain identical across timezones.
 
+### 2.5.0 — 2026-10-19
+
+- Add opt-in Tabs drag sorting, Alt+Shift+Arrow keyboard sorting, an optional `v-model:order`, and `sort` events carrying the complete order and moved-item indexes. Keep active values and pane instances intact.
+- Enable FormGroup tab sorting by default and reorder its bound data array from events while preserving stable item identities and validation state.
+- Consolidate duplicate `v-model` and backing-prop documentation rows across both locales, and preserve close-button contrast when hovering active Tabs.
+
 ### 2.4.2 — 2026-10-19
 
 - Restore complete ESM/CommonJS package contents and validate every archive file against the staging directory before publication.

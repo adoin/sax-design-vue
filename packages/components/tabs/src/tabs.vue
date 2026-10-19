@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { resolveVisualEnumProps } from '@vuesax-alpha/utils'
 import {
   computed,
   getCurrentInstance,
+  isVNode,
   nextTick,
   onBeforeUnmount,
   onMounted,
+  onUpdated,
   provide,
   shallowRef,
   toRef,
@@ -14,6 +15,14 @@ import {
   useTemplateRef,
   watch,
 } from 'vue'
+import {
+  debugWarn,
+  flattedChildren,
+  getVsColor,
+  isVsColor,
+  normalizeVsColor,
+  resolveVisualEnumProps,
+} from '@vuesax-alpha/utils'
 import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
 import { useResizeObserver } from '@vueuse/core'
 import {
@@ -22,16 +31,11 @@ import {
   useOrderedChildren,
   useSize,
 } from '@vuesax-alpha/hooks'
-import {
-  debugWarn,
-  getVsColor,
-  isVsColor,
-  normalizeVsColor,
-} from '@vuesax-alpha/utils'
 import { tabsContextKey } from './constants'
 import { tabsEmits, tabsProps } from './tabs'
 import { calculateTabsOverflowLayout } from './tabs-overflow'
 import TabsOverflowTrigger from './tabs-overflow-trigger.vue'
+import { useTabsSort } from './use-tabs-sort'
 
 import type { CSSProperties } from 'vue'
 import type { TabPaneContext, TabValue, TabsRenderMode } from './constants'
@@ -53,10 +57,30 @@ const instance = getCurrentInstance()
 if (!instance) throw new Error('[STabs] component instance is unavailable')
 
 const {
-  children: panes,
+  children: sourcePanes,
   addChild: addPane,
   removeChild: removePane,
 } = useOrderedChildren<TabPaneContext>(instance, 'STab')
+const sorting = useTabsSort(sourcePanes, props, (order, detail) => {
+  emit('update:order', [...order])
+  emit('sort', [...order], detail)
+  queueLayout()
+})
+const panes = sorting.panes
+// Slot children can move without mounting again. Keep their source order current.
+onUpdated(() => {
+  const byUid = new Map(sourcePanes.value.map((pane) => [pane.uid, pane]))
+  const ordered = flattedChildren(instance.subTree)
+    .map((node) =>
+      isVNode(node) ? byUid.get(node.component?.uid ?? -1) : undefined,
+    )
+    .filter((pane): pane is TabPaneContext => !!pane)
+  if (
+    ordered.length === sourcePanes.value.length &&
+    ordered.some((pane, index) => pane.uid !== sourcePanes.value[index]?.uid)
+  )
+    sourcePanes.value = ordered
+})
 const activeUid = shallowRef<number>()
 const lineStyle = shallowRef<CSSProperties>({})
 const overflowLayout = shallowRef<TabsOverflowResult>({
@@ -119,13 +143,20 @@ const rootStyle = computed((): CSSProperties =>
     : {},
 )
 
-const paneValue = (pane: TabPaneContext, index: number): TabValue =>
-  pane.name ?? index
+const paneValue = (pane: TabPaneContext, index: number): TabValue => {
+  const sourceIndex = sourcePanes.value.indexOf(pane)
+  return pane.name ?? (sourceIndex < 0 ? index : sourceIndex)
+}
 
 const resolveIndex = (value: TabValue) => {
   const namedIndex = panes.value.findIndex((pane) => pane.name === value)
   if (namedIndex >= 0) return namedIndex
-  if (typeof value === 'number' && Number.isInteger(value)) return value
+  if (typeof value === 'number' && Number.isInteger(value)) {
+    const source = sourcePanes.value[value]
+    return source
+      ? panes.value.findIndex((pane) => pane.uid === source.uid)
+      : value
+  }
   const labelIndex = panes.value.findIndex((pane) => pane.label === value)
   return labelIndex >= 0 ? labelIndex : 0
 }
@@ -389,6 +420,7 @@ const focusPane = async (pane: TabPaneContext) => {
 }
 
 const handleKeydown = (event: KeyboardEvent, pane: TabPaneContext) => {
+  if (sorting.keyboard(event, pane, isHorizontal.value)) return
   const enabledPanes = panes.value.filter((item) => !item.disabled)
   const currentIndex = enabledPanes.findIndex((item) => item.uid === pane.uid)
   if (currentIndex < 0) return
@@ -441,7 +473,7 @@ const updatePane = (uid: number, nextPane: Partial<TabPaneContext>) => {
   const pane = panes.value.find((item) => item.uid === uid)
   if (!pane) return
   Object.assign(pane, nextPane, { uid })
-  panes.value = [...panes.value]
+  sourcePanes.value = [...sourcePanes.value]
   syncActiveFromModel()
   queueLayout()
 }
@@ -467,6 +499,10 @@ const unregisterPane = (uid: number) => {
 const tabId = (uid: number) => `${tabsId}-tab-${uid}`
 const panelId = (uid: number) => `${tabsId}-panel-${uid}`
 
+watch(
+  () => panes.value.map((pane) => pane.uid),
+  () => queueLayout(),
+)
 watch(
   () => props.modelValue,
   () => {
@@ -566,6 +602,12 @@ onBeforeUnmount(() => {
                 ns.is('active', pane.uid === activeUid),
                 ns.is('disabled', pane.disabled),
                 ns.is('closable', isEditable && pane.closable),
+                ns.is('dragging', sorting.dragging.value === pane.uid),
+                ns.is(
+                  'drop-target',
+                  sorting.over.value === pane.uid &&
+                    sorting.dragging.value !== pane.uid,
+                ),
                 ns.is(
                   'has-label-extra',
                   !!(slots['label-extra'] || pane.renderLabelExtra),
@@ -581,8 +623,22 @@ onBeforeUnmount(() => {
                 role="tab"
                 :tabindex="pane.uid === activeUid ? 0 : -1"
                 :disabled="pane.disabled"
+                :data-sortable="sortable && !pane.disabled ? true : undefined"
+                :aria-keyshortcuts="
+                  sortable
+                    ? isHorizontal
+                      ? 'Alt+Shift+ArrowLeft Alt+Shift+ArrowRight'
+                      : 'Alt+Shift+ArrowUp Alt+Shift+ArrowDown'
+                    : undefined
+                "
                 :aria-selected="pane.uid === activeUid"
                 :aria-controls="panelId(pane.uid)"
+                @pointerdown="sorting.start($event, pane)"
+                @pointermove="sorting.pointerMove"
+                @pointerup="sorting.end"
+                @pointercancel="sorting.cancel"
+                @lostpointercapture="sorting.cancel"
+                @click.capture="sorting.click"
                 @click="handleTabClick(pane, $event)"
                 @keydown="handleKeydown($event, pane)"
               >

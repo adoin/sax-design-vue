@@ -6,11 +6,6 @@ PROPS:
     description: Apply rounded or square geometry to the trigger and editor panel.
     default: rounded
     usage: '#shape'
-  - name: model-value
-    type: String
-    values: "hex / rgb / rgba / hsl / hsla"
-    description: Selected color value.
-    default: '#5667f4'
   - name: v-model
     type: String
     values: "hex / rgb / rgba / hsl / hsla"

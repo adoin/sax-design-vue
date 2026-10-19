@@ -11,19 +11,9 @@ PROPS:
     description: "Plain document text. HTML is treated as literal text."
     default: "''"
     usage: '#default'
-  - name: model-value
-    type: "String"
-    description: "Controlled plain document text."
-    default: "''"
-    usage: '#default'
   - name: v-model:marks
     type: "AgentEditorMark[]"
     description: "Controlled inline ranges. start is inclusive and end exclusive; offsets use UTF-16 code units."
-    default: "[]"
-    usage: '#formatting'
-  - name: marks
-    type: "AgentEditorMark[]"
-    description: "Initial or externally controlled inline formatting ranges."
     default: "[]"
     usage: '#formatting'
   - name: title

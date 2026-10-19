@@ -61,6 +61,41 @@ const mountGroup = (
 }
 
 describe('FormGroup', () => {
+  it('sorts its final model by tab events without an order prop and keeps stable form state', async () => {
+    const { wrapper, items, group } = mountGroup([
+      { name: 'Alpha' },
+      { name: 'Beta' },
+      { name: 'Gamma' },
+    ])
+    await flushPromises()
+    const first = items.value[0]
+    const form = group.value!.getForm(first.__index!)
+    const tab = wrapper.findAll(
+      '.s-tabs__item:not(.s-tabs__nav-item-leave-active) [role="tab"]',
+    )[0]
+    expect(tab.attributes('data-sortable')).toBe('true')
+    await tab.trigger('keydown', {
+      key: 'ArrowRight',
+      altKey: true,
+      shiftKey: true,
+    })
+    await flushPromises()
+    expect(wrapper.findComponent({ name: 'STabs' }).emitted('sort')).toEqual([
+      [[1, 0, 2], { value: 0, oldIndex: 0, newIndex: 1 }],
+    ])
+    expect(items.value.map((item) => item.name)).toEqual([
+      'Beta',
+      'Alpha',
+      'Gamma',
+    ])
+    expect(items.value[1]).toBe(first)
+    expect(group.value!.activeKey).toBe(first.__index)
+    expect(group.value!.getForm(first.__index!)).toBe(form)
+    expect(
+      wrapper.findComponent({ name: 'STabs' }).props('order'),
+    ).toBeUndefined()
+    wrapper.unmount()
+  })
   it('normalizes stable indexes and uses tabs to add and remove forms', async () => {
     const createItem = vi.fn(() => ({ name: 'New project' }))
     const onAdd = vi.fn()

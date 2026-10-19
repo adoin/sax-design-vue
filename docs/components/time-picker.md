@@ -97,14 +97,6 @@ PROPS:
     link: null
     usage: '#default'
     code: null
-  - name: model-value
-    type: TimePickerValue
-    values: 'Date | string | number | null'
-    description: Set the selected time value without v-model syntax.
-    default: null
-    link: null
-    usage: '#default'
-    code: null
   - name: timezone
     type: String
     values: 'IANA zone'

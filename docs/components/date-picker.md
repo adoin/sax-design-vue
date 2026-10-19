@@ -99,14 +99,6 @@ PROPS:
     link: null
     usage: '#default'
     code: null
-  - name: model-value
-    type: DatePickerValue
-    values: "Date | string | number | range | array | null"
-    description: Set the selected date value or values without v-model syntax.
-    default: null
-    link: null
-    usage: '#default'
-    code: null
   - name: type
     type: String
     values: "date | datetime | daterange | datetimerange | month | quarter | year | week"

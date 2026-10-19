@@ -1,10 +1,5 @@
 ---
 PROPS:
-  - name: model-value
-    type: String
-    values: 'href'
-    description: Active anchor href.
-    default: "''"
   - name: v-model
     type: String
     values: 'href'

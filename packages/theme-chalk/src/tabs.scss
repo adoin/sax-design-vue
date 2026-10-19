@@ -120,6 +120,11 @@
   }
 
   @include e(btn) {
+    &[data-sortable='true'] {
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+    }
     box-sizing: border-box;
     display: inline-flex;
     min-width: 0;
@@ -147,6 +152,14 @@
     &:disabled {
       cursor: not-allowed;
     }
+  }
+
+  .s-tabs__item.is-dragging {
+    opacity: 0.45;
+  }
+  .s-tabs__item.is-drop-target {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px -8px var(--sax-tabs-color);
   }
 
   @include e(label) {

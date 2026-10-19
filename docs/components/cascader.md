@@ -17,11 +17,6 @@ PROPS:
     values: "single path or multiple paths"
     description: Bind the current selection. Single mode uses one path; multiple mode uses an array of paths.
     default: '[]'
-  - name: model-value
-    type: CascaderPathValue | CascaderPathValue[]
-    values: "single path or multiple paths"
-    description: Bind the current selection. Single mode uses one path; multiple mode uses an array of paths.
-    default: '[]'
   - name: options
     type: CascaderOption[]
     values: "value | label | children | disabled | isLeaf"

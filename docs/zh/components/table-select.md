@@ -42,11 +42,6 @@ PROPS:
     default: false
     values: "true | false"
     usage: "#tree-single-selection"
-  - name: model-value
-    type: TableSelectValue
-    values: "行键值"
-    description: 通过 row-key 解析的已选行键；多选时为行键数组。
-    default: null
   - name: v-model
     type: TableSelectValue
     values: "行键值"

@@ -17,11 +17,6 @@ PROPS:
     values: "单选值路径或多选值路径数组"
     description: 绑定当前选择。单选为一条路径，多选为路径数组。
     default: '[]'
-  - name: model-value
-    type: CascaderPathValue | CascaderPathValue[]
-    values: "单选值路径或多选值路径数组"
-    description: 绑定当前选择。单选为一条路径，多选为路径数组。
-    default: '[]'
   - name: options
     type: CascaderOption[]
     values: "value | label | children | disabled | isLeaf"

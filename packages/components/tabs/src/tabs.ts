@@ -17,6 +17,7 @@ import type {
   TabsPosition,
   TabsRenderMode,
   TabsSize,
+  TabsSortDetail,
   TabsType,
 } from './constants'
 
@@ -55,6 +56,10 @@ export const tabsProps = buildProps({
     default: 'medium',
   },
   animated: { type: Boolean, default: true },
+  /** Drag labels or use Alt+Shift+Arrow to reorder tabs. */
+  sortable: Boolean,
+  /** Optional controlled order; omitted names are appended in source order. */
+  order: { type: definePropType<TabValue[]>(Array) },
   /** Show add and close controls independently from the visual type. */
   editable: Boolean,
   /** Mounting policy for all panes; individual panes may override it. */
@@ -71,6 +76,9 @@ export const tabsProps = buildProps({
 } as const)
 
 export const tabsEmits = {
+  'update:order': (order: TabValue[]) => order.every(isTabValue),
+  sort: (order: TabValue[], detail: TabsSortDetail) =>
+    order.every(isTabValue) && !!detail,
   [UPDATE_MODEL_EVENT]: isTabValue,
   change: (value: TabValue, pane: TabPaneContext) =>
     isTabValue(value) && !!pane,

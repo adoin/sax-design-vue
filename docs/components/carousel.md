@@ -1,10 +1,5 @@
 ---
 PROPS:
-  - name: model-value
-    type: Number
-    values: "slide index"
-    description: Active slide index.
-    default: '0'
   - name: v-model
     type: Number
     values: "slide index"

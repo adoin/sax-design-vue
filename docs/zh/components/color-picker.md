@@ -6,11 +6,6 @@ PROPS:
     description: 为取色触发器和编辑面板统一设置圆角或方形外观。
     default: rounded
     usage: '#shape'
-  - name: model-value
-    type: String
-    values: "hex / rgb / rgba / hsl / hsla"
-    description: 当前颜色值。
-    default: '#5667f4'
   - name: v-model
     type: String
     values: "hex / rgb / rgba / hsl / hsla"

@@ -1,10 +1,5 @@
 ---
 PROPS:
-  - name: model-value
-    type: String
-    values: 'href'
-    description: 当前激活锚点 href。
-    default: "''"
   - name: v-model
     type: String
     values: 'href'

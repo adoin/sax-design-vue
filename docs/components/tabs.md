@@ -3,14 +3,18 @@ description: 'Tabs with overflow collapse, editable items, context menus, and bo
 PROPS:
   - name: v-model
     type: String | Number
-    values: "s-tab name"
+    values: "s-tab name or source index when name is omitted"
     description: Active tab value.
     default: '0'
-  - name: model-value
-    type: String | Number
-    values: "or index when name is omitted"
-    description: Active tab value.
-    default: '0'
+  - name: sortable
+    type: Boolean
+    description: Allow label dragging or Alt+Shift+Arrow sorting. Disabled tabs cannot be dragged or used as drop targets.
+    default: 'false'
+    usage: '#sorting'
+  - name: v-model:order
+    type: TabValue[]
+    description: Optional controlled order. An internal order is maintained when omitted. Unknown and duplicate values are ignored; unlisted tabs append in source order.
+    usage: '#sorting'
   - name: type
     type: String
     values: "line / pill / card / connected-card / editable-card"
@@ -123,6 +127,10 @@ CHILD_PROPS:
     default: 'false'
     usage: '#pane-override'
 EVENTS:
+  - name: sort
+    type: '(order: TabValue[], detail: TabsSortDetail) => void'
+    description: Emits the complete order and value, oldIndex, newIndex after sorting. Usually handle this event to reorder the source array without binding order. Sorting does not change the active value.
+    usage: '#sorting'
   - name: change
     description: Emits value and pane when the active tab changes.
   - name: tab-click
@@ -364,6 +372,28 @@ Use label-extra to retain the default title, icon and badge while rendering arbi
 <template #script>
 
 @[code{1-6}](../.vuepress/components/tabs/label-extra.vue)
+
+</template>
+
+</card>
+
+<card>
+
+<h2 id="sorting">Drag sorting</h2>
+
+Drag a label, or focus it and press Alt+Shift+Arrow. Use stable name and key values to preserve selection and input. The first example reorders its source array from sort events; the second binds the optional order array. Sorting never mounts a second pane. Activate collapsed tabs first to reorder them with the keyboard.
+
+<template #example><tabs-sorting /></template>
+
+<template #template>
+
+@[code{18-38}](../.vuepress/components/tabs/sorting.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-16}](../.vuepress/components/tabs/sorting.vue)
 
 </template>
 

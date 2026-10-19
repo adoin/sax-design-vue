@@ -17,6 +17,7 @@
 - Agent 组件的覆盖层、紧凑 composer、引用翻页、计划预览与角色消息契约见 `.agents/notes/implemented/ai-agent-interaction-fidelity.md`。
 - Read relevant records in `.agents/notes/active/` and `.agents/notes/prohibited/` before implementation. Treat proposed records as unapproved, prohibited records as approaches that must not be repeated unless their `reopen_only_if` condition is met, and implemented records as verified project contracts.
 - Tabs 首次加载的激活横线对齐契约见 `.agents/notes/implemented/tabs-indicator-initial-alignment.md`。
+- Tabs 拖拽排序、FormGroup 默认排序与 v-model API 文档去重见 `.agents/notes/implemented/tabs-sort-and-model-api.md`。
 - 当前尚未完成的目标记录在 `.agents/notes/active/table-generated-error-navigation.md`。文档源码类型高亮已记录在 `.agents/notes/implemented/documentation-code-type-highlighting.md`，公共 API 类型与尺寸示例已记录在 `.agents/notes/implemented/public-api-type-and-size-documentation.md`，递归 API 类型详情已记录在 `.agents/notes/implemented/recursive-api-type-details.md`；继续遵守 `.agents/notes/prohibited/flat-api-type-details-popover.md` 与 `.agents/notes/prohibited/plain-text-public-api-type-alias.md`。
 - Move a project specification to `.agents/notes/implemented/` only after its implementation and required verification pass. Preserve superseded decisions in `.agents/notes/superseded/` when the replacement needs historical context.
 - For Table work, read `.agents/notes/implemented/table-component-architecture.md`, `.agents/notes/implemented/table-documentation-information-architecture.md`, and `.agents/notes/implemented/table-single-component-business-shell.md`, plus their linked prohibited approaches.

@@ -2,16 +2,6 @@
 description: "通过可选图标采集或展示评分。"
 PROPS:
   #__________________________________
-  - name: model-value
-    type: Number
-    values: "Number"
-    description: 绑定值。
-    default: 0
-    link: null
-    usage: '#default'
-    code: >
-      <s-rate v-model="value" />
-    #__________________________________
   - name: v-model
     type: Number
     values: "Number"

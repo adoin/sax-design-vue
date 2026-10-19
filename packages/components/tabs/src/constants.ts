@@ -1,6 +1,11 @@
 import type { InjectionKey, Ref, VNode } from 'vue'
 
 export type TabValue = string | number
+export interface TabsSortDetail {
+  value: TabValue
+  oldIndex: number
+  newIndex: number
+}
 export type TabsPosition = 'top' | 'bottom' | 'left' | 'right'
 export type TabsType =
   'line' | 'pill' | 'card' | 'connected-card' | 'editable-card'

@@ -77,14 +77,6 @@ PROPS:
     link: null
     usage: '#default'
     code: null
-  - name: model-value
-    type: TimePickerValue
-    values: 'Date | string | number | null'
-    description: 不使用 v-model 语法时设置选中的时间值。
-    default: null
-    link: null
-    usage: '#default'
-    code: null
   - name: timezone
     type: String
     values: 'IANA 时区'

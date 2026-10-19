@@ -33,21 +33,11 @@ PROPS:
     values: "0+"
     description: 月视图/全天格直接展示的日程数。默认只展示最早一条，剩余日程通过 `+n` 打开。
     default: '1'
-  - name: date
-    type: String
-    values: "YYYY-MM-DD"
-    description: 控制当前展示的月、周、日，不影响日期选中值。
-    default: 当前日期
   - name: v-model:date
     type: String
     values: "YYYY-MM-DD"
     description: 控制当前展示的月、周、日，不影响日期选中值。
     default: 当前日期
-  - name: view
-    type: month | week | day
-    values: "month / week / day"
-    description: 当前日程视图。
-    default: month
   - name: v-model:view
     type: month | week | day
     values: "month / week / day"
@@ -103,11 +93,6 @@ PROPS:
     values: "pixels"
     description: 右键菜单面板最小宽度。
     default: '184'
-  - name: model-value
-    type: String | String[]
-    values: "YYYY-MM-DD"
-    description: 当前日期或日期范围。
-    default: "''"
   - name: v-model
     type: String | String[]
     values: "YYYY-MM-DD"

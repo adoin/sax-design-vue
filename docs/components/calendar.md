@@ -33,21 +33,11 @@ PROPS:
     values: "0+"
     description: Number of events shown directly in a month/all-day cell. The default keeps the earliest event plus a `+n` overflow trigger.
     default: '1'
-  - name: date
-    type: String
-    values: "YYYY-MM-DD"
-    description: Controls the visible month, week, or day without changing selection.
-    default: current date
   - name: v-model:date
     type: String
     values: "YYYY-MM-DD"
     description: Controls the visible month, week, or day without changing selection.
     default: current date
-  - name: view
-    type: month | week | day
-    values: "month / week / day"
-    description: Active scheduler view.
-    default: month
   - name: v-model:view
     type: month | week | day
     values: "month / week / day"
@@ -103,11 +93,6 @@ PROPS:
     values: "pixels"
     description: Minimum width of the context menu panel.
     default: '184'
-  - name: model-value
-    type: String | String[]
-    values: "YYYY-MM-DD"
-    description: Selected date or selected date range.
-    default: "''"
   - name: v-model
     type: String | String[]
     values: "YYYY-MM-DD"

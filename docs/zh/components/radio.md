@@ -15,11 +15,6 @@ PROPS:
     values: '已选单选值'
     description: 绑定单选项或单选组的选中值。
     default: null
-  - name: model-value
-    type: String | Number | Boolean
-    values: '已选单选值'
-    description: 绑定单选项或单选组的选中值。
-    default: null
   - name: color
     type: String
     values: "primary | success | danger | warn | warning | dark | text | light | secondary | RGB | RGBA | HEX | HSL | HSLA"
@@ -132,11 +127,6 @@ GROUP_TABS_PROPS:
     description: "页签及其 `options`；页签支持 `disabled`、`columns`、禁用值配置。"
     default: "[]"
     usage: "#default"
-  - name: "active-key"
-    type: "string | number"
-    description: "当前面板；支持 `v-model:active-key`。"
-    default: "首个可用页签"
-    usage: "#default"
   - name: "v-model:active-key"
     type: RadioGroupTabValue
     description: 当前页签键的双向绑定。
@@ -161,11 +151,6 @@ BUTTON_PROPS:
   - name: v-model
     type: RadioButtonValue
     description: 直接使用 RadioButton 时双向绑定的选中值。
-    default: null
-    usage: '#radio-options-default'
-  - name: model-value
-    type: RadioButtonValue
-    description: 不使用 v-model 语法时设置选中值。
     default: null
     usage: '#radio-options-default'
   - name: value

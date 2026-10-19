@@ -6,11 +6,15 @@ PROPS:
     values: "s-tab 的 name；未设置 name 时为索引"
     description: 当前激活标签。
     default: '0'
-  - name: model-value
-    type: String | Number
-    values: "s-tab 的 name；未设置 name 时为索引"
-    description: 当前激活标签。
-    default: '0'
+  - name: sortable
+    type: Boolean
+    description: 允许拖拽标签或使用 Alt+Shift+方向键排序。禁用标签不可拖动或作为投放目标。
+    default: 'false'
+    usage: '#sorting'
+  - name: v-model:order
+    type: TabValue[]
+    description: 可选受控顺序；省略时维护内部顺序。未知值和重复值忽略，未列出的标签按源顺序追加。
+    usage: '#sorting'
   - name: type
     type: String
     values: "line / pill / card / connected-card / editable-card"
@@ -123,6 +127,10 @@ CHILD_PROPS:
     default: 'false'
     usage: '#pane-override'
 EVENTS:
+  - name: sort
+    type: '(order: TabValue[], detail: TabsSortDetail) => void'
+    description: 排序后返回完整顺序及 value、oldIndex、newIndex；通常监听此事件重排原始数组，无需绑定 order。排序不改变激活值。
+    usage: '#sorting'
   - name: change
     description: 激活项变化时返回 value 与 pane。
   - name: tab-click
@@ -364,6 +372,28 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 <template #script>
 
 @[code{1-6}](../../.vuepress/components/tabs-zh/label-extra.vue)
+
+</template>
+
+</card>
+
+<card>
+
+<h2 id="sorting">拖拽排序</h2>
+
+拖拽标签排序，或聚焦标签后按 Alt+Shift+方向键。给每个标签设置稳定的 name 和 key，保留激活项及输入内容。第一个示例只监听 sort 重排原始数组，第二个示例演示可选的排序数组；排序不会挂载第二份面板。折叠的标签可先激活后用键盘排序。
+
+<template #example><tabs-zh-sorting /></template>
+
+<template #template>
+
+@[code{18-38}](../../.vuepress/components/tabs-zh/sorting.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-16}](../../.vuepress/components/tabs-zh/sorting.vue)
 
 </template>
 

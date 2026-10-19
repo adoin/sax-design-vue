@@ -1,10 +1,5 @@
 ---
 PROPS:
-  - name: model-value
-    type: Number
-    values: "轮播项下标"
-    description: 当前激活项下标。
-    default: '0'
   - name: v-model
     type: Number
     values: "轮播项下标"

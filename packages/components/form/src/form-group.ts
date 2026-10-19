@@ -33,6 +33,7 @@ export interface FormGroupProps<F extends object = FormModel> {
   getTabLabel?: (data: FormGroupItem<F>, index: number) => string
   getContextMenuItems?: (context: FormGroupItemContext<F>) => ContextMenuItem[]
   tabsType?: TabsProps['type']
+  sortable?: boolean
   editable?: boolean
   /** @deprecated Use `editable` instead. */
   editAble?: boolean
@@ -73,6 +74,7 @@ export const formGroupProps = buildProps({
     default: 'connected-card',
   },
   editable: Boolean,
+  sortable: { type: Boolean, default: true },
   editAble: Boolean,
   showAdd: Boolean,
   keepSerial: Boolean,

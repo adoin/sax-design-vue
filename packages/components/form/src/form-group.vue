@@ -15,6 +15,7 @@ import { useNamespace } from '@vuesax-alpha/hooks'
 import Form from './form.vue'
 import { formGroupProps } from './form-group'
 import { createFormValidator } from './form-validator'
+import type { TabValue } from '@vuesax-alpha/components/tabs'
 import type { ComponentPublicInstance } from 'vue'
 import type { ContextMenuItem } from '@vuesax-alpha/components/context-menu'
 import type { FormInstance, FormModel } from './form'
@@ -37,6 +38,7 @@ const emit = defineEmits<{
   validate: [index: number, valid: boolean]
   fieldValidate: [index: number, field: string, valid: boolean, message: string]
   addError: [error: unknown]
+  sort: [items: FormGroupItem[]]
 }>()
 
 const model = defineModel<FormGroupItem[]>({ default: () => [] })
@@ -149,6 +151,13 @@ const canAdd = computed(
   () => props.showAdd && !props.loading && model.value.length < props.max,
 )
 const isEditable = computed(() => props.editable || props.editAble)
+const handleSort = (order: TabValue[]) => {
+  const byKey = new Map(model.value.map((item) => [item.__index, item]))
+  const next = order.map((key) => byKey.get(Number(key)))
+  if (next.length !== model.value.length || next.some((item) => !item)) return
+  model.value = next as FormGroupItem[]
+  emit('sort', [...model.value])
+}
 
 const setFormRef = (
   key: number,
@@ -402,11 +411,13 @@ defineExpose({
       v-else-if="entries.length"
       v-model="activeKey"
       :type="tabsType"
+      :sortable="sortable"
       :editable="isEditable || showAdd"
       :lazy="isLazy"
       :aria-label="ariaLabel || title || undefined"
       :hide-add="!canAdd || adding"
       @add="addItem"
+      @sort="handleSort"
       @change="handleTabChange"
       @remove="handleRemove"
       @tab-contextmenu="handleTabContextmenu"

@@ -42,11 +42,6 @@ PROPS:
     default: false
     values: "true | false"
     usage: "#tree-single-selection"
-  - name: model-value
-    type: TableSelectValue
-    values: "row key"
-    description: Selected row key resolved through row-key; an array of keys in multiple mode.
-    default: null
   - name: v-model
     type: TableSelectValue
     values: "row key"

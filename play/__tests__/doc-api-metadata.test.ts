@@ -26,6 +26,20 @@ const apiSections = new Set([
 ])
 
 describe('documentation API metadata', () => {
+  it('documents each v-model binding once instead of repeating its backing prop', () => {
+    for (const root of docsRoots) for (const file of readdirSync(root).filter(name => name.endsWith('.md'))) {
+      const data = matter(readFileSync(resolve(root, file), 'utf8')).data
+      for (const section of apiSections) {
+        const rows = data[section] as { name: string }[] | undefined
+        if (!Array.isArray(rows)) continue
+        const names = rows.map(row => row.name)
+        for (const name of names.filter(name => name?.startsWith('v-model'))) {
+          const prop = name === 'v-model' ? 'model-value' : name.slice('v-model:'.length)
+          expect(names, `${file} ${section}: duplicate binding ${name}`).not.toContain(prop)
+        }
+      }
+    }
+  })
   it('keeps legacy card subsections in the shared example and API hierarchy', () => {
     const names = [
       'avatar',

@@ -79,14 +79,6 @@ PROPS:
     link: null
     usage: '#default'
     code: null
-  - name: model-value
-    type: DatePickerValue
-    values: "Date | string | number | 范围 | 数组 | null"
-    description: 不使用 v-model 语法时设置选中的日期值。
-    default: null
-    link: null
-    usage: '#default'
-    code: null
   - name: type
     type: String
     values: "date | datetime | daterange | datetimerange | month | quarter | year | week"

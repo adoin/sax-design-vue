@@ -2,16 +2,6 @@
 description: "Collect or display a rating with selectable symbols."
 PROPS:
   #__________________________________
-  - name: model-value
-    type: Number
-    values: "Number"
-    description: binding value.
-    default: 0
-    link: null
-    usage: '#default'
-    code: >
-      <s-rate v-model="value" />
-    #__________________________________
   - name: v-model
     type: Number
     values: "Number"

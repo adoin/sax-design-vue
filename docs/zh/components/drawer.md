@@ -1,23 +1,11 @@
 ---
 description: '从页面边缘打开的可配置面板，支持关闭校验、完整插槽、嵌套和尺寸调整。'
 PROPS:
-  - name: 'model-value'
-    type: 'Boolean'
-    values: 'true | false'
-    description: '控制可见状态；提供 open 时优先使用 open。'
-    default: false
-    usage: '#default'
   - name: 'v-model'
     type: 'Boolean'
     values: 'true | false'
     description: '控制可见状态；提供 open 时优先使用 open。'
     default: false
-    usage: '#default'
-  - name: 'open'
-    type: 'Boolean'
-    values: 'true | false'
-    description: '控制可见状态；提供 open 时优先使用 open。'
-    default: null
     usage: '#default'
   - name: 'v-model:open'
     type: 'Boolean'

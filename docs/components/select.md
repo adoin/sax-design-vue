@@ -46,13 +46,6 @@ PROPS:
     default: null
     link: null
     usage: '#default'
-  - name: model-value
-    type: SelectValue
-    values: 'option value or values'
-    description: Bind selected values and optionally configure the value treated as empty.
-    default: null
-    link: null
-    usage: '#default'
   - name: not-value
     type: SelectOptionValue
     values: 'option value or values'
