@@ -4,6 +4,10 @@
 
 - Display documentation update timestamps in explicit UTC so server output and client hydration remain identical across timezones.
 
+### 2.4.1 — 2026-10-19
+
+- Resolve Window surface, shadow and keyboard-feedback colors through the shared Sass function module. Reject unresolved Window Sass functions during release validation.
+
 ### 2.4.0 — 2026-10-19
 
 - Add `SWindow` with controlled geometry and title, pointer and keyboard movement, eight-direction resizing, minimum dimensions, parent boundaries, shared shape configuration and action slots.
