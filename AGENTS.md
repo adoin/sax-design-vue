@@ -4,6 +4,7 @@
 
 - Work directly on `main`. Do not create feature branches, `cursor/*` snapshot branches, or pull-request branches unless the user explicitly asks for a branch.
 - Commit and push to `main`. After any temporary branch is merged, delete it locally and on the remote.
+- npm 发布以 `npm publish` 的退出状态判断上传成功；保留构建与包完整性验证，不追加发布后公开可用性轮询，也不因 registry 后台处理或传播延迟判定发布失败。
 
 ## Project specifications
 
