@@ -2,9 +2,12 @@
 
 ### Unreleased
 
-- Add an inset shadow to Window content and focus pointer handles so arrow keys, Shift steps and Escape cancellation work after mouse interaction.
-
 - Display documentation update timestamps in explicit UTC so server output and client hydration remain identical across timezones.
+
+### 2.5.1 — 2026-10-19
+
+- Add a borderless inset shadow to Window content without intercepting pointer input.
+- Focus Window move and resize handles on pointer interaction so arrow keys, Shift steps and Escape cancellation work after clicking or dragging. Keep input editing keys independent and clarify keyboard usage in both documentation locales.
 
 ### 2.5.0 — 2026-10-19
 
