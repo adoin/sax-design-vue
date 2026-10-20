@@ -153,27 +153,35 @@ export default defineConfig({
 
 <h2 id="morphing">图标变形</h2>
 
-`morph` 默认关闭。开启后，同一 `SIcon` 的 `name` 或 `iconData` 改变时，统一按需加载 `svg-morpheus-ts/core`，进行全局轮廓匹配、精确贝塞尔细分与颜色插值。支持多色、透明色、线性和径向渐变；同类型渐变连续插值色标与几何，不同类型交叉淡化。透明度组保留合成层级。蒙版、滤镜、图案等不支持的 SVG 保留静态原图。
+给 `SIcon` 添加 `morph`，改变 `name` 时，当前图标会平滑变为新图标。下面以展开、收起箭头为例，`expanded` 是页面中的展开状态。
 
-使用下面的示例体验图标、多色与渐变过渡。切换图标类型与时长，或在动画尚未结束时连续切换。Tabs 的 `icon` 属性通过内部 `SIcon` 继承配置。
+<command>
+
+```vue
+<s-icon :name="expanded ? 'cb:chevron-up' : 'cb:chevron-down'" morph />
+```
+
+</command>
+
+选择一个示例，然后点击“切换图标”查看效果。“动画时长”决定切换需要多久，“动画效果”决定图标是平滑停下还是带有回弹。多色和渐变示例通过 `iconData` 提供 SVG，使用相同的 `morph` 配置。
 
 <template #example><icons-zh-morph /></template>
 
 <template #template>
 
-@[code{142-206}](../../.vuepress/components/icons-zh/morph.vue)
+@[code{83-129}](../../.vuepress/components/icons-zh/morph.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-140}](../../.vuepress/components/icons-zh/morph.vue)
+@[code{1-81}](../../.vuepress/components/icons-zh/morph.vue)
 
 </template>
 
 <template #style>
 
-@[code{208-239}](../../.vuepress/components/icons-zh/morph.vue)
+@[code{131-161}](../../.vuepress/components/icons-zh/morph.vue)
 
 </template>
 
@@ -183,7 +191,7 @@ export default defineConfig({
 
 <h2 id="global-morphing">全局变形配置</h2>
 
-通过安装选项或 `SConfigProvider` 的 `icon.morph` 配置默认值，局部属性优先。局部 `morph` 保留全局动画设置，局部 `:morph="false"` 关闭。只有通过 `SIcon` 渲染并保留实例的图标属性会继承；自定义插槽、独立 SVG 或使用不同 key 重建的实例不会跨实例变形。
+在安装组件库时，或通过 `SConfigProvider` 设置 `icon.morph`，可以让作用范围内的图标默认开启变形。使用 `SIcon` 的组件图标也会继承，例如 `Button`、`Tab` 的 `icon` 属性。局部 `morph` 配置可以覆盖默认值；传入 `:morph="false"` 可关闭某个图标的动画。
 
 <command>
 
@@ -195,21 +203,24 @@ app.use(SaxDesignVue, {
 
 ```vue
 <s-config-provider :icon="{ morph: { duration: 400 } }">
-  <s-icon :name="open ? 'cb:chevron-up' : 'cb:chevron-down'" />
+  <s-button
+    :icon="expanded ? 'cb:chevron-up' : 'cb:chevron-down'"
+    @click="expanded = !expanded"
+  >展开 / 收起</s-button>
   <s-icon name="cb:pin" :morph="false" />
 </s-config-provider>
 ```
 
 </command>
 
-| 属性 | Type | 默认值 |
-| --- | --- | --- |
-| morph | boolean &#124; IconMorphOptions | false |
-| morph.duration | number (ms) | 360 |
-| morph.spring | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy |
+| 属性 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| morph | boolean &#124; IconMorphOptions | false | 开启或关闭图标变形；传入对象可调整动画。 |
+| morph.duration | number | 360 | 动画时长，单位毫秒；设为 0 时立即切换。 |
+| morph.spring | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy | smooth 平滑停下；snappy 轻微回弹；bouncy 明显回弹。 |
 
-`spring` 控制动画曲线。`duration <= 0` 立即切换。初始渲染与 SSR 显示原始 SVG；系统减少动态效果开启时直接切换。动画中再次改变图标会从当前形状继续，卸载与配置变化会取消动画。完成时恢复精确的目标 SVG。蒙版、滤镜、图案、外部引用等复杂 SVG 直接切换，保留原图。
+首次显示图标时不会播放变形。系统开启“减少动态效果”时直接切换。连续改变图标会从当前画面继续；带有蒙版、滤镜或图案等不支持的 SVG 会直接显示新图标。
 
-`morph-start` 与 `morph-end` 事件提供 `{ elapsed }`。取消的动画不会触发完成事件，静态切换也不会触发动画事件。
+`morph-start` 在动画开始时触发，`morph-end` 在完成时触发，参数为 `{ elapsed }`，其中 `elapsed` 是已经经过的毫秒数。被新图标打断的动画不会触发完成事件。
 
 </card>

@@ -29,6 +29,12 @@ describe('Icon morph example source', () => {
         parsed.descriptor.template!.content.match(/<s-icon\b/g),
       ).toHaveLength(1)
       expect(source).not.toContain('const engines')
+      expect(source).not.toMatch(/stress|setInterval|elapsed|onBeforeUnmount/)
+      expect(source).toContain(locale ? '动画时长' : 'Duration')
+      expect(source).toContain(locale ? '动画效果' : 'Animation style')
+      expect(source).not.toMatch(
+        /起点错位|全局配对|Procrustes|cubic subdivision/,
+      )
       expect(compileDemoSfc(source, `morph-${locale || 'en'}`).error).toBeNull()
       expect(source).toContain(locale ? '切换图标' : 'Switch icon')
       expect(source).not.toContain(locale ? 'Switch icon' : '切换图标')

@@ -154,27 +154,35 @@ Set `rolling` to `true` to use the `--sax-icon-rolling-duration` CSS default of 
 
 <h2 id="morphing">Icon morphing</h2>
 
-Morphing is off by default. Enable `morph` to animate name or iconData changes on the same SIcon. The lazily loaded `svg-morpheus-ts/core` handles global contour assignment, exact cubic subdivision and paint interpolation. Multicolor paths, alpha colors, linear/radial gradients and opacity groups are supported. Same-type gradients interpolate stops and geometry; different types crossfade. Unsupported masks, filters and patterns retain the static SVG.
+Add `morph` to `SIcon` to animate changes to `name`. For example, use your page’s `expanded` state to switch between the expand and collapse arrows.
 
-Try different icons, colors and gradients, including changes during an unfinished animation. The Tabs icon property inherits defaults through its internal SIcon.
+<command>
+
+```vue
+<s-icon :name="expanded ? 'cb:chevron-up' : 'cb:chevron-down'" morph />
+```
+
+</command>
+
+Choose an example and click “Switch icon”. Duration controls how long the transition takes; Animation style controls how it settles. The multicolor and gradient examples supply SVG through `iconData` and use the same `morph` options.
 
 <template #example><icons-morph /></template>
 
 <template #template>
 
-@[code{142-206}](../.vuepress/components/icons/morph.vue)
+@[code{86-132}](../.vuepress/components/icons/morph.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-140}](../.vuepress/components/icons/morph.vue)
+@[code{1-84}](../.vuepress/components/icons/morph.vue)
 
 </template>
 
 <template #style>
 
-@[code{208-239}](../.vuepress/components/icons/morph.vue)
+@[code{134-164}](../.vuepress/components/icons/morph.vue)
 
 </template>
 
@@ -184,7 +192,7 @@ Try different icons, colors and gradients, including changes during an unfinishe
 
 <h2 id="global-morphing">Global morphing</h2>
 
-Set icon.morph in installation options or SConfigProvider. Explicit local props take precedence. Local morph=true retains configured animation options; morph=false disables them. Icon properties rendered through a retained SIcon inherit defaults. Custom slots, independent SVGs and instances recreated with different keys do not morph across instances.
+Set `icon.morph` when installing the library or through `SConfigProvider` to enable morphing for icons in that scope. Components that render `SIcon`, such as the `icon` property of Button and Tab, inherit the setting. Local `morph` options override defaults; pass `:morph="false"` to disable an individual icon.
 
 <command>
 
@@ -196,21 +204,24 @@ app.use(SaxDesignVue, {
 
 ```vue
 <s-config-provider :icon="{ morph: { duration: 400 } }">
-  <s-icon :name="open ? 'cb:chevron-up' : 'cb:chevron-down'" />
+  <s-button
+    :icon="expanded ? 'cb:chevron-up' : 'cb:chevron-down'"
+    @click="expanded = !expanded"
+  >Expand / collapse</s-button>
   <s-icon name="cb:pin" :morph="false" />
 </s-config-provider>
 ```
 
 </command>
 
-| Property | Type | Default |
-| --- | --- | --- |
-| morph | boolean &#124; IconMorphOptions | false |
-| morph.duration | number (ms) | 360 |
-| morph.spring | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy |
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| morph | boolean &#124; IconMorphOptions | false | Enable morphing, or pass an object to adjust the animation. |
+| morph.duration | number | 360 | Duration in milliseconds; 0 switches immediately. |
+| morph.spring | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy | smooth settles gently; snappy adds a subtle bounce; bouncy adds a stronger bounce. |
 
-spring controls the animation profile. duration <= 0 switches immediately. Initial render and SSR retain the original SVG; reduced motion switches immediately. Interrupted changes continue from the current shape. Unmounting and configuration changes cancel animation. Completion restores the exact target SVG. Complex SVGs with masks, filters, patterns or external references switch directly, retaining their artwork.
+The first icon appears without animating. The system’s reduced-motion preference disables transitions. Interrupted changes continue from the current picture. Unsupported SVG masks, filters or patterns switch directly to the new icon.
 
-morph-start and morph-end emit { elapsed }. Cancelled animations do not emit completion; static changes do not emit animation events.
+`morph-start` fires when an animation begins and `morph-end` when it finishes. Both receive `{ elapsed }`, the elapsed time in milliseconds. An animation interrupted by a new icon does not emit completion.
 
 </card>
