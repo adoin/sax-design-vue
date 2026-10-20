@@ -154,7 +154,7 @@ Set `rolling` to `true` to use the `--sax-icon-rolling-duration` CSS default of 
 
 <h2 id="morphing">Icon morphing</h2>
 
-Morphing is off by default. Enable `morph` to animate changes to name or iconData on the same SIcon instance. `engine: 'svg-morpheus'` uses the svg-morpheus-ts Bézier core; `engine: 'builtin'` uses built-in arc-length sampling, contour matching, similarity alignment and spring interpolation. Both engines load on demand. Filled shapes use contour interpolation, without distance-field reconstruction.
+Morphing is off by default. Enable `morph` to animate changes to name or iconData on the same SIcon instance. `engine: 'svg-morpheus'` uses the svg-morpheus-ts 1.4 global contour assignment, similarity alignment and exact cubic subdivision core; `engine: 'builtin'` uses built-in arc-length sampling, contour matching, similarity alignment and spring interpolation. Both engines load on demand. Filled shapes use contour interpolation, without distance-field reconstruction.
 
 Compare both engines below using the same icons and duration, including changes during an unfinished animation. The Tabs icon property inherits defaults through its internal SIcon.
 
@@ -162,19 +162,19 @@ Compare both engines below using the same icons and duration, including changes 
 
 <template #template>
 
-@[code{70-138}](../.vuepress/components/icons/morph.vue)
+@[code{98-175}](../.vuepress/components/icons/morph.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-68}](../.vuepress/components/icons/morph.vue)
+@[code{1-96}](../.vuepress/components/icons/morph.vue)
 
 </template>
 
 <template #style>
 
-@[code{140-182}](../.vuepress/components/icons/morph.vue)
+@[code{177-219}](../.vuepress/components/icons/morph.vue)
 
 </template>
 
@@ -210,7 +210,7 @@ app.use(SaxDesignVue, {
 | morph.duration | number (ms) | 360 |
 | morph.spring | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy |
 
-spring applies only to the built-in engine. duration <= 0 switches immediately. Initial render and SSR retain the original SVG; reduced motion switches immediately. Interrupted changes continue from the current shape. Unmounting and configuration changes cancel animation. Completion restores the exact target SVG. Complex SVGs with gradients, masks, filters or external references switch directly, retaining their artwork.
+spring applies to both engines. The comparison uses the same duration and spring configuration. duration <= 0 switches immediately. Initial render and SSR retain the original SVG; reduced motion switches immediately. Interrupted changes continue from the current shape. Unmounting and configuration changes cancel animation. Completion restores the exact target SVG. Complex SVGs with gradients, masks, filters or external references switch directly, retaining their artwork.
 
 morph-start and morph-end emit { engine, elapsed }. Cancelled animations do not emit completion; static changes do not emit animation events.
 

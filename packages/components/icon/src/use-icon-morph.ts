@@ -93,9 +93,10 @@ export const useIconMorph = (
         let plan: MorphPlan
         let progress: (time: number) => number
         if (engine === 'svg-morpheus') {
-          const { createMorpheusPlan } = await import('./morph/svg-morpheus')
+          const { createMorpheusPlan, springProgress } =
+            await import('./morph/svg-morpheus')
           plan = createMorpheusPlan(from, to)
-          progress = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2)
+          progress = (t) => springProgress(t, settings.spring ?? 'snappy')
         } else {
           const { createBuiltinPlan, springProgress } =
             await import('./morph/builtin')

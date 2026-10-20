@@ -15,7 +15,7 @@ export interface IconMorphOptions {
   engine?: IconMorphEngine
   /** Animation budget in milliseconds. */
   duration?: number
-  /** Spring profile used by the built-in engine. */
+  /** Spring profile shared by both engines. */
   spring?: 'smooth' | 'snappy' | 'bouncy'
 }
 export interface IconMorphDetail {

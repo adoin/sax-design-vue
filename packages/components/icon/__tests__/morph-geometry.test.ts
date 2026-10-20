@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
+import { curvePathBBox, path2curve } from 'svg-morpheus-ts/core'
 import { alignPoints, springProgress } from '../src/morph/builtin'
-import { createMorpheusPlan } from '../src/morph/svg-morpheus'
+import {
+  createMorpheusPlan,
+  springProgress as morpheusSpring,
+} from '../src/morph/svg-morpheus'
 import { readMorphShapes, splitSubpaths } from '../src/morph/svg'
 import { renderPaths } from '../src/morph/types'
 import type { MorphShape, Point } from '../src/morph/types'
@@ -94,8 +98,37 @@ describe('Icon morph geometry', () => {
       expect(plan.frame(progress)).not.toMatch(/NaN|Infinity|undefined/)
       expect(plan.frame(progress)).toContain('<path')
     }
-    expect(plan.frame(0)).toMatch(/M\s*4[, ]+4/)
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    svg.innerHTML = plan.frame(0)
+    const first = path2curve(svg.querySelector('path')!.getAttribute('d'))[0]
+    expect(first[1]).toBeCloseTo(4)
+    expect(first[2]).toBeCloseTo(4)
   })
+  it('delegates matched rotation to the updated library without midpoint contraction', () => {
+    const source = {
+      ...shape('M2 12L22 12'),
+      closed: false,
+      attributes: { fill: 'none', stroke: 'currentColor' },
+    }
+    const target = { ...source, d: 'M12 2L12 22' }
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    svg.innerHTML = createMorpheusPlan([source], [target]).frame(0.5)
+    const bounds = curvePathBBox(
+      path2curve(svg.querySelector('path')!.getAttribute('d')),
+    )
+    expect(Math.hypot(bounds.w, bounds.h)).toBeCloseTo(20)
+    expect(svg.innerHTML).toContain('C')
+  })
+  it.each(['smooth', 'snappy', 'bouncy'] as const)(
+    'uses identical %s easing for both comparison engines',
+    (profile) => {
+      for (const t of [0, 0.1, 0.25, 0.5, 0.9, 1])
+        expect(morpheusSpring(t, profile)).toBeCloseTo(
+          springProgress(t, profile),
+          12,
+        )
+    },
+  )
   it('rejects paint servers before attaching a temporary SVG', () => {
     const before = document.body.childElementCount
     expect(() =>

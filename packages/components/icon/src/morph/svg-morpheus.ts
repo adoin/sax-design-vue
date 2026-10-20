@@ -1,56 +1,45 @@
-import { curveCalc, path2curve, path2string } from 'svg-morpheus-ts/core'
+import { createMorphPlan, path2curve, path2string } from 'svg-morpheus-ts/core'
 import { renderPaths, transformPoint } from './types'
+import type { CurveData } from 'svg-morpheus-ts/core'
 import type { MorphPlan, MorphShape } from './types'
 
-type Curve = (string | number)[][]
-const normalize = (shape: MorphShape): Curve => {
-  const curve = path2curve(shape.d) as Curve
-  return curve.map(([command, ...values]) => {
-    const output: (string | number)[] = [command]
-    for (let i = 0; i < values.length; i += 2)
-      output.push(
-        ...transformPoint(
-          [Number(values[i]), Number(values[i + 1])],
-          shape.matrix,
-        ),
-      )
-    return output
-  })
-}
+export { springProgress } from 'svg-morpheus-ts/core'
 
-/** Use the published library's Bézier normalization, balancing and interpolation. */
+const normalize = (shape: MorphShape) => ({
+  d: path2string(
+    (path2curve(shape.d) as CurveData).map(([command, ...values]) => {
+      const output: (string | number)[] = [command]
+      for (let i = 0; i < values.length; i += 2)
+        output.push(
+          ...transformPoint(
+            [Number(values[i]), Number(values[i + 1])],
+            shape.matrix,
+          ),
+        )
+      return output
+    }),
+  ),
+  closed: shape.closed,
+  allowReverse: shape.attributes.fill === 'none',
+})
+
+/** Pairing, alignment and exact cubic interpolation belong to the published engine. */
 export const createMorpheusPlan = (
   from: MorphShape[],
   to: MorphShape[],
 ): MorphPlan => {
-  const pairs = Array.from(
-    { length: Math.max(from.length, to.length) },
-    (_, index) => {
-      const source = from[index],
-        target = to[index]
-      const a = source
-        ? normalize(source)
-        : [
-            ['M', 12, 12],
-            ['C', 12, 12, 12, 12, 12, 12],
-          ]
-      const b = target
-        ? normalize(target)
-        : [
-            ['M', 12, 12],
-            ['C', 12, 12, 12, 12, 12, 12],
-          ]
-      const [start, end] = path2curve(a, b) as [Curve, Curve]
-      return { start, end, shape: target || { ...source, group: 1000 + index } }
-    },
-  )
+  const plan = createMorphPlan(from.map(normalize), to.map(normalize))
   return {
     frame: (progress) =>
       renderPaths(
-        pairs.map(({ start, end, shape }) => ({
-          shape,
-          d: path2string(curveCalc(start, end, progress)),
-        })),
+        plan.frame(progress).map((d, index) => {
+          const pair = plan.pairs[index]
+          const shape =
+            pair.toIndex === null
+              ? { ...from[pair.fromIndex!], group: 1000 + pair.fromIndex! }
+              : to[pair.toIndex]
+          return { d, shape }
+        }),
       ),
   }
 }

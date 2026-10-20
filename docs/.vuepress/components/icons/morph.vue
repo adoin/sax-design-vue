@@ -9,6 +9,7 @@ import type {
 const flipped = shallowRef(false)
 const pair = shallowRef(0)
 const duration = shallowRef(600)
+const spring = shallowRef<'smooth' | 'snappy' | 'bouncy'>('snappy')
 const mounted = shallowRef(true)
 const running = shallowRef(false)
 const stats = shallowRef<Record<string, string>>({})
@@ -18,6 +19,8 @@ const pairs = [
   { label: 'Visibility', from: 'cb:view', to: 'cb:view-off' },
   { label: 'Different viewBoxes', from: 'cb:add', to: 'sax:close' },
   { label: 'Strokes and curves', from: 'cb:chevron-down', to: 'cb:chevron-up' },
+  { label: 'Contour origins', from: 'cb:chevron-down', to: 'cb:chevron-up' },
+  { label: 'Global matching', from: 'cb:chevron-down', to: 'cb:chevron-up' },
 ]
 const name = computed(() =>
   flipped.value ? pairs[pair.value].to : pairs[pair.value].from,
@@ -32,11 +35,36 @@ const strokeIcons: SaxIconData[] = [
     body: '<g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="16" cy="16" r="11"/><path d="M12 12l8 8m0-8l-8 8"/></g>',
   },
 ]
+const comparisonIcons: SaxIconData[][] = [
+  strokeIcons,
+  [
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<path fill="none" stroke="currentColor" stroke-width="2" d="M4 4H20V20H4Z"/>',
+    },
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<path fill="none" stroke="currentColor" stroke-width="2" d="M20 20H4V4H20Z"/>',
+    },
+  ],
+  [
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<path fill="currentColor" d="M2 10h4v4H2Z"/><path fill="currentColor" d="M8 10h4v4H8Z"/>',
+    },
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<path fill="currentColor" d="M6 10h4v4H6Z"/><path fill="currentColor" d="M18 10h4v4H18Z"/>',
+    },
+  ],
+]
 const iconData = computed(() =>
-  pair.value === 4 ? strokeIcons[Number(flipped.value)] : undefined,
+  pair.value >= 4
+    ? comparisonIcons[pair.value - 4][Number(flipped.value)]
+    : undefined,
 )
 const engines: { value: IconMorphEngine; label: string }[] = [
-  { value: 'svg-morpheus', label: 'svg-morpheus-ts' },
+  { value: 'svg-morpheus', label: 'svg-morpheus-ts 1.4.0' },
   { value: 'builtin', label: 'Built-in algorithm' },
 ]
 let timer: ReturnType<typeof setInterval> | undefined
@@ -86,6 +114,15 @@ onBeforeUnmount(stop)
           { label: '1200 ms', value: 1200 },
         ]"
       />
+      <s-select
+        v-model="spring"
+        aria-label="Shared easing"
+        :options="[
+          { label: 'Smooth', value: 'smooth' },
+          { label: 'Snappy', value: 'snappy' },
+          { label: 'Bouncy', value: 'bouncy' },
+        ]"
+      />
     </div>
     <div class="morph-compare__controls">
       <s-button @click="flipped = !flipped">Switch both</s-button>
@@ -100,7 +137,7 @@ onBeforeUnmount(stop)
       <s-config-provider
         v-for="engine in engines"
         :key="engine.value"
-        :icon="{ morph: { engine: engine.value, duration } }"
+        :icon="{ morph: { engine: engine.value, duration, spring } }"
       >
         <section class="morph-compare__panel" :aria-label="engine.label">
           <h3>{{ engine.label }}</h3>
@@ -131,8 +168,8 @@ onBeforeUnmount(stop)
       <s-icon :name="name" :icon-data="iconData" :size="24" :morph="false" />
     </p>
     <p>
-      Respects reduced motion. Timings measure animation wall time in this
-      browser, not a performance benchmark.
+      Both engines share duration and spring settings to compare geometry.
+      Respects reduced motion; wall time is not a performance benchmark.
     </p>
   </div>
 </template>
