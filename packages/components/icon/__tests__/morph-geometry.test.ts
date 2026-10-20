@@ -7,6 +7,7 @@ import {
 } from '../src/morph/svg-morpheus'
 import { readMorphShapes, splitSubpaths } from '../src/morph/svg'
 import { renderPaths } from '../src/morph/types'
+import { builtinCarbonIcons } from '../src/builtin-carbon-icons'
 import type { MorphShape, Point } from '../src/morph/types'
 
 const shape = (d: string): MorphShape => ({
@@ -18,6 +19,36 @@ const shape = (d: string): MorphShape => ({
 })
 
 describe('Icon morph geometry', () => {
+  it('keeps the real Carbon eye pupil circular through arc normalization and scaling', () => {
+    const pupil = Array.from(
+      builtinCarbonIcons.view.body.matchAll(/<path[^>]*\bd="([^"]+)"/g),
+    )[1][1]
+    const target = splitSubpaths(pupil).map((d) => ({
+      ...shape(d),
+      closed: false,
+      matrix: [0.75, 0, 0, 0.75, 0, 0] as [
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+      ],
+    }))
+    const plan = createMorpheusPlan([shape('M9 12L12 9L15 12Z')], target)
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    for (const progress of [0.9999, 1]) {
+      svg.innerHTML = plan.frame(progress)
+      expect(svg.innerHTML).not.toMatch(/NaN|Infinity|undefined/)
+      const bounds = curvePathBBox(
+        path2curve(svg.querySelector('path')!.getAttribute('d')),
+      )
+      expect(bounds.cx).toBeCloseTo(12, 1)
+      expect(bounds.cy).toBeCloseTo(12, 1)
+      expect(bounds.w).toBeCloseTo(9, 1)
+      expect(bounds.h).toBeCloseTo(9, 1)
+    }
+  })
   it('resolves relative moves, repeated coordinates and horizontal/vertical commands', () => {
     expect(splitSubpaths('m2 3 4 0v4h-4z m10 0l2 0 0 2z')).toEqual([
       'M2 3 L6 3 L6 7 L2 7 Z',

@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ConfigProvider from '../../config-provider/src/config-provider'
 import Icon from '../src/icon.vue'
 import { readMorphShapes } from '../src/morph/svg'
+import { springProgress } from '../src/morph/builtin'
 import type { SaxIconData } from '../src/icon'
 
 vi.mock('../src/morph/svg', () => ({ readMorphShapes: vi.fn(() => []) }))
@@ -12,7 +13,7 @@ vi.mock('../src/morph/builtin', () => ({
   createBuiltinPlan: vi.fn(() => ({
     frame: (t: number) => `<path d="M${t} 0L2 2"/>`,
   })),
-  springProgress: (t: number) => t,
+  springProgress: vi.fn((t: number) => t),
 }))
 const icon = (x: number): SaxIconData => ({
   attributes: { viewBox: '0 0 32 32' },
@@ -40,6 +41,7 @@ beforeEach(() => {
     get: () => reduced,
   })
   vi.mocked(readMorphShapes).mockClear()
+  vi.mocked(springProgress).mockImplementation((t) => t)
 })
 afterEach(() => {
   vi.restoreAllMocks()
@@ -58,6 +60,38 @@ const tick = async (time: number) => {
 }
 
 describe('Icon morph lifecycle', () => {
+  it('restores exact artwork after settling while preserving completion timing', async () => {
+    vi.mocked(springProgress).mockImplementation((t) => Math.min(1, t * 2))
+    const wrapper = mount(Icon, {
+      props: { iconData: icon(1), morph: { duration: 100 } },
+    })
+    await wrapper.setProps({ iconData: icon(2) })
+    await settleImports()
+    await tick(60)
+    expect(wrapper.get('path').attributes('d')).toBe('M1 0L2 2')
+    await tick(70)
+    expect(wrapper.get('path').attributes('d')).toBe('M2 0L10 10')
+    expect(wrapper.get('svg').attributes('viewBox')).toBe('0 0 32 32')
+    expect(wrapper.emitted('morphEnd')).toBeUndefined()
+    await tick(100)
+    expect(wrapper.emitted('morphEnd')).toHaveLength(1)
+    wrapper.unmount()
+  })
+  it('does not treat a moving crossing of the target as settled', async () => {
+    vi.mocked(springProgress).mockImplementation(
+      (t) => 1 + 0.1 * Math.sin((t - 0.5) * 10),
+    )
+    const wrapper = mount(Icon, {
+      props: { iconData: icon(1), morph: { duration: 100 } },
+    })
+    await wrapper.setProps({ iconData: icon(2) })
+    await settleImports()
+    await tick(50)
+    await tick(50)
+    expect(wrapper.get('svg').attributes('viewBox')).toBe('0 0 24 24')
+    expect(wrapper.emitted('morphEnd')).toBeUndefined()
+    wrapper.unmount()
+  })
   it('leaves SSR and initial render static', async () => {
     expect(
       await renderToString(h(Icon, { iconData: icon(1), morph: true })),

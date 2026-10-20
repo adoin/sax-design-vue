@@ -64,7 +64,7 @@ const iconData = computed(() =>
     : undefined,
 )
 const engines: { value: IconMorphEngine; label: string }[] = [
-  { value: 'svg-morpheus', label: 'svg-morpheus-ts 1.4.0' },
+  { value: 'svg-morpheus', label: 'svg-morpheus-ts 1.4.1' },
   { value: 'builtin', label: '项目内置算法' },
 ]
 let timer: ReturnType<typeof setInterval> | undefined

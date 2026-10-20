@@ -113,6 +113,8 @@ export const useIconMorph = (
           attributes: canonicalAttributes,
           body: plan.frame(0),
         }
+        let settledFrames = 0
+        let canonical = false
         const tick = (now: number) => {
           if (!mounted || ticket !== generation) return
           const time = Math.min((now - started) / duration, 1)
@@ -122,10 +124,29 @@ export const useIconMorph = (
             rendered.value = target
             notify('morphEnd', { engine, elapsed: now - started })
           } else {
-            rendered.value = {
-              attributes: canonicalAttributes,
-              body: plan.frame(progress(time)),
+            const value = progress(time)
+            if (!canonical) {
+              const velocity =
+                (progress(Math.min(1, time + 0.001)) -
+                  progress(Math.max(0, time - 0.001))) /
+                0.002
+              settledFrames =
+                time > 0.15 &&
+                Math.abs(1 - value) < 0.001 &&
+                Math.abs(velocity) < 0.02
+                  ? settledFrames + 1
+                  : 0
+              canonical = settledFrames >= 2
             }
+            // Restore exact artwork once the spring settles, rather than leaving
+            // an approximate contour on screen until the duration budget expires.
+            // Completion timing is unchanged; crossing 1 during a bounce is not settling.
+            rendered.value = canonical
+              ? target
+              : {
+                  attributes: canonicalAttributes,
+                  body: plan.frame(value),
+                }
             frame = requestAnimationFrame(tick)
           }
         }
