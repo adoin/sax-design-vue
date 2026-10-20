@@ -20,6 +20,16 @@ PROPS:
     values: "line / pill / card / connected-card / editable-card"
     description: Navigation style. connected-card joins the active tab and its pane into one continuous surface; editable-card is the backward-compatible editable card preset.
     default: line
+  - name: show-indicator
+    type: Boolean
+    description: Show the active indicator in line mode. Supports global tabs configuration.
+    default: 'true'
+    usage: '#indicator'
+  - name: indicator-position
+    type: "'top' | 'bottom' | 'left' | 'right'"
+    values: "top / bottom / left / right"
+    description: Use top/bottom horizontally and left/right vertically. Omitted or incompatible edges face the content. Supports global tabs configuration.
+    usage: '#indicator'
   - name: overflow
     type: String
     values: "collapse / scroll / wrap"
@@ -146,17 +156,17 @@ EVENTS:
 SLOTS:
   - name: label
     type: Slot
-    scope: "{ pane: TabPaneContext; active: boolean; value: TabValue }"
+    scope: '{ pane: TabPaneContext; active: boolean; value: TabValue }'
     description: Customizes every label with pane, active, and value.
   - name: s-tab#label
     description: Customizes one label and can compose ContextMenu.
   - name: label-extra
     type: Slot
-    scope: "{ pane: TabPaneContext; active: boolean; value: TabValue }"
+    scope: '{ pane: TabPaneContext; active: boolean; value: TabValue }'
     description: Append content after the default label and badge, before the pane close action. Scope supplies pane, active and value. Content is arbitrary; interaction events are stopped at the slot boundary without preventing native defaults.
   - name: s-tab#label-extra
     type: Slot
-    scope: "{ pane: TabPaneContext; active: boolean; value: TabValue }"
+    scope: '{ pane: TabPaneContext; active: boolean; value: TabValue }'
     description: Append content after the default label and badge, before the pane close action. Scope supplies pane, active and value. Content is arbitrary; interaction events are stopped at the slot boundary without preventing native defaults.
   - name: extra
     description: Trailing tab-bar actions.
@@ -164,7 +174,7 @@ SLOTS:
     description: Replaces editable and overflow icons.
   - name: close-icon
     type: Slot
-    scope: "{ pane: TabPaneContext }"
+    scope: '{ pane: TabPaneContext }'
     description: Replaces editable and overflow icons.
   - name: more-icon
     description: Replaces editable and overflow icons.
@@ -350,7 +360,6 @@ Use the `s-tab` label slot with `SContextMenu` to add contextual actions to a ta
 
 </card>
 
-
 <card>
 
 <h2 id="label-extra">Label suffix</h2>
@@ -394,6 +403,22 @@ Drag a label, or focus it and press Alt+Shift+Arrow. Use stable name and key val
 <template #script>
 
 @[code{1-16}](../.vuepress/components/tabs/sorting.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Indicator
+
+Set defaults with SConfigProvider tabs; explicit component props take precedence. Installation also supports `app.use(SaxDesignVue, { tabs: { showIndicator: true, indicatorPosition: 'top' } })`.
+
+<template #example><tabs-indicator /></template>
+
+<template #template>
+
+@[code{1-14}](../.vuepress/components/tabs/indicator.vue)
 
 </template>
 

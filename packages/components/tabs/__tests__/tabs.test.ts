@@ -2,7 +2,9 @@ import { defineComponent, h, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import zhCn from '@vuesax-alpha/locale/lang/zh-cn'
-import { localeContextKey } from '@vuesax-alpha/hooks'
+import { localeContextKey, provideGlobalConfig } from '@vuesax-alpha/hooks'
+import ConfigProvider from '../../config-provider/src/config-provider'
+
 import Tab from '../src/tab.vue'
 import Tabs from '../src/tabs.vue'
 import {
@@ -65,6 +67,91 @@ afterEach(() => {
 })
 
 describe('Tabs', () => {
+  it('toggles the indicator and selects physical edges', async () => {
+    const wrapper = mountTabs({ indicatorPosition: 'top' }, { default: panes })
+    await flushPromises()
+    expect(wrapper.get('.s-tabs__indicator').attributes('style')).toContain(
+      'top: 2px',
+    )
+    await wrapper.setProps({ showIndicator: false })
+    expect(wrapper.find('.s-tabs__indicator').exists()).toBe(false)
+    await wrapper.setProps({ showIndicator: true, indicatorPosition: 'bottom' })
+    expect(wrapper.get('.s-tabs__indicator').attributes('style')).toContain(
+      'bottom: 2px',
+    )
+    await wrapper.setProps({ position: 'left', indicatorPosition: 'left' })
+    expect(wrapper.get('.s-tabs__indicator').attributes('style')).toContain(
+      'left: 2px',
+    )
+    await wrapper.setProps({ indicatorPosition: 'right' })
+    expect(wrapper.get('.s-tabs__indicator').attributes('style')).toContain(
+      'right: 2px',
+    )
+    await wrapper.setProps({ position: 'right', indicatorPosition: 'top' })
+    expect(wrapper.get('.s-tabs__indicator').attributes('style')).toContain(
+      'left: 2px',
+    )
+    await wrapper.setProps({ position: 'bottom', indicatorPosition: undefined })
+    expect(wrapper.get('.s-tabs__indicator').attributes('style')).toContain(
+      'top: 2px',
+    )
+    await wrapper.setProps({ type: 'pill' })
+    expect(wrapper.find('.s-tabs__indicator').exists()).toBe(false)
+    wrapper.unmount()
+  })
+  it('merges reactive nested defaults and honors explicit props', async () => {
+    const defaults = ref({
+      showIndicator: false,
+      indicatorPosition: 'top' as const,
+    })
+    const wrapper = mount(
+      defineComponent({
+        setup: () => () =>
+          h(ConfigProvider, { tabs: defaults.value }, () => [
+            h(Tabs, {}, { default: panes }),
+            h(ConfigProvider, { tabs: { showIndicator: true } }, () =>
+              h(Tabs, {}, { default: panes }),
+            ),
+            h(
+              Tabs,
+              { showIndicator: true, indicatorPosition: 'bottom' },
+              { default: panes },
+            ),
+          ]),
+      }),
+    )
+    await flushPromises()
+    const tabs = wrapper.findAllComponents(Tabs)
+    expect(tabs[0].find('.s-tabs__indicator').exists()).toBe(false)
+    expect(tabs[1].get('.s-tabs__indicator').attributes('style')).toContain(
+      'top: 2px',
+    )
+    expect(tabs[2].get('.s-tabs__indicator').attributes('style')).toContain(
+      'bottom: 2px',
+    )
+    defaults.value = { ...defaults.value, showIndicator: true }
+    await nextTick()
+    expect(tabs[0].find('.s-tabs__indicator').exists()).toBe(true)
+    wrapper.unmount()
+  })
+  it('inherits installation defaults', async () => {
+    const wrapper = mount(Tabs, {
+      slots: { default: panes },
+      global: {
+        plugins: [
+          {
+            install(app) {
+              provideGlobalConfig({ tabs: { showIndicator: false } }, app)
+            },
+          },
+        ],
+      },
+    })
+    await flushPromises()
+    expect(wrapper.find('.s-tabs__indicator').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
   it('ignores small moves and cancels captured pointer sorting with Escape', async () => {
     const wrapper = mountTabs(
       { sortable: true, modelValue: 'overview' },

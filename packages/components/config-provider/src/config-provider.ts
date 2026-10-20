@@ -24,6 +24,11 @@ import type {
   Strategy,
 } from '@vuesax-alpha/hooks/use-floating/vue'
 
+export interface TabsGlobalConfig {
+  showIndicator?: boolean
+  indicatorPosition?: 'top' | 'bottom' | 'left' | 'right'
+}
+
 export interface RadioGroupGlobalConfig {
   animated?: boolean
   direction?: 'horizontal' | 'vertical'
@@ -177,6 +182,8 @@ export const configProviderProps = buildProps({
     type: String,
     values: [...componentSizes, 'default'] as const,
   },
+  /** Defaults for the active indicator in line Tabs. */
+  tabs: { type: definePropType<TabsGlobalConfig>(Object) },
   /** Defaults for multiple Select value ordering. */
   select: { type: definePropType<SelectGlobalConfig>(Object) },
   /** Component-level defaults for Anchor. */

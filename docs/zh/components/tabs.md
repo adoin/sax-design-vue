@@ -20,6 +20,16 @@ PROPS:
     values: "line / pill / card / connected-card / editable-card"
     description: 标签栏外观；connected-card 将激活标签与内容面板连接为同一表面，editable-card 是兼容旧用法的可编辑卡片预设。
     default: line
+  - name: show-indicator
+    type: Boolean
+    description: 在线条模式下显示激活指示线。支持全局 tabs 配置。
+    default: 'true'
+    usage: '#indicator'
+  - name: indicator-position
+    type: "'top' | 'bottom' | 'left' | 'right'"
+    values: "top / bottom / left / right"
+    description: 横向使用 top/bottom，纵向使用 left/right。省略或方向不匹配时靠近内容。支持全局 tabs 配置。
+    usage: '#indicator'
   - name: overflow
     type: String
     values: "collapse / scroll / wrap"
@@ -146,17 +156,17 @@ EVENTS:
 SLOTS:
   - name: label
     type: Slot
-    scope: "{ pane: TabPaneContext; active: boolean; value: TabValue }"
+    scope: '{ pane: TabPaneContext; active: boolean; value: TabValue }'
     description: 自定义全部标签标题，参数为 pane、active、value。
   - name: s-tab#label
     description: 自定义单个标签标题，可组合 ContextMenu。
   - name: label-extra
     type: Slot
-    scope: "{ pane: TabPaneContext; active: boolean; value: TabValue }"
+    scope: '{ pane: TabPaneContext; active: boolean; value: TabValue }'
     description: 在默认标题和徽标后追加内容，位于标签页关闭按钮之前。作用域提供 pane、active、value，允许渲染任意内容；交互事件在插槽边界停止冒泡，不阻止原生默认行为。
   - name: s-tab#label-extra
     type: Slot
-    scope: "{ pane: TabPaneContext; active: boolean; value: TabValue }"
+    scope: '{ pane: TabPaneContext; active: boolean; value: TabValue }'
     description: 在默认标题和徽标后追加内容，位于标签页关闭按钮之前。作用域提供 pane、active、value，允许渲染任意内容；交互事件在插槽边界停止冒泡，不阻止原生默认行为。
   - name: extra
     description: 标签栏尾部操作区。
@@ -164,7 +174,7 @@ SLOTS:
     description: 替换添加、关闭和更多图标。
   - name: close-icon
     type: Slot
-    scope: "{ pane: TabPaneContext }"
+    scope: '{ pane: TabPaneContext }'
     description: 替换添加、关闭和更多图标。
   - name: more-icon
     description: 替换添加、关闭和更多图标。
@@ -350,7 +360,6 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 
 </card>
 
-
 <card>
 
 <h2 id="label-extra">标题后缀</h2>
@@ -394,6 +403,22 @@ Tabs 使用语义化 `tablist / tab / tabpanel`，支持方向键、Home 与 End
 <template #script>
 
 @[code{1-16}](../../.vuepress/components/tabs-zh/sorting.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 指示线 {#indicator}
+
+通过 `SConfigProvider` 的 `tabs` 设置默认值，显式组件属性优先。安装选项也支持 `app.use(SaxDesignVue, { tabs: { showIndicator: true, indicatorPosition: 'top' } })`。
+
+<template #example><tabs-zh-indicator /></template>
+
+<template #template>
+
+@[code{1-14}](../../.vuepress/components/tabs-zh/indicator.vue)
 
 </template>
 

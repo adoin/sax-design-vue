@@ -45,6 +45,13 @@ export const tabsProps = buildProps({
     values: ['line', 'pill', 'card', 'connected-card', 'editable-card'],
     default: 'line',
   },
+  /** Show the active indicator in line mode. */
+  showIndicator: { type: Boolean, default: true },
+  /** Physical edge; top/bottom for horizontal tabs, left/right for vertical tabs. */
+  indicatorPosition: {
+    type: definePropType<'top' | 'bottom' | 'left' | 'right'>(String),
+    values: ['top', 'bottom', 'left', 'right'],
+  },
   overflow: {
     type: definePropType<TabsOverflow>(String),
     values: ['collapse', 'scroll', 'wrap'],

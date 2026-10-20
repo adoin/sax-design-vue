@@ -26,6 +26,7 @@ import {
 import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
 import { useResizeObserver } from '@vueuse/core'
 import {
+  useGlobalComponentProps,
   useLocale,
   useNamespace,
   useOrderedChildren,
@@ -44,7 +45,10 @@ import type { TabsOverflowResult } from './tabs-overflow'
 defineOptions({ name: 'STabs' })
 
 const rawProps = defineProps(tabsProps)
-const props = resolveVisualEnumProps('tabs', rawProps)
+const props = resolveVisualEnumProps(
+  'tabs',
+  useGlobalComponentProps('tabs', rawProps),
+)
 const emit = defineEmits(tabsEmits)
 const slots = useSlots()
 const ns = useNamespace('tabs')
@@ -104,7 +108,33 @@ const isHorizontal = computed(
 const isEditable = computed(
   () => props.editable || props.type === 'editable-card',
 )
-const showLine = computed(() => props.type === 'line')
+const showLine = computed(() => props.type === 'line' && props.showIndicator)
+const indicatorStyle = computed<CSSProperties>(() => {
+  const requested = props.indicatorPosition
+  const edge = isHorizontal.value
+    ? requested === 'top' || requested === 'bottom'
+      ? requested
+      : props.position === 'bottom'
+        ? 'top'
+        : 'bottom'
+    : requested === 'left' || requested === 'right'
+      ? requested
+      : props.position === 'right'
+        ? 'left'
+        : 'right'
+  return {
+    ...lineStyle.value,
+    ...(isHorizontal.value
+      ? {
+          top: edge === 'top' ? '2px' : 'auto',
+          bottom: edge === 'bottom' ? '2px' : 'auto',
+        }
+      : {
+          left: edge === 'left' ? '2px' : 'auto',
+          right: edge === 'right' ? '2px' : 'auto',
+        }),
+  }
+})
 const renderMode = computed<TabsRenderMode>(() => {
   if (props.renderMode) return props.renderMode
   if (props.destroyOnHide) return 'active-only'
@@ -520,6 +550,8 @@ watch(
 watch(
   () => [
     props.position,
+    props.showIndicator,
+    props.indicatorPosition,
     props.type,
     props.alignment,
     props.overflow,
@@ -721,7 +753,7 @@ onBeforeUnmount(() => {
         <span
           v-if="showLine"
           :class="ns.e('indicator')"
-          :style="lineStyle"
+          :style="indicatorStyle"
           aria-hidden="true"
         />
       </div>
