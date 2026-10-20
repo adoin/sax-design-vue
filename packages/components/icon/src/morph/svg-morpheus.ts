@@ -17,7 +17,7 @@ let sequence = 0
 const normalize = (shapes: MorphShape[]) => {
   const groups = new Map<
     number,
-    { d: string; allowReverse: boolean; paint: PaintStyle }
+    { d: string; allowReverse: boolean; draw: boolean; paint: PaintStyle }
   >()
   for (const shape of shapes) {
     const d = path2string(
@@ -37,9 +37,15 @@ const normalize = (shapes: MorphShape[]) => {
     if (existing) existing.d += d
     else {
       const paint = shape.paint ?? { attributes: shape.attributes }
+      const isStroke = (p: PaintStyle): boolean =>
+        p.layers
+          ? p.layers.every((l) => isStroke(l.style))
+          : (p.fill ?? p.attributes.fill) === 'none'
+      const draw = isStroke(paint)
       groups.set(shape.group, {
         d,
-        allowReverse: shape.attributes.fill === 'none',
+        allowReverse: draw,
+        draw,
         paint: {
           ...paint,
           fill: transformPaint(
@@ -68,6 +74,7 @@ export const createMorpheusPlan = (
   const transparent = (paint: PaintStyle): PaintStyle => ({
     ...paint,
     attributes: { ...paint.attributes, opacity: '0' },
+    layers: paint.layers?.map((layer) => ({ ...layer, weight: 0 })),
   })
   const paint = createPaintPlan(
     plan.pairs.map((pair) =>
@@ -85,5 +92,20 @@ export const createMorpheusPlan = (
   return {
     frame: (progress) =>
       renderPaintFrame(plan.frame(progress), paint.frame(progress), prefix),
+    snapshot: (progress) => {
+      const geometry = plan.frame(progress),
+        layers = paint.frame(progress)
+      return geometry.map((d, group) => ({
+        d,
+        group,
+        matrix: [1, 0, 0, 1, 0, 0],
+        closed: /z\s*$/i.test(d),
+        attributes: {},
+        paint:
+          layers[group].length === 1 && layers[group][0].weight === 1
+            ? layers[group][0].style
+            : { attributes: {}, layers: layers[group] },
+      }))
+    },
   }
 }

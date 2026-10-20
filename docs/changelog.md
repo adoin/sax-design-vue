@@ -1,0 +1,27 @@
+---
+title: Changelog
+description: Releases and changes in Sax Design Vue.
+---
+
+# Changelog
+
+## 2.6.1
+
+Released October 20, 2026.
+
+- Icon morphing uses `svg-morpheus-ts/core` 2.0.0.
+- Newly added or removed native stroke contours draw/retract along their own paths. Filled artwork preserves geometry interpolation, compound contours and holes.
+- Rapid target changes retain current geometry and composited paint without multiplying paths. Disappearing strokes stay transparent at the end of a stroke-to-fill transition.
+- Existing `morph`, global `icon.morph`, duration and spring configuration remain available. Reduced motion still follows the system.
+
+See [Icon usage](./icons/#morphing).
+
+## 2.6.0
+
+Released October 20, 2026.
+
+- Added opt-in Icon morphing, including multicolor, alpha and linear/radial gradient interpolation, isolated SVG definitions and global configuration.
+- Added local/global Tabs indicator visibility and placement configuration.
+- Kept disappearing contours collapsed during spring overshoot and improved movement across the requested duration.
+
+[Full release history](https://github.com/adoin/sax-design-vue/blob/main/CHANGELOG.md)

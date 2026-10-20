@@ -2,6 +2,7 @@ import { enComponentCategories } from './component-categories'
 import type { NavbarConfig } from '~/shared/client/nav'
 
 export const enNavbar: NavbarConfig = [
+  { text: 'Changelog', link: '/changelog.html' },
   {
     text: 'Guide',
     link: `/guide/`,

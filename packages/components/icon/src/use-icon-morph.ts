@@ -22,9 +22,12 @@ export const useIconMorph = (
   const active = shallowRef(false)
   let frame = 0
   let generation = 0
+  let currentPlan: MorphPlan | undefined
+  let currentProgress = 0
   let mounted = false
   let media: MediaQueryList | undefined
   const cancel = () => {
+    currentPlan = undefined
     generation++
     if (frame) cancelAnimationFrame(frame)
     frame = 0
@@ -61,6 +64,7 @@ export const useIconMorph = (
     data,
     async (target) => {
       const source = rendered.value
+      const sourceSnapshot = currentPlan?.snapshot?.(currentProgress)
       cancel()
       const options = configuration()
       if (
@@ -86,7 +90,7 @@ export const useIconMorph = (
       try {
         // DOM-only parsing and the external engine never execute during SSR.
         const { readMorphShapes } = await import('./morph/svg')
-        const from = readMorphShapes(source),
+        const from = sourceSnapshot ?? readMorphShapes(source),
           to = readMorphShapes(target)
         const { createMorpheusPlan, springProgress } =
           await import('./morph/svg-morpheus')
@@ -95,6 +99,8 @@ export const useIconMorph = (
           springProgress(t, settings.spring ?? 'snappy')
         if (!mounted || ticket !== generation) return
         const started = performance.now()
+        currentPlan = plan
+        currentProgress = 0
         active.value = true
         notify('morphStart', { elapsed: 0 })
         if (!mounted || ticket !== generation) return
@@ -109,12 +115,14 @@ export const useIconMorph = (
           if (!mounted || ticket !== generation) return
           const time = Math.min((now - started) / duration, 1)
           if (time >= 1) {
+            currentPlan = undefined
             frame = 0
             active.value = false
             rendered.value = target
             notify('morphEnd', { elapsed: now - started })
           } else {
             const value = progress(time)
+            currentProgress = value
             if (!canonical) {
               const velocity =
                 (progress(Math.min(1, time + 0.001)) -
@@ -127,6 +135,7 @@ export const useIconMorph = (
                   ? settledFrames + 1
                   : 0
               canonical = settledFrames >= 2
+              if (canonical) currentPlan = undefined
             }
             // Restore exact artwork once the spring settles, rather than leaving
             // an approximate contour on screen until the duration budget expires.

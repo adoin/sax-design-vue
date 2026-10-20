@@ -156,6 +156,8 @@ Set `rolling` to `true` to use the `--sax-icon-rolling-duration` CSS default of 
 
 Add `morph` to `SIcon` to animate changes to `name`. For example, use your page’s `expanded` state to switch between the expand and collapse arrows.
 
+New or disappearing native stroke contours draw and retract along their original paths. Filled artwork keeps geometry interpolation and compound holes. Selecting another icon during a transition continues from the displayed geometry and paint.
+
 <command>
 
 ```vue

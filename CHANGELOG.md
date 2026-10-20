@@ -1,5 +1,13 @@
 ## Changelog
 
+### 2.6.1 — 2026-10-20
+
+- Upgrade the shared icon geometry/paint core to svg-morpheus-ts 2.0.0.
+- Draw and retract unmatched native stroke contours along their original paths while preserving compound filled contours and holes.
+- Retain logical geometry and composited paint snapshots during rapid retargeting, avoiding repeated parsing and path/layer multiplication.
+- Keep disappearing paths transparent so stroke-to-fill transitions do not linger as endpoint dots.
+- Add English/Chinese on-site changelogs and retain existing local/global morph settings and reduced-motion behavior.
+
 ### 2.6.0 — 2026-10-20
 
 - Add opt-in SIcon morphing with global icon.morph configuration, shared svg-morpheus-ts/core geometry and color interpolation, linear/radial gradients, scoped SVG definitions, and reduced-motion support.

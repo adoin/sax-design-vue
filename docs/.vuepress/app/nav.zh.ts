@@ -4,6 +4,7 @@ import type { NavbarConfig } from '~/shared/client/nav'
 const zh = (path: string) => `/zh${path}`
 
 export const zhNavbar: NavbarConfig = [
+  { text: '更新日志', link: zh('/changelog.html') },
   {
     text: '指南',
     link: zh('/guide/'),

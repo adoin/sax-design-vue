@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ConfigProvider from '../../config-provider/src/config-provider'
 import Icon from '../src/icon.vue'
 import { readMorphShapes } from '../src/morph/svg'
-import { springProgress } from '../src/morph/svg-morpheus'
+import { createMorpheusPlan, springProgress } from '../src/morph/svg-morpheus'
 import type { SaxIconData } from '../src/icon'
 
 vi.mock('../src/morph/svg', () => ({ readMorphShapes: vi.fn(() => []) }))
@@ -41,6 +41,7 @@ beforeEach(() => {
     get: () => reduced,
   })
   vi.mocked(readMorphShapes).mockClear()
+  vi.mocked(createMorpheusPlan).mockClear()
   vi.mocked(springProgress).mockImplementation((t) => t)
 })
 afterEach(() => {
@@ -60,6 +61,26 @@ const tick = async (time: number) => {
 }
 
 describe('Icon morph lifecycle', () => {
+  it('reuses a logical paint snapshot instead of reparsing an interrupted SVG', async () => {
+    const source: ReturnType<typeof readMorphShapes> = []
+    const snapshot = vi.fn(() => source)
+    vi.mocked(createMorpheusPlan).mockReturnValueOnce({
+      frame: () => '<path d="M1 0L2 2"/>',
+      snapshot,
+    })
+    const wrapper = mount(Icon, {
+      props: { iconData: icon(1), morph: { duration: 100 } },
+    })
+    await wrapper.setProps({ iconData: icon(2) })
+    await settleImports()
+    await tick(40)
+    await wrapper.setProps({ iconData: icon(3) })
+    await settleImports()
+    expect(snapshot).toHaveBeenCalledWith(0.4)
+    expect(readMorphShapes).toHaveBeenCalledTimes(3)
+    expect(vi.mocked(createMorpheusPlan).mock.calls.at(-1)?.[0]).toBe(source)
+    wrapper.unmount()
+  })
   it('restores exact artwork after settling while preserving completion timing', async () => {
     vi.mocked(springProgress).mockImplementation((t) => Math.min(1, t * 2))
     const wrapper = mount(Icon, {

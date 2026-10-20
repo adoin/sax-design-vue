@@ -14,6 +14,60 @@ const shape = (d: string): MorphShape => ({
 })
 
 describe('Icon morph geometry', () => {
+  it('retains logical geometry through repeated interrupted paint snapshots', () => {
+    const line = (d: string, group: number): MorphShape => ({
+      ...shape(d),
+      group,
+      closed: false,
+      attributes: {
+        fill: 'none',
+        stroke: '#43546e',
+        'stroke-width': '2',
+        'stroke-linecap': 'round',
+      },
+    })
+    const a = [line('M3 3L21 21', 0), line('M3 21L21 3', 1)]
+    const b = [
+      {
+        ...shape('M3 12A9 9 0 1 0 21 12A9 9 0 1 0 3 12Z'),
+        attributes: { fill: '#ee5577', stroke: 'none' },
+      },
+    ]
+    let source = a
+    for (let i = 0; i < 80; i++) {
+      const plan = createMorpheusPlan(source, i % 2 ? a : b)
+      expect(plan.frame(0.23)).not.toMatch(/NaN|Infinity/)
+      source = plan.snapshot!(0.23)
+      expect(source.length).toBeLessThanOrEqual(2)
+    }
+    const final = createMorpheusPlan(source, b)
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    svg.innerHTML = final.frame(1)
+    const visible = [...svg.querySelectorAll('path[data-morph-index]')].filter(
+      (node) => Number(node.getAttribute('opacity') ?? 1) > 0,
+    )
+    expect(visible).toHaveLength(1)
+  })
+  it('draws newly introduced stroke geometry from its starting point', () => {
+    const line = (d: string, group: number): MorphShape => ({
+      ...shape(d),
+      group,
+      closed: false,
+      attributes: { fill: 'none', stroke: '#43546e', 'stroke-width': '2' },
+    })
+    const plan = createMorpheusPlan(
+      [line('M2 12H22', 0)],
+      [line('M2 12H22', 0), line('M12 2V22', 1)],
+    )
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    svg.innerHTML = plan.frame(0.5)
+    const d = svg
+      .querySelector('path[data-morph-index="1"]')!
+      .getAttribute('d')!
+    const box = curvePathBBox(path2curve(d))
+    expect(box.y).toBeCloseTo(2)
+    expect(box.h).toBeCloseTo(10)
+  })
   it('keeps a removed hole collapsed throughout both bounce presets', () => {
     const from = shape('M2 2H22V22H2ZM6 6V18H18V6Z')
     const to = shape('M2 2H22V22H2Z')

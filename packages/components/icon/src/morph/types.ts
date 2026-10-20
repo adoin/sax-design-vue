@@ -10,6 +10,7 @@ export interface MorphShape {
 }
 export interface MorphPlan {
   frame: (progress: number) => string
+  snapshot?: (progress: number) => MorphShape[]
 }
 export interface IconMorphOptions {
   /** Animation budget in milliseconds. */
