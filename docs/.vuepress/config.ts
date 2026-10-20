@@ -54,6 +54,7 @@ const localizedHeadingSlugify = createLocalizedHeadingSlugify(
 )
 
 export default defineUserConfig({
+  port: 8585,
   pagePatterns: devScope.pagePatterns,
   ...(devScope.focused
     ? {
