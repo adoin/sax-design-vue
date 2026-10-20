@@ -148,3 +148,69 @@ export default defineConfig({
 | `flip`    | `horizontal \| vertical \| both` | —              | 水平、垂直或双向镜像。                        |
 | `rolling` | `boolean \| number`              | `false`        | 持续旋转；数字表示每圈秒数。                  |
 | `label`   | `string`                         | —              | 无障碍名称；未设置时视为装饰图标。            |
+
+<card>
+
+<h2 id="morphing">图标变形</h2>
+
+`morph` 默认关闭。开启后，同一 `SIcon` 的 `name` 或 `iconData` 改变时会变形。`engine: 'svg-morpheus'` 使用 svg-morpheus-ts 的贝塞尔曲线内核，`engine: 'builtin'` 使用项目内置的等弧长采样、轮廓匹配、相似变换对齐与弹簧插值。两种引擎均按需加载。内置算法对填充图标使用轮廓插值，不执行距离场重建。
+
+使用下面的同屏示例比较两种引擎。切换图标类型与时长，或在动画尚未结束时连续切换。Tabs 的 `icon` 属性通过内部 `SIcon` 继承配置。
+
+<template #example><icons-zh-morph /></template>
+
+<template #template>
+
+@[code{70-137}](../../.vuepress/components/icons-zh/morph.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-68}](../../.vuepress/components/icons-zh/morph.vue)
+
+</template>
+
+<template #style>
+
+@[code{139-181}](../../.vuepress/components/icons-zh/morph.vue)
+
+</template>
+
+</card>
+
+<card>
+
+<h2 id="global-morphing">全局变形配置</h2>
+
+通过安装选项或 `SConfigProvider` 的 `icon.morph` 配置默认值，局部属性优先。局部 `morph` 保留全局引擎设置，局部 `:morph="false"` 关闭。只有通过 `SIcon` 渲染并保留实例的图标属性会继承；自定义插槽、独立 SVG 或使用不同 key 重建的实例不会跨实例变形。
+
+<command>
+
+```ts
+app.use(SaxDesignVue, {
+  icon: { morph: { engine: 'builtin', duration: 360, spring: 'snappy' } },
+})
+```
+
+```vue
+<s-config-provider :icon="{ morph: { engine: 'svg-morpheus', duration: 400 } }">
+  <s-icon :name="open ? 'cb:chevron-up' : 'cb:chevron-down'" />
+  <s-icon name="cb:pin" :morph="false" />
+</s-config-provider>
+```
+
+</command>
+
+| 属性 | Type | 默认值 |
+| --- | --- | --- |
+| morph | boolean &#124; IconMorphOptions | false |
+| morph.engine | 'builtin' &#124; 'svg-morpheus' | builtin |
+| morph.duration | number (ms) | 360 |
+| morph.spring | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy |
+
+`spring` 仅作用于内置引擎。`duration <= 0` 立即切换。初始渲染与 SSR 显示原始 SVG；系统减少动态效果开启时直接切换。动画中再次改变图标会从当前形状继续，卸载与配置变化会取消动画。完成时恢复精确的目标 SVG。渐变、蒙版、滤镜、外部引用等复杂 SVG 直接切换，保留原图。
+
+`morph-start` 与 `morph-end` 事件提供 `{ engine, elapsed }`。取消的动画不会触发完成事件，静态切换也不会触发动画事件。
+
+</card>

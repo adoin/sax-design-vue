@@ -1,6 +1,12 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { CSSProperties, ExtractPropTypes } from 'vue'
 import type Icon from './icon.vue'
+import type { IconMorphDetail, IconMorphOptions } from './morph/types'
+export type {
+  IconMorphDetail,
+  IconMorphEngine,
+  IconMorphOptions,
+} from './morph/types'
 
 export interface SaxIconData {
   body: string
@@ -15,6 +21,11 @@ export const iconProps = buildProps({
   /** Build-time injected Iconify SVG data. */
   iconData: {
     type: definePropType<SaxIconData>(Object),
+  },
+  /** Animate changes to name/iconData. Explicit false overrides global defaults. */
+  morph: {
+    type: definePropType<boolean | IconMorphOptions>([Boolean, Object]),
+    default: false,
   },
   /** Width and height. Numbers use px; strings accept any CSS unit. */
   size: {
@@ -41,6 +52,11 @@ export const iconProps = buildProps({
   /** Accessible label. Decorative icons omit it. */
   label: String,
 } as const)
+
+export const iconEmits = {
+  morphStart: (detail: IconMorphDetail) => !!detail,
+  morphEnd: (detail: IconMorphDetail) => !!detail,
+}
 
 export interface IconRenderStyles {
   root: CSSProperties

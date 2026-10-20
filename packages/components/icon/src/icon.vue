@@ -6,16 +6,17 @@
     :role="label ? 'img' : undefined"
     :aria-label="label"
     :aria-hidden="label ? undefined : 'true'"
+    :data-morphing="morphActive || undefined"
   >
     <svg
-      v-if="resolvedIconData"
-      v-bind="resolvedIconData.attributes"
+      v-if="renderedIconData"
+      v-bind="renderedIconData.attributes"
       xmlns="http://www.w3.org/2000/svg"
       width="1em"
       height="1em"
       focusable="false"
       :style="svgStyle"
-      v-html="resolvedIconData.body"
+      v-html="renderedIconData.body"
     />
     <slot v-else />
   </span>
@@ -24,9 +25,10 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { addUnit, getVsColor } from '@vuesax-alpha/utils'
-import { useNamespace } from '@vuesax-alpha/hooks'
+import { useGlobalComponentProps, useNamespace } from '@vuesax-alpha/hooks'
 import { getIconData } from 'sax-design-vue-iconify'
-import { iconProps } from './icon'
+import { iconEmits, iconProps } from './icon'
+import { useIconMorph } from './use-icon-morph'
 import { builtinCarbonIcons } from './builtin-carbon-icons'
 import { closeIconData } from './close-artwork'
 import type { CSSProperties } from 'vue'
@@ -36,7 +38,9 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const props = defineProps(iconProps)
+const rawProps = defineProps(iconProps)
+const props = useGlobalComponentProps('icon', rawProps)
+const emit = defineEmits(iconEmits)
 const ns = useNamespace('icon')
 const isRolling = computed(
   () =>
@@ -51,6 +55,14 @@ const resolvedIconData = computed(() => {
   const [prefix, name] = props.name.split(':')
   return prefix === 'cb' && name ? builtinCarbonIcons[name] : undefined
 })
+const { rendered: renderedIconData, active: morphActive } = useIconMorph(
+  resolvedIconData,
+  () => props.morph,
+  (event, detail) => {
+    if (event === 'morphStart') emit('morphStart', detail)
+    else emit('morphEnd', detail)
+  },
+)
 
 const rootStyle = computed<CSSProperties>(() => {
   const size = props.size === undefined ? '1em' : addUnit(props.size)

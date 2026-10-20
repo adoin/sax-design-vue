@@ -16,6 +16,7 @@ import type {
   AnchorRouterAdapter,
 } from '../../types'
 import type { TableGlobalConfig } from '../../table/src/table-global-config'
+import type { IconMorphOptions } from '../../icon/src/morph/types'
 import type {
   FlipOptions,
   OffsetOptions,
@@ -123,6 +124,10 @@ export interface AnchorGlobalConfig {
 }
 
 export const configProviderProps = buildProps({
+  /** Defaults inherited by SIcon and component icon properties rendered with SIcon. */
+  icon: {
+    type: definePropType<{ morph?: boolean | IconMorphOptions }>(Object),
+  },
   /** Default PNG / SVG Agent icon shared by Agent Editor and Message. */
   agentIcon: String,
   /** First weekday: 0 Sunday through 6 Saturday. Defaults to Monday. */

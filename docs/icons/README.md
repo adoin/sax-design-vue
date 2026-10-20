@@ -149,3 +149,69 @@ Set `rolling` to `true` to use the `--sax-icon-rolling-duration` CSS default of 
 | `flip`    | `horizontal \| vertical \| both` | —              | Mirrors the icon.                                   |
 | `rolling` | `boolean \| number`              | `false`        | Rotates continuously; number is seconds per turn.   |
 | `label`   | `string`                         | —              | Accessible name. Without it the icon is decorative. |
+
+<card>
+
+<h2 id="morphing">Icon morphing</h2>
+
+Morphing is off by default. Enable `morph` to animate changes to name or iconData on the same SIcon instance. `engine: 'svg-morpheus'` uses the svg-morpheus-ts Bézier core; `engine: 'builtin'` uses built-in arc-length sampling, contour matching, similarity alignment and spring interpolation. Both engines load on demand. Filled shapes use contour interpolation, without distance-field reconstruction.
+
+Compare both engines below using the same icons and duration, including changes during an unfinished animation. The Tabs icon property inherits defaults through its internal SIcon.
+
+<template #example><icons-morph /></template>
+
+<template #template>
+
+@[code{70-138}](../.vuepress/components/icons/morph.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-68}](../.vuepress/components/icons/morph.vue)
+
+</template>
+
+<template #style>
+
+@[code{140-182}](../.vuepress/components/icons/morph.vue)
+
+</template>
+
+</card>
+
+<card>
+
+<h2 id="global-morphing">Global morphing</h2>
+
+Set icon.morph in installation options or SConfigProvider. Explicit local props take precedence. Local morph=true retains configured engine options; morph=false disables them. Icon properties rendered through a retained SIcon inherit defaults. Custom slots, independent SVGs and instances recreated with different keys do not morph across instances.
+
+<command>
+
+```ts
+app.use(SaxDesignVue, {
+  icon: { morph: { engine: 'builtin', duration: 360, spring: 'snappy' } },
+})
+```
+
+```vue
+<s-config-provider :icon="{ morph: { engine: 'svg-morpheus', duration: 400 } }">
+  <s-icon :name="open ? 'cb:chevron-up' : 'cb:chevron-down'" />
+  <s-icon name="cb:pin" :morph="false" />
+</s-config-provider>
+```
+
+</command>
+
+| Property | Type | Default |
+| --- | --- | --- |
+| morph | boolean &#124; IconMorphOptions | false |
+| morph.engine | 'builtin' &#124; 'svg-morpheus' | builtin |
+| morph.duration | number (ms) | 360 |
+| morph.spring | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy |
+
+spring applies only to the built-in engine. duration <= 0 switches immediately. Initial render and SSR retain the original SVG; reduced motion switches immediately. Interrupted changes continue from the current shape. Unmounting and configuration changes cancel animation. Completion restores the exact target SVG. Complex SVGs with gradients, masks, filters or external references switch directly, retaining their artwork.
+
+morph-start and morph-end emit { engine, elapsed }. Cancelled animations do not emit completion; static changes do not emit animation events.
+
+</card>
