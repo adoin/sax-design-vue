@@ -1,6 +1,10 @@
 ## Changelog
 
-### Unreleased
+### 2.6.0 — 2026-10-20
+
+- Add opt-in SIcon morphing with global icon.morph configuration, shared svg-morpheus-ts/core geometry and color interpolation, linear/radial gradients, scoped SVG definitions, and reduced-motion support.
+- Preserve disappearing contours during spring overshoot and provide smooth, snappy and bouncy presets with consistent duration.
+- Configure Tabs indicator visibility and placement through local props, installation options and SConfigProvider.
 
 - Display documentation update timestamps in explicit UTC so server output and client hydration remain identical across timezones.
 

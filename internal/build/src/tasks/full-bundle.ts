@@ -69,6 +69,8 @@ async function buildFullEntry(minify: boolean) {
         formatBundleFilename('index.full', minify, 'js'),
       ),
       exports: 'named',
+      // Complete bundles are single files, including lazily imported icon morphs.
+      codeSplitting: false,
       name: PKG_CAMELCASE_NAME,
       globals: {
         vue: 'Vue',
@@ -79,6 +81,7 @@ async function buildFullEntry(minify: boolean) {
     },
     {
       format: 'esm',
+      codeSplitting: false,
       file: path.resolve(
         vsOutput,
         'dist',

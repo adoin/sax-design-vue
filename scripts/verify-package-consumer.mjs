@@ -128,13 +128,20 @@ export function renderIcons() {
   const runtimeChunks = (Array.isArray(runtime) ? runtime : [runtime])
     .flatMap((output) => output.output)
     .filter((item) => item.type === 'chunk')
-  assert.equal(
-    runtimeChunks.length,
-    1,
-    'Icon smoke fixture should produce one executable chunk',
-  )
-  const runtimeFile = path.join(fixture, `runtime-${format}.mjs`)
-  await writeFile(runtimeFile, runtimeChunks[0].code)
+  const entries = runtimeChunks.filter((chunk) => chunk.isEntry)
+  assert.equal(entries.length, 1, 'Icon smoke fixture must have one entry')
+  const runtimeDirectory = path.join(fixture, `output-${format}`)
+  await mkdir(runtimeDirectory)
+  const filenames = new Set(runtimeChunks.map((chunk) => chunk.fileName))
+  for (const chunk of runtimeChunks) {
+    for (const dynamic of chunk.dynamicImports)
+      assert.ok(filenames.has(dynamic), `Missing lazy consumer chunk: ${dynamic}`)
+    const output = path.resolve(runtimeDirectory, chunk.fileName)
+    assert.ok(output.startsWith(runtimeDirectory + path.sep))
+    await mkdir(path.dirname(output), { recursive: true })
+    await writeFile(output, chunk.code)
+  }
+  const runtimeFile = path.join(runtimeDirectory, entries[0].fileName)
   const { renderIcons } = await import(pathToFileURL(runtimeFile).href)
   const html = await renderIcons()
   assert.equal(
@@ -143,7 +150,7 @@ export function renderIcons() {
     'Static/built-in, registered external, and close icons must all render after minification',
   )
   console.log(
-    `Production ${format} SIcon consumer: 4 SVGs rendered from minified output (${runtimeChunks[0].code.length} JS characters)`,
+    `Production ${format} SIcon consumer: 4 SVGs rendered; ${runtimeChunks.length} complete minified chunks`,
   )
 }
 console.log(`Consumer fixture: ${fixture}`)
