@@ -14,6 +14,28 @@ const shape = (d: string): MorphShape => ({
 })
 
 describe('Icon morph geometry', () => {
+  it('keeps a removed hole collapsed throughout both bounce presets', () => {
+    const from = shape('M2 2H22V22H2ZM6 6V18H18V6Z')
+    const to = shape('M2 2H22V22H2Z')
+    const plan = createMorpheusPlan([from], [to])
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    for (const profile of ['snappy', 'bouncy'] as const) {
+      const progress = Math.max(
+        ...Array.from({ length: 101 }, (_, i) =>
+          springProgress(i / 100, profile),
+        ),
+      )
+      expect(progress).toBeGreaterThan(1)
+      svg.innerHTML = plan.frame(progress)
+      const contours = splitSubpaths(
+        svg.querySelector('path')!.getAttribute('d')!,
+      )
+      expect(contours).toHaveLength(2)
+      const hole = curvePathBBox(path2curve(contours[1]))
+      expect(hole.w).toBeCloseTo(0)
+      expect(hole.h).toBeCloseTo(0)
+    }
+  })
   it('keeps the real Carbon eye pupil circular through arc normalization and scaling', () => {
     const pupil = Array.from(
       builtinCarbonIcons.view.body.matchAll(/<path[^>]*\bd="([^"]+)"/g),

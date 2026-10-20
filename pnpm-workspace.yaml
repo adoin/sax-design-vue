@@ -29,4 +29,4 @@ allowBuilds:
 
 # Verified release archive; retain the cooldown for all other versions.
 minimumReleaseAgeExclude:
-  - svg-morpheus-ts@1.5.2
+  - svg-morpheus-ts@1.5.3

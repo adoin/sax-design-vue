@@ -93,7 +93,7 @@
     "memoize-one": "^6.0.0",
     "normalize-wheel-es": "^1.2.0",
     "sax-design-vue-iconify": "workspace:*",
-    "svg-morpheus-ts": "1.5.2",
+    "svg-morpheus-ts": "1.5.3",
     "vue-router": "^5.2.0"
   },
   "devDependencies": {

@@ -571,8 +571,8 @@ importers:
         specifier: workspace:*
         version: link:../iconify
       svg-morpheus-ts:
-        specifier: 1.5.2
-        version: 1.5.2
+        specifier: 1.5.3
+        version: 1.5.3
       vue-router:
         specifier: ^5.2.0
         version: 5.2.0(@vue/compiler-sfc@3.5.40)(esbuild@0.28.1)(rolldown@1.2.5)(rollup@4.62.2)(vite@8.2.2(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.3)(tsx@4.23.1)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))
@@ -6535,8 +6535,8 @@ packages:
   sver@1.8.4:
     resolution: {integrity: sha512-71o1zfzyawLfIWBOmw8brleKyvnbn73oVHNCsu51uPMz/HWiKkkXsI31JjHW5zqXEqnPYkIiHd8ZmL7FCimLEA==}
 
-  svg-morpheus-ts@1.5.2:
-    resolution: {integrity: sha512-0Y5ec35fOLZEqXdLP3VVB/UVVMKwpRW7Nz8ERToMmEacQixkkvQH/CtqWCFpw+lJXTTV18T9a0/ySjZ1dqrf+w==}
+  svg-morpheus-ts@1.5.3:
+    resolution: {integrity: sha512-hbYqmBtpJG7lExS0juIE8K1+3cn6UsretR9GH0lpNET5oO4bQxL0q5SkrKyqRIQjSA0IttecJEr9Y+7BGP7wNg==}
     engines: {node: '>=18.0.0', pnpm: '>=9.0.0'}
 
   svgo@4.0.2:
@@ -13805,7 +13805,7 @@ snapshots:
     optionalDependencies:
       semver: 6.3.1
 
-  svg-morpheus-ts@1.5.2: {}
+  svg-morpheus-ts@1.5.3: {}
 
   svgo@4.0.2:
     dependencies:
