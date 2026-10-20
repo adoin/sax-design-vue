@@ -50,7 +50,6 @@ export const useIconMorph = (
       const settings = typeof options === 'object' ? options : {}
       return JSON.stringify([
         Boolean(options),
-        'svg-morpheus',
         settings.duration ?? 360,
         settings.spring ?? 'snappy',
       ])
@@ -83,7 +82,6 @@ export const useIconMorph = (
         rendered.value = target
         return
       }
-      const engine = 'svg-morpheus' as const
       const ticket = generation
       try {
         // DOM-only parsing and the external engine never execute during SSR.
@@ -98,7 +96,7 @@ export const useIconMorph = (
         if (!mounted || ticket !== generation) return
         const started = performance.now()
         active.value = true
-        notify('morphStart', { engine, elapsed: 0 })
+        notify('morphStart', { elapsed: 0 })
         if (!mounted || ticket !== generation) return
         // Flush a real frame-zero shape before scheduling the first animation frame.
         rendered.value = {
@@ -114,7 +112,7 @@ export const useIconMorph = (
             frame = 0
             active.value = false
             rendered.value = target
-            notify('morphEnd', { engine, elapsed: now - started })
+            notify('morphEnd', { elapsed: now - started })
           } else {
             const value = progress(time)
             if (!canonical) {

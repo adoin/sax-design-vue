@@ -2,11 +2,7 @@ import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import type { CSSProperties, ExtractPropTypes } from 'vue'
 import type Icon from './icon.vue'
 import type { IconMorphDetail, IconMorphOptions } from './morph/types'
-export type {
-  IconMorphDetail,
-  IconMorphEngine,
-  IconMorphOptions,
-} from './morph/types'
+export type { IconMorphDetail, IconMorphOptions } from './morph/types'
 
 export interface SaxIconData {
   body: string

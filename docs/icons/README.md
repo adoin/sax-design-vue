@@ -156,25 +156,25 @@ Set `rolling` to `true` to use the `--sax-icon-rolling-duration` CSS default of 
 
 Morphing is off by default. Enable `morph` to animate name or iconData changes on the same SIcon. The lazily loaded `svg-morpheus-ts/core` handles global contour assignment, exact cubic subdivision and paint interpolation. Multicolor paths, alpha colors, linear/radial gradients and opacity groups are supported. Same-type gradients interpolate stops and geometry; different types crossfade. Unsupported masks, filters and patterns retain the static SVG.
 
-Compare the animated icon with its static target, including changes during an unfinished animation. The Tabs icon property inherits defaults through its internal SIcon.
+Try different icons, colors and gradients, including changes during an unfinished animation. The Tabs icon property inherits defaults through its internal SIcon.
 
 <template #example><icons-morph /></template>
 
 <template #template>
 
-@[code{149-228}](../.vuepress/components/icons/morph.vue)
+@[code{142-206}](../.vuepress/components/icons/morph.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-147}](../.vuepress/components/icons/morph.vue)
+@[code{1-140}](../.vuepress/components/icons/morph.vue)
 
 </template>
 
 <template #style>
 
-@[code{230-272}](../.vuepress/components/icons/morph.vue)
+@[code{208-239}](../.vuepress/components/icons/morph.vue)
 
 </template>
 
@@ -206,12 +206,11 @@ app.use(SaxDesignVue, {
 | Property | Type | Default |
 | --- | --- | --- |
 | morph | boolean &#124; IconMorphOptions | false |
-| morph.engine | 'svg-morpheus' | svg-morpheus |
 | morph.duration | number (ms) | 360 |
 | morph.spring | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy |
 
-spring controls the animation profile. The deprecated engine option accepts builtin as a compatibility alias; all values use the shared core. duration <= 0 switches immediately. Initial render and SSR retain the original SVG; reduced motion switches immediately. Interrupted changes continue from the current shape. Unmounting and configuration changes cancel animation. Completion restores the exact target SVG. Complex SVGs with masks, filters, patterns or external references switch directly, retaining their artwork.
+spring controls the animation profile. duration <= 0 switches immediately. Initial render and SSR retain the original SVG; reduced motion switches immediately. Interrupted changes continue from the current shape. Unmounting and configuration changes cancel animation. Completion restores the exact target SVG. Complex SVGs with masks, filters, patterns or external references switch directly, retaining their artwork.
 
-morph-start and morph-end emit { engine, elapsed }. Cancelled animations do not emit completion; static changes do not emit animation events.
+morph-start and morph-end emit { elapsed }. Cancelled animations do not emit completion; static changes do not emit animation events.
 
 </card>

@@ -75,6 +75,7 @@ describe('Icon morph lifecycle', () => {
     expect(wrapper.emitted('morphEnd')).toBeUndefined()
     await tick(100)
     expect(wrapper.emitted('morphEnd')).toHaveLength(1)
+    expect(wrapper.emitted('morphEnd')![0][0]).not.toHaveProperty('engine')
     wrapper.unmount()
   })
   it('does not treat a moving crossing of the target as settled', async () => {

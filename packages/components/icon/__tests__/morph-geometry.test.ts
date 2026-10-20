@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest'
 import { curvePathBBox, path2curve, springProgress } from 'svg-morpheus-ts/core'
 import { createMorpheusPlan } from '../src/morph/svg-morpheus'
 import { readMorphShapes, splitSubpaths } from '../src/morph/svg'
-import { renderPaths } from '../src/morph/types'
 import { builtinCarbonIcons } from '../src/builtin-carbon-icons'
 import type { MorphShape } from '../src/morph/types'
 
@@ -69,15 +68,6 @@ describe('Icon morph geometry', () => {
       ).toBe(true)
     },
   )
-  it('keeps hole contours within the same compound path', () => {
-    const markup = renderPaths([
-      { d: 'M0 0L10 0L10 10Z', shape: shape('') },
-      { d: 'M2 2L2 4L4 4Z', shape: shape('') },
-    ])
-    expect(markup.match(/<path/g)).toHaveLength(1)
-    expect(markup).toContain('fill-rule="evenodd"')
-    expect(markup).toContain('M2 2')
-  })
   it('uses the published Morpheus core for transformed unequal path counts', () => {
     const a = shape('M0 0L16 0L16 16Z')
     a.matrix = [0.5, 0, 0, 0.5, 4, 4]

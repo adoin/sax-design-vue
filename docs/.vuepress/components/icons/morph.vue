@@ -8,7 +8,7 @@ const duration = shallowRef(600)
 const spring = shallowRef<'smooth' | 'snappy' | 'bouncy'>('snappy')
 const mounted = shallowRef(true)
 const running = shallowRef(false)
-const stats = shallowRef<Record<string, string>>({})
+const elapsed = shallowRef('')
 const pairs = [
   { label: 'Direction', from: 'cb:chevron-down', to: 'cb:chevron-up' },
   { label: 'Pin', from: 'cb:pin', to: 'cb:pin-filled' },
@@ -36,7 +36,7 @@ const strokeIcons: SaxIconData[] = [
     body: '<g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="16" cy="16" r="11"/><path d="M12 12l8 8m0-8l-8 8"/></g>',
   },
 ]
-const comparisonIcons: SaxIconData[][] = [
+const customIcons: SaxIconData[][] = [
   strokeIcons,
   [
     {
@@ -111,13 +111,9 @@ const comparisonIcons: SaxIconData[][] = [
 ]
 const iconData = computed(() =>
   pair.value >= 4
-    ? comparisonIcons[pair.value - 4][Number(flipped.value)]
+    ? customIcons[pair.value - 4][Number(flipped.value)]
     : undefined,
 )
-const engines = [
-  { value: 'svg-morpheus', label: 'svg-morpheus-ts 1.5.2', animated: true },
-  { value: 'target', label: 'Static target', animated: false },
-]
 let timer: ReturnType<typeof setInterval> | undefined
 const stop = () => {
   clearInterval(timer)
@@ -134,10 +130,7 @@ const stress = () => {
   }, 80)
 }
 const record = (detail: IconMorphDetail) => {
-  stats.value = {
-    ...stats.value,
-    [detail.engine]: `${detail.elapsed.toFixed(0)} ms`,
-  }
+  elapsed.value = `${detail.elapsed.toFixed(0)} ms`
 }
 const toggleMount = () => {
   stop()
@@ -147,8 +140,8 @@ onBeforeUnmount(stop)
 </script>
 
 <template>
-  <div class="morph-compare">
-    <div class="morph-compare__controls">
+  <div class="morph-demo">
+    <div class="morph-demo__controls">
       <s-button
         v-for="(item, index) in pairs"
         :key="item.label"
@@ -167,7 +160,7 @@ onBeforeUnmount(stop)
       />
       <s-select
         v-model="spring"
-        aria-label="Shared easing"
+        aria-label="Animation easing"
         :options="[
           { label: 'Smooth', value: 'smooth' },
           { label: 'Snappy', value: 'snappy' },
@@ -175,8 +168,8 @@ onBeforeUnmount(stop)
         ]"
       />
     </div>
-    <div class="morph-compare__controls">
-      <s-button @click="flipped = !flipped">Switch both</s-button>
+    <div class="morph-demo__controls">
+      <s-button @click="flipped = !flipped">Switch icon</s-button>
       <s-button type="flat" :disabled="running || !mounted" @click="stress"
         >Switch 20 times</s-button
       >
@@ -184,69 +177,49 @@ onBeforeUnmount(stop)
         mounted ? 'Unmount icons' : 'Remount icons'
       }}</s-button>
     </div>
-    <div class="morph-compare__grid">
-      <s-config-provider
-        v-for="engine in engines"
-        :key="engine.value"
-        :icon="{ morph: engine.animated ? { duration, spring } : false }"
-      >
-        <section class="morph-compare__panel" :aria-label="engine.label">
-          <h3>{{ engine.label }}</h3>
-          <template v-if="mounted">
-            <s-icon
-              :name="name"
-              :icon-data="iconData"
-              :size="76"
-              color="primary"
-              :label="engine.label"
-              @morph-end="record"
-            />
-            <s-tabs type="pill" :animated="false">
-              <s-tab :name="0" :icon="name" label="Tab icon"
-                >The Tabs icon property inherits global defaults.</s-tab
-              >
-            </s-tabs>
-          </template>
-          <p v-else>Icons unmounted</p>
-          <p class="morph-compare__timing" aria-live="polite">
-            Last completed animation:
-            {{ (engine.animated ? stats['svg-morpheus'] : '') || '—' }}
-          </p>
-        </section>
-      </s-config-provider>
-    </div>
-    <p>
-      Static reference:
-      <s-icon :name="name" :icon-data="iconData" :size="24" :morph="false" />
-    </p>
-    <p>
-      The animated icon uses the shared geometry and paint core. The target
-      remains static. Respects reduced motion; wall time is not a performance
-      benchmark.
-    </p>
+    <s-config-provider :icon="{ morph: { duration, spring } }">
+      <section class="morph-demo__panel" aria-label="Icon morph preview">
+        <template v-if="mounted">
+          <s-icon
+            :name="name"
+            :icon-data="iconData"
+            :size="76"
+            color="primary"
+            label="Icon morph preview"
+            @morph-end="record"
+          />
+          <s-tabs type="pill" :animated="false">
+            <s-tab :name="0" :icon="name" label="Tab icon"
+              >The Tabs icon property inherits global defaults.</s-tab
+            >
+          </s-tabs>
+        </template>
+        <p v-else>Icons unmounted</p>
+        <p class="morph-demo__timing" aria-live="polite">
+          Last completed animation:
+          {{ elapsed || '—' }}
+        </p>
+      </section>
+    </s-config-provider>
+    <p>Respects reduced motion; wall time is not a performance benchmark.</p>
   </div>
 </template>
 
 <style scoped>
-.morph-compare {
+.morph-demo {
   display: grid;
   gap: 16px;
 }
-.morph-compare__controls {
+.morph-demo__controls {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
 }
-.morph-compare__controls :deep(.s-select) {
+.morph-demo__controls :deep(.s-select) {
   width: 150px;
 }
-.morph-compare__grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-}
-.morph-compare__panel {
+.morph-demo__panel {
   display: grid;
   align-content: start;
   justify-items: center;
@@ -257,16 +230,10 @@ onBeforeUnmount(stop)
   box-shadow: inset 0 2px 10px
     color-mix(in srgb, var(--sax-css-text) 8%, transparent);
 }
-.morph-compare__panel h3,
-.morph-compare__panel p {
+.morph-demo__panel p {
   margin: 0;
 }
-.morph-compare__timing {
+.morph-demo__timing {
   font-variant-numeric: tabular-nums;
-}
-@media (max-width: 600px) {
-  .morph-compare__grid {
-    grid-template-columns: 1fr;
-  }
 }
 </style>
