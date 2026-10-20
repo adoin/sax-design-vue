@@ -1,6 +1,7 @@
 export type Point = [number, number]
 export type Matrix = [number, number, number, number, number, number]
 export interface MorphShape {
+  paint?: import('svg-morpheus-ts/core').PaintStyle
   d: string
   matrix: Matrix
   attributes: Record<string, string>
@@ -10,12 +11,14 @@ export interface MorphShape {
 export interface MorphPlan {
   frame: (progress: number) => string
 }
+/** builtin is a compatibility alias; all morphs use svg-morpheus-ts/core. */
 export type IconMorphEngine = 'builtin' | 'svg-morpheus'
 export interface IconMorphOptions {
+  /** @deprecated All icons use svg-morpheus-ts/core; builtin is accepted as an alias. */
   engine?: IconMorphEngine
   /** Animation budget in milliseconds. */
   duration?: number
-  /** Spring profile shared by both engines. */
+  /** Spring profile from the shared core. */
   spring?: 'smooth' | 'snappy' | 'bouncy'
 }
 export interface IconMorphDetail {

@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, shallowRef } from 'vue'
-import type {
-  IconMorphDetail,
-  IconMorphEngine,
-  SaxIconData,
-} from 'sax-design-vue'
+import type { IconMorphDetail, SaxIconData } from 'sax-design-vue'
 
 const flipped = shallowRef(false)
 const pair = shallowRef(0)
@@ -21,6 +17,11 @@ const pairs = [
   { label: '描边与曲线', from: 'cb:chevron-down', to: 'cb:chevron-up' },
   { label: '起点错位', from: 'cb:chevron-down', to: 'cb:chevron-up' },
   { label: '全局配对', from: 'cb:chevron-down', to: 'cb:chevron-up' },
+  { label: '多色与透明度', from: 'cb:chevron-down', to: 'cb:chevron-up' },
+  { label: '线性渐变', from: 'cb:chevron-down', to: 'cb:chevron-up' },
+  { label: '径向渐变', from: 'cb:chevron-down', to: 'cb:chevron-up' },
+  { label: '渐变类型切换', from: 'cb:chevron-down', to: 'cb:chevron-up' },
+  { label: '组透明度', from: 'cb:chevron-down', to: 'cb:chevron-up' },
 ]
 const name = computed(() =>
   flipped.value ? pairs[pair.value].to : pairs[pair.value].from,
@@ -57,15 +58,65 @@ const comparisonIcons: SaxIconData[][] = [
       body: '<path fill="currentColor" d="M6 10h4v4H6Z"/><path fill="currentColor" d="M18 10h4v4H18Z"/>',
     },
   ],
+  [
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<path fill="#ff004080" d="M2 2H15V15H2Z"/><path fill="rgb(0 120 255 / 75%)" d="M10 10H22V22H10Z"/>',
+    },
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<path fill="hsl(160 90% 40%)" d="M10 10H22V22H10Z"/><path fill="#ff9900" d="M2 2H15V15H2Z"/>',
+    },
+  ],
+  [
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<defs><linearGradient id="paint"><stop offset="0" stop-color="#ff0066"/><stop offset="1" stop-color="#4466ff"/></linearGradient></defs><path fill="url(#paint)" d="M3 3H21V21H3Z"/>',
+    },
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<defs><linearGradient id="paint" x2="0%" y2="100%"><stop offset="0" stop-color="#00bb99"/><stop offset=".4" stop-color="#ffee00" stop-opacity=".7"/><stop offset="1" stop-color="#ff7700"/></linearGradient></defs><circle fill="url(#paint)" cx="12" cy="12" r="10"/>',
+    },
+  ],
+  [
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<defs><radialGradient id="paint" cx="25%" cy="25%"><stop offset="0" stop-color="white"/><stop offset="1" stop-color="#0066ff"/></radialGradient></defs><circle fill="url(#paint)" cx="12" cy="12" r="10"/>',
+    },
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<defs><radialGradient id="paint" cx="75%" cy="75%" r="70%"><stop offset="0" stop-color="#ffdd00"/><stop offset="1" stop-color="#ff0066"/></radialGradient></defs><circle fill="url(#paint)" cx="12" cy="12" r="10"/>',
+    },
+  ],
+  [
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<defs><linearGradient id="paint"><stop offset="0" stop-color="#ff0066"/><stop offset="1" stop-color="#4466ff"/></linearGradient></defs><circle fill="url(#paint)" cx="12" cy="12" r="10"/>',
+    },
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<defs><radialGradient id="paint"><stop offset="0" stop-color="#ffee00"/><stop offset="1" stop-color="#00aa99"/></radialGradient></defs><circle fill="url(#paint)" cx="12" cy="12" r="10"/>',
+    },
+  ],
+  [
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<g opacity=".5"><path fill="#ff0066" d="M2 2H16V16H2Z"/><path fill="#0066ff" d="M8 8H22V22H8Z"/></g>',
+    },
+    {
+      attributes: { viewBox: '0 0 24 24' },
+      body: '<g opacity=".9"><path fill="#00aa99" d="M2 2H16V16H2Z"/><path fill="#ff9900" d="M8 8H22V22H8Z"/></g>',
+    },
+  ],
 ]
 const iconData = computed(() =>
   pair.value >= 4
     ? comparisonIcons[pair.value - 4][Number(flipped.value)]
     : undefined,
 )
-const engines: { value: IconMorphEngine; label: string }[] = [
-  { value: 'svg-morpheus', label: 'svg-morpheus-ts 1.4.1' },
-  { value: 'builtin', label: '项目内置算法' },
+const engines = [
+  { value: 'svg-morpheus', label: 'svg-morpheus-ts 1.5.2', animated: true },
+  { value: 'target', label: '静态目标', animated: false },
 ]
 let timer: ReturnType<typeof setInterval> | undefined
 const stop = () => {
@@ -137,7 +188,7 @@ onBeforeUnmount(stop)
       <s-config-provider
         v-for="engine in engines"
         :key="engine.value"
-        :icon="{ morph: { engine: engine.value, duration, spring } }"
+        :icon="{ morph: engine.animated ? { duration, spring } : false }"
       >
         <section class="morph-compare__panel" :aria-label="engine.label">
           <h3>{{ engine.label }}</h3>
@@ -158,7 +209,8 @@ onBeforeUnmount(stop)
           </template>
           <p v-else>图标已卸载</p>
           <p class="morph-compare__timing" aria-live="polite">
-            上次完成耗时: {{ stats[engine.value] || '—' }}
+            上次完成耗时:
+            {{ (engine.animated ? stats['svg-morpheus'] : '') || '—' }}
           </p>
         </section>
       </s-config-provider>
@@ -168,7 +220,7 @@ onBeforeUnmount(stop)
       <s-icon :name="name" :icon-data="iconData" :size="24" :morph="false" />
     </p>
     <p>
-      两侧共用时长和弹簧配置，仅比较几何算法。遵循系统减少动态效果设置；耗时不是性能基准。
+      左侧使用统一的几何与颜色内核，右侧显示静态目标。遵循系统减少动态效果设置；耗时不是性能基准。
     </p>
   </div>
 </template>

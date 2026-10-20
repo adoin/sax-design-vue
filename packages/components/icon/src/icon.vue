@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, useId } from 'vue'
 import { addUnit, getVsColor } from '@vuesax-alpha/utils'
 import { useGlobalComponentProps, useNamespace } from '@vuesax-alpha/hooks'
 import { getIconData } from 'sax-design-vue-iconify'
@@ -31,6 +31,7 @@ import { iconEmits, iconProps } from './icon'
 import { useIconMorph } from './use-icon-morph'
 import { builtinCarbonIcons } from './builtin-carbon-icons'
 import { closeIconData } from './close-artwork'
+import { scopeIconData } from './scope-svg'
 import type { CSSProperties } from 'vue'
 
 defineOptions({
@@ -42,6 +43,7 @@ const rawProps = defineProps(iconProps)
 const props = useGlobalComponentProps('icon', rawProps)
 const emit = defineEmits(iconEmits)
 const ns = useNamespace('icon')
+const paintId = `sax-icon-${useId().replace(/[^\w-]/g, '-')}`
 const isRolling = computed(
   () =>
     props.rolling === true ||
@@ -56,7 +58,7 @@ const resolvedIconData = computed(() => {
   return prefix === 'cb' && name ? builtinCarbonIcons[name] : undefined
 })
 const { rendered: renderedIconData, active: morphActive } = useIconMorph(
-  resolvedIconData,
+  computed(() => scopeIconData(resolvedIconData.value, paintId)),
   () => props.morph,
   (event, detail) => {
     if (event === 'morphStart') emit('morphStart', detail)

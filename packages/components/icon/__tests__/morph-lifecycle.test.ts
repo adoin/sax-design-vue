@@ -5,12 +5,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ConfigProvider from '../../config-provider/src/config-provider'
 import Icon from '../src/icon.vue'
 import { readMorphShapes } from '../src/morph/svg'
-import { springProgress } from '../src/morph/builtin'
+import { springProgress } from '../src/morph/svg-morpheus'
 import type { SaxIconData } from '../src/icon'
 
 vi.mock('../src/morph/svg', () => ({ readMorphShapes: vi.fn(() => []) }))
-vi.mock('../src/morph/builtin', () => ({
-  createBuiltinPlan: vi.fn(() => ({
+vi.mock('../src/morph/svg-morpheus', () => ({
+  createMorpheusPlan: vi.fn(() => ({
     frame: (t: number) => `<path d="M${t} 0L2 2"/>`,
   })),
   springProgress: vi.fn((t: number) => t),

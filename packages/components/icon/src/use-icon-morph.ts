@@ -50,7 +50,7 @@ export const useIconMorph = (
       const settings = typeof options === 'object' ? options : {}
       return JSON.stringify([
         Boolean(options),
-        settings.engine ?? 'builtin',
+        'svg-morpheus',
         settings.duration ?? 360,
         settings.spring ?? 'snappy',
       ])
@@ -83,26 +83,18 @@ export const useIconMorph = (
         rendered.value = target
         return
       }
-      const engine = settings.engine ?? 'builtin'
+      const engine = 'svg-morpheus' as const
       const ticket = generation
       try {
         // DOM-only parsing and the external engine never execute during SSR.
         const { readMorphShapes } = await import('./morph/svg')
         const from = readMorphShapes(source),
           to = readMorphShapes(target)
-        let plan: MorphPlan
-        let progress: (time: number) => number
-        if (engine === 'svg-morpheus') {
-          const { createMorpheusPlan, springProgress } =
-            await import('./morph/svg-morpheus')
-          plan = createMorpheusPlan(from, to)
-          progress = (t) => springProgress(t, settings.spring ?? 'snappy')
-        } else {
-          const { createBuiltinPlan, springProgress } =
-            await import('./morph/builtin')
-          plan = createBuiltinPlan(from, to)
-          progress = (t) => springProgress(t, settings.spring ?? 'snappy')
-        }
+        const { createMorpheusPlan, springProgress } =
+          await import('./morph/svg-morpheus')
+        const plan: MorphPlan = createMorpheusPlan(from, to)
+        const progress = (t: number) =>
+          springProgress(t, settings.spring ?? 'snappy')
         if (!mounted || ticket !== generation) return
         const started = performance.now()
         active.value = true

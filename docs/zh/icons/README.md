@@ -153,27 +153,27 @@ export default defineConfig({
 
 <h2 id="morphing">图标变形</h2>
 
-`morph` 默认关闭。开启后，同一 `SIcon` 的 `name` 或 `iconData` 改变时会变形。`engine: 'svg-morpheus'` 使用 svg-morpheus-ts 1.4 的全局轮廓匹配、旋转分离与精确贝塞尔细分内核，`engine: 'builtin'` 使用项目内置的等弧长采样、轮廓匹配、相似变换对齐与弹簧插值。两种引擎均按需加载。内置算法对填充图标使用轮廓插值，不执行距离场重建。
+`morph` 默认关闭。开启后，同一 `SIcon` 的 `name` 或 `iconData` 改变时，统一按需加载 `svg-morpheus-ts/core`，进行全局轮廓匹配、精确贝塞尔细分与颜色插值。支持多色、透明色、线性和径向渐变；同类型渐变连续插值色标与几何，不同类型交叉淡化。透明度组保留合成层级。蒙版、滤镜、图案等不支持的 SVG 保留静态原图。
 
-使用下面的同屏示例比较两种引擎。切换图标类型与时长，或在动画尚未结束时连续切换。Tabs 的 `icon` 属性通过内部 `SIcon` 继承配置。
+使用下面的同屏示例比较动画图标与静态目标。切换图标类型与时长，或在动画尚未结束时连续切换。Tabs 的 `icon` 属性通过内部 `SIcon` 继承配置。
 
 <template #example><icons-zh-morph /></template>
 
 <template #template>
 
-@[code{98-174}](../../.vuepress/components/icons-zh/morph.vue)
+@[code{149-226}](../../.vuepress/components/icons-zh/morph.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-96}](../../.vuepress/components/icons-zh/morph.vue)
+@[code{1-147}](../../.vuepress/components/icons-zh/morph.vue)
 
 </template>
 
 <template #style>
 
-@[code{176-218}](../../.vuepress/components/icons-zh/morph.vue)
+@[code{228-270}](../../.vuepress/components/icons-zh/morph.vue)
 
 </template>
 
@@ -183,18 +183,18 @@ export default defineConfig({
 
 <h2 id="global-morphing">全局变形配置</h2>
 
-通过安装选项或 `SConfigProvider` 的 `icon.morph` 配置默认值，局部属性优先。局部 `morph` 保留全局引擎设置，局部 `:morph="false"` 关闭。只有通过 `SIcon` 渲染并保留实例的图标属性会继承；自定义插槽、独立 SVG 或使用不同 key 重建的实例不会跨实例变形。
+通过安装选项或 `SConfigProvider` 的 `icon.morph` 配置默认值，局部属性优先。局部 `morph` 保留全局动画设置，局部 `:morph="false"` 关闭。只有通过 `SIcon` 渲染并保留实例的图标属性会继承；自定义插槽、独立 SVG 或使用不同 key 重建的实例不会跨实例变形。
 
 <command>
 
 ```ts
 app.use(SaxDesignVue, {
-  icon: { morph: { engine: 'builtin', duration: 360, spring: 'snappy' } },
+  icon: { morph: { duration: 360, spring: 'snappy' } },
 })
 ```
 
 ```vue
-<s-config-provider :icon="{ morph: { engine: 'svg-morpheus', duration: 400 } }">
+<s-config-provider :icon="{ morph: { duration: 400 } }">
   <s-icon :name="open ? 'cb:chevron-up' : 'cb:chevron-down'" />
   <s-icon name="cb:pin" :morph="false" />
 </s-config-provider>
@@ -205,11 +205,11 @@ app.use(SaxDesignVue, {
 | 属性 | Type | 默认值 |
 | --- | --- | --- |
 | morph | boolean &#124; IconMorphOptions | false |
-| morph.engine | 'builtin' &#124; 'svg-morpheus' | builtin |
+| morph.engine | 'svg-morpheus' | svg-morpheus |
 | morph.duration | number (ms) | 360 |
 | morph.spring | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy |
 
-`spring` 作用于两种引擎，对比示例共用相同的时长与弹簧配置。`duration <= 0` 立即切换。初始渲染与 SSR 显示原始 SVG；系统减少动态效果开启时直接切换。动画中再次改变图标会从当前形状继续，卸载与配置变化会取消动画。完成时恢复精确的目标 SVG。渐变、蒙版、滤镜、外部引用等复杂 SVG 直接切换，保留原图。
+`spring` 控制动画曲线。`engine` 仅为兼容保留，旧值 `builtin` 也统一使用共享内核。`duration <= 0` 立即切换。初始渲染与 SSR 显示原始 SVG；系统减少动态效果开启时直接切换。动画中再次改变图标会从当前形状继续，卸载与配置变化会取消动画。完成时恢复精确的目标 SVG。蒙版、滤镜、图案、外部引用等复杂 SVG 直接切换，保留原图。
 
 `morph-start` 与 `morph-end` 事件提供 `{ engine, elapsed }`。取消的动画不会触发完成事件，静态切换也不会触发动画事件。
 

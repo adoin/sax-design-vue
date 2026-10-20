@@ -1,14 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { curvePathBBox, path2curve } from 'svg-morpheus-ts/core'
-import { alignPoints, springProgress } from '../src/morph/builtin'
-import {
-  createMorpheusPlan,
-  springProgress as morpheusSpring,
-} from '../src/morph/svg-morpheus'
+import { curvePathBBox, path2curve, springProgress } from 'svg-morpheus-ts/core'
+import { createMorpheusPlan } from '../src/morph/svg-morpheus'
 import { readMorphShapes, splitSubpaths } from '../src/morph/svg'
 import { renderPaths } from '../src/morph/types'
 import { builtinCarbonIcons } from '../src/builtin-carbon-icons'
-import type { MorphShape, Point } from '../src/morph/types'
+import type { MorphShape } from '../src/morph/types'
 
 const shape = (d: string): MorphShape => ({
   d,
@@ -60,43 +56,6 @@ describe('Icon morph geometry', () => {
     expect(splitSubpaths('M1e1 2c1 2 3 4 5 6a2 3 0 0 1 4 5')).toEqual([
       'M10 2 C11 4 13 6 15 8 A2 3 0 0 1 19 13 ',
     ])
-  })
-  it('rotates a line without collapsing its midpoint', () => {
-    const from: Point[] = [
-      [-1, 0],
-      [0, 0],
-      [1, 0],
-    ]
-    const to: Point[] = [
-      [0, -1],
-      [0, 0],
-      [0, 1],
-    ]
-    const plan = alignPoints(from, to, false, false)
-    const halfway = plan(0.5)
-    expect(Math.hypot(...halfway[0])).toBeCloseTo(1)
-    plan(1).forEach((point, index) => {
-      expect(point[0]).toBeCloseTo(to[index][0])
-      expect(point[1]).toBeCloseTo(to[index][1])
-    })
-  })
-  it('matches a shifted closed contour and handles degenerate contours', () => {
-    const a: Point[] = [
-      [0, 0],
-      [2, 0],
-      [2, 2],
-      [0, 2],
-    ]
-    const b = [...a.slice(2), ...a.slice(0, 2)]
-    const at = alignPoints(a, b, true, false)(0.5)
-    expect(at).toEqual(a)
-    const collapsed = a.map((): Point => [1, 1])
-    expect(
-      alignPoints(collapsed, a, true)(0.5).flat().every(Number.isFinite),
-    ).toBe(true)
-    expect(
-      alignPoints(a, collapsed, true)(1).flat().every(Number.isFinite),
-    ).toBe(true)
   })
   it.each(['smooth', 'snappy', 'bouncy'] as const)(
     'has finite %s spring endpoints',
@@ -150,20 +109,68 @@ describe('Icon morph geometry', () => {
     expect(Math.hypot(bounds.w, bounds.h)).toBeCloseTo(20)
     expect(svg.innerHTML).toContain('C')
   })
-  it.each(['smooth', 'snappy', 'bouncy'] as const)(
-    'uses identical %s easing for both comparison engines',
-    (profile) => {
-      for (const t of [0, 0.1, 0.25, 0.5, 0.9, 1])
-        expect(morpheusSpring(t, profile)).toBeCloseTo(
-          springProgress(t, profile),
-          12,
-        )
-    },
-  )
-  it('rejects paint servers before attaching a temporary SVG', () => {
+  it('interpolates colors and gradients through the shared core and scopes IDs per icon', () => {
+    const from = {
+      ...shape('M2 2H22V22H2Z'),
+      attributes: { fill: '#ff000080' },
+    }
+    const target = {
+      ...shape('M2 2H22V22H2Z'),
+      paint: {
+        attributes: {},
+        fill: {
+          type: 'linearGradient' as const,
+          attributes: { x2: '0%', y2: '100%' },
+          stops: [
+            { offset: 0, color: 'blue' },
+            { offset: 1, color: 'white' },
+          ],
+        },
+      },
+    }
+    const a = createMorpheusPlan([from], [target]),
+      b = createMorpheusPlan([from], [target])
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    svg.innerHTML = a.frame(0.5)
+    const gradient = svg.querySelector('linearGradient')!
+    expect(gradient).not.toBeNull()
+    expect(gradient.querySelector('stop')!.getAttribute('stop-color')).not.toBe(
+      'blue',
+    )
+    expect(svg.querySelector('path')!.getAttribute('fill')).toBe(
+      `url(#${gradient.id})`,
+    )
+    expect(b.frame(0.5)).not.toContain(gradient.id)
+  })
+  it('preserves compound holes and shared group compositing during color interpolation', () => {
+    const a = shape('M0 0H20V20H0ZM4 4V16H16V4Z')
+    a.paint = {
+      attributes: { 'fill-rule': 'evenodd' },
+      fill: 'red',
+      groups: [{ id: 'a', opacity: 0.5 }],
+    }
+    const b = {
+      ...a,
+      paint: { ...a.paint, fill: 'blue', groups: [{ id: 'b', opacity: 0.9 }] },
+    }
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    svg.innerHTML = createMorpheusPlan([a], [b]).frame(0.5)
+    expect(svg.querySelectorAll('path')).toHaveLength(1)
+    expect(
+      svg.querySelector('path')!.getAttribute('d')!.match(/M/g),
+    ).toHaveLength(2)
+    expect(svg.querySelector('path')!.getAttribute('fill')).toBe(
+      'rgba(128,0,128,1)',
+    )
+    expect(svg.querySelector('g[opacity="0.7"]')).not.toBeNull()
+  })
+  it('rejects unsupported filters before attaching a temporary SVG', () => {
     const before = document.body.childElementCount
     expect(() =>
-      readMorphShapes({ attributes: {}, body: '<defs/><path d="M0 0L2 2"/>' }),
+      readMorphShapes({
+        attributes: {},
+        body: '<filter id="f"/><path d="M0 0L2 2"/>',
+      }),
     ).toThrow()
     expect(document.body.childElementCount).toBe(before)
   })

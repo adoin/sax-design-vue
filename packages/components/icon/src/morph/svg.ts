@@ -1,3 +1,4 @@
+import { readPaint } from './read-paint'
 import type { SaxIconData } from '../icon'
 import type { MorphShape } from './types'
 
@@ -122,7 +123,7 @@ const attributes = [
 ]
 const cache = new Map<string, MorphShape[]>()
 
-/** Browser geometry handles nested transforms and viewBox scaling for both engines. */
+/** Browser adapter reads geometry, paint and opacity groups for the shared core. */
 export const readMorphShapes = (data: SaxIconData): MorphShape[] => {
   const key = JSON.stringify(data)
   const cached = cache.get(key)
@@ -138,7 +139,7 @@ export const readMorphShapes = (data: SaxIconData): MorphShape[] => {
   // Complex paint servers keep the original static SVG instead of losing artwork.
   if (
     svg.querySelector(
-      'defs,mask,clipPath,filter,use,text,image,foreignObject,style,script,svg',
+      'mask,clipPath,filter,use,text,image,foreignObject,style,script,svg,pattern',
     ) ||
     svg.querySelector('[mask],[clip-path],[filter],[class]')
   )
@@ -148,7 +149,19 @@ export const readMorphShapes = (data: SaxIconData): MorphShape[] => {
     const shapes: MorphShape[] = []
     let group = 0
     for (const element of svg.querySelectorAll('*')) {
-      if (['g', 'title', 'desc'].includes(element.localName)) continue
+      if (
+        [
+          'g',
+          'title',
+          'desc',
+          'defs',
+          'linearGradient',
+          'radialGradient',
+          'stop',
+        ].includes(element.localName)
+      )
+        continue
+      if (element.closest('defs')) continue
       const geometry = element as SVGGraphicsElement
       const computed = getComputedStyle(geometry)
       if (computed.display === 'none' || computed.visibility === 'collapse')
@@ -169,17 +182,13 @@ export const readMorphShapes = (data: SaxIconData): MorphShape[] => {
         }
         value ||=
           name === 'fill' ? 'currentColor' : computed.getPropertyValue(name)
-        if (value.includes('url(') || value.includes('var('))
-          throw new Error('Complex paint stays static')
+        if (value.includes('var(')) value = computed.getPropertyValue(name)
         if (value) attrs[name] = value
       }
-      let opacity = 1
-      let owner: Element | null = element
-      while (owner && owner !== svg.parentElement) {
-        opacity *= Number(getComputedStyle(owner).opacity || 1)
-        owner = owner.parentElement
-      }
-      attrs.opacity = String(opacity)
+      attrs.opacity =
+        getComputedStyle(element).opacity ||
+        element.getAttribute('opacity') ||
+        '1'
       attrs['stroke-width'] = String(
         Number.parseFloat(attrs['stroke-width'] || '1') *
           Math.sqrt(Math.abs(matrix.a * matrix.d - matrix.b * matrix.c)),
@@ -190,6 +199,7 @@ export const readMorphShapes = (data: SaxIconData): MorphShape[] => {
           d,
           matrix: [matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f],
           attributes: attrs,
+          paint: readPaint(element, svg, attrs),
           closed: /z\s*$/i.test(d),
         })
       group++
