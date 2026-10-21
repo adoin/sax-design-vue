@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "noEmit": true,
+    "noUnusedLocals": false,
+    "skipLibCheck": false,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["web-bluetooth"],
+    "paths": {
+      "sax-design-vue": ["dist/sax-design-vue/es/index.d.ts"],
+      "sax-design-vue/*": ["dist/sax-design-vue/*"]
+    }
+  },
+  "include": [
+    "internal/build/__tests__/fixtures/declaration-consumer.vue",
+    "internal/build/__tests__/fixtures/declaration-consumer.ts",
+    "type-tests"
+  ]
+}

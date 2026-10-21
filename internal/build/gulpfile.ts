@@ -120,6 +120,7 @@ export default series(
   withTaskName('verifyStyleEntries', () =>
     run('node scripts/verify-style-entries.mjs'),
   ),
+  withTaskName('verifyDeclarations', () => run('pnpm run test:declarations')),
 ) as any
 
 export * from './src'

@@ -7,7 +7,8 @@ export const SDatePicker: SFCWithInstall<typeof DatePicker> = withInstall(
   DatePicker,
   { DatePanel },
 )
-export const SDatePanel = withNoopInstall(DatePanel)
+export const SDatePanel: SFCWithInstall<typeof DatePanel> =
+  withNoopInstall(DatePanel)
 
 export default SDatePicker
 

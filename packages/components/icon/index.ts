@@ -10,19 +10,23 @@ import LogoLoading from './src/logo-loading.vue'
 import Plus from './src/plus.vue'
 import Star from './src/star.vue'
 import StarFilled from './src/star-filled.vue'
+import type { SFCWithInstall } from '@vuesax-alpha/utils'
 
-export const SIcon = withInstall(Icon)
+export const SIcon: SFCWithInstall<typeof Icon> = withInstall(Icon)
 export default SIcon
 
-export const IconArrow = withInstall(Arrow)
-export const IconCheck = withInstall(Check)
-export const IconClose = withInstall(Close)
-export const IconLoading = withInstall(Loading)
-export const IconControlLoading = withInstall(ControlLoading)
-export const SLogoLoading = withInstall(LogoLoading)
-export const IconPlus = withInstall(Plus)
-export const IconStar = withInstall(Star)
-export const IconStarFilled = withInstall(StarFilled)
+export const IconArrow: SFCWithInstall<typeof Arrow> = withInstall(Arrow)
+export const IconCheck: SFCWithInstall<typeof Check> = withInstall(Check)
+export const IconClose: SFCWithInstall<typeof Close> = withInstall(Close)
+export const IconLoading: SFCWithInstall<typeof Loading> = withInstall(Loading)
+export const IconControlLoading: SFCWithInstall<typeof ControlLoading> =
+  withInstall(ControlLoading)
+export const SLogoLoading: SFCWithInstall<typeof LogoLoading> =
+  withInstall(LogoLoading)
+export const IconPlus: SFCWithInstall<typeof Plus> = withInstall(Plus)
+export const IconStar: SFCWithInstall<typeof Star> = withInstall(Star)
+export const IconStarFilled: SFCWithInstall<typeof StarFilled> =
+  withInstall(StarFilled)
 
 export * from './src/icon'
 export * from './src/arrow'

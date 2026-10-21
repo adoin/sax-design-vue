@@ -7,6 +7,8 @@ description: Releases and changes in Sax Design Vue.
 
 ## Unreleased
 
+- Reduce duplicate type declarations through shared component references, while retaining typed props, events, slots and instance methods.
+
 - Add File Manager with a directory tree, breadcrumbs, virtual icon/list views, drag/drop, keyboard operations and configurable global behavior.
 - Customize folder covers through a slot and file previews through extension/MIME renderers. Use asynchronous operation guards for persistence and confirmation.
 

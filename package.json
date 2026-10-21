@@ -7,6 +7,7 @@
     "docs"
   ],
   "scripts": {
+    "test:declarations": "tsx scripts/verify-declarations.ts",
     "cz": "czg",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
@@ -88,6 +89,7 @@
     "@types/jsdom": "^28.0.3",
     "@types/node": "^26.1.1",
     "@types/sass": "^1.45.0",
+    "@types/web-bluetooth": "0.0.21",
     "@vitejs/plugin-vue": "^6.0.8",
     "@vitejs/plugin-vue-jsx": "^5.1.6",
     "@vitest/ui": "^4.1.11",

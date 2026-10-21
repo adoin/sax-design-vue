@@ -1,7 +1,8 @@
 import { withInstall } from '@vuesax-alpha/utils'
 import Popper from './src/popper.vue'
+import type { SFCWithInstall } from '@vuesax-alpha/utils'
 
-export const SPopper = withInstall(Popper)
+export const SPopper: SFCWithInstall<typeof Popper> = withInstall(Popper)
 export default SPopper
 
 export * from './src/popper'

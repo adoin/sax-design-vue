@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Generate Vue declarations from public SFC contracts and reuse component/install types by reference, reducing repeated setup and child-component inference while preserving typed props, events, slots and exposed methods.
+
 - Add File Manager with a virtualized folder tree, shared breadcrumbs, icon/list views, resizable icon grids and stable selection across virtual rows.
 - Support data-driven context menus, folder-cover slots, extension/MIME preview renderers, internal drag/drop across folders/tree/breadcrumbs, keyboard navigation and file operations with asynchronous guards.
 - Add global File Manager behavior defaults and paired English/Chinese interactive examples.

@@ -5,8 +5,18 @@ import LayoutHeader from './src/header.vue'
 import LayoutAside from './src/aside.vue'
 import LayoutBody from './src/body.vue'
 import LayoutFooter from './src/footer.vue'
+import type { SFCWithInstall } from '@vuesax-alpha/utils'
 
-export const SLayout = withInstall(Layout, {
+export const SLayout: SFCWithInstall<
+  typeof Layout,
+  {
+    LayoutContainer: typeof LayoutContainer
+    LayoutHeader: typeof LayoutHeader
+    LayoutAside: typeof LayoutAside
+    LayoutBody: typeof LayoutBody
+    LayoutFooter: typeof LayoutFooter
+  }
+> = withInstall(Layout, {
   LayoutContainer,
   LayoutHeader,
   LayoutAside,
@@ -14,11 +24,16 @@ export const SLayout = withInstall(Layout, {
   LayoutFooter,
 })
 
-export const SLayoutContainer = withNoopInstall(LayoutContainer)
-export const SLayoutHeader = withNoopInstall(LayoutHeader)
-export const SLayoutAside = withNoopInstall(LayoutAside)
-export const SLayoutBody = withNoopInstall(LayoutBody)
-export const SLayoutFooter = withNoopInstall(LayoutFooter)
+export const SLayoutContainer: SFCWithInstall<typeof LayoutContainer> =
+  withNoopInstall(LayoutContainer)
+export const SLayoutHeader: SFCWithInstall<typeof LayoutHeader> =
+  withNoopInstall(LayoutHeader)
+export const SLayoutAside: SFCWithInstall<typeof LayoutAside> =
+  withNoopInstall(LayoutAside)
+export const SLayoutBody: SFCWithInstall<typeof LayoutBody> =
+  withNoopInstall(LayoutBody)
+export const SLayoutFooter: SFCWithInstall<typeof LayoutFooter> =
+  withNoopInstall(LayoutFooter)
 
 export default SLayoutContainer
 

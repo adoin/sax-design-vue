@@ -1,10 +1,4 @@
-import type {
-  ComponentOptionsMixin,
-  DefineComponent,
-  PublicProps,
-  SlotsType,
-  VNodeChild,
-} from 'vue'
+import type { VNodeChild } from 'vue'
 import type { ComponentShape } from '@vuesax-alpha/constants'
 import type { ContextMenuItem } from '../../context-menu'
 
@@ -147,19 +141,5 @@ export interface FileManagerSlots {
   }) => VNodeChild
   status?: (context: { count: number; selected: number }) => VNodeChild
 }
-/** Keep the public component declaration independent from private child component inference. */
-export type FileManagerComponent = DefineComponent<
-  FileManagerProps,
-  FileManagerExposes,
-  Record<never, never>,
-  Record<never, never>,
-  Record<never, never>,
-  ComponentOptionsMixin,
-  ComponentOptionsMixin,
-  FileManagerEmits,
-  string,
-  PublicProps,
-  FileManagerProps,
-  Record<never, never>,
-  SlotsType<FileManagerSlots>
->
+/** Derive the public component from the SFC instead of duplicating Vue's generic contract. */
+export type FileManagerComponent = typeof import('./file-manager.vue').default

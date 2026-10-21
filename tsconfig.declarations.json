@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.web.json",
+  "compilerOptions": {
+    "composite": false,
+    "declaration": true,
+    "declarationMap": false,
+    "emitDeclarationOnly": true,
+    "noEmitOnError": true,
+    "outDir": "./dist/types",
+    "noUnusedLocals": false
+  },
+  "exclude": [
+    "node_modules",
+    "**/dist",
+    "**/__tests__/**/*",
+    "**/gulpfile.ts",
+    "**/test-helper",
+    "packages/test-utils",
+    "packages/iconify",
+    "**/*.md"
+  ]
+}

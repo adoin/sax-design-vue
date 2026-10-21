@@ -9,6 +9,8 @@
 
 ## Project specifications
 
+- 类型声明生成、组件安装能力的共享泛型、公共入口引用与体积回归约束见 `.agents/notes/implemented/compact-public-declarations.md`。组件入口使用 `SFCWithInstall<typeof Component, Extra>` 等引用，避免重复展开构造类型；不得用裸 `DefineComponent` 或 `any` 换取体积下降。
+
 - File Manager 的扁平目录数据、虚拟网格缩放锚点、统一操作钩子、预览渲染器与全局操作习惯见 `.agents/notes/implemented/file-manager-explorer.md`；导航按钮位于目录树上方的全宽导航栏，面包屑复用现有组件。
 
 - 图标数据边界见 `.agents/notes/implemented/builtin-icon-fallbacks.md` 与 `.agents/notes/implemented/local-svg-registration.md`：组件库只内置内部控件所需 SVG，不得内置 IconPicker 候选 SVG 或在库构建时运行应用图标提取插件；业务图标仅进入应用产物，或由运行时 API 加载。本地 SVG 按静态引用/safelist 提取并复用相同数据。

@@ -8,7 +8,8 @@ export const SForm: SFCWithInstall<typeof Form> & {
   FormItem: typeof FormItem
   FormGroup: typeof FormGroup
 } = withInstall(Form, { FormItem, FormGroup })
-export const SFormItem = withNoopInstall(FormItem)
+export const SFormItem: SFCWithInstall<typeof FormItem> =
+  withNoopInstall(FormItem)
 export const SFormGroup: SFCWithInstall<typeof FormGroup> =
   withNoopInstall(FormGroup)
 export default SForm
