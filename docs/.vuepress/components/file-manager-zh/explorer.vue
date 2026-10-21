@@ -6,6 +6,7 @@ import type {
   FileManagerEntry,
   FileManagerMenuItem,
   FileManagerPreviewRenderer,
+  FileManagerSortOption,
 } from 'sax-design-vue'
 
 const files = shallowRef<FileManagerEntry[]>([
@@ -29,19 +30,39 @@ const files = shallowRef<FileManagerEntry[]>([
     size: 1024 * (100 + i * 25),
     modifiedAt: '2026-10-21',
   })),
+  { id: 'scene', parentId: null, kind: 'file', name: '场景.scene' },
+  { id: 'raster', parentId: null, kind: 'file', name: '封面.raster' },
+  { id: 'binary', parentId: null, kind: 'file', name: 'payload.custombin' },
+  {
+    id: 'internal',
+    parentId: null,
+    kind: 'folder',
+    name: '内部资料',
+    hidden: true,
+  },
+  {
+    id: 'cache',
+    parentId: null,
+    kind: 'file',
+    name: 'cache.bin',
+    hidden: true,
+  },
 ])
 const directory = shallowRef<string | number | null>(null)
 const selection = shallowRef<(string | number)[]>([])
 const readOnly = shallowRef(false)
+const treeFiles = shallowRef(false)
 const notice = shallowRef('')
 const renderers: FileManagerPreviewRenderer[] = [
   {
     extensions: ['md', 'txt'],
-    render: ({ entry }) =>
-      h('div', { class: 'document-preview' }, [
-        h('strong', entry.name.endsWith('.md') ? 'MD' : 'TXT'),
-        h('span', '文本预览'),
-      ]),
+    render: ({ entry, view }) =>
+      view === 'list'
+        ? h('strong', entry.name.endsWith('.md') ? 'MD' : 'TXT')
+        : h('div', { class: 'document-preview' }, [
+            h('strong', entry.name.endsWith('.md') ? 'MD' : 'TXT'),
+            h('span', '文本预览'),
+          ]),
   },
 ]
 const folderImages = (entry: FileManagerEntry) =>
@@ -49,27 +70,37 @@ const folderImages = (entry: FileManagerEntry) =>
     .filter((item) => item.parentId === entry.id && item.thumbnail)
     .slice(0, 4)
 const menus = (ctx: FileManagerContext): FileManagerMenuItem[] => [
-  { label: '打开', action: 'open', disabled: ctx.selection.length !== 1 },
-  {
-    label: '重命名',
-    action: 'rename',
-    disabled: readOnly.value || ctx.selection.length !== 1,
-  },
-  {
-    label: '剪切',
-    action: 'cut',
-    disabled: readOnly.value || !ctx.selection.length,
-  },
-  { label: '复制', action: 'copy', disabled: !ctx.selection.length },
-  { label: '粘贴', action: 'paste', disabled: readOnly.value },
-  {
-    label: '删除',
-    action: 'delete',
-    divided: true,
-    disabled: readOnly.value || !ctx.selection.length,
-  },
-  { label: '查看信息', value: 'details', disabled: !ctx.entry },
+  ...(ctx.defaultItems ?? []).map((item) => ({
+    ...item,
+    disabled:
+      item.disabled ||
+      (readOnly.value &&
+        [
+          'rename',
+          'delete',
+          'cut',
+          'paste',
+          'hide',
+          'unhide',
+          'new-folder',
+        ].includes(item.action ?? '')),
+  })),
+  { label: '查看信息', value: 'details', divided: true, disabled: !ctx.entry },
 ]
+const sortOptions: FileManagerSortOption[] = [
+  { key: 'name', label: '名称' },
+  { key: 'modifiedAt', label: '修改时间' },
+  { key: 'size', label: '大小' },
+  {
+    key: 'extension',
+    label: '文件类型',
+    compare: (a, b) =>
+      (a.name.split('.').pop() || '').localeCompare(
+        b.name.split('.').pop() || '',
+      ),
+  },
+]
+const thumbnails = { scene: '/file-manager-scene.svg', raster: '/foto1.png' }
 const showLargeFolder = () => {
   const parent: FileManagerEntry = {
     id: 'large',
@@ -98,6 +129,7 @@ const showLargeFolder = () => {
   <div class="manager-controls">
     <SSwitch v-model="readOnly" /> <span>只读模式</span
     ><SButton size="small" @click="showLargeFolder">打开 10,000 个文件</SButton
+    ><SSwitch v-model="treeFiles" /><span>树内显示文件</span
     ><span aria-live="polite">{{ notice }}</span>
   </div>
   <SFileManager
@@ -105,6 +137,9 @@ const showLargeFolder = () => {
     v-model:directory-id="directory"
     v-model:selected-ids="selection"
     :height="540"
+    :tree-show-files="treeFiles"
+    :thumbnails="thumbnails"
+    :sort-options="sortOptions"
     :preview-renderers="renderers"
     :context-menu="menus"
     :before-operation="() => !readOnly"
@@ -115,7 +150,7 @@ const showLargeFolder = () => {
       }
     "
   >
-    <template #folder-preview="{ entry }"
+    <template #folder-preview="{ entry, renderDefault }"
       ><div v-if="folderImages(entry).length" class="folder-collage">
         <img
           v-for="image in folderImages(entry)"
@@ -125,19 +160,8 @@ const showLargeFolder = () => {
           loading="lazy"
         />
       </div>
-      <svg v-else viewBox="0 0 96 76" class="folder-cover" fill="currentColor">
-        <path
-          d="M6 17a7 7 0 0 1 7-7h24l9 10h37a7 7 0 0 1 7 7v36a7 7 0 0 1-7 7H13a7 7 0 0 1-7-7Z"
-        /></svg
-    ></template>
-    <template #toolbar="{ directory: current }"
-      ><SButton
-        size="small"
-        type="transparent"
-        @click="notice = current?.name || '全部文件'"
-        >目录信息</SButton
-      ></template
-    >
+      <component :is="renderDefault" v-else />
+    </template>
   </SFileManager>
 </template>
 
@@ -163,11 +187,6 @@ const showLargeFolder = () => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-.folder-cover {
-  width: 88%;
-  height: 88%;
-  color: var(--sax-css-warn);
 }
 :deep(.document-preview) {
   display: flex;

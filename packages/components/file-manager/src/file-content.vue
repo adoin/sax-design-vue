@@ -11,7 +11,7 @@ import {
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
 import { SInput } from '@vuesax-alpha/components/input'
 import FilePreview from './file-preview.vue'
-import { gridColumns } from './file-model'
+import { gridColumns, isFileHidden } from './file-model'
 import type { VirtualListInstance } from '../../virtual-list'
 import type {
   FileManagerEntry,
@@ -297,6 +297,7 @@ onBeforeUnmount(() => {
               'is-focused': focusedId === entry.id,
               'is-cut': clipboard?.cut && clipboard.ids.includes(entry.id),
               'is-disabled': entry.disabled,
+              'is-hidden': isFileHidden(entry),
               'is-drop-target': state.dropTarget.value === entry.id,
             }"
             role="option"
@@ -334,6 +335,7 @@ onBeforeUnmount(() => {
                 size: tileSize,
               }"
               :renderers="renderers"
+              :graphic="state.graphicFor(entry)"
               ><template v-if="$slots['folder-preview']" #folder-preview="scope"
                 ><slot name="folder-preview" v-bind="scope" /></template
             ></FilePreview>

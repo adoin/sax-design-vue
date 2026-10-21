@@ -26,6 +26,32 @@ PROPS:
     description: 'Tile width clamped to 88–280 px; adjustable with Shift + wheel.'
     usage: '#explorer'
     default: 144
+  - name: 'v-model:show-hidden'
+    type: 'Boolean'
+    description: 'Show hidden entries; toggle with the upper-left eye.'
+    usage: '#search-and-toolbar'
+    default: false
+  - name: 'v-model:sort'
+    type: 'FileManagerSort'
+    description: 'Current sort criterion and direction.'
+    usage: '#search-and-toolbar'
+  - name: 'sort-options'
+    type: 'FileManagerSortOption[]'
+    description: 'Sort criteria with optional custom comparators.'
+    usage: '#search-and-toolbar'
+  - name: 'tree-show-files'
+    type: 'Boolean'
+    description: 'Include files in the tree.'
+    usage: '#search-and-toolbar'
+    default: false
+  - name: 'icons'
+    type: 'FileManagerIcons'
+    description: 'Customize Home, folder states, files and toolbar icons.'
+    usage: '#search-and-toolbar'
+  - name: 'thumbnails'
+    type: 'FileManagerThumbnails'
+    description: 'Map extensions to image URLs or icon configurations.'
+    usage: '#search-and-toolbar'
   - name: 'height'
     type: 'String | Number'
     description: 'Overall manager height.'
@@ -43,7 +69,7 @@ PROPS:
     default: true
   - name: 'root-label'
     type: 'String'
-    description: 'Root label; uses the locale when omitted.'
+    description: 'Accessible name and tooltip for Home; localized when omitted.'
     usage: '#explorer'
   - name: 'behavior'
     type: 'FileManagerBehavior'
@@ -106,8 +132,8 @@ SLOTS:
     description: 'Folder cover, such as a four-image collage.'
     usage: '#explorer'
   - name: 'toolbar'
-    type: '(context: { directory: FileManagerEntry | null; selection: FileManagerEntry[]; pending: boolean })'
-    description: 'Toolbar extension for uploads or application actions.'
+    type: '(context: FileManagerToolbarContext)'
+    description: 'Replace the whole row using search and view state and update hooks.'
     usage: '#explorer'
   - name: 'status'
     type: '(context: { count: number; selected: number })'
@@ -148,19 +174,43 @@ Double-click folders to open them. Click to select, Ctrl / ⌘ + click to toggle
 
 <template #template>
 
-@[code{97-142}](../.vuepress/components/file-manager/explorer.vue)
+@[code{133-171}](../.vuepress/components/file-manager/explorer.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-95}](../.vuepress/components/file-manager/explorer.vue)
+@[code{1-131}](../.vuepress/components/file-manager/explorer.vue)
 
 </template>
 
 <template #style>
 
-@[code{144-187}](../.vuepress/components/file-manager/explorer.vue)
+@[code{173-211}](../.vuepress/components/file-manager/explorer.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## Search and toolbar
+
+The toolbar contains name search and one view toggle. Search matches file and folder names in the current directory. Right-click blank content space to sort. Configure criteria with `sortOptions` and optional `compare(a, b)`. Bind `v-model:sort` to `{ key, order }`, with `ascending` or `descending` order. Name ascending is the default; `behavior.foldersFirst` controls folder grouping.
+
+The `toolbar` slot replaces the whole row. It exposes `search` / `setSearch`, `view` / `setView` / `toggleView`, plus `directory`, `selection`, `pending`, `showHidden` / `setShowHidden`, `sort` / `setSort` and `sortOptions`.
+
+<template #example><file-manager-toolbar /></template>
+
+<template #template>
+
+@[code{10-26}](../.vuepress/components/file-manager/toolbar.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-9}](../.vuepress/components/file-manager/toolbar.vue)
 
 </template>
 
@@ -184,7 +234,11 @@ Copy/cut buffers belong to one manager instance; cross-instance/application and 
 
 ## File previews
 
-`folder-preview` customizes directory covers; the example finds four child thumbnails by parentId. Files use `previewRenderers`, selecting the first matching rule in array order. A rule can specify `extensions` (case-insensitive, optional leading dot), `mimeTypes` (including image/*), `match(entry)` and `render(context)`. Return Vue nodes with h() instead of adding a slot for every extension. Context contains entry, view, selected and size. Unmatched files use thumbnail or a type placeholder. Renderers own media loading and complex preview behavior; never interpret untrusted text as HTML.
+`folder-preview` customizes directory covers; the example finds four child thumbnails by parentId. Files use `previewRenderers`, selecting the first matching rule in array order. A rule can specify `extensions` (case-insensitive, optional leading dot), `mimeTypes` (including image/*), `match(entry)` and `render(context)`. Return Vue nodes with h() instead of adding a slot for every extension. Context contains entry, view, selected and size. Unmatched files use configured thumbnails or a generic file icon. Renderers own media loading and complex preview behavior; never interpret untrusted text as HTML.
+
+Root navigation uses Home. Customize `icons.home`; `rootLabel` supplies its accessible name and tooltip. `icons.folder` / `folderOpen` distinguish folder states. Enable `treeShowFiles` to include files in the tree. `thumbnails` matches extensions case-insensitively, ignoring a leading dot. Strings are SVG/PNG image URLs; `{ icon: "lo-home" }` uses a registered icon and `{ src: "/file.svg" }` uses an image. Precedence is entry `thumbnail`, extension mapping, `*`, then the generic file icon. Both panes share these rules. Call `renderDefault()` in the folder slot to reuse its glyph.
+
+Files and folders accept `hidden: true`. Omitted values fall back to dot-prefixed names; explicit `hidden: false` overrides this. The upper-left eye toggles both panes. Hide/unhide actions issue `set-hidden` operations, respecting `permissions.hide` and `beforeOperation`. Custom menus can compose `context.defaultItems` to keep built-in actions.
 
 </card>
 
@@ -192,7 +246,7 @@ Copy/cut buffers belong to one manager instance; cross-instance/application and 
 
 ## Behavior and global configuration
 
-Set global behavior, view and tileSize through SConfigProvider.fileManager or the fileManager installation option. Local props win; behavior merges per field. Toggle drag/drop, wheel zoom and the Delete shortcut below. Entry permissions remain independent.
+Set global behavior, view, tileSize, treeShowFiles, icons, thumbnails and sortOptions through SConfigProvider.fileManager or the fileManager installation option. Local props win; behavior merges per field. Toggle drag/drop, wheel zoom and the Delete shortcut below. Entry permissions remain independent.
 
 <template #example><file-manager-behavior /></template>
 

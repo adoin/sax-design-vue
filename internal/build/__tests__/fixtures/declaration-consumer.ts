@@ -53,3 +53,17 @@ export const invalidSelection: EditorToolbar['selection'] = {
   text: '',
 }
 export type ButtonGroupProps = Props<typeof SButton.ButtonGroup>
+
+type FileToolbar = Parameters<
+  NonNullable<InstanceType<typeof SFileManager>['$slots']['toolbar']>
+>[0]
+export type FileToolbarSearchIsTyped = MustBeFalse<IsAny<FileToolbar['search']>>
+export function useFileToolbar(tools: FileToolbar) {
+  tools.setSearch('folder')
+  tools.setView('list')
+  tools.toggleView()
+  tools.setShowHidden(true)
+  tools.setSort({ key: 'name', order: 'descending' })
+  // @ts-expect-error Sort directions remain concrete.
+  tools.setSort({ key: 'name', order: 'backward' })
+}

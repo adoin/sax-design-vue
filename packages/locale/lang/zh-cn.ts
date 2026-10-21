@@ -2,8 +2,16 @@ export default {
   name: 'zh-cn',
   vs: {
     fileManager: {
+      showHidden: '显示隐藏项目',
+      hideHidden: '不显示隐藏项目',
+      hidden: '已隐藏',
+      hide: '隐藏',
+      unhide: '取消隐藏',
+      sortBy: '按{name}排序',
+      ascending: '升序',
+      descending: '降序',
       label: '文件管理',
-      root: '全部文件',
+      root: '主目录',
       folders: '文件夹',
       contents: '目录内容',
       name: '名称',

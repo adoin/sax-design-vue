@@ -146,6 +146,218 @@ describe('FileManager operation planner', () => {
 })
 
 describe('FileManager interactions', () => {
+  const clickMenu = async (text: string) => {
+    const button = [
+      ...document.querySelectorAll<HTMLButtonElement>('[role="menuitem"]'),
+    ].find((item) => item.textContent?.includes(text))
+    expect(button).toBeDefined()
+    button!.click()
+    await settle()
+  }
+  it('keeps one search input and a single changing view toggle, with Home icons', async () => {
+    const { manager } = controlled()
+    await settle()
+    expect(
+      manager.find('.s-file-manager__toolbar').findAll('input'),
+    ).toHaveLength(1)
+    expect(
+      manager.find('.s-file-manager__toolbar').findAll('button'),
+    ).toHaveLength(1)
+    expect(manager.find('.s-file-manager__toolbar').text()).not.toContain(
+      'New folder',
+    )
+    expect(
+      manager.find('.s-file-manager__history').findAll('button'),
+    ).toHaveLength(4)
+    expect(manager.find('.s-file-manager__tree-root').text()).toBe('')
+    expect(manager.findAll('.s-file-manager__glyph.is-home')).toHaveLength(2)
+    await manager
+      .get('input[aria-label="Search this folder"]')
+      .setValue('assets')
+    expect(manager.findAll('[role="option"]')).toHaveLength(1)
+    await manager.get('button[aria-label="List view"]').trigger('click')
+    expect(
+      manager
+        .get('.s-file-manager__view-toggle .s-file-manager__glyph')
+        .classes(),
+    ).toContain('is-list')
+    expect(manager.find('button[aria-label="Icon view"]').exists()).toBe(true)
+  })
+  it('sorts from blank-space menus with configurable comparators and directions', async () => {
+    const { manager } = controlled({
+      sortOptions: [
+        { key: 'name', label: 'Name' },
+        {
+          key: 'length',
+          label: 'Name length',
+          compare: (a: FileManagerEntry, b: FileManagerEntry) =>
+            a.name.length - b.name.length,
+        },
+      ],
+    })
+    await settle()
+    await manager.get('[role="listbox"]').trigger('contextmenu')
+    await settle()
+    await clickMenu('Sort by Name length')
+    expect(manager.emitted('update:sort')?.at(-1)).toEqual([
+      { key: 'length', order: 'ascending' },
+    ])
+    await manager.get('[role="listbox"]').trigger('contextmenu')
+    await settle()
+    await clickMenu('Descending')
+    expect(manager.emitted('update:sort')?.at(-1)).toEqual([
+      { key: 'length', order: 'descending' },
+    ])
+    const names = manager
+      .findAll('[role="option"]')
+      .map((entry) => entry.attributes('aria-label'))
+      .filter((name) => name?.startsWith('File'))
+    expect(names.slice(0, 2)).toEqual(['File 11.txt', 'File 10.txt'])
+  })
+  it('allows the toolbar slot to replace the complete row using typed search/view hooks', async () => {
+    const wrapper = mount(FileManager, {
+      props: { modelValue: fixture() },
+      slots: {
+        toolbar: (ctx) =>
+          h('div', { class: 'custom-toolbar' }, [
+            h('input', {
+              value: ctx.search,
+              'aria-label': 'Custom search',
+              onInput: (event: Event) =>
+                ctx.setSearch((event.target as HTMLInputElement).value),
+            }),
+            h('button', { onClick: ctx.toggleView }, ctx.view),
+          ]),
+      },
+    })
+    await settle()
+    expect(wrapper.find('.s-file-manager__view-toggle').exists()).toBe(false)
+    expect(
+      wrapper.find('input[aria-label="Search this folder"]').exists(),
+    ).toBe(false)
+    await wrapper.get('input[aria-label="Custom search"]').setValue('Assets')
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(1)
+    await wrapper.get('.custom-toolbar button').trigger('click')
+    expect(wrapper.find('.s-file-manager__content.is-list').exists()).toBe(true)
+  })
+  it('shares hidden filtering between the tree and content, and persists hide/unhide through operations', async () => {
+    const { manager, files } = controlled()
+    await settle()
+    await manager.vm.$.exposed!.execute({
+      type: 'set-hidden',
+      ids: ['a', 0],
+      hidden: true,
+    })
+    await settle()
+    expect(files.value.find((entry) => entry.id === 'a')?.hidden).toBe(true)
+    expect(manager.find('[role="option"][aria-label="Assets"]').exists()).toBe(
+      false,
+    )
+    expect(manager.find('.s-file-manager__tree').text()).not.toContain('Assets')
+    await manager.get('button[aria-label="Show hidden items"]').trigger('click')
+    expect(
+      manager.find('[role="option"][aria-label="Assets"]').classes(),
+    ).toContain('is-hidden')
+    expect(manager.find('.s-file-manager__tree').text()).toContain('Assets')
+    await manager
+      .get('[role="option"][aria-label="File 0.txt"]')
+      .trigger('contextmenu')
+    await settle()
+    await clickMenu('Unhide')
+    expect(files.value.find((entry) => entry.id === 0)?.hidden).toBe(false)
+    await manager.get('button[aria-label="Hide hidden items"]').trigger('click')
+    expect(
+      manager.find('[role="option"][aria-label="File 0.txt"]').exists(),
+    ).toBe(true)
+  })
+  it('can list files in the tree and use case-insensitive SVG/PNG thumbnails with a file fallback', async () => {
+    const manager = mount(FileManager, {
+      props: {
+        modelValue: fixture(),
+        treeShowFiles: true,
+        thumbnails: { '.TXT': '/files/text.svg' },
+        icons: { home: { src: '/files/home.svg' } },
+      },
+    })
+    await settle()
+    expect(
+      manager.find('.s-file-manager__tree-root img').attributes('src'),
+    ).toBe('/files/home.svg')
+    const treeFile = manager
+      .findAll('.s-file-manager__tree-name')
+      .find((row) => row.text() === 'File 0.txt')!
+    expect(treeFile.find('img').attributes('src')).toBe('/files/text.svg')
+    expect(
+      manager
+        .get('[role="option"][aria-label="File 0.txt"] img')
+        .attributes('src'),
+    ).toBe('/files/text.svg')
+    await manager.setProps({ thumbnails: {} })
+    expect(treeFile.find('.s-file-manager__glyph.is-file svg').exists()).toBe(
+      true,
+    )
+    expect(treeFile.find('img').exists()).toBe(false)
+    await manager.setProps({ treeShowFiles: false })
+    expect(manager.find('.s-file-manager__tree').text()).not.toContain(
+      'File 0.txt',
+    )
+  })
+  it('shows different folder glyphs after opening and leaves hidden directories when visibility is disabled', async () => {
+    const { manager, files } = controlled()
+    await settle()
+    expect(
+      manager.find('.s-file-manager__tree-name .is-folder-open').exists(),
+    ).toBe(false)
+    await manager
+      .get('[role="option"][aria-label="Assets"]')
+      .trigger('dblclick')
+    expect(
+      manager.find('.s-file-manager__tree-name .is-folder-open').exists(),
+    ).toBe(true)
+    await manager.get('button[aria-label="Show hidden items"]').trigger('click')
+    await manager.vm.$.exposed!.execute({
+      type: 'set-hidden',
+      ids: ['a'],
+      hidden: true,
+    })
+    await settle()
+    await manager.get('button[aria-label="Hide hidden items"]').trigger('click')
+    await settle()
+    expect(manager.emitted('navigate')?.at(-1)).toEqual([null])
+    expect(
+      files.value.find((entry) => entry.id === 'nested')?.hidden,
+    ).toBeUndefined()
+  })
+  it('honors hidden permissions and allows explicit unhide for dot-prefixed names', async () => {
+    const hidden: FileManagerEntry = {
+      id: 'hidden',
+      parentId: null,
+      kind: 'file',
+      name: '.settings',
+    }
+    const wrapper = mount(FileManager, {
+      props: { modelValue: [hidden], behavior: { showHidden: true } },
+    })
+    await settle()
+    expect(wrapper.get('[role="option"]').classes()).toContain('is-hidden')
+    const unhidden = applyFileOperation(
+      [hidden],
+      { type: 'set-hidden', ids: ['hidden'], hidden: false },
+      () => 'new',
+    )
+    await wrapper.setProps({
+      modelValue: unhidden,
+      behavior: { showHidden: false },
+    })
+    expect(wrapper.find('[role="option"]').exists()).toBe(true)
+    expect(() =>
+      applyFileOperation(
+        [{ ...hidden, permissions: { hide: false } }],
+        { type: 'set-hidden', ids: ['hidden'], hidden: true },
+        () => 'new',
+      ),
+    ).toThrow(/denied/i)
+  })
   const drag = async (element: Element, type: string) => {
     const event = new Event(type, { bubbles: true, cancelable: true })
     Object.defineProperty(event, 'dataTransfer', {
@@ -330,18 +542,32 @@ describe('FileManager interactions', () => {
             fileManager: {
               behavior: { deleteKey: false, wheelZoom: false },
               view: 'list',
+              treeShowFiles: true,
+              icons: { home: { src: '/global-home.svg' } },
+              thumbnails: { txt: '/global-text.svg' },
+              sortOptions: [{ key: 'size', label: 'Bytes' }],
             },
           },
           () =>
             h(FileManager, {
               modelValue: fixture(),
               behavior: { wheelZoom: true },
+              thumbnails: { '.TXT': '/local-text.png' },
             }),
         ),
     })
     await settle()
     const manager = wrapper.findComponent(FileManager)
     expect(manager.find('.is-list').exists()).toBe(true)
+    expect(
+      manager.get('.s-file-manager__tree-root img').attributes('src'),
+    ).toBe('/global-home.svg')
+    expect(manager.find('.s-file-manager__tree').text()).toContain('File 0.txt')
+    expect(
+      manager
+        .get('[role="option"][aria-label="File 0.txt"] img')
+        .attributes('src'),
+    ).toBe('/local-text.png')
     await manager.get('[role="option"][aria-label="Assets"]').trigger('click')
     await manager.get('[role="listbox"]').trigger('keydown', { key: 'Delete' })
     expect(manager.emitted('update:modelValue')).toBeUndefined()

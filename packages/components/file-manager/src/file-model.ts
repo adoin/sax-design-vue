@@ -115,7 +115,7 @@ export function applyFileOperation(
   }
   const permitted = (
     entry: FileManagerEntry,
-    permission: 'rename' | 'delete' | 'move' | 'copy' | 'create',
+    permission: 'rename' | 'delete' | 'move' | 'copy' | 'create' | 'hide',
   ) => !entry.disabled && entry.permissions?.[permission] !== false
   const checkTarget = () =>
     assert(
@@ -170,6 +170,15 @@ export function applyFileOperation(
       entry.id === selected[0].id
         ? { ...entry, name, extension: undefined }
         : entry,
+    )
+  }
+  if (operation.type === 'set-hidden') {
+    assert(typeof operation.hidden === 'boolean', 'Hidden state is required')
+    for (const entry of selected)
+      assert(permitted(entry, 'hide'), 'Hide denied')
+    const changed = new Set(ids)
+    return entries.map((entry) =>
+      changed.has(entry.id) ? { ...entry, hidden: operation.hidden } : entry,
     )
   }
   const subtree = descendantIds(index, ids)
@@ -229,6 +238,10 @@ export function resolveExtension(entry: FileManagerEntry) {
   )
     .replace(/^\./, '')
     .toLowerCase()
+}
+
+export function isFileHidden(entry: FileManagerEntry) {
+  return entry.hidden ?? entry.name.startsWith('.')
 }
 
 export function gridColumns(width: number, size: number, gap = 12) {

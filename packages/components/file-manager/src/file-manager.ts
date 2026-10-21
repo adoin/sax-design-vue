@@ -4,10 +4,14 @@ import type {
   FileManagerBehavior,
   FileManagerContext,
   FileManagerEntry,
+  FileManagerIcons,
   FileManagerId,
   FileManagerMenuItem,
   FileManagerPreviewRenderer,
   FileManagerProps,
+  FileManagerSort,
+  FileManagerSortOption,
+  FileManagerThumbnails,
 } from './types'
 
 export const fileManagerProps = buildProps({
@@ -29,6 +33,18 @@ export const fileManagerProps = buildProps({
   treeWidth: { type: Number, default: 216 },
   showTree: { type: Boolean, default: true },
   rootLabel: { type: String, default: undefined },
+  treeShowFiles: { type: Boolean, default: undefined },
+  showHidden: { type: Boolean, default: undefined },
+  sort: { type: definePropType<FileManagerSort>(Object), default: undefined },
+  sortOptions: {
+    type: definePropType<FileManagerSortOption[]>(Array),
+    default: undefined,
+  },
+  icons: { type: definePropType<FileManagerIcons>(Object), default: undefined },
+  thumbnails: {
+    type: definePropType<FileManagerThumbnails>(Object),
+    default: undefined,
+  },
   behavior: {
     type: definePropType<FileManagerBehavior>(Object),
     default: undefined,

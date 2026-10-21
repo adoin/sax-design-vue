@@ -2,8 +2,16 @@ export default {
   name: 'en',
   vs: {
     fileManager: {
+      showHidden: 'Show hidden items',
+      hideHidden: 'Hide hidden items',
+      hidden: 'Hidden',
+      hide: 'Hide',
+      unhide: 'Unhide',
+      sortBy: 'Sort by {name}',
+      ascending: 'Ascending',
+      descending: 'Descending',
       label: 'File manager',
-      root: 'All files',
+      root: 'Home',
       folders: 'Folders',
       contents: 'Directory contents',
       name: 'Name',

@@ -6,11 +6,12 @@ import {
   SBreadcrumbItem,
 } from '@vuesax-alpha/components/breadcrumb'
 import { SButton } from '@vuesax-alpha/components/button'
-import { SInput } from '@vuesax-alpha/components/input'
 import { SContextMenu } from '@vuesax-alpha/components/context-menu'
 import { SConfigProvider } from '@vuesax-alpha/components/config-provider'
 import FileTree from './file-tree.vue'
 import FileContent from './file-content.vue'
+import FileToolbar from './file-toolbar.vue'
+import FileGlyph from './file-glyph.vue'
 import { useFileManager } from './use-file-manager'
 import { fileManagerProps } from './file-manager'
 import type { ContextMenuInstance } from '../../context-menu'
@@ -23,6 +24,8 @@ import type {
   FileManagerMenuItem,
   FileManagerOperation,
   FileManagerPreviewContext,
+  FileManagerSort,
+  FileManagerToolbarContext,
   FileManagerView,
 } from './types'
 
@@ -34,6 +37,8 @@ const emit = defineEmits<{
   'update:selectedIds': [ids: FileManagerId[]]
   'update:view': [view: FileManagerView]
   'update:tileSize': [size: number]
+  'update:showHidden': [value: boolean]
+  'update:sort': [sort: FileManagerSort]
   'selection-change': [entries: FileManagerEntry[]]
   navigate: [id: FileManagerId | null]
   open: [entry: FileManagerEntry]
@@ -44,11 +49,7 @@ const emit = defineEmits<{
 }>()
 defineSlots<{
   'folder-preview'?: (context: FileManagerPreviewContext) => any
-  toolbar?: (context: {
-    directory: FileManagerEntry | null
-    selection: FileManagerEntry[]
-    pending: boolean
-  }) => any
+  toolbar?: (context: FileManagerToolbarContext) => any
   status?: (context: { count: number; selected: number }) => any
 }>()
 const state = useFileManager(
@@ -66,9 +67,10 @@ const {
   behavior,
   visible,
   path,
-  sortBy,
-  descending,
-  search,
+  toolbar,
+  showHidden,
+  setShowHidden,
+  icons,
   expanded,
   history,
   historyIndex,
@@ -81,7 +83,6 @@ const {
   menuContext,
   menuItems,
   setSelection,
-  setView,
   setTileSize,
   navigate,
   goHistory,
@@ -132,6 +133,7 @@ const onContext = (
 }
 const menuSelect = (item: FileManagerMenuItem) => {
   emit('menu-select', item, menuContext.value)
+  if (item.sort) state.setSort(item.sort)
   if (item.action) actions(item.action, menuContext.value)
 }
 const dragStart = (event: DragEvent, entry: FileManagerEntry) => {
@@ -308,6 +310,18 @@ defineExpose<FileManagerExposes>({
             @click="navigate(directory?.parentId ?? null)"
             >↑</SButton
           >
+          <SButton
+            :debounce="false"
+            icon
+            type="transparent"
+            :aria-label="label(showHidden ? 'hideHidden' : 'showHidden')"
+            :title="label(showHidden ? 'hideHidden' : 'showHidden')"
+            :aria-pressed="showHidden"
+            @click="setShowHidden(!showHidden)"
+            ><FileGlyph
+              :kind="showHidden ? 'eye' : 'eye-off'"
+              :graphic="showHidden ? icons.eye : icons.eyeOff"
+          /></SButton>
         </div>
         <SBreadcrumb class="s-file-manager__path" separator="›">
           <SBreadcrumbItem
@@ -315,10 +329,13 @@ defineExpose<FileManagerExposes>({
             @click.prevent="navigate(null)"
             @dragover.stop="dragOver($event, null)"
             @drop.stop="onDrop($event, null)"
-            ><span :class="{ 'is-drop-target': dropTarget === null }">{{
-              rootLabel || label('root')
-            }}</span></SBreadcrumbItem
-          >
+            ><span
+              :class="{ 'is-drop-target': dropTarget === null }"
+              role="img"
+              :aria-label="rootLabel || label('root')"
+              :title="rootLabel || label('root')"
+              ><FileGlyph kind="home" :graphic="icons.home" /></span
+          ></SBreadcrumbItem>
           <SBreadcrumbItem
             v-for="(entry, i) in path"
             :key="entry.id"
@@ -345,90 +362,9 @@ defineExpose<FileManagerExposes>({
         />
         <div class="s-file-manager__main">
           <div class="s-file-manager__toolbar">
-            <SButton
-              :debounce="false"
-              size="small"
-              :disabled="pending || directory?.permissions?.create === false"
-              @click="actions('new-folder', context(undefined, 'toolbar'))"
-              >{{ label('new-folder') }}</SButton
-            >
-            <slot
-              name="toolbar"
-              :directory="directory"
-              :selection="selection"
-              :pending="pending"
-            />
-            <SInput
-              v-model="search"
-              class="s-file-manager__search"
-              :placeholder="label('search')"
-              :aria-label="label('search')"
-              clearable
-            />
-            <SButton
-              :debounce="false"
-              size="small"
-              type="transparent"
-              @click="
-                sortBy =
-                  sortBy === 'name'
-                    ? 'modifiedAt'
-                    : sortBy === 'modifiedAt'
-                      ? 'size'
-                      : 'name'
-              "
-              >{{
-                label(
-                  sortBy === 'name'
-                    ? 'name'
-                    : sortBy === 'size'
-                      ? 'size'
-                      : 'modified',
-                )
-              }}</SButton
-            >
-            <SButton
-              :debounce="false"
-              icon
-              type="transparent"
-              :aria-label="label('sortDirection')"
-              @click="descending = !descending"
-              >{{ descending ? '↓' : '↑' }}</SButton
-            >
-            <SButton
-              :debounce="false"
-              icon
-              type="transparent"
-              :aria-label="label('grid')"
-              :aria-pressed="view === 'grid'"
-              @click="setView('grid')"
-              ><svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  d="M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z"
-                /></svg
-            ></SButton>
-            <SButton
-              :debounce="false"
-              icon
-              type="transparent"
-              :aria-label="label('list')"
-              :aria-pressed="view === 'list'"
-              @click="setView('list')"
-              ><svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M3 4h18v3H3zm0 7h18v3H3zm0 7h18v3H3z" /></svg
-            ></SButton>
+            <slot name="toolbar" v-bind="toolbar"
+              ><FileToolbar :state="state"
+            /></slot>
           </div>
           <FileContent
             ref="content"

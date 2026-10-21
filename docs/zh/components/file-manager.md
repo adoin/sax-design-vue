@@ -26,6 +26,32 @@ PROPS:
     description: '图标宽度，限制在 88–280 px；Shift + 滚轮可调整。'
     usage: '#explorer'
     default: 144
+  - name: 'v-model:show-hidden'
+    type: 'Boolean'
+    description: '显示隐藏项目，左上眼睛按钮可切换。'
+    usage: '#search-and-toolbar'
+    default: false
+  - name: 'v-model:sort'
+    type: 'FileManagerSort'
+    description: '当前排序字段与方向。'
+    usage: '#search-and-toolbar'
+  - name: 'sort-options'
+    type: 'FileManagerSortOption[]'
+    description: '排序依据，支持自定义 compare。'
+    usage: '#search-and-toolbar'
+  - name: 'tree-show-files'
+    type: 'Boolean'
+    description: '在树中显示文件。'
+    usage: '#search-and-toolbar'
+    default: false
+  - name: 'icons'
+    type: 'FileManagerIcons'
+    description: '自定义 Home、文件夹开合、文件和工具图标。'
+    usage: '#search-and-toolbar'
+  - name: 'thumbnails'
+    type: 'FileManagerThumbnails'
+    description: '后缀到图片地址或图标配置的映射。'
+    usage: '#search-and-toolbar'
   - name: 'height'
     type: 'String | Number'
     description: '整个管理器高度。'
@@ -43,7 +69,7 @@ PROPS:
     default: true
   - name: 'root-label'
     type: 'String'
-    description: '根目录名称，省略时使用语言包。'
+    description: 'Home 图标的无障碍名称和提示，省略时使用语言包。'
     usage: '#explorer'
   - name: 'behavior'
     type: 'FileManagerBehavior'
@@ -106,8 +132,8 @@ SLOTS:
     description: '文件夹封面，例如四图拼贴。'
     usage: '#explorer'
   - name: 'toolbar'
-    type: '(context: { directory: FileManagerEntry | null; selection: FileManagerEntry[]; pending: boolean })'
-    description: '上传或业务操作等工具栏扩展。'
+    type: '(context: FileManagerToolbarContext)'
+    description: '替换整行工具栏，提供搜索值、视图状态及更新方法。'
     usage: '#explorer'
   - name: 'status'
     type: '(context: { count: number; selected: number })'
@@ -148,19 +174,43 @@ EXPOSES:
 
 <template #template>
 
-@[code{97-142}](../../.vuepress/components/file-manager-zh/explorer.vue)
+@[code{128-166}](../../.vuepress/components/file-manager-zh/explorer.vue)
 
 </template>
 
 <template #script>
 
-@[code{1-95}](../../.vuepress/components/file-manager-zh/explorer.vue)
+@[code{1-126}](../../.vuepress/components/file-manager-zh/explorer.vue)
 
 </template>
 
 <template #style>
 
-@[code{144-187}](../../.vuepress/components/file-manager-zh/explorer.vue)
+@[code{168-206}](../../.vuepress/components/file-manager-zh/explorer.vue)
+
+</template>
+
+</card>
+
+<card>
+
+## 搜索与工具栏
+
+默认工具栏仅包含名称搜索和单个视图切换按钮。搜索匹配当前目录中文件和文件夹的名称。排序在内容区空白处右键菜单中操作；`sortOptions` 配置依据，`compare(a, b)` 定义比较规则。`v-model:sort` 保存 `{ key, order }`，方向为 `ascending` 或 `descending`，默认按名称升序。`behavior.foldersFirst` 控制文件夹优先。
+
+`toolbar` 插槽替换整行，提供 `search` / `setSearch`、`view` / `setView` / `toggleView`，以及 `directory`、`selection`、`pending`、`showHidden` / `setShowHidden`、`sort` / `setSort`、`sortOptions`。
+
+<template #example><file-manager-zh-toolbar /></template>
+
+<template #template>
+
+@[code{10-26}](../../.vuepress/components/file-manager-zh/toolbar.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-9}](../../.vuepress/components/file-manager-zh/toolbar.vue)
 
 </template>
 
@@ -184,7 +234,11 @@ EXPOSES:
 
 ## 文件预览
 
-`folder-preview` 为目录提供插槽，上例按 `parentId` 查找四张图片组成封面。文件使用 `previewRenderers`，按数组顺序选择首个匹配项；每项可设置 `extensions`（忽略大小写与开头的点）、`mimeTypes`（支持 `image/*`）、`match(entry)` 和 `render(context)`。通过 Vue 的 `h()` 返回节点，避免根据任意扩展名创建插槽。渲染器接收 `entry`、`view`、`selected`、`size`。未匹配时使用 `thumbnail`，否则显示文件类型。图片加载、媒体播放器或复杂预览需由渲染器自行处理；不要把不可信文本作为 HTML。
+`folder-preview` 为目录提供插槽，上例按 `parentId` 查找四张图片组成封面。文件使用 `previewRenderers`，按数组顺序选择首个匹配项；每项可设置 `extensions`（忽略大小写与开头的点）、`mimeTypes`（支持 `image/*`）、`match(entry)` 和 `render(context)`。通过 Vue 的 `h()` 返回节点，避免根据任意扩展名创建插槽。渲染器接收 `entry`、`view`、`selected`、`size`。未匹配时使用 `thumbnail`，否则显示默认文件图标。图片加载、媒体播放器或复杂预览需由渲染器自行处理；不要把不可信文本作为 HTML。
+
+根入口使用 Home 图标；`icons.home` 自定义图形，`rootLabel` 提供无障碍名称和提示。`icons.folder` / `folderOpen` 区分目录开合。`treeShowFiles` 让左侧树显示文件。`thumbnails` 按后缀匹配，忽略大小写和前导点；字符串为 SVG/PNG 等图片 URL，`{ icon: "lo-home" }` 使用已注册图标，`{ src: "/file.svg" }` 使用图片。优先级为记录的 `thumbnail`、后缀映射、`*` 映射、默认文件图标。树和内容区共享此规则。文件夹插槽的 `renderDefault()` 可复用默认图标。
+
+文件和文件夹可设置 `hidden: true`。未指定时点开头名称视为隐藏，显式 `hidden: false` 可覆盖。左上眼睛同时控制树和内容区；右键隐藏操作通过 `set-hidden` 更新记录，受 `permissions.hide` 与 `beforeOperation` 约束。自定义右键菜单可组合 `context.defaultItems` 保留默认操作。
 
 </card>
 

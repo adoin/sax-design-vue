@@ -14,6 +14,8 @@ export type FileManagerAction =
   | 'new-folder'
   | 'select-all'
   | 'refresh'
+  | 'hide'
+  | 'unhide'
 export interface FileManagerEntry {
   id: FileManagerId
   parentId: FileManagerId | null
@@ -25,9 +27,11 @@ export interface FileManagerEntry {
   modifiedAt?: string | number
   thumbnail?: string
   disabled?: boolean
+  /** Omit to retain dot-prefixed hidden-file conventions; false explicitly unhides. */
+  hidden?: boolean
   /** False denies the operation through every entry point. */
   permissions?: Partial<
-    Record<'rename' | 'delete' | 'move' | 'copy' | 'create', boolean>
+    Record<'rename' | 'delete' | 'move' | 'copy' | 'create' | 'hide', boolean>
   >
   data?: unknown
 }
@@ -51,27 +55,59 @@ export interface FileManagerGlobalConfig {
   behavior?: FileManagerBehavior
   view?: FileManagerView
   tileSize?: number
+  treeShowFiles?: boolean
+  icons?: FileManagerIcons
+  thumbnails?: FileManagerThumbnails
+  sortOptions?: FileManagerSortOption[]
+}
+export type FileManagerGraphic = string | { icon?: string; src?: string }
+export interface FileManagerIcons {
+  home?: FileManagerGraphic
+  folder?: FileManagerGraphic
+  folderOpen?: FileManagerGraphic
+  file?: FileManagerGraphic
+  eye?: FileManagerGraphic
+  eyeOff?: FileManagerGraphic
+  grid?: FileManagerGraphic
+  list?: FileManagerGraphic
+}
+/** String values are image URLs; object values can use an SIcon name instead. */
+export type FileManagerThumbnails = Record<string, FileManagerGraphic>
+export interface FileManagerSort {
+  key: string
+  order: 'ascending' | 'descending'
+}
+export interface FileManagerSortOption {
+  key: string
+  label: string
+  /** Required for application-defined criteria. Built-in keys are name, modifiedAt and size. */
+  compare?: (a: FileManagerEntry, b: FileManagerEntry) => number
 }
 export interface FileManagerContext {
   entry?: FileManagerEntry
   selection: FileManagerEntry[]
   directory: FileManagerEntry | null
   source: 'content' | 'tree' | 'breadcrumb' | 'keyboard' | 'toolbar'
+  /** Available when resolving a custom context-menu function. */
+  defaultItems?: FileManagerMenuItem[]
 }
 export interface FileManagerMenuItem extends ContextMenuItem {
   action?: FileManagerAction
+  sort?: FileManagerSort
 }
 export interface FileManagerOperation {
-  type: 'rename' | 'delete' | 'move' | 'copy' | 'new-folder'
+  type: 'rename' | 'delete' | 'move' | 'copy' | 'new-folder' | 'set-hidden'
   ids: FileManagerId[]
   targetId?: FileManagerId | null
   name?: string
+  hidden?: boolean
 }
 export interface FileManagerPreviewContext {
   entry: FileManagerEntry
   view: FileManagerView
   selected: boolean
   size: number
+  renderDefault?: () => VNodeChild
 }
 export interface FileManagerPreviewRenderer {
   /** Lowercase extensions without dots, matched case-insensitively. */
@@ -90,6 +126,12 @@ export interface FileManagerProps {
   treeWidth?: number
   showTree?: boolean
   rootLabel?: string
+  treeShowFiles?: boolean
+  showHidden?: boolean
+  sort?: FileManagerSort
+  sortOptions?: FileManagerSortOption[]
+  icons?: FileManagerIcons
+  thumbnails?: FileManagerThumbnails
   behavior?: FileManagerBehavior
   previewRenderers?: FileManagerPreviewRenderer[]
   contextMenu?:
@@ -118,6 +160,8 @@ export type FileManagerEmits = {
   'update:selectedIds': (ids: FileManagerId[]) => void
   'update:view': (view: FileManagerView) => void
   'update:tileSize': (size: number) => void
+  'update:showHidden': (value: boolean) => void
+  'update:sort': (sort: FileManagerSort) => void
   'selection-change': (entries: FileManagerEntry[]) => void
   navigate: (id: FileManagerId | null) => void
   open: (entry: FileManagerEntry) => void
@@ -134,12 +178,23 @@ export type FileManagerEmits = {
 }
 export interface FileManagerSlots {
   'folder-preview'?: (context: FileManagerPreviewContext) => VNodeChild
-  toolbar?: (context: {
-    directory: FileManagerEntry | null
-    selection: FileManagerEntry[]
-    pending: boolean
-  }) => VNodeChild
+  toolbar?: (context: FileManagerToolbarContext) => VNodeChild
   status?: (context: { count: number; selected: number }) => VNodeChild
+}
+export interface FileManagerToolbarContext {
+  directory: FileManagerEntry | null
+  selection: FileManagerEntry[]
+  pending: boolean
+  search: string
+  setSearch: (value: string) => void
+  view: FileManagerView
+  setView: (view: FileManagerView) => void
+  toggleView: () => void
+  showHidden: boolean
+  setShowHidden: (value: boolean) => void
+  sort: FileManagerSort
+  sortOptions: FileManagerSortOption[]
+  setSort: (sort: FileManagerSort) => void
 }
 /** Derive the public component from the SFC instead of duplicating Vue's generic contract. */
 export type FileManagerComponent = typeof import('./file-manager.vue').default

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, nextTick, useTemplateRef } from 'vue'
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
+import FileGlyph from './file-glyph.vue'
+import { isFileHidden } from './file-model'
 import type { FileManagerEntry, FileManagerId } from './types'
 import type { VirtualListInstance } from '../../virtual-list'
 import type { FileManagerState } from './use-file-manager'
@@ -15,8 +17,18 @@ const emit = defineEmits<{
   'drag-over': [event: DragEvent, id: FileManagerId | null]
   drop: [event: DragEvent, id: FileManagerId | null]
 }>()
-const { directoryId, index, expanded, navigate, behavior, dropTarget, label } =
-  props.state
+const {
+  directoryId,
+  index,
+  expanded,
+  navigate,
+  behavior,
+  dropTarget,
+  label,
+  icons,
+  treeShowFiles,
+  graphicFor,
+} = props.state
 const list = useTemplateRef<VirtualListInstance>('list')
 const tree = useTemplateRef<HTMLElement>('tree')
 const rows = computed(() => {
@@ -26,7 +38,7 @@ const rows = computed(() => {
     hasChildren: boolean
   }[] = []
   const stack = (index.value.children.get(null) ?? [])
-    .filter((entry) => entry.kind === 'folder')
+    .filter((entry) => entry.kind === 'folder' || treeShowFiles.value)
     .map((entry) => ({ entry, depth: 1 }))
     .reverse()
   const visited = new Set<FileManagerId>()
@@ -34,13 +46,18 @@ const rows = computed(() => {
     const row = stack.pop()!
     if (
       visited.has(row.entry.id) ||
-      (!behavior.value.showHidden && row.entry.name.startsWith('.'))
+      (!behavior.value.showHidden && isFileHidden(row.entry))
     )
       continue
     visited.add(row.entry.id)
-    const children = (index.value.children.get(row.entry.id) ?? []).filter(
-      (entry) => entry.kind === 'folder',
-    )
+    const children =
+      row.entry.kind === 'folder'
+        ? (index.value.children.get(row.entry.id) ?? []).filter(
+            (entry) =>
+              (entry.kind === 'folder' || treeShowFiles.value) &&
+              (behavior.value.showHidden || !isFileHidden(entry)),
+          )
+        : []
     result.push({ ...row, hasChildren: children.length > 0 })
     if (expanded.value.has(row.entry.id))
       for (let i = children.length - 1; i >= 0; i--)
@@ -60,10 +77,25 @@ const focusRow = async (position: number) => {
   await nextTick()
   tree.value?.querySelector<HTMLElement>(`[data-tree-index="${i}"]`)?.focus()
 }
+const clickEntry = (entry: FileManagerEntry, event: MouseEvent) => {
+  if (entry.kind === 'folder') navigate(entry.id)
+  else {
+    props.state.select(entry, event)
+    if (
+      behavior.value.openOn === 'click' &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.shiftKey
+    )
+      props.state.open(entry)
+  }
+}
+const targetId = (entry: FileManagerEntry) =>
+  entry.kind === 'folder' ? entry.id : entry.parentId
 const onKey = (event: KeyboardEvent, entry: FileManagerEntry) => {
   if (!behavior.value.keyboard || event.isComposing || event.altKey) return
   const position = rows.value.findIndex((row) => row.entry.id === entry.id)
-  if (event.key === 'ArrowRight') {
+  if (event.key === 'ArrowRight' && entry.kind === 'folder') {
     event.preventDefault()
     if (expanded.value.has(entry.id) && rows.value[position]?.hasChildren)
       focusRow(position + 1)
@@ -89,6 +121,10 @@ const onKey = (event: KeyboardEvent, entry: FileManagerEntry) => {
           ? rows.value.length - 1
           : position + (event.key === 'ArrowDown' ? 1 : -1),
     )
+  }
+  if (entry.kind === 'file' && event.key === 'Enter') {
+    event.preventDefault()
+    props.state.open(entry)
   }
   const ctx = { ...props.state.context(entry, 'tree'), selection: [entry] }
   if (event.key === 'F2' && behavior.value.renameKey) {
@@ -121,11 +157,13 @@ const onKey = (event: KeyboardEvent, entry: FileManagerEntry) => {
         'is-current': directoryId === null,
         'is-drop-target': dropTarget === null,
       }"
+      :aria-label="rootLabel"
+      :title="rootLabel"
       @click="navigate(null)"
       @dragover.stop="emit('drag-over', $event, null)"
       @drop.stop="emit('drop', $event, null)"
     >
-      {{ rootLabel }}
+      <FileGlyph kind="home" :graphic="icons.home" />
     </button>
     <SVirtualList
       ref="list"
@@ -142,10 +180,14 @@ const onKey = (event: KeyboardEvent, entry: FileManagerEntry) => {
             :class="{
               'is-current': directoryId === row.entry.id,
               'is-drop-target': dropTarget === row.entry.id,
+              'is-hidden': isFileHidden(row.entry),
+              'is-selected':
+                row.entry.kind === 'file' &&
+                state.selectedSet.value.has(row.entry.id),
             }"
             :style="{ paddingInlineStart: `${(row.depth - 1) * 16 + 8}px` }"
-            @dragover.stop="emit('drag-over', $event, row.entry.id)"
-            @drop.stop="emit('drop', $event, row.entry.id)"
+            @dragover.stop="emit('drag-over', $event, targetId(row.entry))"
+            @drop.stop="emit('drop', $event, targetId(row.entry))"
             @contextmenu.stop="emit('context', $event, row.entry, 'tree')"
           >
             <button
@@ -175,14 +217,30 @@ const onKey = (event: KeyboardEvent, entry: FileManagerEntry) => {
               "
               :draggable="behavior.dragDrop && !row.entry.disabled"
               @dragstart="emit('drag-start', $event, row.entry)"
-              @click="navigate(row.entry.id)"
+              @click="clickEntry(row.entry, $event)"
+              @dblclick="
+                row.entry.kind === 'file' &&
+                behavior.openOn === 'double-click' &&
+                state.open(row.entry)
+              "
               @keydown="onKey($event, row.entry)"
             >
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path
-                  d="M2 6a2 2 0 0 1 2-2h6l3 3h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z"
-                /></svg
-              ><span>{{ row.entry.name }}</span>
+              <FileGlyph
+                :kind="
+                  row.entry.kind === 'folder'
+                    ? expanded.has(row.entry.id) || directoryId === row.entry.id
+                      ? 'folder-open'
+                      : 'folder'
+                    : 'file'
+                "
+                :graphic="
+                  graphicFor(
+                    row.entry,
+                    expanded.has(row.entry.id) || directoryId === row.entry.id,
+                  )
+                "
+              />
+              <span>{{ row.entry.name }}</span>
             </button>
           </div>
         </template>

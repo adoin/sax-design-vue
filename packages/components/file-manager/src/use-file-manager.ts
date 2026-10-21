@@ -5,16 +5,22 @@ import {
   applyFileOperation,
   canMoveFiles,
   indexFiles,
+  isFileHidden,
+  resolveExtension,
   topLevelIds,
 } from './file-model'
 import type {
   FileManagerAction,
   FileManagerContext,
   FileManagerEntry,
+  FileManagerGraphic,
   FileManagerId,
   FileManagerMenuItem,
   FileManagerOperation,
   FileManagerProps,
+  FileManagerSort,
+  FileManagerSortOption,
+  FileManagerToolbarContext,
   FileManagerView,
 } from './types'
 
@@ -60,6 +66,48 @@ export function useFileManager(
       ),
     ),
   )
+  const localShowHidden = shallowRef<boolean>()
+  const showHidden = computed(
+    () =>
+      props.showHidden ??
+      localShowHidden.value ??
+      props.behavior?.showHidden ??
+      global.value?.behavior?.showHidden ??
+      false,
+  )
+  const setShowHidden = (value: boolean) => {
+    localShowHidden.value = value
+    emit('update:showHidden', value)
+  }
+  const treeShowFiles = computed(
+    () => props.treeShowFiles ?? global.value?.treeShowFiles ?? false,
+  )
+  const icons = computed(() => ({ ...global.value?.icons, ...props.icons }))
+  const thumbnails = computed(
+    () =>
+      new Map(
+        Object.entries({
+          ...global.value?.thumbnails,
+          ...props.thumbnails,
+        }).map(([extension, graphic]) => [
+          extension.replace(/^\./, '').toLowerCase(),
+          graphic,
+        ]),
+      ),
+  )
+  const graphicFor = (
+    entry: FileManagerEntry,
+    opened = false,
+  ): FileManagerGraphic | undefined => {
+    if (entry.kind === 'folder')
+      return opened ? icons.value.folderOpen : icons.value.folder
+    if (entry.thumbnail) return { src: entry.thumbnail }
+    const configured =
+      thumbnails.value.get(resolveExtension(entry)) ?? thumbnails.value.get('*')
+    return typeof configured === 'string'
+      ? { src: configured }
+      : (configured ?? icons.value.file)
+  }
   const behavior = computed(() => ({
     multiple: true,
     rangeSelect: true,
@@ -73,22 +121,50 @@ export function useFileManager(
     typeahead: true,
     openOn: 'double-click' as 'double-click' | 'click',
     foldersFirst: true,
-    showHidden: false,
     ...global.value?.behavior,
     ...props.behavior,
+    showHidden: showHidden.value,
   }))
-  const sortBy = shallowRef<'name' | 'modifiedAt' | 'size'>('name')
-  const descending = shallowRef(false)
+  const localSort = shallowRef<FileManagerSort>({
+    key: 'name',
+    order: 'ascending',
+  })
+  const sort = computed<FileManagerSort>(() => {
+    const value = props.sort ?? localSort.value
+    return sortOptions.value.some((option) => option.key === value.key)
+      ? value
+      : { ...value, key: sortOptions.value[0]?.key ?? 'name' }
+  })
+  const sortOptions = computed<FileManagerSortOption[]>(
+    () =>
+      props.sortOptions ??
+      global.value?.sortOptions ?? [
+        { key: 'name', label: label('name') },
+        { key: 'modifiedAt', label: label('modified') },
+        { key: 'size', label: label('size') },
+      ],
+  )
+  const setSort = (value: FileManagerSort) => {
+    if (!sortOptions.value.some((option) => option.key === value.key)) return
+    localSort.value = { ...value }
+    emit('update:sort', { ...value })
+  }
   const search = shallowRef('')
+  const setSearch = (value: string) => {
+    search.value = value
+  }
   const collator = new Intl.Collator(undefined, {
     numeric: true,
     sensitivity: 'base',
   })
-  const visible = computed(() =>
-    (index.value.children.get(directoryId.value) ?? [])
+  const visible = computed(() => {
+    const option = sortOptions.value.find(
+      (option) => option.key === sort.value.key,
+    )
+    return (index.value.children.get(directoryId.value) ?? [])
       .filter(
         (entry) =>
-          (behavior.value.showHidden || !entry.name.startsWith('.')) &&
+          (showHidden.value || !isFileHidden(entry)) &&
           entry.name
             .toLocaleLowerCase()
             .includes(search.value.toLocaleLowerCase()),
@@ -97,25 +173,22 @@ export function useFileManager(
       .sort((a, b) => {
         if (behavior.value.foldersFirst && a.kind !== b.kind)
           return a.kind === 'folder' ? -1 : 1
-        const order =
-          sortBy.value === 'name'
-            ? collator.compare(a.name, b.name)
-            : Number(
-                sortBy.value === 'size'
-                  ? (a.size ?? 0)
-                  : new Date(a.modifiedAt ?? 0),
-              ) -
-              Number(
-                sortBy.value === 'size'
-                  ? (b.size ?? 0)
-                  : new Date(b.modifiedAt ?? 0),
-              )
+        const key = option?.key ?? 'name'
+        const order = option?.compare
+          ? option.compare(a, b)
+          : key === 'size'
+            ? (a.size ?? 0) - (b.size ?? 0)
+            : key === 'modifiedAt'
+              ? Number(new Date(a.modifiedAt ?? 0)) -
+                Number(new Date(b.modifiedAt ?? 0))
+              : collator.compare(a.name, b.name)
         return (
-          (order || collator.compare(a.name, b.name)) *
-          (descending.value ? -1 : 1)
+          ((Number.isFinite(order) ? order : 0) ||
+            collator.compare(a.name, b.name)) *
+          (sort.value.order === 'descending' ? -1 : 1)
         )
-      }),
-  )
+      })
+  })
   const path = computed(() => ancestors(index.value, directoryId.value))
   const focusedId = shallowRef<FileManagerId>()
   const anchorId = shallowRef<FileManagerId>()
@@ -212,6 +285,15 @@ export function useFileManager(
       setSelection(selectedIds.value.filter((id) => index.value.byId.has(id)))
     if (directoryId.value !== null && !index.value.byId.has(directoryId.value))
       navigate(null)
+  })
+  watch([showHidden, files], () => {
+    if (!showHidden.value) {
+      const hidden = path.value.find((entry) => isFileHidden(entry))
+      if (hidden) navigate(hidden.parentId)
+    }
+    const allowed = new Set(visible.value.map((entry) => entry.id))
+    if (selectedIds.value.some((id) => !allowed.has(id)))
+      setSelection(selectedIds.value.filter((id) => allowed.has(id)))
   })
   const context = (
     entry?: FileManagerEntry,
@@ -356,6 +438,8 @@ export function useFileManager(
       rename(chosen[0])
     }
     if (action === 'delete') await operate({ type: 'delete', ids }, ctx)
+    if (action === 'hide' || action === 'unhide')
+      await operate({ type: 'set-hidden', ids, hidden: action === 'hide' }, ctx)
     if (
       (action === 'cut' || action === 'copy') &&
       behavior.value.clipboard &&
@@ -404,12 +488,7 @@ export function useFileManager(
     }
   }
   const menuContext = shallowRef<FileManagerContext>(context())
-  const menuItems = computed<FileManagerMenuItem[]>(() => {
-    if (props.contextMenu === false) return []
-    if (typeof props.contextMenu === 'function')
-      return props.contextMenu(menuContext.value)
-    if (props.contextMenu) return props.contextMenu
-    const ctx = menuContext.value
+  const defaultMenu = (ctx: FileManagerContext): FileManagerMenuItem[] => {
     const chosen = ctx.selection
     const item = (
       action: FileManagerAction,
@@ -422,6 +501,27 @@ export function useFileManager(
       disabled: pending.value || disabled,
       divided,
     })
+    if (!ctx.entry && ctx.source === 'content')
+      return [
+        ...sortOptions.value.map((option) => ({
+          value: `sort:${option.key}`,
+          label: `${label('sortBy', { name: option.label })}${sort.value.key === option.key ? ' ✓' : ''}`,
+          sort: { key: option.key, order: sort.value.order },
+        })),
+        ...(sortOptions.value.length
+          ? (['ascending', 'descending'] as const)
+          : []
+        ).map((order, i) => ({
+          value: `sort-order:${order}`,
+          label: `${label(order)}${sort.value.order === order ? ' ✓' : ''}`,
+          sort: { key: sort.value.key, order },
+          divided: i === 0,
+        })),
+        item('paste', !clipboard.value || !behavior.value.clipboard, true),
+        item('new-folder'),
+        item('select-all'),
+        item('refresh'),
+      ]
     return [
       item('open', chosen.length !== 1),
       item(
@@ -447,11 +547,39 @@ export function useFileManager(
         !chosen.length ||
           chosen.some((entry) => entry.permissions?.delete === false),
       ),
+      item(
+        chosen.length && chosen.every(isFileHidden) ? 'unhide' : 'hide',
+        !chosen.length ||
+          chosen.some((entry) => entry.permissions?.hide === false),
+      ),
       item('new-folder', false, true),
       item('select-all'),
       item('refresh'),
     ]
+  }
+  const menuItems = computed<FileManagerMenuItem[]>(() => {
+    if (props.contextMenu === false) return []
+    const defaults = defaultMenu(menuContext.value)
+    if (typeof props.contextMenu === 'function')
+      return props.contextMenu({ ...menuContext.value, defaultItems: defaults })
+    return props.contextMenu ?? defaults
   })
+  const toggleView = () => setView(view.value === 'grid' ? 'list' : 'grid')
+  const toolbar = computed<FileManagerToolbarContext>(() => ({
+    directory: directory.value,
+    selection: selection.value,
+    pending: pending.value,
+    search: search.value,
+    setSearch,
+    view: view.value,
+    setView,
+    toggleView,
+    showHidden: showHidden.value,
+    setShowHidden,
+    sort: sort.value,
+    sortOptions: sortOptions.value,
+    setSort,
+  }))
   let dropCacheIndex: typeof index.value | undefined
   let dropCacheIds: FileManagerId[] | undefined
   const dropCache = new Map<FileManagerId | null, boolean>()
@@ -492,8 +620,17 @@ export function useFileManager(
     behavior,
     visible,
     path,
-    sortBy,
-    descending,
+    sort,
+    sortOptions,
+    setSort,
+    toolbar,
+    showHidden,
+    setShowHidden,
+    icons,
+    graphicFor,
+    treeShowFiles,
+    toggleView,
+    setSearch,
     search,
     focusedId,
     anchorId,

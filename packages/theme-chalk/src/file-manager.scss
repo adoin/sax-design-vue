@@ -77,12 +77,12 @@
     padding: 4px 16px 12px;
   }
   &__search {
-    margin-inline-start: auto;
+    margin-inline-start: 0;
     flex: 1;
-    min-width: 100px;
-    max-width: 220px;
+    min-width: 140px;
   }
-  &__toolbar [aria-pressed='true'] {
+  &__toolbar [aria-pressed='true'],
+  &__history [aria-pressed='true'] {
     color: getColor(primary);
     background: getColor(primary, 0.12);
   }
@@ -147,11 +147,10 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    svg {
-      width: 16px;
-      height: 16px;
+    .s-file-manager__glyph {
+      width: 18px;
+      height: 18px;
       flex-shrink: 0;
-      color: getColor(primary, 0.65);
     }
   }
   &__content {
@@ -231,26 +230,55 @@
       object-fit: contain;
     }
   }
-  &__folder {
-    height: 88%;
+  &__glyph {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: inherit;
+    > svg,
+    > img,
+    > .s-icon {
+      width: 100%;
+      height: 100%;
+    }
+    > img {
+      object-fit: contain;
+    }
+    &.is-folder,
+    &.is-folder-open {
+      color: getColor(warn, 0.9);
+    }
+    &.is-file {
+      color: getColor(primary, 0.72);
+    }
+  }
+  &__preview > &__glyph {
     width: 90%;
+    height: 90%;
     max-width: 120px;
-    color: getColor(warn, 0.85);
   }
-  &__file {
-    height: 88%;
-    max-width: 80%;
-    color: getColor(primary);
+  &__preview > &__glyph.is-file {
+    max-width: 90px;
   }
-  &__extension {
-    position: absolute;
-    inset-inline: 0;
-    top: 55%;
-    text-align: center;
-    font-weight: 700;
-    font-size: 12px;
-    text-transform: uppercase;
-    color: getColor(primary);
+  &__tree-row.is-hidden,
+  &__entry.is-hidden {
+    opacity: 0.45;
+  }
+  &__tree-row.is-selected {
+    background: getColor(primary, 0.1);
+  }
+  &__tree-root {
+    justify-content: flex-start;
+  }
+  &__path &__glyph {
+    vertical-align: middle;
+  }
+  &__navigation .s-button .s-file-manager__glyph {
+    width: 18px;
+    height: 18px;
   }
   &__name {
     width: 100%;
@@ -288,9 +316,6 @@
   }
   &__content.is-list &__name {
     text-align: start;
-  }
-  &__content.is-list &__extension {
-    display: none;
   }
   &__modified,
   &__size {
