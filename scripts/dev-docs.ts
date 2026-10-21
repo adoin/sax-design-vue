@@ -9,7 +9,11 @@ const env = { ...process.env }
 const forwarded: string[] = []
 for (let index = 0; index < args.length; index++) {
   const option = args[index]
-  const match = /^(--component|--locale)(?:=(.*))?$/.exec(option)
+  if (option === '--profile') {
+    env.SAX_DOCS_PROFILE = '1'
+    continue
+  }
+  const match = /^(--component|--locale|--cache-root)(?:=(.*))?$/.exec(option)
   if (match) {
     const value = match[2] ?? args[++index]
     if (!value || value.startsWith('--'))
@@ -17,8 +21,10 @@ for (let index = 0; index < args.length; index++) {
     env[
       match[1] === '--component'
         ? 'SAX_DOCS_DEV_COMPONENT'
-        : 'SAX_DOCS_DEV_LOCALE'
-    ] = value
+        : match[1] === '--locale'
+          ? 'SAX_DOCS_DEV_LOCALE'
+          : 'SAX_DOCS_CACHE_ROOT'
+    ] = match[1] === '--cache-root' ? path.resolve(value) : value
   } else forwarded.push(option)
 }
 const scope = readDevScope(docs, env)
@@ -26,6 +32,8 @@ env.SAX_DOCS_DEV_STARTED = String(Date.now())
 console.log(
   `[docs-dev] ${scope.component || 'all components'} / ${scope.locale}`,
 )
+if (env.SAX_DOCS_CACHE_ROOT)
+  console.log(`[docs-dev] isolated caches: ${env.SAX_DOCS_CACHE_ROOT}`)
 const child = spawn(
   process.execPath,
   [

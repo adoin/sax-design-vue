@@ -120,6 +120,7 @@
   </Teleport>
 
   <ExamplePlaygroundDialog
+    v-if="openedExample"
     v-model:open="playgroundOpen"
     :example="openedExample"
     :return-focus-to="playgroundReturnFocus"
@@ -143,14 +144,23 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, shallowRef, useSlots, useTemplateRef } from 'vue'
+import {
+  computed,
+  defineAsyncComponent,
+  shallowRef,
+  useSlots,
+  useTemplateRef,
+} from 'vue'
 import { IconClose } from '@vuesax-alpha/components/icon'
 import { useClipboard } from '@vueuse/core'
 
 import CodeCopied from '../components/CodeCopied.vue'
 import { useDocLocaleUi } from '../composables/docLocale'
-import ExamplePlaygroundDialog from './ExamplePlaygroundDialog.vue'
 import type { DocExampleRecord } from '../type'
+
+const ExamplePlaygroundDialog = defineAsyncComponent(
+  () => import('./ExamplePlaygroundDialog.vue'),
+)
 
 type CodeSection = 'template' | 'script' | 'style' | 'all'
 

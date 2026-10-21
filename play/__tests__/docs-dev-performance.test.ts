@@ -16,24 +16,89 @@ import {
 } from '../../docs/.vuepress/node/devScope'
 import {
   fileKey,
+  documentationCache,
+  documentationCacheRoot,
+  flushDocumentationCaches,
   PersistentCache,
 } from '../../docs/.vuepress/node/persistentCache'
 import { collectDocumentationIconNames } from '../../docs/.vuepress/node/documentationIcons'
 import { createApiTypeDetailsResolver } from '../../docs/.vuepress/theme/node/apiTypeDetails'
+import { documentationStylesPlugin } from '../../docs/.vuepress/node/devStyles'
 
 const fixtures: string[] = []
 const fixture = () => {
-  const root = mkdtempSync(join(tmpdir(), 'sax-docs-cache-'))
+  const base = process.env.SAX_DOCS_TEST_TMP || tmpdir()
+  mkdirSync(base, { recursive: true })
+  const root = mkdtempSync(join(base, 'sax-docs-cache-'))
   fixtures.push(root)
   return root
 }
-afterEach(() =>
+afterEach(() => {
+  vi.unstubAllEnvs()
   fixtures
     .splice(0)
-    .forEach((root) => rmSync(root, { recursive: true, force: true })),
-)
+    .forEach((root) => rmSync(root, { recursive: true, force: true }))
+})
 
 describe('documentation development scope and caches', () => {
+  it('isolates disk and in-process caches without deleting ordinary dev caches', () => {
+    const first = fixture(),
+      second = fixture()
+    const compute = vi.fn(() => 'value')
+    expect(documentationCacheRoot({})).toBe(
+      resolve(__dirname, '../../docs/.vuepress/.cache'),
+    )
+    vi.stubEnv('SAX_DOCS_CACHE_ROOT', first)
+    documentationCache('isolation', []).get('same', compute)
+    vi.stubEnv('SAX_DOCS_CACHE_ROOT', second)
+    documentationCache('isolation', []).get('same', compute)
+    vi.stubEnv('SAX_DOCS_CACHE_ROOT', first)
+    documentationCache('isolation', []).get('same', compute)
+    expect(compute).toHaveBeenCalledTimes(2)
+    flushDocumentationCaches()
+    expect(
+      readFileSync(join(first, 'sax-data/isolation.json'), 'utf8'),
+    ).toContain('value')
+    expect(
+      readFileSync(join(second, 'sax-data/isolation.json'), 'utf8'),
+    ).toContain('value')
+  })
+
+  it('reuses CSS across restarts and refreshes it after a source edit', async () => {
+    const root = fixture(),
+      cache = join(root, 'generated')
+    vi.stubEnv('SAX_DOCS_CACHE_ROOT', cache)
+    const styles = join(root, 'packages/theme-chalk/src')
+    mkdirSync(join(styles, 'dark'), { recursive: true })
+    mkdirSync(join(root, 'docs/.vuepress/node'), { recursive: true })
+    writeFileSync(join(styles, 'index.scss'), '.probe { color: red; }')
+    writeFileSync(join(styles, 'dark/css-vars.scss'), '.dark { --probe: 1; }')
+    writeFileSync(join(root, 'pnpm-lock.yaml'), 'fixture')
+    writeFileSync(join(root, 'docs/.vuepress/node/devStyles.ts'), 'fixture')
+    const first = documentationStylesPlugin(root),
+      warm = documentationStylesPlugin(root)
+    const resolveStyle = (plugin: typeof first) =>
+      (plugin.resolveId as (id: string) => Promise<string>)(
+        '@vuesax-alpha/theme-chalk/src/index.scss',
+      )
+    const dispose = (plugin: typeof first) =>
+      (plugin.closeBundle as () => Promise<void>)()
+    try {
+      const output = await resolveStyle(first)
+      expect(output).toBe(join(cache, 'sax-styles/0.css'))
+      expect(readFileSync(output, 'utf8')).toContain('color: red')
+      const before = fileKey(output)
+      await resolveStyle(warm)
+      expect(fileKey(output)).toBe(before)
+      writeFileSync(join(styles, 'index.scss'), '.probe { color: blue; }')
+      await resolveStyle(first)
+      expect(readFileSync(output, 'utf8')).toContain('color: blue')
+    } finally {
+      await dispose(first)
+      await dispose(warm)
+    }
+  })
+
   it('keeps full mode by default, validates scope and includes nested Table pages', () => {
     const docs = resolve(__dirname, '../../docs')
     expect(readDevScope(docs, {}).pagePatterns).toBeUndefined()

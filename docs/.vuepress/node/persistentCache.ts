@@ -71,6 +71,12 @@ export class PersistentCache {
 }
 
 const caches = new Map<string, PersistentCache>()
+/** Override all generated-data caches together without clearing normal dev state. */
+export const documentationCacheRoot = (env = process.env) =>
+  env.SAX_DOCS_CACHE_ROOT
+    ? path.resolve(env.SAX_DOCS_CACHE_ROOT)
+    : path.resolve(import.meta.dirname, '../.cache')
+
 export const documentationCache = (name: string, sources: string[]) => {
   const version = contentKey(
     [...sources, path.resolve(import.meta.dirname, '../../../pnpm-lock.yaml')]
@@ -78,14 +84,12 @@ export const documentationCache = (name: string, sources: string[]) => {
       .map((file) => readFileSync(file, 'utf8'))
       .join('\n'),
   )
-  const key = `${name}:${version}`
+  const root = documentationCacheRoot()
+  const key = `${root}:${name}:${version}`
   if (!caches.has(key))
     caches.set(
       key,
-      new PersistentCache(
-        path.resolve(import.meta.dirname, '../.cache/sax-data', `${name}.json`),
-        version,
-      ),
+      new PersistentCache(path.join(root, 'sax-data', `${name}.json`), version),
     )
   return caches.get(key)!
 }

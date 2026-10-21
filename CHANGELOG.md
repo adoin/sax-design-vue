@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Improve documentation cold-page loading with development-only component imports, batched icon registration, native Sass caching and deferred Playground loading; add isolated cold/warm profiling options.
+
 ### 2.8.1 — 2026-10-21
 
 - Preserve model-driven Form props, validators, events and dynamic slot types through shared generic declarations; include the generated control id in slot scope.

@@ -33,6 +33,7 @@
     "@vuepress/plugin-prismjs": "2.0.0-rc.132",
     "@vuepress/plugin-register-components": "2.0.0-rc.132",
     "@vuepress/plugin-theme-data": "2.0.0-rc.131",
+    "sass-embedded": "1.105.1",
     "vuepress": "2.0.0-rc.31"
   }
 }

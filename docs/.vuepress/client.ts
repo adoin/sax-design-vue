@@ -1,6 +1,7 @@
 import { defineClientConfig } from '@vuepress/client'
 
-import SaxDesignVue, { ID_INJECTION_KEY } from 'sax-design-vue'
+import { ID_INJECTION_KEY } from '@vuesax-alpha/hooks/use-id'
+import installDocumentationComponents from 'virtual:sax-docs-installer'
 import '@vuesax-alpha/theme-chalk/src/index.scss'
 import '@vuesax-alpha/theme-chalk/src/dark/css-vars.scss'
 
@@ -50,8 +51,7 @@ export default defineClientConfig({
       prefix: 1,
       current: 0,
     })
-    // @ts-expect-error
-    app.use(SaxDesignVue)
+    installDocumentationComponents(app)
     router.beforeEach((to, from) => {
       // active-header-links temporarily removes scrollBehavior while replacing
       // the current hash. The Table API is a real overview route, so clearing

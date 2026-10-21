@@ -7,17 +7,19 @@ import {
   writeFileSync,
 } from 'node:fs'
 import path from 'node:path'
-import { contentKey, fileKey } from './persistentCache'
+import { contentKey, documentationCacheRoot, fileKey } from './persistentCache'
 import type { Plugin } from 'vite'
+import type { AsyncCompiler } from 'sass-embedded'
 
 /** Warm restarts reuse Sass output; source changes still regenerate live CSS. */
 export const documentationStylesPlugin = (projectRoot: string): Plugin => {
   const sourceRoot = path.join(projectRoot, 'packages/theme-chalk/src')
-  const outputRoot = path.join(projectRoot, 'docs/.vuepress/.cache/sax-styles')
+  const outputRoot = path.join(documentationCacheRoot(), 'sax-styles')
   const entries = ['index.scss', 'dark/css-vars.scss']
   let signature = ''
   let pending: Promise<void> | undefined
   let changedDuringCompile = false
+  let compiler: Promise<AsyncCompiler> | undefined
   const writeAtomic = (file: string, value: string) => {
     const temporary = `${file}.${process.pid}.tmp`
     writeFileSync(temporary, value)
@@ -53,26 +55,37 @@ export const documentationStylesPlugin = (projectRoot: string): Plugin => {
       )
         return
     }
-    const { compileAsync } = await import('sass')
+    const started = performance.now()
+    const { initAsyncCompiler } = await import('sass-embedded')
+    compiler ??= initAsyncCompiler()
+    const currentCompiler = await compiler
     mkdirSync(outputRoot, { recursive: true })
     await Promise.all(
       entries.map(async (entry, index) => {
-        const result = await compileAsync(path.join(sourceRoot, entry), {
-          style: 'expanded',
-          sourceMap: false,
-          silenceDeprecations: [
-            'global-builtin',
-            'color-functions',
-            'if-function',
-            'import',
-            'new-global',
-          ],
-        })
+        const result = await currentCompiler.compileAsync(
+          path.join(sourceRoot, entry),
+          {
+            style: 'expanded',
+            sourceMap: false,
+            silenceDeprecations: [
+              'global-builtin',
+              'color-functions',
+              'if-function',
+              'import',
+              'new-global',
+            ],
+          },
+        )
         writeAtomic(path.join(outputRoot, `${index}.css`), result.css)
       }),
     )
     signature = next
     writeAtomic(path.join(outputRoot, 'signature'), signature)
+    if (process.env.SAX_DOCS_PROFILE)
+      // eslint-disable-next-line no-console
+      console.info(
+        `[docs-dev] cold Sass: ${(performance.now() - started).toFixed(0)}ms`,
+      )
   }
   const ensure = async () => {
     pending ??= (async () => {
@@ -89,6 +102,12 @@ export const documentationStylesPlugin = (projectRoot: string): Plugin => {
     name: 'sax-documentation-style-cache',
     apply: 'serve',
     enforce: 'pre',
+    async closeBundle() {
+      await pending?.catch(() => {})
+      const current = compiler
+      compiler = undefined
+      if (current) await (await current).dispose()
+    },
     async resolveId(id) {
       const normalized = id.replaceAll('\\', '/')
       const index = entries.findIndex(

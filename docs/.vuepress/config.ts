@@ -4,8 +4,8 @@ import { fileURLToPath } from 'node:url'
 import fg from 'fast-glob'
 import { viteBundler } from '@vuepress/bundler-vite'
 import { defineUserConfig } from 'vuepress'
-import { saxIcons } from 'sax-design-vue-iconify/vite'
 import saxIconConfig from '../../sax-icons.config'
+import { documentationIconsPlugin } from './node/devIcons'
 import { collectDocumentationIconNames } from './node/documentationIcons'
 import {
   collectFocusedExamples,
@@ -14,9 +14,11 @@ import {
 } from './node/devScope'
 import {
   documentationCache,
+  documentationCacheRoot,
   flushDocumentationCaches,
 } from './node/persistentCache'
 import { documentationStylesPlugin } from './node/devStyles'
+import { documentationImportsPlugin } from './node/devImports'
 import {
   enNavbar,
   enSearchData,
@@ -56,20 +58,25 @@ const localizedHeadingSlugify = createLocalizedHeadingSlugify(
 export default defineUserConfig({
   port: 8585,
   pagePatterns: devScope.pagePatterns,
-  ...(devScope.focused
+  ...(process.env.SAX_DOCS_CACHE_ROOT
     ? {
-        temp: path.resolve(
-          __dirname,
-          '.temp/scopes',
-          `${devScope.component || 'all'}-${devScope.locale}`,
-        ),
-        cache: path.resolve(
-          __dirname,
-          '.cache/scopes',
-          `${devScope.component || 'all'}-${devScope.locale}`,
-        ),
+        temp: path.join(documentationCacheRoot(), 'vuepress-temp'),
+        cache: path.join(documentationCacheRoot(), 'vuepress-cache'),
       }
-    : {}),
+    : devScope.focused
+      ? {
+          temp: path.resolve(
+            __dirname,
+            '.temp/scopes',
+            `${devScope.component || 'all'}-${devScope.locale}`,
+          ),
+          cache: path.resolve(
+            __dirname,
+            '.cache/scopes',
+            `${devScope.component || 'all'}-${devScope.locale}`,
+          ),
+        }
+      : {}),
   plugins: [
     {
       name: 'sax-docs-development-data',
@@ -91,6 +98,9 @@ export default defineUserConfig({
   ],
   bundler: viteBundler({
     viteOptions: {
+      ...(process.env.SAX_DOCS_CACHE_ROOT
+        ? { cacheDir: path.join(documentationCacheRoot(), 'vite') }
+        : {}),
       server: {
         watch: {
           ignored: [
@@ -140,6 +150,7 @@ export default defineUserConfig({
       // client.ts imports the registry already; avoid a duplicate HTML entry.
       plugins: [
         documentationStylesPlugin(projRoot),
+        documentationImportsPlugin(projRoot),
         {
           name: 'sax-docs-startup-timing',
           apply: 'serve',
@@ -157,7 +168,7 @@ export default defineUserConfig({
             })
           },
         },
-        saxIcons({
+        documentationIconsPlugin({
           ...saxIconConfig,
           autoRegister: false,
           safelist: collectDocumentationIconNames(

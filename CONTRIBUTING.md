@@ -51,6 +51,32 @@ Ah, now you have installed the code correctly, you can choose:
 pnpm run docs:dev
 ```
 
+For component work, limit the development pages and examples:
+
+```shell
+pnpm run docs:dev -- --component file-manager --locale zh
+```
+
+To reproduce a first start without clearing the normal development cache, use
+a new directory for each cold run and a separate port:
+
+```shell
+pnpm run docs:dev -- --cache-root D:/tmp/sax-docs-cold/run-1 --profile --port 8596
+```
+
+Use the same directory again to measure a warm restart; use `run-2` for another
+cold run. The directory isolates VuePress generated files, Vite dependencies,
+documentation metadata and compiled Sass. It does not clear the package store,
+operating-system file cache or browser cache. Keep other builds idle while
+comparing runs. Measure both the terminal's ready time and the browser's first
+page load: Vite compiles requested modules after the server is ready. Refreshing
+an already-open page on the same process is a separate, much warmer measurement.
+
+The documentation development server loads components on demand, batches known
+icons and caches native Sass output. Code and Playground source remains the
+original public example; the editor workspace loads when opened. Production
+builds retain the normal component installer and icon extraction.
+
 ### Making changes to the component instead of website
 
 ```shell

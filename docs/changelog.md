@@ -7,6 +7,8 @@ description: Releases and changes in Sax Design Vue.
 
 ## Unreleased
 
+- Improve documentation development cold loads with on-demand components, batched icons, native Sass caching and deferred Playground loading; support isolated caches for repeatable profiling.
+
 ## 2.8.1
 
 - Restore model inference for Form items, validators and events, and include control IDs in dynamic slot types.
