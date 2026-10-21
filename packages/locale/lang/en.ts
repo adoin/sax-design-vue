@@ -7,6 +7,7 @@ export default {
       hidden: 'Hidden',
       hide: 'Hide',
       unhide: 'Unhide',
+      sort: 'Sort',
       sortBy: 'Sort by {name}',
       ascending: 'Ascending',
       descending: 'Descending',

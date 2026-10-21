@@ -7,6 +7,7 @@ export default {
       hidden: '已隐藏',
       hide: '隐藏',
       unhide: '取消隐藏',
+      sort: '排序',
       sortBy: '按{name}排序',
       ascending: '升序',
       descending: '降序',

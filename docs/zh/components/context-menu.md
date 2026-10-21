@@ -2,22 +2,22 @@
 PROPS:
   - name: min-width
     type: Number
-    values: "像素"
+    values: '像素'
     description: 设置菜单最小宽度，不超出视口。
     default: '184'
   - name: items
     type: ContextMenuItem[]
-    values: "ContextMenuItem[]"
+    values: 'ContextMenuItem[]'
     description: 菜单项配置。
     default: '[]'
   - name: v-model
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 控制菜单显示状态。
     default: 'false'
   - name: disabled
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: 禁用右键触发。
     default: 'false'
 EXPOSES:
@@ -39,7 +39,7 @@ EVENTS:
   - name: close
     type: '() => void'
     description: 菜单关闭时触发。
-description: "右键菜单。"
+description: '右键菜单。'
 ---
 
 # Context Menu 右键菜单
@@ -69,6 +69,8 @@ description: "右键菜单。"
 @[code{49-147}](../../.vuepress/components/context-menu/default.vue)
 
 </template>
+
+菜单项的 `children` 可配置多级子菜单。悬停、点击或按右方向键展开；左方向键和 Escape 返回上一级。上下方向键跳过禁用项，只有选择叶子项才触发 `select`。每级菜单通过共享 Popper 定位，接近视口边缘时自动翻转。
 
 </card>
 

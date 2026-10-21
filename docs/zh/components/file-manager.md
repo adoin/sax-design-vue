@@ -196,7 +196,7 @@ EXPOSES:
 
 ## 搜索与工具栏
 
-默认工具栏仅包含名称搜索和单个视图切换按钮。搜索匹配当前目录中文件和文件夹的名称。排序在内容区空白处右键菜单中操作；`sortOptions` 配置依据，`compare(a, b)` 定义比较规则。`v-model:sort` 保存 `{ key, order }`，方向为 `ascending` 或 `descending`，默认按名称升序。`behavior.foldersFirst` 控制文件夹优先。
+默认工具栏仅包含名称搜索和单个视图切换按钮。搜索匹配当前目录中文件和文件夹的名称。在内容区空白处右键，展开“排序”二级菜单选择排序依据和升降序；`sortOptions` 配置依据，`compare(a, b)` 定义比较规则。`v-model:sort` 保存 `{ key, order }`，方向为 `ascending` 或 `descending`，默认按名称升序。`behavior.foldersFirst` 控制文件夹优先。
 
 `toolbar` 插槽替换整行，提供 `search` / `setSearch`、`view` / `setView` / `toggleView`，以及 `directory`、`selection`、`pending`、`showHidden` / `setShowHidden`、`sort` / `setSort`、`sortOptions`。
 

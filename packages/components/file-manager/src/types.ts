@@ -95,6 +95,7 @@ export interface FileManagerContext {
   defaultItems?: FileManagerMenuItem[]
 }
 export interface FileManagerMenuItem extends ContextMenuItem {
+  children?: FileManagerMenuItem[]
   action?: FileManagerAction
   sort?: FileManagerSort
 }

@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Support nested Context Menu items and place File Manager sort criteria and directions in a Sort submenu.
+
 - Refine File Manager with a replaceable search/view toolbar, blank-space custom sorting, configurable Home/folder/file graphics and extension thumbnails, optional tree files, and guarded hide/unhide operations.
 
 - Generate Vue declarations from public SFC contracts and reuse component/install types by reference, reducing repeated setup and child-component inference while preserving typed props, events, slots and exposed methods.

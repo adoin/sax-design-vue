@@ -8,10 +8,10 @@ import {
   shallowRef,
   watch,
 } from 'vue'
-import { SIcon } from '@vuesax-alpha/components/icon'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SFocusTrap } from '@vuesax-alpha/components/focus-trap'
 import { useNamespace, useShape } from '@vuesax-alpha/hooks'
+import ContextMenuItems from './context-menu-items.vue'
 import { contextMenuEmits, contextMenuProps } from './context-menu'
 import { claimContextMenu, releaseContextMenu } from './session'
 import type { ContextMenuItem } from './context-menu'
@@ -272,19 +272,13 @@ defineExpose({ show, close })
           @contextmenu.prevent
           @keydown="onKeydown"
         >
-          <button
-            v-for="(item, index) in items"
-            :key="item.value ?? `${item.label}-${index}`"
-            :class="[ns.e('item'), { 'is-divided': item.divided }]"
-            type="button"
-            role="menuitem"
-            tabindex="-1"
-            :disabled="item.disabled"
-            @click="select(item)"
-          >
-            <SIcon v-if="item.icon" :name="item.icon" />
-            <span>{{ item.label }}</span>
-          </button>
+          <ContextMenuItems
+            v-if="open"
+            :items="items"
+            :min-width="minWidth"
+            @select="select"
+            @dismiss="close()"
+          />
           <slot name="menu" :close="close" />
         </div>
       </SFocusTrap>

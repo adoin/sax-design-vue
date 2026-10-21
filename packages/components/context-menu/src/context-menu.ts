@@ -8,6 +8,7 @@ export interface ContextMenuItem {
   icon?: string
   disabled?: boolean
   divided?: boolean
+  children?: ContextMenuItem[]
   keepOpen?: boolean
 }
 

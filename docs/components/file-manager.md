@@ -196,7 +196,7 @@ Double-click folders to open them. Click to select, Ctrl / ⌘ + click to toggle
 
 ## Search and toolbar
 
-The toolbar contains name search and one view toggle. Search matches file and folder names in the current directory. Right-click blank content space to sort. Configure criteria with `sortOptions` and optional `compare(a, b)`. Bind `v-model:sort` to `{ key, order }`, with `ascending` or `descending` order. Name ascending is the default; `behavior.foldersFirst` controls folder grouping.
+The toolbar contains name search and one view toggle. Search matches file and folder names in the current directory. Right-click blank content space and open the Sort submenu to choose a criterion or direction. Configure criteria with `sortOptions` and optional `compare(a, b)`. Bind `v-model:sort` to `{ key, order }`, with `ascending` or `descending` order. Name ascending is the default; `behavior.foldersFirst` controls folder grouping.
 
 The `toolbar` slot replaces the whole row. It exposes `search` / `setSearch`, `view` / `setView` / `toggleView`, plus `directory`, `selection`, `pending`, `showHidden` / `setShowHidden`, `sort` / `setSort` and `sortOptions`.
 

@@ -31,7 +31,7 @@ modules:
 
 - The default toolbar is name search plus one changing grid/list icon. No Select, sort-direction control or create/info buttons appear there. Search matches current-directory file and folder names only.
 - The toolbar scoped slot replaces the entire row and exposes search/view state and setters/toggle, selection, directory, pending state, sorting and hidden visibility hooks.
-- Blank-content context menus expose configured sort criteria and ascending/descending order. Custom comparators use stable name tie-breaking; foldersFirst remains independent. Custom menu factories can compose context.defaultItems.
+- Blank-content context menus expose one Sort parent item; its submenu contains configured sort criteria and ascending/descending order. Custom comparators use stable name tie-breaking; foldersFirst remains independent. Custom menu factories can compose context.defaultItems.
 - Home replaces visible root text; rootLabel remains an accessible label/tooltip. Folder closed/open graphics share the content folder color. Icons accept registered SIcon names or image sources.
 - treeShowFiles optionally includes files. Entry thumbnail, normalized extension thumbnail, wildcard mapping and generic file glyph form the shared tree/content fallback order. Extension values may be SVG/PNG URLs or icon configurations.
 - Files/folders support hidden metadata, dot-name compatibility and explicit false overrides. The eye in the history area controls both panes. Hide/unhide uses the shared operation planner, permissions.hide and async guard. Local options override global fileManager configuration.

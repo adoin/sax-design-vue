@@ -198,12 +198,23 @@ describe('FileManager interactions', () => {
     await settle()
     await manager.get('[role="listbox"]').trigger('contextmenu')
     await settle()
-    await clickMenu('Sort by Name length')
+    expect(
+      document.querySelector('[role="menuitem"][aria-haspopup="menu"]')
+        ?.textContent,
+    ).toContain('Sort')
+    expect(
+      [...document.querySelectorAll('[role="menuitem"]')].some((item) =>
+        item.textContent?.includes('Name length'),
+      ),
+    ).toBe(false)
+    await clickMenu('Sort')
+    await clickMenu('Name length')
     expect(manager.emitted('update:sort')?.at(-1)).toEqual([
       { key: 'length', order: 'ascending' },
     ])
     await manager.get('[role="listbox"]').trigger('contextmenu')
     await settle()
+    await clickMenu('Sort')
     await clickMenu('Descending')
     expect(manager.emitted('update:sort')?.at(-1)).toEqual([
       { key: 'length', order: 'descending' },

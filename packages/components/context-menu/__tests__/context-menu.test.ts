@@ -52,6 +52,79 @@ describe('shared context menu', () => {
     return { wrapper, menus, menu }
   }
 
+  it('opens a teleported submenu, navigates by keyboard and emits only leaf selections', async () => {
+    const leaf = { label: 'Name', value: 'name' }
+    const wrapper = mount(SContextMenu, {
+      attachTo: document.body,
+      props: {
+        items: [
+          {
+            label: 'Sort',
+            value: 'sort',
+            children: [
+              { label: 'Disabled', disabled: true },
+              leaf,
+              { label: 'Descending', value: 'desc' },
+            ],
+          },
+          { label: 'Unavailable', disabled: true, children: [leaf] },
+        ],
+      },
+      slots: { default: () => h('button', 'Origin') },
+    })
+    wrappers.push(wrapper)
+    await wrapper.get('button').trigger('contextmenu')
+    await settle()
+    const parent = document.querySelector<HTMLButtonElement>(
+      '[aria-haspopup="menu"]',
+    )!
+    expect(parent.getAttribute('aria-expanded')).toBe('false')
+    parent.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    await settle()
+    const submenu = document.querySelector('[role="menu"][aria-label="Sort"]')!
+    expect(submenu).not.toBeNull()
+    expect(wrapper.emitted('select')).toBeUndefined()
+    expect(document.activeElement?.textContent).toContain('Name')
+    parent.dispatchEvent(new MouseEvent('mouseleave'))
+    await new Promise((resolve) => setTimeout(resolve, 220))
+    expect(parent.getAttribute('aria-expanded')).toBe('true')
+    document.activeElement?.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'ArrowDown',
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    await settle()
+    expect(document.activeElement?.textContent).toContain('Descending')
+    document.activeElement?.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'ArrowLeft',
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    await settle()
+    expect(document.activeElement).toBe(parent)
+    expect(
+      document.querySelector('[role="menu"][aria-label="Sort"]'),
+    ).toBeNull()
+    parent.dispatchEvent(new MouseEvent('mouseenter'))
+    await settle()
+    const child = [
+      ...document.querySelectorAll<HTMLButtonElement>('[role="menuitem"]'),
+    ].find((item) => item.textContent === 'Name')!
+    child.click()
+    await settle()
+    expect(wrapper.emitted('select')).toEqual([[leaf]])
+    expect(wrapper.emitted('close')).toHaveLength(1)
+  })
   it.each([
     ['contextmenu', {}],
     ['keydown', { key: 'ContextMenu' }],

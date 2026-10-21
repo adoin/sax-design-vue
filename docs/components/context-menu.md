@@ -2,22 +2,22 @@
 PROPS:
   - name: min-width
     type: Number
-    values: "Pixels"
+    values: 'Pixels'
     description: Set the minimum menu width, constrained to the viewport.
     default: '184'
   - name: items
     type: ContextMenuItem[]
-    values: "ContextMenuItem[]"
+    values: 'ContextMenuItem[]'
     description: Menu item definitions.
     default: '[]'
   - name: v-model
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Controls menu visibility.
     default: 'false'
   - name: disabled
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Disable the context trigger.
     default: 'false'
 EXPOSES:
@@ -39,7 +39,7 @@ EVENTS:
   - name: close
     type: '() => void'
     description: Emitted when the menu closes.
-description: "Right-click context menu."
+description: 'Right-click context menu.'
 ---
 
 # Context Menu
@@ -69,6 +69,8 @@ Right-click or focus the trigger and press Shift + F10 / the context-menu key. A
 @[code{49-147}](../.vuepress/components/context-menu/default.vue)
 
 </template>
+
+Use item `children` to define submenus. Hover, click or press Right to open; Left and Escape return to the parent. Up/Down skip disabled items, and only leaf selections emit `select`. Each level uses the shared Popper with viewport flipping.
 
 </card>
 

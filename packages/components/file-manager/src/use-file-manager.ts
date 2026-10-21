@@ -503,20 +503,30 @@ export function useFileManager(
     })
     if (!ctx.entry && ctx.source === 'content')
       return [
-        ...sortOptions.value.map((option) => ({
-          value: `sort:${option.key}`,
-          label: `${label('sortBy', { name: option.label })}${sort.value.key === option.key ? ' ✓' : ''}`,
-          sort: { key: option.key, order: sort.value.order },
-        })),
         ...(sortOptions.value.length
-          ? (['ascending', 'descending'] as const)
-          : []
-        ).map((order, i) => ({
-          value: `sort-order:${order}`,
-          label: `${label(order)}${sort.value.order === order ? ' ✓' : ''}`,
-          sort: { key: sort.value.key, order },
-          divided: i === 0,
-        })),
+          ? [
+              {
+                value: 'sort',
+                label: label('sort'),
+                children: [
+                  ...sortOptions.value.map((option) => ({
+                    value: `sort:${option.key}`,
+                    label: `${option.label}${sort.value.key === option.key ? ' ✓' : ''}`,
+                    sort: { key: option.key, order: sort.value.order },
+                  })),
+                  ...(sortOptions.value.length
+                    ? (['ascending', 'descending'] as const)
+                    : []
+                  ).map((order, i) => ({
+                    value: `sort-order:${order}`,
+                    label: `${label(order)}${sort.value.order === order ? ' ✓' : ''}`,
+                    sort: { key: sort.value.key, order },
+                    divided: i === 0,
+                  })),
+                ],
+              },
+            ]
+          : []),
         item('paste', !clipboard.value || !behavior.value.clipboard, true),
         item('new-folder'),
         item('select-all'),

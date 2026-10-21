@@ -26,3 +26,12 @@ Added on 2026-10-10: English and Chinese `nested` examples show three visible ne
 ## Consecutive-opening verification
 
 The initial tests covered event bubbling, but not menus retained from separate opening events. The session contract now covers outer → middle → inner → outer without manually closing between triggers. Thirteen component tests verify pointer/keyboard replacement, old-focus suppression, cross-root and slotless imperative/model opening and owner cleanup alongside the existing nesting behavior. Browser verification confirmed one visible panel after each consecutive right-click, including replacement without a visible exit overlap. Paired documentation states the per-document mutual-exclusion policy.
+
+## Cascading item submenus (2026-10-21)
+
+- ContextMenuItem.children represents a submenu within the current session, distinct from independently nested trigger wrappers. Only enabled leaf items emit select; opening a parent does not execute an action.
+- Each submenu uses shared SPopper positioning and Teleport with right-start placement, viewport flipping and inherited shape. No separate positioning engine or document event listener is added.
+- Hover/click opens a branch; Right enters it, Up/Down/Home/End navigate enabled siblings, and Left/Escape return to its parent. Escape at the root and Tab dismiss the session. Leaf selection returns focus through parent triggers before the root restores the origin.
+- Pointer transit has a short close delay, descendant activity cancels ancestor closing, and keyboard focus inside a submenu prevents premature hover closing. Teardown clears timers and removes child layers.
+- File Manager uses a single Sort parent in its blank-content menu, with configured criteria and ascending/descending leaf items separated into groups.
+- Verification: 39 tests pass across Context Menu and File Manager, including disabled-item navigation, keyboard entry/back, leaf-only selection, focus retention during mouseleave and custom comparator/direction selection. Source typing, scoped ESLint, 22 documentation checks, full library build, style entry verification and strict declaration consumer checks pass. Browser validation confirms the two visible levels and a successful descending-order selection. Public declarations remain 2,489,622 bytes in total.

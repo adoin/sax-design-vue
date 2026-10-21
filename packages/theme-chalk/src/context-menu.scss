@@ -48,7 +48,9 @@
 }
 .s-context-menu__panel.is-square {
   border-radius: 0;
-  .s-context-menu__item { border-radius: 0; }
+  .s-context-menu__item {
+    border-radius: 0;
+  }
 }
 .s-context-menu__item:hover:not(:disabled),
 .s-context-menu__item:focus-visible:not(:disabled) {
@@ -84,4 +86,14 @@
   opacity: 0;
   transform: scale(0.96);
   transform-origin: top left;
+}
+
+.s-context-menu__items {
+  display: contents;
+}
+.s-context-menu__submenu-arrow {
+  width: 14px;
+  height: 14px;
+  margin-inline-start: auto;
+  flex-shrink: 0;
 }
