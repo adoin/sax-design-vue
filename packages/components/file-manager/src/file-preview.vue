@@ -50,6 +50,7 @@ const renderDefault = () =>
     <FileGlyph
       v-else
       kind="file"
+      :extension="resolveExtension(context.entry)"
       :graphic="
         graphic ||
         (context.entry.thumbnail ? { src: context.entry.thumbnail } : undefined)

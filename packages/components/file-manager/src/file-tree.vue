@@ -2,7 +2,7 @@
 import { computed, nextTick, useTemplateRef } from 'vue'
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
 import FileGlyph from './file-glyph.vue'
-import { isFileHidden } from './file-model'
+import { isFileHidden, resolveExtension } from './file-model'
 import type { FileManagerEntry, FileManagerId } from './types'
 import type { VirtualListInstance } from '../../virtual-list'
 import type { FileManagerState } from './use-file-manager'
@@ -226,6 +226,7 @@ const onKey = (event: KeyboardEvent, entry: FileManagerEntry) => {
               @keydown="onKey($event, row.entry)"
             >
               <FileGlyph
+                :extension="resolveExtension(row.entry)"
                 :kind="
                   row.entry.kind === 'folder'
                     ? expanded.has(row.entry.id) || directoryId === row.entry.id

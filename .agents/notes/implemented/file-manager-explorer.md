@@ -36,3 +36,9 @@ modules:
 - treeShowFiles optionally includes files. Entry thumbnail, normalized extension thumbnail, wildcard mapping and generic file glyph form the shared tree/content fallback order. Extension values may be SVG/PNG URLs or icon configurations.
 - Files/folders support hidden metadata, dot-name compatibility and explicit false overrides. The eye in the history area controls both panes. Hide/unhide uses the shared operation planner, permissions.hide and async guard. Local options override global fileManager configuration.
 - Verification: 25 File Manager tests pass including custom comparators, complete toolbar replacement, hidden operations, SVG/PNG thumbnail fallback and global/local precedence. All 22 documentation checks, source typing, scoped lint, full library build and 239-page documentation build pass. Both changed examples in both languages were checked through Code and Playground. Declarations total 2,488,377 bytes, largest 74,394 bytes; strict consumer fixtures also validate toolbar hooks and invalid sort directions.
+
+## Short-extension fallback glyphs (2026-10-21)
+
+- When no entry/extension/wildcard thumbnail or custom file icon is used, the default SVG includes a text node for a normalized extension of one or two Unicode code points. Longer extensions and extensionless names retain the plain file glyph. No raw SVG string interpolation is used.
+- Tree, grid and list share the same glyph implementation. Existing custom preview renderers and graphic overrides retain priority; name/extension updates refresh the label.
+- Verification: 26 File Manager tests cover both short Latin and Chinese extensions, long/absent extensions, tree/list parity, thumbnail precedence and renaming updates.

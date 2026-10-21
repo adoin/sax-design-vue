@@ -604,6 +604,43 @@ describe('FileManager interactions', () => {
     await settle()
     expect(manager.emitted('update:tileSize')).toHaveLength(1)
   })
+  it('labels only short fallback extensions and preserves custom thumbnail priority across tree and views', async () => {
+    const entries: FileManagerEntry[] = [
+      'note.md',
+      'code.js',
+      'photo.png',
+      'README',
+      'data.文档',
+    ].map((name, id) => ({ id, parentId: null, name, kind: 'file' }))
+    const wrapper = mount(FileManager, {
+      props: { modelValue: entries, treeShowFiles: true },
+    })
+    await settle()
+    const labels = () =>
+      wrapper
+        .findAll('.s-file-manager__preview svg text')
+        .map((node) => node.text())
+    expect(labels().sort()).toEqual(['js', 'md', '文档'].sort())
+    expect(
+      wrapper
+        .findAll('.s-file-manager__tree-name svg text')
+        .map((node) => node.text())
+        .sort(),
+    ).toEqual(['js', 'md', '文档'].sort())
+    await wrapper.get('button[aria-label="List view"]').trigger('click')
+    expect(labels().sort()).toEqual(['js', 'md', '文档'].sort())
+    await wrapper.setProps({ thumbnails: { md: '/markdown.svg' } })
+    expect(
+      wrapper
+        .get('[role="option"][aria-label="note.md"] img')
+        .attributes('src'),
+    ).toBe('/markdown.svg')
+    expect(labels()).not.toContain('md')
+    await wrapper.setProps({
+      modelValue: [{ ...entries[1], name: 'code.long' }],
+    })
+    expect(labels()).toEqual([])
+  })
   it('renders arbitrary extension previews and a folder slot without treating data as HTML', () => {
     const preview = mount(FilePreview, {
       props: {

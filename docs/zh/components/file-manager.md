@@ -236,7 +236,7 @@ EXPOSES:
 
 `folder-preview` 为目录提供插槽，上例按 `parentId` 查找四张图片组成封面。文件使用 `previewRenderers`，按数组顺序选择首个匹配项；每项可设置 `extensions`（忽略大小写与开头的点）、`mimeTypes`（支持 `image/*`）、`match(entry)` 和 `render(context)`。通过 Vue 的 `h()` 返回节点，避免根据任意扩展名创建插槽。渲染器接收 `entry`、`view`、`selected`、`size`。未匹配时使用 `thumbnail`，否则显示默认文件图标。图片加载、媒体播放器或复杂预览需由渲染器自行处理；不要把不可信文本作为 HTML。
 
-根入口使用 Home 图标；`icons.home` 自定义图形，`rootLabel` 提供无障碍名称和提示。`icons.folder` / `folderOpen` 区分目录开合。`treeShowFiles` 让左侧树显示文件。`thumbnails` 按后缀匹配，忽略大小写和前导点；字符串为 SVG/PNG 等图片 URL，`{ icon: "lo-home" }` 使用已注册图标，`{ src: "/file.svg" }` 使用图片。优先级为记录的 `thumbnail`、后缀映射、`*` 映射、默认文件图标。树和内容区共享此规则。文件夹插槽的 `renderDefault()` 可复用默认图标。
+根入口使用 Home 图标；`icons.home` 自定义图形，`rootLabel` 提供无障碍名称和提示。`icons.folder` / `folderOpen` 区分目录开合。`treeShowFiles` 让左侧树显示文件。`thumbnails` 按后缀匹配，忽略大小写和前导点；字符串为 SVG/PNG 等图片 URL，`{ icon: "lo-home" }` 使用已注册图标，`{ src: "/file.svg" }` 使用图片。优先级为记录的 `thumbnail`、后缀映射、`*` 映射、默认文件图标。没有匹配缩略图或自定义文件图标时，一至两个字符的后缀会显示在默认 SVG 内；更长或没有后缀时使用普通文件图标。树和内容区共享此规则。文件夹插槽的 `renderDefault()` 可复用默认图标。
 
 文件和文件夹可设置 `hidden: true`。未指定时点开头名称视为隐藏，显式 `hidden: false` 可覆盖。左上眼睛同时控制树和内容区；右键隐藏操作通过 `set-hidden` 更新记录，受 `permissions.hide` 与 `beforeOperation` 约束。自定义右键菜单可组合 `context.defaultItems` 保留默认操作。
 

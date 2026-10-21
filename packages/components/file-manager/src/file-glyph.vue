@@ -16,6 +16,7 @@ const props = defineProps<{
     | 'grid'
     | 'list'
   graphic?: FileManagerGraphic
+  extension?: string
 }>()
 const custom = computed(() =>
   typeof props.graphic === 'string' ? { icon: props.graphic } : props.graphic,
@@ -27,6 +28,12 @@ watch(
     failed.value = false
   },
 )
+const extensionLabel = computed(() => {
+  const extension = props.extension ?? ''
+  return props.kind === 'file' && Array.from(extension).length <= 2
+    ? extension
+    : ''
+})
 const paths: Record<string, string> = {
   back: 'm15 5-7 7 7 7',
   forward: 'm9 5 7 7-7 7',
@@ -76,6 +83,19 @@ const paths: Record<string, string> = {
       stroke-linejoin="round"
     >
       <path :d="paths[kind]" />
+      <text
+        v-if="extensionLabel"
+        x="12.5"
+        y="15.5"
+        text-anchor="middle"
+        fill="currentColor"
+        stroke="none"
+        font-family="sans-serif"
+        font-size="4.5"
+        font-weight="600"
+      >
+        {{ extensionLabel }}
+      </text>
     </svg>
   </span>
 </template>

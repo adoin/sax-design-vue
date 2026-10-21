@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Show one- or two-character extensions inside fallback File Manager SVG file glyphs.
+
 - Support nested Context Menu items and place File Manager sort criteria and directions in a Sort submenu.
 
 - Refine File Manager with a replaceable search/view toolbar, blank-space custom sorting, configurable Home/folder/file graphics and extension thumbnails, optional tree files, and guarded hide/unhide operations.
