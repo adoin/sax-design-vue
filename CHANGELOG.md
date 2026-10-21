@@ -1,6 +1,8 @@
 ## Changelog
 
-### Unreleased
+### 2.7.0 — 2026-10-21
+
+- Require the companion `sax-design-vue-iconify` 1.1.0 package, including the optional browser API entry.
 
 - Add the `signSvgs` Vite plugin for registering project SVG files with glob patterns and names such as `lo-home`, including dynamic component icon props, duplicate-name diagnostics and development file watching.
 - Extract only referenced/safelisted local SVGs, sharing identical data across files and prefixes.

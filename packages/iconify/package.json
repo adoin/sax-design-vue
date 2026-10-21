@@ -1,11 +1,12 @@
 {
   "name": "sax-design-vue-iconify",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Build-time Iconify and local SVG integration for Sax Design Vue",
   "type": "module",
   "license": "MIT",
   "files": [
     "dist",
+    "CHANGELOG.md",
     "src/virtual.d.ts"
   ],
   "main": "./dist/index.cjs",
