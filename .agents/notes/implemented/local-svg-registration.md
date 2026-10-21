@@ -43,5 +43,7 @@ strict Iconify coexistence, unused-file exclusion, content deduplication and gra
 ID isolation. ESM/CJS/declaration builds, Vitest type checking and 22 documentation
 checks pass. The complete library and 237-page documentation builds also pass.
 
-This change is unreleased; the root and both localized public changelogs record it
-under Unreleased.
+Released in sax-design-vue 2.7.0 with sax-design-vue-iconify 1.1.0 on 2026-10-21.
+Both npm publish commands exited successfully. The release archives preserve only
+66 internal control names; all 122 other picker payloads are absent. Root and
+localized public changelogs record the release and intranet/offline usage.

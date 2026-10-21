@@ -1,9 +1,9 @@
 name: Release npm package
+run-name: Release ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.event.release.tag_name }}
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  release:
+    types: [published]
   workflow_dispatch:
     inputs:
       version:
@@ -30,14 +30,15 @@ permissions:
   actions: write
 
 env:
-  TAG_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+  TAG_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.event.release.tag_name }}
 
 concurrency:
-  group: npm-release-${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+  group: npm-release-${{ github.event_name == 'workflow_dispatch' && inputs.version || github.event.release.tag_name }}
   cancel-in-progress: false
 
 jobs:
   publish:
+    if: github.event_name != 'release' || !github.event.release.prerelease
     runs-on: ubuntu-24.04
     outputs:
       source_sha: ${{ steps.source.outputs.sha }}
@@ -52,7 +53,7 @@ jobs:
       - name: Validate release source
         id: source
         run: |
-          node -e "const v = require('./packages/sax-design-vue/package.json').version; if (process.env.TAG_VERSION !== 'v' + v) throw new Error('Release tag must match source package version')"
+          node -e "const v = require('./packages/sax-design-vue/package.json').version; if (!/^v\d+\.\d+\.\d+$/.test(process.env.TAG_VERSION) || process.env.TAG_VERSION !== 'v' + v) throw new Error('Stable release tag must match source package version')"
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "GIT_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
 
@@ -105,9 +106,9 @@ jobs:
             gh release create "$TAG_VERSION" --target "$RELEASE_SOURCE" --notes-file "$RUNNER_TEMP/release-notes.md" --title "sax-design-vue $TAG_VERSION" --latest="$MARK_LATEST"
           fi
 
-      - name: Deploy documentation for manual release
-        if: github.event_name == 'workflow_dispatch' && inputs.deploy_docs
+      - name: Deploy released documentation
+        if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.deploy_docs)
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-        run: gh workflow run pages.yml --ref main
+        run: gh workflow run pages.yml --ref "$TAG_VERSION"
