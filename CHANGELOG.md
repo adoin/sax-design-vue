@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+### 2.8.0 — 2026-10-21
+
 - Show one- or two-character extensions inside fallback File Manager SVG file glyphs.
 
 - Support nested Context Menu items and place File Manager sort criteria and directions in a Sort submenu.

@@ -7,6 +7,8 @@ description: Releases and changes in Sax Design Vue.
 
 ## Unreleased
 
+## 2.8.0
+
 - Show short file extensions inside default File Manager SVG icons when no custom thumbnail matches.
 
 - Add shared context-menu submenus; group File Manager criteria and direction under Sort.
