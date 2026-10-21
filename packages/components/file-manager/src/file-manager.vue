@@ -288,28 +288,31 @@ defineExpose<FileManagerExposes>({
             icon
             type="transparent"
             :aria-label="label('back')"
+            :title="label('back')"
             :disabled="historyIndex <= 0"
             @click="goHistory(-1)"
-            >←</SButton
-          >
+            ><FileGlyph kind="back" :graphic="icons.back"
+          /></SButton>
           <SButton
             :debounce="false"
             icon
             type="transparent"
             :aria-label="label('forward')"
+            :title="label('forward')"
             :disabled="historyIndex >= history.length - 1"
             @click="goHistory(1)"
-            >→</SButton
-          >
+            ><FileGlyph kind="forward" :graphic="icons.forward"
+          /></SButton>
           <SButton
             :debounce="false"
             icon
             type="transparent"
             :aria-label="label('up')"
+            :title="label('up')"
             :disabled="directoryId === null"
             @click="navigate(directory?.parentId ?? null)"
-            >↑</SButton
-          >
+            ><FileGlyph kind="up" :graphic="icons.up"
+          /></SButton>
           <SButton
             :debounce="false"
             icon

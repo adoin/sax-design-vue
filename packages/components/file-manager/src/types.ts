@@ -62,6 +62,9 @@ export interface FileManagerGlobalConfig {
 }
 export type FileManagerGraphic = string | { icon?: string; src?: string }
 export interface FileManagerIcons {
+  back?: FileManagerGraphic
+  forward?: FileManagerGraphic
+  up?: FileManagerGraphic
   home?: FileManagerGraphic
   folder?: FileManagerGraphic
   folderOpen?: FileManagerGraphic

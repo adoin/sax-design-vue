@@ -4,6 +4,9 @@ import { SIcon } from '@vuesax-alpha/components/icon'
 import type { FileManagerGraphic } from './types'
 const props = defineProps<{
   kind:
+    | 'back'
+    | 'forward'
+    | 'up'
     | 'home'
     | 'folder'
     | 'folder-open'
@@ -25,6 +28,9 @@ watch(
   },
 )
 const paths: Record<string, string> = {
+  back: 'm15 5-7 7 7 7',
+  forward: 'm9 5 7 7-7 7',
+  up: 'M3 7V4h6l3 3h9v13H3ZM12 17v-7m-3 3 3-3 3 3',
   home: 'M3 11 12 3l9 8v10h-6v-7H9v7H3Z',
   file: 'M6 3h8l5 5v13H6ZM14 3v6h5',
   eye: 'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Zm13 0a3 3 0 1 0-6 0 3 3 0 0 0 6 0Z',
