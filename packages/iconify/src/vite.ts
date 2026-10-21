@@ -10,10 +10,16 @@ import {
 } from './index'
 import type { IconifyJSON } from '@iconify/types'
 
+export { signSvgs } from './sign-svgs'
+export type { SaxSvgPreset } from './sign-svgs'
+
 export interface SaxIconVitePlugin {
   name: string
   enforce: 'pre'
-  configResolved: (config: { root: string }) => void
+  configResolved: (config: {
+    root: string
+    plugins?: Array<{ api?: { saxSvgPresets?: string[] } }>
+  }) => void
   transform: (
     code: string,
     id: string,
@@ -102,6 +108,7 @@ function transformStaticIcons(
   id: string,
   options: Required<Pick<SaxIconViteOptions, 'componentNames'>> &
     SaxIconViteOptions,
+  localPresets: string[] = [],
 ) {
   const cleanId = id.split('?', 1)[0]
   const isVue = cleanId.endsWith('.vue')
@@ -125,6 +132,8 @@ function transformStaticIcons(
       if (!nameMatch) return tag
       // Library-owned artwork is resolved by SIcon, independently of Iconify collections.
       if (nameMatch[2] === 'sax:close') return tag
+      if (localPresets.some((preset) => nameMatch[2].startsWith(`${preset}-`)))
+        return tag
 
       const icon = parseIconName(nameMatch[2], options.collections)
       if (!icon) {
@@ -224,6 +233,7 @@ export function saxIcons(userOptions: SaxIconViteOptions): SaxIconVitePlugin {
   const apiIconSets = new Map<string, Promise<IconifyJSON>>()
   const resolvedIcons = new Map<string, string>()
   let projectRoot = process.cwd()
+  let localPresets: string[] = []
 
   const loadCollection = (prefix: string) => {
     let pending = iconSets.get(prefix)
@@ -352,6 +362,9 @@ export function saxIcons(userOptions: SaxIconViteOptions): SaxIconVitePlugin {
     enforce: 'pre',
     configResolved(config) {
       projectRoot = config.root
+      localPresets =
+        config.plugins?.flatMap((plugin) => plugin.api?.saxSvgPresets || []) ||
+        []
     },
     transformIndexHtml: {
       order: 'pre',
@@ -369,7 +382,7 @@ export function saxIcons(userOptions: SaxIconViteOptions): SaxIconVitePlugin {
     },
     transform(code, id) {
       if (id.includes('?vue&type=')) return
-      const staticResult = transformStaticIcons(code, id, options)
+      const staticResult = transformStaticIcons(code, id, options, localPresets)
       const source = staticResult?.code || code
       return (
         transformLiteralIcons(source, id, options.collections) || staticResult

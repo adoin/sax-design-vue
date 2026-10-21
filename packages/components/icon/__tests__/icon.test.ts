@@ -1,10 +1,34 @@
+import { h } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
+import { addIconDataRecord } from 'sax-design-vue-iconify'
 import Icon from '../src/icon.vue'
 import Close from '../src/close.vue'
 import { closePath } from '../src/close-artwork'
 
 describe('Icon rolling', () => {
+  it('renders registered local file names and scopes their gradient IDs per instance', () => {
+    addIconDataRecord({
+      'local-test-home': {
+        attributes: { viewBox: '0 0 32 24' },
+        body: '<defs><linearGradient id="paint"><stop stop-color="red"/><stop offset="1" stop-color="blue"/></linearGradient></defs><path fill="url(#paint)" d="M1 1h20v20z"/>',
+      },
+    })
+    const wrapper = mount({
+      setup: () => () =>
+        h('div', [
+          h(Icon, { name: 'local-test-home' }),
+          h(Icon, { name: 'local-test-home' }),
+        ]),
+    })
+    const [first, second] = wrapper.findAllComponents(Icon)
+    expect(first.get('svg').attributes('viewBox')).toBe('0 0 32 24')
+    expect(first.get('stop').attributes('stop-color')).toBe('red')
+    const firstId = first.get('linearGradient').attributes('id')
+    expect(firstId).not.toBe(second.get('linearGradient').attributes('id'))
+    expect(first.get('path').attributes('fill')).toBe(`url(#${firstId})`)
+    wrapper.unmount()
+  })
   it('shares the soft close artwork between component and dynamic icon names', () => {
     const close = mount(Close, { props: { size: 14 } })
     const icon = mount(Icon, { props: { name: 'sax:close' } })

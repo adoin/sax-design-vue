@@ -1,5 +1,9 @@
 ## Changelog
 
+### Unreleased
+
+- Add the `signSvgs` Vite plugin for registering project SVG files with glob patterns and names such as `lo-home`, including dynamic component icon props, duplicate-name diagnostics and development file watching.
+
 ### 2.6.1 — 2026-10-20
 
 - Upgrade the shared icon geometry/paint core to svg-morpheus-ts 2.0.0.

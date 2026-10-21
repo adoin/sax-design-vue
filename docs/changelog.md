@@ -5,6 +5,12 @@ description: Releases and changes in Sax Design Vue.
 
 # Changelog
 
+## Unreleased {#unreleased}
+
+- Register project SVG files with the `signSvgs` Vite plugin. Use names such as `lo-home` in Icon or other components' icon props, including dynamic values. File changes reload development pages automatically.
+
+See [Local SVG files](./icons/#local-svg-files).
+
 ## 2.6.1
 
 Released October 20, 2026.

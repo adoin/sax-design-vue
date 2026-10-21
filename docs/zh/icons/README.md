@@ -1,6 +1,6 @@
 # Icons（图标）
 
-`SIcon` 渲染 Iconify SVG 数据，不需要图标字体、全局图标 CSS，也不会在运行时请求 Iconify API。Vite 插件只提取应用真正使用的图标。
+`SIcon` 渲染 Iconify 或项目本地 SVG 数据，不需要图标字体、全局图标 CSS，也不会在运行时请求 Iconify API。Iconify 集合按使用量提取；本地 SVG 目录注册所有匹配文件。
 
 Sax 组件会为自身默认控件携带一小组 Carbon 回退数据，因此分页箭头、关闭按钮、选择器提示、表格操作等内部图标在未配置 Carbon 时仍能显示。显式 `iconData` 和应用注册的图标优先于回退数据；IconPicker 仅在使用该组件时加载更完整的内置默认列表。应用自行选择的图标名仍需按下文配置对应集合或 `safelist`。
 
@@ -89,6 +89,54 @@ export default defineConfig({
 ```
 
 插件会自动把 `safelist` 注册模块注入 Vite HTML 入口，应用入口无需再写注册代码。
+
+## 注册本地 SVG 文件 {#local-svg-files}
+
+在项目的 `src/assets/svgs/` 放入 `home.svg`、`user.svg` 等文件，然后在 `vite.config.ts` 注册目录：
+
+```ts
+import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite'
+import { signSvgs } from 'sax-design-vue-iconify/vite'
+
+export default defineConfig({
+  plugins: [
+    signSvgs([
+      { preset: 'lo', url: 'src/assets/svgs/*.svg' },
+      { preset: 'brand', url: 'src/assets/brands/**/*.svg' },
+    ]),
+    vue(),
+  ],
+})
+```
+
+`url` 是相对 Vite `root` 的文件路径或 glob，也可传入多个 glob 的数组。`*.svg` 只匹配当前目录，`**/*.svg` 包含子目录。扫描在开发服务器和构建时完成，不在浏览器中访问本地目录。
+
+```vue
+<template>
+  <s-icon name="lo-home" />
+  <s-button icon="lo-user">用户</s-button>
+  <s-icon :name="selectedIcon" />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+const selectedIcon = ref('lo-home')
+</script>
+```
+
+名称为 `preset-文件名`，去掉 `.svg` 后缀，保留文件名大小写。子目录不参与命名，同一 preset 下重名会使构建报错。多个目录中有同名文件时，为它们配置不同 preset。插件可以和 `saxIcons(...)` 一起使用。
+
+所有匹配的本地 SVG 都会注册，因此动态名称及其他组件的 `icon` 属性不需要额外 `safelist`。请只扫描要交付的图标目录；本地目录不会按使用量裁剪。修改、新增、删除 SVG 会自动刷新开发页面，以便清除旧注册。
+
+保留 SVG 的 `viewBox`、路径、原有颜色和渐变；没有 `viewBox` 时使用正数宽高推导。需要跟随文字颜色的文件应使用 `currentColor`；普通黑色填充不会自动改成主题色。SVG 仍受浏览器内联 SVG 和图标变形所支持特性的限制。
+
+普通 HTML 入口会自动注册。SSR 或没有 HTML 入口的应用需在共享入口先导入注册模块：
+
+```ts
+/// <reference types="sax-design-vue-iconify/virtual" />
+import 'virtual:sax-svgs/register'
+```
 
 ## 树摇规则
 
@@ -215,11 +263,11 @@ app.use(SaxDesignVue, {
 
 </command>
 
-| 属性 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| morph | boolean &#124; IconMorphOptions | false | 开启或关闭图标变形；传入对象可调整动画。 |
-| morph.duration | number | 360 | 动画时长，单位毫秒；设为 0 时立即切换。 |
-| morph.spring | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy | smooth 平滑停下；snappy 轻微回弹；bouncy 明显回弹。 |
+| 属性           | 类型                                     | 默认值 | 说明                                                |
+| -------------- | ---------------------------------------- | ------ | --------------------------------------------------- |
+| morph          | boolean &#124; IconMorphOptions          | false  | 开启或关闭图标变形；传入对象可调整动画。            |
+| morph.duration | number                                   | 360    | 动画时长，单位毫秒；设为 0 时立即切换。             |
+| morph.spring   | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy | smooth 平滑停下；snappy 轻微回弹；bouncy 明显回弹。 |
 
 首次显示图标时不会播放变形。系统开启“减少动态效果”时直接切换。连续改变图标会从当前画面继续；带有蒙版、滤镜或图案等不支持的 SVG 会直接显示新图标。
 

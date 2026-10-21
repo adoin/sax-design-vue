@@ -12,6 +12,19 @@ afterEach(() => {
 })
 
 describe('shared icon registry', () => {
+  it('replaces scoped registrations while preserving later manual overrides', async () => {
+    const registry = await import('../src/index')
+    const data = { body: '<path/>', attributes: { viewBox: '0 0 24 24' } }
+    const override = { ...data, body: '<circle/>' }
+    registry.replaceIconDataRecord('registry-test', {
+      [names[0]]: data,
+      [names[1]]: data,
+    })
+    registry.addIconData(names[1], override)
+    registry.replaceIconDataRecord('registry-test', {})
+    expect(registry.getIconData(names[0])).toBeUndefined()
+    expect(registry.getIconData(names[1])).toBe(override)
+  })
   it('keeps registrations visible to independently evaluated module copies', async () => {
     const first = await import('../src/index')
     const data = {

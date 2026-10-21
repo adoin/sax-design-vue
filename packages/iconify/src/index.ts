@@ -71,6 +71,27 @@ export function addIconDataRecord(icons: Record<string, SaxIconData>) {
   Object.entries(icons).forEach(([name, data]) => addIconData(name, data))
 }
 
+const scopesKey = Symbol.for('sax-design-vue-iconify.scopes.v1')
+const scopesScope = globalThis as typeof globalThis & {
+  [scopesKey]?: Map<string, Record<string, SaxIconData>>
+}
+const registryScopes = (scopesScope[scopesKey] ??= new Map())
+
+/** Replace one registration group, removing stale names without deleting later overrides. */
+export function replaceIconDataRecord(
+  scope: string,
+  icons: Record<string, SaxIconData>,
+) {
+  const previous = registryScopes.get(scope)
+  if (previous) {
+    for (const [name, data] of Object.entries(previous)) {
+      if (iconRegistry.get(name) === data) iconRegistry.delete(name)
+    }
+  }
+  addIconDataRecord(icons)
+  registryScopes.set(scope, icons)
+}
+
 export function getIconData(name: string) {
   return iconRegistry.get(name)
 }

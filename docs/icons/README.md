@@ -1,6 +1,6 @@
 # Icons
 
-`SIcon` renders Iconify SVG data. No icon font, global CSS, or runtime Iconify API request is required. The Vite plugin extracts only the icons used by the application.
+`SIcon` renders Iconify or project SVG data. No icon font, global CSS, or runtime Iconify API request is required. Iconify collections are extracted by usage; local SVG directories register every matched file.
 
 Sax components ship a small built-in Carbon fallback for their own default controls, so pagination arrows, close buttons, picker affordances, table actions, and similar internal icons remain visible without configuring Carbon. Explicit `iconData` and application-registered icons take precedence over this fallback. IconPicker loads its broader built-in default list only when the picker is used. Icon names chosen by an application still require the corresponding collection or safelist configuration described below.
 
@@ -90,6 +90,54 @@ export default defineConfig({
 ```
 
 The plugin injects the `safelist` registry into Vite HTML entries automatically. No entry-file registration code is needed.
+
+## Register local SVG files {#local-svg-files}
+
+Place `home.svg`, `user.svg`, and other assets in `src/assets/svgs/`, then register the directory in `vite.config.ts`:
+
+```ts
+import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite'
+import { signSvgs } from 'sax-design-vue-iconify/vite'
+
+export default defineConfig({
+  plugins: [
+    signSvgs([
+      { preset: 'lo', url: 'src/assets/svgs/*.svg' },
+      { preset: 'brand', url: 'src/assets/brands/**/*.svg' },
+    ]),
+    vue(),
+  ],
+})
+```
+
+`url` accepts a file, glob, or array of globs relative to Vite `root`. `*.svg` matches one directory; `**/*.svg` includes subdirectories. Scanning happens in the development server and build process, without browser access to the filesystem.
+
+```vue
+<template>
+  <s-icon name="lo-home" />
+  <s-button icon="lo-user">Users</s-button>
+  <s-icon :name="selectedIcon" />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+const selectedIcon = ref('lo-home')
+</script>
+```
+
+Names use `preset-filename` without `.svg`, preserving filename case. Subdirectories do not affect names; duplicate basenames within one preset fail the build. Assign different presets to directories containing the same filenames. This plugin can coexist with `saxIcons(...)`.
+
+All matched local SVGs are registered, so dynamic names and other components' `icon` props need no additional safelist. Only scan assets you intend to ship: the local directory is not pruned by usage. Adding, editing or deleting an SVG automatically reloads the development page to clear old registrations.
+
+SVG viewBox, paths, colors and gradients are preserved. Files without viewBox need positive numeric width and height. Author `currentColor` when an icon should inherit text color; black fills are not automatically recolored. Inline SVG and icon morphing feature limitations still apply.
+
+HTML entries register automatically. For SSR or entries without HTML, import the registry in the shared entry before rendering:
+
+```ts
+/// <reference types="sax-design-vue-iconify/virtual" />
+import 'virtual:sax-svgs/register'
+```
 
 ## Tree shaking
 
@@ -216,11 +264,11 @@ app.use(SaxDesignVue, {
 
 </command>
 
-| Property | Type | Default | Description |
-| --- | --- | --- | --- |
-| morph | boolean &#124; IconMorphOptions | false | Enable morphing, or pass an object to adjust the animation. |
-| morph.duration | number | 360 | Duration in milliseconds; 0 switches immediately. |
-| morph.spring | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy | smooth settles gently; snappy adds a subtle bounce; bouncy adds a stronger bounce. |
+| Property       | Type                                     | Default | Description                                                                        |
+| -------------- | ---------------------------------------- | ------- | ---------------------------------------------------------------------------------- |
+| morph          | boolean &#124; IconMorphOptions          | false   | Enable morphing, or pass an object to adjust the animation.                        |
+| morph.duration | number                                   | 360     | Duration in milliseconds; 0 switches immediately.                                  |
+| morph.spring   | 'smooth' &#124; 'snappy' &#124; 'bouncy' | snappy  | smooth settles gently; snappy adds a subtle bounce; bouncy adds a stronger bounce. |
 
 The first icon appears without animating. The system’s reduced-motion preference disables transitions. Interrupted changes continue from the current picture. Unsupported SVG masks, filters or patterns switch directly to the new icon.
 
