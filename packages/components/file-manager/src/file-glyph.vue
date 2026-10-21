@@ -90,9 +90,7 @@ const paths: Record<string, string> = {
         text-anchor="middle"
         fill="currentColor"
         stroke="none"
-        font-family="sans-serif"
-        font-size="4.5"
-        font-weight="600"
+        style="font: 600 4.5px sans-serif"
       >
         {{ extensionLabel }}
       </text>
