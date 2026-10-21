@@ -3,11 +3,15 @@ import Form from './src/form.vue'
 import FormItem from './src/form-item.vue'
 import FormGroup from './src/form-group.vue'
 import type { SFCWithInstall } from '@vuesax-alpha/utils'
+import type { SaxFormComponent } from './src/form'
 
-export const SForm: SFCWithInstall<typeof Form> & {
-  FormItem: typeof FormItem
-  FormGroup: typeof FormGroup
-} = withInstall(Form, { FormItem, FormGroup })
+export const SForm: SFCWithInstall<
+  SaxFormComponent,
+  {
+    FormItem: typeof FormItem
+    FormGroup: typeof FormGroup
+  }
+> = withInstall(Form as unknown as SaxFormComponent, { FormItem, FormGroup })
 export const SFormItem: SFCWithInstall<typeof FormItem> =
   withNoopInstall(FormItem)
 export const SFormGroup: SFCWithInstall<typeof FormGroup> =

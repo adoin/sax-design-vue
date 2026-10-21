@@ -1,6 +1,12 @@
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
 import { useSizeProp } from '@vuesax-alpha/hooks'
-import type { CSSProperties, ExtractPropTypes } from 'vue'
+import type {
+  CSSProperties,
+  ExtractPropTypes,
+  PublicProps,
+  VNode,
+  VNodeChild,
+} from 'vue'
 import type { RendererOptions } from './renderer'
 import type { FieldPath, Recordable } from '../../types'
 
@@ -137,3 +143,62 @@ export interface FormInstance {
   submit: (event?: Event) => Promise<boolean>
   getErrors: () => Record<string, string>
 }
+
+/** The model drives inference; callbacks and field definitions retain that model. */
+export type FormPublicProps<Model extends object = FormModel> = Partial<
+  Omit<FormProps<Model>, 'model' | 'items' | 'rules'>
+> & {
+  model: Model
+  items?: FormItemConfig<NoInfer<Model>>[]
+  rules?: FormRules<NoInfer<Model>>
+  onValidate?: (prop: string, valid: boolean, message: string) => void
+  onSubmit?: (model: NoInfer<Model>, event?: Event) => void
+  onInvalidSubmit?: (
+    errors: Record<string, string>,
+    model: NoInfer<Model>,
+    event?: Event,
+  ) => void
+  onReset?: (model: NoInfer<Model>, event?: Event) => void
+}
+export interface FormSlotParams<Model extends object = FormModel> {
+  model: Model
+  item: FormItemConfig<Model>
+  size: string
+  field?: FieldPath<Model>
+  prop?: FieldPath<Model>
+  value: unknown
+  disabled: boolean
+  readonly: boolean
+  setValue: (value: unknown) => void
+  id?: string
+  label?: string
+  description?: string
+  error?: string
+}
+export type FormSlots<Model extends object = FormModel> = {
+  [name: string]: ((params: FormSlotParams<Model>) => VNodeChild) | undefined
+}
+export interface FormEmitFn<Model extends object = FormModel> {
+  (event: 'validate', prop: string, valid: boolean, message: string): void
+  (event: 'submit' | 'reset', model: Model, nativeEvent?: Event): void
+  (
+    event: 'invalidSubmit',
+    errors: Record<string, string>,
+    model: Model,
+    nativeEvent?: Event,
+  ): void
+}
+export interface SaxFormSetupContext<Model extends object = FormModel> {
+  props: PublicProps & FormPublicProps<Model>
+  attrs: Record<string, unknown>
+  emit: FormEmitFn<Model>
+  slots: FormSlots<Model>
+  expose: (instance: FormInstance) => void
+}
+/** Generic public signature shared by Vue templates and TSX, without setup-state expansion. */
+export type SaxFormComponent = <Model extends object = FormModel>(
+  props: PublicProps & FormPublicProps<Model>,
+  context?: Pick<SaxFormSetupContext<Model>, 'attrs' | 'emit' | 'slots'>,
+  exposed?: FormInstance,
+  setup?: Promise<SaxFormSetupContext<Model>>,
+) => VNode & { __ctx?: SaxFormSetupContext<Model> }

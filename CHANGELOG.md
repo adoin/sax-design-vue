@@ -2,6 +2,12 @@
 
 ### Unreleased
 
+### 2.8.1 — 2026-10-21
+
+- Preserve model-driven Form props, validators, events and dynamic slot types through shared generic declarations; include the generated control id in slot scope.
+- Verify generic Form usage against the built package with positive and negative consumer fixtures.
+
+
 ### 2.8.0 — 2026-10-21
 
 - Show one- or two-character extensions inside fallback File Manager SVG file glyphs.

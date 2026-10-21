@@ -24,3 +24,9 @@ modules:
 - [x] Built-package strict consumer checks pass with skipLibCheck disabled: typed props/events/slots, negative-use rejection, private-state isolation, exposed methods, static children, Upload picker overloads and the existing Table generic fixtures. ESM and CJS declarations are identical.
 - [x] All 11 path-normalization regressions, scoped ESLint, all 22 documentation example/API tests and the 239-page documentation build pass. The fixture explicitly includes the already-used web-bluetooth browser environment types; the dependency lockfile passes frozen validation.
 - [x] ESM declaration count stays at 1,113. Size drops from 42,729,255 to 2,477,739 bytes (94.20%, 40,251,516 bytes saved); largest file drops from 1,435,183 to 74,394 bytes. TypeScript transpilation of all 93 modified component/utility TS sources produces identical runtime code (comments excluded). Generated bundle hashes are not used as a semantic-equivalence check because bundler identifier allocation can change.
+
+## Form model inference regression guard (2026-10-21)
+
+- Form uses a shared SaxFormComponent generic signature, following the existing typed Table boundary. Infer the model from the model prop; items/rules and event callbacks consume that model without widening it. Preserve FormItem/FormGroup static exports by reference.
+- Dynamic Form slot types include the generated id as well as model/item/value and field controls. Runtime validation and rendering are unchanged.
+- Built-package consumer fixtures exercise typed validators/events/slots and reject unknown fields and incompatible submit models. Four Form suites (41 tests), source typing and strict declaration checks pass; total declarations remain about 2.5 MB.

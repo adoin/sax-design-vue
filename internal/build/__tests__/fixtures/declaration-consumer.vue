@@ -5,6 +5,7 @@ import {
   SBreadcrumb,
   SButton,
   SFileManager,
+  SForm,
   SInput,
   SSelect,
   SWindow,
@@ -12,9 +13,18 @@ import {
 import type {
   FileManagerEntry,
   FileManagerInstance,
+  FormItemConfig,
   WindowInstance,
 } from 'sax-design-vue'
 
+const formModel = shallowRef({ name: 'Ada', count: 1 })
+const formItems: FormItemConfig<typeof formModel.value>[] = [
+  {
+    field: 'name',
+    slots: { default: 'name' },
+    rules: { validator: (_value, model) => model.count > 0 },
+  },
+]
 const text = shallowRef('')
 const selectValue = shallowRef('a')
 const files = shallowRef<FileManagerEntry[]>([
@@ -37,6 +47,15 @@ const inspect = () => {
 </script>
 
 <template>
+  <SForm
+    :model="formModel"
+    :items="formItems"
+    @submit="(model) => model.count.toFixed()"
+  >
+    <template #name="{ id, model }"
+      ><SInput :id="id" v-model="model.name"
+    /></template>
+  </SForm>
   <SButton @click="inspect">Inspect</SButton>
   <SButton.ButtonGroup><SButton>Child</SButton></SButton.ButtonGroup>
   <SBreadcrumb

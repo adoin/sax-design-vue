@@ -1,4 +1,4 @@
-import { SUpload } from 'sax-design-vue'
+import { SForm, SUpload } from 'sax-design-vue'
 import type {
   SAgentEditor,
   SButton,
@@ -67,3 +67,21 @@ export function useFileToolbar(tools: FileToolbar) {
   // @ts-expect-error Sort directions remain concrete.
   tools.setSort({ key: 'name', order: 'backward' })
 }
+
+SForm({
+  model: { name: 'Ada', count: 1 },
+  items: [
+    {
+      field: 'count',
+      rules: { validator: (_value, model) => model.count > 0 },
+    },
+  ],
+  onSubmit: (model) => model.name.toUpperCase(),
+})
+// @ts-expect-error Model-driven fields reject unknown paths.
+SForm({ model: { count: 1 }, items: [{ field: 'missing' }] })
+// @ts-expect-error Submit models retain their field types.
+SForm({
+  model: { count: 1 },
+  onSubmit: (model: { count: string }) => model.count.toUpperCase(),
+})

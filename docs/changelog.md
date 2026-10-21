@@ -7,6 +7,11 @@ description: Releases and changes in Sax Design Vue.
 
 ## Unreleased
 
+## 2.8.1
+
+- Restore model inference for Form items, validators and events, and include control IDs in dynamic slot types.
+
+
 ## 2.8.0
 
 - Show short file extensions inside default File Manager SVG icons when no custom thumbnail matches.
