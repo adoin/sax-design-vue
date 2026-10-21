@@ -1,8 +1,8 @@
 # Icons
 
-`SIcon` renders Iconify or project SVG data. No icon font, global CSS, or runtime Iconify API request is required. Iconify collections are extracted by usage; local SVG directories register every matched file.
+`SIcon` renders Iconify or project SVG data without icon fonts or global icon CSS. It never initiates API requests. Both Iconify and local SVG build plugins emit only statically referenced or safelisted icons.
 
-Sax components ship a small built-in Carbon fallback for their own default controls, so pagination arrows, close buttons, picker affordances, table actions, and similar internal icons remain visible without configuring Carbon. Explicit `iconData` and application-registered icons take precedence over this fallback. IconPicker loads its broader built-in default list only when the picker is used. Icon names chosen by an application still require the corresponding collection or safelist configuration described below.
+Sax components ship a small built-in Carbon fallback for their own default controls, so pagination arrows, close buttons, picker affordances and table actions remain visible without configuring Carbon. Explicit `iconData` and application registrations take precedence. IconPicker contains candidate names only: opening it loads missing candidates from its configured API. No candidate SVG catalog is embedded in the component library.
 
 This integration targets Vite 4, 5, and 8. A Webpack adapter is intentionally not shipped.
 
@@ -128,11 +128,21 @@ const selectedIcon = ref('lo-home')
 
 Names use `preset-filename` without `.svg`, preserving filename case. Subdirectories do not affect names; duplicate basenames within one preset fail the build. Assign different presets to directories containing the same filenames. This plugin can coexist with `saxIcons(...)`.
 
-All matched local SVGs are registered, so dynamic names and other components' `icon` props need no additional safelist. Only scan assets you intend to ship: the local directory is not pruned by usage. Adding, editing or deleting an SVG automatically reloads the development page to clear old registrations.
+Scanning builds a filename index; only literal names found in application source and explicit safelist entries become SVG modules. This includes `name="lo-home"`, `icon="lo-home"`, and configuration strings such as `{ icon: 'lo-home' }`. Identical SVG data shares one module across files and presets. Unreferenced SVGs are not parsed or emitted. File changes automatically reload the development page.
+
+Names assembled at runtime or returned by an API need a safelist:
+
+```ts
+signSvgs([{ preset: 'lo', url: 'src/assets/svgs/**/*.svg' }], {
+  safelist: ['lo-home', 'lo-user'],
+})
+```
+
+When used together with `saxIcons`, local names may also be included in its shared `safelist`. Both paths reference the same per-icon modules.
 
 SVG viewBox, paths, colors and gradients are preserved. Files without viewBox need positive numeric width and height. Author `currentColor` when an icon should inherit text color; black fills are not automatically recolored. Inline SVG and icon morphing feature limitations still apply.
 
-HTML entries register automatically. For SSR or entries without HTML, import the registry in the shared entry before rendering:
+Literal names register through imports inserted into their source module, including SSR. Safelists register automatically in HTML entries. For SSR or entries without HTML, import the local safelist module before rendering:
 
 ```ts
 /// <reference types="sax-design-vue-iconify/virtual" />

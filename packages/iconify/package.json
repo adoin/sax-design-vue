@@ -21,6 +21,11 @@
       "import": "./dist/vite.mjs",
       "require": "./dist/vite.cjs"
     },
+    "./api": {
+      "types": "./dist/api.d.ts",
+      "import": "./dist/api.mjs",
+      "require": "./dist/api.cjs"
+    },
     "./virtual": {
       "types": "./src/virtual.d.ts"
     }

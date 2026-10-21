@@ -4,72 +4,77 @@ API_TITLES:
 PROPS:
   - name: locale
     type: Language
-    values: "Component locale object"
+    values: 'Component locale object'
     description: Locale used by the dialog and its nested controls.
     default: English
   - name: title
     type: String
-    values: "Dialog title"
+    values: 'Dialog title'
     description: Override the default title.
     default: Insert icon
   - name: iconList
     type: readonly string[]
-    values: "Registered Iconify names"
-    description: Icons available for search and selection in the dialog.
-    default: 168 common Carbon icons
+    values: 'Iconify names or registered local SVG names'
+    description: Candidate names; missing Iconify data loads when the picker opens.
+    default: 168 common Carbon candidate names
+  - name: api
+    type: boolean | IconPickerApiOptions
+    values: 'true / false / { baseUrl, collections, timeout }'
+    description: Enable runtime API loading, disable requests for offline use, or configure a trusted Iconify-compatible endpoint.
+    default: 'true'
   - name: initialIcon
     type: String
-    values: "prefix:name"
+    values: 'prefix:name'
     description: Initially selected icon.
     default: "''"
   - name: output
     type: String
-    values: "svg / code"
+    values: 'svg / code'
     description: Return complete SVG or a compact object containing code, color, and size.
     default: svg
   - name: color
     type: String
-    values: "HEX / RGB / HSL"
+    values: 'HEX / RGB / HSL'
     description: Initial icon color.
     default: '#5667F4'
   - name: size
     type: Number
-    values: "8 - 256"
+    values: '8 - 256'
     description: Fix the output size; omit it to let the user choose in the dialog.
     default: Dialog selection, initially 24
   - name: label
     type: String
-    values: "Accessible text"
+    values: 'Accessible text'
     description: Adds role=img and aria-label; omitted output is decorative.
     default: null
   - name: showName
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Show names in the icon grid.
     default: 'true'
   - name: showAlpha
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Allow alpha selection.
     default: 'false'
   - name: predefine
     type: Array
-    values: "Color presets"
+    values: 'Color presets'
     description: Preset colors passed to the color picker.
     default: '[]'
   - name: maskClosable
     type: Boolean
-    values: "true / false"
+    values: 'true / false'
     description: Allow closing by clicking the overlay.
     default: 'true'
   - name: confirmText
     type: String
-    values: "Button labels"
+    values: 'Button labels'
     description: Custom confirm and cancel labels.
     default: null
   - name: cancelText
     type: String
-    values: "Button labels"
+    values: 'Button labels'
     description: Custom confirm and cancel labels.
     default: null
 description: 'Choose an icon, color, and size in a Promise-based dialog, then return compact icon data or complete SVG.'
@@ -86,6 +91,12 @@ during server rendering returns `undefined`.
 
 Passing `size` fixes the output dimensions. If it is omitted, the user can
 choose a size from 8–256 px directly in the dialog.
+
+The default catalog contains 168 candidate names without their SVG payloads. Opening the picker reuses control fallbacks and registered data, then loads missing candidates in batches from `https://api.iconify.design`. Results are cached for the current page. Closing aborts pending requests; failed loads can be retried. Ordinary `SIcon` never starts a network request.
+
+Use `api: { baseUrl: 'https://icons.example.com', collections: { lo: 'lucide' }, timeout: 10000 }` for a trusted self-hosted endpoint and prefix mappings. Offline applications should set `api: false` and register their `iconList` through the build plugin or `addIconDataRecord`. Unregistered candidates without a control fallback are omitted.
+
+An application such as an admin dashboard can instead configure `saxIcons` with `mode: 'api'` and put candidate names in its own `safelist`. API requests then run during that application's build, and SVG data belongs to the application bundle. The component library still embeds only control fallbacks. IconPicker reuses those registrations; set `api: false` to prevent browser requests entirely.
 
 ```ts
 import { SIconPicker } from 'sax-design-vue'

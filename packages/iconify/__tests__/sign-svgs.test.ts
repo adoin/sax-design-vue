@@ -44,6 +44,10 @@ async function fixture() {
   await mkdir(path.join(root, 'src/assets/svgs'), { recursive: true })
   await writeFile(path.join(root, 'src/assets/svgs/home.svg'), svg)
   await writeFile(
+    path.join(root, 'src/assets/svgs/unused.svg'),
+    '<svg viewBox="0 0 24 24"><path id="unused-never-shipped" d="M2 2h12"/></svg>',
+  )
+  await writeFile(
     path.join(root, 'index.html'),
     '<script type="module" src="/main.ts"></script>',
   )
@@ -71,7 +75,11 @@ describe('signSvgs', () => {
       logLevel: 'silent',
       server: { middlewareMode: true, watch: null },
       resolve: { alias: { 'sax-design-vue-iconify': runtime } },
-      plugins: [signSvgs([{ preset: 'lo', url: 'src/assets/svgs/*.svg' }])],
+      plugins: [
+        signSvgs([{ preset: 'lo', url: 'src/assets/svgs/*.svg' }], {
+          safelist: ['lo-home'],
+        }),
+      ],
     })
     try {
       await server.ssrLoadModule('virtual:sax-svgs/register')
@@ -103,28 +111,42 @@ describe('signSvgs', () => {
       expect(code).toContain('stop-color')
       expect(code).not.toContain('DOMParser')
       expect(code).not.toContain('fast-glob')
+      expect(code).not.toContain('unused-never-shipped')
     },
   )
 
-  it('loads current files, derives a viewBox, and rejects duplicate names', async () => {
+  it('loads selected files, derives a viewBox, and rejects duplicate names', async () => {
     const root = await fixture()
     const plugin = signSvgs([
       { preset: 'lo', url: 'src/assets/svgs/**/*.svg' },
     ]) as any
     plugin.configResolved({ root, plugins: [plugin] })
     const context = { addWatchFile: vi.fn() }
-    const load = () => plugin.load.call(context, '\0sax-svgs:register')
-    expect((await load()).code).toContain('lo-home')
+    const reset = () => plugin.configResolved({ root, plugins: [plugin] })
+    const load = async (name: string) => {
+      const registration = await plugin.load.call(
+        context,
+        `\0sax-svg/register/${name}`,
+      )
+      const hash = registration.code.match(
+        /virtual:sax-svg\/data\/([a-f0-9]+)/,
+      )[1]
+      return plugin.load.call(context, `\0sax-svg/data/${hash}`)
+    }
+    expect((await load('lo-home')).code).toContain('linearGradient')
     await writeFile(
       path.join(root, 'src/assets/svgs/add.svg'),
       '<svg width="16px" height="20"><path d="M0 0h10"/></svg>',
     )
-    expect((await load()).code).toContain('0 0 16 20')
+    reset()
+    expect((await load('lo-add')).code).toContain('0 0 16 20')
     await rm(path.join(root, 'src/assets/svgs/home.svg'))
-    expect((await load()).code).not.toContain('lo-home')
+    reset()
+    await expect(load('lo-home')).rejects.toThrow('Unknown local icon')
     await mkdir(path.join(root, 'src/assets/svgs/nested'))
     await writeFile(path.join(root, 'src/assets/svgs/nested/add.svg'), svg)
-    await expect(load()).rejects.toThrow('Duplicate icon "lo-add"')
+    reset()
+    await expect(load('lo-add')).rejects.toThrow('Duplicate icon "lo-add"')
   })
 
   it('coexists with strict Iconify transforms in either plugin order', () => {
@@ -160,17 +182,16 @@ describe('signSvgs', () => {
     plugin.configResolved({ root, plugins: [plugin] })
     const watcher = Object.assign(new EventEmitter(), { add: vi.fn() })
     const httpServer = new EventEmitter()
-    const module = {}
     const server = {
       watcher,
       httpServer,
-      moduleGraph: { getModuleById: () => module, invalidateModule: vi.fn() },
+      moduleGraph: { invalidateAll: vi.fn() },
       ws: { send: vi.fn() },
     }
     plugin.configureServer(server)
     for (const event of ['add', 'change', 'unlink'])
       watcher.emit(event, path.join(root, 'src/assets/svgs/home.svg'))
-    expect(server.moduleGraph.invalidateModule).toHaveBeenCalledTimes(3)
+    expect(server.moduleGraph.invalidateAll).toHaveBeenCalledTimes(3)
     expect(server.ws.send).toHaveBeenCalledWith({ type: 'full-reload' })
     watcher.emit('change', path.join(root, 'other.svg'))
     expect(server.ws.send).toHaveBeenCalledTimes(3)
@@ -190,7 +211,64 @@ describe('signSvgs', () => {
       '<svg viewBox="0 0 24 24"><path></svg>',
     )
     await expect(
-      plugin.load.call({ addWatchFile() {} }, '\0sax-svgs:register'),
+      plugin.load.call({ addWatchFile() {} }, '\0sax-svg/register/lo-home'),
     ).rejects.toThrow('home.svg')
+  })
+
+  it('shares one SVG data module across files and presets with identical content', async () => {
+    const { build } = await import('vite')
+    const root = await fixture()
+    await writeFile(path.join(root, 'src/assets/svgs/copy.svg'), svg)
+    await writeFile(
+      path.join(root, 'main.ts'),
+      "export const icons = ['lo-home', 'lo-copy', 'brand-home']",
+    )
+    const result: any = await build({
+      configFile: false,
+      root,
+      logLevel: 'silent',
+      resolve: { alias: { 'sax-design-vue-iconify': runtime } },
+      plugins: [
+        signSvgs([
+          { preset: 'lo', url: 'src/assets/svgs/*.svg' },
+          { preset: 'brand', url: 'src/assets/svgs/home.svg' },
+        ]),
+      ],
+      build: { write: false, minify: false },
+    })
+    const code = result.output
+      .filter((entry: any) => entry.type === 'chunk')
+      .map((entry: any) => entry.code)
+      .join('\n')
+    expect(code.match(/M1 1h20v20z/g)).toHaveLength(1)
+    expect(code).toContain('brand-home')
+    expect(code).toContain('lo-copy')
+    expect(code).not.toContain('unused-never-shipped')
+  })
+
+  it('registers only safelisted dynamic names and supports the shared Iconify safelist', async () => {
+    const { build } = await import('vite')
+    const root = await fixture()
+    await writeFile(
+      path.join(root, 'main.ts'),
+      'export const icon = globalThis.selectedIcon',
+    )
+    const result: any = await build({
+      configFile: false,
+      root,
+      logLevel: 'silent',
+      resolve: { alias: { 'sax-design-vue-iconify': runtime } },
+      plugins: [
+        signSvgs([{ preset: 'lo', url: 'src/assets/svgs/*.svg' }]),
+        saxIcons({ collections: {}, safelist: ['lo-home'] }),
+      ],
+      build: { write: false, minify: false },
+    })
+    const code = result.output
+      .filter((entry: any) => entry.type === 'chunk')
+      .map((entry: any) => entry.code)
+      .join('\n')
+    expect(code).toContain('M1 1h20v20z')
+    expect(code).not.toContain('unused-never-shipped')
   })
 })

@@ -318,6 +318,9 @@ export default {
         '你使用了一些已被废弃的用法，请参考 pagination 的官方文档',
     },
     iconPicker: {
+      loading: '正在加载图标…',
+      loadError: '部分图标未能加载。',
+      retry: '重试',
       title: '插入图标',
       description: '选择图标、颜色和尺寸，生成需要的图标数据。',
       search: '搜索图标',

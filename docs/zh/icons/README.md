@@ -1,8 +1,8 @@
 # Icons（图标）
 
-`SIcon` 渲染 Iconify 或项目本地 SVG 数据，不需要图标字体、全局图标 CSS，也不会在运行时请求 Iconify API。Iconify 集合按使用量提取；本地 SVG 目录注册所有匹配文件。
+`SIcon` 渲染 Iconify 或项目本地 SVG 数据，不需要图标字体或全局图标 CSS，也不会主动发起 API 请求。Iconify 与本地 SVG 构建插件均只输出静态引用或 safelist 中的图标。
 
-Sax 组件会为自身默认控件携带一小组 Carbon 回退数据，因此分页箭头、关闭按钮、选择器提示、表格操作等内部图标在未配置 Carbon 时仍能显示。显式 `iconData` 和应用注册的图标优先于回退数据；IconPicker 仅在使用该组件时加载更完整的内置默认列表。应用自行选择的图标名仍需按下文配置对应集合或 `safelist`。
+Sax 组件为自身默认控件携带一小组 Carbon 回退数据，因此分页箭头、关闭按钮、选择器提示、表格操作等内部图标在未配置 Carbon 时仍能显示。显式 `iconData` 和应用注册的图标优先于回退数据。IconPicker 仅保留候选名称，打开时通过配置的 API 加载缺少的数据，候选 SVG 集合不会内置到组件库。
 
 当前集成仅面向 Vite，支持 Vite 4、5、8，不提供 Webpack 适配层。
 
@@ -127,11 +127,21 @@ const selectedIcon = ref('lo-home')
 
 名称为 `preset-文件名`，去掉 `.svg` 后缀，保留文件名大小写。子目录不参与命名，同一 preset 下重名会使构建报错。多个目录中有同名文件时，为它们配置不同 preset。插件可以和 `saxIcons(...)` 一起使用。
 
-所有匹配的本地 SVG 都会注册，因此动态名称及其他组件的 `icon` 属性不需要额外 `safelist`。请只扫描要交付的图标目录；本地目录不会按使用量裁剪。修改、新增、删除 SVG 会自动刷新开发页面，以便清除旧注册。
+扫描只建立文件名索引，应用源码中出现的固定名称和显式 safelist 才会生成 SVG 模块。支持 `name="lo-home"`、`icon="lo-home"` 以及 `{ icon: 'lo-home' }` 等配置字符串。相同 SVG 数据在不同文件或前缀间共用一个模块；未引用的 SVG 不解析、不打包。修改、新增、删除文件会自动刷新开发页面。
+
+运行时拼接或接口返回的名称需要 safelist：
+
+```ts
+signSvgs([{ preset: 'lo', url: 'src/assets/svgs/**/*.svg' }], {
+  safelist: ['lo-home', 'lo-user'],
+})
+```
+
+同时使用 `saxIcons` 时，也可以将本地名称放进它的统一 `safelist`；两种方式引用同一套独立图标模块。
 
 保留 SVG 的 `viewBox`、路径、原有颜色和渐变；没有 `viewBox` 时使用正数宽高推导。需要跟随文字颜色的文件应使用 `currentColor`；普通黑色填充不会自动改成主题色。SVG 仍受浏览器内联 SVG 和图标变形所支持特性的限制。
 
-普通 HTML 入口会自动注册。SSR 或没有 HTML 入口的应用需在共享入口先导入注册模块：
+固定名称通过其所在源码模块注入导入，SSR 同样适用。safelist 在 HTML 入口自动注册；SSR 或没有 HTML 入口的应用需先导入本地 safelist 模块：
 
 ```ts
 /// <reference types="sax-design-vue-iconify/virtual" />

@@ -1,20 +1,22 @@
-import { addIconData, getIconData } from 'sax-design-vue-iconify'
+import { getIconData } from 'sax-design-vue-iconify'
 import {
   formatColor,
   parseColor,
   toCssColor,
 } from '@vuesax-alpha/components/color-picker'
 import { buildProps, definePropType } from '@vuesax-alpha/utils'
-import { defaultCarbonIcons } from './default-carbon-icons'
+import { builtinCarbonIcons } from '../../icon/src/builtin-carbon-icons'
+import type { SaxIconLoadOptions } from 'sax-design-vue-iconify/api'
 import type { ExtractPropTypes } from 'vue'
 import type { ColorPickerPresetInput } from '@vuesax-alpha/components/color-picker'
 import type { Language } from '@vuesax-alpha/locale'
 import type IconPicker from './icon-picker.vue'
 
-Object.entries(defaultCarbonIcons).forEach(([name, data]) => {
-  const publicName = `cb:${name}`
-  if (!getIconData(publicName)) addIconData(publicName, data)
-})
+export type IconPickerApiOptions = Omit<SaxIconLoadOptions, 'signal'>
+
+export const resolveIconPickerData = (name: string) =>
+  getIconData(name) ||
+  (name.startsWith('cb:') ? builtinCarbonIcons[name.slice(3)] : undefined)
 
 export const ICON_PICKER_DEFAULT_SIZE = 24
 export const ICON_PICKER_MIN_SIZE = 8
@@ -198,6 +200,10 @@ export const iconPickerProps = buildProps({
     type: definePropType<Language>(Object),
   },
   title: String,
+  api: {
+    type: definePropType<boolean | IconPickerApiOptions>([Boolean, Object]),
+    default: true,
+  },
   iconList: {
     type: definePropType<readonly string[]>(Array),
     default: () => [...DEFAULT_ICON_LIST],
@@ -258,6 +264,7 @@ export interface IconPickerSelection extends IconPickerCodeResult {
 export type IconPickerResult = string | IconPickerCodeResult
 
 export interface IconPickerBaseOptions {
+  api?: boolean | IconPickerApiOptions
   locale?: Language
   title?: string
   iconList?: readonly string[]
@@ -290,11 +297,18 @@ const escapeAttribute = (value: string) =>
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
 
-export const normalizeIconList = (iconList: readonly string[]) => {
+export const normalizeIconList = (
+  iconList: readonly string[],
+  availableOnly = true,
+) => {
   const unique = new Set<string>()
   iconList.forEach((icon) => {
     const value = icon.trim()
-    if (/^[^:\s]+:[^:\s]+$/.test(value) && getIconData(value)) {
+    if (
+      value &&
+      (resolveIconPickerData(value) ||
+        (!availableOnly && /^[a-z0-9-]+:[a-z0-9-]+$/i.test(value)))
+    ) {
       unique.add(value)
     }
   })
@@ -307,7 +321,7 @@ export const createIconPickerSelection = ({
   size = ICON_PICKER_DEFAULT_SIZE,
   label,
 }: CreateIconSvgOptions): IconPickerSelection | undefined => {
-  const data = getIconData(name)
+  const data = resolveIconPickerData(name)
   const parsedColor = parseColor(color)
   if (!data || !parsedColor) return
 

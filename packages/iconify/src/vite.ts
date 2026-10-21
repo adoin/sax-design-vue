@@ -2,6 +2,7 @@ import { createRequire } from 'node:module'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { getIconData, iconToSVG } from '@iconify/utils'
+import { addIconImports, isApplicationIconSource } from './source'
 import {
   DEFAULT_API_ENDPOINTS,
   type SaxIconCollections,
@@ -11,7 +12,7 @@ import {
 import type { IconifyJSON } from '@iconify/types'
 
 export { signSvgs } from './sign-svgs'
-export type { SaxSvgPreset } from './sign-svgs'
+export type { SaxSvgOptions, SaxSvgPreset } from './sign-svgs'
 
 export interface SaxIconVitePlugin {
   name: string
@@ -92,15 +93,7 @@ function virtualId(icon: ParsedIconName) {
 }
 
 function addImportsToVueSfc(code: string, imports: string[]) {
-  if (!imports.length) return code
-  const block = `${imports.join('\n')}\n`
-  const scriptSetup = /<script\b([^>]*\bsetup\b[^>]*)>/i
-
-  if (scriptSetup.test(code)) {
-    return code.replace(scriptSetup, (match) => `${match}\n${block}`)
-  }
-
-  return `<script setup lang="ts">\n${block}</script>\n${code}`
+  return imports.length ? addIconImports(code, 'component.vue', imports) : code
 }
 
 function transformStaticIcons(
@@ -177,17 +170,7 @@ function transformLiteralIcons(
   collections: SaxIconCollections,
 ) {
   const cleanId = id.split('?', 1)[0].replace(/\\/g, '/')
-  const isSaxDesignModule =
-    /\/node_modules\/(?:@vuesax-alpha\/components|sax-design-vue)(?:\/|$)/.test(
-      cleanId,
-    )
-  if (
-    (cleanId.includes('/node_modules/') && !isSaxDesignModule) ||
-    cleanId.includes('/packages/iconify/') ||
-    cleanId.endsWith('.d.ts') ||
-    !/\.(?:vue|[cm]?[jt]sx?)$/.test(cleanId)
-  )
-    return
+  if (!isApplicationIconSource(id)) return
 
   const prefixes = Object.keys(collections)
   if (!prefixes.length) return
@@ -381,7 +364,7 @@ export function saxIcons(userOptions: SaxIconViteOptions): SaxIconVitePlugin {
       },
     },
     transform(code, id) {
-      if (id.includes('?vue&type=')) return
+      if (!isApplicationIconSource(id)) return
       const staticResult = transformStaticIcons(code, id, options, localPresets)
       const source = staticResult?.code || code
       return (
@@ -403,6 +386,12 @@ export function saxIcons(userOptions: SaxIconViteOptions): SaxIconVitePlugin {
         const entries: string[] = []
 
         icons.forEach((name, index) => {
+          if (localPresets.some((preset) => name.startsWith(`${preset}-`))) {
+            imports.push(
+              `import 'virtual:sax-svg/register/${encodeURIComponent(name)}'`,
+            )
+            return
+          }
           const icon = parseIconName(name, options.collections)
           if (!icon) {
             throw new Error(

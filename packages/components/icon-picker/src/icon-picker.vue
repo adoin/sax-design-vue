@@ -25,7 +25,8 @@ const ns = useNamespace('icon-picker')
 const { t } = useLocale(toRef(props, 'locale'))
 const panelRef =
   useTemplateRef<InstanceType<typeof IconPickerPanel>>('panelRef')
-const availableIcons = computed(() => normalizeIconList(props.iconList))
+const availableIcons = computed(() => normalizeIconList(props.iconList, false))
+const loadedIcons = shallowRef(normalizeIconList(props.iconList))
 const visible = shallowRef(true)
 const selectedIcon = shallowRef(
   availableIcons.value.includes(props.initialIcon) ? props.initialIcon : '',
@@ -33,7 +34,7 @@ const selectedIcon = shallowRef(
 const selectedColor = shallowRef(props.color)
 const selectedSize = shallowRef(props.size ?? ICON_PICKER_DEFAULT_SIZE)
 const selection = computed(() =>
-  selectedIcon.value
+  selectedIcon.value && loadedIcons.value.includes(selectedIcon.value)
     ? createIconPickerSelection({
         name: selectedIcon.value,
         color: selectedColor.value,
@@ -110,6 +111,8 @@ const confirm = (icon = selectedIcon.value) => {
         :color="selectedColor"
         :locale="locale"
         :show-name="showName"
+        :api="api"
+        @loaded="loadedIcons = $event"
         @confirm="confirm"
       />
 
@@ -121,7 +124,7 @@ const confirm = (icon = selectedIcon.value) => {
       >
         <div :class="ns.e('preview')" aria-live="polite">
           <SIcon
-            v-if="selectedIcon"
+            v-if="selection"
             :name="selectedIcon"
             :color="selectedColor"
             :size="previewSize"

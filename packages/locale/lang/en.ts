@@ -339,6 +339,9 @@ export default {
         'Deprecated usages detected, please refer to the pagination documentation for more details',
     },
     iconPicker: {
+      loading: 'Loading icons…',
+      loadError: 'Some icons could not be loaded.',
+      retry: 'Retry',
       title: 'Insert icon',
       description: 'Choose an icon, color, and size for the required output.',
       search: 'Search icons',

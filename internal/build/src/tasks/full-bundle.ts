@@ -21,8 +21,6 @@ import {
   writeBundles,
 } from '../utils'
 import { target } from '../build-info'
-import { saxIcons } from '../../../../packages/iconify/src/vite'
-import saxIconConfig from '../../../../sax-icons.config'
 import type { TaskFunction } from 'gulp'
 
 const banner = `/*! ${PKG_BRAND_NAME} v${version} */\n`
@@ -30,7 +28,6 @@ const banner = `/*! ${PKG_BRAND_NAME} v${version} */\n`
 async function buildFullEntry(minify: boolean) {
   const plugins = [
     VuesaxAlphaAlias(),
-    saxIcons(saxIconConfig),
     VueMacros({
       setupComponent: false,
       setupSFC: false,

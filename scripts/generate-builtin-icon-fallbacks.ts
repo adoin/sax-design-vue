@@ -12,7 +12,6 @@ const require = createRequire(import.meta.url)
 const pickerSource = 'packages/components/icon-picker/src/icon-picker.ts'
 const generatedFiles = new Set([
   'packages/components/icon/src/builtin-carbon-icons.ts',
-  'packages/components/icon-picker/src/default-carbon-icons.ts',
 ])
 const pattern = /cb:([a-z0-9-]+)/gi
 
@@ -31,7 +30,6 @@ const sourceFiles = (
 const essentialNames = await readNames(
   sourceFiles.filter((file) => file.replace(/\\/g, '/') !== pickerSource),
 )
-const pickerNames = await readNames([pickerSource])
 const collection = JSON.parse(
   await readFile(require.resolve('@iconify-json/carbon/icons.json'), 'utf8'),
 ) as IconifyJSON
@@ -73,19 +71,4 @@ await writeFile(
   ),
   'utf8',
 )
-await writeFile(
-  path.join(
-    root,
-    'packages/components/icon-picker/src/default-carbon-icons.ts',
-  ),
-  await generatedModule(
-    "import type { SaxIconData } from '@vuesax-alpha/components/icon'",
-    'defaultCarbonIcons',
-    pickerNames,
-  ),
-  'utf8',
-)
-
-process.stdout.write(
-  `Generated ${essentialNames.length} component fallbacks and ${pickerNames.length} IconPicker defaults.`,
-)
+process.stdout.write(`Generated ${essentialNames.length} component fallbacks.`)

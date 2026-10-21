@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { computed, nextTick, shallowRef, toRef, useTemplateRef } from 'vue'
 import { IconClose, SIcon } from '@vuesax-alpha/components/icon'
+import { SButton } from '@vuesax-alpha/components/button'
 import PlaceholderText from '@vuesax-alpha/components/base/src/placeholder-text.vue'
 import { useLocale, useNamespace } from '@vuesax-alpha/hooks'
-import { normalizeIconList } from './icon-picker'
+import { useIconPickerIcons } from './use-icon-picker-icons'
+import type { IconPickerApiOptions } from './icon-picker'
 import type { Language } from '@vuesax-alpha/locale'
 
 const props = defineProps<{
@@ -12,11 +14,13 @@ const props = defineProps<{
   color: string
   locale?: Language
   showName: boolean
+  api?: boolean | IconPickerApiOptions
 }>()
 
 const emit = defineEmits<{
   'update:modelValue': [value: string]
   confirm: [value: string]
+  loaded: [names: string[]]
 }>()
 
 const ns = useNamespace('icon-picker')
@@ -26,7 +30,11 @@ const searchFocused = shallowRef(false)
 const gridRef = useTemplateRef<HTMLElement>('gridRef')
 const optionRefs = useTemplateRef<HTMLButtonElement[]>('optionRef')
 const query = shallowRef('')
-const icons = computed(() => normalizeIconList(props.iconList))
+const { icons, loading, failed, reload } = useIconPickerIcons(
+  () => props.iconList,
+  () => props.api,
+  (names) => emit('loaded', names),
+)
 const filteredIcons = computed(() => {
   const normalized = query.value.trim().toLowerCase()
   return normalized
@@ -72,7 +80,7 @@ defineExpose({ focusSearch })
 </script>
 
 <template>
-  <section :class="ns.e('catalog')">
+  <section :class="ns.e('catalog')" :aria-busy="loading">
     <div :class="ns.e('search-wrap')">
       <SIcon name="cb:search" />
       <span :class="ns.e('search-field')">
@@ -110,6 +118,13 @@ defineExpose({ focusSearch })
       <span>{{ resultText }}</span>
       <code v-if="modelValue">{{ modelValue }}</code>
     </div>
+    <p v-if="loading" role="status">{{ t('vs.iconPicker.loading') }}</p>
+    <div v-if="failed" role="status">
+      {{ t('vs.iconPicker.loadError') }}
+      <SButton type="flat" @click="reload()">{{
+        t('vs.iconPicker.retry')
+      }}</SButton>
+    </div>
 
     <div
       v-if="filteredIcons.length"
@@ -145,7 +160,7 @@ defineExpose({ focusSearch })
       </button>
     </div>
 
-    <div v-else :class="ns.e('empty')" role="status">
+    <div v-else-if="!loading && !failed" :class="ns.e('empty')" role="status">
       <span :class="ns.e('empty-icon')">
         <SIcon name="cb:search-locate" />
       </span>

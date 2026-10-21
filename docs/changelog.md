@@ -8,6 +8,7 @@ description: Releases and changes in Sax Design Vue.
 ## Unreleased {#unreleased}
 
 - Register project SVG files with the `signSvgs` Vite plugin. Use names such as `lo-home` in Icon or other components' icon props, including dynamic values. File changes reload development pages automatically.
+- Emit only referenced/safelisted local icons and share identical SVG data. IconPicker loads missing candidates through its configurable API instead of embedding a candidate SVG catalog. Internal control fallbacks remain available offline.
 
 See [Local SVG files](./icons/#local-svg-files).
 

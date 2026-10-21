@@ -112,7 +112,7 @@ describe('saxIcons', () => {
     expect(result.code).toContain('cb:help')
   })
 
-  it('registers literal icon lists shipped by Sax Design components', async () => {
+  it('does not reprocess icon lists shipped by Sax Design components', async () => {
     const plugin = saxIcons(config)
     const transform = hook<(code: string, id: string) => any>(plugin.transform)
     const result = await transform(
@@ -120,9 +120,7 @@ describe('saxIcons', () => {
       '/app/node_modules/sax-design-vue/es/icon-picker.mjs',
     )
 
-    expect(result.code).toContain('virtual:sax-icon/cb%3Ahome')
-    expect(result.code).toContain('virtual:sax-icon/cb%3Asearch')
-    expect(result.code).toContain('addIconDataRecord')
+    expect(result).toBeUndefined()
   })
 
   it('does not scan literal strings from unrelated dependencies', async () => {

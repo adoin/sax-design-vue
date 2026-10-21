@@ -8,6 +8,8 @@
 
 ## Project specifications
 
+- 图标数据边界见 `.agents/notes/implemented/builtin-icon-fallbacks.md` 与 `.agents/notes/implemented/local-svg-registration.md`：组件库只内置内部控件所需 SVG，不得内置 IconPicker 候选 SVG 或在库构建时运行应用图标提取插件；业务图标仅进入应用产物，或由运行时 API 加载。本地 SVG 按静态引用/safelist 提取并复用相同数据。
+
 - 路由页面固定为可拖动、可缩放窗口的新需求见 `.agents/notes/implemented/window-and-pinned-route-pages.md`；分工与交互建议见 `.agents/notes/proposed/window-component-and-admin-boundary.md`，不得把 proposed 中尚未确认的选择作为硬性要求。
 
 - Message Scroller 动态虚拟行高、历史懒加载、阅读锚点与用户滚动意图见 `.agents/notes/implemented/message-scroller-virtual-history.md`；虚拟测量统一复用 SVirtualList。
@@ -128,7 +130,6 @@
 - Keep the upload surface keyboard operable, provide accessible names for icon-only actions, announce validation and upload outcomes through localized live regions, and never communicate success or failure by color alone.
 - Apply `shape` to the dropzone, queue, previews, and actions together. Keep `listType` responsible only for queue presentation and `previewFit` responsible only for image fitting; neither may change validation or request behavior.
 - Verify picker selection, drag-and-drop rejection, count and size limits, manual and automatic requests, progress, failure retry, removal guards, controlled values, image cards, both shapes, and every localized Code and Playground example together.
-
 
 ## Component attribute ownership
 

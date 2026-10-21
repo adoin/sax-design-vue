@@ -19,7 +19,6 @@ import {
   createIconSvg,
   normalizeIconList,
 } from '../src/icon-picker'
-import { defaultCarbonIcons } from '../src/default-carbon-icons'
 
 const iconData = {
   body: '<path fill="currentColor" d="M2 2h12v12H2z"/>',
@@ -28,6 +27,12 @@ const iconData = {
 const missingIcon = ['bx', 'missing'].join(':')
 
 beforeAll(() => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async () => {
+      throw new Error('Network disabled in picker UI tests')
+    }),
+  )
   // These tests verify picker results and disposal. Particle timing has its
   // own suite; do not depend on real animation frames in jsdom API tests.
   vi.stubGlobal('matchMedia', (query: string) => ({
@@ -55,11 +60,13 @@ afterEach(() => {
 })
 
 describe('IconPicker', () => {
-  it('ships a broad, unique default Carbon collection', () => {
+  it('provides a default name catalog without requiring its SVG payloads', () => {
     expect(DEFAULT_ICON_LIST).toHaveLength(168)
     expect(new Set(DEFAULT_ICON_LIST).size).toBe(DEFAULT_ICON_LIST.length)
-    expect(Object.keys(defaultCarbonIcons)).toHaveLength(168)
-    expect(normalizeIconList(DEFAULT_ICON_LIST)).toEqual(DEFAULT_ICON_LIST)
+    expect(normalizeIconList(DEFAULT_ICON_LIST, false)).toEqual(
+      DEFAULT_ICON_LIST,
+    )
+    expect(normalizeIconList(DEFAULT_ICON_LIST).length).toBeLessThan(168)
   })
 
   it('normalizes registered names and ignores unavailable values', () => {

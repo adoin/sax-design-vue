@@ -7,8 +7,6 @@ import { excludeFiles, pkgRoot, vsRoot } from '@vuesax-alpha/build-utils'
 import { generateExternal, writeBundles } from '../utils'
 import { VuesaxAlphaAlias } from '../plugins/vuesax-alpha-alias'
 import { buildConfigEntries, target } from '../build-info'
-import { saxIcons } from '../../../../packages/iconify/src/vite'
-import saxIconConfig from '../../../../sax-icons.config'
 
 import type { OutputOptions } from 'rolldown'
 
@@ -25,7 +23,6 @@ export const buildModules = async () => {
     input,
     plugins: [
       VuesaxAlphaAlias(),
-      saxIcons(saxIconConfig),
       VueMacros({
         setupComponent: false,
         setupSFC: false,

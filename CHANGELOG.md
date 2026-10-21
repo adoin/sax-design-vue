@@ -3,6 +3,9 @@
 ### Unreleased
 
 - Add the `signSvgs` Vite plugin for registering project SVG files with glob patterns and names such as `lo-home`, including dynamic component icon props, duplicate-name diagnostics and development file watching.
+- Extract only referenced/safelisted local SVGs, sharing identical data across files and prefixes.
+- Remove IconPicker's embedded candidate SVG catalog and duplicate library-build extraction; load missing picker candidates from a configurable runtime API, with offline mode, batching, cancellation and retry.
+- Skip already published component modules in application icon transforms.
 
 ### 2.6.1 — 2026-10-20
 
