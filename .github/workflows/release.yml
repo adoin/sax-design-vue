@@ -99,6 +99,8 @@ jobs:
         run: |
           if gh release view "$TAG_VERSION" >/dev/null 2>&1; then
             gh release edit "$TAG_VERSION" --notes-file "$RUNNER_TEMP/release-notes.md" --title "sax-design-vue $TAG_VERSION" --latest="$MARK_LATEST"
+          elif gh api "repos/$GH_REPO/git/ref/tags/$TAG_VERSION" >/dev/null 2>&1; then
+            gh release create "$TAG_VERSION" --verify-tag --notes-file "$RUNNER_TEMP/release-notes.md" --title "sax-design-vue $TAG_VERSION" --latest="$MARK_LATEST"
           else
             gh release create "$TAG_VERSION" --target "$RELEASE_SOURCE" --notes-file "$RUNNER_TEMP/release-notes.md" --title "sax-design-vue $TAG_VERSION" --latest="$MARK_LATEST"
           fi
