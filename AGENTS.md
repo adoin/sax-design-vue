@@ -5,6 +5,7 @@
 - Work directly on `main`. Do not create feature branches, `cursor/*` snapshot branches, or pull-request branches unless the user explicitly asks for a branch.
 - Commit and push to `main`. After any temporary branch is merged, delete it locally and on the remote.
 - npm 发布以 `npm publish` 的退出状态判断上传成功；保留构建与包完整性验证，不追加发布后公开可用性轮询，也不因 registry 后台处理或传播延迟判定发布失败。
+- 正式发布统一走 `.github/workflows/release.yml`：版本标签或手动触发负责 npm 上传、GitHub Release 与官网部署。已确认 npm 上传成功的补录使用 `npm_already_published`，历史版本补录关闭 `deploy_docs`，不得重复上传包，也不得只发 npm 而遗漏 GitHub Release。
 
 ## Project specifications
 

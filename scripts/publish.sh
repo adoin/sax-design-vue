@@ -13,12 +13,6 @@ if [[ "$release_version" != "$manifest_version" ]]; then
   exit 1
 fi
 
-live_version="$(npm view "sax-design-vue@$release_version" version --prefer-online 2>/dev/null || true)"
-if [[ "$live_version" == "$release_version" ]]; then
-  echo "Verified public sax-design-vue@$release_version"
-  exit 0
-fi
-
 pnpm install --frozen-lockfile
 pnpm run gen:version
 pnpm run build
@@ -32,7 +26,7 @@ if [[ "$release_version" != "$built_version" ]]; then
 fi
 
 icon_version="$(node -p "require('./packages/iconify/package.json').version")"
-published_icon_version="$(npm view sax-design-vue-iconify version)"
+published_icon_version="$(npm view "sax-design-vue-iconify@$icon_version" version 2>/dev/null || true)"
 if [[ "$icon_version" != "$published_icon_version" ]]; then
   npm publish ./packages/iconify --access public --provenance
 fi
