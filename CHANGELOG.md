@@ -6,6 +6,7 @@
 - Extract only referenced/safelisted local SVGs, sharing identical data across files and prefixes.
 - Remove IconPicker's embedded candidate SVG catalog and duplicate library-build extraction; load missing picker candidates from a configurable runtime API, with offline mode, batching, cancellation and retry.
 - Skip already published component modules in application icon transforms.
+- Document IconPicker network requirements, intranet Docker API deployment with local JSON sets, and fully offline application bundling.
 
 ### 2.6.1 — 2026-10-20
 

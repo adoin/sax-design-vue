@@ -91,7 +91,7 @@ export default defineConfig({
 
 The plugin injects the `safelist` registry into Vite HTML entries automatically. No entry-file registration code is needed.
 
-## Register local SVG files {#local-svg-files}
+## Local SVG files
 
 Place `home.svg`, `user.svg`, and other assets in `src/assets/svgs/`, then register the directory in `vite.config.ts`:
 

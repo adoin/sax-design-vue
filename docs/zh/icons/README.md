@@ -90,7 +90,7 @@ export default defineConfig({
 
 插件会自动把 `safelist` 注册模块注入 Vite HTML 入口，应用入口无需再写注册代码。
 
-## 注册本地 SVG 文件 {#local-svg-files}
+## 注册本地 SVG 文件
 
 在项目的 `src/assets/svgs/` 放入 `home.svg`、`user.svg` 等文件，然后在 `vite.config.ts` 注册目录：
 

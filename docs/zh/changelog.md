@@ -5,10 +5,11 @@ description: Sax Design Vue 版本与变更记录。
 
 # 更新日志
 
-## 尚未发布 {#unreleased}
+## 尚未发布
 
 - 新增 `signSvgs` Vite 插件，将项目 SVG 文件注册为 `lo-home` 等名称，可用于 Icon 和其他组件的图标属性，也支持动态名称。开发时文件变化会自动刷新页面。
 - 本地 SVG 仅打包静态引用及 safelist，并复用相同数据。IconPicker 改为通过可配置 API 加载缺少的候选数据，不再内置候选 SVG 集合；内部控件图标仍可离线使用。
+- 补充 IconPicker 网络依赖、内网 Docker API 部署与完全离线应用打包说明。
 
 参见[本地 SVG 文件](./icons/#local-svg-files)。
 
