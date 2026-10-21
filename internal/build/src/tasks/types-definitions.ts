@@ -134,6 +134,8 @@ async function addSourceFiles(project: Project) {
         const { script, scriptSetup } = sfc.descriptor
         if (script || scriptSetup) {
           if (scriptSetup) {
+            const useFileManagerPublicType =
+              path.basename(file) === 'file-manager.vue'
             const useOpaqueComponentType = [
               'anchor.vue',
               'calendar.vue',
@@ -157,12 +159,17 @@ async function addSourceFiles(project: Project) {
               (script?.content ?? '')
             const compiled = vueCompiler.compileScript(sfc.descriptor, {
               id: 'xxx',
-              ...(useOpaqueComponentType
+              ...(useOpaqueComponentType || useFileManagerPublicType
                 ? { genDefaultAs: '__sfc_component__' }
                 : {}),
             })
             content += compiled.content
-            if (useOpaqueComponentType) {
+            if (useFileManagerPublicType) {
+              // Preserve the complete named public contract without serializing
+              // the internal tree/content/provider component graph.
+              content +=
+                "\nimport type { FileManagerComponent } from './types'\nexport default __sfc_component__ as unknown as FileManagerComponent\n"
+            } else if (useOpaqueComponentType) {
               // These SFCs compose many imported components. Their
               // inferred default type exceeds TypeScript's declaration limit;
               // their public contracts remain exported from their modules.

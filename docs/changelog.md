@@ -5,6 +5,11 @@ description: Releases and changes in Sax Design Vue.
 
 # Changelog
 
+## Unreleased
+
+- Add File Manager with a directory tree, breadcrumbs, virtual icon/list views, drag/drop, keyboard operations and configurable global behavior.
+- Customize folder covers through a slot and file previews through extension/MIME renderers. Use asynchronous operation guards for persistence and confirmation.
+
 ## 2.7.0
 
 Released October 21, 2026. Uses `sax-design-vue-iconify` 1.1.0.

@@ -1,6 +1,7 @@
 import { SReasoningSteps } from '@vuesax-alpha/components/reasoning-steps'
 import { SChatHistory } from '@vuesax-alpha/components/chat-history'
 import { SFileDiff } from '@vuesax-alpha/components/file-diff'
+import { SFileManager } from '@vuesax-alpha/components/file-manager'
 import { SImageGeneration } from '@vuesax-alpha/components/image-generation'
 import { SStreamingText } from '@vuesax-alpha/components/streaming-text'
 import { SInlineCitations } from '@vuesax-alpha/components/inline-citations'
@@ -223,5 +224,6 @@ export default [
   SVirtualList,
   SWatermark,
   SWindow,
+  SFileManager,
   SVerificationCode,
 ] as Plugin[]

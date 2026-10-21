@@ -1,5 +1,11 @@
 ## Changelog
 
+### Unreleased
+
+- Add File Manager with a virtualized folder tree, shared breadcrumbs, icon/list views, resizable icon grids and stable selection across virtual rows.
+- Support data-driven context menus, folder-cover slots, extension/MIME preview renderers, internal drag/drop across folders/tree/breadcrumbs, keyboard navigation and file operations with asynchronous guards.
+- Add global File Manager behavior defaults and paired English/Chinese interactive examples.
+
 ### 2.7.0 — 2026-10-21
 
 - Require the companion `sax-design-vue-iconify` 1.1.0 package, including the optional browser API entry.

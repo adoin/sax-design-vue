@@ -128,6 +128,7 @@ export const componentCategories: ComponentCategory[] = [
       ),
       component('Tag', '标签', '/components/tag'),
       component('Virtual list', '虚拟列表', '/components/virtual-list'),
+      component('File Manager', '文件管理', '/components/file-manager'),
     ],
   },
   {

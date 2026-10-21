@@ -2,6 +2,7 @@
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     SWindow: (typeof import('sax-design-vue'))['SWindow']
+    SFileManager: (typeof import('sax-design-vue'))['SFileManager']
     SSkeleton: (typeof import('sax-design-vue'))['SSkeleton']
     SAlert: (typeof import('sax-design-vue'))['SAlert']
     SAvatar: (typeof import('sax-design-vue'))['SAvatar']

@@ -9,6 +9,8 @@
 
 ## Project specifications
 
+- File Manager 的扁平目录数据、虚拟网格缩放锚点、统一操作钩子、预览渲染器与全局操作习惯见 `.agents/notes/implemented/file-manager-explorer.md`；导航按钮位于目录树上方的全宽导航栏，面包屑复用现有组件。
+
 - 图标数据边界见 `.agents/notes/implemented/builtin-icon-fallbacks.md` 与 `.agents/notes/implemented/local-svg-registration.md`：组件库只内置内部控件所需 SVG，不得内置 IconPicker 候选 SVG 或在库构建时运行应用图标提取插件；业务图标仅进入应用产物，或由运行时 API 加载。本地 SVG 按静态引用/safelist 提取并复用相同数据。
 
 - 路由页面固定为可拖动、可缩放窗口的新需求见 `.agents/notes/implemented/window-and-pinned-route-pages.md`；分工与交互建议见 `.agents/notes/proposed/window-component-and-admin-boundary.md`，不得把 proposed 中尚未确认的选择作为硬性要求。

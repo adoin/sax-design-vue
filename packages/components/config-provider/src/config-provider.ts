@@ -16,6 +16,7 @@ import type {
   AnchorRouterAdapter,
 } from '../../types'
 import type { TableGlobalConfig } from '../../table/src/table-global-config'
+import type { FileManagerGlobalConfig } from '../../file-manager/src/types'
 import type { IconMorphOptions } from '../../icon/src/morph/types'
 import type {
   FlipOptions,
@@ -191,6 +192,7 @@ export const configProviderProps = buildProps({
   tabs: { type: definePropType<TabsGlobalConfig>(Object) },
   /** Defaults for multiple Select value ordering. */
   select: { type: definePropType<SelectGlobalConfig>(Object) },
+  fileManager: { type: definePropType<FileManagerGlobalConfig>(Object) },
   /** Component-level defaults for Anchor. */
   anchor: {
     type: definePropType<AnchorGlobalConfig>(Object),

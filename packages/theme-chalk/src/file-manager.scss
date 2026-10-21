@@ -1,0 +1,335 @@
+@use 'mixins/function' as *;
+.s-file-manager {
+  display: flex;
+  flex-direction: column;
+  min-height: 220px;
+  min-width: 0;
+  overflow: hidden;
+  color: getColor(text);
+  background: getColor(background);
+  border-radius: var(--sax-radius-lg, 16px);
+  box-shadow: inset 0 2px 8px getColor(text, 0.06);
+  font-size: 13px;
+  user-select: none;
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: none;
+    background-color: getColor(primary, 0.12);
+  }
+  button {
+    font: inherit;
+  }
+  &.is-square {
+    border-radius: 0;
+    .s-file-manager__entry,
+    .s-file-manager__tree-row,
+    .s-file-manager__tree-root,
+    .s-file-manager__preview {
+      border-radius: 0;
+    }
+  }
+  &__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  &__workspace {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+  }
+  &.has-tree &__history {
+    width: calc(var(--s-file-manager-tree-width) - 16px);
+  }
+  &__navigation {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    min-width: 0;
+  }
+  &__history {
+    display: flex;
+    flex-shrink: 0;
+    gap: 2px;
+  }
+  &__path {
+    min-width: 0;
+    flex: 1;
+    overflow: auto;
+    white-space: nowrap;
+    .s-breadcrumb__list {
+      flex-wrap: nowrap;
+    }
+  }
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 4px 16px 12px;
+  }
+  &__search {
+    margin-inline-start: auto;
+    flex: 1;
+    min-width: 100px;
+    max-width: 220px;
+  }
+  &__toolbar [aria-pressed='true'] {
+    color: getColor(primary);
+    background: getColor(primary, 0.12);
+  }
+  &__tree {
+    width: var(--s-file-manager-tree-width);
+    flex-shrink: 0;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: getColor(text, 0.025);
+    box-shadow: inset -2px 0 6px getColor(text, 0.025);
+  }
+  &__tree > .s-vl {
+    flex: 1;
+    min-height: 0;
+  }
+  &__tree-root,
+  &__tree-row {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    border-radius: 8px;
+  }
+  &__tree-root {
+    border: 0;
+    background: transparent;
+    padding: 8px 12px;
+    text-align: start;
+    cursor: pointer;
+    font-weight: 600;
+    flex-shrink: 0;
+    color: inherit;
+  }
+  &__expand {
+    width: 24px;
+    height: 32px;
+    flex-shrink: 0;
+    border: 0;
+    color: inherit;
+    background: transparent;
+    cursor: pointer;
+    &:disabled {
+      cursor: default;
+    }
+  }
+  &__tree-name {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    height: 36px;
+    flex: 1;
+    min-width: 0;
+    padding: 0 8px 0 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    text-align: start;
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      color: getColor(primary, 0.65);
+    }
+  }
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    min-width: 0;
+    position: relative;
+    padding: 8px 16px 0;
+  }
+  &__content > .s-vl {
+    flex: 1;
+    min-height: 0;
+  }
+  &__row {
+    display: grid;
+    gap: 12px;
+    padding: 0 4px 12px 0;
+  }
+  &__entry {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 10px 8px;
+    border-radius: 10px;
+    cursor: default;
+    overflow: hidden;
+  }
+  &__entry:hover,
+  &__tree-row:hover,
+  &__tree-root:hover {
+    background: getColor(text, 0.04);
+  }
+  &__entry.is-selected,
+  .is-current {
+    background: getColor(primary, 0.1);
+    color: getColor(primary);
+  }
+  &__content:focus-visible {
+    background-color: transparent !important;
+  }
+  &__content:focus-visible &__entry.is-focused {
+    background: getColor(primary, 0.17);
+    box-shadow: inset 0 2px 8px getColor(primary, 0.14);
+  }
+  .is-drop-target {
+    background: getColor(primary, 0.18) !important;
+    box-shadow: inset 0 0 14px getColor(primary, 0.14);
+  }
+  &__entry.is-cut {
+    opacity: 0.45;
+  }
+  &__entry.is-disabled,
+  &__tree-name:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  &__preview {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 8px;
+    pointer-events: none;
+    > img {
+      display: block;
+      height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
+  }
+  &__folder {
+    height: 88%;
+    width: 90%;
+    max-width: 120px;
+    color: getColor(warn, 0.85);
+  }
+  &__file {
+    height: 88%;
+    max-width: 80%;
+    color: getColor(primary);
+  }
+  &__extension {
+    position: absolute;
+    inset-inline: 0;
+    top: 55%;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: getColor(primary);
+  }
+  &__name {
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 24px;
+  }
+  &__rename {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+  }
+  &__list-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 120px 90px;
+    padding: 8px 12px;
+    color: getColor(text, 0.6);
+    gap: 12px;
+  }
+  &__content.is-list &__row {
+    padding-bottom: 2px;
+    gap: 0;
+  }
+  &__content.is-list &__entry {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr) 120px 90px;
+    gap: 12px;
+    padding: 6px 12px;
+    align-items: center;
+  }
+  &__content.is-list &__preview {
+    height: 30px;
+  }
+  &__content.is-list &__name {
+    text-align: start;
+  }
+  &__content.is-list &__extension {
+    display: none;
+  }
+  &__modified,
+  &__size {
+    color: getColor(text, 0.6);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  &__empty {
+    padding: 60px 16px;
+    text-align: center;
+    color: getColor(text, 0.55);
+    pointer-events: none;
+  }
+  &__status {
+    min-height: 32px;
+    flex-shrink: 0;
+    padding: 8px 16px;
+    display: flex;
+    gap: 16px;
+    color: getColor(text, 0.6);
+    font-size: 12px;
+    [role='alert'] {
+      color: getColor(danger);
+    }
+  }
+  @media (max-width: 680px) {
+    &__tree {
+      width: 150px;
+    }
+    &__navigation {
+      padding-inline: 8px;
+      gap: 4px;
+    }
+    &__content.is-list &__entry {
+      grid-template-columns: 26px minmax(0, 1fr) 64px;
+    }
+    &__modified,
+    &__list-header {
+      display: none;
+    }
+  }
+}

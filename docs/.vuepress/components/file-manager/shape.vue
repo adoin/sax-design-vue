@@ -1,0 +1,47 @@
+<script setup lang="ts">
+import { SFileManager } from 'sax-design-vue'
+import type { FileManagerEntry } from 'sax-design-vue'
+const files: FileManagerEntry[] = [
+  { id: 1, parentId: null, name: 'Folder', kind: 'folder' },
+]
+</script>
+
+<template>
+  <div class="shape-examples">
+    <div>
+      <p>Rounded</p>
+      <SFileManager
+        :model-value="files"
+        :height="300"
+        :show-tree="false"
+        :context-menu="false"
+        :behavior="{ dragDrop: false }"
+        shape="rounded"
+      />
+    </div>
+    <div>
+      <p>Square</p>
+      <SFileManager
+        :model-value="files"
+        :height="300"
+        :show-tree="false"
+        :context-menu="false"
+        :behavior="{ dragDrop: false }"
+        shape="square"
+      />
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.shape-examples {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+@media (max-width: 700px) {
+  .shape-examples {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+</style>

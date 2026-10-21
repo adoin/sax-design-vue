@@ -7,6 +7,7 @@ declare module '@vue/runtime-core' {
     SReasoningSteps: (typeof import('../packages/sax-design-vue'))['SReasoningSteps']
     SChatHistory: (typeof import('../packages/sax-design-vue'))['SChatHistory']
     SFileDiff: (typeof import('../packages/sax-design-vue'))['SFileDiff']
+    SFileManager: (typeof import('../packages/sax-design-vue'))['SFileManager']
     SImageGeneration: (typeof import('../packages/sax-design-vue'))['SImageGeneration']
     SStreamingText: (typeof import('../packages/sax-design-vue'))['SStreamingText']
     SInlineCitations: (typeof import('../packages/sax-design-vue'))['SInlineCitations']
