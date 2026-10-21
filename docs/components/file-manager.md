@@ -294,6 +294,28 @@ Space toggles the focused entry and typing a name prefix locates a match. Arrow 
 
 The icon grid derives columns from container width and tileSize, then virtualizes rows with SVirtualList. Resizing or zooming restores the top entry by stable ID. Selection is independent of mounted DOM, including off-screen range selection. The tree virtualizes expanded rows. Previews use a fixed tile frame; constrain custom content to that frame. Indexing, filtering and sorting still happen in memory; applications should load and replace data for very large remote sources.
 
+The example starts with 10,000 files and can load 100,000. Jump to the start, middle or end, or scroll manually. Use the view button to switch grid/list and Shift + wheel to resize tiles. Enable the file tree to test its virtual scrolling too.
+
+<template #example><file-manager-virtual /></template>
+
+<template #template>
+
+@[code{30-51}](../.vuepress/components/file-manager/virtual.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-28}](../.vuepress/components/file-manager/virtual.vue)
+
+</template>
+
+<template #style>
+
+@[code{53-66}](../.vuepress/components/file-manager/virtual.vue)
+
+</template>
+
 </card>
 
 <card>

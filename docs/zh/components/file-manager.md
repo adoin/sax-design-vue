@@ -294,6 +294,28 @@ EXPOSES:
 
 图标网格根据实际容器宽度与 tileSize 计算列数，把每一排交给 SVirtualList。缩放或改变容器宽度后按稳定项目 ID 恢复顶部锚点；选择不依赖 DOM，离屏项目仍能参与范围选择。目录树只渲染展开的虚拟行。预览使用统一图标框，复杂内容应限制在框内。数组索引、过滤与排序仍在内存进行；超大远程数据应由业务加载并替换当前数据。
 
+示例默认载入 10,000 个文件，可切换为 100,000 个。使用“开头 / 中间 / 末尾”快速定位，或直接滚动；右上按钮切换网格与列表，Shift + 滚轮缩放网格。“显示文件树”可同时测试左侧树的虚拟滚动。
+
+<template #example><file-manager-zh-virtual /></template>
+
+<template #template>
+
+@[code{30-51}](../../.vuepress/components/file-manager-zh/virtual.vue)
+
+</template>
+
+<template #script>
+
+@[code{1-28}](../../.vuepress/components/file-manager-zh/virtual.vue)
+
+</template>
+
+<template #style>
+
+@[code{53-66}](../../.vuepress/components/file-manager-zh/virtual.vue)
+
+</template>
+
 </card>
 
 <card>

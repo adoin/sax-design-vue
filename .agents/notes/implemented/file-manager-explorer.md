@@ -42,3 +42,8 @@ modules:
 - When no entry/extension/wildcard thumbnail or custom file icon is used, the default SVG includes a text node for a normalized extension of one or two Unicode code points. Longer extensions and extensionless names retain the plain file glyph. No raw SVG string interpolation is used.
 - Tree, grid and list share the same glyph implementation. Existing custom preview renderers and graphic overrides retain priority; name/extension updates refresh the label.
 - Verification: 26 File Manager tests cover both short Latin and Chinese extensions, long/absent extensions, tree/list parity, thumbnail precedence and renaming updates.
+
+## Large-directory documentation playground (2026-10-21)
+
+- The keyboard-and-virtualization example starts with 10,000 files and allows loading 100,000; all entries are flat consumer data. Start/middle/end controls invoke the public scrollTo method. Built-in view switching and Shift+wheel zoom remain component-owned; an optional file-tree switch exercises the virtual tree too.
+- English/Chinese examples have complete synchronized Code and Playground sources. Browser verification: 100,000-file end navigation mounts 24 grid entries; middle navigation in list view mounts 13 entries; the file tree mounts 16 names. All 22 documentation checks and scoped lint pass.
