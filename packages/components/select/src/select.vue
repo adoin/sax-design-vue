@@ -174,12 +174,7 @@
           ns.e('label'),
           ns.is(
             'placeholder',
-            labelFloat &&
-              !dropMenuVisible &&
-              (multiple
-                ? selectedArray.length === 0
-                : isEqual(modelValue, notValue) ||
-                  (!modelValue && modelValue != 0)),
+            labelFloat && !dropMenuVisible && !placeholderOccupied,
           ),
         ]"
       >
@@ -430,7 +425,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { StyleValue } from 'vue'
 import {
   computed,
   h,
@@ -476,6 +470,7 @@ import { selectEmits, selectProps } from './select'
 import { useSelect, useSelectStates } from './useSelect'
 import { sortOptionsByPinnedValues, useSelectPinning } from './useSelectPinning'
 import { calculateVisibleTagCount } from './tag-overflow'
+import type { StyleValue } from 'vue'
 import type {
   SelectDataOption,
   SelectRenderItemContext,
@@ -802,7 +797,10 @@ const optionsAnimation = computed(() => ns.b())
 const multipleOptionOrder = computed(() => {
   if (slots.default) return undefined
   const data = props.optionGroups.length
-    ? props.optionGroups.reduce<Record<string, unknown>[]>((result, group) => { result.push(...getGroupOptions(group)); return result }, [])
+    ? props.optionGroups.reduce<Record<string, unknown>[]>((result, group) => {
+        result.push(...getGroupOptions(group))
+        return result
+      }, [])
     : orderedOptions.value
   return data.map((option) => getOptionValue(option) as SelectOptionValue)
 })

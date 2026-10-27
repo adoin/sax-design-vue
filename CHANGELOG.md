@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Keep Select floating labels above displayed option text when the selected value is an empty string or matches `notValue`.
+
 - Improve documentation cold-page loading with development-only component imports, batched icon registration, native Sass caching and deferred Playground loading; add isolated cold/warm profiling options.
 
 ### 2.8.1 — 2026-10-21

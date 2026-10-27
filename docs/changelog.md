@@ -7,6 +7,8 @@ description: Releases and changes in Sax Design Vue.
 
 ## Unreleased
 
+- Prevent Select floating labels from overlapping selected option text for empty-string values or values matching `notValue`.
+
 - Improve documentation development cold loads with on-demand components, batched icons, native Sass caching and deferred Playground loading; support isolated caches for repeatable profiling.
 
 ## 2.8.1

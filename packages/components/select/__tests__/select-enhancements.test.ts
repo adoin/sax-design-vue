@@ -193,6 +193,55 @@ describe('Select enhanced capabilities', () => {
     wrapper.unmount()
   })
 
+  it.each([
+    ['', undefined],
+    ['', ''],
+    [0, undefined],
+    ['none', 'none'],
+  ])(
+    'floats the label for a displayed option with value %j and empty sentinel %j',
+    async (value, notValue) => {
+      const wrapper = mountSelect({
+        modelValue: value,
+        ...(notValue === undefined ? {} : { notValue }),
+        labelFloat: true,
+        placeholder: 'Status',
+        options: [{ label: 'All statuses', value }],
+      })
+      await nextTick()
+      expect(
+        wrapper.get<HTMLInputElement>('.s-select__input').element.value,
+      ).toBe('All statuses')
+      expect(wrapper.get('.s-select__label').classes()).not.toContain(
+        'is-placeholder',
+      )
+      wrapper.unmount()
+    },
+  )
+
+  it('updates floating occupancy when empty-string option data arrives and the value is reset', async () => {
+    const wrapper = mountSelect({
+      modelValue: '',
+      labelFloat: true,
+      placeholder: 'Status',
+      options: [],
+    })
+    expect(wrapper.get('.s-select__label').classes()).toContain(
+      'is-placeholder',
+    )
+    await wrapper.setProps({ options: [{ label: 'All statuses', value: '' }] })
+    await nextTick()
+    expect(wrapper.get('.s-select__label').classes()).not.toContain(
+      'is-placeholder',
+    )
+    await wrapper.setProps({ modelValue: null, options: [] })
+    await nextTick()
+    expect(wrapper.get('.s-select__label').classes()).toContain(
+      'is-placeholder',
+    )
+    wrapper.unmount()
+  })
+
   it.each(['small', 'default', 'large'] as const)(
     'renders the inherited %s size class',
     (size) => {
