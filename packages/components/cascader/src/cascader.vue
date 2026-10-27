@@ -485,15 +485,20 @@ const resolvedLabel = computed(
 const hasFloatingLabel = computed(() =>
   Boolean(resolvedLabel.value && props.labelFloat),
 )
+const hasDisplayedContent = computed(
+  () =>
+    selectedCount.value > 0 ||
+    (!props.multiple && Boolean(singleDisplayLabel.value)),
+)
 const labelIsPlaceholder = computed(
   () =>
     hasFloatingLabel.value &&
     !mergedOpen.value &&
-    selectedCount.value === 0 &&
+    !hasDisplayedContent.value &&
     !searchText.value,
 )
 const showPlaceholder = computed(
-  () => selectedCount.value === 0 && !searchText.value,
+  () => !hasDisplayedContent.value && !searchText.value,
 )
 const showClear = computed(
   () =>

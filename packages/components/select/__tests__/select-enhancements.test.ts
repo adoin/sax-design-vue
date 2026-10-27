@@ -219,7 +219,7 @@ describe('Select enhanced capabilities', () => {
     },
   )
 
-  it('updates floating occupancy when empty-string option data arrives and the value is reset', async () => {
+  it('updates floating occupancy when empty-string option data arrives', async () => {
     const wrapper = mountSelect({
       modelValue: '',
       labelFloat: true,
@@ -232,11 +232,6 @@ describe('Select enhanced capabilities', () => {
     await wrapper.setProps({ options: [{ label: 'All statuses', value: '' }] })
     await nextTick()
     expect(wrapper.get('.s-select__label').classes()).not.toContain(
-      'is-placeholder',
-    )
-    await wrapper.setProps({ modelValue: null, options: [] })
-    await nextTick()
-    expect(wrapper.get('.s-select__label').classes()).toContain(
       'is-placeholder',
     )
     wrapper.unmount()

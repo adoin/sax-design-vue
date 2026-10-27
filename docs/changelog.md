@@ -7,6 +7,8 @@ description: Releases and changes in Sax Design Vue.
 
 ## Unreleased
 
+- Keep Cascader labels and placeholders clear of custom display text returned for an empty selection.
+
 ## 2.8.2
 
 - Prevent Select floating labels from overlapping selected option text for empty-string values or values matching `notValue`.

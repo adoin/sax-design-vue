@@ -7,6 +7,8 @@ description: Sax Design Vue 版本与变更记录。
 
 ## 未发布
 
+- 修复 Cascader 空选中值的自定义显示文字与浮动标签、占位文字重叠的问题。
+
 ## 2.8.2
 
 - 修复 Select 选中空字符串或与 `notValue` 相同的选项时，浮动标签与选项文字重叠的问题。

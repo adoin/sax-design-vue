@@ -61,6 +61,21 @@ const mountTableSelect = (
   })
 
 describe('TableSelect', () => {
+  it.each(['', 0])(
+    'shows the row label instead of a placeholder for key %j',
+    (id) => {
+      const wrapper = mountTableSelect({
+        modelValue: id,
+        data: [{ id, name: 'All' }],
+        placeholder: 'Choose',
+      })
+      expect(wrapper.get('.s-table-select__value').text()).toBe('All')
+      expect(wrapper.get('.s-table-select__value').classes()).not.toContain(
+        'is-placeholder',
+      )
+      wrapper.unmount()
+    },
+  )
   it('selects multiple flat rows, stays open, removes tags and clears to an array', async () => {
     const wrapper = mountTableSelect({
       multiple: true,

@@ -22,11 +22,48 @@ const ButtonStub = defineComponent({
 })
 const global = { stubs: { SPopper: PopperStub, SButton: ButtonStub } }
 beforeEach(() => {
-  vi.stubGlobal('matchMedia', () => ({ matches: true }))
+  vi.stubGlobal('matchMedia', () => ({
+    matches: true,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }))
 })
 afterEach(() => vi.unstubAllGlobals())
 
 describe('Picker placeholder interaction', () => {
+  it('keeps a zero timestamp date occupied with a floating label', () => {
+    const wrapper = mount(DatePicker, {
+      props: {
+        modelValue: 0,
+        labelFloat: true,
+        placeholder: 'Date',
+        timezone: 'UTC',
+      },
+      global,
+    })
+    const input = wrapper.getComponent(Input)
+    expect(input.get('input').element.value).not.toBe('')
+    expect(input.get('.s-input__placeholder').classes()).toContain(
+      's-input__placeholder--float-active',
+    )
+  })
+
+  it('keeps a zero timestamp time occupied with a floating label', () => {
+    const wrapper = mount(TimePicker, {
+      props: {
+        modelValue: 0,
+        labelFloat: true,
+        placeholder: 'Time',
+        timezone: 'UTC',
+      },
+      global,
+    })
+    const input = wrapper.getComponent(Input)
+    expect(input.get('input').element.value).not.toBe('')
+    expect(input.get('.s-input__placeholder').classes()).toContain(
+      's-input__placeholder--float-active',
+    )
+  })
   it('keeps a time hint dissolved while editing the uncommitted panel time', async () => {
     const wrapper = mount(TimePicker, {
       attachTo: document.body,

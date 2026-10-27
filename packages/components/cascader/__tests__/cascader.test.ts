@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import Cascader from '../src/cascader.vue'
 import { SHOW_CHILD } from '../src/cascader'
+import PlaceholderText from '../../base/src/placeholder-text.vue'
 import type { CascaderOption } from '../src/cascader'
 
 const PopperStub = defineComponent({
@@ -47,6 +48,54 @@ const options = [
 ]
 
 describe('Cascader', () => {
+  it.each(['', 0])(
+    'keeps the floating label above the option with value %j',
+    (value) => {
+      const wrapper = mountCascader({
+        defaultOpen: false,
+        modelValue: [value],
+        options: [{ value, label: 'All' }],
+        labelFloat: true,
+        placeholder: 'Destination',
+      })
+      expect(wrapper.get('.s-cascader__value').text()).toBe('All')
+      expect(wrapper.get('.s-cascader__label').classes()).not.toContain(
+        'is-placeholder',
+      )
+      wrapper.unmount()
+    },
+  )
+
+  it.each([true, false])(
+    'does not overlap custom empty-path display text with a placeholder (floating: %j)',
+    async (labelFloat) => {
+      const wrapper = mountCascader({
+        defaultOpen: false,
+        modelValue: [],
+        options,
+        label: 'Destination',
+        placeholder: 'Choose a destination',
+        labelFloat,
+        displayRender: () => 'All destinations',
+      })
+      expect(wrapper.get('.s-cascader__value').text()).toBe('All destinations')
+      expect(wrapper.get('.s-cascader__label').classes()).not.toContain(
+        'is-placeholder',
+      )
+      if (!labelFloat)
+        expect(wrapper.getComponent(PlaceholderText).props('hidden')).toBe(true)
+      await wrapper.setProps({ displayRender: undefined })
+      if (labelFloat)
+        expect(wrapper.get('.s-cascader__label').classes()).toContain(
+          'is-placeholder',
+        )
+      else
+        expect(wrapper.getComponent(PlaceholderText).props('hidden')).toBe(
+          false,
+        )
+      wrapper.unmount()
+    },
+  )
   it('prioritizes loading over clear/custom suffix and closes the popup', async () => {
     const wrapper = mountCascader({
       options,

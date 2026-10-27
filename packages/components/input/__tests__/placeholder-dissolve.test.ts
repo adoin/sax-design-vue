@@ -52,6 +52,21 @@ afterEach(() => {
 })
 
 describe('Lazy instance placeholder dissolve', () => {
+  it.each([0, '0', ''])(
+    'bases floating occupancy on the displayed input value %j',
+    (modelValue) => {
+      const wrapper = mount(Input, {
+        props: { modelValue, labelFloat: true, placeholder: 'Amount' },
+      })
+      expect(wrapper.get('input').element.value).toBe(String(modelValue))
+      expect(
+        wrapper
+          .get('.s-input__placeholder')
+          .classes()
+          .includes('s-input__placeholder--float-active'),
+      ).toBe(modelValue !== '')
+    },
+  )
   it('cancels a deferred dissolve before its first paint without flashing or leaking frames', async () => {
     const wrapper = mount(SharedPlaceholder, {
       props: { text: 'Choose', dissolved: false, defer: true, duration: 240 },

@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Prevent Cascader floating labels and placeholders from overlapping custom `displayRender` text for an empty selection.
+
 ### 2.8.2 — 2026-10-27
 
 - Keep Select floating labels above displayed option text when the selected value is an empty string or matches `notValue`.
