@@ -1,4 +1,5 @@
 import '@vuesax-alpha/components/base/style/css'
+import '@vuesax-alpha/components/empty/style/css'
 import '@vuesax-alpha/components/button/style/css'
 import '@vuesax-alpha/components/alert/style/css'
 import '@vuesax-alpha/components/form/style/css'

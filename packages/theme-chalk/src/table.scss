@@ -1763,12 +1763,24 @@
   }
 
   @include e(data-empty) {
+    position: sticky;
+    left: 0;
+    box-sizing: border-box;
     display: flex;
+    min-width: 0;
     min-height: 96px;
+    overflow: hidden;
     align-items: center;
     justify-content: center;
     padding: 20px;
     color: getCssVar(text-color, secondary);
+
+    > .#{$namespace}-empty {
+      min-width: 0;
+      min-height: 0;
+      max-width: 100%;
+      padding: 0;
+    }
   }
 
   @include e(merge-placeholder) {

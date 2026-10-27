@@ -336,9 +336,17 @@
           />
         </div>
 
-        <div v-else :class="ns.e('data-empty')" role="row">
+        <div
+          v-else
+          :class="ns.e('data-empty')"
+          :style="emptyStateStyle"
+          role="row"
+        >
           <slot name="notFound">
-            {{ emptyText || t('vs.table.emptyText') }}
+            <SEmpty
+              :image-size="64"
+              :description="emptyText || t('vs.table.emptyText')"
+            />
           </slot>
         </div>
 
@@ -538,6 +546,7 @@ import {
 } from 'vue'
 import { SPopper } from '@vuesax-alpha/components/popper'
 import { SPagination } from '@vuesax-alpha/components/pagination'
+import { SEmpty } from '@vuesax-alpha/components/empty'
 import { SVirtualList } from '@vuesax-alpha/components/virtual-list'
 import { useId, useLocale, useNamespace } from '@vuesax-alpha/hooks'
 import { SContextMenu } from '@vuesax-alpha/components/context-menu'
@@ -1329,6 +1338,21 @@ const fixedBoundaryOverlayStyle = computed<CSSProperties>(() => ({
   '--s-table-fixed-left-width': `${fixedPixelMetrics.value.left}px`,
   '--s-table-fixed-right-width': `${fixedPixelMetrics.value.right}px`,
 }))
+const emptyStateStyle = computed<CSSProperties>(() => {
+  const left = cssOffset(columnPartitions.value.left.map(indexedColumnBaseSize))
+  const right = cssOffset(
+    columnPartitions.value.right.map(indexedColumnBaseSize),
+  )
+  return {
+    width:
+      columnVirtualization.viewportWidth.value > 0
+        ? `${columnVirtualization.viewportWidth.value}px`
+        : '100%',
+    paddingLeft: `calc(20px + ${left})`,
+    paddingRight: `calc(20px + ${right})`,
+    clipPath: `inset(0 ${right} 0 ${left})`,
+  }
+})
 const horizontalVirtualMode = computed(
   () =>
     virtualEnabled.value &&
@@ -2535,7 +2559,7 @@ watch(
     // Editing owns the active-cell feedback. Pointer range gestures pause
     // while an editor is open, so retaining their old range leaves stale cells.
     if (id != null && (cellRange.getRange() || cellRange.pending.value))
-      void cellRange.clear()
+      cellRange.clear()
   },
 )
 const clipboardCells = createTableClipboardCells({

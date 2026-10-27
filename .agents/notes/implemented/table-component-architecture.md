@@ -14,6 +14,8 @@ supersedes: []
 
 ## Public contract
 
+Empty Table bodies reuse `SEmpty` with the localized Table empty text, keeping `emptyText` and `notFound` overrides. Their sticky horizontal viewport reserves and clips the fixed left/right panes so default or custom empty content cannot paint across fixed-column boundaries. This applies to the empty fallback of both regular and virtual tables; Table style entries include the shared Empty styles.
+
 `STable` is the single data-driven table implementation. Consumers define rows with `data` and columns either through the `columns` configuration array or renderless nested `STableColumn` children. A supplied `columns` array takes precedence when both forms are present, and both forms use the same rendering, sizing, interaction, and virtualization pipeline.
 
 `STableColumn` registers with its parent and renders no table markup itself. Data-cell rendering precedence is a column-specific slot, the generic cell slot, an inline or named renderer, then the raw field value. A grouped header uses `title`, then `field`, unless its optional header slot or renderer overrides that content.

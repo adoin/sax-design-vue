@@ -7,6 +7,11 @@ description: Releases and changes in Sax Design Vue.
 
 ## Unreleased
 
+## 2.8.4
+
+- Table uses the shared Empty component by default, retaining custom empty text and slots.
+- Empty states remain in the visible center area during horizontal scrolling and do not overlap fixed columns.
+
 ## 2.8.3
 
 - Keep Cascader labels and placeholders clear of custom display text returned for an empty selection.

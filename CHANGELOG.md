@@ -2,6 +2,11 @@
 
 ### Unreleased
 
+### 2.8.4 — 2026-10-27
+
+- Use the shared Empty illustration for Table's default empty state while preserving `emptyText` and the `notFound` slot.
+- Keep empty states within the horizontal viewport and outside fixed-column panes in regular and virtual tables.
+
 ### 2.8.3 — 2026-10-27
 
 - Prevent Cascader floating labels and placeholders from overlapping custom `displayRender` text for an empty selection.

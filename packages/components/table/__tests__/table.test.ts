@@ -81,6 +81,49 @@ const columns: TableColumn[] = [
 ]
 
 describe('Table data mode', () => {
+  it.each([false, true])(
+    'uses shared Empty and reserves fixed panes for empty tables (virtual: %j)',
+    async (virtual) => {
+      const wrapper = mount(Table, {
+        props: {
+          data: [],
+          columns: [
+            { field: 'left', width: 72, fixed: 'left' },
+            { field: 'name', width: 800 },
+            { field: 'actions', width: 100, fixed: 'right' },
+          ],
+          virtualConfig: virtual ? { enabled: true, height: 300 } : false,
+          emptyText: 'No matching records',
+        },
+      })
+      await nextTick()
+      expect(wrapper.find('.s-empty__illustration').exists()).toBe(true)
+      expect(wrapper.get('.s-empty__description').text()).toBe(
+        'No matching records',
+      )
+      const style = wrapper.get('.s-table__data-empty').attributes('style')
+      expect(style).toContain('padding-left: calc(92px)')
+      expect(style).toContain('padding-right: calc(120px)')
+      expect(style).toContain('clip-path: inset(0 calc(100px) 0 calc(72px))')
+      await wrapper.setProps({ columns: [{ field: 'name' }] })
+      expect(wrapper.get('.s-table__data-empty').attributes('style')).toContain(
+        'clip-path: inset(0 0px 0 0px)',
+      )
+      wrapper.unmount()
+    },
+  )
+
+  it('preserves a consumer notFound slot instead of the default Empty', () => {
+    const wrapper = mount(Table, {
+      props: { data: [], columns },
+      slots: { notFound: '<strong>Custom empty state</strong>' },
+    })
+    expect(wrapper.get('.s-table__data-empty').text()).toBe(
+      'Custom empty state',
+    )
+    expect(wrapper.find('.s-empty').exists()).toBe(false)
+    wrapper.unmount()
+  })
   it('uses upper-level wording for the Chinese parent indicator defaults', () => {
     expect(zhCn.vs.table.parentContext).toBe('上级')
     expect(zhCn.vs.table.returnToParent).toBe('回到上级行')
