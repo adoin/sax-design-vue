@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+### 2.8.3 — 2026-10-27
+
 - Prevent Cascader floating labels and placeholders from overlapping custom `displayRender` text for an empty selection.
 
 ### 2.8.2 — 2026-10-27

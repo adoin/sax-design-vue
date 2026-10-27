@@ -7,6 +7,8 @@ description: Releases and changes in Sax Design Vue.
 
 ## Unreleased
 
+## 2.8.3
+
 - Keep Cascader labels and placeholders clear of custom display text returned for an empty selection.
 
 ## 2.8.2
