@@ -7,6 +7,8 @@ description: Releases and changes in Sax Design Vue.
 
 ## Unreleased
 
+## 2.8.5
+
 - Fade Button content and existing outline/relief borders while loading.
 
 ## 2.8.4

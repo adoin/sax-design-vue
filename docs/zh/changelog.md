@@ -7,6 +7,8 @@ description: Sax Design Vue 版本与变更记录。
 
 ## 未发布
 
+## 2.8.5
+
 - Button 加载时淡化文字内容及已有的描边、立体边线。
 
 ## 2.8.4

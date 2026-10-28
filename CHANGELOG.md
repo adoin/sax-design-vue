@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+### 2.8.5 — 2026-10-28
+
 - Soften Button loading content and existing outline/relief borders while retaining loading indicators and interaction guards.
 
 ### 2.8.4 — 2026-10-27
