@@ -7,6 +7,8 @@ description: Releases and changes in Sax Design Vue.
 
 ## Unreleased
 
+- Fade Button content and existing outline/relief borders while loading.
+
 ## 2.8.4
 
 - Table uses the shared Empty component by default, retaining custom empty text and slots.

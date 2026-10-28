@@ -7,6 +7,8 @@ description: Sax Design Vue 版本与变更记录。
 
 ## 未发布
 
+- Button 加载时淡化文字内容及已有的描边、立体边线。
+
 ## 2.8.4
 
 - Table 默认空状态统一使用 Empty 组件，保留自定义文字和插槽。

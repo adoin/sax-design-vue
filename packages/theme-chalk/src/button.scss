@@ -291,7 +291,7 @@
     cursor: progress;
 
     @include e(content) {
-      opacity: 0.92;
+      opacity: 0.6;
     }
 
     @include e(animate) {
@@ -442,6 +442,11 @@
       transition: none;
     }
 
+    &.#{$namespace}-button--border::before,
+    &.#{$namespace}-button--relief::before {
+      transition: none;
+    }
+
     &-loading-enter-active,
     &-loading-leave-active {
       transition: none;
@@ -534,6 +539,9 @@
       background: getColor(color);
       color: var(--sax-button-solid-foreground);
     }
+    &.#{$namespace}-button--loading::before {
+      opacity: 0.6;
+    }
   }
   @include m(gradient) {
     background: getColor('color');
@@ -604,6 +612,7 @@
       border-radius: inherit;
       pointer-events: none;
       transition:
+        opacity var(--sax-motion-duration) var(--sax-motion-easing-standard),
         filter var(--sax-motion-duration-slow)
           var(--sax-motion-easing-emphasized),
         border-color var(--sax-motion-duration-slow)
@@ -614,6 +623,9 @@
       filter: contrast(2) grayscale(0.4);
       border-bottom: 3px solid getColor('color');
       box-sizing: border-box;
+    }
+    &.#{$namespace}-button--loading::before {
+      opacity: 0.6;
     }
     &:active {
       transform: translate(0, 1px);

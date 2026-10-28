@@ -2,6 +2,8 @@
 
 ### Unreleased
 
+- Soften Button loading content and existing outline/relief borders while retaining loading indicators and interaction guards.
+
 ### 2.8.4 — 2026-10-27
 
 - Use the shared Empty illustration for Table's default empty state while preserving `emptyText` and the `notFound` slot.
